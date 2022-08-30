@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,32 +19,35 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../reference/index.html">Functions</a>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
-    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
-    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
+    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
-    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
-    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
-    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
-    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
-    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
-    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
-    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
+    <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
+    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Findings ADAM</a>
+    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
+    <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
+    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
+    <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
+    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+  </div>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-community">
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
+    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
+    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
   </div>
 </li>
 <li class="nav-item">
@@ -96,6 +99,13 @@ has been thrown, the dataset of the first error can no longer be accessed (unles
 it has been saved in a variable).</p>
     </div>
     <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Utilities for Dataset Checking: 
+<code><a href="extract_duplicate_records.html">extract_duplicate_records</a>()</code>,
+<code><a href="get_many_to_one_dataset.html">get_many_to_one_dataset</a>()</code>,
+<code><a href="get_one_to_many_dataset.html">get_one_to_many_dataset</a>()</code></p></div>
+    </div>
+    <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Thomas Neitmann</p>
     </div>
@@ -112,19 +122,20 @@ it has been saved in a variable).</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Run `get_duplicates_dataset()` to access the duplicate records</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">get_duplicates_dataset</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 2 x 48</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 2 x 50</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID STUDYID SUBJID RFSTDTC RFENDTC RFXSTDTC RFXENDTC RFICDTC RFPENDTC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">*</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>  </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> 01-701… CDISCP… 1015   2014-0… 2014-0… 2014-01… 2014-07… </span><span style="color: #BB0000;">NA</span><span>      2014-07…</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> 01-701… CDISCP… 1015   2014-0… 2014-0… 2014-01… 2014-07… </span><span style="color: #BB0000;">NA</span><span>      2014-07…</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 39 more variables: DTHDTC </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, DTHFL </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, SITEID </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, AGE </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 41 more variables: DTHDTC </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, DTHFL </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, SITEID </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, AGE </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#   AGEU </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, SEX </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, RACE </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, ETHNIC </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, ARMCD </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, ARM </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#   ACTARMCD </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, ACTARM </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, COUNTRY </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, DMDTC </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, DMDY </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#   TRT01P </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, TRT01A </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, TRTSDTM </span><span style="color: #555555;font-style: italic;">&lt;dttm&gt;</span><span style="color: #555555;">, TRTEDTM </span><span style="color: #555555;font-style: italic;">&lt;dttm&gt;</span><span style="color: #555555;">, TRTSDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#   TRTEDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">, TRTDURD </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, SCRFDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">, EOSDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">, EOSSTT </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#   FRVDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">, DTHDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">, DTHDTF </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, DTHADY </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, LDDTHELD </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#   LSTALVDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">, AGEGR1 </span><span style="color: #555555;font-style: italic;">&lt;fct&gt;</span><span style="color: #555555;">, SAFFL </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, RACEGR1 </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, REGION1 </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#   LDDTHGR1 </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, DTH30FL </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, DTHA30FL </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, DTHB30FL </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#   TRT01P </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, TRT01A </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, TRTSDTM </span><span style="color: #555555;font-style: italic;">&lt;dttm&gt;</span><span style="color: #555555;">, TRTSTMF </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, TRTEDTM </span><span style="color: #555555;font-style: italic;">&lt;dttm&gt;</span><span style="color: #555555;">,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#   TRTETMF </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, TRTSDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">, TRTEDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">, TRTDURD </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, SCRFDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#   EOSDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">, EOSSTT </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, FRVDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">, RANDDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">, DTHDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#   DTHADY </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, LDDTHELD </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, LSTALVDT </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span style="color: #555555;">, AGEGR1 </span><span style="color: #555555;font-style: italic;">&lt;fct&gt;</span><span style="color: #555555;">, SAFFL </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#   RACEGR1 </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, REGION1 </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, LDDTHGR1 </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, DTH30FL </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">#   DTHA30FL </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, DTHB30FL </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

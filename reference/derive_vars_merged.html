@@ -18,7 +18,7 @@ each by group (order and mode argument)."><meta property="og:image" content="htt
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,32 +27,35 @@ each by group (order and mode argument)."><meta property="og:image" content="htt
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../reference/index.html">Functions</a>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
-    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
-    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
+    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
-    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
-    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
-    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
-    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
-    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
-    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
-    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
+    <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
+    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Findings ADAM</a>
+    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
+    <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
+    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
+    <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
+    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+  </div>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-community">
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
+    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
+    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
   </div>
 </li>
 <li class="nav-item">
@@ -173,7 +176,7 @@ with respect to the by variables and the order.</p>
 <p>If the uniqueness check fails, the specified message is displayed.</p>
 <p><em>Default</em>:</p>
 <p></p><div class="sourceCode r"><pre><code><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Dataset `dataset_add` contains duplicate records with respect to"</span>,
-      <span class="fu"><a href="../reference/dev_util_enumerate.html">enumerate</a></span><span class="op">(</span><span class="fu"><a href="../reference/vars2chr.html">vars2chr</a></span><span class="op">(</span><span class="va">by_vars</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre><p></p></div></dd>
+      <span class="fu">enumerate</span><span class="op">(</span><span class="fu"><a href="https://pharmaverse.github.io/admiraldev/main/reference/vars2chr.html">vars2chr</a></span><span class="op">(</span><span class="va">by_vars</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre><p></p></div></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -196,6 +199,24 @@ to <code>NA</code>. Observations in the additional dataset which have no matchin
 observation in the input dataset are ignored.</p></li>
 </ol></div>
     <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>General Derivation Functions for all ADaMs that returns variable appended to dataset:
+<code><a href="derive_var_confirmation_flag.html">derive_var_confirmation_flag</a>()</code>,
+<code><a href="derive_var_extreme_flag.html">derive_var_extreme_flag</a>()</code>,
+<code><a href="derive_var_last_dose_amt.html">derive_var_last_dose_amt</a>()</code>,
+<code><a href="derive_var_last_dose_date.html">derive_var_last_dose_date</a>()</code>,
+<code><a href="derive_var_last_dose_grp.html">derive_var_last_dose_grp</a>()</code>,
+<code><a href="derive_var_merged_cat.html">derive_var_merged_cat</a>()</code>,
+<code><a href="derive_var_merged_character.html">derive_var_merged_character</a>()</code>,
+<code><a href="derive_var_merged_exist_flag.html">derive_var_merged_exist_flag</a>()</code>,
+<code><a href="derive_var_obs_number.html">derive_var_obs_number</a>()</code>,
+<code><a href="derive_var_worst_flag.html">derive_var_worst_flag</a>()</code>,
+<code><a href="derive_vars_last_dose.html">derive_vars_last_dose</a>()</code>,
+<code><a href="derive_vars_merged_lookup.html">derive_vars_merged_lookup</a>()</code>,
+<code><a href="derive_vars_transposed.html">derive_vars_transposed</a>()</code>,
+<code><a href="get_summary_records.html">get_summary_records</a>()</code></p></div>
+    </div>
+    <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Stefan Bundfuss</p>
     </div>
@@ -207,7 +228,7 @@ observation in the input dataset are ignored.</p></li>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_vs"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_dm"</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># merging all dm variables to vs</span></span>
+<span class="r-in"><span class="co"># Merging all dm variables to vs</span></span>
 <span class="r-in"><span class="fu">derive_vars_merged</span><span class="op">(</span></span>
 <span class="r-in">  <span class="va">admiral_vs</span>,</span>
 <span class="r-in">  dataset_add <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">admiral_dm</span>, <span class="op">-</span><span class="va">DOMAIN</span><span class="op">)</span>,</span>
@@ -229,7 +250,7 @@ observation in the input dataset are ignored.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> CDISCPILO… 01-701-1… DIABP    AMBUL ECG… AFTER LYING DO…       67    63 YEARS</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 29,633 more rows</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># merge last weight to adsl</span></span>
+<span class="r-in"><span class="co"># Merge last weight to adsl</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_adsl"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">derive_vars_merged</span><span class="op">(</span></span>
 <span class="r-in">  <span class="va">admiral_adsl</span>,</span>
@@ -255,6 +276,111 @@ observation in the input dataset are ignored.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> CDISCPILOT01 01-701-1097    68 YEARS    78.5 kg       TRUE    </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> CDISCPILOT01 01-701-1111    81 YEARS    60.8 kg       TRUE    </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> CDISCPILOT01 01-701-1115    84 YEARS    78.5 kg       TRUE    </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 296 more rows</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Derive treatment start datetime (TRTSDTM)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">admiral_ex</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co">## Impute exposure start date to first date/time</span></span>
+<span class="r-in"><span class="va">ex_ext</span> <span class="op">&lt;-</span> <span class="fu"><a href="derive_vars_dtm.html">derive_vars_dtm</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">admiral_ex</span>,</span>
+<span class="r-in">  dtc <span class="op">=</span> <span class="va">EXSTDTC</span>,</span>
+<span class="r-in">  new_vars_prefix <span class="op">=</span> <span class="st">"EXST"</span>,</span>
+<span class="r-in">  highest_imputation <span class="op">=</span> <span class="st">"M"</span>,</span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co">## Add first exposure datetime and imputation flags to adsl</span></span>
+<span class="r-in"><span class="fu">derive_vars_merged</span><span class="op">(</span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">admiral_dm</span>, <span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span class="r-in">  dataset_add <span class="op">=</span> <span class="va">ex_ext</span>,</span>
+<span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span class="r-in">  new_vars <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span>TRTSDTM <span class="op">=</span> <span class="va">EXSTDTM</span>, TRTSDTF <span class="op">=</span> <span class="va">EXSTDTF</span>, TRTSTMF <span class="op">=</span> <span class="va">EXSTTMF</span><span class="op">)</span>,</span>
+<span class="r-in">  order <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">EXSTDTM</span><span class="op">)</span>,</span>
+<span class="r-in">  mode <span class="op">=</span> <span class="st">"first"</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 306 x 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    STUDYID      USUBJID     TRTSDTM             TRTSDTF TRTSTMF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #555555;font-style: italic;">&lt;dttm&gt;</span><span>              </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> CDISCPILOT01 01-701-1015 2014-01-02 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 2</span><span> CDISCPILOT01 01-701-1023 2012-08-05 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> CDISCPILOT01 01-701-1028 2013-07-19 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 4</span><span> CDISCPILOT01 01-701-1033 2014-03-18 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> CDISCPILOT01 01-701-1034 2014-07-01 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 6</span><span> CDISCPILOT01 01-701-1047 2013-02-12 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 7</span><span> CDISCPILOT01 01-701-1057 </span><span style="color: #BB0000;">NA</span><span>                  </span><span style="color: #BB0000;">NA</span><span>      </span><span style="color: #BB0000;">NA</span><span>     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> CDISCPILOT01 01-701-1097 2014-01-01 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> CDISCPILOT01 01-701-1111 2012-09-07 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> CDISCPILOT01 01-701-1115 2012-11-30 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 296 more rows</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Derive treatment start datetime (TRTSDTM)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">admiral_ex</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co">## Impute exposure start date to first date/time</span></span>
+<span class="r-in"><span class="va">ex_ext</span> <span class="op">&lt;-</span> <span class="fu"><a href="derive_vars_dtm.html">derive_vars_dtm</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">admiral_ex</span>,</span>
+<span class="r-in">  dtc <span class="op">=</span> <span class="va">EXSTDTC</span>,</span>
+<span class="r-in">  new_vars_prefix <span class="op">=</span> <span class="st">"EXST"</span>,</span>
+<span class="r-in">  highest_imputation <span class="op">=</span> <span class="st">"M"</span>,</span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co">## Add first exposure datetime and imputation flags to adsl</span></span>
+<span class="r-in"><span class="fu">derive_vars_merged</span><span class="op">(</span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">admiral_dm</span>, <span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span class="r-in">  dataset_add <span class="op">=</span> <span class="va">ex_ext</span>,</span>
+<span class="r-in">  filter_add <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">EXSTDTM</span><span class="op">)</span>,</span>
+<span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span class="r-in">  new_vars <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span>TRTSDTM <span class="op">=</span> <span class="va">EXSTDTM</span>, TRTSDTF <span class="op">=</span> <span class="va">EXSTDTF</span>, TRTSTMF <span class="op">=</span> <span class="va">EXSTTMF</span><span class="op">)</span>,</span>
+<span class="r-in">  order <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">EXSTDTM</span><span class="op">)</span>,</span>
+<span class="r-in">  mode <span class="op">=</span> <span class="st">"first"</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 306 x 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    STUDYID      USUBJID     TRTSDTM             TRTSDTF TRTSTMF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #555555;font-style: italic;">&lt;dttm&gt;</span><span>              </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> CDISCPILOT01 01-701-1015 2014-01-02 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 2</span><span> CDISCPILOT01 01-701-1023 2012-08-05 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> CDISCPILOT01 01-701-1028 2013-07-19 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 4</span><span> CDISCPILOT01 01-701-1033 2014-03-18 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> CDISCPILOT01 01-701-1034 2014-07-01 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 6</span><span> CDISCPILOT01 01-701-1047 2013-02-12 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 7</span><span> CDISCPILOT01 01-701-1057 </span><span style="color: #BB0000;">NA</span><span>                  </span><span style="color: #BB0000;">NA</span><span>      </span><span style="color: #BB0000;">NA</span><span>     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> CDISCPILOT01 01-701-1097 2014-01-01 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> CDISCPILOT01 01-701-1111 2012-09-07 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> CDISCPILOT01 01-701-1115 2012-11-30 </span><span style="color: #555555;">00:00:00</span><span> </span><span style="color: #BB0000;">NA</span><span>      H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 296 more rows</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Derive treatment end datetime (TRTEDTM)</span></span>
+<span class="r-in"><span class="co">## Impute exposure end datetime to last time, no date imputation</span></span>
+<span class="r-in"><span class="va">ex_ext</span> <span class="op">&lt;-</span> <span class="fu"><a href="derive_vars_dtm.html">derive_vars_dtm</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">admiral_ex</span>,</span>
+<span class="r-in">  dtc <span class="op">=</span> <span class="va">EXENDTC</span>,</span>
+<span class="r-in">  new_vars_prefix <span class="op">=</span> <span class="st">"EXEN"</span>,</span>
+<span class="r-in">  time_imputation <span class="op">=</span> <span class="st">"last"</span>,</span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co">## Add last exposure datetime and imputation flag to adsl</span></span>
+<span class="r-in"><span class="fu">derive_vars_merged</span><span class="op">(</span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">admiral_dm</span>, <span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span class="r-in">  dataset_add <span class="op">=</span> <span class="va">ex_ext</span>,</span>
+<span class="r-in">  filter_add <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">EXENDTM</span><span class="op">)</span>,</span>
+<span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span class="r-in">  new_vars <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span>TRTEDTM <span class="op">=</span> <span class="va">EXENDTM</span>, TRTETMF <span class="op">=</span> <span class="va">EXENTMF</span><span class="op">)</span>,</span>
+<span class="r-in">  order <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">EXENDTM</span><span class="op">)</span>,</span>
+<span class="r-in">  mode <span class="op">=</span> <span class="st">"last"</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 306 x 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    STUDYID      USUBJID     TRTEDTM             TRTETMF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #555555;font-style: italic;">&lt;dttm&gt;</span><span>              </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> CDISCPILOT01 01-701-1015 2014-07-02 </span><span style="color: #555555;">23:59:59</span><span> H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 2</span><span> CDISCPILOT01 01-701-1023 2012-09-01 </span><span style="color: #555555;">23:59:59</span><span> H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> CDISCPILOT01 01-701-1028 2014-01-14 </span><span style="color: #555555;">23:59:59</span><span> H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 4</span><span> CDISCPILOT01 01-701-1033 2014-03-31 </span><span style="color: #555555;">23:59:59</span><span> H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> CDISCPILOT01 01-701-1034 2014-12-30 </span><span style="color: #555555;">23:59:59</span><span> H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 6</span><span> CDISCPILOT01 01-701-1047 2013-03-09 </span><span style="color: #555555;">23:59:59</span><span> H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 7</span><span> CDISCPILOT01 01-701-1057 </span><span style="color: #BB0000;">NA</span><span>                  </span><span style="color: #BB0000;">NA</span><span>     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> CDISCPILOT01 01-701-1097 2014-07-09 </span><span style="color: #555555;">23:59:59</span><span> H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> CDISCPILOT01 01-701-1111 2012-09-16 </span><span style="color: #555555;">23:59:59</span><span> H      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> CDISCPILOT01 01-701-1115 2013-01-23 </span><span style="color: #555555;">23:59:59</span><span> H      </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 296 more rows</span></span>
 </code></pre></div>
     </div>

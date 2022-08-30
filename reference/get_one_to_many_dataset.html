@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,32 +19,35 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../reference/index.html">Functions</a>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
-    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
-    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
+    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
-    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
-    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
-    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
-    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
-    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
-    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
-    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
+    <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
+    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Findings ADAM</a>
+    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
+    <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
+    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
+    <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
+    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+  </div>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-community">
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
+    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
+    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
   </div>
 </li>
 <li class="nav-item">
@@ -86,13 +89,20 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>If <code><a href="assert_one_to_one.html">assert_one_to_one()</a></code> detects an issue, the one to many values are stored
+    <p>If <code>assert_one_to_one()</code> detects an issue, the one to many values are stored
 in a dataset. This dataset can be retrieved by <code>get_one_to_many_dataset()</code>.</p>
 <p>Note that the function always returns the one to many values from the last
 error that has been thrown in the current R session. Thus, after restarting
 the R sessions <code>get_one_to_many_dataset()</code> will return <code>NULL</code> and after a
 second error has been thrown, the dataset of the first error can no longer be
 accessed (unless it has been saved in a variable).</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Utilities for Dataset Checking: 
+<code><a href="extract_duplicate_records.html">extract_duplicate_records</a>()</code>,
+<code><a href="get_duplicates_dataset.html">get_duplicates_dataset</a>()</code>,
+<code><a href="get_many_to_one_dataset.html">get_many_to_one_dataset</a>()</code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -104,34 +114,13 @@ accessed (unless it has been saved in a variable).</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">admiral_adsl</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fu"><a href="assert_one_to_one.html">assert_one_to_one</a></span><span class="op">(</span><span class="va">admiral_adsl</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">STUDYID</span><span class="op">)</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">SITEID</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">assert_one_to_one</span><span class="op">(</span><span class="va">admiral_adsl</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">STUDYID</span><span class="op">)</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">SITEID</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in assert_one_to_one(admiral_adsl, vars(STUDYID), vars(SITEID)) : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   For some values of STUDYID there is more than one value of SITEID.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call `get_one_to_many_dataset()` to get all one to many values.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   could not find function "assert_one_to_one"</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">get_one_to_many_dataset</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 17 x 2</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># Groups:   STUDYID [1]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    STUDYID      SITEID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> CDISCPILOT01 701   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 2</span><span> CDISCPILOT01 702   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> CDISCPILOT01 703   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 4</span><span> CDISCPILOT01 704   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> CDISCPILOT01 705   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 6</span><span> CDISCPILOT01 706   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 7</span><span> CDISCPILOT01 707   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> CDISCPILOT01 708   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> CDISCPILOT01 709   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> CDISCPILOT01 710   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">11</span><span> CDISCPILOT01 711   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">12</span><span> CDISCPILOT01 713   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">13</span><span> CDISCPILOT01 714   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">14</span><span> CDISCPILOT01 715   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">15</span><span> CDISCPILOT01 716   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">16</span><span> CDISCPILOT01 717   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">17</span><span> CDISCPILOT01 718   </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
