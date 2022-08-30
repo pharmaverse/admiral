@@ -249,7 +249,7 @@ test_that("derive_vars_last_dose Test 7: no error is raised when setting `dose_d
   )
 
   adex <- tribble(
-    ~USUBJID, ~EXTRT, ~EXDOSFRQ, ~EXSTDTC, ~EXENDTC, ~ASTDT, ~AENDT, ~ASTDTM, ~AENDTM
+    ~USUBJID, ~EXTRT, ~EXDOSFRQ, ~EXSTDTC, ~EXENDTC, ~ASTDT, ~AENDT, ~ASTDTM, ~AENDTM,
     "P01", "Drug A", "QD", "2022-01-09", "2022-01-12", ymd("2022-01-09"), ymd("2022-01-12"),
     ymd_hms("2022-01-09 09:30:00"), ymd_hms("2022-01-12 09:30:00"),
     "P02", "Drug A", "QD", "2022-02-01", "2022-02-04", ymd("2022-02-01"), ymd("2022-02-04"),
