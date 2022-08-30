@@ -65,6 +65,7 @@ RoxygenNote: 7.2.0
 Depends: R (>= 3.5)
 Imports:
     admiraldev,
+    assertthat,
     dplyr,
     hms,
     lifecycle,
