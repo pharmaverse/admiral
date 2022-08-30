@@ -122,6 +122,8 @@ have been removed:
 
 - Added link to [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) to README
 
+- - New vignette [Lab Grading](https://pharmaverse.github.io/admiral/articles/lab_grading.html) (#1369)
+
 ## Various
 
 - Restructured Reference page and updated **all** functions to use `family` tag 
