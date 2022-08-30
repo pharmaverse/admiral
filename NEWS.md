@@ -8,11 +8,7 @@
 
 - New function `compute_qual_imputation()` which imputes values when qualifier exists in character result (#976)
 
-- All admiral utility functions are exported now such that they can be used in
-admiral extension packages (#1079)
-
-- Moved all developer-facing functions to `{admiraldev}`. This supersedes above (#1079)
- update (#1231)
+- Moved all developer-facing functions to `{admiraldev}` (#1231)
 
 - New function to map lookup table `derive_vars_merged_lookup()` (#940)
 
@@ -123,6 +119,8 @@ have been removed:
 
 - Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
 
+- Added link to [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) to README
+
 - Restructured Reference page and updated **all** functions to use `family` tag 
 in roxygen headers for finding similar functions.  (#1105)
 
@@ -131,9 +129,6 @@ in roxygen headers for finding similar functions.  (#1105)
 
 - Renamed Reference page to Functions and updated **all** functions to use `family` tag 
 in roxygen headers for finding similar functions.  (#1105)
-
-## Various
-
 
 
 # admiral 0.7.1
