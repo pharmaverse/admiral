@@ -19,7 +19,14 @@ Map \code{"Y"} and \code{"N"} to numeric values.
 
 yn_to_numeric(c("Y", "N", NA_character_))
 }
+\seealso{
+Utilities for Formatting Observations: 
+\code{\link{convert_blanks_to_na}()},
+\code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()}
+}
 \author{
 Stefan Bundfuss
 }
+\concept{utils_fmt}
 \keyword{utils_fmt}
