@@ -79,20 +79,19 @@ Imports:
     tidyselect
 Suggests:
     admiral.test,
+    covr,
     devtools,
+    DT,
     diffdf,
     knitr,
     lintr,
-    pkgdown,
-    testthat,
     methods,
-    miniUI,
+    pkgdown,
     rmarkdown,
     roxygen2,
     spelling,
     styler,
+    testthat,
     tibble,
-    usethis,
-    covr,
-    DT
+    usethis
 VignetteBuilder: knitr
