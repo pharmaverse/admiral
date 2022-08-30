@@ -1,89 +1,3 @@
-#' Turn a List of Quosures into a Character Vector
-#'
-#' @param quosures A `list` of `quosures` created using [`vars()`]
-#'
-#' @return A character vector
-#'
-#' @author Thomas Neitmann
-#'
-#' @export
-#'
-#' @family utils_help
-#' @keywords utils_help
-#'
-#' @examples
-#' vars2chr(vars(USUBJID, AVAL))
-vars2chr <- function(quosures) {
-  rlang::set_names(
-    map_chr(quosures, ~ as_string(quo_get_expr(.x))),
-    names(quosures)
-  )
-}
-
-#' Negate List of Variables
-#'
-#' The function adds a minus sign as prefix to each variable.
-#'
-#' This is useful if a list of variables should be removed from a dataset,
-#' e.g., `select(!!!negate_vars(by_vars))` removes all by variables.
-#'
-#' @param vars List of variables created by `vars()`
-#'
-#' @return A list of `quosures`
-#'
-#' @author Stefan Bundfuss
-#'
-#' @export
-#'
-#' @family utils_help
-#' @keywords utils_help
-#'
-#' @examples
-#' negate_vars(vars(USUBJID, STUDYID))
-negate_vars <- function(vars = NULL) {
-  assert_vars(vars, optional = TRUE)
-  if (is.null(vars)) {
-    NULL
-  } else {
-    lapply(vars, function(var) expr(-!!quo_get_expr(var)))
-  }
-}
-
-#' Optional Filter
-#'
-#' Filters the input dataset if the provided expression is not `NULL`
-#'
-#' @param dataset Input dataset
-#' @param filter A filter condition. Must be a quosure.
-#'
-#' @return A `data.frame` containing all rows in `dataset` matching `filter` or
-#' just `dataset` if `filter` is `NULL`
-#'
-#' @author Thomas Neitmann
-#'
-#' @export
-#'
-#' @family utils_fil
-#'
-#' @keywords utils_fil
-#'
-#' @examples
-#' library(admiral.test)
-#' data(admiral_vs)
-#'
-#' admiral::filter_if(admiral_vs, rlang::quo(NULL))
-#' admiral::filter_if(admiral_vs, rlang::quo(VSTESTCD == "WEIGHT"))
-filter_if <- function(dataset, filter) {
-  assert_data_frame(dataset, accept_grouped = TRUE)
-  assert_filter_cond(filter, optional = TRUE)
-
-  if (quo_is_null(filter)) {
-    dataset
-  } else {
-    filter(dataset, !!filter)
-  }
-}
-
 #' Extract Unit From Parameter Description
 #'
 #' Extract the unit of a parameter from a description like "Param (unit)".
@@ -201,7 +115,7 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #'
 #' get_one_to_many_dataset()
 get_one_to_many_dataset <- function() {
-  .datasets$one_to_many
+  get_dataset("one_to_many")
 }
 
 #' Get Many to One Values that Led to a Prior Error
@@ -234,7 +148,7 @@ get_one_to_many_dataset <- function() {
 #'
 #' get_many_to_one_dataset()
 get_many_to_one_dataset <- function() {
-  .datasets$many_to_one
+  get_dataset("many_to_one")
 }
 
 #' Map `"Y"` and `"N"` to Numeric Values
@@ -246,6 +160,7 @@ get_many_to_one_dataset <- function() {
 #' @author Stefan Bundfuss
 #'
 #' @keywords utils_fmt
+#' @family utils_fmt
 #'
 #' @export
 #'
