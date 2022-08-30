@@ -27,5 +27,4 @@
 #' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
 #' @importFrom readxl read_excel
-#' @import admiraldev
 "_PACKAGE"
