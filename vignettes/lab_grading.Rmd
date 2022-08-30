@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 Within the ADLB ADaM data set there is a concept of lab grading, where there is 
 a set of criteria for particular lab tests that grade the severity or abnormality of 
-a lab value. The grades are from 1 to 4, and grade 0 can be viewed generally as a 
+a lab value. The grades are from 0 to 4, where grade 0 can be viewed generally as a 
 “NORMAL” value. The higher the grade the more severe or more abnormal the lab value is.
 There are several sets of lab grading criteria, for the initial implementation of lab
 grading we will look at NCI-CTCAEv4. (In future releases `{admiral}` look to implement
@@ -51,7 +51,7 @@ Variable | Scope |  Type | Example Value
 **DIRECTION** | The direction of the abnormality of a particular lab test value|   Character | "L" or "H".
 **SI_UNIT_CHECK** | Unit of lab test, to check against input data if criteria is based on absolute values. |  Character | "mmol/L"
 **VAR_CHECK** | Comma separated list of variables used in criteria, to check input data that variables exist. |  Character | "AVAL, ANRLO"
-**GRADE_CRITERIA_CODE** | Variable to hold code that creates grade based on defined criteria. |  Character |A valid case statement within a `mutate` function call
+**GRADE_CRITERIA_CODE** | Variable to hold code that creates grade based on defined criteria. |  Character |R code that is a valid case statement within a `mutate` function call
 
 The metadata data set has the following structure for the optional variables:
 
@@ -63,7 +63,7 @@ Variable | Scope |  Type | Example Value
 **GRADE_3** | Grade 3 criteria for lab test, normally straight from source document.|   Character | ">5.0 - 20.0 x ULN".
 **GRADE_4** | Grade 4 criteria for lab test, normally straight from source document.|   Character | ">20.0 x ULN".
 **DEFINITION** | Definition of abnormality, normally from source document.|  Character | "A finding based on laboratory test results that indicate an increase in the level of alanine aminotransferase (ALT or SGPT) in the blood specimen.".
-**COMMENT** | Description of any decisions made by `{admiral}` to implement grading criteria | Character | "Take worst case and assume on anticoagulation".
+**COMMENT** | Description of any decisions made by `{admiral}` to implement grading criteria, where grading criteria alone was ambiguous. | Character | "Take worst case and assume on anticoagulation".
 
 
 # Creating the lab grade
@@ -185,6 +185,8 @@ adlb <- lb %>%
 Another look-up table is used to add on `ATOXDSCL` and `ATOXDSCH` using
 `PARAMCD`. `ATOXDSCL` holds the terms for grading low lab values, and `ATOXDSCH` holds 
 the terms for grading high lab values. The names of these variables can be user-defined.
+`ATOXDSCL` and `ATOXDSCH` are the link from ADLB data to the `{admiral}` metadata that
+holds the grading criteria.
 
 ```{r, eval=TRUE}
 # Assign ATOXDSCL and ATOXDSCH to hold lab grading terms
