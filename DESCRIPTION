@@ -79,7 +79,9 @@ Imports:
 Suggests:
     admiral.test,
     DT,
+    knitr,
     methods,
+    roxygen2,
     testthat,
     tibble
 VignetteBuilder: knitr
