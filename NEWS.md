@@ -2,6 +2,12 @@
 
 ## New Features
 
+- New function `get_summary_records()` creates summary records e.g. derive analysis value (`AVAL`) from multiple records, only keeping the derived observations (#525)
+
+- New function `derive_param_framingham()` which adds a Parameter for Framingham Heart Study Cardiovascular Disease 10-Year Risk Score (#977)
+
+- New function `compute_qual_imputation()` which imputes values when qualifier exists in character result (#976)
+
 - All admiral utility functions are exported now such that they can be used in
 admiral extension packages (#1079)
 
@@ -61,6 +67,9 @@ users feedback (#1300):
     - It is now possible to impute completely missing dates by specifying
     `highest_imputation = "Y"` and the `min_dates` or `max_dates` argument.
 
+- `order` parameter added to `dthcaus_source()` which allows an additional 
+character vector to be used for sorting the `dataset`, `derive_vars_dthcaus()` 
+updated to process additional parameter (#1125)
 
 ## Breaking Changes
 
@@ -296,8 +305,6 @@ Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/918) raise
 - `derive_vars_dy()` derives the analysis day from one or more `--DT(M)` variables
 (#700)
 
-- `compute_qual_imputation()` derives impute values when qualifier exists in character result
-(#976)
 
 ## Updates of Existing Functions
 

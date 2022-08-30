@@ -162,14 +162,13 @@ derive_param_exposure <- function(dataset,
     filter_if(filter)
 
   add_data <- subset_ds %>%
-    filter(PARAMCD == input_code) %>%
-    derive_summary_records(
+    get_summary_records(
       by_vars = by_vars,
+      filter = PARAMCD == input_code,
       analysis_var = !!analysis_var,
       summary_fun = summary_fun,
       set_values_to = set_values_to
-    ) %>%
-    filter(PARAMCD == quo_get_expr(set_values_to$PARAMCD))
+    )
 
   # add the dates for the derived parameters
   tmp_start <- get_new_tmp_var(dataset)
@@ -185,8 +184,8 @@ derive_param_exposure <- function(dataset,
     expo_data <- add_data %>%
       derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
       mutate(
-        ASTDTM = coalesce(ASTDTM, !!tmp_start),
-        AENDTM = coalesce(AENDTM, !!tmp_end)
+        ASTDTM = !!tmp_start,
+        AENDTM = !!tmp_end
       ) %>%
       remove_tmp_vars()
 
@@ -205,8 +204,8 @@ derive_param_exposure <- function(dataset,
     expo_data <- add_data %>%
       derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
       mutate(
-        ASTDT = coalesce(ASTDT, !!tmp_start),
-        AENDT = coalesce(AENDT, !!tmp_end)
+        ASTDT = !!tmp_start,
+        AENDT = !!tmp_end
       ) %>%
       remove_tmp_vars()
   }

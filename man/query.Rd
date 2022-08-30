@@ -69,7 +69,7 @@ An object of class \code{query}.
 }
 \description{
 A \code{query} object defines a query, e.g., a Standard MedDRA Query (SMQ), a
-Standardised Drug Grouping (SDG), or a customized query (CQ). It is used
+Standardized Drug Grouping (SDG), or a customized query (CQ). It is used
 as input to \code{create_query_data()}.
 }
 \examples{
@@ -135,7 +135,7 @@ Source Specifications:
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
-\code{\link{dthcaus_source}()},
+\code{\link{derive_var_dthcaus}()},
 \code{\link{event_source}()},
 \code{\link{filter_date_sources}()},
 \code{\link{list_tte_source_objects}()},
