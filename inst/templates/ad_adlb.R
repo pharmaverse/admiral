@@ -38,7 +38,7 @@ param_lookup <- tibble::tribble(
   "ALT", "ALT", "Alanine Aminotransferase (U/L)", 3,
   "ANISO", "ANISO", "Anisocytes", 4,
   "AST", "AST", "Aspartate Aminotransferase (U/L)", 5,
-  "BASO", "BASO", "Basophils (GI/L)", 6,
+  "BASO", "BASO", "Basophils (10^9/L)", 6,
   "BASOLE", "BASOLE", "Basophils/Leukocytes (FRACTION)", 7,
   "BILI", "BILI", "Bilirubin (umol/L)", 8,
   "BUN", "BUN", "Blood Urea Nitrogen (mmol/L)", 9,
@@ -48,7 +48,7 @@ param_lookup <- tibble::tribble(
   "CL", "CL", "Chloride (mmol/L)", 13,
   "COLOR", "COLOR", "Color", 14,
   "CREAT", "CREAT", "Creatinine (umol/L)", 15,
-  "EOS", "EOS", "Eosinophils (GI/L)", 16,
+  "EOS", "EOS", "Eosinophils (10^9/L)", 16,
   "EOSLE", "EOSLE", "Eosinophils/Leukocytes (FRACTION)", 17,
   "GGT", "GGT", "Gamma Glutamyl Transferase (U/L)", 18,
   "GLUC", "GLUC", "Glucose (mmol/L)", 19,
@@ -57,18 +57,18 @@ param_lookup <- tibble::tribble(
   "HGB", "HGB", "Hemoglobin (mmol/L)", 22,
   "K", "POTAS", "Potassium (mmol/L)", 23,
   "KETONES", "KETON", "Ketones", 24,
-  "LYM", "LYMPH", "Lymphocytes (GI/L)", 25,
+  "LYM", "LYMPH", "Lymphocytes (10^9/L)", 25,
   "LYMLE", "LYMPHLE", "Lymphocytes/Leukocytes (FRACTION)", 26,
   "MACROCY", "MACROC", "Macrocytes", 27,
   "MCH", "MCH", "Ery. Mean Corpuscular Hemoglobin (fmol(Fe))", 28,
   "MCHC", "MCHC", "Ery. Mean Corpuscular HGB Concentration (mmol/L)", 29,
   "MCV", "MCV", "Ery. Mean Corpuscular Volume (f/L)", 30,
   "MICROCY", "MICROC", "Microcytes", 31,
-  "MONO", "MONO", "Monocytes (GI/L)", 32,
+  "MONO", "MONO", "Monocytes (10^9/L)", 32,
   "MONOLE", "MONOLE", "Monocytes/Leukocytes (FRACTION)", 33,
   "PH", "PH", "pH", 34,
   "PHOS", "PHOS", "Phosphate (mmol/L)", 35,
-  "PLAT", "PLAT", "Platelet (GI/L)", 36,
+  "PLAT", "PLAT", "Platelet (10^9/L)", 36,
   "POIKILO", "POIKIL", "Poikilocytes", 37,
   "POLYCHR", "POLYCH", "Polychromasia", 38,
   "PROT", "PROT", "Protein (g/L)", 39,
@@ -79,7 +79,7 @@ param_lookup <- tibble::tribble(
   "URATE", "URATE", "Urate (umol/L)", 44,
   "UROBIL", "UROBIL", "Urobilinogen", 45,
   "VITB12", "VITB12", "Vitamin B12 (pmol/L)", 46,
-  "WBC", "WBC", "Leukocytes (GI/L)", 47
+  "WBC", "WBC", "Leukocytes (10^9/L)", 47
 )
 
 
@@ -130,32 +130,26 @@ adlb <- adlb %>%
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, DOMAIN, VISIT, VISITNUM, ADT, ADY),
     set_values_to = vars(
       PARAMCD = "BASO",
-      PARAM = "Basophils Abs (GI/L)",
+      PARAM = "Basophils Abs (10^9/L)",
       PARAMN = 6,
       DTYPE = "CALCULATION",
       PARCAT1 = "HEMATOLOGY"
     ),
     get_unit_expr = extract_unit(PARAM),
-    wbc_code = "WBC",
-    wbc_unit = "GI/L",
-    diff_code = "BASOLE",
-    diff_type = "fraction"
+    diff_code = "BASOLE"
   ) %>%
   # Derive absolute Lymphocytes
   derive_param_wbc_abs(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, DOMAIN, VISIT, VISITNUM, ADT, ADY),
     set_values_to = vars(
       PARAMCD = "LYMPH",
-      PARAM = "Lymphocytes Abs (GI/L)",
+      PARAM = "Lymphocytes Abs (10^9/L)",
       PARAMN = 25,
       DTYPE = "CALCULATION",
       PARCAT1 = "HEMATOLOGY"
     ),
     get_unit_expr = extract_unit(PARAM),
-    wbc_code = "WBC",
-    wbc_unit = "GI/L",
-    diff_code = "LYMPHLE",
-    diff_type = "fraction"
+    diff_code = "LYMPHLE"
   )
 
 ## Get Visit Info ----
@@ -230,6 +224,76 @@ adlb <- adlb %>%
   derive_var_pchg()
 
 
+## Calculate lab grading ----
+
+# Assign ATOXDSCL and ATOXDSCH to hold lab grading terms
+# ATOXDSCL and ATOXDSCH hold terms defined by NCI-CTCAEv4.
+grade_lookup <- tibble::tribble(
+  ~PARAMCD, ~ATOXDSCL, ~ATOXDSCH,
+  "ALB", "Hypoalbuminemia", NA_character_,
+  "ALKPH", NA_character_, "Alkaline phosphatase increased",
+  "ALT", NA_character_, "Alanine aminotransferase increased",
+  "AST", NA_character_, "Aspartate aminotransferase increased",
+  "BILI", NA_character_, "Blood bilirubin increased",
+  "CA", "Hypocalcemia", "Hypercalcemia",
+  "CHOLES", NA_character_, "Cholesterol high",
+  "CK", NA_character_, "CPK increased",
+  "CREAT", NA_character_, "Creatinine increased",
+  "GGT", NA_character_, "GGT increased",
+  "GLUC", "Hypoglycemia", "Hyperglycemia",
+  "HGB", "Anemia", "Hemoglobin increased",
+  "POTAS", "Hypokalemia", "Hyperkalemia",
+  "LYMPH", "CD4 lymphocytes decreased", NA_character_,
+  "PHOS", "Hypophosphatemia", NA_character_,
+  "PLAT", "Platelet count decreased", NA_character_,
+  "SODIUM", "Hyponatremia", "Hypernatremia",
+  "WBC", "White blood cell decreased", "Leukocytosis",
+)
+
+# Add ATOXDSCL and ATOXDSCH
+adlb <- adlb %>%
+  derive_vars_merged(
+    dataset_add = grade_lookup,
+    by_vars = vars(PARAMCD)
+  ) %>%
+  # Derive toxicity grade for low values ATOXGRL
+  # default metadata atoxgr_criteria_ctcv4 used
+  derive_var_atoxgr_dir(
+    new_var = ATOXGRL,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = extract_unit(PARAM)
+  ) %>%
+  # Derive toxicity grade for low values ATOXGRH
+  # default metadata atoxgr_criteria_ctcv4 used
+  derive_var_atoxgr_dir(
+    new_var = ATOXGRH,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = extract_unit(PARAM)
+  ) %>%
+  # (Optional) derive overall grade ATOXGR (combining ATOXGRL and ATOXGRH)
+  derive_var_atoxgr() %>%
+  # Derive baseline toxicity grade for low values BTOXGRL
+  derive_var_base(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    source_var = ATOXGRL,
+    new_var = BTOXGRL
+  ) %>%
+  # Derive baseline toxicity grade for high values BTOXGRH
+  derive_var_base(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    source_var = ATOXGRH,
+    new_var = BTOXGRH
+  ) %>%
+  # Derive baseline toxicity grade for for overall grade BTOXGR
+  derive_var_base(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    source_var = ATOXGR,
+    new_var = BTOXGR
+  )
+
+
 ## Calculate R2BASE, R2ANRLO and R2ANRHI ----
 adlb <- adlb %>%
   derive_var_analysis_ratio(
@@ -247,10 +311,21 @@ adlb <- adlb %>%
 
 ## SHIFT derivation ----
 adlb <- adlb %>%
+  # Derive shift from baseline for analysis indicator
   derive_var_shift(
     new_var = SHIFT1,
     from_var = BNRIND,
     to_var = ANRIND
+  ) %>%
+  # Derive shift from baseline for overall grade
+  restrict_derivation(
+    derivation = derive_var_shift,
+    args = params(
+      new_var = SHIFT2,
+      from_var = BTOXGR,
+      to_var = ATOXGR
+    ),
+    filter = !is.na(ATOXDSCL) | !is.na(ATOXDSCH)
   )
 
 ## Flag variables (ANL01FL, LVOTFL) ----
