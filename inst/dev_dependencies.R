@@ -12,4 +12,3 @@ library(spelling)
 library(staged.dependencies)
 library(styler)
 library(usethis)
-
