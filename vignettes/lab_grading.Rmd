@@ -73,8 +73,8 @@ Variable | Scope |  Type | Example Value
 
 ```{r message=FALSE}
 library(admiral)
-library(dplyr)
 library(admiral.test)
+library(dplyr)
 library(stringr)
 library(tibble)
 
@@ -95,11 +95,11 @@ The list of terms defined in the `{admiral}` metadata to implement NCI-CTCAEv4 i
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  atoxgr_criteria_ctcv4,
-  display_vars = vars(TERM),
-  filter = !is.na(TERM)
-)
+atoxgr_criteria_ctcv4 %>% 
+  filter(!is.na(TERM)) %>% 
+  dataset_vignette(
+    display_vars = vars(TERM)
+  )
 ```
 <br>
 Using CDISC data these lab tests can be mapped to the correct terms, firstly create
@@ -246,11 +246,13 @@ is in the data folder of `{admiral}`.
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  atoxgr_criteria_ctcv4,
-  display_vars = vars(TERM, SI_UNIT_CHECK),
-  filter = !is.na(SI_UNIT_CHECK)
-)
+
+atoxgr_criteria_ctcv4 %>% 
+  filter(!is.na(SI_UNIT_CHECK)) %>% 
+  dataset_vignette(
+    display_vars = vars(TERM, SI_UNIT_CHECK),
+  )
+
 ```
 <br>
 
@@ -265,11 +267,11 @@ adlb <- adlb %>%
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  adlb,
-  display_vars = vars(ATOXDSCL, ATOXDSCH, ATOXGRL, ATOXGRH, ATOXGR),
-  filter = (ATOXGRL == "1") | (ATOXGRH == "1")
-)
+adlb %>% 
+  filter((ATOXGRL == "1") | (ATOXGRH == "1")) %>% 
+  dataset_vignette(
+    display_vars = vars(ATOXDSCL, ATOXDSCH, ATOXGRL, ATOXGRH, ATOXGR)
+  )
 ```
 
 
@@ -338,11 +340,11 @@ the metadata:
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  atoxgr_criteria_ctcv4,
-  display_vars = vars(TERM, COMMENT),
-  filter = str_detect(TERM, "calcemia")
-)
+atoxgr_criteria_ctcv4 %>% 
+  filter(str_detect(TERM, "calcemia")) %>% 
+  dataset_vignette(
+    display_vars = vars(TERM, COMMENT)
+  )
 ```
 <br>
 
@@ -352,11 +354,11 @@ be split into 2 rows:
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  atoxgr_criteria_ctcv4,
-  display_vars = vars(TERM, COMMENT),
-  filter = str_detect(TERM, "glycemia")
-)
+atoxgr_criteria_ctcv4 %>% 
+  filter(str_detect(TERM, "glycemia")) %>% 
+  dataset_vignette(
+    display_vars = vars(TERM, COMMENT)
+  )
 ```
 <br>
 
@@ -366,11 +368,12 @@ For term "INR Increased" there is the following criteria:
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  atoxgr_criteria_ctcv4,
-  display_vars = vars(TERM, Grade_1),
-  filter = str_detect(TERM, "INR")
-)
+
+atoxgr_criteria_ctcv4 %>%
+  filter(str_detect(TERM, "INR")) %>%
+  dataset_vignette(
+  display_vars = vars(TERM, Grade_1)
+  )
 ```
 <br>
 
@@ -379,11 +382,11 @@ lab value against ULN and also BASE. The decision made was put in the `COMMENT` 
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  atoxgr_criteria_ctcv4,
-  display_vars = vars(TERM, COMMENT),
-  filter = str_detect(TERM, "INR")
-)
+atoxgr_criteria_ctcv4 %>% 
+  filter(str_detect(TERM, "INR")) %>% 
+  dataset_vignette(
+    display_vars = vars(TERM, COMMENT)
+  )
 ```
 <br>
 
@@ -393,11 +396,11 @@ put in the `COMMENT` field.
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  atoxgr_criteria_ctcv4,
-  display_vars = vars(TERM, Grade_1, Grade_3, COMMENT),
-  filter = str_detect(TERM, "Hypouricemia")
-)
+atoxgr_criteria_ctcv4 %>% 
+  filter(str_detect(TERM, "Hypouricemia")) %>% 
+  dataset_vignette(
+    display_vars = vars(TERM, Grade_1, Grade_3, COMMENT)
+  )
 ```
 <br>
 
@@ -407,9 +410,17 @@ The decision made was put in the `COMMENT` field.
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  atoxgr_criteria_ctcv4,
-  display_vars = vars(TERM, Grade_1, Grade_2, COMMENT),
-  filter = str_detect(TERM, "Hypokalemia")
-)
+atoxgr_criteria_ctcv4 %>% 
+  filter(str_detect(TERM, "Hypokalemia")) %>% 
+  dataset_vignette(
+    display_vars = vars(TERM, Grade_1, Grade_2, COMMENT)
+  )
 ```
+<br>
+
+# Conclusion
+
+In future releases `{admiral}` will implement further grading criteria, with NCI-CTCAE v5
+being the priority. Providing tools for users to easily interact with the metadata to 
+update criteria, based on their companies needs will also be looked at. Ideally, users should
+be able to create their own metadata for company specific grading schemes.
