@@ -24,6 +24,16 @@ The input dataset with query variables derived.
 Derive Query Variables
 }
 \details{
+This function can be used to derive CDISC variables such as
+\code{SMQzzNAM}, \code{SMQzzCD}, \code{SMQzzSC}, \code{SMQzzSCN}, and \code{CQzzNAM} in ADAE and
+ADMH, and variables such as \code{SDGzzNAM}, \code{SDGzzCD}, and \code{SDGzzSC} in ADCM.
+An example usage of this function can be found in the
+\href{../articles/occds.html}{OCCDS vignette}.
+
+A query dataset is expected as an input to this function. See the
+\href{../articles/queries_dataset.html}{Queries Dataset Documentation vignette}
+for descriptions, or call \code{data("queries")} for an example of a query dataset.
+
 For each unique element in \code{VAR_PREFIX}, the corresponding "NAM"
 variable will be created. For each unique \code{VAR_PREFIX}, if \code{QUERY_ID} is
 not "" or NA, then the corresponding "CD" variable is created; similarly,

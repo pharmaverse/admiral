@@ -671,7 +671,7 @@ query <- function(prefix,
 #'
 #' @return The original object.
 validate_query <- function(obj) {
-  assert_that(inherits(obj, "query"))
+  assert_s3_class(obj, "query")
   values <- unclass(obj)
   prefix <- values$prefix
   assert_character_scalar(prefix)
@@ -928,7 +928,7 @@ smq_select <- function(name = NULL,
 #'
 #' @return The original object.
 validate_smq_select <- function(obj) {
-  assert_that(inherits(obj, "smq_select"))
+  assert_s3_class(obj, "smq_select")
   values <- unclass(obj)
   name <- values$name
   assert_character_scalar(name,
@@ -1032,7 +1032,7 @@ sdg_select <- function(name = NULL,
 #'
 #' @return The original object.
 validate_sdg_select <- function(obj) {
-  assert_that(inherits(obj, "sdg_select"))
+  assert_s3_class(obj, "sdg_select")
   values <- unclass(obj)
   name <- values$name
   assert_character_scalar(name,

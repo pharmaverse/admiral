@@ -138,7 +138,7 @@ adpp <- adpp %>%
 
 # Add all ADSL variables
 adpp <- adpp %>%
-  left_join(select(admiral_adsl, !!!admiral:::negate_vars(adsl_vars)),
+  left_join(admiral_adsl,
     by = c("STUDYID", "USUBJID")
   )
 
