@@ -69,7 +69,9 @@ jobs:
   docs:
     name: Documentation
     uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
-    if: github.event_name == 'push'
+    # Only run this for main
+    # Change this after the next release to remove the ref condition
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     with:
       r-version: $R_VERSION
       # Whether to skip multiversion docs
