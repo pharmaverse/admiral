@@ -15,6 +15,14 @@
 #'
 "queries"
 
+#' Queries MH Dataset
+#' @keywords datasets
+#' @family datasets
+#' @source
+#' An example of standard query MH dataset to be used in deriving variables in ADMH
+#'
+"queries_mh"
+
 #' Subject Level Analysis Dataset
 #'
 #' An example subject level analysis dataset

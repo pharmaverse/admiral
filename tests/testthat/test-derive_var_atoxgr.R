@@ -147,7 +147,7 @@ test_that("derive_var_atoxgr_dir: Test 1 NCICTCAEv4 Anemia", {
 
 test_that("derive_var_atoxgr_dir: Test 2 NCICTCAEv4 Leukocytosis", {
   exp_out_ctcv4_2 <- tibble::tribble(
-    ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
+    ~ATOXDSCH,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
     "Not a term",   99,     0,      NA,     "10^9/L",  NA,
     NA,             99,     0,      NA,     "10^9/L",  NA,
     "Leukocytosis", 101,    0,      40,     "10^9/L",  "3",
@@ -161,21 +161,21 @@ test_that("derive_var_atoxgr_dir: Test 2 NCICTCAEv4 Leukocytosis", {
     "Leukocytosis", NA,     0,      40,     "10^9/L",  NA,
   )
   input_ctcv4_2 <- exp_out_ctcv4_2 %>%
-    select(-ATOXGRL)
+    select(-ATOXGRH)
 
   actual_output_ctcv4_2 <- derive_var_atoxgr_dir(
     input_ctcv4_2,
-    new_var = ATOXGRL,
+    new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
-    tox_description_var = ATOXDSCL,
-    criteria_direction = "L",
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
     get_unit_expr = AVALU
   )
 
   expect_dfs_equal(
     base = exp_out_ctcv4_2,
     compare = actual_output_ctcv4_2,
-    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+    keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
