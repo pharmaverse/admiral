@@ -12,7 +12,7 @@ A toolbox for programming Clinical Data Standards Interchange Consortium (CDISC)
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,46 +21,37 @@ A toolbox for programming Clinical Data Standards Interchange Consortium (CDISC)
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get started</a>
 </li>
 <li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Functions</a>
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
-    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
-    <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
     <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Findings ADAM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
     <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
     <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
-    <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
     <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
-  </div>
-</li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-community">
-    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
-    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
-    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
+    <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
+    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
+    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
+    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
+    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
+    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
   </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" href="https://pharmaverse.github.io/admiral/"></a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -90,11 +81,9 @@ A toolbox for programming Clinical Data Standards Interchange Consortium (CDISC)
 
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Useful links:</p><ul><li><p><a href="https://pharmaverse.github.io/admiral">https://pharmaverse.github.io/admiral</a></p></li>
-<li><p><a href="https://github.com/pharmaverse/admiral" class="external-link">https://github.com/pharmaverse/admiral</a></p></li>
-</ul><p>Other internal: 
-<code><a href="print.adam_templates.html">print.adam_templates</a>()</code>,
-<code><a href="print.tte_source.html">print.tte_source</a>()</code></p></div>
+    <div class="dont-index"><p>Useful links:</p><ul><li><p><a href="https://pharmaverse.github.io/admiral/index.html">https://pharmaverse.github.io/admiral/index.html</a></p></li>
+<li><p><a href="https://github.com/pharmaverse/admiral/" class="external-link">https://github.com/pharmaverse/admiral/</a></p></li>
+</ul></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -129,18 +118,6 @@ A toolbox for programming Clinical Data Standards Interchange Consortium (CDISC)
 <li><p>Ondrej Slama [contributor]</p></li>
 <li><p>Shimeng Huang [contributor]</p></li>
 <li><p>James Kim [contributor]</p></li>
-<li><p>Shan Lee [contributor]</p></li>
-<li><p>Bill Denney [contributor]</p></li>
-<li><p>Syed Mubasheer [contributor]</p></li>
-<li><p>Wenyi Liu [contributor]</p></li>
-<li><p>Dinakar Kulkarni [contributor]</p></li>
-<li><p>Tamara Senior [contributor]</p></li>
-<li><p>Jordanna Morrish [contributor]</p></li>
-<li><p>Anthony Howard [contributor]</p></li>
-<li><p>Barbara O'Reilly [contributor]</p></li>
-<li><p>John Kirkpatrick [contributor]</p></li>
-<li><p>James Black [contributor]</p></li>
-<li><p>Leena Khatri [contributor]</p></li>
 <li><p>F. Hoffmann-La Roche AG [copyright holder, funder]</p></li>
 <li><p>GlaxoSmithKline LLC [copyright holder, funder]</p></li>
 </ul></div>

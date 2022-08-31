@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,46 +19,37 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get started</a>
 </li>
 <li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Functions</a>
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
-    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
-    <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
     <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Findings ADAM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
     <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
     <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
-    <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
     <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
-  </div>
-</li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-community">
-    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
-    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
-    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
+    <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
+    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
+    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
+    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
+    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
+    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
   </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" href="https://pharmaverse.github.io/admiral/"></a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -163,7 +154,9 @@ specified by the <code>filter</code> element are selected. Then for each patient
 first observation (with respect to <code>date</code>) is selected.</p></li>
 <li><p>The <code>ADT</code> variable is set to the variable specified by the
 <code>date</code> element. If the date variable is a datetime variable, only
-the datepart is copied.</p></li>
+the datepart is copied. If the source variable is a character variable, it
+is converted to a date. If the date is incomplete, it is imputed as the
+first possible date.</p></li>
 <li><p>The <code>CNSR</code> variable is added and set to the <code>censor</code> element.</p></li>
 <li><p>The variables specified by the <code>set_values_to</code> element are
 added.</p></li>
@@ -177,7 +170,9 @@ specified by the <code>filter</code> element are selected. Then for each patient
 last observation (with respect to <code>date</code>) is selected.</p></li>
 <li><p>The <code>ADT</code> variable is set to the variable specified by the
 <code>date</code> element. If the date variable is a datetime variable, only
-the datepart is copied.</p></li>
+the datepart is copied. If the source variable is a character variable, it
+is converted to a date. If the date is incomplete, it is imputed as the
+first possible date.</p></li>
 <li><p>The <code>CNSR</code> variable is added and set to the <code>censor</code> element.</p></li>
 <li><p>The variables specified by the <code>set_values_to</code> element are
 added.</p></li>
@@ -202,8 +197,7 @@ joined from the ADSL dataset,</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_adsl"</span><span class="op">)</span></span>
 <span class="r-in"></span>
@@ -258,14 +252,14 @@ joined from the ADSL dataset,</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">11</span><span> 01-701-… LAST DATE … ADSL   LSTAL…     1 2013-02-07 2013-01-05 OS      Overa…</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># derive time to adverse event for each preferred term #</span></span>
-<span class="r-in"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">TRTSDT</span>,           <span class="op">~</span><span class="va">EOSDT</span>,</span>
 <span class="r-in">  <span class="st">"01"</span>,     <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2020-12-06"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2021-03-06"</span><span class="op">)</span>,</span>
 <span class="r-in">  <span class="st">"02"</span>,     <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2021-01-16"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2021-02-03"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYID <span class="op">=</span> <span class="st">"AB42"</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AESTDTC</span>,           <span class="op">~</span><span class="va">AESEQ</span>, <span class="op">~</span><span class="va">AEDECOD</span>,</span>
 <span class="r-in">  <span class="st">"01"</span>,     <span class="st">"2021-01-03T10:56"</span>, <span class="fl">1</span>,      <span class="st">"Flu"</span>,</span>
 <span class="r-in">  <span class="st">"01"</span>,     <span class="st">"2021-03-04"</span>,       <span class="fl">2</span>,      <span class="st">"Cough"</span>,</span>
@@ -273,17 +267,9 @@ joined from the ADSL dataset,</p></li>
 <span class="r-in"><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYID <span class="op">=</span> <span class="st">"AB42"</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">ae_ext</span> <span class="op">&lt;-</span> <span class="fu"><a href="derive_vars_dt.html">derive_vars_dt</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">ae</span>,</span>
-<span class="r-in">  dtc <span class="op">=</span> <span class="va">AESTDTC</span>,</span>
-<span class="r-in">  new_vars_prefix <span class="op">=</span> <span class="st">"AEST"</span>,</span>
-<span class="r-in">  highest_imputation <span class="op">=</span> <span class="st">"M"</span>,</span>
-<span class="r-in">  flag_imputation <span class="op">=</span> <span class="st">"none"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
 <span class="r-in"><span class="va">ttae</span> <span class="op">&lt;-</span> <span class="fu"><a href="event_source.html">event_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ae"</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">AESTDT</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="va">AESTDTC</span>,</span>
 <span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span></span>
 <span class="r-in">    EVNTDESC <span class="op">=</span> <span class="st">"AE"</span>,</span>
 <span class="r-in">    SRCDOM <span class="op">=</span> <span class="st">"AE"</span>,</span>
@@ -308,7 +294,7 @@ joined from the ADSL dataset,</p></li>
 <span class="r-in">  start_date <span class="op">=</span> <span class="va">TRTSDT</span>,</span>
 <span class="r-in">  event_conditions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ttae</span><span class="op">)</span>,</span>
 <span class="r-in">  censor_conditions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">eos</span><span class="op">)</span>,</span>
-<span class="r-in">  source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>adsl <span class="op">=</span> <span class="va">adsl</span>, ae <span class="op">=</span> <span class="va">ae_ext</span><span class="op">)</span>,</span>
+<span class="r-in">  source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>adsl <span class="op">=</span> <span class="va">adsl</span>, ae <span class="op">=</span> <span class="va">ae</span><span class="op">)</span>,</span>
 <span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span></span>
 <span class="r-in">    PARAMCD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"TTAE"</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span class="r-in">    PARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Time to First"</span>, <span class="va">AEDECOD</span>, <span class="st">"Adverse Event"</span><span class="op">)</span>,</span>

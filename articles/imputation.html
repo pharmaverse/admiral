@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,46 +43,37 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get started</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Functions</a>
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
-    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
-    <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
     <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Findings ADAM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
     <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
     <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
-    <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
     <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
-  </div>
-</li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-community">
-    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
-    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
-    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
+    <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
+    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
+    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
+    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
+    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
+    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
   </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" href="https://pharmaverse.github.io/admiral/"></a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -129,14 +120,13 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>Date and time is collected in SDTM as character values using the extended <a href="https://en.wikipedia.org/wiki/ISO_8601" class="external-link">ISO 8601</a> format. For example, <code>"2019-10-9T13:42:00"</code>. It allows that some parts of the date or time are missing, e.g., <code>"2019-10"</code> if the day and the time is unknown.</p>
-<p>The ADaM timing variables like <code>ADTM</code> (Analysis Datetime) or <code>ADY</code> (Analysis Relative Day) are numeric variables. They can be derived only if the date or datetime is complete. Therefore <a href="https://pharmaverse.github.io/admiral">admiral</a> provides imputation functions which fill in missing date or time parts according to certain imputation rules.</p>
-<p>In {admiral} we use only two functions <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> for date and datetime imputations respectively. In all other functions where dates can be passed as an argument, we expect full dates or datetimes (unless otherwise specified), so if any possibility of partials then these functions should be used as a first step to make the required imputation.</p>
+<p>The ADaM timing variables like <code>ADTM</code> (Analysis Datetime) or <code>ADY</code> (Analysis Relative Day) are numeric variables. They can be derived only if the date or datetime is complete. Therefore <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> provides imputation functions which fill in missing date or time parts according to certain imputation rules.</p>
 <div class="section level3">
 <h3 id="required-packages">Required Packages<a class="anchor" aria-label="anchor" href="#required-packages"></a>
 </h3>
 <p>The examples of this vignette require the following packages.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral">admiral</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/index.html">admiral</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></code></pre></div>
@@ -145,52 +135,46 @@
 <div class="section level2">
 <h2 id="imputation-rules">Imputation Rules<a class="anchor" aria-label="anchor" href="#imputation-rules"></a>
 </h2>
-<p>In {admiral} we don’t allow users to pick any single part of the date/time to impute, we only enable to impute up to a highest level, i.e. you couldn’t choose to say impute months, but not days.</p>
 <p>The simplest imputation rule is to set the missing parts to a fixed value. For example</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/impute_dtc.html">impute_dtc</a></span><span class="op">(</span>
   <span class="st">"2019-10"</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"M"</span>,
   date_imputation <span class="op">=</span> <span class="st">"01-01"</span>,
   time_imputation <span class="op">=</span> <span class="st">"00:00:00"</span>
 <span class="op">)</span>
 <span class="co">#&gt; [1] "2019-10-01T00:00:00"</span></code></pre></div>
 <p>Sometimes this does not work as it would result in invalid dates, e.g.,</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/impute_dtc.html">impute_dtc</a></span><span class="op">(</span>
   <span class="st">"2019-02"</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"M"</span>,
   date_imputation <span class="op">=</span> <span class="st">"02-31"</span>,
   time_imputation <span class="op">=</span> <span class="st">"00:00:00"</span>
 <span class="op">)</span>
 <span class="co">#&gt; [1] "2019-02-31T00:00:00"</span></code></pre></div>
 <p>Therefore the keywords <code>"first"</code> or <code>"last"</code> can be specified to request that missing parts are replaced by the first or last possible value:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/impute_dtc.html">impute_dtc</a></span><span class="op">(</span>
   <span class="st">"2019-02"</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"M"</span>,
   date_imputation <span class="op">=</span> <span class="st">"last"</span>,
   time_imputation <span class="op">=</span> <span class="st">"00:00:00"</span>
 <span class="op">)</span>
 <span class="co">#&gt; [1] "2019-02-28T00:00:00"</span></code></pre></div>
-<p>For dates, there is the additional option to use keyword <code>"mid"</code> to impute missing day to <code>15</code> or missing day and month to <code>06-30</code>, but note the different behaviour below depending on <code>preserve</code> argument for case when month only is missing:</p>
+<p>For dates, there is the additional option to use keyword <code>"mid"</code> to impute missing day to <code>15</code> or missing day and month to <code>06-30</code>, but note the different behaviour below depending on <code>preserve</code> parameter for case when month only is missing:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
   <span class="st">"2019-02"</span>,
   <span class="st">"2019"</span>,
   <span class="st">"2019---01"</span>
 <span class="op">)</span>
-<span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
+<span class="fu"><a href="../reference/impute_dtc.html">impute_dtc</a></span><span class="op">(</span>
   <span class="va">dates</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"M"</span>,
   date_imputation <span class="op">=</span> <span class="st">"mid"</span>,
   time_imputation <span class="op">=</span> <span class="st">"00:00:00"</span>,
   preserve <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span>
 <span class="co">#&gt; [1] "2019-02-15T00:00:00" "2019-06-30T00:00:00" "2019-06-30T00:00:00"</span>
-<span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
+<span class="fu"><a href="../reference/impute_dtc.html">impute_dtc</a></span><span class="op">(</span>
   <span class="va">dates</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"M"</span>,
   date_imputation <span class="op">=</span> <span class="st">"mid"</span>,
   time_imputation <span class="op">=</span> <span class="st">"00:00:00"</span>,
   preserve <span class="op">=</span> <span class="cn">TRUE</span>
@@ -203,121 +187,44 @@
   <span class="st">"2019"</span>,
   <span class="st">"2019---01"</span>
 <span class="op">)</span>
-<span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
+<span class="fu"><a href="../reference/impute_dtc.html">impute_dtc</a></span><span class="op">(</span>
   <span class="va">dates</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"M"</span>,
   date_imputation <span class="op">=</span> <span class="st">"06-15"</span>,
   time_imputation <span class="op">=</span> <span class="st">"00:00:00"</span>
 <span class="op">)</span>
 <span class="co">#&gt; [1] "2019-02-15T00:00:00" "2019-06-15T00:00:00" "2019-06-15T00:00:00"</span></code></pre></div>
 <div class="section level3">
-<h3 id="imputation-level">Imputation Level<a class="anchor" aria-label="anchor" href="#imputation-level"></a>
-</h3>
-<p>The imputation level, i.e., which components are imputed if they are missing, is controlled by the <code>highest_imputation</code> argument. All components up to the specified level are imputed.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
-  <span class="st">"2019-02-03T12:30:15"</span>,
-  <span class="st">"2019-02-03T12:30"</span>,
-  <span class="st">"2019-02-03"</span>,
-  <span class="st">"2019-02"</span>,
-  <span class="st">"2019"</span>
-<span class="op">)</span>
-
-<span class="co"># Do not impute</span>
-<span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
-  <span class="va">dates</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"n"</span>
-<span class="op">)</span>
-<span class="co">#&gt; [1] "2019-02-03T12:30:15" NA                    NA                   </span>
-<span class="co">#&gt; [4] NA                    NA</span>
-
-<span class="co"># Impute seconds only</span>
-<span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
-  <span class="va">dates</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"s"</span>
-<span class="op">)</span>
-<span class="co">#&gt; [1] "2019-02-03T12:30:15" "2019-02-03T12:30:00" NA                   </span>
-<span class="co">#&gt; [4] NA                    NA</span>
-
-<span class="co"># Impute time (hours, minutes, seconds) only</span>
-<span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
-  <span class="va">dates</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"h"</span>
-<span class="op">)</span>
-<span class="co">#&gt; [1] "2019-02-03T12:30:15" "2019-02-03T12:30:00" "2019-02-03T00:00:00"</span>
-<span class="co">#&gt; [4] NA                    NA</span>
-
-<span class="co"># Impute days and time</span>
-<span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
-  <span class="va">dates</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"D"</span>
-<span class="op">)</span>
-<span class="co">#&gt; [1] "2019-02-03T12:30:15" "2019-02-03T12:30:00" "2019-02-03T00:00:00"</span>
-<span class="co">#&gt; [4] "2019-02-01T00:00:00" NA</span>
-
-<span class="co"># Impute date (months and days) and time</span>
-<span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
-  <span class="va">dates</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"M"</span>
-<span class="op">)</span>
-<span class="co">#&gt; [1] "2019-02-03T12:30:15" "2019-02-03T12:30:00" "2019-02-03T00:00:00"</span>
-<span class="co">#&gt; [4] "2019-02-01T00:00:00" "2019-01-01T00:00:00"</span></code></pre></div>
-<p>For imputation of years (<code>highest_imputation = "Y"</code>) see next section.</p>
-</div>
-<div class="section level3">
 <h3 id="minimummaximum-dates">Minimum/Maximum Dates<a class="anchor" aria-label="anchor" href="#minimummaximum-dates"></a>
 </h3>
-<p>In some scenarios the imputed date should not be before or after certain dates. For example an imputed date after data cut off date or death date is not desirable. The <a href="https://pharmaverse.github.io/admiral">admiral</a> imputation functions provide the <code>min_dates</code> and <code>max_dates</code> argument to specify those dates. For example:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
+<p>In some scenarios the imputed date should not be before or after certain dates. For example an imputed date after data cut off date or death date is not desirable. The <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> imputation functions provide the <code>min_dates</code> and <code>max_dates</code> parameter to specify those dates. For example:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/impute_dtc.html">impute_dtc</a></span><span class="op">(</span>
   <span class="st">"2019-02"</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"M"</span>,
   date_imputation <span class="op">=</span> <span class="st">"last"</span>,
   time_imputation <span class="op">=</span> <span class="st">"last"</span>,
   max_dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-01-14"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-02-25"</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; [1] "2019-02-25T23:59:59"</span></code></pre></div>
+<span class="co">#&gt; [1] "2019-02-25T00:00:00"</span></code></pre></div>
 <p>It is ensured that the imputed date is not after any of the specified dates. Only dates which are in the range of possible dates of the dtc value are considered. The possible dates are defined by the missing parts of the dtc date, i.e., for “2019-02” the possible dates range from “2019-02-01” to “2019-02-28”. Thus “2019-01-14” is ignored. This ensures that the non-missing parts of the dtc date are not changed.</p>
-<p>If the <code>min_dates</code> or <code>max_dates</code> argument is specified, it is also possible to impute completely missing dates. For <code>date_imputation = "first"</code> the <code>min_dates</code> argument must be specified and for <code>date_imputation = "last"</code> the <code>max_dates</code> argument. For other imputation rules imputing the year is not possible.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Impute year to first</span>
-<span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2019-02"</span>, <span class="cn">NA</span><span class="op">)</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"Y"</span>,
-  min_dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-01-14"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-02-25"</span><span class="op">)</span><span class="op">)</span>
-<span class="op">)</span>
-<span class="co">#&gt; [1] "2019-02-25T00:00:00" "2019-02-25T00:00:00"</span>
-
-<span class="co"># Impute year to last</span>
-<span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2019-02"</span>, <span class="cn">NA</span><span class="op">)</span>,
-  highest_imputation <span class="op">=</span> <span class="st">"Y"</span>,
-  date_imputation <span class="op">=</span> <span class="st">"last"</span>,
-  time_imputation <span class="op">=</span> <span class="st">"last"</span>,
-  max_dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-01-14"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-02-25"</span><span class="op">)</span><span class="op">)</span>
-<span class="op">)</span>
-<span class="co">#&gt; [1] "2019-02-25T23:59:59" "2019-01-14T23:59:59"</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="imputation-flags">Imputation Flags<a class="anchor" aria-label="anchor" href="#imputation-flags"></a>
 </h2>
-<p>ADaM requires that date or datetime variables for which imputation was used are accompanied by date and/or time imputation flag variables (<code>*DTF</code> and <code>*TMF</code>, e.g., <code>ADTF</code> and <code>ATMF</code> for <code>ADTM</code>). These variables indicate the highest level that was imputed, e.g., if minutes and seconds were imputed, the imputation flag is set to <code>"M"</code>. The <a href="https://pharmaverse.github.io/admiral">admiral</a> functions which derive imputed variables are also adding the corresponding imputation flag variables.</p>
-<p>Note: The <a href="https://pharmaverse.github.io/admiral">admiral</a> datetime imputation function provides the <code>ignore_seconds_flag</code> argument which can be set to <code>TRUE</code> in cases where seconds were never collected. This is due to the following from ADaM IG: For a given SDTM DTC variable, if only hours and minutes are ever collected, and seconds are imputed in <code>*DTM</code> as <code>00</code>, then it is not necessary to set <code>*TMF</code> to <code>"S"</code>.</p>
+<p>ADaM requires that date or datetime variables for which imputation was used are accompanied by date and/or time imputation flag variables (<code>*DTF</code> and <code>*TMF</code>, e.g., <code>ADTF</code> and <code>ATMF</code> for <code>ADTM</code>). These variables indicate the highest level that was imputed, e.g., if minutes and seconds were imputed, the imputation flag is set to <code>"M"</code>. The <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> functions which derive imputed variables are also adding the corresponding imputation flag variables.</p>
+<p>Note: The <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> datetime imputation function provides the <code>ignore_seconds_flag</code> parameter which can be set to <code>TRUE</code> in cases where seconds were never collected. This is due to the following from ADaM IG: For a given SDTM DTC variable, if only hours and minutes are ever collected, and seconds are imputed in <code>*DTM</code> as <code>00</code>, then it is not necessary to set <code>*TMF</code> to <code>"S"</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="imputation-functions">Imputation Functions<a class="anchor" aria-label="anchor" href="#imputation-functions"></a>
 </h2>
-<p><a href="https://pharmaverse.github.io/admiral">admiral</a> provides the following functions for imputation:</p>
+<p><a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> provides the following functions for imputation:</p>
 <ul>
 <li>
 <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code>: Adds a date variable and a date imputation flag variable (optional) based on a –DTC variable and imputation rules.</li>
 <li>
 <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code>: Adds a datetime variable, a date imputation flag variable, and a time imputation flag variable (both optional) based on a –DTC variable and imputation rules.</li>
 <li>
-<code><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm()</a></code>: Returns a complete ISO 8601 datetime or <code>NA</code> based on a partial ISO 8601 datetime and imputation rules.</li>
-<li>
-<code><a href="../reference/impute_dtc_dt.html">impute_dtc_dt()</a></code>: Returns a complete ISO 8601 date (without time) or <code>NA</code> based on a partial ISO 8601 date(time) and imputation rules.</li>
+<code><a href="../reference/impute_dtc.html">impute_dtc()</a></code>: Returns a complete ISO 8601 date or <code>NA</code> based on a partial ISO 8601 date and imputation rules.</li>
 <li>
 <code><a href="../reference/convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code>: Returns a date if the input ISO 8601 date is complete. Otherwise, <code>NA</code> is returned.</li>
 <li>
@@ -335,6 +242,48 @@
 <h3 id="create-an-imputed-datetime-and-date-variable-and-imputation-flag-variables">Create an Imputed Datetime and Date Variable and Imputation Flag Variables<a class="anchor" aria-label="anchor" href="#create-an-imputed-datetime-and-date-variable-and-imputation-flag-variables"></a>
 </h3>
 <p>The <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> function derives an imputed datetime variable and the corresponding date and time imputation flags. The imputed date variable can be derived by using the <code><a href="../reference/derive_vars_dtm_to_dt.html">derive_vars_dtm_to_dt()</a></code> function. It is not necessary and advisable to perform the imputation for the date variable if it was already done for the datetime variable. CDISC considers the datetime and the date variable as two representations of the same date. Thus the imputation must be the same and the imputation flags are valid for both the datetime and the date variable.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span>
+  <span class="op">~</span><span class="va">AESTDTC</span>,
+  <span class="st">"2019-08-09T12:34:56"</span>,
+  <span class="st">"2019-04-12"</span>,
+  <span class="st">"2010-09"</span>,
+  <span class="cn">NA_character_</span>
+<span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span><span class="op">(</span>
+    dtc <span class="op">=</span> <span class="va">AESTDTC</span>,
+    new_vars_prefix <span class="op">=</span> <span class="st">"AST"</span>,
+    date_imputation <span class="op">=</span> <span class="st">"first"</span>,
+    time_imputation <span class="op">=</span> <span class="st">"first"</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/derive_vars_dtm_to_dt.html">derive_vars_dtm_to_dt</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">ASTDTM</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div id="htmlwidget-f02f34bafd82a00bb4ef" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f02f34bafd82a00bb4ef">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2010-09&quot;,&quot;2019-04-12&quot;,&quot;2019-08-09T12:34:56&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1283299200000\" data-max=\"1565354096000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;D&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"date\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1283299200000\" data-max=\"1565308800000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-04-12","2010-09",null],["2019-08-09T12:34:56Z","2019-04-12T00:00:00Z","2010-09-01T00:00:00Z",null],[null,null,"D",null],[null,"H","H",null],["2019-08-09","2019-04-12","2010-09-01",null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AESTDTC<\/th>\n      <th>ASTDTM<\/th>\n      <th>ASTDTF<\/th>\n      <th>ASTTMF<\/th>\n      <th>ASTDT<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div class="section level3">
+<h3 id="create-an-imputed-date-variable-and-imputation-flag-variable">Create an Imputed Date Variable and Imputation Flag Variable<a class="anchor" aria-label="anchor" href="#create-an-imputed-date-variable-and-imputation-flag-variable"></a>
+</h3>
+<p>If an imputed date variable without a corresponding datetime variable is required, it can be derived by the <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> function.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span>
+  <span class="op">~</span><span class="va">AESTDTC</span>,
+  <span class="st">"2019-08-09T12:34:56"</span>,
+  <span class="st">"2019-04-12"</span>,
+  <span class="st">"2010-09"</span>,
+  <span class="cn">NA_character_</span>
+<span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/derive_vars_dt.html">derive_vars_dt</a></span><span class="op">(</span>
+    dtc <span class="op">=</span> <span class="va">AESTDTC</span>,
+    new_vars_prefix <span class="op">=</span> <span class="st">"AST"</span>,
+    date_imputation <span class="op">=</span> <span class="st">"first"</span>
+  <span class="op">)</span></code></pre></div>
+<div id="htmlwidget-c2fb6cc18fb84760bb42" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c2fb6cc18fb84760bb42">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2010-09&quot;,&quot;2019-04-12&quot;,&quot;2019-08-09T12:34:56&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"date\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1283299200000\" data-max=\"1565308800000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;D&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-04-12","2010-09",null],["2019-08-09","2019-04-12","2010-09-01",null],[null,null,"D",null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AESTDTC<\/th>\n      <th>ASTDT<\/th>\n      <th>ASTDTF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div class="section level3">
+<h3 id="impute-time-without-imputing-date">Impute Time without Imputing Date<a class="anchor" aria-label="anchor" href="#impute-time-without-imputing-date"></a>
+</h3>
+<p>If the time should be imputed but not the date, the <code>date_imputation</code> parameter should be set to <code>NULL</code>. This results in <code>NA</code> if the date is partial. As no date is imputed the date imputation flag is not created.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span>
   <span class="op">~</span><span class="va">AESTDTC</span>,
@@ -346,62 +295,18 @@
   <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span><span class="op">(</span>
     dtc <span class="op">=</span> <span class="va">AESTDTC</span>,
     new_vars_prefix <span class="op">=</span> <span class="st">"AST"</span>,
-    highest_imputation <span class="op">=</span> <span class="st">"M"</span>,
-    date_imputation <span class="op">=</span> <span class="st">"first"</span>,
-    time_imputation <span class="op">=</span> <span class="st">"first"</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/derive_vars_dtm_to_dt.html">derive_vars_dtm_to_dt</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">ASTDTM</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-6a04c22f5ec0ae2ad87f" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6a04c22f5ec0ae2ad87f">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2010-09&quot;,&quot;2019-04-12&quot;,&quot;2019-08-09T12:34:56&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1283299200000\" data-max=\"1565354096000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;D&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"date\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1283299200000\" data-max=\"1565308800000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-04-12","2010-09",null],["2019-08-09T12:34:56Z","2019-04-12T00:00:00Z","2010-09-01T00:00:00Z",null],[null,null,"D",null],[null,"H","H",null],["2019-08-09","2019-04-12","2010-09-01",null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AESTDTC<\/th>\n      <th>ASTDTM<\/th>\n      <th>ASTDTF<\/th>\n      <th>ASTTMF<\/th>\n      <th>ASTDT<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
-</div>
-<div class="section level3">
-<h3 id="create-an-imputed-date-variable-and-imputation-flag-variable">Create an Imputed Date Variable and Imputation Flag Variable<a class="anchor" aria-label="anchor" href="#create-an-imputed-date-variable-and-imputation-flag-variable"></a>
-</h3>
-<p>If an imputed date variable without a corresponding datetime variable is required, it can be derived by the <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> function.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span>
-  <span class="op">~</span><span class="va">AESTDTC</span>,
-  <span class="st">"2019-08-09T12:34:56"</span>,
-  <span class="st">"2019-04-12"</span>,
-  <span class="st">"2010-09"</span>,
-  <span class="cn">NA_character_</span>
-<span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/derive_vars_dt.html">derive_vars_dt</a></span><span class="op">(</span>
-    dtc <span class="op">=</span> <span class="va">AESTDTC</span>,
-    new_vars_prefix <span class="op">=</span> <span class="st">"AST"</span>,
-    highest_imputation <span class="op">=</span> <span class="st">"M"</span>,
-    date_imputation <span class="op">=</span> <span class="st">"first"</span>
-  <span class="op">)</span></code></pre></div>
-<div id="htmlwidget-8cab2a5a8733e728192c" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-8cab2a5a8733e728192c">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2010-09&quot;,&quot;2019-04-12&quot;,&quot;2019-08-09T12:34:56&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"date\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1283299200000\" data-max=\"1565308800000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;D&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-04-12","2010-09",null],["2019-08-09","2019-04-12","2010-09-01",null],[null,null,"D",null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AESTDTC<\/th>\n      <th>ASTDT<\/th>\n      <th>ASTDTF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
-</div>
-<div class="section level3">
-<h3 id="impute-time-without-imputing-date">Impute Time without Imputing Date<a class="anchor" aria-label="anchor" href="#impute-time-without-imputing-date"></a>
-</h3>
-<p>If the time should be imputed but not the date, the <code>highest_imputation</code> argument should be set to <code>"h"</code>. This results in <code>NA</code> if the date is partial. As no date is imputed the date imputation flag is not created.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span>
-  <span class="op">~</span><span class="va">AESTDTC</span>,
-  <span class="st">"2019-08-09T12:34:56"</span>,
-  <span class="st">"2019-04-12"</span>,
-  <span class="st">"2010-09"</span>,
-  <span class="cn">NA_character_</span>
-<span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span><span class="op">(</span>
-    dtc <span class="op">=</span> <span class="va">AESTDTC</span>,
-    new_vars_prefix <span class="op">=</span> <span class="st">"AST"</span>,
-    highest_imputation <span class="op">=</span> <span class="st">"h"</span>,
+    date_imputation <span class="op">=</span> <span class="cn">NULL</span>,
     time_imputation <span class="op">=</span> <span class="st">"first"</span>
   <span class="op">)</span></code></pre></div>
-<div id="htmlwidget-351e1f473e83fbb721d6" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-351e1f473e83fbb721d6">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2010-09&quot;,&quot;2019-04-12&quot;,&quot;2019-08-09T12:34:56&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1555027200000\" data-max=\"1565354096000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-04-12","2010-09",null],["2019-08-09T12:34:56Z","2019-04-12T00:00:00Z",null,null],[null,"H",null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AESTDTC<\/th>\n      <th>ASTDTM<\/th>\n      <th>ASTTMF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-9ab9cae51b52af7500d4" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9ab9cae51b52af7500d4">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2010-09&quot;,&quot;2019-04-12&quot;,&quot;2019-08-09T12:34:56&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1555027200000\" data-max=\"1565354096000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-04-12","2010-09",null],["2019-08-09T12:34:56Z","2019-04-12T00:00:00Z",null,null],[null,"H",null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AESTDTC<\/th>\n      <th>ASTDTM<\/th>\n      <th>ASTTMF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level3">
 <h3 id="avoid-imputed-dates-before-a-particular-date">Avoid Imputed Dates Before a Particular Date<a class="anchor" aria-label="anchor" href="#avoid-imputed-dates-before-a-particular-date"></a>
 </h3>
-<p>Usually the adverse event start date is imputed as the earliest date of all possible dates when filling the missing parts. The result may be a date before treatment start date. This is not desirable because the adverse event would not be considered as treatment emergent and excluded from the adverse event summaries. This can be avoided by specifying the treatment start date variable (<code>TRTSDTM</code>) for the <code>min_dates</code> argument.</p>
+<p>Usually the adverse event start date is imputed as the earliest date of all possible dates when filling the missing parts. The result may be a date before treatment start date. This is not desirable because the adverse event would not be considered as treatment emergent and excluded from the adverse event summaries. This can be avoided by specifying the treatment start date variable (<code>TRTSDTM</code>) for the <code>min_dates</code> parameter.</p>
 <p>Please note that <code>TRTSDTM</code> is used as imputed date only if the non missing date and time parts of <code>AESTDTC</code> coincide with those of <code>TRTSDTM</code>. Therefore <code>2019-10</code> is not imputed as <code>2019-11-11 12:34:56</code>. This ensures that collected information is not changed by the imputation.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span>
   <span class="op">~</span><span class="va">AESTDTC</span>,              <span class="op">~</span><span class="va">TRTSDTM</span>,
   <span class="st">"2019-08-09T12:34:56"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2019-11-11T12:34:56"</span><span class="op">)</span>,
@@ -412,20 +317,19 @@
   <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span><span class="op">(</span>
     dtc <span class="op">=</span> <span class="va">AESTDTC</span>,
     new_vars_prefix <span class="op">=</span> <span class="st">"AST"</span>,
-    highest_imputation <span class="op">=</span> <span class="st">"M"</span>,
     date_imputation <span class="op">=</span> <span class="st">"first"</span>,
     time_imputation <span class="op">=</span> <span class="st">"first"</span>,
     min_dates <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">TRTSDTM</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
-<div id="htmlwidget-cf5fe5d04420d34c33c1" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-cf5fe5d04420d34c33c1">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2019-08-09T12:34:56&quot;,&quot;2019-10&quot;,&quot;2019-11&quot;,&quot;2019-12-04&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1565354096000\" data-max=\"1575417600000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;D&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-10","2019-11","2019-12-04"],["2019-11-11T12:34:56Z","2019-11-11T12:34:56Z","2019-11-11T12:34:56Z","2019-11-11T12:34:56Z"],["2019-08-09T12:34:56Z","2019-10-01T00:00:00Z","2019-11-11T12:34:56Z","2019-12-04T00:00:00Z"],[null,"D","D",null],[null,"H","H","H"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AESTDTC<\/th>\n      <th>TRTSDTM<\/th>\n      <th>ASTDTM<\/th>\n      <th>ASTDTF<\/th>\n      <th>ASTTMF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-3f552bd883298d1794aa" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3f552bd883298d1794aa">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2019-08-09T12:34:56&quot;,&quot;2019-10&quot;,&quot;2019-11&quot;,&quot;2019-12-04&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1565354096000\" data-max=\"1575417600000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;D&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-10","2019-11","2019-12-04"],["2019-11-11T12:34:56Z","2019-11-11T12:34:56Z","2019-11-11T12:34:56Z","2019-11-11T12:34:56Z"],["2019-08-09T12:34:56Z","2019-10-01T00:00:00Z","2019-11-11T12:34:56Z","2019-12-04T00:00:00Z"],[null,"D","D",null],[null,"H","H","H"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AESTDTC<\/th>\n      <th>TRTSDTM<\/th>\n      <th>ASTDTM<\/th>\n      <th>ASTDTF<\/th>\n      <th>ASTTMF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level3">
 <h3 id="avoid-imputed-dates-after-a-particular-date">Avoid Imputed Dates After a Particular Date<a class="anchor" aria-label="anchor" href="#avoid-imputed-dates-after-a-particular-date"></a>
 </h3>
-<p>If a date is imputed as the latest date of all possible dates when filling the missing parts, it should not result in dates after data cut off or death. This can be achieved by specifying the dates for the <code>max_dates</code> argument.</p>
+<p>If a date is imputed as the latest date of all possible dates when filling the missing parts, it should not result in dates after data cut off or death. This can be achieved by specifying the dates for the <code>max_dates</code> parameter.</p>
 <p>Please note that non missing date parts are not changed. Thus <code>2019-12-04</code> is imputed as <code>2019-12-04 23:59:59</code> although it is after the data cut off date. It may make sense to replace it by the data cut off date but this is not part of the imputation. It should be done in a separate data cleaning or data cut off step.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span>
   <span class="op">~</span><span class="va">AEENDTC</span>,              <span class="op">~</span><span class="va">DTHDT</span>,            <span class="op">~</span><span class="va">DCUTDT</span>,
   <span class="st">"2019-08-09T12:34:56"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-11-11"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-12-02"</span><span class="op">)</span>,
@@ -436,19 +340,18 @@
   <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span><span class="op">(</span>
     dtc <span class="op">=</span> <span class="va">AEENDTC</span>,
     new_vars_prefix <span class="op">=</span> <span class="st">"AEN"</span>,
-    highest_imputation <span class="op">=</span> <span class="st">"M"</span>,
     date_imputation <span class="op">=</span> <span class="st">"last"</span>,
     time_imputation <span class="op">=</span> <span class="st">"last"</span>,
     max_dates <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">DTHDT</span>, <span class="va">DCUTDT</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
-<div id="htmlwidget-c467d58c8ffd0f1ff1a1" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c467d58c8ffd0f1ff1a1">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2019-08-09T12:34:56&quot;,&quot;2019-11&quot;,&quot;2019-12&quot;,&quot;2019-12-04&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1565354096000\" data-max=\"1575503999000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;D&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-11","2019-12","2019-12-04"],["2019-11-11","2019-11-11",null,null],["2019-12-02","2019-12-02","2019-12-02","2019-12-02"],["2019-08-09T12:34:56Z","2019-11-11T23:59:59Z","2019-12-02T23:59:59Z","2019-12-04T23:59:59Z"],[null,"D","D",null],[null,"H","H","H"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AEENDTC<\/th>\n      <th>DTHDT<\/th>\n      <th>DCUTDT<\/th>\n      <th>AENDTM<\/th>\n      <th>AENDTF<\/th>\n      <th>AENTMF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-e8ea9a22d762aae23e5d" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e8ea9a22d762aae23e5d">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2019-08-09T12:34:56&quot;,&quot;2019-11&quot;,&quot;2019-12&quot;,&quot;2019-12-04&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1565354096000\" data-max=\"1575503999000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;D&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-11","2019-12","2019-12-04"],["2019-11-11","2019-11-11",null,null],["2019-12-02","2019-12-02","2019-12-02","2019-12-02"],["2019-08-09T12:34:56Z","2019-11-11T00:00:00Z","2019-12-02T00:00:00Z","2019-12-04T23:59:59Z"],[null,"D","D",null],[null,"H","H","H"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AEENDTC<\/th>\n      <th>DTHDT<\/th>\n      <th>DCUTDT<\/th>\n      <th>AENDTM<\/th>\n      <th>AENDTF<\/th>\n      <th>AENTMF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level3">
 <h3 id="imputation-without-creating-a-new-variable">Imputation Without Creating a New Variable<a class="anchor" aria-label="anchor" href="#imputation-without-creating-a-new-variable"></a>
 </h3>
 <p>If imputation is required without creating a new variable the <code><a href="../reference/convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code> function can be called to obtain a vector of imputed dates. It can be used for example in conditions:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span>
   <span class="op">~</span><span class="va">MHSTDTC</span>,     <span class="op">~</span><span class="va">TRTSDT</span>,
   <span class="st">"2019-04"</span>,    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-04-15"</span><span class="op">)</span>,
@@ -457,20 +360,16 @@
   <span class="st">"2019-06-21"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-04-15"</span><span class="op">)</span>
 <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/convert_dtc_to_dt.html">convert_dtc_to_dt</a></span><span class="op">(</span>
-      <span class="va">MHSTDTC</span>,
-      highest_imputation <span class="op">=</span> <span class="st">"M"</span>,
-      date_imputation <span class="op">=</span> <span class="st">"first"</span>
-    <span class="op">)</span> <span class="op">&lt;</span> <span class="va">TRTSDT</span>
+    <span class="fu"><a href="../reference/convert_dtc_to_dt.html">convert_dtc_to_dt</a></span><span class="op">(</span><span class="va">MHSTDTC</span>, date_imputation <span class="op">=</span> <span class="st">"first"</span><span class="op">)</span> <span class="op">&lt;</span> <span class="va">TRTSDT</span>
   <span class="op">)</span></code></pre></div>
-<div id="htmlwidget-8169a53752d07641720a" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-8169a53752d07641720a">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2019-04&quot;,&quot;2019-04-01&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-04","2019-04-01"],["2019-04-15","2019-04-15"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>MHSTDTC<\/th>\n      <th>TRTSDT<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-61ba3702e4f185c162b9" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-61ba3702e4f185c162b9">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2019-04&quot;,&quot;2019-04-01&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-04","2019-04-01"],["2019-04-15","2019-04-15"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>MHSTDTC<\/th>\n      <th>TRTSDT<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level3">
 <h3 id="using-more-than-one-imputation-rule-for-a-variable">Using More Than One Imputation Rule for a Variable<a class="anchor" aria-label="anchor" href="#using-more-than-one-imputation-rule-for-a-variable"></a>
 </h3>
 <p>Using different imputation rules depending on the observation can be done by using <code><a href="../reference/slice_derivation.html">slice_derivation()</a></code>.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">vs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span>
   <span class="op">~</span><span class="va">VSDTC</span>,                <span class="op">~</span><span class="va">VSTPT</span>,
   <span class="st">"2019-08-09T12:34:56"</span>, <span class="cn">NA</span>,
@@ -482,7 +381,8 @@
     derivation <span class="op">=</span> <span class="va">derive_vars_dtm</span>,
     args <span class="op">=</span> <span class="fu"><a href="../reference/params.html">params</a></span><span class="op">(</span>
       dtc <span class="op">=</span> <span class="va">VSDTC</span>,
-      new_vars_prefix <span class="op">=</span> <span class="st">"A"</span>
+      new_vars_prefix <span class="op">=</span> <span class="st">"A"</span>,
+      date_imputation <span class="op">=</span> <span class="cn">NULL</span>
     <span class="op">)</span>,
     <span class="fu"><a href="../reference/derivation_slice.html">derivation_slice</a></span><span class="op">(</span>
       filter <span class="op">=</span> <span class="va">VSTPT</span> <span class="op">==</span> <span class="st">"PRE-DOSE"</span>,
@@ -493,8 +393,8 @@
       args <span class="op">=</span> <span class="fu"><a href="../reference/params.html">params</a></span><span class="op">(</span>time_imputation <span class="op">=</span> <span class="st">"last"</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span></code></pre></div>
-<div id="htmlwidget-eab7fac271c654f72292" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-eab7fac271c654f72292">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2019-08-09T12:34:56&quot;,&quot;2019-10-12&quot;,&quot;2019-11-10&quot;,&quot;2019-12-04&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;PRE-DOSE&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1565354096000\" data-max=\"1575503999000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-11-10","2019-12-04","2019-10-12"],[null,null,null,"PRE-DOSE"],["2019-08-09T12:34:56Z","2019-11-10T23:59:59Z","2019-12-04T23:59:59Z","2019-10-12T00:00:00Z"],[null,"H","H","H"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>VSDTC<\/th>\n      <th>VSTPT<\/th>\n      <th>ADTM<\/th>\n      <th>ATMF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-6f69757b86d676c78658" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6f69757b86d676c78658">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2019-08-09T12:34:56&quot;,&quot;2019-10-12&quot;,&quot;2019-11-10&quot;,&quot;2019-12-04&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;PRE-DOSE&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1565354096000\" data-max=\"1575503999000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-11-10","2019-12-04","2019-10-12"],[null,null,null,"PRE-DOSE"],["2019-08-09T12:34:56Z","2019-11-10T23:59:59Z","2019-12-04T23:59:59Z","2019-10-12T00:00:00Z"],[null,"H","H","H"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>VSDTC<\/th>\n      <th>VSTPT<\/th>\n      <th>ADTM<\/th>\n      <th>ATMF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
