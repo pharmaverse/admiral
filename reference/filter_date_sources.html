@@ -12,7 +12,7 @@ from a list of sources."><meta property="og:image" content="https://pharmaverse.
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,32 +21,35 @@ from a list of sources."><meta property="og:image" content="https://pharmaverse.
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../reference/index.html">Functions</a>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
-    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
-    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
+    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
-    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
-    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
-    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
-    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
-    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
-    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
-    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
+    <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
+    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Findings ADAM</a>
+    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
+    <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
+    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
+    <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
+    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+  </div>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-community">
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
+    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
+    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
   </div>
 </li>
 <li class="nav-item">
@@ -141,33 +144,52 @@ single dataset.</p></li>
 <code>ADT</code> variable) from the single dataset is selected.</p></li>
 </ol></div>
     <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Source Specifications: 
+<code><a href="censor_source.html">censor_source</a>()</code>,
+<code><a href="date_source.html">date_source</a>()</code>,
+<code><a href="tte_source_objects.html">death_event</a></code>,
+<code><a href="derive_var_dthcaus.html">derive_var_dthcaus</a>()</code>,
+<code><a href="event_source.html">event_source</a>()</code>,
+<code><a href="list_tte_source_objects.html">list_tte_source_objects</a>()</code>,
+<code><a href="params.html">params</a>()</code>,
+<code><a href="query.html">query</a>()</code>,
+<code><a href="sdg_select.html">sdg_select</a>()</code>,
+<code><a href="smq_select.html">smq_select</a>()</code>,
+<code><a href="tte_source.html">tte_source</a>()</code></p></div>
+    </div>
+    <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Stefan Bundfuss</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">TRTSDT</span>,           <span class="op">~</span><span class="va">EOSDT</span>,</span>
 <span class="r-in">  <span class="st">"01"</span>,     <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2020-12-06"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2021-03-06"</span><span class="op">)</span>,</span>
 <span class="r-in">  <span class="st">"02"</span>,     <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2021-01-16"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2021-02-03"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYID <span class="op">=</span> <span class="st">"AB42"</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AESTDTC</span>,           <span class="op">~</span><span class="va">AESEQ</span>, <span class="op">~</span><span class="va">AEDECOD</span>,</span>
-<span class="r-in">  <span class="st">"01"</span>,     <span class="st">"2021-01-03T10:56"</span>, <span class="fl">1</span>,      <span class="st">"Flu"</span>,</span>
-<span class="r-in">  <span class="st">"01"</span>,     <span class="st">"2021-03-04"</span>,       <span class="fl">2</span>,      <span class="st">"Cough"</span>,</span>
-<span class="r-in">  <span class="st">"01"</span>,     <span class="st">"2021"</span>,             <span class="fl">3</span>,      <span class="st">"Flu"</span></span>
+<span class="r-in"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AESTDTC</span>,     <span class="op">~</span><span class="va">AESEQ</span>, <span class="op">~</span><span class="va">AEDECOD</span>,</span>
+<span class="r-in">  <span class="st">"01"</span>,     <span class="st">"2021-01-03"</span>, <span class="fl">1</span>,      <span class="st">"Flu"</span>,</span>
+<span class="r-in">  <span class="st">"01"</span>,     <span class="st">"2021-03-04"</span>, <span class="fl">2</span>,      <span class="st">"Cough"</span>,</span>
+<span class="r-in">  <span class="st">"01"</span>,     <span class="st">"2021-01-01"</span>, <span class="fl">3</span>,      <span class="st">"Flu"</span></span>
 <span class="r-in"><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYID <span class="op">=</span> <span class="st">"AB42"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span class="r-in">    STUDYID <span class="op">=</span> <span class="st">"AB42"</span>,</span>
+<span class="r-in">    AESTDT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">AESTDTC</span><span class="op">)</span></span>
+<span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">ttae</span> <span class="op">&lt;-</span> <span class="fu"><a href="event_source.html">event_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ae"</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">AESTDTC</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="va">AESTDT</span>,</span>
 <span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span></span>
 <span class="r-in">    EVNTDESC <span class="op">=</span> <span class="st">"AE"</span>,</span>
 <span class="r-in">    SRCDOM <span class="op">=</span> <span class="st">"AE"</span>,</span>

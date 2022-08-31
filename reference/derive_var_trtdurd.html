@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,32 +19,35 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../reference/index.html">Functions</a>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
-    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
-    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
+    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
-    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
-    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
-    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
-    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
-    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
-    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
-    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
+    <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
+    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Findings ADAM</a>
+    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
+    <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
+    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
+    <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
+    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+  </div>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-community">
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
+    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
+    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
   </div>
 </li>
 <li class="nav-item">
@@ -110,7 +113,14 @@ start to end date plus one.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="derive_vars_duration.html">derive_vars_duration()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="derive_vars_duration.html">derive_vars_duration()</a></code></p>
+<p>Date/Time Derivation Functions that returns variable appended to dataset: 
+<code><a href="derive_vars_dtm_to_dt.html">derive_vars_dtm_to_dt</a>()</code>,
+<code><a href="derive_vars_dtm_to_tm.html">derive_vars_dtm_to_tm</a>()</code>,
+<code><a href="derive_vars_dtm.html">derive_vars_dtm</a>()</code>,
+<code><a href="derive_vars_dt.html">derive_vars_dt</a>()</code>,
+<code><a href="derive_vars_duration.html">derive_vars_duration</a>()</code>,
+<code><a href="derive_vars_dy.html">derive_vars_dy</a>()</code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
