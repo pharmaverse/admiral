@@ -19,6 +19,7 @@ A derived dataset with single dose per date.
 \seealso{
 Other datasets: 
 \code{\link{admiral_adsl}},
+\code{\link{atoxgr_criteria_ctcv4}},
 \code{\link{queries}}
 }
 \concept{datasets}
