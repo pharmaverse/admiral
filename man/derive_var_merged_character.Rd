@@ -130,6 +130,7 @@ derive_var_merged_character(
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},

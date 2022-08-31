@@ -8,8 +8,7 @@
 
 - New function `compute_qual_imputation()` which imputes values when qualifier exists in character result (#976)
 
-- All admiral utility functions are exported now such that they can be used in
-admiral extension packages (#1079)
+- Moved all developer-facing functions to `{admiraldev}` (#1231)
 
 - New function to map lookup table `derive_vars_merged_lookup()` (#940)
 
@@ -35,7 +34,7 @@ and `ATOXGRH` holds toxicity/severity grade for high lab values.
 
 - `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
 
-- `list_all_templates()` and `use_ad_templates()` gain a `package` parameter which
+- `list_all_templates()` and `use_ad_template()` gain a `package` parameter which
 can be used to indicate in which package to look for templates (#1205)
 
 - Randomization Date `RANDDT` variable added to ADSL template and vignette (#1126)
@@ -125,10 +124,15 @@ have been removed:
 
 - Added link to [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) to README
 
-## Various
-
 - Restructured Reference page and updated **all** functions to use `family` tag 
 in roxygen headers for finding similar functions.  (#1105)
+
+- Renamed Reference page to Functions and Articles to User Guides. Moved Developer 
+  Vignettes to `{admiraldev}` (#1356)
+
+- Renamed Reference page to Functions and updated **all** functions to use `family` tag 
+in roxygen headers for finding similar functions.  (#1105)
+
 
 # admiral 0.7.1
 

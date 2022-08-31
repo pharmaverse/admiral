@@ -31,9 +31,7 @@ try(call_user_fun(compute_bmi(
 Utilities used within Derivation functions: 
 \code{\link{extract_unit}()},
 \code{\link{get_not_mapped}()},
-\code{\link{negate_vars}()},
-\code{\link{signal_duplicate_records}()},
-\code{\link{vars2chr}()}
+\code{\link{signal_duplicate_records}()}
 }
 \author{
 Stefan Bundfuss

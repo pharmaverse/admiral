@@ -16,6 +16,7 @@ list(
     utils_fmt = "Utilities for Formatting Observations: ",
     utils_help = "Utilities used within Derivation functions: ",
     utils_examples = "Utilities used for examples and template scripts: ",
+    utils_impute = "Utilities used for date imputation: ",
     source_specifications = "Source Specifications: ",
     high_order_function = "Higher Order Functions: ",
     move_adm_dev = "Functions moved to admiraldev package: "
