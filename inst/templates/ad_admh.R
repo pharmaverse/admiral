@@ -140,18 +140,16 @@ admh <- mh %>%
   )
 
 # Derive MHTERMN (company specific variable derivation)
-admh <- admh %>%
-  filter(MHPRESP == "Y") %>%
-  derive_vars_merged(
+admh <- restrict_derivation(
+  admh,
+  derivation = derive_vars_merged,
+  args = params(
     dataset_add = mhtermn_lookup,
-    new_vars = vars(MHTERMN),
-    by_vars = vars(MHTERM)
-  )
-
-admh <- admh %>%
-  filter(is.na(MHPRESP) | MHPRESP != "Y") %>%
-  mutate(MHTERMN = NA) %>%
-  bind_rows(admh)
+    by_vars = vars(MHTERM),
+    new_vars = vars(MHTERMN)
+  ),
+  filter = (MHPRESP == "Y")
+)
 
 
 
