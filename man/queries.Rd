@@ -19,10 +19,9 @@ Queries Dataset
 \seealso{
 Other datasets: 
 \code{\link{admiral_adsl}},
+\code{\link{atoxgr_criteria_ctcv4}},
 \code{\link{ex_single}},
 \code{\link{queries_mh}}
-\code{\link{atoxgr_criteria_ctcv4}},
-\code{\link{ex_single}}
 }
 \concept{datasets}
 \keyword{datasets}
