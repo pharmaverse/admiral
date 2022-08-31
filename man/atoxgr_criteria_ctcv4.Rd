@@ -46,6 +46,7 @@ tracability only.
 Other datasets: 
 \code{\link{admiral_adsl}},
 \code{\link{ex_single}},
+\code{\link{queries_mh}},
 \code{\link{queries}}
 }
 \author{

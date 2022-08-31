@@ -117,6 +117,9 @@ have been removed:
 
 ## Documentation
 
+- New admh R Script template added. Use `admiral::use_ad_template("admh")` to access 
+  (#502)
+
 - New vignette [Higher Order Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html) (#1047)
 
 - Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
