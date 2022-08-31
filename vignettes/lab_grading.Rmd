@@ -241,7 +241,8 @@ adlb <- adlb %>%
 
 Note: `{admiral}` does not grade 'Anemia' or 'Hemoglobin Increased' because the metadata is 
 based on the SI unit of 'g/L', however the CDISC data has SI unit of 'mmol/L'.
-Please see `SI_UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctcv4`.
+Please see `SI_UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctcv4`, the metadata
+is in the data folder of `{admiral}`.
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
