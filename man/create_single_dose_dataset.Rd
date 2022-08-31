@@ -8,9 +8,12 @@ create_single_dose_dataset(
   dataset,
   dose_freq = EXDOSFRQ,
   start_date = ASTDT,
+  start_datetime = ASTDTM,
   end_date = AENDT,
+  end_datetime = AENDTM,
   lookup_table = dose_freq_lookup,
-  lookup_column = CDISC_VALUE
+  lookup_column = CDISC_VALUE,
+  keep_source_vars = vars(USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM)
 )
 }
 \arguments{
@@ -29,12 +32,21 @@ Permitted Values: defined by lookup table.}
 
 \item{start_date}{The start date
 
-A date or date-time object is expected. This object cannot contain \code{NA} values.
+A date object is expected. This object cannot contain \code{NA} values.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 Default: \code{ASTDT}}
+
+\item{start_datetime}{The start date-time
+
+A date-time object is expected. This object cannot contain \code{NA} values.
+
+Refer to \code{derive_vars_dtm()} to impute and derive a date-time from a date
+character vector to a date object.
+
+Default: \code{ASTDTM}}
 
 \item{end_date}{The end date
 
@@ -44,6 +56,15 @@ Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 Default: \code{AENDT}}
+
+\item{end_datetime}{The end date-time
+
+A date-time object is expected. This object cannot contain \code{NA} values.
+
+Refer to \code{derive_vars_dtm()} to impute and derive a date-time from a date
+character vector to a date object.
+
+Default: \code{AENDTM}}
 
 \item{lookup_table}{The dose frequency value lookup table
 
@@ -63,6 +84,10 @@ Permitted Values for \code{DOSE_WINDOW}: \code{"MINUTE"}, \code{"HOUR"}, \code{"
 The column of \code{lookup_table}.
 
 Default: \code{CDISC_VALUE} (column of \code{dose_freq_lookup})}
+
+\item{keep_source_vars}{List of variables to be retained from source dataset
+
+Default: vars(USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM)}
 }
 \value{
 The input dataset with a single dose per row.
@@ -75,24 +100,30 @@ or deriving a total dose parameter in \code{ADEX} when \code{EXDOSFRQ != ONCE}.
 \details{
 Each aggregate dose row is split into multiple rows which each
 represent a single dose.The number of completed dose periods between
-\code{start_date} and \code{end_date} is calculated with \code{compute_duration} and
-multiplied by \code{DOSE_COUNT}. For \code{DOSE_WINDOW} values of \code{"WEEK"},
-\code{"MONTH"}, and \code{"YEAR"}, \code{CONVERSION_FACTOR} is used to convert into days
-the time object to be added to \code{start_date}.
+\code{start_date} or \code{start_datetime} and \code{end_date} or \code{end_datetime} is
+calculated with \code{compute_duration} and multiplied by \code{DOSE_COUNT}.
+For \code{DOSE_WINDOW} values of \code{"WEEK"}, \code{"MONTH"}, and \code{"YEAR"},
+\code{CONVERSION_FACTOR} is used to convert into days the time object
+to be added to \code{start_date}.
 }
 \examples{
 # Example with default lookup
 
 library(lubridate)
+library(stringr)
 
 data <- tibble::tribble(
-  ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
-  "P01", "Q2D", ymd("2021-01-01"), ymd("2021-01-07"),
-  "P01", "Q3D", ymd("2021-01-08"), ymd("2021-01-15"),
-  "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd("2021-01-29")
+  ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
+  "P01", "Q2D", ymd("2021-01-01"), ymd_hms("2021-01-01 10:30:00"),
+  ymd("2021-01-07"), ymd_hms("2021-01-07 11:30:00"),
+  "P01", "Q3D", ymd("2021-01-08"), ymd_hms("2021-01-08 12:00:00"),
+  ymd("2021-01-14"), ymd_hms("2021-01-14 14:00:00"),
+  "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd_hms("2021-01-15 09:57:00"),
+  ymd("2021-01-29"), ymd_hms("2021-01-29 10:57:00")
 )
 
 create_single_dose_dataset(data)
+
 
 # Example with custom lookup
 
@@ -103,16 +134,16 @@ custom_lookup <- tibble::tribble(
 )
 
 data <- tibble::tribble(
-  ~USUBJID, ~EXDOSFRQ, ~ASTDTM, ~AENDTM,
-  "P01", "Q30MIN", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T07:00:00"),
-  "P02", "Q90MIN", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T09:00:00")
+  ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
+  "P01", "Q30MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
+  ymd("2021-01-01"), ymd_hms("2021-01-01T07:00:00"),
+  "P02", "Q90MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
+  ymd("2021-01-01"), ymd_hms("2021-01-01T09:00:00")
 )
 
 create_single_dose_dataset(data,
   lookup_table = custom_lookup,
-  lookup_column = Value,
-  start_date = ASTDTM,
-  end_date = AENDTM
+  lookup_column = Value
 )
 }
 \seealso{
