@@ -18,6 +18,7 @@ An example subject level analysis dataset
 }
 \seealso{
 Other datasets: 
+\code{\link{atoxgr_criteria_ctcv4}},
 \code{\link{ex_single}},
 \code{\link{queries_mh}},
 \code{\link{queries}}

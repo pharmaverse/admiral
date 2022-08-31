@@ -85,7 +85,6 @@ if (FALSE) {
 }
 \seealso{
 BDS-Findings Functions that returns variable appended to dataset: 
-\code{\link{atoxgr_criteria_ctcv4}},
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_param_rr}()},
 \code{\link{derive_summary_records}()},
