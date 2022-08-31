@@ -180,7 +180,7 @@ be preserved.
 
 # Computations
 
-[Computations](../reference/index.html#computations) expect vectors as
+[Computations](../reference/index.html#computation-functions-for-vectors) expect vectors as
 input and return a vector. Usually these computation functions can not be used with `%>%`. These functions can be used in expressions like
 `convert_dtc_to_dt()` in the derivation of `FINLABDT` in the
 example below:
@@ -309,4 +309,4 @@ channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269).
 
 - [Template scripts](https://github.com/pharmaverse/admiral/tree/main/inst/templates)
 
-- [Programming Strategy](programming_strategy.html)
+- [Programming Strategy](https://pharmaverse.github.io/admiraldev/main/articles/programming_strategy.html)

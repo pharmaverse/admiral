@@ -44,10 +44,10 @@ Phases:
 
 | Release Schedule           | Phase 1- Date and Packages   |  Phase 2- Date and Packages | Phase 3- Date and Packages   |
 |----------------------------|------------------------------|---------------------------- |------------------------------|
-| Q3-2022                    |    August 29th               |   September 5th             |  September 12th              |  
+| Q4-2022                    |    November 28th             |   December 5th              |  December 12th              |  
 |                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
 |                            |   `{admiral.test}`           |                             |           |
-| Q4-2022                    |    November 28th             |   December 5th              |  December 12th               |  
+| Q1-2023                    |    February 27th             |   March 6th                 |  March 12th               |  
 |                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
 |                            |   `{admiral.test}`           |                             |              |
 
@@ -144,7 +144,7 @@ extension packages will be moved to the core `{admiral}` package.
 
 ### Readability
 
-All `{admiral}` functions follow the [Programming Strategy](https://pharmaverse.github.io/admiral/articles/programming_strategy.html)
+All `{admiral}` functions follow the [Programming Strategy](https://pharmaverse.github.io/admiraldev/main/articles/programming_strategy.html)
 that all our developers and contributors must follow, so that all our code has a high degree of consistency and readability.
 
 * We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.
@@ -160,7 +160,7 @@ therefore want any module to be understandable to all, not only the `{admiral}` 
 
 * Please go to [Get Started](https://pharmaverse.github.io/admiral/articles/admiral.html) section to start using `{admiral}`
 * Please see the [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) for videos related to `{admiral}`.
-* Please see the [Programming Strategy](https://pharmaverse.github.io/admiral/articles/programming_strategy.html) to understand how functions are created
+* Please see the [Programming Strategy](https://pharmaverse.github.io/admiraldev/main/articles/programming_strategy.html) to understand how functions are created
 * Please see the [FAQ](https://pharmaverse.github.io/admiral/articles/faq.html) for the most frequent questions
 * Please see the [Contribution Model](https://pharmaverse.github.io/admiral/articles/contribution_model.html) for how to get involved with making contributions
 * Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.

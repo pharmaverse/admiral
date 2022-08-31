@@ -106,7 +106,7 @@ navbar:
       text: Get Started
       href: articles/admiral.html
     reference:
-      text: Functions
+      text: Reference
       href: reference/index.html
     community:
       text: Community
