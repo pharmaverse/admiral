@@ -95,8 +95,8 @@ The list of terms defined in the `{admiral}` metadata to implement NCI-CTCAEv4 i
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
-atoxgr_criteria_ctcv4 %>% 
-  filter(!is.na(TERM)) %>% 
+atoxgr_criteria_ctcv4 %>%
+  filter(!is.na(TERM)) %>%
   dataset_vignette(
     display_vars = vars(TERM)
   )
@@ -247,12 +247,11 @@ is in the data folder of `{admiral}`.
 
 ```{r, eval=TRUE, echo=FALSE}
 
-atoxgr_criteria_ctcv4 %>% 
-  filter(!is.na(SI_UNIT_CHECK)) %>% 
+atoxgr_criteria_ctcv4 %>%
+  filter(!is.na(SI_UNIT_CHECK)) %>%
   dataset_vignette(
     display_vars = vars(TERM, SI_UNIT_CHECK),
   )
-
 ```
 <br>
 
@@ -267,8 +266,8 @@ adlb <- adlb %>%
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
-adlb %>% 
-  filter((ATOXGRL == "1") | (ATOXGRH == "1")) %>% 
+adlb %>%
+  filter((ATOXGRL == "1") | (ATOXGRH == "1")) %>%
   dataset_vignette(
     display_vars = vars(ATOXDSCL, ATOXDSCH, ATOXGRL, ATOXGRH, ATOXGR)
   )
@@ -340,8 +339,8 @@ the metadata:
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
-atoxgr_criteria_ctcv4 %>% 
-  filter(str_detect(TERM, "calcemia")) %>% 
+atoxgr_criteria_ctcv4 %>%
+  filter(str_detect(TERM, "calcemia")) %>%
   dataset_vignette(
     display_vars = vars(TERM, COMMENT)
   )
@@ -354,8 +353,8 @@ be split into 2 rows:
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-atoxgr_criteria_ctcv4 %>% 
-  filter(str_detect(TERM, "glycemia")) %>% 
+atoxgr_criteria_ctcv4 %>%
+  filter(str_detect(TERM, "glycemia")) %>%
   dataset_vignette(
     display_vars = vars(TERM, COMMENT)
   )
@@ -372,7 +371,7 @@ For term "INR Increased" there is the following criteria:
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
-  display_vars = vars(TERM, Grade_1)
+    display_vars = vars(TERM, Grade_1)
   )
 ```
 <br>
@@ -382,8 +381,8 @@ lab value against ULN and also BASE. The decision made was put in the `COMMENT` 
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-atoxgr_criteria_ctcv4 %>% 
-  filter(str_detect(TERM, "INR")) %>% 
+atoxgr_criteria_ctcv4 %>%
+  filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
     display_vars = vars(TERM, COMMENT)
   )
@@ -396,8 +395,8 @@ put in the `COMMENT` field.
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-atoxgr_criteria_ctcv4 %>% 
-  filter(str_detect(TERM, "Hypouricemia")) %>% 
+atoxgr_criteria_ctcv4 %>%
+  filter(str_detect(TERM, "Hypouricemia")) %>%
   dataset_vignette(
     display_vars = vars(TERM, Grade_1, Grade_3, COMMENT)
   )
@@ -410,8 +409,8 @@ The decision made was put in the `COMMENT` field.
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-atoxgr_criteria_ctcv4 %>% 
-  filter(str_detect(TERM, "Hypokalemia")) %>% 
+atoxgr_criteria_ctcv4 %>%
+  filter(str_detect(TERM, "Hypokalemia")) %>%
   dataset_vignette(
     display_vars = vars(TERM, Grade_1, Grade_2, COMMENT)
   )
