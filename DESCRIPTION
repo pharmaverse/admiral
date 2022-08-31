@@ -72,7 +72,7 @@ Imports:
     lubridate (>= 1.7.4),
     magrittr (>= 1.5),
     purrr (>= 0.3.3),
-    readxl (>= 1.4.0)
+    readxl (>= 1.4.0),
     rlang (>= 1.0.2),
     stringr (>= 1.4.0),
     tidyr (>= 1.0.2),
