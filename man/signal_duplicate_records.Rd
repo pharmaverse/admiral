@@ -41,9 +41,7 @@ signal_duplicate_records(adsl, vars(USUBJID), cnd_type = "message")
 Utilities used within Derivation functions: 
 \code{\link{call_user_fun}()},
 \code{\link{extract_unit}()},
-\code{\link{get_not_mapped}()},
-\code{\link{negate_vars}()},
-\code{\link{vars2chr}()}
+\code{\link{get_not_mapped}()}
 }
 \author{
 Thomas Neitmann
