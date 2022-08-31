@@ -12,4 +12,4 @@ library(spelling)
 library(staged.dependencies)
 library(styler)
 library(usethis)
-library(renv)
+
