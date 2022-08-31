@@ -69,7 +69,7 @@ Imports:
     hms (>= 0.5.3),
     lifecycle (>= 1.0.0),
     lubridate (>= 1.7.4),
-    magrittr (>= 2.0.1),
+    magrittr (>= 1.5),
     purrr (>= 0.3.3),
     rlang (>= 1.0.2),
     stringr (>= 1.4.0),
