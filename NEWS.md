@@ -115,8 +115,8 @@ have been removed:
   - `lstalvdt_source()`
   - `derive_var_trtedtm()`
   - `derive_var_trtsdtm()`
-  
-- The following functions and parameters,, which were deprecated in previous
+
+- The following functions and parameters, which were deprecated in previous
 {admiral} versions, are now defunct and will output an ERROR if used:
 
   - `derive_var_ady()` 
