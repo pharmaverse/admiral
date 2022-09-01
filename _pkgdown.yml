@@ -64,6 +64,10 @@ reference:
   contents:
   - has_keyword('com_bds_findings')
 
+- title: Joining data from one dataframe to another
+- subtitle:
+- contents:
+  - has_keyword("derive_vars_merged")
 
 - title: Utility Functions
 - subtitle: Utilities for Formatting Observations
@@ -98,7 +102,7 @@ reference:
 - subtitle: Deprecated
 - contents:
   - has_keyword("deprecated")
-  
+
 navbar:
   structure:
     left: [getstarted, reference, articles, community, news]
@@ -145,3 +149,5 @@ navbar:
         href: articles/queries_dataset.html
       - text: Lab Grading
         href: articles/lab_grading.html
+      - text: Joining dataframes
+        href: articles/derive_vars_merged.html

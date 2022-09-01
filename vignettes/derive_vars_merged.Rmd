@@ -1,0 +1,423 @@
+---
+title: "Joining data from one dataframe to another"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Joining data from one dataframe to another}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+This article describes a suite of four functions which form part of the derived_vars_merged family
+and how they can be used to serve a specific purpose:
+
+* [derive_vars_merged()](#derive_vars_merged)
+* [derive_var_merged_cat()](#derive_var_merged_cat)
+* [derive_var_merged_exist_flag()](#derive_var_merged_exist_flag)
+* [derive_var_merged_character()](#derive_var_merged_character)
+
+**Note:** *All examples assume CDISC SDTM and/or ADaM format as input unless 
+otherwise specified.*
+
+
+## Required Packages
+
+The examples in this vignette require the following packages.
+
+```{r, warning=FALSE, message=FALSE}
+library(admiral)
+library(admiral.test)
+library(dplyr)
+library(stringr)
+```
+
+For example purposes, the SDTM datasets from `{admiral.test}` are used for two subjects only.
+
+```{r, warning=FALSE, message=FALSE}
+data("admiral_dm")
+data("admiral_ds")
+data("admiral_ex")
+data("admiral_vs")
+
+dm <- convert_blanks_to_na(admiral_dm)
+ds <- convert_blanks_to_na(admiral_ds)
+ex <- convert_blanks_to_na(admiral_ex)
+vs <- convert_blanks_to_na(admiral_vs)
+
+dm <- filter(dm, USUBJID %in% c("01-701-1111", "01-705-1393"))
+ds <- filter(ds, USUBJID %in% c("01-701-1111", "01-705-1393"))
+ex <- filter(ex, USUBJID %in% c("01-701-1111", "01-705-1393"))
+vs <- filter(vs, USUBJID %in% c("01-701-1111", "01-705-1393"))
+```
+
+## `derive_vars_merged()` {#derive_vars_merged}
+
+**Description**\
+
+This function can be used to join columns in the dataframe being passed into the `dataset_add`
+argument to another input dataframe being passed into the `dataset` argument. The dataframe
+being joined to the input dataframe is referred to throughout this document as the 'additional
+dataframe'.
+
+The additional dataframe can be filtered based on a user-defined condition passed into the
+`filter_add` argument and/or by selecting the first or last row for each by group (`order` and
+`mode` arguments) and then joined with the input dataframe by user-specified columns passed into
+`by_vars` argument. Columns from the additional dataframe can be joined to the input dataframe as
+they are or can be renamed (`new_vars` argument).
+
+
+**Return**\
+
+The dataframe returned from the function call contains all rows and columns from the input 
+dataframe with or without filtering applied and additionally the columns specified for `new_vars`
+from the additional dataframe. This is achieved via an underlying
+[dplyr::left_join](https://dplyr.tidyverse.org/reference/mutate-joins.html). For rows without a 
+matching row in the additional dataframe the new columns are set to NA. Rows in the additional 
+dataframe which have no matching row in the input dataframe are ignored.
+
+
+**Error checking**\
+
+- The following arguments are expected and, if not provided, will generate error messages: 
+`dataset`, `dataset_add`, `by_vars`.
+
+- When no value is passed to the `new_vars` argument, all columns from the additional dataframe are
+joined to the input dataframe. An error message will show if the same column name is being used
+in both dataframes. The user has the option to rename columns from the additional dataframe in the
+`new_vars` argument.
+
+- The additional dataframe being joined to the input dataframe must contain unique records for each 
+by group otherwise the join will fail and a warning will be displayed. The type of message is a
+'warning' by default but can be upgraded to 'error' through the use of the `check_type` argument.
+
+### Example 1 
+
+A simple call to derive `ADSL` randomization date (`ADSL.RANDDT`) from an intermediate additional
+dataframe would be:
+
+```{r eval=TRUE}
+# Use DM domain as basis to build ADSL
+adsl_01 <- dm %>%
+  select(-DOMAIN)
+
+# Convert disposition character date to numeric date without imputation (DSSTDT)
+ds_ext <- derive_vars_dt(
+  dataset         = ds,
+  dtc             = DSSTDTC,
+  new_vars_prefix = "DSST"
+)
+
+# Join randomization date to ADSL dataframe
+adsl_02 <- adsl_01 %>%
+  derive_vars_merged(
+    dataset_add = ds_ext,
+    filter_add  = DSDECOD == "RANDOMIZED",
+    by_vars     = vars(STUDYID, USUBJID),
+    new_vars    = vars(RANDDT = DSSTDT)
+  ) 
+```
+
+This call would return the input dataframe with the column `RANDDT` added. 
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  dataset      = adsl_02, 
+  display_vars = vars(USUBJID, RANDDT)
+  )
+```
+
+Note: Only USUBJID, RANDDT are printed.
+
+### Example 2
+
+This function can be used to join the first or last row (via `mode` argument values of "first"
+or "last") of a group of ordered records (`order` argument) from one dataframe to an input
+dataframe.
+
+In this example, the function allows the user to derive the ADSL subject-level columns:
+
+- `ADSL.TRTSDTM` (Datetime of First Exposure to Treatment)
+- `ADSL.TRTSTMF` (Time of First Exposure Imput. Flag)
+- `ADSL.TRTEDTM` (Datetime of Last Exposure to Treatment)
+- `ADSL.TRTETMF` (Time of Last Exposure Imput. Flag)
+
+from multiple records originating from another dataframe.
+
+```{r eval=TRUE}
+# Impute start and end time of exposure to first and last respectively, do not impute date
+ex_ext <- ex %>%
+  derive_vars_dtm(
+    dtc             = EXSTDTC,
+    new_vars_prefix = "EXST",
+    time_imputation = "first"
+  ) %>%
+  derive_vars_dtm(
+    dtc             = EXENDTC,
+    new_vars_prefix = "EXEN",
+    time_imputation = "last"
+  )
+
+# Determine first and last datetime of exposure per subject and join dataframe to ADSL
+adsl_03 <- dm %>%
+  derive_vars_merged(
+    dataset_add = ex_ext,
+    filter_add  = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & !is.na(EXSTDTM),
+    new_vars    = vars(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
+    order       = vars(EXSTDTM, EXSEQ),
+    mode        = "first",
+    by_vars     = vars(STUDYID, USUBJID)
+  ) %>% 
+  derive_vars_merged(
+    dataset_add = ex_ext,
+    filter_add  = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & !is.na(EXENDTM),
+    new_vars    = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+    order       = vars(EXENDTM, EXSEQ),
+    mode        = "last",
+    by_vars     = vars(STUDYID, USUBJID)
+  )
+```
+
+This call would return the input dataframe with columns `TRTSDTM`, `TRTSTMF`, `TRTEDTM`, `TRTETMF`
+added. 
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  dataset      = adsl_03, 
+  display_vars = vars(USUBJID, TRTSDTM, TRTSTMF, TRTEDTM, TRTETMF)
+  )
+```
+
+Note: Only USUBJID, TRTSDTM, TRTSTMF, TRTEDTM, TRTETMF are printed.
+
+### Example 3
+
+For dataframes following the ADaM BDS structure, the additional dataframe can also serve as a
+lookup to derive BDS-targeted columns.
+
+In this example, a lookup dataframe is joined to `VS` dataframe on `VSTESTCD` to derive `ADVS`
+suite of parameters (columns starting with 'PAR'):
+ 
+```{r eval=TRUE}
+param_lookup <- tribble(
+  ~VSTESTCD, ~PARAMCD, ~PARAM,                           ~PARAMN, ~PARCAT1,                 ~PARCAT1N,
+  "HEIGHT",  "HEIGHT", "Height (cm)",                     1,      "Subject Characteristic", 1,
+  "WEIGHT",  "WEIGHT", "Weight (kg)",                     2,      "Subject Characteristic", 1,
+  "DIABP",   "DIABP",  "Diastolic Blood Pressure (mmHg)", 3,      "Vital Sign",             2,
+  "MAP",     "MAP",    "Mean Arterial Pressure (mmHg)",   4,      "Vital Sign",             2,
+  "BSA",     "BSA",    "Body Surface Area (m^2)",         5,      "Vital Sign",             2,
+  "PULSE",   "PULSE",  "Pulse Rate (beats/min)",          6,      "Vital Sign",             2,
+  "SYSBP",   "SYSBP",  "Systolic Blood Pressure (mmHg)",  7,      "Vital Sign",             2,
+  "TEMP",    "TEMP",   "Temperature (C)",                 8,      "Vital Sign",             2
+)
+
+advs_01 <- vs %>% 
+  derive_vars_merged(
+    dataset_add = param_lookup,
+    new_vars    = vars(PARAMCD, PARAM, PARAMN, PARCAT1, PARCAT1N),
+    by_vars     = vars(VSTESTCD)
+    )
+```
+
+This call would return the input dataframe with columns `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1` and
+`PARCAT1N` added.
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  dataset      = advs_01, 
+  display_vars = vars(USUBJID, VISIT, VSTPT, VSDTC, VSTESTCD, VSPOS, PARAMCD, PARAM, PARAMN, PARCAT1, PARCAT1N),
+  filter       = USUBJID == "01-701-1111" & VSPOS == "STANDING" & 
+                 VSTPT == "AFTER STANDING FOR 1 MINUTE" & VSBLFL == "Y"
+  )
+```
+
+Note: Data on this output are restricted to baseline vital signs for one subject only for vitals in
+the standing position after standing for 1 minute to save some space.
+
+### Example 4
+
+Finally, one common task with the use of this function is to join `ADSL` 'core' columns ('core'
+meaning columns with subject-level data that need to be present in all other ADaMs) to an 
+additional dataframe. This is usually done right at the end of a code that produces an ADaM.
+
+In this example, `ADSL` core columns are joined to an intermediate dataframe before creating the
+`ADVS` dataframe.
+
+```{r eval=FALSE}
+advs <- advs_last %>%
+  derive_vars_merged(
+    dataset_add = select(adsl, var(adsl_vars)),
+    by_vars     = vars(STUDYID, USUBJID)
+  )
+```
+
+## `derive_var_merged_cat()` {#derive_var_merged}
+
+**Description**\
+
+This function allows the user to:
+
+- categorize values from the additional dataframe column passed into the `source_var` argument
+- return the categorized values in a new column (`new_var`)
+- join this new column to an input dataframe. 
+
+The mapping between the source value and its category is done through the use of a custom function
+which needs to be passed to the the `cat_fun` argument. Please refer to
+[Higher Order Functions](higher_order.html) for more details.
+
+Similarly to the `derive_vars_merged()` function described above, the additional dataframe can be
+filtered on rows meeting a specific condition and/or the first or last row within a group of rows
+can be selected before the join is performed.
+
+**Return**\
+
+See 'Return' section from `derive_vars_merged()` above.
+
+**Error checking**\
+
+See 'Error checking' section from `derive_vars_merged()` above. Additionally, the following 
+arguments are expected and, if not provided, will generate error messages: `source_var`, `cat_fun`,
+`new_var`.
+
+### Example 5
+
+In this example, we filter a `VS` dataframe for weights at screening visits only before
+taking the last weight per subject after data are ordered by `USUBJID`, `VSDTC`, `VSSEQ` . This
+baseline weight is then categorized into 'low', 'high' or 'normal' by the wgt_cat function and
+joined to the `DM` dataframe.
+
+```{r eval=TRUE}
+wgt_cat <- function(wgt) {
+  case_when(
+    wgt < 50 ~ "low",
+    wgt > 90 ~ "high",
+    TRUE ~ "normal"
+  )
+}
+
+adsl_04 <- dm %>% 
+  derive_var_merged_cat(
+    dataset_add = vs,
+    by_vars     = vars(STUDYID, USUBJID),
+    order       = vars(VSDTC, VSSEQ),
+    filter_add  = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
+    new_var     = WGTBLCAT,
+    source_var  = VSSTRESN,
+    cat_fun     = wgt_cat,
+    mode        = "last"
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  dataset      = adsl_04, 
+  display_vars = vars(STUDYID, USUBJID, WGTBLCAT)
+  )
+```
+
+Note: Only STUDYID, USUBJID, WGTBLCAT are printed.
+
+## `derive_var_merged_exist_flag()` {#derive_var_merged_exist_flag}
+
+**Description**\
+
+This function evaluates the additional dataframe by checking if a condition is met or not 
+(`condition` argument) for a group of records (`by_vars` argument). For all by groups where it
+evaluates as TRUE at least once the `new_var` is set to the true value (`true_value` argument) 
+which is defaulted to "Y". For all by groups where it evaluates as FALSE or NA for all rows the
+`new_var` is set to the false value (`false_value` argument) which is defaulted to NA_character_.
+The `new_var` is set to the missing value (`missing_value` argument) for by groups not present in
+the additional dataframe.
+
+The additional dataframe can be filtered (`filter_add` argument) before the `condition` is applied.
+
+**Return**\
+
+See 'Return' section from `derive_vars_merged()` above.
+
+**Error checking**\
+
+See 'Error checking' section from `derive_vars_merged()` above. Additionally, the following 
+argument is expected and, if not provided, will generate error messages: `condition`.
+
+### Example 6
+
+In this example, the safety population flag (`SAFFL`) is derived in `ADSL` based on records from
+`EX` indicating a dose was received:
+
+```{r eval=TRUE}
+adsl_05 <- dm %>%
+  derive_var_merged_exist_flag(
+    dataset_add = ex,
+    by_vars     = vars(STUDYID, USUBJID),
+    new_var     = SAFFL,
+    condition   = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  dataset      = adsl_05, 
+  display_vars = vars(STUDYID, USUBJID, SAFFL)
+  )
+```
+
+Note: Only STUDYID, USUBJID, SAFFL are printed.
+
+## `derive_var_merged_character()` {#derive_var_merged_character}
+
+**Description**\
+
+This function allows a user to:
+
+- change the case of the content of a dataframe character column (`source_var` argument) from
+an additional dataframe (either "lower", "upper" or "title" case is specified)
+- store the modified text into `new_var`
+- join the new column to the input dataframe.
+
+Similarly to the `derive_vars_merged()` function described above, the additional dataframe can be
+filtered on rows meeting a specific condition and/or the first or last row within a group of rows
+can be selected before the join is performed.
+
+**Return**\
+
+See 'Return' section from `derive_vars_merged()` above.
+
+**Error checking**\
+
+See 'Error checking' section from `derive_vars_merged()` above. Additionally, the following 
+argument is expected and, if not provided, will generate error messages: `source_var`, `new_var`.
+
+### Example 7
+
+In this example, the disposition status is obtained from `DS`, its case changed to 'title' case and
+the resulting column (DISPSTAT) is joined to the `ADSL` input dataframe:
+
+```{r eval=TRUE}
+adsl_06 <- adsl_05 %>%
+  derive_var_merged_character(
+    dataset_add = ds,
+    by_vars     = vars(STUDYID, USUBJID),
+    new_var     = DISPSTAT,
+    filter_add  = DSCAT == "DISPOSITION EVENT",
+    source_var  = DSDECOD,
+    case        = "title"
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  dataset      = adsl_06, 
+  display_vars = vars(STUDYID, USUBJID, DISPSTAT)
+  )
+```
+
+Note: Only STUDYID, USUBJID, DISPSTAT are printed.
