@@ -95,6 +95,7 @@ reference:
 - desc: Look out for Warning and Error messages. These will guide you to deprecated functions replacements.
 - contents:
   - has_keyword("deprecated")
+  
 navbar:
   structure:
     left: [getstarted, reference, articles, community, news]
@@ -139,3 +140,5 @@ navbar:
         href: articles/higher_order.html
       - text: Queries Dataset Documentation
         href: articles/queries_dataset.html
+      - text: Lab Grading
+        href: articles/lab_grading.html

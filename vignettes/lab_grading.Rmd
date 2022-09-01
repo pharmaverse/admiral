@@ -1,0 +1,427 @@
+---
+title: "Lab Grading"
+output:
+  rmarkdown::html_vignette:
+  toc: false
+vignette: >
+  %\VignetteIndexEntry{Lab Grading}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(admiraldev)
+```
+
+
+# Introduction
+
+Within the ADLB ADaM data set there is a concept of lab grading, where there is 
+a set of criteria for particular lab tests that grade the severity or abnormality of 
+a lab value. The grades are from 0 to 4, where grade 0 can be viewed generally as a 
+“NORMAL” value. The higher the grade the more severe or more abnormal the lab value is.
+There are several sets of lab grading criteria, for the initial implementation of lab
+grading we will look at NCI-CTCAEv4. (In future releases `{admiral}` look to implement
+further grading criteria, for example NCI-CTCAEv5)
+
+The NCI-CTCAE version 4 and 5 grading criteria can be found 
+here: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm .
+
+The NCI-CTCAEv4 criteria can be found under the heading
+[**Common Terminology Criteria for Adverse Events (CTCAE)v4.0**](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm#ctc_40)
+
+
+# Grading metadata
+
+`{admiral}` will store a metadata data set with required variables and optional variables, the
+optional variables are purely for transparency, and will contain detailed information about
+the grading criteria. The required variables are those used by `{admiral}` to create the grade.
+
+## Structure of metadata set
+
+The metadata data set has the following structure for the required variables:
+
+Variable | Scope |  Type | Example Value
+------- | -------- | ------ | -------- 
+**TERM** | Term describing the criteria applied to a particular lab test.|  Character |  "Anemia" 
+**DIRECTION** | The direction of the abnormality of a particular lab test value|   Character | "L" or "H".
+**SI_UNIT_CHECK** | Unit of lab test, to check against input data if criteria is based on absolute values. |  Character | "mmol/L"
+**VAR_CHECK** | Comma separated list of variables used in criteria, to check input data that variables exist. |  Character | "AVAL, ANRLO"
+**GRADE_CRITERIA_CODE** | Variable to hold code that creates grade based on defined criteria. |  Character |R code that is a valid case statement within a `mutate` function call
+
+The metadata data set has the following structure for the optional variables:
+
+Variable | Scope |  Type | Example Value
+------- | -------- | ------ | -------- 
+**SOC** | System Organ Class the lab test belongs to.|  Character |  "Investigations" 
+**GRADE_1** | Grade 1 criteria for lab test, normally straight from source document.|   Character | ">ULN - 3.0 x ULN".
+**GRADE_2** | Grade 2 criteria for lab test, normally straight from source document.|   Character | ">3.0 - 5.0 x ULN".
+**GRADE_3** | Grade 3 criteria for lab test, normally straight from source document.|   Character | ">5.0 - 20.0 x ULN".
+**GRADE_4** | Grade 4 criteria for lab test, normally straight from source document.|   Character | ">20.0 x ULN".
+**DEFINITION** | Definition of abnormality, normally from source document.|  Character | "A finding based on laboratory test results that indicate an increase in the level of alanine aminotransferase (ALT or SGPT) in the blood specimen.".
+**COMMENT** | Description of any decisions made by `{admiral}` to implement grading criteria, where grading criteria alone was ambiguous. | Character | "Take worst case and assume on anticoagulation".
+
+
+# Creating the lab grade
+
+## Mapping ADLB VAD to the TERM variable in the `{admiral}` metadata data set
+
+
+```{r message=FALSE}
+library(admiral)
+library(admiral.test)
+library(dplyr)
+library(stringr)
+library(tibble)
+
+data("admiral_lb")
+
+adsl <- admiral_adsl
+lb <- admiral_lb
+
+lb <- convert_blanks_to_na(lb)
+```
+```{r echo=FALSE}
+lb <- filter(lb, USUBJID %in% c("01-701-1115", "01-705-1186", "01-705-1349", "01-708-1286", "01-707-1037", "01-716-1024"))
+```
+
+<br>
+Each company needs to map their lab test to a term that describes the criteria being applied.
+The list of terms defined in the `{admiral}` metadata to implement NCI-CTCAEv4 is below:
+<br>
+
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv4 %>%
+  filter(!is.na(TERM)) %>%
+  dataset_vignette(
+    display_vars = vars(TERM)
+  )
+```
+<br>
+Using CDISC data these lab tests can be mapped to the correct terms, firstly create
+`PARAMCD`, `PARAM`, `AVAL`, `ANRLO` and `ANRHI`, also some lab grading criteria require `BASE`
+and `PCHG`, so these would also need to be created before running `derive_var_atoxgr_dir()`
+function.
+<br>
+
+```{r, eval=TRUE}
+# Look-up tables ----
+
+# Assign PARAMCD, PARAM, and PARAMN
+param_lookup <- tibble::tribble(
+  ~LBTESTCD, ~PARAMCD,  ~PARAM,                                             ~PARAMN,
+  "ALB",     "ALB",     "Albumin (g/L)",                                    1,
+  "ALP",     "ALKPH",   "Alkaline Phosphatase (U/L)",                       2,
+  "ALT",     "ALT",     "Alanine Aminotransferase (U/L)",                   3,
+  "ANISO",   "ANISO",   "Anisocytes",                                       4,
+  "AST",     "AST",     "Aspartate Aminotransferase (U/L)",                 5,
+  "BASO",    "BASO",    "Basophils (10^9/L)",                               6,
+  "BASOLE",  "BASOLE",  "Basophils/Leukocytes (FRACTION)",                  7,
+  "BILI",    "BILI",    "Bilirubin (umol/L)",                               8,
+  "BUN",     "BUN",     "Blood Urea Nitrogen (mmol/L)",                     9,
+  "CA",      "CA",      "Calcium (mmol/L)",                                 10,
+  "CHOL",    "CHOLES",  "Cholesterol (mmol/L)",                             11,
+  "CK",      "CK",      "Creatinine Kinase (U/L)",                          12,
+  "CL",      "CL",      "Chloride (mmol/L)",                                13,
+  "COLOR",   "COLOR",   "Color",                                            14,
+  "CREAT",   "CREAT",   "Creatinine (umol/L)",                              15,
+  "EOS",     "EOS",     "Eosinophils (10^9/L)",                             16,
+  "EOSLE",   "EOSLE",   "Eosinophils/Leukocytes (FRACTION)",                17,
+  "GGT",     "GGT",     "Gamma Glutamyl Transferase (U/L)",                 18,
+  "GLUC",    "GLUC",    "Glucose (mmol/L)",                                 19,
+  "HBA1C",   "HBA1C",   "Hemoglobin A1C (1)",                               20,
+  "HCT",     "HCT",     "Hematocrit (1)",                                   21,
+  "HGB",     "HGB",     "Hemoglobin (mmol/L)",                              22,
+  "K",       "POTAS",   "Potassium (mmol/L)",                               23,
+  "KETONES", "KETON",   "Ketones",                                          24,
+  "LYM",     "LYMPH",   "Lymphocytes (10^9/L)",                             25,
+  "LYMLE",   "LYMPHLE", "Lymphocytes/Leukocytes (FRACTION)",                26,
+  "MACROCY", "MACROC",  "Macrocytes",                                       27,
+  "MCH",     "MCH",     "Ery. Mean Corpuscular Hemoglobin (fmol(Fe))",      28,
+  "MCHC",    "MCHC",    "Ery. Mean Corpuscular HGB Concentration (mmol/L)", 29,
+  "MCV",     "MCV",     "Ery. Mean Corpuscular Volume (f/L)",               30,
+  "MICROCY", "MICROC",  "Microcytes",                                       31,
+  "MONO",    "MONO",    "Monocytes (10^9/L)",                               32,
+  "MONOLE",  "MONOLE",  "Monocytes/Leukocytes (FRACTION)",                  33,
+  "PH",      "PH",      "pH",                                               34,
+  "PHOS",    "PHOS",    "Phosphate (mmol/L)",                               35,
+  "PLAT",    "PLAT",    "Platelet (10^9/L)",                                36,
+  "POIKILO", "POIKIL",  "Poikilocytes",                                     37,
+  "POLYCHR", "POLYCH",  "Polychromasia",                                    38,
+  "PROT",    "PROT",    "Protein (g/L)",                                    39,
+  "RBC",     "RBC",     "Erythrocytes (TI/L)",                              40,
+  "SODIUM",  "SODIUM",  "Sodium (mmol/L)",                                  41,
+  "SPGRAV",  "SPGRAV",  "Specific Gravity",                                 42,
+  "TSH",     "TSH",     "Thyrotropin (mU/L)",                               43,
+  "URATE",   "URATE",   "Urate (umol/L)",                                   44,
+  "UROBIL",  "UROBIL",  "Urobilinogen",                                     45,
+  "VITB12",  "VITB12",  "Vitamin B12 (pmol/L)",                             46,
+  "WBC",     "WBC",     "Leukocytes (10^9/L)",                              47
+)
+
+adlb <- lb %>%
+  ## Add PARAMCD PARAM and PARAMN - from LOOK-UP table
+  derive_vars_merged_lookup(
+    dataset_add = param_lookup,
+    new_vars = vars(PARAMCD, PARAM, PARAMN),
+    by_vars = vars(LBTESTCD)
+  ) %>%
+  ## Calculate PARCAT1 AVAL AVALC ANRLO ANRHI
+  ## Dummy the values for BASE
+  mutate(
+    PARCAT1 = LBCAT,
+    AVAL = LBSTRESN,
+    AVALC = LBSTRESC,
+    ANRLO = LBSTNRLO,
+    ANRHI = LBSTNRHI,
+    BASE = AVAL - 10
+  )
+```
+
+Another look-up table is used to add on `ATOXDSCL` and `ATOXDSCH` using
+`PARAMCD`. `ATOXDSCL` holds the terms for grading low lab values, and `ATOXDSCH` holds 
+the terms for grading high lab values. The names of these variables can be user-defined.
+`ATOXDSCL` and `ATOXDSCH` are the link from ADLB data to the `{admiral}` metadata that
+holds the grading criteria.
+
+```{r, eval=TRUE}
+# Assign ATOXDSCL and ATOXDSCH to hold lab grading terms
+# ATOXDSCL and ATOXDSCH hold terms defined by NCI-CTCAEv4.
+grade_lookup <- tibble::tribble(
+  ~PARAMCD, ~ATOXDSCL,                    ~ATOXDSCH,
+  "ALB",    "Hypoalbuminemia",            NA_character_,
+  "ALKPH",  NA_character_,                "Alkaline phosphatase increased",
+  "ALT",    NA_character_,                "Alanine aminotransferase increased",
+  "AST",    NA_character_,                "Aspartate aminotransferase increased",
+  "BILI",   NA_character_,                "Blood bilirubin increased",
+  "CA",     "Hypocalcemia",               "Hypercalcemia",
+  "CHOLES", NA_character_,                "Cholesterol high",
+  "CK",     NA_character_,                "CPK increased",
+  "CREAT",  NA_character_,                "Creatinine increased",
+  "GGT",    NA_character_,                "GGT increased",
+  "GLUC",   "Hypoglycemia",               "Hyperglycemia",
+  "HGB",    "Anemia",                     "Hemoglobin increased",
+  "POTAS",  "Hypokalemia",                "Hyperkalemia",
+  "LYMPH",  "CD4 lymphocytes decreased",  NA_character_,
+  "PHOS",   "Hypophosphatemia",           NA_character_,
+  "PLAT",   "Platelet count decreased",   NA_character_,
+  "SODIUM", "Hyponatremia",               "Hypernatremia",
+  "WBC",    "White blood cell decreased", "Leukocytosis",
+)
+
+adlb <- adlb %>%
+  derive_vars_merged(
+    dataset_add = grade_lookup,
+    by_vars = vars(PARAMCD),
+  )
+```
+
+It is now straightforward to create the grade, for low lab values the grade will
+be held in `ATOXGRL` and for high lab values the grade will be held in `ATOXGRH`
+
+```{r, eval=TRUE}
+adlb <- adlb %>%
+  derive_var_atoxgr_dir(
+    new_var = ATOXGRL,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = extract_unit(PARAM)
+  ) %>%
+  derive_var_atoxgr_dir(
+    new_var = ATOXGRH,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = extract_unit(PARAM)
+  )
+```
+
+Note: `{admiral}` does not grade 'Anemia' or 'Hemoglobin Increased' because the metadata is 
+based on the SI unit of 'g/L', however the CDISC data has SI unit of 'mmol/L'.
+Please see `SI_UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctcv4`, the metadata
+is in the data folder of `{admiral}`.
+<br>
+
+```{r, eval=TRUE, echo=FALSE}
+
+atoxgr_criteria_ctcv4 %>%
+  filter(!is.na(SI_UNIT_CHECK)) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, SI_UNIT_CHECK),
+  )
+```
+<br>
+
+`{admiral}` also gives the option to combine `ATOXGRL` and `ATOXGRH` into one variable,
+namely `ATOXGR`. Grades held in `ATOXGRL` will be given a negative value in `ATOXGR`
+to distinguish between low and high values.
+
+```{r, eval=TRUE}
+adlb <- adlb %>%
+  derive_var_atoxgr()
+```
+<br>
+
+```{r, eval=TRUE, echo=FALSE}
+adlb %>%
+  filter((ATOXGRL == "1") | (ATOXGRH == "1")) %>%
+  dataset_vignette(
+    display_vars = vars(ATOXDSCL, ATOXDSCH, ATOXGRL, ATOXGRH, ATOXGR)
+  )
+```
+
+
+# NCI-CTCAEV4 implementation
+
+## Terms graded
+
+Grading is implemented for those lab tests where a lab value is included in the grading definition,
+`{admiral}` does NOT try to read any other data to determine the grade, and only the ADLB VAD is used.
+The following CTCAE v4.0 SOC values were identified for grading, these are “Investigations", 
+“Metabolism and nutrition disorders” and “Blood and lymphatic system disorders”.
+
+From these SOC values the following terms criteria is implemented in `{admiral}` 
+
+From SOC = “Investigations" there are 21 CTCAE v4.0 Terms:
+
+  + Activated partial thromboplastin time prolonged
+  + Alanine aminotransferase increased
+  + Alkaline phosphatase increased
+  + Aspartate aminotransferase increased
+  + Blood bilirubin increased
+  + CD4 lymphocytes decreased
+  + Cholesterol high
+  + CPK increased
+  + Creatinine increased
+  + Fibrinogen decreased
+  + GGT increased
+  + Haptoglobin decreased
+  + Hemoglobin increased
+  + INR increased
+  + Lipase increased
+  + Lymphocyte count decreased
+  + Lymphocyte count increased
+  + Neutrophil count decreased
+  + Platelet count decreased
+  + Serum amylase increased
+  + White blood cell decreased
+
+From the SOC =  “Metabolism and nutrition disorders” there are 14 CTCAE v4.0 Terms:
+
+  + Hypercalcemia
+  + Hyperglycemia
+  + Hyperkalemia
+  + Hypermagnesemia
+  + Hypernatremia
+  + Hypertriglyceridemia
+  + Hyperuricemia
+  + Hypoalbuminemia
+  + Hypocalcemia
+  + Hypoglycemia
+  + Hypokalemia
+  + Hypomagnesemia
+  + Hyponatremia
+  + Hypophosphatemia
+
+From the SOC =  “Blood and lymphatic system disorders” there are 2 CTCAE v4.0 Terms:
+
+  + Anemia
+  + Leukocytosis
+
+## Updates made to TERM
+
+For terms "Hypocalcemia" and "Hypercalcemia" the criteria is provided for Calcium and Ionized Calcium,
+therefore `{admiral}` created a row for each in the metadata, this is noted in the COMMENT variable of
+the metadata:
+<br>
+
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv4 %>%
+  filter(str_detect(TERM, "calcemia")) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, COMMENT)
+  )
+```
+<br>
+
+Similarly, there is criteria applicable to Fasting Glucose as well as non-Fasting Glucose for "Hyperglycemia"
+so again this was split into 2 rows, and noted in the COMMENT variable. Note "Hypoglycemia" does not require to
+be split into 2 rows:
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv4 %>%
+  filter(str_detect(TERM, "glycemia")) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, COMMENT)
+  )
+```
+<br>
+
+## Assumptions made when grading
+
+For term "INR Increased" there is the following criteria:
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+
+atoxgr_criteria_ctcv4 %>%
+  filter(str_detect(TERM, "INR")) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, Grade_1)
+  )
+```
+<br>
+
+`{admiral}` assumed worst case and used both parts of the criteria for grading, so comparing
+lab value against ULN and also BASE. The decision made was put in the `COMMENT` field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv4 %>%
+  filter(str_detect(TERM, "INR")) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, COMMENT)
+  )
+```
+<br>
+
+For TERM "Hyperuricemia", the criteria for Grade 1 and Grade 3 is the same with respect
+to the lab value, so worse case is assumed as grade 3. The decision made was 
+put in the `COMMENT` field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv4 %>%
+  filter(str_detect(TERM, "Hypouricemia")) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, Grade_1, Grade_3, COMMENT)
+  )
+```
+<br>
+
+A similar approach was taken for TERM "Hypokalemia" where Grade 1 and Grade 2 criteria
+is the same with respect to the lab value, so worse case is assumed as grade 2.
+The decision made was put in the `COMMENT` field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv4 %>%
+  filter(str_detect(TERM, "Hypokalemia")) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, Grade_1, Grade_2, COMMENT)
+  )
+```
+<br>
+
+# Conclusion
+
+In future releases `{admiral}` will implement further grading criteria, with NCI-CTCAE v5
+being the priority. Providing tools for users to easily interact with the metadata to 
+update criteria, based on their companies needs will also be looked at. Ideally, users should
+be able to create their own metadata for company specific grading schemes.
