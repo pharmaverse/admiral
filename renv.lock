@@ -65,7 +65,7 @@
       "Repository": "CRAN",
       "Hash": "f3ca785924863b0e4c8cb23b6a5c75a1"
     },
-    "admiral.test": {
+        "admiral.test": {
       "Package": "admiral.test",
       "Version": "0.2.0",
       "Source": "GitHub",
