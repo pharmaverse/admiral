@@ -65,17 +65,17 @@ RoxygenNote: 7.2.0
 Depends: R (>= 3.5)
 Imports:
     admiraldev,
-    assertthat,
-    dplyr,
-    hms,
-    lifecycle,
-    lubridate,
-    magrittr,
-    purrr,
-    rlang,
-    stringr,
-    tidyr,
-    tidyselect
+    assertthat (>= 0.2.1),
+    dplyr (>= 0.8.4),
+    hms (>= 0.5.3),
+    lifecycle (>= 0.1.0),
+    lubridate (>= 1.7.4),
+    magrittr (>= 1.5),
+    purrr (>= 0.3.3),
+    rlang (>= 0.4.4),
+    stringr (>= 1.4.0),
+    tidyr (>= 1.0.2),
+    tidyselect (>= 1.0.0)
 Suggests:
     admiral.test,
     covr,
