@@ -37,12 +37,24 @@ data("queries")
 assert_valid_queries(queries, "queries")
 }
 \seealso{
-Functions moved to admiraldev package: 
+Source Specifications: 
 \code{\link{assert_db_requirements}()},
 \code{\link{assert_terms}()},
+\code{\link{censor_source}()},
+\code{\link{date_source}()},
+\code{\link{death_event}},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{event_source}()},
 \code{\link{extend_source_datasets}()},
+\code{\link{filter_date_sources}()},
 \code{\link{format.sdg_select}()},
 \code{\link{format.smq_select}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()},
+\code{\link{tte_source}()},
 \code{\link{validate_query}()},
 \code{\link{validate_sdg_select}()},
 \code{\link{validate_smq_select}()}
@@ -50,5 +62,5 @@ Functions moved to admiraldev package:
 \author{
 Shimeng Huang, Ondrej Slama
 }
-\concept{move_adm_dev}
-\keyword{move_adm_dev}
+\concept{source_specifications}
+\keyword{source_specifications}

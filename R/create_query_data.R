@@ -456,8 +456,8 @@ get_terms_from_db <- function(version,
 #'
 #' Should be `"SMQ`" or `"SDG"`.
 #'
-#' @keywords move_adm_dev
-#' @family move_adm_dev
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @return An error is issued if `version` or `fun` is null.
 #'
@@ -662,8 +662,8 @@ query <- function(prefix,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords move_adm_dev
-#' @family move_adm_dev
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @seealso [query()]
 #'
@@ -806,8 +806,8 @@ validate_query <- function(obj) {
 #'
 #' @seealso [create_query_data()], [query()]
 #'
-#' @keywords move_adm_dev
-#' @family move_adm_dev
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @author Stefan Bundfuss
 assert_terms <- function(terms,
@@ -919,8 +919,8 @@ smq_select <- function(name = NULL,
 #'
 #' @seealso [smq_select()]
 #'
-#' @keywords move_adm_dev
-#' @family move_adm_dev
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @author Stefan Bundfuss
 #'
@@ -967,8 +967,8 @@ validate_smq_select <- function(obj) {
 #'
 #' @seealso [smq_select()]
 #'
-#' @keywords move_adm_dev
-#' @family move_adm_dev
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @export
 #'
@@ -1025,8 +1025,8 @@ sdg_select <- function(name = NULL,
 #'
 #' @seealso [sdg_select()]
 #'
-#' @keywords move_adm_dev
-#' @family move_adm_dev
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @export
 #'
@@ -1066,8 +1066,8 @@ validate_sdg_select <- function(obj) {
 #'
 #' @seealso [sdg_select()]
 #'
-#' @keywords move_adm_dev
-#' @family move_adm_dev
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @export
 #'
