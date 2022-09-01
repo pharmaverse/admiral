@@ -8,7 +8,6 @@
 
 - New function `compute_qual_imputation()` which imputes values when qualifier exists in character result (#976)
 
-- Moved all developer-facing functions to `{admiraldev}` (#1231)
 
 - New function to map lookup table `derive_vars_merged_lookup()` (#940)
 
@@ -73,6 +72,8 @@ updated to process additional parameter (#1125)
 - `create_single_dose_dataset()` Fixed bug where ASTDTM and AENDTM were not updated when start_date=ASTDT and end_date=AENDT. The function has been amended to now require start_datetime and end_datetime parameters in addition to start_date and end_date.The keep_source_vars has been added to specify the variables to be retained from the source dataset (#1224)
 
 ## Breaking Changes
+
+- Moved all developer-facing functions and vignettes to `{admiraldev}` (#1231)
 
 - All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
 
