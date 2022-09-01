@@ -26,17 +26,26 @@ Exactly one \code{name} or \code{id} must be specified.
 \code{\link[=create_query_data]{create_query_data()}}, \code{\link[=query]{query()}}
 
 Source Specifications: 
+\code{\link{assert_db_requirements}()},
+\code{\link{assert_terms}()},
+\code{\link{assert_valid_queries}()},
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{event_source}()},
+\code{\link{extend_source_datasets}()},
 \code{\link{filter_date_sources}()},
+\code{\link{format.sdg_select}()},
+\code{\link{format.smq_select}()},
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
 \code{\link{query}()},
 \code{\link{smq_select}()},
-\code{\link{tte_source}()}
+\code{\link{tte_source}()},
+\code{\link{validate_query}()},
+\code{\link{validate_sdg_select}()},
+\code{\link{validate_smq_select}()}
 }
 \author{
 Stefan Bundfuss

@@ -594,8 +594,8 @@ filter_date_sources <- function(sources,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords move_adm_dev
-#' @family move_adm_dev
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)

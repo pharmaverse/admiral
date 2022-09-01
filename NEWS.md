@@ -8,7 +8,6 @@
 
 - New function `compute_qual_imputation()` which imputes values when qualifier exists in character result (#976)
 
-- Moved all developer-facing functions to `{admiraldev}` (#1231)
 
 - New function to map lookup table `derive_vars_merged_lookup()` (#940)
 
@@ -73,6 +72,8 @@ updated to process additional parameter (#1125)
 - `create_single_dose_dataset()` Fixed bug where ASTDTM and AENDTM were not updated when start_date=ASTDT and end_date=AENDT. The function has been amended to now require start_datetime and end_datetime parameters in addition to start_date and end_date.The keep_source_vars has been added to specify the variables to be retained from the source dataset (#1224)
 
 ## Breaking Changes
+
+- Moved all developer-facing functions and vignettes to `{admiraldev}`.  `{admiraldev}` is now a dependency of `{admiral}` (#1231)
 
 - All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
 
@@ -376,9 +377,9 @@ this case the day is imputed as `15` (#592)
 
 - README and site homepage has been updated with important new section around expectations of {admiral}, as well as other useful references such as links to conference talks (#868 & #802)
 
-- New vignette [Development Process](https://pharmaverse.github.io/admiral/articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
+- New vignette [Development Process](https://pharmaverse.github.io/admiraldev/main/articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 
-- Updated [Pull Request Review Guidance](https://pharmaverse.github.io/admiral/articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
+- Updated [Pull Request Review Guidance](https://pharmaverse.github.io/admiraldev/main/articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
 
 ## Various
 
@@ -392,7 +393,7 @@ this case the day is imputed as `15` (#592)
 
 - New vignette [Contributing to admiral](https://pharmaverse.github.io/admiral/articles/contribution_model.html) (#679)
 
-- New vignette [Unit Test Guidance](https://pharmaverse.github.io/admiral/articles/unit_test_guidance.html) (#679)
+- New vignette [Unit Test Guidance](https://pharmaverse.github.io/admiraldev/main/articles/unit_test_guidance.html) (#679)
 
 - Broken links in README have been fixed (#564)
 
@@ -451,9 +452,9 @@ to specify the unit of the input age (#569)
 
 - New vignette [Queries Dataset Documentation](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) (#561)
 
-- New vignette [Writing Vignettes](https://pharmaverse.github.io/admiral/articles/writing_vignettes.html) (#334)
+- New vignette [Writing Vignettes](https://pharmaverse.github.io/admiraldev/main/articles/writing_vignettes.html) (#334)
 
-- New vignette [Pull Request Review Guidance](https://pharmaverse.github.io/admiral/articles/pr_review_guidance.html) (#554)
+- New vignette [Pull Request Review Guidance](https://pharmaverse.github.io/admiraldev/main/articles/pr_review_guidance.html) (#554)
 
 - A section on handling missing values when working with {admiral} has been added to the "Get Started" vignette (#577)
 
