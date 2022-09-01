@@ -73,7 +73,7 @@ updated to process additional parameter (#1125)
 
 ## Breaking Changes
 
-- Moved all developer-facing functions and vignettes to `{admiraldev}` (#1231)
+- Moved all developer-facing functions and vignettes to `{admiraldev}`.  `{admiraldev}` is now a dependency of `{admiral}` (#1231)
 
 - All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
 
