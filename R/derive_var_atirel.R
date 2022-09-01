@@ -38,5 +38,9 @@
 derive_var_atirel <- function(dataset,
                               flag_var,
                               new_var) {
-  deprecate_stop("0.8.0", "derive_var_atirel()", "mutate()")
+  deprecate_stop("0.7.0",
+                 "derive_var_atirel()",
+                 details = "Please use combination of `mutate()` and `case_when()` instead."
+  )
+
 }

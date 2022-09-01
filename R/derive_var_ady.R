@@ -41,5 +41,5 @@
 #' @export
 #'
 derive_var_ady <- function(dataset, reference_date = TRTSDT, date = ADT) {
-  deprecate_stop("0.8.0", "derive_var_ady()", "derive_vars_dy()")
+  deprecate_stop("0.7.0", "derive_var_ady()", "derive_vars_dy()")
 }
