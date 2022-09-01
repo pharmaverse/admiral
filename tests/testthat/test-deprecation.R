@@ -20,152 +20,61 @@ ex <- tribble(
   "ST42-3", "2021-03-02"
 ) %>% mutate(STUDYID = "ST42")
 
-test_that("a warning is issued when using `derive_var_extreme_flag()` with `filter` argument", {
-  input <- tibble::tribble(
-    ~USUBJID, ~AVISITN, ~AVAL,
-    1, 1, 12,
-    1, 3, 9,
-    2, 2, 42,
-    3, 3, 14,
-    3, 3, 10
-  )
-
-  expect_warning(
+test_that("An error is thrown if `derive_var_extreme_flag()` with `filter` argument is called", {
+  expect_error(
     derive_var_extreme_flag(
-      input,
-      by_vars = vars(USUBJID),
-      order = vars(AVISITN, desc(AVAL)),
-      new_var = firstfl,
-      mode = "first",
       filter = !is.na(AVAL)
     ),
-    paste(
-      "`filter` is deprecated as of admiral 0.7.0.",
-      "Please use `restrict_derivation()` instead (see examples).",
-      sep = "\n"
-    ),
-    fixed = TRUE
+    "deprecated",
+    fixed = TRUE,
+    class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("a warning is issued when using `derive_var_worst_flag()` with `filter` argument", {
-  input_worst_flag <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT, ~ADT, ~AVAL,
-    "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT01", "PARAM01", "WEEK 1", as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT01", "PARAM01", "WEEK 2", as.Date("2021-04-30"), 12.0,
-    "TEST01", "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT02", "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT02", "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT02", "PARAM01", "WEEK 1", as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT02", "PARAM01", "WEEK 2", as.Date("2021-04-30"), 12.0,
-    "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT01", "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT01", "PARAM02", "WEEK 2", as.Date("2021-04-30"), 12.0,
-    "TEST01", "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT02", "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT02", "PARAM02", "WEEK 1", as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT02", "PARAM02", "WEEK 1", as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT02", "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
-    "TEST01", "PAT02", "PARAM03", "SCREENING", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT02", "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT02", "PARAM03", "WEEK 1", as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT02", "PARAM03", "WEEK 1", as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT02", "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
-  )
-
-  expect_warning(
+test_that("An error is thrown if `derive_var_worst_flag()` with `filter` argument is called", {
+  expect_error(
     derive_var_worst_flag(
-      input_worst_flag,
-      by_vars = vars(USUBJID, PARAMCD, AVISIT),
-      order = vars(desc(ADT)),
-      new_var = WORSTFL,
-      param_var = PARAMCD,
-      analysis_var = AVAL,
-      worst_high = c("PARAM01", "PARAM03"),
-      worst_low = "PARAM02",
       filter = !is.na(AVAL)
     ),
-    paste(
-      "`filter` is deprecated as of admiral 0.7.0.",
-      "Please use `restrict_derivation()` instead (see examples).",
-      sep = "\n"
-    ),
-    fixed = TRUE
+    "deprecated",
+    fixed = TRUE,
+    class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("derive_var_ady() Test 1: A warning is issued when using `derive_var_ady()`", {
-  input <- tibble::tribble(
-    ~TRTSDT, ~ADT,
-    ymd("2020-01-01"), ymd("2020-02-24"),
-    ymd("2020-01-01"), ymd("2020-01-01"),
-    ymd("2020-02-24"), ymd("2020-01-01")
-  )
-
-  expect_warning(
-    derive_var_ady(input),
+test_that("derive_var_ady() Test 1: An error is thrown if `derive_var_ady()` is called", {
+  expect_error(
+    derive_var_ady(),
     "deprecated",
-    fixed = TRUE
+    fixed = TRUE,
+    class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("derive_var_aendy Test 1: A warning is issued when using `derive_var_aendy()`", {
-  input <- tibble::tribble(
-    ~TRTSDT, ~AENDT,
-    ymd("2020-01-01"), ymd("2020-02-24"),
-    ymd("2020-01-01"), ymd("2020-01-01"),
-    ymd("2020-02-24"), ymd("2020-01-01")
-  )
-
-  expect_warning(
-    derive_var_aendy(input),
+test_that("derive_var_aendy Test 1: An error is thrown if `derive_var_aendy()` is called", {
+  expect_error(
+    derive_var_aendy(),
     "deprecated",
-    fixed = TRUE
+    fixed = TRUE,
+    class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("derive_var_astdy Test 1: A warning is issued when using `derive_var_astdy()`", {
-  input <- tibble::tribble(
-    ~TRTSDT, ~ASTDT,
-    ymd("2020-01-01"), ymd("2020-02-24"),
-    ymd("2020-01-01"), ymd("2020-01-01"),
-    ymd("2020-02-24"), ymd("2020-01-01")
-  )
-
-  expect_warning(
-    derive_var_astdy(input),
+test_that("derive_var_astdy Test 1: An error is thrown if `derive_var_astdy()` is called", {
+  expect_error(
+    derive_var_astdy(),
     "deprecated",
-    fixed = TRUE
+    fixed = TRUE,
+    class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("derive_var_atirel Test 1: A warning is issued when using `derive_var_atirel()`", {
-  input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM, ~ASTTMF, # nolint
-    "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-03-28 19:00:00", "2012-05-25 23:00:00", "",
-    "TEST01", "PAT01", "", "2012-02-28 19:00:00", "", "",
-    "TEST01", "PAT01", "2017-02-25 23:00:00", "2013-02-25 19:00:00", "2014-02-25 19:00:00", "",
-    "TEST01", "PAT01", "2017-02-25 23:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00", "m",
-    "TEST01", "PAT01", "2017-02-25 23:00:00", "2017-01-25 14:00:00", "2018-04-29 14:00:00", "",
-  ) %>% mutate(
-    TRTSDTM = lubridate::as_datetime(TRTSDTM),
-    ASTDTM = lubridate::as_datetime(ASTDTM),
-    AENDTM = lubridate::as_datetime(AENDTM)
-  )
-
-  expect_warning(
-    derive_var_atirel(
-      dataset = input,
-      flag_var = ASTTMF,
-      new_var = ATIREL
-    ),
+test_that("derive_var_atirel Test 1: An error is thrown if `derive_var_atirel()` is called", {
+  expect_error(
+    derive_var_atirel(),
     "deprecated",
-    fixed = TRUE
+    fixed = TRUE,
+    class = "lifecycle_error_deprecated"
   )
 })
 
@@ -173,8 +82,7 @@ test_that("derive_vars_suppqual Test 1: An error is thrown if `derive_vars_suppq
   expect_error(
     derive_vars_suppqual(),
     "deprecated",
-    fixed = TRUE,
-    class = "lifecycle_error_deprecated"
+    fixed = TRUE
   )
 })
 

@@ -116,6 +116,15 @@ have been removed:
   - `derive_var_trtedtm()`
   - `derive_var_trtsdtm()`
 
+- The following functions and parameters, which were deprecated in previous
+{admiral} versions, are now defunct and will output an ERROR if used:
+
+  - `derive_var_ady()` 
+  - `derive_var_aendy()` 
+  - `derive_var_astdy()`
+  - `derive_var_atirel()`
+  - `filter` parameter in `derive_var_extreme_flag()` and `derive_var_worst_flag()`
+
 ## Documentation
 
 - New admh R Script template added. Use `admiral::use_ad_template("admh")` to access 
