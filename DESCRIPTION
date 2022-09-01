@@ -65,6 +65,7 @@ RoxygenNote: 7.2.0
 Depends: R (>= 3.5)
 Imports:
     admiraldev,
+    rlang (>= 1.0.2),
     assertthat (>= 0.2.1),
     dplyr (>= 0.8.5),
     hms (>= 0.5.3),
@@ -72,7 +73,6 @@ Imports:
     lubridate (>= 1.7.4),
     magrittr (>= 1.5),
     purrr (>= 0.3.3),
-    rlang (>= 1.0.2),
     stringr (>= 1.4.0),
     tidyr (>= 1.0.2),
     tidyselect (>= 1.0.0)
