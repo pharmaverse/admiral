@@ -95,11 +95,8 @@ reference:
   contents:
   - has_keyword('datasets')
 
-- title: Relocated/Deprecated
-- subtitle: Functions moved to another admiraldev package
-- contents:
-  - has_keyword("move_adm_dev")
-- subtitle: Deprecated
+- title: Deprecated
+- desc: Look out for Warning and Error messages. These will guide you to deprecated functions replacements.
 - contents:
   - has_keyword("deprecated")
 
@@ -111,7 +108,7 @@ navbar:
       text: Get Started
       href: articles/admiral.html
     reference:
-      text: Functions
+      text: Reference
       href: reference/index.html
     community:
       text: Community
