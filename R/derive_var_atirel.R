@@ -38,28 +38,5 @@
 derive_var_atirel <- function(dataset,
                               flag_var,
                               new_var) {
-  # checks
-  warn(paste(
-    "`derive_var_atirel` is deprecated as of admiral 0.7.0.",
-    "Please use `mutate()` and `case_when()` instead.",
-    sep = "\n"
-  ))
-
-  flag_var <- assert_symbol(enquo(flag_var))
-  assert_data_frame(dataset,
-    required_vars = vars(STUDYID, USUBJID, TRTSDTM, ASTDTM, AENDTM, !!flag_var)
-  )
-  new_var <- assert_symbol(enquo(new_var))
-  warn_if_vars_exist(dataset, quo_text(new_var))
-
-  # logic to create ATIREL
-  dataset %>%
-    mutate(!!new_var :=
-      case_when(
-        is.na(TRTSDTM) ~ NA_character_,
-        ASTDTM >= TRTSDTM ~ "CONCOMITANT",
-        !is.na(AENDTM) & AENDTM < TRTSDTM ~ "PRIOR",
-        date(ASTDTM) == date(TRTSDTM) & toupper(!!flag_var) %in% c("H", "M") ~ "CONCOMITANT",
-        TRUE ~ "PRIOR_CONCOMITANT"
-      ))
+  deprecate_stop("0.8.0", "derive_var_atirel()", "mutate()")
 }
