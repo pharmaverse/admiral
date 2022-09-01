@@ -43,5 +43,4 @@ derive_var_atirel <- function(dataset,
     "derive_var_atirel()",
     details = "Please use combination of `mutate()` and `case_when()` instead."
   )
-
 }
