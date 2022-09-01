@@ -199,7 +199,6 @@ derive_var_extreme_flag <- function(dataset,
                                     mode,
                                     filter = deprecated(),
                                     check_type = "warning") {
-
   if (!missing(filter)) {
     deprecate_stop("0.7.0", "derive_var_extreme_flag(filter = )", "restrict_derivation(filter = )")
   }
