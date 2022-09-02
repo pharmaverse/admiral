@@ -148,8 +148,9 @@ adex \%>\%
   select(-ASTDTM, -AENDTM)
 }
 \seealso{
-BDS-Findings Functions for adding Parameters: 
+BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
+\code{\link{derive_extreme_records}()},
 \code{\link{derive_param_bmi}()},
 \code{\link{derive_param_bsa}()},
 \code{\link{derive_param_computed}()},
@@ -159,7 +160,9 @@ BDS-Findings Functions for adding Parameters:
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},
-\code{\link{derive_param_wbc_abs}()}
+\code{\link{derive_param_rr}()},
+\code{\link{derive_param_wbc_abs}()},
+\code{\link{derive_summary_records}()}
 }
 \author{
 Samia Kabi

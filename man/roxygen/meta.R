@@ -3,7 +3,7 @@ list(
     der_date_time = "Date/Time Derivation Functions that returns variable appended to dataset: ",
     der_bds_gen = "General BDS Functions: ",
     der_bds_findings = "BDS-Findings Functions that returns variable appended to dataset: ",
-    der_prm_bds_findings = "BDS-Findings Functions for adding Parameters: ",
+    der_prm_bds_findings = "BDS-Findings Functions for adding Parameters/Records: ",
     der_adsl = "ADSL Functions that returns variable appended to dataset: ",
     der_tte = "TTE Functions that returns variable appended to dataset:",
     der_prm_tte = "TTE Functions for adding Parameters: ",
