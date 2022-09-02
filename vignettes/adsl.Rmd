@@ -810,8 +810,3 @@ NOTE: All these packages are in the experimental phase, but the vision is to
 have them associated with an End to End pipeline under the umbrella of the
 [pharmaverse](https://github.com/pharmaverse).
 
-# Example Script 
-
-ADaM | Sample Code
----- | --------------
-ADSL | [ad_adsl.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R){target="_blank"} 
