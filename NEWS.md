@@ -130,13 +130,13 @@ have been removed:
 - New admh R Script template added. Use `admiral::use_ad_template("admh")` to access 
   (#502)
 
-- New vignette [Higher Order Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html) (#1047)
+- New vignette "Higher Order Functions" (#1047)
 
 - Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
 
 - Added link to [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) to README
 
-- New vignette [Lab Grading](https://pharmaverse.github.io/admiral/articles/lab_grading.html) (#1369)
+- New vignette "Lab Grading" (#1369)
 
 ## Various
 
