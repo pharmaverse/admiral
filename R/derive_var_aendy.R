@@ -37,19 +37,10 @@
 #'
 #' @return The input dataset with `AENDY` column added
 #'
-#' @keywords derivation bds occds timing
-#'
+#' @keywords deprecated
+#' @family deprecated
 #' @export
 #'
 derive_var_aendy <- function(dataset, reference_date = TRTSDT, date = AENDT) {
-  reference_date <- assert_symbol(enquo(reference_date))
-  date <- assert_symbol(enquo(date))
-  assert_data_frame(dataset, vars(!!reference_date, !!date))
-  deprecate_warn("0.7.0", "derive_var_aendy()", "derive_vars_dy()")
-
-  derive_vars_dy(
-    dataset,
-    reference_date = !!reference_date,
-    source_vars = vars(AENDY = !!date)
-  )
+  deprecate_stop("0.7.0", "derive_var_aendy()", "derive_vars_dy()")
 }

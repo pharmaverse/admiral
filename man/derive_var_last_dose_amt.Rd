@@ -75,41 +75,72 @@ library(admiral.test)
 data(admiral_ae)
 data(ex_single)
 
-admiral_ae \%>\%
+ex_single <- derive_vars_dtm(
+  head(ex_single, 100),
+  dtc = EXENDTC,
+  new_vars_prefix = "EXEN",
+  flag_imputation = "none"
+)
+
+adae <- admiral_ae \%>\%
   head(100) \%>\%
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    highest_imputation = "M"
+  )
+
+adae \%>\%
   derive_var_last_dose_amt(
-    head(ex_single, 100),
+    dataset_ex = ex_single,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      nchar(EXENDTC) >= 10,
-    dose_date = EXENDTC,
-    analysis_date = AESTDTC,
-    single_dose_condition = (EXSTDTC == EXENDTC),
+      !is.na(EXENDTM),
+    dose_date = EXENDTM,
+    analysis_date = ASTDTM,
     new_var = LDOSE,
     dose_var = EXDOSE
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSE)
 
 # or with traceability variables
-admiral_ae \%>\%
-  head(100) \%>\%
+adae \%>\%
   derive_var_last_dose_amt(
-    head(ex_single, 100),
+    dataset_ex = ex_single,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      nchar(EXENDTC) >= 10,
-    dose_date = EXENDTC,
-    analysis_date = AESTDTC,
-    single_dose_condition = (EXSTDTC == EXENDTC),
+      !is.na(EXENDTM),
+    dose_date = EXENDTM,
+    analysis_date = ASTDTM,
     new_var = LDOSE,
     dose_var = EXDOSE,
-    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
+    traceability_vars = vars(
+      LDOSEDOM = "EX",
+      LDOSESEQ = EXSEQ,
+      LDOSEVAR = "EXDOSE"
+    )
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSE)
 }
 \seealso{
 \code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
+
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_confirmation_flag}()},
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_last_dose_date}()},
+\code{\link{derive_var_last_dose_grp}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_obs_number}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_last_dose}()},
+\code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_merged}()},
+\code{\link{derive_vars_transposed}()},
+\code{\link{get_summary_records}()}
 }
 \author{
 Annie Yang
 }
-\keyword{adam}
-\keyword{derivation}
+\concept{der_gen}
+\keyword{der_gen}

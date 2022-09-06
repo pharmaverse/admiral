@@ -5,7 +5,7 @@
 \alias{admiral_adsl}
 \title{Subject Level Analysis Dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 306 rows and 48 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 306 rows and 50 columns.
 }
 \source{
 Derived from the \code{dm} and \code{ds} datasets using \code{{admiral}} (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R})
@@ -16,4 +16,12 @@ admiral_adsl
 \description{
 An example subject level analysis dataset
 }
+\seealso{
+Other datasets: 
+\code{\link{atoxgr_criteria_ctcv4}},
+\code{\link{ex_single}},
+\code{\link{queries_mh}},
+\code{\link{queries}}
+}
+\concept{datasets}
 \keyword{datasets}

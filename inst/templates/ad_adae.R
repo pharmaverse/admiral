@@ -8,7 +8,7 @@ library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
-# ---- Load source datasets ----
+# Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
@@ -22,11 +22,16 @@ adsl <- admiral_adsl
 ae <- admiral_ae
 suppae <- admiral_suppae
 
+# When SAS datasets are imported into R using haven::read_sas(), missing
+# character values from SAS appear as "" characters in R, instead of appearing
+# as NA values. Further details can be obtained via the following link:
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+
 ae <- convert_blanks_to_na(ae)
 ex <- convert_blanks_to_na(ex_single)
 
 
-# ---- Derivations ----
+# Derivations ----
 
 # Get list of ADSL vars required for derivations
 adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT)
@@ -38,30 +43,30 @@ adae <- ae %>%
     new_vars = adsl_vars,
     by = vars(STUDYID, USUBJID)
   ) %>%
-  # derive analysis start time
+  ## Derive analysis start time ----
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
-    date_imputation = "first",
-    time_imputation = "first",
+    highest_imputation = "M",
     min_dates = vars(TRTSDT)
   ) %>%
-  # derive analysis end time
+  ## Derive analysis end time ----
   derive_vars_dtm(
     dtc = AEENDTC,
     new_vars_prefix = "AEN",
+    highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last",
     max_dates = vars(DTHDT, EOSDT)
   ) %>%
-  # derive analysis end/start date
+  ## Derive analysis end/start date ----
   derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
-  # derive analysis start relative day and  analysis end relative day
+  ## Derive analysis start relative day and  analysis end relative day ----
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = vars(ASTDT, AENDT)
   ) %>%
-  # derive analysis duration (value and unit)
+  ## Derive analysis duration (value and unit) ----
   derive_vars_duration(
     new_var = ADURN,
     new_var_unit = ADURU,
@@ -73,29 +78,35 @@ adae <- ae %>%
     trunc_out = FALSE
   )
 
+ex_ext <- derive_vars_dtm(
+  ex,
+  dtc = EXSTDTC,
+  new_vars_prefix = "EXST",
+  flag_imputation = "none"
+)
 
 adae <- adae %>%
-  # derive last dose date/time
+  ## Derive last dose date/time ----
   derive_var_last_dose_date(
-    ex,
+    ex_ext,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      nchar(EXENDTC) >= 10,
-    dose_date = EXSTDTC,
+      !is.na(EXSTDTM),
+    dose_date = EXSTDTM,
     analysis_date = ASTDT,
     new_var = LDOSEDTM,
     single_dose_condition = (EXSTDTC == EXENDTC),
     output_datetime = TRUE
   ) %>%
-  # derive severity / causality / ...
+  ## Derive severity / causality / ... ----
   mutate(
     ASEV = AESEV,
     AREL = AEREL
   ) %>%
-  # derive treatment emergent flag
+  ## Derive treatment emergent flag ----
   mutate(
     TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", NA_character_)
   ) %>%
-  # derive occurrence flags: first occurence of most severe AE
+  ## Derive occurrence flags: first occurence of most severe AE ----
   # create numeric value ASEVN for severity
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
@@ -104,9 +115,9 @@ adae <- adae %>%
     derivation = derive_var_extreme_flag,
     args = params(
       by_vars = vars(USUBJID),
-      order = vars(ASTDTM, AESEQ),
+      order = vars(desc(ASEVN), ASTDTM, AESEQ),
       new_var = AOCCIFL,
-      mode = "last"
+      mode = "first"
     ),
     filter = TRTEMFL == "Y"
   )
@@ -119,7 +130,7 @@ adae <- adae %>%
   )
 
 
-# ---- Save output ----
+# Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 save(adae, file = file.path(dir, "adae.rda"), compress = "bzip2")

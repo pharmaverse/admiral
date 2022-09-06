@@ -13,10 +13,14 @@ A toolbox for programming Clinical Data Standards Interchange Consortium (CDISC)
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://pharmaverse.github.io/admiral/index.html}
-  \item \url{https://github.com/pharmaverse/admiral/}
+  \item \url{https://pharmaverse.github.io/admiral/}
+  \item \url{https://github.com/pharmaverse/admiral}
 }
 
+
+Other internal: 
+\code{\link{print.adam_templates}()},
+\code{\link{print.tte_source}()}
 }
 \author{
 \strong{Maintainer}: Thomas Neitmann \email{thomas.neitmann@roche.com}
@@ -57,9 +61,22 @@ Other contributors:
   \item Ondrej Slama [contributor]
   \item Shimeng Huang [contributor]
   \item James Kim [contributor]
+  \item Shan Lee [contributor]
+  \item Bill Denney [contributor]
+  \item Syed Mubasheer [contributor]
+  \item Wenyi Liu [contributor]
+  \item Dinakar Kulkarni [contributor]
+  \item Tamara Senior [contributor]
+  \item Jordanna Morrish [contributor]
+  \item Anthony Howard [contributor]
+  \item Barbara O'Reilly [contributor]
+  \item John Kirkpatrick [contributor]
+  \item James Black [contributor]
+  \item Leena Khatri [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
 }
 
 }
+\concept{internal}
 \keyword{internal}

@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+library(admiraldev)
 ```
 
 # Introduction
@@ -33,6 +35,7 @@ otherwise specified.*
   * [Disposition Dates (e.g. `EOSDT`)](#disposition_date)
   * [Disposition Status (e.g. `EOSTT`)](#disposition_status)
   * [Disposition Reason(s) (e.g. `DCSREAS`, `DCSREASP`)](#disposition_reason)
+  * [Randomization Date (`RANDDT`)](#randomization_date)
 * [Derive Death Variables](#death)
   * [Death Date (`DTHDT`)](#death_date)
   * [Cause of Death (`DTHCAUS`)](#death_cause)
@@ -51,7 +54,8 @@ To start, all data frames needed for the creation of `ADSL` should be read into
 the environment. This will be a company specific process. Some of the 
 data frames needed may be `DM`, `EX`, `DS`, `AE`, and `LB`.
 
-For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral.test}`---are used.
+For example purpose, the CDISC Pilot SDTM datasets---which are included in 
+`{admiral.test}`---are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
@@ -98,42 +102,54 @@ adsl <- dm %>%
 
 ## Derive/Impute Numeric Treatment Date/Time and Duration (`TRTSDTM`, `TRTEDTM`, `TRTDURD`) {#trtdatetime}
 
-The function `derive_vars_merged_dtm()` can be used to derive the treatment
-start and end date/times using the `ex` domain.
+The function `derive_vars_merged()` can be used to derive the treatment start
+and end date/times using the `ex` domain. A pre-processing step for `ex` is
+required to convert the variable `EXSTDTC` and `EXSTDTC` to datetime variables
+and impute missing date or time components. Conversion and imputation is done by
+`derive_vars_dtm()`.
 
 Example calls:
 
 ```{r eval=TRUE}
+# impute start and end time of exposure to first and last respectively, do not impute date
+ex_ext <- ex %>%
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST"
+  ) %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN",
+    time_imputation = "last"
+  )
+
 adsl <- adsl %>%
-  derive_vars_merged_dtm(
-    dataset_add = ex,
+  derive_vars_merged(
+    dataset_add = ex_ext,
     filter_add = (EXDOSE > 0 |
       (EXDOSE == 0 &
-        str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10,
-    new_vars_prefix = "TRTS",
-    dtc = EXSTDTC,
-    order = vars(TRTSDTM, EXSEQ),
+        str_detect(EXTRT, "PLACEBO"))) & !is.na(EXSTDTM),
+    new_vars = vars(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
+    order = vars(EXSTDTM, EXSEQ),
     mode = "first",
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-  derive_vars_merged_dtm(
-    dataset_add = ex,
+  derive_vars_merged(
+    dataset_add = ex_ext,
     filter_add = (EXDOSE > 0 |
       (EXDOSE == 0 &
-        str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10,
-    new_vars_prefix = "TRTE",
-    dtc = EXENDTC,
-    time_imputation = "last",
-    order = vars(TRTEDTM, EXSEQ),
+        str_detect(EXTRT, "PLACEBO"))) & !is.na(EXENDTM),
+    new_vars = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+    order = vars(EXENDTM, EXSEQ),
     mode = "last",
     by_vars = vars(STUDYID, USUBJID)
   )
 ```
 
-This call returns the original data frame with the column `TRTSDTM` and
-`TRTEDTM` added. Exposure observations with incomplete date and zero doses of
-non placebo treatments are ignored. Missing time parts are imputed as first or
-last for start and end date respectively.
+This call returns the original data frame with the column `TRTSDTM`, `TRTSTMF`,
+`TRTEDTM`, and `TRTETMF` added. Exposure observations with incomplete date and
+zero doses of non placebo treatments are ignored. Missing time parts are imputed
+as first or last for start and end date respectively.
 
 The datetime variables returned can be converted to dates using the `derive_vars_dtm_to_dt()` 
 function.
@@ -164,20 +180,27 @@ dataset_vignette(
 
 ### Disposition Dates (e.g. `EOSDT`) {#disposition_date}
 
-The function `derive_var_disposition_dt()` can be used to derive a disposition date. 
-The relevant disposition date (`DS.DSSTDTC`) is selected by adjusting the filter parameter. 
+The functions `derive_vars_dt()` and `derive_vars_merged()` can be used to
+derive a disposition date. First the character disposition date (`DS.DSSTDTC`)
+is converted to a numeric date (`DSSTDT`) calling `derive_vars_dt()`. Then the
+relevant disposition date is selected by adjusting the `filter_add` parameter.
 
 To derive the End of Study date (`EOSDT`), a call could be:
 
 ```{r eval=TRUE}
+# convert character date to numeric date without imputation
+ds_ext <- derive_vars_dt(
+  ds,
+  dtc = DSSTDTC,
+  new_vars_prefix = "DSST"
+)
+
 adsl <- adsl %>%
-  derive_vars_merged_dt(
-    dataset_add = ds,
+  derive_vars_merged(
+    dataset_add = ds_ext,
     by_vars = vars(STUDYID, USUBJID),
-    new_vars_prefix = "EOS",
-    dtc = DSSTDTC,
-    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE",
-    date_imputation = NULL
+    new_vars = vars(EOSDT = DSSTDT),
+    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   )
 ```
 
@@ -197,8 +220,6 @@ We would get :
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(adsl, display_vars = vars(USUBJID, EOSDT))
 ```
-
-
 
 This call would return the input dataset with the column `EOSDT` added. 
 This function allows the user to impute partial dates as well. If imputation is needed and the date 
@@ -229,8 +250,9 @@ dataset_vignette(adsl, display_vars = vars(USUBJID, EOSDT, EOSSTT))
 
 This call would return the input dataset with the column `EOSSTT` added. 
 
-By default, the function will derive `EOSSTT` as 
+By default, the function will derive `EOSSTT` as
 
+- `"NOT STARTED"` if `DSDECOD` is `"SCREEN FAILURE"` or `"SCREENING NOT COMPLETED"`
 - `"COMPLETED"` if `DSDECOD == "COMPLETED"`
 - `"DISCONTINUED"` if `DSDECOD` is not `"COMPLETED"` or `NA`
 - `"ONGOING"` otherwise
@@ -313,7 +335,7 @@ and  `DSTERM` to a suitable `DCSREAS`/`DCSREASP` value.
 Example function `format_dcsreas()`:
 
 ```{r eval=TRUE}
-format_dctreas <- function(dsdecod, dsterm = NULL) {
+format_dcsreas <- function(dsdecod, dsterm = NULL) {
   if (is.null(dsterm)) {
     if_else(dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod), dsdecod, NA_character_)
   } else {
@@ -336,6 +358,31 @@ adsl <- adsl %>%
     filter_ds = DSCAT == "DISPOSITION EVENT"
   )
 ```
+
+
+### Randomization Date (`RANDDT`) {#randomization_date}
+
+The function `derive_vars_merged()` can be used to derive randomization date 
+variable. To map Randomization Date (`RANDDT`), the call would be:
+
+```{r eval=TRUE}
+adsl <- adsl %>%
+  derive_vars_merged(
+    dataset_add = ds_ext,
+    filter_add = DSDECOD == "RANDOMIZED",
+    by_vars = vars(STUDYID, USUBJID),
+    new_vars = vars(RANDDT = DSSTDT)
+  )
+```
+
+
+This call would return the input dataset with the column `RANDDT` is added.
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adsl, display_vars = vars(USUBJID, RANDDT))
+```
+
+[Link](#link_ds) to `DS`.
 
 ## Derive Death Variables {#death}
 
@@ -371,7 +418,7 @@ adsl <- adsl %>%
   derive_vars_dt(
     new_vars_prefix = "DTH",
     dtc = DTHDTC,
-    date_imputation = "FIRST"
+    date_imputation = "first"
   )
 ```
 
@@ -406,7 +453,7 @@ An example call to define the sources would be:
 src_ae <- dthcaus_source(
   dataset_name = "ae",
   filter = AEOUT == "FATAL",
-  date = AESTDTC,
+  date = AESTDTM,
   mode = "first",
   dthcaus = AEDECOD
 )
@@ -424,7 +471,7 @@ dataset_vignette(
 src_ds <- dthcaus_source(
   dataset_name = "ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-  date = DSSTDTC,
+  date = DSSTDT,
   mode = "first",
   dthcaus = "Death in DS"
 )
@@ -441,8 +488,16 @@ dataset_vignette(
 Once the sources are defined, the function `derive_var_dthcaus()` can be used to derive `DTHCAUS`:
 
 ```{r eval=TRUE}
+ae_ext <- derive_vars_dtm(
+  ae,
+  dtc = AESTDTC,
+  new_vars_prefix = "AEST",
+  highest_imputation = "M",
+  flag_imputation = "none"
+)
+
 adsl <- adsl %>%
-  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
+  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae_ext, ds = ds_ext))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -462,7 +517,7 @@ arguments:
 src_ae <- dthcaus_source(
   dataset_name = "ae",
   filter = AEOUT == "FATAL",
-  date = AESTDTC,
+  date = AESTDTM,
   mode = "first",
   dthcaus = AEDECOD,
   traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
@@ -471,14 +526,14 @@ src_ae <- dthcaus_source(
 src_ds <- dthcaus_source(
   dataset_name = "ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-  date = DSSTDTC,
+  date = DSSTDT,
   mode = "first",
   dthcaus = DSTERM,
   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 adsl <- adsl %>%
   select(-DTHCAUS) %>% # remove it before deriving it again
-  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
+  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae_ext, ds = ds_ext))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -543,22 +598,20 @@ source domain, sequence, variable)
 An example could be :
 
 ```{r eval=TRUE}
-ae_src1 <- date_source(
+ae_start_date <- date_source(
   dataset_name = "ae",
-  date = AESTDTC,
-  date_imputation = "FIRST"
+  date = AESTDT
 )
-ae_src2 <- date_source(
+ae_end_date <- date_source(
   dataset_name = "ae",
-  date = AEENDTC,
-  date_imputation = "LAST"
+  date = AEENDT
 )
-lb_src <- date_source(
+lb_date <- date_source(
   dataset_name = "lb",
-  date = LBDTC,
-  filter = str_length(LBDTC) >= 10
+  date = LBDT,
+  filter = !is.na(LBDT)
 )
-adsl_src <- date_source(
+trt_end_date <- date_source(
   dataset_name = "adsl",
   date = TRTEDT
 )
@@ -568,11 +621,32 @@ Once the sources are defined, the function `derive_var_extreme_dt()` can be used
 to derive `LSTALVDT`:
 
 ```{r eval=TRUE}
+# impute AE start and end date to first
+ae_ext <- ae %>%
+  derive_vars_dt(
+    dtc = AESTDTC,
+    new_vars_prefix = "AEST",
+    highest_imputation = "M"
+  ) %>%
+  derive_vars_dt(
+    dtc = AEENDTC,
+    new_vars_prefix = "AEEN",
+    highest_imputation = "M"
+  )
+
+# impute LB date to first
+lb_ext <- derive_vars_dt(
+  lb,
+  dtc = LBDTC,
+  new_vars_prefix = "LB",
+  highest_imputation = "M"
+)
+
 adsl <- adsl %>%
   derive_var_extreme_dt(
     new_var = LSTALVDT,
-    ae_src1, ae_src2, lb_src, adsl_src,
-    source_datasets = list(ae = ae, adsl = adsl, lb = lb),
+    ae_start_date, ae_end_date, lb_date, trt_end_date,
+    source_datasets = list(ae = ae_ext, adsl = adsl, lb = lb_ext),
     mode = "last"
   )
 ```
@@ -589,25 +663,23 @@ Similarly to `dthcaus_source()`, the traceability variables can be added by spec
 `traceability_vars` argument in `date_source()`.
 
 ```{r eval=TRUE}
-ae_src1 <- date_source(
+ae_start_date <- date_source(
   dataset_name = "ae",
-  date = AESTDTC,
-  date_imputation = "FIRST",
+  date = AESTDT,
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")
 )
-ae_src2 <- date_source(
+ae_end_date <- date_source(
   dataset_name = "ae",
-  date = AEENDTC,
-  date_imputation = "LAST",
+  date = AEENDT,
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC")
 )
-lb_src <- date_source(
+lb_date <- date_source(
   dataset_name = "lb",
-  date = LBDTC,
-  filter = str_length(LBDTC) >= 10,
+  date = LBDT,
+  filter = !is.na(LBDT),
   traceability_vars = vars(LALVDOM = "LB", LALVSEQ = LBSEQ, LALVVAR = "LBDTC")
 )
-adsl_src <- date_source(
+trt_end_date <- date_source(
   dataset_name = "adsl",
   date = TRTEDTM,
   traceability_vars = vars(LALVDOM = "ADSL", LALVSEQ = NA_integer_, LALVVAR = "TRTEDTM")
@@ -617,8 +689,8 @@ adsl <- adsl %>%
   select(-LSTALVDT) %>% # created in the previous call
   derive_var_extreme_dt(
     new_var = LSTALVDT,
-    ae_src1, ae_src2, lb_src, adsl_src,
-    source_datasets = list(ae = ae, adsl = adsl, lb = lb),
+    ae_start_date, ae_end_date, lb_date, trt_end_date,
+    source_datasets = list(ae = ae_ext, adsl = adsl, lb = lb_ext),
     mode = "last"
   )
 ```
@@ -660,7 +732,7 @@ the user defined function(s) would be like:
 ```{r eval=TRUE}
 format_agegr2 <- function(var_input) {
   case_when(
-    !is.na(var_input) & var_input < 65 ~ "< 65",
+    var_input < 65 ~ "< 65",
     var_input >= 65 ~ ">= 65",
     TRUE ~ NA_character_
   )
@@ -723,8 +795,6 @@ The users can add specific code to cover their need for the analysis.
 The following functions are helpful for many ADSL derivations:
 
   - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
-  - `derive_vars_merged_dt()` - Merge a (Imputed) Date Variable
-  - `derive_vars_merged_dtm()` - Merge a (Imputed) Datetime Variable
   - `derive_var_merged_cat()` - Merge a Categorization Variable
   - `derive_var_merged_exist_flag()` - Merge an Existence Flag
   - `derive_var_merged_character()` - Merge a Character Variable
@@ -755,4 +825,3 @@ have them associated with an End to End pipeline under the umbrella of the
 ADaM | Sample Code
 ---- | --------------
 ADSL | [ad_adsl.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R){target="_blank"} 
-

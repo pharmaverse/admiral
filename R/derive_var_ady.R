@@ -36,19 +36,10 @@
 #'
 #' @return The input dataset with `ADY` column added
 #'
-#' @keywords derivation bds timing
+#' @keywords deprecated
 #'
 #' @export
 #'
 derive_var_ady <- function(dataset, reference_date = TRTSDT, date = ADT) {
-  reference_date <- assert_symbol(enquo(reference_date))
-  date <- assert_symbol(enquo(date))
-  assert_data_frame(dataset, vars(!!reference_date, !!date))
-  deprecate_warn("0.7.0", "derive_var_ady()", "derive_vars_dy()")
-
-  derive_vars_dy(
-    dataset,
-    reference_date = !!reference_date,
-    source_vars = vars(ADY = !!date)
-  )
+  deprecate_stop("0.7.0", "derive_var_ady()", "derive_vars_dy()")
 }

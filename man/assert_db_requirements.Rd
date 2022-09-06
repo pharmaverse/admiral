@@ -38,6 +38,31 @@ An error is issued if \code{version} or \code{fun} is null.
 If SMQs or SDGs are requested, the version and a function to access the
 database must be provided. The function checks these requirements.
 }
+\seealso{
+Source Specifications: 
+\code{\link{assert_terms}()},
+\code{\link{assert_valid_queries}()},
+\code{\link{censor_source}()},
+\code{\link{date_source}()},
+\code{\link{death_event}},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{event_source}()},
+\code{\link{extend_source_datasets}()},
+\code{\link{filter_date_sources}()},
+\code{\link{format.sdg_select}()},
+\code{\link{format.smq_select}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()},
+\code{\link{tte_source}()},
+\code{\link{validate_query}()},
+\code{\link{validate_sdg_select}()},
+\code{\link{validate_smq_select}()}
+}
 \author{
 Stefan Bundfuss
 }
+\concept{source_specifications}
+\keyword{source_specifications}

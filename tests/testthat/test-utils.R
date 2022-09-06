@@ -8,13 +8,6 @@ test_that("atomic vectors of length 1", {
   expect_identical(what_is_it(2.42), "`2.42`")
 })
 
-test_that("vectors", {
-  expect_identical(what_is_it(letters), "a character vector")
-  expect_identical(what_is_it(1:10), "an integer vector")
-  expect_identical(what_is_it(c(1.2, 3)), "a double vector")
-  expect_identical(what_is_it(c(TRUE, FALSE)), "a logical vector")
-  expect_identical(what_is_it(list(1, letters, TRUE)), "a list")
-})
 
 test_that("S3 objects", {
   expect_identical(what_is_it(mtcars), "a data frame")
@@ -109,6 +102,14 @@ test_that("blank strings are turned into `NA` inside data frames", {
   expect_identical(convert_blanks_to_na(input), expected_output)
 })
 
+test_that("`convert_blanks_to_na.list` produces a lists", {
+  x <- c("", "", "")
+  expected_output <- lapply(x, convert_blanks_to_na)
+  actual_output <- convert_blanks_to_na.list(x)
+
+  expect_equal(expected_output, actual_output)
+})
+
 test_that("negate_vars returns list of negated variables", {
   expect_identical(negate_vars(vars(var1, var2)), rlang::exprs(-var1, -var2))
 })
@@ -142,5 +143,35 @@ test_that("`convert_dtm_to_dtc` Error is thrown if dtm is not in correct format"
     convert_dtm_to_dtc("2022-04-05T15:26:14"),
     "lubridate::is.instant(dtm) is not TRUE",
     fixed = TRUE
+  )
+})
+
+test_that("get_constant_vars Test 1: without ignore_vars", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AGE, ~AVISIT,
+    "1",      26,   "BASELINE",
+    "1",      26,   "WEEK 1",
+    "2",      42,   "BASELINE",
+    "2",      42,   "WEEK 1"
+  )
+
+  expect_equal(
+    get_constant_vars(data, by_vars = vars(USUBJID)),
+    vars(USUBJID, AGE)
+  )
+})
+
+test_that("get_constant_vars Test 2: with ignore_vars", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AGE, ~WGTBL, ~HGTBL, ~AVISIT,
+    "1",      26,   61,     172,    "BASELINE",
+    "1",      26,   61,     172,    "WEEK 1",
+    "2",      42,   72,     183,    "BASELINE",
+    "2",      42,   72,     183,    "WEEK 1"
+  )
+
+  expect_equal(
+    get_constant_vars(data, by_vars = vars(USUBJID), ignore_vars = vars(WGTBL, HGTBL)),
+    vars(USUBJID, AGE)
   )
 })

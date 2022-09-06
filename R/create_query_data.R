@@ -140,7 +140,8 @@
 #' @return A dataset to be used as input dataset to the `dataset_queries`
 #'   argument in `derive_vars_query()`
 #'
-#' @keywords adae adcm user_utility
+#' @family der_occds
+#' @keywords der_occds
 #'
 #' @seealso [derive_vars_query()], [query()], [smq_select()], [sdg_select()], [Queries Dataset
 #' Documentation](../articles/queries_dataset.html)
@@ -381,6 +382,9 @@ create_query_data <- function(queries,
 #'
 #'   *Permitted Values*: `"smq"`, `"sdg"`
 #'
+#' @family der_occds
+#' @keywords der_occds
+#'
 #' @return Output dataset of the access function
 #'
 #' @author Stefan Bundfuss
@@ -452,6 +456,9 @@ get_terms_from_db <- function(version,
 #'
 #' Should be `"SMQ`" or `"SDG"`.
 #'
+#' @keywords source_specifications
+#' @family source_specifications
+#'
 #' @return An error is issued if `version` or `fun` is null.
 #'
 #' @author Stefan Bundfuss
@@ -495,7 +502,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' Create an `query` object
 #'
 #' A `query` object defines a query, e.g., a Standard MedDRA Query (SMQ), a
-#' Standardised Drug Grouping (SDG), or a customized query (CQ). It is used
+#' Standardized Drug Grouping (SDG), or a customized query (CQ). It is used
 #' as input to `create_query_data()`.
 #'
 #' @param prefix The value is used to populate `VAR_PREFIX` in the output
@@ -562,6 +569,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' @seealso [create_query_data()], [smq_select()], [sdg_select()], [Queries Dataset
 #' Documentation](../articles/queries_dataset.html)
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @export
@@ -654,13 +662,16 @@ query <- function(prefix,
 #'
 #' @author Stefan Bundfuss
 #'
+#' @keywords source_specifications
+#' @family source_specifications
+#'
 #' @seealso [query()]
 #'
 #' @export
 #'
 #' @return The original object.
 validate_query <- function(obj) {
-  assert_that(inherits(obj, "query"))
+  assert_s3_class(obj, "query")
   values <- unclass(obj)
   prefix <- values$prefix
   assert_character_scalar(prefix)
@@ -795,7 +806,8 @@ validate_query <- function(obj) {
 #'
 #' @seealso [create_query_data()], [query()]
 #'
-#' @keywords assertion
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @author Stefan Bundfuss
 assert_terms <- function(terms,
@@ -885,6 +897,7 @@ assert_terms <- function(terms,
 #'
 #' @seealso [create_query_data()], [query()]
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @export
@@ -906,13 +919,16 @@ smq_select <- function(name = NULL,
 #'
 #' @seealso [smq_select()]
 #'
+#' @keywords source_specifications
+#' @family source_specifications
+#'
 #' @author Stefan Bundfuss
 #'
 #' @export
 #'
 #' @return The original object.
 validate_smq_select <- function(obj) {
-  assert_that(inherits(obj, "smq_select"))
+  assert_s3_class(obj, "smq_select")
   values <- unclass(obj)
   name <- values$name
   assert_character_scalar(name,
@@ -951,7 +967,8 @@ validate_smq_select <- function(obj) {
 #'
 #' @seealso [smq_select()]
 #'
-#' @keywords dev_utility
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @export
 #'
@@ -986,6 +1003,7 @@ format.smq_select <- function(x, ...) {
 #'
 #' @seealso [create_query_data()], [query()]
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @export
@@ -1007,11 +1025,14 @@ sdg_select <- function(name = NULL,
 #'
 #' @seealso [sdg_select()]
 #'
+#' @keywords source_specifications
+#' @family source_specifications
+#'
 #' @export
 #'
 #' @return The original object.
 validate_sdg_select <- function(obj) {
-  assert_that(inherits(obj, "sdg_select"))
+  assert_s3_class(obj, "sdg_select")
   values <- unclass(obj)
   name <- values$name
   assert_character_scalar(name,
@@ -1045,7 +1066,8 @@ validate_sdg_select <- function(obj) {
 #'
 #' @seealso [sdg_select()]
 #'
-#' @keywords dev_utility
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @export
 #'

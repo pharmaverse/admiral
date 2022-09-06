@@ -1,85 +1,3 @@
-#' Turn a List of Quosures into a Character Vector
-#'
-#' @param quosures A `list` of `quosures` created using [`vars()`]
-#'
-#' @return A character vector
-#'
-#' @author Thomas Neitmann
-#'
-#' @export
-#'
-#' @keywords user_utility
-#'
-#' @examples
-#' vars2chr(vars(USUBJID, AVAL))
-vars2chr <- function(quosures) {
-  rlang::set_names(
-    map_chr(quosures, ~ as_string(quo_get_expr(.x))),
-    names(quosures)
-  )
-}
-
-#' Negate List of Variables
-#'
-#' The function adds a minus sign as prefix to each variable.
-#'
-#' This is useful if a list of variables should be removed from a dataset,
-#' e.g., `select(!!!negate_vars(by_vars))` removes all by variables.
-#'
-#' @param vars List of variables created by `vars()`
-#'
-#' @return A list of `quosures`
-#'
-#' @author Stefan Bundfuss
-#'
-#' @export
-#'
-#' @keywords user_utility
-#'
-#' @examples
-#' negate_vars(vars(USUBJID, STUDYID))
-negate_vars <- function(vars = NULL) {
-  assert_vars(vars, optional = TRUE)
-  if (is.null(vars)) {
-    NULL
-  } else {
-    lapply(vars, function(var) expr(-!!quo_get_expr(var)))
-  }
-}
-
-#' Optional Filter
-#'
-#' Filters the input dataset if the provided expression is not `NULL`
-#'
-#' @param dataset Input dataset
-#' @param filter A filter condition. Must be a quosure.
-#'
-#' @return A `data.frame` containing all rows in `dataset` matching `filter` or
-#' just `dataset` if `filter` is `NULL`
-#'
-#' @author Thomas Neitmann
-#'
-#' @export
-#'
-#' @keywords user_utility
-#'
-#' @examples
-#' library(admiral.test)
-#' data(admiral_vs)
-#'
-#' admiral::filter_if(admiral_vs, rlang::quo(NULL))
-#' admiral::filter_if(admiral_vs, rlang::quo(VSTESTCD == "WEIGHT"))
-filter_if <- function(dataset, filter) {
-  assert_data_frame(dataset)
-  assert_filter_cond(filter, optional = TRUE)
-
-  if (quo_is_null(filter)) {
-    dataset
-  } else {
-    filter(dataset, !!filter)
-  }
-}
-
 #' Extract Unit From Parameter Description
 #'
 #' Extract the unit of a parameter from a description like "Param (unit)".
@@ -90,7 +8,8 @@ filter_if <- function(dataset, filter) {
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @keywords utils_help
+#' @family utils_help
 #'
 #' @examples
 #' extract_unit("Height (cm)")
@@ -121,7 +40,8 @@ extract_unit <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords user_utility
+#' @family utils_fmt
+#' @keywords utils_fmt
 #'
 #' @export
 #'
@@ -183,7 +103,8 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #'
 #' @return A `data.frame` or `NULL`
 #'
-#' @keywords user_utility
+#' @family utils_ds_chk
+#' @keywords utils_ds_chk
 #'
 #' @examples
 #' data(admiral_adsl)
@@ -194,7 +115,7 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #'
 #' get_one_to_many_dataset()
 get_one_to_many_dataset <- function() {
-  .datasets$one_to_many
+  get_dataset("one_to_many")
 }
 
 #' Get Many to One Values that Led to a Prior Error
@@ -215,7 +136,8 @@ get_one_to_many_dataset <- function() {
 #'
 #' @return A `data.frame` or `NULL`
 #'
-#' @keywords user_utility
+#' @family utils_ds_chk
+#' @keywords utils_ds_chk
 #'
 #' @examples
 #' data(admiral_adsl)
@@ -226,5 +148,32 @@ get_one_to_many_dataset <- function() {
 #'
 #' get_many_to_one_dataset()
 get_many_to_one_dataset <- function() {
-  .datasets$many_to_one
+  get_dataset("many_to_one")
+}
+
+#' Map `"Y"` and `"N"` to Numeric Values
+#'
+#' Map `"Y"` and `"N"` to numeric values.
+#'
+#' @param arg Character vector
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords utils_fmt
+#' @family utils_fmt
+#'
+#' @export
+#'
+#' @return `1` if `arg` equals `"Y"`, `0` if `arg` equals `"N"`, `NA_real_` otherwise
+#'
+#' @examples
+#'
+#' yn_to_numeric(c("Y", "N", NA_character_))
+yn_to_numeric <- function(arg) {
+  assert_character_vector(arg)
+  case_when(
+    arg == "Y" ~ 1,
+    arg == "N" ~ 0,
+    TRUE ~ NA_real_
+  )
 }

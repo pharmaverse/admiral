@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+library(admiraldev)
 ```
 
 # Introduction
@@ -127,8 +129,8 @@ the user to impute the date as well.
 Example calls:
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- derive_vars_dt(adex, new_vars_prefix = "AST", dtc = EXSTDTC, flag_imputation = "none")
-adex <- derive_vars_dt(adex, new_vars_prefix = "AEN", dtc = EXENDTC, flag_imputation = "none")
+adex <- derive_vars_dt(adex, new_vars_prefix = "AST", dtc = EXSTDTC)
+adex <- derive_vars_dt(adex, new_vars_prefix = "AEN", dtc = EXENDTC)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -138,7 +140,6 @@ dataset_vignette(
 )
 ```
 
-
 The next examples demonstrates the datetime imputation features available
 in the `derive_vars_dtm()` function, where the time is imputed as "00:00:00":
 
@@ -146,13 +147,14 @@ in the `derive_vars_dtm()` function, where the time is imputed as "00:00:00":
 adex <- derive_vars_dtm(
   adex,
   dtc = EXSTDTC,
-  date_imputation = "first",
+  highest_imputation = "M",
   new_vars_prefix = "AST"
 )
 
 adex <- derive_vars_dtm(
   adex,
   dtc = EXENDTC,
+  highest_imputation = "M",
   date_imputation = "last",
   new_vars_prefix = "AEN"
 )
@@ -275,7 +277,7 @@ frequency to a corresponding set of records each representing one dose (i.e.
 ```{r eval=TRUE, echo=TRUE}
 single_dose <- adex %>%
   filter(USUBJID == "01-701-1015" & EXSTDY == 1) %>%
-  create_single_dose_dataset()
+  create_single_dose_dataset(keep_source_vars = vars(USUBJID, EXDOSE, EXPLDOS, EXDOSFRQ, ASTDT, AENDT))
 
 dataset_vignette(
   single_dose,

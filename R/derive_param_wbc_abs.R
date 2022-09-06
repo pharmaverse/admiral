@@ -71,7 +71,8 @@
 #'
 #' @return The input dataset with the new parameter added
 #'
-#' @keywords derivation bds adlb
+#' @family der_prm_bds_findings
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
@@ -152,7 +153,7 @@ derive_param_wbc_abs <- function(dataset,
 
   # Create new parameter.
   dataset_new <- dataset_temp %>%
-    derive_derived_param(
+    derive_param_computed(
       parameters = c(
         wbc_code,
         diff_code

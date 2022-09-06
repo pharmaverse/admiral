@@ -13,7 +13,9 @@
 #' A data frame containing the input dataset with the corresponding date (`--DT`)
 #' variable(s) of all datetime variables (`--DTM`) specified in `source_vars.`
 #'
-#' @keywords adam timing
+#' @family der_date_time
+#'
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'

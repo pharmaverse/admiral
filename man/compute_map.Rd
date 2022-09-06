@@ -42,8 +42,18 @@ compute_map(diabp = 51, sysbp = 121)
 # Compute MAP based on diastolic and systolic blood pressure and heart rate
 compute_map(diabp = 51, sysbp = 121, hr = 59)
 }
+\seealso{
+BDS-Findings Functions that returns a vector: 
+\code{\link{compute_bmi}()},
+\code{\link{compute_bsa}()},
+\code{\link{compute_framingham}()},
+\code{\link{compute_qtc}()},
+\code{\link{compute_qual_imputation_dec}()},
+\code{\link{compute_qual_imputation}()},
+\code{\link{compute_rr}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{advs}
-\keyword{computation}
+\concept{com_bds_findings}
+\keyword{com_bds_findings}

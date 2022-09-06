@@ -1,3 +1,150 @@
+# admiral 0.8.0
+
+## New Features
+
+- `get_summary_records()` creates summary records e.g. derive analysis value (`AVAL`) from multiple records, only keeping the derived observations (#525)
+
+- `derive_param_framingham()` adds a Parameter for Framingham Heart Study Cardiovascular Disease 10-Year Risk Score (#977)
+
+- `compute_qual_imputation()` imputes values when qualifier exists in character result (#976)
+
+- `derive_vars_merged_lookup()` maps lookup tables (#940)
+
+- `filter_confirmation()` filters out confirmed observations
+(#1292) including supporting functions `count_vals()`, `min_cond()`, and
+`max_cond()`.
+
+- `derive_var_confirmation_flag()` derives a flag which
+depends on other observations of the input dataset (#1293)
+
+- `derive_var_atoxgr()` derives lab toxicity/severity grade `ATOXGR`
+from `ATOXGRL` and `ATOXGRH`. `ATOXGRL` holds toxicity/severity grade for low lab values,
+and `ATOXGRH` holds toxicity/severity grade for high lab values.
+
+- `derive_var_atoxgr_dir()` derives lab toxicity/severity grade for low
+lab values (`ATOXGRL`) or for high lab values (`ATOXGRH`). The grading is created from
+metadata.
+
+- New metadata data set called `atoxgr_criteria_ctcv4` which holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v4.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
+
+
+## Updates of Existing Functions
+
+- `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
+
+- `list_all_templates()` and `use_ad_template()` gain a `package` parameter which
+can be used to indicate in which package to look for templates (#1205)
+
+- Randomization Date `RANDDT` variable added to ADSL template and vignette (#1126)
+
+- Renamed `derive_derived_param()` to `derive_param_computed()` and added a 
+deprecation notice (#1229)
+
+- `derive_vars_duration()` updated to not display units when there is missing duration (#1207)
+
+- `value_var` parameter added to `derive_vars_atc()` (#1120)
+
+- `format_eoxxstt_default()` - Updated the default value of EOSSTT for screen failure patients (#885)
+
+- The imputation functions (`derive_vars_dtm()`, `derive_vars_dt()`,
+`convert_dtc_to_dtm()`, `convert_dtc_to_dt()`) have been enhanced to address
+users feedback (#1300):
+
+    - Partial dates with missing components in the middle like
+    `"2003-12-15T-:15:18"`, `"2003-12-15T13:-:19"`, `"2020-07--T00:00"` are
+    handled now.
+  
+    - The control of the level of imputation has been refined by adding the
+      `highest_imputation` argument. For example, `highest_imputation = "D"`
+      requests imputation for day and time but not for year and month.
+  
+      (For the `date_imputation` and the `time_imputation` argument `NULL` is no
+      longer a permitted value.)
+  
+    - It is now possible to impute completely missing dates by specifying
+    `highest_imputation = "Y"` and the `min_dates` or `max_dates` argument.
+
+- `order` parameter added to `dthcaus_source()` which allows an additional 
+character vector to be used for sorting the `dataset`, `derive_vars_dthcaus()` 
+updated to process additional parameter (#1125).
+
+- `create_single_dose_dataset()` Fixed bug where `ASTDTM` and `AENDTM` were not updated when `start_date = ASTDT` and `end_date = AENDT`. The function has been amended to now require `start_datetime` and `end_datetime` parameters in addition to `start_date` and `end_date`.The `keep_source_vars` has been added to specify the variables to be retained from the source dataset (#1224)
+
+## Breaking Changes
+
+- Moved all developer-facing functions and vignettes to `{admiraldev}`. `{admiraldev}` is now a dependency of `{admiral}` (#1231)
+
+- All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
+
+- `derive_var_agegr_ema()` and `derive_var_agegr_fda()` have been deprecated (#1333)
+
+- Imputation related arguments have been deprecated for all functions except the
+imputation functions themselves (#1299). I.e., if a derivation like last known alive
+date is based on dates, DTC variables have to be converted to numeric date or
+datetime variables in a preprocessing step. For examples see the [ADSL
+vignette](https://pharmaverse.github.io/admiral/articles/adsl.html).
+
+  The following arguments were deprecated:
+
+  - `date_imputation`, `time_imputation`, and `preserve` in `date_source()`
+  
+  The following arguments no longer accept DTC variables:
+  
+  - `date` in `date_source()`, `dthcaus_source()`, `censor_source()`, and
+  `event_source()`
+  - `dose_date` and `analysis_date` in `derive_vars_last_dose()`,
+  `derive_var_last_dose_amt()`, `derive_var_last_dose_date()`,
+  `derive_var_last_dose_grp()`
+  
+  The following functions were deprecated:
+  
+  - `derive_vars_merged_dt()`
+  - `derive_vars_merged_dtm()`
+  
+- For the `date_imputation` and the `time_imputation` argument of the imputation
+functions (`derive_vars_dtm()`, `derive_vars_dt()`, `convert_dtc_to_dtm()`,
+`convert_dtc_to_dt()`) `NULL` is no longer a permitted value. The level of
+imputation can be controlled by the `highest_imputation` argument now.
+
+- The following functions, which were deprecated in previous {admiral} versions,
+have been removed:
+
+  - `derive_var_disposition_dt()`
+  - `derive_var_lstalvdt()`
+  - `lstalvdt_source()`
+  - `derive_var_trtedtm()`
+  - `derive_var_trtsdtm()`
+
+- The following functions and parameters, which were deprecated in previous
+{admiral} versions, are now defunct and will output an ERROR if used:
+
+  - `derive_var_ady()` 
+  - `derive_var_aendy()` 
+  - `derive_var_astdy()`
+  - `derive_var_atirel()`
+  - `filter` parameter in `derive_var_extreme_flag()` and `derive_var_worst_flag()`
+
+## Documentation
+
+- New ADMH template script can be accessed using `admiral::use_ad_template("admh")` (#502)
+
+- New vignette "Higher Order Functions" (#1047)
+
+- New vignette "Lab Grading" (#1369)
+
+- Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
+
+- Added link to [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) to README
+
+## Various
+
+- Restructured Reference page and updated **all** functions to use `family` tag 
+in roxygen headers for finding similar functions.  (#1105)
+
+- Rename "Articles" page on website to "User Guides" and moved developer vignettes to `{admiraldev}` website (#1356)
+
+
 # admiral 0.7.1
 
 - `derive_vars_last_dose()` no longer fails when a variable renamed in `new_vars` is supplied
@@ -9,6 +156,8 @@ duration (#1207)
 - `derive_param_first_event()` was updated (#1214) such that
     - `AVAL` is derived instead of `AVALN` and
     - all variables from the source dataset are kept.
+    
+- `create_single_dose_dataset()` Fixed bug where ASTDTM and AENDTM were not updated when `start_date=ASTDT` and `end_date=AENDT`. The function has been amended to now require start_datetime and end_datetime parameters in addition to start_date and end_date.The keep_source_vars has been added to specify the variables to be retained from the source dataset.
 
 - `slice_derivation()` was updated such that it no longer fails if a slice is
 empty (#1309)
@@ -178,6 +327,7 @@ Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/918) raise
 - `derive_vars_dy()` derives the analysis day from one or more `--DT(M)` variables
 (#700)
 
+
 ## Updates of Existing Functions
 
 - The `derive_last_dose()` function has been split into a general function 
@@ -234,9 +384,9 @@ this case the day is imputed as `15` (#592)
 
 - README and site homepage has been updated with important new section around expectations of {admiral}, as well as other useful references such as links to conference talks (#868 & #802)
 
-- New vignette [Development Process](https://pharmaverse.github.io/admiral/articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
+- New vignette [Development Process](https://pharmaverse.github.io/admiraldev/main/articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 
-- Updated [Pull Request Review Guidance](https://pharmaverse.github.io/admiral/articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
+- Updated [Pull Request Review Guidance](https://pharmaverse.github.io/admiraldev/main/articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
 
 ## Various
 
@@ -250,7 +400,7 @@ this case the day is imputed as `15` (#592)
 
 - New vignette [Contributing to admiral](https://pharmaverse.github.io/admiral/articles/contribution_model.html) (#679)
 
-- New vignette [Unit Test Guidance](https://pharmaverse.github.io/admiral/articles/unit_test_guidance.html) (#679)
+- New vignette [Unit Test Guidance](https://pharmaverse.github.io/admiraldev/main/articles/unit_test_guidance.html) (#679)
 
 - Broken links in README have been fixed (#564)
 
@@ -309,9 +459,9 @@ to specify the unit of the input age (#569)
 
 - New vignette [Queries Dataset Documentation](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) (#561)
 
-- New vignette [Writing Vignettes](https://pharmaverse.github.io/admiral/articles/writing_vignettes.html) (#334)
+- New vignette [Writing Vignettes](https://pharmaverse.github.io/admiraldev/main/articles/writing_vignettes.html) (#334)
 
-- New vignette [Pull Request Review Guidance](https://pharmaverse.github.io/admiral/articles/pr_review_guidance.html) (#554)
+- New vignette [Pull Request Review Guidance](https://pharmaverse.github.io/admiraldev/main/articles/pr_review_guidance.html) (#554)
 
 - A section on handling missing values when working with {admiral} has been added to the "Get Started" vignette (#577)
 

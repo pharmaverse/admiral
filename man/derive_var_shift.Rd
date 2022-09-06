@@ -79,10 +79,20 @@ data \%>\%
     filter = is.na(ABLFL)
   )
 }
+\seealso{
+BDS-Findings Functions that returns variable appended to dataset: 
+\code{\link{derive_var_analysis_ratio}()},
+\code{\link{derive_var_anrind}()},
+\code{\link{derive_var_atoxgr_dir}()},
+\code{\link{derive_var_atoxgr}()},
+\code{\link{derive_var_basetype}()},
+\code{\link{derive_var_base}()},
+\code{\link{derive_var_chg}()},
+\code{\link{derive_var_ontrtfl}()},
+\code{\link{derive_var_pchg}()}
+}
 \author{
 Annie Yang
 }
-\keyword{adam}
-\keyword{adlb}
-\keyword{bds}
-\keyword{derivation}
+\concept{der_bds_findings}
+\keyword{der_bds_findings}

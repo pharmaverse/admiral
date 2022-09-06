@@ -42,7 +42,8 @@
 #' @return The input dataset with the first or last observation of each by group
 #'   added as new observations.
 #'
-#' @keywords derivation bds
+#' @family der_prm_bds_findings
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'

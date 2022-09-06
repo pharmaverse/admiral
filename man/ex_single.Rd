@@ -16,4 +16,12 @@ ex_single
 \description{
 A derived dataset with single dose per date.
 }
+\seealso{
+Other datasets: 
+\code{\link{admiral_adsl}},
+\code{\link{atoxgr_criteria_ctcv4}},
+\code{\link{queries_mh}},
+\code{\link{queries}}
+}
+\concept{datasets}
 \keyword{datasets}

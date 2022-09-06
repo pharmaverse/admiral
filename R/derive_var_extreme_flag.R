@@ -57,7 +57,8 @@
 #'
 #' @return The input dataset with the new flag variable added
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
@@ -198,6 +199,10 @@ derive_var_extreme_flag <- function(dataset,
                                     mode,
                                     filter = deprecated(),
                                     check_type = "warning") {
+  if (!missing(filter)) {
+    deprecate_stop("0.7.0", "derive_var_extreme_flag(filter = )", "restrict_derivation(filter = )")
+  }
+
   new_var <- assert_symbol(enquo(new_var))
   assert_vars(by_vars)
   assert_order_vars(order)
@@ -208,28 +213,6 @@ derive_var_extreme_flag <- function(dataset,
     values = c("none", "warning", "error"),
     case_sensitive = FALSE
   )
-  if (!missing(filter)) {
-    warn(paste(
-      "`filter` is deprecated as of admiral 0.7.0.",
-      "Please use `restrict_derivation()` instead (see examples).",
-      sep = "\n"
-    ))
-
-    filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-    return(
-      restrict_derivation(
-        dataset,
-        derivation = derive_var_extreme_flag,
-        args = params(
-          by_vars = by_vars,
-          order = order,
-          new_var = !!new_var,
-          mode = mode
-        ),
-        filter = !!filter
-      )
-    )
-  }
 
   # Create flag
   data <- dataset %>%
@@ -292,7 +275,8 @@ derive_var_extreme_flag <- function(dataset,
 #'
 #' @return The input dataset with the new flag variable added.
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
@@ -365,6 +349,9 @@ derive_var_worst_flag <- function(dataset,
                                   worst_low,
                                   filter = deprecated(),
                                   check_type = "warning") {
+  if (!missing(filter)) {
+    deprecate_stop("0.7.0", "derive_var_worst_flag(filter = )", "restrict_derivation(filter = )")
+  }
 
   # perform argument checks
   new_var <- assert_symbol(enquo(new_var))
@@ -378,32 +365,6 @@ derive_var_worst_flag <- function(dataset,
   )
   assert_character_vector(worst_high)
   assert_character_vector(worst_low)
-  if (!missing(filter)) {
-    filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-    return(
-      bind_rows(
-        derive_var_extreme_flag(
-          dataset = filter(dataset, !!param_var %in% worst_low),
-          by_vars = by_vars,
-          order = quo_c(analysis_var, order),
-          new_var = !!new_var,
-          mode = "first",
-          filter = !!filter,
-          check_type = check_type
-        ),
-        derive_var_extreme_flag(
-          dataset = filter(dataset, !!param_var %in% worst_high),
-          by_vars = by_vars,
-          order = quo_c(quo(desc(!!quo_get_expr(analysis_var))), order),
-          new_var = !!new_var,
-          mode = "first",
-          filter = !!filter,
-          check_type = check_type
-        ),
-        filter(dataset, !(!!param_var %in% c(worst_low, worst_high)))
-      )
-    )
-  }
 
   # additional checks for worstflag - parameters overlap
   if (length(intersect(worst_high, worst_low)) > 0) {

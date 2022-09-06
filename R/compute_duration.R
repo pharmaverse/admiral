@@ -10,12 +10,16 @@
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
+#'   Refer to `convert_dtc_to_dt()` to obtain a vector of imputed dates.
+#'
 #' @param end_date The end date
 #'
 #'   A date or date-time object is expected.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
+#'
+#'   Refer to `convert_dtc_to_dt()` to obtain a vector of imputed dates.
 #'
 #' @param in_unit Input unit
 #'
@@ -69,18 +73,20 @@
 #'
 #' @return The duration between the two date in the specified unit
 #'
-#' @keywords computation adam timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
 #' @examples
-#' # derive duration in days (integer), i.e., relative day
+#' # Derive duration in days (integer), i.e., relative day
 #' compute_duration(
 #'   start_date = lubridate::ymd_hms("2020-12-06T15:00:00"),
 #'   end_date = lubridate::ymd_hms("2020-12-24T08:15:00")
 #' )
 #'
-#' # derive duration in days (float)
+#' # Derive duration in days (float)
 #' compute_duration(
 #'   start_date = lubridate::ymd_hms("2020-12-06T15:00:00"),
 #'   end_date = lubridate::ymd_hms("2020-12-24T08:15:00"),
@@ -88,13 +94,22 @@
 #'   add_one = FALSE
 #' )
 #'
-#' # derive age
+#' # Derive age in years
 #' compute_duration(
 #'   start_date = lubridate::ymd("1984-09-06"),
 #'   end_date = lubridate::ymd("2020-02-24"),
 #'   trunc_out = TRUE,
 #'   out_unit = "years",
 #'   add_one = FALSE
+#' )
+#'
+#' # Derive duration in hours
+#' compute_duration(
+#'   start_date = lubridate::ymd_hms("2020-12-06T9:00:00"),
+#'   end_date = lubridate::ymd_hms("2020-12-06T13:30:00"),
+#'   out_unit = "hours",
+#'   floor_in = FALSE,
+#'   add_one = FALSE,
 #' )
 compute_duration <- function(start_date,
                              end_date,
@@ -106,7 +121,9 @@ compute_duration <- function(start_date,
   # Checks
   assert_that(is_date(start_date), is_date(end_date))
   assert_that(is_timeunit(in_unit), is_timeunit(out_unit) | out_unit == "weeks")
-  assert_that(is.logical(floor_in), is.logical(add_one), is.logical(trunc_out))
+  assert_logical_scalar(floor_in)
+  assert_logical_scalar(add_one)
+  assert_logical_scalar(trunc_out)
 
   # Derivation
   if (floor_in) {

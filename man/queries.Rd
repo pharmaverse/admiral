@@ -7,10 +7,21 @@
 \format{
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 15 rows and 8 columns.
 }
+\source{
+An example of standard query dataset to be used in deriving variables in ADAE and ADCM
+}
 \usage{
 queries
 }
 \description{
-An example of standard query dataset to be used in deriving variables in ADAE and ADCM
+Queries Dataset
 }
+\seealso{
+Other datasets: 
+\code{\link{admiral_adsl}},
+\code{\link{atoxgr_criteria_ctcv4}},
+\code{\link{ex_single}},
+\code{\link{queries_mh}}
+}
+\concept{datasets}
 \keyword{datasets}

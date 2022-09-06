@@ -46,7 +46,14 @@ df <- tibble::tibble(
 print(df)
 convert_blanks_to_na(df)
 }
+\seealso{
+Utilities for Formatting Observations: 
+\code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()},
+\code{\link{yn_to_numeric}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{user_utility}
+\concept{utils_fmt}
+\keyword{utils_fmt}
