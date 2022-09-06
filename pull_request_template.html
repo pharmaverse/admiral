@@ -54,12 +54,6 @@
 <li class="nav-item">
   <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/"></a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -83,7 +77,7 @@
 
 <p>Thank you for your Pull Request! We have developed this task checklist from the <a href="https://pharmaverse.github.io/admiraldev/main/articles/development_process.html">Development Process Guide</a> to help with the final steps of the process. Completing the below tasks helps to ensure our reviewers can maximize their time on your code as well as making sure the admiral codebase remains robust and consistent.</p>
 <p>Please check off each taskbox as an acknowledgment that you completed the task or check off that it is not relevant to your Pull Request. This checklist is part of the Github Action workflows and the Pull Request will not be merged into the <code>devel</code> branch until you have checked off each task.</p>
-<ul><li>
+<ul class="task-list"><li>
 <input type="checkbox" disabled>Place Closes #<insert_issue_number> into the beginning of your Pull Request Title (Use Edit button in top-right if you need to update)</insert_issue_number></li>
 <li>
 <input type="checkbox" disabled>Code is formatted according to the <a href="https://style.tidyverse.org/" class="external-link">tidyverse style guide</a>. Run <code><a href="https://styler.r-lib.org/reference/style_file.html" class="external-link">styler::style_file()</a></code> to style R and Rmd files</li>

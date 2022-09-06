@@ -58,12 +58,6 @@ in the derive_vars_query() function as defined in the Queries Dataset Documentat
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/"></a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -253,11 +247,11 @@ is not created.</p></li>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">create_query_data</span><span class="op">(</span>queries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">cq</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 2 x 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 x 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   TERM_NAME                 TERM_ID TERM_LEVEL VAR_PREFIX QUERY_NAME            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                       </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                 </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> APPLICATION SITE ERYTHE… 10</span><span style="text-decoration: underline;">003</span><span>041 AEDECOD    CQ01       Application Site Issu…</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> APPLICATION SITE PRURIT… 10</span><span style="text-decoration: underline;">003</span><span>053 AEDECOD    CQ01       Application Site Issu…</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                       </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                 </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> APPLICATION SITE ERYTHE… 10</span><span style="text-decoration: underline;">003</span><span>041 AEDECOD    CQ01       Application Site Issu…</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> APPLICATION SITE PRURIT… 10</span><span style="text-decoration: underline;">003</span><span>053 AEDECOD    CQ01       Application Site Issu…</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># create a query dataset for SMQs</span></span>
 <span class="r-in"><span class="va">pregsmq</span> <span class="op">&lt;-</span> <span class="fu"><a href="query.html">query</a></span><span class="op">(</span></span>
@@ -284,20 +278,20 @@ is not created.</p></li>
 <span class="r-in">  get_smq_fun <span class="op">=</span> <span class="fu">admiral.test</span><span class="fu">:::</span><span class="va"><a href="https://rdrr.io/pkg/admiral.test/man/get_smq_terms.html" class="external-link">get_smq_terms</a></span>,</span>
 <span class="r-in">  meddra_version <span class="op">=</span> <span class="st">"20.1"</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 43 x 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 43 x 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    TERM_NAME         TERM_LEVEL QUERY_NAME       QUERY_ID QUERY_SCOPE VAR_PREFIX</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>             </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>               </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> Achromotrichia c… AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 2</span><span> Craniosynostosis  AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> Hypophosphatasia  AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 4</span><span> Congenital pyelo… AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> Uterine contract… AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 6</span><span> Ductus arteriosu… AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 7</span><span> Pseudotruncus ar… AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> Lipomeningocele   AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> Macrocephaly      AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> Carnitine palmit… AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 33 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>             </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>               </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span><span> Achromotrichia c… AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span><span> Craniosynostosis  AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span><span> Hypophosphatasia  AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span><span> Congenital pyelo… AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span><span> Uterine contract… AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span><span> Ductus arteriosu… AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span><span> Pseudotruncus ar… AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span><span> Lipomeningocele   AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span><span> Macrocephaly      AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span><span> Carnitine palmit… AEDECOD    Pregnancy and n… 20</span><span style="text-decoration: underline;">000</span><span>185 NARROW      SMQ02     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 33 more rows</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># create a query dataset for SDGs</span></span>
 <span class="r-in"><span class="va">sdg</span> <span class="op">&lt;-</span> <span class="fu"><a href="query.html">query</a></span><span class="op">(</span></span>
@@ -315,25 +309,25 @@ is not created.</p></li>
 <span class="r-in">  get_sdg_fun <span class="op">=</span> <span class="fu">admiral.test</span><span class="fu">:::</span><span class="va"><a href="https://rdrr.io/pkg/admiral.test/man/get_sdg_terms.html" class="external-link">get_sdg_terms</a></span>,</span>
 <span class="r-in">  whodd_version <span class="op">=</span> <span class="st">"2019-09"</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 16 x 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 16 x 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    TERM_NAME               TERM_LEVEL QUERY_NAME             QUERY_ID VAR_PREFIX</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                     </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> AMINOSALICYLIC ACID     CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 2</span><span> AMINOSALICYLATE CALCIUM CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> AMINOSALICYLATE CALCIU… CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 4</span><span> AMINOSALICYLATE SODIUM  CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> SODIUM AMINOSALICYLATE… CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 6</span><span> AMINOSALICYLATE SODIUM… CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 7</span><span> SULFASALAZINE           CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> CALCIUM BENZAMIDOSALIC… CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> OLSALAZINE              CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> OLSALAZINE SODIUM       CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">11</span><span> MESALAZINE              CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">12</span><span> BALSALAZIDE             CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">13</span><span> BALSALAZIDE SODIUM      CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">14</span><span> BALSALAZIDE DISODIUM D… CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">15</span><span> DERSALAZINE             CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">16</span><span> DERSALAZINE SODIUM      CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                     </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span><span> AMINOSALICYLIC ACID     CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span><span> AMINOSALICYLATE CALCIUM CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span><span> AMINOSALICYLATE CALCIU… CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span><span> AMINOSALICYLATE SODIUM  CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span><span> SODIUM AMINOSALICYLATE… CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span><span> AMINOSALICYLATE SODIUM… CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span><span> SULFASALAZINE           CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span><span> CALCIUM BENZAMIDOSALIC… CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span><span> OLSALAZINE              CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span><span> OLSALAZINE SODIUM       CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span><span> MESALAZINE              CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span><span> BALSALAZIDE             CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span><span> BALSALAZIDE SODIUM      CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span><span> BALSALAZIDE DISODIUM D… CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span><span> DERSALAZINE             CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span><span> DERSALAZINE SODIUM      CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># creating a query dataset for a customized query including SMQs</span></span>
 <span class="r-in"><span class="co"># The get_smq_terms function from admiral.test is used for this example.</span></span>
@@ -355,20 +349,20 @@ is not created.</p></li>
 <span class="r-in">  get_smq_fun <span class="op">=</span> <span class="fu">admiral.test</span><span class="fu">:::</span><span class="va"><a href="https://rdrr.io/pkg/admiral.test/man/get_smq_terms.html" class="external-link">get_smq_terms</a></span>,</span>
 <span class="r-in">  meddra_version <span class="op">=</span> <span class="st">"20.1"</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 23 x 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 23 x 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    TERM_NAME                   TERM_LEVEL QUERY_NAME          TERM_ID VAR_PREFIX</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                       </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                 </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> Achromotrichia congenital   AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 2</span><span> Craniosynostosis            AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> Hypophosphatasia            AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 4</span><span> Congenital pyelocaliectasis AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> Uterine contractions durin… AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 6</span><span> Ductus arteriosus prematur… AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 7</span><span> Pseudotruncus arteriosus    AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> Lipomeningocele             AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> Macrocephaly                AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> Carnitine palmitoyltransfe… AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 13 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                       </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                 </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span><span> Achromotrichia congenital   AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span><span> Craniosynostosis            AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span><span> Hypophosphatasia            AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span><span> Congenital pyelocaliectasis AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span><span> Uterine contractions durin… AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span><span> Ductus arteriosus prematur… AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span><span> Pseudotruncus arteriosus    AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span><span> Lipomeningocele             AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span><span> Macrocephaly                AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span><span> Carnitine palmitoyltransfe… AEDECOD    Special issues of …      </span><span style="color: #BB0000;">NA</span><span> CQ03      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 13 more rows</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

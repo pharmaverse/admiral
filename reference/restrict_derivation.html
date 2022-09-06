@@ -54,12 +54,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/"></a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -144,16 +138,16 @@
 <span class="r-in">  <span class="op">)</span>,</span>
 <span class="r-in">  filter <span class="op">=</span> <span class="va">AVISITN</span> <span class="op">&gt;</span> <span class="fl">0</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 7 x 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 x 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID AVISITN  AVAL ABLFL  BASE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> 1             3   117 </span><span style="color: #BB0000;">NA</span><span>      113</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> 3             1   101 </span><span style="color: #BB0000;">NA</span><span>      111</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">3</span><span> 3             2   123 </span><span style="color: #BB0000;">NA</span><span>      111</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">4</span><span> 1            -</span><span style="color: #BB0000;">1</span><span>   113 </span><span style="color: #BB0000;">NA</span><span>       </span><span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">5</span><span> 1             0   113 Y        </span><span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">6</span><span> 2             0    95 Y        </span><span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">7</span><span> 3             0   111 Y        </span><span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> 1             3   117 </span><span style="color: #BB0000;">NA</span><span>      113</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> 3             1   101 </span><span style="color: #BB0000;">NA</span><span>      111</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span><span> 3             2   123 </span><span style="color: #BB0000;">NA</span><span>      111</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span><span> 1            -</span><span style="color: #BB0000;">1</span><span>   113 </span><span style="color: #BB0000;">NA</span><span>       </span><span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span><span> 1             0   113 Y        </span><span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span><span> 2             0    95 Y        </span><span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span><span> 3             0   111 Y        </span><span style="color: #BB0000;">NA</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Derive BASE for baseline and post-baseline records only</span></span>
 <span class="r-in"><span class="fu">restrict_derivation</span><span class="op">(</span></span>
@@ -169,16 +163,16 @@
 <span class="r-in">    derivation <span class="op">=</span> <span class="va">derive_var_chg</span>,</span>
 <span class="r-in">    filter <span class="op">=</span> <span class="va">AVISITN</span> <span class="op">&gt;</span> <span class="fl">0</span></span>
 <span class="r-in">  <span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 7 x 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 x 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID AVISITN  AVAL ABLFL  BASE   CHG</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> 1             3   117 </span><span style="color: #BB0000;">NA</span><span>      113     4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> 3             1   101 </span><span style="color: #BB0000;">NA</span><span>      111   -</span><span style="color: #BB0000;">10</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">3</span><span> 3             2   123 </span><span style="color: #BB0000;">NA</span><span>      111    12</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">4</span><span> 1             0   113 Y       113    </span><span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">5</span><span> 2             0    95 Y        95    </span><span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">6</span><span> 3             0   111 Y       111    </span><span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">7</span><span> 1            -</span><span style="color: #BB0000;">1</span><span>   113 </span><span style="color: #BB0000;">NA</span><span>       </span><span style="color: #BB0000;">NA</span><span>    </span><span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> 1             3   117 </span><span style="color: #BB0000;">NA</span><span>      113     4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> 3             1   101 </span><span style="color: #BB0000;">NA</span><span>      111   -</span><span style="color: #BB0000;">10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span><span> 3             2   123 </span><span style="color: #BB0000;">NA</span><span>      111    12</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span><span> 1             0   113 Y       113    </span><span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span><span> 2             0    95 Y        95    </span><span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span><span> 3             0   111 Y       111    </span><span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span><span> 1            -</span><span style="color: #BB0000;">1</span><span>   113 </span><span style="color: #BB0000;">NA</span><span>       </span><span style="color: #BB0000;">NA</span><span>    </span><span style="color: #BB0000;">NA</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
