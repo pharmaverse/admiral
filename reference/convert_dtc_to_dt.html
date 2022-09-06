@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,32 +19,36 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
-    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
-    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
+    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
-    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
-    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
-    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
-    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
-    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
-    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
-    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
+    <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
+    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Findings ADAM</a>
+    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
+    <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
+    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
+    <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
+    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+    <a class="dropdown-item" href="../articles/lab_grading.html">Lab Grading</a>
+  </div>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-community">
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
+    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
+    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
   </div>
 </li>
 <li class="nav-item">
@@ -79,7 +83,8 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">convert_dtc_to_dt</span><span class="op">(</span>
   <span class="va">dtc</span>,
-  date_imputation <span class="op">=</span> <span class="cn">NULL</span>,
+  highest_imputation <span class="op">=</span> <span class="st">"n"</span>,
+  date_imputation <span class="op">=</span> <span class="st">"first"</span>,
   min_dates <span class="op">=</span> <span class="cn">NULL</span>,
   max_dates <span class="op">=</span> <span class="cn">NULL</span>,
   preserve <span class="op">=</span> <span class="cn">FALSE</span>
@@ -89,21 +94,33 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dtc</dt>
-<dd><p>The --DTC date to convert.</p>
-<p>A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-A partial date will return a NA date and a warning will be issued:
-'All formats failed to parse. No formats found.'.
-Note: you can use impute_dtc function to build a complete date.</p></dd>
+<dd><p>The --DTC date to convert.</p></dd>
+<dt>highest_imputation</dt>
+<dd><p>Highest imputation level</p>
+<p>The <code>highest_imputation</code> argument controls which components of the DTC
+value are imputed if they are missing. All components up to the specified
+level are imputed.</p>
+<p>If a component at a higher level than the highest imputation level is
+missing, <code>NA_character_</code> is returned. For example, for <code>highest_imputation = "D"</code> <code>"2020"</code> results in <code>NA_character_</code> because the month is missing.</p>
+<p>If <code>"n"</code> is specified no imputation is performed, i.e., if any component is
+missing, <code>NA_character_</code> is returned.</p>
+<p>If <code>"Y"</code> is specified, <code>date_imputation</code> should be <code>"first"</code> or <code>"last"</code>
+and <code>min_dates</code> or <code>max_dates</code> should be specified respectively. Otherwise,
+<code>NA_character_</code> is returned if the year component is missing.</p>
+<p><em>Default</em>: <code>"n"</code></p>
+<p><em>Permitted Values</em>: <code>"Y"</code> (year, highest level), <code>"M"</code> (month), <code>"D"</code>
+(day), <code>"n"</code> (none, lowest level)</p></dd>
 <dt>date_imputation</dt>
 <dd><p>The value to impute the day/month when a datepart is
 missing.</p>
-<p>If <code>NULL</code>: no date imputation is performed and partial dates are returned as
-missing.</p>
-<p>Otherwise, a character value is expected, either as a</p><ul><li><p>format with month and day specified as <code>"mm-dd"</code>: e.g. <code>"06-15"</code> for the 15th
-of June,</p></li>
-<li><p>or as a keyword: <code>"FIRST"</code>, <code>"MID"</code>, <code>"LAST"</code> to impute to the first/mid/last
+<p>A character value is expected, either as a</p><ul><li><p>format with month and day specified as <code>"mm-dd"</code>: e.g. <code>"06-15"</code> for the
+15th of June (The year can not be specified; for imputing the year
+<code>"first"</code> or <code>"last"</code> together with <code>min_dates</code> or <code>max_dates</code> argument can
+be used (see examples).),</p></li>
+<li><p>or as a keyword: <code>"first"</code>, <code>"mid"</code>, <code>"last"</code> to impute to the first/mid/last
 day/month.</p></li>
-</ul><p>Default is <code>NULL</code>.</p></dd>
+</ul><p>The argument is ignored if <code>highest_imputation</code> is less then <code>"D"</code>.</p>
+<p><em>Default</em>: <code>"first"</code></p></dd>
 <dt>min_dates</dt>
 <dd><p>Minimum dates</p>
 <p>A list of dates is expected. It is ensured that the imputed date is not
@@ -114,13 +131,13 @@ are defined by the missing parts of the <code>dtc</code> date (see example below
 ensures that the non-missing parts of the <code>dtc</code> date are not changed.
 A date or date-time object is expected.
 For example</p>
-<p></p><div class="sourceCode r"><pre><code><span class="fu"><a href="../reference/impute_dtc.html">impute_dtc</a></span><span class="op">(</span>
-<span class="st">"2020-11"</span>,
-min_dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
- <span class="fu">ymd_hms</span><span class="op">(</span><span class="st">"2020-12-06T12:12:12"</span><span class="op">)</span>,
- <span class="fu">ymd_hms</span><span class="op">(</span><span class="st">"2020-11-11T11:11:11"</span><span class="op">)</span>
-<span class="op">)</span>,
-date_imputation <span class="op">=</span> <span class="st">"first"</span>
+<p></p><div class="sourceCode r"><pre><code><span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span>
+  <span class="st">"2020-11"</span>,
+  min_dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+   <span class="fu">ymd_hms</span><span class="op">(</span><span class="st">"2020-12-06T12:12:12"</span><span class="op">)</span>,
+   <span class="fu">ymd_hms</span><span class="op">(</span><span class="st">"2020-11-11T11:11:11"</span><span class="op">)</span>
+  <span class="op">)</span>,
+  highest_imputation <span class="op">=</span> <span class="st">"M"</span>
 <span class="op">)</span></code></pre><p></p></div>
 <p>returns <code>"2020-11-11T11:11:11"</code> because the possible dates for <code>"2020-11"</code>
 range from <code>"2020-11-01T00:00:00"</code> to <code>"2020-11-30T23:59:59"</code>. Therefore
@@ -146,6 +163,17 @@ considered. A date or date-time object is expected.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Usually this computation function can not be used with <code>%&gt;%</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Date/Time Computation Functions that returns a vector: 
+<code><a href="compute_dtf.html">compute_dtf</a>()</code>,
+<code><a href="compute_duration.html">compute_duration</a>()</code>,
+<code><a href="compute_tmf.html">compute_tmf</a>()</code>,
+<code><a href="convert_date_to_dtm.html">convert_date_to_dtm</a>()</code>,
+<code><a href="convert_dtc_to_dtm.html">convert_dtc_to_dtm</a>()</code>,
+<code><a href="impute_dtc_dtm.html">impute_dtc_dtm</a>()</code>,
+<code><a href="impute_dtc_dt.html">impute_dtc_dt</a>()</code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>

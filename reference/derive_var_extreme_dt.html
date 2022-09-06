@@ -12,7 +12,7 @@ the last known alive date (LSTALVDT)."><meta property="og:image" content="https:
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,32 +21,36 @@ the last known alive date (LSTALVDT)."><meta property="og:image" content="https:
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
-    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
-    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
+    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
-    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
-    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
-    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
-    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
-    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
-    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
-    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
+    <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
+    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Findings ADAM</a>
+    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
+    <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
+    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
+    <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
+    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+    <a class="dropdown-item" href="../articles/lab_grading.html">Lab Grading</a>
+  </div>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-community">
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
+    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
+    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
   </div>
 </li>
 <li class="nav-item">
@@ -122,12 +126,7 @@ for the first or last date</p></dd>
     <p>The following steps are performed to create the output dataset:</p><ol><li><p>For each source dataset the observations as specified by the <code>filter</code>
 element are selected. Then for each patient the first or last observation
 (with respect to <code>date</code> and <code>mode</code>) is selected.</p></li>
-<li><p>The new variable is set to the variable specified by the <code>date</code> element.
-If the date variable is a date variable, the time is imputed as
-<code>time_imputation = "first"</code>. If the source variable is a character
-variable, it is converted to a datetime. If the date is incomplete, it is
-imputed as specified by the <code>date_imputation</code> element and with
-<code>time_imputation = "first"</code>.</p></li>
+<li><p>The new variable is set to the variable specified by the <code>date</code> element.</p></li>
 <li><p>The variables specified by the <code>traceability_vars</code> element are added.</p></li>
 <li><p>The selected observations of all source datasets are combined into a
 single dataset.</p></li>
@@ -138,9 +137,14 @@ variable is merged to the input dataset.</p></li>
 </ol></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="date_source.html">date_source()</a></code>, <code><a href="derive_var_extreme_dtm.html">derive_var_extreme_dtm()</a></code>,
-<code><a href="derive_vars_merged_dt.html">derive_vars_merged_dt()</a></code>, <code><a href="derive_vars_merged_dtm.html">derive_vars_merged_dtm()</a></code>,
-<code><a href="derive_vars_merged.html">derive_vars_merged()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="date_source.html">date_source()</a></code>, <code><a href="derive_var_extreme_dtm.html">derive_var_extreme_dtm()</a></code>, <code><a href="derive_vars_merged.html">derive_vars_merged()</a></code></p>
+<p>ADSL Functions that returns variable appended to dataset: 
+<code><a href="derive_var_age_years.html">derive_var_age_years</a>()</code>,
+<code><a href="derive_var_disposition_status.html">derive_var_disposition_status</a>()</code>,
+<code><a href="derive_var_dthcaus.html">derive_var_dthcaus</a>()</code>,
+<code><a href="derive_var_extreme_dtm.html">derive_var_extreme_dtm</a>()</code>,
+<code><a href="derive_vars_aage.html">derive_vars_aage</a>()</code>,
+<code><a href="derive_vars_disposition_reason.html">derive_vars_disposition_reason</a>()</code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -159,19 +163,37 @@ variable is merged to the input dataset.</p></li>
 <span class="r-in"><span class="co"># derive last known alive date (LSTALVDT)</span></span>
 <span class="r-in"><span class="va">ae_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ae"</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">AESTDTC</span>,</span>
-<span class="r-in">  date_imputation <span class="op">=</span> <span class="st">"first"</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="va">AESTDT</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">ae_end</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ae"</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">AEENDTC</span>,</span>
-<span class="r-in">  date_imputation <span class="op">=</span> <span class="st">"first"</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="va">AEENDT</span></span>
 <span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">ae_ext</span> <span class="op">&lt;-</span> <span class="va">admiral_ae</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="derive_vars_dt.html">derive_vars_dt</a></span><span class="op">(</span></span>
+<span class="r-in">    dtc <span class="op">=</span> <span class="va">AESTDTC</span>,</span>
+<span class="r-in">    new_vars_prefix <span class="op">=</span> <span class="st">"AEST"</span>,</span>
+<span class="r-in">    highest_imputation <span class="op">=</span> <span class="st">"M"</span></span>
+<span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="derive_vars_dt.html">derive_vars_dt</a></span><span class="op">(</span></span>
+<span class="r-in">    dtc <span class="op">=</span> <span class="va">AEENDTC</span>,</span>
+<span class="r-in">    new_vars_prefix <span class="op">=</span> <span class="st">"AEEN"</span>,</span>
+<span class="r-in">    highest_imputation <span class="op">=</span> <span class="st">"M"</span></span>
+<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="va">lb_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"lb"</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">LBDTC</span>,</span>
-<span class="r-in">  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">LBDTC</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">10</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="va">LBDT</span>,</span>
+<span class="r-in">  filter <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">LBDT</span><span class="op">)</span>,</span>
 <span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">lb_ext</span> <span class="op">&lt;-</span> <span class="fu"><a href="derive_vars_dt.html">derive_vars_dt</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">admiral_lb</span>,</span>
+<span class="r-in">  dtc <span class="op">=</span> <span class="va">LBDTC</span>,</span>
+<span class="r-in">  new_vars_prefix <span class="op">=</span> <span class="st">"LB"</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="va">adsl_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span>dataset_name <span class="op">=</span> <span class="st">"adsl"</span>, date <span class="op">=</span> <span class="va">TRTEDT</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">admiral_dm</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -180,7 +202,8 @@ variable is merged to the input dataset.</p></li>
 <span class="r-in">    <span class="va">ae_start</span>, <span class="va">ae_end</span>, <span class="va">lb_date</span>, <span class="va">adsl_date</span>,</span>
 <span class="r-in">    source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span class="r-in">      adsl <span class="op">=</span> <span class="va">admiral_adsl</span>,</span>
-<span class="r-in">      ae <span class="op">=</span> <span class="va">admiral_ae</span>, lb <span class="op">=</span> <span class="va">admiral_lb</span></span>
+<span class="r-in">      ae <span class="op">=</span> <span class="va">ae_ext</span>,</span>
+<span class="r-in">      lb <span class="op">=</span> <span class="va">lb_ext</span></span>
 <span class="r-in">    <span class="op">)</span>,</span>
 <span class="r-in">    mode <span class="op">=</span> <span class="st">"last"</span></span>
 <span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -203,8 +226,7 @@ variable is merged to the input dataset.</p></li>
 <span class="r-in"><span class="co"># derive last alive date and traceability variables</span></span>
 <span class="r-in"><span class="va">ae_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ae"</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">AESTDTC</span>,</span>
-<span class="r-in">  date_imputation <span class="op">=</span> <span class="st">"first"</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="va">AESTDT</span>,</span>
 <span class="r-in">  traceability_vars <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span></span>
 <span class="r-in">    LALVDOM <span class="op">=</span> <span class="st">"AE"</span>,</span>
 <span class="r-in">    LALVSEQ <span class="op">=</span> <span class="va">AESEQ</span>,</span>
@@ -214,8 +236,7 @@ variable is merged to the input dataset.</p></li>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">ae_end</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ae"</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">AEENDTC</span>,</span>
-<span class="r-in">  date_imputation <span class="op">=</span> <span class="st">"first"</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="va">AEENDT</span>,</span>
 <span class="r-in">  traceability_vars <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span></span>
 <span class="r-in">    LALVDOM <span class="op">=</span> <span class="st">"AE"</span>,</span>
 <span class="r-in">    LALVSEQ <span class="op">=</span> <span class="va">AESEQ</span>,</span>
@@ -224,8 +245,8 @@ variable is merged to the input dataset.</p></li>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">lb_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"lb"</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">LBDTC</span>,</span>
-<span class="r-in">  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">LBDTC</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">10</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="va">LBDT</span>,</span>
+<span class="r-in">  filter <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">LBDT</span><span class="op">)</span>,</span>
 <span class="r-in">  traceability_vars <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span></span>
 <span class="r-in">    LALVDOM <span class="op">=</span> <span class="st">"LB"</span>,</span>
 <span class="r-in">    LALVSEQ <span class="op">=</span> <span class="va">LBSEQ</span>,</span>
@@ -249,7 +270,8 @@ variable is merged to the input dataset.</p></li>
 <span class="r-in">    <span class="va">ae_start</span>, <span class="va">ae_end</span>, <span class="va">lb_date</span>, <span class="va">adsl_date</span>,</span>
 <span class="r-in">    source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span class="r-in">      adsl <span class="op">=</span> <span class="va">admiral_adsl</span>,</span>
-<span class="r-in">      ae <span class="op">=</span> <span class="va">admiral_ae</span>, lb <span class="op">=</span> <span class="va">admiral_lb</span></span>
+<span class="r-in">      ae <span class="op">=</span> <span class="va">ae_ext</span>,</span>
+<span class="r-in">      lb <span class="op">=</span> <span class="va">lb_ext</span></span>
 <span class="r-in">    <span class="op">)</span>,</span>
 <span class="r-in">    mode <span class="op">=</span> <span class="st">"last"</span></span>
 <span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -257,16 +279,16 @@ variable is merged to the input dataset.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 306 x 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     LSTALVDT   LALVDOM LALVSEQ LALVVAR</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> 01-701-1015 2014-07-02 LB          323 LBDTC  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> 01-701-1015 2014-07-02 ADSL         </span><span style="color: #BB0000;">NA</span><span> TRTEDT </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 2</span><span> 01-701-1023 2012-09-02 LB          107 LBDTC  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> 01-701-1028 2014-01-14 LB          328 LBDTC  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> 01-701-1028 2014-01-14 ADSL         </span><span style="color: #BB0000;">NA</span><span> TRTEDT </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 4</span><span> 01-701-1033 2014-04-14 LB          107 LBDTC  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> 01-701-1034 2014-12-30 LB          330 LBDTC  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> 01-701-1034 2014-12-30 ADSL         </span><span style="color: #BB0000;">NA</span><span> TRTEDT </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 6</span><span> 01-701-1047 2013-04-07 LB          134 LBDTC  </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 7</span><span> 01-701-1057 </span><span style="color: #BB0000;">NA</span><span>         </span><span style="color: #BB0000;">NA</span><span>           </span><span style="color: #BB0000;">NA</span><span> </span><span style="color: #BB0000;">NA</span><span>     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> 01-701-1097 2014-07-09 LB          327 LBDTC  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> 01-701-1097 2014-07-09 ADSL         </span><span style="color: #BB0000;">NA</span><span> TRTEDT </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> 01-701-1111 2012-09-17 LB           73 LBDTC  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> 01-701-1115 2013-01-23 LB          182 LBDTC  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> 01-701-1115 2013-01-23 ADSL         </span><span style="color: #BB0000;">NA</span><span> TRTEDT </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 296 more rows</span></span>
 </code></pre></div>
     </div>

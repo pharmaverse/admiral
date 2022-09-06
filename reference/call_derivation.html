@@ -12,7 +12,7 @@ iterations and others varying."><meta property="og:image" content="https://pharm
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,32 +21,36 @@ iterations and others varying."><meta property="og:image" content="https://pharm
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
-    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
-    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
+    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
-    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
-    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
-    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
-    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
-    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
-    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
-    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
+    <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
+    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Findings ADAM</a>
+    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
+    <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
+    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
+    <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
+    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+    <a class="dropdown-item" href="../articles/lab_grading.html">Lab Grading</a>
+  </div>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-community">
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
+    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
+    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
   </div>
 </li>
 <li class="nav-item">
@@ -104,7 +108,12 @@ which <code>derivation</code> has been used.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="params.html">params()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="params.html">params()</a></code></p>
+<p>Higher Order Functions: 
+<code><a href="derivation_slice.html">derivation_slice</a>()</code>,
+<code><a href="print.derivation_slice.html">print.derivation_slice</a>()</code>,
+<code><a href="restrict_derivation.html">restrict_derivation</a>()</code>,
+<code><a href="slice_derivation.html">slice_derivation</a>()</code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -138,20 +147,20 @@ which <code>derivation</code> has been used.</p>
 <span class="r-in">  min_dates <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">TRTSDT</span><span class="op">)</span>,</span>
 <span class="r-in">  max_dates <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">TRTEDT</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 1,000 x 9</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID AESTDTC AEENDTC TRTSDT     TRTEDT     ASTDT      ASTDTF AENDT     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>  </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> 01-701… 2014-0… </span><span style="color: #555555;">"</span><span>2014-… 2014-02-15 2014-08-16 2014-03-09 </span><span style="color: #BB0000;">NA</span><span>     2014-03-16</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 2</span><span> 01-704… 2013-0… </span><span style="color: #555555;">""</span><span>      2013-08-27 2013-09-25 2013-09-14 </span><span style="color: #BB0000;">NA</span><span>     </span><span style="color: #BB0000;">NA</span><span>        </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> 01-708… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-04-20 2013-06-18 2013-06-13 </span><span style="color: #BB0000;">NA</span><span>     2013-06-25</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 4</span><span> 01-710… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-06-03 2013-08-13 2013-07-02 </span><span style="color: #BB0000;">NA</span><span>     2013-07-09</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> 01-714… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-04-26 2013-10-23 2013-05-13 </span><span style="color: #BB0000;">NA</span><span>     2013-07-17</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 6</span><span> 01-718… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-04-26 2013-08-01 2013-05-09 </span><span style="color: #BB0000;">NA</span><span>     2013-05-11</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 7</span><span> 01-710… 2012-1… </span><span style="color: #555555;">""</span><span>      2012-11-11 2013-05-01 2012-12-30 </span><span style="color: #BB0000;">NA</span><span>     </span><span style="color: #BB0000;">NA</span><span>        </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> 01-701… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-01-05 2013-01-26 2013-01-26 </span><span style="color: #BB0000;">NA</span><span>     2013-01-30</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> 01-711… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-04-03 2013-05-30 2013-04-28 </span><span style="color: #BB0000;">NA</span><span>     2013-05-11</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> 01-701… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-01-05 2013-02-12 2013-02-08 </span><span style="color: #BB0000;">NA</span><span>     2013-02-08</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 990 more rows, and 1 more variable: AENDTF </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 1,000 x 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     AESTDTC   AEENDTC     TRTSDT     TRTEDT     ASTDT      AENDT     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>    </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> 01-701-1383 2013-07-… </span><span style="color: #555555;">"</span><span>2013-07-2… 2013-02-04 2013-08-06 2013-07-17 2013-07-26</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 2</span><span> 01-718-1355 1982      </span><span style="color: #555555;">""</span><span>          2013-02-28 2013-08-29 </span><span style="color: #BB0000;">NA</span><span>         </span><span style="color: #BB0000;">NA</span><span>        </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> 01-710-1060 2013-01-… </span><span style="color: #555555;">"</span><span>2013-01-0… 2013-01-01 2013-07-05 2013-01-02 2013-01-02</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 4</span><span> 01-701-1153 2013-10-… </span><span style="color: #555555;">"</span><span>2013-11-0… 2013-09-23 2014-03-16 2013-10-13 2013-11-06</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> 01-701-1180 2013-02-… </span><span style="color: #555555;">"</span><span>2013-03-1… 2013-02-12 2013-03-18 2013-02-15 2013-03-19</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 6</span><span> 01-718-1079 2012-10-… </span><span style="color: #555555;">""</span><span>          2012-09-19 2012-10-31 2012-10-05 </span><span style="color: #BB0000;">NA</span><span>        </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 7</span><span> 01-703-1258 2012-08-… </span><span style="color: #555555;">"</span><span>2012-08-1… 2012-07-20 2013-01-11 2012-08-11 2012-08-19</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> 01-701-1111 2012-09-… </span><span style="color: #555555;">"</span><span>2012-09-0… 2012-09-07 2012-09-16 2012-09-02 2012-09-07</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> 01-709-1309 2013-07-… </span><span style="color: #555555;">"</span><span>2013-07-0… 2013-06-19 2013-12-19 2013-07-01 2013-07-01</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> 01-716-1298 2013-04-… </span><span style="color: #555555;">"</span><span>2013-07-0… 2013-04-08 2013-06-28 2013-04-22 2013-07-06</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 990 more rows</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## The above call using `call_derivation()` is equivalent to the following</span></span>
 <span class="r-in"><span class="va">adae</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -169,20 +178,20 @@ which <code>derivation</code> has been used.</p>
 <span class="r-in">    min_dates <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">TRTSDT</span><span class="op">)</span>,</span>
 <span class="r-in">    max_dates <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">TRTEDT</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 1,000 x 9</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID AESTDTC AEENDTC TRTSDT     TRTEDT     ASTDT      ASTDTF AENDT     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>  </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> 01-701… 2014-0… </span><span style="color: #555555;">"</span><span>2014-… 2014-02-15 2014-08-16 2014-03-09 </span><span style="color: #BB0000;">NA</span><span>     2014-03-16</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 2</span><span> 01-704… 2013-0… </span><span style="color: #555555;">""</span><span>      2013-08-27 2013-09-25 2013-09-14 </span><span style="color: #BB0000;">NA</span><span>     </span><span style="color: #BB0000;">NA</span><span>        </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> 01-708… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-04-20 2013-06-18 2013-06-13 </span><span style="color: #BB0000;">NA</span><span>     2013-06-25</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 4</span><span> 01-710… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-06-03 2013-08-13 2013-07-02 </span><span style="color: #BB0000;">NA</span><span>     2013-07-09</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> 01-714… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-04-26 2013-10-23 2013-05-13 </span><span style="color: #BB0000;">NA</span><span>     2013-07-17</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 6</span><span> 01-718… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-04-26 2013-08-01 2013-05-09 </span><span style="color: #BB0000;">NA</span><span>     2013-05-11</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 7</span><span> 01-710… 2012-1… </span><span style="color: #555555;">""</span><span>      2012-11-11 2013-05-01 2012-12-30 </span><span style="color: #BB0000;">NA</span><span>     </span><span style="color: #BB0000;">NA</span><span>        </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> 01-701… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-01-05 2013-01-26 2013-01-26 </span><span style="color: #BB0000;">NA</span><span>     2013-01-30</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> 01-711… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-04-03 2013-05-30 2013-04-28 </span><span style="color: #BB0000;">NA</span><span>     2013-05-11</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> 01-701… 2013-0… </span><span style="color: #555555;">"</span><span>2013-… 2013-01-05 2013-02-12 2013-02-08 </span><span style="color: #BB0000;">NA</span><span>     2013-02-08</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 990 more rows, and 1 more variable: AENDTF </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 1,000 x 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     AESTDTC   AEENDTC     TRTSDT     TRTEDT     ASTDT      AENDT     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>    </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> 01-701-1383 2013-07-… </span><span style="color: #555555;">"</span><span>2013-07-2… 2013-02-04 2013-08-06 2013-07-17 2013-07-26</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 2</span><span> 01-718-1355 1982      </span><span style="color: #555555;">""</span><span>          2013-02-28 2013-08-29 </span><span style="color: #BB0000;">NA</span><span>         </span><span style="color: #BB0000;">NA</span><span>        </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> 01-710-1060 2013-01-… </span><span style="color: #555555;">"</span><span>2013-01-0… 2013-01-01 2013-07-05 2013-01-02 2013-01-02</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 4</span><span> 01-701-1153 2013-10-… </span><span style="color: #555555;">"</span><span>2013-11-0… 2013-09-23 2014-03-16 2013-10-13 2013-11-06</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> 01-701-1180 2013-02-… </span><span style="color: #555555;">"</span><span>2013-03-1… 2013-02-12 2013-03-18 2013-02-15 2013-03-19</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 6</span><span> 01-718-1079 2012-10-… </span><span style="color: #555555;">""</span><span>          2012-09-19 2012-10-31 2012-10-05 </span><span style="color: #BB0000;">NA</span><span>        </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 7</span><span> 01-703-1258 2012-08-… </span><span style="color: #555555;">"</span><span>2012-08-1… 2012-07-20 2013-01-11 2012-08-11 2012-08-19</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> 01-701-1111 2012-09-… </span><span style="color: #555555;">"</span><span>2012-09-0… 2012-09-07 2012-09-16 2012-09-02 2012-09-07</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> 01-709-1309 2013-07-… </span><span style="color: #555555;">"</span><span>2013-07-0… 2013-06-19 2013-12-19 2013-07-01 2013-07-01</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> 01-716-1298 2013-04-… </span><span style="color: #555555;">"</span><span>2013-07-0… 2013-04-08 2013-06-28 2013-04-22 2013-07-06</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># … with 990 more rows</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
