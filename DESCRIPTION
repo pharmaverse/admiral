@@ -9,12 +9,13 @@ Authors@R: c(
     person("Samia", "Kabi", role = "aut"),
     person("Pooja", "Kumari", role = "aut"),
     person("Syed", "Mubasheer", role = "aut"),
+    person("Ross", "Farrugia", role = "aut"),
     person("Ondrej", "Slama", role = "ctb"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
     )
 Description: Utility functions to check data, variables and conditions for functions used in
- 'admiral' and 'admiral' extension packages.  Additional utility helper functions to to assist developers 
+ 'admiral' and 'admiral' extension packages.  Additional utility helper functions to assist developers 
  with maintaining documentation, testing and general upkeep of 'admiral' and 'admiral' extension packages.  
 License: Apache License (>= 2)
 URL: https://pharmaverse.github.io/admiraldev/main/, https://github.com/pharmaverse/admiraldev/
@@ -25,17 +26,17 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Depends: R (>= 3.5)
 Imports:
-    assertthat,
-    dplyr,
-    lubridate,
-    magrittr,
-    purrr,
-    rlang,
-    stringr,
-    hms,
-    tidyr,
-    tidyselect,
-    lifecycle
+    assertthat (>= 0.2.1),
+    dplyr (>= 0.8.4),
+    hms (>= 0.5.3),
+    lifecycle (>= 0.1.0),
+    lubridate (>= 1.7.4),
+    magrittr (>= 1.5),
+    purrr (>= 0.3.3),
+    rlang (>= 0.4.4),
+    stringr (>= 1.4.0),
+    tidyr (>= 1.0.2),
+    tidyselect (>= 1.0.0)
 Suggests:
     admiral.test,
     devtools,

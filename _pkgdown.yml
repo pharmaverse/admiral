@@ -79,7 +79,7 @@ reference:
 navbar:
  components:
   reference:
-      text: Functions
+      text: Reference
       href: reference/index.html
   articles:
     text: Developer Guides
