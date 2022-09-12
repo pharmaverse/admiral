@@ -1,5 +1,5 @@
-# ---- addin_format_testthat, test 1: works as expected ----
-test_that("addin_format_testthat, test 1: works as expected", {
+## Test 1: works as expected ----
+test_that("addin_format_testthat Test 1: works as expected", {
 
   # test: file exists
   expect_error(

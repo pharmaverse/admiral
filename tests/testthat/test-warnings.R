@@ -1,6 +1,8 @@
 library(admiral.test)
 
-test_that("A warning is issued when a variable to be derived already exists in the input dataset", {
+# warn_if_vars_exist ----
+## Test 1: A warning is issued when a variable to be derived already exists in the input dataset ----
+test_that("warn_if_vars_exist Test 1: A warning is issued when a variable to be derived already exists in the input dataset", {
   data(admiral_dm)
 
   expect_warning(
@@ -21,19 +23,25 @@ test_that("A warning is issued when a variable to be derived already exists in t
   )
 })
 
-test_that("A warning is issued when a vector contain unknown datetime format", {
+# warn_if_invalud_dtc ----
+## Test 2: A warning is issued when a vector contain unknown datetime format ----
+test_that("warn_if_invalud_dtc Test 2: A warning is issued when a vector contain unknown datetime format", {
   expect_warning(
     warn_if_invalid_dtc(dtc = "20210406T12:30:30")
   )
 })
 
-test_that("A warning is issued when a vector contain an incomplete dtc", {
+# warn_if_inclomplete_dtc ----
+## Test 3: A warning is issued when a vector contain an incomplete dtc ----
+test_that("warn_if_inclomplete_dtc Test 3: A warning is issued when a vector contain an incomplete dtc", {
   expect_warning(
     warn_if_incomplete_dtc("2021-04-06", n = 19)
   )
 })
 
-test_that("A warning is issued when two lists are inconsistent", {
+# warn_if_inconsistent_list ----
+## Test 4: A warning is issued when two lists are inconsistent ----
+test_that("warn_if_inconsistent_list Test 4: A warning is issued when two lists are inconsistent", {
   expect_warning(
     warn_if_inconsistent_list(
       base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
