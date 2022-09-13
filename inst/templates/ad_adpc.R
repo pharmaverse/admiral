@@ -11,7 +11,7 @@ library(lubridate)
 library(stringr)
 library(admiral.test) # Contains example datasets from the CDISC pilot project
 
-#to remove
+# to remove
 devtools::load_all()
 
 # ---- Load source datasets ----
@@ -29,7 +29,9 @@ data("admiral_adsl")
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
 
-pc <- convert_blanks_to_na(admiral_pc) %>% rename(PCDTM = PCDTC) %>% mutate(PCDTC = as.character(as.Date(PCDTM)))
+pc <- convert_blanks_to_na(admiral_pc) %>%
+  rename(PCDTM = PCDTC) %>%
+  mutate(PCDTC = as.character(as.Date(PCDTM)))
 
 
 # ---- Lookup tables ----
@@ -123,7 +125,7 @@ adpc3 <- adpc2 %>%
 # Add all ADSL variables
 adpc <- adpc3 %>%
   left_join(select(admiral_adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+    by = c("STUDYID", "USUBJID")
   )
 
 # Final Steps, Select final variables and Add labels

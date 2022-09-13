@@ -28,6 +28,8 @@ metadata.
 - New metadata data set called `atoxgr_criteria_ctcv4` which holds criteria for lab grading
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v4.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
 
+- New ADPC (Pharmacokinetics Concentrations Analysis Dataset) template added.
+
 
 ## Updates of Existing Functions
 
