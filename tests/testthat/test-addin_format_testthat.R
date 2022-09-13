@@ -36,12 +36,11 @@ test_that("addin_format_testthat Test 1: works as expected", {
     file_content = c(
       "# some stuff in comment",
       paste0(
-        "# ---- ", sub("test-", "", basename(tf)), ", ",
-        "test 1: my description ----"
+        "## Test 1: my description ----"
       ),
       paste0(
-        'test_that("', sub("test-", "", basename(tf)), ", ",
-        'test 1: my description", {'
+        'test_that("', sub("test-", "", basename(tf)), " ",
+        'Test 1: my description", {'
       ),
       "  expect_true(TRUE)",
       "}"
