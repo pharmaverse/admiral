@@ -52,7 +52,7 @@ prepare_test_that_file <- function(path) {
 
   # determine name of function which is tested
   # the function name can be specified by # function_name ---- comments
-  function_name <- str_match(file_content, "# (\\w+) ----")[,2]
+  function_name <- str_match(file_content, "# (\\w+) ----")[, 2]
   if (is.na(function_name[1])) {
     function_name[1] <- testing_file
   }
