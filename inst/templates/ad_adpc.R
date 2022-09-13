@@ -2,9 +2,9 @@
 #
 # Label: Pharmacokinetics Concentrations Analysis Dataset
 #
-# Description: Based on simulated data, create ADPP analysis dataset
+# Description: Based on simulated data, create ADPC analysis dataset
 #
-# Input: pp, adsl
+# Input: pc, adsl
 library(admiral)
 library(dplyr)
 library(lubridate)
