@@ -1,6 +1,7 @@
 url: https://pharmaverse.github.io/admiraldev
 
 template:
+  bootstrap: 5
   params:
     bootswatch: flatly
     docsearch:
