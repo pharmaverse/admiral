@@ -26,7 +26,7 @@ print(templates)
 
 Other internal: 
 \code{\link{admiral}},
-\code{\link{print.tte_source}()}
+\code{\link{print.source}()}
 }
 \author{
 Thomas Neitmann

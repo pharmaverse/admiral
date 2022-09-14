@@ -283,6 +283,6 @@ dthcaus_source <- function(dataset_name,
     dthcaus = assert_symbol(enquo(dthcaus)) %or% assert_character_scalar(dthcaus),
     traceability = assert_varval_list(traceability_vars, optional = TRUE)
   )
-  class(out) <- c("dthcaus_source", "list")
+  class(out) <- c("dthcaus_source", "source", "list")
   out
 }

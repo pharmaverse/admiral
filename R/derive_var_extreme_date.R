@@ -504,6 +504,6 @@ date_source <- function(dataset_name,
     date = assert_symbol(enquo(date)),
     traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
   )
-  class(out) <- c("date_source", "list")
+  class(out) <- c("date_source", "source", "list")
   out
 }

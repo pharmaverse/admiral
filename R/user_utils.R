@@ -177,3 +177,68 @@ yn_to_numeric <- function(arg) {
     TRUE ~ NA_real_
   )
 }
+
+#' Print `source` Objects
+#'
+#' @param x An `source` object
+#' @param ... Not used
+#'
+#' @return No return value, called for side effects
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords internal
+#' @family internal
+#'
+#' @export
+#'
+#' @seealso [tte_source()], [censor_source()], [event_source()]
+#'
+#' @examples
+#' print(death_event)
+print.source <- function(x, ...) {
+  cat <- function(...) base::cat(..., sep = "")
+  args <- list(...)
+  if (length(args) > 0) {
+    indent <- args[[1]]
+  }
+  else {
+    indent <- 0
+  }
+  cat(strrep(" ", indent), "<", attr(x, "class")[1], "> object\n")
+  print_named_list(x, indent = indent)
+  # cat("dataset_name: \"", x$dataset_name, "\"\n")
+  # cat("filter: ", quo_text(x$filter), "\n")
+  # cat("date: ", quo_text(x$date), "\n")
+  # cat("censor: ", x$censor, "\n")
+  # cat("set_values_to:\n")
+  # for (name in names(x$set_values_to)) {
+  #   cat("  ", name, ": ", quo_text(x$set_values_to[[name]]), "\n")
+  # }
+}
+
+print_named_list <- function(list, indent = 0) {
+  for (name in names(list)) {
+    if (inherits(list[[name]], "source")) {
+      cat(strrep(" ", indent), name, ":\n", sep = "")
+      newindent <- indent + 2
+      print(list[[name]], newindent)
+    }
+    else if (is.list(list[[name]])) {
+      cat(strrep(" ", indent), name, ":\n", sep = "")
+      print_named_list(list[[name]], indent = indent + 2)
+    }
+    else {
+      if (is.character(list[[name]])) {
+        chr_val <- paste0("\"", list[[name]], "\"")
+      }
+      else if (is_quosure(list[[name]])) {
+        chr_val <- quo_text(list[[name]])
+      }
+      else {
+        chr_val <- list[[name]]
+      }
+      cat(strrep(" ", indent), name, ": ", chr_val, "\n", sep = "")
+    }
+  }
+}
