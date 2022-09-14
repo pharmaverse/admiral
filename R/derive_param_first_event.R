@@ -1,9 +1,9 @@
 #' Add a First Event Parameter
 #'
-#' Add a new parameter for the first event occurring in a dataset. `AVALC` and
-#' `AVAL` indicate if an event occurred and `ADT` is set to the date of the
-#' first event. For example, the function can derive a parameter for the first
-#' disease progression.
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_param_extreme_event()` instead.
 #'
 #' @param dataset Input dataset
 #'
@@ -39,6 +39,132 @@
 #'   Date variable in the source dataset (`dataset_source`). The variable is
 #'   used to sort the source dataset. `ADT` is set to the specified variable for
 #'   events.
+#'
+#' @param set_values_to Variables to set
+#'
+#'   A named list returned by `vars()` defining the variables to be set for the
+#'   new parameter, e.g. `vars(PARAMCD = "PD", PARAM = "Disease Progression")`
+#'   is expected. The values must be symbols, character strings, numeric values,
+#'   or `NA`.
+#'
+#' @param subject_keys Variables to uniquely identify a subject
+#'
+#'   A list of symbols created using `vars()` is expected.
+#'
+#' @param check_type Check uniqueness?
+#'
+#'   If `"warning"` or `"error"` is specified, a message is issued if the
+#'   observations of the input dataset restricted to the source parameter
+#'   (`source_param`) are not unique with respect to the subject keys
+#'   (`subject_key` parameter) and `ADT`.
+#'
+#'   *Default*: `"warning"`
+#'
+#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
+#'
+#' @details
+#'   1. The input dataset is restricted to observations fulfilling
+#'   `filter_source`.
+#'   1. For each subject (with respect to the variables specified for the
+#'   `subject_keys` parameter) the first observation (with respect to
+#'   `date_var`) where the event condition (`filter_source` parameter) is
+#'   fulfilled is selected.
+#'   1. For each observation in `dataset_adsl` a new observation is created. For
+#'   subjects with event `AVALC` is set to `"Y"`, `AVAL` to `1`, and `ADT` to
+#'   the first date where the event condition is fulfilled. For all other
+#'   subjects `AVALC` is set to `"N"`, `AVAL` to `0`, and `ADT` to `NA`.
+#'   For subjects with event all variables from `dataset_source` are kept. For
+#'   subjects without event all variables which are in both `dataset_adsl` and
+#'   `dataset_source` are kept.
+#'   1. The variables specified by the `set_values_to` parameter are added to
+#'   the new observations.
+#'   1. The new observations are added to input dataset.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The input dataset with a new parameter indicating if and when an
+#'   event occurred
+#'
+#' @keywords deprecated
+#'
+#' @export
+#'
+derive_param_first_event <- function(dataset,
+                                     dataset_adsl,
+                                     dataset_source,
+                                     filter_source,
+                                     date_var,
+                                     subject_keys = vars(STUDYID, USUBJID),
+                                     set_values_to,
+                                     check_type = "warning") {
+
+  ### DEPRECATION
+  deprecate_warn("0.9.0", "derive_param_first_event", "derive_param_extreme_event")
+
+  derive_param_extreme_event(
+    dataset = dataset,
+    dataset_adsl = dataset_adsl,
+    dataset_source = dataset_source,
+    filter_source = filter_source,
+    date_var = date_var,
+    subject_keys = subject_keys,
+    set_values_to = set_values_to,
+    check_type = check_type,
+    mode = "first"
+  )
+}
+
+#' Add an Extreme Event Parameter
+#'
+#' Add a new parameter for the first or last event occurring in a dataset. `AVALC` and
+#' `AVAL` indicate if an event occurred and `ADT` is set to the date of the
+#' first or last event. For example, the function can derive a parameter for the first
+#' disease progression.
+#'
+#' @param dataset Input dataset
+#'
+#'   The `PARAMCD` variable is expected.
+#'
+#' @param dataset_adsl ADSL input dataset
+#'
+#'   The variables specified for `subject_keys` are expected. For each
+#'   observation of the specified dataset a new observation is added to the
+#'   input dataset.
+#'
+#' @param dataset_source Source dataset
+#'
+#'   All observations in the specified dataset fulfilling the condition
+#'   specified by `filter_source` are considered as event.
+#'
+#'   The variables specified by the `subject_keys` and
+#'   `order` parameter are expected.
+#'
+#' @param filter_source Source filter
+#'
+#'   All observations in `dataset_source` fulfilling the specified condition are
+#'   considered as event.
+#'
+#'   For subjects with at least one event `AVALC` is set to `"Y"`, `AVAL` to
+#'   `1`, and `ADT` to the first date where the condition is fulfilled.
+#'
+#'   For all other subjects `AVALC` is set to `"N"`, `AVAL` to `0`, and `ADT` to
+#'   `NA`.
+#'
+#' @param date_var *Deprecated*, please use `order` instead.
+#'
+#' @param order Order variable
+#'
+#'   List of symbols for sorting the source dataset (`dataset_source`).
+#'
+#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
+#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))`.
+#'
+#' @param mode Selection mode (first or last)
+#'
+#'   If `"first"` is specified, the first observation of each subject is selected.
+#'   If `"last"` is specified, the last observation of each subject is selected.
+#'
+#'   *Permitted Values*: `"first"`, `"last"`
 #'
 #' @param set_values_to Variables to set
 #'
