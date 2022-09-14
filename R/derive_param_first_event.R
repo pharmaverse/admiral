@@ -134,7 +134,7 @@ derive_param_first_event <- function(dataset,
 #' @param dataset_source Source dataset
 #'
 #'   All observations in the specified dataset fulfilling the condition
-#'   specified by `filter_source` are considered as event.
+#'   specified by `filter_source` are considered as an event.
 #'
 #'   The variables specified by the `subject_keys` and
 #'   `order` parameter are expected.
@@ -142,7 +142,7 @@ derive_param_first_event <- function(dataset,
 #' @param filter_source Source filter
 #'
 #'   All observations in `dataset_source` fulfilling the specified condition are
-#'   considered as event.
+#'   considered as an event.
 #'
 #'   For subjects with at least one event `AVALC` is set to `"Y"`, `AVAL` to
 #'   `1`, and `ADT` to the first date where the condition is fulfilled.
@@ -206,7 +206,7 @@ derive_param_first_event <- function(dataset,
 #'   the new observations.
 #'   1. The new observations are added to input dataset.
 #'
-#' @author Stefan Bundfuss
+#' @author Stefan Bundfuss Sophie Shapcott
 #'
 #' @return The input dataset with a new parameter indicating if and when an
 #'   event occurred
@@ -279,6 +279,8 @@ derive_param_first_event <- function(dataset,
                                      dataset_source,
                                      filter_source,
                                      date_var,
+                                     order,
+                                     mode,
                                      subject_keys = vars(STUDYID, USUBJID),
                                      set_values_to,
                                      check_type = "warning") {
@@ -325,3 +327,8 @@ derive_param_first_event <- function(dataset,
   # Create output dataset
   bind_rows(dataset, new_obs)
 }
+
+
+
+### CONTINUE FROM DETAILS SECTION OF THE DERIVE_PARAM_EXTREME_EVENT DOCUMENTATION ###
+### ALSO REMEMBER TO UPDATE AND CREATE FURTHER TESTING ###
