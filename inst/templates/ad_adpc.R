@@ -9,10 +9,7 @@ library(admiral)
 library(dplyr)
 library(lubridate)
 library(stringr)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
-
-# to remove
-devtools::load_all()
+library(admiral.test) # Contains example datasets from the CDISC pilot project or simulated
 
 # ---- Load source datasets ----
 
@@ -104,8 +101,6 @@ adpc2 <- adpc1 %>%
 adpc3 <- adpc2 %>%
   # Derive Timing
   mutate(
-    # VISIT = "", # /!\ To remove
-    # VISITNUM = NA, # /!\ To remove
     AVISIT = case_when(
       str_detect(VISIT, "SCREEN|UNSCHED|RETRIEVAL|AMBUL") ~ NA_character_,
       !is.na(VISIT) ~ str_to_title(VISIT),
