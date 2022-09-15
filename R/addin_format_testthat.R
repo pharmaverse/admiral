@@ -47,12 +47,12 @@ prepare_test_that_file <- function(path) {
   )
   test_that_desc_cleaned <- stringr::str_remove(
     string = test_that_desc_parsed,
-    pattern = paste0("(\\w+,? )?[Tt]est \\d{1,} ?: ")
+    pattern = paste0("([\\w\\.]+,? )?[Tt]est \\d{1,} ?: ")
   )
 
   # determine name of function which is tested
   # the function name can be specified by # function_name ---- comments
-  function_name <- str_match(file_content, "# (\\w+) ----")[, 2]
+  function_name <- str_match(file_content, "# ([\\w\\.]+) ----")[, 2]
   if (is.na(function_name[1])) {
     function_name[1] <- testing_file
   }
