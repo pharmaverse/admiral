@@ -26,7 +26,8 @@ print(templates)
 
 Other internal: 
 \code{\link{admiral}},
-\code{\link{print.source}()}
+\code{\link{print.source}()},
+\code{\link{print_named_list}()}
 }
 \author{
 Thomas Neitmann

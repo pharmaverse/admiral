@@ -161,29 +161,6 @@ derivation_slice <- function(filter,
     filter = assert_filter_cond(enquo(filter)),
     args = assert_s3_class(args, "params")
   )
-  class(out) <- c("derivation_slice", "list")
+  class(out) <- c("derivation_slice", "source", "list")
   out
-}
-
-#' Print `derivation_slice` Objects
-#'
-#' @param x A `derivation_slice` object
-#' @param ... Not used
-#'
-#' @return No return value, called for side effects
-#'
-#' @export
-#'
-#' @family high_order_function
-#' @keywords high_order_function
-#'
-#' @seealso [derivation_slice()]
-#'
-#' @examples
-#' print(death_event)
-print.derivation_slice <- function(x, ...) {
-  cat("<derivation_slice> object\n")
-  cat("filter:", quo_text(x$filter), "\n")
-  cat("args:\n")
-  print(x$args)
 }

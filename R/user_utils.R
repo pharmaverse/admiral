@@ -181,7 +181,8 @@ yn_to_numeric <- function(arg) {
 #' Print `source` Objects
 #'
 #' @param x An `source` object
-#' @param ... Not used
+#' @param ... If `indent = <numeric value>` is specified the output is indented
+#'   by the specified number of characters.
 #'
 #' @return No return value, called for side effects
 #'
@@ -192,37 +193,47 @@ yn_to_numeric <- function(arg) {
 #'
 #' @export
 #'
-#' @seealso [tte_source()], [censor_source()], [event_source()]
-#'
 #' @examples
 #' print(death_event)
 print.source <- function(x, ...) {
-  cat <- function(...) base::cat(..., sep = "")
   args <- list(...)
-  if (length(args) > 0) {
-    indent <- args[[1]]
+  if ("indent" %in% names(args)) {
+    indent <- args[["indent"]]
   }
   else {
     indent <- 0
   }
-  cat(strrep(" ", indent), "<", attr(x, "class")[1], "> object\n")
+  cat(strrep(" ", indent), "<", attr(x, "class")[1], "> object\n", sep = "")
   print_named_list(x, indent = indent)
-  # cat("dataset_name: \"", x$dataset_name, "\"\n")
-  # cat("filter: ", quo_text(x$filter), "\n")
-  # cat("date: ", quo_text(x$date), "\n")
-  # cat("censor: ", x$censor, "\n")
-  # cat("set_values_to:\n")
-  # for (name in names(x$set_values_to)) {
-  #   cat("  ", name, ": ", quo_text(x$set_values_to[[name]]), "\n")
-  # }
 }
 
+
+#' Print Named List
+#'
+#' @param list A named list
+#' @param ... If `indent = <numeric value>` is specified the output is indented
+#'   by the specified number of characters.
+#'
+#' @return No return value, called for side effects
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords internal
+#' @family internal
+#'
+#' @export
+#'
+#' @examples
+#' print_named_list(death_event)
 print_named_list <- function(list, indent = 0) {
   for (name in names(list)) {
     if (inherits(list[[name]], "source")) {
       cat(strrep(" ", indent), name, ":\n", sep = "")
-      newindent <- indent + 2
-      print(list[[name]], newindent)
+      print(list[[name]], indent = indent + 2)
+    }
+    else if (is.data.frame(list[[name]])) {
+      cat(strrep(" ", indent), name, ":\n", sep = "")
+      print(list[[name]])
     }
     else if (is.list(list[[name]])) {
       cat(strrep(" ", indent), name, ":\n", sep = "")
@@ -230,7 +241,7 @@ print_named_list <- function(list, indent = 0) {
     }
     else {
       if (is.character(list[[name]])) {
-        chr_val <- paste0("\"", list[[name]], "\"")
+        chr_val <- dquote(list[[name]])
       }
       else if (is_quosure(list[[name]])) {
         chr_val <- quo_text(list[[name]])

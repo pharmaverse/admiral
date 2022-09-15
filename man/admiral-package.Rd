@@ -20,7 +20,8 @@ Useful links:
 
 Other internal: 
 \code{\link{print.adam_templates}()},
-\code{\link{print.source}()}
+\code{\link{print.source}()},
+\code{\link{print_named_list}()}
 }
 \author{
 \strong{Maintainer}: Thomas Neitmann \email{thomas.neitmann@roche.com}
