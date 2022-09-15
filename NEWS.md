@@ -2,6 +2,9 @@
 
 ## New Features
 
+- A `print()` method was added for all S3 objects defined by admiral, e.g.,
+`date_source()`, `dthcaus_source()`, ... (#858)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
