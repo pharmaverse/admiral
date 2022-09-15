@@ -57,16 +57,16 @@ test_that("negate_vars Test 6: negate_vars returns NULL if input is NULL", {
 })
 
 # get_one_to_many_dataset ----
-## Test 7: `get_one_to_many_dataset()` returns a data frame after a previous error ----
-test_that("get_one_to_many_dataset Test 7: `get_one_to_many_dataset()` returns a data frame after a previous error", {
+## Test 7: returns a data frame after a previous error ----
+test_that("get_one_to_many_dataset Test 7: returns a data frame after a previous error", {
   try(assert_one_to_one(admiral_adsl, vars(STUDYID), vars(SITEID)), silent = TRUE)
 
   expect_true(is.data.frame(get_one_to_many_dataset()))
 })
 
 # get_many_to_one_dataset ----
-## Test 8: `get_many_to_one_dataset()` returns a data frame after a previous error ----
-test_that("get_many_to_one_dataset Test 8: `get_many_to_one_dataset()` returns a data frame after a previous error", {
+## Test 8: returns a data frame after a previous error ----
+test_that("get_many_to_one_dataset Test 8: returns a data frame after a previous error", {
   try(assert_one_to_one(admiral_adsl, vars(SITEID), vars(STUDYID)), silent = TRUE)
 
   expect_true(is.data.frame(get_many_to_one_dataset()))
@@ -143,5 +143,6 @@ test_that("print.source Test 11: `source` objects containing `data.frame`", {
     "1 APPLICATION SITE ERYTHEMA 10003041 AEDECOD   ",
     "2 APPLICATION SITE PRURITUS 10003053 AEDECOD   "
   )
-  expect_identical(capture.output(print(cq)), expected_print_output)
+  # replace × with x due to differences between R versions
+  expect_identical(str_replace_all(capture.output(print(cq)), "×", "x"), expected_print_output)
 })
