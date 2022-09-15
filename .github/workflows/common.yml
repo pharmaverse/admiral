@@ -78,6 +78,8 @@ jobs:
       # Note that if you have multiple versions of docs,
       # your URL links are likely to break due to path changes
       skip-multiversion-docs: false
+      # Ref to use for the multiversion docs landing page
+      multiversion-docs-landing-page: devel
   linter:
     name: Lint
     uses: pharmaverse/admiralci/.github/workflows/lintr.yml@main
