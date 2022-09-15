@@ -212,3 +212,37 @@ test_that("derive_var_agegr_fda Test 1: A warning is issued if `derive_var_agegr
     )
   })
 })
+
+test_that("derive_param_first_event Test 1: A warning is issued if `derive_param_first_event()` is called",
+          {
+            with_options(lifecycle_verbosity = "warning", {
+
+
+                           adsl <- tibble::tribble(
+                             ~STUDYID, ~USUBJID, ~DTHDT,
+                             "XX1234", "1",      ymd("2022-05-13"),
+                             "XX1234", "2",      ymd(""),
+                             "XX1234", "3",      ymd(""),
+                           )
+
+                           adrs <- tibble::tribble(
+
+                           )
+                           expect_warning(
+                             derive_param_first_event(
+                               adrs,
+                               dataset_adsl = adsl,
+                               dataset_source = adrs,
+                               filter_source = PARAMCD == "OVR" & AVALC == "PD",
+                               date_var = ADT,
+                               set_values_to = vars(
+                                 PARAMCD = "PD",
+                                 PARAM = "Disease Progression",
+                                 ANL01FL = "Y"
+                               )
+                             ),
+                             "deprecated",
+                             fixed = TRUE
+                           )
+                         })
+          })

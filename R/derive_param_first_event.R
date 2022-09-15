@@ -99,7 +99,7 @@ derive_param_first_event <- function(dataset,
                                      check_type = "warning") {
 
   ### DEPRECATION
-  deprecate_warn("0.9.0", "derive_param_first_event", "derive_param_extreme_event")
+  deprecate_warn("0.9.0", "derive_param_first_event()", "derive_param_extreme_event()")
 
   derive_param_extreme_event(
     dataset = dataset,
@@ -164,6 +164,8 @@ derive_param_first_event <- function(dataset,
 #'   If `"first"` is specified, the first observation of each subject is selected.
 #'   If `"last"` is specified, the last observation of each subject is selected.
 #'
+#'   *Default*: `"first"`
+#'
 #'   *Permitted Values*: `"first"`, `"last"`
 #'
 #' @param set_values_to Variables to set
@@ -192,8 +194,8 @@ derive_param_first_event <- function(dataset,
 #'   1. The input dataset is restricted to observations fulfilling
 #'   `filter_source`.
 #'   1. For each subject (with respect to the variables specified for the
-#'   `subject_keys` parameter) the first observation (with respect to
-#'   `date_var`) where the event condition (`filter_source` parameter) is
+#'   `subject_keys` parameter) either the first or last observation, depending on `mode`,
+#'    (with respect to `order`) where the event condition (`filter_source` parameter) is
 #'   fulfilled is selected.
 #'   1. For each observation in `dataset_adsl` a new observation is created. For
 #'   subjects with event `AVALC` is set to `"Y"`, `AVAL` to `1`, and `ADT` to
@@ -248,12 +250,13 @@ derive_param_first_event <- function(dataset,
 #'   ) %>%
 #'   select(-ADTC)
 #'
-#' derive_param_first_event(
+#' derive_param_extreme_event(
 #'   adrs,
 #'   dataset_adsl = adsl,
 #'   dataset_source = adrs,
 #'   filter_source = PARAMCD == "OVR" & AVALC == "PD",
-#'   date_var = ADT,
+#'   order = ADT,
+#'   mode = "first",
 #'   set_values_to = vars(
 #'     PARAMCD = "PD",
 #'     PARAM = "Disease Progression",
@@ -262,31 +265,43 @@ derive_param_first_event <- function(dataset,
 #' )
 #'
 #' # derive parameter indicating death
-#' derive_param_first_event(
+#' derive_param_extreme_event(
 #'   dataset = adrs,
 #'   dataset_adsl = adsl,
 #'   dataset_source = adsl,
 #'   filter_source = !is.na(DTHDT),
-#'   date_var = DTHDT,
+#'   order = DTHDT,
+#'   mode = "first",
 #'   set_values_to = vars(
 #'     PARAMCD = "DEATH",
 #'     PARAM = "Death",
 #'     ANL01FL = "Y"
 #'   )
 #' )
-derive_param_first_event <- function(dataset,
-                                     dataset_adsl,
-                                     dataset_source,
-                                     filter_source,
-                                     date_var,
-                                     order,
-                                     mode,
-                                     subject_keys = vars(STUDYID, USUBJID),
-                                     set_values_to,
-                                     check_type = "warning") {
+derive_param_extreme_event <- function(dataset,
+                                       dataset_adsl,
+                                       dataset_source,
+                                       filter_source,
+                                       date_var,
+                                       order,
+                                       mode = "first",
+                                       subject_keys = vars(STUDYID, USUBJID),
+                                       set_values_to,
+                                       check_type = "warning") {
+  ### BEGIN DEPRECATION
+  if (!missing(date_var)) {
+    deprecate_warn("0.9.0",
+                   "derive_param_extreme_event(date_var = )",
+                   "derive_param_extreme_event(order = )")
+
+    order <- enquo(date_var)
+    order <- vars(!!order)
+  }
+  ### END DEPRECATION
+
   # Check input parameters
   filter_source <- assert_filter_cond(enquo(filter_source))
-  date_var <- assert_symbol(enquo(date_var))
+  assert_vars(order)
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
   assert_data_frame(dataset_source, required_vars = vars(!!!subject_keys, !!date_var))
@@ -297,6 +312,11 @@ derive_param_first_event <- function(dataset,
       values = c("none", "warning", "error"),
       case_sensitive = FALSE
     )
+  mode <- assert_character_scalar(
+    mode,
+    values = c("first", "last"),
+    case_sensitive = FALSE
+  )
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
@@ -308,8 +328,8 @@ derive_param_first_event <- function(dataset,
     filter_if(filter_source) %>%
     filter_extreme(
       by_vars = subject_keys,
-      order = vars(!!date_var),
-      mode = "first",
+      order = order,
+      mode = mode,
       check_type = check_type
     )
   noevents <- anti_join(
@@ -327,8 +347,3 @@ derive_param_first_event <- function(dataset,
   # Create output dataset
   bind_rows(dataset, new_obs)
 }
-
-
-
-### CONTINUE FROM DETAILS SECTION OF THE DERIVE_PARAM_EXTREME_EVENT DOCUMENTATION ###
-### ALSO REMEMBER TO UPDATE AND CREATE FURTHER TESTING ###
