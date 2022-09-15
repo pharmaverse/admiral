@@ -120,28 +120,28 @@ test_that("print.source Test 10: `source` objects containing `source` objects", 
 ## Test 11: `source` objects containing `data.frame` ----
 test_that("print.source Test 11: `source` objects containing `data.frame`", {
   cqterms <- tribble(
-  ~TERM_NAME,                  ~TERM_ID,
-  "APPLICATION SITE ERYTHEMA", 10003041L,
-  "APPLICATION SITE PRURITUS", 10003053L
-) %>%
-  mutate(TERM_LEVEL = "AEDECOD")
+    ~TERM_NAME,                  ~TERM_ID,
+    "APPLICATION SITE ERYTHEMA", 10003041L,
+    "APPLICATION SITE PRURITUS", 10003053L
+  ) %>%
+    mutate(TERM_LEVEL = "AEDECOD")
 
-cq <- query(
-  prefix = "CQ01",
-  name = "Application Site Issues",
-  definition = cqterms
-)
-expected_print_output <- c(
-  "<query> object",
-  "prefix: \"CQ01\"",
-  "name: \"Application Site Issues\"",
-  "add_scope_num: FALSE",
-  "definition:",
-  "# A tibble: 2 x 3",
-  "  TERM_NAME                  TERM_ID TERM_LEVEL",
-  "  <chr>                        <int> <chr>     ",
-  "1 APPLICATION SITE ERYTHEMA 10003041 AEDECOD   ",
-  "2 APPLICATION SITE PRURITUS 10003053 AEDECOD   "
-)
-expect_identical(capture.output(print(cq)), expected_print_output)
+  cq <- query(
+    prefix = "CQ01",
+    name = "Application Site Issues",
+    definition = cqterms
+  )
+  expected_print_output <- c(
+    "<query> object",
+    "prefix: \"CQ01\"",
+    "name: \"Application Site Issues\"",
+    "add_scope_num: FALSE",
+    "definition:",
+    "# A tibble: 2 x 3",
+    "  TERM_NAME                  TERM_ID TERM_LEVEL",
+    "  <chr>                        <int> <chr>     ",
+    "1 APPLICATION SITE ERYTHEMA 10003041 AEDECOD   ",
+    "2 APPLICATION SITE PRURITUS 10003053 AEDECOD   "
+  )
+  expect_identical(capture.output(print(cq)), expected_print_output)
 })

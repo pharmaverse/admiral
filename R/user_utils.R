@@ -199,8 +199,7 @@ print.source <- function(x, ...) {
   args <- list(...)
   if ("indent" %in% names(args)) {
     indent <- args[["indent"]]
-  }
-  else {
+  } else {
     indent <- 0
   }
   cat(strrep(" ", indent), "<", attr(x, "class")[1], "> object\n", sep = "")
@@ -230,23 +229,18 @@ print_named_list <- function(list, indent = 0) {
     if (inherits(list[[name]], "source")) {
       cat(strrep(" ", indent), name, ":\n", sep = "")
       print(list[[name]], indent = indent + 2)
-    }
-    else if (is.data.frame(list[[name]])) {
+    } else if (is.data.frame(list[[name]])) {
       cat(strrep(" ", indent), name, ":\n", sep = "")
       print(list[[name]])
-    }
-    else if (is.list(list[[name]])) {
+    } else if (is.list(list[[name]])) {
       cat(strrep(" ", indent), name, ":\n", sep = "")
       print_named_list(list[[name]], indent = indent + 2)
-    }
-    else {
+    } else {
       if (is.character(list[[name]])) {
         chr_val <- dquote(list[[name]])
-      }
-      else if (is_quosure(list[[name]])) {
+      } else if (is_quosure(list[[name]])) {
         chr_val <- quo_text(list[[name]])
-      }
-      else {
+      } else {
         chr_val <- list[[name]]
       }
       cat(strrep(" ", indent), name, ": ", chr_val, "\n", sep = "")
