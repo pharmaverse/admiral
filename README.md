@@ -88,7 +88,7 @@ There will be 3 foreseeable types of `{admiral}` packages:
 * Core package---one package containing all core functions required to create ADaMs,
 usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS)
 * TA (Therapeutic Area) package extensions---one package per TA with functions that are
-specific to algorithms and requirements for that particular TA (e.g. `{[admiralonco](https://pharmaverse.github.io/admiralonco/index.html)}`)
+specific to algorithms and requirements for that particular TA (e.g. [`{admiralonco}`](https://pharmaverse.github.io/admiralonco/index.html))
 * Company package extensions---specific needs and plug-ins for the company, such as access to metadata
 (e.g. `{admiralroche}` or `{admiralgsk}`)
 
