@@ -3,11 +3,8 @@
 <!-- badges: start -->
 [<img src="http://pharmaverse.org/shields/admiral.svg">](https://pharmaverse.org)
 [![CRAN status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.org/package=admiral)
-[![R-CMD-check](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yml)
-[![Style](https://github.com/pharmaverse/admiral/actions/workflows/style.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/style.yml)
-[![Spelling](https://github.com/pharmaverse/admiral/actions/workflows/spellcheck.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/spellcheck.yml)
-[![Man Pages 📃](https://github.com/pharmaverse/admiral/actions/workflows/man-pages.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/man-pages.yml)
-[![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiral/badges/devel/test-coverage.svg)](https://github.com/pharmaverse/admiral/actions/workflows/code-coverage.yml)
+[![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiral/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiral/actions/workflows/code-coverage.yml)
+
 <!-- badges: end -->
 
 ADaM in R Asset Library
