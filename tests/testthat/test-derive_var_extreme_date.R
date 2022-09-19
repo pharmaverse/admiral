@@ -191,7 +191,7 @@ test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables
 })
 
 ## Test 5: error is issued if DTC variable is specified ----
-test_that("derive_var_extreme_dtm Test 5: error is issued if DTC variable is specified", {
+test_that("derive_var_extreme_dtm Test 5: error is issued if `--DTC` variable is specified", {
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTC,
