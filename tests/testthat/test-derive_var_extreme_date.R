@@ -100,7 +100,7 @@ test_that("derive_var_extreme_dt Test 2: LSTALVDT is derived for Date class as w
 })
 
 ## Test 3: NA dates are excluded ----
-test_that("derive_var_extreme_dt Test 3: NA dates are excluded", {
+test_that("derive_var_extreme_dt Test 3: `NA` dates are excluded", {
   ae_end <- date_source(
     dataset_name = "ae",
     date = AEENDTM
