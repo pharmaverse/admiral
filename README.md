@@ -3,11 +3,8 @@
 <!-- badges: start -->
 [<img src="http://pharmaverse.org/shields/admiral.svg">](https://pharmaverse.org)
 [![CRAN status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.org/package=admiral)
-[![R-CMD-check](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yml)
-[![Style](https://github.com/pharmaverse/admiral/actions/workflows/style.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/style.yml)
-[![Spelling](https://github.com/pharmaverse/admiral/actions/workflows/spellcheck.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/spellcheck.yml)
-[![Man Pages 📃](https://github.com/pharmaverse/admiral/actions/workflows/man-pages.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/man-pages.yml)
-[![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiral/badges/devel/test-coverage.svg)](https://github.com/pharmaverse/admiral/actions/workflows/code-coverage.yml)
+[![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiral/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiral/actions/workflows/code-coverage.yml)
+
 <!-- badges: end -->
 
 ADaM in R Asset Library
@@ -88,7 +85,7 @@ There will be 3 foreseeable types of `{admiral}` packages:
 * Core package---one package containing all core functions required to create ADaMs,
 usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS)
 * TA (Therapeutic Area) package extensions---one package per TA with functions that are
-specific to algorithms and requirements for that particular TA (e.g. `{admiralonco}`)
+specific to algorithms and requirements for that particular TA (e.g. [`{admiralonco}`](https://pharmaverse.github.io/admiralonco/index.html))
 * Company package extensions---specific needs and plug-ins for the company, such as access to metadata
 (e.g. `{admiralroche}` or `{admiralgsk}`)
 

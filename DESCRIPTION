@@ -1,7 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.8.0
+Version: 0.8.1
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
@@ -49,7 +49,7 @@ Authors@R: c(
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
     )
-Description: A toolbox for programming Clinical Data Standards Interchange Consortium
+Description: A toolbox for programming Clinical Data Interchange Standards Consortium
     (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
     mandatory part of any New Drug or Biologics License Application submitted to the
     United States Food and Drug Administration (FDA). Analysis derivations are
