@@ -28,11 +28,11 @@ Our contribution model is still in a testing phase so we advise you to contact u
  * For each new contribution, the user creates an issue on the issue tab on [GitHub](https://github.com/pharmaverse/admiral/issues) to put it in our backlog. 
  
  * Familiarize yourself with our [programming
- strategy](https://pharmaverse.github.io/admiraldev/main/articles/programming_strategy.html),
+ strategy](https://pharmaverse.github.io/admiraldev/devel/articles/programming_strategy.html),
  guidance for [GitHub
- usage](https://pharmaverse.github.io/admiraldev/main/articles/git_usage.html)
+ usage](https://pharmaverse.github.io/admiraldev/devel/articles/git_usage.html)
  and [unit
- testing](https://pharmaverse.github.io/admiraldev/main/articles/unit_test_guidance.html).
+ testing](https://pharmaverse.github.io/admiraldev/devel/articles/unit_test_guidance.html).
 
  * All [created issues](https://github.com/pharmaverse/admiral/issues) will be reviewed within the next sprint and the creator will receive an initial feedback via a comment. Someone from the core development team will then triage new issues by assigning the appropriate labels (such as “user request” so we can easily identify new requests).
  
