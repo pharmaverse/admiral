@@ -50,7 +50,7 @@ Type 1 Contribution with Code:
  * First, the user creates an issue or comments on an existing issue to notify that they’d like to contribute code.
  
  * Follow our [development
- process](https://pharmaverse.github.io/admiraldev/main/articles/development_process.html)
+ process](https://pharmaverse.github.io/admiraldev/devel/articles/development_process.html)
  step-by-step guide.
  
  * We advise to contact an `{admiral}` core development team directly via [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) before submitting code for complex functionality.
