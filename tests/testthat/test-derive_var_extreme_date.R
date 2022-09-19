@@ -125,7 +125,7 @@ test_that("derive_var_extreme_dt Test 3: NA dates are excluded", {
 
 # derive_var_extreme_dtm ----
 ## Test 4: LSTALVDTM and traceability variables are derived ----
-test_that("derive_var_extreme_dtm Test 4: LSTALVDTM and traceability variables are derived", {
+test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables are derived", {
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTM,
