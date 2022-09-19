@@ -2,6 +2,8 @@
 
 ## New Features
 
+- New function `derive_var_trtemfl()` for deriving treatment emergent flags (#989)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
