@@ -64,6 +64,29 @@
 #'
 #' @author Stefan Bundfuss
 #'
+#' @details For the derivation of the new variable the following cases are
+#'   considered in this order. The first case which applies, defines the value
+#'   of the variable.
+#'
+#' - *not treated*: If `trt_start_date` is `NA`, it is set to `NA_character_`.
+#' - *event before treatment*: If `end_date` is before `trt_start_date` (and
+#' `end_date` is not `NA`), it is set to `NA_character_`.
+#' - *no event date*: If `start_date` is `NA`, it is set to `"Y"`.
+#' - *event started during treatment*:
+#'     - if `end_window` is not specified:
+#'       if `start_date` is on or after `trt_start_date`, it is set to `"Y"`,
+#'     - if `end_window` is specified:
+#'       if `start_date` is on or after `trt_start_date` and `start_date` is on
+#'       or before `trt_end_date` + `end_window` days, it is set to `"Y"`,
+#'  - *event started before treatment and (possibly) worsened on treatment*: If
+#'  `initial_intensity` and `intensity` is specified:
+#'    if `initial_intensity < intensity` and `start_date` is before
+#'    `trt_start_date` and `end_date` is on or after `trt_start_date` or
+#'    `end_date` is `NA`, it is set to `"Y"`.
+#'  - Otherwise it is set to `NA_character_`.
+#'
+#' @return The input dataset with the variable specified by `new_var` added
+#'
 #' @keywords der_occds
 #' @family der_occds
 #'

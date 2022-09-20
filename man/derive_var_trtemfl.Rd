@@ -75,8 +75,36 @@ intensity \code{initial_intensity < intensity} must evaluate to \code{TRUE}.
 \emph{Permitted Values:} A symbol referring to a variable of the input dataset
 or \code{NULL}}
 }
+\value{
+The input dataset with the variable specified by \code{new_var} added
+}
 \description{
 Derive treatment emergent analysis flag (e.g., \code{TRTEMFL}).
+}
+\details{
+For the derivation of the new variable the following cases are
+considered in this order. The first case which applies, defines the value
+of the variable.
+\itemize{
+\item \emph{not treated}: If \code{trt_start_date} is \code{NA}, it is set to \code{NA_character_}.
+\item \emph{event before treatment}: If \code{end_date} is before \code{trt_start_date} (and
+\code{end_date} is not \code{NA}), it is set to \code{NA_character_}.
+\item \emph{no event date}: If \code{start_date} is \code{NA}, it is set to \code{"Y"}.
+\item \emph{event started during treatment}:
+\itemize{
+\item if \code{end_window} is not specified:
+if \code{start_date} is on or after \code{trt_start_date}, it is set to \code{"Y"},
+\item if \code{end_window} is specified:
+if \code{start_date} is on or after \code{trt_start_date} and \code{start_date} is on
+or before \code{trt_end_date} + \code{end_window} days, it is set to \code{"Y"},
+}
+\item \emph{event started before treatment and (possibly) worsened on treatment}: If
+\code{initial_intensity} and \code{intensity} is specified:
+if \code{initial_intensity < intensity} and \code{start_date} is before
+\code{trt_start_date} and \code{end_date} is on or after \code{trt_start_date} or
+\code{end_date} is \code{NA}, it is set to \code{"Y"}.
+\item Otherwise it is set to \code{NA_character_}.
+}
 }
 \examples{
 
