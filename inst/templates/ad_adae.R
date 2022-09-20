@@ -103,8 +103,10 @@ adae <- adae %>%
     AREL = AEREL
   ) %>%
   ## Derive treatment emergent flag ----
-  mutate(
-    TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", NA_character_)
+  derive_var_trtemfl(
+    trt_start_date = TRTSDT,
+    trt_end_date = TRTEDT,
+    end_window = 30
   ) %>%
   ## Derive occurrence flags: first occurence of most severe AE ----
   # create numeric value ASEVN for severity

@@ -278,13 +278,16 @@ adae <- adae %>%
 
 ## Derive Treatment Emergent Flag {#trtflag}
 
-To derive the treatment emergent flag `TRTEMFL`, one can use a simple
-`dplyr::mutate()` assignment. In the example below, we use 30 days in the flag derivation.
+To derive the treatment emergent flag `TRTEMFL`, one can call
+`derive_var_trtemfl()`. In the example below, we use 30 days in the flag
+derivation.
 
 ```{r eval=TRUE}
 adae <- adae %>%
-  mutate(
-    TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", NA_character_)
+  derive_var_trtemfl(
+    trt_start_date = TRTSDT,
+    trt_end_date = TRTEDT,
+    end_window = 30
   )
 ```
 
