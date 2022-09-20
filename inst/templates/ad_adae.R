@@ -108,7 +108,7 @@ adae <- adae %>%
     trt_end_date = TRTEDT,
     end_window = 30
   ) %>%
-  ## Derive occurrence flags: first occurence of most severe AE ----
+  ## Derive occurrence flags: first occurrence of most severe AE ----
   # create numeric value ASEVN for severity
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))

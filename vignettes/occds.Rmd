@@ -304,7 +304,8 @@ dataset_vignette(
 To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single occurrence date, we
 use `derive_var_ontrtfl()`.
 
-The expected result is the input dataset with an additional column named `ONTRTFL` with a value of `"Y"` or `NA`.
+The expected result is the input dataset with an additional column named
+`ONTRTFL` with a value of `"Y"` or `NA`.
 
 If you want to also check an end date, you could add the `end_date` argument.
 Note that in this scenario you could set `span_period = "Y"` if you want occurrences that started
