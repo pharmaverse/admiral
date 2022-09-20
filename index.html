@@ -140,7 +140,7 @@
 <li>Phase 1 release is for <a href="https://pharmaverse.github.io/admiraldev/main/">admiraldev</a> and <code>{admiral.test}</code>, which feed into all <code>admiral</code> packages</li>
 <li>Phase 2 release is only for core <a href="https://pharmaverse.github.io/admiral/">admiral</a>
 </li>
-<li>Phase 3 release is extension packages, e.g. <code>{admiralonco}</code>
+<li>Phase 3 release is extension packages, e.g. <code>{admiralonco}</code>
 </li>
 </ul>
 <table class="table">
@@ -213,7 +213,7 @@
 <li>Functions that are comprehensively documented and tested, including example calls—these are all listed in the <a href="https://pharmaverse.github.io/admiral/reference/index.html">Reference section</a>
 </li>
 <li>Vignettes on how to create ADSL, BDS and OCCDS datasets, including example scripts</li>
-<li>Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs …)</li>
+<li>Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs …)</li>
 </ul>
 </div>
 <div class="section level2">
@@ -221,9 +221,9 @@
 </h2>
 <p>There will be 3 foreseeable types of <a href="https://pharmaverse.github.io/admiral/">admiral</a> packages:</p>
 <ul>
-<li>Core package—one package containing all core functions required to create ADaMs, usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS)</li>
-<li>TA (Therapeutic Area) package extensions—one package per TA with functions that are specific to algorithms and requirements for that particular TA (e.g. <code>{admiralonco}</code>)</li>
-<li>Company package extensions—specific needs and plug-ins for the company, such as access to metadata (e.g. <code>{admiralroche}</code> or <code>{admiralgsk}</code>)</li>
+<li>Core package—one package containing all core functions required to create ADaMs, usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS)</li>
+<li>TA (Therapeutic Area) package extensions—one package per TA with functions that are specific to algorithms and requirements for that particular TA (e.g. <code>{admiralonco}</code>)</li>
+<li>Company package extensions—specific needs and plug-ins for the company, such as access to metadata (e.g. <code>{admiralroche}</code> or <code>{admiralgsk}</code>)</li>
 </ul>
 </div>
 <div class="section level2">
@@ -247,7 +247,7 @@
 <p>All <a href="https://pharmaverse.github.io/admiral/">admiral</a> functions have a clear purpose.</p>
 <ul>
 <li><p>We try not to ever design single functions that could achieve numerous very different derivations. For example if you as a user pick up a function with &gt;10 different arguments then chances are it is going to be difficult to understand if this function could be applied for your specific need. The intention is that arguments/parameters can influence how the output of a function is calculated, but not change the purpose of the function.</p></li>
-<li><p>We try to combine similar tasks and algorithms into one function where applicable to reduce the amount of repetitive functions with similar algorithms and to group together similar functionality to increase usability (e.g. one study day calculation rather than a function per variable).</p></li>
+<li><p>We try to combine similar tasks and algorithms into one function where applicable to reduce the amount of repetitive functions with similar algorithms and to group together similar functionality to increase usability (e.g. one study day calculation rather than a function per variable).</p></li>
 <li><p>We strive to design functions that are not too general and trying to fulfil multiple, complex purposes.</p></li>
 <li><p>Functions should not allow expressions as arguments that are used as code snippets in function calls.</p></li>
 <li><p>We recommend to avoid copy and paste of complex computational algorithms or repetitive code like checks and advise to wrap them into a function. However we would also like to avoid multi-layered functional nesting, so this needs to be considered carefully to keep the nesting of 3-4 functions an exception rather than the rule.</p></li>
@@ -261,7 +261,7 @@
 <li>In a growing code base, across a family of packages, we make every effort to make our functions easily findable.</li>
 <li>We use consistent naming conventions across all our functions, and provide vignettes and ADaM templates that help users to get started and build familiarity. Each <a href="https://pharmaverse.github.io/admiral/">admiral</a> family package website is searchable.</li>
 <li>We avoid repetitive functions that will do similar tasks (as explained above with study day example).</li>
-<li>Each package extension is kept focused on the specific scope, e.g. features that are relevant across multiple extension packages will be moved to the core <a href="https://pharmaverse.github.io/admiral/">admiral</a> package.</li>
+<li>Each package extension is kept focused on the specific scope, e.g. features that are relevant across multiple extension packages will be moved to the core <a href="https://pharmaverse.github.io/admiral/">admiral</a> package.</li>
 </ul>
 </div>
 <div class="section level3">
@@ -269,8 +269,8 @@
 </h3>
 <p>All <a href="https://pharmaverse.github.io/admiral/">admiral</a> functions follow the <a href="https://pharmaverse.github.io/admiraldev/main/articles/programming_strategy.html">Programming Strategy</a> that all our developers and contributors must follow, so that all our code has a high degree of consistency and readability.</p>
 <ul>
-<li>We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.</li>
-<li>For sections of code that perform the actual derivations (e.g. besides assertions or basic utilities), we try to limit nesting of too many dependencies or functions.</li>
+<li>We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.</li>
+<li>For sections of code that perform the actual derivations (e.g. besides assertions or basic utilities), we try to limit nesting of too many dependencies or functions.</li>
 <li>Modularity is a focus—we don’t try to achieve too many steps in one.</li>
 <li>All code has to be well commented.</li>
 <li>We recognize that a user or a Health Authority reviewer may have the wish to delve into the code base (especially given this open source setting), or users may need to extend/adapt the code for their study specific needs. We therefore want any module to be understandable to all, not only the <a href="https://pharmaverse.github.io/admiral/">admiral</a> developers.</li>
