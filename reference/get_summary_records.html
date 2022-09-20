@@ -202,15 +202,15 @@ see the <code><a href="derive_summary_records.html">derive_summary_records()</a>
 <span class="r-in">  summary_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span>DTYPE <span class="op">=</span> <span class="st">"AVERAGE"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 x 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 6 x 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID  PARAM            AVISIT    AVAL DTYPE  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>            </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> XYZ-1001 QTcF Int. (msec) Baseline  393. AVERAGE</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> XYZ-1001 QTcF Int. (msec) Visit 2   388. AVERAGE</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span><span> XYZ-1001 QTcF Int. (msec) Visit 3   394. AVERAGE</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span><span> XYZ-1002 QTcF Int. (msec) Baseline  400. AVERAGE</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span><span> XYZ-1002 QTcF Int. (msec) Visit 2   403. AVERAGE</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span><span> XYZ-1002 QTcF Int. (msec) Visit 3   409. AVERAGE</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>            </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> XYZ-1001 QTcF Int. (msec) Baseline  393. AVERAGE</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> XYZ-1001 QTcF Int. (msec) Visit 2   388. AVERAGE</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">3</span><span> XYZ-1001 QTcF Int. (msec) Visit 3   394. AVERAGE</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">4</span><span> XYZ-1002 QTcF Int. (msec) Baseline  400. AVERAGE</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">5</span><span> XYZ-1002 QTcF Int. (msec) Visit 2   403. AVERAGE</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">6</span><span> XYZ-1002 QTcF Int. (msec) Visit 3   409. AVERAGE</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">advs</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">VSSEQ</span>, <span class="op">~</span><span class="va">PARAM</span>, <span class="op">~</span><span class="va">AVAL</span>, <span class="op">~</span><span class="va">VSSTRESU</span>, <span class="op">~</span><span class="va">VISIT</span>, <span class="op">~</span><span class="va">VSDTC</span>,</span>
@@ -237,10 +237,10 @@ see the <code><a href="derive_summary_records.html">derive_summary_records()</a>
 <span class="r-in">    summary_fun <span class="op">=</span> <span class="va">mean</span>,</span>
 <span class="r-in">    set_values_to <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span>DTYPE <span class="op">=</span> <span class="st">"AVERAGE"</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 x 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 1 x 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID     PARAM   AVAL DTYPE  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> XYZ-001-001 Weight   101 AVERAGE</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>  </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> XYZ-001-001 Weight   101 AVERAGE</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'</span></span>
 <span class="r-in"><span class="va">adeg</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
@@ -271,11 +271,11 @@ see the <code><a href="derive_summary_records.html">derive_summary_records()</a>
 <span class="r-in">  summary_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span>DTYPE <span class="op">=</span> <span class="st">"AVERAGE"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 x 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 2 x 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID  PARAM            AVISIT    AVAL DTYPE  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>            </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> XYZ-1001 QTcF Int. (msec) Baseline  393. AVERAGE</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> XYZ-1002 QTcF Int. (msec) Baseline  400. AVERAGE</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>            </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> XYZ-1001 QTcF Int. (msec) Baseline  393. AVERAGE</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> XYZ-1002 QTcF Int. (msec) Baseline  400. AVERAGE</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -177,40 +177,40 @@ condition are kept and <code>BASETYPE</code> is set to <code>NA</code>.</p>
 <span class="r-in"><span class="co"># Below print statement will print all 23 records in the data frame</span></span>
 <span class="r-in"><span class="co"># bds_with_basetype</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bds_with_basetype</span>, n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 23 x 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 23 x 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>        </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>       </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span><span> P01     RUN-IN       PARAM01     1  10   RUN-IN      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span><span> P01     RUN-IN       PARAM01     2   9.8 RUN-IN      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span><span> P01     DOUBLE-BLIND PARAM01     3   9.2 RUN-IN      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span><span> P01     DOUBLE-BLIND PARAM01     4  10.1 RUN-IN      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span><span> P01     OPEN-LABEL   PARAM01     5  10.4 RUN-IN      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span><span> P01     OPEN-LABEL   PARAM01     6   9.9 RUN-IN      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span><span> P02     RUN-IN       PARAM01     1  12.1 RUN-IN      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span><span> P02     DOUBLE-BLIND PARAM01     2  10.2 RUN-IN      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span><span> P02     DOUBLE-BLIND PARAM01     3  10.8 RUN-IN      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span><span> P02     OPEN-LABEL   PARAM01     4  11.4 RUN-IN      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span><span> P02     OPEN-LABEL   PARAM01     5  10.8 RUN-IN      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span><span> P01     DOUBLE-BLIND PARAM01     3   9.2 DOUBLE-BLIND</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span><span> P01     DOUBLE-BLIND PARAM01     4  10.1 DOUBLE-BLIND</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span><span> P01     OPEN-LABEL   PARAM01     5  10.4 DOUBLE-BLIND</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span><span> P01     OPEN-LABEL   PARAM01     6   9.9 DOUBLE-BLIND</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span><span> P02     DOUBLE-BLIND PARAM01     2  10.2 DOUBLE-BLIND</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span><span> P02     DOUBLE-BLIND PARAM01     3  10.8 DOUBLE-BLIND</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span><span> P02     OPEN-LABEL   PARAM01     4  11.4 DOUBLE-BLIND</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span><span> P02     OPEN-LABEL   PARAM01     5  10.8 DOUBLE-BLIND</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">20</span><span> P01     OPEN-LABEL   PARAM01     5  10.4 OPEN-LABEL  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">21</span><span> P01     OPEN-LABEL   PARAM01     6   9.9 OPEN-LABEL  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">22</span><span> P02     OPEN-LABEL   PARAM01     4  11.4 OPEN-LABEL  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">23</span><span> P02     OPEN-LABEL   PARAM01     5  10.8 OPEN-LABEL  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 1</span><span> P01     RUN-IN       PARAM01     1  10   RUN-IN      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 2</span><span> P01     RUN-IN       PARAM01     2   9.8 RUN-IN      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 3</span><span> P01     DOUBLE-BLIND PARAM01     3   9.2 RUN-IN      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 4</span><span> P01     DOUBLE-BLIND PARAM01     4  10.1 RUN-IN      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 5</span><span> P01     OPEN-LABEL   PARAM01     5  10.4 RUN-IN      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 6</span><span> P01     OPEN-LABEL   PARAM01     6   9.9 RUN-IN      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 7</span><span> P02     RUN-IN       PARAM01     1  12.1 RUN-IN      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 8</span><span> P02     DOUBLE-BLIND PARAM01     2  10.2 RUN-IN      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 9</span><span> P02     DOUBLE-BLIND PARAM01     3  10.8 RUN-IN      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10</span><span> P02     OPEN-LABEL   PARAM01     4  11.4 RUN-IN      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">11</span><span> P02     OPEN-LABEL   PARAM01     5  10.8 RUN-IN      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">12</span><span> P01     DOUBLE-BLIND PARAM01     3   9.2 DOUBLE-BLIND</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">13</span><span> P01     DOUBLE-BLIND PARAM01     4  10.1 DOUBLE-BLIND</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">14</span><span> P01     OPEN-LABEL   PARAM01     5  10.4 DOUBLE-BLIND</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">15</span><span> P01     OPEN-LABEL   PARAM01     6   9.9 DOUBLE-BLIND</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">16</span><span> P02     DOUBLE-BLIND PARAM01     2  10.2 DOUBLE-BLIND</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">17</span><span> P02     DOUBLE-BLIND PARAM01     3  10.8 DOUBLE-BLIND</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">18</span><span> P02     OPEN-LABEL   PARAM01     4  11.4 DOUBLE-BLIND</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">19</span><span> P02     OPEN-LABEL   PARAM01     5  10.8 DOUBLE-BLIND</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">20</span><span> P01     OPEN-LABEL   PARAM01     5  10.4 OPEN-LABEL  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">21</span><span> P01     OPEN-LABEL   PARAM01     6   9.9 OPEN-LABEL  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">22</span><span> P02     OPEN-LABEL   PARAM01     4  11.4 OPEN-LABEL  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">23</span><span> P02     OPEN-LABEL   PARAM01     5  10.8 OPEN-LABEL  </span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tally.html" class="external-link">count</a></span><span class="op">(</span><span class="va">bds_with_basetype</span>, <span class="va">BASETYPE</span>, name <span class="op">=</span> <span class="st">"Number of Records"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 x 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 3 x 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   BASETYPE     `Number of Records`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                      </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> DOUBLE-BLIND                   8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> OPEN-LABEL                     4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span><span> RUN-IN                        11</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                      </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> DOUBLE-BLIND                   8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> OPEN-LABEL                     4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">3</span><span> RUN-IN                        11</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># An example where all parameter records need to be included for 2 different</span></span>
 <span class="r-in"><span class="co"># baseline type derivations (such as LAST and WORST)</span></span>
@@ -231,24 +231,24 @@ condition are kept and <code>BASETYPE</code> is set to <code>NA</code>.</p>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bds_with_basetype</span>, n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 x 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 8 x 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>        </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> P01     RUN-IN       PARAM01     1  10   LAST    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> P01     RUN-IN       PARAM01     2   9.8 LAST    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span><span> P01     DOUBLE-BLIND PARAM01     3   9.2 LAST    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span><span> P01     DOUBLE-BLIND PARAM01     4  10.1 LAST    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span><span> P01     RUN-IN       PARAM01     1  10   WORST   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span><span> P01     RUN-IN       PARAM01     2   9.8 WORST   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span><span> P01     DOUBLE-BLIND PARAM01     3   9.2 WORST   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span><span> P01     DOUBLE-BLIND PARAM01     4  10.1 WORST   </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> P01     RUN-IN       PARAM01     1  10   LAST    </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> P01     RUN-IN       PARAM01     2   9.8 LAST    </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">3</span><span> P01     DOUBLE-BLIND PARAM01     3   9.2 LAST    </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">4</span><span> P01     DOUBLE-BLIND PARAM01     4  10.1 LAST    </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">5</span><span> P01     RUN-IN       PARAM01     1  10   WORST   </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">6</span><span> P01     RUN-IN       PARAM01     2   9.8 WORST   </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">7</span><span> P01     DOUBLE-BLIND PARAM01     3   9.2 WORST   </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">8</span><span> P01     DOUBLE-BLIND PARAM01     4  10.1 WORST   </span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tally.html" class="external-link">count</a></span><span class="op">(</span><span class="va">bds_with_basetype</span>, <span class="va">BASETYPE</span>, name <span class="op">=</span> <span class="st">"Number of Records"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 x 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 2 x 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   BASETYPE `Number of Records`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                  </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> LAST                       4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> WORST                      4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                  </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> LAST                       4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> WORST                      4</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

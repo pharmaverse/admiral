@@ -247,12 +247,12 @@ the preferred order.</p>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">derive_var_dthcaus</span><span class="op">(</span><span class="va">adsl</span>, <span class="va">src_ae</span>, <span class="va">src_ds</span>, source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ae <span class="op">=</span> <span class="va">ae</span>, ds <span class="op">=</span> <span class="va">ds</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 x 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 3 x 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID USUBJID DTHCAUS                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                              </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> STUDY01 PAT01   SUDDEN DEATH                       </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> STUDY01 PAT02   DEATH DUE TO PROGRESSION OF DISEASE</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span><span> STUDY01 PAT03   </span><span style="color: #BB0000;">NA</span><span>                                 </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                              </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> STUDY01 PAT01   SUDDEN DEATH                       </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> STUDY01 PAT02   DEATH DUE TO PROGRESSION OF DISEASE</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">3</span><span> STUDY01 PAT03   </span><span style="color: #BB0000;">NA</span><span>                                 </span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Derive `DTHCAUS` and add traceability variables - for on-study deaths only</span></span>
 <span class="r-in"><span class="va">src_ae</span> <span class="op">&lt;-</span> <span class="fu">dthcaus_source</span><span class="op">(</span></span>
@@ -274,12 +274,12 @@ the preferred order.</p>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">derive_var_dthcaus</span><span class="op">(</span><span class="va">adsl</span>, <span class="va">src_ae</span>, <span class="va">src_ds</span>, source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ae <span class="op">=</span> <span class="va">ae</span>, ds <span class="op">=</span> <span class="va">ds</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 x 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 3 x 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID USUBJID DTHCAUS                             DTHDOM DTHSEQ</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                               </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> STUDY01 PAT01   SUDDEN DEATH                        AE         12</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> STUDY01 PAT02   DEATH DUE TO PROGRESSION OF DISEASE DS          3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span><span> STUDY01 PAT03   </span><span style="color: #BB0000;">NA</span><span>                                  </span><span style="color: #BB0000;">NA</span><span>         </span><span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                               </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> STUDY01 PAT01   SUDDEN DEATH                        AE         12</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> STUDY01 PAT02   DEATH DUE TO PROGRESSION OF DISEASE DS          3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">3</span><span> STUDY01 PAT03   </span><span style="color: #BB0000;">NA</span><span>                                  </span><span style="color: #BB0000;">NA</span><span>         </span><span style="color: #BB0000;">NA</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Derive `DTHCAUS` as above - now including post-study deaths with different `DTHCAUS` value</span></span>
 <span class="r-in"><span class="va">src_ae</span> <span class="op">&lt;-</span> <span class="fu">dthcaus_source</span><span class="op">(</span></span>
@@ -310,12 +310,12 @@ the preferred order.</p>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">derive_var_dthcaus</span><span class="op">(</span><span class="va">adsl</span>, <span class="va">src_ae</span>, <span class="va">src_ds</span>, <span class="va">src_ds_post</span>, source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ae <span class="op">=</span> <span class="va">ae</span>, ds <span class="op">=</span> <span class="va">ds</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 x 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 3 x 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID USUBJID DTHCAUS                             DTHDOM DTHSEQ</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                               </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> STUDY01 PAT01   SUDDEN DEATH                        AE         12</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> STUDY01 PAT02   DEATH DUE TO PROGRESSION OF DISEASE DS          3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span><span> STUDY01 PAT03   POST STUDY: UNKNOWN CAUSE           DS          1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                               </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> STUDY01 PAT01   SUDDEN DEATH                        AE         12</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> STUDY01 PAT02   DEATH DUE TO PROGRESSION OF DISEASE DS          3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">3</span><span> STUDY01 PAT03   POST STUDY: UNKNOWN CAUSE           DS          1</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

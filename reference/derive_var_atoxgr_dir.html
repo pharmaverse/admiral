@@ -180,15 +180,15 @@ severe grade</p><ul><li><p>"4" is where the lab value satisfies the criteria for
 <span class="r-in">  criteria_direction <span class="op">=</span> <span class="st">"L"</span>,</span>
 <span class="r-in">  get_unit_expr <span class="op">=</span> <span class="fu"><a href="extract_unit.html">extract_unit</a></span><span class="op">(</span><span class="va">PARAM</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 x 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 6 x 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ATOXDSCL                    AVAL ANRLO ANRHI PARAM                     ATOXGRL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                      </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> Anemia                       129   120   180 Hemoglobin (g/L)          0      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> Anemia                       140   120   180 Hemoglobin (g/L)          0      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span><span> Hypoglycemia                 119     4     7 Glucose (mmol/L)          0      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span><span> Hypoglycemia                 120     4     7 Glucose (mmol/L)          0      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span><span> White blood cell decreased    10     5    20 White blood cell (10^9/L) 0      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span><span> White blood cell decreased    15     5    20 White blood cell (10^9/L) 0      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                      </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> Anemia                       129   120   180 Hemoglobin (g/L)          0      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> Anemia                       140   120   180 Hemoglobin (g/L)          0      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">3</span><span> Hypoglycemia                 119     4     7 Glucose (mmol/L)          0      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">4</span><span> Hypoglycemia                 120     4     7 Glucose (mmol/L)          0      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">5</span><span> White blood cell decreased    10     5    20 White blood cell (10^9/L) 0      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">6</span><span> White blood cell decreased    15     5    20 White blood cell (10^9/L) 0      </span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="op">~</span><span class="va">ATOXDSCH</span>,                     <span class="op">~</span><span class="va">AVAL</span>,  <span class="op">~</span><span class="va">ANRLO</span>,   <span class="op">~</span><span class="va">ANRHI</span>, <span class="op">~</span><span class="va">PARAM</span>,</span>
@@ -207,15 +207,15 @@ severe grade</p><ul><li><p>"4" is where the lab value satisfies the criteria for
 <span class="r-in">  criteria_direction <span class="op">=</span> <span class="st">"H"</span>,</span>
 <span class="r-in">  get_unit_expr <span class="op">=</span> <span class="fu"><a href="extract_unit.html">extract_unit</a></span><span class="op">(</span><span class="va">PARAM</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 x 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 6 x 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ATOXDSCH                  AVAL ANRLO ANRHI PARAM                       ATOXGRH</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                    </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                       </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> GGT increased              129     0    30 Gamma Glutamyl Transferase… 2      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> GGT increased              140   120   180 Gamma Glutamyl Transferase… 0      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span><span> Hyperglycemia              119     4     7 Glucose (mmol/L)            4      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span><span> Hyperglycemia              120     4     7 Glucose  (mmol/L)           4      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span><span> Lymphocyte count increa…     4     1     4 Lymphocytes Abs (10^9/L)    0      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span><span> Lymphocyte count increa…     2     1     4 Lymphocytes Abs (10^9/L)    0      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                    </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                       </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> GGT increased              129     0    30 Gamma Glutamyl Transferase… 2      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> GGT increased              140   120   180 Gamma Glutamyl Transferase… 0      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">3</span><span> Hyperglycemia              119     4     7 Glucose (mmol/L)            4      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">4</span><span> Hyperglycemia              120     4     7 Glucose  (mmol/L)           4      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">5</span><span> Lymphocyte count increa…     4     1     4 Lymphocytes Abs (10^9/L)    0      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">6</span><span> Lymphocyte count increa…     2     1     4 Lymphocytes Abs (10^9/L)    0      </span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
