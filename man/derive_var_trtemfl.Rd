@@ -113,29 +113,29 @@ library(dplyr)
 library(lubridate)
 
 adae <- expected <- tribble(
-~USUBJID, ~ASTDTM,            ~AENDTM,            ~AEITOXGR, ~AETOXGR,
-# before treatment
-"1",      "2021-12-13T20:15", "2021-12-15T12:45", "1",       "1",
-"1",      "2021-12-14T20:15", "2021-12-14T22:00", "1",       "3",
-# starting before treatment and ending during treatment
-"1",      "2021-12-30T20:00", "2022-01-14T11:00", "1",       "3",
-"1",      "2021-12-31T20:15", "2022-01-01T01:23", "1",       "1",
-# starting during treatment
-"1",      "2022-01-01T12:00", "2022-01-02T23:25", "3",       "4",
-# after treatment
-"1",      "2022-05-10T11:00", "2022-05-10T13:05", "2",       "2",
-"1",      "2022-05-11T11:00", "2022-05-11T13:05", "2",       "2",
-# missing dates
-"1",      "",                 "",                 "3",       "4",
-"1",      "2021-12-30T09:00", "",                 "3",       "4",
-"1",      "2021-12-30T11:00", "",                 "3",       "3",
-"1",      "",                 "2022-01-04T09:00", "3",       "4",
-"1",      "",                 "2021-12-24T19:00", "3",       "4",
-"1",      "",                 "2022-06-04T09:00", "3",       "4",
-# without treatment
-"2",      "",                 "2021-12-03T12:00", "1",       "2",
-"2",      "2021-12-01T12:00", "2021-12-03T12:00", "1",       "2",
-"2",      "2021-12-06T18:00", "",                 "1",       "2"
+  ~USUBJID, ~ASTDTM,            ~AENDTM,            ~AEITOXGR, ~AETOXGR,
+  # before treatment
+  "1",      "2021-12-13T20:15", "2021-12-15T12:45", "1",       "1",
+  "1",      "2021-12-14T20:15", "2021-12-14T22:00", "1",       "3",
+  # starting before treatment and ending during treatment
+  "1",      "2021-12-30T20:00", "2022-01-14T11:00", "1",       "3",
+  "1",      "2021-12-31T20:15", "2022-01-01T01:23", "1",       "1",
+  # starting during treatment
+  "1",      "2022-01-01T12:00", "2022-01-02T23:25", "3",       "4",
+  # after treatment
+  "1",      "2022-05-10T11:00", "2022-05-10T13:05", "2",       "2",
+  "1",      "2022-05-11T11:00", "2022-05-11T13:05", "2",       "2",
+  # missing dates
+  "1",      "",                 "",                 "3",       "4",
+  "1",      "2021-12-30T09:00", "",                 "3",       "4",
+  "1",      "2021-12-30T11:00", "",                 "3",       "3",
+  "1",      "",                 "2022-01-04T09:00", "3",       "4",
+  "1",      "",                 "2021-12-24T19:00", "3",       "4",
+  "1",      "",                 "2022-06-04T09:00", "3",       "4",
+  # without treatment
+  "2",      "",                 "2021-12-03T12:00", "1",       "2",
+  "2",      "2021-12-01T12:00", "2021-12-03T12:00", "1",       "2",
+  "2",      "2021-12-06T18:00", "",                 "1",       "2"
 ) \%>\%
   mutate(
     ASTDTM = ymd_hm(ASTDTM),
@@ -149,12 +149,12 @@ derive_var_trtemfl(adae) \%>\% select(ASTDTM, AENDTM, TRTSDTM, TRTEMFL)
 
 # derive TRTEM2FL taking treatment end and worsening into account
 derive_var_trtemfl(
-adae,
-new_var = TRTEM2FL,
-trt_end_date = TRTEDTM,
-end_window = 10,
-initial_intensity = AEITOXGR,
-intensity = AETOXGR
+  adae,
+  new_var = TRTEM2FL,
+  trt_end_date = TRTEDTM,
+  end_window = 10,
+  initial_intensity = AEITOXGR,
+  intensity = AETOXGR
 ) \%>\% select(ASTDTM, AENDTM, AEITOXGR, AETOXGR, TRTEM2FL)
 }
 \seealso{

@@ -41,7 +41,8 @@ test_that("derive_var_trtemfl Test 1: without end_window and worsening", {
   expect_dfs_equal(
     base = select(expected, -TRTEM2FL),
     comp = derive_var_trtemfl(adae),
-    keys = c("USUBJID", "ASTDTM", "AENDTM"))
+    keys = c("USUBJID", "ASTDTM", "AENDTM")
+  )
 })
 
 ## Test 2: with end_window and worsening ----
@@ -55,8 +56,9 @@ test_that("derive_var_trtemfl Test 2: with end_window and worsening", {
       end_window = 10,
       initial_intensity = AEITOXGR,
       intensity = AETOXGR
-      ),
-    keys = c("USUBJID", "ASTDTM", "AENDTM"))
+    ),
+    keys = c("USUBJID", "ASTDTM", "AENDTM")
+  )
 })
 
 ## Test 3: error if `end_window` without `trt_end_date` ----
@@ -69,7 +71,8 @@ test_that("derive_var_trtemfl Test 3: error if `end_window` without `trt_end_dat
     paste(
       "`end_window` argument was specified but not `trt_end_date`",
       "Either both or none of them must be specified.",
-      sep = "\n"),
+      sep = "\n"
+    ),
     fixed = TRUE
   )
 })
@@ -84,7 +87,8 @@ test_that("derive_var_trtemfl Test 4: error if `initial_intensity` without `inte
     paste(
       "`initial_intensity` argument was specified but not `intensity`",
       "Either both or none of them must be specified.",
-      sep = "\n"),
+      sep = "\n"
+    ),
     fixed = TRUE
   )
 })
@@ -99,7 +103,8 @@ test_that("derive_var_trtemfl Test 5: error if `intensity` without `initial_inte
     paste(
       "`intensity` argument was specified but not `initial_intensity`",
       "Either both or none of them must be specified.",
-      sep = "\n"),
+      sep = "\n"
+    ),
     fixed = TRUE
   )
 })
