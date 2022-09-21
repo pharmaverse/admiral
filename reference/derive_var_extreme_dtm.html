@@ -12,7 +12,7 @@ the last known alive datetime (LSTALVDTM)."><meta property="og:image" content="h
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,6 @@ the last known alive datetime (LSTALVDTM)."><meta property="og:image" content="h
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -125,8 +124,9 @@ for the first or last date</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The following steps are performed to create the output dataset:</p><ol><li><p>For each source dataset the observations as specified by the <code>filter</code>
-element are selected. Then for each patient the first or last observation
-(with respect to <code>date</code> and <code>mode</code>) is selected.</p></li>
+element are selected and observations where <code>date</code> is <code>NA</code> are removed.
+Then for each patient the first or last observation (with respect to <code>date</code>
+and <code>mode</code>) is selected.</p></li>
 <li><p>The new variable is set to the variable specified by the <code>date</code> element.
 If this is a date variable (rather than datetime), then the time is imputed
 as <code>"00:00:00"</code>.</p></li>
