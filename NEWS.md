@@ -1,3 +1,8 @@
+# admiral 0.8.1
+
+- `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` were updated such
+that source observations where the date is `NA` are excluded (#1419)
+
 # admiral 0.8.0
 
 ## New Features
