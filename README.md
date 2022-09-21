@@ -42,7 +42,7 @@ Phases:
 
 | Release Schedule | Phase 1- Date and Packages | Phase 2- Date and Packages | Phase 3- Date and Packages |
 | ---------------- | -------------------------- | -------------------------- | -------------------------- |
-| Q4-2022          | November 28th              | December 5th               | December 12th             |
+| Q4-2022          | November 28th              | December 5th               | December 12th              |
 |                  | `{admiraldev}`             | `{admiral}`                | `{admiralonco}`            |
 |                  | `{admiral.test}`           |                            |                            |
 | Q1-2023          | February 27th              | March 6th                  | March 12th                 |
