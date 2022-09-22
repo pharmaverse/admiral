@@ -2,6 +2,9 @@
 
 ## New Features
 
+- A `print()` method was added for all S3 objects defined by admiral, e.g.,
+`date_source()`, `dthcaus_source()`, ... (#858)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
@@ -9,6 +12,11 @@
 ## Documentation
 
 ## Various
+
+# admiral 0.8.1
+
+- `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` were updated such
+that source observations where the date is `NA` are excluded (#1419)
 
 # admiral 0.8.0
 
