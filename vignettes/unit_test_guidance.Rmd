@@ -123,8 +123,8 @@ Don’t forget to add a unit test for each exported function.
 
 ## Set up the Test Script
 
-Within {admiral} folder https://github.com/pharmaverse/admiral/tree/main/tests/testthat, 
-add a script with the naming convention “test-\<script_containing_function\>.R”.,
+Within the {admiral} folder https://github.com/pharmaverse/admiral/tree/main/tests/testthat, 
+add a script with the naming convention `test-\<script_containing_function\>.R`.,
 the unit test script can be created from the console also, as follows: 
 
 ```
@@ -135,9 +135,8 @@ the testing framework used is testthat and has the following format :
 ```
 ## Test 1: <Explanation of the test> ----
 test_that("<function_name> Test 1: <Explanation of the test>", {
-  library(tibble)
   
-  input <- tribble(
+  input <- tibble::tribble(
     ~inputvar1, ~inputvar2, ...
     <Add Test Data Scenarios>
     ...
@@ -150,22 +149,21 @@ test_that("<function_name> Test 1: <Explanation of the test>", {
 })
 ```
 
-For example, if you are testing a function called my_new_func that is contained 
-in script all_funcs.R then from console use:
+For example, if you are testing a function called `my_new_func` that is contained 
+in script `all_funcs.R` then from console use:
 
 ```
 usethis::use_test("all_funcs")
 ```
 
-Open the newly created file "test-all_funcs.R" and use the following format:
+Open the newly created file `test-all_funcs.R`  and use the following format:
 
 ```
 # my_new_func ----
 ## Test 1: <Explanation of the test> ----
 test_that("my_new_func Test 1: <Explanation of the test>", {
-  library(tibble)
   
-  input <- tribble(
+  input <- tibble::tribble(
     ~inputvar1, ~inputvar2, ...
     <Add Test Data Scenarios>
     ...
@@ -176,7 +174,7 @@ test_that("my_new_func Test 1: <Explanation of the test>", {
   expect_dfs_equal(<function name>(input), expected_output)
 })
 ```
-**Note**: When comparing datasets in {admiral} we use function `expect_dfs_equal()`. 
+**Note**: When comparing datasets in `{admiral}` we use function `expect_dfs_equal()`. 
 
 The input and expected output for the unit tests must follow the following rules:
 
@@ -184,7 +182,7 @@ The input and expected output for the unit tests must follow the following rules
 * Values should be hard-coded whenever possible.
 * If values need to be derived, only unit tested functions can be used.
 
-If a dataset needs to be created for testing purpose, it should be done so using the function `tribble()` (specify `library(tibble)` before calling this function). 
+If a dataset needs to be created for testing purpose, it should be done so using the function `tribble()` from the `tibble` package with the following command `tibble::tribble(<data here>)`.
 Make sure to align columns as well. This ensures quick code readability.
 
 Ensure you give a meaningful explanation of the test in the testthat call, as 
@@ -197,20 +195,23 @@ The comments ending with `----` create entries in the TOC in RStudio.
 knitr::include_graphics("./unit_test_toc.png")
 ```
 
-For adding and updating these comments and (re)numbering the tests the "Format
-test_that test file" addin can be called.
+
+## Addin admiraldev::format_test_that_file()
+
+To ease the burden on developers for writing and adding tests we have developed an Addin for formatting test_that test files according to admiral programming standards. The Addin will add and update comments as well as number or re-numbers the tests. Just use the Addin button and select the "Format
+test_that test file" as seen in the image.  Be sure to have the test-file open and selected when calling the Addin.
 
 ```{r echo=FALSE, out.width='120%'}
 knitr::include_graphics("./unit_test_format_tests.png")
 ```
 
-The addin
+The Addin will perform the following:
 
-- updates or adds the number of the tests in the comments and in the
-`test_that()` call,
-- updates the comments based on the description provided in the `test_that()`
-call,
-- updates the function name in the `test_that()` call. The function name is
+- Updates or adds the number of the tests in the comments and in the
+`test_that()` call
+- Updates the comments based on the description provided in the `test_that()`
+call
+- Updates the function name in the `test_that()` call. The function name is
 extracted from the last `# <function name> ----` comment before the
 `test_that()` call. If a test file tests more than one function, such comments
 should be added before the first test of each function. If a test files tests a

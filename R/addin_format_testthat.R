@@ -97,7 +97,7 @@ prepare_test_that_file <- function(path) {
   list(file_content = file_content_new)
 }
 
-# Function for the RStudio Addin, see inst/rstudio/addins.dcf.
+# Function for the RStudio Addin, see inst/rstudio/format_tests.dcf.
 # Wrapper of prepare_test_that_file.
 format_test_that_file <- function() {
   file_info <- rstudioapi::getActiveDocumentContext()
