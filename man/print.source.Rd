@@ -22,13 +22,12 @@ Print \code{source} Objects
 print(death_event)
 }
 \seealso{
-Other internal: 
-\code{\link{admiral}},
+Utilities for printing: 
 \code{\link{print.adam_templates}()},
 \code{\link{print_named_list}()}
 }
 \author{
 Stefan Bundfuss
 }
-\concept{internal}
-\keyword{internal}
+\concept{utils_print}
+\keyword{utils_print}

@@ -188,8 +188,8 @@ yn_to_numeric <- function(arg) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords internal
-#' @family internal
+#' @keywords utils_print
+#' @family utils_print
 #'
 #' @export
 #'
@@ -217,8 +217,8 @@ print.source <- function(x, ...) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords internal
-#' @family internal
+#' @keywords utils_print
+#' @family utils_print
 #'
 #' @export
 #'

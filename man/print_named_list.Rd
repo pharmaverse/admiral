@@ -22,13 +22,12 @@ Print Named List
 print_named_list(death_event)
 }
 \seealso{
-Other internal: 
-\code{\link{admiral}},
+Utilities for printing: 
 \code{\link{print.adam_templates}()},
 \code{\link{print.source}()}
 }
 \author{
 Stefan Bundfuss
 }
-\concept{internal}
-\keyword{internal}
+\concept{utils_print}
+\keyword{utils_print}
