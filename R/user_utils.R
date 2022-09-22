@@ -210,8 +210,9 @@ print.source <- function(x, ...) {
 #' Print Named List
 #'
 #' @param list A named list
-#' @param ... If `indent = <numeric value>` is specified the output is indented
-#'   by the specified number of characters.
+#' @param indent Indent
+#'
+#'   The output is indented by the specified number of characters.
 #'
 #' @return No return value, called for side effects
 #'
