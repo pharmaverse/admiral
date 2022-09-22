@@ -24,12 +24,12 @@ print(templates)
 \seealso{
 \code{\link[=list_all_templates]{list_all_templates()}}
 
-Other internal: 
-\code{\link{admiral}},
-\code{\link{print.tte_source}()}
+Utilities for printing: 
+\code{\link{print.source}()},
+\code{\link{print_named_list}()}
 }
 \author{
 Thomas Neitmann
 }
-\concept{internal}
-\keyword{internal}
+\concept{utils_print}
+\keyword{utils_print}
