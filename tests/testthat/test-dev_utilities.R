@@ -19,29 +19,37 @@ test_that("`convert_dtm_to_dtc` Error is thrown if dtm is not in correct format"
   )
 })
 
-test_that("input is returned as is if filter is NULL", {
-  input <- tibble::tribble(
+test_that("filter_if Test 1 : Input is returned as is if filter is NULL", {
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
     "P01", "WEIGHT", 80.9,
     "P01", "HEIGHT", 189.2
   )
 
+  expected_output = input
+
   expect_dfs_equal(
-    input,
+    expected_output,
     filter_if(input, quo(NULL)),
     keys = c("USUBJID", "VSTESTCD")
   )
 })
 
-test_that("input is filtered if filter is not NULL", {
-  input <- tibble::tribble(
+test_that("filter_if Test 2 : Input is filtered if filter is not NULL", {
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
     "P01", "WEIGHT", 80.9,
     "P01", "HEIGHT", 189.2
   )
 
+  expected_output = input[1L, ]
+
   expect_dfs_equal(
-    input[1L, ],
+    expected_output,
     filter_if(input, quo(VSTESTCD == "WEIGHT")),
     keys = c("USUBJID", "VSTESTCD")
   )
