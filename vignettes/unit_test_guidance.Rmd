@@ -123,9 +123,9 @@ Don’t forget to add a unit test for each exported function.
 
 ## Set up the Test Script
 
-Within the {admiral} folder https://github.com/pharmaverse/admiral/tree/main/tests/testthat, 
-add a script with the naming convention `test-\<script_containing_function\>.R`.,
-the unit test script can be created from the console also, as follows: 
+Within the `tests/testthat` folder of the project, add a script with the naming
+convention `test-<script_containing_function>.R`., the unit test script can be
+created from the console also, as follows:
 
 ```
 usethis::use_test("<script_containing_function>")
@@ -196,7 +196,7 @@ knitr::include_graphics("./unit_test_toc.png")
 ```
 
 
-## Addin admiraldev::format_test_that_file()
+## Addin `admiraldev::format_test_that_file()`
 
 To ease the burden on developers for writing and adding tests we have developed an Addin for formatting test_that test files according to admiral programming standards. The Addin will add and update comments as well as number or re-numbers the tests. Just use the Addin button and select the "Format
 test_that test file" as seen in the image.  Be sure to have the test-file open and selected when calling the Addin.
