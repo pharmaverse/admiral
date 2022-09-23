@@ -1,7 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.8.0
+Version: 0.9.0
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
@@ -49,7 +49,7 @@ Authors@R: c(
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
     )
-Description: A toolbox for programming Clinical Data Standards Interchange Consortium
+Description: A toolbox for programming Clinical Data Interchange Standards Consortium
     (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
     mandatory part of any New Drug or Biologics License Application submitted to the
     United States Food and Drug Administration (FDA). Analysis derivations are
@@ -57,7 +57,7 @@ Description: A toolbox for programming Clinical Data Standards Interchange Conso
     (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
 Language: en-US
 License: Apache License (>= 2)
-URL: https://pharmaverse.github.io/admiral, https://github.com/pharmaverse/admiral
+URL: https://pharmaverse.github.io/admiral/, https://github.com/pharmaverse/admiral
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -65,17 +65,17 @@ RoxygenNote: 7.2.0
 Depends: R (>= 3.5)
 Imports:
     admiraldev,
-    assertthat,
-    dplyr,
-    hms,
-    lifecycle,
-    lubridate,
-    magrittr,
-    purrr,
-    rlang,
-    stringr,
-    tidyr,
-    tidyselect
+    assertthat (>= 0.2.1),
+    dplyr (>= 0.8.4),
+    hms (>= 0.5.3),
+    lifecycle (>= 0.1.0),
+    lubridate (>= 1.7.4),
+    magrittr (>= 1.5),
+    purrr (>= 0.3.3),
+    rlang (>= 0.4.4),
+    stringr (>= 1.4.0),
+    tidyr (>= 1.0.2),
+    tidyselect (>= 1.0.0)
 Suggests:
     admiral.test,
     covr,

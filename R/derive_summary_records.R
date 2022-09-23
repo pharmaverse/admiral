@@ -51,8 +51,8 @@
 #'
 #' @return A data frame with derived records appended to original dataset.
 #'
-#' @family der_bds_findings
-#' @keywords der_bds_findings
+#' @family der_prm_bds_findings
+#' @keywords der_prm_bds_findings
 #'
 #' @seealso `get_summary_records()`
 #'

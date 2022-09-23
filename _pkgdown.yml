@@ -32,12 +32,8 @@ reference:
   desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
 - contents:
   - has_keyword("der_occds")
-# - subtitle: TTE-specific
-#   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
-# - contents:
-#   - has_keyword("der_tte")
 
-- title: Derivations for Adding Parameters
+- title: Derivations for Adding Parameters/Records
 - subtitle: BDS-specific
 - contents:
   - has_keyword("der_prm_bds_findings")
@@ -88,7 +84,9 @@ reference:
 - subtitle: Utilities used for Examples and Template Scripts
 - contents:
   - has_keyword('utils_examples')
-
+- subtitle: Utilities for Printing
+- contents:
+  - has_keyword('utils_print')
 
 - title: Example Datasets
   desc: You can run `use_ad_template()` to produce additional datasets

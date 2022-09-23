@@ -75,7 +75,6 @@ adae \%>\%
 
 Higher Order Functions: 
 \code{\link{derivation_slice}()},
-\code{\link{print.derivation_slice}()},
 \code{\link{restrict_derivation}()},
 \code{\link{slice_derivation}()}
 }
