@@ -123,16 +123,16 @@ adsl_02 <- adsl_01 %>%
     filter_add  = DSDECOD == "RANDOMIZED",
     by_vars     = vars(STUDYID, USUBJID),
     new_vars    = vars(RANDDT = DSSTDT)
-  ) 
+  )
 ```
 
 This call would return the input dataframe with the column `RANDDT` added. 
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  dataset      = adsl_02, 
+  dataset      = adsl_02,
   display_vars = vars(USUBJID, RANDDT)
-  )
+)
 ```
 
 Note: Only USUBJID, RANDDT are printed.
@@ -175,7 +175,7 @@ adsl_03 <- dm %>%
     order       = vars(EXSTDTM, EXSEQ),
     mode        = "first",
     by_vars     = vars(STUDYID, USUBJID)
-  ) %>% 
+  ) %>%
   derive_vars_merged(
     dataset_add = ex_ext,
     filter_add  = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & !is.na(EXENDTM),
@@ -191,9 +191,9 @@ added.
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  dataset      = adsl_03, 
+  dataset      = adsl_03,
   display_vars = vars(USUBJID, TRTSDTM, TRTSTMF, TRTEDTM, TRTETMF)
-  )
+)
 ```
 
 Note: Only USUBJID, TRTSDTM, TRTSTMF, TRTEDTM, TRTETMF are printed.
@@ -208,23 +208,23 @@ suite of parameters (columns starting with 'PAR'):
  
 ```{r eval=TRUE}
 param_lookup <- tribble(
-  ~VSTESTCD, ~PARAMCD, ~PARAM,                           ~PARAMN, ~PARCAT1,                 ~PARCAT1N,
-  "HEIGHT",  "HEIGHT", "Height (cm)",                     1,      "Subject Characteristic", 1,
-  "WEIGHT",  "WEIGHT", "Weight (kg)",                     2,      "Subject Characteristic", 1,
-  "DIABP",   "DIABP",  "Diastolic Blood Pressure (mmHg)", 3,      "Vital Sign",             2,
-  "MAP",     "MAP",    "Mean Arterial Pressure (mmHg)",   4,      "Vital Sign",             2,
-  "BSA",     "BSA",    "Body Surface Area (m^2)",         5,      "Vital Sign",             2,
-  "PULSE",   "PULSE",  "Pulse Rate (beats/min)",          6,      "Vital Sign",             2,
-  "SYSBP",   "SYSBP",  "Systolic Blood Pressure (mmHg)",  7,      "Vital Sign",             2,
-  "TEMP",    "TEMP",   "Temperature (C)",                 8,      "Vital Sign",             2
+  ~VSTESTCD, ~PARAMCD, ~PARAM, ~PARAMN, ~PARCAT1, ~PARCAT1N,
+  "HEIGHT", "HEIGHT", "Height (cm)", 1, "Subject Characteristic", 1,
+  "WEIGHT", "WEIGHT", "Weight (kg)", 2, "Subject Characteristic", 1,
+  "DIABP", "DIABP", "Diastolic Blood Pressure (mmHg)", 3, "Vital Sign", 2,
+  "MAP", "MAP", "Mean Arterial Pressure (mmHg)", 4, "Vital Sign", 2,
+  "BSA", "BSA", "Body Surface Area (m^2)", 5, "Vital Sign", 2,
+  "PULSE", "PULSE", "Pulse Rate (beats/min)", 6, "Vital Sign", 2,
+  "SYSBP", "SYSBP", "Systolic Blood Pressure (mmHg)", 7, "Vital Sign", 2,
+  "TEMP", "TEMP", "Temperature (C)", 8, "Vital Sign", 2
 )
 
-advs_01 <- vs %>% 
+advs_01 <- vs %>%
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars    = vars(PARAMCD, PARAM, PARAMN, PARCAT1, PARCAT1N),
     by_vars     = vars(VSTESTCD)
-    )
+  )
 ```
 
 This call would return the input dataframe with columns `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1` and
@@ -232,11 +232,11 @@ This call would return the input dataframe with columns `PARAMCD`, `PARAM`, `PAR
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  dataset      = advs_01, 
+  dataset = advs_01,
   display_vars = vars(USUBJID, VISIT, VSTPT, VSDTC, VSTESTCD, VSPOS, PARAMCD, PARAM, PARAMN, PARCAT1, PARCAT1N),
-  filter       = USUBJID == "01-701-1111" & VSPOS == "STANDING" & 
-                 VSTPT == "AFTER STANDING FOR 1 MINUTE" & VSBLFL == "Y"
-  )
+  filter = USUBJID == "01-701-1111" & VSPOS == "STANDING" &
+    VSTPT == "AFTER STANDING FOR 1 MINUTE" & VSBLFL == "Y"
+)
 ```
 
 Note: Data on this output are restricted to baseline vital signs for one subject only for vitals in
@@ -303,7 +303,7 @@ wgt_cat <- function(wgt) {
   )
 }
 
-adsl_04 <- dm %>% 
+adsl_04 <- dm %>%
   derive_var_merged_cat(
     dataset_add = vs,
     by_vars     = vars(STUDYID, USUBJID),
@@ -318,9 +318,9 @@ adsl_04 <- dm %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  dataset      = adsl_04, 
+  dataset      = adsl_04,
   display_vars = vars(STUDYID, USUBJID, WGTBLCAT)
-  )
+)
 ```
 
 Note: Only STUDYID, USUBJID, WGTBLCAT are printed.
@@ -365,9 +365,9 @@ adsl_05 <- dm %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  dataset      = adsl_05, 
+  dataset      = adsl_05,
   display_vars = vars(STUDYID, USUBJID, SAFFL)
-  )
+)
 ```
 
 Note: Only STUDYID, USUBJID, SAFFL are printed.
@@ -415,9 +415,9 @@ adsl_06 <- adsl_05 %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  dataset      = adsl_06, 
+  dataset      = adsl_06,
   display_vars = vars(STUDYID, USUBJID, DISPSTAT)
-  )
+)
 ```
 
 Note: Only STUDYID, USUBJID, DISPSTAT are printed.
