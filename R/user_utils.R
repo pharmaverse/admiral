@@ -85,6 +85,29 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
   x
 }
 
+#' Turn a Character Vector into a List of Quosures
+#'
+#' @param chr A character vector
+#'
+#' @return A `list` of `quosures` as returned by [`vars()`]
+#'
+#' @author Stefan Bundfuss
+#'
+#' @export
+#'
+#' @keywords utils_quo
+#' @family utils_quo
+#'
+#' @examples
+#' chr2vars(c("USUBJID", "AVAL"))
+chr2vars <- function(chr) {
+  assert_character_vector(chr)
+  rlang::set_names(
+    quos(!!!syms(chr)),
+    names(chr)
+  )
+}
+
 #' Get One to Many Values that Led to a Prior Error
 #'
 #' @export

@@ -66,7 +66,7 @@ Depends: R (>= 3.5)
 Imports:
     admiraldev,
     assertthat (>= 0.2.1),
-    dplyr (>= 0.8.4),
+    dplyr (>= 1.0.0),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
     lubridate (>= 1.7.4),
@@ -75,7 +75,7 @@ Imports:
     rlang (>= 0.4.4),
     stringr (>= 1.4.0),
     tidyr (>= 1.0.2),
-    tidyselect (>= 1.0.0)
+    tidyselect (>= 1.1.0)
 Suggests:
     admiral.test,
     covr,
