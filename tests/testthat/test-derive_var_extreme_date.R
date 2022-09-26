@@ -1,28 +1,25 @@
-library(tibble)
-library(lubridate)
-library(dplyr)
-adsl <- tribble(
+adsl <- tibble::tribble(
   ~STUDYID,  ~USUBJID, ~TRTEDTM,                       ~DTHDTC,
-  "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"), NA_character_,
+  "STUDY01", "1",      lubridate::ymd_hms("2020-01-01T12:00:00"), NA_character_,
   "STUDY01", "2",      NA,                             "2020-06",
-  "STUDY01", "3",      ymd_hms("2020-04-12T13:15:00"), NA_character_
+  "STUDY01", "3",      lubridate::ymd_hms("2020-04-12T13:15:00"), NA_character_
 ) %>%
-  mutate(
-    DTHDT = c(ymd(""), ymd("2020-06-01"), ymd(""))
+  dplyr::mutate(
+    DTHDT = c(lubridate::ymd(""), lubridate::ymd("2020-06-01"), lubridate::ymd(""))
   )
 
-ae <- tribble(
+ae <- tibble::tribble(
   ~STUDYID,  ~USUBJID, ~AESTDTC,     ~AEENDTC,      ~AESEQ,
   "STUDY01", "1",      "2019-11-01", "2019-11-23",  1,
   "STUDY01", "1",      "2020-02-01", "2020-02-01",  2,
   "STUDY01", "3",      "2020-02-02", "2020-02-03",  1,
   "STUDY01", "3",      "2020-04-11", NA_character_, 2
 ) %>%
-  mutate(
-    AESTDT = ymd(AESTDTC),
-    AEENDT = ymd(AEENDTC),
-    AESTDTM = ymd_hms(paste(AESTDTC, "12:00:00")),
-    AEENDTM = ymd_hms(if_else(is.na(AEENDTC), "", paste(AEENDTC, "12:00:00")))
+  dplyr::mutate(
+    AESTDT = lubridate::ymd(AESTDTC),
+    AEENDT = lubridate::ymd(AEENDTC),
+    AESTDTM = lubridate::ymd_hms(paste(AESTDTC, "12:00:00")),
+    AEENDTM = lubridate::ymd_hms(if_else(is.na(AEENDTC), "", paste(AEENDTC, "12:00:00")))
   )
 
 # derive_var_extreme_dt ----
@@ -49,7 +46,7 @@ test_that("derive_var_extreme_dt Test 1: LSTALVDT is derived", {
     filter = nchar(DTHDTC) >= 10
   )
 
-  expected_output <- adsl %>% mutate(LSTALVDT = c(ymd("2020-02-01"), NA, ymd("2020-04-12")))
+  expected_output <- adsl %>% dplyr::mutate(LSTALVDT = c(lubridate::ymd("2020-02-01"), NA, lubridate::ymd("2020-04-12")))
 
   actual_output <- derive_var_extreme_dt(
     adsl,
@@ -70,11 +67,11 @@ test_that("derive_var_extreme_dt Test 1: LSTALVDT is derived", {
 test_that("derive_var_extreme_dt Test 2: LSTALVDT is derived for Date class as well", {
   adsl <- tibble::tribble(
     ~STUDYID,  ~USUBJID, ~TRTEDTM,
-    "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"),
-    "STUDY01", "2",      as.POSIXct(ymd("2020-02-03")),
-    "STUDY01", "3",      ymd_hms("2020-04-12T13:15:00")
+    "STUDY01", "1",      lubridate::ymd_hms("2020-01-01T12:00:00"),
+    "STUDY01", "2",      as.POSIXct(lubridate::ymd("2020-02-03")),
+    "STUDY01", "3",      lubridate::ymd_hms("2020-04-12T13:15:00")
   ) %>%
-    mutate(TRTEDTM = as.Date(TRTEDTM))
+    dplyr::mutate(TRTEDTM = as.Date(TRTEDTM))
 
   adsl_trtdate <- date_source(
     dataset_name = "adsl",
@@ -82,7 +79,7 @@ test_that("derive_var_extreme_dt Test 2: LSTALVDT is derived for Date class as w
   )
 
   expected_output <- adsl %>%
-    mutate(LSTALVDT = c(ymd("2020-01-01"), ymd("2020-02-03"), ymd("2020-04-12")))
+    dplyr::mutate(LSTALVDT = c(lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-03"), lubridate::ymd("2020-04-12")))
 
   actual_output <- derive_var_extreme_dt(
     adsl,
@@ -106,7 +103,7 @@ test_that("derive_var_extreme_dt Test 3: `NA` dates are excluded", {
     date = AEENDTM
   )
 
-  expected_output <- adsl %>% mutate(LSTALVDT = c(ymd("2020-02-01"), NA, ymd("2020-02-03")))
+  expected_output <- adsl %>% dplyr::mutate(LSTALVDT = c(lubridate::ymd("2020-02-01"), NA, lubridate::ymd("2020-02-03")))
 
   actual_output <- derive_var_extreme_dt(
     adsl,
@@ -168,8 +165,8 @@ test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables
   )
 
   expected_output <- adsl %>%
-    mutate(
-      LSTALVDTM = c(ymd_hms("2020-02-01T12:00:00"), NA, ymd_hms("2020-04-12T13:15:00")),
+    dplyr::mutate(
+      LSTALVDTM = c(lubridate::ymd_hms("2020-02-01T12:00:00"), NA, lubridate::ymd_hms("2020-04-12T13:15:00")),
       LALVDOM = c("AE", NA_character_, "ADSL"),
       LALVSEQ = c(2, NA_integer_, NA_integer_),
       LALVVAR = c("AEENDTC", NA_character_, "TRTEDTM")
