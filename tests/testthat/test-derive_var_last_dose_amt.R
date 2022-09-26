@@ -1,8 +1,8 @@
-library(tibble)
-library(dplyr)
-library(lubridate)
+#library(tibble)
+#library(dplyr)
+#library(lubridate)
 
-input_ae <- tribble(
+input_ae <- tibble::tribble(
   ~STUDYID,   ~USUBJID,   ~AESEQ, ~AESTDTC,
   "my_study", "subject1", 1,      "2020-01-02",
   "my_study", "subject1", 2,      "2020-08-31",
@@ -12,11 +12,11 @@ input_ae <- tribble(
   "my_study", "subject3", 1,      "2020-03-02",
   "my_study", "subject4", 1,      "2020-11-02"
 ) %>%
-  mutate(
-    AESTDT = ymd(AESTDTC)
+  dplyr::mutate(
+    AESTDT = lubridate::ymd(AESTDTC)
   )
 
-input_ex <- tribble(
+input_ex <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
   "my_study", "subject1", "2020-01-01", "2020-01-01", 1, 10, "treatment",
   "my_study", "subject1", "2020-08-29", "2020-08-29", 2, 10, "treatment",
@@ -26,7 +26,7 @@ input_ex <- tribble(
   "my_study", "subject2", "2020-01-20", "2020-01-20", 2, 0, "placebo",
   "my_study", "subject3", "2020-03-15", "2020-03-15", 1, 10, "treatment"
 ) %>%
-  mutate(
+  dplyr::mutate(
     EXSTDT = as.Date(EXSTDTC),
     EXENDT = as.Date(EXENDTC)
   )
@@ -34,7 +34,7 @@ input_ex <- tribble(
 # derive_var_last_dose_amt ----
 ## Test 1: works as expected ----
 test_that("derive_var_last_dose_amt Test 1: works as expected", {
-  expected_output <- mutate(
+  expected_output <- dplyr::mutate(
     input_ae,
     LDOSE = c(10, 10, 10, NA, 0, NA, NA)
   )
@@ -57,7 +57,7 @@ test_that("derive_var_last_dose_amt Test 1: works as expected", {
 
 ## Test 2: returns traceability vars ----
 test_that("derive_var_last_dose_amt Test 2: returns traceability vars", {
-  expected_output <- mutate(
+  expected_output <- dplyr::mutate(
     input_ae,
     LDOSEDOM = c("EX", "EX", "EX", NA, "EX", NA, NA),
     LDOSESEQ = c(1, 2, 3, NA, 2, NA, NA),
