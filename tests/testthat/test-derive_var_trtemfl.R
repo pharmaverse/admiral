@@ -36,8 +36,8 @@ expected <- tribble(
 
 adae <- select(expected, -starts_with("TRTEM"))
 
-## Test 1: without end_window and worsening ----
-test_that("derive_var_trtemfl Test 1: without end_window and worsening", {
+## Test 1: end_window and worsening parameters not specfied ----
+test_that("derive_var_trtemfl Test 1: end_window and worsening parameters not specfied", {
   expect_dfs_equal(
     base = select(expected, -TRTEM2FL),
     comp = derive_var_trtemfl(adae),
