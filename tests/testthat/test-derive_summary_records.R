@@ -1,9 +1,6 @@
-library(tibble)
-library(dplyr)
-
 test_that("creates a new record for each group and new data frame retains grouping", {
   # group --> 4
-  input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
+  input <- tibble::tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
   actual_output <- input %>%
     derive_summary_records(
       by_vars = vars(x, y),
@@ -16,14 +13,14 @@ test_that("creates a new record for each group and new data frame retains groupi
 })
 
 test_that("`fns` as inlined", {
-  input <- tibble(x = rep(1:2, each = 2), y = 9:12, z = 101:104)
+  input <- tibble::tibble(x = rep(1:2, each = 2), y = 9:12, z = 101:104)
   actual_output <- derive_summary_records(
     input,
     by_vars = vars(x),
     analysis_var = y,
     summary_fun = function(x) mean(x, na.rm = TRUE)
   )
-  expected_output <- tibble(
+  expected_output <- tibble::tibble(
     x = rep(1:2, each = 3),
     y = c(9:10, 9.5, 11:12, 11.5),
     z = c(101:102, NA, 103:104, NA)
@@ -33,7 +30,7 @@ test_that("`fns` as inlined", {
 })
 
 test_that("set new value to a derived record", {
-  input <- tibble(x = rep(1:2, each = 2), y = 9:12)
+  input <- tibble::tibble(x = rep(1:2, each = 2), y = 9:12)
   actual_output <- derive_summary_records(
     input,
     by_vars = vars(x),
@@ -41,7 +38,7 @@ test_that("set new value to a derived record", {
     summary_fun = mean,
     set_values_to = vars(z = "MEAN")
   )
-  expected_output <- tibble(
+  expected_output <- tibble::tibble(
     x = rep(1:2, each = 3),
     y = c(9:10, 9.5, 11:12, 11.5),
     z = c(NA, NA, "MEAN", NA, NA, "MEAN")
@@ -51,7 +48,7 @@ test_that("set new value to a derived record", {
 })
 
 test_that("check `set_values_to` mapping", {
-  input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
+  input <- tibble::tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
   actual_output <- input %>%
     derive_summary_records(
       by_vars = vars(x, y),
@@ -86,7 +83,7 @@ test_that("check `set_values_to` mapping", {
 })
 
 test_that("Filter record within `by_vars`", {
-  input <- tibble(x = c(rep(1:2, each = 2), 2), y = 9:13, z = c(1, 1, 2, 1, 1))
+  input <- tibble::tibble(x = c(rep(1:2, each = 2), 2), y = 9:13, z = c(1, 1, 2, 1, 1))
 
   actual_output <- derive_summary_records(
     input,
@@ -96,7 +93,7 @@ test_that("Filter record within `by_vars`", {
     filter = n() > 2,
     set_values_to = vars(d = "MEAN")
   )
-  expected_output <- tibble(
+  expected_output <- tibble::tibble(
     x = c(rep(1, 2), rep(2, 4)),
     y = c(9:13, 12),
     z = c(1, 1, 2, 1, 1, NA),
@@ -113,7 +110,7 @@ test_that("Filter record within `by_vars`", {
     filter = z == 1,
     set_values_to = vars(d = "MEAN")
   )
-  expected_output <- tibble(
+  expected_output <- tibble::tibble(
     x = c(rep(1, 3), rep(2, 4)),
     y = c(9:10, 9.5, 11:13, 12.5),
     z = c(1, 1, NA, 2, 1, 1, NA),
@@ -126,7 +123,7 @@ test_that("Filter record within `by_vars`", {
 # Errors ---
 
 test_that("Errors", {
-  input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
+  input <- tibble::tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
 
   # Is by_vars quosures/`vars()` object?
   expect_error(
