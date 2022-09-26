@@ -1,3 +1,4 @@
+
 data <- tibble::tribble(
   ~USUBJID, ~AVISITN, ~AVALC,
   "1",      1,        "PR",
