@@ -488,7 +488,7 @@ The documentation will be updated at:
 
 + the description level for a function, 
 + the keywords will be replaced with `deprecated`
-+ the @family roxygen tag will be removed
++ the @family roxygen tag will become `deprecated`
 
     ```{r, eval=FALSE}
 #' Title of the function
@@ -498,6 +498,8 @@ The documentation will be updated at:
 #'
 #' This function is *deprecated*, please use `new_fun()` instead.
 #' .
+#' @family deprecated
+#' 
 #' @keywords deprecated
 #' .
     ``` 
