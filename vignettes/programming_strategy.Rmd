@@ -499,7 +499,7 @@ The documentation will be updated at:
 #' This function is *deprecated*, please use `new_fun()` instead.
 #' .
 #' @family deprecated
-#' 
+#'
 #' @keywords deprecated
 #' .
     ``` 
