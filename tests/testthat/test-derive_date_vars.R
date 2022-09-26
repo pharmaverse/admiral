@@ -1,6 +1,3 @@
-library(lubridate)
-library(dplyr)
-
 input <- c(
   "2019-07-18T15:25:40.243",
   "2019-07-18T15:25:40",
@@ -208,14 +205,14 @@ test_that("impute_dtc_dtm Test 8: min_dates parameter works", {
     impute_dtc_dtm(c("2020-12", "2020-11", NA_character_),
       min_dates = list(
         c(
-          ymd_hms("2020-12-06T12:12:12"),
+          lubridate::ymd_hms("2020-12-06T12:12:12"),
           NA,
           NA
         ),
         c(
-          ymd_hms("2020-11-11T11:11:11"),
-          ymd_hms("2020-11-11T11:11:11"),
-          ymd_hms("2020-11-11T11:11:11")
+          lubridate::ymd_hms("2020-11-11T11:11:11"),
+          lubridate::ymd_hms("2020-11-11T11:11:11"),
+          lubridate::ymd_hms("2020-11-11T11:11:11")
         )
       ),
       highest_imputation = "Y",
@@ -230,8 +227,8 @@ test_that("impute_dtc_dtm Test 9: max_dates parameter works", {
   expect_equal(
     impute_dtc_dtm(c("2020-12", "2020-11", NA_character_, "2020-02-02"),
       max_dates = list(
-        c(ymd_hms("2020-12-06T12:12:12"), NA, ymd_hms("2020-09-13T08:30:00"), NA),
-        c(ymd(""), ymd("2020-11-11"), ymd(""), ymd("2020-02-02"))
+        c(lubridate::ymd_hms("2020-12-06T12:12:12"), NA, lubridate::ymd_hms("2020-09-13T08:30:00"), NA),
+        c(lubridate::ymd(""), lubridate::ymd("2020-11-11"), lubridate::ymd(""), lubridate::ymd("2020-02-02"))
       ),
       highest_imputation = "Y",
       date_imputation = "last",
@@ -352,14 +349,14 @@ test_that("impute_dtc_dt Test 15: min_dates parameter works", {
       c("2020-12", "2020-11", NA_character_),
       min_dates = list(
         c(
-          ymd("2020-12-06"),
+          lubridate::ymd("2020-12-06"),
           NA,
           NA
         ),
         c(
-          ymd("2020-11-11"),
-          ymd("2020-11-11"),
-          ymd("2020-11-11")
+          lubridate::ymd("2020-11-11"),
+          lubridate::ymd("2020-11-11"),
+          lubridate::ymd("2020-11-11")
         )
       ),
       highest_imputation = "Y",
@@ -374,8 +371,8 @@ test_that("impute_dtc_dt Test 16: max_dates parameter works", {
   expect_equal(
     impute_dtc_dt(c("2020-12", "2020-11", NA_character_),
       max_dates = list(
-        c(ymd("2020-12-06"), NA, ymd("2020-09-13")),
-        c(ymd(""), ymd("2020-11-11"), ymd(""))
+        c(lubridate::ymd("2020-12-06"), NA, lubridate::ymd("2020-09-13")),
+        c(lubridate::ymd(""), lubridate::ymd("2020-11-11"), lubridate::ymd(""))
       ),
       highest_imputation = "Y",
       date_imputation = "last"
@@ -389,7 +386,7 @@ test_that("impute_dtc_dt Test 16: max_dates parameter works", {
 test_that("convert_dtc_to_dtm Test 17: Convert a complete -- DTC into a date time object", {
   expect_equal(
     convert_dtc_to_dtm("2019-07-18T15:25:52"),
-    ymd_hms("2019-07-18T15:25:52")
+    lubridate::ymd_hms("2019-07-18T15:25:52")
   )
 })
 
@@ -416,7 +413,7 @@ test_that("convert_dtc_to_dt Test 18: Convert a complete -- DTC into a date obje
 test_that("convert_date_to_dtm Test 19: Convert a complete -- DTC into a date time object", {
   expect_equal(
     convert_date_to_dtm("2019-07-18T15:25:52"),
-    ymd_hms("2019-07-18T15:25:52")
+    lubridate::ymd_hms("2019-07-18T15:25:52")
   )
 })
 
@@ -424,7 +421,7 @@ test_that("convert_date_to_dtm Test 19: Convert a complete -- DTC into a date ti
 test_that("convert_date_to_dtm Test 20: Impute incomplete -- DTC into a date time object", {
   expect_equal(
     convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59"),
-    ymd_hms("2019-07-18T23:59:59")
+    lubridate::ymd_hms("2019-07-18T23:59:59")
   )
 })
 
@@ -432,7 +429,7 @@ test_that("convert_date_to_dtm Test 20: Impute incomplete -- DTC into a date tim
 test_that("convert_date_to_dtm Test 21: Convert -- DT into a date time object", {
   expect_equal(
     convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59"),
-    ymd_hms("2019-07-18T23:59:59")
+    lubridate::ymd_hms("2019-07-18T23:59:59")
   )
 })
 
@@ -440,7 +437,7 @@ test_that("convert_date_to_dtm Test 21: Convert -- DT into a date time object", 
 test_that("convert_date_to_dtm Test 22: Keep -- DTM as the original date time object", {
   expect_equal(
     convert_date_to_dtm(ymd_hms("2019-07-18T15:25:52"), time_imputation = "23:59:59"),
-    ymd_hms("2019-07-18T15:25:52")
+    lubridate::ymd_hms("2019-07-18T15:25:52")
   )
 })
 
@@ -532,7 +529,7 @@ test_that("compute_tmf Test 24: compute TMF", {
 test_that("compute_tmf Test 25: throws ERROR when ignore_seconds_flag  = T and seconds are present", { # nolint
   expect_error(compute_tmf(
     dtc = c("2020-11-11T11:11:11", "2020-11-11T11:11"),
-    dtm = ymd_hms(c(
+    dtm = lubridate::ymd_hms(c(
       "2020-11-11T11:11:11", "2020-11-11T11:11:00"
     )),
     ignore_seconds_flag = TRUE
@@ -546,7 +543,7 @@ test_that("compute_tmf Test 26: ignore_seconds_flag  = TRUE", {
   expect_equal(
     compute_tmf(
       dtc = c("2020-11-11T11:11", "2020-11-11T11"),
-      dtm = ymd_hms(c(
+      dtm = lubridate::ymd_hms(c(
         "2020-11-11T11:11:00", "2020-11-11T11:00:00"
       )),
       ignore_seconds_flag = TRUE
@@ -684,14 +681,14 @@ input <- tibble::tribble(
 ## Test 31: default behavior ----
 test_that("derive_vars_dtm Test 31: default behavior", {
   expected_output <- tibble::tribble(
-    ~XXSTDTC,              ~ASTDTM,                        ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
-    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), "S",
-    "2019-07-18T15",       ymd_hms("2019-07-18T15:00:00"), "M",
-    "2019-07-18",          ymd_hms("2019-07-18T00:00:00"), "H",
-    "2019-02",             ymd_hms(NA),                    NA_character_,
-    "2019",                ymd_hms(NA),                    NA_character_,
-    "2019---07",           ymd_hms(NA),                    NA_character_
+    ~XXSTDTC,              ~ASTDTM,                                   ~ASTTMF,
+    "2019-07-18T15:25:40", lubridate::ymd_hms("2019-07-18T15:25:40"), NA_character_,
+    "2019-07-18T15:25",    lubridate::ymd_hms("2019-07-18T15:25:00"), "S",
+    "2019-07-18T15",       lubridate::ymd_hms("2019-07-18T15:00:00"), "M",
+    "2019-07-18",          lubridate::ymd_hms("2019-07-18T00:00:00"), "H",
+    "2019-02",             lubridate::ymd_hms(NA),                    NA_character_,
+    "2019",                lubridate::ymd_hms(NA),                    NA_character_,
+    "2019---07",           lubridate::ymd_hms(NA),                    NA_character_
   )
 
   actual_output <- derive_vars_dtm(
@@ -710,14 +707,14 @@ test_that("derive_vars_dtm Test 31: default behavior", {
 ## Test 32: date imputed to first, auto DTM/TMF ----
 test_that("derive_vars_dtm Test 32: date imputed to first, auto DTF/TMF", {
   expected_output <- tibble::tribble(
-    ~XXSTDTC,              ~ASTDTM,                        ~ASTDTF,       ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
-    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
-    "2019-07-18T15",       ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
-    "2019-07-18",          ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
-    "2019-02",             ymd_hms("2019-02-01T00:00:00"), "D",           "H",
-    "2019",                ymd_hms("2019-01-01T00:00:00"), "M",           "H",
-    "2019---07",           ymd_hms("2019-01-01T00:00:00"), "M",           "H"
+    ~XXSTDTC,              ~ASTDTM,                                   ~ASTDTF,       ~ASTTMF,
+    "2019-07-18T15:25:40", lubridate::ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
+    "2019-07-18T15:25",    lubridate::ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
+    "2019-07-18T15",       lubridate::ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
+    "2019-07-18",          lubridate::ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
+    "2019-02",             lubridate::ymd_hms("2019-02-01T00:00:00"), "D",           "H",
+    "2019",                lubridate::ymd_hms("2019-01-01T00:00:00"), "M",           "H",
+    "2019---07",           lubridate::ymd_hms("2019-01-01T00:00:00"), "M",           "H"
   )
 
   actual_output <- derive_vars_dtm(
@@ -739,13 +736,13 @@ test_that("derive_vars_dtm Test 32: date imputed to first, auto DTF/TMF", {
 test_that("derive_vars_dtm Test 33: date and time imputed to last, no DTF/TMF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~AENDTM,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"),
-    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:59"),
-    "2019-07-18T15",       ymd_hms("2019-07-18T15:59:59"),
-    "2019-07-18",          ymd_hms("2019-07-18T23:59:59"),
-    "2019-02",             ymd_hms("2019-02-28T23:59:59"),
-    "2019",                ymd_hms("2019-12-31T23:59:59"),
-    "2019---07",           ymd_hms("2019-12-31T23:59:59")
+    "2019-07-18T15:25:40", lubridate::ymd_hms("2019-07-18T15:25:40"),
+    "2019-07-18T15:25",    lubridate::ymd_hms("2019-07-18T15:25:59"),
+    "2019-07-18T15",       lubridate::ymd_hms("2019-07-18T15:59:59"),
+    "2019-07-18",          lubridate::ymd_hms("2019-07-18T23:59:59"),
+    "2019-02",             lubridate::ymd_hms("2019-02-28T23:59:59"),
+    "2019",                lubridate::ymd_hms("2019-12-31T23:59:59"),
+    "2019---07",           lubridate::ymd_hms("2019-12-31T23:59:59")
   )
 
   actual_output <- derive_vars_dtm(
@@ -768,14 +765,14 @@ test_that("derive_vars_dtm Test 33: date and time imputed to last, no DTF/TMF", 
 ## Test 34: date and time imputed to last, DTF only ----
 test_that("derive_vars_dtm Test 34: date and time imputed to last, DTF only", {
   expected_output <- tibble::tribble(
-    ~XXSTDTC,              ~AENDTM,                        ~AENDTF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
-    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:59"), NA_character_,
-    "2019-07-18T15",       ymd_hms("2019-07-18T15:59:59"), NA_character_,
-    "2019-07-18",          ymd_hms("2019-07-18T23:59:59"), NA_character_,
-    "2019-02",             ymd_hms("2019-02-28T23:59:59"), "D",
-    "2019",                ymd_hms("2019-12-31T23:59:59"), "M",
-    "2019---07",           ymd_hms("2019-12-31T23:59:59"), "M"
+    ~XXSTDTC,              ~AENDTM,                                   ~AENDTF,
+    "2019-07-18T15:25:40", lubridate::ymd_hms("2019-07-18T15:25:40"), NA_character_,
+    "2019-07-18T15:25",    lubridate::ymd_hms("2019-07-18T15:25:59"), NA_character_,
+    "2019-07-18T15",       lubridate::ymd_hms("2019-07-18T15:59:59"), NA_character_,
+    "2019-07-18",          lubridate::ymd_hms("2019-07-18T23:59:59"), NA_character_,
+    "2019-02",             lubridate::ymd_hms("2019-02-28T23:59:59"), "D",
+    "2019",                lubridate::ymd_hms("2019-12-31T23:59:59"), "M",
+    "2019---07",           lubridate::ymd_hms("2019-12-31T23:59:59"), "M"
   )
 
   actual_output <- derive_vars_dtm(
@@ -798,14 +795,14 @@ test_that("derive_vars_dtm Test 34: date and time imputed to last, DTF only", {
 ## Test 35: date imputed to MID, time to first, TMF only ----
 test_that("derive_vars_dtm Test 35: date imputed to MID, time to first, TMF only", {
   expected_output <- tibble::tribble(
-    ~XXSTDTC,              ~ASTDTM,                        ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
-    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), "S",
-    "2019-07-18T15",       ymd_hms("2019-07-18T15:00:00"), "M",
-    "2019-07-18",          ymd_hms("2019-07-18T00:00:00"), "H",
-    "2019-02",             ymd_hms("2019-02-15T00:00:00"), "H",
-    "2019",                ymd_hms("2019-06-30T00:00:00"), "H",
-    "2019---07",           ymd_hms("2019-06-07T00:00:00"), "H"
+    ~XXSTDTC,              ~ASTDTM,                                   ~ASTTMF,
+    "2019-07-18T15:25:40", lubridate::ymd_hms("2019-07-18T15:25:40"), NA_character_,
+    "2019-07-18T15:25",    lubridate::ymd_hms("2019-07-18T15:25:00"), "S",
+    "2019-07-18T15",       lubridate::ymd_hms("2019-07-18T15:00:00"), "M",
+    "2019-07-18",          lubridate::ymd_hms("2019-07-18T00:00:00"), "H",
+    "2019-02",             lubridate::ymd_hms("2019-02-15T00:00:00"), "H",
+    "2019",                lubridate::ymd_hms("2019-06-30T00:00:00"), "H",
+    "2019---07",           lubridate::ymd_hms("2019-06-07T00:00:00"), "H"
   )
 
   actual_output <- derive_vars_dtm(
@@ -828,14 +825,14 @@ test_that("derive_vars_dtm Test 35: date imputed to MID, time to first, TMF only
 ## Test 36: No re-derivation is done if --DTF variable already exists ----
 test_that("derive_vars_dtm Test 36: No re-derivation is done if --DTF variable already exists", {
   expected_output <- tibble::tribble(
-    ~XXSTDTC,              ~ASTDTM,                        ~ASTDTF,       ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
-    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
-    "2019-07-18T15",       ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
-    "2019-07-18",          ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
-    "2019-02",             ymd_hms("2019-02-01T00:00:00"), "D",           "H",
-    "2019",                ymd_hms("2019-01-01T00:00:00"), "MD",          "H",
-    "2019---07",           ymd_hms("2019-01-01T00:00:00"), "M",           "H"
+    ~XXSTDTC,              ~ASTDTM,                                   ~ASTDTF,       ~ASTTMF,
+    "2019-07-18T15:25:40", lubridate::ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
+    "2019-07-18T15:25",    lubridate::ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
+    "2019-07-18T15",       lubridate::ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
+    "2019-07-18",          lubridate::ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
+    "2019-02",             lubridate::ymd_hms("2019-02-01T00:00:00"), "D",           "H",
+    "2019",                lubridate::ymd_hms("2019-01-01T00:00:00"), "MD",          "H",
+    "2019---07",           lubridate::ymd_hms("2019-01-01T00:00:00"), "M",           "H"
   ) %>%
     select(XXSTDTC, ASTDTF, everything())
 
@@ -860,12 +857,12 @@ test_that("derive_vars_dtm Test 36: No re-derivation is done if --DTF variable a
 ## Test 37: max_dates parameter works as expected ----
 test_that("derive_vars_dtm Test 37: max_dates parameter works as expected", {
   expected_output <- tibble::tribble(
-    ~XXSTDTC,    ~ASTDTM,                        ~ASTDTF, ~ASTTMF,
-    "2019-02",   ymd_hms("2019-02-10T00:00:00"), "D",     "H",
-    "2019",      ymd_hms("2019-02-10T00:00:00"), "M",     "H",
-    "2019---07", ymd_hms("2019-02-10T00:00:00"), "M",     "H"
+    ~XXSTDTC,    ~ASTDTM,                                   ~ASTDTF, ~ASTTMF,
+    "2019-02",   lubridate::ymd_hms("2019-02-10T00:00:00"), "D",     "H",
+    "2019",      lubridate::ymd_hms("2019-02-10T00:00:00"), "M",     "H",
+    "2019---07", lubridate::ymd_hms("2019-02-10T00:00:00"), "M",     "H"
   ) %>%
-    mutate(DCUTDT = ymd_hms("2019-02-10T00:00:00"))
+    dplyr::mutate(DCUTDT = lubridate::ymd_hms("2019-02-10T00:00:00"))
 
   actual_output <- derive_vars_dtm(
     select(expected_output, XXSTDTC, DCUTDT),
