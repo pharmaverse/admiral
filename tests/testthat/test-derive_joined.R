@@ -64,3 +64,38 @@ test_that("derive_vars_joined Test 2: new_vars with rename", {
     keys = c("USUBJID", "ADY")
   )
 })
+
+## Test 3: by_vars with rename ----
+test_that("derive_vars_joined Test 3: by_vars with rename", {
+  adae <- tribble(
+    ~AEGRPID,
+           1,
+           2
+  ) %>%
+    mutate(
+      TRTSDTM = ymd_hms("2020-01-06T12:00:00")
+    )
+
+  faae <- tribble(
+    ~FAGRPID, ~FADT,        ~FAORRES,
+           1, "2020-01-01", "1",
+           1, "2020-01-03", "2",
+           1, "2020-01-05", "3",
+           1, "2020-01-08", "4"
+  ) %>%
+    mutate(FADT = ymd(FADT))
+  expect_dfs_equal(
+    base = mutate(adae, ATOXGR_pre = c("3", NA)),
+    comp = derive_vars_joined(
+      adae,
+      dataset_add = faae,
+      by_vars = vars(AEGRPID = FAGRPID),
+      order = vars(FADT),
+      new_vars = vars(ATOXGR_pre = FAORRES),
+      join_vars = vars(FADT),
+      filter_join = FADT < TRTSDTM,
+      mode = "last"
+    ),
+    keys = c("AEGRPID")
+  )
+})

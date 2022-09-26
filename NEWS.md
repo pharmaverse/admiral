@@ -2,6 +2,12 @@
 
 ## New Features
 
+- The new function `derive_vars_joined()` adds variables from a second dataset.
+The selection of the observations can depend on variables from both datasets.
+This can be used for adding `AVISIT`, `AWLO`, `AWHI` based on time windows and
+`ADY` or deriving the lowest value (nadir) before the current observation
+(#1448).
+
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
 
