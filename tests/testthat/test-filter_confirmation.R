@@ -1,5 +1,4 @@
-library(tibble)
-data <- tribble(
+data <- tibble::tribble(
   ~USUBJID, ~AVISITN, ~AVALC,
   "1",      1,        "PR",
   "1",      2,        "CR",
@@ -31,7 +30,7 @@ test_that("filter_confirmation Test 1: filter without first_cond", {
         AVISITN < AVISITN.join
     )
 
-  expected <- tribble(
+  expected <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",
     "4",      1,        "PR"
@@ -58,7 +57,7 @@ test_that("filter_confirmation Test 2: filter with first_cond", {
       filter = TRUE
     )
 
-  expected <- tribble(
+  expected <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      2,        "CR"
   )
@@ -84,7 +83,7 @@ test_that("filter_confirmation Test 3: filter with first_cond and summary functi
       filter = count_vals(AVALC.join, "SD") <= 1
     )
 
-  expected <- tribble(
+  expected <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR"
   )
@@ -98,7 +97,7 @@ test_that("filter_confirmation Test 3: filter with first_cond and summary functi
 
 ## Test 4: join_type = "all" ----
 test_that("filter_confirmation Test 4: join_type = 'all'", {
-  adae <- tribble(
+  adae <- tibble::tribble(
     ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
     "1",        10, "N",          1,
     "1",        21, "N",         50,
@@ -121,7 +120,7 @@ test_that("filter_confirmation Test 4: join_type = 'all'", {
     filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
   )
 
-  expected <- tribble(
+  expected <- tibble::tribble(
     ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
     "1",        21, "N",         50,
     "1",        32, "N",         31,
@@ -137,7 +136,7 @@ test_that("filter_confirmation Test 4: join_type = 'all'", {
 # min_cond ----
 ## Test 1: test it ----
 test_that("min_cond, Test 1: test it", {
-  data <- tribble(
+  data <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",
     "1",      2,        "CR",
@@ -153,7 +152,7 @@ test_that("min_cond, Test 1: test it", {
     first_cr_vis = min_cond(var = AVISITN, cond = AVALC == "CR")
   )
 
-  expected <- tribble(
+  expected <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC, ~first_cr_vis,
     "1",      1,        "PR",               2,
     "1",      2,        "CR",               2,
@@ -175,7 +174,7 @@ test_that("min_cond, Test 1: test it", {
 # max_cond ----
 ## Test 1: test it ----
 test_that("max_cond, Test 1: test it", {
-  data <- tribble(
+  data <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",
     "1",      2,        "CR",
@@ -191,7 +190,7 @@ test_that("max_cond, Test 1: test it", {
     last_pr_vis = max_cond(var = AVISITN, cond = AVALC == "PR")
   )
 
-  expected <- tribble(
+  expected <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC, ~last_pr_vis,
     "1",      1,        "PR",              1,
     "1",      2,        "CR",              1,
