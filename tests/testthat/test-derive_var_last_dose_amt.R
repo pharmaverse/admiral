@@ -1,7 +1,3 @@
-#library(tibble)
-#library(dplyr)
-#library(lubridate)
-
 input_ae <- tibble::tribble(
   ~STUDYID,   ~USUBJID,   ~AESEQ, ~AESTDTC,
   "my_study", "subject1", 1,      "2020-01-02",
