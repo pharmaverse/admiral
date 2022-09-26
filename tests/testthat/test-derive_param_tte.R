@@ -1,13 +1,10 @@
-library(tibble)
-library(lubridate)
-
 # derive_param_tte ----
 ## Test 1: new observations with analysis date are derived correctly ----
 test_that("derive_param_tte Test 1: new observations with analysis date are derived correctly", {
-  adsl <- tribble(
-    ~USUBJID, ~DTHFL, ~DTHDT,            ~LSTALVDT,         ~TRTSDT,           ~TRTSDTF,
-    "03",     "Y",    ymd("2021-08-21"), ymd("2021-08-21"), ymd("2021-08-10"), NA,
-    "04",     "N",    NA,                ymd("2021-05-24"), ymd("2021-02-03"), NA
+  adsl <- tibble::tribble(
+    ~USUBJID, ~DTHFL, ~DTHDT,                       ~LSTALVDT,                    ~TRTSDT,                      ~TRTSDTF,
+    "03",     "Y",    lubridate::ymd("2021-08-21"), lubridate::ymd("2021-08-21"), lubridate::ymd("2021-08-10"), NA,
+    "04",     "N",    NA,                           lubridate::ymd("2021-05-24"), lubridate::ymd("2021-02-03"), NA
   ) %>%
     mutate(STUDYID = "AB42")
 
@@ -33,10 +30,10 @@ test_that("derive_param_tte Test 1: new observations with analysis date are deri
     )
   )
 
-  expected_output <- tribble(
-    ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,
-    "03",     ymd("2021-08-21"), 0L,    "DEATH",                 "ADSL",  "DTHDT",
-    "04",     ymd("2021-05-24"), 1L,    "LAST KNOWN ALIVE DATE", "ADSL",  "LSTALVDT"
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~ADT,                         ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,
+    "03",     lubridate::ymd("2021-08-21"), 0L,    "DEATH",                 "ADSL",  "DTHDT",
+    "04",     lubridate::ymd("2021-05-24"), 1L,    "LAST KNOWN ALIVE DATE", "ADSL",  "LSTALVDT"
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -67,24 +64,24 @@ test_that("derive_param_tte Test 1: new observations with analysis date are deri
 ## Test 2: new parameter with analysis datetime is derived correctly ----
 test_that("derive_param_tte Test 2: new parameter with analysis datetime is derived correctly", {
   adsl <- tibble::tribble(
-    ~USUBJID, ~DTHFL, ~DTHDT,            ~TRTSDTM,                       ~TRTSDTF, ~TRTSTMF,
-    "01",     "Y",    ymd("2021-06-12"), ymd_hms("2021-01-01 00:00:00"), "M",      "H",
-    "02",     "N",    NA,                ymd_hms("2021-02-03 10:24:00"), NA,       NA,
-    "03",     "Y",    ymd("2021-08-21"), ymd_hms("2021-08-10 00:00:00"), NA,       "H",
-    "04",     "N",    NA,                ymd_hms("2021-02-03 10:24:00"), NA,       NA,
-    "05",     "N",    NA,                ymd_hms("2021-04-05 11:22:33"), NA,       NA
+    ~USUBJID, ~DTHFL, ~DTHDT,                      ~TRTSDTM,                                   ~TRTSDTF, ~TRTSTMF,
+    "01",     "Y",    lubridate::ymd("2021-06-12"), lubridate::ymd_hms("2021-01-01 00:00:00"), "M",      "H",
+    "02",     "N",    NA,                           lubridate::ymd_hms("2021-02-03 10:24:00"),  NA,       NA,
+    "03",     "Y",    lubridate::ymd("2021-08-21"), lubridate::ymd_hms("2021-08-10 00:00:00"),  NA,       "H",
+    "04",     "N",    NA,                           lubridate::ymd_hms("2021-02-03 10:24:00"),  NA,       NA,
+    "05",     "N",    NA,                           lubridate::ymd_hms("2021-04-05 11:22:33"),  NA,       NA
   ) %>%
     mutate(STUDYID = "AB42")
 
   adrs <- tibble::tribble(
-    ~USUBJID, ~AVALC, ~ADTM,                          ~ASEQ,
-    "01",     "SD",   ymd_hms("2021-01-03 10:56:00"), 1,
-    "01",     "PR",   ymd_hms("2021-03-04 11:13:00"), 2,
-    "01",     "PD",   ymd_hms("2021-05-05 12:02:00"), 3,
-    "02",     "PD",   ymd_hms("2021-02-03 10:56:00"), 1,
-    "04",     "SD",   ymd_hms("2021-02-13 10:56:00"), 1,
-    "04",     "PR",   ymd_hms("2021-04-14 11:13:00"), 2,
-    "04",     "CR",   ymd_hms("2021-05-15 12:02:00"), 3
+    ~USUBJID, ~AVALC, ~ADTM,                                     ~ASEQ,
+    "01",     "SD",   lubridate::ymd_hms("2021-01-03 10:56:00"), 1,
+    "01",     "PR",   lubridate::ymd_hms("2021-03-04 11:13:00"), 2,
+    "01",     "PD",   lubridate::ymd_hms("2021-05-05 12:02:00"), 3,
+    "02",     "PD",   lubridate::ymd_hms("2021-02-03 10:56:00"), 1,
+    "04",     "SD",   lubridate::ymd_hms("2021-02-13 10:56:00"), 1,
+    "04",     "PR",   lubridate::ymd_hms("2021-04-14 11:13:00"), 2,
+    "04",     "CR",   lubridate::ymd_hms("2021-05-15 12:02:00"), 3
   ) %>%
     mutate(STUDYID = "AB42", PARAMCD = "OVR")
 
@@ -134,13 +131,13 @@ test_that("derive_param_tte Test 2: new parameter with analysis datetime is deri
   )
 
   # nolint start
-  expected_output <- tribble(
-    ~USUBJID, ~ADTM,                          ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
-    "01",     ymd_hms("2021-05-05 12:02:00"), 0L,    "PD",                    "ADRS",  "ADTM",    3,
-    "02",     ymd_hms("2021-02-03 10:56:00"), 0L,    "PD",                    "ADRS",  "ADTM",    1,
-    "03",     as_datetime(ymd("2021-08-21")), 0L,    "DEATH",                 "ADSL",  "DTHDT",   NA,
-    "04",     ymd_hms("2021-05-15 12:02:00"), 1L,    "LAST TUMOR ASSESSMENT", "ADRS",  "ADTM",    NA,
-    "05",     ymd_hms("2021-04-05 11:22:33"), 1L,    "TREATMENT START",       "ADSL",  "TRTSDTM", NA
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~ADTM,                                     ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
+    "01",     lubridate::ymd_hms("2021-05-05 12:02:00"), 0L,    "PD",                    "ADRS",  "ADTM",    3,
+    "02",     lubridate::ymd_hms("2021-02-03 10:56:00"), 0L,    "PD",                    "ADRS",  "ADTM",    1,
+    "03",     as_datetime(lubridate::ymd("2021-08-21")), 0L,    "DEATH",                 "ADSL",  "DTHDT",   NA,
+    "04",     lubridate::ymd_hms("2021-05-15 12:02:00"), 1L,    "LAST TUMOR ASSESSMENT", "ADRS",  "ADTM",    NA,
+    "05",     lubridate::ymd_hms("2021-04-05 11:22:33"), 1L,    "TREATMENT START",       "ADSL",  "TRTSDTM", NA
   ) %>%
     # nolint end
     mutate(
@@ -176,9 +173,9 @@ test_that("derive_param_tte Test 2: new parameter with analysis datetime is deri
 ## Test 3: error is issued if DTC variables specified for date ----
 test_that("derive_param_tte Test 3: error is issued if DTC variables specified for date", {
   adsl <- tibble::tribble(
-    ~USUBJID, ~TRTSDT,           ~EOSDT,
-    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
-    "02",     ymd("2021-01-16"), ymd("2021-02-03")
+    ~USUBJID, ~TRTSDT,                      ~EOSDT,
+    "01",     lubridate::ymd("2020-12-06"), lubridate::ymd("2021-03-06"),
+    "02",     lubridate::ymd("2021-01-16"), lubridate::ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
@@ -231,9 +228,9 @@ test_that("derive_param_tte Test 3: error is issued if DTC variables specified f
 ## Test 4: by_vars parameter works correctly ----
 test_that("derive_param_tte Test 4: by_vars parameter works correctly", {
   adsl <- tibble::tribble(
-    ~USUBJID, ~TRTSDT,           ~EOSDT,
-    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
-    "02",     ymd("2021-01-16"), ymd("2021-02-03")
+    ~USUBJID, ~TRTSDT,                      ~EOSDT,
+    "01",     lubridate::ymd("2020-12-06"), lubridate::ymd("2021-03-06"),
+    "02",     lubridate::ymd("2021-01-16"), lubridate::ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
@@ -245,7 +242,7 @@ test_that("derive_param_tte Test 4: by_vars parameter works correctly", {
   ) %>%
     mutate(
       STUDYID = "AB42",
-      AESTDT = ymd(AESTDTC)
+      AESTDT = lubridate::ymd(AESTDTC)
     )
 
   ttae <- event_source(
@@ -272,11 +269,11 @@ test_that("derive_param_tte Test 4: by_vars parameter works correctly", {
 
   # nolint start
   expected_output <- tibble::tribble(
-    ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ, ~PARCAT2, ~PARAMCD,
-    "01",     ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,       "Flu",    "TTAE2",
-    "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA,      "Flu",    "TTAE2",
-    "01",     ymd("2021-03-04"), 0L,    "AE",           "AE",    "AESTDTC", 2,       "Cough",  "TTAE1",
-    "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA,      "Cough",  "TTAE1"
+    ~USUBJID, ~ADT,                         ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ, ~PARCAT2, ~PARAMCD,
+    "01",     lubridate::ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,       "Flu",    "TTAE2",
+    "02",     lubridate::ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA,      "Flu",    "TTAE2",
+    "01",     lubridate::ymd("2021-03-04"), 0L,    "AE",           "AE",    "AESTDTC", 2,       "Cough",  "TTAE1",
+    "02",     lubridate::ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA,      "Cough",  "TTAE1"
   ) %>%
     # nolint end
     mutate(
@@ -308,14 +305,14 @@ test_that("derive_param_tte Test 4: by_vars parameter works correctly", {
 
 ## Test 5: an error is issued if some of the by variables are missing ----
 test_that("derive_param_tte Test 5: an error is issued if some of the by variables are missing", {
-  adsl <- tribble(
-    ~USUBJID, ~TRTSDT,           ~EOSDT,
-    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
-    "02",     ymd("2021-01-16"), ymd("2021-02-03")
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,                      ~EOSDT,
+    "01",     lubridate::ymd("2020-12-06"), lubridate::ymd("2021-03-06"),
+    "02",     lubridate::ymd("2021-01-16"), lubridate::ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tribble(
+  ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03", 1,      "Flu",
     "01",     "2021-03-04", 2,      "Cough",
@@ -323,7 +320,7 @@ test_that("derive_param_tte Test 5: an error is issued if some of the by variabl
   ) %>%
     mutate(
       STUDYID = "AB42",
-      AESTDT = ymd(AESTDTC)
+      AESTDT = lubridate::ymd(AESTDTC)
     )
 
   ttae <- event_source(
@@ -369,10 +366,10 @@ test_that("derive_param_tte Test 5: an error is issued if some of the by variabl
 
 ## Test 6: errors if all by vars are missing in all source datasets ----
 test_that("derive_param_tte Test 6: errors if all by vars are missing in all source datasets", {
-  adsl <- tribble(
-    ~USUBJID, ~TRTSDT,           ~EOSDT,
-    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
-    "02",     ymd("2021-01-16"), ymd("2021-02-03")
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,                      ~EOSDT,
+    "01",     lubridate::ymd("2020-12-06"), lubridate::ymd("2021-03-06"),
+    "02",     lubridate::ymd("2021-01-16"), lubridate::ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
@@ -384,7 +381,7 @@ test_that("derive_param_tte Test 6: errors if all by vars are missing in all sou
   ) %>%
     mutate(
       STUDYID = "AB42",
-      AESTDT = ymd(AESTDTC)
+      AESTDT = lubridate::ymd(AESTDTC)
     )
 
   ttae <- event_source(
@@ -431,14 +428,14 @@ test_that("derive_param_tte Test 6: errors if all by vars are missing in all sou
 
 ## Test 7: errors if PARAMCD and by_vars are not one to one ----
 test_that("derive_param_tte Test 7: errors if PARAMCD and by_vars are not one to one", {
-  adsl <- tribble(
-    ~USUBJID, ~TRTSDT,           ~EOSDT,
-    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
-    "02",     ymd("2021-01-16"), ymd("2021-02-03")
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,                      ~EOSDT,
+    "01",     lubridate::ymd("2020-12-06"), lubridate::ymd("2021-03-06"),
+    "02",     lubridate::ymd("2021-01-16"), lubridate::ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tribble(
+  ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03", 1,      "Flu",
     "01",     "2021-03-04", 2,      "Cough",
@@ -446,7 +443,7 @@ test_that("derive_param_tte Test 7: errors if PARAMCD and by_vars are not one to
   ) %>%
     mutate(
       STUDYID = "AB42",
-      AESTDT = ymd(AESTDTC)
+      AESTDT = lubridate::ymd(AESTDTC)
     )
 
   ttae <- event_source(
@@ -494,14 +491,14 @@ test_that("derive_param_tte Test 7: errors if PARAMCD and by_vars are not one to
 
 ## Test 8: errors if set_values_to contains invalid expressions ----
 test_that("derive_param_tte Test 8: errors if set_values_to contains invalid expressions", {
-  adsl <- tribble(
-    ~USUBJID, ~TRTSDT,           ~EOSDT,
-    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
-    "02",     ymd("2021-01-16"), ymd("2021-02-03")
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,                      ~EOSDT,
+    "01",     lubridate::ymd("2020-12-06"), lubridate::ymd("2021-03-06"),
+    "02",     lubridate::ymd("2021-01-16"), lubridate::ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tribble(
+  ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03", 1,      "Flu",
     "01",     "2021-03-04", 2,      "Cough",
@@ -509,7 +506,7 @@ test_that("derive_param_tte Test 8: errors if set_values_to contains invalid exp
   ) %>%
     mutate(
       STUDYID = "AB42",
-      AESTDT = ymd(AESTDTC)
+      AESTDT = lubridate::ymd(AESTDTC)
     )
 
   ttae <- event_source(
@@ -565,14 +562,14 @@ test_that("derive_param_tte Test 8: errors if set_values_to contains invalid exp
 
 ## Test 9: error is issued if parameter code already exists ----
 test_that("derive_param_tte Test 9: error is issued if parameter code already exists", {
-  adsl <- tribble(
-    ~USUBJID, ~TRTSDT,           ~EOSDT,
-    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
-    "02",     ymd("2021-01-16"), ymd("2021-02-03")
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,                      ~EOSDT,
+    "01",     lubridate::ymd("2020-12-06"), lubridate::ymd("2021-03-06"),
+    "02",     lubridate::ymd("2021-01-16"), lubridate::ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tribble(
+  ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03", 1,      "Flu",
     "01",     "2021-03-04", 2,      "Cough",
@@ -580,7 +577,7 @@ test_that("derive_param_tte Test 9: error is issued if parameter code already ex
   ) %>%
     mutate(
       STUDYID = "AB42",
-      AESTDT = ymd(AESTDTC)
+      AESTDT = lubridate::ymd(AESTDTC)
     )
 
   ttae <- event_source(
@@ -606,9 +603,9 @@ test_that("derive_param_tte Test 9: error is issued if parameter code already ex
   )
 
   expected_output <- tibble::tribble(
-    ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
-    "01",     ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,
-    "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA
+    ~USUBJID, ~ADT,                         ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
+    "01",     lubridate::ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,
+    "02",     lubridate::ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA
   ) %>%
     mutate(
       STUDYID = "AB42",
