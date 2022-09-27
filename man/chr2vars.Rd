@@ -13,7 +13,7 @@ chr2vars(chr)
 A \code{list} of \code{quosures} as returned by \code{\link[=vars]{vars()}}
 }
 \description{
-Turn a Character Vector into a List of Quosures
+Turn a character vector into a list of quosures
 }
 \examples{
 chr2vars(c("USUBJID", "AVAL"))

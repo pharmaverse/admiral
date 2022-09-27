@@ -120,6 +120,7 @@
 #' @examples
 #'
 #' library(tibble)
+#' library(lubridate)
 #'
 #' # Add AVISIT (based on time windows), AWLO, and AWHI
 #' adbds <- tribble(
@@ -206,6 +207,45 @@
 #'   filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,
 #'   mode = "last"
 #' )
+#'
+#' # Add APERIOD, APERIODC, APERSDT, APEREDT based on ADSL
+#' adsl <- tribble(
+#' ~USUBJID, ~AP01SDT,     ~AP01EDT,     ~AP02SDT,     ~AP02EDT,
+#' "1",      "2021-01-04", "2021-02-06", "2021-02-07", "2021-03-07",
+#' "2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01"
+#' ) %>%
+#'   mutate(
+#'     across(matches("AP\\d\\d[ES]DT"), ymd)
+#'   )
+#'
+#' period_ref <- pivot_longer(adsl, matches("AP\\d\\d[ES]DT"), names_to = c("APERIODC", ".value"), names_pattern = "AP(\\d\\d)([ES])DT") %>%
+#'   rename(APERSDT = S, APEREDT = E) %>%
+#'   mutate(
+#'     APERIOD = as.integer(APERIODC),
+#'     APERIODC = paste("Period", APERIODC)
+#'   )
+#'
+#' adae <- tribble(
+#'   ~USUBJID, ~ASTDT,
+#'   "1",      "2021-01-01",
+#'   "1",      "2021-01-05",
+#'   "1",      "2021-02-05",
+#'   "1",      "2021-03-05",
+#'   "1",      "2021-04-05",
+#'   "2",      "2021-02-15",
+#' ) %>%
+#'   mutate(
+#'     ASTDT = ymd(ASTDT)
+#'   )
+#'
+#' derive_vars_joined(
+#'   adae,
+#'   dataset_add = period_ref,
+#'   by_vars = vars(USUBJID),
+#'   join_vars = vars(APERSDT, APEREDT),
+#'   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
+#' )
+
 derive_vars_joined <- function(dataset,
                                dataset_add,
                                by_vars = NULL,
@@ -256,7 +296,8 @@ derive_vars_joined <- function(dataset,
   # select observations for the new variables
   data_return <- filter(data_joined, !!filter_join)
 
-  common_vars <- chr2vars(intersect(colnames(data), colnames(data_right)))
+  common_vars <-
+    chr2vars(setdiff(intersect(colnames(data), colnames(data_right)), vars2chr(by_vars)))
   if (!is.null(order)) {
     data_return <- filter_extreme(
       data_return,
@@ -279,46 +320,4 @@ derive_vars_joined <- function(dataset,
       by_vars = vars(!!!by_vars_left, !!tmp_obs_nr)
     ) %>%
     remove_tmp_vars()
-}
-
-
-replace_symbol_in_quo <- function(quosure,
-                                  target,
-                                  replace) {
-  assert_expr(quosure)
-  target <- quo_get_expr(assert_symbol(enquo(target)))
-  replace <- quo_get_expr(assert_symbol(enquo(replace)))
-  expr <- quo_get_expr(quosure)
-  if (is.symbol(expr)) {
-    if (expr == target) {
-      expr = replace
-    }
-  } else {
-    for (i in seq_along(quosure)) {
-      if (expr[[i]] == target) {
-        expr[[i]] <- replace
-      }
-    }
-  }
-  rlang::quo_set_expr(quosure, expr)
-}
-
-add_suffix_to_vars <- function(order,
-                               vars,
-                               suffix
-) {
-  assert_order_vars(order)
-  assert_vars(vars)
-  assert_character_scalar(suffix)
-  for (i in seq_along(vars)) {
-    order <- lapply(
-      order,
-      replace_symbol_in_quo,
-      target = !!quo_get_expr(vars[[i]]),
-      replace = !!sym(paste0(as_label(
-             quo_get_expr(vars[[i]])
-           ), suffix)))
-  }
-  class(order) <- c("quosures", "list")
-  order
 }

@@ -128,6 +128,7 @@ in the input dataset are ignored.
 \examples{
 
 library(tibble)
+library(lubridate)
 
 # Add AVISIT (based on time windows), AWLO, and AWHI
 adbds <- tribble(
@@ -213,6 +214,44 @@ derive_vars_joined(
   filter_add = PARAMCD == "HGB",
   filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,
   mode = "last"
+)
+
+# Add APERIOD, APERIODC, APERSDT, APEREDT based on ADSL
+adsl <- tribble(
+~USUBJID, ~AP01SDT,     ~AP01EDT,     ~AP02SDT,     ~AP02EDT,
+"1",      "2021-01-04", "2021-02-06", "2021-02-07", "2021-03-07",
+"2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01"
+) \%>\%
+  mutate(
+    across(matches("AP\\\\d\\\\d[ES]DT"), ymd)
+  )
+
+period_ref <- pivot_longer(adsl, matches("AP\\\\d\\\\d[ES]DT"), names_to = c("APERIODC", ".value"), names_pattern = "AP(\\\\d\\\\d)([ES])DT") \%>\%
+  rename(APERSDT = S, APEREDT = E) \%>\%
+  mutate(
+    APERIOD = as.integer(APERIODC),
+    APERIODC = paste("Period", APERIODC)
+  )
+
+adae <- tribble(
+  ~USUBJID, ~ASTDT,
+  "1",      "2021-01-01",
+  "1",      "2021-01-05",
+  "1",      "2021-02-05",
+  "1",      "2021-03-05",
+  "1",      "2021-04-05",
+  "2",      "2021-02-15",
+) \%>\%
+  mutate(
+    ASTDT = ymd(ASTDT)
+  )
+
+derive_vars_joined(
+  adae,
+  dataset_add = period_ref,
+  by_vars = vars(USUBJID),
+  join_vars = vars(APERSDT, APEREDT),
+  filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
 )
 }
 \seealso{

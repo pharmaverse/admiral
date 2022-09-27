@@ -87,6 +87,8 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 
 #' Turn a Character Vector into a List of Quosures
 #'
+#' Turn a character vector into a list of quosures
+#'
 #' @param chr A character vector
 #'
 #' @return A `list` of `quosures` as returned by [`vars()`]
