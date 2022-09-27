@@ -163,6 +163,9 @@ replace_values_by_names <- function(quosures) {
 #' @export
 #'
 #' @examples
+#'
+#' library(rlang)
+#'
 #' replace_symbol_in_quo(quo(AVAL), target = AVAL, replace = AVAL.join)
 #' replace_symbol_in_quo(quo(AVALC), target = AVAL, replace = AVAL.join)
 #' replace_symbol_in_quo(quo(desc(AVAL)), target = AVAL, replace = AVAL.join)

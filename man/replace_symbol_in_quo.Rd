@@ -21,6 +21,9 @@ by \code{replace}
 Replace symbols in a quosure
 }
 \examples{
+
+library(rlang)
+
 replace_symbol_in_quo(quo(AVAL), target = AVAL, replace = AVAL.join)
 replace_symbol_in_quo(quo(AVALC), target = AVAL, replace = AVAL.join)
 replace_symbol_in_quo(quo(desc(AVAL)), target = AVAL, replace = AVAL.join)
