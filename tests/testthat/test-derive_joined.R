@@ -12,12 +12,12 @@ test_that("derive_vars_joined Test 1: no by_vars, no order, no new_vars", {
   )
 
   windows <- tribble(
-    ~AWLO, ~AWHI, ~AVISIT,
-      -30,     1, "BASELINE",
-        2,     7, "WEEK 1",
-        8,    15, "WEEK 2",
-       16,    22, "WEEK 3",
-       23,    30, "WEEK 4"
+    ~AVISIT,    ~AWLO, ~AWHI,
+    "BASELINE",   -30,     1,
+    "WEEK 1",       2,     7,
+    "WEEK 2",       8,    15,
+    "WEEK 3",      16,    22,
+    "WEEK 4",      23,    30
   )
 
   expect_dfs_equal(
@@ -60,7 +60,7 @@ test_that("derive_vars_joined Test 2: new_vars with rename", {
       filter_join = ADY.join < ADY,
       mode = "first",
       check_type = "none"
-      ),
+    ),
     keys = c("USUBJID", "ADY")
   )
 })
@@ -69,8 +69,8 @@ test_that("derive_vars_joined Test 2: new_vars with rename", {
 test_that("derive_vars_joined Test 3: by_vars with rename", {
   adae <- tribble(
     ~AEGRPID,
-           1,
-           2
+    "1",
+    "2"
   ) %>%
     mutate(
       TRTSDTM = ymd_hms("2020-01-06T12:00:00")
@@ -78,10 +78,10 @@ test_that("derive_vars_joined Test 3: by_vars with rename", {
 
   faae <- tribble(
     ~FAGRPID, ~FADT,        ~FAORRES,
-           1, "2020-01-01", "1",
-           1, "2020-01-03", "2",
-           1, "2020-01-05", "3",
-           1, "2020-01-08", "4"
+    "1",      "2020-01-01", "1",
+    "1",      "2020-01-03", "2",
+    "1",      "2020-01-05", "3",
+    "1",      "2020-01-08", "4"
   ) %>%
     mutate(FADT = ymd(FADT))
   expect_dfs_equal(

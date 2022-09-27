@@ -98,8 +98,8 @@
 #'
 #'   1. The joined dataset is restricted by the `filter_join` condition.
 #'
-#'   1. If `order` is specified, for each observation of the input dataset the first or last observation
-#'   (depending on `mode`) is selected.
+#'   1. If `order` is specified, for each observation of the input dataset the
+#'   first or last observation (depending on `mode`) is selected.
 #'
 #'   1. The variables specified for `new_vars` are renamed (if requested) and
 #'   merged to the input dataset. I.e., the output dataset contains all
@@ -118,7 +118,6 @@
 #' @export
 #'
 #' @examples
-#'
 #' library(tibble)
 #' library(lubridate)
 #'
@@ -218,12 +217,19 @@
 #'     across(matches("AP\\d\\d[ES]DT"), ymd)
 #'   )
 #'
-#' period_ref <- pivot_longer(adsl, matches("AP\\d\\d[ES]DT"), names_to = c("APERIODC", ".value"), names_pattern = "AP(\\d\\d)([ES])DT") %>%
+#' period_ref <- pivot_longer(
+#'   adsl,
+#'   matches("AP\\d\\d[ES]DT"),
+#'   names_to = c("APERIODC", ".value"),
+#'   names_pattern = "AP(\\d\\d)([ES])DT"
+#' ) %>%
 #'   rename(APERSDT = S, APEREDT = E) %>%
 #'   mutate(
 #'     APERIOD = as.integer(APERIODC),
 #'     APERIODC = paste("Period", APERIODC)
 #'   )
+#'
+#' period_ref
 #'
 #' adae <- tribble(
 #'   ~USUBJID, ~ASTDT,
@@ -261,7 +267,10 @@ derive_vars_joined <- function(dataset,
   assert_vars(new_vars, optional = TRUE)
   assert_vars(join_vars)
   assert_data_frame(dataset, required_vars = by_vars_left)
-  assert_data_frame(dataset_add, required_vars = quo_c(by_vars, join_vars, extract_vars(order), new_vars))
+  assert_data_frame(
+    dataset_add,
+    required_vars = quo_c(by_vars, join_vars, extract_vars(order), new_vars)
+  )
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   filter_join <- assert_filter_cond(enquo(filter_join))
 
