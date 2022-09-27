@@ -74,6 +74,10 @@ test_that("add_suffix_to_vars Test 7: with single variable", {
 test_that("add_suffix_to_vars Test 8: with more than one variable", {
   expect_equal(
     expected = vars(ADT, desc(AVAL.join), AVALC.join),
-    object = add_suffix_to_vars(vars(ADT, desc(AVAL), AVALC), vars = vars(AVAL, AVALC), suffix = ".join")
+    object = add_suffix_to_vars(
+      vars(ADT, desc(AVAL), AVALC),
+      vars = vars(AVAL, AVALC),
+      suffix = ".join"
+    )
   )
 })
