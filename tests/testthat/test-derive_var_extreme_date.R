@@ -1,8 +1,8 @@
 adsl <- tibble::tribble(
-  ~STUDYID,  ~USUBJID, ~TRTEDTM,                       ~DTHDTC,
-  "STUDY01", "1",      lubridate::ymd_hms("2020-01-01T12:00:00"), NA_character_,
-  "STUDY01", "2",      NA,                             "2020-06",
-  "STUDY01", "3",      lubridate::ymd_hms("2020-04-12T13:15:00"), NA_character_
+  ~STUDYID, ~USUBJID, ~TRTEDTM, ~DTHDTC,
+  "STUDY01", "1", lubridate::ymd_hms("2020-01-01T12:00:00"), NA_character_,
+  "STUDY01", "2", NA, "2020-06",
+  "STUDY01", "3", lubridate::ymd_hms("2020-04-12T13:15:00"), NA_character_
 ) %>%
   dplyr::mutate(
     DTHDT = c(lubridate::ymd(""), lubridate::ymd("2020-06-01"), lubridate::ymd(""))

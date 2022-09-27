@@ -64,12 +64,12 @@ test_that("derive_param_tte Test 1: new observations with analysis date are deri
 ## Test 2: new parameter with analysis datetime is derived correctly ----
 test_that("derive_param_tte Test 2: new parameter with analysis datetime is derived correctly", {
   adsl <- tibble::tribble(
-    ~USUBJID, ~DTHFL, ~DTHDT,                      ~TRTSDTM,                                   ~TRTSDTF, ~TRTSTMF,
-    "01",     "Y",    lubridate::ymd("2021-06-12"), lubridate::ymd_hms("2021-01-01 00:00:00"), "M",      "H",
-    "02",     "N",    NA,                           lubridate::ymd_hms("2021-02-03 10:24:00"),  NA,       NA,
-    "03",     "Y",    lubridate::ymd("2021-08-21"), lubridate::ymd_hms("2021-08-10 00:00:00"),  NA,       "H",
-    "04",     "N",    NA,                           lubridate::ymd_hms("2021-02-03 10:24:00"),  NA,       NA,
-    "05",     "N",    NA,                           lubridate::ymd_hms("2021-04-05 11:22:33"),  NA,       NA
+    ~USUBJID, ~DTHFL, ~DTHDT, ~TRTSDTM, ~TRTSDTF, ~TRTSTMF,
+    "01", "Y", lubridate::ymd("2021-06-12"), lubridate::ymd_hms("2021-01-01 00:00:00"), "M", "H",
+    "02", "N", NA, lubridate::ymd_hms("2021-02-03 10:24:00"), NA, NA,
+    "03", "Y", lubridate::ymd("2021-08-21"), lubridate::ymd_hms("2021-08-10 00:00:00"), NA, "H",
+    "04", "N", NA, lubridate::ymd_hms("2021-02-03 10:24:00"), NA, NA,
+    "05", "N", NA, lubridate::ymd_hms("2021-04-05 11:22:33"), NA, NA
   ) %>%
     mutate(STUDYID = "AB42")
 
