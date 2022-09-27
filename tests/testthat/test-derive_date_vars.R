@@ -227,8 +227,10 @@ test_that("impute_dtc_dtm Test 9: max_dates parameter works", {
   expect_equal(
     impute_dtc_dtm(c("2020-12", "2020-11", NA_character_, "2020-02-02"),
       max_dates = list(
-        c(lubridate::ymd_hms("2020-12-06T12:12:12"), NA, lubridate::ymd_hms("2020-09-13T08:30:00"), NA),
-        c(lubridate::ymd(""), lubridate::ymd("2020-11-11"), lubridate::ymd(""), lubridate::ymd("2020-02-02"))
+        c(lubridate::ymd_hms("2020-12-06T12:12:12"), NA,
+          lubridate::ymd_hms("2020-09-13T08:30:00"), NA),
+        c(lubridate::ymd(""), lubridate::ymd("2020-11-11"),
+          lubridate::ymd(""), lubridate::ymd("2020-02-02"))
       ),
       highest_imputation = "Y",
       date_imputation = "last",

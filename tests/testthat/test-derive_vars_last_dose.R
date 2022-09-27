@@ -239,17 +239,25 @@ test_that("derive_vars_last_dose Test 6: error is issued if same variable is fou
 ## Test 7: no error is raised when setting `dose_date` to a renamed variable ----
 test_that("derive_vars_last_dose Test 7: no error is raised when setting `dose_date` to a renamed variable", { # nolint
   adae <- tibble::tribble(
-    ~USUBJID, ~AESTDTC,     ~AENDTC,      ~ASTDT,                       ~AENDT,                       ~AEDECOD,
-    "P01",    "2022-01-10", "2022-01-12", lubridate::ymd("2022-01-10"), lubridate::ymd("2022-01-12"), "Nausea",
-    "P02",    "2022-01-31", "2022-01-31", lubridate::ymd("2022-01-31"), lubridate::ymd("2022-01-31"), "Vomitting",
-    "P02",    "2022-02-02", "2022-02-04", lubridate::ymd("2022-02-02"), lubridate::ymd("2022-02-04"), "Vomitting"
+    ~USUBJID, ~AESTDTC,     ~AENDTC,      ~ASTDT,
+    ~AENDT,                       ~AEDECOD,
+    "P01",    "2022-01-10", "2022-01-12", lubridate::ymd("2022-01-10"),
+    lubridate::ymd("2022-01-12"), "Nausea",
+    "P02",    "2022-01-31", "2022-01-31", lubridate::ymd("2022-01-31"),
+    lubridate::ymd("2022-01-31"), "Vomitting",
+    "P02",    "2022-02-02", "2022-02-04", lubridate::ymd("2022-02-02"),
+    lubridate::ymd("2022-02-04"), "Vomitting"
   )
 
   adex <- tibble::tribble(
-    ~USUBJID, ~EXTRT, ~EXDOSFRQ, ~EXSTDTC, ~EXENDTC, ~ASTDT, ~AENDT, ~ASTDTM, ~AENDTM,
-    "P01", "Drug A", "QD", "2022-01-09", "2022-01-12", lubridate::ymd("2022-01-09"), lubridate::ymd("2022-01-12"),
+    ~USUBJID, ~EXTRT,   ~EXDOSFRQ, ~EXSTDTC,
+    ~EXENDTC,     ~ASTDT,                       ~AENDT,
+    ~ASTDTM,                                   ~AENDTM,
+    "P01",    "Drug A", "QD",      "2022-01-09",
+    "2022-01-12", lubridate::ymd("2022-01-09"), lubridate::ymd("2022-01-12"),
     lubridate::ymd_hms("2022-01-09 09:30:00"), lubridate::ymd_hms("2022-01-12 09:30:00"),
-    "P02", "Drug A", "QD", "2022-02-01", "2022-02-04", lubridate::ymd("2022-02-01"), lubridate::ymd("2022-02-04"),
+    "P02",    "Drug A", "QD",      "2022-02-01",
+    "2022-02-04", lubridate::ymd("2022-02-01"), lubridate::ymd("2022-02-04"),
     lubridate::ymd_hms("2022-02-01 10:00:00"), lubridate::ymd_hms("2022-02-04 10:00:00")
   )
 
