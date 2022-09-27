@@ -2,11 +2,11 @@
 ## Test 1: new observations with analysis date are derived correctly ----
 test_that("derive_param_tte Test 1: new observations with analysis date are derived correctly", {
   adsl <- tibble::tribble(
-    ~USUBJID, ~DTHFL, ~DTHDT,                       ~LSTALVDT,
-    ~TRTSDT,                      ~TRTSDTF,
-    "03",     "Y",    lubridate::ymd("2021-08-21"), lubridate::ymd("2021-08-21"),
+    ~USUBJID, ~DTHFL, ~DTHDT, ~LSTALVDT,
+    ~TRTSDT, ~TRTSDTF,
+    "03", "Y", lubridate::ymd("2021-08-21"), lubridate::ymd("2021-08-21"),
     lubridate::ymd("2021-08-10"), NA,
-    "04",     "N",    NA,                           lubridate::ymd("2021-05-24"),
+    "04", "N", NA, lubridate::ymd("2021-05-24"),
     lubridate::ymd("2021-02-03"), NA
   ) %>%
     mutate(STUDYID = "AB42")

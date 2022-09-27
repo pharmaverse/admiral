@@ -1,9 +1,4 @@
-library(admiral.test)
-library(rlang)
-library(tibble)
-data("admiral_dm")
-
-adsl <- tribble(
+adsl <- tibble::tribble(
   ~USUBJID, ~SEX, ~COUNTRY,
   "ST42-1", "F",  "AUT",
   "ST42-2", "M",  "MWI",
@@ -11,7 +6,7 @@ adsl <- tribble(
   "ST42-4", "F",  "UGA"
 ) %>% mutate(STUDYID = "ST42")
 
-ex <- tribble(
+ex <- tibble::tribble(
   ~USUBJID, ~EXSTDTC,
   "ST42-1", "2020-12-07",
   "ST42-1", "2020-12-14",
@@ -194,9 +189,9 @@ test_that("date_source: errors when preserve is specified", {
 })
 
 test_that("derive_var_agegr_ema Test 1: A warning is issued if `derive_var_agegr_ema()` is called", { # nolint
-  with_options(lifecycle_verbosity = "warning", {
+  rlang::with_options(lifecycle_verbosity = "warning", {
     expect_warning(
-      derive_var_agegr_ema(admiral_dm, age_var = AGE, new_var = AGEGR1),
+      derive_var_agegr_ema(admiral.test::admiral_dm, age_var = AGE, new_var = AGEGR1),
       "deprecated",
       fixed = TRUE
     )
@@ -204,9 +199,9 @@ test_that("derive_var_agegr_ema Test 1: A warning is issued if `derive_var_agegr
 })
 
 test_that("derive_var_agegr_fda Test 1: A warning is issued if `derive_var_agegr_fda()` is called", { # nolint
-  with_options(lifecycle_verbosity = "warning", {
+  rlang::with_options(lifecycle_verbosity = "warning", {
     expect_warning(
-      derive_var_agegr_fda(admiral_dm, age_var = AGE, new_var = AGEGR1),
+      derive_var_agegr_fda(admiral.test::admiral_dm, age_var = AGE, new_var = AGEGR1),
       "deprecated",
       fixed = TRUE
     )

@@ -80,8 +80,10 @@ test_that("derive_var_extreme_dt Test 2: LSTALVDT is derived for Date class as w
   )
 
   expected_output <- adsl %>%
-    dplyr::mutate(LSTALVDT = c(lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-03"),
-                               lubridate::ymd("2020-04-12")))
+    dplyr::mutate(LSTALVDT = c(
+      lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-03"),
+      lubridate::ymd("2020-04-12")
+    ))
 
   actual_output <- derive_var_extreme_dt(
     adsl,
@@ -169,8 +171,10 @@ test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables
 
   expected_output <- adsl %>%
     dplyr::mutate(
-      LSTALVDTM = c(lubridate::ymd_hms("2020-02-01T12:00:00"), NA,
-                    lubridate::ymd_hms("2020-04-12T13:15:00")),
+      LSTALVDTM = c(
+        lubridate::ymd_hms("2020-02-01T12:00:00"), NA,
+        lubridate::ymd_hms("2020-04-12T13:15:00")
+      ),
       LALVDOM = c("AE", NA_character_, "ADSL"),
       LALVSEQ = c(2, NA_integer_, NA_integer_),
       LALVVAR = c("AEENDTC", NA_character_, "TRTEDTM")
