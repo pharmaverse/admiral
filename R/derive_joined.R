@@ -124,21 +124,21 @@
 #'
 #' # Add AVISIT (based on time windows), AWLO, and AWHI
 #' adbds <- tribble(
-#' ~USUBJID, ~ADY,
-#' "1",       -33,
-#' "1",        -2,
-#' "1",         3,
-#' "1",        24,
-#' "2",        NA,
+#'   ~USUBJID, ~ADY,
+#'   "1",       -33,
+#'   "1",        -2,
+#'   "1",         3,
+#'   "1",        24,
+#'   "2",        NA,
 #' )
 #'
 #' windows <- tribble(
-#'   ~AWLO, ~AWHI, ~AVISIT,
-#'   -30,     1, "BASELINE",
-#'   2,     7, "WEEK 1",
-#'   8,    15, "WEEK 2",
-#'   16,    22, "WEEK 3",
-#'   23,    30, "WEEK 4"
+#'   ~AVISIT,    ~AWLO, ~AWHI,
+#'   "BASELINE",   -30,     1,
+#'   "WEEK 1",       2,     7,
+#'   "WEEK 2",       8,    15,
+#'   "WEEK 3",      16,    22,
+#'   "WEEK 4",      23,    30
 #' )
 #'
 #' derive_vars_joined(
@@ -150,14 +150,14 @@
 #'
 #' # derive the nadir after baseline and before the current observation
 #' adbds <- tribble(
-#' ~USUBJID, ~ADY, ~AVAL,
-#' "1",        -7,    10,
-#' "1",         1,    12,
-#' "1",         8,    11,
-#' "1",        15,     9,
-#' "1",        20,    14,
-#' "1",        24,    12,
-#' "2",        13,     8
+#'   ~USUBJID, ~ADY, ~AVAL,
+#'   "1",        -7,    10,
+#'   "1",         1,    12,
+#'   "1",         8,    11,
+#'   "1",        15,     9,
+#'   "1",        20,    14,
+#'   "1",        24,    12,
+#'   "2",        13,     8
 #' )
 #'
 #' derive_vars_joined(
@@ -176,24 +176,24 @@
 #' # add highest hemoglobin value within two weeks before AE
 #' adae <- tribble(
 #'   ~USUBJID, ~ASTDY,
-#'        "1",      3,
-#'        "1",     22,
-#'        "2",      2
+#'   "1",           3,
+#'   "1",          22,
+#'   "2",           2
 #' )
 #'
 #' adlb <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~ADY, ~AVAL,
-#'        "1",    "HGB",    1,   8.5,
-#'        "1",    "HGB",    3,   7.9,
-#'        "1",    "HGB",    5,   8.9,
-#'        "1",    "HGB",    8,   8.0,
-#'        "1",    "HGB",    9,   8.0,
-#'        "1",    "HGB",   16,   7.4,
-#'        "1",    "HGB",   24,   8.1,
-#'        "1",    "ALB",    1,    42,
-#'        "1",    "ALB",    8,    39,
-#'        "1",    "ALB",   16,    38,
-#'        "2",    "ALB",    1,    41
+#'   "1",      "HGB",       1,   8.5,
+#'   "1",      "HGB",       3,   7.9,
+#'   "1",      "HGB",       5,   8.9,
+#'   "1",      "HGB",       8,   8.0,
+#'   "1",      "HGB",       9,   8.0,
+#'   "1",      "HGB",      16,   7.4,
+#'   "1",      "HGB",      24,   8.1,
+#'   "1",      "ALB",       1,    42,
+#'   "1",      "ALB",       8,    39,
+#'   "1",      "ALB",      16,    38,
+#'   "2",      "ALB",       1,    41
 #' )
 #'
 #' derive_vars_joined(
@@ -210,9 +210,9 @@
 #'
 #' # Add APERIOD, APERIODC, APERSDT, APEREDT based on ADSL
 #' adsl <- tribble(
-#' ~USUBJID, ~AP01SDT,     ~AP01EDT,     ~AP02SDT,     ~AP02EDT,
-#' "1",      "2021-01-04", "2021-02-06", "2021-02-07", "2021-03-07",
-#' "2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01"
+#'   ~USUBJID, ~AP01SDT,     ~AP01EDT,     ~AP02SDT,     ~AP02EDT,
+#'   "1",      "2021-01-04", "2021-02-06", "2021-02-07", "2021-03-07",
+#'   "2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01"
 #' ) %>%
 #'   mutate(
 #'     across(matches("AP\\d\\d[ES]DT"), ymd)
@@ -245,7 +245,6 @@
 #'   join_vars = vars(APERSDT, APEREDT),
 #'   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
 #' )
-
 derive_vars_joined <- function(dataset,
                                dataset_add,
                                by_vars = NULL,
@@ -267,7 +266,7 @@ derive_vars_joined <- function(dataset,
   filter_join <- assert_filter_cond(enquo(filter_join))
 
   if (is.null(new_vars)) {
-    new_vars = chr2vars(colnames(dataset_add))
+    new_vars <- chr2vars(colnames(dataset_add))
   }
 
   # number observations of the input dataset to get a unique key
