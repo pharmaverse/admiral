@@ -23,3 +23,51 @@ test_that("convert_dtm_to_dtc Test 3: Error is thrown if dtm is not in correct f
     fixed = TRUE
   )
 })
+
+# replace_symbol_in_quo ----
+## Test 4: symbol is replaced ----
+test_that("replace_symbol_in_quo Test 4: symbol is replaced", {
+  expect_equal(
+    expected = quo(AVAL.join),
+    object = replace_symbol_in_quo(
+      quo(AVAL),
+      target = AVAL,
+      replace = AVAL.join))
+})
+
+## Test 5: partial match is not replaced ----
+test_that("replace_symbol_in_quo Test 5: partial match is not replaced", {
+  expect_equal(
+    expected = quo(AVALC),
+    object = replace_symbol_in_quo(
+      quo(AVALC),
+      target = AVAL,
+      replace = AVAL.join))
+})
+
+## Test 6: symbol in expression is replaced ----
+test_that("replace_symbol_in_quo Test 6: symbol in expression is replaced", {
+  expect_equal(
+    expected = quo(desc(AVAL.join)),
+    object = replace_symbol_in_quo(
+      quo(desc(AVAL)),
+      target = AVAL,
+      replace = AVAL.join))
+})
+
+# add_suffix_to_vars ----
+## Test 7: with single variable ----
+test_that("add_suffix_to_vars Test 7: with single variable", {
+  expect_equal(
+    expected = vars(ADT, desc(AVAL.join), AVALC),
+    object = add_suffix_to_vars(vars(ADT, desc(AVAL), AVALC), vars = vars(AVAL), suffix = ".join")
+  )
+})
+
+## Test 8: with more than one variable ----
+test_that("add_suffix_to_vars Test 8: with more than one variable", {
+  expect_equal(
+    expected = vars(ADT, desc(AVAL.join), AVALC.join),
+    object = add_suffix_to_vars(vars(ADT, desc(AVAL), AVALC), vars = vars(AVAL, AVALC), suffix = ".join")
+  )
+})

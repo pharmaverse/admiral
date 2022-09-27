@@ -17,7 +17,9 @@ Concatenate One or More Quosure(s)
 }
 \seealso{
 Helpers for working with Quosures: 
-\code{\link{quo_not_missing}()}
+\code{\link{add_suffix_to_vars}()},
+\code{\link{quo_not_missing}()},
+\code{\link{replace_symbol_in_quo}()}
 }
 \author{
 Thomas Neitmann
