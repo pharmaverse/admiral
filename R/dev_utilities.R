@@ -175,7 +175,7 @@ replace_symbol_in_quo <- function(quosure,
   expr <- quo_get_expr(quosure)
   if (is.symbol(expr)) {
     if (expr == target) {
-      expr = replace
+      expr <- replace
     }
   } else {
     for (i in seq_along(quosure)) {
@@ -218,8 +218,7 @@ replace_symbol_in_quo <- function(quosure,
 #' add_suffix_to_vars(vars(ADT, desc(AVAL), AVALC), vars = vars(AVAL), suffix = ".join")
 add_suffix_to_vars <- function(order,
                                vars,
-                               suffix
-) {
+                               suffix) {
   assert_order_vars(order)
   assert_vars(vars)
   assert_character_scalar(suffix)
@@ -230,7 +229,8 @@ add_suffix_to_vars <- function(order,
       target = !!quo_get_expr(vars[[i]]),
       replace = !!sym(paste0(as_label(
         quo_get_expr(vars[[i]])
-      ), suffix)))
+      ), suffix))
+    )
   }
   class(order) <- c("quosures", "list")
   order

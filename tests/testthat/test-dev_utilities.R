@@ -32,7 +32,9 @@ test_that("replace_symbol_in_quo Test 4: symbol is replaced", {
     object = replace_symbol_in_quo(
       quo(AVAL),
       target = AVAL,
-      replace = AVAL.join))
+      replace = AVAL.join
+    )
+  )
 })
 
 ## Test 5: partial match is not replaced ----
@@ -42,7 +44,9 @@ test_that("replace_symbol_in_quo Test 5: partial match is not replaced", {
     object = replace_symbol_in_quo(
       quo(AVALC),
       target = AVAL,
-      replace = AVAL.join))
+      replace = AVAL.join
+    )
+  )
 })
 
 ## Test 6: symbol in expression is replaced ----
@@ -52,7 +56,9 @@ test_that("replace_symbol_in_quo Test 6: symbol in expression is replaced", {
     object = replace_symbol_in_quo(
       quo(desc(AVAL)),
       target = AVAL,
-      replace = AVAL.join))
+      replace = AVAL.join
+    )
+  )
 })
 
 # add_suffix_to_vars ----
