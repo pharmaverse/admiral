@@ -120,6 +120,8 @@
 #' @examples
 #' library(tibble)
 #' library(lubridate)
+#' library(dplyr)
+#' library(tidyr)
 #'
 #' # Add AVISIT (based on time windows), AWLO, and AWHI
 #' adbds <- tribble(
