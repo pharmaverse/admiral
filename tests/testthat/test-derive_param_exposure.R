@@ -1,19 +1,19 @@
 input <- tibble::tribble(
-  ~USUBJID,      ~VISIT,     ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC,     ~EXENDTC,
-  "01-701-1015", "BASELINE", "DOSE",   80,    NA,     "2020-07-01", "2020-07-14",
-  "01-701-1015", "WEEK 2",   "DOSE",   80,    NA,     "2020-07-15", "2020-09-23",
-  "01-701-1015", "WEEK 12",  "DOSE",   65,    NA,     "2020-09-24", "2020-12-16",
-  "01-701-1015", "WEEK 24",  "DOSE",   65,    NA,     "2020-12-17", "2021-06-02",
-  "01-701-1015", "BASELINE", "ADJ",    NA,    NA,     "2020-07-01", "2020-07-14",
-  "01-701-1015", "WEEK 2",   "ADJ",    NA,    "Y",    "2020-07-15", "2020-09-23",
-  "01-701-1015", "WEEK 12",  "ADJ",    NA,    "Y",    "2020-09-24", "2020-12-16",
-  "01-701-1015", "WEEK 24",  "ADJ",    NA,    NA,     "2020-12-17", "2021-06-02",
-  "01-701-1281", "BASELINE", "DOSE",   80,    NA,     "2020-07-03", "2020-07-18",
-  "01-701-1281", "WEEK 2",   "DOSE",   80,    NA,     "2020-07-19", "2020-10-01",
-  "01-701-1281", "WEEK 12",  "DOSE",   82,    NA,     "2020-10-02", "2020-12-01",
-  "01-701-1281", "BASELINE", "ADJ",    NA,    NA,     "2020-07-03", "2020-07-18",
-  "01-701-1281", "WEEK 2",   "ADJ",    NA,    NA,     "2020-07-19", "2020-10-01",
-  "01-701-1281", "WEEK 12",  "ADJ",    NA,    NA,     "2020-10-02", "2020-12-01"
+  ~USUBJID, ~VISIT, ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC, ~EXENDTC,
+  "01-701-1015", "BASELINE", "DOSE", 80, NA, "2020-07-01", "2020-07-14",
+  "01-701-1015", "WEEK 2", "DOSE", 80, NA, "2020-07-15", "2020-09-23",
+  "01-701-1015", "WEEK 12", "DOSE", 65, NA, "2020-09-24", "2020-12-16",
+  "01-701-1015", "WEEK 24", "DOSE", 65, NA, "2020-12-17", "2021-06-02",
+  "01-701-1015", "BASELINE", "ADJ", NA, NA, "2020-07-01", "2020-07-14",
+  "01-701-1015", "WEEK 2", "ADJ", NA, "Y", "2020-07-15", "2020-09-23",
+  "01-701-1015", "WEEK 12", "ADJ", NA, "Y", "2020-09-24", "2020-12-16",
+  "01-701-1015", "WEEK 24", "ADJ", NA, NA, "2020-12-17", "2021-06-02",
+  "01-701-1281", "BASELINE", "DOSE", 80, NA, "2020-07-03", "2020-07-18",
+  "01-701-1281", "WEEK 2", "DOSE", 80, NA, "2020-07-19", "2020-10-01",
+  "01-701-1281", "WEEK 12", "DOSE", 82, NA, "2020-10-02", "2020-12-01",
+  "01-701-1281", "BASELINE", "ADJ", NA, NA, "2020-07-03", "2020-07-18",
+  "01-701-1281", "WEEK 2", "ADJ", NA, NA, "2020-07-19", "2020-10-01",
+  "01-701-1281", "WEEK 12", "ADJ", NA, NA, "2020-10-02", "2020-12-01"
 ) %>%
   mutate(
     ASTDTM = ymd_hms(paste(EXSTDTC, "T00:00:00")),
@@ -91,66 +91,66 @@ test_that("derive_param_exposure Test 1: New observations are derived correctly
 
 test_that("derive_param_exposure Test 2: New observations are derived correctly
           for AVAL, when the input dataset only contains AxxDT variables", {
-            new_obs1 <- input_no_dtm %>%
-              filter(PARAMCD == "DOSE") %>%
-              group_by(USUBJID) %>%
-              summarise(
-                AVAL = sum(AVAL, na.rm = TRUE),
-                ASTDT = min(ASTDT, na.rm = TRUE),
-                AENDT = max(AENDT, na.rm = TRUE)
-              ) %>%
-              mutate(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+  new_obs1 <- input_no_dtm %>%
+    filter(PARAMCD == "DOSE") %>%
+    group_by(USUBJID) %>%
+    summarise(
+      AVAL = sum(AVAL, na.rm = TRUE),
+      ASTDT = min(ASTDT, na.rm = TRUE),
+      AENDT = max(AENDT, na.rm = TRUE)
+    ) %>%
+    mutate(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
 
-            new_obs2 <- input_no_dtm %>%
-              filter(PARAMCD == "DOSE") %>%
-              group_by(USUBJID) %>%
-              summarise(
-                AVAL = mean(AVAL, na.rm = TRUE),
-                ASTDT = min(ASTDT, na.rm = TRUE),
-                AENDT = max(AENDT, na.rm = TRUE)
-              ) %>%
-              mutate(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
+  new_obs2 <- input_no_dtm %>%
+    filter(PARAMCD == "DOSE") %>%
+    group_by(USUBJID) %>%
+    summarise(
+      AVAL = mean(AVAL, na.rm = TRUE),
+      ASTDT = min(ASTDT, na.rm = TRUE),
+      AENDT = max(AENDT, na.rm = TRUE)
+    ) %>%
+    mutate(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
 
-            new_obs3 <- input_no_dtm %>%
-              filter(PARAMCD == "ADJ") %>%
-              group_by(USUBJID) %>%
-              summarise(
-                AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_),
-                ASTDT = min(ASTDT, na.rm = TRUE),
-                AENDT = max(AENDT, na.rm = TRUE)
-              ) %>%
-              mutate(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
+  new_obs3 <- input_no_dtm %>%
+    filter(PARAMCD == "ADJ") %>%
+    group_by(USUBJID) %>%
+    summarise(
+      AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_),
+      ASTDT = min(ASTDT, na.rm = TRUE),
+      AENDT = max(AENDT, na.rm = TRUE)
+    ) %>%
+    mutate(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
 
-            expected_output <- bind_rows(input_no_dtm, new_obs1, new_obs2, new_obs3)
+  expected_output <- bind_rows(input_no_dtm, new_obs1, new_obs2, new_obs3)
 
-            actual_output <- input_no_dtm %>%
-              derive_param_exposure(
-                by_vars = vars(USUBJID),
-                input_code = "DOSE",
-                analysis_var = AVAL,
-                summary_fun = function(x) sum(x, na.rm = TRUE),
-                set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
-              ) %>%
-              derive_param_exposure(
-                by_vars = vars(USUBJID),
-                input_code = "DOSE",
-                analysis_var = AVAL,
-                summary_fun = function(x) mean(x, na.rm = TRUE),
-                set_values_to = vars(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
-              ) %>%
-              derive_param_exposure(
-                by_vars = vars(USUBJID),
-                input_code = "ADJ",
-                analysis_var = AVALC,
-                summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_),
-                set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
-              )
+  actual_output <- input_no_dtm %>%
+    derive_param_exposure(
+      by_vars = vars(USUBJID),
+      input_code = "DOSE",
+      analysis_var = AVAL,
+      summary_fun = function(x) sum(x, na.rm = TRUE),
+      set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+    ) %>%
+    derive_param_exposure(
+      by_vars = vars(USUBJID),
+      input_code = "DOSE",
+      analysis_var = AVAL,
+      summary_fun = function(x) mean(x, na.rm = TRUE),
+      set_values_to = vars(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
+    ) %>%
+    derive_param_exposure(
+      by_vars = vars(USUBJID),
+      input_code = "ADJ",
+      analysis_var = AVALC,
+      summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_),
+      set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
+    )
 
-            expect_dfs_equal(
-              actual_output,
-              expected_output,
-              keys = c("USUBJID", "VISIT", "PARAMCD")
-            )
+  expect_dfs_equal(
+    actual_output,
+    expected_output,
+    keys = c("USUBJID", "VISIT", "PARAMCD")
+  )
 })
 
 test_that("Errors", {
