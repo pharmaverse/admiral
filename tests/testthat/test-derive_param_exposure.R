@@ -22,7 +22,11 @@ input <- tibble::tribble(
     AENDT = date(AENDTM)
   )
 
-test_that("new observations are derived correctly for AVAL", {
+input_no_dtm <- input %>%
+  select(-ASTDTM, -AENDTM)
+
+test_that("derive_param_exposure Test 1: New observations are derived correctly
+          for AVAL", {
   new_obs1 <- input %>%
     filter(PARAMCD == "DOSE") %>%
     group_by(USUBJID) %>%
@@ -83,6 +87,70 @@ test_that("new observations are derived correctly for AVAL", {
     expected_output,
     keys = c("USUBJID", "VISIT", "PARAMCD")
   )
+})
+
+test_that("derive_param_exposure Test 2: New observations are derived correctly
+          for AVAL, when the input dataset only contains AxxDT variables", {
+            new_obs1 <- input_no_dtm %>%
+              filter(PARAMCD == "DOSE") %>%
+              group_by(USUBJID) %>%
+              summarise(
+                AVAL = sum(AVAL, na.rm = TRUE),
+                ASTDT = min(ASTDT, na.rm = TRUE),
+                AENDT = max(AENDT, na.rm = TRUE)
+              ) %>%
+              mutate(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+
+            new_obs2 <- input_no_dtm %>%
+              filter(PARAMCD == "DOSE") %>%
+              group_by(USUBJID) %>%
+              summarise(
+                AVAL = mean(AVAL, na.rm = TRUE),
+                ASTDT = min(ASTDT, na.rm = TRUE),
+                AENDT = max(AENDT, na.rm = TRUE)
+              ) %>%
+              mutate(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
+
+            new_obs3 <- input_no_dtm %>%
+              filter(PARAMCD == "ADJ") %>%
+              group_by(USUBJID) %>%
+              summarise(
+                AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_),
+                ASTDT = min(ASTDT, na.rm = TRUE),
+                AENDT = max(AENDT, na.rm = TRUE)
+              ) %>%
+              mutate(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
+
+            expected_output <- bind_rows(input_no_dtm, new_obs1, new_obs2, new_obs3)
+
+            actual_output <- input_no_dtm %>%
+              derive_param_exposure(
+                by_vars = vars(USUBJID),
+                input_code = "DOSE",
+                analysis_var = AVAL,
+                summary_fun = function(x) sum(x, na.rm = TRUE),
+                set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+              ) %>%
+              derive_param_exposure(
+                by_vars = vars(USUBJID),
+                input_code = "DOSE",
+                analysis_var = AVAL,
+                summary_fun = function(x) mean(x, na.rm = TRUE),
+                set_values_to = vars(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
+              ) %>%
+              derive_param_exposure(
+                by_vars = vars(USUBJID),
+                input_code = "ADJ",
+                analysis_var = AVALC,
+                summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_),
+                set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
+              )
+
+            expect_dfs_equal(
+              actual_output,
+              expected_output,
+              keys = c("USUBJID", "VISIT", "PARAMCD")
+            )
 })
 
 test_that("Errors", {
