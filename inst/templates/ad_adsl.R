@@ -258,6 +258,12 @@ adsl <- adsl %>%
   )
 
 
+# To create an eSub XPT, a few more functions can be used to apply metadata and perform
+# associated checks. Further details can be obtained via the following link:
+# https://examples.pharmaverse.org/data/adsl/
+# at section "Apply Metadata to Create an eSub XPT and Perform Associated Checks"
+
+
 # Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
