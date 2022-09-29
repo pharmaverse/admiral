@@ -26,3 +26,41 @@ expect_dfs_equal <- function(base, compare, keys, ...) {
     invisible()
   }
 }
+
+#' Expectation: Are Table Lists are Equal?
+#'
+#' Uses [diffdf::diffdf()] to compares 2 datasets for any differences
+#'
+#' @param base Input dataset
+#' @param compare Comparison dataset
+
+#' @return
+#' An error if `base` and `compare` do not match or `NULL` invisibly if they do
+#'
+#' @author Ben Straub
+#' @keywords test_helper
+#' @family test_helper
+#'
+#' @export
+expect_equal_tbl <- function(object, expected, ..., info = NULL) {
+  act <- testthat::quasi_label(rlang::enquo(object), arg = "object")
+  exp <- testthat::quasi_label(rlang::enquo(expected), arg = "expected")
+
+  # all.equal.list is slightly problematic: it returns TRUE for match, and
+  # returns a character vector when differences are observed. We extract
+  # both a match-indicator and a failure message
+
+  diffs <- all.equal.list(object, expected, ...)
+  has_diff <- if (is.logical(diffs)) diffs else FALSE
+  diff_msg <- paste(diffs, collapse = "\n")
+
+  testthat::expect(
+    has_diff,
+    failure_message = sprintf(
+      "%s not equal to %s.\n%s", act$lab, exp$lab, diff_msg
+    ),
+    info = info
+  )
+
+  invisible(act$val)
+}
