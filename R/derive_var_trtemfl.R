@@ -36,6 +36,13 @@
 #'
 #'    *Permitted Values:* A non-negative integer or `NULL`
 #'
+#' @param ignore_time_for_trt_end
+#'
+#'   If the argument is set to `TRUE`, the time part is ignored for checking if
+#'   the event occurred more than `end_window` days after end of treatment.
+#'
+#'   *Permitted Values:* `TRUE`, `FALSE`
+#'
 #' @param initial_intensity Initial severity/intensity or toxity
 #'
 #'   If the argument is specified, events which start before treatment start and
@@ -149,6 +156,7 @@ derive_var_trtemfl <- function(dataset,
                                trt_start_date = TRTSDTM,
                                trt_end_date = NULL,
                                end_window = NULL,
+                               ignore_time_for_trt_end = TRUE,
                                initial_intensity = NULL,
                                intensity = NULL) {
   new_var <- assert_symbol(enquo(new_var))
@@ -157,6 +165,7 @@ derive_var_trtemfl <- function(dataset,
   trt_start_date <- assert_symbol(enquo(trt_start_date))
   trt_end_date <- assert_symbol(enquo(trt_end_date), optional = TRUE)
   assert_integer_scalar(end_window, subset = "non-negative", optional = TRUE)
+  assert_logical_scalar(ignore_time_for_trt_end)
   initial_intensity <- assert_symbol(enquo(initial_intensity), optional = TRUE)
   intensity <- assert_symbol(enquo(intensity), optional = TRUE)
   if (quo_is_null(initial_intensity) && !quo_is_null(intensity)) {
@@ -201,7 +210,12 @@ derive_var_trtemfl <- function(dataset,
         sep = "\n"
       ))
     }
-    end_cond <- expr(is.na(!!trt_end_date) | !!start_date <= !!trt_end_date + days(end_window))
+    if (ignore_time_for_trt_end) {
+      end_cond <- expr(is.na(!!trt_end_date) |
+        date(!!start_date) <= date(!!trt_end_date) + days(end_window))
+    } else {
+      end_cond <- expr(is.na(!!trt_end_date) | !!start_date <= !!trt_end_date + days(end_window))
+    }
   }
 
   if (quo_is_null(intensity)) {

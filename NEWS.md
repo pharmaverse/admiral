@@ -9,6 +9,10 @@
 
 ## Updates of Existing Functions
 
+- Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
+which controls if time is considered for the condition if `start_date` is after
+`ref_end_date` + `ref_end_window` days (#989).
+
 ## Breaking Changes
 
 ## Documentation

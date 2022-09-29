@@ -12,6 +12,7 @@ derive_var_trtemfl(
   trt_start_date = TRTSDTM,
   trt_end_date = NULL,
   end_window = NULL,
+  ignore_time_for_trt_end = TRUE,
   initial_intensity = NULL,
   intensity = NULL
 )
@@ -48,6 +49,11 @@ the input dataset or \code{NULL}}
 number of days after end of treatment, are not flagged.
 
 \emph{Permitted Values:} A non-negative integer or \code{NULL}}
+
+\item{ignore_time_for_trt_end}{If the argument is set to \code{TRUE}, the time part is ignored for checking if
+the event occurred more than \code{end_window} days after end of treatment.
+
+\emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
 
 \item{initial_intensity}{Initial severity/intensity or toxity
 

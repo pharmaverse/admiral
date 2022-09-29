@@ -48,6 +48,14 @@
 #'   measured in days (e.g. 7 if 7 days should be added to the upper bound)
 #'   Optional; default is 0.
 #'
+#' @param ignore_time_for_ref_end_date
+#'
+#'   If the argument is set to `TRUE`, the time part is ignored for checking if
+#'   the event occurred more than `ref_end_window` days after reference end
+#'   date.
+#'
+#'   *Permitted Values:* `TRUE`, `FALSE`
+#'
 #' @param filter_pre_timepoint An expression to filter observations as not
 #'   on-treatment when `date` = `ref_start_date`. For example, if observations
 #'   where `VSTPT = PRE` should not be considered on-treatment when `date =
@@ -177,6 +185,7 @@ derive_var_ontrtfl <- function(dataset,
                                ref_start_date,
                                ref_end_date = NULL,
                                ref_end_window = 0,
+                               ignore_time_for_ref_end_date = TRUE,
                                filter_pre_timepoint = NULL,
                                span_period = NULL) {
   new_var <- assert_symbol(enquo(new_var))
@@ -191,6 +200,7 @@ derive_var_ontrtfl <- function(dataset,
   warn_if_vars_exist(dataset, quo_text(new_var))
 
   ref_end_window <- assert_integer_scalar(ref_end_window, "non-negative")
+  assert_logical_scalar(ignore_time_for_ref_end_date)
   filter_pre_timepoint <- assert_filter_cond(enquo(filter_pre_timepoint), optional = TRUE)
   assert_character_scalar(span_period, values = c("Y", "y"), optional = TRUE)
 
@@ -226,11 +236,15 @@ derive_var_ontrtfl <- function(dataset,
     )
   } else {
     # Scenario 2: Treatment end date is passed, window added above
+    if (ignore_time_for_ref_end_date) {
+      end_cond <- expr(date(!!start_date) <= date(!!ref_end_date) + days(!!ref_end_window))
+    } else {
+      end_cond <- expr(!!start_date <= !!ref_end_date + days(!!ref_end_window))
+    }
     dataset <- mutate(
       dataset,
       !!new_var := if_else(
-        !is.na(!!ref_start_date) & !is.na(!!start_date) & !!ref_start_date < !!start_date &
-          !is.na(!!ref_end_date) & !!start_date <= (!!ref_end_date + days(!!ref_end_window)),
+        !!ref_start_date < !!start_date & !!end_cond,
         "Y",
         !!new_var,
         missing = !!new_var
@@ -238,7 +252,7 @@ derive_var_ontrtfl <- function(dataset,
     )
   }
 
-  # scenario 3: end_date is parsed
+  # scenario 3: end_date is passed
   if (!quo_is_null(end_date)) {
     dataset <- mutate(
       dataset,
@@ -251,12 +265,12 @@ derive_var_ontrtfl <- function(dataset,
     )
   }
 
-  # scenario 4: end_date and span_period are parsed
+  # scenario 4: end_date and span_period are passed
   if (!is.null(span_period)) {
     dataset <- mutate(
       dataset,
       !!new_var := if_else(
-        !!start_date <= (!!ref_end_date + days(!!ref_end_window)) &
+        !!end_cond &
           (is.na(!!end_date) | !!end_date >= !!ref_start_date),
         "Y",
         !!new_var,
