@@ -1,4 +1,4 @@
-# admiral 0.8.2
+# admiral 0.8.3
 
 - Fixed an issue where CRAN identified a failing test when "a strict Latin-1* locale" is used. (#1469)
 
