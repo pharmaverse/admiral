@@ -8,6 +8,8 @@ This can be used for adding `AVISIT`, `AWLO`, `AWHI` based on time windows and
 `ADY` or deriving the lowest value (nadir) before the current observation
 (#1448).
 
+- New function `derive_var_trtemfl()` for deriving treatment emergent flags (#989)
+
 - The new function `chr2vars()` turns a character vector into a list of quosures
 (#1448).
 
@@ -15,6 +17,10 @@ This can be used for adding `AVISIT`, `AWLO`, `AWHI` based on time windows and
 `date_source()`, `dthcaus_source()`, ... (#858)
 
 ## Updates of Existing Functions
+
+- Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
+which controls if time is considered for the condition if `start_date` is after
+`ref_end_date` + `ref_end_window` days (#989).
 
 ## Breaking Changes
 
