@@ -79,7 +79,6 @@ slice_derivation(
 Higher Order Functions: 
 \code{\link{call_derivation}()},
 \code{\link{derivation_slice}()},
-\code{\link{print.derivation_slice}()},
 \code{\link{restrict_derivation}()}
 }
 \author{

@@ -17,6 +17,7 @@ list(
     utils_help = "Utilities used within Derivation functions: ",
     utils_examples = "Utilities used for examples and template scripts: ",
     utils_impute = "Utilities used for date imputation: ",
+    utils_print = "Utilities for printing: ",
     source_specifications = "Source Specifications: ",
     high_order_function = "Higher Order Functions: "
   )
