@@ -3,6 +3,8 @@
 ## New Features
 
   - Developer addin for formatting tests to admiral programming standards (#73)
+  
+  - New functions `replace_symbol_in_quo()` and `add_suffix_to_vars()` (#106)
 
 ## Updates of Existing Functions
   - NA
