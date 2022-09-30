@@ -22,10 +22,6 @@ An error if \code{base} and \code{compare} do not match or \code{NULL} invisibly
 \description{
 Uses \code{\link[diffdf:diffdf]{diffdf::diffdf()}} to compares 2 datasets for any differences
 }
-\seealso{
-Helps with Testing: 
-\code{\link{expect_equal_tbl}()}
-}
 \author{
 Thomas Neitmann
 }

@@ -57,7 +57,7 @@ test_that("replace_symbol_in_quo Test 5: symbol in expression is replaced", {
 # add_suffix_to_vars ----
 ## Test 6: with single variable ----
 test_that("add_suffix_to_vars Test 6: with single variable", {
-  expect_equal_tbl(
+  expect_equal(
     expected = vars(ADT, desc(AVAL.join), AVALC),
     object = add_suffix_to_vars(vars(ADT, desc(AVAL), AVALC), vars = vars(AVAL), suffix = ".join")
   )
@@ -65,7 +65,7 @@ test_that("add_suffix_to_vars Test 6: with single variable", {
 
 ## Test 7: with more than one variable ----
 test_that("add_suffix_to_vars Test 7: with more than one variable", {
-  expect_equal_tbl(
+  expect_equal(
     expected = vars(ADT, desc(AVAL.join), AVALC.join),
     object = add_suffix_to_vars(
       vars(ADT, desc(AVAL), AVALC),
