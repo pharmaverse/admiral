@@ -99,7 +99,7 @@ test_that("derive_derived_param Test 1: A warning is issued if `derive_derived_p
     "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
   )
 
-  expect_warning(
+  lifecycle::expect_deprecated(
     derive_derived_param(
       input,
       parameters = c("SYSBP", "DIABP"),
@@ -110,14 +110,12 @@ test_that("derive_derived_param Test 1: A warning is issued if `derive_derived_p
         PARAM = "Mean arterial pressure (mmHg)",
         AVALU = "mmHg"
       )
-    ),
-    "deprecated",
-    fixed = TRUE
+    )
   )
 })
 
 test_that("derive_vars_merged_dt: a deprecation warning is issued", {
-  expect_warning(
+  lifecycle::expect_deprecated(
     derive_vars_merged_dt(
       adsl,
       dataset_add = ex,
@@ -127,13 +125,12 @@ test_that("derive_vars_merged_dt: a deprecation warning is issued", {
       dtc = EXSTDTC,
       new_vars_prefix = "TRTS",
       mode = "first"
-    ),
-    "deprecated"
+    )
   )
 })
 
 test_that("derive_vars_merged_dtm: a deprecation warning is issued", {
-  expect_warning(
+  lifecycle::expect_deprecated(
     derive_vars_merged_dtm(
       adsl,
       dataset_add = ex,
@@ -143,52 +140,36 @@ test_that("derive_vars_merged_dtm: a deprecation warning is issued", {
       new_vars_prefix = "TRTS",
       time_imputation = "first",
       mode = "first"
-    ),
-    "deprecated"
+    )
   )
 })
 
 test_that("date_source: errors when date_imputation is specified", {
-  expect_error(
+  lifecycle::expect_defunct(
     date_source(
       dataset_name = "ae",
       date = ASTDTM,
       date_imputation = "first"
-    ),
-    paste(
-      "The `date_imputation` argument of `date_source\\(\\)` .* deprecated .* admiral 0.8.0.*",
-      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.", # nolint
-      sep = "\n"
     )
   )
 })
 
 test_that("date_source: errors when time_imputation is specified", {
-  expect_error(
+  lifecycle::expect_defunct(
     date_source(
       dataset_name = "ae",
       date = ASTDTM,
       time_imputation = "first"
-    ),
-    paste(
-      "The `time_imputation` argument of `date_source\\(\\)` .* deprecated .* admiral 0.8.0.*",
-      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.", # nolint
-      sep = "\n"
     )
   )
 })
 
 test_that("date_source: errors when preserve is specified", {
-  expect_error(
+  lifecycle::expect_defunct(
     date_source(
       dataset_name = "ae",
       date = ASTDTM,
       preserve = TRUE
-    ),
-    paste(
-      "The `preserve` argument of `date_source\\(\\)` .* deprecated .* admiral 0.8.0.*",
-      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.", # nolint
-      sep = "\n"
     )
   )
 })
