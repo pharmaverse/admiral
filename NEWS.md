@@ -2,6 +2,10 @@
 
 - Fixed an issue where CRAN identified a failing test when "a strict Latin-1* locale" is used. (#1469)
 
+# admiral 0.8.2
+
+- Fixed an issue where CRAN identified a failing test when "a strict Latin-1* locale" is used. (#1469)
+
 # admiral 0.8.1
 
 - `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` were updated such
