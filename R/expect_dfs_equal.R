@@ -26,4 +26,3 @@ expect_dfs_equal <- function(base, compare, keys, ...) {
     invisible()
   }
 }
-
