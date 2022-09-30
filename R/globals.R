@@ -40,6 +40,7 @@ globalVariables(c(
   "TRTDURD",
   "TRTEDT",
   "TRTEDTM",
+  "TRTEMFL",
   "TRTSDT",
   "TRTSDTM",
   "QLABEL",
