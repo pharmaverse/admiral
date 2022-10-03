@@ -1,11 +1,9 @@
-url: https://pharmaverse.github.io/admiraldev
+url: https://pharmaverse.github.io/admiraldev/devel
 
 template:
+  bootstrap: 5
   params:
     bootswatch: flatly
-    docsearch:
-      api_key: 2d4895759f79e89d6eb1c3b990bca6d8
-      index_name: pharmaverse
 repo:
   url:
     home: https://github.com/pharmaverse/admiraldev

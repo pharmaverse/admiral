@@ -116,31 +116,6 @@ extract_vars <- function(x, side = "lhs") {
   tryCatch(lhs, error = function(e) rhs)
 }
 
-#' Replace Quosure Value with Name
-#'
-#' @param quosures A list of quosures
-#'
-#' @author Thomas Neitmann
-#'
-#' @keywords dev_utility
-#' @family dev_utility
-#'
-#'
-#' @return A list of quosures
-#' @export
-replace_values_by_names <- function(quosures) {
-  vars <- map2(quosures, names(quosures), function(q, n) {
-    if (n == "") {
-      return(q)
-    }
-    quo_set_env(
-      quo(!!as.symbol(n)),
-      quo_get_env(q)
-    )
-  })
-  structure(vars, class = "quosures", names = NULL)
-}
-
 
 #' Turn a Quosure into a String
 #'

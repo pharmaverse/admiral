@@ -24,7 +24,7 @@ test_that("get_new_tmp_var Test 3: the temporary variable counter is increased c
 })
 
 # remove_tmp_vars ----
-## Test 4:  no variables are removed when no tmp vars are present ----
+## Test 4: no variables are removed when no tmp vars are present ----
 test_that("remove_tmp_vars Test 4: no variables are removed when no tmp vars are present", {
   expect_identical(dm, remove_tmp_vars(dm))
 })
