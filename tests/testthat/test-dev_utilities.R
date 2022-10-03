@@ -33,7 +33,7 @@ test_that("filter_if Test 1 : Input is returned as is if filter is NULL", {
     "P01", "HEIGHT", 189.2
   )
 
-  expected_output = input
+  expected_output <- input
 
   expect_dfs_equal(
     expected_output,
@@ -51,7 +51,7 @@ test_that("filter_if Test 2 : Input is filtered if filter is not NULL", {
     "P01", "HEIGHT", 189.2
   )
 
-  expected_output = input[1L, ]
+  expected_output <- input[1L, ]
 
   expect_dfs_equal(
     expected_output,
