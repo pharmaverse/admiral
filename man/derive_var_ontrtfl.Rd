@@ -12,6 +12,7 @@ derive_var_ontrtfl(
   ref_start_date,
   ref_end_date = NULL,
   ref_end_window = 0,
+  ignore_time_for_ref_end_date = TRUE,
   filter_pre_timepoint = NULL,
   span_period = NULL
 )
@@ -60,6 +61,12 @@ considered on-treatment. Default is \code{NULL}.}
 \item{ref_end_window}{A window to add to the upper bound \code{ref_end_date}
 measured in days (e.g. 7 if 7 days should be added to the upper bound)
 Optional; default is 0.}
+
+\item{ignore_time_for_ref_end_date}{If the argument is set to \code{TRUE}, the time part is ignored for checking if
+the event occurred more than \code{ref_end_window} days after reference end
+date.
+
+\emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
 
 \item{filter_pre_timepoint}{An expression to filter observations as not
 on-treatment when \code{date} = \code{ref_start_date}. For example, if observations

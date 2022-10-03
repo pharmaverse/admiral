@@ -66,7 +66,6 @@ adsl <- admiral_adsl
 ```
 ```{r echo = FALSE}
 ae <- filter(ae, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
-
 ```
 
 At this step, it may be useful to join `ADSL` to your `AE` domain as well. Only the 
@@ -279,13 +278,16 @@ adae <- adae %>%
 
 ## Derive Treatment Emergent Flag {#trtflag}
 
-To derive the treatment emergent flag `TRTEMFL`, one can use a simple
-`dplyr::mutate()` assignment. In the example below, we use 30 days in the flag derivation.
+To derive the treatment emergent flag `TRTEMFL`, one can call
+`derive_var_trtemfl()`. In the example below, we use 30 days in the flag
+derivation.
 
 ```{r eval=TRUE}
 adae <- adae %>%
-  mutate(
-    TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", NA_character_)
+  derive_var_trtemfl(
+    trt_start_date = TRTSDT,
+    trt_end_date = TRTEDT,
+    end_window = 30
   )
 ```
 
@@ -302,7 +304,8 @@ dataset_vignette(
 To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single occurrence date, we
 use `derive_var_ontrtfl()`.
 
-The expected result is the input dataset with an additional column named `ONTRTFL` with a value of `"Y"` or `NA`.
+The expected result is the input dataset with an additional column named
+`ONTRTFL` with a value of `"Y"` or `NA`.
 
 If you want to also check an end date, you could add the `end_date` argument.
 Note that in this scenario you could set `span_period = "Y"` if you want occurrences that started
