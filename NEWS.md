@@ -11,6 +11,8 @@
 
 ## Documentation
 
+- New vignette "Generic Functions" (#734)
+
 ## Various
 
 # admiral 0.8.1
