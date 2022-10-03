@@ -60,10 +60,10 @@ ex <- convert_blanks_to_na(admiral_ex)
 ae <- convert_blanks_to_na(admiral_ae)
 ```
 ```{r echo=FALSE}
-dm <- filter(dm, USUBJID %in% c("01-701-1111", "01-701-1057"))
-ds <- filter(ds, USUBJID %in% c("01-701-1111", "01-701-1057"))
-ex <- filter(ex, USUBJID %in% c("01-701-1111", "01-701-1057"))
-ae <- filter(ae, USUBJID %in% c("01-701-1111", "01-701-1057"))
+dm <- filter(dm, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
+ds <- filter(ds, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
+ex <- filter(ex, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
+ae <- filter(ae, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
 ```
 
 ## Difference between _merged_ and _joined_ functions
@@ -283,8 +283,8 @@ datacut source is the additional dataframe that needs to be joined.
 # Create a unique datacut day for each patient
 datacut <- tribble(
    ~USUBJID,      ~DCUTDY, ~DCUTFL,
-   "01-701-1111", 50,      "Y",
-   "01-705-1393", 100,     "Y"   
+   "01-701-1111", 5,       "Y",
+   "01-701-1047", 25,      "Y"
  )
 
 # Join datacut flag to AE only for events up to and including this date
