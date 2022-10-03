@@ -47,6 +47,7 @@ otherwise specified.*
 * [Derive Categorization Variables (`AVALCATx`)](#cat)
 * [Add ADSL variables](#adsl_vars)
 * [Derive New Rows](#additional)
+* [Add Labels and Attributes](#attributes)
 
 ## Read in Data {#readdata}
 

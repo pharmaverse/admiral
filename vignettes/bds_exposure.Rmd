@@ -44,6 +44,7 @@ otherwise specified.*
 * [Derive Categorization Variables (`AVALCATx`)](#cat)
 * [Assign `ASEQ`](#aseq)
 * [Add ADSL variables `ASEQ`](#adsl_vars)
+* [Add Labels and Attributes](#attributes)
 
 ## Read in Data {#readdata}
 
