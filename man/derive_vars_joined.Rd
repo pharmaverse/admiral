@@ -10,9 +10,9 @@ derive_vars_joined(
   by_vars = NULL,
   order = NULL,
   new_vars = NULL,
-  join_vars,
+  join_vars = NULL,
   filter_add = NULL,
-  filter_join,
+  filter_join = NULL,
   mode = NULL,
   check_type = "warning"
 )

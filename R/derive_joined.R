@@ -258,23 +258,23 @@ derive_vars_joined <- function(dataset,
                                by_vars = NULL,
                                order = NULL,
                                new_vars = NULL,
-                               join_vars,
+                               join_vars = NULL,
                                filter_add = NULL,
-                               filter_join,
+                               filter_join = NULL,
                                mode = NULL,
                                check_type = "warning") {
   assert_vars(by_vars, optional = TRUE)
   by_vars_left <- replace_values_by_names(by_vars)
   assert_order_vars(order, optional = TRUE)
   assert_vars(new_vars, optional = TRUE)
-  assert_vars(join_vars)
+  assert_vars(join_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars_left)
   assert_data_frame(
     dataset_add,
     required_vars = quo_c(by_vars, join_vars, extract_vars(order), new_vars)
   )
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
-  filter_join <- assert_filter_cond(enquo(filter_join))
+  filter_join <- assert_filter_cond(enquo(filter_join), optional = TRUE)
 
   if (is.null(new_vars)) {
     new_vars <- chr2vars(colnames(dataset_add))
@@ -304,7 +304,7 @@ derive_vars_joined <- function(dataset,
   )
 
   # select observations for the new variables
-  data_return <- filter(data_joined, !!filter_join)
+  data_return <- filter_if(data_joined, filter_join)
 
   common_vars <-
     chr2vars(setdiff(intersect(colnames(data), colnames(data_right)), vars2chr(by_vars)))
