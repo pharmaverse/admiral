@@ -1,3 +1,29 @@
+# admiral 0.9.0
+
+## New Features
+
+- New function `derive_var_trtemfl()` for deriving treatment emergent flags (#989)
+
+- A `print()` method was added for all S3 objects defined by admiral, e.g.,
+`date_source()`, `dthcaus_source()`, ... (#858)
+
+## Updates of Existing Functions
+
+- Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
+which controls if time is considered for the condition if `start_date` is after
+`ref_end_date` + `ref_end_window` days (#989).
+
+## Breaking Changes
+
+## Documentation
+
+## Various
+
+# admiral 0.8.1
+
+- `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` were updated such
+that source observations where the date is `NA` are excluded (#1419)
+
 # admiral 0.8.0
 
 ## New Features
