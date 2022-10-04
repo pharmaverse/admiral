@@ -287,9 +287,9 @@ derive_vars_merged <- function(dataset,
         "Please add it to `by_vars` or remove or rename it in one of the datasets."
       ),
       paste0(
-        "The variables",
+        "The variables ",
         enumerate(common_vars),
-        "are contained in both datasets.\n",
+        " are contained in both datasets.\n",
         "Please add them to `by_vars` or remove or rename them in one of the datasets."
       )
     ))
