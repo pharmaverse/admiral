@@ -50,6 +50,7 @@ library(lubridate)
 * [Derive Analysis Value (`AVAL`)](#aval)
 * [Derive Analysis Sequence Number (`ASEQ`)](#aseq)
 * [Add ADSL Variables](#adslvars)
+* [Add Labels and Attributes](#attributes)
 
 ## Read in Data {#readdata}
 
@@ -668,3 +669,25 @@ dataset_vignette(
   display_vars = vars(USUBJID, PARAMCD, CNSR, AVAL, ARMCD, AGE, SEX)
 )
 ```
+
+## Add Labels and Attributes {#attributes}
+
+Adding labels and attributes for SAS transport files is supported by the
+following packages:
+
+- [metacore](https://atorus-research.github.io/metacore/): establish a common
+foundation for the use of metadata within an R session.
+
+- [metatools](https://pharmaverse.github.io/metatools/): enable the use of
+metacore objects. Metatools can be used to build datasets or enhance columns in
+existing datasets as well as checking datasets against the metadata.
+
+- [xportr](https://atorus-research.github.io/xportr/): functionality to
+associate all metadata information to a local R data frame, perform data set
+level validation checks and convert into a [transport v5
+file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
+
+NOTE: All these packages are in the experimental phase, but the vision is to
+have them associated with an End to End pipeline under the umbrella of the
+[pharmaverse](https://github.com/pharmaverse). An example of applying metadata 
+and perform associated checks can be found at the [pharmaverse E2E example](https://examples.pharmaverse.org/data/adsl/).
