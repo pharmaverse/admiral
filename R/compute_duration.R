@@ -129,8 +129,9 @@ compute_duration <- function(start_date,
   if (floor_in) {
     # Remove information more precise than the input unit, e.g., if input unit
     # is days, the time part of the dates is removed. After updates in R `NA`
-    # values have to be explicitly handled here because otherwise `floor_date(as.Date(NA))`
-    # will return `"1970-01-01"` rather than `NA` (#1486). See also here:
+    # values have to be explicitly handled here because otherwise
+    # `floor_date(as.Date(NA), unit = "days")` will return `"1970-01-01"` rather
+    # than `NA` (#1486). See also here:
     # https://github.com/tidyverse/lubridate/issues/1069
     start_date_fun <- if (is.Date(start_date)) as.Date else as.POSIXct
     end_date_fun <- if (is.Date(end_date)) as.Date else as.POSIXct
