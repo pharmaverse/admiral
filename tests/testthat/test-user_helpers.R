@@ -65,8 +65,8 @@ test_that("`adam_templates` objects are printed as intended: some templates", {
     structure(class = c("adam_templates", "character"), package = "admiral")
   expected_print_output <- c(
     "Existing ADaM templates in package 'admiral':",
-    "• ADAE",
-    "• ADSL"
+    if (is.na(iconv("\U2022"))) "- ADAE" else "\U2022 ADAE",
+    if (is.na(iconv("\U2022"))) "- ADSL" else "\U2022 ADSL"
   )
   expect_identical(capture.output(print(templates)), expected_print_output)
 })
