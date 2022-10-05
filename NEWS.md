@@ -19,6 +19,9 @@ which controls if time is considered for the condition if `start_date` is after
 
 ## Various
 
+- Function `derive_vars_merged()` had an improperly formatted error message 
+which has been corrected
+
 # admiral 0.8.1
 
 - `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` were updated such
