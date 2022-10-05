@@ -11,7 +11,7 @@
 ## Breaking Changes
   - NA
 ## Documentation
-  - NA
+  - New vignette for our package release strategy (#79)
 ## Various
   - NA
 
