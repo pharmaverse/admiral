@@ -135,8 +135,16 @@ compute_duration <- function(start_date,
     # https://github.com/tidyverse/lubridate/issues/1069
     start_date_fun <- if (is.Date(start_date)) as.Date else as.POSIXct
     end_date_fun <- if (is.Date(end_date)) as.Date else as.POSIXct
-    start_date <- if_else(is.na(start_date), start_date_fun(NA), floor_date(start_date, unit = in_unit))
-    end_date <- if_else(is.na(end_date), end_date_fun(NA), floor_date(end_date, unit = in_unit))
+    start_date <- if_else(
+      is.na(start_date),
+      start_date_fun(NA),
+      floor_date(start_date, unit = in_unit)
+    )
+    end_date <- if_else(
+      is.na(end_date),
+      end_date_fun(NA),
+      floor_date(end_date, unit = in_unit)
+    )
   }
 
   # derive the duration in the output unit
