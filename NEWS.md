@@ -1,6 +1,6 @@
 # admiral 0.8.3
 
-- Second attempto to address issue where CRAN identified a failing test when "a strict Latin-1* locale" is used. (#1469)
+- Second attempt to address issue where CRAN identified a failing test when "a strict Latin-1* locale" is used (#1469)
 - Fixed a bug in `derive_vars_duration()` that surfaced after changes in R-devel (#1486)
 
 # admiral 0.8.2
