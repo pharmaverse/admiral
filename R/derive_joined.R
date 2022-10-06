@@ -51,9 +51,9 @@
 #'
 #'   Any extra variables required from the additional dataset for `filter_join`
 #'   should be specified for this argument. Variables specified for `new_vars`
-#'   does not need to be repeated for `join_vars`. If a specified variables
-#'   exists in both the input dataset and the additional dataset, the suffix
-#'   ".join" is added to the variable from the additional dataset.
+#'   do not need to be repeated for `join_vars`. If a specified variables exists
+#'   in both the input dataset and the additional dataset, the suffix ".join" is
+#'   added to the variable from the additional dataset.
 #'
 #'   The variables are not included in the output dataset.
 #'
