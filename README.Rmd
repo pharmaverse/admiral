@@ -61,10 +61,4 @@ remotes::install_github("pharmaverse/admiraldev", ref = "devel")
 
 ## Release Schedule
 
-`{admiraldev}` is to be officially released to CRAN one week before an official release of `{admiral}`.  You can find the release schedule for `{admiral}` packages [here](https://github.com/pharmaverse/admiral/tree/devel#release-schedule). 
-
-
-
-
-
-
+`{admiraldev}` is to be officially released to CRAN one week before an official release of `{admiral}`.  You can find the release schedule for `{admiral}` packages [here](https://pharmaverse.github.io/admiral/#release-schedule). 
