@@ -2,11 +2,11 @@
 
 ## New Features
 
-- The new function `derive_vars_joined()` adds variables from a second dataset.
-The selection of the observations can depend on variables from both datasets.
-This can be used for adding `AVISIT`, `AWLO`, `AWHI` based on time windows and
-`ADY` or deriving the lowest value (nadir) before the current observation
-(#1448).
+- The new function `derive_vars_joined()` adds variables from an additional
+dataset. The selection of the observations can depend on variables from both
+datasets. This can be used for adding `AVISIT`, `AWLO`, `AWHI` based on time
+windows and `ADY` or deriving the lowest value (nadir) before the current
+observation (#1448).
 
 - New function `derive_var_trtemfl()` for deriving treatment emergent flags (#989)
 

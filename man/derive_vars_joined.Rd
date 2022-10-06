@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_joined.R
 \name{derive_vars_joined}
 \alias{derive_vars_joined}
-\title{Add Variables from a Second Dataset Based on Variables from Both Datasets}
+\title{Add Variables from an Additional Dataset Based on Conditions from Both Datasets}
 \usage{
 derive_vars_joined(
   dataset,
@@ -60,10 +60,11 @@ additional dataset (\code{dataset_add}) are added.
 
 \item{join_vars}{Variables to use from additional dataset
 
-The variables required from the additional dataset for \code{filter_join} should
-be specified for this argument. If a specified variables exists in both the
-input dataset and the additional dataset, the suffix ".join" is added to
-the variable from the additional dataset.
+Any extra variables required from the additional dataset for \code{filter_join}
+should be specified for this argument. Variables specified for \code{new_vars}
+does not need to be repeated for \code{join_vars}. If a specified variables
+exists in both the input dataset and the additional dataset, the suffix
+".join" is added to the variable from the additional dataset.
 
 The variables are not included in the output dataset.}
 
@@ -76,6 +77,9 @@ observations are joined.
 \emph{Permitted Values}: a condition}
 
 \item{filter_join}{Filter for the joined dataset
+
+The specified condition is applied to the joined dataset. Therefore
+variables from both datasets \code{dataset} and \code{dataset_add} can be used.
 
 \emph{Permitted Values}: a condition}
 
@@ -102,10 +106,10 @@ input dataset and additionally the variables specified for \code{new_vars} from
 the additional dataset (\code{dataset_add}).
 }
 \description{
-The function adds variables from a second dataset to the input dataset. The
-selection of the observations from the second dataset can depend on variables
-from both datasets. For example, add the lowest value (nadir) before the
-current observation.
+The function adds variables from an additional dataset to the input dataset.
+The selection of the observations from the additional dataset can depend on
+variables from both datasets. For example, add the lowest value (nadir)
+before the current observation.
 }
 \details{
 \enumerate{
@@ -153,7 +157,6 @@ windows <- tribble(
 derive_vars_joined(
   adbds,
   dataset_add = windows,
-  join_vars = vars(AWHI, AWLO),
   filter_join = AWLO <= ADY & ADY <= AWHI
 )
 
@@ -182,7 +185,8 @@ derive_vars_joined(
   check_type = "none"
 )
 
-# add highest hemoglobin value within two weeks before AE
+# add highest hemoglobin value within two weeks before AE,
+# take earliest if more than one
 adae <- tribble(
   ~USUBJID, ~ASTDY,
   "1",           3,
@@ -200,9 +204,6 @@ adlb <- tribble(
   "1",      "HGB",      16,   7.4,
   "1",      "HGB",      24,   8.1,
   "1",      "ALB",       1,    42,
-  "1",      "ALB",       8,    39,
-  "1",      "ALB",      16,    38,
-  "2",      "ALB",       1,    41
 )
 
 derive_vars_joined(
@@ -211,13 +212,12 @@ derive_vars_joined(
   by_vars = vars(USUBJID),
   order = vars(AVAL, desc(ADY)),
   new_vars = vars(HGB_MAX = AVAL, HGB_DY = ADY),
-  join_vars = vars(ADY),
   filter_add = PARAMCD == "HGB",
   filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,
   mode = "last"
 )
 
-# Add APERIOD, APERIODC, APERSDT, APEREDT based on ADSL
+# Add APERIOD, APERIODC based on ADSL
 adsl <- tribble(
   ~USUBJID, ~AP01SDT,     ~AP01EDT,     ~AP02SDT,     ~AP02EDT,
   "1",      "2021-01-04", "2021-02-06", "2021-02-07", "2021-03-07",
@@ -258,6 +258,7 @@ derive_vars_joined(
   adae,
   dataset_add = period_ref,
   by_vars = vars(USUBJID),
+  new_vars = vars(APERIOD, APERIODC),
   join_vars = vars(APERSDT, APEREDT),
   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
 )
