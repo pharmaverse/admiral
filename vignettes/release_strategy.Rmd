@@ -25,7 +25,7 @@ as hotfixes.
 
 # Release Schedule
 
-A release schedule is maintained on the [homepage](../index.html#release-schedule).
+A release schedule is maintained on the [homepage](https://pharmaverse.github.io/admiral/#release-schedule).
 
 # Planning Releases
 
