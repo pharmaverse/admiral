@@ -43,7 +43,10 @@
 #'
 #'   *Permitted Values:* `TRUE`, `FALSE`
 #'
-#' @param initial_intensity Initial severity/intensity or toxity
+#' @param initial_intensity Initial severity/intensity or toxicity
+#'
+#'   This derivation assumes AE data collection method as single record per AE
+#'   with “initial” and “most extreme” severity/intensity recorded separately.
 #'
 #'   If the argument is specified, events which start before treatment start and
 #'   end after treatment start (or are ongoing) and worsened (i.e., the
@@ -56,7 +59,7 @@
 #'   *Permitted Values:* A symbol referring to a variable of the input dataset
 #'   or `NULL`
 #'
-#' @param intensity Severity/intensity or toxity
+#' @param intensity Severity/intensity or toxicity
 #'
 #'   If the argument is specified, events which start before treatment start and
 #'   end after treatment start (or are ongoing) and worsened (i.e., the
@@ -78,16 +81,18 @@
 #' - *not treated*: If `trt_start_date` is `NA`, it is set to `NA_character_`.
 #' - *event before treatment*: If `end_date` is before `trt_start_date` (and
 #' `end_date` is not `NA`), it is set to `NA_character_`.
-#' - *no event date*: If `start_date` is `NA`, it is set to `"Y"`.
+#' - *no event date*: If `start_date` is `NA`, it is set to `"Y"` as in such
+#' cases it is usually considered more conservative to assume the event was
+#' treatment-emergent.
 #' - *event started during treatment*:
 #'     - if `end_window` is not specified:
 #'       if `start_date` is on or after `trt_start_date`, it is set to `"Y"`,
 #'     - if `end_window` is specified:
 #'       if `start_date` is on or after `trt_start_date` and `start_date` is on
 #'       or before `trt_end_date` + `end_window` days, it is set to `"Y"`,
-#'  - *event started before treatment and (possibly) worsened on treatment*: If
-#'  `initial_intensity` and `intensity` is specified:
-#'    if `initial_intensity < intensity` and `start_date` is before
+#'  - *event started before treatment and (possibly) worsened on treatment*:
+#'    - if `initial_intensity` and `intensity` is specified: if
+#'    `initial_intensity < intensity` and `start_date` is before
 #'    `trt_start_date` and `end_date` is on or after `trt_start_date` or
 #'    `end_date` is `NA`, it is set to `"Y"`.
 #'  - Otherwise it is set to `NA_character_`.
