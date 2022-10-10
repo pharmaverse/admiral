@@ -69,7 +69,7 @@
 #'
 #' @details For each by group (`by_vars` argument) the observations before or
 #'   after (`selection` argument) the observations where the condition
-#'   (`condition` argument) if fulfilled the first or last time (`order`
+#'   (`condition` argument) is fulfilled the first or last time (`order`
 #'   argument and `mode` argument) is flagged in the output dataset.
 #'
 #' @return The input dataset with the new variable (`new_var`) added
@@ -139,8 +139,10 @@ derive_var_relative_flag <- function(dataset,
                                      inclusive,
                                      flag_no_ref_groups = TRUE,
                                      check_type = "warning") {
+
   new_var <- assert_symbol(enquo(new_var))
   condition <- assert_filter_cond(enquo(condition))
+  assert_logical_scalar(flag_no_ref_groups)
 
   # add obs number for merging
   tmp_obs_nr <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr")
@@ -152,6 +154,7 @@ derive_var_relative_flag <- function(dataset,
     check_type = check_type
   )
 
+  # select observations before/after the condition
   # set check_type to "none" as uniqueness was already checked by derive_var_obs_number()
   flag_obs <- filter_relative(
     data,
@@ -165,6 +168,7 @@ derive_var_relative_flag <- function(dataset,
     check_type = "none"
   )
 
+  # flag observations based on the selected observations
   derive_var_merged_exist_flag(
     data,
     dataset_add = flag_obs,

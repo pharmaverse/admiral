@@ -89,7 +89,7 @@ progression.
 \details{
 For each by group ( \code{by_vars} parameter) the observations before or
 after (\code{selection} parameter) the observations where the condition
-(\code{condition} parameter) if fulfilled the first or last time (\code{order}
+(\code{condition} parameter) is fulfilled the first or last time (\code{order}
 parameter and \code{mode} parameter) is included in the output dataset.
 }
 \examples{

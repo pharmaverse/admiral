@@ -90,7 +90,7 @@ progression.
 \details{
 For each by group (\code{by_vars} argument) the observations before or
 after (\code{selection} argument) the observations where the condition
-(\code{condition} argument) if fulfilled the first or last time (\code{order}
+(\code{condition} argument) is fulfilled the first or last time (\code{order}
 argument and \code{mode} argument) is flagged in the output dataset.
 }
 \examples{

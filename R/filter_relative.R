@@ -65,7 +65,7 @@
 #'
 #' @details For each by group ( `by_vars` parameter) the observations before or
 #'   after (`selection` parameter) the observations where the condition
-#'   (`condition` parameter) if fulfilled the first or last time (`order`
+#'   (`condition` parameter) is fulfilled the first or last time (`order`
 #'   parameter and `mode` parameter) is included in the output dataset.
 #'
 #' @author Stefan Bundfuss
