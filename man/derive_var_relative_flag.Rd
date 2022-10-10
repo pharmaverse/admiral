@@ -139,7 +139,7 @@ response \%>\%
       mode = "first",
       selection = "before",
       inclusive = TRUE
-      ),
+    ),
     filter = AVISITN > 0
   ) \%>\%
   arrange(USUBJID, AVISITN)
