@@ -125,7 +125,7 @@
 #'       mode = "first",
 #'       selection = "before",
 #'       inclusive = TRUE
-#'       ),
+#'     ),
 #'     filter = AVISITN > 0
 #'   ) %>%
 #'   arrange(USUBJID, AVISITN)
@@ -139,7 +139,6 @@ derive_var_relative_flag <- function(dataset,
                                      inclusive,
                                      flag_no_ref_groups = TRUE,
                                      check_type = "warning") {
-
   new_var <- assert_symbol(enquo(new_var))
   condition <- assert_filter_cond(enquo(condition))
   assert_logical_scalar(flag_no_ref_groups)
