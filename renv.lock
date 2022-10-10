@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "3.6.3",
+    "Version": "4.0.3",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -65,7 +65,7 @@
       "Repository": "CRAN",
       "Hash": "f3ca785924863b0e4c8cb23b6a5c75a1"
     },
-        "admiral.test": {
+    "admiral.test": {
       "Package": "admiral.test",
       "Version": "0.2.0",
       "Source": "GitHub",
@@ -81,7 +81,8 @@
       "Package": "admiraldev",
       "Version": "0.1.0",
       "Source": "Repository",
-      "Repository": "CRAN"
+      "Repository": "CRAN",
+      "Hash": "d4ea0e3868e03819b2d3f8aef44729c0"
     },
     "askpass": {
       "Package": "askpass",

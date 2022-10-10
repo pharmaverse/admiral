@@ -89,7 +89,7 @@ test_that("derive_param_exist_flag Test 2: error is issued if aval_fun returns w
 ## derive_param_exist_flag Test 3: error is issued if paramter already exists in dataset ----
 test_that("derive_param_exist_flag Test 3: error is issued if paramter already exists in dataset", {
   expect_error(
-    actual <- derive_param_exist_flag(
+    derive_param_exist_flag(
       dataset = adrs,
       dataset_adsl = adsl,
       dataset_add = adrs,
