@@ -181,8 +181,7 @@ test_that("call_derivation - Error is thrown if `...` arguments are not properly
   )
 })
 
-
-test_that("call_derivation - Error is thrown if duplicate parameters includede", {
+test_that("call_derivation - Error is thrown if duplicate parameters", {
   input <- admiral_vs[sample(seq_len(nrow(admiral_vs)), 1000), ]
 
   expect_error(
@@ -190,7 +189,8 @@ test_that("call_derivation - Error is thrown if duplicate parameters includede",
       dataset = input,
       derivation = derive_vars_dt,
       variable_params = list(
-        params(dtc = VSDTC, dtc = VSDTC, new_vars_prefix = "A")),
+        params(dtc = VSDTC, dtc = VSDTC, new_vars_prefix = "A")
+      ),
       flag_imputation = "auto"
     ), "The following parameters have been specified more than once: `dtc`",
     fixed = TRUE
