@@ -476,7 +476,6 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' example_fun_name(vars(APERSDT = APxxSDT, APEREDT = APxxEDT))
 #'
 #' try(example_fun_name(vars(APERSDT = APxxSDT, APxxEDT)))
-#'
 assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
   assert_logical_scalar(optional)
 
@@ -512,8 +511,9 @@ assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
     if (any(names(arg) == "")) {
       abort(sprintf(
         paste(
-        "`%s` must be a named list of unquoted variable names,",
-        "e.g. `vars(APERSDT = APxxSDT, APEREDT = APxxEDT)`"),
+          "`%s` must be a named list of unquoted variable names,",
+          "e.g. `vars(APERSDT = APxxSDT, APEREDT = APxxEDT)`"
+        ),
         arg_name(substitute(arg))
       ))
     }

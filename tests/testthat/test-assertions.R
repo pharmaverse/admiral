@@ -111,30 +111,32 @@ test_that("assert_character_scalar Test 9: error if input is a vector", {
 })
 
 # assert_vars ----
-test_that("no error if expected input", {
+## Test 10: no error if expected input ----
+test_that("assert_vars Test 10: no error if expected input", {
   expect_invisible(assert_vars(vars(USUBJID, PARAMCD)))
   expect_invisible(assert_vars(
     vars(APERSDT = APxxSDT, APEREDT = APxxEDT),
-    expect_names = TRUE))
+    expect_names = TRUE
+  ))
 })
 
-test_that("error if unexpected input", {
+## Test 11: error if unexpected input ----
+test_that("assert_vars Test 11: error if unexpected input", {
   expect_error(assert_vars(AVAL + 1))
   expect_error(assert_vars(rlang::exprs(USUBJID, PARAMCD)))
   expect_error(assert_vars(c("USUBJID", "PARAMCD", "VISIT")))
   expect_error(assert_vars(vars(USUBJID, AVAL + 2)))
   expect_error(assert_vars(vars(APERSDT = APxxSDT, APxxEDT), expect_names = TRUE))
-}
-)
+})
 
 # assert_order_vars ----
-## Test 10: returns invisible if used correctly ----
-test_that("assert_order_vars Test 10: returns invisible if used correctly", {
+## Test 12: returns invisible if used correctly ----
+test_that("assert_order_vars Test 12: returns invisible if used correctly", {
   expect_invisible(assert_order_vars(vars(USUBJID, PARAMCD, desc(AVISITN))))
 })
 
-## Test 11: returns errors if used incorrectly ----
-test_that("assert_order_vars Test 11: returns errors if used incorrectly", {
+## Test 13: returns errors if used incorrectly ----
+test_that("assert_order_vars Test 13: returns errors if used incorrectly", {
   expect_error(assert_order_vars(rlang::exprs(USUBJID, PARAMCD)))
   expect_error(assert_order_vars(c("USUBJID", "PARAMCD", "VISIT")))
   expect_error(assert_order_vars(vars(USUBJID, toupper(PARAMCD), -AVAL)))
