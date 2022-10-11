@@ -437,8 +437,14 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' Checks if an argument is a valid list of variables created using `vars()`
 #'
 #' @param arg A function argument to be checked
+#'
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
+#'
+#' @param expect_names Expect Names?
+#'
+#'   If the argument is set to `TRUE`, it is checked if all variables are named,
+#'   e.g., `vars(APERSDT = APxxSDT, APEREDT = APxxEDT)`.
 #'
 #' @author Samia Kabi
 #'
@@ -462,7 +468,16 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
 #' try(example_fun(vars(USUBJID, toupper(PARAMCD), desc(AVAL))))
-assert_vars <- function(arg, optional = FALSE) {
+#'
+#' example_fun_name <- function(by_vars) {
+#'   assert_vars(by_vars, expect_names = TRUE)
+#' }
+#'
+#' example_fun_name(vars(APERSDT = APxxSDT, APEREDT = APxxEDT))
+#'
+#' try(example_fun_name(vars(APERSDT = APxxSDT, APxxEDT)))
+#'
+assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
   assert_logical_scalar(optional)
 
   default_err_msg <- sprintf(
@@ -491,6 +506,17 @@ assert_vars <- function(arg, optional = FALSE) {
       enumerate(expr_list[!is_symbol])
     )
     abort(err_msg)
+  }
+
+  if (expect_names) {
+    if (any(names(arg) == "")) {
+      abort(sprintf(
+        paste(
+        "`%s` must be a named list of unquoted variable names,",
+        "e.g. `vars(APERSDT = APxxSDT, APEREDT = APxxEDT)`"),
+        arg_name(substitute(arg))
+      ))
+    }
   }
 
   invisible(arg)
