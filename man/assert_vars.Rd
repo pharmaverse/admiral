@@ -44,7 +44,6 @@ example_fun_name <- function(by_vars) {
 example_fun_name(vars(APERSDT = APxxSDT, APEREDT = APxxEDT))
 
 try(example_fun_name(vars(APERSDT = APxxSDT, APxxEDT)))
-
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
