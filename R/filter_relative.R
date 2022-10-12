@@ -49,8 +49,6 @@
 #'
 #' @param keep_no_ref_groups Should by groups without reference observation be kept?
 #'
-#'   *Default:* `TRUE`
-#'
 #'   *Permitted Values:* `TRUE`, `FALSE`
 #'
 #' @param check_type Check uniqueness?
@@ -58,8 +56,6 @@
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
-#'
-#'   *Default:* `"none"`
 #'
 #'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
 #'

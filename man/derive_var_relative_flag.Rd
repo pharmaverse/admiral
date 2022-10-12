@@ -85,7 +85,7 @@ The input dataset with the new variable (\code{new_var}) added
 Flag all observations before or after the observation where a specified
 condition is fulfilled for each by group. For example, the function could be
 called to flag for each subject all observations before the first disease
-progression.
+progression or to flag all AEs after a specific AE.
 }
 \details{
 For each by group (\code{by_vars} argument) the observations before or
@@ -96,6 +96,31 @@ argument and \code{mode} argument) is flagged in the output dataset.
 \examples{
 library(tibble)
 library(dplyr, warn.conflict = FALSE)
+
+# Flag all AEs after the first COVID AE
+adae <- tribble(
+  ~USUBJID, ~ASTDY, ~ACOVFL, ~AESEQ,
+  "1",           2, NA,           1,
+  "1",           5, "Y",          2,
+  "1",           5, NA,           3,
+  "1",          17, NA,           4,
+  "1",          27, "Y",          5,
+  "1",          32, NA,           6,
+  "2",           8, NA,           1,
+  "2",          11, NA,           2,
+)
+
+derive_var_relative_flag(
+  adae,
+  by_vars = vars(USUBJID),
+  order = vars(ASTDY, AESEQ),
+  new_var = PSTCOVFL,
+  condition = ACOVFL == "Y",
+  mode = "first",
+  selection = "after",
+  inclusive = FALSE,
+  flag_no_ref_groups = FALSE
+)
 
 response <- tribble(
   ~USUBJID, ~AVISITN, ~AVALC,

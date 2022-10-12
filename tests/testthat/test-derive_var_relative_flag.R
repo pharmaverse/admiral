@@ -36,3 +36,36 @@ test_that("derive_var_relative_flag Test 1: flag observations up to first PD", {
     keys = c("USUBJID", "AVISITN")
   )
 })
+
+## Test 2: Flag AEs after COVID AE ----
+test_that("derive_var_relative_flag Test 2: Flag AEs after COVID AE", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~ASTDY, ~ACOVFL, ~AESEQ, ~PSTCOVFL,
+    "1",           2, NA,           1, NA,
+    "1",           5, "Y",          2, NA,
+    "1",           5, NA,           3, "Y",
+    "1",          17, NA,           4, "Y",
+    "1",          27, "Y",          5, "Y",
+    "1",          32, NA,           6, "Y",
+    "2",           8, NA,           1, NA,
+    "2",          11, NA,           2, NA
+  )
+
+  adae <- select(expected, -PSTCOVFL)
+
+  expect_dfs_equal(
+    base = expected,
+    compare = derive_var_relative_flag(
+      adae,
+      by_vars = vars(USUBJID),
+      order = vars(ASTDY, AESEQ),
+      new_var = PSTCOVFL,
+      condition = ACOVFL == "Y",
+      mode = "first",
+      selection = "after",
+      inclusive = FALSE,
+      flag_no_ref_groups = FALSE
+    ),
+    keys = c("USUBJID", "AESEQ")
+  )
+})

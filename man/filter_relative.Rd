@@ -61,8 +61,6 @@ included in the output dataset.
 
 \item{keep_no_ref_groups}{Should by groups without reference observation be kept?
 
-\emph{Default:} \code{TRUE}
-
 \emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
 
 \item{check_type}{Check uniqueness?
@@ -70,8 +68,6 @@ included in the output dataset.
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.
-
-\emph{Default:} \code{"none"}
 
 \emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
 }
