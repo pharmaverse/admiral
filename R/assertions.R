@@ -441,10 +441,8 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
-#' @param expect_names Expect Names?
-#'
-#'   If the argument is set to `TRUE`, it is checked if all variables are named,
-#'   e.g., `vars(APERSDT = APxxSDT, APEREDT = APxxEDT)`.
+#' @param expect_names If the argument is set to `TRUE`, it is checked if all
+#'   variables are named, e.g., `vars(APERSDT = APxxSDT, APEREDT = APxxEDT)`.
 #'
 #' @author Samia Kabi
 #'

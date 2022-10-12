@@ -12,10 +12,8 @@ assert_vars(arg, optional = FALSE, expect_names = FALSE)
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
 
-\item{expect_names}{Expect Names?
-
-If the argument is set to \code{TRUE}, it is checked if all variables are named,
-e.g., \code{vars(APERSDT = APxxSDT, APEREDT = APxxEDT)}.}
+\item{expect_names}{If the argument is set to \code{TRUE}, it is checked if all
+variables are named, e.g., \code{vars(APERSDT = APxxSDT, APEREDT = APxxEDT)}.}
 }
 \value{
 The function throws an error if \code{arg} is not a list of variables created using \code{vars()}
