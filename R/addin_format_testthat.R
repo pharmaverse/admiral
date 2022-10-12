@@ -19,7 +19,7 @@ prepare_test_that_file <- function(path) {
   }
 
   # parse the name of the testing function
-  testing_fun <- sub("^test-", "", sub(".R$", "", basename(path)))
+  testing_file <- sub("^test-", "", sub(".R$", "", basename(path)))
 
   # get file content
   file_content <- readLines(path)
@@ -47,13 +47,21 @@ prepare_test_that_file <- function(path) {
   )
   test_that_desc_cleaned <- stringr::str_remove(
     string = test_that_desc_parsed,
-    pattern = paste0(testing_fun, ", ", "test \\d{1,}: ")
+    pattern = paste0("([\\w\\.]+,? )?[Tt]est \\d{1,} ?: ")
   )
+
+  # determine name of function which is tested
+  # the function name can be specified by # function_name ---- comments
+  function_name <- str_match(file_content, "# ([\\w\\.]+) ----")[, 2]
+  if (is.na(function_name[1])) {
+    function_name[1] <- testing_file
+  }
+  function_name <- tidyr::fill(data.frame(name = function_name), name)$name
+  function_name <- function_name[test_that_loc]
 
   # formulate new test descriptions (update only those that don't include test_title)
   new_desc <- paste0(
-    testing_fun, ", ",
-    "test ", seq_along(test_that_loc), ": ",
+    "Test ", seq_along(test_that_loc), ": ",
     test_that_desc_cleaned
   )
 
@@ -61,7 +69,7 @@ prepare_test_that_file <- function(path) {
   test_that_lines_updated <- stringr::str_replace(
     string = test_that_lines,
     pattern = '(?<=test_that\\(").*"',
-    replacement = paste0(new_desc, '"')
+    replacement = paste0(function_name, " ", new_desc, '"')
   )
 
   # modify the file content
@@ -72,10 +80,10 @@ prepare_test_that_file <- function(path) {
   ####
 
   # formulate headers according to RStudio editor functionality
-  headers <- paste0("# ---- ", new_desc, " ----")
+  headers <- paste0("## ", new_desc, " ----")
 
   # get locations of headers created by this function
-  header_loc_lgl <- grepl(paste0("^# ---- ", testing_fun, ", ", "test \\d{1,}: "), file_content)
+  header_loc_lgl <- grepl(paste0("^##?( ----)?( \\w+)?,? [tT]est \\d{1,} ?: "), file_content)
 
   # remove those headers
   file_content <- file_content[!header_loc_lgl]

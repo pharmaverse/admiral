@@ -398,7 +398,7 @@ add an issue in GitHub for discussion.
 | `der_tte`                                                                         | Function used only for creating a Time to Event (TTE) Dataset                                                            |
 | `der_occds`                                                                       | OCCDS specific derivation of helper Functions                                                                            |
 | `der_prm_tte`                                                                     | TTE Functions for adding Parameters to TTE Dataset                                                                       |
-| `deprecated`                                                                      | Function which will be removed from admiral after next release.  See  [Deprecation Guidance](https://pharmaverse.github.io/admiral/articles/programming_strategy.html#deprecation).                                                                                                               |
+| `deprecated`                                                                      | Function which will be removed from admiral after next release.  See  [Deprecation Guidance](#deprecation).                                                                                                               |
 | `utils_ds_chk`                                                                    | Utilities for Dataset Checking                                                                                           |	
 | `utils_fil`                                                                       | Utilities for Filtering Observations                                                                                     |
 | `utils_fmt`                                                                       | Utilities for Formatting Observations                                                                                    |	
@@ -488,7 +488,7 @@ The documentation will be updated at:
 
 + the description level for a function, 
 + the keywords will be replaced with `deprecated`
-+ the @family roxygen tag will be removed
++ the @family roxygen tag will become `deprecated`
 
     ```{r, eval=FALSE}
 #' Title of the function
@@ -498,6 +498,8 @@ The documentation will be updated at:
 #'
 #' This function is *deprecated*, please use `new_fun()` instead.
 #' .
+#' @family deprecated
+#'
 #' @keywords deprecated
 #' .
     ``` 
