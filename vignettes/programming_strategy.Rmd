@@ -223,7 +223,7 @@ and, if there’s an invalid input, the function should stop immediately with an
 An exception is the case where a variable to be added by a function already exists in the input dataset: 
 here only a warning should be displayed and the function should continue executing.
 
-Inputs should be checked either using `asserthat::assert_that()` or custom assertion functions defined in [`R/assertions.R`](https://github.com/pharmaverse/admiral/blob/main/R/assertions.R). 
+Inputs should be checked either using `asserthat::assert_that()` or custom assertion functions defined in [`R/assertions.R`](https://github.com/pharmaverse/admiraldev/blob/main/R/assertions.R).
 These custom assertion functions should either return an error in case of an invalid input or return nothing.
 
 For the most common types of input parameters like a single variable, a list of
