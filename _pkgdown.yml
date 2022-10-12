@@ -1,4 +1,4 @@
-url: https://pharmaverse.github.io/admiraldev/devel
+url: https://pharmaverse.github.io/admiraldev/
 
 template:
   bootstrap: 5
@@ -94,3 +94,5 @@ navbar:
       href: articles/git_usage.html
     - text: Pull Request Review Guidance
       href: articles/pr_review_guidance.html
+    - text: Release Strategy
+      href: articles/release_strategy.html
