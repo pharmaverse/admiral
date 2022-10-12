@@ -67,7 +67,7 @@ get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
 #'
 #' get_duplicates(c("a", "a", "b", "c", "d", "d"))
 get_duplicates <- function(x) {
-  assert_that(is.atomic(x), msg = "x must be an atomic vector")
+  assert_atomic_vector(x)
 
   unique(x[duplicated(x)])
 }
