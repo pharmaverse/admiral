@@ -1,21 +1,26 @@
-library(admiral.test)
 
 # assert_has_variables ----
 ## Test 1: error if a required variable is missing ----
 test_that("assert_has_variables Test 1: error if a required variable is missing", {
-  data(admiral_dm)
+  data <- tibble::tribble(
+    ~USUBJID,
+    "1"
+  )
 
   expect_error(
-    assert_has_variables(admiral_dm, "TRT01P"),
+    assert_has_variables(data, "TRT01P"),
     "Required variable `TRT01P` is missing."
   )
 })
 
 ## Test 2: no error if a required variable exists ----
 test_that("assert_has_variables Test 2: no error if a required variable exists", {
-  data(admiral_dm)
+  data <- tibble::tribble(
+    ~USUBJID,
+    "1"
+  )
 
-  expect_error(assert_has_variables(admiral_dm, "USUBJID"), NA)
+  expect_error(assert_has_variables(data, "USUBJID"), NA)
 })
 
 # assert_filter_cond ----
@@ -74,10 +79,14 @@ test_that("assert_data_fram Test 7: error if dataframe is grouped", {
     assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
   }
 
-  admiral_dm <- admiral_dm %>% group_by(ARMCD)
+  data <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~ARMCD,
+    "xyz",    "1",      "PLACEBO",
+    "xyz",    "2",      "ACTIVE"
+  ) %>% group_by(ARMCD)
 
   expect_error(
-    example_fun(admiral_dm)
+    example_fun(data)
   )
 })
 
