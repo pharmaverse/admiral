@@ -59,6 +59,7 @@ example_fun2("Warning")
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
+\code{\link{assert_atomic_vector}()},
 \code{\link{assert_character_vector}()},
 \code{\link{assert_data_frame}()},
 \code{\link{assert_expr}()},
