@@ -49,8 +49,3 @@ test_that("get_constant_vars Test 2: x not atomic vector", {
   expect_error(get_duplicates(x)
   )
 })
-
-
-
-
-
