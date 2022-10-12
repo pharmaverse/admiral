@@ -1,6 +1,6 @@
 library(admiral.test)
 
-#dataset_vignette
+# dataset_vignette
 # ---- dataset_vignette, test 1: A 'knitr_kable' object is output when run outside pkgdown ----
 test_that("dataset_vignette, test 1: A 'knitr_kable' object is output when run outside pkgdown", {
   expect_s3_class(dataset_vignette(head(admiral_dm)), "knitr_kable")
