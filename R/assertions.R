@@ -681,7 +681,7 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
 #'
 #' example_fun(1:10)
 #'
-#' try(example_fun(list(1,2)))
+#' try(example_fun(list(1, 2)))
 assert_atomic_vector <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
