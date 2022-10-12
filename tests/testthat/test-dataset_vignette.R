@@ -12,12 +12,21 @@ test_that("dataset_vignette, test 2: a 'datatables' object is output when run in
   expect_s3_class(dataset_vignette(head(admiral_dm)), "datatables")
 })
 
-# ---- dataset_vignette, test 3: a 'knitr_kable' object is output when run outside pkgdown ----
-test_that("dataset_vignette, test 3: a 'knitr_kable' object is output when run outside pkgdown", {
+# ---- dataset_vignette, test 3: a 'knitr_kable' object is output when run outside pkgdown using display_vars input ----
+test_that("dataset_vignette, test 3: a 'knitr_kable' object is output when run outside pkgdown using display_vars input", {
   Sys.setenv(IN_PKGDOWN = "false")
   on.exit(Sys.setenv(IN_PKGDOWN = ""))
   expect_s3_class(
     dataset_vignette(head(admiral_dm), display_vars = vars(STUDYID, USUBJID)),
     "knitr_kable"
+  )
+})
+
+# ---- dataset_vignette, test 4: a 'datatables' object is output when run inside pkgdown using display_vars input ----
+test_that("dataset_vignette, test 4: a 'datatables' object is output when run inside pkgdown using display_vars input", {
+  Sys.setenv(IN_PKGDOWN = "true")
+  on.exit(Sys.setenv(IN_PKGDOWN = ""))
+  expect_s3_class(dataset_vignette(head(admiral_dm), display_vars = vars(STUDYID, USUBJID)),
+    "datatables"
   )
 })
