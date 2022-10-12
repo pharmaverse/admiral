@@ -46,6 +46,5 @@ test_that("get_duplicates Test 1: x atomic vector", {
 test_that("get_constant_vars Test 2: x not atomic vector", {
   x <- list("a", "a", "b", "c", "d", "d", 1, 1, 4)
 
-  expect_error(get_duplicates(x)
-  )
+  expect_error(get_duplicates(x))
 })
