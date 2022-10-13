@@ -641,3 +641,10 @@ test_that("list_tte_source_objects Test 1: error is issued if package does not e
     regexp = "No package called 'tte' is installed and hence no `tte_source` objects are available"
   )
 })
+
+## Test 11: no error produced if package includes tte_source objects ----
+test_that("list_tte_source_objects Test 2: expected output", {
+  expect_silent(
+    list_tte_source_objects(package = "admiral")
+  )
+})
