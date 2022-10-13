@@ -64,7 +64,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Depends: R (>= 3.5)
 Imports:
-    admiraldev,
+    admiraldev (>= 0.2.0),
     assertthat (>= 0.2.1),
     dplyr (>= 1.0.0),
     hms (>= 0.5.3),
