@@ -13,6 +13,9 @@ observation (#1448).
 - The new function `chr2vars()` turns a character vector into a list of quosures
 (#1448).
 
+- New function `derive_var_relative_flag()` for flagging observations before or
+after a condition is fulfilled (#1453)
+
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
 
@@ -27,6 +30,9 @@ which controls if time is considered for the condition if `start_date` is after
 ## Documentation
 
 ## Various
+
+- Function `derive_vars_merged()` had an improperly formatted error message 
+which has been corrected (#1473)
 
 # admiral 0.8.1
 
