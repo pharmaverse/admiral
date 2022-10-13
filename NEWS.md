@@ -4,6 +4,9 @@
 
 - New function `derive_var_trtemfl()` for deriving treatment emergent flags (#989)
 
+- New function `derive_var_relative_flag()` for flagging observations before or
+after a condition is fulfilled (#1453)
+
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
 
