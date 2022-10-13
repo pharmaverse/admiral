@@ -1,6 +1,6 @@
 # admiral 0.8.4
 
-- Fixed a bug where a recent update to `{lifecylce}` caused several `admiral` tests to break. (#1500)
+- Fixed a bug where a recent update to `{lifecylce}` caused several `admiral` tests to break (#1500)
 
 # admiral 0.8.3
 
