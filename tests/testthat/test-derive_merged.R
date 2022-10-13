@@ -37,7 +37,8 @@ vs <- tibble::tribble(
 
 # derive_vars_merged ----
 ## Test 1: merge all variables ----
-test_that("derive_vars_merged Test 1: merge all variables", {
+# ---- derive_merged, test 1: derive_vars_merged Test 1: merge all variables ----
+test_that("derive_merged, test 1: derive_vars_merged Test 1: merge all variables", {
   actual <- derive_vars_merged(advs,
     dataset_add = adsl,
     by_vars = vars(STUDYID, USUBJID)
@@ -53,7 +54,8 @@ test_that("derive_vars_merged Test 1: merge all variables", {
 })
 
 ## Test 2: merge selected variables ----
-test_that("derive_vars_merged Test 2: merge selected variables", {
+# ---- derive_merged, test 2: derive_vars_merged Test 2: merge selected variables ----
+test_that("derive_merged, test 2: derive_vars_merged Test 2: merge selected variables", {
   actual <- derive_vars_merged(advs,
     dataset_add = adsl,
     by_vars = vars(USUBJID),
@@ -70,7 +72,8 @@ test_that("derive_vars_merged Test 2: merge selected variables", {
 })
 
 ## Test 3: merge last value and flag matched by groups ----
-test_that("derive_vars_merged Test 3: merge last value and flag matched by groups", {
+# ---- derive_merged, test 3: derive_vars_merged Test 3: merge last value and flag matched by groups ----
+test_that("derive_merged, test 3: derive_vars_merged Test 3: merge last value and flag matched by groups", {
   actual <- derive_vars_merged(adsl,
     dataset_add = advs,
     order = vars(AVAL),
@@ -92,7 +95,8 @@ test_that("derive_vars_merged Test 3: merge last value and flag matched by group
 })
 
 ## Test 4: error if variable in both datasets ----
-test_that("derive_vars_merged Test 4: error if variable in both datasets", {
+# ---- derive_merged, test 4: derive_vars_merged Test 4: error if variable in both datasets ----
+test_that("derive_merged, test 4: derive_vars_merged Test 4: error if variable in both datasets", {
   expect_error(derive_vars_merged(advs,
     dataset_add = adsl,
     by_vars = vars(USUBJID)
@@ -103,7 +107,8 @@ test_that("derive_vars_merged Test 4: error if variable in both datasets", {
 
 # derive_vars_merged_dt ----
 ## Test 5: merge first date ----
-test_that("derive_vars_merged_dt Test 5: merge first date", {
+# ---- derive_merged, test 5: derive_vars_merged_dt Test 5: merge first date ----
+test_that("derive_merged, test 5: derive_vars_merged_dt Test 5: merge first date", {
   suppress_warning(
     actual <- derive_vars_merged_dt(
       adsl,
@@ -134,7 +139,8 @@ test_that("derive_vars_merged_dt Test 5: merge first date", {
 
 # derive_vars_merged_dtm ----
 ## Test 6: merge first date ----
-test_that("derive_vars_merged_dtm Test 6: merge first date", {
+# ---- derive_merged, test 6: derive_vars_merged_dtm Test 6: merge first date ----
+test_that("derive_merged, test 6: derive_vars_merged_dtm Test 6: merge first date", {
   suppress_warning(
     actual <- derive_vars_merged_dtm(
       adsl,
@@ -170,7 +176,8 @@ test_that("derive_vars_merged_dtm Test 6: merge first date", {
 
 # derive_var_merged_cat ----
 ## Test 7: merge categorized variable ----
-test_that("derive_vars_merged_cat Test 7: merge categorized variable", {
+# ---- derive_merged, test 7: derive_vars_merged_cat Test 7: merge categorized variable ----
+test_that("derive_merged, test 7: derive_vars_merged_cat Test 7: merge categorized variable", {
   get_region <- function(x) {
     if_else(x %in% c("AUT", "NOR"), "EUROPE", "AFRICA")
   }
@@ -197,7 +204,8 @@ test_that("derive_vars_merged_cat Test 7: merge categorized variable", {
 })
 
 ## Test 8: define value for non-matched by groups ----
-test_that("derive_vars_merged_cat Test 8: define value for non-matched by groups", {
+# ---- derive_merged, test 8: derive_vars_merged_cat Test 8: define value for non-matched by groups ----
+test_that("derive_merged, test 8: derive_vars_merged_cat Test 8: define value for non-matched by groups", {
   get_vscat <- function(x) {
     if_else(x == "BASELINE", "BASELINE", "POST-BASELINE")
   }
@@ -228,7 +236,8 @@ test_that("derive_vars_merged_cat Test 8: define value for non-matched by groups
 
 # derive_var_merged_exist_flag ----
 ## Test 9: merge existence flag ----
-test_that("derive_vars_merged_exist_flag Test 9: merge existence flag", {
+# ---- derive_merged, test 9: derive_vars_merged_exist_flag Test 9: merge existence flag ----
+test_that("derive_merged, test 9: derive_vars_merged_exist_flag Test 9: merge existence flag", {
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs,
@@ -250,7 +259,8 @@ test_that("derive_vars_merged_exist_flag Test 9: merge existence flag", {
 
 # derive_var_merged_character ----
 ## Test 10: merge character variable, no transformation ----
-test_that("derive_var_merged_character Test 10: merge character variable, no transformation", {
+# ---- derive_merged, test 10: derive_var_merged_character Test 10: merge character variable, no transformation ----
+test_that("derive_merged, test 10: derive_var_merged_character Test 10: merge character variable, no transformation", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -273,7 +283,8 @@ test_that("derive_var_merged_character Test 10: merge character variable, no tra
 })
 
 ## Test 11: merge character variable, upper case ----
-test_that("derive_var_merged_character Test 11: merge character variable, upper case", {
+# ---- derive_merged, test 11: derive_var_merged_character Test 11: merge character variable, upper case ----
+test_that("derive_merged, test 11: derive_var_merged_character Test 11: merge character variable, upper case", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -298,7 +309,8 @@ test_that("derive_var_merged_character Test 11: merge character variable, upper 
 })
 
 ## Test 12: merge character variable, lower case ----
-test_that("derive_var_merged_character Test 12: merge character variable, lower case", {
+# ---- derive_merged, test 12: derive_var_merged_character Test 12: merge character variable, lower case ----
+test_that("derive_merged, test 12: derive_var_merged_character Test 12: merge character variable, lower case", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -322,7 +334,8 @@ test_that("derive_var_merged_character Test 12: merge character variable, lower 
 })
 
 ## Test 13: merge character variable, title case ----
-test_that("derive_var_merged_character Test 13: merge character variable, title case", {
+# ---- derive_merged, test 13: derive_var_merged_character Test 13: merge character variable, title case ----
+test_that("derive_merged, test 13: derive_var_merged_character Test 13: merge character variable, title case", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -348,7 +361,8 @@ test_that("derive_var_merged_character Test 13: merge character variable, title 
 
 
 ## Test 14: merge lookup table
-test_that("derive_vars_merged_lookup Test 14: merge lookup table", {
+# ---- derive_merged, test 14: derive_vars_merged_lookup Test 14: merge lookup table ----
+test_that("derive_merged, test 14: derive_vars_merged_lookup Test 14: merge lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -384,7 +398,8 @@ test_that("derive_vars_merged_lookup Test 14: merge lookup table", {
 
 ## Test 15: merge lookup table when all by_vars have corresponding records in
 ## the lookup table
-test_that("derive_vars_merged_lookup Test 15: merge lookup table when all
+# ---- derive_merged, test 15: NA ----
+test_that("derive_merged Test 15: merge lookup table when all
           by_vars have corresponding records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
@@ -422,7 +437,8 @@ test_that("derive_vars_merged_lookup Test 15: merge lookup table when all
 
 ## Test16: get not mapped when not all by_vars have corresponding records
 ## in the lookup table
-test_that("get_not_mapped Test 16: get not mapped when not all by_vars have
+# ---- derive_merged, test 16: NA ----
+test_that("derive_merged Test 16: get not mapped when not all by_vars have
           corresponding records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
