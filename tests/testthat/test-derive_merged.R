@@ -379,3 +379,81 @@ test_that("derive_vars_merged_lookup Test 14: merge lookup table", {
     keys = c("USUBJID", "VSSEQ", "VSTESTCD")
   )
 })
+
+
+
+## Test 15: merge lookup table when all by_vars have corresponding records in
+## the lookup table
+test_that("derive_vars_merged_lookup Test 15: merge lookup table when all
+          by_vars have corresponding records in the lookup table", {
+  param_lookup <- tibble::tribble(
+    ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
+    "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
+    "HEIGHT", "Height", "HEIGHT", "Height (cm)",
+    "BMI", "Body Mass Index", "BMI", "Body Mass Index(kg/m^2)",
+    "DIABP", "Diastolic Blood Pressure", "DIABP", "Diastolic Blood Pressure (mmHg)"
+  )
+
+  attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
+  attr(param_lookup$VSTEST, "label") <- "Vital Signs Test Name"
+
+
+  actual <- derive_vars_merged_lookup(
+    vs,
+    dataset_add = param_lookup,
+    by_vars = vars(VSTESTCD, VSTEST),
+    new_var = vars(PARAMCD, PARAM = DESCRIPTION),
+    print_not_mapped = TRUE
+  )
+
+  expected <-
+    left_join(vs, param_lookup, by = c("VSTESTCD", "VSTEST")) %>%
+    rename(PARAM = DESCRIPTION)
+
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "VSSEQ", "VSTESTCD")
+  )
+})
+
+
+
+## Test16: get not mapped when not all by_vars have corresponding records
+## in the lookup table
+test_that("get_not_mapped Test 16: get not mapped when not all by_vars have
+          corresponding records in the lookup table", {
+            param_lookup <- tibble::tribble(
+              ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
+              "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
+              "HEIGHT", "Height", "HEIGHT", "Height (cm)",
+              "BMI", "Body Mass Index", "BMI", "Body Mass Index(kg/m^2)"
+            )
+
+            attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
+            attr(param_lookup$VSTEST, "label") <- "Vital Signs Test Name"
+
+
+            act_vs_param <- derive_vars_merged_lookup(
+              vs,
+              dataset_add = param_lookup,
+              by_vars = vars(VSTESTCD, VSTEST),
+              new_var = vars(PARAMCD, PARAM = DESCRIPTION),
+              print_not_mapped = TRUE
+            )
+
+            actual <- get_not_mapped()
+
+            expected <- left_join(vs, param_lookup, by = c("VSTESTCD", "VSTEST")) %>%
+              rename(PARAM = DESCRIPTION) %>%
+              filter(is.na(PARAMCD)) %>%
+              select(VSTESTCD, VSTEST) %>%
+              distinct()
+
+            expect_dfs_equal(
+              base = expected,
+              compare = actual,
+              keys = c("VSTESTCD", "VSTEST")
+            )
+          })
