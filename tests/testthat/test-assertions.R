@@ -150,3 +150,12 @@ test_that("assert_order_vars Test 13: returns errors if used incorrectly", {
   expect_error(assert_order_vars(c("USUBJID", "PARAMCD", "VISIT")))
   expect_error(assert_order_vars(vars(USUBJID, toupper(PARAMCD), -AVAL)))
 })
+
+
+# assert_atomic_vector ----
+## Test 14: error if input is not atomic vector ----
+test_that("assert_atomic_vector Test 14: error if input is not atomic vector", {
+  x <- list("a", "a", "b", "c", "d", "d", 1, 1, 4)
+
+  expect_error(assert_atomic_vector(x))
+})
