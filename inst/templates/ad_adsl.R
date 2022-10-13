@@ -261,4 +261,4 @@ adsl <- adsl %>%
 # Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(adsl, file = file.path(dir, "adsl.rds"), compress = "bzip2")
+saveRDS(adsl, file = file.path(dir, "adsl.rds"), compress = "bzip2")
