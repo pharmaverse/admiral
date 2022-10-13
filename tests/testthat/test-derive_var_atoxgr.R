@@ -1,7 +1,8 @@
 
 # derive_var_atoxgr ----
 
-test_that("derive_var_atoxgr: Test 1 ATOXGR cannot be graded", {
+## Test 1: ATOXGR cannot be graded ----
+test_that("derive_var_atoxgr Test 1: ATOXGR cannot be graded", {
   exp_out_1 <- tibble::tribble(
     ~ATOXDSCL,          ~ATOXDSCH,        ~ATOXGRL,      ~ATOXGRH,       ~ATOXGR,
     NA_character_,      NA_character_,    NA_character_, NA_character_,  NA_character_,
@@ -27,7 +28,8 @@ test_that("derive_var_atoxgr: Test 1 ATOXGR cannot be graded", {
   )
 })
 
-test_that("derive_var_atoxgr: Test 2 ATOXGR = 0 (normal)", {
+## Test 2: ATOXGR = 0 (normal) ----
+test_that("derive_var_atoxgr Test 2: ATOXGR = 0 (normal)", {
   exp_out_2 <- tibble::tribble(
     ~ATOXDSCL,          ~ATOXDSCH,        ~ATOXGRL,      ~ATOXGRH,       ~ATOXGR,
     "Hypoglycemia",     "Hyperglycemia",  "0",           "0",            "0",
@@ -48,7 +50,9 @@ test_that("derive_var_atoxgr: Test 2 ATOXGR = 0 (normal)", {
   )
 })
 
-test_that("derive_var_atoxgr: Test 3 ATOXGR > 0 (HYPER)", {
+
+## Test 3: ATOXGR > 0 (HYPER) ----
+test_that("derive_var_atoxgr Test 3: ATOXGR > 0 (HYPER)", {
   exp_out_3 <- tibble::tribble(
     ~ATOXDSCL,          ~ATOXDSCH,        ~ATOXGRL,      ~ATOXGRH,       ~ATOXGR,
     "Hypoglycemia",     "Hyperglycemia",  NA_character_, "1",            "1",
@@ -69,7 +73,8 @@ test_that("derive_var_atoxgr: Test 3 ATOXGR > 0 (HYPER)", {
   )
 })
 
-test_that("derive_var_atoxgr: Test 4 ATOXGR < 0 (HYPO)", {
+## Test 4: ATOXGR < 0 (HYPO) ----
+test_that("derive_var_atoxgr Test 4: ATOXGR < 0 (HYPO)", {
   exp_out_4 <- tibble::tribble(
     ~ATOXDSCL,          ~ATOXDSCH,        ~ATOXGRL,      ~ATOXGRH,       ~ATOXGR,
     "Hypoglycemia",     "Hyperglycemia",  "3",           NA_character_,  "-3",
@@ -90,44 +95,51 @@ test_that("derive_var_atoxgr: Test 4 ATOXGR < 0 (HYPO)", {
   )
 })
 
+# derive_var_atoxgr_dir ----
 
-## Blood and lymphatic system disorders ----
-## Grade 3: <80 g/L
-## Grade 2: <100 - 80g/L
-## Grade 1: <LLN - 100 g/L
+## Blood and lymphatic system disorders
 
-### 1. Anemia ----
-test_that("derive_var_atoxgr_dir: Test 1 NCICTCAEv4 Anemia", {
-  exp_out_ctcv4_1 <- tibble::tribble(
-    ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRL,
-    "Not a term",   80,     120,    200,    "G/L",  NA,
-    NA_character_,  60,     50,     100,    "G/L",  NA,
-    "ANEMIA",       79,     140,    NA,     "G/L",  "3",
-    "ANEMIA",       80,     140,    NA,     "G/L",  "2",
-    "Anemia",       99,     140,    NA,     "G/L",  "2",
-    "Anemia",       100,    140,    NA,     "G/L",  "1",
-    # wrong UNIT - GRADE should be missing
-    "anemia",       100,    140,    NA,     "G/dL", NA,
-    "Anemia",       139,    140,    NA,     "G/L",  "1",
-    "ANEMIA",       140,    140,    NA,     "g/L",  "0",
-    # ANRLO missing AVAL not grade 2 or 3 - cannot grade
-    "Anemia",       140,    NA,     NA,     "G/L",  NA,
-    "Anemia",       139,    NA,     NA,     "G/L",  NA,
-    "Anemia",       100,    NA,     NA,     "G/L",  NA,
-    # ANRLO missing but AVAL satisfies grade 2
-    "Anemia",       99,     NA,     NA,     "G/L",  "2",
-    # ANRLO missing but AVAL satisfies grade 3
-    "Anemia",       79,     NA,     NA,     "G/L",  "3",
-    # Unit missing cannot grade
-    "Anemia",       140,    140,    NA,     NA,     NA,
-    # AVAL missing cannot grade
-    "Anemia",       NA,     140,    NA,     "G/L",  NA,
-  )
-  input_ctcv4_1 <- exp_out_ctcv4_1 %>%
-    select(-ATOXGRL)
+### Anemia
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
+### Grade 3: <80 g/L
+### Grade 2: <100 - 80g/L
+### Grade 1: <LLN - 100 g/L
 
-  actual_output_ctcv4_1 <- derive_var_atoxgr_dir(
-    input_ctcv4_1,
+
+expected_anemia <- tibble::tribble(
+  ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRL,
+  "Not a term",   80,     120,    200,    "G/L",  NA,
+  NA_character_,  60,     50,     100,    "G/L",  NA,
+  "ANEMIA",       79,     140,    NA,     "G/L",  "3",
+  "ANEMIA",       80,     140,    NA,     "G/L",  "2",
+  "Anemia",       99,     140,    NA,     "G/L",  "2",
+  "Anemia",       100,    140,    NA,     "G/L",  "1",
+  # wrong UNIT - GRADE should be missing
+  "anemia",       100,    140,    NA,     "G/dL", NA,
+  "Anemia",       139,    140,    NA,     "G/L",  "1",
+  "ANEMIA",       140,    140,    NA,     "g/L",  "0",
+  # ANRLO missing AVAL not grade 2 or 3 - cannot grade
+  "Anemia",       140,    NA,     NA,     "G/L",  NA,
+  "Anemia",       139,    NA,     NA,     "G/L",  NA,
+  "Anemia",       100,    NA,     NA,     "G/L",  NA,
+  # ANRLO missing but AVAL satisfies grade 2
+  "Anemia",       99,     NA,     NA,     "G/L",  "2",
+  # ANRLO missing but AVAL satisfies grade 3
+  "Anemia",       79,     NA,     NA,     "G/L",  "3",
+  # Unit missing cannot grade
+  "Anemia",       140,    140,    NA,     NA,     NA,
+  # AVAL missing cannot grade
+  "Anemia",       NA,     140,    NA,     "G/L",  NA,
+)
+
+input_anemia <- expected_anemia %>%
+  select(-ATOXGRL)
+
+## Test 5: CTCAEv4 Anemia ----
+test_that("derive_var_atoxgr_dir Test 5: CTCAEv4 Anemia", {
+
+  actual_anemia_ctcv4 <- derive_var_atoxgr_dir(
+    input_anemia,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCL,
@@ -136,35 +148,58 @@ test_that("derive_var_atoxgr_dir: Test 1 NCICTCAEv4 Anemia", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_1,
-    compare = actual_output_ctcv4_1,
+    base = expected_anemia,
+    compare = actual_anemia_ctcv4,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
-### 2. Leukocytosis ----
+## Test 6: CTCAEv5 Anemia ----
+test_that("derive_var_atoxgr_dir Test 6: CTCAEv5 Anemia", {
+
+  actual_anemia_ctcv5 <- derive_var_atoxgr_dir(
+    input_anemia,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_anemia,
+    compare = actual_anemia_ctcv5,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+
+### Leukocytosis
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 3: >100,000/mm3
 
-test_that("derive_var_atoxgr_dir: Test 2 NCICTCAEv4 Leukocytosis", {
-  exp_out_ctcv4_2 <- tibble::tribble(
-    ~ATOXDSCH,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
-    "Not a term",   99,     0,      NA,     "10^9/L",  NA,
-    NA,             99,     0,      NA,     "10^9/L",  NA,
-    "Leukocytosis", 101,    0,      40,     "10^9/L",  "3",
-    "leukocytosis", 100,    0,      40,     "10^9/L",  "0",
-    "Leukocytosis", 99,     0,      NA,     "10^9/L",  "0",
-    # wrong UNIT - GRADE should be missing
-    "Leukocytosis", 99,     0,      40,     "10^9/M",  NA,
-    # Unit missing cannot grade
-    "Leukocytosis", 99,     0,      40,     NA,        NA,
-    # AVAL missing cannot grade
-    "Leukocytosis", NA,     0,      40,     "10^9/L",  NA,
-  )
-  input_ctcv4_2 <- exp_out_ctcv4_2 %>%
-    select(-ATOXGRH)
+expected_leukocytosis <- tibble::tribble(
+  ~ATOXDSCH,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
+  "Not a term",   99,     0,      NA,     "10^9/L",  NA,
+  NA,             99,     0,      NA,     "10^9/L",  NA,
+  "Leukocytosis", 101,    0,      40,     "10^9/L",  "3",
+  "leukocytosis", 100,    0,      40,     "10^9/L",  "0",
+  "Leukocytosis", 99,     0,      NA,     "10^9/L",  "0",
+  # wrong UNIT - GRADE should be missing
+  "Leukocytosis", 99,     0,      40,     "10^9/M",  NA,
+  # Unit missing cannot grade
+  "Leukocytosis", 99,     0,      40,     NA,        NA,
+  # AVAL missing cannot grade
+  "Leukocytosis", NA,     0,      40,     "10^9/L",  NA,
+)
+input_leukocytosis <- expected_leukocytosis %>%
+  select(-ATOXGRH)
 
-  actual_output_ctcv4_2 <- derive_var_atoxgr_dir(
-    input_ctcv4_2,
+## Test 7: CTCAEv4 Leukocytosis ----
+test_that("derive_var_atoxgr_dir Test 7: CTCAEv4 Leukocytosis", {
+
+  actual_leukocytosis <- derive_var_atoxgr_dir(
+    input_leukocytosis,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -173,40 +208,62 @@ test_that("derive_var_atoxgr_dir: Test 2 NCICTCAEv4 Leukocytosis", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_2,
-    compare = actual_output_ctcv4_2,
+    base = expected_leukocytosis,
+    compare = actual_leukocytosis,
     keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
-## Investigations ----
+## Test 8: CTCAEv5 Leukocytosis ----
+test_that("derive_var_atoxgr_dir Test 8: CTCAEv5 Leukocytosis", {
 
-### 3. Activated partial thromboplastin time prolonged ----
+  actual_leukocytosis <- derive_var_atoxgr_dir(
+    input_leukocytosis,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_leukocytosis,
+    compare = actual_leukocytosis,
+    keys = c("ATOXDSCH", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+## Investigations
+
+### Activated partial thromboplastin time prolonged
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 3: >2.5 x ULN
 ### Grade 2: >1.5 - 2.5 x ULN
 ### Grade 1: >ULN - 1.5 x ULN
 
-test_that("derive_var_atoxgr_dir: Test 3 CTCAEv4 Activated partial thromboplastin time prolonged", {
-  exp_out_ctcv4_3 <- tibble::tribble(
-    ~ATOXDSCH,                                         ~AVAL,  ~ANRHI,  ~AVALU,         ~ATOXGRH,
-    "Not a term",                                      80,     100,     NA_character_,  NA,
-    NA_character_,                                     60,     100,     NA_character_,  NA,
-    "Activated partial thromboplastin time prolonged", 251,    100,     NA_character_,  "3",
-    "Activated Partial thromboplastin time prolonged", 250,    100,     NA_character_,  "2",
-    "Activated partial Thromboplastin time prolonged", 151,    100,     NA_character_,  "2",
-    "Activated partial thromboplastin time prolonged", 150,    100,     NA_character_,  "1",
-    "Activated partial thromboplastin Time prolonged", 101,    100,     NA_character_,  "1",
-    "Activated partial thromboplastin time prolonged", 100,    100,     NA_character_,  "0",
-    # ANRHI missing - cannot grade
-    "Activated partial thromboplastin time prolonged", 100,    NA,      NA_character_,  NA,
-    # AVAL missing cannot grade
-    "Activated partial thromboplastin time prolonged", NA,     100,     NA_character_,  NA,
-  )
-  input_ctcv4_3 <- exp_out_ctcv4_3 %>%
-    select(-ATOXGRH)
+expected_aptt <- tibble::tribble(
+  ~ATOXDSCH,                                         ~AVAL,  ~ANRHI,  ~AVALU,         ~ATOXGRH,
+  "Not a term",                                      80,     100,     NA_character_,  NA,
+  NA_character_,                                     60,     100,     NA_character_,  NA,
+  "Activated partial thromboplastin time prolonged", 251,    100,     NA_character_,  "3",
+  "Activated Partial thromboplastin time prolonged", 250,    100,     NA_character_,  "2",
+  "Activated partial Thromboplastin time prolonged", 151,    100,     NA_character_,  "2",
+  "Activated partial thromboplastin time prolonged", 150,    100,     NA_character_,  "1",
+  "Activated partial thromboplastin Time prolonged", 101,    100,     NA_character_,  "1",
+  "Activated partial thromboplastin time prolonged", 100,    100,     NA_character_,  "0",
+  # ANRHI missing - cannot grade
+  "Activated partial thromboplastin time prolonged", 100,    NA,      NA_character_,  NA,
+  # AVAL missing cannot grade
+  "Activated partial thromboplastin time prolonged", NA,     100,     NA_character_,  NA,
+)
+input_aptt <- expected_aptt %>%
+  select(-ATOXGRH)
 
-  actual_output_ctcv4_3 <- derive_var_atoxgr_dir(
-    input_ctcv4_3,
+## Test 9: CTCAEv4 Activated partial thromboplastin time prolonged ----
+test_that("derive_var_atoxgr_dir Test 9: CTCAEv4 Activated partial thromboplastin time prolonged", {
+
+  actual_aptt <- derive_var_atoxgr_dir(
+    input_aptt,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -215,19 +272,40 @@ test_that("derive_var_atoxgr_dir: Test 3 CTCAEv4 Activated partial thromboplasti
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_3,
-    compare = actual_output_ctcv4_3,
+    base = expected_aptt,
+    compare = actual_aptt,
     keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
   )
 })
 
-### 4. Alanine aminotransferase increased ----
+## Test 10: CTCAEv5 Activated partial thromboplastin time prolonged ----
+test_that("derive_var_atoxgr_dir Test 10: CTCAEv5 Activated partial thromboplastin time prolonged", {
+
+  actual_aptt <- derive_var_atoxgr_dir(
+    input_aptt,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_aptt,
+    compare = actual_aptt,
+    keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
+  )
+})
+
+
+### Alanine aminotransferase increased
 ### Grade 4: >20.0 x ULN
 ### Grade 3: >5.0 - 20.0 x ULN
 ### Grade 2: >3.0 - 5.0 x ULN
 ### Grade 1: >ULN - 3.0 x ULN
 
-test_that("derive_var_atoxgr_dir: Test 4 NCICTCAEv4 Alanine aminotransferase increased", {
+## Test 11: CTCAEv4 Alanine aminotransferase increased ----
+test_that("derive_var_atoxgr_dir Test 11: CTCAEv4 Alanine aminotransferase increased", {
   exp_out_ctcv4_4 <- tibble::tribble(
     ~ATOXDSCH,                            ~AVAL,  ~ANRHI, ~AVALU,         ~ATOXGRH,
     "Not a term",                         80,     40,     NA_character_,  NA,
@@ -264,13 +342,14 @@ test_that("derive_var_atoxgr_dir: Test 4 NCICTCAEv4 Alanine aminotransferase inc
   )
 })
 
-### 5. Alkaline phosphatase increased ----
+### Alkaline phosphatase increased
 ### Grade 4: >20.0 x ULN
 ### Grade 3: >5.0 - 20.0 x ULN
 ### Grade 2: >2.5 - 5.0 x ULN
 ### Grade 1: >ULN - 2.5 x ULN
 
-test_that("derive_var_atoxgr_dir: Test 5 NCICTCAEv4 Alkaline phosphatase increased", {
+## Test 12: CTCAEv4 Alkaline phosphatase increased ----
+test_that("derive_var_atoxgr_dir Test 12: CTCAEv4 Alkaline phosphatase increased", {
   exp_out_ctcv4_5 <- tibble::tribble(
     ~ATOXDSCH,                         ~AVAL,  ~ANRHI, ~AVALU,         ~ATOXGRH,
     "Not a term",                      80,     40,     NA_character_,  NA,
@@ -307,13 +386,14 @@ test_that("derive_var_atoxgr_dir: Test 5 NCICTCAEv4 Alkaline phosphatase increas
   )
 })
 
-### 6. Aspartate aminotransferase increased ----
+### Aspartate aminotransferase increased
 ### Grade 4: >20.0 x ULN
 ### Grade 3: >5.0 - 20.0 x ULN
 ### Grade 2: >3.0 - 5.0 x ULN
 ### Grade 1: >ULN - 3.0 x ULN
 
-test_that("derive_var_atoxgr_dir: Test 6 NCICTCAEv4 Aspartate aminotransferase increased", {
+## Test 13: CTCAEv4 Aspartate aminotransferase increased ----
+test_that("derive_var_atoxgr_dir Test 13: CTCAEv4 Aspartate aminotransferase increased", {
   exp_out_ctcv4_6 <- tibble::tribble(
     ~ATOXDSCH,                              ~AVAL,  ~ANRHI, ~AVALU,         ~ATOXGRH,
     "Not a term",                           80,     40,     NA_character_,  NA,
@@ -350,13 +430,14 @@ test_that("derive_var_atoxgr_dir: Test 6 NCICTCAEv4 Aspartate aminotransferase i
   )
 })
 
-### 7. Blood bilirubin increased ----
+### Blood bilirubin increased
 ### Grade 4: >10.0 x ULN
 ### Grade 3: >3.0 - 10.0 x ULN
 ### Grade 2: >3.0 - 1.5 x ULN
 ### Grade 1: >ULN - 1.5 x ULN
 
-test_that("derive_var_atoxgr_dir: Test 7 NCICTCAEv4 Blood bilirubin increased", {
+## Test 14: CTCAEv4 Blood bilirubin increased ----
+test_that("derive_var_atoxgr_dir Test 14: CTCAEv4 Blood bilirubin increased", {
   exp_out_ctcv4_7 <- tibble::tribble(
     ~ATOXDSCH,                   ~AVAL,  ~ANRHI, ~AVALU,         ~ATOXGRH,
     "Not a term",                80,     40,     NA_character_,  NA,
@@ -393,13 +474,14 @@ test_that("derive_var_atoxgr_dir: Test 7 NCICTCAEv4 Blood bilirubin increased", 
   )
 })
 
-### 8. CD4 Lymphocytes decreased ----
+### CD4 Lymphocytes decreased
 ### Grade 4: <0.05 x 10e9 /L
 ### Grade 3: <0.2 x 0.05 - 10e9 /L
 ### Grade 2: <0.5 - 0.2 x 10e9 /L
 ### Grade 1: <LLN - 0.5 x 10e9 /L
 
-test_that("derive_var_atoxgr_dir: Test 8 NCICTCAEv4 CD4 Lymphocytes decreased", {
+## Test 15: CTCAEv4 CD4 Lymphocytes decreased ----
+test_that("derive_var_atoxgr_dir Test 15: CTCAEv4 CD4 Lymphocytes decreased", {
   exp_out_ctcv4_8 <- tibble::tribble(
     ~ATOXDSCL,                    ~AVAL,  ~ANRLO, ~AVALU,    ~ATOXGRL,
     "Not a term",                 80,     120,    "10^9/L",  NA,
@@ -449,13 +531,14 @@ test_that("derive_var_atoxgr_dir: Test 8 NCICTCAEv4 CD4 Lymphocytes decreased", 
   )
 })
 
-### 9. Cholesterol high ----
+### Cholesterol high
 ### Grade 4: >12.92 mmol/L
 ### Grade 3: >10.34 - 12.92 mmol/L
 ### Grade 2: >7.75 - 10.34 mmol/L
 ### Grade 1: >ULN - 7.75 mmol/L
 
-test_that("derive_var_atoxgr_dir: Test 9 NCICTCAEv4 Cholesterol high", {
+## Test 16: CTCAEv4 Cholesterol high ----
+test_that("derive_var_atoxgr_dir Test 16: CTCAEv4 Cholesterol high", {
   exp_out_ctcv4_9 <- tibble::tribble(
     ~ATOXDSCH,          ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
     "Not a term",       8,      0,      5,      "mmol/L",  NA,
@@ -504,13 +587,14 @@ test_that("derive_var_atoxgr_dir: Test 9 NCICTCAEv4 Cholesterol high", {
   )
 })
 
-### 10. CPK increased ----
+### CPK increased
 ### Grade 4: >10.0 x ULN
 ### Grade 3: >5.0 - 10.0 x ULN
 ### Grade 2: >2.5 - 5.0 x ULN
 ### Grade 1: >ULN - 2.5 x ULN
 
-test_that("derive_var_atoxgr_dir: Test 10 NCICTCAEv4 CPK increased", {
+## Test 17: CTCAEv4 CPK increased ----
+test_that("derive_var_atoxgr_dir Test 17: CTCAEv4 CPK increased", {
   exp_out_ctcv4_10 <- tibble::tribble(
     ~ATOXDSCH,        ~AVAL,  ~ANRLO,  ~ANRHI,  ~AVALU,         ~ATOXGRH,
     "Not a term",     80,     0,       40,      NA_character_,  NA,
@@ -547,13 +631,14 @@ test_that("derive_var_atoxgr_dir: Test 10 NCICTCAEv4 CPK increased", {
   )
 })
 
-### 11. Creatinine increased ----
+### Creatinine increased
 ### Grade 4: >6.0 x ULN
 ### Grade 3: >3.0 baseline; >3.0 - 6.0 x ULN
 ### Grade 2: >1.5 - 3.0 x baseline; >1.5 - 3.0 x ULN
 ### Grade 1: >1 - 1.5 x baseline; >ULN - 1.5 x ULN
 
-test_that("derive_var_atoxgr_dir: Test 10 NCICTCAEv4 Creatinine increased", {
+## Test 18: CTCAEv4 Creatinine increased ----
+test_that("derive_var_atoxgr_dir Test 18: CTCAEv4 Creatinine increased", {
   exp_out_ctcv4_11 <- tibble::tribble(
     ~ATOXDSCH,               ~AVAL,  ~BASE, ~ANRHI, ~AVALU,         ~ATOXGRH,
     "Not a term",            80,     80,    40,     NA_character_,  NA,
@@ -601,13 +686,14 @@ test_that("derive_var_atoxgr_dir: Test 10 NCICTCAEv4 Creatinine increased", {
   )
 })
 
-### 12. Fibrinogen decreased decreased ----
+### Fibrinogen decreased decreased
 ### Grade 4: <0.25 x LLN or 75% decrease from baseline or absolute value <50 mg/dL
 ### Grade 3: <0.5 - 0.25 x LLN or 50 - <75% decrease from baseline
 ### Grade 2: <0.75 - 0.5 x LLN or 25 - <50% decrease from baseline
 ### Grade 1: <1.0 - 0.75 x LLN or <25% decrease from baseline
 
-test_that("derive_var_atoxgr_dir: Test 12 NCICTCAEv4 Fibrinogen decreased", {
+## Test 19: CTCAEv4 Fibrinogen decreased ----
+test_that("derive_var_atoxgr_dir Test 19: CTCAEv4 Fibrinogen decreased", {
   exp_out_ctcv4_12 <- tibble::tribble(
     ~ATOXDSCL,               ~AVAL,  ~ANRLO, ~PCHG,  ~AVALU,  ~ATOXGRL,
     "Not a term",            9,      10,     40,     "g/L",   NA,
@@ -680,13 +766,14 @@ test_that("derive_var_atoxgr_dir: Test 12 NCICTCAEv4 Fibrinogen decreased", {
   )
 })
 
-### 13. GGT increased ----
+### GGT increased
 ### Grade 4: >20.0 x ULN
 ### Grade 3: >5.0 - 20.0 x ULN
 ### Grade 2: >2.5 - 5.0 x ULN
 ### Grade 1: >ULN - 2.5 x ULN
 
-test_that("derive_var_atoxgr_dir: Test 13 NCICTCAEv4 GGT increased", {
+## Test 20: CTCAEv4 GGT increased ----
+test_that("derive_var_atoxgr_dir Test 20: CTCAEv4 GGT increased", {
   exp_out_ctcv4_13 <- tibble::tribble(
     ~ATOXDSCH,       ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,        ~ATOXGRH,
     "Not a term",    80,    0,      40,     NA_character_, NA,
@@ -723,10 +810,11 @@ test_that("derive_var_atoxgr_dir: Test 13 NCICTCAEv4 GGT increased", {
   )
 })
 
-### 14. Haptoglobin decreased ----
+### Haptoglobin decreased
 ### Grade 1: <LLN
 
-test_that("derive_var_atoxgr_dir: Test 14 NCICTCAEv4 Haptoglobin decreased", {
+## Test 21: CTCAEv4 Haptoglobin decreased ----
+test_that("derive_var_atoxgr_dir Test 21: CTCAEv4 Haptoglobin decreased", {
   exp_out_ctcv4_14 <- tibble::tribble(
     ~ATOXDSCL,               ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,         ~ATOXGRL,
     "Not a term",            9,      10,     40,     NA_character_,  NA,
@@ -758,12 +846,13 @@ test_that("derive_var_atoxgr_dir: Test 14 NCICTCAEv4 Haptoglobin decreased", {
   )
 })
 
-### 15. Hemoglobin increased ----
+### Hemoglobin increased
 ### Grade 3: Increase in >4 gm/dL above ULN or above baseline if baseline is above ULN
 ### Grade 2: Increase in >2 - 4 gm/dL above ULN or above baseline if baseline is above ULN
 ### Grade 1: Increase in >0 - 2 gm/dL above ULN or above baseline if baseline is above ULN
 
-test_that("derive_var_atoxgr_dir: Test 15 NCICTCAEv4 Hemoglobin increased", {
+## Test 22: CTCAEv4 Hemoglobin increased ----
+test_that("derive_var_atoxgr_dir Test 22: CTCAEv4 Hemoglobin increased", {
   exp_out_ctcv4_15 <- tibble::tribble(
     ~ATOXDSCH,              ~AVAL,  ~BASE,  ~ANRHI, ~AVALU, ~ATOXGRH, ~TESTNUM,
     "Not a term",           80,     120,    200,    "g/L",  NA,       1,
@@ -818,12 +907,13 @@ test_that("derive_var_atoxgr_dir: Test 15 NCICTCAEv4 Hemoglobin increased", {
   )
 })
 
-### 16. INR increased ----
+### INR increased
 ### Grade 3: >2.5 x ULN; >2.5 times above baseline if on anticoagulation
 ### Grade 2: >1.5 - 2.5 x ULN; >1.5 - 2.5 times above baseline if on anticoagulation
 ### Grade 1: >1 - 1.5 x ULN; >1 - 1.5 times above baseline if on anticoagulation
 
-test_that("derive_var_atoxgr_dir: Test 16 NCICTCAEv4 INR increased", {
+## Test 23: CTCAEv4 INR increased ----
+test_that("derive_var_atoxgr_dir Test 23: CTCAEv4 INR increased", {
   exp_out_ctcv4_16 <- tibble::tribble(
     ~ATOXDSCH,       ~AVAL, ~BASE, ~ANRHI, ~AVALU,        ~ATOXGRH, ~TESTNUM,
     "Not a term",    80,    120,   200,    NA_character_, NA,       1,
@@ -868,13 +958,14 @@ test_that("derive_var_atoxgr_dir: Test 16 NCICTCAEv4 INR increased", {
   )
 })
 
-### 17. Lipase increased ----
+### Lipase increased
 ### Grade 4: >5.0 x ULN
 ### Grade 3: >2.0 - 5.0 x ULN
 ### Grade 2: >1.5 - 2.0 x ULN
 ### Grade 1: >ULN - 1.5 x ULN
 
-test_that("derive_var_atoxgr_dir: Test 17 NCICTCAEv4 Lipase increased", {
+## Test 24: CTCAEv4 Lipase increased ----
+test_that("derive_var_atoxgr_dir Test 24: CTCAEv4 Lipase increased", {
   exp_out_ctcv4_17 <- tibble::tribble(
     ~ATOXDSCH,          ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,         ~ATOXGRH,
     "Not a term",       80,     120,    200,    NA_character_,  NA,
@@ -911,13 +1002,14 @@ test_that("derive_var_atoxgr_dir: Test 17 NCICTCAEv4 Lipase increased", {
   )
 })
 
-### 18. Lymphocyte count decreased ----
+### Lymphocyte count decreased
 ### Grade 4: <0.2 x 10e9 /L
 ### Grade 3: <0.5 - 0.2 x 10e9 /L
 ### Grade 2: <0.8 - 0.5 x 10e9 /L
 ### Grade 1: <LLN - 0.8 x 10e9/L
 
-test_that("derive_var_atoxgr_dir: Test 18 NCICTCAEv4 Lymphocyte count decreased", {
+## Test 25: CTCAEv4 Lymphocyte count decreased ----
+test_that("derive_var_atoxgr_dir Test 25: CTCAEv4 Lymphocyte count decreased", {
   exp_out_ctcv4_18 <- tibble::tribble(
     ~ATOXDSCL,                    ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL, ~TESTNUM,
     "Not a term",                 80,     120,    200,    "10^9/L",  NA,       1,
@@ -965,10 +1057,12 @@ test_that("derive_var_atoxgr_dir: Test 18 NCICTCAEv4 Lymphocyte count decreased"
   )
 })
 
-### 19. Lymphocyte count increased ----
+### Lymphocyte count increased
 ### Grade 3: >20,000/mm3
 ### Grade 2: >4000/mm3 - 20,000/mm3
-test_that("derive_var_atoxgr_dir: Test 19 NCICTCAEv4 Lymphocyte count increased", {
+
+## Test 26: CTCAEv4 Lymphocyte count increased ----
+test_that("derive_var_atoxgr_dir Test 26: CTCAEv4 Lymphocyte count increased", {
   exp_out_ctcv4_19 <- tibble::tribble(
     ~ATOXDSCH,                    ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
     "Not a term",                 80,     120,    200,    "10^9/L",  NA,
@@ -1001,13 +1095,14 @@ test_that("derive_var_atoxgr_dir: Test 19 NCICTCAEv4 Lymphocyte count increased"
   )
 })
 
-### 20. Neutrophil count decreased ----
+### Neutrophil count decreased
 ### Grade 4: <25.0 x 10e9 /L
 ### Grade 3: <1.0 - 0.5 x 10e9 /L
 ### Grade 2: <1.5 - 1.0 x 10e9 /L
 ### Grade 1: <LLN - 1.5 x 10e9 /L
 
-test_that("derive_var_atoxgr_dir: Test 20 NCICTCAEv4 Neutrophil count decreased", {
+## Test 27: CTCAEv4 Neutrophil count decreased ----
+test_that("derive_var_atoxgr_dir Test 27: CTCAEv4 Neutrophil count decreased", {
   exp_out_ctcv4_20 <- tibble::tribble(
     ~ATOXDSCL,                    ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
     "Not a term",                 80,     120,    200,    "10^9/L",  NA,
@@ -1055,13 +1150,14 @@ test_that("derive_var_atoxgr_dir: Test 20 NCICTCAEv4 Neutrophil count decreased"
   )
 })
 
-### 21. Platelet count decreased ----
+### Platelet count decreased
 ### Grade 4: <25.0 x 10e9 /L
 ### Grade 3: <50.0 - 25.0 x 10e9 /L
 ### Grade 2: <75.0 - 50.0 x 10e9 /L
 ### Grade 1: <LLN - 75.0 x 10e9 /L
 
-test_that("derive_var_atoxgr_dir: Test 21 NCICTCAEv4 Platelet count decreased", {
+## Test 28: CTCAEv4 Platelet count decreased ----
+test_that("derive_var_atoxgr_dir Test 28: CTCAEv4 Platelet count decreased", {
   exp_out_ctcv4_21 <- tibble::tribble(
     ~ATOXDSCL,                  ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRL, ~TESTNUM,
     "Not a term",               80,    120,    200,    "10^9/L", NA,       1,
@@ -1109,13 +1205,14 @@ test_that("derive_var_atoxgr_dir: Test 21 NCICTCAEv4 Platelet count decreased", 
   )
 })
 
-### 22. Serum amylase increased ----
+### Serum amylase increased
 ### Grade 4: >5.0 x ULN
 ### Grade 3: >2.0 - 5.0 x ULN
 ### Grade 2: >1.5 - 2.0 x ULN
 ### Grade 1: >ULN - 1.5 x ULN
 
-test_that("derive_var_atoxgr_dir: Test 22 NCICTCAEv4 Serum amylase increased", {
+## Test 29: CTCAEv4 Serum amylase increased ----
+test_that("derive_var_atoxgr_dir Test 29: CTCAEv4 Serum amylase increased", {
   exp_out_ctcv4_22 <- tibble::tribble(
     ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,         ~ATOXGRH,
     "Not a term",              80,     120,    200,    NA_character_,  NA,
@@ -1152,13 +1249,14 @@ test_that("derive_var_atoxgr_dir: Test 22 NCICTCAEv4 Serum amylase increased", {
   )
 })
 
-### 23. White blood cell decreased ----
+### White blood cell decreased
 ### Grade 4: <1.0 x 10e9 /L
 ### Grade 3: <2.0 - 1.0 x 10e9 /L
 ### Grade 2: <3.0 - 2.0 x 10e9 /L
 ### Grade 1: <LLN - 3.0 x 10e9 /L
 
-test_that("derive_var_atoxgr_dir: Test 23 NCICTCAEv4 White blood cell decreased", {
+## Test 30: CTCAEv4 White blood cell decreased ----
+test_that("derive_var_atoxgr_dir Test 30: CTCAEv4 White blood cell decreased", {
   exp_out_ctcv4_23 <- tibble::tribble(
     ~ATOXDSCL,                    ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRL, ~TESTNUM,
     "Not a term",                 1,     5,      15,     "10^9/L", NA,       1,
@@ -1206,15 +1304,16 @@ test_that("derive_var_atoxgr_dir: Test 23 NCICTCAEv4 White blood cell decreased"
   )
 })
 
-# Metabolism and nutrition disorders ----
+## Metabolism and nutrition disorders
 
-### 24. Hypercalcemia ----
+### Hypercalcemia
 ### Grade 4: >3.4 mmol/L
 ### Grade 3: >3.1 - 3.4 mmol/L
 ### Grade 2: >2.9 - 3.1 mmol/L
 ### Grade 1: >ULN - 2.9 mmol/L
 
-test_that("derive_var_atoxgr_dir: Test 24 NCICTCAEv4 Hypercalcemia", {
+## Test 31: CTCAEv4 Hypercalcemia ----
+test_that("derive_var_atoxgr_dir Test 31: CTCAEv4 Hypercalcemia", {
   exp_out_ctcv4_24 <- tibble::tribble(
     ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
     "Not a term",    3.5,    0,      2.5,    "mmol/L",  NA,       1,
@@ -1262,13 +1361,14 @@ test_that("derive_var_atoxgr_dir: Test 24 NCICTCAEv4 Hypercalcemia", {
   )
 })
 
-### 25. Hypercalcemia (Ionized) ----
+### Hypercalcemia (Ionized)
 ### Grade 4: >1.8 mmol/L
 ### Grade 3: >1.6 - 1.8 mmol/L
 ### Grade 2: >1.5 - 1.6 mmol/L
 ### Grade 1: >ULN - 1.5 mmol/L
 
-test_that("derive_var_atoxgr_dir: Test 25 NCICTCAEv4 Hypercalcemia (Ionized)", {
+## Test 32: CTCAEv4 Hypercalcemia (Ionized) ----
+test_that("derive_var_atoxgr_dir Test 32: CTCAEv4 Hypercalcemia (Ionized)", {
   exp_out_ctcv4_25 <- tibble::tribble(
     ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
     "Not a term",              1.9,    0,      1.3,    "mmol/L",  NA,       1,
@@ -1316,13 +1416,14 @@ test_that("derive_var_atoxgr_dir: Test 25 NCICTCAEv4 Hypercalcemia (Ionized)", {
   )
 })
 
-### 26. Hyperglycemia (Fasting) ----
+### Hyperglycemia (Fasting)
 ### Grade 4: >27.8 mmol/L
 ### Grade 3: >13.9 - 27.8 mmol/L
 ### Grade 2: >8.9 - 13.9 mmol/L
 ### Grade 1: >ULN - 8.9 mmol/L
 
-test_that("derive_var_atoxgr_dir: Test 26 NCICTCAEv4 Hyperglycemia (Fasting)", {
+## Test 33: CTCAEv4 Hyperglycemia (Fasting) ----
+test_that("derive_var_atoxgr_dir Test 33: CTCAEv4 Hyperglycemia (Fasting)", {
   exp_out_ctcv4_26 <- tibble::tribble(
     ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
     "Not a term",              27.9,   0,      5.3,    "mmol/L",  NA,       1,
@@ -1370,11 +1471,12 @@ test_that("derive_var_atoxgr_dir: Test 26 NCICTCAEv4 Hyperglycemia (Fasting)", {
   )
 })
 
-### 27. Hyperglycemia ----
+### Hyperglycemia
 ### Grade 4: >27.8 mmol/L
 ### Grade 3: >13.9 - 27.8 mmol/L
 
-test_that("derive_var_atoxgr_dir: Test 27 NCICTCAEv4 Hyperglycemia", {
+## Test 34: CTCAEv4 Hyperglycemia ----
+test_that("derive_var_atoxgr_dir Test 34: CTCAEv4 Hyperglycemia", {
   exp_out_ctcv4_27 <- tibble::tribble(
     ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
     "Not a term",    27.9,   0,      5.3,    "mmol/L",  NA,       1,
@@ -1408,13 +1510,14 @@ test_that("derive_var_atoxgr_dir: Test 27 NCICTCAEv4 Hyperglycemia", {
   )
 })
 
-### 28. Hyperkalemia ----
+### Hyperkalemia
 ### Grade 4: >7.0 mmol/L
 ### Grade 3: >6.0 - 7.0 mmol/L
 ### Grade 2: >5.5 - 6.0 mmol/L
 ### Grade 1: >ULN - 5.5 mmol/L
 
-test_that("derive_var_atoxgr_dir: Test 28 NCICTCAEv4 Hyperkalemia", {
+## Test 35: CTCAEv4 Hyperkalemia ----
+test_that("derive_var_atoxgr_dir Test 35: CTCAEv4 Hyperkalemia", {
   exp_out_ctcv4_28 <- tibble::tribble(
     ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
     "Not a term",    7.1,    0,      5.1,    "mmol/L",  NA,       1,
@@ -1462,12 +1565,13 @@ test_that("derive_var_atoxgr_dir: Test 28 NCICTCAEv4 Hyperkalemia", {
   )
 })
 
-### 29. Hypermagnesemia ----
+### Hypermagnesemia
 ### Grade 4: >3.30 mmol/L
 ### Grade 3: >1.23 - 3.30 mmol/L
 ### Grade 1: >ULN - 1.23 mmol/L
 
-test_that("derive_var_atoxgr_dir: Test 29 NCICTCAEv4 Hypermagnesemia", {
+## Test 36: CTCAEv4 Hypermagnesemia ----
+test_that("derive_var_atoxgr_dir Test 36: CTCAEv4 Hypermagnesemia", {
   exp_out_ctcv4_29 <- tibble::tribble(
     ~ATOXDSCH,         ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRH, ~TESTNUM,
     "Not a term",      3.4,   0,      0.8,    "mmol/L", NA,       1,
@@ -1511,13 +1615,14 @@ test_that("derive_var_atoxgr_dir: Test 29 NCICTCAEv4 Hypermagnesemia", {
   )
 })
 
-### 30. Hypernatremia ----
+### Hypernatremia
 ### Grade 4: >160 mmol/L
 ### Grade 3: >155 - 160 mmol/L
 ### Grade 2: >150 - 155 mmol/L
 ### Grade 1: >ULN - 150 mmol/L
 
-test_that("derive_var_atoxgr_dir: Test 30 NCICTCAEv4 Hypernatremia", {
+## Test 37: CTCAEv4 Hypernatremia ----
+test_that("derive_var_atoxgr_dir Test 37: CTCAEv4 Hypernatremia", {
   exp_out_ctcv4_30 <- tibble::tribble(
     ~ATOXDSCH,        ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
     "Not a term",     161,    0,      140,    "mmol/L",  NA,       1,
@@ -1565,13 +1670,14 @@ test_that("derive_var_atoxgr_dir: Test 30 NCICTCAEv4 Hypernatremia", {
   )
 })
 
-### 31. Hypertriglyceridemia ----
+### Hypertriglyceridemia
 ### Grade 4: >11.4 mmol/L
 ### Grade 3: >5.7 mmol/L - 11.4 mmol/L
 ### Grade 2: >3.42 mmol/L - 5.7 mmol/L
 ### Grade 1: 1.71 mmol/L - 3.42 mmol/L
 
-test_that("derive_var_atoxgr_dir: Test 31 NCICTCAEv4 Hypertriglyceridemia", {
+## Test 38: CTCAEv4 Hypertriglyceridemia ----
+test_that("derive_var_atoxgr_dir Test 38: CTCAEv4 Hypertriglyceridemia", {
   exp_out_ctcv4_31 <- tibble::tribble(
     ~ATOXDSCH,               ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
     "Not a term",            11.5,   0,      2.1,    "mmol/L",  NA,
@@ -1608,11 +1714,12 @@ test_that("derive_var_atoxgr_dir: Test 31 NCICTCAEv4 Hypertriglyceridemia", {
   )
 })
 
-### 32. Hyperuricemia ----
+### Hyperuricemia
 ### Grade 4: >0.59 mmol/L;
 ### Grade 3: >ULN - 10 mg/dL (0.59 mmol/L)
 
-test_that("derive_var_atoxgr_dir: Test 32 NCICTCAEv4 Hyperuricemia", {
+## Test 39: CTCAEv4 Hyperuricemia ----
+test_that("derive_var_atoxgr_dir Test 39: CTCAEv4 Hyperuricemia", {
   exp_out_ctcv4_32 <- tibble::tribble(
     ~ATOXDSCH,        ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
     "Not a term",     591,    0,      200,    "umol/L",  NA,
@@ -1653,12 +1760,13 @@ test_that("derive_var_atoxgr_dir: Test 32 NCICTCAEv4 Hyperuricemia", {
   )
 })
 
-### 33. Hypoalbuminemia ----
+### Hypoalbuminemia
 ### Grade 3: <20 g/L
 ### Grade 2: <30 - 20 g/L
 ### Grade 1: <LLN - 30 g/L
 
-test_that("derive_var_atoxgr_dir: Test 33 NCICTCAEv4 Hypoalbuminemia", {
+## Test 40: CTCAEv4 Hypoalbuminemia ----
+test_that("derive_var_atoxgr_dir Test 40: CTCAEv4 Hypoalbuminemia", {
   exp_out_ctcv4_33 <- tibble::tribble(
     ~ATOXDSCL,          ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRL,
     "Not a term",       19,     40,     100,    "G/L",  NA,
@@ -1704,12 +1812,14 @@ test_that("derive_var_atoxgr_dir: Test 33 NCICTCAEv4 Hypoalbuminemia", {
 })
 
 
-### 34. Hypocalcemia ----
+### Hypocalcemia
 ### Grade 4: <1.5 mmol/L
 ### Grade 3: <1.75 - 1.5 mmol/L
 ### Grade 2: <2.0 - 1.75 mmol/L
 ### Grade 1: <LLN - 2.0 mmol/L
-test_that("derive_var_atoxgr_dir: Test 34 NCICTCAEv4 Hypocalcemia", {
+
+## Test 41: CTCAEv4 Hypocalcemia ----
+test_that("derive_var_atoxgr_dir Test 41: CTCAEv4 Hypocalcemia", {
   exp_out_ctcv4_34 <- tibble::tribble(
     ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
     "Not a term",    1.4,    4,      100,    "mmol/L",  NA,
@@ -1757,12 +1867,14 @@ test_that("derive_var_atoxgr_dir: Test 34 NCICTCAEv4 Hypocalcemia", {
   )
 })
 
-### 35. Hypocalcemia (Ionized) ----
+### Hypocalcemia (Ionized)
 ### Grade 4: <0.8 mmol/L
 ### Grade 3: <0.9 - 0.8 mmol/L
 ### Grade 2: <1.0 - 0.9 mmol/L
 ### Grade 1: <LLN - 1.0 mmol/L
-test_that("derive_var_atoxgr_dir: Test 35 NCICTCAEv4 Hypocalcemia (Ionized)", {
+
+## Test 42: CTCAEv4 Hypocalcemia (Ionized) ----
+test_that("derive_var_atoxgr_dir Test 42: CTCAEv4 Hypocalcemia (Ionized)", {
   exp_out_ctcv4_35 <- tibble::tribble(
     ~ATOXDSCL,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
     "Not a term",              0.79,   1.3,    100,    "mmol/L",  NA,
@@ -1810,12 +1922,14 @@ test_that("derive_var_atoxgr_dir: Test 35 NCICTCAEv4 Hypocalcemia (Ionized)", {
   )
 })
 
-### 36. Hypoglycemia ----
+### Hypoglycemia
 ### Grade 4: <1.7 mmol/L
 ### Grade 3: <2.2 - 1.7 mmol/L
 ### Grade 2: <3.0 - 2.2 mmol/L
 ### Grade 1: <LLN - 3.0 mmol/L
-test_that("derive_var_atoxgr_dir: Test 36 NCICTCAEv4 Hypoglycemia", {
+
+## Test 43: CTCAEv4 Hypoglycemia ----
+test_that("derive_var_atoxgr_dir Test 43: CTCAEv4 Hypoglycemia", {
   exp_out_ctcv4_36 <- tibble::tribble(
     ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
     "Not a term",    1.69,   4,      100,    "mmol/L",  NA,
@@ -1863,11 +1977,13 @@ test_that("derive_var_atoxgr_dir: Test 36 NCICTCAEv4 Hypoglycemia", {
   )
 })
 
-### 37. Hypokalemia ----
+### Hypokalemia
 ### Grade 4: <2.5 mmol/L
 ### Grade 3: <3.0 - 2.5 mmol/L
 ### Grade 2: <LLN - 3.0 mmol/L
-test_that("derive_var_atoxgr_dir: Test 37 NCICTCAEv4 Hypokalemia", {
+
+## Test 44: CTCAEv4 Hypokalemia ----
+test_that("derive_var_atoxgr_dir Test 44: CTCAEv4 Hypokalemia", {
   exp_out_ctcv4_37 <- tibble::tribble(
     ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
     "Not a term",   2.49,   4,      100,    "mmol/L",  NA,
@@ -1911,13 +2027,14 @@ test_that("derive_var_atoxgr_dir: Test 37 NCICTCAEv4 Hypokalemia", {
   )
 })
 
-### 38. Hypomagnesemia ----
+### Hypomagnesemia
 ### Grade 4: <0.3 mmol/L
 ### Grade 3: <0.4 - 0.3 mmol/L
 ### Grade 2: <0.5 - 0.4 mmol/L
 ### Grade 1: <LLN - 0.5 mmol/L
 
-test_that("derive_var_atoxgr_dir: Test 38 NCICTCAEv4 Hypomagnesemia", {
+## Test 45: CTCAEv4 Hypomagnesemia ----
+test_that("derive_var_atoxgr_dir Test 45: CTCAEv4 Hypomagnesemia", {
   exp_out_ctcv4_38 <- tibble::tribble(
     ~ATOXDSCL,         ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
     "Not a term",      0.29,   1,      100,    "mmol/L",  NA,
@@ -1965,12 +2082,13 @@ test_that("derive_var_atoxgr_dir: Test 38 NCICTCAEv4 Hypomagnesemia", {
   )
 })
 
-### 39. Hyponatremia ----
+### Hyponatremia
 ### Grade 4: <120 mmol/L
 ### Grade 3: <130 - 120 mmol/L
 ### Grade 1: <LLN - 130 mmol/L
 
-test_that("derive_var_atoxgr_dir: Test 39 NCICTCAEv4 Hyponatremia", {
+## Test 46: CTCAEv4 Hyponatremia ----
+test_that("derive_var_atoxgr_dir Test 46: CTCAEv4 Hyponatremia", {
   exp_out_ctcv4_39 <- tibble::tribble(
     ~ATOXDSCL,       ~AVAL,  ~ANRLO,   ~ANRHI, ~AVALU,    ~ATOXGRL,
     "Not a term",    119,    140,      100,    "mmol/L",  NA,
@@ -2014,13 +2132,14 @@ test_that("derive_var_atoxgr_dir: Test 39 NCICTCAEv4 Hyponatremia", {
   )
 })
 
-### 40. Hypophosphatemia ----
+### Hypophosphatemia
 ### Grade 4: <0.3 mmol/L
 ### Grade 3: <0.6 - 0.3 mmol/L
 ### Grade 2: <0.8 - 0.6 mmol/L
 ### Grade 1: <LLN - 0.8 mmol/L
 
-test_that("derive_var_atoxgr_dir: Test 40 NCICTCAEv4 Hypophosphatemia", {
+## Test 47: CTCAEv4 Hypophosphatemia ----
+test_that("derive_var_atoxgr_dir Test 47: CTCAEv4 Hypophosphatemia", {
   exp_out_ctcv4_40 <- tibble::tribble(
     ~ATOXDSCL,           ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
     "Not a term",        0.29,   1,      100,    "mmol/L",  NA,
