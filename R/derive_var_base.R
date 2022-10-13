@@ -36,19 +36,19 @@
 #'
 #' @examples
 #' dataset <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID,   ~PARAMCD, ~AVAL,   ~AVALC,      ~AVISIT, ~ABLFL,
-#'   "TEST01",  "PAT01",  "PARAM01", 10.12,       NA,   "Baseline",    "Y",
-#'   "TEST01",  "PAT01",  "PARAM01", 9.700,       NA,      "Day 7",    "N",
-#'   "TEST01",  "PAT01",  "PARAM01", 15.01,       NA,     "Day 14",    "N",
-#'   "TEST01",  "PAT01",  "PARAM02", 8.350,       NA,   "Baseline",    "Y",
-#'   "TEST01",  "PAT01",  "PARAM02",    NA,       NA,      "Day 7",    "N",
-#'   "TEST01",  "PAT01",  "PARAM02", 8.350,       NA,     "Day 14",    "N",
-#'   "TEST01",  "PAT01",  "PARAM03",    NA,    "LOW",   "Baseline",    "Y",
-#'   "TEST01",  "PAT01",  "PARAM03",    NA,    "LOW",      "Day 7",    "N",
-#'   "TEST01",  "PAT01",  "PARAM03",    NA, "MEDIUM",     "Day 14",    "N",
-#'   "TEST01",  "PAT01",  "PARAM04",    NA,   "HIGH",   "Baseline",    "Y",
-#'   "TEST01",  "PAT01",  "PARAM04",    NA,   "HIGH",      "Day 7",    "N",
-#'   "TEST01",  "PAT01",  "PARAM04",    NA, "MEDIUM",     "Day 14",    "N"
+#'   ~STUDYID, ~USUBJID,   ~PARAMCD, ~AVAL,   ~AVALC,      ~AVISIT, ~ABLFL,  ~ANRIND,
+#'   "TEST01",  "PAT01",  "PARAM01", 10.12,       NA,   "Baseline",    "Y", "NORMAL",
+#'   "TEST01",  "PAT01",  "PARAM01", 9.700,       NA,      "Day 7",    "N",    "LOW",
+#'   "TEST01",  "PAT01",  "PARAM01", 15.01,       NA,     "Day 14",    "N",   "HIGH",
+#'   "TEST01",  "PAT01",  "PARAM02", 8.350,       NA,   "Baseline",    "Y",    "LOW",
+#'   "TEST01",  "PAT01",  "PARAM02",    NA,       NA,      "Day 7",    "N",       NA,
+#'   "TEST01",  "PAT01",  "PARAM02", 8.350,       NA,     "Day 14",    "N",    "LOW",
+#'   "TEST01",  "PAT01",  "PARAM03",    NA,    "LOW",   "Baseline",    "Y",       NA,
+#'   "TEST01",  "PAT01",  "PARAM03",    NA,    "LOW",      "Day 7",    "N",       NA,
+#'   "TEST01",  "PAT01",  "PARAM03",    NA, "MEDIUM",     "Day 14",    "N",       NA,
+#'   "TEST01",  "PAT01",  "PARAM04",    NA,   "HIGH",   "Baseline",    "Y",       NA,
+#'   "TEST01",  "PAT01",  "PARAM04",    NA,   "HIGH",      "Day 7",    "N",       NA,
+#'   "TEST01",  "PAT01",  "PARAM04",    NA, "MEDIUM",     "Day 14",    "N",       NA
 #' )
 #'
 #' ## Derive `BASE` variable from `AVAL`
@@ -68,14 +68,12 @@
 #' )
 #'
 #' ## Derive `BNRIND` variable from `ANRIND`
-#' if (FALSE) {
-#'   derive_var_base(
-#'     dataset,
-#'     by_vars = vars(USUBJID, PARAMCD),
-#'     source_var = ANRIND,
-#'     new_var = BNRIND
-#'   )
-#' }
+#' derive_var_base(
+#'    dataset,
+#'    by_vars = vars(USUBJID, PARAMCD),
+#'    source_var = ANRIND,
+#'    new_var = BNRIND
+#' )
 derive_var_base <- function(dataset,
                             by_vars,
                             source_var = AVAL,
