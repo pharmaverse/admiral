@@ -635,7 +635,7 @@ test_that("derive_param_tte Test 9: error is issued if parameter code already ex
 })
 
 ## Test 10: error is issued if package does not exist ----
-test_that("derive_param_tte Test 10: error is issued if package does not exist", {
+test_that("list_tte_source_objects Test 1: error is issued if package does not exist", {
 
   expected_output <- list_tte_source_objects(package = "admiral")
 
