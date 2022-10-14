@@ -266,7 +266,7 @@ test_that("derive_vars_period Test 8: phases", {
     compare = derive_vars_period(
       adsl,
       dataset_ref = phase_ref,
-      new_vars = vars(PHwSDT = PHSDT, PHwEDT = PHEDT , APHASEw = APHASE)
+      new_vars = vars(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
     ),
     keys = "USUBJID"
   )

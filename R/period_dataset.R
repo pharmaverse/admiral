@@ -108,7 +108,7 @@
 #'   ) %>%
 #'   mutate(
 #'     STUDYID = "xyz"
-#'  )
+#'   )
 #'
 #' create_period_dataset(
 #'   adsl,
@@ -277,11 +277,11 @@ create_period_dataset <- function(dataset,
 #'
 #' # Add period variables to ADSL
 #' period_ref <- tribble(
-#' ~USUBJID, ~APERIOD, ~APERSDT,     ~APEREDT,
-#' "1",             1, "2021-01-04", "2021-02-06",
-#' "1",             2, "2021-02-07", "2021-03-07",
-#' "2",             1, "2021-02-02", "2021-03-02",
-#' "2",             2, "2021-03-03", "2021-04-01"
+#'   ~USUBJID, ~APERIOD, ~APERSDT,     ~APEREDT,
+#'   "1",             1, "2021-01-04", "2021-02-06",
+#'   "1",             2, "2021-02-07", "2021-03-07",
+#'   "2",             1, "2021-02-02", "2021-03-02",
+#'   "2",             2, "2021-03-03", "2021-04-01"
 #' ) %>%
 #'   mutate(
 #'     STUDYID = "xyz",
@@ -290,9 +290,9 @@ create_period_dataset <- function(dataset,
 #'   )
 #'
 #' derive_vars_period(
-#'     adsl,
-#'     dataset_ref = period_ref,
-#'     new_vars = vars(APxxSDT = APERSDT, APxxEDT = APEREDT)
+#'   adsl,
+#'   dataset_ref = period_ref,
+#'   new_vars = vars(APxxSDT = APERSDT, APxxEDT = APEREDT)
 #' )
 #'
 #' # Add phase variables to ADSL
@@ -310,10 +310,10 @@ create_period_dataset <- function(dataset,
 #'
 #' # Add subperiod variables to ADSL
 #' derive_vars_period(
-#'     adsl,
-#'     dataset_ref = phase_ref,
-#'     new_vars = vars(PHwSDT = PHSDT, PHwEDT = PHEDT , APHASEw = APHASE)
-#'   )
+#'   adsl,
+#'   dataset_ref = phase_ref,
+#'   new_vars = vars(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
+#' )
 #'
 #' subperiod_ref <- tibble::tribble(
 #'   ~USUBJID, ~APERIOD, ~ASPER, ~ASPRSDT,     ~ASPREDT,
@@ -331,10 +331,10 @@ create_period_dataset <- function(dataset,
 #'   )
 #'
 #' derive_vars_period(
-#'     adsl,
-#'     dataset_ref = subperiod_ref,
-#'     new_vars = vars(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
-#'   )
+#'   adsl,
+#'   dataset_ref = subperiod_ref,
+#'   new_vars = vars(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
+#' )
 derive_vars_period <- function(dataset,
                                dataset_ref,
                                new_vars,
@@ -390,12 +390,12 @@ derive_vars_period <- function(dataset,
   split_names <- str_match(rename_arg, "(\\w+?)_(\\d{1,2})_?(\\d)?")
   source_vars <- names(new_vars_chr)
   names(source_vars) <- new_vars_chr
-  index <- split_names[,3]
+  index <- split_names[, 3]
   if (mode == "phase") {
-    names_rename_arg <- str_replace(source_vars[split_names[,2]], "w", index)
+    names_rename_arg <- str_replace(source_vars[split_names[, 2]], "w", index)
   } else {
     index <- if_else(str_length(index) == 1, paste0("0", index), index)
-    names_rename_arg <- str_replace(source_vars[split_names[,2]], "xx", index)
+    names_rename_arg <- str_replace(source_vars[split_names[, 2]], "xx", index)
     if (mode == "subperiod") {
       index2 <- split_names[, 4]
       names_rename_arg <- str_replace(names_rename_arg, "w", index2)
