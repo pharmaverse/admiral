@@ -72,8 +72,10 @@ test_that("derive_merged, test 2: derive_vars_merged Test 2: merge selected vari
 })
 
 ## Test 3: merge last value and flag matched by groups ----
-# ---- derive_merged, test 3: derive_vars_merged Test 3: merge last value and flag matched by groups ----
-test_that("derive_merged, test 3: derive_vars_merged Test 3: merge last value and flag matched by groups", {
+# ---- derive_merged, test 3: derive_vars_merged Test 3: merge last value and ----
+# ---- flag matched by groups ----
+test_that("derive_merged, test 3: derive_vars_merged Test 3: merge last value and 7
+          flag matched by groups", {
   actual <- derive_vars_merged(adsl,
     dataset_add = advs,
     order = vars(AVAL),
@@ -204,8 +206,10 @@ test_that("derive_merged, test 7: derive_vars_merged_cat Test 7: merge categoriz
 })
 
 ## Test 8: define value for non-matched by groups ----
-# ---- derive_merged, test 8: derive_vars_merged_cat Test 8: define value for non-matched by groups ----
-test_that("derive_merged, test 8: derive_vars_merged_cat Test 8: define value for non-matched by groups", {
+# ---- derive_merged, test 8: derive_vars_merged_cat Test 8: define value ----
+# ---- for non-matched by groups ----
+test_that("derive_merged, test 8: derive_vars_merged_cat Test 8: define value
+          for non-matched by groups", {
   get_vscat <- function(x) {
     if_else(x == "BASELINE", "BASELINE", "POST-BASELINE")
   }
@@ -259,8 +263,10 @@ test_that("derive_merged, test 9: derive_vars_merged_exist_flag Test 9: merge ex
 
 # derive_var_merged_character ----
 ## Test 10: merge character variable, no transformation ----
-# ---- derive_merged, test 10: derive_var_merged_character Test 10: merge character variable, no transformation ----
-test_that("derive_merged, test 10: derive_var_merged_character Test 10: merge character variable, no transformation", {
+# ---- derive_merged, test 10: derive_var_merged_character Test 10: merge ----
+# ---- character variable, no transformation ----
+test_that("derive_merged, test 10: derive_var_merged_character Test 10: merge
+          character variable, no transformation", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -283,8 +289,10 @@ test_that("derive_merged, test 10: derive_var_merged_character Test 10: merge ch
 })
 
 ## Test 11: merge character variable, upper case ----
-# ---- derive_merged, test 11: derive_var_merged_character Test 11: merge character variable, upper case ----
-test_that("derive_merged, test 11: derive_var_merged_character Test 11: merge character variable, upper case", {
+# ---- derive_merged, test 11: derive_var_merged_character Test 11: merge ----
+# ---- character variable, upper case ----
+test_that("derive_merged, test 11: derive_var_merged_character Test 11: merge
+          character variable, upper case", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -309,8 +317,10 @@ test_that("derive_merged, test 11: derive_var_merged_character Test 11: merge ch
 })
 
 ## Test 12: merge character variable, lower case ----
-# ---- derive_merged, test 12: derive_var_merged_character Test 12: merge character variable, lower case ----
-test_that("derive_merged, test 12: derive_var_merged_character Test 12: merge character variable, lower case", {
+# ---- derive_merged, test 12: derive_var_merged_character Test 12: merge ----
+# ---- character variable, lower case ----
+test_that("derive_merged, test 12: derive_var_merged_character Test 12: merge
+          character variable, lower case", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -334,8 +344,10 @@ test_that("derive_merged, test 12: derive_var_merged_character Test 12: merge ch
 })
 
 ## Test 13: merge character variable, title case ----
-# ---- derive_merged, test 13: derive_var_merged_character Test 13: merge character variable, title case ----
-test_that("derive_merged, test 13: derive_var_merged_character Test 13: merge character variable, title case", {
+# ---- derive_merged, test 13: derive_var_merged_character Test 13: merge ----
+# ---- character variable, title case ----
+test_that("derive_merged, test 13: derive_var_merged_character Test 13: merge
+          character variable, title case", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
