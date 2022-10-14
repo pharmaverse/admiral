@@ -16,6 +16,7 @@ on:
       - devel
       - patch
       - pre-release
+      - walkowif-test@devel
   # 'pull_request' events are triggered when PRs are
   # created against one of these target branches.
   pull_request:
