@@ -104,7 +104,7 @@ jobs:
       skip-coverage-badges: false
   man-pages:
     name: Man Pages
-    uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@staged-deps-fix
     if: github.event_name == 'pull_request'
     with:
       r-version: $R_VERSION
