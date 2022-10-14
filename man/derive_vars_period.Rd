@@ -71,11 +71,11 @@ adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
 
 # Add period variables to ADSL
 period_ref <- tribble(
-~USUBJID, ~APERIOD, ~APERSDT,     ~APEREDT,
-"1",             1, "2021-01-04", "2021-02-06",
-"1",             2, "2021-02-07", "2021-03-07",
-"2",             1, "2021-02-02", "2021-03-02",
-"2",             2, "2021-03-03", "2021-04-01"
+  ~USUBJID, ~APERIOD, ~APERSDT,     ~APEREDT,
+  "1",             1, "2021-01-04", "2021-02-06",
+  "1",             2, "2021-02-07", "2021-03-07",
+  "2",             1, "2021-02-02", "2021-03-02",
+  "2",             2, "2021-03-03", "2021-04-01"
 ) \%>\%
   mutate(
     STUDYID = "xyz",
@@ -84,9 +84,9 @@ period_ref <- tribble(
   )
 
 derive_vars_period(
-    adsl,
-    dataset_ref = period_ref,
-    new_vars = vars(APxxSDT = APERSDT, APxxEDT = APEREDT)
+  adsl,
+  dataset_ref = period_ref,
+  new_vars = vars(APxxSDT = APERSDT, APxxEDT = APEREDT)
 )
 
 # Add phase variables to ADSL
@@ -104,10 +104,10 @@ phase_ref <- tribble(
 
 # Add subperiod variables to ADSL
 derive_vars_period(
-    adsl,
-    dataset_ref = phase_ref,
-    new_vars = vars(PHwSDT = PHSDT, PHwEDT = PHEDT , APHASEw = APHASE)
-  )
+  adsl,
+  dataset_ref = phase_ref,
+  new_vars = vars(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
+)
 
 subperiod_ref <- tibble::tribble(
   ~USUBJID, ~APERIOD, ~ASPER, ~ASPRSDT,     ~ASPREDT,
@@ -125,10 +125,10 @@ subperiod_ref <- tibble::tribble(
   )
 
 derive_vars_period(
-    adsl,
-    dataset_ref = subperiod_ref,
-    new_vars = vars(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
-  )
+  adsl,
+  dataset_ref = subperiod_ref,
+  new_vars = vars(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
+)
 }
 \seealso{
 \code{\link[=create_period_dataset]{create_period_dataset()}}

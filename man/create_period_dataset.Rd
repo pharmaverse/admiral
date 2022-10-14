@@ -108,7 +108,7 @@ adsl <- tribble(
   ) \%>\%
   mutate(
     STUDYID = "xyz"
- )
+  )
 
 create_period_dataset(
   adsl,
