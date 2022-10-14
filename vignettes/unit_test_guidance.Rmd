@@ -182,7 +182,7 @@ The input and expected output for the unit tests must follow the following rules
 * Values should be hard-coded whenever possible.
 * If values need to be derived, only unit tested functions can be used.
 
-If a dataset needs to be created for testing purpose, it should be done so using the function `tribble()` from the `tibble` package with the following command `tibble::tribble(<data here>)`.
+If a dataset needs to be created for testing purpose, it should be done so using the function `tribble()` from the `tibble` package with the following command `tibble::tribble(<data here>)`. If additional functions from other packages need to be called, it should be done using the notation `pkg_name::fun()`. 
 Make sure to align columns as well. This ensures quick code readability.
 
 Ensure you give a meaningful explanation of the test in the testthat call, as 
