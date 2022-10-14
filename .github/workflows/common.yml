@@ -102,6 +102,7 @@ jobs:
       # Setting to 'false' will require you to create
       # an orphan branch called 'badges' in your repository
       skip-coverage-badges: false
+
   man-pages:
     name: Man Pages
     uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@staged-deps-fix
