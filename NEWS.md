@@ -12,6 +12,10 @@ for subperiods, periods, or phases from the ADSL dataset was added. The
 reference dataset can be used to create subperiod, period, and phase variables
 in OCCDS and BDS datasets. (#1477)
 
+- The new function `derive_vars_period()` adds subperiod, period, or phase
+variables to ADSL. The values for the new variables are provided by a period
+reference dataset. (#1477)
+
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
 

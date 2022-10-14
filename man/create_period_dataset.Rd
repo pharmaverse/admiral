@@ -21,10 +21,10 @@ variables from the ADSL dataset in CDISC notation.
 
 If the lower case letter "w"  is used it refers to a phase variable, if the
 lower case letters "xx" are used it refers to a period variable, and if
-both "w" and "xx" are used it refers to a subperiod variable.
+both "xx" and "w" are used it refers to a subperiod variable.
 
-Only one type must be used, e.g., all right hand must refer to period
-variables. It is not allowed to mix for example period and subperiod
+Only one type must be used, e.g., all right hand side values must refer to
+period variables. It is not allowed to mix for example period and subperiod
 variables. If period \emph{and} subperiod variables are required, separate
 reference datasets must be created.}
 
@@ -108,13 +108,22 @@ adsl <- tribble(
   ) \%>\%
   mutate(
     STUDYID = "xyz"
-  )
+ )
 
 create_period_dataset(
   adsl,
   new_vars = vars(ASPRSDT = PxxSwSDT, ASPREDT = PxxSwEDT)
 )
 }
+\seealso{
+\code{\link[=derive_vars_period]{derive_vars_period()}}
+
+Creating auxiliary datasets: 
+\code{\link{create_query_data}()},
+\code{\link{create_single_dose_dataset}()}
+}
 \author{
 Stefan Bundfuss
 }
+\concept{create_aux}
+\keyword{create_aux}
