@@ -1,9 +1,114 @@
+#' Create a Reference Dataset for Subperiods, Periods, or Phases
+#'
+#' The function creates a reference dataset for subperiods, periods, or phases
+#' from the `ADSL` dataset. The reference dataset can be used to derive
+#' subperiod, period, or phase variables like `ASPER`, `ASPRSDT`, `ASPREDT`,
+#' `APERIOD`, `APERSDT`, `APEREDT`, `TRTA`, `APHASEN`, `PHSDTM`, `PHEDTM`, ...
+#' in OCCDS and BDS datasets.
+#'
+#' @param dataset ADSL dataset
+#'
+#'   The variables specified by `new_vars` and `subject_keys` are expected. For
+#'   each element of `new_vars` at least one variable of the form of the right
+#'   hand side value must be available in the dataset.
+#'
+#' @param new_vars New variables
+#'
+#'   A named list of variables like `vars(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE
+#'   = APHASEw)` is expected. The left hand side of the elements defines a
+#'   variable of the output dataset, the right hand side defines the source
+#'   variables from the ADSL dataset in CDISC notation.
+#'
+#'   If the lower case letter "w"  is used it refers to a phase variable, if the
+#'   lower case letters "xx" are used it refers to a period variable, and if
+#'   both "w" and "xx" are used it refers to a subperiod variable.
+#'
+#'   Only one type must be used, e.g., all right hand must refer to period
+#'   variables. It is not allowed to mix for example period and subperiod
+#'   variables. If period *and* subperiod variables are required, separate
+#'   reference datasets must be created.
+#'
+#' @param subject_keys Variables to uniquely identify a subject
+#'
+#'   A list of quosures where the expressions are symbols as returned by
+#'   `vars()` is expected.
+#'
 #' @author Stefan Bundfuss
+#'
+#' @details For each subject and each subperiod/period/phase where at least one
+#'   of the source variable is not `NA` an observation is added to the output
+#'   dataset.
+#'
+#'   Depending on the type of the source variable (subperiod, period, or phase)
+#'   the variable `ASPER`, `APERIOD`, or `APHASEN` is added and set to the
+#'   number of the subperiod, period, or phase.
+#'
+#'   The variables specified for `new_vars` (left hand side) are added to the
+#'   output dataset and set to the value of the source variable (right hand
+#'   side).
+#'
+#' @return A period reference dataset (see "Details" section)
 #'
 #' @export
 #'
 #' @examples
 #' library(tibble)
+#' library(dplyr)
+#' library(lubridate)
+#'
+#' # Create reference dataset for periods
+#' adsl <- tribble(
+#'   ~USUBJID, ~AP01SDT,     ~AP01EDT,     ~AP02SDT,     ~AP02EDT,     ~TRT01A, ~TRT02A,
+#'   "1",      "2021-01-04", "2021-02-06", "2021-02-07", "2021-03-07", "A",     "B",
+#'   "2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01", "B",     "A",
+#' ) %>%
+#'   mutate(
+#'     across(matches("AP\\d\\d[ES]DT"), ymd)
+#'   ) %>%
+#'   mutate(
+#'     STUDYID = "xyz"
+#'   )
+#'
+#' create_period_dataset(
+#'   adsl,
+#'   new_vars = vars(APERSDT = APxxSDT, APEREDT = APxxEDT, TRTA = TRTxxA)
+#' )
+#'
+#' # Create reference dataset for phases
+#' adsl <- tribble(
+#'   ~USUBJID, ~PH1SDT,      ~PH1EDT,      ~PH2SDT,      ~PH2EDT,      ~APHASE1,    ~APHASE2,
+#'   "1",      "2021-01-04", "2021-02-06", "2021-02-07", "2021-03-07", "TREATMENT", "FUP",
+#'   "2",      "2021-02-02", "2021-03-02", NA,           NA,           "TREATMENT", NA
+#' ) %>%
+#'   mutate(
+#'     across(matches("PH\\d[ES]DT"), ymd)
+#'   ) %>%
+#'   mutate(
+#'     STUDYID = "xyz"
+#'   )
+#'
+#' create_period_dataset(
+#'   adsl,
+#'   new_vars = vars(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
+#' )
+#'
+#' # Create reference datasets for subperiods
+#' adsl <- tribble(
+#'   ~USUBJID, ~P01S1SDT,    ~P01S1EDT,    ~P01S2SDT,    ~P01S2EDT,    ~P02S1SDT,    ~P02S1EDT,
+#'   "1",      "2021-01-04", "2021-01-19", "2021-01-20", "2021-02-06", "2021-02-07", "2021-03-07",
+#'   "2",      "2021-02-02", "2021-03-02", NA,           NA,           "2021-03-03", "2021-04-01"
+#' ) %>%
+#'   mutate(
+#'     across(matches("PH\\d\\dS\\d[ES]DT"), ymd)
+#'   ) %>%
+#'   mutate(
+#'     STUDYID = "xyz"
+#'   )
+#'
+#' create_period_dataset(
+#'   adsl,
+#'   new_vars = vars(ASPRSDT = PxxSwSDT, ASPREDT = PxxSwEDT)
+#' )
 create_period_dataset <- function(dataset,
                                   new_vars,
                                   subject_keys = vars(STUDYID, USUBJID)) {
@@ -30,7 +135,8 @@ create_period_dataset <- function(dataset,
       paste(
         "The right hand side values of `new_vars` have to be CDISC style subperiod, period, or phase variables.",
         "I.e., they must contain the xx or w fragment, e.g., APxxSDT, PxxSwSDT, or PHwSDT.",
-        sep = "\n")
+        sep = "\n"
+      )
     )
   }
   if (length(mode) > 1) {
@@ -43,11 +149,12 @@ create_period_dataset <- function(dataset,
       )
     )
   }
-  prefix <- syms(str_match(cols, "(\\w+)\\\\")[,2])
+  prefix <- syms(str_match(cols, "(\\w+)\\\\")[, 2])
   num_var_chr <- c(
     subperiod = "ASPER",
     period = "APERIOD",
-    phase = "APHASEN")
+    phase = "APHASEN"
+  )
   num_var <- syms(num_var_chr)
   period_ref <- vector("list", length(new_vars))
   for (i in seq_along(new_vars)) {
@@ -56,12 +163,11 @@ create_period_dataset <- function(dataset,
         "No variables of the form",
         new_vars_chr[[i]],
         "were found in the input dataset."
-        )
-      )
+      ))
     }
     if (mode == "subperiod") {
       period_ref[[i]] <- pivot_longer(
-        select(dataset,!!!subject_keys, matches(cols[[i]])),
+        select(dataset, !!!subject_keys, matches(cols[[i]])),
         matches(cols[[i]]),
         names_to = c(".value", "APERIOD", num_var_chr[[mode]]),
         names_pattern = names_pattern[[i]]
@@ -69,7 +175,8 @@ create_period_dataset <- function(dataset,
         rename(!!sym(new_vars_names[[i]]) := !!prefix[[i]]) %>%
         mutate(
           APERIOD = as.integer(APERIOD),
-          !!num_var[[mode]] := as.integer(!!num_var[[mode]])) %>%
+          !!num_var[[mode]] := as.integer(!!num_var[[mode]])
+        ) %>%
         filter(!is.na(!!sym(new_vars_names[[i]])))
       by_vars <- vars(APERIOD, !!sym(num_var[[mode]]))
     } else {
@@ -85,7 +192,7 @@ create_period_dataset <- function(dataset,
       by_vars <- vars(!!sym(num_var[[mode]]))
     }
     if (i == 1) {
-      period_ref_final <-  period_ref[[1]]
+      period_ref_final <- period_ref[[1]]
     } else {
       period_ref_final <- derive_vars_merged(
         period_ref_final,
@@ -95,4 +202,80 @@ create_period_dataset <- function(dataset,
     }
   }
   period_ref_final
+}
+
+#' @export
+derive_vars_period <- function(dataset,
+                               dataset_ref,
+                               new_vars,
+                               subject_keys = vars(STUDYID, USUBJID)) {
+  assert_vars(new_vars, expect_names = TRUE)
+  assert_vars(subject_keys)
+  assert_data_frame(dataset, required_vars = subject_keys)
+  assert_data_frame(dataset_ref, required_vars = subject_keys)
+
+  new_vars_names <- names(new_vars)
+  new_vars_chr <- vars2chr(new_vars)
+  mode <- case_when(
+    str_detect(new_vars_names, "\\w+xx\\w+w\\w*") ~ "subperiod",
+    str_detect(new_vars_names, "\\w+xx\\w*") ~ "period",
+    str_detect(new_vars_names, "\\w+w\\w*") ~ "phase",
+    TRUE ~ "none"
+  ) %>% unique()
+  if (any(mode == "none")) {
+    abort(
+      paste(
+        "The left hand side values of `new_vars` have to be CDISC style subperiod, period, or phase variables.",
+        "I.e., they must contain the xx or w fragment, e.g., APxxSDT, PxxSwSDT, or PHwSDT.",
+        sep = "\n"
+      )
+    )
+  }
+  if (length(mode) > 1) {
+    abort(
+      paste0(
+        "More than one type of subperiod, period, or phase variables is specified for `new_vars`:\n",
+        if_else("subperiod" %in% mode, paste0("subperiod: ", enumerate(new_vars_names[mode == "subperiod"]), "\n"), ""),
+        if_else("period" %in% mode, paste0("period: ", enumerate(new_vars_names[mode == "period"]), "\n"), ""),
+        if_else("phase" %in% mode, paste0("phase: ", enumerate(new_vars_names[mode == "phase"]), "\n"), "")
+      )
+    )
+  }
+  if (mode == "subperiod") {
+    id_vars <- vars(APERIOD, ASPER)
+  } else if (mode == "period") {
+    id_vars <- vars(APERIOD)
+  } else {
+    id_vars <- vars(APHASEN)
+  }
+  assert_data_frame(dataset_ref, required_vars = quo_c(subject_keys, new_vars, id_vars))
+
+  ref_wide <- pivot_wider(
+    dataset_ref,
+    names_from = vars2chr(id_vars),
+    values_from = new_vars_chr
+  )
+
+  rename_arg <- colnames(select(ref_wide, !!!negate_vars(subject_keys)))
+  split_names <- str_match(rename_arg, "(\\w+?)_(\\d{1,2})_?(\\d)?")
+  source_vars <- names(new_vars_chr)
+  names(source_vars) <- new_vars_chr
+  index <- split_names[,3]
+  if (mode == "phase") {
+    names_rename_arg <- str_replace(source_vars[split_names[,2]], "w", index)
+  } else {
+    index <- if_else(str_length(index) == 1, paste0("0", index), index)
+    names_rename_arg <- str_replace(source_vars[split_names[,2]], "xx", index)
+    if (mode == "subperiod") {
+      index2 <- split_names[, 4]
+      names_rename_arg <- str_replace(names_rename_arg, "w", index2)
+    }
+  }
+  names(rename_arg) <- names_rename_arg
+
+  derive_vars_merged(
+    dataset,
+    dataset_add = ref_wide,
+    by_vars = subject_keys
+  ) %>% rename(rename_arg)
 }
