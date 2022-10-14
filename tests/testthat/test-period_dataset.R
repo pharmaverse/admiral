@@ -232,7 +232,7 @@ test_that("derive_vars_period Test 7: periods", {
       dataset_ref = period_ref,
       new_vars = vars(APxxSDT = APERSDT, APxxEDT = APEREDT)
     ),
-    keys = "USUBJID"
+    keys = c("USUBJID")
   )
 })
 
@@ -271,7 +271,7 @@ test_that("derive_vars_period Test 8: phases", {
       dataset_ref = phase_ref,
       new_vars = vars(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
     ),
-    keys = "USUBJID"
+    keys = c("USUBJID")
   )
 })
 
@@ -313,7 +313,7 @@ test_that("derive_vars_period Test 9: subperiods", {
       dataset_ref = subperiod_ref,
       new_vars = vars(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
     ),
-    keys = "USUBJID"
+    keys = c("USUBJID")
   )
 })
 ## Test 10: error if no period/phase variable on LHS ----
