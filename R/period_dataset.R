@@ -138,7 +138,10 @@ create_period_dataset <- function(dataset,
   if (any(mode == "none")) {
     abort(
       paste(
-        "The right hand side values of `new_vars` have to be CDISC style subperiod, period, or phase variables.",
+        paste0(
+          "The right hand side values of `new_vars` have to be CDISC style ",
+          "subperiod, period, or phase variables."
+        ),
         "I.e., they must contain the xx or w fragment, e.g., APxxSDT, PxxSwSDT, or PHwSDT.",
         sep = "\n"
       )
@@ -147,10 +150,23 @@ create_period_dataset <- function(dataset,
   if (length(mode) > 1) {
     abort(
       paste0(
-        "More than one type of subperiod, period, or phase variables is specified for `new_vars`:\n",
-        if_else("subperiod" %in% mode, paste0("subperiod: ", enumerate(new_vars_chr[mode == "subperiod"]), "\n"), ""),
-        if_else("period" %in% mode, paste0("period: ", enumerate(new_vars_chr[mode == "period"]), "\n"), ""),
-        if_else("phase" %in% mode, paste0("phase: ", enumerate(new_vars_chr[mode == "phase"]), "\n"), "")
+        "More than one type of subperiod, period, or phase variables ",
+        "is specified for `new_vars`:\n",
+        if_else(
+          "subperiod" %in% mode,
+          paste0("subperiod: ", enumerate(new_vars_chr[mode == "subperiod"]), "\n"),
+          ""
+        ),
+        if_else(
+          "period" %in% mode,
+          paste0("period: ", enumerate(new_vars_chr[mode == "period"]), "\n"),
+          ""
+        ),
+        if_else(
+          "phase" %in% mode,
+          paste0("phase: ", enumerate(new_vars_chr[mode == "phase"]), "\n"),
+          ""
+        )
       )
     )
   }
@@ -355,7 +371,10 @@ derive_vars_period <- function(dataset,
   if (any(mode == "none")) {
     abort(
       paste(
-        "The left hand side values of `new_vars` have to be CDISC style subperiod, period, or phase variables.",
+        paste0(
+          "The left hand side values of `new_vars` have to be CDISC style ",
+          "subperiod, period, or phase variables."
+        ),
         "I.e., they must contain the xx or w fragment, e.g., APxxSDT, PxxSwSDT, or PHwSDT.",
         sep = "\n"
       )
@@ -364,10 +383,23 @@ derive_vars_period <- function(dataset,
   if (length(mode) > 1) {
     abort(
       paste0(
-        "More than one type of subperiod, period, or phase variables is specified for `new_vars`:\n",
-        if_else("subperiod" %in% mode, paste0("subperiod: ", enumerate(new_vars_names[mode == "subperiod"]), "\n"), ""),
-        if_else("period" %in% mode, paste0("period: ", enumerate(new_vars_names[mode == "period"]), "\n"), ""),
-        if_else("phase" %in% mode, paste0("phase: ", enumerate(new_vars_names[mode == "phase"]), "\n"), "")
+        "More than one type of subperiod, period, or phase variables ",
+        "is specified for `new_vars`:\n",
+        if_else(
+          "subperiod" %in% mode,
+          paste0("subperiod: ", enumerate(new_vars_names[mode == "subperiod"]), "\n"),
+          ""
+        ),
+        if_else(
+          "period" %in% mode,
+          paste0("period: ", enumerate(new_vars_names[mode == "period"]), "\n"),
+          ""
+        ),
+        if_else(
+          "phase" %in% mode,
+          paste0("phase: ", enumerate(new_vars_names[mode == "phase"]), "\n"),
+          ""
+        )
       )
     )
   }

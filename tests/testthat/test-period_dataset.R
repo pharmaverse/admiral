@@ -131,7 +131,10 @@ test_that("create_period_dataset Test 4: error if no period/phase variable on RH
       new_vars = vars(USUBJ = USUBJID)
     ),
     regexp = paste(
-      "The right hand side values of `new_vars` have to be CDISC style subperiod, period, or phase variables.",
+      paste0(
+        "The right hand side values of `new_vars` have to be CDISC style ",
+        "subperiod, period, or phase variables."
+      ),
       "I.e., they must contain the xx or w fragment, e.g., APxxSDT, PxxSwSDT, or PHwSDT.",
       sep = "\n"
     ),
@@ -337,7 +340,10 @@ test_that("derive_vars_period Test 10: error if no period/phase variable on LHS"
       new_vars = vars(USUBJ = USUBJID)
     ),
     regexp = paste(
-      "The left hand side values of `new_vars` have to be CDISC style subperiod, period, or phase variables.",
+      paste0(
+        "The left hand side values of `new_vars` have to be CDISC style ",
+        "subperiod, period, or phase variables."
+      ),
       "I.e., they must contain the xx or w fragment, e.g., APxxSDT, PxxSwSDT, or PHwSDT.",
       sep = "\n"
     ),
