@@ -1,3 +1,7 @@
+# admiral 0.8.4
+
+- Fixed a bug where a recent update to `{lifecylce}` caused several `admiral` tests to break (#1500)
+
 # admiral 0.8.3
 
 - Second attempt to address issue where CRAN identified a failing test when "a strict Latin-1* locale" is used (#1469)
