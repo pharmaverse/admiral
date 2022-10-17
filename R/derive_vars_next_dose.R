@@ -251,7 +251,7 @@ derive_vars_next_dose <- function(dataset,
     select(!!!by_vars, tmp_seq_var, tmp_analysis_date) %>%
     inner_join(dataset_ex, by = by_vars_str) %>%
     filter(!is.na(tmp_dose_date) & !is.na(tmp_analysis_date) &
-             tmp_dose_date > tmp_analysis_date) %>%
+      tmp_dose_date > tmp_analysis_date) %>%
     filter_extreme(
       by_vars = vars(tmp_seq_var),
       order = c(vars(tmp_dose_date), dose_id),
