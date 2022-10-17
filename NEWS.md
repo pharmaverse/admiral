@@ -5,6 +5,8 @@
   - Developer addin for formatting tests to admiral programming standards (#73)
   
   - New functions `replace_symbol_in_quo()` and `add_suffix_to_vars()` (#106)
+  
+  - New keyword/family `create_aux` for functions creating auxiliary datasets (#126)
 
 ## Updates of Existing Functions
 
