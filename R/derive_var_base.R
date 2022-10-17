@@ -69,10 +69,10 @@
 #'
 #' ## Derive `BNRIND` variable from `ANRIND`
 #' derive_var_base(
-#'    dataset,
-#'    by_vars = vars(USUBJID, PARAMCD),
-#'    source_var = ANRIND,
-#'    new_var = BNRIND
+#'   dataset,
+#'   by_vars = vars(USUBJID, PARAMCD),
+#'   source_var = ANRIND,
+#'   new_var = BNRIND
 #' )
 derive_var_base <- function(dataset,
                             by_vars,
