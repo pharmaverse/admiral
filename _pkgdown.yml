@@ -80,7 +80,9 @@ reference:
 - subtitle: Utilities used for Examples and Template Scripts
 - contents:
   - has_keyword('utils_examples')
-
+- subtitle: Utilities for Printing
+- contents:
+  - has_keyword('utils_print')
 
 - title: Example Datasets
   desc: You can run `use_ad_template()` to produce additional datasets

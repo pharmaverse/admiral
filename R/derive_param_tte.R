@@ -823,38 +823,6 @@ censor_source <- function(dataset_name,
   out
 }
 
-#' Print `tte_source` Objects
-#'
-#' @param x A `tte_source` object
-#' @param ... Not used
-#'
-#' @return No return value, called for side effects
-#'
-#' @author Thomas Neitmann
-#'
-#' @keywords internal
-#' @family internal
-#'
-#' @export
-#'
-#' @seealso [tte_source()], [censor_source()], [event_source()]
-#'
-#' @examples
-#' print(death_event)
-print.tte_source <- function(x, ...) {
-  cat <- function(...) base::cat(..., sep = "")
-  cat("<tte_source> object\n")
-  cat("dataset_name: \"", x$dataset_name, "\"\n")
-  cat("filter: ", quo_text(x$filter), "\n")
-  cat("date: ", quo_text(x$date), "\n")
-  cat("censor: ", x$censor, "\n")
-  cat("set_values_to:\n")
-  for (name in names(x$set_values_to)) {
-    cat("  ", name, ": ", quo_text(x$set_values_to[[name]]), "\n")
-  }
-}
-
-
 #' List all `tte_source` Objects Available in a Package
 #'
 #' @param package The name of the package in which to search for `tte_source` objects

@@ -652,7 +652,7 @@ query <- function(prefix,
   if (!is_auto(out$id)) {
     out$id <- eval_tidy(out$id)
   }
-  class(out) <- c("query", "list")
+  class(out) <- c("query", "source", "list")
   validate_query(out)
 }
 
@@ -909,7 +909,7 @@ smq_select <- function(name = NULL,
     id = id,
     scope = scope
   )
-  class(out) <- c("smq_select", "list")
+  class(out) <- c("smq_select", "source", "list")
   validate_smq_select(out)
 }
 
@@ -1013,7 +1013,7 @@ sdg_select <- function(name = NULL,
     name = name,
     id = id
   )
-  class(out) <- c("sdg_select", "list")
+  class(out) <- c("sdg_select", "source", "list")
   validate_sdg_select(out)
 }
 

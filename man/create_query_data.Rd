@@ -248,6 +248,7 @@ create_query_data(
 
 OCCDS Functions: 
 \code{\link{create_single_dose_dataset}()},
+\code{\link{derive_var_trtemfl}()},
 \code{\link{derive_vars_atc}()},
 \code{\link{derive_vars_query}()},
 \code{\link{get_terms_from_db}()}
