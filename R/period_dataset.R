@@ -418,6 +418,8 @@ derive_vars_period <- function(dataset,
     values_from = unname(new_vars_chr)
   )
 
+  # pivot_wider creates columns like APERSDT_1, APERSDT_2, ...
+  # these need to be renamed to variables like AP01SDT, AP02SDT, ...
   rename_arg <- colnames(select(ref_wide, !!!negate_vars(subject_keys)))
   split_names <- str_match(rename_arg, "(\\w+?)_(\\d{1,2})_?(\\d)?")
   source_vars <- names(new_vars_chr)
@@ -426,6 +428,7 @@ derive_vars_period <- function(dataset,
   if (mode == "phase") {
     names_rename_arg <- str_replace(source_vars[split_names[, 2]], "w", index)
   } else {
+    # add leading zero for "xx" fragment
     index <- if_else(str_length(index) == 1, paste0("0", index), index)
     names_rename_arg <- str_replace(source_vars[split_names[, 2]], "xx", index)
     if (mode == "subperiod") {
@@ -439,5 +442,5 @@ derive_vars_period <- function(dataset,
     dataset,
     dataset_add = ref_wide,
     by_vars = subject_keys
-  ) %>% rename(rename_arg)
+  ) %>% rename(all_of(rename_arg))
 }
