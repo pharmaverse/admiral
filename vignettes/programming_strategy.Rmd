@@ -388,6 +388,7 @@ add an issue in GitHub for discussion.
 |-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
 | `com_date_time`                                                                   | Date/Time Computation Functions that returns a vector                                                                    | 	
 | `com_bds_findings`                                                                | BDS-Findings Functions that returns a vector                                                                             |
+| `create_aux`                                                                      | Functions for Creating Auxiliary Datasets |
 | `datasets`                                                                        | Example datasets used within admiral                                                                                     |
 | `der_gen`                                                                         | General Derivation Functions that can be used for any ADaM.                                                              |
 | `der_date_time`                                                                   | Date/Time Derivation Function                                                                                            |
