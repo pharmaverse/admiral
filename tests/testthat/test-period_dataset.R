@@ -223,7 +223,7 @@ test_that("derive_vars_period Test 7: periods", {
       across(matches("APER[ES]DT"), ymd)
     )
 
-  adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
+  adsl <- tibble::tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
 
   expect_dfs_equal(
     base = expected,

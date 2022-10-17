@@ -415,7 +415,7 @@ derive_vars_period <- function(dataset,
   ref_wide <- pivot_wider(
     dataset_ref,
     names_from = vars2chr(id_vars),
-    values_from = new_vars_chr
+    values_from = unname(new_vars_chr)
   )
 
   rename_arg <- colnames(select(ref_wide, !!!negate_vars(subject_keys)))
