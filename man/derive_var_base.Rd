@@ -34,8 +34,8 @@ dataset plus the \code{new_var} variable
 Derive baseline variables, e.g. \code{BASE} or \code{BNRIND}, in a BDS dataset
 }
 \details{
-For each \code{by_vars} group the baseline record is identified by filtering using the
-condition specified by \code{filter} which defaults to \code{ABLFL == "Y"}. Subsequently,
+For each \code{by_vars} group, the baseline record is identified by the
+condition specified in \code{filter} which defaults to \code{ABLFL == "Y"}. Subsequently,
 every value of the \code{new_var} variable for the \code{by_vars} group is set to the
 value of the \code{source_var} variable of the baseline record. In case there are
 multiple baseline records within \code{by_vars} an error is issued.

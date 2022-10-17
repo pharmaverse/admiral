@@ -20,8 +20,8 @@
 #' dataset plus the `new_var` variable
 #'
 #' @details
-#' For each `by_vars` group the baseline record is identified by filtering using the
-#' condition specified by `filter` which defaults to `ABLFL == "Y"`. Subsequently,
+#' For each `by_vars` group, the baseline record is identified by the
+#' condition specified in `filter` which defaults to `ABLFL == "Y"`. Subsequently,
 #' every value of the `new_var` variable for the `by_vars` group is set to the
 #' value of the `source_var` variable of the baseline record. In case there are
 #' multiple baseline records within `by_vars` an error is issued.
