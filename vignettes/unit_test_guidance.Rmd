@@ -182,7 +182,7 @@ The input and expected output for the unit tests must follow the following rules
 * Values should be hard-coded whenever possible.
 * If values need to be derived, only unit tested functions can be used.
 
-Test files should not include `library(pkg_name)` calls. 
+In contrast to the [Programming Strategy](programming_strategy.html#function-header-documentation) documentation for function examples, test files should not include `library(pkg_name)` calls. 
 If a dataset needs to be created for testing purposes, it should be done so using the function `tribble()` from the `tibble` package with the following command `tibble::tribble(<data here>)`. 
 Furthermore, if other functions need to be called, it should also be done using `pkg_name::fun()`notation. 
 Make sure to align columns as well. This ensures quick code readability.
