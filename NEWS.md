@@ -25,6 +25,19 @@ which controls if time is considered for the condition if `start_date` is after
 - Function `derive_vars_merged()` had an improperly formatted error message 
 which has been corrected (#1473)
 
+# admiral 0.8.4
+
+- Fixed a bug where a recent update to `{lifecylce}` caused several `admiral` tests to break (#1500)
+
+# admiral 0.8.3
+
+- Second attempt to address issue where CRAN identified a failing test when "a strict Latin-1* locale" is used (#1469)
+- Fixed a bug in `derive_vars_duration()` that surfaced after changes in R-devel (#1486)
+
+# admiral 0.8.2
+
+- Fixed an issue where CRAN identified a failing test when "a strict Latin-1* locale" is used (#1469)
+
 # admiral 0.8.1
 
 - `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` were updated such
