@@ -1429,14 +1429,17 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
 #'
 #' Checks if a variable vector is a date or datetime variable
 #'
-#' @param var The variable to check
+#' @param arg The function argument to be checked
 #'
-#' @param var_name The name of the variable. If the argument is specified, the
-#'   specified name is displayed in the error message.
+#' @param var_name a character vector name of the `arg`.
+#' `var_name` argument is optional.
+#'
+#' @param optional Is the checked parameter optional? If set to `FALSE`
+#' and `arg` is `NULL` then an error is thrown.
 #'
 #' @return
-#' The function throws an error if `var` is not a date or datetime variable
-#' and returns the input invisibly otherwise.
+#' The function returns an error if `arg` is not a date or datetime variable
+#' but otherwise returns an invisible output.
 #'
 #' @export
 #'
@@ -1445,30 +1448,27 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
 #' @keywords assertion
 #'
 #' @examples
-#' library(tibble)
-#' library(rlang)
-#'
-#' example_fun <- function(var) {
-#'   assert_date_vector(var)
+#' example_fun <- function(arg) {
+#'   assert_date_vector(arg)
 #' }
 #'
-#' my_dates_chr <- c("2018-08-23", "2022-01-30", "1993-07-14")
-#' my_dates_fmt <- as.Date(my_dates_chr, tz = "UTC")
-#'
 #' example_fun(
-#'   var = my_dates_fmt
+#'  as.Date("2022-01-30", tz = "UTC")
 #' )
-#'
-assert_date_vector <- function(var, var_name = NULL) {
-  assert_character_scalar(var_name, optional = TRUE)
+#' try(example_fun(c("2018-08-23", "2022-01-30", "1993-07-14")))
+assert_date_vector <- function(arg, var_name=NULL, optional=FALSE) {
+  assert_character_vector(var_name, optional = TRUE)
+  assert_logical_scalar(optional)
+
   if (is.null(var_name)) {
-    var_name <- deparse(substitute(var))
+    var_name <-arg_name(substitute(arg))
   }
-  if (!is.instant(var)) {
+
+  if (!is.instant(arg)) {
     abort(paste0(
       var_name,
-      " is not a date or datetime variable but is ",
-      friendly_type_of(var)
+      " must be a date or datetime variable but it's ",
+      friendly_type_of(arg)
     ))
   }
 }

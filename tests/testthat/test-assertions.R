@@ -108,5 +108,5 @@ test_that("Test 11 : `assert_order_vars` returns errors if used incorrectly", {
 })
 
 test_that("Test 12: `assert_date_vector` returns error if input vector is not a date formatted",{
-  expect_error(assert_date_vector(var=c("2018-08-23", "2022-01-30", "1993-07-14")))
+  expect_error(assert_date_vector("2018-08-23"))
 })

@@ -4,36 +4,33 @@
 \alias{assert_date_vector}
 \title{Is a Variable is a Date or Datetime Variable?}
 \usage{
-assert_date_vector(var, var_name = NULL)
+assert_date_vector(arg, var_name = NULL, optional = FALSE)
 }
 \arguments{
-\item{var}{The variable to check}
+\item{arg}{The function argument to be checked}
 
-\item{var_name}{The name of the variable. If the argument is specified, the
-specified name is displayed in the error message.}
+\item{var_name}{a character vector name of the \code{arg}.
+\code{var_name} argument is optional.}
+
+\item{optional}{Is the checked parameter optional? If set to \code{FALSE}
+and \code{arg} is \code{NULL} then an error is thrown.}
 }
 \value{
-The function throws an error if \code{var} is not a date or datetime variable
-and returns the input invisibly otherwise.
+The function returns an error if \code{arg} is not a date or datetime variable
+but otherwise returns an invisible output.
 }
 \description{
 Checks if a variable vector is a date or datetime variable
 }
 \examples{
-library(tibble)
-library(rlang)
-
-example_fun <- function(var) {
-  assert_date_vector(var)
+example_fun <- function(arg) {
+  assert_date_vector(arg)
 }
 
-my_dates_chr <- c("2018-08-23", "2022-01-30", "1993-07-14")
-my_dates_fmt <- as.Date(my_dates_chr, tz = "UTC")
-
 example_fun(
-  var = my_dates_fmt
+ as.Date("2022-01-30", tz = "UTC")
 )
-
+try(example_fun(c("2018-08-23", "2022-01-30", "1993-07-14")))
 }
 \author{
 Sadchla Mascary
