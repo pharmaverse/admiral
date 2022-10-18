@@ -309,7 +309,8 @@ create_period_dataset <- function(dataset,
 #'   adsl,
 #'   dataset_ref = period_ref,
 #'   new_vars = vars(APxxSDT = APERSDT, APxxEDT = APEREDT)
-#' )
+#' ) %>%
+#'   select(STUDYID, USUBJID, AP01SDT, AP01EDT, AP02SDT, AP02EDT)
 #'
 #' # Add phase variables to ADSL
 #' phase_ref <- tribble(
@@ -324,14 +325,15 @@ create_period_dataset <- function(dataset,
 #'     across(matches("PH[ES]DT"), ymd)
 #'   )
 #'
-#' # Add subperiod variables to ADSL
 #' derive_vars_period(
 #'   adsl,
 #'   dataset_ref = phase_ref,
 #'   new_vars = vars(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
-#' )
+#' ) %>%
+#'   select(STUDYID, USUBJID, PH1SDT, PH1EDT, PH2SDT, PH2EDT, APHASE1, APHASE2)
 #'
-#' subperiod_ref <- tibble::tribble(
+#' # Add subperiod variables to ADSL
+#' subperiod_ref <- tribble(
 #'   ~USUBJID, ~APERIOD, ~ASPER, ~ASPRSDT,     ~ASPREDT,
 #'   "1",             1,      1, "2021-01-04", "2021-01-19",
 #'   "1",             1,      2, "2021-01-20", "2021-02-06",
@@ -350,7 +352,8 @@ create_period_dataset <- function(dataset,
 #'   adsl,
 #'   dataset_ref = subperiod_ref,
 #'   new_vars = vars(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
-#' )
+#' ) %>%
+#'   select(STUDYID, USUBJID, P01S1SDT, P01S1EDT, P01S2SDT, P01S2EDT, P02S1SDT, P02S1EDT)
 derive_vars_period <- function(dataset,
                                dataset_ref,
                                new_vars,
