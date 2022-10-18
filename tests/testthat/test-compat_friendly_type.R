@@ -1,9 +1,11 @@
-test_that("friendly_type_of() supports objects", {
+## Test 1: friendly_type_of() supports objects ----
+test_that("compat_friendly_type Test 1: friendly_type_of() supports objects", {
   expect_equal(friendly_type_of(mtcars), "a <data.frame> object")
   expect_equal(friendly_type_of(quo(1)), "a <quosure> object")
 })
 
-test_that("friendly_type_of() supports matrices and arrays (#141)", {
+## Test 2: friendly_type_of() supports matrices and arrays (#141) ----
+test_that("compat_friendly_type Test 2: friendly_type_of() supports matrices and arrays (#141)", {
   expect_equal(friendly_type_of(list()), "an empty list")
   expect_equal(friendly_type_of(matrix(list(1, 2))), "a list matrix")
   expect_equal(friendly_type_of(array(list(1, 2, 3), dim = 1:3)), "a list array")
@@ -15,8 +17,8 @@ test_that("friendly_type_of() supports matrices and arrays (#141)", {
   expect_equal(friendly_type_of(array(letters[1:3], dim = 1:3)), "a character array")
 })
 
-
-test_that("friendly_type_of() handles scalars", {
+## Test 3: friendly_type_of() handles scalars ----
+test_that("compat_friendly_type Test 3: friendly_type_of() handles scalars", {
   expect_equal(friendly_type_of(NA), "`NA`")
 
   expect_equal(friendly_type_of(TRUE), "`TRUE`")
