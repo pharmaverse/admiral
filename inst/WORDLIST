@@ -140,6 +140,7 @@ censorings
 chk
 constructible
 cyclomatic
+datasets
 datepart
 datetime
 datetimes
@@ -219,3 +220,5 @@ yyyyy
 Framingham
 CTCAE
 admh
+.rda
+.rds
