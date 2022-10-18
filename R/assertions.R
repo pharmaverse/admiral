@@ -1424,3 +1424,51 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
     ))
   }
 }
+
+#' Is a Variable is a Date or Datetime Variable?
+#'
+#' Checks if a variable vector is a date or datetime variable
+#'
+#' @param var The variable to check
+#'
+#' @param var_name The name of the variable. If the argument is specified, the
+#'   specified name is displayed in the error message.
+#'
+#' @return
+#' The function throws an error if `var` is not a date or datetime variable
+#' and returns the input invisibly otherwise.
+#'
+#' @export
+#'
+#' @author Sadchla Mascary
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' library(tibble)
+#' library(rlang)
+#'
+#' example_fun <- function(var) {
+#'   assert_date_vector(var)
+#' }
+#'
+#' my_dates_chr <- c("2018-08-23", "2022-01-30", "1993-07-14")
+#' my_dates_fmt <- as.Date(my_dates_chr, tz = "UTC")
+#'
+#' example_fun(
+#'   var = my_dates_fmt
+#' )
+#'
+assert_date_vector <- function(var, var_name = NULL) {
+  assert_character_scalar(var_name, optional = TRUE)
+  if (is.null(var_name)) {
+    var_name <- deparse(substitute(var))
+  }
+  if (!is.instant(var)) {
+    abort(paste0(
+      var_name,
+      " is not a date or datetime variable but is ",
+      friendly_type_of(var)
+    ))
+  }
+}
