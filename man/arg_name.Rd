@@ -24,7 +24,6 @@ Developer Utility Functions:
 \code{\link{extract_vars}()},
 \code{\link{filter_if}()},
 \code{\link{negate_vars}()},
-\code{\link{replace_values_by_names}()},
 \code{\link{valid_time_units}()},
 \code{\link{vars2chr}()}
 }

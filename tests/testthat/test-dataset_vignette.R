@@ -1,23 +1,48 @@
-library(admiral.test)
-
-# ---- dataset_vignette, test 1: a 'knitr_kable' object is output when run outside pkgdown ----
-test_that("dataset_vignette, test 1: a 'knitr_kable' object is output when run outside pkgdown", {
-  expect_s3_class(dataset_vignette(head(admiral_dm)), "knitr_kable")
-})
-
-# ---- dataset_vignette, test 2: a 'datatables' object is output when run inside pkgdown ----
-test_that("dataset_vignette, test 2: a 'datatables' object is output when run inside pkgdown", {
-  Sys.setenv(IN_PKGDOWN = "true")
-  on.exit(Sys.setenv(IN_PKGDOWN = ""))
-  expect_s3_class(dataset_vignette(head(admiral_dm)), "datatables")
-})
-
-# ---- dataset_vignette, test 3: a 'knitr_kable' object is output when run outside pkgdown ----
-test_that("dataset_vignette, test 3: a 'knitr_kable' object is output when run outside pkgdown", {
+# dataset_vignette ----
+## Test 1: A 'knitr_kable' object is outputted when run outside pkgdown ----
+test_that("dataset_vignette Test 1: A 'knitr_kable' object is outputted when run outside pkgdown", {
   Sys.setenv(IN_PKGDOWN = "false")
   on.exit(Sys.setenv(IN_PKGDOWN = ""))
-  expect_s3_class(
-    dataset_vignette(head(admiral_dm), display_vars = vars(STUDYID, USUBJID)),
-    "knitr_kable"
+
+  dm <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~COUNTRY,
+    "STUDY1", "1",      "USA",
+    "STUDY1", "2",      "USA",
+    "STUDY1", "3",      "USA",
+    "STUDY1", "4",      "USA"
   )
+
+  expect_s3_class(dataset_vignette(dm), "knitr_kable")
+  expect_s3_class(dataset_vignette(dm, display_vars = vars(STUDYID, USUBJID)), "knitr_kable")
+})
+
+## Test 2: A 'datatables' object is outputted when run inside pkgdown ----
+test_that("dataset_vignette Test 2: A 'datatables' object is outputted when run inside pkgdown", {
+  Sys.setenv(IN_PKGDOWN = "true")
+  on.exit(Sys.setenv(IN_PKGDOWN = ""))
+
+  dm <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~COUNTRY,
+    "STUDY1", "1",      "USA",
+    "STUDY1", "2",      "USA",
+    "STUDY1", "3",      "USA",
+    "STUDY1", "4",      "USA"
+  )
+
+
+  expect_s3_class(dataset_vignette(dm), "datatables")
+  expect_s3_class(dataset_vignette(dm, display_vars = vars(STUDYID, USUBJID)), "datatables")
+})
+
+## Test 3: An error is outputted when calling variable not in dataset ----
+test_that("dataset_vignette Test 3: An error is outputted when calling variable not in dataset", {
+  dm <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~COUNTRY,
+    "STUDY1", "1",      "USA",
+    "STUDY1", "2",      "USA",
+    "STUDY1", "3",      "USA",
+    "STUDY1", "4",      "USA"
+  )
+
+  expect_error(dataset_vignette(dm, display_vars = vars(AGE)))
 })

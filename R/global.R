@@ -4,5 +4,6 @@
 globalVariables(c(
   "_unit",
   "auto",
+  "name",
   "PARAMCD"
 ))

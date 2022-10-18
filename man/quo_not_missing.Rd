@@ -17,7 +17,10 @@ Check Whether an Argument Is Not a Quosure of a Missing Argument
 }
 \seealso{
 Helpers for working with Quosures: 
-\code{\link{quo_c}()}
+\code{\link{add_suffix_to_vars}()},
+\code{\link{quo_c}()},
+\code{\link{replace_symbol_in_quo}()},
+\code{\link{replace_values_by_names}()}
 }
 \author{
 Thomas Neitmann, Ondrej Slama
