@@ -107,6 +107,6 @@ test_that("Test 11 : `assert_order_vars` returns errors if used incorrectly", {
   expect_error(assert_order_vars(vars(USUBJID, toupper(PARAMCD), -AVAL)))
 })
 
-test_that("Test 12: `assert_date_vector` returns error if input vector is not a date formatted",{
+test_that("Test 12: `assert_date_vector` returns error if input vector is not a date formatted", {
   expect_error(assert_date_vector("2018-08-23"))
 })

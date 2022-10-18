@@ -1453,15 +1453,15 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
 #' }
 #'
 #' example_fun(
-#'  as.Date("2022-01-30", tz = "UTC")
+#'   as.Date("2022-01-30", tz = "UTC")
 #' )
 #' try(example_fun(c("2018-08-23", "2022-01-30", "1993-07-14")))
-assert_date_vector <- function(arg, var_name=NULL, optional=FALSE) {
+assert_date_vector <- function(arg, var_name = NULL, optional = FALSE) {
   assert_character_vector(var_name, optional = TRUE)
   assert_logical_scalar(optional)
 
   if (is.null(var_name)) {
-    var_name <-arg_name(substitute(arg))
+    var_name <- arg_name(substitute(arg))
   }
 
   if (!is.instant(arg)) {

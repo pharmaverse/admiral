@@ -28,7 +28,7 @@ example_fun <- function(arg) {
 }
 
 example_fun(
- as.Date("2022-01-30", tz = "UTC")
+  as.Date("2022-01-30", tz = "UTC")
 )
 try(example_fun(c("2018-08-23", "2022-01-30", "1993-07-14")))
 }
