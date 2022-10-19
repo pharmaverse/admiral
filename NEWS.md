@@ -4,6 +4,9 @@
 
 - New function `derive_var_trtemfl()` for deriving treatment emergent flags (#989)
 
+- New function `derive_var_relative_flag()` for flagging observations before or
+after a condition is fulfilled (#1453)
+
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
 
@@ -23,6 +26,19 @@ which controls if time is considered for the condition if `start_date` is after
 which has been corrected (#1473)
 
 - Templates now save datasets as .rds instead of .rda (#1501)
+
+# admiral 0.8.4
+
+- Fixed a bug where a recent update to `{lifecylce}` caused several `admiral` tests to break (#1500)
+
+# admiral 0.8.3
+
+- Second attempt to address issue where CRAN identified a failing test when "a strict Latin-1* locale" is used (#1469)
+- Fixed a bug in `derive_vars_duration()` that surfaced after changes in R-devel (#1486)
+
+# admiral 0.8.2
+
+- Fixed an issue where CRAN identified a failing test when "a strict Latin-1* locale" is used (#1469)
 
 # admiral 0.8.1
 
