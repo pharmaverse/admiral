@@ -16,7 +16,7 @@ test_that("quo_c Test 1: `quo_c` works in concatenating and indexing quosures", 
 
 ## Test 2: `quo_c` returns error if non-quosures are input ----
 test_that("quo_c Test 2: `quo_c` returns error if non-quosures are input", {
-  USUBJID <- "01-701-1015" #nolint
+  USUBJID <- "01-701-1015" # nolint
 
   expect_error(
     object = quo_c(quo(USUBJID), USUBJID)
