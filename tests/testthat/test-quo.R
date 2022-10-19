@@ -40,11 +40,17 @@ test_that("replace_values_by_names Test 5: names of quosures replace value", {
   x <- quo(USUBJID)
   y <- quo(STUDYID)
   z <- quo_c(x, y)
-  names(z) <- c("Unique Subject Identifier", "Study Identifier")
+
   z2 <- replace_values_by_names(z)
 
-  expect_equal(z2[[1]], quo(`Unique Subject Identifier`))
-  expect_equal(z2[[2]], quo(`Study Identifier`))
+  names(z) <- c("Unique Subject Identifier", "Study Identifier")
+  z3 <- replace_values_by_names(z)
+
+  expect_equal(z2[[1]], quo(USUBJID))
+  expect_equal(z2[[2]], quo(STUDYID))
+
+  expect_equal(z3[[1]], quo(`Unique Subject Identifier`))
+  expect_equal(z3[[2]], quo(`Study Identifier`))
 })
 
 # replace_symbol_in_quo ----
