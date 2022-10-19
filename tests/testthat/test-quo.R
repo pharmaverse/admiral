@@ -4,15 +4,23 @@ test_that("quo_c Test 1: `quo_c` works in concatenating and indexing quosures", 
   x <- quo(USUBJID)
   y <- quo(STUDYID)
 
-  expect_equal(quo_c(x, NULL, y)[[1]], quo(USUBJID))
-  expect_equal(quo_c(x, NULL, y)[[2]], quo(STUDYID))
+  expect_equal(
+    expected = quo(USUBJID),
+    object = quo_c(x, NULL, y)[[1]]
+  )
+  expect_equal(
+    expected = quo(STUDYID),
+    object = quo_c(x, NULL, y)[[2]]
+  )
 })
 
 ## Test 2: `quo_c` returns error if non-quosures are input ----
 test_that("quo_c Test 2: `quo_c` returns error if non-quosures are input", {
-  USUBJID <- "STUDY-1001"
+  USUBJID <- "01-701-1015" #nolint
 
-  expect_error(quo_c(quo(USUBJID), USUBJID))
+  expect_error(
+    object = quo_c(quo(USUBJID), USUBJID)
+  )
 })
 
 # quo_not_missing ----
@@ -41,16 +49,28 @@ test_that("replace_values_by_names Test 5: names of quosures replace value", {
   y <- quo(STUDYID)
   z <- quo_c(x, y)
 
-  z2 <- replace_values_by_names(z)
+  z_noname <- replace_values_by_names(z)
 
   names(z) <- c("Unique Subject Identifier", "Study Identifier")
-  z3 <- replace_values_by_names(z)
+  z_named <- replace_values_by_names(z)
 
-  expect_equal(z2[[1]], quo(USUBJID))
-  expect_equal(z2[[2]], quo(STUDYID))
+  expect_equal(
+    expected = quo(USUBJID),
+    object = z_noname[[1]]
+  )
+  expect_equal(
+    expected = quo(STUDYID),
+    object = z_noname[[2]]
+  )
 
-  expect_equal(z3[[1]], quo(`Unique Subject Identifier`))
-  expect_equal(z3[[2]], quo(`Study Identifier`))
+  expect_equal(
+    expected = quo(`Unique Subject Identifier`),
+    object = z_named[[1]]
+  )
+  expect_equal(
+    expected = quo(`Study Identifier`),
+    object = z_named[[2]]
+  )
 })
 
 # replace_symbol_in_quo ----
