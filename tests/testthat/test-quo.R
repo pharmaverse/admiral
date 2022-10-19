@@ -1,6 +1,23 @@
+# quo_c ----
+## Test 1: `quo_c` works in concatenating and indexing quosures ----
+test_that("quo_c Test 1: `quo_c` works in concatenating and indexing quosures", {
+  x = quo(USUBJID)
+  y = quo(STUDYID)
+
+  expect_equal(quo_c(x, NULL, y)[[1]], quo(USUBJID))
+  expect_equal(quo_c(x, NULL, y)[[2]], quo(STUDYID))
+})
+
+## Test 2: `quo_c` returns error if non-quosures are input ----
+test_that("quo_c Test 2: `quo_c` returns error if non-quosures are input", {
+  USUBJID = "STUDY-1001"
+
+  expect_error(quo_c(quo(USUBJID), USUBJID))
+})
+
 # quo_not_missing ----
-## Test 1: `quo_not_missing` returns TRUE if no missing argument ----
-test_that("quo_not_missing Test 1: `quo_not_missing` returns TRUE if no missing argument", {
+## Test 3: `quo_not_missing` returns TRUE if no missing argument ----
+test_that("quo_not_missing Test 3: `quo_not_missing` returns TRUE if no missing argument", {
   test_fun <- function(x) {
     x <- rlang::enquo(x)
     assertthat::assert_that(quo_not_missing(x))
@@ -8,8 +25,8 @@ test_that("quo_not_missing Test 1: `quo_not_missing` returns TRUE if no missing 
   expect_true(test_fun(my_variable))
 })
 
-## Test 2: `quo_not_missing` throws and Error if missing argument ----
-test_that("quo_not_missing Test 2: `quo_not_missing` throws and Error if missing argument", {
+## Test 4: `quo_not_missing` throws and Error if missing argument ----
+test_that("quo_not_missing Test 4: `quo_not_missing` throws and Error if missing argument", {
   test_fun <- function(x) {
     x <- rlang::enquo(x)
     assertthat::assert_that(quo_not_missing(x))
@@ -18,8 +35,8 @@ test_that("quo_not_missing Test 2: `quo_not_missing` throws and Error if missing
 })
 
 # replace_symbol_in_quo ----
-## Test 3: symbol is replaced ----
-test_that("replace_symbol_in_quo Test 3: symbol is replaced", {
+## Test 5: symbol is replaced ----
+test_that("replace_symbol_in_quo Test 5: symbol is replaced", {
   expect_equal(
     expected = quo(AVAL.join),
     object = replace_symbol_in_quo(
@@ -30,8 +47,8 @@ test_that("replace_symbol_in_quo Test 3: symbol is replaced", {
   )
 })
 
-## Test 4: partial match is not replaced ----
-test_that("replace_symbol_in_quo Test 4: partial match is not replaced", {
+## Test 6: partial match is not replaced ----
+test_that("replace_symbol_in_quo Test 6: partial match is not replaced", {
   expect_equal(
     expected = quo(AVALC),
     object = replace_symbol_in_quo(
@@ -42,8 +59,8 @@ test_that("replace_symbol_in_quo Test 4: partial match is not replaced", {
   )
 })
 
-## Test 5: symbol in expression is replaced ----
-test_that("replace_symbol_in_quo Test 5: symbol in expression is replaced", {
+## Test 7: symbol in expression is replaced ----
+test_that("replace_symbol_in_quo Test 7: symbol in expression is replaced", {
   expect_equal(
     expected = quo(desc(AVAL.join)),
     object = replace_symbol_in_quo(
@@ -55,16 +72,16 @@ test_that("replace_symbol_in_quo Test 5: symbol in expression is replaced", {
 })
 
 # add_suffix_to_vars ----
-## Test 6: with single variable ----
-test_that("add_suffix_to_vars Test 6: with single variable", {
+## Test 8: with single variable ----
+test_that("add_suffix_to_vars Test 8: with single variable", {
   expect_equal(
     expected = vars(ADT, desc(AVAL.join), AVALC),
     object = add_suffix_to_vars(vars(ADT, desc(AVAL), AVALC), vars = vars(AVAL), suffix = ".join")
   )
 })
 
-## Test 7: with more than one variable ----
-test_that("add_suffix_to_vars Test 7: with more than one variable", {
+## Test 9: with more than one variable ----
+test_that("add_suffix_to_vars Test 9: with more than one variable", {
   expect_equal(
     expected = vars(ADT, desc(AVAL.join), AVALC.join),
     object = add_suffix_to_vars(
