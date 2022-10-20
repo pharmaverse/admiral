@@ -111,8 +111,7 @@ parameter) are potential events or censorings,
 - the value of the `CNSR` variable (`censor` parameter), and
 - which variable provides the date (`date` parameter).
 
-The date can be provided as date (`--DT` variable), datetime (`--DTM` variable),
-or character ISO-8601 date (`--DTC` variable).
+The date can be provided as date (`--DT` variable) or datetime (`--DTM` variable).
 
 CDISC strongly recommends `CNSR = 0` for events and positive integers for
 censorings. `{admiral}` enforces this recommendation. Therefore the `censor`
