@@ -913,6 +913,43 @@ smq_select <- function(name = NULL,
   validate_smq_select(out)
 }
 
+#' Create an `basket_select` object
+#'
+#' @param name Name of the query used to select the definition of the query from
+#'   the company database.
+#'
+#' @param id Identifier of the query used to select the definition of the query
+#'   from the company database.
+#'
+#' @param scope Scope of the query used to select the definition of the query
+#'   from the company database.
+#'
+#'   *Permitted Values*: `"BROAD"`, `"NARROW"`, NA_character_
+#'
+#' @details Exactly one of `name` or `id` must be specified.
+#'
+#' @return An object of class `smq_select`.
+#'
+#' @author Tamara Senior
+#'
+#' @seealso [create_query_data()], [query()]
+#'
+#' @family source_specifications
+#' @keywords source_specifications
+#'
+#' @export
+basket_select <- function(name = NULL,
+                       id = NULL,
+                       scope = NULL) {
+  out <- list(
+    name = name,
+    id = id,
+    scope = scope
+  )
+  class(out) <- c("smq_select", "list")
+  validate_smq_select(out)
+}
+
 #' Validate an object is indeed a `smq_select` object
 #'
 #' @param obj An object to be validated.
