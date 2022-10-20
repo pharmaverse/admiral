@@ -1,7 +1,4 @@
-library(tibble)
-library(lubridate)
-
-expected <- tribble(
+expected <- tibble::tribble(
   ~USUBJID, ~ASTDTM,            ~AENDTM,            ~AEITOXGR, ~AETOXGR, ~TRTEMFL, ~TRTEM2FL, ~TRTEM3FL, # nolint
   # before treatment
   "1",      "2021-12-13T20:15", "2021-12-15T12:45", "1",       "1",      NA,       NA,        NA,
