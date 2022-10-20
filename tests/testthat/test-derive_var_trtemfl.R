@@ -26,10 +26,10 @@ expected <- tibble::tribble(
   "2",      "2021-12-06T18:00", "",                 "1",       "2",      NA,       NA,        NA
 ) %>%
   mutate(
-    ASTDTM = ymd_hm(ASTDTM),
-    AENDTM = ymd_hm(AENDTM),
-    TRTSDTM = if_else(USUBJID == "1", ymd_hm("2022-01-01T01:01"), ymd_hms("")),
-    TRTEDTM = if_else(USUBJID == "1", ymd_hm("2022-04-30T11:30"), ymd_hms(""))
+    ASTDTM = lubridate::ymd_hm(ASTDTM),
+    AENDTM = lubridate::ymd_hm(AENDTM),
+    TRTSDTM = if_else(USUBJID == "1", lubridate::ymd_hm("2022-01-01T01:01"), ymd_hms("")),
+    TRTEDTM = if_else(USUBJID == "1", lubridate::ymd_hm("2022-04-30T11:30"), ymd_hms(""))
   )
 
 adae <- select(expected, -starts_with("TRTEM"))
