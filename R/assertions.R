@@ -1449,9 +1449,9 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
   }
 }
 
-#' Is a Variable vector is a Date or Datetime Variable?
+#' Is an object a date or datetime vector?
 #'
-#' Checks if a variable vector is a date or datetime variable
+#' Check if an object/vector is a date or datetime variable without needing a dataset as input
 #'
 #' @param arg The function argument to be checked
 #'

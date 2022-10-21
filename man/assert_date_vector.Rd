@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{assert_date_vector}
 \alias{assert_date_vector}
-\title{Is a Variable vector is a Date or Datetime Variable?}
+\title{Is an object a date or datetime vector?}
 \usage{
 assert_date_vector(arg, optional = TRUE)
 }
@@ -17,7 +17,7 @@ The function returns an error if \code{arg} is missing, or not a date or datetim
 but otherwise returns an invisible output.
 }
 \description{
-Checks if a variable vector is a date or datetime variable
+Check if an object/vector is a date or datetime variable without needing a dataset as input
 }
 \examples{
 example_fun <- function(arg) {
