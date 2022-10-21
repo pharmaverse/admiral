@@ -35,7 +35,7 @@ library(dplyr)
 library(lubridate)
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(admiraldev)
 ```
 
@@ -124,7 +124,7 @@ subperiods, or phases can be created from this dataset by calling
 
 For example the period reference dataset from the previous section can be used
 to add the phase variables (`PHwSDT`, `PHwEDT`, and `APHASEw`) to ADSL:
-```{r eval=FALSE}
+```{r}
 adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
 
 adsl <- derive_vars_period(
@@ -174,7 +174,7 @@ the period reference dataset can be created from ADSL by calling
 
 For example, a period reference dataset for phases can be created from the ADSL
 dataset created above:
-```{r eval=FALSE}
+```{r}
 create_period_dataset(
   adsl,
   new_vars = vars(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
