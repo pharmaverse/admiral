@@ -147,15 +147,12 @@ create_single_dose_dataset(data,
 )
 }
 \seealso{
-OCCDS Functions: 
-\code{\link{create_query_data}()},
-\code{\link{derive_var_trtemfl}()},
-\code{\link{derive_vars_atc}()},
-\code{\link{derive_vars_query}()},
-\code{\link{get_terms_from_db}()}
+Creating auxiliary datasets: 
+\code{\link{create_period_dataset}()},
+\code{\link{create_query_data}()}
 }
 \author{
 Michael Thorpe, Andrew Smith
 }
-\concept{der_occds}
-\keyword{der_occds}
+\concept{create_aux}
+\keyword{create_aux}
