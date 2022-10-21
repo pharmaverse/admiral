@@ -60,8 +60,14 @@ ex <- convert_blanks_to_na(admiral_ex)
 ae <- convert_blanks_to_na(admiral_ae)
 ```
 ```{r echo=FALSE}
+# Select interesting test patients and make the test data more realistic for adsl_05 example
 dm <- filter(dm, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
-ds <- filter(ds, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
+ds <- filter(ds, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057")) %>%
+  mutate(DSSTDTC = case_when(
+    USUBJID == "01-701-1111" & DSDECOD == "RANDOMIZED" ~ "2012-08-01",
+    TRUE ~ DSSTDTC
+    )
+  )
 ex <- filter(ex, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
 ae <- filter(ae, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
 ```
@@ -120,7 +126,7 @@ intermediate additional dataframe would use `derive_vars_merged()` as follows.
 adsl_01 <- dm %>%
   select(-DOMAIN)
 
-# Convert disposition character date to numeric date without imputation (DSSTDT)
+# Convert disposition character date to numeric date without imputation
 ds_ext <- derive_vars_dt(
   dataset = ds,
   dtc = DSSTDTC,
@@ -148,40 +154,37 @@ dataset_vignette(
 )
 ```
 
-Now, an example to add first treatment datetime (`ADSL.TRTSDTM`), where we now
+Now, an example to add first treatment datetime (`ADSL.TRTSDT`), where we
 need to make use of `derive_vars_merged()` with the `mode` and `order` arguments
 to select the required observations from the additional dataframe. Note: the
 `filter_add` argument here shows a possible method for checking only for valid doses.
 
 ```{r eval=TRUE}
-# Convert exposure start date to numeric date with time imputed as earliest,
-# but no date imputation applied (EXSTDT)
-ex_ext <- derive_vars_dtm(
+# Convert exposure start date to numeric date without imputation
+ex_ext <- derive_vars_dt(
   dataset = ex,
   dtc = EXSTDTC,
-  new_vars_prefix = "EXST",
-  time_imputation = "first"
+  new_vars_prefix = "EXST"
 )
 
 # Determine first exposure datetime and add to ADSL
 adsl_03 <- adsl_02 %>%
   derive_vars_merged(
     dataset_add = ex_ext,
-    filter_add = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & !is.na(EXSTDTM),
-    new_vars = vars(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
-    order = vars(EXSTDTM, EXSEQ),
+    filter_add = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & !is.na(EXSTDT),
+    new_vars = vars(TRTSDT = EXSTDT),
+    order = vars(EXSTDT, EXSEQ),
     mode = "first",
     by_vars = vars(STUDYID, USUBJID)
   )
 ```
 
-This call would return the input dataframe with variables `TRTSDTM` and `TRTSTMF`
-(time imputation flag) added.
+This call would return the input dataframe with `TRTSDT` added.
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   dataset = adsl_03,
-  display_vars = vars(USUBJID, TRTSDTM, TRTSTMF)
+  display_vars = vars(USUBJID, TRTSDT)
 )
 ```
 
@@ -241,14 +244,14 @@ group (`order` and `mode` arguments). Finally the joined variables from the addi
 dataframe can be renamed (`new_vars` argument).
 
 To illustrate this, imagine that in the above randomization date example you only
-wanted the date populated for patients in the safety population. You would now need
-to check both the additional `DS` and the original `ADSL` dataframes, so this would
-not be possible in one step using the "merged" functions.
+wanted the date populated for patients randomized within 30 days of first treatment.
+You would now need to check both the additional `DS` and the original `ADSL` dataframes,
+so this would not be possible in one step using the "merged" functions.
 
 **Examples**\
 
-The above mentioned randomization date for safety population patients variable
-(let's call it `SAFRANDT` here) would use `derive_vars_joined()` as follows.
+The above mentioned randomization date variable (let's call it `RAND30DT` here)
+would use `derive_vars_joined()` as follows.
 
 ```{r eval=TRUE}
 # Join randomization date to ADSL only for safety population patients
@@ -257,15 +260,15 @@ adsl_05 <- adsl_04 %>%
     dataset_add = ds_ext,
     filter_add = DSDECOD == "RANDOMIZED",
     by_vars = vars(STUDYID, USUBJID),
-    new_vars = vars(SAFRANDT = DSSTDT),
-    filter_join = SAFFL == "Y"
+    new_vars = vars(RAND30DT = DSSTDT),
+    filter_join = TRTSDT - 30 >= DSSTDT
   )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   dataset = adsl_05,
-  display_vars = vars(USUBJID, RANDDT, SAFRANDT)
+  display_vars = vars(USUBJID, RANDDT, TRTSDT, RAND30DT)
 )
 ```
 
@@ -343,7 +346,7 @@ dataset_vignette(
 There exists a further function `derive_var_confirmation_flag()`, which follows
 a similar principle to the "joined" set as explained here. This can be used for whenever
 one set of observations "confirms" another set in a dataframe, i.e. the flag is only
-set for your observation if both the obeservation and some other observation meet both
+set for your observation if both the observation and some other observation meet both
 the user-specified criteria.
 
 ## _extreme_ functions {#extreme}
