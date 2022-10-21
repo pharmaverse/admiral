@@ -2,21 +2,18 @@
 % Please edit documentation in R/assertions.R
 \name{assert_date_vector}
 \alias{assert_date_vector}
-\title{Is a Variable is a Date or Datetime Variable?}
+\title{Is a Variable vector is a Date or Datetime Variable?}
 \usage{
-assert_date_vector(arg, var_name = NULL, optional = FALSE)
+assert_date_vector(arg, optional = TRUE)
 }
 \arguments{
 \item{arg}{The function argument to be checked}
 
-\item{var_name}{a character vector name of the \code{arg}.
-\code{var_name} argument is optional.}
-
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE}
-and \code{arg} is \code{NULL} then an error is thrown.}
+and \code{arg} is \code{NULL} then the function \code{assert_date_vector} exits early and throw and error.}
 }
 \value{
-The function returns an error if \code{arg} is not a date or datetime variable
+The function returns an error if \code{arg} is missing, or not a date or datetime variable
 but otherwise returns an invisible output.
 }
 \description{
@@ -30,9 +27,35 @@ example_fun <- function(arg) {
 example_fun(
   as.Date("2022-01-30", tz = "UTC")
 )
-try(example_fun(c("2018-08-23", "2022-01-30", "1993-07-14")))
+try(example_fun("1993-07-14"))
+}
+\seealso{
+Checks for valid input and returns warning or errors messages: 
+\code{\link{assert_character_scalar}()},
+\code{\link{assert_character_vector}()},
+\code{\link{assert_data_frame}()},
+\code{\link{assert_expr}()},
+\code{\link{assert_filter_cond}()},
+\code{\link{assert_function_param}()},
+\code{\link{assert_function}()},
+\code{\link{assert_has_variables}()},
+\code{\link{assert_integer_scalar}()},
+\code{\link{assert_list_element}()},
+\code{\link{assert_list_of}()},
+\code{\link{assert_logical_scalar}()},
+\code{\link{assert_named_exprs}()},
+\code{\link{assert_numeric_vector}()},
+\code{\link{assert_one_to_one}()},
+\code{\link{assert_order_vars}()},
+\code{\link{assert_param_does_not_exist}()},
+\code{\link{assert_s3_class}()},
+\code{\link{assert_symbol}()},
+\code{\link{assert_unit}()},
+\code{\link{assert_vars}()},
+\code{\link{assert_varval_list}()}
 }
 \author{
 Sadchla Mascary
 }
+\concept{assertion}
 \keyword{assertion}

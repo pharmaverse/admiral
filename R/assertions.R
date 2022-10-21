@@ -1449,20 +1449,17 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
   }
 }
 
-#' Is a Variable is a Date or Datetime Variable?
+#' Is a Variable vector is a Date or Datetime Variable?
 #'
 #' Checks if a variable vector is a date or datetime variable
 #'
 #' @param arg The function argument to be checked
 #'
-#' @param var_name a character vector name of the `arg`.
-#' `var_name` argument is optional.
-#'
 #' @param optional Is the checked parameter optional? If set to `FALSE`
-#' and `arg` is `NULL` then an error is thrown.
+#' and `arg` is `NULL` then the function `assert_date_vector` exits early and throw and error.
 #'
 #' @return
-#' The function returns an error if `arg` is not a date or datetime variable
+#' The function returns an error if `arg` is missing, or not a date or datetime variable
 #' but otherwise returns an invisible output.
 #'
 #' @export
@@ -1470,6 +1467,8 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
 #' @author Sadchla Mascary
 #'
 #' @keywords assertion
+#'
+#' @family assertion
 #'
 #' @examples
 #' example_fun <- function(arg) {
@@ -1479,18 +1478,17 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
 #' example_fun(
 #'   as.Date("2022-01-30", tz = "UTC")
 #' )
-#' try(example_fun(c("2018-08-23", "2022-01-30", "1993-07-14")))
-assert_date_vector <- function(arg, var_name = NULL, optional = FALSE) {
-  assert_character_vector(var_name, optional = TRUE)
+#' try(example_fun("1993-07-14"))
+assert_date_vector <- function(arg, optional = TRUE) {
   assert_logical_scalar(optional)
 
-  if (is.null(var_name)) {
-    var_name <- arg_name(substitute(arg))
+  if (optional && is.null(arg)) {
+    stop()
   }
 
   if (!is.instant(arg)) {
     abort(paste0(
-      var_name,
+      deparse(substitute(arg)),
       " must be a date or datetime variable but it's ",
       friendly_type_of(arg)
     ))
