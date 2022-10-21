@@ -263,8 +263,8 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #' @author Michael Thorpe, Andrew Smith
 #'
-#' @family der_occds
-#' @keywords der_occds
+#' @family create_aux
+#' @keywords create_aux
 #'
 #' @return The input dataset with a single dose per row.
 #'
