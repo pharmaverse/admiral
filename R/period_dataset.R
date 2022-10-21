@@ -104,7 +104,7 @@
 #'   "2",      "2021-02-02", "2021-03-02", NA,           NA,           "2021-03-03", "2021-04-01"
 #' ) %>%
 #'   mutate(
-#'     across(matches("PH\\d\\dS\\d[ES]DT"), ymd)
+#'     across(matches("P\\d\\dS\\d[ES]DT"), ymd)
 #'   ) %>%
 #'   mutate(
 #'     STUDYID = "xyz"
@@ -345,7 +345,7 @@ create_period_dataset <- function(dataset,
 #'     STUDYID = "xyz",
 #'     APERIOD = as.integer(APERIOD),
 #'     ASPER = as.integer(ASPER),
-#'     across(matches("APER[ES]DT"), ymd)
+#'     across(matches("ASPR[ES]DT"), ymd)
 #'   )
 #'
 #' derive_vars_period(

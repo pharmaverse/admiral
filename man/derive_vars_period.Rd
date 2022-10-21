@@ -123,7 +123,7 @@ subperiod_ref <- tribble(
     STUDYID = "xyz",
     APERIOD = as.integer(APERIOD),
     ASPER = as.integer(ASPER),
-    across(matches("APER[ES]DT"), ymd)
+    across(matches("ASPR[ES]DT"), ymd)
   )
 
 derive_vars_period(

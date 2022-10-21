@@ -104,7 +104,7 @@ adsl <- tribble(
   "2",      "2021-02-02", "2021-03-02", NA,           NA,           "2021-03-03", "2021-04-01"
 ) \%>\%
   mutate(
-    across(matches("PH\\\\d\\\\dS\\\\d[ES]DT"), ymd)
+    across(matches("P\\\\d\\\\dS\\\\d[ES]DT"), ymd)
   ) \%>\%
   mutate(
     STUDYID = "xyz"
