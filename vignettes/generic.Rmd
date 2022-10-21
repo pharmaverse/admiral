@@ -66,8 +66,7 @@ ds <- filter(ds, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057")) %>
   mutate(DSSTDTC = case_when(
     USUBJID == "01-701-1111" & DSDECOD == "RANDOMIZED" ~ "2012-08-01",
     TRUE ~ DSSTDTC
-    )
-  )
+  ))
 ex <- filter(ex, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
 ae <- filter(ae, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
 ```
@@ -285,10 +284,10 @@ datacut source is the additional dataframe that needs to be joined.
 ```{r eval=TRUE}
 # Create a unique datacut day for each patient
 datacut <- tribble(
-   ~USUBJID,      ~DCUTDY, ~DCUTFL,
-   "01-701-1111", 5,       "Y",
-   "01-701-1047", 25,      "Y"
- )
+  ~USUBJID, ~DCUTDY, ~DCUTFL,
+  "01-701-1111", 5, "Y",
+  "01-701-1047", 25, "Y"
+)
 
 # Join datacut flag to AE only for events up to and including this date
 ae_01 <- ae %>%
@@ -319,7 +318,7 @@ post-baseline up to and excluding the current AE day.
 ```{r eval=TRUE}
 # Add a numeric version of severity for sorting with severe=1, moderate=2, mild=3
 ae_ext <- ae %>%
-  mutate(TEMP_SEVN = as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD"))))
+  mutate(TEMP_SEVN = as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD"))))
 
 # Derive nadir severity (AENADSEV)
 ae_02 <- ae_ext %>%
