@@ -94,6 +94,11 @@
 #'   if the observations of the (restricted) joined dataset are not unique
 #'   with respect to the by variables and the order.
 #'
+#'   This argument is ignored if `order` is not specified. In this case an error
+#'   is issued independent of `check_type` if the restricted joined dataset
+#'   contains more than one observation for any of the observations of the input
+#'   dataset.
+#'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
 #' @author Stefan Bundfuss

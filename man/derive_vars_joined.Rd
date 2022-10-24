@@ -105,6 +105,11 @@ If \code{"warning"} or \code{"error"} is specified, the specified message is iss
 if the observations of the (restricted) joined dataset are not unique
 with respect to the by variables and the order.
 
+This argument is ignored if \code{order} is not specified. In this case an error
+is issued independent of \code{check_type} if the restricted joined dataset
+contains more than one observation for any of the observations of the input
+dataset.
+
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 }
 \value{
