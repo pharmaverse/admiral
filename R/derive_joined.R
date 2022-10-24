@@ -340,7 +340,18 @@ derive_vars_joined <- function(dataset,
         !!tmp_obs_nr,
         !!!add_suffix_to_vars(new_vars, vars = common_vars, suffix = ".join")
       ),
-      by_vars = vars(!!!by_vars_left, !!tmp_obs_nr)
+      by_vars = vars(!!!by_vars_left, !!tmp_obs_nr),
+      duplicate_msg = paste(
+        paste(
+          "After applying `filter_join` the joined dataset contains more",
+          "than one observation per observation of the input dataset."
+          ),
+        paste(
+          "Please adjust `filter_add` and/or `filter_join` or specify `order`",
+          "and `mode` to select one of the observations."
+        ),
+        sep = "\n"
+      )
     ) %>%
     remove_tmp_vars()
 }
