@@ -64,7 +64,7 @@ windows <- tribble(
 ```
 Then the visits can be assigned based on the analysis day (`ADY`) by calling
 `derive_vars_joined`:
-```{r, eval=FALSE}
+```{r}
 adbds <- tribble(
   ~USUBJID, ~ADY,
   "1",       -33,
@@ -145,7 +145,7 @@ subperiods, or phases can be created by calling `derive_vars_joined()`.
 For example the variables `APHASEN`, `PHSDT`, `PHEDT`, `APHASE` can be derived
 from the period reference dataset defined above.
 
-```{r eval=FALSE}
+```{r}
 adae <- tribble(
   ~USUBJID, ~ASTDT,
   "1",      "2021-01-01",
@@ -155,22 +155,19 @@ adae <- tribble(
   "1",      "2021-04-05",
   "2",      "2021-02-15",
 ) %>%
-  mutate(
-    ASTDT = ymd(ASTDT)
-  )
+  mutate(ASTDT = ymd(ASTDT))
 
 derive_vars_joined(
   adae,
   dataset_add = phase_ref,
   by_vars = vars(USUBJID),
-  new_vars = vars(APHASEN, APHASE, PHSDT, PHEDT),
   filter_join = PHSDT <= ASTDT & ASTDT <= PHEDT
 )
 ```
 
 If no period reference dataset is available but period variables are in ADSL,
 the period reference dataset can be created from ADSL by calling
-`create_period_dataset`.
+`create_period_dataset()`.
 
 For example, a period reference dataset for phases can be created from the ADSL
 dataset created above:
