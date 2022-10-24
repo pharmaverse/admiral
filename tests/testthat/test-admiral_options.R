@@ -16,13 +16,19 @@ test_that("get_admiral_options, Test 3: unexpected function input for get gives 
 
 # set_admiral_options ----
 ## Test 4: set works ----
-# test_that("set_admiral_options, Test 4: set works", {
-#   set_admiral_options(subject_keys = vars(STUDYID, USUBJID2))
-#   expect_equal(admiral_options$subject_keys, vars(STUDYID, USUBJID2))
-# })
+test_that("set_admiral_options, Test 4: set works", {
+  set_admiral_options(subject_keys = vars(STUDYID, USUBJID2))
+  expect_equal(get_admiral_options(subject_keys), vars(STUDYID, USUBJID2))
+})
 
-## Test 5: unexpected function input for set gives error ----
-test_that("set_admiral_options, Test 5: unexpected function input for set gives error", {
+## Test 5: setting back to default works ----
+test_that("set_admiral_options, Test 5: setting back to default works", {
+  set_admiral_options(set_default = TRUE)
+  expect_equal(get_admiral_options(subject_keys), vars(STUDYID, USUBJID))
+})
+
+## Test 6: unexpected function input for set gives error ----
+test_that("set_admiral_options, Test 6: unexpected function input for set gives error", {
   expect_error(set_admiral_options(subject_keys = quo_c(STUDYID, USUBJID2)))
   expect_error(set_admiral_options(subject_keys = STUDYID))
 })

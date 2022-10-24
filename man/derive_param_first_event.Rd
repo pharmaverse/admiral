@@ -10,7 +10,7 @@ derive_param_first_event(
   dataset_source,
   filter_source,
   date_var,
-  subject_keys = vars(STUDYID, USUBJID),
+  subject_keys = get_admiral_options(subject_keys),
   set_values_to,
   check_type = "warning"
 )

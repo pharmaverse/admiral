@@ -165,7 +165,7 @@ derive_var_disposition_status <- function(dataset,
                                           status_var,
                                           format_new_var = format_eoxxstt_default,
                                           filter_ds,
-                                          subject_keys = vars(STUDYID, USUBJID)) {
+                                          subject_keys = get_admiral_options(subject_keys)) {
   new_var <- assert_symbol(enquo(new_var))
   status_var <- assert_symbol(enquo(status_var))
   filter_ds <- assert_filter_cond(enquo(filter_ds))

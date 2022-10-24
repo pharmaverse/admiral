@@ -4,31 +4,100 @@
 \alias{set_admiral_options}
 \title{Set a package-standard input}
 \usage{
-set_admiral_options(subject_keys, future_input)
+set_admiral_options(subject_keys, future_input, set_default = FALSE)
 }
 \arguments{
-\item{subject_keys}{Subjects used for several \code{derive_()} functions, defaults to
+\item{subject_keys}{Variables to uniquely identify a subject, defaults to
 vars(STUDYID, USUBJID)}
 
-\item{future_input}{Possible future input to figure out how to scale this}
+\item{future_input}{Possible future input that may need the flexability to be modified
+in same mannyer.}
+
+\item{set_default}{If set to \code{TRUE} will restore admiral defaults.}
 }
 \value{
-Modify an admiral option which will affect downstream function inputs: e.g \code{subject_keys}.
+Modify an admiral option, e.g \code{subject_keys}, such that it automatically affects downstream
+function inputs where \code{get_admiral_option()} is called such as \code{derive_param_exist_flag()}.
 }
 \description{
 Set a package-standard input that can be modified for advanced users.
 }
+\details{
+This function allows flexibility for function inputs that may need to be repeated
+multiple times in a script, such as for \verb{subject keys}.
+}
 \examples{
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate)
 set_admiral_options(subject_keys = vars(STUDYID, USUBJID2))
+
+# Derive a new parameter for measurable disease at baseline
+adsl <- tibble::tribble(
+  ~USUBJID2,
+  "1",
+  "2",
+  "3"
+) \%>\%
+  mutate(STUDYID = "XX1234")
+
+tu <- tibble::tribble(
+  ~USUBJID2, ~VISIT,      ~TUSTRESC,
+  "1",       "SCREENING", "TARGET",
+  "1",       "WEEK 1",    "TARGET",
+  "1",       "WEEK 5",    "TARGET",
+  "1",       "WEEK 9",    "NON-TARGET",
+  "2",       "SCREENING", "NON-TARGET",
+  "2",       "SCREENING", "NON-TARGET"
+) \%>\%
+  mutate(
+    STUDYID = "XX1234",
+    TUTESTCD = "TUMIDENT"
+  )
+
+derive_param_exist_flag(
+  dataset_adsl = adsl,
+  dataset_add = tu,
+  filter_add = TUTESTCD == "TUMIDENT" & VISIT == "SCREENING",
+  condition = TUSTRESC == "TARGET",
+  false_value = "N",
+  missing_value = "N",
+  set_values_to = vars(
+    PARAMCD = "MDIS",
+    PARAM = "Measurable Disease at Baseline"
+  )
+)
 }
 \seealso{
-\code{\link[=vars]{vars()}}
+\code{\link[=vars]{vars()}}, \code{\link[=get_admiral_options]{get_admiral_options()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},
+\code{\link[=derive_param_first_event]{derive_param_first_event()}}, \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=derive_var_disposition_status]{derive_var_disposition_status()}},
+\code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}}
 
-Other XXX: 
-\code{\link{get_admiral_options}()}
+Source Specifications: 
+\code{\link{assert_db_requirements}()},
+\code{\link{assert_terms}()},
+\code{\link{assert_valid_queries}()},
+\code{\link{censor_source}()},
+\code{\link{date_source}()},
+\code{\link{death_event}},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{event_source}()},
+\code{\link{extend_source_datasets}()},
+\code{\link{filter_date_sources}()},
+\code{\link{format.sdg_select}()},
+\code{\link{format.smq_select}()},
+\code{\link{get_admiral_options}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()},
+\code{\link{tte_source}()},
+\code{\link{validate_query}()},
+\code{\link{validate_sdg_select}()},
+\code{\link{validate_smq_select}()}
 }
 \author{
 Zelos Zhu
 }
-\concept{XXX}
-\keyword{XXX}
+\concept{source_specifications}
+\keyword{source_specifications}
