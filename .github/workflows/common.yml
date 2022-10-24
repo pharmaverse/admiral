@@ -45,25 +45,25 @@ jobs:
     uses: pharmaverse/admiralci/.github/workflows/style.yml@main
     if: github.event_name == 'pull_request'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0.5"
   spellcheck:
     name: Spelling
     uses: pharmaverse/admiralci/.github/workflows/spellcheck.yml@main
     if: github.event_name == 'pull_request'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0.5"
   readme:
     name: Render README
     uses: pharmaverse/admiralci/.github/workflows/readme-render.yml@main
     if: github.event_name == 'push'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0.5"
   validation:
     name: Validation
     uses: pharmaverse/admiralci/.github/workflows/r-pkg-validation.yml@main
     if: github.event_name == 'release'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0.5"
   check:
     name: Check
     uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@main
@@ -75,7 +75,7 @@ jobs:
     # Change this after the next release to remove the ref condition
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0.5"
       # Whether to skip multiversion docs
       # Note that if you have multiple versions of docs,
       # your URL links are likely to break due to path changes
@@ -85,7 +85,7 @@ jobs:
     uses: pharmaverse/admiralci/.github/workflows/lintr.yml@main
     if: github.event_name == 'pull_request'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0.5"
   links:
     name: Links
     uses: pharmaverse/admiralci/.github/workflows/links.yml@main
@@ -97,7 +97,7 @@ jobs:
     if: >
       github.event_name == 'push' || github.event_name == 'pull_request'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0.5"
       # Whether to skip code coverage badge creation
       # Setting to 'false' will require you to create
       # an orphan branch called 'badges' in your repository
@@ -107,4 +107,4 @@ jobs:
     uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@main
     if: github.event_name == 'pull_request'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0.5"

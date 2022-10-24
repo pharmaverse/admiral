@@ -16,4 +16,4 @@ jobs:
     uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
     if: github.event.review.state == 'approved'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0.5"
