@@ -345,7 +345,7 @@ derive_vars_joined <- function(dataset,
         paste(
           "After applying `filter_join` the joined dataset contains more",
           "than one observation per observation of the input dataset."
-          ),
+        ),
         paste(
           "Please adjust `filter_add` and/or `filter_join` or specify `order`",
           "and `mode` to select one of the observations."
