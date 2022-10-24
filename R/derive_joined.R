@@ -18,13 +18,18 @@
 #'
 #'   The two datasets are joined by the specified variables. Variables from the
 #'   additional dataset can be renamed by naming the element, i.e., `by_vars =
-#'   vars(<name in input dataset> = <name in additinoal dataset>)`.
+#'   vars(<name in input dataset> = <name in additional dataset>)`.
+#'
+#'   *Permitted Values*: list of variables created by `vars()`
 #'
 #' @param order Sort order
 #'
 #'   If the argument is set to a non-null value, for each observation of the
 #'   input dataset the first or last observation from the joined dataset is
-#'   selected with respect to the specified order.
+#'   selected with respect to the specified order. The specified variables are
+#'   expected in the additional dataset (`dataset_add`). If a variable is
+#'   available in both `dataset` and `dataset_add`, the one from `dataset_add`
+#'   is used for the sorting.
 #'
 #'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
 #'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))` or `NULL`
@@ -56,6 +61,8 @@
 #'   added to the variable from the additional dataset.
 #'
 #'   The variables are not included in the output dataset.
+#'
+#'   *Permitted Values*: list of variables created by `vars()`
 #'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'

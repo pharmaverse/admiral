@@ -30,13 +30,18 @@ and the \code{order} argument are expected.}
 \item{by_vars}{Grouping variables
 
 The two datasets are joined by the specified variables. Variables from the
-additional dataset can be renamed by naming the element, i.e., \verb{by_vars = vars(<name in input dataset> = <name in additinoal dataset>)}.}
+additional dataset can be renamed by naming the element, i.e., \verb{by_vars = vars(<name in input dataset> = <name in additional dataset>)}.
+
+\emph{Permitted Values}: list of variables created by \code{vars()}}
 
 \item{order}{Sort order
 
 If the argument is set to a non-null value, for each observation of the
 input dataset the first or last observation from the joined dataset is
-selected with respect to the specified order.
+selected with respect to the specified order. The specified variables are
+expected in the additional dataset (\code{dataset_add}). If a variable is
+available in both \code{dataset} and \code{dataset_add}, the one from \code{dataset_add}
+is used for the sorting.
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
 created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))} or \code{NULL}}
@@ -66,7 +71,9 @@ do not need to be repeated for \code{join_vars}. If a specified variable exists
 in both the input dataset and the additional dataset, the suffix ".join" is
 added to the variable from the additional dataset.
 
-The variables are not included in the output dataset.}
+The variables are not included in the output dataset.
+
+\emph{Permitted Values}: list of variables created by \code{vars()}}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
