@@ -8,7 +8,7 @@ on:
 
 env:
   # R version to use for the workflows
-  R_VERSION: "3.6"
+  R_VERSION: "4.0"
 
 jobs:
   templates:
