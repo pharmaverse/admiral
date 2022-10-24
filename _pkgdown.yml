@@ -45,6 +45,9 @@ reference:
 - subtitle: Higher Order
 - contents:
   - has_keyword("high_order_function")
+- subtitle: Creating Auxiliary Datasets
+- contents:
+  - has_keyword("create_aux")
 - subtitle: Metadata
 - contents:
   - has_keyword("metadata")
