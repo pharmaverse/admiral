@@ -2,7 +2,16 @@
 
 ## New Features
 
+- The new function `derive_vars_joined()` adds variables from an additional
+dataset. The selection of the observations can depend on variables from both
+datasets. This can be used for adding `AVISIT`, `AWLO`, `AWHI` based on time
+windows and `ADY` or deriving the lowest value (nadir) before the current
+observation (#1448).
+
 - New function `derive_var_trtemfl()` for deriving treatment emergent flags (#989)
+
+- The new function `chr2vars()` turns a character vector into a list of quosures
+(#1448).
 
 - New function `derive_var_relative_flag()` for flagging observations before or
 after a condition is fulfilled (#1453)
