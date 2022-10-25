@@ -2,7 +2,28 @@
 
 ## New Features
 
+- The new function `derive_vars_joined()` adds variables from an additional
+dataset. The selection of the observations can depend on variables from both
+datasets. This can be used for adding `AVISIT`, `AWLO`, `AWHI` based on time
+windows and `ADY` or deriving the lowest value (nadir) before the current
+observation (#1448).
+
 - New function `derive_var_trtemfl()` for deriving treatment emergent flags (#989)
+
+- The new function `chr2vars()` turns a character vector into a list of quosures
+(#1448).
+
+- New function `derive_var_relative_flag()` for flagging observations before or
+after a condition is fulfilled (#1453)
+
+- The new function `create_period_dataset()` for creating a reference dataset
+for subperiods, periods, or phases from the ADSL dataset was added. The
+reference dataset can be used to create subperiod, period, and phase variables
+in OCCDS and BDS datasets. (#1477)
+
+- The new function `derive_vars_period()` adds subperiod, period, or phase
+variables to ADSL. The values for the new variables are provided by a period
+reference dataset. (#1477)
 
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
@@ -21,6 +42,19 @@ which controls if time is considered for the condition if `start_date` is after
 
 - Function `derive_vars_merged()` had an improperly formatted error message 
 which has been corrected (#1473)
+
+# admiral 0.8.4
+
+- Fixed a bug where a recent update to `{lifecylce}` caused several `admiral` tests to break (#1500)
+
+# admiral 0.8.3
+
+- Second attempt to address issue where CRAN identified a failing test when "a strict Latin-1* locale" is used (#1469)
+- Fixed a bug in `derive_vars_duration()` that surfaced after changes in R-devel (#1486)
+
+# admiral 0.8.2
+
+- Fixed an issue where CRAN identified a failing test when "a strict Latin-1* locale" is used (#1469)
 
 # admiral 0.8.1
 
