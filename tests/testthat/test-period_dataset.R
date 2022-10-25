@@ -7,7 +7,7 @@ test_that("create_period_dataset Test 1: periods", {
     "2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01"
   ) %>%
     mutate(
-      across(matches("AP\\d\\d[ES]DT"), ymd)
+      dplyr::across(matches("AP\\d\\d[ES]DT"), ymd)
     ) %>%
     mutate(
       STUDYID = "xyz"
@@ -23,7 +23,7 @@ test_that("create_period_dataset Test 1: periods", {
     mutate(
       STUDYID = "xyz",
       APERIOD = as.integer(APERIOD),
-      across(matches("APER[ES]DT"), ymd)
+      dplyr::across(matches("APER[ES]DT"), ymd)
     )
 
   expect_dfs_equal(
@@ -44,7 +44,7 @@ test_that("create_period_dataset Test 2: phases", {
     "2",      "2021-02-02", "2021-03-02", NA,           NA,           "TREATMENT", NA
   ) %>%
     mutate(
-      across(matches("PH\\d[ES]DT"), ymd)
+      dplyr::across(matches("PH\\d[ES]DT"), ymd)
     ) %>%
     mutate(
       STUDYID = "xyz"
@@ -59,7 +59,7 @@ test_that("create_period_dataset Test 2: phases", {
     mutate(
       STUDYID = "xyz",
       APHASEN = as.integer(APHASEN),
-      across(matches("PH[ES]DT"), ymd)
+      dplyr::across(matches("PH[ES]DT"), ymd)
     )
 
   expect_dfs_equal(
@@ -80,7 +80,7 @@ test_that("create_period_dataset Test 3: subperiods", {
     "2",      "2021-02-02", "2021-03-02", NA,           NA,           "2021-03-03", "2021-04-01"
   ) %>%
     mutate(
-      across(matches("PH\\d\\dS\\d[ES]DT"), ymd)
+      dplyr::across(matches("PH\\d\\dS\\d[ES]DT"), ymd)
     ) %>%
     mutate(
       STUDYID = "xyz"
@@ -98,7 +98,7 @@ test_that("create_period_dataset Test 3: subperiods", {
       STUDYID = "xyz",
       APERIOD = as.integer(APERIOD),
       ASPER = as.integer(ASPER),
-      across(matches("APER[ES]DT"), ymd)
+      dplyr::across(matches("APER[ES]DT"), ymd)
     )
 
   expect_dfs_equal(
@@ -119,7 +119,7 @@ test_that("create_period_dataset Test 4: error if no period/phase variable on RH
     "2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01"
   ) %>%
     mutate(
-      across(matches("AP\\d\\d[ES]DT"), ymd)
+      dplyr::across(matches("AP\\d\\d[ES]DT"), ymd)
     ) %>%
     mutate(
       STUDYID = "xyz"
@@ -150,7 +150,7 @@ test_that("create_period_dataset Test 5: error if different type of RHSs", {
     "2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01"
   ) %>%
     mutate(
-      across(matches("AP\\d\\d[ES]DT"), ymd)
+      dplyr::across(matches("AP\\d\\d[ES]DT"), ymd)
     ) %>%
     mutate(
       STUDYID = "xyz"
@@ -179,7 +179,7 @@ test_that("create_period_dataset Test 6: error if RHS variable not in input data
     "2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01"
   ) %>%
     mutate(
-      across(matches("AP\\d\\d[ES]DT"), ymd)
+      dplyr::across(matches("AP\\d\\d[ES]DT"), ymd)
     ) %>%
     mutate(
       STUDYID = "xyz"
@@ -204,7 +204,7 @@ test_that("derive_vars_period Test 7: periods", {
     "2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01"
   ) %>%
     mutate(
-      across(matches("AP\\d\\d[ES]DT"), ymd)
+      dplyr::across(matches("AP\\d\\d[ES]DT"), ymd)
     ) %>%
     mutate(
       STUDYID = "xyz"
@@ -220,7 +220,7 @@ test_that("derive_vars_period Test 7: periods", {
     mutate(
       STUDYID = "xyz",
       APERIOD = as.integer(APERIOD),
-      across(matches("APER[ES]DT"), ymd)
+      dplyr::across(matches("APER[ES]DT"), ymd)
     )
 
   adsl <- tibble::tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
@@ -244,7 +244,7 @@ test_that("derive_vars_period Test 8: phases", {
     "2",      "2021-02-02", "2021-03-02", NA,           NA,           "TREATMENT", NA
   ) %>%
     mutate(
-      across(matches("PH\\d[ES]DT"), ymd)
+      dplyr::across(matches("PH\\d[ES]DT"), ymd)
     ) %>%
     mutate(
       STUDYID = "xyz"
@@ -259,7 +259,7 @@ test_that("derive_vars_period Test 8: phases", {
     mutate(
       STUDYID = "xyz",
       APHASEN = as.integer(APHASEN),
-      across(matches("PH[ES]DT"), ymd)
+      dplyr::across(matches("PH[ES]DT"), ymd)
     )
 
   adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
@@ -283,7 +283,7 @@ test_that("derive_vars_period Test 9: subperiods", {
     "2",      "2021-02-02", "2021-03-02", NA,           NA,           "2021-03-03", "2021-04-01"
   ) %>%
     mutate(
-      across(matches("PH\\d\\dS\\d[ES]DT"), ymd)
+      dplyr::across(matches("PH\\d\\dS\\d[ES]DT"), ymd)
     ) %>%
     mutate(
       STUDYID = "xyz"
@@ -301,7 +301,7 @@ test_that("derive_vars_period Test 9: subperiods", {
       STUDYID = "xyz",
       APERIOD = as.integer(APERIOD),
       ASPER = as.integer(ASPER),
-      across(matches("APER[ES]DT"), ymd)
+      dplyr::across(matches("APER[ES]DT"), ymd)
     )
 
   adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
@@ -328,7 +328,7 @@ test_that("derive_vars_period Test 10: error if no period/phase variable on LHS"
     mutate(
       STUDYID = "xyz",
       APERIOD = as.integer(APERIOD),
-      across(matches("APER[ES]DT"), ymd)
+      dplyr::across(matches("APER[ES]DT"), ymd)
     )
 
   adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
@@ -363,7 +363,7 @@ test_that("derive_vars_period Test 11: error if different type of LHSs", {
     mutate(
       STUDYID = "xyz",
       APERIOD = as.integer(APERIOD),
-      across(matches("APER[ES]DT"), ymd)
+      dplyr::across(matches("APER[ES]DT"), ymd)
     )
 
   adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
