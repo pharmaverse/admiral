@@ -19,6 +19,7 @@ list(
     utils_impute = "Utilities used for date imputation: ",
     utils_print = "Utilities for printing: ",
     source_specifications = "Source Specifications: ",
-    high_order_function = "Higher Order Functions: "
+    high_order_function = "Higher Order Functions: ",
+    create_aux = "Creating auxiliary datasets: "
   )
 )
