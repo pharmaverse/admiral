@@ -153,6 +153,8 @@ adlb <- adlb %>%
   )
 
 ## Get Visit Info ----
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits)
 adlb <- adlb %>%
   # Derive Timing
   mutate(
@@ -354,6 +356,8 @@ adlb <- adlb %>%
   )
 
 ## Get treatment information ----
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
 adlb <- adlb %>%
   # Assign TRTA, TRTP
   mutate(

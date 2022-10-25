@@ -108,6 +108,8 @@ adcm <- adcm %>%
 
 ## Derive APHASE and APHASEN Variable ----
 # Other timing variable can be derived similarly.
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html)
 adcm <- adcm %>%
   mutate(
     APHASE = case_when(

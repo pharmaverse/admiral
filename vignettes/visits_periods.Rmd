@@ -39,7 +39,7 @@ library(lubridate)
 library(admiraldev)
 ```
 
-# Visit variables (`AVISIT`, `AVISITN`, `AWLO`, `AWHI`, ...)
+# Visit variables (`AVISIT`, `AVISITN`, `AWLO`, `AWHI`, ...) {#visits}
 
 The most common ways of deriving `AVISIT` and `AVISITN` are:
 
@@ -116,7 +116,7 @@ phases. For periods the numeric variable `APERIOD` is expected, for subperiods
 the numeric variables `APERIOD` and `ASPER`, and for phases the numeric variable
 `APHASEN`.
 
-## Creating ADSL Period, Subperiod, or Phase Variables
+## Creating ADSL Period, Subperiod, or Phase Variables {#periods_adsl}
 
 If a period reference dataset is available, the ADSL variables for periods,
 subperiods, or phases can be created from this dataset by calling
@@ -137,7 +137,7 @@ adsl <- derive_vars_period(
 adsl
 ```
 
-## Creating BDS and OCCDS Period, Subperiod, or Phase Variables
+## Creating BDS and OCCDS Period, Subperiod, or Phase Variables {#periods_bds}
 
 If a period reference dataset is available, BDS and OCCDS variables for periods,
 subperiods, or phases can be created by calling `derive_vars_joined()`.
@@ -175,5 +175,97 @@ dataset created above:
 create_period_dataset(
   adsl,
   new_vars = vars(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
+)
+```
+
+# Treatment Variables (`TRTxxP`, `TRTxxA`, `TRTP`, `TRTA`, ...)
+
+In studies with multiple periods the treatment can differ by period. CDISC
+defines variables for planned and actual treatments in ADSL (`TRTxxP`, `TRTxxA`,
+`TRxxPGy`, `TRxxAGy`, ...) and corresponding variables in BDS and OCCDS datasets
+(`TRTP`, `TRTA`, `TRTPGy`, `TRTAGy`, ...). They can be derived in the same way
+(and same step) as the period, subperiod, and phase variables.
+
+## Creating ADSL Treatment Variables {#treatment_adsl}
+
+If the treatment information is included in the period reference dataset, the
+treatment ADSL variables can be created by calling `derive_vars_periods()`:
+
+```{r}
+# Add period variables to ADSL
+period_ref <- tribble(
+  ~USUBJID, ~APERIOD, ~APERSDT,     ~APEREDT,     ~TRTP,    ~TRTA,
+  "1",             1, "2021-01-04", "2021-02-06", "DRUG A", "DRUG A",
+  "1",             2, "2021-02-07", "2021-03-07", "DRUG B", "DRUG B",
+  "2",             1, "2021-02-02", "2021-03-02", "DRUG B", "DRUG B",
+  "2",             2, "2021-03-03", "2021-04-01", "DRUG A", "DRUG B"
+) %>%
+  mutate(
+    STUDYID = "xyz",
+    APERIOD = as.integer(APERIOD),
+    across(ends_with("DT"), ymd)
+  )
+
+adsl <- derive_vars_period(
+  adsl,
+  dataset_ref = period_ref,
+  new_vars = vars(
+    APxxSDT = APERSDT,
+    APxxEDT = APEREDT,
+    TRTxxP = TRTP,
+    TRTxxA = TRTA
+  )
+) %>%
+  select(
+    STUDYID, USUBJID,
+    TRT01P, TRT01A, TRT02P, TRT02A,
+    AP01SDT, AP01EDT, AP02SDT, AP02EDT
+  )
+
+adsl
+```
+
+## Creating BDS and OCCDS Treatment Variables {#treatment_bds}
+
+If a period reference dataset is available, BDS and OCCDS variables for
+treatment can be created by calling `derive_vars_joined()`.
+
+For example the variables `APERIOD`, `TRTP`, and `TRTA` can be derived from the
+period reference dataset defined above.
+
+```{r}
+adae <- tribble(
+  ~USUBJID, ~ASTDT,
+  "1",      "2021-01-05",
+  "1",      "2021-02-05",
+  "1",      "2021-03-05",
+  "1",      "2021-04-05",
+  "2",      "2021-02-15",
+  "2",      "2021-03-10",
+) %>%
+  mutate(
+    ASTDT = ymd(ASTDT),
+    STUDYID = "xyz")
+
+derive_vars_joined(
+  adae,
+  dataset_add = period_ref,
+  by_vars = vars(STUDYID, USUBJID),
+  new_vars = vars(APERIOD, TRTP, TRTA),
+  join_vars = vars(APERSDT, APEREDT),
+  filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
+)
+```
+
+If no period reference dataset is available but period variables are in ADSL,
+the period reference dataset can be created from ADSL by calling
+`create_period_dataset()`.
+
+For example, a period reference dataset for periods and treatments can be
+created from the ADSL dataset created above:
+```{r}
+create_period_dataset(
+  adsl,
+  new_vars = vars(APERSDT = APxxSDT, APEREDT = APxxEDT, TRTP = TRTxxP, TRTA = TRTxxA)
 )
 ```
