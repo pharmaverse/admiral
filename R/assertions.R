@@ -1483,7 +1483,7 @@ assert_date_vector <- function(arg, optional = TRUE) {
   assert_logical_scalar(optional)
 
   if (optional && is.null(arg)) {
-    stop()
+    return(invisible(arg))
   }
 
   if (!is.instant(arg)) {
