@@ -1,22 +1,17 @@
-.onLoad <- function(libname, pkgname) {
-  op <- options()
-  op_admiral_options <- list(
-    admiral_options_subject_keys = vars(STUDYID, USUBJID)
-    # admiral_options_future_input = vars(USUBJID, SEX)
+admiral_default <- new.env(parent = emptyenv())
+admiral_default$admiral_options <- list(
+  subject_keys = vars(STUDYID, USUBJID)
+  # future_input = vars(...)
 
-    ######################################################
-    ### To enhance feature and add inputs as necessary ###
-    ######################################################
+  ######################################################
+  ### To enhance feature and add inputs as necessary ###
+  ######################################################
 
-    # 1. Add admiral_options_XXXX, see commented admiral_options_future_input above
-    # 2. Update @params with XXXX in set_admiral_options roxygen documentation
-    # 3. Modify the commented sections of set_admiral_options()
-  )
-  toset <- !(names(op_admiral_options) %in% names(op))
-  if (any(toset)) options(op_admiral_options[toset])
+  # 1. Add additional options such as future_input as shown commented above
+  # 2. Update @params with future_input in set_admiral_options roxygen documentation
+  # 3. Modify the commented sections of set_admiral_options()
+)
 
-  invisible()
-}
 #' Call a package-standard input
 #'
 #' Call a package-standard input that can be modified for advanced users.
@@ -90,19 +85,18 @@ get_admiral_options <- function(input) {
   assert_expr(enquo(input))
 
   # Find which admiral_options is being called upon
-  requested <- paste("admiral_options", as_name(enquo(input)), sep = "_")
-  op <- names(options())
+  requested <- as_name(enquo(input))
+  possible_inputs <- names(admiral_default$admiral_options)
 
-  if (requested %in% op) {
-    return(getOption(requested))
+  if (requested %in% possible_inputs) {
+    return(admiral_default$admiral_options[[which(requested == possible_inputs)]])
   }
 
   # Return message otherwise, catch typos
   else {
-    index <- op[grep("admiral_options_", op)]
     default_err_msg <- sprintf(paste(
       "Invalid function argument, select one unquoted of:",
-      paste0(gsub("admiral_options_", "", index), collapse = " or ")
+      paste0(possible_inputs, collapse = " or ")
     ))
     abort(default_err_msg)
   }
@@ -182,19 +176,19 @@ set_admiral_options <- function(subject_keys,
                                 set_default = FALSE) {
   if (!missing(subject_keys)) {
     assert_vars(subject_keys)
-    options(admiral_options_subject_keys = subject_keys)
+    admiral_default$admiral_options$subject_keys <- subject_keys
   }
 
   # if (!missing(future_input)) {
   #   assert_vars(future_input)
-  #   options(admiral_options_future_input = future_input)
+  #   admiral_default$admiral_options$future_input = future_input
   # }
 
   if (!missing(set_default)) {
     assert_logical_scalar(set_default)
     if (set_default == TRUE) {
-      options(admiral_options_subject_keys = vars(STUDYID, USUBJID))
-      # options(admiral_options_future_input = vars(USUBJID, SEX))
+      admiral_default$admiral_options$subject_keys <- vars(STUDYID, USUBJID)
+      # admiral_default$admiral_options$future_input = vars(...)
     }
   }
 }
