@@ -150,3 +150,14 @@ test_that("assert_order_vars Test 13: returns errors if used incorrectly", {
   expect_error(assert_order_vars(c("USUBJID", "PARAMCD", "VISIT")))
   expect_error(assert_order_vars(vars(USUBJID, toupper(PARAMCD), -AVAL)))
 })
+
+# assert_date_vector ----
+## Test 14: returns error if input vector is not a date formatted ----
+test_that("assert_date_vector Test 14: returns error if input vector is not a date formatted", {
+  expect_error(assert_date_vector("2018-08-23"))
+})
+
+## Test 15: returns invisible if input is date formatted ----
+test_that("assert_date_vector Test 15: returns invisible if input is date formatted", {
+  expect_invisible(assert_date_vector(as.Date("2022-10-25")))
+})
