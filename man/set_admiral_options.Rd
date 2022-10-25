@@ -4,14 +4,11 @@
 \alias{set_admiral_options}
 \title{Set a package-standard input}
 \usage{
-set_admiral_options(subject_keys, future_input, set_default = FALSE)
+set_admiral_options(subject_keys, set_default = FALSE)
 }
 \arguments{
 \item{subject_keys}{Variables to uniquely identify a subject, defaults to
 vars(STUDYID, USUBJID)}
-
-\item{future_input}{Possible future input that may need the flexability to be modified
-in same mannyer.}
 
 \item{set_default}{If set to \code{TRUE} will restore admiral defaults.}
 }
@@ -66,6 +63,7 @@ derive_param_exist_flag(
     PARAM = "Measurable Disease at Baseline"
   )
 )
+set_admiral_options(set_default = TRUE)
 }
 \seealso{
 \code{\link[=vars]{vars()}}, \code{\link[=get_admiral_options]{get_admiral_options()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},

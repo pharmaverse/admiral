@@ -1,11 +1,19 @@
 .onLoad <- function(libname, pkgname) {
+  op <- options()
+  op_admiral_options <- list(
+    admiral_options_subject_keys = vars(STUDYID, USUBJID)
+    # admiral_options_future_input = vars(USUBJID, SEX)
 
-  options(admiral_options =
-    list(
-      subject_keys = vars(STUDYID, USUBJID),
-      future_input = vars(USUBJID, SEX)
-    )
+    ######################################################
+    ### To enhance feature and add inputs as necessary ###
+    ######################################################
+
+    # 1. Add admiral_options_XXXX, see commented admiral_options_future_input above
+    # 2. Update @params with XXXX in set_admiral_options roxygen documentation
+    # 3. Modify the commented sections of set_admiral_options()
   )
+  toset <- !(names(op_admiral_options) %in% names(op))
+  if (any(toset)) options(op_admiral_options[toset])
 
   invisible()
 }
@@ -77,24 +85,25 @@
 #'   ),
 #'   subject_keys = get_admiral_options(subject_keys)
 #' )
-get_admiral_options <- function(input){
-  #Check for valid input - catch function abuse
+get_admiral_options <- function(input) {
+  # Check for valid input - catch function abuse
   assert_expr(enquo(input))
 
-  #Find which admiral_options is being called upon
-  x = enquo(input)
-  names_admiral_options = names(getOption("admiral_options"))
-  if(as_name(x) %in% names_admiral_options) {
-      index = which(as_name(x) == names_admiral_options)
-      return(getOption("admiral_options")[[index]])
+  # Find which admiral_options is being called upon
+  requested <- paste("admiral_options", as_name(enquo(input)), sep = "_")
+  op <- names(options())
+
+  if (requested %in% op) {
+    return(getOption(requested))
   }
 
-  #Return message otherwise, catch typos
+  # Return message otherwise, catch typos
   else {
-    default_err_msg = sprintf(paste("Invalid function argument, select one unquoted of:",
-                                     paste0(names_admiral_options, collapse = " or ")
-                                     )
-                               )
+    index <- op[grep("admiral_options_", op)]
+    default_err_msg <- sprintf(paste(
+      "Invalid function argument, select one unquoted of:",
+      paste0(gsub("admiral_options_", "", index), collapse = " or ")
+    ))
     abort(default_err_msg)
   }
 }
@@ -105,9 +114,6 @@ get_admiral_options <- function(input){
 #'
 #' @param subject_keys Variables to uniquely identify a subject, defaults to
 #'   vars(STUDYID, USUBJID)
-#'
-#' @param future_input Possible future input that may need the flexability to be modified
-#' in same mannyer.
 #'
 #' @param set_default If set to `TRUE` will restore admiral defaults.
 #'
@@ -170,28 +176,25 @@ get_admiral_options <- function(input){
 #'     PARAM = "Measurable Disease at Baseline"
 #'   )
 #' )
+#' set_admiral_options(set_default = TRUE)
 set_admiral_options <- function(subject_keys,
-                                future_input,
-                                set_default = FALSE){
-  if(!missing(subject_keys)){
+                                # future_input,
+                                set_default = FALSE) {
+  if (!missing(subject_keys)) {
     assert_vars(subject_keys)
-    options(admiral_options = list(subject_keys = subject_keys,
-                                   future_input = getOption("admiral_options")$future_input))
+    options(admiral_options_subject_keys = subject_keys)
   }
 
-  if(!missing(future_input)){
-    assert_vars(future_input)
-    options(admiral_options = list(subject_keys = getOption("admiral_options")$subject_keys),
-                                   future_input = future_input)
-  }
-  if(!missing(set_default)){
+  # if (!missing(future_input)) {
+  #   assert_vars(future_input)
+  #   options(admiral_options_future_input = future_input)
+  # }
+
+  if (!missing(set_default)) {
     assert_logical_scalar(set_default)
-    if(set_default == TRUE){
-      options(admiral_options = list(subject_keys = vars(STUDYID, USUBJID),
-                                     future_input = vars(USUBJID, SEX)))
-
-      print("Ignoring user-inputs, setting all options back to default.")
+    if (set_default == TRUE) {
+      options(admiral_options_subject_keys = vars(STUDYID, USUBJID))
+      # options(admiral_options_future_input = vars(USUBJID, SEX))
     }
   }
 }
-
