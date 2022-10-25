@@ -9,7 +9,7 @@ get_admiral_options(input)
 \arguments{
 \item{input}{An unquoted expression of commonly used admiral function inputs.
 
-As of now, support only available for \verb{subject keys}.}
+As of now, support only available for \code{subject_keys}.}
 }
 \value{
 Currently \code{subject_keys} returns \code{vars(STUDYID, USUBJID)} unless user changes the default
@@ -20,7 +20,7 @@ Call a package-standard input that can be modified for advanced users.
 }
 \details{
 This function allows flexibility for function inputs that may need to be repeated
-multiple times in a script, such as for \verb{subject keys}.
+multiple times in a script, such as for \code{subject_keys}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)

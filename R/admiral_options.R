@@ -18,11 +18,11 @@ admiral_default$admiral_options <- list(
 #'
 #' @param input An unquoted expression of commonly used admiral function inputs.
 #'
-#'   As of now, support only available for `subject keys`.
+#'   As of now, support only available for `subject_keys`.
 #'
 #' @details
 #' This function allows flexibility for function inputs that may need to be repeated
-#' multiple times in a script, such as for `subject keys`.
+#' multiple times in a script, such as for `subject_keys`.
 #'
 #' @author Zelos Zhu
 #'
