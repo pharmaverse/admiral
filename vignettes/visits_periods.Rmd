@@ -105,7 +105,8 @@ phase_ref <- tribble(
     STUDYID = "xyz",
     APHASEN = as.integer(APHASEN),
     across(matches("PH[ES]DT"), ymd)
-  ) %>% select(STUDYID, everything())
+  ) %>%
+  select(STUDYID, everything())
 dataset_vignette(
   phase_ref
 )
@@ -245,7 +246,8 @@ adae <- tribble(
 ) %>%
   mutate(
     ASTDT = ymd(ASTDT),
-    STUDYID = "xyz")
+    STUDYID = "xyz"
+  )
 
 derive_vars_joined(
   adae,

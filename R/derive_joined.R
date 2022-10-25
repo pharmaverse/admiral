@@ -247,8 +247,8 @@
 #'   "2",      "2021-02-15",
 #' ) %>%
 #'   mutate(
-#'   ASTDT = ymd(ASTDT),
-#'   STUDYID = "xyz"
+#'     ASTDT = ymd(ASTDT),
+#'     STUDYID = "xyz"
 #'   )
 #'
 #' derive_vars_joined(
