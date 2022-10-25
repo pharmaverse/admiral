@@ -1,5 +1,4 @@
-library(tibble)
-data <- tribble(
+data <- tibble::tribble(
   ~USUBJID, ~AVISITN, ~AVALC,
   "1",      1,        "PR",
   "1",      2,        "CR",
@@ -32,7 +31,7 @@ test_that("derive_var_confirmation_flag Test 1: filter without first_cond", {
       filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR")
     )
 
-  expected <- tribble(
+  expected <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC, ~CONFFL,
     "1",      1,        "PR",   "Y",
     "1",      2,        "CR",   NA_character_,
@@ -60,7 +59,7 @@ test_that("derive_var_confirmation_flag Test 1: filter without first_cond", {
 ## Test 2: filter with first_cond ----
 ## Flagging any patient CR value that is followed by a CR
 test_that("derive_var_confirmation_flag Test 2: filter with first_cond", {
-  data <- tribble(
+  data <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",
     "1",      2,        "CR",
@@ -89,7 +88,7 @@ test_that("derive_var_confirmation_flag Test 2: filter with first_cond", {
       filter = TRUE
     )
 
-  expected <- tribble(
+  expected <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC, ~CONFFL,
     "1",      1,        "PR",   NA_character_,
     "1",      2,        "CR",   "Y",
@@ -131,7 +130,7 @@ test_that("derive_var_confirmation_flag Test 3: filter with first_cond and summa
       false_value = "N"
     )
 
-  expected <- tribble(
+  expected <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC, ~CONFFL,
     "1",      1,        "PR",   "Y",
     "1",      2,        "CR",   "N",
@@ -160,7 +159,7 @@ test_that("derive_var_confirmation_flag Test 3: filter with first_cond and summa
 ## Flagging observations with a duration longer than 30 and
 ## on or after 7 days of a COVID AE (ACOVFL == "Y")
 test_that("derive_var_confirmation_flag, Test 4: join_type = 'all'", {
-  adae <- tribble(
+  adae <- tibble::tribble(
     ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
     "1",        10, "N",          1,
     "1",        21, "N",         50,
@@ -185,7 +184,7 @@ test_that("derive_var_confirmation_flag, Test 4: join_type = 'all'", {
     filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
   )
 
-  expected <- tribble(
+  expected <- tibble::tribble(
     ~USUBJID, ~ADY, ~ACOVFL, ~ADURN, ~ALCOVFL,
     "1",        10, "N",          1, NA_character_,
     "1",        21, "N",         50, "Y",
@@ -210,7 +209,7 @@ test_that("derive_var_confirmation_flag, Test 4: join_type = 'all'", {
 ## Test 5: join_type = "before" ----
 ## Flagging observations with AVALC = Y and an observation with CRIT1FL = Y before
 test_that("derive_var_confirmation_flag, Test 5: join_type = 'before'", {
-  data <- tribble(
+  data <- tibble::tribble(
     ~USUBJID, ~ASEQ, ~AVALC, ~CRIT1FL,
     "1",          1, "Y",    "Y",
     "1",          2, "N",    "N",
@@ -230,7 +229,7 @@ test_that("derive_var_confirmation_flag, Test 5: join_type = 'before'", {
     false_value = "N"
   )
 
-  expected <- tribble(
+  expected <- tibble::tribble(
     ~USUBJID, ~ASEQ, ~AVALC, ~CRIT1FL, ~CONFFL,
     "1",          1, "Y",    "Y",      "N",
     "1",          2, "N",    "N",      "N",
