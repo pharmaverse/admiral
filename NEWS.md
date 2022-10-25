@@ -25,7 +25,7 @@ which controls if time is considered for the condition if `start_date` is after
 - Function `derive_vars_merged()` had an improperly formatted error message 
 which has been corrected (#1473)
 
-- Templates now save datasets as .rds instead of .rda (#1501)
+- Templates now save datasets as `.rds` instead of `.rda` (#1501)
 
 # admiral 0.8.4
 
