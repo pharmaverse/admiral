@@ -2,7 +2,8 @@ library(admiral.test)
 data(admiral_ae)
 data(admiral_vs)
 
-test_that("call_derivation works", {
+## Test 1: Test that call_derivation generates expected summary output  ----
+test_that("call_derivation Test 1:  Test that call_derivation generates expected summary output", {
   input <- admiral_vs[sample(seq_len(nrow(admiral_vs)), 1000), ]
 
   expected_output <- input %>%
@@ -57,7 +58,8 @@ test_that("call_derivation works", {
   )
 })
 
-test_that("call_derivation works", {
+## Test 2: Test that call_derivation generates expected imputation output  ----
+test_that("call_derivation Test 2: Test that call_derivation generates expected imputation output", {
   input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
@@ -91,8 +93,8 @@ test_that("call_derivation works", {
   expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "AESEQ"))
 })
 
-
-test_that("call_derivation - Error is thrown if ... has no arguments", {
+## Test 3: Test that Error is thrown if ... has no arguments  ----
+test_that("call_derivation Test 3: Test that Error is thrown if ... has no arguments", {
   input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
@@ -108,7 +110,8 @@ test_that("call_derivation - Error is thrown if ... has no arguments", {
   )
 })
 
-test_that("call_derivation - Error is thrown if ... arguments are not properly named", {
+## Test 4: Error is thrown if ... arguments are not properly named ----
+test_that("call_derivation Test 4: Error is thrown if ... arguments are not properly named", {
   input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
@@ -126,7 +129,8 @@ test_that("call_derivation - Error is thrown if ... arguments are not properly n
   )
 })
 
-test_that("call_derivation - Error is thrown params is empty", {
+## Test 5: Error is thrown params is empty ----
+test_that("call_derivation Test 5: Error is thrown params is empty", {
   input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
@@ -144,7 +148,8 @@ test_that("call_derivation - Error is thrown params is empty", {
   )
 })
 
-test_that("call_derivation - Error is thrown if passed params are not proprely named", {
+## Test 6: Error is thrown if passed params are not properly named ----
+test_that("call_derivation Test 6: Error is thrown if passed params are not properly named", {
   input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
@@ -163,7 +168,8 @@ test_that("call_derivation - Error is thrown if passed params are not proprely n
   )
 })
 
-test_that("call_derivation - Error is thrown if `...` arguments are not properly named", {
+## Test 7: Error is thrown if `...` arguments are not properly named ----
+test_that("call_derivation Test 7: Error is thrown if `...` arguments are not properly named", {
   input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
@@ -181,7 +187,8 @@ test_that("call_derivation - Error is thrown if `...` arguments are not properly
   )
 })
 
-test_that("call_derivation - Error is thrown if duplicate parameters", {
+## Test 8: Error is thrown if duplicate parameters ----
+test_that("call_derivation Test 8: Error is thrown if duplicate parameters", {
   expect_error(
     params(dtc = VSDTC, dtc = VSDTC, new_vars_prefix = "A"),
     "The following parameters have been specified more than once: `dtc`",
