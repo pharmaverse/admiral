@@ -7,6 +7,10 @@
 - New function `derive_var_relative_flag()` for flagging observations before or
 after a condition is fulfilled (#1453)
 
+- New functions `get_admiral_options()` and `set_admiral_options()` to allow more 
+flexibility on common function inputs; e.g. like `subject_keys` to avoid several 
+find and replace instances of `vars(STUDYID, USUBJID)
+
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
 
