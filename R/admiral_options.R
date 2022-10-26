@@ -1,7 +1,7 @@
 admiral_default <- new.env(parent = emptyenv())
 admiral_default$admiral_options <- list(
   subject_keys = vars(STUDYID, USUBJID)
-  # future_input = vars(...)
+  # future_input = vars(...) nolint
 
   ######################################################
   ### To enhance feature and add inputs as necessary ###
@@ -82,7 +82,7 @@ admiral_default$admiral_options <- list(
 #' )
 get_admiral_options <- function(input) {
   # Check for valid input - catch function abuse
-  assert_expr(enquo(input))
+  assert_symbol(enquo(input))
 
   # Find which admiral_options is being called upon
   requested <- as_name(enquo(input))
@@ -96,7 +96,7 @@ get_admiral_options <- function(input) {
   else {
     default_err_msg <- sprintf(paste(
       "Invalid function argument, select one unquoted of:",
-      paste0(possible_inputs, collapse = " or ")
+      paste(possible_inputs, collapse = " or ")
     ))
     abort(default_err_msg)
   }
@@ -180,15 +180,15 @@ set_admiral_options <- function(subject_keys,
   }
 
   # if (!missing(future_input)) {
-  #   assert_vars(future_input)
-  #   admiral_default$admiral_options$future_input = future_input
+  #   assert_vars(future_input) nolint
+  #   admiral_default$admiral_options$future_input = future_input nolint
   # }
 
   if (!missing(set_default)) {
     assert_logical_scalar(set_default)
     if (set_default == TRUE) {
       admiral_default$admiral_options$subject_keys <- vars(STUDYID, USUBJID)
-      # admiral_default$admiral_options$future_input = vars(...)
+      # admiral_default$admiral_options$future_input = vars(...) nolint
     }
   }
 }
