@@ -27,8 +27,8 @@ This article will give you an overview of how the `{admiral}` project is utilizi
 -	The `main` branch contains the latest **released** version and should not be used for development. You can find the released versions [here](https://GitHub.com/pharmaverse/admiral/releases) 
 -	The `devel` branch contains the latest development version of the package. You will always be branching off and pulling into the `devel` branch.
 - The `gh-pages` branches contains the code used to render this website you are looking at right now!
-- The `patch` branch is reserved for special hot fixes to address bugs. More info in [ Hot Fix Release](#hot-fix-release)
-- The `pre-release` branch is used to as an intermediate step to releasing the package from `main`.  More info in [Quarterly Release section](#quarterly-release)
+- The `patch` branch is reserved for special hot fixes to address bugs. More info in [Hot Fix Release](release_strategy.html#hot-fix-release)
+- The `pre-release` branch is used to as an intermediate step to releasing the package from `main`.  More info in [Quarterly Release section](release_strategy.html#quarterly-release)
 - The `main`, `devel`, `gh-pages`, `patch` and `pre-release` branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator. 
 
 -	**Feature** branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged. Check out the [Pull Request Review Guidance](pr_review_guidance.html).
