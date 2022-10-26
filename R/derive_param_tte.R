@@ -376,7 +376,7 @@ derive_param_tte <- function(dataset = NULL,
   )
 
   new_param <- new_param %>%
-    mutate(!!date_var := pmax(!!date_var, !!start_var), na.rm = TRUE) %>%
+    mutate(!!date_var := pmax(!!date_var, !!start_var, na.rm = TRUE)) %>%
     remove_tmp_vars()
 
   if (!is.null(by_vars)) {
