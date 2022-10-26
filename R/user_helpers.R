@@ -123,6 +123,7 @@ print.adam_templates <- function(x, ...) {
     cat("No ADaM templates available in package '", pkg, "'\n", sep = "")
   } else {
     cat("Existing ADaM templates in package '", pkg, "':\n", sep = "")
-    cat(paste0("\U2022 ", x), sep = "\n")
+    bullet <- if (is.na(iconv("\U2022"))) "-" else "\U2022"
+    cat(paste(bullet, x), sep = "\n")
   }
 }
