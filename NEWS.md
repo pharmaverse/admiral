@@ -18,7 +18,7 @@ after a condition is fulfilled (#1453)
 
 - New functions `get_admiral_options()` and `set_admiral_options()` to allow more 
 flexibility on common function inputs; e.g. like `subject_keys` to avoid several 
-find and replace instances of `vars(STUDYID, USUBJID). (#1338)
+find and replace instances of `vars(STUDYID, USUBJID)`. (#1338)
 
 - The new function `create_period_dataset()` for creating a reference dataset
 for subperiods, periods, or phases from the ADSL dataset was added. The

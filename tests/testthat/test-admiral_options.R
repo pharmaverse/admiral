@@ -1,6 +1,6 @@
 # get_admiral_options ----
 ## Test 1: get works ----
-test_that("get_admiral_options,Test 1: get works", {
+test_that("get_admiral_options, Test 1: get works", {
   expect_equal(get_admiral_options(subject_keys), vars(STUDYID, USUBJID))
 })
 
@@ -10,7 +10,7 @@ test_that("get_admiral_options, Test 2: common typo gives error", {
 })
 
 ## Test 3: unexpected function input for get gives error ----
-test_that("get_admiral_options, Test 3: unexpected function input for get gives error",{
+test_that("get_admiral_options, Test 3: unexpected function input for get gives error", {
   expect_error(get_admiral_options("subject_key"))
 })
 
