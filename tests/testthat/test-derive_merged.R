@@ -35,7 +35,7 @@ vs <- tibble::tribble(
 ) %>% mutate(STUDYID = "ST42")
 
 
-# ---- derive_vars_merged, Test 1: merge all variables ----
+## Test 1: merge all variables
 test_that("derive_vars_merged, Test 1: merge all variables", {
   actual <- derive_vars_merged(advs,
     dataset_add = adsl,
@@ -51,7 +51,7 @@ test_that("derive_vars_merged, Test 1: merge all variables", {
   )
 })
 
-# ---- derive_vars_merged Test 2: merge selected variables ----
+## Test 2: merge selected variables
 test_that("derive_vars_merged Test 2: merge selected variables", {
   actual <- derive_vars_merged(advs,
     dataset_add = adsl,
@@ -68,7 +68,7 @@ test_that("derive_vars_merged Test 2: merge selected variables", {
   )
 })
 
-# ---- derive_vars_merged Test 3: merge last value and 7 flag matched by groups ----
+## Test 3: merge last value and 7 flag matched by groups
 test_that("derive_vars_merged Test 3: merge last value and 7 flag matched by
           groups", {
   actual <- derive_vars_merged(adsl,
@@ -91,7 +91,7 @@ test_that("derive_vars_merged Test 3: merge last value and 7 flag matched by
   )
 })
 
-# ---- derive_vars_merged Test 4: error if variable in both datasets ----
+## Test 4: error if variable in both datasets
 test_that("derive_vars_merged Test 4: error if variable in both datasets", {
   expect_error(derive_vars_merged(advs,
     dataset_add = adsl,
@@ -101,7 +101,7 @@ test_that("derive_vars_merged Test 4: error if variable in both datasets", {
   )
 })
 
-# ---- derive_vars_merged_dt Test 5: merge first date ----
+## Test 5: merge first date
 test_that("derive_vars_merged_dt Test 5: merge first date", {
   suppress_warning(
     actual <- derive_vars_merged_dt(
@@ -131,7 +131,7 @@ test_that("derive_vars_merged_dt Test 5: merge first date", {
   )
 })
 
-# ---- derive_vars_merged_dtm Test 6: merge first date ----
+## Test 6: merge first date
 test_that("derive_vars_merged_dtm Test 6: merge first date", {
   suppress_warning(
     actual <- derive_vars_merged_dtm(
@@ -166,7 +166,7 @@ test_that("derive_vars_merged_dtm Test 6: merge first date", {
   )
 })
 
-# ---- derive_vars_merged_cat Test 7: merge categorized variable ----
+## Test 7: merge categorized variable
 test_that("derive_vars_merged_cat Test 7: merge categorized variable", {
   get_region <- function(x) {
     if_else(x %in% c("AUT", "NOR"), "EUROPE", "AFRICA")
@@ -193,7 +193,7 @@ test_that("derive_vars_merged_cat Test 7: merge categorized variable", {
   )
 })
 
-# ---- derive_vars_merged_cat Test 8: define value for non-matched by groups ----
+## Test 8: define value for non-matched by groups
 test_that("derive_vars_merged_cat Test 8: define value for non-matched by
           groups", {
   get_vscat <- function(x) {
@@ -224,7 +224,7 @@ test_that("derive_vars_merged_cat Test 8: define value for non-matched by
   )
 })
 
-# ---- derive_vars_merged_exist_flag Test 9: merge existence flag ----
+## Test 9: merge existence flag
 test_that("derive_vars_merged_exist_flag Test 9: merge existence flag", {
   actual <- derive_var_merged_exist_flag(
     adsl,
@@ -245,8 +245,7 @@ test_that("derive_vars_merged_exist_flag Test 9: merge existence flag", {
   )
 })
 
-# ---- derive_var_merged_character Test 10: merge character variable, no ----
-# ---- transformation ----
+## Test 10: merge character variable, no transformation
 test_that("derive_var_merged_character Test 10: merge character variable,
           no transformation", {
   actual <- derive_var_merged_character(
@@ -270,8 +269,7 @@ test_that("derive_var_merged_character Test 10: merge character variable,
   )
 })
 
-# ---- derive_var_merged_character Test 11: merge character variable, ----
-# ---- upper case ----
+## Test 11: merge character variable, upper case
 test_that("derive_var_merged_character Test 11: merge character variable,
           upper case", {
   actual <- derive_var_merged_character(
@@ -297,8 +295,7 @@ test_that("derive_var_merged_character Test 11: merge character variable,
   )
 })
 
-# ---- derive_var_merged_character Test 12: merge character variable, ----
-# ---- lower case ----
+## Test 12: merge character variable, lower case
 test_that("derive_var_merged_character Test 12: merge character variable,
           lower case", {
   actual <- derive_var_merged_character(
@@ -323,8 +320,7 @@ test_that("derive_var_merged_character Test 12: merge character variable,
   )
 })
 
-# ---- derive_var_merged_character Test 13: merge character variable, ----
-# ---- title case ----
+## Test 13: merge character variable, title case
 test_that("derive_var_merged_character Test 13: merge character variable,
           title case", {
   actual <- derive_var_merged_character(
