@@ -113,7 +113,7 @@ get_admiral_options <- function(input) {
 #'
 #' @details
 #' This function allows flexibility for function inputs that may need to be repeated
-#' multiple times in a script, such as for `subject keys`.
+#' multiple times in a script, such as for `subject_keys`.
 #'
 #' @author Zelos Zhu
 #'

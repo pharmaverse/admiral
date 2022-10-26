@@ -21,7 +21,7 @@ Set a package-standard input that can be modified for advanced users.
 }
 \details{
 This function allows flexibility for function inputs that may need to be repeated
-multiple times in a script, such as for \verb{subject keys}.
+multiple times in a script, such as for \code{subject_keys}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
