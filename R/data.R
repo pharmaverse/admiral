@@ -64,6 +64,6 @@
 #'
 #' @author Gordon Miller
 #'
-#' @keywords datasets
-#' @family datasets
+#' @keywords metadata
+#' @family metadata
 "atoxgr_criteria_ctcv4"
