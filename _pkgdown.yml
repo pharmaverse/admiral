@@ -42,7 +42,7 @@ reference:
   - has_keyword("der_prm_tte")
 
 - title: Metadata
-  desc: Auxiliary datasets providing definitions as input for derivations, e.g., grading criteria or dose frequencies
+  desc: Auxiliary datasets providing definitions as input for derivations, e.g. grading criteria or dose frequencies
   contents:
   - has_keyword("metadata")
 
