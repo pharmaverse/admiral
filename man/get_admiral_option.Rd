@@ -29,6 +29,7 @@ library(dplyr, warn.conflicts = FALSE)
 data("admiral_vs")
 data("admiral_dm")
 
+# Merging all dm variables to vs
 derive_vars_merged(
   admiral_vs,
   dataset_add = select(admiral_dm, -DOMAIN),
