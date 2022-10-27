@@ -37,14 +37,13 @@ admiral_env$admiral_options <- list()
 #' data("admiral_vs")
 #' data("admiral_dm")
 #'
-#  Merging all dm variables to vs
+#' # Merging all dm variables to vs
 #' derive_vars_merged(
 #'   admiral_vs,
 #'   dataset_add = select(admiral_dm, -DOMAIN),
 #'   by_vars = get_admiral_option(subject_keys)
 #' ) %>%
 #'   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
-
 get_admiral_option <- function(option) {
   # Check for valid option - catch function abuse
   assert_symbol(enquo(option))
@@ -162,7 +161,6 @@ set_admiral_options <- function(subject_keys,
 
     # 1. Add additional options such as future_input as shown commented above
     # 2. Update @params with future_input in set_admiral_options roxygen documentation
-
   }
 }
 set_admiral_options(set_default = TRUE)
