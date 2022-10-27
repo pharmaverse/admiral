@@ -41,3 +41,14 @@ test_that("get_duplicates Test 1: x atomic vector", {
     c("a", "d", 1)
   )
 })
+
+# get_source_vars ----
+## Test 1: x is a list of quosures ----
+test_that("get_source_vars Test 1: x is a list of quosures", {
+  x <- vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+
+  expect_equal(
+    get_source_vars(x),
+    x[2]
+  )
+})
