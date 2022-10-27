@@ -9,7 +9,7 @@ derive_var_dthcaus(
   dataset,
   ...,
   source_datasets,
-  subject_keys = get_admiral_options(subject_keys)
+  subject_keys = get_admiral_option(subject_keys)
 )
 
 dthcaus_source(
@@ -212,12 +212,10 @@ Source Specifications:
 \code{\link{filter_date_sources}()},
 \code{\link{format.sdg_select}()},
 \code{\link{format.smq_select}()},
-\code{\link{get_admiral_options}()},
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
 \code{\link{query}()},
 \code{\link{sdg_select}()},
-\code{\link{set_admiral_options}()},
 \code{\link{smq_select}()},
 \code{\link{tte_source}()},
 \code{\link{validate_query}()},

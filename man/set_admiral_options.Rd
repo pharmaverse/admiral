@@ -2,34 +2,35 @@
 % Please edit documentation in R/admiral_options.R
 \name{set_admiral_options}
 \alias{set_admiral_options}
-\title{Set a package-standard input}
+\title{Set the values of admiral options}
 \usage{
 set_admiral_options(subject_keys, set_default = FALSE)
 }
 \arguments{
 \item{subject_keys}{Variables to uniquely identify a subject, defaults to
-vars(STUDYID, USUBJID)}
+\code{vars(STUDYID, USUBJID)}. This option is used as default value for the
+\code{subject_keys} argument in all admiral functions.}
 
 \item{set_default}{If set to \code{TRUE} will restore admiral defaults.}
 }
 \value{
-Modify an admiral option, e.g \code{subject_keys}, such that it automatically affects downstream
-function inputs where \code{get_admiral_option()} is called such as \code{derive_param_exist_flag()}.
+No return value, called for side effects.
 }
 \description{
-Set a package-standard input that can be modified for advanced users.
+Set the values of admiral options that can be modified for advanced users.
 }
 \details{
-This function allows flexibility for function inputs that may need to be repeated
-multiple times in a script, such as for \code{subject_keys}.
+Modify an admiral option, e.g \code{subject_keys}, such that it automatically affects downstream
+function inputs where \code{get_admiral_option()} is called such as \code{derive_param_exist_flag()}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
+library(tibble)
 set_admiral_options(subject_keys = vars(STUDYID, USUBJID2))
 
 # Derive a new parameter for measurable disease at baseline
-adsl <- tibble::tribble(
+adsl <- tribble(
   ~USUBJID2,
   "1",
   "2",
@@ -37,7 +38,7 @@ adsl <- tibble::tribble(
 ) \%>\%
   mutate(STUDYID = "XX1234")
 
-tu <- tibble::tribble(
+tu <- tribble(
   ~USUBJID2, ~VISIT,      ~TUSTRESC,
   "1",       "SCREENING", "TARGET",
   "1",       "WEEK 1",    "TARGET",
@@ -66,36 +67,16 @@ derive_param_exist_flag(
 set_admiral_options(set_default = TRUE)
 }
 \seealso{
-\code{\link[=vars]{vars()}}, \code{\link[=get_admiral_options]{get_admiral_options()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},
+\code{\link[=vars]{vars()}}, \code{\link[=get_admiral_option]{get_admiral_option()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},
 \code{\link[=derive_param_first_event]{derive_param_first_event()}}, \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=derive_var_disposition_status]{derive_var_disposition_status()}},
-\code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}}
+\code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}},
+\code{\link[=derive_vars_period]{derive_vars_period()}}, \code{\link[=create_period_dataset]{create_period_dataset()}}
 
-Source Specifications: 
-\code{\link{assert_db_requirements}()},
-\code{\link{assert_terms}()},
-\code{\link{assert_valid_queries}()},
-\code{\link{censor_source}()},
-\code{\link{date_source}()},
-\code{\link{death_event}},
-\code{\link{derive_var_dthcaus}()},
-\code{\link{event_source}()},
-\code{\link{extend_source_datasets}()},
-\code{\link{filter_date_sources}()},
-\code{\link{format.sdg_select}()},
-\code{\link{format.smq_select}()},
-\code{\link{get_admiral_options}()},
-\code{\link{list_tte_source_objects}()},
-\code{\link{params}()},
-\code{\link{query}()},
-\code{\link{sdg_select}()},
-\code{\link{smq_select}()},
-\code{\link{tte_source}()},
-\code{\link{validate_query}()},
-\code{\link{validate_sdg_select}()},
-\code{\link{validate_smq_select}()}
+Other admiral_options: 
+\code{\link{get_admiral_option}()}
 }
 \author{
 Zelos Zhu
 }
-\concept{source_specifications}
-\keyword{source_specifications}
+\concept{admiral_options}
+\keyword{admiral_options}

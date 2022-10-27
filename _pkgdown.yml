@@ -47,6 +47,9 @@ reference:
   - has_keyword("metadata")
 
 - title: Advanced Functions
+- subtitle: Admiral Options
+- contents:
+  - has_keyword("admiral_options")
 - subtitle: Higher Order
 - contents:
   - has_keyword("high_order_function")

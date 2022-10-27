@@ -14,7 +14,7 @@ derive_param_tte(
   censor_conditions,
   create_datetime = FALSE,
   set_values_to,
-  subject_keys = get_admiral_options(subject_keys)
+  subject_keys = get_admiral_option(subject_keys)
 )
 }
 \arguments{

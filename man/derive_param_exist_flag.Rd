@@ -14,7 +14,7 @@ derive_param_exist_flag(
   missing_value = NA_character_,
   filter_add = NULL,
   aval_fun = yn_to_numeric,
-  subject_keys = get_admiral_options(subject_keys),
+  subject_keys = get_admiral_option(subject_keys),
   set_values_to
 )
 }

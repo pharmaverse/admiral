@@ -8,7 +8,7 @@ derive_vars_period(
   dataset,
   dataset_ref,
   new_vars,
-  subject_keys = vars(STUDYID, USUBJID)
+  subject_keys = get_admiral_option(subject_keys)
 )
 }
 \arguments{
