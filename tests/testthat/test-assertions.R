@@ -106,3 +106,82 @@ test_that("Test 11 : `assert_order_vars` returns errors if used incorrectly", {
   expect_error(assert_order_vars(c("USUBJID", "PARAMCD", "VISIT")))
   expect_error(assert_order_vars(vars(USUBJID, toupper(PARAMCD), -AVAL)))
 })
+
+test_that("Test 12 : `assert_data_frame` doesn't throw an error if optional is TRUE and arg is NULL", {
+  example_fun <- function(dataset) {
+    assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID), optional=TRUE)
+  }
+
+  expect_invisible(
+    example_fun(NULL)
+  )
+})
+
+test_that("Test 13 : `assert_data_frame` throws an error if required variables are missing", {
+  example_fun <- function(dataset) {
+    assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
+  }
+
+  admiral_dm <- admiral_dm %>% select(-c(STUDYID,USUBJID))
+
+  expect_error(
+    example_fun(admiral_dm)
+  )
+})
+
+test_that("Test 14 : `assert_character_scalar` doesn't throw an error if optional is TRUE and arg is NULL", {
+  example_fun <- function(character) {
+    assert_character_scalar(character, optional=TRUE)
+  }
+
+  expect_invisible(
+    example_fun(NULL)
+  )
+})
+
+test_that("Test 15 : `assert_character_scalar` doesn't throw an error if case_sensitive is FALSE", {
+  example_fun <- function(character) {
+    assert_character_scalar(character, values=c("test"), case_sensitive=FALSE)
+  }
+
+  expect_invisible(
+    example_fun(character="TEST")
+  )
+})
+
+test_that("Test 16 : `assert_character_scalar` throws an error if values are not NULL and arg not in values", {
+  example_fun <- function(character) {
+    assert_character_scalar(character, values=c("test"))
+  }
+
+  expect_error(
+    example_fun(character="oak")
+  )
+})
+
+test_that("Test 17 : `assert_character_vector` throws an error if arg is not a character vector", {
+
+  expect_error(
+    assert_character_vector(c(1,2,3))
+  )
+})
+
+test_that("Test 18 : `assert_character_vector` throws an error if values are not NULL and arg not in values", {
+  example_fun <- function(character) {
+    assert_character_vector(character, values=c("test","oak"))
+  }
+
+  expect_error(
+    example_fun(character=c("oak","mint"))
+  )
+})
+
+test_that("Test 19 : `assert_logical_scalar` doesn't throw an error if optional is TRUE and arg is NULL", {
+  example_fun <- function(arg) {
+    assert_logical_scalar(arg, optional=TRUE)
+  }
+
+  expect_invisible(
+    example_fun(NULL)
+  )
+})
