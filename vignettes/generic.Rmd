@@ -19,8 +19,8 @@ library(admiraldev)
 # Introduction
 
 This vignette explains some of the `{admiral}` generic functions, which we believe
-will most commonly be able to be re-used to save users having to create their own
-functions for study-specific analysis derivations. These re-usable functions give
+are able to be re-used to sometimes save users having to create so many of their
+own functions for study-specific analysis derivations. These re-usable functions give
 the users great flexibility, but the challenge is knowing which to use when. So
 this vignette is intended to help understand the differences between each, thus
 improving the findability of the function needed for each task.
@@ -151,15 +151,6 @@ adsl_02 <- adsl_01 %>%
 ```
 
 This call would return the input dataframe with the variable `RANDDT` added.
-Note: Only `USUBJID` and the variable(s) added are printed for illustration in
-these examples.
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  dataset = adsl_02,
-  display_vars = vars(USUBJID, RANDDT)
-)
-```
 
 Now, an example to add first treatment datetime (`ADSL.TRTSDT`), where we
 need to make use of `derive_vars_merged()` with the `mode` and `order` arguments
@@ -188,25 +179,18 @@ adsl_03 <- adsl_02 %>%
 
 This call would return the input dataframe with `TRTSDT` added.
 
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  dataset = adsl_03,
-  display_vars = vars(USUBJID, TRTSDT)
-)
-```
-
 Beyond `derive_vars_merged()`, other "merged" functions offer specific common
 analysis needs. For example, below shows an example of using `derive_var_merged_exist_flag()`
 for adding safety population flag (`ADSL.SAFFL`).
 
 In this case we create a new flag variable (`new_var` argument) based on information we
 take from the additional dataframe to tell us if a certain `condition` is met.
-For all by groups (`by_vars` argument) where the check evaluates as TRUE at least
+For all by groups (`by_vars` argument) where the check evaluates as `TRUE` at least
 once the flag is set to `"Y"` (or whatever user passes in `true_value` argument).
 
 Note: we have extra arguments available here for patients that do not meet the `condition`.
 In the below example, we set patients in `EX` with no valid dose to `"N"` (`false_value`)
-and the same for patients with no observations at all in `EX' (`missing_value`).
+and the same for patients with no observations at all in `EX` (`missing_value`).
 
 ```{r eval=TRUE}
 # Add safety population flag to ADSL
@@ -221,10 +205,12 @@ adsl_04 <- adsl_03 %>%
   )
 ```
 
+Here's how all these above derived variables then look in the dataset.
+
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   dataset = adsl_04,
-  display_vars = vars(USUBJID, SAFFL)
+  display_vars = vars(USUBJID, RANDDT, TRTSDT, SAFFL)
 )
 ```
 
@@ -268,7 +254,7 @@ adsl_05 <- adsl_04 %>%
     filter_add = DSDECOD == "RANDOMIZED",
     by_vars = vars(STUDYID, USUBJID),
     new_vars = vars(RAND30DT = DSSTDT),
-    filter_join = TRTSDT - 30 >= DSSTDT
+    filter_join = DSSTDT >= TRTSDT - 30
   )
 ```
 
@@ -346,7 +332,7 @@ ae_02 <- ae_ext %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   dataset = ae_02,
-  display_vars = vars(USUBJID, AESEV, AESTDY, AENADSEV)
+  display_vars = vars(USUBJID, AESTDY, AESEV, AENADSEV)
 )
 ```
 
@@ -386,33 +372,7 @@ ae_03 <- ae_02 %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   dataset = ae_03,
-  display_vars = vars(USUBJID, AESEV, AESTDY, AESEQ, AEHSEVFL)
-)
-```
-
-If we wanted to only flag post-baseline records here as in the nadir example,
-we could use `restrict_derivation()` as follows, as explained at
-[Higher Order Functions](higher_order.html).
-
-```{r eval=TRUE}
-# Highest severity flag post-baseline (AEHSPBFL)
-ae_04 <- ae_03 %>%
-  restrict_derivation(
-    derivation = derive_var_extreme_flag,
-    args = params(
-      new_var = AEHSPBFL,
-      by_vars = vars(USUBJID),
-      order = vars(TEMP_SEVN, AESTDY, AESEQ),
-      mode = "first"
-    ),
-    filter = AESTDY > 0
-  )
-```
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  dataset = ae_04,
-  display_vars = vars(USUBJID, AESEV, AESTDY, AESEQ, AEHSEVFL, AEHSPBFL)
+  display_vars = vars(USUBJID, AESTDY, AESEQ, AESEV, AEHSEVFL)
 )
 ```
 
