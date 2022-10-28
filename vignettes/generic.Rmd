@@ -60,7 +60,7 @@ ex <- convert_blanks_to_na(admiral_ex)
 ae <- convert_blanks_to_na(admiral_ae)
 ```
 ```{r echo=FALSE}
-# Select interesting test patients and make the test data more realistic for adsl_05 example
+# Filter test patients and make more realistic and interesting for the examples
 dm <- filter(dm, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
 ds <- filter(ds, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057")) %>%
   mutate(DSSTDTC = case_when(
@@ -68,7 +68,15 @@ ds <- filter(ds, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057")) %>
     TRUE ~ DSSTDTC
   ))
 ex <- filter(ex, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
-ae <- filter(ae, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
+ae <- filter(ae, USUBJID %in% c("01-701-1111", "01-701-1047")) %>%
+  mutate(AESTDTC = case_when(
+    USUBJID == "01-701-1111" & AESTDY == "-61" ~ "2012-09-14",
+    TRUE ~ AESTDTC
+  )) %>%
+  mutate(AESTDY = case_when(
+    USUBJID == "01-701-1111" & AESTDY == "-61" ~ 8,
+    TRUE ~ AESTDY
+  ))
 ```
 
 ## Difference between _merged_ and _joined_ functions
@@ -285,8 +293,8 @@ datacut source is the additional dataframe that needs to be joined.
 # Create a unique datacut day for each patient
 datacut <- tribble(
   ~USUBJID, ~DCUTDY, ~DCUTFL,
-  "01-701-1111", 5, "Y",
-  "01-701-1047", 25, "Y"
+  "01-701-1047", 25, "Y",
+  "01-701-1111", 5, "Y"
 )
 
 # Join datacut flag to AE only for events up to and including this date
@@ -317,7 +325,7 @@ post-baseline up to and excluding the current AE day.
 
 ```{r eval=TRUE}
 # Add a numeric version of severity for sorting with severe=1, moderate=2, mild=3
-ae_ext <- ae %>%
+ae_ext <- ae_01 %>%
   mutate(TEMP_SEVN = as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD"))))
 
 # Derive nadir severity (AENADSEV)
@@ -361,7 +369,7 @@ on which respective function is used between `derive_var_extreme_flag()`,
 
 **Example**\
 
-Building on the above example, let's use `derive_var_extreme_flag()` to now flag
+Building on the above case, let's use `derive_var_extreme_flag()` to now flag
 the earliest observation with the highest severity per patient.
 
 ```{r eval=TRUE}
@@ -370,7 +378,7 @@ ae_03 <- ae_02 %>%
   derive_var_extreme_flag(
     new_var = AEHSEVFL,
     by_vars = vars(USUBJID),
-    order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+    order = vars(TEMP_SEVN, AESTDY, AESEQ),
     mode = "first"
   )
 ```
@@ -379,6 +387,32 @@ ae_03 <- ae_02 %>%
 dataset_vignette(
   dataset = ae_03,
   display_vars = vars(USUBJID, AESEV, AESTDY, AESEQ, AEHSEVFL)
+)
+```
+
+If we wanted to only flag post-baseline records here as in the nadir example,
+we could use `restrict_derivation()` as follows, as explained at
+[Higher Order Functions](higher_order.html).
+
+```{r eval=TRUE}
+# Highest severity flag post-baseline (AEHSPBFL)
+ae_04 <- ae_03 %>%
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      new_var = AEHSPBFL,
+      by_vars = vars(USUBJID),
+      order = vars(TEMP_SEVN, AESTDY, AESEQ),
+      mode = "first"
+    ),
+    filter = AESTDY > 0
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  dataset = ae_04,
+  display_vars = vars(USUBJID, AESEV, AESTDY, AESEQ, AEHSEVFL, AEHSPBFL)
 )
 ```
 
