@@ -4,13 +4,16 @@
 \alias{assert_vars}
 \title{Is an Argument a List of Variables?}
 \usage{
-assert_vars(arg, optional = FALSE)
+assert_vars(arg, optional = FALSE, expect_names = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
+
+\item{expect_names}{If the argument is set to \code{TRUE}, it is checked if all
+variables are named, e.g., \code{vars(APERSDT = APxxSDT, APEREDT = APxxEDT)}.}
 }
 \value{
 The function throws an error if \code{arg} is not a list of variables created using \code{vars()}
@@ -31,12 +34,21 @@ try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
 try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 
 try(example_fun(vars(USUBJID, toupper(PARAMCD), desc(AVAL))))
+
+example_fun_name <- function(by_vars) {
+  assert_vars(by_vars, expect_names = TRUE)
+}
+
+example_fun_name(vars(APERSDT = APxxSDT, APEREDT = APxxEDT))
+
+try(example_fun_name(vars(APERSDT = APxxSDT, APxxEDT)))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
 \code{\link{assert_character_scalar}()},
 \code{\link{assert_character_vector}()},
 \code{\link{assert_data_frame}()},
+\code{\link{assert_date_vector}()},
 \code{\link{assert_expr}()},
 \code{\link{assert_filter_cond}()},
 \code{\link{assert_function_param}()},

@@ -1,11 +1,14 @@
-library(admiral.test)
+# assert_has_variables ----
+## Test 1: error if a required variable is missing ----
+test_that("assert_has_variables Test 1: error if a required variable is missing", {
+  data <- tibble::tribble(
+    ~USUBJID,
+    "1"
+  )
 
-test_that("Test 1 : `assert_has_variables` an error is thrown if a required
-           variable/s is missing", {
-  data(admiral_dm)
 
   expect_error(
-    assert_has_variables(admiral_dm, "TRT01P"),
+    assert_has_variables(data, "TRT01P"),
     "Required variable `TRT01P` is missing."
   )
   expect_error(
@@ -13,14 +16,19 @@ test_that("Test 1 : `assert_has_variables` an error is thrown if a required
   )
 })
 
-test_that("Test 2 : `assert_has_variables` no error is thrown if a required
-           variable exists", {
-  data(admiral_dm)
+## Test 2: no error if a required variable exists ----
+test_that("assert_has_variables Test 2: no error if a required variable exists", {
+  data <- tibble::tribble(
+    ~USUBJID,
+    "1"
+  )
 
-  expect_error(assert_has_variables(admiral_dm, "USUBJID"), NA)
+  expect_error(assert_has_variables(data, "USUBJID"), NA)
 })
 
-test_that("Test 3 : `assert_filter_cond` works as expected", {
+# assert_filter_cond ----
+## Test 3: `assert_filter_cond` works as expected ----
+test_that("assert_filter_cond Test 3: `assert_filter_cond` works as expected", {
   fc <- quo(AGE == 64)
   expect_identical(
     assert_filter_cond(fc),
@@ -45,15 +53,21 @@ test_that("Test 3 : `assert_filter_cond` works as expected", {
   )
 })
 
-test_that("Test 4 : is_valid_sec_min works as expected", {
+# is_valid_sec_min ----
+## Test 4: is_valid_sec_min works as expected ----
+test_that("is_valid_sec_min Test 4: is_valid_sec_min works as expected", {
   expect_true(is_valid_sec_min(59))
 })
 
-test_that("Test 5 : is_valid_hour works as expected", {
+# is_valid_hour ----
+## Test 5: is_valid_hour works as expected ----
+test_that("is_valid_hour Test 5: is_valid_hour works as expected", {
   expect_true(is_valid_hour(23))
 })
 
-test_that("Test 6 : `assert_data_frame` throws an error if not a dataframe", {
+# assert_data_fram ----
+## Test 6: error if not a dataframe ----
+test_that("assert_data_fram Test 6: error if not a dataframe", {
   example_fun <- function(dataset) {
     assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
   }
@@ -62,19 +76,26 @@ test_that("Test 6 : `assert_data_frame` throws an error if not a dataframe", {
   )
 })
 
-test_that("Test 7 : `assert_data_frame` throws an error if dataframe is grouped", {
+## Test 7: error if dataframe is grouped ----
+test_that("assert_data_fram Test 7: error if dataframe is grouped", {
   example_fun <- function(dataset) {
     assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
   }
 
-  admiral_dm <- admiral_dm %>% group_by(ARMCD)
+  data <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~ARMCD,
+    "xyz",    "1",      "PLACEBO",
+    "xyz",    "2",      "ACTIVE"
+  ) %>% group_by(ARMCD)
 
   expect_error(
-    example_fun(admiral_dm)
+    example_fun(data)
   )
 })
 
-test_that("Test 8 : `assert_character_scalar` throws an error if not a character scaler string", {
+# assert_character_scalar ----
+## Test 8: error if not a character scaler string ----
+test_that("assert_character_scalar Test 8: error if not a character scaler string", {
   example_fun2 <- function(msg_type) {
     msg_type <- assert_character_scalar(msg_type,
       values = c("warning", "error"), case_sensitive = FALSE
@@ -87,7 +108,8 @@ test_that("Test 8 : `assert_character_scalar` throws an error if not a character
   expect_error(example_fun2(2))
 })
 
-test_that("Test 9 : `assert_character_scalar` throws an error if input is a vector", {
+## Test 9: error if input is a vector ----
+test_that("assert_character_scalar Test 9: error if input is a vector", {
   example_fun2 <- function(msg_type) {
     msg_type <- assert_character_scalar(msg_type,
       values = c("warning", "error"), case_sensitive = FALSE
@@ -100,16 +122,26 @@ test_that("Test 9 : `assert_character_scalar` throws an error if input is a vect
   expect_error(example_fun2(c("admiral", "admiralonco")))
 })
 
-test_that("Test 10 : `assert_order_vars` returns invisible if used correctly", {
-  expect_invisible(assert_order_vars(vars(USUBJID, PARAMCD, desc(AVISITN))))
+# assert_vars ----
+## Test 10: no error if expected input ----
+test_that("assert_vars Test 10: no error if expected input", {
+  expect_invisible(assert_vars(vars(USUBJID, PARAMCD)))
+  expect_invisible(assert_vars(
+    vars(APERSDT = APxxSDT, APEREDT = APxxEDT),
+    expect_names = TRUE
+  ))
 })
 
-test_that("Test 11 : `assert_order_vars` returns errors if used incorrectly", {
-  expect_error(assert_order_vars(rlang::exprs(USUBJID, PARAMCD)))
-  expect_error(assert_order_vars(c("USUBJID", "PARAMCD", "VISIT")))
-  expect_error(assert_order_vars(vars(USUBJID, toupper(PARAMCD), -AVAL)))
+## Test 11: error if unexpected input ----
+test_that("assert_vars Test 11: error if unexpected input", {
+  expect_error(assert_vars(AVAL + 1))
+  expect_error(assert_vars(rlang::exprs(USUBJID, PARAMCD)))
+  expect_error(assert_vars(c("USUBJID", "PARAMCD", "VISIT")))
+  expect_error(assert_vars(vars(USUBJID, AVAL + 2)))
+  expect_error(assert_vars(vars(APERSDT = APxxSDT, APxxEDT), expect_names = TRUE))
 })
 
+# assert_data_frame ----
 test_that("Test 12 : `assert_data_frame` doesn't throw an error
           if optional is TRUE and `arg` is NULL", {
   example_fun <- function(dataset) {
@@ -145,6 +177,7 @@ test_that("Test 14 : `assert_data_frame` throws an error if required variable is
   )
 })
 
+# assert_character_scalar ----
 test_that("Test 15 : `assert_character_scalar` doesn't throw an error if
           optional is TRUE and `arg` is NULL", {
   example_fun <- function(character) {
@@ -196,6 +229,7 @@ test_that("Test 19 : `assert_character_vector` throws an error
   )
 })
 
+# assert_logical_scalar ----
 test_that("Test 20 : `assert_logical_scalar` doesn't throw an error
           if optional is TRUE and `arg` is NULL", {
   example_fun <- function(arg) {
@@ -217,6 +251,7 @@ test_that("Test 21 : `assert_logical_scalar` throws an error if `arg` is not TRU
   expect_error(example_fun("test"))
 })
 
+# assert_symbol ----
 test_that("Test 22 : `assert_symbol` doesn't throw an error if optional = TRUE and `arg` = NULL", {
   f <- function(var) {
     v <- enquo(var)
@@ -281,6 +316,7 @@ test_that("Test 25 : `assert_symbol` doesn't throw an error if `arg` is a symbol
   )
 })
 
+# assert_expr ----
 test_that("Test 26 : `assert_expr` doesn't throw an error if `arg` is an expression", {
   f <- function(var) {
     v <- enquo(var)
@@ -344,6 +380,7 @@ test_that("Test 29 : `assert_expr` throws an error if `arg` is not an expression
   )
 })
 
+# assert_vars ----
 test_that("Test 30 : `assert_vars` throws an error
           if `arg` is not a list of unquoted variable names", {
   example_fun <- function(arg) {
@@ -369,6 +406,7 @@ test_that("Test 31 : `assert_vars` throws an error
   )
 })
 
+# assert_order_vars ----
 test_that("Test 32 : `assert_order_vars` throws an error
           if `arg` is not a list of unquoted variable names or `desc()` calls", {
   example_fun <- function(arg) {
@@ -392,6 +430,7 @@ test_that("Test 33 : `assert_order_vars` doesn't throw an error
   )
 })
 
+# assert_integer_scalar ----
 test_that("Test 34 : `assert_integer_scalar` doesn't throw an error
           if `arg` is NULL and optional is TRUE", {
 
@@ -442,6 +481,7 @@ test_that("Test 37 : `assert_integer_scalar` throws an error
   expect_error(example_fun(1.5))
 })
 
+# assert_numeric_vector ----
 test_that("Test 38 : `assert_numeric_vector` doesn't throw an error
           if `arg` is NULL and optional is TRUE", {
 
@@ -454,6 +494,7 @@ test_that("Test 38 : `assert_numeric_vector` doesn't throw an error
   )
 })
 
+# assert_integer_scalar ----
 test_that("Test 39 : `assert_integer_scalar` throws an error if `arg` is not an integer scalar", {
 
   example_fun <- function(arg) {
@@ -467,6 +508,7 @@ test_that("Test 39 : `assert_integer_scalar` throws an error if `arg` is not an 
   expect_error(example_fun("1.5"))
 })
 
+# assert_s3_class ----
 test_that("Test 40 : `assert_s3_class` throws an error
           if `arg` is not an object of a specific class S3", {
 
@@ -499,6 +541,7 @@ test_that("Test 42 : `assert_s3_class` doesn't throw an error
   expect_invisible(example_fun(as.factor("test")))
 })
 
+# assert_list_of ----
 test_that("Test 43 : `assert_list_of` throws an error
           if `arg` is not a list of objects of a specific class S3", {
 
@@ -535,6 +578,7 @@ test_that("Test 45 : `assert_list_of` doesn't throw an error
     )
 })
 
+# assert_named_exprs ----
 test_that("Test 46 : `assert_named_exprs` throws an error
           if `arg` is not a named list of expressions", {
 
@@ -577,6 +621,7 @@ test_that("Test 48 : `assert_named_exprs` doesn't throw an error
     )
 })
 
+# assert_function ----
 test_that("Test 49 : `assert_function` throws an error
           if `arg` is not a function", {
 
@@ -627,6 +672,8 @@ test_that("Test 52 : `assert_function` throws an error
 
 })
 
+
+# assert_function_param ----
 test_that("Test 53 : `assert_function_param` doesn't throw an error
           if `arg` is a parameter of a function", {
 
@@ -648,6 +695,7 @@ test_that("Test 54 : `assert_function_param` throws an error
   expect_error(assert_function_param("hello", params = c("surname", "firstname")))
 })
 
+# assert_unit ----
 test_that("Test 55 : `assert_unit` doesn't throw an error
           if the parameter is provided in the expected unit", {
 
@@ -690,6 +738,7 @@ test_that("Test 57 : `assert_unit` throws an error if the unit variable differs 
   )
 })
 
+# assert_param_does_not_exist ----
 test_that("Test 58 : `assert_param_does_not_exist` throws an error
           if the parameter exists in the input dataset", {
 
@@ -718,6 +767,7 @@ test_that("Test 59 : `assert_param_does_not_exist` doesn't throw an error
   )
 })
 
+# assert_varval_list ----
 test_that("Test 60 : `assert_varval_list` throws an error
           if `arg` is not a list of variable-value expressions", {
   example_fun <- function(arg) {
@@ -798,6 +848,7 @@ test_that("Test 66 : `assert_varval_list` doesn't throw an error
   )
 })
 
+# assert_list_element ----
 test_that("Test 67 : `assert_list_element` doesn't throw an error
           if the elements of a list of named lists/classes fulfill a certain condition", {
 
@@ -819,6 +870,7 @@ test_that("Test 68 : `assert_list_element` throws an error
   )
 })
 
+# assert_one_to_one ----
 test_that("Test 69 : `assert_one_to_one` throws an error
           if there is a one to many mapping between two lists of variables", {
 
@@ -835,6 +887,7 @@ test_that("Test 70 : `assert_one_to_one` throws an error
     )
 })
 
+# assert_date_var ----
 test_that("Test 71 : `assert_date_var` throws an error
           if a variable in a dataset is not a date or datetime variable", {
 
@@ -855,4 +908,15 @@ test_that("Test 71 : `assert_date_var` throws an error
       var = USUBJID
     )
   )
+})
+
+# assert_date_vector ----
+## Test 72: returns error if input vector is not a date formatted ----
+test_that("assert_date_vector Test 14: returns error if input vector is not a date formatted", {
+  expect_error(assert_date_vector("2018-08-23"))
+})
+
+## Test 73: returns invisible if input is date formatted ----
+test_that("assert_date_vector Test 15: returns invisible if input is date formatted", {
+  expect_invisible(assert_date_vector(as.Date("2022-10-25")))
 })

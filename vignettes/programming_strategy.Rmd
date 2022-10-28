@@ -223,7 +223,7 @@ and, if there’s an invalid input, the function should stop immediately with an
 An exception is the case where a variable to be added by a function already exists in the input dataset: 
 here only a warning should be displayed and the function should continue executing.
 
-Inputs should be checked either using `asserthat::assert_that()` or custom assertion functions defined in [`R/assertions.R`](https://github.com/pharmaverse/admiral/blob/main/R/assertions.R). 
+Inputs should be checked either using `asserthat::assert_that()` or custom assertion functions defined in [`R/assertions.R`](https://github.com/pharmaverse/admiraldev/blob/main/R/assertions.R).
 These custom assertion functions should either return an error in case of an invalid input or return nothing.
 
 For the most common types of input parameters like a single variable, a list of
@@ -330,7 +330,8 @@ Any newly added variable(-s) should be mentioned here.
 * `@examples`: A fully self-contained example of how to use the function. 
 Self-contained means that, if this code is executed in a new R session, it will run without errors. 
 That means any packages need to be loaded with `library()` and any datasets needed either to be created directly inside the example code or loaded using `data()`.
-If a dataset is created in the example, it should be done so using the function `tribble()` (specify `library(tibble)` before calling this function).  
+If a dataset is created in the example, it should be done so using the function `tribble()` (specify `library(tibble)` before calling this function).
+If other functions are called in the example, please specify `library(pkg_name)` then refer to the respective function `fun()` as opposed to the preferred `pkg_name::fun()` notation as specified in [Unit Test Guidance](unit_test_guidance.html#set-up-the-test-script).
 Make sure to align columns as this ensures quick code readability. 
 
 Copying descriptions should be avoided as it makes the documentation hard to
@@ -388,6 +389,7 @@ add an issue in GitHub for discussion.
 |-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
 | `com_date_time`                                                                   | Date/Time Computation Functions that returns a vector                                                                    | 	
 | `com_bds_findings`                                                                | BDS-Findings Functions that returns a vector                                                                             |
+| `create_aux`                                                                      | Functions for Creating Auxiliary Datasets |
 | `datasets`                                                                        | Example datasets used within admiral                                                                                     |
 | `der_gen`                                                                         | General Derivation Functions that can be used for any ADaM.                                                              |
 | `der_date_time`                                                                   | Date/Time Derivation Function                                                                                            |
@@ -398,7 +400,8 @@ add an issue in GitHub for discussion.
 | `der_tte`                                                                         | Function used only for creating a Time to Event (TTE) Dataset                                                            |
 | `der_occds`                                                                       | OCCDS specific derivation of helper Functions                                                                            |
 | `der_prm_tte`                                                                     | TTE Functions for adding Parameters to TTE Dataset                                                                       |
-| `deprecated`                                                                      | Function which will be removed from admiral after next release.  See  [Deprecation Guidance](https://pharmaverse.github.io/admiral/articles/programming_strategy.html#deprecation).                                                                                                               |
+| `deprecated`                                                                      | Function which will be removed from admiral after next release.  See  [Deprecation Guidance](#deprecation).                                                                                                               |
+| `metadata`                                                                        | Auxiliary datasets providing definitions as input for derivations, e.g. grading criteria or dose frequencies         |
 | `utils_ds_chk`                                                                    | Utilities for Dataset Checking                                                                                           |	
 | `utils_fil`                                                                       | Utilities for Filtering Observations                                                                                     |
 | `utils_fmt`                                                                       | Utilities for Formatting Observations                                                                                    |	
@@ -488,7 +491,7 @@ The documentation will be updated at:
 
 + the description level for a function, 
 + the keywords will be replaced with `deprecated`
-+ the @family roxygen tag will be removed
++ the @family roxygen tag will become `deprecated`
 
     ```{r, eval=FALSE}
 #' Title of the function
@@ -498,6 +501,8 @@ The documentation will be updated at:
 #'
 #' This function is *deprecated*, please use `new_fun()` instead.
 #' .
+#' @family deprecated
+#'
 #' @keywords deprecated
 #' .
     ``` 
@@ -666,8 +671,8 @@ If meaningful, comments can cover multiple variables within a piece of code
 
 # R and package versions for development
 
-* The choice of R Version is not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in R Version 3.6.3, but that will change as we move forward with `{admiral}`. This need for a common development environment also carries over for our choice of package versions.  
-* GitHub allows us through the Actions/Workflows to test `{admiral}` under several versions of R as well as several versions of dependent R packages needed for `{admiral}`.  Currently we test `{admiral}` against 3.6.3 with a CRAN package snapshot from 2020-02-29, 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages.  You can view this workflow on our [GitHub Repository](https://github.com/pharmaverse/admiral/blob/main/.github/workflows/R-CMD-check.yml)
+* The choice of R Version is not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers.  We only use the three latest R versions and the closest date of snapshots of R packages available when that R version came out. This need for a common development environment also carries over for our choice of package versions.  
+* GitHub allows us through the Actions/Workflows to test `{admiral}` under several versions of R as well as several versions of dependent R packages needed for `{admiral}`.  Currently we test `{admiral}` against 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages.  You can view this workflow on our [GitHub Repository](https://github.com/pharmaverse/admiralci/blob/main/.github/workflows/r-cmd-check.yml)
 * This common development allows us to easily re-create bugs and provide solutions to each other issues that developers will encounter.  
 * Reviewers of Pull Requests when running code will know that their environment is identical to the initiator of the Pull Request.  This ensures faster review times and higher quality Pull Request reviews.
 * We achieve this common development environment by using a **lockfile** created from the [`renv`](https://rstudio.github.io/renv/) package. New developers will encounter a suggested `renv::restore()` in the console to revert or move forward your R version and package versions.
