@@ -6,13 +6,13 @@ test_that("assert_has_variables Test 1: error if a required variable is missing"
     "1"
   )
 
-
   expect_error(
     assert_has_variables(data, "TRT01P"),
     "Required variable `TRT01P` is missing."
   )
+
   expect_error(
-    assert_has_variables(admiral_dm, c("TRT01P", "AVAL"))
+    assert_has_variables(admiral.test::admiral_dm, c("TRT01P", "AVAL"))
   )
 })
 
@@ -158,7 +158,7 @@ test_that("Test 13 : `assert_data_frame` throws an error if required variables a
     assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
   }
 
-  admiral_dm <- admiral_dm %>% select(-c(STUDYID, USUBJID))
+  admiral_dm <- admiral.test::admiral_dm %>% select(-c(STUDYID, USUBJID))
 
   expect_error(
     example_fun(admiral_dm)
@@ -170,7 +170,7 @@ test_that("Test 14 : `assert_data_frame` throws an error if required variable is
     assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
   }
 
-  admiral_dm <- admiral_dm %>% select(-c(USUBJID))
+  admiral_dm <- admiral.test::admiral_dm %>% select(-c(USUBJID))
 
   expect_error(
     example_fun(admiral_dm)
@@ -309,6 +309,8 @@ test_that("Test 25 : `assert_symbol` doesn't throw an error if `arg` is a symbol
     assert_symbol(arg)
   }
 
+  library(admiral.test)
+
   expect_invisible(
     example_fun(
       f(admiral_dm)
@@ -328,7 +330,7 @@ test_that("Test 26 : `assert_expr` doesn't throw an error if `arg` is an express
 
   expect_invisible(
     example_fun(
-      f(admiral_dm)
+      f(admiral.test::admiral_dm)
     )
   )
 })
@@ -821,11 +823,12 @@ test_that("Test 66 : `assert_varval_list` doesn't throw an error
 # assert_list_element ----
 test_that("Test 67 : `assert_list_element` doesn't throw an error
           if the elements of a list of named lists/classes fulfill a certain condition", {
+  library(admiral.test)
   expect_invisible(
     assert_list_element(vars(DTHDOM = "AE", DTHSEQ = AESEQ), "DTHSEQ", TRUE, message_text = "")
   )
   expect_invisible(
-    assert_list_element(vars(DTHDOM = "AE", DTHSEQ = admiral_dm), "DTHSEQ",
+    assert_list_element(vars(DTHDOM = "AE", DTHSEQ = admiral.test::admiral_dm), "DTHSEQ",
       admiral_dm$DOMAIN == "DM",
       message_text = ""
     )
@@ -835,7 +838,7 @@ test_that("Test 67 : `assert_list_element` doesn't throw an error
 test_that("Test 68 : `assert_list_element` throws an error
           if the elements of a list of named lists/classes don't fulfill a certain condition", {
   expect_error(
-    assert_list_element(vars(DTHDOM = "AE", DTHSEQ = admiral_dm), "DTHSEQ",
+    assert_list_element(vars(DTHDOM = "AE", DTHSEQ = admiral.test::admiral_dm), "DTHSEQ",
       admiral_dm$DOMAIN == "GM",
       message_text = ""
     )
@@ -846,14 +849,14 @@ test_that("Test 68 : `assert_list_element` throws an error
 test_that("Test 69 : `assert_one_to_one` throws an error
           if there is a one to many mapping between two lists of variables", {
   expect_error(
-    assert_one_to_one(admiral_dm, vars(DOMAIN), vars(USUBJID))
+    assert_one_to_one(admiral.test::admiral_dm, vars(DOMAIN), vars(USUBJID))
   )
 })
 
 test_that("Test 70 : `assert_one_to_one` throws an error
           if there is a many to one mapping between two lists of variables", {
   expect_error(
-    assert_one_to_one(admiral_dm, vars(USUBJID), vars(DOMAIN))
+    assert_one_to_one(admiral.test::admiral_dm, vars(USUBJID), vars(DOMAIN))
   )
 })
 
@@ -881,11 +884,11 @@ test_that("Test 71 : `assert_date_var` throws an error
 
 # assert_date_vector ----
 ## Test 72: returns error if input vector is not a date formatted ----
-test_that("assert_date_vector Test 14: returns error if input vector is not a date formatted", {
+test_that("assert_date_vector Test 72: returns error if input vector is not a date formatted", {
   expect_error(assert_date_vector("2018-08-23"))
 })
 
 ## Test 73: returns invisible if input is date formatted ----
-test_that("assert_date_vector Test 15: returns invisible if input is date formatted", {
+test_that("assert_date_vector Test 73: returns invisible if input is date formatted", {
   expect_invisible(assert_date_vector(as.Date("2022-10-25")))
 })
