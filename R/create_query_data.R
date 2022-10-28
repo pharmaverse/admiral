@@ -130,9 +130,10 @@
 #' pregsmq <- query(
 #'   prefix = "SMQ02",
 #'   id = auto,
-#'   definition = smq_select(
+#'   definition = basket_select(
 #'     name = "Pregnancy and neonatal topics (SMQ)",
-#'     scope = "NARROW"
+#'     scope = "NARROW",
+#'     type = "smq"
 #'   )
 #' )
 #'
@@ -148,8 +149,8 @@
 #' # In a real application a company-specific function must be used.
 #' create_query_data(
 #'   queries = list(pregsmq, bilismq),
-#'   get_smq_fun = admiral.test:::get_smq_terms,
-#'   meddra_version = "20.1"
+#'   get_terms_fun = admiral.test:::get_smq_terms,
+#'   version = "20.1"
 #' )
 #'
 #' # create a query dataset for SDGs
@@ -207,6 +208,7 @@ create_query_data <- function(queries,
   for (i in seq_along(queries)) {
     # get term names and term variable
     if (inherits(queries[[i]]$definition, "basket_select")) {
+      #query is a basket
       query_data[[i]] <- get_terms_from_db(
         version = version,
         fun = get_terms_fun,
@@ -216,7 +218,7 @@ create_query_data <- function(queries,
         expect_query_id = !is.null(queries[[i]]$id),
         i = i,
         temp_env = temp_env,
-        type = type
+        type = queries[[i]]$definition$type
       )
       query_data[[i]] <- mutate(query_data[[i]],
         QUERY_SCOPE = queries[[i]]$definition$scope

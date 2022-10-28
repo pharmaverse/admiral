@@ -130,9 +130,10 @@ create_query_data(queries = list(cq))
 pregsmq <- query(
   prefix = "SMQ02",
   id = auto,
-  definition = smq_select(
+  definition = basket_select(
     name = "Pregnancy and neonatal topics (SMQ)",
-    scope = "NARROW"
+    scope = "NARROW",
+    type = "smq"
   )
 )
 
@@ -148,8 +149,8 @@ bilismq <- query(
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(pregsmq, bilismq),
-  get_smq_fun = admiral.test:::get_smq_terms,
-  meddra_version = "20.1"
+  get_terms_fun = admiral.test:::get_smq_terms,
+  version = "20.1"
 )
 
 # create a query dataset for SDGs
