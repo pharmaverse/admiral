@@ -295,10 +295,10 @@ ae_01 <- ae %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  dataset = ae_01,
-  display_vars = vars(USUBJID, AEDECOD, AESTDY, DCUTFL)
-)
+ae_01 %>%
+  select(USUBJID, AEDECOD, AESTDY, DCUTFL) %>%
+  arrange(USUBJID, AESTDY) %>%
+  dataset_vignette(display_vars = vars(USUBJID, AEDECOD, AESTDY, DCUTFL))
 ```
 
 The `derive_vars_joined()` function could also be used to join the original dataframe
@@ -330,10 +330,10 @@ ae_02 <- ae_ext %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  dataset = ae_02,
-  display_vars = vars(USUBJID, AESTDY, AESEV, AENADSEV)
-)
+ae_02 %>%
+  select(USUBJID, AESTDY, AESEV, AENADSEV) %>%
+  arrange(USUBJID, AESTDY) %>%
+  dataset_vignette(display_vars = vars(USUBJID, AESTDY, AESEV, AENADSEV))
 ```
 
 There exists a further function `derive_var_confirmation_flag()`, which follows
@@ -370,10 +370,10 @@ ae_03 <- ae_02 %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  dataset = ae_03,
-  display_vars = vars(USUBJID, AESTDY, AESEQ, AESEV, AEHSEVFL)
-)
+ae_03 %>%
+  select(USUBJID, AESTDY, AESEQ, AESEV, AEHSEVFL) %>%
+  arrange(USUBJID, AESTDY, AESEQ) %>%
+  dataset_vignette(display_vars = vars(USUBJID, AESTDY, AESEQ, AESEV, AEHSEVFL))
 ```
 
 Common further examples of usage of this set of functions could be using
