@@ -69,8 +69,6 @@ derive_vars_query(adae, queries)
 \code{\link[=create_query_data]{create_query_data()}} \code{\link[=assert_valid_queries]{assert_valid_queries()}}
 
 OCCDS Functions: 
-\code{\link{create_query_data}()},
-\code{\link{create_single_dose_dataset}()},
 \code{\link{derive_var_trtemfl}()},
 \code{\link{derive_vars_atc}()},
 \code{\link{get_terms_from_db}()}

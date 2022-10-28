@@ -205,9 +205,9 @@ test_that("derive_var_ontrtfl Test 8: considering time for ref_end_date", {
     "TEST01", "PAT03",  "2020-02-10T13:00", NA
   ) %>%
     mutate(
-      ADTM = ymd_hm(ADTM),
-      TRTSDTM = ymd_hm("2020-01-01T12:00"),
-      TRTEDTM = ymd_hm("2020-02-01T12:00")
+      ADTM = lubridate::ymd_hm(ADTM),
+      TRTSDTM = lubridate::ymd_hm("2020-01-01T12:00"),
+      TRTEDTM = lubridate::ymd_hm("2020-02-01T12:00")
     )
 
   input <- select(expected_output, -ONTRTFL)
