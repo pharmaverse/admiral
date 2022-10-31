@@ -278,9 +278,9 @@ datacut source is the additional dataframe that needs to be joined.
 ```{r eval=TRUE}
 # Create a unique datacut day for each patient
 datacut <- tribble(
-  ~USUBJID, ~DCUTDY, ~DCUTFL,
-  "01-701-1047", 25, "Y",
-  "01-701-1111", 5, "Y"
+  ~USUBJID,      ~DCUTDY, ~DCUTFL,
+  "01-701-1047",      25, "Y",
+  "01-701-1111",       5, "Y"
 )
 
 # Join datacut flag to AE only for events up to and including this date
