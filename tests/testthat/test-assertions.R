@@ -252,7 +252,7 @@ test_that("Test 21 : `assert_logical_scalar` throws an error if `arg` is not TRU
 })
 
 # assert_symbol ----
-test_that("Test 22 : `assert_symbol` doesn't throw an error if optional = TRUE and `arg` = NULL", {
+test_that("Test 22 : `assert_symbol` does not throw an error if optional = TRUE and `arg` = NULL", {
   f <- function(var) {
     v <- enquo(var)
   }
