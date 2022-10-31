@@ -100,14 +100,19 @@ derive_param_first_event <- function(dataset,
                                      check_type = "warning") {
 
   ### DEPRECATION
-  deprecate_warn("0.9.0", "derive_param_first_event()", "derive_param_extreme_event()")
+  deprecate_warn("0.9.0",
+                 "derive_param_first_event()",
+                 "derive_param_extreme_event()")
+
+  filter_source <- enquo(filter_source)
+  date_var <- enquo(date_var)
 
   derive_param_extreme_event(
     dataset = dataset,
     dataset_adsl = dataset_adsl,
     dataset_source = dataset_source,
-    filter_source = filter_source,
-    date_var = date_var,
+    filter_source = !!filter_source,
+    date_var = !!date_var,
     subject_keys = subject_keys,
     set_values_to = set_values_to,
     check_type = check_type,
@@ -297,7 +302,7 @@ derive_param_extreme_event <- function(dataset,
 
     date_var_enquo <- enquo(date_var)
     order <- vars(!!date_var_enquo)
-    set_values_to <- vars(!!!set_values_to, ADT := !!date_var_enquo)
+    set_values_to <- vars(!!!set_values_to, ADT = !!date_var_enquo)
   }
   ### END DEPRECATION
 
@@ -343,7 +348,7 @@ derive_param_extreme_event <- function(dataset,
   new_obs <- bind_rows(yes = events, no = noevents, .id = 'HAD_EVENT') %>%
     mutate(
       AVALC = if_else(HAD_EVENT == "yes", "Y", "N"),
-      AVAL = if_else(HAD_EVENT == "no", 1, 0),
+      AVAL = if_else(HAD_EVENT == "yes", 1, 0),
       !!!set_values_to
     ) %>%
     select(-HAD_EVENT)

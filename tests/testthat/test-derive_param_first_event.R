@@ -29,18 +29,20 @@ adrs <- tibble::tribble(
   ) %>%
   select(-ADTC)
 
-# derive_param_first_event ----
-## derive_param_first_event Test 1: derive first PD date ----
-test_that("derive_param_first_event Test 1: derive first PD date", {
-  actual <- derive_param_first_event(
+# derive_param_extreme_event ----
+## derive_param_extreme_event Test 1: derive first PD date ----
+test_that("derive_param_extreme_event Test 1: derive first PD date", {
+  actual <- derive_param_extreme_event(
     adrs,
     dataset_adsl = adsl,
     dataset_source = adrs,
     filter_source = PARAMCD == "OVR" & AVALC == "PD",
-    date_var = ADT,
+    order = vars(ADT),
+    mode = "first",
     set_values_to = vars(
       PARAMCD = "PD",
-      ANL01FL = "Y"
+      ANL01FL = "Y",
+      ADT = ADT
     )
   )
 
@@ -66,17 +68,19 @@ test_that("derive_param_first_event Test 1: derive first PD date", {
   )
 })
 
-## derive_param_first_event Test 2: derive death date parameter ----
-test_that("derive_param_first_event Test 2: derive death date parameter", {
-  actual <- derive_param_first_event(
+## derive_param_extreme_event Test 2: derive death date parameter ----
+test_that("derive_param_extreme_event Test 2: derive death date parameter", {
+  actual <- derive_param_extreme_event(
     dataset = adrs,
     dataset_adsl = adsl,
     dataset_source = adsl,
     filter_source = !is.na(DTHDT),
-    date_var = DTHDT,
+    order = vars(DTHDT),
+    mode = "first",
     set_values_to = vars(
       PARAMCD = "DEATH",
-      ANL01FL = "Y"
+      ANL01FL = "Y",
+      ADT = DTHDT
     )
   )
 
@@ -91,6 +95,70 @@ test_that("derive_param_first_event Test 2: derive death date parameter", {
       mutate(
         STUDYID = "XX1234",
         PARAMCD = "DEATH",
+        ANL01FL = "Y"
+      )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "PARAMCD", "ADT")
+  )
+})
+
+adrs <- tibble::tribble(
+  ~USUBJID, ~ADTC,        ~AVALC, ~PARAMCD,
+  "1",      "2020-01-02", "PR",   "OVR",
+  "1",      "2020-02-01", "CR",   "OVR",
+  "1",      "2020-03-01", "NE",   "OVR",
+  "1",      "2020-04-01", "SD",   "OVR",
+  "2",      "2021-06-15", "SD",   "OVR",
+  "2",      "2021-07-16", "SD",   "OVR",
+  "2",      "2021-09-14", "NE",   "OVR",
+  "3",      "2021-08-03", "NE",   "OVR",
+  "1",      "2020-01-02", "PR",   "OVRF",
+  "1",      "2020-02-01", "CR",   "OVRF",
+  "1",      "2020-03-01", "NE",   "OVRF",
+  "1",      "2020-04-01", "SD",   "OVRF",
+  "2",      "2021-06-15", "SD",   "OVRF",
+  "2",      "2021-07-16", "SD",   "OVRF",
+  "2",      "2021-09-14", "NE",   "OVRF",
+  "3",      "2021-08-03", "NE",   "OVRF"
+) %>%
+  mutate(
+    STUDYID = "XX1234",
+    ADT = ymd(ADTC)
+  ) %>%
+  select(-ADTC)
+
+## derive_param_extreme_event Test 3: derive date of latest evaluable
+## tumor assessment parameter ----
+test_that("derive_param_extreme_event Test 3: derive latest evaluable tumor assessment date parameter", {
+  actual <- derive_param_extreme_event(
+    dataset = adrs,
+    dataset_adsl = adsl,
+    dataset_source = adrs,
+    filter_source = PARAMCD == "OVR" & AVALC != "NE",
+    order = vars(ADT),
+    mode = "last",
+    set_values_to = vars(
+      PARAMCD = "LSTEVLDT",
+      ANL01FL = "Y",
+      ADT = ADT
+    )
+  )
+
+  expected <- bind_rows(
+    adrs,
+    tibble::tribble(
+      ~USUBJID, ~ADT,              ~AVALC, ~AVAL,
+      "1",      ymd("2020-04-01"), "Y",    1,
+      "2",      ymd("2021-07-16"), "Y",    1,
+      "3",      ymd(""),           "N",    0
+    ) %>%
+      mutate(
+        STUDYID = "XX1234",
+        PARAMCD = "LSTEVLDT",
         ANL01FL = "Y"
       )
   )
