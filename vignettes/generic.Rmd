@@ -333,7 +333,7 @@ ae_02 <- ae_ext %>%
 ae_02 %>%
   select(USUBJID, AESTDY, AESEV, AENADSEV) %>%
   arrange(USUBJID, AESTDY) %>%
-  dataset_vignette(display_vars = vars(USUBJID, AESTDY, AESEV, AENADSEV))
+  dataset_vignette(display_vars = vars(USUBJID, AEDECOD, AESTDY, AESEV, AENADSEV))
 ```
 
 There exists a further function `derive_var_confirmation_flag()`, which follows
