@@ -331,7 +331,7 @@ ae_02 <- ae_ext %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 ae_02 %>%
-  select(USUBJID, AESTDY, AESEV, AENADSEV) %>%
+  select(USUBJID, AEDECOD, AESTDY, AESEV, AENADSEV) %>%
   arrange(USUBJID, AESTDY) %>%
   dataset_vignette(display_vars = vars(USUBJID, AEDECOD, AESTDY, AESEV, AENADSEV))
 ```
