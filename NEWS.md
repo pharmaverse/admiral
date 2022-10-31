@@ -28,6 +28,8 @@ reference dataset. (#1477)
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
 
+- Removed the `{assertthat}` dependency in `{admiral}` (#1392)
+
 ## Updates of Existing Functions
 
 - Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
