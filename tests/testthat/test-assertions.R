@@ -219,7 +219,7 @@ test_that("Test 18 : `assert_character_vector` throws an error if `arg` not a ch
 })
 
 test_that("Test 19 : `assert_character_vector` throws an error
-          if values are not NULL and `arg` not in values", {
+          if values are not NULL and `arg` is not in values", {
   example_fun <- function(character) {
     assert_character_vector(character, values = c("test", "oak"))
   }
