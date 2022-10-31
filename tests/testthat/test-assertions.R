@@ -189,7 +189,7 @@ test_that("Test 15 : `assert_character_scalar` doesn't throw an error if
   )
 })
 
-test_that("Test 16 : `assert_character_scalar` doesn't throw an error if case_sensitive is FALSE", {
+test_that("Test 16 : `assert_character_scalar` does not throw an error if case_sensitive is FALSE", {
   example_fun <- function(character) {
     assert_character_scalar(character, values = c("test"), case_sensitive = FALSE)
   }
