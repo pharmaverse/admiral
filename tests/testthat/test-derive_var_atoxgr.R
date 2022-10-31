@@ -1449,14 +1449,15 @@ test_that("derive_var_atoxgr, test 34: CTCAEv5 Hemoglobin increased", {
   )
 })
 
-### INR increased (NCICTCV4 AND V5 DIFFERENT)
+### INR increased (NCICTCV4)
+### NCICTCV5 different for grade 1
 ### Grade 3: >2.5 x ULN; >2.5 times above baseline if on anticoagulation
 ### Grade 2: >1.5 - 2.5 x ULN; >1.5 - 2.5 times above baseline if on anticoagulation
 ### Grade 1: >1 - 1.5 x ULN; >1 - 1.5 times above baseline if on anticoagulation
 
 # ---- derive_var_atoxgr, test 35: CTCAEv4 INR increased ----
 test_that("derive_var_atoxgr, test 35: CTCAEv4 INR increased", {
-  exp_out_ctcv4_16 <- tibble::tribble(
+  expected_inri <- tibble::tribble(
     ~ATOXDSCH,       ~AVAL, ~BASE, ~ANRHI, ~AVALU,        ~ATOXGRH, ~TESTNUM,
     "Not a term",    80,    120,   200,    NA_character_, NA,       1,
     NA_character_,   60,    50,    100,    NA_character_, NA,       2,
@@ -1481,11 +1482,11 @@ test_that("derive_var_atoxgr, test 35: CTCAEv4 INR increased", {
     # AVAL missing cannot grade
     "INR Increased", NA,    100,   100,    NA_character_, NA,       17,
   )
-  input_ctcv4_16 <- exp_out_ctcv4_16 %>%
+  input_inri <- expected_inri %>%
     select(-ATOXGRH)
 
-  actual_output_ctcv4_16 <- derive_var_atoxgr_dir(
-    input_ctcv4_16,
+  actual_inri <- derive_var_atoxgr_dir(
+    input_inri,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -1494,8 +1495,60 @@ test_that("derive_var_atoxgr, test 35: CTCAEv4 INR increased", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_16,
-    compare = actual_output_ctcv4_16,
+    base = expected_inri,
+    compare = actual_inri,
+    keys = c("TESTNUM")
+  )
+})
+
+### INR increased (NCICTCV4)
+### NCICTCV5 different for grade 1
+### Grade 3: >2.5 x ULN; >2.5 times above baseline if on anticoagulation
+### Grade 2: >1.5 - 2.5 x ULN; >1.5 - 2.5 times above baseline if on anticoagulation
+### Grade 1: >1.2 - 1.5 x ULN; >1 - 1.5 times above baseline if on anticoagulation
+
+# ---- derive_var_atoxgr, test 36: CTCAEv5 INR increased ----
+test_that("derive_var_atoxgr, test 36: CTCAEv5 INR increased", {
+  expected_inri <- tibble::tribble(
+    ~ATOXDSCH,       ~AVAL, ~BASE, ~ANRHI, ~AVALU,        ~ATOXGRH, ~TESTNUM,
+    "Not a term",    80,    120,   200,    NA_character_, NA,       1,
+    NA_character_,   60,    50,    100,    NA_character_, NA,       2,
+    # GRADE derived from AVAL against ANRHI
+    "INR IncreaSed", 251,   200,   100,    NA_character_, "3",      3,
+    "INR Increased", 250,   199,   100,    NA_character_, "2",      4,
+    "INR Increased", 151,   150,   100,    NA_character_, "2",      5,
+    "INR Increased", 150,   150,   100,    NA_character_, "1",      6,
+    "INR Increased", 121,   150,   100,    NA_character_, "1",      7,
+    "INR Increased", 120,   100,   100,    NA_character_, "0",      8,
+    # GRADE derived from AVAL against BASE
+    "INR IncreaSed", 251,   100,   200,    NA_character_, "3",      9,
+    "INR Increased", 250,   100,   199,    NA_character_, "2",      10,
+    "INR Increased", 151,   100,   150,    NA_character_, "2",      11,
+    "INR Increased", 150,   100,   150,    NA_character_, "1",      12,
+    "INR Increased", 101,   100,   150,    NA_character_, "1",      13,
+    "INR Increased", 100,   100,   100,    NA_character_, "0",      14,
+    # BASE missing - AVAL <= ANRLO cannot grade as NORMAL
+    "INR Increased", 100,   NA,    100,    NA_character_, NA,       15,
+    # ANRHI missing - AVAL <= BASE cannot grade as NORMAL
+    "INR Increased", 100,   100,   NA,     NA_character_, NA,       16,
+    # AVAL missing cannot grade
+    "INR Increased", NA,    100,   100,    NA_character_, NA,       17,
+  )
+  input_inri <- expected_inri %>%
+    select(-ATOXGRH)
+
+  actual_inri <- derive_var_atoxgr_dir(
+    input_inri,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_inri,
+    compare = actual_inri,
     keys = c("TESTNUM")
   )
 })
@@ -1527,8 +1580,8 @@ expected_lip <- tibble::tribble(
 input_lip <- expected_lip %>%
   select(-ATOXGRH)
 
-# ---- derive_var_atoxgr, test 36: CTCAEv4 Lipase increased ----
-test_that("derive_var_atoxgr, test 36: CTCAEv4 Lipase increased", {
+# ---- derive_var_atoxgr, test 37: CTCAEv4 Lipase increased ----
+test_that("derive_var_atoxgr, test 37: CTCAEv4 Lipase increased", {
 
   actual_lip <- derive_var_atoxgr_dir(
     input_lip,
@@ -1546,8 +1599,8 @@ test_that("derive_var_atoxgr, test 36: CTCAEv4 Lipase increased", {
   )
 })
 
-# ---- derive_var_atoxgr, test 37: CTCAEv5 Lipase increased ----
-test_that("derive_var_atoxgr, test 37: CTCAEv5 Lipase increased", {
+# ---- derive_var_atoxgr, test 38: CTCAEv5 Lipase increased ----
+test_that("derive_var_atoxgr, test 38: CTCAEv5 Lipase increased", {
 
   actual_lip <- derive_var_atoxgr_dir(
     input_lip,
@@ -1604,8 +1657,8 @@ expected_lymd <- tibble::tribble(
 input_lymd <- expected_lymd %>%
   select(-ATOXGRL)
 
-# ---- derive_var_atoxgr, test 38: CTCAEv4 Lymphocyte count decreased ----
-test_that("derive_var_atoxgr, test 38: CTCAEv4 Lymphocyte count decreased", {
+# ---- derive_var_atoxgr, test 39: CTCAEv4 Lymphocyte count decreased ----
+test_that("derive_var_atoxgr, test 39: CTCAEv4 Lymphocyte count decreased", {
 
   actual_lymd <- derive_var_atoxgr_dir(
     input_lymd,
@@ -1623,8 +1676,8 @@ test_that("derive_var_atoxgr, test 38: CTCAEv4 Lymphocyte count decreased", {
   )
 })
 
-# ---- derive_var_atoxgr, test 39: CTCAEv5 Lymphocyte count decreased ----
-test_that("derive_var_atoxgr, test 39: CTCAEv5 Lymphocyte count decreased", {
+# ---- derive_var_atoxgr, test 40: CTCAEv5 Lymphocyte count decreased ----
+test_that("derive_var_atoxgr, test 40: CTCAEv5 Lymphocyte count decreased", {
 
   actual_lymd <- derive_var_atoxgr_dir(
     input_lymd,
@@ -1663,8 +1716,8 @@ expected_lymi <- tibble::tribble(
 input_lymi <- expected_lymi %>%
   select(-ATOXGRH)
 
-# ---- derive_var_atoxgr, test 40: CTCAEv4 Lymphocyte count increased ----
-test_that("derive_var_atoxgr, test 40: CTCAEv4 Lymphocyte count increased", {
+# ---- derive_var_atoxgr, test 41: CTCAEv4 Lymphocyte count increased ----
+test_that("derive_var_atoxgr, test 41: CTCAEv4 Lymphocyte count increased", {
 
   actual_lymi <- derive_var_atoxgr_dir(
     input_lymi,
@@ -1682,8 +1735,8 @@ test_that("derive_var_atoxgr, test 40: CTCAEv4 Lymphocyte count increased", {
   )
 })
 
-# ---- derive_var_atoxgr, test 41: CTCAEv5 Lymphocyte count increased ----
-test_that("derive_var_atoxgr, test 41: CTCAEv5 Lymphocyte count increased", {
+# ---- derive_var_atoxgr, test 42: CTCAEv5 Lymphocyte count increased ----
+test_that("derive_var_atoxgr, test 42: CTCAEv5 Lymphocyte count increased", {
 
   actual_lymi <- derive_var_atoxgr_dir(
     input_lymi,
@@ -1740,8 +1793,8 @@ input_neut <- expected_neut %>%
   select(-ATOXGRL)
 
 
-# ---- derive_var_atoxgr, test 42: CTCAEv4 Neutrophil count decreased ----
-test_that("derive_var_atoxgr, test 42: CTCAEv4 Neutrophil count decreased", {
+# ---- derive_var_atoxgr, test 43: CTCAEv4 Neutrophil count decreased ----
+test_that("derive_var_atoxgr, test 43: CTCAEv4 Neutrophil count decreased", {
 
   actual_neut <- derive_var_atoxgr_dir(
     input_neut,
@@ -1759,8 +1812,8 @@ test_that("derive_var_atoxgr, test 42: CTCAEv4 Neutrophil count decreased", {
   )
 })
 
-# ---- derive_var_atoxgr, test 43: CTCAEv5 Neutrophil count decreased ----
-test_that("derive_var_atoxgr, test 43: CTCAEv5 Neutrophil count decreased", {
+# ---- derive_var_atoxgr, test 44: CTCAEv5 Neutrophil count decreased ----
+test_that("derive_var_atoxgr, test 44: CTCAEv5 Neutrophil count decreased", {
 
   actual_neut <- derive_var_atoxgr_dir(
     input_neut,
@@ -1816,8 +1869,8 @@ expected_plate <- tibble::tribble(
 input_plate <- expected_plate %>%
   select(-ATOXGRL)
 
-# ---- derive_var_atoxgr, test 44: CTCAEv4 Platelet count decreased ----
-test_that("derive_var_atoxgr, test 44: CTCAEv4 Platelet count decreased", {
+# ---- derive_var_atoxgr, test 45: CTCAEv4 Platelet count decreased ----
+test_that("derive_var_atoxgr, test 45: CTCAEv4 Platelet count decreased", {
 
   actual_plate <- derive_var_atoxgr_dir(
     input_plate,
@@ -1835,8 +1888,8 @@ test_that("derive_var_atoxgr, test 44: CTCAEv4 Platelet count decreased", {
   )
 })
 
-# ---- derive_var_atoxgr, test 45: CTCAEv5 Platelet count decreased ----
-test_that("derive_var_atoxgr, test 45: CTCAEv5 Platelet count decreased", {
+# ---- derive_var_atoxgr, test 46: CTCAEv5 Platelet count decreased ----
+test_that("derive_var_atoxgr, test 46: CTCAEv5 Platelet count decreased", {
 
   actual_plate <- derive_var_atoxgr_dir(
     input_plate,
@@ -1855,35 +1908,37 @@ test_that("derive_var_atoxgr, test 45: CTCAEv5 Platelet count decreased", {
 })
 
 ### Serum amylase increased
+### NCICTCAEv4 and NCICTCAEv5 criteria essentially the same
 ### Grade 4: >5.0 x ULN
 ### Grade 3: >2.0 - 5.0 x ULN
 ### Grade 2: >1.5 - 2.0 x ULN
 ### Grade 1: >ULN - 1.5 x ULN
 
-# ---- derive_var_atoxgr, test 46: CTCAEv4 Serum amylase increased ----
-test_that("derive_var_atoxgr, test 46: CTCAEv4 Serum amylase increased", {
-  exp_out_ctcv4_22 <- tibble::tribble(
-    ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,         ~ATOXGRH,
-    "Not a term",              80,     120,    200,    NA_character_,  NA,
-    NA_character_,             60,     50,     100,    NA_character_,  NA,
-    "Serum amylase increased", 501,    0,      100,    NA_character_,  "4",
-    "Serum amylase increased", 500,    0,      100,    NA_character_,  "3",
-    "Serum amylase increased", 201,    0,      100,    NA_character_,  "3",
-    "Serum amylase increased", 200,    0,      100,    NA_character_,  "2",
-    "Serum amylase increased", 151,    0,      100,    NA_character_,  "2",
-    "Serum amylase increased", 150,    0,      100,    NA_character_,  "1",
-    "Serum amylase increased", 101,    0,      100,    NA_character_,  "1",
-    "Serum amylase increased", 100,    0,      100,    NA_character_,  "0",
-    # ANRHI missing cannot grade
-    "Serum amylase increased", 200,    0,      NA,     NA_character_,  NA,
-    # AVAL missing cannot grade
-    "Serum amylase increased", NA,     0,      100,    NA_character_,  NA,
-  )
-  input_ctcv4_22 <- exp_out_ctcv4_22 %>%
-    select(-ATOXGRH)
+expected_seri <- tibble::tribble(
+  ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,         ~ATOXGRH,
+  "Not a term",              80,     120,    200,    NA_character_,  NA,
+  NA_character_,             60,     50,     100,    NA_character_,  NA,
+  "Serum amylase increased", 501,    0,      100,    NA_character_,  "4",
+  "Serum amylase increased", 500,    0,      100,    NA_character_,  "3",
+  "Serum amylase increased", 201,    0,      100,    NA_character_,  "3",
+  "Serum amylase increased", 200,    0,      100,    NA_character_,  "2",
+  "Serum amylase increased", 151,    0,      100,    NA_character_,  "2",
+  "Serum amylase increased", 150,    0,      100,    NA_character_,  "1",
+  "Serum amylase increased", 101,    0,      100,    NA_character_,  "1",
+  "Serum amylase increased", 100,    0,      100,    NA_character_,  "0",
+  # ANRHI missing cannot grade
+  "Serum amylase increased", 200,    0,      NA,     NA_character_,  NA,
+  # AVAL missing cannot grade
+  "Serum amylase increased", NA,     0,      100,    NA_character_,  NA,
+)
+input_seri <- expected_seri %>%
+  select(-ATOXGRH)
 
-  actual_output_ctcv4_22 <- derive_var_atoxgr_dir(
-    input_ctcv4_22,
+# ---- derive_var_atoxgr, test 47: CTCAEv4 Serum amylase increased ----
+test_that("derive_var_atoxgr, test 47: CTCAEv4 Serum amylase increased", {
+
+  actual_seri <- derive_var_atoxgr_dir(
+    input_seri,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -1892,53 +1947,74 @@ test_that("derive_var_atoxgr, test 46: CTCAEv4 Serum amylase increased", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_22,
-    compare = actual_output_ctcv4_22,
+    base = expected_seri,
+    compare = actual_seri,
+    keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+# ---- derive_var_atoxgr, test 48: CTCAEv5 Serum amylase increased ----
+test_that("derive_var_atoxgr, test 48: CTCAEv5 Serum amylase increased", {
+
+  actual_seri <- derive_var_atoxgr_dir(
+    input_seri,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_seri,
+    compare = actual_seri,
     keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
   )
 })
 
 ### White blood cell decreased
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 4: <1.0 x 10e9 /L
 ### Grade 3: <2.0 - 1.0 x 10e9 /L
 ### Grade 2: <3.0 - 2.0 x 10e9 /L
 ### Grade 1: <LLN - 3.0 x 10e9 /L
 
-# ---- derive_var_atoxgr, test 47: CTCAEv4 White blood cell decreased ----
-test_that("derive_var_atoxgr, test 47: CTCAEv4 White blood cell decreased", {
-  exp_out_ctcv4_23 <- tibble::tribble(
-    ~ATOXDSCL,                    ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRL, ~TESTNUM,
-    "Not a term",                 1,     5,      15,     "10^9/L", NA,       1,
-    NA_character_,                2,     5,      15,     "10^9/L", NA,       2,
-    # ANRLO not missing
-    "White blood cell decreased", 0.9,   5,      15,     "10^9/L", "4",      3,
-    "White blood cell decreased", 1,     5,      15,     "10^9/L", "3",      4,
-    "White blood cell decreased", 1.9,   5,      15,     "10^9/L", "3",      5,
-    "White blood cell decreased", 2,     5,      15,     "10^9/L", "2",      6,
-    "White blood cell decreased", 2.9,   5,      15,     "10^9/L", "2",      7,
-    "White blood cell decreased", 3,     5,      15,     "10^9/L", "1",      8,
-    "White blood cell decreased", 4.9,   5,      15,     "10^9/L", "1",      9,
-    "White blood cell decreased", 5,     5,      15,     "10^9/L", "0",      10,
-    # ANRLO missing - can grade 2-4
-    "White blood cell decreased", 0.9,   NA,     NA,     "10^9/L", "4",      11,
-    "White blood cell decreased", 1,     NA,     NA,     "10^9/L", "3",      12,
-    "White blood cell decreased", 1.9,   NA,     NA,     "10^9/L", "3",      13,
-    "White blood cell decreased", 2,     NA,     NA,     "10^9/L", "2",      14,
-    "White blood cell decreased", 2.9,   NA,     NA,     "10^9/L", "2",      15,
-    # ANRLO missing - can NOT grade 0 or 1
-    "White blood cell decreased", 3,     NA,     NA,     "10^9/L", NA,       16,
-    "White blood cell decreased", 3,     NA,     NA,     "10^9/L", NA,       17,
-    "White blood cell decreased", 3,     NA,     NA,     "10^9/L", NA,       18,
-    # Unit missing cannot grade
-    "White blood cell decreased", 3,     100,    NA,     NA,       NA,       19,
-    # AVAL missing cannot grade
-    "White blood cell decreased", NA,    100,    NA,     "10^9/L", NA,       20,
-  )
-  input_ctcv4_23 <- exp_out_ctcv4_23 %>%
-    select(-ATOXGRL)
+expected_wbcd <- tibble::tribble(
+  ~ATOXDSCL,                    ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRL, ~TESTNUM,
+  "Not a term",                 1,     5,      15,     "10^9/L", NA,       1,
+  NA_character_,                2,     5,      15,     "10^9/L", NA,       2,
+  # ANRLO not missing
+  "White blood cell decreased", 0.9,   5,      15,     "10^9/L", "4",      3,
+  "White blood cell decreased", 1,     5,      15,     "10^9/L", "3",      4,
+  "White blood cell decreased", 1.9,   5,      15,     "10^9/L", "3",      5,
+  "White blood cell decreased", 2,     5,      15,     "10^9/L", "2",      6,
+  "White blood cell decreased", 2.9,   5,      15,     "10^9/L", "2",      7,
+  "White blood cell decreased", 3,     5,      15,     "10^9/L", "1",      8,
+  "White blood cell decreased", 4.9,   5,      15,     "10^9/L", "1",      9,
+  "White blood cell decreased", 5,     5,      15,     "10^9/L", "0",      10,
+  # ANRLO missing - can grade 2-4
+  "White blood cell decreased", 0.9,   NA,     NA,     "10^9/L", "4",      11,
+  "White blood cell decreased", 1,     NA,     NA,     "10^9/L", "3",      12,
+  "White blood cell decreased", 1.9,   NA,     NA,     "10^9/L", "3",      13,
+  "White blood cell decreased", 2,     NA,     NA,     "10^9/L", "2",      14,
+  "White blood cell decreased", 2.9,   NA,     NA,     "10^9/L", "2",      15,
+  # ANRLO missing - can NOT grade 0 or 1
+  "White blood cell decreased", 3,     NA,     NA,     "10^9/L", NA,       16,
+  "White blood cell decreased", 3,     NA,     NA,     "10^9/L", NA,       17,
+  "White blood cell decreased", 3,     NA,     NA,     "10^9/L", NA,       18,
+  # Unit missing cannot grade
+  "White blood cell decreased", 3,     100,    NA,     NA,       NA,       19,
+  # AVAL missing cannot grade
+  "White blood cell decreased", NA,    100,    NA,     "10^9/L", NA,       20,
+)
+input_wbcd <- expected_wbcd %>%
+  select(-ATOXGRL)
 
-  actual_output_ctcv4_23 <- derive_var_atoxgr_dir(
-    input_ctcv4_23,
+# ---- derive_var_atoxgr, test 49: CTCAEv4 White blood cell decreased ----
+test_that("derive_var_atoxgr, test 49: CTCAEv4 White blood cell decreased", {
+
+  actual_wbcd <- derive_var_atoxgr_dir(
+    input_wbcd,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCL,
@@ -1947,55 +2023,77 @@ test_that("derive_var_atoxgr, test 47: CTCAEv4 White blood cell decreased", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_23,
-    compare = actual_output_ctcv4_23,
+    base = expected_wbcd,
+    compare = actual_wbcd,
     keys = c("TESTNUM")
   )
 })
 
+# ---- derive_var_atoxgr, test 50: CTCAEv5 White blood cell decreased ----
+test_that("derive_var_atoxgr, test 50: CTCAEv5 White blood cell decreased", {
+
+  actual_wbcd <- derive_var_atoxgr_dir(
+    input_wbcd,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_wbcd,
+    compare = actual_wbcd,
+    keys = c("TESTNUM")
+  )
+})
+
+
 ## Metabolism and nutrition disorders
 
 ### Hypercalcemia
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 4: >3.4 mmol/L
 ### Grade 3: >3.1 - 3.4 mmol/L
 ### Grade 2: >2.9 - 3.1 mmol/L
 ### Grade 1: >ULN - 2.9 mmol/L
 
-# ---- derive_var_atoxgr, test 48: CTCAEv4 Hypercalcemia ----
-test_that("derive_var_atoxgr, test 48: CTCAEv4 Hypercalcemia", {
-  exp_out_ctcv4_24 <- tibble::tribble(
-    ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
-    "Not a term",    3.5,    0,      2.5,    "mmol/L",  NA,       1,
-    NA_character_,   3.5,    0,      2.5,    "mmol/L",  NA,       2,
-    # ANRHI not missing
-    "Hypercalcemia", 3.5,    0,      2.5,    "mmol/L",  "4",      3,
-    "Hypercalcemia", 3.4,    0,      2.5,    "mmol/L",  "3",      4,
-    "Hypercalcemia", 3.2,    0,      2.5,    "mmol/L",  "3",      5,
-    "Hypercalcemia", 3.1,    0,      2.5,    "mmol/L",  "2",      6,
-    "Hypercalcemia", 3,      0,      2.5,    "mmol/L",  "2",      7,
-    "Hypercalcemia", 2.9,    0,      2.5,    "mmol/L",  "1",      8,
-    "Hypercalcemia", 2.6,    0,      2.5,    "mmol/L",  "1",      9,
-    "Hypercalcemia", 2.5,    0,      2.5,    "mmol/L",  "0",      10,
-    # ANRHI missing - can grade 2-4
-    "Hypercalcemia", 3.5,    0,      NA,     "mmol/L",  "4",      11,
-    "Hypercalcemia", 3.4,    0,      NA,     "mmol/L",  "3",      12,
-    "Hypercalcemia", 3.2,    0,      NA,     "mmol/L",  "3",      13,
-    "Hypercalcemia", 3.1,    0,      NA,     "mmol/L",  "2",      14,
-    "Hypercalcemia", 3,      0,      NA,     "mmol/L",  "2",      15,
-    # ANRHI missing - can NOT grade 0 or 1
-    "Hypercalcemia", 2.9,    0,      NA,     "mmol/L",  NA,       16,
-    "Hypercalcemia", 2.6,    0,      NA,     "mmol/L",  NA,       17,
-    "Hypercalcemia", 2.5,    0,      NA,     "mmol/L",  NA,       18,
-    # Unit missing cannot grade
-    "Hypercalcemia", 2.5,    0,      2.5,    NA,        NA,       19,
-    # AVAL missing cannot grade
-    "Hypercalcemia", NA,     0,      2.5,    "mmol/L",  NA,       20,
-  )
-  input_ctcv4_24 <- exp_out_ctcv4_24 %>%
-    select(-ATOXGRH)
+expected_calci <- tibble::tribble(
+  ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
+  "Not a term",    3.5,    0,      2.5,    "mmol/L",  NA,       1,
+  NA_character_,   3.5,    0,      2.5,    "mmol/L",  NA,       2,
+  # ANRHI not missing
+  "Hypercalcemia", 3.5,    0,      2.5,    "mmol/L",  "4",      3,
+  "Hypercalcemia", 3.4,    0,      2.5,    "mmol/L",  "3",      4,
+  "Hypercalcemia", 3.2,    0,      2.5,    "mmol/L",  "3",      5,
+  "Hypercalcemia", 3.1,    0,      2.5,    "mmol/L",  "2",      6,
+  "Hypercalcemia", 3,      0,      2.5,    "mmol/L",  "2",      7,
+  "Hypercalcemia", 2.9,    0,      2.5,    "mmol/L",  "1",      8,
+  "Hypercalcemia", 2.6,    0,      2.5,    "mmol/L",  "1",      9,
+  "Hypercalcemia", 2.5,    0,      2.5,    "mmol/L",  "0",      10,
+  # ANRHI missing - can grade 2-4
+  "Hypercalcemia", 3.5,    0,      NA,     "mmol/L",  "4",      11,
+  "Hypercalcemia", 3.4,    0,      NA,     "mmol/L",  "3",      12,
+  "Hypercalcemia", 3.2,    0,      NA,     "mmol/L",  "3",      13,
+  "Hypercalcemia", 3.1,    0,      NA,     "mmol/L",  "2",      14,
+  "Hypercalcemia", 3,      0,      NA,     "mmol/L",  "2",      15,
+  # ANRHI missing - can NOT grade 0 or 1
+  "Hypercalcemia", 2.9,    0,      NA,     "mmol/L",  NA,       16,
+  "Hypercalcemia", 2.6,    0,      NA,     "mmol/L",  NA,       17,
+  "Hypercalcemia", 2.5,    0,      NA,     "mmol/L",  NA,       18,
+  # Unit missing cannot grade
+  "Hypercalcemia", 2.5,    0,      2.5,    NA,        NA,       19,
+  # AVAL missing cannot grade
+  "Hypercalcemia", NA,     0,      2.5,    "mmol/L",  NA,       20,
+)
+input_calci <- expected_calci %>%
+  select(-ATOXGRH)
 
-  actual_output_ctcv4_24 <- derive_var_atoxgr_dir(
-    input_ctcv4_24,
+# ---- derive_var_atoxgr, test 51: CTCAEv4 Hypercalcemia ----
+test_that("derive_var_atoxgr, test 51: CTCAEv4 Hypercalcemia", {
+
+  actual_calci <- derive_var_atoxgr_dir(
+    input_calci,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2004,53 +2102,75 @@ test_that("derive_var_atoxgr, test 48: CTCAEv4 Hypercalcemia", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_24,
-    compare = actual_output_ctcv4_24,
+    base = expected_calci,
+    compare = actual_calci,
+    keys = c("TESTNUM")
+  )
+})
+
+# ---- derive_var_atoxgr, test 52: CTCAEv5 Hypercalcemia ----
+test_that("derive_var_atoxgr, test 52: CTCAEv5 Hypercalcemia", {
+
+  actual_calci <- derive_var_atoxgr_dir(
+    input_calci,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_calci,
+    compare = actual_calci,
     keys = c("TESTNUM")
   )
 })
 
 ### Hypercalcemia (Ionized)
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 4: >1.8 mmol/L
 ### Grade 3: >1.6 - 1.8 mmol/L
 ### Grade 2: >1.5 - 1.6 mmol/L
 ### Grade 1: >ULN - 1.5 mmol/L
 
-# ---- derive_var_atoxgr, test 49: CTCAEv4 Hypercalcemia (Ionized) ----
-test_that("derive_var_atoxgr, test 49: CTCAEv4 Hypercalcemia (Ionized)", {
-  exp_out_ctcv4_25 <- tibble::tribble(
-    ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
-    "Not a term",              1.9,    0,      1.3,    "mmol/L",  NA,       1,
-    NA_character_,             1.9,    0,      1.3,    "mmol/L",  NA,       2,
-    # ANRHI not missing
-    "Hypercalcemia (Ionized)", 1.9,    0,      1.3,    "mmol/L",  "4",      3,
-    "Hypercalcemia (Ionized)", 1.8,    0,      1.3,    "mmol/L",  "3",      4,
-    "Hypercalcemia (Ionized)", 1.7,    0,      1.3,    "mmol/L",  "3",      5,
-    "Hypercalcemia (Ionized)", 1.6,    0,      1.3,    "mmol/L",  "2",      6,
-    "Hypercalcemia (Ionized)", 1.51,   0,      1.3,    "mmol/L",  "2",      7,
-    "Hypercalcemia (Ionized)", 1.5,    0,      1.3,    "mmol/L",  "1",      8,
-    "Hypercalcemia (Ionized)", 1.4,    0,      1.3,    "mmol/L",  "1",      9,
-    "Hypercalcemia (Ionized)", 1.3,    0,      1.3,    "mmol/L",  "0",      10,
-    # ANRHI missing - can grade 2-4
-    "Hypercalcemia (Ionized)", 1.9,    0,      NA,     "mmol/L",  "4",      11,
-    "Hypercalcemia (Ionized)", 1.8,    0,      NA,     "mmol/L",  "3",      12,
-    "Hypercalcemia (Ionized)", 1.7,    0,      NA,     "mmol/L",  "3",      13,
-    "Hypercalcemia (Ionized)", 1.6,    0,      NA,     "mmol/L",  "2",      14,
-    "Hypercalcemia (Ionized)", 1.51,   0,      NA,     "mmol/L",  "2",      15,
-    # ANRHI missing - can NOT grade 0 or 1
-    "Hypercalcemia (Ionized)", 1.5,    0,      NA,     "mmol/L",  NA,       16,
-    "Hypercalcemia (Ionized)", 1.4,    0,      NA,     "mmol/L",  NA,       17,
-    "Hypercalcemia (Ionized)", 1.3,    0,      NA,     "mmol/L",  NA,       18,
-    # Unit missing cannot grade       1,
-    "Hypercalcemia (Ionized)", 1.3,    0,      1.3,    NA,        NA,       19,
-    # AVAL missing cannot grade
-    "Hypercalcemia (Ionized)", NA,     0,      1.3,    "mmol/L",  NA,       20,
-  )
-  input_ctcv4_25 <- exp_out_ctcv4_25 %>%
-    select(-ATOXGRH)
+expected_calioni <- tibble::tribble(
+  ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
+  "Not a term",              1.9,    0,      1.3,    "mmol/L",  NA,       1,
+  NA_character_,             1.9,    0,      1.3,    "mmol/L",  NA,       2,
+  # ANRHI not missing
+  "Hypercalcemia (Ionized)", 1.9,    0,      1.3,    "mmol/L",  "4",      3,
+  "Hypercalcemia (Ionized)", 1.8,    0,      1.3,    "mmol/L",  "3",      4,
+  "Hypercalcemia (Ionized)", 1.7,    0,      1.3,    "mmol/L",  "3",      5,
+  "Hypercalcemia (Ionized)", 1.6,    0,      1.3,    "mmol/L",  "2",      6,
+  "Hypercalcemia (Ionized)", 1.51,   0,      1.3,    "mmol/L",  "2",      7,
+  "Hypercalcemia (Ionized)", 1.5,    0,      1.3,    "mmol/L",  "1",      8,
+  "Hypercalcemia (Ionized)", 1.4,    0,      1.3,    "mmol/L",  "1",      9,
+  "Hypercalcemia (Ionized)", 1.3,    0,      1.3,    "mmol/L",  "0",      10,
+  # ANRHI missing - can grade 2-4
+  "Hypercalcemia (Ionized)", 1.9,    0,      NA,     "mmol/L",  "4",      11,
+  "Hypercalcemia (Ionized)", 1.8,    0,      NA,     "mmol/L",  "3",      12,
+  "Hypercalcemia (Ionized)", 1.7,    0,      NA,     "mmol/L",  "3",      13,
+  "Hypercalcemia (Ionized)", 1.6,    0,      NA,     "mmol/L",  "2",      14,
+  "Hypercalcemia (Ionized)", 1.51,   0,      NA,     "mmol/L",  "2",      15,
+  # ANRHI missing - can NOT grade 0 or 1
+  "Hypercalcemia (Ionized)", 1.5,    0,      NA,     "mmol/L",  NA,       16,
+  "Hypercalcemia (Ionized)", 1.4,    0,      NA,     "mmol/L",  NA,       17,
+  "Hypercalcemia (Ionized)", 1.3,    0,      NA,     "mmol/L",  NA,       18,
+  # Unit missing cannot grade       1,
+  "Hypercalcemia (Ionized)", 1.3,    0,      1.3,    NA,        NA,       19,
+  # AVAL missing cannot grade
+  "Hypercalcemia (Ionized)", NA,     0,      1.3,    "mmol/L",  NA,       20,
+)
+input_calioni <- expected_calioni %>%
+  select(-ATOXGRH)
 
-  actual_output_ctcv4_25 <- derive_var_atoxgr_dir(
-    input_ctcv4_25,
+
+# ---- derive_var_atoxgr, test 53: CTCAEv4 Hypercalcemia (Ionized) ----
+test_that("derive_var_atoxgr, test 53: CTCAEv4 Hypercalcemia (Ionized)", {
+
+  actual_calioni <- derive_var_atoxgr_dir(
+    input_calioni,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2059,21 +2179,41 @@ test_that("derive_var_atoxgr, test 49: CTCAEv4 Hypercalcemia (Ionized)", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_25,
-    compare = actual_output_ctcv4_25,
+    base = expected_calioni,
+    compare = actual_calioni,
     keys = c("TESTNUM")
   )
 })
 
-### Hyperglycemia (Fasting)
+# ---- derive_var_atoxgr, test 54: CTCAEv5 Hypercalcemia (Ionized) ----
+test_that("derive_var_atoxgr, test 54: CTCAEv5 Hypercalcemia (Ionized)", {
+
+  actual_calioni <- derive_var_atoxgr_dir(
+    input_calioni,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_calioni,
+    compare = actual_calioni,
+    keys = c("TESTNUM")
+  )
+})
+
+### Hyperglycemia (Fasting) (NCICTCAEv4)
+### not included in NCICTCAEv5
 ### Grade 4: >27.8 mmol/L
 ### Grade 3: >13.9 - 27.8 mmol/L
 ### Grade 2: >8.9 - 13.9 mmol/L
 ### Grade 1: >ULN - 8.9 mmol/L
 
-# ---- derive_var_atoxgr, test 50: CTCAEv4 Hyperglycemia (Fasting) ----
-test_that("derive_var_atoxgr, test 50: CTCAEv4 Hyperglycemia (Fasting)", {
-  exp_out_ctcv4_26 <- tibble::tribble(
+# ---- derive_var_atoxgr, test 55: CTCAEv4 Hyperglycemia (Fasting) ----
+test_that("derive_var_atoxgr, test 55: CTCAEv4 Hyperglycemia (Fasting)", {
+  expected_glycfi <- tibble::tribble(
     ~ATOXDSCH,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
     "Not a term",              27.9,   0,      5.3,    "mmol/L",  NA,       1,
     NA_character_,             27.9,   0,      5.3,    "mmol/L",  NA,       2,
@@ -2101,11 +2241,11 @@ test_that("derive_var_atoxgr, test 50: CTCAEv4 Hyperglycemia (Fasting)", {
     # AVAL missing cannot grade
     "Hyperglycemia (Fasting)", NA,     0,      5.3,    "mmol/L",  NA,       20,
   )
-  input_ctcv4_26 <- exp_out_ctcv4_26 %>%
+  input_glycfi <- expected_glycfi %>%
     select(-ATOXGRH)
 
-  actual_output_ctcv4_26 <- derive_var_atoxgr_dir(
-    input_ctcv4_26,
+  actual_glycfi <- derive_var_atoxgr_dir(
+    input_glycfi,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2114,19 +2254,20 @@ test_that("derive_var_atoxgr, test 50: CTCAEv4 Hyperglycemia (Fasting)", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_26,
-    compare = actual_output_ctcv4_26,
+    base = expected_glycfi,
+    compare = actual_glycfi,
     keys = c("TESTNUM")
   )
 })
 
-### Hyperglycemia
+### Hyperglycemia (NCICTCAEv4)
+### not included in NCICTCAEv5
 ### Grade 4: >27.8 mmol/L
 ### Grade 3: >13.9 - 27.8 mmol/L
 
-# ---- derive_var_atoxgr, test 51: CTCAEv4 Hyperglycemia ----
-test_that("derive_var_atoxgr, test 51: CTCAEv4 Hyperglycemia", {
-  exp_out_ctcv4_27 <- tibble::tribble(
+# ---- derive_var_atoxgr, test 56: CTCAEv4 Hyperglycemia ----
+test_that("derive_var_atoxgr, test 56: CTCAEv4 Hyperglycemia", {
+  expected_glyci <- tibble::tribble(
     ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
     "Not a term",    27.9,   0,      5.3,    "mmol/L",  NA,       1,
     NA_character_,   27.9,   0,      5.3,    "mmol/L",  NA,       2,
@@ -2140,11 +2281,11 @@ test_that("derive_var_atoxgr, test 51: CTCAEv4 Hyperglycemia", {
     # AVAL missing cannot grade
     "Hyperglycemia", NA,     0,      5.3,    "mmol/L",  NA,       9,
   )
-  input_ctcv4_27 <- exp_out_ctcv4_27 %>%
+  input_glyci <- expected_glyci %>%
     select(-ATOXGRH)
 
-  actual_output_ctcv4_27 <- derive_var_atoxgr_dir(
-    input_ctcv4_27,
+  actual_glyci <- derive_var_atoxgr_dir(
+    input_glyci,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2153,53 +2294,55 @@ test_that("derive_var_atoxgr, test 51: CTCAEv4 Hyperglycemia", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_27,
-    compare = actual_output_ctcv4_27,
+    base = expected_glyci,
+    compare = actual_glyci,
     keys = c("TESTNUM")
   )
 })
 
 ### Hyperkalemia
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 4: >7.0 mmol/L
 ### Grade 3: >6.0 - 7.0 mmol/L
 ### Grade 2: >5.5 - 6.0 mmol/L
 ### Grade 1: >ULN - 5.5 mmol/L
 
-# ---- derive_var_atoxgr, test 52: CTCAEv4 Hyperkalemia ----
-test_that("derive_var_atoxgr, test 52: CTCAEv4 Hyperkalemia", {
-  exp_out_ctcv4_28 <- tibble::tribble(
-    ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
-    "Not a term",    7.1,    0,      5.1,    "mmol/L",  NA,       1,
-    NA_character_,   7.1,    0,      5.1,    "mmol/L",  NA,       2,
-    # ANRHI not missing
-    "Hyperkalemia",  7.1,    0,      5.1,    "mmol/L",  "4",      3,
-    "Hyperkalemia",  7,      0,      5.1,    "mmol/L",  "3",      4,
-    "Hyperkalemia",  6.1,    0,      5.1,    "mmol/L",  "3",      5,
-    "Hyperkalemia",  6,      0,      5.1,    "mmol/L",  "2",      6,
-    "Hyperkalemia",  5.6,    0,      5.1,    "mmol/L",  "2",      7,
-    "Hyperkalemia",  5.5,    0,      5.1,    "mmol/L",  "1",      8,
-    "Hyperkalemia",  5.2,    0,      5.1,    "mmol/L",  "1",      9,
-    "Hyperkalemia",  5.1,    0,      5.1,    "mmol/L",  "0",      10,
-    # ANRHI missing - can grade 2-4
-    "Hyperkalemia",  7.1,    0,      NA,     "mmol/L",  "4",      11,
-    "Hyperkalemia",  7,      0,      NA,     "mmol/L",  "3",      12,
-    "Hyperkalemia",  6.1,    0,      NA,     "mmol/L",  "3",      13,
-    "Hyperkalemia",  6,      0,      NA,     "mmol/L",  "2",      14,
-    "Hyperkalemia",  5.6,    0,      NA,     "mmol/L",  "2",      15,
-    # ANRHI missing - can NOT grade 0 or 1
-    "Hyperkalemia",  5.5,    0,      NA,     "mmol/L",  NA,       16,
-    "Hyperkalemia",  5.2,    0,      NA,     "mmol/L",  NA,       17,
-    "Hyperkalemia",  5.1,    0,      NA,     "mmol/L",  NA,       18,
-    # Unit missing cannot grade
-    "Hyperkalemia",  5.1,    0,      5.1,    NA,        NA,       19,
-    # AVAL missing cannot grade
-    "Hyperkalemia",  NA,     0,      5.1,    "mmol/L",  NA,       20,
-  )
-  input_ctcv4_28 <- exp_out_ctcv4_28 %>%
-    select(-ATOXGRH)
+expected_kalei <- tibble::tribble(
+  ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
+  "Not a term",    7.1,    0,      5.1,    "mmol/L",  NA,       1,
+  NA_character_,   7.1,    0,      5.1,    "mmol/L",  NA,       2,
+  # ANRHI not missing
+  "Hyperkalemia",  7.1,    0,      5.1,    "mmol/L",  "4",      3,
+  "Hyperkalemia",  7,      0,      5.1,    "mmol/L",  "3",      4,
+  "Hyperkalemia",  6.1,    0,      5.1,    "mmol/L",  "3",      5,
+  "Hyperkalemia",  6,      0,      5.1,    "mmol/L",  "2",      6,
+  "Hyperkalemia",  5.6,    0,      5.1,    "mmol/L",  "2",      7,
+  "Hyperkalemia",  5.5,    0,      5.1,    "mmol/L",  "1",      8,
+  "Hyperkalemia",  5.2,    0,      5.1,    "mmol/L",  "1",      9,
+  "Hyperkalemia",  5.1,    0,      5.1,    "mmol/L",  "0",      10,
+  # ANRHI missing - can grade 2-4
+  "Hyperkalemia",  7.1,    0,      NA,     "mmol/L",  "4",      11,
+  "Hyperkalemia",  7,      0,      NA,     "mmol/L",  "3",      12,
+  "Hyperkalemia",  6.1,    0,      NA,     "mmol/L",  "3",      13,
+  "Hyperkalemia",  6,      0,      NA,     "mmol/L",  "2",      14,
+  "Hyperkalemia",  5.6,    0,      NA,     "mmol/L",  "2",      15,
+  # ANRHI missing - can NOT grade 0 or 1
+  "Hyperkalemia",  5.5,    0,      NA,     "mmol/L",  NA,       16,
+  "Hyperkalemia",  5.2,    0,      NA,     "mmol/L",  NA,       17,
+  "Hyperkalemia",  5.1,    0,      NA,     "mmol/L",  NA,       18,
+  # Unit missing cannot grade
+  "Hyperkalemia",  5.1,    0,      5.1,    NA,        NA,       19,
+  # AVAL missing cannot grade
+  "Hyperkalemia",  NA,     0,      5.1,    "mmol/L",  NA,       20,
+)
+input_kalei <- expected_kalei %>%
+  select(-ATOXGRH)
 
-  actual_output_ctcv4_28 <- derive_var_atoxgr_dir(
-    input_ctcv4_28,
+# ---- derive_var_atoxgr, test 57: CTCAEv4 Hyperkalemia ----
+test_that("derive_var_atoxgr, test 57: CTCAEv4 Hyperkalemia", {
+
+  actual_kalei <- derive_var_atoxgr_dir(
+    input_kalei,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2208,48 +2351,70 @@ test_that("derive_var_atoxgr, test 52: CTCAEv4 Hyperkalemia", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_28,
-    compare = actual_output_ctcv4_28,
+    base = expected_kalei,
+    compare = actual_kalei,
+    keys = c("TESTNUM")
+  )
+})
+
+# ---- derive_var_atoxgr, test 58: CTCAEv5 Hyperkalemia ----
+test_that("derive_var_atoxgr, test 58: CTCAEv5 Hyperkalemia", {
+
+  actual_kalei <- derive_var_atoxgr_dir(
+    input_kalei,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_kalei,
+    compare = actual_kalei,
     keys = c("TESTNUM")
   )
 })
 
 ### Hypermagnesemia
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 4: >3.30 mmol/L
 ### Grade 3: >1.23 - 3.30 mmol/L
 ### Grade 1: >ULN - 1.23 mmol/L
 
-# ---- derive_var_atoxgr, test 53: CTCAEv4 Hypermagnesemia ----
-test_that("derive_var_atoxgr, test 53: CTCAEv4 Hypermagnesemia", {
-  exp_out_ctcv4_29 <- tibble::tribble(
-    ~ATOXDSCH,         ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRH, ~TESTNUM,
-    "Not a term",      3.4,   0,      0.8,    "mmol/L", NA,       1,
-    NA_character_,     3.4,   0,      0.8,    "mmol/L", NA,       2,
-    # ANRHI not missing
-    "Hypermagnesemia", 3.4,   0,      0.8,    "mmol/L", "4",      3,
-    "Hypermagnesemia", 3.3,   0,      0.8,    "mmol/L", "3",      4,
-    "Hypermagnesemia", 1.24,  0,      0.8,    "mmol/L", "3",      5,
-    "Hypermagnesemia", 1.23,  0,      0.8,    "mmol/L", "1",      6,
-    "Hypermagnesemia", 0.81,  0,      0.8,    "mmol/L", "1",      7,
-    "Hypermagnesemia", 0.8,   0,      0.8,    "mmol/L", "0",      8,
-    # ANRHI missing - can grade 3-4
-    "Hypermagnesemia", 3.4,   0,      NA,     "mmol/L", "4",      9,
-    "Hypermagnesemia", 3.3,   0,      NA,     "mmol/L", "3",      10,
-    "Hypermagnesemia", 1.24,  0,      NA,     "mmol/L", "3",      11,
-    # ANRHI missing - can NOT grade 0 or 1
-    "Hypermagnesemia", 1.23,  0,      NA,     "mmol/L", NA,       12,
-    "Hypermagnesemia", 0.81,  0,      NA,     "mmol/L", NA,       13,
-    "Hypermagnesemia", 0.8,   0,      NA,     "mmol/L", NA,       14,
-    # Unit missing cannot grade
-    "Hypermagnesemia", 0.8,   0,      0.8,    NA,       NA,       15,
-    # AVAL missing cannot grade
-    "Hypermagnesemia", NA,    0,      0.8,    "mmol/L", NA,       16,
-  )
-  input_ctcv4_29 <- exp_out_ctcv4_29 %>%
-    select(-ATOXGRH)
+expected_magni <- tibble::tribble(
+  ~ATOXDSCH,         ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRH, ~TESTNUM,
+  "Not a term",      3.4,   0,      0.8,    "mmol/L", NA,       1,
+  NA_character_,     3.4,   0,      0.8,    "mmol/L", NA,       2,
+  # ANRHI not missing
+  "Hypermagnesemia", 3.4,   0,      0.8,    "mmol/L", "4",      3,
+  "Hypermagnesemia", 3.3,   0,      0.8,    "mmol/L", "3",      4,
+  "Hypermagnesemia", 1.24,  0,      0.8,    "mmol/L", "3",      5,
+  "Hypermagnesemia", 1.23,  0,      0.8,    "mmol/L", "1",      6,
+  "Hypermagnesemia", 0.81,  0,      0.8,    "mmol/L", "1",      7,
+  "Hypermagnesemia", 0.8,   0,      0.8,    "mmol/L", "0",      8,
+  # ANRHI missing - can grade 3-4
+  "Hypermagnesemia", 3.4,   0,      NA,     "mmol/L", "4",      9,
+  "Hypermagnesemia", 3.3,   0,      NA,     "mmol/L", "3",      10,
+  "Hypermagnesemia", 1.24,  0,      NA,     "mmol/L", "3",      11,
+  # ANRHI missing - can NOT grade 0 or 1
+  "Hypermagnesemia", 1.23,  0,      NA,     "mmol/L", NA,       12,
+  "Hypermagnesemia", 0.81,  0,      NA,     "mmol/L", NA,       13,
+  "Hypermagnesemia", 0.8,   0,      NA,     "mmol/L", NA,       14,
+  # Unit missing cannot grade
+  "Hypermagnesemia", 0.8,   0,      0.8,    NA,       NA,       15,
+  # AVAL missing cannot grade
+  "Hypermagnesemia", NA,    0,      0.8,    "mmol/L", NA,       16,
+)
+input_magni <- expected_magni %>%
+  select(-ATOXGRH)
 
-  actual_output_ctcv4_29 <- derive_var_atoxgr_dir(
-    input_ctcv4_29,
+
+# ---- derive_var_atoxgr, test 59: CTCAEv4 Hypermagnesemia ----
+test_that("derive_var_atoxgr, test 59: CTCAEv4 Hypermagnesemia", {
+
+  actual_magni <- derive_var_atoxgr_dir(
+    input_magni,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2258,53 +2423,74 @@ test_that("derive_var_atoxgr, test 53: CTCAEv4 Hypermagnesemia", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_29,
-    compare = actual_output_ctcv4_29,
+    base = expected_magni,
+    compare = actual_magni,
+    keys = c("TESTNUM")
+  )
+})
+
+# ---- derive_var_atoxgr, test 60: CTCAEv5 Hypermagnesemia ----
+test_that("derive_var_atoxgr, test 60: CTCAEv5 Hypermagnesemia", {
+
+  actual_magni <- derive_var_atoxgr_dir(
+    input_magni,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_magni,
+    compare = actual_magni,
     keys = c("TESTNUM")
   )
 })
 
 ### Hypernatremia
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 4: >160 mmol/L
 ### Grade 3: >155 - 160 mmol/L
 ### Grade 2: >150 - 155 mmol/L
 ### Grade 1: >ULN - 150 mmol/L
 
-# ---- derive_var_atoxgr, test 54: CTCAEv4 Hypernatremia ----
-test_that("derive_var_atoxgr, test 54: CTCAEv4 Hypernatremia", {
-  exp_out_ctcv4_30 <- tibble::tribble(
-    ~ATOXDSCH,        ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
-    "Not a term",     161,    0,      140,    "mmol/L",  NA,       1,
-    NA_character_,    161,    0,      140,    "mmol/L",  NA,       2,
-    # ANRHI not missing
-    "Hypernatremia",  161,    0,      140,    "mmol/L",  "4",      3,
-    "Hypernatremia",  160,    0,      140,    "mmol/L",  "3",      4,
-    "Hypernatremia",  156,    0,      140,    "mmol/L",  "3",      5,
-    "Hypernatremia",  155,    0,      140,    "mmol/L",  "2",      6,
-    "Hypernatremia",  151,    0,      140,    "mmol/L",  "2",      7,
-    "Hypernatremia",  150,    0,      140,    "mmol/L",  "1",      8,
-    "Hypernatremia",  141,    0,      140,    "mmol/L",  "1",      9,
-    "Hypernatremia",  140,    0,      140,    "mmol/L",  "0",      10,
-    # ANRHI missing - can grade 3-4
-    "Hypernatremia",  161,    0,      NA,     "mmol/L",  "4",      11,
-    "Hypernatremia",  160,    0,      NA,     "mmol/L",  "3",      12,
-    "Hypernatremia",  156,    0,      NA,     "mmol/L",  "3",      13,
-    "Hypernatremia",  155,    0,      NA,     "mmol/L",  "2",      14,
-    "Hypernatremia",  151,    0,      NA,     "mmol/L",  "2",      15,
-    # ANRHI missing - can NOT grade 0 or 1
-    "Hypernatremia",  150,    0,      NA,     "mmol/L",  NA,       16,
-    "Hypernatremia",  141,    0,      NA,     "mmol/L",  NA,       17,
-    "Hypernatremia",  140,    0,      NA,     "mmol/L",  NA,       18,
-    # Unit missing cannot grade
-    "Hypernatremia",  140,    0,      140,    NA,        NA,       19,
-    # AVAL missing cannot grade
-    "Hypernatremia",  NA,     0,      140,    "mmol/L",  NA,       20,
-  )
-  input_ctcv4_30 <- exp_out_ctcv4_30 %>%
-    select(-ATOXGRH)
+expected_natri <- tibble::tribble(
+  ~ATOXDSCH,        ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
+  "Not a term",     161,    0,      140,    "mmol/L",  NA,       1,
+  NA_character_,    161,    0,      140,    "mmol/L",  NA,       2,
+  # ANRHI not missing
+  "Hypernatremia",  161,    0,      140,    "mmol/L",  "4",      3,
+  "Hypernatremia",  160,    0,      140,    "mmol/L",  "3",      4,
+  "Hypernatremia",  156,    0,      140,    "mmol/L",  "3",      5,
+  "Hypernatremia",  155,    0,      140,    "mmol/L",  "2",      6,
+  "Hypernatremia",  151,    0,      140,    "mmol/L",  "2",      7,
+  "Hypernatremia",  150,    0,      140,    "mmol/L",  "1",      8,
+  "Hypernatremia",  141,    0,      140,    "mmol/L",  "1",      9,
+  "Hypernatremia",  140,    0,      140,    "mmol/L",  "0",      10,
+  # ANRHI missing - can grade 3-4
+  "Hypernatremia",  161,    0,      NA,     "mmol/L",  "4",      11,
+  "Hypernatremia",  160,    0,      NA,     "mmol/L",  "3",      12,
+  "Hypernatremia",  156,    0,      NA,     "mmol/L",  "3",      13,
+  "Hypernatremia",  155,    0,      NA,     "mmol/L",  "2",      14,
+  "Hypernatremia",  151,    0,      NA,     "mmol/L",  "2",      15,
+  # ANRHI missing - can NOT grade 0 or 1
+  "Hypernatremia",  150,    0,      NA,     "mmol/L",  NA,       16,
+  "Hypernatremia",  141,    0,      NA,     "mmol/L",  NA,       17,
+  "Hypernatremia",  140,    0,      NA,     "mmol/L",  NA,       18,
+  # Unit missing cannot grade
+  "Hypernatremia",  140,    0,      140,    NA,        NA,       19,
+  # AVAL missing cannot grade
+  "Hypernatremia",  NA,     0,      140,    "mmol/L",  NA,       20,
+)
+input_natri <- expected_natri %>%
+  select(-ATOXGRH)
 
-  actual_output_ctcv4_30 <- derive_var_atoxgr_dir(
-    input_ctcv4_30,
+# ---- derive_var_atoxgr, test 61: CTCAEv4 Hypernatremia ----
+test_that("derive_var_atoxgr, test 61: CTCAEv4 Hypernatremia", {
+
+  actual_natri <- derive_var_atoxgr_dir(
+    input_natri,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2313,42 +2499,63 @@ test_that("derive_var_atoxgr, test 54: CTCAEv4 Hypernatremia", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_30,
-    compare = actual_output_ctcv4_30,
+    base = expected_natri,
+    compare = actual_natri,
+    keys = c("TESTNUM")
+  )
+})
+
+# ---- derive_var_atoxgr, test 62: CTCAEv5 Hypernatremia ----
+test_that("derive_var_atoxgr, test 62: CTCAEv5 Hypernatremia", {
+
+  actual_natri <- derive_var_atoxgr_dir(
+    input_natri,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_natri,
+    compare = actual_natri,
     keys = c("TESTNUM")
   )
 })
 
 ### Hypertriglyceridemia
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 4: >11.4 mmol/L
 ### Grade 3: >5.7 mmol/L - 11.4 mmol/L
 ### Grade 2: >3.42 mmol/L - 5.7 mmol/L
 ### Grade 1: 1.71 mmol/L - 3.42 mmol/L
 
-# ---- derive_var_atoxgr, test 55: CTCAEv4 Hypertriglyceridemia ----
-test_that("derive_var_atoxgr, test 55: CTCAEv4 Hypertriglyceridemia", {
-  exp_out_ctcv4_31 <- tibble::tribble(
-    ~ATOXDSCH,               ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
-    "Not a term",            11.5,   0,      2.1,    "mmol/L",  NA,
-    NA_character_,           11.5,   0,      2.1,    "mmol/L",  NA,
-    "Hypertriglyceridemia",  11.5,   0,      2.1,    "mmol/L",  "4",
-    "Hypertriglyceridemia",  11.4,   0,      2.1,    "mmol/L",  "3",
-    "Hypertriglyceridemia",  5.8,    0,      2.1,    "mmol/L",  "3",
-    "Hypertriglyceridemia",  5.7,    0,      2.1,    "mmol/L",  "2",
-    "Hypertriglyceridemia",  3.43,   0,      2.1,    "mmol/L",  "2",
-    "Hypertriglyceridemia",  3.42,   0,      2.1,    "mmol/L",  "1",
-    "Hypertriglyceridemia",  1.72,   0,      2.1,    "mmol/L",  "1",
-    "Hypertriglyceridemia",  1.71,   0,      2.1,    "mmol/L",  "0",
-    # Unit missing cannot grade
-    "Hypertriglyceridemia",  1.71,   0,      2.1,    NA,        NA,
-    # AVAL missing cannot grade
-    "Hypertriglyceridemia",  NA,     0,      2.1,    "mmol/L",  NA,
-  )
-  input_ctcv4_31 <- exp_out_ctcv4_31 %>%
-    select(-ATOXGRH)
+expected_trigi <- tibble::tribble(
+  ~ATOXDSCH,               ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
+  "Not a term",            11.5,   0,      2.1,    "mmol/L",  NA,
+  NA_character_,           11.5,   0,      2.1,    "mmol/L",  NA,
+  "Hypertriglyceridemia",  11.5,   0,      2.1,    "mmol/L",  "4",
+  "Hypertriglyceridemia",  11.4,   0,      2.1,    "mmol/L",  "3",
+  "Hypertriglyceridemia",  5.8,    0,      2.1,    "mmol/L",  "3",
+  "Hypertriglyceridemia",  5.7,    0,      2.1,    "mmol/L",  "2",
+  "Hypertriglyceridemia",  3.43,   0,      2.1,    "mmol/L",  "2",
+  "Hypertriglyceridemia",  3.42,   0,      2.1,    "mmol/L",  "1",
+  "Hypertriglyceridemia",  1.72,   0,      2.1,    "mmol/L",  "1",
+  "Hypertriglyceridemia",  1.71,   0,      2.1,    "mmol/L",  "0",
+  # Unit missing cannot grade
+  "Hypertriglyceridemia",  1.71,   0,      2.1,    NA,        NA,
+  # AVAL missing cannot grade
+  "Hypertriglyceridemia",  NA,     0,      2.1,    "mmol/L",  NA,
+)
+input_trigi <- expected_trigi %>%
+  select(-ATOXGRH)
 
-  actual_output_ctcv4_31 <- derive_var_atoxgr_dir(
-    input_ctcv4_31,
+# ---- derive_var_atoxgr, test 63: CTCAEv4 Hypertriglyceridemia ----
+test_that("derive_var_atoxgr, test 63: CTCAEv4 Hypertriglyceridemia", {
+
+  actual_trigi <- derive_var_atoxgr_dir(
+    input_trigi,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2357,44 +2564,92 @@ test_that("derive_var_atoxgr, test 55: CTCAEv4 Hypertriglyceridemia", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_31,
-    compare = actual_output_ctcv4_31,
+    base = expected_trigi,
+    compare = actual_trigi,
     keys = c("ATOXDSCH", "AVAL", "AVALU")
   )
 })
 
-### Hyperuricemia
+# ---- derive_var_atoxgr, test 64: CTCAEv5 Hypertriglyceridemia ----
+test_that("derive_var_atoxgr, test 64: CTCAEv5 Hypertriglyceridemia", {
+
+  actual_trigi <- derive_var_atoxgr_dir(
+    input_trigi,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_trigi,
+    compare = actual_trigi,
+    keys = c("ATOXDSCH", "AVAL", "AVALU")
+  )
+})
+
+### Hyperuricemia (NCICTCAEv4)
+### NCICTCAEv5 only has grade 3
 ### Grade 4: >0.59 mmol/L;
 ### Grade 3: >ULN - 10 mg/dL (0.59 mmol/L)
 
-# ---- derive_var_atoxgr, test 56: CTCAEv4 Hyperuricemia ----
-test_that("derive_var_atoxgr, test 56: CTCAEv4 Hyperuricemia", {
-  exp_out_ctcv4_32 <- tibble::tribble(
-    ~ATOXDSCH,        ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
-    "Not a term",     591,    0,      200,    "umol/L",  NA,
-    NA_character_,    591,    0,      200,    "umol/L",  NA,
-    # ANRHI not missing
-    "Hyperuricemia",  591,    0,      200,    "umol/L",  "4",
-    "Hyperuricemia",  590,    0,      200,    "umol/L",  "3",
-    "Hyperuricemia",  201,    0,      200,    "umol/L",  "3",
-    "Hyperuricemia",  200,    0,      200,    "umol/L",  "0",
-    # ANRHI missing - can grade 4
-    "Hyperuricemia",  591,    0,      NA,     "umol/L",  "4",
-    # ANRHI missing - can NOT grade 0 or 3
-    "Hyperuricemia",  590,    0,      NA,     "umol/L",  NA,
-    "Hyperuricemia",  201,    0,      NA,     "umol/L",  NA,
-    "Hyperuricemia",  200,    0,      NA,     "umol/L",  NA,
-    # Unit missing cannot grade
-    "Hyperuricemia",  200,    0,      200,    NA,        NA,
-    # AVAL missing cannot grade
-    "Hyperuricemia",  NA,     0,      200,    "umol/L",  NA,
-  )
-  input_ctcv4_32 <- exp_out_ctcv4_32 %>%
+expected_albi <- tibble::tribble(
+  ~ATOXDSCH,        ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
+  "Not a term",     591,    0,      200,    "umol/L",  NA,
+  NA_character_,    591,    0,      200,    "umol/L",  NA,
+  # ANRHI not missing
+  "Hyperuricemia",  591,    0,      200,    "umol/L",  "4",
+  "Hyperuricemia",  590,    0,      200,    "umol/L",  "3",
+  "Hyperuricemia",  201,    0,      200,    "umol/L",  "3",
+  "Hyperuricemia",  200,    0,      200,    "umol/L",  "0",
+  # ANRHI missing - can grade 4
+  "Hyperuricemia",  591,    0,      NA,     "umol/L",  "4",
+  # ANRHI missing - can NOT grade 0 or 3
+  "Hyperuricemia",  590,    0,      NA,     "umol/L",  NA,
+  "Hyperuricemia",  201,    0,      NA,     "umol/L",  NA,
+  "Hyperuricemia",  200,    0,      NA,     "umol/L",  NA,
+  # Unit missing cannot grade
+  "Hyperuricemia",  200,    0,      200,    NA,        NA,
+  # AVAL missing cannot grade
+  "Hyperuricemia",  NA,     0,      200,    "umol/L",  NA,
+)
+input_albi <- expected_albi %>%
+  select(-ATOXGRH)
+
+### Hyperuricemia (NCICTCAEv5)
+### NCICTCAEv5 only has grade 3
+### Grade 3: >ULN
+
+# ---- derive_var_atoxgr, test 65: CTCAEv5 Hyperuricemia ----
+test_that("derive_var_atoxgr, test 65: CTCAEv5 Hyperuricemia", {
+
+  expected_albi <- expected_albi %>%
+    filter(ATOXGRH != '4')
+  input_albi <- expected_albi %>%
     select(-ATOXGRH)
 
+  actual_albi <- derive_var_atoxgr_dir(
+    input_albi,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
 
-  actual_output_ctcv4_32 <- derive_var_atoxgr_dir(
-    input_ctcv4_32,
+  expect_dfs_equal(
+    base = expected_albi,
+    compare = actual_albi,
+    keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
+  )
+})
+
+# ---- derive_var_atoxgr, test 66: CTCAEv4 Hyperuricemia ----
+test_that("derive_var_atoxgr, test 66: CTCAEv4 Hyperuricemia", {
+
+  actual_albi <- derive_var_atoxgr_dir(
+    input_albi,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2403,48 +2658,50 @@ test_that("derive_var_atoxgr, test 56: CTCAEv4 Hyperuricemia", {
   )
 
   expect_dfs_equal(
-    base = exp_out_ctcv4_32,
-    compare = actual_output_ctcv4_32,
+    base = expected_albi,
+    compare = actual_albi,
     keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
   )
 })
 
 ### Hypoalbuminemia
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 3: <20 g/L
 ### Grade 2: <30 - 20 g/L
 ### Grade 1: <LLN - 30 g/L
 
-# ---- derive_var_atoxgr, test 57: CTCAEv4 Hypoalbuminemia ----
-test_that("derive_var_atoxgr, test 57: CTCAEv4 Hypoalbuminemia", {
-  expected_albd <- tibble::tribble(
-    ~ATOXDSCL,          ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRL,
-    "Not a term",       19,     40,     100,    "G/L",  NA,
-    NA_character_,      19,     40,     100,    "G/L",  NA,
-    # ANRLO not missing
-    "Hypoalbuminemia",  19,     40,     100,    "G/L",  "3",
-    "Hypoalbuminemia",  20,     40,     100,    "G/L",  "2",
-    "Hypoalbuminemia",  29,     40,     100,    "G/L",  "2",
-    "Hypoalbuminemia",  30,     40,     100,    "G/L",  "1",
-    "Hypoalbuminemia",  39,     40,     100,    "G/L",  "1",
-    "Hypoalbuminemia",  40,     40,     100,    "G/L",  "0",
-    "Hypoalbuminemia",  40,     40,     NA,     "G/L",  "0",
-    # ANRLO missing - can grade 2-3
-    "Hypoalbuminemia",  19,     NA,     100,    "G/L",  "3",
-    "Hypoalbuminemia",  20,     NA,     100,    "G/L",  "2",
-    "Hypoalbuminemia",  29,     NA,     100,    "G/L",  "2",
-    # ANRLO missing - can NOT grade 0 or 1
-    "Hypoalbuminemia",  30,     NA,     100,    "G/L",  NA,
-    "Hypoalbuminemia",  39,     NA,     100,    "G/L",  NA,
-    "Hypoalbuminemia",  40,     NA,     100,    "G/L",  NA,
-    # Unit missing cannot grade
-    "Hypoalbuminemia",  40,     40,     100,    NA,     NA,
-    # AVAL missing cannot grade
-    "Hypoalbuminemia",  NA,     40,     100,    "G/L",  NA,
-  )
-  input_albd <- expected_albd %>%
-    select(-ATOXGRL)
+expected_albd <- tibble::tribble(
+  ~ATOXDSCL,          ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRL,
+  "Not a term",       19,     40,     100,    "G/L",  NA,
+  NA_character_,      19,     40,     100,    "G/L",  NA,
+  # ANRLO not missing
+  "Hypoalbuminemia",  19,     40,     100,    "G/L",  "3",
+  "Hypoalbuminemia",  20,     40,     100,    "G/L",  "2",
+  "Hypoalbuminemia",  29,     40,     100,    "G/L",  "2",
+  "Hypoalbuminemia",  30,     40,     100,    "G/L",  "1",
+  "Hypoalbuminemia",  39,     40,     100,    "G/L",  "1",
+  "Hypoalbuminemia",  40,     40,     100,    "G/L",  "0",
+  "Hypoalbuminemia",  40,     40,     NA,     "G/L",  "0",
+  # ANRLO missing - can grade 2-3
+  "Hypoalbuminemia",  19,     NA,     100,    "G/L",  "3",
+  "Hypoalbuminemia",  20,     NA,     100,    "G/L",  "2",
+  "Hypoalbuminemia",  29,     NA,     100,    "G/L",  "2",
+  # ANRLO missing - can NOT grade 0 or 1
+  "Hypoalbuminemia",  30,     NA,     100,    "G/L",  NA,
+  "Hypoalbuminemia",  39,     NA,     100,    "G/L",  NA,
+  "Hypoalbuminemia",  40,     NA,     100,    "G/L",  NA,
+  # Unit missing cannot grade
+  "Hypoalbuminemia",  40,     40,     100,    NA,     NA,
+  # AVAL missing cannot grade
+  "Hypoalbuminemia",  NA,     40,     100,    "G/L",  NA,
+)
+input_albd <- expected_albd %>%
+  select(-ATOXGRL)
 
-  actual_output_ctcv4_33 <- derive_var_atoxgr_dir(
+# ---- derive_var_atoxgr, test 67: CTCAEv4 Hypoalbuminemia ----
+test_that("derive_var_atoxgr, test 67: CTCAEv4 Hypoalbuminemia", {
+
+  actual_albd <- derive_var_atoxgr_dir(
     input_albd,
     new_var = ATOXGRL,
     meta_criteria = atoxgr_criteria_ctcv4,
@@ -2460,45 +2717,65 @@ test_that("derive_var_atoxgr, test 57: CTCAEv4 Hypoalbuminemia", {
   )
 })
 
+# ---- derive_var_atoxgr, test 68: CTCAEv5 Hypoalbuminemia ----
+test_that("derive_var_atoxgr, test 68: CTCAEv5 Hypoalbuminemia", {
+
+  actual_albd <- derive_var_atoxgr_dir(
+    input_albd,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_albd,
+    compare = actual_albd,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
 
 ### Hypocalcemia
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 4: <1.5 mmol/L
 ### Grade 3: <1.75 - 1.5 mmol/L
 ### Grade 2: <2.0 - 1.75 mmol/L
 ### Grade 1: <LLN - 2.0 mmol/L
 
-# ---- derive_var_atoxgr, test 58: CTCAEv4 Hypocalcemia ----
-test_that("derive_var_atoxgr, test 58: CTCAEv4 Hypocalcemia", {
-  expected_calcd <- tibble::tribble(
-    ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
-    "Not a term",    1.4,    4,      100,    "mmol/L",  NA,
-    NA_character_,   1.4,    4,      100,    "mmol/L",  NA,
-    # ANRLO not missing
-    "Hypocalcemia",  1.4,    4,      100,    "mmol/L",  "4",
-    "Hypocalcemia",  1.5,    4,      100,    "mmol/L",  "3",
-    "Hypocalcemia",  1.74,   4,      100,    "mmol/L",  "3",
-    "Hypocalcemia",  1.75,   4,      100,    "mmol/L",  "2",
-    "Hypocalcemia",  1.9,    4,      100,    "mmol/L",  "2",
-    "Hypocalcemia",  2,      4,      100,    "mmol/L",  "1",
-    "Hypocalcemia",  3,      4,      100,    "mmol/L",  "1",
-    "Hypocalcemia",  4,      4,      100,    "mmol/L",  "0",
-    # ANRLO missing - can grade 2-4
-    "Hypocalcemia",  1.4,    4,      NA,     "mmol/L",  "4",
-    "Hypocalcemia",  1.5,    4,      NA,     "mmol/L",  "3",
-    "Hypocalcemia",  1.74,   4,      NA,     "mmol/L",  "3",
-    "Hypocalcemia",  1.75,   4,      NA,     "mmol/L",  "2",
-    "Hypocalcemia",  1.9,    4,      NA,     "mmol/L",  "2",
-    # ANRLO missing - can NOT grade 0 or 1
-    "Hypocalcemia",  2,      4,      NA,     "mmol/L",  "1",
-    "Hypocalcemia",  3,      4,      NA,     "mmol/L",  "1",
-    "Hypocalcemia",  4,      4,      NA,     "mmol/L",  "0",
-    # Unit missing cannot grade
-    "Hypocalcemia",  4,      4,      100,    NA,        NA,
-    # AVAL missing cannot grade
-    "Hypocalcemia",  NA,     4,      100,    "mmol/L",  NA,
-  )
-  input_calcd <- expected_calcd %>%
-    select(-ATOXGRL)
+expected_calcd <- tibble::tribble(
+  ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
+  "Not a term",    1.4,    4,      100,    "mmol/L",  NA,
+  NA_character_,   1.4,    4,      100,    "mmol/L",  NA,
+  # ANRLO not missing
+  "Hypocalcemia",  1.4,    4,      100,    "mmol/L",  "4",
+  "Hypocalcemia",  1.5,    4,      100,    "mmol/L",  "3",
+  "Hypocalcemia",  1.74,   4,      100,    "mmol/L",  "3",
+  "Hypocalcemia",  1.75,   4,      100,    "mmol/L",  "2",
+  "Hypocalcemia",  1.9,    4,      100,    "mmol/L",  "2",
+  "Hypocalcemia",  2,      4,      100,    "mmol/L",  "1",
+  "Hypocalcemia",  3,      4,      100,    "mmol/L",  "1",
+  "Hypocalcemia",  4,      4,      100,    "mmol/L",  "0",
+  # ANRLO missing - can grade 2-4
+  "Hypocalcemia",  1.4,    4,      NA,     "mmol/L",  "4",
+  "Hypocalcemia",  1.5,    4,      NA,     "mmol/L",  "3",
+  "Hypocalcemia",  1.74,   4,      NA,     "mmol/L",  "3",
+  "Hypocalcemia",  1.75,   4,      NA,     "mmol/L",  "2",
+  "Hypocalcemia",  1.9,    4,      NA,     "mmol/L",  "2",
+  # ANRLO missing - can NOT grade 0 or 1
+  "Hypocalcemia",  2,      4,      NA,     "mmol/L",  "1",
+  "Hypocalcemia",  3,      4,      NA,     "mmol/L",  "1",
+  "Hypocalcemia",  4,      4,      NA,     "mmol/L",  "0",
+  # Unit missing cannot grade
+  "Hypocalcemia",  4,      4,      100,    NA,        NA,
+  # AVAL missing cannot grade
+  "Hypocalcemia",  NA,     4,      100,    "mmol/L",  NA,
+)
+input_calcd <- expected_calcd %>%
+  select(-ATOXGRL)
+
+# ---- derive_var_atoxgr, test 69: CTCAEv4 Hypocalcemia ----
+test_that("derive_var_atoxgr, test 69: CTCAEv4 Hypocalcemia", {
 
   actual_calcd <- derive_var_atoxgr_dir(
     input_calcd,
@@ -2516,44 +2793,65 @@ test_that("derive_var_atoxgr, test 58: CTCAEv4 Hypocalcemia", {
   )
 })
 
+# ---- derive_var_atoxgr, test 70: CTCAEv5 Hypocalcemia ----
+test_that("derive_var_atoxgr, test 70: CTCAEv5 Hypocalcemia", {
+
+  actual_calcd <- derive_var_atoxgr_dir(
+    input_calcd,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_calcd,
+    compare = actual_calcd,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
 ### Hypocalcemia (Ionized)
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 4: <0.8 mmol/L
 ### Grade 3: <0.9 - 0.8 mmol/L
 ### Grade 2: <1.0 - 0.9 mmol/L
 ### Grade 1: <LLN - 1.0 mmol/L
 
-# ---- derive_var_atoxgr, test 59: CTCAEv4 Hypocalcemia (Ionized) ----
-test_that("derive_var_atoxgr, test 59: CTCAEv4 Hypocalcemia (Ionized)", {
-  expected_caliond <- tibble::tribble(
-    ~ATOXDSCL,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
-    "Not a term",              0.79,   1.3,    100,    "mmol/L",  NA,
-    NA_character_,             0.79,   1.3,    100,    "mmol/L",  NA,
-    # ANRLO not missing
-    "Hypocalcemia (Ionized)",  0.79,   1.3,    100,    "mmol/L",  "4",
-    "Hypocalcemia (Ionized)",  0.8,    1.3,    100,    "mmol/L",  "3",
-    "Hypocalcemia (Ionized)",  0.89,   1.3,    100,    "mmol/L",  "3",
-    "Hypocalcemia (Ionized)",  0.9,    1.3,    100,    "mmol/L",  "2",
-    "Hypocalcemia (Ionized)",  0.99,   1.3,    100,    "mmol/L",  "2",
-    "Hypocalcemia (Ionized)",  1,      1.3,    100,    "mmol/L",  "1",
-    "Hypocalcemia (Ionized)",  1.29,   1.3,    100,    "mmol/L",  "1",
-    "Hypocalcemia (Ionized)",  1.3,    1.3,    100,    "mmol/L",  "0",
-    # ANRLO missing - can grade 2-4
-    "Hypocalcemia (Ionized)",  0.79,   NA,     100,    "mmol/L",  "4",
-    "Hypocalcemia (Ionized)",  0.8,    NA,     100,    "mmol/L",  "3",
-    "Hypocalcemia (Ionized)",  0.89,   NA,     100,    "mmol/L",  "3",
-    "Hypocalcemia (Ionized)",  0.9,    NA,     100,    "mmol/L",  "2",
-    "Hypocalcemia (Ionized)",  0.99,   NA,     100,    "mmol/L",  "2",
-    # ANRLO missing - can NOT grade 0 or 1
-    "Hypocalcemia (Ionized)",  1,      1.3,    NA,     "mmol/L",  "1",
-    "Hypocalcemia (Ionized)",  1.29,   1.3,    NA,     "mmol/L",  "1",
-    "Hypocalcemia (Ionized)",  1.3,    1.3,    NA,     "mmol/L",  "0",
-    # Unit missing cannot grade
-    "Hypocalcemia (Ionized)",  1.3,    1.3,    100,    NA,        NA,
-    # AVAL missing cannot grade
-    "Hypocalcemia (Ionized)",  NA,     1.3,    100,    "mmol/L",  NA,
-  )
-  input_caliond <- expected_caliond %>%
-    select(-ATOXGRL)
+expected_caliond <- tibble::tribble(
+  ~ATOXDSCL,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
+  "Not a term",              0.79,   1.3,    100,    "mmol/L",  NA,
+  NA_character_,             0.79,   1.3,    100,    "mmol/L",  NA,
+  # ANRLO not missing
+  "Hypocalcemia (Ionized)",  0.79,   1.3,    100,    "mmol/L",  "4",
+  "Hypocalcemia (Ionized)",  0.8,    1.3,    100,    "mmol/L",  "3",
+  "Hypocalcemia (Ionized)",  0.89,   1.3,    100,    "mmol/L",  "3",
+  "Hypocalcemia (Ionized)",  0.9,    1.3,    100,    "mmol/L",  "2",
+  "Hypocalcemia (Ionized)",  0.99,   1.3,    100,    "mmol/L",  "2",
+  "Hypocalcemia (Ionized)",  1,      1.3,    100,    "mmol/L",  "1",
+  "Hypocalcemia (Ionized)",  1.29,   1.3,    100,    "mmol/L",  "1",
+  "Hypocalcemia (Ionized)",  1.3,    1.3,    100,    "mmol/L",  "0",
+  # ANRLO missing - can grade 2-4
+  "Hypocalcemia (Ionized)",  0.79,   NA,     100,    "mmol/L",  "4",
+  "Hypocalcemia (Ionized)",  0.8,    NA,     100,    "mmol/L",  "3",
+  "Hypocalcemia (Ionized)",  0.89,   NA,     100,    "mmol/L",  "3",
+  "Hypocalcemia (Ionized)",  0.9,    NA,     100,    "mmol/L",  "2",
+  "Hypocalcemia (Ionized)",  0.99,   NA,     100,    "mmol/L",  "2",
+  # ANRLO missing - can NOT grade 0 or 1
+  "Hypocalcemia (Ionized)",  1,      1.3,    NA,     "mmol/L",  "1",
+  "Hypocalcemia (Ionized)",  1.29,   1.3,    NA,     "mmol/L",  "1",
+  "Hypocalcemia (Ionized)",  1.3,    1.3,    NA,     "mmol/L",  "0",
+  # Unit missing cannot grade
+  "Hypocalcemia (Ionized)",  1.3,    1.3,    100,    NA,        NA,
+  # AVAL missing cannot grade
+  "Hypocalcemia (Ionized)",  NA,     1.3,    100,    "mmol/L",  NA,
+)
+input_caliond <- expected_caliond %>%
+  select(-ATOXGRL)
+
+# ---- derive_var_atoxgr, test 71: CTCAEv4 Hypocalcemia (Ionized) ----
+test_that("derive_var_atoxgr, test 71: CTCAEv4 Hypocalcemia (Ionized)", {
 
   actual_caliond <- derive_var_atoxgr_dir(
     input_caliond,
@@ -2571,44 +2869,65 @@ test_that("derive_var_atoxgr, test 59: CTCAEv4 Hypocalcemia (Ionized)", {
   )
 })
 
+# ---- derive_var_atoxgr, test 72: CTCAEv5 Hypocalcemia (Ionized) ----
+test_that("derive_var_atoxgr, test 72: CTCAEv5 Hypocalcemia (Ionized)", {
+
+  actual_caliond <- derive_var_atoxgr_dir(
+    input_caliond,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_caliond,
+    compare = actual_caliond,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
 ### Hypoglycemia
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 4: <1.7 mmol/L
 ### Grade 3: <2.2 - 1.7 mmol/L
 ### Grade 2: <3.0 - 2.2 mmol/L
 ### Grade 1: <LLN - 3.0 mmol/L
 
-# ---- derive_var_atoxgr, test 60: CTCAEv4 Hypoglycemia ----
-test_that("derive_var_atoxgr, test 60: CTCAEv4 Hypoglycemia", {
-  expected_glycd <- tibble::tribble(
-    ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
-    "Not a term",    1.69,   4,      100,    "mmol/L",  NA,
-    NA_character_,   1.69,   4,      100,    "mmol/L",  NA,
-    # ANRLO not missing
-    "Hypoglycemia",  1.69,   4,      100,    "mmol/L",  "4",
-    "Hypoglycemia",  1.7,    4,      100,    "mmol/L",  "3",
-    "Hypoglycemia",  2.19,   4,      100,    "mmol/L",  "3",
-    "Hypoglycemia",  2.2,    4,      100,    "mmol/L",  "2",
-    "Hypoglycemia",  2.9,    4,      100,    "mmol/L",  "2",
-    "Hypoglycemia",  3,      4,      100,    "mmol/L",  "1",
-    "Hypoglycemia",  3.9,    4,      100,    "mmol/L",  "1",
-    "Hypoglycemia",  4,      4,      100,    "mmol/L",  "0",
-    # ANRLO missing - can grade 2-4
-    "Hypoglycemia",  1.69,   NA,     100,    "mmol/L",  "4",
-    "Hypoglycemia",  1.7,    NA,     100,    "mmol/L",  "3",
-    "Hypoglycemia",  2.19,   NA,     100,    "mmol/L",  "3",
-    "Hypoglycemia",  2.2,    NA,     100,    "mmol/L",  "2",
-    "Hypoglycemia",  2.9,    NA,     100,    "mmol/L",  "2",
-    # ANRLO missing - can NOT grade 0 or 1
-    "Hypoglycemia",  3,      NA,     100,    "mmol/L",  NA,
-    "Hypoglycemia",  3.9,    NA,     100,    "mmol/L",  NA,
-    "Hypoglycemia",  4,      NA,     100,    "mmol/L",  NA,
-    # Unit missing cannot grade
-    "Hypoglycemia",  4,      4,      100,    NA,        NA,
-    # AVAL missing cannot grade
-    "Hypoglycemia",  NA,     4,      100,    "mmol/L",  NA,
-  )
-  input_glycd <- expected_glycd %>%
-    select(-ATOXGRL)
+expected_glycd <- tibble::tribble(
+  ~ATOXDSCL,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
+  "Not a term",    1.69,   4,      100,    "mmol/L",  NA,
+  NA_character_,   1.69,   4,      100,    "mmol/L",  NA,
+  # ANRLO not missing
+  "Hypoglycemia",  1.69,   4,      100,    "mmol/L",  "4",
+  "Hypoglycemia",  1.7,    4,      100,    "mmol/L",  "3",
+  "Hypoglycemia",  2.19,   4,      100,    "mmol/L",  "3",
+  "Hypoglycemia",  2.2,    4,      100,    "mmol/L",  "2",
+  "Hypoglycemia",  2.9,    4,      100,    "mmol/L",  "2",
+  "Hypoglycemia",  3,      4,      100,    "mmol/L",  "1",
+  "Hypoglycemia",  3.9,    4,      100,    "mmol/L",  "1",
+  "Hypoglycemia",  4,      4,      100,    "mmol/L",  "0",
+  # ANRLO missing - can grade 2-4
+  "Hypoglycemia",  1.69,   NA,     100,    "mmol/L",  "4",
+  "Hypoglycemia",  1.7,    NA,     100,    "mmol/L",  "3",
+  "Hypoglycemia",  2.19,   NA,     100,    "mmol/L",  "3",
+  "Hypoglycemia",  2.2,    NA,     100,    "mmol/L",  "2",
+  "Hypoglycemia",  2.9,    NA,     100,    "mmol/L",  "2",
+  # ANRLO missing - can NOT grade 0 or 1
+  "Hypoglycemia",  3,      NA,     100,    "mmol/L",  NA,
+  "Hypoglycemia",  3.9,    NA,     100,    "mmol/L",  NA,
+  "Hypoglycemia",  4,      NA,     100,    "mmol/L",  NA,
+  # Unit missing cannot grade
+  "Hypoglycemia",  4,      4,      100,    NA,        NA,
+  # AVAL missing cannot grade
+  "Hypoglycemia",  NA,     4,      100,    "mmol/L",  NA,
+)
+input_glycd <- expected_glycd %>%
+  select(-ATOXGRL)
+
+# ---- derive_var_atoxgr, test 73: CTCAEv4 Hypoglycemia ----
+test_that("derive_var_atoxgr, test 73: CTCAEv4 Hypoglycemia", {
 
   actual_glycd <- derive_var_atoxgr_dir(
     input_glycd,
@@ -2626,39 +2945,60 @@ test_that("derive_var_atoxgr, test 60: CTCAEv4 Hypoglycemia", {
   )
 })
 
+# ---- derive_var_atoxgr, test 74: CTCAEv5 Hypoglycemia ----
+test_that("derive_var_atoxgr, test 74: CTCAEv5 Hypoglycemia", {
+
+  actual_glycd <- derive_var_atoxgr_dir(
+    input_glycd,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_glycd,
+    compare = actual_glycd,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
 ### Hypokalemia
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 4: <2.5 mmol/L
 ### Grade 3: <3.0 - 2.5 mmol/L
 ### Grade 2: <LLN - 3.0 mmol/L
 
-# ---- derive_var_atoxgr, test 61: CTCAEv4 Hypokalemia ----
-test_that("derive_var_atoxgr, test 61: CTCAEv4 Hypokalemia", {
-  expected_kaled <- tibble::tribble(
-    ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
-    "Not a term",   2.49,   4,      100,    "mmol/L",  NA,
-    NA_character_,  2.49,   4,      100,    "mmol/L",  NA,
-    # ANRLO not missing
-    "Hypokalemia",  2.49,   4,      100,    "mmol/L",  "4",
-    "Hypokalemia",  2.5,    4,      100,    "mmol/L",  "3",
-    "Hypokalemia",  2.9,    4,      100,    "mmol/L",  "3",
-    "Hypokalemia",  3,      4,      100,    "mmol/L",  "2",
-    "Hypokalemia",  3.9,    4,      100,    "mmol/L",  "2",
-    "Hypokalemia",  4,      4,      100,    "mmol/L",  "0",
-    # ANRLO missing - can grade 3-4
-    "Hypokalemia",  2.49,   NA,     100,    "mmol/L",  "4",
-    "Hypokalemia",  2.5,    NA,     100,    "mmol/L",  "3",
-    "Hypokalemia",  2.9,    NA,     100,    "mmol/L",  "3",
-    # ANRLO missing - can NOT grade 0 or 2
-    "Hypokalemia",  3,      NA,     100,    "mmol/L",  NA,
-    "Hypokalemia",  3.9,    NA,     100,    "mmol/L",  NA,
-    "Hypokalemia",  4,      NA,     NA,     "mmol/L",  NA,
-    # Unit missing cannot grade
-    "Hypokalemia",  4,      4,      100,    NA,        NA,
-    # AVAL missing cannot grade
-    "Hypokalemia",  NA,     4,      100,    "mmol/L",  NA,
-  )
-  input_kaled <- expected_kaled %>%
-    select(-ATOXGRL)
+expected_kaled <- tibble::tribble(
+  ~ATOXDSCL,      ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
+  "Not a term",   2.49,   4,      100,    "mmol/L",  NA,
+  NA_character_,  2.49,   4,      100,    "mmol/L",  NA,
+  # ANRLO not missing
+  "Hypokalemia",  2.49,   4,      100,    "mmol/L",  "4",
+  "Hypokalemia",  2.5,    4,      100,    "mmol/L",  "3",
+  "Hypokalemia",  2.9,    4,      100,    "mmol/L",  "3",
+  "Hypokalemia",  3,      4,      100,    "mmol/L",  "2",
+  "Hypokalemia",  3.9,    4,      100,    "mmol/L",  "2",
+  "Hypokalemia",  4,      4,      100,    "mmol/L",  "0",
+  # ANRLO missing - can grade 3-4
+  "Hypokalemia",  2.49,   NA,     100,    "mmol/L",  "4",
+  "Hypokalemia",  2.5,    NA,     100,    "mmol/L",  "3",
+  "Hypokalemia",  2.9,    NA,     100,    "mmol/L",  "3",
+  # ANRLO missing - can NOT grade 0 or 2
+  "Hypokalemia",  3,      NA,     100,    "mmol/L",  NA,
+  "Hypokalemia",  3.9,    NA,     100,    "mmol/L",  NA,
+  "Hypokalemia",  4,      NA,     NA,     "mmol/L",  NA,
+  # Unit missing cannot grade
+  "Hypokalemia",  4,      4,      100,    NA,        NA,
+  # AVAL missing cannot grade
+  "Hypokalemia",  NA,     4,      100,    "mmol/L",  NA,
+)
+input_kaled <- expected_kaled %>%
+  select(-ATOXGRL)
+
+# ---- derive_var_atoxgr, test 75: CTCAEv4 Hypokalemia ----
+test_that("derive_var_atoxgr, test 75: CTCAEv4 Hypokalemia", {
 
   actual_kaled <- derive_var_atoxgr_dir(
     input_kaled,
@@ -2676,44 +3016,65 @@ test_that("derive_var_atoxgr, test 61: CTCAEv4 Hypokalemia", {
   )
 })
 
+# ---- derive_var_atoxgr, test 76: CTCAEv5 Hypokalemia ----
+test_that("derive_var_atoxgr, test 76: CTCAEv5 Hypokalemia", {
+
+  actual_kaled <- derive_var_atoxgr_dir(
+    input_kaled,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_kaled,
+    compare = actual_kaled,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
 ### Hypomagnesemia
+### NCICTCAEv4 and NCICTCAEv5 criteria is the same
 ### Grade 4: <0.3 mmol/L
 ### Grade 3: <0.4 - 0.3 mmol/L
 ### Grade 2: <0.5 - 0.4 mmol/L
 ### Grade 1: <LLN - 0.5 mmol/L
 
-# ---- derive_var_atoxgr, test 62: CTCAEv4 Hypomagnesemia ----
-test_that("derive_var_atoxgr, test 62: CTCAEv4 Hypomagnesemia", {
-  expected_magnd <- tibble::tribble(
-    ~ATOXDSCL,         ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
-    "Not a term",      0.29,   1,      100,    "mmol/L",  NA,
-    NA_character_,     0.29,   1,      100,    "mmol/L",  NA,
-    # ANRLO not missing
-    "Hypomagnesemia",  0.29,   1,      100,    "mmol/L",  "4",
-    "Hypomagnesemia",  0.3,    1,      100,    "mmol/L",  "3",
-    "Hypomagnesemia",  0.39,   1,      100,    "mmol/L",  "3",
-    "Hypomagnesemia",  0.4,    1,      100,    "mmol/L",  "2",
-    "Hypomagnesemia",  0.49,   1,      100,    "mmol/L",  "2",
-    "Hypomagnesemia",  0.5,    1,      100,    "mmol/L",  "1",
-    "Hypomagnesemia",  0.9,    1,      100,    "mmol/L",  "1",
-    "Hypomagnesemia",  1,      1,      100,    "mmol/L",  "0",
-    # ANRLO missing - can grade 2-4
-    "Hypomagnesemia",  0.29,   NA,     100,    "mmol/L",  "4",
-    "Hypomagnesemia",  0.3,    NA,     100,    "mmol/L",  "3",
-    "Hypomagnesemia",  0.39,   NA,     100,    "mmol/L",  "3",
-    "Hypomagnesemia",  0.4,    NA,     100,    "mmol/L",  "2",
-    "Hypomagnesemia",  0.49,   NA,     100,    "mmol/L",  "2",
-    # ANRLO missing - can NOT grade 0 or 1
-    "Hypomagnesemia",  0.5,    NA,     100,    "mmol/L",  NA,
-    "Hypomagnesemia",  0.9,    NA,     100,    "mmol/L",  NA,
-    "Hypomagnesemia",  1,      NA,     100,    "mmol/L",  NA,
-    # Unit missing cannot grade
-    "Hypomagnesemia",  1,      1,      100,    NA,        NA,
-    # AVAL missing cannot grade
-    "Hypomagnesemia",  NA,     1,      100,    "mmol/L",  NA,
-  )
-  input_magnd <- expected_magnd %>%
-    select(-ATOXGRL)
+expected_magnd <- tibble::tribble(
+  ~ATOXDSCL,         ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
+  "Not a term",      0.29,   1,      100,    "mmol/L",  NA,
+  NA_character_,     0.29,   1,      100,    "mmol/L",  NA,
+  # ANRLO not missing
+  "Hypomagnesemia",  0.29,   1,      100,    "mmol/L",  "4",
+  "Hypomagnesemia",  0.3,    1,      100,    "mmol/L",  "3",
+  "Hypomagnesemia",  0.39,   1,      100,    "mmol/L",  "3",
+  "Hypomagnesemia",  0.4,    1,      100,    "mmol/L",  "2",
+  "Hypomagnesemia",  0.49,   1,      100,    "mmol/L",  "2",
+  "Hypomagnesemia",  0.5,    1,      100,    "mmol/L",  "1",
+  "Hypomagnesemia",  0.9,    1,      100,    "mmol/L",  "1",
+  "Hypomagnesemia",  1,      1,      100,    "mmol/L",  "0",
+  # ANRLO missing - can grade 2-4
+  "Hypomagnesemia",  0.29,   NA,     100,    "mmol/L",  "4",
+  "Hypomagnesemia",  0.3,    NA,     100,    "mmol/L",  "3",
+  "Hypomagnesemia",  0.39,   NA,     100,    "mmol/L",  "3",
+  "Hypomagnesemia",  0.4,    NA,     100,    "mmol/L",  "2",
+  "Hypomagnesemia",  0.49,   NA,     100,    "mmol/L",  "2",
+  # ANRLO missing - can NOT grade 0 or 1
+  "Hypomagnesemia",  0.5,    NA,     100,    "mmol/L",  NA,
+  "Hypomagnesemia",  0.9,    NA,     100,    "mmol/L",  NA,
+  "Hypomagnesemia",  1,      NA,     100,    "mmol/L",  NA,
+  # Unit missing cannot grade
+  "Hypomagnesemia",  1,      1,      100,    NA,        NA,
+  # AVAL missing cannot grade
+  "Hypomagnesemia",  NA,     1,      100,    "mmol/L",  NA,
+)
+input_magnd <- expected_magnd %>%
+  select(-ATOXGRL)
+
+# ---- derive_var_atoxgr, test 77: CTCAEv4 Hypomagnesemia ----
+test_that("derive_var_atoxgr, test 77: CTCAEv4 Hypomagnesemia", {
 
   actual_magnd <- derive_var_atoxgr_dir(
     input_magnd,
@@ -2731,39 +3092,60 @@ test_that("derive_var_atoxgr, test 62: CTCAEv4 Hypomagnesemia", {
   )
 })
 
-### Hyponatremia
+# ---- derive_var_atoxgr, test 78: CTCAEv5 Hypomagnesemia ----
+test_that("derive_var_atoxgr, test 78: CTCAEv5 Hypomagnesemia", {
+
+  actual_magnd <- derive_var_atoxgr_dir(
+    input_magnd,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_magnd,
+    compare = actual_magnd,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
+### Hyponatremia (NCICTCAEv4)
+### NCICTCAEv4 and NCICTCAEv5 essentially the same (slightly different text)
 ### Grade 4: <120 mmol/L
 ### Grade 3: <130 - 120 mmol/L
 ### Grade 1: <LLN - 130 mmol/L
 
-# ---- derive_var_atoxgr, test 63: CTCAEv4 Hyponatremia ----
-test_that("derive_var_atoxgr, test 63: CTCAEv4 Hyponatremia", {
-  expected_natrd <- tibble::tribble(
-    ~ATOXDSCL,       ~AVAL,  ~ANRLO,   ~ANRHI, ~AVALU,    ~ATOXGRL,
-    "Not a term",    119,    140,      100,    "mmol/L",  NA,
-    NA_character_,   119,    140,      100,    "mmol/L",  NA,
-    # ANRLO not missing
-    "Hyponatremia",  119,    140,      100,    "mmol/L",  "4",
-    "Hyponatremia",  120,    140,      100,    "mmol/L",  "3",
-    "Hyponatremia",  129,    140,      100,    "mmol/L",  "3",
-    "Hyponatremia",  130,    140,      100,    "mmol/L",  "1",
-    "Hyponatremia",  139,    140,      100,    "mmol/L",  "1",
-    "Hyponatremia",  140,    140,      100,    "mmol/L",  "0",
-    # ANRLO missing - can grade 3-4
-    "Hyponatremia",  119,    NA,       100,    "mmol/L",  "4",
-    "Hyponatremia",  120,    NA,       100,    "mmol/L",  "3",
-    "Hyponatremia",  129,    NA,       100,    "mmol/L",  "3",
-    # ANRLO missing - can NOT grade 0 or 1
-    "Hyponatremia",  130,    NA,       100,    "mmol/L",  NA,
-    "Hyponatremia",  139,    NA,       100,    "mmol/L",  NA,
-    "Hyponatremia",  140,    NA,       100,    "mmol/L",  NA,
-    # Unit missing cannot grade
-    "Hyponatremia",  140,    140,      100,    NA,        NA,
-    # AVAL missing cannot grade
-    "Hyponatremia",  NA,     140,      100,    "mmol/L",  NA,
-  )
-  input_natrd <- expected_natrd %>%
-    select(-ATOXGRL)
+expected_natrd <- tibble::tribble(
+  ~ATOXDSCL,       ~AVAL,  ~ANRLO,   ~ANRHI, ~AVALU,    ~ATOXGRL,
+  "Not a term",    119,    140,      100,    "mmol/L",  NA,
+  NA_character_,   119,    140,      100,    "mmol/L",  NA,
+  # ANRLO not missing
+  "Hyponatremia",  119,    140,      100,    "mmol/L",  "4",
+  "Hyponatremia",  120,    140,      100,    "mmol/L",  "3",
+  "Hyponatremia",  129,    140,      100,    "mmol/L",  "3",
+  "Hyponatremia",  130,    140,      100,    "mmol/L",  "1",
+  "Hyponatremia",  139,    140,      100,    "mmol/L",  "1",
+  "Hyponatremia",  140,    140,      100,    "mmol/L",  "0",
+  # ANRLO missing - can grade 3-4
+  "Hyponatremia",  119,    NA,       100,    "mmol/L",  "4",
+  "Hyponatremia",  120,    NA,       100,    "mmol/L",  "3",
+  "Hyponatremia",  129,    NA,       100,    "mmol/L",  "3",
+  # ANRLO missing - can NOT grade 0 or 1
+  "Hyponatremia",  130,    NA,       100,    "mmol/L",  NA,
+  "Hyponatremia",  139,    NA,       100,    "mmol/L",  NA,
+  "Hyponatremia",  140,    NA,       100,    "mmol/L",  NA,
+  # Unit missing cannot grade
+  "Hyponatremia",  140,    140,      100,    NA,        NA,
+  # AVAL missing cannot grade
+  "Hyponatremia",  NA,     140,      100,    "mmol/L",  NA,
+)
+input_natrd <- expected_natrd %>%
+  select(-ATOXGRL)
+
+# ---- derive_var_atoxgr, test 79: CTCAEv4 Hyponatremia ----
+test_that("derive_var_atoxgr, test 79: CTCAEv4 Hyponatremia", {
 
   actual_natrd <- derive_var_atoxgr_dir(
     input_natrd,
@@ -2781,14 +3163,34 @@ test_that("derive_var_atoxgr, test 63: CTCAEv4 Hyponatremia", {
   )
 })
 
+# ---- derive_var_atoxgr, test 80: CTCAEv5 Hyponatremia ----
+test_that("derive_var_atoxgr, test 80: CTCAEv5 Hyponatremia", {
+
+  actual_natrd <- derive_var_atoxgr_dir(
+    input_natrd,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv5,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_natrd,
+    compare = actual_natrd,
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+  )
+})
+
 ### Hypophosphatemia
+### Only in NCICTCAEv4 (not NCICTCAEv5)
 ### Grade 4: <0.3 mmol/L
 ### Grade 3: <0.6 - 0.3 mmol/L
 ### Grade 2: <0.8 - 0.6 mmol/L
 ### Grade 1: <LLN - 0.8 mmol/L
 
-# ---- derive_var_atoxgr, test 64: CTCAEv4 Hypophosphatemia ----
-test_that("derive_var_atoxgr, test 64: CTCAEv4 Hypophosphatemia", {
+# ---- derive_var_atoxgr, test 81: CTCAEv4 Hypophosphatemia ----
+test_that("derive_var_atoxgr, test 81: CTCAEv4 Hypophosphatemia", {
   expected_phosd <- tibble::tribble(
     ~ATOXDSCL,           ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
     "Not a term",        0.29,   1,      100,    "mmol/L",  NA,
