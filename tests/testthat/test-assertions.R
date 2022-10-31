@@ -827,7 +827,6 @@ test_that("Test 66 : `assert_varval_list` does not throw an error
 # assert_list_element ----
 test_that("Test 67 : `assert_list_element` does not throw an error
           if the elements of a list of named lists/classes fulfill a certain condition", {
-
   expect_invisible(
     assert_list_element(vars(DTHDOM = "AE", DTHSEQ = AESEQ), "DTHSEQ", TRUE, message_text = "")
   )
@@ -900,11 +899,11 @@ test_that("assert_date_vector Test 73: returns invisible if input is date format
 ## Test 74: returns invisible if `arg` is NULL and optional is TRUE  ----
 test_that("Test 74 : `assert_date_vector` does not throw an error
           if `arg` is NULL and optional is TRUE", {
-            example_fun <- function(arg) {
-              assert_date_vector(arg, optional = TRUE)
-            }
+  example_fun <- function(arg) {
+    assert_date_vector(arg, optional = TRUE)
+  }
 
-            expect_invisible(
-              example_fun(NULL)
-            )
-          })
+  expect_invisible(
+    example_fun(NULL)
+  )
+})
