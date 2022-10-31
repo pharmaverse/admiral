@@ -1,9 +1,7 @@
-library(tibble)
-
 # derive_vars_joined ----
 ## Test 1: no by_vars, no order, no new_vars ----
 test_that("derive_vars_joined Test 1: no by_vars, no order, no new_vars", {
-  expected <- tribble(
+  expected <- tibble::tribble(
     ~USUBJID, ~ADY, ~AVISIT,    ~AWLO, ~AWHI,
     "1",        -2, "BASELINE",   -30,     1,
     "1",         3, "WEEK 1",       2,     7,
@@ -11,7 +9,7 @@ test_that("derive_vars_joined Test 1: no by_vars, no order, no new_vars", {
     "2",        NA, NA,            NA,    NA
   )
 
-  windows <- tribble(
+  windows <- tibble::tribble(
     ~AVISIT,    ~AWLO, ~AWHI,
     "BASELINE",   -30,     1,
     "WEEK 1",       2,     7,
@@ -34,7 +32,7 @@ test_that("derive_vars_joined Test 1: no by_vars, no order, no new_vars", {
 
 ## Test 2: new_vars with rename ----
 test_that("derive_vars_joined Test 2: new_vars with rename", {
-  expected <- tribble(
+  expected <- tibble::tribble(
     ~USUBJID, ~ADY, ~AVAL, ~NADIR,
     "1",        -7,    10,     NA,
     "1",         1,    12,     NA,
@@ -67,7 +65,7 @@ test_that("derive_vars_joined Test 2: new_vars with rename", {
 
 ## Test 3: by_vars with rename ----
 test_that("derive_vars_joined Test 3: by_vars with rename", {
-  adae <- tribble(
+  adae <- tibble::tribble(
     ~AEGRPID,
     "1",
     "2"
@@ -76,7 +74,7 @@ test_that("derive_vars_joined Test 3: by_vars with rename", {
       TRTSDTM = ymd_hms("2020-01-06T12:00:00")
     )
 
-  faae <- tribble(
+  faae <- tibble::tribble(
     ~FAGRPID, ~FADT,        ~FAORRES,
     "1",      "2020-01-01", "1",
     "1",      "2020-01-03", "2",
@@ -102,7 +100,7 @@ test_that("derive_vars_joined Test 3: by_vars with rename", {
 
 ## Test 4: no join_vars, no filter_join ----
 test_that("derive_vars_joined Test 4: no join_vars, no filter_join", {
-  adae <- tribble(
+  adae <- tibble::tribble(
     ~AEGRPID,
     "1",
     "2"
@@ -111,7 +109,7 @@ test_that("derive_vars_joined Test 4: no join_vars, no filter_join", {
       TRTSDTM = ymd_hms("2020-01-06T12:00:00")
     )
 
-  faae <- tribble(
+  faae <- tibble::tribble(
     ~FAGRPID, ~FADT,        ~FAORRES,
     "1",      "2020-01-01", "1",
     "1",      "2020-01-03", "2",

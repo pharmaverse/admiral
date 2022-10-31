@@ -35,9 +35,8 @@ vs <- tibble::tribble(
 ) %>% mutate(STUDYID = "ST42")
 
 
-# derive_vars_merged ----
-## Test 1: merge all variables ----
-test_that("derive_vars_merged Test 1: merge all variables", {
+## Test 1: merge all variables
+test_that("derive_vars_merged, Test 1: merge all variables", {
   actual <- derive_vars_merged(advs,
     dataset_add = adsl,
     by_vars = vars(STUDYID, USUBJID)
@@ -52,7 +51,7 @@ test_that("derive_vars_merged Test 1: merge all variables", {
   )
 })
 
-## Test 2: merge selected variables ----
+## Test 2: merge selected variables
 test_that("derive_vars_merged Test 2: merge selected variables", {
   actual <- derive_vars_merged(advs,
     dataset_add = adsl,
@@ -69,8 +68,9 @@ test_that("derive_vars_merged Test 2: merge selected variables", {
   )
 })
 
-## Test 3: merge last value and flag matched by groups ----
-test_that("derive_vars_merged Test 3: merge last value and flag matched by groups", {
+## Test 3: merge last value and 7 flag matched by groups
+test_that("derive_vars_merged Test 3: merge last value and 7 flag matched by
+          groups", {
   actual <- derive_vars_merged(adsl,
     dataset_add = advs,
     order = vars(AVAL),
@@ -91,7 +91,7 @@ test_that("derive_vars_merged Test 3: merge last value and flag matched by group
   )
 })
 
-## Test 4: error if variable in both datasets ----
+## Test 4: error if variable in both datasets
 test_that("derive_vars_merged Test 4: error if variable in both datasets", {
   expect_error(derive_vars_merged(advs,
     dataset_add = adsl,
@@ -101,8 +101,7 @@ test_that("derive_vars_merged Test 4: error if variable in both datasets", {
   )
 })
 
-# derive_vars_merged_dt ----
-## Test 5: merge first date ----
+## Test 5: merge first date
 test_that("derive_vars_merged_dt Test 5: merge first date", {
   suppress_warning(
     actual <- derive_vars_merged_dt(
@@ -132,8 +131,7 @@ test_that("derive_vars_merged_dt Test 5: merge first date", {
   )
 })
 
-# derive_vars_merged_dtm ----
-## Test 6: merge first date ----
+## Test 6: merge first date
 test_that("derive_vars_merged_dtm Test 6: merge first date", {
   suppress_warning(
     actual <- derive_vars_merged_dtm(
@@ -168,8 +166,7 @@ test_that("derive_vars_merged_dtm Test 6: merge first date", {
   )
 })
 
-# derive_var_merged_cat ----
-## Test 7: merge categorized variable ----
+## Test 7: merge categorized variable
 test_that("derive_vars_merged_cat Test 7: merge categorized variable", {
   get_region <- function(x) {
     if_else(x %in% c("AUT", "NOR"), "EUROPE", "AFRICA")
@@ -196,8 +193,9 @@ test_that("derive_vars_merged_cat Test 7: merge categorized variable", {
   )
 })
 
-## Test 8: define value for non-matched by groups ----
-test_that("derive_vars_merged_cat Test 8: define value for non-matched by groups", {
+## Test 8: define value for non-matched by groups
+test_that("derive_vars_merged_cat Test 8: define value for non-matched by
+          groups", {
   get_vscat <- function(x) {
     if_else(x == "BASELINE", "BASELINE", "POST-BASELINE")
   }
@@ -226,8 +224,7 @@ test_that("derive_vars_merged_cat Test 8: define value for non-matched by groups
   )
 })
 
-# derive_var_merged_exist_flag ----
-## Test 9: merge existence flag ----
+## Test 9: merge existence flag
 test_that("derive_vars_merged_exist_flag Test 9: merge existence flag", {
   actual <- derive_var_merged_exist_flag(
     adsl,
@@ -248,9 +245,9 @@ test_that("derive_vars_merged_exist_flag Test 9: merge existence flag", {
   )
 })
 
-# derive_var_merged_character ----
-## Test 10: merge character variable, no transformation ----
-test_that("derive_var_merged_character Test 10: merge character variable, no transformation", {
+## Test 10: merge character variable, no transformation
+test_that("derive_var_merged_character Test 10: merge character variable,
+          no transformation", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -272,8 +269,9 @@ test_that("derive_var_merged_character Test 10: merge character variable, no tra
   )
 })
 
-## Test 11: merge character variable, upper case ----
-test_that("derive_var_merged_character Test 11: merge character variable, upper case", {
+## Test 11: merge character variable, upper case
+test_that("derive_var_merged_character Test 11: merge character variable,
+          upper case", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -297,8 +295,9 @@ test_that("derive_var_merged_character Test 11: merge character variable, upper 
   )
 })
 
-## Test 12: merge character variable, lower case ----
-test_that("derive_var_merged_character Test 12: merge character variable, lower case", {
+## Test 12: merge character variable, lower case
+test_that("derive_var_merged_character Test 12: merge character variable,
+          lower case", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -321,8 +320,9 @@ test_that("derive_var_merged_character Test 12: merge character variable, lower 
   )
 })
 
-## Test 13: merge character variable, title case ----
-test_that("derive_var_merged_character Test 13: merge character variable, title case", {
+## Test 13: merge character variable, title case
+test_that("derive_var_merged_character Test 13: merge character variable,
+          title case", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -344,8 +344,6 @@ test_that("derive_var_merged_character Test 13: merge character variable, title 
     keys = "USUBJID"
   )
 })
-
-
 
 ## Test 14: merge lookup table
 test_that("derive_vars_merged_lookup Test 14: merge lookup table", {
@@ -377,5 +375,84 @@ test_that("derive_vars_merged_lookup Test 14: merge lookup table", {
     base = expected,
     compare = actual,
     keys = c("USUBJID", "VSSEQ", "VSTESTCD")
+  )
+})
+
+
+
+## Test 15: merge lookup table when all by_vars have corresponding records in
+## the lookup table
+test_that("derive_merged Test 15: merge lookup table when all
+          by_vars have corresponding records in the lookup table", {
+  param_lookup <- tibble::tribble(
+    ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
+    "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
+    "HEIGHT", "Height", "HEIGHT", "Height (cm)",
+    "BMI", "Body Mass Index", "BMI", "Body Mass Index(kg/m^2)",
+    "DIABP", "Diastolic Blood Pressure", "DIABP", "Diastolic Blood Pressure (mmHg)"
+  )
+
+  attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
+  attr(param_lookup$VSTEST, "label") <- "Vital Signs Test Name"
+
+
+  actual <- derive_vars_merged_lookup(
+    vs,
+    dataset_add = param_lookup,
+    by_vars = vars(VSTESTCD, VSTEST),
+    new_var = vars(PARAMCD, PARAM = DESCRIPTION),
+    print_not_mapped = TRUE
+  )
+
+  expected <-
+    left_join(vs, param_lookup, by = c("VSTESTCD", "VSTEST")) %>%
+    rename(PARAM = DESCRIPTION)
+
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "VSSEQ", "VSTESTCD")
+  )
+})
+
+
+
+## Test16: get not mapped when not all by_vars have corresponding records
+## in the lookup table
+# ---- derive_merged, test 16: NA ----
+test_that("derive_merged Test 16: get not mapped when not all by_vars have
+          corresponding records in the lookup table", {
+  param_lookup <- tibble::tribble(
+    ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
+    "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
+    "HEIGHT", "Height", "HEIGHT", "Height (cm)",
+    "BMI", "Body Mass Index", "BMI", "Body Mass Index(kg/m^2)"
+  )
+
+  attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
+  attr(param_lookup$VSTEST, "label") <- "Vital Signs Test Name"
+
+
+  act_vs_param <- derive_vars_merged_lookup(
+    vs,
+    dataset_add = param_lookup,
+    by_vars = vars(VSTESTCD, VSTEST),
+    new_var = vars(PARAMCD, PARAM = DESCRIPTION),
+    print_not_mapped = TRUE
+  )
+
+  actual <- get_not_mapped()
+
+  expected <- left_join(vs, param_lookup, by = c("VSTESTCD", "VSTEST")) %>%
+    rename(PARAM = DESCRIPTION) %>%
+    filter(is.na(PARAMCD)) %>%
+    select(VSTESTCD, VSTEST) %>%
+    distinct()
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("VSTESTCD", "VSTEST")
   )
 })

@@ -431,4 +431,4 @@ adlb <- adlb %>%
 # Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(adlb, file = file.path(dir, "adlb.rda"), compress = "bzip2")
+saveRDS(adlb, file = file.path(dir, "adlb.rds"), compress = "bzip2")
