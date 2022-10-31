@@ -51,3 +51,71 @@ test_that("derive_var_age_years - Error is issued if age_unit is missing", {
     derive_var_age_years(input, AGE, new_var = AAGE)
   )
 })
+
+test_that(paste0("derive_var_age_years - Warning is issued if age_unit is not null, but the ",
+                 "'unit' variable corresponding to age_var stores more than one unique unit."), {
+  input <- tibble::tribble(
+    ~AGE,   ~AGEU,
+    #-------/---------
+    25,     "years",
+    312,    "months",
+    51,     "years",
+    402,    "months",
+    432,    "months"
+  )
+
+  expect_warning(
+    derive_var_age_years(input, AGE, age_unit = "months", new_var = AAGE)
+  )
+})
+
+test_that(paste0("derive_var_age_years - The 'unit' variable corresponding to age_var will be ",
+                 "considered as storing one unique unit, if values only differ by case, i.e. ",
+                 "months = Months = MONTHS etc."), {
+
+  # The tibbles "input" and "input2" differ only in the third row: "Months" versus "months".
+
+  input <- tibble::tribble(
+    ~AGE,   ~AGEU,
+    #-------/---------
+    459,    "months",
+    312,    "months",
+    510,    "Months",
+    402,    "months",
+    432,    "months"
+  )
+
+  input2 <- tibble::tribble(
+    ~AGE,   ~AGEU,
+    #-------/---------
+    459,    "months",
+    312,    "months",
+    510,    "months",
+    402,    "months",
+    432,    "months"
+  )
+
+  expect_equal(
+    derive_var_age_years(input, AGE, age_unit = "months", new_var = AAGE),
+    derive_var_age_years(input2, AGE, age_unit = "months", new_var = AAGE)
+  )
+})
+
+test_that(paste0("derive_var_age_years - Warning is issued if age_unit is not null, but the ",
+                 "'unit' variable corresponding to age_var stores one unique unit that is not ",
+                 "equivalent to age_unit."), {
+  input <- tibble::tribble(
+    ~AGE,   ~AGEU,
+    #-------/---------
+    459,    "months",
+    312,    "months",
+    510,    "months",
+    402,    "months",
+    432,    "months"
+  )
+
+  expect_warning(
+    derive_var_age_years(input, AGE, age_unit = "years", new_var = AAGE)
+  )
+})
+
