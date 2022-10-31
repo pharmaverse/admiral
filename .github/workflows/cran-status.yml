@@ -1,0 +1,24 @@
+---
+# Source: https://github.com/pharmaverse/admiralci
+name: CRAN Status Monitor
+
+on:
+  # 'workflow_dispatch' gives you the ability
+  # to run this workflow on demand, anytime
+  workflow_dispatch:
+  # 'schedule' events are triggered on a schedule
+  schedule:
+    - cron: '1 0 * * 1,3,5'
+
+jobs:
+  cran-status:
+    name: Check & Report
+    uses: pharmaverse/admiralci/.github/workflows/cran-status.yml@main
+    with:
+      # Whom should the issue be assigned to if errors are encountered
+      # in the CRAN status checks?
+      issue-assignees: "bundfussr,esimms999-gsk,thomas-neitmann,bms63,rossfarrugia"
+      # Create an issue if one or more of the following
+      # statuses are reported on the check report.
+      status-types: "WARNING,ERROR,NOTE"
+ 

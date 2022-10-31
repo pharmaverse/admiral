@@ -1,9 +1,4 @@
-library(admiral.test)
-library(rlang)
-library(tibble)
-data("admiral_dm")
-
-adsl <- tribble(
+adsl <- tibble::tribble(
   ~USUBJID, ~SEX, ~COUNTRY,
   "ST42-1", "F",  "AUT",
   "ST42-2", "M",  "MWI",
@@ -11,7 +6,7 @@ adsl <- tribble(
   "ST42-4", "F",  "UGA"
 ) %>% mutate(STUDYID = "ST42")
 
-ex <- tribble(
+ex <- tibble::tribble(
   ~USUBJID, ~EXSTDTC,
   "ST42-1", "2020-12-07",
   "ST42-1", "2020-12-14",
@@ -20,73 +15,76 @@ ex <- tribble(
   "ST42-3", "2021-03-02"
 ) %>% mutate(STUDYID = "ST42")
 
-test_that("An error is thrown if `derive_var_extreme_flag()` with `filter` argument is called", {
+## Test 1: An error is thrown if `derive_var_extreme_flag()` with `filter` argument is called ----
+test_that("deprecation Test 1: An error is thrown if `derive_var_extreme_flag()`
+          with `filter` argument is called", {
   expect_error(
     derive_var_extreme_flag(
       filter = !is.na(AVAL)
     ),
-    "deprecated",
-    fixed = TRUE,
     class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("An error is thrown if `derive_var_worst_flag()` with `filter` argument is called", {
+## Test 2: An error is thrown if `derive_var_worst_flag()` with `filter` argument is called ----
+test_that("deprecation Test 2: An error is thrown if `derive_var_worst_flag()`
+          with `filter` argument is called", {
   expect_error(
     derive_var_worst_flag(
       filter = !is.na(AVAL)
     ),
-    "deprecated",
-    fixed = TRUE,
     class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("derive_var_ady() Test 1: An error is thrown if `derive_var_ady()` is called", {
+## Test 3: derive_var_ady() An error is thrown if `derive_var_ady()` is called ----
+test_that("deprecation Test 3: derive_var_ady() An error is thrown if
+          `derive_var_ady()` is called", {
   expect_error(
     derive_var_ady(),
-    "deprecated",
-    fixed = TRUE,
     class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("derive_var_aendy Test 1: An error is thrown if `derive_var_aendy()` is called", {
+## Test 4: An error is thrown if `derive_var_aendy()` is called ----
+test_that("deprecation Test 4: An error is thrown if `derive_var_aendy()`
+          is called", {
   expect_error(
     derive_var_aendy(),
-    "deprecated",
-    fixed = TRUE,
     class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("derive_var_astdy Test 1: An error is thrown if `derive_var_astdy()` is called", {
+## Test 5: An error is thrown if `derive_var_astdy()` is called ----
+test_that("deprecation Test 5: An error is thrown if `derive_var_astdy()`
+          is called", {
   expect_error(
     derive_var_astdy(),
-    "deprecated",
-    fixed = TRUE,
     class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("derive_var_atirel Test 1: An error is thrown if `derive_var_atirel()` is called", {
+## Test 6: An error is thrown if `derive_var_atirel()` is called ----
+test_that("deprecation Test 6: An error is thrown if `derive_var_atirel()`
+          is called", {
   expect_error(
     derive_var_atirel(),
-    "deprecated",
-    fixed = TRUE,
     class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("derive_vars_suppqual Test 1: An error is thrown if `derive_vars_suppqual()` is called", {
+## Test 7: An error is thrown if `derive_vars_suppqual()` is called ----
+test_that("deprecation Test 7: An error is thrown if `derive_vars_suppqual()`
+          is called", {
   expect_error(
     derive_vars_suppqual(),
-    "deprecated",
-    fixed = TRUE
+    class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("derive_derived_param Test 1: A warning is issued if `derive_derived_param()` is called", { # nolint
+## Test 8: A warning is issued if `derive_derived_param()` is called ----
+test_that("deprecation Test 8: A warning is issued if `derive_derived_param()`
+          is called", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
@@ -111,12 +109,13 @@ test_that("derive_derived_param Test 1: A warning is issued if `derive_derived_p
         AVALU = "mmHg"
       )
     ),
-    "deprecated",
-    fixed = TRUE
+    class = "lifecycle_warning_deprecated"
   )
 })
 
-test_that("derive_vars_merged_dt: a deprecation warning is issued", {
+## Test 9: derive_vars_merged_dt: a deprecation warning is issued ----
+test_that("deprecation Test 9: derive_vars_merged_dt: a deprecation warning
+          is issued", {
   expect_warning(
     derive_vars_merged_dt(
       adsl,
@@ -128,11 +127,13 @@ test_that("derive_vars_merged_dt: a deprecation warning is issued", {
       new_vars_prefix = "TRTS",
       mode = "first"
     ),
-    "deprecated"
+    class = "lifecycle_warning_deprecated"
   )
 })
 
-test_that("derive_vars_merged_dtm: a deprecation warning is issued", {
+## Test 10: derive_vars_merged_dtm: a deprecation warning is issued ----
+test_that("deprecation Test 10: derive_vars_merged_dtm: a deprecation warning
+          is issued", {
   expect_warning(
     derive_vars_merged_dtm(
       adsl,
@@ -144,71 +145,67 @@ test_that("derive_vars_merged_dtm: a deprecation warning is issued", {
       time_imputation = "first",
       mode = "first"
     ),
-    "deprecated"
+    class = "lifecycle_warning_deprecated"
   )
 })
 
-test_that("date_source: errors when date_imputation is specified", {
+## Test 11: date_source: errors when date_imputation is specified ----
+test_that("deprecation Test 11: date_source: errors when date_imputation
+          is specified", {
   expect_error(
     date_source(
       dataset_name = "ae",
       date = ASTDTM,
       date_imputation = "first"
     ),
-    paste(
-      "The `date_imputation` argument of `date_source\\(\\)` .* deprecated .* admiral 0.8.0.*",
-      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.", # nolint
-      sep = "\n"
-    )
+    class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("date_source: errors when time_imputation is specified", {
+## Test 12: date_source: errors when time_imputation is specified ----
+test_that("deprecation Test 12: date_source: errors when time_imputation
+          is specified", {
   expect_error(
     date_source(
       dataset_name = "ae",
       date = ASTDTM,
       time_imputation = "first"
     ),
-    paste(
-      "The `time_imputation` argument of `date_source\\(\\)` .* deprecated .* admiral 0.8.0.*",
-      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.", # nolint
-      sep = "\n"
-    )
+    class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("date_source: errors when preserve is specified", {
+## Test 13: date_source: errors when preserve is specified ----
+test_that("deprecation Test 13: date_source: errors when preserve
+          is specified", {
   expect_error(
     date_source(
       dataset_name = "ae",
       date = ASTDTM,
       preserve = TRUE
     ),
-    paste(
-      "The `preserve` argument of `date_source\\(\\)` .* deprecated .* admiral 0.8.0.*",
-      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.", # nolint
-      sep = "\n"
-    )
+    class = "lifecycle_error_deprecated"
   )
 })
 
-test_that("derive_var_agegr_ema Test 1: A warning is issued if `derive_var_agegr_ema()` is called", { # nolint
-  with_options(lifecycle_verbosity = "warning", {
+## Test 14: A warning is issued if `derive_var_agegr_ema()` is called ----
+test_that("deprecation Test 14: A warning is issued if `derive_var_agegr_ema()`
+          is called", {
+  rlang::with_options(lifecycle_verbosity = "warning", {
     expect_warning(
-      derive_var_agegr_ema(admiral_dm, age_var = AGE, new_var = AGEGR1),
-      "deprecated",
-      fixed = TRUE
+      derive_var_agegr_ema(admiral.test::admiral_dm, age_var = AGE, new_var = AGEGR1),
+      class = "lifecycle_warning_deprecated"
     )
   })
 })
 
-test_that("derive_var_agegr_fda Test 1: A warning is issued if `derive_var_agegr_fda()` is called", { # nolint
-  with_options(lifecycle_verbosity = "warning", {
+## Test 15: A warning is issued if `derive_var_agegr_fda()` is called ----
+test_that("deprecation Test 15: A warning is issued if `derive_var_agegr_fda()`
+          is called", {
+  rlang::with_options(lifecycle_verbosity = "warning", {
     expect_warning(
-      derive_var_agegr_fda(admiral_dm, age_var = AGE, new_var = AGEGR1),
-      "deprecated",
-      fixed = TRUE
+      derive_var_agegr_fda(admiral.test::admiral_dm, age_var = AGE, new_var = AGEGR1),
+      class = "lifecycle_warning_deprecated"
     )
   })
 })

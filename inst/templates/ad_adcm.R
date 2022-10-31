@@ -138,4 +138,4 @@ adcm <- adcm %>%
 # Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(adcm, file = file.path(dir, "adcm.rda"), compress = "bzip2")
+saveRDS(adcm, file = file.path(dir, "adcm.rds"), compress = "bzip2")

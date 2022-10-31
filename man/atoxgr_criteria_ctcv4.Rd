@@ -43,14 +43,11 @@ From these variables only 'TERM' is used in the {admiral} code, the rest are for
 tracability only.
 }
 \seealso{
-Other datasets: 
-\code{\link{admiral_adsl}},
-\code{\link{ex_single}},
-\code{\link{queries_mh}},
-\code{\link{queries}}
+Other metadata: 
+\code{\link{dose_freq_lookup}}
 }
 \author{
 Gordon Miller
 }
-\concept{datasets}
-\keyword{datasets}
+\concept{metadata}
+\keyword{metadata}

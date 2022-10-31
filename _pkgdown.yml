@@ -41,13 +41,18 @@ reference:
 - contents:
   - has_keyword("der_prm_tte")
 
+- title: Metadata
+  desc: Auxiliary datasets providing definitions as input for derivations, e.g. grading criteria or dose frequencies
+  contents:
+  - has_keyword("metadata")
+
 - title: Advanced Functions
 - subtitle: Higher Order
 - contents:
   - has_keyword("high_order_function")
-- subtitle: Metadata
+- subtitle: Creating Auxiliary Datasets
 - contents:
-  - has_keyword("metadata")
+  - has_keyword("create_aux")
 - subtitle: Other
 - contents:
   - has_keyword("source_specifications")
@@ -77,6 +82,9 @@ reference:
 - subtitle: Utilities used for Date Imputation
 - contents:
   - has_keyword('utils_impute')
+- subtitle: Utilities for Quosures
+- contents:
+  - has_keyword('utils_quo')
 - subtitle: Utilities used for Examples and Template Scripts
 - contents:
   - has_keyword('utils_examples')

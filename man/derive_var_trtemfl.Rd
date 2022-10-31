@@ -55,7 +55,10 @@ the event occurred more than \code{end_window} days after end of treatment.
 
 \emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
 
-\item{initial_intensity}{Initial severity/intensity or toxity
+\item{initial_intensity}{Initial severity/intensity or toxicity
+
+This derivation assumes AE data collection method as single record per AE
+with “initial” and “most extreme” severity/intensity recorded separately.
 
 If the argument is specified, events which start before treatment start and
 end after treatment start (or are ongoing) and worsened (i.e., the
@@ -68,7 +71,7 @@ intensity \code{initial_intensity < intensity} must evaluate to \code{TRUE}.
 \emph{Permitted Values:} A symbol referring to a variable of the input dataset
 or \code{NULL}}
 
-\item{intensity}{Severity/intensity or toxity
+\item{intensity}{Severity/intensity or toxicity
 
 If the argument is specified, events which start before treatment start and
 end after treatment start (or are ongoing) and worsened (i.e., the
@@ -95,7 +98,9 @@ of the variable.
 \item \emph{not treated}: If \code{trt_start_date} is \code{NA}, it is set to \code{NA_character_}.
 \item \emph{event before treatment}: If \code{end_date} is before \code{trt_start_date} (and
 \code{end_date} is not \code{NA}), it is set to \code{NA_character_}.
-\item \emph{no event date}: If \code{start_date} is \code{NA}, it is set to \code{"Y"}.
+\item \emph{no event date}: If \code{start_date} is \code{NA}, it is set to \code{"Y"} as in such
+cases it is usually considered more conservative to assume the event was
+treatment-emergent.
 \item \emph{event started during treatment}:
 \itemize{
 \item if \code{end_window} is not specified:
@@ -104,11 +109,13 @@ if \code{start_date} is on or after \code{trt_start_date}, it is set to \code{"Y
 if \code{start_date} is on or after \code{trt_start_date} and \code{start_date} is on
 or before \code{trt_end_date} + \code{end_window} days, it is set to \code{"Y"},
 }
-\item \emph{event started before treatment and (possibly) worsened on treatment}: If
-\code{initial_intensity} and \code{intensity} is specified:
-if \code{initial_intensity < intensity} and \code{start_date} is before
+\item \emph{event started before treatment and (possibly) worsened on treatment}:
+\itemize{
+\item if \code{initial_intensity} and \code{intensity} is specified: if
+\code{initial_intensity < intensity} and \code{start_date} is before
 \code{trt_start_date} and \code{end_date} is on or after \code{trt_start_date} or
 \code{end_date} is \code{NA}, it is set to \code{"Y"}.
+}
 \item Otherwise it is set to \code{NA_character_}.
 }
 }
@@ -165,8 +172,6 @@ derive_var_trtemfl(
 }
 \seealso{
 OCCDS Functions: 
-\code{\link{create_query_data}()},
-\code{\link{create_single_dose_dataset}()},
 \code{\link{derive_vars_atc}()},
 \code{\link{derive_vars_query}()},
 \code{\link{get_terms_from_db}()}
