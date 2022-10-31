@@ -173,7 +173,7 @@ derive_param_first_event <- function(dataset,
 #'   A named list returned by `vars()` defining the variables to be set for the
 #'   new parameter, e.g. `vars(PARAMCD = "PD", PARAM = "Disease Progression")`
 #'   is expected. The values must be symbols, character strings, numeric values,
-#'   or `NA`.
+#'   or `NA`. Note, if you require
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
@@ -296,6 +296,7 @@ derive_param_extreme_event <- function(dataset,
 
     order <- enquo(date_var)
     order <- vars(!!order)
+
   }
   ### END DEPRECATION
 
@@ -338,7 +339,6 @@ derive_param_extreme_event <- function(dataset,
   )
   new_obs <- bind_rows(events, noevents) %>%
     mutate(
-      ADT = !!date_var,
       AVALC = if_else(!is.na(ADT), "Y", "N"),
       AVAL = if_else(!is.na(ADT), 1, 0),
       !!!set_values_to
