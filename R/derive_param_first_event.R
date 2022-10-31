@@ -85,6 +85,7 @@
 #' @return The input dataset with a new parameter indicating if and when an
 #'   event occurred
 #'
+#' @family deprecated
 #' @keywords deprecated
 #'
 #' @export
@@ -117,9 +118,8 @@ derive_param_first_event <- function(dataset,
 #' Add an Extreme Event Parameter
 #'
 #' Add a new parameter for the first or last event occurring in a dataset. `AVALC` and
-#' `AVAL` indicate if an event occurred and `ADT` is set to the date of the
-#' first or last event. For example, the function can derive a parameter for the first
-#' disease progression.
+#' `AVAL` indicate if an event occurred. For example, the function can derive a parameter
+#'  for the first disease progression.
 #'
 #' @param dataset Input dataset
 #'
@@ -144,13 +144,12 @@ derive_param_first_event <- function(dataset,
 #'   All observations in `dataset_source` fulfilling the specified condition are
 #'   considered as an event.
 #'
-#'   For subjects with at least one event `AVALC` is set to `"Y"`, `AVAL` to
-#'   `1`, and `ADT` to the first date where the condition is fulfilled.
+#'   For subjects with at least one event `AVALC` is set to `"Y"` and `AVAL` to
+#'   `1`.
 #'
-#'   For all other subjects `AVALC` is set to `"N"`, `AVAL` to `0`, and `ADT` to
-#'   `NA`.
+#'   For all other subjects `AVALC` is set to `"N"` and `AVAL` to `0`.
 #'
-#' @param date_var *Deprecated*, please use `order` instead.
+#' @param date_var *Deprecated*, please use `order` and `set_values_to` instead.
 #'
 #' @param order Order variable
 #'
@@ -173,7 +172,8 @@ derive_param_first_event <- function(dataset,
 #'   A named list returned by `vars()` defining the variables to be set for the
 #'   new parameter, e.g. `vars(PARAMCD = "PD", PARAM = "Disease Progression")`
 #'   is expected. The values must be symbols, character strings, numeric values,
-#'   or `NA`. Note, if you require
+#'   or `NA`. Note, if you require a date or datetime variable to be populated,
+#'   this needs to be defined here.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
@@ -184,7 +184,7 @@ derive_param_first_event <- function(dataset,
 #'   If `"warning"` or `"error"` is specified, a message is issued if the
 #'   observations of the input dataset restricted to the source parameter
 #'   (`source_param`) are not unique with respect to the subject keys
-#'   (`subject_key` parameter) and `ADT`.
+#'   (`subject_key` parameter) and order variables (`order` parameter).
 #'
 #'   *Default*: `"warning"`
 #'
@@ -198,9 +198,8 @@ derive_param_first_event <- function(dataset,
 #'    (with respect to `order`) where the event condition (`filter_source` parameter) is
 #'   fulfilled is selected.
 #'   1. For each observation in `dataset_adsl` a new observation is created. For
-#'   subjects with event `AVALC` is set to `"Y"`, `AVAL` to `1`, and `ADT` to
-#'   the first date where the event condition is fulfilled. For all other
-#'   subjects `AVALC` is set to `"N"`, `AVAL` to `0`, and `ADT` to `NA`.
+#'   subjects with event `AVALC` is set to `"Y"` and `AVAL` to `1`. For all other
+#'   subjects `AVALC` is set to `"N"` and `AVAL` to `0`.
 #'   For subjects with event all variables from `dataset_source` are kept. For
 #'   subjects without event all variables which are in both `dataset_adsl` and
 #'   `dataset_source` are kept.
@@ -255,12 +254,13 @@ derive_param_first_event <- function(dataset,
 #'   dataset_adsl = adsl,
 #'   dataset_source = adrs,
 #'   filter_source = PARAMCD == "OVR" & AVALC == "PD",
-#'   order = ADT,
+#'   order = vars(ADT),
 #'   mode = "first",
 #'   set_values_to = vars(
 #'     PARAMCD = "PD",
 #'     PARAM = "Disease Progression",
-#'     ANL01FL = "Y"
+#'     ANL01FL = "Y",
+#'     ADT = ADT
 #'   )
 #' )
 #'
@@ -270,12 +270,13 @@ derive_param_first_event <- function(dataset,
 #'   dataset_adsl = adsl,
 #'   dataset_source = adsl,
 #'   filter_source = !is.na(DTHDT),
-#'   order = DTHDT,
+#'   order = vars(DTHDT),
 #'   mode = "first",
 #'   set_values_to = vars(
 #'     PARAMCD = "DEATH",
 #'     PARAM = "Death",
-#'     ANL01FL = "Y"
+#'     ANL01FL = "Y",
+#'     ADT = DTHDT
 #'   )
 #' )
 derive_param_extreme_event <- function(dataset,
@@ -292,11 +293,11 @@ derive_param_extreme_event <- function(dataset,
   if (!missing(date_var)) {
     deprecate_warn("0.9.0",
                    "derive_param_extreme_event(date_var = )",
-                   "derive_param_extreme_event(order = )")
+                   details = "Please use `order` and `set_values_to` instead")
 
-    order <- enquo(date_var)
-    order <- vars(!!order)
-
+    date_var_enquo <- enquo(date_var)
+    order <- vars(!!date_var_enquo)
+    set_values_to <- vars(!!!set_values_to, ADT := !!date_var_enquo)
   }
   ### END DEPRECATION
 
@@ -305,7 +306,7 @@ derive_param_extreme_event <- function(dataset,
   assert_vars(order)
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
-  assert_data_frame(dataset_source, required_vars = vars(!!!subject_keys, !!date_var))
+  assert_data_frame(dataset_source, required_vars = vars(!!!subject_keys, !!!order))
   assert_data_frame(dataset_adsl, required_vars = subject_keys)
   check_type <-
     assert_character_scalar(
@@ -333,16 +334,19 @@ derive_param_extreme_event <- function(dataset,
       mode = mode,
       check_type = check_type
     )
+
   noevents <- anti_join(
     select(dataset_adsl, intersect(source_vars, adsl_vars)),
     select(events, !!!subject_keys)
   )
-  new_obs <- bind_rows(events, noevents) %>%
+
+  new_obs <- bind_rows(yes = events, no = noevents, .id = 'HAD_EVENT') %>%
     mutate(
-      AVALC = if_else(!is.na(ADT), "Y", "N"),
-      AVAL = if_else(!is.na(ADT), 1, 0),
+      AVALC = if_else(HAD_EVENT == "yes", "Y", "N"),
+      AVAL = if_else(HAD_EVENT == "no", 1, 0),
       !!!set_values_to
-    )
+    ) %>%
+    select(-HAD_EVENT)
 
   # Create output dataset
   bind_rows(dataset, new_obs)
