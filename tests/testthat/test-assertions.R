@@ -142,7 +142,7 @@ test_that("assert_vars Test 11: error if unexpected input", {
 })
 
 # assert_data_frame ----
-test_that("Test 12 : `assert_data_frame` doesn't throw an error
+test_that("Test 12 : `assert_data_frame` does not throw an error
           if optional is TRUE and `arg` is NULL", {
   example_fun <- function(dataset) {
     assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID), optional = TRUE)
