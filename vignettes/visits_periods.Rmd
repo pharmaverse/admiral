@@ -18,10 +18,10 @@ knitr::opts_chunk$set(
 
 The derivation of visit variables like `AVISIT`, `AVISITN`, `AWLO`, `AWHI`, ...
 or period, subperiod, or phase variables like `APERIOD`, `TRT01A`, `TRT02A`,
-`ASPER`, `PHSDTM`, `PHEDTM`, ... is highly study-specific. Therefore admiral can
-not provide functions which derive these variables. However, for common
+`ASPER`, `PHSDTM`, `PHEDTM`, ... is highly study-specific. Therefore admiral
+cannot provide functions which derive these variables. However, for common
 scenarios like visit assignments based on time windows or deriving BDS period
-variables from ADSL period variables functions are provided which support those
+variables from ADSL period variables, functions are provided which support those
 derivations.
 
 ## Required Packages
@@ -46,12 +46,12 @@ The most common ways of deriving `AVISIT` and `AVISITN` are:
 - The variables are set to the collected visits (`VISIT` and `VISITNUM`).
 - The variables are set based on time windows.
 
-The former one can be done by calling `mutate()` like in the vignettes and the
-template scripts.
+The former can be achieved simply by calling `mutate()`, like in the vignettes
+and the template scripts.
 
-For the latter one a (study specific) reference dataset needs to be created
-which provides for each visit the start and end day (`AWLO` and `AWHI`) and the
-values of other visit related variables (`AVISIT`, `AVISITN`, `AWTARGET`, ...).
+For the latter a (study-specific) reference dataset needs to be created which
+provides for each visit the start and end day (`AWLO` and `AWHI`) and the values
+of other visit related variables (`AVISIT`, `AVISITN`, `AWTARGET`, ...).
 ```{r}
 windows <- tribble(
   ~AVISIT,    ~AWLO, ~AWHI, ~AVISITN, ~AWTARGET,
@@ -63,7 +63,7 @@ windows <- tribble(
 )
 ```
 Then the visits can be assigned based on the analysis day (`ADY`) by calling
-`derive_vars_joined`:
+`derive_vars_joined()`:
 ```{r}
 adbds <- tribble(
   ~USUBJID, ~ADY,
@@ -86,8 +86,8 @@ derive_vars_joined(
 If periods, subperiods, or phases are used, the corresponding variables have to
 be consistent across all datasets. This can be achieved by defining the periods,
 subperiods, or phases once and then use this definition for all datasets. The
-definition can be stored in ADSL or in a separate dataset. In the following this
-separate dataset is called period reference dataset.
+definition can be stored in ADSL or in a separate dataset. In the following
+examples, this separate dataset is called period reference dataset.
 
 ## Period Reference Dataset
 
@@ -107,9 +107,8 @@ phase_ref <- tribble(
     across(matches("PH[ES]DT"), ymd)
   ) %>%
   select(STUDYID, everything())
-dataset_vignette(
-  phase_ref
-)
+
+phase_ref
 ```
 
 The admiral functions expect separate datasets for periods, subperiods, and
@@ -181,25 +180,26 @@ create_period_dataset(
 
 # Treatment Variables (`TRTxxP`, `TRTxxA`, `TRTP`, `TRTA`, ...)
 
-In studies with multiple periods the treatment can differ by period. CDISC
-defines variables for planned and actual treatments in ADSL (`TRTxxP`, `TRTxxA`,
-`TRxxPGy`, `TRxxAGy`, ...) and corresponding variables in BDS and OCCDS datasets
-(`TRTP`, `TRTA`, `TRTPGy`, `TRTAGy`, ...). They can be derived in the same way
-(and same step) as the period, subperiod, and phase variables.
+In studies with multiple periods the treatment can differ by period, e.g. for a
+crossover trial. CDISC defines variables for planned and actual treatments in
+ADSL (`TRTxxP`, `TRTxxA`, `TRxxPGy`, `TRxxAGy`, ...) and corresponding variables
+in BDS and OCCDS datasets (`TRTP`, `TRTA`, `TRTPGy`, `TRTAGy`, ...). They can be
+derived in the same way (and same step) as the period, subperiod, and phase
+variables.
 
 ## Creating ADSL Treatment Variables {#treatment_adsl}
 
 If the treatment information is included in the period reference dataset, the
-treatment ADSL variables can be created by calling `derive_vars_periods()`:
+treatment ADSL variables can be created by calling `derive_vars_period()`:
 
 ```{r}
 # Add period variables to ADSL
 period_ref <- tribble(
-  ~USUBJID, ~APERIOD, ~APERSDT,     ~APEREDT,     ~TRTP,    ~TRTA,
-  "1",             1, "2021-01-04", "2021-02-06", "DRUG A", "DRUG A",
-  "1",             2, "2021-02-07", "2021-03-07", "DRUG B", "DRUG B",
-  "2",             1, "2021-02-02", "2021-03-02", "DRUG B", "DRUG B",
-  "2",             2, "2021-03-03", "2021-04-01", "DRUG A", "DRUG B"
+  ~USUBJID, ~APERIOD, ~APERSDT,     ~APEREDT,     ~TRTA,
+  "1",             1, "2021-01-04", "2021-02-06", "DRUG A",
+  "1",             2, "2021-02-07", "2021-03-07", "DRUG B",
+  "2",             1, "2021-02-02", "2021-03-02", "DRUG B",
+  "2",             2, "2021-03-03", "2021-04-01", "DRUG B"
 ) %>%
   mutate(
     STUDYID = "xyz",
@@ -213,13 +213,12 @@ adsl <- derive_vars_period(
   new_vars = vars(
     APxxSDT = APERSDT,
     APxxEDT = APEREDT,
-    TRTxxP = TRTP,
     TRTxxA = TRTA
   )
 ) %>%
   select(
     STUDYID, USUBJID,
-    TRT01P, TRT01A, TRT02P, TRT02A,
+    TRT01A, TRT02A,
     AP01SDT, AP01EDT, AP02SDT, AP02EDT
   )
 
@@ -231,8 +230,8 @@ adsl
 If a period reference dataset is available, BDS and OCCDS variables for
 treatment can be created by calling `derive_vars_joined()`.
 
-For example the variables `APERIOD`, `TRTP`, and `TRTA` can be derived from the
-period reference dataset defined above.
+For example the variables `APERIOD` and `TRTA` can be derived from the period
+reference dataset defined above.
 
 ```{r}
 adae <- tribble(
@@ -253,7 +252,7 @@ derive_vars_joined(
   adae,
   dataset_add = period_ref,
   by_vars = vars(STUDYID, USUBJID),
-  new_vars = vars(APERIOD, TRTP, TRTA),
+  new_vars = vars(APERIOD, TRTA),
   join_vars = vars(APERSDT, APEREDT),
   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
 )
@@ -268,6 +267,6 @@ created from the ADSL dataset created above:
 ```{r}
 create_period_dataset(
   adsl,
-  new_vars = vars(APERSDT = APxxSDT, APEREDT = APxxEDT, TRTP = TRTxxP, TRTA = TRTxxA)
+  new_vars = vars(APERSDT = APxxSDT, APEREDT = APxxEDT, TRTA = TRTxxA)
 )
 ```
