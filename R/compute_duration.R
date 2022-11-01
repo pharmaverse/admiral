@@ -119,18 +119,34 @@ compute_duration <- function(start_date,
                              add_one = TRUE,
                              trunc_out = FALSE) {
   # Checks
-  assert_that(is_date(start_date), is_date(end_date))
-  assert_that(is_timeunit(in_unit), is_timeunit(out_unit) | out_unit == "weeks")
+  assert_date_vector(start_date)
+  assert_date_vector(end_date)
+  assert_character_scalar(in_unit, values = valid_time_units())
+  assert_character_scalar(out_unit, values = c(valid_time_units(), "weeks"))
   assert_logical_scalar(floor_in)
   assert_logical_scalar(add_one)
   assert_logical_scalar(trunc_out)
 
   # Derivation
   if (floor_in) {
-    # remove information more precise than the input unit, e.g., if input unit
-    # is days, the time part of the dates is removed.
-    start_date <- floor_date(start_date, unit = in_unit)
-    end_date <- floor_date(end_date, unit = in_unit)
+    # Remove information more precise than the input unit, e.g., if input unit
+    # is days, the time part of the dates is removed. After updates in R `NA`
+    # values have to be explicitly handled here because otherwise
+    # `floor_date(as.Date(NA), unit = "days")` will return `"1970-01-01"` rather
+    # than `NA` (#1486). See also here:
+    # https://github.com/tidyverse/lubridate/issues/1069
+    start_date_fun <- if (is.Date(start_date)) as.Date else as.POSIXct
+    end_date_fun <- if (is.Date(end_date)) as.Date else as.POSIXct
+    start_date <- if_else(
+      is.na(start_date),
+      start_date_fun(NA),
+      floor_date(start_date, unit = in_unit)
+    )
+    end_date <- if_else(
+      is.na(end_date),
+      end_date_fun(NA),
+      floor_date(end_date, unit = in_unit)
+    )
   }
 
   # derive the duration in the output unit

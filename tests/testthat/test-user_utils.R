@@ -119,7 +119,7 @@ test_that("print.source Test 10: `source` objects containing `source` objects", 
 
 ## Test 11: `source` objects containing `data.frame` ----
 test_that("print.source Test 11: `source` objects containing `data.frame`", {
-  cqterms <- tribble(
+  cqterms <- tibble::tribble(
     ~TERM_NAME,                  ~TERM_ID,
     "APPLICATION SITE ERYTHEMA", 10003041L,
     "APPLICATION SITE PRURITUS", 10003053L
