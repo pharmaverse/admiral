@@ -105,7 +105,7 @@ variables must start with `temp_` and must be removed from the output dataset.
 ## Admiral Options
 
 * An exception is made for admiral options, see `get_admiral_option()` and `set_admiral_options()`, where we have certain pre-defined defaults with added flexibility to allow for user-defined defaults on *commonly used* function arguments e.g. `subject_keys` currently pre-defined as `vars(STUDYID, USUBJID)`, but can be modified using `set_admiral_options(subject_keys = vars(...))` at the top of a script. The reasoning behind this was to relieve the user of repeatedly changing aforementioned *commonly used* function arguments multiple times in a script, which may be called across many admiral functions. 
-* If this additional flexibility needs to be added for another *commonly used* function argument e.g. `future_input` to be set as `vars(...)` it can be added as an admiral option. In the function formals define `future_input = get_admiral_option(future_input)` then proceed to modify the body and roxygen documentation of `set_admiral_options()`. 
+* If this additional flexibility needs to be added for another *commonly used* function argument e.g. `future_input` to be set as `vars(...)` it can be added as an admiral option. In the function formals define `future_input = get_admiral_option("future_input")` then proceed to modify the body and roxygen documentation of `set_admiral_options()`. 
 
 ## Function Names
 
@@ -212,7 +212,7 @@ Parameters which expect a boolean or boolean vector must start with a verb, e.g.
 | `dtc`            | (Partial) date/datetime in ISO 8601 format.                                                                        |
 | `date`           | Date of an event / interval. Expects a date object.                                                                |
 | `set_values_to`  | List of variable name-value pairs.                                                                                 |
-| `subject_keys`   | Variables to uniquely identify a subject, defaults to `vars(STUDYID, USUBJID)`. In function formals, use `subject_keys = get_admiral_option(subject_keys)`                                     |
+| `subject_keys`   | Variables to uniquely identify a subject, defaults to `vars(STUDYID, USUBJID)`. In function formals, use `subject_keys = get_admiral_option("subject_keys")`                                     |
 
 
 ## Source Code Formatting
