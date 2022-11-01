@@ -1,13 +1,22 @@
-admiral_env <- new.env(parent = emptyenv())
-admiral_env$admiral_options <- list()
+admiral_options <- new.env(parent = emptyenv())
+admiral_options$subject_keys <- vars(STUDYID, USUBJID)
+# admiral_options$future_input <- vars(...) nolint
+
+######################################################
+### To enhance feature and add inputs as necessary ###
+######################################################
+
+# 1. Add additional options such as future_input as shown commented above
+# 2. Update @params with future_input in set_admiral_options roxygen documentation
+# 3. Add future_input into set_admiral_options() formals and body
 
 #' Get the value of an admiral option
 #'
 #' Get the value of an admiral option which can be modified for advanced users.
 #'
-#' @param option An unquoted expression of commonly used admiral function inputs.
+#' @param option A character scalar of commonly used admiral function inputs.
 #'
-#'   As of now, support only available for `r enumerate(names(admiral_env$admiral_options))`.
+#'   As of now, support only available for `r enumerate(possible_inputs, quote_fun = dquote, conjunction = "or")`.
 #'   See `set_admiral_options()` for a description of the options.
 #'
 #' @details
@@ -41,25 +50,25 @@ admiral_env$admiral_options <- list()
 #' derive_vars_merged(
 #'   admiral_vs,
 #'   dataset_add = select(admiral_dm, -DOMAIN),
-#'   by_vars = get_admiral_option(subject_keys)
+#'   by_vars = get_admiral_option("subject_keys")
 #' ) %>%
 #'   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 get_admiral_option <- function(option) {
+
   # Check for valid option - catch function abuse
-  assert_symbol(enquo(option))
+  assert_character_scalar(option)
 
   # Find which admiral_options is being called upon
-  requested <- as_name(enquo(option))
-  possible_inputs <- names(admiral_env$admiral_options)
+  possible_inputs <- ls(admiral_options)
 
-  if (requested %in% possible_inputs) {
-    return(admiral_env$admiral_options[[which(requested == possible_inputs)]])
+  if (option %in% possible_inputs) {
+    return(admiral_options[[option]])
   }
 
   # Return message otherwise, catch typos
   else {
     default_err_msg <- sprintf(paste(
-      "Invalid function argument, select one unquoted of:",
+      "Invalid function argument, select one of:",
       enumerate(possible_inputs, quote_fun = dquote, conjunction = "or")
     ))
     abort(default_err_msg)
@@ -73,8 +82,6 @@ get_admiral_option <- function(option) {
 #' @param subject_keys Variables to uniquely identify a subject, defaults to
 #'   `vars(STUDYID, USUBJID)`. This option is used as default value for the
 #'   `subject_keys` argument in all admiral functions.
-#'
-#' @param set_default If set to `TRUE` will restore admiral defaults.
 #'
 #' @details
 #' Modify an admiral option, e.g `subject_keys`, such that it automatically affects downstream
@@ -136,31 +143,15 @@ get_admiral_option <- function(option) {
 #'     PARAM = "Measurable Disease at Baseline"
 #'   )
 #' )
-#' set_admiral_options(set_default = TRUE)
-set_admiral_options <- function(subject_keys,
-                                # future_input,
-                                set_default = FALSE) {
+set_admiral_options <- function(subject_keys) {
   if (!missing(subject_keys)) {
     assert_vars(subject_keys)
-    admiral_env$admiral_options$subject_keys <- subject_keys
+    admiral_options$subject_keys <- subject_keys
   }
 
+  # Add future input to function formals above
   # if (!missing(future_input)) {
   #   assert_vars(future_input) nolint
-  #   admiral_env$admiral_options$future_input = future_input nolint
+  #   admiral_options$future_input <- future_input nolint
   # }
-
-  assert_logical_scalar(set_default)
-  if (set_default == TRUE) {
-    admiral_env$admiral_options$subject_keys <- vars(STUDYID, USUBJID)
-    # admiral_env$admiral_options$future_input <- vars(...) nolint
-
-    ######################################################
-    ### To enhance feature and add inputs as necessary ###
-    ######################################################
-
-    # 1. Add additional options such as future_input as shown commented above
-    # 2. Update @params with future_input in set_admiral_options roxygen documentation
-  }
 }
-set_admiral_options(set_default = TRUE)

@@ -7,9 +7,9 @@
 get_admiral_option(option)
 }
 \arguments{
-\item{option}{An unquoted expression of commonly used admiral function inputs.
+\item{option}{A character scalar of commonly used admiral function inputs.
 
-As of now, support only available for \code{subject_keys}.
+As of now, support only available for "subject_keys".
 See \code{set_admiral_options()} for a description of the options.}
 }
 \value{
@@ -33,7 +33,7 @@ data("admiral_dm")
 derive_vars_merged(
   admiral_vs,
   dataset_add = select(admiral_dm, -DOMAIN),
-  by_vars = get_admiral_option(subject_keys)
+  by_vars = get_admiral_option("subject_keys")
 ) \%>\%
   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 }

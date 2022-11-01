@@ -173,7 +173,7 @@ derive_var_extreme_dtm <- function(dataset,
                                    ...,
                                    source_datasets,
                                    mode,
-                                   subject_keys = get_admiral_option(subject_keys)) {
+                                   subject_keys = get_admiral_option("subject_keys")) {
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
   new_var <- assert_symbol(enquo(new_var))
@@ -409,7 +409,7 @@ derive_var_extreme_dt <- function(dataset,
                                   ...,
                                   source_datasets,
                                   mode,
-                                  subject_keys = get_admiral_option(subject_keys)) {
+                                  subject_keys = get_admiral_option("subject_keys")) {
   new_var <- assert_symbol(enquo(new_var))
 
   sources <- list(...)

@@ -153,7 +153,7 @@ derive_param_first_event <- function(dataset,
                                      dataset_source,
                                      filter_source,
                                      date_var,
-                                     subject_keys = get_admiral_option(subject_keys),
+                                     subject_keys = get_admiral_option("subject_keys"),
                                      set_values_to,
                                      check_type = "warning") {
   # Check input parameters

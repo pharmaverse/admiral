@@ -116,7 +116,7 @@
 #' )
 create_period_dataset <- function(dataset,
                                   new_vars,
-                                  subject_keys = get_admiral_option(subject_keys)) {
+                                  subject_keys = get_admiral_option("subject_keys")) {
   assert_vars(new_vars, expect_names = TRUE)
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
@@ -357,7 +357,7 @@ create_period_dataset <- function(dataset,
 derive_vars_period <- function(dataset,
                                dataset_ref,
                                new_vars,
-                               subject_keys = get_admiral_option(subject_keys)) {
+                               subject_keys = get_admiral_option("subject_keys")) {
   assert_vars(new_vars, expect_names = TRUE)
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)

@@ -7,7 +7,7 @@
 create_period_dataset(
   dataset,
   new_vars,
-  subject_keys = get_admiral_option(subject_keys)
+  subject_keys = get_admiral_option("subject_keys")
 )
 }
 \arguments{

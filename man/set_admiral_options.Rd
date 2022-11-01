@@ -4,14 +4,12 @@
 \alias{set_admiral_options}
 \title{Set the values of admiral options}
 \usage{
-set_admiral_options(subject_keys, set_default = FALSE)
+set_admiral_options(subject_keys)
 }
 \arguments{
 \item{subject_keys}{Variables to uniquely identify a subject, defaults to
 \code{vars(STUDYID, USUBJID)}. This option is used as default value for the
 \code{subject_keys} argument in all admiral functions.}
-
-\item{set_default}{If set to \code{TRUE} will restore admiral defaults.}
 }
 \value{
 No return value, called for side effects.
@@ -64,7 +62,6 @@ derive_param_exist_flag(
     PARAM = "Measurable Disease at Baseline"
   )
 )
-set_admiral_options(set_default = TRUE)
 }
 \seealso{
 \code{\link[=vars]{vars()}}, \code{\link[=get_admiral_option]{get_admiral_option()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},

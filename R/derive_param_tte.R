@@ -239,7 +239,7 @@ derive_param_tte <- function(dataset = NULL,
                              censor_conditions,
                              create_datetime = FALSE,
                              set_values_to,
-                             subject_keys = get_admiral_option(subject_keys)) {
+                             subject_keys = get_admiral_option("subject_keys")) {
   # checking and quoting #
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
@@ -498,7 +498,7 @@ derive_param_tte <- function(dataset = NULL,
 #'   source_datasets = list(adsl = adsl, ae = ae),
 #'   by_vars = vars(AEDECOD),
 #'   create_datetime = FALSE,
-#'   subject_keys = get_admiral_option(subject_keys),
+#'   subject_keys = get_admiral_option("subject_keys"),
 #'   mode = "first"
 #' )
 filter_date_sources <- function(sources,

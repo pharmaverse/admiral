@@ -134,7 +134,7 @@
 derive_var_dthcaus <- function(dataset,
                                ...,
                                source_datasets,
-                               subject_keys = get_admiral_option(subject_keys)) {
+                               subject_keys = get_admiral_option("subject_keys")) {
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
   assert_list_of(source_datasets, "data.frame")
