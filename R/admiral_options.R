@@ -16,7 +16,7 @@ admiral_options$subject_keys <- vars(STUDYID, USUBJID)
 #'
 #' @param option A character scalar of commonly used admiral function inputs.
 #'
-#'   As of now, support only available for `r enumerate(possible_inputs, quote_fun = dquote, conjunction = "or")`.
+#'   As of now, support only available for `r enumerate(ls(admiral_options), quote_fun = dquote, conjunction = "or")`.
 #'   See `set_admiral_options()` for a description of the options.
 #'
 #' @details
