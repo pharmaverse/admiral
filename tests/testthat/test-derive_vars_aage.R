@@ -53,7 +53,8 @@ test_that("derive_var_age_years - Error is issued if age_unit is missing", {
 })
 
 test_that(paste0("derive_var_age_years - Warning is issued if age_unit is not null, but the ",
-                 "'unit' variable corresponding to age_var stores more than one unique unit."), {
+                 "'unit' variable corresponding to age_var stores more than one unique ",
+                 "value."), {
   input <- tibble::tribble(
     ~AGE,   ~AGEU,
     #-------/---------
@@ -69,9 +70,26 @@ test_that(paste0("derive_var_age_years - Warning is issued if age_unit is not nu
   )
 })
 
-test_that(paste0("derive_var_age_years - The 'unit' variable corresponding to age_var will be ",
-                 "considered as storing one unique unit, if values only differ by case, i.e. ",
-                 "months = Months = MONTHS etc."), {
+test_that(paste0("derive_var_age_years - Error is issued if age_unit consists of more than ",
+                 "one unique value."), {
+  input <- tibble::tribble(
+    ~AGE,   ~AGEU,
+    #-------/---------
+    459,    "months",
+    312,    "months",
+    510,    "months",
+    402,    "months",
+    432,    "months"
+  )
+
+  expect_error(
+    derive_var_age_years(input, AGE, age_unit = c("months", "years"), new_var = AAGE)
+  )
+})
+
+test_that(paste0("derive_var_age_years - The 'unit' variable corresponding to age_var will ",
+                 "be considered as storing one unique unit, if values only differ by case, ",
+                 "i.e. 'months', 'Months', 'MONTHS' considered same unit, etc."), {
 
   # The tibbles "input" and "input2" differ only in the third row: "Months" versus "months".
 
@@ -102,8 +120,8 @@ test_that(paste0("derive_var_age_years - The 'unit' variable corresponding to ag
 })
 
 test_that(paste0("derive_var_age_years - Warning is issued if age_unit is not null, but the ",
-                 "'unit' variable corresponding to age_var stores one unique unit that is not ",
-                 "equivalent to age_unit."), {
+                 "'unit' variable corresponding to age_var stores one unique unit that is ",
+                 "not equivalent to age_unit."), {
   input <- tibble::tribble(
     ~AGE,   ~AGEU,
     #-------/---------
