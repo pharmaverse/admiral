@@ -30,6 +30,8 @@ reference dataset. (#1477)
 
 - Removed the `{assertthat}` dependency in `{admiral}` (#1392)
 
+- Removed R Version 3.6 check in CI/CD workflows in favor of the three most recent versions: 4.0, 4.1 and 4.2. (#1490)
+
 ## Updates of Existing Functions
 
 - Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
