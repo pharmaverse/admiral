@@ -9,7 +9,6 @@ derive_param_extreme_event(
   dataset_adsl,
   dataset_source,
   filter_source,
-  date_var,
   order,
   mode = "first",
   subject_keys = vars(STUDYID, USUBJID),

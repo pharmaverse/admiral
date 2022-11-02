@@ -194,6 +194,8 @@ derive_param_first_event <- function(dataset,
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
+#' @importFrom rlang .data
+#'
 #' @details
 #'   1. The input dataset is restricted to observations fulfilling
 #'   `filter_source`.
@@ -287,7 +289,6 @@ derive_param_extreme_event <- function(dataset,
                                        dataset_adsl,
                                        dataset_source,
                                        filter_source,
-                                       date_var,
                                        order,
                                        mode = "first",
                                        subject_keys = vars(STUDYID, USUBJID),
@@ -335,11 +336,11 @@ derive_param_extreme_event <- function(dataset,
 
   new_obs <- bind_rows(yes = events, no = noevents, .id = "HAD_EVENT") %>%
     mutate(
-      AVALC = if_else(HAD_EVENT == "yes", "Y", "N"),
-      AVAL = if_else(HAD_EVENT == "yes", 1, 0),
+      AVALC = if_else(.data$HAD_EVENT == "yes", "Y", "N"),
+      AVAL = if_else(.data$HAD_EVENT == "yes", 1, 0),
       !!!set_values_to
     ) %>%
-    select(-HAD_EVENT)
+    select(-.data$HAD_EVENT)
 
   # Create output dataset
   bind_rows(dataset, new_obs)
