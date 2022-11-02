@@ -232,7 +232,7 @@ NULL
 #'
 #' @export
 derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_warn("0.8.0", "derive_var_agegr_ema()")
+  deprecate_warn("0.8.0", "derive_var_agegr_fda()")
 
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
