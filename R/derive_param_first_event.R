@@ -3,7 +3,7 @@
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' This function is *deprecated*, please use `derive_param_extreme_event()` instead.
+#' This function is *deprecated*, please use `derive_param_extreme_event()` instead with the `order` argument instead of the `date_var` argument.
 #'
 #' @param dataset Input dataset
 #'
@@ -102,7 +102,7 @@ derive_param_first_event <- function(dataset,
   ### DEPRECATION
   deprecate_warn("0.9.0",
                  "derive_param_first_event()",
-                 "derive_param_extreme_event()")
+                 details = "Please use `derive_param_extreme_event()` instead with the `order` argument instead of the `date_var` argument")
 
   filter_source <- enquo(filter_source)
   date_var <- enquo(date_var)
@@ -112,7 +112,7 @@ derive_param_first_event <- function(dataset,
     dataset_adsl = dataset_adsl,
     dataset_source = dataset_source,
     filter_source = !!filter_source,
-    date_var = !!date_var,
+    order = vars(!!date_var),
     subject_keys = subject_keys,
     set_values_to = set_values_to,
     check_type = check_type,
@@ -153,8 +153,6 @@ derive_param_first_event <- function(dataset,
 #'   `1`.
 #'
 #'   For all other subjects `AVALC` is set to `"N"` and `AVAL` to `0`.
-#'
-#' @param date_var *Deprecated*, please use `order` and `set_values_to` instead.
 #'
 #' @param order Order variable
 #'
@@ -294,17 +292,6 @@ derive_param_extreme_event <- function(dataset,
                                        subject_keys = vars(STUDYID, USUBJID),
                                        set_values_to,
                                        check_type = "warning") {
-  ### BEGIN DEPRECATION
-  if (!missing(date_var)) {
-    deprecate_warn("0.9.0",
-                   "derive_param_extreme_event(date_var = )",
-                   details = "Please use `order` and `set_values_to` instead")
-
-    date_var_enquo <- enquo(date_var)
-    order <- vars(!!date_var_enquo)
-    set_values_to <- vars(!!!set_values_to, ADT = !!date_var_enquo)
-  }
-  ### END DEPRECATION
 
   # Check input parameters
   filter_source <- assert_filter_cond(enquo(filter_source))
