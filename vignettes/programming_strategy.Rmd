@@ -408,8 +408,7 @@ add an issue in GitHub for discussion.
 | `utils_help` 	                                                                    | Utilities used within Derivation functions                                                                               |	
 | `utils_examples`                                                                  | Utilities used for examples and template scripts                                                                         |
 | `source_specifications` 	                                                        | Source Specifications                                                                                                    |	
-| `high_order_function`                                                             |	Higher Order Functions                                                                                                   |	
-| `move_adm_dev` 	                                                                  | Functions moved to `admiraldev` package [Link TBA]                                                                       |	
+| `high_order_function`                                                             |	Higher Order Functions                                                                                                   |	                                                                     |	
 | `internal`                                                                        | Internal functions only available to admiral developers                                                                  |
 |                                                                                   |                                                                                                                         |
 | `assertion`*                                                                       | Asserts a certain type and gives warning, error to user        |
