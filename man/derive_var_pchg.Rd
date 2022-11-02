@@ -22,7 +22,9 @@ baseline by the absolute value of the baseline value and
 multiplying the result by \code{100}.
 }
 \examples{
-advs <- tibble::tribble(
+library(tibble)
+
+advs <- tribble(
   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BASE,
   "P01",    "WEIGHT", 80,    "Y",    80,
   "P01",    "WEIGHT", 80.8,  "",     80,

@@ -57,7 +57,9 @@ here, results are calculated based on the actual calendar length of months or ye
 rather than assuming equal days every month (30.4375 days) or every year (365.25 days).
 }
 \examples{
-data <- tibble::tribble(
+library(tibble)
+
+data <- tribble(
   ~BRTHDT, ~RANDDT,
   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
 )

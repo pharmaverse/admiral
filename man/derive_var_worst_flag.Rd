@@ -78,8 +78,9 @@ arguments \code{worst_high} / \code{worst_low}, i.e. for some parameters the hig
 and for others the worst is the lowest value.
 }
 \examples{
+library(tibble)
 
-input <- tibble::tribble(
+input <- tribble(
   ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,
   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,
   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,
