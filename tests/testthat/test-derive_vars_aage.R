@@ -114,8 +114,8 @@ test_that(paste0("derive_var_age_years - The 'unit' variable corresponding to ag
   )
 
   expect_equal(
-    derive_var_age_years(input, AGE, age_unit = "months", new_var = AAGE),
-    derive_var_age_years(input2, AGE, age_unit = "months", new_var = AAGE)
+    derive_var_age_years(input, AGE, age_unit = "months", new_var = AAGE)$AAGE,
+    derive_var_age_years(input2, AGE, age_unit = "months", new_var = AAGE)$AAGE
   )
 })
 

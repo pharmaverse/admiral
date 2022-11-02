@@ -132,6 +132,13 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
   age_var <- age_variable
   unit_var <- paste0(quo_get_expr(age_var), "U")
 
+  if (!is.null(age_unit)) {
+    if (length(age_unit) > 1) {
+      err_msg <- "Only one unit can be specified via the `age_unit` parameter"
+      abort(err_msg)
+    }
+  }
+
   new_var <- assert_symbol(enquo(new_var))
   warn_if_vars_exist(dataset, quo_text(new_var))
 
