@@ -52,6 +52,15 @@ format_racegr1 <- function(x) {
   )
 }
 
+format_agegr1 <- function(x) {
+  case_when(
+    x < 18 ~ "<18",
+    between(x, 18, 64) ~ "18-64",
+    x > 65 ~ ">65",
+    TRUE ~ "Missing"
+  )
+}
+
 format_region1 <- function(x) {
   case_when(
     x %in% c("CAN", "USA") ~ "NA",
@@ -234,12 +243,6 @@ adsl <- adsl %>%
     source_datasets = list(ae = ae_ext, lb = lb_ext, adsl = adsl),
     mode = "last"
   ) %>%
-  ## Age group ----
-  derive_var_agegr_fda(
-    age_var = AGE,
-    new_var = AGEGR1
-  ) %>%
-  ## Safety population ----
   derive_var_merged_exist_flag(
     dataset_add = ex,
     by_vars = vars(STUDYID, USUBJID),
@@ -249,6 +252,7 @@ adsl <- adsl %>%
   ## Groupings and others variables ----
   mutate(
     RACEGR1 = format_racegr1(RACE),
+    AGEGR1 = format_agegr1(AGE),
     REGION1 = format_region1(COUNTRY),
     LDDTHGR1 = format_lddthgr1(LDDTHELD),
     DTH30FL = if_else(LDDTHGR1 == "<= 30", "Y", NA_character_),
