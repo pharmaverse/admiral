@@ -28,6 +28,8 @@ reference dataset. (#1477)
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
 
+- Removed the `{assertthat}` dependency in `{admiral}` (#1392)
+
 ## Updates of Existing Functions
 
 - Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
@@ -42,6 +44,8 @@ which controls if time is considered for the condition if `start_date` is after
 
 - Function `derive_vars_merged()` had an improperly formatted error message 
 which has been corrected (#1473)
+
+- Templates now save datasets as `.rds` instead of `.rda` (#1501)
 
 # admiral 0.8.4
 

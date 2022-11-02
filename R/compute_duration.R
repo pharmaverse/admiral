@@ -119,8 +119,10 @@ compute_duration <- function(start_date,
                              add_one = TRUE,
                              trunc_out = FALSE) {
   # Checks
-  assert_that(is_date(start_date), is_date(end_date))
-  assert_that(is_timeunit(in_unit), is_timeunit(out_unit) | out_unit == "weeks")
+  assert_date_vector(start_date)
+  assert_date_vector(end_date)
+  assert_character_scalar(in_unit, values = valid_time_units())
+  assert_character_scalar(out_unit, values = c(valid_time_units(), "weeks"))
   assert_logical_scalar(floor_in)
   assert_logical_scalar(add_one)
   assert_logical_scalar(trunc_out)
