@@ -583,7 +583,26 @@ will need to be quoted.
 ## Unit Testing
 
 Unit tests for deprecated functions and parameters must be added to
-`tests/testthat/test-deprecation.R` to ensure that a warning or error is issued.
+`tests/testthat/test-deprecation.R` to ensure that a warning or error is issued. 
+
+When writing the unit test, check that the error or warning has the right class, i.e. "lifecycle_error_deprecated" or "lifecycle_warning_deprecated", respectively. The expect statement of the unit-test should follow the corresponding format:
+
+```
+# For deprecated functions that issues error
+expect_error(
+  deprecated_function_error(),
+  class = "lifecycle_error_deprecated"
+)
+```
+
+```
+# For deprecated functions that issues warning 
+expect_warning(
+  deprecated_function_warning(),
+  class = "lifecycle_warning_deprecated"
+)  
+```
+
 
 Other unit tests of deprecated functions must be removed.
 
