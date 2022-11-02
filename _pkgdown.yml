@@ -142,6 +142,8 @@ navbar:
       - text: "Advanced User Guides"
       - text: Date and Time Imputation
         href: articles/imputation.html
+      - text: Visit and Period Variables
+        href: articles/visits_periods.html
       - text: Higher Order Functions
         href: articles/higher_order.html
       - text: Queries Dataset Documentation
