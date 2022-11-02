@@ -211,47 +211,44 @@ test_that("deprecation Test 15: A warning is issued if `derive_var_agegr_fda()`
 })
 
 ## Test 16: A warning is issued if `derive_param_first_event()` is called ----
-test_that("deprecation Test 16: A warning is issued if `derive_param_first_event()` is called",
-          {
-            rlang::with_options(lifecycle_verbosity = "warning", {
+test_that("deprecation Test 16: A warning is issued if `derive_param_first_event()` is called", {
+  rlang::with_options(lifecycle_verbosity = "warning", {
+    adsl <- tibble::tribble(
+      ~STUDYID, ~USUBJID, ~DTHDT,
+      "XX1234", "1",      ymd("2022-05-13"),
+      "XX1234", "2",      ymd(""),
+      "XX1234", "3",      ymd(""),
+    )
 
+    adrs <- tibble::tribble(
+      ~USUBJID, ~ADTC,        ~AVALC, ~PARAMCD,
+      "1",      "2020-01-02", "PR",   "OVR",
+      "1",      "2020-02-01", "CR",   "OVR",
+      "1",      "2020-03-01", "CR",   "OVR",
+      "1",      "2020-04-01", "SD",   "OVR",
+      "2",      "2021-06-15", "SD",   "OVR",
+      "2",      "2021-07-16", "PD",   "OVR",
+      "2",      "2021-09-14", "PD",   "OVR",
+    ) %>%
+      mutate(
+        STUDYID = "XX1234",
+        ADT = ymd(ADTC)
+      ) %>%
+      select(-ADTC)
 
-                           adsl <- tibble::tribble(
-                             ~STUDYID, ~USUBJID, ~DTHDT,
-                             "XX1234", "1",      ymd("2022-05-13"),
-                             "XX1234", "2",      ymd(""),
-                             "XX1234", "3",      ymd(""),
-                           )
-
-                           adrs <- tibble::tribble(
-                             ~USUBJID, ~ADTC,        ~AVALC, ~PARAMCD,
-                             "1",      "2020-01-02", "PR",   "OVR",
-                             "1",      "2020-02-01", "CR",   "OVR",
-                             "1",      "2020-03-01", "CR",   "OVR",
-                             "1",      "2020-04-01", "SD",   "OVR",
-                             "2",      "2021-06-15", "SD",   "OVR",
-                             "2",      "2021-07-16", "PD",   "OVR",
-                             "2",      "2021-09-14", "PD",   "OVR",
-                           )  %>%
-                             mutate(
-                               STUDYID = "XX1234",
-                               ADT = ymd(ADTC)
-                             ) %>%
-                             select(-ADTC)
-
-                           expect_warning(
-                             derive_param_first_event(
-                               adrs,
-                               dataset_adsl = adsl,
-                               dataset_source = adrs,
-                               filter_source = PARAMCD == "OVR" & AVALC == "PD",
-                               date_var = ADT,
-                               set_values_to = vars(
-                                 PARAMCD = "PD",
-                                 ANL01FL = "Y"
-                               )
-                             ),
-                             class = "lifecycle_warning_deprecated"
-                           )
-                         })
-          })
+    expect_warning(
+      derive_param_first_event(
+        adrs,
+        dataset_adsl = adsl,
+        dataset_source = adrs,
+        filter_source = PARAMCD == "OVR" & AVALC == "PD",
+        date_var = ADT,
+        set_values_to = vars(
+          PARAMCD = "PD",
+          ANL01FL = "Y"
+        )
+      ),
+      class = "lifecycle_warning_deprecated"
+    )
+  })
+})

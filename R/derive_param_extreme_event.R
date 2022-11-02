@@ -101,8 +101,9 @@ derive_param_first_event <- function(dataset,
 
   ### DEPRECATION
   deprecate_warn("0.9.0",
-                 "derive_param_first_event()",
-                 details = "Please use `derive_param_extreme_event()` instead with the `order` argument instead of the `date_var` argument")
+    "derive_param_first_event()",
+    details = "Please use `derive_param_extreme_event()` instead with the `order` argument instead of the `date_var` argument"
+  )
 
   filter_source <- enquo(filter_source)
   date_var <- enquo(date_var)
@@ -332,7 +333,7 @@ derive_param_extreme_event <- function(dataset,
     select(events, !!!subject_keys)
   )
 
-  new_obs <- bind_rows(yes = events, no = noevents, .id = 'HAD_EVENT') %>%
+  new_obs <- bind_rows(yes = events, no = noevents, .id = "HAD_EVENT") %>%
     mutate(
       AVALC = if_else(HAD_EVENT == "yes", "Y", "N"),
       AVAL = if_else(HAD_EVENT == "yes", 1, 0),
