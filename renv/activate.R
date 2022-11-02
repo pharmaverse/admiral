@@ -1,4 +1,5 @@
 
+
 local({
   # the requested version of renv
   version <- "0.16.0"
@@ -61,18 +62,30 @@ local({
 
   # load bootstrap tools
   `%||%` <- function(x, y) {
-    if (is.environment(x) || length(x)) x else y
+    if (is.environment(x) || length(x)) {
+      x
+    } else {
+      y
+    }
   }
 
   bootstrap <- function(version, library) {
     # attempt to download renv
-    tarball <- tryCatch(renv_bootstrap_download(version), error = identity)
+    tarball <-
+      tryCatch(
+        renv_bootstrap_download(version),
+        error = identity
+      )
     if (inherits(tarball, "error")) {
       stop("failed to download renv ", version)
     }
 
     # now attempt to install
-    status <- tryCatch(renv_bootstrap_install(version, tarball, library), error = identity)
+    status <-
+      tryCatch(
+        renv_bootstrap_install(version, tarball, library),
+        error = identity
+      )
     if (inherits(status, "error")) {
       stop("failed to install renv ", version)
     }
@@ -90,7 +103,11 @@ local({
     }
 
     # check for lockfile repositories
-    repos <- tryCatch(renv_bootstrap_repos_lockfile(), error = identity)
+    repos <-
+      tryCatch(
+        renv_bootstrap_repos_lockfile(),
+        error = identity
+      )
     if (!inherits(repos, "error") && length(repos)) {
       return(repos)
     }
@@ -125,7 +142,10 @@ local({
       return(NULL)
     }
 
-    lockfile <- tryCatch(renv_json_read(lockpath), error = identity)
+    lockfile <- tryCatch(
+      renv_json_read(lockpath),
+      error = identity
+    )
     if (inherits(lockfile, "error")) {
       warning(lockfile)
       return(NULL)
@@ -167,7 +187,10 @@ local({
     )
 
     for (method in methods) {
-      path <- tryCatch(method(version), error = identity)
+      path <- tryCatch(
+        method(version),
+        error = identity
+      )
       if (is.character(path) && file.exists(path)) {
         return(path)
       }
@@ -275,7 +298,9 @@ local({
         !identical(getOption("pkgType"), "source") &&
         Sys.info()[["sysname"]] %in% c("Darwin", "Windows")
 
-    types <- c(if (binary) "binary", "source")
+    types <- c(if (binary) {
+      "binary"
+    }, "source")
 
     # iterate over types + repositories
     for (type in types) {
@@ -294,19 +319,25 @@ local({
         }
 
         # check for compatible entry
-        entry <- db[db$Package %in% "renv" & db$Version %in% version, ]
+        entry <-
+          db[db$Package %in% "renv" & db$Version %in% version, ]
         if (nrow(entry) == 0) {
           next
         }
 
         # found it; return spec to caller
-        spec <- list(entry = entry, type = type, repos = repos)
+        spec <- list(
+          entry = entry,
+          type = type,
+          repos = repos
+        )
         return(spec)
       }
     }
 
     # if we got here, we failed to find renv
-    fmt <- "renv %s is not available from your declared package repositories"
+    fmt <-
+      "renv %s is not available from your declared package repositories"
     stop(sprintf(fmt, version))
   }
 
@@ -352,7 +383,8 @@ local({
     # bail if it doesn't exist
     if (!file.exists(tarball)) {
       # let the user know we weren't able to honour their request
-      fmt <- "* RENV_BOOTSTRAP_TARBALL is set (%s) but does not exist."
+      fmt <-
+        "* RENV_BOOTSTRAP_TARBALL is set (%s) but does not exist."
       msg <- sprintf(fmt, tarball)
       warning(msg)
 
@@ -378,20 +410,32 @@ local({
     if (nzchar(Sys.which("curl")) && nzchar(pat)) {
       fmt <- "--location --fail --header \"Authorization: token %s\""
       extra <- sprintf(fmt, pat)
-      saved <- options("download.file.method", "download.file.extra")
-      options(download.file.method = "curl", download.file.extra = extra)
+      saved <-
+        options("download.file.method", "download.file.extra")
+      options(
+        download.file.method = "curl",
+        download.file.extra = extra
+      )
       on.exit(do.call(base::options, saved), add = TRUE)
     } else if (nzchar(Sys.which("wget")) && nzchar(pat)) {
       fmt <- "--header=\"Authorization: token %s\""
       extra <- sprintf(fmt, pat)
-      saved <- options("download.file.method", "download.file.extra")
-      options(download.file.method = "wget", download.file.extra = extra)
+      saved <-
+        options("download.file.method", "download.file.extra")
+      options(
+        download.file.method = "wget",
+        download.file.extra = extra
+      )
       on.exit(do.call(base::options, saved), add = TRUE)
     }
 
     message("* Downloading renv ", version, " from GitHub ... ", appendLF = FALSE)
 
-    url <- file.path("https://api.github.com/repos/rstudio/renv/tarball", version)
+    url <-
+      file.path(
+        "https://api.github.com/repos/rstudio/renv/tarball",
+        version
+      )
     name <- sprintf("renv_%s.tar.gz", version)
     destfile <- file.path(tempdir(), name)
 
@@ -416,12 +460,21 @@ local({
 
     # invoke using system2 so we can capture and report output
     bin <- R.home("bin")
-    exe <- if (Sys.info()[["sysname"]] == "Windows") "R.exe" else "R"
+    exe <-
+      if (Sys.info()[["sysname"]] == "Windows") {
+        "R.exe"
+      } else {
+        "R"
+      }
     r <- file.path(bin, exe)
 
     args <- c(
-      "--vanilla", "CMD", "INSTALL", "--no-multiarch",
-      "-l", shQuote(path.expand(library)),
+      "--vanilla",
+      "CMD",
+      "INSTALL",
+      "--no-multiarch",
+      "-l",
+      shQuote(path.expand(library)),
       shQuote(path.expand(tarball))
     )
 
@@ -443,7 +496,8 @@ local({
   renv_bootstrap_platform_prefix <- function() {
     # construct version prefix
     version <- paste(R.version$major, R.version$minor, sep = ".")
-    prefix <- paste("R", numeric_version(version)[1, 1:2], sep = "-")
+    prefix <-
+      paste("R", numeric_version(version)[1, 1:2], sep = "-")
 
     # include SVN revision for development versions of R
     # (to avoid sharing platform-specific artefacts with released versions of R)
@@ -486,7 +540,10 @@ local({
   }
 
   renv_bootstrap_platform_prefix_auto <- function() {
-    prefix <- tryCatch(renv_bootstrap_platform_os(), error = identity)
+    prefix <- tryCatch(
+      renv_bootstrap_platform_os(),
+      error = identity
+    )
     if (inherits(prefix, "error") || prefix %in% "unknown") {
       msg <- paste(
         "failed to infer current operating system",
@@ -526,44 +583,50 @@ local({
     "unknown"
   }
 
-  renv_bootstrap_platform_os_via_os_release <- function(file, sysinfo) {
-    # read /etc/os-release
-    release <- utils::read.table(
-      file             = file,
-      sep              = "=",
-      quote            = c("\"", "'"),
-      col.names        = c("Key", "Value"),
-      comment.char     = "#",
-      stringsAsFactors = FALSE
-    )
+  renv_bootstrap_platform_os_via_os_release <-
+    function(file, sysinfo) {
+      # read /etc/os-release
+      release <- utils::read.table(
+        file             = file,
+        sep              = "=",
+        quote            = c("\"", "'"),
+        col.names        = c("Key", "Value"),
+        comment.char     = "#",
+        stringsAsFactors = FALSE
+      )
 
-    vars <- as.list(release$Value)
-    names(vars) <- release$Key
+      vars <- as.list(release$Value)
+      names(vars) <- release$Key
 
-    # get os name
-    os <- tolower(sysinfo[["sysname"]])
+      # get os name
+      os <- tolower(sysinfo[["sysname"]])
 
-    # read id
-    id <- "unknown"
-    for (field in c("ID", "ID_LIKE")) {
-      if (field %in% names(vars) && nzchar(vars[[field]])) {
-        id <- vars[[field]]
-        break
+      # read id
+      id <- "unknown"
+      for (field in c("ID", "ID_LIKE")) {
+        if (field %in% names(vars) && nzchar(vars[[field]])) {
+          id <- vars[[field]]
+          break
+        }
       }
-    }
 
-    # read version
-    version <- "unknown"
-    for (field in c("UBUNTU_CODENAME", "VERSION_CODENAME", "VERSION_ID", "BUILD_ID")) {
-      if (field %in% names(vars) && nzchar(vars[[field]])) {
-        version <- vars[[field]]
-        break
+      # read version
+      version <- "unknown"
+      for (field in c(
+        "UBUNTU_CODENAME",
+        "VERSION_CODENAME",
+        "VERSION_ID",
+        "BUILD_ID"
+      )) {
+        if (field %in% names(vars) && nzchar(vars[[field]])) {
+          version <- vars[[field]]
+          break
+        }
       }
-    }
 
-    # join together
-    paste(c(os, id, version), collapse = "-")
-  }
+      # join together
+      paste(c(os, id, version), collapse = "-")
+    }
 
   renv_bootstrap_platform_os_via_redhat_release <- function() {
     # read /etc/redhat-release
@@ -583,7 +646,10 @@ local({
 
     parts <- strsplit(contents, "[[:space:]]")[[1L]]
     for (part in parts) {
-      nv <- tryCatch(numeric_version(part), error = identity)
+      nv <- tryCatch(
+        numeric_version(part),
+        error = identity
+      )
       if (inherits(nv, "error")) {
         next
       }
@@ -597,7 +663,8 @@ local({
 
   renv_bootstrap_library_root_name <- function(project) {
     # use project name as-is if requested
-    asis <- Sys.getenv("RENV_PATHS_LIBRARY_ROOT_ASIS", unset = "FALSE")
+    asis <-
+      Sys.getenv("RENV_PATHS_LIBRARY_ROOT_ASIS", unset = "FALSE")
     if (asis) {
       return(basename(project))
     }
@@ -638,7 +705,8 @@ local({
   }
 
   renv_bootstrap_validate_version <- function(version) {
-    loadedversion <- utils::packageDescription("renv", fields = "Version")
+    loadedversion <-
+      utils::packageDescription("renv", fields = "Version")
     if (version == loadedversion) {
       return(TRUE)
     }
@@ -696,7 +764,8 @@ local({
     }
 
     # check for a profile file (nothing to do if it doesn't exist)
-    path <- renv_bootstrap_paths_renv("profile", profile = FALSE, project = project)
+    path <-
+      renv_bootstrap_paths_renv("profile", profile = FALSE, project = project)
     if (!file.exists(path)) {
       return(NULL)
     }
@@ -752,13 +821,23 @@ local({
     )
   }
 
-  renv_bootstrap_paths_renv <- function(..., profile = TRUE, project = NULL) {
-    renv <- Sys.getenv("RENV_PATHS_RENV", unset = "renv")
-    root <- if (renv_bootstrap_path_absolute(renv)) NULL else project
-    prefix <- if (profile) renv_bootstrap_profile_prefix()
-    components <- c(root, renv, prefix, ...)
-    paste(components, collapse = "/")
-  }
+  renv_bootstrap_paths_renv <-
+    function(...,
+             profile = TRUE,
+             project = NULL) {
+      renv <- Sys.getenv("RENV_PATHS_RENV", unset = "renv")
+      root <-
+        if (renv_bootstrap_path_absolute(renv)) {
+          NULL
+        } else {
+          project
+        }
+      prefix <- if (profile) {
+        renv_bootstrap_profile_prefix()
+      }
+      components <- c(root, renv, prefix, ...)
+      paste(components, collapse = "/")
+    }
 
   renv_bootstrap_project_type <- function(path) {
     descpath <- file.path(path, "DESCRIPTION")
@@ -858,7 +937,8 @@ local({
       strings <- substring(text, starts, ends)
 
       # only keep those requiring escaping
-      strings <- grep("[[\\]{}:]", strings, perl = TRUE, value = TRUE)
+      strings <-
+        grep("[[\\]{}:]", strings, perl = TRUE, value = TRUE)
 
       # compute replacements
       replacements <- sprintf('"\032%i\032"', seq_along(strings))
@@ -871,14 +951,24 @@ local({
 
     # transform the JSON into something the R parser understands
     transformed <- replaced
-    transformed <- gsub("{}", "`names<-`(list(), character())", transformed, fixed = TRUE)
+    transformed <-
+      gsub("{}",
+        "`names<-`(list(), character())",
+        transformed,
+        fixed = TRUE
+      )
     transformed <- gsub("[[{]", "list(", transformed, perl = TRUE)
     transformed <- gsub("[]}]", ")", transformed, perl = TRUE)
     transformed <- gsub(":", "=", transformed, fixed = TRUE)
     text <- paste(transformed, collapse = "\n")
 
     # parse it
-    json <- parse(text = text, keep.source = FALSE, srcfile = NULL)[[1L]]
+    json <-
+      parse(
+        text = text,
+        keep.source = FALSE,
+        srcfile = NULL
+      )[[1L]]
 
     # construct map between source strings, replaced strings
     map <- as.character(parse(text = strings))
