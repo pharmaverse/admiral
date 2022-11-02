@@ -502,7 +502,7 @@ compute_bsa <- function(height = height,
 #' @export
 #'
 #' @examples
-#' librsry(tibble)
+#' library(tibble)
 #' advs <- tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVISIT,
 #'   "01-701-1015", "HEIGHT", "Height (cm)", 147,   "SCREENING",
