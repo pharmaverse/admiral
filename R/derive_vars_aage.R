@@ -158,7 +158,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
         )
     }
   } else {
-    unit <- tolower(unique(pull(dataset, !!sym(unit_var))))
+    unit <- unique(tolower(pull(dataset, !!sym(unit_var))))
     assert_character_vector(
       unit,
       values = c(
