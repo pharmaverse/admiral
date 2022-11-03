@@ -2625,7 +2625,7 @@ input_albi <- expected_albi %>%
 test_that("derive_var_atoxgr, test 65: CTCAEv5 Hyperuricemia", {
 
   expected_albi <- expected_albi %>%
-    filter(ATOXGRH != '4')
+    filter(ATOXGRH != "4")
   input_albi <- expected_albi %>%
     select(-ATOXGRH)
 
