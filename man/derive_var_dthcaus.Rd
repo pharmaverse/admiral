@@ -88,9 +88,9 @@ the preferred order.
 }
 \section{Functions}{
 \itemize{
-\item \code{dthcaus_source}: Create objects of class "dthcaus_source"
-}}
+\item \code{dthcaus_source()}: Create objects of class "dthcaus_source"
 
+}}
 \examples{
 library(tibble)
 library(dplyr)

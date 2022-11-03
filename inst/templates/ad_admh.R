@@ -8,7 +8,7 @@ library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
-# ---- Load source datasets ----
+# Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
@@ -23,7 +23,7 @@ mh <- admiral_mh
 mh <- convert_blanks_to_na(mh)
 
 
-# ---- Look-up tables ----
+# Look-up tables ----
 
 # Creating a look-up table for assigning MHTERMN (for derivation of company specific variable)
 # (this is set to align with the order of pre-printed terms on the CRF)
@@ -32,7 +32,7 @@ mhtermn_lookup <- tibble::tribble(
   "ALZHEIMER'S DISEASE", 1
 )
 
-# ---- Derivations ----
+# Derivations ----
 
 # Get list of ADSL vars required for derivations
 adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT)
@@ -44,6 +44,7 @@ admh <- mh %>%
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
+  ## Derive dates (ASTDT, AEDT, ...) ----
   # Derive analysis start date and flag
   derive_vars_dt(
     dtc = MHSTDTC,
@@ -72,7 +73,7 @@ admh <- mh %>%
     reference_date = TRTSDT,
     source_vars = vars(ADT)
   ) %>%
-  # Derive query variables
+  ## Derive query variables ----
   derive_vars_query(queries_mh) %>%
   # Assign the AHIST (company specific variable derivation)
   mutate(AHIST = case_when(
@@ -80,7 +81,7 @@ admh <- mh %>%
     MHENRF %in% c("DURING", "AFTER") ~ "Current",
     MHSTAT == "Not Done" ~ "Not Assessed"
   )) %>%
-  # Derive occurrence flags
+  ## Derive occurrence flags ----
   derive_var_extreme_flag(
     by_vars = vars(USUBJID),
     order = vars(ASTDT, MHSEQ),
@@ -118,14 +119,18 @@ admh <- mh %>%
     new_var = AOCPPFL,
     mode = "first"
   ) %>%
-  # Derive analysis flag (company specific variable derivation)
+  ## Derive analysis flag (company specific variable derivation) ----
   mutate(ANL01FL = ifelse(MHOCCUR != "N", "Y", NA_character_)) %>%
-  # Assign TRTA, TRTP (company specific variables derivation)
+  ## Assign TRTA, TRTP (company specific variables derivation) ----
+  # See also the "Visit and Period Variables" vignette
+  # (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A
   ) %>%
-  # Assign APHASE and APHASEN Variable (company specific variable derivation)
+  ## Assign APHASE and APHASEN Variable (company specific variable derivation) ----
+  # See also the "Visit and Period Variables" vignette
+  # (https://pharmaverse.github.io/admiral/articles/visits_periods.html#periods_bds)
   mutate(
     APHASE = case_when(
       ADT < TRTSDT ~ "Screening",
@@ -151,9 +156,7 @@ admh <- restrict_derivation(
   filter = (MHPRESP == "Y")
 )
 
-
-
-# Add all ADSL variables
+## Add all ADSL variables ----
 admh <- admh %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
@@ -165,7 +168,7 @@ admh <- admh %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
-# ---- Save output ----
+# Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 saveRDS(admh, file = file.path(dir, "admh.rds"), compress = "bzip2")

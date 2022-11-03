@@ -68,7 +68,6 @@ reference:
   contents:
   - has_keyword('com_bds_findings')
 
-
 - title: Utility Functions
 - subtitle: Utilities for Formatting Observations
 - contents:
@@ -145,6 +144,10 @@ navbar:
       - text: "Advanced User Guides"
       - text: Date and Time Imputation
         href: articles/imputation.html
+      - text: Visit and Period Variables
+        href: articles/visits_periods.html
+      - text: Generic Functions
+        href: articles/generic.html
       - text: Higher Order Functions
         href: articles/higher_order.html
       - text: Queries Dataset Documentation
