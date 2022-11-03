@@ -177,14 +177,14 @@ for (pkg in base_recommended_pkgs) {
 assign(".lib.loc", ".library", envir = environment(.libPaths))
 
 r_version <- getRversion()
-if ([grepl]("^4.0", r_version)) {
-  [options](repos = "https://cran.microsoft.com/snapshot/2021-03-31")
-} else if ([grepl]("^4.1", r_version)) {
-  [options](repos = "https://cran.microsoft.com/snapshot/2022-03-10")
-} else if ([grepl]("release", r_version)) {
-  [options](repos = "https://cran.microsoft.com/snapshot/2022-06-23")
+if (grepl("^4.0", r_version)) {
+  options(repos = "https://cran.microsoft.com/snapshot/2021-03-31")
+} else if (grepl("^4.1", r_version)) {
+  options(repos = "https://cran.microsoft.com/snapshot/2022-03-10")
+} else if (grepl("release", r_version)) {
+  options(repos = "https://cran.microsoft.com/snapshot/2022-06-23")
 } else {
-  [options](https://rdrr.io/r/base/options.html)(repos = "https://cran.rstudio.com")
+  options(https://rdrr.io/r/base/options.html)(repos = "https://cran.rstudio.com")
 }
 
 if (!requireNamespace("remotes", quietly = TRUE)) {
