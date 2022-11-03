@@ -65,8 +65,8 @@
 #'
 #' @author Gordon Miller
 #'
-#' @keywords datasets
-#' @family datasets
+#' @keywords metadata
+#' @family metadata
 "atoxgr_criteria_ctcv4"
 
 #' Metadata Holding Grading Criteria for NCI-CTCAEv5

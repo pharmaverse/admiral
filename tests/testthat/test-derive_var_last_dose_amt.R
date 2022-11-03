@@ -1,8 +1,4 @@
-library(tibble)
-library(dplyr)
-library(lubridate)
-
-input_ae <- tribble(
+input_ae <- tibble::tribble(
   ~STUDYID,   ~USUBJID,   ~AESEQ, ~AESTDTC,
   "my_study", "subject1", 1,      "2020-01-02",
   "my_study", "subject1", 2,      "2020-08-31",
@@ -16,7 +12,7 @@ input_ae <- tribble(
     AESTDT = ymd(AESTDTC)
   )
 
-input_ex <- tribble(
+input_ex <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
   "my_study", "subject1", "2020-01-01", "2020-01-01", 1, 10, "treatment",
   "my_study", "subject1", "2020-08-29", "2020-08-29", 2, 10, "treatment",
