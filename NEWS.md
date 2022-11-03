@@ -40,6 +40,9 @@ which controls if time is considered for the condition if `start_date` is after
 
 ## Documentation
 
+- New vignette "Generic Functions" (#734)
+- New vignette "Visit and Period Variables" (#1478)
+
 ## Various
 
 - Function `derive_vars_merged()` had an improperly formatted error message 
