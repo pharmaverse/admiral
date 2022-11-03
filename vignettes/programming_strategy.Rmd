@@ -414,8 +414,7 @@ add an issue in GitHub for discussion.
 | `utils_help` 	                                                                    | Utilities used within Derivation functions                                                                               |	
 | `utils_examples`                                                                  | Utilities used for examples and template scripts                                                                         |
 | `source_specifications` 	                                                        | Source Specifications                                                                                                    |	
-| `high_order_function`                                                             |	Higher Order Functions                                                                                                   |	
-| `move_adm_dev` 	                                                                  | Functions moved to `admiraldev` package [Link TBA]                                                                       |	
+| `high_order_function`                                                             |	Higher Order Functions                                                                                                   |	                                                                     |	
 | `internal`                                                                        | Internal functions only available to admiral developers                                                                  |
 |                                                                                   |                                                                                                                         |
 | `assertion`*                                                                       | Asserts a certain type and gives warning, error to user        |
@@ -589,7 +588,36 @@ will need to be quoted.
 ## Unit Testing
 
 Unit tests for deprecated functions and parameters must be added to
-`tests/testthat/test-deprecation.R` to ensure that a warning or error is issued.
+`tests/testthat/test-deprecation.R` to ensure that a warning or error is issued. 
+
+When writing the unit test, check that the error or warning has the right class, i.e. "lifecycle_error_deprecated" or "lifecycle_warning_deprecated", respectively. The unit-test should follow the corresponding format, per the [unit test guidance](unit_test_guidance.html#writing-unit-tests-in-admiral-):
+
+```
+# For deprecated functions that issues error
+
+## Test #: An error is thrown if `derive_var_example()` is called ----
+test_that("deprecation Test #: derive_var_example() An error is thrown if
+          `derive_var_example()` is called", {
+  expect_error(
+    derive_var_example(),
+    class = "lifecycle_error_deprecated"
+  )
+})
+```
+
+```
+# For deprecated functions that issues warning
+
+## Test #: A warning is thrown if `derive_var_example()` is called ----
+test_that("deprecation Test #: derive_var_example() A warning is thrown if
+          `derive_var_example()` is called", {
+  expect_warning(
+    derive_var_example(),
+    class = "lifecycle_warning_deprecated"
+  )
+})
+```
+
 
 Other unit tests of deprecated functions must be removed.
 
