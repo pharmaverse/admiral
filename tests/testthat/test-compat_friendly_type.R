@@ -64,22 +64,25 @@ test_that(".rlang_as_friendly_type Test 5: .rlang_as_friendly_type() works as ex
   )
   expect_equal(.rlang_as_friendly_type(typeof(test_weakref)), "a weak reference")
 
+  # For S4 classes -- think this triggers messages but the expect_equal comes fine
   # setClass("Person", slots = c(name = "character", age = "numeric"))
   # john <- new("Person", name = "John Smith", age = NA_real_)
   # expect_equal(.rlang_as_friendly_type(typeof(john)), "an S4 object")
 
-  # skip name
+  # Skip name
   expect_equal(.rlang_as_friendly_type(typeof(sym("test symbol"))), "a symbol")
   expect_equal(.rlang_as_friendly_type(typeof(expr(1 + 1))), "a call")
   expect_equal(.rlang_as_friendly_type(typeof(pairlist(x = 1, y = 2))), "a pairlist node")
   expect_equal(.rlang_as_friendly_type(typeof(expression(x <- 4, x))), "an expression vector")
-  # typo in char, supposed to be character?
-  # promise is impossible because it stops being a promise at evaluation?
-  # don't know how to check for ...
-  # don't know how to check for any
+
+  # Unsure what char is in compat_friendly_type.R line 118
+  # Promise seems impossible because it stops being a promise at evaluation?
+  # Unsure how to check for `...`
+  # Unsure how to check for `any`
   expect_equal(.rlang_as_friendly_type(typeof(compiler::compile(quote(1 + 3)))), "an internal bytecode object")
-  # skip primitive
-  # skip builtin
+
+  # Skip primitive
+  # Skip builtin
   expect_equal(.rlang_as_friendly_type(typeof(switch)), "a primitive function")
   expect_equal(.rlang_as_friendly_type(typeof(mean)), "a function")
 })
