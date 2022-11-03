@@ -10,9 +10,9 @@ admiral_options$subject_keys <- vars(STUDYID, USUBJID)
 # 2. Update @params with future_input in set_admiral_options roxygen documentation
 # 3. Add future_input into set_admiral_options() formals and body
 
-#' Get the value of an admiral option
+#' Get the Value of an Admiral Option
 #'
-#' Get the value of an admiral option which can be modified for advanced users.
+#' Get the Value of an Admiral Option Which Can Be Modified for Advanced Users.
 #'
 #' @param option A character scalar of commonly used admiral function inputs.
 #'
@@ -26,8 +26,7 @@ admiral_options$subject_keys <- vars(STUDYID, USUBJID)
 #' @author Zelos Zhu
 #'
 #' @return
-#' The value of the specified option unless user changes the default
-#' using `set_admiral_options()`.
+#' The value of the specified option.
 #'
 #' @keywords admiral_options
 #' @family admiral_options
@@ -75,9 +74,9 @@ get_admiral_option <- function(option) {
   }
 }
 
-#' Set the values of admiral options
+#' Set the Value of Admiral Options
 #'
-#' Set the values of admiral options that can be modified for advanced users.
+#’ Set the Values of Admiral Options That Can Be Modified for Advanced Users.
 #'
 #' @param subject_keys Variables to uniquely identify a subject, defaults to
 #'   `vars(STUDYID, USUBJID)`. This option is used as default value for the

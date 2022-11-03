@@ -2,7 +2,7 @@
 % Please edit documentation in R/admiral_options.R
 \name{get_admiral_option}
 \alias{get_admiral_option}
-\title{Get the value of an admiral option}
+\title{Get the Value of an Admiral Option}
 \usage{
 get_admiral_option(option)
 }
@@ -13,11 +13,10 @@ As of now, support only available for "subject_keys".
 See \code{set_admiral_options()} for a description of the options.}
 }
 \value{
-The value of the specified option unless user changes the default
-using \code{set_admiral_options()}.
+The value of the specified option.
 }
 \description{
-Get the value of an admiral option which can be modified for advanced users.
+Get the Value of an Admiral Option Which Can Be Modified for Advanced Users.
 }
 \details{
 This function allows flexibility for function inputs that may need to be repeated

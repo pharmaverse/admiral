@@ -2,7 +2,7 @@
 % Please edit documentation in R/admiral_options.R
 \name{set_admiral_options}
 \alias{set_admiral_options}
-\title{Set the values of admiral options}
+\title{Set the Value of Admiral Options}
 \usage{
 set_admiral_options(subject_keys)
 }
@@ -15,7 +15,7 @@ set_admiral_options(subject_keys)
 No return value, called for side effects.
 }
 \description{
-Set the values of admiral options that can be modified for advanced users.
+Set the Value of Admiral Options
 }
 \details{
 Modify an admiral option, e.g \code{subject_keys}, such that it automatically affects downstream

@@ -4,14 +4,15 @@ test_that("get_admiral_option Test 1: get works", {
   expect_equal(get_admiral_option("subject_keys"), vars(STUDYID, USUBJID))
 })
 
-## Test 2: common typo gives error ----
-test_that("get_admiral_option Test 2: common typo gives error", {
+## Test 2: common typo gives error to select available options ----
+test_that("get_admiral_option Test 2: common typo gives error to select available options", {
   expect_error(get_admiral_option("subject_key"))
 })
 
-## Test 3: unexpected function input for get gives error ----
-test_that("get_admiral_option Test 3: unexpected function input for get gives error", {
-  expect_error(get_admiral_option(subject_keys))
+## Test 3: non-character argument triggers assertion error ----
+test_that("get_admiral_option Test 3: non-character argument triggers assertion error", {
+  subject_keys = 1
+  expect_error(get_admiral_option(subject_keys), "`option` must be a character scalar but is `1`")
 })
 
 # set_admiral_options ----
