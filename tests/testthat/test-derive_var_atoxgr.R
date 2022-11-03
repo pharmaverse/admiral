@@ -1519,7 +1519,7 @@ test_that("derive_var_atoxgr, test 36: CTCAEv5 INR increased", {
     "INR Increased", 151,   150,   100,    NA_character_, "2",      5,
     "INR Increased", 150,   150,   100,    NA_character_, "1",      6,
     "INR Increased", 121,   150,   100,    NA_character_, "1",      7,
-    "INR Increased", 120,   100,   100,    NA_character_, "0",      8,
+    "INR Increased", 120,   120,   100,    NA_character_, "0",      8,
     # GRADE derived from AVAL against BASE
     "INR IncreaSed", 251,   100,   200,    NA_character_, "3",      9,
     "INR Increased", 250,   100,   199,    NA_character_, "2",      10,

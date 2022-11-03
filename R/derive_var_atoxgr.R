@@ -15,11 +15,14 @@
 #'
 #' @param meta_criteria Metadata data set holding the criteria (normally a case statement)
 #'
-#'   Default: `atoxgr_criteria_ctcv4`
+#' Permitted Values: atoxgr_criteria_ctcv4, atoxgr_criteria_ctcv5
 #'
 #'   {admiral} metadata data set `atoxgr_criteria_ctcv4` implements
 #'   [Common Terminology Criteria for Adverse Events (CTCAE)
 #'    v4.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
+#'   {admiral} metadata data set `atoxgr_criteria_ctcv5` implements
+#'   [Common Terminology Criteria for Adverse Events (CTCAE)
+#'    v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
 #'
 #'   The metadata should have the following variables:
 #'
@@ -107,7 +110,7 @@
 derive_var_atoxgr_dir <- function(dataset,
                                   new_var,
                                   tox_description_var,
-                                  meta_criteria = atoxgr_criteria_ctcv4,
+                                  meta_criteria,
                                   criteria_direction,
                                   get_unit_expr) {
   new_var <- assert_symbol(enquo(new_var))

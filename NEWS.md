@@ -7,6 +7,13 @@
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
 
+- `derive_var_atoxgr_dir()` default value of `atoxgr_criteria_ctcv4` removed for
+parameter `meta_criteria`. Can now also choose `atoxgr_criteria_ctcv5` for parameter 
+`meta_criteria`, to implement NCI-CTCAEv5 grading criteria .
+
+- New metadata data set called `atoxgr_criteria_ctcv5` which holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
+
 ## Updates of Existing Functions
 
 - Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
