@@ -585,22 +585,32 @@ will need to be quoted.
 Unit tests for deprecated functions and parameters must be added to
 `tests/testthat/test-deprecation.R` to ensure that a warning or error is issued. 
 
-When writing the unit test, check that the error or warning has the right class, i.e. "lifecycle_error_deprecated" or "lifecycle_warning_deprecated", respectively. The expect statement of the unit-test should follow the corresponding format:
+When writing the unit test, check that the error or warning has the right class, i.e. "lifecycle_error_deprecated" or "lifecycle_warning_deprecated", respectively. The unit-test should follow the corresponding format, per the [unit test guidance](unit_test_guidance.html#writing-unit-tests-in-admiral-):
 
 ```
 # For deprecated functions that issues error
-expect_error(
-  deprecated_function_error(),
-  class = "lifecycle_error_deprecated"
-)
+
+## Test #: An error is thrown if `derive_var_example()` is called ----
+test_that("deprecation Test #: derive_var_example() An error is thrown if
+          `derive_var_example()` is called", {
+  expect_error(
+    derive_var_example(),
+    class = "lifecycle_error_deprecated"
+  )
+})
 ```
 
 ```
-# For deprecated functions that issues warning 
-expect_warning(
-  deprecated_function_warning(),
-  class = "lifecycle_warning_deprecated"
-)  
+# For deprecated functions that issues warning
+
+## Test #: A warning is thrown if `derive_var_example()` is called ----
+test_that("deprecation Test #: derive_var_example() A warning is thrown if
+          `derive_var_example()` is called", {
+  expect_warning(
+    derive_var_example(),
+    class = "lifecycle_warning_deprecated"
+  )
+})
 ```
 
 
