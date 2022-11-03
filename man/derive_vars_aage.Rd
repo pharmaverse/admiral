@@ -58,10 +58,11 @@ rather than assuming equal days every month (30.4375 days) or every year (365.25
 }
 \examples{
 library(tibble)
+library(lubridate)
 
 data <- tribble(
   ~BRTHDT, ~RANDDT,
-  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+  ymd("1984-09-06"), ymd("2020-02-24")
 )
 
 derive_vars_aage(data)
