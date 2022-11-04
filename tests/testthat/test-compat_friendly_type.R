@@ -42,49 +42,42 @@ test_that("friendly_type_of Test 3: friendly_type_of() handles scalars", {
 ## Test 4: friendly_type_of() edge cases ----
 test_that("friendly_type_of Test 4: friendly_type_of() edge cases", {
   expect_equal(friendly_type_of(), "absent")
-  expect_equal(friendly_type_of(NULL), "NULL")
   expect_equal(friendly_type_of(1:2, length = TRUE), "an integer vector of length 2")
-})
 
-# .rlang_as_friendly_type ----
-## Test 5: .rlang_as_friendly_type() works as expected ----
-test_that(".rlang_as_friendly_type Test 5: .rlang_as_friendly_type() works as expected", {
-  expect_equal(.rlang_as_friendly_type(typeof(list(test = 1:3))), "a list")
-  expect_equal(.rlang_as_friendly_type(typeof(NULL)), "NULL")
-  expect_equal(.rlang_as_friendly_type(typeof(new.env(parent = emptyenv()))), "an environment")
-  expect_equal(
-    .rlang_as_friendly_type(
-      typeof(xml2::read_xml("<foo><bar /></foo>")$node)
-    ),
-    "a pointer"
-  )
+  expect_equal(friendly_type_of(list(test = 1:3)), "a list")
+  expect_equal(friendly_type_of(NULL), "NULL")
+  expect_equal(friendly_type_of(new.env(parent = emptyenv())), "an environment")
+  expect_equal(friendly_type_of(xml2::read_xml("<foo><bar /></foo>")$node), "a pointer")
 
-  test_weakref <- new_weakref(new.env(parent = emptyenv()),
+  test_weakref <- rlang::new_weakref(new.env(parent = emptyenv()),
     finalizer = function(e) message("finalized")
   )
-  expect_equal(.rlang_as_friendly_type(typeof(test_weakref)), "a weak reference")
-
-  # For S4 classes -- think this triggers messages but the expect_equal comes fine
-  # setClass("Person", slots = c(name = "character", age = "numeric"))
-  # john <- new("Person", name = "John Smith", age = NA_real_)
-  # expect_equal(.rlang_as_friendly_type(typeof(john)), "an S4 object")
+  expect_equal(friendly_type_of(test_weakref), "a weak reference")
 
   # Skip name
-  expect_equal(.rlang_as_friendly_type(typeof(sym("test symbol"))), "a symbol")
-  expect_equal(.rlang_as_friendly_type(typeof(expr(1 + 1))), "a call")
-  expect_equal(.rlang_as_friendly_type(typeof(pairlist(x = 1, y = 2))), "a pairlist node")
-  expect_equal(.rlang_as_friendly_type(typeof(expression(x <- 4, x))), "an expression vector")
+  expect_equal(friendly_type_of(sym("test symbol")), "a symbol")
+  expect_equal(friendly_type_of(expr(1 + 1)), "a call")
+  expect_equal(friendly_type_of(pairlist(x = 1, y = 2)), "a pairlist node")
+  expect_equal(friendly_type_of(expression(x <- 4, x)), "an expression vector")
 
   # Unsure what char is in compat_friendly_type.R line 118
   # Promise seems impossible because it stops being a promise at evaluation?
   # Unsure how to check for `...`
   # Unsure how to check for `any`
-  expect_equal(.rlang_as_friendly_type(typeof(compiler::compile(quote(1 + 3)))), "an internal bytecode object")
+
+  expect_equal(friendly_type_of(compiler::compile(quote(1 + 3))), "an internal bytecode object")
 
   # Skip primitive
   # Skip builtin
-  expect_equal(.rlang_as_friendly_type(typeof(switch)), "a primitive function")
-  expect_equal(.rlang_as_friendly_type(typeof(mean)), "a function")
+  expect_equal(friendly_type_of(switch), "a primitive function")
+  expect_equal(friendly_type_of(mean), "a function")
+})
+# .rlang_as_friendly_type ----
+## Test 5: .rlang_as_friendly_type() works ----
+test_that(".rlang_as_friendly_type Test 5: .rlang_as_friendly_type() works", {
+  setClass("person", slots = c(name = "character", age = "numeric"))
+  john <- new("person", name = "John", age = 18)
+  expect_equal(.rlang_as_friendly_type(typeof(john)), "an S4 object")
 })
 
 # .rlang_stop_unexpected_typeof ----
