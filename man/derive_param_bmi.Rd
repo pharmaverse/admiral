@@ -81,7 +81,8 @@ The analysis value of the new parameter is derived as
 \deqn{BMI = \frac{WEIGHT}{HEIGHT^2}}
 }
 \examples{
-advs <- tibble::tribble(
+library(tibble)
+advs <- tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 147,   "SCREENING",
   "01-701-1015", "WEIGHT", "Weight (kg)", 54.0,  "SCREENING",

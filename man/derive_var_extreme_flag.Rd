@@ -72,6 +72,7 @@ all parameters in the dataset depending on the \code{order} and the \code{mode},
 parameter the first or last record will be flagged across the whole dataset.
 }
 \examples{
+library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 data("admiral_vs")
@@ -93,7 +94,7 @@ admiral_vs \%>\%
 
 # Baseline (ABLFL) examples:
 
-input <- tibble::tribble(
+input <- tribble(
   ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,    ~DTYPE,
   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,        NA,
   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,

@@ -89,9 +89,10 @@ after (\code{selection} parameter) the observations where the condition
 parameter and \code{mode} parameter) is included in the output dataset.
 }
 \examples{
+library(tibble)
 library(dplyr, warn.conflict = FALSE)
 
-response <- tibble::tribble(
+response <- tribble(
   ~USUBJID, ~AVISITN, ~AVALC,
   "1",      1,        "PR",
   "1",      2,        "CR",

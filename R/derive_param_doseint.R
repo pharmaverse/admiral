@@ -75,10 +75,11 @@
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate, warn.conflicts = FALSE)
 #'
-#' adex <- tibble::tribble(
+#' adex <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT, ~AENDT, ~AVAL,
 #'   "P001", "TNDOSE", "V1", "Y", ymd("2020-01-01"), ymd("2020-01-30"), 59,
 #'   "P001", "TSNDOSE", "V1", "Y", ymd("2020-01-01"), ymd("2020-02-01"), 96,

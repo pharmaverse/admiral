@@ -80,24 +80,26 @@
 #' @export
 #'
 #' @examples
+#' library(lubridate)
+#'
 #' # Derive duration in days (integer), i.e., relative day
 #' compute_duration(
-#'   start_date = lubridate::ymd_hms("2020-12-06T15:00:00"),
-#'   end_date = lubridate::ymd_hms("2020-12-24T08:15:00")
+#'   start_date = ymd_hms("2020-12-06T15:00:00"),
+#'   end_date = ymd_hms("2020-12-24T08:15:00")
 #' )
 #'
 #' # Derive duration in days (float)
 #' compute_duration(
-#'   start_date = lubridate::ymd_hms("2020-12-06T15:00:00"),
-#'   end_date = lubridate::ymd_hms("2020-12-24T08:15:00"),
+#'   start_date = ymd_hms("2020-12-06T15:00:00"),
+#'   end_date = ymd_hms("2020-12-24T08:15:00"),
 #'   floor_in = FALSE,
 #'   add_one = FALSE
 #' )
 #'
 #' # Derive age in years
 #' compute_duration(
-#'   start_date = lubridate::ymd("1984-09-06"),
-#'   end_date = lubridate::ymd("2020-02-24"),
+#'   start_date = ymd("1984-09-06"),
+#'   end_date = ymd("2020-02-24"),
 #'   trunc_out = TRUE,
 #'   out_unit = "years",
 #'   add_one = FALSE
@@ -105,8 +107,8 @@
 #'
 #' # Derive duration in hours
 #' compute_duration(
-#'   start_date = lubridate::ymd_hms("2020-12-06T9:00:00"),
-#'   end_date = lubridate::ymd_hms("2020-12-06T13:30:00"),
+#'   start_date = ymd_hms("2020-12-06T9:00:00"),
+#'   end_date = ymd_hms("2020-12-06T13:30:00"),
 #'   out_unit = "hours",
 #'   floor_in = FALSE,
 #'   add_one = FALSE,
