@@ -17,8 +17,7 @@ admiral_adsl
 An example subject level analysis dataset
 }
 \seealso{
-Other datasets:
-\code{\link{atoxgr_criteria_ctcv4}},
+Other datasets: 
 \code{\link{atoxgr_criteria_ctcv5}},
 \code{\link{ex_single}},
 \code{\link{queries_mh}},

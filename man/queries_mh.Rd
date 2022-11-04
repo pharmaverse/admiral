@@ -17,9 +17,8 @@ queries_mh
 Queries MH Dataset
 }
 \seealso{
-Other datasets:
+Other datasets: 
 \code{\link{admiral_adsl}},
-\code{\link{atoxgr_criteria_ctcv4}},
 \code{\link{atoxgr_criteria_ctcv5}},
 \code{\link{ex_single}},
 \code{\link{queries}}
