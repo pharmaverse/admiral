@@ -906,6 +906,7 @@ test_that("Test 74 : `assert_date_vector` does not throw an error
   expect_invisible(
     example_fun(NULL)
   )
+})
 
 # assert_atomic_vector ----
 ## Test 75: error if input is not atomic vector ----
