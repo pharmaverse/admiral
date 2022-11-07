@@ -190,14 +190,41 @@ test_that("Test 15 : `assert_character_scalar` does not throw an error if
 })
 
 test_that("Test 16 : `assert_character_scalar` does not throw an error if
-          case_sensitive is FALSE", {
+          case_sensitive is FALSE, and argument is returned in lower case", {
   example_fun <- function(character) {
     assert_character_scalar(character, values = c("test"), case_sensitive = FALSE)
   }
 
-  expect_invisible(
-    example_fun(character = "TEST")
-  )
+  out <- expect_invisible(example_fun(character = "TEST")  )
+  expect_equal(out, "test")
+
+  check_unit <- function(duration_unit) {
+    duration_unit <- assert_character_scalar(
+      duration_unit,
+      values = c("years", "months", "weeks", "days", "hours", "minutes", "seconds"),
+      case_sensitive <- FALSE
+    )
+  }
+
+  out <- expect_invisible(check_unit("months"))
+  expect_equal(out, "months")
+
+  out <- expect_invisible(check_unit("MONTHS"))
+  expect_equal(out, "months")
+
+  check_unit2 <- function(duration_unit) {
+    duration_unit <- assert_character_scalar(
+      duration_unit,
+      values = c("YEARS", "MONTHS", "WEEKS", "DAYS", "HOURS", "MINUTES", "SECONDS"),
+      case_sensitive <- FALSE
+    )
+  }
+
+  out <- expect_invisible(check_unit2("months"))
+  expect_equal(out, "months")
+
+  out <- expect_invisible(check_unit2("MONTHS"))
+  expect_equal(out, "months")
 })
 
 test_that("Test 17 : `assert_character_scalar` throws an error if
@@ -208,6 +235,42 @@ test_that("Test 17 : `assert_character_scalar` throws an error if
 
   expect_error(
     example_fun(character = "oak")
+  )
+
+  check_unit <- function(duration_unit) {
+    duration_unit <- assert_character_scalar(
+      duration_unit,
+      values = c("years", "months", "weeks", "days", "hours", "minutes", "seconds"),
+      case_sensitive <- FALSE
+    )
+  }
+
+  expect_error(check_unit("month"),
+               paste0("`duration_unit` must be one of 'years', 'months', 'weeks', 'days', ",
+                      "'hours', 'minutes' or 'seconds' but is 'month'")
+  )
+
+  expect_error(check_unit("MONTH"),
+               paste0("`duration_unit` must be one of 'years', 'months', 'weeks', 'days', ",
+                      "'hours', 'minutes' or 'seconds' but is 'MONTH'")
+  )
+
+  check_unit2 <- function(duration_unit) {
+    duration_unit <- assert_character_scalar(
+      duration_unit,
+      values = c("YEARS", "MONTHS", "WEEKS", "DAYS", "HOURS", "MINUTES", "SECONDS"),
+      case_sensitive <- FALSE
+    )
+  }
+
+  expect_error(check_unit2("month"),
+               paste0("`duration_unit` must be one of 'YEARS', 'MONTHS', 'WEEKS', 'DAYS', ",
+                      "'HOURS', 'MINUTES' or 'SECONDS' but is 'month'")
+  )
+
+  expect_error(check_unit2("MONTH"),
+               paste0("`duration_unit` must be one of 'YEARS', 'MONTHS', 'WEEKS', 'DAYS', ",
+                      "'HOURS', 'MINUTES' or 'SECONDS' but is 'MONTH'")
   )
 })
 
