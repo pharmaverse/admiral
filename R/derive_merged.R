@@ -1038,3 +1038,168 @@ derive_vars_merged_lookup <- function(dataset,
 get_not_mapped <- function() {
   .temp$nmap
 }
+
+#' @param dataset Input dataset
+#'
+#'   The variables specified by the `by_vars` parameter are expected.
+#'
+#' @param dataset_add Additional dataset
+#'
+#'   The variables specified by the `by_vars`, the `new_vars`, and the `order`
+#'   parameter are expected.
+#'
+#' @param order Sort order
+#'
+#'   If the parameter is set to a non-null value, for each by group the first or
+#'   last observation from the additional dataset is selected with respect to the
+#'   specified order.
+#'
+#'   *Default*: `NULL`
+#'
+#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
+#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))` or `NULL`
+#'
+#' @param new_vars Variables to add
+#'
+#'   The specified variables from the additional dataset are added to the output
+#'   dataset. Variables can be renamed by naming the element, i.e., `new_vars =
+#'   vars(<new name> = <old name>)`.
+#'
+#'   For example `new_vars = vars(var1, var2)` adds variables `var1` and `var2`
+#'   from `dataset_add` to the input dataset.
+#'
+#'   And `new_vars = vars(var1, new_var2 = old_var2)` takes `var1` and
+#'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
+#'   `old_var2` to `new_var2`.
+#'
+#'   If the parameter is not specified or set to `NULL`, all variables from the
+#'   additional dataset (`dataset_add`) are added.
+#'
+#'   *Default*: `NULL`
+#'
+#'   *Permitted Values*: list of variables created by `vars()`
+#'
+#' @param mode Selection mode
+#'
+#'   Determines if the first or last observation is selected. If the `order`
+#'   parameter is specified, `mode` must be non-null.
+#'
+#'   If the `order` parameter is not specified, the `mode` parameter is ignored.
+#'
+#'   *Default*: `NULL`
+#'
+#'   *Permitted Values*: `"first"`, `"last"`, `NULL`
+#'
+#' @param by_vars Grouping variables
+#'
+#'   The input dataset and the selected observations from the additional dataset
+#'   are merged by the specified by variables. The by variables must be a unique
+#'   key of the selected observations.
+#'
+#'   *Permitted Values*: list of variables created by `vars()`
+#'
+#' @param filter_add Filter for additional dataset (`dataset_add`)
+#'
+#'   Only observations fulfilling the specified condition are taken into account
+#'   for merging. If the parameter is not specified, all observations are
+#'   considered.
+#'
+#'   *Default*: `NULL`
+#'
+#'   *Permitted Values*: a condition
+#'
+#' @param match_flag Match flag
+#'
+#'   If the parameter is specified (e.g., `match_flag = FLAG`), the specified
+#'   variable (e.g., `FLAG`) is added to the input dataset. This variable will
+#'   be `TRUE` for all selected records from `dataset_add` which are merged into
+#'   the input dataset, and `NA` otherwise.
+#'
+#'   *Default*: `NULL`
+#'
+#'   *Permitted Values*: Variable name
+#'
+#' @param check_type Check uniqueness?
+#'
+#'   If `"warning"` or `"error"` is specified, the specified message is issued
+#'   if the observations of the (restricted) additional dataset are not unique
+#'   with respect to the by variables and the order.
+#'
+#'   *Default*: `"warning"`
+#'
+#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
+#'
+#' @param duplicate_msg Message of unique check
+#'
+#'   If the uniqueness check fails, the specified message is displayed.
+#'
+#'   *Default*:
+#'
+#'   ```{r echo=TRUE, eval=FALSE}
+#'   paste("Dataset `dataset_add` contains duplicate records with respect to",
+#'         enumerate(vars2chr(by_vars)))
+#'   ```
+#'
+#' @author Stefan Bundfuss
+#'
+#' @details
+#'
+#'   1. The records from the additional dataset (`dataset_add`) are restricted
+#'   to those matching the `filter_add` condition.
+#'
+#'   1. If `order` is specified, for each by group the first or last observation
+#'   (depending on `mode`) is selected.
+#'
+#'   1. The variables specified for `new_vars` are renamed (if requested) and
+#'   merged to the input dataset using `left_join()`. I.e., the output dataset
+#'   contains all observations from the input dataset. For observations without
+#'   a matching observation in the additional dataset the new variables are set
+#'   to `NA`. Observations in the additional dataset which have no matching
+#'   observation in the input dataset are ignored.
+#'
+#' @return The output dataset contains all observations and variables of the
+#'   input dataset and additionally the variables specified for `new_vars` from
+#'   the additional dataset (`dataset_add`).
+#'
+#' @family der_gen
+#' @keywords der_gen
+#'
+#' @export
+#'
+#' @examples
+#' library(admiral.test)
+derive_var_merged_summary <- function(dataset,
+                                       dataset_add,
+                                       by_vars,
+                                       new_var,
+                                       filter_add = NULL,
+                                       analysis_var,
+                                       summary_fun) {
+  assert_vars(by_vars)
+  new_var <- assert_symbol(enquo(new_var))
+  analysis_var <- assert_symbol(enquo(analysis_var))
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
+  assert_s3_class(summary_fun, "function")
+  assert_data_frame(
+    dataset,
+    required_vars = by_vars
+  )
+  assert_data_frame(
+    dataset_add,
+    required_vars = quo_c(by_vars, analysis_var)
+  )
+
+  # Summarise the analysis value and merge to the original dataset
+  derive_vars_merged(
+    dataset,
+    dataset_add = get_summary_records(
+      dataset_add,
+      by_vars = by_vars,
+      filter = !!filter_add,
+      analysis_var = !!analysis_var,
+      summary_fun = summary_fun
+    ),
+    by_vars = by_vars,
+    new_vars = vars(!!new_var := !!analysis_var)
+  )
+}
