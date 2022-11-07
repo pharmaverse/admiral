@@ -55,3 +55,10 @@ test_that("remove_tmp_vars Test 6: removing temp variables works with the pipe o
   }
   expect_identical(colnames(dm), colnames(do_something_with_pipe(dm)))
 })
+
+
+## Test 7: running get_new_tmp_var on NULL dataset creates generic variable ----
+test_that("running get_new_tmp_var on NULL dataset creates generic variable", {
+  df <- NULL
+  expect_identical(get_new_tmp_var(df), sym("tmp_var_1"))
+})
