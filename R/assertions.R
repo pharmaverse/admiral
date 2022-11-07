@@ -158,14 +158,19 @@ assert_character_scalar <- function(arg,
     abort(err_msg)
   }
 
-  if (!case_sensitive) {
-    arg <- tolower(arg)
+  if (case_sensitive) {
+    case_adjusted_arg <- arg
     if (!is.null(values)) {
-      values <- tolower(values)
+      case_adjusted_values <- values
+    }
+  } else {
+    case_adjusted_arg <- tolower(arg)
+    if (!is.null(values)) {
+      case_adjusted_values <- tolower(values)
     }
   }
 
-  if (!is.null(values) && arg %notin% values) {
+  if (!is.null(values) && case_adjusted_arg %notin% case_adjusted_values) {
     err_msg <- sprintf(
       "`%s` must be one of %s but is '%s'",
       arg_name(substitute(arg)),
@@ -175,7 +180,7 @@ assert_character_scalar <- function(arg,
     abort(err_msg)
   }
 
-  invisible(arg)
+  invisible(case_adjusted_arg)
 }
 
 #' Is an Argument a Character Vector?
