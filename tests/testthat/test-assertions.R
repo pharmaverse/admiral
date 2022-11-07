@@ -914,4 +914,3 @@ test_that("assert_atomic_vector Test 14: error if input is not atomic vector", {
   x <- list("a", "a", "b", "c", "d", "d", 1, 1, 4)
   expect_error(assert_atomic_vector(x))
 })
-
