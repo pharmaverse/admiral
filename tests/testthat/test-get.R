@@ -30,3 +30,25 @@ test_that("get_constant_vars Test 2: with ignore_vars", {
     vars(USUBJID, AGE)
   )
 })
+
+# get_duplicates ----
+## Test 1: x atomic vector ----
+test_that("get_duplicates Test 1: x atomic vector", {
+  x <- c("a", "a", "b", "c", "d", "d", 1, 1, 4)
+
+  expect_equal(
+    get_duplicates(x),
+    c("a", "d", 1)
+  )
+})
+
+# get_source_vars ----
+## Test 1: x is a list of quosures ----
+test_that("get_source_vars Test 1: x is a list of quosures", {
+  x <- vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+
+  expect_equal(
+    get_source_vars(x),
+    x[2]
+  )
+})

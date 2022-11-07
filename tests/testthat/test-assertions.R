@@ -907,3 +907,10 @@ test_that("Test 74 : `assert_date_vector` does not throw an error
     example_fun(NULL)
   )
 })
+
+# assert_atomic_vector ----
+## Test 75: error if input is not atomic vector ----
+test_that("assert_atomic_vector Test 14: error if input is not atomic vector", {
+  x <- list("a", "a", "b", "c", "d", "d", 1, 1, 4)
+  expect_error(assert_atomic_vector(x))
+})

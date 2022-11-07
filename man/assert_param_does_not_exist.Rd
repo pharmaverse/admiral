@@ -30,6 +30,7 @@ try(assert_param_does_not_exist(advs, param = "WEIGHT"))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
+\code{\link{assert_atomic_vector}()},
 \code{\link{assert_character_scalar}()},
 \code{\link{assert_character_vector}()},
 \code{\link{assert_data_frame}()},
