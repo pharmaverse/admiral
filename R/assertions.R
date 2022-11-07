@@ -86,7 +86,8 @@ assert_data_frame <- function(arg,
 #' one of the provided `values`.
 #'
 #' @param arg A function argument to be checked
-#' @param values A `character` vector of valid values for `arg`
+#' @param values A `character` vector of valid values for `arg`.
+#' Values should be a lower case vector if case_sensitive = FALSE is used.
 #' @param case_sensitive Should the argument be handled case-sensitive?
 #' If set to `FALSE`, the argument is converted to lower case for checking the
 #' permitted values and returning the argument.
@@ -159,6 +160,9 @@ assert_character_scalar <- function(arg,
 
   if (!case_sensitive) {
     arg <- tolower(arg)
+    if (!is.null(values)) {
+      values <- tolower(values)
+    }
   }
 
   if (!is.null(values) && arg %notin% values) {
@@ -1445,6 +1449,52 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
       dataset_name,
       "` is not a date or datetime variable but is ",
       friendly_type_of(column)
+    ))
+  }
+}
+
+#' Is an object a date or datetime vector?
+#'
+#' Check if an object/vector is a date or datetime variable without needing a dataset as input
+#'
+#' @param arg The function argument to be checked
+#'
+#' @param optional Is the checked parameter optional? If set to `FALSE`
+#' and `arg` is `NULL` then the function `assert_date_vector` exits early and throw and error.
+#'
+#' @return
+#' The function returns an error if `arg` is missing, or not a date or datetime variable
+#' but otherwise returns an invisible output.
+#'
+#' @export
+#'
+#' @author Sadchla Mascary
+#'
+#' @keywords assertion
+#'
+#' @family assertion
+#'
+#' @examples
+#' example_fun <- function(arg) {
+#'   assert_date_vector(arg)
+#' }
+#'
+#' example_fun(
+#'   as.Date("2022-01-30", tz = "UTC")
+#' )
+#' try(example_fun("1993-07-14"))
+assert_date_vector <- function(arg, optional = TRUE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.instant(arg)) {
+    abort(paste0(
+      deparse(substitute(arg)),
+      " must be a date or datetime variable but it's ",
+      friendly_type_of(arg)
     ))
   }
 }

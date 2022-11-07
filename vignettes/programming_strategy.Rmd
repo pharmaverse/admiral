@@ -100,7 +100,12 @@ i.e. all input like datasets, variable names, options, … must be provided to t
 * If the function needs to create temporary variables in an input dataset, these
 variables must start with `temp_` and must be removed from the output dataset.
 * If the input dataset includes variables starting with `temp_`, an error must be issued.
-* The function must not have any side-effects like creating or modifying global objects, printing, writing files, ...
+* In general, the function must not have any side-effects like creating or modifying global objects, printing, writing files, ...
+
+## Admiral Options
+
+* An exception is made for admiral options, see `get_admiral_option()` and `set_admiral_options()`, where we have certain pre-defined defaults with added flexibility to allow for user-defined defaults on *commonly used* function arguments e.g. `subject_keys` currently pre-defined as `vars(STUDYID, USUBJID)`, but can be modified using `set_admiral_options(subject_keys = vars(...))` at the top of a script. The reasoning behind this was to relieve the user of repeatedly changing aforementioned *commonly used* function arguments multiple times in a script, which may be called across many admiral functions. 
+* If this additional flexibility needs to be added for another *commonly used* function argument e.g. `future_input` to be set as `vars(...)` it can be added as an admiral option. In the function formals define `future_input = get_admiral_option("future_input")` then proceed to modify the body and roxygen documentation of `set_admiral_options()`. 
 
 ## Function Names
 
@@ -203,10 +208,11 @@ Parameters which expect a boolean or boolean vector must start with a verb, e.g.
 | `filter`         | Expression to filter a dataset, e.g., `PARAMCD == "TEMP"`.                                                         |
 | `start_date`     | The start date of an event/interval. Expects a date object.                                                        |
 | `end_date`       | The end date of an event/interval. Expects a date object.                                                          |
-| `start_dtc`      | (Partial) start date/datetime in ISO 8601 format.                                                                                                                    |
+| `start_dtc`      | (Partial) start date/datetime in ISO 8601 format.                                                                  |
 | `dtc`            | (Partial) date/datetime in ISO 8601 format.                                                                        |
 | `date`           | Date of an event / interval. Expects a date object.                                                                |
 | `set_values_to`  | List of variable name-value pairs.                                                                                 |
+| `subject_keys`   | Variables to uniquely identify a subject, defaults to `vars(STUDYID, USUBJID)`. In function formals, use `subject_keys = get_admiral_option("subject_keys")`                                     |
 
 
 ## Source Code Formatting
@@ -401,14 +407,14 @@ add an issue in GitHub for discussion.
 | `der_occds`                                                                       | OCCDS specific derivation of helper Functions                                                                            |
 | `der_prm_tte`                                                                     | TTE Functions for adding Parameters to TTE Dataset                                                                       |
 | `deprecated`                                                                      | Function which will be removed from admiral after next release.  See  [Deprecation Guidance](#deprecation).                                                                                                               |
+| `metadata`                                                                        | Auxiliary datasets providing definitions as input for derivations, e.g. grading criteria or dose frequencies         |
 | `utils_ds_chk`                                                                    | Utilities for Dataset Checking                                                                                           |	
 | `utils_fil`                                                                       | Utilities for Filtering Observations                                                                                     |
 | `utils_fmt`                                                                       | Utilities for Formatting Observations                                                                                    |	
 | `utils_help` 	                                                                    | Utilities used within Derivation functions                                                                               |	
 | `utils_examples`                                                                  | Utilities used for examples and template scripts                                                                         |
 | `source_specifications` 	                                                        | Source Specifications                                                                                                    |	
-| `high_order_function`                                                             |	Higher Order Functions                                                                                                   |	
-| `move_adm_dev` 	                                                                  | Functions moved to `admiraldev` package [Link TBA]                                                                       |	
+| `high_order_function`                                                             |	Higher Order Functions                                                                                                   |	                                                                     |	
 | `internal`                                                                        | Internal functions only available to admiral developers                                                                  |
 |                                                                                   |                                                                                                                         |
 | `assertion`*                                                                       | Asserts a certain type and gives warning, error to user        |
@@ -582,7 +588,36 @@ will need to be quoted.
 ## Unit Testing
 
 Unit tests for deprecated functions and parameters must be added to
-`tests/testthat/test-deprecation.R` to ensure that a warning or error is issued.
+`tests/testthat/test-deprecation.R` to ensure that a warning or error is issued. 
+
+When writing the unit test, check that the error or warning has the right class, i.e. "lifecycle_error_deprecated" or "lifecycle_warning_deprecated", respectively. The unit-test should follow the corresponding format, per the [unit test guidance](unit_test_guidance.html#writing-unit-tests-in-admiral-):
+
+```
+# For deprecated functions that issues error
+
+## Test #: An error is thrown if `derive_var_example()` is called ----
+test_that("deprecation Test #: derive_var_example() An error is thrown if
+          `derive_var_example()` is called", {
+  expect_error(
+    derive_var_example(),
+    class = "lifecycle_error_deprecated"
+  )
+})
+```
+
+```
+# For deprecated functions that issues warning
+
+## Test #: A warning is thrown if `derive_var_example()` is called ----
+test_that("deprecation Test #: derive_var_example() A warning is thrown if
+          `derive_var_example()` is called", {
+  expect_warning(
+    derive_var_example(),
+    class = "lifecycle_warning_deprecated"
+  )
+})
+```
+
 
 Other unit tests of deprecated functions must be removed.
 
@@ -670,8 +705,8 @@ If meaningful, comments can cover multiple variables within a piece of code
 
 # R and package versions for development
 
-* The choice of R Version is not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in R Version 3.6.3, but that will change as we move forward with `{admiral}`. This need for a common development environment also carries over for our choice of package versions.  
-* GitHub allows us through the Actions/Workflows to test `{admiral}` under several versions of R as well as several versions of dependent R packages needed for `{admiral}`.  Currently we test `{admiral}` against 3.6.3 with a CRAN package snapshot from 2020-02-29, 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages.  You can view this workflow on our [GitHub Repository](https://github.com/pharmaverse/admiral/blob/main/.github/workflows/R-CMD-check.yml)
+* The choice of R Version is not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers.  We only use the three latest R versions and the closest date of snapshots of R packages available when that R version came out. This need for a common development environment also carries over for our choice of package versions.  
+* GitHub allows us through the Actions/Workflows to test `{admiral}` under several versions of R as well as several versions of dependent R packages needed for `{admiral}`.  Currently we test `{admiral}` against 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages.  You can view this workflow on our [GitHub Repository](https://github.com/pharmaverse/admiralci/blob/main/.github/workflows/r-cmd-check.yml)
 * This common development allows us to easily re-create bugs and provide solutions to each other issues that developers will encounter.  
 * Reviewers of Pull Requests when running code will know that their environment is identical to the initiator of the Pull Request.  This ensures faster review times and higher quality Pull Request reviews.
 * We achieve this common development environment by using a **lockfile** created from the [`renv`](https://rstudio.github.io/renv/) package. New developers will encounter a suggested `renv::restore()` in the console to revert or move forward your R version and package versions.
