@@ -1,6 +1,3 @@
-library(lubridate)
-library(dplyr)
-
 input <- c(
   "2019-07-18T15:25:40.243",
   "2019-07-18T15:25:40",

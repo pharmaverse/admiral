@@ -176,5 +176,5 @@ params <- function(...) {
     )
     abort(err_msg)
   }
-  structure(args, class = c("params", "list"))
+  structure(args, class = c("params", "source", "list"))
 }

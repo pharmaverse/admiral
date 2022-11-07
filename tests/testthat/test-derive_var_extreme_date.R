@@ -1,5 +1,4 @@
-library(tibble)
-adsl <- tribble(
+adsl <- tibble::tribble(
   ~STUDYID,  ~USUBJID, ~TRTEDTM,                       ~DTHDTC,
   "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"), NA_character_,
   "STUDY01", "2",      NA,                             "2020-06",
@@ -9,7 +8,7 @@ adsl <- tribble(
     DTHDT = c(ymd(""), ymd("2020-06-01"), ymd(""))
   )
 
-ae <- tribble(
+ae <- tibble::tribble(
   ~STUDYID,  ~USUBJID, ~AESTDTC,     ~AEENDTC,      ~AESEQ,
   "STUDY01", "1",      "2019-11-01", "2019-11-23",  1,
   "STUDY01", "1",      "2020-02-01", "2020-02-01",  2,
@@ -97,9 +96,33 @@ test_that("derive_var_extreme_dt Test 2: LSTALVDT is derived for Date class as w
   )
 })
 
+## Test 3: NA dates are excluded ----
+test_that("derive_var_extreme_dt Test 3: `NA` dates are excluded", {
+  ae_end <- date_source(
+    dataset_name = "ae",
+    date = AEENDTM
+  )
+
+  expected_output <- adsl %>% mutate(LSTALVDT = c(ymd("2020-02-01"), NA, ymd("2020-02-03")))
+
+  actual_output <- derive_var_extreme_dt(
+    adsl,
+    new_var = LSTALVDT,
+    source_datasets = list(ae = ae),
+    ae_end,
+    mode = "last"
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("USUBJID")
+  )
+})
+
 # derive_var_extreme_dtm ----
-## Test 3: LSTALVDTM and traceability variables are derived ----
-test_that("derive_var_extreme_dtm Test 3: LSTALVDTM and traceability variables are derived", {
+## Test 4: LSTALVDTM and traceability variables are derived ----
+test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables are derived", {
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTM,
@@ -164,8 +187,8 @@ test_that("derive_var_extreme_dtm Test 3: LSTALVDTM and traceability variables a
   )
 })
 
-## Test 4: error is issued if DTC variable is specified ----
-test_that("derive_var_extreme_dtm Test 4: error is issued if DTC variable is specified", {
+## Test 5: error is issued if DTC variable is specified ----
+test_that("derive_var_extreme_dtm Test 5: error is issued if `--DTC` variable is specified", {
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTC,

@@ -171,6 +171,8 @@ adeg <- adeg %>%
   )
 
 ## Get visit info ----
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits)
 adeg <- adeg %>%
   # Derive Timing
   mutate(
@@ -287,10 +289,11 @@ adeg <- adeg %>%
   )
 
 ## Get treatment information ----
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
 adeg <- adeg %>%
   # Assign TRTA, TRTP
   mutate(TRTP = TRT01P, TRTA = TRT01A)
-
 
 ## Get ASEQ and AVALCAT1/CHGCAT1 and add PARAM/PARAMN ----
 adeg <- adeg %>%
@@ -327,4 +330,4 @@ adeg <- adeg %>%
 # Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(adeg, file = file.path(dir, "adeg.rda"), compress = "bzip2")
+saveRDS(adeg, file = file.path(dir, "adeg.rds"), compress = "bzip2")

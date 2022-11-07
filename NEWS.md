@@ -1,3 +1,75 @@
+# admiral 0.9.0
+
+## New Features
+
+- The new function `derive_vars_joined()` adds variables from an additional
+dataset. The selection of the observations can depend on variables from both
+datasets. This can be used for adding `AVISIT`, `AWLO`, `AWHI` based on time
+windows and `ADY` or deriving the lowest value (nadir) before the current
+observation (#1448).
+
+- New function `derive_var_trtemfl()` for deriving treatment emergent flags (#989)
+
+- The new function `chr2vars()` turns a character vector into a list of quosures
+(#1448).
+
+- New function `derive_var_relative_flag()` for flagging observations before or
+after a condition is fulfilled (#1453)
+
+- The new function `create_period_dataset()` for creating a reference dataset
+for subperiods, periods, or phases from the ADSL dataset was added. The
+reference dataset can be used to create subperiod, period, and phase variables
+in OCCDS and BDS datasets. (#1477)
+
+- The new function `derive_vars_period()` adds subperiod, period, or phase
+variables to ADSL. The values for the new variables are provided by a period
+reference dataset. (#1477)
+
+- A `print()` method was added for all S3 objects defined by admiral, e.g.,
+`date_source()`, `dthcaus_source()`, ... (#858)
+
+- Removed the `{assertthat}` dependency in `{admiral}` (#1392)
+
+- Removed R Version 3.6 check in CI/CD workflows in favor of the three most recent versions: 4.0, 4.1 and 4.2. (#1556)
+
+## Updates of Existing Functions
+
+- Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
+which controls if time is considered for the condition if `start_date` is after
+`ref_end_date` + `ref_end_window` days (#989).
+
+## Breaking Changes
+
+## Documentation
+
+- New vignette "Generic Functions" (#734)
+- New vignette "Visit and Period Variables" (#1478)
+
+## Various
+
+- Function `derive_vars_merged()` had an improperly formatted error message 
+which has been corrected (#1473)
+
+- Templates now save datasets as `.rds` instead of `.rda` (#1501)
+
+# admiral 0.8.4
+
+- Fixed a bug where a recent update to `{lifecylce}` caused several `admiral` tests to break (#1500)
+
+# admiral 0.8.3
+
+- Second attempt to address issue where CRAN identified a failing test when "a strict Latin-1* locale" is used (#1469)
+- Fixed a bug in `derive_vars_duration()` that surfaced after changes in R-devel (#1486)
+
+# admiral 0.8.2
+
+- Fixed an issue where CRAN identified a failing test when "a strict Latin-1* locale" is used (#1469)
+
+# admiral 0.8.1
+
+- `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` were updated such
+that source observations where the date is `NA` are excluded (#1419)
+
 # admiral 0.8.0
 
 ## New Features

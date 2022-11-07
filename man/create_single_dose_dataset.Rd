@@ -111,8 +111,9 @@ to be added to \code{start_date}.
 
 library(lubridate)
 library(stringr)
+library(tibble)
 
-data <- tibble::tribble(
+data <- tribble(
   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
   "P01", "Q2D", ymd("2021-01-01"), ymd_hms("2021-01-01 10:30:00"),
   ymd("2021-01-07"), ymd_hms("2021-01-07 11:30:00"),
@@ -127,13 +128,13 @@ create_single_dose_dataset(data)
 
 # Example with custom lookup
 
-custom_lookup <- tibble::tribble(
+custom_lookup <- tribble(
   ~Value, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
   "Q30MIN", (1 / 30), "MINUTE", 1,
   "Q90MIN", (1 / 90), "MINUTE", 1
 )
 
-data <- tibble::tribble(
+data <- tribble(
   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
   "P01", "Q30MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
   ymd("2021-01-01"), ymd_hms("2021-01-01T07:00:00"),
@@ -147,14 +148,12 @@ create_single_dose_dataset(data,
 )
 }
 \seealso{
-OCCDS Functions: 
-\code{\link{create_query_data}()},
-\code{\link{derive_vars_atc}()},
-\code{\link{derive_vars_query}()},
-\code{\link{get_terms_from_db}()}
+Creating auxiliary datasets: 
+\code{\link{create_period_dataset}()},
+\code{\link{create_query_data}()}
 }
 \author{
 Michael Thorpe, Andrew Smith
 }
-\concept{der_occds}
-\keyword{der_occds}
+\concept{create_aux}
+\keyword{create_aux}

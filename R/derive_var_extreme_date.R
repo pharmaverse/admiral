@@ -30,8 +30,9 @@
 #' @details The following steps are performed to create the output dataset:
 #'
 #'   1. For each source dataset the observations as specified by the `filter`
-#'   element are selected. Then for each patient the first or last observation
-#'   (with respect to `date` and `mode`) is selected.
+#'   element are selected and observations where `date` is `NA` are removed.
+#'   Then for each patient the first or last observation (with respect to `date`
+#'   and `mode`) is selected.
 #'
 #'   1. The new variable is set to the variable specified by the `date` element.
 #'   If this is a date variable (rather than datetime), then the time is imputed
@@ -223,6 +224,7 @@ derive_var_extreme_dtm <- function(dataset,
     )
     add_data[[i]] <- source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
+      filter(!is.na(!!date)) %>%
       filter_extreme(
         order = vars(!!date),
         by_vars = subject_keys,
@@ -240,7 +242,6 @@ derive_var_extreme_dtm <- function(dataset,
 
   all_data <- add_data %>%
     bind_rows() %>%
-    filter(!is.na(!!new_var)) %>%
     filter_extreme(
       by_vars = subject_keys,
       order = vars(!!new_var),
@@ -265,8 +266,9 @@ derive_var_extreme_dtm <- function(dataset,
 #' @details The following steps are performed to create the output dataset:
 #'
 #'   1. For each source dataset the observations as specified by the `filter`
-#'   element are selected. Then for each patient the first or last observation
-#'   (with respect to `date` and `mode`) is selected.
+#'   element are selected and observations where `date` is `NA` are removed.
+#'   Then for each patient the first or last observation (with respect to `date`
+#'   and `mode`) is selected.
 #'
 #'   1. The new variable is set to the variable specified by the `date` element.
 #'
@@ -504,6 +506,6 @@ date_source <- function(dataset_name,
     date = assert_symbol(enquo(date)),
     traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
   )
-  class(out) <- c("date_source", "list")
+  class(out) <- c("date_source", "source", "list")
   out
 }

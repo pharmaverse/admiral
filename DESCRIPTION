@@ -1,7 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.8.0
+Version: 0.9.0
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
@@ -39,6 +39,7 @@ Authors@R: c(
     person("Syed", "Mubasheer", role = "ctb"),
     person("Wenyi", "Liu", role = "ctb"),
     person("Dinakar", "Kulkarni", role = "ctb"),
+    person("Franciszek", "Walkowiak", role = "ctb"),
     person("Tamara", "Senior", role = "ctb"),
     person("Jordanna", "Morrish", role = "ctb"),
     person("Anthony", "Howard", role = "ctb"),
@@ -49,7 +50,7 @@ Authors@R: c(
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
     )
-Description: A toolbox for programming Clinical Data Standards Interchange Consortium
+Description: A toolbox for programming Clinical Data Interchange Standards Consortium
     (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
     mandatory part of any New Drug or Biologics License Application submitted to the
     United States Food and Drug Administration (FDA). Analysis derivations are
@@ -61,11 +62,10 @@ URL: https://pharmaverse.github.io/admiral/, https://github.com/pharmaverse/admi
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Depends: R (>= 3.5)
 Imports:
     admiraldev,
-    assertthat (>= 0.2.1),
     dplyr (>= 0.8.4),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
@@ -75,7 +75,7 @@ Imports:
     rlang (>= 0.4.4),
     stringr (>= 1.4.0),
     tidyr (>= 1.0.2),
-    tidyselect (>= 1.0.0)
+    tidyselect (>= 1.1.0)
 Suggests:
     admiral.test,
     covr,
