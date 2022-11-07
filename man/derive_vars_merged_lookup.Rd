@@ -126,9 +126,10 @@ mapping from the lookup table.
 }
 \examples{
 library(admiral.test)
+library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 data("admiral_vs")
-param_lookup <- tibble::tribble(
+param_lookup <- tribble(
   ~VSTESTCD, ~VSTEST, ~PARAMCD, ~PARAM,
   "SYSBP", "Systolic Blood Pressure", "SYSBP", "Systolic Blood Pressure (mmHg)",
   "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -157,7 +158,9 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_obs_number}()},
+\code{\link{derive_var_relative_flag}()},
 \code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},

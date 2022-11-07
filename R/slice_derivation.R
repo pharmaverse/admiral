@@ -46,9 +46,9 @@
 #' @export
 #'
 #' @examples
-#'
+#' library(tibble)
 #' library(stringr)
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~VSDTC,       ~VSTPT,
 #'   "1",      "2020-04-16", NA_character_,
 #'   "1",      "2020-04-16", "BEFORE TREATMENT"

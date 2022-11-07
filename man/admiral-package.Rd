@@ -62,6 +62,7 @@ Other contributors:
   \item Syed Mubasheer [contributor]
   \item Wenyi Liu [contributor]
   \item Dinakar Kulkarni [contributor]
+  \item Franciszek Walkowiak [contributor]
   \item Tamara Senior [contributor]
   \item Jordanna Morrish [contributor]
   \item Anthony Howard [contributor]

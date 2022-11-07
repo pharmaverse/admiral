@@ -57,9 +57,12 @@ here, results are calculated based on the actual calendar length of months or ye
 rather than assuming equal days every month (30.4375 days) or every year (365.25 days).
 }
 \examples{
-data <- tibble::tribble(
+library(tibble)
+library(lubridate)
+
+data <- tribble(
   ~BRTHDT, ~RANDDT,
-  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+  ymd("1984-09-06"), ymd("2020-02-24")
 )
 
 derive_vars_aage(data)
@@ -73,7 +76,8 @@ ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{derive_var_extreme_dt}()},
-\code{\link{derive_vars_disposition_reason}()}
+\code{\link{derive_vars_disposition_reason}()},
+\code{\link{derive_vars_period}()}
 }
 \author{
 Stefan Bundfuss

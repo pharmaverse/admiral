@@ -93,6 +93,8 @@ ex_ext <- ex %>%
 
 adsl <- dm %>%
   ## derive treatment variables (TRT01P, TRT01A) ----
+  # See also the "Visit and Period Variables" vignette
+  # (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_adsl)
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
   ## derive treatment start date (TRTSDTM) ----
   derive_vars_merged(
@@ -261,4 +263,4 @@ adsl <- adsl %>%
 # Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(adsl, file = file.path(dir, "adsl.rda"), compress = "bzip2")
+saveRDS(adsl, file = file.path(dir, "adsl.rds"), compress = "bzip2")

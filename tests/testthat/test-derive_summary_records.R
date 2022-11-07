@@ -1,6 +1,3 @@
-library(tibble)
-library(dplyr)
-
 test_that("creates a new record for each group and new data frame retains grouping", {
   # group --> 4
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
@@ -12,7 +9,7 @@ test_that("creates a new record for each group and new data frame retains groupi
     )
 
   expect_equal(nrow(actual_output), nrow(input) + 4)
-  expect_equal(group_vars(actual_output), group_vars(input))
+  expect_equal(dplyr::group_vars(actual_output), dplyr::group_vars(input))
 })
 
 test_that("`fns` as inlined", {
