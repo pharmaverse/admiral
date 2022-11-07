@@ -45,15 +45,16 @@ dataset is transposed and subsequently merged onto \code{dataset} using \code{by
 keys.
 }
 \examples{
+library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 
-cm <- tibble::tribble(
+cm <- tribble(
   ~USUBJID, ~CMGRPID, ~CMREFID, ~CMDECOD,
   "BP40257-1001", "14", "1192056", "PARACETAMOL",
   "BP40257-1001", "18", "2007001", "SOLUMEDROL",
   "BP40257-1002", "19", "2791596", "SPIRONOLACTONE"
 )
-facm <- tibble::tribble(
+facm <- tribble(
   ~USUBJID, ~FAGRPID, ~FAREFID, ~FATESTCD, ~FASTRESC,
   "BP40257-1001", "1", "1192056", "CMATC1CD", "N",
   "BP40257-1001", "1", "1192056", "CMATC2CD", "N02",

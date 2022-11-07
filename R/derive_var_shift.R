@@ -36,9 +36,10 @@
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #'
-#' data <- tibble::tribble(
+#' data <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,
 #'   "P01", "ALB", 33, "Y", "LOW", "LOW",
 #'   "P01", "ALB", 38, NA, "LOW", "NORMAL",
