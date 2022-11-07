@@ -954,9 +954,10 @@ derive_var_merged_character <- function(dataset,
 #'
 #' @examples
 #' library(admiral.test)
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_vs")
-#' param_lookup <- tibble::tribble(
+#' param_lookup <- tribble(
 #'   ~VSTESTCD, ~VSTEST, ~PARAMCD, ~PARAM,
 #'   "SYSBP", "Systolic Blood Pressure", "SYSBP", "Systolic Blood Pressure (mmHg)",
 #'   "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
