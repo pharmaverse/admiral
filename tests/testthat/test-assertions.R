@@ -195,7 +195,7 @@ test_that("Test 16 : `assert_character_scalar` does not throw an error if
     assert_character_scalar(character, values = c("test"), case_sensitive = FALSE)
   }
 
-  out <- expect_invisible(example_fun(character = "TEST")  )
+  out <- expect_invisible(example_fun(character = "TEST"))
   expect_equal(out, "test")
 
   check_unit <- function(duration_unit) {
