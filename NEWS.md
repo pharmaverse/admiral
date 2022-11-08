@@ -25,6 +25,9 @@ in OCCDS and BDS datasets. (#1477)
 variables to ADSL. The values for the new variables are provided by a period
 reference dataset. (#1477)
 
+- New function `derive_var_merged_summary()` adds a variable of summarized
+values to the input dataset (#1564)
+
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
 
