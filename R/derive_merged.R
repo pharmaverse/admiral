@@ -1116,58 +1116,58 @@ get_not_mapped <- function() {
 #'
 #' # add a variable for the mean of AVAL within each visit
 #' adbds <- tribble(
-#' ~AVISIT,  ~ASEQ, ~AVAL,
-#' "WEEK 1",     1,    10,
-#' "WEEK 1",     2,    NA,
-#' "WEEK 2",     3,    NA,
-#' "WEEK 3",     4,    42,
-#' "WEEK 4",     5,    12,
-#' "WEEK 4",     6,    12,
-#' "WEEK 4",     7,    15
+#'   ~AVISIT,  ~ASEQ, ~AVAL,
+#'   "WEEK 1",     1,    10,
+#'   "WEEK 1",     2,    NA,
+#'   "WEEK 2",     3,    NA,
+#'   "WEEK 3",     4,    42,
+#'   "WEEK 4",     5,    12,
+#'   "WEEK 4",     6,    12,
+#'   "WEEK 4",     7,    15
 #' )
 #'
 #' derive_var_merged_summary(
-#'     adbds,
-#'     dataset_add = adbds,
-#'     by_vars = vars(AVISIT),
-#'     new_var = MEANVIS,
-#'     analysis_var = AVAL,
-#'     summary_fun = function(x) mean(x, na.rm = TRUE)
-#'   )
+#'   adbds,
+#'   dataset_add = adbds,
+#'   by_vars = vars(AVISIT),
+#'   new_var = MEANVIS,
+#'   analysis_var = AVAL,
+#'   summary_fun = function(x) mean(x, na.rm = TRUE)
+#' )
 #'
-#'  # add a variable listing the lesion ids at baseline
-#'  adsl <- tribble(
-#'    ~USUBJID,
-#'    "1",
-#'    "2",
-#'    "3"
-#'  )
+#' # add a variable listing the lesion ids at baseline
+#' adsl <- tribble(
+#'   ~USUBJID,
+#'   "1",
+#'   "2",
+#'   "3"
+#' )
 #'
-#'  adtr <- tribble(
-#'    ~USUBJID, ~AVISIT,    ~LESIONID,
-#'    "1",      "BASELINE", "INV-T1",
-#'    "1",      "BASELINE", "INV-T2",
-#'    "1",      "BASELINE", "INV-T3",
-#'    "1",      "BASELINE", "INV-T4",
-#'    "1",      "WEEK 1",   "INV-T1",
-#'    "1",      "WEEK 1",   "INV-T2",
-#'    "1",      "WEEK 1",   "INV-T4",
-#'    "2",      "BASELINE", "INV-T1",
-#'    "2",      "BASELINE", "INV-T2",
-#'    "2",      "BASELINE", "INV-T3",
-#'    "2",      "WEEK 1",   "INV-T1",
-#'    "2",      "WEEK 1",   "INV-N1"
-#'  )
+#' adtr <- tribble(
+#'   ~USUBJID, ~AVISIT,    ~LESIONID,
+#'   "1",      "BASELINE", "INV-T1",
+#'   "1",      "BASELINE", "INV-T2",
+#'   "1",      "BASELINE", "INV-T3",
+#'   "1",      "BASELINE", "INV-T4",
+#'   "1",      "WEEK 1",   "INV-T1",
+#'   "1",      "WEEK 1",   "INV-T2",
+#'   "1",      "WEEK 1",   "INV-T4",
+#'   "2",      "BASELINE", "INV-T1",
+#'   "2",      "BASELINE", "INV-T2",
+#'   "2",      "BASELINE", "INV-T3",
+#'   "2",      "WEEK 1",   "INV-T1",
+#'   "2",      "WEEK 1",   "INV-N1"
+#' )
 #'
-#'  derive_var_merged_summary(
-#'    adsl,
-#'    dataset_add = adtr,
-#'    by_vars = vars(USUBJID),
-#'    filter_add = AVISIT == "BASELINE",
-#'    new_var = LESIONSBL,
-#'    analysis_var = LESIONID,
-#'    summary_fun = function(x) paste(x, collapse = ", ")
-#'  )
+#' derive_var_merged_summary(
+#'   adsl,
+#'   dataset_add = adtr,
+#'   by_vars = vars(USUBJID),
+#'   filter_add = AVISIT == "BASELINE",
+#'   new_var = LESIONSBL,
+#'   analysis_var = LESIONID,
+#'   summary_fun = function(x) paste(x, collapse = ", ")
+#' )
 #'
 derive_var_merged_summary <- function(dataset,
                                       dataset_add,

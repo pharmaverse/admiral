@@ -92,11 +92,12 @@ test_that("derive_vars_merged Test 3: merge last value and flag matched by group
 
 ## Test 4: error if variable in both datasets ----
 test_that("derive_vars_merged Test 4: error if variable in both datasets", {
-  expect_error(derive_vars_merged(advs,
-    dataset_add = adsl,
-    by_vars = vars(USUBJID)
-  ),
-  regexp = ""
+  expect_error(
+    derive_vars_merged(advs,
+      dataset_add = adsl,
+      by_vars = vars(USUBJID)
+    ),
+    regexp = ""
   )
 })
 
@@ -484,7 +485,6 @@ test_that("derive_var_merged_summary Test 17: dataset == dataset_add, no filter"
 
 ## Test 18: dataset != dataset_add, filter ----
 test_that("derive_var_merged_summary Test 18: dataset != dataset_add, filter", {
-
   expected <- tibble::tribble(
     ~USUBJID, ~MEANPBL,
     "1",          13.5,
