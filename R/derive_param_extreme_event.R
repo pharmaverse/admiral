@@ -123,8 +123,8 @@ derive_param_first_event <- function(dataset,
 
 #' Add an Extreme Event Parameter
 #'
-#' Add a new parameter for the first or last event occurring in a dataset. `AVALC` and
-#' `AVAL` indicate if an event occurred. For example, the function can derive a parameter
+#' Add a new parameter for the first or last event occurring in a dataset. The variable given in `new_var`
+#'  indicates if an event occurred or not. For example, the function can derive a parameter
 #'  for the first disease progression.
 #'
 #' @param dataset Input dataset
@@ -150,10 +150,9 @@ derive_param_first_event <- function(dataset,
 #'   All observations in `dataset_source` fulfilling the specified condition are
 #'   considered as an event.
 #'
-#'   For subjects with at least one event `AVALC` is set to `"Y"` and `AVAL` to
-#'   `1`.
+#'   For subjects with at least one event `new_var` is set to `true_value`.
 #'
-#'   For all other subjects `AVALC` is set to `"N"` and `AVAL` to `0`.
+#'   For all other subjects `new_var` is set to `false_value`.
 #'
 #' @param order Order variable
 #'
@@ -161,6 +160,27 @@ derive_param_first_event <- function(dataset,
 #'
 #'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
 #'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))`.
+#'
+#' @param new_var New variable
+#'
+#'   The name of the variable which will indicate whether an event happened or not.
+#'
+#'   *Default*: `AVAL`
+#'
+#' @param true_value True value
+#'
+#'   For all subjects with at least one observation in the source dataset (`dataset_source`)
+#'   fullfilling the event condition (`filter_source`), `new_var` is set to the specified value
+#'   `true_value`.
+#'
+#'   *Default*: `"Y"`
+#'
+#' @param false_value False value
+#'
+#'   For all other subjects in `dataset_adsl` without an event, `new_var` is set to the specified
+#'   value `false_value`.
+#'
+#'   *Default*: `"N"`
 #'
 #' @param mode Selection mode (first or last)
 #'
@@ -204,8 +224,8 @@ derive_param_first_event <- function(dataset,
 #'    (with respect to `order`) where the event condition (`filter_source` parameter) is
 #'   fulfilled is selected.
 #'   1. For each observation in `dataset_adsl` a new observation is created. For
-#'   subjects with event `AVALC` is set to `"Y"` and `AVAL` to `1`. For all other
-#'   subjects `AVALC` is set to `"N"` and `AVAL` to `0`.
+#'   subjects with event `new_var` is set to `true_var`. For all other
+#'   subjects `new_var` is set to `false_var`.
 #'   For subjects with event all variables from `dataset_source` are kept. For
 #'   subjects without event all variables which are in both `dataset_adsl` and
 #'   `dataset_source` are kept.
@@ -291,6 +311,9 @@ derive_param_extreme_event <- function(dataset,
                                        dataset_source,
                                        filter_source,
                                        order,
+                                       new_var = AVALC,
+                                       true_value = "Y",
+                                       false_value = "N",
                                        mode = "first",
                                        subject_keys = vars(STUDYID, USUBJID),
                                        set_values_to,
@@ -299,6 +322,7 @@ derive_param_extreme_event <- function(dataset,
   # Check input parameters
   filter_source <- assert_filter_cond(enquo(filter_source))
   assert_vars(order)
+  new_var <- assert_symbol(enquo(new_var))
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
   assert_data_frame(dataset_source, required_vars = vars(!!!subject_keys, !!!order))
