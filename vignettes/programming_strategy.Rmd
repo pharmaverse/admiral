@@ -108,7 +108,7 @@ variables must start with `temp_` and must be removed from the output dataset.
 
 | Function name prefix                         | Description                                                                                         |
 |----------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `assert_` / `warn_` / `is_`                  | Functions that check other functions’ inputs                                                        |
+| `assert_` / `warn_`                          | Functions that check other functions’ inputs                                                        |
 | `derive_`                                    | Functions that take a dataset as input and return a new dataset with additional rows and/or columns |
 | `derive_var_` (e.g. `derive_var_trtdurd`)    | Functions which add a single variable                                                               |
 | `derive_vars_` (e.g. `derive_vars_dt`)       | Functions which add multiple variables                                                              |
@@ -223,7 +223,7 @@ and, if there’s an invalid input, the function should stop immediately with an
 An exception is the case where a variable to be added by a function already exists in the input dataset: 
 here only a warning should be displayed and the function should continue executing.
 
-Inputs should be checked either using `asserthat::assert_that()` or custom assertion functions defined in [`R/assertions.R`](https://github.com/pharmaverse/admiraldev/blob/main/R/assertions.R).
+Inputs should be checked either using custom assertion functions defined in [`R/assertions.R`](https://github.com/pharmaverse/admiraldev/blob/main/R/assertions.R).
 These custom assertion functions should either return an error in case of an invalid input or return nothing.
 
 For the most common types of input parameters like a single variable, a list of
@@ -415,7 +415,6 @@ add an issue in GitHub for discussion.
 | `assertion`*                                                                       | Asserts a certain type and gives warning, error to user        |
 | `warning`                                                                         | Provides custom warnings to user       |
 | `what`                                                                            | A function that ...      |
-| `is`                                                                              | A function that ...      |
 | `get`                                                                             | A function that ...      |
 
 **NOTE:** It is strongly encouraged that each `@keyword` and `@family` are to be identical.  This eases the burden of development and maintenance for admiral functions. If you need to use multiple keywords or families, please reach out to the core development team for discussion.  

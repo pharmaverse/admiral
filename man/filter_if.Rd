@@ -26,6 +26,7 @@ Developer Utility Functions:
 \code{\link{as_name}()},
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},
+\code{\link{is_order_vars}()},
 \code{\link{negate_vars}()},
 \code{\link{valid_time_units}()},
 \code{\link{vars2chr}()}

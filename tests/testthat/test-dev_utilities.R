@@ -24,7 +24,8 @@ test_that("convert_dtm_to_dtc Test 3: Error is thrown if dtm is not in correct f
   )
 })
 
-test_that("filter_if Test 1 : Input is returned as is if filter is NULL", {
+## Test 4: Input is returned as is if filter is NULL ----
+test_that("convert_dtm_to_dtc Test 4: Input is returned as is if filter is NULL", {
   library(tibble)
 
   input <- tribble(
@@ -42,7 +43,8 @@ test_that("filter_if Test 1 : Input is returned as is if filter is NULL", {
   )
 })
 
-test_that("filter_if Test 2 : Input is filtered if filter is not NULL", {
+## Test 5: Input is filtered if filter is not NULL ----
+test_that("convert_dtm_to_dtc Test 5: Input is filtered if filter is not NULL", {
   library(tibble)
 
   input <- tribble(
@@ -58,4 +60,26 @@ test_that("filter_if Test 2 : Input is filtered if filter is not NULL", {
     filter_if(input, quo(VSTESTCD == "WEIGHT")),
     keys = c("USUBJID", "VSTESTCD")
   )
+})
+
+# negate_vars ----
+## Test 6: negate_vars returns list of negated variables ----
+test_that("negate_vars Test 6: negate_vars returns list of negated variables", {
+  expect_identical(negate_vars(vars(var1, var2)), rlang::exprs(-var1, -var2))
+})
+
+## Test 7: negate_vars returns NULL if input is NULL ----
+test_that("negate_vars Test 7: negate_vars returns NULL if input is NULL", {
+  expect_identical(negate_vars(NULL), NULL)
+})
+
+# is_order_vars ----
+## Test 8: returns error if input were created incorrectly ----
+test_that("is_order_vars Test 8: returns error if input were created incorrectly", {
+  expect_error(is_order_vars(STUDYID))
+})
+
+## Test 9: returns TRUE if input were created correctly ----
+test_that("is_order_vars Test 9: returns TRUE if input were created correctly", {
+  expect_true(is_order_vars(vars(AVAL, desc(ADT))))
 })

@@ -47,7 +47,7 @@ Tools for developing functions and maintaining a healthy code base within the fa
 
 ## Installation
 
-The package is available from CRAN and can be installed by running install.packages("admiraldev").
+The package is available from CRAN and can be installed by running `install.packages("admiraldev")`.
 
 To install the latest development version of the package directly from GitHub use the following code:
 

@@ -4,7 +4,7 @@
 \alias{warn_if_invalid_dtc}
 \title{Warn If a Vector Contains Unknown Datetime Format}
 \usage{
-warn_if_invalid_dtc(dtc, is_valid = is_valid_dtc(dtc))
+warn_if_invalid_dtc(dtc, is_valid = is.POSIXlt(dtc))
 }
 \arguments{
 \item{dtc}{a character vector containing the dates}
