@@ -25,9 +25,8 @@ test_that("convert_dtm_to_dtc Test 3: Error is thrown if dtm is not in correct f
 })
 
 test_that("filter_if Test 1 : Input is returned as is if filter is NULL", {
-  library(tibble)
 
-  input <- tribble(
+  input <- tibble::tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
     "P01", "WEIGHT", 80.9,
     "P01", "HEIGHT", 189.2
@@ -43,9 +42,8 @@ test_that("filter_if Test 1 : Input is returned as is if filter is NULL", {
 })
 
 test_that("filter_if Test 2 : Input is filtered if filter is not NULL", {
-  library(tibble)
 
-  input <- tribble(
+  input <- tibble::tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
     "P01", "WEIGHT", 80.9,
     "P01", "HEIGHT", 189.2
