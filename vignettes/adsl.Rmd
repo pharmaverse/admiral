@@ -43,7 +43,7 @@ otherwise specified.*
   * [Duration Relative to Death](#death_other)
 * [Derive Last Known Date Alive (`LSTALVDT`)](#lstalvdt)
 * [Derive Groupings and Populations](#groupings)
-  * [Grouping (e.g. `AGEGR1`)](#groupings_ex)
+  * [Grouping (e.g. `AGEGR1` or `REGION1`)](#groupings_ex)
   * [Population Flags (e.g. `SAFFL`)](#popflag)
 * [Derive Other Variables](#other)
 * [Add Labels and Attributes](#attributes)
