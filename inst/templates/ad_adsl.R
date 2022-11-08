@@ -56,7 +56,7 @@ format_agegr1 <- function(x) {
   case_when(
     x < 18 ~ "<18",
     between(x, 18, 64) ~ "18-64",
-    x > 65 ~ ">65",
+    x > 64 ~ ">64",
     TRUE ~ "Missing"
   )
 }
