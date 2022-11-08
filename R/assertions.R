@@ -161,8 +161,8 @@ assert_character_scalar <- function(arg,
   # Create case_adjusted_arg and case_adjusted_values for the following purpose:
   #
   #   1. To simplify the comparison of arg and values; i.e. the "case_adjusted_"
-  #      variables take into consideration whether case_sensitive = TRUE, or
-  #      case_sensitive = FALSE.
+  #      variables take into consideration whether `case_sensitive = TRUE`, or
+  #      `case_sensitive = FALSE`.
   #
   #   2. To avoid overwriting the original "arg" and "values", so that subsequent
   #      code can refer directly to the initial function arguments: this is
