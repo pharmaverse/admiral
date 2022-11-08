@@ -41,7 +41,7 @@ value. 'L' is for LOW values, 'H' is for HIGH values. Note: the variable is case
 Note: Variables \code{SOC}, \code{TERM}, \verb{Grade 1}, \verb{Grade 2},\verb{Grade 3},\verb{Grade 4},\verb{Grade 5}, \code{Definition}
 are from the source document on NCI-CTC website defining the grading criteria.
 From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
-tracability only.
+traceability only.
 }
 \seealso{
 Other datasets: 
