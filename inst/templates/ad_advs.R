@@ -133,6 +133,8 @@ advs <- advs %>%
 
 
 ## Get visit info ----
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits)
 advs <- advs %>%
   # Derive Timing
   mutate(
@@ -240,6 +242,8 @@ advs <- advs %>%
   )
 
 ## Get treatment information ----
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
 advs <- advs %>%
   # Assign TRTA, TRTP
   # Create End of Treatment Record

@@ -51,8 +51,9 @@ The "CD", "SC", and "SCN" variables are derived accordingly based on
 whenever not missing.
 }
 \examples{
+library(tibble)
 data("queries")
-adae <- tibble::tribble(
+adae <- tribble(
   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
   3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
