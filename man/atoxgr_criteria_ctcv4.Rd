@@ -45,6 +45,7 @@ tracability only.
 }
 \seealso{
 Other metadata: 
+\code{\link{atoxgr_criteria_ctcv5}},
 \code{\link{dose_freq_lookup}}
 }
 \author{
