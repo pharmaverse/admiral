@@ -97,7 +97,7 @@
 #' Note: Variables `SOC`, `TERM`, `Grade 1`, `Grade 2`,`Grade 3`,`Grade 4`,`Grade 5`, `Definition`
 #' are from the source document on NCI-CTC website defining the grading criteria.
 #' From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
-#' tracability only.
+#' traceability only.
 #'
 #' @author Gordon Miller
 #'
