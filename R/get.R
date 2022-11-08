@@ -84,7 +84,7 @@ get_duplicates <- function(x) {
 #' @return A list of quosures
 #' @export
 get_source_vars <- function(quosures) {
-  assert_varval_list(quosures)
+  assert_varval_list(quosures, optional = TRUE)
 
   quo_c(quosures)[lapply(quo_c(quosures), quo_is_symbol) == TRUE]
 }
