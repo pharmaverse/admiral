@@ -26,7 +26,7 @@ Within the ADLB ADaM data set there is a concept of lab grading, where there is
 a set of criteria for particular lab tests that grade the severity or abnormality of 
 a lab value. The grades are from 0 to 4, where grade 0 can be viewed generally as a 
 “NORMAL” value. The higher the grade the more severe or more abnormal the lab value is.
-There are several sets of lab grading criteria, currently {admiral} has implemented
+There are several sets of lab grading criteria, currently `{admiral}` has implemented
 NCI-CTCAEv4 and NCI-CTCAEv5 grading criteria. (In future releases `{admiral}` may look
 to implement further grading criteria).
 
