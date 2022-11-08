@@ -30,6 +30,8 @@ reference dataset. (#1477)
 
 - Removed the `{assertthat}` dependency in `{admiral}` (#1392)
 
+- Removed R Version 3.6 check in CI/CD workflows in favor of the three most recent versions: 4.0, 4.1 and 4.2. (#1556)
+
 ## Updates of Existing Functions
 
 - Function `derive_param_first_event` has been replaced by a more generalized `derive_param_extreme_event` function with new argument `mode` allowing for the selection of either the `"first"` or `"last"` event record according to the conditions provided. Also the `date_var` argument has been replaced with the `order` argument instead (#1317). 
@@ -43,6 +45,9 @@ which controls if time is considered for the condition if `start_date` is after
 - Function `derive_param_first_event` has been deprecated. Please use `derive_param_extreme_event` with the `order` argument instead of the `date_var` argument (#1317).
 
 ## Documentation
+
+- New vignette "Generic Functions" (#734)
+- New vignette "Visit and Period Variables" (#1478)
 
 ## Various
 

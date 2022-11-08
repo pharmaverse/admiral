@@ -115,6 +115,8 @@ adpp <- adpp %>%
   select(-DOMAIN, -PPSEQ)
 
 ## Get visit info ----
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visit_bds)
 adpp <- adpp %>%
   # Derive Timing
   mutate(
@@ -128,6 +130,8 @@ adpp <- adpp %>%
     AVISITN = VISITNUM
   ) %>%
   ## Assign TRTA, TRTP ----
+  # See also the "Visit and Period Variables" vignette
+  # (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A

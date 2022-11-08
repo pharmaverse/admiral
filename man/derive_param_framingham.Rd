@@ -177,9 +177,10 @@ Risk Period \tab 0.88936 \cr
 \deqn{Risk = 100 * (1 - RiskPeriodFactor^{RiskFactors})}
 }
 \examples{
+library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 
-adcvrisk <- tibble::tribble(
+adcvrisk <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU,
   ~VISIT, ~AGE, ~SEX, ~SMOKEFL, ~DIABETFL, ~TRTHYPFL,
   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121,

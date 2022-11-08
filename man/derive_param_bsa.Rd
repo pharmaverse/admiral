@@ -97,7 +97,8 @@ Adds a record for BSA (Body Surface Area) using the specified derivation method
 for each by group (e.g., subject and visit) where the source parameters are available.
 }
 \examples{
-advs <- tibble::tribble(
+library(tibble)
+advs <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 170, "BASELINE",
   "01-701-1015", "WEIGHT", "Weight (kg)", 75, "BASELINE",

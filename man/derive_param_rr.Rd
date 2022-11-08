@@ -73,7 +73,8 @@ The analysis value of the new parameter is derived as
 \deqn{\frac{60000}{HR}}{60000 / HR}
 }
 \examples{
-adeg <- tibble::tribble(
+library(tibble)
+adeg <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "HR", "Heart Rate", 70.14, "beats/min", "BASELINE",
   "01-701-1015", "QT", "QT Duration", 370, "msec", "WEEK 2",

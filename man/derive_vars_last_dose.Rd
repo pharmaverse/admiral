@@ -138,7 +138,7 @@ adae \%>\%
     new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
     dose_date = EXENDTM,
     analysis_date = ASTDTM,
-    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
+    traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 }

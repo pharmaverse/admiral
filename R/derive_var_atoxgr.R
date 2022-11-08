@@ -67,9 +67,10 @@
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #'
-#' data <- tibble::tribble(
+#' data <- tribble(
 #'   ~ATOXDSCL,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
 #'   "Hypoglycemia",                119,    4,        7,      "Glucose (mmol/L)",
 #'   "Hypoglycemia",                120,    4,        7,      "Glucose (mmol/L)",
@@ -87,7 +88,7 @@
 #'   get_unit_expr = extract_unit(PARAM)
 #' )
 #'
-#' data <- tibble::tribble(
+#' data <- tribble(
 #'   ~ATOXDSCH,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
 #'   "Hyperglycemia",               119,    4,        7,      "Glucose (mmol/L)",
 #'   "Hyperglycemia",               120,    4,        7,      "Glucose  (mmol/L)",
@@ -245,9 +246,10 @@ derive_var_atoxgr_dir <- function(dataset,
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #'
-#' adlb <- tibble::tribble(
+#' adlb <- tribble(
 #'   ~ATOXDSCL,          ~ATOXDSCH,        ~ATOXGRL,      ~ATOXGRH,
 #'   "Hypoglycemia",     "Hyperglycemia",  NA_character_, "0",
 #'   "Hypoglycemia",     "Hyperglycemia",  "0",           "1",

@@ -208,12 +208,11 @@ derive_vars_atc(cm, facm)
 
 ## Derive Planned and Actual Treatment {#trtpa}
 
-`TRTA` and `TRTP` must correlate to treatment `TRTxxP` and/or `TRTxxA` in ADSL.
-The derivation of `TRTA` and `TRTP` for a record are protocol and analysis 
-specific.  `{admiral}`does not currently have functionality to assist with `TRTA` 
-and `TRTP` assignment.
+`TRTA` and `TRTP` must match at least one value of the character treatment
+variables in ADSL (e.g., `TRTxxA`/`TRTxxP`, `TRTSEQA`/`TRTSEQP`,
+`TRxxAGy`/`TRxxPGy`).
 
-However, an example of a simple implementation could be:
+An example of a simple implementation for a study without periods could be:
 
 ```{r eval=TRUE}
 adae <- mutate(adae, TRTP = TRT01P, TRTA = TRT01A)
@@ -221,7 +220,8 @@ adae <- mutate(adae, TRTP = TRT01P, TRTA = TRT01A)
 count(adae, TRTP, TRTA, TRT01P, TRT01A)
 ```
 
-
+For studies with periods see the ["Visit and Period Variables"
+vignette](visits_periods.html#treatment_bds).
 
 ## Derive Date/Date-time of Last Dose {#last_dose}
 
