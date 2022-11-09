@@ -15,7 +15,7 @@ set_admiral_options(subject_keys)
 No return value, called for side effects.
 }
 \description{
-Set the Value of Admiral Options
+Set the Values of Admiral Options That Can Be Modified for Advanced Users.
 }
 \details{
 Modify an admiral option, e.g \code{subject_keys}, such that it automatically affects downstream
