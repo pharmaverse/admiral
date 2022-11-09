@@ -87,7 +87,7 @@ assert_data_frame <- function(arg,
 #'
 #' @param arg A function argument to be checked
 #' @param values A `character` vector of valid values for `arg`.
-#' Values should be a lower case vector if case_sensitive = FALSE is used.
+#' Values is converted to a lower case vector if case_sensitive = FALSE is used.
 #' @param case_sensitive Should the argument be handled case-sensitive?
 #' If set to `FALSE`, the argument is converted to lower case for checking the
 #' permitted values and returning the argument.
