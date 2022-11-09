@@ -731,7 +731,7 @@ For example, if
 - `AGEGR1` is required to categorize `AGE` into `<18`, `18-64` and `>64`, or
 - `REGION1` is required to categorize `COUNTRY` in `North America`, `Rest of the World`,
 
-the user defined functions would look like:
+the user defined functions would look like the following:
 
 ```{r eval=TRUE}
 format_agegr1 <- function(var_input) {
