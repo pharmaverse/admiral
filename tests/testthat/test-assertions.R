@@ -190,18 +190,16 @@ test_that("Test 15 : `assert_character_scalar` does not throw an error if
 })
 
 test_that("Test 16 : `assert_character_scalar` does not throw an error if
-          case_sensitive is FALSE, and argument is returned with its case
-          unchanged.",
-          {
+          case_sensitive is FALSE, and argument is returned in lower case", {
   example_fun <- function(character) {
     assert_character_scalar(character, values = c("test"), case_sensitive = FALSE)
   }
 
   out <- expect_invisible(example_fun(character = "TEST"))
-  expect_equal(out, "TEST")
+  expect_equal(out, "test")
 
   check_unit <- function(duration_unit) {
-    assert_character_scalar(
+    duration_unit <- assert_character_scalar(
       duration_unit,
       values = c("years", "months", "weeks", "days", "hours", "minutes", "seconds"),
       case_sensitive <- FALSE
@@ -212,10 +210,10 @@ test_that("Test 16 : `assert_character_scalar` does not throw an error if
   expect_equal(out, "months")
 
   out <- expect_invisible(check_unit("MONTHS"))
-  expect_equal(out, "MONTHS")
+  expect_equal(out, "months")
 
   check_unit2 <- function(duration_unit) {
-    assert_character_scalar(
+    duration_unit <- assert_character_scalar(
       duration_unit,
       values = c("YEARS", "MONTHS", "WEEKS", "DAYS", "HOURS", "MINUTES", "SECONDS"),
       case_sensitive <- FALSE
@@ -226,7 +224,7 @@ test_that("Test 16 : `assert_character_scalar` does not throw an error if
   expect_equal(out, "months")
 
   out <- expect_invisible(check_unit2("MONTHS"))
-  expect_equal(out, "MONTHS")
+  expect_equal(out, "months")
 })
 
 test_that("Test 17 : `assert_character_scalar` throws an error if
@@ -240,7 +238,7 @@ test_that("Test 17 : `assert_character_scalar` throws an error if
   )
 
   check_unit <- function(duration_unit) {
-    assert_character_scalar(
+    duration_unit <- assert_character_scalar(
       duration_unit,
       values = c("years", "months", "weeks", "days", "hours", "minutes", "seconds"),
       case_sensitive <- FALSE
@@ -258,7 +256,7 @@ test_that("Test 17 : `assert_character_scalar` throws an error if
   )
 
   check_unit2 <- function(duration_unit) {
-    assert_character_scalar(
+    duration_unit <- assert_character_scalar(
       duration_unit,
       values = c("YEARS", "MONTHS", "WEEKS", "DAYS", "HOURS", "MINUTES", "SECONDS"),
       case_sensitive <- FALSE
