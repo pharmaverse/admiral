@@ -598,17 +598,18 @@ filter_date_sources <- function(sources,
 #' @family source_specifications
 #'
 #' @examples
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
 #'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
-#' ae <- tibble::tribble(
+#' ae <- tribble(
 #'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
 #'   "01",     "2021-01-03T10:56", 1,      "Flu",
 #'   "01",     "2021-03-04",       2,      "Cough",
@@ -822,38 +823,6 @@ censor_source <- function(dataset_name,
   class(out) <- c("censor_source", class(out))
   out
 }
-
-#' Print `tte_source` Objects
-#'
-#' @param x A `tte_source` object
-#' @param ... Not used
-#'
-#' @return No return value, called for side effects
-#'
-#' @author Thomas Neitmann
-#'
-#' @keywords internal
-#' @family internal
-#'
-#' @export
-#'
-#' @seealso [tte_source()], [censor_source()], [event_source()]
-#'
-#' @examples
-#' print(death_event)
-print.tte_source <- function(x, ...) {
-  cat <- function(...) base::cat(..., sep = "")
-  cat("<tte_source> object\n")
-  cat("dataset_name: \"", x$dataset_name, "\"\n")
-  cat("filter: ", quo_text(x$filter), "\n")
-  cat("date: ", quo_text(x$date), "\n")
-  cat("censor: ", x$censor, "\n")
-  cat("set_values_to:\n")
-  for (name in names(x$set_values_to)) {
-    cat("  ", name, ": ", quo_text(x$set_values_to[[name]]), "\n")
-  }
-}
-
 
 #' List all `tte_source` Objects Available in a Package
 #'

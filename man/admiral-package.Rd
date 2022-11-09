@@ -17,10 +17,6 @@ Useful links:
   \item \url{https://github.com/pharmaverse/admiral}
 }
 
-
-Other internal: 
-\code{\link{print.adam_templates}()},
-\code{\link{print.tte_source}()}
 }
 \author{
 \strong{Maintainer}: Thomas Neitmann \email{thomas.neitmann@roche.com}
@@ -66,6 +62,7 @@ Other contributors:
   \item Syed Mubasheer [contributor]
   \item Wenyi Liu [contributor]
   \item Dinakar Kulkarni [contributor]
+  \item Franciszek Walkowiak [contributor]
   \item Tamara Senior [contributor]
   \item Jordanna Morrish [contributor]
   \item Anthony Howard [contributor]

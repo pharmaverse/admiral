@@ -287,9 +287,9 @@ derive_vars_merged <- function(dataset,
         "Please add it to `by_vars` or remove or rename it in one of the datasets."
       ),
       paste0(
-        "The variables",
+        "The variables ",
         enumerate(common_vars),
-        "are contained in both datasets.\n",
+        " are contained in both datasets.\n",
         "Please add them to `by_vars` or remove or rename them in one of the datasets."
       )
     ))
@@ -954,9 +954,10 @@ derive_var_merged_character <- function(dataset,
 #'
 #' @examples
 #' library(admiral.test)
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_vs")
-#' param_lookup <- tibble::tribble(
+#' param_lookup <- tribble(
 #'   ~VSTESTCD, ~VSTEST, ~PARAMCD, ~PARAM,
 #'   "SYSBP", "Systolic Blood Pressure", "SYSBP", "Systolic Blood Pressure (mmHg)",
 #'   "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",

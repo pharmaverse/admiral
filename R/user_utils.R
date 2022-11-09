@@ -46,9 +46,11 @@ extract_unit <- function(x) {
 #' @export
 #'
 #' @examples
+#' library(tibble)
+#'
 #' convert_blanks_to_na(c("a", "b", "", "d", ""))
 #'
-#' df <- tibble::tibble(
+#' df <- tibble(
 #'   a = structure(c("a", "b", "", "c"), label = "A"),
 #'   b = structure(c(1, NA, 21, 9), label = "B"),
 #'   c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
@@ -83,6 +85,31 @@ convert_blanks_to_na.list <- function(x) {
 convert_blanks_to_na.data.frame <- function(x) { # nolint
   x[] <- lapply(x, convert_blanks_to_na)
   x
+}
+
+#' Turn a Character Vector into a List of Quosures
+#'
+#' Turn a character vector into a list of quosures
+#'
+#' @param chr A character vector
+#'
+#' @return A `list` of `quosures` as returned by [`vars()`]
+#'
+#' @author Stefan Bundfuss
+#'
+#' @export
+#'
+#' @keywords utils_quo
+#' @family utils_quo
+#'
+#' @examples
+#' chr2vars(c("USUBJID", "AVAL"))
+chr2vars <- function(chr) {
+  assert_character_vector(chr)
+  rlang::set_names(
+    quos(!!!syms(chr)),
+    names(chr)
+  )
 }
 
 #' Get One to Many Values that Led to a Prior Error
@@ -176,4 +203,75 @@ yn_to_numeric <- function(arg) {
     arg == "N" ~ 0,
     TRUE ~ NA_real_
   )
+}
+
+#' Print `source` Objects
+#'
+#' @param x An `source` object
+#' @param ... If `indent = <numeric value>` is specified the output is indented
+#'   by the specified number of characters.
+#'
+#' @return No return value, called for side effects
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords utils_print
+#' @family utils_print
+#'
+#' @export
+#'
+#' @examples
+#' print(death_event)
+print.source <- function(x, ...) {
+  args <- list(...)
+  if ("indent" %in% names(args)) {
+    indent <- args[["indent"]]
+  } else {
+    indent <- 0
+  }
+  cat(strrep(" ", indent), "<", attr(x, "class")[1], "> object\n", sep = "")
+  print_named_list(x, indent = indent)
+}
+
+
+#' Print Named List
+#'
+#' @param list A named list
+#' @param indent Indent
+#'
+#'   The output is indented by the specified number of characters.
+#'
+#' @return No return value, called for side effects
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords utils_print
+#' @family utils_print
+#'
+#' @export
+#'
+#' @examples
+#' print_named_list(death_event)
+print_named_list <- function(list, indent = 0) {
+  for (name in names(list)) {
+    if (inherits(list[[name]], "source")) {
+      cat(strrep(" ", indent), name, ":\n", sep = "")
+      print(list[[name]], indent = indent + 2)
+    } else if (is.data.frame(list[[name]])) {
+      cat(strrep(" ", indent), name, ":\n", sep = "")
+      print(list[[name]])
+    } else if (is.list(list[[name]])) {
+      cat(strrep(" ", indent), name, ":\n", sep = "")
+      print_named_list(list[[name]], indent = indent + 2)
+    } else {
+      if (is.character(list[[name]])) {
+        chr_val <- dquote(list[[name]])
+      } else if (is_quosure(list[[name]])) {
+        chr_val <- quo_text(list[[name]])
+      } else {
+        chr_val <- list[[name]]
+      }
+      cat(strrep(" ", indent), name, ": ", chr_val, "\n", sep = "")
+    }
+  }
 }

@@ -29,6 +29,7 @@ otherwise specified.*
 # Programming Flow
 
 * [Read in Data](#readdata)
+* [Derive Period, Subperiod, and Phase Variables (e.g. `APxxSDT`, `APxxEDT`, ...)](#periodvars)
 * [Derive Treatment Variables (`TRT0xP`, `TRT0xA`)](#treatmentvar)
 * [Derive/Impute Numeric Treatment Date/Time and Duration (`TRTSDT`, `TRTEDT`, `TRTDURD`)](#trtdatetime)
 * [Derive Disposition Variables](#disposition)
@@ -91,14 +92,27 @@ dataset_vignette(
 )
 ```
 
+## Derive Period, Subperiod, and Phase Variables (e.g. `APxxSDT`, `APxxEDT`, ...) {#periodvars}
+
+See the ["Visit and Period Variables"
+vignette](visits_periods.html#periods_adsl) for more information.
+
+If the variables are not derived based on a period reference dataset, they may
+be derived at a later point of the flow. For example, phases like "Treatment
+Phase" and "Follow up" could be derived based on treatment start and end date.
+
 ## Derive Treatment Variables (`TRT0xP`, `TRT0xA`) {#treatmentvar}
 
-The mapping of the treatment variables is left to the ADaM programmer. An example mapping may be:
+The mapping of the treatment variables is left to the ADaM programmer. An
+example mapping for a study without periods may be:
 
 ```{r eval=TRUE}
 adsl <- dm %>%
   mutate(TRT01P = ARM, TRT01A = ACTARM)
 ```
+
+For studies with periods see the ["Visit and Period Variables"
+vignette](visits_periods.html#treatment_adsl).
 
 ## Derive/Impute Numeric Treatment Date/Time and Duration (`TRTSDTM`, `TRTEDTM`, `TRTDURD`) {#trtdatetime}
 
@@ -818,7 +832,8 @@ file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbw
 
 NOTE: All these packages are in the experimental phase, but the vision is to
 have them associated with an End to End pipeline under the umbrella of the
-[pharmaverse](https://github.com/pharmaverse).
+[pharmaverse](https://github.com/pharmaverse). An example of applying metadata 
+and perform associated checks can be found at the [pharmaverse E2E example](https://examples.pharmaverse.org/data/adsl/).
 
 # Example Script 
 

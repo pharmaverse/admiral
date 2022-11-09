@@ -64,8 +64,7 @@ is in the expected format (see \code{assert_terms()}).
 }
 \seealso{
 OCCDS Functions: 
-\code{\link{create_query_data}()},
-\code{\link{create_single_dose_dataset}()},
+\code{\link{derive_var_trtemfl}()},
 \code{\link{derive_vars_atc}()},
 \code{\link{derive_vars_query}()}
 }

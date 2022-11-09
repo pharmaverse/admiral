@@ -140,6 +140,7 @@ censorings
 chk
 constructible
 cyclomatic
+datasets
 datepart
 datetime
 datetimes
@@ -196,6 +197,7 @@ reults
 roche
 roxygen
 submittable
+subperiod
 summarization
 testthat
 th

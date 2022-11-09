@@ -51,9 +51,12 @@
 #' @seealso [derive_vars_duration()]
 #'
 #' @examples
-#' data <- tibble::tribble(
+#' library(tibble)
+#' library(lubridate)
+#'
+#' data <- tribble(
 #'   ~BRTHDT, ~RANDDT,
-#'   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+#'   ymd("1984-09-06"), ymd("2020-02-24")
 #' )
 #'
 #' derive_vars_aage(data)
