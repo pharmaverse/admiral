@@ -191,7 +191,7 @@ assert_character_scalar <- function(arg,
     abort(err_msg)
   }
 
-  invisible(case_adjusted_arg)
+  invisible(arg)
 }
 
 #' Is an Argument a Character Vector?
