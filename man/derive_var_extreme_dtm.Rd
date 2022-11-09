@@ -10,7 +10,7 @@ derive_var_extreme_dtm(
   ...,
   source_datasets,
   mode,
-  subject_keys = vars(STUDYID, USUBJID)
+  subject_keys = get_admiral_option("subject_keys")
 )
 }
 \arguments{
