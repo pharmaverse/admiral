@@ -53,7 +53,6 @@ admiral_options$subject_keys <- vars(STUDYID, USUBJID)
 #' ) %>%
 #'   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 get_admiral_option <- function(option) {
-
   # Check for valid option - catch function abuse
   assert_character_scalar(option)
 
@@ -65,18 +64,16 @@ get_admiral_option <- function(option) {
   }
 
   # Return message otherwise, catch typos
-  else {
-    default_err_msg <- sprintf(paste(
-      "Invalid function argument, select one of:",
-      enumerate(possible_inputs, quote_fun = dquote, conjunction = "or")
-    ))
-    abort(default_err_msg)
-  }
+  err_msg <- sprintf(paste(
+    "Invalid function argument, select one of:",
+    enumerate(possible_inputs, quote_fun = dquote, conjunction = "or")
+  ))
+  abort(err_msg)
 }
 
 #' Set the Value of Admiral Options
 #'
-#’ Set the Values of Admiral Options That Can Be Modified for Advanced Users.
+#' Set the Values of Admiral Options That Can Be Modified for Advanced Users.
 #'
 #' @param subject_keys Variables to uniquely identify a subject, defaults to
 #'   `vars(STUDYID, USUBJID)`. This option is used as default value for the
