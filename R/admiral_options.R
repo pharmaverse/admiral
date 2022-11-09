@@ -64,10 +64,10 @@ get_admiral_option <- function(option) {
   }
 
   # Return message otherwise, catch typos
-  err_msg <- sprintf(paste(
+  err_msg <- paste(
     "Invalid function argument, select one of:",
     enumerate(possible_inputs, quote_fun = dquote, conjunction = "or")
-  ))
+  )
   abort(err_msg)
 }
 
