@@ -1,6 +1,4 @@
-library(admiral.test)
-data(admiral_dm)
-dm <- select(admiral_dm, USUBJID)
+dm <- select(admiral.test::admiral_dm, USUBJID)
 
 # get_new_tmp_var ----
 ## Test 1: creating temporary variables works ----
