@@ -57,6 +57,7 @@ Occasionally we will need to release a hot fix to address a package breaking bug
 
 1) Identify all the bugs that need to be fixed for this hot fix release and label with hot fix label.
 1) Branches addressing the bugs should have Pull Requests merged into the `patch` branch **NOT** the `devel` branch.
+1) When naming the branch follow the [naming conventions](git_usage.html#implementing-an-issue) guide but use the `@main` suffix 
 1) Create a Pull Request from `patch` into the `pre-release` branch.  Verify that all CI/CD checks are passing, merge and bundle up and send off to CRAN.
 1) Once package is approved and available on CRAN, another Pull Request is created for merging the `pre-release` branch into the `main` branch.  This will trigger the action to rebuild the `{admiral}` website with all the updates for this hot fix release.
 1) Use the release button on GitHub to "release" the package onto GitHub.  This release onto Github archives the version of code within the `main` branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file and makes a validation report via the GitHub action `validation` from [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).  Please see past [admiral releases](https://github.com/pharmaverse/admiral/releases) for reference.

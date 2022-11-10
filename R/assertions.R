@@ -86,7 +86,8 @@ assert_data_frame <- function(arg,
 #' one of the provided `values`.
 #'
 #' @param arg A function argument to be checked
-#' @param values A `character` vector of valid values for `arg`
+#' @param values A `character` vector of valid values for `arg`.
+#' Values should be a lower case vector if case_sensitive = FALSE is used.
 #' @param case_sensitive Should the argument be handled case-sensitive?
 #' If set to `FALSE`, the argument is converted to lower case for checking the
 #' permitted values and returning the argument.
@@ -159,6 +160,9 @@ assert_character_scalar <- function(arg,
 
   if (!case_sensitive) {
     arg <- tolower(arg)
+    if (!is.null(values)) {
+      values <- tolower(values)
+    }
   }
 
   if (!is.null(values) && arg %notin% values) {
@@ -682,6 +686,48 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
   }
 }
 
+#' Is an Argument an Atomic Vector?
+#'
+#' Checks if an argument is an atomic vector
+#'
+#' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Ania Golab
+#'
+#' @return
+#' The function throws an error if `arg` is not an atomic vector.
+#' Otherwise, the input is returned invisibly.
+#'
+#' @export
+#'
+#' @keywords assertion
+#' @family assertion
+#' @examples
+#' example_fun <- function(x) {
+#'   assert_atomic_vector(x)
+#' }
+#'
+#' example_fun(1:10)
+#'
+#' try(example_fun(list(1, 2)))
+assert_atomic_vector <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.atomic(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be an atomic vector but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+}
 
 #' Is an Argument an Object of a Specific S3 Class?
 #'

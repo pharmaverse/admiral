@@ -5,6 +5,8 @@
   - Developer addin for formatting tests to admiral programming standards (#73)
   
   - New functions `replace_symbol_in_quo()` and `add_suffix_to_vars()` (#106)
+
+  - New function `assert_atomic_vector()` (#98)
   
   - New keyword/family `create_aux` for functions creating auxiliary datasets (#126)
   
@@ -13,6 +15,7 @@
   - Remove dependency on `{assertthat}` (#149)
   
   - Test coverage for `admiraldev` have increased from 45% to approximately 100% (#94,#95, #96,#98,#101,#103)
+
 
 ## Updates of Existing Functions
 
