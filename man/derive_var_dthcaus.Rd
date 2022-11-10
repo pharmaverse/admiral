@@ -9,7 +9,7 @@ derive_var_dthcaus(
   dataset,
   ...,
   source_datasets,
-  subject_keys = vars(STUDYID, USUBJID)
+  subject_keys = get_admiral_option("subject_keys")
 )
 
 dthcaus_source(
@@ -88,9 +88,9 @@ the preferred order.
 }
 \section{Functions}{
 \itemize{
-\item \code{dthcaus_source}: Create objects of class "dthcaus_source"
-}}
+\item \code{dthcaus_source()}: Create objects of class "dthcaus_source"
 
+}}
 \examples{
 library(tibble)
 library(dplyr)
@@ -197,7 +197,8 @@ ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_disposition_reason}()}
+\code{\link{derive_vars_disposition_reason}()},
+\code{\link{derive_vars_period}()}
 
 Source Specifications: 
 \code{\link{assert_db_requirements}()},

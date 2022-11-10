@@ -45,9 +45,9 @@ output dataset but the derivation is not called for them.
 }
 }
 \examples{
-
+library(tibble)
 library(stringr)
-advs <- tibble::tribble(
+advs <- tribble(
   ~USUBJID, ~VSDTC,       ~VSTPT,
   "1",      "2020-04-16", NA_character_,
   "1",      "2020-04-16", "BEFORE TREATMENT"
@@ -79,7 +79,6 @@ slice_derivation(
 Higher Order Functions: 
 \code{\link{call_derivation}()},
 \code{\link{derivation_slice}()},
-\code{\link{print.derivation_slice}()},
 \code{\link{restrict_derivation}()}
 }
 \author{

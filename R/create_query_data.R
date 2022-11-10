@@ -95,8 +95,8 @@
 #' @return A dataset to be used as input dataset to the `dataset_queries`
 #'   argument in `derive_vars_query()`
 #'
-#' @family der_occds
-#' @keywords der_occds
+#' @family create_aux
+#' @keywords create_aux
 #'
 #' @seealso [derive_vars_query()], [query()], [basket_select()], [Queries Dataset
 #' Documentation](../articles/queries_dataset.html)
@@ -594,7 +594,7 @@ query <- function(prefix,
   if (!is_auto(out$id)) {
     out$id <- eval_tidy(out$id)
   }
-  class(out) <- c("query", "list")
+  class(out) <- c("query", "source", "list")
   validate_query(out)
 }
 

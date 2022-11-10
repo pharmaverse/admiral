@@ -198,14 +198,12 @@ create_query_data(
 \seealso{
 \code{\link[=derive_vars_query]{derive_vars_query()}}, \code{\link[=query]{query()}}, \code{\link[=basket_select]{basket_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
 
-OCCDS Functions: 
-\code{\link{create_single_dose_dataset}()},
-\code{\link{derive_vars_atc}()},
-\code{\link{derive_vars_query}()},
-\code{\link{get_terms_from_db}()}
+Creating auxiliary datasets: 
+\code{\link{create_period_dataset}()},
+\code{\link{create_single_dose_dataset}()}
 }
 \author{
 Stefan Bundfuss Tamara Senior
 }
-\concept{der_occds}
-\keyword{der_occds}
+\concept{create_aux}
+\keyword{create_aux}

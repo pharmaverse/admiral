@@ -1,33 +1,112 @@
+# admiral 0.9.0
+
+## New Features
+
+- The new function `derive_vars_joined()` adds variables from an additional
+dataset. The selection of the observations can depend on variables from both
+datasets. This can be used for adding `AVISIT`, `AWLO`, `AWHI` based on time
+windows and `ADY` or deriving the lowest value (nadir) before the current
+observation (#1448).
+
+- New function `derive_var_trtemfl()` for deriving treatment emergent flags (#989)
+
+- The new function `chr2vars()` turns a character vector into a list of quosures
+(#1448).
+
+- New function `derive_var_relative_flag()` for flagging observations before or
+after a condition is fulfilled (#1453)
+
+- New functions `get_admiral_option()` and `set_admiral_options()` to allow more 
+flexibility on common function inputs; e.g. like `subject_keys` to avoid several 
+find and replace instances of `vars(STUDYID, USUBJID)`. (#1338)
+
+- The new function `create_period_dataset()` for creating a reference dataset
+for subperiods, periods, or phases from the ADSL dataset was added. The
+reference dataset can be used to create subperiod, period, and phase variables
+in OCCDS and BDS datasets. (#1477)
+
+- The new function `derive_vars_period()` adds subperiod, period, or phase
+variables to ADSL. The values for the new variables are provided by a period
+reference dataset. (#1477)
+
+- New function `derive_var_merged_summary()` adds a variable of summarized
+values to the input dataset (#1564)
+
+- A `print()` method was added for all S3 objects defined by admiral, e.g.,
+`date_source()`, `dthcaus_source()`, ... (#858)
+
+- Removed the `{assertthat}` dependency in `{admiral}` (#1392)
+
+- Removed R Version 3.6 check in CI/CD workflows in favor of the three most recent versions: 4.0, 4.1 and 4.2. (#1556)
+
+## Updates of Existing Functions
+
+- Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
+which controls if time is considered for the condition if `start_date` is after
+`ref_end_date` + `ref_end_window` days (#989).
+
+## Breaking Changes
+
+## Documentation
+
+- New vignette "Generic Functions" (#734)
+- New vignette "Visit and Period Variables" (#1478)
+
+## Various
+
+- Function `derive_vars_merged()` had an improperly formatted error message 
+which has been corrected (#1473)
+
+- Templates now save datasets as `.rds` instead of `.rda` (#1501)
+
+# admiral 0.8.4
+
+- Fixed a bug where a recent update to `{lifecylce}` caused several `admiral` tests to break (#1500)
+
+# admiral 0.8.3
+
+- Second attempt to address issue where CRAN identified a failing test when "a strict Latin-1* locale" is used (#1469)
+- Fixed a bug in `derive_vars_duration()` that surfaced after changes in R-devel (#1486)
+
+# admiral 0.8.2
+
+- Fixed an issue where CRAN identified a failing test when "a strict Latin-1* locale" is used (#1469)
+
+# admiral 0.8.1
+
+- `derive_var_extreme_dt()` and `derive_var_extreme_dtm()` were updated such
+that source observations where the date is `NA` are excluded (#1419)
+
 # admiral 0.8.0
 
 ## New Features
 
-- New function `get_summary_records()` creates summary records e.g. derive analysis value (`AVAL`) from multiple records, only keeping the derived observations (#525)
+- `get_summary_records()` creates summary records e.g. derive analysis value (`AVAL`) from multiple records, only keeping the derived observations (#525)
 
-- New function `derive_param_framingham()` which adds a Parameter for Framingham Heart Study Cardiovascular Disease 10-Year Risk Score (#977)
+- `derive_param_framingham()` adds a Parameter for Framingham Heart Study Cardiovascular Disease 10-Year Risk Score (#977)
 
-- New function `compute_qual_imputation()` which imputes values when qualifier exists in character result (#976)
+- `compute_qual_imputation()` imputes values when qualifier exists in character result (#976)
 
+- `derive_vars_merged_lookup()` maps lookup tables (#940)
 
-- New function to map lookup table `derive_vars_merged_lookup()` (#940)
-
-- New function `filter_confirmation()` for filtering out confirmed observations
+- `filter_confirmation()` filters out confirmed observations
 (#1292) including supporting functions `count_vals()`, `min_cond()`, and
 `max_cond()`.
 
-- New function `derive_var_confirmation_flag()` for deriving a flag which
+- `derive_var_confirmation_flag()` derives a flag which
 depends on other observations of the input dataset (#1293)
+
+- `derive_var_atoxgr()` derives lab toxicity/severity grade `ATOXGR`
+from `ATOXGRL` and `ATOXGRH`. `ATOXGRL` holds toxicity/severity grade for low lab values,
+and `ATOXGRH` holds toxicity/severity grade for high lab values.
+
+- `derive_var_atoxgr_dir()` derives lab toxicity/severity grade for low
+lab values (`ATOXGRL`) or for high lab values (`ATOXGRH`). The grading is created from
+metadata.
 
 - New metadata data set called `atoxgr_criteria_ctcv4` which holds criteria for lab grading
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v4.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
 
-- New function `derive_var_atoxgr_dir()` for deriving lab toxicity/severity grade for low
-lab values (`ATOXGRL`) or for high lab values (`ATOXGRH`). The grading is created from
-metadata.
-
-- New function `derive_var_atoxgr()` that derives lab toxicity/severity grade `ATOXGR`
-from `ATOXGRL` and `ATOXGRH`. `ATOXGRL` holds toxicity/severity grade for low lab values,
-and `ATOXGRH` holds toxicity/severity grade for high lab values.
 
 ## Updates of Existing Functions
 
@@ -45,7 +124,7 @@ deprecation notice (#1229)
 
 - `value_var` parameter added to `derive_vars_atc()` (#1120)
 
-- `format_eoxxstt_default()` - Updated the default value of EOSSTT for screen failure patients  (#885)
+- `format_eoxxstt_default()` - Updated the default value of EOSSTT for screen failure patients (#885)
 
 - The imputation functions (`derive_vars_dtm()`, `derive_vars_dt()`,
 `convert_dtc_to_dtm()`, `convert_dtc_to_dt()`) have been enhanced to address
@@ -67,13 +146,13 @@ users feedback (#1300):
 
 - `order` parameter added to `dthcaus_source()` which allows an additional 
 character vector to be used for sorting the `dataset`, `derive_vars_dthcaus()` 
-updated to process additional parameter (#1125)
+updated to process additional parameter (#1125).
 
-- `create_single_dose_dataset()` Fixed bug where ASTDTM and AENDTM were not updated when start_date=ASTDT and end_date=AENDT. The function has been amended to now require start_datetime and end_datetime parameters in addition to start_date and end_date.The keep_source_vars has been added to specify the variables to be retained from the source dataset (#1224)
+- `create_single_dose_dataset()` Fixed bug where `ASTDTM` and `AENDTM` were not updated when `start_date = ASTDT` and `end_date = AENDT`. The function has been amended to now require `start_datetime` and `end_datetime` parameters in addition to `start_date` and `end_date`.The `keep_source_vars` has been added to specify the variables to be retained from the source dataset (#1224)
 
 ## Breaking Changes
 
-- Moved all developer-facing functions and vignettes to `{admiraldev}`.  `{admiraldev}` is now a dependency of `{admiral}` (#1231)
+- Moved all developer-facing functions and vignettes to `{admiraldev}`. `{admiraldev}` is now a dependency of `{admiral}` (#1231)
 
 - All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
 
@@ -127,24 +206,22 @@ have been removed:
 
 ## Documentation
 
-- New admh R Script template added. Use `admiral::use_ad_template("admh")` to access 
-  (#502)
+- New ADMH template script can be accessed using `admiral::use_ad_template("admh")` (#502)
 
-- New vignette [Higher Order Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html) (#1047)
+- New vignette "Higher Order Functions" (#1047)
+
+- New vignette "Lab Grading" (#1369)
 
 - Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
 
 - Added link to [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) to README
-
-- New vignette [Lab Grading](https://pharmaverse.github.io/admiral/articles/lab_grading.html) (#1369)
 
 ## Various
 
 - Restructured Reference page and updated **all** functions to use `family` tag 
 in roxygen headers for finding similar functions.  (#1105)
 
-- Renamed Reference page to Functions and Articles to User Guides. Moved Developer 
-  Vignettes to `{admiraldev}` (#1356)
+- Rename "Articles" page on website to "User Guides" and moved developer vignettes to `{admiraldev}` website (#1356)
 
 
 # admiral 0.7.1

@@ -2,7 +2,7 @@
 # Source: https://github.com/pharmaverse/admiralci
 # Common workflows designed for Admiral
 # but can be easily used by any other R package
-name: Admiral Workflows
+name: admiral CI/CD Workflows
 
 on:
   # 'workflow_dispatch' gives you the ability
@@ -14,6 +14,7 @@ on:
     branches:
       - main
       - devel
+      - patch
       - pre-release
   # 'pull_request' events are triggered when PRs are
   # created against one of these target branches.
@@ -21,15 +22,12 @@ on:
     branches:
       - main
       - devel
+      - patch
       - pre-release
   # 'release' events are triggered when...
   # you guessed it - when releases are made.
   release:
     types: [published]
-
-env:
-  # R version to use for the workflows
-  R_VERSION: "3.6"
 
 # Docs on concurrency:
 # https://docs.github.com/en/actions/using-jobs/using-concurrency
@@ -43,25 +41,25 @@ jobs:
     uses: pharmaverse/admiralci/.github/workflows/style.yml@main
     if: github.event_name == 'pull_request'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0"
   spellcheck:
     name: Spelling
     uses: pharmaverse/admiralci/.github/workflows/spellcheck.yml@main
     if: github.event_name == 'pull_request'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0"
   readme:
     name: Render README
     uses: pharmaverse/admiralci/.github/workflows/readme-render.yml@main
     if: github.event_name == 'push'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0"
   validation:
     name: Validation
     uses: pharmaverse/admiralci/.github/workflows/r-pkg-validation.yml@main
     if: github.event_name == 'release'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0"
   check:
     name: Check
     uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@main
@@ -73,7 +71,7 @@ jobs:
     # Change this after the next release to remove the ref condition
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0"
       # Whether to skip multiversion docs
       # Note that if you have multiple versions of docs,
       # your URL links are likely to break due to path changes
@@ -83,7 +81,7 @@ jobs:
     uses: pharmaverse/admiralci/.github/workflows/lintr.yml@main
     if: github.event_name == 'pull_request'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0"
   links:
     name: Links
     uses: pharmaverse/admiralci/.github/workflows/links.yml@main
@@ -95,7 +93,7 @@ jobs:
     if: >
       github.event_name == 'push' || github.event_name == 'pull_request'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0"
       # Whether to skip code coverage badge creation
       # Setting to 'false' will require you to create
       # an orphan branch called 'badges' in your repository
@@ -105,4 +103,4 @@ jobs:
     uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@main
     if: github.event_name == 'pull_request'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0"

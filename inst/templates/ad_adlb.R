@@ -153,6 +153,8 @@ adlb <- adlb %>%
   )
 
 ## Get Visit Info ----
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits)
 adlb <- adlb %>%
   # Derive Timing
   mutate(
@@ -354,6 +356,8 @@ adlb <- adlb %>%
   )
 
 ## Get treatment information ----
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
 adlb <- adlb %>%
   # Assign TRTA, TRTP
   mutate(
@@ -427,4 +431,4 @@ adlb <- adlb %>%
 # Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(adlb, file = file.path(dir, "adlb.rda"), compress = "bzip2")
+saveRDS(adlb, file = file.path(dir, "adlb.rds"), compress = "bzip2")

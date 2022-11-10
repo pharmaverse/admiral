@@ -1,10 +1,7 @@
-library(tibble)
-library(lubridate)
-
 # derive_param_tte ----
 ## Test 1: new observations with analysis date are derived correctly ----
 test_that("derive_param_tte Test 1: new observations with analysis date are derived correctly", {
-  adsl <- tribble(
+  adsl <- tibble::tribble(
     ~USUBJID, ~DTHFL, ~DTHDT,            ~LSTALVDT,         ~TRTSDT,           ~TRTSDTF,
     "03",     "Y",    ymd("2021-08-21"), ymd("2021-08-21"), ymd("2021-08-10"), NA,
     "04",     "N",    NA,                ymd("2021-05-24"), ymd("2021-02-03"), NA
@@ -33,7 +30,7 @@ test_that("derive_param_tte Test 1: new observations with analysis date are deri
     )
   )
 
-  expected_output <- tribble(
+  expected_output <- tibble::tribble(
     ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,
     "03",     ymd("2021-08-21"), 0L,    "DEATH",                 "ADSL",  "DTHDT",
     "04",     ymd("2021-05-24"), 1L,    "LAST KNOWN ALIVE DATE", "ADSL",  "LSTALVDT"
@@ -134,7 +131,7 @@ test_that("derive_param_tte Test 2: new parameter with analysis datetime is deri
   )
 
   # nolint start
-  expected_output <- tribble(
+  expected_output <- tibble::tribble(
     ~USUBJID, ~ADTM,                          ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
     "01",     ymd_hms("2021-05-05 12:02:00"), 0L,    "PD",                    "ADRS",  "ADTM",    3,
     "02",     ymd_hms("2021-02-03 10:56:00"), 0L,    "PD",                    "ADRS",  "ADTM",    1,
@@ -308,14 +305,14 @@ test_that("derive_param_tte Test 4: by_vars parameter works correctly", {
 
 ## Test 5: an error is issued if some of the by variables are missing ----
 test_that("derive_param_tte Test 5: an error is issued if some of the by variables are missing", {
-  adsl <- tribble(
+  adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tribble(
+  ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03", 1,      "Flu",
     "01",     "2021-03-04", 2,      "Cough",
@@ -369,7 +366,7 @@ test_that("derive_param_tte Test 5: an error is issued if some of the by variabl
 
 ## Test 6: errors if all by vars are missing in all source datasets ----
 test_that("derive_param_tte Test 6: errors if all by vars are missing in all source datasets", {
-  adsl <- tribble(
+  adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-02-03")
@@ -431,14 +428,14 @@ test_that("derive_param_tte Test 6: errors if all by vars are missing in all sou
 
 ## Test 7: errors if PARAMCD and by_vars are not one to one ----
 test_that("derive_param_tte Test 7: errors if PARAMCD and by_vars are not one to one", {
-  adsl <- tribble(
+  adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tribble(
+  ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03", 1,      "Flu",
     "01",     "2021-03-04", 2,      "Cough",
@@ -494,14 +491,14 @@ test_that("derive_param_tte Test 7: errors if PARAMCD and by_vars are not one to
 
 ## Test 8: errors if set_values_to contains invalid expressions ----
 test_that("derive_param_tte Test 8: errors if set_values_to contains invalid expressions", {
-  adsl <- tribble(
+  adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tribble(
+  ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03", 1,      "Flu",
     "01",     "2021-03-04", 2,      "Cough",
@@ -565,14 +562,14 @@ test_that("derive_param_tte Test 8: errors if set_values_to contains invalid exp
 
 ## Test 9: error is issued if parameter code already exists ----
 test_that("derive_param_tte Test 9: error is issued if parameter code already exists", {
-  adsl <- tribble(
+  adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tribble(
+  ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03", 1,      "Flu",
     "01",     "2021-03-04", 2,      "Cough",
@@ -632,32 +629,4 @@ test_that("derive_param_tte Test 9: error is issued if parameter code already ex
     ),
     regexp = "^The parameter code 'TTAE' does already exist in `dataset`.$"
   )
-})
-
-# print.tte_source ----
-## Test 10: tte_source` objects are printed as intended ----
-test_that("`print.tte_source Test 10: tte_source` objects are printed as intended", {
-  ttae <- event_source(
-    dataset_name = "ae",
-    date = AESTDTC,
-    set_values_to = vars(
-      EVENTDESC = "AE",
-      SRCDOM = "AE",
-      SRCVAR = "AESTDTC",
-      SRCSEQ = AESEQ
-    )
-  )
-  expected_print_output <- c(
-    "<tte_source> object",
-    "dataset_name: \"ae\"",
-    "filter: NULL",
-    "date: AESTDTC",
-    "censor: 0",
-    "set_values_to:",
-    "  EVENTDESC: \"AE\"",
-    "  SRCDOM: \"AE\"",
-    "  SRCVAR: \"AESTDTC\"",
-    "  SRCSEQ: AESEQ"
-  )
-  expect_identical(capture.output(print(ttae)), expected_print_output)
 })

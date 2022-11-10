@@ -114,7 +114,7 @@ filter_date_sources(
   source_datasets = list(adsl = adsl, ae = ae),
   by_vars = vars(AEDECOD),
   create_datetime = FALSE,
-  subject_keys = vars(STUDYID, USUBJID),
+  subject_keys = get_admiral_option("subject_keys"),
   mode = "first"
 )
 }
