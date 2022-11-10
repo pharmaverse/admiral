@@ -1049,7 +1049,7 @@ get_not_mapped <- function() {
 #'
 #' @param dataset_add Additional dataset
 #'
-#'   The variables specified by the `by_vars` and the `analysis_var` argument
+#'   The variables specified by the `by_vars` and the `analysis_var` arguments
 #'   are expected.
 #'
 #' @param new_var Variable to add
@@ -1114,28 +1114,30 @@ get_not_mapped <- function() {
 #' @examples
 #' library(tibble)
 #'
-#' # add a variable for the mean of AVAL within each visit
+#' # Add a variable for the mean of AVAL within each visit
 #' adbds <- tribble(
-#'   ~AVISIT,  ~ASEQ, ~AVAL,
-#'   "WEEK 1",     1,    10,
-#'   "WEEK 1",     2,    NA,
-#'   "WEEK 2",     3,    NA,
-#'   "WEEK 3",     4,    42,
-#'   "WEEK 4",     5,    12,
-#'   "WEEK 4",     6,    12,
-#'   "WEEK 4",     7,    15
+#'   ~USUBJID, ~AVISIT,  ~ASEQ, ~AVAL,
+#'   "1",      "WEEK 1",     1,    10,
+#'   "1",      "WEEK 1",     2,    NA,
+#'   "1",      "WEEK 2",     3,    NA,
+#'   "1",      "WEEK 3",     4,    42,
+#'   "1",      "WEEK 4",     5,    12,
+#'   "1",      "WEEK 4",     6,    12,
+#'   "1",      "WEEK 4",     7,    15,
+#'   "2",      "WEEK 1",     1,    21,
+#'   "2",      "WEEK 4",     2,    22
 #' )
 #'
 #' derive_var_merged_summary(
 #'   adbds,
 #'   dataset_add = adbds,
-#'   by_vars = vars(AVISIT),
+#'   by_vars = vars(USUBJID, AVISIT),
 #'   new_var = MEANVIS,
 #'   analysis_var = AVAL,
 #'   summary_fun = function(x) mean(x, na.rm = TRUE)
 #' )
 #'
-#' # add a variable listing the lesion ids at baseline
+#' # Add a variable listing the lesion ids at baseline
 #' adsl <- tribble(
 #'   ~USUBJID,
 #'   "1",
