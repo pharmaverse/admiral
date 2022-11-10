@@ -77,12 +77,14 @@ library(tibble)
 library(magrittr, warn.conflicts = FALSE)
 library(dplyr, warn.conflicts = FALSE)
 
+# create a query for a SMQ
 query(
   prefix = "SMQ02",
   id = auto,
-  definition = smq_select(
+  definition = basket_select(
     name = "Pregnancy and neonatal topics (SMQ)",
-    scope = "NARROW"
+    scope = "NARROW",
+    type = "smq"
   )
 )
 
@@ -90,8 +92,9 @@ query(
 query(
   prefix = "SDG01",
   id = auto,
-  definition = sdg_select(
-    name = "5-aminosalicylates for ulcerative colitis"
+  definition = basket_select(
+    name = "5-aminosalicylates for ulcerative colitis",
+    type = "sdg"
   )
 )
 
@@ -115,19 +118,21 @@ query(
   name = "Special issues of interest",
   definition = list(
     cqterms,
-    smq_select(
+    basket_select(
       name = "Pregnancy and neonatal topics (SMQ)",
-      scope = "NARROW"
+      scope = "NARROW",
+      type = "smq"
     ),
-    smq_select(
+    basket_select(
       id = 8050L,
-      scope = "BROAD"
+      scope = "BROAD",
+      type = "smq"
     )
   )
 )
 }
 \seealso{
-\code{\link[=create_query_data]{create_query_data()}}, \code{\link[=smq_select]{smq_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
+\code{\link[=create_query_data]{create_query_data()}}, \code{\link[=basket_select]{basket_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
 
 Source Specifications: 
 \code{\link{assert_db_requirements}()},

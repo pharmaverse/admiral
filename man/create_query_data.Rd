@@ -141,7 +141,8 @@ bilismq <- query(
   prefix = "SMQ04",
   definition = basket_select(
     id = 20000121L,
-    scope = "BROAD"
+    scope = "BROAD",
+    type = "smq"
   )
 )
 
@@ -149,7 +150,7 @@ bilismq <- query(
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(pregsmq, bilismq),
-  get_terms_fun = admiral.test:::get_smq_terms,
+  get_terms_fun = admiral.test:::get_terms,
   version = "20.1"
 )
 
@@ -157,8 +158,10 @@ create_query_data(
 sdg <- query(
   prefix = "SDG01",
   id = auto,
-  definition = sdg_select(
-    name = "5-aminosalicylates for ulcerative colitis"
+  definition = basket_select(
+    name = "5-aminosalicylates for ulcerative colitis",
+    scope = NA_character_,
+    type = "sdg"
   )
 )
 
@@ -166,8 +169,8 @@ sdg <- query(
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(sdg),
-  get_sdg_fun = admiral.test:::get_sdg_terms,
-  whodd_version = "2019-09"
+  get_terms_fun = admiral.test:::get_terms,
+  version = "2019-09"
 )
 
 # creating a query dataset for a customized query including SMQs
@@ -181,7 +184,8 @@ create_query_data(
       definition = list(
         basket_select(
           name = "Pregnancy and neonatal topics (SMQ)",
-          scope = "NARROW"
+          scope = "NARROW",
+          type = "smq"
         ),
         cqterms
       )

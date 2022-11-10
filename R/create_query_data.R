@@ -141,7 +141,8 @@
 #'   prefix = "SMQ04",
 #'   definition = basket_select(
 #'     id = 20000121L,
-#'     scope = "BROAD"
+#'     scope = "BROAD",
+#'     type = "smq"
 #'   )
 #' )
 #'
@@ -149,7 +150,7 @@
 #' # In a real application a company-specific function must be used.
 #' create_query_data(
 #'   queries = list(pregsmq, bilismq),
-#'   get_terms_fun = admiral.test:::get_smq_terms,
+#'   get_terms_fun = admiral.test:::get_terms,
 #'   version = "20.1"
 #' )
 #'
@@ -157,8 +158,10 @@
 #' sdg <- query(
 #'   prefix = "SDG01",
 #'   id = auto,
-#'   definition = sdg_select(
-#'     name = "5-aminosalicylates for ulcerative colitis"
+#'   definition = basket_select(
+#'     name = "5-aminosalicylates for ulcerative colitis",
+#'     scope = NA_character_,
+#'     type = "sdg"
 #'   )
 #' )
 #'
@@ -166,8 +169,8 @@
 #' # In a real application a company-specific function must be used.
 #' create_query_data(
 #'   queries = list(sdg),
-#'   get_sdg_fun = admiral.test:::get_sdg_terms,
-#'   whodd_version = "2019-09"
+#'   get_terms_fun = admiral.test:::get_terms,
+#'   version = "2019-09"
 #' )
 #'
 #' # creating a query dataset for a customized query including SMQs
@@ -181,7 +184,8 @@
 #'       definition = list(
 #'         basket_select(
 #'           name = "Pregnancy and neonatal topics (SMQ)",
-#'           scope = "NARROW"
+#'           scope = "NARROW",
+#'           type = "smq"
 #'         ),
 #'         cqterms
 #'       )
@@ -247,7 +251,7 @@ create_query_data <- function(queries,
             definition = definition[[j]],
             i = i,
             temp_env = temp_env,
-            type = type
+            type = "smq"
           )
         }
       }
@@ -499,7 +503,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @seealso [create_query_data()], [smq_select()], [Queries Dataset
+#' @seealso [create_query_data()], [basket_select()], [Queries Dataset
 #' Documentation](../articles/queries_dataset.html)
 #'
 #' @family source_specifications
@@ -516,12 +520,14 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' library(magrittr, warn.conflicts = FALSE)
 #' library(dplyr, warn.conflicts = FALSE)
 #'
+#' # create a query for a SMQ
 #' query(
 #'   prefix = "SMQ02",
 #'   id = auto,
-#'   definition = smq_select(
+#'   definition = basket_select(
 #'     name = "Pregnancy and neonatal topics (SMQ)",
-#'     scope = "NARROW"
+#'     scope = "NARROW",
+#'     type = "smq"
 #'   )
 #' )
 #'
@@ -529,8 +535,9 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' query(
 #'   prefix = "SDG01",
 #'   id = auto,
-#'   definition = sdg_select(
-#'     name = "5-aminosalicylates for ulcerative colitis"
+#'   definition = basket_select(
+#'     name = "5-aminosalicylates for ulcerative colitis",
+#'     type = "sdg"
 #'   )
 #' )
 #'
@@ -554,13 +561,15 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'   name = "Special issues of interest",
 #'   definition = list(
 #'     cqterms,
-#'     smq_select(
+#'     basket_select(
 #'       name = "Pregnancy and neonatal topics (SMQ)",
-#'       scope = "NARROW"
+#'       scope = "NARROW",
+#'       type = "smq"
 #'     ),
-#'     smq_select(
+#'     basket_select(
 #'       id = 8050L,
-#'       scope = "BROAD"
+#'       scope = "BROAD",
+#'       type = "smq"
 #'     )
 #'   )
 #' )
@@ -629,9 +638,6 @@ validate_query <- function(obj) {
   assert_logical_scalar(add_scope_num,
     optional = TRUE
   )
-  if (add_scope_num && !inherits(values$definition, "smq_select")) {
-    abort("`add_scope_num == TRUE` must be used for SMQs only.")
-  }
 
   if (inherits(values$definition, "basket_select")) {
     validate_basket_select(values$definition)
@@ -660,7 +666,7 @@ validate_query <- function(obj) {
     } else {
       is_valid <-
         map_lgl(values$definition, is.data.frame) |
-          map_lgl(values$definition, inherits, "smq_select")
+          map_lgl(values$definition, inherits, "basket_select")
       if (!all(is_valid)) {
         info_msg <- paste(sprintf(
           "\u2716 Element %s is %s",
@@ -672,7 +678,7 @@ validate_query <- function(obj) {
         err_msg <- sprintf(
           paste(
             "Each element of the list in the definition field must be a data frame",
-            "or an object of class `smq_select` but the following are not:\n%s"
+            "or an object of class `basket_select` but the following are not:\n%s"
           ),
           info_msg
         )
@@ -691,8 +697,8 @@ validate_query <- function(obj) {
   } else {
     abort(
       paste0(
-        "`definition` expects a `smq_select` or `sdg_select` object, a data frame,",
-        " or a list of data frames and `smq_select` objects.\n",
+        "`definition` expects a `basket_select` object, a data frame,",
+        " or a list of data frames and `basket_select` objects with type smq\n",
         "An object of the following class was provided: ",
         class(values$definition)
       )
@@ -879,6 +885,10 @@ validate_basket_select <- function(obj) {
   assert_character_scalar(scope,
     values = c("BROAD", "NARROW", NA_character_)
   )
+  type <- values$type
+  assert_character_scalar(type,
+                          optional = FALSE
+  )
 
   if (is.null(values$id) && is.null(values$name)) {
     abort("Either id or name has to be non null.")
@@ -920,6 +930,8 @@ format.basket_select <- function(x, ...) {
     format(x$id),
     ", scope = ",
     dquote(x$scope),
+    ", type = ",
+    dquote(x$type),
     ")"
   )
 }
