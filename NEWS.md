@@ -16,6 +16,10 @@ observation (#1448).
 - New function `derive_var_relative_flag()` for flagging observations before or
 after a condition is fulfilled (#1453)
 
+- New functions `get_admiral_option()` and `set_admiral_options()` to allow more 
+flexibility on common function inputs; e.g. like `subject_keys` to avoid several 
+find and replace instances of `vars(STUDYID, USUBJID)`. (#1338)
+
 - The new function `create_period_dataset()` for creating a reference dataset
 for subperiods, periods, or phases from the ADSL dataset was added. The
 reference dataset can be used to create subperiod, period, and phase variables
