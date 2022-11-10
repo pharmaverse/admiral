@@ -239,7 +239,7 @@ derive_param_tte <- function(dataset = NULL,
                              censor_conditions,
                              create_datetime = FALSE,
                              set_values_to,
-                             subject_keys = vars(STUDYID, USUBJID)) {
+                             subject_keys = get_admiral_option("subject_keys")) {
   # checking and quoting #
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
@@ -498,7 +498,7 @@ derive_param_tte <- function(dataset = NULL,
 #'   source_datasets = list(adsl = adsl, ae = ae),
 #'   by_vars = vars(AEDECOD),
 #'   create_datetime = FALSE,
-#'   subject_keys = vars(STUDYID, USUBJID),
+#'   subject_keys = get_admiral_option("subject_keys"),
 #'   mode = "first"
 #' )
 filter_date_sources <- function(sources,
@@ -598,17 +598,18 @@ filter_date_sources <- function(sources,
 #' @family source_specifications
 #'
 #' @examples
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
 #'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
-#' ae <- tibble::tribble(
+#' ae <- tribble(
 #'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
 #'   "01",     "2021-01-03T10:56", 1,      "Flu",
 #'   "01",     "2021-03-04",       2,      "Cough",

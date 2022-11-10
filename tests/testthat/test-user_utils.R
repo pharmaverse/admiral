@@ -143,6 +143,8 @@ test_that("print.source Test 11: `source` objects containing `data.frame`", {
     "1 APPLICATION SITE ERYTHEMA 10003041 AEDECOD   ",
     "2 APPLICATION SITE PRURITUS 10003053 AEDECOD   "
   )
-  # replace × with x due to differences between R versions
-  expect_identical(str_replace_all(capture.output(print(cq)), "×", "x"), expected_print_output)
+  # replace × with x due to differences between R versions and remove formatting
+  expect_identical(str_replace_all(capture.output(print(cq)), "×", "x") %>%
+                   str_replace_all("\033\\[[\\d;]+m", "")
+                   , expected_print_output)
 })

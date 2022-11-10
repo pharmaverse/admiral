@@ -35,7 +35,9 @@
 #' @keywords der_bds_findings
 #'
 #' @examples
-#' dataset <- tibble::tribble(
+#' library(tibble)
+#'
+#' dataset <- tribble(
 #'   ~STUDYID, ~USUBJID,   ~PARAMCD, ~AVAL,   ~AVALC,      ~AVISIT, ~ABLFL,  ~ANRIND,
 #'   "TEST01",  "PAT01",  "PARAM01", 10.12,       NA,   "Baseline",    "Y", "NORMAL",
 #'   "TEST01",  "PAT01",  "PARAM01", 9.700,       NA,      "Day 7",    "N",    "LOW",

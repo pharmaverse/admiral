@@ -182,7 +182,7 @@ derive_vars_disposition_reason <- function(dataset,
                                            reason_var_spe = NULL,
                                            format_new_vars = format_reason_default,
                                            filter_ds,
-                                           subject_keys = vars(STUDYID, USUBJID)) {
+                                           subject_keys = get_admiral_option("subject_keys")) {
   new_var <- assert_symbol(enquo(new_var))
   reason_var <- assert_symbol(enquo(reason_var))
   new_var_spe <- assert_symbol(enquo(new_var_spe), optional = T)

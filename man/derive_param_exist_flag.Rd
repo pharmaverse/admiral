@@ -14,7 +14,7 @@ derive_param_exist_flag(
   missing_value = NA_character_,
   filter_add = NULL,
   aval_fun = yn_to_numeric,
-  subject_keys = vars(STUDYID, USUBJID),
+  subject_keys = get_admiral_option("subject_keys"),
   set_values_to
 )
 }
@@ -140,11 +140,12 @@ the new observations.
 }
 }
 \examples{
+library(tibble)
 library(dplyr)
 library(lubridate)
 
 # Derive a new parameter for measurable disease at baseline
-adsl <- tibble::tribble(
+adsl <- tribble(
   ~USUBJID,
   "1",
   "2",
@@ -152,7 +153,7 @@ adsl <- tibble::tribble(
 ) \%>\%
   mutate(STUDYID = "XX1234")
 
-tu <- tibble::tribble(
+tu <- tribble(
   ~USUBJID, ~VISIT,      ~TUSTRESC,
   "1",      "SCREENING", "TARGET",
   "1",      "WEEK 1",    "TARGET",

@@ -9,7 +9,7 @@ derive_var_dthcaus(
   dataset,
   ...,
   source_datasets,
-  subject_keys = vars(STUDYID, USUBJID)
+  subject_keys = get_admiral_option("subject_keys")
 )
 
 dthcaus_source(
@@ -88,9 +88,9 @@ the preferred order.
 }
 \section{Functions}{
 \itemize{
-\item \code{dthcaus_source}: Create objects of class "dthcaus_source"
-}}
+\item \code{dthcaus_source()}: Create objects of class "dthcaus_source"
 
+}}
 \examples{
 library(tibble)
 library(dplyr)

@@ -20,11 +20,11 @@ derive_vars_merged_lookup(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} parameter are expected.}
+The variables specified by the \code{by_vars} argument are expected.}
 
 \item{dataset_add}{Lookup table
 
-The variables specified by the \code{by_vars} parameter are expected.}
+The variables specified by the \code{by_vars} argument are expected.}
 
 \item{by_vars}{Grouping variables
 
@@ -36,7 +36,7 @@ key of the selected observations.
 
 \item{order}{Sort order
 
-If the parameter is set to a non-null value, for each by group the first or
+If the argument is set to a non-null value, for each by group the first or
 last observation from the additional dataset is selected with respect to the
 specified order.
 
@@ -57,7 +57,7 @@ And \code{new_vars = vars(var1, new_var2 = old_var2)} takes \code{var1} and
 \code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
 \code{old_var2} to \code{new_var2}.
 
-If the parameter is not specified or set to \code{NULL}, all variables from the
+If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
 
 \emph{Default}: \code{NULL}
@@ -67,9 +67,9 @@ additional dataset (\code{dataset_add}) are added.
 \item{mode}{Selection mode
 
 Determines if the first or last observation is selected. If the \code{order}
-parameter is specified, \code{mode} must be non-null.
+argument is specified, \code{mode} must be non-null.
 
-If the \code{order} parameter is not specified, the \code{mode} parameter is ignored.
+If the \code{order} argument is not specified, the \code{mode} argument is ignored.
 
 \emph{Default}: \code{NULL}
 
@@ -78,7 +78,7 @@ If the \code{order} parameter is not specified, the \code{mode} parameter is ign
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
 Only observations fulfilling the specified condition are taken into account
-for merging. If the parameter is not specified, all observations are
+for merging. If the argument is not specified, all observations are
 considered.
 
 \emph{Default}: \code{NULL}
@@ -126,9 +126,10 @@ mapping from the lookup table.
 }
 \examples{
 library(admiral.test)
+library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 data("admiral_vs")
-param_lookup <- tibble::tribble(
+param_lookup <- tribble(
   ~VSTESTCD, ~VSTEST, ~PARAMCD, ~PARAM,
   "SYSBP", "Systolic Blood Pressure", "SYSBP", "Systolic Blood Pressure (mmHg)",
   "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -156,6 +157,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_cat}()},
 \code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_var_worst_flag}()},
