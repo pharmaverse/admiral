@@ -10,8 +10,7 @@ is_order_vars(arg)
 \item{arg}{A<n R object}
 }
 \value{
-A TRUE if input was created with \code{vars()} or calls involving \code{desc()}
-otherwise throws an error
+\code{FALSE} if the argument is not a list of order vars
 }
 \description{
 Check if inputs are created using \code{vars()} or calls involving \code{desc()}

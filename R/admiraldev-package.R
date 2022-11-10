@@ -13,13 +13,13 @@
 #'             quo_is_missing quo_is_null quo_is_symbol quos quo_squash quo_text
 #'             set_names sym syms type_of warn quo_set_env quo_get_env
 #' @importFrom utils capture.output str
-#' @importFrom purrr map map2 map_chr map_lgl reduce walk keep map_if transpose possibly
+#' @importFrom purrr map map2 map_chr map_lgl reduce walk keep map_if transpose
 #'             flatten every modify_at modify_if reduce compose
 #' @importFrom stringr str_c str_detect str_extract str_glue str_match
 #'             str_remove str_remove_all str_replace str_trim str_to_lower str_subset
 #'             str_to_title str_to_upper
 #' @importFrom lubridate as_datetime ceiling_date date days duration floor_date is.Date is.instant
-#'             is.POSIXlt time_length %--% ymd ymd_hms weeks years hours minutes
+#'             time_length %--% ymd ymd_hms weeks years hours minutes
 #' @importFrom tidyr drop_na nest pivot_longer pivot_wider unnest
 #' @importFrom tidyselect all_of contains vars_select
 #' @importFrom hms as_hms
