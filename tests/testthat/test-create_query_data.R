@@ -1,19 +1,19 @@
 
-get_smq <- function(smq_select,
+get_smq <- function(basket_select,
                     version,
                     keep_id = FALSE,
                     temp_env) {
-  if (smq_select$scope == "NARROW") {
+  if (basket_select$scope == "NARROW") {
     end <- 3
   } else {
     end <- 5
   }
 
-  if (is.null(smq_select$name)) {
-    smq_select$name <- paste("SMQ name of", smq_select$id)
+  if (is.null(basket_select$name)) {
+    basket_select$name <- paste("SMQ name of", basket_select$id)
   }
-  terms <- tibble(TERM_NAME = paste(smq_select$name, "Term", c(1:end), "(", version, ")"))
-  terms <- mutate(terms, TERM_LEVEL = "AEDECOD", QUERY_NAME = smq_select$name)
+  terms <- tibble(TERM_NAME = paste(basket_select$name, "Term", c(1:end), "(", version, ")"))
+  terms <- mutate(terms, TERM_LEVEL = "AEDECOD", QUERY_NAME = basket_select$name)
   if (keep_id) {
     mutate(terms, QUERY_ID = 42)
   } else {
@@ -21,12 +21,12 @@ get_smq <- function(smq_select,
   }
 }
 
-get_sdg <- function(sdg_select,
+get_sdg <- function(basket_select,
                     version,
                     keep_id = FALSE,
                     temp_env) {
-  terms <- tibble(TERM_NAME = paste(sdg_select$name, "Term", c(1:4)))
-  terms <- mutate(terms, TERM_LEVEL = "CMDECOD", QUERY_NAME = sdg_select$name)
+  terms <- tibble(TERM_NAME = paste(basket_select$name, "Term", c(1:4)))
+  terms <- mutate(terms, TERM_LEVEL = "CMDECOD", QUERY_NAME = basket_select$name)
   if (keep_id) {
     mutate(terms, QUERY_ID = 42)
   } else {
@@ -69,34 +69,38 @@ test_that("customized query defined by SMQs", {
     prefix = "CQ02",
     name = "Immune-Mediated Meningoencephalitis",
     definition = list(
-      smq_select(
+      basket_select(
         name = "Noninfectious meningitis",
-        scope = "NARROW"
+        scope = "NARROW",
+        type = "smq"
       ),
-      smq_select(
+      basket_select(
         name = "Noninfectious encephalitis",
-        scope = "BROAD"
+        scope = "BROAD",
+        type = "smq"
       )
     )
   )
 
   actual_output <- create_query_data(
     queries = list(cq),
-    meddra_version = "20.0",
-    get_smq_fun = get_smq
+    version = "20.0",
+    get_terms_fun = get_smq
   )
 
   expected_output <-
     bind_rows(
-      get_smq(smq_select(
+      get_smq(basket_select(
         name = "Noninfectious meningitis",
-        scope = "NARROW"
+        scope = "NARROW",
+        type = "smq"
       ),
       version = "20.0"
       ),
-      get_smq(smq_select(
+      get_smq(basket_select(
         name = "Noninfectious encephalitis",
-        scope = "BROAD"
+        scope = "BROAD",
+        type = "smq"
       ),
       version = "20.0"
       )
@@ -118,36 +122,40 @@ test_that("customized query defined by terms and SMQs", {
     prefix = "CQ03",
     name = "Immune-Mediated Meningoencephalitis or Application Site Issues",
     definition = list(
-      smq_select(
+      basket_select(
         name = "Noninfectious meningitis",
-        scope = "NARROW"
+        scope = "NARROW",
+        type = "smq"
       ),
       cqterms,
-      smq_select(
+      basket_select(
         name = "Noninfectious encephalitis",
-        scope = "BROAD"
+        scope = "BROAD",
+        type = "smq"
       )
     )
   )
 
   actual_output <- create_query_data(
     queries = list(cq),
-    meddra_version = "20.1",
-    get_smq_fun = get_smq
+    version = "20.1",
+    get_terms_fun = get_smq
   )
 
   expected_output <-
     bind_rows(
-      get_smq(smq_select(
+      get_smq(basket_select(
         name = "Noninfectious meningitis",
-        scope = "NARROW"
+        scope = "NARROW",
+        type = "smq"
       ),
       version = "20.1"
       ),
       cqterms,
-      get_smq(smq_select(
+      get_smq(basket_select(
         name = "Noninfectious encephalitis",
-        scope = "BROAD"
+        scope = "BROAD",
+        type = "smq"
       ),
       version = "20.1"
       )
@@ -170,33 +178,36 @@ test_that("SMQs", {
     prefix = "SMQ02",
     id = 13,
     add_scope_num = TRUE,
-    definition = smq_select(
+    definition = basket_select(
       name = "Pregnancy and neonatal topics (SMQ)",
-      scope = "NARROW"
+      scope = "NARROW",
+      type = "smq"
     )
   )
 
   pneuaegt <- query(
     prefix = "SMQ04",
-    definition = smq_select(
+    definition = basket_select(
       id = 8050L,
-      scope = "BROAD"
+      scope = "BROAD",
+      type = "smq"
     )
   )
 
   actual_output <-
     create_query_data(
       queries = list(pregsmq, pneuaegt),
-      meddra_version = "20.0",
-      get_smq_fun = get_smq
+      version = "20.0",
+      get_terms_fun = get_smq
     )
 
   expected_output <-
     bind_rows(
       get_smq(
-        smq_select(
+        basket_select(
           name = "Pregnancy and neonatal topics (SMQ)",
-          scope = "NARROW"
+          scope = "NARROW",
+          type = "smq"
         ),
         version = "20.0"
       ) %>%
@@ -207,9 +218,10 @@ test_that("SMQs", {
           QUERY_SCOPE_NUM = 2,
           VAR_PREFIX = "SMQ02"
         ),
-      get_smq(smq_select(
+      get_smq(basket_select(
         id = 8050L,
-        scope = "BROAD"
+        scope = "BROAD",
+        type = "smq"
       ),
       version = "20.0"
       ) %>%
@@ -226,41 +238,23 @@ test_that("SMQs", {
   )
 })
 
-# issues error if SMQs without get_smq_fun are requested ----
-test_that("issues error if SMQs without get_smq_fun are requested", {
-  pregsmq <- query(
-    prefix = "SMQ02",
-    definition = smq_select(
-      name = "Pregnancy and neonatal topics (SMQ)",
-      scope = "NARROW"
-    )
-  )
-
-  expect_error(
-    create_query_data(
-      queries = list(pregsmq),
-      meddra_version = "20.0"
-    ),
-    regexp = "^get_smq_fun is not specified. This is expected for SMQs.*"
-  )
-})
-
 # issues error if SMQs without meddra_version are requested ----
 test_that("issues error if SMQs without meddra_version are requested", {
   pregsmq <- query(
     prefix = "SMQ02",
-    definition = smq_select(
+    definition = basket_select(
       name = "Pregnancy and neonatal topics (SMQ)",
-      scope = "NARROW"
+      scope = "NARROW",
+      type = "smq"
     )
   )
 
   expect_error(
     create_query_data(
       queries = list(pregsmq),
-      get_smq_fun = get_smq
+      get_terms_fun = get_smq
     ),
-    regexp = "^meddra_version is not specified. This is expected for SMQs.*"
+    regexp = "^version is not specified. This is expected for smqs.*"
   )
 })
 
@@ -269,22 +263,29 @@ test_that("SDGs", {
   sdg <- query(
     prefix = "SDG01",
     id = auto,
-    definition = sdg_select(name = "5-aminosalicylates for ulcerative colitis")
+    definition = basket_select(
+      name = "5-aminosalicylates for ulcerative colitis",
+      scope = NA_character_,
+      type = "sdg")
   )
 
   actual_output <- create_query_data(
     queries = list(sdg),
-    whodd_version = "2019_09",
-    get_sdg_fun = get_sdg
+    version = "2019_09",
+    get_terms_fun = get_sdg
   )
 
   expected_output <-
-    get_sdg(sdg_select(name = "5-aminosalicylates for ulcerative colitis"),
+    get_sdg(basket_select(
+      name = "5-aminosalicylates for ulcerative colitis",
+      scope = NA_character_,
+      type = "sdg"),
       version = "2019_09"
     ) %>%
     mutate(
       QUERY_ID = 42,
-      VAR_PREFIX = "SDG01"
+      VAR_PREFIX = "SDG01",
+      QUERY_SCOPE = NA_character_
     )
 
   expect_dfs_equal(
@@ -293,48 +294,23 @@ test_that("SDGs", {
     keys = c("VAR_PREFIX", "TERM_NAME")
   )
 })
-# issues error if SDGs without get_sdg_fun are requested ----
-test_that("issues error if SDGs without get_sdg_fun are requested", {
-  sdg <- query(
-    prefix = "SDG01",
-    definition = sdg_select(name = "5-aminosalicylates for ulcerative colitis")
-  )
-
-  expect_error(
-    create_query_data(
-      queries = list(sdg),
-      whodd_version = "2019_09"
-    ),
-    regexp = "^get_sdg_fun is not specified. This is expected for SDGs.*"
-  )
-})
 
 # issues error if SDGs without meddra_version are requested ----
 test_that("issues error if SDGs without meddra_version are requested", {
   sdg <- query(
     prefix = "SDG01",
-    definition = sdg_select(name = "5-aminosalicylates for ulcerative colitis")
+    definition = basket_select(
+      name = "5-aminosalicylates for ulcerative colitis",
+      scope = NA_character_,
+      type = "sdg")
   )
 
   expect_error(
     create_query_data(
       queries = list(sdg),
-      get_sdg_fun = get_sdg
+      get_terms_fun = get_sdg
     ),
-    regexp = "^whodd_version is not specified. This is expected for SDGs.*"
-  )
-})
-
-# query: error: add_scope_num = TRUE for non SMQs ----
-test_that("query: error: add_scope_num = TRUE for non SMQs", {
-  expect_error(
-    sdg <- query(
-      prefix = "SDG01",
-      add_scope_num = TRUE,
-      definition = sdg_select(name = "5-aminosalicylates for ulcerative colitis")
-    ),
-    regexp = "`add_scope_num == TRUE` must be used for SMQs only.",
-    fixed = TRUE
+    regexp = "^version is not specified. This is expected for sdgs.*"
   )
 })
 
@@ -362,22 +338,6 @@ test_that("query: error: name = id for non SMQs/SDGs", {
   )
 })
 
-# query: error: definition is list with non dataframe or smq_select elements ----
-test_that("query: error: definition is list with non dataframe or smq_select elements", {
-  expect_error(
-    sdg <- query(
-      name = "My CQ",
-      prefix = "CQ01",
-      definition = list(sdg_select(name = "5-aminosalicylates for ulcerative colitis"))
-    ),
-    regexp =
-      paste0(
-        "^Each element of the list in the definition field must be a data frame or",
-        " an object of class `smq_select` but the following are not:.*"
-      )
-  )
-})
-
 # query: error: invalid definition ----
 test_that("query: error: invalid definition", {
   expect_error(
@@ -388,8 +348,8 @@ test_that("query: error: invalid definition", {
     ),
     regexp =
       paste0(
-        "^`definition` expects a `smq_select` or `sdg_select` object,",
-        " a data frame, or a list of data frames and `smq_select` objects.*"
+        "^`definition` expects a `basket_select` object,",
+        " a data frame, or a list of data frames and `basket_select` objects with type smq*"
       )
   )
 })
@@ -471,64 +431,77 @@ test_that("assert_terms: error: QUERY_ID is missing", {
   )
 })
 
-# smq_select: error: name and id specified ----
-test_that("smq_select: error: name and id specified", {
+# basket_select: error: name and id specified ----
+test_that("basket_select: error: name and id specified", {
   expect_error(
-    smq_select(
+    basket_select(
       name = "My SMQ",
       id = 42,
-      scope = "NARROW"
+      scope = "NARROW",
+      type = "smq"
     ),
     regexp = "Either id or name has to be null.",
     fixed = TRUE
   )
 })
 
-# smq_select: error: neither name nor id specified ----
-test_that("smq_select: error: neither name nor id specified", {
+# basket_select: error: neither name nor id specified ----
+test_that("basket_select: error: neither name nor id specified", {
   expect_error(
-    smq_select(scope = "NARROW"),
+    basket_select(scope = "NARROW", type = "smq"),
     regexp = "Either id or name has to be non null.",
     fixed = TRUE
   )
 })
 
-# sdg_select: error: name and id specified ----
-test_that("sdg_select: error: name and id specified", {
+# basket_select: error: name and id specified ----
+test_that("basket_select: error: name and id specified", {
   expect_error(
-    sdg_select(
+    basket_select(
       name = "My SDG",
-      id = 42
+      id = 42,
+      scope = NA_character_,
+      type = "sdg"
     ),
     regexp = "Either id or name has to be null.",
     fixed = TRUE
   )
 })
 
-# format.smq_select: formatting is correct ----
-test_that("format.smq_select: formatting is correct", {
+# format.basket_select: formatting is correct ----
+test_that("format.basket_select: formatting is correct", {
   expect_equal(
-    format(smq_select(
+    format(basket_select(
       id = 42,
-      scope = "NARROW"
+      scope = "NARROW",
+      type = "smq"
     )),
-    "smq_select(name = NULL, id = 42, scope = \"NARROW\")"
+    "basket_select(name = NULL, id = 42, scope = \"NARROW\", type = \"smq\")"
   )
 })
 
-# sdg_select: error: neither name nor id specified ----
-test_that("sdg_select: error: neither name nor id specified", {
+# basket_select: error: neither name nor id specified ----
+test_that("basket_select: error: neither name nor id specified", {
   expect_error(
-    sdg_select(),
+    basket_select(type = "sdg", scope = NA_character_),
     regexp = "Either id or name has to be non null.",
     fixed = TRUE
   )
 })
 
-# format.sdg_select: formatting is correct ----
-test_that("format.sdg_select: formatting is correct", {
+# basket_select: error: type is not specified ----
+test_that("basket_select: error: type is not specified", {
+  expect_error(
+    basket_select(id = 42, scope = "NARROW"),
+    regexp = "argument \"type\" is missing, with no default",
+    fixed = TRUE
+  )
+})
+
+# format.basket_select: formatting is correct ----
+test_that("format.basket_select: formatting is correct", {
   expect_equal(
-    format(sdg_select(name = "My SDG")),
-    "sdg_select(name = \"My SDG\", id = NULL)"
+    format(basket_select(name = "My SDG", type = "sdg", scope = NA_character_)),
+    "basket_select(name = \"My SDG\", id = NULL, scope = \"NA\", type = \"sdg\")"
   )
 })

@@ -666,7 +666,7 @@ validate_query <- function(obj) {
     } else {
       is_valid <-
         map_lgl(values$definition, is.data.frame) |
-          map_lgl(values$definition, inherits, "basket_select")
+        map_lgl(values$definition, inherits, "basket_select")
       if (!all(is_valid)) {
         info_msg <- paste(sprintf(
           "\u2716 Element %s is %s",
