@@ -232,39 +232,3 @@ filter_if <- function(dataset, filter) {
     filter(dataset, !!filter)
   }
 }
-
-#' Is order vars?
-#'
-#' Check if inputs are created using `vars()` or calls involving `desc()`
-#' @param arg A<n R object
-#'
-#' @return A TRUE if input was created with `vars()` or calls involving `desc()`
-#' otherwise throws an error
-#'
-#' @export
-#'
-#' @keywords dev_utility
-#' @family dev_utility
-is_order_vars <- function(arg) {
-  quo_is_desc_call <- function(quo) {
-    expr <- quo_get_expr(quo)
-    is_call(expr) &&
-      length(expr) == 2L &&
-      deparse(expr[[1L]]) == "desc" &&
-      is_symbol(expr[[2L]])
-   }
-
-  inherits(arg, "quosures") &&
-    all(map_lgl(arg, ~ quo_is_symbol(.x) || quo_is_desc_call(.x)))
- }
-
- possibly(is_order_vars, otherwise =
-            paste0(
-              " is not a valid input for `order_vars`.",
-              " Valid inputs are created using `vars()` and may only contain symbols or calls involving `desc()`.\n\n", # nolint
-              "  # Bad:\n",
-              "  vars(ADT = impute_dtc(LBDTC), is.na(AVAL))\n\n",
-              "  # Good:\n",
-              "  vars(AVAL, desc(ADT))"
-            )
- )

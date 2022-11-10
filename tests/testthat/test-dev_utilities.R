@@ -72,14 +72,3 @@ test_that("negate_vars Test 6: negate_vars returns list of negated variables", {
 test_that("negate_vars Test 7: negate_vars returns NULL if input is NULL", {
   expect_identical(negate_vars(NULL), NULL)
 })
-
-# is_order_vars ----
-## Test 8: returns error if input were created incorrectly ----
-test_that("is_order_vars Test 8: returns error if input were created incorrectly", {
-  expect_error(is_order_vars(STUDYID))
-})
-
-## Test 9: returns TRUE if input were created correctly ----
-test_that("is_order_vars Test 9: returns TRUE if input were created correctly", {
-  expect_true(is_order_vars(vars(AVAL, desc(ADT))))
-})

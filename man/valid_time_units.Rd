@@ -21,7 +21,6 @@ Developer Utility Functions:
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},
 \code{\link{filter_if}()},
-\code{\link{is_order_vars}()},
 \code{\link{negate_vars}()},
 \code{\link{vars2chr}()}
 }

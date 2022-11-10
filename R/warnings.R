@@ -60,7 +60,7 @@ warn_if_vars_exist <- function(dataset, vars) {
 #'
 #' ## Issues a warning
 #' warn_if_invalid_dtc(dtc = "2021-04-06T-:30:30")
-warn_if_invalid_dtc <- function(dtc, is_valid = is.POSIXlt(dtc)) {
+warn_if_invalid_dtc <- function(dtc, is_valid = is_valid_dtc(dtc)) {
   if (!all(is_valid)) {
     incorrect_dtc <- dtc[!is_valid]
     incorrect_dtc_row <- rownames(as.data.frame(dtc))[!is_valid]
