@@ -25,12 +25,12 @@ derive_vars_merged_dt(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} parameter are expected.}
+The variables specified by the \code{by_vars} argument are expected.}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified by the \code{by_vars}, the \code{dtc}, and the \code{order}
-parameter are expected.}
+argument are expected.}
 
 \item{by_vars}{Grouping variables
 
@@ -42,7 +42,7 @@ key of the selected observations.
 
 \item{order}{Sort order
 
-If the parameter is set to a non-null value, for each by group the first or
+If the argument is set to a non-null value, for each by group the first or
 last observation from the additional dataset is selected with respect to
 the specified order. The imputed date variable can be specified as well
 (see examples below).
@@ -66,7 +66,7 @@ the specified prefix and for the date imputation flag "DTF". I.e., for
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
 Only observations fulfilling the specified condition are taken into account
-for merging. If the parameter is not specified, all observations are
+for merging. If the argument is not specified, all observations are
 considered.
 
 \emph{Default}: \code{NULL}
@@ -76,9 +76,9 @@ considered.
 \item{mode}{Selection mode
 
 Determines if the first or last observation is selected. If the \code{order}
-parameter is specified, \code{mode} must be non-null.
+argument is specified, \code{mode} must be non-null.
 
-If the \code{order} parameter is not specified, the \code{mode} parameter is ignored.
+If the \code{order} argument is not specified, the \code{mode} argument is ignored.
 
 \emph{Default}: \code{NULL}
 

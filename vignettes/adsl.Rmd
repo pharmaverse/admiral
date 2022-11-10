@@ -800,9 +800,12 @@ The users can add specific code to cover their need for the analysis.
 The following functions are helpful for many ADSL derivations:
 
   - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
-  - `derive_var_merged_cat()` - Merge a Categorization Variable
   - `derive_var_merged_exist_flag()` - Merge an Existence Flag
+  - `derive_var_merged_cat()` - Merge a Categorization Variable
   - `derive_var_merged_character()` - Merge a Character Variable
+  - `derive_var_merged_summary()` - Merge a Summary Variable
+
+See also [Generic Functions](generic.html).
 
 ## Add Labels and Attributes {#attributes}
 
