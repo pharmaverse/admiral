@@ -152,7 +152,7 @@ get_summary_records <- function(dataset,
                                 filter = NULL,
                                 analysis_var,
                                 summary_fun,
-                                set_values_to) {
+                                set_values_to = NULL) {
   assert_vars(by_vars)
   analysis_var <- assert_symbol(enquo(analysis_var))
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)

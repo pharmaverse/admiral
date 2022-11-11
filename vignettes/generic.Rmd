@@ -79,7 +79,7 @@ ae <- filter(ae, USUBJID %in% c("01-701-1111", "01-701-1047")) %>%
   ))
 ```
 
-## Difference between _merged_ and _joined_ functions
+# Difference between _merged_ and _joined_ functions
 
 Firstly, we need to address the question all new users will have... why do we have
 "merged" and "joined" functions and are they not the same thing??
@@ -101,9 +101,9 @@ In principle though, we actually could achieve every "merged" function result us
 the equivalent "joined" function. However, the "joined" functions require much more
 resources (time and memory), hence why we include both options for users.
 
-## _merged_ functions {#merged}
+# _merged_ functions {#merged}
 
-**Description**\
+## Description
 
 As explained above, this simpler set of functions for joins selects relevant
 information from the additional dataframe and joins it to the original dataframe.
@@ -123,7 +123,7 @@ For observations without a match in the additional dataframe the new variable(s)
 are set to `NA`. Observations in the additional dataframe which have no match in
 the original dataframe are ignored.
 
-**Examples**\
+## Examples
 
 A simple call to derive `ADSL` randomization date (`ADSL.RANDDT`) from an
 intermediate additional dataframe would use `derive_vars_merged()` as follows.
@@ -215,13 +215,15 @@ dataset_vignette(
 ```
 
 Some further examples of "merged" functions are `derive_vars_merged_lookup()` to
-join a user-defined lookup table as commonly used in BDS ADaMs, or
-`derive_var_merged_cat()` to create a categorization variable from the information
-joined from the additional dataframe.
+join a user-defined lookup table as commonly used in BDS ADaMs,
+`derive_var_merged_cat()` to create a categorization variable from the
+information joined from the additional dataframe, or
+`derive_var_merged_summary()` to merge summarized values from the additional
+dataframe.
 
-## _joined_ functions {#joined}
+# _joined_ functions {#joined}
 
-**Description**\
+## Description
 
 For any "joined" function remember from above that the main difference is that
 given the additional option to filter after the join, it means that selection of
@@ -241,7 +243,7 @@ wanted the date populated for patients randomized within 30 days of first treatm
 You would now need to check both the additional `DS` and the original `ADSL` dataframes,
 so this would not be possible in one step using the "merged" functions.
 
-**Examples**\
+## Examples
 
 The above mentioned randomization date variable (let's call it `RAND30DT` here)
 would use `derive_vars_joined()` as follows.
@@ -342,9 +344,9 @@ one set of observations "confirms" another set in a dataframe, i.e. the flag is 
 set for your observation if both the observation and some other observation meet both
 the user-specified criteria.
 
-## _extreme_ functions {#extreme}
+# _extreme_ functions {#extreme}
 
-**Description**\
+## Description
 
 The "extreme" functions are used for finding the first or last observation
 (from `order` and `mode` arguments) within each by group (`by_vars` argument).
@@ -353,7 +355,7 @@ These can then be output as a flag variable, a date, or as new records dependent
 on which respective function is used between `derive_var_extreme_flag()`,
 `derive_var_extreme_dt()` or `derive_extreme_records()` for example.
 
-**Example**\
+## Example
 
 Building on the above case, let's use `derive_var_extreme_flag()` to now flag
 the earliest observation with the highest severity per patient.
