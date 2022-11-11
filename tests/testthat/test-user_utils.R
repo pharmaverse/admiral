@@ -148,3 +148,26 @@ test_that("print.source Test 11: `source` objects containing `data.frame`", {
                    str_replace_all("\033\\[[\\d;]+m", "")
                    , expected_print_output)
 })
+
+# print_named_list ----
+## Test 12: named list ----
+test_that("print_named_list Test 12: named list", {
+  expect_identical(
+    capture.output(print_named_list(list(a = 1, b = 2))),
+    c(
+      "a: 1",
+      "b: 2"
+    )
+  )
+})
+
+## Test 13: unnamed list ----
+test_that("print_named_list Test 13: unnamed list", {
+  expect_identical(
+    capture.output(print_named_list(list(1, 2))),
+    c(
+      "1: 1",
+      "2: 2"
+    )
+  )
+})
