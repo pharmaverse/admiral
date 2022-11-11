@@ -75,9 +75,10 @@ severe grade
 }
 }
 \examples{
+library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 
-data <- tibble::tribble(
+data <- tribble(
   ~ATOXDSCL,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
   "Hypoglycemia",                119,    4,        7,      "Glucose (mmol/L)",
   "Hypoglycemia",                120,    4,        7,      "Glucose (mmol/L)",
@@ -95,7 +96,7 @@ derive_var_atoxgr_dir(data,
   get_unit_expr = extract_unit(PARAM)
 )
 
-data <- tibble::tribble(
+data <- tribble(
   ~ATOXDSCH,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
   "Hyperglycemia",               119,    4,        7,      "Glucose (mmol/L)",
   "Hyperglycemia",               120,    4,        7,      "Glucose  (mmol/L)",

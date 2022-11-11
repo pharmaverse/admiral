@@ -51,9 +51,12 @@
 #' @seealso [derive_vars_duration()]
 #'
 #' @examples
-#' data <- tibble::tribble(
+#' library(tibble)
+#' library(lubridate)
+#'
+#' data <- tribble(
 #'   ~BRTHDT, ~RANDDT,
-#'   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+#'   ymd("1984-09-06"), ymd("2020-02-24")
 #' )
 #'
 #' derive_vars_aage(data)
@@ -232,7 +235,7 @@ NULL
 #'
 #' @export
 derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_warn("0.8.0", "derive_var_agegr_ema()")
+  deprecate_warn("0.8.0", "derive_var_agegr_fda()")
 
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))

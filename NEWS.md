@@ -16,6 +16,10 @@ observation (#1448).
 - New function `derive_var_relative_flag()` for flagging observations before or
 after a condition is fulfilled (#1453)
 
+- New functions `get_admiral_option()` and `set_admiral_options()` to allow more 
+flexibility on common function inputs; e.g. like `subject_keys` to avoid several 
+find and replace instances of `vars(STUDYID, USUBJID)`. (#1338)
+
 - The new function `create_period_dataset()` for creating a reference dataset
 for subperiods, periods, or phases from the ADSL dataset was added. The
 reference dataset can be used to create subperiod, period, and phase variables
@@ -25,8 +29,15 @@ in OCCDS and BDS datasets. (#1477)
 variables to ADSL. The values for the new variables are provided by a period
 reference dataset. (#1477)
 
+- New function `derive_var_merged_summary()` adds a variable of summarized
+values to the input dataset (#1564)
+
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
+
+- Removed the `{assertthat}` dependency in `{admiral}` (#1392)
+
+- Removed R Version 3.6 check in CI/CD workflows in favor of the three most recent versions: 4.0, 4.1 and 4.2. (#1556)
 
 ## Updates of Existing Functions
 
@@ -38,10 +49,15 @@ which controls if time is considered for the condition if `start_date` is after
 
 ## Documentation
 
+- New vignette "Generic Functions" (#734)
+- New vignette "Visit and Period Variables" (#1478)
+
 ## Various
 
 - Function `derive_vars_merged()` had an improperly formatted error message 
 which has been corrected (#1473)
+
+- Templates now save datasets as `.rds` instead of `.rda` (#1501)
 
 # admiral 0.8.4
 

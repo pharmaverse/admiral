@@ -108,6 +108,8 @@ adcm <- adcm %>%
 
 ## Derive APHASE and APHASEN Variable ----
 # Other timing variable can be derived similarly.
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html)
 adcm <- adcm %>%
   mutate(
     APHASE = case_when(
@@ -138,4 +140,4 @@ adcm <- adcm %>%
 # Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(adcm, file = file.path(dir, "adcm.rda"), compress = "bzip2")
+saveRDS(adcm, file = file.path(dir, "adcm.rds"), compress = "bzip2")

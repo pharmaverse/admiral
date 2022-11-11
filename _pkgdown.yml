@@ -41,16 +41,21 @@ reference:
 - contents:
   - has_keyword("der_prm_tte")
 
+- title: Metadata
+  desc: Auxiliary datasets providing definitions as input for derivations, e.g. grading criteria or dose frequencies
+  contents:
+  - has_keyword("metadata")
+
 - title: Advanced Functions
+- subtitle: Admiral Options
+- contents:
+  - has_keyword("admiral_options")
 - subtitle: Higher Order
 - contents:
   - has_keyword("high_order_function")
 - subtitle: Creating Auxiliary Datasets
 - contents:
   - has_keyword("create_aux")
-- subtitle: Metadata
-- contents:
-  - has_keyword("metadata")
 - subtitle: Other
 - contents:
   - has_keyword("source_specifications")
@@ -62,7 +67,6 @@ reference:
 - subtitle: BDS-specific
   contents:
   - has_keyword('com_bds_findings')
-
 
 - title: Utility Functions
 - subtitle: Utilities for Formatting Observations
@@ -140,6 +144,10 @@ navbar:
       - text: "Advanced User Guides"
       - text: Date and Time Imputation
         href: articles/imputation.html
+      - text: Visit and Period Variables
+        href: articles/visits_periods.html
+      - text: Generic Functions
+        href: articles/generic.html
       - text: Higher Order Functions
         href: articles/higher_order.html
       - text: Queries Dataset Documentation

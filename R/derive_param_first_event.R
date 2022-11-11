@@ -91,11 +91,12 @@
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' library(dplyr)
 #' library(lubridate)
 #'
 #' # Derive a new parameter for the first disease progression (PD)
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID, ~DTHDT,
 #'   "1",      ymd("2022-05-13"),
 #'   "2",      ymd(""),
@@ -103,7 +104,7 @@
 #' ) %>%
 #'   mutate(STUDYID = "XX1234")
 #'
-#' adrs <- tibble::tribble(
+#' adrs <- tribble(
 #'   ~USUBJID, ~ADTC,        ~AVALC,
 #'   "1",      "2020-01-02", "PR",
 #'   "1",      "2020-02-01", "CR",
@@ -153,7 +154,7 @@ derive_param_first_event <- function(dataset,
                                      dataset_source,
                                      filter_source,
                                      date_var,
-                                     subject_keys = vars(STUDYID, USUBJID),
+                                     subject_keys = get_admiral_option("subject_keys"),
                                      set_values_to,
                                      check_type = "warning") {
   # Check input parameters
