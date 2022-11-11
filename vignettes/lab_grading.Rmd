@@ -298,7 +298,7 @@ adlb %>%
 ```
 
 
-# NCI-CTCAEV4 implementation
+# NCI-CTCAEV4 implementation{#implement_ctcv4}
 
 ## Terms graded
 
@@ -441,7 +441,7 @@ atoxgr_criteria_ctcv4 %>%
 ```
 <br>
 
-# NCI-CTCAEV5 implementation
+# NCI-CTCAEV5 implementation {#implement_ctcv5}
 
 ## Terms graded
 
