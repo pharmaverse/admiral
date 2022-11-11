@@ -258,7 +258,7 @@ grade_lookup <- tibble::tribble(
 # user could change to atoxgr_criteria_ctcv5 to implement NCI-CTCAEv5
 # Note: Hyperglycemia and Hypophosphatemia not defined in NCI-CTCAEv5 so
 # user would need to amend look-up table grade_lookup
-# See # (https://pharmaverse.github.io/admiral/articles/lab_grading.html#implement_ctcv5)
+# See (https://pharmaverse.github.io/admiral/articles/lab_grading.html#implement_ctcv5)
 grade_crit <- atoxgr_criteria_ctcv4
 
 
