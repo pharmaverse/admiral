@@ -35,6 +35,9 @@ values to the input dataset (#1564)
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
 
+- New metadata data set called `atoxgr_criteria_ctcv5` which holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
+
 - Removed the `{assertthat}` dependency in `{admiral}` (#1392)
 
 - Removed R Version 3.6 check in CI/CD workflows in favor of the three most recent versions: 4.0, 4.1 and 4.2. (#1556)
@@ -44,6 +47,10 @@ values to the input dataset (#1564)
 - Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
 which controls if time is considered for the condition if `start_date` is after
 `ref_end_date` + `ref_end_window` days (#989).
+
+- `derive_var_atoxgr_dir()` default value of `atoxgr_criteria_ctcv4` removed for
+parameter `meta_criteria`. Can now also choose `atoxgr_criteria_ctcv5` for parameter 
+`meta_criteria`, to implement NCI-CTCAEv5 grading criteria .
 
 ## Breaking Changes
 
