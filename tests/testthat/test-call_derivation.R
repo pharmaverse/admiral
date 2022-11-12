@@ -5,7 +5,7 @@ data(admiral_vs)
 ## Test 1: Test that call_derivation generates expected summary output  ----
 # ---- call_derivation, test 1: call_derivation Test 1:  Test that call_derivation generates expected summary output ----
 test_that("call_derivation, test 1: call_derivation Test 1:  Test that call_derivation generates expected summary output", {
-  input <- admiral_vs[sample(seq_len(nrow(admiral_vs)), 1000), ]
+  input <- admiral.test::admiral_vs[sample(seq_len(nrow(admiral.test::admiral_vs)), 1000), ]
 
   expected_output <- input %>%
     derive_summary_records(
