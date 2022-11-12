@@ -630,3 +630,39 @@ test_that("derive_param_tte Test 9: error is issued if parameter code already ex
     regexp = "^The parameter code 'TTAE' does already exist in `dataset`.$"
   )
 })
+
+## Test 10: error is issued if package does not exist ----
+test_that("list_tte_source_objects Test 10: error is issued if package does not exist", {
+  expect_error(
+    list_tte_source_objects(package = "tte"),
+    regexp = "No package called 'tte' is installed and hence no `tte_source` objects are available"
+  )
+})
+
+## Test 11: calling list_tte_source_objects results in expected output objects ----
+test_that("list_tte_source_objects Test 11: expected objects produced", {
+  expected_output <- tibble::tribble(
+    ~object, ~dataset_name, ~filter, ~date, ~censor,
+    "ae_ser_event", "adae", quote(TRTEMFL == "Y" & AESER == "Y"), "ASTDT", 0,
+    "ae_gr2_event", "adae", quote(TRTEMFL == "Y" & ATOXGR == "2"), "ASTDT", 0,
+    "ae_sev_event", "adae", quote(TRTEMFL == "Y" & AESEV == "SEVERE"), "ASTDT", 0,
+    "ae_gr4_event", "adae", quote(TRTEMFL == "Y" & ATOXGR == "4"), "ASTDT", 0,
+    "ae_gr3_event", "adae", quote(TRTEMFL == "Y" & ATOXGR == "3"), "ASTDT", 0,
+    "lastalive_censor", "adsl", NULL, "LSTALVDT", 1,
+    "ae_event", "adae", quote(TRTEMFL == "Y"), "ASTDT", 0,
+    "death_event", "adsl", quote(DTHFL == "Y"), "DTHDT", 0,
+    "ae_gr35_event", "adae", quote(TRTEMFL == "Y" & ATOXGR %in% c("3", "4", "5")), "ASTDT", 0,
+    "ae_wd_event", "adae", quote(TRTEMFL == "Y" & AEACN == "DRUG WITHDRAWN"), "ASTDT", 0,
+    "ae_gr1_event", "adae", quote(TRTEMFL == "Y" & ATOXGR == "1"), "ASTDT", 0,
+    "ae_gr5_event", "adae", quote(TRTEMFL == "Y" & ATOXGR == "5"), "ASTDT", 0,
+  ) %>%
+    mutate(
+      filter = as.character(filter),
+      censor = as.integer(censor)
+    )
+
+  observed_output <- list_tte_source_objects(package = "admiral") %>%
+    select(object, dataset_name, filter, date, censor)
+
+  expect_dfs_equal(expected_output, observed_output, keys = c("object"))
+})
