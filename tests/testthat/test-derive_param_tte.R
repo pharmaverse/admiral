@@ -632,7 +632,7 @@ test_that("derive_param_tte Test 9: error is issued if parameter code already ex
 })
 
 ## Test 10: error is issued if package does not exist ----
-test_that("list_tte_source_objects Test 1: error is issued if package does not exist", {
+test_that("list_tte_source_objects Test 10: error is issued if package does not exist", {
   expect_error(
     list_tte_source_objects(package = "tte"),
     regexp = "No package called 'tte' is installed and hence no `tte_source` objects are available"
