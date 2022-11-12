@@ -640,7 +640,7 @@ test_that("list_tte_source_objects Test 1: error is issued if package does not e
 })
 
 ## Test 11: calling list_tte_source_objects results in expected output objects ----
-test_that("list_tte_source_objects Test 2: expected objects produced", {
+test_that("list_tte_source_objects Test 11: expected objects produced", {
   expected_output <- tibble::tribble(
     ~object, ~dataset_name, ~filter, ~date, ~censor,
     "ae_ser_event", "adae", quote(TRTEMFL == "Y" & AESER == "Y"), "ASTDT", 0,
