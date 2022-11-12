@@ -9,7 +9,7 @@ derive_var_dthcaus(
   dataset,
   ...,
   source_datasets,
-  subject_keys = vars(STUDYID, USUBJID)
+  subject_keys = get_admiral_option("subject_keys")
 )
 
 dthcaus_source(
