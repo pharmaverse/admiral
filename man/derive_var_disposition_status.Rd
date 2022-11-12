@@ -11,7 +11,7 @@ derive_var_disposition_status(
   status_var,
   format_new_var = format_eoxxstt_default,
   filter_ds,
-  subject_keys = vars(STUDYID, USUBJID)
+  subject_keys = get_admiral_option("subject_keys")
 )
 }
 \arguments{

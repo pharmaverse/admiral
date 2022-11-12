@@ -21,12 +21,12 @@ derive_vars_merged(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} parameter are expected.}
+The variables specified by the \code{by_vars} argument are expected.}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified by the \code{by_vars}, the \code{new_vars}, and the \code{order}
-parameter are expected.}
+argument are expected.}
 
 \item{by_vars}{Grouping variables
 
@@ -38,7 +38,7 @@ key of the selected observations.
 
 \item{order}{Sort order
 
-If the parameter is set to a non-null value, for each by group the first or
+If the argument is set to a non-null value, for each by group the first or
 last observation from the additional dataset is selected with respect to the
 specified order.
 
@@ -59,7 +59,7 @@ And \code{new_vars = vars(var1, new_var2 = old_var2)} takes \code{var1} and
 \code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
 \code{old_var2} to \code{new_var2}.
 
-If the parameter is not specified or set to \code{NULL}, all variables from the
+If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
 
 \emph{Default}: \code{NULL}
@@ -69,9 +69,9 @@ additional dataset (\code{dataset_add}) are added.
 \item{mode}{Selection mode
 
 Determines if the first or last observation is selected. If the \code{order}
-parameter is specified, \code{mode} must be non-null.
+argument is specified, \code{mode} must be non-null.
 
-If the \code{order} parameter is not specified, the \code{mode} parameter is ignored.
+If the \code{order} argument is not specified, the \code{mode} argument is ignored.
 
 \emph{Default}: \code{NULL}
 
@@ -80,7 +80,7 @@ If the \code{order} parameter is not specified, the \code{mode} parameter is ign
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
 Only observations fulfilling the specified condition are taken into account
-for merging. If the parameter is not specified, all observations are
+for merging. If the argument is not specified, all observations are
 considered.
 
 \emph{Default}: \code{NULL}
@@ -89,7 +89,7 @@ considered.
 
 \item{match_flag}{Match flag
 
-If the parameter is specified (e.g., \code{match_flag = FLAG}), the specified
+If the argument is specified (e.g., \code{match_flag = FLAG}), the specified
 variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
 be \code{TRUE} for all selected records from \code{dataset_add} which are merged into
 the input dataset, and \code{NA} otherwise.
@@ -244,6 +244,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_cat}()},
 \code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_var_worst_flag}()},

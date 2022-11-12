@@ -13,7 +13,7 @@ derive_vars_disposition_reason(
   reason_var_spe = NULL,
   format_new_vars = format_reason_default,
   filter_ds,
-  subject_keys = vars(STUDYID, USUBJID)
+  subject_keys = get_admiral_option("subject_keys")
 )
 }
 \arguments{
