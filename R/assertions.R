@@ -87,7 +87,7 @@ assert_data_frame <- function(arg,
 #'
 #' @param arg A function argument to be checked
 #' @param values A `character` vector of valid values for `arg`.
-#' Values should be a lower case vector if case_sensitive = FALSE is used.
+#' Values is converted to a lower case vector if case_sensitive = FALSE is used.
 #' @param case_sensitive Should the argument be handled case-sensitive?
 #' If set to `FALSE`, the argument is converted to lower case for checking the
 #' permitted values and returning the argument.
@@ -158,14 +158,30 @@ assert_character_scalar <- function(arg,
     abort(err_msg)
   }
 
-  if (!case_sensitive) {
-    arg <- tolower(arg)
+  # Create case_adjusted_arg and case_adjusted_values for the following purpose:
+  #
+  #   1. To simplify the comparison of arg and values; i.e. the "case_adjusted_"
+  #      variables take into consideration whether `case_sensitive = TRUE`, or
+  #      `case_sensitive = FALSE`.
+  #
+  #   2. To avoid overwriting the original "arg" and "values", so that subsequent
+  #      code can refer directly to the initial function arguments: this is
+  #      required whilst generating an error message if "arg" is not one of the
+  #      user-specified valid values.
+
+  if (case_sensitive) {
+    case_adjusted_arg <- arg
     if (!is.null(values)) {
-      values <- tolower(values)
+      case_adjusted_values <- values
+    }
+  } else {
+    case_adjusted_arg <- tolower(arg)
+    if (!is.null(values)) {
+      case_adjusted_values <- tolower(values)
     }
   }
 
-  if (!is.null(values) && arg %notin% values) {
+  if (!is.null(values) && case_adjusted_arg %notin% case_adjusted_values) {
     err_msg <- sprintf(
       "`%s` must be one of %s but is '%s'",
       arg_name(substitute(arg)),
@@ -175,7 +191,7 @@ assert_character_scalar <- function(arg,
     abort(err_msg)
   }
 
-  invisible(arg)
+  invisible(case_adjusted_arg)
 }
 
 #' Is an Argument a Character Vector?
