@@ -38,7 +38,7 @@ concurrency:
 jobs:
   style:
     name: Code Style
-    uses: pharmaverse/admiralci/.github/workflows/style.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/style.yml@changed-files-fix
     if: github.event_name == 'pull_request'
     with:
       r-version: "4.0"
