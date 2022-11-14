@@ -715,22 +715,6 @@ extend_source_datasets <- function(source_datasets,
 #' @seealso [derive_param_tte()], [censor_source()], [event_source()]
 #'
 #' @return An object of class `tte_source`
-#'
-#' @examples
-#'
-#' # serious adverse event
-#' ae_ser_event <- tte_source(
-#'   dataset_name = "adae",
-#'   filter = TRTEMFL == "Y" & AESER == "Y",
-#'   date = ASTDT,
-#'   censor = 0,
-#'   set_values_to = vars(
-#'     EVNTDESC = "SERIOUS ADVERSE EVENT",
-#'     SRCDOM = "ADAE",
-#'     SRCVAR = "ASTDT",
-#'     SRCSEQ = AESEQ
-#'   )
-#' )
 tte_source <- function(dataset_name,
                        filter = NULL,
                        date,

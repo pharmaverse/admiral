@@ -465,7 +465,6 @@ derive_var_extreme_dt <- function(dataset,
 #' @return An object of class `date_source`.
 #'
 #' @examples
-#'
 #' # treatment end date from ADSL
 #' trt_end_date <- date_source(
 #'   dataset_name = "adsl",

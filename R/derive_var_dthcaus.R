@@ -273,7 +273,6 @@ derive_var_dthcaus <- function(dataset,
 #' @return An object of class "dthcaus_source".
 #'
 #' @examples
-#'
 #' # Deaths sourced from AE
 #' src_ae <- dthcaus_source(
 #'   dataset_name = "ae",

@@ -56,7 +56,6 @@ An object of class "dthcaus_source".
 Create a \code{dthcaus_source} Object
 }
 \examples{
-
 # Deaths sourced from AE
 src_ae <- dthcaus_source(
   dataset_name = "ae",
