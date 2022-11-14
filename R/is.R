@@ -31,7 +31,7 @@ is_auto <- function(arg) {
 #' Is order vars?
 #'
 #' Check if inputs are created using `vars()` or calls involving `desc()`
-#' @param arg A<n R object
+#' @param arg An R object
 #'
 #' @return `FALSE` if the argument is not a list of order vars
 #'

@@ -7,7 +7,7 @@
 is_order_vars(arg)
 }
 \arguments{
-\item{arg}{A<n R object}
+\item{arg}{An R object}
 }
 \value{
 \code{FALSE} if the argument is not a list of order vars
