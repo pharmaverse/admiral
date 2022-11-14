@@ -253,7 +253,11 @@ print.source <- function(x, ...) {
 #' @examples
 #' print_named_list(death_event)
 print_named_list <- function(list, indent = 0) {
-  for (name in names(list)) {
+  names <- names(list)
+  if (is.null(names)) {
+    names <- seq_len(length.out = length(list))
+  }
+  for (name in names) {
     if (inherits(list[[name]], "source")) {
       cat(strrep(" ", indent), name, ":\n", sep = "")
       print(list[[name]], indent = indent + 2)
