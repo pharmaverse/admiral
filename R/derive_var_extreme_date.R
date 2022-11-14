@@ -463,6 +463,31 @@ derive_var_extreme_dt <- function(dataset,
 #' @export
 #'
 #' @return An object of class `date_source`.
+#'
+#' @examples
+#'
+#' # treatment end date from ADSL
+#' trt_end_date <- date_source(
+#'   dataset_name = "adsl",
+#'   date = TRTEDT
+#' )
+#'
+#' # lab date from LB where assessment was taken, i.e. not "NOT DONE"
+#' lb_date <- date_source(
+#'   dataset_name = "lb",
+#'   filter = LBSTAT != "NOT DONE" | is.na(LBSTAT),
+#'   date = LBDT
+#' )
+#'
+#' # death date from ADSL including traceability variables
+#' death_date <- date_source(
+#'   dataset_name = "adsl",
+#'   date = DTHDT,
+#'   traceability_vars = vars(
+#'     LALVDOM = "ADSL",
+#'     LALVVAR = "DTHDT"
+#'   )
+#' )
 date_source <- function(dataset_name,
                         filter = NULL,
                         date,

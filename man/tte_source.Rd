@@ -36,6 +36,22 @@ An object of class \code{tte_source}
 \description{
 The \code{tte_source} object is used to define events and possible censorings.
 }
+\examples{
+
+# serious adverse event
+ae_ser_event <- tte_source(
+  dataset_name = "adae",
+  filter = TRTEMFL == "Y" & AESER == "Y",
+  date = ASTDT,
+  censor = 0,
+  set_values_to = vars(
+    EVNTDESC = "SERIOUS ADVERSE EVENT",
+    SRCDOM = "ADAE",
+    SRCVAR = "ASTDT",
+    SRCSEQ = AESEQ
+  )
+)
+}
 \seealso{
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=censor_source]{censor_source()}}, \code{\link[=event_source]{event_source()}}
 
@@ -46,7 +62,7 @@ Source Specifications:
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
-\code{\link{derive_var_dthcaus}()},
+\code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{filter_date_sources}()},
