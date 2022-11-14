@@ -313,7 +313,7 @@ derive_vars_joined <- function(dataset,
 
   common_vars <-
     chr2vars(setdiff(intersect(colnames(data), colnames(data_right)), vars2chr(by_vars)))
-  if (!is.null(order)) {
+  if (!is.null(order))     {
     data_return <- filter_extreme(
       data_return,
       by_vars = quo_c(by_vars_left, quo(!!tmp_obs_nr)),
