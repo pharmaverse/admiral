@@ -31,10 +31,16 @@ quo_c <- function(...) {
 #' @export
 quo_not_missing <- function(x) {
   !rlang::quo_is_missing(x)
+
+  if (is.null(missing(x)) || quo_is_missing(x)) {
+    stop(paste0(
+      "Argument `",
+      deparse(substitute(x)),
+      "` is missing, with no default"
+    ))
+  }
 }
-on_failure(quo_not_missing) <- function(call, env) {
-  paste0("Argument `", deparse(call$x), "` is missing, with no default")
-}
+
 
 #' Replace Quosure Value with Name
 #'

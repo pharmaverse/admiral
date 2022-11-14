@@ -11,6 +11,10 @@
   - New keyword/family `create_aux` for functions creating auxiliary datasets (#126)
   
   - New function `assert_date_vector` (#129)
+  
+  - Remove dependency on `{assertthat}` (#149)
+  
+  - Test coverage for `admiraldev` have increased from 45% to approximately 100% (#94,#95, #96,#98,#101,#103)
 
 
 ## Updates of Existing Functions

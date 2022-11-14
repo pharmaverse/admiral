@@ -95,7 +95,6 @@ extract_vars <- function(x, side = "lhs") {
   }
 }
 
-
 #' Or
 #'
 #' @param lhs Any valid R expression
@@ -139,6 +138,8 @@ as_name <- function(x) {
 }
 
 #' Valid Time Units
+#'
+#' Contains the acceptable character vector of valid time units
 #'
 #' @return A `character` vector of valid time units
 #'

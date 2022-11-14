@@ -24,8 +24,11 @@ test_that("convert_dtm_to_dtc Test 3: Error is thrown if dtm is not in correct f
   )
 })
 
-test_that("filter_if Test 1 : Input is returned as is if filter is NULL", {
-  input <- tibble::tribble(
+## Test 4: Input is returned as is if filter is NULL ----
+test_that("convert_dtm_to_dtc Test 4: Input is returned as is if filter is NULL", {
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
     "P01", "WEIGHT", 80.9,
     "P01", "HEIGHT", 189.2
@@ -40,8 +43,11 @@ test_that("filter_if Test 1 : Input is returned as is if filter is NULL", {
   )
 })
 
-test_that("filter_if Test 2 : Input is filtered if filter is not NULL", {
-  input <- tibble::tribble(
+## Test 5: Input is filtered if filter is not NULL ----
+test_that("convert_dtm_to_dtc Test 5: Input is filtered if filter is not NULL", {
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
     "P01", "WEIGHT", 80.9,
     "P01", "HEIGHT", 189.2
@@ -54,4 +60,15 @@ test_that("filter_if Test 2 : Input is filtered if filter is not NULL", {
     filter_if(input, quo(VSTESTCD == "WEIGHT")),
     keys = c("USUBJID", "VSTESTCD")
   )
+})
+
+# negate_vars ----
+## Test 6: negate_vars returns list of negated variables ----
+test_that("negate_vars Test 6: negate_vars returns list of negated variables", {
+  expect_identical(negate_vars(vars(var1, var2)), rlang::exprs(-var1, -var2))
+})
+
+## Test 7: negate_vars returns NULL if input is NULL ----
+test_that("negate_vars Test 7: negate_vars returns NULL if input is NULL", {
+  expect_identical(negate_vars(NULL), NULL)
 })

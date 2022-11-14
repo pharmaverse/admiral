@@ -28,7 +28,7 @@ test_that("quo_c Test 2: `quo_c` returns error if non-quosures are input", {
 test_that("quo_not_missing Test 3: `quo_not_missing` returns TRUE if no missing argument", {
   test_fun <- function(x) {
     x <- enquo(x)
-    assert_that(quo_not_missing(x))
+    !isTRUE(quo_not_missing(x))
   }
   expect_true(test_fun(my_variable))
 })
@@ -37,7 +37,7 @@ test_that("quo_not_missing Test 3: `quo_not_missing` returns TRUE if no missing 
 test_that("quo_not_missing Test 4: `quo_not_missing` throws an Error if missing argument", {
   test_fun <- function(x) {
     x <- enquo(x)
-    assert_that(quo_not_missing(x))
+    isTrue(quo_not_missing(x))
   }
   expect_error(test_fun()) # missing argument -> throws error
 })

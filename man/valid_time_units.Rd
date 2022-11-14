@@ -10,7 +10,7 @@ valid_time_units()
 A \code{character} vector of valid time units
 }
 \description{
-Valid Time Units
+Contains the acceptable character vector of valid time units
 }
 \seealso{
 Developer Utility Functions: 

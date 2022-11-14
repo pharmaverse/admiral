@@ -53,21 +53,9 @@ test_that("assert_filter_cond Test 3: `assert_filter_cond` works as expected", {
   )
 })
 
-# is_valid_sec_min ----
-## Test 4: is_valid_sec_min works as expected ----
-test_that("is_valid_sec_min Test 4: is_valid_sec_min works as expected", {
-  expect_true(is_valid_sec_min(59))
-})
-
-# is_valid_hour ----
-## Test 5: is_valid_hour works as expected ----
-test_that("is_valid_hour Test 5: is_valid_hour works as expected", {
-  expect_true(is_valid_hour(23))
-})
-
-# assert_data_fram ----
-## Test 6: error if not a dataframe ----
-test_that("assert_data_fram Test 6: error if not a dataframe", {
+# assert_data_frame ----
+## Test 4: error if not a dataframe ----
+test_that("assert_data_frame Test 4: error if not a dataframe", {
   example_fun <- function(dataset) {
     assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
   }
@@ -76,8 +64,8 @@ test_that("assert_data_fram Test 6: error if not a dataframe", {
   )
 })
 
-## Test 7: error if dataframe is grouped ----
-test_that("assert_data_fram Test 7: error if dataframe is grouped", {
+## Test 5: error if dataframe is grouped ----
+test_that("assert_data_frame Test 5: error if dataframe is grouped", {
   example_fun <- function(dataset) {
     assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
   }
@@ -94,8 +82,8 @@ test_that("assert_data_fram Test 7: error if dataframe is grouped", {
 })
 
 # assert_character_scalar ----
-## Test 8: error if not a character scaler string ----
-test_that("assert_character_scalar Test 8: error if not a character scaler string", {
+## Test 6: error if not a character scaler string ----
+test_that("assert_character_scalar Test 6: error if not a character scaler string", {
   example_fun2 <- function(msg_type) {
     msg_type <- assert_character_scalar(msg_type,
       values = c("warning", "error"), case_sensitive = FALSE
@@ -108,8 +96,8 @@ test_that("assert_character_scalar Test 8: error if not a character scaler strin
   expect_error(example_fun2(2))
 })
 
-## Test 9: error if input is a vector ----
-test_that("assert_character_scalar Test 9: error if input is a vector", {
+## Test 7: error if input is a vector ----
+test_that("assert_character_scalar Test 7: error if input is a vector", {
   example_fun2 <- function(msg_type) {
     msg_type <- assert_character_scalar(msg_type,
       values = c("warning", "error"), case_sensitive = FALSE
@@ -123,8 +111,8 @@ test_that("assert_character_scalar Test 9: error if input is a vector", {
 })
 
 # assert_vars ----
-## Test 10: no error if expected input ----
-test_that("assert_vars Test 10: no error if expected input", {
+## Test 8: no error if expected input ----
+test_that("assert_vars Test 8: no error if expected input", {
   expect_invisible(assert_vars(vars(USUBJID, PARAMCD)))
   expect_invisible(assert_vars(
     vars(APERSDT = APxxSDT, APEREDT = APxxEDT),
@@ -132,8 +120,8 @@ test_that("assert_vars Test 10: no error if expected input", {
   ))
 })
 
-## Test 11: error if unexpected input ----
-test_that("assert_vars Test 11: error if unexpected input", {
+## Test 9: error if unexpected input ----
+test_that("assert_vars Test 9: error if unexpected input", {
   expect_error(assert_vars(AVAL + 1))
   expect_error(assert_vars(rlang::exprs(USUBJID, PARAMCD)))
   expect_error(assert_vars(c("USUBJID", "PARAMCD", "VISIT")))
@@ -245,14 +233,20 @@ test_that("Test 17 : `assert_character_scalar` throws an error if
     )
   }
 
-  expect_error(check_unit("month"),
-               paste0("`duration_unit` must be one of 'years', 'months', 'weeks', 'days', ",
-                      "'hours', 'minutes' or 'seconds' but is 'month'")
+  expect_error(
+    check_unit("month"),
+    paste0(
+      "`duration_unit` must be one of 'years', 'months', 'weeks', 'days', ",
+      "'hours', 'minutes' or 'seconds' but is 'month'"
+    )
   )
 
-  expect_error(check_unit("MONTH"),
-               paste0("`duration_unit` must be one of 'years', 'months', 'weeks', 'days', ",
-                      "'hours', 'minutes' or 'seconds' but is 'MONTH'")
+  expect_error(
+    check_unit("MONTH"),
+    paste0(
+      "`duration_unit` must be one of 'years', 'months', 'weeks', 'days', ",
+      "'hours', 'minutes' or 'seconds' but is 'MONTH'"
+    )
   )
 
   check_unit2 <- function(duration_unit) {
@@ -263,14 +257,20 @@ test_that("Test 17 : `assert_character_scalar` throws an error if
     )
   }
 
-  expect_error(check_unit2("month"),
-               paste0("`duration_unit` must be one of 'YEARS', 'MONTHS', 'WEEKS', 'DAYS', ",
-                      "'HOURS', 'MINUTES' or 'SECONDS' but is 'month'")
+  expect_error(
+    check_unit2("month"),
+    paste0(
+      "`duration_unit` must be one of 'YEARS', 'MONTHS', 'WEEKS', 'DAYS', ",
+      "'HOURS', 'MINUTES' or 'SECONDS' but is 'month'"
+    )
   )
 
-  expect_error(check_unit2("MONTH"),
-               paste0("`duration_unit` must be one of 'YEARS', 'MONTHS', 'WEEKS', 'DAYS', ",
-                      "'HOURS', 'MINUTES' or 'SECONDS' but is 'MONTH'")
+  expect_error(
+    check_unit2("MONTH"),
+    paste0(
+      "`duration_unit` must be one of 'YEARS', 'MONTHS', 'WEEKS', 'DAYS', ",
+      "'HOURS', 'MINUTES' or 'SECONDS' but is 'MONTH'"
+    )
   )
 })
 

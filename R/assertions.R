@@ -576,7 +576,7 @@ assert_order_vars <- function(arg, optional = FALSE) {
 
   default_err_msg <- paste(
     backquote(arg_name(substitute(arg))),
-    "must be a a list of unquoted variable names or `desc()` calls,",
+    "must be a list of unquoted variable names or `desc()` calls,",
     "e.g. `vars(USUBJID, desc(VISITNUM))`"
   )
 
@@ -592,7 +592,9 @@ assert_order_vars <- function(arg, optional = FALSE) {
     abort(default_err_msg)
   }
 
-  assert_that(is_order_vars(arg))
+  if (isFALSE(is_order_vars(arg))) {
+    abort(default_err_msg)
+  }
 
   invisible(arg)
 }
