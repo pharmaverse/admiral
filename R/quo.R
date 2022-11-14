@@ -33,9 +33,10 @@ quo_not_missing <- function(x) {
   !rlang::quo_is_missing(x)
 
   if (is.null(missing(x)) || quo_is_missing(x)) {
-    stop(paste0("Argument `",
-                deparse(substitute(x)),
-                "` is missing, with no default"
+    stop(paste0(
+      "Argument `",
+      deparse(substitute(x)),
+      "` is missing, with no default"
     ))
   }
 }
