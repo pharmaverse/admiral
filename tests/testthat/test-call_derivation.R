@@ -1,6 +1,6 @@
-## Test 1: Test that call_derivation generates expected summary output  ----
-# ---- call_derivation Test 1:  Test that call_derivation generates expected summary output ----
-test_that("call_derivation Test 1:  Test that call_derivation generates expected summary output", {
+## Test 1: Test that call_derivation generates expected summary  ----
+# ---- call_derivation Test 1:  Test that call_derivation generates expected summary ----
+test_that("call_derivation Test 1:  Test that call_derivation generates expected summary", {
   input <- admiral.test::admiral_vs[sample(seq_len(nrow(admiral.test::admiral_vs)), 1000), ]
 
   expected_output <- input %>%
@@ -55,9 +55,9 @@ test_that("call_derivation Test 1:  Test that call_derivation generates expected
   )
 })
 
-## Test 2: Test that call_derivation generates expected imputation output  ----
-# ---- call_derivation Test 2: Test that call_derivation generates expected imputation output ----
-test_that("call_derivation Test 2: Test that call_derivation generates expected imputation output", {
+## Test 2: Test that call_derivation generates expected imputation  ----
+# ---- call_derivation Test 2: Test that call_derivation generates expected imputation ----
+test_that("call_derivation Test 2: Test that call_derivation generates expected imputation", {
   input <- admiral.test::admiral_ae[sample(seq_len(nrow(admiral.test::admiral_ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
