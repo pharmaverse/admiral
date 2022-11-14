@@ -1,6 +1,6 @@
 # create_single_dose_dataset ----
-## Test 1: create_single_dose_dataset works as expected for Q#/EVERY # cases ----
-test_that("create_single_dose_dataset Test 1: create_single_dose_dataset works as expected for Q#/EVERY # cases", { # nolint
+## Test 1: Works as expected for Q#/EVERY # cases ----
+test_that("create_single_dose_dataset Test 1: Works as expected for Q#/EVERY # cases", {
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
     "P01", "Q2D", ymd("2021-01-01"), ymd_hms("2021-01-01 10:30:00"),
@@ -36,8 +36,9 @@ test_that("create_single_dose_dataset Test 1: create_single_dose_dataset works a
 })
 
 
-## Test 2: create_single_dose_dataset works as expected for # TIMES PER cases ----
-test_that("create_single_dose_dataset Test 2: create_single_dose_dataset works as expected for # TIMES PER cases", { # nolint
+
+## Test 2: Works as expected for # TIMES PER cases ----
+test_that("create_single_dose_dataset Test 2: Works as expected for # TIMES PER cases", {
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
     "P01", "2 TIMES PER YEAR",
@@ -102,8 +103,8 @@ test_that("create_single_dose_dataset Test 2: create_single_dose_dataset works a
   expect_equal(create_single_dose_dataset(input), expected_output)
 })
 
-## Test 3: create_single_dose_dataset works for different treatments ----
-test_that("create_single_dose_dataset Test 3: create_single_dose_dataset works for different treatments", { # nolint
+## Test 3: Works for different treatments ----
+test_that("create_single_dose_dataset Test 3: Works for different treatments", {
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM, ~EXTRT,
     "P01", "Q2D", lubridate::ymd("2021-01-01"), lubridate::ymd_hms("2021-01-01 09:00:00"),
@@ -133,8 +134,8 @@ test_that("create_single_dose_dataset Test 3: create_single_dose_dataset works f
   )
 })
 
-## Test 4: custom lookup works ----
-test_that("create_single_dose_dataset Test 4: custom lookup works", {
+## Test 4: Custom lookup works ----
+test_that("create_single_dose_dataset Test 4: Custom lookup works", {
   custom_lookup <- tibble::tribble(
     ~VALUE, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
     "Q30MIN", (1 / 30), "MINUTE", 1,
