@@ -19,6 +19,10 @@
 #' @return Variable vector.
 #' @export
 get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
+  assert_data_frame(dataset, optional = FALSE)
+  assert_vars(by_vars, optional = FALSE)
+  assert_vars(ignore_vars, optional = TRUE)
+
   non_by_vars <- setdiff(names(dataset), vars2chr(by_vars))
 
   if (!is.null(ignore_vars)) {
@@ -63,6 +67,8 @@ get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
 #'
 #' get_duplicates(c("a", "a", "b", "c", "d", "d"))
 get_duplicates <- function(x) {
+  assert_atomic_vector(x)
+
   unique(x[duplicated(x)])
 }
 
@@ -78,5 +84,7 @@ get_duplicates <- function(x) {
 #' @return A list of quosures
 #' @export
 get_source_vars <- function(quosures) {
+  assert_varval_list(quosures, optional = TRUE)
+
   quo_c(quosures)[lapply(quo_c(quosures), quo_is_symbol) == TRUE]
 }

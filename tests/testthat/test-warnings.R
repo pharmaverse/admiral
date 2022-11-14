@@ -1,24 +1,22 @@
-library(admiral.test)
-
 # warn_if_vars_exist ----
 ## Test 1: warning if a variable already exists in the input dataset ----
 test_that("warn_if_vars_exist Test 1: warning if a variable already exists in the input dataset", {
-  data(admiral_dm)
+  dm <- admiral.test::admiral_dm
 
   expect_warning(
-    warn_if_vars_exist(admiral_dm, "AGE"),
+    warn_if_vars_exist(dm, "AGE"),
     "Variable `AGE` already exists in the dataset"
   )
   expect_warning(
-    warn_if_vars_exist(admiral_dm, c("AGE", "AGEU", "ARM")),
+    warn_if_vars_exist(dm, c("AGE", "AGEU", "ARM")),
     "Variables `AGE`, `AGEU` and `ARM` already exist in the dataset"
   )
   expect_warning(
-    warn_if_vars_exist(admiral_dm, c("AAGE", "AGEU", "ARM")),
+    warn_if_vars_exist(dm, c("AAGE", "AGEU", "ARM")),
     "Variables `AGEU` and `ARM` already exist in the dataset"
   )
   expect_warning(
-    warn_if_vars_exist(admiral_dm, "AAGE"),
+    warn_if_vars_exist(dm, "AAGE"),
     NA
   )
 })

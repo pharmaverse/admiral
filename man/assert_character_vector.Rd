@@ -33,6 +33,7 @@ try(example_fun(1:10))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
+\code{\link{assert_atomic_vector}()},
 \code{\link{assert_character_scalar}()},
 \code{\link{assert_data_frame}()},
 \code{\link{assert_date_vector}()},
