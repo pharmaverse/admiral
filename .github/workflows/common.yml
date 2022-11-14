@@ -35,6 +35,7 @@ concurrency:
   group: admiral-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+
 jobs:
   style:
     name: Code Style
