@@ -460,7 +460,7 @@ Functions from other packages have to be explicitly imported by using the `@impo
 To import the `if_else()` and `mutate()` function from `dplyr` the following line would have to be included in that file:
 `#' @importFrom dplyr if_else mutate`.
 
-Some of these functions become critically important for admiral, such as `vars()` from `dplyr`, and should be included as a export. This may also include functions that are frequently called in roxygen examples. To export these functions, the following R code should be included in the `R/reexports.R` file using the format:
+Some of these functions become critically important while using admiral, such as `vars()` from `dplyr`, and should be included as a export. This may also include functions that are frequently called in roxygen examples. To export these functions, the following R code should be included in the `R/reexports.R` file using the format:
 
 ```
 #' @export
