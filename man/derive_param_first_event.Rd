@@ -167,6 +167,7 @@ derive_param_first_event(
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_extreme_records}()},
+\code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
 \code{\link{derive_param_bsa}()},
 \code{\link{derive_param_computed}()},

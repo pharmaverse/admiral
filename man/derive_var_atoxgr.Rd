@@ -61,7 +61,6 @@ derive_var_atoxgr(adlb)
 }
 \seealso{
 BDS-Findings Functions that returns variable appended to dataset: 
-\code{\link{derive_locf_records}()},
 \code{\link{derive_var_analysis_ratio}()},
 \code{\link{derive_var_anrind}()},
 \code{\link{derive_var_atoxgr_dir}()},
