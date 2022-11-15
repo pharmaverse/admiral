@@ -25,8 +25,7 @@ reference:
   - has_keyword("der_adsl")
 - subtitle: BDS-specific
   desc: Derivation Functions helpful for building the BDS datasets (e.g. advs, adlb, adeg, adex)
-- contents:
-  - has_keyword("der_bds_gen")
+  contents:
   - has_keyword("der_bds_findings")
 - subtitle: OCCDS-specific
   desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)

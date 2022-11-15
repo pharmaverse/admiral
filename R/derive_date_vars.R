@@ -1055,7 +1055,7 @@ convert_date_to_dtm <- function(dt,
   if (lubridate::is.POSIXct(dt)) {
     return(dt)
   } else {
-    if (is_date(dt)) {
+    if (is.instant(dt)) {
       dt <- format(dt, "%Y-%m-%d")
     }
 
