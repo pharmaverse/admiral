@@ -34,6 +34,10 @@ Authors:
 Other contributors:
 \itemize{
   \item Ondrej Slama [contributor]
+  \item Saddchla Mascary [contributor]
+  \item Zelos Zhu [contributor]
+  \item Jeffrey Dickinson [contributor]
+  \item Ania Golab [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
 }

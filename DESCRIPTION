@@ -11,6 +11,10 @@ Authors@R: c(
     person("Syed", "Mubasheer", role = "aut"),
     person("Ross", "Farrugia", role = "aut"),
     person("Ondrej", "Slama", role = "ctb"),
+    person("Saddchla", "Mascary", role = "ctb"),
+    person("Zelos", "Zhu", role = "ctb"),
+    person("Jeffrey", "Dickinson", role = "ctb"),
+    person("Ania", "Golab", role = "ctb"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
     )
