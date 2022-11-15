@@ -24,7 +24,7 @@
 #' @param order List of variables for sorting a dataset
 #'
 #'   The dataset is sorted by `order` before carrying the last
-#'   observation (eg. `AVAL`) within each `by_vars` forward.
+#'   observation forward (eg. `AVAL`) within each `by_vars`.
 #'
 #' @author G Gayatri
 #'
