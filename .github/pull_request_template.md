@@ -4,7 +4,7 @@ Please check off each taskbox as an acknowledgment that you completed the task o
 
 - [ ] Place Closes #<insert_issue_number> into the beginning of your Pull Request Title (Use Edit button in top-right if you need to update)
 - [ ] Code is formatted according to the [tidyverse style guide](https://style.tidyverse.org/). Run `styler::style_file()` to style R and Rmd files
-- [ ] Updated relevant unit tests or have written new unit tests, which should include edge cases, e.g. empty datasets, errors, etc. - See [Unit Test Guide](https://pharmaverse.github.io/admiraldev/devel/articles/unit_test_guidance.html#writing-unit-tests-in-admiral-)
+- [ ] Updated relevant unit tests or have written new unit tests, which should include edge cases, e.g. empty datasets, errors, etc. - See [Unit Test Guide](https://pharmaverse.github.io/admiraldev/devel/articles/unit_test_guidance.html#tests-should-be-robust-to-cover-realistic-data-scenarios)
 - [ ] If you removed/replaced any function and/or function parameters, did you fully follow the [deprecation guidance](https://pharmaverse.github.io/admiraldev/devel/articles/programming_strategy.html#deprecation)?
 - [ ] Update to all relevant roxygen headers and examples, including keywords and families. Refer to the [categorization of functions](https://pharmaverse.github.io/admiraldev/devel/articles/programming_strategy.html#categorization-of-functions) to tag appropriate keyword/family.
 - [ ] Run `devtools::document()` so all `.Rd` files in the `man` folder and the `NAMESPACE` file in the project root are updated appropriately
