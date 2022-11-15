@@ -70,6 +70,10 @@ Other contributors:
   \item John Kirkpatrick [contributor]
   \item James Black [contributor]
   \item Leena Khatri [contributor]
+  \item Saddchla Mascary [contributor]
+  \item Zelos Zhu [contributor]
+  \item Jeffrey Dickinson [contributor]
+  \item Ania Golab [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
 }
