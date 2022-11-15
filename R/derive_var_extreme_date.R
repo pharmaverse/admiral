@@ -225,7 +225,10 @@ derive_var_extreme_dtm <- function(dataset,
 
     if (!is.null(sources[[i]]$traceability_vars)) {
       warn_if_vars_exist(source_dataset, names(sources[[i]]$traceability_vars))
-      assert_data_frame(source_dataset, required_vars = get_source_vars(sources[[i]]$traceability_vars))
+      assert_data_frame(
+        source_dataset,
+        required_vars = get_source_vars(sources[[i]]$traceability_vars)
+      )
     }
 
     add_data[[i]] <- source_dataset %>%
