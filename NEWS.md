@@ -24,8 +24,11 @@
   
 ## Breaking Changes
   - NA
+  
 ## Documentation
   - New vignette for our package release strategy (#79)
+  - New section in programming strategy regarding comments (#71)
+  
 ## Various
   - NA
 
