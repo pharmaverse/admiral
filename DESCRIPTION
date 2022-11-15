@@ -47,7 +47,7 @@ Authors@R: c(
     person("John", "Kirkpatrick", role = "ctb"),
     person("James", "Black", role = "ctb"),
     person("Leena", "Khatri", role = "ctb"),
-    person("Saddchla", "Mascary", role = "ctb"),
+    person("Sadchla", "Mascary", role = "ctb"),
     person("Zelos", "Zhu", role = "ctb"),
     person("Jeffrey", "Dickinson", role = "ctb"),
     person("Ania", "Golab", role = "ctb"),
