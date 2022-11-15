@@ -21,10 +21,10 @@ An error if \code{base} and \code{compare} do not match or \code{NULL} invisibly
 }
 \description{
 Uses \code{\link[diffdf:diffdf]{diffdf::diffdf()}} to compares 2 datasets for any differences. This function can be
-thought of as an R-equivalent of SAS' proc compare.
+thought of as an R-equivalent of SAS proc compare and a useful tool for unit testing as well.
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(tibble)
 
 tbl1 <- tribble(

@@ -1,7 +1,7 @@
 #' Expectation: Are Two Datasets Equal?
 #'
 #' Uses [diffdf::diffdf()] to compares 2 datasets for any differences. This function can be
-#' thought of as an R-equivalent of SAS' proc compare.
+#' thought of as an R-equivalent of SAS proc compare and a useful tool for unit testing as well.
 #'
 #' @param base Input dataset
 #' @param compare Comparison dataset
@@ -17,7 +17,7 @@
 #' @family test_helper
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(tibble)
 #'
 #' tbl1 <- tribble(
