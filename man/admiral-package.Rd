@@ -44,6 +44,10 @@ Authors:
   \item Pooja Kumari
   \item Claudia Carlucci
   \item Daniil Stefonishin
+  \item Sadchla Mascary
+  \item Zelos Zhu
+  \item Jeffrey Dickinson
+  \item Ania Golab
 }
 
 Other contributors:
@@ -70,10 +74,6 @@ Other contributors:
   \item John Kirkpatrick [contributor]
   \item James Black [contributor]
   \item Leena Khatri [contributor]
-  \item Sadchla Mascary [contributor]
-  \item Zelos Zhu [contributor]
-  \item Jeffrey Dickinson [contributor]
-  \item Ania Golab [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
 }
