@@ -1,4 +1,4 @@
-#' Derive LOCF(Last observation carried forward) records
+#' Derive LOCF (Last Observation Carried Forward) Records
 #'
 #' Adds LOCF records as new observations for each 'by group' when the data set
 #' does not contain observations for missed visits/time points.
