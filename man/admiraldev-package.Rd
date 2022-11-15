@@ -29,15 +29,15 @@ Authors:
   \item Pooja Kumari
   \item Syed Mubasheer
   \item Ross Farrugia
+  \item Sadchla Mascary
+  \item Zelos Zhu
+  \item Jeffrey Dickinson
+  \item Ania Golab
 }
 
 Other contributors:
 \itemize{
   \item Ondrej Slama [contributor]
-  \item Sadchla Mascary [contributor]
-  \item Zelos Zhu [contributor]
-  \item Jeffrey Dickinson [contributor]
-  \item Ania Golab [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
 }
