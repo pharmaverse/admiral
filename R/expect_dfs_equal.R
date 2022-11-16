@@ -35,7 +35,7 @@
 #'     "1003",   20,   NA
 #' )
 #'
-#' expect_dfs_equal(tbl1, tbl2, keys = "USUBJID")
+#' try(expect_dfs_equal(tbl1, tbl2, keys = "USUBJID"))
 #'
 #' tlb3 <- tribble(
 #'   ~USUBJID, ~AGE, ~SEX,
