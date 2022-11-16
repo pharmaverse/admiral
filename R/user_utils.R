@@ -46,9 +46,11 @@ extract_unit <- function(x) {
 #' @export
 #'
 #' @examples
+#' library(tibble)
+#'
 #' convert_blanks_to_na(c("a", "b", "", "d", ""))
 #'
-#' df <- tibble::tibble(
+#' df <- tibble(
 #'   a = structure(c("a", "b", "", "c"), label = "A"),
 #'   b = structure(c(1, NA, 21, 9), label = "B"),
 #'   c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
@@ -83,6 +85,31 @@ convert_blanks_to_na.list <- function(x) {
 convert_blanks_to_na.data.frame <- function(x) { # nolint
   x[] <- lapply(x, convert_blanks_to_na)
   x
+}
+
+#' Turn a Character Vector into a List of Quosures
+#'
+#' Turn a character vector into a list of quosures
+#'
+#' @param chr A character vector
+#'
+#' @return A `list` of `quosures` as returned by [`vars()`]
+#'
+#' @author Stefan Bundfuss
+#'
+#' @export
+#'
+#' @keywords utils_quo
+#' @family utils_quo
+#'
+#' @examples
+#' chr2vars(c("USUBJID", "AVAL"))
+chr2vars <- function(chr) {
+  assert_character_vector(chr)
+  rlang::set_names(
+    quos(!!!syms(chr)),
+    names(chr)
+  )
 }
 
 #' Get One to Many Values that Led to a Prior Error
@@ -226,7 +253,11 @@ print.source <- function(x, ...) {
 #' @examples
 #' print_named_list(death_event)
 print_named_list <- function(list, indent = 0) {
-  for (name in names(list)) {
+  names <- names(list)
+  if (is.null(names)) {
+    names <- seq_len(length.out = length(list))
+  }
+  for (name in names) {
     if (inherits(list[[name]], "source")) {
       cat(strrep(" ", indent), name, ":\n", sep = "")
       print(list[[name]], indent = indent + 2)

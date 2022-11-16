@@ -1,7 +1,4 @@
-library(tibble)
-library(lubridate)
-library(dplyr)
-adsl <- tribble(
+adsl <- tibble::tribble(
   ~STUDYID,  ~USUBJID, ~TRTEDTM,                       ~DTHDTC,
   "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"), NA_character_,
   "STUDY01", "2",      NA,                             "2020-06",
@@ -11,7 +8,7 @@ adsl <- tribble(
     DTHDT = c(ymd(""), ymd("2020-06-01"), ymd(""))
   )
 
-ae <- tribble(
+ae <- tibble::tribble(
   ~STUDYID,  ~USUBJID, ~AESTDTC,     ~AEENDTC,      ~AESEQ,
   "STUDY01", "1",      "2019-11-01", "2019-11-23",  1,
   "STUDY01", "1",      "2020-02-01", "2020-02-01",  2,
