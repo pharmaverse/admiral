@@ -630,3 +630,72 @@ test_that("derive_param_tte Test 9: error is issued if parameter code already ex
     regexp = "^The parameter code 'TTAE' does already exist in `dataset`.$"
   )
 })
+
+## Test 10: ensuring na.rm is set for making sure ADT is not NA based on missing start date
+test_that("derive_param_tte Test 10: ensuring na.rm is set for making sure ADT is not NA based on missing start date", {
+
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,           ~LSTALVDT,
+    "01",     NA,                18594,
+    "02",     NA,                18594,
+    "03",     "2022-12-13",      18594
+  ) %>%
+    mutate(STUDYID = "AB42")
+
+  ae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC,     ~AESEQ,
+    "01",     "2020-09-10", 1,
+    "01",     "2021-11-25", 2,
+    "01",     "2022-12-13", 3
+  ) %>%
+    mutate(STUDYID = "AB42")
+
+  eos <- censor_source(
+    "adsl",
+    date = LSTALVDT,
+    set_values_to = vars(
+      EVNTDESC = "Last Known Alive Date",
+      SRCDOM = "ADSL",
+      SRCVAR = "LSTALVDT"
+    )
+  )
+
+  ttae <- event_source(
+    dataset_name = "adae",
+    date = ASTDT,
+    set_values_to = vars(
+      EVNTDESC = "Any Adverse Event",
+      SRCDOM = "ADAE",
+      SRCVAR = "AEDECOD",
+      SRCSEQ = AESEQ
+    )
+  )
+
+  actual_output <- derive_param_tte(
+    dataset_adsl = adsl,
+    source_datasets = list(adae = adae, adsl = adsl),
+    start_date = TRTSDT,
+    event_conditions = list(ttae),
+    censor_conditions = list(eos),
+    set_values_to = vars(
+      PARAMCD = "ANYAETTE",
+      PARAM = "Time to any first adverse event"
+    )
+  )
+
+  expected_output <- tibble::tribble(
+    ~ STUDYID, ~USUBJID,  ~EVNTDESC,            ~SRCDOM,  ~SRCVAR,    ~SRCSEQ,  ~CNSR,  ~ADT,          ~STARTDT,
+    "AB42"     "01",      "Any Adverse Event",  "ADAE",   "AEDECOD",  1         0       "2020-09-10",  NA,
+    "AB42"     "02",      "Any Adverse Event",  "ADAE",   "AEDECOD",  1         0       "2021-11-25",  NA,
+    "AB42"     "03",      "Any Adverse Event",  "ADAE",   "AEDECOD",  1         0       "2022-12-13",  "2022-12-13",
+  ) %>%
+    mutate(
+      PARAMCD = "ANYAETTE",
+      PARAM = "Time to any first adverse event"
+    )
+
+  # add regexp for either error/warning ?
+
+})
+
+
