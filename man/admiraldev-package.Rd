@@ -29,6 +29,10 @@ Authors:
   \item Pooja Kumari
   \item Syed Mubasheer
   \item Ross Farrugia
+  \item Sadchla Mascary
+  \item Zelos Zhu
+  \item Jeffrey Dickinson
+  \item Ania Golab
 }
 
 Other contributors:
