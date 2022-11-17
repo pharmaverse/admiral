@@ -30,7 +30,7 @@ try(example_fun(
   true_value = 1,
   false_value = 0,
   missing_value = "missing"
-  ))
+))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
