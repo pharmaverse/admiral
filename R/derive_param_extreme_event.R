@@ -123,9 +123,9 @@ derive_param_first_event <- function(dataset,
 
 #' Add an Extreme Event Parameter
 #'
-#' Add a new parameter for the first or last event occurring in a dataset. The variable given in `new_var`
-#'  indicates if an event occurred or not. For example, the function can derive a parameter
-#'  for the first disease progression.
+#' Add a new parameter for the first or last event occurring in a dataset. The
+#'  variable given in `new_var` indicates if an event occurred or not. For example,
+#'  the function can derive a parameter for the first disease progression.
 #'
 #' @param dataset Input dataset
 #'
@@ -177,8 +177,8 @@ derive_param_first_event <- function(dataset,
 #'
 #' @param false_value False value
 #'
-#'   For all other subjects in `dataset_adsl` without an event, `new_var` is set to the specified
-#'   value `false_value`.
+#'   For all other subjects in `dataset_adsl` without an event, `new_var` is set to
+#'   the specified value `false_value`.
 #'
 #'   *Default*: `"N"`
 #'
