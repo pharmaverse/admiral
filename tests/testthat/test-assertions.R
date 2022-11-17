@@ -1011,7 +1011,8 @@ test_that("assert_same_type Test 75: error if different type", {
       "true_value: character",
       "false_value: character",
       "missing_value: double",
-      sep = "\n"),
+      sep = "\n"
+    ),
     fixed = TRUE
-    )
+  )
 })

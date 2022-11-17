@@ -1590,9 +1590,9 @@ assert_date_vector <- function(arg, optional = TRUE) {
 #'   true_value = 1,
 #'   false_value = 0,
 #'   missing_value = "missing"
-#'   ))
+#' ))
 assert_same_type <- function(...) {
-  args  <- rlang::dots_list(..., .named = TRUE)
+  args <- rlang::dots_list(..., .named = TRUE)
   arg_names <- lapply(args, function(x) deparse(substitute(x)))
   types <- lapply(args, typeof)
 
