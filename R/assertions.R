@@ -1558,3 +1558,53 @@ assert_date_vector <- function(arg, optional = TRUE) {
     ))
   }
 }
+
+#' Are All Argument of the Same Type?
+#'
+#'
+#' Checks if all arguments are of the same type.
+#'
+#' @param ... Arguments to be checked
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error if not all arguments are of the same type.
+#'
+#' @export
+#'
+#' @keywords assertion
+#' @family assertion
+#'
+#' @examples
+#' example_fun <- function(true_value, false_value, missing_value) {
+#'   assert_same_type(true_value, false_value, missing_value)
+#' }
+#'
+#' example_fun(
+#'   true_value = "Y",
+#'   false_value = "N",
+#'   missing_value = NA_character_
+#' )
+#'
+#' try(example_fun(
+#'   true_value = 1,
+#'   false_value = 0,
+#'   missing_value = "missing"
+#'   ))
+assert_same_type <- function(...) {
+  args  <- rlang::dots_list(..., .named = TRUE)
+  arg_names <- lapply(args, function(x) deparse(substitute(x)))
+  types <- lapply(args, typeof)
+
+  if (length(unique(types)) > 1) {
+    abort(
+      paste(
+        "All arguments must be of the same type.",
+        "Argument: Type",
+        "--------------",
+        paste0(names(args), ": ", types, collapse = "\n"),
+        sep = "\n"
+      )
+    )
+  }
+}

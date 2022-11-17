@@ -10,7 +10,9 @@
   
   - New keyword/family `create_aux` for functions creating auxiliary datasets (#126)
   
-  - New function `assert_date_vector` (#129)
+  - New function `assert_date_vector()` (#129)
+  
+  - New function `assert_same_type()` (#176)
   
   - Remove dependency on `{assertthat}` (#149)
   
