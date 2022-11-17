@@ -20,12 +20,12 @@ derive_var_merged_character(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} parameter are expected.}
+The variables specified by the \code{by_vars} argument are expected.}
 
 \item{dataset_add}{Additional dataset
 
 The variables specified by the \code{by_vars}, the \code{source_var}, and the \code{order}
-parameter are expected.}
+argument are expected.}
 
 \item{by_vars}{Grouping variables
 
@@ -37,7 +37,7 @@ key of the selected observations.
 
 \item{order}{Sort order
 
-If the parameter is set to a non-null value, for each by group the first or
+If the argument is set to a non-null value, for each by group the first or
 last observation from the additional dataset is selected with respect to the
 specified order.
 
@@ -49,7 +49,7 @@ created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))} or \code{NULL}}
 \item{new_var}{New variable
 
 The specified variable is added to the additional dataset and set to the
-transformed value with respect to the \code{case} parameter.}
+transformed value with respect to the \code{case} argument.}
 
 \item{source_var}{Source variable}
 
@@ -64,7 +64,7 @@ Changes the case of the values of the new variable.
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
 Only observations fulfilling the specified condition are taken into account
-for merging. If the parameter is not specified, all observations are
+for merging. If the argument is not specified, all observations are
 considered.
 
 \emph{Default}: \code{NULL}
@@ -74,9 +74,9 @@ considered.
 \item{mode}{Selection mode
 
 Determines if the first or last observation is selected. If the \code{order}
-parameter is specified, \code{mode} must be non-null.
+argument is specified, \code{mode} must be non-null.
 
-If the \code{order} parameter is not specified, the \code{mode} parameter is ignored.
+If the \code{order} argument is not specified, the \code{mode} argument is ignored.
 
 \emph{Default}: \code{NULL}
 
@@ -137,6 +137,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_last_dose_grp}()},
 \code{\link{derive_var_merged_cat}()},
 \code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_var_worst_flag}()},

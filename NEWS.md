@@ -16,6 +16,10 @@ observation (#1448).
 - New function `derive_var_relative_flag()` for flagging observations before or
 after a condition is fulfilled (#1453)
 
+- New functions `get_admiral_option()` and `set_admiral_options()` to allow more 
+flexibility on common function inputs; e.g. like `subject_keys` to avoid several 
+find and replace instances of `vars(STUDYID, USUBJID)`. (#1338)
+
 - The new function `create_period_dataset()` for creating a reference dataset
 for subperiods, periods, or phases from the ADSL dataset was added. The
 reference dataset can be used to create subperiod, period, and phase variables
@@ -25,8 +29,14 @@ in OCCDS and BDS datasets. (#1477)
 variables to ADSL. The values for the new variables are provided by a period
 reference dataset. (#1477)
 
+- New function `derive_var_merged_summary()` adds a variable of summarized
+values to the input dataset (#1564)
+
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
+
+- New metadata data set called `atoxgr_criteria_ctcv5` which holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
 
 - Removed the `{assertthat}` dependency in `{admiral}` (#1392)
 
@@ -39,6 +49,10 @@ reference dataset. (#1477)
 - Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
 which controls if time is considered for the condition if `start_date` is after
 `ref_end_date` + `ref_end_window` days (#989).
+
+- `derive_var_atoxgr_dir()` default value of `atoxgr_criteria_ctcv4` removed for
+parameter `meta_criteria`. Can now also choose `atoxgr_criteria_ctcv5` for parameter 
+`meta_criteria`, to implement NCI-CTCAEv5 grading criteria .
 
 ## Breaking Changes
 

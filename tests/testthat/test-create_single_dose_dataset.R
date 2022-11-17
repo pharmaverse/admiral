@@ -1,4 +1,6 @@
-test_that("create_single_dose_dataset works as expected for Q#/EVERY # cases", {
+# create_single_dose_dataset ----
+## Test 1: Works as expected for Q#/EVERY # cases ----
+test_that("create_single_dose_dataset Test 1: Works as expected for Q#/EVERY # cases", {
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
     "P01", "Q2D", ymd("2021-01-01"), ymd_hms("2021-01-01 10:30:00"),
@@ -34,7 +36,9 @@ test_that("create_single_dose_dataset works as expected for Q#/EVERY # cases", {
 })
 
 
-test_that("create_single_dose_dataset works as expected for # TIMES PER cases", {
+
+## Test 2: Works as expected for # TIMES PER cases ----
+test_that("create_single_dose_dataset Test 2: Works as expected for # TIMES PER cases", {
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
     "P01", "2 TIMES PER YEAR",
@@ -99,7 +103,8 @@ test_that("create_single_dose_dataset works as expected for # TIMES PER cases", 
   expect_equal(create_single_dose_dataset(input), expected_output)
 })
 
-test_that("create_single_dose_dataset works for different treatments", {
+## Test 3: Works for different treatments ----
+test_that("create_single_dose_dataset Test 3: Works for different treatments", {
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM, ~EXTRT,
     "P01", "Q2D", lubridate::ymd("2021-01-01"), lubridate::ymd_hms("2021-01-01 09:00:00"),
@@ -129,7 +134,8 @@ test_that("create_single_dose_dataset works for different treatments", {
   )
 })
 
-test_that("custom lookup works", {
+## Test 4: Custom lookup works ----
+test_that("create_single_dose_dataset Test 4: Custom lookup works", {
   custom_lookup <- tibble::tribble(
     ~VALUE, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
     "Q30MIN", (1 / 30), "MINUTE", 1,
@@ -169,7 +175,8 @@ test_that("custom lookup works", {
   )
 })
 
-test_that("Warning is returned when values in EXDOSFRQ does not appear in lookup table", {
+## Test 5: Warning is returned when values in EXDOSFRQ does not appear in lookup table ----
+test_that("create_single_dose_dataset Test 5: Warning is returned when values in EXDOSFRQ does not appear in lookup table", { # nolint
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
     "P01", "1", lubridate::ymd("2021-01-01"), lubridate::ymd_hms("2021-01-01T09:00:00"),
@@ -184,7 +191,8 @@ test_that("Warning is returned when values in EXDOSFRQ does not appear in lookup
   )
 })
 
-test_that("Error is returned when a date variable contains NA values", {
+## Test 6: Error is returned when a date variable contains NA values ----
+test_that("create_single_dose_dataset Test 6: Error is returned when a date variable contains NA values", { # nolint
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
     "P01", "Q2D", ymd("2021-01-01"), lubridate::ymd_hms("2021-01-01T09:00:00"), NA, NA,
@@ -196,5 +204,59 @@ test_that("Error is returned when a date variable contains NA values", {
   expect_error(
     create_single_dose_dataset(input),
     regexp = "cannot contain `NA`"
+  )
+})
+
+## Test 7: Message for improper DT column names, ASTDT ----
+test_that("create_single_dose_dataset Test 7: Message for improper DT column names, ASTDT", {
+  input <- tibble::tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ADTSTD, ~ASTDTM, ~AENDT, ~AENDTM,
+    "P01", "Q2D", ymd("2021-01-01"), ymd_hms("2021-01-01 10:30:00"),
+    ymd("2021-01-07"), ymd_hms("2021-01-07 11:30:00"),
+    "P01", "Q3D", ymd("2021-01-01"), ymd_hms("2021-01-08 12:00:00"),
+    ymd("2021-01-14"), ymd_hms("2021-01-14 14:00:00"),
+    "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd_hms("2021-01-15 09:57:00"),
+    ymd("2021-01-29"), ymd_hms("2021-01-29 10:57:00")
+  )
+  expect_error(
+    create_single_dose_dataset(input,
+      start_date = ADTSTD,
+      keep_source_vars = vars(
+        USUBJID, EXDOSFRQ,
+        ADTSTD, ASTDTM,
+        AENDT, AENDTM
+      )
+    ),
+    regexp = paste0(
+      "The argument start_date is expected to have a name like xxxDT.\n",
+      "Please check as it does not follow the expected naming convention"
+    )
+  )
+})
+
+## Test 8: Message for improper DT column names, AENDT ----
+test_that("create_single_dose_dataset Test 8: Message for improper DT column names, AENDT", {
+  input <- tibble::tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~ADTEND, ~AENDTM,
+    "P01", "Q2D", ymd("2021-01-01"), ymd_hms("2021-01-01 10:30:00"),
+    ymd("2021-01-07"), ymd_hms("2021-01-07 11:30:00"),
+    "P01", "Q3D", ymd("2021-01-01"), ymd_hms("2021-01-08 12:00:00"),
+    ymd("2021-01-14"), ymd_hms("2021-01-14 14:00:00"),
+    "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd_hms("2021-01-15 09:57:00"),
+    ymd("2021-01-29"), ymd_hms("2021-01-29 10:57:00")
+  )
+  expect_error(
+    create_single_dose_dataset(input,
+      end_date = ADTEND,
+      keep_source_vars = vars(
+        USUBJID, EXDOSFRQ,
+        ASTDT, ASTDTM,
+        ADTEND, AENDTM
+      )
+    ),
+    regexp = paste0(
+      "The argument end_date is expected to have a name like xxxDT.\n",
+      "Please check as it does not follow the expected naming convention"
+    )
   )
 })
