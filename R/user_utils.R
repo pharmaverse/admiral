@@ -87,6 +87,74 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
   x
 }
 
+
+#' Convert NAs Into Blank Strings
+#'
+#' Turn `NA`s to blank strings .
+#'
+#' @param x Any R object
+#'
+#' @details
+#' The default methods simply returns its input unchanged. The `character` method
+#' turns every instance of `NA_character_` or `NA` into `""` while preserving *all* attributes.
+#' When given a data frame as input the function keeps all non-character columns
+#' as is and applies the just described logic to `character`
+#' all attributes such as labels are preserved.
+#'
+#' @return An object of the same class as the input
+#'
+#' @author Sadchla Mascary
+#'
+#' @family utils_fmt
+#' @keywords utils_fmt
+#'
+#' @export
+#'
+#' @examples
+#' library(tibble)
+#'
+#' convert_na_to_blanks(c("a", "b", NA, "d", NA))
+#'
+#' df <- tibble(
+#'   a = structure(c("a", "b", NA, "c"), label = "A"),
+#'   b = structure(c(1, NA, 21, 9), label = "B"),
+#'   c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
+#'   d = structure(c(NA, NA, "s", "q"), label = "D")
+#' )
+#' print(df)
+#' convert_na_to_blanks(df)
+convert_na_to_blanks <- function(x) {
+  x_out <- ifelse((is.character(x) & is.na(x)), "", x)
+  do.call(structure, c(list(x_out), attributes(x)))
+}
+
+#' @export
+#' @rdname convert_na_to_blanks
+convert_na_to_blanks_default <- function(x) {
+  x
+}
+
+#' @export
+#' @rdname convert_na_to_blanks
+convert_na_to_blanks_character <- function(x) {
+  do.call(structure, c(list(if_else(is.na(x), "", x)), attributes(x)))
+}
+
+#' @export
+#' @rdname convert_na_to_blanks
+convert_na_to_blanks_list <- function(x) {
+  lapply(x, convert_na_to_blanks)
+}
+
+#' @export
+#' @rdname convert_na_to_blanks
+convert_na_to_blank_data_frame <- function(x) {
+  x_out <- x %>%
+    mutate(across(where(is.character), convert_na_to_blanks))
+  x_out
+  }
+
+
 #' Turn a Character Vector into a List of Quosures
 #'
 #' Turn a character vector into a list of quosures
