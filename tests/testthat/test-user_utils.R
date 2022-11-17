@@ -73,7 +73,7 @@ test_that("convert_na_to_blanks Test 6: attributes are preserved when converting
 ## Test 7: `NA` are turned into blank strings inside data frames ----
 # convert_na_to_blanks Test 7: `NA` are turned into blank strings inside data frames ----
 test_that("convert_na_to_blanks Test 7: `NA` are turned into blank strings inside data frames", {
-    input <- tibble::tibble(
+  input <- tibble::tibble(
     a = structure(c("a", "b", NA, "c"), label = "A"),
     b = structure(c(1, NA, 21, 9), label = "B"),
     c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),

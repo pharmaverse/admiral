@@ -150,9 +150,9 @@ convert_na_to_blanks_list <- function(x) {
 #' @rdname convert_na_to_blanks
 convert_na_to_blank_data_frame <- function(x) {
   x_out <- x %>%
-    mutate(across(where(is.character), convert_na_to_blanks))
+    mutate(across(everything(), convert_na_to_blanks))
   x_out
-  }
+}
 
 
 #' Turn a Character Vector into a List of Quosures

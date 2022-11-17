@@ -4,7 +4,7 @@
 #' @importFrom dplyr arrange bind_rows case_when desc ends_with filter full_join group_by
 #'             if_else mutate mutate_at mutate_if n pull rename rename_at row_number select slice
 #'             semi_join starts_with transmute ungroup vars n_distinct union distinct
-#'             summarise_at summarise coalesce bind_cols na_if tibble across
+#'             summarise_at summarise coalesce bind_cols na_if tibble across everything
 #' @importFrom magrittr %>%
 #' @importFrom rlang := abort arg_match as_function as_label as_string call2
 #'   caller_env call_name current_env .data enexpr enquo eval_bare eval_tidy
@@ -22,7 +22,7 @@
 #' @importFrom lubridate as_datetime ceiling_date date days duration floor_date is.Date is.instant
 #'             rollback time_length %--% ymd ymd_hms weeks years hours minutes
 #' @importFrom tidyr drop_na nest pivot_longer pivot_wider unnest replace_na
-#' @importFrom tidyselect all_of contains matches vars_select where
+#' @importFrom tidyselect all_of contains matches vars_select
 #' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
 "_PACKAGE"
