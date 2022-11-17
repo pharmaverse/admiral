@@ -1,22 +1,10 @@
-admiral_options <- new.env(parent = emptyenv())
-admiral_options$subject_keys <- vars(STUDYID, USUBJID)
-# admiral_options$future_input <- vars(...) nolint
-
-######################################################
-### To enhance feature and add inputs as necessary ###
-######################################################
-
-# 1. Add additional options such as future_input as shown commented above
-# 2. Update @params with future_input in set_admiral_options roxygen documentation
-# 3. Add future_input into set_admiral_options() formals and body
-
 #' Get the Value of an Admiral Option
 #'
 #' Get the Value of an Admiral Option Which Can Be Modified for Advanced Users.
 #'
 #' @param option A character scalar of commonly used admiral function inputs.
 #'
-#'   As of now, support only available for `r enumerate(ls(admiral_options), quote_fun = dquote, conjunction = "or")`.
+#'   As of now, support only available for `r enumerate(names(admiral_environment$admiral_options), quote_fun = dquote, conjunction = "or")`.
 #'   See `set_admiral_options()` for a description of the options.
 #'
 #' @details
@@ -57,10 +45,10 @@ get_admiral_option <- function(option) {
   assert_character_scalar(option)
 
   # Find which admiral_options is being called upon
-  possible_inputs <- ls(admiral_options)
+  possible_inputs <- names(admiral_environment$admiral_options)
 
   if (option %in% possible_inputs) {
-    return(admiral_options[[option]])
+    return(admiral_environment$admiral_options[[option]])
   }
 
   # Return message otherwise, catch typos
@@ -142,12 +130,12 @@ get_admiral_option <- function(option) {
 set_admiral_options <- function(subject_keys) {
   if (!missing(subject_keys)) {
     assert_vars(subject_keys)
-    admiral_options$subject_keys <- subject_keys
+    admiral_environment$admiral_options$subject_keys <- subject_keys
   }
 
   # Add future input to function formals above
   # if (!missing(future_input)) {
   #   assert_vars(future_input) nolint
-  #   admiral_options$future_input <- future_input nolint
+  #   admiral_environment$admiral_options$future_input <- future_input nolint
   # }
 }
