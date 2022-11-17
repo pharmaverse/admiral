@@ -112,7 +112,7 @@ format_eoxxstt1 <- function(x) {
     x == "COMPLETED" ~ "COMPLETED",
     x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
     !(x \%in\% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~
-    "DISCONTINUED NOT DUE TO AE",
+      "DISCONTINUED NOT DUE TO AE",
     TRUE ~ "ONGOING"
   )
 }

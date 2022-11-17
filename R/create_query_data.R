@@ -731,12 +731,13 @@ validate_query <- function(obj) {
         map_lgl(values$definition, is.data.frame) |
           map_lgl(values$definition, inherits, "smq_select")
       if (!all(is_valid)) {
-        info_msg <- paste(sprintf(
-          "\u2716 Element %s is %s",
-          which(!is_valid),
-          map_chr(values$definition[!is_valid], what_is_it)
-        ),
-        collapse = "\n"
+        info_msg <- paste(
+          sprintf(
+            "\u2716 Element %s is %s",
+            which(!is_valid),
+            map_chr(values$definition[!is_valid], what_is_it)
+          ),
+          collapse = "\n"
         )
         err_msg <- sprintf(
           paste(

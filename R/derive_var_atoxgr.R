@@ -169,7 +169,6 @@ derive_var_atoxgr_dir <- function(dataset,
 
   # for each TERM apply criteria and create grade derivation
   for (i in seq_along(list_of_terms$TERM)) {
-
     # filter metadata on a term
     meta_this_term <- atoxgr_dir %>%
       filter(TERM_UPPER == list_of_terms$TERM_UPPER[i])
