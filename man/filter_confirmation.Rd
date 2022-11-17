@@ -163,6 +163,7 @@ are dropped.
 
 library(tibble)
 library(admiral)
+library(dplyr)
 
 # filter observations with a duration longer than 30 and
 # on or after 7 days before a COVID AE (ACOVFL == "Y")
@@ -287,6 +288,7 @@ filter_confirmation(
 Utilities for Filtering Observations: 
 \code{\link{count_vals}()},
 \code{\link{filter_extreme}()},
+\code{\link{filter_if}()},
 \code{\link{filter_relative}()},
 \code{\link{max_cond}()},
 \code{\link{min_cond}()}

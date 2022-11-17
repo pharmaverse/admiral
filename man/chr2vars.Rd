@@ -18,6 +18,11 @@ Turn a character vector into a list of quosures
 \examples{
 chr2vars(c("USUBJID", "AVAL"))
 }
+\seealso{
+Other utils_quo: 
+\code{\link{negate_vars}()},
+\code{\link{vars2chr}()}
+}
 \author{
 Stefan Bundfuss
 }

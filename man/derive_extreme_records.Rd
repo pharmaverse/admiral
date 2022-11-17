@@ -98,6 +98,7 @@ the selected observations.
 }
 \examples{
 library(tibble)
+library(dplyr)
 
 adlb <- tribble(
   ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,

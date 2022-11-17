@@ -46,6 +46,7 @@ Utilities for Filtering Observations:
 \code{\link{count_vals}()},
 \code{\link{filter_confirmation}()},
 \code{\link{filter_extreme}()},
+\code{\link{filter_if}()},
 \code{\link{filter_relative}()},
 \code{\link{min_cond}()}
 }

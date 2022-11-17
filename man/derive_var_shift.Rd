@@ -47,7 +47,7 @@ missing value is replaced by \code{na_val} (e.g. "NORMAL to NULL").
 }
 \examples{
 library(tibble)
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 
 data <- tribble(
   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,

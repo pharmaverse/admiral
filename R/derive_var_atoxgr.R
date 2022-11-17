@@ -71,7 +71,7 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #'
 #' data <- tribble(
 #'   ~ATOXDSCL,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
@@ -250,7 +250,7 @@ derive_var_atoxgr_dir <- function(dataset,
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #'
 #' adlb <- tribble(
 #'   ~ATOXDSCL,          ~ATOXDSCH,        ~ATOXGRL,      ~ATOXGRH,
