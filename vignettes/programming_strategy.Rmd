@@ -119,6 +119,19 @@ variables must start with `temp_` and must be removed from the output dataset.
 | `derive_vars_` (e.g. `derive_vars_dt`)       | Functions which add multiple variables                                                              |
 | `derive_param_` (e.g. `derive_param_os`)     | Functions which add a single parameter                                                              |
 | `compute_` /  `calculate_` / ...             | Functions that take vectors as input and return a vector                                            |
+| `create_`  /  `consolidate_`                 | Functions that create datasets without keeping the original observations                            |
+| `get_`                                       | Usually utility functions that return very specific objects that get passed through other functions |
+| `filter_`                                    | Functions that filter observations based on conditions associated with common clinical trial syntax |
+
+| Function name suffix                         | Description                                                                                         |
+|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `_derivation` (suffix)                       | High order functions that takes another function as input                                           |
+| `_date` / `_time` / `_dt` / `_dtc` / `_dtm`  | Functions associated with dates, times, datetimes, and their character equivalents.                 |
+| `_source`                                    | Functions that create source datasets that usually will be passed through other `derive_` functions.|
+
+| Other common function name terms             | Description                                                                                         |
+|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `_merged_` / `_joined_` / `_extreme_`        | Functions that follow the generic function user-guide.                                              |
 
 Please note that the appropriate *var*/*vars* prefix should be used for all cases in which the function creates any variable(s), regardless of the presence of a `new_var` parameter in the function call. 
 
