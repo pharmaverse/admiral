@@ -2,7 +2,7 @@
 % Please edit documentation in R/datasets.R
 \name{set_dataset}
 \alias{set_dataset}
-\title{Set a Dataset in the \code{admiraldev_environment} environment}
+\title{Set a Dataset in the \code{admiral_environment} environment}
 \usage{
 set_dataset(dataset, name)
 }
@@ -15,11 +15,11 @@ set_dataset(dataset, name)
 No return value, called for side effects
 }
 \description{
-Set a Dataset in the \code{admiraldev_environment} environment
+Set a Dataset in the \code{admiral_environment} environment
 }
 \details{
 The object passed to the \code{dataset} argument will be assigned to \code{name} in
-the \code{admiraldev_environment} environment. It can be retrieved later on using \code{\link[=get_dataset]{get_dataset()}}
+the \code{admiral_environment} environment. It can be retrieved later on using \code{\link[=get_dataset]{get_dataset()}}
 }
 \seealso{
 Other datasets: 

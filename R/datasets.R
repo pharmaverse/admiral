@@ -1,4 +1,4 @@
-#' Set a Dataset in the `admiraldev_environment` environment
+#' Set a Dataset in the `admiral_environment` environment
 #'
 #' @param dataset A `data.frame`
 #' @param name A name for `dataset`
@@ -13,17 +13,17 @@
 #'
 #' @details
 #' The object passed to the `dataset` argument will be assigned to `name` in
-#' the `admiraldev_environment` environment. It can be retrieved later on using [get_dataset()]
+#' the `admiral_environment` environment. It can be retrieved later on using [get_dataset()]
 #'
 #' @export
 set_dataset <- function(dataset, name) {
   assert_data_frame(dataset, check_is_grouped = FALSE)
   assert_character_scalar(name)
 
-  admiraldev_environment[[name]] <- dataset
+  admiral_environment[[name]] <- dataset
 }
 
-#' Retrieve a Dataset from the `admiraldev_environment` environment
+#' Retrieve a Dataset from the `admiral_environment` environment
 #'
 #' @param name The name of the dataset to retrieve
 #'
@@ -38,5 +38,5 @@ set_dataset <- function(dataset, name) {
 get_dataset <- function(name) {
   assert_character_scalar(name)
 
-  admiraldev_environment[[name]]
+  admiral_environment[[name]]
 }
