@@ -50,7 +50,7 @@ reference:
   - has_keyword('tmp_vars')
 
 - title: Getting and Setting Datasets
-  desc: Assign or retrieve a dataset into/from the `admiral_environment` enironment
+  desc: Assign or retrieve a dataset into/from the `admiraldev_environment` enironment
   contents:
   - has_keyword('datasets')
 
