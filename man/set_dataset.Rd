@@ -19,7 +19,7 @@ Set a Dataset in the \code{admiraldev_environment} environment
 }
 \details{
 The object passed to the \code{dataset} argument will be assigned to \code{name} in
-the \code{.datasets} environment. It can be retrieved later on using \code{\link[=get_dataset]{get_dataset()}}
+the \code{admiraldev_environment} environment. It can be retrieved later on using \code{\link[=get_dataset]{get_dataset()}}
 }
 \seealso{
 Other datasets: 

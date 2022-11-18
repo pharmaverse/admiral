@@ -13,7 +13,7 @@
 #'
 #' @details
 #' The object passed to the `dataset` argument will be assigned to `name` in
-#' the `.datasets` environment. It can be retrieved later on using [get_dataset()]
+#' the `admiraldev_environment` environment. It can be retrieved later on using [get_dataset()]
 #'
 #' @export
 set_dataset <- function(dataset, name) {
@@ -23,7 +23,7 @@ set_dataset <- function(dataset, name) {
   admiraldev_environment[[name]] <- dataset
 }
 
-#' Retrieve a Dataset from the `.datasets` environment
+#' Retrieve a Dataset from the `admiraldev_environment` environment
 #'
 #' @param name The name of the dataset to retrieve
 #'
