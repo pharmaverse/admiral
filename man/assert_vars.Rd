@@ -23,6 +23,8 @@ and returns the input invisibly otherwise.
 Checks if an argument is a valid list of variables created using \code{vars()}
 }
 \examples{
+library(dplyr)
+
 example_fun <- function(by_vars) {
   assert_vars(by_vars)
 }

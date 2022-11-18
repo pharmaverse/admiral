@@ -35,6 +35,8 @@ variable-value pairs. The value can be a symbol, a string, a numeric, or
 \code{NA}. More general expression are not allowed.
 }
 \examples{
+library(dplyr)
+
 example_fun <- function(vars) {
   assert_varval_list(vars)
 }

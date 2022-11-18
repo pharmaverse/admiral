@@ -20,6 +20,7 @@ calls created using \code{vars()} and returns the input invisibly otherwise.
 Checks if an argument is a valid list of order variables created using \code{vars()}
 }
 \examples{
+library(dplyr)
 
 example_fun <- function(by_vars) {
   assert_order_vars(by_vars)

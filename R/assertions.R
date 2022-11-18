@@ -23,6 +23,7 @@
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
@@ -323,11 +324,13 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #' @family assertion
 #' @examples
 #' library(admiral.test)
+#' library(dplyr)
+#' library(rlang)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dat, var) {
-#'   var <- assert_symbol(rlang::enquo(var))
-#'   dplyr::select(dat, !!var)
+#'   var <- assert_symbol(enquo(var))
+#'   select(dat, !!var)
 #' }
 #'
 #' example_fun(admiral_dm, USUBJID)
@@ -415,12 +418,14 @@ assert_expr <- function(arg, optional = FALSE) {
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr)
+#' library(rlang)
 #' data(admiral_dm)
 #'
 #' # typical usage in a function as a parameter check
 #' example_fun <- function(dat, x) {
-#'   x <- assert_filter_cond(rlang::enquo(x))
-#'   dplyr::filter(dat, !!x)
+#'   x <- assert_filter_cond(enquo(x))
+#'   filter(dat, !!x)
 #' }
 #'
 #' example_fun(admiral_dm, AGE == 64)
@@ -475,6 +480,8 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #' @family assertion
 #' @examples
+#' library(dplyr)
+#'
 #' example_fun <- function(by_vars) {
 #'   assert_vars(by_vars)
 #' }
@@ -559,6 +566,7 @@ assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
 #' @keywords assertion
 #' @family assertion
 #' @examples
+#' library(dplyr)
 #'
 #' example_fun <- function(by_vars) {
 #'   assert_order_vars(by_vars)
@@ -1183,6 +1191,8 @@ assert_param_does_not_exist <- function(dataset, param) {
 #' @export
 #'
 #' @examples
+#' library(dplyr)
+#'
 #' example_fun <- function(vars) {
 #'   assert_varval_list(vars)
 #' }

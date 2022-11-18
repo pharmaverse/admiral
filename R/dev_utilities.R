@@ -169,6 +169,8 @@ contains_vars <- function(arg) {
 #' @family dev_utility
 #'
 #' @examples
+#' library(dplyr)
+#'
 #' vars2chr(vars(USUBJID, AVAL))
 vars2chr <- function(quosures) {
   rlang::set_names(
@@ -196,6 +198,8 @@ vars2chr <- function(quosures) {
 #' @family dev_utility
 #'
 #' @examples
+#' library(dplyr)
+#'
 #' negate_vars(vars(USUBJID, STUDYID))
 negate_vars <- function(vars = NULL) {
   assert_vars(vars, optional = TRUE)
