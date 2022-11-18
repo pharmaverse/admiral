@@ -119,6 +119,21 @@ variables must start with `temp_` and must be removed from the output dataset.
 | `derive_vars_` (e.g. `derive_vars_dt`)       | Functions which add multiple variables                                                              |
 | `derive_param_` (e.g. `derive_param_os`)     | Functions which add a single parameter                                                              |
 | `compute_` /  `calculate_` / ...             | Functions that take vectors as input and return a vector                                            |
+| `create_`  /  `consolidate_`                 | Functions that create datasets without keeping the original observations                            |
+| `get_`                                       | Usually utility functions that return very specific objects that get passed through other functions |
+| `filter_`                                    | Functions that filter observations based on conditions associated with common clinical trial syntax |
+
+| Function Name Suffix                         | Description                                                                                         |
+|----------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `_derivation` (suffix)                       | High order functions that call a user specified derivation                                          |
+| `_date` / `_time` / `_dt` / `_dtc` / `_dtm`  | Functions associated with dates, times, datetimes, and their character equivalents.                 |
+| `_source`                                    | Functions that create source datasets that usually will be passed through other `derive_` functions.|
+
+| Other Common Function Name Terms             | Description                                                                                         |
+|----------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `_merged_` / `_joined_` / `_extreme_`        | Functions that follow the generic function user-guide.                                              |
+
+
 
 Please note that the appropriate *var*/*vars* prefix should be used for all cases in which the function creates any variable(s), regardless of the presence of a `new_var` parameter in the function call. 
 
@@ -712,8 +727,8 @@ If meaningful, comments can cover multiple variables within a piece of code
 
 # R and package versions for development
 
-* The choice of R Version is not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers.  We only use the three latest R versions and the closest date of snapshots of R packages available when that R version came out. This need for a common development environment also carries over for our choice of package versions.  
-* GitHub allows us through the Actions/Workflows to test `{admiral}` under several versions of R as well as several versions of dependent R packages needed for `{admiral}`.  Currently we test `{admiral}` against 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages.  You can view this workflow on our [GitHub Repository](https://github.com/pharmaverse/admiralci/blob/main/.github/workflows/r-cmd-check.yml)
+* The choice of R Version is not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in the earliest of the three latest R Versions. This need for a common development environment also carries over for our choice of package versions.  
+* GitHub allows us through the Actions/Workflows to test `{admiral}` under several versions of R as well as several versions of dependent R packages needed for `{admiral}`.  Currently we test `{admiral}` against the three latest R Versions and the closest snapshots of packages to those R versions.  You can view this workflow and others on our [admiralci GitHub Repository](https://github.com/pharmaverse/admiralci).
 * This common development allows us to easily re-create bugs and provide solutions to each other issues that developers will encounter.  
 * Reviewers of Pull Requests when running code will know that their environment is identical to the initiator of the Pull Request.  This ensures faster review times and higher quality Pull Request reviews.
 * We achieve this common development environment by using a **lockfile** created from the [`renv`](https://rstudio.github.io/renv/) package. New developers will encounter a suggested `renv::restore()` in the console to revert or move forward your R version and package versions.
