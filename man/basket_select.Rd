@@ -16,7 +16,7 @@ from the company database.}
 \item{scope}{Scope of the query used to select the definition of the query
 from the company database.
 
-\emph{Permitted Values}: \code{"BROAD"}, \code{"NARROW"}, NA_character_}
+\emph{Permitted Values}: \code{"BROAD"}, \code{"NARROW"}, \code{NA_character_}}
 
 \item{type}{The type argument expects a character scalar. It is passed to the
 company specific get_terms() function such that the function can determine

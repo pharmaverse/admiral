@@ -20,7 +20,7 @@ It can be used for error messages for example.
 }
 \examples{
 
-format(basket_select(id = 42, scope = "NARROW"))
+format(basket_select(id = 42, scope = "NARROW", type = "smq"))
 }
 \seealso{
 \code{\link[=basket_select]{basket_select()}}

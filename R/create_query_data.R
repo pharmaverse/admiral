@@ -790,7 +790,7 @@ assert_terms <- function(terms,
       )
     }
   }
-  if (!"TERM_NAME" %in% vars & !"TERM_ID" %in% vars) {
+  if (!"TERM_NAME" %in% vars && !"TERM_ID" %in% vars) {
     abort(
       paste0(
         "Variable `TERM_NAME` or `TERM_ID` is required.\n",

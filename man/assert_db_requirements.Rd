@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_query_data.R
 \name{assert_db_requirements}
 \alias{assert_db_requirements}
-\title{Check required parameters for SMQ/SDG}
+\title{Check required parameters for a basket}
 \usage{
 assert_db_requirements(
   version,
@@ -10,8 +10,7 @@ assert_db_requirements(
   fun,
   fun_arg_name,
   queries,
-  i,
-  type
+  i
 )
 }
 \arguments{
@@ -26,16 +25,12 @@ assert_db_requirements(
 \item{queries}{Queries provide by user}
 
 \item{i}{Index of query being checked}
-
-\item{type}{Type of query
-
-Should be \verb{"SMQ}" or \code{"SDG"}.}
 }
 \value{
 An error is issued if \code{version} or \code{fun} is null.
 }
 \description{
-If SMQs or SDGs are requested, the version and a function to access the
+If a basket (SMQ, SDG, ....) are requested, the version and a function to access the
 database must be provided. The function checks these requirements.
 }
 \seealso{

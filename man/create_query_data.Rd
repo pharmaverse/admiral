@@ -15,31 +15,31 @@ A list of \code{query()} objects is expected.}
 \item{version}{Dictionary version
 
 The dictionary version used for coding the terms should be specified.
-If any of the queries is a SDG, SMQ or a customized query including a SMQ,
-the parameter needs to be specified.
+If any of the queries is a basket (SMQ, SDG, ....) or a customized query
+including a basket, the parameter needs to be specified.
 
 \emph{Permitted Values}: A character string (the expected format is
 company-specific)}
 
 \item{get_terms_fun}{Function which returns the terms
 
-For each query specified for the \code{queries} parameter which refers to an SMQ
-or SDG (i.e., those where the \code{definition} field is set to a \code{basket_select()}
+For each query specified for the \code{queries} parameter referring to a basket
+(i.e., those where the \code{definition} field is set to a \code{basket_select()}
 object or a list which contains at least one \code{basket_select()} object) the
 specified function is called to retrieve the terms defining the query.
 This function is not provided by admiral as it is company specific, i.e.,
 it has to be implemented at company level.
 
-The function must return a dataset with all the terms defining the SMQ or SDG.
+The function must return a dataset with all the terms defining the basket.
 The output dataset must contain the following variables.
 \itemize{
-\item \code{TERM_LEVEL}: the variable to be used for defining a term of the SMQ or SDG,
+\item \code{TERM_LEVEL}: the variable to be used for defining a term of the basket,
 e.g., \code{AEDECOD}
 \item \code{TERM_NAME}: the name of the term if the variable \code{TERM_LEVEL} is
 referring to is character
 \item \code{TERM_ID} the numeric id of the term if the variable \code{TERM_LEVEL} is
 referring to is numeric
-\item \code{QUERY_NAME}: the name of the SMQ or SDG. The values must be the same for
+\item \code{QUERY_NAME}: the name of the basket. The values must be the same for
 all observations.
 }
 
@@ -50,9 +50,9 @@ The function must provide the following parameters
 \code{version} in the \code{create_query_data()} call is passed to this
 parameter.
 \item \code{keep_id}: If set to \code{TRUE}, the output dataset must contain the
-\code{QUERY_ID} variable. The variable must be set to the numeric id of the SMQ or SDG.
+\code{QUERY_ID} variable. The variable must be set to the numeric id of the basket.
 \item \code{temp_env}: A temporary environment is passed to this parameter. It can
-be used to store data which is used for all SMQs or SDGs in the
+be used to store data which is used for all baskets in the
 \code{create_query_data()} call. For example if SMQs need to be read from a
 database all SMQs can be read and stored in the environment when the first
 SMQ is handled. For the other SMQs the terms can be retrieved from the
@@ -73,11 +73,11 @@ to the query (\code{TERM_LEVEL}, \code{TERM_NAME}, \code{TERM_ID}) are determine
 to the \code{definition} field of the query: if the definition field of the
 \code{query()} object is
 \itemize{
-\item a \code{basket_select()} object, the terms are read from the SMQ
-database by calling the function specified for the \code{get_smq_fun} parameter.
+\item a \code{basket_select()} object, the terms are read from the basket
+database by calling the function specified for the \code{get_terms_fun} parameter.
 \item a data frame, the terms stored in the data frame are used.
 \item a list of data frames and \code{basket_select()} objects, all terms from
-the data frames and all terms read from the SMQ database referenced by the
+the data frames and all terms read from the basket database referenced by the
 \code{basket_select()} objects are collated.
 }
 
@@ -94,9 +94,9 @@ the \code{basket_select()} object. For queries not defined by a \code{basket_sel
 object, the variable is set to \code{NA}. If none of the queries is defined by a
 \code{basket_select()} object, the variable is not created.
 \item \code{QUERY_SCOPE_NUM}: numeric scope of the query. It is set to \code{1} if the
-scope is broad. Otherwise it is set to '2'. If the \code{add_scope_num} element
+scope is broad. Otherwise it is set to \code{2}. If the \code{add_scope_num} element
 equals \code{FALSE}, the variable is set to \code{NA}. If the \code{add_scope_num} element
-equals \code{FALSE} for all SMQs or none of the queries is an SMQ , the variable
+equals \code{FALSE} for all basketss or none of the queries is an basket , the variable
 is not created.
 \item \code{TERM_LEVEL}: Name of the variable used to identify the terms.
 \item \code{TERM_NAME}: Value of the term variable if it is a character variable.
@@ -146,7 +146,7 @@ bilismq <- query(
   )
 )
 
-# The get_smq_terms function from admiral.test is used for this example.
+# The get_terms function from admiral.test is used for this example.
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(pregsmq, bilismq),
@@ -165,7 +165,7 @@ sdg <- query(
   )
 )
 
-# The get_sdg_terms function from admiral.test is used for this example.
+# The get_terms function from admiral.test is used for this example.
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(sdg),
@@ -174,7 +174,7 @@ create_query_data(
 )
 
 # creating a query dataset for a customized query including SMQs
-# The get_smq_terms function from admiral.test is used for this example.
+# The get_terms function from admiral.test is used for this example.
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(
@@ -191,7 +191,7 @@ create_query_data(
       )
     )
   ),
-  get_smq_fun = admiral.test:::get_smq_terms,
+  get_terms_fun = admiral.test:::get_terms,
   meddra_version = "20.1"
 )
 }
