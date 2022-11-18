@@ -14,10 +14,8 @@ admiral_environment$admiral_options <- list(
 # 2. Update @params with future_input in set_admiral_options roxygen documentation
 # 3. Add future_input into set_admiral_options() formals and body
 
-
 # derive_merged.R ----
 admiral_environment$nmap <- NULL
 
 # duplicates.R ----
 admiral_environment$duplicates <- NULL
-
