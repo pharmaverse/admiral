@@ -98,7 +98,6 @@ derive_param_first_event <- function(dataset,
                                      subject_keys = vars(STUDYID, USUBJID),
                                      set_values_to,
                                      check_type = "warning") {
-
   ### DEPRECATION
   deprecate_warn("0.9.0",
     "derive_param_first_event()",
@@ -327,7 +326,6 @@ derive_param_extreme_event <- function(dataset,
                                        subject_keys = vars(STUDYID, USUBJID),
                                        set_values_to,
                                        check_type = "warning") {
-
   # Check input parameters
   filter_source <- assert_filter_cond(enquo(filter_source))
   assert_vars(order)
