@@ -1,6 +1,4 @@
-.datasets <- new.env(parent = emptyenv())
-
-#' Set a Dataset in the `.datasets` environment
+#' Set a Dataset in the `admiraldev_environment` environment
 #'
 #' @param dataset A `data.frame`
 #' @param name A name for `dataset`
@@ -22,7 +20,7 @@ set_dataset <- function(dataset, name) {
   assert_data_frame(dataset, check_is_grouped = FALSE)
   assert_character_scalar(name)
 
-  .datasets[[name]] <- dataset
+  admiraldev_environment[[name]] <- dataset
 }
 
 #' Retrieve a Dataset from the `.datasets` environment
@@ -40,5 +38,5 @@ set_dataset <- function(dataset, name) {
 get_dataset <- function(name) {
   assert_character_scalar(name)
 
-  .datasets[[name]]
+  admiraldev_environment[[name]]
 }

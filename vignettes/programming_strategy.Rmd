@@ -89,6 +89,8 @@ is restricted, otherwise this step is skipped.
 on `BASE` or based on `ANRIND`. It should not be implemented within one function as the algorithms are completely different.
 If `BASE` is used, the values are categorized while if `ANRIND` is used, the values are merged from the baseline observation.
 
+  * If developers find the need to use or create *environment* objects to achieve flexibility, use the `admiral_environment` environment object created in `admiral_environment.R`. All objects which are stored in this environment must be documented in `admiral_environment.R`. An equivalent environment object and `.R` file exist for admiraldev as well. For more details how environments work, please refer to this [chapter](https://r-pkgs.org/data.html#sec-data-state) in the latest edition of the R Packages book.
+
 ## Input, Output, and Side-effects
 
 * The behavior of the function is only determined by its input, not by any global object,  
