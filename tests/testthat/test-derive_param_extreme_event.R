@@ -30,7 +30,7 @@ adrs <- tibble::tribble(
   select(-ADTC)
 
 # derive_param_extreme_event ----
-## derive_param_extreme_event Test 1: derive first PD date ----
+## Test 1: derive first PD date ----
 test_that("derive_param_extreme_event Test 1: derive first PD date", {
   actual <- derive_param_extreme_event(
     adrs,
@@ -38,7 +38,6 @@ test_that("derive_param_extreme_event Test 1: derive first PD date", {
     dataset_source = adrs,
     filter_source = PARAMCD == "OVR" & AVALC == "PD",
     order = vars(ADT),
-    mode = "first",
     set_values_to = vars(
       PARAMCD = "PD",
       ANL01FL = "Y",
@@ -68,14 +67,13 @@ test_that("derive_param_extreme_event Test 1: derive first PD date", {
   )
 })
 
-## derive_param_extreme_event Test 2: derive death date parameter ----
+# derive_param_extreme_event ----
+## Test 2: derive death date parameter ----
 test_that("derive_param_extreme_event Test 2: derive death date parameter", {
   actual <- derive_param_extreme_event(
-    dataset = adrs,
     dataset_adsl = adsl,
     dataset_source = adsl,
     filter_source = !is.na(DTHDT),
-    order = vars(DTHDT),
     new_var = AVAL,
     true_value = 1,
     false_value = 0,
@@ -134,10 +132,9 @@ adrs <- tibble::tribble(
   ) %>%
   select(-ADTC)
 
-## derive_param_extreme_event Test 3: derive date of latest evaluable
-## tumor assessment parameter ----
-test_that("derive_param_extreme_event Test 3:
-          derive latest evaluable tumor assessment date parameter", {
+# derive_param_extreme_event ----
+## Test 3: derive latest evaluable tumor assessment date parameter ----
+test_that("derive_param_extreme_event Test 3: derive latest evaluable tumor assessment date parameter", {
   actual <- derive_param_extreme_event(
     dataset = adrs,
     dataset_adsl = adsl,

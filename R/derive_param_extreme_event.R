@@ -58,8 +58,6 @@
 #'   (`source_param`) are not unique with respect to the subject keys
 #'   (`subject_key` parameter) and `ADT`.
 #'
-#'   *Default*: `"warning"`
-#'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
 #' @details
@@ -145,7 +143,7 @@ derive_param_first_event <- function(dataset,
 #'   specified by `filter_source` are considered as an event.
 #'
 #'   The variables specified by the `subject_keys` and
-#'   `order` parameter are expected.
+#'   `order` parameter (if applicable) are expected.
 #'
 #' @param filter_source Source filter
 #'
@@ -167,29 +165,21 @@ derive_param_first_event <- function(dataset,
 #'
 #'   The name of the variable which will indicate whether an event happened or not.
 #'
-#'   *Default*: `AVAL`
-#'
 #' @param true_value True value
 #'
-#'   For all subjects with at least one observation in the source dataset (`dataset_source`)
-#'   fullfilling the event condition (`filter_source`), `new_var` is set to the specified value
-#'   `true_value`.
-#'
-#'   *Default*: `"Y"`
+#'   For all subjects with at least one observation in the source dataset
+#'   (`dataset_source`) fulfilling the event condition (`filter_source`),
+#'   `new_var` is set to the specified value `true_value`.
 #'
 #' @param false_value False value
 #'
 #'   For all other subjects in `dataset_adsl` without an event, `new_var` is set to
 #'   the specified value `false_value`.
 #'
-#'   *Default*: `"N"`
-#'
 #' @param mode Selection mode (first or last)
 #'
 #'   If `"first"` is specified, the first observation of each subject is selected.
 #'   If `"last"` is specified, the last observation of each subject is selected.
-#'
-#'   *Default*: `"first"`
 #'
 #'   *Permitted Values*: `"first"`, `"last"`
 #'
@@ -212,19 +202,15 @@ derive_param_first_event <- function(dataset,
 #'   (`source_param`) are not unique with respect to the subject keys
 #'   (`subject_key` parameter) and order variables (`order` parameter).
 #'
-#'   *Default*: `"warning"`
-#'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
-#' @importFrom rlang .data
-#'
 #' @details
-#'   1. The input dataset is restricted to observations fulfilling
+#'   1. The source dataset (`dataset_source`) is restricted to observations fulfilling
 #'   `filter_source`.
 #'   1. For each subject (with respect to the variables specified for the
-#'   `subject_keys` parameter) either the first or last observation, depending on `mode`,
-#'    (with respect to `order`) where the event condition (`filter_source` parameter) is
-#'   fulfilled is selected.
+#'   `subject_keys` parameter) either the first or last observation from the restricted
+#'   source dataset is selected. This is depending on `mode`, (with respect to `order`,
+#'   if applicable) where the event condition (`filter_source` parameter) is fulfilled.
 #'   1. For each observation in `dataset_adsl` a new observation is created. For
 #'   subjects with event `new_var` is set to `true_var`. For all other
 #'   subjects `new_var` is set to `false_var`.
@@ -298,11 +284,9 @@ derive_param_first_event <- function(dataset,
 #'
 #' # derive parameter indicating death
 #' derive_param_extreme_event(
-#'   dataset = adrs,
 #'   dataset_adsl = adsl,
 #'   dataset_source = adsl,
 #'   filter_source = !is.na(DTHDT),
-#'   order = vars(DTHDT),
 #'   new_var = AVALC,
 #'   true_value = "Y",
 #'   false_value = "N",
@@ -314,11 +298,11 @@ derive_param_first_event <- function(dataset,
 #'     ADT = DTHDT
 #'   )
 #' )
-derive_param_extreme_event <- function(dataset,
+derive_param_extreme_event <- function(dataset = NULL,
                                        dataset_adsl,
                                        dataset_source,
                                        filter_source,
-                                       order,
+                                       order = NULL,
                                        new_var = AVALC,
                                        true_value = "Y",
                                        false_value = "N",
@@ -328,12 +312,16 @@ derive_param_extreme_event <- function(dataset,
                                        check_type = "warning") {
   # Check input parameters
   filter_source <- assert_filter_cond(enquo(filter_source))
-  assert_vars(order)
+  assert_vars(subject_keys)
+  assert_vars(order, optional = TRUE)
+  if (!is.null(order)) {
+    assert_data_frame(dataset_source, required_vars = vars(!!!subject_keys, !!!order))
+  } else {
+    assert_data_frame(dataset_source, required_vars = subject_keys)
+  }
   new_var <- assert_symbol(enquo(new_var))
   assert_same_type(true_value, false_value)
-  assert_vars(subject_keys)
-  assert_data_frame(dataset, required_vars = vars(PARAMCD))
-  assert_data_frame(dataset_source, required_vars = vars(!!!subject_keys, !!!order))
+  assert_data_frame(dataset, required_vars = vars(PARAMCD), optional = TRUE)
   assert_data_frame(dataset_adsl, required_vars = subject_keys)
   check_type <-
     assert_character_scalar(
@@ -360,12 +348,15 @@ derive_param_extreme_event <- function(dataset,
       order = order,
       mode = mode,
       check_type = check_type
-    )
+    ) %>%
+    mutate(!!new_var := true_value)
 
   noevents <- anti_join(
     select(dataset_adsl, intersect(source_vars, adsl_vars)),
-    select(events, !!!subject_keys)
-  )
+    select(events, !!!subject_keys),
+    by = subject_keys
+    ) %>%
+    mutate(!!new_var := false_value)
 
   new_obs <- bind_rows(yes = events, no = noevents, .id = "HAD_EVENT") %>%
     mutate(

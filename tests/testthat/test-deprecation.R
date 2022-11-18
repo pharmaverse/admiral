@@ -211,7 +211,8 @@ test_that("deprecation Test 15: A warning is issued if `derive_var_agegr_fda()`
 })
 
 ## Test 16: A warning is issued if `derive_param_first_event()` is called ----
-test_that("deprecation Test 16: A warning is issued if `derive_param_first_event()` is called", {
+test_that("deprecation Test 16: A warning is issued if `derive_param_first_event()`
+          is called", {
   rlang::with_options(lifecycle_verbosity = "warning", {
     adsl <- tibble::tribble(
       ~STUDYID, ~USUBJID, ~DTHDT,
