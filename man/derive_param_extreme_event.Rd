@@ -10,6 +10,9 @@ derive_param_extreme_event(
   dataset_source,
   filter_source,
   order,
+  new_var = AVALC,
+  true_value = "Y",
+  false_value = "N",
   mode = "first",
   subject_keys = vars(STUDYID, USUBJID),
   set_values_to,
@@ -40,10 +43,9 @@ The variables specified by the \code{subject_keys} and
 All observations in \code{dataset_source} fulfilling the specified condition are
 considered as an event.
 
-For subjects with at least one event \code{AVALC} is set to \code{"Y"} and \code{AVAL} to
-\code{1}.
+For subjects with at least one event \code{new_var} is set to \code{true_value}.
 
-For all other subjects \code{AVALC} is set to \code{"N"} and \code{AVAL} to \code{0}.}
+For all other subjects \code{new_var} is set to \code{false_value}.}
 
 \item{order}{Order variable
 
@@ -51,6 +53,27 @@ List of symbols for sorting the source dataset (\code{dataset_source}).
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
 created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))}.}
+
+\item{new_var}{New variable
+
+The name of the variable which will indicate whether an event happened or not.
+
+\emph{Default}: \code{AVAL}}
+
+\item{true_value}{True value
+
+For all subjects with at least one observation in the source dataset (\code{dataset_source})
+fullfilling the event condition (\code{filter_source}), \code{new_var} is set to the specified value
+\code{true_value}.
+
+\emph{Default}: \code{"Y"}}
+
+\item{false_value}{False value
+
+For all other subjects in \code{dataset_adsl} without an event, \code{new_var} is set to
+the specified value \code{false_value}.
+
+\emph{Default}: \code{"N"}}
 
 \item{mode}{Selection mode (first or last)
 
@@ -89,9 +112,9 @@ The input dataset with a new parameter indicating if and when an
 event occurred
 }
 \description{
-Add a new parameter for the first or last event occurring in a dataset. \code{AVALC} and
-\code{AVAL} indicate if an event occurred. For example, the function can derive a parameter
-for the first disease progression.
+Add a new parameter for the first or last event occurring in a dataset. The
+variable given in \code{new_var} indicates if an event occurred or not. For example,
+the function can derive a parameter for the first disease progression.
 }
 \details{
 \enumerate{
@@ -102,8 +125,8 @@ for the first disease progression.
 (with respect to \code{order}) where the event condition (\code{filter_source} parameter) is
 fulfilled is selected.
 \item For each observation in \code{dataset_adsl} a new observation is created. For
-subjects with event \code{AVALC} is set to \code{"Y"} and \code{AVAL} to \code{1}. For all other
-subjects \code{AVALC} is set to \code{"N"} and \code{AVAL} to \code{0}.
+subjects with event \code{new_var} is set to \code{true_var}. For all other
+subjects \code{new_var} is set to \code{false_var}.
 For subjects with event all variables from \code{dataset_source} are kept. For
 subjects without event all variables which are in both \code{dataset_adsl} and
 \code{dataset_source} are kept.
@@ -151,6 +174,9 @@ derive_param_extreme_event(
   dataset_source = adrs,
   filter_source = PARAMCD == "OVR" & AVALC == "PD",
   order = vars(ADT),
+  new_var = AVALC,
+  true_value = "Y",
+  false_value = "N",
   mode = "first",
   set_values_to = vars(
     PARAMCD = "PD",
@@ -167,6 +193,9 @@ derive_param_extreme_event(
   dataset_source = adsl,
   filter_source = !is.na(DTHDT),
   order = vars(DTHDT),
+  new_var = AVALC,
+  true_value = "Y",
+  false_value = "N",
   mode = "first",
   set_values_to = vars(
     PARAMCD = "DEATH",
