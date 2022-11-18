@@ -118,7 +118,10 @@ derive_param_first_event <- function(dataset,
     set_values_to = set_values_to,
     check_type = check_type,
     mode = "first"
-  )
+  ) %>%
+    mutate(
+      AVAL = if_else(AVALC == "Y", 1, 0)
+    )
 }
 
 #' Add an Extreme Event Parameter
@@ -282,6 +285,9 @@ derive_param_first_event <- function(dataset,
 #'   dataset_source = adrs,
 #'   filter_source = PARAMCD == "OVR" & AVALC == "PD",
 #'   order = vars(ADT),
+#'   new_var = AVALC,
+#'   true_value = "Y",
+#'   false_value = "N",
 #'   mode = "first",
 #'   set_values_to = vars(
 #'     PARAMCD = "PD",
@@ -298,6 +304,9 @@ derive_param_first_event <- function(dataset,
 #'   dataset_source = adsl,
 #'   filter_source = !is.na(DTHDT),
 #'   order = vars(DTHDT),
+#'   new_var = AVALC,
+#'   true_value = "Y",
+#'   false_value = "N",
 #'   mode = "first",
 #'   set_values_to = vars(
 #'     PARAMCD = "DEATH",
@@ -323,6 +332,7 @@ derive_param_extreme_event <- function(dataset,
   filter_source <- assert_filter_cond(enquo(filter_source))
   assert_vars(order)
   new_var <- assert_symbol(enquo(new_var))
+  assert_same_type(true_value, false_value)
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
   assert_data_frame(dataset_source, required_vars = vars(!!!subject_keys, !!!order))
@@ -361,8 +371,7 @@ derive_param_extreme_event <- function(dataset,
 
   new_obs <- bind_rows(yes = events, no = noevents, .id = "HAD_EVENT") %>%
     mutate(
-      AVALC = if_else(.data$HAD_EVENT == "yes", "Y", "N"),
-      AVAL = if_else(.data$HAD_EVENT == "yes", 1, 0),
+      !!new_var := if_else(.data$HAD_EVENT == "yes", true_value, false_value),
       !!!set_values_to
     ) %>%
     select(-.data$HAD_EVENT)

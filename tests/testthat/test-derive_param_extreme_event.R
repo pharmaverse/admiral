@@ -49,10 +49,10 @@ test_that("derive_param_extreme_event Test 1: derive first PD date", {
   expected <- bind_rows(
     adrs,
     tibble::tribble(
-      ~USUBJID, ~ADT,              ~AVALC, ~AVAL,
-      "1",      ymd(""),           "N",    0,
-      "2",      ymd("2021-07-16"), "Y",    1,
-      "3",      ymd(""),           "N",    0
+      ~USUBJID, ~ADT,              ~AVALC,
+      "1",      ymd(""),           "N",
+      "2",      ymd("2021-07-16"), "Y",
+      "3",      ymd(""),           "N"
     ) %>%
       mutate(
         STUDYID = "XX1234",
@@ -76,6 +76,9 @@ test_that("derive_param_extreme_event Test 2: derive death date parameter", {
     dataset_source = adsl,
     filter_source = !is.na(DTHDT),
     order = vars(DTHDT),
+    new_var = AVAL,
+    true_value = 1,
+    false_value = 0,
     mode = "first",
     set_values_to = vars(
       PARAMCD = "DEATH",
@@ -87,10 +90,10 @@ test_that("derive_param_extreme_event Test 2: derive death date parameter", {
   expected <- bind_rows(
     adrs,
     tibble::tribble(
-      ~USUBJID, ~ADT,              ~AVALC, ~AVAL, ~DTHDT,
-      "1",      ymd("2022-05-13"), "Y",    1,     ymd("2022-05-13"),
-      "2",      ymd(""),           "N",    0,     ymd(""),
-      "3",      ymd(""),           "N",    0,     ymd("")
+      ~USUBJID, ~ADT,              ~AVAL, ~DTHDT,
+      "1",      ymd("2022-05-13"), 1,     ymd("2022-05-13"),
+      "2",      ymd(""),           0,     ymd(""),
+      "3",      ymd(""),           0,     ymd("")
     ) %>%
       mutate(
         STUDYID = "XX1234",
@@ -141,6 +144,9 @@ test_that("derive_param_extreme_event Test 3:
     dataset_source = adrs,
     filter_source = PARAMCD == "OVR" & AVALC != "NE",
     order = vars(ADT),
+    new_var = AVALC,
+    true_value = "Y",
+    false_value = "N",
     mode = "last",
     set_values_to = vars(
       PARAMCD = "LSTEVLDT",
@@ -152,10 +158,10 @@ test_that("derive_param_extreme_event Test 3:
   expected <- bind_rows(
     adrs,
     tibble::tribble(
-      ~USUBJID, ~ADT,              ~AVALC, ~AVAL,
-      "1",      ymd("2020-04-01"), "Y",    1,
-      "2",      ymd("2021-07-16"), "Y",    1,
-      "3",      ymd(""),           "N",    0
+      ~USUBJID, ~ADT,              ~AVALC,
+      "1",      ymd("2020-04-01"), "Y",
+      "2",      ymd("2021-07-16"), "Y",
+      "3",      ymd(""),           "N"
     ) %>%
       mutate(
         STUDYID = "XX1234",

@@ -44,7 +44,7 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 
 ## Updates of Existing Functions
 
-- Function `derive_param_first_event` has been replaced by a more generalized `derive_param_extreme_event` function with new argument `mode` allowing for the selection of either the `"first"` or `"last"` event record according to the conditions provided. Also the `date_var` argument has been replaced with the `order` argument instead (#1317). 
+- Function `derive_param_first_event` has been replaced by a more generalized `derive_param_extreme_event` function with new argument `mode` allowing for the selection of either the `"first"` or `"last"` event record according to the conditions provided. Also the `date_var` argument has been replaced with the `order` argument instead. In addition, three new arguments `new_var`, `true_value`, and `false_value` have been added to allow the user to choose what variable is used to indicate whether an event happened, and the values it is given (#1317) (#1242).
 
 - Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
 which controls if time is considered for the condition if `start_date` is after
