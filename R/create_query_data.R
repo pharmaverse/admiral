@@ -12,31 +12,31 @@
 #' @param version Dictionary version
 #'
 #'   The dictionary version used for coding the terms should be specified.
-#'   If any of the queries is a SDG, SMQ or a customized query including a SMQ,
-#'   the parameter needs to be specified.
+#'   If any of the queries is a basket (SMQ, SDG, ....) or a customized query
+#'   including a basket, the parameter needs to be specified.
 #'
 #'   *Permitted Values*: A character string (the expected format is
 #'   company-specific)
 #'
 #' @param get_terms_fun Function which returns the terms
 #'
-#'   For each query specified for the `queries` parameter which refers to an SMQ
-#'   or SDG (i.e., those where the `definition` field is set to a `basket_select()`
+#'   For each query specified for the `queries` parameter referring to a basket
+#'   (i.e., those where the `definition` field is set to a `basket_select()`
 #'   object or a list which contains at least one `basket_select()` object) the
 #'   specified function is called to retrieve the terms defining the query.
 #'   This function is not provided by admiral as it is company specific, i.e.,
 #'   it has to be implemented at company level.
 #'
-#'   The function must return a dataset with all the terms defining the SMQ or SDG.
+#'   The function must return a dataset with all the terms defining the basket.
 #'   The output dataset must contain the following variables.
 #'
-#'   - `TERM_LEVEL`: the variable to be used for defining a term of the SMQ or SDG,
+#'   - `TERM_LEVEL`: the variable to be used for defining a term of the basket,
 #'    e.g., `AEDECOD`
 #'   - `TERM_NAME`: the name of the term if the variable `TERM_LEVEL` is
 #'   referring to is character
 #'   - `TERM_ID` the numeric id of the term if the variable `TERM_LEVEL` is
 #'   referring to is numeric
-#'   - `QUERY_NAME`: the name of the SMQ or SDG. The values must be the same for
+#'   - `QUERY_NAME`: the name of the basket. The values must be the same for
 #'   all observations.
 #'
 #'   The function must provide the following parameters
@@ -46,9 +46,9 @@
 #'   `version` in the `create_query_data()` call is passed to this
 #'   parameter.
 #'   - `keep_id`: If set to `TRUE`, the output dataset must contain the
-#'   `QUERY_ID` variable. The variable must be set to the numeric id of the SMQ or SDG.
+#'   `QUERY_ID` variable. The variable must be set to the numeric id of the basket.
 #'   - `temp_env`: A temporary environment is passed to this parameter. It can
-#'   be used to store data which is used for all SMQs or SDGs in the
+#'   be used to store data which is used for all baskets in the
 #'   `create_query_data()` call. For example if SMQs need to be read from a
 #'   database all SMQs can be read and stored in the environment when the first
 #'   SMQ is handled. For the other SMQs the terms can be retrieved from the
@@ -61,11 +61,11 @@
 #'   to the `definition` field of the query: if the definition field of the
 #'   `query()` object is
 #'
-#'   * a `basket_select()` object, the terms are read from the SMQ
-#'   database by calling the function specified for the `get_smq_fun` parameter.
+#'   * a `basket_select()` object, the terms are read from the basket
+#'   database by calling the function specified for the `get_terms_fun` parameter.
 #'   * a data frame, the terms stored in the data frame are used.
 #'   * a list of data frames and `basket_select()` objects, all terms from
-#'   the data frames and all terms read from the SMQ database referenced by the
+#'   the data frames and all terms read from the basket database referenced by the
 #'   `basket_select()` objects are collated.
 #'
 #' The following variables (as described in [Queries Dataset
@@ -82,9 +82,9 @@
 #'   object, the variable is set to `NA`. If none of the queries is defined by a
 #'   `basket_select()` object, the variable is not created.
 #'   * `QUERY_SCOPE_NUM`: numeric scope of the query. It is set to `1` if the
-#'   scope is broad. Otherwise it is set to '2'. If the `add_scope_num` element
+#'   scope is broad. Otherwise it is set to `2`. If the `add_scope_num` element
 #'   equals `FALSE`, the variable is set to `NA`. If the `add_scope_num` element
-#'   equals `FALSE` for all SMQs or none of the queries is an SMQ , the variable
+#'   equals `FALSE` for all basketss or none of the queries is an basket , the variable
 #'   is not created.
 #'   * `TERM_LEVEL`: Name of the variable used to identify the terms.
 #'   * `TERM_NAME`: Value of the term variable if it is a character variable.
@@ -146,7 +146,7 @@
 #'   )
 #' )
 #'
-#' # The get_smq_terms function from admiral.test is used for this example.
+#' # The get_terms function from admiral.test is used for this example.
 #' # In a real application a company-specific function must be used.
 #' create_query_data(
 #'   queries = list(pregsmq, bilismq),
@@ -165,7 +165,7 @@
 #'   )
 #' )
 #'
-#' # The get_sdg_terms function from admiral.test is used for this example.
+#' # The get_terms function from admiral.test is used for this example.
 #' # In a real application a company-specific function must be used.
 #' create_query_data(
 #'   queries = list(sdg),
@@ -174,7 +174,7 @@
 #' )
 #'
 #' # creating a query dataset for a customized query including SMQs
-#' # The get_smq_terms function from admiral.test is used for this example.
+#' # The get_terms function from admiral.test is used for this example.
 #' # In a real application a company-specific function must be used.
 #' create_query_data(
 #'   queries = list(
@@ -191,7 +191,7 @@
 #'       )
 #'     )
 #'   ),
-#'   get_smq_fun = admiral.test:::get_smq_terms,
+#'   get_terms_fun = admiral.test:::get_terms,
 #'   meddra_version = "20.1"
 #' )
 create_query_data <- function(queries,
@@ -237,7 +237,7 @@ create_query_data <- function(queries,
       # query is a customized query
       query_data[[i]] <- queries[[i]]$definition
     } else if (is.list(queries[[i]]$definition)) {
-      # query is defined by customized queries and SMQs
+      # query is defined by customized queries and baskets
       definition <- queries[[i]]$definition
       terms <- vector("list", length(definition))
       for (j in seq_along(definition)) {
@@ -251,7 +251,7 @@ create_query_data <- function(queries,
             definition = definition[[j]],
             i = i,
             temp_env = temp_env,
-            type = "smq"
+            type = definition[[j]]$type
           )
         }
       }
@@ -318,10 +318,6 @@ create_query_data <- function(queries,
 #'
 #'   The value is passed to the access function.
 #'
-#' @param type Type of query
-#'
-#'   *Permitted Values*: `"smq"`, `"sdg"`
-#'
 #' @family der_occds
 #' @keywords der_occds
 #'
@@ -335,35 +331,37 @@ get_terms_from_db <- function(version,
                               expect_query_name = FALSE,
                               expect_query_id = FALSE,
                               i,
-                              temp_env,
-                              type) {
+                              temp_env) {
   assert_db_requirements(
     version = version,
     version_arg_name = arg_name(substitute(version)),
     fun = fun,
     fun_arg_name = arg_name(substitute(fun)),
     queries = queries,
-    i = i,
-    type = type
+    i = i
   )
-  select <- rlang::parse_expr(paste0(str_to_lower(type), "_select = definition"))
   fun_call <- quo(fun(
-    !!select,
+    basket_select = definition,
     version = version,
     keep_id = expect_query_id,
-    temp_env = temp_env
+    temp_env = temp_env,
+    type = definition$type
   ))
-  terms <- call_user_fun(fun_call)
+  terms <- call_user_fun(
+    fun(
+      basket_select = definition,
+      version = version,
+      keep_id = expect_query_id,
+      temp_env = temp_env,
+      type = definition$type
+    )
+  )
   assert_terms(
     terms,
     expect_query_name = expect_query_name,
     expect_query_id = expect_query_id,
     source_text = paste0(
-      "object returned by calling get_",
-      str_to_lower(type),
-      "_fun(",
-      str_to_lower(type),
-      "_select = ",
+      "object returned by calling get_terms_fun(basket_select = ",
       format(definition),
       ", version = ",
       dquote(version),
@@ -375,9 +373,9 @@ get_terms_from_db <- function(version,
   terms
 }
 
-#' Check required parameters for SMQ/SDG
+#' Check required parameters for a basket
 #'
-#' If SMQs or SDGs are requested, the version and a function to access the
+#' If a basket (SMQ, SDG, ....) are requested, the version and a function to access the
 #' database must be provided. The function checks these requirements.
 #'
 #' @param version Version provided by user
@@ -392,25 +390,20 @@ get_terms_from_db <- function(version,
 #'
 #' @param i Index of query being checked
 #'
-#' @param type Type of query
-#'
-#' Should be `"SMQ`" or `"SDG"`.
-#'
 #' @keywords source_specifications
 #' @family source_specifications
 #'
 #' @return An error is issued if `version` or `fun` is null.
 #'
 #' @author Stefan Bundfuss
-assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name, queries, i, type) {
+assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name, queries, i) {
   if (is.null(fun)) {
     msg <-
       paste0(
         fun_arg_name,
-        " is not specified. This is expected for ",
-        type,
+        " is not specified. This is expected for basket",
         "s.\n",
-        "A ", type, " is requested by query ",
+        "A basket is requested by query ",
         i,
         ":\n",
         paste(capture.output(str(queries[[i]])),
@@ -423,12 +416,9 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
     msg <-
       paste0(
         version_arg_name,
-        " is not specified. This is expected for ",
-        type,
+        " is not specified. This is expected for basket",
         "s.\n",
-        "A ",
-        type,
-        " is requested by query ",
+        "A basket is requested by query ",
         i,
         ":\n",
         paste(capture.output(str(queries[[i]])),
@@ -537,6 +527,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'   id = auto,
 #'   definition = basket_select(
 #'     name = "5-aminosalicylates for ulcerative colitis",
+#'     scope = NA_character_
 #'     type = "sdg"
 #'   )
 #' )
@@ -645,7 +636,7 @@ validate_query <- function(obj) {
     if (is_auto(values$name)) {
       abort(
         paste0(
-          "The auto keyword can be used for SMQs and SDGs only.\n",
+          "The auto keyword can be used for baskets only.\n",
           "It was provided for the name element."
         )
       )
@@ -653,7 +644,7 @@ validate_query <- function(obj) {
     if (is_auto(values$id)) {
       abort(
         paste0(
-          "The auto keyword can be used for SMQs and SDGs only.\n",
+          "The auto keyword can be used for baskets only.\n",
           "It was provided for the id element."
         )
       )
@@ -698,7 +689,7 @@ validate_query <- function(obj) {
     abort(
       paste0(
         "`definition` expects a `basket_select` object, a data frame,",
-        " or a list of data frames and `basket_select` objects with type smq\n",
+        " or a list of data frames and `basket_select` objects\n",
         "An object of the following class was provided: ",
         class(values$definition)
       )
@@ -824,7 +815,7 @@ assert_terms <- function(terms,
 #' @param scope Scope of the query used to select the definition of the query
 #'   from the company database.
 #'
-#'   *Permitted Values*: `"BROAD"`, `"NARROW"`, NA_character_
+#'   *Permitted Values*: `"BROAD"`, `"NARROW"`, `NA_character_`
 #'
 #' @param type The type argument expects a character scalar. It is passed to the
 #' company specific get_terms() function such that the function can determine
@@ -852,7 +843,7 @@ basket_select <- function(name = NULL,
     scope = scope,
     type = type
   )
-  class(out) <- c("basket_select", "list")
+  class(out) <- c("basket_select", "source", "list")
   validate_basket_select(out)
 }
 
@@ -884,10 +875,6 @@ validate_basket_select <- function(obj) {
   scope <- values$scope
   assert_character_scalar(scope,
     values = c("BROAD", "NARROW", NA_character_)
-  )
-  type <- values$type
-  assert_character_scalar(type,
-                          optional = FALSE
   )
 
   if (is.null(values$id) && is.null(values$name)) {
@@ -921,7 +908,7 @@ validate_basket_select <- function(obj) {
 #'
 #' @examples
 #'
-#' format(basket_select(id = 42, scope = "NARROW"))
+#' format(basket_select(id = 42, scope = "NARROW", type = "smq"))
 format.basket_select <- function(x, ...) {
   paste0(
     "basket_select(name = ",

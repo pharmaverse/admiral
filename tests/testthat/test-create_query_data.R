@@ -254,7 +254,7 @@ test_that("issues error if SMQs without meddra_version are requested", {
       queries = list(pregsmq),
       get_terms_fun = get_smq
     ),
-    regexp = "^version is not specified. This is expected for smqs.*"
+    regexp = "^version is not specified. This is expected for baskets.*"
   )
 })
 
@@ -310,9 +310,10 @@ test_that("issues error if SDGs without meddra_version are requested", {
       queries = list(sdg),
       get_terms_fun = get_sdg
     ),
-    regexp = "^version is not specified. This is expected for sdgs.*"
+    regexp = "^version is not specified. This is expected for baskets.*"
   )
 })
+
 
 # query: error: name = auto for non SMQs/SDGs ----
 test_that("query: error: name = auto for non SMQs/SDGs", {
@@ -321,7 +322,7 @@ test_that("query: error: name = auto for non SMQs/SDGs", {
       prefix = "CQ01",
       definition = cqterms
     ),
-    regexp = "^The auto keyword can be used for SMQs and SDGs only.*"
+    regexp = "^The auto keyword can be used for baskets only.*"
   )
 })
 
@@ -334,7 +335,7 @@ test_that("query: error: name = id for non SMQs/SDGs", {
       prefix = "CQ01",
       definition = cqterms
     ),
-    regexp = "^The auto keyword can be used for SMQs and SDGs only.*"
+    regexp = "^The auto keyword can be used for baskets only.*"
   )
 })
 
@@ -349,7 +350,7 @@ test_that("query: error: invalid definition", {
     regexp =
       paste0(
         "^`definition` expects a `basket_select` object,",
-        " a data frame, or a list of data frames and `basket_select` objects with type smq*"
+        " a data frame, or a list of data frames and `basket_select` objects*"
       )
   )
 })
