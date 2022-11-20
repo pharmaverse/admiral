@@ -131,7 +131,8 @@ adrs <- tibble::tribble(
 
 # derive_param_extreme_event ----
 ## Test 3: derive latest evaluable tumor assessment date parameter ----
-test_that("derive_param_extreme_event Test 3: derive latest evaluable tumor assessment date parameter", {
+test_that("derive_param_extreme_event Test 3: derive latest evaluable tumor
+          assessment date parameter", {
   actual <- derive_param_extreme_event(
     dataset = adrs,
     dataset_adsl = adsl,
