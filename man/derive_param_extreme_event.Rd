@@ -5,11 +5,11 @@
 \title{Add an Extreme Event Parameter}
 \usage{
 derive_param_extreme_event(
-  dataset,
+  dataset = NULL,
   dataset_adsl,
   dataset_source,
   filter_source,
-  order,
+  order = NULL,
   new_var = AVALC,
   true_value = "Y",
   false_value = "N",
@@ -36,7 +36,7 @@ All observations in the specified dataset fulfilling the condition
 specified by \code{filter_source} are considered as an event.
 
 The variables specified by the \code{subject_keys} and
-\code{order} parameter are expected.}
+\code{order} parameter (if applicable) are expected.}
 
 \item{filter_source}{Source filter
 
@@ -56,31 +56,23 @@ created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))}.}
 
 \item{new_var}{New variable
 
-The name of the variable which will indicate whether an event happened or not.
-
-\emph{Default}: \code{AVAL}}
+The name of the variable which will indicate whether an event happened or not.}
 
 \item{true_value}{True value
 
-For all subjects with at least one observation in the source dataset (\code{dataset_source})
-fullfilling the event condition (\code{filter_source}), \code{new_var} is set to the specified value
-\code{true_value}.
-
-\emph{Default}: \code{"Y"}}
+For all subjects with at least one observation in the source dataset
+(\code{dataset_source}) fulfilling the event condition (\code{filter_source}),
+\code{new_var} is set to the specified value \code{true_value}.}
 
 \item{false_value}{False value
 
 For all other subjects in \code{dataset_adsl} without an event, \code{new_var} is set to
-the specified value \code{false_value}.
-
-\emph{Default}: \code{"N"}}
+the specified value \code{false_value}.}
 
 \item{mode}{Selection mode (first or last)
 
 If \code{"first"} is specified, the first observation of each subject is selected.
 If \code{"last"} is specified, the last observation of each subject is selected.
-
-\emph{Default}: \code{"first"}
 
 \emph{Permitted Values}: \code{"first"}, \code{"last"}}
 
@@ -103,8 +95,6 @@ observations of the input dataset restricted to the source parameter
 (\code{source_param}) are not unique with respect to the subject keys
 (\code{subject_key} parameter) and order variables (\code{order} parameter).
 
-\emph{Default}: \code{"warning"}
-
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 }
 \value{
@@ -118,12 +108,12 @@ the function can derive a parameter for the first disease progression.
 }
 \details{
 \enumerate{
-\item The input dataset is restricted to observations fulfilling
+\item The source dataset (\code{dataset_source}) is restricted to observations fulfilling
 \code{filter_source}.
 \item For each subject (with respect to the variables specified for the
-\code{subject_keys} parameter) either the first or last observation, depending on \code{mode},
-(with respect to \code{order}) where the event condition (\code{filter_source} parameter) is
-fulfilled is selected.
+\code{subject_keys} parameter) either the first or last observation from the restricted
+source dataset is selected. This is depending on \code{mode}, (with respect to \code{order},
+if applicable) where the event condition (\code{filter_source} parameter) is fulfilled.
 \item For each observation in \code{dataset_adsl} a new observation is created. For
 subjects with event \code{new_var} is set to \code{true_var}. For all other
 subjects \code{new_var} is set to \code{false_var}.
@@ -188,11 +178,9 @@ derive_param_extreme_event(
 
 # derive parameter indicating death
 derive_param_extreme_event(
-  dataset = adrs,
   dataset_adsl = adsl,
   dataset_source = adsl,
   filter_source = !is.na(DTHDT),
-  order = vars(DTHDT),
   new_var = AVALC,
   true_value = "Y",
   false_value = "N",

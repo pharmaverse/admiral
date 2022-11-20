@@ -69,8 +69,6 @@ observations of the input dataset restricted to the source parameter
 (\code{source_param}) are not unique with respect to the subject keys
 (\code{subject_key} parameter) and \code{ADT}.
 
-\emph{Default}: \code{"warning"}
-
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 }
 \value{

@@ -354,16 +354,14 @@ derive_param_extreme_event <- function(dataset = NULL,
   noevents <- anti_join(
     select(dataset_adsl, intersect(source_vars, adsl_vars)),
     select(events, !!!subject_keys),
-    by = subject_keys
-    ) %>%
+    by = sapply(subject_keys, as_name)
+  ) %>%
     mutate(!!new_var := false_value)
 
-  new_obs <- bind_rows(yes = events, no = noevents, .id = "HAD_EVENT") %>%
+  new_obs <- bind_rows(events, noevents) %>%
     mutate(
-      !!new_var := if_else(.data$HAD_EVENT == "yes", true_value, false_value),
       !!!set_values_to
-    ) %>%
-    select(-.data$HAD_EVENT)
+    )
 
   # Create output dataset
   bind_rows(dataset, new_obs)
