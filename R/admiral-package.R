@@ -1,10 +1,10 @@
 #' @keywords internal
 #' @family internal
 #' @import admiraldev
-#' @importFrom dplyr arrange bind_rows case_when desc ends_with filter full_join group_by
-#'             if_else mutate mutate_at mutate_if n pull rename rename_at row_number select slice
-#'             semi_join starts_with transmute ungroup vars n_distinct union distinct
-#'             summarise_at summarise coalesce bind_cols na_if tibble across everything
+#' @importFrom dplyr across arrange bind_rows case_when desc ends_with everything filter full_join
+#'             group_by if_else mutate mutate_at mutate_if n pull rename rename_at row_number select
+#'             slice semi_join starts_with transmute ungroup vars n_distinct union distinct
+#'             summarise_at summarise coalesce bind_cols na_if tibble
 #' @importFrom magrittr %>%
 #' @importFrom rlang := abort arg_match as_function as_label as_string call2
 #'   caller_env call_name current_env .data enexpr enquo eval_bare eval_tidy

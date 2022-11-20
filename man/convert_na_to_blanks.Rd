@@ -2,21 +2,21 @@
 % Please edit documentation in R/user_utils.R
 \name{convert_na_to_blanks}
 \alias{convert_na_to_blanks}
-\alias{convert_na_to_blanks_default}
-\alias{convert_na_to_blanks_character}
-\alias{convert_na_to_blanks_list}
-\alias{convert_na_to_blank_data_frame}
+\alias{convert_na_to_blanks.default}
+\alias{convert_na_to_blanks.character}
+\alias{convert_na_to_blanks.list}
+\alias{convert_na_to_blanks.data.frame}
 \title{Convert NAs Into Blank Strings}
 \usage{
 convert_na_to_blanks(x)
 
-convert_na_to_blanks_default(x)
+\method{convert_na_to_blanks}{default}(x)
 
-convert_na_to_blanks_character(x)
+\method{convert_na_to_blanks}{character}(x)
 
-convert_na_to_blanks_list(x)
+\method{convert_na_to_blanks}{list}(x)
 
-convert_na_to_blank_data_frame(x)
+\method{convert_na_to_blanks}{data.frame}(x)
 }
 \arguments{
 \item{x}{Any R object}

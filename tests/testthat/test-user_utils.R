@@ -1,7 +1,7 @@
 # convert_blanks_to_na ----
 ## Test 1: blank strings are turned into `NA` ----
-# ---- user_utils, test 1: convert_blanks_to_na Test 1: blank strings are turned into `NA` ----
-test_that("user_utils, test 1: convert_blanks_to_na Test 1: blank strings are turned into `NA`", {
+# convert_blanks_to_na Test 1: blank strings are turned into `NA` ----
+test_that("convert_blanks_to_na Test 1: blank strings are turned into `NA`", {
   expect_identical(
     convert_blanks_to_na(c("a", "", "b")),
     c("a", NA, "b")
@@ -63,7 +63,7 @@ test_that("convert_na_to_blanks Test 5: `NA` strings are turned into blank ", {
 # convert_na_to_blanks Test 6: attributes are preserved when converting `NA` to blanks ----
 test_that("convert_na_to_blanks Test 6: attributes are preserved when converting `NA` to blanks", {
   input <- structure(letters, names = rev(letters), label = "Letters")
-  input[c(1, 9, 23)] <- ""
+  input[c(1, 9, 23)] <- NA_character_
   output <- convert_na_to_blanks(input)
 
   expect_identical(attr(output, "label"), "Letters")
@@ -87,16 +87,16 @@ test_that("convert_na_to_blanks Test 7: `NA` are turned into blank strings insid
     d = structure(c("", "", "s", "q"), label = "D")
   )
 
-  expect_equivalent(convert_na_to_blank_data_frame(input), expected_output)
+  expect_equivalent(convert_na_to_blanks.data.frame(input), expected_output)
 })
 
 # convert_na_to_blanks.list ----
 ## Test 8: `convert_na_to_blanks.list` produces a lists ----
 # convert_na_to_blanks.list Test 8: `convert_na_to_blanks.list` produces a lists ----
 test_that("convert_na_to_blanks.list Test 8: `convert_na_to_blanks.list` produces a lists", {
-  x <- c("", "", "")
+  x <- c(NA_character_, NA_character_, NA_character_)
   expected_output <- lapply(x, convert_na_to_blanks)
-  actual_output <- convert_na_to_blanks_list(x)
+  actual_output <- convert_na_to_blanks.list(x)
 
   expect_equal(expected_output, actual_output)
 })

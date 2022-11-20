@@ -124,34 +124,34 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #' print(df)
 #' convert_na_to_blanks(df)
 convert_na_to_blanks <- function(x) {
-  x_out <- ifelse((is.character(x) & is.na(x)), "", x)
-  do.call(structure, c(list(x_out), attributes(x)))
+  UseMethod("convert_na_to_blanks")
 }
 
 #' @export
 #' @rdname convert_na_to_blanks
-convert_na_to_blanks_default <- function(x) {
+convert_na_to_blanks.default <- function(x) {
   x
 }
 
 #' @export
 #' @rdname convert_na_to_blanks
-convert_na_to_blanks_character <- function(x) {
+convert_na_to_blanks.character <- function(x) {
   do.call(structure, c(list(if_else(is.na(x), "", x)), attributes(x)))
 }
 
 #' @export
 #' @rdname convert_na_to_blanks
-convert_na_to_blanks_list <- function(x) {
+convert_na_to_blanks.list <- function(x) {
   lapply(x, convert_na_to_blanks)
 }
 
 #' @export
 #' @rdname convert_na_to_blanks
-convert_na_to_blank_data_frame <- function(x) {
+convert_na_to_blanks.data.frame <- function(x) { # nolint
   x_out <- x %>%
     mutate(across(everything(), convert_na_to_blanks))
   x_out
+
 }
 
 
