@@ -85,20 +85,17 @@ test_that("derive_param_extreme_event Test 2: derive death date parameter", {
     )
   )
 
-  expected <- bind_rows(
-    adrs,
-    tibble::tribble(
-      ~USUBJID, ~ADT,              ~AVAL, ~DTHDT,
-      "1",      ymd("2022-05-13"), 1,     ymd("2022-05-13"),
-      "2",      ymd(""),           0,     ymd(""),
-      "3",      ymd(""),           0,     ymd("")
-    ) %>%
-      mutate(
-        STUDYID = "XX1234",
-        PARAMCD = "DEATH",
-        ANL01FL = "Y"
-      )
-  )
+  expected <- tibble::tribble(
+    ~USUBJID, ~ADT,              ~AVAL, ~DTHDT,
+    "1",      ymd("2022-05-13"), 1,     ymd("2022-05-13"),
+    "2",      ymd(""),           0,     ymd(""),
+    "3",      ymd(""),           0,     ymd("")
+  ) %>%
+    mutate(
+      STUDYID = "XX1234",
+      PARAMCD = "DEATH",
+      ANL01FL = "Y"
+    )
 
   expect_dfs_equal(
     base = expected,

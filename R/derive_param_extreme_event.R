@@ -321,7 +321,7 @@ derive_param_extreme_event <- function(dataset = NULL,
   }
   new_var <- assert_symbol(enquo(new_var))
   assert_same_type(true_value, false_value)
-  assert_data_frame(dataset, required_vars = vars(PARAMCD), optional = TRUE)
+  assert_data_frame(dataset, optional = TRUE)
   assert_data_frame(dataset_adsl, required_vars = subject_keys)
   check_type <-
     assert_character_scalar(
@@ -335,7 +335,9 @@ derive_param_extreme_event <- function(dataset = NULL,
     case_sensitive = FALSE
   )
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
+    assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  }
 
   # Create new observations
   source_vars <- colnames(dataset_source)
