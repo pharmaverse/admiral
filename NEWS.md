@@ -34,7 +34,7 @@ reference dataset. (#1477)
 
 - The new function `derive_locf_records()` adds LOCF records as new observations. 
 This can be used when the input dataset does not contain observations for missed 
-visits/time points or when `AVAL` is NA for particular visits/time points (#1316).
+visits/time points or when `AVAL` is `NA` for particular visits/time points (#1316).
 
 ## Updates of Existing Functions
 

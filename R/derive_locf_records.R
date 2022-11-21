@@ -50,47 +50,47 @@
 #' @examples
 #'
 #' advs <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT,
-#'   "CDISC01", "01-701-1015", "PULSE", 61, 0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "PULSE", 60, 2, "WEEK 6",
-#'   "CDISC01", "01-701-1015", "DIABP", 51, 0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "DIABP", 50, 2, "WEEK 2",
-#'   "CDISC01", "01-701-1015", "DIABP", 51, 4, "WEEK 4",
-#'   "CDISC01", "01-701-1015", "DIABP", 50, 6, "WEEK 6",
-#'   "CDISC01", "01-701-1015", "SYSBP", 121, 0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "SYSBP", 121, 2, "WEEK 2",
-#'   "CDISC01", "01-701-1015", "SYSBP", 121, 4, "WEEK 4",
-#'   "CDISC01", "01-701-1015", "SYSBP", 121, 6, "WEEK 6",
-#'   "CDISC01", "01-701-1028", "PULSE", 65, 0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "DIABP", 79, 0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "DIABP", 80, 2, "WEEK 2",
-#'   "CDISC01", "01-701-1028", "DIABP", NA, 4, "WEEK 4",
-#'   "CDISC01", "01-701-1028", "DIABP", NA, 6, "WEEK 6",
-#'   "CDISC01", "01-701-1028", "SYSBP", 130, 0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "SYSBP", 132, 2, "WEEK 2"
+#'   ~STUDYID,  ~USUBJID,      ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT,
+#'   "CDISC01", "01-701-1015", "PULSE",     61,        0, "BASELINE",
+#'   "CDISC01", "01-701-1015", "PULSE",     60,        2, "WEEK 6",
+#'   "CDISC01", "01-701-1015", "DIABP",     51,        0, "BASELINE",
+#'   "CDISC01", "01-701-1015", "DIABP",     50,        2, "WEEK 2",
+#'   "CDISC01", "01-701-1015", "DIABP",     51,        4, "WEEK 4",
+#'   "CDISC01", "01-701-1015", "DIABP",     50,        6, "WEEK 6",
+#'   "CDISC01", "01-701-1015", "SYSBP",    121,        0, "BASELINE",
+#'   "CDISC01", "01-701-1015", "SYSBP",    121,        2, "WEEK 2",
+#'   "CDISC01", "01-701-1015", "SYSBP",    121,        4, "WEEK 4",
+#'   "CDISC01", "01-701-1015", "SYSBP",    121,        6, "WEEK 6",
+#'   "CDISC01", "01-701-1028", "PULSE",     65,        0, "BASELINE",
+#'   "CDISC01", "01-701-1028", "DIABP",     79,        0, "BASELINE",
+#'   "CDISC01", "01-701-1028", "DIABP",     80,        2, "WEEK 2",
+#'   "CDISC01", "01-701-1028", "DIABP",     NA,        4, "WEEK 4",
+#'   "CDISC01", "01-701-1028", "DIABP",     NA,        6, "WEEK 6",
+#'   "CDISC01", "01-701-1028", "SYSBP",    130,        0, "BASELINE",
+#'   "CDISC01", "01-701-1028", "SYSBP",    132,        2, "WEEK 2"
 #' )
 #'
 #'
 #' # A dataset with all the combinations of PARAMCD, PARAM, AVISIT, AVISITN, ... which are expected.
 #' advs_expected_obsv <- tibble::tribble(
 #'   ~PARAMCD, ~AVISITN, ~AVISIT,
-#'   "PULSE", 0, "BASELINE",
-#'   "PULSE", 0, "WEEK 6",
-#'   "DIABP", 0, "BASELINE",
-#'   "DIABP", 2, "WEEK 2",
-#'   "DIABP", 4, "WEEK 4",
-#'   "DIABP", 6, "WEEK 6",
-#'   "SYSBP", 0, "BASELINE",
-#'   "SYSBP", 2, "WEEK 2",
-#'   "SYSBP", 4, "WEEK 4",
-#'   "SYSBP", 6, "WEEK 6"
+#'   "PULSE",         0, "BASELINE",
+#'   "PULSE",         0, "WEEK 6",
+#'   "DIABP",         0, "BASELINE",
+#'   "DIABP",         2, "WEEK 2",
+#'   "DIABP",         4, "WEEK 4",
+#'   "DIABP",         6, "WEEK 6",
+#'   "SYSBP",         0, "BASELINE",
+#'   "SYSBP",         2, "WEEK 2",
+#'   "SYSBP",         4, "WEEK 4",
+#'   "SYSBP",         6, "WEEK 6"
 #' )
 #'
 #' derive_locf_records(
 #'   data = advs,
 #'   dataset_expected_obs = advs_expected_obsv,
 #'   by_vars = vars(STUDYID, USUBJID, PARAMCD),
-#'   order = vars(STUDYID, USUBJID, PARAMCD, AVISITN, AVISIT)
+#'   order = vars(AVISITN, AVISIT)
 #' )
 #'
 derive_locf_records <- function(dataset,
@@ -113,13 +113,13 @@ derive_locf_records <- function(dataset,
   #### Prepping 'dataset_expected_obs' ####
 
 
-  # Get the STUDYID and USUBJID from input dataset to set expected
-  # observations for each subject
-  subjids <- dataset %>%
-    select(STUDYID, USUBJID) %>%
+  # Get the IDs from input dataset for which the expected observations are to be added
+
+  ids <- dataset %>%
+    select(setdiff(str_remove(as.character(by_vars), "~"), colnames(dataset_expected_obs))) %>%
     distinct()
 
-  exp_obsv <- subjids %>%
+  exp_obsv <- ids %>%
     crossing(dataset_expected_obs)
 
 
@@ -152,37 +152,32 @@ derive_locf_records <- function(dataset,
   # dataset (with non-missing AVAL)
   advs_exp_obsv3 <- exp_obsv %>%
     mutate(!!tmp_dtype := "LOCF") %>%
-    anti_join(advs_unique_original, by = c(exp_obs_vars)) %>%
-    drop_na(exp_obs_vars)
-
+    anti_join(advs_unique_original, by = c(exp_obs_vars))
 
   # Merge the expected observations with the input dataset (with non-missing AVAL)
   # Arrange the dataset by 'order' and group it by 'by_vars'
   # Use fill() to fill the AVAL from the previous observation for the newly added records
 
-  attach(aval_not_missing)
 
-  if (exists("DTYPE") == FALSE) {
-    aval_not_missing_locf <- aval_not_missing %>%
-      full_join(advs_exp_obsv3, by = c(exp_obs_vars)) %>%
-      mutate(DTYPE = case_when(!!tmp_dtype == "LOCF" ~ "LOCF")) %>%
-      select(-!!tmp_dtype) %>%
-      arrange(!!!order) %>%
-      group_by(!!!by_vars) %>%
-      fill("AVAL") %>%
-      ungroup()
-  } else if (exists("DTYPE") == TRUE) {
-    aval_not_missing_locf <- aval_not_missing %>%
-      full_join(advs_exp_obsv3, by = c(exp_obs_vars)) %>%
+  aval_not_missing_locf <- aval_not_missing %>%
+    full_join(advs_exp_obsv3, by = c(exp_obs_vars))
+
+  if ("DTYPE" %in% colnames(aval_not_missing)) {
+    aval_not_missing_locf <- aval_not_missing_locf %>%
       mutate(DTYPE = if_else(!!tmp_dtype == "LOCF", "LOCF", DTYPE, missing = DTYPE)) %>%
-      select(-!!tmp_dtype) %>%
-      arrange(!!!order) %>%
-      group_by(!!!by_vars) %>%
-      fill("AVAL") %>%
-      ungroup()
+      select(-!!tmp_dtype)
+  } else {
+    aval_not_missing_locf <- rename(aval_not_missing_locf, DTYPE = !!tmp_dtype)
   }
+
+  aval_not_missing_locf <- aval_not_missing_locf %>%
+    arrange(!!!by_vars, !!!order) %>%
+    group_by(!!!by_vars) %>%
+    fill("AVAL") %>%
+    ungroup()
+
 
 
   # Output dataset - merge the AVAL missing with non-missing+newly added LOCF records
-  output <- bind_rows(aval_not_missing_locf, aval_missing)
+  bind_rows(aval_not_missing_locf, aval_missing)
 }
