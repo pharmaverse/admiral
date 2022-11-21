@@ -42,6 +42,8 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 
 - Removed R Version 3.6 check in CI/CD workflows in favor of the three most recent versions: 4.0, 4.1 and 4.2. (#1556)
 
+- New function `convert_na_to_blanks()` converts `NA` strings to blank while preserving all attributes (#1589) 
+
 ## Updates of Existing Functions
 
 - Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
