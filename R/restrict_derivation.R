@@ -24,6 +24,7 @@
 #' @examples
 #'
 #' library(tibble)
+#' library(dplyr)
 #' library(magrittr)
 #' adlb <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,

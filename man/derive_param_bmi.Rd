@@ -82,6 +82,8 @@ The analysis value of the new parameter is derived as
 }
 \examples{
 library(tibble)
+library(dplyr)
+
 advs <- tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 147,   "SCREENING",
