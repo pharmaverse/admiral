@@ -26,8 +26,7 @@ negate_vars(vars(USUBJID, STUDYID))
 }
 \seealso{
 Other utils_quo: 
-\code{\link{chr2vars}()},
-\code{\link{vars2chr}()}
+\code{\link{chr2vars}()}
 }
 \author{
 Stefan Bundfuss

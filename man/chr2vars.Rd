@@ -20,8 +20,7 @@ chr2vars(c("USUBJID", "AVAL"))
 }
 \seealso{
 Other utils_quo: 
-\code{\link{negate_vars}()},
-\code{\link{vars2chr}()}
+\code{\link{negate_vars}()}
 }
 \author{
 Stefan Bundfuss
