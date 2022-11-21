@@ -57,14 +57,3 @@ test_that("convert_dtm_to_dtc Test 5: Input is filtered if filter is not NULL", 
     keys = c("USUBJID", "VSTESTCD")
   )
 })
-
-# negate_vars ----
-## Test 6: negate_vars returns list of negated variables ----
-test_that("negate_vars Test 6: negate_vars returns list of negated variables", {
-  expect_identical(negate_vars(vars(var1, var2)), rlang::exprs(-var1, -var2))
-})
-
-## Test 7: negate_vars returns NULL if input is NULL ----
-test_that("negate_vars Test 7: negate_vars returns NULL if input is NULL", {
-  expect_identical(negate_vars(NULL), NULL)
-})
