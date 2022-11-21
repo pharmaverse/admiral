@@ -14,31 +14,35 @@ repo:
     user: https://github.com/
 news:
   cran_dates: true
+
 reference:
 - title: Derivations for Adding Variables
 - subtitle: All ADaMs
-- contents:
+  contents:
   - has_keyword("der_gen")
+
 - subtitle: ADSL-specific
-  desc: Derivation Functions helpful for building the ADSL dataset
-- contents:
+  desc: Derivation functions helpful for building the ADSL dataset
+  contents:
   - has_keyword("der_adsl")
+
 - subtitle: BDS-specific
-  desc: Derivation Functions helpful for building the BDS datasets (e.g. advs, adlb, adeg, adex)
-- contents:
-  - has_keyword("der_bds_gen")
+  desc: Derivation functions helpful for building the BDS datasets (e.g. advs, adlb, adeg, adex)
+  contents:
   - has_keyword("der_bds_findings")
+
 - subtitle: OCCDS-specific
-  desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
-- contents:
+  desc: Derivation functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
+  contents:
   - has_keyword("der_occds")
 
 - title: Derivations for Adding Parameters/Records
 - subtitle: BDS-specific
-- contents:
+  contents:
   - has_keyword("der_prm_bds_findings")
+
 - subtitle: TTE-specific
-- contents:
+  contents:
   - has_keyword("der_prm_tte")
 
 - title: Metadata
@@ -47,48 +51,62 @@ reference:
   - has_keyword("metadata")
 
 - title: Advanced Functions
+- subtitle: Admiral Options
+  contents:
+  - has_keyword("admiral_options")
+
 - subtitle: Higher Order
-- contents:
+  contents:
   - has_keyword("high_order_function")
+
 - subtitle: Creating Auxiliary Datasets
-- contents:
+  contents:
   - has_keyword("create_aux")
+
 - subtitle: Other
-- contents:
+  contents:
   - has_keyword("source_specifications")
 
 - title: Computation Functions for Vectors
 - subtitle: All ADaMs
   contents:
   - has_keyword('com_date_time')
+
 - subtitle: BDS-specific
   contents:
   - has_keyword('com_bds_findings')
 
 - title: Utility Functions
 - subtitle: Utilities for Formatting Observations
-- contents:
+  contents:
   - has_keyword('utils_fmt')
+
 - subtitle: Utilities for Dataset Checking
-- contents:
+  contents:
   - has_keyword('utils_ds_chk')
+
 - subtitle: Utilities used within Derivation Functions
-- contents:
+  contents:
   - has_keyword('utils_help')
+
 - subtitle: Utilities for Filtering Observations
-- contents:
+  contents:
   - has_keyword('utils_fil')
+
 - subtitle: Utilities used for Date Imputation
-- contents:
+  contents:
   - has_keyword('utils_impute')
+
 - subtitle: Utilities for Quosures
-- contents:
+  contents:
   - has_keyword('utils_quo')
+
 - subtitle: Utilities used for Examples and Template Scripts
-- contents:
+  contents:
   - has_keyword('utils_examples')
+
 - subtitle: Utilities for Printing
-- contents:
+  contents:
   - has_keyword('utils_print')
 
 - title: Example Datasets
@@ -98,7 +116,7 @@ reference:
 
 - title: Deprecated
 - desc: Look out for Warning and Error messages. These will guide you to deprecated functions replacements.
-- contents:
+  contents:
   - has_keyword("deprecated")
 
 navbar:

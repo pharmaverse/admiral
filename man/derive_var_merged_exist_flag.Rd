@@ -19,11 +19,11 @@ derive_var_merged_exist_flag(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} parameter are expected.}
+The variables specified by the \code{by_vars} argument are expected.}
 
 \item{dataset_add}{Additional dataset
 
-The variables specified by the \code{by_vars} parameter are expected.}
+The variables specified by the \code{by_vars} argument are expected.}
 
 \item{by_vars}{Grouping variables
 
@@ -63,7 +63,7 @@ observations in the additional dataset.
 \item{filter_add}{Filter for additional data
 
 Only observations fulfilling the specified condition are taken into account
-for flagging. If the parameter is not specified, all observations are
+for flagging. If the argument is not specified, all observations are
 considered.
 
 \emph{Permitted Values}: a condition}
@@ -127,6 +127,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_last_dose_grp}()},
 \code{\link{derive_var_merged_cat}()},
 \code{\link{derive_var_merged_character}()},
+\code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_var_worst_flag}()},
