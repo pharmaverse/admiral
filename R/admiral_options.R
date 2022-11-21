@@ -29,7 +29,7 @@
 #'
 #' @examples
 #' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' data("admiral_vs")
 #' data("admiral_dm")
 #'
@@ -87,7 +87,7 @@ get_admiral_option <- function(option) {
 #' [derive_vars_period()], [create_period_dataset()]
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' library(lubridate)
 #' library(tibble)
 #' set_admiral_options(subject_keys = vars(STUDYID, USUBJID2))

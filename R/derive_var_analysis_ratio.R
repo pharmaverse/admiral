@@ -39,7 +39,7 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #'
 #' data <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~SEQ, ~AVAL, ~BASE, ~ANRLO, ~ANRHI,

@@ -77,7 +77,7 @@ defined by \code{format_new_var} (e.g. when the default format is used, the func
 Derive a disposition status from the the relevant records in the disposition domain.
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 library(admiral.test)
 data("admiral_dm")
 data("admiral_ds")
@@ -112,7 +112,7 @@ format_eoxxstt1 <- function(x) {
     x == "COMPLETED" ~ "COMPLETED",
     x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
     !(x \%in\% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~
-    "DISCONTINUED NOT DUE TO AE",
+      "DISCONTINUED NOT DUE TO AE",
     TRUE ~ "ONGOING"
   )
 }

@@ -279,3 +279,34 @@ print_named_list <- function(list, indent = 0) {
     }
   }
 }
+
+#' Negate List of Variables
+#'
+#' The function adds a minus sign as prefix to each variable.
+#'
+#' This is useful if a list of variables should be removed from a dataset,
+#' e.g., `select(!!!negate_vars(by_vars))` removes all by variables.
+#'
+#' @param vars List of variables created by `vars()`
+#'
+#' @return A list of `quosures`
+#'
+#' @author Stefan Bundfuss
+#'
+#' @export
+#'
+#' @keywords utils_quo
+#' @family utils_quo
+#'
+#' @examples
+#' library(dplyr)
+#'
+#' negate_vars(vars(USUBJID, STUDYID))
+negate_vars <- function(vars = NULL) {
+  assert_vars(vars, optional = TRUE)
+  if (is.null(vars)) {
+    NULL
+  } else {
+    lapply(vars, function(var) expr(-!!quo_get_expr(var)))
+  }
+}

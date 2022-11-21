@@ -79,6 +79,7 @@ and for others the worst is the lowest value.
 }
 \examples{
 library(tibble)
+library(dplyr)
 
 input <- tribble(
   ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,
