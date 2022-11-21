@@ -37,7 +37,7 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #'
 #' cm <- tribble(
 #'   ~USUBJID, ~CMGRPID, ~CMREFID, ~CMDECOD,

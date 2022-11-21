@@ -71,7 +71,7 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #'
 #' data <- tribble(
 #'   ~ATOXDSCL,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
@@ -169,7 +169,6 @@ derive_var_atoxgr_dir <- function(dataset,
 
   # for each TERM apply criteria and create grade derivation
   for (i in seq_along(list_of_terms$TERM)) {
-
     # filter metadata on a term
     meta_this_term <- atoxgr_dir %>%
       filter(TERM_UPPER == list_of_terms$TERM_UPPER[i])
@@ -250,7 +249,7 @@ derive_var_atoxgr_dir <- function(dataset,
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #'
 #' adlb <- tribble(
 #'   ~ATOXDSCL,          ~ATOXDSCH,        ~ATOXGRL,      ~ATOXGRH,

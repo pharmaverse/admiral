@@ -146,7 +146,7 @@ joined from the ADSL dataset,
 }
 \examples{
 library(tibble)
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 library(lubridate)
 data("admiral_adsl")
 

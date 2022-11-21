@@ -34,6 +34,8 @@ An object of class \code{event_source}, inheriting from class \code{tte_source}
 }
 \examples{
 # Death event
+library(dplyr)
+
 event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
