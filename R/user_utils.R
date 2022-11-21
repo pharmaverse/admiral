@@ -151,7 +151,6 @@ convert_na_to_blanks.data.frame <- function(x) { # nolint
   x_out <- x %>%
     mutate(across(everything(), convert_na_to_blanks))
   x_out
-
 }
 
 
