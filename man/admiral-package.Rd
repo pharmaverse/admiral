@@ -44,6 +44,10 @@ Authors:
   \item Pooja Kumari
   \item Claudia Carlucci
   \item Daniil Stefonishin
+  \item Sadchla Mascary
+  \item Zelos Zhu
+  \item Jeffrey Dickinson
+  \item Ania Golab
 }
 
 Other contributors:
