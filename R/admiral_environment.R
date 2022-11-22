@@ -1,6 +1,7 @@
 admiral_environment <- new.env(parent = emptyenv())
 
 # admiral_options.R ----
+## set_admiral_options
 admiral_environment$admiral_options <- list(
   # future_input = vars(...), nolint
   subject_keys = vars(STUDYID, USUBJID)
@@ -15,7 +16,9 @@ admiral_environment$admiral_options <- list(
 # 3. Add future_input into set_admiral_options() formals and body
 
 # derive_merged.R ----
+## derive_vars_merged_lookup
 admiral_environment$nmap <- NULL
 
 # duplicates.R ----
+## signal_duplicate_records
 admiral_environment$duplicates <- NULL
