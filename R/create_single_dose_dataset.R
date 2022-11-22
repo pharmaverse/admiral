@@ -434,7 +434,8 @@ create_single_dose_dataset <- function(dataset,
     by = as.character(quo_get_expr(dose_freq))
   )
 
-  if (any(dataset_part_2$DOSE_WINDOW %in% c("MINUTE", "HOUR")) & (quo_is_null(start_datetime) | quo_is_null(end_datetime))) {
+  if (any(dataset_part_2$DOSE_WINDOW %in% c("MINUTE", "HOUR")) &
+    (quo_is_null(start_datetime) | quo_is_null(end_datetime))) {
     abort(
       paste(
         "There are dose frequencies more frequent than once a day.",
@@ -512,12 +513,10 @@ create_single_dose_dataset <- function(dataset,
         )
       )
   }
-  select(dataset_part_2, !!!vars(all_of(col_names)))
+  dataset - part_2 <- select(dataset_part_2, !!!vars(all_of(col_names)))
 
   # Stitch back together
 
-  dataset <- bind_rows(dataset_part_1, dataset_part_2)
-  dataset <- dataset %>% select(!!!keep_source_vars)
-
-  return(dataset)
+  bind_rows(dataset_part_1, dataset_part_2) %>%
+    select(!!!keep_source_vars)
 }
