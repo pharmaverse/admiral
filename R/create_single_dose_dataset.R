@@ -513,7 +513,7 @@ create_single_dose_dataset <- function(dataset,
         )
       )
   }
-  dataset - part_2 <- select(dataset_part_2, !!!vars(all_of(col_names)))
+  dataset_part_2 <- select(dataset_part_2, !!!vars(all_of(col_names)))
 
   # Stitch back together
 
