@@ -206,6 +206,9 @@ dose_freq_lookup <- tibble::tribble(
 #'   Refer to `derive_vars_dtm()` to impute and derive a date-time from a date
 #'   character vector to a date object.
 #'
+#'   If the input dataset contains frequencies which refer to `DOSE_WINDOW`
+#'   equals `"HOUR"` or `"MINUTE"`, the parameter must be specified.
+#'
 #' @param end_date The end date
 #'
 #'   A date or date-time object is expected. This object cannot contain `NA` values.
@@ -219,6 +222,9 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #'   Refer to `derive_vars_dtm()` to impute and derive a date-time from a date
 #'   character vector to a date object.
+#'
+#'   If the input dataset contains frequencies which refer to `DOSE_WINDOW`
+#'   equals `"HOUR"` or `"MINUTE"`, the parameter must be specified.
 #'
 #' @param lookup_table The dose frequency value lookup table
 #'
@@ -281,9 +287,9 @@ dose_freq_lookup <- tibble::tribble(
 #' # Example with custom lookup
 #'
 #' custom_lookup <- tribble(
-#'   ~Value, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
-#'   "Q30MIN", (1 / 30), "MINUTE", 1,
-#'   "Q90MIN", (1 / 90), "MINUTE", 1
+#'   ~Value,   ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
+#'   "Q30MIN", (1 / 30),    "MINUTE",                      1,
+#'   "Q90MIN", (1 / 90),    "MINUTE",                      1
 #' )
 #'
 #' data <- tribble(
@@ -296,7 +302,9 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #' create_single_dose_dataset(data,
 #'   lookup_table = custom_lookup,
-#'   lookup_column = Value
+#'   lookup_column = Value,
+#'   start_datetime = ASTDTM,
+#'   end_datetime = AENDTM
 #' )
 create_single_dose_dataset <- function(dataset,
                                        dose_freq = EXDOSFRQ,

@@ -8,13 +8,13 @@ create_single_dose_dataset(
   dataset,
   dose_freq = EXDOSFRQ,
   start_date = ASTDT,
-  start_datetime = ASTDTM,
+  start_datetime = NULL,
   end_date = AENDT,
-  end_datetime = AENDTM,
+  end_datetime = NULL,
   lookup_table = dose_freq_lookup,
   lookup_column = CDISC_VALUE,
-  keep_source_vars = vars(USUBJID, !!dose_freq, !!start_date, !!start_datetime,
-    !!end_date, !!end_datetime)
+  keep_source_vars = quo_c(vars(USUBJID), dose_freq, start_date, start_datetime,
+    end_date, end_datetime)
 )
 }
 \arguments{
@@ -41,7 +41,10 @@ character vector to a date object.}
 A date-time object is expected. This object cannot contain \code{NA} values.
 
 Refer to \code{derive_vars_dtm()} to impute and derive a date-time from a date
-character vector to a date object.}
+character vector to a date object.
+
+If the input dataset contains frequencies which refer to \code{DOSE_WINDOW}
+equals \code{"HOUR"} or \code{"MINUTE"}, the parameter must be specified.}
 
 \item{end_date}{The end date
 
@@ -55,7 +58,10 @@ character vector to a date object.}
 A date-time object is expected. This object cannot contain \code{NA} values.
 
 Refer to \code{derive_vars_dtm()} to impute and derive a date-time from a date
-character vector to a date object.}
+character vector to a date object.
+
+If the input dataset contains frequencies which refer to \code{DOSE_WINDOW}
+equals \code{"HOUR"} or \code{"MINUTE"}, the parameter must be specified.}
 
 \item{lookup_table}{The dose frequency value lookup table
 
@@ -118,9 +124,9 @@ create_single_dose_dataset(data)
 # Example with custom lookup
 
 custom_lookup <- tribble(
-  ~Value, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
-  "Q30MIN", (1 / 30), "MINUTE", 1,
-  "Q90MIN", (1 / 90), "MINUTE", 1
+  ~Value,   ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
+  "Q30MIN", (1 / 30),    "MINUTE",                      1,
+  "Q90MIN", (1 / 90),    "MINUTE",                      1
 )
 
 data <- tribble(
@@ -133,7 +139,9 @@ data <- tribble(
 
 create_single_dose_dataset(data,
   lookup_table = custom_lookup,
-  lookup_column = Value
+  lookup_column = Value,
+  start_datetime = ASTDTM,
+  end_datetime = AENDTM
 )
 }
 \seealso{

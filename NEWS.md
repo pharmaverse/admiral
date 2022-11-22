@@ -58,7 +58,8 @@ parameter `meta_criteria`. Can now also choose `atoxgr_criteria_ctcv5` for param
 
 - The default value of the `keep_source_vars` argument in
 `create_single_dose_dataset()` was updated such that it takes the values of the
-other arguments into account. (#1598).
+other arguments into account and the `start_datetime` and `end_datetime`
+arguments are optional now (#1598).
 
 ## Breaking Changes
 
