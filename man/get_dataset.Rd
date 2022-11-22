@@ -15,10 +15,6 @@ A \code{data.frame}
 \description{
 Retrieve a Dataset from the \code{admiraldev_environment} environment
 }
-\seealso{
-Other datasets: 
-\code{\link{set_dataset}()}
-}
 \author{
 Thomas Neitmann
 }
