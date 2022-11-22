@@ -58,8 +58,11 @@ test_that("derive_var_age_years Test 5: Error is issued if age_unit is missing",
   )
 })
 
-## Test 6: Warning is issued if age_unit is not null, but the 'unit' variable corresponding to age_var stores more than one unique value. ----
-test_that("derive_var_age_years Test 6: Warning is issued if age_unit is not null, but the 'unit' variable corresponding to age_var stores more than one unique value.", { # nolint
+## Test 6: Warning is issued if age_unit is not null, but the 'unit' variable
+##         corresponding to age_var stores more than one unique value. ----
+test_that("derive_var_age_years Test 6: Warning is issued if age_unit is not
+          null, but the 'unit' variable corresponding to age_var stores more
+          than one unique value.", {
   input <- tibble::tribble(
     ~AGE,   ~AGEU,
     #-------/---------
@@ -77,7 +80,8 @@ test_that("derive_var_age_years Test 6: Warning is issued if age_unit is not nul
 
 
 ## Test 7: Error is issued if age_unit consists of more than one unique value. ----
-test_that("derive_var_age_years Test 7: Error is issued if age_unit consists of more than one unique value.", { # nolint
+test_that("derive_var_age_years Test 7: Error is issued if age_unit consists of
+          more than one unique value.", {
   input <- tibble::tribble(
     ~AGE,   ~AGEU,
     #-------/---------
@@ -93,8 +97,13 @@ test_that("derive_var_age_years Test 7: Error is issued if age_unit consists of 
   )
 })
 
-## Test 8: The 'unit' variable corresponding to age_var will be considered as storing one unique unit, if values differ only by case, i.e. 'months', 'Months', 'MONTHS' considered same unit, etc. ----
-test_that("derive_var_age_years Test 8: The 'unit' variable corresponding to age_var will be considered as storing one unique unit, if values differ only by case, i.e. 'months', 'Months', 'MONTHS' considered same unit, etc.", { # nolint
+## Test 8: The 'unit' variable corresponding to age_var will be considered as
+##         storing one unique unit, if values differ only by case, i.e.
+##         'months', 'Months', 'MONTHS' considered same unit, etc. ----
+test_that("derive_var_age_years Test 8: The 'unit' variable corresponding to
+          age_var will be considered as storing one unique unit, if values
+          differ only by case, i.e. 'months', 'Months', 'MONTHS' considered same
+          unit, etc.", {
 
   # The tibbles "input" and "input2" differ only in the third row: "Months"
   # versus "months".
@@ -125,8 +134,12 @@ test_that("derive_var_age_years Test 8: The 'unit' variable corresponding to age
   )
 })
 
-## Test 9: Warning is issued if age_unit is not null, but the 'unit' variable corresponding to age_var stores one unique unit that is not equivalent to age_unit. ----
-test_that("derive_var_age_years Test 9: Warning is issued if age_unit is not null, but the 'unit' variable corresponding to age_var stores one unique unit that is not equivalent to age_unit.", { # nolint
+## Test 9: Warning is issued if age_unit is not null, but the 'unit' variable
+##         corresponding to age_var stores one unique unit that is not
+##         equivalent to age_unit. ----
+test_that("derive_var_age_years Test 9: Warning is issued if age_unit is not
+          null, but the 'unit' variable corresponding to age_var stores one
+          unique unit that is not equivalent to age_unit.", {
   input <- tibble::tribble(
     ~AGE,   ~AGEU,
     #-------/---------
