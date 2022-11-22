@@ -419,12 +419,14 @@ create_single_dose_dataset <- function(dataset,
   if (quo_is_null(start_datetime)) {
     min_hour_cases <- rlang::exprs(FALSE ~ 0)
   } else {
-  min_hour_cases <- rlang::exprs(DOSE_WINDOW == "MINUTE" ~ compute_duration(!!start_datetime, !!end_datetime,
-                                                                     in_unit = "minutes", out_unit = "minutes"
-  ),
-  DOSE_WINDOW == "HOUR" ~ compute_duration(!!start_datetime, !!end_datetime,
-                                           in_unit = "hours", out_unit = "hours"
-  ))
+    min_hour_cases <- rlang::exprs(
+      DOSE_WINDOW == "MINUTE" ~ compute_duration(!!start_datetime, !!end_datetime,
+        in_unit = "minutes", out_unit = "minutes"
+      ),
+      DOSE_WINDOW == "HOUR" ~ compute_duration(!!start_datetime, !!end_datetime,
+        in_unit = "hours", out_unit = "hours"
+      )
+    )
   }
   dataset_part_2 <- left_join(
     dataset_part_2,
@@ -465,16 +467,16 @@ create_single_dose_dataset <- function(dataset,
     ungroup() %>%
     mutate(
       time_differential = case_when(
-        DOSE_WINDOW == "MINUTE" ~ minutes(floor(.data$time_increment)),
-        DOSE_WINDOW == "HOUR" ~ hours(floor(.data$time_increment)),
+        DOSE_WINDOW == "MINUTE" ~ minutes(floor(time_increment)),
+        DOSE_WINDOW == "HOUR" ~ hours(floor(time_increment)),
         DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
-          days(floor(.data$time_increment / CONVERSION_FACTOR))
+          days(floor(time_increment / CONVERSION_FACTOR))
       ),
       time_differential_dt = case_when(
-        DOSE_WINDOW == "MINUTE" ~ days(floor(.data$time_increment / 1440)),
-        DOSE_WINDOW == "HOUR" ~ days(floor(.data$time_increment / 24)),
+        DOSE_WINDOW == "MINUTE" ~ days(floor(time_increment / 1440)),
+        DOSE_WINDOW == "HOUR" ~ days(floor(time_increment / 24)),
         DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
-          days(floor(.data$time_increment / CONVERSION_FACTOR))
+          days(floor(time_increment / CONVERSION_FACTOR))
       )
     )
 
@@ -484,13 +486,14 @@ create_single_dose_dataset <- function(dataset,
   dataset_part_2 <- dataset_part_2 %>%
     mutate(
       !!dose_freq := "ONCE",
-      !!start_date := !!start_date + .data$time_differential_dt)
+      !!start_date := !!start_date + time_differential_dt
+    )
   if (!quo_is_null(start_datetime)) {
     dataset_part_2 <-
       mutate(
         dataset_part_2,
-        !!start_datetime := !!start_datetime + .data$time_differential
-    )
+        !!start_datetime := !!start_datetime + time_differential
+      )
   }
 
   dataset_part_2 <- dataset_part_2 %>%
@@ -502,14 +505,14 @@ create_single_dose_dataset <- function(dataset,
     dataset_part_2 <-
       mutate(
         dataset_part_2,
-      !!end_datetime := case_when(
-        DOSE_WINDOW %in% c("MINUTE", "HOUR") ~ !!start_datetime,
-        DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
-          ymd_hms(paste0(!!start_date, " ", format(!!end_datetime, format = "%H:%M:%S")))
+        !!end_datetime := case_when(
+          DOSE_WINDOW %in% c("MINUTE", "HOUR") ~ !!start_datetime,
+          DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
+            ymd_hms(paste0(!!start_date, " ", format(!!end_datetime, format = "%H:%M:%S")))
+        )
       )
-    )
-    }
-    select(dataset_part_2, !!!vars(all_of(col_names)))
+  }
+  select(dataset_part_2, !!!vars(all_of(col_names)))
 
   # Stitch back together
 

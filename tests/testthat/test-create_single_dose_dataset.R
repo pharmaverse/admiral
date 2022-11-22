@@ -32,7 +32,8 @@ test_that("cases Test 1: Works as expected for Q#/EVERY # cases", {
   expect_dfs_equal(
     create_single_dose_dataset(input),
     expected_output,
-    keys = "ASTDT")
+    keys = "ASTDT"
+  )
 })
 
 
@@ -107,9 +108,11 @@ test_that("cases Test 2: Works as expected for # TIMES PER cases", {
       start_date = EXSTDT,
       start_datetime = EXSTDTM,
       end_date = EXENDT,
-      end_datetime = EXENDTM),
+      end_datetime = EXENDTM
+    ),
     expected_output,
-    keys = c("USUBJID", "EXSTDT"))
+    keys = c("USUBJID", "EXSTDT")
+  )
 })
 
 ## Test 3: Works for different treatments ----
@@ -286,8 +289,8 @@ test_that("cases Test 9: error if no datetime specified and freq more than QD", 
     regexp = paste(
       "There are dose frequencies more frequent than once a day.",
       "Thus `start_datetime` and `end_datetime` must be specified.",
-      sep = "\n"),
-
+      sep = "\n"
+    ),
     fixed = TRUE
   )
 })
