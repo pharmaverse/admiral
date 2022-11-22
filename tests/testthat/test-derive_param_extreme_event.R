@@ -67,7 +67,6 @@ test_that("derive_param_extreme_event Test 1: derive first PD date", {
   )
 })
 
-# derive_param_extreme_event ----
 ## Test 2: derive death date parameter ----
 test_that("derive_param_extreme_event Test 2: derive death date parameter", {
   actual <- derive_param_extreme_event(
@@ -129,10 +128,8 @@ adrs <- tibble::tribble(
   ) %>%
   select(-ADTC)
 
-# derive_param_extreme_event ----
 ## Test 3: derive latest evaluable tumor assessment date parameter ----
-test_that("derive_param_extreme_event Test 3: derive latest evaluable tumor
-          assessment date parameter", {
+test_that("derive_param_extreme_event Test 3: latest evaluable tumor assessment date parameter", {
   actual <- derive_param_extreme_event(
     dataset = adrs,
     dataset_adsl = adsl,

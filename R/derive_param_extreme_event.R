@@ -314,11 +314,9 @@ derive_param_extreme_event <- function(dataset = NULL,
   filter_source <- assert_filter_cond(enquo(filter_source))
   assert_vars(subject_keys)
   assert_vars(order, optional = TRUE)
-  if (!is.null(order)) {
-    assert_data_frame(dataset_source, required_vars = vars(!!!subject_keys, !!!order))
-  } else {
-    assert_data_frame(dataset_source, required_vars = subject_keys)
-  }
+  assert_data_frame(dataset_source,
+    required_vars = vars(!!!subject_keys, !!!extract_vars(order))
+  )
   new_var <- assert_symbol(enquo(new_var))
   assert_same_type(true_value, false_value)
   assert_data_frame(dataset, optional = TRUE)
