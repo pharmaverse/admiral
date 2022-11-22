@@ -16,7 +16,7 @@ An object of class \code{params}
 Create a set of variable parameters/function arguments to be used in \code{\link[=call_derivation]{call_derivation()}}.
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 library(admiral.test)
 data(admiral_ae)
 data(admiral_adsl)

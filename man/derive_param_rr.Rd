@@ -74,6 +74,8 @@ The analysis value of the new parameter is derived as
 }
 \examples{
 library(tibble)
+library(dplyr)
+
 adeg <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "HR", "Heart Rate", 70.14, "beats/min", "BASELINE",
