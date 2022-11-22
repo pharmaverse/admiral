@@ -89,8 +89,7 @@ test_that("derive_var_age_years - Error is issued if age_unit consists of more
 
 test_that("derive_var_age_years - The 'unit' variable corresponding to age_var
           will be considered as storing one unique unit, if values differ only
-          by case, i.e. 'months', 'Months', 'MONTHS' considered same unit, etc."
-          , {
+          by case, i.e. 'months', 'Months', 'MONTHS' considered same unit, etc.", {
 
   # The tibbles "input" and "input2" differ only in the third row: "Months"
   # versus "months".
@@ -138,4 +137,3 @@ test_that("derive_var_age_years - Warning is issued if age_unit is not null, but
     derive_var_age_years(input, AGE, age_unit = "years", new_var = AAGE)
   )
 })
-
