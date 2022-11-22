@@ -223,7 +223,6 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #' data("queries")
 #' assert_valid_queries(queries, "queries")
 assert_valid_queries <- function(queries, queries_name) {
-
   # check required columns
   assert_has_variables(
     queries,

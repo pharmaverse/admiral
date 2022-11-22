@@ -77,7 +77,7 @@ single dataset.
 }
 \examples{
 library(tibble)
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 library(lubridate)
 
 adsl <- tribble(

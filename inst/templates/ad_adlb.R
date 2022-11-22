@@ -263,7 +263,7 @@ grade_crit <- atoxgr_criteria_ctcv4
 
 
 # Add ATOXDSCL and ATOXDSCH
-adlb1 <- adlb %>%
+adlb <- adlb %>%
   derive_vars_merged(
     dataset_add = grade_lookup,
     by_vars = vars(PARAMCD)

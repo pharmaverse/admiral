@@ -60,7 +60,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' library(admiral.test)
 #' data("admiral_dm")
 #' data("admiral_ae")
@@ -222,6 +222,15 @@ derive_var_extreme_dtm <- function(dataset,
       var = !!date,
       dataset_name = source_dataset_name
     )
+
+    if (!is.null(sources[[i]]$traceability_vars)) {
+      warn_if_vars_exist(source_dataset, names(sources[[i]]$traceability_vars))
+      assert_data_frame(
+        source_dataset,
+        required_vars = get_source_vars(sources[[i]]$traceability_vars)
+      )
+    }
+
     add_data[[i]] <- source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
       filter(!is.na(!!date)) %>%
@@ -295,7 +304,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' library(admiral.test)
 #' data("admiral_dm")
 #' data("admiral_ae")
@@ -465,6 +474,8 @@ derive_var_extreme_dt <- function(dataset,
 #' @return An object of class `date_source`.
 #'
 #' @examples
+#' library(dplyr)
+#'
 #' # treatment end date from ADSL
 #' trt_end_date <- date_source(
 #'   dataset_name = "adsl",

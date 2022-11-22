@@ -87,6 +87,73 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
   x
 }
 
+
+#' Convert NAs Into Blank Strings
+#'
+#' Turn `NA`s to blank strings .
+#'
+#' @param x Any R object
+#'
+#' @details
+#' The default methods simply returns its input unchanged. The `character` method
+#' turns every instance of `NA_character_` or `NA` into `""` while preserving *all* attributes.
+#' When given a data frame as input the function keeps all non-character columns
+#' as is and applies the just described logic to `character`
+#' all attributes such as labels are preserved.
+#'
+#' @return An object of the same class as the input
+#'
+#' @author Sadchla Mascary
+#'
+#' @family utils_fmt
+#' @keywords utils_fmt
+#'
+#' @export
+#'
+#' @examples
+#' library(tibble)
+#'
+#' convert_na_to_blanks(c("a", "b", NA, "d", NA))
+#'
+#' df <- tibble(
+#'   a = structure(c("a", "b", NA, "c"), label = "A"),
+#'   b = structure(c(1, NA, 21, 9), label = "B"),
+#'   c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
+#'   d = structure(c(NA, NA, "s", "q"), label = "D")
+#' )
+#' print(df)
+#' convert_na_to_blanks(df)
+convert_na_to_blanks <- function(x) {
+  UseMethod("convert_na_to_blanks")
+}
+
+#' @export
+#' @rdname convert_na_to_blanks
+convert_na_to_blanks.default <- function(x) {
+  x
+}
+
+#' @export
+#' @rdname convert_na_to_blanks
+convert_na_to_blanks.character <- function(x) {
+  do.call(structure, c(list(if_else(is.na(x), "", x)), attributes(x)))
+}
+
+#' @export
+#' @rdname convert_na_to_blanks
+convert_na_to_blanks.list <- function(x) {
+  lapply(x, convert_na_to_blanks)
+}
+
+#' @export
+#' @rdname convert_na_to_blanks
+convert_na_to_blanks.data.frame <- function(x) { # nolint
+  x_out <- x %>%
+    mutate(across(everything(), convert_na_to_blanks))
+  x_out
+}
+
+
 #' Turn a Character Vector into a List of Quosures
 #'
 #' Turn a character vector into a list of quosures
@@ -277,5 +344,36 @@ print_named_list <- function(list, indent = 0) {
       }
       cat(strrep(" ", indent), name, ": ", chr_val, "\n", sep = "")
     }
+  }
+}
+
+#' Negate List of Variables
+#'
+#' The function adds a minus sign as prefix to each variable.
+#'
+#' This is useful if a list of variables should be removed from a dataset,
+#' e.g., `select(!!!negate_vars(by_vars))` removes all by variables.
+#'
+#' @param vars List of variables created by `vars()`
+#'
+#' @return A list of `quosures`
+#'
+#' @author Stefan Bundfuss
+#'
+#' @export
+#'
+#' @keywords utils_quo
+#' @family utils_quo
+#'
+#' @examples
+#' library(dplyr)
+#'
+#' negate_vars(vars(USUBJID, STUDYID))
+negate_vars <- function(vars = NULL) {
+  assert_vars(vars, optional = TRUE)
+  if (is.null(vars)) {
+    NULL
+  } else {
+    lapply(vars, function(var) expr(-!!quo_get_expr(var)))
   }
 }
