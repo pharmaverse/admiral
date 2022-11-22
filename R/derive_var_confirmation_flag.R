@@ -182,6 +182,7 @@
 #' @examples
 #' library(tibble)
 #' library(admiral)
+#' library(dplyr)
 #'
 #' # flag observations with a duration longer than 30 and
 #' # at, after, or up to 7 days before a COVID AE (ACOVFL == "Y")

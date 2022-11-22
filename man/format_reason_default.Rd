@@ -26,7 +26,7 @@ equal to \code{'OTHER'}.
 \cr Usually this function can not be used with \verb{\%>\%}.
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 library(admiral.test)
 data("admiral_dm")
 data("admiral_ds")
@@ -47,6 +47,7 @@ admiral_dm \%>\%
 
 Utilities for Formatting Observations: 
 \code{\link{convert_blanks_to_na}()},
+\code{\link{convert_na_to_blanks}()},
 \code{\link{format_eoxxstt_default}()},
 \code{\link{yn_to_numeric}()}
 }
