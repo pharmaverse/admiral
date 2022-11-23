@@ -104,7 +104,6 @@ test_that("derive_var_age_years Test 8: The 'unit' variable corresponding to
           age_var will be considered as storing one unique unit, if values
           differ only by case, i.e. 'months', 'Months', 'MONTHS' considered same
           unit, etc.", {
-
   # The tibbles "input" and "input2" differ only in the third row: "Months"
   # versus "months".
 
