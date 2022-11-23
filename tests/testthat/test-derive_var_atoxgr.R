@@ -134,7 +134,6 @@ input_anemia <- expected_anemia %>%
 
 # ---- derive_var_atoxgr, test 5: CTCAEv4 Anemia ----
 test_that("derive_var_atoxgr, test 5: CTCAEv4 Anemia", {
-
   actual_anemia_ctcv4 <- derive_var_atoxgr_dir(
     input_anemia,
     new_var = ATOXGRL,
@@ -153,7 +152,6 @@ test_that("derive_var_atoxgr, test 5: CTCAEv4 Anemia", {
 
 # ---- derive_var_atoxgr, test 6: CTCAEv5 Anemia ----
 test_that("derive_var_atoxgr, test 6: CTCAEv5 Anemia", {
-
   actual_anemia_ctcv5 <- derive_var_atoxgr_dir(
     input_anemia,
     new_var = ATOXGRL,
@@ -195,7 +193,6 @@ input_leukocytosis <- expected_leukocytosis %>%
 
 # ---- derive_var_atoxgr, test 7: CTCAEv4 Leukocytosis ----
 test_that("derive_var_atoxgr, test 7: CTCAEv4 Leukocytosis", {
-
   actual_leukocytosis <- derive_var_atoxgr_dir(
     input_leukocytosis,
     new_var = ATOXGRH,
@@ -214,7 +211,6 @@ test_that("derive_var_atoxgr, test 7: CTCAEv4 Leukocytosis", {
 
 # ---- derive_var_atoxgr, test 8: CTCAEv5 Leukocytosis ----
 test_that("derive_var_atoxgr, test 8: CTCAEv5 Leukocytosis", {
-
   actual_leukocytosis <- derive_var_atoxgr_dir(
     input_leukocytosis,
     new_var = ATOXGRH,
@@ -259,7 +255,6 @@ input_aptt <- expected_aptt %>%
 
 # ---- derive_var_atoxgr, test 9: CTCAEv4 Activated partial thromboplastin time prolonged ----
 test_that("derive_var_atoxgr, test 9: CTCAEv4 Activated partial thromboplastin time prolonged", {
-
   actual_aptt <- derive_var_atoxgr_dir(
     input_aptt,
     new_var = ATOXGRH,
@@ -278,7 +273,6 @@ test_that("derive_var_atoxgr, test 9: CTCAEv4 Activated partial thromboplastin t
 
 # ---- derive_var_atoxgr, test 10: CTCAEv5 Activated partial thromboplastin time prolonged ----
 test_that("derive_var_atoxgr, test 10: CTCAEv5 Activated partial thromboplastin time prolonged", {
-
   actual_aptt <- derive_var_atoxgr_dir(
     input_aptt,
     new_var = ATOXGRH,
@@ -323,7 +317,6 @@ expected_alt_ctcv4 <- tibble::tribble(
 
 # ---- derive_var_atoxgr, test 11: CTCAEv4 Alanine aminotransferase increased ----
 test_that("derive_var_atoxgr, test 11: CTCAEv4 Alanine aminotransferase increased", {
-
   input_alt <- expected_alt_ctcv4 %>%
     select(-ATOXGRH)
 
@@ -352,34 +345,37 @@ test_that("derive_var_atoxgr, test 11: CTCAEv4 Alanine aminotransferase increase
 
 # ---- derive_var_atoxgr, test 12: CTCAEv5 Alanine aminotransferase increased ----
 test_that("derive_var_atoxgr, test 12: CTCAEv5 Alanine aminotransferase increased", {
-
   # V5 and V4 criteria identical when BASELINE normal
   expected_alt_ctcv5_norm <- expected_alt_ctcv4 %>%
     # set BASE to be normal and create FLAG
-    mutate(BASE = ANRHI,
-           FLAG = "NORMAL")
+    mutate(
+      BASE = ANRHI,
+      FLAG = "NORMAL"
+    )
 
   # create records with baseline abnormal and apply criteria
   expected_alt_ctcv5_abn <- tibble::tribble(
-    ~ATOXDSCH,                            ~AVAL,  ~BASE, ~AVALU,         ~ATOXGRH,
-    "Not a term",                         80,     40,     NA_character_,  NA,
-    NA_character_,                        60,     40,     NA_character_,  NA,
-    "Alanine aminotransferase Increased", 801,    40,     NA_character_,  "4",
-    "Alanine aminotransferase Increased", 800,    40,     NA_character_,  "3",
-    "Alanine aminotransferase Increased", 201,    40,     NA_character_,  "3",
-    "Alanine aminotransferase Increased", 200,    40,     NA_character_,  "2",
-    "Alanine aminotransferase Increased", 121,    40,     NA_character_,  "2",
-    "Alanine aminotransferase Increased", 120,    40,     NA_character_,  "1",
-    "Alanine aminotransferase Increased", 60,     40,     NA_character_,  "1",
-    "Alanine aminotransferase Increased", 59,     40,     NA_character_,  "0",
+    ~ATOXDSCH, ~AVAL, ~BASE, ~AVALU, ~ATOXGRH,
+    "Not a term", 80, 40, NA_character_, NA,
+    NA_character_, 60, 40, NA_character_, NA,
+    "Alanine aminotransferase Increased", 801, 40, NA_character_, "4",
+    "Alanine aminotransferase Increased", 800, 40, NA_character_, "3",
+    "Alanine aminotransferase Increased", 201, 40, NA_character_, "3",
+    "Alanine aminotransferase Increased", 200, 40, NA_character_, "2",
+    "Alanine aminotransferase Increased", 121, 40, NA_character_, "2",
+    "Alanine aminotransferase Increased", 120, 40, NA_character_, "1",
+    "Alanine aminotransferase Increased", 60, 40, NA_character_, "1",
+    "Alanine aminotransferase Increased", 59, 40, NA_character_, "0",
     # ANRHI missing - cannot grade
-    "Alanine aminotransferase Increased", 100,    NA,     NA_character_,  NA,
+    "Alanine aminotransferase Increased", 100, NA, NA_character_, NA,
     # AVAL missing cannot grade
-    "Alanine aminotransferase Increased", NA,     40,     NA_character_,  NA,
+    "Alanine aminotransferase Increased", NA, 40, NA_character_, NA,
   ) %>%
     # set BASE to be abnormal and create FLAG
-    mutate(ANRHI = BASE - 1,
-           FLAG = "ABNORMAL")
+    mutate(
+      ANRHI = BASE - 1,
+      FLAG = "ABNORMAL"
+    )
 
   # combine records with baseline normal and abnormal
   expected_alt_ctcv5 <- expected_alt_ctcv5_norm %>%
@@ -433,7 +429,6 @@ expected_alkph_ctcv4 <- tibble::tribble(
 
 # ---- derive_var_atoxgr, test 13: CTCAEv4 Alkaline phosphatase increased ----
 test_that("derive_var_atoxgr, test 13: CTCAEv4 Alkaline phosphatase increased", {
-
   input_alkph <- expected_alkph_ctcv4 %>%
     select(-ATOXGRH)
 
@@ -462,12 +457,13 @@ test_that("derive_var_atoxgr, test 13: CTCAEv4 Alkaline phosphatase increased", 
 
 # ---- derive_var_atoxgr, test 14: CTCAEv5 Alkaline phosphatase increased ----
 test_that("derive_var_atoxgr, test 14: CTCAEv5 Alkaline phosphatase increased", {
-
   # V5 and V4 criteria identical when BASELINE normal
   expected_alkph_ctcv5_norm <- expected_alkph_ctcv4 %>%
     # set BASE to be normal and create FLAG
-    mutate(BASE = ANRHI,
-           FLAG = "NORMAL")
+    mutate(
+      BASE = ANRHI,
+      FLAG = "NORMAL"
+    )
 
   # create records with baseline abnormal and apply criteria
 
@@ -489,8 +485,10 @@ test_that("derive_var_atoxgr, test 14: CTCAEv5 Alkaline phosphatase increased", 
     "Alkaline phosphatase increased",  NA,     40,     NA_character_,  NA,
   ) %>%
     # set BASE to be abnormal and create FLAG
-    mutate(ANRHI = BASE - 1,
-           FLAG = "ABNORMAL")
+    mutate(
+      ANRHI = BASE - 1,
+      FLAG = "ABNORMAL"
+    )
 
   # combine records with baseline normal and abnormal
   expected_alkph_ctcv5 <- expected_alkph_ctcv5_norm %>%
@@ -543,7 +541,6 @@ expected_ast_ctcv4 <- tibble::tribble(
 
 # ---- derive_var_atoxgr, test 15: CTCAEv4 Aspartate aminotransferase increased ----
 test_that("derive_var_atoxgr, test 15: CTCAEv4 Aspartate aminotransferase increased", {
-
   input_ast <- expected_ast_ctcv4 %>%
     select(-ATOXGRH)
 
@@ -571,12 +568,13 @@ test_that("derive_var_atoxgr, test 15: CTCAEv4 Aspartate aminotransferase increa
 
 # ---- derive_var_atoxgr, test 16: CTCAEv5 Aspartate aminotransferase increased ----
 test_that("derive_var_atoxgr, test 16: CTCAEv5 Aspartate aminotransferase increased", {
-
   # V5 and V4 criteria identical when BASELINE normal
   expected_ast_ctcv5_norm <- expected_ast_ctcv4 %>%
     # set BASE to be normal and create FLAG
-    mutate(BASE = ANRHI,
-           FLAG = "NORMAL")
+    mutate(
+      BASE = ANRHI,
+      FLAG = "NORMAL"
+    )
 
   # create records with baseline abnormal and apply criteria
   expected_ast_ctcv5_abn <- tibble::tribble(
@@ -597,8 +595,10 @@ test_that("derive_var_atoxgr, test 16: CTCAEv5 Aspartate aminotransferase increa
     "Aspartate aminotransferase Increased", NA,     40,     NA_character_,  NA,
   ) %>%
     # set BASE to be abnormal and create FLAG
-    mutate(ANRHI = BASE - 1,
-           FLAG = "ABNORMAL")
+    mutate(
+      ANRHI = BASE - 1,
+      FLAG = "ABNORMAL"
+    )
 
   # combine records with baseline normal and abnormal
   expected_ast_ctcv5 <- expected_ast_ctcv5_norm %>%
@@ -655,7 +655,6 @@ expected_bili_ctcv4 <- tibble::tribble(
 
 # ---- derive_var_atoxgr, test 17: CTCAEv4 Blood bilirubin increased ----
 test_that("derive_var_atoxgr, test 17: CTCAEv4 Blood bilirubin increased", {
-
   input_bili <- expected_bili_ctcv4 %>%
     select(-ATOXGRH)
 
@@ -684,19 +683,22 @@ test_that("derive_var_atoxgr, test 17: CTCAEv4 Blood bilirubin increased", {
 
 # ---- derive_var_atoxgr, test 18: CTCAEv5  Blood bilirubin increased ----
 test_that("derive_var_atoxgr, test 18: CTCAEv5  Blood bilirubin increased", {
-
   # V5 and V4 criteria identical when BASELINE normal
   expected_bili_ctcv5_norm <- expected_bili_ctcv4 %>%
     # set BASE to be normal and create FLAG
-    mutate(BASE = ANRHI,
-           FLAG = "NORMAL")
+    mutate(
+      BASE = ANRHI,
+      FLAG = "NORMAL"
+    )
 
   # create records with abnormal BASE then add records with normal BASE
   expected_bili_ctcv5 <- expected_bili_ctcv4 %>%
     # set BASE to ANRHI then make ANRHI < BASE
-    mutate(BASE = ANRHI,
-           ANRHI = ANRHI - 1,
-           FLAG = "ABNORMAL") %>%
+    mutate(
+      BASE = ANRHI,
+      ANRHI = ANRHI - 1,
+      FLAG = "ABNORMAL"
+    ) %>%
     bind_rows(expected_bili_ctcv5_norm)
 
   input_bili <- expected_bili_ctcv5 %>%
@@ -762,7 +764,6 @@ input_cd4 <- expected_cd4 %>%
 
 # ---- derive_var_atoxgr, test 19: CTCAEv4 CD4 Lymphocytes decreased ----
 test_that("derive_var_atoxgr, test 19: CTCAEv4 CD4 Lymphocytes decreased", {
-
   actual_cd4 <- derive_var_atoxgr_dir(
     input_cd4,
     new_var = ATOXGRL,
@@ -781,7 +782,6 @@ test_that("derive_var_atoxgr, test 19: CTCAEv4 CD4 Lymphocytes decreased", {
 
 # ---- derive_var_atoxgr, test 20: CTCAEv5 CD4 Lymphocytes decreased ----
 test_that("derive_var_atoxgr, test 20: CTCAEv5 CD4 Lymphocytes decreased", {
-
   actual_cd4 <- derive_var_atoxgr_dir(
     input_cd4,
     new_var = ATOXGRL,
@@ -839,7 +839,6 @@ input_choles <- expected_choles %>%
 
 # ---- derive_var_atoxgr, test 21: CTCAEv4 Cholesterol high ----
 test_that("derive_var_atoxgr, test 21: CTCAEv4 Cholesterol high", {
-
   actual_choles <- derive_var_atoxgr_dir(
     input_choles,
     new_var = ATOXGRH,
@@ -858,7 +857,6 @@ test_that("derive_var_atoxgr, test 21: CTCAEv4 Cholesterol high", {
 
 # ---- derive_var_atoxgr, test 22: CTCAEv5 Cholesterol high ----
 test_that("derive_var_atoxgr, test 22: CTCAEv5 Cholesterol high", {
-
   actual_choles <- derive_var_atoxgr_dir(
     input_choles,
     new_var = ATOXGRH,
@@ -904,8 +902,6 @@ input_cpk <- expected_cpk %>%
 
 # ---- derive_var_atoxgr, test 23: CTCAEv4 CPK increased ----
 test_that("derive_var_atoxgr, test 23: CTCAEv4 CPK increased", {
-
-
   actual_cpk <- derive_var_atoxgr_dir(
     input_cpk,
     new_var = ATOXGRH,
@@ -924,8 +920,6 @@ test_that("derive_var_atoxgr, test 23: CTCAEv4 CPK increased", {
 
 # ---- derive_var_atoxgr, test 24: CTCAEv5 CPK increased ----
 test_that("derive_var_atoxgr, test 24: CTCAEv5 CPK increased", {
-
-
   actual_cpk <- derive_var_atoxgr_dir(
     input_cpk,
     new_var = ATOXGRH,
@@ -981,7 +975,6 @@ expected_creatn <- tibble::tribble(
 
 # ---- derive_var_atoxgr, test 25: CTCAEv4 Creatinine increased ----
 test_that("derive_var_atoxgr, test 25: CTCAEv4 Creatinine increased", {
-
   input_creatn <- expected_creatn %>%
     select(-ATOXGRH)
 
@@ -1010,7 +1003,6 @@ test_that("derive_var_atoxgr, test 25: CTCAEv4 Creatinine increased", {
 
 # ---- derive_var_atoxgr, test 26: CTCAEv4 Creatinine increased ----
 test_that("derive_var_atoxgr, test 26: CTCAEv4 Creatinine increased", {
-
   expected_creatn <- expected_creatn %>%
     filter(V5 == "Y")
 
@@ -1122,57 +1114,57 @@ test_that("derive_var_atoxgr, test 27: CTCAEv4 Fibrinogen decreased", {
 # ---- derive_var_atoxgr, test 28: CTCAEv5 Fibrinogen decreased ----
 test_that("derive_var_atoxgr, test 28: CTCAEv5 Fibrinogen decreased", {
   expected_fib <- tibble::tribble(
-    ~ATOXDSCL,               ~AVAL,  ~ANRLO, ~PCHG,  ~AVALU,  ~ATOXGRL,
-    "Not a term",            9,      10,     40,     "g/L",   NA,
-    NA_character_,           10,     10,     40,     "g/L",   NA,
+    ~ATOXDSCL, ~AVAL, ~ANRLO, ~PCHG, ~AVALU, ~ATOXGRL,
+    "Not a term", 9, 10, 40, "g/L", NA,
+    NA_character_, 10, 10, 40, "g/L", NA,
     # Satisfies < 0.5 for grade 4 - other criteria missing
-    "Fibrinogen decreased",  0.49,   NA,     NA,     "g/L",   "4",
+    "Fibrinogen decreased", 0.49, NA, NA, "g/L", "4",
     # Satisfies < 0.5 for grade 4 - satisfies grade 3 for other criteria
-    "Fibrinogen decreased",  0.49,   1,      -51,    "g/L",   "4",
+    "Fibrinogen decreased", 0.49, 1, -51, "g/L", "4",
     # Satisfies < 0.25*LLN for grade 4 - PCHG missing
-    "Fibrinogen decreased",  0.5,    2.1,    NA,     "g/L",   "4",
+    "Fibrinogen decreased", 0.5, 2.1, NA, "g/L", "4",
     # Satisfies < 0.25*LLN for grade 4 - PCHG satisfies grade 3
-    "Fibrinogen decreased",  0.5,    2.1,    -51,    "g/L",   "4",
+    "Fibrinogen decreased", 0.5, 2.1, -51, "g/L", "4",
     # Satisfies <=75% decrease for grade 4 - LLN  satisfies grade 3
-    "Fibrinogen decreased",  0.5,    1.1,   -75,    "g/L",   "4",
+    "Fibrinogen decreased", 0.5, 1.1, -75, "g/L", "4",
     # Satisfies < 0.5*LLN for grade 3 - PCHG missing
-    "Fibrinogen decreased",  1,      2.1,    NA,     "g/L",   "3",
+    "Fibrinogen decreased", 1, 2.1, NA, "g/L", "3",
     # Satisfies < 0.5*LLN for grade 3 - PCHG satisfies grade 2
-    "Fibrinogen decreased",  1,      2.1,    -49,    "g/L",   "3",
+    "Fibrinogen decreased", 1, 2.1, -49, "g/L", "3",
     # Satisfies <=50% decrease for grade 3 - LLN  satisfies grade 2
-    "Fibrinogen decreased",  1,      2,      -50,    "g/L",   "3",
+    "Fibrinogen decreased", 1, 2, -50, "g/L", "3",
     # Satisfies < 0.75*LLN for grade 2 - PCHG missing
-    "Fibrinogen decreased",  1.5,    2.1,    NA,     "g/L",   "2",
+    "Fibrinogen decreased", 1.5, 2.1, NA, "g/L", "2",
     # Satisfies < 0.75*LLN for grade 2 - PCHG satisfies grade 1
-    "Fibrinogen decreased",  1.5,    2.1,    -10,    "g/L",   "2",
+    "Fibrinogen decreased", 1.5, 2.1, -10, "g/L", "2",
     # Satisfies <=25% for grade 2 - LLN satisfies grade 1
-    "Fibrinogen decreased",  1.5,    1.6,    -25,    "g/L",   "2",
+    "Fibrinogen decreased", 1.5, 1.6, -25, "g/L", "2",
     # Satisfies < LLN for grade 1 - PCHG missing
-    "Fibrinogen decreased",  2,      2.1,    NA,     "g/L",   "1",
+    "Fibrinogen decreased", 2, 2.1, NA, "g/L", "1",
     # Satisfies < LLN for grade 1 - PCHG satisfies grade 0
-    "Fibrinogen decreased",  2,      2.1,    10,     "g/L",   "1",
+    "Fibrinogen decreased", 2, 2.1, 10, "g/L", "1",
     # Satisfies grade 0 - AVAL >= LLN AND no % descrease
-    "Fibrinogen decreased",  1.5,    1.5,    0,      "g/L",   "0",
+    "Fibrinogen decreased", 1.5, 1.5, 0, "g/L", "0",
     # Satisfies % decrease for grade 1 - AVAL = LLN so not abnormal
-    "Fibrinogen decreased",  1.5,    1.5,    -1,     "g/L",   "0",
+    "Fibrinogen decreased", 1.5, 1.5, -1, "g/L", "0",
     # AVAL >= LLN - PCT missing but its normal so ignore PCT
-    "Fibrinogen decreased",  1.5,    1.5,    NA,     "g/L",   "0",
+    "Fibrinogen decreased", 1.5, 1.5, NA, "g/L", "0",
     # Satisfies <=75% decrease for grade 4 - LLN missing do not know its abnormal
-    "Fibrinogen decreased",  1,      NA,     -75,    "g/L",   NA,
+    "Fibrinogen decreased", 1, NA, -75, "g/L", NA,
     # Satisfies <=50% decrease for grade 3 - LLN missing do not know its abnormal
-    "Fibrinogen decreased",  1,      NA,     -50,    "g/L",   NA,
+    "Fibrinogen decreased", 1, NA, -50, "g/L", NA,
     # Satisfies <=25% decrease for grade 2 - LLN missing do not know its abnormal
-    "Fibrinogen decreased",  1.5,    NA,     -25,    "g/L",   NA,
+    "Fibrinogen decreased", 1.5, NA, -25, "g/L", NA,
     # Satisfies % decrease for grade 1 - LLN missing do not know its abnormal
-    "Fibrinogen decreased",  1.5,    NA,     -1,     "g/L",   NA,
+    "Fibrinogen decreased", 1.5, NA, -1, "g/L", NA,
     # PCT >= 0 BUT LLN missing cannot grade as NORMAL
-    "Fibrinogen decreased",  1.5,    NA,     10,     "g/L",   NA,
+    "Fibrinogen decreased", 1.5, NA, 10, "g/L", NA,
     # AVAL missing cannot grade
-    "Fibrinogen decreased",  NA,     1.5,    10,     "g/L",   NA,
+    "Fibrinogen decreased", NA, 1.5, 10, "g/L", NA,
     # wrong unit cannot grade as it may satisfy grade 4
-    "Fibrinogen decreased",  1.5,    1.5,    0,      "g/dL",  NA,
+    "Fibrinogen decreased", 1.5, 1.5, 0, "g/dL", NA,
     # missing unit cannot grade as it may satisfy grade 4
-    "Fibrinogen decreased",  1.5,    1.5,    0,      NA,      NA,
+    "Fibrinogen decreased", 1.5, 1.5, 0, NA, NA,
   )
   input_fib <- expected_fib %>%
     select(-ATOXGRL)
@@ -1220,7 +1212,6 @@ expected_ggt_ctcv4 <- tibble::tribble(
 
 # ---- derive_var_atoxgr, test 29: CTCAEv4 GGT increased ----
 test_that("derive_var_atoxgr, test 29: CTCAEv4 GGT increased", {
-
   input_ggt <- expected_ggt_ctcv4 %>%
     select(-ATOXGRH)
 
@@ -1249,12 +1240,13 @@ test_that("derive_var_atoxgr, test 29: CTCAEv4 GGT increased", {
 
 # ---- derive_var_atoxgr, test 30: CTCAEv5 GGT increased ----
 test_that("derive_var_atoxgr, test 30: CTCAEv5 GGT increased", {
-
   # V5 and V4 criteria identical when BASELINE normal
   expected_ggt_ctcv5_norm <- expected_ggt_ctcv4 %>%
     # set BASE to be normal and create FLAG
-    mutate(BASE = ANRHI,
-           FLAG = "NORMAL")
+    mutate(
+      BASE = ANRHI,
+      FLAG = "NORMAL"
+    )
 
   # create records with baseline abnormal and apply criteria
   expected_ggt_ctcv5_abn <- tibble::tribble(
@@ -1275,8 +1267,10 @@ test_that("derive_var_atoxgr, test 30: CTCAEv5 GGT increased", {
     "GGT increased", NA,    0,      NA,     NA_character_, NA,
   ) %>%
     # set BASE to be abnormal and create FLAG
-    mutate(ANRHI = BASE - 1,
-           FLAG = "ABNORMAL")
+    mutate(
+      ANRHI = BASE - 1,
+      FLAG = "ABNORMAL"
+    )
 
   # combine records with baseline normal and abnormal
   expected_ggt_ctcv5 <- expected_ggt_ctcv5_norm %>%
@@ -1324,7 +1318,6 @@ input_hapt <- expected_hapt %>%
 
 # ---- derive_var_atoxgr, test 31: CTCAEv4 Haptoglobin decreased ----
 test_that("derive_var_atoxgr, test 31: CTCAEv4 Haptoglobin decreased", {
-
   actual_hapt <- derive_var_atoxgr_dir(
     input_hapt,
     new_var = ATOXGRL,
@@ -1343,7 +1336,6 @@ test_that("derive_var_atoxgr, test 31: CTCAEv4 Haptoglobin decreased", {
 
 # ---- derive_var_atoxgr, test 32: CTCAEv5 Haptoglobin decreased ----
 test_that("derive_var_atoxgr, test 32: CTCAEv5 Haptoglobin decreased", {
-
   actual_hapt <- derive_var_atoxgr_dir(
     input_hapt,
     new_var = ATOXGRL,
@@ -1367,44 +1359,43 @@ test_that("derive_var_atoxgr, test 32: CTCAEv5 Haptoglobin decreased", {
 ### Grade 1: Increase in >0 - 2 gm/dL above ULN or above baseline if baseline is above ULN
 
 expected_hgbi <- tibble::tribble(
-  ~ATOXDSCH,              ~AVAL,  ~BASE,  ~ANRHI, ~AVALU, ~ATOXGRH, ~TESTNUM, ~V5,
-  "Not a term",           80,     120,    200,    "g/L",  NA,       1,        "Y",
-  NA_character_,          60,     50,     100,    "g/L",  NA,       2,        "Y",
+  ~ATOXDSCH, ~AVAL, ~BASE, ~ANRHI, ~AVALU, ~ATOXGRH, ~TESTNUM, ~V5,
+  "Not a term", 80, 120, 200, "g/L", NA, 1, "Y",
+  NA_character_, 60, 50, 100, "g/L", NA, 2, "Y",
   # BASE greater than ANRHI
-  "Hemoglobin increased", 106,    65,     60,     "g/L",  "3",      3,        "N",
-  "Hemoglobin increased", 105,    65,     60,     "g/L",  "2",      4,        "N",
-  "Hemoglobin increased", 86,     65,     60,     "g/L",  "2",      5,        "N",
-  "Hemoglobin increased", 85,     65,     60,     "g/L",  "1",      6,        "N",
-  "Hemoglobin increased", 66,     65,     60,     "g/L",  "1",      7,        "N",
-  "Hemoglobin increased", 65,     65,     60,     "g/L",  "0",      8,        "N",
-  "Hemoglobin increased", NA,     65,     60,     "g/L",  NA,       9,        "N",
+  "Hemoglobin increased", 106, 65, 60, "g/L", "3", 3, "N",
+  "Hemoglobin increased", 105, 65, 60, "g/L", "2", 4, "N",
+  "Hemoglobin increased", 86, 65, 60, "g/L", "2", 5, "N",
+  "Hemoglobin increased", 85, 65, 60, "g/L", "1", 6, "N",
+  "Hemoglobin increased", 66, 65, 60, "g/L", "1", 7, "N",
+  "Hemoglobin increased", 65, 65, 60, "g/L", "0", 8, "N",
+  "Hemoglobin increased", NA, 65, 60, "g/L", NA, 9, "N",
   # BASE less than or equal to ANRHI
-  "Hemoglobin increased", 106,    60,     65,     "g/L",  "3",      10,        "Y",
-  "Hemoglobin increased", 105,    60,     65,     "g/L",  "2",      11,        "Y",
-  "Hemoglobin increased", 86,     60,     65,     "g/L",  "2",      12,        "Y",
-  "Hemoglobin increased", 85,     60,     65,     "g/L",  "1",      13,        "Y",
-  "Hemoglobin increased", 66,     60,     65,     "g/L",  "1",      14,        "Y",
-  "Hemoglobin increased", 65,     60,     65,     "g/L",  "0",      15,        "Y",
-  "Hemoglobin increased", NA,     60,     65,     "g/L",  NA,       16,        "Y",
+  "Hemoglobin increased", 106, 60, 65, "g/L", "3", 10, "Y",
+  "Hemoglobin increased", 105, 60, 65, "g/L", "2", 11, "Y",
+  "Hemoglobin increased", 86, 60, 65, "g/L", "2", 12, "Y",
+  "Hemoglobin increased", 85, 60, 65, "g/L", "1", 13, "Y",
+  "Hemoglobin increased", 66, 60, 65, "g/L", "1", 14, "Y",
+  "Hemoglobin increased", 65, 60, 65, "g/L", "0", 15, "Y",
+  "Hemoglobin increased", NA, 60, 65, "g/L", NA, 16, "Y",
   # BASE missing
-  "Hemoglobin increased", 106,    NA,     65,     "g/L",  "3",      17,        "N",
-  "Hemoglobin increased", 105,    NA,     65,     "g/L",  "2",      18,        "N",
-  "Hemoglobin increased", 86,     NA,     65,     "g/L",  "2",      19,        "N",
-  "Hemoglobin increased", 85,     NA,     65,     "g/L",  "1",      20,        "N",
-  "Hemoglobin increased", 66,     NA,     65,     "g/L",  "1",      21,        "N",
-  "Hemoglobin increased", 65,     NA,     65,     "g/L",  "0",      22,        "N",
-  "Hemoglobin increased", NA,     NA,     65,     "g/L",  NA,       23,        "N",
+  "Hemoglobin increased", 106, NA, 65, "g/L", "3", 17, "N",
+  "Hemoglobin increased", 105, NA, 65, "g/L", "2", 18, "N",
+  "Hemoglobin increased", 86, NA, 65, "g/L", "2", 19, "N",
+  "Hemoglobin increased", 85, NA, 65, "g/L", "1", 20, "N",
+  "Hemoglobin increased", 66, NA, 65, "g/L", "1", 21, "N",
+  "Hemoglobin increased", 65, NA, 65, "g/L", "0", 22, "N",
+  "Hemoglobin increased", NA, NA, 65, "g/L", NA, 23, "N",
   # Unit missing cannot grade
-  "Hemoglobin increased", 200,    61,     65,     NA,     NA,       24,        "Y",
+  "Hemoglobin increased", 200, 61, 65, NA, NA, 24, "Y",
   # ANRHI missing - cannot grade
-  "Hemoglobin increased", 200,    60,     NA,     "g/L",  NA,       25,        "Y",
+  "Hemoglobin increased", 200, 60, NA, "g/L", NA, 25, "Y",
   # AVAL missing cannot grade
-  "Hemoglobin increased", NA,     60,     65,     "g/L",  NA,       26,        "Y",
+  "Hemoglobin increased", NA, 60, 65, "g/L", NA, 26, "Y",
 )
 
 # ---- derive_var_atoxgr, test 33: CTCAEv4 Hemoglobin increased ----
 test_that("derive_var_atoxgr, test 33: CTCAEv4 Hemoglobin increased", {
-
   input_hgbi <- expected_hgbi %>%
     select(-ATOXGRH)
 
@@ -1426,7 +1417,6 @@ test_that("derive_var_atoxgr, test 33: CTCAEv4 Hemoglobin increased", {
 
 # ---- derive_var_atoxgr, test 34: CTCAEv5 Hemoglobin increased ----
 test_that("derive_var_atoxgr, test 34: CTCAEv5 Hemoglobin increased", {
-
   expected_hgbi <- expected_hgbi %>%
     filter(V5 == "Y")
 
@@ -1582,7 +1572,6 @@ input_lip <- expected_lip %>%
 
 # ---- derive_var_atoxgr, test 37: CTCAEv4 Lipase increased ----
 test_that("derive_var_atoxgr, test 37: CTCAEv4 Lipase increased", {
-
   actual_lip <- derive_var_atoxgr_dir(
     input_lip,
     new_var = ATOXGRH,
@@ -1601,7 +1590,6 @@ test_that("derive_var_atoxgr, test 37: CTCAEv4 Lipase increased", {
 
 # ---- derive_var_atoxgr, test 38: CTCAEv5 Lipase increased ----
 test_that("derive_var_atoxgr, test 38: CTCAEv5 Lipase increased", {
-
   actual_lip <- derive_var_atoxgr_dir(
     input_lip,
     new_var = ATOXGRH,
@@ -1659,7 +1647,6 @@ input_lymd <- expected_lymd %>%
 
 # ---- derive_var_atoxgr, test 39: CTCAEv4 Lymphocyte count decreased ----
 test_that("derive_var_atoxgr, test 39: CTCAEv4 Lymphocyte count decreased", {
-
   actual_lymd <- derive_var_atoxgr_dir(
     input_lymd,
     new_var = ATOXGRL,
@@ -1678,7 +1665,6 @@ test_that("derive_var_atoxgr, test 39: CTCAEv4 Lymphocyte count decreased", {
 
 # ---- derive_var_atoxgr, test 40: CTCAEv5 Lymphocyte count decreased ----
 test_that("derive_var_atoxgr, test 40: CTCAEv5 Lymphocyte count decreased", {
-
   actual_lymd <- derive_var_atoxgr_dir(
     input_lymd,
     new_var = ATOXGRL,
@@ -1718,7 +1704,6 @@ input_lymi <- expected_lymi %>%
 
 # ---- derive_var_atoxgr, test 41: CTCAEv4 Lymphocyte count increased ----
 test_that("derive_var_atoxgr, test 41: CTCAEv4 Lymphocyte count increased", {
-
   actual_lymi <- derive_var_atoxgr_dir(
     input_lymi,
     new_var = ATOXGRH,
@@ -1737,7 +1722,6 @@ test_that("derive_var_atoxgr, test 41: CTCAEv4 Lymphocyte count increased", {
 
 # ---- derive_var_atoxgr, test 42: CTCAEv5 Lymphocyte count increased ----
 test_that("derive_var_atoxgr, test 42: CTCAEv5 Lymphocyte count increased", {
-
   actual_lymi <- derive_var_atoxgr_dir(
     input_lymi,
     new_var = ATOXGRH,
@@ -1795,7 +1779,6 @@ input_neut <- expected_neut %>%
 
 # ---- derive_var_atoxgr, test 43: CTCAEv4 Neutrophil count decreased ----
 test_that("derive_var_atoxgr, test 43: CTCAEv4 Neutrophil count decreased", {
-
   actual_neut <- derive_var_atoxgr_dir(
     input_neut,
     new_var = ATOXGRL,
@@ -1814,7 +1797,6 @@ test_that("derive_var_atoxgr, test 43: CTCAEv4 Neutrophil count decreased", {
 
 # ---- derive_var_atoxgr, test 44: CTCAEv5 Neutrophil count decreased ----
 test_that("derive_var_atoxgr, test 44: CTCAEv5 Neutrophil count decreased", {
-
   actual_neut <- derive_var_atoxgr_dir(
     input_neut,
     new_var = ATOXGRL,
@@ -1871,7 +1853,6 @@ input_plate <- expected_plate %>%
 
 # ---- derive_var_atoxgr, test 45: CTCAEv4 Platelet count decreased ----
 test_that("derive_var_atoxgr, test 45: CTCAEv4 Platelet count decreased", {
-
   actual_plate <- derive_var_atoxgr_dir(
     input_plate,
     new_var = ATOXGRL,
@@ -1890,7 +1871,6 @@ test_that("derive_var_atoxgr, test 45: CTCAEv4 Platelet count decreased", {
 
 # ---- derive_var_atoxgr, test 46: CTCAEv5 Platelet count decreased ----
 test_that("derive_var_atoxgr, test 46: CTCAEv5 Platelet count decreased", {
-
   actual_plate <- derive_var_atoxgr_dir(
     input_plate,
     new_var = ATOXGRL,
@@ -1936,7 +1916,6 @@ input_seri <- expected_seri %>%
 
 # ---- derive_var_atoxgr, test 47: CTCAEv4 Serum amylase increased ----
 test_that("derive_var_atoxgr, test 47: CTCAEv4 Serum amylase increased", {
-
   actual_seri <- derive_var_atoxgr_dir(
     input_seri,
     new_var = ATOXGRH,
@@ -1955,7 +1934,6 @@ test_that("derive_var_atoxgr, test 47: CTCAEv4 Serum amylase increased", {
 
 # ---- derive_var_atoxgr, test 48: CTCAEv5 Serum amylase increased ----
 test_that("derive_var_atoxgr, test 48: CTCAEv5 Serum amylase increased", {
-
   actual_seri <- derive_var_atoxgr_dir(
     input_seri,
     new_var = ATOXGRH,
@@ -2012,7 +1990,6 @@ input_wbcd <- expected_wbcd %>%
 
 # ---- derive_var_atoxgr, test 49: CTCAEv4 White blood cell decreased ----
 test_that("derive_var_atoxgr, test 49: CTCAEv4 White blood cell decreased", {
-
   actual_wbcd <- derive_var_atoxgr_dir(
     input_wbcd,
     new_var = ATOXGRL,
@@ -2031,7 +2008,6 @@ test_that("derive_var_atoxgr, test 49: CTCAEv4 White blood cell decreased", {
 
 # ---- derive_var_atoxgr, test 50: CTCAEv5 White blood cell decreased ----
 test_that("derive_var_atoxgr, test 50: CTCAEv5 White blood cell decreased", {
-
   actual_wbcd <- derive_var_atoxgr_dir(
     input_wbcd,
     new_var = ATOXGRL,
@@ -2091,7 +2067,6 @@ input_calci <- expected_calci %>%
 
 # ---- derive_var_atoxgr, test 51: CTCAEv4 Hypercalcemia ----
 test_that("derive_var_atoxgr, test 51: CTCAEv4 Hypercalcemia", {
-
   actual_calci <- derive_var_atoxgr_dir(
     input_calci,
     new_var = ATOXGRH,
@@ -2110,7 +2085,6 @@ test_that("derive_var_atoxgr, test 51: CTCAEv4 Hypercalcemia", {
 
 # ---- derive_var_atoxgr, test 52: CTCAEv5 Hypercalcemia ----
 test_that("derive_var_atoxgr, test 52: CTCAEv5 Hypercalcemia", {
-
   actual_calci <- derive_var_atoxgr_dir(
     input_calci,
     new_var = ATOXGRH,
@@ -2168,7 +2142,6 @@ input_calioni <- expected_calioni %>%
 
 # ---- derive_var_atoxgr, test 53: CTCAEv4 Hypercalcemia (Ionized) ----
 test_that("derive_var_atoxgr, test 53: CTCAEv4 Hypercalcemia (Ionized)", {
-
   actual_calioni <- derive_var_atoxgr_dir(
     input_calioni,
     new_var = ATOXGRH,
@@ -2187,7 +2160,6 @@ test_that("derive_var_atoxgr, test 53: CTCAEv4 Hypercalcemia (Ionized)", {
 
 # ---- derive_var_atoxgr, test 54: CTCAEv5 Hypercalcemia (Ionized) ----
 test_that("derive_var_atoxgr, test 54: CTCAEv5 Hypercalcemia (Ionized)", {
-
   actual_calioni <- derive_var_atoxgr_dir(
     input_calioni,
     new_var = ATOXGRH,
@@ -2340,7 +2312,6 @@ input_kalei <- expected_kalei %>%
 
 # ---- derive_var_atoxgr, test 57: CTCAEv4 Hyperkalemia ----
 test_that("derive_var_atoxgr, test 57: CTCAEv4 Hyperkalemia", {
-
   actual_kalei <- derive_var_atoxgr_dir(
     input_kalei,
     new_var = ATOXGRH,
@@ -2359,7 +2330,6 @@ test_that("derive_var_atoxgr, test 57: CTCAEv4 Hyperkalemia", {
 
 # ---- derive_var_atoxgr, test 58: CTCAEv5 Hyperkalemia ----
 test_that("derive_var_atoxgr, test 58: CTCAEv5 Hyperkalemia", {
-
   actual_kalei <- derive_var_atoxgr_dir(
     input_kalei,
     new_var = ATOXGRH,
@@ -2412,7 +2382,6 @@ input_magni <- expected_magni %>%
 
 # ---- derive_var_atoxgr, test 59: CTCAEv4 Hypermagnesemia ----
 test_that("derive_var_atoxgr, test 59: CTCAEv4 Hypermagnesemia", {
-
   actual_magni <- derive_var_atoxgr_dir(
     input_magni,
     new_var = ATOXGRH,
@@ -2431,7 +2400,6 @@ test_that("derive_var_atoxgr, test 59: CTCAEv4 Hypermagnesemia", {
 
 # ---- derive_var_atoxgr, test 60: CTCAEv5 Hypermagnesemia ----
 test_that("derive_var_atoxgr, test 60: CTCAEv5 Hypermagnesemia", {
-
   actual_magni <- derive_var_atoxgr_dir(
     input_magni,
     new_var = ATOXGRH,
@@ -2488,7 +2456,6 @@ input_natri <- expected_natri %>%
 
 # ---- derive_var_atoxgr, test 61: CTCAEv4 Hypernatremia ----
 test_that("derive_var_atoxgr, test 61: CTCAEv4 Hypernatremia", {
-
   actual_natri <- derive_var_atoxgr_dir(
     input_natri,
     new_var = ATOXGRH,
@@ -2507,7 +2474,6 @@ test_that("derive_var_atoxgr, test 61: CTCAEv4 Hypernatremia", {
 
 # ---- derive_var_atoxgr, test 62: CTCAEv5 Hypernatremia ----
 test_that("derive_var_atoxgr, test 62: CTCAEv5 Hypernatremia", {
-
   actual_natri <- derive_var_atoxgr_dir(
     input_natri,
     new_var = ATOXGRH,
@@ -2553,7 +2519,6 @@ input_trigi <- expected_trigi %>%
 
 # ---- derive_var_atoxgr, test 63: CTCAEv4 Hypertriglyceridemia ----
 test_that("derive_var_atoxgr, test 63: CTCAEv4 Hypertriglyceridemia", {
-
   actual_trigi <- derive_var_atoxgr_dir(
     input_trigi,
     new_var = ATOXGRH,
@@ -2572,7 +2537,6 @@ test_that("derive_var_atoxgr, test 63: CTCAEv4 Hypertriglyceridemia", {
 
 # ---- derive_var_atoxgr, test 64: CTCAEv5 Hypertriglyceridemia ----
 test_that("derive_var_atoxgr, test 64: CTCAEv5 Hypertriglyceridemia", {
-
   actual_trigi <- derive_var_atoxgr_dir(
     input_trigi,
     new_var = ATOXGRH,
@@ -2623,7 +2587,6 @@ input_albi <- expected_albi %>%
 
 # ---- derive_var_atoxgr, test 65: CTCAEv5 Hyperuricemia ----
 test_that("derive_var_atoxgr, test 65: CTCAEv5 Hyperuricemia", {
-
   expected_albi <- expected_albi %>%
     filter(ATOXGRH != "4")
   input_albi <- expected_albi %>%
@@ -2647,7 +2610,6 @@ test_that("derive_var_atoxgr, test 65: CTCAEv5 Hyperuricemia", {
 
 # ---- derive_var_atoxgr, test 66: CTCAEv4 Hyperuricemia ----
 test_that("derive_var_atoxgr, test 66: CTCAEv4 Hyperuricemia", {
-
   actual_albi <- derive_var_atoxgr_dir(
     input_albi,
     new_var = ATOXGRH,
@@ -2700,7 +2662,6 @@ input_albd <- expected_albd %>%
 
 # ---- derive_var_atoxgr, test 67: CTCAEv4 Hypoalbuminemia ----
 test_that("derive_var_atoxgr, test 67: CTCAEv4 Hypoalbuminemia", {
-
   actual_albd <- derive_var_atoxgr_dir(
     input_albd,
     new_var = ATOXGRL,
@@ -2719,7 +2680,6 @@ test_that("derive_var_atoxgr, test 67: CTCAEv4 Hypoalbuminemia", {
 
 # ---- derive_var_atoxgr, test 68: CTCAEv5 Hypoalbuminemia ----
 test_that("derive_var_atoxgr, test 68: CTCAEv5 Hypoalbuminemia", {
-
   actual_albd <- derive_var_atoxgr_dir(
     input_albd,
     new_var = ATOXGRL,
@@ -2776,7 +2736,6 @@ input_calcd <- expected_calcd %>%
 
 # ---- derive_var_atoxgr, test 69: CTCAEv4 Hypocalcemia ----
 test_that("derive_var_atoxgr, test 69: CTCAEv4 Hypocalcemia", {
-
   actual_calcd <- derive_var_atoxgr_dir(
     input_calcd,
     new_var = ATOXGRL,
@@ -2795,7 +2754,6 @@ test_that("derive_var_atoxgr, test 69: CTCAEv4 Hypocalcemia", {
 
 # ---- derive_var_atoxgr, test 70: CTCAEv5 Hypocalcemia ----
 test_that("derive_var_atoxgr, test 70: CTCAEv5 Hypocalcemia", {
-
   actual_calcd <- derive_var_atoxgr_dir(
     input_calcd,
     new_var = ATOXGRL,
@@ -2852,7 +2810,6 @@ input_caliond <- expected_caliond %>%
 
 # ---- derive_var_atoxgr, test 71: CTCAEv4 Hypocalcemia (Ionized) ----
 test_that("derive_var_atoxgr, test 71: CTCAEv4 Hypocalcemia (Ionized)", {
-
   actual_caliond <- derive_var_atoxgr_dir(
     input_caliond,
     new_var = ATOXGRL,
@@ -2871,7 +2828,6 @@ test_that("derive_var_atoxgr, test 71: CTCAEv4 Hypocalcemia (Ionized)", {
 
 # ---- derive_var_atoxgr, test 72: CTCAEv5 Hypocalcemia (Ionized) ----
 test_that("derive_var_atoxgr, test 72: CTCAEv5 Hypocalcemia (Ionized)", {
-
   actual_caliond <- derive_var_atoxgr_dir(
     input_caliond,
     new_var = ATOXGRL,
@@ -2928,7 +2884,6 @@ input_glycd <- expected_glycd %>%
 
 # ---- derive_var_atoxgr, test 73: CTCAEv4 Hypoglycemia ----
 test_that("derive_var_atoxgr, test 73: CTCAEv4 Hypoglycemia", {
-
   actual_glycd <- derive_var_atoxgr_dir(
     input_glycd,
     new_var = ATOXGRL,
@@ -2947,7 +2902,6 @@ test_that("derive_var_atoxgr, test 73: CTCAEv4 Hypoglycemia", {
 
 # ---- derive_var_atoxgr, test 74: CTCAEv5 Hypoglycemia ----
 test_that("derive_var_atoxgr, test 74: CTCAEv5 Hypoglycemia", {
-
   actual_glycd <- derive_var_atoxgr_dir(
     input_glycd,
     new_var = ATOXGRL,
@@ -2999,7 +2953,6 @@ input_kaled <- expected_kaled %>%
 
 # ---- derive_var_atoxgr, test 75: CTCAEv4 Hypokalemia ----
 test_that("derive_var_atoxgr, test 75: CTCAEv4 Hypokalemia", {
-
   actual_kaled <- derive_var_atoxgr_dir(
     input_kaled,
     new_var = ATOXGRL,
@@ -3018,7 +2971,6 @@ test_that("derive_var_atoxgr, test 75: CTCAEv4 Hypokalemia", {
 
 # ---- derive_var_atoxgr, test 76: CTCAEv5 Hypokalemia ----
 test_that("derive_var_atoxgr, test 76: CTCAEv5 Hypokalemia", {
-
   actual_kaled <- derive_var_atoxgr_dir(
     input_kaled,
     new_var = ATOXGRL,
@@ -3075,7 +3027,6 @@ input_magnd <- expected_magnd %>%
 
 # ---- derive_var_atoxgr, test 77: CTCAEv4 Hypomagnesemia ----
 test_that("derive_var_atoxgr, test 77: CTCAEv4 Hypomagnesemia", {
-
   actual_magnd <- derive_var_atoxgr_dir(
     input_magnd,
     new_var = ATOXGRL,
@@ -3094,7 +3045,6 @@ test_that("derive_var_atoxgr, test 77: CTCAEv4 Hypomagnesemia", {
 
 # ---- derive_var_atoxgr, test 78: CTCAEv5 Hypomagnesemia ----
 test_that("derive_var_atoxgr, test 78: CTCAEv5 Hypomagnesemia", {
-
   actual_magnd <- derive_var_atoxgr_dir(
     input_magnd,
     new_var = ATOXGRL,
@@ -3146,7 +3096,6 @@ input_natrd <- expected_natrd %>%
 
 # ---- derive_var_atoxgr, test 79: CTCAEv4 Hyponatremia ----
 test_that("derive_var_atoxgr, test 79: CTCAEv4 Hyponatremia", {
-
   actual_natrd <- derive_var_atoxgr_dir(
     input_natrd,
     new_var = ATOXGRL,
@@ -3165,7 +3114,6 @@ test_that("derive_var_atoxgr, test 79: CTCAEv4 Hyponatremia", {
 
 # ---- derive_var_atoxgr, test 80: CTCAEv5 Hyponatremia ----
 test_that("derive_var_atoxgr, test 80: CTCAEv5 Hyponatremia", {
-
   actual_natrd <- derive_var_atoxgr_dir(
     input_natrd,
     new_var = ATOXGRL,

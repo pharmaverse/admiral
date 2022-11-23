@@ -552,7 +552,7 @@ Similarly, for terms "Lipase Increased" and "Serum amylase increased" there is t
 ```{r, eval=TRUE, echo=FALSE}
 
 atoxgr_criteria_ctcv5 %>%
-  filter(str_detect(TERM, "INR") |  str_detect(TERM, "amylase")) %>%
+  filter(str_detect(TERM, "INR") | str_detect(TERM, "amylase")) %>%
   dataset_vignette(
     display_vars = vars(TERM, Grade_2, Grade_3, Grade_4)
   )
@@ -565,7 +565,7 @@ The decision made was put in the `COMMENT` field.
 <br>
 ```{r, eval=TRUE, echo=FALSE}
 atoxgr_criteria_ctcv5 %>%
-  filter(str_detect(TERM, "INR") |  str_detect(TERM, "amylase")) %>%
+  filter(str_detect(TERM, "INR") | str_detect(TERM, "amylase")) %>%
   dataset_vignette(
     display_vars = vars(TERM, COMMENT)
   )

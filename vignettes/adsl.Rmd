@@ -477,7 +477,7 @@ src_ae <- dthcaus_source(
 dataset_vignette(
   ae,
   display_vars = vars(USUBJID, AESTDTC, AEENDTC, AEDECOD, AEOUT),
-  filter =  AEOUT == "FATAL"
+  filter = AEOUT == "FATAL"
 )
 ```
 
@@ -713,7 +713,7 @@ adsl <- adsl %>%
 dataset_vignette(
   adsl,
   display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR),
-  filter =  !is.na(TRTSDT)
+  filter = !is.na(TRTSDT)
 )
 ```
  

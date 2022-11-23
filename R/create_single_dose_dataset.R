@@ -132,13 +132,13 @@ dose_freq_lookup <- tibble::tribble(
   mutate(
     DOSE_COUNT = case_when(
       str_detect(CDISC_VALUE, "PER [WMY]") ~
-      as.numeric(str_remove_all(CDISC_VALUE, "[\\D]")),
+        as.numeric(str_remove_all(CDISC_VALUE, "[\\D]")),
       str_detect(CDISC_VALUE, "PER [D]") ~
-      24 / as.numeric(str_remove_all(CDISC_VALUE, "[\\D]")),
+        24 / as.numeric(str_remove_all(CDISC_VALUE, "[\\D]")),
       str_detect(CDISC_VALUE, "^Q\\d{1,2}(H|MIN)") ~
-      1 / as.numeric(str_remove_all(CDISC_VALUE, "[\\D]")),
+        1 / as.numeric(str_remove_all(CDISC_VALUE, "[\\D]")),
       str_detect(CDISC_VALUE, "^(Q|EVERY)\\s?\\d{1,2}") ~
-      1 / as.numeric(str_remove_all(CDISC_VALUE, "[\\D]")),
+        1 / as.numeric(str_remove_all(CDISC_VALUE, "[\\D]")),
       str_detect(CDISC_VALUE, "^EVERY (A|E|W)[:alpha:]+") ~ 1,
       str_detect(CDISC_VALUE, "^Q(AM|PM|M|N|D|HS)|^PA$") ~ 1,
       str_detect(CDISC_VALUE, "^QH$") ~ 1,
@@ -149,7 +149,7 @@ dose_freq_lookup <- tibble::tribble(
     ),
     DOSE_WINDOW = case_when(
       str_detect(CDISC_VALUE, "EVERY \\d{1,2}|PER [WMY]") ~
-      str_remove_all(sub(".* (\\w+)$", "\\1", CDISC_VALUE), "S"),
+        str_remove_all(sub(".* (\\w+)$", "\\1", CDISC_VALUE), "S"),
       str_detect(CDISC_VALUE, "^Q\\d{1,2}D$") ~ "DAY",
       str_detect(CDISC_VALUE, "^Q\\d{1,2}M$") ~ "MONTH",
       str_detect(CDISC_VALUE, "^Q\\d{0,2}H$|PER D") ~ "HOUR",
@@ -443,13 +443,13 @@ create_single_dose_dataset <- function(dataset,
         DOSE_WINDOW == "MINUTE" ~ minutes(floor(.data$time_increment)),
         DOSE_WINDOW == "HOUR" ~ hours(floor(.data$time_increment)),
         DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
-        days(floor(.data$time_increment / CONVERSION_FACTOR))
+          days(floor(.data$time_increment / CONVERSION_FACTOR))
       ),
       time_differential_dt = case_when(
         DOSE_WINDOW == "MINUTE" ~ days(floor(.data$time_increment / 1440)),
         DOSE_WINDOW == "HOUR" ~ days(floor(.data$time_increment / 24)),
         DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
-        days(floor(.data$time_increment / CONVERSION_FACTOR))
+          days(floor(.data$time_increment / CONVERSION_FACTOR))
       )
     )
 
@@ -470,7 +470,7 @@ create_single_dose_dataset <- function(dataset,
       !!end_datetime := case_when(
         DOSE_WINDOW %in% c("MINUTE", "HOUR") ~ !!start_datetime,
         DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
-        ymd_hms(paste0(!!start_date, " ", format(!!end_datetime, format = "%H:%M:%S")))
+          ymd_hms(paste0(!!start_date, " ", format(!!end_datetime, format = "%H:%M:%S")))
       )
     ) %>%
     select(!!!vars(all_of(col_names)))
