@@ -23,6 +23,7 @@ Developer Utility Functions:
 \code{\link{\%or\%}()},
 \code{\link{arg_name}()},
 \code{\link{as_name}()},
+\code{\link{contains_vars}()},
 \code{\link{extract_vars}()},
 \code{\link{filter_if}()},
 \code{\link{negate_vars}()},
