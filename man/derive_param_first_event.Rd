@@ -100,69 +100,6 @@ the new observations.
 \item The new observations are added to input dataset.
 }
 }
-<<<<<<< HEAD
-\examples{
-library(tibble)
-library(dplyr, warn.conflicts = FALSE)
-library(lubridate)
-
-# Derive a new parameter for the first disease progression (PD)
-adsl <- tribble(
-  ~USUBJID, ~DTHDT,
-  "1",      ymd("2022-05-13"),
-  "2",      ymd(""),
-  "3",      ymd("")
-) \%>\%
-  mutate(STUDYID = "XX1234")
-
-adrs <- tribble(
-  ~USUBJID, ~ADTC,        ~AVALC,
-  "1",      "2020-01-02", "PR",
-  "1",      "2020-02-01", "CR",
-  "1",      "2020-03-01", "CR",
-  "1",      "2020-04-01", "SD",
-  "2",      "2021-06-15", "SD",
-  "2",      "2021-07-16", "PD",
-  "2",      "2021-09-14", "PD"
-) \%>\%
-  mutate(
-    STUDYID = "XX1234",
-    ADT = ymd(ADTC),
-    PARAMCD = "OVR",
-    PARAM = "Overall Response",
-    ANL01FL = "Y"
-  ) \%>\%
-  select(-ADTC)
-
-derive_param_first_event(
-  adrs,
-  dataset_adsl = adsl,
-  dataset_source = adrs,
-  filter_source = PARAMCD == "OVR" & AVALC == "PD",
-  date_var = ADT,
-  set_values_to = vars(
-    PARAMCD = "PD",
-    PARAM = "Disease Progression",
-    ANL01FL = "Y"
-  )
-)
-
-# derive parameter indicating death
-derive_param_first_event(
-  dataset = adrs,
-  dataset_adsl = adsl,
-  dataset_source = adsl,
-  filter_source = !is.na(DTHDT),
-  date_var = DTHDT,
-  set_values_to = vars(
-    PARAMCD = "DEATH",
-    PARAM = "Death",
-    ANL01FL = "Y"
-  )
-)
-}
-=======
->>>>>>> devel
 \seealso{
 Other deprecated: 
 \code{\link{derive_derived_param}()},
