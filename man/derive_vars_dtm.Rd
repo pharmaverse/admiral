@@ -179,7 +179,7 @@ in the input dataset, a warning is issued and \code{'--TMF'} will be overwritten
 \examples{
 library(tibble)
 library(lubridate)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 mhdt <- tribble(
   ~MHSTDTC,

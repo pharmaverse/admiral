@@ -41,7 +41,7 @@
 #' @examples
 #' library(tibble)
 #' library(rlang)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' bds <- tribble(
 #'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,

@@ -122,7 +122,7 @@ or before \code{trt_end_date} + \code{end_window} days, it is set to \code{"Y"},
 \examples{
 
 library(tibble)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 
 adae <- expected <- tribble(

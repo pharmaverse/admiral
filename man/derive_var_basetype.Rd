@@ -42,7 +42,7 @@ condition are kept and \code{BASETYPE} is set to \code{NA}.
 \examples{
 library(tibble)
 library(rlang)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 bds <- tribble(
   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,

@@ -25,7 +25,7 @@ Define a function to map the disposition status. To be used as an input for
 Usually this function can not be used with \verb{\%>\%}.
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 data("admiral_dm")
 data("admiral_ds")

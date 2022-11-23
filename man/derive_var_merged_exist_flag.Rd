@@ -93,7 +93,7 @@ observation exists and for all observations the condition evaluates to
 \examples{
 
 library(admiral.test)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 data("admiral_dm")
 data("admiral_ae")
 derive_var_merged_exist_flag(

@@ -24,7 +24,7 @@ multiple times in a script, such as \code{subject_keys}.
 }
 \examples{
 library(admiral.test)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 data("admiral_vs")
 data("admiral_dm")
 

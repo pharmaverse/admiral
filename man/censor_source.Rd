@@ -45,7 +45,7 @@ An object of class \code{censor_source}, inheriting from class \code{tte_source}
 }
 \examples{
 # Last study date known alive censor
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 censor_source(
   dataset_name = "adsl",

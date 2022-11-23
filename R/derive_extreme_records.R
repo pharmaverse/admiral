@@ -49,7 +49,7 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' adlb <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,

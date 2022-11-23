@@ -299,7 +299,7 @@ print_named_list <- function(list, indent = 0) {
 #' @family utils_quo
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' negate_vars(vars(USUBJID, STUDYID))
 negate_vars <- function(vars = NULL) {

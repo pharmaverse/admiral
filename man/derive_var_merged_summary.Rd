@@ -79,7 +79,7 @@ are ignored.
 }
 \examples{
 library(tibble)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 # Add a variable for the mean of AVAL within each visit
 adbds <- tribble(

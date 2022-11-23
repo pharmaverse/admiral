@@ -22,7 +22,7 @@ Modify an admiral option, e.g \code{subject_keys}, such that it automatically af
 function inputs where \code{get_admiral_option()} is called such as \code{derive_param_exist_flag()}.
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 library(tibble)
 set_admiral_options(subject_keys = vars(STUDYID, USUBJID2))

@@ -30,7 +30,7 @@ No return value, called for side effects
 Signal Duplicate Records
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 data(admiral_adsl)
 

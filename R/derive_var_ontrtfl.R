@@ -102,7 +102,7 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate, warn.conflict = FALSE)
 #'
 #' advs <- tribble(

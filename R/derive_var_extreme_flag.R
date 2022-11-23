@@ -64,7 +64,7 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
 #' data("admiral_vs")
 #'
@@ -283,7 +283,7 @@ derive_var_extreme_flag <- function(dataset,
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' input <- tribble(
 #'   ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,

@@ -24,7 +24,7 @@
 #' @examples
 #'
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(magrittr)
 #' adlb <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,

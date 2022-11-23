@@ -113,7 +113,7 @@ derive_vars_aage <- function(dataset,
 #'
 #' @examples
 #'
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' data <- data.frame(
 #'   AGE = c(27, 24, 3, 4, 1),

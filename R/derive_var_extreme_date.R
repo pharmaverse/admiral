@@ -60,7 +60,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
 #' data("admiral_dm")
 #' data("admiral_ae")
@@ -304,7 +304,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
 #' data("admiral_dm")
 #' data("admiral_ae")
@@ -474,7 +474,7 @@ derive_var_extreme_dt <- function(dataset,
 #' @return An object of class `date_source`.
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' # treatment end date from ADSL
 #' trt_end_date <- date_source(

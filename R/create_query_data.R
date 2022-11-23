@@ -151,7 +151,7 @@
 #' @examples
 #' library(tibble)
 #' library(magrittr, warn.conflicts = FALSE)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
 #' library(admiral)
 #'
@@ -581,7 +581,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' # create a query for an SMQ
 #' library(tibble)
 #' library(magrittr, warn.conflicts = FALSE)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' query(
 #'   prefix = "SMQ02",

@@ -24,7 +24,7 @@
 #' @keywords utils_ds_chk
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' data(admiral_adsl)
 #'
@@ -53,7 +53,7 @@ get_duplicates_dataset <- function() {
 #' @author Thomas Neitmann
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' data(admiral_adsl)
 #'
@@ -95,7 +95,7 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' @author Thomas Neitmann
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' data(admiral_adsl)
 #'

@@ -34,7 +34,7 @@ An object of class \code{event_source}, inheriting from class \code{tte_source}
 }
 \examples{
 # Death event
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 event_source(
   dataset_name = "adsl",

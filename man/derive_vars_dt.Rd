@@ -142,7 +142,7 @@ a warning is issued and \code{'--DTF'} will be overwritten.
 \examples{
 library(tibble)
 library(lubridate)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 mhdt <- tribble(
   ~MHSTDTC,

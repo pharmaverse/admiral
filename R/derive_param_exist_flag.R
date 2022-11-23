@@ -132,7 +132,7 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
 #' # Derive a new parameter for measurable disease at baseline

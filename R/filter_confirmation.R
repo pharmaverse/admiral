@@ -163,7 +163,7 @@
 #'
 #' library(tibble)
 #' library(admiral)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' # filter observations with a duration longer than 30 and
 #' # on or after 7 days before a COVID AE (ACOVFL == "Y")
@@ -386,7 +386,7 @@ filter_confirmation <- function(dataset,
 #' @examples
 #'
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral)
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
@@ -432,7 +432,7 @@ count_vals <- function(var, val) {
 #' @examples
 #'
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral)
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
@@ -482,7 +482,7 @@ min_cond <- function(var, cond) {
 #' @examples
 #'
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral)
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
