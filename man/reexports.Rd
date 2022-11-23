@@ -5,6 +5,7 @@
 \alias{reexports}
 \alias{vars}
 \alias{desc}
+\alias{\%>\%}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -13,5 +14,7 @@ below to see their documentation.
 
 \describe{
   \item{dplyr}{\code{\link[dplyr]{desc}}, \code{\link[dplyr]{vars}}}
+
+  \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
 }}
 
