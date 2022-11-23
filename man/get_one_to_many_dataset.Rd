@@ -23,6 +23,7 @@ second error has been thrown, the dataset of the first error can no longer be
 accessed (unless it has been saved in a variable).
 }
 \examples{
+library(admiraldev, warn.conflicts = FALSE)
 data(admiral_adsl)
 
 try(

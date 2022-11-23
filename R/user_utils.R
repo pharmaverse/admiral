@@ -201,6 +201,7 @@ chr2vars <- function(chr) {
 #' @keywords utils_ds_chk
 #'
 #' @examples
+#' library(admiraldev, warn.conflicts = FALSE)
 #' data(admiral_adsl)
 #'
 #' try(
@@ -234,6 +235,7 @@ get_one_to_many_dataset <- function() {
 #' @keywords utils_ds_chk
 #'
 #' @examples
+#' library(admiraldev, warn.conflicts = FALSE)
 #' data(admiral_adsl)
 #'
 #' try(
