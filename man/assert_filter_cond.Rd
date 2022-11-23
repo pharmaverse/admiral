@@ -24,7 +24,7 @@ functions like \code{subset} or \code{dplyr::filter}.
 }
 \examples{
 library(admiral.test)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(rlang)
 data(admiral_dm)
 

@@ -169,7 +169,7 @@ contains_vars <- function(arg) {
 #' @family dev_utility
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' vars2chr(vars(USUBJID, AVAL))
 vars2chr <- function(quosures) {

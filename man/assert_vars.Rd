@@ -23,7 +23,8 @@ and returns the input invisibly otherwise.
 Checks if an argument is a valid list of variables created using \code{vars()}
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
+library(rlang)
 
 example_fun <- function(by_vars) {
   assert_vars(by_vars)
@@ -31,7 +32,7 @@ example_fun <- function(by_vars) {
 
 example_fun(vars(USUBJID, PARAMCD))
 
-try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
+try(example_fun(exprs(USUBJID, PARAMCD)))
 
 try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 

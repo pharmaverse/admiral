@@ -16,7 +16,7 @@ A character vector
 Turn a List of Quosures into a Character Vector
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 vars2chr(vars(USUBJID, AVAL))
 }

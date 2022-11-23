@@ -316,7 +316,7 @@ An example is given below:
 #'
 #' @examples
 #' library(lubridate)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(tibble)
 #'
 #' datain <- tribble(
