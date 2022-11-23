@@ -35,6 +35,8 @@ variable-value pairs. The value can be a symbol, a string, a numeric, or
 \code{NA}. More general expression are not allowed.
 }
 \examples{
+library(dplyr)
+
 example_fun <- function(vars) {
   assert_varval_list(vars)
 }
@@ -64,6 +66,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_order_vars}()},
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_s3_class}()},
+\code{\link{assert_same_type}()},
 \code{\link{assert_symbol}()},
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()}

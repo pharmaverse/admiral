@@ -20,6 +20,7 @@ calls created using \code{vars()} and returns the input invisibly otherwise.
 Checks if an argument is a valid list of order variables created using \code{vars()}
 }
 \examples{
+library(dplyr)
 
 example_fun <- function(by_vars) {
   assert_order_vars(by_vars)
@@ -54,6 +55,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_one_to_one}()},
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_s3_class}()},
+\code{\link{assert_same_type}()},
 \code{\link{assert_symbol}()},
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()},
