@@ -22,6 +22,7 @@ yn_to_numeric(c("Y", "N", NA_character_))
 \seealso{
 Utilities for Formatting Observations: 
 \code{\link{convert_blanks_to_na}()},
+\code{\link{convert_na_to_blanks}()},
 \code{\link{format_eoxxstt_default}()},
 \code{\link{format_reason_default}()}
 }
