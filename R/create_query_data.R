@@ -212,7 +212,7 @@ create_query_data <- function(queries,
   for (i in seq_along(queries)) {
     # get term names and term variable
     if (inherits(queries[[i]]$definition, "basket_select")) {
-      #query is a basket
+      # query is a basket
       query_data[[i]] <- get_terms_from_db(
         version = version,
         fun = get_terms_fun,
@@ -653,7 +653,7 @@ validate_query <- function(obj) {
     } else {
       is_valid <-
         map_lgl(values$definition, is.data.frame) |
-        map_lgl(values$definition, inherits, "basket_select")
+          map_lgl(values$definition, inherits, "basket_select")
       if (!all(is_valid)) {
         info_msg <- paste(
           sprintf(
