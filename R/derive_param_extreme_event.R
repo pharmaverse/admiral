@@ -104,6 +104,8 @@ derive_param_first_event <- function(dataset,
 
   filter_source <- enquo(filter_source)
   date_var <- enquo(date_var)
+  tmp_var <- get_new_tmp_var(dataset = dataset)
+  tmp_var <- enquo(tmp_var)
 
   derive_param_extreme_event(
     dataset = dataset,
@@ -111,14 +113,17 @@ derive_param_first_event <- function(dataset,
     dataset_source = dataset_source,
     filter_source = !!filter_source,
     order = vars(!!date_var),
+    new_var = !!tmp_var,
     subject_keys = subject_keys,
     set_values_to = set_values_to,
     check_type = check_type,
     mode = "first"
   ) %>%
     mutate(
-      AVAL = if_else(AVALC == "Y", 1, 0)
-    )
+      AVALC = coalesce(!!tmp_var, AVALC),
+      AVAL = if_else(!!tmp_var == 'Y', true = 1, false = 0)
+    ) %>%
+    remove_tmp_vars()
 }
 
 #' Add an Extreme Event Parameter
