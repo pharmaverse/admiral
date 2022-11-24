@@ -116,17 +116,15 @@ reference:
 
 - title: Deprecated
   desc: |
-    As `{admiral}` is still evolving, functions or parameters may need to be removed or replaced with more efficient options from one release to another. In such cases, the function will enter the deprecation cycle, which is as follows:
+    As `{admiral}` is still evolving, functions/parameters may need to be removed or replaced over time. In such cases, the function/parameter will enter the following 6-month deprecation cycle:
 
-    * Phase 1: In the release where the identified function or parameter is set to be deprecated, there will be a warning issued if you attempt to use the function or parameter. This will allow you to still use this function or parameter until the next release to help smooth over the transition.
+    * In the first release (0-3 months), there will be a warning issued if you use the function/parameter, but it will still be available to use.
+    * In the following release (3-6 months), an error will be produced if you use the function/parameter.
+    * Finally, from the 3rd release (6 months) onwards, the function/parameter will be removed from `{admiral}` and its documentation completely.
 
-    * Phase 2: In the following release (3 months later), an error will be produced if you try to use the function or parameter. This means the function or parameter can no longer be used, although it will still be present in `{admiral}`.
+    *Note: Guidance on replacement functionality can be found in the warning/error message produced or in the function's documentation.*
 
-    * Phase 3: Finally, from the 3rd release onwards (6 months from the start of deprecation), the function will be removed from `{admiral}` and its documentation completely.
-
-    *Note: During phases 1 and 2, the warning/error produced when attempting to use the function will provide you with guidance on replacement functionality. You can also find the same information in the function's documentation page.*
-
-    Below, you can find a list of functions in the process of being deprecated (in phase 1 or 2 of the deprecation cycle):
+    Below, you can find a list of functions in the process of being deprecated:
   contents:
   - has_keyword("deprecated")
 
