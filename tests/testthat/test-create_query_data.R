@@ -90,6 +90,7 @@ test_that("customized query defined by SMQs", {
 
   expected_output <-
     bind_rows(
+<<<<<<< HEAD
       get_smq(basket_select(
         name = "Noninfectious meningitis",
         scope = "NARROW",
@@ -101,8 +102,21 @@ test_that("customized query defined by SMQs", {
         name = "Noninfectious encephalitis",
         scope = "BROAD",
         type = "smq"
+=======
+      get_smq(
+        smq_select(
+          name = "Noninfectious meningitis",
+          scope = "NARROW"
+        ),
+        version = "20.0"
+>>>>>>> devel
       ),
-      version = "20.0"
+      get_smq(
+        smq_select(
+          name = "Noninfectious encephalitis",
+          scope = "BROAD"
+        ),
+        version = "20.0"
       )
     ) %>%
     mutate(
@@ -144,6 +158,7 @@ test_that("customized query defined by terms and SMQs", {
 
   expected_output <-
     bind_rows(
+<<<<<<< HEAD
       get_smq(basket_select(
         name = "Noninfectious meningitis",
         scope = "NARROW",
@@ -158,6 +173,22 @@ test_that("customized query defined by terms and SMQs", {
         type = "smq"
       ),
       version = "20.1"
+=======
+      get_smq(
+        smq_select(
+          name = "Noninfectious meningitis",
+          scope = "NARROW"
+        ),
+        version = "20.1"
+      ),
+      cqterms,
+      get_smq(
+        smq_select(
+          name = "Noninfectious encephalitis",
+          scope = "BROAD"
+        ),
+        version = "20.1"
+>>>>>>> devel
       )
     ) %>%
     mutate(
@@ -218,12 +249,21 @@ test_that("SMQs", {
           QUERY_SCOPE_NUM = 2,
           VAR_PREFIX = "SMQ02"
         ),
+<<<<<<< HEAD
       get_smq(basket_select(
         id = 8050L,
         scope = "BROAD",
         type = "smq"
       ),
       version = "20.0"
+=======
+      get_smq(
+        smq_select(
+          id = 8050L,
+          scope = "BROAD"
+        ),
+        version = "20.0"
+>>>>>>> devel
       ) %>%
         mutate(
           QUERY_SCOPE = "BROAD",

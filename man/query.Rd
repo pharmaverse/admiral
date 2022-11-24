@@ -75,7 +75,7 @@ as input to \code{create_query_data()}.
 # create a query for an SMQ
 library(tibble)
 library(magrittr, warn.conflicts = FALSE)
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 
 # create a query for a SMQ
 query(
@@ -143,7 +143,7 @@ Source Specifications:
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
-\code{\link{derive_var_dthcaus}()},
+\code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{filter_date_sources}()},

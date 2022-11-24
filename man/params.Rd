@@ -16,7 +16,7 @@ An object of class \code{params}
 Create a set of variable parameters/function arguments to be used in \code{\link[=call_derivation]{call_derivation()}}.
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 library(admiral.test)
 data(admiral_ae)
 data(admiral_adsl)
@@ -77,7 +77,7 @@ Source Specifications:
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
-\code{\link{derive_var_dthcaus}()},
+\code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{filter_date_sources}()},

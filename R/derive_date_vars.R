@@ -1055,7 +1055,7 @@ convert_date_to_dtm <- function(dt,
   if (lubridate::is.POSIXct(dt)) {
     return(dt)
   } else {
-    if (is_date(dt)) {
+    if (is.instant(dt)) {
       dt <- format(dt, "%Y-%m-%d")
     }
 
@@ -1241,6 +1241,7 @@ compute_tmf <- function(dtc,
 #' @examples
 #' library(tibble)
 #' library(lubridate)
+#' library(dplyr)
 #'
 #' mhdt <- tribble(
 #'   ~MHSTDTC,
@@ -1337,7 +1338,6 @@ derive_vars_dt <- function(dataset,
                            min_dates = NULL,
                            max_dates = NULL,
                            preserve = FALSE) {
-
   # check and quote arguments
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)
@@ -1443,6 +1443,7 @@ derive_vars_dt <- function(dataset,
 #' @examples
 #' library(tibble)
 #' library(lubridate)
+#' library(dplyr)
 #'
 #' mhdt <- tribble(
 #'   ~MHSTDTC,
@@ -1524,7 +1525,6 @@ derive_vars_dtm <- function(dataset,
                             max_dates = NULL,
                             preserve = FALSE,
                             ignore_seconds_flag = FALSE) {
-
   # check and quote arguments
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)

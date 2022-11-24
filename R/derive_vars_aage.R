@@ -113,7 +113,7 @@ derive_vars_aage <- function(dataset,
 #'
 #' @examples
 #'
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #'
 #' data <- data.frame(
 #'   AGE = c(27, 24, 3, 4, 1),
@@ -235,7 +235,7 @@ NULL
 #'
 #' @export
 derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_warn("0.8.0", "derive_var_agegr_fda()")
+  deprecate_warn("0.8.0", "derive_var_agegr_fda()", details = "Please create a user defined function instead.")
 
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
@@ -267,7 +267,7 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'
 #' @export
 derive_var_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_warn("0.8.0", "derive_var_agegr_ema()")
+  deprecate_warn("0.8.0", "derive_var_agegr_ema()", details = "Please create a user defined function instead.")
 
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))

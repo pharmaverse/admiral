@@ -32,7 +32,7 @@ by groups.
 }
 \examples{
 library(tibble)
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 library(lubridate)
 
 adsl <- tribble(
@@ -64,7 +64,7 @@ Source Specifications:
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
-\code{\link{derive_var_dthcaus}()},
+\code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{filter_date_sources}()},
 \code{\link{format.basket_select}()},

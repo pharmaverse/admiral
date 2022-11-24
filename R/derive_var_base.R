@@ -36,6 +36,7 @@
 #'
 #' @examples
 #' library(tibble)
+#' library(dplyr)
 #'
 #' dataset <- tribble(
 #'   ~STUDYID, ~USUBJID,   ~PARAMCD, ~AVAL,   ~AVALC,      ~AVISIT, ~ABLFL,  ~ANRIND,

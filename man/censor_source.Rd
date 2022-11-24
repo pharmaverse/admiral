@@ -45,6 +45,8 @@ An object of class \code{censor_source}, inheriting from class \code{tte_source}
 }
 \examples{
 # Last study date known alive censor
+library(dplyr)
+
 censor_source(
   dataset_name = "adsl",
   date = LSTALVDT,
@@ -65,7 +67,7 @@ Source Specifications:
 \code{\link{basket_select}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
-\code{\link{derive_var_dthcaus}()},
+\code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{filter_date_sources}()},

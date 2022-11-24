@@ -42,6 +42,7 @@ multiple baseline records within \code{by_vars} an error is issued.
 }
 \examples{
 library(tibble)
+library(dplyr)
 
 dataset <- tribble(
   ~STUDYID, ~USUBJID,   ~PARAMCD, ~AVAL,   ~AVALC,      ~AVISIT, ~ABLFL,  ~ANRIND,

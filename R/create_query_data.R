@@ -106,7 +106,7 @@
 #' @examples
 #' library(tibble)
 #' library(magrittr, warn.conflicts = FALSE)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' library(admiral.test)
 #' library(admiral)
 #'
@@ -504,7 +504,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' # create a query for an SMQ
 #' library(tibble)
 #' library(magrittr, warn.conflicts = FALSE)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #'
 #' # create a query for a SMQ
 #' query(
@@ -655,12 +655,13 @@ validate_query <- function(obj) {
         map_lgl(values$definition, is.data.frame) |
         map_lgl(values$definition, inherits, "basket_select")
       if (!all(is_valid)) {
-        info_msg <- paste(sprintf(
-          "\u2716 Element %s is %s",
-          which(!is_valid),
-          map_chr(values$definition[!is_valid], what_is_it)
-        ),
-        collapse = "\n"
+        info_msg <- paste(
+          sprintf(
+            "\u2716 Element %s is %s",
+            which(!is_valid),
+            map_chr(values$definition[!is_valid], what_is_it)
+          ),
+          collapse = "\n"
         )
         err_msg <- sprintf(
           paste(

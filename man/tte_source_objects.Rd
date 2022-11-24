@@ -67,7 +67,7 @@ Source Specifications:
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
-\code{\link{derive_var_dthcaus}()},
+\code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{filter_date_sources}()},

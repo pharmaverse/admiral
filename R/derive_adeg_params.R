@@ -62,6 +62,8 @@
 #'
 #' @examples
 #' library(tibble)
+#' library(dplyr)
+#'
 #' adeg <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "HR", "Heart Rate (beats/min)", 70.14, "beats/min", "BASELINE",
@@ -278,6 +280,8 @@ compute_qtc <- function(qt, rr, method) {
 #'
 #' @examples
 #' library(tibble)
+#' library(dplyr)
+#'
 #' adeg <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "HR", "Heart Rate", 70.14, "beats/min", "BASELINE",
