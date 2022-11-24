@@ -35,7 +35,7 @@ get_sdg <- function(basket_select,
 }
 
 cqterms <- tibble::tribble(
-  ~TERM_NAME, ~TERM_ID,
+  ~ TERM_NAME, ~ TERM_ID,
   "APPLICATION SITE ERYTHEMA", 10003041L,
   "APPLICATION SITE PRURITUS", 10003053L
 ) %>%
@@ -90,7 +90,6 @@ test_that("customized query defined by SMQs", {
 
   expected_output <-
     bind_rows(
-<<<<<<< HEAD
       get_smq(basket_select(
         name = "Noninfectious meningitis",
         scope = "NARROW",
@@ -102,21 +101,8 @@ test_that("customized query defined by SMQs", {
         name = "Noninfectious encephalitis",
         scope = "BROAD",
         type = "smq"
-=======
-      get_smq(
-        smq_select(
-          name = "Noninfectious meningitis",
-          scope = "NARROW"
-        ),
-        version = "20.0"
->>>>>>> devel
       ),
-      get_smq(
-        smq_select(
-          name = "Noninfectious encephalitis",
-          scope = "BROAD"
-        ),
-        version = "20.0"
+      version = "20.0"
       )
     ) %>%
     mutate(
@@ -158,7 +144,6 @@ test_that("customized query defined by terms and SMQs", {
 
   expected_output <-
     bind_rows(
-<<<<<<< HEAD
       get_smq(basket_select(
         name = "Noninfectious meningitis",
         scope = "NARROW",
@@ -173,22 +158,6 @@ test_that("customized query defined by terms and SMQs", {
         type = "smq"
       ),
       version = "20.1"
-=======
-      get_smq(
-        smq_select(
-          name = "Noninfectious meningitis",
-          scope = "NARROW"
-        ),
-        version = "20.1"
-      ),
-      cqterms,
-      get_smq(
-        smq_select(
-          name = "Noninfectious encephalitis",
-          scope = "BROAD"
-        ),
-        version = "20.1"
->>>>>>> devel
       )
     ) %>%
     mutate(
@@ -249,21 +218,12 @@ test_that("SMQs", {
           QUERY_SCOPE_NUM = 2,
           VAR_PREFIX = "SMQ02"
         ),
-<<<<<<< HEAD
       get_smq(basket_select(
         id = 8050L,
         scope = "BROAD",
         type = "smq"
       ),
       version = "20.0"
-=======
-      get_smq(
-        smq_select(
-          id = 8050L,
-          scope = "BROAD"
-        ),
-        version = "20.0"
->>>>>>> devel
       ) %>%
         mutate(
           QUERY_SCOPE = "BROAD",
@@ -399,7 +359,7 @@ test_that("query: error: invalid definition", {
 test_that("assert_terms: error: TERM_LEVEL missing", {
   expect_error(
     assert_terms(
-      terms = select(cqterms, -TERM_LEVEL),
+      terms = select(cqterms, - TERM_LEVEL),
       source_text = "my test data"
     ),
     regexp = "Required variable `TERM_LEVEL` is missing in my test data.",
