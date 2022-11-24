@@ -221,8 +221,7 @@ create_query_data <- function(queries,
         expect_query_name = TRUE,
         expect_query_id = !is.null(queries[[i]]$id),
         i = i,
-        temp_env = temp_env,
-        type = queries[[i]]$definition$type
+        temp_env = temp_env
       )
       query_data[[i]] <- mutate(query_data[[i]],
         QUERY_SCOPE = queries[[i]]$definition$scope
@@ -250,8 +249,7 @@ create_query_data <- function(queries,
             queries = queries,
             definition = definition[[j]],
             i = i,
-            temp_env = temp_env,
-            type = definition[[j]]$type
+            temp_env = temp_env
           )
         }
       }
@@ -344,16 +342,14 @@ get_terms_from_db <- function(version,
     basket_select = definition,
     version = version,
     keep_id = expect_query_id,
-    temp_env = temp_env,
-    type = definition$type
+    temp_env = temp_env
   ))
   terms <- call_user_fun(
     fun(
       basket_select = definition,
       version = version,
       keep_id = expect_query_id,
-      temp_env = temp_env,
-      type = definition$type
+      temp_env = temp_env
     )
   )
   assert_terms(
