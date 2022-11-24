@@ -149,28 +149,6 @@ ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_vars_aage}()},
 \code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_period}()}
-<<<<<<< HEAD
-
-Source Specifications: 
-\code{\link{assert_db_requirements}()},
-\code{\link{assert_terms}()},
-\code{\link{assert_valid_queries}()},
-\code{\link{basket_select}()},
-\code{\link{censor_source}()},
-\code{\link{date_source}()},
-\code{\link{death_event}},
-\code{\link{event_source}()},
-\code{\link{extend_source_datasets}()},
-\code{\link{filter_date_sources}()},
-\code{\link{format.basket_select}()},
-\code{\link{list_tte_source_objects}()},
-\code{\link{params}()},
-\code{\link{query}()},
-\code{\link{tte_source}()},
-\code{\link{validate_basket_select}()},
-\code{\link{validate_query}()}
-=======
->>>>>>> devel
 }
 \author{
 Shimeng Huang, Samia Kabi, Thomas Neitmann, Tamara Senior
