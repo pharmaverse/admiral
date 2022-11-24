@@ -94,7 +94,7 @@ query(
   id = auto,
   definition = basket_select(
     name = "5-aminosalicylates for ulcerative colitis",
-    scope = NA_character_
+    scope = NA_character_,
     type = "sdg"
   )
 )

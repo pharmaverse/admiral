@@ -192,7 +192,7 @@ create_query_data(
     )
   ),
   get_terms_fun = admiral.test:::get_terms,
-  meddra_version = "20.1"
+  version = "20.1"
 )
 }
 \seealso{

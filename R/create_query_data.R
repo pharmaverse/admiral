@@ -192,7 +192,7 @@
 #'     )
 #'   ),
 #'   get_terms_fun = admiral.test:::get_terms,
-#'   meddra_version = "20.1"
+#'   version = "20.1"
 #' )
 create_query_data <- function(queries,
                               version = NULL,
@@ -523,7 +523,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'   id = auto,
 #'   definition = basket_select(
 #'     name = "5-aminosalicylates for ulcerative colitis",
-#'     scope = NA_character_
+#'     scope = NA_character_,
 #'     type = "sdg"
 #'   )
 #' )
