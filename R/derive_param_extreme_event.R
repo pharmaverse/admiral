@@ -121,7 +121,7 @@ derive_param_first_event <- function(dataset,
   ) %>%
     mutate(
       AVALC = coalesce(!!tmp_var, AVALC),
-      AVAL = if_else(!!tmp_var == 'Y', true = 1, false = 0)
+      AVAL = if_else(!!tmp_var == "Y", true = 1, false = 0)
     ) %>%
     remove_tmp_vars()
 }
