@@ -417,9 +417,9 @@ create_single_dose_dataset <- function(dataset,
     filter(!!dose_freq != "ONCE")
 
   if (quo_is_null(start_datetime)) {
-    min_hour_cases <- rlang::exprs(FALSE ~ 0)
+    min_hour_cases <- exprs(FALSE ~ 0)
   } else {
-    min_hour_cases <- rlang::exprs(
+    min_hour_cases <- exprs(
       DOSE_WINDOW == "MINUTE" ~ compute_duration(!!start_datetime, !!end_datetime,
         in_unit = "minutes", out_unit = "minutes"
       ),
