@@ -32,7 +32,7 @@ is less than or equal \code{A1HI}
 }
 \examples{
 library(tibble)
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 library(admiral.test)
 data(admiral_vs)
 

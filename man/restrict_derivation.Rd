@@ -23,6 +23,7 @@ Execute a derivation on a subset of the input dataset.
 \examples{
 
 library(tibble)
+library(dplyr)
 library(magrittr)
 adlb <- tribble(
   ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,

@@ -141,7 +141,7 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #'
 #' adcvrisk <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU,

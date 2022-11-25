@@ -73,7 +73,7 @@ parameter the first or last record will be flagged across the whole dataset.
 }
 \examples{
 library(tibble)
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 library(admiral.test)
 data("admiral_vs")
 

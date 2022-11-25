@@ -24,6 +24,8 @@
 #' @keywords utils_ds_chk
 #'
 #' @examples
+#' library(dplyr)
+#'
 #' data(admiral_adsl)
 #'
 #' # Duplicate the first record
@@ -51,6 +53,8 @@ get_duplicates_dataset <- function() {
 #' @author Thomas Neitmann
 #'
 #' @examples
+#' library(dplyr)
+#'
 #' data(admiral_adsl)
 #'
 #' # Duplicate the first record
@@ -91,6 +95,8 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' @author Thomas Neitmann
 #'
 #' @examples
+#' library(dplyr)
+#'
 #' data(admiral_adsl)
 #'
 #' # Duplicate the first record

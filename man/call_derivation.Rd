@@ -27,7 +27,7 @@ Call a single derivation multiple times with some parameters/arguments being fix
 iterations and others varying.
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 library(admiral.test)
 data(admiral_ae)
 data(admiral_adsl)

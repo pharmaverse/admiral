@@ -127,7 +127,7 @@ mapping from the lookup table.
 \examples{
 library(admiral.test)
 library(tibble)
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 data("admiral_vs")
 param_lookup <- tribble(
   ~VSTESTCD, ~VSTEST, ~PARAMCD, ~PARAM,

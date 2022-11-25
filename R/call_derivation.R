@@ -25,7 +25,7 @@
 #' @seealso [params()]
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' library(admiral.test)
 #' data(admiral_ae)
 #' data(admiral_adsl)
@@ -111,7 +111,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #' @seealso [call_derivation()]
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' library(admiral.test)
 #' data(admiral_ae)
 #' data(admiral_adsl)
