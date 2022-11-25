@@ -61,6 +61,9 @@ parameter `meta_criteria`. Can now also choose `atoxgr_criteria_ctcv5` for param
 other arguments into account and the `start_datetime` and `end_datetime`
 arguments are optional now (#1598).
 
+- Function `create_query_data()` has been updated such that the dictionary
+version is stored in the output dataset (#1337).
+
 ## Breaking Changes
 
 - Function `derive_param_first_event()` has been deprecated. Please use `derive_param_extreme_event()` with the `order` argument instead of the `date_var` argument (#1317).
