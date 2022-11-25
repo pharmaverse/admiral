@@ -116,7 +116,7 @@ derive_locf_records <- function(dataset,
   # Get the IDs from input dataset for which the expected observations are to be added
 
   ids <- dataset %>%
-    select(setdiff(str_remove(as.character(by_vars), "~"), colnames(dataset_expected_obs))) %>%
+    select(!!!setdiff(by_vars, chr2vars(colnames(dataset_expected_obs)))) %>%
     distinct()
 
   exp_obsv <- ids %>%
