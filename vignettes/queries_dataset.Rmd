@@ -46,16 +46,21 @@ This vignette describes the expected structure and content of the dataset passed
 
 Variable | Scope |  Type | Example Value
 ------- | ----- | ------ | ----- 
-**VAR_PREFIX** | The prefix used to define the grouping variables |  Character |  "SMQ01" 
-**QUERY_NAME** | The value provided to the grouping variables name|   Character | "Immune-Mediated Guillain-Barre Syndrome"
-**TERM_LEVEL** | The variable used to define the grouping. Used in conjunction with TERM_NAME |  Character | "AEDECOD"
-**TERM_NAME** | A term used to define the grouping. Used in conjunction with TERM_LEVEL |  Character | "GUILLAIN-BARRE SYNDROME"
-**TERM_ID** | A code used to define the grouping. Used in conjunction with TERM_LEVEL |  Integer | 10018767
-QUERY_ID | Id number of the query. This could be a SMQ identifier |  Integer | 20000131
-QUERY_SCOPE | For SMQs, scope (Broad/Narrow) of the query |  Character | BROAD, NARROW, NA
-QUERY_SCOPE_NUM | For SMQs, scope (Broad/Narrow) of the query |  Integer | 1, 2, NA
+**VAR_PREFIX** | The prefix used to define the grouping variables |  Character |  `"SMQ01"`
+**QUERY_NAME** | The value provided to the grouping variables name|   Character | `"Immune-Mediated Guillain-Barre Syndrome"`
+**TERM_LEVEL** | The variable used to define the grouping. Used in conjunction with TERM_NAME |  Character | `"AEDECOD"`
+**TERM_NAME** | A term used to define the grouping. Used in conjunction with TERM_LEVEL |  Character | `"GUILLAIN-BARRE SYNDROME"`
+**TERM_ID** | A code used to define the grouping. Used in conjunction with TERM_LEVEL |  Integer | `10018767`
+QUERY_ID | Id number of the query. This could be a SMQ identifier |  Integer | `20000131`
+QUERY_SCOPE | Scope (Broad/Narrow) of the query |  Character | `BROAD`, `NARROW`, `NA`
+QUERY_SCOPE_NUM | Scope (Broad/Narrow) of the query |  Integer | `1`, `2`, `NA`
+VERSION | The version of the dictionary | Character | `"20.1"`
 
 **Bold  variables** are required in `dataset_queries`: an error is issued if any of these variables is missing. Other variables are optional.
+
+The `VERSION` variable is not used by `derive_vars_query()` but can be used to
+check if the dictionary version of the queries dataset and the analysis dataset
+are in line.
 
 ## Required Content
 
