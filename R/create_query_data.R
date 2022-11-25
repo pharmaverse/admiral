@@ -84,13 +84,15 @@
 #'   * `QUERY_SCOPE_NUM`: numeric scope of the query. It is set to `1` if the
 #'   scope is broad. Otherwise it is set to `2`. If the `add_scope_num` element
 #'   equals `FALSE`, the variable is set to `NA`. If the `add_scope_num` element
-#'   equals `FALSE` for all basketss or none of the queries is an basket , the variable
+#'   equals `FALSE` for all baskets or none of the queries is an basket , the variable
 #'   is not created.
 #'   * `TERM_LEVEL`: Name of the variable used to identify the terms.
 #'   * `TERM_NAME`: Value of the term variable if it is a character variable.
 #'   * `TERM_ID`: Value of the term variable if it is a numeric variable.
+#'   * `VERSION`: Set to the value of the `version` argument. If it is not
+#'   specified, the variable is not created.
 #'
-#' @author Stefan Bundfuss Tamara Senior
+#' @author Stefan Bundfuss, Tamara Senior
 #'
 #' @return A dataset to be used as input dataset to the `dataset_queries`
 #'   argument in `derive_vars_query()`
@@ -257,12 +259,14 @@ create_query_data <- function(queries,
     }
 
     # add mandatory variables
-    query_data[[i]] <- mutate(query_data[[i]],
+    query_data[[i]] <- mutate(
+      query_data[[i]],
       VAR_PREFIX = queries[[i]]$prefix
     )
 
     if (!is_auto(queries[[i]]$name)) {
-      query_data[[i]] <- mutate(query_data[[i]],
+      query_data[[i]] <- mutate(
+        query_data[[i]],
         QUERY_NAME = queries[[i]]$name
       )
     }
@@ -274,7 +278,15 @@ create_query_data <- function(queries,
       )
     }
   }
-  bind_rows(query_data)
+  queries <- bind_rows(query_data)
+
+  if (!is.null(version)) {
+    queries <- mutate(
+      queries,
+      VERSION = version
+    )
+  }
+  queries
 }
 
 #' Get Terms from the Queries Database
