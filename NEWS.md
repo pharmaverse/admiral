@@ -27,7 +27,8 @@
 ## Breaking Changes
   - NA
 ## Documentation
-  - New vignette for our package release strategy (#79)
+  - New vignette for our package release strategy (#79) 
+  - Updated multiple roxygen updates (#116, #133, #134, #141, #145, #172)
 ## Various
   - NA
 

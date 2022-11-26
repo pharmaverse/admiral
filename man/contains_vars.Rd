@@ -2,7 +2,8 @@
 % Please edit documentation in R/dev_utilities.R
 \name{contains_vars}
 \alias{contains_vars}
-\title{check that argument contains valid variable created with \code{vars()}}
+\title{check that argument contains valid variable(s) created with \code{vars()} or
+Source Variables from a List of Quosures}
 \usage{
 contains_vars(arg)
 }
@@ -13,7 +14,8 @@ contains_vars(arg)
 A TRUE if variables were valid variable
 }
 \description{
-check that argument contains valid variable created with \code{vars()}
+check that argument contains valid variable(s) created with \code{vars()} or
+Source Variables from a List of Quosures
 }
 \seealso{
 Developer Utility Functions: 

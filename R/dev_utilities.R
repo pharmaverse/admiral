@@ -151,7 +151,8 @@ valid_time_units <- function() {
   c("years", "months", "days", "hours", "minutes", "seconds")
 }
 
-#' check that argument contains valid variable created with `vars()`
+#' check that argument contains valid variable(s) created with `vars()` or
+#' Source Variables from a List of Quosures
 #'
 #' @param arg A function argument to be checked
 #'
