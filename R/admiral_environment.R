@@ -9,7 +9,7 @@ admiral_environment$admiral_options <- list(
 
 # To enhance features and add inputs as necessary 
 
-# 1. Add additional options such as future_input as shown commented above
+# 1. Add additional options such as future_input as shown in comment above
 # 2. Update @params with future_input in set_admiral_options roxygen documentation
 # 3. Add future_input into set_admiral_options() formals and body
 
