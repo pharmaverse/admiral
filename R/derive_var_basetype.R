@@ -40,7 +40,6 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(rlang)
 #' library(dplyr, warn.conflicts = FALSE)
 #'
 #' bds <- tribble(
