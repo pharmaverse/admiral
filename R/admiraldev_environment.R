@@ -7,8 +7,8 @@
 #' at points in time after the package has been loaded. To manage such data or objects,
 #' R has a data structure known as an 'environment'. These environment objects are created
 #' at build time, but can be populated with values after the package has been loaded and
-#' update those values over the course of an R session. See Chapter 8.5 of the R Packages textbook
-#' or Chapter 7 of the Advanced R textbook for more details.
+#' update those values over the course of an R session. For more details how environments work,
+#' see relevant sections on environments in R Packages and Advanced R textbooks for more details.
 #' @noRd
 admiraldev_environment <- new.env(parent = emptyenv())
 # See respective ...R page for usage

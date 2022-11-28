@@ -100,7 +100,7 @@ i.e. all input like datasets, variable names, options, … must be provided to t
 * If the function needs to create temporary variables in an input dataset, these
 variables must start with `temp_` and must be removed from the output dataset.
 * If the input dataset includes variables starting with `temp_`, an error must be issued.
-* If developers find the need to use or create *environment* objects to achieve flexibility, use the `admiral_environment` environment object created in `admiral_environment.R`. All objects which are stored in this environment must be documented in `admiral_environment.R`. An equivalent environment object and `.R` file exist for admiraldev as well. For more details how environments work, please refer to [Chapter 8](https://r-pkgs.org/data.html#sec-data-state) of the latest edition of the R Packages book and [Chapter 7](https://adv-r.hadley.nz/environments.html) of the latest edition of the Advanced R book.
+* If developers find the need to use or create *environment* objects to achieve flexibility, use the `admiral_environment` environment object created in `admiral_environment.R`. All objects which are stored in this environment must be documented in `admiral_environment.R`. An equivalent environment object and `.R` file exist for admiraldev as well. For more details how environments work, see relevant sections on environments in [R Packages](https://r-pkgs.org) and [Advanced R](https://adv-r.hadley.nz) textbooks.
 * In general, the function must not have any side-effects like creating or modifying global objects, printing, writing files, ...
 
 ## Admiral Options
