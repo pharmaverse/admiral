@@ -78,7 +78,6 @@ severe grade
 }
 \examples{
 library(tibble)
-library(dplyr, warn.conflicts = FALSE)
 
 data <- tribble(
   ~ATOXDSCL,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,

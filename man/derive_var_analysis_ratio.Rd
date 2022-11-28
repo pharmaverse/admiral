@@ -42,7 +42,6 @@ Version 1.1 Section 3.3.4 Analysis Parameter Variables for BDS Datasets
 }
 \examples{
 library(tibble)
-library(dplyr, warn.conflicts = FALSE)
 
 data <- tribble(
   ~USUBJID, ~PARAMCD, ~SEQ, ~AVAL, ~BASE, ~ANRLO, ~ANRHI,

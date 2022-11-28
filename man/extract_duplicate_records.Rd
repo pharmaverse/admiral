@@ -19,8 +19,6 @@ A \code{data.frame} of duplicate records within \code{dataset}
 Extract Duplicate Records
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
-
 data(admiral_adsl)
 
 # Duplicate the first record

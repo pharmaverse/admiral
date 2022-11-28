@@ -1113,7 +1113,6 @@ get_not_mapped <- function() {
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' # Add a variable for the mean of AVAL within each visit
 #' adbds <- tribble(

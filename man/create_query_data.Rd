@@ -107,7 +107,6 @@ specified, the variable is not created.
 }
 \examples{
 library(tibble)
-library(magrittr, warn.conflicts = FALSE)
 library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 library(admiral)

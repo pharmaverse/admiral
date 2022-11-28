@@ -44,7 +44,6 @@ Create a \code{date_source} object as input for \code{derive_var_extreme_dt()} a
 \code{derive_var_extreme_dtm()}.
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
 
 # treatment end date from ADSL
 trt_end_date <- date_source(

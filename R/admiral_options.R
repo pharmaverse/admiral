@@ -99,8 +99,8 @@ get_admiral_option <- function(option) {
 #' [derive_vars_period()], [create_period_dataset()]
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(tibble)
 #' set_admiral_options(subject_keys = vars(STUDYID, USUBJID2))
 #'

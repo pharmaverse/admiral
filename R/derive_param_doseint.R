@@ -76,7 +76,6 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate, warn.conflicts = FALSE)
 #'
 #' adex <- tribble(

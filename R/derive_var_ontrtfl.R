@@ -103,7 +103,7 @@
 #' @examples
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate, warn.conflict = FALSE)
+#' library(lubridate, warn.conflicts = FALSE)
 #'
 #' advs <- tribble(
 #'   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,

@@ -82,7 +82,6 @@ The analysis value of the new parameter is derived as
 }
 \examples{
 library(tibble)
-library(dplyr, warn.conflicts = FALSE)
 
 advs <- tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVISIT,

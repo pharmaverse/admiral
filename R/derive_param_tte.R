@@ -754,7 +754,6 @@ tte_source <- function(dataset_name,
 #'
 #' @examples
 #' # Death event
-#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' event_source(
 #'   dataset_name = "adsl",
@@ -801,7 +800,6 @@ event_source <- function(dataset_name,
 #'
 #' @examples
 #' # Last study date known alive censor
-#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' censor_source(
 #'   dataset_name = "adsl",

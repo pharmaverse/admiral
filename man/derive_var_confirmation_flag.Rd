@@ -191,7 +191,6 @@ previous step. For the other observations it is set to \code{false_value}.
 \examples{
 library(tibble)
 library(admiral)
-library(dplyr, warn.conflicts = FALSE)
 
 # flag observations with a duration longer than 30 and
 # at, after, or up to 7 days before a COVID AE (ACOVFL == "Y")
