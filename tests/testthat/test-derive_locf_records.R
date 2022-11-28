@@ -120,14 +120,14 @@ test_that("derive_locf_records Test 3: new locf observations are derived correct
 
   advs_expected_obsv <- tibble::tribble(
     ~PARAMCD, ~PARAM, ~AVISITN, ~AVISIT,
-    "DIABP", "Diastolic Blood Pressure (mmHg)", 0, "BASELINE",
-    "DIABP", "Diastolic Blood Pressure (mmHg)", 2, "WEEK 2",
-    "LTDIABP", "Log(Diastolic Blood Pressure (mmHg))", 0, "BASELINE",
-    "LTDIABP", "Log(Diastolic Blood Pressure (mmHg))", 2, "WEEK 2",
-    "SYSBP", "Systolic Blood Pressure (mmHg)", 0, "BASELINE",
-    "SYSBP", "Systolic Blood Pressure (mmHg)", 2, "WEEK 2",
-    "LTSYSBP", "Log(Systolic Blood Pressure (mmHg))", 0, "BASELINE",
-    "LTSYSBP", "Log(Systolic Blood Pressure (mmHg))", 2, "WEEK 2"
+    "DIABP", "Diastolic Blood Pressure", 0, "BASELINE",
+    "DIABP", "Diastolic Blood Pressure", 2, "WEEK 2",
+    "LTDIABP", "Log(Diastolic Blood Pressure)", 0, "BASELINE",
+    "LTDIABP", "Log(Diastolic Blood Pressure)", 2, "WEEK 2",
+    "SYSBP", "Systolic Blood Pressure", 0, "BASELINE",
+    "SYSBP", "Systolic Blood Pressure", 2, "WEEK 2",
+    "LTSYSBP", "Log(Systolic Blood Pressure)", 0, "BASELINE",
+    "LTSYSBP", "Log(Systolic Blood Pressure)", 2, "WEEK 2"
   )
 
 
@@ -135,10 +135,10 @@ test_that("derive_locf_records Test 3: new locf observations are derived correct
     input,
     tibble::tribble(
       ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT,
-      "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure", 79, 2, "WEEK 2",
-      "TEST01", "01-701-1028", "LTDIABP", "Log(Diastolic Blood Pressure)", 1.89, 2, "WEEK 2",
-      "TEST01", "01-701-1028", "SYSBP", "Systolic Blood Pressure", 130, 2, "WEEK 2",
-      "TEST01", "01-701-1028", "LTSYSBP", "Log(Systolic Blood Pressure)", 2.11, 2, "WEEK 2"
+      "TEST01", "1028", "DIABP", "Diastolic Blood Pressure", 79, 2, "WEEK 2",
+      "TEST01", "1028", "LTDIABP", "Log(Diastolic Blood Pressure)", 1.89, 2, "WEEK 2",
+      "TEST01", "1028", "SYSBP", "Systolic Blood Pressure", 130, 2, "WEEK 2",
+      "TEST01", "1028", "LTSYSBP", "Log(Systolic Blood Pressure)", 2.11, 2, "WEEK 2"
     ) %>%
       mutate(DTYPE = "LOCF")
   )
