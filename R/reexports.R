@@ -17,3 +17,7 @@ dplyr::desc
 #' @noRd
 #' @export
 magrittr::`%>%`
+
+#' @noRd
+#' @export
+rlang::exprs
