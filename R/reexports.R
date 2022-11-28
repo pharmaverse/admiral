@@ -1,5 +1,3 @@
-#' Function Re-exports
-#'
 #' @details
 #' Sometimes functions from other libraries become critically important while using admiral
 #' and thus should be included as an export. This applies especially to functions which are
@@ -15,6 +13,5 @@ dplyr::desc
 #' @export
 magrittr::`%>%`
 
-#' @aliases expr
 #' @export
 rlang::exprs

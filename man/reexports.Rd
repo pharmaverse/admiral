@@ -7,8 +7,7 @@
 \alias{desc}
 \alias{\%>\%}
 \alias{exprs}
-\alias{expr}
-\title{Function Re-exports}
+\title{Objects exported from other packages}
 \details{
 Sometimes functions from other libraries become critically important while using admiral
 and thus should be included as an export. This applies especially to functions which are
