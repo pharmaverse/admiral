@@ -56,6 +56,11 @@ which controls if time is considered for the condition if `start_date` is after
 parameter `meta_criteria`. Can now also choose `atoxgr_criteria_ctcv5` for parameter 
 `meta_criteria`, to implement NCI-CTCAEv5 grading criteria .
 
+- The default value of the `keep_source_vars` argument in
+`create_single_dose_dataset()` was updated such that it takes the values of the
+other arguments into account and the `start_datetime` and `end_datetime`
+arguments are optional now (#1598).
+
 - Function `create_query_data()` has been updated such that the dictionary
 version is stored in the output dataset (#1337).
 
