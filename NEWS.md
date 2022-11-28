@@ -58,6 +58,14 @@ parameter `meta_criteria`. Can now also choose `atoxgr_criteria_ctcv5` for param
 
 - _Environment_ objects were consolidated into a single `admiral_environment` object under `R/admiral__environment.R`. (#1572)
 
+- The default value of the `keep_source_vars` argument in
+`create_single_dose_dataset()` was updated such that it takes the values of the
+other arguments into account and the `start_datetime` and `end_datetime`
+arguments are optional now (#1598).
+
+- Function `create_query_data()` has been updated such that the dictionary
+version is stored in the output dataset (#1337).
+
 ## Breaking Changes
 
 - Function `derive_param_first_event()` has been deprecated. Please use `derive_param_extreme_event()` with the `order` argument instead of the `date_var` argument (#1317).
