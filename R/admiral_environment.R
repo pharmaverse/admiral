@@ -1,4 +1,5 @@
 admiral_environment <- new.env(parent = emptyenv())
+# See respective ...R page for usage
 
 # admiral_options.R ----
 ## set_admiral_options
@@ -7,7 +8,7 @@ admiral_environment$admiral_options <- list(
   subject_keys = vars(STUDYID, USUBJID)
 )
 
-# To enhance features and add inputs as necessary 
+# To enhance features and add inputs as necessary
 
 # 1. Add additional options such as future_input as shown in comment above
 # 2. Update @params with future_input in set_admiral_options roxygen documentation
