@@ -7,14 +7,7 @@
 \alias{desc}
 \alias{\%>\%}
 \alias{exprs}
-\title{Function Re-exports}
-\details{
-Sometimes functions from other libraries become critically important while using admiral
-and thus should be included as an export. This applies especially to functions which are
-frequently called within \code{admiral} function arguments. The goal of these exports is such that
-admiral comes ready "out of the box", similar to how one might think the pipe operator, \verb{\%>\%},
-comes from \code{dplyr} but is actually native to \code{magrittr}.
-}
+\title{Objects exported from other packages}
 \keyword{internal}
 \description{
 These objects are imported from other packages. Follow the links
