@@ -24,6 +24,7 @@ Developer Utility Functions:
 \code{\link{\%notin\%}()},
 \code{\link{\%or\%}()},
 \code{\link{arg_name}()},
+\code{\link{contains_vars}()},
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},
 \code{\link{filter_if}()},

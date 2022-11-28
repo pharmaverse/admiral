@@ -151,6 +151,17 @@ valid_time_units <- function() {
   c("years", "months", "days", "hours", "minutes", "seconds")
 }
 
+#' check that argument contains valid variable(s) created with `vars()` or
+#' Source Variables from a List of Quosures
+#'
+#' @param arg A function argument to be checked
+#'
+#' @return A TRUE if variables were valid variable
+#'
+#' @export
+#'
+#' @keywords dev_utility
+#' @family dev_utility
 contains_vars <- function(arg) {
   inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol) | names(arg) != "")
 }
