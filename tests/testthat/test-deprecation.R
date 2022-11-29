@@ -257,61 +257,61 @@ test_that("deprecation Test 16: A warning is issued if `derive_param_first_event
 ## Test 17: An error is thrown if `smq_select()` is called ----
 test_that("deprecation Test 17: An error is thrown if `smq_select()`
           is called", {
-            expect_error(
-              smq_select(),
-              class = "lifecycle_error_deprecated"
-            )
-          })
+  expect_error(
+    smq_select(),
+    class = "lifecycle_error_deprecated"
+  )
+})
 
 ## Test 18: An error is thrown if `sdg_select()` is called ----
 test_that("deprecation Test 18: An error is thrown if `sdg_select()`
           is called", {
-            expect_error(
-              sdg_select(),
-              class = "lifecycle_error_deprecated"
-            )
-          })
+  expect_error(
+    sdg_select(),
+    class = "lifecycle_error_deprecated"
+  )
+})
 
 ## Test 19: An error is thrown if `create_query_data()` and `meddra_version` argument is called ----
 test_that("deprecation Test 19: An error is thrown if `create_query_data()`
            with `meddra_version` argument is called", {
-            expect_error(
-              create_query_data(
-                meddra_version = "20.1"
-              ),
-              class = "lifecycle_error_deprecated"
-            )
-          })
+  expect_error(
+    create_query_data(
+      meddra_version = "20.1"
+    ),
+    class = "lifecycle_error_deprecated"
+  )
+})
 
 ## Test 20: An error is thrown if `create_query_data()` and `whodd_version` argument is called ----
 test_that("deprecation Test 20: An error is thrown if `create_query_data()`
            with `whodd_version` argument is called", {
-             expect_error(
-               create_query_data(
-                 whodd_version = "2019-09"
-               ),
-               class = "lifecycle_error_deprecated"
-             )
-           })
+  expect_error(
+    create_query_data(
+      whodd_version = "2019-09"
+    ),
+    class = "lifecycle_error_deprecated"
+  )
+})
 
 ## Test 21: An error is thrown if `create_query_data()` and `get_smq_fun` argument is called ----
 test_that("deprecation Test 21: An error is thrown if `create_query_data()`
            with `get_smq_fun` argument is called", {
-             expect_error(
-               create_query_data(
-                 get_smq_fun = admiral.test:::get_smq_terms
-               ),
-               class = "lifecycle_error_deprecated"
-             )
-           })
+  expect_error(
+    create_query_data(
+      get_smq_fun = admiral.test:::get_smq_terms
+    ),
+    class = "lifecycle_error_deprecated"
+  )
+})
 
 ## Test 22: An error is thrown if `create_query_data()` and `get_sdg_fun` argument is called ----
 test_that("deprecation Test 22: An error is thrown if `create_query_data()`
            with `get_sdg_fun` argument is called", {
-             expect_error(
-               create_query_data(
-                 get_sdg_fun = admiral.test:::get_sdg_terms
-               ),
-               class = "lifecycle_error_deprecated"
-             )
-           })
+  expect_error(
+    create_query_data(
+      get_sdg_fun = admiral.test:::get_sdg_terms
+    ),
+    class = "lifecycle_error_deprecated"
+  )
+})
