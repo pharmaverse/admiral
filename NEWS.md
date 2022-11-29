@@ -40,6 +40,9 @@ which controls if time is considered for the condition if `start_date` is after
 
 ## Various
 
+- Function `derive_param_tte()` had a bug that set ADT to NA when start_date 
+was missing, which has been fixed (#1540)
+
 - Function `derive_vars_merged()` had an improperly formatted error message 
 which has been corrected (#1473)
 
