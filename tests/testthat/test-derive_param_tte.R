@@ -645,7 +645,7 @@ test_that("derive_param_tte Test 10: ensuring ADT is not NA because of missing s
   ae <- tibble::tribble(
     ~USUBJID,  ~AESEQ, ~ASTDT,
     "01",      1,      ymd("2020-08-10"),
-    "02",      2,      ymd("2020-08-10"),
+    "02",      2,      ymd("2020-08-15"),
     "03",      3,      ymd("2020-12-10"),
   ) %>%
     mutate(STUDYID = "AB42")
@@ -686,7 +686,7 @@ test_that("derive_param_tte Test 10: ensuring ADT is not NA because of missing s
   expected_output <- tibble::tribble(
     ~USUBJID,  ~EVNTDESC,            ~SRCDOM,  ~SRCVAR,    ~SRCSEQ,  ~CNSR,     ~ADT,                ~STARTDT,
     "01",      "Any Adverse Event",  "ADAE",   "AEDECOD",  1,         0L,       ymd("2020-08-10"),  NA,
-    "02",      "Any Adverse Event",  "ADAE",   "AEDECOD",  2,         0L,       ymd("2020-08-10"),  NA,
+    "02",      "Any Adverse Event",  "ADAE",   "AEDECOD",  2,         0L,       ymd("2020-08-15"),  NA,
     "03",      "Any Adverse Event",  "ADAE",   "AEDECOD",  3,         0L,       ymd("2020-12-10"),  ymd("2020-10-13")
   ) %>%
     mutate(
