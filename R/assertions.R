@@ -1193,6 +1193,8 @@ assert_param_does_not_exist <- function(dataset, param) {
 #' @export
 #'
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' example_fun <- function(vars) {
 #'   assert_varval_list(vars)
 #' }
