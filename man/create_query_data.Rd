@@ -112,11 +112,13 @@ object, the variable is set to \code{NA}. If none of the queries is defined by a
 \item \code{QUERY_SCOPE_NUM}: numeric scope of the query. It is set to \code{1} if the
 scope is broad. Otherwise it is set to \code{2}. If the \code{add_scope_num} element
 equals \code{FALSE}, the variable is set to \code{NA}. If the \code{add_scope_num} element
-equals \code{FALSE} for all basketss or none of the queries is an basket , the variable
+equals \code{FALSE} for all baskets or none of the queries is an basket , the variable
 is not created.
 \item \code{TERM_LEVEL}: Name of the variable used to identify the terms.
 \item \code{TERM_NAME}: Value of the term variable if it is a character variable.
 \item \code{TERM_ID}: Value of the term variable if it is a numeric variable.
+\item \code{VERSION}: Set to the value of the \code{version} argument. If it is not
+specified, the variable is not created.
 }
 }
 \examples{
@@ -219,7 +221,7 @@ Creating auxiliary datasets:
 \code{\link{create_single_dose_dataset}()}
 }
 \author{
-Stefan Bundfuss Tamara Senior
+Stefan Bundfuss, Tamara Senior
 }
 \concept{create_aux}
 \keyword{create_aux}
