@@ -14,7 +14,8 @@ assert_character_scalar(
 \arguments{
 \item{arg}{A function argument to be checked}
 
-\item{values}{A \code{character} vector of valid values for \code{arg}}
+\item{values}{A \code{character} vector of valid values for \code{arg}.
+Values is converted to a lower case vector if case_sensitive = FALSE is used.}
 
 \item{case_sensitive}{Should the argument be handled case-sensitive?
 If set to \code{FALSE}, the argument is converted to lower case for checking the
@@ -59,8 +60,10 @@ example_fun2("Warning")
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
+\code{\link{assert_atomic_vector}()},
 \code{\link{assert_character_vector}()},
 \code{\link{assert_data_frame}()},
+\code{\link{assert_date_vector}()},
 \code{\link{assert_expr}()},
 \code{\link{assert_filter_cond}()},
 \code{\link{assert_function_param}()},
@@ -76,6 +79,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_order_vars}()},
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_s3_class}()},
+\code{\link{assert_same_type}()},
 \code{\link{assert_symbol}()},
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()},

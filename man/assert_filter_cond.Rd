@@ -24,12 +24,14 @@ functions like \code{subset} or \code{dplyr::filter}.
 }
 \examples{
 library(admiral.test)
+library(dplyr, warn.conflicts = FALSE)
+library(rlang)
 data(admiral_dm)
 
 # typical usage in a function as a parameter check
 example_fun <- function(dat, x) {
-  x <- assert_filter_cond(rlang::enquo(x))
-  dplyr::filter(dat, !!x)
+  x <- assert_filter_cond(enquo(x))
+  filter(dat, !!x)
 }
 
 example_fun(admiral_dm, AGE == 64)
@@ -38,9 +40,11 @@ try(example_fun(admiral_dm, USUBJID))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
+\code{\link{assert_atomic_vector}()},
 \code{\link{assert_character_scalar}()},
 \code{\link{assert_character_vector}()},
 \code{\link{assert_data_frame}()},
+\code{\link{assert_date_vector}()},
 \code{\link{assert_expr}()},
 \code{\link{assert_function_param}()},
 \code{\link{assert_function}()},
@@ -55,6 +59,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_order_vars}()},
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_s3_class}()},
+\code{\link{assert_same_type}()},
 \code{\link{assert_symbol}()},
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()},

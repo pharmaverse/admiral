@@ -20,6 +20,8 @@ calls created using \code{vars()} and returns the input invisibly otherwise.
 Checks if an argument is a valid list of order variables created using \code{vars()}
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
+library(rlang)
 
 example_fun <- function(by_vars) {
   assert_order_vars(by_vars)
@@ -27,7 +29,7 @@ example_fun <- function(by_vars) {
 
 example_fun(vars(USUBJID, PARAMCD, desc(AVISITN)))
 
-try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
+try(example_fun(exprs(USUBJID, PARAMCD)))
 
 try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 
@@ -35,9 +37,11 @@ try(example_fun(vars(USUBJID, toupper(PARAMCD), -AVAL)))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
+\code{\link{assert_atomic_vector}()},
 \code{\link{assert_character_scalar}()},
 \code{\link{assert_character_vector}()},
 \code{\link{assert_data_frame}()},
+\code{\link{assert_date_vector}()},
 \code{\link{assert_expr}()},
 \code{\link{assert_filter_cond}()},
 \code{\link{assert_function_param}()},
@@ -52,6 +56,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_one_to_one}()},
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_s3_class}()},
+\code{\link{assert_same_type}()},
 \code{\link{assert_symbol}()},
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()},

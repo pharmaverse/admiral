@@ -16,7 +16,7 @@ The input dataset with temporary variables removed
 Remove All Temporary Variables Created Within the Current Function Environment
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 data(admiral_dm)
 dm <- select(admiral_dm, USUBJID)
