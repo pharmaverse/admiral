@@ -50,7 +50,7 @@ reference:
   - has_keyword('tmp_vars')
 
 - title: Getting Datasets
-  desc: Retrieve a dataset into/from the `admiraldev_environment` enironment
+  desc: Retrieve a dataset from the `admiraldev_environment` enironment
   contents:
   - has_keyword('datasets')
 

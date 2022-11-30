@@ -13,7 +13,7 @@
 
 ## Updates of Existing Functions
   - `expect_names` argument added to `assert_vars()` to check if all variables are named (#117)
-  - Remove `dplyr` function exports (#83)
+  - Remove `dplyr` function exports and migration of user facing function `negate_vars()` to admiral  (#83)
   
 ## Breaking Changes
   - No longer compatible with admiral (<0.9)
