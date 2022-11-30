@@ -28,6 +28,8 @@ added to every symbol specified for \code{vars}
 Add a suffix to variables in a list of quosures
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
+
 add_suffix_to_vars(vars(ADT, desc(AVAL), AVALC), vars = vars(AVAL), suffix = ".join")
 }
 \seealso{

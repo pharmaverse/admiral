@@ -27,7 +27,6 @@ Developer Utility Functions:
 \code{\link{contains_vars}()},
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},
-\code{\link{negate_vars}()},
 \code{\link{valid_time_units}()},
 \code{\link{vars2chr}()}
 }

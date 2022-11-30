@@ -23,6 +23,7 @@
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
@@ -31,7 +32,7 @@
 #'
 #' example_fun(admiral_dm)
 #'
-#' try(example_fun(dplyr::select(admiral_dm, -STUDYID)))
+#' try(example_fun(select(admiral_dm, -STUDYID)))
 #'
 #' try(example_fun("Not a dataset"))
 assert_data_frame <- function(arg,
@@ -323,11 +324,13 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #' @family assertion
 #' @examples
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dat, var) {
-#'   var <- assert_symbol(rlang::enquo(var))
-#'   dplyr::select(dat, !!var)
+#'   var <- assert_symbol(enquo(var))
+#'   select(dat, !!var)
 #' }
 #'
 #' example_fun(admiral_dm, USUBJID)
@@ -415,12 +418,14 @@ assert_expr <- function(arg, optional = FALSE) {
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #' data(admiral_dm)
 #'
 #' # typical usage in a function as a parameter check
 #' example_fun <- function(dat, x) {
-#'   x <- assert_filter_cond(rlang::enquo(x))
-#'   dplyr::filter(dat, !!x)
+#'   x <- assert_filter_cond(enquo(x))
+#'   filter(dat, !!x)
 #' }
 #'
 #' example_fun(admiral_dm, AGE == 64)
@@ -475,13 +480,16 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #' @family assertion
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
+#'
 #' example_fun <- function(by_vars) {
 #'   assert_vars(by_vars)
 #' }
 #'
 #' example_fun(vars(USUBJID, PARAMCD))
 #'
-#' try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
+#' try(example_fun(exprs(USUBJID, PARAMCD)))
 #'
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
@@ -559,6 +567,8 @@ assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
 #' @keywords assertion
 #' @family assertion
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #'
 #' example_fun <- function(by_vars) {
 #'   assert_order_vars(by_vars)
@@ -566,7 +576,7 @@ assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
 #'
 #' example_fun(vars(USUBJID, PARAMCD, desc(AVISITN)))
 #'
-#' try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
+#' try(example_fun(exprs(USUBJID, PARAMCD)))
 #'
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
@@ -1183,6 +1193,8 @@ assert_param_does_not_exist <- function(dataset, param) {
 #' @export
 #'
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' example_fun <- function(vars) {
 #'   assert_varval_list(vars)
 #' }
