@@ -42,7 +42,7 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 
 - Removed R Version 3.6 check in CI/CD workflows in favor of the three most recent versions: 4.0, 4.1 and 4.2. (#1556)
 
-- New function `convert_na_to_blanks()` converts `NA` strings to blank while preserving all attributes (#1589) 
+- New function `convert_na_to_blanks()` converts `NA` strings to blank while preserving all attributes (#1589)
 
 ## Updates of Existing Functions
 
@@ -67,6 +67,8 @@ version is stored in the output dataset (#1337).
 ## Breaking Changes
 
 - Function `derive_param_first_event()` has been deprecated. Please use `derive_param_extreme_event()` with the `order` argument instead of the `date_var` argument (#1317).
+
+- Functions `smq_select()` and `sdg_select()` have been deprecated and replaced with `basket_select()`. In the `create_query_data()` function, `meddra_version` and `whodd_version` argument has been replaced by `version` and `get_smq_fun` and `get_sdg_fun` argument by `get_terms_fun`. (#1597) 
 
 ## Documentation
 
