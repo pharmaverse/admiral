@@ -24,6 +24,8 @@ Checks if two list inputs have the same names and same number of elements and
 issues a warning otherwise.
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
+
 # no warning
 warn_if_inconsistent_list(
   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),

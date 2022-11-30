@@ -16,6 +16,8 @@ A character vector
 Turn a List of Quosures into a Character Vector
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
+
 vars2chr(vars(USUBJID, AVAL))
 }
 \seealso{
@@ -28,7 +30,6 @@ Developer Utility Functions:
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},
 \code{\link{filter_if}()},
-\code{\link{negate_vars}()},
 \code{\link{valid_time_units}()}
 }
 \author{
