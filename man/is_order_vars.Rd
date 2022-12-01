@@ -7,27 +7,19 @@
 is_order_vars(arg)
 }
 \arguments{
-\item{arg}{A<n R object}
+\item{arg}{An R object}
 }
 \value{
-A \code{logical} vector
+\code{FALSE} if the argument is not a list of order vars
 }
 \description{
-Is order vars?
+Check if inputs are created using \code{vars()} or calls involving \code{desc()}
 }
 \seealso{
 Identifies type of Object with return of TRUE/FALSE: 
 \code{\link{is_auto}()},
-\code{\link{is_date}()},
 \code{\link{is_named}()},
-\code{\link{is_timeunit}()},
-\code{\link{is_valid_date_entry}()},
-\code{\link{is_valid_day}()},
-\code{\link{is_valid_dtc}()},
-\code{\link{is_valid_hour}()},
-\code{\link{is_valid_month}()},
-\code{\link{is_valid_sec_min}()},
-\code{\link{is_valid_time_entry}()}
+\code{\link{is_valid_dtc}()}
 }
 \concept{is}
 \keyword{is}

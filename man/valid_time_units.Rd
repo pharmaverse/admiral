@@ -10,7 +10,7 @@ valid_time_units()
 A \code{character} vector of valid time units
 }
 \description{
-Valid Time Units
+Contains the acceptable character vector of valid time units
 }
 \seealso{
 Developer Utility Functions: 
@@ -18,11 +18,10 @@ Developer Utility Functions:
 \code{\link{\%or\%}()},
 \code{\link{arg_name}()},
 \code{\link{as_name}()},
+\code{\link{contains_vars}()},
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},
 \code{\link{filter_if}()},
-\code{\link{negate_vars}()},
-\code{\link{replace_values_by_names}()},
 \code{\link{vars2chr}()}
 }
 \concept{dev_utility}

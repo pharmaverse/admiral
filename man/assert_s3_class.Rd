@@ -34,9 +34,11 @@ try(example_fun(1:10))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
+\code{\link{assert_atomic_vector}()},
 \code{\link{assert_character_scalar}()},
 \code{\link{assert_character_vector}()},
 \code{\link{assert_data_frame}()},
+\code{\link{assert_date_vector}()},
 \code{\link{assert_expr}()},
 \code{\link{assert_filter_cond}()},
 \code{\link{assert_function_param}()},
@@ -51,6 +53,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_one_to_one}()},
 \code{\link{assert_order_vars}()},
 \code{\link{assert_param_does_not_exist}()},
+\code{\link{assert_same_type}()},
 \code{\link{assert_symbol}()},
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()},

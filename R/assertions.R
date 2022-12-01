@@ -23,6 +23,7 @@
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
@@ -31,7 +32,7 @@
 #'
 #' example_fun(admiral_dm)
 #'
-#' try(example_fun(dplyr::select(admiral_dm, -STUDYID)))
+#' try(example_fun(select(admiral_dm, -STUDYID)))
 #'
 #' try(example_fun("Not a dataset"))
 assert_data_frame <- function(arg,
@@ -86,7 +87,8 @@ assert_data_frame <- function(arg,
 #' one of the provided `values`.
 #'
 #' @param arg A function argument to be checked
-#' @param values A `character` vector of valid values for `arg`
+#' @param values A `character` vector of valid values for `arg`.
+#' Values is converted to a lower case vector if case_sensitive = FALSE is used.
 #' @param case_sensitive Should the argument be handled case-sensitive?
 #' If set to `FALSE`, the argument is converted to lower case for checking the
 #' permitted values and returning the argument.
@@ -157,11 +159,30 @@ assert_character_scalar <- function(arg,
     abort(err_msg)
   }
 
-  if (!case_sensitive) {
-    arg <- tolower(arg)
+  # Create case_adjusted_arg and case_adjusted_values for the following purpose:
+  #
+  #   1. To simplify the comparison of arg and values; i.e. the "case_adjusted_"
+  #      variables take into consideration whether `case_sensitive = TRUE`, or
+  #      `case_sensitive = FALSE`.
+  #
+  #   2. To avoid overwriting the original "arg" and "values", so that subsequent
+  #      code can refer directly to the initial function arguments: this is
+  #      required whilst generating an error message if "arg" is not one of the
+  #      user-specified valid values.
+
+  if (case_sensitive) {
+    case_adjusted_arg <- arg
+    if (!is.null(values)) {
+      case_adjusted_values <- values
+    }
+  } else {
+    case_adjusted_arg <- tolower(arg)
+    if (!is.null(values)) {
+      case_adjusted_values <- tolower(values)
+    }
   }
 
-  if (!is.null(values) && arg %notin% values) {
+  if (!is.null(values) && case_adjusted_arg %notin% case_adjusted_values) {
     err_msg <- sprintf(
       "`%s` must be one of %s but is '%s'",
       arg_name(substitute(arg)),
@@ -171,7 +192,7 @@ assert_character_scalar <- function(arg,
     abort(err_msg)
   }
 
-  invisible(arg)
+  invisible(case_adjusted_arg)
 }
 
 #' Is an Argument a Character Vector?
@@ -303,11 +324,13 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #' @family assertion
 #' @examples
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dat, var) {
-#'   var <- assert_symbol(rlang::enquo(var))
-#'   dplyr::select(dat, !!var)
+#'   var <- assert_symbol(enquo(var))
+#'   select(dat, !!var)
 #' }
 #'
 #' example_fun(admiral_dm, USUBJID)
@@ -395,12 +418,14 @@ assert_expr <- function(arg, optional = FALSE) {
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #' data(admiral_dm)
 #'
 #' # typical usage in a function as a parameter check
 #' example_fun <- function(dat, x) {
-#'   x <- assert_filter_cond(rlang::enquo(x))
-#'   dplyr::filter(dat, !!x)
+#'   x <- assert_filter_cond(enquo(x))
+#'   filter(dat, !!x)
 #' }
 #'
 #' example_fun(admiral_dm, AGE == 64)
@@ -437,8 +462,12 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' Checks if an argument is a valid list of variables created using `vars()`
 #'
 #' @param arg A function argument to be checked
+#'
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
+#'
+#' @param expect_names If the argument is set to `TRUE`, it is checked if all
+#'   variables are named, e.g., `vars(APERSDT = APxxSDT, APEREDT = APxxEDT)`.
 #'
 #' @author Samia Kabi
 #'
@@ -451,18 +480,29 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #' @family assertion
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
+#'
 #' example_fun <- function(by_vars) {
 #'   assert_vars(by_vars)
 #' }
 #'
 #' example_fun(vars(USUBJID, PARAMCD))
 #'
-#' try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
+#' try(example_fun(exprs(USUBJID, PARAMCD)))
 #'
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
 #' try(example_fun(vars(USUBJID, toupper(PARAMCD), desc(AVAL))))
-assert_vars <- function(arg, optional = FALSE) {
+#'
+#' example_fun_name <- function(by_vars) {
+#'   assert_vars(by_vars, expect_names = TRUE)
+#' }
+#'
+#' example_fun_name(vars(APERSDT = APxxSDT, APEREDT = APxxEDT))
+#'
+#' try(example_fun_name(vars(APERSDT = APxxSDT, APxxEDT)))
+assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
   assert_logical_scalar(optional)
 
   default_err_msg <- sprintf(
@@ -493,6 +533,18 @@ assert_vars <- function(arg, optional = FALSE) {
     abort(err_msg)
   }
 
+  if (expect_names) {
+    if (any(names(arg) == "")) {
+      abort(sprintf(
+        paste(
+          "`%s` must be a named list of unquoted variable names,",
+          "e.g. `vars(APERSDT = APxxSDT, APEREDT = APxxEDT)`"
+        ),
+        arg_name(substitute(arg))
+      ))
+    }
+  }
+
   invisible(arg)
 }
 
@@ -515,6 +567,8 @@ assert_vars <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #' @family assertion
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #'
 #' example_fun <- function(by_vars) {
 #'   assert_order_vars(by_vars)
@@ -522,7 +576,7 @@ assert_vars <- function(arg, optional = FALSE) {
 #'
 #' example_fun(vars(USUBJID, PARAMCD, desc(AVISITN)))
 #'
-#' try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
+#' try(example_fun(exprs(USUBJID, PARAMCD)))
 #'
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
@@ -532,7 +586,7 @@ assert_order_vars <- function(arg, optional = FALSE) {
 
   default_err_msg <- paste(
     backquote(arg_name(substitute(arg))),
-    "must be a a list of unquoted variable names or `desc()` calls,",
+    "must be a list of unquoted variable names or `desc()` calls,",
     "e.g. `vars(USUBJID, desc(VISITNUM))`"
   )
 
@@ -548,7 +602,9 @@ assert_order_vars <- function(arg, optional = FALSE) {
     abort(default_err_msg)
   }
 
-  assert_that(is_order_vars(arg))
+  if (isFALSE(is_order_vars(arg))) {
+    abort(default_err_msg)
+  }
 
   invisible(arg)
 }
@@ -656,6 +712,48 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
   }
 }
 
+#' Is an Argument an Atomic Vector?
+#'
+#' Checks if an argument is an atomic vector
+#'
+#' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Ania Golab
+#'
+#' @return
+#' The function throws an error if `arg` is not an atomic vector.
+#' Otherwise, the input is returned invisibly.
+#'
+#' @export
+#'
+#' @keywords assertion
+#' @family assertion
+#' @examples
+#' example_fun <- function(x) {
+#'   assert_atomic_vector(x)
+#' }
+#'
+#' example_fun(1:10)
+#'
+#' try(example_fun(list(1, 2)))
+assert_atomic_vector <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.atomic(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be an atomic vector but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+}
 
 #' Is an Argument an Object of a Specific S3 Class?
 #'
@@ -1095,6 +1193,8 @@ assert_param_does_not_exist <- function(dataset, param) {
 #' @export
 #'
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' example_fun <- function(vars) {
 #'   assert_varval_list(vars)
 #' }
@@ -1308,7 +1408,7 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
     filter(n() > 1) %>%
     arrange(!!!vars1)
   if (nrow(one_to_many) > 0) {
-    set_dataset(one_to_many, "one_to_many")
+    admiraldev_environment$one_to_many <- one_to_many
     abort(
       paste0(
         "For some values of ",
@@ -1324,7 +1424,7 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
     filter(n() > 1) %>%
     arrange(!!!vars2)
   if (nrow(many_to_one) > 0) {
-    set_dataset(many_to_one, "many_to_one")
+    admiraldev_environment$many_to_one <- many_to_one
     abort(
       paste0(
         "There is more than one value of ",
@@ -1422,5 +1522,101 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
       "` is not a date or datetime variable but is ",
       friendly_type_of(column)
     ))
+  }
+}
+
+#' Is an object a date or datetime vector?
+#'
+#' Check if an object/vector is a date or datetime variable without needing a dataset as input
+#'
+#' @param arg The function argument to be checked
+#'
+#' @param optional Is the checked parameter optional? If set to `FALSE`
+#' and `arg` is `NULL` then the function `assert_date_vector` exits early and throw and error.
+#'
+#' @return
+#' The function returns an error if `arg` is missing, or not a date or datetime variable
+#' but otherwise returns an invisible output.
+#'
+#' @export
+#'
+#' @author Sadchla Mascary
+#'
+#' @keywords assertion
+#'
+#' @family assertion
+#'
+#' @examples
+#' example_fun <- function(arg) {
+#'   assert_date_vector(arg)
+#' }
+#'
+#' example_fun(
+#'   as.Date("2022-01-30", tz = "UTC")
+#' )
+#' try(example_fun("1993-07-14"))
+assert_date_vector <- function(arg, optional = TRUE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.instant(arg)) {
+    abort(paste0(
+      deparse(substitute(arg)),
+      " must be a date or datetime variable but it's ",
+      friendly_type_of(arg)
+    ))
+  }
+}
+
+#' Are All Argument of the Same Type?
+#'
+#'
+#' Checks if all arguments are of the same type.
+#'
+#' @param ... Arguments to be checked
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error if not all arguments are of the same type.
+#'
+#' @export
+#'
+#' @keywords assertion
+#' @family assertion
+#'
+#' @examples
+#' example_fun <- function(true_value, false_value, missing_value) {
+#'   assert_same_type(true_value, false_value, missing_value)
+#' }
+#'
+#' example_fun(
+#'   true_value = "Y",
+#'   false_value = "N",
+#'   missing_value = NA_character_
+#' )
+#'
+#' try(example_fun(
+#'   true_value = 1,
+#'   false_value = 0,
+#'   missing_value = "missing"
+#' ))
+assert_same_type <- function(...) {
+  args <- rlang::dots_list(..., .named = TRUE)
+  arg_names <- lapply(args, function(x) deparse(substitute(x)))
+  types <- lapply(args, typeof)
+
+  if (length(unique(types)) > 1) {
+    abort(
+      paste(
+        "All arguments must be of the same type.",
+        "Argument: Type",
+        "--------------",
+        paste0(names(args), ": ", types, collapse = "\n"),
+        sep = "\n"
+      )
+    )
   }
 }

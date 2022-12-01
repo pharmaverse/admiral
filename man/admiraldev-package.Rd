@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Utility functions to check data, variables and conditions for functions used in 'admiral' and 'admiral' extension packages. Additional utility helper functions to to assist developers with maintaining documentation, testing and general upkeep of 'admiral' and 'admiral' extension packages.
+Utility functions to check data, variables and conditions for functions used in 'admiral' and 'admiral' extension packages. Additional utility helper functions to assist developers with maintaining documentation, testing and general upkeep of 'admiral' and 'admiral' extension packages.
 }
 \seealso{
 Useful links:
@@ -28,6 +28,11 @@ Authors:
   \item Samia Kabi
   \item Pooja Kumari
   \item Syed Mubasheer
+  \item Ross Farrugia
+  \item Sadchla Mascary
+  \item Zelos Zhu
+  \item Jeffrey Dickinson
+  \item Ania Golab
 }
 
 Other contributors:
