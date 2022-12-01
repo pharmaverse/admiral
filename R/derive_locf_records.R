@@ -75,7 +75,7 @@
 #' advs_expected_obsv <- tibble::tribble(
 #'   ~PARAMCD, ~AVISITN, ~AVISIT,
 #'   "PULSE",         0, "BASELINE",
-#'   "PULSE",         0, "WEEK 6",
+#'   "PULSE",         6, "WEEK 6",
 #'   "DIABP",         0, "BASELINE",
 #'   "DIABP",         2, "WEEK 2",
 #'   "DIABP",         4, "WEEK 4",
