@@ -54,7 +54,10 @@ previous observation in the input dataset (when sorted by \code{order}) and
 }
 \examples{
 
-advs <- tibble::tribble(
+library(dplyr)
+library(tibble)
+
+advs <- tribble(
   ~STUDYID,  ~USUBJID,      ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT,
   "CDISC01", "01-701-1015", "PULSE",     61,        0, "BASELINE",
   "CDISC01", "01-701-1015", "PULSE",     60,        2, "WEEK 6",
