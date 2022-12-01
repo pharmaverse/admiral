@@ -7,6 +7,13 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 Name: derive_single_dose_fillin
 Label: "Derive Single Dose Dataset with Missing End of Treatment Date and Datetime Fill-in" 
 
