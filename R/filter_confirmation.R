@@ -163,6 +163,7 @@
 #'
 #' library(tibble)
 #' library(admiral)
+#' library(dplyr)
 #'
 #' # filter observations with a duration longer than 30 and
 #' # on or after 7 days before a COVID AE (ACOVFL == "Y")
@@ -387,7 +388,7 @@ filter_confirmation <- function(dataset,
 #' library(tibble)
 #' library(dplyr)
 #' library(admiral)
-#' data <- tibble::tribble(
+#' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
 #'   "1",      1,        "PR",
 #'   "1",      2,        "CR",

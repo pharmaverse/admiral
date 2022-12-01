@@ -191,6 +191,7 @@ previous step. For the other observations it is set to \code{false_value}.
 \examples{
 library(tibble)
 library(admiral)
+library(dplyr)
 
 # flag observations with a duration longer than 30 and
 # at, after, or up to 7 days before a COVID AE (ACOVFL == "Y")
@@ -324,6 +325,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_cat}()},
 \code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_var_worst_flag}()},

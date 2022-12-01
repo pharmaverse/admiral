@@ -67,8 +67,9 @@ retain those common values in the newly derived records. Otherwise new value
 will be set to \code{NA}.
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
-adeg <- tibble::tribble(
+library(tibble)
+library(dplyr)
+adeg <- tribble(
   ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
@@ -99,7 +100,7 @@ derive_summary_records(
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 
-advs <- tibble::tribble(
+advs <- tribble(
   ~USUBJID, ~VSSEQ, ~PARAM, ~AVAL, ~VSSTRESU, ~VISIT, ~VSDTC,
   "XYZ-001-001", 1164, "Weight", 99, "kg", "Screening", "2018-03-19",
   "XYZ-001-001", 1165, "Weight", 101, "kg", "Run-In", "2018-03-26",
@@ -126,7 +127,7 @@ derive_summary_records(
   )
 
 # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
-adeg <- tibble::tribble(
+adeg <- tribble(
   ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
@@ -149,7 +150,7 @@ adeg <- tibble::tribble(
 derive_summary_records(
   adeg,
   by_vars = vars(USUBJID, PARAM, AVISIT),
-  filter = dplyr::n() > 2,
+  filter = n() > 2,
   analysis_var = AVAL,
   summary_fun = function(x) mean(x, na.rm = TRUE),
   set_values_to = vars(DTYPE = "AVERAGE")
@@ -167,7 +168,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_extreme_event}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

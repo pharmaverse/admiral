@@ -41,7 +41,10 @@ value of the \code{source_var} variable of the baseline record. In case there ar
 multiple baseline records within \code{by_vars} an error is issued.
 }
 \examples{
-dataset <- tibble::tribble(
+library(tibble)
+library(dplyr)
+
+dataset <- tribble(
   ~STUDYID, ~USUBJID,   ~PARAMCD, ~AVAL,   ~AVALC,      ~AVISIT, ~ABLFL,  ~ANRIND,
   "TEST01",  "PAT01",  "PARAM01", 10.12,       NA,   "Baseline",    "Y", "NORMAL",
   "TEST01",  "PAT01",  "PARAM01", 9.700,       NA,      "Day 7",    "N",    "LOW",

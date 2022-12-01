@@ -9,16 +9,16 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The variables specified by the `by_vars` parameter are expected.
+#'   The variables specified by the `by_vars` argument are expected.
 #'
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified by the `by_vars`, the `new_vars`, and the `order`
-#'   parameter are expected.
+#'   argument are expected.
 #'
 #' @param order Sort order
 #'
-#'   If the parameter is set to a non-null value, for each by group the first or
+#'   If the argument is set to a non-null value, for each by group the first or
 #'   last observation from the additional dataset is selected with respect to the
 #'   specified order.
 #'
@@ -40,7 +40,7 @@
 #'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
 #'   `old_var2` to `new_var2`.
 #'
-#'   If the parameter is not specified or set to `NULL`, all variables from the
+#'   If the argument is not specified or set to `NULL`, all variables from the
 #'   additional dataset (`dataset_add`) are added.
 #'
 #'   *Default*: `NULL`
@@ -50,9 +50,9 @@
 #' @param mode Selection mode
 #'
 #'   Determines if the first or last observation is selected. If the `order`
-#'   parameter is specified, `mode` must be non-null.
+#'   argument is specified, `mode` must be non-null.
 #'
-#'   If the `order` parameter is not specified, the `mode` parameter is ignored.
+#'   If the `order` argument is not specified, the `mode` argument is ignored.
 #'
 #'   *Default*: `NULL`
 #'
@@ -69,7 +69,7 @@
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
 #'   Only observations fulfilling the specified condition are taken into account
-#'   for merging. If the parameter is not specified, all observations are
+#'   for merging. If the argument is not specified, all observations are
 #'   considered.
 #'
 #'   *Default*: `NULL`
@@ -78,7 +78,7 @@
 #'
 #' @param match_flag Match flag
 #'
-#'   If the parameter is specified (e.g., `match_flag = FLAG`), the specified
+#'   If the argument is specified (e.g., `match_flag = FLAG`), the specified
 #'   variable (e.g., `FLAG`) is added to the input dataset. This variable will
 #'   be `TRUE` for all selected records from `dataset_add` which are merged into
 #'   the input dataset, and `NA` otherwise.
@@ -136,7 +136,7 @@
 #'
 #' @examples
 #' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' data("admiral_vs")
 #' data("admiral_dm")
 #'
@@ -312,11 +312,11 @@ derive_vars_merged <- function(dataset,
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified by the `by_vars`, the `dtc`, and the `order`
-#'   parameter are expected.
+#'   argument are expected.
 #'
 #' @param order Sort order
 #'
-#'   If the parameter is set to a non-null value, for each by group the first or
+#'   If the argument is set to a non-null value, for each by group the first or
 #'   last observation from the additional dataset is selected with respect to
 #'   the specified order. The imputed date variable can be specified as well
 #'   (see examples below).
@@ -431,11 +431,11 @@ derive_vars_merged_dt <- function(dataset,
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified by the `by_vars`, the `dtc`, and the `order`
-#'   parameter are expected.
+#'   argument are expected.
 #'
 #' @param order Sort order
 #'
-#'   If the parameter is set to a non-null value, for each by group the first or
+#'   If the argument is set to a non-null value, for each by group the first or
 #'   last observation from the additional dataset is selected with respect to
 #'   the specified order. The imputed datetime variable can be specified as well
 #'   (see examples below).
@@ -544,7 +544,7 @@ derive_vars_merged_dtm <- function(dataset,
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified by the `by_vars`, the `source_var`, and the `order`
-#'   parameter are expected.
+#'   argument are expected.
 #'
 #' @param new_var New variable
 #'
@@ -555,7 +555,7 @@ derive_vars_merged_dtm <- function(dataset,
 #'
 #' @param cat_fun Categorization function
 #'
-#'   A function must be specified for this parameter which expects the values of
+#'   A function must be specified for this argument which expects the values of
 #'   the source variable as input and returns the categorized values.
 #'
 #' @param missing_value Values used for missing information
@@ -592,7 +592,7 @@ derive_vars_merged_dtm <- function(dataset,
 #'
 #' @examples
 #' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' data("admiral_dm")
 #' data("admiral_vs")
 #'
@@ -668,7 +668,7 @@ derive_var_merged_cat <- function(dataset,
 #'
 #' @param dataset_add Additional dataset
 #'
-#'   The variables specified by the `by_vars` parameter are expected.
+#'   The variables specified by the `by_vars` argument are expected.
 #'
 #' @param by_vars Grouping variables
 #'
@@ -708,7 +708,7 @@ derive_var_merged_cat <- function(dataset,
 #' @param filter_add Filter for additional data
 #'
 #'   Only observations fulfilling the specified condition are taken into account
-#'   for flagging. If the parameter is not specified, all observations are
+#'   for flagging. If the argument is not specified, all observations are
 #'   considered.
 #'
 #'   *Permitted Values*: a condition
@@ -742,7 +742,7 @@ derive_var_merged_cat <- function(dataset,
 #' @examples
 #'
 #' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' data("admiral_dm")
 #' data("admiral_ae")
 #' derive_var_merged_exist_flag(
@@ -804,12 +804,12 @@ derive_var_merged_exist_flag <- function(dataset,
 #' @param dataset_add Additional dataset
 #'
 #'   The variables specified by the `by_vars`, the `source_var`, and the `order`
-#'   parameter are expected.
+#'   argument are expected.
 #'
 #' @param new_var New variable
 #'
 #'   The specified variable is added to the additional dataset and set to the
-#'   transformed value with respect to the `case` parameter.
+#'   transformed value with respect to the `case` argument.
 #'
 #' @param source_var Source variable
 #'
@@ -857,7 +857,7 @@ derive_var_merged_exist_flag <- function(dataset,
 #'
 #' @examples
 #' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' data("admiral_dm")
 #' data("admiral_ds")
 #'
@@ -927,7 +927,7 @@ derive_var_merged_character <- function(dataset,
 #'
 #' @param dataset_add Lookup table
 #'
-#' The variables specified by the `by_vars` parameter are expected.
+#' The variables specified by the `by_vars` argument are expected.
 #'
 #' @param print_not_mapped Print a list of unique `by_vars` values that do not
 #' have corresponding records from the lookup table?
@@ -954,9 +954,10 @@ derive_var_merged_character <- function(dataset,
 #'
 #' @examples
 #' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(tibble)
+#' library(dplyr)
 #' data("admiral_vs")
-#' param_lookup <- tibble::tribble(
+#' param_lookup <- tribble(
 #'   ~VSTESTCD, ~VSTEST, ~PARAMCD, ~PARAM,
 #'   "SYSBP", "Systolic Blood Pressure", "SYSBP", "Systolic Blood Pressure (mmHg)",
 #'   "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -1036,4 +1037,174 @@ derive_vars_merged_lookup <- function(dataset,
 #' @family utils_help
 get_not_mapped <- function() {
   .temp$nmap
+}
+
+#' Merge a Summary Variable
+#'
+#' Merge a summary variable from a dataset to the input dataset.
+#'
+#' @param dataset Input dataset
+#'
+#'   The variables specified by the `by_vars` argument are expected.
+#'
+#' @param dataset_add Additional dataset
+#'
+#'   The variables specified by the `by_vars` and the `analysis_var` arguments
+#'   are expected.
+#'
+#' @param new_var Variable to add
+#'
+#'   The specified variable is added to the input dataset (`dataset`) and set to
+#'   the summarized values.
+#'
+#' @param by_vars Grouping variables
+#'
+#'   The values of `analysis_var` are summarized by the specified variables. The
+#'   summarized values are merged to the input dataset (`dataset`) by the
+#'   specified by variables.
+#'
+#'   *Permitted Values*: list of variables created by `vars()`
+#'
+#' @param filter_add Filter for additional dataset (`dataset_add`)
+#'
+#'   Only observations fulfilling the specified condition are taken into account
+#'   for summarizing. If the argument is not specified, all observations are
+#'   considered.
+#'
+#'   *Permitted Values*: a condition
+#'
+#' @param analysis_var Analysis variable
+#'
+#'   The values of the specified variable are summarized by the function
+#'   specified for `summary_fun`.
+#'
+#' @param summary_fun Summary function
+#'
+#'   The specified function that takes as input `analysis_var` and performs the
+#'   calculation. This can include built-in functions as well as user defined
+#'   functions, for example `mean` or `function(x) mean(x, na.rm = TRUE)`.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @details
+#'
+#'   1. The records from the additional dataset (`dataset_add`) are restricted
+#'   to those matching the `filter_add` condition.
+#'
+#'   1. The values of the analysis variable (`analysis_var`) are summarized by
+#'   the summary function (`summary_fun`) for each by group (`by_vars`) in the
+#'   additional dataset (`dataset_add`).
+#'
+#'   1. The summarized values are merged to the input dataset as a new variable
+#'   (`new_var`). For observations without a matching observation in the
+#'   additional dataset the new variable is set to `NA`. Observations in the
+#'   additional dataset which have no matching observation in the input dataset
+#'   are ignored.
+#'
+#' @return The output dataset contains all observations and variables of the
+#'   input dataset and additionally the variable specified for `new_var`.
+#'
+#' @family der_gen
+#' @keywords der_gen
+#'
+#' @seealso [derive_summary_records()], [get_summary_records()]
+#'
+#' @export
+#'
+#' @examples
+#' library(tibble)
+#' library(dplyr)
+#'
+#' # Add a variable for the mean of AVAL within each visit
+#' adbds <- tribble(
+#'   ~USUBJID, ~AVISIT,  ~ASEQ, ~AVAL,
+#'   "1",      "WEEK 1",     1,    10,
+#'   "1",      "WEEK 1",     2,    NA,
+#'   "1",      "WEEK 2",     3,    NA,
+#'   "1",      "WEEK 3",     4,    42,
+#'   "1",      "WEEK 4",     5,    12,
+#'   "1",      "WEEK 4",     6,    12,
+#'   "1",      "WEEK 4",     7,    15,
+#'   "2",      "WEEK 1",     1,    21,
+#'   "2",      "WEEK 4",     2,    22
+#' )
+#'
+#' derive_var_merged_summary(
+#'   adbds,
+#'   dataset_add = adbds,
+#'   by_vars = vars(USUBJID, AVISIT),
+#'   new_var = MEANVIS,
+#'   analysis_var = AVAL,
+#'   summary_fun = function(x) mean(x, na.rm = TRUE)
+#' )
+#'
+#' # Add a variable listing the lesion ids at baseline
+#' adsl <- tribble(
+#'   ~USUBJID,
+#'   "1",
+#'   "2",
+#'   "3"
+#' )
+#'
+#' adtr <- tribble(
+#'   ~USUBJID, ~AVISIT,    ~LESIONID,
+#'   "1",      "BASELINE", "INV-T1",
+#'   "1",      "BASELINE", "INV-T2",
+#'   "1",      "BASELINE", "INV-T3",
+#'   "1",      "BASELINE", "INV-T4",
+#'   "1",      "WEEK 1",   "INV-T1",
+#'   "1",      "WEEK 1",   "INV-T2",
+#'   "1",      "WEEK 1",   "INV-T4",
+#'   "2",      "BASELINE", "INV-T1",
+#'   "2",      "BASELINE", "INV-T2",
+#'   "2",      "BASELINE", "INV-T3",
+#'   "2",      "WEEK 1",   "INV-T1",
+#'   "2",      "WEEK 1",   "INV-N1"
+#' )
+#'
+#' derive_var_merged_summary(
+#'   adsl,
+#'   dataset_add = adtr,
+#'   by_vars = vars(USUBJID),
+#'   filter_add = AVISIT == "BASELINE",
+#'   new_var = LESIONSBL,
+#'   analysis_var = LESIONID,
+#'   summary_fun = function(x) paste(x, collapse = ", ")
+#' )
+#'
+derive_var_merged_summary <- function(dataset,
+                                      dataset_add,
+                                      by_vars,
+                                      new_var,
+                                      filter_add = NULL,
+                                      analysis_var,
+                                      summary_fun) {
+  assert_vars(by_vars)
+  new_var <- assert_symbol(enquo(new_var))
+  analysis_var <- assert_symbol(enquo(analysis_var))
+  filter_add <-
+    assert_filter_cond(enquo(filter_add), optional = TRUE)
+  assert_s3_class(summary_fun, "function")
+  assert_data_frame(
+    dataset,
+    required_vars = by_vars
+  )
+  assert_data_frame(
+    dataset_add,
+    required_vars = quo_c(by_vars, analysis_var)
+  )
+
+  # Summarise the analysis value and merge to the original dataset
+  derive_vars_merged(
+    dataset,
+    dataset_add = get_summary_records(
+      dataset_add,
+      by_vars = by_vars,
+      filter = !!filter_add,
+      analysis_var = !!analysis_var,
+      summary_fun = summary_fun
+    ),
+    by_vars = by_vars,
+    new_vars = vars(!!new_var := !!analysis_var)
+  )
 }

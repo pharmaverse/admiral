@@ -48,7 +48,10 @@
 #' @export
 #'
 #' @examples
-#' adlb <- tibble::tribble(
+#' library(tibble)
+#' library(dplyr)
+#'
+#' adlb <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
 #'   "1",      1,          113,      1,
 #'   "1",      2,          113,      2,

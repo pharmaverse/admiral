@@ -72,9 +72,9 @@ compute_qual_imputation <- function(character_value, imputation_type = 1, factor
     numeric_value <-
       case_when(
         str_detect(character_value, ">") & !str_detect(character_value, "=") ~
-        numeric_value + factor,
+          numeric_value + factor,
         str_detect(character_value, "<") & !str_detect(character_value, "=") ~
-        numeric_value - factor,
+          numeric_value - factor,
         TRUE ~ numeric_value
       )
   }
@@ -83,9 +83,9 @@ compute_qual_imputation <- function(character_value, imputation_type = 1, factor
     numeric_value <-
       case_when(
         str_detect(character_value, ">") & !str_detect(character_value, "=") ~
-        numeric_value + compute_qual_imputation_dec(character_value),
+          numeric_value + compute_qual_imputation_dec(character_value),
         str_detect(character_value, "<") & !str_detect(character_value, "=") ~
-        numeric_value - compute_qual_imputation_dec(character_value),
+          numeric_value - compute_qual_imputation_dec(character_value),
         TRUE ~ numeric_value
       )
   }

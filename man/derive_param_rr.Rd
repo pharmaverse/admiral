@@ -73,7 +73,10 @@ The analysis value of the new parameter is derived as
 \deqn{\frac{60000}{HR}}{60000 / HR}
 }
 \examples{
-adeg <- tibble::tribble(
+library(tibble)
+library(dplyr)
+
+adeg <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "HR", "Heart Rate", 70.14, "beats/min", "BASELINE",
   "01-701-1015", "QT", "QT Duration", 370, "msec", "WEEK 2",
@@ -107,7 +110,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_extreme_event}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

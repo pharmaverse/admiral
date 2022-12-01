@@ -50,7 +50,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' library(admiral.test)
 #' data("admiral_vs")
 #'

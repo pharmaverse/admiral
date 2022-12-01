@@ -177,9 +177,10 @@ Risk Period \tab 0.88936 \cr
 \deqn{Risk = 100 * (1 - RiskPeriodFactor^{RiskFactors})}
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
+library(tibble)
+library(dplyr)
 
-adcvrisk <- tibble::tribble(
+adcvrisk <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU,
   ~VISIT, ~AGE, ~SEX, ~SMOKEFL, ~DIABETFL, ~TRTHYPFL,
   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121,
@@ -241,7 +242,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_extreme_event}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},
 \code{\link{derive_param_rr}()},

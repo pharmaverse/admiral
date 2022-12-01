@@ -106,8 +106,11 @@ the provided values. The values of the other variables of the input dataset
 are set to \code{NA}.
 }
 \examples{
+library(tibble)
+library(dplyr)
+
 # Example 1: Derive MAP
-advs <- tibble::tribble(
+advs <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
@@ -132,7 +135,7 @@ derive_param_computed(
 )
 
 # Example 2: Derive BMI where height is measured only once
-advs <- tibble::tribble(
+advs <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
   "01-701-1015", "WEIGHT", "Weight (kg)", 54.0, "kg", "SCREENING",
@@ -167,7 +170,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_extreme_event}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

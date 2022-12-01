@@ -25,6 +25,10 @@ Authors@R: c(
     person("Pooja", "Kumari", role = "aut"),
     person("Claudia", "Carlucci", role = "aut"),
     person("Daniil", "Stefonishin", role = "aut"), 
+    person("Sadchla", "Mascary", role = "aut"),
+    person("Zelos", "Zhu", role = "aut"),
+    person("Jeffrey", "Dickinson", role = "aut"),
+    person("Ania", "Golab", role = "aut"),
     person("Michael", "Thorpe", role = "ctb"),
     person("Pavan", "Kumar", role = "ctb"),
     person("Hamza", "Rahal", role = "ctb"),
@@ -39,6 +43,7 @@ Authors@R: c(
     person("Syed", "Mubasheer", role = "ctb"),
     person("Wenyi", "Liu", role = "ctb"),
     person("Dinakar", "Kulkarni", role = "ctb"),
+    person("Franciszek", "Walkowiak", role = "ctb"),
     person("Tamara", "Senior", role = "ctb"),
     person("Jordanna", "Morrish", role = "ctb"),
     person("Anthony", "Howard", role = "ctb"),
@@ -61,12 +66,11 @@ URL: https://pharmaverse.github.io/admiral/, https://github.com/pharmaverse/admi
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Depends: R (>= 3.5)
 Imports:
-    admiraldev (>= 0.2.0),
-    assertthat (>= 0.2.1),
-    dplyr (>= 1.0.0),
+    admiraldev,
+    dplyr (>= 0.8.4),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
     lubridate (>= 1.7.4),

@@ -227,21 +227,13 @@
 #'   "1",      "2021-01-04", "2021-02-06", "2021-02-07", "2021-03-07",
 #'   "2",      "2021-02-02", "2021-03-02", "2021-03-03", "2021-04-01"
 #' ) %>%
-#'   mutate(
-#'     across(matches("AP\\d\\d[ES]DT"), ymd)
-#'   )
+#'   mutate(across(ends_with("DT"), ymd)) %>%
+#'   mutate(STUDYID = "xyz")
 #'
-#' period_ref <- pivot_longer(
+#' period_ref <- create_period_dataset(
 #'   adsl,
-#'   matches("AP\\d\\d[ES]DT"),
-#'   names_to = c("APERIODC", ".value"),
-#'   names_pattern = "AP(\\d\\d)([ES])DT"
-#' ) %>%
-#'   rename(APERSDT = S, APEREDT = E) %>%
-#'   mutate(
-#'     APERIOD = as.integer(APERIODC),
-#'     APERIODC = paste("Period", APERIODC)
-#'   )
+#'   new_vars = vars(APERSDT = APxxSDT, APEREDT = APxxEDT)
+#' )
 #'
 #' period_ref
 #'
@@ -255,14 +247,14 @@
 #'   "2",      "2021-02-15",
 #' ) %>%
 #'   mutate(
-#'     ASTDT = ymd(ASTDT)
+#'     ASTDT = ymd(ASTDT),
+#'     STUDYID = "xyz"
 #'   )
 #'
 #' derive_vars_joined(
 #'   adae,
 #'   dataset_add = period_ref,
-#'   by_vars = vars(USUBJID),
-#'   new_vars = vars(APERIOD, APERIODC),
+#'   by_vars = vars(STUDYID, USUBJID),
 #'   join_vars = vars(APERSDT, APEREDT),
 #'   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
 #' )

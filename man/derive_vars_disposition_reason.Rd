@@ -13,7 +13,7 @@ derive_vars_disposition_reason(
   reason_var_spe = NULL,
   format_new_vars = format_reason_default,
   filter_ds,
-  subject_keys = vars(STUDYID, USUBJID)
+  subject_keys = get_admiral_option("subject_keys")
 )
 }
 \arguments{
@@ -107,7 +107,7 @@ The details associated with the reason for discontinuation are derived based on
 \code{reason_var_spe} (e.g. \code{DSTERM}), \code{reason_var} and \code{format_new_vars}.
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 library(admiral.test)
 data("admiral_dm")
 data("admiral_ds")

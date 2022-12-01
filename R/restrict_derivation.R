@@ -23,8 +23,10 @@
 #'
 #' @examples
 #'
+#' library(tibble)
+#' library(dplyr)
 #' library(magrittr)
-#' adlb <- tibble::tribble(
+#' adlb <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,
 #'   "1",            -1,   113, NA_character_,
 #'   "1",             0,   113, "Y",

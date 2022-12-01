@@ -96,7 +96,7 @@ then join cannot be performed properly and an error is issued. To resolve the er
 variables from \code{dataset_ex} (e.g. \code{new_vars = vars(LSTEXVIS = VISIT)}).
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 library(admiral.test)
 data(admiral_ae)
 data(ex_single)
@@ -138,7 +138,7 @@ adae \%>\%
     new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
     dose_date = EXENDTM,
     analysis_date = ASTDTM,
-    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
+    traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 }
@@ -155,6 +155,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_cat}()},
 \code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_var_worst_flag}()},

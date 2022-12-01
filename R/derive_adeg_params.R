@@ -61,7 +61,10 @@
 #' @export
 #'
 #' @examples
-#' adeg <- tibble::tribble(
+#' library(tibble)
+#' library(dplyr)
+#'
+#' adeg <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "HR", "Heart Rate (beats/min)", 70.14, "beats/min", "BASELINE",
 #'   "01-701-1015", "QT", "QT Duration (msec)", 370, "msec", "WEEK 2",
@@ -276,7 +279,10 @@ compute_qtc <- function(qt, rr, method) {
 #' @export
 #'
 #' @examples
-#' adeg <- tibble::tribble(
+#' library(tibble)
+#' library(dplyr)
+#'
+#' adeg <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "HR", "Heart Rate", 70.14, "beats/min", "BASELINE",
 #'   "01-701-1015", "QT", "QT Duration", 370, "msec", "WEEK 2",

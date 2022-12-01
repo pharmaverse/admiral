@@ -59,7 +59,7 @@ order specified for the \code{order} parameter and the mode specified for the
 \code{mode} parameter) is included in the output dataset.
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 library(admiral.test)
 data("admiral_vs")
 
@@ -81,6 +81,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_cat}()},
 \code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_joined}()},

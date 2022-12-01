@@ -44,6 +44,10 @@ Authors:
   \item Pooja Kumari
   \item Claudia Carlucci
   \item Daniil Stefonishin
+  \item Sadchla Mascary
+  \item Zelos Zhu
+  \item Jeffrey Dickinson
+  \item Ania Golab
 }
 
 Other contributors:
@@ -62,6 +66,7 @@ Other contributors:
   \item Syed Mubasheer [contributor]
   \item Wenyi Liu [contributor]
   \item Dinakar Kulkarni [contributor]
+  \item Franciszek Walkowiak [contributor]
   \item Tamara Senior [contributor]
   \item Jordanna Morrish [contributor]
   \item Anthony Howard [contributor]
