@@ -1,6 +1,5 @@
-## Test 1: new locf observations are derived correctly when visits are missing ----
-test_that("derive_locf_records Test 1: new locf observations are derived correctly when
-          visits are missing", {
+# ---- derive_locf_records, test 1: visits are missing ----
+test_that("derive_locf_records, test 1: visits are missing", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT,
     "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, 0, "BASELINE",
@@ -47,9 +46,8 @@ test_that("derive_locf_records Test 1: new locf observations are derived correct
 })
 
 
-## Test 2: new locf observations are derived correctly when some visits have missing AVAL ----
-test_that("derive_locf_records Test 2: new locf observations are derived correctly when some
-          visits have missing AVAL", {
+# ---- derive_locf_records, test 2: some visits have missing AVAL ----
+test_that("derive_locf_records, test 2: some visits have missing AVAL", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT,
     "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, 0, "BASELINE",
@@ -98,10 +96,8 @@ test_that("derive_locf_records Test 2: new locf observations are derived correct
 })
 
 
-## Test 3: new locf observations are derived correctly when visits are missing and DTYPE
-# already exits ----
-test_that("derive_locf_records Test 3: new locf observations are derived correctly when
-          visits are missing - and DTYPE already exits", {
+# ---- derive_locf_records, test 3: visits are missing - and DTYPE already exits ----
+test_that("derive_locf_records, test 3: visits are missing - and DTYPE already exits", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~DTYPE,
     "TEST01", "1015", "DIABP", "Diastolic Blood Pressure", 51, 0, "BASELINE", NA,
@@ -160,10 +156,8 @@ test_that("derive_locf_records Test 3: new locf observations are derived correct
 })
 
 
-## Test 4: new locf observations are derived correctly when visit variables are parameter
-# independent ----
-test_that("derive_locf_records Test 4: new locf observations are derived correctly when visit
-          variables are parameter independent", {
+# ---- derive_locf_records, test 4: visit variables are parameter independent ----
+test_that("derive_locf_records, test 4: visit variables are parameter independent", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT,
     "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, 0, "BASELINE",
@@ -210,10 +204,8 @@ test_that("derive_locf_records Test 4: new locf observations are derived correct
 })
 
 
-## Test 5: new locf observations are derived correctly when visit variables are parameter
-# dependent ----
-test_that("derive_locf_records Test 5: new locf observations are derived correctly when visit
-          variables are parameter dependent", {
+# ---- derive_locf_records, test 5: visit variables are parameter dependent ----
+test_that("derive_locf_records, test 5: visit variables are parameter dependent", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT,
     "TEST01", "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, 0, "BASELINE",
