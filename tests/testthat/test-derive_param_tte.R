@@ -32,8 +32,8 @@ test_that("derive_param_tte Test 1: new observations with analysis date are deri
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,
-    "03",     ymd("2021-08-21"), 0L,    "DEATH",                 "ADSL",  "DTHDT",
-    "04",     ymd("2021-05-24"), 1L,    "LAST KNOWN ALIVE DATE", "ADSL",  "LSTALVDT"
+    "03",     ymd("2021-08-21"),    0L, "DEATH",                 "ADSL",  "DTHDT",
+    "04",     ymd("2021-05-24"),    1L, "LAST KNOWN ALIVE DATE", "ADSL",  "LSTALVDT"
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -75,13 +75,13 @@ test_that("derive_param_tte Test 2: new parameter with analysis datetime is deri
 
   adrs <- tibble::tribble(
     ~USUBJID, ~AVALC, ~ADTM,                          ~ASEQ,
-    "01",     "SD",   ymd_hms("2021-01-03 10:56:00"), 1,
-    "01",     "PR",   ymd_hms("2021-03-04 11:13:00"), 2,
-    "01",     "PD",   ymd_hms("2021-05-05 12:02:00"), 3,
-    "02",     "PD",   ymd_hms("2021-02-03 10:56:00"), 1,
-    "04",     "SD",   ymd_hms("2021-02-13 10:56:00"), 1,
-    "04",     "PR",   ymd_hms("2021-04-14 11:13:00"), 2,
-    "04",     "CR",   ymd_hms("2021-05-15 12:02:00"), 3
+    "01",     "SD",   ymd_hms("2021-01-03 10:56:00"),     1,
+    "01",     "PR",   ymd_hms("2021-03-04 11:13:00"),     2,
+    "01",     "PD",   ymd_hms("2021-05-05 12:02:00"),     3,
+    "02",     "PD",   ymd_hms("2021-02-03 10:56:00"),     1,
+    "04",     "SD",   ymd_hms("2021-02-13 10:56:00"),     1,
+    "04",     "PR",   ymd_hms("2021-04-14 11:13:00"),     2,
+    "04",     "CR",   ymd_hms("2021-05-15 12:02:00"),     3
   ) %>%
     mutate(STUDYID = "AB42", PARAMCD = "OVR")
 
@@ -133,11 +133,11 @@ test_that("derive_param_tte Test 2: new parameter with analysis datetime is deri
   # nolint start
   expected_output <- tibble::tribble(
     ~USUBJID, ~ADTM,                          ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
-    "01",     ymd_hms("2021-05-05 12:02:00"), 0L,    "PD",                    "ADRS",  "ADTM",    3,
-    "02",     ymd_hms("2021-02-03 10:56:00"), 0L,    "PD",                    "ADRS",  "ADTM",    1,
-    "03",     as_datetime(ymd("2021-08-21")), 0L,    "DEATH",                 "ADSL",  "DTHDT",   NA,
-    "04",     ymd_hms("2021-05-15 12:02:00"), 1L,    "LAST TUMOR ASSESSMENT", "ADRS",  "ADTM",    NA,
-    "05",     ymd_hms("2021-04-05 11:22:33"), 1L,    "TREATMENT START",       "ADSL",  "TRTSDTM", NA
+    "01",     ymd_hms("2021-05-05 12:02:00"),    0L, "PD",                    "ADRS",  "ADTM",          3,
+    "02",     ymd_hms("2021-02-03 10:56:00"),    0L, "PD",                    "ADRS",  "ADTM",          1,
+    "03",     as_datetime(ymd("2021-08-21")),    0L, "DEATH",                 "ADSL",  "DTHDT",        NA,
+    "04",     ymd_hms("2021-05-15 12:02:00"),    1L, "LAST TUMOR ASSESSMENT", "ADRS",  "ADTM",         NA,
+    "05",     ymd_hms("2021-04-05 11:22:33"),    1L, "TREATMENT START",       "ADSL",  "TRTSDTM",      NA
   ) %>%
     # nolint end
     mutate(
@@ -181,9 +181,9 @@ test_that("derive_param_tte Test 3: error is issued if DTC variables specified f
 
   ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,           ~AESEQ,
-    "01",     "2021-01-03T10:56", 1,
-    "01",     "2021-03-04",       2,
-    "01",     "2021",             3
+    "01",     "2021-01-03T10:56",      1,
+    "01",     "2021-03-04",            2,
+    "01",     "2021",                  3
   ) %>%
     mutate(STUDYID = "AB42")
 
@@ -236,9 +236,9 @@ test_that("derive_param_tte Test 4: by_vars parameter works correctly", {
 
   ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
-    "01",     "2021-01-03", 1,      "Flu",
-    "01",     "2021-03-04", 2,      "Cough",
-    "01",     "2021-01-01", 3,      "Flu"
+    "01",     "2021-01-03",      1, "Flu",
+    "01",     "2021-03-04",      2, "Cough",
+    "01",     "2021-01-01",      3, "Flu"
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -270,10 +270,10 @@ test_that("derive_param_tte Test 4: by_vars parameter works correctly", {
   # nolint start
   expected_output <- tibble::tribble(
     ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ, ~PARCAT2, ~PARAMCD,
-    "01",     ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,       "Flu",    "TTAE2",
-    "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA,      "Flu",    "TTAE2",
-    "01",     ymd("2021-03-04"), 0L,    "AE",           "AE",    "AESTDTC", 2,       "Cough",  "TTAE1",
-    "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA,      "Cough",  "TTAE1"
+    "01",     ymd("2021-01-01"),    0L, "AE",           "AE",    "AESTDTC",       3, "Flu",    "TTAE2",
+    "02",     ymd("2021-02-03"),    1L, "END OF STUDY", "ADSL",  "EOSDT",        NA, "Flu",    "TTAE2",
+    "01",     ymd("2021-03-04"),    0L, "AE",           "AE",    "AESTDTC",       2, "Cough",  "TTAE1",
+    "02",     ymd("2021-02-03"),    1L, "END OF STUDY", "ADSL",  "EOSDT",        NA, "Cough",  "TTAE1"
   ) %>%
     # nolint end
     mutate(
@@ -314,9 +314,9 @@ test_that("derive_param_tte Test 5: an error is issued if some of the by variabl
 
   ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
-    "01",     "2021-01-03", 1,      "Flu",
-    "01",     "2021-03-04", 2,      "Cough",
-    "01",     "2021-01-01", 3,      "Flu"
+    "01",     "2021-01-03",      1, "Flu",
+    "01",     "2021-03-04",      2, "Cough",
+    "01",     "2021-01-01",      3, "Flu"
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -375,9 +375,9 @@ test_that("derive_param_tte Test 6: errors if all by vars are missing in all sou
 
   ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
-    "01",     "2021-01-03", 1,      "Flu",
-    "01",     "2021-03-04", 2,      "Cough",
-    "01",     "2021-01-01", 3,      "Flu"
+    "01",     "2021-01-03",      1, "Flu",
+    "01",     "2021-03-04",      2, "Cough",
+    "01",     "2021-01-01",      3, "Flu"
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -437,9 +437,9 @@ test_that("derive_param_tte Test 7: errors if PARAMCD and by_vars are not one to
 
   ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
-    "01",     "2021-01-03", 1,      "Flu",
-    "01",     "2021-03-04", 2,      "Cough",
-    "01",     "2021-01-01", 3,      "Flu"
+    "01",     "2021-01-03",      1, "Flu",
+    "01",     "2021-03-04",      2, "Cough",
+    "01",     "2021-01-01",      3, "Flu"
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -500,9 +500,9 @@ test_that("derive_param_tte Test 8: errors if set_values_to contains invalid exp
 
   ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
-    "01",     "2021-01-03", 1,      "Flu",
-    "01",     "2021-03-04", 2,      "Cough",
-    "01",     "2021-01-01", 3,      "Flu"
+    "01",     "2021-01-03",      1, "Flu",
+    "01",     "2021-03-04",      2, "Cough",
+    "01",     "2021-01-01",      3, "Flu"
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -571,9 +571,9 @@ test_that("derive_param_tte Test 9: error is issued if parameter code already ex
 
   ae <- tibble::tribble(
     ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
-    "01",     "2021-01-03", 1,      "Flu",
-    "01",     "2021-03-04", 2,      "Cough",
-    "01",     "2021-01-01", 3,      "Flu"
+    "01",     "2021-01-03",      1, "Flu",
+    "01",     "2021-03-04",      2, "Cough",
+    "01",     "2021-01-01",      3, "Flu"
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -604,8 +604,8 @@ test_that("derive_param_tte Test 9: error is issued if parameter code already ex
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
-    "01",     ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,
-    "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA
+    "01",     ymd("2021-01-01"),    0L, "AE",           "AE",    "AESTDTC",       3,
+    "02",     ymd("2021-02-03"),    1L, "END OF STUDY", "ADSL",  "EOSDT",        NA
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -633,7 +633,6 @@ test_that("derive_param_tte Test 9: error is issued if parameter code already ex
 
 ## Test 10: ensuring ADT is not NA because of missing start_date ----
 test_that("derive_param_tte Test 10: ensuring ADT is not NA because of missing start_date", {
-
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,                ~LSTALVDT,
     "01",     NA,                     ymd("2022-08-10"),
@@ -644,9 +643,9 @@ test_that("derive_param_tte Test 10: ensuring ADT is not NA because of missing s
 
   ae <- tibble::tribble(
     ~USUBJID,  ~AESEQ, ~ASTDT,
-    "01",      1,      ymd("2020-08-10"),
-    "02",      2,      ymd("2020-08-15"),
-    "03",      3,      ymd("2020-12-10"),
+    "01",           1, ymd("2020-08-10"),
+    "02",           2, ymd("2020-08-15"),
+    "03",           3, ymd("2020-12-10"),
   ) %>%
     mutate(STUDYID = "AB42")
 
@@ -684,10 +683,10 @@ test_that("derive_param_tte Test 10: ensuring ADT is not NA because of missing s
   )
 
   expected_output <- tibble::tribble(
-    ~USUBJID,  ~EVNTDESC,            ~SRCDOM,  ~SRCVAR,    ~SRCSEQ,  ~CNSR,     ~ADT,                ~STARTDT,
-    "01",      "Any Adverse Event",  "ADAE",   "AEDECOD",  1,         0L,       ymd("2020-08-10"),  NA,
-    "02",      "Any Adverse Event",  "ADAE",   "AEDECOD",  2,         0L,       ymd("2020-08-15"),  NA,
-    "03",      "Any Adverse Event",  "ADAE",   "AEDECOD",  3,         0L,       ymd("2020-12-10"),  ymd("2020-10-13")
+    ~USUBJID, ~EVNTDESC,           ~SRCDOM, ~SRCVAR,  ~SRCSEQ, ~CNSR, ~ADT,              ~STARTDT,
+    "01",     "Any Adverse Event", "ADAE",  "AEDECOD",      1,    0L, ymd("2020-08-10"), NA,
+    "02",     "Any Adverse Event", "ADAE",  "AEDECOD",      2,    0L, ymd("2020-08-15"), NA,
+    "03",     "Any Adverse Event", "ADAE",  "AEDECOD",      3,    0L, ymd("2020-12-10"), ymd("2020-10-13")
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -700,7 +699,6 @@ test_that("derive_param_tte Test 10: ensuring ADT is not NA because of missing s
     expected_output,
     keys = c("USUBJID", "PARAMCD")
   )
-
 })
 
 ## Test 11: error is issued if package does not exist ----
