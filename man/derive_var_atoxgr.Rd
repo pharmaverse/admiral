@@ -46,7 +46,6 @@ Function applies the following rules:
 }
 \examples{
 library(tibble)
-library(dplyr)
 
 adlb <- tribble(
   ~ATOXDSCL,          ~ATOXDSCH,        ~ATOXGRL,      ~ATOXGRH,

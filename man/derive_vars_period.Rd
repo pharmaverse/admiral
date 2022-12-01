@@ -64,7 +64,7 @@ of \code{new_vars}.
 }
 \examples{
 library(tibble)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 
 adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))

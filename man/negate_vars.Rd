@@ -20,8 +20,6 @@ This is useful if a list of variables should be removed from a dataset,
 e.g., \code{select(!!!negate_vars(by_vars))} removes all by variables.
 }
 \examples{
-library(dplyr)
-
 negate_vars(vars(USUBJID, STUDYID))
 }
 \seealso{

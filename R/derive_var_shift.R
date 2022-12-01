@@ -37,7 +37,6 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
 #'
 #' data <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,

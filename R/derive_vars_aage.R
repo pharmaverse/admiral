@@ -114,8 +114,6 @@ derive_vars_aage <- function(dataset,
 #'
 #' @examples
 #'
-#' library(dplyr)
-#'
 #' data <- data.frame(
 #'   AGE = c(27, 24, 3, 4, 1),
 #'   AGEU = c("days", "months", "years", "weeks", "years")

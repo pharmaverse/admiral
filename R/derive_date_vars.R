@@ -1241,7 +1241,6 @@ compute_tmf <- function(dtc,
 #' @examples
 #' library(tibble)
 #' library(lubridate)
-#' library(dplyr)
 #'
 #' mhdt <- tribble(
 #'   ~MHSTDTC,
@@ -1443,7 +1442,6 @@ derive_vars_dt <- function(dataset,
 #' @examples
 #' library(tibble)
 #' library(lubridate)
-#' library(dplyr)
 #'
 #' mhdt <- tribble(
 #'   ~MHSTDTC,

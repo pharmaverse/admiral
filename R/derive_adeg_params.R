@@ -62,7 +62,6 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
 #'
 #' adeg <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
@@ -280,7 +279,6 @@ compute_qtc <- function(qt, rr, method) {
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
 #'
 #' adeg <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
