@@ -53,6 +53,9 @@ Authors:
 Other contributors:
 \itemize{
   \item Michael Thorpe [contributor]
+  \item Declan Hodges [contributor]
+  \item Jaxon Abercrombie [contributor]
+  \item Nick Ramirez [contributor]
   \item Pavan Kumar [contributor]
   \item Hamza Rahal [contributor]
   \item Alice Ehmann [contributor]
