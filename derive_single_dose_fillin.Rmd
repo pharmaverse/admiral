@@ -43,21 +43,22 @@ dm_death <- dm %>%
     dtc = DTHDTC,
     flag_imputation = "none",
     new_vars_prefix = "DTH"
-  ) %>% 
- derive_vars_dtm_to_dt(vars(DTHDTM)) %>%
-# Set up datacut as character snapshot date to use in `EXENDT` and `EXENDTM` imputations
-  mutate(DCUTDT = as.Date("2015-03-06"),
-         DCUTDTM = convert_date_to_dtm(DCUTDT))
+  ) %>%
+  derive_vars_dtm_to_dt(vars(DTHDTM)) %>%
+  # Set up datacut as character snapshot date to use in `EXENDT` and `EXENDTM` imputations
+  mutate(
+    DCUTDT = as.Date("2015-03-06"),
+    DCUTDTM = convert_date_to_dtm(DCUTDT)
+  )
 ```
 Select valid dose records, non-missing `EXSTDTC` and `EXDOSE`.
 Set up missing `EXDOSFRQ` as QD daily dosing regime.
 ```{r}
 ex_mod <- ex %>%
- filter(!is.na(EXSTDTC) & !is.na(EXDOSE)) %>%
-  left_join(dm_death, by=c("STUDYID", "USUBJID")) %>% 
-  mutate(EXDOSFRQ = if_else(is.na(EXDOSFRQ), "QD", EXDOSFRQ) 
-     )%>%
-# Create EXxxDTM variables and replace missing `EXENDTM`.
+  filter(!is.na(EXSTDTC) & !is.na(EXDOSE)) %>%
+  left_join(dm_death, by = c("STUDYID", "USUBJID")) %>%
+  mutate(EXDOSFRQ = if_else(is.na(EXDOSFRQ), "QD", EXDOSFRQ)) %>%
+  # Create EXxxDTM variables and replace missing `EXENDTM`.
   derive_vars_dtm(
     dtc = EXSTDTC,
     new_vars_prefix = "EXST",
@@ -65,26 +66,26 @@ ex_mod <- ex %>%
     time_imputation = "first",
     flag_imputation = "none",
   ) %>%
- derive_vars_dtm_to_dt(vars(EXSTDTM)) %>%
+  derive_vars_dtm_to_dt(vars(EXSTDTM)) %>%
   derive_vars_dtm(
     dtc = EXENDTC,
     new_vars_prefix = "EXEN",
-# Maximum imputed treatment end date must not be not greater than date of death or after the datacut date
+    # Maximum imputed treatment end date must not be not greater than date of death or after the datacut date
     max_dates = vars(DTHDTM, DCUTDTM),
     date_imputation = "last",
     time_imputation = "last",
     flag_imputation = "none"
-    )%>% 
+  ) %>%
   derive_vars_dtm_to_dt(vars(EXENDTM)) %>%
   mutate(
     EXENDT = if_else(is.na(EXENDT) & is.na(DTHDT), DCUTDT, EXENDT),
     EXENDT = if_else(is.na(EXENDT) & !is.na(DTHDT), DTHDT, EXENDT),
-    EXENDTM = if_else(is.na(EXENDTM) & is.na(DTHDTM), DCUTDTM, EXENDTM), 
-    EXENDTM = if_else(is.na(EXENDTM) & !is.na(DTHDTM), DTHDTM, EXENDTM) 
-   )%>%
-# Select only unique values.
-# Removes duplicated records before final step.   
-distinct(STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ, DCUTDT, DTHDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC)
+    EXENDTM = if_else(is.na(EXENDTM) & is.na(DTHDTM), DCUTDTM, EXENDTM),
+    EXENDTM = if_else(is.na(EXENDTM) & !is.na(DTHDTM), DTHDTM, EXENDTM)
+  ) %>%
+  # Select only unique values.
+  # Removes duplicated records before final step.
+  distinct(STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ, DCUTDT, DTHDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC)
 
 ex_single <-
   create_single_dose_dataset(
@@ -93,7 +94,6 @@ ex_single <-
     start_datetime = EXSTDTM,
     end_date = EXENDT,
     end_datetime = EXENDTM,
-keep_source_vars = vars(STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ, DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC)
-  ) 
+    keep_source_vars = vars(STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ, DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC)
+  )
 ```
-
