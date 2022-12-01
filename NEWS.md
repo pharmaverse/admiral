@@ -77,7 +77,7 @@ version is stored in the output dataset (#1337).
 
 ## Various
 
-- Function `derive_param_tte()` had a bug that set ADT to NA when start_date 
+- Function `derive_param_tte()` had a bug that set `ADT` to `NA` when `start_date` 
 was missing, which has now been fixed (#1540)
 
 - Function `derive_vars_merged()` had an improperly formatted error message 
