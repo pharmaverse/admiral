@@ -686,7 +686,7 @@ test_that("derive_param_tte Test 10: ensuring ADT is not NA because of missing s
     ~USUBJID, ~EVNTDESC,           ~SRCDOM, ~SRCVAR,  ~SRCSEQ, ~CNSR, ~ADT,              ~STARTDT,
     "01",     "Any Adverse Event", "ADAE",  "AEDECOD",      1,    0L, ymd("2020-08-10"), NA,
     "02",     "Any Adverse Event", "ADAE",  "AEDECOD",      2,    0L, ymd("2020-08-15"), NA,
-    "03",     "Any Adverse Event", "ADAE",  "AEDECOD",      3,    0L, ymd("2020-12-10"), ymd("2020-10-13")
+    "03",     "Any Adverse Event", "ADAE",  "AEDECOD",      3,    0L, ymd("2020-12-10"), ymd("2020-10-13") # nolint
   ) %>%
     mutate(
       STUDYID = "AB42",
