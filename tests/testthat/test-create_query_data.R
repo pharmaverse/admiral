@@ -40,9 +40,10 @@ cqterms <- tibble::tribble(
   "APPLICATION SITE PRURITUS", 10003053L
 ) %>%
   mutate(TERM_LEVEL = "AEDECOD")
-
+# create_query_data ----
 # customized query defined by terms ----
-test_that("customized query defined by terms", {
+## Test 1: customized query defined by terms ----
+test_that("create_query_data Test 1: customized query defined by terms", {
   cq <- query(
     prefix = "CQ01",
     name = "Application Site Issues",
@@ -64,7 +65,8 @@ test_that("customized query defined by terms", {
 })
 
 # customized query defined by SMQs ----
-test_that("customized query defined by SMQs", {
+## Test 2: customized query defined by SMQs ----
+test_that("create_query_data Test 2: customized query defined by SMQs", {
   cq <- query(
     prefix = "CQ02",
     name = "Immune-Mediated Meningoencephalitis",
@@ -109,7 +111,8 @@ test_that("customized query defined by SMQs", {
     ) %>%
     mutate(
       QUERY_NAME = "Immune-Mediated Meningoencephalitis",
-      VAR_PREFIX = "CQ02"
+      VAR_PREFIX = "CQ02",
+      VERSION = "20.0"
     )
 
   expect_dfs_equal(
@@ -119,7 +122,8 @@ test_that("customized query defined by SMQs", {
   )
 })
 
-test_that("customized query defined by terms and SMQs", {
+## Test 3: customized query defined by terms and SMQs ----
+test_that("create_query_data Test 3: customized query defined by terms and SMQs", {
   cq <- query(
     prefix = "CQ03",
     name = "Immune-Mediated Meningoencephalitis or Application Site Issues",
@@ -166,7 +170,8 @@ test_that("customized query defined by terms and SMQs", {
     ) %>%
     mutate(
       QUERY_NAME = "Immune-Mediated Meningoencephalitis or Application Site Issues",
-      VAR_PREFIX = "CQ03"
+      VAR_PREFIX = "CQ03",
+      VERSION = "20.1"
     )
 
   expect_dfs_equal(
@@ -177,7 +182,8 @@ test_that("customized query defined by terms and SMQs", {
 })
 
 # SMQs ----
-test_that("SMQs", {
+## Test 4: SMQs ----
+test_that("SMQs Test 4: SMQs", {
   pregsmq <- query(
     prefix = "SMQ02",
     id = 13,
@@ -234,6 +240,9 @@ test_that("SMQs", {
           QUERY_SCOPE = "BROAD",
           VAR_PREFIX = "SMQ04"
         )
+    ) %>%
+    mutate(
+      VERSION = "20.0"
     )
 
   expect_dfs_equal(
@@ -244,7 +253,8 @@ test_that("SMQs", {
 })
 
 # issues error if SMQs without meddra_version are requested ----
-test_that("issues error if SMQs without meddra_version are requested", {
+## Test 5: issues error if SMQs without meddra_version are requested ----
+test_that("SMQs Test 5: issues error if SMQs without meddra_version are requested", {
   pregsmq <- query(
     prefix = "SMQ02",
     definition = basket_select(
@@ -264,7 +274,8 @@ test_that("issues error if SMQs without meddra_version are requested", {
 })
 
 # SDGs ----
-test_that("SDGs", {
+## Test 6: SDGs ----
+test_that("SDGs Test 6: SDGs", {
   sdg <- query(
     prefix = "SDG01",
     id = auto,
@@ -293,7 +304,8 @@ test_that("SDGs", {
     mutate(
       QUERY_ID = 42,
       VAR_PREFIX = "SDG01",
-      QUERY_SCOPE = NA_character_
+      QUERY_SCOPE = NA_character_,
+      VERSION = "2019_09"
     )
 
   expect_dfs_equal(
@@ -304,7 +316,8 @@ test_that("SDGs", {
 })
 
 # issues error if SDGs without meddra_version are requested ----
-test_that("issues error if SDGs without meddra_version are requested", {
+## Test 7: issues error if SDGs without meddra_version are requested ----
+test_that("SDGs Test 7: issues error if SDGs without meddra_version are requested", {
   sdg <- query(
     prefix = "SDG01",
     definition = basket_select(
@@ -323,9 +336,10 @@ test_that("issues error if SDGs without meddra_version are requested", {
   )
 })
 
-
+# query() ----
 # query: error: name = auto for non SMQs/SDGs ----
-test_that("query: error: name = auto for non SMQs/SDGs", {
+## Test 8: query: error: name = auto for non SMQs/SDGs ----
+test_that("SDGs Test 8: query: error: name = auto for non SMQs/SDGs", {
   expect_error(
     sdg <- query(
       prefix = "CQ01",
@@ -336,7 +350,8 @@ test_that("query: error: name = auto for non SMQs/SDGs", {
 })
 
 # query: error: name = id for non SMQs/SDGs ----
-test_that("query: error: name = id for non SMQs/SDGs", {
+## Test 9: query: error: name = id for non SMQs/SDGs ----
+test_that("SDGs Test 9: query: error: name = id for non SMQs/SDGs", {
   expect_error(
     sdg <- query(
       name = "My CQ",
@@ -349,7 +364,8 @@ test_that("query: error: name = id for non SMQs/SDGs", {
 })
 
 # query: error: invalid definition ----
-test_that("query: error: invalid definition", {
+## Test 10: query: error: invalid definition ----
+test_that("SDGs Test 10: query: error: invalid definition", {
   expect_error(
     sdg <- query(
       name = "My CQ",
@@ -364,8 +380,10 @@ test_that("query: error: invalid definition", {
   )
 })
 
+# assert_terms ----
 # assert_terms: error: TERM_LEVEL missing ----
-test_that("assert_terms: error: TERM_LEVEL missing", {
+## Test 11: assert_terms: error: TERM_LEVEL missing ----
+test_that("assert_terms Test 11: assert_terms: error: TERM_LEVEL missing", {
   expect_error(
     assert_terms(
       terms = select(cqterms, -TERM_LEVEL),
@@ -377,7 +395,8 @@ test_that("assert_terms: error: TERM_LEVEL missing", {
 })
 
 # assert_terms: error: TERM_NAME and TERM_ID missing ----
-test_that("assert_terms: error: TERM_NAME and TERM_ID missing", {
+## Test 12: assert_terms: error: TERM_NAME and TERM_ID missing ----
+test_that("assert_terms Test 12: assert_terms: error: TERM_NAME and TERM_ID missing", {
   expect_error(
     assert_terms(
       terms = select(cqterms, TERM_LEVEL),
@@ -392,7 +411,8 @@ test_that("assert_terms: error: TERM_NAME and TERM_ID missing", {
 })
 
 # assert_terms: error: no data frame ----
-test_that("assert_terms: error: no data frame", {
+## Test 13: assert_terms: error: no data frame ----
+test_that("assert_terms Test 13: assert_terms: error: no data frame", {
   expect_error(
     assert_terms(
       terms = 42,
@@ -404,7 +424,8 @@ test_that("assert_terms: error: no data frame", {
 })
 
 # assert_terms: error: no observations ----
-test_that("assert_terms: error: no observations", {
+## Test 14: assert_terms: error: no observations ----
+test_that("assert_terms Test 14: assert_terms: error: no observations", {
   expect_error(
     assert_terms(
       terms = filter(cqterms, TERM_ID == 42),
@@ -416,7 +437,8 @@ test_that("assert_terms: error: no observations", {
 })
 
 # assert_terms: error: QUERY_NAME is missing ----
-test_that("assert_terms: error: QUERY_NAME is missing", {
+## Test 15: assert_terms: error: QUERY_NAME is missing ----
+test_that("assert_terms Test 15: assert_terms: error: QUERY_NAME is missing", {
   expect_error(
     assert_terms(
       terms = cqterms,
@@ -429,7 +451,8 @@ test_that("assert_terms: error: QUERY_NAME is missing", {
 })
 
 # assert_terms: error: QUERY_ID is missing ----
-test_that("assert_terms: error: QUERY_ID is missing", {
+## Test 16: assert_terms: error: QUERY_ID is missing ----
+test_that("assert_terms Test 16: assert_terms: error: QUERY_ID is missing", {
   expect_error(
     assert_terms(
       terms = cqterms,
@@ -441,8 +464,10 @@ test_that("assert_terms: error: QUERY_ID is missing", {
   )
 })
 
+# basket_select ----
 # basket_select: error: name and id specified ----
-test_that("basket_select: error: name and id specified", {
+## Test 17: basket_select: error: name and id specified ----
+test_that("basket_select Test 17: basket_select: error: name and id specified", {
   expect_error(
     basket_select(
       name = "My SMQ",
@@ -456,7 +481,8 @@ test_that("basket_select: error: name and id specified", {
 })
 
 # basket_select: error: neither name nor id specified ----
-test_that("basket_select: error: neither name nor id specified", {
+## Test 18: basket_select: error: neither name nor id specified ----
+test_that("basket_select Test 18: basket_select: error: neither name nor id specified", {
   expect_error(
     basket_select(scope = "NARROW", type = "smq"),
     regexp = "Either id or name has to be non null.",
@@ -465,7 +491,8 @@ test_that("basket_select: error: neither name nor id specified", {
 })
 
 # basket_select: error: name and id specified ----
-test_that("basket_select: error: name and id specified", {
+## Test 19: basket_select: error: name and id specified ----
+test_that("basket_select Test 19: basket_select: error: name and id specified", {
   expect_error(
     basket_select(
       name = "My SDG",
@@ -479,7 +506,8 @@ test_that("basket_select: error: name and id specified", {
 })
 
 # format.basket_select: formatting is correct ----
-test_that("format.basket_select: formatting is correct", {
+## Test 20: format.basket_select: formatting is correct ----
+test_that("basket_select Test 20: format.basket_select: formatting is correct", {
   expect_equal(
     format(basket_select(
       id = 42,
@@ -491,7 +519,8 @@ test_that("format.basket_select: formatting is correct", {
 })
 
 # basket_select: error: neither name nor id specified ----
-test_that("basket_select: error: neither name nor id specified", {
+## Test 21: basket_select: error: neither name nor id specified ----
+test_that("basket_select Test 21: basket_select: error: neither name nor id specified", {
   expect_error(
     basket_select(type = "sdg", scope = NA_character_),
     regexp = "Either id or name has to be non null.",
@@ -500,7 +529,8 @@ test_that("basket_select: error: neither name nor id specified", {
 })
 
 # basket_select: error: type is not specified ----
-test_that("basket_select: error: type is not specified", {
+## Test 22: basket_select: error: type is not specified ----
+test_that("basket_select Test 22: basket_select: error: type is not specified", {
   expect_error(
     basket_select(id = 42, scope = "NARROW"),
     regexp = "argument \"type\" is missing, with no default",
@@ -508,8 +538,10 @@ test_that("basket_select: error: type is not specified", {
   )
 })
 
+# format.basket_select ----
 # format.basket_select: formatting is correct ----
-test_that("format.basket_select: formatting is correct", {
+## Test 23: format.basket_select: formatting is correct ----
+test_that("format.basket_select Test 23: format.basket_select: formatting is correct", {
   expect_equal(
     format(basket_select(name = "My SDG", type = "sdg", scope = NA_character_)),
     "basket_select(name = \"My SDG\", id = NULL, scope = \"NA\", type = \"sdg\")"

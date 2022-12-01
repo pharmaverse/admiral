@@ -115,7 +115,16 @@ reference:
   - has_keyword('datasets')
 
 - title: Deprecated
-- desc: Look out for Warning and Error messages. These will guide you to deprecated functions replacements.
+  desc: |
+    As `{admiral}` is still evolving, functions/parameters may need to be removed or replaced over time. In such cases, the function/parameter will enter the following 6-month deprecation cycle:
+
+    * In the first release (0-3 months), there will be a warning issued if you use the function/parameter, but it will still be available to use.
+    * In the following release (3-6 months), an error will be produced if you use the function/parameter.
+    * Finally, from the 3rd release (6 months) onwards, the function/parameter will be removed from `{admiral}` and its documentation completely.
+
+    *Note: Guidance on replacement functionality can be found in the warning/error message produced or in the function's documentation.*
+
+    Below, you can find a list of functions in the process of being deprecated:
   contents:
   - has_keyword("deprecated")
 

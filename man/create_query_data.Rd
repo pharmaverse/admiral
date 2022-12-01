@@ -5,12 +5,24 @@
 \title{Creates a queries dataset as input dataset to the \code{dataset_queries} argument in
 \code{derive_vars_query()}}
 \usage{
-create_query_data(queries, version = NULL, get_terms_fun = NULL)
+create_query_data(
+  queries,
+  meddra_version = deprecated(),
+  whodd_version = deprecated(),
+  version = NULL,
+  get_smq_fun = deprecated(),
+  get_sdg_fun = deprecated(),
+  get_terms_fun = NULL
+)
 }
 \arguments{
 \item{queries}{List of queries
 
 A list of \code{query()} objects is expected.}
+
+\item{meddra_version}{\emph{Deprecated}, please use \code{version}}
+
+\item{whodd_version}{\emph{Deprecated}, please use \code{version}}
 
 \item{version}{Dictionary version
 
@@ -20,6 +32,10 @@ including a basket, the parameter needs to be specified.
 
 \emph{Permitted Values}: A character string (the expected format is
 company-specific)}
+
+\item{get_smq_fun}{\emph{Deprecated}, please use \code{get_terms_fun}}
+
+\item{get_sdg_fun}{\emph{Deprecated}, please use \code{get_terms_fun}}
 
 \item{get_terms_fun}{Function which returns the terms
 
@@ -96,11 +112,13 @@ object, the variable is set to \code{NA}. If none of the queries is defined by a
 \item \code{QUERY_SCOPE_NUM}: numeric scope of the query. It is set to \code{1} if the
 scope is broad. Otherwise it is set to \code{2}. If the \code{add_scope_num} element
 equals \code{FALSE}, the variable is set to \code{NA}. If the \code{add_scope_num} element
-equals \code{FALSE} for all basketss or none of the queries is an basket , the variable
+equals \code{FALSE} for all baskets or none of the queries is an basket , the variable
 is not created.
 \item \code{TERM_LEVEL}: Name of the variable used to identify the terms.
 \item \code{TERM_NAME}: Value of the term variable if it is a character variable.
 \item \code{TERM_ID}: Value of the term variable if it is a numeric variable.
+\item \code{VERSION}: Set to the value of the \code{version} argument. If it is not
+specified, the variable is not created.
 }
 }
 \examples{
@@ -203,7 +221,7 @@ Creating auxiliary datasets:
 \code{\link{create_single_dose_dataset}()}
 }
 \author{
-Stefan Bundfuss Tamara Senior
+Stefan Bundfuss, Tamara Senior
 }
 \concept{create_aux}
 \keyword{create_aux}

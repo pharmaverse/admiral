@@ -59,9 +59,19 @@ which controls if time is considered for the condition if `start_date` is after
 parameter `meta_criteria`. Can now also choose `atoxgr_criteria_ctcv5` for parameter 
 `meta_criteria`, to implement NCI-CTCAEv5 grading criteria .
 
+- The default value of the `keep_source_vars` argument in
+`create_single_dose_dataset()` was updated such that it takes the values of the
+other arguments into account and the `start_datetime` and `end_datetime`
+arguments are optional now (#1598).
+
+- Function `create_query_data()` has been updated such that the dictionary
+version is stored in the output dataset (#1337).
+
 ## Breaking Changes
 
 - Function `derive_param_first_event()` has been deprecated. Please use `derive_param_extreme_event()` with the `order` argument instead of the `date_var` argument (#1317).
+
+- Functions `smq_select()` and `sdg_select()` have been deprecated and replaced with `basket_select()`. In the `create_query_data()` function, `meddra_version` and `whodd_version` argument has been replaced by `version` and `get_smq_fun` and `get_sdg_fun` argument by `get_terms_fun`. (#1597) 
 
 ## Documentation
 
