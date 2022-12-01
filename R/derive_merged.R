@@ -1,4 +1,3 @@
-.temp <- new.env(parent = emptyenv())
 #' Add New Variable(s) to the Input Dataset Based on Variables from Another
 #' Dataset
 #'
@@ -1006,7 +1005,7 @@ derive_vars_merged_lookup <- function(dataset,
       distinct(!!!by_vars)
 
     if (nrow(temp_not_mapped) > 0) {
-      .temp$nmap <- structure(
+      admiral_environment$nmap <- structure(
         temp_not_mapped,
         class = union("nmap", class(temp_not_mapped)),
         by_vars = vars2chr(by_vars)
@@ -1036,7 +1035,7 @@ derive_vars_merged_lookup <- function(dataset,
 #' @keywords utils_help
 #' @family utils_help
 get_not_mapped <- function() {
-  .temp$nmap
+  admiral_environment$nmap
 }
 
 #' Merge a Summary Variable

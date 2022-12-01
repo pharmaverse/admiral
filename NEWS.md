@@ -59,6 +59,8 @@ which controls if time is considered for the condition if `start_date` is after
 parameter `meta_criteria`. Can now also choose `atoxgr_criteria_ctcv5` for parameter 
 `meta_criteria`, to implement NCI-CTCAEv5 grading criteria .
 
+- _Environment_ objects were consolidated into a single `admiral_environment` object under `R/admiral__environment.R`. (#1572)
+
 - The default value of the `keep_source_vars` argument in
 `create_single_dose_dataset()` was updated such that it takes the values of the
 other arguments into account and the `start_datetime` and `end_datetime`
