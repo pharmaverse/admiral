@@ -68,7 +68,8 @@ will be set to \code{NA}.
 }
 \examples{
 library(tibble)
-library(dplyr)
+library(dplyr, warn.conflicts = TRUE)
+
 adeg <- tribble(
   ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
@@ -162,6 +163,7 @@ derive_summary_records(
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_extreme_records}()},
+\code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
 \code{\link{derive_param_bsa}()},
 \code{\link{derive_param_computed}()},

@@ -98,7 +98,6 @@ for each by group (e.g., subject and visit) where the source parameters are avai
 }
 \examples{
 library(tibble)
-library(dplyr)
 
 advs <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
@@ -138,6 +137,7 @@ derive_param_bsa(
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_extreme_records}()},
+\code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
 \code{\link{derive_param_computed}()},
 \code{\link{derive_param_doseint}()},

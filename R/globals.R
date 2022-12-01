@@ -135,5 +135,6 @@ globalVariables(c(
   "VAR_CHECK",
   "TERM",
   "TERM_UPPER",
-  "atoxgr_criteria_ctcv4"
+  "atoxgr_criteria_ctcv4",
+  "DTYPE"
 ))

@@ -136,7 +136,7 @@
 #' @examples
 #' library(tibble)
 #' library(lubridate)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(tidyr)
 #'
 #' # Add AVISIT (based on time windows), AWLO, and AWHI

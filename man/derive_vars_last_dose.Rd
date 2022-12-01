@@ -96,7 +96,7 @@ then join cannot be performed properly and an error is issued. To resolve the er
 variables from \code{dataset_ex} (e.g. \code{new_vars = vars(LSTEXVIS = VISIT)}).
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 data(admiral_ae)
 data(ex_single)

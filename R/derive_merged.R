@@ -135,7 +135,7 @@
 #'
 #' @examples
 #' library(admiral.test)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_vs")
 #' data("admiral_dm")
 #'
@@ -591,7 +591,7 @@ derive_vars_merged_dtm <- function(dataset,
 #'
 #' @examples
 #' library(admiral.test)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_dm")
 #' data("admiral_vs")
 #'
@@ -741,7 +741,7 @@ derive_var_merged_cat <- function(dataset,
 #' @examples
 #'
 #' library(admiral.test)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_dm")
 #' data("admiral_ae")
 #' derive_var_merged_exist_flag(
@@ -856,7 +856,7 @@ derive_var_merged_exist_flag <- function(dataset,
 #'
 #' @examples
 #' library(admiral.test)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_dm")
 #' data("admiral_ds")
 #'
@@ -954,7 +954,7 @@ derive_var_merged_character <- function(dataset,
 #' @examples
 #' library(admiral.test)
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_vs")
 #' param_lookup <- tribble(
 #'   ~VSTESTCD, ~VSTEST, ~PARAMCD, ~PARAM,
@@ -1112,7 +1112,6 @@ get_not_mapped <- function() {
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
 #'
 #' # Add a variable for the mean of AVAL within each visit
 #' adbds <- tribble(

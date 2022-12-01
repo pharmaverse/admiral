@@ -130,7 +130,7 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #' data("admiral_adsl")
 #'
@@ -461,7 +461,7 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
 #' adsl <- tribble(
@@ -599,7 +599,7 @@ filter_date_sources <- function(sources,
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
 #' adsl <- tribble(
@@ -754,7 +754,6 @@ tte_source <- function(dataset_name,
 #'
 #' @examples
 #' # Death event
-#' library(dplyr)
 #'
 #' event_source(
 #'   dataset_name = "adsl",
@@ -801,7 +800,6 @@ event_source <- function(dataset_name,
 #'
 #' @examples
 #' # Last study date known alive censor
-#' library(dplyr)
 #'
 #' censor_source(
 #'   dataset_name = "adsl",

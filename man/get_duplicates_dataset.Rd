@@ -24,8 +24,6 @@ has been thrown, the dataset of the first error can no longer be accessed (unles
 it has been saved in a variable).
 }
 \examples{
-library(dplyr)
-
 data(admiral_adsl)
 
 # Duplicate the first record

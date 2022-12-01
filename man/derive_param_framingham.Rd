@@ -178,7 +178,6 @@ Risk Period \tab 0.88936 \cr
 }
 \examples{
 library(tibble)
-library(dplyr)
 
 adcvrisk <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU,
@@ -236,6 +235,7 @@ derive_param_framingham(
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_extreme_records}()},
+\code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
 \code{\link{derive_param_bsa}()},
 \code{\link{derive_param_computed}()},

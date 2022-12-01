@@ -107,7 +107,6 @@ are set to \code{NA}.
 }
 \examples{
 library(tibble)
-library(dplyr)
 
 # Example 1: Derive MAP
 advs <- tribble(
@@ -165,6 +164,7 @@ derive_param_computed(
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_extreme_records}()},
+\code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
 \code{\link{derive_param_bsa}()},
 \code{\link{derive_param_doseint}()},
