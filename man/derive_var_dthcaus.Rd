@@ -41,7 +41,7 @@ the preferred order.
 }
 \examples{
 library(tibble)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 
 adsl <- tribble(

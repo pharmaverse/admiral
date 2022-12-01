@@ -58,7 +58,7 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
 #' # Create reference dataset for periods
@@ -286,7 +286,7 @@ create_period_dataset <- function(dataset,
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
 #' adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))

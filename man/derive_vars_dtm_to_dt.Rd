@@ -21,7 +21,7 @@ This function creates date(s) as output from datetime variable(s)
 }
 \examples{
 library(tibble)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 
 adcm <- tribble(

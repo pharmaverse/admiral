@@ -96,7 +96,6 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
 #'
 #' # Example 1: Derive MAP
 #' advs <- tribble(

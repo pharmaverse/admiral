@@ -83,7 +83,6 @@ are available.
 }
 \examples{
 library(tibble)
-library(dplyr)
 
 adeg <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,

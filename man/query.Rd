@@ -74,8 +74,7 @@ as input to \code{create_query_data()}.
 
 # create a query for an SMQ
 library(tibble)
-library(magrittr, warn.conflicts = FALSE)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 # create a query for a SMQ
 query(

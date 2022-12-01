@@ -44,7 +44,7 @@ DY.
 \examples{
 library(tibble)
 library(lubridate)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 datain <- tribble(
   ~TRTSDTM, ~ASTDTM, ~AENDT,

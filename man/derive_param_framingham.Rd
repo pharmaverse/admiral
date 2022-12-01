@@ -178,7 +178,6 @@ Risk Period \tab 0.88936 \cr
 }
 \examples{
 library(tibble)
-library(dplyr)
 
 adcvrisk <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU,

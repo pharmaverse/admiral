@@ -37,7 +37,7 @@
 #' @seealso [derive_vars_last_dose()], [cut()], [create_single_dose_dataset()]
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
 #' data(admiral_ae)
 #' data(ex_single)
