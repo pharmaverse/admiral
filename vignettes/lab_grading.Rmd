@@ -78,7 +78,7 @@ Variable | Scope |  Type | Example Value
 ```{r message=FALSE}
 library(admiral)
 library(admiral.test)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(stringr)
 library(tibble)
 

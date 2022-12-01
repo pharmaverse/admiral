@@ -94,7 +94,7 @@ variables
 }
 \examples{
 library(tibble)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(lubridate, warn.conflicts = FALSE)
 library(stringr, warn.conflicts = FALSE)
 adex <- tribble(

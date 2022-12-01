@@ -98,7 +98,6 @@ for each by group (e.g., subject and visit) where the source parameters are avai
 }
 \examples{
 library(tibble)
-library(dplyr)
 
 advs <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,

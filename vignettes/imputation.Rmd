@@ -42,7 +42,7 @@ The examples of this vignette require the following packages.
 library(admiral)
 library(lubridate)
 library(tibble)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 ```
 
 # Imputation Rules

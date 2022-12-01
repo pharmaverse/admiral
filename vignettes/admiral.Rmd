@@ -29,7 +29,7 @@ for example the following script which creates a (very simple) ADSL dataset.
 First, we will load our packages and example datasets to help with our `ADSL` creation. The `{dplyr}` and `{lubridate}` packages are `{tidyverse}` packages and used heavily throughout this script.  The `{admiral}` package also leverages the `{admiral.test}` package for example SDTM datasets which are from the CDISC Pilot Study.
 
 ```{r, message=FALSE, warning=FALSE}
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 library(admiral)
 library(admiral.test)

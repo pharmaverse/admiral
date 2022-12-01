@@ -78,7 +78,6 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr, warn.conflict = FALSE)
 #'
 #' response <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,

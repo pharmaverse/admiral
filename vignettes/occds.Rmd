@@ -54,7 +54,7 @@ included in `{admiral.test}`--- are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 library(lubridate)
 

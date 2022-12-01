@@ -64,7 +64,7 @@ variable is merged to the input dataset.
 }
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 data("admiral_dm")
 data("admiral_ae")

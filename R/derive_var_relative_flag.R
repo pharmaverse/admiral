@@ -81,7 +81,7 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr, warn.conflict = FALSE)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' # Flag all AEs after the first COVID AE
 #' adae <- tribble(

@@ -21,7 +21,7 @@
 #' @keywords utils_fmt
 #' @seealso [derive_vars_disposition_reason()]
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
 #' data("admiral_dm")
 #' data("admiral_ds")
@@ -140,7 +140,7 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
 #' data("admiral_dm")
 #' data("admiral_ds")
