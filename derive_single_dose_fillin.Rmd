@@ -15,7 +15,7 @@ Input: ex, dm
 # Introduction
 For either single drug administration records, or multiple drug administration records covering a range of dates, fill-in of missing treatment end datetime (`EXENDTC`) by substitution with an acceptable alternate, for example date of death, date of datacut may be required. This programming strategy allows the maximum possible number of single dose records to be derived.
 The example R script requires the date of datacut `DCUTDT` to be specified correctly, or if not appropriate to use `DCUTDT` as missing treatment end data and missing treatment end datetime could set equal to treatment start date and treatment start datetime. 
-All available trial treatments are included, allowing multiple different last dose variables to be created in `ad_adae.R` if required.
+All available trial treatments are included, allowing multiple different last dose variables to be created in ad_adae.R if required.
 
 ## Required packages
 ```{r}
@@ -35,7 +35,7 @@ ex <- convert_blanks_to_na(ex)
 dm <- convert_blanks_to_na(dm)
 ```
 Derive date of death and set up data cut date to fill in missing treatment end date `EXENDT` and missing treatment end datetime `EXENDTM`.
-Alternative approach instead of death date could use last known alive date in `ADSL` `LSTALVDT`.
+Alternative approach instead of death date could use last known alive date in ADSL `LSTALVDT`.
 ```{r}
 dm_death <- dm %>%
   select(STUDYID, USUBJID, DTHDTC) %>%
@@ -50,8 +50,7 @@ dm_death <- dm %>%
          DCUTDTM = convert_date_to_dtm(DCUTDT))
 ```
 Select valid dose records, non-missing `EXSTDTC` and `EXDOSE`.
-Set up missing `EXDOSFRQ` as per study Protocol for each trial treatment. 
-Replace "QD" with study dosing regime as required.
+Set up missing `EXDOSFRQ` as QD daily dosing regime.
 ```{r}
 ex_mod <- ex %>%
  filter(!is.na(EXSTDTC) & !is.na(EXDOSE)) %>%
@@ -84,6 +83,7 @@ ex_mod <- ex %>%
     EXENDTM = if_else(is.na(EXENDTM) & !is.na(DTHDTM), DTHDTM, EXENDTM) 
    )%>%
 # Select only unique values.
+# Removes duplicated records before final step.   
 distinct(STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ, DCUTDT, DTHDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC)
 
 ex_single <-
