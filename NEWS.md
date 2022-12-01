@@ -42,7 +42,10 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 
 - Removed R Version 3.6 check in CI/CD workflows in favor of the three most recent versions: 4.0, 4.1 and 4.2. (#1556)
 
-- New function `convert_na_to_blanks()` converts `NA` strings to blank while preserving all attributes (#1589)
+- The new function `derive_locf_records()` adds LOCF records as new observations. 
+This can be used when the input dataset does not contain observations for missed 
+visits/time points or when `AVAL` is `NA` for particular visits/time points (#1316).
+
 
 ## Updates of Existing Functions
 
