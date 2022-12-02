@@ -46,6 +46,8 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 This can be used when the input dataset does not contain observations for missed 
 visits/time points or when `AVAL` is `NA` for particular visits/time points (#1316).
 
+- New function `convert_na_to_blanks()` to convert character `NA` to blanks (#1624)
+
 
 ## Updates of Existing Functions
 

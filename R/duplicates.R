@@ -1,4 +1,4 @@
-#' Get Duplicate Records that Lead to a Prior Error
+#' Get Duplicate Records that Led to a Prior Error
 #'
 #' @export
 #'

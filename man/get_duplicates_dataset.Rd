@@ -2,7 +2,7 @@
 % Please edit documentation in R/duplicates.R
 \name{get_duplicates_dataset}
 \alias{get_duplicates_dataset}
-\title{Get Duplicate Records that Lead to a Prior Error}
+\title{Get Duplicate Records that Led to a Prior Error}
 \usage{
 get_duplicates_dataset()
 }
@@ -10,7 +10,7 @@ get_duplicates_dataset()
 A \code{data.frame} or \code{NULL}
 }
 \description{
-Get Duplicate Records that Lead to a Prior Error
+Get Duplicate Records that Led to a Prior Error
 }
 \details{
 Many {admiral} function check that the input dataset contains only one record
