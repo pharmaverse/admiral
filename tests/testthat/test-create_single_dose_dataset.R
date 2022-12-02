@@ -2,31 +2,24 @@
 ## Test 1: Works as expected for Q#/EVERY # cases ----
 test_that("cases Test 1: Works as expected for Q#/EVERY # cases", {
   input <- tibble::tribble(
-    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
-    "P01", "Q2D", ymd("2021-01-01"), ymd("2021-01-07"),
-    "P01", "Q3D", ymd("2021-01-08"), ymd("2021-01-14"),
-    "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd("2021-01-29")
+    ~USUBJID, ~EXDOSFRQ,       ~ASTDT,            ~AENDT,
+    "P01",    "Q2D",           ymd("2021-01-01"), ymd("2021-01-07"),
+    "P01",    "Q3D",           ymd("2021-01-08"), ymd("2021-01-14"),
+    "P01",    "EVERY 2 WEEKS", ymd("2021-01-15"), ymd("2021-01-29"),
+    "P02",    "ONCE",          ymd("2021-02-02"), ymd("2021-02-02")
   )
   expected_output <- tibble::tribble(
-    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
-    "P01", "ONCE", ymd("2021-01-01"),
-    ymd("2021-01-01"),
-    "P01", "ONCE", ymd("2021-01-03"),
-    ymd("2021-01-03"),
-    "P01", "ONCE", ymd("2021-01-05"),
-    ymd("2021-01-05"),
-    "P01", "ONCE", ymd("2021-01-07"),
-    ymd("2021-01-07"),
-    "P01", "ONCE", ymd("2021-01-08"),
-    ymd("2021-01-08"),
-    "P01", "ONCE", ymd("2021-01-11"),
-    ymd("2021-01-11"),
-    "P01", "ONCE", ymd("2021-01-14"),
-    ymd("2021-01-14"),
-    "P01", "ONCE", ymd("2021-01-15"),
-    ymd("2021-01-15"),
-    "P01", "ONCE", ymd("2021-01-29"),
-    ymd("2021-01-29"),
+    ~USUBJID, ~EXDOSFRQ, ~ASTDT,            ~AENDT,
+    "P01",    "ONCE",    ymd("2021-01-01"), ymd("2021-01-01"),
+    "P01",    "ONCE",    ymd("2021-01-03"), ymd("2021-01-03"),
+    "P01",    "ONCE",    ymd("2021-01-05"), ymd("2021-01-05"),
+    "P01",    "ONCE",    ymd("2021-01-07"), ymd("2021-01-07"),
+    "P01",    "ONCE",    ymd("2021-01-08"), ymd("2021-01-08"),
+    "P01",    "ONCE",    ymd("2021-01-11"), ymd("2021-01-11"),
+    "P01",    "ONCE",    ymd("2021-01-14"), ymd("2021-01-14"),
+    "P01",    "ONCE",    ymd("2021-01-15"), ymd("2021-01-15"),
+    "P01",    "ONCE",    ymd("2021-01-29"), ymd("2021-01-29"),
+    "P02",    "ONCE",    ymd("2021-02-02"), ymd("2021-02-02")
   )
 
   expect_dfs_equal(
