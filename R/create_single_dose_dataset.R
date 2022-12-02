@@ -255,6 +255,9 @@ dose_freq_lookup <- tibble::tribble(
 #'   `CONVERSION_FACTOR` is used to convert into days the time object
 #'   to be added to `start_date`.
 #'
+#'   Observations with dose frequency `"ONCE"` are copied to the output dataset
+#'   unchanged.
+#'
 #' @author Michael Thorpe, Andrew Smith
 #'
 #' @family create_aux
@@ -362,6 +365,11 @@ create_single_dose_dataset <- function(dataset,
   lookup <- lookup_table %>%
     rename(!!dose_freq := !!lookup_column)
 
+  # Observations with frequency ONCE are copied unchanged to the output dataset
+  data_once <- filter(dataset, !!dose_freq == "ONCE")
+
+  data_not_once <- filter(dataset, !!dose_freq != "ONCE")
+
   # Check that NAs do not appear in start_date or start_datetime or end_date or end_datetime columns
   condition <- paste0("is.na(", as_name(start_date), ") | is.na(", as_name(end_date), ")")
   if (!quo_is_null(start_datetime)) {
@@ -370,7 +378,7 @@ create_single_dose_dataset <- function(dataset,
   if (!quo_is_null(end_datetime)) {
     condition <- paste(condition, "| is.na(", as_name(end_datetime), ")")
   }
-  na_check <- dataset %>%
+  na_check <- data_not_once %>%
     filter(!!parse_expr(condition)) %>%
     select(!!start_date, !!end_date, !!start_datetime, !!end_datetime)
 
@@ -389,7 +397,7 @@ create_single_dose_dataset <- function(dataset,
 
   # Check values of lookup vs. data and return error if values are not covered
 
-  value_check <- dataset %>%
+  value_check <- data_not_once %>%
     select(!!dose_freq) %>%
     anti_join(lookup, by = as.character(quo_get_expr(dose_freq))) %>%
     unique()
@@ -410,12 +418,6 @@ create_single_dose_dataset <- function(dataset,
 
   # Use compute_duration to determine the number of completed dose periods
 
-  dataset_part_1 <- dataset %>%
-    filter(!!dose_freq == "ONCE")
-
-  dataset_part_2 <- dataset %>%
-    filter(!!dose_freq != "ONCE")
-
   if (quo_is_null(start_datetime)) {
     min_hour_cases <- exprs(FALSE ~ 0)
   } else {
@@ -428,13 +430,13 @@ create_single_dose_dataset <- function(dataset,
       )
     )
   }
-  dataset_part_2 <- left_join(
-    dataset_part_2,
+  data_not_once <- left_join(
+    data_not_once,
     lookup,
     by = as.character(quo_get_expr(dose_freq))
   )
 
-  if (any(dataset_part_2$DOSE_WINDOW %in% c("MINUTE", "HOUR")) &
+  if (any(data_not_once$DOSE_WINDOW %in% c("MINUTE", "HOUR")) &
     (quo_is_null(start_datetime) | quo_is_null(end_datetime))) {
     abort(
       paste(
@@ -445,7 +447,7 @@ create_single_dose_dataset <- function(dataset,
     )
   }
 
-  dataset_part_2 <- dataset_part_2 %>%
+  data_not_once <- data_not_once %>%
     mutate(dose_periods = case_when(
       !!!min_hour_cases,
       DOSE_WINDOW == "DAY" ~ compute_duration(!!start_date, !!end_date, out_unit = "days"),
@@ -458,11 +460,11 @@ create_single_dose_dataset <- function(dataset,
 
   # Generate a row for each completed dose
 
-  dataset_part_2 <- dataset_part_2[rep(row.names(dataset_part_2), dataset_part_2$dose_count), ]
+  data_not_once <- data_not_once[rep(row.names(data_not_once), data_not_once$dose_count), ]
 
   # Determine amount of days to adjust start_date or start_datetime and end_date or end_datetime
 
-  dataset_part_2 <- dataset_part_2 %>%
+  data_not_once <- data_not_once %>%
     group_by(grpseq, !!dose_freq, !!start_date, !!end_date) %>%
     mutate(time_increment = (row_number() - 1) / (DOSE_COUNT)) %>%
     ungroup() %>%
@@ -484,28 +486,28 @@ create_single_dose_dataset <- function(dataset,
   # Adjust start_date and end_date, drop calculation columns, make sure nothing
   # later than end_date shows up in output
 
-  dataset_part_2 <- dataset_part_2 %>%
+  data_not_once <- data_not_once %>%
     mutate(
       !!dose_freq := "ONCE",
       !!start_date := !!start_date + time_differential_dt
     )
   if (!quo_is_null(start_datetime)) {
-    dataset_part_2 <-
+    data_not_once <-
       mutate(
-        dataset_part_2,
+        data_not_once,
         !!start_datetime := !!start_datetime + time_differential
       )
   }
 
-  dataset_part_2 <- dataset_part_2 %>%
+  data_not_once <- data_not_once %>%
     filter(!(!!start_date > !!end_date)) %>%
     mutate(
       !!end_date := !!start_date
     )
   if (!quo_is_null(end_datetime)) {
-    dataset_part_2 <-
+    data_not_once <-
       mutate(
-        dataset_part_2,
+        data_not_once,
         !!end_datetime := case_when(
           DOSE_WINDOW %in% c("MINUTE", "HOUR") ~ !!start_datetime,
           DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
@@ -513,10 +515,10 @@ create_single_dose_dataset <- function(dataset,
         )
       )
   }
-  dataset_part_2 <- select(dataset_part_2, !!!vars(all_of(col_names)))
+  data_not_once <- select(data_not_once, !!!vars(all_of(col_names)))
 
   # Stitch back together
 
-  bind_rows(dataset_part_1, dataset_part_2) %>%
+  bind_rows(data_once, data_not_once) %>%
     select(!!!keep_source_vars)
 }

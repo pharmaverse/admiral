@@ -90,6 +90,9 @@ which has been corrected (#1473)
 
 - Templates now save datasets as `.rds` instead of `.rda` (#1501)
 
+- Function `create_single_dose_dataset()` no longer fails if the input dataset
+contains observations with dose frequency `"ONCE"` (#1375).
+
 # admiral 0.8.4
 
 - Fixed a bug where a recent update to `{lifecylce}` caused several `admiral` tests to break (#1500)

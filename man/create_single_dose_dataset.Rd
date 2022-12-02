@@ -100,6 +100,9 @@ calculated with \code{compute_duration} and multiplied by \code{DOSE_COUNT}.
 For \code{DOSE_WINDOW} values of \code{"WEEK"}, \code{"MONTH"}, and \code{"YEAR"},
 \code{CONVERSION_FACTOR} is used to convert into days the time object
 to be added to \code{start_date}.
+
+Observations with dose frequency \code{"ONCE"} are copied to the output dataset
+unchanged.
 }
 \examples{
 # Example with default lookup
