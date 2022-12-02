@@ -35,6 +35,7 @@ Authors@R: c(
     person("Nick", "Ramirez", role = "ctb"),
     person("Pavan", "Kumar", role = "ctb"),
     person("Hamza", "Rahal", role = "ctb"),
+    person("Yohann", "Omnes", role = "ctb"),
     person("Alice", "Ehmann", role = "ctb"),
     person("Tom", "Ratford", role = "ctb"),
     person("Vignesh", "Thanikachalam", role = "ctb"),

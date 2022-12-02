@@ -58,6 +58,7 @@ Other contributors:
   \item Nick Ramirez [contributor]
   \item Pavan Kumar [contributor]
   \item Hamza Rahal [contributor]
+  \item Yohann Omnes [contributor]
   \item Alice Ehmann [contributor]
   \item Tom Ratford [contributor]
   \item Vignesh Thanikachalam [contributor]
