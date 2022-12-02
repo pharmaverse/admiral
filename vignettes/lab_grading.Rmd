@@ -26,9 +26,9 @@ Within the ADLB ADaM data set there is a concept of lab grading, where there is
 a set of criteria for particular lab tests that grade the severity or abnormality of 
 a lab value. The grades are from 0 to 4, where grade 0 can be viewed generally as a 
 “NORMAL” value. The higher the grade the more severe or more abnormal the lab value is.
-There are several sets of lab grading criteria, for the initial implementation of lab
-grading we will look at NCI-CTCAEv4. (In future releases `{admiral}` look to implement
-further grading criteria, for example NCI-CTCAEv5)
+There are several sets of lab grading criteria, currently `{admiral}` has implemented
+NCI-CTCAEv4 and NCI-CTCAEv5 grading criteria. In future releases `{admiral}` may look
+to implement further grading criteria.
 
 The NCI-CTCAE version 4 and 5 grading criteria can be found 
 here: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm .
@@ -36,6 +36,8 @@ here: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.ht
 The NCI-CTCAEv4 criteria can be found under the heading
 [**Common Terminology Criteria for Adverse Events (CTCAE)v4.0**](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm#ctc_40)
 
+The NCI-CTCAEv5 criteria can be found under the heading
+[**Common Terminology Criteria for Adverse Events (CTCAE)v5.0**](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm#ctc_50)
 
 # Grading metadata
 
@@ -76,7 +78,7 @@ Variable | Scope |  Type | Example Value
 ```{r message=FALSE}
 library(admiral)
 library(admiral.test)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(stringr)
 library(tibble)
 
@@ -98,6 +100,21 @@ The list of terms defined in the `{admiral}` metadata to implement NCI-CTCAEv4 i
 
 ```{r, eval=TRUE, echo=FALSE}
 atoxgr_criteria_ctcv4 %>%
+  filter(!is.na(TERM)) %>%
+  dataset_vignette(
+    display_vars = vars(TERM)
+  )
+```
+<br>
+
+<br>
+Likewise, the list of terms defined in the `{admiral}` metadata to implement NCI-CTCAEv5 is below:
+(Terms identical to NCI-CTCAEv4, except `Hyperglycemia`, `Hyperglycemia (Fasting)` and `Hypophosphatemia`)
+which are not present in NCI-CTCAEv5.
+<br>
+
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv5 %>%
   filter(!is.na(TERM)) %>%
   dataset_vignette(
     display_vars = vars(TERM)
@@ -223,19 +240,24 @@ adlb <- adlb %>%
 ```
 
 It is now straightforward to create the grade, for low lab values the grade will
-be held in `ATOXGRL` and for high lab values the grade will be held in `ATOXGRH`
+be held in `ATOXGRL` and for high lab values the grade will be held in `ATOXGRH`.
+
+Note: for NCICTCAEv5 grading, you would update `meta_criteria` parameter to
+`atoxgr_criteria_ctcv5`.
 
 ```{r, eval=TRUE}
 adlb <- adlb %>%
   derive_var_atoxgr_dir(
     new_var = ATOXGRL,
     tox_description_var = ATOXDSCL,
+    meta_criteria = atoxgr_criteria_ctcv4,
     criteria_direction = "L",
     get_unit_expr = extract_unit(PARAM)
   ) %>%
   derive_var_atoxgr_dir(
     new_var = ATOXGRH,
     tox_description_var = ATOXDSCH,
+    meta_criteria = atoxgr_criteria_ctcv4,
     criteria_direction = "H",
     get_unit_expr = extract_unit(PARAM)
   )
@@ -243,8 +265,8 @@ adlb <- adlb %>%
 
 Note: `{admiral}` does not grade 'Anemia' or 'Hemoglobin Increased' because the metadata is 
 based on the SI unit of 'g/L', however the CDISC data has SI unit of 'mmol/L'.
-Please see `SI_UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctcv4`, the metadata
-is in the data folder of `{admiral}`.
+Please see `SI_UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctcv4` or 
+`atoxgr_criteria_ctcv5`, the metadata is in the data folder of `{admiral}`.
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -276,7 +298,7 @@ adlb %>%
 ```
 
 
-# NCI-CTCAEV4 implementation
+# NCI-CTCAEV4 implementation{#implement_ctcv4}
 
 ## Terms graded
 
@@ -398,7 +420,7 @@ put in the `COMMENT` field.
 <br>
 ```{r, eval=TRUE, echo=FALSE}
 atoxgr_criteria_ctcv4 %>%
-  filter(str_detect(TERM, "Hypouricemia")) %>%
+  filter(str_detect(TERM, "Hyperuricemia")) %>%
   dataset_vignette(
     display_vars = vars(TERM, Grade_1, Grade_3, COMMENT)
   )
@@ -419,9 +441,170 @@ atoxgr_criteria_ctcv4 %>%
 ```
 <br>
 
+# NCI-CTCAEV5 implementation {#implement_ctcv5}
+
+## Terms graded
+
+Grading is implemented for those lab tests where a lab value is included in the grading definition,
+`{admiral}` does NOT try to read any other data to determine the grade, and only the ADLB VAD is used.
+The following CTCAE v5.0 SOC values were identified for grading, these are “Investigations", 
+“Metabolism and nutrition disorders” and “Blood and lymphatic system disorders”.
+
+From these SOC values the following terms criteria is implemented in `{admiral}` 
+
+From SOC = “Investigations" there are 21 CTCAE v5.0 Terms:
+
+  + Activated partial thromboplastin time prolonged
+  + Alanine aminotransferase increased
+  + Alkaline phosphatase increased
+  + Aspartate aminotransferase increased
+  + Blood bilirubin increased
+  + CD4 lymphocytes decreased
+  + Cholesterol high
+  + CPK increased
+  + Creatinine increased
+  + Fibrinogen decreased
+  + GGT increased
+  + Haptoglobin decreased
+  + Hemoglobin increased
+  + INR increased
+  + Lipase increased
+  + Lymphocyte count decreased
+  + Lymphocyte count increased
+  + Neutrophil count decreased
+  + Platelet count decreased
+  + Serum amylase increased
+  + White blood cell decreased
+  
+Note: These are the same terms identified for NCI-CTCAEv4.
+
+From the SOC =  “Metabolism and nutrition disorders” there are 12 CTCAE v4.0 Terms:
+
+  + Hypercalcemia
+  + Hyperkalemia
+  + Hypermagnesemia
+  + Hypernatremia
+  + Hypertriglyceridemia
+  + Hyperuricemia
+  + Hypoalbuminemia
+  + Hypocalcemia
+  + Hypoglycemia
+  + Hypokalemia
+  + Hypomagnesemia
+  + Hyponatremia
+
+Note: These are the same terms identified for NCI-CTCAEv4, except "Hypophosphatemia"
+and "Hyperglycemia" which are not in NCICTCAEv5 grading criteria.
+
+From the SOC =  “Blood and lymphatic system disorders” there are 2 CTCAE v4.0 Terms:
+
+  + Anemia
+  + Leukocytosis
+
+Note: These are the same terms identified for NCI-CTCAEv4.
+
+## Updates made to TERM
+
+For terms "Hypocalcemia" and "Hypercalcemia" the criteria is provided for Calcium and Ionized Calcium,
+therefore `{admiral}` created a row for each in the metadata, this is noted in the COMMENT variable of
+the metadata:
+<br>
+
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv5 %>%
+  filter(str_detect(TERM, "calcemia")) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, COMMENT)
+  )
+```
+<br>
+
+## Assumptions made when grading
+
+For term "INR Increased" there is the following criteria:
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+
+atoxgr_criteria_ctcv5 %>%
+  filter(str_detect(TERM, "INR")) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, Grade_1)
+  )
+```
+<br>
+
+`{admiral}` assumed worst case and used both parts of the criteria for grading, so comparing
+lab value against ULN and also BASE. The decision made was put in the `COMMENT` field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv5 %>%
+  filter(str_detect(TERM, "INR")) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, COMMENT)
+  )
+```
+<br>
+Similarly, for terms "Lipase Increased" and "Serum amylase increased" there is the following criteria:
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+
+atoxgr_criteria_ctcv5 %>%
+  filter(str_detect(TERM, "INR") | str_detect(TERM, "amylase")) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, Grade_2, Grade_3, Grade_4)
+  )
+```
+<br>
+
+`{admiral}` assumed worst case and implemented highest grade possible. 
+The decision made was put in the `COMMENT` field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv5 %>%
+  filter(str_detect(TERM, "INR") | str_detect(TERM, "amylase")) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, COMMENT)
+  )
+```
+<br>
+
+For TERM "Hyperuricemia", the criteria for Grade 1 and Grade 3 is the same with respect
+to the lab value, so worse case is assumed as grade 3. The decision made was 
+put in the `COMMENT` field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv5 %>%
+  filter(str_detect(TERM, "Hyperuricemia")) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, Grade_1, Grade_3, COMMENT)
+  )
+```
+<br>
+
+A similar approach was taken for TERM "Hypokalemia" and "Hyponatremia". For "Hypokalemia",
+where Grade 1 and Grade 2 criteria is the same with respect to the lab value, then worse case
+is assumed as grade 2. For "Hyponatremia", where Grade 2 and Grade 2 criteria is the same with
+respect to the lab value, then worse case is assumed as grade 3.
+The decision made was put in the `COMMENT` field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_ctcv5 %>%
+  filter(str_detect(TERM, "Hypokalemia") | str_detect(TERM, "Hyponatremia")) %>%
+  dataset_vignette(
+    display_vars = vars(TERM, Grade_1, Grade_2, Grade_3, COMMENT)
+  )
+```
+<br>
+
 # Conclusion
 
-In future releases `{admiral}` will implement further grading criteria, with NCI-CTCAE v5
-being the priority. Providing tools for users to easily interact with the metadata to 
-update criteria, based on their companies needs will also be looked at. Ideally, users should
-be able to create their own metadata for company specific grading schemes.
+With NCI-CTCAEv4 and NCI-CTCAEv5 now implemented, {admiral} may look to implement other
+industry standard grading criteria. Providing tools for users to easily interact with
+the metadata to update criteria, based on their companies needs will also be looked at. 
+Ideally, users should be able to create their own metadata for company specific grading schemes.

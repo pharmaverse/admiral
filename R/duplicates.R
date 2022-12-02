@@ -1,6 +1,4 @@
-.datasets <- new.env(parent = emptyenv())
-
-#' Get Duplicate Records that Lead to a Prior Error
+#' Get Duplicate Records that Led to a Prior Error
 #'
 #' @export
 #'
@@ -33,7 +31,7 @@
 #'
 #' get_duplicates_dataset()
 get_duplicates_dataset <- function() {
-  .datasets$duplicates
+  admiral_environment$duplicates
 }
 
 #' Extract Duplicate Records
@@ -110,7 +108,7 @@ signal_duplicate_records <- function(dataset,
 
   duplicate_records <- extract_duplicate_records(dataset, by_vars)
   if (nrow(duplicate_records) >= 1L) {
-    .datasets$duplicates <- structure(
+    admiral_environment$duplicates <- structure(
       duplicate_records,
       class = union("duplicates", class(duplicate_records)),
       by_vars = vars2chr(by_vars)

@@ -48,8 +48,9 @@
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' data("queries")
-#' adae <- tibble::tribble(
+#' adae <- tribble(
 #'   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
 #'   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
 #'   3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
@@ -222,7 +223,6 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #' data("queries")
 #' assert_valid_queries(queries, "queries")
 assert_valid_queries <- function(queries, queries_name) {
-
   # check required columns
   assert_has_variables(
     queries,

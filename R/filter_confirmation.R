@@ -385,9 +385,9 @@ filter_confirmation <- function(dataset,
 #' @examples
 #'
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral)
-#' data <- tibble::tribble(
+#' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
 #'   "1",      1,        "PR",
 #'   "1",      2,        "CR",
@@ -431,7 +431,7 @@ count_vals <- function(var, val) {
 #' @examples
 #'
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral)
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
@@ -481,7 +481,7 @@ min_cond <- function(var, cond) {
 #' @examples
 #'
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral)
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,

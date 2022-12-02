@@ -81,7 +81,9 @@ The analysis value of the new parameter is derived as
 \deqn{BMI = \frac{WEIGHT}{HEIGHT^2}}
 }
 \examples{
-advs <- tibble::tribble(
+library(tibble)
+
+advs <- tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 147,   "SCREENING",
   "01-701-1015", "WEIGHT", "Weight (kg)", 54.0,  "SCREENING",
@@ -109,12 +111,13 @@ derive_param_bmi(
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_extreme_records}()},
+\code{\link{derive_locf_records}()},
 \code{\link{derive_param_bsa}()},
 \code{\link{derive_param_computed}()},
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_extreme_event}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

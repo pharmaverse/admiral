@@ -131,11 +131,12 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(tibble)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
 #' # Derive a new parameter for measurable disease at baseline
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID,
 #'   "1",
 #'   "2",
@@ -143,7 +144,7 @@
 #' ) %>%
 #'   mutate(STUDYID = "XX1234")
 #'
-#' tu <- tibble::tribble(
+#' tu <- tribble(
 #'   ~USUBJID, ~VISIT,      ~TUSTRESC,
 #'   "1",      "SCREENING", "TARGET",
 #'   "1",      "WEEK 1",    "TARGET",
@@ -178,7 +179,7 @@ derive_param_exist_flag <- function(dataset = NULL,
                                     missing_value = NA_character_,
                                     filter_add = NULL,
                                     aval_fun = yn_to_numeric,
-                                    subject_keys = vars(STUDYID, USUBJID),
+                                    subject_keys = get_admiral_option("subject_keys"),
                                     set_values_to) {
   # Check input parameters
   condition <- assert_filter_cond(enquo(condition))

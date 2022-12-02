@@ -3,11 +3,9 @@
 \docType{import}
 \name{reexports}
 \alias{reexports}
-\alias{filter_if}
-\alias{negate_vars}
-\alias{vars2chr}
 \alias{vars}
 \alias{desc}
+\alias{\%>\%}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -15,8 +13,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{admiraldev}{\code{\link[admiraldev]{filter_if}}, \code{\link[admiraldev]{negate_vars}}, \code{\link[admiraldev]{vars2chr}}}
-
   \item{dplyr}{\code{\link[dplyr]{desc}}, \code{\link[dplyr]{vars}}}
+
+  \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
 }}
 

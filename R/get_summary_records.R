@@ -59,8 +59,10 @@
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
-#' adeg <- tibble::tribble(
+#'
+#' adeg <- tribble(
 #'   ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
 #'   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
 #'   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
@@ -91,7 +93,7 @@
 #'   set_values_to = vars(DTYPE = "AVERAGE")
 #' )
 #'
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~VSSEQ, ~PARAM, ~AVAL, ~VSSTRESU, ~VISIT, ~VSDTC,
 #'   "XYZ-001-001", 1164, "Weight", 99, "kg", "Screening", "2018-03-19",
 #'   "XYZ-001-001", 1165, "Weight", 101, "kg", "Run-In", "2018-03-26",
@@ -118,7 +120,7 @@
 #'   )
 #'
 #' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
-#' adeg <- tibble::tribble(
+#' adeg <- tribble(
 #'   ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
 #'   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
 #'   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
@@ -141,7 +143,7 @@
 #' get_summary_records(
 #'   adeg,
 #'   by_vars = vars(USUBJID, PARAM, AVISIT),
-#'   filter = dplyr::n() > 2,
+#'   filter = n() > 2,
 #'   analysis_var = AVAL,
 #'   summary_fun = function(x) mean(x, na.rm = TRUE),
 #'   set_values_to = vars(DTYPE = "AVERAGE")
@@ -151,7 +153,7 @@ get_summary_records <- function(dataset,
                                 filter = NULL,
                                 analysis_var,
                                 summary_fun,
-                                set_values_to) {
+                                set_values_to = NULL) {
   assert_vars(by_vars)
   analysis_var <- assert_symbol(enquo(analysis_var))
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)

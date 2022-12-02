@@ -45,9 +45,9 @@ Function applies the following rules:
 }
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
+library(tibble)
 
-adlb <- tibble::tribble(
+adlb <- tribble(
   ~ATOXDSCL,          ~ATOXDSCH,        ~ATOXGRL,      ~ATOXGRH,
   "Hypoglycemia",     "Hyperglycemia",  NA_character_, "0",
   "Hypoglycemia",     "Hyperglycemia",  "0",           "1",

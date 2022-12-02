@@ -16,7 +16,7 @@ is set to the name of the query in the SMQ/SDG database.
 
 \emph{Permitted Values}: A character scalar or the \code{auto} keyword. The \code{auto}
 keyword is permitted only for queries which are defined by an
-\code{smq_select()} or \code{sdg_select()} object.}
+\code{basket_select()} object.}
 
 \item{id}{The value is used to populate \code{QUERY_ID} in the output dataset of
 \code{create_query_data()}. If the \code{auto} keyword is specified, the variable is
@@ -24,12 +24,12 @@ set to the id of the query in the SMQ/SDG database.
 
 \emph{Permitted Values}: A integer scalar or the \code{auto} keyword. The \code{auto}
 keyword is permitted only for queries which are defined by an
-\code{smq_select()} or \code{sdg_select()} object.}
+\code{basket_select()} object.}
 
 \item{add_scope_num}{Determines if  \code{QUERY_SCOPE_NUM} in the output dataset
 of \code{create_query_data()} is populated
 
-If the parameter is set to \code{TRUE}, the definition must be an \code{smq_select()}
+If the parameter is set to \code{TRUE}, the definition must be an \code{basket_select()}
 object.
 
 \emph{Default}: \code{FALSE}
@@ -38,11 +38,9 @@ object.
 
 \item{definition}{Definition of terms belonging to the query
 
-There are four different ways to define the terms:
+There are three different ways to define the terms:
 \itemize{
-\item An \code{smq_select()} object is specified to select a query from the SMQ
-database.
-\item An \code{sdg_select()} object is specified to select a query from the SDG
+\item An \code{basket_select()} object is specified to select a query from the SMQ
 database.
 \item A data frame with columns \code{TERM_LEVEL} and \code{TERM_NAME} or \code{TERM_ID} can
 be specified to define the terms of a customized query. The \code{TERM_LEVEL}
@@ -56,13 +54,13 @@ to the value the variable. If it refers to a numeric variable, \code{TERM_ID}
 should be set to the value of the variable. If only character variables
 or only numeric variables are used, \code{TERM_ID} or \code{TERM_NAME} respectively
 can be omitted.
-\item A list of data frames and \code{smq_select()} objects can be specified to
+\item A list of data frames and \code{basket_select()} objects can be specified to
 define a customized query based on custom terms and SMQs. The data frames
 must have the same structure as described for the previous item.
 }
 
-\emph{Permitted Values}: an \code{smq_select()} object, an \code{sdg_select()} object, a
-data frame, or a list of data frames and \code{smq_select()} objects.}
+\emph{Permitted Values}: an \code{basket_select()} object, a
+data frame, or a list of data frames and \code{basket_select()} objects.}
 }
 \value{
 An object of class \code{query}.
@@ -76,15 +74,16 @@ as input to \code{create_query_data()}.
 
 # create a query for an SMQ
 library(tibble)
-library(magrittr, warn.conflicts = FALSE)
 library(dplyr, warn.conflicts = FALSE)
 
+# create a query for a SMQ
 query(
   prefix = "SMQ02",
   id = auto,
-  definition = smq_select(
+  definition = basket_select(
     name = "Pregnancy and neonatal topics (SMQ)",
-    scope = "NARROW"
+    scope = "NARROW",
+    type = "smq"
   )
 )
 
@@ -92,8 +91,10 @@ query(
 query(
   prefix = "SDG01",
   id = auto,
-  definition = sdg_select(
-    name = "5-aminosalicylates for ulcerative colitis"
+  definition = basket_select(
+    name = "5-aminosalicylates for ulcerative colitis",
+    scope = NA_character_,
+    type = "sdg"
   )
 )
 
@@ -117,41 +118,42 @@ query(
   name = "Special issues of interest",
   definition = list(
     cqterms,
-    smq_select(
+    basket_select(
       name = "Pregnancy and neonatal topics (SMQ)",
-      scope = "NARROW"
+      scope = "NARROW",
+      type = "smq"
     ),
-    smq_select(
+    basket_select(
       id = 8050L,
-      scope = "BROAD"
+      scope = "BROAD",
+      type = "smq"
     )
   )
 )
 }
 \seealso{
-\code{\link[=create_query_data]{create_query_data()}}, \code{\link[=smq_select]{smq_select()}}, \code{\link[=sdg_select]{sdg_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
+\code{\link[=create_query_data]{create_query_data()}}, \code{\link[=basket_select]{basket_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
 
 Source Specifications: 
 \code{\link{assert_db_requirements}()},
 \code{\link{assert_terms}()},
 \code{\link{assert_valid_queries}()},
+\code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
-\code{\link{derive_var_dthcaus}()},
+\code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{filter_date_sources}()},
-\code{\link{format.sdg_select}()},
-\code{\link{format.smq_select}()},
+\code{\link{format.basket_select}()},
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
 \code{\link{sdg_select}()},
 \code{\link{smq_select}()},
 \code{\link{tte_source}()},
-\code{\link{validate_query}()},
-\code{\link{validate_sdg_select}()},
-\code{\link{validate_smq_select}()}
+\code{\link{validate_basket_select}()},
+\code{\link{validate_query}()}
 }
 \author{
 Stefan Bundfuss

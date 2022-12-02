@@ -10,7 +10,7 @@ derive_var_extreme_dtm(
   ...,
   source_datasets,
   mode,
-  subject_keys = vars(STUDYID, USUBJID)
+  subject_keys = get_admiral_option("subject_keys")
 )
 }
 \arguments{
@@ -183,7 +183,8 @@ ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_disposition_reason}()}
+\code{\link{derive_vars_disposition_reason}()},
+\code{\link{derive_vars_period}()}
 }
 \author{
 Stefan Bundfuss, Thomas Neitmann

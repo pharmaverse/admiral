@@ -58,9 +58,10 @@
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #'
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
 #'   "01-701-1015", "PULSE", "Pulse (beats/min)", 59, "BASELINE",
 #'   "01-701-1015", "PULSE", "Pulse (beats/min)", 61, "WEEK 2",
@@ -267,7 +268,9 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #' @export
 #'
 #' @examples
-#' advs <- tibble::tribble(
+#' library(tibble)
+#'
+#' advs <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
 #'   "01-701-1015", "HEIGHT", "Height (cm)", 170, "BASELINE",
 #'   "01-701-1015", "WEIGHT", "Weight (kg)", 75, "BASELINE",
@@ -500,7 +503,9 @@ compute_bsa <- function(height = height,
 #' @export
 #'
 #' @examples
-#' advs <- tibble::tribble(
+#' library(tibble)
+#'
+#' advs <- tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVISIT,
 #'   "01-701-1015", "HEIGHT", "Height (cm)", 147,   "SCREENING",
 #'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.0,  "SCREENING",

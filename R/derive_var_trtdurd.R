@@ -41,9 +41,12 @@
 #' @seealso [derive_vars_duration()]
 #'
 #' @examples
-#' data <- tibble::tribble(
+#' library(tibble)
+#' library(lubridate)
+#'
+#' data <- tribble(
 #'   ~TRTSDT, ~TRTEDT,
-#'   lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-24")
+#'   ymd("2020-01-01"), ymd("2020-02-24")
 #' )
 #'
 #' derive_var_trtdurd(data)

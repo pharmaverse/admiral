@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_basetype.R
 \name{derive_var_basetype}
 \alias{derive_var_basetype}
-\title{Derive BASETYPE Variable}
+\title{Derive Basetype Variable}
 \usage{
 derive_var_basetype(dataset, basetypes)
 }
@@ -40,7 +40,11 @@ expression. Then, all subsets are stacked. Records which do not match any
 condition are kept and \code{BASETYPE} is set to \code{NA}.
 }
 \examples{
-bds <- tibble::tribble(
+library(tibble)
+library(dplyr, warn.conflicts = FALSE)
+library(rlang)
+
+bds <- tribble(
   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
   "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
   "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
@@ -57,7 +61,7 @@ bds <- tibble::tribble(
 
 bds_with_basetype <- derive_var_basetype(
   dataset = bds,
-  basetypes = rlang::exprs(
+  basetypes = exprs(
     "RUN-IN" = EPOCH \%in\% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
     "DOUBLE-BLIND" = EPOCH \%in\% c("DOUBLE-BLIND", "OPEN-LABEL"),
     "OPEN-LABEL" = EPOCH == "OPEN-LABEL"
@@ -69,11 +73,11 @@ bds_with_basetype <- derive_var_basetype(
 # bds_with_basetype
 print(bds_with_basetype, n = Inf)
 
-dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
+count(bds_with_basetype, BASETYPE, name = "Number of Records")
 
 # An example where all parameter records need to be included for 2 different
 # baseline type derivations (such as LAST and WORST)
-bds <- tibble::tribble(
+bds <- tribble(
   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
   "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
   "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
@@ -83,7 +87,7 @@ bds <- tibble::tribble(
 
 bds_with_basetype <- derive_var_basetype(
   dataset = bds,
-  basetypes = rlang::exprs(
+  basetypes = exprs(
     "LAST" = TRUE,
     "WORST" = TRUE
   )
@@ -91,7 +95,7 @@ bds_with_basetype <- derive_var_basetype(
 
 print(bds_with_basetype, n = Inf)
 
-dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
+count(bds_with_basetype, BASETYPE, name = "Number of Records")
 }
 \seealso{
 BDS-Findings Functions that returns variable appended to dataset: 
