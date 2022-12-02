@@ -10,7 +10,7 @@ get_summary_records(
   filter = NULL,
   analysis_var,
   summary_fun,
-  set_values_to
+  set_values_to = NULL
 )
 }
 \arguments{
@@ -67,8 +67,10 @@ to the original dataset observations. If you would like to this instead,
 see the \code{derive_summary_records()} function.
 }
 \examples{
+library(tibble)
 library(dplyr, warn.conflicts = FALSE)
-adeg <- tibble::tribble(
+
+adeg <- tribble(
   ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
@@ -99,7 +101,7 @@ get_summary_records(
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 
-advs <- tibble::tribble(
+advs <- tribble(
   ~USUBJID, ~VSSEQ, ~PARAM, ~AVAL, ~VSSTRESU, ~VISIT, ~VSDTC,
   "XYZ-001-001", 1164, "Weight", 99, "kg", "Screening", "2018-03-19",
   "XYZ-001-001", 1165, "Weight", 101, "kg", "Run-In", "2018-03-26",
@@ -126,7 +128,7 @@ get_summary_records(
   )
 
 # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
-adeg <- tibble::tribble(
+adeg <- tribble(
   ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
@@ -149,7 +151,7 @@ adeg <- tibble::tribble(
 get_summary_records(
   adeg,
   by_vars = vars(USUBJID, PARAM, AVISIT),
-  filter = dplyr::n() > 2,
+  filter = n() > 2,
   analysis_var = AVAL,
   summary_fun = function(x) mean(x, na.rm = TRUE),
   set_values_to = vars(DTYPE = "AVERAGE")
@@ -167,8 +169,11 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_cat}()},
 \code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
+\code{\link{derive_var_relative_flag}()},
 \code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},

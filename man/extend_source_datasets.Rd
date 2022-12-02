@@ -31,17 +31,18 @@ by groups.
 }
 }
 \examples{
+library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 
-adsl <- tibble::tribble(
+adsl <- tribble(
   ~USUBJID, ~TRTSDT,           ~EOSDT,
   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 ) \%>\%
   mutate(STUDYID = "AB42")
 
-ae <- tibble::tribble(
+ae <- tribble(
   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
   "01",     "2021-01-03T10:56", 1,      "Flu",
   "01",     "2021-03-04",       2,      "Cough",
@@ -59,23 +60,22 @@ Source Specifications:
 \code{\link{assert_db_requirements}()},
 \code{\link{assert_terms}()},
 \code{\link{assert_valid_queries}()},
+\code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
-\code{\link{derive_var_dthcaus}()},
+\code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{filter_date_sources}()},
-\code{\link{format.sdg_select}()},
-\code{\link{format.smq_select}()},
+\code{\link{format.basket_select}()},
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
 \code{\link{query}()},
 \code{\link{sdg_select}()},
 \code{\link{smq_select}()},
 \code{\link{tte_source}()},
-\code{\link{validate_query}()},
-\code{\link{validate_sdg_select}()},
-\code{\link{validate_smq_select}()}
+\code{\link{validate_basket_select}()},
+\code{\link{validate_query}()}
 }
 \author{
 Stefan Bundfuss

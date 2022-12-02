@@ -1,4 +1,6 @@
-test_that("duration and unit variable are added", {
+# derive_vars_aage ----
+## Test 1: duration and unit variable are added ----
+test_that("derive_vars_aage Test 1: duration and unit variable are added", {
   input <- tibble::tribble(
     ~BRTHDT, ~RANDDT,
     ymd("1999-09-09"), ymd("2020-02-20")
@@ -8,8 +10,9 @@ test_that("duration and unit variable are added", {
   expect_dfs_equal(derive_vars_aage(input), expected_output, keys = c("BRTHDT", "RANDDT"))
 })
 
-
-test_that("derive_var_age_years works as expected", {
+# derive_var_age_years ----
+## Test 2: derive_var_age_years works as expected ----
+test_that("derive_var_age_years Test 2: derive_var_age_years works as expected", {
   input <- tibble::tibble(
     AGE = c(12, 24, 36, 48, 60),
     AGEU = c("months", "months", "months", "months", "months")
@@ -23,7 +26,8 @@ test_that("derive_var_age_years works as expected", {
   expect_dfs_equal(derive_var_age_years(input, AGE, new_var = AAGE), expected_output, keys = "AGE")
 })
 
-test_that("derive_var_age_years works as expected", {
+## Test 3: derive_var_age_years works as expected ----
+test_that("derive_var_age_years Test 3: derive_var_age_years works as expected", {
   input <- tibble::tibble(AGE = c(12, 24, 36, 48, 60))
 
   expected_output <- mutate(
@@ -37,152 +41,8 @@ test_that("derive_var_age_years works as expected", {
   )
 })
 
-test_that("derive_var_agegr_fda works as expected", {
-  input <- tibble::tibble(AGE = c(10, 17, 18, 50, 64, 65, 80))
-
-  expected_output <- mutate(
-    input,
-    AGEGR_EXP = factor(
-      c("<18", "<18", "18-64", "18-64", "18-64", ">=65", ">=65"),
-      levels = c("<18", "18-64", ">=65"),
-      exclude = NULL
-    )
-  )
-
-  expect_dfs_equal(derive_var_agegr_fda(input, AGE, age_unit = "years", AGEGR_EXP), expected_output,
-    keys = "AGE"
-  )
-})
-
-test_that("derive_var_agegr_fda works with age_unit missing and multiple units in AGEU", {
-  input <- tibble::tibble(
-    AGE = c(10, 17, 18, 50, 64, 65, 80, 85),
-    AGEU = c(
-      "years", "years", "years", "years", "years", "years", "months",
-      "months"
-    )
-  )
-
-  expected_output <- mutate(
-    input,
-    AGEGR_EXP = factor(
-      c("<18", "<18", "18-64", "18-64", "18-64", ">=65", "<18", "<18"),
-      levels = c("<18", "18-64", ">=65"),
-      exclude = NULL
-    )
-  )
-
-  expect_dfs_equal(derive_var_agegr_fda(input, AGE, age_unit = NULL, AGEGR_EXP), expected_output,
-    keys = "AGE"
-  )
-})
-
-test_that("derive_var_agegr_ema works as expected", {
-  input <- tibble::tibble(AGE = c(10, 18, 19, 50, 64, 65, 80, 85))
-
-  expected_output <- mutate(
-    input,
-    AGEGR_EXP = factor(
-      c("2-11 (Children)", "18-64", "18-64", "18-64", "18-64", "65-84", "65-84", ">=85"),
-      levels = c(
-        "0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)",
-        "2-11 (Children)", "12-17 (Adolescents)", "18-64", "65-84", ">=85"
-      ),
-      exclude = NULL
-    )
-  )
-
-  expect_dfs_equal(derive_var_agegr_ema(input, AGE, age_unit = "years", AGEGR_EXP), expected_output,
-    keys = "AGE"
-  )
-})
-
-test_that("derive_var_agegr_ema - works as expected", {
-  input <- tibble::tibble(AGE = c(1, 2, 11, 12, 17, 18))
-
-  expected_output <- mutate(
-    input,
-    AGEGR_EXP = factor(
-      c(
-        "28 days to 23 months (Infants and Toddlers)", "2-11 (Children)",
-        "2-11 (Children)", "12-17 (Adolescents)", "12-17 (Adolescents)",
-        "18-64"
-      ),
-      levels = c(
-        "0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)",
-        "2-11 (Children)", "12-17 (Adolescents)", "18-64", "65-84", ">=85"
-      ),
-      exclude = NULL
-    )
-  )
-
-  expect_dfs_equal(
-    derive_var_agegr_ema(input, AGE, age_unit = "years", AGEGR_EXP),
-    expected_output,
-    keys = "AGE"
-  )
-})
-
-
-test_that("derive_var_agegr_ema works with age_unit missing and multiple units in AGEU (adults)", {
-  input <- tibble::tibble(
-    AGE = c(10, 18, 19, 50, 64, 65, 80, 85),
-    AGEU = c(
-      "years", "years", "years", "years", "years", "years",
-      "months", "years"
-    )
-  )
-
-  expected_output <- mutate(
-    input,
-    AGEGR_EXP = factor(
-      c("2-11 (Children)", "18-64", "18-64", "18-64", "18-64", "65-84", "2-11 (Children)", ">=85"),
-      levels = c(
-        "0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)",
-        "2-11 (Children)", "12-17 (Adolescents)", "18-64", "65-84", ">=85"
-      ),
-      exclude = NULL
-    )
-  )
-
-  expect_dfs_equal(derive_var_agegr_ema(input, AGE, new_var = AGEGR_EXP), expected_output,
-    keys = "AGE"
-  )
-})
-
-test_that("derive_var_agegr_ema - works with age_unit missing and multiple units in AGEU (all)", {
-  input <- tibble::tibble(
-    AGE = c(1, 2, 11, 12, 17, 18, 36, 72, 3),
-    AGEU = c(
-      "years", "years", "years", "years", "years", "years", "months",
-      "months", "weeks"
-    )
-  )
-
-  expected_output <- mutate(
-    input,
-    AGEGR_EXP = factor(
-      c(
-        "28 days to 23 months (Infants and Toddlers)", "2-11 (Children)",
-        "2-11 (Children)", "12-17 (Adolescents)", "12-17 (Adolescents)",
-        "18-64", "2-11 (Children)", "2-11 (Children)", "0-27 days (Newborns)"
-      ),
-      levels = c(
-        "0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)",
-        "2-11 (Children)", "12-17 (Adolescents)", "18-64", "65-84", ">=85"
-      ),
-      exclude = NULL
-    )
-  )
-
-  expect_dfs_equal(
-    derive_var_agegr_ema(input, AGE, new_var = AGEGR_EXP),
-    expected_output,
-    keys = "AGE"
-  )
-})
-
-test_that("derive_var_age_years - Error is thrown when age_unit is not proper unit ", {
+## Test 4: Error is thrown when age_unit is not proper unit ----
+test_that("derive_var_age_years Test 4: Error is thrown when age_unit is not proper unit", {
   input <- data.frame(AGE = c(12, 24, 36, 48))
   expect_error(
     derive_var_age_years(input, AGE, age_unit = "month", new_var = AAGE),
@@ -190,9 +50,106 @@ test_that("derive_var_age_years - Error is thrown when age_unit is not proper un
   )
 })
 
-test_that("derive_var_age_years - Error is issued if age_unit is missing", {
+## Test 5: Error is issued if age_unit is missing ----
+test_that("derive_var_age_years Test 5: Error is issued if age_unit is missing", {
   input <- data.frame(AGE = c(12, 24, 36, 48))
   expect_error(
     derive_var_age_years(input, AGE, new_var = AAGE)
+  )
+})
+
+## Test 6: Warning is issued if age_unit is not null, but the 'unit' variable
+##         corresponding to age_var stores more than one unique value. ----
+test_that("derive_var_age_years Test 6: Warning is issued if age_unit is not
+          null, but the 'unit' variable corresponding to age_var stores more
+          than one unique value.", {
+  input <- tibble::tribble(
+    ~AGE,   ~AGEU,
+    #-------/---------
+    25,     "years",
+    312,    "months",
+    51,     "years",
+    402,    "months",
+    432,    "months"
+  )
+
+  expect_warning(
+    derive_var_age_years(input, AGE, age_unit = "months", new_var = AAGE)
+  )
+})
+
+
+## Test 7: Error is issued if age_unit consists of more than one unique value. ----
+test_that("derive_var_age_years Test 7: Error is issued if age_unit consists of
+          more than one unique value.", {
+  input <- tibble::tribble(
+    ~AGE,   ~AGEU,
+    #-------/---------
+    459,    "months",
+    312,    "months",
+    510,    "months",
+    402,    "months",
+    432,    "months"
+  )
+
+  expect_error(
+    derive_var_age_years(input, AGE, age_unit = c("months", "years"), new_var = AAGE)
+  )
+})
+
+## Test 8: The 'unit' variable corresponding to age_var will be considered as
+##         storing one unique unit, if values differ only by case, i.e.
+##         'months', 'Months', 'MONTHS' considered same unit, etc. ----
+test_that("derive_var_age_years Test 8: The 'unit' variable corresponding to
+          age_var will be considered as storing one unique unit, if values
+          differ only by case, i.e. 'months', 'Months', 'MONTHS' considered same
+          unit, etc.", {
+  # The tibbles "input" and "input2" differ only in the third row: "Months"
+  # versus "months".
+
+  input <- tibble::tribble(
+    ~AGE,   ~AGEU,
+    #-------/---------
+    459,    "months",
+    312,    "months",
+    510,    "Months",
+    402,    "months",
+    432,    "months"
+  )
+
+  input2 <- tibble::tribble(
+    ~AGE,   ~AGEU,
+    #-------/---------
+    459,    "months",
+    312,    "months",
+    510,    "months",
+    402,    "months",
+    432,    "months"
+  )
+
+  expect_equal(
+    derive_var_age_years(input, AGE, age_unit = "months", new_var = AAGE)$AAGE,
+    derive_var_age_years(input2, AGE, age_unit = "months", new_var = AAGE)$AAGE
+  )
+})
+
+## Test 9: Warning is issued if age_unit is not null, but the 'unit' variable
+##         corresponding to age_var stores one unique unit that is not
+##         equivalent to age_unit. ----
+test_that("derive_var_age_years Test 9: Warning is issued if age_unit is not
+          null, but the 'unit' variable corresponding to age_var stores one
+          unique unit that is not equivalent to age_unit.", {
+  input <- tibble::tribble(
+    ~AGE,   ~AGEU,
+    #-------/---------
+    459,    "months",
+    312,    "months",
+    510,    "months",
+    402,    "months",
+    432,    "months"
+  )
+
+  expect_warning(
+    derive_var_age_years(input, AGE, age_unit = "years", new_var = AAGE)
   )
 })

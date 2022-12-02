@@ -37,13 +37,15 @@ The input dataset with ATC variables added
 Add Anatomical Therapeutic Chemical class variables from \code{FACM} to \code{ADCM}
 }
 \examples{
-cm <- tibble::tribble(
+library(tibble)
+
+cm <- tribble(
   ~USUBJID, ~CMGRPID, ~CMREFID, ~CMDECOD,
   "BP40257-1001", "14", "1192056", "PARACETAMOL",
   "BP40257-1001", "18", "2007001", "SOLUMEDROL",
   "BP40257-1002", "19", "2791596", "SPIRONOLACTONE"
 )
-facm <- tibble::tribble(
+facm <- tribble(
   ~USUBJID, ~FAGRPID, ~FAREFID, ~FATESTCD, ~FASTRESC,
   "BP40257-1001", "1", "1192056", "CMATC1CD", "N",
   "BP40257-1001", "1", "1192056", "CMATC2CD", "N02",
@@ -71,8 +73,7 @@ derive_vars_atc(cm, facm)
 }
 \seealso{
 OCCDS Functions: 
-\code{\link{create_query_data}()},
-\code{\link{create_single_dose_dataset}()},
+\code{\link{derive_var_trtemfl}()},
 \code{\link{derive_vars_query}()},
 \code{\link{get_terms_from_db}()}
 }

@@ -38,9 +38,9 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(tibble)
 #'
-#' data <- tibble::tribble(
+#' data <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~SEQ, ~AVAL, ~BASE, ~ANRLO, ~ANRHI,
 #'   "P01", "ALT", 1, 27, 27, 6, 34,
 #'   "P01", "ALT", 2, 41, 27, 6, 34,

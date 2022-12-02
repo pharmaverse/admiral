@@ -145,7 +145,7 @@ format_eoxxstt_default <- function(status) {
 #'     x == "COMPLETED" ~ "COMPLETED",
 #'     x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
 #'     !(x %in% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~
-#'     "DISCONTINUED NOT DUE TO AE",
+#'       "DISCONTINUED NOT DUE TO AE",
 #'     TRUE ~ "ONGOING"
 #'   )
 #' }
@@ -165,7 +165,7 @@ derive_var_disposition_status <- function(dataset,
                                           status_var,
                                           format_new_var = format_eoxxstt_default,
                                           filter_ds,
-                                          subject_keys = vars(STUDYID, USUBJID)) {
+                                          subject_keys = get_admiral_option("subject_keys")) {
   new_var <- assert_symbol(enquo(new_var))
   status_var <- assert_symbol(enquo(status_var))
   filter_ds <- assert_filter_cond(enquo(filter_ds))

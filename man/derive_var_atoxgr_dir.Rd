@@ -8,7 +8,7 @@ derive_var_atoxgr_dir(
   dataset,
   new_var,
   tox_description_var,
-  meta_criteria = atoxgr_criteria_ctcv4,
+  meta_criteria,
   criteria_direction,
   get_unit_expr
 )
@@ -26,10 +26,12 @@ criteria. For example: "Anemia" or "INR Increased".}
 
 \item{meta_criteria}{Metadata data set holding the criteria (normally a case statement)
 
-Default: \code{atoxgr_criteria_ctcv4}
+Permitted Values: atoxgr_criteria_ctcv4, atoxgr_criteria_ctcv5
 
 {admiral} metadata data set \code{atoxgr_criteria_ctcv4} implements
 \href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm}{Common Terminology Criteria for Adverse Events (CTCAE) v4.0}
+{admiral} metadata data set \code{atoxgr_criteria_ctcv5} implements
+\href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm}{Common Terminology Criteria for Adverse Events (CTCAE) v5.0}
 
 The metadata should have the following variables:
 \itemize{
@@ -75,9 +77,9 @@ severe grade
 }
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
+library(tibble)
 
-data <- tibble::tribble(
+data <- tribble(
   ~ATOXDSCL,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
   "Hypoglycemia",                119,    4,        7,      "Glucose (mmol/L)",
   "Hypoglycemia",                120,    4,        7,      "Glucose (mmol/L)",
@@ -95,7 +97,7 @@ derive_var_atoxgr_dir(data,
   get_unit_expr = extract_unit(PARAM)
 )
 
-data <- tibble::tribble(
+data <- tribble(
   ~ATOXDSCH,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
   "Hyperglycemia",               119,    4,        7,      "Glucose (mmol/L)",
   "Hyperglycemia",               120,    4,        7,      "Glucose  (mmol/L)",

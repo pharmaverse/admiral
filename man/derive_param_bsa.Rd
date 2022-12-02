@@ -97,7 +97,9 @@ Adds a record for BSA (Body Surface Area) using the specified derivation method
 for each by group (e.g., subject and visit) where the source parameters are available.
 }
 \examples{
-advs <- tibble::tribble(
+library(tibble)
+
+advs <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 170, "BASELINE",
   "01-701-1015", "WEIGHT", "Weight (kg)", 75, "BASELINE",
@@ -135,12 +137,13 @@ derive_param_bsa(
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_extreme_records}()},
+\code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
 \code{\link{derive_param_computed}()},
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_extreme_event}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

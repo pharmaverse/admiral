@@ -94,9 +94,10 @@ DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
 if it is based on diastolic, systolic blood pressure, and heart rate.
 }
 \examples{
+library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 
-advs <- tibble::tribble(
+advs <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
   "01-701-1015", "PULSE", "Pulse (beats/min)", 59, "BASELINE",
   "01-701-1015", "PULSE", "Pulse (beats/min)", 61, "WEEK 2",
@@ -140,13 +141,14 @@ derive_param_map(
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_extreme_records}()},
+\code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
 \code{\link{derive_param_bsa}()},
 \code{\link{derive_param_computed}()},
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_extreme_event}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_qtc}()},
 \code{\link{derive_param_rr}()},

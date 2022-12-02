@@ -29,6 +29,7 @@ otherwise specified.*
 # Programming Flow
 
 * [Read in Data](#readdata)
+* [Derive Period, Subperiod, and Phase Variables (e.g. `APxxSDT`, `APxxEDT`, ...)](#periodvars)
 * [Derive Treatment Variables (`TRT0xP`, `TRT0xA`)](#treatmentvar)
 * [Derive/Impute Numeric Treatment Date/Time and Duration (`TRTSDT`, `TRTEDT`, `TRTDURD`)](#trtdatetime)
 * [Derive Disposition Variables](#disposition)
@@ -42,7 +43,7 @@ otherwise specified.*
   * [Duration Relative to Death](#death_other)
 * [Derive Last Known Date Alive (`LSTALVDT`)](#lstalvdt)
 * [Derive Groupings and Populations](#groupings)
-  * [Grouping (e.g. `AGEGR1`)](#groupings_ex)
+  * [Grouping (e.g. `AGEGR1` or `REGION1`)](#groupings_ex)
   * [Population Flags (e.g. `SAFFL`)](#popflag)
 * [Derive Other Variables](#other)
 * [Add Labels and Attributes](#attributes)
@@ -59,7 +60,7 @@ For example purpose, the CDISC Pilot SDTM datasets---which are included in
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 library(lubridate)
 library(stringr)
@@ -91,14 +92,27 @@ dataset_vignette(
 )
 ```
 
+## Derive Period, Subperiod, and Phase Variables (e.g. `APxxSDT`, `APxxEDT`, ...) {#periodvars}
+
+See the ["Visit and Period Variables"
+vignette](visits_periods.html#periods_adsl) for more information.
+
+If the variables are not derived based on a period reference dataset, they may
+be derived at a later point of the flow. For example, phases like "Treatment
+Phase" and "Follow up" could be derived based on treatment start and end date.
+
 ## Derive Treatment Variables (`TRT0xP`, `TRT0xA`) {#treatmentvar}
 
-The mapping of the treatment variables is left to the ADaM programmer. An example mapping may be:
+The mapping of the treatment variables is left to the ADaM programmer. An
+example mapping for a study without periods may be:
 
 ```{r eval=TRUE}
 adsl <- dm %>%
   mutate(TRT01P = ARM, TRT01A = ACTARM)
 ```
+
+For studies with periods see the ["Visit and Period Variables"
+vignette](visits_periods.html#treatment_adsl).
 
 ## Derive/Impute Numeric Treatment Date/Time and Duration (`TRTSDTM`, `TRTEDTM`, `TRTDURD`) {#trtdatetime}
 
@@ -463,7 +477,7 @@ src_ae <- dthcaus_source(
 dataset_vignette(
   ae,
   display_vars = vars(USUBJID, AESTDTC, AEENDTC, AEDECOD, AEOUT),
-  filter =  AEOUT == "FATAL"
+  filter = AEOUT == "FATAL"
 )
 ```
 
@@ -699,7 +713,7 @@ adsl <- adsl %>%
 dataset_vignette(
   adsl,
   display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR),
-  filter =  !is.na(TRTSDT)
+  filter = !is.na(TRTSDT)
 )
 ```
  
@@ -710,31 +724,22 @@ dataset_vignette(
 
 Numeric and categorical variables (`AGE`, `RACE`, `COUNTRY`, etc.) may need to be grouped to perform
 the required analysis.
-`{admiral}` does not **currently** have functionality to assist with all required groupings. Some functions exist for age grouping according to FDA or EMA conventions. For others, the user can create his/her own function to meet his/her study requirement.
+`{admiral}` does not **currently** have functionality to assist with all required groupings. So, the user will often need to create his/her own function to meet his/her study requirement. 
 
-To derive `AGEGR1` as categorized `AGE` in `< 18 `, `18-65`, `>= 65` (FDA convention):
+For example, if 
 
-```{r eval=TRUE}
-adsl <- adsl %>%
-  derive_var_agegr_fda(
-    age_var = AGE,
-    new_var = AGEGR1
-  )
-```
+- `AGEGR1` is required to categorize `AGE` into `<18`, `18-64` and `>64`, or
+- `REGION1` is required to categorize `COUNTRY` in `North America`, `Rest of the World`,
 
-However for example if
-
-- `AGEGR2` would categorize `AGE` in `< 65`, `>= 65`,
-- `REGION1` would categorize `COUNTRY` in `North America`, `Rest of the World`,
-
-the user defined function(s) would be like:
+the user defined functions would look like the following:
 
 ```{r eval=TRUE}
-format_agegr2 <- function(var_input) {
+format_agegr1 <- function(var_input) {
   case_when(
-    var_input < 65 ~ "< 65",
-    var_input >= 65 ~ ">= 65",
-    TRUE ~ NA_character_
+    var_input < 18 ~ "<18",
+    between(var_input, 18, 64) ~ "18-64",
+    var_input > 64 ~ ">64",
+    TRUE ~ "Missing"
   )
 }
 
@@ -752,7 +757,7 @@ These functions are then used in a `mutate()` statement to derive the required g
 ```{r eval=TRUE}
 adsl <- adsl %>%
   mutate(
-    AGEGR2 = format_agegr2(AGE),
+    AGEGR1 = format_agegr1(AGE),
     REGION1 = format_region1(COUNTRY)
   )
 ```
@@ -760,7 +765,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = vars(USUBJID, AGE, SEX, COUNTRY, AGEGR1, AGEGR2, REGION1)
+  display_vars = vars(USUBJID, AGE, SEX, COUNTRY, AGEGR1, REGION1)
 )
 ```
 
@@ -795,9 +800,12 @@ The users can add specific code to cover their need for the analysis.
 The following functions are helpful for many ADSL derivations:
 
   - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
-  - `derive_var_merged_cat()` - Merge a Categorization Variable
   - `derive_var_merged_exist_flag()` - Merge an Existence Flag
+  - `derive_var_merged_cat()` - Merge a Categorization Variable
   - `derive_var_merged_character()` - Merge a Character Variable
+  - `derive_var_merged_summary()` - Merge a Summary Variable
+
+See also [Generic Functions](generic.html).
 
 ## Add Labels and Attributes {#attributes}
 
@@ -818,7 +826,8 @@ file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbw
 
 NOTE: All these packages are in the experimental phase, but the vision is to
 have them associated with an End to End pipeline under the umbrella of the
-[pharmaverse](https://github.com/pharmaverse).
+[pharmaverse](https://github.com/pharmaverse). An example of applying metadata 
+and perform associated checks can be found at the [pharmaverse E2E example](https://examples.pharmaverse.org/data/adsl/).
 
 # Example Script 
 
