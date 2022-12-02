@@ -1,4 +1,4 @@
-#' Derive BASETYPE Variable
+#' Derive Basetype Variable
 #'
 #' Baseline Type `BASETYPE` is needed when there is more than one definition of
 #' baseline for a given Analysis Parameter `PARAM` in the same dataset.  For a

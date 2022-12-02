@@ -30,8 +30,12 @@ Authors@R: c(
     person("Jeffrey", "Dickinson", role = "aut"),
     person("Ania", "Golab", role = "aut"),
     person("Michael", "Thorpe", role = "ctb"),
+    person("Declan", "Hodges", role = "ctb"),
+    person("Jaxon", "Abercrombie", role = "ctb"),
+    person("Nick", "Ramirez", role = "ctb"),
     person("Pavan", "Kumar", role = "ctb"),
     person("Hamza", "Rahal", role = "ctb"),
+    person("Yohann", "Omnes", role = "ctb"),
     person("Alice", "Ehmann", role = "ctb"),
     person("Tom", "Ratford", role = "ctb"),
     person("Vignesh", "Thanikachalam", role = "ctb"),
@@ -69,7 +73,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Depends: R (>= 3.5)
 Imports:
-    admiraldev,
+    admiraldev (>= 0.2.0),
     dplyr (>= 0.8.4),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
@@ -81,7 +85,7 @@ Imports:
     tidyr (>= 1.0.2),
     tidyselect (>= 1.1.0)
 Suggests:
-    admiral.test,
+    admiral.test (>= 0.4.0),
     covr,
     devtools,
     DT,
