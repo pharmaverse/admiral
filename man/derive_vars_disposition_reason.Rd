@@ -13,7 +13,7 @@ derive_vars_disposition_reason(
   reason_var_spe = NULL,
   format_new_vars = format_reason_default,
   filter_ds,
-  subject_keys = vars(STUDYID, USUBJID)
+  subject_keys = get_admiral_option("subject_keys")
 )
 }
 \arguments{
@@ -151,7 +151,8 @@ ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{derive_var_extreme_dt}()},
-\code{\link{derive_vars_aage}()}
+\code{\link{derive_vars_aage}()},
+\code{\link{derive_vars_period}()}
 }
 \author{
 Samia Kabi

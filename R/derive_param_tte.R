@@ -239,7 +239,7 @@ derive_param_tte <- function(dataset = NULL,
                              censor_conditions,
                              create_datetime = FALSE,
                              set_values_to,
-                             subject_keys = vars(STUDYID, USUBJID)) {
+                             subject_keys = get_admiral_option("subject_keys")) {
   # checking and quoting #
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
@@ -376,7 +376,7 @@ derive_param_tte <- function(dataset = NULL,
   )
 
   new_param <- new_param %>%
-    mutate(!!date_var := pmax(!!date_var, !!start_var)) %>%
+    mutate(!!date_var := pmax(!!date_var, !!start_var, na.rm = TRUE)) %>%
     remove_tmp_vars()
 
   if (!is.null(by_vars)) {
@@ -498,7 +498,7 @@ derive_param_tte <- function(dataset = NULL,
 #'   source_datasets = list(adsl = adsl, ae = ae),
 #'   by_vars = vars(AEDECOD),
 #'   create_datetime = FALSE,
-#'   subject_keys = vars(STUDYID, USUBJID),
+#'   subject_keys = get_admiral_option("subject_keys"),
 #'   mode = "first"
 #' )
 filter_date_sources <- function(sources,
@@ -598,17 +598,18 @@ filter_date_sources <- function(sources,
 #' @family source_specifications
 #'
 #' @examples
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
 #'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
-#' ae <- tibble::tribble(
+#' ae <- tribble(
 #'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
 #'   "01",     "2021-01-03T10:56", 1,      "Flu",
 #'   "01",     "2021-03-04",       2,      "Cough",
@@ -753,6 +754,7 @@ tte_source <- function(dataset_name,
 #'
 #' @examples
 #' # Death event
+#'
 #' event_source(
 #'   dataset_name = "adsl",
 #'   filter = DTHFL == "Y",
@@ -798,6 +800,7 @@ event_source <- function(dataset_name,
 #'
 #' @examples
 #' # Last study date known alive censor
+#'
 #' censor_source(
 #'   dataset_name = "adsl",
 #'   date = LSTALVDT,
@@ -822,38 +825,6 @@ censor_source <- function(dataset_name,
   class(out) <- c("censor_source", class(out))
   out
 }
-
-#' Print `tte_source` Objects
-#'
-#' @param x A `tte_source` object
-#' @param ... Not used
-#'
-#' @return No return value, called for side effects
-#'
-#' @author Thomas Neitmann
-#'
-#' @keywords internal
-#' @family internal
-#'
-#' @export
-#'
-#' @seealso [tte_source()], [censor_source()], [event_source()]
-#'
-#' @examples
-#' print(death_event)
-print.tte_source <- function(x, ...) {
-  cat <- function(...) base::cat(..., sep = "")
-  cat("<tte_source> object\n")
-  cat("dataset_name: \"", x$dataset_name, "\"\n")
-  cat("filter: ", quo_text(x$filter), "\n")
-  cat("date: ", quo_text(x$date), "\n")
-  cat("censor: ", x$censor, "\n")
-  cat("set_values_to:\n")
-  for (name in names(x$set_values_to)) {
-    cat("  ", name, ": ", quo_text(x$set_values_to[[name]]), "\n")
-  }
-}
-
 
 #' List all `tte_source` Objects Available in a Package
 #'

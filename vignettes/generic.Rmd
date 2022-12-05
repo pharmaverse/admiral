@@ -1,0 +1,383 @@
+---
+title: "Generic Functions"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Generic Functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(admiraldev)
+```
+
+# Introduction
+
+This vignette explains some of the `{admiral}` generic functions, which we believe
+are able to be re-used to sometimes save users having to create so many of their
+own functions for study-specific analysis derivations. These re-usable functions give
+the users great flexibility, but the challenge is knowing which to use when. So
+this vignette is intended to help understand the differences between each, thus
+improving the findability of the function needed for each task.
+
+The focus will be on the following different sets of generic functions:
+
+* [_merged_ functions](#merged)
+* [_joined_ functions](#joined)
+* [_extreme_ functions](#extreme)
+
+In each section below, we will show examples of different functions that belong
+to each of these sets, but we don't list out each and every function offered.
+Users should refer to the Reference page and search for example "merged" to see
+the full list of functions offered for this respective set, with more examples
+shown within each function page.
+
+## Required Packages
+
+The examples in this vignette require the following packages.
+
+For example purpose, the SDTM datasets from `{admiral.test}` are used.
+
+```{r, warning=FALSE, message=FALSE}
+library(admiral)
+library(admiral.test)
+library(dplyr, warn.conflicts = FALSE)
+library(stringr)
+library(tibble)
+
+data("admiral_dm")
+data("admiral_ds")
+data("admiral_ex")
+data("admiral_ae")
+dm <- convert_blanks_to_na(admiral_dm)
+ds <- convert_blanks_to_na(admiral_ds)
+ex <- convert_blanks_to_na(admiral_ex)
+ae <- convert_blanks_to_na(admiral_ae)
+```
+```{r echo=FALSE}
+# Filter test patients and make more realistic and interesting for the examples
+dm <- filter(dm, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
+ds <- filter(ds, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057")) %>%
+  mutate(DSSTDTC = case_when(
+    USUBJID == "01-701-1111" & DSDECOD == "RANDOMIZED" ~ "2012-08-01",
+    TRUE ~ DSSTDTC
+  ))
+ex <- filter(ex, USUBJID %in% c("01-701-1111", "01-701-1047", "01-701-1057"))
+ae <- filter(ae, USUBJID %in% c("01-701-1111", "01-701-1047")) %>%
+  mutate(AESTDTC = case_when(
+    USUBJID == "01-701-1111" & AESTDY == "-61" ~ "2012-09-14",
+    TRUE ~ AESTDTC
+  )) %>%
+  mutate(AESTDY = case_when(
+    USUBJID == "01-701-1111" & AESTDY == "-61" ~ 8,
+    TRUE ~ AESTDY
+  ))
+```
+
+# Difference between _merged_ and _joined_ functions
+
+Firstly, we need to address the question all new users will have... why do we have
+"merged" and "joined" functions and are they not the same thing??
+
+Essentially in both sets of functions we are trying to take information from
+an additional dataframe (passed into the `dataset_add` argument) and join it to
+our original dataframe (passed into the `dataset` argument). The subtle difference
+is that "merged" functions select the relevant information from the additional
+dataframe and then adds it to the original dataframe; whilst "joined" functions
+allow an extra filter condition after the join to further select the relevant
+information.
+
+So in `derive_vars_joined()` for example, the filter conditions can depend on variables
+from both dataframes; whilst in `derive_vars_merged()` only variables from the
+additional dataframe can be used. Examples will be shown in the below sections to
+further explain the difference.
+
+In principle though, we actually could achieve every "merged" function result using
+the equivalent "joined" function. However, the "joined" functions require much more
+resources (time and memory), hence why we include both options for users.
+
+# _merged_ functions {#merged}
+
+## Description
+
+As explained above, this simpler set of functions for joins selects relevant
+information from the additional dataframe and joins it to the original dataframe.
+
+The additional dataframe can be filtered based on a user-defined condition passed
+into the `filter_add` argument and/or (where relevant) by selecting the first or
+last observation for each by group (`order` and `mode` arguments) and then joined with
+the input dataframe by user-specified variables passed into `by_vars` argument.
+Variables from the additional dataframe can be joined to the input dataframe as
+they are or can be renamed (`new_vars` argument).
+
+The dataframe returned from the function call contains all observations and variables
+from the original dataframe (with or without filtering applied) and additionally
+the variable(s) specified for `new_var`/`new_vars` from the additional dataframe.
+This is achieved via an underlying [dplyr::left_join](https://dplyr.tidyverse.org/reference/mutate-joins.html).
+For observations without a match in the additional dataframe the new variable(s)
+are set to `NA`. Observations in the additional dataframe which have no match in
+the original dataframe are ignored.
+
+## Examples
+
+A simple call to derive `ADSL` randomization date (`ADSL.RANDDT`) from an
+intermediate additional dataframe would use `derive_vars_merged()` as follows.
+
+```{r eval=TRUE}
+# Use DM domain as basis to build ADSL
+adsl_01 <- dm %>%
+  select(-DOMAIN)
+
+# Convert disposition character date to numeric date without imputation
+ds_ext <- derive_vars_dt(
+  dataset = ds,
+  dtc = DSSTDTC,
+  new_vars_prefix = "DSST"
+)
+
+# Join randomization date to ADSL
+adsl_02 <- adsl_01 %>%
+  derive_vars_merged(
+    dataset_add = ds_ext,
+    filter_add = DSDECOD == "RANDOMIZED",
+    by_vars = vars(STUDYID, USUBJID),
+    new_vars = vars(RANDDT = DSSTDT)
+  )
+```
+
+This call would return the input dataframe with the variable `RANDDT` added.
+
+Now, an example to add first treatment datetime (`ADSL.TRTSDT`), where we
+need to make use of `derive_vars_merged()` with the `mode` and `order` arguments
+to select the required observations from the additional dataframe. Note: the
+`filter_add` argument here shows a possible method for checking only for valid doses.
+
+```{r eval=TRUE}
+# Convert exposure start date to numeric date without imputation
+ex_ext <- derive_vars_dt(
+  dataset = ex,
+  dtc = EXSTDTC,
+  new_vars_prefix = "EXST"
+)
+
+# Determine first exposure datetime and add to ADSL
+adsl_03 <- adsl_02 %>%
+  derive_vars_merged(
+    dataset_add = ex_ext,
+    filter_add = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & !is.na(EXSTDT),
+    new_vars = vars(TRTSDT = EXSTDT),
+    order = vars(EXSTDT, EXSEQ),
+    mode = "first",
+    by_vars = vars(STUDYID, USUBJID)
+  )
+```
+
+This call would return the input dataframe with `TRTSDT` added.
+
+Beyond `derive_vars_merged()`, other "merged" functions offer specific common
+analysis needs. For example, below shows an example of using `derive_var_merged_exist_flag()`
+for adding safety population flag (`ADSL.SAFFL`).
+
+In this case we create a new flag variable (`new_var` argument) based on information we
+take from the additional dataframe to tell us if a certain `condition` is met.
+For all by groups (`by_vars` argument) where the check evaluates as `TRUE` at least
+once the flag is set to `"Y"` (or whatever user passes in `true_value` argument).
+
+Note: we have extra arguments available here for patients that do not meet the `condition`.
+In the below example, we set patients in `EX` with no valid dose to `"N"` (`false_value`)
+and the same for patients with no observations at all in `EX` (`missing_value`).
+
+```{r eval=TRUE}
+# Add safety population flag to ADSL
+adsl_04 <- adsl_03 %>%
+  derive_var_merged_exist_flag(
+    dataset_add = ex,
+    by_vars = vars(STUDYID, USUBJID),
+    new_var = SAFFL,
+    condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))),
+    false_value = "N",
+    missing_value = "N"
+  )
+```
+
+Here's how all these above derived variables then look in the dataset.
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  dataset = adsl_04,
+  display_vars = vars(USUBJID, RANDDT, TRTSDT, SAFFL)
+)
+```
+
+Some further examples of "merged" functions are `derive_vars_merged_lookup()` to
+join a user-defined lookup table as commonly used in BDS ADaMs,
+`derive_var_merged_cat()` to create a categorization variable from the
+information joined from the additional dataframe, or
+`derive_var_merged_summary()` to merge summarized values from the additional
+dataframe.
+
+# _joined_ functions {#joined}
+
+## Description
+
+For any "joined" function remember from above that the main difference is that
+given the additional option to filter after the join, it means that selection of
+the observations to add from the additional dataframe can depend on variables from
+both this and the original dataframe.
+
+So, as with the "merged" functions the additional dataframe can first be filtered
+based on a user-defined condition passed into the `filter_add` argument. Then it
+is joined with the input dataframe by user-specified variables passed into `by_vars`
+argument. The joined dataframe can then be further restricted by the `filter_join`
+condition, before optionally selecting the first or last observation for each by
+group (`order` and `mode` arguments). Finally the joined variables from the additional
+dataframe can be renamed (`new_vars` argument).
+
+To illustrate this, imagine that in the above randomization date example you only
+wanted the date populated for patients randomized within 30 days of first treatment.
+You would now need to check both the additional `DS` and the original `ADSL` dataframes,
+so this would not be possible in one step using the "merged" functions.
+
+## Examples
+
+The above mentioned randomization date variable (let's call it `RAND30DT` here)
+would use `derive_vars_joined()` as follows.
+
+```{r eval=TRUE}
+# Join randomization date to ADSL only for safety population patients
+adsl_05 <- adsl_04 %>%
+  derive_vars_joined(
+    dataset_add = ds_ext,
+    filter_add = DSDECOD == "RANDOMIZED",
+    by_vars = vars(STUDYID, USUBJID),
+    new_vars = vars(RAND30DT = DSSTDT),
+    filter_join = DSSTDT >= TRTSDT - 30
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  dataset = adsl_05,
+  display_vars = vars(USUBJID, RANDDT, TRTSDT, RAND30DT)
+)
+```
+
+Now, let's consider another example of `derive_vars_joined()`. For this we'll need to
+additionally use the `join_vars` argument, which is where the user needs to call out
+any variables from the additional dataframe being used in `filter_join`. Note: If a
+specified variable exists in both dataframes, then the suffix ".join" is added to the
+variable from the additional dataframe.
+
+In this case we want to add a datacut flag to `AE`, only for events occurring up
+to and including this day. So in this case `AE` is the original dataframe and the
+datacut source is the additional dataframe that needs to be joined.
+
+```{r eval=TRUE}
+# Create a unique datacut day for each patient
+datacut <- tribble(
+  ~USUBJID,      ~DCUTDY, ~DCUTFL,
+  "01-701-1047",      25, "Y",
+  "01-701-1111",       5, "Y"
+)
+
+# Join datacut flag to AE only for events up to and including this date
+ae_01 <- ae %>%
+  derive_vars_joined(
+    dataset_add = datacut,
+    by_vars = vars(USUBJID),
+    new_vars = vars(DCUTFL),
+    join_vars = vars(DCUTDY),
+    filter_join = AESTDY <= DCUTDY
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+ae_01 %>%
+  select(USUBJID, AEDECOD, AESTDY, DCUTFL) %>%
+  arrange(USUBJID, AESTDY) %>%
+  dataset_vignette(display_vars = vars(USUBJID, AEDECOD, AESTDY, DCUTFL))
+```
+
+The `derive_vars_joined()` function could also be used to join the original dataframe
+back with itself, which may be necessary if you're comparing across different observations.
+For example, the below shows how a "nadir" calculation would be achieved which checks
+for the worst value prior up to that observation.
+
+Here is how you would derive the highest severity AE the patient has occurred
+post-baseline up to and excluding the current AE day.
+
+```{r eval=TRUE}
+# Add a numeric version of severity for sorting with severe=1, moderate=2, mild=3
+ae_ext <- ae_01 %>%
+  mutate(TEMP_SEVN = as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD"))))
+
+# Derive nadir severity (AENADSEV)
+ae_02 <- ae_ext %>%
+  derive_vars_joined(
+    dataset_add = ae_ext,
+    filter_add = AESTDY > 0,
+    by_vars = vars(USUBJID),
+    order = vars(TEMP_SEVN),
+    new_vars = vars(AENADSEV = AESEV),
+    join_vars = vars(AESTDY),
+    filter_join = AESTDY.join < AESTDY,
+    mode = "first",
+    check_type = "none"
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+ae_02 %>%
+  select(USUBJID, AEDECOD, AESTDY, AESEV, AENADSEV) %>%
+  arrange(USUBJID, AESTDY) %>%
+  dataset_vignette(display_vars = vars(USUBJID, AEDECOD, AESTDY, AESEV, AENADSEV))
+```
+
+There exists a further function `derive_var_confirmation_flag()`, which follows
+a similar principle to the "joined" set as explained here. This can be used for whenever
+one set of observations "confirms" another set in a dataframe, i.e. the flag is only
+set for your observation if both the observation and some other observation meet both
+the user-specified criteria.
+
+# _extreme_ functions {#extreme}
+
+## Description
+
+The "extreme" functions are used for finding the first or last observation
+(from `order` and `mode` arguments) within each by group (`by_vars` argument).
+
+These can then be output as a flag variable, a date, or as new records dependent
+on which respective function is used between `derive_var_extreme_flag()`,
+`derive_var_extreme_dt()` or `derive_extreme_records()` for example.
+
+## Example
+
+Building on the above case, let's use `derive_var_extreme_flag()` to now flag
+the earliest observation with the highest severity per patient.
+
+```{r eval=TRUE}
+# Highest severity flag (AEHSEVFL)
+ae_03 <- ae_02 %>%
+  derive_var_extreme_flag(
+    new_var = AEHSEVFL,
+    by_vars = vars(USUBJID),
+    order = vars(TEMP_SEVN, AESTDY, AESEQ),
+    mode = "first"
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+ae_03 %>%
+  select(USUBJID, AESTDY, AESEQ, AESEV, AEHSEVFL) %>%
+  arrange(USUBJID, AESTDY, AESEQ) %>%
+  dataset_vignette(display_vars = vars(USUBJID, AESTDY, AESEQ, AESEV, AEHSEVFL))
+```
+
+Common further examples of usage of this set of functions could be using
+`derive_var_extreme_dt()` for last known alive date calculation or `derive_extreme_records()`
+for creating derived minimum or maximum value records.

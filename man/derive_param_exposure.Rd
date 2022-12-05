@@ -93,10 +93,11 @@ an observation is added to the output dataset and the defined values are set to 
 variables
 }
 \examples{
+library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate, warn.conflicts = FALSE)
 library(stringr, warn.conflicts = FALSE)
-adex <- tibble::tribble(
+adex <- tribble(
   ~USUBJID, ~PARAMCD, ~AVAL, ~AVALC, ~VISIT, ~ASTDT, ~AENDT,
   "1015", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
   "1015", "DOSE", 85, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),
@@ -151,12 +152,13 @@ adex \%>\%
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_extreme_records}()},
+\code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
 \code{\link{derive_param_bsa}()},
 \code{\link{derive_param_computed}()},
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
-\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_extreme_event}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

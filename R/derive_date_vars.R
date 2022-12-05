@@ -535,7 +535,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
     # for each minimum date within the range ensure that the imputed date is not
     # before it
     for (min_date in min_dates) {
-      assert_that(is_date(min_date))
+      assert_date_vector(min_date)
       min_date_iso <- strftime(min_date, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
       imputed_dtc <- if_else(
         min_dtc <= min_date_iso & min_date_iso <= max_dtc,
@@ -549,7 +549,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
     # for each maximum date within the range ensure that the imputed date is not
     # after it
     for (max_date in max_dates) {
-      assert_that(is_date(max_date))
+      assert_date_vector(max_date)
       max_date <- convert_date_to_dtm(
         max_date,
         time_imputation = "last"
@@ -901,7 +901,7 @@ restrict_imputed_dtc_dt <- function(dtc,
     # for each minimum date within the range ensure that the imputed date is not
     # before it
     for (min_date in min_dates) {
-      assert_that(is_date(min_date))
+      assert_date_vector(min_date)
       min_date_iso <- strftime(min_date, format = "%Y-%m-%d", tz = "UTC")
       imputed_dtc <- if_else(
         min_dtc <= min_date_iso & min_date_iso <= max_dtc,
@@ -915,7 +915,7 @@ restrict_imputed_dtc_dt <- function(dtc,
     # for each maximum date within the range ensure that the imputed date is not
     # after it
     for (max_date in max_dates) {
-      assert_that(is_date(max_date))
+      assert_date_vector(max_date)
       max_date_iso <- strftime(max_date, format = "%Y-%m-%d", tz = "UTC")
       imputed_dtc <- if_else(
         min_dtc <= max_date_iso & max_date_iso <= max_dtc,
@@ -957,7 +957,7 @@ convert_dtc_to_dt <- function(dtc,
                               min_dates = NULL,
                               max_dates = NULL,
                               preserve = FALSE) {
-  assert_that(is.character(dtc))
+  assert_character_vector(dtc)
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
 
   imputed_dtc <- impute_dtc_dt(
@@ -1055,7 +1055,7 @@ convert_date_to_dtm <- function(dt,
   if (lubridate::is.POSIXct(dt)) {
     return(dt)
   } else {
-    if (is_date(dt)) {
+    if (is.instant(dt)) {
       dt <- format(dt, "%Y-%m-%d")
     }
 
@@ -1102,7 +1102,7 @@ convert_date_to_dtm <- function(dt,
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 compute_dtf <- function(dtc, dt) {
   assert_character_vector(dtc)
-  assert_that(is_date(dt))
+  assert_date_vector(dt)
 
   is_na <- is.na(dt)
   n_chr <- nchar(dtc)
@@ -1159,7 +1159,7 @@ compute_dtf <- function(dtc, dt) {
 compute_tmf <- function(dtc,
                         dtm,
                         ignore_seconds_flag = FALSE) {
-  assert_that(is_date(dtm))
+  assert_date_vector(dtm)
   assert_character_vector(dtc)
   assert_logical_scalar(ignore_seconds_flag)
 
@@ -1337,7 +1337,6 @@ derive_vars_dt <- function(dataset,
                            min_dates = NULL,
                            max_dates = NULL,
                            preserve = FALSE) {
-
   # check and quote arguments
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)
@@ -1524,7 +1523,6 @@ derive_vars_dtm <- function(dataset,
                             max_dates = NULL,
                             preserve = FALSE,
                             ignore_seconds_flag = FALSE) {
-
   # check and quote arguments
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)

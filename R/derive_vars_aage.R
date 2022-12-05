@@ -51,9 +51,12 @@
 #' @seealso [derive_vars_duration()]
 #'
 #' @examples
-#' data <- tibble::tribble(
+#' library(tibble)
+#' library(lubridate)
+#'
+#' data <- tribble(
 #'   ~BRTHDT, ~RANDDT,
-#'   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+#'   ymd("1984-09-06"), ymd("2020-02-24")
 #' )
 #'
 #' derive_vars_aage(data)
@@ -80,6 +83,7 @@ derive_vars_aage <- function(dataset,
     trunc_out = TRUE
   )
 }
+
 
 #' Derive Age in Years
 #'
@@ -110,8 +114,6 @@ derive_vars_aage <- function(dataset,
 #'
 #' @examples
 #'
-#' library(dplyr, warn.conflicts = FALSE)
-#'
 #' data <- data.frame(
 #'   AGE = c(27, 24, 3, 4, 1),
 #'   AGEU = c("days", "months", "years", "weeks", "years")
@@ -132,6 +134,16 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
   age_var <- age_variable
   unit_var <- paste0(quo_get_expr(age_var), "U")
 
+  age_unit <- assert_character_scalar(
+    age_unit,
+    values = c(
+      "years", "months", "weeks", "days",
+      "hours", "minutes", "seconds"
+    ),
+    case_sensitive = FALSE,
+    optional = TRUE
+  )
+
   new_var <- assert_symbol(enquo(new_var))
   warn_if_vars_exist(dataset, quo_text(new_var))
 
@@ -143,22 +155,15 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
       )
       abort(err_msg)
     } else {
-      assert_character_scalar(
-        tolower(age_unit),
-        values = c(
-          "years", "months", "weeks", "days",
-          "hours", "minutes", "seconds"
-        )
-      )
       ds <- dataset %>%
         mutate(
-          !!new_var := time_length(duration(!!age_var, units = tolower(age_unit)),
+          !!new_var := time_length(duration(!!age_var, units = age_unit),
             unit = "years"
           )
         )
     }
   } else {
-    unit <- tolower(unique(pull(dataset, !!sym(unit_var))))
+    unit <- unique(tolower(pull(dataset, !!sym(unit_var))))
     assert_character_vector(
       unit,
       values = c(
@@ -177,7 +182,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
           unit_var
         )
         warn(msg)
-      } else if (unit != tolower(age_unit)) {
+      } else if (unit != age_unit) {
         msg <- paste(
           "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
           "but the argument `age_unit` has been specified with a different value.",
@@ -232,7 +237,7 @@ NULL
 #'
 #' @export
 derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_warn("0.8.0", "derive_var_agegr_ema()")
+  deprecate_warn("0.8.0", "derive_var_agegr_fda()", details = "Please create a user defined function instead.")
 
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
@@ -264,7 +269,7 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'
 #' @export
 derive_var_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_warn("0.8.0", "derive_var_agegr_ema()")
+  deprecate_warn("0.8.0", "derive_var_agegr_ema()", details = "Please create a user defined function instead.")
 
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))

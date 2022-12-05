@@ -11,7 +11,7 @@ derive_var_disposition_status(
   status_var,
   format_new_var = format_eoxxstt_default,
   filter_ds,
-  subject_keys = vars(STUDYID, USUBJID)
+  subject_keys = get_admiral_option("subject_keys")
 )
 }
 \arguments{
@@ -112,7 +112,7 @@ format_eoxxstt1 <- function(x) {
     x == "COMPLETED" ~ "COMPLETED",
     x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
     !(x \%in\% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~
-    "DISCONTINUED NOT DUE TO AE",
+      "DISCONTINUED NOT DUE TO AE",
     TRUE ~ "ONGOING"
   )
 }
@@ -134,7 +134,8 @@ ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_disposition_reason}()}
+\code{\link{derive_vars_disposition_reason}()},
+\code{\link{derive_vars_period}()}
 }
 \author{
 Samia Kabi

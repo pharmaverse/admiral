@@ -22,8 +22,9 @@ Execute a derivation on a subset of the input dataset.
 }
 \examples{
 
-library(magrittr)
-adlb <- tibble::tribble(
+library(tibble)
+
+adlb <- tribble(
   ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,
   "1",            -1,   113, NA_character_,
   "1",             0,   113, "Y",
@@ -69,7 +70,6 @@ restrict_derivation(
 Higher Order Functions: 
 \code{\link{call_derivation}()},
 \code{\link{derivation_slice}()},
-\code{\link{print.derivation_slice}()},
 \code{\link{slice_derivation}()}
 }
 \author{

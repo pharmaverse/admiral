@@ -12,6 +12,7 @@ derive_var_ontrtfl(
   ref_start_date,
   ref_end_date = NULL,
   ref_end_window = 0,
+  ignore_time_for_ref_end_date = TRUE,
   filter_pre_timepoint = NULL,
   span_period = NULL
 )
@@ -61,6 +62,12 @@ considered on-treatment. Default is \code{NULL}.}
 measured in days (e.g. 7 if 7 days should be added to the upper bound)
 Optional; default is 0.}
 
+\item{ignore_time_for_ref_end_date}{If the argument is set to \code{TRUE}, the time part is ignored for checking if
+the event occurred more than \code{ref_end_window} days after reference end
+date.
+
+\emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
+
 \item{filter_pre_timepoint}{An expression to filter observations as not
 on-treatment when \code{date} = \code{ref_start_date}. For example, if observations
 where \code{VSTPT = PRE} should not be considered on-treatment when \code{date = ref_start_date}, \code{filter_pre_timepoint} should be used to denote when the
@@ -108,8 +115,8 @@ Any date imputations needed should be done prior to calling this function.
 }
 \examples{
 library(tibble)
-library(dplyr)
-library(lubridate, warn.conflict = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate, warn.conflicts = FALSE)
 
 advs <- tribble(
   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,

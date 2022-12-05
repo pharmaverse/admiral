@@ -153,6 +153,8 @@ adlb <- adlb %>%
   )
 
 ## Get Visit Info ----
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits)
 adlb <- adlb %>%
   # Derive Timing
   mutate(
@@ -228,6 +230,7 @@ adlb <- adlb %>%
 
 # Assign ATOXDSCL and ATOXDSCH to hold lab grading terms
 # ATOXDSCL and ATOXDSCH hold terms defined by NCI-CTCAEv4.
+# See (https://pharmaverse.github.io/admiral/articles/lab_grading.html#implement_ctcv4)
 grade_lookup <- tibble::tribble(
   ~PARAMCD, ~ATOXDSCL, ~ATOXDSCH,
   "ALB", "Hypoalbuminemia", NA_character_,
@@ -250,6 +253,15 @@ grade_lookup <- tibble::tribble(
   "WBC", "White blood cell decreased", "Leukocytosis",
 )
 
+# Assign grade criteria
+# metadata atoxgr_criteria_ctcv4 used to implement NCI-CTCAEv4
+# user could change to atoxgr_criteria_ctcv5 to implement NCI-CTCAEv5
+# Note: Hyperglycemia and Hypophosphatemia not defined in NCI-CTCAEv5 so
+# user would need to amend look-up table grade_lookup
+# See (https://pharmaverse.github.io/admiral/articles/lab_grading.html#implement_ctcv5)
+grade_crit <- atoxgr_criteria_ctcv4
+
+
 # Add ATOXDSCL and ATOXDSCH
 adlb <- adlb %>%
   derive_vars_merged(
@@ -257,8 +269,9 @@ adlb <- adlb %>%
     by_vars = vars(PARAMCD)
   ) %>%
   # Derive toxicity grade for low values ATOXGRL
-  # default metadata atoxgr_criteria_ctcv4 used
+
   derive_var_atoxgr_dir(
+    meta_criteria = grade_crit,
     new_var = ATOXGRL,
     tox_description_var = ATOXDSCL,
     criteria_direction = "L",
@@ -267,6 +280,7 @@ adlb <- adlb %>%
   # Derive toxicity grade for low values ATOXGRH
   # default metadata atoxgr_criteria_ctcv4 used
   derive_var_atoxgr_dir(
+    meta_criteria = grade_crit,
     new_var = ATOXGRH,
     tox_description_var = ATOXDSCH,
     criteria_direction = "H",
@@ -354,6 +368,8 @@ adlb <- adlb %>%
   )
 
 ## Get treatment information ----
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
 adlb <- adlb %>%
   # Assign TRTA, TRTP
   mutate(
@@ -427,4 +443,4 @@ adlb <- adlb %>%
 # Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(adlb, file = file.path(dir, "adlb.rda"), compress = "bzip2")
+saveRDS(adlb, file = file.path(dir, "adlb.rds"), compress = "bzip2")

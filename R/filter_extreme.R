@@ -54,7 +54,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflict = FALSE)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
 #' data("admiral_ex")
 #'

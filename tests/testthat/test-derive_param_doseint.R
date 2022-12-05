@@ -35,11 +35,12 @@ test_that("new observations are derived correctly when zero_doses is NULL", {
     select(-AVAL.TSNDOSE, -AVAL.TNDOSE)
   expected_output <- bind_rows(input, new_obs)
 
-  expect_dfs_equal(derive_param_doseint(input,
-    by_vars = vars(USUBJID, VISIT)
-  ),
-  expected_output,
-  keys = c("USUBJID", "PARAMCD", "VISIT")
+  expect_dfs_equal(
+    derive_param_doseint(input,
+      by_vars = vars(USUBJID, VISIT)
+    ),
+    expected_output,
+    keys = c("USUBJID", "PARAMCD", "VISIT")
   )
 })
 
@@ -84,11 +85,12 @@ test_that("new observations are derived correctly when zero_doses is Y", {
     select(-AVAL.TSNDOSE, -AVAL.TNDOSE)
   expected_output <- bind_rows(input, new_obs)
 
-  expect_dfs_equal(derive_param_doseint(input,
-    by_vars = vars(USUBJID, VISIT),
-    zero_doses = "100"
-  ),
-  expected_output,
-  keys = c("USUBJID", "PARAMCD", "VISIT")
+  expect_dfs_equal(
+    derive_param_doseint(input,
+      by_vars = vars(USUBJID, VISIT),
+      zero_doses = "100"
+    ),
+    expected_output,
+    keys = c("USUBJID", "PARAMCD", "VISIT")
   )
 })

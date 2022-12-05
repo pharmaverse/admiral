@@ -14,7 +14,7 @@ derive_param_exist_flag(
   missing_value = NA_character_,
   filter_add = NULL,
   aval_fun = yn_to_numeric,
-  subject_keys = vars(STUDYID, USUBJID),
+  subject_keys = get_admiral_option("subject_keys"),
   set_values_to
 )
 }
@@ -140,11 +140,12 @@ the new observations.
 }
 }
 \examples{
-library(dplyr)
+library(tibble)
+library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 
 # Derive a new parameter for measurable disease at baseline
-adsl <- tibble::tribble(
+adsl <- tribble(
   ~USUBJID,
   "1",
   "2",
@@ -152,7 +153,7 @@ adsl <- tibble::tribble(
 ) \%>\%
   mutate(STUDYID = "XX1234")
 
-tu <- tibble::tribble(
+tu <- tribble(
   ~USUBJID, ~VISIT,      ~TUSTRESC,
   "1",      "SCREENING", "TARGET",
   "1",      "WEEK 1",    "TARGET",
@@ -183,12 +184,13 @@ derive_param_exist_flag(
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_extreme_records}()},
+\code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
 \code{\link{derive_param_bsa}()},
 \code{\link{derive_param_computed}()},
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_extreme_event}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

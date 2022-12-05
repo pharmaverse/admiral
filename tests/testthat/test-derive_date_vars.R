@@ -1,6 +1,3 @@
-library(lubridate)
-library(dplyr)
-
 input <- c(
   "2019-07-18T15:25:40.243",
   "2019-07-18T15:25:40",
@@ -530,14 +527,15 @@ test_that("compute_tmf Test 24: compute TMF", {
 
 ## Test 25: throws ERROR when ignore_seconds_flag  = T and seconds are present ----
 test_that("compute_tmf Test 25: throws ERROR when ignore_seconds_flag  = T and seconds are present", { # nolint
-  expect_error(compute_tmf(
-    dtc = c("2020-11-11T11:11:11", "2020-11-11T11:11"),
-    dtm = ymd_hms(c(
-      "2020-11-11T11:11:11", "2020-11-11T11:11:00"
-    )),
-    ignore_seconds_flag = TRUE
-  ),
-  regexp = "Seconds detected in data while ignore_seconds_flag is invoked"
+  expect_error(
+    compute_tmf(
+      dtc = c("2020-11-11T11:11:11", "2020-11-11T11:11"),
+      dtm = ymd_hms(c(
+        "2020-11-11T11:11:11", "2020-11-11T11:11:00"
+      )),
+      ignore_seconds_flag = TRUE
+    ),
+    regexp = "Seconds detected in data while ignore_seconds_flag is invoked"
   )
 })
 

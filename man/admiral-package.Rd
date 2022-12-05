@@ -17,10 +17,6 @@ Useful links:
   \item \url{https://github.com/pharmaverse/admiral}
 }
 
-
-Other internal: 
-\code{\link{print.adam_templates}()},
-\code{\link{print.tte_source}()}
 }
 \author{
 \strong{Maintainer}: Thomas Neitmann \email{thomas.neitmann@roche.com}
@@ -48,13 +44,21 @@ Authors:
   \item Pooja Kumari
   \item Claudia Carlucci
   \item Daniil Stefonishin
+  \item Sadchla Mascary
+  \item Zelos Zhu
+  \item Jeffrey Dickinson
+  \item Ania Golab
 }
 
 Other contributors:
 \itemize{
   \item Michael Thorpe [contributor]
+  \item Declan Hodges [contributor]
+  \item Jaxon Abercrombie [contributor]
+  \item Nick Ramirez [contributor]
   \item Pavan Kumar [contributor]
   \item Hamza Rahal [contributor]
+  \item Yohann Omnes [contributor]
   \item Alice Ehmann [contributor]
   \item Tom Ratford [contributor]
   \item Vignesh Thanikachalam [contributor]
@@ -66,6 +70,7 @@ Other contributors:
   \item Syed Mubasheer [contributor]
   \item Wenyi Liu [contributor]
   \item Dinakar Kulkarni [contributor]
+  \item Franciszek Walkowiak [contributor]
   \item Tamara Senior [contributor]
   \item Jordanna Morrish [contributor]
   \item Anthony Howard [contributor]

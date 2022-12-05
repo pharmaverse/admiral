@@ -14,73 +14,100 @@ repo:
     user: https://github.com/
 news:
   cran_dates: true
+
 reference:
 - title: Derivations for Adding Variables
 - subtitle: All ADaMs
-- contents:
+  contents:
   - has_keyword("der_gen")
+
 - subtitle: ADSL-specific
-  desc: Derivation Functions helpful for building the ADSL dataset
-- contents:
+  desc: Derivation functions helpful for building the ADSL dataset
+  contents:
   - has_keyword("der_adsl")
+
 - subtitle: BDS-specific
-  desc: Derivation Functions helpful for building the BDS datasets (e.g. advs, adlb, adeg, adex)
-- contents:
-  - has_keyword("der_bds_gen")
+  desc: Derivation functions helpful for building the BDS datasets (e.g. advs, adlb, adeg, adex)
+  contents:
   - has_keyword("der_bds_findings")
+
 - subtitle: OCCDS-specific
-  desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
-- contents:
+  desc: Derivation functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
+  contents:
   - has_keyword("der_occds")
 
 - title: Derivations for Adding Parameters/Records
 - subtitle: BDS-specific
-- contents:
+  contents:
   - has_keyword("der_prm_bds_findings")
+
 - subtitle: TTE-specific
-- contents:
+  contents:
   - has_keyword("der_prm_tte")
 
-- title: Advanced Functions
-- subtitle: Higher Order
-- contents:
-  - has_keyword("high_order_function")
-- subtitle: Metadata
-- contents:
+- title: Metadata
+  desc: Auxiliary datasets providing definitions as input for derivations, e.g. grading criteria or dose frequencies
+  contents:
   - has_keyword("metadata")
+
+- title: Advanced Functions
+- subtitle: Admiral Options
+  contents:
+  - has_keyword("admiral_options")
+
+- subtitle: Higher Order
+  contents:
+  - has_keyword("high_order_function")
+
+- subtitle: Creating Auxiliary Datasets
+  contents:
+  - has_keyword("create_aux")
+
 - subtitle: Other
-- contents:
+  contents:
   - has_keyword("source_specifications")
 
 - title: Computation Functions for Vectors
 - subtitle: All ADaMs
   contents:
   - has_keyword('com_date_time')
+
 - subtitle: BDS-specific
   contents:
   - has_keyword('com_bds_findings')
 
-
 - title: Utility Functions
 - subtitle: Utilities for Formatting Observations
-- contents:
+  contents:
   - has_keyword('utils_fmt')
+
 - subtitle: Utilities for Dataset Checking
-- contents:
+  contents:
   - has_keyword('utils_ds_chk')
+
 - subtitle: Utilities used within Derivation Functions
-- contents:
+  contents:
   - has_keyword('utils_help')
+
 - subtitle: Utilities for Filtering Observations
-- contents:
+  contents:
   - has_keyword('utils_fil')
+
 - subtitle: Utilities used for Date Imputation
-- contents:
+  contents:
   - has_keyword('utils_impute')
+
+- subtitle: Utilities for Quosures
+  contents:
+  - has_keyword('utils_quo')
+
 - subtitle: Utilities used for Examples and Template Scripts
-- contents:
+  contents:
   - has_keyword('utils_examples')
 
+- subtitle: Utilities for Printing
+  contents:
+  - has_keyword('utils_print')
 
 - title: Example Datasets
   desc: You can run `use_ad_template()` to produce additional datasets
@@ -88,8 +115,17 @@ reference:
   - has_keyword('datasets')
 
 - title: Deprecated
-- desc: Look out for Warning and Error messages. These will guide you to deprecated functions replacements.
-- contents:
+  desc: |
+    As `{admiral}` is still evolving, functions/parameters may need to be removed or replaced over time. In such cases, the function/parameter will enter the following 6-month deprecation cycle:
+
+    * In the first release (0-3 months), there will be a warning issued if you use the function/parameter, but it will still be available to use.
+    * In the following release (3-6 months), an error will be produced if you use the function/parameter.
+    * Finally, from the 3rd release (6 months) onwards, the function/parameter will be removed from `{admiral}` and its documentation completely.
+
+    *Note: Guidance on replacement functionality can be found in the warning/error message produced or in the function's documentation.*
+
+    Below, you can find a list of functions in the process of being deprecated:
+  contents:
   - has_keyword("deprecated")
 
 navbar:
@@ -132,6 +168,10 @@ navbar:
       - text: "Advanced User Guides"
       - text: Date and Time Imputation
         href: articles/imputation.html
+      - text: Visit and Period Variables
+        href: articles/visits_periods.html
+      - text: Generic Functions
+        href: articles/generic.html
       - text: Higher Order Functions
         href: articles/higher_order.html
       - text: Queries Dataset Documentation
