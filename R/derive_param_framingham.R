@@ -140,9 +140,9 @@
 #' @seealso [compute_framingham()]
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(tibble)
 #'
-#' adcvrisk <- tibble::tribble(
+#' adcvrisk <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU,
 #'   ~VISIT, ~AGE, ~SEX, ~SMOKEFL, ~DIABETFL, ~TRTHYPFL,
 #'   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121,

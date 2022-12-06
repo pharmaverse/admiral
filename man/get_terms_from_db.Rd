@@ -12,8 +12,7 @@ get_terms_from_db(
   expect_query_name = FALSE,
   expect_query_id = FALSE,
   i,
-  temp_env,
-  type
+  temp_env
 )
 }
 \arguments{
@@ -48,10 +47,6 @@ The value is used for error messages.}
 \item{temp_env}{Temporary environment
 
 The value is passed to the access function.}
-
-\item{type}{Type of query
-
-\emph{Permitted Values}: \code{"smq"}, \code{"sdg"}}
 }
 \value{
 Output dataset of the access function
@@ -64,8 +59,7 @@ is in the expected format (see \code{assert_terms()}).
 }
 \seealso{
 OCCDS Functions: 
-\code{\link{create_query_data}()},
-\code{\link{create_single_dose_dataset}()},
+\code{\link{derive_var_trtemfl}()},
 \code{\link{derive_vars_atc}()},
 \code{\link{derive_vars_query}()}
 }

@@ -6,14 +6,10 @@ on:
   pull_request_review:
     types: [submitted]
 
-env:
-  # R version to use for the workflows
-  R_VERSION: "3.6"
-
 jobs:
   templates:
     name: Check Templates
     uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
     if: github.event.review.state == 'approved'
     with:
-      r-version: $R_VERSION
+      r-version: "4.0"

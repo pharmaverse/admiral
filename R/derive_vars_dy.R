@@ -40,10 +40,11 @@
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' library(lubridate)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
-#' datain <- tibble::tribble(
+#' datain <- tribble(
 #'   ~TRTSDTM, ~ASTDTM, ~AENDT,
 #'   "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
 #' ) %>%
@@ -60,7 +61,7 @@
 #' )
 #'
 #' # specifying name of new variables
-#' datain <- tibble::tribble(
+#' datain <- tribble(
 #'   ~TRTSDT, ~DTHDT,
 #'   "2014-01-17", "2014-02-01"
 #' ) %>%
@@ -114,7 +115,7 @@ derive_vars_dy <- function(dataset,
       mutate_at(
         .vars = source_vars,
         .funs = list(temp = ~
-        compute_duration(start_date = eval(reference_date), end_date = .))
+          compute_duration(start_date = eval(reference_date), end_date = .))
       ) %>%
       rename_at(
         vars(ends_with("temp")),

@@ -8,12 +8,13 @@ create_single_dose_dataset(
   dataset,
   dose_freq = EXDOSFRQ,
   start_date = ASTDT,
-  start_datetime = ASTDTM,
+  start_datetime = NULL,
   end_date = AENDT,
-  end_datetime = AENDTM,
+  end_datetime = NULL,
   lookup_table = dose_freq_lookup,
   lookup_column = CDISC_VALUE,
-  keep_source_vars = vars(USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM)
+  keep_source_vars = quo_c(vars(USUBJID), dose_freq, start_date, start_datetime,
+    end_date, end_datetime)
 )
 }
 \arguments{
@@ -26,8 +27,6 @@ parameters are expected.}
 
 The aggregate dosing frequency used for multiple doses in a row.
 
-Default: \code{EXDOSFRQ}
-
 Permitted Values: defined by lookup table.}
 
 \item{start_date}{The start date
@@ -35,9 +34,7 @@ Permitted Values: defined by lookup table.}
 A date object is expected. This object cannot contain \code{NA} values.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
-character vector to a date object.
-
-Default: \code{ASTDT}}
+character vector to a date object.}
 
 \item{start_datetime}{The start date-time
 
@@ -46,16 +43,15 @@ A date-time object is expected. This object cannot contain \code{NA} values.
 Refer to \code{derive_vars_dtm()} to impute and derive a date-time from a date
 character vector to a date object.
 
-Default: \code{ASTDTM}}
+If the input dataset contains frequencies which refer to \code{DOSE_WINDOW}
+equals \code{"HOUR"} or \code{"MINUTE"}, the parameter must be specified.}
 
 \item{end_date}{The end date
 
 A date or date-time object is expected. This object cannot contain \code{NA} values.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
-character vector to a date object.
-
-Default: \code{AENDT}}
+character vector to a date object.}
 
 \item{end_datetime}{The end date-time
 
@@ -64,7 +60,8 @@ A date-time object is expected. This object cannot contain \code{NA} values.
 Refer to \code{derive_vars_dtm()} to impute and derive a date-time from a date
 character vector to a date object.
 
-Default: \code{AENDTM}}
+If the input dataset contains frequencies which refer to \code{DOSE_WINDOW}
+equals \code{"HOUR"} or \code{"MINUTE"}, the parameter must be specified.}
 
 \item{lookup_table}{The dose frequency value lookup table
 
@@ -74,20 +71,18 @@ default is used, it must have columns \code{DOSE_WINDOW}, \code{DOSE_COUNT}, and
 \code{CONVERSION_FACTOR}. The default table \code{dose_freq_lookup} is described in
 detail \link[=dose_freq_lookup]{here}.
 
-Default: \code{dose_freq_lookup}
-
 Permitted Values for \code{DOSE_WINDOW}: \code{"MINUTE"}, \code{"HOUR"}, \code{"DAY"},
 \code{"WEEK"}, \code{"MONTH"}, \code{"YEAR"}}
 
 \item{lookup_column}{The dose frequency value column in the lookup table
 
-The column of \code{lookup_table}.
-
-Default: \code{CDISC_VALUE} (column of \code{dose_freq_lookup})}
+The column of \code{lookup_table}.}
 
 \item{keep_source_vars}{List of variables to be retained from source dataset
 
-Default: vars(USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM)}
+This parameter can be specified if additional information is required in
+the output dataset. For example \code{EXTRT} for studies with more than one
+drug.}
 }
 \value{
 The input dataset with a single dose per row.
@@ -105,14 +100,18 @@ calculated with \code{compute_duration} and multiplied by \code{DOSE_COUNT}.
 For \code{DOSE_WINDOW} values of \code{"WEEK"}, \code{"MONTH"}, and \code{"YEAR"},
 \code{CONVERSION_FACTOR} is used to convert into days the time object
 to be added to \code{start_date}.
+
+Observations with dose frequency \code{"ONCE"} are copied to the output dataset
+unchanged.
 }
 \examples{
 # Example with default lookup
 
 library(lubridate)
 library(stringr)
+library(tibble)
 
-data <- tibble::tribble(
+data <- tribble(
   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
   "P01", "Q2D", ymd("2021-01-01"), ymd_hms("2021-01-01 10:30:00"),
   ymd("2021-01-07"), ymd_hms("2021-01-07 11:30:00"),
@@ -127,13 +126,13 @@ create_single_dose_dataset(data)
 
 # Example with custom lookup
 
-custom_lookup <- tibble::tribble(
-  ~Value, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
-  "Q30MIN", (1 / 30), "MINUTE", 1,
-  "Q90MIN", (1 / 90), "MINUTE", 1
+custom_lookup <- tribble(
+  ~Value,   ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
+  "Q30MIN", (1 / 30),    "MINUTE",                      1,
+  "Q90MIN", (1 / 90),    "MINUTE",                      1
 )
 
-data <- tibble::tribble(
+data <- tribble(
   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
   "P01", "Q30MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
   ymd("2021-01-01"), ymd_hms("2021-01-01T07:00:00"),
@@ -143,18 +142,18 @@ data <- tibble::tribble(
 
 create_single_dose_dataset(data,
   lookup_table = custom_lookup,
-  lookup_column = Value
+  lookup_column = Value,
+  start_datetime = ASTDTM,
+  end_datetime = AENDTM
 )
 }
 \seealso{
-OCCDS Functions: 
-\code{\link{create_query_data}()},
-\code{\link{derive_vars_atc}()},
-\code{\link{derive_vars_query}()},
-\code{\link{get_terms_from_db}()}
+Creating auxiliary datasets: 
+\code{\link{create_period_dataset}()},
+\code{\link{create_query_data}()}
 }
 \author{
 Michael Thorpe, Andrew Smith
 }
-\concept{der_occds}
-\keyword{der_occds}
+\concept{create_aux}
+\keyword{create_aux}

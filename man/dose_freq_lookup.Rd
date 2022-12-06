@@ -42,6 +42,10 @@ To see the entire table in the console, run \code{print(dose_freq_lookup)}.
 }
 \seealso{
 \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
+
+Other metadata: 
+\code{\link{atoxgr_criteria_ctcv4}},
+\code{\link{atoxgr_criteria_ctcv5}}
 }
 \concept{metadata}
 \keyword{metadata}

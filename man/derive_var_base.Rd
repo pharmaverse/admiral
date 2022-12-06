@@ -34,27 +34,29 @@ dataset plus the \code{new_var} variable
 Derive baseline variables, e.g. \code{BASE} or \code{BNRIND}, in a BDS dataset
 }
 \details{
-For each \code{by_vars} group the baseline record is identified by filtering using the
-condition specified by \code{filter} which defaults to \code{ABLFL == "Y"}. Subsequently,
+For each \code{by_vars} group, the baseline record is identified by the
+condition specified in \code{filter} which defaults to \code{ABLFL == "Y"}. Subsequently,
 every value of the \code{new_var} variable for the \code{by_vars} group is set to the
 value of the \code{source_var} variable of the baseline record. In case there are
 multiple baseline records within \code{by_vars} an error is issued.
 }
 \examples{
-dataset <- tibble::tribble(
-  ~STUDYID, ~USUBJID,   ~PARAMCD, ~AVAL,   ~AVALC,      ~AVISIT, ~ABLFL,
-  "TEST01",  "PAT01",  "PARAM01", 10.12,       NA,   "Baseline",    "Y",
-  "TEST01",  "PAT01",  "PARAM01", 9.700,       NA,      "Day 7",    "N",
-  "TEST01",  "PAT01",  "PARAM01", 15.01,       NA,     "Day 14",    "N",
-  "TEST01",  "PAT01",  "PARAM02", 8.350,       NA,   "Baseline",    "Y",
-  "TEST01",  "PAT01",  "PARAM02",    NA,       NA,      "Day 7",    "N",
-  "TEST01",  "PAT01",  "PARAM02", 8.350,       NA,     "Day 14",    "N",
-  "TEST01",  "PAT01",  "PARAM03",    NA,    "LOW",   "Baseline",    "Y",
-  "TEST01",  "PAT01",  "PARAM03",    NA,    "LOW",      "Day 7",    "N",
-  "TEST01",  "PAT01",  "PARAM03",    NA, "MEDIUM",     "Day 14",    "N",
-  "TEST01",  "PAT01",  "PARAM04",    NA,   "HIGH",   "Baseline",    "Y",
-  "TEST01",  "PAT01",  "PARAM04",    NA,   "HIGH",      "Day 7",    "N",
-  "TEST01",  "PAT01",  "PARAM04",    NA, "MEDIUM",     "Day 14",    "N"
+library(tibble)
+
+dataset <- tribble(
+  ~STUDYID, ~USUBJID,   ~PARAMCD, ~AVAL,   ~AVALC,      ~AVISIT, ~ABLFL,  ~ANRIND,
+  "TEST01",  "PAT01",  "PARAM01", 10.12,       NA,   "Baseline",    "Y", "NORMAL",
+  "TEST01",  "PAT01",  "PARAM01", 9.700,       NA,      "Day 7",    "N",    "LOW",
+  "TEST01",  "PAT01",  "PARAM01", 15.01,       NA,     "Day 14",    "N",   "HIGH",
+  "TEST01",  "PAT01",  "PARAM02", 8.350,       NA,   "Baseline",    "Y",    "LOW",
+  "TEST01",  "PAT01",  "PARAM02",    NA,       NA,      "Day 7",    "N",       NA,
+  "TEST01",  "PAT01",  "PARAM02", 8.350,       NA,     "Day 14",    "N",    "LOW",
+  "TEST01",  "PAT01",  "PARAM03",    NA,    "LOW",   "Baseline",    "Y",       NA,
+  "TEST01",  "PAT01",  "PARAM03",    NA,    "LOW",      "Day 7",    "N",       NA,
+  "TEST01",  "PAT01",  "PARAM03",    NA, "MEDIUM",     "Day 14",    "N",       NA,
+  "TEST01",  "PAT01",  "PARAM04",    NA,   "HIGH",   "Baseline",    "Y",       NA,
+  "TEST01",  "PAT01",  "PARAM04",    NA,   "HIGH",      "Day 7",    "N",       NA,
+  "TEST01",  "PAT01",  "PARAM04",    NA, "MEDIUM",     "Day 14",    "N",       NA
 )
 
 ## Derive `BASE` variable from `AVAL`
@@ -74,14 +76,12 @@ derive_var_base(
 )
 
 ## Derive `BNRIND` variable from `ANRIND`
-if (FALSE) {
-  derive_var_base(
-    dataset,
-    by_vars = vars(USUBJID, PARAMCD),
-    source_var = ANRIND,
-    new_var = BNRIND
-  )
-}
+derive_var_base(
+  dataset,
+  by_vars = vars(USUBJID, PARAMCD),
+  source_var = ANRIND,
+  new_var = BNRIND
+)
 }
 \seealso{
 BDS-Findings Functions that returns variable appended to dataset: 

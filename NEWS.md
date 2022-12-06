@@ -1,3 +1,100 @@
+# admiral 0.9.0
+
+## New Features
+
+- The new function `derive_vars_joined()` adds variables from an additional
+dataset. The selection of the observations can depend on variables from both
+datasets. This can be used for adding `AVISIT`, `AWLO`, `AWHI` based on time
+windows and `ADY` or deriving the lowest value (nadir) before the current
+observation (#1448).
+
+- New function `derive_var_trtemfl()` for deriving treatment emergent flags (#989)
+
+- The new function `chr2vars()` turns a character vector into a list of quosures
+(#1448).
+
+- New function `derive_var_relative_flag()` for flagging observations before or
+after a condition is fulfilled (#1453)
+
+- New functions `get_admiral_option()` and `set_admiral_options()` to allow more 
+flexibility on common function inputs; e.g. like `subject_keys` to avoid several 
+find and replace instances of `vars(STUDYID, USUBJID)`. (#1338)
+
+- The new function `create_period_dataset()` for creating a reference dataset
+for subperiods, periods, or phases from the ADSL dataset was added. The
+reference dataset can be used to create subperiod, period, and phase variables
+in OCCDS and BDS datasets. (#1477)
+
+- The new function `derive_vars_period()` adds subperiod, period, or phase
+variables to ADSL. The values for the new variables are provided by a period
+reference dataset. (#1477)
+
+- New function `derive_var_merged_summary()` adds a variable of summarized
+values to the input dataset (#1564)
+
+- A `print()` method was added for all S3 objects defined by admiral, e.g.,
+`date_source()`, `dthcaus_source()`, ... (#858)
+
+- New metadata data set called `atoxgr_criteria_ctcv5` which holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
+
+- Removed the `{assertthat}` dependency in `{admiral}` (#1392)
+
+- Removed R Version 3.6 check in CI/CD workflows in favor of the three most recent versions: 4.0, 4.1 and 4.2. (#1556)
+
+- The new function `derive_locf_records()` adds LOCF records as new observations. 
+This can be used when the input dataset does not contain observations for missed 
+visits/time points or when `AVAL` is `NA` for particular visits/time points (#1316).
+
+- New function `convert_na_to_blanks()` to convert character `NA` to blanks (#1624)
+
+
+## Updates of Existing Functions
+
+- Function `derive_param_first_event()` has been replaced by a more generalized `derive_param_extreme_event()` function with new argument `mode` allowing for the selection of either the `"first"` or `"last"` event record according to the conditions provided. Also the `date_var` argument has been replaced with the `order` argument instead. In addition, three new arguments `new_var`, `true_value`, and `false_value` have been added to allow the user to choose what variable is used to indicate whether an event happened, and the values it is given (#1317) (#1242).
+
+- Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
+which controls if time is considered for the condition if `start_date` is after
+`ref_end_date` + `ref_end_window` days (#989).
+
+- `derive_var_atoxgr_dir()` default value of `atoxgr_criteria_ctcv4` removed for
+parameter `meta_criteria`. Can now also choose `atoxgr_criteria_ctcv5` for parameter 
+`meta_criteria`, to implement NCI-CTCAEv5 grading criteria .
+
+- _Environment_ objects were consolidated into a single `admiral_environment` object under `R/admiral__environment.R`. (#1572)
+
+- The default value of the `keep_source_vars` argument in
+`create_single_dose_dataset()` was updated such that it takes the values of the
+other arguments into account and the `start_datetime` and `end_datetime`
+arguments are optional now (#1598).
+
+- Function `create_query_data()` has been updated such that the dictionary
+version is stored in the output dataset (#1337).
+
+## Breaking Changes
+
+- Function `derive_param_first_event()` has been deprecated. Please use `derive_param_extreme_event()` with the `order` argument instead of the `date_var` argument (#1317).
+
+- Functions `smq_select()` and `sdg_select()` have been deprecated and replaced with `basket_select()`. In the `create_query_data()` function, `meddra_version` and `whodd_version` argument has been replaced by `version` and `get_smq_fun` and `get_sdg_fun` argument by `get_terms_fun`. (#1597) 
+
+## Documentation
+
+- New vignette "Generic Functions" (#734)
+- New vignette "Visit and Period Variables" (#1478)
+
+## Various
+
+- Function `derive_param_tte()` had a bug that set `ADT` to `NA` when `start_date` 
+was missing, which has now been fixed (#1540)
+
+- Function `derive_vars_merged()` had an improperly formatted error message 
+which has been corrected (#1473)
+
+- Templates now save datasets as `.rds` instead of `.rda` (#1501)
+
+- Function `create_single_dose_dataset()` no longer fails if the input dataset
+contains observations with dose frequency `"ONCE"` (#1375).
+
 # admiral 0.8.4
 
 - Fixed a bug where a recent update to `{lifecylce}` caused several `admiral` tests to break (#1500)

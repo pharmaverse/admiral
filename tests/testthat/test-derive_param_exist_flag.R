@@ -84,3 +84,26 @@ test_that("derive_param_exist_flag Test 2: error is issued if aval_fun returns w
     fixed = TRUE
   )
 })
+
+
+## derive_param_exist_flag Test 3: error is issued if paramter already exists in dataset ----
+test_that("derive_param_exist_flag Test 3: error is issued if paramter already exists in dataset", {
+  expect_error(
+    derive_param_exist_flag(
+      dataset = adrs,
+      dataset_adsl = adsl,
+      dataset_add = adrs,
+      filter_add = PARAMCD == "OVR",
+      condition = AVALC == "PD",
+      false_value = "N",
+      set_values_to = vars(
+        PARAMCD = "OVR",
+        ANL01FL = "Y"
+      )
+    ),
+    regexp = paste(
+      "The parameter code 'OVR' does already exist in `dataset`."
+    ),
+    fixed = TRUE
+  )
+})
