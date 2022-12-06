@@ -34,6 +34,9 @@
     <loc>https://pharmaverse.github.io/admiral/articles/faq.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/articles/generic.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/articles/higher_order.html</loc>
   </url>
   <url>
@@ -50,6 +53,9 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/articles/queries_dataset.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/articles/visits_periods.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/authors.html</loc>
@@ -82,6 +88,12 @@
     <loc>https://pharmaverse.github.io/admiral/reference/atoxgr_criteria_ctcv4.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/atoxgr_criteria_ctcv5.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/basket_select.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/reference/call_derivation.html</loc>
   </url>
   <url>
@@ -89,6 +101,9 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/censor_source.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/chr2vars.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/compute_bmi.html</loc>
@@ -136,7 +151,13 @@
     <loc>https://pharmaverse.github.io/admiral/reference/convert_dtc_to_dtm.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/convert_na_to_blanks.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/reference/count_vals.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/create_period_dataset.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/create_query_data.html</loc>
@@ -160,6 +181,9 @@
     <loc>https://pharmaverse.github.io/admiral/reference/derive_extreme_records.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/derive_locf_records.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/reference/derive_param_bmi.html</loc>
   </url>
   <url>
@@ -176,6 +200,9 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/derive_param_exposure.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/derive_param_extreme_event.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/derive_param_first_event.html</loc>
@@ -277,6 +304,9 @@
     <loc>https://pharmaverse.github.io/admiral/reference/derive_var_merged_exist_flag.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/derive_var_merged_summary.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/reference/derive_var_obs_number.html</loc>
   </url>
   <url>
@@ -286,10 +316,16 @@
     <loc>https://pharmaverse.github.io/admiral/reference/derive_var_pchg.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/derive_var_relative_flag.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/reference/derive_var_shift.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/derive_var_trtdurd.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/derive_var_trtemfl.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html</loc>
@@ -322,6 +358,9 @@
     <loc>https://pharmaverse.github.io/admiral/reference/derive_vars_dy.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/derive_vars_joined.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/reference/derive_vars_last_dose.html</loc>
   </url>
   <url>
@@ -337,6 +376,9 @@
     <loc>https://pharmaverse.github.io/admiral/reference/derive_vars_merged_lookup.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/derive_vars_period.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/reference/derive_vars_query.html</loc>
   </url>
   <url>
@@ -350,6 +392,9 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/dt_level.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/dthcaus_source.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/dtm_level.html</loc>
@@ -382,16 +427,16 @@
     <loc>https://pharmaverse.github.io/admiral/reference/filter_relative.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiral/reference/format.sdg_select.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/reference/format.smq_select.html</loc>
+    <loc>https://pharmaverse.github.io/admiral/reference/format.basket_select.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/format_eoxxstt_default.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/format_reason_default.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/get_admiral_option.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/get_duplicates_dataset.html</loc>
@@ -442,16 +487,19 @@
     <loc>https://pharmaverse.github.io/admiral/reference/min_cond.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/negate_vars.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/reference/params.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/print.adam_templates.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiral/reference/print.derivation_slice.html</loc>
+    <loc>https://pharmaverse.github.io/admiral/reference/print.source.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiral/reference/print.tte_source.html</loc>
+    <loc>https://pharmaverse.github.io/admiral/reference/print_named_list.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/queries.html</loc>
@@ -478,6 +526,9 @@
     <loc>https://pharmaverse.github.io/admiral/reference/sdg_select.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/set_admiral_options.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/reference/signal_duplicate_records.html</loc>
   </url>
   <url>
@@ -496,13 +547,10 @@
     <loc>https://pharmaverse.github.io/admiral/reference/use_ad_template.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/validate_basket_select.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/reference/validate_query.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/reference/validate_sdg_select.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/reference/validate_smq_select.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/yn_to_numeric.html</loc>
