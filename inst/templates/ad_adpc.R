@@ -69,7 +69,7 @@ derive_var_expand_nfrlt <- function(dataset) {
   dataset <- dataset %>%
     mutate(orig_NFRLT = NFRLT)
 
-  for (i in (1:length(dataset$NFRLT))) {
+  for (i in (seq_along(dataset$NFRLT))) {
     if (i > 1) {
       if (dataset$orig_EXDOSFRQ[i - 1] == "QD") {
         dose_int <- 24
@@ -198,7 +198,7 @@ ex_exp <- ex %>%
 
 # ---- Add nominal time from first dose (NFRLT) to EX data ----
 
-ex_exp <- ex_exp %>%
+ex_expn <- ex_exp %>%
   derive_var_expand_nfrlt() %>%
   # Derive AVISIT based on nominal relative time
   mutate(
@@ -208,7 +208,7 @@ ex_exp <- ex_exp %>%
 
 # ---- Find first dose per treatment per subject ----
 
-timezero <- ex_exp %>%
+timezero <- ex_expn %>%
   group_by(STUDYID, USUBJID, DRUG) %>%
   summarize(timezero = min(ADTM, na.rm = TRUE))
 
@@ -228,11 +228,13 @@ adpc <- left_join(timezero, adpc, by = c("STUDYID", "USUBJID", "DRUG")) %>%
 
 adpc <- adpc %>%
   derive_vars_joined(
-    dataset_add = ex_exp,
+    dataset_add = ex_expn,
     by_vars = vars(USUBJID),
     order = vars(ADTM),
-    new_vars = vars(ADTM_prev = ADTM, EXDOSE_prev = EXDOSE,
-                    AVISIT_prev = AVISIT, AENDTM_prev = AENDTM),
+    new_vars = vars(
+      ADTM_prev = ADTM, EXDOSE_prev = EXDOSE, AVISIT_prev = AVISIT,
+      AENDTM_prev = AENDTM
+    ),
     join_vars = vars(ADTM),
     filter_add = NULL,
     filter_join = ADTM > ADTM.join,
@@ -244,11 +246,13 @@ adpc <- adpc %>%
 
 adpc <- adpc %>%
   derive_vars_joined(
-    dataset_add = ex_exp,
+    dataset_add = ex_expn,
     by_vars = vars(USUBJID),
     order = vars(ADTM),
-    new_vars = vars(ADTM_next = ADTM, EXDOSE_next = EXDOSE,
-                    AVISIT_next = AVISIT, AENDTM_next = AENDTM),
+    new_vars = vars(
+      ADTM_next = ADTM, EXDOSE_next = EXDOSE, AVISIT_next = AVISIT,
+      AENDTM_next = AENDTM
+    ),
     join_vars = vars(ADTM),
     filter_add = NULL,
     filter_join = ADTM <= ADTM.join,
@@ -260,7 +264,7 @@ adpc <- adpc %>%
 
 adpc <- adpc %>%
   derive_vars_joined(
-    dataset_add = ex_exp,
+    dataset_add = ex_expn,
     by_vars = vars(USUBJID),
     order = vars(NFRLT),
     new_vars = vars(NFRLT_prev = NFRLT),
@@ -275,7 +279,7 @@ adpc <- adpc %>%
 
 adpc <- adpc %>%
   derive_vars_joined(
-    dataset_add = ex_exp,
+    dataset_add = ex_expn,
     by_vars = vars(USUBJID),
     order = vars(NFRLT),
     new_vars = vars(NFRLT_next = NFRLT),
@@ -290,7 +294,7 @@ adpc <- adpc %>%
 # Derive Relative Time Variables
 
 
-adpc <- bind_rows(adpc, ex_exp) %>%
+adpc <- bind_rows(adpc, ex_expn) %>%
   group_by(USUBJID) %>%
   mutate(
     timezero = min(timezero, na.rm = TRUE),
@@ -489,5 +493,5 @@ adpc <- adpc %>%
 # ...
 # ---- Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
+dir <- "~/R/" # tempdir() # Change to whichever directory you want to save the dataset in
 saveRDS(adpc, file = file.path(dir, "adpc.rds"), compress = "bzip2")
