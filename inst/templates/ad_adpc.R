@@ -493,5 +493,5 @@ adpc <- adpc %>%
 # ...
 # ---- Save output ----
 
-dir <- "~/R/" # tempdir() # Change to whichever directory you want to save the dataset in
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
 saveRDS(adpc, file = file.path(dir, "adpc.rds"), compress = "bzip2")
