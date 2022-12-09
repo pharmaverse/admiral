@@ -80,7 +80,7 @@ derive_var_expand_nfrlt <- function(dataset) {
       }
 
       if (dataset$orig_NFRLT[i] == dataset$orig_NFRLT[i - 1] &
-          dataset$USUBJID[i] == dataset$USUBJID[i - 1]) {
+        dataset$USUBJID[i] == dataset$USUBJID[i - 1]) {
         dataset$NFRLT[i] <- dataset$NFRLT[i - 1] + dose_int
       } else {
         dataset$NFRLT[i] <- dataset$orig_NFRLT[i]
@@ -128,7 +128,7 @@ adpc <- pc %>%
 
 ex <- ex %>%
   left_join(select(admiral_adsl, STUDYID, USUBJID, !!!adsl_vars),
-            by = c("STUDYID", "USUBJID")
+    by = c("STUDYID", "USUBJID")
   ) %>%
   # Keep records with nonzero dose
   filter(EXDOSE > 0) %>%
@@ -479,7 +479,7 @@ adpc <- adpc %>%
 
 adpc <- adpc %>%
   left_join(select(admiral_adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+    by = c("STUDYID", "USUBJID")
   )
 
 # Final Steps, Select final variables and Add labels
