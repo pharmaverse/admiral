@@ -24,6 +24,8 @@ data("admiral_pc")
 data("admiral_ex")
 data("admiral_adsl")
 
+adsl <- admiral_adsl
+
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
@@ -64,7 +66,7 @@ format_avalcat1n <- function(param, aval) {
 
 # Use this function to expand nominal times based on EXDOSFRQ
 derive_var_expand_nfrlt <- function(dataset) {
-  assert_data_frame(dataset, required_vars = vars(NFRLT))
+  admiraldev::assert_data_frame(dataset, required_vars = vars(NFRLT))
 
   dataset <- dataset %>%
     mutate(orig_NFRLT = NFRLT)
@@ -99,9 +101,10 @@ adsl_vars <- vars(TRTSDT, TRTSDTM, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
 
 adpc <- pc %>%
   # Join ADSL with PC (need TRTSDT for ADY derivation)
-  left_join(
-    select(admiral_adsl, STUDYID, USUBJID, !!!adsl_vars),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = vars(STUDYID, USUBJID)
   ) %>%
   # Calculate ADTM, ADT, ADY
   derive_vars_dtm(
@@ -127,8 +130,10 @@ adpc <- pc %>%
 # ---- Get dosing information ----
 
 ex <- ex %>%
-  left_join(select(admiral_adsl, STUDYID, USUBJID, !!!adsl_vars),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = vars(STUDYID, USUBJID)
   ) %>%
   # Keep records with nonzero dose
   filter(EXDOSE > 0) %>%
@@ -210,11 +215,17 @@ ex_expn <- ex_exp %>%
 
 timezero <- ex_expn %>%
   group_by(STUDYID, USUBJID, DRUG) %>%
-  summarize(timezero = min(ADTM, na.rm = TRUE))
+  summarize(timezero = min(ADTM, na.rm = TRUE)) %>%
+  ungroup()
 
 # ---- Join with ADPC data and keep only subjects with dosing ----
 
-adpc <- left_join(timezero, adpc, by = c("STUDYID", "USUBJID", "DRUG")) %>%
+adpc <- adpc %>%
+  derive_vars_merged(
+    dataset_add = timezero,
+    new_vars = vars(timezero),
+    by_vars = vars(STUDYID, USUBJID, DRUG)
+  ) %>%
   ungroup() %>%
   # Derive AVISIT from nominal relative time
   mutate(
@@ -483,9 +494,11 @@ adpc <- adpc %>%
 
 # ---- Add all ADSL variables ----
 
+# Add all ADSL variables
 adpc <- adpc %>%
-  left_join(select(admiral_adsl, !!!admiral:::negate_vars(adsl_vars)),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
 
 # Final Steps, Select final variables and Add labels
