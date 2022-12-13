@@ -82,7 +82,7 @@ derive_var_expand_nfrlt <- function(dataset) {
       }
 
       if (dataset$orig_NFRLT[i] == dataset$orig_NFRLT[i - 1] &
-        dataset$USUBJID[i] == dataset$USUBJID[i - 1]) {
+          dataset$USUBJID[i] == dataset$USUBJID[i - 1]) {
         dataset$NFRLT[i] <- dataset$NFRLT[i - 1] + dose_int
       } else {
         dataset$NFRLT[i] <- dataset$orig_NFRLT[i]
@@ -226,7 +226,7 @@ adpc <- adpc %>%
     new_vars = vars(timezero),
     by_vars = vars(STUDYID, USUBJID, DRUG)
   ) %>%
-  ungroup() %>%
+  filter(!is.na(timezero)) %>%
   # Derive AVISIT from nominal relative time
   mutate(
     AVISITN = NFRLT %/% 24 + 1,
