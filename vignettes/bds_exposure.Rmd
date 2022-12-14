@@ -56,7 +56,7 @@ For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included
 
 ```{r message=FALSE}
 library(admiral)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 library(lubridate)
 library(stringr)
@@ -279,7 +279,9 @@ frequency to a corresponding set of records each representing one dose (i.e.
 single_dose <- adex %>%
   filter(USUBJID == "01-701-1015" & EXSTDY == 1) %>%
   create_single_dose_dataset(keep_source_vars = vars(USUBJID, EXDOSE, EXPLDOS, EXDOSFRQ, ASTDT, AENDT))
+```
 
+```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   single_dose,
   display_vars = vars(USUBJID, EXDOSE, EXPLDOS, EXDOSFRQ, ASTDT, AENDT)

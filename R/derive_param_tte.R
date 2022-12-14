@@ -376,7 +376,7 @@ derive_param_tte <- function(dataset = NULL,
   )
 
   new_param <- new_param %>%
-    mutate(!!date_var := pmax(!!date_var, !!start_var)) %>%
+    mutate(!!date_var := pmax(!!date_var, !!start_var, na.rm = TRUE)) %>%
     remove_tmp_vars()
 
   if (!is.null(by_vars)) {
@@ -754,6 +754,7 @@ tte_source <- function(dataset_name,
 #'
 #' @examples
 #' # Death event
+#'
 #' event_source(
 #'   dataset_name = "adsl",
 #'   filter = DTHFL == "Y",
@@ -799,6 +800,7 @@ event_source <- function(dataset_name,
 #'
 #' @examples
 #' # Last study date known alive censor
+#'
 #' censor_source(
 #'   dataset_name = "adsl",
 #'   date = LSTALVDT,

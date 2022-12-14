@@ -58,8 +58,8 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
 #' library(tibble)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' advs <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
@@ -269,6 +269,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #' @examples
 #' library(tibble)
+#'
 #' advs <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
 #'   "01-701-1015", "HEIGHT", "Height (cm)", 170, "BASELINE",
@@ -503,6 +504,7 @@ compute_bsa <- function(height = height,
 #'
 #' @examples
 #' library(tibble)
+#'
 #' advs <- tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVISIT,
 #'   "01-701-1015", "HEIGHT", "Height (cm)", 147,   "SCREENING",

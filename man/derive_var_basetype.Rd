@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_basetype.R
 \name{derive_var_basetype}
 \alias{derive_var_basetype}
-\title{Derive BASETYPE Variable}
+\title{Derive Basetype Variable}
 \usage{
 derive_var_basetype(dataset, basetypes)
 }
@@ -41,8 +41,8 @@ condition are kept and \code{BASETYPE} is set to \code{NA}.
 }
 \examples{
 library(tibble)
+library(dplyr, warn.conflicts = FALSE)
 library(rlang)
-library(dplyr)
 
 bds <- tribble(
   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,

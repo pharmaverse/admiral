@@ -15,7 +15,8 @@ Metadata Holding Grading Criteria for NCI-CTCAEv4
 }
 \details{
 This metadata has its origin in the ADLB Grading Spec Excel file which ships with \code{{admiral}}
-and can be accessed using \code{system.file("adlb_grading/adlb_grading_spec.xlsx", package = "admiral")}.
+and can be accessed using \code{system.file("adlb_grading/adlb_grading_spec.xlsx", package = "admiral")}
+in sheet = "NCICTCAEv4".
 The dataset contained in there has the following columns:
 \itemize{
 \item \code{SOC}: variable to hold the SOC of the lab test criteria.
@@ -39,11 +40,13 @@ value. 'L' is for LOW values, 'H' is for HIGH values. Note: the variable is case
 
 Note: Variables \code{SOC}, \code{TERM}, \verb{Grade 1}, \verb{Grade 2},\verb{Grade 3},\verb{Grade 4},\verb{Grade 5}, \code{Definition}
 are from the source document on NCI-CTC website defining the grading criteria.
+\href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm#ctc_40}{\strong{Common Terminology Criteria for Adverse Events (CTCAE)v4.0}}
 From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
 tracability only.
 }
 \seealso{
 Other metadata: 
+\code{\link{atoxgr_criteria_ctcv5}},
 \code{\link{dose_freq_lookup}}
 }
 \author{

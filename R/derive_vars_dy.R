@@ -42,7 +42,7 @@
 #' @examples
 #' library(tibble)
 #' library(lubridate)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' datain <- tribble(
 #'   ~TRTSDTM, ~ASTDTM, ~AENDT,
@@ -115,7 +115,7 @@ derive_vars_dy <- function(dataset,
       mutate_at(
         .vars = source_vars,
         .funs = list(temp = ~
-        compute_duration(start_date = eval(reference_date), end_date = .))
+          compute_duration(start_date = eval(reference_date), end_date = .))
       ) %>%
       rename_at(
         vars(ends_with("temp")),

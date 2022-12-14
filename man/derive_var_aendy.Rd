@@ -46,7 +46,8 @@ start date is 1.
 }
 \seealso{
 Other deprecated: 
-\code{\link{derive_derived_param}()}
+\code{\link{derive_derived_param}()},
+\code{\link{derive_param_first_event}()}
 }
 \author{
 Stefan Bundfuss

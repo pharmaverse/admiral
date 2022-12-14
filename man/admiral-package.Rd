@@ -44,13 +44,21 @@ Authors:
   \item Pooja Kumari
   \item Claudia Carlucci
   \item Daniil Stefonishin
+  \item Sadchla Mascary
+  \item Zelos Zhu
+  \item Jeffrey Dickinson
+  \item Ania Golab
 }
 
 Other contributors:
 \itemize{
   \item Michael Thorpe [contributor]
+  \item Declan Hodges [contributor]
+  \item Jaxon Abercrombie [contributor]
+  \item Nick Ramirez [contributor]
   \item Pavan Kumar [contributor]
   \item Hamza Rahal [contributor]
+  \item Yohann Omnes [contributor]
   \item Alice Ehmann [contributor]
   \item Tom Ratford [contributor]
   \item Vignesh Thanikachalam [contributor]

@@ -17,7 +17,7 @@ Count number of observations where a variable equals a value.
 \examples{
 
 library(tibble)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(admiral)
 data <- tribble(
   ~USUBJID, ~AVISITN, ~AVALC,

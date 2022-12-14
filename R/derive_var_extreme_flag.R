@@ -283,6 +283,7 @@ derive_var_extreme_flag <- function(dataset,
 #'
 #' @examples
 #' library(tibble)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' input <- tribble(
 #'   ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,

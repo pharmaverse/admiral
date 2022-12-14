@@ -34,8 +34,6 @@ These can then be used to create age groups.
 }
 \examples{
 
-library(dplyr, warn.conflicts = FALSE)
-
 data <- data.frame(
   AGE = c(27, 24, 3, 4, 1),
   AGEU = c("days", "months", "years", "weeks", "years")

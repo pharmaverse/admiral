@@ -12,8 +12,7 @@ get_terms_from_db(
   expect_query_name = FALSE,
   expect_query_id = FALSE,
   i,
-  temp_env,
-  type
+  temp_env
 )
 }
 \arguments{
@@ -48,10 +47,6 @@ The value is used for error messages.}
 \item{temp_env}{Temporary environment
 
 The value is passed to the access function.}
-
-\item{type}{Type of query
-
-\emph{Permitted Values}: \code{"smq"}, \code{"sdg"}}
 }
 \value{
 Output dataset of the access function

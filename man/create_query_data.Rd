@@ -7,10 +7,12 @@
 \usage{
 create_query_data(
   queries,
-  meddra_version = NULL,
-  whodd_version = NULL,
-  get_smq_fun = NULL,
-  get_sdg_fun = NULL
+  meddra_version = deprecated(),
+  whodd_version = deprecated(),
+  version = NULL,
+  get_smq_fun = deprecated(),
+  get_sdg_fun = deprecated(),
+  get_terms_fun = NULL
 )
 }
 \arguments{
@@ -18,95 +20,58 @@ create_query_data(
 
 A list of \code{query()} objects is expected.}
 
-\item{meddra_version}{MedDRA version
+\item{meddra_version}{\emph{Deprecated}, please use \code{version}}
 
-The MedDRA version used for coding the terms in the AE dataset should be
-specified. If any of the queries is a SMQ or a customized query including a
-SMQ, the parameter needs to be specified.
+\item{whodd_version}{\emph{Deprecated}, please use \code{version}}
 
-\emph{Permitted Values}: A character string (the expected format is
-company-specific)}
+\item{version}{Dictionary version
 
-\item{whodd_version}{WHO Drug Dictionary version
-
-The version of the WHO Drug Dictionary used for coding the terms in the CM
-dataset should be specified. If any of the queries is a SDG, the parameter
-needs to be specified.
+The dictionary version used for coding the terms should be specified.
+If any of the queries is a basket (SMQ, SDG, ....) or a customized query
+including a basket, the parameter needs to be specified.
 
 \emph{Permitted Values}: A character string (the expected format is
 company-specific)}
 
-\item{get_smq_fun}{Function which returns the terms of an SMQ
+\item{get_smq_fun}{\emph{Deprecated}, please use \code{get_terms_fun}}
 
-For each query specified for the \code{queries} parameter which refers to an SMQ
-(i.e., those where the \code{definition} field is set to a \code{smq_select()} object
-or a list which contains at least one \code{smq_select()} object) the specified
-function is called to retrieve the terms defining the query. This function
-is not provided by admiral as it is company specific, i.e., it has to be
-implemented at company level.
+\item{get_sdg_fun}{\emph{Deprecated}, please use \code{get_terms_fun}}
 
-The function must return a dataset with all the terms defining the SMQ. The
-output dataset must contain the following variables.
-\itemize{
-\item \code{TERM_LEVEL}: the variable to be used for defining a term of the SMQ, e.g.,
-\code{AEDECOD}
-\item \code{TERM_NAME}: the name of the term if the variable \code{TERM_LEVEL} is
-referring to is character
-\item \code{TERM_ID} the numeric id of the term if the variable \code{TERM_LEVEL} is
-referring to is numeric
-\item \code{QUERY_NAME}: the name of the SMQ. The values must be the same for all
-observations.
-}
+\item{get_terms_fun}{Function which returns the terms
 
-The function must provide the following parameters
-\itemize{
-\item \code{smq_select}: A \code{smq_select()} object.
-\item \code{version}: The MedDRA version. The value specified for the
-\code{meddra_version} in the \code{create_query_data()} call is passed to this
-parameter.
-\item \code{keep_id}: If set to \code{TRUE}, the output dataset must contain the
-\code{QUERY_ID} variable. The variable must be set to the numeric id of the SMQ.
-\item \code{temp_env}: A temporary environment is passed to this parameter. It can
-be used to store data which is used for all SMQs in the
-\code{create_query_data()} call. For example if the SMQs need to be read from a
-database all SMQs can be read and stored in the environment when the first
-SMQ is handled. For the other SMQs the terms can be retrieved from the
-environment instead of accessing the database again.
-}}
-
-\item{get_sdg_fun}{Function which returns the terms of an SDG
-
-For each query specified for the \code{queries} parameter which refers to an SDG
-the specified function is called to retrieve the terms defining the query.
+For each query specified for the \code{queries} parameter referring to a basket
+(i.e., those where the \code{definition} field is set to a \code{basket_select()}
+object or a list which contains at least one \code{basket_select()} object) the
+specified function is called to retrieve the terms defining the query.
 This function is not provided by admiral as it is company specific, i.e.,
 it has to be implemented at company level.
 
-The function must return a dataset with all the terms defining the SDG. The
-output dataset must contain the following variables.
+The function must return a dataset with all the terms defining the basket.
+The output dataset must contain the following variables.
 \itemize{
-\item \code{TERM_LEVEL}: the variable to be used for defining a term of the SDG, e.g.,
-\code{CMDECOD}
+\item \code{TERM_LEVEL}: the variable to be used for defining a term of the basket,
+e.g., \code{AEDECOD}
 \item \code{TERM_NAME}: the name of the term if the variable \code{TERM_LEVEL} is
 referring to is character
 \item \code{TERM_ID} the numeric id of the term if the variable \code{TERM_LEVEL} is
 referring to is numeric
-\item \code{QUERY_NAME}: the name of the SDG. The values must be the same for all
-observations.
+\item \code{QUERY_NAME}: the name of the basket. The values must be the same for
+all observations.
 }
 
 The function must provide the following parameters
 \itemize{
-\item \code{sdg_select}: A \code{sdg_select()} object.
-\item \code{version}: The WHO drug dictionary version. The value specified for the
-\code{whodd_version} in the \code{create_query_data()} call is passed to this
+\item \code{basket_select}: A \code{basket_select()} object.
+\item \code{version}: The dictionary version. The value specified for the
+\code{version} in the \code{create_query_data()} call is passed to this
 parameter.
 \item \code{keep_id}: If set to \code{TRUE}, the output dataset must contain the
-\code{QUERY_ID} variable. The variable must be set to the numeric id of the SDG.
+\code{QUERY_ID} variable. The variable must be set to the numeric id of the basket.
 \item \code{temp_env}: A temporary environment is passed to this parameter. It can
-be used to store data which is used for all SDGs in the
-\code{create_query_data()} call. For example if the SDGs need to be read from a
-database all SDGs can be read and stored in the environment when the first
-SDG is handled. For the other SDGs the terms can be retrieved from the
+be used to store data which is used for all baskets in the
+\code{create_query_data()} call. For example if SMQs need to be read from a
+database all SMQs can be read and stored in the environment when the first
+SMQ is handled. For the other SMQs the terms can be retrieved from the
 environment instead of accessing the database again.
 }}
 }
@@ -124,14 +89,12 @@ to the query (\code{TERM_LEVEL}, \code{TERM_NAME}, \code{TERM_ID}) are determine
 to the \code{definition} field of the query: if the definition field of the
 \code{query()} object is
 \itemize{
-\item an \code{smq_select()} object, the terms are read from the SMQ
-database by calling the function specified for the \code{get_smq_fun} parameter.
-\item an \code{sdg_select()} object, the terms are read from the SDG
-database by calling the function specified for the \code{get_sdg_fun} parameter.
+\item a \code{basket_select()} object, the terms are read from the basket
+database by calling the function specified for the \code{get_terms_fun} parameter.
 \item a data frame, the terms stored in the data frame are used.
-\item a list of data frames and \code{smq_select()} objects, all terms from
-the data frames and all terms read from the SMQ database referenced by the
-\code{smq_select()} objects are collated.
+\item a list of data frames and \code{basket_select()} objects, all terms from
+the data frames and all terms read from the basket database referenced by the
+\code{basket_select()} objects are collated.
 }
 
 The following variables (as described in \href{../articles/queries_dataset.html}{Queries Dataset Documentation}) are created:
@@ -143,22 +106,23 @@ The following variables (as described in \href{../articles/queries_dataset.html}
 element is not specified for a query, the variable is set to \code{NA}. If the
 \code{id} element is not specified for any query, the variable is not created.
 \item \code{QUERY_SCOPE}: scope of the query as specified by the \code{scope} element of
-the \code{smq_select()} object. For queries not defined by a \code{smq_select()}
+the \code{basket_select()} object. For queries not defined by a \code{basket_select()}
 object, the variable is set to \code{NA}. If none of the queries is defined by a
-\code{smq_select()} object, the variable is not created.
+\code{basket_select()} object, the variable is not created.
 \item \code{QUERY_SCOPE_NUM}: numeric scope of the query. It is set to \code{1} if the
-scope is broad. Otherwise it is set to '2'. If the \code{add_scope_num} element
+scope is broad. Otherwise it is set to \code{2}. If the \code{add_scope_num} element
 equals \code{FALSE}, the variable is set to \code{NA}. If the \code{add_scope_num} element
-equals \code{FALSE} for all SMQs or none of the queries is an SMQ , the variable
+equals \code{FALSE} for all baskets or none of the queries is an basket , the variable
 is not created.
 \item \code{TERM_LEVEL}: Name of the variable used to identify the terms.
 \item \code{TERM_NAME}: Value of the term variable if it is a character variable.
 \item \code{TERM_ID}: Value of the term variable if it is a numeric variable.
+\item \code{VERSION}: Set to the value of the \code{version} argument. If it is not
+specified, the variable is not created.
 }
 }
 \examples{
 library(tibble)
-library(magrittr, warn.conflicts = FALSE)
 library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 library(admiral)
@@ -183,47 +147,51 @@ create_query_data(queries = list(cq))
 pregsmq <- query(
   prefix = "SMQ02",
   id = auto,
-  definition = smq_select(
+  definition = basket_select(
     name = "Pregnancy and neonatal topics (SMQ)",
-    scope = "NARROW"
+    scope = "NARROW",
+    type = "smq"
   )
 )
 
 bilismq <- query(
   prefix = "SMQ04",
-  definition = smq_select(
+  definition = basket_select(
     id = 20000121L,
-    scope = "BROAD"
+    scope = "BROAD",
+    type = "smq"
   )
 )
 
-# The get_smq_terms function from admiral.test is used for this example.
+# The get_terms function from admiral.test is used for this example.
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(pregsmq, bilismq),
-  get_smq_fun = admiral.test:::get_smq_terms,
-  meddra_version = "20.1"
+  get_terms_fun = admiral.test:::get_terms,
+  version = "20.1"
 )
 
 # create a query dataset for SDGs
 sdg <- query(
   prefix = "SDG01",
   id = auto,
-  definition = sdg_select(
-    name = "5-aminosalicylates for ulcerative colitis"
+  definition = basket_select(
+    name = "5-aminosalicylates for ulcerative colitis",
+    scope = NA_character_,
+    type = "sdg"
   )
 )
 
-# The get_sdg_terms function from admiral.test is used for this example.
+# The get_terms function from admiral.test is used for this example.
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(sdg),
-  get_sdg_fun = admiral.test:::get_sdg_terms,
-  whodd_version = "2019-09"
+  get_terms_fun = admiral.test:::get_terms,
+  version = "2019-09"
 )
 
 # creating a query dataset for a customized query including SMQs
-# The get_smq_terms function from admiral.test is used for this example.
+# The get_terms function from admiral.test is used for this example.
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(
@@ -231,27 +199,28 @@ create_query_data(
       prefix = "CQ03",
       name = "Special issues of interest",
       definition = list(
-        smq_select(
+        basket_select(
           name = "Pregnancy and neonatal topics (SMQ)",
-          scope = "NARROW"
+          scope = "NARROW",
+          type = "smq"
         ),
         cqterms
       )
     )
   ),
-  get_smq_fun = admiral.test:::get_smq_terms,
-  meddra_version = "20.1"
+  get_terms_fun = admiral.test:::get_terms,
+  version = "20.1"
 )
 }
 \seealso{
-\code{\link[=derive_vars_query]{derive_vars_query()}}, \code{\link[=query]{query()}}, \code{\link[=smq_select]{smq_select()}}, \code{\link[=sdg_select]{sdg_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
+\code{\link[=derive_vars_query]{derive_vars_query()}}, \code{\link[=query]{query()}}, \code{\link[=basket_select]{basket_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
 
 Creating auxiliary datasets: 
 \code{\link{create_period_dataset}()},
 \code{\link{create_single_dose_dataset}()}
 }
 \author{
-Stefan Bundfuss
+Stefan Bundfuss, Tamara Senior
 }
 \concept{create_aux}
 \keyword{create_aux}

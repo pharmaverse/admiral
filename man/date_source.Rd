@@ -43,6 +43,31 @@ An object of class \code{date_source}.
 Create a \code{date_source} object as input for \code{derive_var_extreme_dt()} and
 \code{derive_var_extreme_dtm()}.
 }
+\examples{
+
+# treatment end date from ADSL
+trt_end_date <- date_source(
+  dataset_name = "adsl",
+  date = TRTEDT
+)
+
+# lab date from LB where assessment was taken, i.e. not "NOT DONE"
+lb_date <- date_source(
+  dataset_name = "lb",
+  filter = LBSTAT != "NOT DONE" | is.na(LBSTAT),
+  date = LBDT
+)
+
+# death date from ADSL including traceability variables
+death_date <- date_source(
+  dataset_name = "adsl",
+  date = DTHDT,
+  traceability_vars = vars(
+    LALVDOM = "ADSL",
+    LALVVAR = "DTHDT"
+  )
+)
+}
 \seealso{
 \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}}
 
@@ -50,23 +75,22 @@ Source Specifications:
 \code{\link{assert_db_requirements}()},
 \code{\link{assert_terms}()},
 \code{\link{assert_valid_queries}()},
+\code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{death_event}},
-\code{\link{derive_var_dthcaus}()},
+\code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{filter_date_sources}()},
-\code{\link{format.sdg_select}()},
-\code{\link{format.smq_select}()},
+\code{\link{format.basket_select}()},
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
 \code{\link{query}()},
 \code{\link{sdg_select}()},
 \code{\link{smq_select}()},
 \code{\link{tte_source}()},
-\code{\link{validate_query}()},
-\code{\link{validate_sdg_select}()},
-\code{\link{validate_smq_select}()}
+\code{\link{validate_basket_select}()},
+\code{\link{validate_query}()}
 }
 \author{
 Stefan Bundfuss

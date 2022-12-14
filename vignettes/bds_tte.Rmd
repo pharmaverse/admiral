@@ -35,7 +35,7 @@ The examples of this vignette require the following packages.
 
 ```{r, warning=FALSE, message=FALSE}
 library(admiral)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 ```
 

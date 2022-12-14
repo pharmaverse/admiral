@@ -35,6 +35,7 @@ COVID
 CQ
 CRF
 CTCAE
+CTCAEv
 Changelog
 Codebase
 Cyclomatic
@@ -65,10 +66,12 @@ GxP
 Hoffmann
 IG
 LLC
+LOCF
 MedDRA
 Metatools
 Modularity
 Mosteller
+NCI
 NUM
 OCCDS
 PARAM

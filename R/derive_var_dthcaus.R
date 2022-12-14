@@ -29,13 +29,15 @@
 #' @author
 #' Shimeng Huang, Samia Kabi, Thomas Neitmann, Tamara Senior
 #'
-#' @return `derive_var_dthcaus()` returns the input dataset with `DTHCAUS` variable added.
+#' @return The input dataset with `DTHCAUS` variable added.
 #'
 #' @export
 #'
+#' @seealso [dthcaus_source()]
+#'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
 #' adsl <- tribble(
@@ -198,6 +200,7 @@ derive_var_dthcaus <- function(dataset,
     }
     if (!is.null(sources[[ii]]$traceability)) {
       warn_if_vars_exist(source_dataset, names(sources[[ii]]$traceability))
+      assert_data_frame(source_dataset, required_vars = get_source_vars(sources[[ii]]$traceability))
       add_data[[ii]] <- add_data[[ii]] %>%
         transmute(
           !!!subject_keys,
@@ -259,14 +262,35 @@ derive_var_dthcaus <- function(dataset,
 #' in the returned dataset.
 #' These can be either strings or symbols referring to existing variables.
 #'
-#' @describeIn derive_var_dthcaus Create objects of class "dthcaus_source"
-#'
 #' @keywords source_specifications
 #' @family source_specifications
 #'
+#' @author Shimeng Huang
+#'
 #' @export
 #'
-#' @return `dthcaus_source()` returns an object of class "dthcaus_source".
+#' @seealso [derive_var_dthcaus()]
+#'
+#' @return An object of class "dthcaus_source".
+#'
+#' @examples
+#' # Deaths sourced from AE
+#' src_ae <- dthcaus_source(
+#'   dataset_name = "ae",
+#'   filter = AEOUT == "FATAL",
+#'   date = AEDTHDT,
+#'   mode = "first",
+#'   dthcaus = AEDECOD
+#' )
+#'
+#' # Deaths sourced from DS
+#' src_ds <- dthcaus_source(
+#'   dataset_name = "ds",
+#'   filter = DSDECOD == "DEATH",
+#'   date = DSSTDT,
+#'   mode = "first",
+#'   dthcaus = DSTERM
+#' )
 dthcaus_source <- function(dataset_name,
                            filter,
                            date,
