@@ -17,7 +17,7 @@ test_that("dataset_vignette Test 1: A 'knitr_kable' object is outputted when run
 })
 
 ## Test 2: A 'datatables' object is outputted when run inside pkgdown ----
-test_that("dataset_vignette Test 2: A 'datatables' object is outputted when run inside pkgdown", {
+test_that("dataset_vignette Test 2: A 'shiny.tag.list' object is outputted when run inside pkgdown", {
   Sys.setenv(IN_PKGDOWN = "true")
   on.exit(Sys.setenv(IN_PKGDOWN = ""))
 
@@ -30,8 +30,8 @@ test_that("dataset_vignette Test 2: A 'datatables' object is outputted when run 
   )
 
 
-  expect_s3_class(dataset_vignette(dm), "datatables")
-  expect_s3_class(dataset_vignette(dm, display_vars = vars(STUDYID, USUBJID)), "datatables")
+  expect_s3_class(dataset_vignette(dm), "shiny.tag.list")
+  expect_s3_class(dataset_vignette(dm, display_vars = vars(STUDYID, USUBJID)), "shiny.tag.list")
 })
 
 ## Test 3: An error is outputted when calling variable not in dataset ----
