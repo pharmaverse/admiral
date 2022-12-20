@@ -17,7 +17,7 @@ test_that("dataset_vignette Test 1: A 'knitr_kable' object is outputted when run
 })
 
 ## Test 2: A 'datatables' object is outputted when run inside pkgdown ----
-test_that("dataset_vignette Test 2: A 'shiny.tag.list' object is outputted when run inside pkgdown", {
+test_that("dataset_vignette Test 2: A 'shiny.tag.list' is outputted when run inside pkgdown", {
   Sys.setenv(IN_PKGDOWN = "true")
   on.exit(Sys.setenv(IN_PKGDOWN = ""))
 
