@@ -1,3 +1,17 @@
+# admiral 1.0.0
+
+## New Features
+
+## Updates of Existing Functions
+
+## Breaking Changes
+
+- Function `derive_param_tte()` has been updated such that only observations are
+added for subjects who have both an event or censoring and and an observation in
+`dataset_adsl` (#1576).
+
+## Documentation
+
 # admiral 0.9.0
 
 ## New Features
