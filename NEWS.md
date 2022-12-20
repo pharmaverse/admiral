@@ -1,3 +1,8 @@
+# admiraldev 0.2.1 (UNRELEASED)
+
+## Updates of Existing Functions
+  - Fix datatable styling for documentation 
+
 # admiraldev 0.2.0
 
 ## New Features
