@@ -114,7 +114,7 @@
 #'   Finally:
 #'   1. The variables specified for `start_date` and `start_imputation_flag` are
 #'   joined from the ADSL dataset. Only subjects in both datasets are kept,
-#'   i.e., subjects with and event or censoring and an observation in
+#'   i.e., subjects with both an event or censoring and an observation in
 #'   `dataset_adsl`.
 #'   1. The variables as defined by the `set_values_to` parameter are added.
 #'   1. The `ADT`/`ADTM` variable is set to the maximum of `ADT`/`ADTM` and

@@ -138,7 +138,7 @@ Finally:
 \enumerate{
 \item The variables specified for \code{start_date} and \code{start_imputation_flag} are
 joined from the ADSL dataset. Only subjects in both datasets are kept,
-i.e., subjects with and event or censoring and an observation in
+i.e., subjects with both an event or censoring and an observation in
 \code{dataset_adsl}.
 \item The variables as defined by the \code{set_values_to} parameter are added.
 \item The \code{ADT}/\code{ADTM} variable is set to the maximum of \code{ADT}/\code{ADTM} and
