@@ -4,7 +4,13 @@
 \alias{derive_locf_records}
 \title{Derive LOCF (Last Observation Carried Forward) Records}
 \usage{
-derive_locf_records(dataset, dataset_expected_obs, by_vars, order)
+derive_locf_records(
+  dataset,
+  dataset_expected_obs,
+  by_vars,
+  order,
+  keep_vars = NULL
+)
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -29,6 +35,12 @@ in the newly created records.}
 
 The dataset is sorted by \code{order} before carrying the last
 observation forward (eg. \code{AVAL}) within each \code{by_vars}.}
+
+\item{keep_vars}{Variables that need carrying the last observation forward
+
+Keep variables that need carrying the last observation forward other than \code{AVAL}
+(eg. \code{PARAMN}, \code{VISITNUM}). If by default \code{NULL}, only variables specified in
+\code{by_vars} and \code{AVAL} will be populated in the newly created records.}
 }
 \value{
 The input dataset with the new "LOCF" observations added for each
@@ -58,24 +70,24 @@ library(dplyr)
 library(tibble)
 
 advs <- tribble(
-  ~STUDYID,  ~USUBJID,      ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT,
-  "CDISC01", "01-701-1015", "PULSE",     61,        0, "BASELINE",
-  "CDISC01", "01-701-1015", "PULSE",     60,        2, "WEEK 6",
-  "CDISC01", "01-701-1015", "DIABP",     51,        0, "BASELINE",
-  "CDISC01", "01-701-1015", "DIABP",     50,        2, "WEEK 2",
-  "CDISC01", "01-701-1015", "DIABP",     51,        4, "WEEK 4",
-  "CDISC01", "01-701-1015", "DIABP",     50,        6, "WEEK 6",
-  "CDISC01", "01-701-1015", "SYSBP",    121,        0, "BASELINE",
-  "CDISC01", "01-701-1015", "SYSBP",    121,        2, "WEEK 2",
-  "CDISC01", "01-701-1015", "SYSBP",    121,        4, "WEEK 4",
-  "CDISC01", "01-701-1015", "SYSBP",    121,        6, "WEEK 6",
-  "CDISC01", "01-701-1028", "PULSE",     65,        0, "BASELINE",
-  "CDISC01", "01-701-1028", "DIABP",     79,        0, "BASELINE",
-  "CDISC01", "01-701-1028", "DIABP",     80,        2, "WEEK 2",
-  "CDISC01", "01-701-1028", "DIABP",     NA,        4, "WEEK 4",
-  "CDISC01", "01-701-1028", "DIABP",     NA,        6, "WEEK 6",
-  "CDISC01", "01-701-1028", "SYSBP",    130,        0, "BASELINE",
-  "CDISC01", "01-701-1028", "SYSBP",    132,        2, "WEEK 2"
+  ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
+  "CDISC01", "01-701-1015", "PULSE", 1, 61, 0, "BASELINE",
+  "CDISC01", "01-701-1015", "PULSE", 1, 60, 2, "WEEK 6",
+  "CDISC01", "01-701-1015", "DIABP", 2, 51, 0, "BASELINE",
+  "CDISC01", "01-701-1015", "DIABP", 2, 50, 2, "WEEK 2",
+  "CDISC01", "01-701-1015", "DIABP", 2, 51, 4, "WEEK 4",
+  "CDISC01", "01-701-1015", "DIABP", 2, 50, 6, "WEEK 6",
+  "CDISC01", "01-701-1015", "SYSBP", 3, 121, 0, "BASELINE",
+  "CDISC01", "01-701-1015", "SYSBP", 3, 121, 2, "WEEK 2",
+  "CDISC01", "01-701-1015", "SYSBP", 3, 121, 4, "WEEK 4",
+  "CDISC01", "01-701-1015", "SYSBP", 3, 121, 6, "WEEK 6",
+  "CDISC01", "01-701-1028", "PULSE", 1, 65, 0, "BASELINE",
+  "CDISC01", "01-701-1028", "DIABP", 2, 79, 0, "BASELINE",
+  "CDISC01", "01-701-1028", "DIABP", 2, 80, 2, "WEEK 2",
+  "CDISC01", "01-701-1028", "DIABP", 2, NA, 4, "WEEK 4",
+  "CDISC01", "01-701-1028", "DIABP", 2, NA, 6, "WEEK 6",
+  "CDISC01", "01-701-1028", "SYSBP", 3, 130, 0, "BASELINE",
+  "CDISC01", "01-701-1028", "SYSBP", 3, 132, 2, "WEEK 2"
 )
 
 
@@ -98,7 +110,8 @@ derive_locf_records(
   data = advs,
   dataset_expected_obs = advs_expected_obsv,
   by_vars = vars(STUDYID, USUBJID, PARAMCD),
-  order = vars(AVISITN, AVISIT)
+  order = vars(AVISITN, AVISIT),
+  keep_vars = vars(PARAMN)
 )
 
 }

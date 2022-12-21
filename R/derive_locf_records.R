@@ -26,6 +26,12 @@
 #'   The dataset is sorted by `order` before carrying the last
 #'   observation forward (eg. `AVAL`) within each `by_vars`.
 #'
+#' @param keep_vars Variables that need carrying the last observation forward
+#'
+#'   Keep variables that need carrying the last observation forward other than `AVAL`
+#'   (eg. `PARAMN`, `VISITNUM`). If by default `NULL`, only variables specified in
+#'   `by_vars` and `AVAL` will be populated in the newly created records.
+#'
 #' @author G Gayatri
 #'
 #' @details For each group (with respect to the variables specified for the
@@ -53,24 +59,24 @@
 #' library(tibble)
 #'
 #' advs <- tribble(
-#'   ~STUDYID,  ~USUBJID,      ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT,
-#'   "CDISC01", "01-701-1015", "PULSE",     61,        0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "PULSE",     60,        2, "WEEK 6",
-#'   "CDISC01", "01-701-1015", "DIABP",     51,        0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "DIABP",     50,        2, "WEEK 2",
-#'   "CDISC01", "01-701-1015", "DIABP",     51,        4, "WEEK 4",
-#'   "CDISC01", "01-701-1015", "DIABP",     50,        6, "WEEK 6",
-#'   "CDISC01", "01-701-1015", "SYSBP",    121,        0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "SYSBP",    121,        2, "WEEK 2",
-#'   "CDISC01", "01-701-1015", "SYSBP",    121,        4, "WEEK 4",
-#'   "CDISC01", "01-701-1015", "SYSBP",    121,        6, "WEEK 6",
-#'   "CDISC01", "01-701-1028", "PULSE",     65,        0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "DIABP",     79,        0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "DIABP",     80,        2, "WEEK 2",
-#'   "CDISC01", "01-701-1028", "DIABP",     NA,        4, "WEEK 4",
-#'   "CDISC01", "01-701-1028", "DIABP",     NA,        6, "WEEK 6",
-#'   "CDISC01", "01-701-1028", "SYSBP",    130,        0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "SYSBP",    132,        2, "WEEK 2"
+#'   ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
+#'   "CDISC01", "01-701-1015", "PULSE", 1, 61, 0, "BASELINE",
+#'   "CDISC01", "01-701-1015", "PULSE", 1, 60, 2, "WEEK 6",
+#'   "CDISC01", "01-701-1015", "DIABP", 2, 51, 0, "BASELINE",
+#'   "CDISC01", "01-701-1015", "DIABP", 2, 50, 2, "WEEK 2",
+#'   "CDISC01", "01-701-1015", "DIABP", 2, 51, 4, "WEEK 4",
+#'   "CDISC01", "01-701-1015", "DIABP", 2, 50, 6, "WEEK 6",
+#'   "CDISC01", "01-701-1015", "SYSBP", 3, 121, 0, "BASELINE",
+#'   "CDISC01", "01-701-1015", "SYSBP", 3, 121, 2, "WEEK 2",
+#'   "CDISC01", "01-701-1015", "SYSBP", 3, 121, 4, "WEEK 4",
+#'   "CDISC01", "01-701-1015", "SYSBP", 3, 121, 6, "WEEK 6",
+#'   "CDISC01", "01-701-1028", "PULSE", 1, 65, 0, "BASELINE",
+#'   "CDISC01", "01-701-1028", "DIABP", 2, 79, 0, "BASELINE",
+#'   "CDISC01", "01-701-1028", "DIABP", 2, 80, 2, "WEEK 2",
+#'   "CDISC01", "01-701-1028", "DIABP", 2, NA, 4, "WEEK 4",
+#'   "CDISC01", "01-701-1028", "DIABP", 2, NA, 6, "WEEK 6",
+#'   "CDISC01", "01-701-1028", "SYSBP", 3, 130, 0, "BASELINE",
+#'   "CDISC01", "01-701-1028", "SYSBP", 3, 132, 2, "WEEK 2"
 #' )
 #'
 #'
@@ -93,17 +99,20 @@
 #'   data = advs,
 #'   dataset_expected_obs = advs_expected_obsv,
 #'   by_vars = vars(STUDYID, USUBJID, PARAMCD),
-#'   order = vars(AVISITN, AVISIT)
+#'   order = vars(AVISITN, AVISIT),
+#'   keep_vars = vars(PARAMN)
 #' )
 #'
 derive_locf_records <- function(dataset,
-                                dataset_expected_obs,
-                                by_vars,
-                                order) {
+                                 dataset_expected_obs,
+                                 by_vars,
+                                 order,
+                                 keep_vars = NULL) {
   #### Input Checking ####
 
   # Check if input parameters is a valid list of variables
   assert_vars(by_vars, optional = TRUE)
+  assert_vars(keep_vars, optional = TRUE)
   assert_order_vars(order)
 
   # Check by_vars and order variables in input datasets
@@ -112,6 +121,12 @@ derive_locf_records <- function(dataset,
     dataset,
     required_vars = quo_c(by_vars, extract_vars(order), chr2vars(colnames(dataset_expected_obs)))
   )
+  assert_data_frame(
+    dataset,
+    required_vars = keep_vars,
+    optional = TRUE
+  )
+
 
   #### Prepping 'dataset_expected_obs' ####
 
@@ -176,7 +191,7 @@ derive_locf_records <- function(dataset,
   aval_not_missing_locf <- aval_not_missing_locf %>%
     arrange(!!!by_vars, !!!order) %>%
     group_by(!!!by_vars) %>%
-    fill("AVAL") %>%
+    fill("AVAL", !!!keep_vars) %>%
     ungroup()
 
 
