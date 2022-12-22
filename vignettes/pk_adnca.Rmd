@@ -23,24 +23,26 @@ library(admiraldev)
 # Introduction
 
 This article describes creating a Pharmacokinetics (PK)
-Non-compartmental analysis (NCA) ADaM using CDISC Implementation Guide
+Non-compartmental analysis (NCA) ADaM using the CDISC Implementation
+Guide
 (<https://www.cdisc.org/standards/foundational/adam/adamig-non-compartmental-analysis-input-data-v1-0>).
-Examples are currently presented using an underlying `EX` and `PC`
-domains where the `EX` and `PC` domains represent data as collected and
-the `ADPC` ADaM is output. However, the example can be applied to
-situations where an `EC` domain is used as input instead of `EX` and/or
-`ADNCA` or another ADaM is created.
+This example presented uses underlying `EX` and `PC` domains where the
+`EX` and `PC` domains represent data as collected and the `ADPC` ADaM is
+output. However, the example can be applied to situations where an `EC`
+domain is used as input instead of `EX` and/or `ADNCA` or another ADaM
+is created.
 
 One of the important aspects of the dataset is the derivation of
 relative timing variables. These variables consist of nominal and actual
 times, and refer to the time from first dose or time from most recent
-dose. Pre-dose records may refer to the upcoming dose. The CDISC
-Implementation guide makes use of duplicated records for analysis, which
-allows the same record to be used both with respect to the previous dose
-and the next upcoming dose. This illustrated later in this vignette.
+reference dose. The reference dose for pre-dose records may be the
+upcoming dose. The CDISC Implementation Guide makes use of duplicated
+records for analysis, which allows the same record to be used both with
+respect to the previous dose and the next upcoming dose. This is
+illustrated later in this vignette.
 
-These are the relative time variables we will use. These correspond to
-the names in the CDISC Implementation guide.
+Here are the relative time variables we will use. These correspond to
+the names in the CDISC Implementation Guide.
 
 | Variable | Variable Label                         |
 |----------|----------------------------------------|
@@ -61,7 +63,7 @@ unless otherwise specified.*
 
 -   [Find First Dose and Calculate `AFRLT`](#firstdose)
 
--   [Find Dose Dates Corresponding to PK Records](#dosedates)
+-   [Find Reference Dose Dates Corresponding to PK Records](#dosedates)
 
 -   [Combine `PC` and `EX` Records and Derive Relative Time
     Variables](#relative)
@@ -71,7 +73,7 @@ unless otherwise specified.*
 
 -   [Create Duplicated Records for Analysis](#copy)
 
--   [Combine ADPC data with Duplicated Records](#combine)
+-   [Combine `ADPC` data with Duplicated Records](#combine)
 
 -   [Calculate Change from Baseline and Assign `ASEQ`](#aseq)
 
@@ -88,11 +90,11 @@ read into the environment. This will be a company specific process. Some
 of the data frames needed may be `PC`, `EX`, and `ADSL`.
 
 Additional domains such as `VS` and `LB` may be used for additional
-baseline variables needed. These may come from either the SDTM or ADaM
-source.
+baseline variables if needed. These may come from either the SDTM or
+ADaM source.
 
-For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are
-included in `{admiral.test}`---are used.
+For the purpose of example, the CDISC Pilot SDTM and ADaM
+datasets---which are included in `{admiral.test}`---are used.
 
 ```{r message=FALSE}
 library(admiral)
@@ -130,14 +132,14 @@ param_lookup <- tibble::tribble(
 ```
 
 ```{r echo=FALSE}
-# ex <- filter(ex, USUBJID %in% c("01-701-1028", "01-701-1033", "01-701-1442", "01-714-1288"))
-# pc <- filter(pc, USUBJID %in% c("01-701-1028", "01-701-1033", "01-701-1442", "01-714-1288"))
+ex <- filter(ex, USUBJID %in% c("01-701-1028", "01-701-1033", "01-701-1442", "01-714-1288", "01-718-1101"))
+pc <- filter(pc, USUBJID %in% c("01-701-1028", "01-701-1033", "01-701-1442", "01-714-1288", "01-718-1101"))
 ```
 
 At this step, it may be useful to join `ADSL` to your `PC` and `EX`
 domains as well. Only the `ADSL` variables used for derivations are
-selected at this step. The rest of the relevant `ADSL` variables would
-be added later.
+selected at this step. The rest of the relevant `ADSL` variables will be
+added later.
 
 In this case we will keep `TRTSDT`/`TRTSDTM` for day derivation and
 `TRT01P`/`TRT01A` for planned and actual treatments.
@@ -272,7 +274,8 @@ the nominal day value from `NFRLT` and give it the format, "Day 1", "Day
 2", "Day 3", etc. This is important for creating the `BASETYPE` variable
 later. `DRUG` is created from `EXTRT` here. This will be useful for
 linking treatment data with concentration data if there are multiple
-drugs and/or analytes.
+drugs and/or analytes, but this variable will also be dropped from the
+final dataset in this example.
 
 ```{r eval=TRUE, echo=TRUE}
 # ---- Expand dosing records between start and end dates ----
@@ -294,7 +297,10 @@ ex_exp <- ex %>%
       TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
     )
   ) %>%
+  # Derive AVISIT based on nominal relative time
   mutate(
+    AVISITN = NFRLT %/% 24 + 1,
+    AVISIT = paste("Day", AVISITN),
     ADTM = ASTDTM,
     DRUG = EXTRT,
   ) %>%
@@ -303,12 +309,7 @@ ex_exp <- ex %>%
   derive_vars_dtm_to_tm(vars(ADTM)) %>%
   derive_vars_dtm_to_tm(vars(ASTDTM)) %>%
   derive_vars_dtm_to_tm(vars(AENDTM)) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT)) %>%
-  # Derive AVISIT based on nominal relative time
-  mutate(
-    AVISITN = NFRLT %/% 24 + 1,
-    AVISIT = paste("Day", AVISITN)
-  )
+  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -321,11 +322,11 @@ dataset_vignette(
 ## Find First Dose and Calculate `AFRLT` {#firstdose}
 
 In this section we will find the first dose for each subject and drug.
-We also create and analysis visit (`AVISIT`) based on `NFRLT`. The first
-dose datetime for an analyte `FANLDTM` is the calculated as the minimum
+We also create an analysis visit (`AVISIT`) based on `NFRLT`. The first
+dose datetime for an analyte `FANLDTM` is calculated as the minimum
 `ADTM` from the dosing records by subject and drug.
 
-```{r eval=TRUE, echo=FALSE, message=FALSE}
+```{r eval=TRUE, echo=TRUE, message=FALSE}
 # ---- Find first dose per treatment per subject ----
 
 timezero <- ex_exp %>%
@@ -356,7 +357,7 @@ dataset_vignette(
 )
 ```
 
-## Find Dose Dates Corresponding to PK Records {#dosedates}
+## Find Reference Dose Dates Corresponding to PK Records {#dosedates}
 
 Use `derive_vars_joined()` to find the previous dose data. This will
 join the expanded `EX` data with the `ADPC` based on the analysis date
@@ -431,10 +432,10 @@ dataset_vignette(
 )
 ```
 
-Use the same method to find and previous and next nominal times. Note
+Use the same method to find the previous and next nominal times. Note
 that here the data are sorted by nominal time rather than the actual
 time. This will tell us when the previous dose and the next dose were
-supposed to be. Sometimes this will differ from the actual times in a
+supposed to occur. Sometimes this will differ from the actual times in a
 study. Here we keep the previous nominal dose time `NFRLT_prev` and the
 next nominal dose time `NFRLT_next`. Note that the `filter_join`
 parameter uses the nominal relative times, e.g. `NFRLT > NFRLT.join`.
@@ -500,6 +501,9 @@ We also calculate the reference dates `FANLDTM` (First Datetime of Dose
 for Analyte) and `PCRFTDTM` (Reference Datetime of Dose for Analyte) and
 their corresponding date and time variables.
 
+We calculate the maximum date for concentration records and only keep
+the dosing records up to that date.
+
 ```{r eval=TRUE, echo=TRUE}
 
 # ---- Combine ADPC and EX data ----
@@ -507,7 +511,7 @@ their corresponding date and time variables.
 
 
 adpc <- bind_rows(adpc, ex_exp) %>%
-  group_by(USUBJID) %>%
+  group_by(USUBJID, DRUG) %>%
   mutate(
     FANLDTM = min(FANLDTM, na.rm = TRUE),
     min_NFRLT = min(NFRLT_prev, na.rm = TRUE),
@@ -594,7 +598,7 @@ adpc <- adpc %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adpc,
-  display_vars = vars(USUBJID, NFRLT, AVISIT, PCTPT, NRRLT, NXRLT)
+  display_vars = vars(USUBJID, AVISIT, PCTPT, NFRLT, NRRLT, NXRLT)
 )
 ```
 
@@ -749,7 +753,7 @@ dataset_vignette(
 )
 ```
 
-## Combine ADPC data with Duplicated Records {#combine}
+## Combine `ADPC` data with Duplicated Records {#combine}
 
 Now the duplicated records are combined with the original records. We
 also derive the modified relative time from reference dose `MRRLT`. In
@@ -789,7 +793,7 @@ baseline `CHG`.
 We also now derive `ASEQ` using `derive_var_obs_number()` and we drop
 intermediate variables such as those ending with "\_prev" and "\_next".
 
-Finally we derive `PARAM`and `PARAMN` from a lookup table.
+Finally we derive `PARAM` and `PARAMN` from a lookup table.
 
 ```{r eval=TRUE, echo=TRUE}
 
@@ -837,7 +841,9 @@ adpc %>%
 
 Here we derive additional baseline values from `VS` for baseline height
 `HTBL` and weight `WTBL` and compute the body mass index (BMI) with
-`compute_bmi()`.
+`compute_bmi()`. These values could also be obtained from `ADVS` if
+available. Baseline lab values could also be derived from `LB` or `ADLB`
+in a similar manner.
 
 ```{r eval=TRUE, echo=TRUE}
 
