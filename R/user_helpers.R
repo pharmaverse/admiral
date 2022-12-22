@@ -109,8 +109,8 @@ list_all_templates <- function(package = "admiral") {
 #'
 #' @export
 #'
-#' @keywords internal
-#' @family internal
+#' @keywords utils_print
+#' @family utils_print
 #'
 #' @seealso [list_all_templates()]
 #'

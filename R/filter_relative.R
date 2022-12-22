@@ -49,8 +49,6 @@
 #'
 #' @param keep_no_ref_groups Should by groups without reference observation be kept?
 #'
-#'   *Default:* `TRUE`
-#'
 #'   *Permitted Values:* `TRUE`, `FALSE`
 #'
 #' @param check_type Check uniqueness?
@@ -59,13 +57,11 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   *Default:* `"none"`
-#'
 #'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
 #'
 #' @details For each by group ( `by_vars` parameter) the observations before or
 #'   after (`selection` parameter) the observations where the condition
-#'   (`condition` parameter) if fulfilled the first or last time (`order`
+#'   (`condition` parameter) is fulfilled the first or last time (`order`
 #'   parameter and `mode` parameter) is included in the output dataset.
 #'
 #' @author Stefan Bundfuss
@@ -81,9 +77,9 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflict = FALSE)
+#' library(tibble)
 #'
-#' response <- tibble::tribble(
+#' response <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
 #'   "1",      1,        "PR",
 #'   "1",      2,        "CR",

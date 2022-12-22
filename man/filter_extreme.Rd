@@ -56,7 +56,7 @@ order specified for the \code{order} parameter and the mode specified for the
 \code{mode} parameter) is included in the output dataset.
 }
 \examples{
-library(dplyr, warn.conflict = FALSE)
+library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 data("admiral_ex")
 

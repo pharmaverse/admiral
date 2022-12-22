@@ -9,7 +9,10 @@ globalVariables(c(
   "AENDY",
   "ANRHI",
   "ANRLO",
+  "APERIOD",
+  "APHASEN",
   "ASEQ",
+  "ASPER",
   "ASTDT",
   "ASTDTM",
   "ASTDY",
@@ -40,6 +43,7 @@ globalVariables(c(
   "TRTDURD",
   "TRTEDT",
   "TRTEDTM",
+  "TRTEMFL",
   "TRTSDT",
   "TRTSDTM",
   "QLABEL",
@@ -66,6 +70,7 @@ globalVariables(c(
   "temp_source_nr",
   "temp_slicenr",
   "temp_date",
+  "time_differential_dt",
   "tmp_obs_nr_filter_relative",
   "tmp_obs_nr_match_filter_relative",
   "VAR_PREFIX",
@@ -130,5 +135,6 @@ globalVariables(c(
   "VAR_CHECK",
   "TERM",
   "TERM_UPPER",
-  "atoxgr_criteria_ctcv4"
+  "atoxgr_criteria_ctcv4",
+  "DTYPE"
 ))

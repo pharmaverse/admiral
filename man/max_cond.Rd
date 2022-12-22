@@ -18,7 +18,7 @@ entries/observations.
 \examples{
 
 library(tibble)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(admiral)
 data <- tribble(
   ~USUBJID, ~AVISITN, ~AVALC,

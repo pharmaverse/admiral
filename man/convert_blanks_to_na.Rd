@@ -35,9 +35,11 @@ as is and applies the just described logic to \code{character} columns. Once aga
 all attributes such as labels are preserved.
 }
 \examples{
+library(tibble)
+
 convert_blanks_to_na(c("a", "b", "", "d", ""))
 
-df <- tibble::tibble(
+df <- tibble(
   a = structure(c("a", "b", "", "c"), label = "A"),
   b = structure(c(1, NA, 21, 9), label = "B"),
   c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
@@ -48,6 +50,7 @@ convert_blanks_to_na(df)
 }
 \seealso{
 Utilities for Formatting Observations: 
+\code{\link{convert_na_to_blanks}()},
 \code{\link{format_eoxxstt_default}()},
 \code{\link{format_reason_default}()},
 \code{\link{yn_to_numeric}()}

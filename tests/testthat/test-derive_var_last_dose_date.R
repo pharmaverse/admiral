@@ -1,7 +1,4 @@
-library(tibble)
-library(dplyr)
-library(lubridate)
-input_ae <- tribble(
+input_ae <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC,
   "my_study", "subject1", 1, "2020-01-02",
   "my_study", "subject1", 2, "2020-08-31",
@@ -14,7 +11,7 @@ input_ae <- tribble(
   AESTDT = ymd(AESTDTC)
 )
 
-input_ex <- tribble(
+input_ex <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
   "my_study", "subject1", "2020-01-01", "2020-01-01", 1, 10, "treatment",
   "my_study", "subject1", "2020-08-29", "2020-08-29", 2, 10, "treatment",
@@ -62,7 +59,7 @@ test_that("derive_var_last_dose_date Test 1: works as expected output_datetime =
 
 ## Test 2: works as expected with output_datetime = TRUE ----
 test_that("derive_var_last_dose_date Test 2: works as expected with output_datetime = TRUE", {
-  expected_output <- tribble(
+  expected_output <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC, ~LDOSEDTM,
     "my_study", "subject1", 1, "2020-01-02", "2020-01-01 00:00:00",
     "my_study", "subject1", 2, "2020-08-31", "2020-08-29 00:00:00",
@@ -95,7 +92,7 @@ test_that("derive_var_last_dose_date Test 2: works as expected with output_datet
 
 ## Test 3: returns traceability vars ----
 test_that("derive_var_last_dose_date Test 3: returns traceability vars", {
-  expected_output <- tribble(
+  expected_output <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC, ~LDOSEDTM,
     "my_study", "subject1", 1, "2020-01-02", "2020-01-01 00:00:00",
     "my_study", "subject1", 2, "2020-08-31", "2020-08-29 00:00:00",

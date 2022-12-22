@@ -34,8 +34,6 @@ These can then be used to create age groups.
 }
 \examples{
 
-library(dplyr, warn.conflicts = FALSE)
-
 data <- data.frame(
   AGE = c(27, 24, 3, 4, 1),
   AGEU = c("days", "months", "years", "weeks", "years")
@@ -54,7 +52,8 @@ ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_disposition_reason}()}
+\code{\link{derive_vars_disposition_reason}()},
+\code{\link{derive_vars_period}()}
 }
 \author{
 Michael Thorpe

@@ -17,9 +17,11 @@ from the company database.}
 An object of class \code{sdg_select}.
 }
 \description{
-Create an \code{sdg_select} object
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \details{
+This function is \emph{deprecated}, please use \code{basket_select()} instead.
+
 Exactly one \code{name} or \code{id} must be specified.
 }
 \seealso{
@@ -29,23 +31,22 @@ Source Specifications:
 \code{\link{assert_db_requirements}()},
 \code{\link{assert_terms}()},
 \code{\link{assert_valid_queries}()},
+\code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
-\code{\link{derive_var_dthcaus}()},
+\code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{filter_date_sources}()},
-\code{\link{format.sdg_select}()},
-\code{\link{format.smq_select}()},
+\code{\link{format.basket_select}()},
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
 \code{\link{query}()},
 \code{\link{smq_select}()},
 \code{\link{tte_source}()},
-\code{\link{validate_query}()},
-\code{\link{validate_sdg_select}()},
-\code{\link{validate_smq_select}()}
+\code{\link{validate_basket_select}()},
+\code{\link{validate_query}()}
 }
 \author{
 Stefan Bundfuss
