@@ -19,9 +19,11 @@ library(admiral.test) # Contains example datasets from the CDISC pilot project o
 # For illustration purposes read in admiral test data
 
 
-# Load PC, EX and ADSL
+# Load PC, EX, VS and ADSL
 data("admiral_pc")
 data("admiral_ex")
+data("admiral_vs")
+
 data("admiral_adsl")
 
 adsl <- admiral_adsl
@@ -41,6 +43,10 @@ pc <- convert_blanks_to_na(admiral_pc) %>%
   rename(PCDTM = PCDTC) %>%
   mutate(PCDTC = as.character.Date(PCDTM, format = "%Y-%m-%dT%H:%M:%S")) %>%
   select(-PCDTM)
+
+# Load VS for baseline height and weight
+
+vs <- convert_blanks_to_na(admiral_vs)
 
 # ---- Lookup tables ----
 param_lookup <- tibble::tribble(
@@ -64,40 +70,11 @@ format_avalcat1n <- function(param, aval) {
   )
 }
 
-# Use this function to expand nominal times based on EXDOSFRQ
-derive_var_expand_nfrlt <- function(dataset) {
-  admiraldev::assert_data_frame(dataset, required_vars = vars(NFRLT))
-
-  dataset <- dataset %>%
-    mutate(orig_NFRLT = NFRLT)
-
-  for (i in (seq_along(dataset$NFRLT))) {
-    if (i > 1) {
-      if (dataset$orig_EXDOSFRQ[i - 1] == "QD") {
-        dose_int <- 24
-      } else if (dataset$orig_EXDOSFRQ[i - 1] == "QOD") {
-        dose_int <- 48
-      } else if (dataset$orig_EXDOSFRQ[i - 1] == "BID") {
-        dose_int <- 12
-      }
-
-      if (dataset$orig_NFRLT[i] == dataset$orig_NFRLT[i - 1] &
-        dataset$USUBJID[i] == dataset$USUBJID[i - 1]) {
-        dataset$NFRLT[i] <- dataset$NFRLT[i - 1] + dose_int
-      } else {
-        dataset$NFRLT[i] <- dataset$orig_NFRLT[i]
-      }
-    }
-  }
-
-  return(dataset)
-}
-
 
 # ---- Derivations ----
 
 # Get list of ADSL vars required for derivations
-adsl_vars <- vars(TRTSDT, TRTSDTM, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
+adsl_vars <- vars(TRTSDT, TRTSDTM, TRT01P, TRT01A)
 
 adpc <- pc %>%
   # Join ADSL with PC (need TRTSDT for ADY derivation)
@@ -172,25 +149,29 @@ ex <- ex %>%
 
 
 # ---- Expand dosing records between start and end dates ----
+# Updated function includes nominal_time parameter
 
 ex_exp <- ex %>%
-  mutate(orig_EXDOSFRQ = EXDOSFRQ) %>%
   create_single_dose_dataset(
     dose_freq = EXDOSFRQ,
     start_date = ASTDT,
     start_datetime = ASTDTM,
     end_date = AENDT,
     end_datetime = AENDTM,
+    nominal_time = NFRLT,
     lookup_table = dose_freq_lookup,
     lookup_column = CDISC_VALUE,
     keep_source_vars = vars(
-      STUDYID, USUBJID, EVID, EXDOSFRQ, orig_EXDOSFRQ, EXDOSFRM,
+      STUDYID, USUBJID, EVID, EXDOSFRQ, EXDOSFRM,
       NFRLT, EXDOSE, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
       VISIT, VISITNUM, VISITDY,
       TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
     )
   ) %>%
+  # Derive AVISIT based on nominal relative time
   mutate(
+    AVISITN = NFRLT %/% 24 + 1,
+    AVISIT = paste("Day", AVISITN),
     ADTM = ASTDTM,
     DRUG = EXTRT
   ) %>%
@@ -201,21 +182,12 @@ ex_exp <- ex %>%
   derive_vars_dtm_to_tm(vars(AENDTM)) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
-# ---- Add nominal time from first dose (NFRLT) to EX data ----
-
-ex_expn <- ex_exp %>%
-  derive_var_expand_nfrlt() %>%
-  # Derive AVISIT based on nominal relative time
-  mutate(
-    AVISITN = NFRLT %/% 24 + 1,
-    AVISIT = paste("Day", AVISITN)
-  )
 
 # ---- Find first dose per treatment per subject ----
 
-timezero <- ex_expn %>%
+timezero <- ex_exp %>%
   group_by(STUDYID, USUBJID, DRUG) %>%
-  summarize(timezero = min(ADTM, na.rm = TRUE)) %>%
+  summarize(FANLDTM = min(ADTM, na.rm = TRUE)) %>%
   ungroup()
 
 # ---- Join with ADPC data and keep only subjects with dosing ----
@@ -223,10 +195,10 @@ timezero <- ex_expn %>%
 adpc <- adpc %>%
   derive_vars_merged(
     dataset_add = timezero,
-    new_vars = vars(timezero),
+    new_vars = vars(FANLDTM),
     by_vars = vars(STUDYID, USUBJID, DRUG)
   ) %>%
-  filter(!is.na(timezero)) %>%
+  filter(!is.na(FANLDTM)) %>%
   # Derive AVISIT from nominal relative time
   mutate(
     AVISITN = NFRLT %/% 24 + 1,
@@ -239,7 +211,7 @@ adpc <- adpc %>%
 
 adpc <- adpc %>%
   derive_vars_joined(
-    dataset_add = ex_expn,
+    dataset_add = ex_exp,
     by_vars = vars(USUBJID),
     order = vars(ADTM),
     new_vars = vars(
@@ -257,7 +229,7 @@ adpc <- adpc %>%
 
 adpc <- adpc %>%
   derive_vars_joined(
-    dataset_add = ex_expn,
+    dataset_add = ex_exp,
     by_vars = vars(USUBJID),
     order = vars(ADTM),
     new_vars = vars(
@@ -275,7 +247,7 @@ adpc <- adpc %>%
 
 adpc <- adpc %>%
   derive_vars_joined(
-    dataset_add = ex_expn,
+    dataset_add = ex_exp,
     by_vars = vars(USUBJID),
     order = vars(NFRLT),
     new_vars = vars(NFRLT_prev = NFRLT),
@@ -290,7 +262,7 @@ adpc <- adpc %>%
 
 adpc <- adpc %>%
   derive_vars_joined(
-    dataset_add = ex_expn,
+    dataset_add = ex_exp,
     by_vars = vars(USUBJID),
     order = vars(NFRLT),
     new_vars = vars(NFRLT_next = NFRLT),
@@ -304,12 +276,10 @@ adpc <- adpc %>%
 # ---- Combine ADPC and EX data ----
 # Derive Relative Time Variables
 
-
-adpc <- bind_rows(adpc, ex_expn) %>%
-  group_by(USUBJID) %>%
+adpc <- bind_rows(adpc, ex_exp) %>%
+  group_by(USUBJID, DRUG) %>%
   mutate(
-    timezero = min(timezero, na.rm = TRUE),
-    FANLDTM = timezero,
+    FANLDTM = min(FANLDTM, na.rm = TRUE),
     min_NFRLT = min(NFRLT_prev, na.rm = TRUE),
     maxdate = max(ADT[EVID == 0], na.rm = TRUE), .after = USUBJID
   ) %>%
@@ -343,7 +313,29 @@ adpc <- bind_rows(adpc, ex_expn) %>%
     floor_in = FALSE,
     add_one = FALSE
   ) %>%
-  # Derive Nominal Relative Time from Reference Dose (NRRLT)
+  mutate(
+    ARRLT = case_when(
+      EVID == 1 ~ 0,
+      is.na(ARRLT) ~ AXRLT,
+      TRUE ~ ARRLT
+    ),
+
+    # Derive Reference Dose Date
+    PCRFTDTM = case_when(
+      EVID == 1 ~ ADTM,
+      is.na(ADTM_prev) ~ ADTM_next,
+      TRUE ~ ADTM_prev
+    )
+  ) %>%
+  # Derive dates and times from datetimes
+  derive_vars_dtm_to_dt(vars(FANLDTM)) %>%
+  derive_vars_dtm_to_tm(vars(FANLDTM)) %>%
+  derive_vars_dtm_to_dt(vars(PCRFTDTM)) %>%
+  derive_vars_dtm_to_tm(vars(PCRFTDTM))
+
+# Derive Nominal Relative Time from Reference Dose (NRRLT)
+
+adpc <- adpc %>%
   mutate(
     NRRLT = case_when(
       EVID == 1 ~ 0,
@@ -353,12 +345,13 @@ adpc <- bind_rows(adpc, ex_expn) %>%
     NXRLT = case_when(
       EVID == 1 ~ 0,
       TRUE ~ NFRLT - NFRLT_next
-    ),
-    ARRLT = case_when(
-      EVID == 1 ~ 0,
-      is.na(ARRLT) ~ AXRLT,
-      TRUE ~ ARRLT
-    ),
+    )
+  )
+
+# Derive Analysis Variables AVAL, ATPT, ATPTREF and BASETYPE
+
+adpc <- adpc %>%
+  mutate(
     ATPTN = case_when(
       EVID == 1 ~ 0,
       TRUE ~ PCTPTNUM
@@ -379,12 +372,7 @@ adpc <- bind_rows(adpc, ex_expn) %>%
     ),
     # Derive BASETYPE
     BASETYPE = paste(ATPTREF, "Baseline"),
-    # Derive Reference Dose Date
-    PCRFTDTM = case_when(
-      EVID == 1 ~ ADTM,
-      is.na(ADTM_prev) ~ ADTM_next,
-      TRUE ~ ADTM_prev
-    ),
+
     # Derive Actual Dose
     DOSEA = case_when(
       EVID == 1 ~ EXDOSE,
@@ -398,11 +386,6 @@ adpc <- bind_rows(adpc, ex_expn) %>%
     ),
     DOSEU = "mg",
   ) %>%
-  # Derive dates and times from datetimes
-  derive_vars_dtm_to_dt(vars(FANLDTM)) %>%
-  derive_vars_dtm_to_tm(vars(FANLDTM)) %>%
-  derive_vars_dtm_to_dt(vars(PCRFTDTM)) %>%
-  derive_vars_dtm_to_tm(vars(PCRFTDTM)) %>%
   mutate(
     RFLTU = "h",
     RRLTU = "h",
@@ -458,15 +441,17 @@ adpc <- bind_rows(adpc, dtype) %>%
     MRRLT = if_else(ARRLT < 0, 0, ARRLT),
     ANL01FL = "Y",
     ANL02FL = if_else(is.na(DTYPE), "Y", NA_character_),
-  ) %>%
-  # Derive BASE
+  )
+
+# Derive BASE
+
+adpc <- adpc %>%
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE,
     filter = ABLFL == "Y"
   )
-
 
 # ---- Calculate Change from Baseline ----
 
@@ -484,13 +469,33 @@ adpc <- adpc %>%
   ) %>%
   # Remove temporary variables
   select(
-    -DOMAIN, -PCSEQ, -timezero, -starts_with("orig"), -starts_with("min"),
+    -DOMAIN, -PCSEQ, -starts_with("min"),
     -starts_with("max"), -starts_with("EX"), -ends_with("next"),
     -ends_with("prev"), -DRUG, -EVID, -AXRLT, -NXRLT
   ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(dataset_add = select(param_lookup, -PCTESTCD), by_vars = vars(PARAMCD))
 
+
+#---- Derive additional baselines from VS ----
+
+adpc <- adpc %>%
+  derive_vars_merged(
+    dataset_add = vs,
+    filter_add = VSTESTCD == "HEIGHT",
+    by_vars = vars(STUDYID, USUBJID),
+    new_vars = vars(HTBL = VSSTRESN, HTBLU = VSSTRESU)
+  ) %>%
+  derive_vars_merged(
+    dataset_add = vs,
+    filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
+    by_vars = vars(STUDYID, USUBJID),
+    new_vars = vars(WTBL = VSSTRESN, WTBLU = VSSTRESU)
+  ) %>%
+  mutate(
+    BMIBL = compute_bmi(height = HTBL, weight = WTBL),
+    BMIBLU = "kg/m^2"
+  )
 
 # ---- Add all ADSL variables ----
 
