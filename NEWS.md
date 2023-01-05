@@ -1,3 +1,8 @@
+# admiral 0.9.1
+
+- Implement changes to `if_else()` from the release of `dplyr` version 1.1.0, which
+affects `derive_vars_dtm()` and `and compute_tmf()`. (#1641)
+
 # admiral 0.9.0
 
 ## New Features

@@ -1178,7 +1178,7 @@ compute_tmf <- function(dtc,
     minute = "M",
     second = "S"
   )
-  flag <- if_else(is.na(dtm) | is.na(highest_miss), NA_character_, map[highest_miss])
+  flag <- if_else(is.na(dtm) | is.na(highest_miss), NA_character_, unname(map[highest_miss]))
 
   if (ignore_seconds_flag) {
     if (any(!is.na(partial[["second"]]))) {
