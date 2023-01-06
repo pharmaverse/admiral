@@ -43,7 +43,6 @@ Authors:
   \item Mahdi About
   \item Pooja Kumari
   \item Claudia Carlucci
-  \item Daniil Stefonishin
   \item Sadchla Mascary
   \item Zelos Zhu
   \item Jeffrey Dickinson
@@ -56,17 +55,11 @@ Other contributors:
   \item Declan Hodges [contributor]
   \item Jaxon Abercrombie [contributor]
   \item Nick Ramirez [contributor]
-  \item Pavan Kumar [contributor]
   \item Hamza Rahal [contributor]
   \item Yohann Omnes [contributor]
-  \item Alice Ehmann [contributor]
   \item Tom Ratford [contributor]
-  \item Vignesh Thanikachalam [contributor]
-  \item Ondrej Slama [contributor]
-  \item Shimeng Huang [contributor]
   \item James Kim [contributor]
   \item Shan Lee [contributor]
-  \item Bill Denney [contributor]
   \item Syed Mubasheer [contributor]
   \item Wenyi Liu [contributor]
   \item Dinakar Kulkarni [contributor]
