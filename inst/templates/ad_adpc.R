@@ -184,18 +184,15 @@ ex_exp <- ex %>%
 
 
 # ---- Find first dose per treatment per subject ----
-
-timezero <- ex_exp %>%
-  group_by(STUDYID, USUBJID, DRUG) %>%
-  summarize(FANLDTM = min(ADTM, na.rm = TRUE)) %>%
-  ungroup()
-
 # ---- Join with ADPC data and keep only subjects with dosing ----
 
 adpc <- adpc %>%
   derive_vars_merged(
-    dataset_add = timezero,
-    new_vars = vars(FANLDTM),
+    dataset_add = ex_exp,
+    filter_add = (EXDOSE > 0 & !is.na(ADTM)),
+    new_vars = vars(FANLDTM = ADTM),
+    order = vars(ADTM, EXSEQ),
+    mode = "first",
     by_vars = vars(STUDYID, USUBJID, DRUG)
   ) %>%
   filter(!is.na(FANLDTM)) %>%
@@ -204,6 +201,7 @@ adpc <- adpc %>%
     AVISITN = NFRLT %/% 24 + 1,
     AVISIT = paste("Day", AVISITN),
   )
+
 
 # ---- Find last dose  ----
 # Use derive_vars_joined for consistency with other variables
