@@ -321,25 +321,23 @@ dataset_vignette(
 
 ## Find First Dose and Calculate `AFRLT` {#firstdose}
 
-In this section we will find the first dose for each subject and drug.
-We also create an analysis visit (`AVISIT`) based on `NFRLT`. The first
-dose datetime for an analyte `FANLDTM` is calculated as the minimum
-`ADTM` from the dosing records by subject and drug.
+In this section we will find the first dose for each subject and drug,
+using `derive_vars_merged()`. We also create an analysis visit
+(`AVISIT`) based on `NFRLT`. The first dose datetime for an analyte
+`FANLDTM` is calculated as the minimum `ADTM` from the dosing records by
+subject and drug.
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 # ---- Find first dose per treatment per subject ----
-
-timezero <- ex_exp %>%
-  group_by(STUDYID, USUBJID, DRUG) %>%
-  summarize(FANLDTM = min(ADTM, na.rm = TRUE)) %>%
-  ungroup()
-
 # ---- Join with ADPC data and keep only subjects with dosing ----
 
 adpc <- adpc %>%
   derive_vars_merged(
-    dataset_add = timezero,
-    new_vars = vars(FANLDTM),
+    dataset_add = ex_exp,
+    filter_add = (EXDOSE > 0 & !is.na(ADTM)),
+    new_vars = vars(FANLDTM = ADTM),
+    order = vars(ADTM, EXSEQ),
+    mode = "first",
     by_vars = vars(STUDYID, USUBJID, DRUG)
   ) %>%
   filter(!is.na(FANLDTM)) %>%
@@ -916,5 +914,5 @@ example](https://examples.pharmaverse.org/data/adsl/).
 # Example Scripts {#example}
 
 | ADaM | Sample Code                                                                                             |
-|------|---------------------------------------------------------------------------------------------------------|
+|------------|------------------------------------------------------------|
 | ADPC | [ad_adpc.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adpc.R){target="_blank"} |
