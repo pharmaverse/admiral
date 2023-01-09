@@ -33,6 +33,16 @@
 #'
 "admiral_adsl"
 
+#' Lab Analysis Dataset
+#'
+#' An example of lab analysis dataset
+#' @keywords datasets
+#' @family datasets
+#' @source
+#' Derived from the `adlb` template.
+#'
+"admiral_adlb"
+
 #' Metadata Holding Grading Criteria for NCI-CTCAEv4
 #'
 #' @details

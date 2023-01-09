@@ -1,0 +1,112 @@
+---
+title: "Hy's Law Implementation Guide"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Hy's Law Implementation Guide}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(admiral)
+library(dplyr, warn.conflicts = FALSE)
+library(tidyr, warn.conflicts = FALSE)
+library(purrr)
+library(admiral.test)
+library(lubridate)
+library(stringr)
+```
+
+# Context
+During the drug development process, clinical trials are often required to assess for the potential that the experimental drug can cause severe liver injury, known as a drug induced liver injury (DILI). There are multiple criteria that need to be evaluated to determine and classify a DILI "event". A rule of thumb known as Hy's Law is usually comprised of three parts:
+
+- Elevated alanine transaminase (ALT) or aspartate transaminase (AST) by 3-fold or greater of the upper limit of normal, or 5-fold (in the case of aminotransferases).
+- Elevated serum total bilirubin (BILI) by 2-fold or greater within a window of time, ~14 days of the elevated AST/ALT event.
+- No other reason to explain these increased lab values like preexisting liver disease.
+
+
+# Example
+We can use a mixture of `admiral` and basic `tidyverse` functions to assist us in creating an ADHY dataset. In the walkthrough below we will use the adlb dataset created from the call `use_ad_template("adlb")`
+
+```{r}
+adlb <- admiral_adlb
+head(adlb)
+```
+
+Using `call_derivation()` and `derive_var_merged_exist_flag()`, we can create a variety of flags such as one to indicate the the 3-fold or greater than upper limit of normal of ALT/AST. The categorical bands and equality placement may vary with your organization. In our example, for ALT/AST we'll create 4 categories: <3xULN, >=3 - <5xULN, >=5 - <10xULN, >=10xULN.
+
+```{r}
+adlb2 <- call_derivation(
+    adlb,
+    derivation = derive_var_merged_exist_flag,
+    dataset_add = adlb,
+    filter_add = PARAMCD %in% c("AST", "ALT", "BILI") & is.na(DTYPE),
+    by_vars = vars(USUBJID, LBSEQ, PARAMCD, ADT),
+    variable_params = list(
+      params(
+        new_var = AST01FL,
+        condition = AVAL/ANRHI < 3 & PARAMCD %in% c("AST", "ALT")
+      ),
+      params(
+        new_var = AST02FL,
+        condition = 3 <= AVAL/ANRHI & AVAL/ANRHI < 5 & PARAMCD %in% c("AST", "ALT")
+      ),
+      params(
+        new_var = AST03FL,
+        condition = 5 <= AVAL/ANRHI & AVAL/ANRHI < 10 & PARAMCD %in% c("AST", "ALT")
+      ),
+      params(
+        new_var = AST04FL,
+        condition = 10 <= AVAL/ANRHI & PARAMCD %in% c("AST", "ALT")
+      ),
+      params(
+        new_var = BILI01FL,
+        condition = AVAL/ANRHI < 2 & PARAMCD %in% c("BILI")
+      ),
+      params(
+        new_var = BILI02FL,
+        condition = 2 <= AVAL/ANRHI & PARAMCD %in% c("BILI")
+      )
+    )
+  )
+head(adlb2)
+```
+
+
+
+```{r}
+adlb3 <- adlb2 %>%
+  filter(is.na(DTYPE)) %>%
+  filter(AST02FL == "Y" | AST03FL == "Y"| AST04FL == "Y" | BILI02FL == "Y") %>%
+  select(USUBJID, LBSEQ, PARAMCD, ADY, starts_with(c("AST", "BILI"))) %>%
+  pivot_longer(.,
+               starts_with(c("AST", "BILI")),
+               names_to = "DILICRIT",
+               values_to = "POTDILI") %>%
+  filter(!is.na(POTDILI)) %>%
+  arrange(ADY) %>%
+  mutate(dummy = 1)
+head(adlb3)
+```
+
+```{r}
+dili_relrec <- inner_join(
+  filter(adlb3, PARAMCD %in% c("AST", "ALT")),
+  filter(adlb3, PARAMCD %in% c("BILI")),
+  by=c("USUBJID", "dummy")) %>%
+  select(-dummy) %>%
+  filter(abs(ADY.x - ADY.y) <= 14) %>%
+  mutate(LBSEQ = map2(.x = LBSEQ.x,
+                      .y = LBSEQ.y,
+                      .f = function(x,y) sort(c(x,y)))) %>%
+  group_by(USUBJID) %>%
+  mutate(DILIPAIR = paste("LB-LB-PAIR", 1:n(), sep = "")) %>%
+  select(USUBJID, DILIPAIR, LBSEQ) %>%
+  unnest(LBSEQ)
+head(dili_relrec)
+```

@@ -178,3 +178,5 @@ navbar:
         href: articles/queries_dataset.html
       - text: Lab Grading
         href: articles/lab_grading.html
+      - text: Hy's Law Implementation Guide
+        href: articles/hys_law.html
