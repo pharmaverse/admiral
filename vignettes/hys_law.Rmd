@@ -77,7 +77,7 @@ adlb2 <- call_derivation(
 head(adlb2)
 ```
 
-
+Filter down the instances that you may want to include in your DILI analysis using the flags created above. By doing a pivot from wide to long you end up with a dataset that will be easier to join on itself to find all the paired instances of AST/ALT & BILI within a certain time-window.
 
 ```{r}
 adlb3 <- adlb2 %>%
@@ -93,6 +93,8 @@ adlb3 <- adlb2 %>%
   mutate(dummy = 1)
 head(adlb3)
 ```
+
+By joining this dataset on itself and filtering by records that occured within a time window, for example 14 days, you can end up with relrec shaped dataset containing all paired labs that would qualify as an event according to Hy's law.
 
 ```{r}
 dili_relrec <- inner_join(
