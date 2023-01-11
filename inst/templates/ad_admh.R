@@ -163,7 +163,7 @@ admh <- admh %>%
     by_vars = vars(STUDYID, USUBJID)
   )
 
-
+derive_var_agegr_fda(admiral.test::admiral_dm, AGE, age_unit = "years", new_var = AGEGRP)
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
 # ...
