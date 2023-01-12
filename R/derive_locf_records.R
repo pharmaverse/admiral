@@ -104,10 +104,10 @@
 #' )
 #'
 derive_locf_records <- function(dataset,
-                                 dataset_expected_obs,
-                                 by_vars,
-                                 order,
-                                 keep_vars = NULL) {
+                                dataset_expected_obs,
+                                by_vars,
+                                order,
+                                keep_vars = NULL) {
   #### Input Checking ####
 
   # Check if input parameters is a valid list of variables
