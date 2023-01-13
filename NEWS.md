@@ -3,16 +3,12 @@
 ## New Features
 
 ## Updates of Existing Functions
+  - Fix datatable styling for documentation (#197)
 
 ## Breaking Changes
 
 ## Documentation
   - New section in programming strategy regarding comments (#71)
-
-# admiraldev 0.2.1 (UNRELEASED)
-
-## Updates of Existing Functions
-  - Fix datatable styling for documentation 
 
 # admiraldev 0.2.0
 
