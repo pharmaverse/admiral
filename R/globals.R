@@ -53,6 +53,7 @@ globalVariables(c(
   "USUBJID",
   "auto",
   "censor",
+  "check_nom",
   "data",
   "Dataset",
   "dataset_name",
