@@ -1,6 +1,5 @@
 ## Test 1: works as expected ----
 test_that("addin_format_testthat Test 1: works as expected", {
-
   # test: file exists
   expect_error(
     prepare_test_that_file("file_does_not_exist"),

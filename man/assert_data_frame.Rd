@@ -32,6 +32,7 @@ a set of required variables
 }
 \examples{
 library(admiral.test)
+library(dplyr, warn.conflicts = FALSE)
 data(admiral_dm)
 
 example_fun <- function(dataset) {
@@ -40,7 +41,7 @@ example_fun <- function(dataset) {
 
 example_fun(admiral_dm)
 
-try(example_fun(dplyr::select(admiral_dm, -STUDYID)))
+try(example_fun(select(admiral_dm, -STUDYID)))
 
 try(example_fun("Not a dataset"))
 }
@@ -65,6 +66,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_order_vars}()},
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_s3_class}()},
+\code{\link{assert_same_type}()},
 \code{\link{assert_symbol}()},
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()},

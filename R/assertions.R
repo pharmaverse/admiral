@@ -23,6 +23,7 @@
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
@@ -31,7 +32,7 @@
 #'
 #' example_fun(admiral_dm)
 #'
-#' try(example_fun(dplyr::select(admiral_dm, -STUDYID)))
+#' try(example_fun(select(admiral_dm, -STUDYID)))
 #'
 #' try(example_fun("Not a dataset"))
 assert_data_frame <- function(arg,
@@ -323,11 +324,13 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #' @family assertion
 #' @examples
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dat, var) {
-#'   var <- assert_symbol(rlang::enquo(var))
-#'   dplyr::select(dat, !!var)
+#'   var <- assert_symbol(enquo(var))
+#'   select(dat, !!var)
 #' }
 #'
 #' example_fun(admiral_dm, USUBJID)
@@ -415,12 +418,14 @@ assert_expr <- function(arg, optional = FALSE) {
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #' data(admiral_dm)
 #'
 #' # typical usage in a function as a parameter check
 #' example_fun <- function(dat, x) {
-#'   x <- assert_filter_cond(rlang::enquo(x))
-#'   dplyr::filter(dat, !!x)
+#'   x <- assert_filter_cond(enquo(x))
+#'   filter(dat, !!x)
 #' }
 #'
 #' example_fun(admiral_dm, AGE == 64)
@@ -475,13 +480,16 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #' @family assertion
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
+#'
 #' example_fun <- function(by_vars) {
 #'   assert_vars(by_vars)
 #' }
 #'
 #' example_fun(vars(USUBJID, PARAMCD))
 #'
-#' try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
+#' try(example_fun(exprs(USUBJID, PARAMCD)))
 #'
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
@@ -559,6 +567,8 @@ assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
 #' @keywords assertion
 #' @family assertion
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #'
 #' example_fun <- function(by_vars) {
 #'   assert_order_vars(by_vars)
@@ -566,7 +576,7 @@ assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
 #'
 #' example_fun(vars(USUBJID, PARAMCD, desc(AVISITN)))
 #'
-#' try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
+#' try(example_fun(exprs(USUBJID, PARAMCD)))
 #'
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
@@ -1183,6 +1193,8 @@ assert_param_does_not_exist <- function(dataset, param) {
 #' @export
 #'
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' example_fun <- function(vars) {
 #'   assert_varval_list(vars)
 #' }
@@ -1396,7 +1408,7 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
     filter(n() > 1) %>%
     arrange(!!!vars1)
   if (nrow(one_to_many) > 0) {
-    set_dataset(one_to_many, "one_to_many")
+    admiraldev_environment$one_to_many <- one_to_many
     abort(
       paste0(
         "For some values of ",
@@ -1412,7 +1424,7 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
     filter(n() > 1) %>%
     arrange(!!!vars2)
   if (nrow(many_to_one) > 0) {
-    set_dataset(many_to_one, "many_to_one")
+    admiraldev_environment$many_to_one <- many_to_one
     abort(
       paste0(
         "There is more than one value of ",
@@ -1556,5 +1568,55 @@ assert_date_vector <- function(arg, optional = TRUE) {
       " must be a date or datetime variable but it's ",
       friendly_type_of(arg)
     ))
+  }
+}
+
+#' Are All Argument of the Same Type?
+#'
+#'
+#' Checks if all arguments are of the same type.
+#'
+#' @param ... Arguments to be checked
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error if not all arguments are of the same type.
+#'
+#' @export
+#'
+#' @keywords assertion
+#' @family assertion
+#'
+#' @examples
+#' example_fun <- function(true_value, false_value, missing_value) {
+#'   assert_same_type(true_value, false_value, missing_value)
+#' }
+#'
+#' example_fun(
+#'   true_value = "Y",
+#'   false_value = "N",
+#'   missing_value = NA_character_
+#' )
+#'
+#' try(example_fun(
+#'   true_value = 1,
+#'   false_value = 0,
+#'   missing_value = "missing"
+#' ))
+assert_same_type <- function(...) {
+  args <- rlang::dots_list(..., .named = TRUE)
+  arg_names <- lapply(args, function(x) deparse(substitute(x)))
+  types <- lapply(args, typeof)
+
+  if (length(unique(types)) > 1) {
+    abort(
+      paste(
+        "All arguments must be of the same type.",
+        "Argument: Type",
+        "--------------",
+        paste0(names(args), ": ", types, collapse = "\n"),
+        sep = "\n"
+      )
+    )
   }
 }

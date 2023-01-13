@@ -23,13 +23,16 @@ and returns the input invisibly otherwise.
 Checks if an argument is a valid list of variables created using \code{vars()}
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
+library(rlang)
+
 example_fun <- function(by_vars) {
   assert_vars(by_vars)
 }
 
 example_fun(vars(USUBJID, PARAMCD))
 
-try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
+try(example_fun(exprs(USUBJID, PARAMCD)))
 
 try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 
@@ -65,6 +68,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_order_vars}()},
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_s3_class}()},
+\code{\link{assert_same_type}()},
 \code{\link{assert_symbol}()},
 \code{\link{assert_unit}()},
 \code{\link{assert_varval_list}()}

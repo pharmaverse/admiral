@@ -21,11 +21,13 @@ Checks if an argument is a symbol
 }
 \examples{
 library(admiral.test)
+library(dplyr, warn.conflicts = FALSE)
+library(rlang)
 data(admiral_dm)
 
 example_fun <- function(dat, var) {
-  var <- assert_symbol(rlang::enquo(var))
-  dplyr::select(dat, !!var)
+  var <- assert_symbol(enquo(var))
+  select(dat, !!var)
 }
 
 example_fun(admiral_dm, USUBJID)
@@ -58,6 +60,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_order_vars}()},
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_s3_class}()},
+\code{\link{assert_same_type}()},
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()},
 \code{\link{assert_varval_list}()}
