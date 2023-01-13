@@ -50,26 +50,36 @@ dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
   } else {
     cols_to_hide <- list()
   }
-
-  DT::datatable(
-    out,
-    rownames = FALSE,
-    filter = "top",
-    extensions = c("Buttons", "ColReorder", "Scroller"),
-    options = list(
-      columnDefs = cols_to_hide,
-      searchHighlight = TRUE,
-      searching = TRUE,
-      pageLength = 5,
-      lengthMenu = c(5, 10, 15, 20, 50, 100),
-      dom = "Bfrtipl",
-      buttons = list(list(
-        extend = "colvis",
-        text = "Choose the columns to display",
-        scroller = T,
-        collectionLayout = "fixed two-column"
-      )),
-      colReorder = TRUE
+  htmltools::tagList(
+    htmltools::htmlDependency(
+      name = "dt-scroll",
+      version = "1.0.0",
+      src = "www",
+      stylesheet = "style.css",
+      package = "admiraldev"
+    ),
+    DT::datatable(
+      out,
+      rownames = FALSE,
+      filter = "top",
+      height = "auto",
+      width = "auto",
+      extensions = c("Buttons", "ColReorder", "Scroller"),
+      options = list(
+        columnDefs = cols_to_hide,
+        searchHighlight = TRUE,
+        searching = TRUE,
+        pageLength = 5,
+        lengthMenu = c(5, 10, 15, 20, 50, 100),
+        dom = "<Bfr<\"dt-scroll\"t>ipl>",
+        buttons = list(list(
+          extend = "colvis",
+          text = "Choose the columns to display",
+          scroller = T,
+          collectionLayout = "fixed two-column"
+        )),
+        colReorder = TRUE
+      )
     )
   )
 }
