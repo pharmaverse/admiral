@@ -151,6 +151,17 @@ valid_time_units <- function() {
   c("years", "months", "days", "hours", "minutes", "seconds")
 }
 
+#' check that argument contains valid variable(s) created with `vars()` or
+#' Source Variables from a List of Quosures
+#'
+#' @param arg A function argument to be checked
+#'
+#' @return A TRUE if variables were valid variable
+#'
+#' @export
+#'
+#' @keywords dev_utility
+#' @family dev_utility
 contains_vars <- function(arg) {
   inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol) | names(arg) != "")
 }
@@ -169,41 +180,14 @@ contains_vars <- function(arg) {
 #' @family dev_utility
 #'
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' vars2chr(vars(USUBJID, AVAL))
 vars2chr <- function(quosures) {
   rlang::set_names(
     map_chr(quosures, ~ as_string(quo_get_expr(.x))),
     names(quosures)
   )
-}
-
-#' Negate List of Variables
-#'
-#' The function adds a minus sign as prefix to each variable.
-#'
-#' This is useful if a list of variables should be removed from a dataset,
-#' e.g., `select(!!!negate_vars(by_vars))` removes all by variables.
-#'
-#' @param vars List of variables created by `vars()`
-#'
-#' @return A list of `quosures`
-#'
-#' @author Stefan Bundfuss
-#'
-#' @export
-#'
-#' @keywords dev_utility
-#' @family dev_utility
-#'
-#' @examples
-#' negate_vars(vars(USUBJID, STUDYID))
-negate_vars <- function(vars = NULL) {
-  assert_vars(vars, optional = TRUE)
-  if (is.null(vars)) {
-    NULL
-  } else {
-    lapply(vars, function(var) expr(-!!quo_get_expr(var)))
-  }
 }
 
 #' Optional Filter

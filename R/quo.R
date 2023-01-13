@@ -143,6 +143,8 @@ replace_symbol_in_quo <- function(quosure,
 #' @export
 #'
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' add_suffix_to_vars(vars(ADT, desc(AVAL), AVALC), vars = vars(AVAL), suffix = ".join")
 add_suffix_to_vars <- function(order,
                                vars,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/datasets.R
 \name{get_dataset}
 \alias{get_dataset}
-\title{Retrieve a Dataset from the \code{.datasets} environment}
+\title{Retrieve a Dataset from the \code{admiraldev_environment} environment}
 \usage{
 get_dataset(name)
 }
@@ -13,11 +13,7 @@ get_dataset(name)
 A \code{data.frame}
 }
 \description{
-Retrieve a Dataset from the \code{.datasets} environment
-}
-\seealso{
-Other datasets: 
-\code{\link{set_dataset}()}
+Retrieve a Dataset from the \code{admiraldev_environment} environment
 }
 \author{
 Thomas Neitmann

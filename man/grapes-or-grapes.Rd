@@ -27,10 +27,10 @@ Developer Utility Functions:
 \code{\link{\%notin\%}()},
 \code{\link{arg_name}()},
 \code{\link{as_name}()},
+\code{\link{contains_vars}()},
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},
 \code{\link{filter_if}()},
-\code{\link{negate_vars}()},
 \code{\link{valid_time_units}()},
 \code{\link{vars2chr}()}
 }

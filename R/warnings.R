@@ -149,6 +149,8 @@ warn_if_incomplete_dtc <- function(dtc, n) {
 #' @export
 #'
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' # no warning
 #' warn_if_inconsistent_list(
 #'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
