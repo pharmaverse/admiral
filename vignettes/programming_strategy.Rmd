@@ -248,7 +248,7 @@ The comment should not rephrase the code but provide additional information.
     
     ```
       # If AVAL equals zero, set it to 0.0001. Otherwise, do not change it
-      mutate(dataset, if_else(AVAL == 0, 0.0001, AVAL))
+      mutate(dataset, AVAL = if_else(AVAL == 0, 0.0001, AVAL))
     ```
 
     *Good*
@@ -256,7 +256,7 @@ The comment should not rephrase the code but provide additional information.
     ```
       # AVAL is to be displayed on a logarithmic scale.
       # Thus replace zeros by a small value to avoid gaps.
-      mutate(dataset, if_else(AVAL == 0, 0.0001, AVAL))
+      mutate(dataset, AVAL = if_else(AVAL == 0, 0.0001, AVAL))
     ```
 
 - For long functions (>100 lines) comments can be added to structure the code
@@ -265,6 +265,33 @@ an entry to the document outline in RStudio. For example:
   ```
     # Check arguments ----
   ```
+
+The formatting of the comments must follow the
+[tidyverse](https://style.tidyverse.org/syntax.html#comments) style guide. I.e.,
+the comment should start with a single `#` and a space. No decoration (except
+for outline entries) must be added.
+
+*Bad*
+```
+# This is a comment #
+
+###########################
+# This is another comment #
+###########################
+
+#+++++++++++++++++++++++++++++++
+# This is a section comment ----
+#+++++++++++++++++++++++++++++++
+```
+
+*Good*
+```
+# This is a comment
+
+# This is another comment
+
+# This is a section comment ----
+```
 
 ## Input Checking
 
