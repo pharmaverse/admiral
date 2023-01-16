@@ -1,7 +1,11 @@
-# admiraldev 0.2.1 (UNRELEASED)
+# admiraldev 0.3.0
 
 ## Updates of Existing Functions
   - Fix datatable styling for documentation 
+  - The `assert_list_of()` function gained a `named` argument to check that all
+  elements of the list are named. (#203)
+  - The `quote_fun` argument of `enumerate()` was extended such that `NULL` can
+  be specified to request no quoting of the elements. (#203)
 
 # admiraldev 0.2.0
 

@@ -810,10 +810,12 @@ assert_s3_class <- function(arg, class, optional = TRUE) {
 #'
 #' @param arg A function argument to be checked
 #' @param class The S3 class to check for
+#' @param named If set to `TRUE`, an error is issued it not all elements of the
+#'   list are named.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #'   is `NULL` then an error is thrown
 #'
-#' @author Thomas Neitmann
+#' @author Thomas Neitmann, Stefan Bundfuss
 #'
 #' @return
 #' The function throws an error if `arg` is not a list or if `arg` is a list but its
@@ -834,8 +836,14 @@ assert_s3_class <- function(arg, class, optional = TRUE) {
 #' try(example_fun(list(letters, 1:10)))
 #'
 #' try(example_fun(c(TRUE, FALSE)))
-assert_list_of <- function(arg, class, optional = TRUE) {
+#'
+#' example_fun2 <- function(list) {
+#'   assert_list_of(list, "numeric", named = TRUE)
+#' }
+#' try(example_fun2(list(1, 2, 3, d = 4)))
+assert_list_of <- function(arg, class, named = FALSE, optional = TRUE) {
   assert_character_scalar(class)
+  assert_logical_scalar(named)
   assert_logical_scalar(optional)
 
   if (is.null(arg) && optional) {
@@ -857,6 +865,22 @@ assert_list_of <- function(arg, class, optional = TRUE) {
       info_msg
     )
     abort(err_msg)
+  }
+
+  if (named && length(arg) > 0) {
+    if (is.null(names(arg))) {
+      abort(paste0(
+        "All elements of ", arg_name(substitute(arg)), " must be named.\n",
+        "No element is named."
+      ))
+    }
+    unnamed <- which(names(arg) == "")
+    if (length(unnamed) > 0) {
+      abort(paste0(
+        "All elements of ", arg_name(substitute(arg)), " must be named.\n",
+        "The following elements are not named: ", enumerate(unnamed, quote_fun = NULL)
+      ))
+    }
   }
 
   invisible(arg)

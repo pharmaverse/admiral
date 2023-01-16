@@ -4,12 +4,15 @@
 \alias{assert_list_of}
 \title{Is an Argument a List of Objects of a Specific S3 Class?}
 \usage{
-assert_list_of(arg, class, optional = TRUE)
+assert_list_of(arg, class, named = FALSE, optional = TRUE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
 
 \item{class}{The S3 class to check for}
+
+\item{named}{If set to \code{TRUE}, an error is issued it not all elements of the
+list are named.}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
@@ -32,6 +35,11 @@ example_fun(list(mtcars, iris))
 try(example_fun(list(letters, 1:10)))
 
 try(example_fun(c(TRUE, FALSE)))
+
+example_fun2 <- function(list) {
+  assert_list_of(list, "numeric", named = TRUE)
+}
+try(example_fun2(list(1, 2, 3, d = 4)))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
@@ -61,7 +69,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_varval_list}()}
 }
 \author{
-Thomas Neitmann
+Thomas Neitmann, Stefan Bundfuss
 }
 \concept{assertion}
 \keyword{assertion}
