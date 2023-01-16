@@ -655,7 +655,8 @@ test_that("assert_list_of Test 44: error if `arg` is not a named list (no elemen
       "All elements of mylist must be named.",
       "No element is named.",
       sep = "\n"
-    ))
+    )
+  )
 })
 
 ## Test 45: error if `arg` is not a named list (some elements named) ----
@@ -666,7 +667,8 @@ test_that("assert_list_of Test 45: error if `arg` is not a named list (some elem
       "All elements of mylist must be named.",
       "The following elements are not named: 1, 2 and 3",
       sep = "\n"
-    ))
+    )
+  )
 })
 
 ## Test 46: no error if `arg` is a named list ----
