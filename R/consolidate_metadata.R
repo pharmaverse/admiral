@@ -113,7 +113,8 @@ consolidate_metadata <- function(datasets,
   names(data_order) <- names(datasets)
   all_data <- bind_rows(datasets, .id = as_label(source_var))
   tmp_source_ord <- get_new_tmp_var(all_data, prefix = "tmp_source_ord")
-  all_data %>% mutate(!!tmp_source_ord := data_order[!!source_var]) %>%
+  all_data %>%
+    mutate(!!tmp_source_ord := data_order[!!source_var]) %>%
     filter_extreme(
       by_vars = key_vars,
       order = vars(!!tmp_source_ord),
