@@ -4,7 +4,7 @@
 \alias{derivation_slice}
 \title{Create a \code{derivation_slice} Object}
 \usage{
-derivation_slice(filter, args)
+derivation_slice(filter, args = NULL)
 }
 \arguments{
 \item{filter}{An unquoted condition for defining the observations of the
