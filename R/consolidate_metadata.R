@@ -109,7 +109,7 @@ consolidate_metadata <- function(datasets,
     }
   }
 
-  data_order <- 1:length(datasets)
+  data_order <- seq_len(length(datasets))
   names(data_order) <- names(datasets)
   all_data <- bind_rows(datasets, .id = as_label(source_var))
   tmp_source_ord <- get_new_tmp_var(all_data, prefix = "tmp_source_ord")
