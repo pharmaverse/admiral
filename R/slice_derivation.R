@@ -156,10 +156,10 @@ slice_derivation <- function(dataset,
 #'
 #' @return An object of class `slice`.
 derivation_slice <- function(filter,
-                             args) {
+                             args = NULL) {
   out <- list(
     filter = assert_filter_cond(enquo(filter)),
-    args = assert_s3_class(args, "params")
+    args = assert_s3_class(args, "params", optional = TRUE)
   )
   class(out) <- c("derivation_slice", "source", "list")
   out
