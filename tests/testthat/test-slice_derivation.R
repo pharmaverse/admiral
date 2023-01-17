@@ -24,7 +24,8 @@ test_that("slice_derivation Test 1: slice derivation", {
     )
   )
 
-  expected <- mutate(advs,
+  expected <- mutate(
+    advs,
     ADTM = c(ymd_hms("2020-04-16 23:59:59"), ymd_hms("2020-04-16 00:00:00")),
     ATMF = "H"
   )
@@ -133,9 +134,10 @@ test_that("slice_derivation Test 4: slice without arguments", {
     )
   )
 
-  expected <- mutate(advs,
-                     ADTM = c(ymd_hms("2020-04-16 23:59:59"), ymd_hms("2020-04-16 00:00:00")),
-                     ATMF = "H"
+  expected <- mutate(
+    advs,
+    ADTM = c(ymd_hms("2020-04-16 23:59:59"), ymd_hms("2020-04-16 00:00:00")),
+    ATMF = "H"
   )
 
   expect_dfs_equal(
