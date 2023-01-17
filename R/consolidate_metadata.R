@@ -21,11 +21,27 @@
 #'
 #'   *Permitted Values*: A symbol
 #'
+#' @param check_vars Check variables?
+#'
+#'   If `"message"`, `"warning"`, or `"error"` is specified, a message is issued
+#'   if the variable names differ across the input datasets (`datasets`).
+#'
+#'   *Permitted Values*: `"none"`, `"message"`, warning"`, `"error"`
+#'
+#' @param check_keys Check keys?
+#'
+#'   If `"warning"` or `"error"` is specified, a message is issued if the key
+#'   variables (`key_vars`) are not a unique key in all of the input datasets
+#'   (`datasets`).
+#'
+#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
+#'
 #' @author Stefan Bundfuss
 #'
 #' @details All observations of the input datasets are put together into a
-#'   single dataset. If a by group (defined by `key_vars`) exists in more of one
-#'   of the input datasets, the observation from the last dataset is selected.
+#'   single dataset. If a by group (defined by `key_vars`) exists in more than
+#'   one of the input datasets, the observation from the last dataset is
+#'   selected.
 #'
 #' @return A dataset which contains one row for each by group occuring in any of
 #'   the input datasets.
@@ -63,21 +79,46 @@
 #' )
 consolidate_metadata <- function(datasets,
                                  key_vars,
-                                 source_var = SOURCE) {
+                                 source_var = SOURCE,
+                                 check_vars = "warning",
+                                 check_keys = "error") {
   assert_list_of(datasets, class = "data.frame", named = TRUE)
-  source_var <- assert_symbol(enquo(source_var))
   assert_vars(key_vars)
+  source_var <- assert_symbol(enquo(source_var))
+  check_vars <-
+    assert_character_scalar(
+      check_vars,
+      values = c("none", "message", "warning", "error"),
+      case_sensitive = FALSE
+    )
+  check_keys <-
+    assert_character_scalar(
+      check_keys,
+      values = c("none", "warning", "error"),
+      case_sensitive = FALSE
+    )
+
+  if (check_vars != "none") {
+    if (length(unique(map(datasets, function(x) sort(names(x))))) > 1) {
+      msg_funs <- list(message = inform, warning = warn, error = abort)
+      msg_funs[[check_vars]](paste(
+        "The variable names differ across the input datasets.",
+        "This message can be suppressed by setting `check_vars = \"none\"`.",
+        sep = "\n"
+      ))
+    }
+  }
 
   data_order <- 1:length(datasets)
   names(data_order) <- names(datasets)
   all_data <- bind_rows(datasets, .id = as_label(source_var))
-  temp_ord_var <- get_new_tmp_var(all_data)
-  all_data %>% mutate(!!temp_ord_var := data_order[!!source_var]) %>%
+  tmp_source_ord <- get_new_tmp_var(all_data, prefix = "tmp_source_ord")
+  all_data %>% mutate(!!tmp_source_ord := data_order[!!source_var]) %>%
     filter_extreme(
       by_vars = key_vars,
-      order = vars(!!temp_ord_var),
+      order = vars(!!tmp_source_ord),
       mode = "last",
-      check_type = "none"
+      check_type = check_keys
     ) %>%
     remove_tmp_vars()
 }

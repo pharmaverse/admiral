@@ -4,7 +4,13 @@
 \alias{consolidate_metadata}
 \title{Consolidate Multiple Meta Datasets Into a Single One}
 \usage{
-consolidate_metadata(datasets, key_vars, source_var = SOURCE)
+consolidate_metadata(
+  datasets,
+  key_vars,
+  source_var = SOURCE,
+  check_vars = "warning",
+  check_keys = "error"
+)
 }
 \arguments{
 \item{datasets}{List of datasets to consolidate
@@ -23,6 +29,21 @@ The specified variable is added to the output dataset. It is set the name
 of the dataset the observation is originating from.
 
 \emph{Permitted Values}: A symbol}
+
+\item{check_vars}{Check variables?
+
+If \code{"message"}, \code{"warning"}, or \code{"error"} is specified, a message is issued
+if the variable names differ across the input datasets (\code{datasets}).
+
+\emph{Permitted Values}: \code{"none"}, \code{"message"}, warning"\verb{, }"error"`}
+
+\item{check_keys}{Check keys?
+
+If \code{"warning"} or \code{"error"} is specified, a message is issued if the key
+variables (\code{key_vars}) are not a unique key in all of the input datasets
+(\code{datasets}).
+
+\emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 }
 \value{
 A dataset which contains one row for each by group occuring in any of
@@ -35,8 +56,9 @@ a single lookup table can be created.
 }
 \details{
 All observations of the input datasets are put together into a
-single dataset. If a by group (defined by \code{key_vars}) exists in more of one
-of the input datasets, the observation from the last dataset is selected.
+single dataset. If a by group (defined by \code{key_vars}) exists in more than
+one of the input datasets, the observation from the last dataset is
+selected.
 }
 \examples{
 library(tibble)
