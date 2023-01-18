@@ -67,17 +67,7 @@ process_set_values_to <- function(dataset,
     named = TRUE,
     optional = TRUE
   )
-  # assert_list_of(expected_types, class = "character", optional = TRUE)
-  # if (!is.null(expected_types)) {
-  #   invalids <- expected_types[!expected_types %in% c("character", "numeric")]
-  #   if (length(invalids) > 0) {
-  #     abort(paste(
-  #       "The right-hand side values of `expected_types` must be either \"character\" or \"numeric\".\n",
-  #       "The following elements are invalid:\n",
-  #       paste(names(invalids), invalids, sep = ": ", collapse = "\n")
-  #     ))
-  #   }
-  # }
+
   tryCatch(
     result <- mutate(dataset, !!!set_values_to),
     error = function(cnd) {
