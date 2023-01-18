@@ -1565,9 +1565,11 @@ assert_date_vector <- function(arg, optional = FALSE) {
 
   if (!is.instant(arg)) {
     abort(paste0(
+      "`",
       deparse(substitute(arg)),
-      " must be a date or datetime variable but it's ",
-      friendly_type_of(arg)
+      "` must be a date or datetime variable but it's `",
+      friendly_type_of(arg),
+      "`"
     ))
   }
 }
