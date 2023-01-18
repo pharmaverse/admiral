@@ -64,6 +64,10 @@ reference:
   contents:
   - has_keyword('quote')
 
+- subtitle: Utilities used within Derivation Functions
+  contents:
+  - has_keyword('utils_help')
+
 - title: Join Functions
   desc: dplyr join function without warning about different attributes
   contents:

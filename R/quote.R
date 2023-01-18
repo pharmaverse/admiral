@@ -13,6 +13,9 @@
 #'
 #' @export
 enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
+  if (is.null(quote_fun)) {
+    quote_fun <- function(x) x
+  }
   if (length(x) == 1L) {
     quote_fun(x)
   } else {

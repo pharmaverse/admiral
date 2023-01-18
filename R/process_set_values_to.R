@@ -1,22 +1,85 @@
+#' Process `set_values_to` Argument
+#'
+#' The function creates the variables specified by the `set_values_to` argument,
+#' catches errors, provides user friendly error messages, and optionally checks
+#' the type of the created variables.
+#'
+#' @param dataset Input dataset
+#'
+#' @param set_values_to Variables to set
+#'
+#'   A named list returned by `vars()` defining the variables to be set, e.g.
+#'   `vars(PARAMCD = "OS", PARAM = "Overall Survival")` is expected. The values
+#'   must be symbols, character strings, numeric values, expressions, or `NA`.
+#'
+#' @param expected_types
+#'
+#'   If the argument is specified, the specified variables are checked whether
+#'   the specified type matches the type of the variables created by
+#'   `set_values_to`.
+#'
+#'   *Permitted Values*: A character vector with values `"numeric"` or
+#'   `"character"`
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The input dataset with the variables specified by `set_values_to`
+#'   added/updated
+#'
+#' @family utils_help
+#' @keywords utils_help
+#'
 #' @export
+#'
+#' @examples
+#' library(tibble)
+#' data <- tribble(
+#'   ~AVAL,
+#'   20
+#' )
+#'
+#' try(
+#'   process_set_values_to(
+#'     data,
+#'     set_values_to = vars(
+#'       PARAMCD = BMI
+#'     )
+#'   )
+#' )
+#'
+#' try(
+#'   process_set_values_to(
+#'     data,
+#'     set_values_to = vars(
+#'       PARAMCD = 42
+#'     ),
+#'     expected_types = c(PARAMCD = "character")
+#'   )
+#' )
 process_set_values_to <- function(dataset,
                                   set_values_to,
                                   expected_types = NULL) {
   assert_data_frame(dataset)
   assert_varval_list(set_values_to, accept_expr = TRUE)
-  assert_list_of(expected_types, class = "character", optional = TRUE)
-  if (!is.null(expected_types)) {
-    invalids <- expected_types[!expected_types %in% c("characeter", "numeric")]
-    if (length(invalids) > 0) {
-      abort(paste(
-        "The right-hand side values of `expected_types` must be either \"character\" or \"numeric\".\n",
-        "The following elements are invalid:\n",
-        paste(names(invalids), invalids, sep = ": ", collapse = "\n")
-      ))
-    }
-  }
+  assert_character_vector(
+    expected_types,
+    values = c("numeric", "character"),
+    named = TRUE,
+    optional = TRUE
+  )
+  # assert_list_of(expected_types, class = "character", optional = TRUE)
+  # if (!is.null(expected_types)) {
+  #   invalids <- expected_types[!expected_types %in% c("character", "numeric")]
+  #   if (length(invalids) > 0) {
+  #     abort(paste(
+  #       "The right-hand side values of `expected_types` must be either \"character\" or \"numeric\".\n",
+  #       "The following elements are invalid:\n",
+  #       paste(names(invalids), invalids, sep = ": ", collapse = "\n")
+  #     ))
+  #   }
+  # }
   tryCatch(
-    mutate(dataset, !!!set_values_to),
+    result <- mutate(dataset, !!!set_values_to),
     error = function(cnd) {
       abort(
         paste0(
@@ -35,4 +98,29 @@ process_set_values_to <- function(dataset,
       )
     }
   )
+  if (!is.null(expected_types)) {
+    types <- map_chr(result, typeof) %>%
+      map_chr(function(x) if_else(x %in% c("integer", "double"), "numeric", x))
+    vars_to_check <- intersect(names(set_values_to), names(expected_types))
+    if (length(vars_to_check) > 0) {
+      actual <- types[vars_to_check]
+      expected <- expected_types[vars_to_check]
+      unexpected <- actual != expected
+      if (any(unexpected)) {
+        abort(paste0(
+          "The following variables have an unexpected type:\n",
+          paste0(
+            names(actual[unexpected]),
+            ": expected: ",
+            expected[unexpected],
+            ", actual: ",
+            actual[unexpected],
+            collapse = "\n"
+          ),
+          sep = "\n"
+        ))
+      }
+    }
+  }
+  result
 }
