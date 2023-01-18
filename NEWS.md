@@ -1,12 +1,18 @@
 # admiraldev 0.3.0
+
 ## New Features
   - New function `process_set_values_to()` for creating the variables specified
   by the `set_value_to` argument and catching errors (#70)
   
 ## Updates of Existing Functions
-  - Fix datatable styling for documentation 
+  - Fix datatable styling for documentation (#197)
   - The `assert_character_vector()` function gained a `named` argument to check
   that all elements of the vector are named. (#70)
+
+## Breaking Changes
+
+## Documentation
+  - New section in programming strategy regarding comments (#71)
 
 # admiraldev 0.2.0
 
@@ -32,7 +38,7 @@
   - New vignette for our package release strategy (#79) 
   - Updated multiple roxygen headers (#116, #133, #134, #141, #145, #172)
   - Description on how admiral options work for certain function inputs, i.e `subject_keys` (#133)
-  
+
 ## Various
   - PR Checklist Template updated (#172)
   - New authors/contributors (#158)

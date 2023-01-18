@@ -233,9 +233,68 @@ Parameters which expect a boolean or boolean vector must start with a verb, e.g.
 
 ## Source Code Formatting
 
-All source code should be formatted according to the [tidyverse](https://style.tidyverse.org/) style guide. 
-The [lintr](https://github.com/jimhester/lintr) package will be used to check and enforce this.
+All source code should be formatted according to the
+[tidyverse](https://style.tidyverse.org/) style guide. The
+[lintr](https://github.com/jimhester/lintr) and
+[styler](https://github.com/r-lib/styler) packages are used to check and enforce
+this.
 
+## Comments
+
+Comments should be added to help other readers than the author to understand the
+code. There are two main cases:
+
+- If the intention of a chunk of code is not clear, a comment should be added.
+The comment should not rephrase the code but provide additional information.
+
+    *Bad*
+    
+    ```
+      # If AVAL equals zero, set it to 0.0001. Otherwise, do not change it
+      mutate(dataset, AVAL = if_else(AVAL == 0, 0.0001, AVAL))
+    ```
+
+    *Good*
+    
+    ```
+      # AVAL is to be displayed on a logarithmic scale.
+      # Thus replace zeros by a small value to avoid gaps.
+      mutate(dataset, AVAL = if_else(AVAL == 0, 0.0001, AVAL))
+    ```
+
+- For long functions (>100 lines) comments can be added to structure the code
+and simplify navigation. In this case the comment should end with `----` to add
+an entry to the document outline in RStudio. For example:
+  ```
+    # Check arguments ----
+  ```
+
+The formatting of the comments must follow the
+[tidyverse](https://style.tidyverse.org/syntax.html#comments) style guide. I.e.,
+the comment should start with a single `#` and a space. No decoration (except
+for outline entries) must be added.
+
+*Bad*
+```
+# This is a comment #
+
+###########################
+# This is another comment #
+###########################
+
+#+++++++++++++++++++++++++++++++
+# This is a section comment ----
+#+++++++++++++++++++++++++++++++
+```
+
+*Good*
+```
+# This is a comment
+
+# This is another comment
+
+# This is a section comment ----
+```
 
 ## Input Checking
 
