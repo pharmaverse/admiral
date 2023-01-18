@@ -16,8 +16,6 @@ A \code{params()} object is expected.}
 }
 \value{
 An object of class \code{derivation_slice}
-
-An object of class \code{slice}.
 }
 \description{
 Create a \code{derivation_slice} object as input for \code{slice_derivation()}.

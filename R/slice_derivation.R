@@ -10,7 +10,7 @@
 #'
 #' @param args Arguments of the derivation
 #'
-#'   A `param()` object is expected.
+#'   A `params()` object is expected.
 #'
 #' @param ... A `derivation_slice()` object is expected
 #'
@@ -153,8 +153,6 @@ slice_derivation <- function(dataset,
 #' @keywords high_order_function
 #'
 #' @export
-#'
-#' @return An object of class `slice`.
 derivation_slice <- function(filter,
                              args = NULL) {
   out <- list(
