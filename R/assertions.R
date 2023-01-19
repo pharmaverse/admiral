@@ -463,11 +463,11 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #'
 #' @param arg A function argument to be checked
 #'
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
-#' is `NULL` then an error is thrown
-#'
 #' @param expect_names If the argument is set to `TRUE`, it is checked if all
 #'   variables are named, e.g., `vars(APERSDT = APxxSDT, APEREDT = APxxEDT)`.
+#'
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
 #'
 #' @author Samia Kabi
 #'
@@ -502,7 +502,8 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' example_fun_name(vars(APERSDT = APxxSDT, APEREDT = APxxEDT))
 #'
 #' try(example_fun_name(vars(APERSDT = APxxSDT, APxxEDT)))
-assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
+assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
+  assert_logical_scalar(expect_names)
   assert_logical_scalar(optional)
 
   default_err_msg <- sprintf(
@@ -783,7 +784,7 @@ assert_atomic_vector <- function(arg, optional = FALSE) {
 #' try(example_fun(letters))
 #'
 #' try(example_fun(1:10))
-assert_s3_class <- function(arg, class, optional = TRUE) {
+assert_s3_class <- function(arg, class, optional = FALSE) {
   assert_character_scalar(class)
   assert_logical_scalar(optional)
 
@@ -834,7 +835,7 @@ assert_s3_class <- function(arg, class, optional = TRUE) {
 #' try(example_fun(list(letters, 1:10)))
 #'
 #' try(example_fun(c(TRUE, FALSE)))
-assert_list_of <- function(arg, class, optional = TRUE) {
+assert_list_of <- function(arg, class, optional = FALSE) {
   assert_character_scalar(class)
   assert_logical_scalar(optional)
 
@@ -1555,7 +1556,7 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
 #'   as.Date("2022-01-30", tz = "UTC")
 #' )
 #' try(example_fun("1993-07-14"))
-assert_date_vector <- function(arg, optional = TRUE) {
+assert_date_vector <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
   if (optional && is.null(arg)) {
@@ -1564,9 +1565,11 @@ assert_date_vector <- function(arg, optional = TRUE) {
 
   if (!is.instant(arg)) {
     abort(paste0(
+      "`",
       deparse(substitute(arg)),
-      " must be a date or datetime variable but it's ",
-      friendly_type_of(arg)
+      "` must be a date or datetime variable but it's `",
+      friendly_type_of(arg),
+      "`"
     ))
   }
 }
