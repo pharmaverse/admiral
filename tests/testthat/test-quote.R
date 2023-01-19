@@ -3,6 +3,7 @@
 test_that("enumerate Test 1: enumerate works", {
   expect_equal(enumerate(letters[1]), "`a`")
   expect_equal(enumerate(letters[1:3]), "`a`, `b` and `c`")
+  expect_equal(enumerate(1:3, quote_fun = NULL), "1, 2 and 3")
 })
 
 # squote ----

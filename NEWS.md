@@ -4,6 +4,10 @@
 
 ## Updates of Existing Functions
   - Fix datatable styling for documentation (#197)
+  - The `assert_list_of()` function gained a `named` argument to check that all
+  elements of the list are named. (#203)
+  - The `quote_fun` argument of `enumerate()` was extended such that `NULL` can
+  be specified to request no quoting of the elements. (#203)
 
 ## Breaking Changes
 - The default value of the `optional` argument in `assert_date_vector()`,
@@ -12,7 +16,6 @@ to make the default behavior consistent. (#87)
 
 ## Documentation
   - New section in programming strategy regarding comments (#71)
-
 
 # admiraldev 0.2.0
 
