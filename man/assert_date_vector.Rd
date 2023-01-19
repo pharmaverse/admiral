@@ -4,7 +4,7 @@
 \alias{assert_date_vector}
 \title{Is an object a date or datetime vector?}
 \usage{
-assert_date_vector(arg, optional = TRUE)
+assert_date_vector(arg, optional = FALSE)
 }
 \arguments{
 \item{arg}{The function argument to be checked}

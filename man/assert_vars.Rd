@@ -4,16 +4,16 @@
 \alias{assert_vars}
 \title{Is an Argument a List of Variables?}
 \usage{
-assert_vars(arg, optional = FALSE, expect_names = FALSE)
+assert_vars(arg, expect_names = FALSE, optional = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
 
-\item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
-is \code{NULL} then an error is thrown}
-
 \item{expect_names}{If the argument is set to \code{TRUE}, it is checked if all
 variables are named, e.g., \code{vars(APERSDT = APxxSDT, APEREDT = APxxEDT)}.}
+
+\item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
+is \code{NULL} then an error is thrown}
 }
 \value{
 The function throws an error if \code{arg} is not a list of variables created using \code{vars()}
