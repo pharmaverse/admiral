@@ -507,7 +507,7 @@ assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
   assert_logical_scalar(optional)
 
   default_err_msg <- sprintf(
-    "`%s` must be a list of unquoted variable names, e.g. `vars(USUBJID, VISIT)`",
+    "`%s` must be a list of symbols, e.g. `exprs(USUBJID, VISIT)`",
     arg_name(substitute(arg))
   )
 
@@ -538,7 +538,7 @@ assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
     if (any(names(arg) == "")) {
       abort(sprintf(
         paste(
-          "`%s` must be a named list of unquoted variable names,",
+          "`%s` must be a named list of symbols,",
           "e.g. `vars(APERSDT = APxxSDT, APEREDT = APxxEDT)`"
         ),
         arg_name(substitute(arg))
@@ -805,21 +805,21 @@ assert_s3_class <- function(arg, class, optional = FALSE) {
   invisible(arg)
 }
 
-#' Is an Argument a List of Objects of a Specific S3 Class?
+#' Is an Argument a List of Objects of a Specific S3 Class or Type?
 #'
-#' Checks if an argument is a `list` of objects inheriting from the S3 class specified.
+#' Checks if an argument is a `list` of objects inheriting from the S3 class or type specified.
 #'
 #' @param arg A function argument to be checked
-#' @param class The S3 class to check for
+#' @param class The S3 class or type to check for
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #'   is `NULL` then an error is thrown
 #'
 #' @author Thomas Neitmann
 #'
 #' @return
-#' The function throws an error if `arg` is not a list or if `arg` is a list but its
-#' elements are not objects inheriting from `class`. Otherwise, the input is returned
-#' invisibly.
+#' The function throws an error if `arg` is not a list or if `arg` is a list but
+#' its elements are not objects inheriting from `class` or of type `class`.
+#' Otherwise, the input is returned invisibly.
 #'
 #' @export
 #'
@@ -845,14 +845,14 @@ assert_list_of <- function(arg, class, optional = FALSE) {
 
   assert_s3_class(arg, "list")
 
-  is_class <- map_lgl(arg, inherits, class)
+  is_class <- map_lgl(arg, inherits, class) | map_chr(arg, typeof) == class
   if (!all(is_class)) {
     info_msg <- paste(
       sprintf("\u2716 Element %s is %s", which(!is_class), map_chr(arg[!is_class], what_is_it)),
       collapse = "\n"
     )
     err_msg <- sprintf(
-      "Each element of `%s` must be an object of class '%s' but the following are not:\n%s",
+      "Each element of `%s` must be an object of class/type '%s' but the following are not:\n%s",
       arg_name(substitute(arg)),
       class,
       info_msg
