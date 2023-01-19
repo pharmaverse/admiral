@@ -28,8 +28,7 @@ Data frame with all the combinations of \code{PARAMCD}, \code{PARAM}, \code{AVIS
 For each group defined by \code{by_vars} those observations from \code{dataset_expected_obs}
 are added to the output dataset which do not have a corresponding observation
 in the input dataset or for which \code{AVAL} is NA for the corresponding observation
-in the input dataset. Only variables specified in \code{by_vars} will be populated
-in the newly created records.}
+in the input dataset.}
 
 \item{order}{List of variables for sorting a dataset
 
@@ -39,7 +38,7 @@ observation forward (eg. \code{AVAL}) within each \code{by_vars}.}
 \item{keep_vars}{Variables that need carrying the last observation forward
 
 Keep variables that need carrying the last observation forward other than \code{AVAL}
-(eg. \code{PARAMN}, \code{VISITNUM}). If by default \code{NULL}, only variables specified in
+(e.g., \code{PARAMN}, \code{VISITNUM}). If by default \code{NULL}, only variables specified in
 \code{by_vars} and \code{AVAL} will be populated in the newly created records.}
 }
 \value{

@@ -18,8 +18,7 @@
 #'   For each group defined by `by_vars` those observations from `dataset_expected_obs`
 #'   are added to the output dataset which do not have a corresponding observation
 #'   in the input dataset or for which `AVAL` is NA for the corresponding observation
-#'   in the input dataset. Only variables specified in `by_vars` will be populated
-#'   in the newly created records.
+#'   in the input dataset.
 #'
 #' @param order List of variables for sorting a dataset
 #'
@@ -29,7 +28,7 @@
 #' @param keep_vars Variables that need carrying the last observation forward
 #'
 #'   Keep variables that need carrying the last observation forward other than `AVAL`
-#'   (eg. `PARAMN`, `VISITNUM`). If by default `NULL`, only variables specified in
+#'   (e.g., `PARAMN`, `VISITNUM`). If by default `NULL`, only variables specified in
 #'   `by_vars` and `AVAL` will be populated in the newly created records.
 #'
 #' @author G Gayatri
