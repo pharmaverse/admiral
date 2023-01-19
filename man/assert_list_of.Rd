@@ -11,7 +11,7 @@ assert_list_of(arg, class, named = FALSE, optional = TRUE)
 
 \item{class}{The S3 class to check for}
 
-\item{named}{If set to \code{TRUE}, an error is issued it not all elements of the
+\item{named}{If set to \code{TRUE}, an error is issued if not all elements of the
 list are named.}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
