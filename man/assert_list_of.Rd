@@ -4,7 +4,7 @@
 \alias{assert_list_of}
 \title{Is an Argument a List of Objects of a Specific S3 Class?}
 \usage{
-assert_list_of(arg, class, optional = TRUE)
+assert_list_of(arg, class, optional = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
