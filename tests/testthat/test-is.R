@@ -6,7 +6,7 @@ test_that("is_order_vars Test 1: returns error if input were created incorrectly
 
 ## Test 2: returns TRUE if input were created correctly ----
 test_that("is_order_vars Test 2: returns TRUE if input were created correctly", {
-  expect_true(is_order_vars(vars(AVAL, desc(ADT))))
+  expect_true(is_order_vars(exprs(AVAL, desc(ADT))))
 })
 
 # is_valid_dtc ----

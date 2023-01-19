@@ -29,7 +29,7 @@
 dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
   display_vars <- assert_vars(display_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = display_vars)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
 
   out <- dataset %>%
     filter_if(filter) %>%

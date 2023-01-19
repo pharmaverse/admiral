@@ -10,8 +10,8 @@ test_that("get_constant_vars Test 1: without ignore_vars", {
   )
 
   expect_equal(
-    get_constant_vars(data, by_vars = vars(USUBJID)),
-    vars(USUBJID, AGE)
+    get_constant_vars(data, by_vars = exprs(USUBJID)),
+    exprs(USUBJID, AGE)
   )
 })
 
@@ -26,8 +26,8 @@ test_that("get_constant_vars Test 2: with ignore_vars", {
   )
 
   expect_equal(
-    get_constant_vars(data, by_vars = vars(USUBJID), ignore_vars = vars(WGTBL, HGTBL)),
-    vars(USUBJID, AGE)
+    get_constant_vars(data, by_vars = exprs(USUBJID), ignore_vars = exprs(WGTBL, HGTBL)),
+    exprs(USUBJID, AGE)
   )
 })
 
@@ -45,7 +45,7 @@ test_that("get_duplicates Test 3: x atomic vector", {
 # get_source_vars ----
 ## Test 4: x is a list of quosures ----
 test_that("get_source_vars Test 4: x is a list of quosures", {
-  x <- vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+  x <- exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
 
   expect_equal(
     get_source_vars(x),
@@ -57,6 +57,6 @@ test_that("get_source_vars Test 4: x is a list of quosures", {
 test_that("get_source_vars Test 5: quosures is NULL", {
   expect_equal(
     get_source_vars(NULL),
-    quo_c(NULL)
+    expr_c(NULL)
   )
 })

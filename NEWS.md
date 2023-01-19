@@ -8,6 +8,8 @@
   elements of the list are named. (#203)
   - The `quote_fun` argument of `enumerate()` was extended such that `NULL` can
   be specified to request no quoting of the elements. (#203)
+  - The `assert_list_of()` function was enhanced such that it also considers the
+  type of the element, e.g., to check if a value is a list of symbols. (#208)
 
 ## Breaking Changes
 - The default value of the `optional` argument in `assert_date_vector()`,

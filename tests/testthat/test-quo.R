@@ -23,9 +23,34 @@ test_that("quo_c Test 2: `quo_c` returns error if non-quosures are input", {
   )
 })
 
+# expr_c ----
+## Test 3: concatenating and indexing expressions ----
+test_that("expr_c Test 3: concatenating and indexing expressions", {
+  x <- expr(USUBJID)
+  y <- expr(STUDYID)
+
+  expect_equal(
+    expected = expr(USUBJID),
+    object = expr_c(x, NULL, y)[[1]]
+  )
+  expect_equal(
+    expected = expr(STUDYID),
+    object = expr_c(x, NULL, y)[[2]]
+  )
+})
+
+## Test 4: returns error if non-expressions are input ----
+test_that("expr_c Test 4: returns error if non-expressions are input", {
+  USUBJID <- mean
+
+  expect_error(
+    object = expr_c(expr(USUBJID), USUBJID)
+  )
+})
+
 # quo_not_missing ----
-## Test 3: `quo_not_missing` returns TRUE if no missing argument ----
-test_that("quo_not_missing Test 3: `quo_not_missing` returns TRUE if no missing argument", {
+## Test 5: `quo_not_missing` returns TRUE if no missing argument ----
+test_that("quo_not_missing Test 5: `quo_not_missing` returns TRUE if no missing argument", {
   test_fun <- function(x) {
     x <- enquo(x)
     !isTRUE(quo_not_missing(x))
@@ -33,8 +58,8 @@ test_that("quo_not_missing Test 3: `quo_not_missing` returns TRUE if no missing 
   expect_true(test_fun(my_variable))
 })
 
-## Test 4: `quo_not_missing` throws an Error if missing argument ----
-test_that("quo_not_missing Test 4: `quo_not_missing` throws an Error if missing argument", {
+## Test 6: `quo_not_missing` throws an Error if missing argument ----
+test_that("quo_not_missing Test 6: `quo_not_missing` throws an Error if missing argument", {
   test_fun <- function(x) {
     x <- enquo(x)
     isTrue(quo_not_missing(x))
@@ -43,11 +68,9 @@ test_that("quo_not_missing Test 4: `quo_not_missing` throws an Error if missing 
 })
 
 # replace_values_by_names ----
-## Test 5: names of quosures replace value ----
-test_that("replace_values_by_names Test 5: names of quosures replace value", {
-  x <- quo(USUBJID)
-  y <- quo(STUDYID)
-  z <- quo_c(x, y)
+## Test 7: names of quosures replace value ----
+test_that("replace_values_by_names Test 7: names of quosures replace value", {
+  z <- exprs(USUBJID, STUDYID)
 
   z_noname <- replace_values_by_names(z)
 
@@ -55,55 +78,64 @@ test_that("replace_values_by_names Test 5: names of quosures replace value", {
   z_named <- replace_values_by_names(z)
 
   expect_equal(
-    expected = quo(USUBJID),
+    expected = expr(USUBJID),
     object = z_noname[[1]]
   )
   expect_equal(
-    expected = quo(STUDYID),
+    expected = expr(STUDYID),
     object = z_noname[[2]]
   )
 
   expect_equal(
-    expected = quo(`Unique Subject Identifier`),
+    expected = expr(`Unique Subject Identifier`),
     object = z_named[[1]]
   )
   expect_equal(
-    expected = quo(`Study Identifier`),
+    expected = expr(`Study Identifier`),
     object = z_named[[2]]
   )
 })
 
 # replace_symbol_in_quo ----
-## Test 6: symbol is replaced ----
-test_that("replace_symbol_in_quo Test 6: symbol is replaced", {
+## Test 8: error if called ----
+test_that("replace_symbol_in_quo Test 8: error if called", {
+  expect_error(
+    replace_symbol_in_quo(),
+    class = "lifecycle_error_deprecated"
+  )
+})
+
+# replace_symbol_in_expr ----
+## Test 9: symbol is replaced ----
+test_that("replace_symbol_in_expr Test 9: symbol is replaced", {
   expect_equal(
-    expected = quo(AVAL.join),
-    object = replace_symbol_in_quo(
-      quo(AVAL),
+    expected = expr(AVAL.join),
+    object = replace_symbol_in_expr(
+      expr(AVAL),
       target = AVAL,
       replace = AVAL.join
     )
   )
 })
 
-## Test 7: partial match is not replaced ----
-test_that("replace_symbol_in_quo Test 7: partial match is not replaced", {
+## Test 10: partial match is not replaced ----
+test_that("replace_symbol_in_expr Test 10: partial match is not replaced", {
   expect_equal(
-    expected = quo(AVALC),
-    object = replace_symbol_in_quo(
-      quo(AVALC),
+    expected = expr(AVALC),
+    object = replace_symbol_in_expr(
+      expr(AVALC),
       target = AVAL,
       replace = AVAL.join
     )
   )
 })
 
-## Test 8: symbol in expression is replaced ----
-test_that("replace_symbol_in_quo Test 8: symbol in expression is replaced", {
+## Test 11: symbol in expression is replaced ----
+test_that("replace_symbol_in_expr Test 11: symbol in expression is replaced", {
   expect_equal(
-    expected = quo(desc(AVAL.join)),
-    object = replace_symbol_in_quo(
-      quo(desc(AVAL)),
+    expected = expr(desc(AVAL.join)),
+    object = replace_symbol_in_expr(
+      expr(desc(AVAL)),
       target = AVAL,
       replace = AVAL.join
     )
@@ -111,21 +143,24 @@ test_that("replace_symbol_in_quo Test 8: symbol in expression is replaced", {
 })
 
 # add_suffix_to_vars ----
-## Test 9: with single variable ----
-test_that("add_suffix_to_vars Test 9: with single variable", {
+## Test 12: with single variable ----
+test_that("add_suffix_to_vars Test 12: with single variable", {
   expect_equal(
-    expected = vars(ADT, desc(AVAL.join), AVALC),
-    object = add_suffix_to_vars(vars(ADT, desc(AVAL), AVALC), vars = vars(AVAL), suffix = ".join")
+    expected = exprs(ADT, desc(AVAL.join), AVALC),
+    object = add_suffix_to_vars(
+      exprs(ADT, desc(AVAL), AVALC),
+      vars = exprs(AVAL),
+      suffix = ".join")
   )
 })
 
-## Test 10: with more than one variable ----
-test_that("add_suffix_to_vars Test 10: with more than one variable", {
+## Test 13: with more than one variable ----
+test_that("add_suffix_to_vars Test 13: with more than one variable", {
   expect_equal(
-    expected = vars(ADT, desc(AVAL.join), AVALC.join),
+    expected = exprs(ADT, desc(AVAL.join), AVALC.join),
     object = add_suffix_to_vars(
-      vars(ADT, desc(AVAL), AVALC),
-      vars = vars(AVAL, AVALC),
+      exprs(ADT, desc(AVAL), AVALC),
+      vars = exprs(AVAL, AVALC),
       suffix = ".join"
     )
   )

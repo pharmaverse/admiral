@@ -17,6 +17,23 @@ quo_c <- function(...) {
   rlang::as_quosures(inputs[!is_null])
 }
 
+#' Concatenate One or More Expressions
+#'
+#' @param ... One or more expressions or list of expressions
+#'
+#' @return A list of expressions
+#'
+#' @keywords quo
+#' @family quo
+#'
+#' @export
+expr_c <- function(...) {
+  inputs <- unlist(list(...), recursive = TRUE)
+  stopifnot(all(map_lgl(inputs, is_expression)))
+  is_null <- map_lgl(inputs, is.null)
+  inputs[!is_null]
+}
+
 #' Check Whether an Argument Is Not a Quosure of a Missing Argument
 #'
 #' @param x Test object
@@ -42,9 +59,9 @@ quo_not_missing <- function(x) {
 }
 
 
-#' Replace Quosure Value with Name
+#' Replace Expression Value with Name
 #'
-#' @param quosures A list of quosures
+#' @param expressions A list of expressions
 #'
 #' @author Thomas Neitmann
 #'
@@ -52,19 +69,22 @@ quo_not_missing <- function(x) {
 #' @family quo
 #'
 #'
-#' @return A list of quosures
+#' @return A list of expressions
 #' @export
-replace_values_by_names <- function(quosures) {
-  vars <- map2(quosures, names(quosures), function(q, n) {
-    if (n == "") {
-      return(q)
-    }
-    quo_set_env(
-      quo(!!as.symbol(n)),
-      quo_get_env(q)
+replace_values_by_names <- function(expressions, quosures) {
+  if (!missing(quosures)) {
+    deprecate_stop(
+      "0.10.0",
+      "replace_values_by_names(quosures = )",
+      "replace_values_by_names(expressions = )"
     )
+  }
+  map2(expressions, names(expressions), function(e, n) {
+    if (n == "") {
+      return(e)
+    }
+    as.symbol(n)
   })
-  structure(vars, class = "quosures", names = NULL)
 }
 
 #' Replace Symbols in a Quosure
@@ -97,36 +117,76 @@ replace_values_by_names <- function(quosures) {
 replace_symbol_in_quo <- function(quosure,
                                   target,
                                   replace) {
-  assert_expr(quosure)
-  target <- quo_get_expr(assert_symbol(enquo(target)))
-  replace <- quo_get_expr(assert_symbol(enquo(replace)))
-  expr <- quo_get_expr(quosure)
-  if (is.symbol(expr)) {
-    if (expr == target) {
-      expr <- replace
+  deprecate_stop(
+    "0.10.0",
+    "replace_symbol_in_quo()",
+    "replace_symbol_in_expr()",
+    details = paste(
+      "Expressions created by `exprs()` must be used",
+      "instead of quosures created by `vars()`."
+    )
+  )
+}
+
+#' Replace Symbols in an Expression
+#'
+#' Replace symbols in an expression
+#'
+#' @param expression Expression
+#'
+#' @param target Target symbol
+#'
+#' @param replace Replacing symbol
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The expression where every occurrence of the symbol `target` is
+#'   replaced by `replace`
+#'
+#' @keywords quo
+#' @family quo
+#'
+#' @export
+#'
+#' @examples
+#'
+#' library(rlang)
+#'
+#' replace_symbol_in_expr(expr(AVAL), target = AVAL, replace = AVAL.join)
+#' replace_symbol_in_expr(expr(AVALC), target = AVAL, replace = AVAL.join)
+#' replace_symbol_in_expr(expr(desc(AVAL)), target = AVAL, replace = AVAL.join)
+replace_symbol_in_expr <- function(expression,
+                                   target,
+                                   replace) {
+  assert_expr(expression)
+  target <- assert_symbol(enexpr(target))
+  replace <- assert_symbol(enexpr(replace))
+  if (is.symbol(expression)) {
+    if (expression == target) {
+      expression <- replace
     }
   } else {
-    for (i in seq_along(quosure)) {
-      if (expr[[i]] == target) {
-        expr[[i]] <- replace
+    for (i in seq_along(expression)) {
+      if (expression[[i]] == target) {
+        expression[[i]] <- replace
       }
     }
   }
-  rlang::quo_set_expr(quosure, expr)
+  expression
 }
 
-#' Add a Suffix to Variables in a List of Quosures
+#' Add a Suffix to Variables in a List of Expressions
 #'
-#' Add a suffix to variables in a list of quosures
+#' Add a suffix to variables in a list of expressions
 #'
-#' @param order List of quosures
+#' @param order List of expressions
 #'
 #'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))`
+#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))`
 #'
 #' @param vars Variables to change
 #'
-#'   *Permitted Values*: list of variables created by `vars()`
+#'   *Permitted Values*: list of variables created by `exprs()`
 #'
 #' @param suffix Suffix
 #'
@@ -134,7 +194,7 @@ replace_symbol_in_quo <- function(quosure,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The list of quosures where for each element the suffix (`suffix`) is
+#' @return The list of expression where for each element the suffix (`suffix`) is
 #'   added to every symbol specified for `vars`
 #'
 #' @keywords quo
@@ -145,7 +205,7 @@ replace_symbol_in_quo <- function(quosure,
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #'
-#' add_suffix_to_vars(vars(ADT, desc(AVAL), AVALC), vars = vars(AVAL), suffix = ".join")
+#' add_suffix_to_vars(exprs(ADT, desc(AVAL), AVALC), vars = exprs(AVAL), suffix = ".join")
 add_suffix_to_vars <- function(order,
                                vars,
                                suffix) {
@@ -155,13 +215,10 @@ add_suffix_to_vars <- function(order,
   for (i in seq_along(vars)) {
     order <- lapply(
       order,
-      replace_symbol_in_quo,
-      target = !!quo_get_expr(vars[[i]]),
-      replace = !!sym(paste0(as_label(
-        quo_get_expr(vars[[i]])
-      ), suffix))
+      replace_symbol_in_expr,
+      target = !!vars[[i]],
+      replace = !!sym(paste0(as_label(vars[[i]]), suffix))
     )
   }
-  class(order) <- c("quosures", "list")
   order
 }

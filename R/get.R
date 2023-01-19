@@ -46,7 +46,7 @@ get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
     names() %>%
     syms()
 
-  vars(!!!by_vars, !!!constant_vars)
+  exprs(!!!by_vars, !!!constant_vars)
 }
 
 
@@ -72,19 +72,28 @@ get_duplicates <- function(x) {
   unique(x[duplicated(x)])
 }
 
-#' Get Source Variables from a List of Quosures
+#' Get Source Variables from a List of Expressions
 #'
-#' @param quosures A list of quosures
+#' @param expressions A list of expressions
+#'
+#' @param quosures *Deprecated*, please use `expressions` instead.
 #'
 #' @author Stefan Bundfuss
 #'
 #' @keywords get
 #' @family get
 #'
-#' @return A list of quosures
+#' @return A list of expressions
 #' @export
-get_source_vars <- function(quosures) {
-  assert_varval_list(quosures, optional = TRUE)
+get_source_vars <- function(expressions, quosures) {
+  if (!missing(quosures)) {
+    deprecate_stop(
+      "0.10.0",
+      "get_source_vars(quosures = )",
+      "get_source_vars(expressions = )"
+    )
+  }
+  assert_varval_list(expressions, optional = TRUE)
 
-  quo_c(quosures)[lapply(quo_c(quosures), quo_is_symbol) == TRUE]
+  expr_c(expressions)[lapply(expr_c(expressions), is.symbol) == TRUE]
 }

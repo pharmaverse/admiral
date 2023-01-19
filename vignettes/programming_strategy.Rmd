@@ -94,7 +94,7 @@ If `BASE` is used, the values are categorized while if `ANRIND` is used, the val
 * The behavior of the function is only determined by its input, not by any global object,  
 i.e. all input like datasets, variable names, options, … must be provided to the function by parameters.
 * It is expected that the input datasets are not grouped. If any are grouped, the function must issue an error.
-* If a function requires grouping, the function must provide the by_vars parameter.
+* If a function requires grouping, the function must provide the `by_vars` parameter.
 * The output dataset must be ungrouped.
 * The functions should not sort (arrange) the output dataset at the end.
 * If the function needs to create temporary variables in an input dataset, these
@@ -105,8 +105,20 @@ variables must start with `temp_` and must be removed from the output dataset.
 
 ## Admiral Options
 
-* An exception is made for admiral options, see `get_admiral_option()` and `set_admiral_options()`, where we have certain pre-defined defaults with added flexibility to allow for user-defined defaults on *commonly used* function arguments e.g. `subject_keys` currently pre-defined as `vars(STUDYID, USUBJID)`, but can be modified using `set_admiral_options(subject_keys = vars(...))` at the top of a script. The reasoning behind this was to relieve the user of repeatedly changing aforementioned *commonly used* function arguments multiple times in a script, which may be called across many admiral functions. 
-* If this additional flexibility needs to be added for another *commonly used* function argument e.g. `future_input` to be set as `vars(...)` it can be added as an admiral option. In the function formals define `future_input = get_admiral_option("future_input")` then proceed to modify the body and roxygen documentation of `set_admiral_options()`. 
+* An exception is made for admiral options, see `get_admiral_option()` and
+`set_admiral_options()`, where we have certain pre-defined defaults with added
+flexibility to allow for user-defined defaults on *commonly used* function
+arguments e.g. `subject_keys` currently pre-defined as `exprs(STUDYID,
+USUBJID)`, but can be modified using `set_admiral_options(subject_keys =
+exprs(...))` at the top of a script. The reasoning behind this was to relieve
+the user of repeatedly changing aforementioned *commonly used* function
+arguments multiple times in a script, which may be called across many admiral
+functions.
+* If this additional flexibility needs to be added for another *commonly used*
+function argument e.g. `future_input` to be set as `exprs(...)` it can be added
+as an admiral option. In the function formals define `future_input =
+get_admiral_option("future_input")` then proceed to modify the body and roxygen
+documentation of `set_admiral_options()`.
 
 ## Function Names
 
@@ -154,14 +166,14 @@ There is a recommended parameter order that all contributors are asked to adhere
     * Make sure to always mention `start_date` before `end_date` (or related).
 
 Names of variables inside a dataset should be passed as symbols rather than strings, i.e. `AVAL` rather than `"AVAL"`.
-If a parameter accepts one or more variables as input, the variables should be wrapped inside `vars()`.
+If a parameter accepts one or more variables as input, the variables should be wrapped inside `exprs()`.
 
 For example:
 
 * `new_var = TEMPBL`
-* `by_vars = vars(PARAMCD, AVISIT)`
+* `by_vars = exprs(PARAMCD, AVISIT)`
 * `filter = PARAMCD == "TEMP"`
-* `order = vars(AVISIT, desc(AESEV))`
+* `order = exprs(AVISIT, desc(AESEV))`
 
 Parameter must not accept expressions for assigning the value of the new
 variable. Instead separate parameters need to be provided for defining the
@@ -170,9 +182,9 @@ following is **not acceptable**.
 
 ```
     ...
-    new_var = vars(mydtm = convert_dtc_to_dtm(impute_dtc(cmstdtc,
-                                                         date_imputation = "last",
-                                                         time_imputation = "last"))),
+    new_var = exprs(mydtm = convert_dtc_to_dtm(impute_dtc(cmstdtc,
+                                                          date_imputation = "last",
+                                                          time_imputation = "last"))),
     ...
 ```
 
@@ -217,7 +229,7 @@ Parameters which expect a boolean or boolean vector must start with a verb, e.g.
 |------------------|--------------------------------------------------------------------------------------------------------------------|
 | `dataset`        | The input dataset. Expects a data.frame or a tibble.                                                               |
 | `by_vars`        | Variables to group by.                                                                                             |
-| `order`          | List of expressions for sorting a dataset, e.g., `vars(PARAMCD, AVISITN, desc(AVAL))`.                             |
+| `order`          | List of expressions for sorting a dataset, e.g., `exprs(PARAMCD, AVISITN, desc(AVAL))`.                             |
 | `new_var`        | Name of a single variable to be added to the dataset.                                                              |
 | `new_vars`       | List of variables to be added to the dataset.                                                                      |
 | `new_var_unit`   | Name of the unit variable to be added. It should be the unit of the variable specified for the new_var parameter.  |
@@ -228,7 +240,7 @@ Parameters which expect a boolean or boolean vector must start with a verb, e.g.
 | `dtc`            | (Partial) date/datetime in ISO 8601 format.                                                                        |
 | `date`           | Date of an event / interval. Expects a date object.                                                                |
 | `set_values_to`  | List of variable name-value pairs.                                                                                 |
-| `subject_keys`   | Variables to uniquely identify a subject, defaults to `vars(STUDYID, USUBJID)`. In function formals, use `subject_keys = get_admiral_option("subject_keys")`                                     |
+| `subject_keys`   | Variables to uniquely identify a subject, defaults to `exprs(STUDYID, USUBJID)`. In function formals, use `subject_keys = get_admiral_option("subject_keys")`                                     |
 
 
 ## Source Code Formatting
@@ -351,9 +363,9 @@ An example is given below:
 #'   character vector to a date object.
 #'
 #' @param source_vars A list of datetime or date variables created using
-#'   `vars()` from which dates are to be extracted. This can either be a list of
+#'   `exprs()` from which dates are to be extracted. This can either be a list of
 #'   date(time) variables or named `--DY` variables and corresponding --DT(M)
-#'   variables e.g. `vars(TRTSDTM, ASTDTM, AENDT)` or `vars(TRTSDT, ASTDTM,
+#'   variables e.g. `exprs(TRTSDTM, ASTDTM, AENDT)` or `exprs(TRTSDT, ASTDTM,
 #'   AENDT, DEATHDY = DTHDT)`. If the source variable does not end in --DT(M), a
 #'   name for the resulting `--DY` variable must be provided.
 #'
@@ -392,7 +404,7 @@ An example is given below:
 #' derive_vars_dy(
 #'   datain,
 #'   reference_date = TRTSDTM,
-#'   source_vars = vars(TRTSDTM, ASTDTM, AENDT)
+#'   source_vars = exprs(TRTSDTM, ASTDTM, AENDT)
 #' )
 ```
 
@@ -535,7 +547,11 @@ Functions from other packages have to be explicitly imported by using the `@impo
 To import the `if_else()` and `mutate()` function from `dplyr` the following line would have to be included in that file:
 `#' @importFrom dplyr if_else mutate`.
 
-Some of these functions become critically important while using admiral and should be included as an export. This applies to functions which are frequently called within `{admiral }`function calls like `dplyr::vars()`, `dplyr::desc()` or the pipe operator `magrittr::%>%`. To export these functions, the following R code should be included in the `R/reexports.R` file using the format:
+Some of these functions become critically important while using admiral and
+should be included as an export. This applies to functions which are frequently
+called within `{admiral }`function calls like `rlang::exprs()`, `dplyr::desc()`
+or the pipe operator `magrittr::%>%`. To export these functions, the following R
+code should be included in the `R/reexports.R` file using the format:
 
 ```
 #' @export
@@ -649,19 +665,19 @@ If a parameter is removed and is not replaced, an **error** must be generated:
 ### END DEPRECATION
 ```
 
-If the parameter is renamed or replaced, a **warning** must be issued and the new parameter takes 
-the value of the old parameter until the next release. 
-Note: parameters which are not passed as `vars()` argument (e.g. `new_var = VAR1` or `filter = AVAL >10`)
-will need to be quoted. 
+If the parameter is renamed or replaced, a **warning** must be issued and the
+new parameter takes the value of the old parameter until the next release. Note:
+parameters which are not passed as `exprs()` argument (e.g. `new_var = VAR1` or
+`filter = AVAL >10`) will need to be quoted.
 
 ``` 
 ### BEGIN DEPRECATION
   if (!missing(old_param)) {
     deprecate_warn("x.y.z", "fun_xxx(old_param = )", "fun_xxx(new_param = )")
-    # old_param is given using vars()
+    # old_param is given using exprs()
     new_param <- old_param
-    # old_param is NOT given using vars()
-    new_param <- enquo(old_param)
+    # old_param is NOT given using exprs()
+    new_param <- enexpr(old_param)
   }
 ### END DEPRECATION
 ```
@@ -707,7 +723,7 @@ Other unit tests of deprecated functions must be removed.
 Please take the following list as recommendation and try to adhere to its rules if possible.
 
 * Parameters in function calls should be named except for the first parameter 
-(e.g. `assert_data_frame(dataset, required_vars = vars(var1, var2), optional = TRUE)`).
+(e.g. `assert_data_frame(dataset, required_vars = exprs(var1, var2), optional = TRUE)`).
 * `dplyr::if_else()` should be used when there are only two conditions. 
 Try to always set the `missing` parameter whenever appropriate.
 
