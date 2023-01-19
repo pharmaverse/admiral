@@ -4,6 +4,10 @@
 
 ## Updates of Existing Functions
 
+- Argument `keep_vars` was added to `derive_locf_records()`, which keeps 
+variables that need carrying the last observation forward other than `AVAL`
+(e.g., `PARAMN`, `VISITNUM`) (#1636).
+
 ## Breaking Changes
 
 - Function `derive_param_tte()` has been updated such that only observations are

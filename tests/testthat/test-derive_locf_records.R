@@ -258,3 +258,48 @@ test_that("derive_locf_records Test 5: visit variables are parameter dependent",
     keys = c("STUDYID", "USUBJID", "PARAMCD", "PARAM", "AVISITN", "AVISIT", "DTYPE")
   )
 })
+
+
+## Test 6: populate VISITNUM for LOCF records ----
+test_that("derive_locf_records Test 6: populate VISITNUM for LOCF records", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~VISITNUM,
+    "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, 0, "BASELINE", 0,
+    "TEST01", "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, 0, "BASELINE", 0
+  )
+
+  advs_expected_obsv <- tibble::tribble(
+    ~PARAMCD, ~PARAM, ~AVISITN, ~AVISIT,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 0, "BASELINE",
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 2, "WEEK 2",
+    "SYSBP", "Systolic Blood Pressure (mmHg)", 0, "BASELINE",
+    "SYSBP", "Systolic Blood Pressure (mmHg)", 2, "WEEK 2",
+  )
+
+
+  expected_output <- bind_rows(
+    input,
+    tibble::tribble(
+      ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISITN, ~AVISIT, ~VISITNUM,
+      "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, 2, "WEEK 2", 0,
+      "TEST01", "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, 2, "WEEK 2", 0
+    ) %>%
+      mutate(DTYPE = "LOCF")
+  )
+
+
+  actual_output <- derive_locf_records(
+    input,
+    dataset_expected_obs = advs_expected_obsv,
+    by_vars = vars(STUDYID, USUBJID, PARAM, PARAMCD),
+    order = vars(AVISITN, AVISIT),
+    keep_vars = vars(VISITNUM)
+  )
+
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("STUDYID", "USUBJID", "PARAMCD", "PARAM", "AVISITN", "AVISIT", "DTYPE")
+  )
+})
