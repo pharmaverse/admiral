@@ -237,7 +237,7 @@ this point. All other variables related to `PARAMCD` (e.g. `PARAM`, `PARAMCAT1`,
 will be added when all `PARAMCD` are derived.
 
 ```{r eval=TRUE}
-advs <- derive_vars_merged(
+advs <- derive_vars_merged_lookup(
   advs,
   dataset_add = param_lookup,
   new_vars = vars(PARAMCD),
@@ -254,6 +254,10 @@ dataset_vignette(advs_param, display_vars = vars(USUBJID, VSTESTCD, PARAMCD))
 Please note, it may be necessary to include other variables in the join. For
 example, perhaps the `PARAMCD` is based on `VSTESTCD` and `VSPOS`, it may be 
 necessary to expand this lookup or create a separate look up for `PARAMCD`.
+
+If more than one lookup table, e.g., company parameter mappings and project
+parameter mappings, are available, `consolidate_metadata()` can be used to
+consolidate these into a single lookup table.
 
 ## Derive Results (`AVAL`, `AVALC`) {#aval}
 
