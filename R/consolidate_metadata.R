@@ -26,7 +26,7 @@
 #'   If `"message"`, `"warning"`, or `"error"` is specified, a message is issued
 #'   if the variable names differ across the input datasets (`datasets`).
 #'
-#'   *Permitted Values*: `"none"`, `"message"`, warning"`, `"error"`
+#'   *Permitted Values*: `"none"`, `"message"`, `"warning"`, `"error"`
 #'
 #' @param check_keys Check keys?
 #'

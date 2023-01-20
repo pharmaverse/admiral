@@ -35,7 +35,7 @@ of the dataset the observation is originating from.
 If \code{"message"}, \code{"warning"}, or \code{"error"} is specified, a message is issued
 if the variable names differ across the input datasets (\code{datasets}).
 
-\emph{Permitted Values}: \code{"none"}, \code{"message"}, warning"\verb{, }"error"`}
+\emph{Permitted Values}: \code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
 
 \item{check_keys}{Check keys?
 
