@@ -29,6 +29,7 @@ Add a suffix to variables in a list of expressions
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(rlang)
 
 add_suffix_to_vars(exprs(ADT, desc(AVAL), AVALC), vars = exprs(AVAL), suffix = ".join")
 }

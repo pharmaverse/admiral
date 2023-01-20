@@ -4,7 +4,7 @@
 #' a set of required variables
 #'
 #' @param arg A function argument to be checked
-#' @param required_vars A list of variables created using `vars()`
+#' @param required_vars A list of variables created using `exprs()`
 #' @param check_is_grouped Throw an error is `dataset` is grouped? Defaults to `TRUE`.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
@@ -24,10 +24,11 @@
 #' @examples
 #' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
-#'   assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
+#'   assert_data_frame(dataset, required_vars = exprs(STUDYID, USUBJID))
 #' }
 #'
 #' example_fun(admiral_dm)
@@ -440,11 +441,6 @@ assert_filter_cond <- function(arg, optional = FALSE) {
   }
 
   provided <- !is_missing(arg)
-  if (!provided & !optional) {
-    err_msg <- sprintf("Argument `%s` is missing, with no default", arg_name(substitute(arg)))
-    abort(err_msg)
-  }
-
   if (provided & !(is_call(arg) | is_logical(arg))) {
     err_msg <- sprintf(
       "`%s` must be a filter condition but is %s",
@@ -1078,10 +1074,10 @@ assert_function_param <- function(arg, params) {
 #'
 #' assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
 assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
-  assert_data_frame(dataset, required_vars = vars(PARAMCD))
+  assert_data_frame(dataset, required_vars = exprs(PARAMCD))
   assert_character_scalar(param)
   assert_character_scalar(required_unit)
-  get_unit_expr <- enquo(get_unit_expr)
+  get_unit_expr <- enexpr(get_unit_expr)
 
   units <- dataset %>%
     mutate(`_unit` = !!get_unit_expr) %>%
@@ -1147,7 +1143,7 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #' assert_param_does_not_exist(advs, param = "HR")
 #' try(assert_param_does_not_exist(advs, param = "WEIGHT"))
 assert_param_does_not_exist <- function(dataset, param) {
-  assert_data_frame(dataset, required_vars = vars(PARAMCD))
+  assert_data_frame(dataset, required_vars = exprs(PARAMCD))
   if (param %in% unique(dataset$PARAMCD)) {
     abort(
       paste0(
@@ -1188,13 +1184,14 @@ assert_param_does_not_exist <- function(dataset, param) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #'
 #' example_fun <- function(vars) {
 #'   assert_varval_list(vars)
 #' }
-#' example_fun(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
+#' example_fun(exprs(DTHDOM = "AE", DTHSEQ = AESEQ))
 #'
-#' try(example_fun(vars("AE", DTSEQ = AESEQ)))
+#' try(example_fun(exprs("AE", DTSEQ = AESEQ)))
 assert_varval_list <- function(arg, # nolint
                                required_elements = NULL,
                                accept_expr = FALSE,
@@ -1340,12 +1337,12 @@ assert_varval_list <- function(arg, # nolint
 assert_list_element <- function(list, element, condition, message_text, ...) {
   assert_s3_class(list, "list")
   assert_character_scalar(element)
-  condition <- assert_filter_cond(enquo(condition))
+  condition <- assert_filter_cond(enexpr(condition))
   assert_character_scalar(message_text)
   # store elements of the lists/classes in a vector named as the element #
   rlang::env_poke(current_env(), eval(element), lapply(list, `[[`, element))
   invalids <- !eval(
-    quo_get_expr(condition),
+    condition,
     envir = list(...),
     enclos = current_env()
   )
@@ -1460,7 +1457,7 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
 #' library(rlang)
 #'
 #' example_fun <- function(dataset, var) {
-#'   var <- assert_symbol(enquo(var))
+#'   var <- assert_symbol(enexpr(var))
 #'   assert_date_var(dataset = dataset, var = !!var)
 #' }
 #'
@@ -1481,7 +1478,7 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
 #' ))
 #'
 #' example_fun2 <- function(dataset, var) {
-#'   var <- assert_symbol(enquo(var))
+#'   var <- assert_symbol(enexpr(var))
 #'   assert_date_var(
 #'     dataset = dataset,
 #'     var = !!var,
@@ -1495,8 +1492,8 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
 #'   var = USUBJID
 #' ))
 assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) {
-  var <- assert_symbol(enquo(var))
-  assert_data_frame(dataset, required_vars = vars(!!var))
+  var <- assert_symbol(enexpr(var))
+  assert_data_frame(dataset, required_vars = exprs(!!var))
   assert_character_scalar(dataset_name, optional = TRUE)
   assert_character_scalar(var_name, optional = TRUE)
   column <- pull(dataset, !!var)

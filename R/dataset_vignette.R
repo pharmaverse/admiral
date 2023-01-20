@@ -33,7 +33,7 @@ dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
 
   out <- dataset %>%
     filter_if(filter) %>%
-    mutate_if(is.character, as.factor)
+    mutate(across(where(is.character), as.factor))
 
   # Create a short markdown table when this function is called outside {pkgdown}
   if (!identical(Sys.getenv("IN_PKGDOWN"), "true")) {

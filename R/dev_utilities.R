@@ -156,6 +156,7 @@ contains_vars <- function(arg) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #'
 #' vars2chr(exprs(USUBJID, AVAL))
 vars2chr <- function(expressions, quosures) {

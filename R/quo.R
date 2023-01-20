@@ -47,6 +47,14 @@ expr_c <- function(...) {
 #'
 #' @export
 quo_not_missing <- function(x) {
+  deprecate_warn(
+    "0.3.0",
+    "quo_not_missing()",
+    details = paste(
+      "Due to changing from `vars()` to `exprs()` the function is no longer required.",
+      "It will be removed in future.",
+      sep = "\n")
+  )
   !rlang::quo_is_missing(x)
 
   if (is.null(missing(x)) || quo_is_missing(x)) {
@@ -62,6 +70,8 @@ quo_not_missing <- function(x) {
 #' Replace Expression Value with Name
 #'
 #' @param expressions A list of expressions
+#'
+#' @param quosures *Deprecated*, please use `expressions` instead.
 #'
 #' @author Thomas Neitmann
 #'
@@ -106,14 +116,6 @@ replace_values_by_names <- function(expressions, quosures) {
 #' @family quo
 #'
 #' @export
-#'
-#' @examples
-#'
-#' library(rlang)
-#'
-#' replace_symbol_in_quo(quo(AVAL), target = AVAL, replace = AVAL.join)
-#' replace_symbol_in_quo(quo(AVALC), target = AVAL, replace = AVAL.join)
-#' replace_symbol_in_quo(quo(desc(AVAL)), target = AVAL, replace = AVAL.join)
 replace_symbol_in_quo <- function(quosure,
                                   target,
                                   replace) {
@@ -204,6 +206,7 @@ replace_symbol_in_expr <- function(expression,
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #'
 #' add_suffix_to_vars(exprs(ADT, desc(AVAL), AVALC), vars = exprs(AVAL), suffix = ".join")
 add_suffix_to_vars <- function(order,

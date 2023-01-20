@@ -55,7 +55,10 @@ test_that("quo_not_missing Test 5: `quo_not_missing` returns TRUE if no missing 
     x <- enquo(x)
     !isTRUE(quo_not_missing(x))
   }
-  expect_true(test_fun(my_variable))
+  expect_warning(
+    test_fun(my_variable),
+    class = "lifecycle_warning_deprecated"
+    )
 })
 
 ## Test 6: `quo_not_missing` throws an Error if missing argument ----

@@ -19,6 +19,7 @@ Turn a List of Expressions into a Character Vector
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(rlang)
 
 vars2chr(exprs(USUBJID, AVAL))
 }

@@ -35,7 +35,7 @@ get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
   # get unique values within each group by variables
   unique_count <- dataset %>%
     group_by(!!!by_vars) %>%
-    summarise_at(vars(!!non_by_vars), n_distinct) %>%
+    summarise(across(!!non_by_vars, n_distinct)) %>%
     ungroup() %>%
     select(!!!syms(non_by_vars))
 

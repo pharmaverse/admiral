@@ -36,13 +36,14 @@ variable-value pairs. The value can be a symbol, a string, a numeric, or
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(rlang)
 
 example_fun <- function(vars) {
   assert_varval_list(vars)
 }
-example_fun(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
+example_fun(exprs(DTHDOM = "AE", DTHSEQ = AESEQ))
 
-try(example_fun(vars("AE", DTSEQ = AESEQ)))
+try(example_fun(exprs("AE", DTSEQ = AESEQ)))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 

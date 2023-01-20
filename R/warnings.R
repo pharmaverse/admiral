@@ -150,6 +150,7 @@ warn_if_incomplete_dtc <- function(dtc, n) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #'
 #' # no warning
 #' warn_if_inconsistent_list(

@@ -8,6 +8,8 @@ replace_values_by_names(expressions, quosures)
 }
 \arguments{
 \item{expressions}{A list of expressions}
+
+\item{quosures}{\emph{Deprecated}, please use \code{expressions} instead.}
 }
 \value{
 A list of expressions
