@@ -780,7 +780,7 @@ assert_s3_class <- function(arg, class, optional = FALSE) {
 #'
 #' @param arg A function argument to be checked
 #' @param class The S3 class or type to check for
-#' @param named If set to `TRUE`, an error is issued it not all elements of the
+#' @param named If set to `TRUE`, an error is issued if not all elements of the
 #'   list are named.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #'   is `NULL` then an error is thrown
