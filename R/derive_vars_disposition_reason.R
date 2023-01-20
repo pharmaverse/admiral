@@ -117,7 +117,7 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' @param subject_keys Variables to uniquely identify a subject
 #'
 #' A list of quosures where the expressions are symbols as returned by
-#' `vars()` is expected.
+#' `exprs()` is expected.
 #'
 #' @return the input dataset with the disposition reason(s) (`new_var` and
 #' if required `new_var_spe`) added.
@@ -183,41 +183,41 @@ derive_vars_disposition_reason <- function(dataset,
                                            format_new_vars = format_reason_default,
                                            filter_ds,
                                            subject_keys = get_admiral_option("subject_keys")) {
-  new_var <- assert_symbol(enquo(new_var))
-  reason_var <- assert_symbol(enquo(reason_var))
-  new_var_spe <- assert_symbol(enquo(new_var_spe), optional = T)
-  reason_var_spe <- assert_symbol(enquo(reason_var_spe), optional = T)
+  new_var <- assert_symbol(enexpr(new_var))
+  reason_var <- assert_symbol(enexpr(reason_var))
+  new_var_spe <- assert_symbol(enexpr(new_var_spe), optional = T)
+  reason_var_spe <- assert_symbol(enexpr(reason_var_spe), optional = T)
   assert_s3_class(format_new_vars, "function")
-  filter_ds <- assert_filter_cond(enquo(filter_ds))
+  filter_ds <- assert_filter_cond(enexpr(filter_ds))
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
   assert_data_frame(
     dataset_ds,
-    required_vars = quo_c(subject_keys, reason_var, reason_var_spe)
+    required_vars = expr_c(subject_keys, reason_var, reason_var_spe)
   )
-  warn_if_vars_exist(dataset, quo_text(new_var))
+  warn_if_vars_exist(dataset, as_name(new_var))
 
   # Additional checks
   if (!quo_is_null(new_var_spe)) {
     if (!quo_is_null(reason_var_spe)) {
-      statusvar <- c(quo_text(reason_var), quo_text(reason_var_spe))
+      statusvar <- c(as_name(reason_var), as_name(reason_var_spe))
     } else {
       err_msg <- paste(
-        "`new_var_spe` is specified as ", quo_text(new_var_spe),
+        "`new_var_spe` is specified as ", as_name(new_var_spe),
         "but `reason_var_spe` is NULL.",
         "Please specify `reason_var_spe` together with `new_var_spe`."
       )
       abort(err_msg)
     }
   } else {
-    statusvar <- quo_text(reason_var)
+    statusvar <- as_name(reason_var)
   }
 
   dataset <- dataset %>%
     derive_vars_merged(
       dataset_add = dataset_ds,
       filter_add = !!filter_ds,
-      new_vars = quo_c(reason_var, reason_var_spe),
+      new_vars = expr_c(reason_var, reason_var_spe),
       by_vars = subject_keys
     ) %>%
     mutate(!!new_var := format_new_vars(!!reason_var))

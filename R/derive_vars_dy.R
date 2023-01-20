@@ -16,9 +16,9 @@
 #'   character vector to a date object.
 #'
 #' @param source_vars A list of datetime or date variables created using
-#'   `vars()` from which dates are to be extracted. This can either be a list of
+#'   `exprs()` from which dates are to be extracted. This can either be a list of
 #'   date(time) variables or named `--DY` variables and corresponding --DT(M)
-#'   variables e.g. `vars(TRTSDTM, ASTDTM, AENDT)` or `vars(TRTSDT, ASTDTM,
+#'   variables e.g. `exprs(TRTSDTM, ASTDTM, AENDT)` or `exprs(TRTSDT, ASTDTM,
 #'   AENDT, DEATHDY = DTHDT)`. If the source variable does not end in --DT(M), a
 #'   name for the resulting `--DY` variable must be provided.
 #'
@@ -57,7 +57,7 @@
 #' derive_vars_dy(
 #'   datain,
 #'   reference_date = TRTSDTM,
-#'   source_vars = vars(TRTSDTM, ASTDTM, AENDT)
+#'   source_vars = exprs(TRTSDTM, ASTDTM, AENDT)
 #' )
 #'
 #' # specifying name of new variables
@@ -73,15 +73,15 @@
 #' derive_vars_dy(
 #'   datain,
 #'   reference_date = TRTSDT,
-#'   source_vars = vars(TRTSDT, DEATHDY = DTHDT)
+#'   source_vars = exprs(TRTSDT, DEATHDY = DTHDT)
 #' )
 derive_vars_dy <- function(dataset,
                            reference_date,
                            source_vars) {
   # assertions
-  reference_date <- assert_symbol(enquo(reference_date))
+  reference_date <- assert_symbol(enexpr(reference_date))
   assert_vars(source_vars)
-  assert_data_frame(dataset, required_vars = quo_c(source_vars, reference_date))
+  assert_data_frame(dataset, required_vars = expr_c(source_vars, reference_date))
 
   # Warn if `--DY` variables already exist
   n_vars <- length(source_vars)
@@ -117,9 +117,10 @@ derive_vars_dy <- function(dataset,
         .funs = list(temp = ~
           compute_duration(start_date = eval(reference_date), end_date = .))
       ) %>%
-      rename_at(
-        vars(ends_with("temp")),
+      rename(across(
+        where(ends_with("temp")),
         ~dy_vars
+      )
       )
   } else {
     dataset %>%

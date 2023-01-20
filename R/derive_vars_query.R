@@ -66,7 +66,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
   assert_data_frame(dataset_queries)
   assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
   assert_data_frame(dataset,
-    required_vars = vars(!!!syms(unique(dataset_queries$TERM_LEVEL))),
+    required_vars = exprs(!!!syms(unique(dataset_queries$TERM_LEVEL))),
     optional = FALSE
   )
 
@@ -188,7 +188,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
     ungroup()
 
   # join queries to input dataset
-  derive_vars_merged(dataset, dataset_add = joined, by_vars = vars(!!!syms(static_cols))) %>%
+  derive_vars_merged(dataset, dataset_add = joined, by_vars = exprs(!!!syms(static_cols))) %>%
     select(-starts_with("temp_"))
 }
 
