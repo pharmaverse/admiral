@@ -21,7 +21,7 @@
 #'
 #' @export
 #'
-#' @seealso [vars()], [set_admiral_options()], [derive_param_exist_flag()],
+#' @seealso [set_admiral_options()], [derive_param_exist_flag()],
 #' [derive_param_first_event()], [derive_param_tte()], [derive_var_disposition_status()],
 #' [derive_var_dthcaus()], [derive_var_extreme_dtm()], [derive_vars_disposition_reason()],
 #' [derive_vars_period()], [create_period_dataset()]
@@ -64,7 +64,7 @@ get_admiral_option <- function(option) {
 #' Set the Values of Admiral Options That Can Be Modified for Advanced Users.
 #'
 #' @param subject_keys Variables to uniquely identify a subject, defaults to
-#'   `vars(STUDYID, USUBJID)`. This option is used as default value for the
+#'   `exprs(STUDYID, USUBJID)`. This option is used as default value for the
 #'   `subject_keys` argument in all admiral functions.
 #'
 #' @details
@@ -81,7 +81,7 @@ get_admiral_option <- function(option) {
 #'
 #' @export
 #'
-#' @seealso [vars()], [get_admiral_option()], [derive_param_exist_flag()],
+#' @seealso [get_admiral_option()], [derive_param_exist_flag()],
 #' [derive_param_first_event()], [derive_param_tte()], [derive_var_disposition_status()],
 #' [derive_var_dthcaus()], [derive_var_extreme_dtm()], [derive_vars_disposition_reason()],
 #' [derive_vars_period()], [create_period_dataset()]
@@ -90,7 +90,7 @@ get_admiral_option <- function(option) {
 #' library(lubridate)
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(tibble)
-#' set_admiral_options(subject_keys = vars(STUDYID, USUBJID2))
+#' set_admiral_options(subject_keys = exprs(STUDYID, USUBJID2))
 #'
 #' # Derive a new parameter for measurable disease at baseline
 #' adsl <- tribble(
@@ -122,7 +122,7 @@ get_admiral_option <- function(option) {
 #'   condition = TUSTRESC == "TARGET",
 #'   false_value = "N",
 #'   missing_value = "N",
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "MDIS",
 #'     PARAM = "Measurable Disease at Baseline"
 #'   )

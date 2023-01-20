@@ -14,7 +14,7 @@
 #' @param subject_keys Variables to uniquely identify a subject
 #'
 #' A list of quosures where the expressions are symbols as returned by
-#' `vars()` is expected.
+#' `exprs()` is expected.
 #'
 #' @details
 #' This function derives `DTHCAUS` along with the user-defined traceability
@@ -90,7 +90,7 @@
 #'   date = AEDTHDT,
 #'   mode = "first",
 #'   dthcaus = AEDECOD,
-#'   traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+#'   traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
 #' )
 #'
 #' src_ds <- dthcaus_source(
@@ -99,7 +99,7 @@
 #'   date = DSSTDT,
 #'   mode = "first",
 #'   dthcaus = DSTERM,
-#'   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+#'   traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 #' )
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
@@ -111,7 +111,7 @@
 #'   date = AEDTHDT,
 #'   mode = "first",
 #'   dthcaus = AEDECOD,
-#'   traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+#'   traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
 #' )
 #'
 #' src_ds <- dthcaus_source(
@@ -120,7 +120,7 @@
 #'   date = DSSTDT,
 #'   mode = "first",
 #'   dthcaus = DSTERM,
-#'   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+#'   traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 #' )
 #'
 #' src_ds_post <- dthcaus_source(
@@ -129,7 +129,7 @@
 #'   date = DSSTDT,
 #'   mode = "first",
 #'   dthcaus = "POST STUDY: UNKNOWN CAUSE",
-#'   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+#'   traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 #' )
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds, src_ds_post, source_datasets = list(ae = ae, ds = ds))
@@ -178,7 +178,7 @@ derive_var_dthcaus <- function(dataset,
     tmp_date <- get_new_tmp_var(dataset)
     add_data[[ii]] <- add_data[[ii]] %>%
       filter_extreme(
-        order = vars(!!sources[[ii]]$date, !!!sources[[ii]]$order),
+        order = exprs(!!sources[[ii]]$date, !!!sources[[ii]]$order),
         by_vars = subject_keys,
         mode = sources[[ii]]$mode
       ) %>%
@@ -217,7 +217,7 @@ derive_var_dthcaus <- function(dataset,
   # if a subject has multiple death info, keep the one from the first source
   dataset_add <- bind_rows(add_data) %>%
     filter_extreme(
-      order = vars(!!tmp_date, !!tmp_source_nr),
+      order = exprs(!!tmp_date, !!tmp_source_nr),
       by_vars = subject_keys,
       mode = "first"
     ) %>%
@@ -243,7 +243,7 @@ derive_var_dthcaus <- function(dataset,
 #'   *Default*: `NULL`
 #'
 #'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))` or `NULL`
+#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param mode One of `"first"` or `"last"`.
 #' Either the `"first"` or `"last"` observation is preserved from the `dataset`
@@ -254,8 +254,8 @@ derive_var_dthcaus <- function(dataset,
 #'   `DTHCAUS`; if a string literal, e.g. `"Adverse Event"`, it is the fixed value
 #'   to be assigned to `DTHCAUS`.
 #'
-#' @param traceability_vars A named list returned by [`vars()`] listing the traceability variables,
-#' e.g. `vars(DTHDOM = "DS", DTHSEQ = DSSEQ)`.
+#' @param traceability_vars A named list returned by [`exprs()`] listing the traceability variables,
+#' e.g. `exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)`.
 #' The left-hand side (names of the list elements) gives the names of the traceability variables
 #' in the returned dataset.
 #' The right-hand side (values of the list elements) gives the values of the traceability variables
@@ -300,11 +300,11 @@ dthcaus_source <- function(dataset_name,
                            traceability_vars = NULL) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
-    filter = assert_filter_cond(enquo(filter), optional = TRUE),
-    date = assert_symbol(enquo(date)),
+    filter = assert_filter_cond(enexpr(filter), optional = TRUE),
+    date = assert_symbol(enexpr(date)),
     order = assert_order_vars(order, optional = TRUE),
     mode = assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE),
-    dthcaus = assert_symbol(enquo(dthcaus)) %or% assert_character_scalar(dthcaus),
+    dthcaus = assert_symbol(enexpr(dthcaus)) %or% assert_character_scalar(dthcaus),
     traceability = assert_varval_list(traceability_vars, optional = TRUE)
   )
   class(out) <- c("dthcaus_source", "source", "list")

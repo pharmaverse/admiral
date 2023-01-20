@@ -318,7 +318,7 @@ create_single_dose_dataset <- function(dataset,
                                        lookup_table = dose_freq_lookup,
                                        lookup_column = CDISC_VALUE,
                                        keep_source_vars = quo_c(
-                                         vars(USUBJID), dose_freq, start_date, start_datetime,
+                                         exprs(USUBJID), dose_freq, start_date, start_datetime,
                                          end_date, end_datetime
                                        )) {
   dose_freq <- assert_symbol(enquo(dose_freq))
@@ -330,7 +330,7 @@ create_single_dose_dataset <- function(dataset,
   assert_data_frame(dataset, required_vars = quo_c(dose_freq, start_date, end_date))
   assert_data_frame(
     lookup_table,
-    required_vars = vars(!!lookup_column, DOSE_WINDOW, DOSE_COUNT, CONVERSION_FACTOR)
+    required_vars = exprs(!!lookup_column, DOSE_WINDOW, DOSE_COUNT, CONVERSION_FACTOR)
   )
   assert_data_frame(dataset, required_vars = keep_source_vars)
   col_names <- colnames(dataset)
@@ -515,7 +515,7 @@ create_single_dose_dataset <- function(dataset,
         )
       )
   }
-  data_not_once <- select(data_not_once, !!!vars(all_of(col_names)))
+  data_not_once <- select(data_not_once, all_of(col_names))
 
   # Stitch back together
 

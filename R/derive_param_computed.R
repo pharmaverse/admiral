@@ -68,7 +68,7 @@
 #' @param set_values_to Variables to be set
 #'
 #'   The specified variables are set to the specified values for the new
-#'   observations. For example `vars(PARAMCD = "MAP")` defines the parameter
+#'   observations. For example `exprs(PARAMCD = "MAP")` defines the parameter
 #'   code for the new parameter.
 #'
 #'   *Permitted Values:* List of variable-value pairs
@@ -112,10 +112,10 @@
 #'
 #' derive_param_computed(
 #'   advs,
-#'   by_vars = vars(USUBJID, VISIT),
+#'   by_vars = exprs(USUBJID, VISIT),
 #'   parameters = c("SYSBP", "DIABP"),
 #'   analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "MAP",
 #'     PARAM = "Mean Arterial Pressure (mmHg)",
 #'     AVALU = "mmHg"
@@ -137,16 +137,16 @@
 #'
 #' derive_param_computed(
 #'   advs,
-#'   by_vars = vars(USUBJID, VISIT),
+#'   by_vars = exprs(USUBJID, VISIT),
 #'   parameters = "WEIGHT",
 #'   analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "BMI",
 #'     PARAM = "Body Mass Index (kg/m^2)",
 #'     AVALU = "kg/m^2"
 #'   ),
 #'   constant_parameters = c("HEIGHT"),
-#'   constant_by_vars = vars(USUBJID)
+#'   constant_by_vars = exprs(USUBJID)
 #' )
 derive_param_computed <- function(dataset,
                                   by_vars,
@@ -158,8 +158,8 @@ derive_param_computed <- function(dataset,
                                   constant_parameters = NULL) {
   assert_vars(by_vars)
   assert_vars(constant_by_vars, optional = TRUE)
-  assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  assert_data_frame(dataset, required_vars = exprs(!!!by_vars, PARAMCD, AVAL))
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   params_available <- unique(dataset$PARAMCD)
   assert_character_vector(parameters, values = params_available)
   assert_character_vector(constant_parameters, values = params_available, optional = TRUE)
@@ -208,7 +208,7 @@ derive_param_computed <- function(dataset,
 
   signal_duplicate_records(
     data_parameters,
-    by_vars = vars(!!!by_vars, PARAMCD),
+    by_vars = exprs(!!!by_vars, PARAMCD),
     msg = paste(
       "The filtered input dataset contains duplicate records with respect to",
       enumerate(c(vars2chr(by_vars), "PARAMCD")),
@@ -225,7 +225,7 @@ derive_param_computed <- function(dataset,
   if (!is.null(constant_parameters)) {
     data_const_parameters <- data_filtered %>%
       filter(PARAMCD %in% constant_parameters) %>%
-      select(!!!vars(!!!constant_by_vars, PARAMCD, AVAL))
+      select(!!!exprs(!!!constant_by_vars, PARAMCD, AVAL))
 
     hori_const_data <- data_const_parameters %>%
       pivot_wider(names_from = PARAMCD, values_from = AVAL, names_prefix = "AVAL.")
@@ -240,7 +240,7 @@ derive_param_computed <- function(dataset,
       c(parameters, constant_parameters),
       ~ str_c("!is.na(AVAL.", .x, ")")
     ))) %>%
-    mutate(AVAL = !!enquo(analysis_value), !!!set_values_to) %>%
+    mutate(AVAL = !!enexpr(analysis_value), !!!set_values_to) %>%
     select(-starts_with("AVAL."))
 
   bind_rows(dataset, hori_data)
@@ -278,9 +278,9 @@ derive_derived_param <- function(dataset,
     dataset,
     by_vars = by_vars,
     parameters = parameters,
-    analysis_value = !!enquo(analysis_value),
+    analysis_value = !!enexpr(analysis_value),
     set_values_to = set_values_to,
-    filter = !!enquo(filter),
+    filter = !!enexpr(filter),
     constant_by_vars = constant_by_vars,
     constant_parameters = constant_parameters
   )

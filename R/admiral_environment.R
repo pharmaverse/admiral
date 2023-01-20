@@ -18,8 +18,8 @@ admiral_environment <- new.env(parent = emptyenv())
 # admiral_options.R ----
 ## set_admiral_options
 admiral_environment$admiral_options <- list(
-  # future_input = vars(...), nolint
-  subject_keys = vars(STUDYID, USUBJID)
+  # future_input = exprs(...), nolint
+  subject_keys = exprs(STUDYID, USUBJID)
 )
 
 # To enhance features and add inputs as necessary
