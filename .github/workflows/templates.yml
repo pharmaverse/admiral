@@ -3,8 +3,26 @@ name: Check Templates
 
 on:
   workflow_dispatch:
-  pull_request_review:
-    types: [submitted]
+  # 'push' events are triggered when commits
+  # are pushed to one of these branches
+  push:
+    branches:
+      - main
+      - devel
+      - patch
+      - pre-release
+  # 'pull_request' events are triggered when PRs are
+  # created against one of these target branches.
+  pull_request:
+    branches:
+      - main
+      - devel
+      - patch
+      - pre-release
+  # 'release' events are triggered when...
+  # you guessed it - when releases are made.
+  #pull_request_review:
+  #  types: [submitted]
 
 jobs:
   templates:
