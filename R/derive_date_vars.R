@@ -1111,7 +1111,7 @@ compute_dtf <- function(dtc, dt) {
 
   case_when(
     (!is_na & n_chr >= 10 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
-    n_chr < 4 ~ "Y",
+    n_chr < 4 | is.na(dtc) ~ "Y",
     n_chr == 4 ~ "M",
     n_chr == 7 ~ "D",
     n_chr == 9 ~ "M" # dates like "2019---07"
