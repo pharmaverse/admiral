@@ -1,7 +1,20 @@
-# Name: derive_single_dose_fillin
-#
-# Label: "Derive Single Dose Dataset with Missing End of Treatment Date and Datetime Fill-in"
-#
+---
+title: "Derive a single dose dataset with imputations"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+ %\VignetteIndexEntry{Derive a single dose dataset with imputations}
+ %\VignetteEngine{knitr::rmarkdown}
+ %\VignetteEncoding{UTF-8}
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 # Input: ex, adsl
 
 # Introduction
@@ -47,7 +60,7 @@ adsl_death <- adsl %>%
   select(STUDYID, USUBJID, DTHDT) %>%
   mutate(
     DTHDTM = convert_date_to_dtm(DTHDT),
-    # Remove DCUTDT setup line below if ADSL DCUTDT is populated.
+    # Remove `DCUT` setup line below if ADSL `DCUTDT` is populated.
     DCUTDT = as.Date("2015-03-06"), # Example only, enter date.
     DCUTDTM = convert_date_to_dtm(DCUTDT)
   )
