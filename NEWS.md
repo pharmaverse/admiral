@@ -1,3 +1,20 @@
+# admiral 0.10.0
+
+## New Features
+
+- New function `consolidate_metadata()` for consolidating multiple meta datasets
+into a single one (#1479)
+
+## Updates of Existing Functions
+
+## Breaking Changes
+
+- Function `derive_param_tte()` has been updated such that only observations are
+added for subjects who have both an event or censoring and an observation in
+`dataset_adsl` (#1576).
+
+## Documentation
+
 # admiral 0.9.0
 
 ## New Features
@@ -91,6 +108,9 @@ was missing, which has now been fixed (#1540)
 which has been corrected (#1473)
 
 - Templates now save datasets as `.rds` instead of `.rda` (#1501)
+
+- Function `create_single_dose_dataset()` no longer fails if the input dataset
+contains observations with dose frequency `"ONCE"` (#1375).
 
 # admiral 0.8.4
 

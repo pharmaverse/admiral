@@ -170,8 +170,112 @@ test_that("derive_param_tte Test 2: new parameter with analysis datetime is deri
   )
 })
 
-## Test 3: error is issued if DTC variables specified for date ----
-test_that("derive_param_tte Test 3: error is issued if DTC variables specified for date", {
+## Test 3: no new observations for subjects not in ADSL ----
+test_that("derive_param_tte Test 3: no new observations for subjects not in ADSL", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~DTHFL, ~DTHDT,            ~RSPDT,
+    "01",     "Y",    ymd("2021-06-12"), ymd("2021-03-04"),
+    "02",     "N",    NA,                NA,
+    "03",     "Y",    ymd("2021-08-21"), NA,
+    "04",     "N",    NA,                ymd("2021-04-14"),
+    "05",     "N",    NA,                NA
+  ) %>%
+    mutate(STUDYID = "AB42")
+
+  adrs <- tibble::tribble(
+    ~USUBJID, ~AVALC, ~ADT,              ~ASEQ,
+    "01",     "SD",   ymd("2021-01-03"), 1,
+    "01",     "PR",   ymd("2021-03-04"), 2,
+    "01",     "PD",   ymd("2021-05-05"), 3,
+    "02",     "PD",   ymd("2021-02-03"), 1,
+    "04",     "SD",   ymd("2021-02-13"), 1,
+    "04",     "PR",   ymd("2021-04-14"), 2,
+    "04",     "CR",   ymd("2021-05-15"), 3
+  ) %>%
+    mutate(STUDYID = "AB42", PARAMCD = "OVR")
+
+  pd <- event_source(
+    dataset_name = "adrs",
+    filter = AVALC == "PD",
+    date = ADT,
+    set_values_to = vars(
+      EVENTDESC = "PD",
+      SRCDOM = "ADRS",
+      SRCVAR = "ADTM",
+      SRCSEQ = ASEQ
+    )
+  )
+
+  death <- event_source(
+    dataset_name = "adsl",
+    filter = DTHFL == "Y",
+    date = DTHDT,
+    set_values_to = vars(
+      EVENTDESC = "DEATH",
+      SRCDOM = "ADSL",
+      SRCVAR = "DTHDT"
+    )
+  )
+
+  lastvisit <- censor_source(
+    dataset_name = "adrs",
+    date = ADT,
+    censor = 1,
+    set_values_to = vars(
+      EVENTDESC = "LAST TUMOR ASSESSMENT",
+      SRCDOM = "ADRS",
+      SRCVAR = "ADTM",
+      SRCSEQ = ASEQ
+    )
+  )
+
+  first_response <- censor_source(
+    dataset_name = "adsl",
+    date = RSPDT,
+    censor = 1,
+    set_values_to = vars(
+      EVENTDESC = "FIRST RESPONSE",
+      SRCDOM = "ADSL",
+      SRCVAR = "RSPDT"
+    )
+  )
+
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
+    "01",     ymd("2021-05-05"),    0L, "PD",                    "ADRS",  "ADTM",          3,
+    "04",     ymd("2021-05-15"),    1L, "LAST TUMOR ASSESSMENT", "ADRS",  "ADTM",          3,
+  ) %>%
+    mutate(
+      STUDYID = "AB42",
+      PARAMCD = "DURRSP",
+      PARAM = "Duration of Response"
+    ) %>%
+    left_join(
+      select(adsl, USUBJID, STARTDT = RSPDT),
+      by = "USUBJID"
+    )
+
+  actual_output <- derive_param_tte(
+    dataset_adsl = filter(adsl, !is.na(RSPDT)),
+    start_date = RSPDT,
+    event_conditions = list(pd, death),
+    censor_conditions = list(lastvisit, first_response),
+    source_datasets = list(adsl = adsl, adrs = adrs),
+    set_values_to = vars(
+      PARAMCD = "DURRSP",
+      PARAM = "Duration of Response"
+    )
+  )
+
+  expect_dfs_equal(
+    actual_output,
+    expected_output,
+    keys = c("USUBJID", "PARAMCD")
+  )
+})
+
+## Test 4: error is issued if DTC variables specified for date ----
+test_that("derive_param_tte Test 4: error is issued if DTC variables specified for date", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -225,8 +329,8 @@ test_that("derive_param_tte Test 3: error is issued if DTC variables specified f
   )
 })
 
-## Test 4: by_vars parameter works correctly ----
-test_that("derive_param_tte Test 4: by_vars parameter works correctly", {
+## Test 5: by_vars parameter works correctly ----
+test_that("derive_param_tte Test 5: by_vars parameter works correctly", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -303,8 +407,8 @@ test_that("derive_param_tte Test 4: by_vars parameter works correctly", {
   )
 })
 
-## Test 5: an error is issued if some of the by variables are missing ----
-test_that("derive_param_tte Test 5: an error is issued if some of the by variables are missing", {
+## Test 6: an error is issued if some of the by variables are missing ----
+test_that("derive_param_tte Test 6: an error is issued if some of the by variables are missing", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -364,8 +468,8 @@ test_that("derive_param_tte Test 5: an error is issued if some of the by variabl
   )
 })
 
-## Test 6: errors if all by vars are missing in all source datasets ----
-test_that("derive_param_tte Test 6: errors if all by vars are missing in all source datasets", {
+## Test 7: errors if all by vars are missing in all source datasets ----
+test_that("derive_param_tte Test 7: errors if all by vars are missing in all source datasets", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -426,8 +530,8 @@ test_that("derive_param_tte Test 6: errors if all by vars are missing in all sou
   )
 })
 
-## Test 7: errors if PARAMCD and by_vars are not one to one ----
-test_that("derive_param_tte Test 7: errors if PARAMCD and by_vars are not one to one", {
+## Test 8: errors if PARAMCD and by_vars are not one to one ----
+test_that("derive_param_tte Test 8: errors if PARAMCD and by_vars are not one to one", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -489,8 +593,8 @@ test_that("derive_param_tte Test 7: errors if PARAMCD and by_vars are not one to
   )
 })
 
-## Test 8: errors if set_values_to contains invalid expressions ----
-test_that("derive_param_tte Test 8: errors if set_values_to contains invalid expressions", {
+## Test 9: errors if set_values_to contains invalid expressions ----
+test_that("derive_param_tte Test 9: errors if set_values_to contains invalid expressions", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -560,8 +664,8 @@ test_that("derive_param_tte Test 8: errors if set_values_to contains invalid exp
   )
 })
 
-## Test 9: error is issued if parameter code already exists ----
-test_that("derive_param_tte Test 9: error is issued if parameter code already exists", {
+## Test 10: error is issued if parameter code already exists ----
+test_that("derive_param_tte Test 10: error is issued if parameter code already exists", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -631,8 +735,8 @@ test_that("derive_param_tte Test 9: error is issued if parameter code already ex
   )
 })
 
-## Test 10: ensuring ADT is not NA because of missing start_date ----
-test_that("derive_param_tte Test 10: ensuring ADT is not NA because of missing start_date", {
+## Test 11: ensuring ADT is not NA because of missing start_date ----
+test_that("derive_param_tte Test 11: ensuring ADT is not NA because of missing start_date", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,                ~LSTALVDT,
     "01",     NA,                     ymd("2022-08-10"),
@@ -701,16 +805,16 @@ test_that("derive_param_tte Test 10: ensuring ADT is not NA because of missing s
   )
 })
 
-## Test 11: error is issued if package does not exist ----
-test_that("list_tte_source_objects Test 10: error is issued if package does not exist", {
+## Test 12: error is issued if package does not exist ----
+test_that("derive_param_tte Test 12: error is issued if package does not exist", {
   expect_error(
     list_tte_source_objects(package = "tte"),
     regexp = "No package called 'tte' is installed and hence no `tte_source` objects are available"
   )
 })
 
-## Test 12: calling list_tte_source_objects results in expected output objects ----
-test_that("list_tte_source_objects Test 11: expected objects produced", {
+## Test 13: expected objects produced ----
+test_that("derive_param_tte Test 13: expected objects produced", {
   expected_output <- tibble::tribble(
     ~object, ~dataset_name, ~filter, ~date, ~censor,
     "ae_ser_event", "adae", quote(TRTEMFL == "Y" & AESER == "Y"), "ASTDT", 0,
