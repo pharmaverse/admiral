@@ -31,7 +31,7 @@ test_that("Convert a complete -- DTM into a date object", {
   )
   # nolint end
 
-  actual_output <- derive_vars_dtm_to_dt(input, vars(TRTSDTM, ASTDTM, AENDTM))
+  actual_output <- derive_vars_dtm_to_dt(input, exprs(TRTSDTM, ASTDTM, AENDTM))
 
   expect_dfs_equal(
     expected_output,
@@ -71,7 +71,7 @@ test_that("Convert a complete -- DTM into a date object", {
   )
   # nolint end
 
-  actual_output <- derive_vars_dtm_to_dt(input, vars(TRTSDTM))
+  actual_output <- derive_vars_dtm_to_dt(input, exprs(TRTSDTM))
 
   expect_dfs_equal(
     expected_output,

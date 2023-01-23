@@ -20,7 +20,7 @@ test_that("derive_vars_dy Test1: Single --DT input when ref date is --DTM", {
 
   actual_output <- derive_vars_dy(datain,
     reference_date = TRTSDTM,
-    source_vars = vars(ASTDT)
+    source_vars = exprs(ASTDT)
   )
 
   expect_dfs_equal(
@@ -61,7 +61,7 @@ test_that("derive_vars_dy Test2: Multiple --DT input when ref date is --DTM,
 
   actual_output <- derive_vars_dy(datain,
     reference_date = TRTSDTM,
-    source_vars = vars(TRTSDTM, ASTDT, AENDT, DEATHDY = DTHDT)
+    source_vars = exprs(TRTSDTM, ASTDT, AENDT, DEATHDY = DTHDT)
   )
 
   expect_dfs_equal(
@@ -95,7 +95,7 @@ test_that("derive_vars_dy Test3: Combo of --DT/--DTM input when ref date is --DT
 
   actual_output <- derive_vars_dy(datain,
     reference_date = TRTSDTM,
-    source_vars = vars(TRTSDTM, ASTDTM, AENDT)
+    source_vars = exprs(TRTSDTM, ASTDTM, AENDT)
   )
 
   expect_dfs_equal(
@@ -127,7 +127,7 @@ test_that("derive_vars_dy Test4: Single --DT input when ref date is --DT", {
 
   actual_output <- derive_vars_dy(datain,
     reference_date = TRTSDT,
-    source_vars = vars(ASTDT)
+    source_vars = exprs(ASTDT)
   )
 
   expect_dfs_equal(
@@ -161,7 +161,7 @@ test_that("derive_vars_dy Test5: Multiple --DT input when ref date is --DT", {
 
   actual_output <- derive_vars_dy(datain,
     reference_date = TRTSDT,
-    source_vars = vars(TRTSDT, ASTDT, AENDT)
+    source_vars = exprs(TRTSDT, ASTDT, AENDT)
   )
 
   expect_dfs_equal(
@@ -195,7 +195,7 @@ test_that("derive_vars_dy Test6: Combo of --DT/--DTM input when ref date is --DT
 
   actual_output <- derive_vars_dy(datain,
     reference_date = TRTSDT,
-    source_vars = vars(TRTSDT, ASTDTM, AENDT)
+    source_vars = exprs(TRTSDT, ASTDTM, AENDT)
   )
 
   expect_dfs_equal(
@@ -229,7 +229,7 @@ test_that("derive_vars_dy Test7: All dates as --DTM", {
 
   actual_output <- derive_vars_dy(datain,
     reference_date = TRTSDTM,
-    source_vars = vars(TRTSDTM, ASTDTM, AENDTM)
+    source_vars = exprs(TRTSDTM, ASTDTM, AENDTM)
   )
 
   expect_dfs_equal(
@@ -249,7 +249,7 @@ test_that("derive_vars_dy Test8: An error is issued if source variables do not e
   expect_error(
     derive_vars_dy(datain,
       reference_date = TRTSDTW,
-      source_vars = vars(TRTSDTW, ASTDTW, AENDTW)
+      source_vars = exprs(TRTSDTW, ASTDTW, AENDTW)
     ),
     "source_vars must end in DT or DTM or be explicitly and uniquely named.\nPlease name or rename the following source_vars:\nTRTSDTW, ASTDTW, AENDTW" # nolint
   )
@@ -277,7 +277,7 @@ test_that("derive_vars_dy Test 9: Single named --DT input when ref date is --DTM
 
   actual_output <- derive_vars_dy(datain,
     reference_date = TRTSDTM,
-    source_vars = vars(ASTDY = ASTDT)
+    source_vars = exprs(ASTDY = ASTDT)
   )
 
   expect_dfs_equal(

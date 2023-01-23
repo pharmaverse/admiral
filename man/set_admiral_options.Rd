@@ -8,7 +8,7 @@ set_admiral_options(subject_keys)
 }
 \arguments{
 \item{subject_keys}{Variables to uniquely identify a subject, defaults to
-\code{vars(STUDYID, USUBJID)}. This option is used as default value for the
+\code{exprs(STUDYID, USUBJID)}. This option is used as default value for the
 \code{subject_keys} argument in all admiral functions.}
 }
 \value{
@@ -25,7 +25,7 @@ function inputs where \code{get_admiral_option()} is called such as \code{derive
 library(lubridate)
 library(dplyr, warn.conflicts = FALSE)
 library(tibble)
-set_admiral_options(subject_keys = vars(STUDYID, USUBJID2))
+set_admiral_options(subject_keys = exprs(STUDYID, USUBJID2))
 
 # Derive a new parameter for measurable disease at baseline
 adsl <- tribble(
@@ -57,14 +57,14 @@ derive_param_exist_flag(
   condition = TUSTRESC == "TARGET",
   false_value = "N",
   missing_value = "N",
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = "MDIS",
     PARAM = "Measurable Disease at Baseline"
   )
 )
 }
 \seealso{
-\code{\link[=vars]{vars()}}, \code{\link[=get_admiral_option]{get_admiral_option()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},
+\code{\link[=get_admiral_option]{get_admiral_option()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},
 \code{\link[=derive_param_first_event]{derive_param_first_event()}}, \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=derive_var_disposition_status]{derive_var_disposition_status()}},
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}},
 \code{\link[=derive_vars_period]{derive_vars_period()}}, \code{\link[=create_period_dataset]{create_period_dataset()}}

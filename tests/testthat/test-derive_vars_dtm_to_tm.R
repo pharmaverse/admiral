@@ -50,7 +50,7 @@ expected_output2 <- tibble::tribble(
 test_that("Convert a complete -- DTM into --TM, TM out is HH:MM:SS", {
   actual_output <- derive_vars_dtm_to_tm(
     input,
-    vars(TRTSDTM, ASTDTM, AENDTM)
+    exprs(TRTSDTM, ASTDTM, AENDTM)
   )
   expect_dfs_equal(
     expected_output,
@@ -63,7 +63,7 @@ test_that("Convert a complete -- DTM into --TM, TM out is HH:MM:SS", {
 test_that("Convert a complete -- DTM into --TM, TM out is HH:MM:SS", {
   actual_output <- derive_vars_dtm_to_tm(
     input,
-    vars(TRTSDTM)
+    exprs(TRTSDTM)
   )
   expect_dfs_equal(
     expected_output2,

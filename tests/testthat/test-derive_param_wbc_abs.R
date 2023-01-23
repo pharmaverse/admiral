@@ -19,8 +19,8 @@ test_that("Test 1: Test adding absolute records for each by group", {
   expect_equal(
     derive_param_wbc_abs(
       dataset = input,
-      by_vars = vars(USUBJID, VISIT),
-      set_values_to = vars(
+      by_vars = exprs(USUBJID, VISIT),
+      set_values_to = exprs(
         PARAMCD = "LYMPH",
         PARAM = "Lymphocytes Abs (10^9/L)",
         DTYPE = "CALCULATION"
@@ -54,8 +54,8 @@ test_that("Test 2: Test when only one of WBC/differential is present", {
   expect_equal(
     derive_param_wbc_abs(
       dataset = input,
-      by_vars = vars(USUBJID, VISIT),
-      set_values_to = vars(
+      by_vars = exprs(USUBJID, VISIT),
+      set_values_to = exprs(
         PARAMCD = "LYMPH",
         PARAM = "Lymphocytes Abs (10^9/L)",
         DTYPE = "CALCULATION"
@@ -90,8 +90,8 @@ test_that("Test 3: Test when absolute record already present in source dataset 1
   expect_equal(
     derive_param_wbc_abs(
       dataset = input,
-      by_vars = vars(USUBJID, VISIT),
-      set_values_to = vars(
+      by_vars = exprs(USUBJID, VISIT),
+      set_values_to = exprs(
         PARAMCD = "LYMPH",
         PARAM = "Lymphocytes Abs (10^9/L)",
         DTYPE = "CALCULATION"
@@ -129,8 +129,8 @@ test_that("Test 4: Test when absolute record already present in source dataset 2
   expect_equal(
     derive_param_wbc_abs(
       dataset = input,
-      by_vars = vars(USUBJID, VISIT),
-      set_values_to = vars(
+      by_vars = exprs(USUBJID, VISIT),
+      set_values_to = exprs(
         PARAMCD = "LYMPH",
         PARAM = "Lymphocytes Abs (10^9/L)",
         DTYPE = "CALCULATION"
@@ -168,8 +168,8 @@ test_that("Test 5: Test percent differential type", {
   expect_equal(
     derive_param_wbc_abs(
       dataset = input,
-      by_vars = vars(USUBJID, VISIT),
-      set_values_to = vars(
+      by_vars = exprs(USUBJID, VISIT),
+      set_values_to = exprs(
         PARAMCD = "LYMPH",
         PARAM = "Lymphocytes Abs (10^9/L)",
         DTYPE = "CALCULATION"

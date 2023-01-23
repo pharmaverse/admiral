@@ -113,15 +113,15 @@ derive_vars_dy <- function(dataset,
   if (n_vars > 1L) {
     dataset %>%
       mutate_at(
-        .vars = source_vars,
+        .vars = rlang::quos(!!!source_vars),
         .funs = list(temp = ~
-          compute_duration(start_date = eval(reference_date), end_date = .))
+                       compute_duration(start_date = eval(reference_date), end_date = .))
       ) %>%
-      rename(across(
-        where(ends_with("temp")),
+      rename_at(
+        dplyr::vars(ends_with("temp")),
         ~dy_vars
       )
-      )
+
   } else {
     dataset %>%
       mutate(

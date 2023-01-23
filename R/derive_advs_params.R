@@ -344,7 +344,7 @@ derive_param_bsa <- function(dataset,
     compute_bsa(
       height = !!sym(paste0("AVAL.", height_code)),
       weight = !!sym(paste0("AVAL.", weight_code)),
-      method = method
+      method = !!method
     )
   )
 

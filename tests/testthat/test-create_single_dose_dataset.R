@@ -136,7 +136,7 @@ test_that("cases Test 3: Works for different treatments", {
       input,
       start_datetime = ASTDTM,
       end_datetime = AENDTM,
-      keep_source_vars = vars(USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, EXTRT)
+      keep_source_vars = exprs(USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, EXTRT)
     ),
     expected_output,
     keys = c("EXTRT", "ASTDT")
@@ -234,7 +234,7 @@ test_that("cases Test 7: Message for improper DT column names, ASTDT", {
   expect_error(
     create_single_dose_dataset(input,
       start_date = ADTSTD,
-      keep_source_vars = vars(
+      keep_source_vars = exprs(
         USUBJID, EXDOSFRQ,
         ADTSTD, ASTDTM,
         AENDT, AENDTM
