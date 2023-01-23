@@ -178,3 +178,5 @@ navbar:
         href: articles/queries_dataset.html
       - text: Lab Grading
         href: articles/lab_grading.html
+      - text: Create Single Dose Dataset complex example
+        href: articles/derive_single_dose_dataset.html
