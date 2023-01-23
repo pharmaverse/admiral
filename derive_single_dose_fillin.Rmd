@@ -2,7 +2,7 @@
 #
 # Label: "Derive Single Dose Dataset with Missing End of Treatment Date and Datetime Fill-in"
 #
-# Input: ex, dm
+# Input: ex, adsl
 
 # Introduction
 
@@ -17,6 +17,7 @@
 # or if not appropriate to use `DCUTDT` as missing treatment end data
 # and missing treatment end datetime could set equal to treatment start date
 # and treatment start datetime.
+# ADSL variables `DTHDT` and `DCUTDT` are preferred for imputation use.
 
 # All available trial treatments are included, allowing multiple different
 # last dose variables to be created in ad_adae.R if required.
@@ -29,38 +30,35 @@ library(dplyr)
 library(lubridate)
 library(tidyr)
 
-data("admiral_dm")
 data("admiral_ex")
+data("admiral_adsl")
 
-dm <- admiral_dm
 ex <- admiral_ex
+adsl <- admiral_adsl
 
 ex <- convert_blanks_to_na(ex)
-dm <- convert_blanks_to_na(dm)
+adsl <- convert_blanks_to_na(adsl)
 
 # Derive date of death and set up data cut date to fill in missing treatment end date `EXENDT` and missing treatment end datetime `EXENDTM`.
 # Alternative approach instead of death date could use last known alive date in ADSL `LSTALVDT`.
+# Convert ADSL variables `DTHDT` and `DCUTDT` to DTM for imputations.
 
-dm_death <- dm %>%
-  select(STUDYID, USUBJID, DTHDTC) %>%
-  derive_vars_dtm(
-    dtc = DTHDTC,
-    flag_imputation = "none",
-    new_vars_prefix = "DTH"
-  ) %>%
-  derive_vars_dtm_to_dt(vars(DTHDTM)) %>%
-  # Set up datacut as character snapshot date to use in `EXENDT` and `EXENDTM` imputations
+adsl_death <- adsl %>%
+  select(STUDYID, USUBJID, DTHDT) %>%
   mutate(
-    DCUTDT = as.Date("2015-03-06"),
+    DTHDTM = convert_date_to_dtm(DTHDT),
+    # Remove DCUTDT setup line below if ADSL DCUTDT is populated.
+    DCUTDT = as.Date("2015-03-06"), # Example only, enter date.
     DCUTDTM = convert_date_to_dtm(DCUTDT)
   )
 
 # Select valid dose records, non-missing `EXSTDTC` and `EXDOSE`.
-# Set up missing `EXDOSFRQ` as QD daily dosing regime.
 
 ex_mod <- ex %>%
   filter(!is.na(EXSTDTC) & !is.na(EXDOSE)) %>%
-  left_join(dm_death, by = c("STUDYID", "USUBJID")) %>%
+  left_join(adsl_death, by = c("STUDYID", "USUBJID")) %>%
+  # Example, set up missing `EXDOSFRQ` as QD daily dosing regime.
+  # Replace with study dosing regime per trial treatment.
   mutate(EXDOSFRQ = if_else(is.na(EXDOSFRQ), "QD", EXDOSFRQ)) %>%
   # Create EXxxDTM variables and replace missing `EXENDTM`.
   derive_vars_dtm(
