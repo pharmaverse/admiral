@@ -283,7 +283,7 @@ impute_dtc_dtm <- function(dtc,
 
   imputed_dtc <-
     if_else(
-      str_detect(imputed_dtc, "x"),
+      str_detect(imputed_dtc, "x") | imputed_dtc == "0000-01-01T00:00:00",
       NA_character_,
       imputed_dtc
     )
