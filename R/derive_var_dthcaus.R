@@ -13,7 +13,7 @@
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#' A list of quosures where the expressions are symbols as returned by
+#' A list of expressions where the expressions are symbols as returned by
 #' `exprs()` is expected.
 #'
 #' @details

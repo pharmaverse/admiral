@@ -89,7 +89,7 @@ derive_var_base <- function(dataset,
     dataset,
     required_vars = expr_c(by_vars, source_var)
   )
-  warn_if_vars_exist(dataset, quo_text(new_var))
+  warn_if_vars_exist(dataset, as_name(new_var))
 
   derive_vars_merged(
     dataset,

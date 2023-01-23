@@ -197,7 +197,7 @@ derive_var_ontrtfl <- function(dataset,
     dataset,
     required_vars = expr_c(start_date, end_date, ref_start_date, ref_end_date)
   )
-  warn_if_vars_exist(dataset, quo_text(new_var))
+  warn_if_vars_exist(dataset, as_name(new_var))
 
   ref_end_window <- assert_integer_scalar(ref_end_window, "non-negative")
   assert_logical_scalar(ignore_time_for_ref_end_date)

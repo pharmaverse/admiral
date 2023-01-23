@@ -132,7 +132,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
   assert_numeric_vector(age_var)
 
   age_var <- age_variable
-  unit_var <- paste0(quo_get_expr(age_var), "U")
+  unit_var <- paste0(age_var, "U")
 
   age_unit <- assert_character_scalar(
     age_unit,
@@ -150,7 +150,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
   if (!unit_var %in% colnames(dataset)) {
     if (is.null(age_unit)) {
       err_msg <- paste(
-        "There is no variable unit:", unit_var, "associated with", quo_get_expr(age_var),
+        "There is no variable unit:", unit_var, "associated with", age_var,
         "and the argument `age_unit` is missing. Please specify a value for `age_unit`"
       )
       abort(err_msg)
@@ -175,7 +175,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
     if (!is.null(age_unit)) {
       if (length(unit) > 1) {
         msg <- paste(
-          "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
+          "The variable unit", unit_var, "is associated with", age_var,
           "and contatins multiple values but the argument `age_unit`
           has been specified with a single different value.",
           "The `age_unit` argument is ignored and the grouping will based on",
@@ -184,7 +184,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
         warn(msg)
       } else if (unit != age_unit) {
         msg <- paste(
-          "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
+          "The variable unit", unit_var, "is associated with", age_var,
           "but the argument `age_unit` has been specified with a different value.",
           "The `age_unit` argument is ignored and the grouping will based on",
           unit_var

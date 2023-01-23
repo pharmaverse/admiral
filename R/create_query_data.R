@@ -385,12 +385,6 @@ get_terms_from_db <- function(version,
     queries = queries,
     i = i
   )
-  fun_call <- quo(fun(
-    basket_select = definition,
-    version = version,
-    keep_id = expect_query_id,
-    temp_env = temp_env
-  ))
   terms <- call_user_fun(
     fun(
       basket_select = definition,

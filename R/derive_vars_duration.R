@@ -186,7 +186,7 @@ derive_vars_duration <- function(dataset,
       )
     )
 
-  if (!quo_is_null(new_var_unit)) {
+  if (!is.null(new_var_unit)) {
     dataset <- dataset %>%
       mutate(!!new_var_unit := if_else(is.na(!!new_var), NA_character_, toupper(out_unit)))
   }

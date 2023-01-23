@@ -165,7 +165,7 @@ derive_param_computed <- function(dataset,
   assert_character_vector(constant_parameters, values = params_available, optional = TRUE)
   assert_varval_list(set_values_to)
   if (!is.null(set_values_to$PARAMCD)) {
-    assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+    assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
 
   # select observations and variables required for new observations

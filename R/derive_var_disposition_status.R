@@ -89,7 +89,7 @@ format_eoxxstt_default <- function(status) {
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#'   A list of quosures where the expressions are symbols as returned by
+#'   A list of expressions where the expressions are symbols as returned by
 #'   `exprs()` is expected.
 #'
 #' @return The input dataset with the disposition status (`new_var`) added.
@@ -171,8 +171,8 @@ derive_var_disposition_status <- function(dataset,
   filter_ds <- assert_filter_cond(enexpr(filter_ds))
   assert_s3_class(format_new_var, "function")
   assert_data_frame(dataset)
-  assert_data_frame(dataset_ds, quo_c(status_var))
-  warn_if_vars_exist(dataset, quo_text(new_var))
+  assert_data_frame(dataset_ds, expr_c(status_var))
+  warn_if_vars_exist(dataset, as_name(new_var))
   assert_vars(subject_keys)
 
   # Add the status variable and derive the new dispo status in the input dataset

@@ -266,7 +266,7 @@ derive_vars_merged <- function(dataset,
   if (!is.null(new_vars)) {
     add_data <- select(add_data, !!!by_vars, !!!new_vars)
   }
-  if (!quo_is_null(match_flag)) {
+  if (!is.null(match_flag)) {
     add_data <- mutate(
       add_data,
       !!match_flag := TRUE
@@ -401,7 +401,7 @@ derive_vars_merged_dt <- function(dataset,
       max_dates = max_dates,
       preserve = preserve
     )
-  new_vars <- quos(!!!syms(setdiff(names(add_data), old_vars)))
+  new_vars <- exprs(!!!syms(setdiff(names(add_data), old_vars)))
   derive_vars_merged(
     dataset,
     dataset_add = add_data,
@@ -521,7 +521,7 @@ derive_vars_merged_dtm <- function(dataset,
       max_dates = max_dates,
       preserve = preserve
     )
-  new_vars <- quos(!!!syms(setdiff(names(add_data), old_vars)))
+  new_vars <- exprs(!!!syms(setdiff(names(add_data), old_vars)))
   derive_vars_merged(
     dataset,
     dataset_add = add_data,

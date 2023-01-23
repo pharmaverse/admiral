@@ -116,7 +116,7 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#' A list of quosures where the expressions are symbols as returned by
+#' A list of expressions where the expressions are symbols as returned by
 #' `exprs()` is expected.
 #'
 #' @return the input dataset with the disposition reason(s) (`new_var` and
@@ -198,8 +198,8 @@ derive_vars_disposition_reason <- function(dataset,
   warn_if_vars_exist(dataset, as_name(new_var))
 
   # Additional checks
-  if (!quo_is_null(new_var_spe)) {
-    if (!quo_is_null(reason_var_spe)) {
+  if (!is.null(new_var_spe)) {
+    if (!is.null(reason_var_spe)) {
       statusvar <- c(as_name(reason_var), as_name(reason_var_spe))
     } else {
       err_msg <- paste(
@@ -222,7 +222,7 @@ derive_vars_disposition_reason <- function(dataset,
     ) %>%
     mutate(!!new_var := format_new_vars(!!reason_var))
 
-  if (!quo_is_null(new_var_spe)) {
+  if (!is.null(new_var_spe)) {
     dataset <- mutate(
       dataset,
       !!new_var_spe := format_new_vars(!!reason_var, !!reason_var_spe)

@@ -56,7 +56,7 @@ derive_vars_dtm_to_tm <- function(dataset, source_vars) {
   assert_data_frame(dataset, required_vars = source_vars)
 
   # Warn if `--TM` variables already exist
-  dtm_vars <- quo_c(source_vars)
+  dtm_vars <- expr_c(source_vars)
   dtm_vars2 <- vars2chr(dtm_vars)
   n_vars <- length(dtm_vars)
 

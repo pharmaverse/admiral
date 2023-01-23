@@ -122,7 +122,7 @@ derive_param_doseint <- function(dataset,
     required_vars = exprs(!!!by_vars, PARAMCD, AVAL)
   )
   assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
-  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
 
   # Create Dose intensity records
   dataset <- derive_param_computed(

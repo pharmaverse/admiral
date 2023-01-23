@@ -361,7 +361,7 @@ derive_param_tte <- function(dataset = NULL,
   assert_logical_scalar(create_datetime)
   assert_varval_list(set_values_to, accept_expr = TRUE, optional = TRUE)
   if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
-    assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+    assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
   if (!is.null(by_vars)) {
     source_datasets <- extend_source_datasets(
@@ -430,7 +430,7 @@ derive_param_tte <- function(dataset = NULL,
   # create observations for new parameter #
   new_param <- filter_extreme(
     bind_rows(event_data, censor_data),
-    by_vars = quo_c(subject_keys, by_vars),
+    by_vars = expr_c(subject_keys, by_vars),
     order = exprs(!!tmp_event),
     mode = "last"
   ) %>%
@@ -449,7 +449,7 @@ derive_param_tte <- function(dataset = NULL,
             " ",
             names(set_values_to),
             "=",
-            lapply(set_values_to, quo_get_expr),
+            set_values_to,
             collapse = "\n"
           ),
           "\n)\nError message:\n  ",
@@ -620,7 +620,7 @@ filter_date_sources <- function(sources,
       filter_if(sources[[i]]$filter) %>%
       filter_extreme(
         order = exprs(!!date),
-        by_vars = quo_c(subject_keys, by_vars),
+        by_vars = expr_c(subject_keys, by_vars),
         mode = mode,
         check_type = "none"
       )
@@ -647,7 +647,7 @@ filter_date_sources <- function(sources,
     bind_rows() %>%
     filter(!is.na(!!date_var)) %>%
     filter_extreme(
-      by_vars = quo_c(subject_keys, by_vars),
+      by_vars = expr_c(subject_keys, by_vars),
       order = exprs(!!date_var),
       mode = mode,
       check_type = "none"
@@ -950,13 +950,13 @@ list_tte_source_objects <- function(package = "admiral") {
     data.frame(
       object = obj_name,
       dataset_name = obj$dataset_name,
-      filter = rlang::quo_text(obj$filter),
-      date = rlang::quo_text(obj$date),
+      filter = as_label(obj$filter),
+      date = as_name(obj$date),
       censor = obj$censor,
       set_values_to = paste(
         paste(
           names(obj$set_values_to),
-          purrr::map_chr(obj$set_values_to, rlang::quo_text, width = 100),
+          purrr::map_chr(obj$set_values_to, as_label, width = 100),
           sep = ": "
         ),
         collapse = "<br>"

@@ -213,7 +213,7 @@ derive_param_framingham <- function(dataset,
 
   assert_data_frame(
     dataset,
-    required_vars = quo_c(
+    required_vars = expr_c(
       by_vars,
       exprs(PARAMCD, AVAL),
       age,
@@ -225,7 +225,7 @@ derive_param_framingham <- function(dataset,
   )
 
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   assert_character_scalar(sysbp_code)
   assert_character_scalar(chol_code)
   assert_character_scalar(cholhdl_code)
@@ -269,7 +269,7 @@ derive_param_framingham <- function(dataset,
     dataset,
     filter = !!filter,
     parameters = c(sysbp_code, chol_code, cholhdl_code),
-    by_vars = quo_c(
+    by_vars = expr_c(
       by_vars,
       age,
       sex,

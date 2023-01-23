@@ -170,7 +170,7 @@ derive_vars_last_dose <- function(dataset,
 
   # check if single_dose_condition is true for all EX records
   single_dose_eval <- dataset_ex %>%
-    with(eval_tidy(quo_get_expr(single_dose_condition))) %>%
+    with(eval_tidy(single_dose_condition)) %>%
     all()
 
   if (!single_dose_eval) {
@@ -190,7 +190,7 @@ derive_vars_last_dose <- function(dataset,
   )
 
   # filter EX based on user-specified condition
-  if (!is.null(quo_get_expr(filter_ex))) {
+  if (!is.null(filter_ex)) {
     dataset_ex <- dataset_ex %>%
       filter_if(filter_ex)
   }

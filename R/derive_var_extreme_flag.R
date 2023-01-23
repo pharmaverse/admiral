@@ -364,7 +364,7 @@ derive_var_worst_flag <- function(dataset,
   assert_order_vars(order)
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, extract_vars(order), param_var, analysis_var)
+    required_vars = expr_c(by_vars, extract_vars(order), param_var, analysis_var)
   )
   assert_character_vector(worst_high)
   assert_character_vector(worst_low)
@@ -379,7 +379,7 @@ derive_var_worst_flag <- function(dataset,
   }
 
   # additional checks for worstflag - parameters not available
-  param_var_str <- as_string(quo_get_expr(param_var))
+  param_var_str <- as_string(param_var)
   if (length(worst_high) > 0 &&
     !all(worst_high %in% dataset[[param_var_str]])) {
     err_msg <- paste0(
@@ -408,7 +408,7 @@ derive_var_worst_flag <- function(dataset,
     derive_var_extreme_flag(
       dataset = dplyr::filter(dataset, !!param_var %in% worst_low),
       by_vars = by_vars,
-      order = quo_c(analysis_var, order),
+      order = expr_c(analysis_var, order),
       new_var = !!new_var,
       mode = "first",
       check_type = check_type
@@ -416,7 +416,7 @@ derive_var_worst_flag <- function(dataset,
     derive_var_extreme_flag(
       dataset = dplyr::filter(dataset, !!param_var %in% worst_high),
       by_vars = by_vars,
-      order = quo_c(quo(desc(!!quo_get_expr(analysis_var))), order),
+      order = expr_c(expr(desc(!!analysis_var)), order),
       new_var = !!new_var,
       mode = "first",
       check_type = check_type

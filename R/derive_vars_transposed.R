@@ -88,7 +88,7 @@ derive_vars_transposed <- function(dataset,
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
-  assert_data_frame(dataset_merge, required_vars = quo_c(by_vars, key_var, value_var))
+  assert_data_frame(dataset_merge, required_vars = expr_c(by_vars, key_var, value_var))
 
   dataset_transposed <- dataset_merge %>%
     filter_if(filter) %>%

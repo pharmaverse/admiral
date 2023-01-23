@@ -70,11 +70,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
     optional = FALSE
   )
 
-  # replace all "" by NA
-  dataset_queries <- dataset_queries %>%
-    dplyr::mutate_if(is.character, function(x) {
-      ifelse(x == "", NA_character_, x)
-    })
+  dataset_queries <- convert_blanks_to_na(dataset_queries)
 
   # names of new columns
   if ("QUERY_ID" %notin% names(dataset_queries)) {
@@ -171,7 +167,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
   # Change non-static numeric vars to character
   df_fix_numeric <- dataset %>%
     select(-static_cols) %>%
-    mutate_if(is.numeric, as.character)
+    mutate(across(where(is.numeric), as.character))
 
 
   joined <- cbind(df_static, df_fix_numeric) %>%
@@ -230,7 +226,7 @@ assert_valid_queries <- function(queries, queries_name) {
   )
 
   # check duplicate rows
-  signal_duplicate_records(queries, by_vars = quos(!!!syms(colnames(queries))))
+  signal_duplicate_records(queries, by_vars = exprs(!!!syms(colnames(queries))))
 
   # check illegal prefix category
   is_good_prefix <- grepl("^[a-zA-Z]{2,3}", queries$VAR_PREFIX)

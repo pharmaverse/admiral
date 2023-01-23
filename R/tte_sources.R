@@ -30,7 +30,7 @@ death_event <- event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "DEATH",
     SRCDOM = "ADSL",
     SRCVAR = "DTHDT"
@@ -44,7 +44,7 @@ death_event <- event_source(
 lastalive_censor <- censor_source(
   dataset_name = "adsl",
   date = LSTALVDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "ALIVE",
     SRCDOM = "ADSL",
     SRCVAR = "LSTALVDT"
@@ -59,7 +59,7 @@ ae_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y",
   date = ASTDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "ADVERSE EVENT",
     SRCDOM = "ADAE",
     SRCVAR = "ASTDT",
@@ -75,7 +75,7 @@ ae_ser_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & AESER == "Y",
   date = ASTDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "SERIOUS ADVERSE EVENT",
     SRCDOM = "ADAE",
     SRCVAR = "ASTDT",
@@ -91,7 +91,7 @@ ae_gr1_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & ATOXGR == "1",
   date = ASTDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "GRADE 1 ADVERSE EVENT",
     SRCDOM = "ADAE",
     SRCVAR = "ASTDT",
@@ -107,7 +107,7 @@ ae_gr2_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & ATOXGR == "2",
   date = ASTDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "GRADE 2 ADVERSE EVENT",
     SRCDOM = "ADAE",
     SRCVAR = "ASTDT",
@@ -123,7 +123,7 @@ ae_gr3_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & ATOXGR == "3",
   date = ASTDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "GRADE 3 ADVERSE EVENT",
     SRCDOM = "ADAE",
     SRCVAR = "ASTDT",
@@ -139,7 +139,7 @@ ae_gr4_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & ATOXGR == "4",
   date = ASTDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "GRADE 4 ADVERSE EVENT",
     SRCDOM = "ADAE",
     SRCVAR = "ASTDT",
@@ -155,7 +155,7 @@ ae_gr5_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & ATOXGR == "5",
   date = ASTDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "GRADE 5 ADVERSE EVENT",
     SRCDOM = "ADAE",
     SRCVAR = "ASTDT",
@@ -171,7 +171,7 @@ ae_gr35_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & ATOXGR %in% c("3", "4", "5"),
   date = ASTDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "GRADE 3-5 ADVERSE EVENT",
     SRCDOM = "ADAE",
     SRCVAR = "ASTDT",
@@ -187,7 +187,7 @@ ae_sev_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & AESEV == "SEVERE",
   date = ASTDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "SEVERE ADVERSE EVENT",
     SRCDOM = "ADAE",
     SRCVAR = "ASTDT",
@@ -203,7 +203,7 @@ ae_wd_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & AEACN == "DRUG WITHDRAWN",
   date = ASTDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "ADVERSE EVENT LEADING TO DRUG WITHDRAWAL",
     SRCDOM = "ADAE",
     SRCVAR = "ASTDT",

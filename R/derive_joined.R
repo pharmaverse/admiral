@@ -316,7 +316,7 @@ derive_vars_joined <- function(dataset,
   if (!is.null(order)) {
     data_return <- filter_extreme(
       data_return,
-      by_vars = expr_c(by_vars_left, quo(!!tmp_obs_nr)),
+      by_vars = expr_c(by_vars_left, tmp_obs_nr),
       order = add_suffix_to_vars(order, vars = common_vars, suffix = ".join"),
       mode = mode,
       check_type = check_type

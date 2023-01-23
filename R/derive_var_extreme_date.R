@@ -24,7 +24,7 @@
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#'   A list of quosures where the expressions are symbols as returned by
+#'   A list of expressions where the expressions are symbols as returned by
 #'   `exprs()` is expected.
 #'
 #' @details The following steps are performed to create the output dataset:
@@ -200,7 +200,7 @@ derive_var_extreme_dtm <- function(dataset,
     )
   )
 
-  warn_if_vars_exist(dataset, vars2chr(quo_c(new_var)))
+  warn_if_vars_exist(dataset, vars2chr(expr_c(new_var)))
 
   add_data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
@@ -216,7 +216,7 @@ derive_var_extreme_dtm <- function(dataset,
     source_dataset_name <- sources[[i]]$dataset_name
     source_dataset <- source_datasets[[source_dataset_name]]
 
-    date <- quo_get_expr(sources[[i]]$date)
+    date <- sources[[i]]$date
     assert_date_var(
       dataset = source_dataset,
       var = !!date,
