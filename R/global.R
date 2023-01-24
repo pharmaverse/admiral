@@ -5,5 +5,6 @@ globalVariables(c(
   "_unit",
   "auto",
   "name",
-  "PARAMCD"
+  "PARAMCD",
+  "where" # this entry should be moved to @importFrom tidyselect once we use tidyselect 1.2.0
 ))
