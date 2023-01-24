@@ -1,5 +1,5 @@
-# derive_vars_dy Test 1----
-test_that("derive_vars_dy Test1: Single --DT input when ref date is --DTM", {
+## Test 1: Single --DT input when ref date is --DTM ----
+test_that("derive_vars_dy Test 1: Single --DT input when ref date is --DTM", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT,
     "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18",
@@ -30,9 +30,8 @@ test_that("derive_vars_dy Test1: Single --DT input when ref date is --DTM", {
   )
 })
 
-# derive_vars_dy Test 2----
-test_that("derive_vars_dy Test2: Multiple --DT input when ref date is --DTM,
-          with name of --DY var specified in par call", {
+## Test 2: DT input, ref date DTM, DY var specified ----
+test_that("derive_vars_dy Test 2: DT input, ref date DTM, DY var specified", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT, ~AENDT, ~DTHDT,
     "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", "2014-01-20", "2014-02-01",
@@ -71,8 +70,8 @@ test_that("derive_vars_dy Test2: Multiple --DT input when ref date is --DTM,
   )
 })
 
-# derive_vars_dy Test 3----
-test_that("derive_vars_dy Test3: Combo of --DT/--DTM input when ref date is --DTM", {
+## Test 3: Combo of --DT/--DTM input when ref date is --DTM ----
+test_that("derive_vars_dy Test 3: Combo of --DT/--DTM input when ref date is --DTM", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDT,
     "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
@@ -105,8 +104,8 @@ test_that("derive_vars_dy Test3: Combo of --DT/--DTM input when ref date is --DT
   )
 })
 
-# derive_vars_dy Test 4----
-test_that("derive_vars_dy Test4: Single --DT input when ref date is --DT", {
+## Test 4: Single --DT input when ref date is --DT ----
+test_that("derive_vars_dy Test 4: Single --DT input when ref date is --DT", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDT,
     "TEST01", "PAT01", "2014-01-17", "2014-01-18",
@@ -137,8 +136,8 @@ test_that("derive_vars_dy Test4: Single --DT input when ref date is --DT", {
   )
 })
 
-# derive_vars_dy Test 5----
-test_that("derive_vars_dy Test5: Multiple --DT input when ref date is --DT", {
+## Test 5: Multiple --DT input when ref date is --DT ----
+test_that("derive_vars_dy Test 5: Multiple --DT input when ref date is --DT", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDT, ~AENDT,
     "TEST01", "PAT01", "2014-01-17", "2014-01-18", "2014-01-20"
@@ -171,8 +170,8 @@ test_that("derive_vars_dy Test5: Multiple --DT input when ref date is --DT", {
   )
 })
 
-# derive_vars_dy Test 6----
-test_that("derive_vars_dy Test6: Combo of --DT/--DTM input when ref date is --DT", {
+## Test 6: Combo of --DT/--DTM input when ref date is --DT ----
+test_that("derive_vars_dy Test 6: Combo of --DT/--DTM input when ref date is --DT", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDTM, ~AENDT,
     "TEST01", "PAT01", "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20"
@@ -205,8 +204,8 @@ test_that("derive_vars_dy Test6: Combo of --DT/--DTM input when ref date is --DT
   )
 })
 
-# derive_vars_dy Test 7----
-test_that("derive_vars_dy Test7: All dates as --DTM", {
+## Test 7: All dates as --DTM ----
+test_that("derive_vars_dy Test 7: All dates as --DTM", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM,
     "TEST01", "PAT01", "2014-01-17T16:34:O9", "2014-01-18T13:09:O9", "2014-01-20T08:29:05"
@@ -239,11 +238,11 @@ test_that("derive_vars_dy Test7: All dates as --DTM", {
   )
 })
 
-# derive_vars_dy Test 8----
-test_that("derive_vars_dy Test8: An error is issued if source variables do not end in DT or DTM", { # nolint
+## Test 8: error if source variables do not end in DT or DTM ----
+test_that("derive_vars_dy Test 8: error if source variables do not end in DT or DTM", {
   datain <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~TRTSDTW, ~ASTDTW, ~AENDTW,
-    "TEST01", "PAT01", "2014-01-17T16:34:O9", "2014-01-18T13:09:O9", "2014-01-20T08:29:05"
+    ~STUDYID, ~USUBJID, ~TRTSDTW,              ~ASTDTW,               ~AENDTW,
+    "TEST01", "PAT01",  "2014-01-17T16:34:O9", "2014-01-18T13:09:O9", "2014-01-20T08:29:05"
   )
 
   expect_error(
@@ -255,7 +254,7 @@ test_that("derive_vars_dy Test8: An error is issued if source variables do not e
   )
 })
 
-# derive_vars_dy Test 9: Single named --DT input when ref date is --DTM ----
+## Test 9: Single named --DT input when ref date is --DTM ----
 test_that("derive_vars_dy Test 9: Single named --DT input when ref date is --DTM", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT,

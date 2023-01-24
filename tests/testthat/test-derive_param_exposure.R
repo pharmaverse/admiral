@@ -25,10 +25,8 @@ input <- tibble::tribble(
 input_no_dtm <- input %>%
   select(-ASTDTM, -AENDTM)
 
-# ---- derive_param_exposure, test 1: New observations are derived correctly ----
-# ---- for AVAL ----
-test_that("derive_param_exposure Test 1: New observations are derived correctly
-          for AVAL", {
+## Test 1: works with DTM variables ----
+test_that("derive_param_exposure Test 1: works with DTM variables", {
   new_obs1 <- input %>%
     filter(PARAMCD == "DOSE") %>%
     group_by(USUBJID) %>%
@@ -91,10 +89,8 @@ test_that("derive_param_exposure Test 1: New observations are derived correctly
   )
 })
 
-# ---- derive_param_exposure, test 2:  New observations are derived correctly ----
-# ---- for AVAL, when the input dataset only contains AxxDT variables ----
-test_that("derive_param_exposure Test 2: New observations are derived correctly
-          for AVAL, when the input dataset only contains AxxDT variables", {
+## Test 2: works with DT variables ----
+test_that("derive_param_exposure Test 2: works with DT variables", {
   new_obs1 <- input_no_dtm %>%
     filter(PARAMCD == "DOSE") %>%
     group_by(USUBJID) %>%
@@ -157,8 +153,8 @@ test_that("derive_param_exposure Test 2: New observations are derived correctly
   )
 })
 
-# ---- derive_param_exposure, test 3: Errors ----
-test_that("derive_param_exposure, test 3: Errors", {
+## Test 3: Errors ----
+test_that("derive_param_exposure Test 3: Errors", {
   # PARAMCD must be specified
   expect_error(
     input <- input %>%

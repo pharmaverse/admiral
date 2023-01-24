@@ -67,8 +67,8 @@ derive_vars_dtm_to_tm <- function(dataset, source_vars) {
 
   if (n_vars > 1L) {
     dataset %>%
-      mutate(across(source_vars, .funs = list(new = as_hms))) %>%
-      rename(across(where(ends_with("new")), .funs = ~ str_replace(., "DTM_new", "TM")))
+      mutate(across(.cols = vars2chr(source_vars), .fns = list(new = as_hms))) %>%
+      rename_with(.fn = ~ str_replace(., "DTM_new", "TM"), .cols = ends_with("new"))
   } else {
     dataset %>%
       mutate(!!sym(tm_vars) := as_hms(!!sym(dtm_vars2)))

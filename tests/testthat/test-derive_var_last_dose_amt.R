@@ -71,7 +71,7 @@ test_that("derive_var_last_dose_amt Test 2: returns traceability vars", {
     new_var = LDOSE,
     dose_var = EXDOSE,
     single_dose_condition = (EXSTDTC == EXENDTC),
-    traceability_vars = dplyr::exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+    traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
   )
 
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))

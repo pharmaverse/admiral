@@ -71,7 +71,7 @@ test_that("derive_param_exist_flag Test 2: error is issued if aval_fun returns w
       filter_add = PARAMCD == "OVR",
       condition = AVALC == "PD",
       false_value = "N",
-      aval_fun = print,
+      aval_fun = function(x) x,
       set_values_to = exprs(
         PARAMCD = "PD",
         ANL01FL = "Y"
