@@ -3,7 +3,7 @@
 \docType{import}
 \name{reexports}
 \alias{reexports}
-\alias{vars}
+\alias{exprs}
 \alias{desc}
 \alias{\%>\%}
 \title{Objects exported from other packages}
@@ -13,8 +13,10 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr]{desc}}, \code{\link[dplyr]{vars}}}
+  \item{dplyr}{\code{\link[dplyr]{desc}}}
 
   \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
+
+  \item{rlang}{\code{\link[rlang:defusing-advanced]{exprs}}}
 }}
 

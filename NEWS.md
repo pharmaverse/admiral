@@ -9,6 +9,11 @@ into a single one (#1479)
 
 ## Breaking Changes
 
+- All function arguments which expected a list of quosures created by `vars()`
+are now expecting a list of expressions created by `exprs()`. For example,
+instead of `by_vars = vars(STUDYID, USUBJID)` `by_vars = exprs(STUDYID,
+USUBJID)` must be used now. (#1627)
+
 - Function `derive_param_tte()` has been updated such that only observations are
 added for subjects who have both an event or censoring and an observation in
 `dataset_adsl` (#1576).

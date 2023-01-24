@@ -94,7 +94,8 @@ This function is deprecated.  Please use \code{derive_param-computed()} instead.
 \seealso{
 Other deprecated: 
 \code{\link{derive_param_first_event}()},
-\code{\link{derive_var_aendy}()}
+\code{\link{derive_var_aendy}()},
+\code{\link{vars}()}
 }
 \author{
 Stefan Bundfuss

@@ -103,7 +103,8 @@ the new observations.
 \seealso{
 Other deprecated: 
 \code{\link{derive_derived_param}()},
-\code{\link{derive_var_aendy}()}
+\code{\link{derive_var_aendy}()},
+\code{\link{vars}()}
 }
 \author{
 Stefan Bundfuss

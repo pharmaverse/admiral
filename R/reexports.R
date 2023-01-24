@@ -5,7 +5,34 @@
 # comes from `dplyr` but is actually native to `magrittr`.
 
 #' @export
-dplyr::vars
+rlang::exprs
+
+#' Create List of Quosures
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `exprs()` instead.
+#'
+#' @param ... List of variables
+#'
+#' @return List of expressions
+#'
+#' @keywords deprecated
+#' @family deprecated
+#'
+#' @export
+vars <- function(...) {
+  deprecate_warn(
+    "0.10.0",
+    "vars()",
+    "exprs()",
+    details = paste(
+      "The admiral functions no longer expect list of quosures created by `vars()`",
+      "but list of expressions created by `exprs()`")
+  )
+  exprs(...)
+}
 
 #' @export
 dplyr::desc
