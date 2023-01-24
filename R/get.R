@@ -95,5 +95,11 @@ get_source_vars <- function(expressions, quosures) {
   }
   assert_varval_list(expressions, optional = TRUE)
 
-  expr_c(expressions)[lapply(expr_c(expressions), is.symbol) == TRUE]
+  source_vars <- expr_c(expressions)[lapply(expr_c(expressions), is.symbol) == TRUE]
+
+  if(length(source_vars) == 0) {
+    NULL
+  } else {
+    source_vars
+  }
 }

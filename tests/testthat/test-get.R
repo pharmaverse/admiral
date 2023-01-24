@@ -43,8 +43,8 @@ test_that("get_duplicates Test 3: x atomic vector", {
 })
 
 # get_source_vars ----
-## Test 4: x is a list of quosures ----
-test_that("get_source_vars Test 4: x is a list of quosures", {
+## Test 4: x is a list of expressions ----
+test_that("get_source_vars Test 4: x is a list of expressions", {
   x <- exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
 
   expect_equal(
@@ -53,10 +53,18 @@ test_that("get_source_vars Test 4: x is a list of quosures", {
   )
 })
 
-## Test 5: quosures is NULL ----
-test_that("get_source_vars Test 5: quosures is NULL", {
+## Test 5: NULL returns NULL ----
+test_that("get_source_vars Test 5: NULL returns NULL", {
   expect_equal(
     get_source_vars(NULL),
     expr_c(NULL)
+  )
+})
+
+## Test 6: no source vars returns NULL ----
+test_that("get_source_vars Test 6: no source vars returns NULL", {
+  expect_equal(
+    get_source_vars(x <- exprs(DTHDOM = "AE", DTHVAR = "AEDECOD")),
+    NULL
   )
 })
