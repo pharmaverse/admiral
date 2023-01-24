@@ -968,6 +968,7 @@ convert_dtc_to_dt <- function(dtc,
     max_dates = max_dates,
     preserve = preserve
   )
+  imputed_dtc <- if_else(imputed_dtc %in% c("0000-01-01"), NA_character_, imputed_dtc)
   ymd(imputed_dtc)
 }
 
@@ -1014,6 +1015,7 @@ convert_dtc_to_dtm <- function(dtc,
       max_dates = max_dates,
       preserve = preserve
     ) %>%
+    if_else(. %in% c("0000-01-01T00:00:00"), NA_character_, .) %>%
     ymd_hms()
 }
 
