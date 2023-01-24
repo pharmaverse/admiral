@@ -954,9 +954,11 @@ test_that("assert_varval_list Test 66: no error if an argument is a variable-val
 ## Test 67: no error if the elements fulfill a certain condition ----
 test_that("assert_list_element Test 67: no error if the elements fulfill a certain condition", {
   expect_invisible(
-    assert_list_element(list(
-      list(var = expr(DTHDT), val = 1),
-      list(var = expr(EOSDT), val = 0)),
+    assert_list_element(
+      list(
+        list(var = expr(DTHDT), val = 1),
+        list(var = expr(EOSDT), val = 0)
+      ),
       element = "val",
       condition = val >= 0,
       message_text = ""
@@ -967,9 +969,11 @@ test_that("assert_list_element Test 67: no error if the elements fulfill a certa
 ## Test 68: error if the elements do not fulfill the condition ----
 test_that("assert_list_element Test 68: error if the elements do not fulfill the condition", {
   expect_error(
-    assert_list_element(input <- list(
-      list(var = expr(DTHDT), val = 1),
-      list(var = expr(EOSDT), val = -1)),
+    assert_list_element(
+      input <- list(
+        list(var = expr(DTHDT), val = 1),
+        list(var = expr(EOSDT), val = -1)
+      ),
       element = "val",
       condition = val >= 0,
       message_text = "Invalid value for `val`:"

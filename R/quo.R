@@ -53,7 +53,8 @@ quo_not_missing <- function(x) {
     details = paste(
       "Due to changing from `vars()` to `exprs()` the function is no longer required.",
       "It will be removed in future.",
-      sep = "\n")
+      sep = "\n"
+    )
   )
   !rlang::quo_is_missing(x)
 

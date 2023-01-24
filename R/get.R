@@ -97,7 +97,7 @@ get_source_vars <- function(expressions, quosures) {
 
   source_vars <- expr_c(expressions)[lapply(expr_c(expressions), is.symbol) == TRUE]
 
-  if(length(source_vars) == 0) {
+  if (length(source_vars) == 0) {
     NULL
   } else {
     source_vars

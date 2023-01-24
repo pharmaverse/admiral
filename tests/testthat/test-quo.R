@@ -58,7 +58,7 @@ test_that("quo_not_missing Test 5: `quo_not_missing` returns TRUE if no missing 
   expect_warning(
     test_fun(my_variable),
     class = "lifecycle_warning_deprecated"
-    )
+  )
 })
 
 ## Test 6: `quo_not_missing` throws an Error if missing argument ----
@@ -153,7 +153,8 @@ test_that("add_suffix_to_vars Test 12: with single variable", {
     object = add_suffix_to_vars(
       exprs(ADT, desc(AVAL), AVALC),
       vars = exprs(AVAL),
-      suffix = ".join")
+      suffix = ".join"
+    )
   )
 })
 
