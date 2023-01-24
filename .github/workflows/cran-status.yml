@@ -20,5 +20,5 @@ jobs:
       issue-assignees: "bundfussr,esimms999-gsk,thomas-neitmann,bms63,rossfarrugia"
       # Create an issue if one or more of the following
       # statuses are reported on the check report.
-      status-types: "WARN,ERROR,NOTE"
+      statuses: "WARN,ERROR,NOTE"
  
