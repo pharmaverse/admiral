@@ -86,6 +86,7 @@ version is stored in the output dataset (#1337).
 
 - New vignette "Generic Functions" (#734)
 - New vignette "Visit and Period Variables" (#1478)
+- New vignette "Derive a single dose dataset with imputations" (#1408)
 
 ## Various
 
