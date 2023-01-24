@@ -116,14 +116,13 @@ derive_vars_dy <- function(dataset,
         across(
           .cols = vars2chr(unname(source_vars)),
           .fns = list(temp = ~
-                       compute_duration(start_date = !!reference_date, end_date = .))
+            compute_duration(start_date = !!reference_date, end_date = .))
         )
       ) %>%
       rename_with(
         .cols = ends_with("temp"),
         .fn = ~dy_vars
       )
-
   } else {
     dataset %>%
       mutate(

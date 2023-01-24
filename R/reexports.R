@@ -29,7 +29,8 @@ vars <- function(...) {
     "exprs()",
     details = paste(
       "The admiral functions no longer expect list of quosures created by `vars()`",
-      "but list of expressions created by `exprs()`")
+      "but list of expressions created by `exprs()`"
+    )
   )
   exprs(...)
 }
