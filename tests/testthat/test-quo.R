@@ -41,10 +41,8 @@ test_that("expr_c Test 3: concatenating and indexing expressions", {
 
 ## Test 4: returns error if non-expressions are input ----
 test_that("expr_c Test 4: returns error if non-expressions are input", {
-  USUBJID <- mean
-
   expect_error(
-    object = expr_c(expr(USUBJID), USUBJID)
+    object = expr_c(expr(USUBJID), mean)
   )
 })
 
