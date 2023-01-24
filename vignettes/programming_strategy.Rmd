@@ -227,7 +227,7 @@ Parameters which expect a boolean or boolean vector must start with a verb, e.g.
 | `start_dtc`      | (Partial) start date/datetime in ISO 8601 format.                                                                  |
 | `dtc`            | (Partial) date/datetime in ISO 8601 format.                                                                        |
 | `date`           | Date of an event / interval. Expects a date object.                                                                |
-| `set_values_to`  | List of variable name-value pairs.                                                                                 |
+| `set_values_to`  | List of variable name-value pairs. Use `process_set_values_to()` for processing the value and providing user friendly error messages. |
 | `subject_keys`   | Variables to uniquely identify a subject, defaults to `vars(STUDYID, USUBJID)`. In function formals, use `subject_keys = get_admiral_option("subject_keys")`                                     |
 
 

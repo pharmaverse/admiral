@@ -1,9 +1,13 @@
 # admiraldev 0.3.0
 
 ## New Features
-
+  - New function `process_set_values_to()` for creating the variables specified
+  by the `set_value_to` argument and catching errors (#70)
+  
 ## Updates of Existing Functions
   - Fix datatable styling for documentation (#197)
+  - The `assert_character_vector()` function gained a `named` argument to check
+  that all elements of the vector are named. (#70)
   - The `assert_list_of()` function gained a `named` argument to check that all
   elements of the list are named. (#203)
   - The `quote_fun` argument of `enumerate()` was extended such that `NULL` can
