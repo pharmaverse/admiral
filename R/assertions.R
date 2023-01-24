@@ -202,6 +202,8 @@ assert_character_scalar <- function(arg,
 #'
 #' @param arg A function argument to be checked
 #' @param values A `character` vector of valid values for `arg`
+#' @param named If set to `TRUE`, an error is issued if not all elements of the
+#'   vector are named.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
@@ -224,7 +226,14 @@ assert_character_scalar <- function(arg,
 #' example_fun(letters)
 #'
 #' try(example_fun(1:10))
-assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
+#'
+#' example_fun2 <- function(chr) {
+#'   assert_character_vector(chr, named = TRUE)
+#' }
+#'
+#' try(example_fun2(c(alpha = "a", "b", gamma = "c")))
+assert_character_vector <- function(arg, values = NULL, named = FALSE, optional = FALSE) {
+  assert_logical_scalar(named)
   assert_logical_scalar(optional)
 
   if (optional && is.null(arg)) {
@@ -250,6 +259,22 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
         enumerate(mismatches), "\n",
         "Valid values:\n",
         enumerate(values)
+      ))
+    }
+  }
+
+  if (named && length(arg) > 0) {
+    if (is.null(names(arg))) {
+      abort(paste0(
+        "All elements of ", arg_name(substitute(arg)), " must be named.\n",
+        "No element is named."
+      ))
+    }
+    unnamed <- which(names(arg) == "")
+    if (length(unnamed) > 0) {
+      abort(paste0(
+        "All elements of ", arg_name(substitute(arg)), " must be named.\n",
+        "The following elements are not named: ", enumerate(unnamed, quote_fun = NULL)
       ))
     }
   }
