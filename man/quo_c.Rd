@@ -13,7 +13,10 @@ quo_c(...)
 An object of class \code{quosures}
 }
 \description{
-Concatenate One or More Quosure(s)
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+}
+\details{
+This function is \emph{deprecated}, please use \code{expr_c()} instead.
 }
 \seealso{
 Helpers for working with Quosures: 

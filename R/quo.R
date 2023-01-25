@@ -1,5 +1,9 @@
 #' Concatenate One or More Quosure(s)
 #'
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `expr_c()` instead.
+#'
 #' @param ... One or more objects of class `quosure` or `quosures`
 #'
 #' @return An object of class `quosures`
@@ -11,6 +15,15 @@
 #'
 #' @export
 quo_c <- function(...) {
+  deprecate_warn(
+    "0.10.0",
+    "quo_c()",
+    "expr_c()",
+    details = paste(
+      "Expressions created by `exprs()` must be used",
+      "instead of quosures created by `vars()`."
+    )
+  )
   inputs <- unlist(list(...), recursive = TRUE)
   stopifnot(all(map_lgl(inputs, is_quosure)))
   is_null <- map_lgl(inputs, quo_is_null)
@@ -84,11 +97,12 @@ quo_not_missing <- function(x) {
 #' @export
 replace_values_by_names <- function(expressions, quosures) {
   if (!missing(quosures)) {
-    deprecate_stop(
+    deprecate_warn(
       "0.10.0",
       "replace_values_by_names(quosures = )",
       "replace_values_by_names(expressions = )"
     )
+    expressions <- map(quosures, rlang::quo_get_expr)
   }
   map2(expressions, names(expressions), function(e, n) {
     if (n == "") {
@@ -100,7 +114,9 @@ replace_values_by_names <- function(expressions, quosures) {
 
 #' Replace Symbols in a Quosure
 #'
-#' Replace symbols in a quosure
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `replace_symbol_in_expr()` instead.
 #'
 #' @param quosure Quosure
 #'

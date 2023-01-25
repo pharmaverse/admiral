@@ -11,8 +11,8 @@ process_set_values_to(dataset, set_values_to, expected_types = NULL)
 
 \item{set_values_to}{Variables to set
 
-A named list returned by \code{vars()} defining the variables to be set, e.g.
-\code{vars(PARAMCD = "OS", PARAM = "Overall Survival")} is expected. The values
+A named list returned by \code{exprs()} defining the variables to be set, e.g.
+\code{exprs(PARAMCD = "OS", PARAM = "Overall Survival")} is expected. The values
 must be symbols, character strings, numeric values, expressions, or \code{NA}.}
 
 \item{expected_types}{If the argument is specified, the specified variables are checked whether
@@ -41,7 +41,7 @@ data <- tribble(
 try(
   process_set_values_to(
     data,
-    set_values_to = vars(
+    set_values_to = exprs(
       PARAMCD = BMI
     )
   )
@@ -50,7 +50,7 @@ try(
 try(
   process_set_values_to(
     data,
-    set_values_to = vars(
+    set_values_to = exprs(
       PARAMCD = 42
     ),
     expected_types = c(PARAMCD = "character")

@@ -26,7 +26,7 @@ test_that("convert_dtm_to_dtc Test 3: Error is thrown if dtm is not in correct f
 
 # filter_if ----
 ## Test 4: Input is returned as is if filter is NULL ----
-test_that("convert_dtm_to_dtc Test 4: Input is returned as is if filter is NULL", {
+test_that("filter_if Test 4: Input is returned as is if filter is NULL", {
   input <- tibble::tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
     "P01",    "WEIGHT",       80.9,
@@ -43,7 +43,7 @@ test_that("convert_dtm_to_dtc Test 4: Input is returned as is if filter is NULL"
 })
 
 ## Test 5: Input is filtered if filter is not NULL ----
-test_that("convert_dtm_to_dtc Test 5: Input is filtered if filter is not NULL", {
+test_that("filter_if Test 5: Input is filtered if filter is not NULL", {
   input <- tibble::tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
     "P01",    "WEIGHT",       80.9,
@@ -68,4 +68,19 @@ test_that("contains_vars Test 6: returns TRUE for valid arguments", {
 ## Test 7: returns TRUE for valid arguments ----
 test_that("contains_vars Test 7: returns TRUE for valid arguments", {
   expect_error(contains_vars(USUBJID))
+})
+# vars2chr ----
+## Test 8: returns character vector ----
+test_that("vars2chr Test 8: returns character vector", {
+  expected <- c("STUDYID", "USUBJID")
+  names(expected) <- c("", "")
+  expect_equal(vars2chr(exprs(STUDYID, USUBJID)), expected)
+})
+
+## Test 9: warning if quosures argument is used ----
+test_that("vars2chr Test 9: warning if quosures argument is used", {
+  expect_warning(
+    vars2chr(quosures = rlang::quos(STUDYID, USUBJID)),
+    class = "lifecycle_warning_deprecated"
+  )
 })

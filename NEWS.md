@@ -19,6 +19,12 @@
 - The default value of the `optional` argument in `assert_date_vector()`,
 `assert_list_of()`, and `assert_s3_class()` was changed from `TRUE` to `FALSE`
 to make the default behavior consistent. (#87)
+- admiral functions no longer expect list of quosures created by `vars()` but
+list of expressions created by `exprs()`. Thus the following functions and
+arguments were deprecated:
+    - `quo_c()` and `replace_symbol_in_quo()`
+    - the `quosures` argument in `get_source_vars()`,
+    `replace_values_by_names()`, and `vars2chr()`
 
 ## Documentation
   - New section in programming strategy regarding comments (#71)

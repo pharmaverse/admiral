@@ -87,11 +87,12 @@ get_duplicates <- function(x) {
 #' @export
 get_source_vars <- function(expressions, quosures) {
   if (!missing(quosures)) {
-    deprecate_stop(
+    deprecate_warn(
       "0.10.0",
       "get_source_vars(quosures = )",
       "get_source_vars(expressions = )"
     )
+    expressions <- map(quosures, rlang::quo_get_expr)
   }
   assert_varval_list(expressions, optional = TRUE)
 

@@ -97,9 +97,17 @@ test_that("replace_values_by_names Test 7: names of quosures replace value", {
   )
 })
 
+## Test 8: warning if quosures argument is used ----
+test_that("replace_values_by_names Test 8: warning if quosures argument is used", {
+  expect_warning(
+    replace_values_by_names(quosures = rlang::quos(STUDYID, USUBJID)),
+    class = "lifecycle_warning_deprecated"
+  )
+})
+
 # replace_symbol_in_quo ----
-## Test 8: error if called ----
-test_that("replace_symbol_in_quo Test 8: error if called", {
+## Test 9: error if called ----
+test_that("replace_symbol_in_quo Test 9: error if called", {
   expect_error(
     replace_symbol_in_quo(),
     class = "lifecycle_error_deprecated"
@@ -107,8 +115,8 @@ test_that("replace_symbol_in_quo Test 8: error if called", {
 })
 
 # replace_symbol_in_expr ----
-## Test 9: symbol is replaced ----
-test_that("replace_symbol_in_expr Test 9: symbol is replaced", {
+## Test 10: symbol is replaced ----
+test_that("replace_symbol_in_expr Test 10: symbol is replaced", {
   expect_equal(
     expected = expr(AVAL.join),
     object = replace_symbol_in_expr(
@@ -119,8 +127,8 @@ test_that("replace_symbol_in_expr Test 9: symbol is replaced", {
   )
 })
 
-## Test 10: partial match is not replaced ----
-test_that("replace_symbol_in_expr Test 10: partial match is not replaced", {
+## Test 11: partial match is not replaced ----
+test_that("replace_symbol_in_expr Test 11: partial match is not replaced", {
   expect_equal(
     expected = expr(AVALC),
     object = replace_symbol_in_expr(
@@ -131,8 +139,8 @@ test_that("replace_symbol_in_expr Test 10: partial match is not replaced", {
   )
 })
 
-## Test 11: symbol in expression is replaced ----
-test_that("replace_symbol_in_expr Test 11: symbol in expression is replaced", {
+## Test 12: symbol in expression is replaced ----
+test_that("replace_symbol_in_expr Test 12: symbol in expression is replaced", {
   expect_equal(
     expected = expr(desc(AVAL.join)),
     object = replace_symbol_in_expr(
@@ -144,8 +152,8 @@ test_that("replace_symbol_in_expr Test 11: symbol in expression is replaced", {
 })
 
 # add_suffix_to_vars ----
-## Test 12: with single variable ----
-test_that("add_suffix_to_vars Test 12: with single variable", {
+## Test 13: with single variable ----
+test_that("add_suffix_to_vars Test 13: with single variable", {
   expect_equal(
     expected = exprs(ADT, desc(AVAL.join), AVALC),
     object = add_suffix_to_vars(
@@ -156,8 +164,8 @@ test_that("add_suffix_to_vars Test 12: with single variable", {
   )
 })
 
-## Test 13: with more than one variable ----
-test_that("add_suffix_to_vars Test 13: with more than one variable", {
+## Test 14: with more than one variable ----
+test_that("add_suffix_to_vars Test 14: with more than one variable", {
   expect_equal(
     expected = exprs(ADT, desc(AVAL.join), AVALC.join),
     object = add_suffix_to_vars(

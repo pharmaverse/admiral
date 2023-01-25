@@ -18,7 +18,10 @@ The quosure where every occurence of the symbol \code{target} is replaced
 by \code{replace}
 }
 \description{
-Replace symbols in a quosure
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+}
+\details{
+This function is \emph{deprecated}, please use \code{replace_symbol_in_expr()} instead.
 }
 \seealso{
 Helpers for working with Quosures: 
