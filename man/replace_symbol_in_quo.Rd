@@ -14,7 +14,7 @@ replace_symbol_in_quo(quosure, target, replace)
 \item{replace}{Replacing symbol}
 }
 \value{
-The quosure where every occurence of the symbol \code{target} is replaced
+The quosure where every occurrence of the symbol \code{target} is replaced
 by \code{replace}
 }
 \description{

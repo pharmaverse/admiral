@@ -126,7 +126,7 @@ replace_values_by_names <- function(expressions, quosures) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The quosure where every occurence of the symbol `target` is replaced
+#' @return The quosure where every occurrence of the symbol `target` is replaced
 #'   by `replace`
 #'
 #' @keywords quo

@@ -762,7 +762,7 @@ The main R-script would contain all function calls to create the ADaM dataset. I
 
 * Function calls should have a preceding comment which is a short and meaningful description for which purpose the function is called, like: 
     * Derive variable X if function name is not descriptive or if it is a customized variable.
-    * Ideally use plain english to describe what a function is deriving.
+    * Ideally use plain English to describe what a function is deriving.
         * \# derive analysis study day
         * \# derive age group <= 18
     * Impute date with missing days.
@@ -771,7 +771,7 @@ The main R-script would contain all function calls to create the ADaM dataset. I
 Ideally one keeps it in line with the ADaM IG terminology, like Treatment Variables, Timing Variables, Identifier Variables as much as possible
     * \# derive all population indicator variables RANDFL, SAFFL ...
 * Functions that create user defined variables, specific to the molecule or study or support a specific endpoint should be called out specifically, like: 
-the following function calls flag the special Adverse Events or a comment that highlights a molecule specific endoint
+the following function calls flag the special Adverse Events or a comment that highlights a molecule specific endpoint
 * A function that covers a whole algorithm should have a preceding comment that indicates the purpose of the algorithm, like
     * \# derive secondary endpoint XYZ
 
