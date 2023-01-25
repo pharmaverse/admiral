@@ -15,34 +15,37 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Input: ex, adsl
-
 # Introduction
 
-# For either single drug administration records,
-# or multiple drug administration records covering a range of dates,
-# fill-in of missing treatment end datetime (`EXENDTC`) by substitution
-# with an acceptable alternate, for example date of death, date of datacut
-# may be required. This programming strategy allows the maximum possible number
-# of single dose records to be derived.
+For either single drug administration records,
+or multiple drug administration records covering a range of dates,
+fill-in of missing treatment end datetime (`EXENDTC`) by substitution
+with an acceptable alternate, for example date of death, date of datacut
+may be required. This programming strategy allows the maximum possible number
+of single dose records to be derived.
 
-# The example R script requires the date of datacut `DCUTDT` to be specified correctly,
-# or if not appropriate to use `DCUTDT` as missing treatment end data
-# and missing treatment end datetime could set equal to treatment start date
-# and treatment start datetime.
-# ADSL variables `DTHDT` and `DCUTDT` are preferred for imputation use.
+The example R script requires the date of datacut `DCUTDT` to be specified correctly,
+or if not appropriate to use `DCUTDT` as missing treatment end data
+and missing treatment end datetime could set equal to treatment start date
+and treatment start datetime.
+ADSL variables `DTHDT` and `DCUTDT` are preferred for imputation use.
 
-# All available trial treatments are included, allowing multiple different
-# last dose variables to be created in ad_adae.R if required.
+All available trial treatments are included, allowing multiple different
+last dose variables to be created in ad_adae.R if required.
 
-## Required packages
+**Note**: `ADSl` is prerequisite.
 
+## Required packages.
+```{r message=FALSE}
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(admiral.test) # Contains example datasets from the CDISC pilot project.
 library(dplyr)
 library(lubridate)
 library(tidyr)
+```
 
+```{r message=FALSE}
+# Input: ex, adsl
 data("admiral_ex")
 data("admiral_adsl")
 
@@ -52,10 +55,13 @@ adsl <- admiral_adsl
 ex <- convert_blanks_to_na(ex)
 adsl <- convert_blanks_to_na(adsl)
 
-# Derive date of death and set up data cut date to fill in missing treatment end date `EXENDT` and missing treatment end datetime `EXENDTM`.
-# Alternative approach instead of death date could use last known alive date in ADSL `LSTALVDT`.
-# Convert ADSL variables `DTHDT` and `DCUTDT` to DTM for imputations.
+```
 
+Derive date of death and set up data cut date to fill in missing treatment end date `EXENDT` and missing treatment end datetime `EXENDTM`.
+Alternative approach instead of death date could use last known alive date in ADSL `LSTALVDT`.
+Convert ADSL variables `DTHDT` and `DCUTDT` to DTM for imputations.
+
+```{r eval=TRUE}
 adsl_death <- adsl %>%
   select(STUDYID, USUBJID, DTHDT) %>%
   mutate(
@@ -66,7 +72,6 @@ adsl_death <- adsl %>%
   )
 
 # Select valid dose records, non-missing `EXSTDTC` and `EXDOSE`.
-
 ex_mod <- ex %>%
   filter(!is.na(EXSTDTC) & !is.na(EXDOSE)) %>%
   left_join(adsl_death, by = c("STUDYID", "USUBJID")) %>%
@@ -114,3 +119,4 @@ ex_single <-
     end_datetime = EXENDTM,
     keep_source_vars = vars(STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ, DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC)
   )
+```
