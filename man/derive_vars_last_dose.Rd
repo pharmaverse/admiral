@@ -29,9 +29,9 @@ and source variables from \code{traceability_vars} parameter are expected.}
 For example, it can be used to filter for valid dose.
 Defaults to NULL.}
 
-\item{by_vars}{Variables to join by (created by \code{dplyr::vars}).}
+\item{by_vars}{Variables to join by (created by \code{rlang::exprs}).}
 
-\item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
+\item{dose_id}{Variables to identify unique dose (created by \code{rlang::exprs}).
 Defaults to empty \code{exprs()}.}
 
 \item{dose_date}{The EX dose date variable. A date or date-time object is expected.}
@@ -41,11 +41,11 @@ Defaults to empty \code{exprs()}.}
 \item{single_dose_condition}{The condition for checking if \code{dataset_ex} is single dose. An error
 is issued if the condition is not true. Defaults to \code{(EXDOSFRQ == "ONCE")}.}
 
-\item{new_vars}{Variables to keep from \code{dataset_ex}, with the option to rename. Can either
-be variables created by \code{dplyr::vars} (e.g. \code{exprs(VISIT)}), or named list returned by \code{\link[=exprs]{exprs()}}
-(e.g. \code{exprs(LSTEXVIS = VISIT)}). If set to \code{NULL}, then all variables from \code{dataset_ex} are
-kept without renaming.
-Defaults to \code{NULL}.}
+\item{new_vars}{Variables to keep from \code{dataset_ex}, with the option to
+rename. Can either be variables created by \code{rlang::exprs} (e.g.
+\code{exprs(VISIT)}), or named list returned by \code{\link[=exprs]{exprs()}} (e.g.
+\code{exprs(LSTEXVIS = VISIT)}). If set to \code{NULL}, then all variables from
+\code{dataset_ex} are kept without renaming. Defaults to \code{NULL}.}
 
 \item{traceability_vars}{A named list returned by \code{\link[=exprs]{exprs()}} listing the traceability variables,
 e.g. \code{exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)}.

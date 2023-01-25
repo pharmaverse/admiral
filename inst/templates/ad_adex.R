@@ -193,8 +193,16 @@ adex <- adex %>%
   call_derivation(
     derivation = derive_param_doseint,
     variable_params = list(
-      params(set_values_to = exprs(PARAMCD = "TDOSINT"), tadm_code = "TDOSE", tpadm_code = "TPDOSE"),
-      params(set_values_to = exprs(PARAMCD = "PDOSINT"), tadm_code = "PDOSE", tpadm_code = "PPDOSE")
+      params(
+        set_values_to = exprs(PARAMCD = "TDOSINT"),
+        tadm_code = "TDOSE",
+        tpadm_code = "TPDOSE"
+      ),
+      params(
+        set_values_to = exprs(PARAMCD = "PDOSINT"),
+        tadm_code = "PDOSE",
+        tpadm_code = "PPDOSE"
+      )
     ),
     by_vars = exprs(
       STUDYID, USUBJID, !!!adsl_vars, PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT

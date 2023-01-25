@@ -30,9 +30,9 @@ and source variables from \code{traceability_vars} parameter are expected.}
 For example, it can be used to filter for valid dose.
 Defaults to NULL.}
 
-\item{by_vars}{Variables to join by (created by \code{dplyr::vars}).}
+\item{by_vars}{Variables to join by (created by \code{rlang::exprs}).}
 
-\item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
+\item{dose_id}{Variables to identify unique dose (created by \code{rlang::exprs}).
 Defaults to empty \code{exprs()}.}
 
 \item{dose_date}{The EX dose date variable. A date or date-time object is expected.}

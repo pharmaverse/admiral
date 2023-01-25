@@ -13,16 +13,16 @@
 #' For example, it can be used to filter for valid dose.
 #' Defaults to NULL.
 #'
-#' @param by_vars Variables to join by (created by `dplyr::vars`).
+#' @param by_vars Variables to join by (created by `rlang::exprs`).
 #'
-#' @param dose_id Variables to identify unique dose (created by `dplyr::vars`).
+#' @param dose_id Variables to identify unique dose (created by `rlang::exprs`).
 #' Defaults to empty `exprs()`.
 #'
-#' @param new_vars Variables to keep from `dataset_ex`, with the option to rename. Can either
-#' be variables created by `dplyr::vars` (e.g. `exprs(VISIT)`), or named list returned by [`exprs()`]
-#' (e.g. `exprs(LSTEXVIS = VISIT)`). If set to `NULL`, then all variables from `dataset_ex` are
-#' kept without renaming.
-#' Defaults to `NULL`.
+#' @param new_vars Variables to keep from `dataset_ex`, with the option to
+#'   rename. Can either be variables created by `rlang::exprs` (e.g.
+#'   `exprs(VISIT)`), or named list returned by [`exprs()`] (e.g.
+#'   `exprs(LSTEXVIS = VISIT)`). If set to `NULL`, then all variables from
+#'   `dataset_ex` are kept without renaming. Defaults to `NULL`.
 #'
 #' @param dose_date The EX dose date variable. A date or date-time object is expected.
 #'
