@@ -1,0 +1,117 @@
+---
+title: "Derive a single dose dataset with imputations"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+ %\VignetteIndexEntry{Derive a single dose dataset with imputations}
+ %\VignetteEngine{knitr::rmarkdown}
+ %\VignetteEncoding{UTF-8}
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+# Introduction
+
+For either single drug administration records,
+or multiple drug administration records covering a range of dates,
+fill-in of missing treatment end datetime (`EXENDTC`) by substitution
+with an acceptable alternate, for example date of death, date of datacut
+may be required. This programming strategy allows the maximum possible number
+of single dose records to be derived.
+
+The example R script requires the date of datacut `DCUTDT` to be specified correctly,
+or if not appropriate to use `DCUTDT` as missing treatment end data
+and missing treatment end datetime could set equal to treatment start date
+and treatment start datetime.
+ADSL variables `DTHDT` and `DCUTDT` are preferred for imputation use.
+
+All available trial treatments are included, allowing multiple different
+last dose variables to be created in ad_adae.R if required.
+
+**Note**: `ADSl` is prerequisite.
+## Required packages.
+```{r message=FALSE}
+library(admiral)
+library(admiral.test) # Contains example datasets from the CDISC pilot project.
+library(dplyr)
+library(lubridate)
+library(tidyr)
+```
+
+```{r message=FALSE}
+# Input: ex, adsl
+data("admiral_ex")
+data("admiral_adsl")
+
+ex <- admiral_ex
+adsl <- admiral_adsl
+
+ex <- convert_blanks_to_na(ex)
+adsl <- convert_blanks_to_na(adsl)
+```
+Derive date of death and set up data cut date to fill in missing treatment end date `EXENDT` and missing treatment end datetime `EXENDTM`.
+Alternative approach instead of death date could use last known alive date in ADSL `LSTALVDT`.
+Convert ADSL variables `DTHDT` and `DCUTDT` to DTM for imputations.
+```{r eval=TRUE}
+adsl_death <- adsl %>%
+  select(STUDYID, USUBJID, DTHDT) %>%
+  mutate(
+    DTHDTM = convert_date_to_dtm(DTHDT),
+    # Remove `DCUT` setup line below if ADSL `DCUTDT` is populated.
+    DCUTDT = as.Date("2015-03-06"), # Example only, enter date.
+    DCUTDTM = convert_date_to_dtm(DCUTDT)
+  )
+
+# Select valid dose records, non-missing `EXSTDTC` and `EXDOSE`.
+ex_mod <- ex %>%
+  filter(!is.na(EXSTDTC) & !is.na(EXDOSE)) %>%
+  left_join(adsl_death, by = c("STUDYID", "USUBJID")) %>%
+  # Example, set up missing `EXDOSFRQ` as QD daily dosing regime.
+  # Replace with study dosing regime per trial treatment.
+  mutate(EXDOSFRQ = if_else(is.na(EXDOSFRQ), "QD", EXDOSFRQ)) %>%
+  # Create EXxxDTM variables and replace missing `EXENDTM`.
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST",
+    date_imputation = "first",
+    time_imputation = "first",
+    flag_imputation = "none",
+  ) %>%
+  derive_vars_dtm_to_dt(vars(EXSTDTM)) %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN",
+    # Maximum imputed treatment end date must not be not greater than date of death or after the datacut date
+    max_dates = vars(DTHDTM, DCUTDTM),
+    date_imputation = "last",
+    time_imputation = "last",
+    flag_imputation = "none"
+  ) %>%
+  derive_vars_dtm_to_dt(vars(EXENDTM)) %>%
+  # Populate missing values with compatible data types.
+  # For missing treatment end dates and missing treatment end datetimes use datacut date as treatment end date if no death date exists.
+  # Otherwise use death date as treatment end date.
+  mutate(
+    EXENDT = if_else(is.na(EXENDT) & is.na(DTHDT), DCUTDT, EXENDT),
+    EXENDT = if_else(is.na(EXENDT) & !is.na(DTHDT), DTHDT, EXENDT),
+    EXENDTM = if_else(is.na(EXENDTM) & is.na(DTHDTM), DCUTDTM, EXENDTM),
+    EXENDTM = if_else(is.na(EXENDTM) & !is.na(DTHDTM), DTHDTM, EXENDTM)
+  ) %>%
+  # Select only unique values.
+  # Removes duplicated records before final step.
+  distinct(STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ, DCUTDT, DTHDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC)
+
+ex_single <-
+  create_single_dose_dataset(
+    ex_mod,
+    start_date = EXSTDT,
+    start_datetime = EXSTDTM,
+    end_date = EXENDT,
+    end_datetime = EXENDTM,
+    keep_source_vars = vars(STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ, DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC)
+  )
+```
