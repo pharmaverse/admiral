@@ -15,6 +15,8 @@ added for subjects who have both an event or censoring and an observation in
 
 ## Documentation
 
+- New vignette "Derive a single dose dataset with imputations" (#1408)
+
 # admiral 0.9.0
 
 ## New Features
