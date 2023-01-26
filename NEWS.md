@@ -1,6 +1,9 @@
-# admiral 1.0.0
+# admiral 0.10.0
 
 ## New Features
+
+- New function `consolidate_metadata()` for consolidating multiple meta datasets
+into a single one (#1479)
 
 ## Updates of Existing Functions
 

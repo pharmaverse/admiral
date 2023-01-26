@@ -24,7 +24,8 @@ test_that("slice_derivation Test 1: slice derivation", {
     )
   )
 
-  expected <- mutate(advs,
+  expected <- mutate(
+    advs,
     ADTM = c(ymd_hms("2020-04-16 23:59:59"), ymd_hms("2020-04-16 00:00:00")),
     ATMF = "H"
   )
@@ -98,6 +99,44 @@ test_that("slice_derivation Test 3: empty slice", {
   expected <- mutate(
     advs,
     ADTM = c(ymd_hms("2020-04-16 23:59:59"), ymd_hms("2020-04-16 23:59:59")),
+    ATMF = "H"
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "VSSEQ")
+  )
+})
+
+## Test 4: slice without arguments ----
+test_that("slice_derivation Test 4: slice without arguments", {
+  advs <- tibble::tribble(
+    ~USUBJID, ~VSDTC,       ~VSTPT,             ~VSSEQ,
+    "1",      "2020-04-16", NA_character_,      1,
+    "1",      "2020-04-16", "BEFORE TREATMENT", 2
+  )
+
+  actual <- slice_derivation(
+    advs,
+    derivation = derive_vars_dtm,
+    args = params(
+      dtc = VSDTC,
+      new_vars_prefix = "A",
+      time_imputation = "last"
+    ),
+    derivation_slice(
+      filter = str_detect(VSTPT, "PRE|BEFORE"),
+      args = params(time_imputation = "first")
+    ),
+    derivation_slice(
+      filter = TRUE
+    )
+  )
+
+  expected <- mutate(
+    advs,
+    ADTM = c(ymd_hms("2020-04-16 23:59:59"), ymd_hms("2020-04-16 00:00:00")),
     ATMF = "H"
   )
 
