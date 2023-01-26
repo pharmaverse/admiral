@@ -23,7 +23,7 @@ library(stringr)
 ```
 
 # Context
-During the drug development process, clinical trials are often required to assess for the potential that the experimental drug can cause severe liver injury, known as a drug induced liver injury (DILI). There are multiple criteria that need to be evaluated to determine and classify a DILI "event". A rule of thumb known as Hy's Law is usually comprised of three parts:
+During the drug development process, clinical trials are often required to assess for the potential that the experimental drug can cause severe liver injury, known as a drug induced liver injury (DILI). There are multiple criteria that need to be evaluated to determine and classify a DILI "event". A common rule of thumb for this is, known as Hy's Law, is usually comprised of three parts:
 
 - Elevated alanine transaminase (ALT) or aspartate transaminase (AST) by 3-fold or greater of the upper limit of normal, or 5-fold (in the case of aminotransferases instead of transaminases).
 - Elevated serum total bilirubin (BILI) by 2-fold or greater within a window of time, ~14 days before or after the elevated AST/ALT event.
@@ -96,13 +96,12 @@ head(adlb3)
 
 Splitting the dataset into its AST/ALT subet and BILI subset, then joining these two datasets, the resulting dataset is one that contains each AST/ALT lab record cross referenced with each BILI lab record. Filtering records that occured within a time window, for example 14 days, then selecting on distinct records of `USUBJID` and `ADT` you can identify paired records that may qualify for DILI. 
 
-Using these records, you can row-bind this back into the original ADLB to create a ADHY dataset.
+Using these records, you can row-bind this back into the original ADLB to create a ADHY dataset. Perhaps instead of 
 ```{r}
 adlb4 <- inner_join(
   filter(adlb3, PARAMCD %in% c("AST", "ALT")),
   filter(adlb3, PARAMCD %in% c("BILI")),
-  by = c("USUBJID")
-) %>%
+  by = c("USUBJID")) %>%
   filter(abs(ADY.x - ADY.y) <= 14) %>%
   select(USUBJID, ADT.x) %>%
   mutate(
@@ -118,8 +117,7 @@ Alternatively, you can create a SDTM RELREC domain-style long dataset giving eac
 dili_relrec <- inner_join(
   filter(adlb3, PARAMCD %in% c("AST", "ALT")),
   filter(adlb3, PARAMCD %in% c("BILI")),
-  by = c("USUBJID")
-) %>%
+  by = c("USUBJID")) %>%
   filter(abs(ADY.x - ADY.y) <= 14) %>%
   mutate(LBSEQ = map2(
     .x = LBSEQ.x,
