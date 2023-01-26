@@ -126,7 +126,10 @@ derive_locf_records <- function(dataset,
   assert_data_frame(dataset_expected_obs)
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, analysis_var, extract_vars(order), chr2vars(colnames(dataset_expected_obs)))
+    required_vars = quo_c(
+      by_vars, analysis_var, extract_vars(order),
+      chr2vars(colnames(dataset_expected_obs))
+    )
   )
   assert_data_frame(
     dataset,

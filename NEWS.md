@@ -8,8 +8,9 @@ into a single one (#1479)
 ## Updates of Existing Functions
 
 - Arguments `analysis_var`, `keep_vars` were added to `derive_locf_records()`,   
-`analysis_var` allows to specify analysis variable, `keep_vars` keeps variables that 
-need carrying the last observation forward other than `analysis_var` (e.g., `PARAMN`, `VISITNUM`) (#1636).
+`analysis_var` allows to specify analysis variable, `keep_vars` keeps variables 
+that need carrying the last observation forward other than `analysis_var` 
+(e.g., `PARAMN`, `VISITNUM`) (#1636).
 
 ## Breaking Changes
 
