@@ -1185,14 +1185,14 @@ assert_param_does_not_exist <- function(dataset, param) {
 
 #' Is an Argument a Variable-Value List?
 #'
-#' Checks if the argument is a list of `quosures` where the expressions are
+#' Checks if the argument is a list of expressions where the expressions are
 #' variable-value pairs. The value can be a symbol, a string, a numeric, or
 #' `NA`. More general expression are not allowed.
 #'
 #' @param arg A function argument to be checked
 #' @param required_elements A `character` vector of names that must be present in `arg`
 #' @param accept_expr Should expressions on the right hand side be accepted?
-#' @param accept_var Should unnamed variable names (e.g. `vars(USUBJID)`) on the
+#' @param accept_var Should unnamed variable names (e.g. `exprs(USUBJID)`) on the
 #'   right hand side be accepted?
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown.
