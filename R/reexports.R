@@ -35,6 +35,35 @@ vars <- function(...) {
   exprs(...)
 }
 
+#' Force admiral definition of vars().
+#' This and the definition of vars() above should be removed in the release after admiral 0.10.0
+setHook(packageEvent("dplyr", "attach"), function(...)
+  if (get_admiral_option("force_admiral_vars")) {
+    inform(paste0(
+      "admiral definition of `vars()` is forced.\n",
+      "If you want to use the dplyr definition of `vars()`, call ",
+      "`set_admiral_options(force_admiral_vars = FALSE)` ",
+      "before attaching dplyr.")
+    )
+    assign(
+      "vars",
+      value = function(...) {
+        deprecate_warn(
+          "0.10.0",
+          "vars()",
+          "exprs()",
+          details = paste(
+            "The admiral functions no longer expect list of quosures created by `vars()`",
+            "but list of expressions created by `exprs()`"
+          )
+        )
+        exprs(...)
+      },
+      envir = globalenv()
+    )
+  },
+  "append")
+
 #' @export
 dplyr::desc
 

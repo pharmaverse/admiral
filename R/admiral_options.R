@@ -127,10 +127,15 @@ get_admiral_option <- function(option) {
 #'     PARAM = "Measurable Disease at Baseline"
 #'   )
 #' )
-set_admiral_options <- function(subject_keys) {
+set_admiral_options <- function(subject_keys, force_admiral_vars) {
   if (!missing(subject_keys)) {
     assert_vars(subject_keys)
     admiral_environment$admiral_options$subject_keys <- subject_keys
+  }
+
+  if (!missing(force_admiral_vars)) {
+    assert_logical_scalar(force_admiral_vars)
+    admiral_environment$admiral_options$force_admiral_vars <- force_admiral_vars
   }
 
   # Add future input to function formals above
