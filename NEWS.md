@@ -4,9 +4,9 @@
 
 ## Updates of Existing Functions
 
-- Argument `keep_vars` was added to `derive_locf_records()`, which keeps 
-variables that need carrying the last observation forward other than `AVAL`
-(e.g., `PARAMN`, `VISITNUM`) (#1636).
+- Arguments `analysis_var`, `keep_vars` were added to `derive_locf_records()`,   
+`analysis_var` allows to specify analysis variable, `keep_vars` keeps variables that 
+need carrying the last observation forward other than `analysis_var` (e.g., `PARAMN`, `VISITNUM`) (#1636).
 
 ## Breaking Changes
 
