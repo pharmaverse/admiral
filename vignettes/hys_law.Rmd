@@ -73,7 +73,8 @@ adlb2 <- call_derivation(
       condition = 2 <= AVAL / ANRHI & PARAMCD %in% c("BILI")
     )
   )
-)
+) %>% 
+  filter(PARAMCD %in% c("AST", "ALT", "BILI"))
 head(adlb2)
 ```
 
@@ -82,15 +83,16 @@ Filter down the instances that you may want to include in your DILI analysis usi
 ```{r}
 adlb3 <- adlb2 %>%
   filter(is.na(DTYPE)) %>%
-  filter(AST02FL == "Y" | AST03FL == "Y" | AST04FL == "Y" | BILI02FL == "Y") %>%
+  filter(AST02FL == "Y" | AST03FL == "Y" | AST04FL == "Y" | BILI02FL == "Y")%>%
   select(USUBJID, LBSEQ, PARAMCD, ADY, ADT, starts_with(c("AST", "BILI"))) %>%
   pivot_longer(.,
     starts_with(c("AST", "BILI")),
     names_to = "DILICRIT",
     values_to = "POTDILI"
   ) %>%
-  filter(!is.na(POTDILI)) %>%
-  arrange(ADY)
+  #filter(!is.na(POTDILI)) %>%
+  arrange(ADY) %>%
+  mutate(dummy = 1)
 head(adlb3)
 ```
 
@@ -98,17 +100,26 @@ Splitting the dataset into its AST/ALT subet and BILI subset, then joining these
 
 Using these records, you can row-bind this back into the original ADLB to create a ADHY dataset. Perhaps instead of 
 ```{r}
-adlb4 <- inner_join(
+# ASTALT <- adlb3 %>% 
+#   filter(PARAMCD %in% c("AST", "ALT"))
+# 
+# BILI <- adlb3 %>% 
+#   filter(PARAMCD %in% "BILI")
+# 
+adlb4 <- full_join(
   filter(adlb3, PARAMCD %in% c("AST", "ALT")),
   filter(adlb3, PARAMCD %in% c("BILI")),
-  by = c("USUBJID")) %>%
-  filter(abs(ADY.x - ADY.y) <= 14) %>%
-  select(USUBJID, ADT.x) %>%
+  by=c("USUBJID", "dummy")) %>%
+  filter(POTDILI.x == "Y" & POTDILI.y == "Y") %>% 
   mutate(
-    AVAL = 1,
-    PARAMCD = "AST3BIL2"
+    PARAMCD = "AST3BIL2",
+    AVAL = if_else(abs(ADY.x - ADY.y) <= 14 ,
+                  1,
+                  0, 
+                  missing = 0)
   ) %>%
-  rename(ADT = ADT.x) %>%
+  select(USUBJID, ADT.x, PARAMCD, AVAL) %>%
+  rename(ADT = ADT.x) %>% 
   distinct()
 ```
 
