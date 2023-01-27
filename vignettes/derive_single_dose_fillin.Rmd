@@ -33,7 +33,9 @@ All available trial treatments are included, allowing multiple different
 last dose variables to be created in ad_adae.R if required.
 
 **Note**: `ADSl` is prerequisite.
+
 ## Required packages.
+
 ```{r message=FALSE}
 library(admiral)
 library(admiral.test) # Contains example datasets from the CDISC pilot project.
@@ -85,7 +87,8 @@ ex_mod <- ex %>%
   derive_vars_dtm(
     dtc = EXENDTC,
     new_vars_prefix = "EXEN",
-    # Maximum imputed treatment end date must not be not greater than date of death or after the datacut date
+    # Maximum imputed treatment end date must not be not greater than
+    # date of death or after the datacut date.
     max_dates = vars(DTHDTM, DCUTDTM),
     date_imputation = "last",
     time_imputation = "last",
@@ -93,7 +96,8 @@ ex_mod <- ex %>%
   ) %>%
   derive_vars_dtm_to_dt(vars(EXENDTM)) %>%
   # Populate missing values with compatible data types.
-  # For missing treatment end dates and missing treatment end datetimes use datacut date as treatment end date if no death date exists.
+  # For missing treatment end dates and missing treatment end datetimes
+  # use datacut date as treatment end date if no death date exists.
   # Otherwise use death date as treatment end date.
   mutate(
     EXENDT = if_else(is.na(EXENDT) & is.na(DTHDT), DCUTDT, EXENDT),
