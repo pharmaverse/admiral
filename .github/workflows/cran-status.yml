@@ -13,7 +13,7 @@ on:
 jobs:
   cran-status:
     name: Check & Report
-    uses: pharmaverse/admiralci/.github/workflows/cran-status.yml@fix-cran-status-duplicates #TODO: reset to pharmaverse/admiralci/.github/workflows/cran-status.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/cran-status.yml@fix/cran_status_issues_duplicates #TODO: reset to pharmaverse/admiralci/.github/workflows/cran-status.yml@main
     with:
       # Whom should the issue be assigned to if errors are encountered
       # in the CRAN status checks?
