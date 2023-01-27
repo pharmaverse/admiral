@@ -128,7 +128,7 @@ Alternatively, you can create a SDTM RELREC domain-style long dataset giving eac
 dili_relrec <- inner_join(
   filter(adlb3, PARAMCD %in% c("AST", "ALT")),
   filter(adlb3, PARAMCD %in% c("BILI")),
-  by = c("USUBJID")) %>%
+  by = c("USUBJID", "dummy")) %>%
   filter(abs(ADY.x - ADY.y) <= 14) %>%
   mutate(LBSEQ = map2(
     .x = LBSEQ.x,
@@ -139,6 +139,7 @@ dili_relrec <- inner_join(
   mutate(DILIPAIR = paste("LB-LB-", LBSEQ.x, "-", LBSEQ.y, sep = "")) %>%
   ungroup() %>%
   select(USUBJID, LBSEQ, DILIPAIR) %>%
-  unnest(LBSEQ)
+  unnest(LBSEQ) %>% 
+  distinct()
 head(dili_relrec)
 ```
