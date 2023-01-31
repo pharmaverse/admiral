@@ -302,12 +302,16 @@ impute_dtc_dtm <- function(dtc,
   }
 
   # Handle min_dates and max_dates argument ----
-  restrict_imputed_dtc_dtm(
+  imputed_dtc <- restrict_imputed_dtc_dtm(
     dtc,
     imputed_dtc = imputed_dtc,
     min_dates = min_dates,
     max_dates = max_dates
   )
+  # if(highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)){
+  #   imputed_dtc <- if_else(stringr::str_starts(imputed_dtc, "(0000|9999)"), NA_character_, imputed_dtc)
+  # }
+  return(imputed_dtc)
 }
 
 #' Create a `dtm_level` object
@@ -544,6 +548,14 @@ restrict_imputed_dtc_dtm <- function(dtc,
         missing = imputed_dtc
       )
     }
+    # pmax_obj <- min_dates %>%
+    #   lapply(., function(x) strftime(x, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")) %>%
+    #   unlist() %>%
+    #   max(., na.rm = TRUE)
+    #
+    # imputed_dtc <- if_else(stringr::str_starts(imputed_dtc, "(0000|9999)"),
+    #                        pmax(imputed_dtc, pmax_obj),
+    #                        imputed_dtc)
   }
   if (!is.null(max_dates)) {
     # for each maximum date within the range ensure that the imputed date is not
@@ -562,6 +574,14 @@ restrict_imputed_dtc_dtm <- function(dtc,
         missing = imputed_dtc
       )
     }
+    # pmin_obj <- max_dates %>%
+    #   lapply(., function(x) strftime(x, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")) %>%
+    #   unlist() %>%
+    #   min(., na.rm = TRUE)
+    #
+    # imputed_dtc <- if_else(stringr::str_starts(imputed_dtc, "(0000|9999)"),
+    #                        pmin(imputed_dtc, pmin_obj),
+    #                        imputed_dtc)
   }
   imputed_dtc
 }
@@ -1370,7 +1390,7 @@ derive_vars_dt <- function(dataset,
 
   # derive DTF
   if (flag_imputation == "date" ||
-    flag_imputation == "auto" && highest_imputation != "n") {
+      flag_imputation == "auto" && highest_imputation != "n") {
     # add --DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
@@ -1553,7 +1573,7 @@ derive_vars_dtm <- function(dataset,
   )
 
   if (flag_imputation %in% c("both", "date") ||
-    flag_imputation == "auto" && dtm_level(highest_imputation) > dtm_level("h")) {
+      flag_imputation == "auto" && dtm_level(highest_imputation) > dtm_level("h")) {
     # add --DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
@@ -1570,7 +1590,7 @@ derive_vars_dtm <- function(dataset,
   }
 
   if (flag_imputation %in% c("both", "time") ||
-    flag_imputation == "auto" && highest_imputation != "n") {
+      flag_imputation == "auto" && highest_imputation != "n") {
     # add --TMF variable
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)
