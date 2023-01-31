@@ -317,7 +317,6 @@ adpc <- bind_rows(adpc, ex_exp) %>%
       is.na(ARRLT) ~ AXRLT,
       TRUE ~ ARRLT
     ),
-
     # Derive Reference Dose Date
     PCRFTDTM = case_when(
       EVID == 1 ~ ADTM,
