@@ -20,6 +20,8 @@ to make the default behavior consistent. (#87)
 
 ## Documentation
   - New section in programming strategy regarding comments (#71)
+  - Removed requirement to add `@author` tags to code scripts from programming 
+  strategy, as we will only be tracking authors in the DESCRIPTION file. (#206)
 
 # admiraldev 0.2.0
 

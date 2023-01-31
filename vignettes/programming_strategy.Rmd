@@ -325,10 +325,9 @@ This rule is applicable only if both functions are part of `{admiral}`.
 Every function that is exported from the package must have an accompanying header 
 that should be formatted according to the [roxygen2](https://roxygen2.r-lib.org/) convention. 
 
-In addition to the roxygen2 parameters, `@author` and `@keywords` are also used. 
+In addition to the roxygen2 parameters, `@keywords` is also used. 
 
-Author is the owner of the function while the keywords are used to categorize the function. 
-Please see section "Categorization of functions".
+The keywords are used to categorize the function. Please see section "Categorization of functions".
 
 An example is given below:
 
@@ -356,8 +355,6 @@ An example is given below:
 #'   variables e.g. `vars(TRTSDTM, ASTDTM, AENDT)` or `vars(TRTSDT, ASTDTM,
 #'   AENDT, DEATHDY = DTHDT)`. If the source variable does not end in --DT(M), a
 #'   name for the resulting `--DY` variable must be provided.
-#'
-#' @author Teckla Akinyi
 #'
 #' @details The relative day is derived as number of days from the reference
 #'   date to the end date. If it is nonnegative, one is added. I.e., the
@@ -403,7 +400,6 @@ The following fields are mandatory:
 The following attributes should be described: expected data type (e.g. `data.frame`, `logical`, `numeric` etc.), default value (if any), permitted values (if applicable), optionality (i.e. is this a required parameter). 
 If the expected input is a dataset then the required variables should be clearly stated.
 * `@details`: A natural-language description of the derivation used inside the function.
-* `@author`: The person who wrote the function. In case a function is later on updated by another person the name should be appended to the list of authors.
 * `@keyword`: One applicable tag to the function - identical to family.
 * `@family`: One applicable tag to the function - identical to keyword.
 * `@return`: A description of the return value of the function. 
