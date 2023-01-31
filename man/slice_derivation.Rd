@@ -13,7 +13,7 @@ slice_derivation(dataset, derivation, args = NULL, ...)
 
 \item{args}{Arguments of the derivation
 
-A \code{param()} object is expected.}
+A \code{params()} object is expected.}
 
 \item{...}{A \code{derivation_slice()} object is expected
 

@@ -1,3 +1,20 @@
+# admiral 0.10.0
+
+## New Features
+
+- New function `consolidate_metadata()` for consolidating multiple meta datasets
+into a single one (#1479)
+
+## Updates of Existing Functions
+
+## Breaking Changes
+
+- Function `derive_param_tte()` has been updated such that only observations are
+added for subjects who have both an event or censoring and an observation in
+`dataset_adsl` (#1576).
+
+## Documentation
+
 # admiral 0.9.1
 
 - Implement changes to `if_else()` from the release of `dplyr` version 1.1.0, which
