@@ -60,7 +60,7 @@ attr(param_lookup$PCTESTCD, "label") <- "Pharmacokinetic Test Short Name"
 
 # ---- User defined functions ----
 
-# Here are some examples of how you can create your own functions that
+# Here is an example of how you can create your own function that
 # operates on vectors, which can be used in `mutate`.
 format_avalcat1n <- function(param, aval) {
   case_when(
