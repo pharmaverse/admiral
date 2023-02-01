@@ -113,7 +113,7 @@ ex <- convert_blanks_to_na(admiral_ex)
 
 # Load PC
 
-pc <- convert_blanks_to_na(admiral_pc) 
+pc <- convert_blanks_to_na(admiral_pc)
 
 # Load VS for baseline height and weight
 
@@ -678,7 +678,7 @@ adpc <- adpc %>%
   mutate(
     RFLTU = "h",
     RRLTU = "h",
-    # Derive PARAMCD    
+    # Derive PARAMCD
     PARAMCD = coalesce(PCTESTCD, "DOSE"),
     ALLOQ = PCLLOQ,
     # Derive AVAL
