@@ -13,6 +13,8 @@ into a single one (#1479)
 added for subjects who have both an event or censoring and an observation in
 `dataset_adsl` (#1576).
 
+- Function `derive_var_disposition_status()` has been deprecated, please use `derive_var_merged_cat()` instead (#1681).
+
 ## Documentation
 
 # admiral 0.9.0

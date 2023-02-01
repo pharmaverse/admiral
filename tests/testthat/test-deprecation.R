@@ -315,3 +315,19 @@ test_that("deprecation Test 22: An error is thrown if `create_query_data()`
     class = "lifecycle_error_deprecated"
   )
 })
+
+## Test 23: A warning is thrown if `derive_var_disposition_status()` is called ----
+test_that("deprecation Test 23: derive_var_disposition_status() A warning is thrown if
+          `derive_var_disposition_status()` is called", {
+            expect_warning(
+              admiral.test::admiral_dm %>%
+              derive_var_disposition_status(
+              dataset_ds = admiral.test::admiral_ds,
+              new_var = EOSSTT,
+              status_var = DSDECOD,
+              filter_ds = DSCAT == "DISPOSITION EVENT") %>%
+              select(STUDYID, USUBJID, EOSSTT)
+            ,
+            class = "lifecycle_warning_deprecated")
+
+          })
