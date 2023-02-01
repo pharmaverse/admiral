@@ -301,17 +301,34 @@ impute_dtc_dtm <- function(dtc,
       )
   }
 
+  # if(!(highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates))){
+  # # Handle min_dates and max_dates argument ----
+  # restricted <- restrict_imputed_dtc_dtm(
+  #   dtc,
+  #   imputed_dtc = imputed_dtc,
+  #   min_dates = min_dates,
+  #   max_dates = max_dates
+  #   )
+  # return(restricted)
+  # }
+  #
+  # if(highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)){
+  #   warn("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.")
+  # }
   # Handle min_dates and max_dates argument ----
-  imputed_dtc <- restrict_imputed_dtc_dtm(
+  restricted <- restrict_imputed_dtc_dtm(
     dtc,
     imputed_dtc = imputed_dtc,
     min_dates = min_dates,
     max_dates = max_dates
-  )
-  # if(highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)){
-  #   imputed_dtc <- if_else(stringr::str_starts(imputed_dtc, "(0000|9999)"), NA_character_, imputed_dtc)
-  # }
-  return(imputed_dtc)
+    )
+  if(highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)){
+   warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.")
+   # restricted <- if_else(stringr::str_starts(restricted, "(0000|9999)"),
+   #                       NA_character_,
+   #                       restricted)
+  }
+  return(restricted)
 }
 
 #' Create a `dtm_level` object
@@ -519,6 +536,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
                                      min_dates,
                                      max_dates) {
   if (!is.null(min_dates) | !is.null(max_dates)) {
+    suppressWarnings({
     # determine range of possible dates
     min_dtc <-
       impute_dtc_dtm(
@@ -534,6 +552,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
         date_imputation = "last",
         time_imputation = "last"
       )
+    })
   }
   if (!is.null(min_dates)) {
     # for each minimum date within the range ensure that the imputed date is not
@@ -548,14 +567,9 @@ restrict_imputed_dtc_dtm <- function(dtc,
         missing = imputed_dtc
       )
     }
-    # pmax_obj <- min_dates %>%
-    #   lapply(., function(x) strftime(x, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")) %>%
-    #   unlist() %>%
-    #   max(., na.rm = TRUE)
-    #
-    # imputed_dtc <- if_else(stringr::str_starts(imputed_dtc, "(0000|9999)"),
-    #                        pmax(imputed_dtc, pmax_obj),
-    #                        imputed_dtc)
+    imputed_dtc <- if_else(stringr::str_starts(imputed_dtc, "(0000|9999)"),
+                          NA_character_,
+                          imputed_dtc)
   }
   if (!is.null(max_dates)) {
     # for each maximum date within the range ensure that the imputed date is not
@@ -574,14 +588,9 @@ restrict_imputed_dtc_dtm <- function(dtc,
         missing = imputed_dtc
       )
     }
-    # pmin_obj <- max_dates %>%
-    #   lapply(., function(x) strftime(x, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")) %>%
-    #   unlist() %>%
-    #   min(., na.rm = TRUE)
-    #
-    # imputed_dtc <- if_else(stringr::str_starts(imputed_dtc, "(0000|9999)"),
-    #                        pmin(imputed_dtc, pmin_obj),
-    #                        imputed_dtc)
+    imputed_dtc <- if_else(stringr::str_starts(imputed_dtc, "(0000|9999)"),
+                           NA_character_,
+                           imputed_dtc)
   }
   imputed_dtc
 }
@@ -988,7 +997,6 @@ convert_dtc_to_dt <- function(dtc,
     max_dates = max_dates,
     preserve = preserve
   )
-  imputed_dtc <- if_else(imputed_dtc %in% c("0000-01-01"), NA_character_, imputed_dtc)
   ymd(imputed_dtc)
 }
 
@@ -1035,7 +1043,6 @@ convert_dtc_to_dtm <- function(dtc,
       max_dates = max_dates,
       preserve = preserve
     ) %>%
-    if_else(. %in% c("0000-01-01T00:00:00"), NA_character_, .) %>%
     ymd_hms()
 }
 
@@ -1133,7 +1140,7 @@ compute_dtf <- function(dtc, dt) {
 
   case_when(
     (!is_na & n_chr >= 10 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
-    n_chr < 4 | is.na(dtc) ~ "Y",
+    n_chr < 4 ~ "Y",
     n_chr == 4 ~ "M",
     n_chr == 7 ~ "D",
     n_chr == 9 ~ "M" # dates like "2019---07"
