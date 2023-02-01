@@ -29,16 +29,16 @@ core team will assign you to the issue.
 strategy](programming_strategy.html), and then make the required code updates.
 1. Before making a pull request, check the [Pull Request Review Guidance](pr_review_guidance.html) & the following checklist of common things developers miss:
     a. Is all your code formatted according to the [tidyverse](https://style.tidyverse.org/) style guide?
-    a. Did you create/add appropriate [unit tests](unit_test_guidance.html#writing-unit-tests-in-admiral-)?
-    a. If you removed/replaced any function and/or function parameters, did you fully follow the [deprecation guidance](programming_strategy.html#deprecation-1)?
-    a. Did you update the [documentation](programming_strategy.html#function-header-documentation-)? If so, remember to run `devtools::document()` and include the updated `NAMESPACE` and `.Rd` files in `man/` 
+    a. Did you create/add appropriate [unit tests](unit_test_guidance.html#writing-unit-tests-in-admiral)?
+    a. If you removed/replaced any function and/or function parameters, did you fully follow the [deprecation guidance](programming_strategy.html#deprecation)?
+    a. Did you update the [documentation](programming_strategy.html#function-header-documentation)? If so, remember to run `devtools::document()` and include the updated `NAMESPACE` and `.Rd` files in `man/` 
     a. Does your code update have any impact on the [ADaM template](admiral.html#starting-a-script-1) R scripts stored in `inst/templates`?
     a. Does your code update have any impact on the vignettes stored in vignettes?
     a. Did you update the Changelog `NEWS.md`?
     a. Did you build `{admiral}` site `pkgdown::build_site()` and check that all affected examples are displayed correctly and that all new functions occur on the "[Reference](../reference/index.html)" page?
 1. Once happy with all the updates, make a [pull request](git_usage.html#pull-request) to merge to the development branch `devel` and link the issue so that it closes after successful merging.
 1. Check that there are no merge conflicts. If there are any, fix them before requesting review. See [solving merge conflicts](git_usage.html#solving-merge-conflicts-in-the-terminal-on-rstudio) guidance.
-1. Check the results of the automated `R-CMD check` and `lintr` checks and if any issues consult this [guide](pr_review_guidance.html#common-r-cmd-check-issues-1).
+1. Check the results of the automated `R-CMD check` and `lintr` checks and if any issues consult this [guide](pr_review_guidance.html#common-r-cmd-check-issues).
 1. Assign a reviewer from the `{admiral}` core development team – this could be
 anyone you discussed the issue with previously via Slack or GitHub. If unsure,
 add a comment that the pull request is ready for review and add the
