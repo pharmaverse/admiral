@@ -3,8 +3,9 @@
 # Label: Pharmacokinetics Concentrations Analysis Dataset
 #
 # Description: Based on simulated data, create ADPC analysis dataset
+#   The dataset format is also suitable for Non-compartmental analysis (ADNCA)
 #
-# Input: pc, ex,  adsl
+# Input: pc, ex, vs, adsl
 library(admiral)
 library(dplyr)
 library(lubridate)
@@ -37,12 +38,9 @@ adsl <- admiral_adsl
 
 ex <- convert_blanks_to_na(admiral_ex)
 
-# Load PC and fix format issue for PCDTC
+# Load PC
 
-pc <- convert_blanks_to_na(admiral_pc) %>%
-  rename(PCDTM = PCDTC) %>%
-  mutate(PCDTC = as.character.Date(PCDTM, format = "%Y-%m-%dT%H:%M:%S")) %>%
-  select(-PCDTM)
+pc <- convert_blanks_to_na(admiral_pc)
 
 # Load VS for baseline height and weight
 
@@ -54,9 +52,6 @@ param_lookup <- tibble::tribble(
   "XAN", "XAN", "Pharmacokinetic concentration of Xanomeline", 1,
   "DOSE", "DOSE", "Xanomeline Patch Dose", 2,
 )
-
-
-attr(param_lookup$PCTESTCD, "label") <- "Pharmacokinetic Test Short Name"
 
 # ---- User defined functions ----
 
@@ -70,7 +65,6 @@ format_avalcat1n <- function(param, aval) {
   )
 }
 
-
 # ---- Derivations ----
 
 # Get list of ADSL vars required for derivations
@@ -83,7 +77,8 @@ adpc <- pc %>%
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-  # Calculate ADTM, ADT, ADY
+  # Derive analysis date/time
+  # Impute missing time to 00:00:00
   derive_vars_dtm(
     new_vars_prefix = "A",
     dtc = PCDTC,
@@ -116,6 +111,7 @@ ex <- ex %>%
   filter(EXDOSE > 0) %>%
   # Add time and set missing end date to start date
   # Impute missing time to 00:00:00
+  # Note all times are missing for dosing records in this example data
   # Derive Analysis Start and End Dates
   derive_vars_dtm(
     new_vars_prefix = "AST",
@@ -169,6 +165,8 @@ ex_exp <- ex %>%
     )
   ) %>%
   # Derive AVISIT based on nominal relative time
+  # Derive AVISITN to nominal time in whole days using integer division
+  # Define AVISIT based on nominal day
   mutate(
     AVISITN = NFRLT %/% 24 + 1,
     AVISIT = paste("Day", AVISITN),
@@ -196,14 +194,16 @@ adpc <- adpc %>%
     by_vars = vars(STUDYID, USUBJID, DRUG)
   ) %>%
   filter(!is.na(FANLDTM)) %>%
-  # Derive AVISIT from nominal relative time
+  # Derive AVISIT based on nominal relative time
+  # Derive AVISITN to nominal time in whole days using integer division
+  # Define AVISIT based on nominal day
   mutate(
     AVISITN = NFRLT %/% 24 + 1,
     AVISIT = paste("Day", AVISITN),
   )
 
 
-# ---- Find last dose  ----
+# ---- Find previous dose  ----
 # Use derive_vars_joined for consistency with other variables
 # This is equivalent to derive_vars_last_dose in this case
 
@@ -345,7 +345,11 @@ adpc <- adpc %>%
     )
   )
 
-# Derive Analysis Variables AVAL, ATPT, ATPTREF and BASETYPE
+# ---- Derive Analysis Variables ----
+# Derive ATPTN, ATPT, ATPTREF, ABLFL and BASETYPE
+# Derive planned dose DOSEP, actual dose DOSEA and units
+# Derive PARAMCD and relative time units
+# Derive AVAL, AVALC and AVALCAT1
 
 adpc <- adpc %>%
   mutate(
@@ -383,11 +387,14 @@ adpc <- adpc %>%
     ),
     DOSEU = "mg",
   ) %>%
+  # Derive relative time units
   mutate(
     RFLTU = "h",
     RRLTU = "h",
+    # Derive PARAMCD
     PARAMCD = coalesce(PCTESTCD, "DOSE"),
     ALLOQ = PCLLOQ,
+    # Derive AVAL
     AVAL = case_when(
       EVID == 1 ~ EXDOSE,
       PCSTRESC == "<BLQ" & NFRLT == 0 ~ 0,
@@ -440,7 +447,7 @@ adpc <- bind_rows(adpc, dtype) %>%
     ANL02FL = if_else(is.na(DTYPE), "Y", NA_character_),
   )
 
-# Derive BASE
+# ---- Derive BASE and Calculate Change from Baseline ----
 
 adpc <- adpc %>%
   derive_var_base(
@@ -449,8 +456,6 @@ adpc <- adpc %>%
     new_var = BASE,
     filter = ABLFL == "Y"
   )
-
-# ---- Calculate Change from Baseline ----
 
 adpc <- derive_var_chg(adpc)
 
