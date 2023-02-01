@@ -12,6 +12,8 @@ added for subjects who have both an event or censoring and an observation in
 
 ## Documentation
 
+- New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
+
 # admiral 0.9.0
 
 ## New Features
