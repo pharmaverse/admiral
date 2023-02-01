@@ -238,6 +238,47 @@ test_that("impute_dtc_dtm Test 9: max_dates parameter works", {
   )
 })
 
+## Test 10: min_dates length mismatch provides error ----
+test_that("impute_dtc_dtm Test 10: min_dates length mismatch provides error", {
+  expect_error(
+    impute_dtc_dtm(
+      c("2020-12", NA_character_),
+      min_dates = list(
+        c(ymd_hms("2020-12-06T12:12:12")),
+        c(ymd_hms("2020-11-11T11:11:11"))
+      ),
+      highest_imputation = "Y"
+    ),
+    "Length of `min_dates` do not match length of dates to be imputed."
+  )
+})
+
+## Test 11: max_dates length mismatch provides error ----
+test_that("impute_dtc_dtm Test 11: max_dates length mismatch provides error", {
+  expect_error(
+    impute_dtc_dtm(
+      c("2020-12", NA_character_),
+      max_dates = list(
+        c(ymd_hms("2020-12-06T12:12:12")),
+        c(ymd_hms("2020-11-11T11:11:11"))
+      ),
+      highest_imputation = "Y"
+    ),
+    "Length of `max_dates` do not match length of dates to be imputed."
+  )
+})
+
+## Test 12: Warning if null min/max_dates when highest_imputation = Y ----
+test_that("impute_dtc_dtm Test 12: Warning if null min/max_dates when highest_imputation = Y", {
+  expect_warning(
+    impute_dtc_dtm(
+      c("2020-12", NA_character_),
+      highest_imputation = "Y"
+    ),
+    "If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." #nolint
+  )
+})
+
 # impute_dtc_dt ----
 input <- c(
   "2019-07-18",
@@ -246,8 +287,8 @@ input <- c(
   "2019---07"
 )
 
-## Test 10: default: no date imputation ----
-test_that("impute_dtc_dt Test 10: default: no date imputation", {
+## Test 13: default: no date imputation ----
+test_that("impute_dtc_dt Test 13: default: no date imputation", {
   expected_output <- c(
     "2019-07-18",
     NA_character_,
@@ -257,8 +298,8 @@ test_that("impute_dtc_dt Test 10: default: no date imputation", {
   expect_equal(impute_dtc_dt(dtc = input), expected_output)
 })
 
-## Test 11: impute month and day to first ----
-test_that("impute_dtc_dt Test 11: impute month and day to first", {
+## Test 14: impute month and day to first ----
+test_that("impute_dtc_dt Test 14: impute month and day to first", {
   expected_output <- c(
     "2019-07-18",
     "2019-02-01",
@@ -285,8 +326,8 @@ test_that("impute_dtc_dt Test 11: impute month and day to first", {
   )
 })
 
-## Test 12: impute day to last ----
-test_that("impute_dtc_dt Test 12: impute day to last", {
+## Test 15: impute day to last ----
+test_that("impute_dtc_dt Test 15: impute day to last", {
   expected_output <- c(
     "2019-07-18",
     "2019-02-28",
@@ -304,8 +345,8 @@ test_that("impute_dtc_dt Test 12: impute day to last", {
   )
 })
 
-## Test 13: impute month and day to last and preserve = TRUE ----
-test_that("impute_dtc_dt Test 13: impute month and day to last and preserve = TRUE", {
+## Test 16: impute month and day to last and preserve = TRUE ----
+test_that("impute_dtc_dt Test 16: impute month and day to last and preserve = TRUE", {
   expected_output <- c(
     "2019-07-18",
     "2019-02-28",
@@ -324,8 +365,8 @@ test_that("impute_dtc_dt Test 13: impute month and day to last and preserve = TR
 })
 
 
-## Test 14: impute month and day to mid ----
-test_that("impute_dtc_dt Test 14: impute month and day to mid", {
+## Test 17: impute month and day to mid ----
+test_that("impute_dtc_dt Test 17: impute month and day to mid", {
   expected_output <- c(
     "2019-07-18",
     "2019-02-15",
@@ -342,8 +383,8 @@ test_that("impute_dtc_dt Test 14: impute month and day to mid", {
   )
 })
 
-## Test 15: min_dates parameter works ----
-test_that("impute_dtc_dt Test 15: min_dates parameter works", {
+## Test 18: min_dates parameter works ----
+test_that("impute_dtc_dt Test 18: min_dates parameter works", {
   expect_equal(
     impute_dtc_dt(
       c("2020-12", "2020-11", NA_character_),
@@ -366,8 +407,8 @@ test_that("impute_dtc_dt Test 15: min_dates parameter works", {
   )
 })
 
-## Test 16: max_dates parameter works ----
-test_that("impute_dtc_dt Test 16: max_dates parameter works", {
+## Test 19: max_dates parameter works ----
+test_that("impute_dtc_dt Test 19: max_dates parameter works", {
   expect_equal(
     impute_dtc_dt(c("2020-12", "2020-11", NA_character_),
       max_dates = list(
@@ -382,8 +423,8 @@ test_that("impute_dtc_dt Test 16: max_dates parameter works", {
 })
 
 # convert_dtc_to_dtm ----
-## Test 17: Convert a complete -- DTC into a date time object ----
-test_that("convert_dtc_to_dtm Test 17: Convert a complete -- DTC into a date time object", {
+## Test 20: Convert a complete -- DTC into a date time object ----
+test_that("convert_dtc_to_dtm Test 20: Convert a complete -- DTC into a date time object", {
   expect_equal(
     convert_dtc_to_dtm("2019-07-18T15:25:52"),
     ymd_hms("2019-07-18T15:25:52")
@@ -396,8 +437,8 @@ inputdtc <- c(
   "2019-07-18"
 )
 
-## Test 18: Convert a complete -- DTC into a date object ----
-test_that("convert_dtc_to_dt Test 18: Convert a complete -- DTC into a date object", {
+## Test 21: Convert a complete -- DTC into a date object ----
+test_that("convert_dtc_to_dt Test 21: Convert a complete -- DTC into a date object", {
   expected_output <- c(
     as.Date("2019-07-18"),
     as.Date("2019-07-18")
@@ -409,24 +450,24 @@ test_that("convert_dtc_to_dt Test 18: Convert a complete -- DTC into a date obje
 })
 
 # convert_date_to_dtm
-## Test 19: Convert a complete -- DTC into a date time object ----
-test_that("convert_date_to_dtm Test 19: Convert a complete -- DTC into a date time object", {
+## Test 22: Convert a complete -- DTC into a date time object ----
+test_that("convert_dtc_to_dt Test 22: Convert a complete -- DTC into a date time object", {
   expect_equal(
     convert_date_to_dtm("2019-07-18T15:25:52"),
     ymd_hms("2019-07-18T15:25:52")
   )
 })
 
-## Test 20: Impute incomplete -- DTC into a date time object ----
-test_that("convert_date_to_dtm Test 20: Impute incomplete -- DTC into a date time object", {
+## Test 23: Impute incomplete -- DTC into a date time object ----
+test_that("convert_dtc_to_dt Test 23: Impute incomplete -- DTC into a date time object", {
   expect_equal(
     convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59"),
     ymd_hms("2019-07-18T23:59:59")
   )
 })
 
-## Test 21: Convert -- DT into a date time object ----
-test_that("convert_date_to_dtm Test 21: Convert -- DT into a date time object", {
+## Test 24: Convert -- DT into a date time object ----
+test_that("convert_dtc_to_dt Test 24: Convert -- DT into a date time object", {
   expect_equal(
     convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59"),
     ymd_hms("2019-07-18T23:59:59")
@@ -434,7 +475,8 @@ test_that("convert_date_to_dtm Test 21: Convert -- DT into a date time object", 
 })
 
 ##  Test 22: Keep -- DTM as the original date time object ----
-test_that("convert_date_to_dtm Test 22: Keep -- DTM as the original date time object", {
+## Test 25: Keep -- DTM as the original date time object ----
+test_that("convert_dtc_to_dt Test 25: Keep -- DTM as the original date time object", {
   expect_equal(
     convert_date_to_dtm(ymd_hms("2019-07-18T15:25:52"), time_imputation = "23:59:59"),
     ymd_hms("2019-07-18T15:25:52")
@@ -456,8 +498,8 @@ inputdt <- c(
   as.Date("2019-01-01")
 )
 
-## Test 23: compute DTF ----
-test_that("compute_dtf Test 23: compute DTF", {
+## Test 26: compute DTF ----
+test_that("compute_dtf Test 26: compute DTF", {
   expected_output <- c(
     NA_character_,
     "D",
@@ -474,8 +516,8 @@ test_that("compute_dtf Test 23: compute DTF", {
 })
 
 # compute_tmf ----
-## Test 24: compute TMF ----
-test_that("compute_tmf Test 24: compute TMF", {
+## Test 27: compute TMF ----
+test_that("compute_tmf Test 27: compute TMF", {
   input_dtc <- c(
     "2019-07-18T15:25:52",
     "2019-07-18T15:25",
@@ -525,8 +567,8 @@ test_that("compute_tmf Test 24: compute TMF", {
   )
 })
 
-## Test 25: throws ERROR when ignore_seconds_flag  = T and seconds are present ----
-test_that("compute_tmf Test 25: throws ERROR when ignore_seconds_flag  = T and seconds are present", { # nolint
+## Test 28: throws ERROR when ignore_seconds_flag  = T and seconds are present ----
+test_that("compute_tmf Test 28: throws ERROR when ignore_seconds_flag  = T and seconds are present", { # nolint
   expect_error(
     compute_tmf(
       dtc = c("2020-11-11T11:11:11", "2020-11-11T11:11"),
@@ -539,8 +581,8 @@ test_that("compute_tmf Test 25: throws ERROR when ignore_seconds_flag  = T and s
   )
 })
 
-## Test 26: ignore_seconds_flag  = TRUE ----
-test_that("compute_tmf Test 26: ignore_seconds_flag  = TRUE", {
+## Test 29: ignore_seconds_flag  = TRUE ----
+test_that("compute_tmf Test 29: ignore_seconds_flag  = TRUE", {
   expect_equal(
     compute_tmf(
       dtc = c("2020-11-11T11:11", "2020-11-11T11"),
@@ -564,8 +606,8 @@ date <- tibble::tribble(
   "2019---07"
 )
 
-## Test 27: default behavior ----
-test_that("derive_vars_dt Test 27: default behavior", {
+## Test 30: default behavior ----
+test_that("derive_vars_dt Test 30: default behavior", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDT,
     "2019-07-18T15:25:40", as.Date("2019-07-18"),
@@ -588,8 +630,8 @@ test_that("derive_vars_dt Test 27: default behavior", {
   )
 })
 
-## Test 28: no date imputation, add DTF ----
-test_that("derive_vars_dt Test 28: no date imputation, add DTF", {
+## Test 31: no date imputation, add DTF ----
+test_that("derive_vars_dt Test 31: no date imputation, add DTF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDT,                ~ASTDTF,
     "2019-07-18T15:25:40", as.Date("2019-07-18"), NA_character_,
@@ -613,8 +655,8 @@ test_that("derive_vars_dt Test 28: no date imputation, add DTF", {
   )
 })
 
-## Test 29: date imputed to first, auto DTF ----
-test_that("derive_vars_dt Test 29: date imputed to first, auto DTF", {
+## Test 32: date imputed to first, auto DTF ----
+test_that("derive_vars_dt Test 32: date imputed to first, auto DTF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDT,                ~ASTDTF,
     "2019-07-18T15:25:40", as.Date("2019-07-18"), NA_character_,
@@ -639,8 +681,8 @@ test_that("derive_vars_dt Test 29: date imputed to first, auto DTF", {
   )
 })
 
-## Test 30: date imputed to last, no DTF ----
-test_that("derive_vars_dt Test 30: date imputed to last, no DTF", {
+## Test 33: date imputed to last, no DTF ----
+test_that("derive_vars_dt Test 33: date imputed to last, no DTF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~AENDT,
     "2019-07-18T15:25:40", as.Date("2019-07-18"),
@@ -679,8 +721,8 @@ input <- tibble::tribble(
   "2019---07"
 )
 
-## Test 31: default behavior ----
-test_that("derive_vars_dtm Test 31: default behavior", {
+## Test 34: default behavior ----
+test_that("derive_vars_dtm Test 34: default behavior", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
@@ -705,8 +747,8 @@ test_that("derive_vars_dtm Test 31: default behavior", {
   )
 })
 
-## Test 32: date imputed to first, auto DTM/TMF ----
-test_that("derive_vars_dtm Test 32: date imputed to first, auto DTF/TMF", {
+## Test 35: date imputed to first, auto DTF/TMF ----
+test_that("derive_vars_dtm Test 35: date imputed to first, auto DTF/TMF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTDTF,       ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
@@ -733,8 +775,8 @@ test_that("derive_vars_dtm Test 32: date imputed to first, auto DTF/TMF", {
   )
 })
 
-## Test 33: date and time imputed to last, no DTF/TMF ----
-test_that("derive_vars_dtm Test 33: date and time imputed to last, no DTF/TMF", {
+## Test 36: date and time imputed to last, no DTF/TMF ----
+test_that("derive_vars_dtm Test 36: date and time imputed to last, no DTF/TMF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~AENDTM,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"),
@@ -763,8 +805,8 @@ test_that("derive_vars_dtm Test 33: date and time imputed to last, no DTF/TMF", 
   )
 })
 
-## Test 34: date and time imputed to last, DTF only ----
-test_that("derive_vars_dtm Test 34: date and time imputed to last, DTF only", {
+## Test 37: date and time imputed to last, DTF only ----
+test_that("derive_vars_dtm Test 37: date and time imputed to last, DTF only", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~AENDTM,                        ~AENDTF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
@@ -793,8 +835,8 @@ test_that("derive_vars_dtm Test 34: date and time imputed to last, DTF only", {
   )
 })
 
-## Test 35: date imputed to MID, time to first, TMF only ----
-test_that("derive_vars_dtm Test 35: date imputed to MID, time to first, TMF only", {
+## Test 38: date imputed to MID, time to first, TMF only ----
+test_that("derive_vars_dtm Test 38: date imputed to MID, time to first, TMF only", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
@@ -823,8 +865,8 @@ test_that("derive_vars_dtm Test 35: date imputed to MID, time to first, TMF only
   )
 })
 
-## Test 36: No re-derivation is done if --DTF variable already exists ----
-test_that("derive_vars_dtm Test 36: No re-derivation is done if --DTF variable already exists", {
+## Test 39: No re-derivation is done if --DTF variable already exists ----
+test_that("derive_vars_dtm Test 39: No re-derivation is done if --DTF variable already exists", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTDTF,       ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
@@ -855,8 +897,8 @@ test_that("derive_vars_dtm Test 36: No re-derivation is done if --DTF variable a
   )
 })
 
-## Test 37: max_dates parameter works as expected ----
-test_that("derive_vars_dtm Test 37: max_dates parameter works as expected", {
+## Test 40: max_dates parameter works as expected ----
+test_that("derive_vars_dtm Test 40: max_dates parameter works as expected", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,    ~ASTDTM,                        ~ASTDTF, ~ASTTMF,
     "2019-02",   ymd_hms("2019-02-10T00:00:00"), "D",     "H",
