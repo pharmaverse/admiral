@@ -39,6 +39,7 @@ globalVariables(c(
   "ONTRTFL",
   "PARAMCD",
   "RANDDT",
+  "SOURCE",
   "STUDYID",
   "TRTDURD",
   "TRTEDT",

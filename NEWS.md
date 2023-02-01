@@ -2,6 +2,9 @@
 
 ## New Features
 
+- New function `consolidate_metadata()` for consolidating multiple meta datasets
+into a single one (#1479)
+
 ## Updates of Existing Functions
 
 -   The function `create_single_dose_dataset()` adds support for
@@ -18,7 +21,15 @@
     hours, such as "BID", "TID", and "QID". Previously these values of
     `EXDOSFRQ` may result in duplicate records where the day values are
     incremented but the time values are not (#1643)
-    
+
+## Breaking Changes
+
+- Function `derive_param_tte()` has been updated such that only observations are
+added for subjects who have both an event or censoring and an observation in
+`dataset_adsl` (#1576).
+
+## Documentation
+
 # admiral 0.9.0
 
 ## New Features
