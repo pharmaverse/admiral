@@ -35,8 +35,5 @@ Helpers for working with Quosures:
 \code{\link{quo_not_missing}()},
 \code{\link{replace_values_by_names}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{quo}
 \keyword{quo}

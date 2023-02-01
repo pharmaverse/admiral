@@ -22,8 +22,5 @@ Helpers for working with Quosures:
 \code{\link{quo_not_missing}()},
 \code{\link{replace_symbol_in_quo}()}
 }
-\author{
-Thomas Neitmann
-}
 \concept{quo}
 \keyword{quo}

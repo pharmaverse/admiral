@@ -32,8 +32,5 @@ Developer Utility Functions:
 \code{\link{filter_if}()},
 \code{\link{valid_time_units}()}
 }
-\author{
-Thomas Neitmann
-}
 \concept{dev_utility}
 \keyword{dev_utility}

@@ -57,8 +57,5 @@ try(
   )
 )
 }
-\author{
-Stefan Bundfuss
-}
 \concept{utils_help}
 \keyword{utils_help}

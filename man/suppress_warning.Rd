@@ -28,11 +28,5 @@ Function that provide users with custom warnings
 \code{\link{warn_if_invalid_dtc}()},
 \code{\link{warn_if_vars_exist}()}
 }
-\author{
-\itemize{
-\item Thomas Neitmann
-\item Stefan Bundfuss
-}
-}
 \concept{warnings}
 \keyword{warnings}

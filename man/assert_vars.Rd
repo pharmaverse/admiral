@@ -73,8 +73,5 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_unit}()},
 \code{\link{assert_varval_list}()}
 }
-\author{
-Samia Kabi
-}
 \concept{assertion}
 \keyword{assertion}
