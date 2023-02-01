@@ -4,7 +4,6 @@
 #'
 #' @return An object of class `quosures`
 #'
-#' @author Thomas Neitmann
 #'
 #' @keywords quo
 #' @family quo
@@ -23,7 +22,6 @@ quo_c <- function(...) {
 #'
 #' @return TRUE or error.
 #'
-#' @author Thomas Neitmann, Ondrej Slama
 #'
 #' @keywords quo
 #' @family quo
@@ -46,7 +44,6 @@ quo_not_missing <- function(x) {
 #'
 #' @param quosures A list of quosures
 #'
-#' @author Thomas Neitmann
 #'
 #' @keywords quo
 #' @family quo
@@ -77,7 +74,6 @@ replace_values_by_names <- function(quosures) {
 #'
 #' @param replace Replacing symbol
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The quosure where every occurence of the symbol `target` is replaced
 #'   by `replace`
@@ -132,7 +128,6 @@ replace_symbol_in_quo <- function(quosure,
 #'
 #'   *Permitted Values*: A character scalar
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The list of quosures where for each element the suffix (`suffix`) is
 #'   added to every symbol specified for `vars`

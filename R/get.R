@@ -76,7 +76,6 @@ get_duplicates <- function(x) {
 #'
 #' @param quosures A list of quosures
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords get
 #' @family get

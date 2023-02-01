@@ -8,7 +8,6 @@
 #'
 #' @return A `logical` vector
 #'
-#' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
 #' @family dev_utility
@@ -24,7 +23,6 @@
 #'
 #' @return `character` vector
 #'
-#' @author Ondrej Slama
 #'
 #' @keywords dev_utility
 #' @family dev_utility
@@ -38,7 +36,6 @@ convert_dtm_to_dtc <- function(dtm) {
 #'
 #' @param expr An expression created inside a function using `substitute()`
 #'
-#' @author Thomas Neitmann, Ondrej Slama
 #'
 #' @return `character` vector
 #'
@@ -69,7 +66,6 @@ arg_name <- function(expr) { # nolint
 #'
 #' @return A list of `quosures`
 #'
-#' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
 #' @family dev_utility
@@ -172,7 +168,6 @@ contains_vars <- function(arg) {
 #'
 #' @return A character vector
 #'
-#' @author Thomas Neitmann
 #'
 #' @export
 #'
@@ -200,7 +195,6 @@ vars2chr <- function(quosures) {
 #' @return A `data.frame` containing all rows in `dataset` matching `filter` or
 #' just `dataset` if `filter` is `NULL`
 #'
-#' @author Thomas Neitmann
 #'
 #' @export
 #'

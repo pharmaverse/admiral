@@ -7,7 +7,6 @@
 #'
 #' @return No return value, called for side effects
 #'
-#' @author Thomas Neitmann
 #'
 #' @keywords warnings
 #' @family warnings
@@ -46,7 +45,6 @@ warn_if_vars_exist <- function(dataset, vars) {
 #'
 #' @return No return value, called for side effects
 #'
-#' @author Samia Kabi
 #'
 #' @keywords warnings
 #' @family warnings
@@ -139,7 +137,6 @@ warn_if_incomplete_dtc <- function(dtc, n) {
 #'
 #' @param i the index id to compare the 2 lists
 #'
-#' @author Samia Kabi
 #'
 #' @return a `warning` if the 2 lists have different names or length
 #'
@@ -189,10 +186,6 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #' @param expr Expression to be executed
 #'
 #' @param regexpr Regular expression matching warnings to suppress
-#'
-#' @author
-#' - Thomas Neitmann
-#' - Stefan Bundfuss
 #'
 #' @return Return value of the expression
 #'

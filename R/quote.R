@@ -7,7 +7,6 @@
 #'   the elements are not quoted.
 #' @param conjunction Character to be used in the message, defaults to `"and"`.
 #'
-#' @author Thomas Neitmann, Stefan Bundfuss
 #'
 #' @return A `character` vector
 #'
@@ -39,7 +38,6 @@ enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
 #'
 #' @param x A `character` vector
 #'
-#' @author Thomas Neitmann
 #'
 #' @return A `character` vector
 #'
@@ -55,7 +53,6 @@ backquote <- function(x) {
 #'
 #' @param x A `character` vector
 #'
-#' @author Thomas Neitmann
 #'
 #' @return A `character` vector
 #'
@@ -77,7 +74,6 @@ squote <- function(x) {
 #' @return If the input is `NULL`, the text `"NULL"` is returned. Otherwise, the
 #'   input in double quotes is returned.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords quote
 #' @family quote
