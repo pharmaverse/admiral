@@ -129,7 +129,6 @@ library(lubridate)
 library(dplyr)
 library(admiral.test)
 library(DT)
-#library(admiral)
 
 data(admiral_vs)
 ```
