@@ -1,9 +1,9 @@
 ---
-title: "Creating a PK NCA ADaM"
+title: "Creating a PK NCA ADaM (ADPC/ADNCA)"
 output: 
   rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Creating a PK NCA ADaM}
+  %\VignetteIndexEntry{Creating a PK NCA ADaM (ADPC/ADNCA)}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -23,8 +23,8 @@ library(admiraldev)
 # Introduction
 
 This article describes creating a Pharmacokinetics (PK)
-Non-compartmental analysis (NCA) ADaM using the CDISC Implementation
-Guide
+Non-compartmental analysis (NCA) ADaM (ADNCA/ADPC) using the CDISC
+Implementation Guide
 (<https://www.cdisc.org/standards/foundational/adam/adamig-non-compartmental-analysis-input-data-v1-0>).
 This example presented uses underlying `EX` and `PC` domains where the
 `EX` and `PC` domains represent data as collected and the `ADPC` ADaM is
@@ -68,8 +68,7 @@ unless otherwise specified.*
 -   [Combine `PC` and `EX` Records and Derive Relative Time
     Variables](#relative)
 
--   [Derive Analysis Variables `AVAL`, `ATPT`, `ATPTREF` and
-    `BASETYPE`](#analysis)
+-   [Derive Analysis Variables](#analysis)
 
 -   [Create Duplicated Records for Analysis](#copy)
 
@@ -112,12 +111,9 @@ data("admiral_vs")
 adsl <- admiral_adsl
 ex <- convert_blanks_to_na(admiral_ex)
 
-# Load PC and fix format issue for PCDTC
+# Load PC
 
-pc <- convert_blanks_to_na(admiral_pc) %>%
-  rename(PCDTM = PCDTC) %>%
-  mutate(PCDTC = as.character.Date(PCDTM, format = "%Y-%m-%dT%H:%M:%S")) %>%
-  select(-PCDTM)
+pc <- convert_blanks_to_na(admiral_pc) 
 
 # Load VS for baseline height and weight
 
@@ -164,7 +160,8 @@ adpc <- pc %>%
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-  # Calculate ADTM, ADT, ADY
+  # Derive analysis date/time
+  # Impute missing time to 00:00:00
   derive_vars_dtm(
     new_vars_prefix = "A",
     dtc = PCDTC,
@@ -216,6 +213,7 @@ ex <- ex %>%
   filter(EXDOSE > 0) %>%
   # Add time and set missing end date to start date
   # Impute missing time to 00:00:00
+  # Note all times are missing for dosing records in this example data
   # Derive Analysis Start and End Dates
   derive_vars_dtm(
     new_vars_prefix = "AST",
@@ -298,6 +296,8 @@ ex_exp <- ex %>%
     )
   ) %>%
   # Derive AVISIT based on nominal relative time
+  # Derive AVISITN to nominal time in whole days using integer division
+  # Define AVISIT based on nominal day
   mutate(
     AVISITN = NFRLT %/% 24 + 1,
     AVISIT = paste("Day", AVISITN),
@@ -341,7 +341,9 @@ adpc <- adpc %>%
     by_vars = vars(STUDYID, USUBJID, DRUG)
   ) %>%
   filter(!is.na(FANLDTM)) %>%
-  # Derive AVISIT from nominal relative time
+  # Derive AVISIT based on nominal relative time
+  # Derive AVISITN to nominal time in whole days using integer division
+  # Define AVISIT based on nominal day
   mutate(
     AVISITN = NFRLT %/% 24 + 1,
     AVISIT = paste("Day", AVISITN),
@@ -600,7 +602,7 @@ dataset_vignette(
 )
 ```
 
-## Derive Analysis Variables `AVAL`, `ATPT`, `ATPTREF` and `BASETYPE` {#analysis}
+## Derive Analysis Variables {#analysis}
 
 Using `dplyr::mutate` we derive a number of analysis variables including
 analysis value (`AVAL`), analysis time point (`ATPT`) analysis timepoint
@@ -630,6 +632,11 @@ addition we add the units for the dose variables and the relative time
 variables.
 
 ```{r eval=TRUE, echo=TRUE}
+# ---- Derive Analysis Variables ----
+# Derive ATPTN, ATPT, ATPTREF, ABLFL and BASETYPE
+# Derive planned dose DOSEP, actual dose DOSEA and units
+# Derive PARAMCD and relative time units
+# Derive AVAL, AVALC and AVALCAT1
 
 adpc <- adpc %>%
   mutate(
@@ -667,11 +674,14 @@ adpc <- adpc %>%
     ),
     DOSEU = "mg",
   ) %>%
+  # Derive relative time units
   mutate(
     RFLTU = "h",
     RRLTU = "h",
+    # Derive PARAMCD    
     PARAMCD = coalesce(PCTESTCD, "DOSE"),
     ALLOQ = PCLLOQ,
+    # Derive AVAL
     AVAL = case_when(
       EVID == 1 ~ EXDOSE,
       PCSTRESC == "<BLQ" & NFRLT == 0 ~ 0,
@@ -795,6 +805,8 @@ Finally we derive `PARAM` and `PARAMN` from a lookup table.
 
 ```{r eval=TRUE, echo=TRUE}
 
+# ---- Derive BASE and Calculate Change from Baseline ----
+
 adpc <- adpc %>%
   # Derive BASE
   derive_var_base(
@@ -803,8 +815,6 @@ adpc <- adpc %>%
     new_var = BASE,
     filter = ABLFL == "Y"
   )
-
-# ---- Calculate Change from Baseline ----
 
 adpc <- derive_var_chg(adpc)
 
@@ -914,5 +924,5 @@ example](https://examples.pharmaverse.org/data/adsl/).
 # Example Scripts {#example}
 
 | ADaM | Sample Code                                                                                             |
-|------------|------------------------------------------------------------|
+|------------------|------------------------------------------------------|
 | ADPC | [ad_adpc.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adpc.R){target="_blank"} |
