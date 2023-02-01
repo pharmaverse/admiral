@@ -215,7 +215,7 @@ impute_dtc_dtm(
   min_dates = list(
     ymd("2019-01-14", NA),
     ymd("2019-02-25", "2020-01-01")
-    )
+  )
 )
 
 # Impute year to last
@@ -227,7 +227,7 @@ impute_dtc_dtm(
   max_dates = list(
     ymd("2019-01-14", NA),
     ymd("2019-02-25", "2020-01-01")
-    )
+  )
 )
 ```
 
