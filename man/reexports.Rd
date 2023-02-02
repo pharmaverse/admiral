@@ -17,6 +17,6 @@ below to see their documentation.
 
   \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
 
-  \item{rlang}{\code{\link[rlang]{exprs}}}
+  \item{rlang}{\code{\link[rlang:defusing-advanced]{exprs}}}
 }}
 
