@@ -389,7 +389,7 @@ adpc <- adpc %>%
   ) %>%
   # Derive relative time units
   mutate(
-    RFLTU = "h",
+    FRLTU = "h",
     RRLTU = "h",
     # Derive PARAMCD
     PARAMCD = coalesce(PCTESTCD, "DOSE"),
