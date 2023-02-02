@@ -171,13 +171,11 @@
     },
     "cli": {
       "Package": "cli",
-      "Version": "3.3.0",
+      "Version": "3.4.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "23abf173c2b783dcc43379ab9bba00ee",
-      "Requirements": [
-        "glue"
-      ]
+      "Hash": "0d297d01734d2bcea40197bd4971a764",
+      "Requirements": []
     },
     "clipr": {
       "Package": "clipr",
@@ -1005,10 +1003,10 @@
     },
     "roxygen2": {
       "Package": "roxygen2",
-      "Version": "7.2.3",
+      "Version": "7.2.1",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "7b153c746193b143c14baa072bae4e27",
+      "Repository": "CRAN",
+      "Hash": "da1f278262e563c835345872f2fef537",
       "Requirements": [
         "R6",
         "brew",
@@ -1016,6 +1014,7 @@
         "commonmark",
         "cpp11",
         "desc",
+        "digest",
         "knitr",
         "pkgload",
         "purrr",
