@@ -301,20 +301,6 @@ impute_dtc_dtm <- function(dtc,
       )
   }
 
-  # if(!(highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates))){
-  # # Handle min_dates and max_dates argument ----
-  # restricted <- restrict_imputed_dtc_dtm(
-  #   dtc,
-  #   imputed_dtc = imputed_dtc,
-  #   min_dates = min_dates,
-  #   max_dates = max_dates
-  #   )
-  # return(restricted)
-  # }
-  #
-  # if(highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)){
-  #   warn("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.")
-  # }
   # Handle min_dates and max_dates argument ----
   restricted <- restrict_imputed_dtc_dtm(
     dtc,
@@ -322,12 +308,11 @@ impute_dtc_dtm <- function(dtc,
     min_dates = min_dates,
     max_dates = max_dates
     )
-  if(highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)){
-    warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.")
-   # restricted <- if_else(stringr::str_starts(restricted, "(0000|9999)"),
-   #                       NA_character_,
-   #                       restricted)
+
+  if (highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)) {
+    warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") #nolint
   }
+
   return(restricted)
 }
 
@@ -555,7 +540,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
     })
   }
   if (!is.null(min_dates)) {
-    if(length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1){
+    if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
       abort("Length of `min_dates` do not match length of dates to be imputed.")
     }
     # for each minimum date within the range ensure that the imputed date is not
@@ -570,12 +555,14 @@ restrict_imputed_dtc_dtm <- function(dtc,
         missing = imputed_dtc
       )
     }
-    imputed_dtc <- if_else(stringr::str_starts(imputed_dtc, "(0000|9999)"),
-                          NA_character_,
-                          imputed_dtc)
+    imputed_dtc <- if_else(
+      stringr::str_starts(imputed_dtc, "(0000|9999)"),
+      NA_character_,
+      imputed_dtc
+      )
   }
   if (!is.null(max_dates)) {
-    if(length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1){
+    if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
       abort("Length of `max_dates` do not match length of dates to be imputed.")
     }
     # for each maximum date within the range ensure that the imputed date is not
@@ -594,9 +581,11 @@ restrict_imputed_dtc_dtm <- function(dtc,
         missing = imputed_dtc
       )
     }
-    imputed_dtc <- if_else(stringr::str_starts(imputed_dtc, "(0000|9999)"),
-                           NA_character_,
-                           imputed_dtc)
+    imputed_dtc <- if_else(
+      stringr::str_starts(imputed_dtc, "(0000|9999)"),
+      NA_character_,
+      imputed_dtc
+    )
   }
   imputed_dtc
 }
