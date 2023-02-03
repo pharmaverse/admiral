@@ -13,11 +13,11 @@ on:
 jobs:
   cran-status:
     name: Check & Report
-    uses: pharmaverse/admiralci/.github/workflows/cran-status.yml@fix/cran_status_issues_duplicates #TODO: reset to pharmaverse/admiralci/.github/workflows/cran-status.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/cran-status.yml@main
     with:
       # Whom should the issue be assigned to if errors are encountered
       # in the CRAN status checks?
-      issue-assignees: "dgrassellyb" #TODO: reset to "bundfussr,esimms999-gsk,thomas-neitmann,bms63,rossfarrugia"
+      issue-assignees: "bundfussr,esimms999-gsk,thomas-neitmann,bms63,rossfarrugia"
       # Create an issue if one or more of the following
       # statuses are reported on the check report.
       statuses: "WARN,ERROR,NOTE"
