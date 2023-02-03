@@ -10,15 +10,8 @@ library(admiral)
 library(dplyr)
 library(lubridate)
 library(stringr)
-library(xportr)
 
 library(admiral.test) # Contains example datasets from the CDISC pilot project or simulated
-
-# Read in prepared spec file for ADPC ----
-adpc_spec <- readxl::read_xlsx("inst/specs/adpc_spec.xlsx", sheet = "Variables") %>%
-  dplyr::rename(type = "Data Type") %>%
-  rlang::set_names(tolower) %>%
-  mutate(format = str_to_lower(format))
 
 # ---- Load source datasets ----
 
@@ -522,14 +515,3 @@ adpc <- adpc %>%
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 saveRDS(adpc, file = file.path(dir, "adpc.rds"), compress = "bzip2")
-
-
-# Add Spec Data and Save Transport File
-
-adpc_xpt <- adpc %>%
-  xportr_type(adpc_spec, "ADPC") %>%
-  xportr_label(adpc_spec, "ADPC") %>%
-  xportr_format(adpc_spec, "ADPC") %>%
-  xportr_order(adpc_spec, "ADPC") %>%
-  xportr_length(adpc_spec, "ADPC") %>%
-  xportr_write(file.path(dir, "adpc.xpt"), label = "PK Concentration Analysis")
