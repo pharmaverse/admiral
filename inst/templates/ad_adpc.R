@@ -10,8 +10,15 @@ library(admiral)
 library(dplyr)
 library(lubridate)
 library(stringr)
+library(xportr)
 
 library(admiral.test) # Contains example datasets from the CDISC pilot project or simulated
+
+# Read in prepared spec file for ADPC ----
+adpc_spec <- readxl::read_xlsx("inst/specs/adpc_spec.xlsx", sheet = "Variables") %>%
+  dplyr::rename(type = "Data Type") %>%
+  rlang::set_names(tolower) %>%
+  mutate(format = str_to_lower(format))
 
 # ---- Load source datasets ----
 
@@ -159,7 +166,7 @@ ex_exp <- ex %>%
     lookup_column = CDISC_VALUE,
     keep_source_vars = vars(
       STUDYID, USUBJID, EVID, EXDOSFRQ, EXDOSFRM,
-      NFRLT, EXDOSE, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
+      NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
       VISIT, VISITNUM, VISITDY,
       TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
     )
@@ -349,7 +356,7 @@ adpc <- adpc %>%
 # Derive ATPTN, ATPT, ATPTREF, ABLFL and BASETYPE
 # Derive planned dose DOSEP, actual dose DOSEA and units
 # Derive PARAMCD and relative time units
-# Derive AVAL, AVALC and AVALCAT1
+# Derive AVAL, AVALU and AVALCAT1
 
 adpc <- adpc %>%
   mutate(
@@ -401,9 +408,9 @@ adpc <- adpc %>%
       PCSTRESC == "<BLQ" & NFRLT > 0 ~ 0.5 * ALLOQ,
       TRUE ~ PCSTRESN
     ),
-    AVALC = case_when(
-      EVID == 1 ~ paste(EXDOSE),
-      TRUE ~ PCSTRESC
+    AVALU = case_when(
+      EVID == 1 ~ paste(EXDOSU),
+      TRUE ~ PCSTRESU
     ),
     AVALCAT1 = if_else(PCSTRESC == "<BLQ", PCSTRESC, prettyNum(signif(AVAL, digits = 3))),
   ) %>%
@@ -473,7 +480,7 @@ adpc <- adpc %>%
   select(
     -DOMAIN, -PCSEQ, -starts_with("min"),
     -starts_with("max"), -starts_with("EX"), -ends_with("next"),
-    -ends_with("prev"), -DRUG, -EVID, -AXRLT, -NXRLT
+    -ends_with("prev"), -DRUG, -EVID, -AXRLT, -NXRLT, -VISITDY
   ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(dataset_add = select(param_lookup, -PCTESTCD), by_vars = vars(PARAMCD))
@@ -515,3 +522,14 @@ adpc <- adpc %>%
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 saveRDS(adpc, file = file.path(dir, "adpc.rds"), compress = "bzip2")
+
+
+# Add Spec Data and Save Transport File
+
+adpc_xpt <- adpc %>%
+  xportr_type(adpc_spec, "ADPC") %>%
+  xportr_label(adpc_spec, "ADPC") %>%
+  xportr_format(adpc_spec, "ADPC") %>%
+  xportr_order(adpc_spec, "ADPC") %>%
+  xportr_length(adpc_spec, "ADPC") %>%
+  xportr_write(file.path(dir, "adpc.xpt"), label = "PK Concentration Analysis")
