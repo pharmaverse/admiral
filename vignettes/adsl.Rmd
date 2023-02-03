@@ -248,14 +248,13 @@ parameter and used to derive `EOSSTT`.
 To derive the End of Study status (`EOSSTT`), a call could be:
 
 ```{r eval=TRUE, echo=FALSE}
-# Setting up the values of the source variable as input for the cat_fun argument in derive_var_merged_cat function 
-format_dsdecod <- function(dsdecod_cat){
+# Setting up the values of the source variable as input for the cat_fun argument in derive_var_merged_cat function
+format_dsdecod <- function(dsdecod_cat) {
   case_when(
-    dsdecod_cat %in% c("SCREEN FAILURE","SCREENING NOT COMPLETED") ~ "NOT STARTED",
+    dsdecod_cat %in% c("SCREEN FAILURE", "SCREENING NOT COMPLETED") ~ "NOT STARTED",
     dsdecod_cat %in% "COMPLETED" ~ "COMPLETED",
     dsdecod_cat != "COMPLETED" | is.na(dsdecod_cat) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
-    
   )
 }
 ```
@@ -265,12 +264,12 @@ format_dsdecod <- function(dsdecod_cat){
 adsl <- adsl %>%
   derive_var_merged_cat(
     dataset_add = ds,
-    by_vars=vars(STUDYID,USUBJID),
+    by_vars = vars(STUDYID, USUBJID),
     order = NULL,
     filter_add = DSCAT == "DISPOSITION EVENT",
-    new_var= EOSSTT,
-    source_var= DSDECOD,
-    cat_fun=format_dsdecod,
+    new_var = EOSSTT,
+    source_var = DSDECOD,
+    cat_fun = format_dsdecod,
     mode = NULL,
     missing_value = NA_character_
   )
@@ -314,12 +313,12 @@ The customized mapping function `format_eosstt()` can now be passed to the main 
 adsl <- adsl %>%
   derive_var_merged_cat(
     dataset_add = ds,
-    by_vars=vars(STUDYID,USUBJID),
+    by_vars = vars(STUDYID, USUBJID),
     order = NULL,
     filter_add = DSCAT == "DISPOSITION EVENT",
-    new_var= EOSSTT,
-    source_var= DSDECOD,
-    cat_fun=format_eosstt,
+    new_var = EOSSTT,
+    source_var = DSDECOD,
+    cat_fun = format_eosstt,
     mode = NULL,
     missing_value = NA_character_
   )

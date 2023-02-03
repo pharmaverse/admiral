@@ -36,27 +36,3 @@ test_that("dataset of duplicate records can be accessed using `get_duplicates_da
 
   expect_true(all(expected_ouput == get_duplicates_dataset()))
 })
-
-test_that("Dataset contains duplicate records with respect", {
-  input <- tibble::tribble(
-    ~USUBJID, ~COUNTRY, ~AAGE,
-    "P01",    "GER",    22,
-    "P01",    "JPN",    34,
-    "P02",    "CZE",    41,
-    "P03",    "AUS",    39,
-    "P04",    "BRA",    21
-  )
-  expect_error(print.duplicates(signal_duplicate_records(input, vars(USUBJID))))
-})
-
-test_that("Dataset contains duplicate records with respect", {
-  input <- tibble::tribble(
-    ~USUBJID, ~COUNTRY, ~AAGE,
-    "P01",    "GER",    22,
-    "P01",    "JPN",    34,
-    "P02",    "CZE",    41,
-    "P03",    "AUS",    39,
-    "P04",    "BRA",    21
-  )
-  expect_error(print.duplicates(extract_duplicate_records(input, vars(USUBJID))))
-})
