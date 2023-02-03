@@ -290,7 +290,7 @@ ex_exp <- ex %>%
     lookup_column = CDISC_VALUE,
     keep_source_vars = vars(
       STUDYID, USUBJID, EVID, EXDOSFRQ, EXDOSFRM,
-      NFRLT, EXDOSE, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
+      NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
       VISIT, VISITNUM, VISITDY,
       TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
     )
@@ -636,7 +636,7 @@ variables.
 # Derive ATPTN, ATPT, ATPTREF, ABLFL and BASETYPE
 # Derive planned dose DOSEP, actual dose DOSEA and units
 # Derive PARAMCD and relative time units
-# Derive AVAL, AVALC and AVALCAT1
+# Derive AVAL, AVALU and AVALCAT1
 
 adpc <- adpc %>%
   mutate(
@@ -688,9 +688,9 @@ adpc <- adpc %>%
       PCSTRESC == "<BLQ" & NFRLT > 0 ~ 0.5 * ALLOQ,
       TRUE ~ PCSTRESN
     ),
-    AVALC = case_when(
-      EVID == 1 ~ paste(EXDOSE),
-      TRUE ~ PCSTRESC
+    AVALU = case_when(
+      EVID == 1 ~ EXDOSU,
+      TRUE ~ PCSTRESU
     ),
     AVALCAT1 = if_else(PCSTRESC == "<BLQ", PCSTRESC, prettyNum(signif(AVAL, digits = 3))),
   ) %>%
@@ -832,7 +832,7 @@ adpc <- adpc %>%
   select(
     -DOMAIN, -PCSEQ, -starts_with("orig"), -starts_with("min"),
     -starts_with("max"), -starts_with("EX"), -ends_with("next"),
-    -ends_with("prev"), -DRUG, -EVID, -AXRLT, -NXRLT
+    -ends_with("prev"), -DRUG, -EVID, -AXRLT, -NXRLT, -VISITDY
   ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(dataset_add = select(param_lookup, -PCTESTCD), by_vars = vars(PARAMCD))
@@ -924,5 +924,5 @@ example](https://examples.pharmaverse.org/data/adsl/).
 # Example Scripts {#example}
 
 | ADaM | Sample Code                                                                                             |
-|------------------|------------------------------------------------------|
+|------|---------------------------------------------------------------------------------------------------------|
 | ADPC | [ad_adpc.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adpc.R){target="_blank"} |
