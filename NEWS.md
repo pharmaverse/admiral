@@ -12,10 +12,17 @@ into a single one (#1479)
 - Function `derive_param_tte()` has been updated such that only observations are
 added for subjects who have both an event or censoring and an observation in
 `dataset_adsl` (#1576).
-
 - Function `derive_var_disposition_status()` has been deprecated, please use `derive_var_merged_cat()` instead (#1681).
+- `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
+`HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
 
 ## Documentation
+
+# admiral 0.9.1
+
+- Implement changes to `if_else()` from the release of `dplyr` version 1.1.0, which
+affects `derive_vars_dtm()` and `and compute_tmf()`. (#1641)
 
 # admiral 0.9.0
 
