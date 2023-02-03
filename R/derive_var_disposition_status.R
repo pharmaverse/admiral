@@ -17,7 +17,6 @@
 #' @export
 #' @family utils_fmt
 #' @keywords utils_fmt
-#' @seealso [derive_var_disposition_status()]
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
@@ -45,6 +44,10 @@ format_eoxxstt_default <- function(status) {
 
 #' Derive a Disposition Status at a Specific Timepoint
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_var_merged_cat()` instead.
 #' Derive a disposition status from the the relevant records in the disposition domain.
 #'
 #' @param dataset Input dataset.
@@ -116,11 +119,10 @@ derive_var_disposition_status <- function(dataset,
                                           format_new_var = format_eoxxstt_default,
                                           filter_ds,
                                           subject_keys = get_admiral_option("subject_keys")) {
-
   ### DEPRECATION
   deprecate_warn("0.10.0",
-                 "derive_var_disposition_status()",
-                 details = "Please use `derive_var_merged_cat()` instead"
+    "derive_var_disposition_status()",
+    details = "Please use `derive_var_merged_cat()` instead"
   )
 
   new_var <- assert_symbol(enquo(new_var))

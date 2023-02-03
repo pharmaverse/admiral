@@ -41,8 +41,6 @@ admiral_dm \%>\%
   select(STUDYID, USUBJID, EOSSTT)
 }
 \seealso{
-\code{\link[=derive_var_disposition_status]{derive_var_disposition_status()}}
-
 Utilities for Formatting Observations: 
 \code{\link{convert_blanks_to_na}()},
 \code{\link{convert_na_to_blanks}()},

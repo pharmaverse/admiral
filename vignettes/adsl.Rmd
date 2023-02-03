@@ -241,19 +241,38 @@ is to be imputed to the first of the month, then set `date_imputation = "FIRST"`
 
 ### Disposition Status (e.g. `EOSSTT`) {#disposition_status}
 
-The function `derive_var_disposition_status()` can be used to derive a disposition status at a specific
+The function `derive_var__merged_cat()` can be used to derive a disposition status at a specific
 timepoint. The relevant disposition variable (`DS.DSDECOD`) is selected by adjusting the filter 
 parameter and used to derive `EOSSTT`.
 
 To derive the End of Study status (`EOSSTT`), a call could be:
 
+```{r eval=TRUE, echo=FALSE}
+# Setting up the values of the source variable as input for the cat_fun argument in derive_var_merged_cat function 
+format_dsdecod <- function(dsdecod_cat){
+  case_when(
+    dsdecod_cat %in% c("SCREEN FAILURE","SCREENING NOT COMPLETED") ~ "NOT STARTED",
+    dsdecod_cat %in% "COMPLETED" ~ "COMPLETED",
+    dsdecod_cat != "COMPLETED" | is.na(dsdecod_cat) ~ "DISCONTINUED",
+    TRUE ~ "ONGOING"
+    
+  )
+}
+```
+
+
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_disposition_status(
-    dataset_ds = ds,
-    new_var = EOSSTT,
-    status_var = DSDECOD,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
+  derive_var_merged_cat(
+    dataset_add = ds,
+    by_vars=vars(STUDYID,USUBJID),
+    order = NULL,
+    filter_add = DSCAT == "DISPOSITION EVENT",
+    new_var= EOSSTT,
+    source_var= DSDECOD,
+    cat_fun=format_dsdecod,
+    mode = NULL,
+    missing_value = NA_character_
   )
 ```
 
@@ -264,15 +283,16 @@ dataset_vignette(adsl, display_vars = vars(USUBJID, EOSDT, EOSSTT))
 
 This call would return the input dataset with the column `EOSSTT` added. 
 
-By default, the function will derive `EOSSTT` as
+The function expects a mapping derivation for the `cat_fun` argument to derive `EOSSTT`.
+The mapping derivation for the call above is
 
 - `"NOT STARTED"` if `DSDECOD` is `"SCREEN FAILURE"` or `"SCREENING NOT COMPLETED"`
 - `"COMPLETED"` if `DSDECOD == "COMPLETED"`
 - `"DISCONTINUED"` if `DSDECOD` is not `"COMPLETED"` or `NA`
 - `"ONGOING"` otherwise
 
-If the default derivation must be changed, the user can create his/her own function and pass it to 
-the `format_new_var` argument of the function (`format_new_var = new_mapping`) to map `DSDECOD` 
+If the derivation must be changed, the user can create his/her own function and pass it to 
+the `cat_fun` argument of the function (`cat_fun = new_mapping`) to map `DSDECOD` 
 to a suitable `EOSSTT` value.
 
 Example function `format_eosstt()`:
@@ -291,14 +311,17 @@ format_eosstt <- function(DSDECOD) {
 The customized mapping function `format_eosstt()` can now be passed to the main function:
 
 ```{r eval=FALSE}
-
 adsl <- adsl %>%
-  derive_var_disposition_status(
-    dataset_ds = ds,
-    new_var = EOSSTT,
-    status_var = DSDECOD,
-    format_new_var = format_eosstt,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
+  derive_var_merged_cat(
+    dataset_add = ds,
+    by_vars=vars(STUDYID,USUBJID),
+    order = NULL,
+    filter_add = DSCAT == "DISPOSITION EVENT",
+    new_var= EOSSTT,
+    source_var= DSDECOD,
+    cat_fun=format_eosstt,
+    mode = NULL,
+    missing_value = NA_character_
   )
 ```
 

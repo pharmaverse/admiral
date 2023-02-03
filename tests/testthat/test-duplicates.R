@@ -47,7 +47,6 @@ test_that("Dataset contains duplicate records with respect", {
     "P04",    "BRA",    21
   )
   expect_error(print.duplicates(signal_duplicate_records(input, vars(USUBJID))))
-
 })
 
 test_that("Dataset contains duplicate records with respect", {
@@ -60,5 +59,4 @@ test_that("Dataset contains duplicate records with respect", {
     "P04",    "BRA",    21
   )
   expect_error(print.duplicates(extract_duplicate_records(input, vars(USUBJID))))
-
 })

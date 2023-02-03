@@ -74,6 +74,9 @@ defined by \code{format_new_var} (e.g. when the default format is used, the func
 "ONGOING" otherwise).
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_var_merged_cat()} instead.
 Derive a disposition status from the the relevant records in the disposition domain.
 }
 \seealso{
