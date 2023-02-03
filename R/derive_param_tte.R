@@ -111,13 +111,15 @@
 #'   observation is selected. If an event is available, the event observation is
 #'   selected. Otherwise the censoring observation is selected.
 #'
-#'   Finally
-#'   1. the variables specified for `start_date` and `start_imputation_flag` are
-#'   joined from the ADSL dataset,
-#'   1. the variables as defined by the `set_values_to` parameter are added,
-#'   1. the `ADT`/`ADTM` variable is set to the maximum of `ADT`/`ADTM` and
-#'   `STARTDT`/`STARTDTM` (depending on the `create_datetime` parameter), and
-#'   1. the new observations are added to the output dataset.
+#'   Finally:
+#'   1. The variables specified for `start_date` and `start_imputation_flag` are
+#'   joined from the ADSL dataset. Only subjects in both datasets are kept,
+#'   i.e., subjects with both an event or censoring and an observation in
+#'   `dataset_adsl`.
+#'   1. The variables as defined by the `set_values_to` parameter are added.
+#'   1. The `ADT`/`ADTM` variable is set to the maximum of `ADT`/`ADTM` and
+#'   `STARTDT`/`STARTDTM` (depending on the `create_datetime` parameter).
+#'   1. The new observations are added to the output dataset.
 #'
 #' @author Stefan Bundfuss
 #'
@@ -136,6 +138,7 @@
 #'
 #' adsl <- admiral_adsl
 #'
+#' # derive overall survival parameter
 #' death <- event_source(
 #'   dataset_name = "adsl",
 #'   filter = DTHFL == "Y",
@@ -170,7 +173,88 @@
 #'   select(-STUDYID) %>%
 #'   filter(row_number() %in% 20:30)
 #'
-#' # derive time to adverse event for each preferred term #
+#' # derive duration of response
+#' # only observations for subjects in dataset_adsl are created
+#' adsl <- tribble(
+#'   ~USUBJID, ~DTHFL, ~DTHDT,            ~RSPDT,
+#'   "01",     "Y",    ymd("2021-06-12"), ymd("2021-03-04"),
+#'   "02",     "N",    NA,                NA,
+#'   "03",     "Y",    ymd("2021-08-21"), NA,
+#'   "04",     "N",    NA,                ymd("2021-04-14")
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' adrs <- tribble(
+#'   ~USUBJID, ~AVALC, ~ADT,              ~ASEQ,
+#'   "01",     "SD",   ymd("2021-01-03"), 1,
+#'   "01",     "PR",   ymd("2021-03-04"), 2,
+#'   "01",     "PD",   ymd("2021-05-05"), 3,
+#'   "02",     "PD",   ymd("2021-02-03"), 1,
+#'   "04",     "SD",   ymd("2021-02-13"), 1,
+#'   "04",     "PR",   ymd("2021-04-14"), 2,
+#'   "04",     "CR",   ymd("2021-05-15"), 3
+#' ) %>%
+#'   mutate(STUDYID = "AB42", PARAMCD = "OVR")
+#'
+#' pd <- event_source(
+#'   dataset_name = "adrs",
+#'   filter = AVALC == "PD",
+#'   date = ADT,
+#'   set_values_to = vars(
+#'     EVENTDESC = "PD",
+#'     SRCDOM = "ADRS",
+#'     SRCVAR = "ADTM",
+#'     SRCSEQ = ASEQ
+#'   )
+#' )
+#'
+#' death <- event_source(
+#'   dataset_name = "adsl",
+#'   filter = DTHFL == "Y",
+#'   date = DTHDT,
+#'   set_values_to = vars(
+#'     EVENTDESC = "DEATH",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "DTHDT"
+#'   )
+#' )
+#'
+#' lastvisit <- censor_source(
+#'   dataset_name = "adrs",
+#'   date = ADT,
+#'   censor = 1,
+#'   set_values_to = vars(
+#'     EVENTDESC = "LAST TUMOR ASSESSMENT",
+#'     SRCDOM = "ADRS",
+#'     SRCVAR = "ADTM",
+#'     SRCSEQ = ASEQ
+#'   )
+#' )
+#'
+#' first_response <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = RSPDT,
+#'   censor = 1,
+#'   set_values_to = vars(
+#'     EVENTDESC = "FIRST RESPONSE",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "RSPDT"
+#'   )
+#' )
+#'
+#' derive_param_tte(
+#'   dataset_adsl = filter(adsl, !is.na(RSPDT)),
+#'   start_date = RSPDT,
+#'   event_conditions = list(pd, death),
+#'   censor_conditions = list(lastvisit, first_response),
+#'   source_datasets = list(adsl = adsl, adrs = adrs),
+#'   set_values_to = vars(
+#'     PARAMCD = "DURRSP",
+#'     PARAM = "Duration of Response"
+#'   )
+#' )
+#'
+#' # derive time to adverse event for each preferred term
 #' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -350,9 +434,9 @@ derive_param_tte <- function(dataset = NULL,
     order = vars(!!tmp_event),
     mode = "last"
   ) %>%
-    derive_vars_merged(
-      dataset_add = adsl,
-      by_vars = subject_keys
+    inner_join(
+      adsl,
+      by = vars2chr(subject_keys)
     )
   tryCatch(
     new_param <- mutate(new_param, !!!set_values_to),
@@ -389,7 +473,7 @@ derive_param_tte <- function(dataset = NULL,
   }
 
   # add new parameter to input dataset #
-  all_data <- bind_rows(dataset, new_param)
+  bind_rows(dataset, new_param)
 }
 
 #' Select the First or Last Date from Several Sources
