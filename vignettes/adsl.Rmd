@@ -241,13 +241,20 @@ is to be imputed to the first of the month, then set `date_imputation = "FIRST"`
 
 ### Disposition Status (e.g. `EOSSTT`) {#disposition_status}
 
-The function `derive_var__merged_cat()` can be used to derive a disposition status at a specific
+The function `derive_var_merged_cat()` can be used to derive a disposition status at a specific
 timepoint. The relevant disposition variable (`DS.DSDECOD`) is selected by adjusting the filter 
 parameter and used to derive `EOSSTT`.
 
-To derive the End of Study status (`EOSSTT`), a call could be:
+To derive the End of Study status (`EOSSTT`), this function must be provided with the mapping derivation for the `cat_fun` argument. The call below has the following mapping derivation:
 
-```{r eval=TRUE, echo=FALSE}
+- `"NOT STARTED"` if `DSDECOD` is `"SCREEN FAILURE"` or `"SCREENING NOT COMPLETED"`
+- `"COMPLETED"` if `DSDECOD == "COMPLETED"`
+- `"DISCONTINUED"` if `DSDECOD` is not `"COMPLETED"` or `NA`
+- `"ONGOING"` otherwise
+
+a call could be:
+
+```{r eval=TRUE}
 # Setting up the values of the source variable as input for the cat_fun argument in derive_var_merged_cat function
 format_dsdecod <- function(dsdecod_cat) {
   case_when(
@@ -285,7 +292,7 @@ This call would return the input dataset with the column `EOSSTT` added.
 The function expects a mapping derivation for the `cat_fun` argument to derive `EOSSTT`.
 The mapping derivation for the call above is
 
-- `"NOT STARTED"` if `DSDECOD` is `"SCREEN FAILURE"` or `"SCREENING NOT COMPLETED"`
+- `"NOT STARTED"` if `DSDECOD` is `"SCREEN FAILURE"`
 - `"COMPLETED"` if `DSDECOD == "COMPLETED"`
 - `"DISCONTINUED"` if `DSDECOD` is not `"COMPLETED"` or `NA`
 - `"ONGOING"` otherwise

@@ -224,7 +224,7 @@ trt_end_date <- date_source(
 
 # impute AE start and end date to first
 ae_ext <- ae %>%
-  derie_vars_dt(
+  derive_vars_dt(
     dtc = AESTDTC,
     new_vars_prefix = "AEST",
     highest_imputation = "M"
