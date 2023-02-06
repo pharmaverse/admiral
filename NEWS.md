@@ -7,6 +7,21 @@ into a single one (#1479)
 
 ## Updates of Existing Functions
 
+-   The function `create_single_dose_dataset()` adds support for
+    expanding relative nominal time (e.g. NFRLT) used in Pharmacokinetic
+    (PK) analyses. The new parameter `nominal_time` defaults as `NULL`
+    and does not change the normal operation of the function. If a
+    `nominal_time` is specified such as NFRLT (Nominal Relative Time
+    from First Dose) then the nominal time is incremented by the
+    interval specified in `EXDOSFRQ` for example for "QD" records the
+    NFRLT is incremented by 24 hours, e.g. 0, 24, 48...(#1640).
+    
+-   `create_single_dose_dataset()` is also updated for values of
+    `EXDOSFRQ` with units in days but expected values less than 24
+    hours, such as "BID", "TID", and "QID". Previously these values of
+    `EXDOSFRQ` may result in duplicate records where the day values are
+    incremented but the time values are not (#1643)
+
 ## Breaking Changes
 
 - Function `derive_param_tte()` has been updated such that only observations are
@@ -18,6 +33,11 @@ added for subjects who have both an event or censoring and an observation in
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
 
 ## Documentation
+
+# admiral 0.9.1
+
+- Implement changes to `if_else()` from the release of `dplyr` version 1.1.0, which
+affects `derive_vars_dtm()` and `and compute_tmf()`. (#1641)
 
 # admiral 0.9.0
 
