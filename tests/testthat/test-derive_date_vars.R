@@ -933,3 +933,121 @@ input_secs <- tibble::tribble(
   "2019",
   "2019---07"
 )
+
+## Test 41: NA imputation for highest_imputation = Y & max_dates ----
+test_that("derive_vars_dtm Test 41: NA imputation for highest_imputation = Y & max_dates", {
+  actual <- data.frame(
+    AESTDTC = c(NA_character_, NA_character_),
+    TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
+  ) %>%
+    mutate(AESTDTC = as.character(AESTDTC)) %>%
+    derive_vars_dtm(
+      dtc = AESTDTC,
+      new_vars_prefix = "AST",
+      highest_imputation = "Y",
+      date_imputation = "last",
+      time_imputation = "last",
+      flag_imputation = "both",
+      max_dates = vars(TRTSDTM)
+    )
+
+  expected <- data.frame(
+    AESTDTC = c(NA_character_, NA_character_),
+    TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA),
+    ASTDTM  = c(ymd_hms("2022-01-01 23:59:59"), NA),
+    ASTDTF  = c("Y", NA),
+    ASTTMF  = c("H", NA)
+  )
+
+  expect_dfs_equal(actual, expected, keys = c("ASTDTM", "ASTDTF", "ASTTMF"))
+})
+
+## Test 42: NA imputation for highest_imputation = Y & max_dates but date_imputation = first ----
+test_that("derive_vars_dtm Test 42: NA imputation for highest_imputation = Y & max_dates but date_imputation = first", { # nolint
+  expect_error(
+    (data.frame(
+      AESTDTC = c(NA_character_, NA_character_),
+      TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
+    ) %>%
+      mutate(AESTDTC = as.character(AESTDTC)) %>%
+      derive_vars_dtm(
+        dtc = AESTDTC,
+        new_vars_prefix = "AST",
+        highest_imputation = "Y",
+        date_imputation = "first",
+        time_imputation = "first",
+        flag_imputation = "both",
+        max_dates = vars(TRTSDTM)
+      )),
+    "If `highest_impuation` = \"Y\" and `max_dates` is specified, input `date_imputation` = \"last\"" # nolint
+  )
+})
+
+## Test 43: NA imputation for highest_imputation = Y & min_dates ----
+test_that("derive_vars_dtm Test 43: NA imputation for highest_imputation = Y & min_dates", {
+  actual <- data.frame(
+    AESTDTC = c(NA_character_, NA_character_),
+    TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
+  ) %>%
+    mutate(AESTDTC = as.character(AESTDTC)) %>%
+    derive_vars_dtm(
+      dtc = AESTDTC,
+      new_vars_prefix = "AST",
+      highest_imputation = "Y",
+      date_imputation = "first",
+      time_imputation = "first",
+      flag_imputation = "both",
+      min_dates = vars(TRTSDTM)
+    )
+
+  expected <- data.frame(
+    AESTDTC = c(NA_character_, NA_character_),
+    TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA),
+    ASTDTM  = c(ymd_hms("2022-01-01 23:59:59"), NA),
+    ASTDTF  = c("Y", NA),
+    ASTTMF  = c("H", NA)
+  )
+
+  expect_dfs_equal(actual, expected, keys = c("ASTDTM", "ASTDTF", "ASTTMF"))
+})
+
+## Test 44: NA imputation for highest_imputation = Y & min_dates but date_imputation = last ----
+test_that("derive_vars_dtm Test 44: NA imputation for highest_imputation = Y & min_dates but date_imputation = last", { # nolint
+  expect_error(
+    (data.frame(
+      AESTDTC = c(NA_character_, NA_character_),
+      TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
+    ) %>%
+      mutate(AESTDTC = as.character(AESTDTC)) %>%
+      derive_vars_dtm(
+        dtc = AESTDTC,
+        new_vars_prefix = "AST",
+        highest_imputation = "Y",
+        date_imputation = "last",
+        time_imputation = "last",
+        flag_imputation = "both",
+        min_dates = vars(TRTSDTM)
+      )),
+    "If `highest_impuation` = \"Y\" and `min_dates` is specified, input `date_imputation` = \"first\"" # nolint
+  )
+})
+
+## Test 45: NA imputation for highest_imputation = Y but null min/max dates fails ----
+test_that("derive_vars_dtm Test 45: NA imputation for highest_imputation = Y but null min/max dates fails", { # nolint
+  expect_error(
+    (data.frame(
+      AESTDTC = c(NA_character_, NA_character_),
+      TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
+    ) %>%
+      mutate(AESTDTC = as.character(AESTDTC)) %>%
+      derive_vars_dtm(
+        dtc = AESTDTC,
+        new_vars_prefix = "AST",
+        highest_imputation = "Y",
+        date_imputation = "first",
+        time_imputation = "first",
+        flag_imputation = "both"
+      )),
+    "If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
+  )
+})
