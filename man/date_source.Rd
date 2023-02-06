@@ -4,15 +4,7 @@
 \alias{date_source}
 \title{Create a \code{date_source} object}
 \usage{
-date_source(
-  dataset_name,
-  filter = NULL,
-  date,
-  date_imputation = deprecated(),
-  time_imputation = deprecated(),
-  preserve = deprecated(),
-  traceability_vars = NULL
-)
+date_source(dataset_name, filter = NULL, date, traceability_vars = NULL)
 }
 \arguments{
 \item{dataset_name}{The name of the dataset, i.e. a string, used to search for
@@ -22,15 +14,6 @@ the date.}
 
 \item{date}{A variable providing a date. A date or a datetime can be
 specified. An unquoted symbol is expected.}
-
-\item{date_imputation}{\emph{Deprecated}, please use \code{derive_vars_dtm()} to
-convert DTC variables to datetime variables in the dataset.}
-
-\item{time_imputation}{\emph{Deprecated}, please use \code{derive_vars_dtm()} to
-convert DTC variables to datetime variables in the dataset.}
-
-\item{preserve}{\emph{Deprecated}, please use \code{derive_vars_dtm()} to convert DTC
-variables to datetime variables in the dataset.}
 
 \item{traceability_vars}{A named list returned by \code{vars()} defining the
 traceability variables, e.g. \code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, a numeric,
@@ -86,8 +69,6 @@ Source Specifications:
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
 \code{\link{query}()},
-\code{\link{sdg_select}()},
-\code{\link{smq_select}()},
 \code{\link{tte_source}()},
 \code{\link{validate_basket_select}()},
 \code{\link{validate_query}()}

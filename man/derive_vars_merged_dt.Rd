@@ -205,7 +205,15 @@ the additional dataset.
 \item The date and flag variables are merged to the input dataset.
 }
 }
+\seealso{
+Other deprecated: 
+\code{\link{derive_derived_param}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_vars_merged_dtm}()}
+}
 \author{
 Stefan Bundfuss
 }
+\concept{deprecated}
 \keyword{deprecated}

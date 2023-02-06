@@ -97,33 +97,11 @@ derive_param_first_event <- function(dataset,
                                      set_values_to,
                                      check_type = "warning") {
   ### DEPRECATION
-  deprecate_warn("0.9.0",
+  deprecate_stop("0.10.0",
     "derive_param_first_event()",
     details = "Please use `derive_param_extreme_event()` instead with the `order` argument instead of the `date_var` argument"
   )
 
-  filter_source <- enquo(filter_source)
-  date_var <- enquo(date_var)
-  tmp_var <- get_new_tmp_var(dataset = dataset)
-  tmp_var <- enquo(tmp_var)
-
-  derive_param_extreme_event(
-    dataset = dataset,
-    dataset_adsl = dataset_adsl,
-    dataset_source = dataset_source,
-    filter_source = !!filter_source,
-    order = vars(!!date_var),
-    new_var = !!tmp_var,
-    subject_keys = subject_keys,
-    set_values_to = set_values_to,
-    check_type = check_type,
-    mode = "first"
-  ) %>%
-    mutate(
-      AVALC = coalesce(!!tmp_var, AVALC),
-      AVAL = if_else(!!tmp_var == "Y", true = 1, false = 0)
-    ) %>%
-    remove_tmp_vars()
 }
 
 #' Add an Extreme Event Parameter

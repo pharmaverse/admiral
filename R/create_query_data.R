@@ -8,11 +8,6 @@
 #' @param queries List of queries
 #'
 #'   A list of `query()` objects is expected.
-#'
-#' @param meddra_version *Deprecated*, please use `version`
-#'
-#' @param whodd_version *Deprecated*, please use `version`
-#'
 #' @param version Dictionary version
 #'
 #'   The dictionary version used for coding the terms should be specified.
@@ -21,10 +16,6 @@
 #'
 #'   *Permitted Values*: A character string (the expected format is
 #'   company-specific)
-#'
-#' @param get_smq_fun *Deprecated*, please use `get_terms_fun`
-#'
-#' @param get_sdg_fun *Deprecated*, please use `get_terms_fun`
 #'
 #' @param get_terms_fun Function which returns the terms
 #'
@@ -204,36 +195,8 @@
 #'   version = "20.1"
 #' )
 create_query_data <- function(queries,
-                              meddra_version = deprecated(),
-                              whodd_version = deprecated(),
                               version = NULL,
-                              get_smq_fun = deprecated(),
-                              get_sdg_fun = deprecated(),
                               get_terms_fun = NULL) {
-  if (!missing(meddra_version)) {
-    deprecate_stop(
-      "0.9.0",
-      "create_query_data(meddra_version = )", "create_query_data(version = )"
-    )
-  }
-  if (!missing(whodd_version)) {
-    deprecate_stop(
-      "0.9.0",
-      "create_query_data(whodd_version = )", "create_query_data(version = )"
-    )
-  }
-  if (!missing(get_smq_fun)) {
-    deprecate_stop(
-      "0.9.0",
-      "create_query_data(get_smq_fun = )", "create_query_data(get_terms_fun = )"
-    )
-  }
-  if (!missing(get_sdg_fun)) {
-    deprecate_stop(
-      "0.9.0",
-      "create_query_data(get_sdg_fun = )", "create_query_data(get_terms_fun = )"
-    )
-  }
   # check parameters
   assert_character_scalar(version, optional = TRUE)
   assert_function(get_terms_fun,
@@ -964,68 +927,4 @@ format.basket_select <- function(x, ...) {
     dquote(x$type),
     ")"
   )
-}
-
-#' Create an `smq_select` object
-#'
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*, please use `basket_select()` instead.
-#'
-#' @param name Name of the query used to select the definition of the query from
-#'   the company database.
-#'
-#' @param id Identifier of the query used to select the definition of the query
-#'   from the company database.
-#'
-#' @param scope Scope of the query used to select the definition of the query
-#'   from the company database.
-#'
-#'   *Permitted Values*: `"BROAD"`, `"NARROW"`
-#'
-#' @details Exactly one of `name` or `id` must be specified.
-#'
-#' @return An object of class `smq_select`.
-#'
-#' @author Stefan Bundfuss
-#'
-#' @seealso [create_query_data()], [query()]
-#'
-#' @family source_specifications
-#' @keywords source_specifications
-#'
-#' @export
-smq_select <- function(name = NULL,
-                       id = NULL,
-                       scope = NULL) {
-  deprecate_stop("0.9.0", "smq_select()", "basket_select()")
-}
-
-#' Create an `sdg_select` object
-#'
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*, please use `basket_select()` instead.
-#'
-#' @param name Name of the query used to select the definition of the query
-#'   from the company database.
-#'
-#' @param id Identifier of the query used to select the definition of the query
-#'   from the company database.
-#'
-#' @details Exactly one `name` or `id` must be specified.
-#'
-#' @return An object of class `sdg_select`.
-#'
-#' @author Stefan Bundfuss
-#'
-#' @seealso [create_query_data()], [query()]
-#'
-#' @family source_specifications
-#' @keywords source_specifications
-#'
-#' @export
-sdg_select <- function(name = NULL,
-                       id = NULL) {
-  deprecate_stop("0.9.0", "sdg_select()", "basket_select()")
 }

@@ -23,7 +23,21 @@ derive_var_agegr_ema(dataset, age_var, age_unit = NULL, new_var)
 
 These functions are \emph{deprecated}.
 }
+\seealso{
+Other deprecated: 
+\code{\link{derive_derived_param}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()}
+
+Other deprecated: 
+\code{\link{derive_derived_param}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()}
+}
 \author{
 Ondrej Slama
 }
+\concept{deprecated}
 \keyword{deprecated}

@@ -17,6 +17,31 @@ added for subjects who have both an event or censoring and an observation in
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
 
+The following functions has been deprecated from previous {admiral} versions using the next phase of the deprecation process:
+
+  - `derive_derived_param()` 
+  - `derive_param_first_event()` 
+  - `derive_vars_merged_dt()`
+  - `derive_vars_merged_dtm()`
+  - `derive_var_agegr_ema()`
+  - `derive_var_agegr_fda()`
+
+- The following functions, which were deprecated in previous {admiral} versions, have been removed (#1712):
+
+  - `derive_var_ady()`
+  - `derive_var_aendy()`
+  - `derive_var_astdy()`
+  - `derive_var_atirel()`
+  - `derive_vars_suppqual()`
+  - `smq_select()`
+  - `sdg_select()`
+
+The following parameters, which were deprecated in previous {admiral} versions, has been removed (#1712):
+
+  - `meddra_version`, `whodd_version`, `get_smq_fun` and `get_sdg_fun` from the `create_query_data()` function
+  - `date_imputation`, `time_imputation` and `preserve` parameters from `date_source()` function
+  - `filter` parameter from `derive_var_extreme_flag()` and `derive_var_worst_flag()` functions
+
 ## Documentation
 
 # admiral 0.9.1

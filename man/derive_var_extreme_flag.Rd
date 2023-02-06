@@ -10,7 +10,6 @@ derive_var_extreme_flag(
   order,
   new_var,
   mode,
-  filter = deprecated(),
   check_type = "warning"
 )
 }
@@ -43,8 +42,6 @@ Determines of the first or last observation is flagged.
 
 Permitted Values: \code{"first"}, \code{"last"}}
 
-\item{filter}{Deprecated, please use \code{restrict_derivation()} instead (see examples).}
-
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
@@ -54,6 +51,8 @@ by variables and the order.
 Default: \code{"warning"}
 
 Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}}
+
+\item{filter}{Deprecated, please use \code{restrict_derivation()} instead (see examples).}
 }
 \value{
 The input dataset with the new flag variable added

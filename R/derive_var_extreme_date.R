@@ -448,15 +448,6 @@ derive_var_extreme_dt <- function(dataset,
 #' @param date A variable providing a date. A date or a datetime can be
 #'   specified. An unquoted symbol is expected.
 #'
-#' @param date_imputation *Deprecated*, please use `derive_vars_dtm()` to
-#'   convert DTC variables to datetime variables in the dataset.
-#'
-#' @param time_imputation *Deprecated*, please use `derive_vars_dtm()` to
-#'   convert DTC variables to datetime variables in the dataset.
-#'
-#' @param preserve *Deprecated*, please use `derive_vars_dtm()` to convert DTC
-#'   variables to datetime variables in the dataset.
-#'
 #' @param traceability_vars A named list returned by `vars()` defining the
 #'   traceability variables, e.g. `vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
 #'   = "AESTDTC")`. The values must be a symbol, a character string, a numeric,
@@ -500,40 +491,7 @@ derive_var_extreme_dt <- function(dataset,
 date_source <- function(dataset_name,
                         filter = NULL,
                         date,
-                        date_imputation = deprecated(),
-                        time_imputation = deprecated(),
-                        preserve = deprecated(),
                         traceability_vars = NULL) {
-  if (!missing(date_imputation)) {
-    deprecate_stop(
-      "0.8.0",
-      "date_source(date_imputation = )",
-      details = paste0(
-        "Please use `derive_vars_dtm()` to convert DTC variables",
-        " to datetime variables in the dataset."
-      )
-    )
-  }
-  if (!missing(time_imputation)) {
-    deprecate_stop(
-      "0.8.0",
-      "date_source(time_imputation = )",
-      details = paste0(
-        "Please use `derive_vars_dtm()` to convert DTC variables",
-        " to datetime variables in the dataset."
-      )
-    )
-  }
-  if (!missing(preserve)) {
-    deprecate_stop(
-      "0.8.0",
-      "date_source(preserve = )",
-      details = paste0(
-        "Please use `derive_vars_dtm()` to convert DTC variables",
-        " to datetime variables in the dataset."
-      )
-    )
-  }
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),

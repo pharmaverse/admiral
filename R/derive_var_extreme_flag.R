@@ -198,11 +198,7 @@ derive_var_extreme_flag <- function(dataset,
                                     order,
                                     new_var,
                                     mode,
-                                    filter = deprecated(),
                                     check_type = "warning") {
-  if (!missing(filter)) {
-    deprecate_stop("0.7.0", "derive_var_extreme_flag(filter = )", "restrict_derivation(filter = )")
-  }
 
   new_var <- assert_symbol(enquo(new_var))
   assert_vars(by_vars)
@@ -350,11 +346,7 @@ derive_var_worst_flag <- function(dataset,
                                   analysis_var,
                                   worst_high,
                                   worst_low,
-                                  filter = deprecated(),
                                   check_type = "warning") {
-  if (!missing(filter)) {
-    deprecate_stop("0.7.0", "derive_var_worst_flag(filter = )", "restrict_derivation(filter = )")
-  }
 
   # perform argument checks
   new_var <- assert_symbol(enquo(new_var))
