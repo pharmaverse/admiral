@@ -4,8 +4,16 @@
 # admiral comes ready "out of the box", similar to how one might think the pipe operator, `%>%`,
 # comes from `dplyr` but is actually native to `magrittr`.
 
+#' rlang exprs
+#'
+#' See \code{rlang::\link[rlang:exprs]{exprs}} for details.
+#'
+#' @name exprs
+#' @rdname reexport-exprs
+#' @keywords reexport
+#' @importFrom rlang exprs
 #' @export
-rlang::exprs
+NULL
 
 #' Create List of Quosures
 #'
@@ -60,8 +68,25 @@ setHook(
   "append"
 )
 
+#' dplyr desc
+#'
+#' See \code{rlang::\link[dplyr:desc]{desc}} for details.
+#'
+#' @name desc
+#' @rdname reexport-desc
+#' @keywords reexport
+#' @importFrom dplyr desc
 #' @export
-dplyr::desc
+NULL
 
+#' Pipe operator
+#'
+#' See \code{\link[magrittr]{%>%}} for more details.
+#'
+#' @name %>%
+#' @rdname pipe
+#' @keywords reexport
 #' @export
-magrittr::`%>%`
+#' @importFrom magrittr %>%
+#' @usage lhs \%>\% rhs
+NULL
