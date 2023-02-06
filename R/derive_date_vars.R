@@ -198,7 +198,7 @@
 #' impute_dtc_dtm(
 #'   c("2020-12", NA_character_),
 #'   min_dates = list(
-#'     ymd_hms("2020-12-06T12:12:12", "2020-01-01T01:01:01),
+#'     ymd_hms("2020-12-06T12:12:12", "2020-01-01T01:01:01"),
 #'     ymd_hms("2020-11-11T11:11:11", NA)
 #'   ),
 #'   highest_imputation = "Y"
@@ -307,10 +307,10 @@ impute_dtc_dtm <- function(dtc,
     imputed_dtc = imputed_dtc,
     min_dates = min_dates,
     max_dates = max_dates
-    )
+  )
 
   if (highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)) {
-    warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") #nolint
+    warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
   }
 
   return(restricted)
@@ -522,21 +522,21 @@ restrict_imputed_dtc_dtm <- function(dtc,
                                      max_dates) {
   if (!is.null(min_dates) | !is.null(max_dates)) {
     suppressWarnings({
-    # determine range of possible dates
-    min_dtc <-
-      impute_dtc_dtm(
-        dtc,
-        highest_imputation = "Y",
-        date_imputation = "first",
-        time_imputation = "first"
-      )
-    max_dtc <-
-      impute_dtc_dtm(
-        dtc,
-        highest_imputation = "Y",
-        date_imputation = "last",
-        time_imputation = "last"
-      )
+      # determine range of possible dates
+      min_dtc <-
+        impute_dtc_dtm(
+          dtc,
+          highest_imputation = "Y",
+          date_imputation = "first",
+          time_imputation = "first"
+        )
+      max_dtc <-
+        impute_dtc_dtm(
+          dtc,
+          highest_imputation = "Y",
+          date_imputation = "last",
+          time_imputation = "last"
+        )
     })
   }
   if (!is.null(min_dates)) {
@@ -559,7 +559,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
       stringr::str_starts(imputed_dtc, "(0000|9999)"),
       NA_character_,
       imputed_dtc
-      )
+    )
   }
   if (!is.null(max_dates)) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
@@ -1392,7 +1392,7 @@ derive_vars_dt <- function(dataset,
 
   # derive DTF
   if (flag_imputation == "date" ||
-      flag_imputation == "auto" && highest_imputation != "n") {
+    flag_imputation == "auto" && highest_imputation != "n") {
     # add --DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
@@ -1558,24 +1558,60 @@ derive_vars_dtm <- function(dataset,
     values = c("auto", "both", "date", "time", "none"),
     case_sensitive = FALSE
   )
+  if ((highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)) |
+    (highest_imputation == "Y" & length(min_dates) == 0 & length(max_dates) == 0)) {
+    stop("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
+  }
 
   dtm <- paste0(new_vars_prefix, "DTM")
 
   # Issue a warning if --DTM already exists
   warn_if_vars_exist(dataset, dtm)
   mask <- rlang::as_data_mask(dataset)
-  dataset[[dtm]] <- convert_dtc_to_dtm(
-    dtc = eval_tidy(dtc, mask),
-    highest_imputation = highest_imputation,
-    date_imputation = date_imputation,
-    time_imputation = time_imputation,
-    min_dates = lapply(min_dates, eval_tidy, data = mask),
-    max_dates = lapply(max_dates, eval_tidy, data = mask),
-    preserve = preserve
-  )
 
+  if (highest_imputation == "Y" &
+    (is.null(min_dates) | length(min_dates) == 0) &
+    !is.null(max_dates)) {
+    if (date_imputation != "last") {
+      stop("If `highest_impuation` = \"Y\" and `max_dates` is specified, input `date_imputation` = \"last\"") # nolint
+    }
+    dataset[[dtm]] <- convert_dtc_to_dtm(
+      dtc = eval_tidy(dtc, mask),
+      highest_imputation = highest_imputation,
+      date_imputation = date_imputation,
+      time_imputation = time_imputation,
+      min_dates = NULL,
+      max_dates = lapply(max_dates, eval_tidy, data = mask),
+      preserve = preserve
+    )
+  } else if (highest_imputation == "Y" &
+    !is.null(min_dates) &
+    (is.null(max_dates) | length(max_dates))) {
+    if (date_imputation != "first") {
+      stop("If `highest_impuation` = \"Y\" and `min_dates` is specified, input `date_imputation` = \"first\"") # nolint
+    }
+    dataset[[dtm]] <- convert_dtc_to_dtm(
+      dtc = eval_tidy(dtc, mask),
+      highest_imputation = highest_imputation,
+      date_imputation = date_imputation,
+      time_imputation = time_imputation,
+      min_dates = lapply(min_dates, eval_tidy, data = mask),
+      max_dates = NULL,
+      preserve = preserve
+    )
+  } else {
+    dataset[[dtm]] <- convert_dtc_to_dtm(
+      dtc = eval_tidy(dtc, mask),
+      highest_imputation = highest_imputation,
+      date_imputation = date_imputation,
+      time_imputation = time_imputation,
+      min_dates = lapply(min_dates, eval_tidy, data = mask),
+      max_dates = lapply(max_dates, eval_tidy, data = mask),
+      preserve = preserve
+    )
+  }
   if (flag_imputation %in% c("both", "date") ||
-      flag_imputation == "auto" && dtm_level(highest_imputation) > dtm_level("h")) {
+    flag_imputation == "auto" && dtm_level(highest_imputation) > dtm_level("h")) {
     # add --DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
@@ -1592,7 +1628,7 @@ derive_vars_dtm <- function(dataset,
   }
 
   if (flag_imputation %in% c("both", "time") ||
-      flag_imputation == "auto" && highest_imputation != "n") {
+    flag_imputation == "auto" && highest_imputation != "n") {
     # add --TMF variable
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)
