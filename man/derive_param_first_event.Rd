@@ -10,7 +10,7 @@ derive_param_first_event(
   dataset_source,
   filter_source,
   date_var,
-  subject_keys = vars(STUDYID, USUBJID),
+  subject_keys = exprs(STUDYID, USUBJID),
   set_values_to,
   check_type = "warning"
 )
@@ -53,12 +53,12 @@ events.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of symbols created using \code{vars()} is expected.}
+A list of symbols created using \code{exprs()} is expected.}
 
 \item{set_values_to}{Variables to set
 
-A named list returned by \code{vars()} defining the variables to be set for the
-new parameter, e.g. \code{vars(PARAMCD = "PD", PARAM = "Disease Progression")}
+A named list returned by \code{exprs()} defining the variables to be set for the
+new parameter, e.g. \code{exprs(PARAMCD = "PD", PARAM = "Disease Progression")}
 is expected. The values must be symbols, character strings, numeric values,
 or \code{NA}.}
 
@@ -105,6 +105,9 @@ Other deprecated:
 \code{\link{derive_derived_param}()},
 \code{\link{derive_var_aendy}()},
 \code{\link{derive_var_disposition_status}()}
+
+\code{\link{vars}()}
+
 }
 \author{
 Stefan Bundfuss

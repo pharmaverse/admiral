@@ -45,7 +45,7 @@ test_that("derive_var_last_dose_date Test 1: works as expected output_datetime =
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = vars(STUDYID, USUBJID),
+    by_vars = exprs(STUDYID, USUBJID),
     dose_date = EXENDT,
     analysis_date = AESTDT,
     new_var = LDOSEDTM,
@@ -78,7 +78,7 @@ test_that("derive_var_last_dose_date Test 2: works as expected with output_datet
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = vars(STUDYID, USUBJID),
+    by_vars = exprs(STUDYID, USUBJID),
     dose_date = EXENDT,
     analysis_date = AESTDT,
     new_var = LDOSEDTM,
@@ -114,13 +114,13 @@ test_that("derive_var_last_dose_date Test 3: returns traceability vars", {
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = vars(STUDYID, USUBJID),
+    by_vars = exprs(STUDYID, USUBJID),
     dose_date = EXENDT,
     analysis_date = AESTDT,
     new_var = LDOSEDTM,
     single_dose_condition = (EXSTDTC == EXENDTC),
     output_datetime = TRUE,
-    traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
+    traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
   )
 
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))

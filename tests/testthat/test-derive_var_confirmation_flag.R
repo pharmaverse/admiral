@@ -24,10 +24,10 @@ test_that("derive_var_confirmation_flag Test 1: filter without first_cond", {
     derive_var_confirmation_flag(
       data,
       new_var = CONFFL,
-      by_vars = vars(USUBJID),
-      join_vars = vars(AVALC),
+      by_vars = exprs(USUBJID),
+      join_vars = exprs(AVALC),
       join_type = "after",
-      order = vars(AVISITN),
+      order = exprs(AVISITN),
       filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR")
     )
 
@@ -79,12 +79,12 @@ test_that("derive_var_confirmation_flag Test 2: filter with first_cond", {
     derive_var_confirmation_flag(
       data,
       new_var = CONFFL,
-      by_vars = vars(USUBJID),
-      join_vars = vars(AVALC),
+      by_vars = exprs(USUBJID),
+      join_vars = exprs(AVALC),
       join_type = "after",
       first_cond = AVALC == "CR" &
         AVALC.join == "CR",
-      order = vars(AVISITN),
+      order = exprs(AVISITN),
       filter = TRUE
     )
 
@@ -120,12 +120,12 @@ test_that("derive_var_confirmation_flag Test 3: filter with first_cond and summa
     derive_var_confirmation_flag(
       data,
       new_var = CONFFL,
-      by_vars = vars(USUBJID),
-      join_vars = vars(AVALC),
+      by_vars = exprs(USUBJID),
+      join_vars = exprs(AVALC),
       join_type = "after",
       first_cond = AVALC == "PR" &
         AVALC.join %in% c("CR", "PR"),
-      order = vars(AVISITN),
+      order = exprs(AVISITN),
       filter = count_vals(AVALC.join, "SD") <= 1,
       false_value = "N"
     )
@@ -176,11 +176,11 @@ test_that("derive_var_confirmation_flag, Test 4: join_type = 'all'", {
 
   actual <- derive_var_confirmation_flag(
     adae,
-    by_vars = vars(USUBJID),
+    by_vars = exprs(USUBJID),
     new_var = ALCOVFL,
-    join_vars = vars(ACOVFL, ADY),
+    join_vars = exprs(ACOVFL, ADY),
     join_type = "all",
-    order = vars(ADY),
+    order = exprs(ADY),
     filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
   )
 
@@ -220,10 +220,10 @@ test_that("derive_var_confirmation_flag, Test 5: join_type = 'before'", {
 
   actual <- derive_var_confirmation_flag(
     data,
-    by_vars = vars(USUBJID),
-    order = vars(ASEQ),
+    by_vars = exprs(USUBJID),
+    order = exprs(ASEQ),
     new_var = CONFFL,
-    join_vars = vars(CRIT1FL),
+    join_vars = exprs(CRIT1FL),
     join_type = "before",
     filter = AVALC == "Y" & CRIT1FL.join == "Y",
     false_value = "N"

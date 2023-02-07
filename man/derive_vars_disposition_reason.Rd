@@ -87,8 +87,8 @@ Permitted Values: logical expression.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of quosures where the expressions are symbols as returned by
-\code{vars()} is expected.}
+A list of expressions where the expressions are symbols as returned by
+\code{exprs()} is expected.}
 }
 \value{
 the input dataset with the disposition reason(s) (\code{new_var} and

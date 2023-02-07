@@ -49,6 +49,8 @@ Other deprecated:
 \code{\link{derive_derived_param}()},
 \code{\link{derive_param_first_event}()},
 \code{\link{derive_var_disposition_status}()}
+\code{\link{vars}()}
+
 }
 \author{
 Stefan Bundfuss

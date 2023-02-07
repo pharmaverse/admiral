@@ -12,7 +12,7 @@
 #'
 #'   The specified variables must be a unique of all input datasets.
 #'
-#'   *Permitted Values*: A list of variables created by `vars()`
+#'   *Permitted Values*: A list of variables created by `exprs()`
 #'
 #' @param source_var Source variable
 #'
@@ -75,7 +75,7 @@
 #'     project = proj_ranges,
 #'     study = stud_ranges
 #'   ),
-#'   key_vars = vars(PARAMCD)
+#'   key_vars = exprs(PARAMCD)
 #' )
 consolidate_metadata <- function(datasets,
                                  key_vars,
@@ -84,7 +84,7 @@ consolidate_metadata <- function(datasets,
                                  check_keys = "error") {
   assert_list_of(datasets, class = "data.frame", named = TRUE)
   assert_vars(key_vars)
-  source_var <- assert_symbol(enquo(source_var))
+  source_var <- assert_symbol(enexpr(source_var))
   check_vars <-
     assert_character_scalar(
       check_vars,
@@ -117,7 +117,7 @@ consolidate_metadata <- function(datasets,
     mutate(!!tmp_source_ord := data_order[!!source_var]) %>%
     filter_extreme(
       by_vars = key_vars,
-      order = vars(!!tmp_source_ord),
+      order = exprs(!!tmp_source_ord),
       mode = "last",
       check_type = check_keys
     ) %>%

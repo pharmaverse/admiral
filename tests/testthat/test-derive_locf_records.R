@@ -33,8 +33,8 @@ test_that("derive_locf_records Test 1: visits are missing", {
   actual_output <- derive_locf_records(
     input,
     dataset_expected_obs = advs_expected_obsv,
-    by_vars = vars(STUDYID, USUBJID, PARAM, PARAMCD),
-    order = vars(AVISITN, AVISIT)
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    order = exprs(AVISITN, AVISIT)
   )
 
 
@@ -83,8 +83,8 @@ test_that("derive_locf_records Test 2: some visits have missing AVAL", {
   actual_output <- derive_locf_records(
     input,
     dataset_expected_obs = advs_expected_obsv,
-    by_vars = vars(STUDYID, USUBJID, PARAM, PARAMCD),
-    order = vars(AVISITN, AVISIT)
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    order = exprs(AVISITN, AVISIT)
   )
 
 
@@ -143,8 +143,8 @@ test_that("derive_locf_records Test 3: visits are missing - and DTYPE already ex
   actual_output <- derive_locf_records(
     input,
     dataset_expected_obs = advs_expected_obsv,
-    by_vars = vars(STUDYID, USUBJID, PARAM, PARAMCD),
-    order = vars(AVISITN, AVISIT)
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    order = exprs(AVISITN, AVISIT)
   )
 
 
@@ -191,8 +191,8 @@ test_that("derive_locf_records Test 4: visit variables are parameter independent
   actual_output <- derive_locf_records(
     input,
     dataset_expected_obs = advs_expected_obsv,
-    by_vars = vars(STUDYID, USUBJID, PARAM, PARAMCD),
-    order = vars(AVISITN, AVISIT)
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    order = exprs(AVISITN, AVISIT)
   )
 
 
@@ -247,8 +247,8 @@ test_that("derive_locf_records Test 5: visit variables are parameter dependent",
   actual_output <- derive_locf_records(
     input,
     dataset_expected_obs = advs_expected_obsv,
-    by_vars = vars(STUDYID, USUBJID, PARAM, PARAMCD),
-    order = vars(AVISITN, AVISIT)
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    order = exprs(AVISITN, AVISIT)
   )
 
 
