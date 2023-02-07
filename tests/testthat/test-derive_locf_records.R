@@ -291,10 +291,10 @@ test_that("derive_locf_records Test 6: populate VISITNUM for LOCF records", {
   actual_output <- derive_locf_records(
     input,
     dataset_expected_obs = advs_expected_obsv,
-    by_vars = vars(STUDYID, USUBJID, PARAM, PARAMCD),
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
     analysis_var = AVALC,
-    order = vars(AVISITN, AVISIT),
-    keep_vars = vars(VISITNUM)
+    order = exprs(AVISITN, AVISIT),
+    keep_vars = exprs(VISITNUM)
   )
 
 
