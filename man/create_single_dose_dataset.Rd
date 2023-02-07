@@ -13,7 +13,8 @@ create_single_dose_dataset(
   end_datetime = NULL,
   lookup_table = dose_freq_lookup,
   lookup_column = CDISC_VALUE,
-  keep_source_vars = quo_c(vars(USUBJID), dose_freq, start_date, start_datetime,
+  nominal_time = NULL,
+  keep_source_vars = expr_c(exprs(USUBJID), dose_freq, start_date, start_datetime,
     end_date, end_datetime)
 )
 }
@@ -78,6 +79,16 @@ Permitted Values for \code{DOSE_WINDOW}: \code{"MINUTE"}, \code{"HOUR"}, \code{"
 
 The column of \code{lookup_table}.}
 
+\item{nominal_time}{The nominal relative time from first dose (\code{NFRLT})
+
+Used for PK analysis, this will be in hours and should be 0 for
+the first dose.  It can be derived as \code{(VISITDY - 1) * 24} for example.
+This will be expanded as the single dose dataset is created.  For example
+an \code{EXDOFRQ} of \code{"QD"} will result in the nominal_time being incremented by
+24 hours for each expanded record.
+
+The value can be NULL if not needed.}
+
 \item{keep_source_vars}{List of variables to be retained from source dataset
 
 This parameter can be specified if additional information is required in
@@ -123,7 +134,6 @@ data <- tribble(
 
 create_single_dose_dataset(data)
 
-
 # Example with custom lookup
 
 custom_lookup <- tribble(
@@ -146,9 +156,35 @@ create_single_dose_dataset(data,
   start_datetime = ASTDTM,
   end_datetime = AENDTM
 )
+# Example with nominal time
+
+data <- tribble(
+  ~USUBJID, ~EXDOSFRQ, ~NFRLT, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
+  "P01", "BID", 0, ymd("2021-01-01"), ymd_hms("2021-01-01 08:00:00"),
+  ymd("2021-01-07"), ymd_hms("2021-01-07 20:00:00"),
+  "P01", "BID", 168, ymd("2021-01-08"), ymd_hms("2021-01-08 08:00:00"),
+  ymd("2021-01-14"), ymd_hms("2021-01-14 20:00:00"),
+  "P01", "BID", 336, ymd("2021-01-15"), ymd_hms("2021-01-15 08:00:00"),
+  ymd("2021-01-29"), ymd_hms("2021-01-29 20:00:00")
+)
+
+create_single_dose_dataset(data,
+  dose_freq = EXDOSFRQ,
+  start_date = ASTDT,
+  start_datetime = ASTDTM,
+  end_date = AENDT,
+  end_datetime = AENDTM,
+  lookup_table = dose_freq_lookup,
+  lookup_column = CDISC_VALUE,
+  nominal_time = NFRLT,
+  keep_source_vars = exprs(
+    USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, NFRLT
+  )
+)
 }
 \seealso{
 Creating auxiliary datasets: 
+\code{\link{consolidate_metadata}()},
 \code{\link{create_period_dataset}()},
 \code{\link{create_query_data}()}
 }

@@ -126,7 +126,7 @@ test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTM,
-    traceability_vars = vars(
+    traceability_vars = exprs(
       LALVDOM = "AE",
       LALVSEQ = AESEQ,
       LALVVAR = "AESTDTC"
@@ -136,7 +136,7 @@ test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables
   ae_end <- date_source(
     dataset_name = "ae",
     date = AEENDTM,
-    traceability_vars = vars(
+    traceability_vars = exprs(
       LALVDOM = "AE",
       LALVSEQ = AESEQ,
       LALVVAR = "AEENDTC"
@@ -146,7 +146,7 @@ test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables
   adsl_trtdate <- date_source(
     dataset_name = "adsl",
     date = TRTEDTM,
-    traceability_vars = vars(
+    traceability_vars = exprs(
       LALVDOM = "ADSL",
       LALVSEQ = NA_integer_,
       LALVVAR = "TRTEDTM"
@@ -157,7 +157,7 @@ test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables
     dataset_name = "adsl",
     date = DTHDT,
     filter = nchar(DTHDTC) >= 10,
-    traceability_vars = vars(
+    traceability_vars = exprs(
       LALVDOM = "ADSL",
       LALVSEQ = NA_integer_,
       LALVVAR = "DTHDTC"
@@ -192,7 +192,7 @@ test_that("derive_var_extreme_dtm Test 5: error is issued if `--DTC` variable is
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTC,
-    traceability_vars = vars(
+    traceability_vars = exprs(
       LALVDOM = "AE",
       LALVSEQ = AESEQ,
       LALVVAR = "AESTDTC"

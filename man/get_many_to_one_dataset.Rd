@@ -27,7 +27,7 @@ library(admiraldev, warn.conflicts = FALSE)
 data(admiral_adsl)
 
 try(
-  assert_one_to_one(admiral_adsl, vars(SITEID), vars(STUDYID))
+  assert_one_to_one(admiral_adsl, exprs(SITEID), exprs(STUDYID))
 )
 
 get_many_to_one_dataset()

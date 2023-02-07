@@ -92,7 +92,10 @@ Pandoc
 Param
 Pharma
 Pharmacokinetics
+Pharmacokinetic
 Pre
+QD
+QID
 Quosure
 Quosures
 RANDFL
@@ -119,6 +122,7 @@ TADJ
 TADJAE
 TDOSE
 TDURD
+TID
 TMF
 TNDOSINT
 TPDOSE
