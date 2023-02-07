@@ -68,14 +68,14 @@ format_avalcat1n <- function(param, aval) {
 # ---- Derivations ----
 
 # Get list of ADSL vars required for derivations
-adsl_vars <- vars(TRTSDT, TRTSDTM, TRT01P, TRT01A)
+adsl_vars <- exprs(TRTSDT, TRTSDTM, TRT01P, TRT01A)
 
 adpc <- pc %>%
   # Join ADSL with PC (need TRTSDT for ADY derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   # Derive analysis date/time
   # Impute missing time to 00:00:00
@@ -88,9 +88,9 @@ adpc <- pc %>%
     flag_imputation = "auto"
   ) %>%
   # Derive dates and times from date/times
-  derive_vars_dtm_to_dt(vars(ADTM)) %>%
-  derive_vars_dtm_to_tm(vars(ADTM)) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT)) %>%
+  derive_vars_dtm_to_dt(exprs(ADTM)) %>%
+  derive_vars_dtm_to_tm(exprs(ADTM)) %>%
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT)) %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
     EVID = 0,
@@ -105,7 +105,7 @@ ex <- ex %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   # Keep records with nonzero dose
   filter(EXDOSE > 0) %>%
@@ -140,8 +140,8 @@ ex <- ex %>%
     TRUE ~ AENDTM
   )) %>%
   # Derive dates from date/times
-  derive_vars_dtm_to_dt(vars(ASTDTM)) %>%
-  derive_vars_dtm_to_dt(vars(AENDTM))
+  derive_vars_dtm_to_dt(exprs(ASTDTM)) %>%
+  derive_vars_dtm_to_dt(exprs(AENDTM))
 
 
 # ---- Expand dosing records between start and end dates ----
@@ -157,7 +157,7 @@ ex_exp <- ex %>%
     nominal_time = NFRLT,
     lookup_table = dose_freq_lookup,
     lookup_column = CDISC_VALUE,
-    keep_source_vars = vars(
+    keep_source_vars = exprs(
       STUDYID, USUBJID, EVID, EXDOSFRQ, EXDOSFRM,
       NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
       VISIT, VISITNUM, VISITDY,
@@ -174,11 +174,11 @@ ex_exp <- ex %>%
     DRUG = EXTRT
   ) %>%
   # Derive dates and times from datetimes
-  derive_vars_dtm_to_dt(vars(ADTM)) %>%
-  derive_vars_dtm_to_tm(vars(ADTM)) %>%
-  derive_vars_dtm_to_tm(vars(ASTDTM)) %>%
-  derive_vars_dtm_to_tm(vars(AENDTM)) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
+  derive_vars_dtm_to_dt(exprs(ADTM)) %>%
+  derive_vars_dtm_to_tm(exprs(ADTM)) %>%
+  derive_vars_dtm_to_tm(exprs(ASTDTM)) %>%
+  derive_vars_dtm_to_tm(exprs(AENDTM)) %>%
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
 
 # ---- Find first dose per treatment per subject ----
@@ -188,10 +188,10 @@ adpc <- adpc %>%
   derive_vars_merged(
     dataset_add = ex_exp,
     filter_add = (EXDOSE > 0 & !is.na(ADTM)),
-    new_vars = vars(FANLDTM = ADTM),
-    order = vars(ADTM, EXSEQ),
+    new_vars = exprs(FANLDTM = ADTM),
+    order = exprs(ADTM, EXSEQ),
     mode = "first",
-    by_vars = vars(STUDYID, USUBJID, DRUG)
+    by_vars = exprs(STUDYID, USUBJID, DRUG)
   ) %>%
   filter(!is.na(FANLDTM)) %>%
   # Derive AVISIT based on nominal relative time
@@ -210,13 +210,13 @@ adpc <- adpc %>%
 adpc <- adpc %>%
   derive_vars_joined(
     dataset_add = ex_exp,
-    by_vars = vars(USUBJID),
-    order = vars(ADTM),
-    new_vars = vars(
+    by_vars = exprs(USUBJID),
+    order = exprs(ADTM),
+    new_vars = exprs(
       ADTM_prev = ADTM, EXDOSE_prev = EXDOSE, AVISIT_prev = AVISIT,
       AENDTM_prev = AENDTM
     ),
-    join_vars = vars(ADTM),
+    join_vars = exprs(ADTM),
     filter_add = NULL,
     filter_join = ADTM > ADTM.join,
     mode = "last",
@@ -228,13 +228,13 @@ adpc <- adpc %>%
 adpc <- adpc %>%
   derive_vars_joined(
     dataset_add = ex_exp,
-    by_vars = vars(USUBJID),
-    order = vars(ADTM),
-    new_vars = vars(
+    by_vars = exprs(USUBJID),
+    order = exprs(ADTM),
+    new_vars = exprs(
       ADTM_next = ADTM, EXDOSE_next = EXDOSE, AVISIT_next = AVISIT,
       AENDTM_next = AENDTM
     ),
-    join_vars = vars(ADTM),
+    join_vars = exprs(ADTM),
     filter_add = NULL,
     filter_join = ADTM <= ADTM.join,
     mode = "first",
@@ -246,10 +246,10 @@ adpc <- adpc %>%
 adpc <- adpc %>%
   derive_vars_joined(
     dataset_add = ex_exp,
-    by_vars = vars(USUBJID),
-    order = vars(NFRLT),
-    new_vars = vars(NFRLT_prev = NFRLT),
-    join_vars = vars(NFRLT),
+    by_vars = exprs(USUBJID),
+    order = exprs(NFRLT),
+    new_vars = exprs(NFRLT_prev = NFRLT),
+    join_vars = exprs(NFRLT),
     filter_add = NULL,
     filter_join = NFRLT > NFRLT.join,
     mode = "last",
@@ -261,10 +261,10 @@ adpc <- adpc %>%
 adpc <- adpc %>%
   derive_vars_joined(
     dataset_add = ex_exp,
-    by_vars = vars(USUBJID),
-    order = vars(NFRLT),
-    new_vars = vars(NFRLT_next = NFRLT),
-    join_vars = vars(NFRLT),
+    by_vars = exprs(USUBJID),
+    order = exprs(NFRLT),
+    new_vars = exprs(NFRLT_next = NFRLT),
+    join_vars = exprs(NFRLT),
     filter_add = NULL,
     filter_join = NFRLT <= NFRLT.join,
     mode = "first",
@@ -325,10 +325,10 @@ adpc <- bind_rows(adpc, ex_exp) %>%
     )
   ) %>%
   # Derive dates and times from datetimes
-  derive_vars_dtm_to_dt(vars(FANLDTM)) %>%
-  derive_vars_dtm_to_tm(vars(FANLDTM)) %>%
-  derive_vars_dtm_to_dt(vars(PCRFTDTM)) %>%
-  derive_vars_dtm_to_tm(vars(PCRFTDTM))
+  derive_vars_dtm_to_dt(exprs(FANLDTM)) %>%
+  derive_vars_dtm_to_tm(exprs(FANLDTM)) %>%
+  derive_vars_dtm_to_dt(exprs(PCRFTDTM)) %>%
+  derive_vars_dtm_to_tm(exprs(PCRFTDTM))
 
 # Derive Nominal Relative Time from Reference Dose (NRRLT)
 
@@ -402,7 +402,7 @@ adpc <- adpc %>%
       TRUE ~ PCSTRESN
     ),
     AVALU = case_when(
-      EVID == 1 ~ paste(EXDOSU),
+      EVID == 1 ~ EXDOSU,
       TRUE ~ PCSTRESU
     ),
     AVALCAT1 = if_else(PCSTRESC == "<BLQ", PCSTRESC, prettyNum(signif(AVAL, digits = 3))),
@@ -433,8 +433,8 @@ dtype <- adpc %>%
     ABLFL = "Y",
     DTYPE = "COPY"
   ) %>%
-  derive_vars_dtm_to_dt(vars(PCRFTDTM)) %>%
-  derive_vars_dtm_to_tm(vars(PCRFTDTM))
+  derive_vars_dtm_to_dt(exprs(PCRFTDTM)) %>%
+  derive_vars_dtm_to_tm(exprs(PCRFTDTM))
 
 # ---- Combine original records and DTYPE copy records ----
 
@@ -451,7 +451,7 @@ adpc <- bind_rows(adpc, dtype) %>%
 
 adpc <- adpc %>%
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE,
     filter = ABLFL == "Y"
@@ -465,8 +465,8 @@ adpc <- adpc %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = vars(STUDYID, USUBJID),
-    order = vars(ADTM, BASETYPE, EVID, AVISITN, ATPTN, DTYPE),
+    by_vars = exprs(STUDYID, USUBJID),
+    order = exprs(ADTM, BASETYPE, EVID, AVISITN, ATPTN, DTYPE),
     check_type = "error"
   ) %>%
   # Remove temporary variables
@@ -476,7 +476,7 @@ adpc <- adpc %>%
     -ends_with("prev"), -DRUG, -EVID, -AXRLT, -NXRLT, -VISITDY
   ) %>%
   # Derive PARAM and PARAMN
-  derive_vars_merged(dataset_add = select(param_lookup, -PCTESTCD), by_vars = vars(PARAMCD))
+  derive_vars_merged(dataset_add = select(param_lookup, -PCTESTCD), by_vars = exprs(PARAMCD))
 
 
 #---- Derive additional baselines from VS ----
@@ -485,14 +485,14 @@ adpc <- adpc %>%
   derive_vars_merged(
     dataset_add = vs,
     filter_add = VSTESTCD == "HEIGHT",
-    by_vars = vars(STUDYID, USUBJID),
-    new_vars = vars(HTBL = VSSTRESN, HTBLU = VSSTRESU)
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(HTBL = VSSTRESN, HTBLU = VSSTRESU)
   ) %>%
   derive_vars_merged(
     dataset_add = vs,
     filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
-    by_vars = vars(STUDYID, USUBJID),
-    new_vars = vars(WTBL = VSSTRESN, WTBLU = VSSTRESU)
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(WTBL = VSSTRESN, WTBLU = VSSTRESU)
   ) %>%
   mutate(
     BMIBL = compute_bmi(height = HTBL, weight = WTBL),
@@ -505,7 +505,7 @@ adpc <- adpc %>%
 adpc <- adpc %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   )
 
 # Final Steps, Select final variables and Add labels
