@@ -2,7 +2,7 @@
 % Please edit documentation in R/dev_utilities.R
 \name{extract_vars}
 \alias{extract_vars}
-\title{Extract All Symbols from a List of Quosures}
+\title{Extract All Symbols from a List of Expressions}
 \usage{
 extract_vars(x, side = "lhs")
 }
@@ -12,17 +12,16 @@ extract_vars(x, side = "lhs")
 \item{side}{One of \code{"lhs"} (the default) or \code{"rhs"}}
 }
 \value{
-A list of \code{quosures}
+A list of expressions
 }
 \description{
-Extract All Symbols from a List of Quosures
+Extract All Symbols from a List of Expressions
 }
 \seealso{
 Developer Utility Functions: 
 \code{\link{\%notin\%}()},
 \code{\link{\%or\%}()},
 \code{\link{arg_name}()},
-\code{\link{as_name}()},
 \code{\link{contains_vars}()},
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{filter_if}()},

@@ -150,17 +150,18 @@ warn_if_incomplete_dtc <- function(dtc, n) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #'
 #' # no warning
 #' warn_if_inconsistent_list(
-#'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
-#'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+#'   base = exprs(DTHDOM = "DM", DTHSEQ = DMSEQ),
+#'   compare = exprs(DTHDOM = "DM", DTHSEQ = DMSEQ),
 #'   list_name = "Test"
 #' )
 #' # warning
 #' warn_if_inconsistent_list(
-#'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
-#'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+#'   base = exprs(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
+#'   compare = exprs(DTHDOM = "DM", DTHSEQ = DMSEQ),
 #'   list_name = "Test"
 #' )
 warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {

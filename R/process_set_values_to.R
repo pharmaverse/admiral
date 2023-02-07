@@ -8,8 +8,8 @@
 #'
 #' @param set_values_to Variables to set
 #'
-#'   A named list returned by `vars()` defining the variables to be set, e.g.
-#'   `vars(PARAMCD = "OS", PARAM = "Overall Survival")` is expected. The values
+#'   A named list returned by `exprs()` defining the variables to be set, e.g.
+#'   `exprs(PARAMCD = "OS", PARAM = "Overall Survival")` is expected. The values
 #'   must be symbols, character strings, numeric values, expressions, or `NA`.
 #'
 #' @param expected_types
@@ -41,7 +41,7 @@
 #' try(
 #'   process_set_values_to(
 #'     data,
-#'     set_values_to = vars(
+#'     set_values_to = exprs(
 #'       PARAMCD = BMI
 #'     )
 #'   )
@@ -50,7 +50,7 @@
 #' try(
 #'   process_set_values_to(
 #'     data,
-#'     set_values_to = vars(
+#'     set_values_to = exprs(
 #'       PARAMCD = 42
 #'     ),
 #'     expected_types = c(PARAMCD = "character")
@@ -79,7 +79,7 @@ process_set_values_to <- function(dataset,
             " ",
             names(set_values_to),
             "=",
-            lapply(set_values_to, quo_get_expr),
+            set_values_to,
             collapse = "\n"
           ),
           "\n)\nError message:\n  ",
