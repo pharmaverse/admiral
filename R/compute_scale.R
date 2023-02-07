@@ -73,7 +73,3 @@ compute_scale <- function(source,
   target
 
 }
-
-test_AVAL <- c(sample(1:4, size = 3, replace = TRUE), NA)
-
-compute_scale(test_AVAL, c(1, 4), c(0, 100), flip_direction = TRUE, min_n = 3)
