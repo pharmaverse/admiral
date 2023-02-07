@@ -2558,27 +2558,27 @@ test_that("derive_var_atoxgr, test 64: CTCAEv5 Hypertriglyceridemia", {
 ### Grade 4: >0.59 mmol/L;
 ### Grade 3: >ULN - 10 mg/dL (0.59 mmol/L)
 
-expected_albi <- tibble::tribble(
-  ~ATOXDSCH,        ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
-  "Not a term",     591,    0,      200,    "umol/L",  NA,
-  NA_character_,    591,    0,      200,    "umol/L",  NA,
+expected_urici <- tibble::tribble(
+  ~ATOXDSCH,        ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
+  "Not a term",     591,   0,      200,    "umol/L",  NA,
+  NA_character_,    591,   0,      200,    "umol/L",  NA,
   # ANRHI not missing
-  "Hyperuricemia",  591,    0,      200,    "umol/L",  "4",
-  "Hyperuricemia",  590,    0,      200,    "umol/L",  "3",
-  "Hyperuricemia",  201,    0,      200,    "umol/L",  "3",
-  "Hyperuricemia",  200,    0,      200,    "umol/L",  "0",
+  "Hyperuricemia",  591,   0,      200,    "umol/L",  "4",
+  "Hyperuricemia",  590,   0,      200,    "umol/L",  "3",
+  "Hyperuricemia",  201,   0,      200,    "umol/L",  "3",
+  "Hyperuricemia",  200,   0,      200,    "umol/L",  "0",
   # ANRHI missing - can grade 4
-  "Hyperuricemia",  591,    0,      NA,     "umol/L",  "4",
+  "Hyperuricemia",  591,   0,      NA,     "umol/L",  "4",
   # ANRHI missing - can NOT grade 0 or 3
-  "Hyperuricemia",  590,    0,      NA,     "umol/L",  NA,
-  "Hyperuricemia",  201,    0,      NA,     "umol/L",  NA,
-  "Hyperuricemia",  200,    0,      NA,     "umol/L",  NA,
+  "Hyperuricemia",  590,   0,      NA,     "umol/L",  NA,
+  "Hyperuricemia",  201,   0,      NA,     "umol/L",  NA,
+  "Hyperuricemia",  200,   0,      NA,     "umol/L",  NA,
   # Unit missing cannot grade
-  "Hyperuricemia",  200,    0,      200,    NA,        NA,
+  "Hyperuricemia",  200,   0,      200,    NA,        "0",
   # AVAL missing cannot grade
-  "Hyperuricemia",  NA,     0,      200,    "umol/L",  NA,
+  "Hyperuricemia",  NA,    0,      200,    "umol/L",  NA,
 )
-input_albi <- expected_albi %>%
+input_urici <- expected_urici %>%
   select(-ATOXGRH)
 
 ### Hyperuricemia (NCICTCAEv5)
@@ -2587,13 +2587,13 @@ input_albi <- expected_albi %>%
 
 # ---- derive_var_atoxgr, test 65: CTCAEv5 Hyperuricemia ----
 test_that("derive_var_atoxgr, test 65: CTCAEv5 Hyperuricemia", {
-  expected_albi <- expected_albi %>%
-    filter(ATOXGRH != "4")
-  input_albi <- expected_albi %>%
+  expected_urici <- expected_urici %>%
+    filter(is.na(ATOXGRH) | ATOXGRH != "4")
+  input_urici <- expected_urici %>%
     select(-ATOXGRH)
 
-  actual_albi <- derive_var_atoxgr_dir(
-    input_albi,
+  actual_urici <- derive_var_atoxgr_dir(
+    input_urici,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv5,
     tox_description_var = ATOXDSCH,
@@ -2602,16 +2602,23 @@ test_that("derive_var_atoxgr, test 65: CTCAEv5 Hyperuricemia", {
   )
 
   expect_dfs_equal(
-    base = expected_albi,
-    compare = actual_albi,
+    base = expected_urici,
+    compare = actual_urici,
     keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
   )
 })
 
 # ---- derive_var_atoxgr, test 66: CTCAEv4 Hyperuricemia ----
+# If unit missing then grade CANNOT be calculated as needed for grade 4
 test_that("derive_var_atoxgr, test 66: CTCAEv4 Hyperuricemia", {
-  actual_albi <- derive_var_atoxgr_dir(
-    input_albi,
+  expected_urici <- expected_urici %>%
+    mutate(ATOXGRH = if_else(is.na(AVALU), NA_character_, ATOXGRH))
+
+  input_urici <- expected_urici %>%
+    select(-ATOXGRH)
+
+  actual_urici <- derive_var_atoxgr_dir(
+    input_urici,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_ctcv4,
     tox_description_var = ATOXDSCH,
@@ -2620,8 +2627,8 @@ test_that("derive_var_atoxgr, test 66: CTCAEv4 Hyperuricemia", {
   )
 
   expect_dfs_equal(
-    base = expected_albi,
-    compare = actual_albi,
+    base = expected_urici,
+    compare = actual_urici,
     keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
   )
 })

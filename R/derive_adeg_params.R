@@ -78,9 +78,9 @@
 #'
 #' derive_param_qtc(
 #'   adeg,
-#'   by_vars = vars(USUBJID, VISIT),
+#'   by_vars = exprs(USUBJID, VISIT),
 #'   method = "Bazett",
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "QTCBR",
 #'     PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)",
 #'     AVALU = "msec"
@@ -90,9 +90,9 @@
 #'
 #' derive_param_qtc(
 #'   adeg,
-#'   by_vars = vars(USUBJID, VISIT),
+#'   by_vars = exprs(USUBJID, VISIT),
 #'   method = "Fridericia",
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "QTCFR",
 #'     PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)",
 #'     AVALU = "msec"
@@ -102,9 +102,9 @@
 #'
 #' derive_param_qtc(
 #'   adeg,
-#'   by_vars = vars(USUBJID, VISIT),
+#'   by_vars = exprs(USUBJID, VISIT),
 #'   method = "Sagie",
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "QTLCR",
 #'     PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)",
 #'     AVALU = "msec"
@@ -122,15 +122,15 @@ derive_param_qtc <- function(dataset,
   assert_vars(by_vars)
   assert_data_frame(
     dataset,
-    required_vars = vars(!!!by_vars, PARAMCD, AVAL)
+    required_vars = exprs(!!!by_vars, PARAMCD, AVAL)
   )
   assert_character_scalar(method, values = c("Bazett", "Fridericia", "Sagie"))
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
-  get_unit_expr <- assert_expr(enquo(get_unit_expr))
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  get_unit_expr <- assert_expr(enexpr(get_unit_expr))
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
 
   assert_unit(
     dataset,
@@ -153,7 +153,7 @@ derive_param_qtc <- function(dataset,
     analysis_value = compute_qtc(
       qt = !!sym(paste0("AVAL.", qt_code)),
       rr = !!sym(paste0("AVAL.", rr_code)),
-      method = method
+      method = !!method
     ),
     set_values_to = set_values_to
   )
@@ -181,7 +181,7 @@ derive_param_qtc <- function(dataset,
 default_qtc_paramcd <- function(method) {
   assert_character_scalar(method, values = c("Bazett", "Fridericia", "Sagie"))
   paramcd <- c(Bazett = "QTCBR", Fridericia = "QTCFR", Sagie = "QTLCR")
-  vars(PARAMCD = !!paramcd[[method]])
+  exprs(PARAMCD = !!paramcd[[method]])
 }
 
 #' Compute Corrected QT
@@ -295,8 +295,8 @@ compute_qtc <- function(qt, rr, method) {
 #'
 #' derive_param_rr(
 #'   adeg,
-#'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(
+#'   by_vars = exprs(USUBJID, VISIT),
+#'   set_values_to = exprs(
 #'     PARAMCD = "RRR",
 #'     PARAM = "RR Duration Rederived (msec)",
 #'     AVALU = "msec"
@@ -305,20 +305,20 @@ compute_qtc <- function(qt, rr, method) {
 #' )
 derive_param_rr <- function(dataset,
                             by_vars,
-                            set_values_to = vars(PARAMCD = "RRR"),
+                            set_values_to = exprs(PARAMCD = "RRR"),
                             hr_code = "HR",
                             get_unit_expr,
                             filter = NULL) {
   assert_vars(by_vars)
   assert_data_frame(
     dataset,
-    required_vars = vars(!!!by_vars, PARAMCD, AVAL)
+    required_vars = exprs(!!!by_vars, PARAMCD, AVAL)
   )
   assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
-  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   assert_character_scalar(hr_code)
-  get_unit_expr <- assert_expr(enquo(get_unit_expr))
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  get_unit_expr <- assert_expr(enexpr(get_unit_expr))
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
 
   assert_unit(
     dataset,
