@@ -45,8 +45,5 @@ BDS-Findings Functions that returns variable appended to dataset:
 \code{\link{derive_var_pchg}()},
 \code{\link{derive_var_shift}()}
 }
-\author{
-Thomas Neitmann
-}
 \concept{der_bds_findings}
 \keyword{der_bds_findings}

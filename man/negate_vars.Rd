@@ -26,8 +26,5 @@ negate_vars(exprs(USUBJID, STUDYID))
 Other utils_quo: 
 \code{\link{chr2vars}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{utils_quo}
 \keyword{utils_quo}

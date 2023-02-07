@@ -41,8 +41,5 @@ if (interactive()) {
 Utilities used for examples and template scripts: 
 \code{\link{list_all_templates}()}
 }
-\author{
-Shimeng Huang, Thomas Neitmann
-}
 \concept{utils_examples}
 \keyword{utils_examples}
