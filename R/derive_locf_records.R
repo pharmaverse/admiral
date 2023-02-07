@@ -115,7 +115,7 @@ derive_locf_records <- function(dataset,
                                 order,
                                 keep_vars = NULL) {
   #### Input Checking ####
-  analysis_var <- assert_symbol(enquo(analysis_var))
+  analysis_var <- assert_symbol(enexpr(analysis_var))
 
   # Check if input parameters is a valid list of variables
   assert_vars(by_vars, optional = TRUE)
@@ -126,8 +126,8 @@ derive_locf_records <- function(dataset,
   assert_data_frame(dataset_expected_obs)
   assert_data_frame(
     dataset,
-    required_vars = quo_c(
-      by_vars, analysis_var, extract_vars(order),
+    required_vars = expr_c(
+      by_vars, analysis_var, order,
       chr2vars(colnames(dataset_expected_obs))
     )
   )
