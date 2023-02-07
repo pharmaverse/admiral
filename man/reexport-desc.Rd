@@ -4,6 +4,6 @@
 \alias{desc}
 \title{dplyr desc}
 \description{
-See \code{rlang::\link[dplyr:desc]{desc}} for details.
+See \code{dplyr::\link[dplyr:desc]{desc}} for details.
 }
 \keyword{reexport}

@@ -437,7 +437,7 @@ create_single_dose_dataset <- function(dataset,
 
   # Check nominal time is NULL or numeric
 
-  if (!quo_is_null(nominal_time)) {
+  if (!is.null(nominal_time)) {
     check_nominal_time <-
       mutate(
         data_not_once,
@@ -550,7 +550,7 @@ create_single_dose_dataset <- function(dataset,
         !!start_datetime := !!start_datetime + time_differential,
       )
   }
-  if (!quo_is_null(nominal_time)) {
+  if (!is.null(nominal_time)) {
     data_not_once <-
       mutate(
         data_not_once,

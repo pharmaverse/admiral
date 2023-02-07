@@ -70,7 +70,7 @@ setHook(
 
 #' dplyr desc
 #'
-#' See \code{rlang::\link[dplyr:desc]{desc}} for details.
+#' See \code{dplyr::\link[dplyr:desc]{desc}} for details.
 #'
 #' @name desc
 #' @rdname reexport-desc
@@ -81,10 +81,12 @@ NULL
 
 #' Pipe operator
 #'
-#' See \code{\link[magrittr]{%>%}} for more details.
+#' See \code{magrittr::\link[magrittr:%>%]{%>%}} for more details.
 #'
 #' @name %>%
 #' @rdname pipe
+#' @param lhs A value or the magrittr placeholder.
+#' @param rhs A function call using the magrittr semantics.
 #' @keywords reexport
 #' @export
 #' @importFrom magrittr %>%
