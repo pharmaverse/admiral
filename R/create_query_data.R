@@ -385,12 +385,6 @@ get_terms_from_db <- function(version,
     queries = queries,
     i = i
   )
-  fun_call <- quo(fun(
-    basket_select = definition,
-    version = version,
-    keep_id = expect_query_id,
-    temp_env = temp_env
-  ))
   terms <- call_user_fun(
     fun(
       basket_select = definition,
@@ -613,14 +607,14 @@ query <- function(prefix,
                   definition = NULL) {
   out <- list(
     prefix = prefix,
-    name = enquo(name),
-    id = enquo(id),
+    name = enexpr(name),
+    id = enexpr(id),
     add_scope_num = add_scope_num,
     definition = definition
   )
   # evaluate to ensure that name contains the quoted symbol auto or a character
   # string
-  if (!is_auto(out$name) && !quo_is_missing(out$name)) {
+  if (!is_auto(out$name) && !is_missing(out$name)) {
     out$name <- eval_tidy(out$name)
   }
   # evaluate to ensure that id contains the quoted symbol auto or a number

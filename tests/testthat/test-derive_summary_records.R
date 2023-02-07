@@ -3,7 +3,7 @@ test_that("creates a new record for each group and new data frame retains groupi
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
   actual_output <- input %>%
     derive_summary_records(
-      by_vars = vars(x, y),
+      by_vars = exprs(x, y),
       analysis_var = z,
       summary_fun = mean
     )
@@ -16,7 +16,7 @@ test_that("`fns` as inlined", {
   input <- tibble(x = rep(1:2, each = 2), y = 9:12, z = 101:104)
   actual_output <- derive_summary_records(
     input,
-    by_vars = vars(x),
+    by_vars = exprs(x),
     analysis_var = y,
     summary_fun = function(x) mean(x, na.rm = TRUE)
   )
@@ -33,10 +33,10 @@ test_that("set new value to a derived record", {
   input <- tibble(x = rep(1:2, each = 2), y = 9:12)
   actual_output <- derive_summary_records(
     input,
-    by_vars = vars(x),
+    by_vars = exprs(x),
     analysis_var = y,
     summary_fun = mean,
-    set_values_to = vars(z = "MEAN")
+    set_values_to = exprs(z = "MEAN")
   )
   expected_output <- tibble(
     x = rep(1:2, each = 3),
@@ -51,16 +51,16 @@ test_that("check `set_values_to` mapping", {
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
   actual_output <- input %>%
     derive_summary_records(
-      by_vars = vars(x, y),
+      by_vars = exprs(x, y),
       analysis_var = z,
       summary_fun = mean,
-      set_values_to = vars(d = "MEAN")
+      set_values_to = exprs(d = "MEAN")
     ) %>%
     derive_summary_records(
-      by_vars = vars(x, y),
+      by_vars = exprs(x, y),
       analysis_var = z,
       summary_fun = sum,
-      set_values_to = vars(d = "SUM")
+      set_values_to = exprs(d = "SUM")
     )
   tf <- rep(c(NA, "MEAN", "SUM"), c(16, 4, 4))
 
@@ -68,10 +68,10 @@ test_that("check `set_values_to` mapping", {
 
   actual_output <- input %>%
     derive_summary_records(
-      by_vars = vars(x, y),
+      by_vars = exprs(x, y),
       analysis_var = z,
       summary_fun = mean,
-      set_values_to = vars(d = "MEAN", p1 = "PARAM1", p2 = "PARAM2")
+      set_values_to = exprs(d = "MEAN", p1 = "PARAM1", p2 = "PARAM2")
     )
   tf <- rep(c(NA, "MEAN"), c(16, 4))
   tp1 <- rep(c(NA, "PARAM1"), c(16, 4))
@@ -87,11 +87,11 @@ test_that("Filter record within `by_vars`", {
 
   actual_output <- derive_summary_records(
     input,
-    by_vars = vars(x),
+    by_vars = exprs(x),
     analysis_var = y,
     summary_fun = mean,
     filter = n() > 2,
-    set_values_to = vars(d = "MEAN")
+    set_values_to = exprs(d = "MEAN")
   )
   expected_output <- tibble(
     x = c(rep(1, 2), rep(2, 4)),
@@ -104,11 +104,11 @@ test_that("Filter record within `by_vars`", {
 
   actual_output <- derive_summary_records(
     input,
-    by_vars = vars(x),
+    by_vars = exprs(x),
     analysis_var = y,
     summary_fun = mean,
     filter = z == 1,
-    set_values_to = vars(d = "MEAN")
+    set_values_to = exprs(d = "MEAN")
   )
   expected_output <- tibble(
     x = c(rep(1, 3), rep(2, 4)),
@@ -125,7 +125,7 @@ test_that("Filter record within `by_vars`", {
 test_that("Errors", {
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
 
-  # Is by_vars quosures/`vars()` object?
+  # Is by_vars quosures/`exprs()` object?
   expect_error(
     derive_summary_records(
       input,
@@ -133,14 +133,14 @@ test_that("Errors", {
       analysis_var = z,
       summary_fun = mean
     ),
-    regexp = "`by_vars` must be a list of unquoted variable names"
+    regexp = "`arg` must be an object of class 'list' but is `\"x\"`"
   )
 
   # Does by_vars exist in input dataset?
   expect_error(
     derive_summary_records(
       input,
-      by_vars = vars(a),
+      by_vars = exprs(a),
       analysis_var = z,
       summary_fun = mean
     ),
@@ -151,7 +151,7 @@ test_that("Errors", {
   expect_error(
     derive_summary_records(
       input,
-      by_vars = vars(x),
+      by_vars = exprs(x),
       analysis_var = y,
       summary_fun = list(mean, sum)
     ),
@@ -162,7 +162,7 @@ test_that("Errors", {
   expect_error(
     derive_summary_records(
       input,
-      by_vars = vars(x),
+      by_vars = exprs(x),
       analysis_var = z,
       summary_fun = ~mean
     ),

@@ -30,7 +30,7 @@ test_that("create_period_dataset Test 1: periods", {
     base = expected,
     compare = create_period_dataset(
       adsl,
-      new_vars = vars(APERSDT = APxxSDT, APEREDT = APxxEDT)
+      new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT)
     ),
     keys = c("USUBJID", "APERIOD")
   )
@@ -66,7 +66,7 @@ test_that("create_period_dataset Test 2: phases", {
     base = expected,
     compare = create_period_dataset(
       adsl,
-      new_vars = vars(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
+      new_vars = exprs(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
     ),
     keys = c("USUBJID", "APHASEN")
   )
@@ -105,7 +105,7 @@ test_that("create_period_dataset Test 3: subperiods", {
     base = expected,
     compare = create_period_dataset(
       adsl,
-      new_vars = vars(ASPRSDT = PxxSwSDT, ASPREDT = PxxSwEDT)
+      new_vars = exprs(ASPRSDT = PxxSwSDT, ASPREDT = PxxSwEDT)
     ),
     keys = c("USUBJID", "APERIOD", "ASPER")
   )
@@ -128,7 +128,7 @@ test_that("create_period_dataset Test 4: error if no period/phase variable on RH
   expect_error(
     create_period_dataset(
       adsl,
-      new_vars = vars(USUBJ = USUBJID)
+      new_vars = exprs(USUBJ = USUBJID)
     ),
     regexp = paste(
       paste0(
@@ -159,7 +159,7 @@ test_that("create_period_dataset Test 5: error if different type of RHSs", {
   expect_error(
     create_period_dataset(
       adsl,
-      new_vars = vars(APERSDT = APxxSDT, ASPRSDT = PxxSwSDT)
+      new_vars = exprs(APERSDT = APxxSDT, ASPRSDT = PxxSwSDT)
     ),
     regexp = paste(
       "More than one type of subperiod, period, or phase variables is specified for `new_vars`:",
@@ -188,7 +188,7 @@ test_that("create_period_dataset Test 6: error if RHS variable not in input data
   expect_error(
     create_period_dataset(
       adsl,
-      new_vars = vars(PHSDT = PHwSDT)
+      new_vars = exprs(PHSDT = PHwSDT)
     ),
     regexp = "No variables of the form PHwSDT were found in the input dataset.",
     fixed = TRUE
@@ -230,7 +230,7 @@ test_that("derive_vars_period Test 7: periods", {
     compare = derive_vars_period(
       adsl,
       dataset_ref = period_ref,
-      new_vars = vars(APxxSDT = APERSDT, APxxEDT = APEREDT)
+      new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
     ),
     keys = c("USUBJID")
   )
@@ -269,7 +269,7 @@ test_that("derive_vars_period Test 8: phases", {
     compare = derive_vars_period(
       adsl,
       dataset_ref = phase_ref,
-      new_vars = vars(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
+      new_vars = exprs(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
     ),
     keys = c("USUBJID")
   )
@@ -311,7 +311,7 @@ test_that("derive_vars_period Test 9: subperiods", {
     compare = derive_vars_period(
       adsl,
       dataset_ref = subperiod_ref,
-      new_vars = vars(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
+      new_vars = exprs(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
     ),
     keys = c("USUBJID")
   )
@@ -337,7 +337,7 @@ test_that("derive_vars_period Test 10: error if no period/phase variable on LHS"
     derive_vars_period(
       adsl,
       dataset_ref = period_ref,
-      new_vars = vars(USUBJ = USUBJID)
+      new_vars = exprs(USUBJ = USUBJID)
     ),
     regexp = paste(
       paste0(
@@ -372,7 +372,7 @@ test_that("derive_vars_period Test 11: error if different type of LHSs", {
     derive_vars_period(
       adsl,
       dataset_ref = period_ref,
-      new_vars = vars(APxxSDT = APERSDT, PxxSwSDT = ASPRSDT)
+      new_vars = exprs(APxxSDT = APERSDT, PxxSwSDT = ASPRSDT)
     ),
     regexp = paste(
       "More than one type of subperiod, period, or phase variables is specified for `new_vars`:",
