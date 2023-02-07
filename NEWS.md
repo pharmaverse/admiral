@@ -5,6 +5,8 @@
 - New function `consolidate_metadata()` for consolidating multiple meta datasets
 into a single one (#1479)
 
+- New function `derive_expected_records()` for adding expected Records (#1729)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
