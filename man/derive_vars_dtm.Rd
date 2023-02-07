@@ -213,7 +213,7 @@ derive_vars_dtm(
   highest_imputation = "M",
   date_imputation = "last",
   time_imputation = "last",
-  max_dates = vars(DTHDT, DCUTDT)
+  max_dates = exprs(DTHDT, DCUTDT)
 )
 
 # Seconds has been removed from the input dataset.  Function now uses

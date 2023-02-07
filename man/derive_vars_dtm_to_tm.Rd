@@ -9,7 +9,7 @@ derive_vars_dtm_to_tm(dataset, source_vars)
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{source_vars}{A list of datetime variables created using \code{vars()} from
+\item{source_vars}{A list of datetime variables created using \code{exprs()} from
 which time is to be extracted}
 }
 \value{
@@ -45,11 +45,11 @@ adcm <- tribble(
   )
 
 adcm \%>\%
-  derive_vars_dtm_to_tm(vars(TRTSDTM)) \%>\%
+  derive_vars_dtm_to_tm(exprs(TRTSDTM)) \%>\%
   select(USUBJID, starts_with("TRT"), everything())
 
 adcm \%>\%
-  derive_vars_dtm_to_tm(vars(TRTSDTM, ASTDTM, AENDTM)) \%>\%
+  derive_vars_dtm_to_tm(exprs(TRTSDTM, ASTDTM, AENDTM)) \%>\%
   select(USUBJID, starts_with("TRT"), starts_with("AS"), starts_with("AE"))
 }
 \seealso{

@@ -23,10 +23,10 @@ test_that("derive_extreme_records Test 1: add last observation for each group", 
 
   actual_output <- derive_extreme_records(
     input,
-    order = vars(AVISITN, LBSEQ),
-    by_vars = vars(USUBJID),
+    order = exprs(AVISITN, LBSEQ),
+    by_vars = exprs(USUBJID),
     mode = "last",
-    set_values_to = vars(DTYPE = "LOV")
+    set_values_to = exprs(DTYPE = "LOV")
   )
 
   expect_dfs_equal(

@@ -287,7 +287,7 @@ ae <- tribble(
     date_imputation = "first",
     time_imputation = "first"
   ) %>%
-  derive_vars_dtm_to_dt(vars(ASTDTM))
+  derive_vars_dtm_to_dt(exprs(ASTDTM))
 ```
 ```{r, echo=FALSE}
 dataset_vignette(ae)
@@ -369,7 +369,7 @@ ae <- tribble(
     highest_imputation = "M",
     date_imputation = "first",
     time_imputation = "first",
-    min_dates = vars(TRTSDTM)
+    min_dates = exprs(TRTSDTM)
   )
 ```
 ```{r, echo=FALSE}
@@ -401,7 +401,7 @@ ae <- tribble(
     highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last",
-    max_dates = vars(DTHDT, DCUTDT)
+    max_dates = exprs(DTHDT, DCUTDT)
   )
 ```
 ```{r, echo=FALSE}
