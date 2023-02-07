@@ -15,7 +15,7 @@ test_that("new observations are derived correctly", {
   outputs <- lapply(methods, function(method) {
     derive_param_qtc(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       method = method,
       get_unit_expr = AVALU
     )

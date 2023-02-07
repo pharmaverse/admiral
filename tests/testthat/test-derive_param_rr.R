@@ -26,8 +26,8 @@ test_that("new observations are derived correctly", {
   expect_dfs_equal(
     derive_param_rr(
       input,
-      by_vars = vars(USUBJID, VISIT),
-      set_values_to = vars(
+      by_vars = exprs(USUBJID, VISIT),
+      set_values_to = exprs(
         PARAMCD = "RRR",
         PARAM = "RR Duration Rederived (msec)",
         AVALU = "msec"

@@ -1,5 +1,6 @@
-# test 1 - multiple vars
-test_that("Convert a complete -- DTM into a date object", {
+
+## Test 1: multiple variables ----
+test_that("derive_vars_dtm_to_dt Test 1: multiple variables", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM,
     "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2013-02-25 23:00:00",
@@ -31,7 +32,7 @@ test_that("Convert a complete -- DTM into a date object", {
   )
   # nolint end
 
-  actual_output <- derive_vars_dtm_to_dt(input, vars(TRTSDTM, ASTDTM, AENDTM))
+  actual_output <- derive_vars_dtm_to_dt(input, exprs(TRTSDTM, ASTDTM, AENDTM))
 
   expect_dfs_equal(
     expected_output,
@@ -40,8 +41,8 @@ test_that("Convert a complete -- DTM into a date object", {
   )
 })
 
-# test 2 - single var
-test_that("Convert a complete -- DTM into a date object", {
+## Test 2: single variable ----
+test_that("derive_vars_dtm_to_dt Test 2: single variable", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM,
     "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2013-02-25 23:00:00",
@@ -71,7 +72,7 @@ test_that("Convert a complete -- DTM into a date object", {
   )
   # nolint end
 
-  actual_output <- derive_vars_dtm_to_dt(input, vars(TRTSDTM))
+  actual_output <- derive_vars_dtm_to_dt(input, exprs(TRTSDTM))
 
   expect_dfs_equal(
     expected_output,

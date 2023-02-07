@@ -52,7 +52,7 @@ ae <- tribble(
 
 extend_source_datasets(
   source_datasets = list(adsl = adsl, ae = ae),
-  by_vars = vars(AEDECOD)
+  by_vars = exprs(AEDECOD)
 )
 }
 \seealso{

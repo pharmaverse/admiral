@@ -42,7 +42,7 @@ test_that("derive_var_last_dose_grp Test 1: works as expected", {
   res <- derive_var_last_dose_grp(input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = vars(STUDYID, USUBJID),
+    by_vars = exprs(STUDYID, USUBJID),
     dose_date = EXENDT,
     new_var = LDGRP,
     grp_brks = c(1, 5, 10, 15),
