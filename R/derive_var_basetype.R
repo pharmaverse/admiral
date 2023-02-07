@@ -30,7 +30,6 @@
 #'
 #' @return The input dataset with variable `BASETYPE` added
 #'
-#' @author Thomas Neitmann
 #'
 #' @family der_bds_findings
 #'

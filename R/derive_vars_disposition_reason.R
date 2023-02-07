@@ -15,7 +15,6 @@
 #'
 #' @return A `character` vector
 #'
-#' @author Samia Kabi
 #' @export
 #' @family utils_fmt
 #' @keywords utils_fmt
@@ -135,7 +134,6 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' @seealso [format_reason_default()]
 #' @keywords der_adsl
 #'
-#' @author Samia Kabi
 #'
 #' @export
 #'

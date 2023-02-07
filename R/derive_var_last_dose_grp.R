@@ -27,7 +27,6 @@
 #' aggregate dose information and satisfy `single_dose_condition`.
 #' @return Input dataset with additional column `new_var`.
 #'
-#' @author Ben Straub
 #'
 #' @family der_gen
 #' @keywords der_gen

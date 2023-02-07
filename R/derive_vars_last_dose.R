@@ -72,7 +72,6 @@
 #'
 #' @return Input dataset with EX source variables from last dose added.
 #'
-#' @author Ondrej Slama, Annie Yang
 #'
 #' @family der_gen
 #' @keywords der_gen
