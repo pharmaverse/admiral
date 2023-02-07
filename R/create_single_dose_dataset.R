@@ -142,9 +142,10 @@ dose_freq_lookup <- tibble::tribble(
       str_detect(CDISC_VALUE, "^EVERY (A|E|W)[:alpha:]+") ~ 1,
       str_detect(CDISC_VALUE, "^Q(AM|PM|M|N|D|HS)|^PA$") ~ 1,
       str_detect(CDISC_VALUE, "^QH$") ~ 1,
-      str_detect(CDISC_VALUE, "BI[DM]") ~ 2,
-      str_detect(CDISC_VALUE, "TID") ~ 3,
-      str_detect(CDISC_VALUE, "QID") ~ 4,
+      str_detect(CDISC_VALUE, "BIM") ~ 2,
+      str_detect(CDISC_VALUE, "BID") ~ 1 / 12,
+      str_detect(CDISC_VALUE, "TID") ~ 1 / 8,
+      str_detect(CDISC_VALUE, "QID") ~ 1 / 6,
       str_detect(CDISC_VALUE, "QOD") ~ 0.5,
     ),
     DOSE_WINDOW = case_when(
@@ -157,9 +158,12 @@ dose_freq_lookup <- tibble::tribble(
       CDISC_VALUE %in% c("EVERY AFTERNOON", "EVERY EVENING") ~ "DAY",
       CDISC_VALUE %in% c("EVERY WEEK") ~ "WEEK",
       CDISC_VALUE %in% c(
-        "BID", "TID", "QAM", "QPM", "QHS",
-        "QD", "QN", "QID", "QOD"
+        "QAM", "QPM", "QHS",
+        "QD", "QN", "QOD"
       ) ~ "DAY",
+      CDISC_VALUE %in% c(
+        "BID", "TID", "QID"
+      ) ~ "HOUR",
       CDISC_VALUE %in% c("QM", "BIM") ~ "MONTH",
       CDISC_VALUE == "PA" ~ "YEAR",
     )
@@ -241,6 +245,16 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #'   The column of `lookup_table`.
 #'
+#' @param nominal_time The nominal relative time from first dose (`NFRLT`)
+#'
+#'   Used for PK analysis, this will be in hours and should be 0 for
+#'   the first dose.  It can be derived as `(VISITDY - 1) * 24` for example.
+#'   This will be expanded as the single dose dataset is created.  For example
+#'   an `EXDOFRQ` of `"QD"` will result in the nominal_time being incremented by
+#'   24 hours for each expanded record.
+#'
+#'   The value can be NULL if not needed.
+#'
 #' @param keep_source_vars List of variables to be retained from source dataset
 #'
 #'   This parameter can be specified if additional information is required in
@@ -286,7 +300,6 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #' create_single_dose_dataset(data)
 #'
-#'
 #' # Example with custom lookup
 #'
 #' custom_lookup <- tribble(
@@ -309,6 +322,31 @@ dose_freq_lookup <- tibble::tribble(
 #'   start_datetime = ASTDTM,
 #'   end_datetime = AENDTM
 #' )
+#' # Example with nominal time
+#'
+#' data <- tribble(
+#'   ~USUBJID, ~EXDOSFRQ, ~NFRLT, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
+#'   "P01", "BID", 0, ymd("2021-01-01"), ymd_hms("2021-01-01 08:00:00"),
+#'   ymd("2021-01-07"), ymd_hms("2021-01-07 20:00:00"),
+#'   "P01", "BID", 168, ymd("2021-01-08"), ymd_hms("2021-01-08 08:00:00"),
+#'   ymd("2021-01-14"), ymd_hms("2021-01-14 20:00:00"),
+#'   "P01", "BID", 336, ymd("2021-01-15"), ymd_hms("2021-01-15 08:00:00"),
+#'   ymd("2021-01-29"), ymd_hms("2021-01-29 20:00:00")
+#' )
+#'
+#' create_single_dose_dataset(data,
+#'   dose_freq = EXDOSFRQ,
+#'   start_date = ASTDT,
+#'   start_datetime = ASTDTM,
+#'   end_date = AENDT,
+#'   end_datetime = AENDTM,
+#'   lookup_table = dose_freq_lookup,
+#'   lookup_column = CDISC_VALUE,
+#'   nominal_time = NFRLT,
+#'   keep_source_vars = exprs(
+#'     USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, NFRLT
+#'   )
+#' )
 create_single_dose_dataset <- function(dataset,
                                        dose_freq = EXDOSFRQ,
                                        start_date = ASTDT,
@@ -317,6 +355,7 @@ create_single_dose_dataset <- function(dataset,
                                        end_datetime = NULL,
                                        lookup_table = dose_freq_lookup,
                                        lookup_column = CDISC_VALUE,
+                                       nominal_time = NULL,
                                        keep_source_vars = expr_c(
                                          exprs(USUBJID), dose_freq, start_date, start_datetime,
                                          end_date, end_datetime
@@ -327,6 +366,7 @@ create_single_dose_dataset <- function(dataset,
   start_datetime <- assert_symbol(enexpr(start_datetime), optional = TRUE)
   end_date <- assert_symbol(enexpr(end_date))
   end_datetime <- assert_symbol(enexpr(end_datetime), optional = TRUE)
+  nominal_time <- assert_symbol(enexpr(nominal_time), optional = TRUE)
   assert_data_frame(dataset, required_vars = expr_c(dose_freq, start_date, end_date))
   assert_data_frame(
     lookup_table,
@@ -393,6 +433,18 @@ create_single_dose_dataset <- function(dataset,
       )
     )
     abort(err_msg)
+  }
+
+  # Check nominal time is NULL or numeric
+
+  if (!quo_is_null(nominal_time)) {
+    check_nominal_time <-
+      mutate(
+        data_not_once,
+        check_nom := !!nominal_time
+      )
+
+    assert_numeric_vector(check_nominal_time$check_nom)
   }
 
   # Check values of lookup vs. data and return error if values are not covered
@@ -495,7 +547,14 @@ create_single_dose_dataset <- function(dataset,
     data_not_once <-
       mutate(
         data_not_once,
-        !!start_datetime := !!start_datetime + time_differential
+        !!start_datetime := !!start_datetime + time_differential,
+      )
+  }
+  if (!quo_is_null(nominal_time)) {
+    data_not_once <-
+      mutate(
+        data_not_once,
+        !!nominal_time := !!nominal_time + as.numeric(time_differential) / 3600
       )
   }
 

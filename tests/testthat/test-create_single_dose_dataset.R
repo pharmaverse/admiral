@@ -287,3 +287,120 @@ test_that("cases Test 9: error if no datetime specified and freq more than QD", 
     fixed = TRUE
   )
 })
+
+## Test 10: Works as expected for BID cases ----
+test_that("cases Test 10: Works as expected for BID cases", {
+  input <- tibble::tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
+    "P01", "BID", ymd("2021-01-01"), ymd_hms("2021-01-01 08:00:00"),
+    ymd("2021-01-03"), ymd_hms("2021-01-03 20:00:00"),
+    "P01", "BID", ymd("2021-01-04"), ymd_hms("2021-01-04 08:00:00"),
+    ymd("2021-01-06"), ymd_hms("2021-01-06 20:00:00")
+  )
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
+    "P01", "ONCE", ymd("2021-01-01"), ymd_hms("2021-01-01 08:00:00"),
+    ymd("2021-01-01"), ymd_hms("2021-01-01 08:00:00"),
+    "P01", "ONCE", ymd("2021-01-01"), ymd_hms("2021-01-01 20:00:00"),
+    ymd("2021-01-01"), ymd_hms("2021-01-01 20:00:00"),
+    "P01", "ONCE", ymd("2021-01-02"), ymd_hms("2021-01-02 08:00:00"),
+    ymd("2021-01-02"), ymd_hms("2021-01-02 08:00:00"),
+    "P01", "ONCE", ymd("2021-01-02"), ymd_hms("2021-01-02 20:00:00"),
+    ymd("2021-01-02"), ymd_hms("2021-01-02 20:00:00"),
+    "P01", "ONCE", ymd("2021-01-03"), ymd_hms("2021-01-03 08:00:00"),
+    ymd("2021-01-03"), ymd_hms("2021-01-03 08:00:00"),
+    "P01", "ONCE", ymd("2021-01-03"), ymd_hms("2021-01-03 20:00:00"),
+    ymd("2021-01-03"), ymd_hms("2021-01-03 20:00:00"),
+    "P01", "ONCE", ymd("2021-01-04"), ymd_hms("2021-01-04 08:00:00"),
+    ymd("2021-01-04"), ymd_hms("2021-01-04 08:00:00"),
+    "P01", "ONCE", ymd("2021-01-04"), ymd_hms("2021-01-04 20:00:00"),
+    ymd("2021-01-04"), ymd_hms("2021-01-04 20:00:00"),
+    "P01", "ONCE", ymd("2021-01-05"), ymd_hms("2021-01-05 08:00:00"),
+    ymd("2021-01-05"), ymd_hms("2021-01-05 08:00:00"),
+    "P01", "ONCE", ymd("2021-01-05"), ymd_hms("2021-01-05 20:00:00"),
+    ymd("2021-01-05"), ymd_hms("2021-01-05 20:00:00"),
+    "P01", "ONCE", ymd("2021-01-06"), ymd_hms("2021-01-06 08:00:00"),
+    ymd("2021-01-06"), ymd_hms("2021-01-06 08:00:00"),
+    "P01", "ONCE", ymd("2021-01-06"), ymd_hms("2021-01-06 20:00:00"),
+    ymd("2021-01-06"), ymd_hms("2021-01-06 20:00:00"),
+  )
+
+  expect_dfs_equal(
+    create_single_dose_dataset(
+      dataset = input,
+      dose_freq = EXDOSFRQ,
+      start_date = ASTDT,
+      start_datetime = ASTDTM,
+      end_date = AENDT,
+      end_datetime = AENDTM,
+      lookup_table = dose_freq_lookup,
+      lookup_column = CDISC_VALUE,
+      keep_source_vars = vars(
+        USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM
+      )
+    ),
+    expected_output,
+    keys = "ASTDTM"
+  )
+})
+
+## Test 11: Works as expected for cases with nominal time ----
+test_that("cases Test 11: Works as expected for cases with nominal time", {
+  input <- tibble::tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM, ~NFRLT,
+    "P01", "QD", ymd("2021-01-01"), ymd_hms("2021-01-01 08:00:00"),
+    ymd("2021-01-07"), ymd_hms("2021-01-07 08:00:00"), 0,
+    "P01", "QD", ymd("2021-01-08"), ymd_hms("2021-01-08 08:00:00"),
+    ymd("2021-01-14"), ymd_hms("2021-01-14 08:00:00"), 168
+  )
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM, ~NFRLT,
+    "P01", "ONCE", ymd("2021-01-01"), ymd_hms("2021-01-01 08:00:00"),
+    ymd("2021-01-01"), ymd_hms("2021-01-01 08:00:00"), 0,
+    "P01", "ONCE", ymd("2021-01-02"), ymd_hms("2021-01-02 08:00:00"),
+    ymd("2021-01-02"), ymd_hms("2021-01-02 08:00:00"), 24,
+    "P01", "ONCE", ymd("2021-01-03"), ymd_hms("2021-01-03 08:00:00"),
+    ymd("2021-01-03"), ymd_hms("2021-01-03 08:00:00"), 48,
+    "P01", "ONCE", ymd("2021-01-04"), ymd_hms("2021-01-04 08:00:00"),
+    ymd("2021-01-04"), ymd_hms("2021-01-04 08:00:00"), 72,
+    "P01", "ONCE", ymd("2021-01-05"), ymd_hms("2021-01-05 08:00:00"),
+    ymd("2021-01-05"), ymd_hms("2021-01-05 08:00:00"), 96,
+    "P01", "ONCE", ymd("2021-01-06"), ymd_hms("2021-01-06 08:00:00"),
+    ymd("2021-01-06"), ymd_hms("2021-01-06 08:00:00"), 120,
+    "P01", "ONCE", ymd("2021-01-07"), ymd_hms("2021-01-07 08:00:00"),
+    ymd("2021-01-07"), ymd_hms("2021-01-07 08:00:00"), 144,
+    "P01", "ONCE", ymd("2021-01-08"), ymd_hms("2021-01-08 08:00:00"),
+    ymd("2021-01-08"), ymd_hms("2021-01-08 08:00:00"), 168,
+    "P01", "ONCE", ymd("2021-01-09"), ymd_hms("2021-01-09 08:00:00"),
+    ymd("2021-01-09"), ymd_hms("2021-01-09 08:00:00"), 192,
+    "P01", "ONCE", ymd("2021-01-10"), ymd_hms("2021-01-10 08:00:00"),
+    ymd("2021-01-10"), ymd_hms("2021-01-10 08:00:00"), 216,
+    "P01", "ONCE", ymd("2021-01-11"), ymd_hms("2021-01-11 08:00:00"),
+    ymd("2021-01-11"), ymd_hms("2021-01-11 08:00:00"), 240,
+    "P01", "ONCE", ymd("2021-01-12"), ymd_hms("2021-01-12 08:00:00"),
+    ymd("2021-01-12"), ymd_hms("2021-01-12 08:00:00"), 264,
+    "P01", "ONCE", ymd("2021-01-13"), ymd_hms("2021-01-13 08:00:00"),
+    ymd("2021-01-13"), ymd_hms("2021-01-13 08:00:00"), 288,
+    "P01", "ONCE", ymd("2021-01-14"), ymd_hms("2021-01-14 08:00:00"),
+    ymd("2021-01-14"), ymd_hms("2021-01-14 08:00:00"), 312,
+  )
+
+  expect_dfs_equal(
+    create_single_dose_dataset(
+      dataset = input,
+      dose_freq = EXDOSFRQ,
+      start_date = ASTDT,
+      start_datetime = ASTDTM,
+      end_date = AENDT,
+      end_datetime = AENDTM,
+      lookup_table = dose_freq_lookup,
+      lookup_column = CDISC_VALUE,
+      nominal_time = NFRLT,
+      keep_source_vars = vars(
+        USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, NFRLT
+      )
+    ),
+    expected_output,
+    keys = "ASTDTM"
+  )
+})
