@@ -41,8 +41,8 @@ test_that("first observation for each group is flagged", {
 
   actual_output <- derive_var_extreme_flag(
     input,
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN, desc(AVAL)),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN, desc(AVAL)),
     new_var = firstfl,
     mode = "first"
   )
@@ -68,8 +68,8 @@ test_that("last observation for each group is flagged", {
 
   actual_output <- derive_var_extreme_flag(
     input,
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN, desc(AVAL)),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN, desc(AVAL)),
     new_var = lastfl,
     mode = "last"
   )
@@ -91,8 +91,8 @@ test_that("Derive worst flag works correctly", {
 
   actual_output <- derive_var_worst_flag(
     input_worst_flag,
-    by_vars = vars(USUBJID, PARAMCD, AVISIT),
-    order = vars(desc(ADT)),
+    by_vars = exprs(USUBJID, PARAMCD, AVISIT),
+    order = exprs(desc(ADT)),
     new_var = WORSTFL,
     param_var = PARAMCD,
     analysis_var = AVAL,
@@ -116,8 +116,8 @@ test_that("Derive worst flag works correctly with no worst_high option", {
 
   actual_output <- derive_var_worst_flag(
     input_worst_flag,
-    by_vars = vars(USUBJID, PARAMCD, AVISIT),
-    order = vars(ADT),
+    by_vars = exprs(USUBJID, PARAMCD, AVISIT),
+    order = exprs(ADT),
     new_var = WORSTFL,
     param_var = PARAMCD,
     analysis_var = AVAL,
@@ -135,8 +135,8 @@ test_that("Derive worst flag catches invalid parameters", {
   expect_error(
     derive_var_worst_flag(
       input_worst_flag,
-      by_vars = vars(USUBJID, PARAMCD, AVISIT),
-      order = vars(ADT),
+      by_vars = exprs(USUBJID, PARAMCD, AVISIT),
+      order = exprs(ADT),
       new_var = WORSTFL,
       param_var = PARAMCD,
       analysis_var = AVAL,
@@ -153,8 +153,8 @@ test_that("Derive worst flag catches invalid parameters", {
     derive_var_worst_flag(
       input_worst_flag,
       new_var = WORSTFL,
-      by_vars = vars(USUBJID, PARAMCD, AVISIT),
-      order = vars(ADT),
+      by_vars = exprs(USUBJID, PARAMCD, AVISIT),
+      order = exprs(ADT),
       param_var = PARAMCD,
       analysis_var = AVAL,
       worst_high = "A",
@@ -169,8 +169,8 @@ test_that("Derive worst flag catches invalid parameters", {
   expect_error(
     derive_var_worst_flag(
       input_worst_flag,
-      by_vars = vars(USUBJID, PARAMCD, AVISIT),
-      order = vars(ADT),
+      by_vars = exprs(USUBJID, PARAMCD, AVISIT),
+      order = exprs(ADT),
       new_var = WORSTFL,
       param_var = PARAMCD,
       analysis_var = AVAL,

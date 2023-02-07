@@ -25,6 +25,17 @@ into a single one (#1479)
 
 ## Breaking Changes
 
+- All function arguments which expected a list of quosures created by `vars()`
+are now expecting a list of expressions created by `exprs()`. For example,
+instead of `by_vars = vars(STUDYID, USUBJID)` `by_vars = exprs(STUDYID,
+USUBJID)` must be used now.
+
+    To enable running old scripts using `vars()` in the admiral function calls
+    admiral redefines the `vars()` function such that it returns a list of
+    expressions. This can be disabled by the admiral option `force_admiral_vars`
+    (see `set_admiral_options()`). Please note that this is a temporary solution
+    and will be removed in a future admiral release. (#1627)
+
 - Function `derive_param_tte()` has been updated such that only observations are
 added for subjects who have both an event or censoring and an observation in
 `dataset_adsl` (#1576).

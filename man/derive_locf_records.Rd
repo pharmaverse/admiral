@@ -97,8 +97,8 @@ advs_expected_obsv <- tibble::tribble(
 derive_locf_records(
   data = advs,
   dataset_expected_obs = advs_expected_obsv,
-  by_vars = vars(STUDYID, USUBJID, PARAMCD),
-  order = vars(AVISITN, AVISIT)
+  by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+  order = exprs(AVISITN, AVISIT)
 )
 
 }

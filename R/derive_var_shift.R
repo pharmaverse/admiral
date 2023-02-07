@@ -74,12 +74,12 @@ derive_var_shift <- function(dataset,
                              to_var,
                              na_val = "NULL",
                              sep_val = " to ") {
-  new_var <- assert_symbol(enquo(new_var))
-  from_var <- assert_symbol(enquo(from_var))
-  to_var <- assert_symbol(enquo(to_var))
+  new_var <- assert_symbol(enexpr(new_var))
+  from_var <- assert_symbol(enexpr(from_var))
+  to_var <- assert_symbol(enexpr(to_var))
   na_val <- assert_character_scalar(na_val)
   sep_val <- assert_character_scalar(sep_val)
-  assert_data_frame(dataset, required_vars = vars(!!from_var, !!to_var))
+  assert_data_frame(dataset, required_vars = exprs(!!from_var, !!to_var))
 
   # Derive shift variable. If from_var or to_var has missing value then set to na_val.
   dataset %>%
