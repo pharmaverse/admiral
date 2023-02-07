@@ -30,7 +30,7 @@ test_that("consolidate_metadata Test 1: consolidation works", {
         project = proj,
         study = stud
       ),
-      key_vars = vars(id)
+      key_vars = exprs(id)
     ),
     keys = c("id")
   )
@@ -55,7 +55,7 @@ test_that("consolidate_metadata Test 2: error if key vars are not unique", {
         global = glob,
         study = stud
       ),
-      key_vars = vars(id)
+      key_vars = exprs(id)
     ),
     "Dataset contains duplicate records with respect to"
   )
@@ -79,7 +79,7 @@ test_that("consolidate_metadata Test 3: warn if variables differ", {
         global = glob,
         study = stud
       ),
-      key_vars = vars(id)
+      key_vars = exprs(id)
     ),
     paste(
       "The variable names differ across the input datasets.",

@@ -101,9 +101,9 @@ test_that("deprecation Test 8: A warning is issued if `derive_derived_param()`
     derive_derived_param(
       input,
       parameters = c("SYSBP", "DIABP"),
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
-      set_values_to = vars(
+      set_values_to = exprs(
         PARAMCD = "MAP",
         PARAM = "Mean arterial pressure (mmHg)",
         AVALU = "mmHg"
@@ -120,9 +120,9 @@ test_that("deprecation Test 9: derive_vars_merged_dt: a deprecation warning
     derive_vars_merged_dt(
       adsl,
       dataset_add = ex,
-      order = vars(TRTSDT),
+      order = exprs(TRTSDT),
       flag_imputation = "date",
-      by_vars = vars(STUDYID, USUBJID),
+      by_vars = exprs(STUDYID, USUBJID),
       dtc = EXSTDTC,
       new_vars_prefix = "TRTS",
       mode = "first"
@@ -138,8 +138,8 @@ test_that("deprecation Test 10: derive_vars_merged_dtm: a deprecation warning
     derive_vars_merged_dtm(
       adsl,
       dataset_add = ex,
-      order = vars(TRTSDTM),
-      by_vars = vars(STUDYID, USUBJID),
+      order = exprs(TRTSDTM),
+      by_vars = exprs(STUDYID, USUBJID),
       dtc = EXSTDTC,
       new_vars_prefix = "TRTS",
       time_imputation = "first",
@@ -244,7 +244,7 @@ test_that("deprecation Test 16: A warning is issued if `derive_param_first_event
         dataset_source = adrs,
         filter_source = PARAMCD == "OVR" & AVALC == "PD",
         date_var = ADT,
-        set_values_to = vars(
+        set_values_to = exprs(
           PARAMCD = "PD",
           ANL01FL = "Y"
         )

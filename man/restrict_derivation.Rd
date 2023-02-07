@@ -41,10 +41,10 @@ restrict_derivation(
   adlb,
   derivation = derive_vars_merged,
   args = params(
-    by_vars = vars(USUBJID),
+    by_vars = exprs(USUBJID),
     dataset_add = adlb,
     filter_add = ABLFL == "Y",
-    new_vars = vars(BASE = AVAL)
+    new_vars = exprs(BASE = AVAL)
   ),
   filter = AVISITN > 0
 )
@@ -54,7 +54,7 @@ restrict_derivation(
   adlb,
   derivation = derive_var_base,
   args = params(
-    by_vars = vars(USUBJID)
+    by_vars = exprs(USUBJID)
   ),
   filter = AVISITN >= 0
 ) \%>\%

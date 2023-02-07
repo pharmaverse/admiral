@@ -14,7 +14,7 @@ create_single_dose_dataset(
   lookup_table = dose_freq_lookup,
   lookup_column = CDISC_VALUE,
   nominal_time = NULL,
-  keep_source_vars = quo_c(vars(USUBJID), dose_freq, start_date, start_datetime,
+  keep_source_vars = expr_c(exprs(USUBJID), dose_freq, start_date, start_datetime,
     end_date, end_datetime)
 )
 }
@@ -177,7 +177,7 @@ create_single_dose_dataset(data,
   lookup_table = dose_freq_lookup,
   lookup_column = CDISC_VALUE,
   nominal_time = NFRLT,
-  keep_source_vars = vars(
+  keep_source_vars = exprs(
     USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, NFRLT
   )
 )

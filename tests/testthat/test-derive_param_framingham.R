@@ -50,8 +50,8 @@ test_that("derive_param_framingham Test 1: New observations are derived correctl
   expect_dfs_equal(
     derive_param_framingham(
       input,
-      by_vars = vars(USUBJID, VISIT),
-      set_values_to = vars(
+      by_vars = exprs(USUBJID, VISIT),
+      set_values_to = exprs(
         PARAMCD = "FCVD101",
         PARAM = "FCVD1-Framingham CVD 10-Year Risk Score (%)"
       ),

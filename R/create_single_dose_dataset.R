@@ -343,7 +343,7 @@ dose_freq_lookup <- tibble::tribble(
 #'   lookup_table = dose_freq_lookup,
 #'   lookup_column = CDISC_VALUE,
 #'   nominal_time = NFRLT,
-#'   keep_source_vars = vars(
+#'   keep_source_vars = exprs(
 #'     USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, NFRLT
 #'   )
 #' )
@@ -356,21 +356,21 @@ create_single_dose_dataset <- function(dataset,
                                        lookup_table = dose_freq_lookup,
                                        lookup_column = CDISC_VALUE,
                                        nominal_time = NULL,
-                                       keep_source_vars = quo_c(
-                                         vars(USUBJID), dose_freq, start_date, start_datetime,
+                                       keep_source_vars = expr_c(
+                                         exprs(USUBJID), dose_freq, start_date, start_datetime,
                                          end_date, end_datetime
                                        )) {
-  dose_freq <- assert_symbol(enquo(dose_freq))
-  lookup_column <- assert_symbol(enquo(lookup_column))
-  start_date <- assert_symbol(enquo(start_date))
-  start_datetime <- assert_symbol(enquo(start_datetime), optional = TRUE)
-  end_date <- assert_symbol(enquo(end_date))
-  end_datetime <- assert_symbol(enquo(end_datetime), optional = TRUE)
-  nominal_time <- assert_symbol(enquo(nominal_time), optional = TRUE)
-  assert_data_frame(dataset, required_vars = quo_c(dose_freq, start_date, end_date))
+  dose_freq <- assert_symbol(enexpr(dose_freq))
+  lookup_column <- assert_symbol(enexpr(lookup_column))
+  start_date <- assert_symbol(enexpr(start_date))
+  start_datetime <- assert_symbol(enexpr(start_datetime), optional = TRUE)
+  end_date <- assert_symbol(enexpr(end_date))
+  end_datetime <- assert_symbol(enexpr(end_datetime), optional = TRUE)
+  nominal_time <- assert_symbol(enexpr(nominal_time), optional = TRUE)
+  assert_data_frame(dataset, required_vars = expr_c(dose_freq, start_date, end_date))
   assert_data_frame(
     lookup_table,
-    required_vars = vars(!!lookup_column, DOSE_WINDOW, DOSE_COUNT, CONVERSION_FACTOR)
+    required_vars = exprs(!!lookup_column, DOSE_WINDOW, DOSE_COUNT, CONVERSION_FACTOR)
   )
   assert_data_frame(dataset, required_vars = keep_source_vars)
   col_names <- colnames(dataset)
@@ -412,10 +412,10 @@ create_single_dose_dataset <- function(dataset,
 
   # Check that NAs do not appear in start_date or start_datetime or end_date or end_datetime columns
   condition <- paste0("is.na(", as_name(start_date), ") | is.na(", as_name(end_date), ")")
-  if (!quo_is_null(start_datetime)) {
+  if (!is.null(start_datetime)) {
     condition <- paste(condition, "| is.na(", as_name(start_datetime), ")")
   }
-  if (!quo_is_null(end_datetime)) {
+  if (!is.null(end_datetime)) {
     condition <- paste(condition, "| is.na(", as_name(end_datetime), ")")
   }
   na_check <- data_not_once %>%
@@ -437,7 +437,7 @@ create_single_dose_dataset <- function(dataset,
 
   # Check nominal time is NULL or numeric
 
-  if (!quo_is_null(nominal_time)) {
+  if (!is.null(nominal_time)) {
     check_nominal_time <-
       mutate(
         data_not_once,
@@ -451,7 +451,7 @@ create_single_dose_dataset <- function(dataset,
 
   value_check <- data_not_once %>%
     select(!!dose_freq) %>%
-    anti_join(lookup, by = as.character(quo_get_expr(dose_freq))) %>%
+    anti_join(lookup, by = as.character(dose_freq)) %>%
     unique()
 
   if (nrow(value_check) > 0) {
@@ -460,7 +460,7 @@ create_single_dose_dataset <- function(dataset,
     err_msg <- paste0(
       sprintf(
         "The following values of %s in %s do not appear in %s:\n",
-        as.character(quo_get_expr(dose_freq)),
+        as.character(dose_freq),
         arg_name(substitute(dataset)),
         arg_name(substitute(lookup_table))
       ), values_not_found
@@ -470,7 +470,7 @@ create_single_dose_dataset <- function(dataset,
 
   # Use compute_duration to determine the number of completed dose periods
 
-  if (quo_is_null(start_datetime)) {
+  if (is.null(start_datetime)) {
     min_hour_cases <- exprs(FALSE ~ 0)
   } else {
     min_hour_cases <- exprs(
@@ -485,11 +485,11 @@ create_single_dose_dataset <- function(dataset,
   data_not_once <- left_join(
     data_not_once,
     lookup,
-    by = as.character(quo_get_expr(dose_freq))
+    by = as.character(dose_freq)
   )
 
   if (any(data_not_once$DOSE_WINDOW %in% c("MINUTE", "HOUR")) &
-    (quo_is_null(start_datetime) | quo_is_null(end_datetime))) {
+    (is.null(start_datetime) | is.null(end_datetime))) {
     abort(
       paste(
         "There are dose frequencies more frequent than once a day.",
@@ -543,14 +543,14 @@ create_single_dose_dataset <- function(dataset,
       !!dose_freq := "ONCE",
       !!start_date := !!start_date + time_differential_dt
     )
-  if (!quo_is_null(start_datetime)) {
+  if (!is.null(start_datetime)) {
     data_not_once <-
       mutate(
         data_not_once,
         !!start_datetime := !!start_datetime + time_differential,
       )
   }
-  if (!quo_is_null(nominal_time)) {
+  if (!is.null(nominal_time)) {
     data_not_once <-
       mutate(
         data_not_once,
@@ -563,7 +563,7 @@ create_single_dose_dataset <- function(dataset,
     mutate(
       !!end_date := !!start_date
     )
-  if (!quo_is_null(end_datetime)) {
+  if (!is.null(end_datetime)) {
     data_not_once <-
       mutate(
         data_not_once,
@@ -574,7 +574,7 @@ create_single_dose_dataset <- function(dataset,
         )
       )
   }
-  data_not_once <- select(data_not_once, !!!vars(all_of(col_names)))
+  data_not_once <- select(data_not_once, all_of(col_names))
 
   # Stitch back together
 
