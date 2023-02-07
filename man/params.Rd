@@ -25,8 +25,8 @@ adae <- admiral_ae[sample(1:nrow(admiral_ae), 1000), ] \%>\%
   select(USUBJID, AESTDTC, AEENDTC) \%>\%
   derive_vars_merged(
     dataset_add = admiral_adsl,
-    new_vars = vars(TRTSDT, TRTEDT),
-    by_vars = vars(USUBJID)
+    new_vars = exprs(TRTSDT, TRTEDT),
+    by_vars = exprs(USUBJID)
   )
 
 ## In order to derive both `ASTDT` and `AENDT` in `ADAE`, one can use `derive_vars_dt()`
@@ -35,15 +35,15 @@ adae \%>\%
     new_vars_prefix = "AST",
     dtc = AESTDTC,
     date_imputation = "first",
-    min_dates = vars(TRTSDT),
-    max_dates = vars(TRTEDT)
+    min_dates = exprs(TRTSDT),
+    max_dates = exprs(TRTEDT)
   ) \%>\%
   derive_vars_dt(
     new_vars_prefix = "AEN",
     dtc = AEENDTC,
     date_imputation = "last",
-    min_dates = vars(TRTSDT),
-    max_dates = vars(TRTEDT)
+    min_dates = exprs(TRTSDT),
+    max_dates = exprs(TRTEDT)
   )
 
 ## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
@@ -59,8 +59,8 @@ call_derivation(
     params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
     params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
   ),
-  min_dates = vars(TRTSDT),
-  max_dates = vars(TRTEDT)
+  min_dates = exprs(TRTSDT),
+  max_dates = exprs(TRTEDT)
 )
 
 ## The above call using `call_derivation()` is equivalent to the call using `derive_vars_dt()`

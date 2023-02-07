@@ -48,7 +48,7 @@ admiral_vs \%>\%
     AVAL = VSSTRESN
   ) \%>\%
   filter(PARAMCD \%in\% c("PULSE", "DIABP")) \%>\%
-  derive_vars_merged(ref_ranges, by_vars = vars(PARAMCD)) \%>\%
+  derive_vars_merged(ref_ranges, by_vars = exprs(PARAMCD)) \%>\%
   derive_var_anrind() \%>\%
   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
 }

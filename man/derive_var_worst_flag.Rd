@@ -109,8 +109,8 @@ input <- tribble(
 
 derive_var_worst_flag(
   input,
-  by_vars = vars(USUBJID, PARAMCD, AVISIT),
-  order = vars(desc(ADT)),
+  by_vars = exprs(USUBJID, PARAMCD, AVISIT),
+  order = exprs(desc(ADT)),
   new_var = WORSTFL,
   param_var = PARAMCD,
   analysis_var = AVAL,
@@ -123,8 +123,8 @@ restrict_derivation(
   advs,
   derivation = derive_var_worst_flag,
   args = params(
-    by_vars = vars(USUBJID, PARAMCD, AVISIT),
-    order = vars(ADT, ATPTN),
+    by_vars = exprs(USUBJID, PARAMCD, AVISIT),
+    order = exprs(ADT, ATPTN),
     new_var = WORSTFL,
     param_var = PARAMCD,
     analysis_var = AVAL,

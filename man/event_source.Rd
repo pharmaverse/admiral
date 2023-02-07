@@ -21,8 +21,8 @@ or a datetime can be specified. An unquoted symbol is expected.
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
 
-\item{set_values_to}{A named list returned by \code{vars()} defining the variables
-to be set for the event or censoring, e.g. \code{vars(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")}. The values must be a symbol, a
+\item{set_values_to}{A named list returned by \code{exprs()} defining the variables
+to be set for the event or censoring, e.g. \code{exprs(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")}. The values must be a symbol, a
 character string, a numeric value, or \code{NA}.}
 }
 \value{
@@ -39,7 +39,7 @@ event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "DEATH",
     SRCDOM = "ADSL",
     SRCVAR = "DTHDT"

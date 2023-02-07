@@ -21,7 +21,7 @@ consolidate_metadata(
 
 The specified variables must be a unique of all input datasets.
 
-\emph{Permitted Values}: A list of variables created by \code{vars()}}
+\emph{Permitted Values}: A list of variables created by \code{exprs()}}
 
 \item{source_var}{Source variable
 
@@ -84,7 +84,7 @@ consolidate_metadata(
     project = proj_ranges,
     study = stud_ranges
   ),
-  key_vars = vars(PARAMCD)
+  key_vars = exprs(PARAMCD)
 )
 }
 \seealso{

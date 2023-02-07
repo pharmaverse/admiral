@@ -38,7 +38,7 @@ The input dataset and the selected observations from the additional dataset
 are merged by the specified by variables. The by variables must be a unique
 key of the selected observations.
 
-\emph{Permitted Values}: list of variables created by \code{vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{order}{Sort order
 
@@ -55,7 +55,7 @@ observations where the variable is not 'NA'.
 \emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \verb{vars(ADT, desc(AVAL)} or \code{NULL}}
+created by \code{exprs()}, e.g., \verb{exprs(ADT, desc(AVAL)} or \code{NULL}}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 

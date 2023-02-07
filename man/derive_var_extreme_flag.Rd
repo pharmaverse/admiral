@@ -81,8 +81,8 @@ admiral_vs \%>\%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = vars(USUBJID, VSTESTCD, VISIT),
-      order = vars(VSTPTNUM),
+      by_vars = exprs(USUBJID, VSTESTCD, VISIT),
+      order = exprs(VSTPTNUM),
       new_var = LASTFL,
       mode = "last"
     ),
@@ -122,8 +122,8 @@ restrict_derivation(
   input,
   derivation = derive_var_extreme_flag,
   args = params(
-    by_vars = vars(USUBJID, PARAMCD),
-    order = vars(ADT),
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
     new_var = ABLFL,
     mode = "last"
   ),
@@ -135,8 +135,8 @@ restrict_derivation(
   input,
   derivation = derive_var_extreme_flag,
   args = params(
-    by_vars = vars(USUBJID, PARAMCD),
-    order = vars(AVAL, ADT),
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(AVAL, ADT),
     new_var = ABLFL,
     mode = "last"
   ),
@@ -148,8 +148,8 @@ restrict_derivation(
   input,
   derivation = derive_var_extreme_flag,
   args = params(
-    by_vars = vars(USUBJID, PARAMCD),
-    order = vars(desc(AVAL), ADT),
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(desc(AVAL), ADT),
     new_var = ABLFL,
     mode = "last"
   ),
@@ -161,8 +161,8 @@ restrict_derivation(
   input,
   derivation = derive_var_extreme_flag,
   args = params(
-    by_vars = vars(USUBJID, PARAMCD),
-    order = vars(ADT, desc(AVAL)),
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT, desc(AVAL)),
     new_var = ABLFL,
     mode = "last"
   ),
@@ -180,8 +180,8 @@ admiral_ae \%>\%
   ) \%>\%
   derive_var_extreme_flag(
     new_var = AOCCIFL,
-    by_vars = vars(USUBJID),
-    order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+    by_vars = exprs(USUBJID),
+    order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
     mode = "first"
   ) \%>\%
   arrange(USUBJID, AESTDY, AESEQ) \%>\%
@@ -195,8 +195,8 @@ admiral_ae \%>\%
   ) \%>\%
   derive_var_extreme_flag(
     new_var = AOCCSIFL,
-    by_vars = vars(USUBJID, AEBODSYS),
-    order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+    by_vars = exprs(USUBJID, AEBODSYS),
+    order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
     mode = "first"
   ) \%>\%
   arrange(USUBJID, AESTDY, AESEQ) \%>\%

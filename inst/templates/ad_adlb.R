@@ -86,29 +86,29 @@ param_lookup <- tibble::tribble(
 # Derivations ----
 
 # Get list of ADSL vars required for derivations
-adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
 adlb <- lb %>%
   # Join ADSL with LB (need TRTSDT for ADY derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   ## Calculate ADT, ADY ----
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = LBDTC
   ) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
 adlb <- adlb %>%
   ## Add PARAMCD PARAM and PARAMN - from LOOK-UP table ----
   # Replace with PARAMCD lookup function
   derive_vars_merged_lookup(
     dataset_add = param_lookup,
-    new_vars = vars(PARAMCD, PARAM, PARAMN),
-    by_vars = vars(LBTESTCD),
+    new_vars = exprs(PARAMCD, PARAM, PARAMN),
+    by_vars = exprs(LBTESTCD),
     check_type = "none",
     print_not_mapped = FALSE
   ) %>%
@@ -127,8 +127,8 @@ adlb <- adlb %>%
 adlb <- adlb %>%
   # Derive absolute Basophils
   derive_param_wbc_abs(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, DOMAIN, VISIT, VISITNUM, ADT, ADY),
-    set_values_to = vars(
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, DOMAIN, VISIT, VISITNUM, ADT, ADY),
+    set_values_to = exprs(
       PARAMCD = "BASO",
       PARAM = "Basophils Abs (10^9/L)",
       PARAMN = 6,
@@ -140,8 +140,8 @@ adlb <- adlb %>%
   ) %>%
   # Derive absolute Lymphocytes
   derive_param_wbc_abs(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, DOMAIN, VISIT, VISITNUM, ADT, ADY),
-    set_values_to = vars(
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, DOMAIN, VISIT, VISITNUM, ADT, ADY),
+    set_values_to = exprs(
       PARAMCD = "LYMPH",
       PARAM = "Lymphocytes Abs (10^9/L)",
       PARAMN = 25,
@@ -192,8 +192,8 @@ adlb <- adlb %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
-      order = vars(ADT, VISITNUM, LBSEQ),
+      by_vars = exprs(STUDYID, USUBJID, BASETYPE, PARAMCD),
+      order = exprs(ADT, VISITNUM, LBSEQ),
       new_var = ABLFL,
       mode = "last"
     ),
@@ -204,19 +204,19 @@ adlb <- adlb %>%
 adlb <- adlb %>%
   # Calculate BASE
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   ) %>%
   # Calculate BASEC
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVALC,
     new_var = BASEC
   ) %>%
   # Calculate BNRIND
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ANRIND,
     new_var = BNRIND
   ) %>%
@@ -266,7 +266,7 @@ grade_crit <- atoxgr_criteria_ctcv4
 adlb <- adlb %>%
   derive_vars_merged(
     dataset_add = grade_lookup,
-    by_vars = vars(PARAMCD)
+    by_vars = exprs(PARAMCD)
   ) %>%
   # Derive toxicity grade for low values ATOXGRL
 
@@ -290,19 +290,19 @@ adlb <- adlb %>%
   derive_var_atoxgr() %>%
   # Derive baseline toxicity grade for low values BTOXGRL
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ATOXGRL,
     new_var = BTOXGRL
   ) %>%
   # Derive baseline toxicity grade for high values BTOXGRH
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ATOXGRH,
     new_var = BTOXGRH
   ) %>%
   # Derive baseline toxicity grade for for overall grade BTOXGR
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ATOXGR,
     new_var = BTOXGR
   )
@@ -349,8 +349,8 @@ adlb <- adlb %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = vars(USUBJID, PARAMCD, AVISIT),
-      order = vars(ADT, AVAL),
+      by_vars = exprs(USUBJID, PARAMCD, AVISIT),
+      order = exprs(ADT, AVAL),
       new_var = ANL01FL,
       mode = "last"
     ),
@@ -359,8 +359,8 @@ adlb <- adlb %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = vars(USUBJID, PARAMCD),
-      order = vars(ADT, AVAL),
+      by_vars = exprs(USUBJID, PARAMCD),
+      order = exprs(ADT, AVAL),
       new_var = LVOTFL,
       mode = "last"
     ),
@@ -381,12 +381,12 @@ adlb <- adlb %>%
 adlb <- adlb %>%
   # get MINIMUM value
   derive_extreme_records(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
-    order = vars(AVAL, ADT, AVISITN),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    order = exprs(AVAL, ADT, AVISITN),
     mode = "first",
     # "AVISITN < 9997" to evaluate only real visits
     filter = (!is.na(AVAL) & ONTRTFL == "Y" & AVISITN < 9997),
-    set_values_to = vars(
+    set_values_to = exprs(
       AVISITN = 9997,
       AVISIT = "POST-BASELINE MINIMUM",
       DTYPE = "MINIMUM"
@@ -394,12 +394,12 @@ adlb <- adlb %>%
   ) %>%
   # get MAXIMUM value
   derive_extreme_records(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
-    order = vars(desc(AVAL), ADT, AVISITN),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    order = exprs(desc(AVAL), ADT, AVISITN),
     mode = "first",
     # "AVISITN < 9997" to evaluate only real visits
     filter = (!is.na(AVAL) & ONTRTFL == "Y" & AVISITN < 9997),
-    set_values_to = vars(
+    set_values_to = exprs(
       AVISITN = 9998,
       AVISIT = "POST-BASELINE MAXIMUM",
       DTYPE = "MAXIMUM"
@@ -407,12 +407,12 @@ adlb <- adlb %>%
   ) %>%
   # get LOV value
   derive_extreme_records(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
-    order = vars(ADT, AVISITN),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    order = exprs(ADT, AVISITN),
     mode = "last",
     # "AVISITN < 9997" to evaluate only real visits
     filter = (ONTRTFL == "Y" & AVISITN < 9997),
-    set_values_to = vars(
+    set_values_to = exprs(
       AVISITN = 9999,
       AVISIT = "POST-BASELINE LAST",
       DTYPE = "LOV"
@@ -424,8 +424,8 @@ adlb <- adlb %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = vars(STUDYID, USUBJID),
-    order = vars(PARAMCD, ADT, AVISITN, VISITNUM),
+    by_vars = exprs(STUDYID, USUBJID),
+    order = exprs(PARAMCD, ADT, AVISITN, VISITNUM),
     check_type = "error"
   )
 
@@ -433,7 +433,7 @@ adlb <- adlb %>%
 adlb <- adlb %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   )
 
 # Final Steps, Select final variables and Add labels

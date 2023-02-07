@@ -99,7 +99,7 @@ data("admiral_ae")
 derive_var_merged_exist_flag(
   admiral_dm,
   dataset_add = admiral_ae,
-  by_vars = vars(STUDYID, USUBJID),
+  by_vars = exprs(STUDYID, USUBJID),
   new_var = AERELFL,
   condition = AEREL == "PROBABLE"
 ) \%>\%
@@ -109,7 +109,7 @@ data("admiral_vs")
 derive_var_merged_exist_flag(
   admiral_dm,
   dataset_add = admiral_vs,
-  by_vars = vars(STUDYID, USUBJID),
+  by_vars = exprs(STUDYID, USUBJID),
   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
   new_var = WTBLHIFL,
   condition = VSSTRESN > 90,

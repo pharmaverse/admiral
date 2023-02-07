@@ -15,8 +15,8 @@ the date.}
 \item{date}{A variable providing a date. A date or a datetime can be
 specified. An unquoted symbol is expected.}
 
-\item{traceability_vars}{A named list returned by \code{vars()} defining the
-traceability variables, e.g. \code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, a numeric,
+\item{traceability_vars}{A named list returned by \code{exprs()} defining the
+traceability variables, e.g. \code{exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, a numeric,
 or \code{NA}.}
 }
 \value{
@@ -45,7 +45,7 @@ lb_date <- date_source(
 death_date <- date_source(
   dataset_name = "adsl",
   date = DTHDT,
-  traceability_vars = vars(
+  traceability_vars = exprs(
     LALVDOM = "ADSL",
     LALVVAR = "DTHDT"
   )
@@ -54,7 +54,7 @@ death_date <- date_source(
 \seealso{
 \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}}
 
-Source Specifications: 
+Source Specifications:
 \code{\link{assert_db_requirements}()},
 \code{\link{assert_terms}()},
 \code{\link{assert_valid_queries}()},

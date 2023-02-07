@@ -37,7 +37,7 @@ test_that("new observations are derived correctly when zero_doses is NULL", {
 
   expect_dfs_equal(
     derive_param_doseint(input,
-      by_vars = vars(USUBJID, VISIT)
+      by_vars = exprs(USUBJID, VISIT)
     ),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
@@ -87,7 +87,7 @@ test_that("new observations are derived correctly when zero_doses is Y", {
 
   expect_dfs_equal(
     derive_param_doseint(input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       zero_doses = "100"
     ),
     expected_output,

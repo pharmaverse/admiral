@@ -42,10 +42,10 @@
 #'   adlb,
 #'   derivation = derive_vars_merged,
 #'   args = params(
-#'     by_vars = vars(USUBJID),
+#'     by_vars = exprs(USUBJID),
 #'     dataset_add = adlb,
 #'     filter_add = ABLFL == "Y",
-#'     new_vars = vars(BASE = AVAL)
+#'     new_vars = exprs(BASE = AVAL)
 #'   ),
 #'   filter = AVISITN > 0
 #' )
@@ -55,7 +55,7 @@
 #'   adlb,
 #'   derivation = derive_var_base,
 #'   args = params(
-#'     by_vars = vars(USUBJID)
+#'     by_vars = exprs(USUBJID)
 #'   ),
 #'   filter = AVISITN >= 0
 #' ) %>%
@@ -75,7 +75,7 @@ restrict_derivation <- function(dataset,
   if (!is.null(args)) {
     assert_function_param(deparse(substitute(derivation)), names(args))
   }
-  filter <- assert_filter_cond(enquo(filter))
+  filter <- assert_filter_cond(enexpr(filter))
 
   # Split input dataset
   data_ignore <- dataset %>%
