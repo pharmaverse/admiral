@@ -887,7 +887,7 @@ If needed, the other `ADSL` variables can now be added:
 # Add all ADSL variables
 adpc <- adpc %>%
   derive_vars_merged(
-    dataset_add = select(adsl, !!!negate_exprs(adsl_vars)),
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = exprs(STUDYID, USUBJID)
   )
 ```
