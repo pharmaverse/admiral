@@ -1331,7 +1331,7 @@
     },
     "stringi": {
       "Package": "stringi",
-      "Version": "1.7.12",
+      "Version": "1.5.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "a063ebea753c92910a4cca7b18bc1f05",
