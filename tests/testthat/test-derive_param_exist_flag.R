@@ -37,7 +37,7 @@ test_that("derive_param_exist_flag Test 1: derive parameter indicating PD", {
     filter_add = PARAMCD == "OVR",
     condition = AVALC == "PD",
     false_value = "N",
-    set_values_to = vars(
+    set_values_to = exprs(
       PARAMCD = "PD",
       ANL01FL = "Y"
     )
@@ -71,8 +71,8 @@ test_that("derive_param_exist_flag Test 2: error is issued if aval_fun returns w
       filter_add = PARAMCD == "OVR",
       condition = AVALC == "PD",
       false_value = "N",
-      aval_fun = print,
-      set_values_to = vars(
+      aval_fun = function(x) x,
+      set_values_to = exprs(
         PARAMCD = "PD",
         ANL01FL = "Y"
       )
@@ -96,7 +96,7 @@ test_that("derive_param_exist_flag Test 3: error is issued if paramter already e
       filter_add = PARAMCD == "OVR",
       condition = AVALC == "PD",
       false_value = "N",
-      set_values_to = vars(
+      set_values_to = exprs(
         PARAMCD = "OVR",
         ANL01FL = "Y"
       )

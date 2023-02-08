@@ -46,11 +46,11 @@ expected_output2 <- tibble::tribble(
 )
 # nolint end
 
-############## Test 1: multiple vars
-test_that("Convert a complete -- DTM into --TM, TM out is HH:MM:SS", {
+## Test 1: mutliple variables ----
+test_that("derive_vars_dtm_to_tm Test 1: mutliple variables", {
   actual_output <- derive_vars_dtm_to_tm(
     input,
-    vars(TRTSDTM, ASTDTM, AENDTM)
+    exprs(TRTSDTM, ASTDTM, AENDTM)
   )
   expect_dfs_equal(
     expected_output,
@@ -59,11 +59,11 @@ test_that("Convert a complete -- DTM into --TM, TM out is HH:MM:SS", {
   )
 })
 
-############## Test 2: single var
-test_that("Convert a complete -- DTM into --TM, TM out is HH:MM:SS", {
+## Test 2: single variable ----
+test_that("derive_vars_dtm_to_tm Test 2: single variable", {
   actual_output <- derive_vars_dtm_to_tm(
     input,
-    vars(TRTSDTM)
+    exprs(TRTSDTM)
   )
   expect_dfs_equal(
     expected_output2,

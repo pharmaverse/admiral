@@ -15,7 +15,7 @@ signal_duplicate_records(
 \arguments{
 \item{dataset}{A data frame}
 
-\item{by_vars}{A list of variables created using \code{vars()} identifying groups of
+\item{by_vars}{A list of variables created using \code{exprs()} identifying groups of
 records in which to look for duplicates}
 
 \item{msg}{The condition message}
@@ -35,7 +35,7 @@ data(admiral_adsl)
 # Duplicate the first record
 adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 
-signal_duplicate_records(adsl, vars(USUBJID), cnd_type = "message")
+signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "message")
 }
 \seealso{
 Utilities used within Derivation functions: 

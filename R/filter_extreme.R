@@ -11,14 +11,14 @@
 #'
 #'   *Default*: `NULL`
 #'
-#'   *Permitted Values:* list of variables created by `vars()`
+#'   *Permitted Values:* list of variables created by `exprs()`
 #'
 #' @param order Sort order
 #'
 #'   Within each by group the observations are ordered by the specified order.
 #'
 #'   *Permitted Values:* list of variables or `desc(<variable>)` function calls
-#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))`
+#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))`
 #'
 #' @param mode Selection mode (first or last)
 #'
@@ -61,8 +61,8 @@
 #' # Select first dose for each patient
 #' admiral_ex %>%
 #'   filter_extreme(
-#'     by_vars = vars(USUBJID),
-#'     order = vars(EXSEQ),
+#'     by_vars = exprs(USUBJID),
+#'     order = exprs(EXSEQ),
 #'     mode = "first"
 #'   ) %>%
 #'   select(USUBJID, EXSEQ)
@@ -71,8 +71,8 @@
 #' admiral_ex %>%
 #'   filter(EXTRT != "PLACEBO") %>%
 #'   filter_extreme(
-#'     by_vars = vars(USUBJID),
-#'     order = vars(EXDOSE),
+#'     by_vars = exprs(USUBJID),
+#'     order = exprs(EXDOSE),
 #'     mode = "last",
 #'     check_type = "none"
 #'   ) %>%
