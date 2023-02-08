@@ -1,8 +1,7 @@
 #' Compute scale parameters
 #'
 #' Computes the average of source and transforms the result from the source
-#' range to the target range. If source contains less than min_n values,
-#' the result is set to NA.
+#' range to the target range.
 #'
 #' @param source A vector of values to be scaled
 #'
@@ -33,9 +32,13 @@
 #'   be carried out. If the number of non-missing values is below `min_n`,
 #'   the result will be set to missing, i.e. `NA`.
 #'
-#'   A non-negative integer is expected.
+#'   A positive integer is expected.
+#'
+#'   Default: 1
 #'
 #' @details
+#' Returns a numeric value. If source contains less than min_n values, the
+#' result is set to NA.
 #'
 #' @return A value representing the average of source transformed to the target
 #'   range or `NA` if source doesn't contain `min_n` values.
@@ -52,8 +55,17 @@ compute_scale <- function(source,
                           source_range,
                           target_range,
                           flip_direction = FALSE,
-                          min_n){
+                          min_n = 1){
 
+  # Function argument checks
+  assert_numeric_vector(source)
+  assert_numeric_vector(source_range)
+  assert_numeric_vector(target_range)
+  assert_logical_scalar(flip_direction)
+  assert_integer_scalar(min_n, subset = "positive")
+
+
+  # Computation
   if(sum(!is.na(source)) >= min_n){
     source_mean <- mean(source, na.rm = TRUE)
 
