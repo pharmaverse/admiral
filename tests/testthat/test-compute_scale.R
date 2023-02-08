@@ -74,7 +74,7 @@ test_that("compute_scale Test 4: compute_scale() works as expected within
       summarise(n = n(), AVAL = mean(AVAL, na.rm = TRUE)) %>%
       mutate(
         PARAMCD = "ITEMAVG",
-        AVAL = if_else(n >= 3, 100 - ((AVAL - 1) * 25), NA)
+        AVAL = ifelse(n >= 3, 100 - ((AVAL - 1) * 25), NA)
       ) %>%
       select(-n)
   )
