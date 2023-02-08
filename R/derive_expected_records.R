@@ -26,7 +26,7 @@
 #'   A list of variable name-value pairs is expected.
 #'   + LHS refers to a variable.
 #'   + RHS refers to the values to set to the variable. This can be a string, a
-#'   symbol, a numeric value or `NA`, e.g., `vars(PARAMCD = "TDOSE", PARCAT1 =
+#'   symbol, a numeric value or `NA`, e.g., `exprs(PARAMCD = "TDOSE", PARCAT1 =
 #'   "OVERALL")`. More general expression are not allowed.
 #'
 #' @author Kangjie Zhang
@@ -68,8 +68,8 @@
 #' derive_expected_records(
 #'   dataset = adqs,
 #'   dataset_expected_obs = parm_visit_ref,
-#'   by_vars = vars(USUBJID),
-#'   set_values_to = vars(DTYPE = "DERIVED")
+#'   by_vars = exprs(USUBJID),
+#'   set_values_to = exprs(DTYPE = "DERIVED")
 #' )
 #'
 derive_expected_records <- function(dataset,
@@ -79,7 +79,7 @@ derive_expected_records <- function(dataset,
   # Check input parameters
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, chr2vars(colnames(dataset_expected_obs)))
+    required_vars = expr_c(by_vars, chr2vars(colnames(dataset_expected_obs)))
   )
   assert_data_frame(dataset_expected_obs)
   assert_vars(by_vars, optional = TRUE)

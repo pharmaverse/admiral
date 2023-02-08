@@ -36,7 +36,7 @@ A list of variable name-value pairs is expected.
 \itemize{
 \item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
-symbol, a numeric value or \code{NA}, e.g., \code{vars(PARAMCD = "TDOSE", PARCAT1 =   "OVERALL")}. More general expression are not allowed.
+symbol, a numeric value or \code{NA}, e.g., \code{exprs(PARAMCD = "TDOSE", PARCAT1 =   "OVERALL")}. More general expression are not allowed.
 }}
 }
 \value{
@@ -77,8 +77,8 @@ parm_visit_ref <- tibble::tribble(
 derive_expected_records(
   dataset = adqs,
   dataset_expected_obs = parm_visit_ref,
-  by_vars = vars(USUBJID),
-  set_values_to = vars(DTYPE = "DERIVED")
+  by_vars = exprs(USUBJID),
+  set_values_to = exprs(DTYPE = "DERIVED")
 )
 
 }

@@ -31,8 +31,8 @@ test_that("derive_expected_records Test 1: `by_vars` are missing", {
   actual_output <- derive_expected_records(
     dataset = input,
     dataset_expected_obs = expected_obsv,
-    by_vars = vars(USUBJID),
-    set_values_to = vars(DTYPE = "DERIVED")
+    by_vars = exprs(USUBJID),
+    set_values_to = exprs(DTYPE = "DERIVED")
   )
 
   expect_dfs_equal(
