@@ -142,12 +142,12 @@ In this case we will keep `TRTSDT`/`TRTSDTM` for day derivation and
 
 In this segment we will use `derive_vars_merged()` to join the `ADSL`
 variables and the following `{admiral}` functions to derive analysis
-dates, times and days: `derive_vars_dtm()`, `derive_vars_dtm_to_dt`,
-`derive_vars_dtm_to_tm`, `derive_vars_dy`. We will also create `NFRLT`
-for `PC` data based on `PCTPTNUM`. We will create an event ID (`EVID`)
-of 0 for concentration records and 1 for dosing records. This is a
-traditional variable that will provide a handy tool to identify records
-but will be dropped from the final dataset in this example.
+dates, times and days: `derive_vars_dtm()`, `derive_vars_dtm_to_dt()`,
+`derive_vars_dtm_to_tm()`, `derive_vars_dy()`. We will also create
+`NFRLT` for `PC` data based on `PCTPTNUM`. We will create an event ID
+(`EVID`) of 0 for concentration records and 1 for dosing records. This
+is a traditional variable that will provide a handy tool to identify
+records but will be dropped from the final dataset in this example.
 
 ```{r eval=TRUE}
 
@@ -165,7 +165,6 @@ adpc <- pc %>%
   derive_vars_dtm(
     new_vars_prefix = "A",
     dtc = PCDTC,
-    date_imputation = "FIRST",
     time_imputation = "00:00:00",
     ignore_seconds_flag = FALSE,
     flag_imputation = "auto"
@@ -192,8 +191,8 @@ dataset_vignette(
 ```
 
 Next we will also join `ADSL` data with `EX` and derive dates/times.
-This section uses the `{admiral}` functions `derive_vars_merged`,
-`derive_vars_dtm`, and `derive_vars_dtm_to_dt()`. Time is imputed to
+This section uses the `{admiral}` functions `derive_vars_merged()`,
+`derive_vars_dtm()`, and `derive_vars_dtm_to_dt()`. Time is imputed to
 00:00:00 here for reasons specific to the sample data. Other imputation
 times may be used based on study details. Here we create `NFRLT` for
 `EX` data based on `VISITDY` using the formula `(VISITDY - 1) * 24`
@@ -218,7 +217,6 @@ ex <- ex %>%
   derive_vars_dtm(
     new_vars_prefix = "AST",
     dtc = EXSTDTC,
-    date_imputation = "FIRST",
     time_imputation = "00:00:00",
     ignore_seconds_flag = FALSE,
     flag_imputation = "auto"
@@ -226,7 +224,6 @@ ex <- ex %>%
   derive_vars_dtm(
     new_vars_prefix = "AEN",
     dtc = EXENDTC,
-    date_imputation = "LAST",
     time_imputation = "00:00:00",
     ignore_seconds_flag = FALSE,
     flag_imputation = "auto"
@@ -367,8 +364,8 @@ previous dose (`ADTM_prev)`, we also keep the actual dose amount
 
 ```{r eval=TRUE, echo=TRUE}
 # ---- Find previous dose  ----
-# Use derive_vars_joined for consistency with other variables
-# This is equivalent to derive_vars_last_dose in this case
+# Use derive_vars_joined() for consistency with other variables
+# This is equivalent to derive_vars_last_dose() in this case
 
 adpc <- adpc %>%
   derive_vars_joined(
@@ -924,5 +921,5 @@ example](https://examples.pharmaverse.org/data/adsl/).
 # Example Scripts {#example}
 
 | ADaM | Sample Code                                                                                             |
-|------------|------------------------------------------------------------|
+|----------------|--------------------------------------------------------|
 | ADPC | [ad_adpc.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adpc.R){target="_blank"} |
