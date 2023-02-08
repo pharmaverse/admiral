@@ -52,7 +52,8 @@ BDS-Findings Functions that returns a vector:
 \code{\link{compute_map}()},
 \code{\link{compute_qual_imputation_dec}()},
 \code{\link{compute_qual_imputation}()},
-\code{\link{compute_rr}()}
+\code{\link{compute_rr}()},
+\code{\link{compute_scale}()}
 }
 \author{
 Stefan Bundfuss
