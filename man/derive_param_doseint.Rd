@@ -7,7 +7,7 @@
 derive_param_doseint(
   dataset,
   by_vars,
-  set_values_to = vars(PARAMCD = "TNDOSINT"),
+  set_values_to = exprs(PARAMCD = "TNDOSINT"),
   tadm_code = "TNDOSE",
   tpadm_code = "TSNDOSE",
   zero_doses = "Inf",
@@ -34,7 +34,7 @@ Permitted Values: list of variables}
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
 code for the new parameter.
 
 \emph{Permitted Values:} List of variable-value pairs}
@@ -120,16 +120,16 @@ adex <- tribble(
 
 derive_param_doseint(
   adex,
-  by_vars = vars(USUBJID, VISIT),
-  set_values_to = vars(PARAMCD = "TNDOSINT"),
+  by_vars = exprs(USUBJID, VISIT),
+  set_values_to = exprs(PARAMCD = "TNDOSINT"),
   tadm_code = "TNDOSE",
   tpadm_code = "TSNDOSE"
 )
 
 derive_param_doseint(
   adex,
-  by_vars = vars(USUBJID, VISIT),
-  set_values_to = vars(PARAMCD = "TDOSINT2"),
+  by_vars = exprs(USUBJID, VISIT),
+  set_values_to = exprs(PARAMCD = "TDOSINT2"),
   tadm_code = "TNDOSE",
   tpadm_code = "TSNDOSE",
   zero_doses = "100"

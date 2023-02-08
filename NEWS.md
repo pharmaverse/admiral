@@ -5,11 +5,39 @@
 - New function `consolidate_metadata()` for consolidating multiple meta datasets
 into a single one (#1479)
 
+-   New ADPC template script available `ad_adpc.R` which creates PK Concentration Analysis Dataset (#849). This script includes formatting suitable for Non-Compartmental Analysis (ADNCA) (#851)
+
 - New function `derive_expected_records()` for adding expected Records (#1729)
 
 ## Updates of Existing Functions
 
+-   The function `create_single_dose_dataset()` adds support for
+    expanding relative nominal time (e.g. NFRLT) used in Pharmacokinetic
+    (PK) analyses. The new parameter `nominal_time` defaults as `NULL`
+    and does not change the normal operation of the function. If a
+    `nominal_time` is specified such as NFRLT (Nominal Relative Time
+    from First Dose) then the nominal time is incremented by the
+    interval specified in `EXDOSFRQ` for example for "QD" records the
+    NFRLT is incremented by 24 hours, e.g. 0, 24, 48...(#1640).
+    
+-   `create_single_dose_dataset()` is also updated for values of
+    `EXDOSFRQ` with units in days but expected values less than 24
+    hours, such as "BID", "TID", and "QID". Previously these values of
+    `EXDOSFRQ` may result in duplicate records where the day values are
+    incremented but the time values are not (#1643)
+
 ## Breaking Changes
+
+- All function arguments which expected a list of quosures created by `vars()`
+are now expecting a list of expressions created by `exprs()`. For example,
+instead of `by_vars = vars(STUDYID, USUBJID)` `by_vars = exprs(STUDYID,
+USUBJID)` must be used now.
+
+    To enable running old scripts using `vars()` in the admiral function calls
+    admiral redefines the `vars()` function such that it returns a list of
+    expressions. This can be disabled by the admiral option `force_admiral_vars`
+    (see `set_admiral_options()`). Please note that this is a temporary solution
+    and will be removed in a future admiral release. (#1627)
 
 - Function `derive_param_tte()` has been updated such that only observations are
 added for subjects who have both an event or censoring and an observation in

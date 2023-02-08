@@ -156,7 +156,7 @@ slice_derivation <- function(dataset,
 derivation_slice <- function(filter,
                              args = NULL) {
   out <- list(
-    filter = assert_filter_cond(enquo(filter)),
+    filter = assert_filter_cond(enexpr(filter)),
     args = assert_s3_class(args, "params", optional = TRUE)
   )
   class(out) <- c("derivation_slice", "source", "list")

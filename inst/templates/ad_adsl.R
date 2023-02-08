@@ -112,10 +112,10 @@ adsl <- dm %>%
       (EXDOSE == 0 &
         str_detect(EXTRT, "PLACEBO"))) &
       !is.na(EXSTDTM),
-    new_vars = vars(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
-    order = vars(EXSTDTM, EXSEQ),
+    new_vars = exprs(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
+    order = exprs(EXSTDTM, EXSEQ),
     mode = "first",
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   ## derive treatment end date (TRTEDTM) ----
   derive_vars_merged(
@@ -123,13 +123,13 @@ adsl <- dm %>%
     filter_add = (EXDOSE > 0 |
       (EXDOSE == 0 &
         str_detect(EXTRT, "PLACEBO"))) & !is.na(EXENDTM),
-    new_vars = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
-    order = vars(EXENDTM, EXSEQ),
+    new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+    order = exprs(EXENDTM, EXSEQ),
     mode = "last",
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   ## Derive treatment end/start date TRTSDT/TRTEDT ----
-  derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM)) %>%
+  derive_vars_dtm_to_dt(source_vars = exprs(TRTSDTM, TRTEDTM)) %>%
   ## derive treatment duration (TRTDURD) ----
   derive_var_trtdurd()
 
@@ -145,14 +145,14 @@ ds_ext <- derive_vars_dt(
 adsl <- adsl %>%
   derive_vars_merged(
     dataset_add = ds_ext,
-    by_vars = vars(STUDYID, USUBJID),
-    new_vars = vars(SCRFDT = DSSTDT),
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(SCRFDT = DSSTDT),
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE"
   ) %>%
   derive_vars_merged(
     dataset_add = ds_ext,
-    by_vars = vars(STUDYID, USUBJID),
-    new_vars = vars(EOSDT = DSSTDT),
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(EOSDT = DSSTDT),
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   ) %>%
   # EOS status
@@ -166,16 +166,16 @@ adsl <- adsl %>%
   # Last retrieval date
   derive_vars_merged(
     dataset_add = ds_ext,
-    by_vars = vars(STUDYID, USUBJID),
-    new_vars = vars(FRVDT = DSSTDT),
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(FRVDT = DSSTDT),
     filter_add = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
   ) %>%
   # Derive Randomization Date
   derive_vars_merged(
     dataset_add = ds_ext,
     filter_add = DSDECOD == "RANDOMIZED",
-    by_vars = vars(STUDYID, USUBJID),
-    new_vars = vars(RANDDT = DSSTDT)
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(RANDDT = DSSTDT)
   ) %>%
   # Death date - impute partial date to first day/month
   derive_vars_dt(
@@ -247,7 +247,7 @@ adsl <- adsl %>%
   ) %>%
   derive_var_merged_exist_flag(
     dataset_add = ex,
-    by_vars = vars(STUDYID, USUBJID),
+    by_vars = exprs(STUDYID, USUBJID),
     new_var = SAFFL,
     condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
   ) %>%

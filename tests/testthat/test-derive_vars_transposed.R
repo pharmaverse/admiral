@@ -22,7 +22,7 @@ test_that("the merge dataset is transposed and merged correctly", {
   actual_output <- derive_vars_transposed(
     dataset,
     dataset_merge,
-    by_vars = vars(USUBJID),
+    by_vars = exprs(USUBJID),
     key_var = TESTCD,
     value_var = VALUE
   )
@@ -41,7 +41,7 @@ test_that("filtering the merge dataset works", {
   actual_output <- derive_vars_transposed(
     dataset,
     dataset_merge,
-    by_vars = vars(USUBJID),
+    by_vars = exprs(USUBJID),
     key_var = TESTCD,
     value_var = VALUE,
     filter = TESTCD == "T01"

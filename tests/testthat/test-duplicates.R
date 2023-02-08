@@ -12,7 +12,7 @@ test_that("duplicate records are extracted", {
 
   expect_equal(
     expected_ouput,
-    extract_duplicate_records(input, vars(USUBJID))
+    extract_duplicate_records(input, exprs(USUBJID))
   )
 })
 
@@ -29,7 +29,7 @@ test_that("dataset of duplicate records can be accessed using `get_duplicates_da
   expected_ouput <- input[c(1:2, 5:6), ]
 
   expect_error(
-    signal_duplicate_records(input, vars(USUBJID)),
+    signal_duplicate_records(input, exprs(USUBJID)),
     "Dataset contains duplicate records with respect to `USUBJID`",
     fixed = TRUE
   )

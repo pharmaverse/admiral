@@ -22,10 +22,10 @@ test_that("filter_confirmation Test 1: filter without first_cond", {
   actual <-
     filter_confirmation(
       data,
-      by_vars = vars(USUBJID),
-      join_vars = vars(AVISITN, AVALC),
+      by_vars = exprs(USUBJID),
+      join_vars = exprs(AVISITN, AVALC),
       join_type = "after",
-      order = vars(AVISITN),
+      order = exprs(AVISITN),
       filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR") &
         AVISITN < AVISITN.join
     )
@@ -48,12 +48,12 @@ test_that("filter_confirmation Test 2: filter with first_cond", {
   actual <-
     filter_confirmation(
       data,
-      by_vars = vars(USUBJID),
-      join_vars = vars(AVALC),
+      by_vars = exprs(USUBJID),
+      join_vars = exprs(AVALC),
       join_type = "after",
       first_cond = AVALC == "CR" &
         AVALC.join == "CR",
-      order = vars(AVISITN),
+      order = exprs(AVISITN),
       filter = TRUE
     )
 
@@ -74,12 +74,12 @@ test_that("filter_confirmation Test 3: filter with first_cond and summary functi
   actual <-
     filter_confirmation(
       data,
-      by_vars = vars(USUBJID),
-      join_vars = vars(AVALC),
+      by_vars = exprs(USUBJID),
+      join_vars = exprs(AVALC),
       join_type = "after",
       first_cond = AVALC == "PR" &
         AVALC.join %in% c("CR", "PR"),
-      order = vars(AVISITN),
+      order = exprs(AVISITN),
       filter = count_vals(AVALC.join, "SD") <= 1
     )
 
@@ -113,10 +113,10 @@ test_that("filter_confirmation Test 4: join_type = 'all'", {
 
   actual <- filter_confirmation(
     adae,
-    by_vars = vars(USUBJID),
-    join_vars = vars(ACOVFL, ADY),
+    by_vars = exprs(USUBJID),
+    join_vars = exprs(ACOVFL, ADY),
     join_type = "all",
-    order = vars(ADY),
+    order = exprs(ADY),
     filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
   )
 

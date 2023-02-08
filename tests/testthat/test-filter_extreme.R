@@ -17,8 +17,8 @@ test_that("first observation for each group are selected", {
 
   actual_output <- filter_extreme(
     input,
-    order = vars(AVISITN, AVAL),
-    by_vars = vars(USUBJID),
+    order = exprs(AVISITN, AVAL),
+    by_vars = exprs(USUBJID),
     mode = "first"
   )
 
@@ -46,7 +46,7 @@ test_that("first observation is selected without grouping", {
 
   actual_output <- filter_extreme(
     input,
-    order = vars(AVISITN, AVAL),
+    order = exprs(AVISITN, AVAL),
     mode = "first"
   )
 

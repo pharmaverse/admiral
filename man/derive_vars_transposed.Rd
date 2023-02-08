@@ -81,7 +81,7 @@ facm <- tribble(
 cm \%>\%
   derive_vars_transposed(
     facm,
-    by_vars = vars(USUBJID, CMREFID = FAREFID),
+    by_vars = exprs(USUBJID, CMREFID = FAREFID),
     key_var = FATESTCD,
     value_var = FASTRESC
   ) \%>\%
