@@ -9,6 +9,7 @@ derive_var_confirmation_flag(
   by_vars,
   order,
   new_var,
+  tmp_obs_nr_var = NULL,
   join_vars,
   join_type,
   first_cond = NULL,
@@ -312,6 +313,34 @@ derive_var_confirmation_flag(
         count_vals(var = AVALC.join, val = "CR") == 0
     )
 )
+
+# flag observations with CRIT1FL == "Y" at two consecutive visits or at the last visit
+data <- tribble(
+  ~USUBJID, ~AVISITN, ~CRIT1FL,
+  "1",      1,        "Y",
+  "1",      2,        "N",
+  "1",      3,        "Y",
+  "1",      5,        "N",
+  "2",      1,        "Y",
+  "2",      3,        "Y",
+  "2",      5,        "N",
+  "3",      1,        "Y",
+  "4",      1,        "Y",
+  "4",      2,        "N",
+)
+
+derive_var_confirmation_flag(
+  data,
+  by_vars = exprs(USUBJID),
+  new_var = CONFFL,
+  tmp_obs_nr_var = tmp_obs_nr,
+  join_vars = exprs(CRIT1FL),
+  join_type = "all",
+  order = exprs(AVISITN),
+  filter = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
+    (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
+)
+
 }
 \seealso{
 \code{\link[=filter_confirmation]{filter_confirmation()}}

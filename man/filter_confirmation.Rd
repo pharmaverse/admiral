@@ -11,6 +11,7 @@ filter_confirmation(
   join_type,
   first_cond = NULL,
   order,
+  tmp_obs_nr_var = NULL,
   filter,
   check_type = "warning"
 )
