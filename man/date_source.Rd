@@ -32,8 +32,8 @@ convert DTC variables to datetime variables in the dataset.}
 \item{preserve}{\emph{Deprecated}, please use \code{derive_vars_dtm()} to convert DTC
 variables to datetime variables in the dataset.}
 
-\item{traceability_vars}{A named list returned by \code{vars()} defining the
-traceability variables, e.g. \code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, a numeric,
+\item{traceability_vars}{A named list returned by \code{exprs()} defining the
+traceability variables, e.g. \code{exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, a numeric,
 or \code{NA}.}
 }
 \value{
@@ -62,7 +62,7 @@ lb_date <- date_source(
 death_date <- date_source(
   dataset_name = "adsl",
   date = DTHDT,
-  traceability_vars = vars(
+  traceability_vars = exprs(
     LALVDOM = "ADSL",
     LALVVAR = "DTHDT"
   )

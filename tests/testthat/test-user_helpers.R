@@ -2,7 +2,7 @@
 test_that("all templates are listed", {
   expect_equal(
     unclass(list_all_templates()),
-    c("ADAE", "ADCM", "ADEG", "ADEX", "ADLB", "ADMH", "ADPP", "ADSL", "ADVS"),
+    c("ADAE", "ADCM", "ADEG", "ADEX", "ADLB", "ADMH", "ADPC", "ADPP", "ADSL", "ADVS"),
     check.attributes = FALSE
   )
 })

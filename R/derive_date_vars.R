@@ -1338,7 +1338,7 @@ compute_tmf <- function(dtc,
 #'   dtc = AESTDTC,
 #'   new_vars_prefix = "AST",
 #'   highest_imputation = "M",
-#'   min_dates = vars(TRTSDTM)
+#'   min_dates = exprs(TRTSDTM)
 #' )
 #'
 #' # A user imputing dates as middle month/day, i.e. date_imputation = "mid" can
@@ -1366,8 +1366,8 @@ derive_vars_dt <- function(dataset,
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)
   assert_vars(min_dates, optional = TRUE)
-  dtc <- assert_symbol(enquo(dtc))
-  assert_data_frame(dataset, required_vars = vars(!!dtc))
+  dtc <- assert_symbol(enexpr(dtc))
+  assert_data_frame(dataset, required_vars = exprs(!!dtc))
   assert_character_scalar(
     flag_imputation,
     values = c("auto", "date", "none"),
@@ -1501,7 +1501,7 @@ derive_vars_dt <- function(dataset,
 #'   highest_imputation = "M",
 #'   date_imputation = "last",
 #'   time_imputation = "last",
-#'   max_dates = vars(DTHDT, DCUTDT)
+#'   max_dates = exprs(DTHDT, DCUTDT)
 #' )
 #'
 #' # Seconds has been removed from the input dataset.  Function now uses
@@ -1552,8 +1552,8 @@ derive_vars_dtm <- function(dataset,
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)
   assert_vars(min_dates, optional = TRUE)
-  dtc <- assert_symbol(enquo(dtc))
-  assert_data_frame(dataset, required_vars = vars(!!dtc))
+  dtc <- assert_symbol(enexpr(dtc))
+  assert_data_frame(dataset, required_vars = exprs(!!dtc))
   assert_character_scalar(
     flag_imputation,
     values = c("auto", "both", "date", "time", "none"),

@@ -92,8 +92,8 @@
 #' derive_locf_records(
 #'   data = advs,
 #'   dataset_expected_obs = advs_expected_obsv,
-#'   by_vars = vars(STUDYID, USUBJID, PARAMCD),
-#'   order = vars(AVISITN, AVISIT)
+#'   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+#'   order = exprs(AVISITN, AVISIT)
 #' )
 #'
 derive_locf_records <- function(dataset,
@@ -110,7 +110,7 @@ derive_locf_records <- function(dataset,
   assert_data_frame(dataset_expected_obs)
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, extract_vars(order), chr2vars(colnames(dataset_expected_obs)))
+    required_vars = expr_c(by_vars, extract_vars(order), chr2vars(colnames(dataset_expected_obs)))
   )
 
   #### Prepping 'dataset_expected_obs' ####

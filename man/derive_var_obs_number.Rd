@@ -67,8 +67,8 @@ admiral_vs \%>\%
   select(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
   filter(VSTESTCD \%in\% c("HEIGHT", "WEIGHT")) \%>\%
   derive_var_obs_number(
-    by_vars = vars(USUBJID, VSTESTCD),
-    order = vars(VISITNUM, VSTPTNUM)
+    by_vars = exprs(USUBJID, VSTESTCD),
+    order = exprs(VISITNUM, VSTPTNUM)
   )
 }
 \seealso{

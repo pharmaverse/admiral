@@ -5,24 +5,24 @@ test_that("call_derivation Test 1:  Test that call_derivation generates expected
 
   expected_output <- input %>%
     derive_summary_records(
-      by_vars = vars(USUBJID, VSTESTCD),
+      by_vars = exprs(USUBJID, VSTESTCD),
       analysis_var = VSSTRESN,
       summary_fun = function(x) mean(x, na.rm = TRUE),
-      set_values_to = vars(DTYPE = "AVERAGE"),
+      set_values_to = exprs(DTYPE = "AVERAGE"),
       filter = dplyr::n() >= 2L
     ) %>%
     derive_summary_records(
-      by_vars = vars(USUBJID, VSTESTCD),
+      by_vars = exprs(USUBJID, VSTESTCD),
       analysis_var = VSSTRESN,
       summary_fun = function(x) max(x, na.rm = TRUE),
-      set_values_to = vars(DTYPE = "MAXIMUM"),
+      set_values_to = exprs(DTYPE = "MAXIMUM"),
       filter = dplyr::n() >= 2L
     ) %>%
     derive_summary_records(
-      by_vars = vars(USUBJID, VSTESTCD),
+      by_vars = exprs(USUBJID, VSTESTCD),
       analysis_var = VSSTRESN,
       summary_fun = function(x) min(x, na.rm = TRUE),
-      set_values_to = vars(DTYPE = "MINIMUM"),
+      set_values_to = exprs(DTYPE = "MINIMUM"),
       filter = dplyr::n() >= 2L
     )
 
@@ -32,18 +32,18 @@ test_that("call_derivation Test 1:  Test that call_derivation generates expected
     variable_params = list(
       params(
         summary_fun = function(x) mean(x, na.rm = TRUE),
-        set_values_to = vars(DTYPE = "AVERAGE")
+        set_values_to = exprs(DTYPE = "AVERAGE")
       ),
       params(
         summary_fun = function(x) max(x, na.rm = TRUE),
-        set_values_to = vars(DTYPE = "MAXIMUM")
+        set_values_to = exprs(DTYPE = "MAXIMUM")
       ),
       params(
         summary_fun = function(x) min(x, na.rm = TRUE),
-        set_values_to = vars(DTYPE = "MINIMUM")
+        set_values_to = exprs(DTYPE = "MINIMUM")
       )
     ),
-    by_vars = vars(USUBJID, VSTESTCD),
+    by_vars = exprs(USUBJID, VSTESTCD),
     analysis_var = VSSTRESN,
     filter = dplyr::n() >= 2L
   )
@@ -66,15 +66,15 @@ test_that("call_derivation Test 2: Test that call_derivation generates expected 
       new_vars_prefix = "AST",
       dtc = AESTDTC,
       date_imputation = "first",
-      min_dates = vars(TRTSDT),
-      max_dates = vars(TRTEDT)
+      min_dates = exprs(TRTSDT),
+      max_dates = exprs(TRTEDT)
     ) %>%
     derive_vars_dt(
       new_vars_prefix = "AEN",
       dtc = AEENDTC,
       date_imputation = "last",
-      min_dates = vars(TRTSDT),
-      max_dates = vars(TRTEDT)
+      min_dates = exprs(TRTSDT),
+      max_dates = exprs(TRTEDT)
     )
 
   actual_output <- call_derivation(
@@ -84,8 +84,8 @@ test_that("call_derivation Test 2: Test that call_derivation generates expected 
       params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
       params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
     ),
-    min_dates = vars(TRTSDT),
-    max_dates = vars(TRTEDT)
+    min_dates = exprs(TRTSDT),
+    max_dates = exprs(TRTEDT)
   )
 
   expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "AESEQ"))
@@ -143,8 +143,8 @@ test_that("call_derivation Test 5: Error is thrown params is empty", {
         params(),
         params()
       ),
-      min_dates = vars(TRTSDT),
-      max_dates = vars(TRTEDT)
+      min_dates = exprs(TRTSDT),
+      max_dates = exprs(TRTEDT)
     ), "At least one argument must be provided"
   )
 })
@@ -163,8 +163,8 @@ test_that("call_derivation Test 6: Error is thrown if passed params are not prop
         params(XYZ),
         params(XYZ)
       ),
-      min_dates = vars(TRTSDT),
-      max_dates = vars(TRTEDT)
+      min_dates = exprs(TRTSDT),
+      max_dates = exprs(TRTEDT)
     ), "All arguments passed to `params()` must be named",
     fixed = TRUE
   )

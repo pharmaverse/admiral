@@ -913,7 +913,7 @@ test_that("derive_vars_dtm Test 40: max_dates parameter works as expected", {
     dtc = XXSTDTC,
     highest_imputation = "M",
     date_imputation = "last",
-    max_dates = vars(DCUTDT)
+    max_dates = exprs(DCUTDT)
   )
 
   expect_dfs_equal(
