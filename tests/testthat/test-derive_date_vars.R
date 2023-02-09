@@ -964,7 +964,7 @@ test_that("derive_vars_dtm Test 41: NA imputation for highest_imputation = Y & m
 
 ## Test 42: NA imputation for highest_imputation = Y & max_dates but date_imputation = first ----
 test_that("derive_vars_dtm Test 42: NA imputation for highest_imputation = Y & max_dates but date_imputation = first", { # nolint
-  expect_error(
+  expect_warning(
     (data.frame(
       AESTDTC = c(NA_character_, NA_character_),
       TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
@@ -979,7 +979,7 @@ test_that("derive_vars_dtm Test 42: NA imputation for highest_imputation = Y & m
         flag_imputation = "both",
         max_dates = vars(TRTSDTM)
       )),
-    "If `highest_impuation` = \"Y\" and `max_dates` is specified, input `date_imputation` = \"last\"" # nolint
+    "If `highest_impuation` = \"Y\" and `max_dates` is specified, `date_imputation` should be set to \"last\"."
   )
 })
 
@@ -1013,7 +1013,7 @@ test_that("derive_vars_dtm Test 43: NA imputation for highest_imputation = Y & m
 
 ## Test 44: NA imputation for highest_imputation = Y & min_dates but date_imputation = last ----
 test_that("derive_vars_dtm Test 44: NA imputation for highest_imputation = Y & min_dates but date_imputation = last", { # nolint
-  expect_error(
+  expect_warning(
     (data.frame(
       AESTDTC = c(NA_character_, NA_character_),
       TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
@@ -1028,13 +1028,13 @@ test_that("derive_vars_dtm Test 44: NA imputation for highest_imputation = Y & m
         flag_imputation = "both",
         min_dates = vars(TRTSDTM)
       )),
-    "If `highest_impuation` = \"Y\" and `min_dates` is specified, input `date_imputation` = \"first\"" # nolint
+   "If `highest_impuation` = \"Y\" and `min_dates` is specified, `date_imputation` should be set to \"first\"."
   )
 })
 
 ## Test 45: NA imputation for highest_imputation = Y but null min/max dates fails ----
 test_that("derive_vars_dtm Test 45: NA imputation for highest_imputation = Y but null min/max dates fails", { # nolint
-  expect_error(
+  expect_warning(
     (data.frame(
       AESTDTC = c(NA_character_, NA_character_),
       TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
