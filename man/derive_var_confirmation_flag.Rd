@@ -38,6 +38,15 @@ The observations are ordered by the specified order.}
 
 The specified variable is added to the input dataset.}
 
+\item{tmp_obs_nr_var}{Temporary observation number
+
+The specified variable is added to the input dataset and set to the
+observation number with respect to \code{order}. For each by group (\code{by_vars})
+the observation number starts with \code{1}. The variable can be used in the
+conditions (\code{filter}, \code{first_cond}). It is not included in the output
+dataset. It can be used to flag consecutive observations or the last
+observation (see last example below).}
+
 \item{join_vars}{Variables to keep from joined dataset
 
 The variables needed from the other observations should be specified

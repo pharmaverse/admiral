@@ -28,6 +28,15 @@
 #'
 #'   The specified variable is added to the input dataset.
 #'
+#' @param tmp_obs_nr_var Temporary observation number
+#'
+#'   The specified variable is added to the input dataset and set to the
+#'   observation number with respect to `order`. For each by group (`by_vars`)
+#'   the observation number starts with `1`. The variable can be used in the
+#'   conditions (`filter`, `first_cond`). It is not included in the output
+#'   dataset. It can be used to flag consecutive observations or the last
+#'   observation (see last example below).
+#'
 #' @param join_vars Variables to keep from joined dataset
 #'
 #'   The variables needed from the other observations should be specified
@@ -331,7 +340,6 @@
 #'     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 #' )
 #'
-
 derive_var_confirmation_flag <- function(dataset,
                                          by_vars,
                                          order,

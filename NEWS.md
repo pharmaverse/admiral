@@ -5,7 +5,10 @@
 - New function `consolidate_metadata()` for consolidating multiple meta datasets
 into a single one (#1479)
 
--   New ADPC template script available `ad_adpc.R` which creates PK Concentration Analysis Dataset (#849). This script includes formatting suitable for Non-Compartmental Analysis (ADNCA) (#851)
+- New ADPC template script available `ad_adpc.R` which creates PK Concentration
+Analysis Dataset (#849). This script includes formatting suitable for
+Non-Compartmental Analysis (ADNCA) (#851)
+
 ## Updates of Existing Functions
 
 -   The function `create_single_dose_dataset()` adds support for
@@ -22,6 +25,10 @@ into a single one (#1479)
     hours, such as "BID", "TID", and "QID". Previously these values of
     `EXDOSFRQ` may result in duplicate records where the day values are
     incremented but the time values are not (#1643)
+    
+- The function `derive_var_confirmation_flag()` and `filter_confirmation()`
+gained the `tmp_obs_nr_var` argument. It helps flagging or selecting consecutive
+observations or the first or last observation in a by group. (#1724)
 
 ## Breaking Changes
 
