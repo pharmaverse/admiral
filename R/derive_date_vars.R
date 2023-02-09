@@ -1561,7 +1561,7 @@ derive_vars_dtm <- function(dataset,
   )
   if ((highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)) |
     (highest_imputation == "Y" & length(min_dates) == 0 & length(max_dates) == 0)) {
-    warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
+    abort("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
   }
 
   if(highest_imputation == "Y" & !is.null(min_dates) & date_imputation != "first") {

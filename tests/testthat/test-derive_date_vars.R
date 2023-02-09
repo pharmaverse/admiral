@@ -1034,7 +1034,7 @@ test_that("derive_vars_dtm Test 44: NA imputation for highest_imputation = Y & m
 
 ## Test 45: NA imputation for highest_imputation = Y but null min/max dates fails ----
 test_that("derive_vars_dtm Test 45: NA imputation for highest_imputation = Y but null min/max dates fails", { # nolint
-  expect_warning(
+  expect_error(
     (data.frame(
       AESTDTC = c(NA_character_, NA_character_),
       TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
