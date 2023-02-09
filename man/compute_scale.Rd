@@ -34,7 +34,7 @@ within the range 0 to 100, 25 would be reversed to 75.
 
 Default: \code{FALSE}
 
-Permitted Values: \code{TRUE} \code{FALSE}}
+Permitted Values: \code{TRUE}, \code{FALSE}}
 
 \item{min_n}{Minimum number of values for computation
 
@@ -51,8 +51,10 @@ The average of source transformed to the target range or \code{NA} if
 source doesn't contain \code{min_n} values.
 }
 \description{
-Computes the average of source and transforms the result from the source
-range to the target range.
+Computes the average of a set of source values and transforms the result
+from the source range to the target range. For example, for calculating the
+average of a set of questionnaire scores and re-coding the average response
+to obtain a subscale score.
 }
 \details{
 Returns a numeric value. If source contains less than min_n values,

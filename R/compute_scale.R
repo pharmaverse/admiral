@@ -1,7 +1,9 @@
 #' Compute scale parameters
 #'
-#' Computes the average of source and transforms the result from the source
-#' range to the target range.
+#' Computes the average of a set of source values and transforms the result
+#' from the source range to the target range. For example, for calculating the
+#' average of a set of questionnaire scores and re-coding the average response
+#' to obtain a subscale score.
 #'
 #' @param source A vector of values to be scaled
 #'
@@ -75,7 +77,8 @@ compute_scale <- function(source,
     source_mean <- mean(source, na.rm = TRUE)
 
     scale_constant <- min(target_range) - min(source_range)
-    scale_coefficient <- (max(target_range) - min(target_range)) / (max(source_range) - min(source_range))
+    scale_coefficient <- (max(target_range) - min(target_range)) /
+      (max(source_range) - min(source_range))
 
     target <- (source_mean + scale_constant) * scale_coefficient
 
@@ -88,4 +91,3 @@ compute_scale <- function(source,
 
   target
 }
-
