@@ -408,7 +408,7 @@ derive_param_tte <- function(dataset = NULL,
 
   start_date_imputation_flag <- gsub("(DT|DTM)$", "DTF", as_name(start_date))
   if (start_date_imputation_flag %in% colnames(dataset_adsl) &
-      as_name(start_date) != start_date_imputation_flag) {
+    as_name(start_date) != start_date_imputation_flag) {
     adsl_vars <- exprs(
       !!!adsl_vars,
       STARTDTF = !!sym(start_date_imputation_flag)
@@ -417,7 +417,7 @@ derive_param_tte <- function(dataset = NULL,
 
   start_time_imputation_flag <- gsub("DTM$", "TMF", as_name(start_date))
   if (start_time_imputation_flag %in% colnames(dataset_adsl) &
-      as_name(start_date) != start_time_imputation_flag) {
+    as_name(start_date) != start_time_imputation_flag) {
     adsl_vars <- exprs(
       !!!adsl_vars,
       STARTTMF = !!sym(start_time_imputation_flag)
