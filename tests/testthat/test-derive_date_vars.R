@@ -979,7 +979,7 @@ test_that("derive_vars_dtm Test 42: NA imputation for highest_imputation = Y & m
         flag_imputation = "both",
         max_dates = vars(TRTSDTM)
       )),
-    "If `highest_impuation` = \"Y\" and `max_dates` is specified, `date_imputation` should be set to \"last\"."
+    "If `highest_impuation` = \"Y\" and `max_dates` is specified, `date_imputation` should be set to \"last\"." # nolint
   )
 })
 
@@ -1028,7 +1028,7 @@ test_that("derive_vars_dtm Test 44: NA imputation for highest_imputation = Y & m
         flag_imputation = "both",
         min_dates = vars(TRTSDTM)
       )),
-   "If `highest_impuation` = \"Y\" and `min_dates` is specified, `date_imputation` should be set to \"first\"."
+    "If `highest_impuation` = \"Y\" and `min_dates` is specified, `date_imputation` should be set to \"first\"." # nolint
   )
 })
 

@@ -310,7 +310,7 @@ impute_dtc_dtm <- function(dtc,
   )
 
   if (highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)) {
-      warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
+    warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
   }
 
   return(restricted)
@@ -521,7 +521,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
                                      min_dates,
                                      max_dates) {
   if (!(is.null(min_dates) | length(min_dates) == 0) |
-      !(is.null(max_dates) | length(max_dates) == 0)) {
+    !(is.null(max_dates) | length(max_dates) == 0)) {
     suppressWarnings({
       # determine range of possible dates
       min_dtc <-
@@ -540,7 +540,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
         )
     })
   }
-  if (!(is.null(min_dates) | length(min_dates) == 0))  {
+  if (!(is.null(min_dates) | length(min_dates) == 0)) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
       abort("Length of `min_dates` do not match length of dates to be imputed.")
     }
@@ -562,7 +562,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
       imputed_dtc
     )
   }
-  if (!(is.null(max_dates) | length(max_dates) == 0))  {
+  if (!(is.null(max_dates) | length(max_dates) == 0)) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
       abort("Length of `max_dates` do not match length of dates to be imputed.")
     }
@@ -1564,10 +1564,10 @@ derive_vars_dtm <- function(dataset,
     abort("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
   }
 
-  if(highest_imputation == "Y" & !is.null(min_dates) & date_imputation != "first") {
+  if (highest_imputation == "Y" & !is.null(min_dates) & date_imputation != "first") {
     warning("If `highest_impuation` = \"Y\" and `min_dates` is specified, `date_imputation` should be set to \"first\".") # nolint
   }
-  if(highest_imputation == "Y" & !is.null(max_dates) & date_imputation != "last") {
+  if (highest_imputation == "Y" & !is.null(max_dates) & date_imputation != "last") {
     warning("If `highest_impuation` = \"Y\" and `max_dates` is specified, `date_imputation` should be set to \"last\".") # nolint
   }
 
