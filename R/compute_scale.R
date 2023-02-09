@@ -2,8 +2,8 @@
 #'
 #' Computes the average of a set of source values and transforms the result
 #' from the source range to the target range. For example, for calculating the
-#' average of a set of questionnaire scores and re-coding the average response
-#' to obtain a subscale score.
+#' average of a set of questionnaire response scores and re-coding the average
+#' response to obtain a subscale score.
 #'
 #' @param source A vector of values to be scaled
 #'

@@ -53,8 +53,8 @@ source doesn't contain \code{min_n} values.
 \description{
 Computes the average of a set of source values and transforms the result
 from the source range to the target range. For example, for calculating the
-average of a set of questionnaire scores and re-coding the average response
-to obtain a subscale score.
+average of a set of questionnaire response scores and re-coding the average
+response to obtain a subscale score.
 }
 \details{
 Returns a numeric value. If source contains less than min_n values,
