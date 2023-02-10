@@ -281,13 +281,13 @@
 #'     )
 #' )
 filter_joined <- function(dataset,
-                                by_vars,
-                                join_vars,
-                                join_type,
-                                first_cond = NULL,
-                                order,
-                                filter,
-                                check_type = "warning") {
+                          by_vars,
+                          join_vars,
+                          join_type,
+                          first_cond = NULL,
+                          order,
+                          filter,
+                          check_type = "warning") {
   # Check input parameters
   assert_vars(by_vars)
   assert_vars(join_vars)
