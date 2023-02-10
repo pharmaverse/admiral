@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
 )
 
 library(admiral)
+library(admiraldev, warn.conflicts = FALSE)
 library(dplyr, warn.conflicts = FALSE)
 library(tidyr, warn.conflicts = FALSE)
 library(purrr)
@@ -69,7 +70,7 @@ adlb_annotated <- adlb %>%
   ) %>%
   select(STUDYID, USUBJID, PARAMCD, LBSEQ, ADT, AVISIT, ADY, AVAL, ANRHI, CRIT1, CRIT1FL)
 
-head(adlb_annotated)
+dataset_vignette(adlb_annotated)
 ```
 
 By,
@@ -100,7 +101,7 @@ HYLAW_records <- derive_vars_joined(
 
 HYLAW_records %>%
   arrange(desc(BILI_CRITFL), desc(CRIT1FL)) %>%
-  head(10)
+  dataset_vignette(10)
 ```
 
 Using `derive_param_exist_flag()` you can create a variety of parameters for your final dataset with AVAL = 1/0 for your specific Hy's Law analysis. Below is an example of how to indicate a potential Hy's Law event, with `PARAMCD` set as `"HYSLAW"` and `PARAM` set to `"ALT/AST >= 3xULN and BILI >= 2xULN"` for **each visit** using the flags from the prior dataset. This method allows for flexibility as well, if you wanted it just for each patient and not each visit, you would remove `AVISIT` and `ADT` from the below code. 
@@ -135,7 +136,7 @@ HYLAW_params <- derive_param_exist_flag(
 
 HYLAW_params %>%
   arrange(desc(AVAL)) %>%
-  head()
+  dataset_vignette()
 ```
 
 The last step would be binding these rows back to whatever previous dataset is appropriate based on your spec, in this case, it would be best suited to bind back to our `adlb_annotated` object.
