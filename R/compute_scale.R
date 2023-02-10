@@ -38,7 +38,7 @@
 #'
 #'   Default: 1
 #'
-#' @details Returns a numeric value. If source contains less than min_n values,
+#' @details Returns a numeric value. If source contains less than `min_n` values,
 #'   the result is set to `NA`.
 #'
 #' @return The average of source transformed to the target range or `NA` if
