@@ -15,17 +15,17 @@
 #'   observation of the specified dataset a new observation is added to the
 #'   input dataset.
 #'
-#' @param dataset_source Source dataset
+#' @param dataset_add Source dataset
 #'
 #'   All observations in the specified dataset fulfilling the condition
-#'   specified by `filter_source` are considered as event.
+#'   specified by `filter_add` are considered as event.
 #'
 #'   The variables specified by the `subject_keys` and
 #'   `date_var` parameter are expected.
 #'
-#' @param filter_source Source filter
+#' @param filter_add Source filter
 #'
-#'   All observations in `dataset_source` fulfilling the specified condition are
+#'   All observations in `dataset_add` fulfilling the specified condition are
 #'   considered as event.
 #'
 #'   For subjects with at least one event `AVALC` is set to `"Y"`, `AVAL` to
@@ -36,7 +36,7 @@
 #'
 #' @param date_var Date variable
 #'
-#'   Date variable in the source dataset (`dataset_source`). The variable is
+#'   Date variable in the source dataset (`dataset_add`). The variable is
 #'   used to sort the source dataset. `ADT` is set to the specified variable for
 #'   events.
 #'
@@ -62,18 +62,18 @@
 #'
 #' @details
 #'   1. The input dataset is restricted to observations fulfilling
-#'   `filter_source`.
+#'   `filter_add`.
 #'   1. For each subject (with respect to the variables specified for the
 #'   `subject_keys` parameter) the first observation (with respect to
-#'   `date_var`) where the event condition (`filter_source` parameter) is
+#'   `date_var`) where the event condition (`filter_add` parameter) is
 #'   fulfilled is selected.
 #'   1. For each observation in `dataset_adsl` a new observation is created. For
 #'   subjects with event `AVALC` is set to `"Y"`, `AVAL` to `1`, and `ADT` to
 #'   the first date where the event condition is fulfilled. For all other
 #'   subjects `AVALC` is set to `"N"`, `AVAL` to `0`, and `ADT` to `NA`.
-#'   For subjects with event all variables from `dataset_source` are kept. For
+#'   For subjects with event all variables from `dataset_add` are kept. For
 #'   subjects without event all variables which are in both `dataset_adsl` and
-#'   `dataset_source` are kept.
+#'   `dataset_add` are kept.
 #'   1. The variables specified by the `set_values_to` parameter are added to
 #'   the new observations.
 #'   1. The new observations are added to input dataset.
@@ -90,8 +90,8 @@
 #'
 derive_param_first_event <- function(dataset,
                                      dataset_adsl,
-                                     dataset_source,
-                                     filter_source,
+                                     dataset_add,
+                                     filter_add,
                                      date_var,
                                      subject_keys = exprs(STUDYID, USUBJID),
                                      set_values_to,
@@ -102,7 +102,7 @@ derive_param_first_event <- function(dataset,
     details = "Please use `derive_param_extreme_event()` instead with the `order` argument instead of the `date_var` argument"
   )
 
-  filter_source <- enexpr(filter_source)
+  filter_add <- enexpr(filter_add)
   date_var <- enexpr(date_var)
   tmp_var <- get_new_tmp_var(dataset = dataset)
   tmp_var <- enexpr(tmp_var)
@@ -110,8 +110,8 @@ derive_param_first_event <- function(dataset,
   derive_param_extreme_event(
     dataset = dataset,
     dataset_adsl = dataset_adsl,
-    dataset_source = dataset_source,
-    filter_source = !!filter_source,
+    dataset_add = dataset_add,
+    filter_add = !!filter_add,
     order = exprs(!!date_var),
     new_var = !!tmp_var,
     subject_keys = subject_keys,
@@ -142,17 +142,17 @@ derive_param_first_event <- function(dataset,
 #'   observation of the specified dataset a new observation is added to the
 #'   input dataset.
 #'
-#' @param dataset_source Source dataset
+#' @param dataset_add Source dataset
 #'
 #'   All observations in the specified dataset fulfilling the condition
-#'   specified by `filter_source` are considered as an event.
+#'   specified by `filter_add` are considered as an event.
 #'
 #'   The variables specified by the `subject_keys` and
 #'   `order` parameter (if applicable) are expected.
 #'
-#' @param filter_source Source filter
+#' @param filter_add Source filter
 #'
-#'   All observations in `dataset_source` fulfilling the specified condition are
+#'   All observations in `dataset_add` fulfilling the specified condition are
 #'   considered as an event.
 #'
 #'   For subjects with at least one event `new_var` is set to `true_value`.
@@ -161,7 +161,7 @@ derive_param_first_event <- function(dataset,
 #'
 #' @param order Order variable
 #'
-#'   List of symbols for sorting the source dataset (`dataset_source`).
+#'   List of symbols for sorting the source dataset (`dataset_add`).
 #'
 #'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
 #'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))`.
@@ -173,7 +173,7 @@ derive_param_first_event <- function(dataset,
 #' @param true_value True value
 #'
 #'   For all subjects with at least one observation in the source dataset
-#'   (`dataset_source`) fulfilling the event condition (`filter_source`),
+#'   (`dataset_add`) fulfilling the event condition (`filter_add`),
 #'   `new_var` is set to the specified value `true_value`.
 #'
 #' @param false_value False value
@@ -210,18 +210,18 @@ derive_param_first_event <- function(dataset,
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
 #' @details
-#'   1. The source dataset (`dataset_source`) is restricted to observations fulfilling
-#'   `filter_source`.
+#'   1. The source dataset (`dataset_add`) is restricted to observations fulfilling
+#'   `filter_add`.
 #'   1. For each subject (with respect to the variables specified for the
 #'   `subject_keys` parameter) either the first or last observation from the restricted
 #'   source dataset is selected. This is depending on `mode`, (with respect to `order`,
-#'   if applicable) where the event condition (`filter_source` parameter) is fulfilled.
+#'   if applicable) where the event condition (`filter_add` parameter) is fulfilled.
 #'   1. For each observation in `dataset_adsl` a new observation is created. For
 #'   subjects with event `new_var` is set to `true_var`. For all other
 #'   subjects `new_var` is set to `false_var`.
-#'   For subjects with event all variables from `dataset_source` are kept. For
+#'   For subjects with event all variables from `dataset_add` are kept. For
 #'   subjects without event all variables which are in both `dataset_adsl` and
-#'   `dataset_source` are kept.
+#'   `dataset_add` are kept.
 #'   1. The variables specified by the `set_values_to` parameter are added to
 #'   the new observations.
 #'   1. The new observations are added to input dataset.
@@ -272,8 +272,8 @@ derive_param_first_event <- function(dataset,
 #' derive_param_extreme_event(
 #'   adrs,
 #'   dataset_adsl = adsl,
-#'   dataset_source = adrs,
-#'   filter_source = PARAMCD == "OVR" & AVALC == "PD",
+#'   dataset_add = adrs,
+#'   filter_add = PARAMCD == "OVR" & AVALC == "PD",
 #'   order = exprs(ADT),
 #'   new_var = AVALC,
 #'   true_value = "Y",
@@ -290,8 +290,8 @@ derive_param_first_event <- function(dataset,
 #' # derive parameter indicating death
 #' derive_param_extreme_event(
 #'   dataset_adsl = adsl,
-#'   dataset_source = adsl,
-#'   filter_source = !is.na(DTHDT),
+#'   dataset_add = adsl,
+#'   filter_add = !is.na(DTHDT),
 #'   new_var = AVALC,
 #'   true_value = "Y",
 #'   false_value = "N",
@@ -305,8 +305,8 @@ derive_param_first_event <- function(dataset,
 #' )
 derive_param_extreme_event <- function(dataset = NULL,
                                        dataset_adsl,
-                                       dataset_source,
-                                       filter_source,
+                                       dataset_add,
+                                       filter_add,
                                        order = NULL,
                                        new_var = AVALC,
                                        true_value = "Y",
@@ -316,10 +316,10 @@ derive_param_extreme_event <- function(dataset = NULL,
                                        set_values_to,
                                        check_type = "warning") {
   # Check input parameters
-  filter_source <- assert_filter_cond(enexpr(filter_source))
+  filter_add <- assert_filter_cond(enexpr(filter_add))
   assert_vars(subject_keys)
   assert_vars(order, optional = TRUE)
-  assert_data_frame(dataset_source,
+  assert_data_frame(dataset_add,
     required_vars = exprs(!!!subject_keys, !!!extract_vars(order))
   )
   new_var <- assert_symbol(enexpr(new_var))
@@ -343,11 +343,11 @@ derive_param_extreme_event <- function(dataset = NULL,
   }
 
   # Create new observations
-  source_vars <- colnames(dataset_source)
+  source_vars <- colnames(dataset_add)
   adsl_vars <- colnames(dataset_adsl)
 
-  events <- dataset_source %>%
-    filter_if(filter_source) %>%
+  events <- dataset_add %>%
+    filter_if(filter_add) %>%
     filter_extreme(
       by_vars = subject_keys,
       order = order,
