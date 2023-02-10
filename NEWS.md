@@ -6,6 +6,7 @@
 into a single one (#1479)
 
 -   New ADPC template script available `ad_adpc.R` which creates PK Concentration Analysis Dataset (#849). This script includes formatting suitable for Non-Compartmental Analysis (ADNCA) (#851)
+
 ## Updates of Existing Functions
 
 -   The function `create_single_dose_dataset()` adds support for
@@ -45,6 +46,10 @@ added for subjects who have both an event or censoring and an observation in
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
 
 ## Documentation
+
+## Various
+
+- Function `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with NA values that has now been fixed (#1646)
 
 # admiral 0.9.1
 
