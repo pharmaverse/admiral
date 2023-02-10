@@ -279,7 +279,7 @@ adsl <- adsl %>%
     new_var = EOSSTT,
     source_var = DSDECOD,
     cat_fun = format_eosstt,
-    missing_value ="ONGOING"
+    missing_value = "ONGOING"
   )
 ```
 
