@@ -47,9 +47,11 @@ To increase visibility, we will keep columns that a relevant to Hy's Law analysi
 ```{r}
 adlb_annotated <- adlb %>%
   filter(PARAMCD %in% c("AST", "ALT", "BILI") & is.na(DTYPE)) %>%
-  mutate(CRIT1 = case_when(PARAMCD == "AST" ~ "AST >=3xULN",
-                           PARAMCD == "ALT" ~ "ALT >=3xULN",
-                           PARAMCD == "BILI" ~ "BILI >=2xULN")) %>%
+  mutate(CRIT1 = case_when(
+    PARAMCD == "AST" ~ "AST >=3xULN",
+    PARAMCD == "ALT" ~ "ALT >=3xULN",
+    PARAMCD == "BILI" ~ "BILI >=2xULN"
+  )) %>%
   call_derivation(
     .,
     derivation = derive_var_merged_exist_flag,
@@ -60,7 +62,7 @@ adlb_annotated <- adlb %>%
         new_var = CRIT1FL,
         condition = (
           (AVAL / ANRHI >= 3 & PARAMCD %in% c("AST", "ALT")) |
-          (AVAL / ANRHI >= 2 & PARAMCD == "BILI")
+            (AVAL / ANRHI >= 2 & PARAMCD == "BILI")
         )
       )
     )
@@ -84,20 +86,20 @@ ALTAST_records <- adlb_annotated %>%
   filter(PARAMCD %in% c("AST", "ALT"))
 
 BILI_records <- adlb_annotated %>%
-  filter(PARAMCD %in% c("BILI")) 
+  filter(PARAMCD %in% c("BILI"))
 
 HYLAW_records <- derive_vars_joined(
-    dataset = ALTAST_records,
-    dataset_add = BILI_records,
-    by_vars = exprs(STUDYID, USUBJID, ADY),
-    order = exprs(ADY),
-    filter_join = ADT.join - ADT <= 14 & CRIT1FL == "Y" & CRIT1FL.join == "Y",
-    new_vars = exprs(BILI_LBSEQ = LBSEQ, BILI_DT = ADT, BILI_CRITFL = CRIT1FL),
-    mode = "first"
-  )
+  dataset = ALTAST_records,
+  dataset_add = BILI_records,
+  by_vars = exprs(STUDYID, USUBJID, ADY),
+  order = exprs(ADY),
+  filter_join = ADT.join - ADT <= 14 & CRIT1FL == "Y" & CRIT1FL.join == "Y",
+  new_vars = exprs(BILI_LBSEQ = LBSEQ, BILI_DT = ADT, BILI_CRITFL = CRIT1FL),
+  mode = "first"
+)
 
-HYLAW_records %>% 
-  arrange(desc(BILI_CRITFL), desc(CRIT1FL)) %>% 
+HYLAW_records %>%
+  arrange(desc(BILI_CRITFL), desc(CRIT1FL)) %>%
   head(10)
 ```
 
@@ -132,7 +134,7 @@ HYLAW_params <- derive_param_exist_flag(
 )
 
 HYLAW_params %>%
-  arrange(desc(AVAL)) %>% 
+  arrange(desc(AVAL)) %>%
   head()
 ```
 
