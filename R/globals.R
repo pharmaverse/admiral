@@ -54,6 +54,7 @@ globalVariables(c(
   "USUBJID",
   "auto",
   "censor",
+  "check_nom",
   "data",
   "Dataset",
   "dataset_name",
@@ -137,5 +138,6 @@ globalVariables(c(
   "TERM",
   "TERM_UPPER",
   "atoxgr_criteria_ctcv4",
-  "DTYPE"
+  "DTYPE",
+  "where" # this entry should be moved to @importFrom tidyselect once we use tidyselect 1.2.0
 ))

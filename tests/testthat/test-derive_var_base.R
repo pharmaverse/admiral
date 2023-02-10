@@ -31,7 +31,7 @@ test_that("`target` is set to `source` where `ABLFL == 'Y'`", {
   )
   actual_output <- derive_var_base(
     input,
-    by_vars = vars(USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   )
@@ -64,7 +64,7 @@ test_that("`target` is set to `NA` if a baseline record is missing", {
   )
   actual_output <- derive_var_base(
     input,
-    by_vars = vars(USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   )
@@ -97,7 +97,7 @@ test_that("only the `target` variable is added to the input dataset", {
   )
   actual_output <- derive_var_base(
     input,
-    by_vars = vars(USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   )
@@ -124,7 +124,7 @@ test_that("An error is thrown if a subject has multiple records per `PARAMCD` an
   expect_error(
     derive_var_base(
       input,
-      by_vars = vars(USUBJID, PARAMCD, BASETYPE),
+      by_vars = exprs(USUBJID, PARAMCD, BASETYPE),
       source_var = AVALC,
       new_var = BASEC
     ),

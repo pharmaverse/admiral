@@ -284,7 +284,7 @@ test_that(paste(
   )
 
   expect_error(
-    derive_param_bmi(input, by_vars = vars(USUBJID, VISIT), get_unit_expr = VSSTRESU),
+    derive_param_bmi(input, by_vars = exprs(USUBJID, VISIT), get_unit_expr = VSSTRESU),
     paste(
       "It is expected that 'HEIGHT' is measured in 'cm'.\nIn the",
       "input dataset it is measured in 'm'."
@@ -304,7 +304,7 @@ test_that(paste(
   )
 
   expect_error(
-    derive_param_bmi(input, by_vars = vars(USUBJID, VISIT), get_unit_expr = VSSTRESU),
+    derive_param_bmi(input, by_vars = exprs(USUBJID, VISIT), get_unit_expr = VSSTRESU),
     paste(
       "It is expected that 'WEIGHT' is measured in 'kg'.\nIn the",
       "input dataset it is measured in 'g'."
@@ -325,7 +325,7 @@ test_that(paste(
   )
 
   expect_error(
-    derive_param_bmi(input, by_vars = vars(USUBJID, VISIT), get_unit_expr = VSSTRESU),
+    derive_param_bmi(input, by_vars = exprs(USUBJID, VISIT), get_unit_expr = VSSTRESU),
     paste0(
       "Multiple units 'kg' and 'g' found for 'WEIGHT'.",
       "\nPlease review and update the units."
@@ -346,8 +346,8 @@ test_that(paste(
   expect_error(
     derive_param_bmi(
       input,
-      by_vars = vars(USUBJID, VISIT),
-      set_values_to = vars(PARAM = "Body Mass Index"),
+      by_vars = exprs(USUBJID, VISIT),
+      set_values_to = exprs(PARAM = "Body Mass Index"),
       get_unit_expr = VSSTRESU
     ),
     "The following required elements are missing in `set_values_to`: 'PARAMCD'"
@@ -372,7 +372,7 @@ test_that("derive_param_bmi Test 02.01: BMI parameter NOT added to input dataset
   input <- expected_output
 
   expect_dfs_equal(
-    derive_param_bmi(input, by_vars = vars(USUBJID, VISIT), get_unit_expr = VSSTRESU),
+    derive_param_bmi(input, by_vars = exprs(USUBJID, VISIT), get_unit_expr = VSSTRESU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -404,7 +404,7 @@ test_that("derive_param_bmi Test 03.01: BMI parameter is correctly added to inpu
   input <- expected_output %>% filter(PARAMCD != "BMI")
 
   expect_dfs_equal(
-    derive_param_bmi(input, by_vars = vars(USUBJID, VISIT), get_unit_expr = VSSTRESU),
+    derive_param_bmi(input, by_vars = exprs(USUBJID, VISIT), get_unit_expr = VSSTRESU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -428,7 +428,7 @@ test_that(paste(
   expect_error(
     derive_param_bsa(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       method = "Mosteller",
       get_unit_expr = VSSTRESU
     ),
@@ -453,7 +453,7 @@ test_that(paste(
   expect_error(
     derive_param_bsa(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       method = "Mosteller",
       get_unit_expr = VSSTRESU
     ),
@@ -479,7 +479,7 @@ test_that(paste(
   expect_error(
     derive_param_bsa(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       method = "Mosteller",
       get_unit_expr = VSSTRESU
     ),
@@ -503,9 +503,9 @@ test_that(paste(
   expect_error(
     derive_param_bsa(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       method = "Mosteller",
-      set_values_to = vars(PARAM = "Body Surface Area"),
+      set_values_to = exprs(PARAM = "Body Surface Area"),
       get_unit_expr = VSSTRESU
     ),
     paste(
@@ -535,7 +535,7 @@ test_that("derive_param_bsa Test 02.01: BSA parameter NOT added to input dataset
   expect_dfs_equal(
     derive_param_bsa(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       method = "Mosteller",
       get_unit_expr = VSSTRESU
     ),
@@ -574,7 +574,7 @@ test_that(paste(
 
   expect_dfs_equal(
     derive_param_bsa(input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       method = "Mosteller",
       get_unit_expr = VSSTRESU
     ),
@@ -612,7 +612,7 @@ test_that(paste(
   expect_dfs_equal(
     derive_param_bsa(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       method = "DuBois-DuBois",
       get_unit_expr = VSSTRESU
     ),
@@ -649,7 +649,7 @@ test_that(paste(
 
   expect_dfs_equal(
     derive_param_bsa(input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       method = "Haycock",
       get_unit_expr = VSSTRESU
     ),
@@ -687,7 +687,7 @@ test_that(paste(
   expect_dfs_equal(
     derive_param_bsa(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       method = "Gehan-George",
       get_unit_expr = VSSTRESU
     ),
@@ -724,7 +724,7 @@ test_that(paste(
 
   expect_dfs_equal(
     derive_param_bsa(input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       method = "Boyd",
       get_unit_expr = VSSTRESU
     ),
@@ -762,7 +762,7 @@ test_that(paste(
   expect_dfs_equal(
     derive_param_bsa(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       method = "Fujimoto",
       get_unit_expr = VSSTRESU
     ),
@@ -799,7 +799,7 @@ test_that(paste(
   expect_dfs_equal(
     derive_param_bsa(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       method = "Takahira",
       get_unit_expr = VSSTRESU
     ),
@@ -825,7 +825,7 @@ test_that(paste(
   expect_error(
     derive_param_map(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       get_unit_expr = extract_unit(PARAM)
     ),
     paste(
@@ -848,7 +848,7 @@ test_that(paste(
   expect_error(
     derive_param_map(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       get_unit_expr = extract_unit(PARAM)
     ),
     paste(
@@ -872,7 +872,7 @@ test_that(paste(
   expect_error(
     derive_param_map(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       hr_code = "PULSE",
       get_unit_expr = extract_unit(PARAM)
     ),
@@ -896,8 +896,8 @@ test_that(paste(
   expect_error(
     derive_param_map(
       input,
-      by_vars = vars(USUBJID, VISIT),
-      set_values_to = vars(PARAM = "Mean Arterial Pressure"),
+      by_vars = exprs(USUBJID, VISIT),
+      set_values_to = exprs(PARAM = "Mean Arterial Pressure"),
       get_unit_expr = extract_unit(PARAM)
     ),
     paste(
@@ -928,7 +928,7 @@ test_that("derive_param_map Test 02.01: MAP parameter NOT added to input dataset
   expect_dfs_equal(
     derive_param_map(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       hr_code = "PULSE",
       get_unit_expr = extract_unit(PARAM)
     ),
@@ -968,7 +968,7 @@ test_that(paste(
   expect_dfs_equal(
     derive_param_map(
       input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       hr_code = "PULSE",
       get_unit_expr = extract_unit(PARAM)
     ),
@@ -1003,7 +1003,7 @@ test_that(paste(
 
   expect_dfs_equal(
     derive_param_map(input,
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       get_unit_expr = extract_unit(PARAM)
     ),
     expected_output,

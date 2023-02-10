@@ -16,14 +16,14 @@ expected.}
 
 \emph{Default}: \code{NULL}
 
-\emph{Permitted Values:} list of variables created by \code{vars()}}
+\emph{Permitted Values:} list of variables created by \code{exprs()}}
 
 \item{order}{Sort order
 
 Within each by group the observations are ordered by the specified order.
 
 \emph{Permitted Values:} list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))}}
+created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}}
 
 \item{mode}{Selection mode (first or last)
 
@@ -63,8 +63,8 @@ data("admiral_ex")
 # Select first dose for each patient
 admiral_ex \%>\%
   filter_extreme(
-    by_vars = vars(USUBJID),
-    order = vars(EXSEQ),
+    by_vars = exprs(USUBJID),
+    order = exprs(EXSEQ),
     mode = "first"
   ) \%>\%
   select(USUBJID, EXSEQ)
@@ -73,8 +73,8 @@ admiral_ex \%>\%
 admiral_ex \%>\%
   filter(EXTRT != "PLACEBO") \%>\%
   filter_extreme(
-    by_vars = vars(USUBJID),
-    order = vars(EXDOSE),
+    by_vars = exprs(USUBJID),
+    order = exprs(EXDOSE),
     mode = "last",
     check_type = "none"
   ) \%>\%

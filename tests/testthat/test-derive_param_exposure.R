@@ -25,10 +25,8 @@ input <- tibble::tribble(
 input_no_dtm <- input %>%
   select(-ASTDTM, -AENDTM)
 
-# ---- derive_param_exposure, test 1: New observations are derived correctly ----
-# ---- for AVAL ----
-test_that("derive_param_exposure Test 1: New observations are derived correctly
-          for AVAL", {
+## Test 1: works with DTM variables ----
+test_that("derive_param_exposure Test 1: works with DTM variables", {
   new_obs1 <- input %>%
     filter(PARAMCD == "DOSE") %>%
     group_by(USUBJID) %>%
@@ -63,25 +61,25 @@ test_that("derive_param_exposure Test 1: New observations are derived correctly
 
   actual_output <- input %>%
     derive_param_exposure(
-      by_vars = vars(USUBJID),
+      by_vars = exprs(USUBJID),
       input_code = "DOSE",
       analysis_var = AVAL,
       summary_fun = function(x) sum(x, na.rm = TRUE),
-      set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+      set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
     ) %>%
     derive_param_exposure(
-      by_vars = vars(USUBJID),
+      by_vars = exprs(USUBJID),
       input_code = "DOSE",
       analysis_var = AVAL,
       summary_fun = function(x) mean(x, na.rm = TRUE),
-      set_values_to = vars(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
+      set_values_to = exprs(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
     ) %>%
     derive_param_exposure(
-      by_vars = vars(USUBJID),
+      by_vars = exprs(USUBJID),
       input_code = "ADJ",
       analysis_var = AVALC,
       summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_),
-      set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
+      set_values_to = exprs(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
     )
 
   expect_dfs_equal(
@@ -91,10 +89,8 @@ test_that("derive_param_exposure Test 1: New observations are derived correctly
   )
 })
 
-# ---- derive_param_exposure, test 2:  New observations are derived correctly ----
-# ---- for AVAL, when the input dataset only contains AxxDT variables ----
-test_that("derive_param_exposure Test 2: New observations are derived correctly
-          for AVAL, when the input dataset only contains AxxDT variables", {
+## Test 2: works with DT variables ----
+test_that("derive_param_exposure Test 2: works with DT variables", {
   new_obs1 <- input_no_dtm %>%
     filter(PARAMCD == "DOSE") %>%
     group_by(USUBJID) %>%
@@ -129,25 +125,25 @@ test_that("derive_param_exposure Test 2: New observations are derived correctly
 
   actual_output <- input_no_dtm %>%
     derive_param_exposure(
-      by_vars = vars(USUBJID),
+      by_vars = exprs(USUBJID),
       input_code = "DOSE",
       analysis_var = AVAL,
       summary_fun = function(x) sum(x, na.rm = TRUE),
-      set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+      set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
     ) %>%
     derive_param_exposure(
-      by_vars = vars(USUBJID),
+      by_vars = exprs(USUBJID),
       input_code = "DOSE",
       analysis_var = AVAL,
       summary_fun = function(x) mean(x, na.rm = TRUE),
-      set_values_to = vars(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
+      set_values_to = exprs(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
     ) %>%
     derive_param_exposure(
-      by_vars = vars(USUBJID),
+      by_vars = exprs(USUBJID),
       input_code = "ADJ",
       analysis_var = AVALC,
       summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_),
-      set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
+      set_values_to = exprs(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
     )
 
   expect_dfs_equal(
@@ -157,17 +153,17 @@ test_that("derive_param_exposure Test 2: New observations are derived correctly
   )
 })
 
-# ---- derive_param_exposure, test 3: Errors ----
-test_that("derive_param_exposure, test 3: Errors", {
+## Test 3: Errors ----
+test_that("derive_param_exposure Test 3: Errors", {
   # PARAMCD must be specified
   expect_error(
     input <- input %>%
       derive_param_exposure(
-        by_vars = vars(USUBJID),
+        by_vars = exprs(USUBJID),
         input_code = "DOSE",
         analysis_var = AVAL,
         summary_fun = function(x) mean(x, na.rm = TRUE),
-        set_values_to = vars(PARCAT1 = "OVERALL")
+        set_values_to = exprs(PARCAT1 = "OVERALL")
       ),
     regexp = paste("The following required elements are missing in `set_values_to`: 'PARAMCD'")
   )
@@ -175,11 +171,11 @@ test_that("derive_param_exposure, test 3: Errors", {
   expect_error(
     input <- input %>%
       derive_param_exposure(
-        by_vars = vars(USUBJID),
+        by_vars = exprs(USUBJID),
         input_code = "DOSED",
         analysis_var = AVAL,
         summary_fun = function(x) mean(x, na.rm = TRUE),
-        set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+        set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
       ),
     regexp = paste(
       "`input_code` contains invalid values:\n`DOSED`\nValid",
@@ -192,11 +188,11 @@ test_that("derive_param_exposure, test 3: Errors", {
     input <- input %>%
       select(-starts_with("AST"), -starts_with("AEN")) %>%
       derive_param_exposure(
-        by_vars = vars(USUBJID),
+        by_vars = exprs(USUBJID),
         input_code = "DOSE",
         analysis_var = AVAL,
         summary_fun = function(x) mean(x, na.rm = TRUE),
-        set_values_to = vars(PARCAT1 = "OVERALL")
+        set_values_to = exprs(PARCAT1 = "OVERALL")
       ),
     regexp = paste("Required variables `ASTDT` and `AENDT` are missing")
   )
