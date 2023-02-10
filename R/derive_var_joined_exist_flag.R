@@ -1,4 +1,4 @@
-#' Derives a New flag from Existing Flag
+#' Derives a flag based on Existing Flag
 #'
 #' Derive a flag which depends on other observations of the dataset. For
 #' example, flagging events which need to be confirmed by a second event.

@@ -1,4 +1,4 @@
-#' Filter Confirmed Observations
+#' Filter Observations taking other Observations into account
 #'
 #' @description
 #'
@@ -10,7 +10,7 @@
 #' ".join" is added to the variables from the subsequent observations.
 #'
 #' An example usage might be checking if a patient received two required
-#' medications within a certain timeframe of each other.
+#' medications within a certain time frame of each other.
 #'
 #' In the oncology setting, for example, we use such processing to check if a
 #' response value can be confirmed by a subsequent assessment. This is commonly
@@ -180,7 +180,7 @@
 #'   "4",        21, "N",         41
 #' )
 #'
-#' filter_confirmation(
+#' filter_joined(
 #'   adae,
 #'   by_vars = exprs(USUBJID),
 #'   join_vars = exprs(ACOVFL, ADY),
@@ -203,7 +203,7 @@
 #'   "4",      2,        "N",
 #' )
 #'
-#' filter_confirmation(
+#' filter_joined(
 #'   data,
 #'   by_vars = exprs(USUBJID),
 #'   join_vars = exprs(AVALC, AVISITN),
@@ -232,7 +232,7 @@
 #'   "4",      5,        "PR"
 #' )
 #'
-#' filter_confirmation(
+#' filter_joined(
 #'   data,
 #'   by_vars = exprs(USUBJID),
 #'   join_vars = exprs(AVALC),
@@ -264,7 +264,7 @@
 #'   "4",        55, "PR"
 #' )
 #'
-#' filter_confirmation(
+#' filter_joined(
 #'   data,
 #'   by_vars = exprs(USUBJID),
 #'   join_vars = exprs(AVALC, ADY),
@@ -280,7 +280,7 @@
 #'         count_vals(var = AVALC.join, val = "CR") == 0
 #'     )
 #' )
-filter_confirmation <- function(dataset,
+filter_joined <- function(dataset,
                                 by_vars,
                                 join_vars,
                                 join_type,
@@ -312,10 +312,10 @@ filter_confirmation <- function(dataset,
   )
 
   # number observations of the input dataset to get a unique key
-  # (by_vars and tmp_obs_nr_filter_confirmation)
+  # (by_vars and tmp_obs_nr_filter_joined)
   data <- dataset %>%
     derive_var_obs_number(
-      new_var = tmp_obs_nr_filter_confirmation,
+      new_var = tmp_obs_nr_filter_joined,
       by_vars = by_vars,
       order = order,
       check_type = check_type
@@ -325,7 +325,7 @@ filter_confirmation <- function(dataset,
   data_joined <-
     left_join(
       data,
-      select(data, !!!by_vars, !!!join_vars, tmp_obs_nr_filter_confirmation),
+      select(data, !!!by_vars, !!!join_vars, tmp_obs_nr_filter_joined),
       by = vars2chr(by_vars),
       suffix = c("", ".join")
     )
@@ -335,9 +335,9 @@ filter_confirmation <- function(dataset,
     data_joined <- filter(
       data_joined,
       !!parse_expr(paste(
-        "tmp_obs_nr_filter_confirmation.join",
+        "tmp_obs_nr_filter_joined.join",
         operator[join_type],
-        "tmp_obs_nr_filter_confirmation"
+        "tmp_obs_nr_filter_joined"
       ))
     )
   }
@@ -346,9 +346,9 @@ filter_confirmation <- function(dataset,
     # select all observations up to the first confirmation observation
     data_joined <- filter_relative(
       data_joined,
-      by_vars = exprs(!!!by_vars, tmp_obs_nr_filter_confirmation),
+      by_vars = exprs(!!!by_vars, tmp_obs_nr_filter_joined),
       condition = !!first_cond,
-      order = exprs(tmp_obs_nr_filter_confirmation.join),
+      order = exprs(tmp_obs_nr_filter_joined.join),
       mode = "first",
       selection = "before",
       inclusive = TRUE,
@@ -358,7 +358,7 @@ filter_confirmation <- function(dataset,
 
   # apply confirmation condition, which may include summary functions
   data_joined %>%
-    group_by(!!!by_vars, tmp_obs_nr_filter_confirmation) %>%
+    group_by(!!!by_vars, tmp_obs_nr_filter_joined) %>%
     filter(!!filter) %>%
     # select one observation of each group, as the joined variables are removed
     # it doesn't matter which one, so we take just the first one
