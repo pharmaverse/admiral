@@ -458,7 +458,6 @@ assert_expr <- function(arg, optional = FALSE) {
 #'
 #' try(example_fun(admiral_dm, USUBJID))
 assert_filter_cond <- function(arg, optional = FALSE) {
-  stopifnot(is_expression(arg))
   assert_logical_scalar(optional)
 
   if (optional && is.null(arg)) {

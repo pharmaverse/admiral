@@ -45,6 +45,13 @@ test_that("assert_filter_cond Test 3: `assert_filter_cond` works as expected", {
     assert_filter_cond(arg = fc),
     "`fc` must be a filter condition but is `\"string\"`"
   )
+
+  vals <- c("A", "B")
+  fc <- expr(VAR %in% !!vals)
+  expect_identical(
+    assert_filter_cond(arg = fc),
+    fc
+  )
 })
 
 # assert_data_frame ----
