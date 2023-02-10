@@ -54,7 +54,7 @@ adlb_annotated <- adlb %>%
     .,
     derivation = derive_var_merged_exist_flag,
     dataset_add = .,
-    by_vars = vars(USUBJID, LBSEQ, PARAMCD, ADT),
+    by_vars = exprs(USUBJID, LBSEQ, PARAMCD, ADT),
     variable_params = list(
       params(
         new_var = CRIT1FL,
@@ -89,10 +89,10 @@ BILI_records <- adlb_annotated %>%
 HYLAW_records <- derive_vars_joined(
     dataset = ALTAST_records,
     dataset_add = BILI_records,
-    by_vars = vars(STUDYID, USUBJID, ADY),
-    order = vars(ADY),
+    by_vars = exprs(STUDYID, USUBJID, ADY),
+    order = exprs(ADY),
     filter_join = ADT.join - ADT <= 14 & CRIT1FL == "Y" & CRIT1FL.join == "Y",
-    new_vars = vars(BILI_LBSEQ = LBSEQ, BILI_DT = ADT, BILI_CRITFL = CRIT1FL),
+    new_vars = exprs(BILI_LBSEQ = LBSEQ, BILI_DT = ADT, BILI_CRITFL = CRIT1FL),
     mode = "first"
   )
 
@@ -124,8 +124,8 @@ HYLAW_params <- derive_param_exist_flag(
   condition = CRIT1FL == "Y" & BILI_CRITFL == "Y",
   false_value = "N",
   missing_value = "N",
-  subject_keys = vars(STUDYID, USUBJID, AVISIT, ADT),
-  set_values_to = vars(
+  subject_keys = exprs(STUDYID, USUBJID, AVISIT, ADT),
+  set_values_to = exprs(
     PARAMCD = "HYSLAW",
     PARAM = "ALT/AST >= 3xULN and BILI >= 2xULN"
   )
