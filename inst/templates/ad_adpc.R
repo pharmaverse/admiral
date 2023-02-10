@@ -82,10 +82,7 @@ adpc <- pc %>%
   derive_vars_dtm(
     new_vars_prefix = "A",
     dtc = PCDTC,
-    date_imputation = "FIRST",
-    time_imputation = "00:00:00",
-    ignore_seconds_flag = FALSE,
-    flag_imputation = "auto"
+    time_imputation = "00:00:00"
   ) %>%
   # Derive dates and times from date/times
   derive_vars_dtm_to_dt(exprs(ADTM)) %>%
@@ -116,18 +113,12 @@ ex <- ex %>%
   derive_vars_dtm(
     new_vars_prefix = "AST",
     dtc = EXSTDTC,
-    date_imputation = "FIRST",
-    time_imputation = "00:00:00",
-    ignore_seconds_flag = FALSE,
-    flag_imputation = "auto"
+    time_imputation = "00:00:00"
   ) %>%
   derive_vars_dtm(
     new_vars_prefix = "AEN",
     dtc = EXENDTC,
-    date_imputation = "LAST",
-    time_imputation = "00:00:00",
-    ignore_seconds_flag = FALSE,
-    flag_imputation = "auto"
+    time_imputation = "00:00:00"
   ) %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
