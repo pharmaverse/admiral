@@ -1,5 +1,9 @@
 #' Default Format for Disposition Status
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_var_merged_cat()` instead.
 #' Define a function to map the disposition status. To be used as an input for
 #' `derive_var_disposition_status()`.
 #'
@@ -15,24 +19,15 @@
 #' @author Samia Kabi
 #' @details Usually this function can not be used with `%>%`.
 #' @export
-#' @family utils_fmt
-#' @keywords utils_fmt
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("admiral_dm")
-#' data("admiral_ds")
-#'
-#' admiral_dm %>%
-#'   derive_var_disposition_status(
-#'     dataset_ds = admiral_ds,
-#'     new_var = EOSSTT,
-#'     status_var = DSDECOD,
-#'     format_new_var = format_eoxxstt_default,
-#'     filter_ds = DSCAT == "DISPOSITION EVENT"
-#'   ) %>%
-#'   select(STUDYID, USUBJID, EOSSTT)
+#' @family deprecated
+#' @keywords deprecated
 format_eoxxstt_default <- function(status) {
+  ### DEPRECATION
+  deprecate_warn("0.10.0",
+    "format_eoxxstt_default()",
+    details = "Please use `derive_var_merged_cat()` instead"
+  )
+
   case_when(
     status %in% c("SCREEN FAILURE", "SCREENING NOT COMPLETED") ~ "NOT STARTED",
     status == "COMPLETED" ~ "COMPLETED",
@@ -119,16 +114,11 @@ derive_var_disposition_status <- function(dataset,
                                           format_new_var = format_eoxxstt_default,
                                           filter_ds,
                                           subject_keys = get_admiral_option("subject_keys")) {
-
   ### DEPRECATION
   deprecate_warn("0.10.0",
     "derive_var_disposition_status()",
     details = "Please use `derive_var_merged_cat()` instead"
   )
-
-  new_var <- assert_symbol(enquo(new_var))
-  status_var <- assert_symbol(enquo(status_var))
-  filter_ds <- assert_filter_cond(enquo(filter_ds))
 
   new_var <- assert_symbol(enexpr(new_var))
   status_var <- assert_symbol(enexpr(status_var))

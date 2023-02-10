@@ -158,14 +158,11 @@ adsl <- adsl %>%
   # EOS status
   derive_var_merged_cat(
     dataset_add = ds_ext,
-    by_vars = vars(STUDYID, USUBJID),
-    order = NULL,
+    by_vars = exprs(STUDYID, USUBJID),
     filter_add = DSCAT == "DISPOSITION EVENT",
     new_var = EOSSTT,
     source_var = DSDECOD,
-    cat_fun =
-      ormat_eosstt,
-    mode = NULL,
+    cat_fun = format_eosstt,
     missing_value = NA_character_
   ) %>%
   # Last retrieval date

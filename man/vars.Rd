@@ -21,7 +21,9 @@ This function is \emph{deprecated}, please use \code{exprs()} instead.
 Other deprecated: 
 \code{\link{derive_derived_param}()},
 \code{\link{derive_param_first_event}()},
-\code{\link{derive_var_aendy}()}
+\code{\link{derive_var_aendy}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{format_eoxxstt_default}()}
 }
 \concept{deprecated}
 \keyword{deprecated}

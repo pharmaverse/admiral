@@ -83,7 +83,9 @@ Derive a disposition status from the the relevant records in the disposition dom
 Other deprecated: 
 \code{\link{derive_derived_param}()},
 \code{\link{derive_param_first_event}()},
-\code{\link{derive_var_aendy}()}
+\code{\link{derive_var_aendy}()},
+\code{\link{format_eoxxstt_default}()},
+\code{\link{vars}()}
 }
 \author{
 Samia Kabi
