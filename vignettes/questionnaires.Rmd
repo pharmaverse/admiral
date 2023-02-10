@@ -1,0 +1,175 @@
+---
+title: "Creating Questionnaire ADaMs"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Creating Questionnaire ADaMs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(admiraldev)
+```
+
+# Introduction
+
+This article describes creating questionnaire ADaMs. Although questionnaire data
+is collected in a single SDTM dataset (`QS`), usually it does not make sense to
+create a single `ADQS` dataset for all questionnaire analyses. Therefore this
+vignette does not provide a programming workflow for a complete dataset but
+provides examples for deriving common types of questionnaire parameters.
+
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless 
+otherwise specified.*
+
+# Original Items
+
+The original items can be handled in the same way like in a BDS finding ADaM. For example:
+
+```{r eval=FALSE}
+
+adqs <- derive_vars_merged(
+  qs,
+  dataset_add = adsl,
+  new_vars = exprs(TRTSDT),
+  by_vars = exprs(STUDYID, USUBJID)
+) %>% 
+  mutate(
+    PARAMCD = QSTESTCD,
+    PARAM = QSTEST,
+    AVALC = QSORRES,
+    AVAL = case_when(
+    )
+  ) %>% 
+  derive_vars_dt(new_vars_prefix = "A", dtc = QSDTC) %>% 
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT)) %>% 
+  mutate(
+    AVISIT = VISIT,
+    AVISITN = VISITNUM
+  ) %>% 
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+      order = exprs(ADT),
+      new_var = ABLFL,
+      mode = "last"
+    ),
+    filter = !is.na(AVAL) & ADT <= TRTSDT
+  ) %>% 
+  derive_var_base(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    source_var = AVAL,
+    new_var = BASE
+  ) %>% 
+  derive_var_base(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    source_var = AVALC,
+    new_var = BASEC
+  ) %>% 
+  derive_var_chg() %>% 
+  derive_var_pchg()
+```
+
+# Scales and Scores
+
+Scales and Scores are often derived as the average across a subset of the
+questions. The results may be transformed to a specific range, e.g., to the
+interval [0, 100]. Often the average should be derived only if a certain
+percentage like 50% was answered. Parameters of this type can be derived by
+`compute_scales()` and `derive_summary_records()`:
+```{r eval=FALSE}
+derive_summary_records(
+  adqs,
+  by_vars = exprs(USUBJID, AVISIT),
+  analysis_var = AVAL,
+  summary_fun = function(x) compute_scale(
+    x,
+    source_range = c(1, 4),
+    target_range = c(0, 100),
+    min_n = 1),
+  filter = PARAMCD %in% c("QS001", "QS002") & ANL01FL == "Y",
+  set_values_to = exprs(
+    PARAMCD = "QLQC30FA",
+    PARAM = "EORTC QLQ-C30: Fatigue"
+  )
+)
+```
+
+# Time to Deterioration/Improvement
+
+As time to event parameters require specific variables like `CNSR`, `STARTDT`,
+and `EVNTDESC`, it makes sense to create a separate time to event dataset for
+them. However, it might be useful to create flags or categorization variables in
+`ADQS`. For example
+```{r eval=FALSE}
+adqs <- adqs %>% 
+  mutate(
+    CHGCAT1 = case_when(
+      CHG >= 10 ~ "Improved",
+      CHG <= -10 ~ "Worsened",
+      !is.na(CHG) ~ "No change"
+    )
+  )
+```
+
+Then a time to deterioration parameter can be derived by:
+```{r eval=FALSE}
+deterioration_event_dy <- event_source(
+  dataset_name = "adqs",
+  filter = PARAMCD == “DY” & CHGCAT1 = “Worsened”,
+  date = ADT,
+  set_values_to = exprs(
+	EVNTDESC = "DETERIORATION",
+	SRCDOM = "ADQS",
+	SRCVAR = "ADT",
+	SRCSEQ = ASEQ
+  )
+)
+
+last_valid_assessment_dy <- censor_source(
+  dataset_name = "adqs",
+  filter = PARAMCD == “DY” & !missing(CHGCAT1),
+  date = ADT,
+  set_values_to = exprs(
+	EVNTDESC = "LAST ASSESSMENT",
+	SRCDOM = "ADQS",
+	SRCVAR = "ADT",
+	SRCSEQ = ASEQ
+  )
+)
+
+start <- censor_source(
+  dataset_name = "adsl",
+  date = TRTSDT,
+  set_values_to = exprs(
+    EVNTDESC = "TREATMENT START",
+    SRCDOM = "ADSL",
+    SRCVAR = "TRTSDT"
+  )
+)
+
+derive_param_tte(
+  dataset_adsl = adsl,
+  startdt = TRTSDT,
+  event_conditions = list(deterioration_event_dy),
+  censor_conditions = list(last_valid_assessment_dy, start),
+  set_values_to = exprs(
+    PARAMCD = "TTDDY",
+    PARAM = "Time to deterioration in Dyspnoea"
+  )
+)
+```
+
+# Time to Confirmed/Definitive Deterioration/Improvement
+
+# Worst/Best Answer
+
+# Completion
+

@@ -170,6 +170,8 @@ navbar:
         href: articles/bds_exposure.html
       - text: Creating a BDS Time-to-Event ADaM
         href: articles/bds_tte.html
+      - text: Creating Questionnaire ADaMs
+        href: articles/questionnaires.html
       - text: "Advanced User Guides"
       - text: Date and Time Imputation
         href: articles/imputation.html
