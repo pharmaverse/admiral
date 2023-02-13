@@ -36,7 +36,8 @@ We can use a mixture of `admiral` and basic `tidyverse` functions to assist us i
 
 ```{r}
 adlb <- admiral_adlb
-head(adlb)
+head(adlb) %>% 
+  dataset_vignette()
 ```
 
 A standard convention of ADLBHY datasets, are various `CRITX` and `CRITXFL` columns to describe the conditions necessary to reach that particular criterion of Hy's Law and the actual flag itself to indicate whether or not the condition was reached.
