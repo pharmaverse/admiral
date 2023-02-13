@@ -101,7 +101,7 @@ HYLAW_records <- derive_vars_joined(
 
 HYLAW_records %>%
   arrange(desc(BILI_CRITFL), desc(CRIT1FL)) %>%
-  dataset_vignette(10)
+  dataset_vignette()
 ```
 
 Using `derive_param_exist_flag()` you can create a variety of parameters for your final dataset with AVAL = 1/0 for your specific Hy's Law analysis. Below is an example of how to indicate a potential Hy's Law event, with `PARAMCD` set as `"HYSLAW"` and `PARAM` set to `"ALT/AST >= 3xULN and BILI >= 2xULN"` for **each visit** using the flags from the prior dataset. This method allows for flexibility as well, if you wanted it just for each patient and not each visit, you would remove `AVISIT` and `ADT` from the below code. 
