@@ -39,20 +39,19 @@ adqs <- derive_vars_merged(
   dataset_add = adsl,
   new_vars = exprs(TRTSDT),
   by_vars = exprs(STUDYID, USUBJID)
-) %>% 
+) %>%
   mutate(
     PARAMCD = QSTESTCD,
     PARAM = QSTEST,
     AVALC = QSORRES,
-    AVAL = case_when(
-    )
-  ) %>% 
-  derive_vars_dt(new_vars_prefix = "A", dtc = QSDTC) %>% 
-  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT)) %>% 
+    AVAL = case_when()
+  ) %>%
+  derive_vars_dt(new_vars_prefix = "A", dtc = QSDTC) %>%
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT)) %>%
   mutate(
     AVISIT = VISIT,
     AVISITN = VISITNUM
-  ) %>% 
+  ) %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
@@ -62,18 +61,18 @@ adqs <- derive_vars_merged(
       mode = "last"
     ),
     filter = !is.na(AVAL) & ADT <= TRTSDT
-  ) %>% 
+  ) %>%
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
-  ) %>% 
+  ) %>%
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVALC,
     new_var = BASEC
-  ) %>% 
-  derive_var_chg() %>% 
+  ) %>%
+  derive_var_chg() %>%
   derive_var_pchg()
 ```
 
@@ -89,11 +88,14 @@ derive_summary_records(
   adqs,
   by_vars = exprs(USUBJID, AVISIT),
   analysis_var = AVAL,
-  summary_fun = function(x) compute_scale(
-    x,
-    source_range = c(1, 4),
-    target_range = c(0, 100),
-    min_n = 1),
+  summary_fun = function(x) {
+    compute_scale(
+      x,
+      source_range = c(1, 4),
+      target_range = c(0, 100),
+      min_n = 1
+    )
+  },
   filter = PARAMCD %in% c("QS001", "QS002") & ANL01FL == "Y",
   set_values_to = exprs(
     PARAMCD = "QLQC30FA",
@@ -102,14 +104,14 @@ derive_summary_records(
 )
 ```
 
-# Time to Deterioration/Improvement
+# Time to Deterioration/Improvement {#timetodeterioration}
 
 As time to event parameters require specific variables like `CNSR`, `STARTDT`,
 and `EVNTDESC`, it makes sense to create a separate time to event dataset for
 them. However, it might be useful to create flags or categorization variables in
 `ADQS`. For example
 ```{r eval=FALSE}
-adqs <- adqs %>% 
+adqs <- adqs %>%
   mutate(
     CHGCAT1 = case_when(
       CHG >= 10 ~ "Improved",
@@ -121,30 +123,33 @@ adqs <- adqs %>%
 
 Then a time to deterioration parameter can be derived by:
 ```{r eval=FALSE}
+# define event
 deterioration_event_dy <- event_source(
   dataset_name = "adqs",
-  filter = PARAMCD == “DY” & CHGCAT1 = “Worsened”,
+  filter = PARAMCD == "DY" & CHGCAT1 == "Worsened",
   date = ADT,
   set_values_to = exprs(
-	EVNTDESC = "DETERIORATION",
-	SRCDOM = "ADQS",
-	SRCVAR = "ADT",
-	SRCSEQ = ASEQ
+    EVNTDESC = "DETERIORATION",
+    SRCDOM = "ADQS",
+    SRCVAR = "ADT",
+    SRCSEQ = ASEQ
   )
 )
 
+# define censoring at last assessment
 last_valid_assessment_dy <- censor_source(
   dataset_name = "adqs",
-  filter = PARAMCD == “DY” & !missing(CHGCAT1),
+  filter = PARAMCD == "DY" & !is.na(CHGCAT1),
   date = ADT,
   set_values_to = exprs(
-	EVNTDESC = "LAST ASSESSMENT",
-	SRCDOM = "ADQS",
-	SRCVAR = "ADT",
-	SRCSEQ = ASEQ
+    EVNTDESC = "LAST ASSESSMENT",
+    SRCDOM = "ADQS",
+    SRCVAR = "ADT",
+    SRCSEQ = ASEQ
   )
 )
 
+# define censoring at treatment start (for subjects without assessment)
 start <- censor_source(
   dataset_name = "adsl",
   date = TRTSDT,
@@ -155,21 +160,194 @@ start <- censor_source(
   )
 )
 
-derive_param_tte(
-  dataset_adsl = adsl,
-  startdt = TRTSDT,
-  event_conditions = list(deterioration_event_dy),
-  censor_conditions = list(last_valid_assessment_dy, start),
+adqstte <- adqstte %>%
+  derive_param_tte(
+    dataset_adsl = adsl,
+    startdt = TRTSDT,
+    event_conditions = list(deterioration_event_dy),
+    censor_conditions = list(last_valid_assessment_dy, start),
+    set_values_to = exprs(
+      PARAMCD = "TTDDY",
+      PARAM = "Time to deterioration in Dyspnoea"
+    )
+  )
+```
+
+# Time to Confirmed/Definitive Deterioration/Improvement 
+
+The derivation of confirmed/definitive deterioration/improvement parameters is
+very similar to the unconfirmed deterioration parameters except that the event
+is not based on `CHGCATy` but on a confirmation flag variable. This confirmation
+flag can be derived by `derive_var_confirmation_flag()`. For example, flagging
+deteriorations, which are confirmed by a second assessment at least seven days
+later:
+```{r eval=FALSE}
+adqs <- adqs %>%
+  derive_var_confirmation_flag(
+    adqs,
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = CDETFL,
+    join_vars = exprs(CHGCAT1, ADY),
+    join_type = "after",
+    filter = CHGCAT1 == "WORSENED" & CHGCAT1.join == "WORSENED" & ADY.join >= ADY + 7
+  )
+```
+
+For flagging deteriorations at two consecutive assessments or considering death
+due to progression at the last assessment as confirmation the `tmp_obs_nr_var`
+argument is helpful:
+```{r eval=FALSE}
+# flagging deterioration at two consecutive assessments
+adqs <- adqs %>%
+  derive_var_confirmation_flag(
+    adqs,
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = CONDETFL,
+    join_vars = exprs(CHGCAT1),
+    join_type = "after",
+    tmp_obs_nr_var = tmp_obs_nr,
+    filter = CHGCAT1 == "WORSENED" & CHGCAT1.join == "WORSENED" &
+      tmp_obs_nr.join == tmp_obs_nr + 1
+  ) %>%
+  # flagging deterioration confirmed by
+  # - a second deterioration at least 7 days later or
+  # - deterioration at the last assessment and death due to progression
+  derive_var_confirmation_flag(
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = CDETFL,
+    join_vars = exprs(CHGCAT1, ADY),
+    join_type = "after",
+    tmp_obs_nr_var = tmp_obs_nr,
+    filter = CHGCAT1 == "WORSENED" & (
+      CHGCAT1.join == "WORSENED" & ADY.join >= ADY + 7 |
+        tmp_obs_nr == max(tmp_obs_nr.join) & DTHCAUS == "PROGRESSIVE DISEASE")
+  )
+```
+
+For definitive deterioration (deterioration at all following assessments)
+parameters summary functions like `all()` can be used in the filter condition:
+
+```{r eval=FALSE}
+derive_var_confirmation_flag(
+  adqs,
+  by_vars = exprs(USUBJID, PARAMCD),
+  order = exprs(ADT),
+  new_var = DEFDETFL,
+  join_vars = exprs(CHGCAT1),
+  join_type = "after",
+  filter = CHGCAT1 == "WORSENED" & all(CHGCAT1.join == "WORSENED")
+)
+```
+
+The time-to-event parameter can be derived in the same way as for the
+unconfirmed parameters (see [Time to
+Deterioration/Improvement](#timetodeterioration))
+
+# Worst/Best Answer
+
+This class of parameters can be used when the worst answer of a set of yes/no answers should be selected. For example, if yes/no answers for "Suicide", "Suicide attempt", "Preparing suicide attempt" are collected, a parameter for the worst suicidal behavior could be derived. In the example no suicidal behavior is assumed if all were answered with "no".
+```{r eval=FALSE}
+derive_param_worst_event(
+  adqs,
+  by_vars = exprs(USUBJID, AVISIT),
+  events = list(
+    event(
+      condition = PARAMCD == "SUICIDE" & AVALC == "Y",
+      set_values_to = exprs(
+        AVALC = "Completed Suicide",
+        AVAL = 1
+      )
+    ),
+    event(
+      condition = PARAMCD == "ATTEMPT" & AVALC == "Y",
+      set_values_to = exprs(
+        AVALC = "Suicide Attempt",
+        AVAL = 2
+      )
+    ),
+    event(
+      condition = PARAMCD == "PREPARE" & AVALC == "Y",
+      set_values_to = exprs(
+        AVALC = "Preparation of Suicide Attempt",
+        AVAL = 3
+      )
+    ),
+    event(
+      condition = all(AVALC == "N"),
+      set_values_to = exprs(
+        AVALC = "No Suicidal Behaviour",
+        AVAL = 4
+      )
+    ),
+    event(
+      condition = TRUE,
+      set_values_to = exprs(
+        AVALC = "Missing",
+        AVAL = 99
+      )
+    )
+  ),
   set_values_to = exprs(
-    PARAMCD = "TTDDY",
-    PARAM = "Time to deterioration in Dyspnoea"
+    PARAMCD = "HSB",
+    PARAM = "Highest Suicidal Behavior"
   )
 )
 ```
 
-# Time to Confirmed/Definitive Deterioration/Improvement
-
-# Worst/Best Answer
-
 # Completion
 
+Parameters for completion like "at least 50% of the questions were answered" can be derived by `derive_summary_records()`.
+```{r eval=FALSE}
+adqs <- adqs %>%
+  derive_summary_records(
+    filter = PARCAT1 == "Original Items" & ANL01FL == "Y",
+    by_vars = exprs(USUBJID, AVISIT),
+    analysis_var = AVAL,
+    summary_fun = function(x) sum(!is.na(x)) / 13 >= 0.5,
+    set_values_to = exprs(
+      PARAMCD = "COMPL50P",
+      PARAM = "Completed at least 50% of questions",
+      PARCAT1 = "Completion",
+      AVALC = if_else(
+        AVAL == 1,
+        "Completed at least 50% of questions",
+        "Completed less than 50% of questions"
+      )
+    )
+  )
+```
+If missed visits need to be taken into account the expected records can be added to the input dataset by calling `derive_expected_records()`:
+
+```{r eval=FALSE}
+adqs <- adqs %>%
+  derive_expected_records(
+    adqs,
+    dataset_expected_obs = parm_visit_ref,
+    by_vars = exprs(USUBJID),
+    set_values_to = exprs(
+      filledin = TRUE,
+      PARCAT1 = "Original Item",
+      ANL01FL = "Y"
+    )
+  ) %>%
+  derive_summary_records(
+    filter = PARCAT1 == "Original Items" & ANL01FL == "Y",
+    by_vars = exprs(USUBJID, AVISIT),
+    analysis_var = AVAL,
+    summary_fun = function(x) sum(!is.na(x)) / 13 >= 0.5,
+    set_values_to = exprs(
+      PARAMCD = "COMPL50P",
+      PARAM = "Completed at least 50% of questions",
+      PARCAT1 = "Completion",
+      AVALC = if_else(
+        AVAL == 1,
+        "Completed at least 50% of questions",
+        "Completed less than 50% of questions"
+      )
+    )
+  ) %>%
+  filter(!filledin)
+```
