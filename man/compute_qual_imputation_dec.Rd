@@ -36,8 +36,5 @@ BDS-Findings Functions that returns a vector:
 \code{\link{compute_qual_imputation}()},
 \code{\link{compute_rr}()}
 }
-\author{
-Alice Ehmann Ojesh Upadhyay
-}
 \concept{com_bds_findings}
 \keyword{com_bds_findings}

@@ -204,8 +204,5 @@ Creating auxiliary datasets:
 \code{\link{create_period_dataset}()},
 \code{\link{create_single_dose_dataset}()}
 }
-\author{
-Stefan Bundfuss, Tamara Senior
-}
 \concept{create_aux}
 \keyword{create_aux}

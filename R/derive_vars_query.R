@@ -36,7 +36,6 @@
 #'
 #'   `create_query_data()` can be used to create the dataset.
 #'
-#' @author Ondrej Slama, Shimeng Huang
 #'
 #' @return The input dataset with query variables derived.
 #'
@@ -206,7 +205,6 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #'
 #' @param queries_name Name of the queries dataset, a string.
 #'
-#' @author Shimeng Huang, Ondrej Slama
 #'
 #' @keywords source_specifications
 #' @family source_specifications

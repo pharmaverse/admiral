@@ -53,8 +53,5 @@ Source Specifications:
 \code{\link{validate_basket_select}()},
 \code{\link{validate_query}()}
 }
-\author{
-Tamara Senior
-}
 \concept{source_specifications}
 \keyword{source_specifications}

@@ -138,8 +138,5 @@ Source Specifications:
 \code{\link{validate_basket_select}()},
 \code{\link{validate_query}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{source_specifications}
 \keyword{source_specifications}

@@ -30,8 +30,6 @@
 #'
 #'   Permitted Values: list of variables
 #'
-#' @param filter Deprecated, please use `restrict_derivation()` instead (see examples).
-#'
 #' @param check_type Check uniqueness?
 #'
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
@@ -53,7 +51,6 @@
 #'
 #' @seealso [derive_var_worst_flag()]
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the new flag variable added
 #'
@@ -268,7 +265,6 @@ derive_var_extreme_flag <- function(dataset,
 #'
 #' @seealso [derive_var_extreme_flag()]
 #'
-#' @author Ondrej Slama
 #'
 #' @return The input dataset with the new flag variable added.
 #'

@@ -92,13 +92,12 @@ be populated in the new parameter rows if it is specified in \code{by_vars}.
 This function is deprecated.  Please use \code{derive_param-computed()} instead.
 }
 \seealso{
-Other deprecated:
+Other deprecated: 
 \code{\link{derive_param_first_event}()},
-\code{\link{derive_var_aendy}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()},
 \code{\link{vars}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{deprecated}
 \keyword{deprecated}

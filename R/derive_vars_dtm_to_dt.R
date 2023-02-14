@@ -7,7 +7,6 @@
 #' @param source_vars A list of datetime variables created using `exprs()` from
 #'   which dates are to be extracted
 #'
-#' @author Teckla Akinyi
 #'
 #' @return
 #' A data frame containing the input dataset with the corresponding date (`--DT`)

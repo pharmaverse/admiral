@@ -49,7 +49,6 @@
 #'
 #' @return The input dataset with the new variable added.
 #'
-#' @author Stefan Bundfuss, Thomas Neitmann
 #'
 #' @family der_adsl
 #' @keywords der_adsl
@@ -294,7 +293,6 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' @return The input dataset with the new variable added.
 #'
-#' @author Stefan Bundfuss, Thomas Neitmann
 #'
 #' @family der_adsl
 #' @keywords der_adsl
@@ -453,7 +451,6 @@ derive_var_extreme_dt <- function(dataset,
 #'   = "AESTDTC")`. The values must be a symbol, a character string, a numeric,
 #'   or `NA`.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @seealso [derive_var_extreme_dtm()], [derive_var_extreme_dt()]
 #'

@@ -69,7 +69,6 @@
 #' start to end date in the specified unit. If the end date is before the start
 #' date, the duration is negative.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The duration between the two date in the specified unit
 #'

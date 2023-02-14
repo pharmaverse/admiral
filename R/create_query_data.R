@@ -91,7 +91,6 @@
 #'   * `VERSION`: Set to the value of the `version` argument. If it is not
 #'   specified, the variable is not created.
 #'
-#' @author Stefan Bundfuss, Tamara Senior
 #'
 #' @return A dataset to be used as input dataset to the `dataset_queries`
 #'   argument in `derive_vars_query()`
@@ -331,7 +330,6 @@ create_query_data <- function(queries,
 #'
 #' @return Output dataset of the access function
 #'
-#' @author Stefan Bundfuss
 get_terms_from_db <- function(version,
                               fun,
                               queries,
@@ -395,7 +393,6 @@ get_terms_from_db <- function(version,
 #'
 #' @return An error is issued if `version` or `fun` is null.
 #'
-#' @author Stefan Bundfuss
 assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name, queries, i) {
   if (is.null(fun)) {
     msg <-
@@ -491,7 +488,6 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'   *Permitted Values*: an `basket_select()` object, a
 #'   data frame, or a list of data frames and `basket_select()` objects.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @seealso [create_query_data()], [basket_select()], [Queries Dataset
 #' Documentation](../articles/queries_dataset.html)
@@ -592,7 +588,6 @@ query <- function(prefix,
 #'
 #' @param obj An object to be validated.
 #'
-#' @author Stefan Bundfuss Tamara Senior
 #'
 #' @keywords source_specifications
 #' @family source_specifications
@@ -737,7 +732,6 @@ validate_query <- function(obj) {
 #' @keywords source_specifications
 #' @family source_specifications
 #'
-#' @author Stefan Bundfuss
 assert_terms <- function(terms,
                          expect_query_name = FALSE,
                          expect_query_id = FALSE,
@@ -825,7 +819,6 @@ assert_terms <- function(terms,
 #'
 #' @return An object of class `basket_select`.
 #'
-#' @author Tamara Senior
 #'
 #' @seealso [create_query_data()], [query()]
 #'
@@ -856,7 +849,6 @@ basket_select <- function(name = NULL,
 #' @keywords source_specifications
 #' @family source_specifications
 #'
-#' @author Tamara Senior
 #'
 #' @export
 #'
@@ -897,7 +889,6 @@ validate_basket_select <- function(obj) {
 #'
 #' @return A character representation of the `basket_select()` object
 #'
-#' @author Tamara Senior
 #'
 #' @seealso [basket_select()]
 #'

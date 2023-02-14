@@ -51,8 +51,6 @@ by variables and the order.
 Default: \code{"warning"}
 
 Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}}
-
-\item{filter}{Deprecated, please use \code{restrict_derivation()} instead (see examples).}
 }
 \value{
 The input dataset with the new flag variable added
@@ -223,9 +221,6 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},
 \code{\link{get_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_gen}
 \keyword{der_gen}

@@ -39,7 +39,6 @@
 #'   here, results are calculated based on the actual calendar length of months or years
 #'   rather than assuming equal days every month (30.4375 days) or every year (365.25 days).
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with ``AAGE`` and ``AAGEU`` added
 #'
@@ -106,7 +105,6 @@ derive_vars_aage <- function(dataset,
 #' @family der_adsl
 #' @keywords der_adsl
 #'
-#' @author Michael Thorpe
 #'
 #' @return The input dataset with new_var parameter added in years.
 #'
@@ -227,7 +225,6 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 #' @keywords deprecated
 #' @family deprecated
 #'
-#' @author Ondrej Slama
 #'
 #' @name derive_var_agegr_fda
 NULL

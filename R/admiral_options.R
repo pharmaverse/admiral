@@ -11,7 +11,6 @@
 #' This function allows flexibility for function inputs that may need to be repeated
 #' multiple times in a script, such as `subject_keys`.
 #'
-#' @author Zelos Zhu
 #'
 #' @return
 #' The value of the specified option.
@@ -75,7 +74,6 @@ get_admiral_option <- function(option) {
 #' Modify an admiral option, e.g `subject_keys`, such that it automatically affects downstream
 #' function inputs where `get_admiral_option()` is called such as `derive_param_exist_flag()`.
 #'
-#' @author Zelos Zhu
 #'
 #' @return
 #' No return value, called for side effects.

@@ -15,7 +15,6 @@
 #' @family high_order_function
 #' @keywords high_order_function
 #'
-#' @author Stefan Bundfuss
 #'
 #' @seealso [params()] [slice_derivation()]
 #'

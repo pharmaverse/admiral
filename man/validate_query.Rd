@@ -37,8 +37,5 @@ Source Specifications:
 \code{\link{tte_source}()},
 \code{\link{validate_basket_select}()}
 }
-\author{
-Stefan Bundfuss Tamara Senior
-}
 \concept{source_specifications}
 \keyword{source_specifications}

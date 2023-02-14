@@ -231,10 +231,8 @@ Other deprecated:
 \code{\link{derive_derived_param}()},
 \code{\link{derive_param_first_event}()},
 \code{\link{derive_var_agegr_fda}()},
-\code{\link{derive_vars_merged_dt}()}
-}
-\author{
-Stefan Bundfuss
+\code{\link{derive_vars_merged_dt}()},
+\code{\link{vars}()}
 }
 \concept{deprecated}
 \keyword{deprecated}

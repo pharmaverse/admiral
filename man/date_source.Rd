@@ -54,7 +54,7 @@ death_date <- date_source(
 \seealso{
 \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}}
 
-Source Specifications:
+Source Specifications: 
 \code{\link{assert_db_requirements}()},
 \code{\link{assert_terms}()},
 \code{\link{assert_valid_queries}()},
@@ -72,9 +72,6 @@ Source Specifications:
 \code{\link{tte_source}()},
 \code{\link{validate_basket_select}()},
 \code{\link{validate_query}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{source_specifications}
 \keyword{source_specifications}
