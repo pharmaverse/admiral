@@ -1,7 +1,7 @@
 Package: admiraldev
 Type: Package
 Title: Development Tools for the Admiral Package Family
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: c(
     person("Ben", "Straub", email = "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
@@ -58,5 +58,6 @@ Suggests:
     tibble,
     usethis,
     covr,
-    DT
+    DT,
+    htmltools
 VignetteBuilder: knitr

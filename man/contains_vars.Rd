@@ -2,8 +2,8 @@
 % Please edit documentation in R/dev_utilities.R
 \name{contains_vars}
 \alias{contains_vars}
-\title{check that argument contains valid variable(s) created with \code{vars()} or
-Source Variables from a List of Quosures}
+\title{check that argument contains valid variable(s) created with \code{exprs()} or
+Source Variables from a List of Expressions}
 \usage{
 contains_vars(arg)
 }
@@ -11,18 +11,17 @@ contains_vars(arg)
 \item{arg}{A function argument to be checked}
 }
 \value{
-A TRUE if variables were valid variable
+A \code{TRUE} if variables were valid variable
 }
 \description{
-check that argument contains valid variable(s) created with \code{vars()} or
-Source Variables from a List of Quosures
+check that argument contains valid variable(s) created with \code{exprs()} or
+Source Variables from a List of Expressions
 }
 \seealso{
 Developer Utility Functions: 
 \code{\link{\%notin\%}()},
 \code{\link{\%or\%}()},
 \code{\link{arg_name}()},
-\code{\link{as_name}()},
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},
 \code{\link{filter_if}()},

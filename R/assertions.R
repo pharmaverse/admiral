@@ -4,7 +4,7 @@
 #' a set of required variables
 #'
 #' @param arg A function argument to be checked
-#' @param required_vars A list of variables created using `vars()`
+#' @param required_vars A list of variables created using `exprs()`
 #' @param check_is_grouped Throw an error is `dataset` is grouped? Defaults to `TRUE`.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
@@ -24,10 +24,11 @@
 #' @examples
 #' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
-#'   assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
+#'   assert_data_frame(dataset, required_vars = exprs(STUDYID, USUBJID))
 #' }
 #'
 #' example_fun(admiral_dm)
@@ -201,6 +202,8 @@ assert_character_scalar <- function(arg,
 #'
 #' @param arg A function argument to be checked
 #' @param values A `character` vector of valid values for `arg`
+#' @param named If set to `TRUE`, an error is issued if not all elements of the
+#'   vector are named.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
@@ -223,7 +226,14 @@ assert_character_scalar <- function(arg,
 #' example_fun(letters)
 #'
 #' try(example_fun(1:10))
-assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
+#'
+#' example_fun2 <- function(chr) {
+#'   assert_character_vector(chr, named = TRUE)
+#' }
+#'
+#' try(example_fun2(c(alpha = "a", "b", gamma = "c")))
+assert_character_vector <- function(arg, values = NULL, named = FALSE, optional = FALSE) {
+  assert_logical_scalar(named)
   assert_logical_scalar(optional)
 
   if (optional && is.null(arg)) {
@@ -249,6 +259,22 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
         enumerate(mismatches), "\n",
         "Valid values:\n",
         enumerate(values)
+      ))
+    }
+  }
+
+  if (named && length(arg) > 0) {
+    if (is.null(names(arg))) {
+      abort(paste0(
+        "All elements of ", arg_name(substitute(arg)), " must be named.\n",
+        "No element is named."
+      ))
+    }
+    unnamed <- which(names(arg) == "")
+    if (length(unnamed) > 0) {
+      abort(paste0(
+        "All elements of ", arg_name(substitute(arg)), " must be named.\n",
+        "The following elements are not named: ", enumerate(unnamed, quote_fun = NULL)
       ))
     }
   }
@@ -308,7 +334,7 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #'
 #' Checks if an argument is a symbol
 #'
-#' @param arg A function argument to be checked. Must be a `quosure`. See examples.
+#' @param arg A function argument to be checked. Must be a `symbol`. See examples.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
@@ -329,7 +355,7 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dat, var) {
-#'   var <- assert_symbol(enquo(var))
+#'   var <- assert_symbol(enexpr(var))
 #'   select(dat, !!var)
 #' }
 #'
@@ -343,20 +369,20 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 assert_symbol <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
-  if (optional && quo_is_null(arg)) {
+  if (optional && is.null(arg)) {
     return(invisible(arg))
   }
 
-  if (quo_is_missing(arg)) {
+  if (is_missing(arg)) {
     err_msg <- sprintf("Argument `%s` missing, with no default", arg_name(substitute(arg)))
     abort(err_msg)
   }
 
-  if (!quo_is_symbol(arg)) {
+  if (!is.symbol(arg)) {
     err_msg <- sprintf(
       "`%s` must be a symbol but is %s",
       arg_name(substitute(arg)),
-      what_is_it(quo_get_expr(arg))
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -379,20 +405,20 @@ assert_symbol <- function(arg, optional = FALSE) {
 assert_expr <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
-  if (optional && quo_is_null(arg)) {
+  if (optional && is.null(arg)) {
     return(invisible(arg))
   }
 
-  if (quo_is_missing(arg)) {
+  if (is_missing(arg)) {
     err_msg <- sprintf("Argument `%s` missing, with no default", arg_name(substitute(arg)))
     abort(err_msg)
   }
 
-  if (!(quo_is_symbol(arg) || quo_is_call(arg))) {
+  if (!is_symbolic(arg)) {
     err_msg <- sprintf(
       "`%s` must be an expression but is %s",
       arg_name(substitute(arg)),
-      what_is_it(quo_get_expr(arg))
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -432,24 +458,18 @@ assert_expr <- function(arg, optional = FALSE) {
 #'
 #' try(example_fun(admiral_dm, USUBJID))
 assert_filter_cond <- function(arg, optional = FALSE) {
-  stopifnot(is_quosure(arg))
   assert_logical_scalar(optional)
 
-  if (optional && quo_is_null(arg)) {
+  if (optional && is.null(arg)) {
     return(invisible(arg))
   }
 
-  provided <- !rlang::quo_is_missing(arg)
-  if (!provided & !optional) {
-    err_msg <- sprintf("Argument `%s` is missing, with no default", arg_name(substitute(arg)))
-    abort(err_msg)
-  }
-
-  if (provided & !(quo_is_call(arg) | is_logical(quo_get_expr(arg)))) {
+  provided <- !is_missing(arg)
+  if (provided & !(is_call(arg) | is_logical(arg))) {
     err_msg <- sprintf(
       "`%s` must be a filter condition but is %s",
       arg_name(substitute(arg)),
-      what_is_it(quo_get_expr(arg))
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -459,21 +479,21 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 
 #' Is an Argument a List of Variables?
 #'
-#' Checks if an argument is a valid list of variables created using `vars()`
+#' Checks if an argument is a valid list of symbols (e.g., created by `exprs()`)
 #'
 #' @param arg A function argument to be checked
+#'
+#' @param expect_names If the argument is set to `TRUE`, it is checked if all
+#'   variables are named, e.g., `exprs(APERSDT = APxxSDT, APEREDT = APxxEDT)`.
 #'
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
-#' @param expect_names If the argument is set to `TRUE`, it is checked if all
-#'   variables are named, e.g., `vars(APERSDT = APxxSDT, APEREDT = APxxEDT)`.
-#'
 #' @author Samia Kabi
 #'
 #' @return
-#' The function throws an error if `arg` is not a list of variables created using `vars()`
-#' and returns the input invisibly otherwise.
+#' The function throws an error if `arg` is not a list of symbols (e.g., created
+#' by `exprs()` and returns the input invisibly otherwise.
 #'
 #' @export
 #'
@@ -487,26 +507,27 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #'   assert_vars(by_vars)
 #' }
 #'
-#' example_fun(vars(USUBJID, PARAMCD))
+#' example_fun(exprs(USUBJID, PARAMCD))
 #'
-#' try(example_fun(exprs(USUBJID, PARAMCD)))
+#' try(example_fun(quos(USUBJID, PARAMCD)))
 #'
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
-#' try(example_fun(vars(USUBJID, toupper(PARAMCD), desc(AVAL))))
+#' try(example_fun(exprs(USUBJID, toupper(PARAMCD), desc(AVAL))))
 #'
 #' example_fun_name <- function(by_vars) {
 #'   assert_vars(by_vars, expect_names = TRUE)
 #' }
 #'
-#' example_fun_name(vars(APERSDT = APxxSDT, APEREDT = APxxEDT))
+#' example_fun_name(exprs(APERSDT = APxxSDT, APEREDT = APxxEDT))
 #'
-#' try(example_fun_name(vars(APERSDT = APxxSDT, APxxEDT)))
-assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
+#' try(example_fun_name(exprs(APERSDT = APxxSDT, APxxEDT)))
+assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
+  assert_logical_scalar(expect_names)
   assert_logical_scalar(optional)
 
   default_err_msg <- sprintf(
-    "`%s` must be a list of unquoted variable names, e.g. `vars(USUBJID, VISIT)`",
+    "`%s` must be a list of symbols, e.g. `exprs(USUBJID, VISIT)`",
     arg_name(substitute(arg))
   )
 
@@ -514,43 +535,12 @@ assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
     abort(default_err_msg)
   }
 
-  if (optional && is.null(arg)) {
-    return(invisible(arg))
-  }
-
-  if (!inherits(arg, "quosures")) {
-    abort(default_err_msg)
-  }
-
-  is_symbol <- map_lgl(arg, quo_is_symbol)
-  if (!all(is_symbol)) {
-    expr_list <- map_chr(arg, quo_text)
-    err_msg <- paste0(
-      default_err_msg,
-      ", but the following elements are not: ",
-      enumerate(expr_list[!is_symbol])
-    )
-    abort(err_msg)
-  }
-
-  if (expect_names) {
-    if (any(names(arg) == "")) {
-      abort(sprintf(
-        paste(
-          "`%s` must be a named list of unquoted variable names,",
-          "e.g. `vars(APERSDT = APxxSDT, APEREDT = APxxEDT)`"
-        ),
-        arg_name(substitute(arg))
-      ))
-    }
-  }
-
-  invisible(arg)
+  assert_list_of(arg, "symbol", named = expect_names, optional = optional)
 }
 
 #' Is an Argument a List of Order Variables?
 #'
-#' Checks if an argument is a valid list of order variables created using `vars()`
+#' Checks if an argument is a valid list of order variables created using `exprs()`
 #'
 #' @param arg A function argument to be checked
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
@@ -560,7 +550,7 @@ assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
 #'
 #' @return
 #' The function throws an error if `arg` is not a list of variables or `desc()`
-#' calls created using `vars()` and returns the input invisibly otherwise.
+#' calls created using `exprs()` and returns the input invisibly otherwise.
 #'
 #' @export
 #'
@@ -574,20 +564,20 @@ assert_vars <- function(arg, optional = FALSE, expect_names = FALSE) {
 #'   assert_order_vars(by_vars)
 #' }
 #'
-#' example_fun(vars(USUBJID, PARAMCD, desc(AVISITN)))
+#' example_fun(exprs(USUBJID, PARAMCD, desc(AVISITN)))
 #'
-#' try(example_fun(exprs(USUBJID, PARAMCD)))
+#' try(example_fun(quos(USUBJID, PARAMCD)))
 #'
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
-#' try(example_fun(vars(USUBJID, toupper(PARAMCD), -AVAL)))
+#' try(example_fun(exprs(USUBJID, toupper(PARAMCD), -AVAL)))
 assert_order_vars <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
   default_err_msg <- paste(
     backquote(arg_name(substitute(arg))),
     "must be a list of unquoted variable names or `desc()` calls,",
-    "e.g. `vars(USUBJID, desc(VISITNUM))`"
+    "e.g. `exprs(USUBJID, desc(VISITNUM))`"
   )
 
   if (isTRUE(tryCatch(force(arg), error = function(e) TRUE))) {
@@ -598,7 +588,7 @@ assert_order_vars <- function(arg, optional = FALSE) {
     return(invisible(arg))
   }
 
-  if (!inherits(arg, "quosures")) {
+  if (!inherits(arg, "list")) {
     abort(default_err_msg)
   }
 
@@ -783,7 +773,7 @@ assert_atomic_vector <- function(arg, optional = FALSE) {
 #' try(example_fun(letters))
 #'
 #' try(example_fun(1:10))
-assert_s3_class <- function(arg, class, optional = TRUE) {
+assert_s3_class <- function(arg, class, optional = FALSE) {
   assert_character_scalar(class)
   assert_logical_scalar(optional)
 
@@ -804,21 +794,23 @@ assert_s3_class <- function(arg, class, optional = TRUE) {
   invisible(arg)
 }
 
-#' Is an Argument a List of Objects of a Specific S3 Class?
+#' Is an Argument a List of Objects of a Specific S3 Class or Type?
 #'
-#' Checks if an argument is a `list` of objects inheriting from the S3 class specified.
+#' Checks if an argument is a `list` of objects inheriting from the S3 class or type specified.
 #'
 #' @param arg A function argument to be checked
-#' @param class The S3 class to check for
+#' @param class The S3 class or type to check for
+#' @param named If set to `TRUE`, an error is issued if not all elements of the
+#'   list are named.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #'   is `NULL` then an error is thrown
 #'
-#' @author Thomas Neitmann
+#' @author Thomas Neitmann, Stefan Bundfuss
 #'
 #' @return
-#' The function throws an error if `arg` is not a list or if `arg` is a list but its
-#' elements are not objects inheriting from `class`. Otherwise, the input is returned
-#' invisibly.
+#' The function throws an error if `arg` is not a list or if `arg` is a list but
+#' its elements are not objects inheriting from `class` or of type `class`.
+#' Otherwise, the input is returned invisibly.
 #'
 #' @export
 #'
@@ -834,8 +826,14 @@ assert_s3_class <- function(arg, class, optional = TRUE) {
 #' try(example_fun(list(letters, 1:10)))
 #'
 #' try(example_fun(c(TRUE, FALSE)))
-assert_list_of <- function(arg, class, optional = TRUE) {
+#'
+#' example_fun2 <- function(list) {
+#'   assert_list_of(list, "numeric", named = TRUE)
+#' }
+#' try(example_fun2(list(1, 2, 3, d = 4)))
+assert_list_of <- function(arg, class, named = FALSE, optional = TRUE) {
   assert_character_scalar(class)
+  assert_logical_scalar(named)
   assert_logical_scalar(optional)
 
   if (is.null(arg) && optional) {
@@ -844,19 +842,35 @@ assert_list_of <- function(arg, class, optional = TRUE) {
 
   assert_s3_class(arg, "list")
 
-  is_class <- map_lgl(arg, inherits, class)
+  is_class <- map_lgl(arg, inherits, class) | map_chr(arg, typeof) == class
   if (!all(is_class)) {
     info_msg <- paste(
       sprintf("\u2716 Element %s is %s", which(!is_class), map_chr(arg[!is_class], what_is_it)),
       collapse = "\n"
     )
     err_msg <- sprintf(
-      "Each element of `%s` must be an object of class '%s' but the following are not:\n%s",
+      "Each element of `%s` must be an object of class/type '%s' but the following are not:\n%s",
       arg_name(substitute(arg)),
       class,
       info_msg
     )
     abort(err_msg)
+  }
+
+  if (named && length(arg) > 0) {
+    if (is.null(names(arg))) {
+      abort(paste0(
+        "All elements of ", arg_name(substitute(arg)), " must be named.\n",
+        "No element is named."
+      ))
+    }
+    unnamed <- which(names(arg) == "")
+    if (length(unnamed) > 0) {
+      abort(paste0(
+        "All elements of ", arg_name(substitute(arg)), " must be named.\n",
+        "The following elements are not named: ", enumerate(unnamed, quote_fun = NULL)
+      ))
+    }
   }
 
   invisible(arg)
@@ -1084,10 +1098,10 @@ assert_function_param <- function(arg, params) {
 #'
 #' assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
 assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
-  assert_data_frame(dataset, required_vars = vars(PARAMCD))
+  assert_data_frame(dataset, required_vars = exprs(PARAMCD))
   assert_character_scalar(param)
   assert_character_scalar(required_unit)
-  get_unit_expr <- enquo(get_unit_expr)
+  get_unit_expr <- enexpr(get_unit_expr)
 
   units <- dataset %>%
     mutate(`_unit` = !!get_unit_expr) %>%
@@ -1153,7 +1167,7 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #' assert_param_does_not_exist(advs, param = "HR")
 #' try(assert_param_does_not_exist(advs, param = "WEIGHT"))
 assert_param_does_not_exist <- function(dataset, param) {
-  assert_data_frame(dataset, required_vars = vars(PARAMCD))
+  assert_data_frame(dataset, required_vars = exprs(PARAMCD))
   if (param %in% unique(dataset$PARAMCD)) {
     abort(
       paste0(
@@ -1170,14 +1184,14 @@ assert_param_does_not_exist <- function(dataset, param) {
 
 #' Is an Argument a Variable-Value List?
 #'
-#' Checks if the argument is a list of `quosures` where the expressions are
+#' Checks if the argument is a list of expressions where the expressions are
 #' variable-value pairs. The value can be a symbol, a string, a numeric, or
 #' `NA`. More general expression are not allowed.
 #'
 #' @param arg A function argument to be checked
 #' @param required_elements A `character` vector of names that must be present in `arg`
 #' @param accept_expr Should expressions on the right hand side be accepted?
-#' @param accept_var Should unnamed variable names (e.g. `vars(USUBJID)`) on the
+#' @param accept_var Should unnamed variable names (e.g. `exprs(USUBJID)`) on the
 #'   right hand side be accepted?
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown.
@@ -1194,13 +1208,14 @@ assert_param_does_not_exist <- function(dataset, param) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #'
 #' example_fun <- function(vars) {
 #'   assert_varval_list(vars)
 #' }
-#' example_fun(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
+#' example_fun(exprs(DTHDOM = "AE", DTHSEQ = AESEQ))
 #'
-#' try(example_fun(vars("AE", DTSEQ = AESEQ)))
+#' try(example_fun(exprs("AE", DTSEQ = AESEQ)))
 assert_varval_list <- function(arg, # nolint
                                required_elements = NULL,
                                accept_expr = FALSE,
@@ -1223,13 +1238,13 @@ assert_varval_list <- function(arg, # nolint
     valid_vals <- "a symbol, character scalar, numeric scalar, or `NA`"
   }
 
-  if (!accept_var & (!is_quosures(arg) || !is_named(arg))) {
+  if (!accept_var & (!inherits(arg, "list") || !is_named(arg))) {
     err_msg <- sprintf(
       paste0(
-        "`%s` must be a named list of quosures where each element is ",
+        "`%s` must be a named list of expressions where each element is ",
         valid_vals,
         " but it is %s\n",
-        "\u2139 To create a list of quosures use `vars()`"
+        "\u2139 To create a list of expressions use `exprs()`"
       ),
       arg_name(substitute(arg)),
       what_is_it(arg)
@@ -1240,10 +1255,10 @@ assert_varval_list <- function(arg, # nolint
   if (accept_var & (!contains_vars(arg))) {
     err_msg <- sprintf(
       paste0(
-        "`%s` must be a list of quosures where each element is ",
+        "`%s` must be a list of expressions where each element is ",
         valid_vals,
         " but it is %s\n",
-        "\u2139 To create a list of quosures use `vars()`"
+        "\u2139 To create a list of expressions use `exprs()`"
       ),
       arg_name(substitute(arg)),
       what_is_it(arg)
@@ -1263,10 +1278,9 @@ assert_varval_list <- function(arg, # nolint
     }
   }
 
-  expr_list <- map(arg, quo_get_expr)
   if (accept_expr) {
-    invalids <- expr_list[!map_lgl(
-      expr_list,
+    invalids <- arg[!map_lgl(
+      arg,
       ~ is.symbol(.x) ||
         is.character(.x) ||
         is.numeric(.x) ||
@@ -1274,8 +1288,8 @@ assert_varval_list <- function(arg, # nolint
         is.atomic(.x) && is.na(.x)
     )]
   } else {
-    invalids <- expr_list[!map_lgl(
-      expr_list,
+    invalids <- arg[!map_lgl(
+      arg,
       ~ is.symbol(.x) ||
         is.character(.x) ||
         is.numeric(.x) ||
@@ -1347,12 +1361,12 @@ assert_varval_list <- function(arg, # nolint
 assert_list_element <- function(list, element, condition, message_text, ...) {
   assert_s3_class(list, "list")
   assert_character_scalar(element)
-  condition <- assert_filter_cond(enquo(condition))
+  condition <- assert_filter_cond(enexpr(condition))
   assert_character_scalar(message_text)
   # store elements of the lists/classes in a vector named as the element #
   rlang::env_poke(current_env(), eval(element), lapply(list, `[[`, element))
   invalids <- !eval(
-    quo_get_expr(condition),
+    condition,
     envir = list(...),
     enclos = current_env()
   )
@@ -1400,7 +1414,7 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 assert_one_to_one <- function(dataset, vars1, vars2) {
   assert_vars(vars1)
   assert_vars(vars2)
-  assert_data_frame(dataset, required_vars = quo_c(vars1, vars2))
+  assert_data_frame(dataset, required_vars = expr_c(vars1, vars2))
 
   uniques <- unique(select(dataset, !!!vars1, !!!vars2))
   one_to_many <- uniques %>%
@@ -1467,7 +1481,7 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
 #' library(rlang)
 #'
 #' example_fun <- function(dataset, var) {
-#'   var <- assert_symbol(enquo(var))
+#'   var <- assert_symbol(enexpr(var))
 #'   assert_date_var(dataset = dataset, var = !!var)
 #' }
 #'
@@ -1488,7 +1502,7 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
 #' ))
 #'
 #' example_fun2 <- function(dataset, var) {
-#'   var <- assert_symbol(enquo(var))
+#'   var <- assert_symbol(enexpr(var))
 #'   assert_date_var(
 #'     dataset = dataset,
 #'     var = !!var,
@@ -1502,8 +1516,8 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
 #'   var = USUBJID
 #' ))
 assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) {
-  var <- assert_symbol(enquo(var))
-  assert_data_frame(dataset, required_vars = vars(!!var))
+  var <- assert_symbol(enexpr(var))
+  assert_data_frame(dataset, required_vars = exprs(!!var))
   assert_character_scalar(dataset_name, optional = TRUE)
   assert_character_scalar(var_name, optional = TRUE)
   column <- pull(dataset, !!var)
@@ -1555,7 +1569,7 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
 #'   as.Date("2022-01-30", tz = "UTC")
 #' )
 #' try(example_fun("1993-07-14"))
-assert_date_vector <- function(arg, optional = TRUE) {
+assert_date_vector <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
   if (optional && is.null(arg)) {
@@ -1564,9 +1578,11 @@ assert_date_vector <- function(arg, optional = TRUE) {
 
   if (!is.instant(arg)) {
     abort(paste0(
+      "`",
       deparse(substitute(arg)),
-      " must be a date or datetime variable but it's ",
-      friendly_type_of(arg)
+      "` must be a date or datetime variable but it's `",
+      friendly_type_of(arg),
+      "`"
     ))
   }
 }
