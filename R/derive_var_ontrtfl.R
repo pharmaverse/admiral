@@ -90,7 +90,6 @@
 #'
 #'   Any date imputations needed should be done prior to calling this function.
 #'
-#' @author Alice Ehmann, Teckla Akinyi
 #'
 #' @family der_bds_findings
 #' @keywords der_bds_findings

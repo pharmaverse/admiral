@@ -59,7 +59,6 @@
 #' - "0" is where a grade can be derived and is not grade "1", "2", "3" or "4".
 #' - NA is where a grade cannot be derived.
 #'
-#' @author Gordon Miller
 #'
 #' @return The input dataset with the character variable added
 #'
@@ -236,7 +235,6 @@ derive_var_atoxgr_dir <- function(dataset,
 #' - (Only low direction OR high direction is NORMAL) and low grade normal - overall NORMAL
 #' - otherwise set to missing
 #'
-#' @author Gordon Miller
 #'
 #' @return The input data set with the character variable added
 #'

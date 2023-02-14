@@ -188,8 +188,5 @@ Creating auxiliary datasets:
 \code{\link{create_period_dataset}()},
 \code{\link{create_query_data}()}
 }
-\author{
-Michael Thorpe, Andrew Smith
-}
 \concept{create_aux}
 \keyword{create_aux}

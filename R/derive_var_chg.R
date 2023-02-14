@@ -9,7 +9,6 @@
 #' Change from baseline is calculated by subtracting the baseline value
 #' from the analysis value.
 #'
-#' @author Thomas Neitmann
 #'
 #' @return The input dataset with an additional column named `CHG`
 #'

@@ -87,9 +87,6 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \code{\link{derive_vars_dt}()},
 \code{\link{derive_vars_duration}()}
 }
-\author{
-Teckla Akinyi
-}
 \concept{der_date_time}
 \keyword{der_date_time}
 \keyword{der_gen}

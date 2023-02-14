@@ -32,7 +32,4 @@ dataset, specify two character\code{domain} value.
 \code{derive_vars_suppqual()} expects \code{USUBJID}, \code{RDOMAIN}, \code{IDVAR}, \code{IDVARVAL},
 \code{QNAM}, \code{QLABEL}, and \code{QVAL} variables to exist in \code{dataset_suppqual}.
 }
-\author{
-Vignesh Thanikachalam
-}
 \keyword{deprecated}

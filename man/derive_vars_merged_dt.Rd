@@ -205,7 +205,4 @@ the additional dataset.
 \item The date and flag variables are merged to the input dataset.
 }
 }
-\author{
-Stefan Bundfuss
-}
 \keyword{deprecated}

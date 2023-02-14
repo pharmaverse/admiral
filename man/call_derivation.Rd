@@ -78,8 +78,5 @@ Higher Order Functions:
 \code{\link{restrict_derivation}()},
 \code{\link{slice_derivation}()}
 }
-\author{
-Thomas Neitmann, Stefan Bundfuss, Tracey Wang
-}
 \concept{high_order_function}
 \keyword{high_order_function}

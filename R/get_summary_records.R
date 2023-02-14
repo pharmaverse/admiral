@@ -46,7 +46,6 @@
 #'   (e.g.  `exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
 #'   More general expression are not allowed.
 #'
-#' @author Pavan Kumar, updated by Alana Harris
 #'
 #' @return A data frame of derived records.
 #'

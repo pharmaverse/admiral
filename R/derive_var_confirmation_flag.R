@@ -170,7 +170,6 @@
 #'
 #' @return The input dataset with the variable specified by `new_var` added.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords der_gen
 #' @family der_gen
