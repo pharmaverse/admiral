@@ -8,6 +8,11 @@
 #'
 #' @param derivation Derivation
 #'
+#'   A function is expected. The function must provide the `dataset` argument
+#'   and all arguments specified in the `params()` objects passed to the `arg`
+#'   argument. Therefore it is not possible to specify dplyr functions like
+#'   `mutate()` or `summarize()`.
+#'
 #' @param args Arguments of the derivation
 #'
 #'   A `params()` object is expected.

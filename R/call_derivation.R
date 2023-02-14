@@ -5,6 +5,12 @@
 #'
 #' @param dataset The input dataset
 #' @param derivation The derivation function to call
+#'
+#'   A function is expected. The function must provide the `dataset` argument
+#'   and all arguments specified in the `params()` objects passed to the
+#'   `variable_params` and `...` argument. Therefore it is not possible to
+#'   specify dplyr functions like `mutate()` or `summarize()`.
+#'
 #' @param variable_params A `list` of function arguments that are different across iterations.
 #'   Each set of function arguments must be created using [`params()`].
 #' @param ... Any number of *named* function arguments that stay the same across iterations.

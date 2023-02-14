@@ -9,7 +9,12 @@ call_derivation(dataset = NULL, derivation, variable_params, ...)
 \arguments{
 \item{dataset}{The input dataset}
 
-\item{derivation}{The derivation function to call}
+\item{derivation}{The derivation function to call
+
+A function is expected. The function must provide the \code{dataset} argument
+and all arguments specified in the \code{params()} objects passed to the
+\code{variable_params} and \code{...} argument. Therefore it is not possible to
+specify dplyr functions like \code{mutate()} or \code{summarize()}.}
 
 \item{variable_params}{A \code{list} of function arguments that are different across iterations.
 Each set of function arguments must be created using \code{\link[=params]{params()}}.}

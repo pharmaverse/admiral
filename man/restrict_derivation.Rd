@@ -9,7 +9,12 @@ restrict_derivation(dataset, derivation, args = NULL, filter)
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{derivation}{Derivation}
+\item{derivation}{Derivation
+
+A function is expected. The function must provide the \code{dataset} argument
+and all arguments specified in the \code{params()} objects passed to the \code{arg}
+argument. Therefore it is not possible to specify dplyr functions like
+\code{mutate()} or \code{summarize()}.}
 
 \item{args}{Arguments of the derivation
 
