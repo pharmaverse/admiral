@@ -28,8 +28,5 @@ Utilities for printing:
 \code{\link{print.source}()},
 \code{\link{print_named_list}()}
 }
-\author{
-Thomas Neitmann
-}
 \concept{utils_print}
 \keyword{utils_print}

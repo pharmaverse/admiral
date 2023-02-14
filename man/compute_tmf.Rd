@@ -49,8 +49,5 @@ Date/Time Computation Functions that returns a vector:
 \code{\link{impute_dtc_dtm}()},
 \code{\link{impute_dtc_dt}()}
 }
-\author{
-Samia Kabi, Stefan Bundfuss
-}
 \concept{com_date_time}
 \keyword{com_date_time}

@@ -23,7 +23,4 @@ derive_var_agegr_ema(dataset, age_var, age_unit = NULL, new_var)
 
 These functions are \emph{deprecated}.
 }
-\author{
-Ondrej Slama
-}
 \keyword{deprecated}

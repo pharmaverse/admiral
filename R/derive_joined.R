@@ -101,7 +101,6 @@
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details
 #'

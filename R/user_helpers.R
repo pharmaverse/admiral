@@ -10,7 +10,6 @@
 #'
 #' @details Running without any arguments such as `use_ad_template()` auto-generates adsl.R in the current path. Use `list_all_templates()` to discover which templates are available.
 #'
-#' @author Shimeng Huang, Thomas Neitmann
 #'
 #' @family utils_examples
 #' @keywords utils_examples
@@ -72,7 +71,6 @@ use_ad_template <- function(adam_name = "adsl",
 #'
 #' @param package The R package in which to look for templates. By default `"admiral"`.
 #'
-#' @author Shimeng Huang, Thomas Neitmann
 #'
 #' @family utils_examples
 #' @keywords utils_examples
@@ -105,7 +103,6 @@ list_all_templates <- function(package = "admiral") {
 #'
 #' @return No return value, called for side effects
 #'
-#' @author Thomas Neitmann
 #'
 #' @export
 #'
