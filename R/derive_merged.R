@@ -126,7 +126,6 @@
 #'   to `NA`. Observations in the additional dataset which have no matching
 #'   observation in the input dataset are ignored.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -351,7 +350,6 @@ derive_vars_merged <- function(dataset,
 #'
 #'   1. The date and flag variables are merged to the input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords deprecated
 #'
@@ -465,7 +463,6 @@ derive_vars_merged_dt <- function(dataset,
 #'
 #'   1. The date and flag variables are merged to the input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords deprecated
 #'
@@ -582,7 +579,6 @@ derive_vars_merged_dtm <- function(dataset,
 #'
 #'   1. The categorization variable is merged to the input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -731,7 +727,6 @@ derive_var_merged_cat <- function(dataset,
 #'   `FALSE` or `NA`. Otherwise, it is set to the missing value
 #'   (`missing_value`).
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -847,7 +842,6 @@ derive_var_merged_exist_flag <- function(dataset,
 #'
 #'   1. The character variable is merged to the input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -944,7 +938,6 @@ derive_var_merged_character <- function(dataset,
 #' `by_vars` values that do not have corresponding records
 #' from the lookup table (by specifying `print_not_mapped = TRUE`).
 #'
-#' @author Annie Yang
 #'
 #' @keywords der_gen
 #' @family der_gen
@@ -1083,7 +1076,6 @@ get_not_mapped <- function() {
 #'   calculation. This can include built-in functions as well as user defined
 #'   functions, for example `mean` or `function(x) mean(x, na.rm = TRUE)`.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details
 #'

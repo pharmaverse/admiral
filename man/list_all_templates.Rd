@@ -22,8 +22,5 @@ list_all_templates()
 Utilities used for examples and template scripts: 
 \code{\link{use_ad_template}()}
 }
-\author{
-Shimeng Huang, Thomas Neitmann
-}
 \concept{utils_examples}
 \keyword{utils_examples}

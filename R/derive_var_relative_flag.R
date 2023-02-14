@@ -65,7 +65,6 @@
 #'
 #'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details For each by group (`by_vars` argument) the observations before or
 #'   after (`selection` argument) the observations where the condition

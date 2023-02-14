@@ -26,8 +26,5 @@ Utilities for printing:
 \code{\link{print.adam_templates}()},
 \code{\link{print_named_list}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{utils_print}
 \keyword{utils_print}

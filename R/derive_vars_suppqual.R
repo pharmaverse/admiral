@@ -25,7 +25,6 @@
 #'
 #' @return A data frame with SUPPQUAL variables appended to parent data set.
 #'
-#' @author Vignesh Thanikachalam
 #'
 #' @keywords deprecated
 #'
