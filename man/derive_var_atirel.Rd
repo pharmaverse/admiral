@@ -42,7 +42,4 @@ the Analysis Start Time Imputation Flag is 'H' or 'M',
 \item otherwise it is set to "PRIOR_CONCOMITANT".
 }
 }
-\author{
-Teckla Akinyi
-}
 \keyword{deprecated}

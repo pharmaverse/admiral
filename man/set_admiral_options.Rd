@@ -77,8 +77,5 @@ derive_param_exist_flag(
 Other admiral_options: 
 \code{\link{get_admiral_option}()}
 }
-\author{
-Zelos Zhu
-}
 \concept{admiral_options}
 \keyword{admiral_options}

@@ -127,8 +127,5 @@ Creating auxiliary datasets:
 \code{\link{create_query_data}()},
 \code{\link{create_single_dose_dataset}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{create_aux}
 \keyword{create_aux}

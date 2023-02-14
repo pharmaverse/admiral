@@ -11,7 +11,6 @@
 #'   If a function argument is specified both inside `variable_params` and `...` then
 #'   the value in `variable_params` overwrites the one in `...`
 #'
-#' @author Thomas Neitmann, Stefan Bundfuss, Tracey Wang
 #'
 #' @return
 #' The input dataset with additional records/variables added depending on
@@ -99,7 +98,6 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'
 #' @param ... One or more named arguments
 #'
-#' @author Thomas Neitmann, Tracey Wang
 #'
 #' @return An object of class `params`
 #'

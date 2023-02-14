@@ -74,7 +74,6 @@
 #' From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
 #' tracability only.
 #'
-#' @author Gordon Miller
 #'
 #' @keywords metadata
 #' @family metadata
@@ -111,7 +110,6 @@
 #' From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
 #' traceability only.
 #'
-#' @author Gordon Miller
 #'
 #' @keywords metadata
 #' @family metadata

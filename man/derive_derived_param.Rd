@@ -97,8 +97,5 @@ Other deprecated:
 \code{\link{derive_var_aendy}()},
 \code{\link{vars}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{deprecated}
 \keyword{deprecated}
