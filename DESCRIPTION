@@ -84,7 +84,7 @@ Imports:
     stringr (>= 1.4.0),
     tidyr (>= 1.0.2),
     tidyselect (>= 1.1.0),
-    Tplyr (>= 1.1.0)
+    Tplyr (>= 0.4.0)
 Suggests:
     admiral.test (>= 0.4.0),
     covr,
