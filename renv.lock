@@ -359,15 +359,17 @@
     },
     "downlit": {
       "Package": "downlit",
-      "Version": "0.2.1",
+      "Version": "0.4.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "f24f1e44320a978c03050b8403a83793",
+      "Hash": "ba63dc9ab5a31f3209892437e40c5f60",
       "Requirements": [
         "brio",
+        "desc",
         "digest",
         "evaluate",
         "fansi",
+        "memoise",
         "rlang",
         "vctrs",
         "yaml"
@@ -1371,10 +1373,10 @@
     },
     "withr": {
       "Package": "withr",
-      "Version": "2.4.1",
+      "Version": "2.4.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "caf4781c674ffa549a4676d2d77b13cc",
+      "Hash": "a376b424c4817cda4920bbbeb3364e85",
       "Requirements": []
     },
     "xfun": {
