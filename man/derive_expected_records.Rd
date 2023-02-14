@@ -14,12 +14,13 @@ derive_expected_records(
 \arguments{
 \item{dataset}{Input dataset
 
-A data frame, the columns specified by the \code{by_vars} parameter are expected.}
+A data frame, the columns from \code{dataset_expected_obs} and specified by the
+\code{by_vars} parameter are expected.}
 
 \item{dataset_expected_obs}{Expected observations dataset
 
-Data frame with all the combinations of \code{PARAMCD}, \code{PARAM}, \code{AVISIT},
-\code{AVISITN}, ... which are expected in the dataset.}
+Data frame with the expected observations, e.g., all the expected
+combinations of \code{PARAMCD}, \code{PARAM}, \code{AVISIT}, \code{AVISITN}, ...}
 
 \item{by_vars}{Grouping variables
 
@@ -59,25 +60,37 @@ library(tibble)
 adqs <- tribble(
   ~USUBJID, ~PARAMCD, ~AVISITN, ~AVISIT, ~AVAL,
   "1", "a", 1, "WEEK 1", 10,
-  "1", "b", 2, "WEEK 2", 11,
-  "2", "a", 1, "WEEK 1", 12,
-  "2", "a", 2, "WEEK 2", 13,
+  "1", "b", 1, "WEEK 1", 11,
+  "2", "a", 2, "WEEK 2", 12,
   "2", "b", 2, "WEEK 2", 14,
 )
 
-# A dataset with all the combinations of PARAMCD,AVISITN, AVISIT, ... which are expected.
-parm_visit_ref <- tibble::tribble(
-  ~PARAMCD, ~AVISITN, ~AVISIT,
-  "a", 1, "WEEK 1",
-  "a", 2, "WEEK 2",
-  "b", 1, "WEEK 1",
-  "b", 2, "WEEK 2"
+# Example 1. visit variables are parameter independent
+parm_visit_ref <- tribble(
+  ~AVISITN, ~AVISIT,
+  1, "WEEK 1",
+  2, "WEEK 2",
 )
 
 derive_expected_records(
   dataset = adqs,
   dataset_expected_obs = parm_visit_ref,
-  by_vars = exprs(USUBJID),
+  by_vars = exprs(USUBJID, PARAMCD),
+  set_values_to = exprs(DTYPE = "DERIVED")
+)
+
+# Example 2. visit variables are parameter dependent
+parm_visit_ref <- tribble(
+  ~PARAMCD, ~AVISITN, ~AVISIT,
+  "a", 1, "WEEK 1",
+  "a", 2, "WEEK 2",
+  "b", 1, "WEEK 1",
+)
+
+derive_expected_records(
+  dataset = adqs,
+  dataset_expected_obs = parm_visit_ref,
+  by_vars = exprs(USUBJID, PARAMCD),
   set_values_to = exprs(DTYPE = "DERIVED")
 )
 

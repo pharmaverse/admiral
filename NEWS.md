@@ -7,7 +7,7 @@ into a single one (#1479)
 
 -   New ADPC template script available `ad_adpc.R` which creates PK Concentration Analysis Dataset (#849). This script includes formatting suitable for Non-Compartmental Analysis (ADNCA) (#851)
 
-- New function `derive_expected_records()` for adding expected Records (#1729)
+- New function `derive_expected_records()` for adding expected records (#1729)
 
 ## Updates of Existing Functions
 
