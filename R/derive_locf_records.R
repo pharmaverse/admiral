@@ -5,8 +5,8 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `by_vars` and the `order`
-#'   parameter are expected.
+#'   The columns specified by the `by_vars`, `analysis_var`, `order`,
+#'   `keep_vars` parameters are expected.
 #'
 #' @param dataset_expected_obs Expected observations dataset
 #'
@@ -17,7 +17,7 @@
 #'
 #'   For each group defined by `by_vars` those observations from `dataset_expected_obs`
 #'   are added to the output dataset which do not have a corresponding observation
-#'   in the input dataset or for which `analysis_var` is NA for the corresponding observation
+#'   in the input dataset or for which `analysis_var` is `NA` for the corresponding observation
 #'   in the input dataset.
 #'
 #' @param analysis_var Analysis variable.
@@ -64,24 +64,24 @@
 #' library(tibble)
 #'
 #' advs <- tribble(
-#'   ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
-#'   "CDISC01", "01-701-1015", "PULSE", 1, 61, 0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "PULSE", 1, 60, 2, "WEEK 6",
-#'   "CDISC01", "01-701-1015", "DIABP", 2, 51, 0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "DIABP", 2, 50, 2, "WEEK 2",
-#'   "CDISC01", "01-701-1015", "DIABP", 2, 51, 4, "WEEK 4",
-#'   "CDISC01", "01-701-1015", "DIABP", 2, 50, 6, "WEEK 6",
-#'   "CDISC01", "01-701-1015", "SYSBP", 3, 121, 0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "SYSBP", 3, 121, 2, "WEEK 2",
-#'   "CDISC01", "01-701-1015", "SYSBP", 3, 121, 4, "WEEK 4",
-#'   "CDISC01", "01-701-1015", "SYSBP", 3, 121, 6, "WEEK 6",
-#'   "CDISC01", "01-701-1028", "PULSE", 1, 65, 0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "DIABP", 2, 79, 0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "DIABP", 2, 80, 2, "WEEK 2",
-#'   "CDISC01", "01-701-1028", "DIABP", 2, NA, 4, "WEEK 4",
-#'   "CDISC01", "01-701-1028", "DIABP", 2, NA, 6, "WEEK 6",
-#'   "CDISC01", "01-701-1028", "SYSBP", 3, 130, 0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "SYSBP", 3, 132, 2, "WEEK 2"
+#'   ~STUDYID, ~USUBJID,      ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
+#'   "CDISC01", "01-701-1015", "PULSE",   1,      61,      0,     "BASELINE",
+#'   "CDISC01", "01-701-1015", "PULSE",   1,      60,      2,     "WEEK 6",
+#'   "CDISC01", "01-701-1015", "DIABP",   2,      51,      0,     "BASELINE",
+#'   "CDISC01", "01-701-1015", "DIABP",   2,      50,      2,     "WEEK 2",
+#'   "CDISC01", "01-701-1015", "DIABP",   2,      51,      4,     "WEEK 4",
+#'   "CDISC01", "01-701-1015", "DIABP",   2,      50,      6,     "WEEK 6",
+#'   "CDISC01", "01-701-1015", "SYSBP",   3,     121,      0,     "BASELINE",
+#'   "CDISC01", "01-701-1015", "SYSBP",   3,     121,      2,     "WEEK 2",
+#'   "CDISC01", "01-701-1015", "SYSBP",   3,     121,      4,     "WEEK 4",
+#'   "CDISC01", "01-701-1015", "SYSBP",   3,     121,      6,     "WEEK 6",
+#'   "CDISC01", "01-701-1028", "PULSE",   1,      65,      0,     "BASELINE",
+#'   "CDISC01", "01-701-1028", "DIABP",   2,      79,      0,     "BASELINE",
+#'   "CDISC01", "01-701-1028", "DIABP",   2,      80,      2,     "WEEK 2",
+#'   "CDISC01", "01-701-1028", "DIABP",   2,      NA,      4,     "WEEK 4",
+#'   "CDISC01", "01-701-1028", "DIABP",   2,      NA,      6,     "WEEK 6",
+#'   "CDISC01", "01-701-1028", "SYSBP",   3,     130,      0,     "BASELINE",
+#'   "CDISC01", "01-701-1028", "SYSBP",   3,     132,      2,     "WEEK 2"
 #' )
 #'
 #'
@@ -127,14 +127,9 @@ derive_locf_records <- function(dataset,
   assert_data_frame(
     dataset,
     required_vars = expr_c(
-      by_vars, analysis_var, order,
+      by_vars, analysis_var, extract_vars(order), keep_vars,
       chr2vars(colnames(dataset_expected_obs))
     )
-  )
-  assert_data_frame(
-    dataset,
-    required_vars = keep_vars,
-    optional = TRUE
   )
 
 

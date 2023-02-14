@@ -16,8 +16,8 @@ derive_locf_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by the \code{by_vars} and the \code{order}
-parameter are expected.}
+The columns specified by the \code{by_vars}, \code{analysis_var}, \code{order},
+\code{keep_vars} parameters are expected.}
 
 \item{dataset_expected_obs}{Expected observations dataset
 
@@ -28,7 +28,7 @@ Data frame with all the combinations of \code{PARAMCD}, \code{PARAM}, \code{AVIS
 
 For each group defined by \code{by_vars} those observations from \code{dataset_expected_obs}
 are added to the output dataset which do not have a corresponding observation
-in the input dataset or for which \code{analysis_var} is NA for the corresponding observation
+in the input dataset or for which \code{analysis_var} is \code{NA} for the corresponding observation
 in the input dataset.}
 
 \item{analysis_var}{Analysis variable.
@@ -76,24 +76,24 @@ library(dplyr)
 library(tibble)
 
 advs <- tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
-  "CDISC01", "01-701-1015", "PULSE", 1, 61, 0, "BASELINE",
-  "CDISC01", "01-701-1015", "PULSE", 1, 60, 2, "WEEK 6",
-  "CDISC01", "01-701-1015", "DIABP", 2, 51, 0, "BASELINE",
-  "CDISC01", "01-701-1015", "DIABP", 2, 50, 2, "WEEK 2",
-  "CDISC01", "01-701-1015", "DIABP", 2, 51, 4, "WEEK 4",
-  "CDISC01", "01-701-1015", "DIABP", 2, 50, 6, "WEEK 6",
-  "CDISC01", "01-701-1015", "SYSBP", 3, 121, 0, "BASELINE",
-  "CDISC01", "01-701-1015", "SYSBP", 3, 121, 2, "WEEK 2",
-  "CDISC01", "01-701-1015", "SYSBP", 3, 121, 4, "WEEK 4",
-  "CDISC01", "01-701-1015", "SYSBP", 3, 121, 6, "WEEK 6",
-  "CDISC01", "01-701-1028", "PULSE", 1, 65, 0, "BASELINE",
-  "CDISC01", "01-701-1028", "DIABP", 2, 79, 0, "BASELINE",
-  "CDISC01", "01-701-1028", "DIABP", 2, 80, 2, "WEEK 2",
-  "CDISC01", "01-701-1028", "DIABP", 2, NA, 4, "WEEK 4",
-  "CDISC01", "01-701-1028", "DIABP", 2, NA, 6, "WEEK 6",
-  "CDISC01", "01-701-1028", "SYSBP", 3, 130, 0, "BASELINE",
-  "CDISC01", "01-701-1028", "SYSBP", 3, 132, 2, "WEEK 2"
+  ~STUDYID, ~USUBJID,      ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
+  "CDISC01", "01-701-1015", "PULSE",   1,      61,      0,     "BASELINE",
+  "CDISC01", "01-701-1015", "PULSE",   1,      60,      2,     "WEEK 6",
+  "CDISC01", "01-701-1015", "DIABP",   2,      51,      0,     "BASELINE",
+  "CDISC01", "01-701-1015", "DIABP",   2,      50,      2,     "WEEK 2",
+  "CDISC01", "01-701-1015", "DIABP",   2,      51,      4,     "WEEK 4",
+  "CDISC01", "01-701-1015", "DIABP",   2,      50,      6,     "WEEK 6",
+  "CDISC01", "01-701-1015", "SYSBP",   3,     121,      0,     "BASELINE",
+  "CDISC01", "01-701-1015", "SYSBP",   3,     121,      2,     "WEEK 2",
+  "CDISC01", "01-701-1015", "SYSBP",   3,     121,      4,     "WEEK 4",
+  "CDISC01", "01-701-1015", "SYSBP",   3,     121,      6,     "WEEK 6",
+  "CDISC01", "01-701-1028", "PULSE",   1,      65,      0,     "BASELINE",
+  "CDISC01", "01-701-1028", "DIABP",   2,      79,      0,     "BASELINE",
+  "CDISC01", "01-701-1028", "DIABP",   2,      80,      2,     "WEEK 2",
+  "CDISC01", "01-701-1028", "DIABP",   2,      NA,      4,     "WEEK 4",
+  "CDISC01", "01-701-1028", "DIABP",   2,      NA,      6,     "WEEK 6",
+  "CDISC01", "01-701-1028", "SYSBP",   3,     130,      0,     "BASELINE",
+  "CDISC01", "01-701-1028", "SYSBP",   3,     132,      2,     "WEEK 2"
 )
 
 
@@ -138,6 +138,9 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
+}
+\author{
+G Gayatri
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}
