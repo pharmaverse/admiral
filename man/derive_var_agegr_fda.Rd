@@ -21,7 +21,11 @@ derive_var_agegr_ema(dataset, age_var, age_unit = NULL, new_var)
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-These functions are \emph{deprecated}.
+This function is \emph{deprecated}, please create a user defined function instead.
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please create a user defined function instead.
 }
 \seealso{
 Other deprecated: 

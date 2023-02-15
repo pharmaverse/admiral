@@ -212,7 +212,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' These functions are *deprecated*.
+#' This function is *deprecated*, please create a user defined function instead.
 #'
 #' @param dataset Input dataset
 #'
@@ -236,11 +236,15 @@ NULL
 #'
 #' @export
 derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_stop("0.10.0", "derive_var_agegr_fda()",
+  deprecate_stop("0.8.0", "derive_var_agegr_fda()",
     details = "Please create a user defined function instead."
   )
 }
 
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please create a user defined function instead.
 #' @rdname derive_var_agegr_fda
 #'
 #' @keywords deprecated
@@ -248,7 +252,7 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'
 #' @export
 derive_var_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_stop("0.10.0", "derive_var_agegr_ema()",
+  deprecate_stop("0.8.0", "derive_var_agegr_ema()",
     details = "Please create a user defined function instead."
   )
 }

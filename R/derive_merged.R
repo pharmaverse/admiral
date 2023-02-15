@@ -371,7 +371,7 @@ derive_vars_merged_dt <- function(dataset,
                                   check_type = "warning",
                                   duplicate_msg = NULL) {
   deprecate_stop(
-    "0.10.0",
+    "0.8.0",
     "derive_vars_merged_dt()",
     details = "Please use `derive_vars_dt()` and `derive_vars_merged()` instead."
   )
@@ -450,7 +450,7 @@ derive_vars_merged_dtm <- function(dataset,
                                    check_type = "warning",
                                    duplicate_msg = NULL) {
   deprecate_stop(
-    "0.10.0",
+    "0.8.0",
     "derive_vars_merged_dtm()",
     details = "Please use `derive_vars_dtm()` and `derive_vars_merged()` instead."
   )

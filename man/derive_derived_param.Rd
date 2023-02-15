@@ -89,7 +89,7 @@ be populated in the new parameter rows if it is specified in \code{by_vars}.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-This function is deprecated.  Please use \code{derive_param-computed()} instead.
+This function is deprecated.  Please use \code{derive_param_computed()} instead.
 }
 \seealso{
 Other deprecated: 

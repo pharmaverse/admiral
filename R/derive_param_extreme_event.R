@@ -96,7 +96,7 @@ derive_param_first_event <- function(dataset,
                                      set_values_to,
                                      check_type = "warning") {
   ### DEPRECATION
-  deprecate_stop("0.10.0",
+  deprecate_stop("0.9.0",
     "derive_param_first_event()",
     details = "Please use `derive_param_extreme_event()` instead with the `order` argument instead of the `date_var` argument"
   )
