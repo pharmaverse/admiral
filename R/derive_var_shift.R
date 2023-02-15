@@ -26,7 +26,6 @@
 #' (e.g. "NORMAL to HIGH"). When `from_var` or `to_var` has missing value, the
 #' missing value is replaced by `na_val` (e.g. "NORMAL to NULL").
 #'
-#' @author Annie Yang
 #'
 #' @return The input dataset with the character shift variable added
 #'

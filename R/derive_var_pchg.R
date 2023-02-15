@@ -10,7 +10,6 @@
 #' baseline by the absolute value of the baseline value and
 #' multiplying the result by `100`.
 #'
-#' @author Thomas Neitmann
 #'
 #' @return The input dataset with an additional column named `PCHG`
 #' @family der_bds_findings

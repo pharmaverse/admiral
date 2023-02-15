@@ -26,7 +26,6 @@
 #'   The dataset is sorted by `order` before carrying the last
 #'   observation forward (eg. `AVAL`) within each `by_vars`.
 #'
-#' @author G Gayatri
 #'
 #' @details For each group (with respect to the variables specified for the
 #' by_vars parameter) those observations from dataset_expected_obs are added to

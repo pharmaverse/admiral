@@ -48,7 +48,6 @@
 #' @family high_order_function
 #' @keywords high_order_function
 #'
-#' @author Stefan Bundfuss
 #'
 #' @seealso [params()] [restrict_derivation()]
 #'
@@ -154,7 +153,6 @@ slice_derivation <- function(dataset,
 #'
 #' @return An object of class `derivation_slice`
 
-#' @author Stefan Bundfuss
 #'
 #' @seealso [slice_derivation()], [params()]
 #'

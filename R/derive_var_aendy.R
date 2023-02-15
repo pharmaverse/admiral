@@ -29,7 +29,6 @@
 #'
 #'   The default is `AENDT`
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details The study day is derived as number of days from the start date
 #'   to the end date. If it is nonnegative, one is added. I.e., the study day of the

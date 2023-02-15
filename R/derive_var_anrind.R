@@ -17,7 +17,6 @@
 #'
 #' @return The input dataset with additional column `ANRIND`
 #'
-#' @author Thomas Neitmann
 #'
 #' @family der_bds_findings
 #' @keywords der_bds_findings

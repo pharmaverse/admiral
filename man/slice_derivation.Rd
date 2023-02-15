@@ -90,8 +90,5 @@ Higher Order Functions:
 \code{\link{derivation_slice}()},
 \code{\link{restrict_derivation}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{high_order_function}
 \keyword{high_order_function}

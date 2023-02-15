@@ -26,7 +26,6 @@
 #' dataset is transposed and subsequently merged onto `dataset` using `by_vars` as
 #' keys.
 #'
-#' @author Thomas Neitmann
 #'
 #' @return The input dataset with transposed variables from `dataset_merge` added
 #'
@@ -119,7 +118,6 @@ derive_vars_transposed <- function(dataset,
 #'
 #'   Default: `FASTRESC`
 #'
-#' @author Thomas Neitmann
 #'
 #' @return The input dataset with ATC variables added
 #'

@@ -52,6 +52,9 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 - The expected value for the `derivation` argument of `restrict_derivation()`,
 `slice_derivation()`, and `call_derivation()` is described now. (#1698)
 
+- Removed authors from function documentation, as we will now only be tracking an overall list of 
+authors for admiral. (#1673)
+
 # admiral 0.9.1
 
 - Implement changes to `if_else()` from the release of `dplyr` version 1.1.0, which

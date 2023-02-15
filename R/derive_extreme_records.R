@@ -37,7 +37,6 @@
 #'   the selected observations.
 #'   1. The observations are added to input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the first or last observation of each by group
 #'   added as new observations.

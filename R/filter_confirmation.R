@@ -150,7 +150,6 @@
 #' @returns A subset of the observations of the input dataset. All variables of
 #'   the input dataset are included in the output dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fil
 #' @family utils_fil
@@ -375,7 +374,6 @@ filter_confirmation <- function(dataset,
 #'
 #' @param val A value
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fil
 #' @family utils_fil
@@ -421,7 +419,6 @@ count_vals <- function(var, val) {
 #'
 #' @param cond A condition
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fil
 #' @family utils_fil
@@ -471,7 +468,6 @@ min_cond <- function(var, cond) {
 #'
 #' @param cond A condition
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fil
 #' @family utils_fil

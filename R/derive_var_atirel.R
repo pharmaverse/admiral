@@ -26,7 +26,6 @@
 #'       the Analysis Start Time Imputation Flag is 'H' or 'M',
 #'    -  otherwise it is set to "PRIOR_CONCOMITANT".
 #'
-#' @author Teckla Akinyi
 #'
 #' @return A dataset containing all observations and variables of the input
 #'   dataset and additionally the variable specified by the `new_var` parameter.

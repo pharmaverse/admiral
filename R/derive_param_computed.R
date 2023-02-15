@@ -83,7 +83,6 @@
 #'   the provided values. The values of the other variables of the input dataset
 #'   are set to `NA`.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
@@ -255,7 +254,6 @@ derive_param_computed <- function(dataset,
 #'
 #' @inheritParams derive_param_computed
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.

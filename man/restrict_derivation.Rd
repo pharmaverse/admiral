@@ -81,8 +81,5 @@ Higher Order Functions:
 \code{\link{derivation_slice}()},
 \code{\link{slice_derivation}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{high_order_function}
 \keyword{high_order_function}

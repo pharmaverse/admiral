@@ -32,7 +32,6 @@
 #'   to the end date. If it is non-negative, one is added. I.e., the study day of the
 #'   start date is 1.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with `ADY` column added
 #'
