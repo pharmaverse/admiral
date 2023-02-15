@@ -11,10 +11,14 @@ slice_derivation(dataset, derivation, args = NULL, ...)
 
 \item{derivation}{Derivation
 
-A function is expected. The function must provide the \code{dataset} argument
-and all arguments specified in the \code{params()} objects passed to the \code{arg}
-argument. Therefore it is not possible to specify dplyr functions like
-\code{mutate()} or \code{summarize()}.}
+A function that performs a specific derivation is expected. A derivation
+adds variables or observations to a dataset. The first argument of a
+derivation must expect a dataset and the derivation must return a dataset.
+The function must provide the \code{dataset} argument and all arguments
+specified in the \code{params()} objects passed to the \code{arg} argument.
+
+Please note that it is not possible to specify \code{{dplyr}}
+functions like \code{mutate()} or \code{summarize()}.}
 
 \item{args}{Arguments of the derivation
 
