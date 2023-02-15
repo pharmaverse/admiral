@@ -63,7 +63,6 @@
 #'
 #' @inheritParams derive_param_computed
 #'
-#' @author Alice Ehmann
 #'
 #' @return The input dataset with the new parameter rows added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.

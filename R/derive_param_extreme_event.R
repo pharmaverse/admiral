@@ -78,7 +78,6 @@
 #'   the new observations.
 #'   1. The new observations are added to input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with a new parameter indicating if and when an
 #'   event occurred
@@ -226,7 +225,6 @@ derive_param_first_event <- function(dataset,
 #'   the new observations.
 #'   1. The new observations are added to input dataset.
 #'
-#' @author Stefan Bundfuss Sophie Shapcott
 #'
 #' @return The input dataset with a new parameter indicating if and when an
 #'   event occurred

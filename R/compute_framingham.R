@@ -41,7 +41,6 @@
 #'   A character vector is expected.
 #'   Expected Values: 'Y' 'N'
 #'
-#' @author Alice Ehmann
 #'
 #' @details
 #' The predicted probability of having cardiovascular disease (CVD)

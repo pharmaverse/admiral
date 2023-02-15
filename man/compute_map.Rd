@@ -53,8 +53,5 @@ BDS-Findings Functions that returns a vector:
 \code{\link{compute_rr}()},
 \code{\link{compute_scale}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{com_bds_findings}
 \keyword{com_bds_findings}

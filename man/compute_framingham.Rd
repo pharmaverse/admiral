@@ -125,8 +125,5 @@ BDS-Findings Functions that returns a vector:
 \code{\link{compute_rr}()},
 \code{\link{compute_scale}()}
 }
-\author{
-Alice Ehmann
-}
 \concept{com_bds_findings}
 \keyword{com_bds_findings}

@@ -36,7 +36,6 @@
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details All observations of the input datasets are put together into a
 #'   single dataset. If a by group (defined by `key_vars`) exists in more than

@@ -28,8 +28,5 @@ Higher Order Functions:
 \code{\link{restrict_derivation}()},
 \code{\link{slice_derivation}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{high_order_function}
 \keyword{high_order_function}
