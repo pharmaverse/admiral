@@ -272,5 +272,4 @@ derive_derived_param <- function(dataset,
                                  constant_by_vars = NULL,
                                  constant_parameters = NULL) {
   deprecate_stop("0.10.0", "derive_derived_param()", "derive_param_computed()")
-
 }

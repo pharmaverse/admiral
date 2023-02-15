@@ -236,9 +236,9 @@ NULL
 #'
 #' @export
 derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
-
   deprecate_stop("0.10.0", "derive_var_agegr_fda()",
-                 details = "Please create a user defined function instead.")
+    details = "Please create a user defined function instead."
+  )
 }
 
 #' @rdname derive_var_agegr_fda
@@ -248,7 +248,7 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'
 #' @export
 derive_var_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
-
   deprecate_stop("0.10.0", "derive_var_agegr_ema()",
-                 details = "Please create a user defined function instead.")
+    details = "Please create a user defined function instead."
+  )
 }

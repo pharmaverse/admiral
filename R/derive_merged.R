@@ -350,7 +350,6 @@ derive_vars_merged <- function(dataset,
 #'
 #'   1. The date and flag variables are merged to the input dataset.
 #'
-#'
 #' @keywords deprecated
 #' @family deprecated
 #'
@@ -429,7 +428,6 @@ derive_vars_merged_dt <- function(dataset,
 #'
 #'   1. The date and flag variables are merged to the input dataset.
 #'
-#'
 #' @keywords deprecated
 #' @family deprecated
 #'
@@ -451,7 +449,6 @@ derive_vars_merged_dtm <- function(dataset,
                                    preserve = FALSE,
                                    check_type = "warning",
                                    duplicate_msg = NULL) {
-
   deprecate_stop(
     "0.10.0",
     "derive_vars_merged_dtm()",

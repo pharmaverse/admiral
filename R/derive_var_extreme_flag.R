@@ -196,7 +196,6 @@ derive_var_extreme_flag <- function(dataset,
                                     new_var,
                                     mode,
                                     check_type = "warning") {
-
   new_var <- assert_symbol(enexpr(new_var))
   assert_vars(by_vars)
   assert_order_vars(order)
@@ -343,7 +342,6 @@ derive_var_worst_flag <- function(dataset,
                                   worst_high,
                                   worst_low,
                                   check_type = "warning") {
-
   # perform argument checks
   new_var <- assert_symbol(enexpr(new_var))
   param_var <- assert_symbol(enexpr(param_var))
