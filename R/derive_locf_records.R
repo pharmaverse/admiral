@@ -86,7 +86,7 @@
 #'
 #'
 #' # A dataset with all the combinations of PARAMCD, PARAM, AVISIT, AVISITN, ... which are expected.
-#' advs_expected_obsv <- tibble::tribble(
+#' advs_expected_obsv <- tribble(
 #'   ~PARAMCD, ~AVISITN, ~AVISIT,
 #'   "PULSE",         0, "BASELINE",
 #'   "PULSE",         6, "WEEK 6",
