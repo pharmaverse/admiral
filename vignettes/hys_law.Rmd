@@ -21,7 +21,6 @@ library(purrr)
 library(admiral.test)
 library(lubridate)
 library(stringr)
-library(Tplyr)
 ```
 
 # Context
@@ -154,41 +153,4 @@ adlbhy <- adlb_annotated %>%
   bind_rows(hylaw_params)
 ```
 
-## Visualize the ADLBHY Dataset
-
-Hopefully this `adlbhy` object created is ready for your organization's standard macro display or code that is previously available for tables and listings related to this analysis. Here we will demonstrate a brief use-case of `Tplyr`:
-
-```{r}
-tplyr_table(adlbhy, TRT01A, where = PARAMCD == "HYSLAW") %>%
-  add_layer(
-    group_count(AVALC, by = "Hy's Law Event") %>%
-      set_distinct_by(USUBJID) %>%
-      set_format_strings(f_str("xx (xx.x)", n, pct))
-  ) %>%
-  build() %>%
-  select(-starts_with("ord")) %>%
-  rename_with(., ~ str_replace_all(., "var1_", ""), starts_with("var1_")) %>%
-  arrange(desc(row_label2)) %>%
-  knitr::kable()
-```
-
-Perhaps it is a listing that is requested, using the prior `HYLAW_records` object created earlier, you can use the `LBSEQ` and `BILI_LBSEQ` as an index to grab the proper lab records from ADLB with a `left_join`.
-
-```{r}
-dili_seq <- hylaw_records %>%
-  filter(CRIT1FL == "Y" & BILI_CRITFL == "Y") %>%
-  select(USUBJID, LBSEQ, BILI_LBSEQ) %>%
-  pivot_longer(
-    cols = c(LBSEQ, BILI_LBSEQ),
-    names_to = "pivot_key",
-    values_to = "LBSEQ"
-  ) %>%
-  select(USUBJID, LBSEQ) %>%
-  distinct()
-
-dili_seq %>%
-  left_join(adlb, by = c("USUBJID", "LBSEQ")) %>%
-  select(STUDYID, USUBJID, TRT01A, PARAM, AVISIT, ADT, AVAL, ANRHI) %>%
-  arrange(USUBJID, ADT) %>%
-  dataset_vignette()
-```
+Hopefully this `adlbhy` object created is ready for your organization's standard macro display or code that is previously available for tables and listings related to this analysis. 
