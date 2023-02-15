@@ -59,17 +59,17 @@ library(tibble)
 
 adqs <- tribble(
   ~USUBJID, ~PARAMCD, ~AVISITN, ~AVISIT, ~AVAL,
-  "1", "a", 1, "WEEK 1", 10,
-  "1", "b", 1, "WEEK 1", 11,
-  "2", "a", 2, "WEEK 2", 12,
-  "2", "b", 2, "WEEK 2", 14,
+  "1",      "a",             1, "WEEK 1",   10,
+  "1",      "b",             1, "WEEK 1",   11,
+  "2",      "a",             2, "WEEK 2",   12,
+  "2",      "b",             2, "WEEK 2",   14
 )
 
 # Example 1. visit variables are parameter independent
 parm_visit_ref <- tribble(
   ~AVISITN, ~AVISIT,
-  1, "WEEK 1",
-  2, "WEEK 2",
+  1,        "WEEK 1",
+  2,        "WEEK 2"
 )
 
 derive_expected_records(
@@ -82,9 +82,9 @@ derive_expected_records(
 # Example 2. visit variables are parameter dependent
 parm_visit_ref <- tribble(
   ~PARAMCD, ~AVISITN, ~AVISIT,
-  "a", 1, "WEEK 1",
-  "a", 2, "WEEK 2",
-  "b", 1, "WEEK 1",
+  "a",             1, "WEEK 1",
+  "a",             2, "WEEK 2",
+  "b",             1, "WEEK 1"
 )
 
 derive_expected_records(
@@ -113,9 +113,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
-}
-\author{
-Kangjie Zhang
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

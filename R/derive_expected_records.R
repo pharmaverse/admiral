@@ -30,8 +30,6 @@
 #'   symbol, a numeric value or `NA`, e.g., `exprs(PARAMCD = "TDOSE", PARCAT1 =
 #'   "OVERALL")`. More general expression are not allowed.
 #'
-#' @author Kangjie Zhang
-#'
 #' @details For each group (the variables specified in the `by_vars` parameter),
 #' those records from `dataset_expected_obs` that are missing in the input
 #' dataset are added to the output dataset.
@@ -50,17 +48,17 @@
 #'
 #' adqs <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVISITN, ~AVISIT, ~AVAL,
-#'   "1", "a", 1, "WEEK 1", 10,
-#'   "1", "b", 1, "WEEK 1", 11,
-#'   "2", "a", 2, "WEEK 2", 12,
-#'   "2", "b", 2, "WEEK 2", 14,
+#'   "1",      "a",             1, "WEEK 1",   10,
+#'   "1",      "b",             1, "WEEK 1",   11,
+#'   "2",      "a",             2, "WEEK 2",   12,
+#'   "2",      "b",             2, "WEEK 2",   14
 #' )
 #'
 #' # Example 1. visit variables are parameter independent
 #' parm_visit_ref <- tribble(
 #'   ~AVISITN, ~AVISIT,
-#'   1, "WEEK 1",
-#'   2, "WEEK 2",
+#'   1,        "WEEK 1",
+#'   2,        "WEEK 2"
 #' )
 #'
 #' derive_expected_records(
@@ -73,9 +71,9 @@
 #' # Example 2. visit variables are parameter dependent
 #' parm_visit_ref <- tribble(
 #'   ~PARAMCD, ~AVISITN, ~AVISIT,
-#'   "a", 1, "WEEK 1",
-#'   "a", 2, "WEEK 2",
-#'   "b", 1, "WEEK 1",
+#'   "a",             1, "WEEK 1",
+#'   "a",             2, "WEEK 2",
+#'   "b",             1, "WEEK 1"
 #' )
 #'
 #' derive_expected_records(
