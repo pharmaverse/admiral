@@ -8,7 +8,11 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 3779 rows and 111 columns.
 }
 \source{
-Derived from the \code{adlb} template.
+Derived from the \code{adlb} template, then further filtered
+due to dataset size by the following USUBJIDs:
+01-701-1015, 01-701-1023, 01-701-1028, 01-701-1033,
+01-701-1034, 01-701-1047, 01-701-1097, 01-705-1186,
+01-705-1292, 01-705-1310, 01-708-1286
 }
 \usage{
 admiral_adlb

@@ -189,3 +189,9 @@ Here we demonstrated what is the base-case that may be asked of as a trial progr
  - other parameters such as worsening of condition
 
 We hope by demonstrating the flexibility of `admiral` functions and using a general workflow to create the necessary parameters for an `adlbhy`, that creating this final dataset becomes simplified and easily scalable. Ideally, this is ready for your organization's standard macros or previous code for TLFs and outputs as well. This is our first attempt at breaking down and summarizing this topic. We welcome feedback and ideas to improve this guide!
+
+# Example Script 
+
+ADaM   | Sample Code
+-------| --------------
+ADLBHY | [ad_adlbhy.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adlbhy.R){target="_blank"} 

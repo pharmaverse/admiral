@@ -39,7 +39,11 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' Derived from the `adlb` template.
+#' Derived from the `adlb` template, then further filtered
+#' due to dataset size by the following USUBJIDs:
+#' 01-701-1015, 01-701-1023, 01-701-1028, 01-701-1033,
+#' 01-701-1034, 01-701-1047, 01-701-1097, 01-705-1186,
+#' 01-705-1292, 01-705-1310, 01-708-1286
 #'
 "admiral_adlb"
 
