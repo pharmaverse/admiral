@@ -6,6 +6,7 @@
 into a single one (#1479)
 
 -   New ADPC template script available `ad_adpc.R` which creates PK Concentration Analysis Dataset (#849). This script includes formatting suitable for Non-Compartmental Analysis (ADNCA) (#851)
+
 ## Updates of Existing Functions
 
 -   The function `create_single_dose_dataset()` adds support for
@@ -67,13 +68,16 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
   - `smq_select()`
   - `sdg_select()`
 
-- The following parameters, which were deprecated in previous {admiral} versions, have been removed (#1712):
+- The following parameters, which were deprecated in previous `{admiral}` versions, have been removed (#1712):
 
   - `meddra_version`, `whodd_version`, `get_smq_fun` and `get_sdg_fun` from the `create_query_data()` function
   - `date_imputation`, `time_imputation` and `preserve` parameters from `date_source()` function
   - `filter` parameter from `derive_var_extreme_flag()` and `derive_var_worst_flag()` functions
 
 ## Documentation
+
+- The expected value for the `derivation` argument of `restrict_derivation()`,
+`slice_derivation()`, and `call_derivation()` is described now. (#1698)
 
 - Removed authors from function documentation, as we will now only be tracking an overall list of 
 authors for admiral. (#1673)
