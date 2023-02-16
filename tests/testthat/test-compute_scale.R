@@ -72,8 +72,26 @@ test_that("compute_scale Test 3: result is missing if min_n is not met", {
   )
 })
 
-## Test 4: compute_scale() works as expected within derive_summary_records() ----
-test_that("compute_scale Test 4: compute_scale() works as expected within
+## Test 4: average is calculated without transformation if source and  ----
+##  target range aren't specified ----
+test_that("compute_scale Test 4: average is calculated without transformation
+            if source and target range aren't specified", {
+  input <- adqs %>%
+    filter(USUBJID == "01-701-1015" & AVISITN == 200) %>%
+    pull()
+
+  expected_output <- mean(input, na.rm = TRUE)
+
+  expect_equal(
+    compute_scale(input,
+      min_n = 2
+    ),
+    expected_output
+  )
+})
+
+## Test 5: compute_scale() works as expected within derive_summary_records() ----
+test_that("compute_scale Test 5: compute_scale() works as expected within
           derive_summary_records()", {
   expected_output <- bind_rows(
     adqs,
@@ -100,5 +118,38 @@ test_that("compute_scale Test 4: compute_scale() works as expected within
       set_values_to = exprs(PARAMCD = "ITEMAVG")
     ),
     expected_output
+  )
+})
+
+## Test 6: error is thrown if source_range is supplied, but not ----
+##  target_range, or vice-versa ----
+test_that("compute_scale Test 6: error is thrown if source_range is supplied,
+          but not target_range, or vice-versa", {
+  input <- adqs %>%
+    filter(USUBJID == "01-701-1015" & AVISITN == 200) %>%
+    pull()
+
+  expect_error(
+    compute_scale(input,
+      source_range = c(1, 5),
+      min_n = 2
+    ),
+    paste0(
+      'argument "target_range" is missing, with no default, but ',
+      '"source_range" is not missing\nEither both or neither ',
+      "argument should exist"
+    )
+  )
+
+  expect_error(
+    compute_scale(input,
+      target_range = c(0, 100),
+      min_n = 2
+    ),
+    paste0(
+      'argument "source_range" is missing, with no default, but ',
+      '"target_range" is not missing\nEither both or neither ',
+      "argument should exist"
+    )
   )
 })

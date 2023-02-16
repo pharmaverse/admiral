@@ -6,8 +6,8 @@
 \usage{
 compute_scale(
   source,
-  source_range,
-  target_range,
+  source_range = NULL,
+  target_range = NULL,
   flip_direction = FALSE,
   min_n = 1
 )
@@ -20,12 +20,16 @@ A numeric vector is expected.}
 \item{source_range}{The permitted source range
 
 A numeric vector containing two elements is expected, representing the
-lower and upper bounds of the permitted source range.}
+lower and upper bounds of the permitted source range. Alternatively, if no
+argument is specified for \code{source_range} and \code{target_range}, no
+transformation will be performed.}
 
 \item{target_range}{The target range
 
 A numeric vector containing two elements is expected, representing the
-lower and upper bounds of the target range.}
+lower and upper bounds of the target range. Alternatively, if no
+argument is specified for \code{source_range} and \code{target_range}, no
+transformation will be performed.}
 
 \item{flip_direction}{Flip direction of the scale?
 
@@ -57,8 +61,10 @@ average of a set of questionnaire response scores and re-coding the average
 response to obtain a subscale score.
 }
 \details{
-Returns a numeric value. If source contains less than min_n values,
-the result is set to \code{NA}.
+Returns a numeric value. If source contains less than \code{min_n} values,
+the result is set to \code{NA}. If \code{source_range} and \code{target_range} aren't
+specified, the mean will be computed without any transformation being
+performed.
 }
 \examples{
 compute_scale(
