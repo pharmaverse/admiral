@@ -14,6 +14,9 @@ library(lubridate)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 # Using use_ad_template("adlb") and assigning the end object as admiral_adlb
+# ADLBHY is a special dataset specifically used to check for potential drug induced liver injuries
+# Please see "Hy's Law Implementation Guide" on the admiral website for additional information
+
 
 data("admiral_adlb")
 adlb <- admiral_adlb
