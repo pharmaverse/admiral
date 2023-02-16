@@ -49,7 +49,7 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 
 ## Various
 
-- Function `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with NA values that has now been fixed (#1646)
+- Functions `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with NA values that has now been fixed (#1646)
 
 # admiral 0.9.1
 
