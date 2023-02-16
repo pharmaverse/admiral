@@ -146,9 +146,11 @@ dataset_vignette(
 # Derivations
 
 The most important functions in `{admiral}` are the
-[derivations](../reference/index.html#section-derivations). These functions
-start with `derive_`. The first parameter of these functions expects the
-input dataset. This allows us to string together derivations using the `%>%`
+[derivations](../reference/index.html#derivations-for-adding-variables).
+Derivations add variables or observations to the input dataset. Existing
+variables and observations of the input dataset are not changed. Derivation
+functions start with `derive_`. The first parameter of these functions expects
+the input dataset. This allows us to string together derivations using the `%>%`
 operator.
 
 Functions which derive a dedicated variable start with `derive_var_` followed by
