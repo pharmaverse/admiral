@@ -9,6 +9,7 @@ into a single one (#1479)
 transforming the result from a source to a target range. (#1692)
 
 -   New ADPC template script available `ad_adpc.R` which creates PK Concentration Analysis Dataset (#849). This script includes formatting suitable for Non-Compartmental Analysis (ADNCA) (#851)
+
 ## Updates of Existing Functions
 
 -   The function `create_single_dose_dataset()` adds support for
@@ -51,7 +52,8 @@ added for subjects who have both an event or censoring and an observation in
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
 
-## Documentation
+- The expected value for the `derivation` argument of `restrict_derivation()`,
+`slice_derivation()`, and `call_derivation()` is described now. (#1698)
 
 - Removed authors from function documentation, as we will now only be tracking an overall list of 
 authors for admiral. (#1673)
