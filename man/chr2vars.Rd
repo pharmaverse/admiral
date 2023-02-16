@@ -22,8 +22,5 @@ chr2vars(c("USUBJID", "AVAL"))
 Other utils_quo: 
 \code{\link{negate_vars}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{utils_quo}
 \keyword{utils_quo}

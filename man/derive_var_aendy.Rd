@@ -50,8 +50,5 @@ Other deprecated:
 \code{\link{derive_param_first_event}()},
 \code{\link{vars}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{deprecated}
 \keyword{deprecated}

@@ -114,7 +114,6 @@
 #'
 #' @return A character vector
 #'
-#' @author Samia Kabi, Stefan Bundfuss
 #'
 #' @family com_date_time
 #'
@@ -329,7 +328,6 @@ impute_dtc_dtm <- function(dtc,
 #' @details A `dtm_level` object is an ordered factor, i.e., two objects can be
 #'   compared.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #'
@@ -360,7 +358,6 @@ dtm_level <- function(level) {
 #' @details The function can be replaced by the parttime parser once it is
 #'   available.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #'
@@ -419,7 +416,6 @@ get_partialdatetime <- function(dtc) {
 #'  component occurs in the imputed DTC value, the imputed DTC value is set to
 #'  `NA_character_` in the imputation functions.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #'
@@ -469,7 +465,6 @@ get_imputation_target_date <- function(date_imputation,
 #'  - For `time_imputation = "last"` `"23"`, `"59"`, `"59"` are returned.
 #'  - For `time_imputation = "<hh>:<mm>:<ss>"` `"<hh>"`, `"<mm>"`, `"<ss>"` are returned.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #'
@@ -509,7 +504,6 @@ get_imputation_target_time <- function(time_imputation) {
 #'   - `imputed_dtc` if the partial DTC date (`dtc`) is not in range of any of
 #'   the minimum or maximum dates.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #'
@@ -685,7 +679,6 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'
 #' @return A character vector
 #'
-#' @author Samia Kabi, Stefan Bundfuss
 #'
 #' @family com_date_time
 #'
@@ -866,7 +859,6 @@ impute_dtc_dt <- function(dtc,
 #' @details A `dt_level` object is an ordered factor, i.e., two objects can be
 #'   compared.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #' @keywords utils_impute
@@ -896,7 +888,6 @@ dt_level <- function(level) {
 #'   - `imputed_dtc` if the partial DTC date (`dtc`) is not in range of any of
 #'   the minimum or maximum dates.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #'
@@ -961,7 +952,6 @@ restrict_imputed_dtc_dt <- function(dtc,
 #'
 #' @inheritParams impute_dtc_dt
 #'
-#' @author Samia Kabi
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
@@ -1008,7 +998,6 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @return A datetime object
 #'
-#' @author Samia Kabi, Stefan Bundfuss
 #'
 #' @family com_date_time
 #'
@@ -1056,7 +1045,6 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @return A datetime object
 #'
-#' @author Samia Kabi
 #'
 #' @family com_date_time
 #'
@@ -1114,7 +1102,6 @@ convert_date_to_dtm <- function(dt,
 #'
 #' @return The date imputation flag (`'--DTF'`) (character value of `'D'`, `'M'` , `'Y'` or `NA`)
 #'
-#' @author Samia Kabi
 #'
 #' @family com_date_time
 #'
@@ -1169,7 +1156,6 @@ compute_dtf <- function(dtc, dt) {
 #'
 #' @return The time imputation flag (`'--TMF'`) (character value of `'H'`, `'M'` , `'S'` or `NA`)
 #'
-#' @author Samia Kabi, Stefan Bundfuss
 #'
 #' @family com_date_time
 #'
@@ -1255,7 +1241,6 @@ compute_tmf <- function(dtc,
 #' The presence of a `'--DTF'` variable is checked and if it already exists in the input dataset,
 #' a warning is issued and `'--DTF'` will be overwritten.
 #'
-#' @author Samia Kabi
 #'
 #' @family der_date_time
 #'
@@ -1456,7 +1441,6 @@ derive_vars_dt <- function(dataset,
 #' @return  The input dataset with the datetime `'--DTM'` (and the date/time imputation
 #' flag `'--DTF'`, `'--TMF'`) added.
 #'
-#' @author Samia Kabi
 #'
 #' @family der_date_time
 #'

@@ -46,7 +46,6 @@
 #' DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
 #' if it is based on diastolic, systolic blood pressure, and heart rate.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
@@ -167,7 +166,6 @@ derive_param_map <- function(dataset,
 #'
 #'   A numeric vector or `NULL` is expected.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details
 #' \deqn{\frac{2DIABP + SYSBP}{3}}{(2DIABP + SYSBP) / 3}
@@ -256,7 +254,6 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #' @inheritParams derive_param_qtc
 #'
-#' @author Eric Simms
 #'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
@@ -392,7 +389,6 @@ derive_param_bsa <- function(dataset,
 #'
 #'   Permitted Values: character value
 #'
-#' @author Eric Simms
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
@@ -491,7 +487,6 @@ compute_bsa <- function(height = height,
 #' The analysis value of the new parameter is derived as
 #' \deqn{BMI = \frac{WEIGHT}{HEIGHT^2}}
 #'
-#' @author Pavan Kumar
 #'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
@@ -586,7 +581,6 @@ derive_param_bmi <- function(dataset,
 #'
 #'   Permitted Values: numeric vector
 #'
-#' @author Pavan Kumar
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'

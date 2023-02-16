@@ -49,7 +49,6 @@
 #'
 #' @seealso [compute_qtc()]
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
@@ -169,7 +168,6 @@ derive_param_qtc <- function(dataset,
 #' `"QTCBR"` if `method` is `"Bazett"`, `"QTCFR"` if it's `"Fridericia"` or
 #' `"QTLCR"` if it's `"Sagie"`. An error otherwise.
 #'
-#' @author Thomas Neitmann
 #'
 #' @export
 #'
@@ -198,7 +196,6 @@ default_qtc_paramcd <- function(method) {
 #'
 #' @inheritParams derive_param_qtc
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return QT interval in msec
 #'
@@ -267,7 +264,6 @@ compute_qtc <- function(qt, rr, method) {
 #'
 #' @inheritParams derive_param_qtc
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
@@ -346,7 +342,6 @@ derive_param_rr <- function(dataset,
 #'   A numeric vector is expected. It is expected that heart rate is measured in
 #'   beats/min.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'

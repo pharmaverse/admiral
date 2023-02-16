@@ -71,8 +71,5 @@ BDS-Findings Functions that returns a vector:
 \code{\link{compute_qual_imputation}()},
 \code{\link{compute_rr}()}
 }
-\author{
-Eric Simms
-}
 \concept{com_bds_findings}
 \keyword{com_bds_findings}

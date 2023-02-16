@@ -45,8 +45,5 @@ derive_vars_merged(
 Other admiral_options: 
 \code{\link{set_admiral_options}()}
 }
-\author{
-Zelos Zhu
-}
 \concept{admiral_options}
 \keyword{admiral_options}

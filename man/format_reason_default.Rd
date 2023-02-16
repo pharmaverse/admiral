@@ -51,8 +51,5 @@ Utilities for Formatting Observations:
 \code{\link{format_eoxxstt_default}()},
 \code{\link{yn_to_numeric}()}
 }
-\author{
-Samia Kabi
-}
 \concept{utils_fmt}
 \keyword{utils_fmt}

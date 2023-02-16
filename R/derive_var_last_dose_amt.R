@@ -16,7 +16,6 @@
 #'
 #' @return Input dataset with additional column `new_var`.
 #'
-#' @author Annie Yang
 #'
 #' @family der_gen
 #' @keywords der_gen
