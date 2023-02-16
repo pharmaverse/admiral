@@ -1,4 +1,4 @@
-#' Compute scale parameters
+#' Compute Scale Parameters
 #'
 #' Computes the average of a set of source values and transforms the result
 #' from the source range to the target range. For example, for calculating the
