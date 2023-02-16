@@ -135,8 +135,8 @@ test_that("compute_scale Test 6: error is thrown if source_range is supplied,
       min_n = 2
     ),
     paste0(
-      'argument "target_range" is missing, with no default, but ',
-      '"source_range" is not missing\nEither both or neither ',
+      "argument `target_range` is missing, with no default, but ",
+      "`source_range` is not missing\nEither both or neither ",
       "argument should exist"
     )
   )
@@ -147,8 +147,8 @@ test_that("compute_scale Test 6: error is thrown if source_range is supplied,
       min_n = 2
     ),
     paste0(
-      'argument "source_range" is missing, with no default, but ',
-      '"target_range" is not missing\nEither both or neither ',
+      "argument `source_range` is missing, with no default, but ",
+      "`target_range` is not missing\nEither both or neither ",
       "argument should exist"
     )
   )

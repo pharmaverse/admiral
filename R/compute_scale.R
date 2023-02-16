@@ -28,6 +28,9 @@
 #'   The transformed values will be reversed within the target range, e.g.
 #'   within the range 0 to 100, 25 would be reversed to 75.
 #'
+#'   This argument will be ignored if `source_range` and `target_range` aren't
+#'   specified.
+#'
 #'   Default: `FALSE`
 #'
 #'   Permitted Values: `TRUE`, `FALSE`
@@ -75,16 +78,16 @@ compute_scale <- function(source,
   assert_numeric_vector(source_range, optional = TRUE)
   if (!is.null(target_range) && is.null(source_range)) {
     abort(paste0(
-      'argument "source_range" is missing, with no default, but ',
-      '"target_range" is not missing\nEither both or neither ',
+      "argument `source_range` is missing, with no default, but ",
+      "`target_range` is not missing\nEither both or neither ",
       "argument should exist"
     ))
   }
   assert_numeric_vector(target_range, optional = TRUE)
   if (!is.null(source_range) && is.null(target_range)) {
     abort(paste0(
-      'argument "target_range" is missing, with no default, but ',
-      '"source_range" is not missing\nEither both or neither ',
+      "argument `target_range` is missing, with no default, but ",
+      "`source_range` is not missing\nEither both or neither ",
       "argument should exist"
     ))
   }

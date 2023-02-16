@@ -36,6 +36,9 @@ transformation will be performed.}
 The transformed values will be reversed within the target range, e.g.
 within the range 0 to 100, 25 would be reversed to 75.
 
+This argument will be ignored if \code{source_range} and \code{target_range} aren't
+specified.
+
 Default: \code{FALSE}
 
 Permitted Values: \code{TRUE}, \code{FALSE}}
