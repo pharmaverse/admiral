@@ -16,7 +16,6 @@
 #'  "SCREENING NOT COMPLETED") nor NA,
 #'  "ONGOING" otherwise.
 #'
-#' @author Samia Kabi
 #' @details Usually this function can not be used with `%>%`.
 #' @export
 #' @family deprecated
@@ -103,7 +102,6 @@ format_eoxxstt_default <- function(status) {
 #' @family deprecated
 #' @keywords deprecated
 #'
-#' @author Samia Kabi
 #'
 #' @export
 #'

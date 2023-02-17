@@ -75,7 +75,6 @@
 #'   is negative. The start and end date variable must be present in the specified
 #'   input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the duration and unit variable added
 #'

@@ -28,7 +28,6 @@
 #'
 #' @export
 #'
-#' @author Thomas Neitmann
 #'
 #' @family der_bds_findings
 #'

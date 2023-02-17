@@ -54,8 +54,5 @@ Utilities for Formatting Observations:
 \code{\link{format_reason_default}()},
 \code{\link{yn_to_numeric}()}
 }
-\author{
-Sadchla Mascary
-}
 \concept{utils_fmt}
 \keyword{utils_fmt}

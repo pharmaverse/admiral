@@ -26,9 +26,6 @@
 #' @family der_adsl
 #' @keywords der_adsl
 #'
-#' @author
-#' Shimeng Huang, Samia Kabi, Thomas Neitmann, Tamara Senior
-#'
 #' @return The input dataset with `DTHCAUS` variable added.
 #'
 #' @export
@@ -265,7 +262,6 @@ derive_var_dthcaus <- function(dataset,
 #' @keywords source_specifications
 #' @family source_specifications
 #'
-#' @author Shimeng Huang
 #'
 #' @export
 #'

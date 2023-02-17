@@ -35,8 +35,13 @@ Other deprecated:
 \code{\link{derive_var_disposition_status}()},
 \code{\link{vars}()}
 }
+
 \author{
 Samia Kabi
 }
 \concept{deprecated}
 \keyword{deprecated}
+
+\concept{utils_fmt}
+\keyword{utils_fmt}
+

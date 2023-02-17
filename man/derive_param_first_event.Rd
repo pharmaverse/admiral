@@ -108,8 +108,5 @@ Other deprecated:
 \code{\link{format_eoxxstt_default}()},
 \code{\link{vars}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{deprecated}
 \keyword{deprecated}

@@ -50,8 +50,5 @@ Utilities for Formatting Observations:
 \code{\link{convert_na_to_blanks}()},
 \code{\link{yn_to_numeric}()}
 }
-\author{
-Samia Kabi
-}
 \concept{utils_fmt}
 \keyword{utils_fmt}

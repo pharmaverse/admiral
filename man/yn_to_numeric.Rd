@@ -25,8 +25,5 @@ Utilities for Formatting Observations:
 \code{\link{convert_na_to_blanks}()},
 \code{\link{format_reason_default}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{utils_fmt}
 \keyword{utils_fmt}

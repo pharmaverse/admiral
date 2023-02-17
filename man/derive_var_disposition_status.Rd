@@ -87,8 +87,11 @@ Other deprecated:
 \code{\link{format_eoxxstt_default}()},
 \code{\link{vars}()}
 }
+
 \author{
 Samia Kabi
 }
 \concept{deprecated}
 \keyword{deprecated}
+\concept{der_adsl}
+\keyword{der_adsl}
