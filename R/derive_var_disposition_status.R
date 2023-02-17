@@ -27,10 +27,12 @@ format_eoxxstt_default <- function(status) {
   ### DEPRECATION
   deprecate_warn("0.10.0",
     "format_eoxxstt_default()",
-    details = paste("This function is deprecated",
-    "Please define your own function and use that as input for the
+    details = paste(
+      "This function is deprecated",
+      "Please define your own function and use that as input for the
                     `cat_fun` argument in `derive_var_merged_cat()` instead"
-  ))
+    )
+  )
 
   case_when(
     status %in% c("SCREEN FAILURE", "SCREENING NOT COMPLETED") ~ "NOT STARTED",
