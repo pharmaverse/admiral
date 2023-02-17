@@ -42,8 +42,8 @@ test_that("warn_if_inclomplete_dtc Test 3: Warning if vector contains an incompl
 test_that("warn_if_inconsistent_list Test 4: Warning if two lists are inconsistent", {
   expect_warning(
     warn_if_inconsistent_list(
-      base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
-      compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+      base = exprs(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
+      compare = exprs(DTHDOM = "DM", DTHSEQ = DMSEQ),
       list_name = "Test"
     )
   )

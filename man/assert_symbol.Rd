@@ -7,7 +7,7 @@
 assert_symbol(arg, optional = FALSE)
 }
 \arguments{
-\item{arg}{A function argument to be checked. Must be a \code{quosure}. See examples.}
+\item{arg}{A function argument to be checked. Must be a \code{symbol}. See examples.}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
@@ -26,7 +26,7 @@ library(rlang)
 data(admiral_dm)
 
 example_fun <- function(dat, var) {
-  var <- assert_symbol(enquo(var))
+  var <- assert_symbol(enexpr(var))
   select(dat, !!var)
 }
 

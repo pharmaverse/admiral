@@ -15,7 +15,7 @@ test_that("process_set_values_to Test 1: add variables", {
     base = expected,
     compare = process_set_values_to(
       bds,
-      set_values_to = vars(
+      set_values_to = exprs(
         PARAMCD = "BMI",
         PARAM = "Body-Mass-Index",
         PARAMN = 1
@@ -41,7 +41,7 @@ test_that("process_set_values_to Test 2: catch error", {
   expect_error(
     process_set_values_to(
       bds,
-      set_values_to = vars(
+      set_values_to = exprs(
         PARAMCD = BMI,
         PARAM = "Body-Mass-Index",
         PARAMN = 1
@@ -63,7 +63,7 @@ test_that("process_set_values_to Test 3: check types", {
   expect_error(
     process_set_values_to(
       bds,
-      set_values_to = vars(
+      set_values_to = exprs(
         PARAMCD = 1,
         PARAM = "Body-Mass-Index",
         PARAMN = "BMI"
