@@ -9,7 +9,6 @@
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
-#' @author Thomas Neitmann
 #'
 #' @return
 #' The function throws an error if `arg` is not a data frame or if `arg`
@@ -96,7 +95,6 @@ assert_data_frame <- function(arg,
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
-#' @author Thomas Neitmann
 #'
 #' @return
 #' The function throws an error if `arg` is not a character vector or if `arg`
@@ -207,7 +205,6 @@ assert_character_scalar <- function(arg,
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
-#' @author Thomas Neitmann
 #'
 #' @return
 #' The function throws an error if `arg` is not a character vector or if
@@ -291,7 +288,6 @@ assert_character_vector <- function(arg, values = NULL, named = FALSE, optional 
 #' If set to `FALSE` and `arg` is `NULL` then an error is thrown. Otherwise,
 #' `NULL` is considered as valid value.
 #'
-#' @author Thomas Neitmann, Stefan Bundfuss
 #'
 #' @return
 #' The function throws an error if `arg` is neither `TRUE` or `FALSE`. Otherwise,
@@ -338,7 +334,6 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
-#' @author Thomas Neitmann
 #'
 #' @return
 #' The function throws an error if `arg` is not a symbol and returns the input
@@ -440,7 +435,6 @@ assert_expr <- function(arg, optional = FALSE) {
 #' @export
 #' @keywords assertion
 #' @family assertion
-#' @author Ondrej Slama
 #'
 #' @examples
 #' library(admiral.test)
@@ -489,7 +483,6 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
-#' @author Samia Kabi
 #'
 #' @return
 #' The function throws an error if `arg` is not a list of symbols (e.g., created
@@ -546,7 +539,6 @@ assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return
 #' The function throws an error if `arg` is not a list of variables or `desc()`
@@ -609,7 +601,6 @@ assert_order_vars <- function(arg, optional = FALSE) {
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #'   is `NULL` then an error is thrown
 #'
-#' @author Thomas Neitmann
 #'
 #' @return
 #' The function throws an error if `arg` is not an integer belonging to the
@@ -667,7 +658,6 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return
 #' The function throws an error if `arg` is not a numeric vector.
@@ -710,7 +700,6 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
-#' @author Ania Golab
 #'
 #' @return
 #' The function throws an error if `arg` is not an atomic vector.
@@ -753,7 +742,6 @@ assert_atomic_vector <- function(arg, optional = FALSE) {
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #'   is `NULL` then an error is thrown
 #'
-#' @author Thomas Neitmann
 #'
 #' @return
 #' The function throws an error if `arg` is an object which does *not* inherit from `class`.
@@ -805,7 +793,6 @@ assert_s3_class <- function(arg, class, optional = FALSE) {
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #'   is `NULL` then an error is thrown
 #'
-#' @author Thomas Neitmann, Stefan Bundfuss
 #'
 #' @return
 #' The function throws an error if `arg` is not a list or if `arg` is a list but
@@ -916,7 +903,6 @@ assert_named_exprs <- function(arg, optional = FALSE) {
 #' @param dataset A `data.frame`
 #' @param required_vars A `character` vector of variable names
 #'
-#' @author Thomas Neitmann
 #'
 #' @return The function throws an error if any of the required variables are
 #' missing in the input dataset. Otherwise, the dataset is returned invisibly.
@@ -963,7 +949,6 @@ assert_has_variables <- function(dataset, required_vars) {
 #'
 #' If set to `FALSE` and `arg` is `NULL` then an error is thrown.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The function throws an error
 #'
@@ -1076,7 +1061,6 @@ assert_function_param <- function(arg, params) {
 #' @param required_unit Expected unit
 #' @param get_unit_expr Expression used to provide the unit of `param`
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords assertion
 #' @family assertion
@@ -1146,7 +1130,6 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #' @param dataset A `data.frame`
 #' @param param Parameter code to check
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return
 #' The function throws an error if the parameter exists in the input
@@ -1196,7 +1179,6 @@ assert_param_does_not_exist <- function(dataset, param) {
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown.
 #'
-#' @author Stefan Bundfuss, Thomas Neitmann
 #'
 #' @return
 #' The function throws an error if `arg` is not a list of variable-value expressions.
@@ -1349,7 +1331,6 @@ assert_varval_list <- function(arg, # nolint
 #'   If the condition contains objects apart from the element, they have to be
 #'   passed to the function. See the second example below.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return
 #' An error if the condition is not meet. The input otherwise.
@@ -1402,7 +1383,6 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #'
 #' @param vars2 Second list of variables
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return
 #' An error if the condition is not meet. The input otherwise.
@@ -1471,7 +1451,6 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
 #'
 #' @export
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords assertion
 #'
@@ -1554,7 +1533,6 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
 #'
 #' @export
 #'
-#' @author Sadchla Mascary
 #'
 #' @keywords assertion
 #'
@@ -1594,7 +1572,6 @@ assert_date_vector <- function(arg, optional = FALSE) {
 #'
 #' @param ... Arguments to be checked
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The function throws an error if not all arguments are of the same type.
 #'

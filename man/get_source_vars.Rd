@@ -22,8 +22,5 @@ Brings something to you!?!:
 \code{\link{get_constant_vars}()},
 \code{\link{get_duplicates}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{get}
 \keyword{get}

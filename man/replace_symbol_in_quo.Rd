@@ -32,8 +32,5 @@ Helpers for working with Quosures:
 \code{\link{replace_symbol_in_expr}()},
 \code{\link{replace_values_by_names}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{quo}
 \keyword{quo}

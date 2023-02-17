@@ -72,8 +72,5 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()}
 }
-\author{
-Stefan Bundfuss, Thomas Neitmann
-}
 \concept{assertion}
 \keyword{assertion}

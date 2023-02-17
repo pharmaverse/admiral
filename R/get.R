@@ -78,7 +78,6 @@ get_duplicates <- function(x) {
 #'
 #' @param quosures *Deprecated*, please use `expressions` instead.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords get
 #' @family get

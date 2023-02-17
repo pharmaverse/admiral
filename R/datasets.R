@@ -4,7 +4,6 @@
 #'
 #' @return A `data.frame`
 #'
-#' @author Thomas Neitmann
 #'
 #' @keywords datasets
 #' @family datasets

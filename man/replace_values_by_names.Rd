@@ -26,8 +26,5 @@ Helpers for working with Quosures:
 \code{\link{replace_symbol_in_expr}()},
 \code{\link{replace_symbol_in_quo}()}
 }
-\author{
-Thomas Neitmann
-}
 \concept{quo}
 \keyword{quo}

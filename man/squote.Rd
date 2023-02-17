@@ -21,8 +21,5 @@ Helpers for working with Quotes and Quoting:
 \code{\link{dquote}()},
 \code{\link{enumerate}()}
 }
-\author{
-Thomas Neitmann
-}
 \concept{quote}
 \keyword{quote}

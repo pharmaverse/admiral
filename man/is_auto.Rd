@@ -22,8 +22,5 @@ Identifies type of Object with return of TRUE/FALSE:
 \code{\link{is_order_vars}()},
 \code{\link{is_valid_dtc}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{is}
 \keyword{is}

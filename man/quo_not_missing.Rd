@@ -24,8 +24,5 @@ Helpers for working with Quosures:
 \code{\link{replace_symbol_in_quo}()},
 \code{\link{replace_values_by_names}()}
 }
-\author{
-Thomas Neitmann, Ondrej Slama
-}
 \concept{quo}
 \keyword{quo}

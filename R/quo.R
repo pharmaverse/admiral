@@ -8,7 +8,6 @@
 #'
 #' @return An object of class `quosures`
 #'
-#' @author Thomas Neitmann
 #'
 #' @keywords quo
 #' @family quo
@@ -53,7 +52,6 @@ expr_c <- function(...) {
 #'
 #' @return TRUE or error.
 #'
-#' @author Thomas Neitmann, Ondrej Slama
 #'
 #' @keywords quo
 #' @family quo
@@ -87,7 +85,6 @@ quo_not_missing <- function(x) {
 #'
 #' @param quosures *Deprecated*, please use `expressions` instead.
 #'
-#' @author Thomas Neitmann
 #'
 #' @keywords quo
 #' @family quo
@@ -124,7 +121,6 @@ replace_values_by_names <- function(expressions, quosures) {
 #'
 #' @param replace Replacing symbol
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The quosure where every occurrence of the symbol `target` is replaced
 #'   by `replace`
@@ -211,7 +207,6 @@ replace_symbol_in_expr <- function(expression,
 #'
 #'   *Permitted Values*: A character scalar
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The list of expression where for each element the suffix (`suffix`) is
 #'   added to every symbol specified for `vars`

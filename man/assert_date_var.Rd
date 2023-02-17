@@ -65,7 +65,4 @@ try(example_fun2(
   var = USUBJID
 ))
 }
-\author{
-Stefan Bundfuss
-}
 \keyword{assertion}

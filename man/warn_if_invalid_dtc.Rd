@@ -33,8 +33,5 @@ Function that provide users with custom warnings
 \code{\link{warn_if_inconsistent_list}()},
 \code{\link{warn_if_vars_exist}()}
 }
-\author{
-Samia Kabi
-}
 \concept{warnings}
 \keyword{warnings}

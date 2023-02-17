@@ -26,8 +26,5 @@ Developer Utility Functions:
 \code{\link{valid_time_units}()},
 \code{\link{vars2chr}()}
 }
-\author{
-Thomas Neitmann, Ondrej Slama
-}
 \concept{dev_utility}
 \keyword{dev_utility}

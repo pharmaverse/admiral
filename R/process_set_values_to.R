@@ -21,7 +21,6 @@
 #'   *Permitted Values*: A character vector with values `"numeric"` or
 #'   `"character"`
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the variables specified by `set_values_to`
 #'   added/updated

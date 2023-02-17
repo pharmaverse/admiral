@@ -19,7 +19,6 @@ is_named <- function(x) {
 #' @return `TRUE` if the argument equals the auto keyword, i.e., it is an
 #'   expression of a symbol named auto.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords is
 #' @family is
