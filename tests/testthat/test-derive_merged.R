@@ -358,13 +358,15 @@ test_that("derive_vars_merged_lookup Test 14: merge lookup table", {
   attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
   attr(param_lookup$VSTEST, "label") <- "Vital Signs Test Name"
 
-
-  actual <- derive_vars_merged_lookup(
-    vs,
-    dataset_add = param_lookup,
-    by_vars = exprs(VSTESTCD, VSTEST),
-    new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-    print_not_mapped = TRUE
+  expect_message(
+    actual <- derive_vars_merged_lookup(
+      vs,
+      dataset_add = param_lookup,
+      by_vars = exprs(VSTESTCD, VSTEST),
+      new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
+      print_not_mapped = TRUE
+    ),
+    regex = "^List of `VSTESTCD` and `VSTEST` not mapped: .*$"
   )
 
   expected <-
@@ -395,13 +397,15 @@ test_that("derive_vars_merged_lookup Test 15:  all by_vars have records in the l
   attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
   attr(param_lookup$VSTEST, "label") <- "Vital Signs Test Name"
 
-
-  actual <- derive_vars_merged_lookup(
-    vs,
-    dataset_add = param_lookup,
-    by_vars = exprs(VSTESTCD, VSTEST),
-    new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-    print_not_mapped = TRUE
+  expect_message(
+    actual <- derive_vars_merged_lookup(
+      vs,
+      dataset_add = param_lookup,
+      by_vars = exprs(VSTESTCD, VSTEST),
+      new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
+      print_not_mapped = TRUE
+    ),
+    regex = "All `VSTESTCD` and `VSTEST` are mapped."
   )
 
   expected <-
@@ -429,13 +433,15 @@ test_that("get_not_mapped Test 16: not all by_vars have records in the lookup ta
   attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
   attr(param_lookup$VSTEST, "label") <- "Vital Signs Test Name"
 
-
-  act_vs_param <- derive_vars_merged_lookup(
-    vs,
-    dataset_add = param_lookup,
-    by_vars = exprs(VSTESTCD, VSTEST),
-    new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
-    print_not_mapped = TRUE
+  expect_message(
+    act_vs_param <- derive_vars_merged_lookup(
+      vs,
+      dataset_add = param_lookup,
+      by_vars = exprs(VSTESTCD, VSTEST),
+      new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
+      print_not_mapped = TRUE
+    ),
+    regex = "^List of `VSTESTCD` and `VSTEST` not mapped: .*$"
   )
 
   actual <- get_not_mapped()

@@ -87,7 +87,8 @@ test_that("Test 3: Test when absolute record already present in source dataset 1
     "P01", "LYMLE", 0.8, "Lymphocytes (fraction of 1)", "CYCLE 3 DAY 1"
   )
 
-  expect_equal(
+
+  expect_message(
     derive_param_wbc_abs(
       dataset = input,
       by_vars = exprs(USUBJID, VISIT),
@@ -101,8 +102,11 @@ test_that("Test 3: Test when absolute record already present in source dataset 1
       diff_code = "LYMLE",
       diff_type = "fraction"
     ),
-    expected_output
-  )
+    "No source records meet condition for calculation, therefore no new records created"
+  ) %>%
+    expect_equal(expected_output
+    )
+
 })
 
 
