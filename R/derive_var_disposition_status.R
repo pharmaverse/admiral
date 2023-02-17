@@ -3,7 +3,10 @@
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' This function is *deprecated*, please use `derive_var_merged_cat()` instead.
+#' This function is *deprecated*. This function is a default for `derive_var_disposition_status()`
+#' for the `format_new_var` argument. Please define your own function and use that as input for the
+#' `cat_fun` argument in `derive_var_merged_cat()` instead.
+#'
 #' Define a function to map the disposition status. To be used as an input for
 #' `derive_var_disposition_status()`.
 #'
@@ -24,8 +27,10 @@ format_eoxxstt_default <- function(status) {
   ### DEPRECATION
   deprecate_warn("0.10.0",
     "format_eoxxstt_default()",
-    details = "Please use `derive_var_merged_cat()` instead"
-  )
+    details = paste("This function is deprecated",
+    "Please define your own function and use that as input for the
+                    `cat_fun` argument in `derive_var_merged_cat()` instead"
+  ))
 
   case_when(
     status %in% c("SCREEN FAILURE", "SCREENING NOT COMPLETED") ~ "NOT STARTED",
@@ -41,7 +46,9 @@ format_eoxxstt_default <- function(status) {
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' This function is *deprecated*, please use `derive_var_merged_cat()` instead.
+#' This function is *deprecated*, Please define your own function and use that as input for the
+#' `cat_fun` argument in `derive_var_merged_cat()` instead.
+#'
 #' Derive a disposition status from the the relevant records in the disposition domain.
 #'
 #' @param dataset Input dataset.

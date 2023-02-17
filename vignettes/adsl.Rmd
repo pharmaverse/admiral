@@ -268,8 +268,6 @@ format_eosstt <- function(x) {
 
 The customized mapping function `format_eosstt()` can now be passed to the main function:
 
-a call could be:
-
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_var_merged_cat(

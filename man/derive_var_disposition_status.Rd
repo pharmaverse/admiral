@@ -76,7 +76,9 @@ defined by \code{format_new_var} (e.g. when the default format is used, the func
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-This function is \emph{deprecated}, please use \code{derive_var_merged_cat()} instead.
+This function is \emph{deprecated}, Please define your own function and use that as input for the
+\code{cat_fun} argument in \code{derive_var_merged_cat()} instead.
+
 Derive a disposition status from the the relevant records in the disposition domain.
 }
 \seealso{
@@ -87,11 +89,5 @@ Other deprecated:
 \code{\link{format_eoxxstt_default}()},
 \code{\link{vars}()}
 }
-
-\author{
-Samia Kabi
-}
 \concept{deprecated}
 \keyword{deprecated}
-\concept{der_adsl}
-\keyword{der_adsl}

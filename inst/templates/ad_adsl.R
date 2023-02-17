@@ -78,11 +78,11 @@ format_lddthgr1 <- function(x) {
 }
 
 # EOSSTT mapping
-format_eoxxstt <- function(x) {
+format_eosstt <- function(x) {
   case_when(
     x %in% c("COMPLETED") ~ "COMPLETED",
-    !(x %in% c("COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~ "DISCONTINUED",
     x %in% c("SCREEN FAILURE") ~ NA_character_,
+    !is.na(x) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 }

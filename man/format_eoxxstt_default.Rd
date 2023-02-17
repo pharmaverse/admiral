@@ -20,7 +20,10 @@ A \code{character} vector derived based on the values given in \code{status}:
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-This function is \emph{deprecated}, please use \code{derive_var_merged_cat()} instead.
+This function is \emph{deprecated}. This function is a default for \code{derive_var_disposition_status()}
+for the \code{format_new_var} argument. Please define your own function and use that as input for the
+\code{cat_fun} argument in \code{derive_var_merged_cat()} instead.
+
 Define a function to map the disposition status. To be used as an input for
 \code{derive_var_disposition_status()}.
 }
@@ -35,13 +38,5 @@ Other deprecated:
 \code{\link{derive_var_disposition_status}()},
 \code{\link{vars}()}
 }
-
-\author{
-Samia Kabi
-}
 \concept{deprecated}
 \keyword{deprecated}
-
-\concept{utils_fmt}
-\keyword{utils_fmt}
-
