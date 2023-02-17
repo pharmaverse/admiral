@@ -73,7 +73,6 @@ To increase visibility and for simplicity, we will retain only columns that are 
 
 ```{r}
 adlb_annotated <- adlb %>%
-  filter(PARAMCD %in% c("AST", "ALT", "BILI") & is.na(DTYPE)) %>%
   mutate(
     CRIT1 = case_when(
       PARAMCD == "AST" ~ "AST >=3xULN",
