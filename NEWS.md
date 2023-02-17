@@ -5,6 +5,9 @@
 - New function `consolidate_metadata()` for consolidating multiple meta datasets
 into a single one (#1479)
 
+- New function `compute_scale()` for computing the average of a vector and 
+transforming the result from a source to a target range. (#1692)
+
 -   New ADPC template script available `ad_adpc.R` which creates PK Concentration Analysis Dataset (#849). This script includes formatting suitable for Non-Compartmental Analysis (ADNCA) (#851)
 
 ## Updates of Existing Functions
