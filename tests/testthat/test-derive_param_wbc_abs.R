@@ -104,9 +104,7 @@ test_that("Test 3: Test when absolute record already present in source dataset 1
     ),
     "No source records meet condition for calculation, therefore no new records created"
   ) %>%
-    expect_equal(expected_output
-    )
-
+    expect_equal(expected_output)
 })
 
 
