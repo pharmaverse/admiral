@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_scale.R
 \name{compute_scale}
 \alias{compute_scale}
-\title{Compute scale parameters}
+\title{Compute Scale Parameters}
 \usage{
 compute_scale(
   source,
