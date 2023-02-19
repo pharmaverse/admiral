@@ -250,7 +250,7 @@ derive_param_computed <- function(dataset,
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' This function is deprecated.  Please use `derive_param-computed()` instead.
+#' This function is deprecated.  Please use `derive_param_computed()` instead.
 #'
 #' @inheritParams derive_param_computed
 #'
@@ -271,15 +271,5 @@ derive_derived_param <- function(dataset,
                                  filter = NULL,
                                  constant_by_vars = NULL,
                                  constant_parameters = NULL) {
-  deprecate_warn("0.8.0", "derive_derived_param()", "derive_param_computed()")
-  derive_param_computed(
-    dataset,
-    by_vars = by_vars,
-    parameters = parameters,
-    analysis_value = !!enexpr(analysis_value),
-    set_values_to = set_values_to,
-    filter = !!enexpr(filter),
-    constant_by_vars = constant_by_vars,
-    constant_parameters = constant_parameters
-  )
+  deprecate_stop("0.8.0", "derive_derived_param()", "derive_param_computed()")
 }

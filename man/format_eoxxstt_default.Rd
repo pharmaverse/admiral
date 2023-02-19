@@ -34,8 +34,10 @@ Usually this function can not be used with \verb{\%>\%}.
 Other deprecated: 
 \code{\link{derive_derived_param}()},
 \code{\link{derive_param_first_event}()},
-\code{\link{derive_var_aendy}()},
+\code{\link{derive_var_agegr_fda}()},
 \code{\link{derive_var_disposition_status}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()},
 \code{\link{vars}()}
 }
 \concept{deprecated}

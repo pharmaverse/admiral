@@ -101,76 +101,9 @@ test_that("derive_vars_merged Test 4: error if variable in both datasets", {
   )
 })
 
-# derive_vars_merged_dt ----
-## Test 5: merge first date ----
-test_that("derive_vars_merged_dt Test 5: merge first date", {
-  suppress_warning(
-    actual <- derive_vars_merged_dt(
-      adsl,
-      dataset_add = ex,
-      order = exprs(TRTSDT),
-      flag_imputation = "date",
-      by_vars = exprs(STUDYID, USUBJID),
-      dtc = EXSTDTC,
-      new_vars_prefix = "TRTS",
-      mode = "first"
-    ),
-    "deprecated"
-  )
-  expected <-
-    adsl %>% mutate(
-      TRTSDT = ymd(c(
-        "2020-12-07", "2021-01-12", "2021-03-02", NA
-      )),
-      TRTSDTF = NA_character_
-    )
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("USUBJID")
-  )
-})
-
-# derive_vars_merged_dtm ----
-## Test 6: merge first date ----
-test_that("derive_vars_merged_dtm Test 6: merge first date", {
-  suppress_warning(
-    actual <- derive_vars_merged_dtm(
-      adsl,
-      dataset_add = ex,
-      order = exprs(TRTSDTM),
-      by_vars = exprs(STUDYID, USUBJID),
-      dtc = EXSTDTC,
-      new_vars_prefix = "TRTS",
-      time_imputation = "first",
-      mode = "first"
-    ),
-    "deprecated"
-  )
-  expected <-
-    adsl %>% mutate(
-      TRTSDTM = ymd_hms(
-        c(
-          "2020-12-07T00:00:00",
-          "2021-01-12T12:00:00",
-          "2021-03-02T00:00:00",
-          NA
-        )
-      ),
-      TRTSTMF = c("H", NA, "H", NA)
-    )
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("USUBJID")
-  )
-})
-
 # derive_var_merged_cat ----
-## Test 7: merge categorized variable ----
-test_that("derive_var_merged_cat Test 7: merge categorized variable", {
+## Test 5: merge categorized variable ----
+test_that("derive_var_merged_cat Test 5: merge categorized variable", {
   get_region <- function(x) {
     if_else(x %in% c("AUT", "NOR"), "EUROPE", "AFRICA")
   }
@@ -196,8 +129,8 @@ test_that("derive_var_merged_cat Test 7: merge categorized variable", {
   )
 })
 
-## Test 8: define value for non-matched by groups ----
-test_that("derive_var_merged_cat Test 8: define value for non-matched by groups", {
+## Test 6: define value for non-matched by groups ----
+test_that("derive_var_merged_cat Test 6: define value for non-matched by groups", {
   get_vscat <- function(x) {
     if_else(x == "BASELINE", "BASELINE", "POST-BASELINE")
   }
@@ -227,8 +160,8 @@ test_that("derive_var_merged_cat Test 8: define value for non-matched by groups"
 })
 
 # derive_var_merged_exist_flag ----
-## Test 9: merge existence flag ----
-test_that("derive_var_merged_exist_flag Test 9: merge existence flag", {
+## Test 7: merge existence flag ----
+test_that("derive_var_merged_exist_flag Test 7: merge existence flag", {
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs,
@@ -249,8 +182,8 @@ test_that("derive_var_merged_exist_flag Test 9: merge existence flag", {
 })
 
 # derive_var_merged_character ----
-## Test 10: no transformation ----
-test_that("derive_var_merged_character Test 10: no transformation", {
+## Test 8: no transformation ----
+test_that("derive_var_merged_character Test 8: no transformation", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -272,8 +205,8 @@ test_that("derive_var_merged_character Test 10: no transformation", {
   )
 })
 
-## Test 11: upper case ----
-test_that("derive_var_merged_character Test 11: upper case", {
+## Test 9: upper case ----
+test_that("derive_var_merged_character Test 9: upper case", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -297,8 +230,8 @@ test_that("derive_var_merged_character Test 11: upper case", {
   )
 })
 
-## Test 12: lower case ----
-test_that("derive_var_merged_character Test 12: lower case", {
+## Test 10: lower case ----
+test_that("derive_var_merged_character Test 10: lower case", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -321,8 +254,8 @@ test_that("derive_var_merged_character Test 12: lower case", {
   )
 })
 
-## Test 13: title case ----
-test_that("derive_var_merged_character Test 13: title case", {
+## Test 11: title case ----
+test_that("derive_var_merged_character Test 11: title case", {
   actual <- derive_var_merged_character(
     adsl,
     dataset_add = advs,
@@ -346,8 +279,8 @@ test_that("derive_var_merged_character Test 13: title case", {
 })
 
 # derive_vars_merged_lookup ----
-## Test 14: merge lookup table ----
-test_that("derive_vars_merged_lookup Test 14: merge lookup table", {
+## Test 12: merge lookup table ----
+test_that("derive_vars_merged_lookup Test 12: merge lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -382,8 +315,8 @@ test_that("derive_vars_merged_lookup Test 14: merge lookup table", {
 
 
 ## the lookup table
-## Test 15:  all by_vars have records in the lookup table ----
-test_that("derive_vars_merged_lookup Test 15:  all by_vars have records in the lookup table", {
+## Test 13:  all by_vars have records in the lookup table ----
+test_that("derive_vars_merged_lookup Test 13:  all by_vars have records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -417,8 +350,8 @@ test_that("derive_vars_merged_lookup Test 15:  all by_vars have records in the l
 })
 
 # get_not_mapped ----
-## Test 16: not all by_vars have records in the lookup table ----
-test_that("get_not_mapped Test 16: not all by_vars have records in the lookup table", {
+## Test 14: not all by_vars have records in the lookup table ----
+test_that("get_not_mapped Test 14: not all by_vars have records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -454,8 +387,8 @@ test_that("get_not_mapped Test 16: not all by_vars have records in the lookup ta
 })
 
 # derive_var_merged_summary ----
-## Test 17: dataset == dataset_add, no filter ----
-test_that("derive_var_merged_summary Test 17: dataset == dataset_add, no filter", {
+## Test 15: dataset == dataset_add, no filter ----
+test_that("derive_var_merged_summary Test 15: dataset == dataset_add, no filter", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -483,8 +416,8 @@ test_that("derive_var_merged_summary Test 17: dataset == dataset_add, no filter"
   )
 })
 
-## Test 18: dataset != dataset_add, filter ----
-test_that("derive_var_merged_summary Test 18: dataset != dataset_add, filter", {
+## Test 16: dataset != dataset_add, filter ----
+test_that("derive_var_merged_summary Test 16: dataset != dataset_add, filter", {
   expected <- tibble::tribble(
     ~USUBJID, ~MEANPBL,
     "1",          13.5,

@@ -37,9 +37,8 @@ derive_vars_merged(
   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 }
 \seealso{
-\code{\link[=set_admiral_options]{set_admiral_options()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},
-\code{\link[=derive_param_first_event]{derive_param_first_event()}}, \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}},
-\code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}},
+\code{\link[=set_admiral_options]{set_admiral_options()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}}, \code{\link[=derive_param_tte]{derive_param_tte()}}
+\code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}},
 \code{\link[=derive_vars_period]{derive_vars_period()}}, \code{\link[=create_period_dataset]{create_period_dataset()}}
 
 Other admiral_options: 

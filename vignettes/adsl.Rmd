@@ -218,9 +218,6 @@ adsl <- adsl %>%
   )
 ```
 
-With `DS`: 
-<a id="link_ds"></a>
-
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   ds,
@@ -284,7 +281,6 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(adsl, display_vars = exprs(USUBJID, EOSDT, EOSSTT))
 ```
-[Link](#link_ds) to `DS`.
 
 This call would return the input dataset with the column `EOSSTT` added. 
 
@@ -319,8 +315,6 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(adsl, display_vars = exprs(USUBJID, EOSDT, EOSSTT, DCSREAS, DCSREASP))
 ```
-
-[Link](#link_ds) to `DS`.
 
 This call would return the input dataset with the column `DCSREAS` and `DCSREASP` added. 
 
@@ -361,7 +355,6 @@ adsl <- adsl %>%
   )
 ```
 
-
 ### Randomization Date (`RANDDT`) {#randomization_date}
 
 The function `derive_vars_merged()` can be used to derive randomization date 
@@ -383,8 +376,6 @@ This call would return the input dataset with the column `RANDDT` is added.
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(adsl, display_vars = exprs(USUBJID, RANDDT))
 ```
-
-[Link](#link_ds) to `DS`.
 
 ## Derive Death Variables {#death}
 
