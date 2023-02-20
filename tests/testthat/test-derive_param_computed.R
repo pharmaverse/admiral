@@ -116,10 +116,10 @@ test_that("no new observations are added if filtered dataset is empty", {
         AVALU = "mmHg"
       )
     ) %>%
-    expect_dfs_equal(input,
-      keys = c("USUBJID", "PARAMCD", "VISIT")
-    ),
-  "The input dataset does not contain any observations fullfiling the filter condition .*"
+      expect_dfs_equal(input,
+        keys = c("USUBJID", "PARAMCD", "VISIT")
+      ),
+    "The input dataset does not contain any observations fullfiling the filter condition .*"
   )
 })
 
@@ -150,9 +150,9 @@ test_that("no new observations are added if a parameter is missing", {
       )
     )
     %>%
-    expect_dfs_equal(input,
-      keys = c("USUBJID", "PARAMCD", "VISIT")
-    ),
-  "The input dataset does not contain any observations fullfiling the filter condition .*"
+      expect_dfs_equal(input,
+        keys = c("USUBJID", "PARAMCD", "VISIT")
+      ),
+    "The input dataset does not contain any observations fullfiling the filter condition .*"
   )
 })
