@@ -212,7 +212,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' These functions are *deprecated*.
+#' This function is *deprecated*, please create a user defined function instead.
 #'
 #' @param dataset Input dataset
 #'
@@ -223,6 +223,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 #' @param new_var New variable to create inside `dataset`
 #'
 #' @keywords deprecated
+#' @family deprecated
 #'
 #'
 #' @name derive_var_agegr_fda
@@ -231,66 +232,27 @@ NULL
 #' @rdname derive_var_agegr_fda
 #'
 #' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_warn("0.8.0", "derive_var_agegr_fda()", details = "Please create a user defined function instead.")
-
-  age_var <- assert_symbol(enexpr(age_var))
-  new_var <- assert_symbol(enexpr(new_var))
-  warn_if_vars_exist(dataset, as_name(new_var))
-
-  ds <- derive_var_age_years(dataset, !!age_var, age_unit, new_var = temp_age)
-
-  out <- ds %>%
-    mutate(
-      !!new_var := cut(
-        x = temp_age,
-        breaks = c(0, 18, 65, Inf),
-        labels = c("<18", "18-64", ">=65"),
-        include.lowest = TRUE,
-        right = FALSE
-      )
-    ) %>%
-    select(-temp_age)
-
-  if (anyNA(dplyr::pull(out, !!new_var))) {
-    out <- mutate(out, !!new_var := addNA(!!new_var))
-  }
-  out
+  deprecate_stop("0.8.0", "derive_var_agegr_fda()",
+    details = "Please create a user defined function instead."
+  )
 }
 
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please create a user defined function instead.
 #' @rdname derive_var_agegr_fda
 #'
 #' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 derive_var_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_warn("0.8.0", "derive_var_agegr_ema()", details = "Please create a user defined function instead.")
-
-  age_var <- assert_symbol(enexpr(age_var))
-  new_var <- assert_symbol(enexpr(new_var))
-  warn_if_vars_exist(dataset, as_name(new_var))
-
-  ds <- derive_var_age_years(dataset, !!age_var, age_unit, new_var = temp_age)
-
-  out <- mutate(
-    ds,
-    !!new_var := cut(
-      x = temp_age,
-      breaks = c(-Inf, (28 / 365.25), 2, 12, 18, 65, 85, Inf),
-      labels = c(
-        "0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)",
-        "2-11 (Children)", "12-17 (Adolescents)", "18-64", "65-84", ">=85"
-      ),
-      include.lowest = FALSE,
-      right = FALSE
-    )
-  ) %>%
-    select(-temp_age)
-
-  if (anyNA(dplyr::pull(out, !!new_var))) {
-    out <- mutate(out, !!new_var := addNA(!!new_var))
-  }
-  out
+  deprecate_stop("0.8.0", "derive_var_agegr_ema()",
+    details = "Please create a user defined function instead."
+  )
 }
