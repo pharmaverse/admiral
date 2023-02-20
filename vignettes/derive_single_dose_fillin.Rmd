@@ -83,18 +83,18 @@ ex_mod <- ex %>%
     time_imputation = "first",
     flag_imputation = "none",
   ) %>%
-  derive_vars_dtm_to_dt(vars(EXSTDTM)) %>%
+  derive_vars_dtm_to_dt(exprs(EXSTDTM)) %>%
   derive_vars_dtm(
     dtc = EXENDTC,
     new_vars_prefix = "EXEN",
     # Maximum imputed treatment end date must not be not greater than
     # date of death or after the datacut date.
-    max_dates = vars(DTHDTM, DCUTDTM),
+    max_dates = exprs(DTHDTM, DCUTDTM),
     date_imputation = "last",
     time_imputation = "last",
     flag_imputation = "none"
   ) %>%
-  derive_vars_dtm_to_dt(vars(EXENDTM)) %>%
+  derive_vars_dtm_to_dt(exprs(EXENDTM)) %>%
   # Populate missing values with compatible data types.
   # For missing treatment end dates and missing treatment end datetimes
   # use datacut date as treatment end date if no death date exists.
@@ -116,6 +116,6 @@ ex_single <-
     start_datetime = EXSTDTM,
     end_date = EXENDT,
     end_datetime = EXENDTM,
-    keep_source_vars = vars(STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ, DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC)
+    keep_source_vars = exprs(STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ, DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC)
   )
 ```
