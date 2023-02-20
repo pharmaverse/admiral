@@ -64,7 +64,6 @@
 #'   (`condition` parameter) is fulfilled the first or last time (`order`
 #'   parameter and `mode` parameter) is included in the output dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return A dataset containing for each by group the observations before or
 #'   after the observation where the condition was fulfilled the first or last

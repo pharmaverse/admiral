@@ -28,7 +28,6 @@
 #' @details The total treatment duration is derived as the number of days from
 #'   start to end date plus one.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with `TRTDURD` added
 #'

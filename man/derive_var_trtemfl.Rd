@@ -176,8 +176,5 @@ OCCDS Functions:
 \code{\link{derive_vars_query}()},
 \code{\link{get_terms_from_db}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{der_occds}
 \keyword{der_occds}

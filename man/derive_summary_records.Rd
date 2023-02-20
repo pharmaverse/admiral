@@ -177,8 +177,5 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()}
 }
-\author{
-Vignesh Thanikachalam, Ondrej Slama
-}
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

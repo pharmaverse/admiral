@@ -125,11 +125,6 @@
 #'
 #' \deqn{Risk = 100 * (1 - RiskPeriodFactor^{RiskFactors})}
 #'
-#' @author
-#' Alice Ehmann
-#' Jack McGavigan
-#' Ben Straub
-#'
 #' @return The input dataset with the new parameter added
 #'
 #' @keywords der_prm_bds_findings

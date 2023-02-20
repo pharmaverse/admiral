@@ -5,13 +5,23 @@
 #'
 #' @param dataset The input dataset
 #' @param derivation The derivation function to call
+#'
+#'   A function that performs a specific derivation is expected. A derivation
+#'   adds variables or observations to a dataset. The first argument of a
+#'   derivation must expect a dataset and the derivation must return a dataset.
+#'   The function must provide the `dataset` argument and all arguments
+#'   specified in the `params()` objects passed to the `variable_params` and
+#'   `...` argument.
+#'
+#'   Please note that it is not possible to specify `{dplyr}`
+#'   functions like `mutate()` or `summarize()`.
+#'
 #' @param variable_params A `list` of function arguments that are different across iterations.
 #'   Each set of function arguments must be created using [`params()`].
 #' @param ... Any number of *named* function arguments that stay the same across iterations.
 #'   If a function argument is specified both inside `variable_params` and `...` then
 #'   the value in `variable_params` overwrites the one in `...`
 #'
-#' @author Thomas Neitmann, Stefan Bundfuss, Tracey Wang
 #'
 #' @return
 #' The input dataset with additional records/variables added depending on
@@ -99,7 +109,6 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'
 #' @param ... One or more named arguments
 #'
-#' @author Thomas Neitmann, Tracey Wang
 #'
 #' @return An object of class `params`
 #'

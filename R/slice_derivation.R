@@ -8,6 +8,15 @@
 #'
 #' @param derivation Derivation
 #'
+#'   A function that performs a specific derivation is expected. A derivation
+#'   adds variables or observations to a dataset. The first argument of a
+#'   derivation must expect a dataset and the derivation must return a dataset.
+#'   The function must provide the `dataset` argument and all arguments
+#'   specified in the `params()` objects passed to the `arg` argument.
+#'
+#'   Please note that it is not possible to specify `{dplyr}`
+#'   functions like `mutate()` or `summarize()`.
+#'
 #' @param args Arguments of the derivation
 #'
 #'   A `params()` object is expected.
@@ -39,7 +48,6 @@
 #' @family high_order_function
 #' @keywords high_order_function
 #'
-#' @author Stefan Bundfuss
 #'
 #' @seealso [params()] [restrict_derivation()]
 #'
@@ -145,7 +153,6 @@ slice_derivation <- function(dataset,
 #'
 #' @return An object of class `derivation_slice`
 
-#' @author Stefan Bundfuss
 #'
 #' @seealso [slice_derivation()], [params()]
 #'

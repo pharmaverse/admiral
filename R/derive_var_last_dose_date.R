@@ -19,7 +19,6 @@
 #'
 #' @return Input dataset with additional column `new_var`.
 #'
-#' @author Ben Straub
 #'
 #' @family der_gen
 #' @keywords der_gen

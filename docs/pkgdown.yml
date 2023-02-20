@@ -1,4 +1,4 @@
-pandoc: 2.11.4
+pandoc: 2.17.1.1
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
@@ -14,6 +14,7 @@ articles:
   imputation: imputation.html
   lab_grading: lab_grading.html
   occds: occds.html
+  pk_adnca: pk_adnca.html
   queries_dataset: queries_dataset.html
   questionnaires: questionnaires.html
   visits_periods: visits_periods.html

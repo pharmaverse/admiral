@@ -38,7 +38,6 @@ extract_unit <- function(x) {
 #'
 #' @return An object of the same class as the input
 #'
-#' @author Thomas Neitmann
 #'
 #' @family utils_fmt
 #' @keywords utils_fmt
@@ -103,7 +102,6 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #'
 #' @return An object of the same class as the input
 #'
-#' @author Sadchla Mascary
 #'
 #' @family utils_fmt
 #' @keywords utils_fmt
@@ -162,7 +160,6 @@ convert_na_to_blanks.data.frame <- function(x) { # nolint
 #'
 #' @return A `list` of expressions as returned by [`exprs()`]
 #'
-#' @author Stefan Bundfuss
 #'
 #' @export
 #'
@@ -183,7 +180,6 @@ chr2vars <- function(chr) {
 #'
 #' @export
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details
 #' If `assert_one_to_one()` detects an issue, the one to many values are stored
@@ -217,7 +213,6 @@ get_one_to_many_dataset <- function() {
 #'
 #' @export
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details
 #' If `assert_one_to_one()` detects an issue, the many to one values are stored
@@ -253,7 +248,6 @@ get_many_to_one_dataset <- function() {
 #'
 #' @param arg Character vector
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fmt
 #' @family utils_fmt
@@ -282,7 +276,6 @@ yn_to_numeric <- function(arg) {
 #'
 #' @return No return value, called for side effects
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_print
 #' @family utils_print
@@ -312,7 +305,6 @@ print.source <- function(x, ...) {
 #'
 #' @return No return value, called for side effects
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_print
 #' @family utils_print
@@ -360,7 +352,6 @@ print_named_list <- function(list, indent = 0) {
 #'
 #' @return A list of expressions
 #'
-#' @author Stefan Bundfuss
 #'
 #' @export
 #'
