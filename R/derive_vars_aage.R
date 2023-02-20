@@ -109,11 +109,13 @@ derive_vars_aage <- function(dataset,
 #'
 #'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 #'
-#' @param new_var New age variable to be created in years. ## NEED TO ADD IN FORMAT TYPE ##
+#' @param new_var New age variable to be created in years. The output values here are
+#'   decimal and NOT integer.
 #''
 #' @details This function is used to convert an age variable into the unit 'years'
-#' which can then be used to create age groups. ## NEED TO ADD IN FORMAT TYPE (and expand
-#' on duration calculation) ##
+#'   which can then be used to create age groups. The resulting column contains the
+#'   equivalent years in decimal. Note, underlying computations assume an equal number
+#'   of days in each year (365.25).
 #'
 #' @author Michael Thorpe
 #'
