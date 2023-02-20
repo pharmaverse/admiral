@@ -10,7 +10,6 @@ derive_var_extreme_flag(
   order,
   new_var,
   mode,
-  filter = deprecated(),
   check_type = "warning"
 )
 }
@@ -42,8 +41,6 @@ Permitted Values: list of name-value pairs}
 Determines of the first or last observation is flagged.
 
 Permitted Values: \code{"first"}, \code{"last"}}
-
-\item{filter}{Deprecated, please use \code{restrict_derivation()} instead (see examples).}
 
 \item{check_type}{Check uniqueness?
 
@@ -224,9 +221,6 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},
 \code{\link{get_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_gen}
 \keyword{der_gen}

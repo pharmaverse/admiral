@@ -272,7 +272,6 @@ dose_freq_lookup <- tibble::tribble(
 #'   Observations with dose frequency `"ONCE"` are copied to the output dataset
 #'   unchanged.
 #'
-#' @author Michael Thorpe, Andrew Smith
 #'
 #' @family create_aux
 #' @keywords create_aux

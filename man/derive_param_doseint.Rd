@@ -153,8 +153,5 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
 }
-\author{
-Alice Ehmann
-}
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

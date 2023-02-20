@@ -72,7 +72,6 @@
 #'   *Permitted Values:* A symbol referring to a variable of the input dataset
 #'   or `NULL`
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details For the derivation of the new variable the following cases are
 #'   considered in this order. The first case which applies, defines the value

@@ -47,7 +47,6 @@
 #'   symbol, a numeric value or `NA`, e.g., `exprs(PARAMCD = "TDOSE", PARCAT1 =
 #'   "OVERALL")`. More general expression are not allowed.
 #'
-#' @author Vignesh Thanikachalam, Ondrej Slama
 #'
 #' @return A data frame with derived records appended to original dataset.
 #'

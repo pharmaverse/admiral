@@ -92,14 +92,9 @@ Source Specifications:
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
 \code{\link{query}()},
-\code{\link{sdg_select}()},
-\code{\link{smq_select}()},
 \code{\link{tte_source}()},
 \code{\link{validate_basket_select}()},
 \code{\link{validate_query}()}
-}
-\author{
-Shimeng Huang
 }
 \concept{source_specifications}
 \keyword{source_specifications}

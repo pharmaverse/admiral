@@ -31,8 +31,5 @@ Utilities used for date imputation:
 \code{\link{restrict_imputed_dtc_dtm}()},
 \code{\link{restrict_imputed_dtc_dt}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{utils_impute}
 \keyword{utils_impute}

@@ -22,7 +22,6 @@
 #'   AENDT, DEATHDY = DTHDT)`. If the source variable does not end in --DT(M), a
 #'   name for the resulting `--DY` variable must be provided.
 #'
-#' @author Teckla Akinyi
 #'
 #' @details The relative day is derived as number of days from the reference
 #'   date to the end date. If it is nonnegative, one is added. I.e., the
