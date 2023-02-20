@@ -514,7 +514,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
                                      imputed_dtc,
                                      min_dates,
                                      max_dates) {
-  if (!is.null(min_dates) | !is.null(max_dates)) {
+  if (!is.null(min_dates) || !is.null(max_dates)) {
     # determine range of possible dates
     min_dtc <-
       impute_dtc_dtm(
@@ -882,7 +882,7 @@ restrict_imputed_dtc_dt <- function(dtc,
                                     imputed_dtc,
                                     min_dates,
                                     max_dates) {
-  if (!is.null(min_dates) | !is.null(max_dates)) {
+  if (!is.null(min_dates) || !is.null(max_dates)) {
     # determine range of possible dates
     min_dtc <-
       impute_dtc_dt(

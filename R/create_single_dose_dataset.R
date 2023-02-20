@@ -436,8 +436,8 @@ create_single_dose_dataset <- function(dataset,
     by = as.character(quo_get_expr(dose_freq))
   )
 
-  if (any(data_not_once$DOSE_WINDOW %in% c("MINUTE", "HOUR")) &
-    (quo_is_null(start_datetime) | quo_is_null(end_datetime))) {
+  if (any(data_not_once$DOSE_WINDOW %in% c("MINUTE", "HOUR")) &&
+    (quo_is_null(start_datetime) || quo_is_null(end_datetime))) {
     abort(
       paste(
         "There are dose frequencies more frequent than once a day.",

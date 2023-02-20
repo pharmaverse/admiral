@@ -338,7 +338,7 @@ derive_param_extreme_event <- function(dataset = NULL,
     case_sensitive = FALSE
   )
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
+  if (!is.null(set_values_to$PARAMCD) && !is.null(dataset)) {
     assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
   }
 
@@ -359,7 +359,7 @@ derive_param_extreme_event <- function(dataset = NULL,
   noevents <- anti_join(
     select(dataset_adsl, intersect(source_vars, adsl_vars)),
     select(events, !!!subject_keys),
-    by = sapply(subject_keys, as_name)
+    by = vapply(subject_keys, as_name) # nolint: undesirable_function_linter
   ) %>%
     mutate(!!new_var := false_value)
 

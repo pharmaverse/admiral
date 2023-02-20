@@ -260,7 +260,7 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
   # check illegal query name
-  if (any(queries$QUERY_NAME == "") | any(is.na(queries$QUERY_NAME))) {
+  if (any(queries$QUERY_NAME == "") || any(is.na(queries$QUERY_NAME))) {
     abort(paste0(
       "`QUERY_NAME` in `", queries_name,
       "` cannot be empty string or NA."
@@ -300,7 +300,7 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
   # check illegal term name
-  if (any(is.na(queries$TERM_NAME) & is.na(queries$TERM_ID)) |
+  if (any(is.na(queries$TERM_NAME) & is.na(queries$TERM_ID)) ||
     any(queries$TERM_NAME == "" & is.na(queries$TERM_ID))) {
     abort(paste0(
       "Either `TERM_NAME` or `TERM_ID` need to be specified",

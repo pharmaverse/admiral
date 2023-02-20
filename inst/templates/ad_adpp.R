@@ -71,7 +71,7 @@ format_avalcat1n <- function(param, aval) {
   case_when(
     param == "AUCALL" & aval < 19 ~ 1,
     param == "AUCALL" & aval >= 19 ~ 2,
-    T ~ NA_real_
+    TRUE ~ NA_real_
   )
 }
 

@@ -89,7 +89,7 @@ derive_var_obs_number <- function(dataset,
   # derivation
   data <- dataset
 
-  if (!is.null(by_vars) | !is.null(order)) {
+  if (!is.null(by_vars) || !is.null(order)) {
     # group and sort input dataset
     if (!is.null(by_vars)) {
       data <- data %>%

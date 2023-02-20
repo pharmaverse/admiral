@@ -185,8 +185,8 @@ derive_vars_disposition_reason <- function(dataset,
                                            subject_keys = get_admiral_option("subject_keys")) {
   new_var <- assert_symbol(enquo(new_var))
   reason_var <- assert_symbol(enquo(reason_var))
-  new_var_spe <- assert_symbol(enquo(new_var_spe), optional = T)
-  reason_var_spe <- assert_symbol(enquo(reason_var_spe), optional = T)
+  new_var_spe <- assert_symbol(enquo(new_var_spe), optional = TRUE)
+  reason_var_spe <- assert_symbol(enquo(reason_var_spe), optional = TRUE)
   assert_s3_class(format_new_vars, "function")
   filter_ds <- assert_filter_cond(enquo(filter_ds))
   assert_vars(subject_keys)

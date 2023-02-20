@@ -222,18 +222,7 @@ create_query_data <- function(queries,
       "create_query_data(whodd_version = )", "create_query_data(version = )"
     )
   }
-  if (!missing(get_smq_fun)) {
-    deprecate_stop(
-      "0.9.0",
-      "create_query_data(get_smq_fun = )", "create_query_data(get_terms_fun = )"
-    )
-  }
-  if (!missing(get_sdg_fun)) {
-    deprecate_stop(
-      "0.9.0",
-      "create_query_data(get_sdg_fun = )", "create_query_data(get_terms_fun = )"
-    )
-  }
+
   # check parameters
   assert_character_scalar(version, optional = TRUE)
   assert_function(get_terms_fun,
