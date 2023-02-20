@@ -1,8 +1,8 @@
 # dataset_vignette ----
 ## Test 1: A 'knitr_kable' object is outputted when run outside pkgdown ----
 test_that("dataset_vignette Test 1: A 'knitr_kable' object is outputted when run outside pkgdown", {
-  Sys.setenv(IN_PKGDOWN = "false")
-  on.exit(Sys.setenv(IN_PKGDOWN = ""))
+  Sys.setenv(IN_PKGDOWN = "false") # nolint: undesirable_function_linter
+  on.exit(Sys.setenv(IN_PKGDOWN = "")) # nolint: undesirable_function_linter
 
   dm <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~COUNTRY,
@@ -18,8 +18,8 @@ test_that("dataset_vignette Test 1: A 'knitr_kable' object is outputted when run
 
 ## Test 2: A 'datatables' object is outputted when run inside pkgdown ----
 test_that("dataset_vignette Test 2: A 'shiny.tag.list' is outputted when run inside pkgdown", {
-  Sys.setenv(IN_PKGDOWN = "true")
-  on.exit(Sys.setenv(IN_PKGDOWN = ""))
+  Sys.setenv(IN_PKGDOWN = "true") # nolint: undesirable_function_linter
+  on.exit(Sys.setenv(IN_PKGDOWN = "")) # nolint: undesirable_function_linter
 
   dm <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~COUNTRY,

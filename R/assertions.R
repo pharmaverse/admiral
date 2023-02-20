@@ -465,12 +465,12 @@ assert_filter_cond <- function(arg, optional = FALSE) {
   }
 
   provided <- !rlang::quo_is_missing(arg)
-  if (!provided & !optional) {
+  if (!provided && !optional) {
     err_msg <- sprintf("Argument `%s` is missing, with no default", arg_name(substitute(arg)))
     abort(err_msg)
   }
 
-  if (provided & !(quo_is_call(arg) | is_logical(quo_get_expr(arg)))) {
+  if (provided && !(quo_is_call(arg) || is_logical(quo_get_expr(arg)))) {
     err_msg <- sprintf(
       "`%s` must be a filter condition but is %s",
       arg_name(substitute(arg)),
@@ -1273,7 +1273,7 @@ assert_varval_list <- function(arg, # nolint
     valid_vals <- "a symbol, character scalar, numeric scalar, or `NA`"
   }
 
-  if (!accept_var & (!is_quosures(arg) || !is_named(arg))) {
+  if (!accept_var && (!is_quosures(arg) || !is_named(arg))) {
     err_msg <- sprintf(
       paste0(
         "`%s` must be a named list of quosures where each element is ",
@@ -1287,7 +1287,7 @@ assert_varval_list <- function(arg, # nolint
     abort(err_msg)
   }
 
-  if (accept_var & (!contains_vars(arg))) {
+  if (accept_var && (!contains_vars(arg))) {
     err_msg <- sprintf(
       paste0(
         "`%s` must be a list of quosures where each element is ",

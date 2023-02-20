@@ -75,7 +75,7 @@ dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
         buttons = list(list(
           extend = "colvis",
           text = "Choose the columns to display",
-          scroller = T,
+          scroller = TRUE,
           collectionLayout = "fixed two-column"
         )),
         colReorder = TRUE
