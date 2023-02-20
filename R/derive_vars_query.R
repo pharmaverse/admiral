@@ -206,8 +206,8 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #' @param queries_name Name of the queries dataset, a string.
 #'
 #'
-#' @keywords source_specifications
-#' @family source_specifications
+#' @keywords other_advanced
+#' @family other_advanced
 #'
 #' @export
 #'

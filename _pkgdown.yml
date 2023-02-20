@@ -63,9 +63,13 @@ reference:
   contents:
   - has_keyword("create_aux")
 
-- subtitle: Other
+- subtitle: Source Objects
   contents:
   - has_keyword("source_specifications")
+
+- subtitle: Other
+  contents:
+  - has_keyword("other_advanced")
 
 - title: Computation Functions for Vectors
 - subtitle: All ADaMs
