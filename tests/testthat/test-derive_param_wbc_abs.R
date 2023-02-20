@@ -87,7 +87,6 @@ test_that("Test 3: Test when absolute record already present in source dataset 1
     "P01", "LYMLE", 0.8, "Lymphocytes (fraction of 1)", "CYCLE 3 DAY 1"
   )
 
-
   expect_message(
     derive_param_wbc_abs(
       dataset = input,
