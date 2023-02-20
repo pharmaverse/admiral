@@ -15,7 +15,6 @@
 #'
 #' @export
 #'
-#' @author Alice Ehmann Ojesh Upadhyay
 #'
 #' @keywords com_bds_findings
 #' @family com_bds_findings
@@ -55,7 +54,6 @@ compute_qual_imputation_dec <- function(character_value_decimal) {
 #'
 #' @export
 #'
-#' @author Alice Ehmann Ojesh Upadhyay
 #'
 #' @keywords com_bds_findings
 #' @family com_bds_findings

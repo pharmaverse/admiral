@@ -33,7 +33,7 @@ The input dataset and the selected observations from the additional dataset
 are merged by the specified by variables. The by variables must be a unique
 key of the selected observations.
 
-\emph{Permitted Values}: list of variables created by \code{vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{order}{Sort order
 
@@ -44,7 +44,7 @@ specified order.
 \emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))} or \code{NULL}}
+created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{new_var}{New variable
 
@@ -123,8 +123,8 @@ wgt_cat <- function(wgt) {
 derive_var_merged_cat(
   admiral_dm,
   dataset_add = admiral_vs,
-  by_vars = vars(STUDYID, USUBJID),
-  order = vars(VSDTC, VSSEQ),
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(VSDTC, VSSEQ),
   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
   new_var = WGTBLCAT,
   source_var = VSSTRESN,
@@ -137,8 +137,8 @@ derive_var_merged_cat(
 derive_var_merged_cat(
   admiral_dm,
   dataset_add = admiral_vs,
-  by_vars = vars(STUDYID, USUBJID),
-  order = vars(VSDTC, VSSEQ),
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(VSDTC, VSSEQ),
   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
   new_var = WGTBLCAT,
   source_var = VSSTRESN,
@@ -167,9 +167,6 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},
 \code{\link{get_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_gen}
 \keyword{der_gen}

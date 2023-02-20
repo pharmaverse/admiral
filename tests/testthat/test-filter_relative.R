@@ -21,8 +21,8 @@ data <- tibble::tribble(
 test_that("filter_relative Test 1: mode = first, selection = before, inclusive = TRUE", {
   actual <- filter_relative(
     data,
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
     condition = AVALC == "PD",
     mode = "first",
     selection = "before",
@@ -54,8 +54,8 @@ test_that("filter_relative Test 1: mode = first, selection = before, inclusive =
 test_that("filter_relative Test 2: mode = first, selection = before, inclusive = FALSE", {
   actual <- filter_relative(
     data,
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
     condition = AVALC == "PD",
     mode = "first",
     selection = "before",
@@ -80,8 +80,8 @@ test_that("filter_relative Test 2: mode = first, selection = before, inclusive =
 test_that("filter_relative Test 3: mode = first, selection = after, inclusive = TRUE", {
   actual <- filter_relative(
     data,
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
     condition = AVALC == "PD",
     mode = "first",
     selection = "after",
@@ -110,8 +110,8 @@ test_that("filter_relative Test 3: mode = first, selection = after, inclusive = 
 test_that("filter_relative Test 4: mode = first, selection = after, inclusive = FALSE", {
   actual <- filter_relative(
     data,
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
     condition = AVALC == "PD",
     mode = "first",
     selection = "after",
@@ -143,8 +143,8 @@ test_that("filter_relative Test 4: mode = first, selection = after, inclusive = 
 test_that("filter_relative Test 1: mode = last, selection = before, inclusive = TRUE", {
   actual <- filter_relative(
     data,
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
     condition = AVALC == "SD",
     mode = "last",
     selection = "before",
@@ -177,8 +177,8 @@ test_that("filter_relative Test 1: mode = last, selection = before, inclusive = 
 test_that("filter_relative Test 2: mode = last, selection = before, inclusive = FALSE", {
   actual <- filter_relative(
     data,
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
     condition = AVALC == "SD",
     mode = "last",
     selection = "before",
@@ -207,8 +207,8 @@ test_that("filter_relative Test 2: mode = last, selection = before, inclusive = 
 test_that("filter_relative Test 7: mode = last, selection = after, inclusive = TRUE", {
   actual <- filter_relative(
     data,
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
     condition = AVALC == "SD",
     mode = "last",
     selection = "after",
@@ -239,8 +239,8 @@ test_that("filter_relative Test 7: mode = last, selection = after, inclusive = T
 test_that("filter_relative Test 8: mode = last, selection = after, inclusive = FALSE", {
   actual <- filter_relative(
     data,
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
     condition = AVALC == "SD",
     mode = "last",
     selection = "after",

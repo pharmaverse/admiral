@@ -33,8 +33,8 @@ test_that("derive_locf_records Test 1: visits are missing", {
   actual_output <- derive_locf_records(
     input,
     dataset_expected_obs = advs_expected_obsv,
-    by_vars = vars(STUDYID, USUBJID, PARAM, PARAMCD),
-    order = vars(AVISITN, AVISIT)
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    order = exprs(AVISITN, AVISIT)
   )
 
 
@@ -83,8 +83,8 @@ test_that("derive_locf_records Test 2: some visits have missing AVAL", {
   actual_output <- derive_locf_records(
     input,
     dataset_expected_obs = advs_expected_obsv,
-    by_vars = vars(STUDYID, USUBJID, PARAM, PARAMCD),
-    order = vars(AVISITN, AVISIT)
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    order = exprs(AVISITN, AVISIT)
   )
 
 
@@ -143,8 +143,8 @@ test_that("derive_locf_records Test 3: visits are missing - and DTYPE already ex
   actual_output <- derive_locf_records(
     input,
     dataset_expected_obs = advs_expected_obsv,
-    by_vars = vars(STUDYID, USUBJID, PARAM, PARAMCD),
-    order = vars(AVISITN, AVISIT)
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    order = exprs(AVISITN, AVISIT)
   )
 
 
@@ -191,8 +191,8 @@ test_that("derive_locf_records Test 4: visit variables are parameter independent
   actual_output <- derive_locf_records(
     input,
     dataset_expected_obs = advs_expected_obsv,
-    by_vars = vars(STUDYID, USUBJID, PARAM, PARAMCD),
-    order = vars(AVISITN, AVISIT)
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    order = exprs(AVISITN, AVISIT)
   )
 
 
@@ -247,8 +247,54 @@ test_that("derive_locf_records Test 5: visit variables are parameter dependent",
   actual_output <- derive_locf_records(
     input,
     dataset_expected_obs = advs_expected_obsv,
-    by_vars = vars(STUDYID, USUBJID, PARAM, PARAMCD),
-    order = vars(AVISITN, AVISIT)
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    order = exprs(AVISITN, AVISIT)
+  )
+
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("STUDYID", "USUBJID", "PARAMCD", "PARAM", "AVISITN", "AVISIT", "DTYPE")
+  )
+})
+
+
+## Test 6: populate VISITNUM for LOCF records ----
+test_that("derive_locf_records Test 6: populate VISITNUM for LOCF records", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVALC, ~AVISITN, ~AVISIT, ~VISITNUM,
+    "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", "79", 0, "BASELINE", 0,
+    "TEST01", "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", "130", 0, "BASELINE", 0
+  )
+
+  advs_expected_obsv <- tibble::tribble(
+    ~PARAMCD, ~PARAM, ~AVISITN, ~AVISIT,
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 0, "BASELINE",
+    "DIABP", "Diastolic Blood Pressure (mmHg)", 2, "WEEK 2",
+    "SYSBP", "Systolic Blood Pressure (mmHg)", 0, "BASELINE",
+    "SYSBP", "Systolic Blood Pressure (mmHg)", 2, "WEEK 2",
+  )
+
+
+  expected_output <- bind_rows(
+    input,
+    tibble::tribble(
+      ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVALC, ~AVISITN, ~AVISIT, ~VISITNUM,
+      "TEST01", "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", "79", 2, "WEEK 2", 0,
+      "TEST01", "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", "130", 2, "WEEK 2", 0
+    ) %>%
+      mutate(DTYPE = "LOCF")
+  )
+
+
+  actual_output <- derive_locf_records(
+    input,
+    dataset_expected_obs = advs_expected_obsv,
+    by_vars = exprs(STUDYID, USUBJID, PARAM, PARAMCD),
+    analysis_var = AVALC,
+    order = exprs(AVISITN, AVISIT),
+    keep_vars = exprs(VISITNUM)
   )
 
 

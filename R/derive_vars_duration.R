@@ -75,7 +75,6 @@
 #'   is negative. The start and end date variable must be present in the specified
 #'   input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the duration and unit variable added
 #'
@@ -154,11 +153,11 @@ derive_vars_duration <- function(dataset,
                                  floor_in = TRUE,
                                  add_one = TRUE,
                                  trunc_out = FALSE) {
-  new_var <- assert_symbol(enquo(new_var))
-  new_var_unit <- assert_symbol(enquo(new_var_unit), optional = TRUE)
-  start_date <- assert_symbol(enquo(start_date))
-  end_date <- assert_symbol(enquo(end_date))
-  assert_data_frame(dataset, required_vars = vars(!!start_date, !!end_date))
+  new_var <- assert_symbol(enexpr(new_var))
+  new_var_unit <- assert_symbol(enexpr(new_var_unit), optional = TRUE)
+  start_date <- assert_symbol(enexpr(start_date))
+  end_date <- assert_symbol(enexpr(end_date))
+  assert_data_frame(dataset, required_vars = exprs(!!start_date, !!end_date))
   assert_character_scalar(in_unit, values = valid_time_units())
   assert_character_scalar(out_unit, values = c(valid_time_units(), "weeks"))
   assert_logical_scalar(floor_in)
@@ -186,7 +185,7 @@ derive_vars_duration <- function(dataset,
       )
     )
 
-  if (!quo_is_null(new_var_unit)) {
+  if (!is.null(new_var_unit)) {
     dataset <- dataset %>%
       mutate(!!new_var_unit := if_else(is.na(!!new_var), NA_character_, toupper(out_unit)))
   }

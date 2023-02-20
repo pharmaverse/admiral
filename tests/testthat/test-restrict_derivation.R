@@ -15,7 +15,7 @@ test_that("restrict_derivation Test 1: restrict derivation with parameters", {
   actual <- restrict_derivation(
     adlb,
     derivation = derive_var_base,
-    args = params(by_vars = vars(USUBJID)),
+    args = params(by_vars = exprs(USUBJID)),
     filter = AVISITN >= 0
   )
 

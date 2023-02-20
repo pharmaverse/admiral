@@ -34,7 +34,7 @@
 #'   for this parameter. The specified variables are added to the joined dataset
 #'   with suffix ".join". For example to flag all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
-#'   vars(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
+#'   exprs(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
 #'   AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
@@ -107,7 +107,7 @@
 #'   specified for `join_vars` are kept. The suffix ".join" is added to these
 #'   variables.
 #'
-#'   For example, for `by_vars = USUBJID`, `join_vars = vars(AVISITN, AVALC)` and input dataset
+#'   For example, for `by_vars = USUBJID`, `join_vars = exprs(AVISITN, AVALC)` and input dataset
 #'
 #'   ```{r eval=FALSE}
 #'   # A tibble: 2 x 4
@@ -135,7 +135,7 @@
 #'   `join_type` and `order`.
 #'
 #'   The dataset from the example in the previous step with `join_type =
-#'   "after"` and `order = vars(AVISITN)` is restricted to
+#'   "after"` and `order = exprs(AVISITN)` is restricted to
 #'
 #'   ```{r eval=FALSE}
 #'   A tibble: 4 x 6
@@ -170,7 +170,6 @@
 #'
 #' @return The input dataset with the variable specified by `new_var` added.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords der_gen
 #' @family der_gen
@@ -202,10 +201,10 @@
 #' derive_var_confirmation_flag(
 #'   adae,
 #'   new_var = ALCOVFL,
-#'   by_vars = vars(USUBJID),
-#'   join_vars = vars(ACOVFL, ADY),
+#'   by_vars = exprs(USUBJID),
+#'   join_vars = exprs(ACOVFL, ADY),
 #'   join_type = "all",
-#'   order = vars(ADY),
+#'   order = exprs(ADY),
 #'   filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 #' )
 #'
@@ -225,11 +224,11 @@
 #'
 #' derive_var_confirmation_flag(
 #'   data,
-#'   by_vars = vars(USUBJID),
+#'   by_vars = exprs(USUBJID),
 #'   new_var = CONFFL,
-#'   join_vars = vars(AVALC, AVISITN),
+#'   join_vars = exprs(AVALC, AVISITN),
 #'   join_type = "after",
-#'   order = vars(AVISITN),
+#'   order = exprs(AVISITN),
 #'   filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
 #' )
 #'
@@ -255,10 +254,10 @@
 #'
 #' derive_var_confirmation_flag(
 #'   data,
-#'   by_vars = vars(USUBJID),
-#'   join_vars = vars(AVALC),
+#'   by_vars = exprs(USUBJID),
+#'   join_vars = exprs(AVALC),
 #'   join_type = "after",
-#'   order = vars(AVISITN),
+#'   order = exprs(AVISITN),
 #'   new_var = CONFFL,
 #'   first_cond = AVALC.join == "CR",
 #'   filter = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
@@ -288,10 +287,10 @@
 #'
 #' derive_var_confirmation_flag(
 #'   data,
-#'   by_vars = vars(USUBJID),
-#'   join_vars = vars(AVALC, ADY),
+#'   by_vars = exprs(USUBJID),
+#'   join_vars = exprs(AVALC, ADY),
 #'   join_type = "after",
-#'   order = vars(ADY),
+#'   order = exprs(ADY),
 #'   new_var = CONFFL,
 #'   first_cond = AVALC.join %in% c("CR", "PR") & ADY.join - ADY >= 20,
 #'   filter = AVALC == "PR" &
@@ -314,9 +313,9 @@ derive_var_confirmation_flag <- function(dataset,
                                          true_value = "Y",
                                          false_value = NA_character_,
                                          check_type = "warning") {
-  new_var <- assert_symbol(enquo(new_var))
-  first_cond <- assert_filter_cond(enquo(first_cond), optional = TRUE)
-  filter <- assert_filter_cond(enquo(filter))
+  new_var <- assert_symbol(enexpr(new_var))
+  first_cond <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
+  filter <- assert_filter_cond(enexpr(filter))
   assert_data_frame(dataset)
 
   tmp_obs_nr <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")
@@ -339,7 +338,7 @@ derive_var_confirmation_flag <- function(dataset,
   derive_var_merged_exist_flag(
     data,
     dataset_add = data_filtered,
-    by_vars = vars(!!tmp_obs_nr),
+    by_vars = exprs(!!tmp_obs_nr),
     new_var = !!new_var,
     condition = TRUE,
     true_value = true_value,

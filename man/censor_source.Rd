@@ -32,8 +32,8 @@ character vector to a date object.}
 CDISC strongly recommends using \code{0} for events and positive integers for
 censoring.}
 
-\item{set_values_to}{A named list returned by \code{vars()} defining the variables
-to be set for the event or censoring, e.g. \code{vars(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")}. The values must be a symbol, a
+\item{set_values_to}{A named list returned by \code{exprs()} defining the variables
+to be set for the event or censoring, e.g. \code{exprs(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")}. The values must be a symbol, a
 character string, a numeric value, or \code{NA}.}
 }
 \value{
@@ -49,7 +49,7 @@ An object of class \code{censor_source}, inheriting from class \code{tte_source}
 censor_source(
   dataset_name = "adsl",
   date = LSTALVDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "ALIVE",
     SRCDOM = "ADSL",
     SRCVAR = "LSTALVDT"
@@ -74,14 +74,9 @@ Source Specifications:
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
 \code{\link{query}()},
-\code{\link{sdg_select}()},
-\code{\link{smq_select}()},
 \code{\link{tte_source}()},
 \code{\link{validate_basket_select}()},
 \code{\link{validate_query}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{source_specifications}
 \keyword{source_specifications}

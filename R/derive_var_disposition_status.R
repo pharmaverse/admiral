@@ -12,7 +12,6 @@
 #'  "SCREENING NOT COMPLETED") nor NA,
 #'  "ONGOING" otherwise.
 #'
-#' @author Samia Kabi
 #' @details Usually this function can not be used with `%>%`.
 #' @export
 #' @family utils_fmt
@@ -89,8 +88,8 @@ format_eoxxstt_default <- function(status) {
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#'   A list of quosures where the expressions are symbols as returned by
-#'   `vars()` is expected.
+#'   A list of expressions where the expressions are symbols as returned by
+#'   `exprs()` is expected.
 #'
 #' @return The input dataset with the disposition status (`new_var`) added.
 #' `new_var` is derived based on the values given in `status_var` and according to the format
@@ -105,7 +104,6 @@ format_eoxxstt_default <- function(status) {
 #' @family der_adsl
 #' @keywords der_adsl
 #'
-#' @author Samia Kabi
 #'
 #' @export
 #'
@@ -166,13 +164,13 @@ derive_var_disposition_status <- function(dataset,
                                           format_new_var = format_eoxxstt_default,
                                           filter_ds,
                                           subject_keys = get_admiral_option("subject_keys")) {
-  new_var <- assert_symbol(enquo(new_var))
-  status_var <- assert_symbol(enquo(status_var))
-  filter_ds <- assert_filter_cond(enquo(filter_ds))
+  new_var <- assert_symbol(enexpr(new_var))
+  status_var <- assert_symbol(enexpr(status_var))
+  filter_ds <- assert_filter_cond(enexpr(filter_ds))
   assert_s3_class(format_new_var, "function")
   assert_data_frame(dataset)
-  assert_data_frame(dataset_ds, quo_c(status_var))
-  warn_if_vars_exist(dataset, quo_text(new_var))
+  assert_data_frame(dataset_ds, expr_c(status_var))
+  warn_if_vars_exist(dataset, as_name(new_var))
   assert_vars(subject_keys)
 
   # Add the status variable and derive the new dispo status in the input dataset
@@ -180,7 +178,7 @@ derive_var_disposition_status <- function(dataset,
     derive_vars_merged(
       dataset_add = dataset_ds,
       filter_add = !!filter_ds,
-      new_vars = vars(!!status_var),
+      new_vars = exprs(!!status_var),
       by_vars = subject_keys
     ) %>%
     mutate(!!new_var := format_new_var(!!status_var)) %>%

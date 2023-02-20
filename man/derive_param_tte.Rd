@@ -69,14 +69,14 @@ variables \code{ADT} and \code{STARTDT} are created.}
 
 \item{set_values_to}{Variables to set
 
-A named list returned by \code{vars()} defining the variables to be set for the
-new parameter, e.g. \code{vars(PARAMCD = "OS", PARAM = "Overall Survival")} is
+A named list returned by \code{exprs()} defining the variables to be set for the
+new parameter, e.g. \code{exprs(PARAMCD = "OS", PARAM = "Overall Survival")} is
 expected. The values must be symbols, character strings, numeric values,
 expressions, or \code{NA}.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of symbols created using \code{vars()} is expected.}
+A list of symbols created using \code{exprs()} is expected.}
 }
 \value{
 The input dataset with the new parameter added
@@ -159,7 +159,7 @@ death <- event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "DEATH",
     SRCDOM = "ADSL",
     SRCVAR = "DTHDT"
@@ -169,7 +169,7 @@ death <- event_source(
 last_alive_dt <- censor_source(
   dataset_name = "adsl",
   date = LSTALVDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "LAST DATE KNOWN ALIVE",
     SRCDOM = "ADSL",
     SRCVAR = "LSTALVDT"
@@ -181,7 +181,7 @@ derive_param_tte(
   event_conditions = list(death),
   censor_conditions = list(last_alive_dt),
   source_datasets = list(adsl = adsl),
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = "OS",
     PARAM = "Overall Survival"
   )
@@ -216,7 +216,7 @@ pd <- event_source(
   dataset_name = "adrs",
   filter = AVALC == "PD",
   date = ADT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVENTDESC = "PD",
     SRCDOM = "ADRS",
     SRCVAR = "ADTM",
@@ -228,7 +228,7 @@ death <- event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVENTDESC = "DEATH",
     SRCDOM = "ADSL",
     SRCVAR = "DTHDT"
@@ -239,7 +239,7 @@ lastvisit <- censor_source(
   dataset_name = "adrs",
   date = ADT,
   censor = 1,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVENTDESC = "LAST TUMOR ASSESSMENT",
     SRCDOM = "ADRS",
     SRCVAR = "ADTM",
@@ -251,7 +251,7 @@ first_response <- censor_source(
   dataset_name = "adsl",
   date = RSPDT,
   censor = 1,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVENTDESC = "FIRST RESPONSE",
     SRCDOM = "ADSL",
     SRCVAR = "RSPDT"
@@ -264,7 +264,7 @@ derive_param_tte(
   event_conditions = list(pd, death),
   censor_conditions = list(lastvisit, first_response),
   source_datasets = list(adsl = adsl, adrs = adrs),
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = "DURRSP",
     PARAM = "Duration of Response"
   )
@@ -297,7 +297,7 @@ ae_ext <- derive_vars_dt(
 ttae <- event_source(
   dataset_name = "ae",
   date = AESTDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "AE",
     SRCDOM = "AE",
     SRCVAR = "AESTDTC",
@@ -308,7 +308,7 @@ ttae <- event_source(
 eos <- censor_source(
   dataset_name = "adsl",
   date = EOSDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "END OF STUDY",
     SRCDOM = "ADSL",
     SRCVAR = "EOSDT"
@@ -317,12 +317,12 @@ eos <- censor_source(
 
 derive_param_tte(
   dataset_adsl = adsl,
-  by_vars = vars(AEDECOD),
+  by_vars = exprs(AEDECOD),
   start_date = TRTSDT,
   event_conditions = list(ttae),
   censor_conditions = list(eos),
   source_datasets = list(adsl = adsl, ae = ae_ext),
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
     PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
     PARCAT1 = "TTAE",
@@ -330,9 +330,6 @@ derive_param_tte(
   )
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_prm_tte}
 \keyword{der_prm_tte}

@@ -114,6 +114,11 @@ reference:
   contents:
   - has_keyword('datasets')
 
+- title: Reexported
+  desc: Functions reexported from other packages
+  contents:
+  - has_keyword('reexport')
+
 - title: Deprecated
   desc: |
     As `{admiral}` is still evolving, functions/parameters may need to be removed or replaced over time. In such cases, the function/parameter will enter the following 6-month deprecation cycle:

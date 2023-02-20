@@ -7,7 +7,7 @@
 derive_vars_atc(
   dataset,
   dataset_facm,
-  by_vars = vars(USUBJID, CMREFID = FAREFID),
+  by_vars = exprs(USUBJID, CMREFID = FAREFID),
   value_var = FASTRESC
 )
 }
@@ -76,9 +76,6 @@ OCCDS Functions:
 \code{\link{derive_var_trtemfl}()},
 \code{\link{derive_vars_query}()},
 \code{\link{get_terms_from_db}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{der_occds}
 \keyword{der_occds}

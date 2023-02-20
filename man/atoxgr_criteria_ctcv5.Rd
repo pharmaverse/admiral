@@ -49,8 +49,5 @@ Other metadata:
 \code{\link{atoxgr_criteria_ctcv4}},
 \code{\link{dose_freq_lookup}}
 }
-\author{
-Gordon Miller
-}
 \concept{metadata}
 \keyword{metadata}

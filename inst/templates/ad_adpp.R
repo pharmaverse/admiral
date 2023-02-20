@@ -78,7 +78,7 @@ format_avalcat1n <- function(param, aval) {
 # Derivations ----
 
 # Get list of ADSL vars required for derivations
-adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
+adsl_vars <- exprs(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
 
 adpp <- pp %>%
   # Join ADSL with PP (need TRTSDT for ADY derivation)
@@ -91,7 +91,7 @@ adpp <- pp %>%
     new_vars_prefix = "A",
     dtc = PPRFDTC
   ) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
 adpp <- adpp %>%
   ## Add PARAMCD only - add PARAM etc later ----
@@ -138,7 +138,7 @@ adpp <- adpp %>%
   ) %>%
   ## Derive AVALCA1N and AVALCAT1 ----
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
-  derive_vars_merged(dataset_add = avalcat_lookup, by_vars = vars(PARAMCD, AVALCA1N))
+  derive_vars_merged(dataset_add = avalcat_lookup, by_vars = exprs(PARAMCD, AVALCA1N))
 
 # Add all ADSL variables
 adpp <- adpp %>%

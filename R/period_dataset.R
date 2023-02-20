@@ -14,7 +14,7 @@
 #'
 #' @param new_vars New variables
 #'
-#'   A named list of variables like `vars(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE
+#'   A named list of variables like `exprs(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE
 #'   = APHASEw)` is expected. The left hand side of the elements defines a
 #'   variable of the output dataset, the right hand side defines the source
 #'   variables from the ADSL dataset in CDISC notation.
@@ -30,10 +30,9 @@
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#'   A list of quosures where the expressions are symbols as returned by
-#'   `vars()` is expected.
+#'   A list of expressions where the expressions are symbols as returned by
+#'   `exprs()` is expected.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details For each subject and each subperiod/period/phase where at least one
 #'   of the source variable is not `NA` an observation is added to the output
@@ -76,7 +75,7 @@
 #'
 #' create_period_dataset(
 #'   adsl,
-#'   new_vars = vars(APERSDT = APxxSDT, APEREDT = APxxEDT, TRTA = TRTxxA)
+#'   new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT, TRTA = TRTxxA)
 #' )
 #'
 #' # Create reference dataset for phases
@@ -94,7 +93,7 @@
 #'
 #' create_period_dataset(
 #'   adsl,
-#'   new_vars = vars(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
+#'   new_vars = exprs(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
 #' )
 #'
 #' # Create reference datasets for subperiods
@@ -112,7 +111,7 @@
 #'
 #' create_period_dataset(
 #'   adsl,
-#'   new_vars = vars(ASPRSDT = PxxSwSDT, ASPREDT = PxxSwEDT)
+#'   new_vars = exprs(ASPRSDT = PxxSwSDT, ASPREDT = PxxSwEDT)
 #' )
 create_period_dataset <- function(dataset,
                                   new_vars,
@@ -199,7 +198,7 @@ create_period_dataset <- function(dataset,
           !!num_var[[mode]] := as.integer(!!num_var[[mode]])
         ) %>%
         filter(!is.na(!!sym(new_vars_names[[i]])))
-      by_vars <- vars(APERIOD, !!sym(num_var[[mode]]))
+      by_vars <- exprs(APERIOD, !!sym(num_var[[mode]]))
     } else {
       period_ref[[i]] <- pivot_longer(
         select(dataset, !!!subject_keys, matches(cols[[i]])),
@@ -210,7 +209,7 @@ create_period_dataset <- function(dataset,
         rename(!!sym(new_vars_names[[i]]) := !!prefix[[i]]) %>%
         mutate(!!num_var[[mode]] := as.integer(!!num_var[[mode]])) %>%
         filter(!is.na(!!sym(new_vars_names[[i]])))
-      by_vars <- vars(!!sym(num_var[[mode]]))
+      by_vars <- exprs(!!sym(num_var[[mode]]))
     }
     if (i == 1) {
       period_ref_final <- period_ref[[1]]
@@ -218,7 +217,7 @@ create_period_dataset <- function(dataset,
       period_ref_final <- derive_vars_merged(
         period_ref_final,
         dataset_add = period_ref[[i]],
-        by_vars = quo_c(subject_keys, by_vars)
+        by_vars = expr_c(subject_keys, by_vars)
       )
     }
   }
@@ -247,7 +246,7 @@ create_period_dataset <- function(dataset,
 #'
 #' @param new_vars New variables
 #'
-#'   A named list of variables like `vars(PHwSDT = PHSDT, PHwEDT = PHEDT,
+#'   A named list of variables like `exprs(PHwSDT = PHSDT, PHwEDT = PHEDT,
 #'   APHASEw = APHASE)` is expected. The left hand side of the elements defines
 #'   a set of variables (in CDISC notation) to be added to the output dataset.
 #'   The right hand side defines the source variable from the period reference
@@ -264,10 +263,9 @@ create_period_dataset <- function(dataset,
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#'   A list of quosures where the expressions are symbols as returned by
-#'   `vars()` is expected.
+#'   A list of expressions where the expressions are symbols as returned by
+#'   `exprs()` is expected.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details For each subperiod/period/phase in the period reference dataset and
 #'   each element in `new_vars` a variable (LHS value of `new_vars`) is added to
@@ -308,7 +306,7 @@ create_period_dataset <- function(dataset,
 #' derive_vars_period(
 #'   adsl,
 #'   dataset_ref = period_ref,
-#'   new_vars = vars(APxxSDT = APERSDT, APxxEDT = APEREDT)
+#'   new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
 #' ) %>%
 #'   select(STUDYID, USUBJID, AP01SDT, AP01EDT, AP02SDT, AP02EDT)
 #'
@@ -328,7 +326,7 @@ create_period_dataset <- function(dataset,
 #' derive_vars_period(
 #'   adsl,
 #'   dataset_ref = phase_ref,
-#'   new_vars = vars(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
+#'   new_vars = exprs(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
 #' ) %>%
 #'   select(STUDYID, USUBJID, PH1SDT, PH1EDT, PH2SDT, PH2EDT, APHASE1, APHASE2)
 #'
@@ -351,7 +349,7 @@ create_period_dataset <- function(dataset,
 #' derive_vars_period(
 #'   adsl,
 #'   dataset_ref = subperiod_ref,
-#'   new_vars = vars(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
+#'   new_vars = exprs(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
 #' ) %>%
 #'   select(STUDYID, USUBJID, P01S1SDT, P01S1EDT, P01S2SDT, P01S2EDT, P02S1SDT, P02S1EDT)
 derive_vars_period <- function(dataset,
@@ -407,13 +405,13 @@ derive_vars_period <- function(dataset,
     )
   }
   if (mode == "subperiod") {
-    id_vars <- vars(APERIOD, ASPER)
+    id_vars <- exprs(APERIOD, ASPER)
   } else if (mode == "period") {
-    id_vars <- vars(APERIOD)
+    id_vars <- exprs(APERIOD)
   } else {
-    id_vars <- vars(APHASEN)
+    id_vars <- exprs(APHASEN)
   }
-  assert_data_frame(dataset_ref, required_vars = quo_c(subject_keys, new_vars, id_vars))
+  assert_data_frame(dataset_ref, required_vars = expr_c(subject_keys, new_vars, id_vars))
 
   ref_wide <- pivot_wider(
     dataset_ref,

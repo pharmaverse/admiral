@@ -27,8 +27,5 @@ Utilities for printing:
 \code{\link{print.adam_templates}()},
 \code{\link{print.source}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{utils_print}
 \keyword{utils_print}

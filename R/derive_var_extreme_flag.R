@@ -30,8 +30,6 @@
 #'
 #'   Permitted Values: list of variables
 #'
-#' @param filter Deprecated, please use `restrict_derivation()` instead (see examples).
-#'
 #' @param check_type Check uniqueness?
 #'
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
@@ -53,7 +51,6 @@
 #'
 #' @seealso [derive_var_worst_flag()]
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the new flag variable added
 #'
@@ -73,8 +70,8 @@
 #'   restrict_derivation(
 #'     derivation = derive_var_extreme_flag,
 #'     args = params(
-#'       by_vars = vars(USUBJID, VSTESTCD, VISIT),
-#'       order = vars(VSTPTNUM),
+#'       by_vars = exprs(USUBJID, VSTESTCD, VISIT),
+#'       order = exprs(VSTPTNUM),
 #'       new_var = LASTFL,
 #'       mode = "last"
 #'     ),
@@ -114,8 +111,8 @@
 #'   input,
 #'   derivation = derive_var_extreme_flag,
 #'   args = params(
-#'     by_vars = vars(USUBJID, PARAMCD),
-#'     order = vars(ADT),
+#'     by_vars = exprs(USUBJID, PARAMCD),
+#'     order = exprs(ADT),
 #'     new_var = ABLFL,
 #'     mode = "last"
 #'   ),
@@ -127,8 +124,8 @@
 #'   input,
 #'   derivation = derive_var_extreme_flag,
 #'   args = params(
-#'     by_vars = vars(USUBJID, PARAMCD),
-#'     order = vars(AVAL, ADT),
+#'     by_vars = exprs(USUBJID, PARAMCD),
+#'     order = exprs(AVAL, ADT),
 #'     new_var = ABLFL,
 #'     mode = "last"
 #'   ),
@@ -140,8 +137,8 @@
 #'   input,
 #'   derivation = derive_var_extreme_flag,
 #'   args = params(
-#'     by_vars = vars(USUBJID, PARAMCD),
-#'     order = vars(desc(AVAL), ADT),
+#'     by_vars = exprs(USUBJID, PARAMCD),
+#'     order = exprs(desc(AVAL), ADT),
 #'     new_var = ABLFL,
 #'     mode = "last"
 #'   ),
@@ -153,8 +150,8 @@
 #'   input,
 #'   derivation = derive_var_extreme_flag,
 #'   args = params(
-#'     by_vars = vars(USUBJID, PARAMCD),
-#'     order = vars(ADT, desc(AVAL)),
+#'     by_vars = exprs(USUBJID, PARAMCD),
+#'     order = exprs(ADT, desc(AVAL)),
 #'     new_var = ABLFL,
 #'     mode = "last"
 #'   ),
@@ -172,8 +169,8 @@
 #'   ) %>%
 #'   derive_var_extreme_flag(
 #'     new_var = AOCCIFL,
-#'     by_vars = vars(USUBJID),
-#'     order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+#'     by_vars = exprs(USUBJID),
+#'     order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
 #'     mode = "first"
 #'   ) %>%
 #'   arrange(USUBJID, AESTDY, AESEQ) %>%
@@ -187,8 +184,8 @@
 #'   ) %>%
 #'   derive_var_extreme_flag(
 #'     new_var = AOCCSIFL,
-#'     by_vars = vars(USUBJID, AEBODSYS),
-#'     order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+#'     by_vars = exprs(USUBJID, AEBODSYS),
+#'     order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
 #'     mode = "first"
 #'   ) %>%
 #'   arrange(USUBJID, AESTDY, AESEQ) %>%
@@ -198,16 +195,11 @@ derive_var_extreme_flag <- function(dataset,
                                     order,
                                     new_var,
                                     mode,
-                                    filter = deprecated(),
                                     check_type = "warning") {
-  if (!missing(filter)) {
-    deprecate_stop("0.7.0", "derive_var_extreme_flag(filter = )", "restrict_derivation(filter = )")
-  }
-
-  new_var <- assert_symbol(enquo(new_var))
+  new_var <- assert_symbol(enexpr(new_var))
   assert_vars(by_vars)
   assert_order_vars(order)
-  assert_data_frame(dataset, required_vars = vars(!!!by_vars, !!!extract_vars(order)))
+  assert_data_frame(dataset, required_vars = exprs(!!!by_vars, !!!extract_vars(order)))
   mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
   check_type <- assert_character_scalar(
     check_type,
@@ -272,7 +264,6 @@ derive_var_extreme_flag <- function(dataset,
 #'
 #' @seealso [derive_var_extreme_flag()]
 #'
-#' @author Ondrej Slama
 #'
 #' @return The input dataset with the new flag variable added.
 #'
@@ -316,8 +307,8 @@ derive_var_extreme_flag <- function(dataset,
 #'
 #' derive_var_worst_flag(
 #'   input,
-#'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
-#'   order = vars(desc(ADT)),
+#'   by_vars = exprs(USUBJID, PARAMCD, AVISIT),
+#'   order = exprs(desc(ADT)),
 #'   new_var = WORSTFL,
 #'   param_var = PARAMCD,
 #'   analysis_var = AVAL,
@@ -330,8 +321,8 @@ derive_var_extreme_flag <- function(dataset,
 #'   advs,
 #'   derivation = derive_var_worst_flag,
 #'   args = params(
-#'     by_vars = vars(USUBJID, PARAMCD, AVISIT),
-#'     order = vars(ADT, ATPTN),
+#'     by_vars = exprs(USUBJID, PARAMCD, AVISIT),
+#'     order = exprs(ADT, ATPTN),
 #'     new_var = WORSTFL,
 #'     param_var = PARAMCD,
 #'     analysis_var = AVAL,
@@ -350,21 +341,16 @@ derive_var_worst_flag <- function(dataset,
                                   analysis_var,
                                   worst_high,
                                   worst_low,
-                                  filter = deprecated(),
                                   check_type = "warning") {
-  if (!missing(filter)) {
-    deprecate_stop("0.7.0", "derive_var_worst_flag(filter = )", "restrict_derivation(filter = )")
-  }
-
   # perform argument checks
-  new_var <- assert_symbol(enquo(new_var))
-  param_var <- assert_symbol(enquo(param_var))
-  analysis_var <- assert_symbol(enquo(analysis_var))
+  new_var <- assert_symbol(enexpr(new_var))
+  param_var <- assert_symbol(enexpr(param_var))
+  analysis_var <- assert_symbol(enexpr(analysis_var))
   assert_vars(by_vars)
   assert_order_vars(order)
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, extract_vars(order), param_var, analysis_var)
+    required_vars = expr_c(by_vars, extract_vars(order), param_var, analysis_var)
   )
   assert_character_vector(worst_high)
   assert_character_vector(worst_low)
@@ -379,7 +365,7 @@ derive_var_worst_flag <- function(dataset,
   }
 
   # additional checks for worstflag - parameters not available
-  param_var_str <- as_string(quo_get_expr(param_var))
+  param_var_str <- as_string(param_var)
   if (length(worst_high) > 0 &&
     !all(worst_high %in% dataset[[param_var_str]])) {
     err_msg <- paste0(
@@ -408,7 +394,7 @@ derive_var_worst_flag <- function(dataset,
     derive_var_extreme_flag(
       dataset = dplyr::filter(dataset, !!param_var %in% worst_low),
       by_vars = by_vars,
-      order = quo_c(analysis_var, order),
+      order = expr_c(analysis_var, order),
       new_var = !!new_var,
       mode = "first",
       check_type = check_type
@@ -416,7 +402,7 @@ derive_var_worst_flag <- function(dataset,
     derive_var_extreme_flag(
       dataset = dplyr::filter(dataset, !!param_var %in% worst_high),
       by_vars = by_vars,
-      order = quo_c(quo(desc(!!quo_get_expr(analysis_var))), order),
+      order = expr_c(expr(desc(!!analysis_var)), order),
       new_var = !!new_var,
       mode = "first",
       check_type = check_type

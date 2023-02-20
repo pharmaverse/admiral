@@ -59,8 +59,8 @@ Permitted Values: logical expression.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of quosures where the expressions are symbols as returned by
-\code{vars()} is expected.}
+A list of expressions where the expressions are symbols as returned by
+\code{exprs()} is expected.}
 }
 \value{
 The input dataset with the disposition status (\code{new_var}) added.
@@ -136,9 +136,6 @@ ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_vars_aage}()},
 \code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_period}()}
-}
-\author{
-Samia Kabi
 }
 \concept{der_adsl}
 \keyword{der_adsl}

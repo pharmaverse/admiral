@@ -55,8 +55,5 @@ Utilities for Formatting Observations:
 \code{\link{format_reason_default}()},
 \code{\link{yn_to_numeric}()}
 }
-\author{
-Thomas Neitmann
-}
 \concept{utils_fmt}
 \keyword{utils_fmt}

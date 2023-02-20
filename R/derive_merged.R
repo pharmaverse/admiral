@@ -24,18 +24,18 @@
 #'   *Default*: `NULL`
 #'
 #'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))` or `NULL`
+#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param new_vars Variables to add
 #'
 #'   The specified variables from the additional dataset are added to the output
 #'   dataset. Variables can be renamed by naming the element, i.e., `new_vars =
-#'   vars(<new name> = <old name>)`.
+#'   exprs(<new name> = <old name>)`.
 #'
-#'   For example `new_vars = vars(var1, var2)` adds variables `var1` and `var2`
+#'   For example `new_vars = exprs(var1, var2)` adds variables `var1` and `var2`
 #'   from `dataset_add` to the input dataset.
 #'
-#'   And `new_vars = vars(var1, new_var2 = old_var2)` takes `var1` and
+#'   And `new_vars = exprs(var1, new_var2 = old_var2)` takes `var1` and
 #'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
 #'   `old_var2` to `new_var2`.
 #'
@@ -44,7 +44,7 @@
 #'
 #'   *Default*: `NULL`
 #'
-#'   *Permitted Values*: list of variables created by `vars()`
+#'   *Permitted Values*: list of variables created by `exprs()`
 #'
 #' @param mode Selection mode
 #'
@@ -63,7 +63,7 @@
 #'   are merged by the specified by variables. The by variables must be a unique
 #'   key of the selected observations.
 #'
-#'   *Permitted Values*: list of variables created by `vars()`
+#'   *Permitted Values*: list of variables created by `exprs()`
 #'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
@@ -126,7 +126,6 @@
 #'   to `NA`. Observations in the additional dataset which have no matching
 #'   observation in the input dataset are ignored.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -143,7 +142,7 @@
 #' derive_vars_merged(
 #'   admiral_vs,
 #'   dataset_add = select(admiral_dm, -DOMAIN),
-#'   by_vars = vars(STUDYID, USUBJID)
+#'   by_vars = exprs(STUDYID, USUBJID)
 #' ) %>%
 #'   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 #'
@@ -152,10 +151,10 @@
 #' derive_vars_merged(
 #'   admiral_adsl,
 #'   dataset_add = admiral_vs,
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   order = vars(VSDTC),
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   order = exprs(VSDTC),
 #'   mode = "last",
-#'   new_vars = vars(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
+#'   new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
 #'   filter_add = VSTESTCD == "WEIGHT",
 #'   match_flag = vsdatafl
 #' ) %>%
@@ -176,9 +175,9 @@
 #' derive_vars_merged(
 #'   select(admiral_dm, STUDYID, USUBJID),
 #'   dataset_add = ex_ext,
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   new_vars = vars(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
-#'   order = vars(EXSTDTM),
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+#'   order = exprs(EXSTDTM),
 #'   mode = "first"
 #' )
 #'
@@ -198,9 +197,9 @@
 #'   select(admiral_dm, STUDYID, USUBJID),
 #'   dataset_add = ex_ext,
 #'   filter_add = !is.na(EXSTDTM),
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   new_vars = vars(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
-#'   order = vars(EXSTDTM),
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+#'   order = exprs(EXSTDTM),
 #'   mode = "first"
 #' )
 #'
@@ -218,9 +217,9 @@
 #'   select(admiral_dm, STUDYID, USUBJID),
 #'   dataset_add = ex_ext,
 #'   filter_add = !is.na(EXENDTM),
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   new_vars = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
-#'   order = vars(EXENDTM),
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+#'   order = exprs(EXENDTM),
 #'   mode = "last"
 #' )
 derive_vars_merged <- function(dataset,
@@ -233,13 +232,13 @@ derive_vars_merged <- function(dataset,
                                match_flag = NULL,
                                check_type = "warning",
                                duplicate_msg = NULL) {
-  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_vars(by_vars)
   assert_order_vars(order, optional = TRUE)
   assert_vars(new_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars)
-  assert_data_frame(dataset_add, required_vars = quo_c(by_vars, extract_vars(order), new_vars))
-  match_flag <- assert_symbol(enquo(match_flag), optional = TRUE)
+  assert_data_frame(dataset_add, required_vars = expr_c(by_vars, extract_vars(order), new_vars))
+  match_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
 
   add_data <- filter_if(dataset_add, filter_add)
   if (!is.null(order)) {
@@ -266,7 +265,7 @@ derive_vars_merged <- function(dataset,
   if (!is.null(new_vars)) {
     add_data <- select(add_data, !!!by_vars, !!!new_vars)
   }
-  if (!quo_is_null(match_flag)) {
+  if (!is.null(match_flag)) {
     add_data <- mutate(
       add_data,
       !!match_flag := TRUE
@@ -328,7 +327,7 @@ derive_vars_merged <- function(dataset,
 #'   *Default*: `NULL`
 #'
 #'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL)` or `NULL`
+#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL)` or `NULL`
 #'
 #' @inheritParams derive_vars_merged
 #' @inheritParams derive_vars_dt
@@ -351,9 +350,8 @@ derive_vars_merged <- function(dataset,
 #'
 #'   1. The date and flag variables are merged to the input dataset.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 #'
@@ -372,45 +370,10 @@ derive_vars_merged_dt <- function(dataset,
                                   preserve = FALSE,
                                   check_type = "warning",
                                   duplicate_msg = NULL) {
-  assert_vars(by_vars)
-  dtc <- assert_symbol(enquo(dtc))
-  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
-  assert_data_frame(dataset_add, required_vars = quo_c(by_vars, dtc))
-
-  deprecate_warn(
+  deprecate_stop(
     "0.8.0",
     "derive_vars_merged_dt()",
     details = "Please use `derive_vars_dt()` and `derive_vars_merged()` instead."
-  )
-
-  old_vars <- names(dataset_add)
-  if (is.null(date_imputation)) {
-    highest_imputation <- "n"
-    date_imputation <- "first"
-  } else {
-    highest_imputation <- "M"
-  }
-  add_data <- filter_if(dataset_add, filter_add) %>%
-    derive_vars_dt(
-      new_vars_prefix = new_vars_prefix,
-      dtc = !!dtc,
-      highest_imputation = highest_imputation,
-      date_imputation = date_imputation,
-      flag_imputation = flag_imputation,
-      min_dates = min_dates,
-      max_dates = max_dates,
-      preserve = preserve
-    )
-  new_vars <- quos(!!!syms(setdiff(names(add_data), old_vars)))
-  derive_vars_merged(
-    dataset,
-    dataset_add = add_data,
-    by_vars = by_vars,
-    order = order,
-    new_vars = new_vars,
-    mode = mode,
-    check_type = check_type,
-    duplicate_msg = duplicate_msg
   )
 }
 
@@ -442,7 +405,7 @@ derive_vars_merged_dt <- function(dataset,
 #'   *Default*: `NULL`
 #'
 #'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL)` or `NULL`
+#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL)` or `NULL`
 #'
 #' @inheritParams derive_vars_merged
 #' @inheritParams derive_vars_dtm
@@ -465,9 +428,8 @@ derive_vars_merged_dt <- function(dataset,
 #'
 #'   1. The date and flag variables are merged to the input dataset.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 #'
@@ -487,50 +449,10 @@ derive_vars_merged_dtm <- function(dataset,
                                    preserve = FALSE,
                                    check_type = "warning",
                                    duplicate_msg = NULL) {
-  dtc <- assert_symbol(enquo(dtc))
-
-  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
-  assert_data_frame(dataset_add, required_vars = quo_c(by_vars, dtc))
-
-  deprecate_warn(
+  deprecate_stop(
     "0.8.0",
     "derive_vars_merged_dtm()",
     details = "Please use `derive_vars_dtm()` and `derive_vars_merged()` instead."
-  )
-
-  old_vars <- names(dataset_add)
-  if (is.null(date_imputation)) {
-    highest_imputation <- "h"
-    date_imputation <- "first"
-  } else {
-    highest_imputation <- "M"
-  }
-  if (is.null(time_imputation)) {
-    highest_imputation <- "n"
-    time_imputation <- "first"
-  }
-  add_data <- filter_if(dataset_add, filter = filter_add) %>%
-    derive_vars_dtm(
-      new_vars_prefix = new_vars_prefix,
-      dtc = !!dtc,
-      highest_imputation = highest_imputation,
-      date_imputation = date_imputation,
-      time_imputation = time_imputation,
-      flag_imputation = flag_imputation,
-      min_dates = min_dates,
-      max_dates = max_dates,
-      preserve = preserve
-    )
-  new_vars <- quos(!!!syms(setdiff(names(add_data), old_vars)))
-  derive_vars_merged(
-    dataset,
-    dataset_add = add_data,
-    by_vars = by_vars,
-    order = order,
-    new_vars = new_vars,
-    mode = mode,
-    check_type = check_type,
-    duplicate_msg = duplicate_msg
   )
 }
 
@@ -582,7 +504,6 @@ derive_vars_merged_dtm <- function(dataset,
 #'
 #'   1. The categorization variable is merged to the input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -606,8 +527,8 @@ derive_vars_merged_dtm <- function(dataset,
 #' derive_var_merged_cat(
 #'   admiral_dm,
 #'   dataset_add = admiral_vs,
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   order = vars(VSDTC, VSSEQ),
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   order = exprs(VSDTC, VSSEQ),
 #'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
 #'   new_var = WGTBLCAT,
 #'   source_var = VSSTRESN,
@@ -620,8 +541,8 @@ derive_vars_merged_dtm <- function(dataset,
 #' derive_var_merged_cat(
 #'   admiral_dm,
 #'   dataset_add = admiral_vs,
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   order = vars(VSDTC, VSSEQ),
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   order = exprs(VSDTC, VSSEQ),
 #'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
 #'   new_var = WGTBLCAT,
 #'   source_var = VSSTRESN,
@@ -640,10 +561,10 @@ derive_var_merged_cat <- function(dataset,
                                   filter_add = NULL,
                                   mode = NULL,
                                   missing_value = NA_character_) {
-  new_var <- assert_symbol(enquo(new_var))
-  source_var <- assert_symbol(enquo(source_var))
-  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
-  assert_data_frame(dataset_add, required_vars = quo_c(by_vars, source_var))
+  new_var <- assert_symbol(enexpr(new_var))
+  source_var <- assert_symbol(enexpr(source_var))
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  assert_data_frame(dataset_add, required_vars = expr_c(by_vars, source_var))
 
   add_data <- filter_if(dataset_add, filter_add) %>%
     mutate(!!new_var := cat_fun(!!source_var))
@@ -652,7 +573,7 @@ derive_var_merged_cat <- function(dataset,
     dataset_add = add_data,
     by_vars = by_vars,
     order = order,
-    new_vars = vars(!!new_var),
+    new_vars = exprs(!!new_var),
     match_flag = temp_match_flag,
     mode = mode
   ) %>%
@@ -731,7 +652,6 @@ derive_var_merged_cat <- function(dataset,
 #'   `FALSE` or `NA`. Otherwise, it is set to the missing value
 #'   (`missing_value`).
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -747,7 +667,7 @@ derive_var_merged_cat <- function(dataset,
 #' derive_var_merged_exist_flag(
 #'   admiral_dm,
 #'   dataset_add = admiral_ae,
-#'   by_vars = vars(STUDYID, USUBJID),
+#'   by_vars = exprs(STUDYID, USUBJID),
 #'   new_var = AERELFL,
 #'   condition = AEREL == "PROBABLE"
 #' ) %>%
@@ -757,7 +677,7 @@ derive_var_merged_cat <- function(dataset,
 #' derive_var_merged_exist_flag(
 #'   admiral_dm,
 #'   dataset_add = admiral_vs,
-#'   by_vars = vars(STUDYID, USUBJID),
+#'   by_vars = exprs(STUDYID, USUBJID),
 #'   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
 #'   new_var = WTBLHIFL,
 #'   condition = VSSTRESN > 90,
@@ -774,10 +694,10 @@ derive_var_merged_exist_flag <- function(dataset,
                                          false_value = NA_character_,
                                          missing_value = NA_character_,
                                          filter_add = NULL) {
-  new_var <- assert_symbol(enquo(new_var))
-  condition <- assert_filter_cond(enquo(condition))
+  new_var <- assert_symbol(enexpr(new_var))
+  condition <- assert_filter_cond(enexpr(condition))
   filter_add <-
-    assert_filter_cond(enquo(filter_add), optional = TRUE)
+    assert_filter_cond(enexpr(filter_add), optional = TRUE)
 
   add_data <- filter_if(dataset_add, filter_add) %>%
     mutate(!!new_var := if_else(!!condition, 1, 0, 0))
@@ -786,8 +706,8 @@ derive_var_merged_exist_flag <- function(dataset,
     dataset,
     dataset_add = add_data,
     by_vars = by_vars,
-    new_vars = vars(!!new_var),
-    order = vars(!!new_var),
+    new_vars = exprs(!!new_var),
+    order = exprs(!!new_var),
     check_type = "none",
     mode = "last"
   ) %>%
@@ -847,7 +767,6 @@ derive_var_merged_exist_flag <- function(dataset,
 #'
 #'   1. The character variable is merged to the input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -863,7 +782,7 @@ derive_var_merged_exist_flag <- function(dataset,
 #' derive_var_merged_character(
 #'   admiral_dm,
 #'   dataset_add = admiral_ds,
-#'   by_vars = vars(STUDYID, USUBJID),
+#'   by_vars = exprs(STUDYID, USUBJID),
 #'   new_var = DISPSTAT,
 #'   filter_add = DSCAT == "DISPOSITION EVENT",
 #'   source_var = DSDECOD,
@@ -880,8 +799,8 @@ derive_var_merged_character <- function(dataset,
                                         filter_add = NULL,
                                         mode = NULL,
                                         missing_value = NA_character_) {
-  new_var <- assert_symbol(enquo(new_var))
-  source_var <- assert_symbol(enquo(source_var))
+  new_var <- assert_symbol(enexpr(new_var))
+  source_var <- assert_symbol(enexpr(source_var))
   case <-
     assert_character_scalar(
       case,
@@ -889,8 +808,8 @@ derive_var_merged_character <- function(dataset,
       case_sensitive = FALSE,
       optional = TRUE
     )
-  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
-  assert_data_frame(dataset_add, required_vars = quo_c(by_vars, source_var))
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  assert_data_frame(dataset_add, required_vars = expr_c(by_vars, source_var))
   assert_character_scalar(missing_value)
 
   if (is.null(case)) {
@@ -909,7 +828,7 @@ derive_var_merged_character <- function(dataset,
     dataset_add = add_data,
     by_vars = by_vars,
     order = order,
-    new_vars = vars(!!new_var),
+    new_vars = exprs(!!new_var),
     match_flag = temp_match_flag,
     mode = mode
   ) %>%
@@ -944,7 +863,6 @@ derive_var_merged_character <- function(dataset,
 #' `by_vars` values that do not have corresponding records
 #' from the lookup table (by specifying `print_not_mapped = TRUE`).
 #'
-#' @author Annie Yang
 #'
 #' @keywords der_gen
 #' @family der_gen
@@ -969,8 +887,8 @@ derive_var_merged_character <- function(dataset,
 #' derive_vars_merged_lookup(
 #'   dataset = admiral_vs,
 #'   dataset_add = param_lookup,
-#'   by_vars = vars(VSTESTCD),
-#'   new_vars = vars(PARAMCD),
+#'   by_vars = exprs(VSTESTCD),
+#'   new_vars = exprs(PARAMCD),
 #'   print_not_mapped = TRUE
 #' )
 derive_vars_merged_lookup <- function(dataset,
@@ -984,7 +902,7 @@ derive_vars_merged_lookup <- function(dataset,
                                       duplicate_msg = NULL,
                                       print_not_mapped = TRUE) {
   assert_logical_scalar(print_not_mapped)
-  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
 
   res <- derive_vars_merged(
     dataset,
@@ -1062,7 +980,7 @@ get_not_mapped <- function() {
 #'   summarized values are merged to the input dataset (`dataset`) by the
 #'   specified by variables.
 #'
-#'   *Permitted Values*: list of variables created by `vars()`
+#'   *Permitted Values*: list of variables created by `exprs()`
 #'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
@@ -1083,7 +1001,6 @@ get_not_mapped <- function() {
 #'   calculation. This can include built-in functions as well as user defined
 #'   functions, for example `mean` or `function(x) mean(x, na.rm = TRUE)`.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details
 #'
@@ -1130,7 +1047,7 @@ get_not_mapped <- function() {
 #' derive_var_merged_summary(
 #'   adbds,
 #'   dataset_add = adbds,
-#'   by_vars = vars(USUBJID, AVISIT),
+#'   by_vars = exprs(USUBJID, AVISIT),
 #'   new_var = MEANVIS,
 #'   analysis_var = AVAL,
 #'   summary_fun = function(x) mean(x, na.rm = TRUE)
@@ -1163,7 +1080,7 @@ get_not_mapped <- function() {
 #' derive_var_merged_summary(
 #'   adsl,
 #'   dataset_add = adtr,
-#'   by_vars = vars(USUBJID),
+#'   by_vars = exprs(USUBJID),
 #'   filter_add = AVISIT == "BASELINE",
 #'   new_var = LESIONSBL,
 #'   analysis_var = LESIONID,
@@ -1178,10 +1095,10 @@ derive_var_merged_summary <- function(dataset,
                                       analysis_var,
                                       summary_fun) {
   assert_vars(by_vars)
-  new_var <- assert_symbol(enquo(new_var))
-  analysis_var <- assert_symbol(enquo(analysis_var))
+  new_var <- assert_symbol(enexpr(new_var))
+  analysis_var <- assert_symbol(enexpr(analysis_var))
   filter_add <-
-    assert_filter_cond(enquo(filter_add), optional = TRUE)
+    assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_s3_class(summary_fun, "function")
   assert_data_frame(
     dataset,
@@ -1189,7 +1106,7 @@ derive_var_merged_summary <- function(dataset,
   )
   assert_data_frame(
     dataset_add,
-    required_vars = quo_c(by_vars, analysis_var)
+    required_vars = expr_c(by_vars, analysis_var)
   )
 
   # Summarise the analysis value and merge to the original dataset
@@ -1203,6 +1120,6 @@ derive_var_merged_summary <- function(dataset,
       summary_fun = summary_fun
     ),
     by_vars = by_vars,
-    new_vars = vars(!!new_var := !!analysis_var)
+    new_vars = exprs(!!new_var := !!analysis_var)
   )
 }
