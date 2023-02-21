@@ -400,37 +400,37 @@ Deterioration/Improvement](#timetodeterioration))
 
 # Worst/Best Answer
 
-This class of parameters can be used when the worst answer of a set of yes/no answers should be selected. For example, if yes/no answers for "Suicide", "Suicide attempt", "Preparing suicide attempt" are collected, a parameter for the worst suicidal behavior could be derived. In the example no suicidal behavior is assumed if all were answered with "no".
+This class of parameters can be used when the worst answer of a set of yes/no answers should be selected. For example, if yes/no answers for "No sleep", "Waking up more than three times", "More than 30 mins to fall asleep" are collected, a parameter for the worst sleeping problems could be derived. In the example no sleeping problems is assumed if all were answered with "no".
 ```{r eval=FALSE}
 derive_param_worst_event(
   adqs,
   by_vars = exprs(USUBJID, AVISIT),
   events = list(
     event(
-      condition = PARAMCD == "SUICIDE" & AVALC == "Y",
+      condition = PARAMCD == "NO SLEEP" & AVALC == "Y",
       set_values_to = exprs(
-        AVALC = "Completed Suicide",
+        AVALC = "No sleep",
         AVAL = 1
       )
     ),
     event(
-      condition = PARAMCD == "ATTEMPT" & AVALC == "Y",
+      condition = PARAMCD == "WAKE UP" & AVALC == "Y",
       set_values_to = exprs(
-        AVALC = "Suicide Attempt",
+        AVALC = "Waking up more than three times",
         AVAL = 2
       )
     ),
     event(
-      condition = PARAMCD == "PREPARE" & AVALC == "Y",
+      condition = PARAMCD == "FALL ASLEEP" & AVALC == "Y",
       set_values_to = exprs(
-        AVALC = "Preparation of Suicide Attempt",
+        AVALC = "More than 30 mins to fall asleep",
         AVAL = 3
       )
     ),
     event(
       condition = all(AVALC == "N"),
       set_values_to = exprs(
-        AVALC = "No Suicidal Behaviour",
+        AVALC = "No sleeping problems",
         AVAL = 4
       )
     ),
@@ -443,8 +443,8 @@ derive_param_worst_event(
     )
   ),
   set_values_to = exprs(
-    PARAMCD = "HSB",
-    PARAM = "Highest Suicidal Behavior"
+    PARAMCD = "WSP",
+    PARAM = "Worst Sleeping Problems"
   )
 )
 ```
