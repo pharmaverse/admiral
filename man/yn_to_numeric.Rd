@@ -26,8 +26,5 @@ Utilities for Formatting Observations:
 \code{\link{format_eoxxstt_default}()},
 \code{\link{format_reason_default}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{utils_fmt}
 \keyword{utils_fmt}

@@ -7,7 +7,6 @@
 #' @param source_vars A list of datetime variables created using `exprs()` from
 #'   which time is to be extracted
 #'
-#' @author Teckla Akinyi
 #'
 #' @details
 #' The names of the newly added variables are automatically set by replacing the

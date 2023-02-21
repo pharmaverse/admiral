@@ -43,8 +43,5 @@ Utilities used within Derivation functions:
 \code{\link{extract_unit}()},
 \code{\link{get_not_mapped}()}
 }
-\author{
-Thomas Neitmann
-}
 \concept{utils_help}
 \keyword{utils_help}

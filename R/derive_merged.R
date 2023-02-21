@@ -126,7 +126,6 @@
 #'   to `NA`. Observations in the additional dataset which have no matching
 #'   observation in the input dataset are ignored.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -351,9 +350,8 @@ derive_vars_merged <- function(dataset,
 #'
 #'   1. The date and flag variables are merged to the input dataset.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 #'
@@ -372,45 +370,10 @@ derive_vars_merged_dt <- function(dataset,
                                   preserve = FALSE,
                                   check_type = "warning",
                                   duplicate_msg = NULL) {
-  assert_vars(by_vars)
-  dtc <- assert_symbol(enexpr(dtc))
-  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
-  assert_data_frame(dataset_add, required_vars = expr_c(by_vars, dtc))
-
-  deprecate_warn(
+  deprecate_stop(
     "0.8.0",
     "derive_vars_merged_dt()",
     details = "Please use `derive_vars_dt()` and `derive_vars_merged()` instead."
-  )
-
-  old_vars <- names(dataset_add)
-  if (is.null(date_imputation)) {
-    highest_imputation <- "n"
-    date_imputation <- "first"
-  } else {
-    highest_imputation <- "M"
-  }
-  add_data <- filter_if(dataset_add, filter_add) %>%
-    derive_vars_dt(
-      new_vars_prefix = new_vars_prefix,
-      dtc = !!dtc,
-      highest_imputation = highest_imputation,
-      date_imputation = date_imputation,
-      flag_imputation = flag_imputation,
-      min_dates = min_dates,
-      max_dates = max_dates,
-      preserve = preserve
-    )
-  new_vars <- exprs(!!!syms(setdiff(names(add_data), old_vars)))
-  derive_vars_merged(
-    dataset,
-    dataset_add = add_data,
-    by_vars = by_vars,
-    order = order,
-    new_vars = new_vars,
-    mode = mode,
-    check_type = check_type,
-    duplicate_msg = duplicate_msg
   )
 }
 
@@ -465,9 +428,8 @@ derive_vars_merged_dt <- function(dataset,
 #'
 #'   1. The date and flag variables are merged to the input dataset.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 #'
@@ -487,50 +449,10 @@ derive_vars_merged_dtm <- function(dataset,
                                    preserve = FALSE,
                                    check_type = "warning",
                                    duplicate_msg = NULL) {
-  dtc <- assert_symbol(enexpr(dtc))
-
-  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
-  assert_data_frame(dataset_add, required_vars = expr_c(by_vars, dtc))
-
-  deprecate_warn(
+  deprecate_stop(
     "0.8.0",
     "derive_vars_merged_dtm()",
     details = "Please use `derive_vars_dtm()` and `derive_vars_merged()` instead."
-  )
-
-  old_vars <- names(dataset_add)
-  if (is.null(date_imputation)) {
-    highest_imputation <- "h"
-    date_imputation <- "first"
-  } else {
-    highest_imputation <- "M"
-  }
-  if (is.null(time_imputation)) {
-    highest_imputation <- "n"
-    time_imputation <- "first"
-  }
-  add_data <- filter_if(dataset_add, filter = filter_add) %>%
-    derive_vars_dtm(
-      new_vars_prefix = new_vars_prefix,
-      dtc = !!dtc,
-      highest_imputation = highest_imputation,
-      date_imputation = date_imputation,
-      time_imputation = time_imputation,
-      flag_imputation = flag_imputation,
-      min_dates = min_dates,
-      max_dates = max_dates,
-      preserve = preserve
-    )
-  new_vars <- exprs(!!!syms(setdiff(names(add_data), old_vars)))
-  derive_vars_merged(
-    dataset,
-    dataset_add = add_data,
-    by_vars = by_vars,
-    order = order,
-    new_vars = new_vars,
-    mode = mode,
-    check_type = check_type,
-    duplicate_msg = duplicate_msg
   )
 }
 
@@ -582,7 +504,6 @@ derive_vars_merged_dtm <- function(dataset,
 #'
 #'   1. The categorization variable is merged to the input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -731,7 +652,6 @@ derive_var_merged_cat <- function(dataset,
 #'   `FALSE` or `NA`. Otherwise, it is set to the missing value
 #'   (`missing_value`).
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -847,7 +767,6 @@ derive_var_merged_exist_flag <- function(dataset,
 #'
 #'   1. The character variable is merged to the input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -944,7 +863,6 @@ derive_var_merged_character <- function(dataset,
 #' `by_vars` values that do not have corresponding records
 #' from the lookup table (by specifying `print_not_mapped = TRUE`).
 #'
-#' @author Annie Yang
 #'
 #' @keywords der_gen
 #' @family der_gen
@@ -1083,7 +1001,6 @@ get_not_mapped <- function() {
 #'   calculation. This can include built-in functions as well as user defined
 #'   functions, for example `mean` or `function(x) mean(x, na.rm = TRUE)`.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details
 #'

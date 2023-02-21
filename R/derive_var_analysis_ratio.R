@@ -28,7 +28,6 @@
 #' Reference CDISC ADaM Implementation Guide
 #' Version 1.1 Section 3.3.4 Analysis Parameter Variables for BDS Datasets
 #'
-#' @author Ben Straub
 #'
 #' @return The input dataset with a ratio variable appended
 #'

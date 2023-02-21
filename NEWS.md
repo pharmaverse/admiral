@@ -5,11 +5,19 @@
 - New function `consolidate_metadata()` for consolidating multiple meta datasets
 into a single one (#1479)
 
+- New function `compute_scale()` for computing the average of a vector and 
+transforming the result from a source to a target range. (#1692)
+
 - New ADPC template script available `ad_adpc.R` which creates PK Concentration
 Analysis Dataset (#849). This script includes formatting suitable for
 Non-Compartmental Analysis (ADNCA) (#851)
 
 ## Updates of Existing Functions
+
+- Arguments `analysis_var`, `keep_vars` were added to `derive_locf_records()`,   
+`analysis_var` allows to specify analysis variable, `keep_vars` keeps variables 
+that need carrying the last observation forward other than `analysis_var` 
+(e.g., `PARAMN`, `VISITNUM`) (#1636).
 
 -   The function `create_single_dose_dataset()` adds support for
     expanding relative nominal time (e.g. NFRLT) used in Pharmacokinetic
@@ -47,11 +55,46 @@ USUBJID)` must be used now.
 added for subjects who have both an event or censoring and an observation in
 `dataset_adsl` (#1576).
 
+## Documentation
+
+- New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
+
 - `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
 
+- The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1712)
+
+  - `derive_derived_param()` 
+  - `derive_param_first_event()` 
+  - `derive_vars_merged_dt()`
+  - `derive_vars_merged_dtm()`
+  - `derive_var_agegr_ema()`
+  - `derive_var_agegr_fda()`
+
+- The following functions, which were deprecated in previous `{admiral}` versions, have been removed (#1712):
+
+  - `derive_var_ady()`
+  - `derive_var_aendy()`
+  - `derive_var_astdy()`
+  - `derive_var_atirel()`
+  - `derive_vars_suppqual()`
+  - `smq_select()`
+  - `sdg_select()`
+
+- The following parameters, which were deprecated in previous `{admiral}` versions, have been removed (#1712):
+
+  - `meddra_version`, `whodd_version`, `get_smq_fun` and `get_sdg_fun` from the `create_query_data()` function
+  - `date_imputation`, `time_imputation` and `preserve` parameters from `date_source()` function
+  - `filter` parameter from `derive_var_extreme_flag()` and `derive_var_worst_flag()` functions
+
 ## Documentation
+
+- The expected value for the `derivation` argument of `restrict_derivation()`,
+`slice_derivation()`, and `call_derivation()` is described now. (#1698)
+
+- Removed authors from function documentation, as we will now only be tracking an overall list of 
+authors for admiral. (#1673)
 
 # admiral 0.9.1
 

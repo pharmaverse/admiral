@@ -328,8 +328,5 @@ Utilities for Filtering Observations:
 \code{\link{max_cond}()},
 \code{\link{min_cond}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{utils_fil}
 \keyword{utils_fil}

@@ -12,7 +12,6 @@
 #'  "SCREENING NOT COMPLETED") nor NA,
 #'  "ONGOING" otherwise.
 #'
-#' @author Samia Kabi
 #' @details Usually this function can not be used with `%>%`.
 #' @export
 #' @family utils_fmt
@@ -105,7 +104,6 @@ format_eoxxstt_default <- function(status) {
 #' @family der_adsl
 #' @keywords der_adsl
 #'
-#' @author Samia Kabi
 #'
 #' @export
 #'

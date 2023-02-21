@@ -67,7 +67,6 @@
 #' white blood cell absolute value (identified by `wbc_code`) and the white blood cell differential
 #' (identified by `diff_code`) are both present.
 #'
-#' @author Annie Yang
 #'
 #' @return The input dataset with the new parameter added
 #'
