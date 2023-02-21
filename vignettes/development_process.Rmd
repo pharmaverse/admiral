@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 ```
 
 Once you’ve familiarized yourself with the `{admiral}` [contribution
-model](contribution_model.html) and you’re ready to make your first code
+model](https://pharmaverse.github.io/admiral/articles/contribution_model.html) and you’re ready to make your first code
 contribution, this development process step-by-step guide will help tie all the
 other detailed vignettes together to give you the simplest experience of helping
 to grow and enhance our codebase.
@@ -32,7 +32,7 @@ strategy](programming_strategy.html), and then make the required code updates.
     a. Did you create/add appropriate [unit tests](unit_test_guidance.html#writing-unit-tests-in-admiral-)?
     a. If you removed/replaced any function and/or function parameters, did you fully follow the [deprecation guidance](programming_strategy.html#deprecation-1)?
     a. Did you update the [documentation](programming_strategy.html#function-header-documentation-)? If so, remember to run `devtools::document()` and include the updated `NAMESPACE` and `.Rd` files in `man/` 
-    a. Does your code update have any impact on the [ADaM template](admiral.html#starting-a-script-1) R scripts stored in `inst/templates`?
+    a. Does your code update have any impact on the [ADaM template](https://pharmaverse.github.io/admiral/articles/admiral.html#starting-a-script) R scripts stored in `inst/templates`?
     a. Does your code update have any impact on the vignettes stored in vignettes?
     a. Did you update the Changelog `NEWS.md`?
     a. Did you build `{admiral}` site `pkgdown::build_site()` and check that all affected examples are displayed correctly and that all new functions occur on the "[Reference](../reference/index.html)" page?
