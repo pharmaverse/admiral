@@ -63,8 +63,5 @@ OCCDS Functions:
 \code{\link{derive_vars_atc}()},
 \code{\link{derive_vars_query}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{der_occds}
 \keyword{der_occds}

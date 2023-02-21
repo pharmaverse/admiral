@@ -33,8 +33,5 @@ Utilities used within Derivation functions:
 \code{\link{get_not_mapped}()},
 \code{\link{signal_duplicate_records}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{utils_help}
 \keyword{utils_help}

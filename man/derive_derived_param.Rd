@@ -52,7 +52,7 @@ can be accessed using \verb{AVAL.<parameter code>}, e.g., \code{AVAL.SYSBP}.
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
 code for the new parameter.
 
 \emph{Permitted Values:} List of variable-value pairs}
@@ -89,15 +89,15 @@ be populated in the new parameter rows if it is specified in \code{by_vars}.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-This function is deprecated.  Please use \code{derive_param-computed()} instead.
+This function is deprecated.  Please use \code{derive_param_computed()} instead.
 }
 \seealso{
 Other deprecated: 
 \code{\link{derive_param_first_event}()},
-\code{\link{derive_var_aendy}()}
-}
-\author{
-Stefan Bundfuss
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()},
+\code{\link{vars}()}
 }
 \concept{deprecated}
 \keyword{deprecated}

@@ -32,7 +32,7 @@
 #'   this parameter. The specified variables are added to the joined dataset
 #'   with suffix ".join". For example to select all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
-#'   vars(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
+#'   exprs(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
 #'   AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
@@ -91,7 +91,7 @@
 #'   specified for `join_vars` are kept. The suffix ".join" is added to these
 #'   variables.
 #'
-#'   For example, for `by_vars = USUBJID`, `join_vars = vars(AVISITN, AVALC)` and input dataset
+#'   For example, for `by_vars = USUBJID`, `join_vars = exprs(AVISITN, AVALC)` and input dataset
 #'
 #'   ```{r eval=FALSE}
 #'   # A tibble: 2 x 4
@@ -119,7 +119,7 @@
 #'   `join_type` and `order`.
 #'
 #'   The dataset from the example in the previous step with `join_type =
-#'   "after"` and order = vars(AVISITN)` is restricted to
+#'   "after"` and order = exprs(AVISITN)` is restricted to
 #'
 #'   ```{r eval=FALSE}
 #'   A tibble: 4 x 6
@@ -150,7 +150,6 @@
 #' @returns A subset of the observations of the input dataset. All variables of
 #'   the input dataset are included in the output dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fil
 #' @family utils_fil
@@ -182,10 +181,10 @@
 #'
 #' filter_confirmation(
 #'   adae,
-#'   by_vars = vars(USUBJID),
-#'   join_vars = vars(ACOVFL, ADY),
+#'   by_vars = exprs(USUBJID),
+#'   join_vars = exprs(ACOVFL, ADY),
 #'   join_type = "all",
-#'   order = vars(ADY),
+#'   order = exprs(ADY),
 #'   filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 #' )
 #'
@@ -205,10 +204,10 @@
 #'
 #' filter_confirmation(
 #'   data,
-#'   by_vars = vars(USUBJID),
-#'   join_vars = vars(AVALC, AVISITN),
+#'   by_vars = exprs(USUBJID),
+#'   join_vars = exprs(AVALC, AVISITN),
 #'   join_type = "after",
-#'   order = vars(AVISITN),
+#'   order = exprs(AVISITN),
 #'   filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
 #' )
 #'
@@ -234,10 +233,10 @@
 #'
 #' filter_confirmation(
 #'   data,
-#'   by_vars = vars(USUBJID),
-#'   join_vars = vars(AVALC),
+#'   by_vars = exprs(USUBJID),
+#'   join_vars = exprs(AVALC),
 #'   join_type = "after",
-#'   order = vars(AVISITN),
+#'   order = exprs(AVISITN),
 #'   first_cond = AVALC.join == "CR",
 #'   filter = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
 #'     count_vals(var = AVALC.join, val = "NE") <= 1
@@ -266,10 +265,10 @@
 #'
 #' filter_confirmation(
 #'   data,
-#'   by_vars = vars(USUBJID),
-#'   join_vars = vars(AVALC, ADY),
+#'   by_vars = exprs(USUBJID),
+#'   join_vars = exprs(AVALC, ADY),
 #'   join_type = "after",
-#'   order = vars(ADY),
+#'   order = exprs(ADY),
 #'   first_cond = AVALC.join %in% c("CR", "PR") & ADY.join - ADY >= 20,
 #'   filter = AVALC == "PR" &
 #'     all(AVALC.join %in% c("CR", "PR", "NE")) &
@@ -297,9 +296,9 @@ filter_confirmation <- function(dataset,
       values = c("before", "after", "all"),
       case_sensitive = FALSE
     )
-  first_cond <- assert_filter_cond(enquo(first_cond), optional = TRUE)
+  first_cond <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
   assert_order_vars(order)
-  filter <- assert_filter_cond(enquo(filter))
+  filter <- assert_filter_cond(enexpr(filter))
   check_type <-
     assert_character_scalar(
       check_type,
@@ -308,7 +307,7 @@ filter_confirmation <- function(dataset,
     )
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, join_vars, extract_vars(order))
+    required_vars = expr_c(by_vars, join_vars, extract_vars(order))
   )
 
   # number observations of the input dataset to get a unique key
@@ -342,13 +341,13 @@ filter_confirmation <- function(dataset,
     )
   }
 
-  if (!quo_is_null(first_cond)) {
+  if (!is.null(first_cond)) {
     # select all observations up to the first confirmation observation
     data_joined <- filter_relative(
       data_joined,
-      by_vars = vars(!!!by_vars, tmp_obs_nr_filter_confirmation),
+      by_vars = exprs(!!!by_vars, tmp_obs_nr_filter_confirmation),
       condition = !!first_cond,
-      order = vars(tmp_obs_nr_filter_confirmation.join),
+      order = exprs(tmp_obs_nr_filter_confirmation.join),
       mode = "first",
       selection = "before",
       inclusive = TRUE,
@@ -375,7 +374,6 @@ filter_confirmation <- function(dataset,
 #'
 #' @param val A value
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fil
 #' @family utils_fil
@@ -421,7 +419,6 @@ count_vals <- function(var, val) {
 #'
 #' @param cond A condition
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fil
 #' @family utils_fil
@@ -454,7 +451,7 @@ count_vals <- function(var, val) {
 #'   pr_after_cr = last_pr_vis > first_cr_vis
 #' )
 min_cond <- function(var, cond) {
-  assert_filter_cond(enquo(cond))
+  assert_filter_cond(enexpr(cond))
   if (length(var[cond]) == 0) {
     NA
   } else {
@@ -471,7 +468,6 @@ min_cond <- function(var, cond) {
 #'
 #' @param cond A condition
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fil
 #' @family utils_fil
@@ -504,7 +500,7 @@ min_cond <- function(var, cond) {
 #'   pr_after_cr = last_pr_vis > first_cr_vis
 #' )
 max_cond <- function(var, cond) {
-  assert_filter_cond(enquo(cond))
+  assert_filter_cond(enexpr(cond))
   if (length(var[cond]) == 0) {
     NA
   } else {

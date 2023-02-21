@@ -178,7 +178,7 @@ test_that("derive_var_dthcaus Test 4: DTHCAUS and traceability vars are added fr
     date = AEDTHDT,
     mode = "first",
     dthcaus = AEDECOD,
-    traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+    traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
   )
 
   src_ds <- dthcaus_source(
@@ -187,7 +187,7 @@ test_that("derive_var_dthcaus Test 4: DTHCAUS and traceability vars are added fr
     date = DSSTDT,
     mode = "first",
     dthcaus = DSTERM,
-    traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+    traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
   )
 
   expected_output <- tibble::tribble(
@@ -247,7 +247,7 @@ test_that("derive_var_dthcaus Test 5: DTHCAUS/traceabiity are added from 2 input
     date = AEDTHDT,
     mode = "first",
     dthcaus = AEDECOD,
-    traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+    traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
   )
 
   src_ds <- dthcaus_source(
@@ -256,7 +256,7 @@ test_that("derive_var_dthcaus Test 5: DTHCAUS/traceabiity are added from 2 input
     date = DSSTDT,
     mode = "first",
     dthcaus = DSTERM,
-    traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+    traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
   )
 
   expected_output <- tibble::tribble(
@@ -397,7 +397,7 @@ test_that("derive_var_dthcaus Test 8: `dataset` is sorted using the `order` para
     dataset_name = "ds",
     filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
     date = DSSTDT,
-    order = vars(DSSEQ),
+    order = exprs(DSSEQ),
     mode = "last",
     dthcaus = DSTERM
   )

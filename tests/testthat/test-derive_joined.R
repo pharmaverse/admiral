@@ -23,7 +23,7 @@ test_that("derive_vars_joined Test 1: no by_vars, no order, no new_vars", {
     comp = derive_vars_joined(
       select(expected, USUBJID, ADY),
       dataset_add = windows,
-      join_vars = vars(AWHI, AWLO),
+      join_vars = exprs(AWHI, AWLO),
       filter_join = AWLO <= ADY & ADY <= AWHI
     ),
     keys = c("USUBJID", "ADY")
@@ -50,10 +50,10 @@ test_that("derive_vars_joined Test 2: new_vars with rename", {
     comp = derive_vars_joined(
       adbds,
       dataset_add = adbds,
-      by_vars = vars(USUBJID),
-      order = vars(AVAL),
-      new_vars = vars(NADIR = AVAL),
-      join_vars = vars(ADY),
+      by_vars = exprs(USUBJID),
+      order = exprs(AVAL),
+      new_vars = exprs(NADIR = AVAL),
+      join_vars = exprs(ADY),
       filter_add = ADY > 0,
       filter_join = ADY.join < ADY,
       mode = "first",
@@ -87,10 +87,10 @@ test_that("derive_vars_joined Test 3: by_vars with rename", {
     comp = derive_vars_joined(
       adae,
       dataset_add = faae,
-      by_vars = vars(AEGRPID = FAGRPID),
-      order = vars(FADT),
-      new_vars = vars(ATOXGR_pre = FAORRES),
-      join_vars = vars(FADT),
+      by_vars = exprs(AEGRPID = FAGRPID),
+      order = exprs(FADT),
+      new_vars = exprs(ATOXGR_pre = FAORRES),
+      join_vars = exprs(FADT),
       filter_join = FADT < TRTSDTM,
       mode = "last"
     ),
@@ -122,9 +122,9 @@ test_that("derive_vars_joined Test 4: no join_vars, no filter_join", {
     comp = derive_vars_joined(
       adae,
       dataset_add = faae,
-      by_vars = vars(AEGRPID = FAGRPID),
-      order = vars(FAORRES),
-      new_vars = vars(ATOXGR_pre = FAORRES),
+      by_vars = exprs(AEGRPID = FAGRPID),
+      order = exprs(FAORRES),
+      new_vars = exprs(ATOXGR_pre = FAORRES),
       mode = "first"
     ),
     keys = c("AEGRPID")

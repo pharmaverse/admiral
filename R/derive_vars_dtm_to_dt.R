@@ -4,10 +4,9 @@
 #'
 #' @param dataset Input dataset
 #'
-#' @param source_vars A list of datetime variables created using `vars()` from
+#' @param source_vars A list of datetime variables created using `exprs()` from
 #'   which dates are to be extracted
 #'
-#' @author Teckla Akinyi
 #'
 #' @return
 #' A data frame containing the input dataset with the corresponding date (`--DT`)
@@ -39,14 +38,14 @@
 #'   )
 #'
 #' adcm %>%
-#'   derive_vars_dtm_to_dt(vars(TRTSDTM, ASTDTM, AENDTM)) %>%
+#'   derive_vars_dtm_to_dt(exprs(TRTSDTM, ASTDTM, AENDTM)) %>%
 #'   select(USUBJID, starts_with("TRT"), starts_with("AST"), starts_with("AEN"))
 derive_vars_dtm_to_dt <- function(dataset, source_vars) {
   assert_vars(source_vars)
   assert_data_frame(dataset, required_vars = source_vars)
 
   # Warn if `--TM` variables already exist
-  dtm_vars <- quo_c(source_vars)
+  dtm_vars <- expr_c(source_vars)
   dtm_vars2 <- vars2chr(dtm_vars)
   n_vars <- length(dtm_vars)
 
@@ -57,8 +56,8 @@ derive_vars_dtm_to_dt <- function(dataset, source_vars) {
 
   if (n_vars > 1L) {
     dataset %>%
-      mutate_at(source_vars, .funs = list(new = lubridate::date)) %>%
-      rename_at(vars(ends_with("new")), .funs = ~ str_replace(., "DTM_new", "DT"))
+      mutate(across(.cols = vars2chr(source_vars), .fns = list(new = date))) %>%
+      rename_with(.cols = ends_with("new"), .fn = ~ str_replace(., "DTM_new", "DT"))
   } else {
     dataset %>%
       mutate(!!sym(dt_vars) := lubridate::date(!!sym(dtm_vars2)))

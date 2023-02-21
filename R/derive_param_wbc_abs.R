@@ -14,8 +14,8 @@
 #'
 #' @param set_values_to Variables to set
 #'
-#'   A named list returned by `vars()` defining the variables to be set for the
-#'   new parameter, e.g. `vars(PARAMCD = "LYMPH", PARAM = "Lymphocytes Abs (10^9/L)")` is
+#'   A named list returned by `exprs()` defining the variables to be set for the
+#'   new parameter, e.g. `exprs(PARAMCD = "LYMPH", PARAM = "Lymphocytes Abs (10^9/L)")` is
 #'   expected.
 #'
 #' @param get_unit_expr An expression providing the unit of the parameter
@@ -67,7 +67,6 @@
 #' white blood cell absolute value (identified by `wbc_code`) and the white blood cell differential
 #' (identified by `diff_code`) are both present.
 #'
-#' @author Annie Yang
 #'
 #' @return The input dataset with the new parameter added
 #'
@@ -94,8 +93,8 @@
 #'
 #' derive_param_wbc_abs(
 #'   dataset = test_lb,
-#'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(
+#'   by_vars = exprs(USUBJID, VISIT),
+#'   set_values_to = exprs(
 #'     PARAMCD = "LYMPH",
 #'     PARAM = "Lymphocytes Abs (10^9/L)",
 #'     DTYPE = "CALCULATION"
@@ -114,11 +113,11 @@ derive_param_wbc_abs <- function(dataset,
                                  diff_code,
                                  diff_type = "fraction") {
   assert_vars(by_vars)
-  assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
+  assert_data_frame(dataset, required_vars = exprs(!!!by_vars, PARAMCD, AVAL))
   assert_character_scalar(wbc_code)
   assert_character_scalar(diff_code)
   assert_character_scalar(diff_type, values = c("percent", "fraction"))
-  get_unit_expr <- assert_expr(enquo(get_unit_expr))
+  get_unit_expr <- assert_expr(enexpr(get_unit_expr))
   assert_character_scalar(wbc_unit)
   by_vars_str <- vars2chr(by_vars)
 
@@ -130,13 +129,13 @@ derive_param_wbc_abs <- function(dataset,
     filter(
       PARAMCD == !!wbc_code |
         PARAMCD == !!diff_code |
-        PARAMCD == !!quo_get_expr(set_values_to$PARAMCD)
+        PARAMCD == !!set_values_to$PARAMCD
     ) %>%
     select(!!!by_vars, PARAMCD, AVAL)
 
   # Only keep records where absolute value do not already exist.
   dataset_abs <- dataset_temp %>%
-    filter(PARAMCD == !!quo_get_expr(set_values_to$PARAMCD)) %>%
+    filter(PARAMCD == !!set_values_to$PARAMCD) %>%
     mutate(temp_flag = "Y") %>%
     select(!!!by_vars, temp_flag)
 
@@ -163,7 +162,7 @@ derive_param_wbc_abs <- function(dataset,
       analysis_value = !!analysis_value,
       set_values_to = set_values_to
     ) %>%
-    filter(PARAMCD == !!quo_get_expr(set_values_to$PARAMCD)) %>%
+    filter(PARAMCD == !!set_values_to$PARAMCD) %>%
     select(-starts_with("temp_"))
 
   # If no new records are added, output note and return original dataset,

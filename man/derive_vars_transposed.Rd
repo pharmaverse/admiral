@@ -81,7 +81,7 @@ facm <- tribble(
 cm \%>\%
   derive_vars_transposed(
     facm,
-    by_vars = vars(USUBJID, CMREFID = FAREFID),
+    by_vars = exprs(USUBJID, CMREFID = FAREFID),
     key_var = FATESTCD,
     value_var = FASTRESC
   ) \%>\%
@@ -106,9 +106,6 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{get_summary_records}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{der_gen}
 \keyword{der_gen}

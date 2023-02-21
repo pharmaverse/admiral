@@ -4,6 +4,8 @@ ADEG
 ADEX
 ADJAE
 ADLB
+ADNCA
+ADPC
 ADPP
 ADSL
 ADT
@@ -17,6 +19,8 @@ AELLTCD
 AENDT
 AENDTM
 AEs
+AFRLT
+ARRLT
 ASEQ
 ASTDT
 ASTDTM
@@ -71,7 +75,11 @@ MedDRA
 Metatools
 Modularity
 Mosteller
+MRRLT
+NCA
 NCI
+NFRLT
+NRRLT
 NUM
 OCCDS
 PARAM
@@ -84,7 +92,10 @@ Pandoc
 Param
 Pharma
 Pharmacokinetics
+Pharmacokinetic
 Pre
+QD
+QID
 Quosure
 Quosures
 RANDFL
@@ -111,6 +122,7 @@ TADJ
 TADJAE
 TDOSE
 TDURD
+TID
 TMF
 TNDOSINT
 TPDOSE

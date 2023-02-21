@@ -8,7 +8,7 @@
 derive_param_framingham(
   dataset,
   by_vars,
-  set_values_to = vars(PARAMCD = "FCVD101"),
+  set_values_to = exprs(PARAMCD = "FCVD101"),
   sysbp_code = "SYSBP",
   chol_code = "CHOL",
   cholhdl_code = "CHOLHDL",
@@ -43,7 +43,7 @@ in the newly created records.
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
 code for the new parameter.
 
 \emph{Permitted Values:} List of variable-value pairs}
@@ -211,8 +211,8 @@ adcvrisk <- tribble(
 
 adcvrisk \%>\%
   derive_param_framingham(
-    by_vars = vars(USUBJID, VISIT),
-    set_values_to = vars(
+    by_vars = exprs(USUBJID, VISIT),
+    set_values_to = exprs(
       PARAMCD = "FCVD101",
       PARAM = "FCVD1-Framingham CVD 10-Year Risk Score (\%)"
     ),
@@ -221,8 +221,8 @@ adcvrisk \%>\%
 
 derive_param_framingham(
   adcvrisk,
-  by_vars = vars(USUBJID, VISIT),
-  set_values_to = vars(
+  by_vars = exprs(USUBJID, VISIT),
+  set_values_to = exprs(
     PARAMCD = "FCVD101",
     PARAM = "FCVD1-Framingham CVD 10-Year Risk Score (\%)"
   ),
@@ -248,11 +248,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
-}
-\author{
-Alice Ehmann
-Jack McGavigan
-Ben Straub
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

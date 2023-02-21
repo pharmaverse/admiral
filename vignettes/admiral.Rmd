@@ -91,18 +91,18 @@ adsl <- adsl %>%
   derive_vars_merged(
     dataset_add = ex_ext,
     filter_add = !is.na(EXSTDTM),
-    new_vars = vars(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
-    order = vars(EXSTDTM, EXSEQ),
+    new_vars = exprs(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
+    order = exprs(EXSTDTM, EXSEQ),
     mode = "first",
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   derive_vars_merged(
     dataset_add = ex_ext,
     filter_add = !is.na(EXENDTM),
-    new_vars = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
-    order = vars(EXENDTM, EXSEQ),
+    new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+    order = exprs(EXENDTM, EXSEQ),
     mode = "last",
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   )
 ```
 
@@ -113,7 +113,7 @@ function.
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM))
+  derive_vars_dtm_to_dt(source_vars = exprs(TRTSDTM, TRTEDTM))
 ```
 
 ## Derive Treatment Duration (`TRTDURD`) {#trtdurgs}
@@ -133,7 +133,7 @@ look at all our newly derived variables.
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = vars(
+  display_vars = exprs(
     STUDYID, USUBJID, TRT01P, TRT01A,
     TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
     TRTSTMF, TRTETMF, TRTDURD
@@ -146,9 +146,11 @@ dataset_vignette(
 # Derivations
 
 The most important functions in `{admiral}` are the
-[derivations](../reference/index.html#section-derivations). These functions
-start with `derive_`. The first parameter of these functions expects the
-input dataset. This allows us to string together derivations using the `%>%`
+[derivations](../reference/index.html#derivations-for-adding-variables).
+Derivations add variables or observations to the input dataset. Existing
+variables and observations of the input dataset are not changed. Derivation
+functions start with `derive_`. The first parameter of these functions expects
+the input dataset. This allows us to string together derivations using the `%>%`
 operator.
 
 Functions which derive a dedicated variable start with `derive_var_` followed by
@@ -165,14 +167,6 @@ the parameter name, e.g., `derive_param_bmi()` derives the `BMI` parameter.
 
 It is expected that the input dataset is not grouped. Otherwise an error is
 issued.
-
-The input dataset should not include variables starting with `temp_`. These
-variable names are reserved for temporary variables used within the derivation
-and are removed from the output dataset. If the input dataset contains such
-variables, an error is issued.
-
-It is expected all variable names are uppercase in the input dataset and new
-variables will be returned in uppercase.
 
 The output dataset is ungrouped. The observations are not ordered in a dedicated
 way. In particular, the order of the observations of the input dataset may not
@@ -196,14 +190,14 @@ adsl <- dm %>%
   # Merge on final lab visit date
   derive_vars_merged(
     dataset_add = ds_final_lab_visit,
-    by_vars = vars(USUBJID)
+    by_vars = exprs(USUBJID)
   )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = vars(STUDYID, USUBJID, FINLABDT)
+  display_vars = exprs(STUDYID, USUBJID, FINLABDT)
 )
 ```
 
@@ -216,13 +210,13 @@ symbols or expressions must be specified rather than strings.
 without quotes and quotation, e.g. `new_var = TEMPBL`
 
 - For parameters which expect one or more variable names, a list of symbols is
-expected, e.g. `by_vars = vars(PARAMCD, AVISIT)` 
+expected, e.g. `by_vars = exprs(PARAMCD, AVISIT)` 
 
 - For parameters which expect a single expression, the expression needs to be
 passed "as is", e.g. `filter = PARAMCD == "TEMP"`
 
 - For parameters which expect one or more expressions, a list of expressions is
-expected, e.g. `order = vars(AVISIT, desc(AESEV))`
+expected, e.g. `order = exprs(AVISIT, desc(AESEV))`
 
 # Handling of Missing Values
 

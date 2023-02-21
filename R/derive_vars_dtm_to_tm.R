@@ -4,10 +4,9 @@
 #'
 #' @param dataset Input dataset
 #'
-#' @param source_vars A list of datetime variables created using `vars()` from
+#' @param source_vars A list of datetime variables created using `exprs()` from
 #'   which time is to be extracted
 #'
-#' @author Teckla Akinyi
 #'
 #' @details
 #' The names of the newly added variables are automatically set by replacing the
@@ -45,18 +44,18 @@
 #'   )
 #'
 #' adcm %>%
-#'   derive_vars_dtm_to_tm(vars(TRTSDTM)) %>%
+#'   derive_vars_dtm_to_tm(exprs(TRTSDTM)) %>%
 #'   select(USUBJID, starts_with("TRT"), everything())
 #'
 #' adcm %>%
-#'   derive_vars_dtm_to_tm(vars(TRTSDTM, ASTDTM, AENDTM)) %>%
+#'   derive_vars_dtm_to_tm(exprs(TRTSDTM, ASTDTM, AENDTM)) %>%
 #'   select(USUBJID, starts_with("TRT"), starts_with("AS"), starts_with("AE"))
 derive_vars_dtm_to_tm <- function(dataset, source_vars) {
   assert_vars(source_vars)
   assert_data_frame(dataset, required_vars = source_vars)
 
   # Warn if `--TM` variables already exist
-  dtm_vars <- quo_c(source_vars)
+  dtm_vars <- expr_c(source_vars)
   dtm_vars2 <- vars2chr(dtm_vars)
   n_vars <- length(dtm_vars)
 
@@ -67,8 +66,8 @@ derive_vars_dtm_to_tm <- function(dataset, source_vars) {
 
   if (n_vars > 1L) {
     dataset %>%
-      mutate_at(source_vars, .funs = list(new = as_hms)) %>%
-      rename_at(vars(ends_with("new")), .funs = ~ str_replace(., "DTM_new", "TM"))
+      mutate(across(.cols = vars2chr(source_vars), .fns = list(new = as_hms))) %>%
+      rename_with(.fn = ~ str_replace(., "DTM_new", "TM"), .cols = ends_with("new"))
   } else {
     dataset %>%
       mutate(!!sym(tm_vars) := as_hms(!!sym(dtm_vars2)))

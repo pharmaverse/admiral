@@ -99,12 +99,12 @@ function must return a numeric vector.
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of symbols created using \code{vars()} is expected.}
+A list of symbols created using \code{exprs()} is expected.}
 
 \item{set_values_to}{Variables to set
 
-A named list returned by \code{vars()} defining the variables to be set for the
-new parameter, e.g. \code{vars(PARAMCD = "MDIS", PARAM = "Measurable Disease at Baseline")} is expected. The values must be symbols, character strings,
+A named list returned by \code{exprs()} defining the variables to be set for the
+new parameter, e.g. \code{exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at Baseline")} is expected. The values must be symbols, character strings,
 numeric values, or \code{NA}.}
 }
 \value{
@@ -174,7 +174,7 @@ derive_param_exist_flag(
   condition = TUSTRESC == "TARGET",
   false_value = "N",
   missing_value = "N",
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = "MDIS",
     PARAM = "Measurable Disease at Baseline"
   )
@@ -197,9 +197,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

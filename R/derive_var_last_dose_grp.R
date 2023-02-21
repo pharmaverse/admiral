@@ -27,7 +27,6 @@
 #' aggregate dose information and satisfy `single_dose_condition`.
 #' @return Input dataset with additional column `new_var`.
 #'
-#' @author Ben Straub
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -62,7 +61,7 @@
 #'     dataset_ex = ex_single,
 #'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
 #'       !is.na(EXSTDTM),
-#'     by_vars = vars(STUDYID, USUBJID),
+#'     by_vars = exprs(STUDYID, USUBJID),
 #'     dose_date = EXSTDTM,
 #'     new_var = LDGRP,
 #'     grp_brks = c(0, 20, 40, 60),
@@ -71,14 +70,14 @@
 #'     right = TRUE,
 #'     dose_var = EXDOSE,
 #'     analysis_date = ASTDTM,
-#'     traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
+#'     traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
 #'   ) %>%
 #'   select(USUBJID, LDGRP, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 derive_var_last_dose_grp <- function(dataset,
                                      dataset_ex,
                                      filter_ex = NULL,
-                                     by_vars = vars(STUDYID, USUBJID),
-                                     dose_id = vars(),
+                                     by_vars = exprs(STUDYID, USUBJID),
+                                     dose_id = exprs(),
                                      dose_date,
                                      analysis_date,
                                      single_dose_condition = (EXDOSFRQ == "ONCE"),
@@ -89,13 +88,13 @@ derive_var_last_dose_grp <- function(dataset,
                                      right = TRUE,
                                      dose_var = EXDOSE,
                                      traceability_vars = NULL) {
-  filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
+  filter_ex <- assert_filter_cond(enexpr(filter_ex), optional = TRUE)
   by_vars <- assert_vars(by_vars)
-  dose_date <- assert_symbol(enquo(dose_date))
-  analysis_date <- assert_symbol(enquo(analysis_date))
-  single_dose_condition <- assert_filter_cond(enquo(single_dose_condition))
-  new_var <- assert_symbol(enquo(new_var))
-  dose_var <- assert_symbol(enquo(dose_var))
+  dose_date <- assert_symbol(enexpr(dose_date))
+  analysis_date <- assert_symbol(enexpr(analysis_date))
+  single_dose_condition <- assert_filter_cond(enexpr(single_dose_condition))
+  new_var <- assert_symbol(enexpr(new_var))
+  dose_var <- assert_symbol(enexpr(dose_var))
 
   derive_vars_last_dose(
     dataset = dataset,
@@ -106,7 +105,7 @@ derive_var_last_dose_grp <- function(dataset,
     dose_date = !!dose_date,
     analysis_date = !!analysis_date,
     single_dose_condition = !!single_dose_condition,
-    new_vars = vars(!!dose_var),
+    new_vars = exprs(!!dose_var),
     traceability_vars = traceability_vars
   ) %>%
     mutate(

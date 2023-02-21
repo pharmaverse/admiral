@@ -26,7 +26,6 @@
 #' dataset is transposed and subsequently merged onto `dataset` using `by_vars` as
 #' keys.
 #'
-#' @author Thomas Neitmann
 #'
 #' @return The input dataset with transposed variables from `dataset_merge` added
 #'
@@ -72,7 +71,7 @@
 #' cm %>%
 #'   derive_vars_transposed(
 #'     facm,
-#'     by_vars = vars(USUBJID, CMREFID = FAREFID),
+#'     by_vars = exprs(USUBJID, CMREFID = FAREFID),
 #'     key_var = FATESTCD,
 #'     value_var = FASTRESC
 #'   ) %>%
@@ -83,12 +82,12 @@ derive_vars_transposed <- function(dataset,
                                    key_var,
                                    value_var,
                                    filter = NULL) {
-  key_var <- assert_symbol(enquo(key_var))
-  value_var <- assert_symbol(enquo(value_var))
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  key_var <- assert_symbol(enexpr(key_var))
+  value_var <- assert_symbol(enexpr(value_var))
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
-  assert_data_frame(dataset_merge, required_vars = quo_c(by_vars, key_var, value_var))
+  assert_data_frame(dataset_merge, required_vars = expr_c(by_vars, key_var, value_var))
 
   dataset_transposed <- dataset_merge %>%
     filter_if(filter) %>%
@@ -119,7 +118,6 @@ derive_vars_transposed <- function(dataset,
 #'
 #'   Default: `FASTRESC`
 #'
-#' @author Thomas Neitmann
 #'
 #' @return The input dataset with ATC variables added
 #'
@@ -164,12 +162,12 @@ derive_vars_transposed <- function(dataset,
 #' derive_vars_atc(cm, facm)
 derive_vars_atc <- function(dataset,
                             dataset_facm,
-                            by_vars = vars(USUBJID, CMREFID = FAREFID),
+                            by_vars = exprs(USUBJID, CMREFID = FAREFID),
                             value_var = FASTRESC) {
-  value_var <- assert_symbol(enquo(value_var))
+  value_var <- assert_symbol(enexpr(value_var))
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
-  assert_data_frame(dataset_facm, required_vars = vars(!!!by_vars, !!value_var, FAGRPID, FATESTCD))
+  assert_data_frame(dataset_facm, required_vars = exprs(!!!by_vars, !!value_var, FAGRPID, FATESTCD))
 
   dataset %>%
     derive_vars_transposed(
@@ -180,5 +178,5 @@ derive_vars_atc <- function(dataset,
       filter = str_detect(FATESTCD, "^CMATC[1-4](CD)?$")
     ) %>%
     select(-starts_with("FA")) %>%
-    rename_at(vars(starts_with("CMATC")), ~ str_remove(.x, "^CM"))
+    rename_with(.fn = ~ str_remove(.x, "^CM"), .cols = starts_with("CMATC"))
 }

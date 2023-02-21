@@ -30,8 +30,8 @@ Permitted Values: list of variables}
 
 \item{set_values_to}{Variables to set
 
-A named list returned by \code{vars()} defining the variables to be set for the
-new parameter, e.g. \code{vars(PARAMCD = "LYMPH", PARAM = "Lymphocytes Abs (10^9/L)")} is
+A named list returned by \code{exprs()} defining the variables to be set for the
+new parameter, e.g. \code{exprs(PARAMCD = "LYMPH", PARAM = "Lymphocytes Abs (10^9/L)")} is
 expected.}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
@@ -101,8 +101,8 @@ test_lb <- tribble(
 
 derive_param_wbc_abs(
   dataset = test_lb,
-  by_vars = vars(USUBJID, VISIT),
-  set_values_to = vars(
+  by_vars = exprs(USUBJID, VISIT),
+  set_values_to = exprs(
     PARAMCD = "LYMPH",
     PARAM = "Lymphocytes Abs (10^9/L)",
     DTYPE = "CALCULATION"
@@ -130,9 +130,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_qtc}()},
 \code{\link{derive_param_rr}()},
 \code{\link{derive_summary_records}()}
-}
-\author{
-Annie Yang
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

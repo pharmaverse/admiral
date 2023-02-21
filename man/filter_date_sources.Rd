@@ -35,7 +35,7 @@ is created.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of symbols created using \code{vars()} is expected.}
+A list of symbols created using \code{exprs()} is expected.}
 
 \item{mode}{Selection mode (first or last)
 
@@ -101,7 +101,7 @@ ae <- tribble(
 ttae <- event_source(
   dataset_name = "ae",
   date = AESTDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "AE",
     SRCDOM = "AE",
     SRCVAR = "AESTDTC",
@@ -112,7 +112,7 @@ ttae <- event_source(
 filter_date_sources(
   sources = list(ttae),
   source_datasets = list(adsl = adsl, ae = ae),
-  by_vars = vars(AEDECOD),
+  by_vars = exprs(AEDECOD),
   create_datetime = FALSE,
   subject_keys = get_admiral_option("subject_keys"),
   mode = "first"
@@ -134,14 +134,9 @@ Source Specifications:
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
 \code{\link{query}()},
-\code{\link{sdg_select}()},
-\code{\link{smq_select}()},
 \code{\link{tte_source}()},
 \code{\link{validate_basket_select}()},
 \code{\link{validate_query}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{source_specifications}
 \keyword{source_specifications}

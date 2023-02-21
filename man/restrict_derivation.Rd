@@ -9,7 +9,16 @@ restrict_derivation(dataset, derivation, args = NULL, filter)
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{derivation}{Derivation}
+\item{derivation}{Derivation
+
+A function that performs a specific derivation is expected. A derivation
+adds variables or observations to a dataset. The first argument of a
+derivation must expect a dataset and the derivation must return a dataset.
+The function must provide the \code{dataset} argument and all arguments
+specified in the \code{params()} objects passed to the \code{arg} argument.
+
+Please note that it is not possible to specify \code{{dplyr}}
+functions like \code{mutate()} or \code{summarize()}.}
 
 \item{args}{Arguments of the derivation
 
@@ -41,10 +50,10 @@ restrict_derivation(
   adlb,
   derivation = derive_vars_merged,
   args = params(
-    by_vars = vars(USUBJID),
+    by_vars = exprs(USUBJID),
     dataset_add = adlb,
     filter_add = ABLFL == "Y",
-    new_vars = vars(BASE = AVAL)
+    new_vars = exprs(BASE = AVAL)
   ),
   filter = AVISITN > 0
 )
@@ -54,7 +63,7 @@ restrict_derivation(
   adlb,
   derivation = derive_var_base,
   args = params(
-    by_vars = vars(USUBJID)
+    by_vars = exprs(USUBJID)
   ),
   filter = AVISITN >= 0
 ) \%>\%
@@ -71,9 +80,6 @@ Higher Order Functions:
 \code{\link{call_derivation}()},
 \code{\link{derivation_slice}()},
 \code{\link{slice_derivation}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{high_order_function}
 \keyword{high_order_function}

@@ -39,7 +39,7 @@ The input dataset and the selected observations from the additional dataset
 are merged by the specified by variables. The by variables must be a unique
 key of the selected observations.
 
-\emph{Permitted Values}: list of variables created by \code{vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{order}{Sort order
 
@@ -51,7 +51,7 @@ the specified order. The imputed datetime variable can be specified as well
 \emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \verb{vars(ADT, desc(AVAL)} or \code{NULL}}
+created by \code{exprs()}, e.g., \verb{exprs(ADT, desc(AVAL)} or \code{NULL}}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
@@ -226,7 +226,13 @@ time imputation flag is added to the additional dataset.
 \item The date and flag variables are merged to the input dataset.
 }
 }
-\author{
-Stefan Bundfuss
+\seealso{
+Other deprecated: 
+\code{\link{derive_derived_param}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_vars_merged_dt}()},
+\code{\link{vars}()}
 }
+\concept{deprecated}
 \keyword{deprecated}

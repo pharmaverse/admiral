@@ -28,7 +28,6 @@
 #' @details The total treatment duration is derived as the number of days from
 #'   start to end date plus one.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with `TRTDURD` added
 #'
@@ -53,9 +52,9 @@
 derive_var_trtdurd <- function(dataset,
                                start_date = TRTSDT,
                                end_date = TRTEDT) {
-  start_date <- assert_symbol(enquo(start_date))
-  end_date <- assert_symbol(enquo(end_date))
-  assert_data_frame(dataset, vars(!!start_date, !!end_date))
+  start_date <- assert_symbol(enexpr(start_date))
+  end_date <- assert_symbol(enexpr(end_date))
+  assert_data_frame(dataset, exprs(!!start_date, !!end_date))
 
   derive_vars_duration(
     dataset,
