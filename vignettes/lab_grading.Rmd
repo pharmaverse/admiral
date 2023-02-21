@@ -84,10 +84,8 @@ library(tibble)
 
 data("admiral_lb")
 
-adsl <- admiral_adsl
-lb <- admiral_lb
-
-lb <- convert_blanks_to_na(lb)
+adsl <- admiral_adsl %>% convert_blanks_to_na()
+lb <- admiral_lb %>% convert_blanks_to_na()
 ```
 ```{r echo=FALSE}
 lb <- filter(lb, USUBJID %in% c("01-701-1115", "01-705-1186", "01-705-1349", "01-708-1286", "01-707-1037", "01-716-1024"))
