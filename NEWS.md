@@ -84,7 +84,10 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
   - `meddra_version`, `whodd_version`, `get_smq_fun` and `get_sdg_fun` from the `create_query_data()` function
   - `date_imputation`, `time_imputation` and `preserve` parameters from `date_source()` function
   - `filter` parameter from `derive_var_extreme_flag()` and `derive_var_worst_flag()` functions
+<<<<<<< HEAD
 >>>>>>> 9c675a282344e5810d28efed98e616e7d149faa1
+=======
+>>>>>>> devel
 
 ## Documentation
 
