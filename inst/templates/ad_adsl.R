@@ -78,11 +78,11 @@ format_lddthgr1 <- function(x) {
 }
 
 # EOSSTT mapping
-format_eoxxstt <- function(x) {
+format_eosstt <- function(x) {
   case_when(
     x %in% c("COMPLETED") ~ "COMPLETED",
-    !(x %in% c("COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~ "DISCONTINUED",
     x %in% c("SCREEN FAILURE") ~ NA_character_,
+    !is.na(x) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 }
@@ -156,12 +156,14 @@ adsl <- adsl %>%
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   ) %>%
   # EOS status
-  derive_var_disposition_status(
-    dataset_ds = ds_ext,
+  derive_var_merged_cat(
+    dataset_add = ds_ext,
+    by_vars = exprs(STUDYID, USUBJID),
+    filter_add = DSCAT == "DISPOSITION EVENT",
     new_var = EOSSTT,
-    status_var = DSDECOD,
-    format_new_var = format_eoxxstt,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
+    source_var = DSDECOD,
+    cat_fun = format_eosstt,
+    missing_value = NA_character_
   ) %>%
   # Last retrieval date
   derive_vars_merged(
