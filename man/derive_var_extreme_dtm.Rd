@@ -186,8 +186,5 @@ ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_period}()}
 }
-\author{
-Stefan Bundfuss, Thomas Neitmann
-}
 \concept{der_adsl}
 \keyword{der_adsl}

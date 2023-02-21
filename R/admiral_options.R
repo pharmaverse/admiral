@@ -11,7 +11,6 @@
 #' This function allows flexibility for function inputs that may need to be repeated
 #' multiple times in a script, such as `subject_keys`.
 #'
-#' @author Zelos Zhu
 #'
 #' @return
 #' The value of the specified option.
@@ -21,10 +20,9 @@
 #'
 #' @export
 #'
-#' @seealso [set_admiral_options()], [derive_param_exist_flag()],
-#' [derive_param_first_event()], [derive_param_tte()], [derive_var_disposition_status()],
-#' [derive_var_dthcaus()], [derive_var_extreme_dtm()], [derive_vars_disposition_reason()],
-#' [derive_vars_period()], [create_period_dataset()]
+#' @seealso [set_admiral_options()], [derive_param_exist_flag()], [derive_param_tte()],
+#' [derive_var_disposition_status()], [derive_var_dthcaus()], [derive_var_extreme_dtm()],
+#' [derive_vars_disposition_reason()], [derive_vars_period()], [create_period_dataset()]
 #'
 #'
 #' @examples
@@ -76,7 +74,6 @@ get_admiral_option <- function(option) {
 #' Modify an admiral option, e.g `subject_keys`, such that it automatically affects downstream
 #' function inputs where `get_admiral_option()` is called such as `derive_param_exist_flag()`.
 #'
-#' @author Zelos Zhu
 #'
 #' @return
 #' No return value, called for side effects.
@@ -86,8 +83,7 @@ get_admiral_option <- function(option) {
 #'
 #' @export
 #'
-#' @seealso [get_admiral_option()], [derive_param_exist_flag()],
-#' [derive_param_first_event()], [derive_param_tte()], [derive_var_disposition_status()],
+#' @seealso [get_admiral_option()], [derive_param_exist_flag()],[derive_param_tte()],
 #' [derive_var_dthcaus()], [derive_var_extreme_dtm()], [derive_vars_disposition_reason()],
 #' [derive_vars_period()], [create_period_dataset()]
 #'
