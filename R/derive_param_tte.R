@@ -121,7 +121,6 @@
 #'   `STARTDT`/`STARTDTM` (depending on the `create_datetime` parameter).
 #'   1. The new observations are added to the output dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the new parameter added
 #'
@@ -536,7 +535,6 @@ derive_param_tte <- function(dataset = NULL,
 #' @return A dataset with one observation per subject as described in the
 #'   "Details" section.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords source_specifications
 #' @family source_specifications
@@ -676,7 +674,6 @@ filter_date_sources <- function(sources,
 #'
 #' @return The list of extended source datasets
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords source_specifications
 #' @family source_specifications
@@ -791,7 +788,6 @@ extend_source_datasets <- function(source_datasets,
 #'   SRCDOM = "ADSL", SRCVAR = "DTHDT")`. The values must be a symbol, a
 #'   character string, a numeric value, or `NA`.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords source_specifications
 #' @family source_specifications
@@ -825,7 +821,6 @@ tte_source <- function(dataset_name,
 #'
 #' @inheritParams tte_source
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family source_specifications
 #' @keywords source_specifications
@@ -871,7 +866,6 @@ event_source <- function(dataset_name,
 #'
 #' @inheritParams tte_source
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family source_specifications
 #' @keywords source_specifications
@@ -918,7 +912,6 @@ censor_source <- function(dataset_name,
 #' A `data.frame` where each row corresponds to one `tte_source` object or `NULL`
 #' if `package` does not contain any `tte_source` objects
 #'
-#' @author Thomas Neitmann
 #'
 #' @export
 #'

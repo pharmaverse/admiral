@@ -2,7 +2,6 @@
 #'
 #' @export
 #'
-#' @author Thomas Neitmann
 #'
 #' @details
 #' Many {admiral} function check that the input dataset contains only one record
@@ -46,7 +45,6 @@ get_duplicates_dataset <- function() {
 #' @family utils_ds_chk
 #'
 #' @keywords utils_ds_chk
-#' @author Thomas Neitmann
 #'
 #' @examples
 #' data(admiral_adsl)
@@ -86,7 +84,6 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' @export
 #' @family utils_help
 #' @keywords utils_help
-#' @author Thomas Neitmann
 #'
 #' @examples
 #' data(admiral_adsl)

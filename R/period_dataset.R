@@ -33,7 +33,6 @@
 #'   A list of expressions where the expressions are symbols as returned by
 #'   `exprs()` is expected.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details For each subject and each subperiod/period/phase where at least one
 #'   of the source variable is not `NA` an observation is added to the output
@@ -267,7 +266,6 @@ create_period_dataset <- function(dataset,
 #'   A list of expressions where the expressions are symbols as returned by
 #'   `exprs()` is expected.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details For each subperiod/period/phase in the period reference dataset and
 #'   each element in `new_vars` a variable (LHS value of `new_vars`) is added to

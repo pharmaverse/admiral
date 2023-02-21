@@ -13,7 +13,6 @@ derive_var_worst_flag(
   analysis_var,
   worst_high,
   worst_low,
-  filter = deprecated(),
   check_type = "warning"
 )
 }
@@ -46,8 +45,6 @@ Use \code{character(0)} if not required.}
 \item{worst_low}{Character with \code{param_var} values specifying the parameters
 referring to "low".
 Use \code{character(0)} if not required.}
-
-\item{filter}{Deprecated, please use \code{restrict_derivation()} instead (see examples).}
 
 \item{check_type}{Check uniqueness?
 
@@ -161,9 +158,6 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},
 \code{\link{get_summary_records}()}
-}
-\author{
-Ondrej Slama
 }
 \concept{der_gen}
 \keyword{der_gen}

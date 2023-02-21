@@ -55,7 +55,6 @@
 #' variables
 #'
 #'
-#' @author Samia Kabi
 #'
 #' @return The input dataset with a new record added for each group (with respect to the variables
 #' specified for the `by_vars` parameter). That is, a variable will only

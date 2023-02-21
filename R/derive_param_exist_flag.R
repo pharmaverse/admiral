@@ -118,7 +118,6 @@
 #'
 #'   1. The new observations are added to input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with a new parameter indicating if an event
 #'   occurred (`AVALC`, `AVAL`, and the variables specified by `subject_keys`

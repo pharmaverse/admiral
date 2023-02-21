@@ -180,8 +180,5 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()}
 }
-\author{
-Pavan Kumar, updated by Alana Harris
-}
 \concept{der_gen}
 \keyword{der_gen}

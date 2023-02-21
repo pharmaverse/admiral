@@ -85,8 +85,5 @@ Utilities for Filtering Observations:
 \code{\link{filter_relative}()},
 \code{\link{min_cond}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{utils_fil}
 \keyword{utils_fil}

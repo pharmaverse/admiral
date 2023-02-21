@@ -103,11 +103,12 @@ the new observations.
 \seealso{
 Other deprecated: 
 \code{\link{derive_derived_param}()},
-\code{\link{derive_var_aendy}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()},
+\code{\link{format_eoxxstt_default}()},
 \code{\link{vars}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{deprecated}
 \keyword{deprecated}

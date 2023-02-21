@@ -239,9 +239,6 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \code{\link{derive_vars_duration}()},
 \code{\link{derive_vars_dy}()}
 }
-\author{
-Samia Kabi
-}
 \concept{der_date_time}
 \keyword{der_date_time}
 \keyword{der_gen}
