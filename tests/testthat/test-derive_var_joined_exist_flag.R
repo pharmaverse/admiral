@@ -16,12 +16,12 @@ data <- tibble::tribble(
   "4",      5,        "PR"
 )
 
-# derive_var_confirmation_flag ----
+# derive_var_joined_exist_flag ----
 ## Test 1: filter without first_cond ----
 ## Flagging any patient PR value that is followed by a CR or PR
-test_that("derive_var_confirmation_flag Test 1: filter without first_cond", {
+test_that("derive_var_joined_exist_flag Test 1: filter without first_cond", {
   actual <-
-    derive_var_confirmation_flag(
+    derive_var_joined_exist_flag(
       data,
       new_var = CONFFL,
       by_vars = exprs(USUBJID),
@@ -58,7 +58,7 @@ test_that("derive_var_confirmation_flag Test 1: filter without first_cond", {
 
 ## Test 2: filter with first_cond ----
 ## Flagging any patient CR value that is followed by a CR
-test_that("derive_var_confirmation_flag Test 2: filter with first_cond", {
+test_that("derive_var_joined_exist_flag Test 2: filter with first_cond", {
   data <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",
@@ -76,7 +76,7 @@ test_that("derive_var_confirmation_flag Test 2: filter with first_cond", {
     "4",      4,        "CR"
   )
   actual <-
-    derive_var_confirmation_flag(
+    derive_var_joined_exist_flag(
       data,
       new_var = CONFFL,
       by_vars = exprs(USUBJID),
@@ -115,9 +115,9 @@ test_that("derive_var_confirmation_flag Test 2: filter with first_cond", {
 ## Test 3: filter with first_cond and summary function ----
 ## Flagging any patient PR value that is followed by a CR or PR
 ## and at most one SD in between
-test_that("derive_var_confirmation_flag Test 3: filter with first_cond and summary function", {
+test_that("derive_var_joined_exist_flag Test 3: filter with first_cond and summary function", {
   actual <-
-    derive_var_confirmation_flag(
+    derive_var_joined_exist_flag(
       data,
       new_var = CONFFL,
       by_vars = exprs(USUBJID),
@@ -158,7 +158,7 @@ test_that("derive_var_confirmation_flag Test 3: filter with first_cond and summa
 ## Test 4: join_type = "all" ----
 ## Flagging observations with a duration longer than 30 and
 ## on or after 7 days of a COVID AE (ACOVFL == "Y")
-test_that("derive_var_confirmation_flag, Test 4: join_type = 'all'", {
+test_that("derive_var_joined_exist_flag, Test 4: join_type = 'all'", {
   adae <- tibble::tribble(
     ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
     "1",        10, "N",          1,
@@ -174,7 +174,7 @@ test_that("derive_var_confirmation_flag, Test 4: join_type = 'all'", {
     "4",        21, "N",         41
   )
 
-  actual <- derive_var_confirmation_flag(
+  actual <- derive_var_joined_exist_flag(
     adae,
     by_vars = exprs(USUBJID),
     new_var = ALCOVFL,
@@ -208,7 +208,7 @@ test_that("derive_var_confirmation_flag, Test 4: join_type = 'all'", {
 
 ## Test 5: join_type = "before" ----
 ## Flagging observations with AVALC = Y and an observation with CRIT1FL = Y before
-test_that("derive_var_confirmation_flag, Test 5: join_type = 'before'", {
+test_that("derive_var_joined_exist_flag, Test 5: join_type = 'before'", {
   data <- tibble::tribble(
     ~USUBJID, ~ASEQ, ~AVALC, ~CRIT1FL,
     "1",          1, "Y",    "Y",
@@ -218,7 +218,7 @@ test_that("derive_var_confirmation_flag, Test 5: join_type = 'before'", {
     "3",          1, "N",    "Y"
   )
 
-  actual <- derive_var_confirmation_flag(
+  actual <- derive_var_joined_exist_flag(
     data,
     by_vars = exprs(USUBJID),
     order = exprs(ASEQ),

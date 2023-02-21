@@ -325,7 +325,7 @@ derive_var_joined_exist_flag <- function(dataset,
     new_var = !!tmp_obs_nr
   )
 
-  data_filtered <- filter_confirmation(
+  data_filtered <- filter_joined(
     data,
     by_vars = by_vars,
     order = order,
