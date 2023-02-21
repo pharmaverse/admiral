@@ -35,8 +35,8 @@ test_that("derive_param_extreme_event Test 1: derive first PD date", {
   actual <- derive_param_extreme_event(
     adrs,
     dataset_adsl = adsl,
-    dataset_source = adrs,
-    filter_source = PARAMCD == "OVR" & AVALC == "PD",
+    dataset_add = adrs,
+    filter_add = PARAMCD == "OVR" & AVALC == "PD",
     order = exprs(ADT),
     set_values_to = exprs(
       PARAMCD = "PD",
@@ -71,8 +71,8 @@ test_that("derive_param_extreme_event Test 1: derive first PD date", {
 test_that("derive_param_extreme_event Test 2: derive death date parameter", {
   actual <- derive_param_extreme_event(
     dataset_adsl = adsl,
-    dataset_source = adsl,
-    filter_source = !is.na(DTHDT),
+    dataset_add = adsl,
+    filter_add = !is.na(DTHDT),
     new_var = AVAL,
     true_value = 1,
     false_value = 0,
@@ -133,8 +133,8 @@ test_that("derive_param_extreme_event Test 3: latest evaluable tumor assessment 
   actual <- derive_param_extreme_event(
     dataset = adrs,
     dataset_adsl = adsl,
-    dataset_source = adrs,
-    filter_source = PARAMCD == "OVR" & AVALC != "NE",
+    dataset_add = adrs,
+    filter_add = PARAMCD == "OVR" & AVALC != "NE",
     order = exprs(ADT),
     new_var = AVALC,
     true_value = "Y",

@@ -7,8 +7,8 @@
 derive_param_first_event(
   dataset,
   dataset_adsl,
-  dataset_source,
-  filter_source,
+  dataset_add,
+  filter_add,
   date_var,
   subject_keys = exprs(STUDYID, USUBJID),
   set_values_to,
@@ -26,17 +26,17 @@ The variables specified for \code{subject_keys} are expected. For each
 observation of the specified dataset a new observation is added to the
 input dataset.}
 
-\item{dataset_source}{Source dataset
+\item{dataset_add}{Source dataset
 
 All observations in the specified dataset fulfilling the condition
-specified by \code{filter_source} are considered as event.
+specified by \code{filter_add} are considered as event.
 
 The variables specified by the \code{subject_keys} and
 \code{date_var} parameter are expected.}
 
-\item{filter_source}{Source filter
+\item{filter_add}{Source filter
 
-All observations in \code{dataset_source} fulfilling the specified condition are
+All observations in \code{dataset_add} fulfilling the specified condition are
 considered as event.
 
 For subjects with at least one event \code{AVALC} is set to \code{"Y"}, \code{AVAL} to
@@ -47,7 +47,7 @@ For all other subjects \code{AVALC} is set to \code{"N"}, \code{AVAL} to \code{0
 
 \item{date_var}{Date variable
 
-Date variable in the source dataset (\code{dataset_source}). The variable is
+Date variable in the source dataset (\code{dataset_add}). The variable is
 used to sort the source dataset. \code{ADT} is set to the specified variable for
 events.}
 
@@ -83,18 +83,18 @@ This function is \emph{deprecated}, please use \code{derive_param_extreme_event(
 \details{
 \enumerate{
 \item The input dataset is restricted to observations fulfilling
-\code{filter_source}.
+\code{filter_add}.
 \item For each subject (with respect to the variables specified for the
 \code{subject_keys} parameter) the first observation (with respect to
-\code{date_var}) where the event condition (\code{filter_source} parameter) is
+\code{date_var}) where the event condition (\code{filter_add} parameter) is
 fulfilled is selected.
 \item For each observation in \code{dataset_adsl} a new observation is created. For
 subjects with event \code{AVALC} is set to \code{"Y"}, \code{AVAL} to \code{1}, and \code{ADT} to
 the first date where the event condition is fulfilled. For all other
 subjects \code{AVALC} is set to \code{"N"}, \code{AVAL} to \code{0}, and \code{ADT} to \code{NA}.
-For subjects with event all variables from \code{dataset_source} are kept. For
+For subjects with event all variables from \code{dataset_add} are kept. For
 subjects without event all variables which are in both \code{dataset_adsl} and
-\code{dataset_source} are kept.
+\code{dataset_add} are kept.
 \item The variables specified by the \code{set_values_to} parameter are added to
 the new observations.
 \item The new observations are added to input dataset.

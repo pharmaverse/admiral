@@ -47,6 +47,9 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 - Renamed `derive_var_confirmation_flag()` and `filter_confirmation()` to 
 `derive_var_joined_exist_flag()` and `filter_joined()` respectively (#1738). 
 
+- Rename `dataset_source` and `filter_source` in `derive_param_extreme_event()` to `dataset_add` and `filter_add` 
+respectively for consistency (#1742).
+
 ## Documentation
 
 # admiral 0.9.1

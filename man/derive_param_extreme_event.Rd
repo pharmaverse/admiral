@@ -7,8 +7,8 @@
 derive_param_extreme_event(
   dataset = NULL,
   dataset_adsl,
-  dataset_source,
-  filter_source,
+  dataset_add,
+  filter_add,
   order = NULL,
   new_var = AVALC,
   true_value = "Y",
@@ -30,17 +30,17 @@ The variables specified for \code{subject_keys} are expected. For each
 observation of the specified dataset a new observation is added to the
 input dataset.}
 
-\item{dataset_source}{Source dataset
+\item{dataset_add}{Source dataset
 
 All observations in the specified dataset fulfilling the condition
-specified by \code{filter_source} are considered as an event.
+specified by \code{filter_add} are considered as an event.
 
 The variables specified by the \code{subject_keys} and
 \code{order} parameter (if applicable) are expected.}
 
-\item{filter_source}{Source filter
+\item{filter_add}{Source filter
 
-All observations in \code{dataset_source} fulfilling the specified condition are
+All observations in \code{dataset_add} fulfilling the specified condition are
 considered as an event.
 
 For subjects with at least one event \code{new_var} is set to \code{true_value}.
@@ -49,7 +49,7 @@ For all other subjects \code{new_var} is set to \code{false_value}.}
 
 \item{order}{Order variable
 
-List of symbols for sorting the source dataset (\code{dataset_source}).
+List of symbols for sorting the source dataset (\code{dataset_add}).
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
 created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}.}
@@ -61,7 +61,7 @@ The name of the variable which will indicate whether an event happened or not.}
 \item{true_value}{True value
 
 For all subjects with at least one observation in the source dataset
-(\code{dataset_source}) fulfilling the event condition (\code{filter_source}),
+(\code{dataset_add}) fulfilling the event condition (\code{filter_add}),
 \code{new_var} is set to the specified value \code{true_value}.}
 
 \item{false_value}{False value
@@ -108,18 +108,18 @@ the function can derive a parameter for the first disease progression.
 }
 \details{
 \enumerate{
-\item The source dataset (\code{dataset_source}) is restricted to observations fulfilling
-\code{filter_source}.
+\item The source dataset (\code{dataset_add}) is restricted to observations fulfilling
+\code{filter_add}.
 \item For each subject (with respect to the variables specified for the
 \code{subject_keys} parameter) either the first or last observation from the restricted
 source dataset is selected. This is depending on \code{mode}, (with respect to \code{order},
-if applicable) where the event condition (\code{filter_source} parameter) is fulfilled.
+if applicable) where the event condition (\code{filter_add} parameter) is fulfilled.
 \item For each observation in \code{dataset_adsl} a new observation is created. For
 subjects with event \code{new_var} is set to \code{true_var}. For all other
 subjects \code{new_var} is set to \code{false_var}.
-For subjects with event all variables from \code{dataset_source} are kept. For
+For subjects with event all variables from \code{dataset_add} are kept. For
 subjects without event all variables which are in both \code{dataset_adsl} and
-\code{dataset_source} are kept.
+\code{dataset_add} are kept.
 \item The variables specified by the \code{set_values_to} parameter are added to
 the new observations.
 \item The new observations are added to input dataset.
@@ -161,8 +161,8 @@ adrs <- tribble(
 derive_param_extreme_event(
   adrs,
   dataset_adsl = adsl,
-  dataset_source = adrs,
-  filter_source = PARAMCD == "OVR" & AVALC == "PD",
+  dataset_add = adrs,
+  filter_add = PARAMCD == "OVR" & AVALC == "PD",
   order = exprs(ADT),
   new_var = AVALC,
   true_value = "Y",
@@ -179,8 +179,8 @@ derive_param_extreme_event(
 # derive parameter indicating death
 derive_param_extreme_event(
   dataset_adsl = adsl,
-  dataset_source = adsl,
-  filter_source = !is.na(DTHDT),
+  dataset_add = adsl,
+  filter_add = !is.na(DTHDT),
   new_var = AVALC,
   true_value = "Y",
   false_value = "N",

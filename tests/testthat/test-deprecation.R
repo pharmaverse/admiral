@@ -241,8 +241,8 @@ test_that("deprecation Test 16: A warning is issued if `derive_param_first_event
       derive_param_first_event(
         adrs,
         dataset_adsl = adsl,
-        dataset_source = adrs,
-        filter_source = PARAMCD == "OVR" & AVALC == "PD",
+        dataset_add = adrs,
+        filter_add = PARAMCD == "OVR" & AVALC == "PD",
         date_var = ADT,
         set_values_to = exprs(
           PARAMCD = "PD",
