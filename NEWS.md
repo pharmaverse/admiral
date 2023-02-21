@@ -49,6 +49,8 @@ USUBJID)` must be used now.
 added for subjects who have both an event or censoring and an observation in
 `dataset_adsl` (#1576).
 
+- Function `derive_var_disposition_status()` has been deprecated, please use `derive_var_merged_cat()` instead (#1681).
+
 - `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
@@ -88,6 +90,7 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 
 - Removed authors from function documentation, as we will now only be tracking an overall list of 
 authors for admiral. (#1673)
+
 
 # admiral 0.9.1
 
