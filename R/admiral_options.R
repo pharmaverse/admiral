@@ -20,9 +20,9 @@
 #'
 #' @export
 #'
-#' @seealso [set_admiral_options()], [derive_param_exist_flag()], [derive_param_tte()],
-#' [derive_var_disposition_status()], [derive_var_dthcaus()], [derive_var_extreme_dtm()],
-#' [derive_vars_disposition_reason()], [derive_vars_period()], [create_period_dataset()]
+#' @seealso [set_admiral_options()], [derive_param_exist_flag()], [derive_param_tte()]
+#'  [derive_var_dthcaus()], [derive_var_extreme_dtm()], [derive_vars_disposition_reason()],
+#'  [derive_vars_period()], [create_period_dataset()]
 #'
 #'
 #' @examples

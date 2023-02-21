@@ -51,7 +51,6 @@ convert_na_to_blanks(df)
 \seealso{
 Utilities for Formatting Observations: 
 \code{\link{convert_blanks_to_na}()},
-\code{\link{format_eoxxstt_default}()},
 \code{\link{format_reason_default}()},
 \code{\link{yn_to_numeric}()}
 }
