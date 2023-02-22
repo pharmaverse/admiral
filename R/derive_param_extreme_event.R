@@ -334,7 +334,7 @@ derive_param_extreme_event <- function(dataset = NULL,
   noevents <- anti_join(
     select(dataset_adsl, intersect(source_vars, adsl_vars)),
     select(events, !!!subject_keys),
-    by = vapply(subject_keys, as_name) # nolint: undesirable_function_linter
+    by = sapply(subject_keys, as_name) # nolint: undesirable_function_linter
   ) %>%
     mutate(!!new_var := false_value)
 
