@@ -3,7 +3,8 @@
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' This function is *deprecated*, please use `derive_param_extreme_event()` instead with the `order` argument instead of the `date_var` argument.
+#' This function is *deprecated*, please use `derive_param_extreme_event()` instead with the
+#' `order` argument instead of the `date_var` argument.
 #'
 #' @param dataset Input dataset
 #'
@@ -98,7 +99,10 @@ derive_param_first_event <- function(dataset,
   ### DEPRECATION
   deprecate_stop("0.9.0",
     "derive_param_first_event()",
-    details = "Please use `derive_param_extreme_event()` instead with the `order` argument instead of the `date_var` argument"
+    details = paste(
+      "Please use `derive_param_extreme_event()` instead with the `order` argument",
+      "instead of the `date_var` argument"
+    )
   )
 }
 

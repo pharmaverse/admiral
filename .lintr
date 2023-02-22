@@ -7,5 +7,6 @@ linters: linters_with_defaults(
 exclusions: list(
     "R/data.R" = Inf,
     "inst" = list(undesirable_function_linter = Inf),
-    "vignettes" = list(undesirable_function_linter = Inf)
+    "vignettes" = list(undesirable_function_linter = Inf),
+    "R/admiral_options.R" = list(line_length_linter = 8)
   )

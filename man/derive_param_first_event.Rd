@@ -78,7 +78,8 @@ event occurred
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-This function is \emph{deprecated}, please use \code{derive_param_extreme_event()} instead with the \code{order} argument instead of the \code{date_var} argument.
+This function is \emph{deprecated}, please use \code{derive_param_extreme_event()} instead with the
+\code{order} argument instead of the \code{date_var} argument.
 }
 \details{
 \enumerate{
