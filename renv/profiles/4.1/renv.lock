@@ -621,10 +621,10 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.37",
+      "Version": "1.40",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "a4ec675eb332a33fe7b7fe26f70e1f98",
+      "Repository": "CRAN",
+      "Hash": "caea8b0f899a0b1738444b9bc47067e7",
       "Requirements": [
         "evaluate",
         "highr",
@@ -1380,10 +1380,10 @@
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.30",
+      "Version": "0.34",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "e83f48136b041845e50a6658feffb197",
+      "Repository": "CRAN",
+      "Hash": "9eba2411b0b1f879797141bd24df7407",
       "Requirements": []
     },
     "xml2": {

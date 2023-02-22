@@ -146,16 +146,14 @@
     },
     "bslib": {
       "Package": "bslib",
-      "Version": "0.2.4",
+      "Version": "0.3.1",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "4830a372b241d78ed6f53731ee3023ac",
+      "Repository": "CRAN",
+      "Hash": "56ae7e1987b340186a8a5a157c2ec358",
       "Requirements": [
-        "digest",
         "htmltools",
         "jquerylib",
         "jsonlite",
-        "magrittr",
         "rlang",
         "sass"
       ]
@@ -619,14 +617,13 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.31",
+      "Version": "1.40",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "c3994c036d19fc22c5e2a209c8298bfb",
+      "Repository": "CRAN",
+      "Hash": "caea8b0f899a0b1738444b9bc47067e7",
       "Requirements": [
         "evaluate",
         "highr",
-        "markdown",
         "stringr",
         "xfun",
         "yaml"
@@ -701,17 +698,6 @@
       "Repository": "RSPM",
       "Hash": "41287f1ac7d28a92f0a286ed507928d3",
       "Requirements": []
-    },
-    "markdown": {
-      "Package": "markdown",
-      "Version": "1.1",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "61e4a10781dd00d7d81dd06ca9b94e95",
-      "Requirements": [
-        "mime",
-        "xfun"
-      ]
     },
     "memoise": {
       "Package": "memoise",
@@ -1047,13 +1033,12 @@
     },
     "sass": {
       "Package": "sass",
-      "Version": "0.3.1",
+      "Version": "0.4.0",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "3ef1adfe46b7b144b970d74ce33ab0d6",
+      "Repository": "CRAN",
+      "Hash": "50cf822feb64bb3977bda0b7091be623",
       "Requirements": [
         "R6",
-        "digest",
         "fs",
         "htmltools",
         "rappdirs",
@@ -1390,10 +1375,10 @@
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.22",
+      "Version": "0.34",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "eab2f8ba53809c321813e72ecbbd19ba",
+      "Repository": "CRAN",
+      "Hash": "9eba2411b0b1f879797141bd24df7407",
       "Requirements": []
     },
     "xml2": {
