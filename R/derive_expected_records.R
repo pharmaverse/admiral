@@ -102,8 +102,12 @@ derive_expected_records <- function(dataset,
     select(!!!setdiff(by_vars, chr2vars(colnames(dataset_expected_obs)))) %>%
     distinct()
 
-  exp_obsv <- ids %>%
-    crossing(dataset_expected_obs)
+  if (ncol(ids) > 0) {
+    exp_obsv <- ids %>%
+      crossing(dataset_expected_obs)
+  } else {
+    exp_obsv <- dataset_expected_obs
+  } # tmp workaround, update after using tidyr 1.2.0
 
   exp_obs_vars <- exp_obsv %>%
     colnames()
