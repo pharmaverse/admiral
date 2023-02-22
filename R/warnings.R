@@ -117,8 +117,7 @@ warn_if_incomplete_dtc <- function(dtc, n) {
       "The function ", funtext, " expect a complete ", dt_dtm, ". ",
       "Please use the function `impute_dtc()` to build a complete ", dt_dtm, "."
     )
-    warn(msg)
-    warn(paste(capture.output(print(tbl)), collapse = "\n"))
+    warn(paste(msg, capture.output(print(tbl)), collapse = "\n"))
   }
 }
 
