@@ -84,8 +84,6 @@ Source Specifications:
 \code{\link{format.basket_select}()},
 \code{\link{list_tte_source_objects}()},
 \code{\link{query}()},
-\code{\link{sdg_select}()},
-\code{\link{smq_select}()},
 \code{\link{tte_source}()},
 \code{\link{validate_basket_select}()},
 \code{\link{validate_query}()}

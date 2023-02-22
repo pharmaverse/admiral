@@ -5,24 +5,12 @@
 \title{Creates a queries dataset as input dataset to the \code{dataset_queries} argument in
 \code{derive_vars_query()}}
 \usage{
-create_query_data(
-  queries,
-  meddra_version = deprecated(),
-  whodd_version = deprecated(),
-  version = NULL,
-  get_smq_fun = deprecated(),
-  get_sdg_fun = deprecated(),
-  get_terms_fun = NULL
-)
+create_query_data(queries, version = NULL, get_terms_fun = NULL)
 }
 \arguments{
 \item{queries}{List of queries
 
 A list of \code{query()} objects is expected.}
-
-\item{meddra_version}{\emph{Deprecated}, please use \code{version}}
-
-\item{whodd_version}{\emph{Deprecated}, please use \code{version}}
 
 \item{version}{Dictionary version
 
@@ -32,10 +20,6 @@ including a basket, the parameter needs to be specified.
 
 \emph{Permitted Values}: A character string (the expected format is
 company-specific)}
-
-\item{get_smq_fun}{\emph{Deprecated}, please use \code{get_terms_fun}}
-
-\item{get_sdg_fun}{\emph{Deprecated}, please use \code{get_terms_fun}}
 
 \item{get_terms_fun}{Function which returns the terms
 
