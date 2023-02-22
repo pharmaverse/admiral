@@ -60,9 +60,9 @@ test_that("warn_if_inconsistent_list Test 5: Warning if two lists are inconsiste
 # suppress_warning ----
 ## Test 6: Suppress certain warnings issued by an expression ----
 test_that("suppress_warning Test 6: Suppress certain warnings issued by an expression", {
-  x <- c("2","-3","end",0,0.2)
+  x <- c("2", "-3", "end", 0, 0.2)
 
   expect_warning(
-   suppress_warning(as.numeric(x), "x" )
+    suppress_warning(as.numeric(x), "x")
   )
 })
