@@ -61,6 +61,8 @@ added for subjects who have both an event or censoring and an observation in
 
 - New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
 
+- New vignette "Hy's Law Implementation" (#1637)
+
 - `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
