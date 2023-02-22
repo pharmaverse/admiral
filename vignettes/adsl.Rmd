@@ -322,7 +322,7 @@ This call would return the input dataset with the column `DCSREAS` and `DCSREASP
 
 If the derivation must be changed, the user can define that derivation in the `filter_add` argument of the function to map `DSDECOD` and  `DSTERM` to a suitable `DCSREAS`/`DCSREASP` value.
 
-The call below map `DCSREAS` and `DCREASP` as follow:
+The call below maps `DCSREAS` and `DCREASP` as follows:
 
 - `DCSREAS` as `DSDECOD` if `DSDECOD` is not `"COMPLETED"` or `NA`, `NA` otherwise
 - `DCSREASP` as `DSTERM` if `DSDECOD` is equal to `OTHER`, `NA` otherwise

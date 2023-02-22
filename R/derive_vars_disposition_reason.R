@@ -30,7 +30,11 @@ format_reason_default <- function(reason, reason_spe = NULL) {
   ### DEPRECATION
   deprecate_warn("0.10.0",
     "format_reason_default()",
-    details = "This function is being deprecated"
+    details = paste(
+      "This function is a default for `derive_vars_disposition_reason() and is being deprecated`",
+      "for the `format_new_vars` argument. Please use `restrict_derivation()`/ `derive_vars_merged()` and",
+      "specify the `filter_add` argument to derive the respective variables."
+    )
   )
 
   if (is.null(reason_spe)) {
