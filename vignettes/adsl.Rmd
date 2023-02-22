@@ -301,7 +301,6 @@ To derive the End of Study reason(s) (`DCSREAS` and `DCSREASP`), the function wi
 - `DCSREAS` as `DSDECOD` if `DSDECOD` is not `"COMPLETED"`, `SCREEN FAILURE`, or `NA`, `NA` otherwise
 - `DCSREASP` as `DSTERM` if `DSDECOD` is not `"COMPLETED"`, `SCREEN FAILURE`, or `NA`, `NA` otherwise
 
-
 ```{r}
 adsl <- restrict_derivation(
   adsl,
