@@ -65,7 +65,7 @@ head(adlb) %>%
 
 ## Flagging Elevated Values (`CRITy`, `CRITyFL`) {#columns}
 
-A standard convention of ADLBHY datasets, are various `CRITX` and `CRITXFL` columns to describe the conditions necessary to reach that particular criterion of Hy's Law and the actual flag itself to indicate whether or not the condition was reached.
+A standard convention of ADLBHY datasets, are various `CRITy` and `CRITyFL` columns to describe the conditions necessary to reach that particular criterion of Hy's Law and the actual flag itself to indicate whether or not the condition was reached.
 
 Using `mutate()`, `call_derivation()` and `derive_var_merged_exist_flag()`, we can create these columns that indicate the the 3-fold or greater than upper limit of normal of ALT/AST and the 2-fold or greater than upper limit of normal of BILI.
 
