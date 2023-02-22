@@ -185,8 +185,8 @@ qs <- bind_rows(qs_gad7, qs_gdssf) %>%
 dataset_vignette(qs)
 
 adsl <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~SITEID, ~ITTFL,    ~TRTP, ~TRTSDT,
-  "STUDYX",  "P0001",     13L,    "Y", "DRUG A", lubridate::ymd("2012-11-16")
+  ~STUDYID, ~USUBJID, ~SITEID, ~ITTFL,    ~TRTP, ~TRTSDT,                      ~DTHCAUS,
+  "STUDYX",  "P0001",     13L,    "Y", "DRUG A", lubridate::ymd("2012-11-16"), NA_character_
 )
 ```
 # Original Items
@@ -198,7 +198,7 @@ adqs <- qs %>%
   # add ADSL variables
   derive_vars_merged(
     dataset_add = adsl,
-    new_vars = exprs(TRTSDT),
+    new_vars = exprs(TRTSDT, DTHCAUS),
     by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   # add analysis parameter variables
@@ -456,11 +456,10 @@ dataset_vignette(
 For flagging deteriorations at two consecutive assessments or considering death
 due to progression at the last assessment as confirmation the `tmp_obs_nr_var`
 argument is helpful:
-```{r eval=FALSE}
-# flagging deterioration at two consecutive assessments
-adqs <- adqs %>%
+```{r}
+# flagging depression at two consecutive assessments
+adgdssf <- adgdssf %>%
   derive_var_confirmation_flag(
-    adqs,
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(ADT),
     new_var = CONDETFL,
@@ -471,9 +470,9 @@ adqs <- adqs %>%
       AVALCAT1.join %in% c("Possible Depression", "Likely Depression") &
       tmp_obs_nr.join == tmp_obs_nr + 1
   ) %>%
-  # flagging deterioration confirmed by
-  # - a second deterioration at least 7 days later or
-  # - deterioration at the last assessment and death due to progression
+  # flagging depression confirmed by
+  # - a second depression at least 7 days later or
+  # - depression at the last assessment and death due to progression
   derive_var_confirmation_flag(
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(ADT),
@@ -497,16 +496,17 @@ dataset_vignette(
 For definitive deterioration (deterioration at all following assessments)
 parameters summary functions like `all()` can be used in the filter condition:
 
-```{r eval=FALSE}
-derive_var_confirmation_flag(
-  adqs,
-  by_vars = exprs(USUBJID, PARAMCD),
-  order = exprs(ADT),
-  new_var = DEFDETFL,
-  join_vars = exprs(CHGCAT1),
-  join_type = "after",
-  filter = CHGCAT1 == "WORSENED" & all(CHGCAT1.join == "WORSENED")
-)
+```{r}
+adgdssf <- adgdssf %>%
+  derive_var_confirmation_flag(
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = DEFDETFL,
+    join_vars = exprs(AVALCAT1),
+    join_type = "after",
+    filter = AVALCAT1 %in% c("Possible Depression", "Likely Depression") &
+      all(AVALCAT1.join %in% c("Possible Depression", "Likely Depression"))
+  )
 ```
 
 ```{r echo=FALSE}
