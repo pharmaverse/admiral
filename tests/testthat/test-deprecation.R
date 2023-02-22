@@ -153,14 +153,14 @@ test_that("deprecation Test 16: An error is issued if `derive_param_first_event(
 ## Test 17: derive_vars_disposition_reason: a deprecation warning is issued ----
 test_that("deprecation Test 17: derive_vars_disposition_reason: a deprecation warning
           is issued", {
-            expect_warning(
-              admiral.test::admiral_dm %>%
-                derive_vars_disposition_reason(
-                  dataset_ds = admiral.test::admiral_ds,
-                  new_var = DCSREAS,
-                  reason_var = DSDECOD,
-                  filter_ds = DSCAT == "DISPOSITION EVENT"
-                ),
-              class = "lifecycle_warning_deprecated"
-            )
-          })
+  expect_warning(
+    admiral.test::admiral_dm %>%
+      derive_vars_disposition_reason(
+        dataset_ds = admiral.test::admiral_ds,
+        new_var = DCSREAS,
+        reason_var = DSDECOD,
+        filter_ds = DSCAT == "DISPOSITION EVENT"
+      ),
+    class = "lifecycle_warning_deprecated"
+  )
+})

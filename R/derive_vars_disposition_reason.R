@@ -27,11 +27,11 @@
 #' @keywords deprecated
 #' @seealso [derive_vars_disposition_reason()]
 format_reason_default <- function(reason, reason_spe = NULL) {
-
   ### DEPRECATION
   deprecate_warn("0.10.0",
-                 "format_reason_default()",
-                 details = "This function is being deprecated")
+    "format_reason_default()",
+    details = "This function is being deprecated"
+  )
 
   if (is.null(reason_spe)) {
     if_else(reason != "COMPLETED" & !is.na(reason), reason, NA_character_)
@@ -149,14 +149,14 @@ derive_vars_disposition_reason <- function(dataset,
                                            format_new_vars = format_reason_default,
                                            filter_ds,
                                            subject_keys = get_admiral_option("subject_keys")) {
-
   ### DEPRECATION
   deprecate_warn("0.10.0",
-                 "derive_var_disposition_reason()",
-                 details = paste(
-                   "Please use `restrict_derivation()`/ `derive_vars_merged()`",
-                   "and specify the `filter_add` argument to derive the respective variables"
-  ))
+    "derive_var_disposition_reason()",
+    details = paste(
+      "Please use `restrict_derivation()`/ `derive_vars_merged()`",
+      "and specify the `filter_add` argument to derive the respective variables"
+    )
+  )
 
   new_var <- assert_symbol(enexpr(new_var))
   reason_var <- assert_symbol(enexpr(reason_var))

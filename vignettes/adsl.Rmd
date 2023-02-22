@@ -309,8 +309,8 @@ adsl <- restrict_derivation(
   args = params(
     dataset_add = ds,
     by_vars = exprs(USUBJID),
-    new_vars = exprs(DCSREAS = DSDECOD , DCSREASP = DSTERM),
-    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %notin% c("SCREEN FAILURE","COMPLETED", NA)
+    new_vars = exprs(DCSREAS = DSDECOD, DCSREASP = DSTERM),
+    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %notin% c("SCREEN FAILURE", "COMPLETED", NA)
   ),
   filter = !is.na(USUBJID)
 )
@@ -339,9 +339,9 @@ adsl <- adsl %>%
     dataset_add = ds,
     by_vars = exprs(USUBJID),
     new_vars = exprs(DCSREAS = DSDECOD),
-    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %notin% c("SCREEN FAILURE","COMPLETED",NA)
+    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %notin% c("SCREEN FAILURE", "COMPLETED", NA)
   ) %>%
- derive_vars_merged(
+  derive_vars_merged(
     dataset_add = ds,
     by_vars = exprs(USUBJID),
     new_vars = exprs(DCSREASP = DSTERM),
