@@ -60,9 +60,17 @@ test_that("warn_if_inconsistent_list Test 5: Warning if two lists are inconsiste
 # suppress_warning ----
 ## Test 6: Suppress certain warnings issued by an expression ----
 test_that("suppress_warning Test 6: Suppress certain warnings issued by an expression", {
-  x <- c("2", "-3", "end", 0, 0.2)
-
+  # Verify if warning is issued
   expect_warning(
-    suppress_warning(as.numeric(x), "x")
+    suppress_warning(as.numeric("fun"), "x")
   )
+
+  # Actual result
+  actual_result <- as.numeric(NA)
+
+  # Call the suppress_warning() to suppress warning messages containing "NAs introduced by coercion"
+  expected_result <- suppress_warning(as.numeric("fun"), "coercion")
+
+  # Expect that the warning message has been suppressed and that the result is NA
+  expect_equal(expected_result, actual_result)
 })
