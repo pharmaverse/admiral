@@ -31,20 +31,38 @@ test_that("warn_if_invalud_dtc Test 2: Warning if vector contains unknown dateti
 
 # warn_if_inclomplete_dtc ----
 ## Test 3: Warning if vector contains an incomplete dtc ----
-test_that("warn_if_inclomplete_dtc Test 3: Warning if vector contains an incomplete dtc", {
+test_that("warn_if_inclomplete_dtc Test 3: Warning if vector contains an incomplete date", {
   expect_warning(
-    warn_if_incomplete_dtc("2021-04-06", n = 19)
+    warn_if_incomplete_dtc("2021-04", n = 10)
+  )
+})
+
+# warn_if_inclomplete_dtc ----
+## Test 4: Warning if vector contains an incomplete dtc ----
+test_that("warn_if_inclomplete_dtc Test 4: Warning if vector contains an incomplete datetime", {
+  expect_warning(
+    warn_if_incomplete_dtc("2021-04-06T12:30", n = 19)
   )
 })
 
 # warn_if_inconsistent_list ----
-## Test 4: Warning if two lists are inconsistent ----
-test_that("warn_if_inconsistent_list Test 4: Warning if two lists are inconsistent", {
+## Test 5: Warning if two lists are inconsistent ----
+test_that("warn_if_inconsistent_list Test 5: Warning if two lists are inconsistent", {
   expect_warning(
     warn_if_inconsistent_list(
       base = exprs(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
       compare = exprs(DTHDOM = "DM", DTHSEQ = DMSEQ),
       list_name = "Test"
     )
+  )
+})
+
+# suppress_warning ----
+## Test 6: Suppress certain warnings issued by an expression ----
+test_that("suppress_warning Test 6: Suppress certain warnings issued by an expression", {
+  x <- c("2","-3","end",0,0.2)
+
+  expect_warning(
+   suppress_warning(as.numeric(x), "x" )
   )
 })
