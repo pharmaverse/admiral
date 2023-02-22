@@ -1157,22 +1157,19 @@
     },
     "styler": {
       "Package": "styler",
-      "Version": "1.4.1",
+      "Version": "1.8.0",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "2ec6308547ffe73208cef3ef3766fc33",
+      "Repository": "CRAN",
+      "Hash": "c855e70eb69b3dd8883660b7110e0c44",
       "Requirements": [
         "R.cache",
-        "backports",
         "cli",
         "magrittr",
         "purrr",
-        "rematch2",
         "rlang",
         "rprojroot",
-        "tibble",
-        "withr",
-        "xfun"
+        "vctrs",
+        "withr"
       ]
     },
     "sys": {
