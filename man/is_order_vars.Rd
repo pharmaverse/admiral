@@ -13,7 +13,7 @@ is_order_vars(arg)
 \code{FALSE} if the argument is not a list of order vars
 }
 \description{
-Check if inputs are created using \code{vars()} or calls involving \code{desc()}
+Check if inputs are created using \code{exprs()} or calls involving \code{desc()}
 }
 \seealso{
 Identifies type of Object with return of TRUE/FALSE: 

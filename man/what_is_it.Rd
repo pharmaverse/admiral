@@ -21,8 +21,5 @@ what_is_it(1L)
 what_is_it(1:10)
 what_is_it(mtcars)
 }
-\author{
-Thomas Neitmann
-}
 \concept{what}
 \keyword{what}

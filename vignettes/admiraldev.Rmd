@@ -56,5 +56,5 @@ A developer working on `{admiralonco}` implements a new type of derivation funct
 
 Loose guidelines:
 
-1. The derivation function should be closely looked at to see if it can be generalized to other ADaM datsets.  If that is the case, then it should be moved to `{admiral}` core. If the function is very specific to oncology needs, then it should remain in `{admiralonco}`.
+1. The derivation function should be closely looked at to see if it can be generalized to other ADaM datasets.  If that is the case, then it should be moved to `{admiral}` core. If the function is very specific to oncology needs, then it should remain in `{admiralonco}`.
 1. The `assert` custom checking functions follow a similar principle - if they can be generalized to other therapeutic areas then move to `{admiraldev}`, whereas if very specific to oncology needs, then they should remain in `{admiralonco}`.  

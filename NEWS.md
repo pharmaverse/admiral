@@ -12,16 +12,26 @@
   elements of the list are named. (#203)
   - The `quote_fun` argument of `enumerate()` was extended such that `NULL` can
   be specified to request no quoting of the elements. (#203)
+  - The `assert_list_of()` function was enhanced such that it also considers the
+  type of the element, e.g., to check if a value is a list of symbols. (#208)
 
 ## Breaking Changes
 - The default value of the `optional` argument in `assert_date_vector()`,
 `assert_list_of()`, and `assert_s3_class()` was changed from `TRUE` to `FALSE`
 to make the default behavior consistent. (#87)
+- admiral functions no longer expect list of quosures created by `vars()` but
+list of expressions created by `exprs()`. Thus the following functions and
+arguments were deprecated:
+    - `quo_c()` and `replace_symbol_in_quo()`
+    - the `quosures` argument in `get_source_vars()`,
+    `replace_values_by_names()`, and `vars2chr()`
 
 ## Documentation
   - New section in programming strategy regarding comments (#71)
   - Removed requirement to add `@author` tags to code scripts from programming 
-  strategy, as we will only be tracking authors in the DESCRIPTION file. (#206)
+  strategy, as we will only be tracking authors in the DESCRIPTION file. Authors
+  have been removed from function documentation in line with this update. 
+  (#206, #210)
 
 # admiraldev 0.2.0
 

@@ -56,8 +56,5 @@ tlb3 <- tribble(
 expect_dfs_equal(tbl1, tlb3, keys = "USUBJID")
 
 }
-\author{
-Thomas Neitmann
-}
 \concept{test_helper}
 \keyword{test_helper}

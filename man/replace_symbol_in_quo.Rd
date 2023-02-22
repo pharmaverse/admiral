@@ -14,29 +14,23 @@ replace_symbol_in_quo(quosure, target, replace)
 \item{replace}{Replacing symbol}
 }
 \value{
-The quosure where every occurence of the symbol \code{target} is replaced
+The quosure where every occurrence of the symbol \code{target} is replaced
 by \code{replace}
 }
 \description{
-Replace symbols in a quosure
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
-\examples{
-
-library(rlang)
-
-replace_symbol_in_quo(quo(AVAL), target = AVAL, replace = AVAL.join)
-replace_symbol_in_quo(quo(AVALC), target = AVAL, replace = AVAL.join)
-replace_symbol_in_quo(quo(desc(AVAL)), target = AVAL, replace = AVAL.join)
+\details{
+This function is \emph{deprecated}, please use \code{replace_symbol_in_expr()} instead.
 }
 \seealso{
 Helpers for working with Quosures: 
 \code{\link{add_suffix_to_vars}()},
+\code{\link{expr_c}()},
 \code{\link{quo_c}()},
 \code{\link{quo_not_missing}()},
+\code{\link{replace_symbol_in_expr}()},
 \code{\link{replace_values_by_names}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{quo}
 \keyword{quo}

@@ -25,17 +25,18 @@ issues a warning otherwise.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(rlang)
 
 # no warning
 warn_if_inconsistent_list(
-  base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
-  compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+  base = exprs(DTHDOM = "DM", DTHSEQ = DMSEQ),
+  compare = exprs(DTHDOM = "DM", DTHSEQ = DMSEQ),
   list_name = "Test"
 )
 # warning
 warn_if_inconsistent_list(
-  base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
-  compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+  base = exprs(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
+  compare = exprs(DTHDOM = "DM", DTHSEQ = DMSEQ),
   list_name = "Test"
 )
 }
@@ -45,9 +46,6 @@ Function that provide users with custom warnings
 \code{\link{warn_if_incomplete_dtc}()},
 \code{\link{warn_if_invalid_dtc}()},
 \code{\link{warn_if_vars_exist}()}
-}
-\author{
-Samia Kabi
 }
 \concept{warnings}
 \keyword{warnings}

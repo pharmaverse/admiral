@@ -23,8 +23,5 @@ Helpers for working with Quotes and Quoting:
 \code{\link{enumerate}()},
 \code{\link{squote}()}
 }
-\author{
-Stefan Bundfuss
-}
 \concept{quote}
 \keyword{quote}

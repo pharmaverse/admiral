@@ -35,7 +35,7 @@ get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
   # get unique values within each group by variables
   unique_count <- dataset %>%
     group_by(!!!by_vars) %>%
-    summarise_at(vars(!!non_by_vars), n_distinct) %>%
+    summarise(across(!!non_by_vars, n_distinct)) %>%
     ungroup() %>%
     select(!!!syms(non_by_vars))
 
@@ -46,7 +46,7 @@ get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
     names() %>%
     syms()
 
-  vars(!!!by_vars, !!!constant_vars)
+  exprs(!!!by_vars, !!!constant_vars)
 }
 
 
@@ -72,19 +72,34 @@ get_duplicates <- function(x) {
   unique(x[duplicated(x)])
 }
 
-#' Get Source Variables from a List of Quosures
+#' Get Source Variables from a List of Expressions
 #'
-#' @param quosures A list of quosures
+#' @param expressions A list of expressions
 #'
-#' @author Stefan Bundfuss
+#' @param quosures *Deprecated*, please use `expressions` instead.
+#'
 #'
 #' @keywords get
 #' @family get
 #'
-#' @return A list of quosures
+#' @return A list of expressions
 #' @export
-get_source_vars <- function(quosures) {
-  assert_varval_list(quosures, optional = TRUE)
+get_source_vars <- function(expressions, quosures) {
+  if (!missing(quosures)) {
+    deprecate_warn(
+      "0.10.0",
+      "get_source_vars(quosures = )",
+      "get_source_vars(expressions = )"
+    )
+    expressions <- map(quosures, rlang::quo_get_expr)
+  }
+  assert_varval_list(expressions, optional = TRUE)
 
-  quo_c(quosures)[lapply(quo_c(quosures), quo_is_symbol) == TRUE]
+  source_vars <- expr_c(expressions)[lapply(expr_c(expressions), is.symbol) == TRUE]
+
+  if (length(source_vars) == 0) {
+    NULL
+  } else {
+    source_vars
+  }
 }

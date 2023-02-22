@@ -32,8 +32,5 @@ Helpers for working with Quotes and Quoting:
 \code{\link{dquote}()},
 \code{\link{squote}()}
 }
-\author{
-Thomas Neitmann, Stefan Bundfuss
-}
 \concept{quote}
 \keyword{quote}
