@@ -8,7 +8,9 @@ into a single one (#1479)
 - New function `compute_scale()` for computing the average of a vector and 
 transforming the result from a source to a target range. (#1692)
 
--   New ADPC template script available `ad_adpc.R` which creates PK Concentration Analysis Dataset (#849). This script includes formatting suitable for Non-Compartmental Analysis (ADNCA) (#851)
+- New ADPC template script available `ad_adpc.R` which creates PK Concentration
+Analysis Dataset (#849). This script includes formatting suitable for
+Non-Compartmental Analysis (ADNCA) (#851)
 
 ## Updates of Existing Functions
 
@@ -31,6 +33,10 @@ that need carrying the last observation forward other than `analysis_var`
     hours, such as "BID", "TID", and "QID". Previously these values of
     `EXDOSFRQ` may result in duplicate records where the day values are
     incremented but the time values are not (#1643)
+    
+- The function `derive_var_confirmation_flag()` and `filter_confirmation()`
+gained the `tmp_obs_nr_var` argument. It helps flagging or selecting consecutive
+observations or the first or last observation in a by group. (#1724)
 
 ## Breaking Changes
 
@@ -48,6 +54,8 @@ USUBJID)` must be used now.
 - Function `derive_param_tte()` has been updated such that only observations are
 added for subjects who have both an event or censoring and an observation in
 `dataset_adsl` (#1576).
+
+- Function `derive_var_disposition_status()` has been deprecated, please use `derive_var_merged_cat()` instead (#1681).
 
 ## Documentation
 
@@ -91,6 +99,7 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 
 - Removed authors from function documentation, as we will now only be tracking an overall list of 
 authors for admiral. (#1673)
+
 
 # admiral 0.9.1
 
