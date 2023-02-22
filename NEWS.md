@@ -59,6 +59,9 @@ added for subjects who have both an event or censoring and an observation in
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
 
+- The following functions are being deprecated (#1683)
+  - `derive_vars_disposition_reason()`
+
 - The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1712)
 
   - `derive_derived_param()` 

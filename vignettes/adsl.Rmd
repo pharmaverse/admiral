@@ -293,66 +293,64 @@ to a suitable `EOSSTT` value.
 The main reason for discontinuation is usually stored in `DSDECOD` while `DSTERM` provides 
 additional details regarding subject’s discontinuation (e.g., description of `"OTHER"`).
 
-The function `derive_vars_disposition_reason()` can be used to derive a disposition reason (along with 
-the details, if  required) at a specific timepoint. 
-The relevant disposition variable(s) (`DS.DSDECOD`, `DS.DSTERM`) are selected by adjusting the 
-filter parameter and used to derive the main reason (and details).
+The functions `restrict_derivation` and `derive_vars_merged()` can be used to derive a disposition reason (along with the details, if required) at a specific timepoint. 
+The relevant disposition variable(s) (`DS.DSDECOD`, `DS.DSTERM`) are selected by adjusting the filter parameter and used to derive the main reason (and details).
 
-To derive the End of Study reason(s) (`DCSREAS` and `DCSREASP`), the call would be:
+To derive the End of Study reason(s) (`DCSREAS` and `DCSREASP`), the function will map 
 
-```{r eval=TRUE}
-adsl <- adsl %>%
-  derive_vars_disposition_reason(
-    dataset_ds = ds,
-    new_var = DCSREAS,
-    reason_var = DSDECOD,
-    new_var_spe = DCSREASP,
-    reason_var_spe = DSTERM,
-    filter_ds = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
-  )
+- `DCSREAS` as `DSDECOD` if `DSDECOD` is not `"COMPLETED"`, `SCREEN FAILURE`, or `NA`, `NA` otherwise
+- `DCSREASP` as `DSTERM` if `DSDECOD` is not `"COMPLETED"`, `SCREEN FAILURE`, or `NA`, `NA` otherwise
+
+
+```{r}
+adsl <- restrict_derivation(
+  adsl,
+  derivation = derive_vars_merged,
+  args = params(
+    dataset_add = ds,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(DCSREAS = DSDECOD , DCSREASP = DSTERM),
+    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %notin% c("SCREEN FAILURE","COMPLETED", NA)
+  ),
+  filter = !is.na(USUBJID)
+)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(adsl, display_vars = exprs(USUBJID, EOSDT, EOSSTT, DCSREAS, DCSREASP))
 ```
-
 This call would return the input dataset with the column `DCSREAS` and `DCSREASP` added. 
 
-By default, the function will map 
+If the derivation must be changed, the user can define that derivation in the `filter_add` argument of the function to map `DSDECOD` and  `DSTERM` to a suitable `DCSREAS`/`DCSREASP` value.
+
+The call below map `DCSREAS` and `DCREASP` as follow:
 
 - `DCSREAS` as `DSDECOD` if `DSDECOD` is not `"COMPLETED"` or `NA`, `NA` otherwise
 - `DCSREASP` as `DSTERM` if `DSDECOD` is equal to `OTHER`, `NA` otherwise
 
-
-If the default derivation must be changed, the user can create his/her own function and pass it to 
-the `format_new_var` argument of the function (`format_new_var = new_mapping`) to map `DSDECOD` 
-and  `DSTERM` to a suitable `DCSREAS`/`DCSREASP` value.
-
-Example function `format_dcsreas()`:
-
-```{r eval=TRUE}
-format_dcsreas <- function(dsdecod, dsterm = NULL) {
-  if (is.null(dsterm)) {
-    if_else(dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod), dsdecod, NA_character_)
-  } else {
-    if_else(dsdecod == "OTHER", dsterm, NA_character_)
-  }
-}
+```{r, eval=TRUE, echo=FALSE}
+adsl <- adsl %>%
+  select(-DCSREAS, -DCSREASP)
 ```
 
-The customized mapping function `format_dcsreas()` can now be passed to the main function:
-
-```{r eval=FALSE}
+```{r}
 adsl <- adsl %>%
-  derive_vars_disposition_reason(
-    dataset_ds = ds,
-    new_var = DCSREAS,
-    reason_var = DSDECOD,
-    new_var_spe = DCSREASP,
-    reason_var_spe = DSTERM,
-    format_new_vars = format_dcsreas,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
+  derive_vars_merged(
+    dataset_add = ds,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(DCSREAS = DSDECOD),
+    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %notin% c("SCREEN FAILURE","COMPLETED",NA)
+  ) %>%
+ derive_vars_merged(
+    dataset_add = ds,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(DCSREASP = DSTERM),
+    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %in% "OTHER"
   )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adsl, display_vars = exprs(USUBJID, EOSDT, EOSSTT, DCSREAS, DCSREASP))
 ```
 
 ### Randomization Date (`RANDDT`) {#randomization_date}

@@ -95,6 +95,11 @@ the input dataset with the disposition reason(s) (\code{new_var} and
 if required \code{new_var_spe}) added.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}. Please use \code{restrict_derivation()}/ \code{derive_vars_merged()} and
+specify the \code{filter_add} argument to derive the respective variables.
+
 Derive a disposition reason from the the relevant records in the disposition domain.
 }
 \details{
@@ -106,52 +111,19 @@ with the reason for discontinuation (e.g. \code{DCSREASP}).
 The details associated with the reason for discontinuation are derived based on
 \code{reason_var_spe} (e.g. \code{DSTERM}), \code{reason_var} and \code{format_new_vars}.
 }
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("admiral_dm")
-data("admiral_ds")
-
-# Derive DCSREAS using the default format
-admiral_dm \%>\%
-  derive_vars_disposition_reason(
-    dataset_ds = admiral_ds,
-    new_var = DCSREAS,
-    reason_var = DSDECOD,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
-  ) \%>\%
-  select(STUDYID, USUBJID, DCSREAS)
-
-# Derive DCSREAS and DCSREASP using a study-specific format
-format_dcsreas <- function(x, y = NULL) {
-  if (is.null(y)) {
-    if_else(!x \%in\% c("COMPLETED", "SCREEN FAILURE") & !is.na(x), x, NA_character_)
-  } else {
-    if_else(x == "OTHER", y, NA_character_)
-  }
-}
-admiral_dm \%>\%
-  derive_vars_disposition_reason(
-    dataset_ds = admiral_ds,
-    new_var = DCSREAS,
-    reason_var = DSDECOD,
-    new_var_spe = DCSREASP,
-    reason_var_spe = DSTERM,
-    format_new_vars = format_dcsreas,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
-  ) \%>\%
-  select(STUDYID, USUBJID, DCSREAS, DCSREASP)
-}
 \seealso{
 \code{\link[=format_reason_default]{format_reason_default()}}
 
-ADSL Functions that returns variable appended to dataset: 
-\code{\link{derive_var_age_years}()},
-\code{\link{derive_var_dthcaus}()},
-\code{\link{derive_var_extreme_dtm}()},
-\code{\link{derive_var_extreme_dt}()},
-\code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_period}()}
+Other deprecated: 
+\code{\link{derive_derived_param}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()},
+\code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()},
+\code{\link{vars}()}
 }
-\concept{der_adsl}
-\keyword{der_adsl}
+\concept{deprecated}
+\keyword{deprecated}
