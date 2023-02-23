@@ -86,6 +86,8 @@ added for subjects who have both an event or censoring and an observation in
 
 - New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
 
+- New vignette "Hy's Law Implementation" (#1637)
+
 - New vignette "Creating Questionnaire ADaMs" (#1715)
 
 - `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
