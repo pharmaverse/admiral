@@ -57,8 +57,7 @@ added for subjects who have both an event or censoring and an observation in
 
 - Function `derive_var_disposition_status()` has been deprecated, please use `derive_var_merged_cat()` instead (#1681).
 
-- The following functions are being deprecated (#1683)
-  - `derive_vars_disposition_reason()`
+- Function `derive_vars_disposition_reason()` has being deprecated, in favor of `restrict_derivation()`/`derive_vars_merged()`(#1683)
   
 - The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1712)
 
