@@ -19,7 +19,7 @@ A \code{character} vector
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
 This function is \emph{deprecated}. This function is a default for \code{derive_vars_disposition_reason()}
-for the \code{format_new_vars} argument. Please use \code{restrict_derivation()}/ \code{derive_vars_merged()} and
+for the \code{format_new_vars} argument. Please use \code{derive_vars_merged()} and
 specify the \code{filter_add} argument to derive the respective variables.
 
 Define a function to map the disposition reason, to be used as a parameter in

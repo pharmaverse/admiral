@@ -4,7 +4,7 @@
 #' `r lifecycle::badge("deprecated")`
 #'
 #' This function is *deprecated*. This function is a default for `derive_vars_disposition_reason()`
-#' for the `format_new_vars` argument. Please use `restrict_derivation()`/ `derive_vars_merged()` and
+#' for the `format_new_vars` argument. Please use `derive_vars_merged()` and
 #' specify the `filter_add` argument to derive the respective variables.
 #'
 #' Define a function to map the disposition reason, to be used as a parameter in
@@ -32,7 +32,7 @@ format_reason_default <- function(reason, reason_spe = NULL) {
     "format_reason_default()",
     details = paste(
       "This function is a default for `derive_vars_disposition_reason() and is being deprecated`",
-      "for the `format_new_vars` argument. Please use `restrict_derivation()`/ `derive_vars_merged()` and",
+      "Please use `derive_vars_merged()` and",
       "specify the `filter_add` argument to derive the respective variables."
     )
   )
@@ -49,7 +49,7 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' This function is *deprecated*. Please use `restrict_derivation()`/ `derive_vars_merged()` and
+#' This function is *deprecated*. Please use `derive_vars_merged()` and
 #' specify the `filter_add` argument to derive the respective variables.
 #'
 #' Derive a disposition reason from the the relevant records in the disposition domain.
@@ -155,9 +155,9 @@ derive_vars_disposition_reason <- function(dataset,
                                            subject_keys = get_admiral_option("subject_keys")) {
   ### DEPRECATION
   deprecate_warn("0.10.0",
-    "derive_var_disposition_reason()",
+    "derive_vars_disposition_reason()",
     details = paste(
-      "Please use `restrict_derivation()`/ `derive_vars_merged()`",
+      "Please use `derive_vars_merged()`",
       "and specify the `filter_add` argument to derive the respective variables"
     )
   )

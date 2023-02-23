@@ -97,7 +97,7 @@ if required \code{new_var_spe}) added.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-This function is \emph{deprecated}. Please use \code{restrict_derivation()}/ \code{derive_vars_merged()} and
+This function is \emph{deprecated}. Please use \code{derive_vars_merged()} and
 specify the \code{filter_add} argument to derive the respective variables.
 
 Derive a disposition reason from the the relevant records in the disposition domain.

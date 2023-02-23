@@ -302,17 +302,13 @@ To derive the End of Study reason(s) (`DCSREAS` and `DCSREASP`), the function wi
 - `DCSREASP` as `DSTERM` if `DSDECOD` is not `"COMPLETED"`, `SCREEN FAILURE`, or `NA`, `NA` otherwise
 
 ```{r}
-adsl <- restrict_derivation(
-  adsl,
-  derivation = derive_vars_merged,
-  args = params(
+adsl <- adsl %>%
+  derive_vars_merged(
     dataset_add = ds,
     by_vars = exprs(USUBJID),
     new_vars = exprs(DCSREAS = DSDECOD, DCSREASP = DSTERM),
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %notin% c("SCREEN FAILURE", "COMPLETED", NA)
-  ),
-  filter = !is.na(USUBJID)
-)
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
