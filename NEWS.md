@@ -5,6 +5,9 @@
   by the `set_value_to` argument and catching errors (#70)
   
 ## Updates of Existing Functions
+  - Using testthat3e (testthat 3rd edition) for unit testing. This is stricter 
+  in that messages must be addressed and deprecated functions throw errors. 
+  (#230)
   - Fix datatable styling for documentation (#197)
   - The `assert_character_vector()` function gained a `named` argument to check
   that all elements of the vector are named. (#70)
