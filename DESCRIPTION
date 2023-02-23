@@ -46,7 +46,7 @@ Suggests:
     diffdf,
     lintr,
     pkgdown,
-    testthat,
+    testthat (>= 3.0.0),
     knitr,
     methods,
     miniUI,
@@ -61,3 +61,4 @@ Suggests:
     DT,
     htmltools
 VignetteBuilder: knitr
+Config/testthat/edition: 3
