@@ -331,4 +331,9 @@ assert_valid_queries <- function(queries, queries_name) {
       "' is not unique."
     ))
   }
+
+  # check QUERY_SCOPE and QUERY_SCOPE_NUM are one to one if available
+  if("QUERY_SCOPE" %in% names(queries) & "QUERY_SCOPE_NUM" %in% names(queries)){
+    assert_one_to_one(queries, exprs(QUERY_SCOPE), exprs(QUERY_SCOPE_NUM))
+  }
 }

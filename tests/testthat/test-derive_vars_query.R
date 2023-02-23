@@ -235,4 +235,24 @@ test_that("assert_valid_queries checks VAR_PREFIX values", {
     ),
     regexp = "In `test`, `QUERY_ID` of 'CQ40' is not unique."
   )
+
+  expect_error(
+    assert_valid_queries(
+      mutate(
+        query,
+        QUERY_SCOPE = c(NA, NA),
+        QUERY_SCOPE_NUM = c(1, 2)
+      ),
+      "test"
+    )
+    # ,
+    # regexp = paste0(
+    #   "For some values of ",
+    #   vars2chr(exprs(QUERY_SCOPE)),
+    #   " there is more than one value of ",
+    #   vars2chr(exprs(QUERY_SCOPE_NUM)),
+    #   ".\nCall `get_one_to_many_dataset()` to get all one to many values."
+    # )
+  )
 })
+
