@@ -231,6 +231,12 @@ derive_var_extreme_flag <- function(dataset,
 }
 
 #' Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*. Please use `restrict_derivation()` / `derive_var_extreme_flag()`
+#' to derive extreme flags and adjust the `mode` argument.
+#'
 #' @inheritParams derive_var_extreme_flag
 #' @param dataset Input dataset.
 #' Variables specified by `by_vars`, `order`, `param_var`, and `analysis_var` are expected.
@@ -267,72 +273,10 @@ derive_var_extreme_flag <- function(dataset,
 #'
 #' @return The input dataset with the new flag variable added.
 #'
-#' @family der_gen
-#' @keywords der_gen
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @export
-#'
-#' @examples
-#' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
-#'
-#' input <- tribble(
-#'   ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,
-#'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,
-#'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,
-#'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0,
-#'   "TEST01",  "PAT01", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0,
-#'   "TEST01",  "PAT01", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,
-#'   "TEST01",  "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0,
-#'   "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,
-#'   "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0,
-#'   "TEST01",  "PAT02", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0,
-#'   "TEST01",  "PAT02", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,
-#'   "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
-#'   "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0,
-#'   "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,
-#'   "TEST01",  "PAT01", "PARAM02",  "BASELINE", as.Date("2021-04-27"),  10.0,
-#'   "TEST01",  "PAT01", "PARAM02",    "WEEK 2", as.Date("2021-04-30"),  12.0,
-#'   "TEST01",  "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
-#'   "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-25"),  14.0,
-#'   "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-23"),  15.0,
-#'   "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-27"),  10.0,
-#'   "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-30"),  12.0,
-#'   "TEST01",  "PAT02", "PARAM03", "SCREENING", as.Date("2021-04-27"),  15.0,
-#'   "TEST01",  "PAT02", "PARAM03",  "BASELINE", as.Date("2021-04-25"),  14.0,
-#'   "TEST01",  "PAT02", "PARAM03",    "WEEK 1", as.Date("2021-04-23"),  15.0,
-#'   "TEST01",  "PAT02", "PARAM03",    "WEEK 1", as.Date("2021-04-27"),  10.0,
-#'   "TEST01",  "PAT02", "PARAM03",  "BASELINE", as.Date("2021-04-30"),  12.0
-#' )
-#'
-#' derive_var_worst_flag(
-#'   input,
-#'   by_vars = exprs(USUBJID, PARAMCD, AVISIT),
-#'   order = exprs(desc(ADT)),
-#'   new_var = WORSTFL,
-#'   param_var = PARAMCD,
-#'   analysis_var = AVAL,
-#'   worst_high = c("PARAM01", "PARAM03"),
-#'   worst_low = "PARAM02"
-#' )
-#' \dontrun{
-#' # example with ADVS
-#' restrict_derivation(
-#'   advs,
-#'   derivation = derive_var_worst_flag,
-#'   args = params(
-#'     by_vars = exprs(USUBJID, PARAMCD, AVISIT),
-#'     order = exprs(ADT, ATPTN),
-#'     new_var = WORSTFL,
-#'     param_var = PARAMCD,
-#'     analysis_var = AVAL,
-#'     worst_high = c("SYSBP", "DIABP"),
-#'     worst_low = "RESP"
-#'   ),
-#'   filter = !is.na(AVISIT) & !is.na(AVAL)
-#' )
-#' }
-#'
 derive_var_worst_flag <- function(dataset,
                                   by_vars,
                                   order,
@@ -342,6 +286,15 @@ derive_var_worst_flag <- function(dataset,
                                   worst_high,
                                   worst_low,
                                   check_type = "warning") {
+  ### DEPRECATION
+  deprecate_warn("0.10.0",
+    "derive_var_worst_flag()",
+    details = paste(
+      "Please use `restrict_derivation()` / `derive_var_extreme_flag()`",
+      "to derive extreme flags by changing the `mode` argument"
+    )
+  )
+
   # perform argument checks
   new_var <- assert_symbol(enexpr(new_var))
   param_var <- assert_symbol(enexpr(param_var))

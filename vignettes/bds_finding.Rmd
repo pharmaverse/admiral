@@ -785,22 +785,29 @@ values (`SYSBP`, `DIABP`, and `RESP`).  We will also assume high is worst for `S
 and `DIABP` and low is worst for `RESP`.
 
 ```{r eval=TRUE}
-
 advs <- restrict_derivation(
   advs,
-  derivation = derive_var_worst_flag,
+  derivation = derive_var_extreme_flag,
   args = params(
     by_vars = exprs(STUDYID, USUBJID, BASETYPE, PARAMCD, AVISIT),
     order = exprs(ADT, ATPTN),
     new_var = WORSTFL,
-    param_var = PARAMCD,
-    analysis_var = AVAL,
-    worst_high = c("SYSBP", "DIABP"),
-    worst_low = "PULSE"
+    mode = "first"
   ),
-  filter = !is.na(AVISIT) & !is.na(AVAL)
-)
+  filter = PARAMCD %in% c("SYSBP", "DIABP") & (!is.na(AVISIT) & !is.na(AVAL))
+) %>%
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = exprs(STUDYID, USUBJID, BASETYPE, PARAMCD, AVISIT),
+      order = exprs(ADT, ATPTN),
+      new_var = WORSTFL,
+      mode = "last"
+    ),
+    filter = PARAMCD %in% "PULSE" & (!is.na(AVISIT) & !is.na(AVAL))
+  )
 ```
+
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
