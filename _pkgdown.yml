@@ -183,5 +183,8 @@ navbar:
         href: articles/queries_dataset.html
       - text: Lab Grading
         href: articles/lab_grading.html
-      - text: Create single dose dataset with end date imputations
-        href: articles/derive_single_dose_fillin.html
+      - text: Hy's Law Implementation
+        href: articles/hys_law.html
+      - text: Creating a PK NCA ADaM (ADPC/ADNCA)
+        href: articles/pk_adnca.html
+

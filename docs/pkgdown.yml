@@ -1,4 +1,4 @@
-pandoc: 2.17.1.1
+pandoc: 2.19.2
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
@@ -12,6 +12,7 @@ articles:
   faq: faq.html
   generic: generic.html
   higher_order: higher_order.html
+  hys_law: hys_law.html
   imputation: imputation.html
   lab_grading: lab_grading.html
   occds: occds.html
