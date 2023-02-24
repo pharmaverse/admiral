@@ -293,13 +293,12 @@ to a suitable `EOSSTT` value.
 The main reason for discontinuation is usually stored in `DSDECOD` while `DSTERM` provides 
 additional details regarding subject’s discontinuation (e.g., description of `"OTHER"`).
 
-The functions `restrict_derivation` and `derive_vars_merged()` can be used to derive a disposition reason (along with the details, if required) at a specific timepoint. 
+The function `derive_vars_merged()` can be used to derive a disposition reason (along with the details, if required) at a specific timepoint. 
 The relevant disposition variable(s) (`DS.DSDECOD`, `DS.DSTERM`) are selected by adjusting the filter parameter and used to derive the main reason (and details).
 
 To derive the End of Study reason(s) (`DCSREAS` and `DCSREASP`), the function will map 
 
-- `DCSREAS` as `DSDECOD` if `DSDECOD` is not `"COMPLETED"`, `SCREEN FAILURE`, or `NA`, `NA` otherwise
-- `DCSREASP` as `DSTERM` if `DSDECOD` is not `"COMPLETED"`, `SCREEN FAILURE`, or `NA`, `NA` otherwise
+- `DCSREAS` as `DSDECOD`, and `DCSREASP` as `DSTERM` if `DSDECOD` is not `"COMPLETED"`, `"SCREEN FAILURE"`, or `NA`, `NA` otherwise
 
 ```{r}
 adsl <- adsl %>%
