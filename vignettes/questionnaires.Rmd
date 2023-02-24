@@ -45,7 +45,7 @@ In this vignette we use the example data from the CDISC ADaM Supplements
 ([Generalized Anxiety Disorder 7-Item Version 2
 (GAD-7)](https://www.cdisc.org/standards/foundational/qrs/generalized-anxiety-disorder-7-item-version-2-0),
 [Geriatric Depression Scale Short Form
-(GDSSF)](https://www.cdisc.org/standards/foundational/qrs/geriatric-depression-scale-short-form-0)):
+(GDS-SF)](https://www.cdisc.org/standards/foundational/qrs/geriatric-depression-scale-short-form-0)):
 ```{r echo=FALSE}
 suppress_warning(
   qs_gad7 <- tibble::tribble(
@@ -259,7 +259,7 @@ dataset_vignette(
 )
 ```
 
-For the GDSSF questionnaire the total score is defined as the average of the
+For the GDS-SF questionnaire the total score is defined as the average of the
 item values transformed to the range [0, 15] and rounded up to the next integer.
 If more than five items are missing, the total score is considered as missing.
 This parameter can be derived by `compute_scales()` and
