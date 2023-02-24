@@ -79,7 +79,7 @@ test_that("convert_na_to_blanks Test 7: `NA` are turned into blank strings insid
     d = structure(c("", "", "s", "q"), label = "D")
   )
 
-  expect_equivalent(convert_na_to_blanks.data.frame(input), expected_output)
+  expect_equal(convert_na_to_blanks.data.frame(input), expected_output, ignore_attr = TRUE)
 })
 
 # convert_na_to_blanks.list ----
