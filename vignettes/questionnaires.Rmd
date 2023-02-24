@@ -93,7 +93,7 @@ suppress_warning(
         "Nearly every day" = 3L,
         .default = as.integer(QSORRES)
       )
-    ) %>% 
+    ) %>%
     mutate(
       USUBJID = "P0001",
       .before = everything()
@@ -101,141 +101,141 @@ suppress_warning(
   regexpr = "NAs introduced by coercion"
 )
 qs_gdssf <- tibble::tribble(
-  ~USUBJID, ~QSSEQ,                                   ~QSTEST, ~QSTESTCD,             ~VISIT, ~VISITNUM,       ~QSDTC, ~QSORRES, ~QSSTRESN,
-   "P0001",     1L,               "GDS02-Satisfied With Life", "GDS0201",          "VISIT 1",         1, "2012-11-16",    "YES",        0L,
-   "P0001",     2L,  "GDS02-Dropped Activities and Interests", "GDS0202",          "VISIT 1",         1, "2012-11-16",    "YES",        1L,
-   "P0001",     3L,                     "GDS02-Life Is Empty", "GDS0203",          "VISIT 1",         1, "2012-11-16",     "NO",        0L,
-   "P0001",     4L,                       "GDS02-Bored Often", "GDS0204",          "VISIT 1",         1, "2012-11-16",    "YES",        1L,
-   "P0001",     5L,         "GDS02-Good Spirits Most of Time", "GDS0205",          "VISIT 1",         1, "2012-11-16",     "NO",        1L,
-   "P0001",     6L, "GDS02-Afraid of Something Bad Happening", "GDS0206",          "VISIT 1",         1, "2012-11-16",    "YES",        1L,
-   "P0001",     7L,           "GDS02-Feel Happy Most of Time", "GDS0207",          "VISIT 1",         1, "2012-11-16",     "NO",        1L,
-   "P0001",     8L,               "GDS02-Often Feel Helpless", "GDS0208",          "VISIT 1",         1, "2012-11-16",    "YES",        1L,
-   "P0001",     9L,               "GDS02-Prefer to Stay Home", "GDS0209",          "VISIT 1",         1, "2012-11-16",     "NO",        0L,
-   "P0001",    10L,                   "GDS02-Memory Problems", "GDS0210",          "VISIT 1",         1, "2012-11-16",    "YES",        1L,
-   "P0001",    11L,             "GDS02-Wonderful to Be Alive", "GDS0211",          "VISIT 1",         1, "2012-11-16",     "NO",        1L,
-   "P0001",    12L,                    "GDS02-Feel Worthless", "GDS0212",          "VISIT 1",         1, "2012-11-16",    "YES",        1L,
-   "P0001",    13L,               "GDS02-Feel Full of Energy", "GDS0213",          "VISIT 1",         1, "2012-11-16",    "YES",        0L,
-   "P0001",    14L,                     "GDS02-Feel Hopeless", "GDS0214",          "VISIT 1",         1, "2012-11-16",    "YES",        1L,
-   "P0001",    15L,   "GDS02-Most People Better Off Than You", "GDS0215",          "VISIT 1",         1, "2012-11-16",     "NO",        0L,
-   "P0001",    16L,               "GDS02-Satisfied With Life", "GDS0201",          "VISIT 2",         2, "2012-12-15",    "YES",        0L,
-   "P0001",    17L,  "GDS02-Dropped Activities and Interests", "GDS0202",          "VISIT 2",         2, "2012-12-15",     "NO",        0L,
-   "P0001",    18L,                     "GDS02-Life Is Empty", "GDS0203",          "VISIT 2",         2, "2012-12-15",     "NO",        0L,
-   "P0001",    19L,                       "GDS02-Bored Often", "GDS0204",          "VISIT 2",         2, "2012-12-15",    "YES",        1L,
-   "P0001",    20L,         "GDS02-Good Spirits Most of Time", "GDS0205",          "VISIT 2",         2, "2012-12-15",     "NO",        1L,
-   "P0001",    21L, "GDS02-Afraid of Something Bad Happening", "GDS0206",          "VISIT 2",         2, "2012-12-15",    "YES",        1L,
-   "P0001",    22L,           "GDS02-Feel Happy Most of Time", "GDS0207",          "VISIT 2",         2, "2012-12-15",     "NO",        1L,
-   "P0001",    23L,               "GDS02-Often Feel Helpless", "GDS0208",          "VISIT 2",         2, "2012-12-15",    "YES",        1L,
-   "P0001",    24L,               "GDS02-Prefer to Stay Home", "GDS0209",          "VISIT 2",         2, "2012-12-15",     "NO",        0L,
-   "P0001",    25L,                   "GDS02-Memory Problems", "GDS0210",          "VISIT 2",         2, "2012-12-15",     "NO",        0L,
-   "P0001",    26L,             "GDS02-Wonderful to Be Alive", "GDS0211",          "VISIT 2",         2, "2012-12-15",     "NO",        1L,
-   "P0001",    27L,                    "GDS02-Feel Worthless", "GDS0212",          "VISIT 2",         2, "2012-12-15",    "YES",        1L,
-   "P0001",    28L,               "GDS02-Feel Full of Energy", "GDS0213",          "VISIT 2",         2, "2012-12-15",    "YES",        0L,
-   "P0001",    29L,                     "GDS02-Feel Hopeless", "GDS0214",          "VISIT 2",         2, "2012-12-15",    "YES",        1L,
-   "P0001",    30L,   "GDS02-Most People Better Off Than You", "GDS0215",          "VISIT 2",         2, "2012-12-15",     "NO",        0L,
-   "P0001",    31L,               "GDS02-Satisfied With Life", "GDS0201", "UNSCHEDULED 2.01",       201, "2012-12-28",    "YES",        0L,
-   "P0001",    32L,  "GDS02-Dropped Activities and Interests", "GDS0202", "UNSCHEDULED 2.01",       201, "2012-12-28",     "NO",        0L,
-   "P0001",    33L,                     "GDS02-Life Is Empty", "GDS0203", "UNSCHEDULED 2.01",       201, "2012-12-28",    "YES",        1L,
-   "P0001",    34L,                       "GDS02-Bored Often", "GDS0204", "UNSCHEDULED 2.01",       201, "2012-12-28",    "YES",        1L,
-   "P0001",    35L,         "GDS02-Good Spirits Most of Time", "GDS0205", "UNSCHEDULED 2.01",       201, "2012-12-28",     "NO",        1L,
-   "P0001",    36L, "GDS02-Afraid of Something Bad Happening", "GDS0206", "UNSCHEDULED 2.01",       201, "2012-12-28",    "YES",        1L,
-   "P0001",    37L,           "GDS02-Feel Happy Most of Time", "GDS0207", "UNSCHEDULED 2.01",       201, "2012-12-28",     "NO",        0L,
-   "P0001",    38L,               "GDS02-Often Feel Helpless", "GDS0208", "UNSCHEDULED 2.01",       201, "2012-12-28",    "YES",        1L,
-   "P0001",    39L,               "GDS02-Prefer to Stay Home", "GDS0209", "UNSCHEDULED 2.01",       201, "2012-12-28",     "NO",        0L,
-   "P0001",    40L,                   "GDS02-Memory Problems", "GDS0210", "UNSCHEDULED 2.01",       201, "2012-12-28",     "NO",        0L,
-   "P0001",    41L,             "GDS02-Wonderful to Be Alive", "GDS0211", "UNSCHEDULED 2.01",       201, "2012-12-28",     "NO",        1L,
-   "P0001",    42L,                    "GDS02-Feel Worthless", "GDS0212", "UNSCHEDULED 2.01",       201, "2012-12-28",    "YES",        1L,
-   "P0001",    43L,               "GDS02-Feel Full of Energy", "GDS0213", "UNSCHEDULED 2.01",       201, "2012-12-28",    "YES",        0L,
-   "P0001",    44L,                     "GDS02-Feel Hopeless", "GDS0214", "UNSCHEDULED 2.01",       201, "2012-12-28",    "YES",        1L,
-   "P0001",    45L,   "GDS02-Most People Better Off Than You", "GDS0215", "UNSCHEDULED 2.01",       201, "2012-12-28",     "NO",        0L,
-   "P0001",    46L,                     "GDS02-Life Is Empty", "GDS0203",          "VISIT 3",         3, "2013-01-12",     "NO",        0L,
-   "P0001",    47L,                       "GDS02-Bored Often", "GDS0204",          "VISIT 3",         3, "2013-01-12",     "NO",        0L,
-   "P0001",    48L,         "GDS02-Good Spirits Most of Time", "GDS0205",          "VISIT 3",         3, "2013-01-12",    "YES",        0L,
-   "P0001",    49L, "GDS02-Afraid of Something Bad Happening", "GDS0206",          "VISIT 3",         3, "2013-01-12",    "YES",        1L,
-   "P0001",    50L,           "GDS02-Feel Happy Most of Time", "GDS0207",          "VISIT 3",         3, "2013-01-12",     "NO",        1L,
-   "P0001",    51L,               "GDS02-Often Feel Helpless", "GDS0208",          "VISIT 3",         3, "2013-01-12",    "YES",        1L,
-   "P0001",    52L,               "GDS02-Prefer to Stay Home", "GDS0209",          "VISIT 3",         3, "2013-01-12",     "NO",        0L,
-   "P0001",    53L,                   "GDS02-Memory Problems", "GDS0210",          "VISIT 3",         3, "2013-01-12",     "NO",        0L,
-   "P0001",    54L,             "GDS02-Wonderful to Be Alive", "GDS0211",          "VISIT 3",         3, "2013-01-12",     "NO",        1L,
-   "P0001",    55L,                    "GDS02-Feel Worthless", "GDS0212",          "VISIT 3",         3, "2013-01-12",    "YES",        1L,
-   "P0001",    56L,               "GDS02-Feel Full of Energy", "GDS0213",          "VISIT 3",         3, "2013-01-12",    "YES",        0L,
-   "P0001",    57L,                     "GDS02-Feel Hopeless", "GDS0214",          "VISIT 3",         3, "2013-01-12",    "YES",        1L,
-   "P0001",    58L,   "GDS02-Most People Better Off Than You", "GDS0215",          "VISIT 3",         3, "2013-01-12",     "NO",        0L,
-   "P0001",    59L,               "GDS02-Satisfied With Life", "GDS0201",          "VISIT 4",         4, "2013-02-13",    "YES",        0L,
-   "P0001",    60L,  "GDS02-Dropped Activities and Interests", "GDS0202",          "VISIT 4",         4, "2013-02-13",     "NO",        0L,
-   "P0001",    61L,                     "GDS02-Life Is Empty", "GDS0203",          "VISIT 4",         4, "2013-02-13",     "NO",        0L,
-   "P0001",    62L,                       "GDS02-Bored Often", "GDS0204",          "VISIT 4",         4, "2013-02-13",     "NO",        0L,
-   "P0001",    63L,         "GDS02-Good Spirits Most of Time", "GDS0205",          "VISIT 4",         4, "2013-02-13",    "YES",        0L,
-   "P0001",    64L, "GDS02-Afraid of Something Bad Happening", "GDS0206",          "VISIT 4",         4, "2013-02-13",    "YES",        1L,
-   "P0001",    65L,           "GDS02-Feel Happy Most of Time", "GDS0207",          "VISIT 4",         4, "2013-02-13",     "NO",        1L,
-   "P0001",    66L,               "GDS02-Often Feel Helpless", "GDS0208",          "VISIT 4",         4, "2013-02-13",     "NO",        0L,
-   "P0001",    67L,               "GDS02-Prefer to Stay Home", "GDS0209",          "VISIT 4",         4, "2013-02-13",     "NO",        0L,
-   "P0001",    68L,                   "GDS02-Memory Problems", "GDS0210",          "VISIT 4",         4, "2013-02-13",     "NO",        0L,
-   "P0001",    69L,             "GDS02-Wonderful to Be Alive", "GDS0211",          "VISIT 4",         4, "2013-02-13",     "NO",        1L,
-   "P0001",    70L,                    "GDS02-Feel Worthless", "GDS0212",          "VISIT 4",         4, "2013-02-13",     "NO",        0L,
-   "P0001",    71L,               "GDS02-Feel Full of Energy", "GDS0213",          "VISIT 4",         4, "2013-02-13",    "YES",        0L,
-   "P0001",    72L,                     "GDS02-Feel Hopeless", "GDS0214",          "VISIT 4",         4, "2013-02-13",     "NO",        0L,
-   "P0001",    73L,   "GDS02-Most People Better Off Than You", "GDS0215",          "VISIT 4",         4, "2013-02-13",     "NO",        0L,
-   "P0002",     1L,               "GDS02-Satisfied With Life", "GDS0201",          "VISIT 1",         1, "2012-11-16",    "YES",        0L,
-   "P0002",     2L,  "GDS02-Dropped Activities and Interests", "GDS0202",          "VISIT 1",         1, "2012-11-16",    "YES",        1L,
-   "P0002",     3L,                     "GDS02-Life Is Empty", "GDS0203",          "VISIT 1",         1, "2012-11-16",     "NO",        0L,
-   "P0002",     4L,                       "GDS02-Bored Often", "GDS0204",          "VISIT 1",         1, "2012-11-16",    "YES",        1L,
-   "P0002",     5L,         "GDS02-Good Spirits Most of Time", "GDS0205",          "VISIT 1",         1, "2012-11-16",     "NO",        1L,
-   "P0002",     6L, "GDS02-Afraid of Something Bad Happening", "GDS0206",          "VISIT 1",         1, "2012-11-16",     "NO",        0L,
-   "P0002",     7L,           "GDS02-Feel Happy Most of Time", "GDS0207",          "VISIT 1",         1, "2012-11-16",     "NO",        1L,
-   "P0002",     8L,               "GDS02-Often Feel Helpless", "GDS0208",          "VISIT 1",         1, "2012-11-16",     "NO",        0L,
-   "P0002",     9L,               "GDS02-Prefer to Stay Home", "GDS0209",          "VISIT 1",         1, "2012-11-16",     "NO",        0L,
-   "P0002",    10L,                   "GDS02-Memory Problems", "GDS0210",          "VISIT 1",         1, "2012-11-16",     "NO",        0L,
-   "P0002",    11L,             "GDS02-Wonderful to Be Alive", "GDS0211",          "VISIT 1",         1, "2012-11-16",    "YES",        0L,
-   "P0002",    12L,                    "GDS02-Feel Worthless", "GDS0212",          "VISIT 1",         1, "2012-11-16",     "NO",        0L,
-   "P0002",    13L,               "GDS02-Feel Full of Energy", "GDS0213",          "VISIT 1",         1, "2012-11-16",    "YES",        0L,
-   "P0002",    14L,                     "GDS02-Feel Hopeless", "GDS0214",          "VISIT 1",         1, "2012-11-16",     "NO",        0L,
-   "P0002",    15L,   "GDS02-Most People Better Off Than You", "GDS0215",          "VISIT 1",         1, "2012-11-16",     "NO",        0L,
-   "P0002",    16L,               "GDS02-Satisfied With Life", "GDS0201",          "VISIT 2",         2, "2012-12-15",    "YES",        0L,
-   "P0002",    17L,  "GDS02-Dropped Activities and Interests", "GDS0202",          "VISIT 2",         2, "2012-12-15",    "YES",        1L,
-   "P0002",    18L,                     "GDS02-Life Is Empty", "GDS0203",          "VISIT 2",         2, "2012-12-15",     "NO",        0L,
-   "P0002",    19L,                       "GDS02-Bored Often", "GDS0204",          "VISIT 2",         2, "2012-12-15",    "YES",        1L,
-   "P0002",    20L,         "GDS02-Good Spirits Most of Time", "GDS0205",          "VISIT 2",         2, "2012-12-15",     "NO",        1L,
-   "P0002",    21L, "GDS02-Afraid of Something Bad Happening", "GDS0206",          "VISIT 2",         2, "2012-12-15",    "YES",        1L,
-   "P0002",    22L,           "GDS02-Feel Happy Most of Time", "GDS0207",          "VISIT 2",         2, "2012-12-15",     "NO",        1L,
-   "P0002",    23L,               "GDS02-Often Feel Helpless", "GDS0208",          "VISIT 2",         2, "2012-12-15",     "NO",        0L,
-   "P0002",    24L,               "GDS02-Prefer to Stay Home", "GDS0209",          "VISIT 2",         2, "2012-12-15",    "YES",        1L,
-   "P0002",    25L,                   "GDS02-Memory Problems", "GDS0210",          "VISIT 2",         2, "2012-12-15",     "NO",        0L,
-   "P0002",    26L,             "GDS02-Wonderful to Be Alive", "GDS0211",          "VISIT 2",         2, "2012-12-15",    "YES",        0L,
-   "P0002",    27L,                    "GDS02-Feel Worthless", "GDS0212",          "VISIT 2",         2, "2012-12-15",     "NO",        0L,
-   "P0002",    28L,               "GDS02-Feel Full of Energy", "GDS0213",          "VISIT 2",         2, "2012-12-15",    "YES",        0L,
-   "P0002",    29L,                     "GDS02-Feel Hopeless", "GDS0214",          "VISIT 2",         2, "2012-12-15",     "NO",        0L,
-   "P0002",    30L,   "GDS02-Most People Better Off Than You", "GDS0215",          "VISIT 2",         2, "2012-12-15",     "NO",        0L,
-   "P0002",    31L,               "GDS02-Satisfied With Life", "GDS0201",          "VISIT 3",         2, "2013-01-12",    "YES",        0L,
-   "P0002",    32L,  "GDS02-Dropped Activities and Interests", "GDS0202",          "VISIT 3",         2, "2013-01-12",    "YES",        1L,
-   "P0002",    33L,                     "GDS02-Life Is Empty", "GDS0203",          "VISIT 3",         3, "2013-01-12",     "NO",        0L,
-   "P0002",    34L,                       "GDS02-Bored Often", "GDS0204",          "VISIT 3",         3, "2013-01-12",     "NO",        0L,
-   "P0002",    35L,         "GDS02-Good Spirits Most of Time", "GDS0205",          "VISIT 3",         3, "2013-01-12",    "YES",        0L,
-   "P0002",    36L, "GDS02-Afraid of Something Bad Happening", "GDS0206",          "VISIT 3",         3, "2013-01-12",     "NO",        0L,
-   "P0002",    37L,           "GDS02-Feel Happy Most of Time", "GDS0207",          "VISIT 3",         3, "2013-01-12",     "NO",        1L,
-   "P0002",    38L,               "GDS02-Often Feel Helpless", "GDS0208",          "VISIT 3",         3, "2013-01-12",     "NO",        0L,
-   "P0002",    39L,               "GDS02-Prefer to Stay Home", "GDS0209",          "VISIT 3",         3, "2013-01-12",     "NO",        0L,
-   "P0002",    40L,                   "GDS02-Memory Problems", "GDS0210",          "VISIT 3",         3, "2013-01-12",     "NO",        0L,
-   "P0002",    41L,             "GDS02-Wonderful to Be Alive", "GDS0211",          "VISIT 3",         3, "2013-01-12",     "NO",        1L,
-   "P0002",    42L,                    "GDS02-Feel Worthless", "GDS0212",          "VISIT 3",         3, "2013-01-12",    "YES",        1L,
-   "P0002",    43L,               "GDS02-Feel Full of Energy", "GDS0213",          "VISIT 3",         3, "2013-01-12",    "YES",        0L,
-   "P0002",    44L,                     "GDS02-Feel Hopeless", "GDS0214",          "VISIT 3",         3, "2013-01-12",     "NO",        0L,
-   "P0002",    45L,   "GDS02-Most People Better Off Than You", "GDS0215",          "VISIT 3",         3, "2013-01-12",     "NO",        0L,
-   "P0002",    46L,               "GDS02-Satisfied With Life", "GDS0201",          "VISIT 4",         4, "2013-02-13",     "NO",        1L,
-   "P0002",    47L,  "GDS02-Dropped Activities and Interests", "GDS0202",          "VISIT 4",         4, "2013-02-13",    "YES",        1L,
-   "P0002",    48L,                     "GDS02-Life Is Empty", "GDS0203",          "VISIT 4",         4, "2013-02-13",     "NO",        0L,
-   "P0002",    49L,                       "GDS02-Bored Often", "GDS0204",          "VISIT 4",         4, "2013-02-13",    "YES",        1L,
-   "P0002",    50L,         "GDS02-Good Spirits Most of Time", "GDS0205",          "VISIT 4",         4, "2013-02-13",     "NO",        1L,
-   "P0002",    51L, "GDS02-Afraid of Something Bad Happening", "GDS0206",          "VISIT 4",         4, "2013-02-13",    "YES",        1L,
-   "P0002",    52L,           "GDS02-Feel Happy Most of Time", "GDS0207",          "VISIT 4",         4, "2013-02-13",     "NO",        1L,
-   "P0002",    53L,               "GDS02-Often Feel Helpless", "GDS0208",          "VISIT 4",         4, "2013-02-13",    "YES",        1L,
-   "P0002",    54L,               "GDS02-Prefer to Stay Home", "GDS0209",          "VISIT 4",         4, "2013-02-13",    "YES",        1L,
-   "P0002",    55L,                   "GDS02-Memory Problems", "GDS0210",          "VISIT 4",         4, "2013-02-13",    "YES",        1L,
-   "P0002",    56L,             "GDS02-Wonderful to Be Alive", "GDS0211",          "VISIT 4",         4, "2013-02-13",     "NO",        1L,
-   "P0002",    57L,                    "GDS02-Feel Worthless", "GDS0212",          "VISIT 4",         4, "2013-02-13",    "YES",        1L,
-   "P0002",    58L,               "GDS02-Feel Full of Energy", "GDS0213",          "VISIT 4",         4, "2013-02-13",     "NO",        1L,
-   "P0002",    59L,                     "GDS02-Feel Hopeless", "GDS0214",          "VISIT 4",         4, "2013-02-13",    "YES",        1L,
-   "P0002",    60L,   "GDS02-Most People Better Off Than You", "GDS0215",          "VISIT 4",         4, "2013-02-13",     "NO",        0L
-  ) %>%
+  ~USUBJID, ~QSSEQ, ~QSTEST, ~QSTESTCD, ~VISIT, ~VISITNUM, ~QSDTC, ~QSORRES, ~QSSTRESN,
+  "P0001", 1L, "GDS02-Satisfied With Life", "GDS0201", "VISIT 1", 1, "2012-11-16", "YES", 0L,
+  "P0001", 2L, "GDS02-Dropped Activities and Interests", "GDS0202", "VISIT 1", 1, "2012-11-16", "YES", 1L,
+  "P0001", 3L, "GDS02-Life Is Empty", "GDS0203", "VISIT 1", 1, "2012-11-16", "NO", 0L,
+  "P0001", 4L, "GDS02-Bored Often", "GDS0204", "VISIT 1", 1, "2012-11-16", "YES", 1L,
+  "P0001", 5L, "GDS02-Good Spirits Most of Time", "GDS0205", "VISIT 1", 1, "2012-11-16", "NO", 1L,
+  "P0001", 6L, "GDS02-Afraid of Something Bad Happening", "GDS0206", "VISIT 1", 1, "2012-11-16", "YES", 1L,
+  "P0001", 7L, "GDS02-Feel Happy Most of Time", "GDS0207", "VISIT 1", 1, "2012-11-16", "NO", 1L,
+  "P0001", 8L, "GDS02-Often Feel Helpless", "GDS0208", "VISIT 1", 1, "2012-11-16", "YES", 1L,
+  "P0001", 9L, "GDS02-Prefer to Stay Home", "GDS0209", "VISIT 1", 1, "2012-11-16", "NO", 0L,
+  "P0001", 10L, "GDS02-Memory Problems", "GDS0210", "VISIT 1", 1, "2012-11-16", "YES", 1L,
+  "P0001", 11L, "GDS02-Wonderful to Be Alive", "GDS0211", "VISIT 1", 1, "2012-11-16", "NO", 1L,
+  "P0001", 12L, "GDS02-Feel Worthless", "GDS0212", "VISIT 1", 1, "2012-11-16", "YES", 1L,
+  "P0001", 13L, "GDS02-Feel Full of Energy", "GDS0213", "VISIT 1", 1, "2012-11-16", "YES", 0L,
+  "P0001", 14L, "GDS02-Feel Hopeless", "GDS0214", "VISIT 1", 1, "2012-11-16", "YES", 1L,
+  "P0001", 15L, "GDS02-Most People Better Off Than You", "GDS0215", "VISIT 1", 1, "2012-11-16", "NO", 0L,
+  "P0001", 16L, "GDS02-Satisfied With Life", "GDS0201", "VISIT 2", 2, "2012-12-15", "YES", 0L,
+  "P0001", 17L, "GDS02-Dropped Activities and Interests", "GDS0202", "VISIT 2", 2, "2012-12-15", "NO", 0L,
+  "P0001", 18L, "GDS02-Life Is Empty", "GDS0203", "VISIT 2", 2, "2012-12-15", "NO", 0L,
+  "P0001", 19L, "GDS02-Bored Often", "GDS0204", "VISIT 2", 2, "2012-12-15", "YES", 1L,
+  "P0001", 20L, "GDS02-Good Spirits Most of Time", "GDS0205", "VISIT 2", 2, "2012-12-15", "NO", 1L,
+  "P0001", 21L, "GDS02-Afraid of Something Bad Happening", "GDS0206", "VISIT 2", 2, "2012-12-15", "YES", 1L,
+  "P0001", 22L, "GDS02-Feel Happy Most of Time", "GDS0207", "VISIT 2", 2, "2012-12-15", "NO", 1L,
+  "P0001", 23L, "GDS02-Often Feel Helpless", "GDS0208", "VISIT 2", 2, "2012-12-15", "YES", 1L,
+  "P0001", 24L, "GDS02-Prefer to Stay Home", "GDS0209", "VISIT 2", 2, "2012-12-15", "NO", 0L,
+  "P0001", 25L, "GDS02-Memory Problems", "GDS0210", "VISIT 2", 2, "2012-12-15", "NO", 0L,
+  "P0001", 26L, "GDS02-Wonderful to Be Alive", "GDS0211", "VISIT 2", 2, "2012-12-15", "NO", 1L,
+  "P0001", 27L, "GDS02-Feel Worthless", "GDS0212", "VISIT 2", 2, "2012-12-15", "YES", 1L,
+  "P0001", 28L, "GDS02-Feel Full of Energy", "GDS0213", "VISIT 2", 2, "2012-12-15", "YES", 0L,
+  "P0001", 29L, "GDS02-Feel Hopeless", "GDS0214", "VISIT 2", 2, "2012-12-15", "YES", 1L,
+  "P0001", 30L, "GDS02-Most People Better Off Than You", "GDS0215", "VISIT 2", 2, "2012-12-15", "NO", 0L,
+  "P0001", 31L, "GDS02-Satisfied With Life", "GDS0201", "UNSCHEDULED 2.01", 201, "2012-12-28", "YES", 0L,
+  "P0001", 32L, "GDS02-Dropped Activities and Interests", "GDS0202", "UNSCHEDULED 2.01", 201, "2012-12-28", "NO", 0L,
+  "P0001", 33L, "GDS02-Life Is Empty", "GDS0203", "UNSCHEDULED 2.01", 201, "2012-12-28", "YES", 1L,
+  "P0001", 34L, "GDS02-Bored Often", "GDS0204", "UNSCHEDULED 2.01", 201, "2012-12-28", "YES", 1L,
+  "P0001", 35L, "GDS02-Good Spirits Most of Time", "GDS0205", "UNSCHEDULED 2.01", 201, "2012-12-28", "NO", 1L,
+  "P0001", 36L, "GDS02-Afraid of Something Bad Happening", "GDS0206", "UNSCHEDULED 2.01", 201, "2012-12-28", "YES", 1L,
+  "P0001", 37L, "GDS02-Feel Happy Most of Time", "GDS0207", "UNSCHEDULED 2.01", 201, "2012-12-28", "NO", 0L,
+  "P0001", 38L, "GDS02-Often Feel Helpless", "GDS0208", "UNSCHEDULED 2.01", 201, "2012-12-28", "YES", 1L,
+  "P0001", 39L, "GDS02-Prefer to Stay Home", "GDS0209", "UNSCHEDULED 2.01", 201, "2012-12-28", "NO", 0L,
+  "P0001", 40L, "GDS02-Memory Problems", "GDS0210", "UNSCHEDULED 2.01", 201, "2012-12-28", "NO", 0L,
+  "P0001", 41L, "GDS02-Wonderful to Be Alive", "GDS0211", "UNSCHEDULED 2.01", 201, "2012-12-28", "NO", 1L,
+  "P0001", 42L, "GDS02-Feel Worthless", "GDS0212", "UNSCHEDULED 2.01", 201, "2012-12-28", "YES", 1L,
+  "P0001", 43L, "GDS02-Feel Full of Energy", "GDS0213", "UNSCHEDULED 2.01", 201, "2012-12-28", "YES", 0L,
+  "P0001", 44L, "GDS02-Feel Hopeless", "GDS0214", "UNSCHEDULED 2.01", 201, "2012-12-28", "YES", 1L,
+  "P0001", 45L, "GDS02-Most People Better Off Than You", "GDS0215", "UNSCHEDULED 2.01", 201, "2012-12-28", "NO", 0L,
+  "P0001", 46L, "GDS02-Life Is Empty", "GDS0203", "VISIT 3", 3, "2013-01-12", "NO", 0L,
+  "P0001", 47L, "GDS02-Bored Often", "GDS0204", "VISIT 3", 3, "2013-01-12", "NO", 0L,
+  "P0001", 48L, "GDS02-Good Spirits Most of Time", "GDS0205", "VISIT 3", 3, "2013-01-12", "YES", 0L,
+  "P0001", 49L, "GDS02-Afraid of Something Bad Happening", "GDS0206", "VISIT 3", 3, "2013-01-12", "YES", 1L,
+  "P0001", 50L, "GDS02-Feel Happy Most of Time", "GDS0207", "VISIT 3", 3, "2013-01-12", "NO", 1L,
+  "P0001", 51L, "GDS02-Often Feel Helpless", "GDS0208", "VISIT 3", 3, "2013-01-12", "YES", 1L,
+  "P0001", 52L, "GDS02-Prefer to Stay Home", "GDS0209", "VISIT 3", 3, "2013-01-12", "NO", 0L,
+  "P0001", 53L, "GDS02-Memory Problems", "GDS0210", "VISIT 3", 3, "2013-01-12", "NO", 0L,
+  "P0001", 54L, "GDS02-Wonderful to Be Alive", "GDS0211", "VISIT 3", 3, "2013-01-12", "NO", 1L,
+  "P0001", 55L, "GDS02-Feel Worthless", "GDS0212", "VISIT 3", 3, "2013-01-12", "YES", 1L,
+  "P0001", 56L, "GDS02-Feel Full of Energy", "GDS0213", "VISIT 3", 3, "2013-01-12", "YES", 0L,
+  "P0001", 57L, "GDS02-Feel Hopeless", "GDS0214", "VISIT 3", 3, "2013-01-12", "YES", 1L,
+  "P0001", 58L, "GDS02-Most People Better Off Than You", "GDS0215", "VISIT 3", 3, "2013-01-12", "NO", 0L,
+  "P0001", 59L, "GDS02-Satisfied With Life", "GDS0201", "VISIT 4", 4, "2013-02-13", "YES", 0L,
+  "P0001", 60L, "GDS02-Dropped Activities and Interests", "GDS0202", "VISIT 4", 4, "2013-02-13", "NO", 0L,
+  "P0001", 61L, "GDS02-Life Is Empty", "GDS0203", "VISIT 4", 4, "2013-02-13", "NO", 0L,
+  "P0001", 62L, "GDS02-Bored Often", "GDS0204", "VISIT 4", 4, "2013-02-13", "NO", 0L,
+  "P0001", 63L, "GDS02-Good Spirits Most of Time", "GDS0205", "VISIT 4", 4, "2013-02-13", "YES", 0L,
+  "P0001", 64L, "GDS02-Afraid of Something Bad Happening", "GDS0206", "VISIT 4", 4, "2013-02-13", "YES", 1L,
+  "P0001", 65L, "GDS02-Feel Happy Most of Time", "GDS0207", "VISIT 4", 4, "2013-02-13", "NO", 1L,
+  "P0001", 66L, "GDS02-Often Feel Helpless", "GDS0208", "VISIT 4", 4, "2013-02-13", "NO", 0L,
+  "P0001", 67L, "GDS02-Prefer to Stay Home", "GDS0209", "VISIT 4", 4, "2013-02-13", "NO", 0L,
+  "P0001", 68L, "GDS02-Memory Problems", "GDS0210", "VISIT 4", 4, "2013-02-13", "NO", 0L,
+  "P0001", 69L, "GDS02-Wonderful to Be Alive", "GDS0211", "VISIT 4", 4, "2013-02-13", "NO", 1L,
+  "P0001", 70L, "GDS02-Feel Worthless", "GDS0212", "VISIT 4", 4, "2013-02-13", "NO", 0L,
+  "P0001", 71L, "GDS02-Feel Full of Energy", "GDS0213", "VISIT 4", 4, "2013-02-13", "YES", 0L,
+  "P0001", 72L, "GDS02-Feel Hopeless", "GDS0214", "VISIT 4", 4, "2013-02-13", "NO", 0L,
+  "P0001", 73L, "GDS02-Most People Better Off Than You", "GDS0215", "VISIT 4", 4, "2013-02-13", "NO", 0L,
+  "P0002", 1L, "GDS02-Satisfied With Life", "GDS0201", "VISIT 1", 1, "2012-11-16", "YES", 0L,
+  "P0002", 2L, "GDS02-Dropped Activities and Interests", "GDS0202", "VISIT 1", 1, "2012-11-16", "YES", 1L,
+  "P0002", 3L, "GDS02-Life Is Empty", "GDS0203", "VISIT 1", 1, "2012-11-16", "NO", 0L,
+  "P0002", 4L, "GDS02-Bored Often", "GDS0204", "VISIT 1", 1, "2012-11-16", "YES", 1L,
+  "P0002", 5L, "GDS02-Good Spirits Most of Time", "GDS0205", "VISIT 1", 1, "2012-11-16", "NO", 1L,
+  "P0002", 6L, "GDS02-Afraid of Something Bad Happening", "GDS0206", "VISIT 1", 1, "2012-11-16", "NO", 0L,
+  "P0002", 7L, "GDS02-Feel Happy Most of Time", "GDS0207", "VISIT 1", 1, "2012-11-16", "NO", 1L,
+  "P0002", 8L, "GDS02-Often Feel Helpless", "GDS0208", "VISIT 1", 1, "2012-11-16", "NO", 0L,
+  "P0002", 9L, "GDS02-Prefer to Stay Home", "GDS0209", "VISIT 1", 1, "2012-11-16", "NO", 0L,
+  "P0002", 10L, "GDS02-Memory Problems", "GDS0210", "VISIT 1", 1, "2012-11-16", "NO", 0L,
+  "P0002", 11L, "GDS02-Wonderful to Be Alive", "GDS0211", "VISIT 1", 1, "2012-11-16", "YES", 0L,
+  "P0002", 12L, "GDS02-Feel Worthless", "GDS0212", "VISIT 1", 1, "2012-11-16", "NO", 0L,
+  "P0002", 13L, "GDS02-Feel Full of Energy", "GDS0213", "VISIT 1", 1, "2012-11-16", "YES", 0L,
+  "P0002", 14L, "GDS02-Feel Hopeless", "GDS0214", "VISIT 1", 1, "2012-11-16", "NO", 0L,
+  "P0002", 15L, "GDS02-Most People Better Off Than You", "GDS0215", "VISIT 1", 1, "2012-11-16", "NO", 0L,
+  "P0002", 16L, "GDS02-Satisfied With Life", "GDS0201", "VISIT 2", 2, "2012-12-15", "YES", 0L,
+  "P0002", 17L, "GDS02-Dropped Activities and Interests", "GDS0202", "VISIT 2", 2, "2012-12-15", "YES", 1L,
+  "P0002", 18L, "GDS02-Life Is Empty", "GDS0203", "VISIT 2", 2, "2012-12-15", "NO", 0L,
+  "P0002", 19L, "GDS02-Bored Often", "GDS0204", "VISIT 2", 2, "2012-12-15", "YES", 1L,
+  "P0002", 20L, "GDS02-Good Spirits Most of Time", "GDS0205", "VISIT 2", 2, "2012-12-15", "NO", 1L,
+  "P0002", 21L, "GDS02-Afraid of Something Bad Happening", "GDS0206", "VISIT 2", 2, "2012-12-15", "YES", 1L,
+  "P0002", 22L, "GDS02-Feel Happy Most of Time", "GDS0207", "VISIT 2", 2, "2012-12-15", "NO", 1L,
+  "P0002", 23L, "GDS02-Often Feel Helpless", "GDS0208", "VISIT 2", 2, "2012-12-15", "NO", 0L,
+  "P0002", 24L, "GDS02-Prefer to Stay Home", "GDS0209", "VISIT 2", 2, "2012-12-15", "YES", 1L,
+  "P0002", 25L, "GDS02-Memory Problems", "GDS0210", "VISIT 2", 2, "2012-12-15", "NO", 0L,
+  "P0002", 26L, "GDS02-Wonderful to Be Alive", "GDS0211", "VISIT 2", 2, "2012-12-15", "YES", 0L,
+  "P0002", 27L, "GDS02-Feel Worthless", "GDS0212", "VISIT 2", 2, "2012-12-15", "NO", 0L,
+  "P0002", 28L, "GDS02-Feel Full of Energy", "GDS0213", "VISIT 2", 2, "2012-12-15", "YES", 0L,
+  "P0002", 29L, "GDS02-Feel Hopeless", "GDS0214", "VISIT 2", 2, "2012-12-15", "NO", 0L,
+  "P0002", 30L, "GDS02-Most People Better Off Than You", "GDS0215", "VISIT 2", 2, "2012-12-15", "NO", 0L,
+  "P0002", 31L, "GDS02-Satisfied With Life", "GDS0201", "VISIT 3", 2, "2013-01-12", "YES", 0L,
+  "P0002", 32L, "GDS02-Dropped Activities and Interests", "GDS0202", "VISIT 3", 2, "2013-01-12", "YES", 1L,
+  "P0002", 33L, "GDS02-Life Is Empty", "GDS0203", "VISIT 3", 3, "2013-01-12", "NO", 0L,
+  "P0002", 34L, "GDS02-Bored Often", "GDS0204", "VISIT 3", 3, "2013-01-12", "NO", 0L,
+  "P0002", 35L, "GDS02-Good Spirits Most of Time", "GDS0205", "VISIT 3", 3, "2013-01-12", "YES", 0L,
+  "P0002", 36L, "GDS02-Afraid of Something Bad Happening", "GDS0206", "VISIT 3", 3, "2013-01-12", "NO", 0L,
+  "P0002", 37L, "GDS02-Feel Happy Most of Time", "GDS0207", "VISIT 3", 3, "2013-01-12", "NO", 1L,
+  "P0002", 38L, "GDS02-Often Feel Helpless", "GDS0208", "VISIT 3", 3, "2013-01-12", "NO", 0L,
+  "P0002", 39L, "GDS02-Prefer to Stay Home", "GDS0209", "VISIT 3", 3, "2013-01-12", "NO", 0L,
+  "P0002", 40L, "GDS02-Memory Problems", "GDS0210", "VISIT 3", 3, "2013-01-12", "NO", 0L,
+  "P0002", 41L, "GDS02-Wonderful to Be Alive", "GDS0211", "VISIT 3", 3, "2013-01-12", "NO", 1L,
+  "P0002", 42L, "GDS02-Feel Worthless", "GDS0212", "VISIT 3", 3, "2013-01-12", "YES", 1L,
+  "P0002", 43L, "GDS02-Feel Full of Energy", "GDS0213", "VISIT 3", 3, "2013-01-12", "YES", 0L,
+  "P0002", 44L, "GDS02-Feel Hopeless", "GDS0214", "VISIT 3", 3, "2013-01-12", "NO", 0L,
+  "P0002", 45L, "GDS02-Most People Better Off Than You", "GDS0215", "VISIT 3", 3, "2013-01-12", "NO", 0L,
+  "P0002", 46L, "GDS02-Satisfied With Life", "GDS0201", "VISIT 4", 4, "2013-02-13", "NO", 1L,
+  "P0002", 47L, "GDS02-Dropped Activities and Interests", "GDS0202", "VISIT 4", 4, "2013-02-13", "YES", 1L,
+  "P0002", 48L, "GDS02-Life Is Empty", "GDS0203", "VISIT 4", 4, "2013-02-13", "NO", 0L,
+  "P0002", 49L, "GDS02-Bored Often", "GDS0204", "VISIT 4", 4, "2013-02-13", "YES", 1L,
+  "P0002", 50L, "GDS02-Good Spirits Most of Time", "GDS0205", "VISIT 4", 4, "2013-02-13", "NO", 1L,
+  "P0002", 51L, "GDS02-Afraid of Something Bad Happening", "GDS0206", "VISIT 4", 4, "2013-02-13", "YES", 1L,
+  "P0002", 52L, "GDS02-Feel Happy Most of Time", "GDS0207", "VISIT 4", 4, "2013-02-13", "NO", 1L,
+  "P0002", 53L, "GDS02-Often Feel Helpless", "GDS0208", "VISIT 4", 4, "2013-02-13", "YES", 1L,
+  "P0002", 54L, "GDS02-Prefer to Stay Home", "GDS0209", "VISIT 4", 4, "2013-02-13", "YES", 1L,
+  "P0002", 55L, "GDS02-Memory Problems", "GDS0210", "VISIT 4", 4, "2013-02-13", "YES", 1L,
+  "P0002", 56L, "GDS02-Wonderful to Be Alive", "GDS0211", "VISIT 4", 4, "2013-02-13", "NO", 1L,
+  "P0002", 57L, "GDS02-Feel Worthless", "GDS0212", "VISIT 4", 4, "2013-02-13", "YES", 1L,
+  "P0002", 58L, "GDS02-Feel Full of Energy", "GDS0213", "VISIT 4", 4, "2013-02-13", "NO", 1L,
+  "P0002", 59L, "GDS02-Feel Hopeless", "GDS0214", "VISIT 4", 4, "2013-02-13", "YES", 1L,
+  "P0002", 60L, "GDS02-Most People Better Off Than You", "GDS0215", "VISIT 4", 4, "2013-02-13", "NO", 0L
+) %>%
   mutate(QSCAT = "GDS SHORT FORM")
 
 qs <- bind_rows(qs_gad7, qs_gdssf) %>%
@@ -254,17 +254,19 @@ adsl <- tibble::tribble(
 ```
 # Original Items
 
-The original items can be handled in the same way like in a [BDS finding ADaM](bds_finding.html). For example:
+The original items, i.e., the answers to the questionnaire questions can be
+handled in the same way like in a [BDS finding ADaM](bds_finding.html). For
+example:
 
 ```{r eval=TRUE}
 adqs <- qs %>%
-  # add ADSL variables
+  # Add ADSL variables
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = exprs(TRTSDT, DTHCAUS),
     by_vars = exprs(STUDYID, USUBJID)
   ) %>%
-  # add analysis parameter variables
+  # Add analysis parameter variables
   mutate(
     PARAMCD = QSTESTCD,
     PARAM = QSTEST,
@@ -272,7 +274,7 @@ adqs <- qs %>%
     AVALC = QSORRES,
     AVAL = QSSTRESN
   ) %>%
-  # add timing variables
+  # Add timing variables
   derive_vars_dt(new_vars_prefix = "A", dtc = QSDTC) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT)) %>%
   mutate(
@@ -297,9 +299,11 @@ for flagging values to be used for analysis `derive_var_extreme_flag()`.
 Scales and Scores are often derived as the sum or the average across a subset of
 the items. For the GAD-7 questionnaire the total score is derived as the sum.
 The `derive_summary_records()` function with `sum()` can be used to derive it as
-a new parameter. In the example we derive a separate ADaM dataset for each
-questionnaire. Depending on the analysis needs it is also possible that an ADaM
-contains more than one questionnaire or all questionnaires.
+a new parameter. For selecting the parameters to be summarized regular
+expressions like in the example below may be helpful. In the example we derive a
+separate ADaM dataset for each questionnaire. Depending on the analysis needs it
+is also possible that an ADaM contains more than one questionnaire or all
+questionnaires.
 ```{r eval=TRUE}
 adgad7 <- adqs %>%
   filter(PARCAT1 == "GAD-7 V2") %>%
@@ -357,11 +361,11 @@ dataset_vignette(
 )
 ```
 
-After deriving the scores by visit baseline and change from baseline variables
-can be derived:
+After deriving the scores by visit the baseline and change from baseline
+variables can be derived:
 ```{r eval=TRUE}
 adgdssf <- adgdssf %>%
-  # flag baseline records (last before treatement start)
+  # Flag baseline records (last before treatement start)
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
@@ -372,7 +376,7 @@ adgdssf <- adgdssf %>%
     ),
     filter = !is.na(AVAL) & ADT <= TRTSDT
   ) %>%
-  # derive baseline and change from baseline variables
+  # Derive baseline and change from baseline variables
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD),
     source_var = AVAL,
@@ -380,7 +384,7 @@ adgdssf <- adgdssf %>%
   ) %>%
   derive_var_chg() %>%
   derive_var_pchg() %>%
-  # derive sequence number
+  # Derive sequence number
   derive_var_obs_number(
     by_vars = exprs(STUDYID, USUBJID),
     order = exprs(PARAMCD, ADT),
@@ -422,7 +426,7 @@ adgdssf <- adgdssf %>%
       ),
       NA_integer_
     )
-  ) %>% 
+  ) %>%
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD),
     source_var = AVALCAT1,
@@ -440,7 +444,6 @@ adgdssf <- adgdssf %>%
       AVALCAT1N < BASECA1N ~ "IMPROVED",
     )
   )
-
 ```
 
 ```{r echo=FALSE}
@@ -452,7 +455,7 @@ dataset_vignette(
 
 Then a time to deterioration parameter can be derived by:
 ```{r}
-# define event
+# Define event
 deterioration_event <- event_source(
   dataset_name = "adqs",
   filter = PARAMCD == "GDS02TS" & CHGCAT1 == "WORSENED",
@@ -465,7 +468,7 @@ deterioration_event <- event_source(
   )
 )
 
-# define censoring at last assessment
+# Define censoring at last assessment
 last_valid_assessment <- censor_source(
   dataset_name = "adqs",
   filter = PARAMCD == "GDS02TS" & !is.na(CHGCAT1),
@@ -478,7 +481,7 @@ last_valid_assessment <- censor_source(
   )
 )
 
-# define censoring at treatment start (for subjects without assessment)
+# Define censoring at treatment start (for subjects without assessment)
 start <- censor_source(
   dataset_name = "adsl",
   date = TRTSDT,
@@ -547,7 +550,7 @@ For flagging deteriorations at two consecutive assessments or considering death
 due to progression at the last assessment as confirmation the `tmp_obs_nr_var`
 argument is helpful:
 ```{r}
-# flagging deterioration at two consecutive assessments
+# Flagging deterioration at two consecutive assessments
 adgdssf <- adgdssf %>%
   derive_var_confirmation_flag(
     by_vars = exprs(USUBJID, PARAMCD),
@@ -560,7 +563,7 @@ adgdssf <- adgdssf %>%
       CHGCAT1.join == "WORSENED" &
       tmp_obs_nr.join == tmp_obs_nr + 1
   ) %>%
-  # flagging deterioration confirmed by
+  # Flagging deterioration confirmed by
   # - a second deterioration at least 7 days later or
   # - deterioration at the last assessment and death due to progression
   derive_var_confirmation_flag(
@@ -611,7 +614,11 @@ Deterioration/Improvement](#timetodeterioration))
 
 # Worst/Best Answer
 
-This class of parameters can be used when the worst answer of a set of yes/no answers should be selected. For example, if yes/no answers for "No sleep", "Waking up more than three times", "More than 30 mins to fall asleep" are collected, a parameter for the worst sleeping problems could be derived. In the example no sleeping problems is assumed if all were answered with "no".
+This class of parameters can be used when the worst answer of a set of yes/no
+answers should be selected. For example, if yes/no answers for "No sleep",
+"Waking up more than three times", "More than 30 mins to fall asleep" are
+collected, a parameter for the worst sleeping problems could be derived. In the
+example no sleeping problems is assumed if all were answered with "no".
 ```{r eval=FALSE}
 derive_param_worst_event(
   adqs,
@@ -662,7 +669,8 @@ derive_param_worst_event(
 
 # Completion
 
-Parameters for completion like "at least 50% of the questions were answered" can be derived by `derive_summary_records()`.
+Parameters for completion like "at least 50% of the questions were answered" can
+be derived by `derive_summary_records()`.
 ```{r eval=FALSE}
 adqs <- adqs %>%
   derive_summary_records(
@@ -682,7 +690,8 @@ adqs <- adqs %>%
     )
   )
 ```
-If missed visits need to be taken into account the expected records can be added to the input dataset by calling `derive_expected_records()`:
+If missed visits need to be taken into account the expected records can be added
+to the input dataset by calling `derive_expected_records()`:
 
 ```{r eval=FALSE}
 adqs <- adqs %>%
