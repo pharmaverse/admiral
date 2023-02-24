@@ -244,15 +244,12 @@ test_that("assert_valid_queries checks VAR_PREFIX values", {
         QUERY_SCOPE_NUM = c(1, 2)
       ),
       "test"
+    ),
+    regexp = paste0(
+      "If a value for `QUERY_SCOPE_NUM` is specified",
+      "a corresponding  `QUERY_SCOPE` is expected",
+      " in `test`. ",
+      "They must both be NA/missing or both specified."
     )
-    # ,
-    # regexp = paste0(
-    #   "For some values of ",
-    #   vars2chr(exprs(QUERY_SCOPE)),
-    #   " there is more than one value of ",
-    #   vars2chr(exprs(QUERY_SCOPE_NUM)),
-    #   ".\nCall `get_one_to_many_dataset()` to get all one to many values."
-    # )
   )
 })
-
