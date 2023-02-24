@@ -2,13 +2,18 @@
 
 ## New Features
 
+- Using testthat3e (testthat 3rd edition) for unit testing. This is stricter in 
+that messages must be addressed and deprecated functions throw errors. (#1754) 
+
 - New function `consolidate_metadata()` for consolidating multiple meta datasets
 into a single one (#1479)
 
 - New function `compute_scale()` for computing the average of a vector and 
 transforming the result from a source to a target range. (#1692)
 
--   New ADPC template script available `ad_adpc.R` which creates PK Concentration Analysis Dataset (#849). This script includes formatting suitable for Non-Compartmental Analysis (ADNCA) (#851)
+- New ADPC template script available `ad_adpc.R` which creates PK Concentration
+Analysis Dataset (#849). This script includes formatting suitable for
+Non-Compartmental Analysis (ADNCA) (#851)
 
 ## Updates of Existing Functions
 
@@ -31,6 +36,10 @@ that need carrying the last observation forward other than `analysis_var`
     hours, such as "BID", "TID", and "QID". Previously these values of
     `EXDOSFRQ` may result in duplicate records where the day values are
     incremented but the time values are not (#1643)
+    
+- The function `derive_var_confirmation_flag()` and `filter_confirmation()`
+gained the `tmp_obs_nr_var` argument. It helps flagging or selecting consecutive
+observations or the first or last observation in a by group. (#1724)
 
 ## Breaking Changes
 
@@ -54,6 +63,8 @@ added for subjects who have both an event or censoring and an observation in
 ## Documentation
 
 - New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
+
+- New vignette "Hy's Law Implementation" (#1637)
 
 - `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
