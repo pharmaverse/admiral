@@ -58,6 +58,7 @@ Source Specifications:
 \code{\link{date_source}()},
 \code{\link{death_event}},
 \code{\link{dthcaus_source}()},
+\code{\link{event}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{filter_date_sources}()},
 \code{\link{format.basket_select}()},

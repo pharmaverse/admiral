@@ -129,6 +129,7 @@ Source Specifications:
 \code{\link{death_event}},
 \code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
+\code{\link{event}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{format.basket_select}()},
 \code{\link{list_tte_source_objects}()},
