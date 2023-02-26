@@ -183,29 +183,30 @@ create_single_dose_dataset(data,
   )
 )
 
-# Example derive a single dose dataset with imputations
+# Example - derive a single dose dataset with imputations
 
 # For either single drug administration records, or multiple drug administration
 # records covering a range of dates, fill-in of missing treatment end datetime
-# EXENDTC by substitution with an acceptable alternate, for example date of
-# death, date of datacut may be required. This programming strategy allows the
-# maximum possible number of single dose records to be derived. The example R
-# script requires the date of datacut `DCUTDT` to be specified correctly, or
+# `EXENDTC` by substitution with an acceptable alternate, for example date of
+# death, date of datacut may be required. This example shows the
+# maximum possible number of single dose records to be derived. The example
+# requires the date of datacut `DCUTDT` to be specified correctly, or
 # if not appropriate to use `DCUTDT` as missing treatment end data and missing
 # treatment end datetime could set equal to treatment start date and treatment
 # start datetime. ADSL variables `DTHDT` and `DCUTDT` are preferred for
 # imputation use.
 #
 # All available trial treatments are included, allowing multiple different
-# last dose variables to be created in ad_adae.R if required.
+# last dose variables to be created in for example `use_ad_template("ADAE")`
+# if required.
 
 adsl <- tribble(
   ~STUDYID, ~USUBJID, ~DTHDT,
-  "01", "01-701-1211", ymd("2013-01-14"),
-  "01", "01-710-1083", ymd("2013-08-02"),
-  "01", "01-704-1445", ymd("2014-11-01"),
-  "01", "01-701-1015", NA,
-  "01", "01-701-1023", NA
+  "01", "1211", ymd("2013-01-14"),
+  "01", "1083", ymd("2013-08-02"),
+  "01", "1445", ymd("2014-11-01"),
+  "01", "1015", NA,
+  "01", "1023", NA
 )
 
 ex <- tribble(
@@ -232,7 +233,7 @@ adsl_death <- adsl \%>\%
 
 # Select valid dose records, non-missing `EXSTDTC` and `EXDOSE`.
 ex_mod <- ex \%>\%
-  filter(!is.na(EXSTDTC) & !is.na(EXDOSE), USUBJID == "01-701-1211") \%>\%
+  filter(!is.na(EXSTDTC) & !is.na(EXDOSE)) \%>\%
   left_join(adsl_death, by = c("STUDYID", "USUBJID")) \%>\%
   # Example, set up missing `EXDOSFRQ` as QD daily dosing regime.
   # Replace with study dosing regime per trial treatment.
@@ -274,7 +275,6 @@ ex_mod <- ex \%>\%
     EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
   )
 
-ex_single <-
   create_single_dose_dataset(
     ex_mod,
     start_date = EXSTDT,
