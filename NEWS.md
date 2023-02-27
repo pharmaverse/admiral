@@ -8,6 +8,7 @@
   - Using testthat3e (testthat 3rd edition) for unit testing. This is stricter 
   in that messages must be addressed and deprecated functions throw errors. 
   (#230)
+  - Slight boost to test coverage for `dev_utilities` (#102)
   - Fix datatable styling for documentation (#197)
   - The `assert_character_vector()` function gained a `named` argument to check
   that all elements of the vector are named. (#70)
