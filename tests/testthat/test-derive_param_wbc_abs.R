@@ -87,24 +87,26 @@ test_that("Test 3: Test when absolute record already present in source dataset 1
     "P01", "LYMLE", 0.8, "Lymphocytes (fraction of 1)", "CYCLE 3 DAY 1"
   )
 
-  expect_equal(
-    derive_param_wbc_abs(
-      dataset = input,
-      by_vars = exprs(USUBJID, VISIT),
-      set_values_to = exprs(
-        PARAMCD = "LYMPH",
-        PARAM = "Lymphocytes Abs (10^9/L)",
-        DTYPE = "CALCULATION"
+  expect_message(
+    expect_equal(
+      derive_param_wbc_abs(
+        dataset = input,
+        by_vars = exprs(USUBJID, VISIT),
+        set_values_to = exprs(
+          PARAMCD = "LYMPH",
+          PARAM = "Lymphocytes Abs (10^9/L)",
+          DTYPE = "CALCULATION"
+        ),
+        get_unit_expr = extract_unit(PARAM),
+        wbc_code = "WBC",
+        diff_code = "LYMLE",
+        diff_type = "fraction"
       ),
-      get_unit_expr = extract_unit(PARAM),
-      wbc_code = "WBC",
-      diff_code = "LYMLE",
-      diff_type = "fraction"
+      expected_output
     ),
-    expected_output
+    "No source records meet condition for calculation, therefore no new records created"
   )
 })
-
 
 test_that("Test 4: Test when absolute record already present in source dataset 2", {
   input <- tibble::tribble(

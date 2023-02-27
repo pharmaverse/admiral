@@ -2,6 +2,9 @@
 
 ## New Features
 
+- Using testthat3e (testthat 3rd edition) for unit testing. This is stricter in 
+that messages must be addressed and deprecated functions throw errors. (#1754) 
+
 - New function `consolidate_metadata()` for consolidating multiple meta datasets
 into a single one (#1479)
 
@@ -11,6 +14,8 @@ transforming the result from a source to a target range. (#1692)
 - New ADPC template script available `ad_adpc.R` which creates PK Concentration
 Analysis Dataset (#849). This script includes formatting suitable for
 Non-Compartmental Analysis (ADNCA) (#851)
+
+- New function `derive_expected_records()` for adding expected records (#1729)
 
 ## Updates of Existing Functions
 
@@ -60,6 +65,8 @@ added for subjects who have both an event or censoring and an observation in
 ## Documentation
 
 - New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
+
+- New vignette "Hy's Law Implementation" (#1637)
 
 - `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
