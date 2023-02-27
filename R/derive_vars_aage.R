@@ -116,11 +116,11 @@ derive_vars_aage <- function(dataset,
 #' # Derive age with age units specified
 #' data <- tribble(
 #'   ~AGE, ~AGEU,
-#'     27, "days",
-#'     24, "months",
-#'      3, "years",
-#'      4, "weeks",
-#'      1, "years"
+#'   27, "days",
+#'   24, "months",
+#'   3, "years",
+#'   4, "weeks",
+#'   1, "years"
 #' )
 #'
 #' derive_var_age_years(data, AGE, new_var = AAGE)
@@ -128,10 +128,10 @@ derive_vars_aage <- function(dataset,
 #' # Derive age without age units variable specified
 #' data <- tribble(
 #'   ~AGE,
-#'     12,
-#'     24,
-#'     36,
-#'     48
+#'   12,
+#'   24,
+#'   36,
+#'   48
 #' )
 #' derive_var_age_years(data, AGE, age_unit = "months", new_var = AAGE)
 derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
