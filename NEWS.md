@@ -15,6 +15,8 @@ transforming the result from a source to a target range. (#1692)
 Analysis Dataset (#849). This script includes formatting suitable for
 Non-Compartmental Analysis (ADNCA) (#851)
 
+- New function `derive_expected_records()` for adding expected records (#1729)
+
 ## Updates of Existing Functions
 
 - Arguments `analysis_var`, `keep_vars` were added to `derive_locf_records()`,   
