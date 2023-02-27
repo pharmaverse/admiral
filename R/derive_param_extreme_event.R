@@ -295,7 +295,7 @@ derive_param_extreme_event <- function(dataset = NULL,
   assert_vars(subject_keys)
   assert_vars(order, optional = TRUE)
   assert_data_frame(dataset_source,
-                    required_vars = exprs(!!!subject_keys, !!!extract_vars(order))
+    required_vars = exprs(!!!subject_keys, !!!extract_vars(order))
   )
   new_var <- assert_symbol(enexpr(new_var), optional = TRUE)
   assert_same_type(true_value, false_value)
@@ -346,9 +346,7 @@ derive_param_extreme_event <- function(dataset = NULL,
 
     # Create output dataset
     bind_rows(dataset, new_obs)
-  }
-
-  else if (is.null(new_var)) {
+  } else if (is.null(new_var)) {
     events <- dataset_source %>%
       filter_if(filter_source) %>%
       filter_extreme(

@@ -170,7 +170,8 @@ test_that("derive_param_extreme_event Test 3: latest evaluable tumor assessment 
   )
 })
 
-## Test 4: derive latest evaluable tumor assessment date parameter without overwriting existing result ----
+## Test 4:
+## derive latest evaluable tumor assessment date parameter without overwriting existing result ----
 test_that("derive_param_extreme_event Test 4: latest evaluable tumor assessment date parameter", {
   actual <- derive_param_extreme_event(
     dataset = adrs,
