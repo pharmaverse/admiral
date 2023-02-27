@@ -127,11 +127,13 @@ is also possible that an ADaM contains more than one questionnaire or all
 questionnaires.
 ```{r eval=TRUE}
 adgad7 <- adqs %>%
+  # select records to keep in the GAD-7 ADaM
   filter(PARCAT1 == "GAD-7 V2") %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT),
     analysis_var = AVAL,
     summary_fun = function(x) sum(x, na.rm = TRUE),
+    # select records contributing to total score
     filter = str_detect(PARAMCD, "GAD020[1-7]"),
     set_values_to = exprs(
       PARAMCD = "GAD02TS",
@@ -154,6 +156,7 @@ This parameter can be derived by `compute_scale()` and
 `derive_summary_records()`:
 ```{r eval=TRUE}
 adgdssf <- adqs %>%
+  # select records to keep in the GDS-SF ADaM
   filter(PARCAT1 == "GDS SHORT FORM") %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT),
@@ -167,6 +170,7 @@ adgdssf <- adqs %>%
       ) %>%
         ceiling()
     },
+    # select records contributing to total score
     filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
     set_values_to = exprs(
       PARAMCD = "GDS02TS",
