@@ -322,6 +322,7 @@ filter_joined <- function(dataset,
 
   # number observations of the input dataset to get a unique key
 
+
   # (by_vars and tmp_obs_nr_filter_joined)
   data <- dataset %>%
     derive_var_obs_number(

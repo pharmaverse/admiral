@@ -16,6 +16,7 @@ data <- tibble::tribble(
   "4",      5,        "PR"
 )
 
+
 # derive_var_joined_exist_flag ----
 ## Test 1: filter without first_cond ----
 ## Flagging any patient PR value that is followed by a CR or PR
@@ -57,6 +58,7 @@ test_that("derive_var_joined_exist_flag Test 1: filter without first_cond", {
 })
 
 ## Flagging any patient CR value that is followed by a CR
+## Test 2 : filter with first_cond
 test_that("derive_var_joined_exist_flag Test 2: filter with first_cond", {
   data <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
@@ -113,6 +115,7 @@ test_that("derive_var_joined_exist_flag Test 2: filter with first_cond", {
 
 ## Flagging any patient PR value that is followed by a CR or PR
 ## and at most one SD in between
+## Test 3:filter with first_cond and summary function
 
 test_that("derive_var_joined_exist_flag Test 3: filter with first_cond and summary function", {
   actual <-
@@ -156,6 +159,7 @@ test_that("derive_var_joined_exist_flag Test 3: filter with first_cond and summa
 
 ## Flagging observations with a duration longer than 30 and
 ## on or after 7 days of a COVID AE (ACOVFL == "Y")
+## Test 4: join_type = 'all'
 
 test_that("derive_var_joined_exist_flag, Test 4: join_type = 'all'", {
   adae <- tibble::tribble(
@@ -206,7 +210,7 @@ test_that("derive_var_joined_exist_flag, Test 4: join_type = 'all'", {
 })
 
 ## Flagging observations with AVALC = Y and an observation with CRIT1FL = Y before
-
+## Test 5: join_type = 'before'
 test_that("derive_var_joined_exist_flag, Test 5: join_type = 'before'", {
   data <- tibble::tribble(
     ~USUBJID, ~ASEQ, ~AVALC, ~CRIT1FL,
@@ -245,6 +249,7 @@ test_that("derive_var_joined_exist_flag, Test 5: join_type = 'before'", {
 })
 
 ## Test 6: tmp_obs_nr_var argument works ----
+
 test_that("derive_var_joined_exist_flag Test 6: tmp_obs_nr_var argument works", {
   expected <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~CRIT1FL, ~CONFFL,
@@ -263,6 +268,7 @@ test_that("derive_var_joined_exist_flag Test 6: tmp_obs_nr_var argument works", 
   expect_dfs_equal(
     base = expected,
     compare = derive_var_joined_exist_flag(
+
       select(expected, -CONFFL),
       by_vars = exprs(USUBJID),
       new_var = CONFFL,
