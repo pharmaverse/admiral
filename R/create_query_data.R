@@ -388,8 +388,8 @@ get_terms_from_db <- function(version,
 #'
 #' @param i Index of query being checked
 #'
-#' @keywords source_specifications
-#' @family source_specifications
+#' @keywords other_advanced
+#' @family other_advanced
 #'
 #' @return An error is issued if `version` or `fun` is null.
 #'
@@ -589,8 +589,8 @@ query <- function(prefix,
 #' @param obj An object to be validated.
 #'
 #'
-#' @keywords source_specifications
-#' @family source_specifications
+#' @keywords other_advanced
+#' @family other_advanced
 #'
 #' @seealso [query()]
 #'
@@ -729,8 +729,8 @@ validate_query <- function(obj) {
 #'
 #' @seealso [create_query_data()], [query()]
 #'
-#' @keywords source_specifications
-#' @family source_specifications
+#' @keywords other_advanced
+#' @family other_advanced
 #'
 assert_terms <- function(terms,
                          expect_query_name = FALSE,
@@ -846,8 +846,8 @@ basket_select <- function(name = NULL,
 #'
 #' @seealso [basket_select()]
 #'
-#' @keywords source_specifications
-#' @family source_specifications
+#' @keywords other_advanced
+#' @family other_advanced
 #'
 #'
 #' @export
@@ -892,8 +892,8 @@ validate_basket_select <- function(obj) {
 #'
 #' @seealso [basket_select()]
 #'
-#' @keywords source_specifications
-#' @family source_specifications
+#' @keywords other_advanced
+#' @family other_advanced
 #'
 #' @export
 #'
