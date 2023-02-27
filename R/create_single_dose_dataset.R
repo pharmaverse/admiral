@@ -377,12 +377,12 @@ dose_freq_lookup <- tibble::tribble(
 #' ex <- tribble(
 #'   ~STUDYID, ~USUBJID, ~EXSEQ, ~EXTRT, ~EXDOSE, ~EXDOSU, ~EXDOSFRQ, ~EXSTDTC, ~EXENDTC,
 #'   "01", "1015", 1, "PLAC", 0, "mg", "QD", "2014-01-02", "2014-01-16",
-#'   "01", "1015", 2, "PLAC", 0, "mg", "QD", "2014-01-17", "2014-06-18",
-#'   "01", "1015", 3, "PLAC", 0, "mg", "QD", "2014-06-19", "2014-07-02",
+#'   "01", "1015", 2, "PLAC", 0, "mg", "QD", "2014-06-17", "2014-06-18",
+#'   "01", "1015", 3, "PLAC", 0, "mg", "QD", "2014-06-19", NA_character_,
 #'   "01", "1023", 1, "PLAC", 0, "mg", "QD", "2012-08-05", "2012-08-27",
 #'   "01", "1023", 2, "PLAC", 0, "mg", "QD", "2012-08-28", "2012-09-01",
 #'   "01", "1211", 1, "XANO", 54, "mg", "QD", "2012-11-15", "2012-11-28",
-#'   "01", "1211", 2, "XANO", 54, "mg", "QD", "2012-11-29", "2013-01-12",
+#'   "01", "1211", 2, "XANO", 54, "mg", "QD", "2012-11-29", NA_character_,
 #'   "01", "1445", 1, "PLAC", 0, "mg", "QD", "2014-05-11", "2014-05-25",
 #'   "01", "1445", 2, "PLAC", 0, "mg", "QD", "2014-05-26", "2014-11-01",
 #'   "01", "1083", 1, "PLAC", 0, "mg", "QD", "2013-07-22", "2013-08-01"
@@ -392,14 +392,14 @@ dose_freq_lookup <- tibble::tribble(
 #'   mutate(
 #'     DTHDTM = convert_date_to_dtm(DTHDT),
 #'     # Remove `DCUT` setup line below if ADSL `DCUTDT` is populated.
-#'     DCUTDT = as.Date("2015-03-06"), # Example only, enter date.
+#'     DCUTDT = convert_dtc_to_dt("2015-03-06"), # Example only, enter date.
 #'     DCUTDTM = convert_date_to_dtm(DCUTDT)
 #'   )
 #'
 #' # Select valid dose records, non-missing `EXSTDTC` and `EXDOSE`.
 #' ex_mod <- ex %>%
 #'   filter(!is.na(EXSTDTC) & !is.na(EXDOSE)) %>%
-#'   left_join(adsl_death, by = c("STUDYID", "USUBJID")) %>%
+#'   derive_vars_merged(adsl_death, by_vars = exprs(STUDYID, USUBJID)) %>%
 #'   # Example, set up missing `EXDOSFRQ` as QD daily dosing regime.
 #'   # Replace with study dosing regime per trial treatment.
 #'   mutate(EXDOSFRQ = if_else(is.na(EXDOSFRQ), "QD", EXDOSFRQ)) %>%
