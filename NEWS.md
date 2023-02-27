@@ -35,6 +35,8 @@ arguments were deprecated:
   strategy, as we will only be tracking authors in the DESCRIPTION file. Authors
   have been removed from function documentation in line with this update. 
   (#206, #210)
+  - Removed On-boarding Issue Template (#225)
+  - Increased clarity for the scope of the package (#232)
 
 # admiraldev 0.2.0
 

@@ -4,7 +4,7 @@
 \name{admiraldev-package}
 \alias{admiraldev}
 \alias{admiraldev-package}
-\title{admiraldev: Development Tools for the Admiral Package Family}
+\title{admiraldev: Utility Functions and Development Tools for the Admiral Package Family}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
