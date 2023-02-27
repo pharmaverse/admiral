@@ -33,16 +33,26 @@ This function is used to convert age variables into years.
 These can then be used to create age groups.
 }
 \examples{
+library(tibble)
 
-data <- data.frame(
-  AGE = c(27, 24, 3, 4, 1),
-  AGEU = c("days", "months", "years", "weeks", "years")
+data <- tribble(
+  ~AGE, ~AGEU,
+    27, "days",
+    24, "months",
+     3, "years",
+     4, "weeks",
+     1, "years"
 )
 
-data \%>\%
-  derive_var_age_years(., AGE, new_var = AAGE)
+derive_var_age_years(data, AGE, new_var = AAGE)
 
-data.frame(AGE = c(12, 24, 36, 48)) \%>\%
+tribble(
+ ~AGE,
+   12,
+   24,
+   36,
+   48
+ ) \%>\%
   derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
 }
 \seealso{
