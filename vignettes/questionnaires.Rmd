@@ -102,6 +102,13 @@ We handle unscheduled visits as normal visits. For deriving visits based on
 time-windows see [Visit and Period Variables](visits_periods.html#visits) and
 for flagging values to be used for analysis `derive_var_extreme_flag()`.
 
+Please note that in the example data the numeric values of the answers are
+mapped in SDMT (`QSSTRESN`) such that they can be used for deriving scores.
+Depending on the question `QSORRES == "YES"` is mapped to `QSSTRESN = 0` or
+`QSSTRESN = 1`. If this is not the case, it is recommended that `QSSTRESN` is
+kept in the ADaM dataset for traceability, and the transformed value is stored
+in `AVAL`, since that’s what will be used for the score calculation.
+
 # Scales and Scores
 
 Scales and Scores are often derived as the sum or the average across a subset of
@@ -212,7 +219,7 @@ dataset_vignette(
 As time to event parameters require specific variables like `CNSR`, `STARTDT`,
 and `EVNTDESC`, it makes sense to create a separate time to event dataset for
 them. However, it might be useful to create flags or categorization variables in
-`ADQS`. For example
+`ADQS`. For example:
 ```{r}
 adgdssf <- adgdssf %>%
   mutate(
@@ -395,7 +402,7 @@ dataset_vignette(
 ```
 
 For definitive deterioration (deterioration at all following assessments)
-parameters summary functions like `all()` can be used in the filter condition:
+parameter summary functions like `all()` can be used in the filter condition:
 
 ```{r}
 adgdssf <- adgdssf %>%
@@ -418,7 +425,7 @@ dataset_vignette(
 
 The time-to-event parameter can be derived in the same way as for the
 unconfirmed parameters (see [Time to
-Deterioration/Improvement](#timetodeterioration))
+Deterioration/Improvement](#timetodeterioration)).
 
 # Worst/Best Answer
 
