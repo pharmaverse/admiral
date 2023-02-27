@@ -41,6 +41,9 @@ that need carrying the last observation forward other than `analysis_var`
 gained the `tmp_obs_nr_var` argument. It helps flagging or selecting consecutive
 observations or the first or last observation in a by group. (#1724)
 
+- The function `derive_vars_query()` now includes a consistency check for
+`QUERY_SCOPE` and `QUERY_SCOPE_NUM` values. (#652)
+
 ## Breaking Changes
 
 - All function arguments which expected a list of quosures created by `vars()`
