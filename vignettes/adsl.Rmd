@@ -218,9 +218,6 @@ adsl <- adsl %>%
   )
 ```
 
-With `DS`: 
-<a id="link_ds"></a>
-
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   ds,
@@ -241,48 +238,26 @@ is to be imputed to the first of the month, then set `date_imputation = "FIRST"`
 
 ### Disposition Status (e.g. `EOSSTT`) {#disposition_status}
 
-The function `derive_var_disposition_status()` can be used to derive a disposition status at a specific
+The function `derive_var_merged_cat()` can be used to derive a disposition status at a specific
 timepoint. The relevant disposition variable (`DS.DSDECOD`) is selected by adjusting the filter 
 parameter and used to derive `EOSSTT`.
 
-To derive the End of Study status (`EOSSTT`), a call could be:
+To derive the End of Study status (`EOSSTT`), the function expects a mapping derivation for the `cat_fun` argument.
+The mapping derivation for the call below is
 
-```{r eval=TRUE}
-adsl <- adsl %>%
-  derive_var_disposition_status(
-    dataset_ds = ds,
-    new_var = EOSSTT,
-    status_var = DSDECOD,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
-  )
-```
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, display_vars = exprs(USUBJID, EOSDT, EOSSTT))
-```
-[Link](#link_ds) to `DS`.
-
-This call would return the input dataset with the column `EOSSTT` added. 
-
-By default, the function will derive `EOSSTT` as
-
-- `"NOT STARTED"` if `DSDECOD` is `"SCREEN FAILURE"` or `"SCREENING NOT COMPLETED"`
+- `"NOT STARTED"` if `DSDECOD` is `"SCREEN FAILURE"`
 - `"COMPLETED"` if `DSDECOD == "COMPLETED"`
 - `"DISCONTINUED"` if `DSDECOD` is not `"COMPLETED"` or `NA`
 - `"ONGOING"` otherwise
 
-If the default derivation must be changed, the user can create his/her own function and pass it to 
-the `format_new_var` argument of the function (`format_new_var = new_mapping`) to map `DSDECOD` 
-to a suitable `EOSSTT` value.
-
 Example function `format_eosstt()`:
 
 ```{r eval=TRUE}
-format_eosstt <- function(DSDECOD) {
+format_eosstt <- function(x) {
   case_when(
-    DSDECOD %in% c("COMPLETED") ~ "COMPLETED",
-    DSDECOD %in% c("SCREEN FAILURE") ~ NA_character_,
-    !is.na(DSDECOD) ~ "DISCONTINUED",
+    x %in% c("COMPLETED") ~ "COMPLETED",
+    x %in% c("SCREEN FAILURE") ~ NA_character_,
+    !is.na(x) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 }
@@ -290,19 +265,28 @@ format_eosstt <- function(DSDECOD) {
 
 The customized mapping function `format_eosstt()` can now be passed to the main function:
 
-```{r eval=FALSE}
-
+```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_disposition_status(
-    dataset_ds = ds,
+  derive_var_merged_cat(
+    dataset_add = ds,
+    by_vars = exprs(STUDYID, USUBJID),
+    filter_add = DSCAT == "DISPOSITION EVENT",
     new_var = EOSSTT,
-    status_var = DSDECOD,
-    format_new_var = format_eosstt,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
+    source_var = DSDECOD,
+    cat_fun = format_eosstt,
+    missing_value = "ONGOING"
   )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adsl, display_vars = exprs(USUBJID, EOSDT, EOSSTT))
+```
+
 This call would return the input dataset with the column `EOSSTT` added. 
+
+If the derivation must be changed, the user can create his/her own function and pass it to 
+the `cat_fun` argument of the function (`cat_fun = new_mapping`) to map `DSDECOD` 
+to a suitable `EOSSTT` value.
 
 ### Disposition Reason(s) (e.g. `DCSREAS`, `DCSREASP`) {#disposition_reason}
 
@@ -331,8 +315,6 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(adsl, display_vars = exprs(USUBJID, EOSDT, EOSSTT, DCSREAS, DCSREASP))
 ```
-
-[Link](#link_ds) to `DS`.
 
 This call would return the input dataset with the column `DCSREAS` and `DCSREASP` added. 
 
@@ -373,7 +355,6 @@ adsl <- adsl %>%
   )
 ```
 
-
 ### Randomization Date (`RANDDT`) {#randomization_date}
 
 The function `derive_vars_merged()` can be used to derive randomization date 
@@ -395,8 +376,6 @@ This call would return the input dataset with the column `RANDDT` is added.
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(adsl, display_vars = exprs(USUBJID, RANDDT))
 ```
-
-[Link](#link_ds) to `DS`.
 
 ## Derive Death Variables {#death}
 

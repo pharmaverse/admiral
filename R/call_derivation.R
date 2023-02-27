@@ -112,8 +112,8 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'
 #' @return An object of class `params`
 #'
-#' @family source_specifications
-#' @keywords source_specifications
+#' @family other_advanced
+#' @keywords other_advanced
 #'
 #' @export
 #'
