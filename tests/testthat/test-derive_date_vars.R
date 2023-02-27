@@ -837,8 +837,8 @@ test_that("derive_vars_dtm Test 36: No re-derivation is done if --DTF variable a
   ) %>%
     select(XXSTDTC, ASTDTF, everything())
 
-  actual_output <- expect_message(
-    derive_vars_dtm(
+  expect_message(
+    actual_output <- derive_vars_dtm(
       mutate(input, ASTDTF = c(NA, NA, NA, NA, "D", "MD", "M")),
       new_vars_prefix = "AST",
       dtc = XXSTDTC,

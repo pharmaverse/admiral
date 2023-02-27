@@ -99,7 +99,8 @@ Suggests:
     roxygen2,
     spelling,
     styler,
-    testthat,
+    testthat (>= 3.0.0),
     tibble,
     usethis
 VignetteBuilder: knitr
+Config/testthat/edition: 3
