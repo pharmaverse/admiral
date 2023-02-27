@@ -37,6 +37,7 @@ test_that("derive_param_extreme_event Test 1: derive first PD date", {
     dataset_adsl = adsl,
     dataset_source = adrs,
     filter_source = PARAMCD == "OVR" & AVALC == "PD",
+    new_var = AVALC,
     order = exprs(ADT),
     set_values_to = exprs(
       PARAMCD = "PD",
@@ -154,6 +155,45 @@ test_that("derive_param_extreme_event Test 3: latest evaluable tumor assessment 
       "1",      ymd("2020-04-01"), "Y",
       "2",      ymd("2021-07-16"), "Y",
       "3",      ymd(""),           "N"
+    ) %>%
+      mutate(
+        STUDYID = "XX1234",
+        PARAMCD = "LSTEVLDT",
+        ANL01FL = "Y"
+      )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "PARAMCD", "ADT")
+  )
+})
+
+## Test 4: derive latest evaluable tumor assessment date parameter without overwriting existing result ----
+test_that("derive_param_extreme_event Test 4: latest evaluable tumor assessment date parameter", {
+  actual <- derive_param_extreme_event(
+    dataset = adrs,
+    dataset_adsl = adsl,
+    dataset_source = adrs,
+    filter_source = PARAMCD == "OVR" & AVALC != "NE",
+    order = exprs(ADT),
+    new_var = NULL,
+    mode = "last",
+    set_values_to = exprs(
+      PARAMCD = "LSTEVLDT",
+      ANL01FL = "Y",
+      ADT = ADT
+    )
+  )
+
+  expected <- bind_rows(
+    adrs,
+    tibble::tribble(
+      ~USUBJID, ~ADT,              ~AVALC,
+      "1",      ymd("2020-04-01"), "SD",
+      "2",      ymd("2021-07-16"), "SD",
+      "3",      ymd(""),           NA
     ) %>%
       mutate(
         STUDYID = "XX1234",
