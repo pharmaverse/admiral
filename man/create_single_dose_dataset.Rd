@@ -255,19 +255,10 @@ ex_mod <- ex \%>\%
     max_dates = exprs(DTHDTM, DCUTDTM),
     date_imputation = "last",
     time_imputation = "last",
-    flag_imputation = "none"
+    flag_imputation = "none",
+    highest_imputation = "Y",
   ) \%>\%
   derive_vars_dtm_to_dt(exprs(EXENDTM)) \%>\%
-  # Populate missing values with compatible data types.
-  # For missing treatment end dates and missing treatment end datetimes
-  # use datacut date as treatment end date if no death date exists.
-  # Otherwise use death date as treatment end date.
-  mutate(
-    EXENDT = if_else(is.na(EXENDT) & is.na(DTHDT), DCUTDT, EXENDT),
-    EXENDT = if_else(is.na(EXENDT) & !is.na(DTHDT), DTHDT, EXENDT),
-    EXENDTM = if_else(is.na(EXENDTM) & is.na(DTHDTM), DCUTDTM, EXENDTM),
-    EXENDTM = if_else(is.na(EXENDTM) & !is.na(DTHDTM), DTHDTM, EXENDTM)
-  ) \%>\%
   # Select only unique values.
   # Removes duplicated records before final step.
   distinct(
