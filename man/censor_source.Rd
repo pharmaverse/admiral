@@ -59,24 +59,14 @@ censor_source(
 \seealso{
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=event_source]{event_source()}}
 
-Source Specifications: 
-\code{\link{assert_db_requirements}()},
-\code{\link{assert_terms}()},
-\code{\link{assert_valid_queries}()},
+Source Objects: 
 \code{\link{basket_select}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
 \code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
-\code{\link{extend_source_datasets}()},
-\code{\link{filter_date_sources}()},
-\code{\link{format.basket_select}()},
-\code{\link{list_tte_source_objects}()},
-\code{\link{params}()},
 \code{\link{query}()},
-\code{\link{tte_source}()},
-\code{\link{validate_basket_select}()},
-\code{\link{validate_query}()}
+\code{\link{tte_source}()}
 }
 \concept{source_specifications}
 \keyword{source_specifications}
