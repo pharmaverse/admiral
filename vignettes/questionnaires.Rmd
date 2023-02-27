@@ -27,9 +27,9 @@ time-to-event analysis. Therefore this vignette does not provide a programming
 workflow for a complete dataset but provides examples for deriving common types
 of questionnaire parameters.
 
-At the moment admiral does not provide functions or metadata for specific
+At the moment, admiral does not provide functions or metadata for specific
 questionnaires nor functionality for handling the vast amount of questionnaires
-and related parameters, e.g., a metadata structure for storing parameter
+and related parameters, e.g. a metadata structure for storing parameter
 definitions and functions for reading such metadata. We plan to provide it in
 future releases.
 
@@ -69,8 +69,8 @@ adsl <- tibble::tribble(
 ```
 # Original Items
 
-The original items, i.e., the answers to the questionnaire questions can be
-handled in the same way like in a [BDS finding ADaM](bds_finding.html). For
+The original items, i.e. the answers to the questionnaire questions, can be
+handled in the same way as in a [BDS finding ADaM](bds_finding.html). For
 example:
 
 ```{r eval=TRUE}
@@ -106,12 +106,12 @@ dataset_vignette(
 ```
 
 We handle unscheduled visits as normal visits. For deriving visits based on
-time-windows see [Visit and Period Variables](visits_periods.html#visits) and
-for flagging values to be used for analysis `derive_var_extreme_flag()`.
+time-windows, see [Visit and Period Variables](visits_periods.html#visits). And
+for flagging values to be used for analysis, see `derive_var_extreme_flag()`.
 
-Please note that in the example data the numeric values of the answers are
+Please note that in the example data, the numeric values of the answers are
 mapped in SDMT (`QSSTRESN`) such that they can be used for deriving scores.
-Depending on the question `QSORRES == "YES"` is mapped to `QSSTRESN = 0` or
+Depending on the question, `QSORRES == "YES"` is mapped to `QSSTRESN = 0` or
 `QSSTRESN = 1`. If this is not the case, it is recommended that `QSSTRESN` is
 kept in the ADaM dataset for traceability, and the transformed value is stored
 in `AVAL`, since that’s what will be used for the score calculation.
@@ -119,11 +119,11 @@ in `AVAL`, since that’s what will be used for the score calculation.
 # Scales and Scores
 
 Scales and Scores are often derived as the sum or the average across a subset of
-the items. For the GAD-7 questionnaire the total score is derived as the sum.
+the items. For the GAD-7 questionnaire, the total score is derived as the sum.
 The `derive_summary_records()` function with `sum()` can be used to derive it as
-a new parameter. For selecting the parameters to be summarized regular
+a new parameter. For selecting the parameters to be summarized, regular
 expressions like in the example below may be helpful. In the example we derive a
-separate ADaM dataset for each questionnaire. Depending on the analysis needs it
+separate ADaM dataset for each questionnaire. Depending on the analysis needs, it
 is also possible that an ADaM contains more than one questionnaire or all
 questionnaires.
 ```{r eval=TRUE}
@@ -150,7 +150,7 @@ dataset_vignette(
 )
 ```
 
-For the GDS-SF questionnaire the total score is defined as the average of the
+For the GDS-SF questionnaire, the total score is defined as the average of the
 item values transformed to the range [0, 15] and rounded up to the next integer.
 If more than five items are missing, the total score is considered as missing.
 This parameter can be derived by `compute_scale()` and
@@ -187,7 +187,7 @@ dataset_vignette(
 )
 ```
 
-After deriving the scores by visit the baseline and change from baseline
+After deriving the scores by visit, the baseline and change from baseline
 variables can be derived:
 ```{r eval=TRUE}
 adgdssf <- adgdssf %>%
@@ -347,7 +347,7 @@ dataset_vignette(
 
 The derivation of confirmed/definitive deterioration/improvement parameters is
 very similar to the unconfirmed deterioration parameters except that the event
-is not based on `CHGCATy` but on a confirmation flag variable. This confirmation
+is not based on `CHGCATy`, but on a confirmation flag variable. This confirmation
 flag can be derived by `derive_var_confirmation_flag()`. For example, flagging
 deteriorations, which are confirmed by a second assessment at least seven days
 later:
@@ -373,7 +373,7 @@ dataset_vignette(
 ```
 
 For flagging deteriorations at two consecutive assessments or considering death
-due to progression at the last assessment as confirmation the `tmp_obs_nr_var`
+due to progression at the last assessment as confirmation, the `tmp_obs_nr_var`
 argument is helpful:
 ```{r}
 # Flagging deterioration at two consecutive assessments
@@ -412,7 +412,7 @@ dataset_vignette(
 )
 ```
 
-For definitive deterioration (deterioration at all following assessments)
+For definitive deterioration (deterioration at all following assessments),
 parameter summary functions like `all()` can be used in the filter condition:
 
 ```{r}
@@ -444,7 +444,7 @@ This class of parameters can be used when the worst answer of a set of yes/no
 answers should be selected. For example, if yes/no answers for "No sleep",
 "Waking up more than three times", "More than 30 mins to fall asleep" are
 collected, a parameter for the worst sleeping problems could be derived. In the
-example no sleeping problems is assumed if all were answered with "no".
+example, no sleeping problems is assumed if all were answered with "no".
 ```{r eval=FALSE}
 derive_param_worst_event(
   adqs,
@@ -495,7 +495,7 @@ derive_param_worst_event(
 
 # Completion
 
-Parameters for completion like "at least 90% of the questions were answered" can
+Parameters for completion, like "at least 90% of the questions were answered", can
 be derived by `derive_summary_records()`.
 ```{r}
 adgdssf <- adgdssf %>%
