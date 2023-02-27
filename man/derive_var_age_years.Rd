@@ -35,6 +35,7 @@ These can then be used to create age groups.
 \examples{
 library(tibble)
 
+# Derive age with age units specified
 data <- tribble(
   ~AGE, ~AGEU,
     27, "days",
@@ -46,14 +47,15 @@ data <- tribble(
 
 derive_var_age_years(data, AGE, new_var = AAGE)
 
-tribble(
- ~AGE,
-   12,
-   24,
-   36,
-   48
- ) \%>\%
-  derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
+# Derive age without age units variable specified
+data <- tribble(
+  ~AGE,
+    12,
+    24,
+    36,
+    48
+)
+derive_var_age_years(data, AGE, age_unit = "months", new_var = AAGE)
 }
 \seealso{
 ADSL Functions that returns variable appended to dataset: 
