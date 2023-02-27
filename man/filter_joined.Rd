@@ -11,7 +11,6 @@ filter_joined(
   join_type,
   first_cond = NULL,
   order,
-  tmp_obs_nr_var = NULL,
   filter,
   check_type = "warning"
 )
@@ -54,15 +53,6 @@ observations are removed.}
 
 The observations are ordered by the specified order.}
 
-\item{tmp_obs_nr_var}{Temporary observation number
-
-The specified variable is added to the input dataset and set to the
-observation number with respect to \code{order}. For each by group (\code{by_vars})
-the observation number starts with \code{1}. The variable can be used in the
-conditions (\code{filter}, \code{first_cond}). It is not included in the output
-dataset. It can be used to select consecutive observations or the last
-observation (see last example below).}
-
 \item{filter}{Condition for selecting observations
 
 The filter is applied to the joined dataset for selecting the confirmed
@@ -84,6 +74,15 @@ by variables and the order.
 \emph{Default:} \code{"none"}
 
 \emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
+
+\item{tmp_obs_nr_var}{Temporary observation number
+
+The specified variable is added to the input dataset and set to the
+observation number with respect to \code{order}. For each by group (\code{by_vars})
+the observation number starts with \code{1}. The variable can be used in the
+conditions (\code{filter}, \code{first_cond}). It is not included in the output
+dataset. It can be used to select consecutive observations or the last
+observation (see last example below).}
 }
 \value{
 A subset of the observations of the input dataset. All variables of
@@ -290,33 +289,6 @@ filter_joined(
         count_vals(var = AVALC.join, val = "CR") == 0
     )
 )
-
-# select observations with CRIT1FL == "Y" at two consecutive visits or at the last visit
-data <- tribble(
-  ~USUBJID, ~AVISITN, ~CRIT1FL,
-  "1",      1,        "Y",
-  "1",      2,        "N",
-  "1",      3,        "Y",
-  "1",      5,        "N",
-  "2",      1,        "Y",
-  "2",      3,        "Y",
-  "2",      5,        "N",
-  "3",      1,        "Y",
-  "4",      1,        "Y",
-  "4",      2,        "N",
-)
-
-filter_confirmation(
-  data,
-  by_vars = exprs(USUBJID),
-  tmp_obs_nr_var = tmp_obs_nr,
-  join_vars = exprs(CRIT1FL),
-  join_type = "all",
-  order = exprs(AVISITN),
-  filter = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
-    (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
-)
-
 }
 \seealso{
 \code{\link[=count_vals]{count_vals()}}, \code{\link[=min_cond]{min_cond()}}, \code{\link[=max_cond]{max_cond()}}

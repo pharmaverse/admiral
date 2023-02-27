@@ -245,7 +245,7 @@ test_that("derive_var_joined_exist_flag, Test 5: join_type = 'before'", {
 })
 
 ## Test 6: tmp_obs_nr_var argument works ----
-test_that("derive_var_confirmation_flag Test 6: tmp_obs_nr_var argument works", {
+test_that("derive_var_joined_exist_flag Test 6: tmp_obs_nr_var argument works", {
   expected <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~CRIT1FL, ~CONFFL,
     "1",      1,        "Y",      "N",
@@ -262,7 +262,7 @@ test_that("derive_var_confirmation_flag Test 6: tmp_obs_nr_var argument works", 
 
   expect_dfs_equal(
     base = expected,
-    compare = derive_var_confirmation_flag(
+    compare = derive_var_joined_exist_flag(
       select(expected, -CONFFL),
       by_vars = exprs(USUBJID),
       new_var = CONFFL,
