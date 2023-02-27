@@ -440,17 +440,17 @@ dose_freq_lookup <- tibble::tribble(
 #'     EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
 #'   )
 #'
-#'   create_single_dose_dataset(
-#'     ex_mod,
-#'     start_date = EXSTDT,
-#'     start_datetime = EXSTDTM,
-#'     end_date = EXENDT,
-#'     end_datetime = EXENDTM,
-#'     keep_source_vars = exprs(
-#'       STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ,
-#'       DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
-#'     )
+#' create_single_dose_dataset(
+#'   ex_mod,
+#'   start_date = EXSTDT,
+#'   start_datetime = EXSTDTM,
+#'   end_date = EXENDT,
+#'   end_datetime = EXENDTM,
+#'   keep_source_vars = exprs(
+#'     STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ,
+#'     DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
 #'   )
+#' )
 create_single_dose_dataset <- function(dataset,
                                        dose_freq = EXDOSFRQ,
                                        start_date = ASTDT,
