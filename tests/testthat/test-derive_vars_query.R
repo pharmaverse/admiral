@@ -35,8 +35,8 @@ test_that("derive_vars_query Test 1: Derive CQ and SMQ variables with two term l
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
 
-## Test 2: Derive when dataset does not have a unique key when excluding `TERM_LEVEL` columns ----
-test_that("derive_vars_query Test 2: Derive when dataset does not have a unique key when excluding `TERM_LEVEL` columns", {
+## Test 2: Derive when no unique key excluding `TERM_LEVEL` columns ----
+test_that("derive_vars_query Test 2: Derive when no unique key excluding `TERM_LEVEL` columns", {
   query <- tibble::tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
     "CQ42", "My Query", "AEDECOD", "PTSI", 1, NA_real_,
@@ -94,8 +94,8 @@ test_that("derive_vars_query Test 3: Derive when an adverse event is in multiple
 })
 
 
-## Test 4: Derive when query dataset does not have QUERY_ID or QUERY_SCOPE column ----
-test_that("derive_vars_query Test 4: Derive when query dataset does not have QUERY_ID or QUERY_SCOPE column", {
+## Test 4: Derive when no QUERY_ID or QUERY_SCOPE column ----
+test_that("derive_vars_query Test 4: Derive when no QUERY_ID or QUERY_SCOPE column", {
   query <- tibble::tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~TERM_ID,
     "CQ42", "My Query", "AEDECOD", "PTSI", NA_real_,
@@ -123,8 +123,8 @@ test_that("derive_vars_query Test 4: Derive when query dataset does not have QUE
   expect_equal(expected_output, actual_output)
 })
 
-## Test 5: Derive decides between TERM_NAME and TERM_ID based on the type of the variable ----
-test_that("derive_vars_query Test 5: Derive decides between TERM_NAME and TERM_ID based on the type of the variable", {
+## Test 5: Derive decides between TERM_NAME and TERM_ID based on type ----
+test_that("derive_vars_query Test 5: Derive decides between TERM_NAME and TERM_ID based on type", {
   query <- tibble::tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
