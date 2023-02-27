@@ -41,8 +41,9 @@ otherwise specified.*
 The examples of this vignette require the following packages.
 
 ```{r, warning=FALSE, message=FALSE}
-library(admiral)
 library(dplyr)
+library(tidyr)
+library(admiral)
 ```
 
 ## Example Data
@@ -494,57 +495,93 @@ derive_param_worst_event(
 
 # Completion
 
-Parameters for completion like "at least 50% of the questions were answered" can
+Parameters for completion like "at least 90% of the questions were answered" can
 be derived by `derive_summary_records()`.
-```{r eval=FALSE}
-adqs <- adqs %>%
+```{r}
+adgdssf <- adgdssf %>%
   derive_summary_records(
-    filter = PARCAT1 == "Original Items" & ANL01FL == "Y",
+    filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
     by_vars = exprs(USUBJID, AVISIT),
     analysis_var = AVAL,
-    summary_fun = function(x) sum(!is.na(x)) / 13 >= 0.5,
+    summary_fun = function(x) sum(!is.na(x)) / 15 >= 0.9,
     set_values_to = exprs(
-      PARAMCD = "COMPL50P",
-      PARAM = "Completed at least 50% of questions",
-      PARCAT1 = "Completion",
-      AVALC = if_else(
+      PARAMCD = "COMPL90P",
+      PARAM = "Completed at least 90% of questions?",
+    )
+  ) %>% 
+  mutate(
+    AVALC = if_else(
+      PARAMCD == "COMPL90P",
+      if_else(
         AVAL == 1,
-        "Completed at least 50% of questions",
-        "Completed less than 50% of questions"
-      )
+        "YES",
+        "NO"
+      ),
+      AVALC
     )
   )
 ```
-If missed visits need to be taken into account the expected records can be added
-to the input dataset by calling `derive_expected_records()`:
 
-```{r eval=FALSE}
-adqs <- adqs %>%
+```{r echo=FALSE}
+dataset_vignette(
+  arrange(adgdssf, USUBJID, PARAMCD, ADY),
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVALC)
+)
+```
+
+If missed visits need to be taken into account, the expected records can be
+added to the input dataset by calling `derive_expected_records()`:
+
+```{r}
+# create dataset with expected visits and parameters (GDS0201 - GDS0215)
+parm_visit_ref <- crossing(
+  tribble(
+    ~AVISIT,    ~AVISITN,
+    "BASELINE",        0,
+    "VISIT 2",         2,
+    "VISIT 3",         3,
+    "VISIT 4",         4,
+    "VISIT 5",         5
+  ),
+  tibble(PARAMCD = sprintf("GDS02%02d", seq(1, 15)))
+)
+
+adgdssf <- adgdssf %>%
   derive_expected_records(
-    adqs,
     dataset_expected_obs = parm_visit_ref,
     by_vars = exprs(USUBJID),
     set_values_to = exprs(
-      filledin = TRUE,
-      PARCAT1 = "Original Item",
-      ANL01FL = "Y"
+      filled_in = 1
     )
   ) %>%
   derive_summary_records(
-    filter = PARCAT1 == "Original Items" & ANL01FL == "Y",
+    filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
     by_vars = exprs(USUBJID, AVISIT),
     analysis_var = AVAL,
-    summary_fun = function(x) sum(!is.na(x)) / 13 >= 0.5,
+    summary_fun = function(x) all(!is.na(x)),
     set_values_to = exprs(
-      PARAMCD = "COMPL50P",
-      PARAM = "Completed at least 50% of questions",
-      PARCAT1 = "Completion",
-      AVALC = if_else(
-        AVAL == 1,
-        "Completed at least 50% of questions",
-        "Completed less than 50% of questions"
-      )
+      PARAMCD = "COMPLALL",
+      PARAM = "Completed all questions?"
     )
-  ) %>%
-  filter(!filledin)
+  ) %>% 
+  mutate(
+    AVALC = if_else(
+      PARAMCD == "COMPLALL",
+      if_else(
+        AVAL == 1,
+        "YES",
+        "NO"
+      ),
+      AVALC
+    )
+  ) %>% 
+  filter(is.na(filled_in)) %>% 
+  select(-filled_in)
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  arrange(adgdssf, USUBJID, PARAMCD, ADY),
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVALC)
+)
 ```
