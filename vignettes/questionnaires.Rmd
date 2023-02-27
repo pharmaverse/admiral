@@ -27,6 +27,12 @@ time-to-event analysis. Therefore this vignette does not provide a programming
 workflow for a complete dataset but provides examples for deriving common types
 of questionnaire parameters.
 
+At the moment admiral does not provide functions or metadata for specific
+questionnaires nor functionality for handling the vast amount of questionnaires
+and related parameters, e.g., a metadata structure for storing parameter
+definitions and functions for reading such metadata. We plan to provide it in
+future releases.
+
 **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless 
 otherwise specified.*
 
