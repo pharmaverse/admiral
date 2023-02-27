@@ -15,8 +15,5 @@ A \code{data.frame}
 \description{
 Retrieve a Dataset from the \code{admiraldev_environment} environment
 }
-\author{
-Thomas Neitmann
-}
 \concept{datasets}
 \keyword{datasets}

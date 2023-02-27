@@ -10,8 +10,8 @@ test_that("get_constant_vars Test 1: without ignore_vars", {
   )
 
   expect_equal(
-    get_constant_vars(data, by_vars = vars(USUBJID)),
-    vars(USUBJID, AGE)
+    get_constant_vars(data, by_vars = exprs(USUBJID)),
+    exprs(USUBJID, AGE)
   )
 })
 
@@ -26,8 +26,8 @@ test_that("get_constant_vars Test 2: with ignore_vars", {
   )
 
   expect_equal(
-    get_constant_vars(data, by_vars = vars(USUBJID), ignore_vars = vars(WGTBL, HGTBL)),
-    vars(USUBJID, AGE)
+    get_constant_vars(data, by_vars = exprs(USUBJID), ignore_vars = exprs(WGTBL, HGTBL)),
+    exprs(USUBJID, AGE)
   )
 })
 
@@ -43,9 +43,9 @@ test_that("get_duplicates Test 3: x atomic vector", {
 })
 
 # get_source_vars ----
-## Test 4: x is a list of quosures ----
-test_that("get_source_vars Test 4: x is a list of quosures", {
-  x <- vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+## Test 4: x is a list of expressions ----
+test_that("get_source_vars Test 4: x is a list of expressions", {
+  x <- exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
 
   expect_equal(
     get_source_vars(x),
@@ -53,10 +53,25 @@ test_that("get_source_vars Test 4: x is a list of quosures", {
   )
 })
 
-## Test 5: quosures is NULL ----
-test_that("get_source_vars Test 5: quosures is NULL", {
+## Test 5: NULL returns NULL ----
+test_that("get_source_vars Test 5: NULL returns NULL", {
   expect_equal(
     get_source_vars(NULL),
-    quo_c(NULL)
+    expr_c(NULL)
+  )
+})
+
+## Test 6: warning if quosures argument is used ----
+test_that("get_source_vars Test 6: warning if quosures argument is used", {
+  expect_warning(
+    get_source_vars(quosures = rlang::quos(DTHDOM = "AE", DTHSEQ = AESEQ)),
+    class = "lifecycle_warning_deprecated"
+  )
+})
+## Test 7: no source vars returns NULL ----
+test_that("get_source_vars Test 7: no source vars returns NULL", {
+  expect_equal(
+    get_source_vars(x <- exprs(DTHDOM = "AE", DTHVAR = "AEDECOD")),
+    NULL
   )
 })

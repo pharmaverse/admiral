@@ -30,7 +30,7 @@ library(lubridate)
 library(rlang)
 
 example_fun <- function(dataset, var) {
-  var <- assert_symbol(enquo(var))
+  var <- assert_symbol(enexpr(var))
   assert_date_var(dataset = dataset, var = !!var)
 }
 
@@ -51,7 +51,7 @@ try(example_fun(
 ))
 
 example_fun2 <- function(dataset, var) {
-  var <- assert_symbol(enquo(var))
+  var <- assert_symbol(enexpr(var))
   assert_date_var(
     dataset = dataset,
     var = !!var,
@@ -64,8 +64,5 @@ try(example_fun2(
   dataset = my_data,
   var = USUBJID
 ))
-}
-\author{
-Stefan Bundfuss
 }
 \keyword{assertion}

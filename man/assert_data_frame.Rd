@@ -14,7 +14,7 @@ assert_data_frame(
 \arguments{
 \item{arg}{A function argument to be checked}
 
-\item{required_vars}{A list of variables created using \code{vars()}}
+\item{required_vars}{A list of variables created using \code{exprs()}}
 
 \item{check_is_grouped}{Throw an error is \code{dataset} is grouped? Defaults to \code{TRUE}.}
 
@@ -33,10 +33,11 @@ a set of required variables
 \examples{
 library(admiral.test)
 library(dplyr, warn.conflicts = FALSE)
+library(rlang)
 data(admiral_dm)
 
 example_fun <- function(dataset) {
-  assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
+  assert_data_frame(dataset, required_vars = exprs(STUDYID, USUBJID))
 }
 
 example_fun(admiral_dm)
@@ -71,9 +72,6 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()},
 \code{\link{assert_varval_list}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{assertion}
 \keyword{assertion}

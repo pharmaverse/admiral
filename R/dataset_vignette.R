@@ -29,11 +29,11 @@
 dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
   display_vars <- assert_vars(display_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = display_vars)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
 
   out <- dataset %>%
     filter_if(filter) %>%
-    mutate_if(is.character, as.factor)
+    mutate(across(where(is.character), as.factor))
 
   # Create a short markdown table when this function is called outside {pkgdown}
   if (!identical(Sys.getenv("IN_PKGDOWN"), "true")) {
@@ -50,26 +50,36 @@ dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
   } else {
     cols_to_hide <- list()
   }
-
-  DT::datatable(
-    out,
-    rownames = FALSE,
-    filter = "top",
-    extensions = c("Buttons", "ColReorder", "Scroller"),
-    options = list(
-      columnDefs = cols_to_hide,
-      searchHighlight = TRUE,
-      searching = TRUE,
-      pageLength = 5,
-      lengthMenu = c(5, 10, 15, 20, 50, 100),
-      dom = "Bfrtipl",
-      buttons = list(list(
-        extend = "colvis",
-        text = "Choose the columns to display",
-        scroller = T,
-        collectionLayout = "fixed two-column"
-      )),
-      colReorder = TRUE
+  htmltools::tagList(
+    htmltools::htmlDependency(
+      name = "dt-scroll",
+      version = "1.0.0",
+      src = "www",
+      stylesheet = "style.css",
+      package = "admiraldev"
+    ),
+    DT::datatable(
+      out,
+      rownames = FALSE,
+      filter = "top",
+      height = "auto",
+      width = "auto",
+      extensions = c("Buttons", "ColReorder", "Scroller"),
+      options = list(
+        columnDefs = cols_to_hide,
+        searchHighlight = TRUE,
+        searching = TRUE,
+        pageLength = 5,
+        lengthMenu = c(5, 10, 15, 20, 50, 100),
+        dom = "<Bfr<\"dt-scroll\"t>ipl>",
+        buttons = list(list(
+          extend = "colvis",
+          text = "Choose the columns to display",
+          scroller = T,
+          collectionLayout = "fixed two-column"
+        )),
+        colReorder = TRUE
+      )
     )
   )
 }

@@ -6,7 +6,6 @@
 #'
 #' @return A `character` description of the type of `x`
 #'
-#' @author Thomas Neitmann
 #'
 #' @keywords what
 #' @family what

@@ -9,7 +9,7 @@ filter_if(dataset, filter)
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{filter}{A filter condition. Must be a quosure.}
+\item{filter}{A filter condition. Must be an expression.}
 }
 \value{
 A \code{data.frame} containing all rows in \code{dataset} matching \code{filter} or
@@ -23,15 +23,11 @@ Developer Utility Functions:
 \code{\link{\%notin\%}()},
 \code{\link{\%or\%}()},
 \code{\link{arg_name}()},
-\code{\link{as_name}()},
 \code{\link{contains_vars}()},
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},
 \code{\link{valid_time_units}()},
 \code{\link{vars2chr}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{dev_utility}
 \keyword{dev_utility}

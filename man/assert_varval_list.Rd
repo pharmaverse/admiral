@@ -19,7 +19,7 @@ assert_varval_list(
 
 \item{accept_expr}{Should expressions on the right hand side be accepted?}
 
-\item{accept_var}{Should unnamed variable names (e.g. \code{vars(USUBJID)}) on the
+\item{accept_var}{Should unnamed variable names (e.g. \code{exprs(USUBJID)}) on the
 right hand side be accepted?}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
@@ -30,19 +30,20 @@ The function throws an error if \code{arg} is not a list of variable-value expre
 Otherwise, the input it returned invisibly.
 }
 \description{
-Checks if the argument is a list of \code{quosures} where the expressions are
+Checks if the argument is a list of expressions where the expressions are
 variable-value pairs. The value can be a symbol, a string, a numeric, or
 \code{NA}. More general expression are not allowed.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(rlang)
 
 example_fun <- function(vars) {
   assert_varval_list(vars)
 }
-example_fun(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
+example_fun(exprs(DTHDOM = "AE", DTHSEQ = AESEQ))
 
-try(example_fun(vars("AE", DTSEQ = AESEQ)))
+try(example_fun(exprs("AE", DTSEQ = AESEQ)))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
@@ -70,9 +71,6 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_symbol}()},
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()}
-}
-\author{
-Stefan Bundfuss, Thomas Neitmann
 }
 \concept{assertion}
 \keyword{assertion}

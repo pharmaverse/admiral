@@ -2,45 +2,45 @@
 % Please edit documentation in R/quo.R
 \name{add_suffix_to_vars}
 \alias{add_suffix_to_vars}
-\title{Add a Suffix to Variables in a List of Quosures}
+\title{Add a Suffix to Variables in a List of Expressions}
 \usage{
 add_suffix_to_vars(order, vars, suffix)
 }
 \arguments{
-\item{order}{List of quosures
+\item{order}{List of expressions
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))}}
+created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}}
 
 \item{vars}{Variables to change
 
-\emph{Permitted Values}: list of variables created by \code{vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{suffix}{Suffix
 
 \emph{Permitted Values}: A character scalar}
 }
 \value{
-The list of quosures where for each element the suffix (\code{suffix}) is
+The list of expression where for each element the suffix (\code{suffix}) is
 added to every symbol specified for \code{vars}
 }
 \description{
-Add a suffix to variables in a list of quosures
+Add a suffix to variables in a list of expressions
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(rlang)
 
-add_suffix_to_vars(vars(ADT, desc(AVAL), AVALC), vars = vars(AVAL), suffix = ".join")
+add_suffix_to_vars(exprs(ADT, desc(AVAL), AVALC), vars = exprs(AVAL), suffix = ".join")
 }
 \seealso{
 Helpers for working with Quosures: 
+\code{\link{expr_c}()},
 \code{\link{quo_c}()},
 \code{\link{quo_not_missing}()},
+\code{\link{replace_symbol_in_expr}()},
 \code{\link{replace_symbol_in_quo}()},
 \code{\link{replace_values_by_names}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{quo}
 \keyword{quo}

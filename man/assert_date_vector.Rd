@@ -4,7 +4,7 @@
 \alias{assert_date_vector}
 \title{Is an object a date or datetime vector?}
 \usage{
-assert_date_vector(arg, optional = TRUE)
+assert_date_vector(arg, optional = FALSE)
 }
 \arguments{
 \item{arg}{The function argument to be checked}
@@ -55,9 +55,6 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()},
 \code{\link{assert_varval_list}()}
-}
-\author{
-Sadchla Mascary
 }
 \concept{assertion}
 \keyword{assertion}

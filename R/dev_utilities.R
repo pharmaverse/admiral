@@ -8,7 +8,6 @@
 #'
 #' @return A `logical` vector
 #'
-#' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
 #' @family dev_utility
@@ -24,7 +23,6 @@
 #'
 #' @return `character` vector
 #'
-#' @author Ondrej Slama
 #'
 #' @keywords dev_utility
 #' @family dev_utility
@@ -38,7 +36,6 @@ convert_dtm_to_dtc <- function(dtm) {
 #'
 #' @param expr An expression created inside a function using `substitute()`
 #'
-#' @author Thomas Neitmann, Ondrej Slama
 #'
 #' @return `character` vector
 #'
@@ -50,7 +47,7 @@ arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
     deparse(expr)
   } else if (length(expr) == 2L &&
-    (expr[[1L]] == quote(enquo) || expr[[1L]] == quote(rlang::enquo)) &&
+    (expr[[1L]] == quote(enexpr) || expr[[1L]] == quote(rlang::enexpr)) &&
     is.symbol(expr[[2L]])) {
     deparse(expr[[2L]])
   } else if (is.call(expr) && length(expr) >= 2 && is.symbol(expr[[2]])) {
@@ -62,14 +59,13 @@ arg_name <- function(expr) { # nolint
   }
 }
 
-#' Extract All Symbols from a List of Quosures
+#' Extract All Symbols from a List of Expressions
 #'
 #' @param x An `R` object
 #' @param side One of `"lhs"` (the default) or `"rhs"`
 #'
-#' @return A list of `quosures`
+#' @return A list of expressions
 #'
-#' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
 #' @family dev_utility
@@ -78,18 +74,13 @@ extract_vars <- function(x, side = "lhs") {
   if (is.null(x)) {
     NULL
   } else if (is.list(x)) {
-    do.call(quo_c, map(x, extract_vars, side))
-  } else if (is_quosure(x)) {
-    env <- quo_get_env(x)
-    symbols <- syms(all.vars(quo_get_expr(x)))
-    map(symbols, ~ quo_set_env(quo(!!.x), env))
+    do.call(expr_c, map(x, extract_vars, side))
+  } else if (is_expression(x)) {
+    syms(all.vars(x))
   } else if (is_formula(x)) {
     funs <- list("lhs" = f_lhs, "rhs" = f_rhs)
     assert_character_scalar(side, values = names(funs))
-    quo_set_env(
-      quo(!!funs[[side]](x)),
-      env = attr(x, ".Environment")
-    )
+    expr(!!funs[[side]](x))
   } else {
     abort()
   }
@@ -115,28 +106,6 @@ extract_vars <- function(x, side = "lhs") {
   tryCatch(lhs, error = function(e) rhs)
 }
 
-
-#' Turn a Quosure into a String
-#'
-#' @details
-#' This function is missing in earlier version of {rlang} which is why we re-
-#' implement it here.
-#'
-#' @param x A `quosure`
-#'
-#' @return A `character` vector
-#'
-#' @keywords dev_utility
-#' @family dev_utility
-#'
-#' @export
-as_name <- function(x) {
-  if (is_quosure(x)) {
-    x <- quo_get_expr(x)
-  }
-  as_string(x)
-}
-
 #' Valid Time Units
 #'
 #' Contains the acceptable character vector of valid time units
@@ -151,28 +120,29 @@ valid_time_units <- function() {
   c("years", "months", "days", "hours", "minutes", "seconds")
 }
 
-#' check that argument contains valid variable(s) created with `vars()` or
-#' Source Variables from a List of Quosures
+#' check that argument contains valid variable(s) created with `exprs()` or
+#' Source Variables from a List of Expressions
 #'
 #' @param arg A function argument to be checked
 #'
-#' @return A TRUE if variables were valid variable
+#' @return A `TRUE` if variables were valid variable
 #'
 #' @export
 #'
 #' @keywords dev_utility
 #' @family dev_utility
 contains_vars <- function(arg) {
-  inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol) | names(arg) != "")
+  inherits(arg, "list") && all(map_lgl(arg, is_symbol) | names(arg) != "")
 }
 
-#' Turn a List of Quosures into a Character Vector
+#' Turn a List of Expressions into a Character Vector
 #'
-#' @param quosures A `list` of `quosures` created using [`vars()`]
+#' @param expressions A `list` of expressions created using [`exprs()`]
+#'
+#' @param quosures *Deprecated*, please use `expressions` instead.
 #'
 #' @return A character vector
 #'
-#' @author Thomas Neitmann
 #'
 #' @export
 #'
@@ -181,12 +151,21 @@ contains_vars <- function(arg) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(rlang)
 #'
-#' vars2chr(vars(USUBJID, AVAL))
-vars2chr <- function(quosures) {
+#' vars2chr(exprs(USUBJID, AVAL))
+vars2chr <- function(expressions, quosures) {
+  if (!missing(quosures)) {
+    deprecate_warn(
+      "0.10.0",
+      "vars2chr(quosures = )",
+      "vars2chr(expressions = )"
+    )
+    expressions <- map(quosures, rlang::quo_get_expr)
+  }
   rlang::set_names(
-    map_chr(quosures, ~ as_string(quo_get_expr(.x))),
-    names(quosures)
+    map_chr(expressions, as_string),
+    names(expressions)
   )
 }
 
@@ -195,12 +174,11 @@ vars2chr <- function(quosures) {
 #' Filters the input dataset if the provided expression is not `NULL`
 #'
 #' @param dataset Input dataset
-#' @param filter A filter condition. Must be a quosure.
+#' @param filter A filter condition. Must be an expression.
 #'
 #' @return A `data.frame` containing all rows in `dataset` matching `filter` or
 #' just `dataset` if `filter` is `NULL`
 #'
-#' @author Thomas Neitmann
 #'
 #' @export
 #'
@@ -210,7 +188,7 @@ vars2chr <- function(quosures) {
 filter_if <- function(dataset, filter) {
   assert_data_frame(dataset, check_is_grouped = FALSE)
   assert_filter_cond(filter, optional = TRUE)
-  if (quo_is_null(filter)) {
+  if (is.null(filter)) {
     dataset
   } else {
     filter(dataset, !!filter)
