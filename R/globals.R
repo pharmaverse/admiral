@@ -120,6 +120,7 @@ globalVariables(c(
   "tmp_obs_nr_filter_joined",
   "tmp_obs_nr_filter_joined.join",
   "tmp_obs_nr_var_conf_flag",
+  "tmp_obs_nr_var",
   "AGE",
   "SEX",
   "SMOKEFL",

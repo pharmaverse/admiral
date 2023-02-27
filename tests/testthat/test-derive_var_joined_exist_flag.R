@@ -56,7 +56,6 @@ test_that("derive_var_joined_exist_flag Test 1: filter without first_cond", {
   )
 })
 
-## Test 2: filter with first_cond ----
 ## Flagging any patient CR value that is followed by a CR
 test_that("derive_var_joined_exist_flag Test 2: filter with first_cond", {
   data <- tibble::tribble(
@@ -112,9 +111,9 @@ test_that("derive_var_joined_exist_flag Test 2: filter with first_cond", {
   )
 })
 
-## Test 3: filter with first_cond and summary function ----
 ## Flagging any patient PR value that is followed by a CR or PR
 ## and at most one SD in between
+
 test_that("derive_var_joined_exist_flag Test 3: filter with first_cond and summary function", {
   actual <-
     derive_var_joined_exist_flag(
@@ -155,9 +154,9 @@ test_that("derive_var_joined_exist_flag Test 3: filter with first_cond and summa
   )
 })
 
-## Test 4: join_type = "all" ----
 ## Flagging observations with a duration longer than 30 and
 ## on or after 7 days of a COVID AE (ACOVFL == "Y")
+
 test_that("derive_var_joined_exist_flag, Test 4: join_type = 'all'", {
   adae <- tibble::tribble(
     ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
@@ -206,8 +205,8 @@ test_that("derive_var_joined_exist_flag, Test 4: join_type = 'all'", {
   )
 })
 
-## Test 5: join_type = "before" ----
 ## Flagging observations with AVALC = Y and an observation with CRIT1FL = Y before
+
 test_that("derive_var_joined_exist_flag, Test 5: join_type = 'before'", {
   data <- tibble::tribble(
     ~USUBJID, ~ASEQ, ~AVALC, ~CRIT1FL,
@@ -242,5 +241,39 @@ test_that("derive_var_joined_exist_flag, Test 5: join_type = 'before'", {
     base = expected,
     compare = actual,
     keys = c("USUBJID", "ASEQ")
+  )
+})
+
+## Test 6: tmp_obs_nr_var argument works ----
+test_that("derive_var_confirmation_flag Test 6: tmp_obs_nr_var argument works", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~CRIT1FL, ~CONFFL,
+    "1",      1,        "Y",      "N",
+    "1",      2,        "N",      "N",
+    "1",      3,        "Y",      "N",
+    "1",      5,        "N",      "N",
+    "2",      1,        "Y",      "Y",
+    "2",      3,        "Y",      "N",
+    "2",      5,        "N",      "N",
+    "3",      1,        "Y",      "Y",
+    "4",      1,        "Y",      "N",
+    "4",      2,        "N",      "N"
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = derive_var_confirmation_flag(
+      select(expected, -CONFFL),
+      by_vars = exprs(USUBJID),
+      new_var = CONFFL,
+      tmp_obs_nr_var = tmp_obs_nr,
+      join_vars = exprs(CRIT1FL),
+      join_type = "all",
+      order = exprs(AVISITN),
+      filter = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
+        (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join)),
+      false_value = "N"
+    ),
+    keys = c("USUBJID", "AVISITN")
   )
 })

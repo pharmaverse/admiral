@@ -57,6 +57,15 @@
 #'
 #'   The observations are ordered by the specified order.
 #'
+#' @param tmp_obs_nr_var Temporary observation number
+#'
+#'   The specified variable is added to the input dataset and set to the
+#'   observation number with respect to `order`. For each by group (`by_vars`)
+#'   the observation number starts with `1`. The variable can be used in the
+#'   conditions (`filter`, `first_cond`). It is not included in the output
+#'   dataset. It can be used to select consecutive observations or the last
+#'   observation (see last example below).
+#'
 #' @param filter Condition for selecting observations
 #'
 #'   The filter is applied to the joined dataset for selecting the confirmed
@@ -298,6 +307,7 @@ filter_joined <- function(dataset,
     )
   first_cond <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
   assert_order_vars(order)
+  tmp_obs_nr_var <- assert_symbol(enexpr(tmp_obs_nr_var), optional = TRUE)
   filter <- assert_filter_cond(enexpr(filter))
   check_type <-
     assert_character_scalar(
@@ -311,6 +321,7 @@ filter_joined <- function(dataset,
   )
 
   # number observations of the input dataset to get a unique key
+
   # (by_vars and tmp_obs_nr_filter_joined)
   data <- dataset %>%
     derive_var_obs_number(
