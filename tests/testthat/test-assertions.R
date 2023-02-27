@@ -84,7 +84,7 @@ test_that("assert_data_frame Test 5: assert_data_frame extract_vars() works as i
   expect_invisible(example_fun(input, order = exprs(SEQ)))
 })
 
-## Test 6: assert_data_frame does not throw error if extract_vars() has NULL input ----
+## Test 6: assert_data_frame throws not throw error if extract_vars() has NULL input ----
 test_that("assert_data_frame Test 6: assert_data_frame throws not throw error if extract_vars() has NULL input", { # nolint
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~SEQ,
@@ -1135,3 +1135,10 @@ test_that("assert_same_type Test 83: error if different type", {
     fixed = TRUE
   )
 })
+
+## Test 84: works as intended ----
+test_that("assert_same_type Test 84: works as intended", {
+  expect_equal(valid_time_units(),
+               c("years", "months", "days", "hours", "minutes","seconds"))
+})
+
