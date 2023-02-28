@@ -103,6 +103,8 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 - Removed authors from function documentation, as we will now only be tracking an overall list of 
 authors for admiral. (#1673)
 
+- Added an imputation example for `create_single_source_dataset()` in function documentation (#1408)(#1760)
+
 
 # admiral 0.9.1
 
