@@ -508,7 +508,7 @@ adgdssf <- adgdssf %>%
       PARAMCD = "COMPL90P",
       PARAM = "Completed at least 90% of questions?",
     )
-  ) %>% 
+  ) %>%
   mutate(
     AVALC = if_else(
       PARAMCD == "COMPL90P",
@@ -563,7 +563,7 @@ adgdssf <- adgdssf %>%
       PARAMCD = "COMPLALL",
       PARAM = "Completed all questions?"
     )
-  ) %>% 
+  ) %>%
   mutate(
     AVALC = if_else(
       PARAMCD == "COMPLALL",
@@ -574,8 +574,8 @@ adgdssf <- adgdssf %>%
       ),
       AVALC
     )
-  ) %>% 
-  filter(is.na(filled_in)) %>% 
+  ) %>%
+  filter(is.na(filled_in)) %>%
   select(-filled_in)
 ```
 
