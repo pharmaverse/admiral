@@ -4,7 +4,7 @@
 #' example, flagging events which need to be confirmed by a second event.
 #'
 #' An example usage might be flagging if a patient received two required
-#' medications within a certain time frame of each other.
+#' medications within a certain timeframe of each other.
 #'
 #' In the oncology setting, for example, the function could be used to flag if a
 #' response value can be confirmed by an other assessment. This is commonly
@@ -28,6 +28,7 @@
 #'
 #'   The specified variable is added to the input dataset.
 #'
+#'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
 #'   The specified variable is added to the input dataset and set to the
@@ -43,7 +44,7 @@
 #'   for this parameter. The specified variables are added to the joined dataset
 #'   with suffix ".join". For example to flag all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
-#'   exprs(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
+#'   vars(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
 #'   AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
@@ -116,7 +117,7 @@
 #'   specified for `join_vars` are kept. The suffix ".join" is added to these
 #'   variables.
 #'
-#'   For example, for `by_vars = USUBJID`, `join_vars = exprs(AVISITN, AVALC)` and input dataset
+#'   For example, for `by_vars = USUBJID`, `join_vars = vars(AVISITN, AVALC)` and input dataset
 #'
 #'   ```{r eval=FALSE}
 #'   # A tibble: 2 x 4
@@ -311,6 +312,34 @@
 #'         count_vals(var = AVALC.join, val = "CR") == 0
 #'     )
 #' )
+#'
+#' # flag observations with CRIT1FL == "Y" at two consecutive visits or at the last visit
+#' data <- tribble(
+#'   ~USUBJID, ~AVISITN, ~CRIT1FL,
+#'   "1",      1,        "Y",
+#'   "1",      2,        "N",
+#'   "1",      3,        "Y",
+#'   "1",      5,        "N",
+#'   "2",      1,        "Y",
+#'   "2",      3,        "Y",
+#'   "2",      5,        "N",
+#'   "3",      1,        "Y",
+#'   "4",      1,        "Y",
+#'   "4",      2,        "N",
+#' )
+#'
+#' derive_var_joined_exist_flag(
+#'   data,
+#'   by_vars = exprs(USUBJID),
+#'   new_var = CONFFL,
+#'   tmp_obs_nr_var = tmp_obs_nr_filter_joined,
+#'   join_vars = exprs(CRIT1FL),
+#'   join_type = "all",
+#'   order = exprs(AVISITN),
+#'   filter = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
+#'     (tmp_obs_nr_filter_joined + 1 == tmp_obs_nr_filter_joined.join | tmp_obs_nr_filter_joined == max(tmp_obs_nr_filter_joined.join))
+#' )
+#'
 derive_var_joined_exist_flag <- function(dataset,
                                          by_vars,
                                          order,
@@ -330,7 +359,6 @@ derive_var_joined_exist_flag <- function(dataset,
   assert_data_frame(dataset)
 
   tmp_obs_nr <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")
-
   data <- derive_var_obs_number(
     dataset,
     new_var = !!tmp_obs_nr

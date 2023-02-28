@@ -11,6 +11,7 @@ filter_joined(
   join_type,
   first_cond = NULL,
   order,
+  tmp_obs_nr_var = NULL,
   filter,
   check_type = "warning"
 )
@@ -30,7 +31,7 @@ dataset with itself.}
 
 The variables needed from the other observations should be specified for
 this parameter. The specified variables are added to the joined dataset
-with suffix ".join". For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
+with suffix ".join". For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = vars(AVALC, AVISITN)} and \code{filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
 
 The \verb{*.join} variables are not included in the output dataset.}
 
@@ -53,6 +54,15 @@ observations are removed.}
 
 The observations are ordered by the specified order.}
 
+\item{tmp_obs_nr_var}{Temporary observation number
+
+The specified variable is added to the input dataset and set to the
+observation number with respect to \code{order}. For each by group (\code{by_vars})
+the observation number starts with \code{1}. The variable can be used in the
+conditions (\code{filter}, \code{first_cond}). It is not included in the output
+dataset. It can be used to select consecutive observations or the last
+observation (see last example below).}
+
 \item{filter}{Condition for selecting observations
 
 The filter is applied to the joined dataset for selecting the confirmed
@@ -74,15 +84,6 @@ by variables and the order.
 \emph{Default:} \code{"none"}
 
 \emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
-
-\item{tmp_obs_nr_var}{Temporary observation number
-
-The specified variable is added to the input dataset and set to the
-observation number with respect to \code{order}. For each by group (\code{by_vars})
-the observation number starts with \code{1}. The variable can be used in the
-conditions (\code{filter}, \code{first_cond}). It is not included in the output
-dataset. It can be used to select consecutive observations or the last
-observation (see last example below).}
 }
 \value{
 A subset of the observations of the input dataset. All variables of
@@ -96,7 +97,7 @@ the current observation and the other observations into account. The suffix
 ".join" is added to the variables from the subsequent observations.
 
 An example usage might be checking if a patient received two required
-medications within a certain time frame of each other.
+medications within a certain timeframe of each other.
 
 In the oncology setting, for example, we use such processing to check if a
 response value can be confirmed by a subsequent assessment. This is commonly
@@ -111,7 +112,7 @@ The input dataset is joined with itself by the variables specified for
 specified for \code{join_vars} are kept. The suffix ".join" is added to these
 variables.
 
-For example, for \code{by_vars = USUBJID}, \code{join_vars = exprs(AVISITN, AVALC)} and input dataset
+For example, for \code{by_vars = USUBJID}, \code{join_vars = vars(AVISITN, AVALC)} and input dataset
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{# A tibble: 2 x 4
 USUBJID AVISITN AVALC  AVAL
@@ -137,7 +138,7 @@ USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
 The joined dataset is restricted to observations with respect to
 \code{join_type} and \code{order}.
 
-The dataset from the example in the previous step with \code{join_type = "after"} and order = exprs(AVISITN)` is restricted to
+The dataset from the example in the previous step with \code{join_type = "after"} and order = vars(AVISITN)` is restricted to
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{A tibble: 4 x 6
 USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
@@ -191,10 +192,10 @@ adae <- tribble(
 
 filter_joined(
   adae,
-  by_vars = exprs(USUBJID),
-  join_vars = exprs(ACOVFL, ADY),
+  by_vars = vars(USUBJID),
+  join_vars = vars(ACOVFL, ADY),
   join_type = "all",
-  order = exprs(ADY),
+  order = vars(ADY),
   filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 )
 
@@ -214,10 +215,10 @@ data <- tribble(
 
 filter_joined(
   data,
-  by_vars = exprs(USUBJID),
-  join_vars = exprs(AVALC, AVISITN),
+  by_vars = vars(USUBJID),
+  join_vars = vars(AVALC, AVISITN),
   join_type = "after",
-  order = exprs(AVISITN),
+  order = vars(AVISITN),
   filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
 )
 
@@ -243,10 +244,10 @@ data <- tribble(
 
 filter_joined(
   data,
-  by_vars = exprs(USUBJID),
-  join_vars = exprs(AVALC),
+  by_vars = vars(USUBJID),
+  join_vars = vars(AVALC),
   join_type = "after",
-  order = exprs(AVISITN),
+  order = vars(AVISITN),
   first_cond = AVALC.join == "CR",
   filter = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) &
     count_vals(var = AVALC.join, val = "NE") <= 1
@@ -275,10 +276,10 @@ data <- tribble(
 
 filter_joined(
   data,
-  by_vars = exprs(USUBJID),
-  join_vars = exprs(AVALC, ADY),
+  by_vars = vars(USUBJID),
+  join_vars = vars(AVALC, ADY),
   join_type = "after",
-  order = exprs(ADY),
+  order = vars(ADY),
   first_cond = AVALC.join \%in\% c("CR", "PR") & ADY.join - ADY >= 20,
   filter = AVALC == "PR" &
     all(AVALC.join \%in\% c("CR", "PR", "NE")) &

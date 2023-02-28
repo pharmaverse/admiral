@@ -10,7 +10,7 @@
 #' ".join" is added to the variables from the subsequent observations.
 #'
 #' An example usage might be checking if a patient received two required
-#' medications within a certain time frame of each other.
+#' medications within a certain timeframe of each other.
 #'
 #' In the oncology setting, for example, we use such processing to check if a
 #' response value can be confirmed by a subsequent assessment. This is commonly
@@ -32,7 +32,7 @@
 #'   this parameter. The specified variables are added to the joined dataset
 #'   with suffix ".join". For example to select all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
-#'   exprs(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
+#'   vars(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
 #'   AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
@@ -100,7 +100,7 @@
 #'   specified for `join_vars` are kept. The suffix ".join" is added to these
 #'   variables.
 #'
-#'   For example, for `by_vars = USUBJID`, `join_vars = exprs(AVISITN, AVALC)` and input dataset
+#'   For example, for `by_vars = USUBJID`, `join_vars = vars(AVISITN, AVALC)` and input dataset
 #'
 #'   ```{r eval=FALSE}
 #'   # A tibble: 2 x 4
@@ -128,7 +128,7 @@
 #'   `join_type` and `order`.
 #'
 #'   The dataset from the example in the previous step with `join_type =
-#'   "after"` and order = exprs(AVISITN)` is restricted to
+#'   "after"` and order = vars(AVISITN)` is restricted to
 #'
 #'   ```{r eval=FALSE}
 #'   A tibble: 4 x 6
@@ -190,10 +190,10 @@
 #'
 #' filter_joined(
 #'   adae,
-#'   by_vars = exprs(USUBJID),
-#'   join_vars = exprs(ACOVFL, ADY),
+#'   by_vars = vars(USUBJID),
+#'   join_vars = vars(ACOVFL, ADY),
 #'   join_type = "all",
-#'   order = exprs(ADY),
+#'   order = vars(ADY),
 #'   filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 #' )
 #'
@@ -213,10 +213,10 @@
 #'
 #' filter_joined(
 #'   data,
-#'   by_vars = exprs(USUBJID),
-#'   join_vars = exprs(AVALC, AVISITN),
+#'   by_vars = vars(USUBJID),
+#'   join_vars = vars(AVALC, AVISITN),
 #'   join_type = "after",
-#'   order = exprs(AVISITN),
+#'   order = vars(AVISITN),
 #'   filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
 #' )
 #'
@@ -242,10 +242,10 @@
 #'
 #' filter_joined(
 #'   data,
-#'   by_vars = exprs(USUBJID),
-#'   join_vars = exprs(AVALC),
+#'   by_vars = vars(USUBJID),
+#'   join_vars = vars(AVALC),
 #'   join_type = "after",
-#'   order = exprs(AVISITN),
+#'   order = vars(AVISITN),
 #'   first_cond = AVALC.join == "CR",
 #'   filter = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
 #'     count_vals(var = AVALC.join, val = "NE") <= 1
@@ -274,10 +274,10 @@
 #'
 #' filter_joined(
 #'   data,
-#'   by_vars = exprs(USUBJID),
-#'   join_vars = exprs(AVALC, ADY),
+#'   by_vars = vars(USUBJID),
+#'   join_vars = vars(AVALC, ADY),
 #'   join_type = "after",
-#'   order = exprs(ADY),
+#'   order = vars(ADY),
 #'   first_cond = AVALC.join %in% c("CR", "PR") & ADY.join - ADY >= 20,
 #'   filter = AVALC == "PR" &
 #'     all(AVALC.join %in% c("CR", "PR", "NE")) &
@@ -294,6 +294,7 @@ filter_joined <- function(dataset,
                           join_type,
                           first_cond = NULL,
                           order,
+                          tmp_obs_nr_var = NULL,
                           filter,
                           check_type = "warning") {
   # Check input parameters
@@ -321,9 +322,12 @@ filter_joined <- function(dataset,
   )
 
   # number observations of the input dataset to get a unique key
-
-
   # (by_vars and tmp_obs_nr_filter_joined)
+  # (by_vars and tmp_obs_nr_var)
+  if (is.null(tmp_obs_nr_var)) {
+    tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")
+  }
+
   data <- dataset %>%
     derive_var_obs_number(
       new_var = tmp_obs_nr_filter_joined,
