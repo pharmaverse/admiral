@@ -97,14 +97,13 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
   - `date_imputation`, `time_imputation` and `preserve` parameters from `date_source()` function
   - `filter` parameter from `derive_var_extreme_flag()` and `derive_var_worst_flag()` functions
 
-## Documentation
-
 - The expected value for the `derivation` argument of `restrict_derivation()`,
 `slice_derivation()`, and `call_derivation()` is described now. (#1698)
 
 - Removed authors from function documentation, as we will now only be tracking an overall list of 
 authors for admiral. (#1673)
 
+- Updates to examples for `derive_var_age_years()` and `derive_vars_duration()` (#1620, #1634)
 
 # admiral 0.9.1
 
