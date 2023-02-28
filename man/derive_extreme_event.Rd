@@ -34,7 +34,8 @@ meet the filter \code{condition}, take the first record sorted by \code{order}.}
 
 \item{order}{Sort order
 
-Within each by group the observations are ordered by the specified order.
+If a particular event from \code{events} has more than one observation, within
+the event and by group, the records are ordered by the specified order.
 
 \emph{Permitted Values:} list of variables or \verb{desc(<variable>)} function calls
 created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}}

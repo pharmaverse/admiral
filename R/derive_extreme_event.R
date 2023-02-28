@@ -7,6 +7,15 @@
 #' where extreme records are derived based on certain order of existing
 #' variables.
 #'
+#' @param order Sort order
+#'
+#'   If a particular event from `events` has more than one observation, within
+#'   the event and by group, the records are ordered by the specified order.
+#'
+#'   *Permitted Values:* list of variables or `desc(<variable>)` function calls
+#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))`
+#'
+#'
 #' @param mode Selection mode (first or last)
 #'
 #'   If a particular event from `events` has more than one observation,
@@ -123,6 +132,7 @@ derive_extreme_event <- function(dataset,
   condition_ls <- map(events, "condition")
   set_values_to_ls <- map(events, "set_values_to")
   event_order <- map(seq_len(length(events)), function(x) x)
+  tmp_event_no <- get_new_tmp_var(dataset, prefix = "tmp_event_no")
 
   selected_records_ls <- purrr::pmap(
     list(condition_ls, set_values_to_ls, event_order),
@@ -130,40 +140,37 @@ derive_extreme_event <- function(dataset,
       dataset %>%
         group_by(!!!by_vars) %>%
         filter(!!enexpr(x)) %>%
-        mutate(!!!y, event_no = z)
+        mutate(!!!y, !!tmp_event_no := z) %>%
+        ungroup()
     }
   )
   selected_records <- bind_rows(selected_records_ls)
 
-  if (check_type != "none") {
-    signal_duplicate_records(
-      selected_records,
-      by_vars = exprs(event_no, !!!by_vars, !!!extract_vars(order)),
-      msg = paste0(
-        "Event dataset", " contains duplicate records with respect to ",
-        enumerate(vars2chr(exprs(!!!by_vars, !!!extract_vars(order), event_no)))
-      ),
-      cnd_type = check_type
+  ## tmp obs number within by_vars and a type of event
+  tmp_obs <- get_new_tmp_var(selected_records)
+  selected_records_obs <- selected_records %>%
+    derive_var_obs_number(
+      new_var = !!tmp_obs,
+      order = order,
+      by_vars = expr_c(by_vars, expr(!!tmp_event_no)),
+      check_type = check_type
     )
+
+  ## filter_extreme
+  if (mode == "first") {
+    tmp_obs_expr <- expr(!!tmp_obs)
+  } else {
+    tmp_obs_expr <- expr(desc(!!tmp_obs))
   }
-
-  ## Filter extreme within each event
-  selected_records_extreme <- selected_records %>%
-    group_by(event_no, !!!by_vars) %>%
-    arrange(!!!order, .by_group = TRUE) %>%
-    slice(if_else(mode == "first", 1L, n())) %>%
-    ungroup()
-
-  ## Filter extreme among all events
-  new_obs <- selected_records_extreme %>%
+  new_obs <- selected_records_obs %>%
     filter_extreme(
       by_vars = by_vars,
-      order = exprs(event_no),
+      order = expr_c(expr(!!tmp_event_no), tmp_obs_expr),
       mode = "first",
       check_type = check_type
     ) %>%
     mutate(!!!set_values_to) %>%
-    select(-event_no)
+    select(-!!tmp_event_no, -!!tmp_obs)
 
   # Create output dataset
   bind_rows(dataset, new_obs)
