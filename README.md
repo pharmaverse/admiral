@@ -43,10 +43,10 @@ Phases:
 
 | Release Schedule | Phase 1- Date and Packages | Phase 2- Date and Packages | Phase 3- Date and Packages |
 | ---------------- | -------------------------- | -------------------------- | -------------------------- |
-| Q1-2023          | February 27th              | March 6th                  | March 13th                 |
+| Q2-2023          | May 29th                   | June 5th                   | June 12th                  |
 |                  | `{admiraldev}`             | `{admiral}`                | `{admiralonco}`            |
 |                  | `{admiral.test}`           |                            |                            |
-| Q2-2023          | May 29th                   | June 5th                   | June 12th                  |
+| Q3-2023          | August 28th                | September 4th              | September 11th             |
 |                  | `{admiraldev}`             | `{admiral}`                | `{admiralonco}`            |
 |                  | `{admiral.test}`           |                            |                            |
 
