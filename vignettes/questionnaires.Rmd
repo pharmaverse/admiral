@@ -43,6 +43,7 @@ The examples of this vignette require the following packages.
 ```{r, warning=FALSE, message=FALSE}
 library(dplyr)
 library(tidyr)
+library(tibble)
 library(admiral)
 ```
 
@@ -52,20 +53,26 @@ In this vignette we use the example data from the CDISC ADaM Supplements
 ([Generalized Anxiety Disorder 7-Item Version 2
 (GAD-7)](https://www.cdisc.org/standards/foundational/qrs/generalized-anxiety-disorder-7-item-version-2-0),
 [Geriatric Depression Scale Short Form
-(GDS-SF)](https://www.cdisc.org/standards/foundational/qrs/geriatric-depression-scale-short-form-0))[^1]:
+(GDS-SF)](https://www.cdisc.org/standards/foundational/qrs/geriatric-depression-scale-short-form-0)):
 
-[^1]: The example `QS` dataset can be loaded by `data(example_qs)`.
-```{r echo=FALSE}
+```{r}
 data("example_qs")
 qs <- example_qs
+```
 
+```{r echo=FALSE}
 dataset_vignette(qs)
+```
 
-adsl <- tibble::tribble(
+```{r}
+adsl <- tribble(
   ~STUDYID, ~USUBJID, ~SITEID, ~ITTFL,    ~TRTP, ~TRTSDT,                      ~DTHCAUS,
   "STUDYX",  "P0001",     13L,    "Y", "DRUG A", lubridate::ymd("2012-11-16"), NA_character_,
   "STUDYX",  "P0002",     11L,    "Y", "DRUG B", lubridate::ymd("2012-11-16"), NA_character_
 )
+```
+```{r echo=FALSE}
+dataset_vignette(adsl)
 ```
 # Original Items
 
@@ -446,7 +453,7 @@ answers should be selected. For example, if yes/no answers for "No sleep",
 collected, a parameter for the worst sleeping problems could be derived. In the
 example, no sleeping problems is assumed if all were answered with "no".
 ```{r eval=FALSE}
-derive_param_worst_event(
+derive_extreme_event(
   adqs,
   by_vars = exprs(USUBJID, AVISIT),
   events = list(
