@@ -155,9 +155,9 @@ test_that("derive_vars_query Test 5: Derive decides between TERM_NAME and TERM_I
   )
 })
 
-
+# assert_valid_queries ----
 ## Test 6: assert_valid_queries checks ----
-test_that("derive_vars_query Test 6: assert_valid_queries checks", {
+test_that("assert_valid_queries Test 6: assert_valid_queries checks", {
   query <- tibble::tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
@@ -247,16 +247,10 @@ test_that("derive_vars_query Test 6: assert_valid_queries checks", {
     assert_valid_queries(
       mutate(
         query,
-        QUERY_SCOPE = c(NA, NA),
-        QUERY_SCOPE_NUM = c(1, 2)
+        QUERY_SCOPE = c("BROAD", "NARROW"),
+        QUERY_SCOPE_NUM = c(1, 1)
       ),
       "test"
-    ),
-    regexp = paste0(
-      "If a value for `QUERY_SCOPE_NUM` is specified",
-      "a corresponding  `QUERY_SCOPE` is expected",
-      " in `test`. ",
-      "They must both be NA/missing or both specified."
     )
   )
 })

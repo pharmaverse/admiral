@@ -334,14 +334,6 @@ assert_valid_queries <- function(queries, queries_name) {
 
   # check QUERY_SCOPE and QUERY_SCOPE_NUM are one to one if available
   if ("QUERY_SCOPE" %in% names(queries) & "QUERY_SCOPE_NUM" %in% names(queries)) {
-    if (any((is.na(queries$QUERY_SCOPE) | queries$QUERY_SCOPE == "") &
-      !is.na(queries$QUERY_SCOPE_NUM))) {
-      abort(paste0(
-        "If a value for `QUERY_SCOPE_NUM` is specified",
-        "a corresponding  `QUERY_SCOPE` is expected",
-        " in `", queries_name, "`. ",
-        "They must both be NA/missing or both specified."
-      ))
-    }
+    assert_one_to_one(queries, exprs(QUERY_SCOPE), exprs(QUERY_SCOPE_NUM))
   }
 }
