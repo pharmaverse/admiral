@@ -43,6 +43,10 @@ that need carrying the last observation forward other than `analysis_var`
 gained the `tmp_obs_nr_var` argument. It helps flagging or selecting consecutive
 observations or the first or last observation in a by group. (#1724)
 
+- `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
+`HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
+
 ## Breaking Changes
 
 - All function arguments which expected a list of quosures created by `vars()`
@@ -62,16 +66,8 @@ added for subjects who have both an event or censoring and an observation in
 
 - Function `derive_var_disposition_status()` has been deprecated, please use `derive_var_merged_cat()` instead (#1681).
 
-## Documentation
-
-- New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
-
-- New vignette "Hy's Law Implementation" (#1637)
-
-- `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
-`HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
-based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
-
+- Function `derive_vars_disposition_reason()` has been deprecated, in favor of `derive_vars_merged()`(#1683)
+  
 - The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1712)
 
   - `derive_derived_param()` 
@@ -95,7 +91,13 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 
   - `meddra_version`, `whodd_version`, `get_smq_fun` and `get_sdg_fun` from the `create_query_data()` function
   - `date_imputation`, `time_imputation` and `preserve` parameters from `date_source()` function
-  - `filter` parameter from `derive_var_extreme_flag()` and `derive_var_worst_flag()` functions
+  - `filter` parameter from `derive_var_extreme_flag()`
+
+## Documentation
+
+- New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
+
+- New vignette "Hy's Law Implementation" (#1637)
 
 - The expected value for the `derivation` argument of `restrict_derivation()`,
 `slice_derivation()`, and `call_derivation()` is described now. (#1698)
