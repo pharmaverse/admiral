@@ -43,6 +43,10 @@ that need carrying the last observation forward other than `analysis_var`
 gained the `tmp_obs_nr_var` argument. It helps flagging or selecting consecutive
 observations or the first or last observation in a by group. (#1724)
 
+- `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
+`HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
+
 ## Breaking Changes
 
 - All function arguments which expected a list of quosures created by `vars()`
@@ -95,15 +99,13 @@ added for subjects who have both an event or censoring and an observation in
 
 - New vignette "Hy's Law Implementation" (#1637)
 
-- `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
-`HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
-based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
-
 - The expected value for the `derivation` argument of `restrict_derivation()`,
 `slice_derivation()`, and `call_derivation()` is described now. (#1698)
 
 - Removed authors from function documentation, as we will now only be tracking an overall list of 
 authors for admiral. (#1673)
+
+- Added an imputation example for `create_single_source_dataset()` in function documentation (#1408)(#1760)
 
 ## Various
 
