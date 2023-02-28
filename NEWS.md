@@ -97,10 +97,6 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
   - `date_imputation`, `time_imputation` and `preserve` parameters from `date_source()` function
   - `filter` parameter from `derive_var_extreme_flag()` and `derive_var_worst_flag()` functions
 
-## Documentation
-
-- New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
-
 - The expected value for the `derivation` argument of `restrict_derivation()`,
 `slice_derivation()`, and `call_derivation()` is described now. (#1698)
 
@@ -109,7 +105,7 @@ authors for admiral. (#1673)
 
 ## Various
 
-- Functions `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with NA values that has now been fixed (#1646)
+- Functions `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with `NA` values that has now been fixed (#1646)
 
 # admiral 0.9.1
 
