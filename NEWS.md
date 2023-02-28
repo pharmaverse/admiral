@@ -43,6 +43,8 @@ that need carrying the last observation forward other than `analysis_var`
 gained the `tmp_obs_nr_var` argument. It helps flagging or selecting consecutive
 observations or the first or last observation in a by group. (#1724)
 
+-   The units "min" and "sec" are added as valid values of `out_unit` in `compute_duration()` and `derive_vars_duration()` (#1647).
+
 ## Breaking Changes
 
 - All function arguments which expected a list of quosures created by `vars()`
