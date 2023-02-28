@@ -54,7 +54,8 @@ test_that("derive_extreme_records Test 1: add the worst event for each group", {
     mode = "first",
     set_values_to = exprs(
       PARAMCD = "WSP"
-    )
+    ),
+    check_type = "none"
   )
 
   expect_dfs_equal(

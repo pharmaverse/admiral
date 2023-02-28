@@ -1,16 +1,17 @@
 #' Add the Worst or Best Observation for Each By Group as New Records
 #'
-#' Add the worst or best observation for each by group as new records, all
-#' variables of the selected observation are kept. It can be used for selecting
-#' the extreme observation from a series of user-defined events. This
-#' distinguish `derive_extreme_event()` from `derive_extreme_records()`, where
-#' extreme records are derived based on certain order of existing variables.
+#' Add the first available record from `events` for each by group as new
+#' records, all variables of the selected observation are kept. It can be used
+#' for selecting the extreme observation from a series of user-defined events.
+#' This distinguish `derive_extreme_event()` from `derive_extreme_records()`,
+#' where extreme records are derived based on certain order of existing
+#' variables.
 #'
 #' @param mode Selection mode (first or last)
 #'
-#'   If `"first"` is specified, the first observation of each by group is added
-#'   to the input dataset. If `"last"` is specified, the last observation of
-#'   each by group is added to the input dataset.
+#'   If a particular event from `events` has more than one observation,
+#'   "first"/"last" is to select the first/last record of this type of events
+#'   sorting by `order`.
 #'
 #'   *Permitted Values:* `"first"`, `"last"`
 #'
@@ -47,14 +48,15 @@
 #' library(tibble)
 #'
 #' adqs <- tribble(
-#'   ~USUBJID, ~PARAMCD,       ~AVALC,
-#'   "1",      "NO SLEEP",     "N",
-#'   "1",      "WAKE UP",      "N",
-#'   "1",      "FALL ASLEEP",  "N",
-#'   "2",      "NO SLEEP",     "N",
-#'   "2",      "WAKE UP",      "Y",
-#'   "2",      "FALL ASLEEP",  "N",
-#'   "3",      "NO SLEEP",     NA_character_
+#'   ~USUBJID, ~PARAMCD,       ~AVALC,        ~ADY,
+#'   "1",      "NO SLEEP",     "N",              1,
+#'   "1",      "WAKE UP",      "N",              2,
+#'   "1",      "FALL ASLEEP",  "N",              3,
+#'   "2",      "NO SLEEP",     "N",              1,
+#'   "2",      "WAKE UP",      "Y",              2,
+#'   "2",      "WAKE UP",      "Y",              3,
+#'   "2",      "FALL ASLEEP",  "N",              4,
+#'   "3",      "NO SLEEP",     NA_character_,    1
 #' )
 #'
 #' # Add a new record for each USUBJID storing the the worst sleeping problem.
@@ -85,8 +87,8 @@
 #'       set_values_to = exprs(AVALC = "Missing", AVAL = 99)
 #'     )
 #'   ),
-#'   order = exprs(AVAL),
-#'   mode = "first",
+#'   order = exprs(ADY),
+#'   mode = "last",
 #'   set_values_to = exprs(
 #'     PARAMCD = "WSP",
 #'     PARAM = "Worst Sleeping Problems"
@@ -103,6 +105,10 @@ derive_extreme_event <- function(dataset,
   assert_vars(by_vars, optional = TRUE)
   assert_list_of(events, "event")
   assert_order_vars(order)
+  assert_data_frame(
+    dataset,
+    required_vars = by_vars
+  )
   mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
   check_type <-
     assert_character_scalar(
@@ -114,30 +120,50 @@ derive_extreme_event <- function(dataset,
 
   # Create new observations
   ## Create a dataset (selected_records) from `events`
-  condition_ls <- map(events, 1)
-  set_values_to_ls <- map(events, 2)
-  selected_records_ls <- map2(
-    condition_ls, set_values_to_ls,
-    function(x, y) {
+  condition_ls <- map(events, "condition")
+  set_values_to_ls <- map(events, "set_values_to")
+  event_order <- map(seq_len(length(events)), function(x) x)
+
+  selected_records_ls <- purrr::pmap(
+    list(condition_ls, set_values_to_ls, event_order),
+    function(x, y, z) {
       dataset %>%
         group_by(!!!by_vars) %>%
         filter(!!enexpr(x)) %>%
-        mutate(!!!y) %>%
-        arrange(!!!order, .by_group = TRUE) %>%
-        slice(1) %>%
-        ungroup()
+        mutate(!!!y, event_no = z)
     }
   )
   selected_records <- bind_rows(selected_records_ls)
-  ## filter_extreme for selected_records
-  new_obs <- selected_records %>%
+
+  if (check_type != "none") {
+    signal_duplicate_records(
+      selected_records,
+      by_vars = exprs(event_no, !!!by_vars, !!!extract_vars(order)),
+      msg = paste0(
+        "Event dataset", " contains duplicate records with respect to ",
+        enumerate(vars2chr(exprs(!!!by_vars, !!!extract_vars(order), event_no)))
+      ),
+      cnd_type = check_type
+    )
+  }
+
+  ## Filter extreme within each event
+  selected_records_extreme <- selected_records %>%
+    group_by(event_no, !!!by_vars) %>%
+    arrange(!!!order, .by_group = TRUE) %>%
+    slice(if_else(mode == "first", 1L, n())) %>%
+    ungroup()
+
+  ## Filter extreme among all events
+  new_obs <- selected_records_extreme %>%
     filter_extreme(
       by_vars = by_vars,
-      order = order,
-      mode = mode,
+      order = exprs(event_no),
+      mode = "first",
       check_type = check_type
     ) %>%
-    mutate(!!!set_values_to)
+    mutate(!!!set_values_to) %>%
+    select(-event_no)
 
   # Create output dataset
   bind_rows(dataset, new_obs)

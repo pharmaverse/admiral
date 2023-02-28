@@ -41,9 +41,9 @@ created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}}
 
 \item{mode}{Selection mode (first or last)
 
-If \code{"first"} is specified, the first observation of each by group is added
-to the input dataset. If \code{"last"} is specified, the last observation of
-each by group is added to the input dataset.
+If a particular event from \code{events} has more than one observation,
+"first"/"last" is to select the first/last record of this type of events
+sorting by \code{order}.
 
 \emph{Permitted Values:} \code{"first"}, \code{"last"}}
 
@@ -74,11 +74,12 @@ The input dataset with the best or worst observation of each by group
 added as new observations.
 }
 \description{
-Add the worst or best observation for each by group as new records, all
-variables of the selected observation are kept. It can be used for selecting
-the extreme observation from a series of user-defined events. This
-distinguish \code{derive_extreme_event()} from \code{derive_extreme_records()}, where
-extreme records are derived based on certain order of existing variables.
+Add the first available record from \code{events} for each by group as new
+records, all variables of the selected observation are kept. It can be used
+for selecting the extreme observation from a series of user-defined events.
+This distinguish \code{derive_extreme_event()} from \code{derive_extreme_records()},
+where extreme records are derived based on certain order of existing
+variables.
 }
 \details{
 \enumerate{
@@ -97,14 +98,15 @@ the selected observations.
 library(tibble)
 
 adqs <- tribble(
-  ~USUBJID, ~PARAMCD,       ~AVALC,
-  "1",      "NO SLEEP",     "N",
-  "1",      "WAKE UP",      "N",
-  "1",      "FALL ASLEEP",  "N",
-  "2",      "NO SLEEP",     "N",
-  "2",      "WAKE UP",      "Y",
-  "2",      "FALL ASLEEP",  "N",
-  "3",      "NO SLEEP",     NA_character_
+  ~USUBJID, ~PARAMCD,       ~AVALC,        ~ADY,
+  "1",      "NO SLEEP",     "N",              1,
+  "1",      "WAKE UP",      "N",              2,
+  "1",      "FALL ASLEEP",  "N",              3,
+  "2",      "NO SLEEP",     "N",              1,
+  "2",      "WAKE UP",      "Y",              2,
+  "2",      "WAKE UP",      "Y",              3,
+  "2",      "FALL ASLEEP",  "N",              4,
+  "3",      "NO SLEEP",     NA_character_,    1
 )
 
 # Add a new record for each USUBJID storing the the worst sleeping problem.
@@ -135,8 +137,8 @@ derive_extreme_event(
       set_values_to = exprs(AVALC = "Missing", AVAL = 99)
     )
   ),
-  order = exprs(AVAL),
-  mode = "first",
+  order = exprs(ADY),
+  mode = "last",
   set_values_to = exprs(
     PARAMCD = "WSP",
     PARAM = "Worst Sleeping Problems"
