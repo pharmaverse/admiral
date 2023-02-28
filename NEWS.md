@@ -62,6 +62,8 @@ added for subjects who have both an event or censoring and an observation in
 
 - Function `derive_var_disposition_status()` has been deprecated, please use `derive_var_merged_cat()` instead (#1681).
 
+- Function `derive_vars_disposition_reason()` has been deprecated, in favor of `derive_vars_merged()`(#1683)
+  
 - The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1712)
 
   - `derive_derived_param()` 
@@ -85,7 +87,7 @@ added for subjects who have both an event or censoring and an observation in
 
   - `meddra_version`, `whodd_version`, `get_smq_fun` and `get_sdg_fun` from the `create_query_data()` function
   - `date_imputation`, `time_imputation` and `preserve` parameters from `date_source()` function
-  - `filter` parameter from `derive_var_extreme_flag()` and `derive_var_worst_flag()` functions
+  - `filter` parameter from `derive_var_extreme_flag()`
 
 ## Documentation
 
