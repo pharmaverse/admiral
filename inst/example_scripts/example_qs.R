@@ -192,8 +192,27 @@ qs_gdssf <- tibble::tribble(
   "P0002",     60L,   "GDS02-Most People Better Off Than You", "GDS0215",          "VISIT 4",         4, "2013-02-13",     "NO",        0L
 ) %>%
   mutate(QSCAT = "GDS SHORT FORM")
+
+qs_sp <- tibble::tribble(
+  ~USUBJID, ~QSTEST,                                 ~QSTESTCD, ~VISIT,    ~VISITNUM, ~QSDTC,       ~QSORRES, ~QSSTRESN,
+  "P0001",  "SP01-No sleep at all",                  "SP0101",  "VISIT 1",         1, "2012-11-16", "NO",            0L,
+  "P0001",  "SP01-Waking up more than three times",  "SP0102",  "VISIT 1",         1, "2012-11-16", "NO",            0L,
+  "P0001",  "SP01-More than 30 mins to fall asleep", "SP0103",  "VISIT 1",         1, "2012-11-16", "YES",           1L,
+  "P0001",  "SP01-No sleep at all",                  "SP0101",  "VISIT 2",         2, "2012-12-15", "NO",            0L,
+  "P0001",  "SP01-Waking up more than three times",  "SP0102",  "VISIT 2",         2, "2012-12-15", "NO",            0L,
+  "P0001",  "SP01-More than 30 mins to fall asleep", "SP0103",  "VISIT 2",         2, "2012-12-15", "NO",            0L,
+  "P0001",  "SP01-No sleep at all",                  "SP0101",  "VISIT 4",         4, "2013-02-13", "NO",            0L,
+  "P0001",  "SP01-Waking up more than three times",  "SP0102",  "VISIT 4",         4, "2013-02-13", "YES",           1L,
+  "P0001",  "SP01-More than 30 mins to fall asleep", "SP0103",  "VISIT 4",         4, "2013-02-13", "YES",           1L,
+) %>%
+  mutate(
+    QSSEQ = row_number(),
+    QSCAT = "SLEEPING PROBLEMS",
+    .after = USUBJID
+  )
+
 # nolint end
-example_qs <- bind_rows(qs_gad7, qs_gdssf) %>%
+example_qs <- bind_rows(qs_gad7, qs_gdssf, qs_sp) %>%
   mutate(
     STUDYID = "STUDYX",
     .before = everything()

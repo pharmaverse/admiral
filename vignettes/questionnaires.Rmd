@@ -453,53 +453,55 @@ This class of parameters can be used when the worst answer of a set of yes/no
 answers should be selected. For example, if yes/no answers for "No sleep",
 "Waking up more than three times", "More than 30 mins to fall asleep" are
 collected, a parameter for the worst sleeping problems could be derived. In the
-example, no sleeping problems is assumed if all were answered with "no".
+example, "no sleeping problems" is assumed if all questions were answered with
+"no".
 ```{r eval=FALSE}
-derive_extreme_event(
-  adqs,
-  by_vars = exprs(USUBJID, AVISIT),
-  events = list(
-    event(
-      condition = PARAMCD == "NO SLEEP" & AVALC == "Y",
-      set_values_to = exprs(
-        AVALC = "No sleep",
-        AVAL = 1
+adsp <- adqs %>%
+  filter(PARCAT1 == "SLEEPING PROBLEMS") %>%
+  derive_extreme_event(
+    by_vars = exprs(USUBJID, AVISIT),
+    events = list(
+      event(
+        condition = PARAMCD == "NO SLEEP" & AVALC == "Y",
+        set_values_to = exprs(
+          AVALC = "No sleep",
+          AVAL = 1
+        )
+      ),
+      event(
+        condition = PARAMCD == "WAKE UP" & AVALC == "Y",
+        set_values_to = exprs(
+          AVALC = "Waking up more than three times",
+          AVAL = 2
+        )
+      ),
+      event(
+        condition = PARAMCD == "FALL ASLEEP" & AVALC == "Y",
+        set_values_to = exprs(
+          AVALC = "More than 30 mins to fall asleep",
+          AVAL = 3
+        )
+      ),
+      event(
+        condition = all(AVALC == "N"),
+        set_values_to = exprs(
+          AVALC = "No sleeping problems",
+          AVAL = 4
+        )
+      ),
+      event(
+        condition = TRUE,
+        set_values_to = exprs(
+          AVALC = "Missing",
+          AVAL = 99
+        )
       )
     ),
-    event(
-      condition = PARAMCD == "WAKE UP" & AVALC == "Y",
-      set_values_to = exprs(
-        AVALC = "Waking up more than three times",
-        AVAL = 2
-      )
-    ),
-    event(
-      condition = PARAMCD == "FALL ASLEEP" & AVALC == "Y",
-      set_values_to = exprs(
-        AVALC = "More than 30 mins to fall asleep",
-        AVAL = 3
-      )
-    ),
-    event(
-      condition = all(AVALC == "N"),
-      set_values_to = exprs(
-        AVALC = "No sleeping problems",
-        AVAL = 4
-      )
-    ),
-    event(
-      condition = TRUE,
-      set_values_to = exprs(
-        AVALC = "Missing",
-        AVAL = 99
-      )
+    set_values_to = exprs(
+      PARAMCD = "WSP",
+      PARAM = "Worst Sleeping Problems"
     )
-  ),
-  set_values_to = exprs(
-    PARAMCD = "WSP",
-    PARAM = "Worst Sleeping Problems"
   )
-)
 ```
 
 # Completion
@@ -537,6 +539,11 @@ dataset_vignette(
   display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVALC)
 )
 ```
+
+Please note that the denominator may depend on the answers of some of the
+questions. For example, a given questionnaire might direct someone to go from
+question #4 directly to question #8 based on their response to question #4,
+because questions #5, #6 and #7 would not apply in that case.
 
 If missed visits need to be taken into account, the expected records can be
 added to the input dataset by calling `derive_expected_records()`:
