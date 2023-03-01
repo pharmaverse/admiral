@@ -85,7 +85,7 @@ test_that("assert_data_frame Test 5: assert_data_frame extract_vars() works as i
 })
 
 ## Test 6: assert_data_frame throws not throw error if extract_vars() has NULL input ----
-test_that("assert_data_frame Test 6: assert_data_frame throws not throw error if extract_vars() has NULL input", { # nolint
+test_that("assert_data_frame Test 6: assert_data_frame throws error if extract_vars() has NULL input", { # nolint
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~SEQ,
     "A",      "1",         1,
