@@ -9,10 +9,10 @@ adsl <- tibble::tribble(
 
 adsl1 <- tibble::tribble(
   ~ID, ~SEX, ~COUNTRY,
-  "ST42-1", "F",  "AUT",
-  "ST42-2", "M",  "MWI",
-  "ST42-3", "M",  "NOR",
-  "ST42-4", "F",  "UGA"
+  "ST42-1", "F", "AUT",
+  "ST42-2", "M", "MWI",
+  "ST42-3", "M", "NOR",
+  "ST42-4", "F", "UGA"
 ) %>% mutate(STUDYID = "ST42")
 
 
@@ -26,12 +26,12 @@ advs <- tibble::tribble(
 ) %>% mutate(STUDYID = "ST42")
 
 advs1 <- tibble::tribble(
-  ~ID, ~PARAMCD, ~AVISIT,    ~AVAL,
+  ~ID, ~PARAMCD, ~AVISIT, ~AVAL,
   "ST42-1", "WEIGHT", "BASELINE", 66,
-  "ST42-1", "WEIGHT", "Week 2",   68,
+  "ST42-1", "WEIGHT", "Week 2", 68,
   "ST42-2", "WEIGHT", "BASELINE", 88,
-  "ST42-3", "WEIGHT", "Week 2",   55,
-  "ST42-3", "WEIGHT", "Week 4",   50
+  "ST42-3", "WEIGHT", "Week 2", 55,
+  "ST42-3", "WEIGHT", "Week 4", 50
 ) %>% mutate(STUDYID = "ST42")
 
 
@@ -123,8 +123,8 @@ test_that("derive_vars_merged Test 4: error if variable in both datasets", {
 ## Test 5: by_vars with rename ----
 test_that("derive_vars_merged Test 5: by_vars with rename", {
   actual <- derive_vars_merged(advs,
-                               dataset_add = adsl1,
-                               by_vars = exprs(STUDYID, USUBJID = ID)
+    dataset_add = adsl1,
+    by_vars = exprs(STUDYID, USUBJID = ID)
   )
 
   expected <- left_join(advs, adsl1, by = c("STUDYID", "USUBJID" = "ID"))
