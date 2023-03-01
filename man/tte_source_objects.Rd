@@ -66,6 +66,7 @@ Source Objects:
 \code{\link{date_source}()},
 \code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
+\code{\link{event}()},
 \code{\link{query}()},
 \code{\link{tte_source}()}
 }

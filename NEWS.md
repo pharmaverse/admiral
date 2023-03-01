@@ -17,6 +17,9 @@ Non-Compartmental Analysis (ADNCA) (#851)
 
 - New function `derive_expected_records()` for adding expected records (#1729)
 
+- New function `derive_extreme_event()` for adding the worst or best observation 
+for each by group as new records (#1755)
+
 ## Updates of Existing Functions
 
 - Arguments `analysis_var`, `keep_vars` were added to `derive_locf_records()`,   
@@ -46,6 +49,9 @@ observations or the first or last observation in a by group. (#1724)
 - `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
+
+- The function `derive_vars_query()` now includes a consistency check for
+`QUERY_SCOPE` and `QUERY_SCOPE_NUM` values. (#652)
 
 ## Breaking Changes
 
@@ -106,6 +112,8 @@ added for subjects who have both an event or censoring and an observation in
 authors for admiral. (#1673)
 
 - Added an imputation example for `create_single_source_dataset()` in function documentation (#1408)(#1760)
+
+- Updates to examples for `derive_var_age_years()` and `derive_vars_duration()` (#1620, #1634)
 
 ## Various
 
