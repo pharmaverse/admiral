@@ -455,35 +455,37 @@ answers should be selected. For example, if yes/no answers for "No sleep",
 collected, a parameter for the worst sleeping problems could be derived. In the
 example, "no sleeping problems" is assumed if all questions were answered with
 "no".
-```{r eval=FALSE}
+```{r}
 adsp <- adqs %>%
   filter(PARCAT1 == "SLEEPING PROBLEMS") %>%
   derive_extreme_event(
     by_vars = exprs(USUBJID, AVISIT),
+    order = exprs(ADY, QSSEQ),
+    mode = "first",
     events = list(
       event(
-        condition = PARAMCD == "NO SLEEP" & AVALC == "Y",
+        condition = PARAMCD == "SP0101" & AVALC == "YES",
         set_values_to = exprs(
           AVALC = "No sleep",
           AVAL = 1
         )
       ),
       event(
-        condition = PARAMCD == "WAKE UP" & AVALC == "Y",
+        condition = PARAMCD == "SP0102" & AVALC == "YES",
         set_values_to = exprs(
           AVALC = "Waking up more than three times",
           AVAL = 2
         )
       ),
       event(
-        condition = PARAMCD == "FALL ASLEEP" & AVALC == "Y",
+        condition = PARAMCD == "SP0103" & AVALC == "YES",
         set_values_to = exprs(
           AVALC = "More than 30 mins to fall asleep",
           AVAL = 3
         )
       ),
       event(
-        condition = all(AVALC == "N"),
+        condition = all(AVALC == "NO"),
         set_values_to = exprs(
           AVALC = "No sleeping problems",
           AVAL = 4
@@ -498,10 +500,17 @@ adsp <- adqs %>%
       )
     ),
     set_values_to = exprs(
-      PARAMCD = "WSP",
+      PARAMCD = "SP01WSP",
       PARAM = "Worst Sleeping Problems"
     )
   )
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  arrange(adsp, USUBJID, ADY, PARAMCD),
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVALC)
+)
 ```
 
 # Completion
