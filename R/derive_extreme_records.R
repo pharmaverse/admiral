@@ -111,6 +111,12 @@ derive_extreme_records <- function(dataset,
   # Check input parameters
   assert_vars(by_vars, optional = TRUE)
   assert_order_vars(order)
+  assert_data_frame(
+    dataset,
+    required_vars = expr_c(
+      by_vars, extract_vars(order)
+    )
+  )
   mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
   check_type <-
     assert_character_scalar(

@@ -536,8 +536,8 @@ derive_param_tte <- function(dataset = NULL,
 #'   "Details" section.
 #'
 #'
-#' @keywords source_specifications
-#' @family source_specifications
+#' @keywords other_advanced
+#' @family other_advanced
 #'
 #' @export
 #'
@@ -675,8 +675,8 @@ filter_date_sources <- function(sources,
 #' @return The list of extended source datasets
 #'
 #'
-#' @keywords source_specifications
-#' @family source_specifications
+#' @keywords other_advanced
+#' @family other_advanced
 #'
 #' @examples
 #' library(tibble)
@@ -915,8 +915,8 @@ censor_source <- function(dataset_name,
 #'
 #' @export
 #'
-#' @family source_specifications
-#' @keywords source_specifications
+#' @family other_advanced
+#' @keywords other_advanced
 #'
 #' @examples
 #' list_tte_source_objects()
