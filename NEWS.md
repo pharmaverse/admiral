@@ -46,6 +46,8 @@ that need carrying the last observation forward other than `analysis_var`
 gained the `tmp_obs_nr_var` argument. It helps flagging or selecting consecutive
 observations or the first or last observation in a by group. (#1724)
 
+-   The units "min" and "sec" are added as valid values of `out_unit` in `compute_duration()` and `derive_vars_duration()` (#1647).
+
 - `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
@@ -113,6 +115,7 @@ authors for admiral. (#1673)
 
 - Added an imputation example for `create_single_source_dataset()` in function documentation (#1408)(#1760)
 
+- Updates to examples for `derive_var_age_years()` and `derive_vars_duration()` (#1620, #1634)
 
 # admiral 0.9.1
 
