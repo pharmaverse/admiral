@@ -4,6 +4,8 @@ ADEG
 ADEX
 ADJAE
 ADLB
+ADLBHY
+adlbhy
 ADMH
 ADNCA
 ADPC
@@ -22,7 +24,9 @@ AFRLT
 ANRLO
 ARRLT
 ASEQ
+AST
 ASTDTM
+aspartate
 ATC
 ATOXGR
 AVAL
@@ -37,6 +41,7 @@ BOR
 Basetype
 Bazett
 Bazett's
+BILI
 Biologics
 CDISC
 COVID
@@ -51,6 +56,7 @@ CVD
 Chol
 Creatinine
 D'Agostino
+DILI
 DIABP
 DT
 DTC
@@ -147,6 +153,7 @@ TADJAE
 TDOSE
 TDURD
 TID
+TLFs
 TMF
 TNDOSINT
 TPDOSE
@@ -234,6 +241,7 @@ repo
 rlang
 roche
 roxygen
+scalable
 str
 submittable
 subperiod
@@ -253,3 +261,4 @@ usethis
 www
 xportr
 xpt
+xULN
