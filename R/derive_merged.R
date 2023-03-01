@@ -61,7 +61,9 @@
 #'
 #'   The input dataset and the selected observations from the additional dataset
 #'   are merged by the specified by variables. The by variables must be a unique
-#'   key of the selected observations.
+#'   key of the selected observations. Variables from the additional dataset can
+#'   be renamed by naming the element, i.e., `by_vars =
+#'   exprs(<name in input dataset> = <name in additional dataset>)`.
 #'
 #'   *Permitted Values*: list of variables created by `exprs()`
 #'
@@ -234,17 +236,19 @@ derive_vars_merged <- function(dataset,
                                duplicate_msg = NULL) {
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_vars(by_vars)
+  by_vars_left <- replace_values_by_names(by_vars)
+  by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
   assert_order_vars(order, optional = TRUE)
   assert_vars(new_vars, optional = TRUE)
-  assert_data_frame(dataset, required_vars = by_vars)
-  assert_data_frame(dataset_add, required_vars = expr_c(by_vars, extract_vars(order), new_vars))
+  assert_data_frame(dataset, required_vars = by_vars_left)
+  assert_data_frame(dataset_add, required_vars = expr_c(by_vars_right, extract_vars(order), new_vars))
   match_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
 
   add_data <- filter_if(dataset_add, filter_add)
   if (!is.null(order)) {
     add_data <- filter_extreme(
       add_data,
-      by_vars = by_vars,
+      by_vars = by_vars_right,
       order = order,
       mode = mode,
       check_type = check_type
@@ -258,12 +262,12 @@ derive_vars_merged <- function(dataset,
     }
     signal_duplicate_records(
       add_data,
-      by_vars = by_vars,
+      by_vars = by_vars_right,
       msg = duplicate_msg
     )
   }
   if (!is.null(new_vars)) {
-    add_data <- select(add_data, !!!by_vars, !!!new_vars)
+    add_data <- select(add_data, !!!by_vars_right, !!!new_vars)
   }
   if (!is.null(match_flag)) {
     add_data <- mutate(
@@ -1095,6 +1099,8 @@ derive_var_merged_summary <- function(dataset,
                                       analysis_var,
                                       summary_fun) {
   assert_vars(by_vars)
+  by_vars_left <- replace_values_by_names(by_vars)
+  by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
   new_var <- assert_symbol(enexpr(new_var))
   analysis_var <- assert_symbol(enexpr(analysis_var))
   filter_add <-
@@ -1102,11 +1108,11 @@ derive_var_merged_summary <- function(dataset,
   assert_s3_class(summary_fun, "function")
   assert_data_frame(
     dataset,
-    required_vars = by_vars
+    required_vars = by_vars_left
   )
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(by_vars, analysis_var)
+    required_vars = expr_c(by_vars_right, analysis_var)
   )
 
   # Summarise the analysis value and merge to the original dataset
@@ -1114,7 +1120,7 @@ derive_var_merged_summary <- function(dataset,
     dataset,
     dataset_add = get_summary_records(
       dataset_add,
-      by_vars = by_vars,
+      by_vars = by_vars_right,
       filter = !!filter_add,
       analysis_var = !!analysis_var,
       summary_fun = summary_fun
