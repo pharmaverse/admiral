@@ -50,6 +50,9 @@ observations or the first or last observation in a by group. (#1724)
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
 
+- The function `derive_vars_query()` now includes a consistency check for
+`QUERY_SCOPE` and `QUERY_SCOPE_NUM` values. (#652)
+
 ## Breaking Changes
 
 - All function arguments which expected a list of quosures created by `vars()`
