@@ -17,6 +17,9 @@ Non-Compartmental Analysis (ADNCA) (#851)
 
 - New function `derive_expected_records()` for adding expected records (#1729)
 
+- New function `derive_extreme_event()` for adding the worst or best observation 
+for each by group as new records (#1755)
+
 ## Updates of Existing Functions
 
 - Arguments `analysis_var`, `keep_vars` were added to `derive_locf_records()`,   
