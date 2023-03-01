@@ -37,18 +37,17 @@ remotes::install_github("pharmaverse/admiral", ref = "devel")
 The `admiral` family has several downstream and upstream dependencies and so this release shall be done in three
 Phases:
 
-* Phase 1 release is for `{admiraldev}` and `{admiral.test}`, which feed into all `admiral` packages
-* Phase 2 release is only for core `{admiral}`
-* Phase 3 release is extension packages, e.g. `{admiralonco}`
+* Phase 1 release is for `{admiraldev}`, `{admiral.test}`, and `{admiral}` core 
+* Phase 2 release is extension packages, e.g. `{admiralonco}`, `admiralophtha`
 
-| Release Schedule | Phase 1- Date and Packages | Phase 2- Date and Packages | Phase 3- Date and Packages |
-| ---------------- | -------------------------- | -------------------------- | -------------------------- |
-| Q2-2023          | May 29th                   | June 5th                   | June 12th                  |
-|                  | `{admiraldev}`             | `{admiral}`                | `{admiralonco}`            |
-|                  | `{admiral.test}`           |                            |                            |
-| Q3-2023          | August 28th                | September 4th              | September 11th             |
-|                  | `{admiraldev}`             | `{admiral}`                | `{admiralonco}`            |
-|                  | `{admiral.test}`           |                            |                            |
+|Release Schedule | Phase 1- Date and Packages      | Phase 2- Date and Packages |
+|---------------- | --------------------------      | -------------------------- | 
+| Q2-2023         | June 5th                        | June 12th                  | 
+|                 | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            |
+|                 | `{admiral}`                     | `admiralophtha`            |   
+| Q3-2023         | September 4th                   | September 11th             | 
+|                 | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            | 
+|                 | `{admiral}`                     | `{admiralophtha}`          | 
 
 ## Main Goal
 
