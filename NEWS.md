@@ -45,8 +45,8 @@ observations or the first or last observation in a by group. (#1724)
 
 - The functions `derive_vars_merged`, `derive_var_merged_cat`, 
 `derive_var_merged_character`, `derive_var_merged_exist_flag`, 
-`derive_var_merged_summary`, and `derive_vars_merged_lookup` were updated for 
-the argument `by_vars` to allow renaming.
+`derive_var_merged_summary`, and `derive_vars_merged_lookup` were updated to 
+allow renaming in the argument `by_vars` (#1680).
 
 ## Breaking Changes
 
