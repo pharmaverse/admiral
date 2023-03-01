@@ -44,7 +44,7 @@ Phases:
 |---------------- | --------------------------      | -------------------------- | 
 | Q2-2023         | June 5th                        | June 12th                  | 
 |                 | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            |
-|                 | `{admiral}`                     | `admiralophtha`            |   
+|                 | `{admiral}`                     | `{admiralophtha}`          |   
 | Q3-2023         | September 4th                   | September 11th             | 
 |                 | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            | 
 |                 | `{admiral}`                     | `{admiralophtha}`          | 
