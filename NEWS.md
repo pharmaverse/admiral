@@ -17,6 +17,9 @@ Non-Compartmental Analysis (ADNCA) (#851)
 
 - New function `derive_expected_records()` for adding expected records (#1729)
 
+- New function `derive_extreme_event()` for adding the worst or best observation 
+for each by group as new records (#1755)
+
 ## Updates of Existing Functions
 
 - Arguments `analysis_var`, `keep_vars` were added to `derive_locf_records()`,   
@@ -43,6 +46,13 @@ that need carrying the last observation forward other than `analysis_var`
 gained the `tmp_obs_nr_var` argument. It helps flagging or selecting consecutive
 observations or the first or last observation in a by group. (#1724)
 
+- `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
+`HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
+
+- The function `derive_vars_query()` now includes a consistency check for
+`QUERY_SCOPE` and `QUERY_SCOPE_NUM` values. (#652)
+
 ## Breaking Changes
 
 - All function arguments which expected a list of quosures created by `vars()`
@@ -64,6 +74,8 @@ added for subjects who have both an event or censoring and an observation in
 
 - Function `derive_var_worst_flag()` has been deprecated in favor of `slice_derivation()`/`derive_var_extreme_flag()` (#1682)
 
+- Function `derive_vars_disposition_reason()` has been deprecated, in favor of `derive_vars_merged()`(#1683)
+  
 - The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1712)
 
   - `derive_derived_param()` 
@@ -87,7 +99,7 @@ added for subjects who have both an event or censoring and an observation in
 
   - `meddra_version`, `whodd_version`, `get_smq_fun` and `get_sdg_fun` from the `create_query_data()` function
   - `date_imputation`, `time_imputation` and `preserve` parameters from `date_source()` function
-  - `filter` parameter from `derive_var_extreme_flag()` and `derive_var_worst_flag()` functions
+  - `filter` parameter from `derive_var_extreme_flag()`
 
 ## Documentation
 
@@ -104,6 +116,8 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 
 - Removed authors from function documentation, as we will now only be tracking an overall list of 
 authors for admiral. (#1673)
+
+- Added an imputation example for `create_single_source_dataset()` in function documentation (#1408)(#1760)
 
 
 # admiral 0.9.1
