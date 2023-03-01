@@ -63,9 +63,13 @@ reference:
   contents:
   - has_keyword("create_aux")
 
-- subtitle: Other
+- subtitle: Source Objects
   contents:
   - has_keyword("source_specifications")
+
+- subtitle: Other
+  contents:
+  - has_keyword("other_advanced")
 
 - title: Computation Functions for Vectors
 - subtitle: All ADaMs
@@ -183,3 +187,8 @@ navbar:
         href: articles/queries_dataset.html
       - text: Lab Grading
         href: articles/lab_grading.html
+      - text: Hy's Law Implementation
+        href: articles/hys_law.html
+      - text: Creating a PK NCA ADaM (ADPC/ADNCA)
+        href: articles/pk_adnca.html
+
