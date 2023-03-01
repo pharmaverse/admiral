@@ -39,7 +39,8 @@ See floor_in and add_one parameter for details.
 
 Default: 'days'
 
-Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
+Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
+'seconds', 'sec'}
 
 \item{out_unit}{Output unit
 
@@ -48,7 +49,7 @@ The duration is derived in the specified unit
 Default: 'days'
 
 Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
-'seconds'}
+'min', 'seconds', 'sec'}
 
 \item{floor_in}{Round down input dates?
 
