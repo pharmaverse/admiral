@@ -44,28 +44,38 @@ equivalent years in decimal. Note, underlying computations assume an equal numbe
 of days in each year (365.25).
 }
 \examples{
+library(tibble)
 
-data <- data.frame(
-  AGE = c(27, 24, 3, 4, 1),
-  AGEU = c("days", "months", "years", "weeks", "years")
+# Derive age with age units specified
+data <- tribble(
+  ~AGE, ~AGEU,
+  27, "days",
+  24, "months",
+  3, "years",
+  4, "weeks",
+  1, "years"
 )
 
-data \%>\%
-  derive_var_age_years(., AGE, new_var = AAGE)
+derive_var_age_years(data, AGE, new_var = AAGE)
 
-data.frame(AGE = c(12, 24, 36, 48)) \%>\%
-  derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
+# Derive age without age units variable specified
+data <- tribble(
+  ~AGE,
+  12,
+  24,
+  36,
+  48
+)
+derive_var_age_years(data, AGE, age_unit = "months", new_var = AAGE)
 }
 \seealso{
 \code{\link[=derive_vars_duration]{derive_vars_duration()}}
 
 ADSL Functions that returns variable appended to dataset: 
-\code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_period}()}
 }
 \author{

@@ -7,6 +7,19 @@
 #' Derived from the `ex` dataset using `{admiral}` and `{dplyr}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/example_scripts/derive_single_dose.R})
 "ex_single"
 
+#' Example `QS` Dataset
+#'
+#' An example `QS` dataset based on the examples from the CDISC ADaM Supplements
+#' [Generalized Anxiety Disorder 7-Item Version 2
+#' (GAD-7)](https://www.cdisc.org/standards/foundational/qrs/generalized-anxiety-disorder-7-item-version-2-0)
+#' and [Geriatric Depression Scale Short Form
+#' (GDS-SF)](https://www.cdisc.org/standards/foundational/qrs/geriatric-depression-scale-short-form-0).
+#' @keywords datasets
+#' @family datasets
+#' @source
+#' Created by (\url{https://github.com/pharmaverse/admiral/blob/main/inst/example_scripts/example_qs.R})
+"example_qs"
+
 #' Queries Dataset
 #' @keywords datasets
 #' @family datasets
@@ -32,6 +45,20 @@
 #' Derived from the `dm` and `ds` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R})
 #'
 "admiral_adsl"
+
+#' Lab Analysis Dataset
+#'
+#' An example of lab analysis dataset
+#' @keywords datasets
+#' @family datasets
+#' @source
+#' Derived from the `adlb` template, then further filtered
+#' due to dataset size by the following USUBJIDs:
+#' 01-701-1015, 01-701-1023, 01-701-1028, 01-701-1033,
+#' 01-701-1034, 01-701-1047, 01-701-1097, 01-705-1186,
+#' 01-705-1292, 01-705-1310, 01-708-1286
+#'
+"admiral_adlb"
 
 #' Metadata Holding Grading Criteria for NCI-CTCAEv4
 #'

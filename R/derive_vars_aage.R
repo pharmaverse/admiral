@@ -128,17 +128,29 @@ derive_vars_aage <- function(dataset,
 #' @seealso [derive_vars_duration()]
 #'
 #' @examples
+#' library(tibble)
 #'
-#' data <- data.frame(
-#'   AGE = c(27, 24, 3, 4, 1),
-#'   AGEU = c("days", "months", "years", "weeks", "years")
+#' # Derive age with age units specified
+#' data <- tribble(
+#'   ~AGE, ~AGEU,
+#'   27, "days",
+#'   24, "months",
+#'   3, "years",
+#'   4, "weeks",
+#'   1, "years"
 #' )
 #'
-#' data %>%
-#'   derive_var_age_years(., AGE, new_var = AAGE)
+#' derive_var_age_years(data, AGE, new_var = AAGE)
 #'
-#' data.frame(AGE = c(12, 24, 36, 48)) %>%
-#'   derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
+#' # Derive age without age units variable specified
+#' data <- tribble(
+#'   ~AGE,
+#'   12,
+#'   24,
+#'   36,
+#'   48
+#' )
+#' derive_var_age_years(data, AGE, age_unit = "months", new_var = AAGE)
 derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
   age_variable <- assert_symbol(enexpr(age_var))
   assert_data_frame(dataset, required_vars = expr_c(age_variable))
@@ -221,6 +233,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
     ds <- dataset %>%
       mutate(!!new_var := !!age_var / unname(average_durations[tolower(!!sym(unit_var))]))
   }
+  return(ds)
 }
 
 
