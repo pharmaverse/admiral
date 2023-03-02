@@ -253,7 +253,7 @@ derive_var_extreme_flag <- function(dataset,
 #'
 #' @details For each group with respect to the variables specified by the `by_vars` parameter,
 #' the maximal / minimal observation of `analysis_var`
-#' is labelled in the `new_var` column as `"Y"`,
+#' is labeled in the `new_var` column as `"Y"`,
 #' if its `param_var` is in `worst_high` / `worst_low`.
 #' Otherwise, it is assigned `NA`.
 #' If there is more than one such maximal / minimal observation,
