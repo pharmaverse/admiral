@@ -176,6 +176,8 @@ navbar:
         href: articles/bds_tte.html
       - text: Creating Questionnaire ADaMs
         href: articles/questionnaires.html
+      - text: Creating a PK NCA ADaM (ADPC/ADNCA)
+        href: articles/pk_adnca.html
       - text: "Advanced User Guides"
       - text: Date and Time Imputation
         href: articles/imputation.html
@@ -191,6 +193,5 @@ navbar:
         href: articles/lab_grading.html
       - text: Hy's Law Implementation
         href: articles/hys_law.html
-      - text: Creating a PK NCA ADaM (ADPC/ADNCA)
-        href: articles/pk_adnca.html
+
 
