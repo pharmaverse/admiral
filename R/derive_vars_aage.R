@@ -87,7 +87,7 @@ derive_vars_aage <- function(dataset,
 #' Derive Age in Years
 #'
 #' Converts the given age variable (`age_var`) to the unit 'years' from the current
-#' units given in the `{age_var}U` variable or `age_unit` argument and stores
+#' units given in the `age_var+U` variable or `age_unit` argument and stores
 #' in a new variable (`new_var`).
 #'
 #' @param dataset Input dataset.
@@ -100,7 +100,7 @@ derive_vars_aage <- function(dataset,
 #'
 #' @param age_unit Age unit.
 #'
-#'   The `age_unit` argument is only expected when there is NOT a variable `{age_var}U`
+#'   The `age_unit` argument is only expected when there is NOT a variable `age_var+U`
 #'   in `dataset`. This gives the unit of the `age_var` variable and is used to convert
 #'   AGE to 'years' so that grouping can occur.
 #'
@@ -108,8 +108,8 @@ derive_vars_aage <- function(dataset,
 #'
 #'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 #'
-#' @param new_var New age variable to be created in years. The output values here are
-#'   decimal and NOT integer.
+#' @param new_var New age variable to be created in years. The returned values are
+#'   doubles and NOT integers.
 #''
 #' @details This function is used to convert an age variable into the unit 'years'
 #'   which can then be used to create age groups. The resulting column contains the

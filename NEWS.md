@@ -119,6 +119,8 @@ authors for admiral. (#1673)
 
 - Updates to examples for `derive_var_age_years()` and `derive_vars_duration()` (#1620, #1634)
 
+- Increased the level of documentation for `derive_var_age_years()` to describe the data type of the newly created `new_var` column. (#970)
+
 ## Various
 
 - Functions `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with `NA` values that has now been fixed (#1646)
