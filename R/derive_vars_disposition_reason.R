@@ -1,5 +1,12 @@
 #' Default Format for the Disposition Reason
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*. This function is a default for `derive_vars_disposition_reason()`
+#' for the `format_new_vars` argument. Please use `derive_vars_merged()` and
+#' specify the `filter_add` argument to derive the respective variables.
+#'
 #' Define a function to map the disposition reason, to be used as a parameter in
 #' `derive_vars_disposition_reason()`.
 #'
@@ -16,26 +23,20 @@
 #' @return A `character` vector
 #'
 #' @export
-#' @family utils_fmt
-#' @keywords utils_fmt
+#' @family deprecated
+#' @keywords deprecated
 #' @seealso [derive_vars_disposition_reason()]
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("admiral_dm")
-#' data("admiral_ds")
-#'
-#' # Derive DCSREAS using format_reason_default
-#' admiral_dm %>%
-#'   derive_vars_disposition_reason(
-#'     dataset_ds = admiral_ds,
-#'     new_var = DCSREAS,
-#'     reason_var = DSDECOD,
-#'     format_new_vars = format_reason_default,
-#'     filter_ds = DSCAT == "DISPOSITION EVENT"
-#'   ) %>%
-#'   select(STUDYID, USUBJID, DCSREAS)
 format_reason_default <- function(reason, reason_spe = NULL) {
+  ### DEPRECATION
+  deprecate_warn("0.10.0",
+    "format_reason_default()",
+    details = paste(
+      "This function is a default for `derive_vars_disposition_reason() and is being deprecated`",
+      "Please use `derive_vars_merged()` and",
+      "specify the `filter_add` argument to derive the respective variables."
+    )
+  )
+
   if (is.null(reason_spe)) {
     if_else(reason != "COMPLETED" & !is.na(reason), reason, NA_character_)
   } else {
@@ -44,6 +45,12 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 }
 
 #' Derive a Disposition Reason at a Specific Timepoint
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*. Please use `derive_vars_merged()` and
+#' specify the `filter_add` argument to derive the respective variables.
 #'
 #' Derive a disposition reason from the the relevant records in the disposition domain.
 #'
@@ -130,48 +137,13 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' The details associated with the reason for discontinuation are derived based on
 #' `reason_var_spe` (e.g. `DSTERM`), `reason_var` and `format_new_vars`.
 #'
-#' @family der_adsl
+#' @family deprecated
 #' @seealso [format_reason_default()]
-#' @keywords der_adsl
+#' @keywords deprecated
 #'
 #'
 #' @export
 #'
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("admiral_dm")
-#' data("admiral_ds")
-#'
-#' # Derive DCSREAS using the default format
-#' admiral_dm %>%
-#'   derive_vars_disposition_reason(
-#'     dataset_ds = admiral_ds,
-#'     new_var = DCSREAS,
-#'     reason_var = DSDECOD,
-#'     filter_ds = DSCAT == "DISPOSITION EVENT"
-#'   ) %>%
-#'   select(STUDYID, USUBJID, DCSREAS)
-#'
-#' # Derive DCSREAS and DCSREASP using a study-specific format
-#' format_dcsreas <- function(x, y = NULL) {
-#'   if (is.null(y)) {
-#'     if_else(!x %in% c("COMPLETED", "SCREEN FAILURE") & !is.na(x), x, NA_character_)
-#'   } else {
-#'     if_else(x == "OTHER", y, NA_character_)
-#'   }
-#' }
-#' admiral_dm %>%
-#'   derive_vars_disposition_reason(
-#'     dataset_ds = admiral_ds,
-#'     new_var = DCSREAS,
-#'     reason_var = DSDECOD,
-#'     new_var_spe = DCSREASP,
-#'     reason_var_spe = DSTERM,
-#'     format_new_vars = format_dcsreas,
-#'     filter_ds = DSCAT == "DISPOSITION EVENT"
-#'   ) %>%
-#'   select(STUDYID, USUBJID, DCSREAS, DCSREASP)
 derive_vars_disposition_reason <- function(dataset,
                                            dataset_ds,
                                            new_var,
@@ -181,6 +153,15 @@ derive_vars_disposition_reason <- function(dataset,
                                            format_new_vars = format_reason_default,
                                            filter_ds,
                                            subject_keys = get_admiral_option("subject_keys")) {
+  ### DEPRECATION
+  deprecate_warn("0.10.0",
+    "derive_vars_disposition_reason()",
+    details = paste(
+      "Please use `derive_vars_merged()`",
+      "and specify the `filter_add` argument to derive the respective variables"
+    )
+  )
+
   new_var <- assert_symbol(enexpr(new_var))
   reason_var <- assert_symbol(enexpr(reason_var))
   new_var_spe <- assert_symbol(enexpr(new_var_spe), optional = T)

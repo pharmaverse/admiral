@@ -206,8 +206,8 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #' @param queries_name Name of the queries dataset, a string.
 #'
 #'
-#' @keywords source_specifications
-#' @family source_specifications
+#' @keywords other_advanced
+#' @family other_advanced
 #'
 #' @export
 #'
@@ -330,5 +330,10 @@ assert_valid_queries <- function(queries, queries_name) {
       paste(count_unique$VAR_PREFIX[idx], collapse = ", "),
       "' is not unique."
     ))
+  }
+
+  # check QUERY_SCOPE and QUERY_SCOPE_NUM are one to one if available
+  if ("QUERY_SCOPE" %in% names(queries) & "QUERY_SCOPE_NUM" %in% names(queries)) {
+    assert_one_to_one(queries, exprs(QUERY_SCOPE), exprs(QUERY_SCOPE_NUM))
   }
 }

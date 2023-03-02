@@ -50,7 +50,8 @@ See floor_in and add_one parameter for details.
 
 Default: 'days'
 
-Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
+Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
+'seconds', 'sec'}
 
 \item{out_unit}{Output unit
 
@@ -58,7 +59,8 @@ The duration is derived in the specified unit
 
 Default: 'days'
 
-Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
+Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
+'seconds', 'sec'}
 
 \item{floor_in}{Round down input dates?
 
@@ -154,6 +156,26 @@ derive_vars_duration(data,
   end_date = TRTSDTM,
   in_unit = "minutes",
   out_unit = "minutes",
+  add_one = FALSE
+)
+
+# Derive adverse event start time since last dose in hours
+data <- tribble(
+  ~USUBJID, ~ASTDTM, ~LDOSEDTM,
+  "P01", ymd_hms("2019-08-09T04:30:56"), ymd_hms("2019-08-08T10:05:00"),
+  "P02", ymd_hms("2019-11-11T23:59:59"), ymd_hms("2019-10-11T11:37:00"),
+  "P03", ymd_hms("2019-11-11T00:00:00"), ymd_hms("2019-11-10T23:59:59"),
+  "P04", ymd_hms("2019-11-11T12:34:56"), NA,
+  "P05", NA, ymd_hms("2019-09-28T12:34:56")
+)
+derive_vars_duration(
+  data,
+  new_var = LDRELTM,
+  new_var_unit = LDRELTMU,
+  start_date = LDOSEDTM,
+  end_date = ASTDTM,
+  in_unit = "hours",
+  out_unit = "hours",
   add_one = FALSE
 )
 }
