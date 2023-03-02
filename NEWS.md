@@ -2,7 +2,7 @@
 
 ## New Features
 
-- Using testthat3e (testthat 3rd edition) for unit testing. This is stricter in 
+- Using `{testthat}` 3rd edition for unit testing. This is stricter in 
 that messages must be addressed and deprecated functions throw errors. (#1754) 
 
 - New function `consolidate_metadata()` for consolidating multiple meta datasets
