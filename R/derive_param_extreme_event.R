@@ -321,53 +321,31 @@ derive_param_extreme_event <- function(dataset = NULL,
   source_vars <- colnames(dataset_source)
   adsl_vars <- colnames(dataset_adsl)
 
-  if (!is.null(new_var)) {
-    events <- dataset_source %>%
-      filter_if(filter_source) %>%
-      filter_extreme(
-        by_vars = subject_keys,
-        order = order,
-        mode = mode,
-        check_type = check_type
-      ) %>%
-      mutate(!!new_var := true_value)
-
-    noevents <- anti_join(
-      select(dataset_adsl, intersect(source_vars, adsl_vars)),
-      select(events, !!!subject_keys),
-      by = sapply(subject_keys, as_name)
-    ) %>%
-      mutate(!!new_var := false_value)
-
-    new_obs <- bind_rows(events, noevents) %>%
-      mutate(
-        !!!set_values_to
-      )
-
-    # Create output dataset
-    bind_rows(dataset, new_obs)
-  } else if (is.null(new_var)) {
-    events <- dataset_source %>%
-      filter_if(filter_source) %>%
-      filter_extreme(
-        by_vars = subject_keys,
-        order = order,
-        mode = mode,
-        check_type = check_type
-      )
-
-    noevents <- anti_join(
-      select(dataset_adsl, intersect(source_vars, adsl_vars)),
-      select(events, !!!subject_keys),
-      by = sapply(subject_keys, as_name)
+  events <- dataset_source %>%
+    filter_if(filter_source) %>%
+    filter_extreme(
+      by_vars = subject_keys,
+      order = order,
+      mode = mode,
+      check_type = check_type
     )
 
-    new_obs <- bind_rows(events, noevents) %>%
-      mutate(
-        !!!set_values_to
-      )
+  noevents <- anti_join(
+    select(dataset_adsl, intersect(source_vars, adsl_vars)),
+    select(events, !!!subject_keys),
+    by = sapply(subject_keys, as_name)
+  )
 
-    # Create output dataset
-    bind_rows(dataset, new_obs)
+  if (!is.null(new_var)) {
+    events <- mutate(events, !!new_var := true_value)
+    noevents <- mutate(noevents, !!new_var := false_value)
   }
+
+  new_obs <- bind_rows(events, noevents) %>%
+    mutate(
+      !!!set_values_to
+    )
+
+  # Create output dataset
+  bind_rows(dataset, new_obs)
 }

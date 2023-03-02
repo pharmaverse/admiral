@@ -129,7 +129,7 @@ adrs <- tibble::tribble(
   ) %>%
   select(-ADTC)
 
-## Test 3: derive latest evaluable tumor assessment date parameter ----
+## Test 3: latest evaluable tumor assessment date parameter ----
 test_that("derive_param_extreme_event Test 3: latest evaluable tumor assessment date parameter", {
   actual <- derive_param_extreme_event(
     dataset = adrs,
@@ -170,9 +170,8 @@ test_that("derive_param_extreme_event Test 3: latest evaluable tumor assessment 
   )
 })
 
-## Test 4:
-## derive latest evaluable tumor assessment date parameter without overwriting existing result ----
-test_that("derive_param_extreme_event Test 4: latest evaluable tumor assessment date parameter", {
+## Test 4: latest evaluable tumor assessment date parameter without overwriting existing result ----
+test_that("derive_param_extreme_event Test 4: latest evaluable tumor assessment date parameter without overwriting existing result", { # nolint
   actual <- derive_param_extreme_event(
     dataset = adrs,
     dataset_adsl = adsl,

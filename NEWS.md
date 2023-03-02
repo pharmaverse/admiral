@@ -12,6 +12,9 @@ transforming the result from a source to a target range. (#1692)
 Analysis Dataset (#849). This script includes formatting suitable for
 Non-Compartmental Analysis (ADNCA) (#851)
 
+- Updates to  `derive_param_extreme_event()` to make new_var as optional 
+parameter. (#1630)
+
 ## Updates of Existing Functions
 
 - Arguments `analysis_var`, `keep_vars` were added to `derive_locf_records()`,   
