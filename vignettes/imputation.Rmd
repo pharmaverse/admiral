@@ -88,7 +88,7 @@ impute_dtc_dtm(
 
 For dates, there is the additional option to use keyword `"mid"` to impute
 missing day to `15` or missing day and month to `06-30`, but note the
-different behaviour below depending on `preserve` argument for case when month
+different behavior below depending on `preserve` argument for case when month
 only is missing:
 
 ```{r}

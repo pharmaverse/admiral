@@ -24,10 +24,10 @@ is collected in a single SDTM dataset (`QS`), usually it does not make sense to
 create a single `ADQS` dataset for all questionnaire analyses. For example, a
 univariate analysis of scores by visit requires different variables than a
 time-to-event analysis. Therefore this vignette does not provide a programming
-workflow for a complete dataset but provides examples for deriving common types
+workflow for a complete dataset, but provides examples for deriving common types
 of questionnaire parameters.
 
-At the moment, admiral does not provide functions or metadata for specific
+At the moment, `{admiral}` does not provide functions or metadata for specific
 questionnaires nor functionality for handling the vast amount of questionnaires
 and related parameters, e.g. a metadata structure for storing parameter
 definitions and functions for reading such metadata. We plan to provide it in
@@ -119,7 +119,7 @@ time-windows, see [Visit and Period Variables](visits_periods.html#visits). And
 for flagging values to be used for analysis, see `derive_var_extreme_flag()`.
 
 Please note that in the example data, the numeric values of the answers are
-mapped in SDMT (`QSSTRESN`) such that they can be used for deriving scores.
+mapped in SDTM (`QSSTRESN`) such that they can be used for deriving scores.
 Depending on the question, `QSORRES == "YES"` is mapped to `QSSTRESN = 0` or
 `QSSTRESN = 1`. If this is not the case, it is recommended that `QSSTRESN` is
 kept in the ADaM dataset for traceability, and the transformed value is stored
@@ -137,13 +137,13 @@ is also possible that an ADaM contains more than one questionnaire or all
 questionnaires.
 ```{r eval=TRUE}
 adgad7 <- adqs %>%
-  # select records to keep in the GAD-7 ADaM
+  # Select records to keep in the GAD-7 ADaM
   filter(PARCAT1 == "GAD-7 V2") %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT),
     analysis_var = AVAL,
     summary_fun = function(x) sum(x, na.rm = TRUE),
-    # select records contributing to total score
+    # Select records contributing to total score
     filter = str_detect(PARAMCD, "GAD020[1-7]"),
     set_values_to = exprs(
       PARAMCD = "GAD02TS",
@@ -166,7 +166,7 @@ This parameter can be derived by `compute_scale()` and
 `derive_summary_records()`:
 ```{r eval=TRUE}
 adgdssf <- adqs %>%
-  # select records to keep in the GDS-SF ADaM
+  # Select records to keep in the GDS-SF ADaM
   filter(PARCAT1 == "GDS SHORT FORM") %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT),
@@ -180,7 +180,7 @@ adgdssf <- adqs %>%
       ) %>%
         ceiling()
     },
-    # select records contributing to total score
+    # Select records contributing to total score
     filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
     set_values_to = exprs(
       PARAMCD = "GDS02TS",
@@ -451,7 +451,7 @@ Deterioration/Improvement](#timetodeterioration)).
 
 This class of parameters can be used when the worst answer of a set of yes/no
 answers should be selected. For example, if yes/no answers for "No sleep",
-"Waking up more than three times", "More than 30 mins to fall asleep" are
+"Waking up more than three times", "More than 30 minutes to fall asleep" are
 collected, a parameter for the worst sleeping problems could be derived. In the
 example, "no sleeping problems" is assumed if all questions were answered with
 "no".
@@ -558,7 +558,7 @@ If missed visits need to be taken into account, the expected records can be
 added to the input dataset by calling `derive_expected_records()`:
 
 ```{r}
-# create dataset with expected visits and parameters (GDS0201 - GDS0215)
+# Create dataset with expected visits and parameters (GDS0201 - GDS0215)
 parm_visit_ref <- crossing(
   tribble(
     ~AVISIT,    ~AVISITN,
