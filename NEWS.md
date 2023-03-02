@@ -48,10 +48,6 @@ observations or the first or last observation in a by group. (#1724)
 
 -   The units "min" and "sec" are added as valid values of `out_unit` in `compute_duration()` and `derive_vars_duration()` (#1647).
 
-- `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
-`HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
-based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
-
 - The function `derive_vars_query()` now includes a consistency check for
 `QUERY_SCOPE` and `QUERY_SCOPE_NUM` values. (#652)
 
@@ -103,6 +99,10 @@ added for subjects who have both an event or censoring and an observation in
   - `date_imputation`, `time_imputation` and `preserve` parameters from `date_source()` function
   - `filter` parameter from `derive_var_extreme_flag()`
 
+- `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
+`HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
+
 ## Documentation
 
 - New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
@@ -113,6 +113,8 @@ added for subjects who have both an event or censoring and an observation in
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
 
+- New vignette "Creating Questionnaire ADaMs" (#1715)
+
 - The expected value for the `derivation` argument of `restrict_derivation()`,
 `slice_derivation()`, and `call_derivation()` is described now. (#1698)
 
@@ -122,6 +124,10 @@ authors for admiral. (#1673)
 - Added an imputation example for `create_single_source_dataset()` in function documentation (#1408)(#1760)
 
 - Updates to examples for `derive_var_age_years()` and `derive_vars_duration()` (#1620, #1634)
+
+## Various
+
+- Functions `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with `NA` values that has now been fixed (#1646)
 
 # admiral 0.9.1
 
@@ -696,7 +702,7 @@ to specify the unit of the input age (#569)
 
 - `derive_vars_dtm()` no longer shifts the time of the input `--DTC` variable (#436)
 
-- `derive_vars_dtm()` Change the min_dates with max_dates in the lapply statement when computing max_dates (#687)
+- `derive_vars_dtm()` Change the min_dates with max_dates in the `lapply` statement when computing max_dates (#687)
 
 ## Documentation
 

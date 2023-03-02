@@ -68,7 +68,7 @@ to derive extreme flags and adjust the \code{mode} argument.
 \details{
 For each group with respect to the variables specified by the \code{by_vars} parameter,
 the maximal / minimal observation of \code{analysis_var}
-is labelled in the \code{new_var} column as \code{"Y"},
+is labeled in the \code{new_var} column as \code{"Y"},
 if its \code{param_var} is in \code{worst_high} / \code{worst_low}.
 Otherwise, it is assigned \code{NA}.
 If there is more than one such maximal / minimal observation,
