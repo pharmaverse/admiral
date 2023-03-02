@@ -113,7 +113,7 @@ derive_vars_aage <- function(dataset,
 #''
 #' @details This function is used to convert an age variable into the unit 'years'
 #'   which can then be used to create age groups. The resulting column contains the
-#'   equivalent years in decimal. Note, underlying computations assume an equal number
+#'   equivalent years as a double. Note, underlying computations assume an equal number
 #'   of days in each year (365.25).
 #'
 #' @author Michael Thorpe

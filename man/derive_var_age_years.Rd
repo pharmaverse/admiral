@@ -17,7 +17,7 @@ A numeric object is expected.}
 
 \item{age_unit}{Age unit.
 
-The \code{age_unit} argument is only expected when there is NOT a variable \verb{\{age_var\}U}
+The \code{age_unit} argument is only expected when there is NOT a variable \code{age_var+U}
 in \code{dataset}. This gives the unit of the \code{age_var} variable and is used to convert
 AGE to 'years' so that grouping can occur.
 
@@ -25,8 +25,8 @@ Default: NULL
 
 Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
 
-\item{new_var}{New age variable to be created in years. The output values here are
-decimal and NOT integer.
+\item{new_var}{New age variable to be created in years. The returned values are
+doubles and NOT integers.
 '}
 }
 \value{
@@ -34,13 +34,13 @@ The input dataset (\code{dataset}) with \code{new_var} variable added in years.
 }
 \description{
 Converts the given age variable (\code{age_var}) to the unit 'years' from the current
-units given in the \verb{\{age_var\}U} variable or \code{age_unit} argument and stores
+units given in the \code{age_var+U} variable or \code{age_unit} argument and stores
 in a new variable (\code{new_var}).
 }
 \details{
 This function is used to convert an age variable into the unit 'years'
 which can then be used to create age groups. The resulting column contains the
-equivalent years in decimal. Note, underlying computations assume an equal number
+equivalent years as a double. Note, underlying computations assume an equal number
 of days in each year (365.25).
 }
 \examples{
