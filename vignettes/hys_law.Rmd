@@ -20,7 +20,7 @@ library(admiraldev)
 
 During the drug development process, clinical trials are often required to assess for the potential that the experimental drug can cause severe liver injury, known as a drug induced liver injury [(DILI)](https://www.fda.gov/media/116737/download). There are multiple criteria that need to be evaluated to determine and classify a DILI "Event". Hy's Law, a common rule of thumb for a DILI Event , is usually comprised of three parts:
 
-- Elevated alanine aminotransaminase (ALT) or aspartate aminotransaminase (AST) by 3-times or greater of the upper limit of normal.
+- Elevated alanine aminotransferase (ALT) or aspartate aminotransferase (AST) by 3-times or greater of the upper limit of normal.
 - Elevated serum total bilirubin (BILI) by 2-times or greater within a window of time, ~14 days after the elevated ALT/AST event.
 - No other reason to explain these increased lab values like preexisting liver disease.
 
@@ -45,7 +45,7 @@ library(dplyr, warn.conflicts = FALSE)
 
 We assume that an `ADLB` dataset is available [^1].
 
-[^1]: In the walkthrough below we will use the ADLB dataset created from the call `use_ad_template("adlb")`. Due to the size of the dataset, we only included the following USUBJID's: 
+[^1]: In the walk through below we will use the ADLB dataset created from the call `use_ad_template("adlb")`. Due to the size of the dataset, we only included the following USUBJIDs: 
 
     * `01-701-1015`, `01-701-1023`, `01-701-1028`, `01-701-1033`, `01-701-1034`, `01-701-1047`, `01-701-1097`, `01-705-1186`, `01-705-1292`, `01-705-1310`, `01-708-1286`.
 
@@ -183,16 +183,17 @@ dataset_vignette(adlbhy)
 
 Here we demonstrated what is the base-case that may be asked of as a trial programmer. The reality is that Hy's Law and assessing potential DILI events can get rather complex quite quickly. Differences in assessment across organizations and specific trials might require modifications, which may include:
 
- - additional CRITy and CRITyFL columns for different cutoffs like 5xULN, 10xULN, 20xULN
+ - additional `CRITy` and `CRITyFL` columns for different cutoffs like 5xULN, 10xULN, 20xULN
  - checking for elevated values of additional labs like alkaline phosphatase (ALP) 
  - appearance of certain adverse events associated with some of these elevated lab-values
  - different criteria cutoffs that depend on baseline values or characteristics
  - other parameters such as worsening of condition
 
-We hope by demonstrating the flexibility of `admiral` functions and using a general workflow to create the necessary parameters for an `adlbhy`, that creating this final dataset becomes simplified and easily scalable. Ideally, this is ready for your organization's standard macros or previous code for TLFs and outputs as well. This is our first attempt at breaking down and summarizing this topic. We welcome feedback and ideas to improve this guide!
+We hope by demonstrating the flexibility of `admiral` functions and using a general workflow to create the necessary parameters for an ADLBHY, that creating this final dataset becomes simplified and easily scalable. Ideally, this is ready for your organization's standard macros or previous code for TLFs and outputs as well. This is our first attempt at breaking down and summarizing this topic. We welcome feedback and ideas to improve this guide!
 
 # Example Script 
 
 ADaM   | Sample Code
 -------| --------------
 ADLBHY | [ad_adlbhy.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adlbhy.R){target="_blank"} 
+

@@ -211,8 +211,11 @@ Other deprecated:
 \code{\link{derive_param_first_event}()},
 \code{\link{derive_var_agegr_fda}()},
 \code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_merged_dtm}()},
 \code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()},
 \code{\link{vars}()}
 }
 \concept{deprecated}
