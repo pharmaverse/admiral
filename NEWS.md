@@ -2,7 +2,7 @@
 
 ## New Features
 
-- Using testthat3e (testthat 3rd edition) for unit testing. This is stricter in 
+- Using `{testthat}` 3rd edition for unit testing. This is stricter in 
 that messages must be addressed and deprecated functions throw errors. (#1754) 
 
 - New function `consolidate_metadata()` for consolidating multiple meta datasets
@@ -45,6 +45,8 @@ that need carrying the last observation forward other than `analysis_var`
 - The function `derive_var_confirmation_flag()` and `filter_confirmation()`
 gained the `tmp_obs_nr_var` argument. It helps flagging or selecting consecutive
 observations or the first or last observation in a by group. (#1724)
+
+-   The units "min" and "sec" are added as valid values of `out_unit` in `compute_duration()` and `derive_vars_duration()` (#1647).
 
 - `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
@@ -119,6 +121,7 @@ authors for admiral. (#1673)
 
 - Added an imputation example for `create_single_source_dataset()` in function documentation (#1408)(#1760)
 
+- Updates to examples for `derive_var_age_years()` and `derive_vars_duration()` (#1620, #1634)
 
 # admiral 0.9.1
 
