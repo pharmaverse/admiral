@@ -62,8 +62,8 @@ The input dataset with the new flag variable added.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-This function is \emph{deprecated}. Please use \code{restrict_derivation()} / \code{derive_var_extreme_flag()}
-to derive extreme flags and adjust the \code{mode} argument.
+This function is \emph{deprecated}. Please use \code{slice_derivation()} / \code{derive_var_extreme_flag()}
+to derive extreme flags and adjust the \code{order} argument.
 }
 \details{
 For each group with respect to the variables specified by the \code{by_vars} parameter,
@@ -85,9 +85,11 @@ Other deprecated:
 \code{\link{derive_param_first_event}()},
 \code{\link{derive_var_agegr_fda}()},
 \code{\link{derive_var_disposition_status}()},
+\code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_merged_dtm}()},
 \code{\link{derive_vars_merged_dt}()},
 \code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()},
 \code{\link{vars}()}
 }
 \concept{deprecated}

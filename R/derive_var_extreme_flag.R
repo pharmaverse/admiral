@@ -234,8 +234,8 @@ derive_var_extreme_flag <- function(dataset,
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' This function is *deprecated*. Please use `restrict_derivation()` / `derive_var_extreme_flag()`
-#' to derive extreme flags and adjust the `mode` argument.
+#' This function is *deprecated*. Please use `slice_derivation()` / `derive_var_extreme_flag()`
+#' to derive extreme flags and adjust the `order` argument.
 #'
 #' @inheritParams derive_var_extreme_flag
 #' @param dataset Input dataset.
@@ -290,8 +290,8 @@ derive_var_worst_flag <- function(dataset,
   deprecate_warn("0.10.0",
     "derive_var_worst_flag()",
     details = paste(
-      "Please use `restrict_derivation()` / `derive_var_extreme_flag()`",
-      "to derive extreme flags by changing the `mode` argument"
+      "Please use `slice_derivation()` / `derive_var_extreme_flag()`",
+      "to derive extreme flags by changing the `order` argument"
     )
   )
 
