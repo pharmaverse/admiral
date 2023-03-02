@@ -12,8 +12,9 @@ transforming the result from a source to a target range. (#1692)
 Analysis Dataset (#849). This script includes formatting suitable for
 Non-Compartmental Analysis (ADNCA) (#851)
 
-- Updates to  `derive_param_extreme_event()` to make new_var as optional 
-parameter. (#1630)
+- New function `derive_expected_records()` for adding expected records (#1729)
+
+- New function derive_extreme_event() for adding the worst or best observation for each by group as new records (#1755)
 
 ## Updates of Existing Functions
 
@@ -40,6 +41,8 @@ that need carrying the last observation forward other than `analysis_var`
 - The function `derive_var_confirmation_flag()` and `filter_confirmation()`
 gained the `tmp_obs_nr_var` argument. It helps flagging or selecting consecutive
 observations or the first or last observation in a by group. (#1724)
+
+- Argument `new_var` in `derive_param_extreme_event()` is made optional. (#1630)
 
 ## Breaking Changes
 
