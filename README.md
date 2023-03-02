@@ -124,7 +124,7 @@ All `{admiral}` functions have a clear purpose.
 
 * We try to combine similar tasks and algorithms into one function where applicable to reduce the amount of repetitive functions with similar algorithms and to group together similar functionality to increase usability (e.g. one study day calculation rather than a function per variable).
 
-* We strive to design functions that are not too general and trying to fulfil multiple, complex purposes.
+* We strive to design functions that are not too general and trying to fulfill multiple, complex purposes.
 
 * Functions should not allow expressions as arguments that are used as code snippets in function calls.
 
