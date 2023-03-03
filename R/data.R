@@ -7,6 +7,19 @@
 #' Derived from the `ex` dataset using `{admiral}` and `{dplyr}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/example_scripts/derive_single_dose.R})
 "ex_single"
 
+#' Example `QS` Dataset
+#'
+#' An example `QS` dataset based on the examples from the CDISC ADaM Supplements
+#' [Generalized Anxiety Disorder 7-Item Version 2
+#' (GAD-7)](https://www.cdisc.org/standards/foundational/qrs/generalized-anxiety-disorder-7-item-version-2-0)
+#' and [Geriatric Depression Scale Short Form
+#' (GDS-SF)](https://www.cdisc.org/standards/foundational/qrs/geriatric-depression-scale-short-form-0).
+#' @keywords datasets
+#' @family datasets
+#' @source
+#' Created by (\url{https://github.com/pharmaverse/admiral/blob/main/inst/example_scripts/example_qs.R})
+"example_qs"
+
 #' Queries Dataset
 #' @keywords datasets
 #' @family datasets
@@ -76,7 +89,7 @@
 #' are from the source document on NCI-CTC website defining the grading criteria.
 #' [**Common Terminology Criteria for Adverse Events (CTCAE)v4.0**](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm#ctc_40)
 #' From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
-#' tracability only.
+#' traceability only.
 #'
 #'
 #' @keywords metadata

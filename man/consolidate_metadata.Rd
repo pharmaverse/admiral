@@ -46,8 +46,8 @@ variables (\code{key_vars}) are not a unique key in all of the input datasets
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 }
 \value{
-A dataset which contains one row for each by group occuring in any of
-the input datasets.
+A dataset which contains one row for each by group occurring in any
+of the input datasets.
 }
 \description{
 The purpose of the function is to consolidate multiple meta datasets into a

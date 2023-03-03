@@ -124,7 +124,7 @@ All `{admiral}` functions have a clear purpose.
 
 * We try to combine similar tasks and algorithms into one function where applicable to reduce the amount of repetitive functions with similar algorithms and to group together similar functionality to increase usability (e.g. one study day calculation rather than a function per variable).
 
-* We strive to design functions that are not too general and trying to fulfil multiple, complex purposes.
+* We strive to design functions that are not too general and trying to fulfill multiple, complex purposes.
 
 * Functions should not allow expressions as arguments that are used as code snippets in function calls.
 
@@ -159,12 +159,12 @@ that all our developers and contributors must follow, so that all our code has a
 
 ## References and Documentation
 
-* Please go to [Get Started](https://pharmaverse.github.io/admiral/articles/admiral.html) section to start using `{admiral}`
+* Please go to [Get Started](https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html) section to start using `{admiral}`
 * Please see the [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) for videos related to `{admiral}`.
 * Please see the [Programming Strategy](https://pharmaverse.github.io/admiraldev/main/articles/programming_strategy.html) to understand how functions are created
-* Please see the [FAQ](https://pharmaverse.github.io/admiral/articles/faq.html) for the most frequent questions
+* Please see the [FAQ](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html) for the most frequent questions
 * Please see the [Contribution Model](https://pharmaverse.github.io/admiral/articles/contribution_model.html) for how to get involved with making contributions
-* Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
+* Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
 
 ## Conference Presentations
 
