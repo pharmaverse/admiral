@@ -183,7 +183,6 @@ anticoagulation
 atoxgr
 basetypes
 bds
-behaviour
 breaks’
 cdisc
 censorings
@@ -198,6 +197,7 @@ datetime
 datetimes
 der
 desc
+deteriorations
 dplyr
 ds
 dtc
@@ -209,16 +209,13 @@ findability
 findable
 fmt
 framingham
-fulfil
 funder
+GDS
 groupwise
 hms
 https
-labelled
-lapply
 lockfile
 magrittr
-measureable
 metacore
 metatools
 mmHg
@@ -227,7 +224,6 @@ modularized
 msec
 nolint
 occds
-occuring
 onwards
 parttime
 pharmaverse
@@ -254,7 +250,6 @@ tidyverse
 timeframe
 timepart
 timepoint
-tracability
 tte
 ungrouped
 usethis
