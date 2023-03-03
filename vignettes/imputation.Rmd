@@ -212,7 +212,10 @@ argument. For other imputation rules imputing the year is not possible.
 impute_dtc_dtm(
   c("2019-02", NA),
   highest_imputation = "Y",
-  min_dates = list(ymd("2019-01-14"), ymd("2019-02-25"))
+  min_dates = list(
+    ymd("2019-01-14", NA),
+    ymd("2019-02-25", "2020-01-01")
+  )
 )
 
 # Impute year to last
@@ -221,7 +224,10 @@ impute_dtc_dtm(
   highest_imputation = "Y",
   date_imputation = "last",
   time_imputation = "last",
-  max_dates = list(ymd("2019-01-14"), ymd("2019-02-25"))
+  max_dates = list(
+    ymd("2019-01-14", NA),
+    ymd("2019-02-25", "2020-01-01")
+  )
 )
 ```
 

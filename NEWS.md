@@ -119,6 +119,10 @@ authors for admiral. (#1673)
 
 - Updates to examples for `derive_var_age_years()` and `derive_vars_duration()` (#1620, #1634)
 
+## Various
+
+- Functions `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with `NA` values that has now been fixed (#1646)
+
 # admiral 0.9.1
 
 - Implement changes to `if_else()` from the release of `dplyr` version 1.1.0, which
