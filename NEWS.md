@@ -111,10 +111,6 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 
 - New vignette "Hy's Law Implementation" (#1637)
 
-- `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
-`HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
-based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
-
 - New vignette "Creating Questionnaire ADaMs" (#1715)
 
 - The expected value for the `derivation` argument of `restrict_derivation()`,
