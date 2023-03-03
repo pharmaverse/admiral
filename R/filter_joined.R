@@ -720,4 +720,3 @@ filter_confirmation <- function(dataset,
     details = "Please use `filter_joined()` instead."
   )
 }
-
