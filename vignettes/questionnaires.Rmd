@@ -358,12 +358,12 @@ dataset_vignette(
 The derivation of confirmed/definitive deterioration/improvement parameters is
 very similar to the unconfirmed deterioration parameters except that the event
 is not based on `CHGCATy`, but on a confirmation flag variable. This confirmation
-flag can be derived by `derive_var_confirmation_flag()`. For example, flagging
+flag can be derived by `derive_var_joined_exist_flag()`. For example, flagging
 deteriorations, which are confirmed by a second assessment at least seven days
 later:
 ```{r}
 adgdssf <- adgdssf %>%
-  derive_var_confirmation_flag(
+  derive_var_joined_exist_flag(
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(ADT),
     new_var = CDETFL,
@@ -388,7 +388,7 @@ argument is helpful:
 ```{r}
 # Flagging deterioration at two consecutive assessments
 adgdssf <- adgdssf %>%
-  derive_var_confirmation_flag(
+  derive_var_joined_exist_flag(
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(ADT),
     new_var = CONDETFL,
@@ -402,7 +402,7 @@ adgdssf <- adgdssf %>%
   # Flagging deterioration confirmed by
   # - a second deterioration at least 7 days later or
   # - deterioration at the last assessment and death due to progression
-  derive_var_confirmation_flag(
+  derive_var_joined_exist_flag(
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(ADT),
     new_var = CDTDTHFL,
@@ -427,7 +427,7 @@ parameter summary functions like `all()` can be used in the filter condition:
 
 ```{r}
 adgdssf <- adgdssf %>%
-  derive_var_confirmation_flag(
+  derive_var_joined_exist_flag(
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(ADT),
     new_var = DEFDETFL,
