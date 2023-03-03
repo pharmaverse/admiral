@@ -65,7 +65,7 @@ library(tibble)
 data("admiral_adsl")
 data("admiral_ex")
 
-adsl <- convert_blanks_to_na(admiral_adsl)
+adsl <- admiral_adsl
 ex <- convert_blanks_to_na(admiral_ex)
 ```
 ```{r echo=FALSE}
