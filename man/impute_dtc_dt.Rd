@@ -168,8 +168,8 @@ impute_dtc_dt(
 impute_dtc_dt(
   c("2020-12", NA_character_),
   min_dates = list(
-    ymd("2020-12-06"),
-    ymd("2020-11-11")
+    ymd("2020-12-06", "2020-01-01"),
+    ymd("2020-11-11", NA)
   ),
   highest_imputation = "Y"
 )
