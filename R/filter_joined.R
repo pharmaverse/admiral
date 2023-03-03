@@ -1,4 +1,4 @@
-#' Filter Observations taking other Observations into account
+#' Filter Observations Taking Other Observations into Account
 #'
 #' @description
 #'

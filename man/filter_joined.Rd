@@ -2,7 +2,7 @@
 % Please edit documentation in R/filter_joined.R
 \name{filter_joined}
 \alias{filter_joined}
-\title{Filter Observations taking other Observations into account}
+\title{Filter Observations Taking Other Observations into Account}
 \usage{
 filter_joined(
   dataset,
