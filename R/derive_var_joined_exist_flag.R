@@ -337,7 +337,7 @@
 #'   join_type = "all",
 #'   order = exprs(AVISITN),
 #'   filter = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
-#'     (tmp_obs_nr_filter_joined + 1 == tmp_obs_nr_filter_joined.join | tmp_obs_nr_filter_joined == max(tmp_obs_nr_filter_joined.join))
+#'     (tmp_obs_nr_filter_joined + 1 == tmp_obs_nr_filter_joined.join | tmp_obs_nr_filter_joined == max(tmp_obs_nr_filter_joined.join)) # nolint
 #' )
 #'
 derive_var_joined_exist_flag <- function(dataset,
