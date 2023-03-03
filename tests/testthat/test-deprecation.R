@@ -180,3 +180,70 @@ test_that("deprecation Test 7: A warning is issued if Derive worst flag is calle
     class = "lifecycle_warning_deprecated"
   )
 })
+
+## Test 8: A warning is issued if derive confirmation flag is called ----
+test_that("deprecation Test 8: A warning is issued if derive confirmation flag is called", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PR",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
+  expect_error(
+    derive_var_confirmation_flag(
+      data,
+      new_var = CONFFL,
+      by_vars = exprs(USUBJID),
+      join_vars = exprs(AVALC),
+      join_type = "after",
+      order = exprs(AVISITN),
+      filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR")
+    ),
+    class = "lifecycle_error_deprecated"
+  )
+})
+
+
+## Test 9: A warning is issued if filter_joined is called ----
+test_that("deprecation Test 9: A warning is issued if filter_confirmation is called", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PR",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
+  expect_error(
+    filter_confirmation(
+      data,
+      by_vars = exprs(USUBJID),
+      join_vars = exprs(AVISITN, AVALC),
+      join_type = "after",
+      order = exprs(AVISITN),
+      filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR") &
+        AVISITN < AVISITN.join
+    ),
+    class = "lifecycle_error_deprecated"
+  )
+})

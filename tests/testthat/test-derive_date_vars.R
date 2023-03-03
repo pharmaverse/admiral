@@ -828,7 +828,7 @@ test_that("derive_vars_dt Test 40: NA imputation for highest_imputation = Y & mi
   expect_warning(
     (data.frame(
       AESTDTC = c(NA_character_, NA_character_),
-      TRTSDT = c(ymd_hms("2022-01-01"), NA)
+      TRTSDT = c(ymd("2022-01-01"), NA)
     ) %>%
       mutate(AESTDTC = as.character(AESTDTC)) %>%
       derive_vars_dt(

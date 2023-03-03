@@ -83,7 +83,7 @@ admiral_ex \%>\%
 \seealso{
 Utilities for Filtering Observations: 
 \code{\link{count_vals}()},
-\code{\link{filter_confirmation}()},
+\code{\link{filter_joined}()},
 \code{\link{filter_relative}()},
 \code{\link{max_cond}()},
 \code{\link{min_cond}()}

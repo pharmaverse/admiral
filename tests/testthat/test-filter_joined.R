@@ -16,11 +16,11 @@ data <- tibble::tribble(
   "4",      5,        "PR"
 )
 
-# filter_confirmation ----
+# filter_joined ----
 ## Test 1: filter without first_cond ----
-test_that("filter_confirmation Test 1: filter without first_cond", {
+test_that("filter_joined Test 1: filter without first_cond", {
   actual <-
-    filter_confirmation(
+    filter_joined(
       data,
       by_vars = exprs(USUBJID),
       join_vars = exprs(AVISITN, AVALC),
@@ -44,9 +44,9 @@ test_that("filter_confirmation Test 1: filter without first_cond", {
 })
 
 ## Test 2: filter with first_cond ----
-test_that("filter_confirmation Test 2: filter with first_cond", {
+test_that("filter_joined Test 2: filter with first_cond", {
   actual <-
-    filter_confirmation(
+    filter_joined(
       data,
       by_vars = exprs(USUBJID),
       join_vars = exprs(AVALC),
@@ -70,9 +70,9 @@ test_that("filter_confirmation Test 2: filter with first_cond", {
 })
 
 ## Test 3: filter with first_cond and summary function ----
-test_that("filter_confirmation Test 3: filter with first_cond and summary function", {
+test_that("filter_joined Test 3: filter with first_cond and summary function", {
   actual <-
-    filter_confirmation(
+    filter_joined(
       data,
       by_vars = exprs(USUBJID),
       join_vars = exprs(AVALC),
@@ -96,7 +96,7 @@ test_that("filter_confirmation Test 3: filter with first_cond and summary functi
 })
 
 ## Test 4: join_type = "all" ----
-test_that("filter_confirmation Test 4: join_type = 'all'", {
+test_that("filter_joined Test 4: join_type = 'all'", {
   adae <- tibble::tribble(
     ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
     "1",        10, "N",          1,
@@ -111,7 +111,7 @@ test_that("filter_confirmation Test 4: join_type = 'all'", {
     "4",        21, "N",         41
   )
 
-  actual <- filter_confirmation(
+  actual <- filter_joined(
     adae,
     by_vars = exprs(USUBJID),
     join_vars = exprs(ACOVFL, ADY),
