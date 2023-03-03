@@ -121,7 +121,7 @@ reference:
 - title: Objects exported from other packages
   desc: |
     To maximize the user-friendliness of `{admiral}`, functions from other packages are provided
-    without changes made them, follow the links below to see their documentation.
+    without changes made to them, follow the links below to see their documentation.
   contents:
   - has_keyword('reexport')
 
