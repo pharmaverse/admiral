@@ -61,7 +61,7 @@ library(lubridate)
 data("admiral_ae")
 data("admiral_adsl")
 
-ae <- admiral_ae
+ae <- convert_blanks_to_na(admiral_ae)
 adsl <- admiral_adsl
 ```
 ```{r echo = FALSE}
