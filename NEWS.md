@@ -75,13 +75,10 @@ added for subjects who have both an event or censoring and an observation in
 
 - Function `derive_var_disposition_status()` has been deprecated, please use `derive_var_merged_cat()` instead (#1681).
 
-<<<<<<< HEAD
-=======
 - Function `derive_var_worst_flag()` has been deprecated, in favor of `slice_derivation()`/`derive_var_extreme_flag()` (#1682)
 
 - Function `derive_vars_disposition_reason()` has been deprecated, in favor of `derive_vars_merged()`(#1683)
   
->>>>>>> devel
 - The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1712)
 
   - `derive_derived_param()` 
@@ -107,12 +104,12 @@ added for subjects who have both an event or censoring and an observation in
   - `date_imputation`, `time_imputation` and `preserve` parameters from `date_source()` function
   - `filter` parameter from `derive_var_extreme_flag()`
 
-<<<<<<< HEAD
-=======
 - `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
 based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
->>>>>>> devel
+
+- Renamed `derive_var_confirmation_flag()` and `filter_confirmation()` to 
+`derive_var_joined_exist_flag()` and `filter_joined()` respectively (#1738). 
 
 ## Documentation
 
@@ -130,16 +127,11 @@ authors for admiral. (#1673)
 
 - Added an imputation example for `create_single_source_dataset()` in function documentation (#1408)(#1760)
 
-<<<<<<< HEAD
-- Renamed `derive_var_confirmation_flag()` and `filter_confirmation()` to 
-`derive_var_joined_exist_flag()` and `filter_joined()` respectively (#1738). 
-=======
 - Updates to examples for `derive_var_age_years()` and `derive_vars_duration()` (#1620, #1634)
 
 ## Various
 
 - Functions `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with `NA` values that has now been fixed (#1646)
->>>>>>> devel
 
 # admiral 0.9.1
 
