@@ -63,7 +63,8 @@
 #'   are merged by the specified by variables. The by variables must be a unique
 #'   key of the selected observations. Variables from the additional dataset can
 #'   be renamed by naming the element, i.e., `by_vars =
-#'   exprs(<name in input dataset> = <name in additional dataset>)`.
+#'   exprs(<name in input dataset> = <name in additional dataset>)`, similar to
+#'   the dplyr joins.
 #'
 #'   *Permitted Values*: list of variables created by `exprs()`
 #'
@@ -905,6 +906,7 @@ derive_vars_merged_lookup <- function(dataset,
                                       check_type = "warning",
                                       duplicate_msg = NULL,
                                       print_not_mapped = TRUE) {
+  by_vars_left <- replace_values_by_names(by_vars)
   assert_logical_scalar(print_not_mapped)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
 
@@ -924,23 +926,23 @@ derive_vars_merged_lookup <- function(dataset,
   if (print_not_mapped) {
     temp_not_mapped <- res %>%
       filter(is.na(temp_match_flag)) %>%
-      distinct(!!!by_vars)
+      distinct(!!!by_vars_left)
 
     if (nrow(temp_not_mapped) > 0) {
       admiral_environment$nmap <- structure(
         temp_not_mapped,
         class = union("nmap", class(temp_not_mapped)),
-        by_vars = vars2chr(by_vars)
+        by_vars = vars2chr(by_vars_left)
       )
 
       message(
-        "List of ", enumerate(vars2chr(by_vars)), " not mapped: ", "\n",
+        "List of ", enumerate(vars2chr(by_vars_left)), " not mapped: ", "\n",
         paste0(capture.output(temp_not_mapped), collapse = "\n"),
         "\nRun `get_not_mapped()` to access the full list"
       )
     } else if (nrow(temp_not_mapped) == 0) {
       message(
-        "All ", enumerate(vars2chr(by_vars)), " are mapped."
+        "All ", enumerate(vars2chr(by_vars_left)), " are mapped."
       )
     }
   }

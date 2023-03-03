@@ -33,7 +33,8 @@ argument are expected.}
 The input dataset and the selected observations from the additional dataset
 are merged by the specified by variables. The by variables must be a unique
 key of the selected observations. Variables from the additional dataset can
-be renamed by naming the element, i.e., \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}.
+be renamed by naming the element, i.e., \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to
+the dplyr joins.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}}
 
