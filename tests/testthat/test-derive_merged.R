@@ -135,7 +135,7 @@ test_that("derive_vars_merged Test 5: by_vars with rename", {
     dataset_add = adsl1,
     by_vars = exprs(STUDYID, USUBJID = ID),
     filter_add = SEX == "F"
-    )
+  )
 
   adsl_1 <- adsl1 %>% filter(SEX == "F")
   expected <- left_join(advs, adsl_1, by = c("STUDYID", "USUBJID" = "ID"))
@@ -149,28 +149,30 @@ test_that("derive_vars_merged Test 5: by_vars with rename", {
 
 ## Test 6: warning if not unique w.r.t the by variables and the order ----
 test_that("derive_vars_merged Test 6: warning if not unique w.r.t the by variables and the order", {
-  expect_warning(actual <- derive_vars_merged(advs,
-                                            dataset_add = adsl2,
-                                            by_vars = exprs(STUDYID, USUBJID = ID),
-                                            order = exprs(ID),
-                                            mode = "last",
-                                            check_type = "warning"
-  ),
-  regexp = ""
+  expect_warning(
+    actual <- derive_vars_merged(advs,
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = exprs(ID),
+      mode = "last",
+      check_type = "warning"
+    ),
+    regexp = ""
   )
 })
 
 ## Test 7: error if not unique w.r.t the by variables and the order ----
 test_that("derive_vars_merged Test 7: error if not unique w.r.t the by variables and the order", {
-  expect_error(actual <- derive_vars_merged(advs,
-                                              dataset_add = adsl2,
-                                              by_vars = exprs(STUDYID, USUBJID = ID),
-                                              order = exprs(ID),
-                                              mode = "last",
-                                              check_type = "error",
-                                              duplicate_msg = "Duplicate records present!"
-  ),
-  regexp = ""
+  expect_error(
+    actual <- derive_vars_merged(advs,
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = exprs(ID),
+      mode = "last",
+      check_type = "error",
+      duplicate_msg = "Duplicate records present!"
+    ),
+    regexp = ""
   )
 })
 
@@ -237,7 +239,6 @@ test_that("derive_var_merged_cat Test 9: define value for non-matched by groups"
 test_that("derive_var_merged_cat Test 10: by_vars with rename", {
   get_region <- function(x) {
     if_else(x %in% c("AUT", "NOR"), "EUROPE", "AFRICA")
-
   }
 
   actual <- derive_var_merged_cat(
@@ -254,8 +255,10 @@ test_that("derive_var_merged_cat Test 10: by_vars with rename", {
   adsl_1 <- adsl1 %>% filter(SEX == "M")
   expected <- left_join(advs, select(adsl_1, ID, COUNTRY), by = c("USUBJID" = "ID")) %>%
     mutate(REGION = get_region(COUNTRY)) %>%
-    mutate(REGION = case_when(!is.na(COUNTRY) ~ REGION,
-           TRUE ~ NA_character_)) %>%
+    mutate(REGION = case_when(
+      !is.na(COUNTRY) ~ REGION,
+      TRUE ~ NA_character_
+    )) %>%
     select(-COUNTRY)
 
 
