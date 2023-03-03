@@ -31,7 +31,7 @@ dataset with itself.}
 
 The variables needed from the other observations should be specified for
 this parameter. The specified variables are added to the joined dataset
-with suffix ".join". For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = vars(AVALC, AVISITN)} and \code{filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
+with suffix ".join". For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
 
 The \verb{*.join} variables are not included in the output dataset.}
 
@@ -112,7 +112,7 @@ The input dataset is joined with itself by the variables specified for
 specified for \code{join_vars} are kept. The suffix ".join" is added to these
 variables.
 
-For example, for \code{by_vars = USUBJID}, \code{join_vars = vars(AVISITN, AVALC)} and input dataset
+For example, for \code{by_vars = USUBJID}, \code{join_vars = exprs(AVISITN, AVALC)} and input dataset
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{# A tibble: 2 x 4
 USUBJID AVISITN AVALC  AVAL
@@ -138,7 +138,7 @@ USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
 The joined dataset is restricted to observations with respect to
 \code{join_type} and \code{order}.
 
-The dataset from the example in the previous step with \code{join_type = "after"} and order = vars(AVISITN)` is restricted to
+The dataset from the example in the previous step with \code{join_type = "after"} and order = exprs(AVISITN)` is restricted to
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{A tibble: 4 x 6
 USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
@@ -192,10 +192,10 @@ adae <- tribble(
 
 filter_joined(
   adae,
-  by_vars = vars(USUBJID),
-  join_vars = vars(ACOVFL, ADY),
+  by_vars = exprs(USUBJID),
+  join_vars = exprs(ACOVFL, ADY),
   join_type = "all",
-  order = vars(ADY),
+  order = exprs(ADY),
   filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 )
 
@@ -215,10 +215,10 @@ data <- tribble(
 
 filter_joined(
   data,
-  by_vars = vars(USUBJID),
-  join_vars = vars(AVALC, AVISITN),
+  by_vars = exprs(USUBJID),
+  join_vars = exprs(AVALC, AVISITN),
   join_type = "after",
-  order = vars(AVISITN),
+  order = exprs(AVISITN),
   filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
 )
 
@@ -244,10 +244,10 @@ data <- tribble(
 
 filter_joined(
   data,
-  by_vars = vars(USUBJID),
-  join_vars = vars(AVALC),
+  by_vars = exprs(USUBJID),
+  join_vars = exprs(AVALC),
   join_type = "after",
-  order = vars(AVISITN),
+  order = exprs(AVISITN),
   first_cond = AVALC.join == "CR",
   filter = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) &
     count_vals(var = AVALC.join, val = "NE") <= 1
@@ -276,10 +276,10 @@ data <- tribble(
 
 filter_joined(
   data,
-  by_vars = vars(USUBJID),
-  join_vars = vars(AVALC, ADY),
+  by_vars = exprs(USUBJID),
+  join_vars = exprs(AVALC, ADY),
   join_type = "after",
-  order = vars(ADY),
+  order = exprs(ADY),
   first_cond = AVALC.join \%in\% c("CR", "PR") & ADY.join - ADY >= 20,
   filter = AVALC == "PR" &
     all(AVALC.join \%in\% c("CR", "PR", "NE")) &
