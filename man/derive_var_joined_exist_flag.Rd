@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_joined_exist_flag.R
 \name{derive_var_joined_exist_flag}
 \alias{derive_var_joined_exist_flag}
-\title{Derives a flag based on Existing Flag}
+\title{Derives a Flag Based on an Existing Flag}
 \usage{
 derive_var_joined_exist_flag(
   dataset,
