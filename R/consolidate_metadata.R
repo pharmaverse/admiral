@@ -42,8 +42,8 @@
 #'   one of the input datasets, the observation from the last dataset is
 #'   selected.
 #'
-#' @return A dataset which contains one row for each by group occuring in any of
-#'   the input datasets.
+#' @return A dataset which contains one row for each by group occurring in any
+#'   of the input datasets.
 #'
 #' @keywords create_aux
 #' @family create_aux
