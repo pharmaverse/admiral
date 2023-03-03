@@ -59,15 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -108,6 +99,7 @@
 <li><p>The units “min” and “sec” are added as valid values of <code>out_unit</code> in <code><a href="../reference/compute_duration.html">compute_duration()</a></code> and <code><a href="../reference/derive_vars_duration.html">derive_vars_duration()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/1647" class="external-link">#1647</a>).</p></li>
 <li><p>The function <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> now includes a consistency check for <code>QUERY_SCOPE</code> and <code>QUERY_SCOPE_NUM</code> values. (<a href="https://github.com/pharmaverse/admiral/issues/652" class="external-link">#652</a>)</p></li>
 <li><p>Argument <code>new_var</code> in <code><a href="../reference/derive_param_extreme_event.html">derive_param_extreme_event()</a></code> is made optional. (<a href="https://github.com/pharmaverse/admiral/issues/1630" class="external-link">#1630</a>)</p></li>
+<li><p><code><a href="../reference/derive_vars_last_dose.html">derive_vars_last_dose()</a></code> no longer fails if <code>USUBJID</code> is not included in the input dataset. (<a href="https://github.com/pharmaverse/admiral/issues/1787" class="external-link">#1787</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-0-10-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-0"></a></h3>
@@ -154,7 +146,6 @@
 <h3 id="documentation-0-10-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-10-0"></a></h3>
 <ul><li><p>New vignette “Creating a PK NCA ADaM (ADPC/ADNCA)” (<a href="https://github.com/pharmaverse/admiral/issues/1639" class="external-link">#1639</a>)</p></li>
 <li><p>New vignette “Hy’s Law Implementation” (<a href="https://github.com/pharmaverse/admiral/issues/1637" class="external-link">#1637</a>)</p></li>
-<li><p><code>ADLB</code> metadata data set called <code>atoxgr_criteria_ctcv5</code> updated to remove unit check for <code>HYPERURICEMIA</code> as grade criteria based on <code>ANRHI</code> only. This metadata holds criteria for lab grading based on <a href="https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm" class="external-link">Common Terminology Criteria for Adverse Events (CTCAE) v5.0</a> (<a href="https://github.com/pharmaverse/admiral/issues/1650" class="external-link">#1650</a>)</p></li>
 <li><p>New vignette “Creating Questionnaire ADaMs” (<a href="https://github.com/pharmaverse/admiral/issues/1715" class="external-link">#1715</a>)</p></li>
 <li><p>The expected value for the <code>derivation</code> argument of <code><a href="../reference/restrict_derivation.html">restrict_derivation()</a></code>, <code><a href="../reference/slice_derivation.html">slice_derivation()</a></code>, and <code><a href="../reference/call_derivation.html">call_derivation()</a></code> is described now. (<a href="https://github.com/pharmaverse/admiral/issues/1698" class="external-link">#1698</a>)</p></li>
 <li><p>Removed authors from function documentation, as we will now only be tracking an overall list of authors for admiral. (<a href="https://github.com/pharmaverse/admiral/issues/1673" class="external-link">#1673</a>)</p></li>
