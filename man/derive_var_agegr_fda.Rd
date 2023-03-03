@@ -31,11 +31,13 @@ This function is \emph{deprecated}, please create a user defined function instea
 Other deprecated: 
 \code{\link{derive_derived_param}()},
 \code{\link{derive_param_first_event}()},
+\code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_merged_dtm}()},
 \code{\link{derive_vars_merged_dt}()},
+\code{\link{filter_confirmation}()},
 \code{\link{format_eoxxstt_default}()},
 \code{\link{format_reason_default}()},
 \code{\link{vars}()}
@@ -43,11 +45,13 @@ Other deprecated:
 Other deprecated: 
 \code{\link{derive_derived_param}()},
 \code{\link{derive_param_first_event}()},
+\code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_merged_dtm}()},
 \code{\link{derive_vars_merged_dt}()},
+\code{\link{filter_confirmation}()},
 \code{\link{format_eoxxstt_default}()},
 \code{\link{format_reason_default}()},
 \code{\link{vars}()}
@@ -55,11 +59,13 @@ Other deprecated:
 Other deprecated: 
 \code{\link{derive_derived_param}()},
 \code{\link{derive_param_first_event}()},
+\code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_merged_dtm}()},
 \code{\link{derive_vars_merged_dt}()},
+\code{\link{filter_confirmation}()},
 \code{\link{format_eoxxstt_default}()},
 \code{\link{format_reason_default}()},
 \code{\link{vars}()}
