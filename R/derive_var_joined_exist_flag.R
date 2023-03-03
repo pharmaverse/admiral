@@ -28,7 +28,6 @@
 #'
 #'   The specified variable is added to the input dataset.
 #'
-#'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
 #'   The specified variable is added to the input dataset and set to the
@@ -332,12 +331,12 @@
 #'   data,
 #'   by_vars = exprs(USUBJID),
 #'   new_var = CONFFL,
-#'   tmp_obs_nr_var = tmp_obs_nr_filter_joined,
+#'   tmp_obs_nr_var = tmp_obs_nr,
 #'   join_vars = exprs(CRIT1FL),
 #'   join_type = "all",
 #'   order = exprs(AVISITN),
 #'   filter = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
-#'     (tmp_obs_nr_filter_joined + 1 == tmp_obs_nr_filter_joined.join | tmp_obs_nr_filter_joined == max(tmp_obs_nr_filter_joined.join)) # nolint
+#'     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 #' )
 #'
 derive_var_joined_exist_flag <- function(dataset,
@@ -359,12 +358,13 @@ derive_var_joined_exist_flag <- function(dataset,
   assert_data_frame(dataset)
 
   tmp_obs_nr <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")
+
   data <- derive_var_obs_number(
     dataset,
     new_var = !!tmp_obs_nr
   )
 
-  data_filtered <- filter_joined(
+  data_filtered <- filter_confirmation(
     data,
     by_vars = by_vars,
     order = order,
