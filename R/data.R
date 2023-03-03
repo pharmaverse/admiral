@@ -89,7 +89,7 @@
 #' are from the source document on NCI-CTC website defining the grading criteria.
 #' [**Common Terminology Criteria for Adverse Events (CTCAE)v4.0**](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm#ctc_40)
 #' From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
-#' tracability only.
+#' traceability only.
 #'
 #'
 #' @keywords metadata
