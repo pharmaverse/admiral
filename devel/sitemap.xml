@@ -298,6 +298,9 @@
     <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_var_extreme_flag.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_var_joined_exist_flag.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_var_last_dose_amt.html</loc>
   </url>
   <url>
@@ -437,6 +440,9 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/filter_extreme.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/devel/reference/filter_joined.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/filter_relative.html</loc>
