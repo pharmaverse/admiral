@@ -1138,7 +1138,8 @@ test_that("assert_same_type Test 83: error if different type", {
 
 ## Test 84: works as intended ----
 test_that("assert_same_type Test 84: works as intended", {
-  expect_equal(valid_time_units(),
-               c("years", "months", "days", "hours", "minutes","seconds"))
+  expect_equal(
+    valid_time_units(),
+    c("years", "months", "days", "hours", "minutes", "seconds")
+  )
 })
-
