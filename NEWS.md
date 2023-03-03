@@ -129,7 +129,9 @@ authors for admiral. (#1673)
 
 - Added an imputation example for `create_single_source_dataset()` in function documentation (#1408)(#1760)
 
-- Updates to examples for `derive_var_age_years()` and `derive_vars_duration()` (#1620, #1634)
+- Updates to examples for `derive_var_age_years()` and `derive_vars_duration()` (#1620)(#1634)
+
+- Increased the level of documentation for `derive_var_age_years()` to describe the data type of the newly created `new_var` column. (#970)
 
 ## Various
 

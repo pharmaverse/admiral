@@ -118,8 +118,10 @@ reference:
   contents:
   - has_keyword('datasets')
 
-- title: Reexported
-  desc: Functions reexported from other packages
+- title: Objects exported from other packages
+  desc: |
+    To maximize the user-friendliness of `{admiral}`, functions from other packages are provided
+    without changes made to them, follow the links below to see their documentation.
   contents:
   - has_keyword('reexport')
 
