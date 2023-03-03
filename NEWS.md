@@ -51,6 +51,8 @@ observations or the first or last observation in a by group. (#1724)
 - The function `derive_vars_query()` now includes a consistency check for
 `QUERY_SCOPE` and `QUERY_SCOPE_NUM` values. (#652)
 
+- Argument `new_var` in `derive_param_extreme_event()` is made optional. (#1630)
+
 ## Breaking Changes
 
 - All function arguments which expected a list of quosures created by `vars()`
@@ -69,6 +71,8 @@ added for subjects who have both an event or censoring and an observation in
 `dataset_adsl` (#1576).
 
 - Function `derive_var_disposition_status()` has been deprecated, please use `derive_var_merged_cat()` instead (#1681).
+
+- Function `derive_var_worst_flag()` has been deprecated, in favor of `slice_derivation()`/`derive_var_extreme_flag()` (#1682)
 
 - Function `derive_vars_disposition_reason()` has been deprecated, in favor of `derive_vars_merged()`(#1683)
   
@@ -106,6 +110,10 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 - New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
 
 - New vignette "Hy's Law Implementation" (#1637)
+
+- `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
+`HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
 
 - New vignette "Creating Questionnaire ADaMs" (#1715)
 
@@ -665,7 +673,7 @@ age in different units (#569)
 - `derive_param_tte()` derives time-to-event-parameters (#546)
 
 - For common time-to-event endpoints [event and censoring source
-objects](https://pharmaverse.github.io/admiral/reference/index.html#section-pre-defined-time-to-event-sources) are
+objects](https://pharmaverse.github.io/admiral/cran-release/reference/index.html#section-pre-defined-time-to-event-sources) are
 provided (#612)
 
 ### Developer
@@ -700,9 +708,9 @@ to specify the unit of the input age (#569)
 
 ## Documentation
 
-- New vignette [Creating a BDS Time-to-Event ADaM](https://pharmaverse.github.io/admiral/articles/bds_tte.html) (#549)
+- New vignette [Creating a BDS Time-to-Event ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_tte.html) (#549)
 
-- New vignette [Queries Dataset Documentation](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) (#561)
+- New vignette [Queries Dataset Documentation](https://pharmaverse.github.io/admiral/cran-release/articles/queries_dataset.html) (#561)
 
 - New vignette [Writing Vignettes](https://pharmaverse.github.io/admiraldev/main/articles/writing_vignettes.html) (#334)
 
@@ -897,10 +905,10 @@ to specify the unit of the input age (#569)
 
 ## Documentation
 
-- [Frequently Asked Questions](https://pharmaverse.github.io/admiral/articles/faq.html)
+- [Frequently Asked Questions](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html)
 
-- [Creating ADSL](https://pharmaverse.github.io/admiral/articles/adsl.html)
+- [Creating ADSL](https://pharmaverse.github.io/admiral/cran-release/articles/adsl.html)
 
-- [Creating a BDS Finding ADaM](https://pharmaverse.github.io/admiral/articles/bds_finding.html)
+- [Creating a BDS Finding ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html)
 
-- [Creating an OCCDS ADaM](https://pharmaverse.github.io/admiral/articles/occds.html)
+- [Creating an OCCDS ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/occds.html)
