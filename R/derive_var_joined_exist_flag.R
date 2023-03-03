@@ -44,7 +44,7 @@
 #'   for this parameter. The specified variables are added to the joined dataset
 #'   with suffix ".join". For example to flag all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
-#'   vars(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
+#'   exprs(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
 #'   AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
@@ -117,7 +117,7 @@
 #'   specified for `join_vars` are kept. The suffix ".join" is added to these
 #'   variables.
 #'
-#'   For example, for `by_vars = USUBJID`, `join_vars = vars(AVISITN, AVALC)` and input dataset
+#'   For example, for `by_vars = USUBJID`, `join_vars = exprs(AVISITN, AVALC)` and input dataset
 #'
 #'   ```{r eval=FALSE}
 #'   # A tibble: 2 x 4

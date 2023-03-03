@@ -51,7 +51,7 @@ observation (see last example below).}
 
 The variables needed from the other observations should be specified
 for this parameter. The specified variables are added to the joined dataset
-with suffix ".join". For example to flag all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = vars(AVALC, AVISITN)} and \code{filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
+with suffix ".join". For example to flag all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
 
 The \verb{*.join} variables are not included in the output dataset.}
 
@@ -135,7 +135,7 @@ The input dataset is joined with itself by the variables specified for
 specified for \code{join_vars} are kept. The suffix ".join" is added to these
 variables.
 
-For example, for \code{by_vars = USUBJID}, \code{join_vars = vars(AVISITN, AVALC)} and input dataset
+For example, for \code{by_vars = USUBJID}, \code{join_vars = exprs(AVISITN, AVALC)} and input dataset
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{# A tibble: 2 x 4
 USUBJID AVISITN AVALC  AVAL
