@@ -58,6 +58,9 @@ allow renaming in the argument `by_vars` (#1680).
 
 - Argument `new_var` in `derive_param_extreme_event()` is made optional. (#1630)
 
+- `derive_vars_last_dose()` no longer fails if `USUBJID` is not included in the
+input dataset. (#1787)
+
 ## Breaking Changes
 
 - All function arguments which expected a list of quosures created by `vars()`
@@ -115,10 +118,6 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 - New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
 
 - New vignette "Hy's Law Implementation" (#1637)
-
-- `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
-`HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
-based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
 
 - New vignette "Creating Questionnaire ADaMs" (#1715)
 
