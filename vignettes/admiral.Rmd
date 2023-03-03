@@ -42,7 +42,6 @@ data("admiral_ex")
 dm <- convert_blanks_to_na(admiral_dm)
 ds <- convert_blanks_to_na(admiral_ds)
 ex <- convert_blanks_to_na(admiral_ex)
-
 ```
 
 ## Derive Treatment Variables (`TRT0xP`, `TRT0xA`) {#treatmentvargs}

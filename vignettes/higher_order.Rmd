@@ -49,7 +49,7 @@ library(dplyr, warn.conflicts = FALSE)
 data("admiral_adsl")
 data("admiral_ae")
 data("admiral_vs")
-adsl <- admiral_adsl  
+adsl <- admiral_adsl
 ae <- convert_blanks_to_na(admiral_ae)
 vs <- convert_blanks_to_na(admiral_vs)
 ```
