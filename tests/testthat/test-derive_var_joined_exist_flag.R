@@ -272,12 +272,12 @@ test_that("derive_var_joined_exist_flag Test 6: tmp_obs_nr_var argument works", 
       select(expected, -CONFFL),
       by_vars = exprs(USUBJID),
       new_var = CONFFL,
-      tmp_obs_nr_var = tmp_obs_nr_filter_joined,
+      tmp_obs_nr_var = tmp_obs_nr,
       join_vars = exprs(CRIT1FL),
       join_type = "all",
       order = exprs(AVISITN),
       filter = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
-        (tmp_obs_nr_filter_joined + 1 == tmp_obs_nr_filter_joined.join | tmp_obs_nr_filter_joined == max(tmp_obs_nr_filter_joined.join)),
+        (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join)),
       false_value = "N"
     ),
     keys = c("USUBJID", "AVISITN")
