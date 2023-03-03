@@ -288,7 +288,7 @@
 #'         count_vals(var = AVALC.join, val = "CR") == 0
 #'     )
 #' )
-#' #'
+#'
 #' # select observations with CRIT1FL == "Y" at two consecutive visits or at the last visit
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~CRIT1FL,
@@ -316,14 +316,14 @@
 #' )
 #'
 filter_joined <- function(dataset,
-                          by_vars,
-                          join_vars,
-                          join_type,
-                          first_cond = NULL,
-                          order,
-                          tmp_obs_nr_var = NULL,
-                          filter,
-                          check_type = "warning") {
+                                by_vars,
+                                join_vars,
+                                join_type,
+                                first_cond = NULL,
+                                order,
+                                tmp_obs_nr_var = NULL,
+                                filter,
+                                check_type = "warning") {
   # Check input parameters
   assert_vars(by_vars)
   assert_vars(join_vars)
@@ -349,15 +349,13 @@ filter_joined <- function(dataset,
   )
 
   # number observations of the input dataset to get a unique key
-  # (by_vars and tmp_obs_nr_filter_joined)
   # (by_vars and tmp_obs_nr_var)
   if (is.null(tmp_obs_nr_var)) {
     tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")
   }
-
   data <- dataset %>%
     derive_var_obs_number(
-      new_var = tmp_obs_nr_filter_joined,
+      new_var = !!tmp_obs_nr_var,
       by_vars = by_vars,
       order = order,
       check_type = check_type
@@ -367,7 +365,7 @@ filter_joined <- function(dataset,
   data_joined <-
     left_join(
       data,
-      select(data, !!!by_vars, !!!join_vars, tmp_obs_nr_filter_joined),
+      select(data, !!!by_vars, !!!join_vars, !!tmp_obs_nr_var),
       by = vars2chr(by_vars),
       suffix = c("", ".join")
     )
@@ -376,10 +374,10 @@ filter_joined <- function(dataset,
 
     data_joined <- filter(
       data_joined,
-      !!parse_expr(paste(
-        "tmp_obs_nr_filter_joined.join",
+      !!parse_expr(paste0(
+        as_name(tmp_obs_nr_var), ".join",
         operator[join_type],
-        "tmp_obs_nr_filter_joined"
+        as_name(tmp_obs_nr_var)
       ))
     )
   }
@@ -388,9 +386,9 @@ filter_joined <- function(dataset,
     # select all observations up to the first confirmation observation
     data_joined <- filter_relative(
       data_joined,
-      by_vars = exprs(!!!by_vars, tmp_obs_nr_filter_joined),
+      by_vars = expr_c(by_vars, tmp_obs_nr_var),
       condition = !!first_cond,
-      order = exprs(tmp_obs_nr_filter_joined.join),
+      order = exprs(!!parse_expr(paste0(as_name(tmp_obs_nr_var), ".join"))),
       mode = "first",
       selection = "before",
       inclusive = TRUE,
@@ -400,7 +398,7 @@ filter_joined <- function(dataset,
 
   # apply confirmation condition, which may include summary functions
   data_joined %>%
-    group_by(!!!by_vars, tmp_obs_nr_filter_joined) %>%
+    group_by(!!!by_vars, !!tmp_obs_nr_var) %>%
     filter(!!filter) %>%
     # select one observation of each group, as the joined variables are removed
     # it doesn't matter which one, so we take just the first one

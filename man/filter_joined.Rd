@@ -290,7 +290,7 @@ filter_joined(
         count_vals(var = AVALC.join, val = "CR") == 0
     )
 )
-#'
+
 # select observations with CRIT1FL == "Y" at two consecutive visits or at the last visit
 data <- tribble(
   ~USUBJID, ~AVISITN, ~CRIT1FL,
