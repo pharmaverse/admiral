@@ -109,15 +109,15 @@ data("admiral_pc")
 data("admiral_vs")
 
 adsl <- admiral_adsl %>% convert_blanks_to_na()
-ex <- admiral_ex %>% convert_blanks_to_na()
+ex <- convert_blanks_to_na(admiral_ex)
 
 # Load PC
 
-pc <- admiral_pc %>% convert_blanks_to_na()
+pc <- convert_blanks_to_na(admiral_pc)
 
 # Load VS for baseline height and weight
 
-vs <- admiral_vs %>% convert_blanks_to_na()
+vs <- convert_blanks_to_na(admiral_vs)
 
 # ---- Lookup tables ----
 param_lookup <- tibble::tribble(

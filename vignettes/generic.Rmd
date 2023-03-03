@@ -54,10 +54,10 @@ data("admiral_dm")
 data("admiral_ds")
 data("admiral_ex")
 data("admiral_ae")
-dm <- admiral_dm %>% convert_blanks_to_na()
-ds <- admiral_ds %>% convert_blanks_to_na()
-ex <- admiral_ex %>% convert_blanks_to_na()
-ae <- admiral_ae %>% convert_blanks_to_na()
+dm <- convert_blanks_to_na(admiral_dm)
+ds <- convert_blanks_to_na(admiral_ds)
+ex <- convert_blanks_to_na(admiral_ex)
+ae <- convert_blanks_to_na(admiral_ae)
 ```
 ```{r echo=FALSE}
 # Filter test patients and make more realistic and interesting for the examples

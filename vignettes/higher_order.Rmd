@@ -49,9 +49,9 @@ library(dplyr, warn.conflicts = FALSE)
 data("admiral_adsl")
 data("admiral_ae")
 data("admiral_vs")
-adsl <- admiral_adsl %>% convert_blanks_to_na()
-ae <- admiral_ae %>% convert_blanks_to_na()
-vs <- admiral_vs %>% convert_blanks_to_na()
+adsl <- admiral_adsl  
+ae <- convert_blanks_to_na(admiral_ae)
+vs <- convert_blanks_to_na(admiral_vs)
 ```
 ```{r echo=FALSE}
 adsl <- filter(adsl, USUBJID %in% c("01-701-1111", "01-705-1393"))
