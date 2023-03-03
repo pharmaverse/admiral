@@ -108,7 +108,7 @@ data("admiral_ex")
 data("admiral_pc")
 data("admiral_vs")
 
-adsl <- admiral_adsl %>% convert_blanks_to_na()
+adsl <- admiral_adsl
 ex <- convert_blanks_to_na(admiral_ex)
 
 # Load PC
