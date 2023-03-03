@@ -121,9 +121,10 @@ for flagging values to be used for analysis, see `derive_var_extreme_flag()`.
 Please note that in the example data, the numeric values of the answers are
 mapped in SDTM (`QSSTRESN`) such that they can be used for deriving scores.
 Depending on the question, `QSORRES == "YES"` is mapped to `QSSTRESN = 0` or
-`QSSTRESN = 1`. If this is not the case, it is recommended that `QSSTRESN` is
-kept in the ADaM dataset for traceability, and the transformed value is stored
-in `AVAL`, since that’s what will be used for the score calculation.
+`QSSTRESN = 1`. If the `QSSTRESN` values are not ready to be used for deriving
+scores and require transformation, it is recommended that `QSSTRESN` is kept in
+the ADaM dataset for traceability, and the transformed value is stored in
+`AVAL`, since that’s what will be used for the score calculation.
 
 # Scales and Scores
 
