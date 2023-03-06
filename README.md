@@ -5,6 +5,7 @@
 Utility Functions and Development Tools for the Admiral Package Family
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 ## Purpose
@@ -16,7 +17,7 @@ functions/Addins to assist developers of `{admiral}` or `{admiral}`
 extension packages as well as functions to help with rendering
 documentation.
 
-**NOTE:** This package is not intended for standalone use but rather as
+__NOTE:__ This package is not intended for standalone use but rather as
 a central dependency for `{admiral}` and its extension packages
 
 ## Installation
@@ -27,11 +28,13 @@ The package is available from CRAN and can be installed by running
 To install the latest development version of the package directly from
 GitHub use the following code:
 
-    if (!requireNamespace("remotes", quietly = TRUE)) {
-      install.packages("remotes")
-    }
+```
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
 
-    remotes::install_github("pharmaverse/admiraldev", ref = "devel")
+remotes::install_github("pharmaverse/admiraldev", ref = "devel")
+```
 
 ## Release Schedule
 
