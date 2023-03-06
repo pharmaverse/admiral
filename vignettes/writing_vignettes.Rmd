@@ -129,7 +129,6 @@ library(lubridate)
 library(dplyr)
 library(admiral.test)
 library(DT)
-#library(admiral)
 
 data(admiral_vs)
 ```
@@ -158,7 +157,7 @@ vs1 <- admiral_vs %>%
 
 dataset_vignette(
   vs1,
-  display_vars = vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
+  display_vars = exprs(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
   filter = VSTESTCD == "WEIGHT"
 )
 ```
@@ -170,7 +169,7 @@ Note: The call to get the formatted dataset would be:
       ```{r, eval=FALSE, echo=TRUE}
 dataset_vignette(
   vs1,
-  display_vars = vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
+  display_vars = exprs(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
   filter = VSTESTCD == "WEIGHT"
 )
       ```

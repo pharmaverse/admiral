@@ -16,21 +16,20 @@ is_named <- function(x) {
 #'
 #' @param arg argument to check
 #'
-#' @return `TRUE` if the argument equals the auto keyword, i.e., it is a quosure
-#'   of a symbol named auto.
+#' @return `TRUE` if the argument equals the auto keyword, i.e., it is an
+#'   expression of a symbol named auto.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords is
 #' @family is
 #' @export
 is_auto <- function(arg) {
-  is_quosure(arg) && quo_is_symbol(arg) && quo_get_expr(arg) == expr(auto)
+  is_symbol(arg) && arg == expr(auto)
 }
 
 #' Is order vars?
 #'
-#' Check if inputs are created using `vars()` or calls involving `desc()`
+#' Check if inputs are created using `exprs()` or calls involving `desc()`
 #' @param arg An R object
 #'
 #' @return `FALSE` if the argument is not a list of order vars
@@ -40,16 +39,15 @@ is_auto <- function(arg) {
 #' @keywords is
 #' @family is
 is_order_vars <- function(arg) {
-  quo_is_desc_call <- function(quo) {
-    expr <- quo_get_expr(quo)
+  is_desc_call <- function(expr) {
     is_call(expr) &&
       length(expr) == 2L &&
       deparse(expr[[1L]]) == "desc" &&
       is_symbol(expr[[2L]])
   }
 
-  inherits(arg, "quosures") &&
-    all(map_lgl(arg, ~ quo_is_symbol(.x) || quo_is_desc_call(.x)))
+  inherits(arg, "list") &&
+    all(map_lgl(arg, ~ is.symbol(.x) || is_desc_call(.x)))
 }
 
 #' Is this string a valid DTC

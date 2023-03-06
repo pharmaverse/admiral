@@ -2,26 +2,25 @@
 % Please edit documentation in R/get.R
 \name{get_source_vars}
 \alias{get_source_vars}
-\title{Get Source Variables from a List of Quosures}
+\title{Get Source Variables from a List of Expressions}
 \usage{
-get_source_vars(quosures)
+get_source_vars(expressions, quosures)
 }
 \arguments{
-\item{quosures}{A list of quosures}
+\item{expressions}{A list of expressions}
+
+\item{quosures}{\emph{Deprecated}, please use \code{expressions} instead.}
 }
 \value{
-A list of quosures
+A list of expressions
 }
 \description{
-Get Source Variables from a List of Quosures
+Get Source Variables from a List of Expressions
 }
 \seealso{
 Brings something to you!?!: 
 \code{\link{get_constant_vars}()},
 \code{\link{get_duplicates}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{get}
 \keyword{get}

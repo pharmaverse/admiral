@@ -14,10 +14,10 @@ is \code{NULL} then an error is thrown}
 }
 \value{
 The function throws an error if \code{arg} is not a list of variables or \code{desc()}
-calls created using \code{vars()} and returns the input invisibly otherwise.
+calls created using \code{exprs()} and returns the input invisibly otherwise.
 }
 \description{
-Checks if an argument is a valid list of order variables created using \code{vars()}
+Checks if an argument is a valid list of order variables created using \code{exprs()}
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -27,13 +27,13 @@ example_fun <- function(by_vars) {
   assert_order_vars(by_vars)
 }
 
-example_fun(vars(USUBJID, PARAMCD, desc(AVISITN)))
+example_fun(exprs(USUBJID, PARAMCD, desc(AVISITN)))
 
-try(example_fun(exprs(USUBJID, PARAMCD)))
+try(example_fun(quos(USUBJID, PARAMCD)))
 
 try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 
-try(example_fun(vars(USUBJID, toupper(PARAMCD), -AVAL)))
+try(example_fun(exprs(USUBJID, toupper(PARAMCD), -AVAL)))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
@@ -61,9 +61,6 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()},
 \code{\link{assert_varval_list}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{assertion}
 \keyword{assertion}

@@ -55,8 +55,5 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_vars}()},
 \code{\link{assert_varval_list}()}
 }
-\author{
-Ania Golab
-}
 \concept{assertion}
 \keyword{assertion}

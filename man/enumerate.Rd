@@ -2,31 +2,35 @@
 % Please edit documentation in R/quote.R
 \name{enumerate}
 \alias{enumerate}
-\title{Enumerate Multiple Strings}
+\title{Enumerate Multiple Elements}
 \usage{
 enumerate(x, quote_fun = backquote, conjunction = "and")
 }
 \arguments{
-\item{x}{A \code{character} vector}
+\item{x}{A vector or list}
 
-\item{quote_fun}{Quoting function, defaults to \code{backquote}.}
+\item{quote_fun}{Quoting function, defaults to \code{backquote}. If set to \code{NULL},
+the elements are not quoted.}
 
-\item{conjunction}{Character to be used in the message, defaults to "and".}
+\item{conjunction}{Character to be used in the message, defaults to \code{"and"}.}
 }
 \value{
 A \code{character} vector
 }
 \description{
-Enumerate Multiple Strings
+Enumerate multiple elements of a vector or list.
+}
+\examples{
+enumerate(c("one", "two", "three"))
+
+enumerate(c(1, 2, 3), quote_fun = NULL)
+
 }
 \seealso{
 Helpers for working with Quotes and Quoting: 
 \code{\link{backquote}()},
 \code{\link{dquote}()},
 \code{\link{squote}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{quote}
 \keyword{quote}

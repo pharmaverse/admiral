@@ -4,12 +4,15 @@
 \alias{assert_character_vector}
 \title{Is an Argument a Character Vector?}
 \usage{
-assert_character_vector(arg, values = NULL, optional = FALSE)
+assert_character_vector(arg, values = NULL, named = FALSE, optional = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
 
 \item{values}{A \code{character} vector of valid values for \code{arg}}
+
+\item{named}{If set to \code{TRUE}, an error is issued if not all elements of the
+vector are named.}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
@@ -30,6 +33,12 @@ example_fun <- function(chr) {
 example_fun(letters)
 
 try(example_fun(1:10))
+
+example_fun2 <- function(chr) {
+  assert_character_vector(chr, named = TRUE)
+}
+
+try(example_fun2(c(alpha = "a", "b", gamma = "c")))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
@@ -57,9 +66,6 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()},
 \code{\link{assert_varval_list}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{assertion}
 \keyword{assertion}

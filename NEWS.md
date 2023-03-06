@@ -1,3 +1,44 @@
+# admiraldev 0.3.0
+
+## New Features
+  - New function `process_set_values_to()` for creating the variables specified
+  by the `set_value_to` argument and catching errors (#70)
+  
+## Updates of Existing Functions
+  - Using testthat3e (testthat 3rd edition) for unit testing. This is stricter 
+  in that messages must be addressed and deprecated functions throw errors. 
+  (#230)
+  - Slight boost to test coverage for `dev_utilities` (#102)
+  - Fix datatable styling for documentation (#197)
+  - The `assert_character_vector()` function gained a `named` argument to check
+  that all elements of the vector are named. (#70)
+  - The `assert_list_of()` function gained a `named` argument to check that all
+  elements of the list are named. (#203)
+  - The `quote_fun` argument of `enumerate()` was extended such that `NULL` can
+  be specified to request no quoting of the elements. (#203)
+  - The `assert_list_of()` function was enhanced such that it also considers the
+  type of the element, e.g., to check if a value is a list of symbols. (#208)
+
+## Breaking Changes
+- The default value of the `optional` argument in `assert_date_vector()`,
+`assert_list_of()`, and `assert_s3_class()` was changed from `TRUE` to `FALSE`
+to make the default behavior consistent. (#87)
+- admiral functions no longer expect list of quosures created by `vars()` but
+list of expressions created by `exprs()`. Thus the following functions and
+arguments were deprecated:
+    - `quo_c()` and `replace_symbol_in_quo()`
+    - the `quosures` argument in `get_source_vars()`,
+    `replace_values_by_names()`, and `vars2chr()`
+
+## Documentation
+  - New section in programming strategy regarding comments (#71)
+  - Removed requirement to add `@author` tags to code scripts from programming 
+  strategy, as we will only be tracking authors in the DESCRIPTION file. Authors
+  have been removed from function documentation in line with this update. 
+  (#206, #210)
+  - Removed On-boarding Issue Template (#225)
+  - Increased clarity for the scope of the package (#232)
+
 # admiraldev 0.2.0
 
 ## New Features
@@ -22,7 +63,7 @@
   - New vignette for our package release strategy (#79) 
   - Updated multiple roxygen headers (#116, #133, #134, #141, #145, #172)
   - Description on how admiral options work for certain function inputs, i.e `subject_keys` (#133)
-  
+
 ## Various
   - PR Checklist Template updated (#172)
   - New authors/contributors (#158)
