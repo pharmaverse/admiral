@@ -25,7 +25,7 @@ data("admiral_adsl")
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 pp <- convert_blanks_to_na(admiral_pp)
 
@@ -78,7 +78,7 @@ format_avalcat1n <- function(param, aval) {
 # Derivations ----
 
 # Get list of ADSL vars required for derivations
-adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
+adsl_vars <- exprs(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
 
 adpp <- pp %>%
   # Join ADSL with PP (need TRTSDT for ADY derivation)
@@ -91,7 +91,7 @@ adpp <- pp %>%
     new_vars_prefix = "A",
     dtc = PPRFDTC
   ) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
 adpp <- adpp %>%
   ## Add PARAMCD only - add PARAM etc later ----
@@ -116,7 +116,7 @@ adpp <- adpp %>%
 
 ## Get visit info ----
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visit_bds)
+# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#visit_bds)
 adpp <- adpp %>%
   # Derive Timing
   mutate(
@@ -131,14 +131,14 @@ adpp <- adpp %>%
   ) %>%
   ## Assign TRTA, TRTP ----
   # See also the "Visit and Period Variables" vignette
-  # (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
+  # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_bds)
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A
   ) %>%
   ## Derive AVALCA1N and AVALCAT1 ----
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
-  derive_vars_merged(dataset_add = avalcat_lookup, by_vars = vars(PARAMCD, AVALCA1N))
+  derive_vars_merged(dataset_add = avalcat_lookup, by_vars = exprs(PARAMCD, AVALCA1N))
 
 # Add all ADSL variables
 adpp <- adpp %>%

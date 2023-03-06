@@ -16,6 +16,12 @@ if required (e.g. \code{DSTERM}).}
 A \code{character} vector
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}. This function is a default for \code{derive_vars_disposition_reason()}
+for the \code{format_new_vars} argument. Please use \code{derive_vars_merged()} and
+specify the \code{filter_add} argument to derive the respective variables.
+
 Define a function to map the disposition reason, to be used as a parameter in
 \code{derive_vars_disposition_reason()}.
 }
@@ -25,34 +31,22 @@ Define a function to map the disposition reason, to be used as a parameter in
 equal to \code{'OTHER'}.
 \cr Usually this function can not be used with \verb{\%>\%}.
 }
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("admiral_dm")
-data("admiral_ds")
-
-# Derive DCSREAS using format_reason_default
-admiral_dm \%>\%
-  derive_vars_disposition_reason(
-    dataset_ds = admiral_ds,
-    new_var = DCSREAS,
-    reason_var = DSDECOD,
-    format_new_vars = format_reason_default,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
-  ) \%>\%
-  select(STUDYID, USUBJID, DCSREAS)
-}
 \seealso{
 \code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}}
 
-Utilities for Formatting Observations: 
-\code{\link{convert_blanks_to_na}()},
-\code{\link{convert_na_to_blanks}()},
+Other deprecated: 
+\code{\link{derive_derived_param}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_var_confirmation_flag}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_disposition_reason}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()},
+\code{\link{filter_confirmation}()},
 \code{\link{format_eoxxstt_default}()},
-\code{\link{yn_to_numeric}()}
+\code{\link{vars}()}
 }
-\author{
-Samia Kabi
-}
-\concept{utils_fmt}
-\keyword{utils_fmt}
+\concept{deprecated}
+\keyword{deprecated}

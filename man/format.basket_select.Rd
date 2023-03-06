@@ -25,29 +25,16 @@ format(basket_select(id = 42, scope = "NARROW", type = "smq"))
 \seealso{
 \code{\link[=basket_select]{basket_select()}}
 
-Source Specifications: 
+Other Advanced Functions: 
 \code{\link{assert_db_requirements}()},
 \code{\link{assert_terms}()},
 \code{\link{assert_valid_queries}()},
-\code{\link{basket_select}()},
-\code{\link{censor_source}()},
-\code{\link{date_source}()},
-\code{\link{death_event}},
-\code{\link{dthcaus_source}()},
-\code{\link{event_source}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{filter_date_sources}()},
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
-\code{\link{query}()},
-\code{\link{sdg_select}()},
-\code{\link{smq_select}()},
-\code{\link{tte_source}()},
 \code{\link{validate_basket_select}()},
 \code{\link{validate_query}()}
 }
-\author{
-Tamara Senior
-}
-\concept{source_specifications}
-\keyword{source_specifications}
+\concept{other_advanced}
+\keyword{other_advanced}

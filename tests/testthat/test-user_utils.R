@@ -79,7 +79,7 @@ test_that("convert_na_to_blanks Test 7: `NA` are turned into blank strings insid
     d = structure(c("", "", "s", "q"), label = "D")
   )
 
-  expect_equivalent(convert_na_to_blanks.data.frame(input), expected_output)
+  expect_equal(convert_na_to_blanks.data.frame(input), expected_output, ignore_attr = TRUE)
 })
 
 # convert_na_to_blanks.list ----
@@ -95,7 +95,7 @@ test_that("convert_na_to_blanks.list Test 8: `convert_na_to_blanks.list` produce
 # negate_vars ----
 ## Test 9: negate_vars returns list of negated variables ----
 test_that("negate_vars Test 9: negate_vars returns list of negated variables", {
-  expect_identical(negate_vars(vars(var1, var2)), rlang::exprs(-var1, -var2))
+  expect_identical(negate_vars(exprs(var1, var2)), rlang::exprs(-var1, -var2))
 })
 
 ## Test 10: negate_vars returns NULL if input is NULL ----
@@ -106,7 +106,7 @@ test_that("negate_vars Test 6: negate_vars returns NULL if input is NULL", {
 # get_one_to_many_dataset ----
 ## Test 11: returns a data frame after a previous error ----
 test_that("get_one_to_many_dataset Test 11: returns a data frame after a previous error", {
-  try(assert_one_to_one(admiral_adsl, vars(STUDYID), vars(SITEID)), silent = TRUE)
+  try(assert_one_to_one(admiral_adsl, exprs(STUDYID), exprs(SITEID)), silent = TRUE)
 
   expect_true(is.data.frame(get_one_to_many_dataset()))
 })
@@ -114,7 +114,7 @@ test_that("get_one_to_many_dataset Test 11: returns a data frame after a previou
 # get_many_to_one_dataset ----
 ## Test 12: returns a data frame after a previous error ----
 test_that("get_many_to_one_dataset Test 12: returns a data frame after a previous error", {
-  try(assert_one_to_one(admiral_adsl, vars(SITEID), vars(STUDYID)), silent = TRUE)
+  try(assert_one_to_one(admiral_adsl, exprs(SITEID), exprs(STUDYID)), silent = TRUE)
 
   expect_true(is.data.frame(get_many_to_one_dataset()))
 })
@@ -125,7 +125,7 @@ test_that("print.source Test 13: `source` objects are printed as intended", {
   ttae <- event_source(
     dataset_name = "ae",
     date = AESTDTC,
-    set_values_to = vars(
+    set_values_to = exprs(
       EVENTDESC = "AE",
       SRCDOM = "AE",
       SRCVAR = "AESTDTC",
@@ -137,7 +137,7 @@ test_that("print.source Test 13: `source` objects are printed as intended", {
     "dataset_name: \"ae\"",
     "filter: NULL",
     "date: AESTDTC",
-    "censor: 0",
+    "censor: 0L",
     "set_values_to:",
     "  EVENTDESC: \"AE\"",
     "  SRCDOM: \"AE\"",

@@ -30,7 +30,7 @@ Additional variables to be used for sorting the \code{dataset} which is ordered 
 \emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))} or \code{NULL}}
+created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{mode}{One of \code{"first"} or \code{"last"}.
 Either the \code{"first"} or \code{"last"} observation is preserved from the \code{dataset}
@@ -41,8 +41,8 @@ it is the variable in the source dataset to be used to assign values to
 \code{DTHCAUS}; if a string literal, e.g. \code{"Adverse Event"}, it is the fixed value
 to be assigned to \code{DTHCAUS}.}
 
-\item{traceability_vars}{A named list returned by \code{\link[=vars]{vars()}} listing the traceability variables,
-e.g. \code{vars(DTHDOM = "DS", DTHSEQ = DSSEQ)}.
+\item{traceability_vars}{A named list returned by \code{\link[=exprs]{exprs()}} listing the traceability variables,
+e.g. \code{exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)}.
 The left-hand side (names of the list elements) gives the names of the traceability variables
 in the returned dataset.
 The right-hand side (values of the list elements) gives the values of the traceability variables
@@ -77,29 +77,15 @@ src_ds <- dthcaus_source(
 \seealso{
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}
 
-Source Specifications: 
-\code{\link{assert_db_requirements}()},
-\code{\link{assert_terms}()},
-\code{\link{assert_valid_queries}()},
+Source Objects: 
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
 \code{\link{event_source}()},
-\code{\link{extend_source_datasets}()},
-\code{\link{filter_date_sources}()},
-\code{\link{format.basket_select}()},
-\code{\link{list_tte_source_objects}()},
-\code{\link{params}()},
+\code{\link{event}()},
 \code{\link{query}()},
-\code{\link{sdg_select}()},
-\code{\link{smq_select}()},
-\code{\link{tte_source}()},
-\code{\link{validate_basket_select}()},
-\code{\link{validate_query}()}
-}
-\author{
-Shimeng Huang
+\code{\link{tte_source}()}
 }
 \concept{source_specifications}
 \keyword{source_specifications}

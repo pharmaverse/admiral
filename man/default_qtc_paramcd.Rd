@@ -23,6 +23,8 @@ default_qtc_paramcd("Sagie")
 }
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_event}()},
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
@@ -38,9 +40,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

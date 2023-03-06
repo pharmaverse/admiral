@@ -63,9 +63,13 @@ reference:
   contents:
   - has_keyword("create_aux")
 
-- subtitle: Other
+- subtitle: Source Objects
   contents:
   - has_keyword("source_specifications")
+
+- subtitle: Other
+  contents:
+  - has_keyword("other_advanced")
 
 - title: Computation Functions for Vectors
 - subtitle: All ADaMs
@@ -113,6 +117,13 @@ reference:
   desc: You can run `use_ad_template()` to produce additional datasets
   contents:
   - has_keyword('datasets')
+
+- title: Objects exported from other packages
+  desc: |
+    To maximize the user-friendliness of `{admiral}`, functions from other packages are provided
+    without changes made to them, follow the links below to see their documentation.
+  contents:
+  - has_keyword('reexport')
 
 - title: Deprecated
   desc: |
@@ -165,6 +176,10 @@ navbar:
         href: articles/bds_exposure.html
       - text: Creating a BDS Time-to-Event ADaM
         href: articles/bds_tte.html
+      - text: Creating Questionnaire ADaMs
+        href: articles/questionnaires.html
+      - text: Creating a PK NCA ADaM (ADPC/ADNCA)
+        href: articles/pk_adnca.html
       - text: "Advanced User Guides"
       - text: Date and Time Imputation
         href: articles/imputation.html
@@ -178,3 +193,7 @@ navbar:
         href: articles/queries_dataset.html
       - text: Lab Grading
         href: articles/lab_grading.html
+      - text: Hy's Law Implementation
+        href: articles/hys_law.html
+
+

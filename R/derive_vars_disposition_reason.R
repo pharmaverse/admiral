@@ -1,5 +1,12 @@
 #' Default Format for the Disposition Reason
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*. This function is a default for `derive_vars_disposition_reason()`
+#' for the `format_new_vars` argument. Please use `derive_vars_merged()` and
+#' specify the `filter_add` argument to derive the respective variables.
+#'
 #' Define a function to map the disposition reason, to be used as a parameter in
 #' `derive_vars_disposition_reason()`.
 #'
@@ -15,28 +22,21 @@
 #'
 #' @return A `character` vector
 #'
-#' @author Samia Kabi
 #' @export
-#' @family utils_fmt
-#' @keywords utils_fmt
+#' @family deprecated
+#' @keywords deprecated
 #' @seealso [derive_vars_disposition_reason()]
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("admiral_dm")
-#' data("admiral_ds")
-#'
-#' # Derive DCSREAS using format_reason_default
-#' admiral_dm %>%
-#'   derive_vars_disposition_reason(
-#'     dataset_ds = admiral_ds,
-#'     new_var = DCSREAS,
-#'     reason_var = DSDECOD,
-#'     format_new_vars = format_reason_default,
-#'     filter_ds = DSCAT == "DISPOSITION EVENT"
-#'   ) %>%
-#'   select(STUDYID, USUBJID, DCSREAS)
 format_reason_default <- function(reason, reason_spe = NULL) {
+  ### DEPRECATION
+  deprecate_warn("0.10.0",
+    "format_reason_default()",
+    details = paste(
+      "This function is a default for `derive_vars_disposition_reason() and is being deprecated`",
+      "Please use `derive_vars_merged()` and",
+      "specify the `filter_add` argument to derive the respective variables."
+    )
+  )
+
   if (is.null(reason_spe)) {
     if_else(reason != "COMPLETED" & !is.na(reason), reason, NA_character_)
   } else {
@@ -45,6 +45,12 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 }
 
 #' Derive a Disposition Reason at a Specific Timepoint
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*. Please use `derive_vars_merged()` and
+#' specify the `filter_add` argument to derive the respective variables.
 #'
 #' Derive a disposition reason from the the relevant records in the disposition domain.
 #'
@@ -116,8 +122,8 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#' A list of quosures where the expressions are symbols as returned by
-#' `vars()` is expected.
+#' A list of expressions where the expressions are symbols as returned by
+#' `exprs()` is expected.
 #'
 #' @return the input dataset with the disposition reason(s) (`new_var` and
 #' if required `new_var_spe`) added.
@@ -131,49 +137,13 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' The details associated with the reason for discontinuation are derived based on
 #' `reason_var_spe` (e.g. `DSTERM`), `reason_var` and `format_new_vars`.
 #'
-#' @family der_adsl
+#' @family deprecated
 #' @seealso [format_reason_default()]
-#' @keywords der_adsl
+#' @keywords deprecated
 #'
-#' @author Samia Kabi
 #'
 #' @export
 #'
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("admiral_dm")
-#' data("admiral_ds")
-#'
-#' # Derive DCSREAS using the default format
-#' admiral_dm %>%
-#'   derive_vars_disposition_reason(
-#'     dataset_ds = admiral_ds,
-#'     new_var = DCSREAS,
-#'     reason_var = DSDECOD,
-#'     filter_ds = DSCAT == "DISPOSITION EVENT"
-#'   ) %>%
-#'   select(STUDYID, USUBJID, DCSREAS)
-#'
-#' # Derive DCSREAS and DCSREASP using a study-specific format
-#' format_dcsreas <- function(x, y = NULL) {
-#'   if (is.null(y)) {
-#'     if_else(!x %in% c("COMPLETED", "SCREEN FAILURE") & !is.na(x), x, NA_character_)
-#'   } else {
-#'     if_else(x == "OTHER", y, NA_character_)
-#'   }
-#' }
-#' admiral_dm %>%
-#'   derive_vars_disposition_reason(
-#'     dataset_ds = admiral_ds,
-#'     new_var = DCSREAS,
-#'     reason_var = DSDECOD,
-#'     new_var_spe = DCSREASP,
-#'     reason_var_spe = DSTERM,
-#'     format_new_vars = format_dcsreas,
-#'     filter_ds = DSCAT == "DISPOSITION EVENT"
-#'   ) %>%
-#'   select(STUDYID, USUBJID, DCSREAS, DCSREASP)
 derive_vars_disposition_reason <- function(dataset,
                                            dataset_ds,
                                            new_var,
@@ -183,46 +153,55 @@ derive_vars_disposition_reason <- function(dataset,
                                            format_new_vars = format_reason_default,
                                            filter_ds,
                                            subject_keys = get_admiral_option("subject_keys")) {
-  new_var <- assert_symbol(enquo(new_var))
-  reason_var <- assert_symbol(enquo(reason_var))
-  new_var_spe <- assert_symbol(enquo(new_var_spe), optional = T)
-  reason_var_spe <- assert_symbol(enquo(reason_var_spe), optional = T)
+  ### DEPRECATION
+  deprecate_warn("0.10.0",
+    "derive_vars_disposition_reason()",
+    details = paste(
+      "Please use `derive_vars_merged()`",
+      "and specify the `filter_add` argument to derive the respective variables"
+    )
+  )
+
+  new_var <- assert_symbol(enexpr(new_var))
+  reason_var <- assert_symbol(enexpr(reason_var))
+  new_var_spe <- assert_symbol(enexpr(new_var_spe), optional = T)
+  reason_var_spe <- assert_symbol(enexpr(reason_var_spe), optional = T)
   assert_s3_class(format_new_vars, "function")
-  filter_ds <- assert_filter_cond(enquo(filter_ds))
+  filter_ds <- assert_filter_cond(enexpr(filter_ds))
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
   assert_data_frame(
     dataset_ds,
-    required_vars = quo_c(subject_keys, reason_var, reason_var_spe)
+    required_vars = expr_c(subject_keys, reason_var, reason_var_spe)
   )
-  warn_if_vars_exist(dataset, quo_text(new_var))
+  warn_if_vars_exist(dataset, as_name(new_var))
 
   # Additional checks
-  if (!quo_is_null(new_var_spe)) {
-    if (!quo_is_null(reason_var_spe)) {
-      statusvar <- c(quo_text(reason_var), quo_text(reason_var_spe))
+  if (!is.null(new_var_spe)) {
+    if (!is.null(reason_var_spe)) {
+      statusvar <- c(as_name(reason_var), as_name(reason_var_spe))
     } else {
       err_msg <- paste(
-        "`new_var_spe` is specified as ", quo_text(new_var_spe),
+        "`new_var_spe` is specified as ", as_name(new_var_spe),
         "but `reason_var_spe` is NULL.",
         "Please specify `reason_var_spe` together with `new_var_spe`."
       )
       abort(err_msg)
     }
   } else {
-    statusvar <- quo_text(reason_var)
+    statusvar <- as_name(reason_var)
   }
 
   dataset <- dataset %>%
     derive_vars_merged(
       dataset_add = dataset_ds,
       filter_add = !!filter_ds,
-      new_vars = quo_c(reason_var, reason_var_spe),
+      new_vars = expr_c(reason_var, reason_var_spe),
       by_vars = subject_keys
     ) %>%
     mutate(!!new_var := format_new_vars(!!reason_var))
 
-  if (!quo_is_null(new_var_spe)) {
+  if (!is.null(new_var_spe)) {
     dataset <- mutate(
       dataset,
       !!new_var_spe := format_new_vars(!!reason_var, !!reason_var_spe)

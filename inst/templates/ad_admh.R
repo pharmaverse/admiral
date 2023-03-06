@@ -35,14 +35,14 @@ mhtermn_lookup <- tibble::tribble(
 # Derivations ----
 
 # Get list of ADSL vars required for derivations
-adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT)
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT)
 
 admh <- mh %>%
   # join ADSL with MH
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   ## Derive dates (ASTDT, AEDT, ...) ----
   # Derive analysis start date and flag
@@ -56,12 +56,12 @@ admh <- mh %>%
     dtc = MHENDTC,
     new_vars_prefix = "AEN",
     date_imputation = "last",
-    max_dates = vars(DTHDT, EOSDT)
+    max_dates = exprs(DTHDT, EOSDT)
   ) %>%
   # Derive analysis start relative day and analysis end relative day
   derive_vars_dy(
     reference_date = TRTSDT,
-    source_vars = vars(ASTDT, AENDT)
+    source_vars = exprs(ASTDT, AENDT)
   ) %>%
   # Derive analysis date of medical history collection - ADT (company specific variable derivation)
   derive_vars_dt(
@@ -71,7 +71,7 @@ admh <- mh %>%
   # Derive analysis relative day - ADY (company specific variable derivation)
   derive_vars_dy(
     reference_date = TRTSDT,
-    source_vars = vars(ADT)
+    source_vars = exprs(ADT)
   ) %>%
   ## Derive query variables ----
   derive_vars_query(queries_mh) %>%
@@ -83,39 +83,39 @@ admh <- mh %>%
   )) %>%
   ## Derive occurrence flags ----
   derive_var_extreme_flag(
-    by_vars = vars(USUBJID),
-    order = vars(ASTDT, MHSEQ),
+    by_vars = exprs(USUBJID),
+    order = exprs(ASTDT, MHSEQ),
     new_var = AOCCFL,
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = vars(USUBJID, MHBODSYS),
-    order = vars(USUBJID, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
+    by_vars = exprs(USUBJID, MHBODSYS),
+    order = exprs(USUBJID, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
     new_var = AOCCSFL,
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = vars(USUBJID, MHDECOD),
-    order = vars(USUBJID, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
+    by_vars = exprs(USUBJID, MHDECOD),
+    order = exprs(USUBJID, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
     new_var = AOCCPFL,
     mode = "first"
   ) %>%
   # (company specific occurrence flag variables derivation)
   derive_var_extreme_flag(
-    by_vars = vars(USUBJID),
-    order = vars(USUBJID, AHIST, ASTDT, MHSEQ),
+    by_vars = exprs(USUBJID),
+    order = exprs(USUBJID, AHIST, ASTDT, MHSEQ),
     new_var = AOCPFL,
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = vars(USUBJID, MHBODSYS),
-    order = vars(USUBJID, AHIST, MHBODSYS, MHCAT, ASTDT, MHSEQ),
+    by_vars = exprs(USUBJID, MHBODSYS),
+    order = exprs(USUBJID, AHIST, MHBODSYS, MHCAT, ASTDT, MHSEQ),
     new_var = AOCPSFL,
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = vars(USUBJID, MHDECOD),
-    order = vars(USUBJID, AHIST, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
+    by_vars = exprs(USUBJID, MHDECOD),
+    order = exprs(USUBJID, AHIST, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
     new_var = AOCPPFL,
     mode = "first"
   ) %>%
@@ -123,14 +123,14 @@ admh <- mh %>%
   mutate(ANL01FL = ifelse(MHOCCUR != "N", "Y", NA_character_)) %>%
   ## Assign TRTA, TRTP (company specific variables derivation) ----
   # See also the "Visit and Period Variables" vignette
-  # (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
+  # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_bds)
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A
   ) %>%
   ## Assign APHASE and APHASEN Variable (company specific variable derivation) ----
   # See also the "Visit and Period Variables" vignette
-  # (https://pharmaverse.github.io/admiral/articles/visits_periods.html#periods_bds)
+  # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#periods_bds)
   mutate(
     APHASE = case_when(
       ADT < TRTSDT ~ "Screening",
@@ -150,8 +150,8 @@ admh <- restrict_derivation(
   derivation = derive_vars_merged,
   args = params(
     dataset_add = mhtermn_lookup,
-    by_vars = vars(MHTERM),
-    new_vars = vars(MHTERMN)
+    by_vars = exprs(MHTERM),
+    new_vars = exprs(MHTERMN)
   ),
   filter = (MHPRESP == "Y")
 )
@@ -160,7 +160,7 @@ admh <- restrict_derivation(
 admh <- admh %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   )
 
 

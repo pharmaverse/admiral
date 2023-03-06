@@ -7,7 +7,7 @@
 derive_param_map(
   dataset,
   by_vars,
-  set_values_to = vars(PARAMCD = "MAP"),
+  set_values_to = exprs(PARAMCD = "MAP"),
   sysbp_code = "SYSBP",
   diabp_code = "DIABP",
   hr_code = NULL,
@@ -37,7 +37,7 @@ in the newly created records.
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
 code for the new parameter.
 
 \emph{Permitted Values:} List of variable-value pairs}
@@ -116,8 +116,8 @@ advs <- tribble(
 # Derive MAP based on diastolic and systolic blood pressure
 advs \%>\%
   derive_param_map(
-    by_vars = vars(USUBJID, VISIT),
-    set_values_to = vars(
+    by_vars = exprs(USUBJID, VISIT),
+    set_values_to = exprs(
       PARAMCD = "MAP",
       PARAM = "Mean Arterial Pressure (mmHg)"
     ),
@@ -128,9 +128,9 @@ advs \%>\%
 # Derive MAP based on diastolic and systolic blood pressure and heart rate
 derive_param_map(
   advs,
-  by_vars = vars(USUBJID, VISIT),
+  by_vars = exprs(USUBJID, VISIT),
   hr_code = "PULSE",
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = "MAP",
     PARAM = "Mean Arterial Pressure (mmHg)"
   ),
@@ -140,6 +140,8 @@ derive_param_map(
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_event}()},
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
@@ -154,9 +156,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

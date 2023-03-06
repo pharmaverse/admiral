@@ -5,8 +5,8 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `by_vars` and the `order`
-#'   parameter are expected.
+#'   The columns specified by the `by_vars`, `analysis_var`, `order`,
+#'   `keep_vars` parameters are expected.
 #'
 #' @param dataset_expected_obs Expected observations dataset
 #'
@@ -17,14 +17,25 @@
 #'
 #'   For each group defined by `by_vars` those observations from `dataset_expected_obs`
 #'   are added to the output dataset which do not have a corresponding observation
-#'   in the input dataset or for which `AVAL` is NA for the corresponding observation
-#'   in the input dataset. Only variables specified in `by_vars` will be populated
-#'   in the newly created records.
+#'   in the input dataset or for which `analysis_var` is `NA` for the corresponding observation
+#'   in the input dataset.
+#'
+#' @param analysis_var Analysis variable.
+#'
+#'   *Default*: `AVAL`
+#'
+#'   *Permitted Values*: a variable
 #'
 #' @param order List of variables for sorting a dataset
 #'
 #'   The dataset is sorted by `order` before carrying the last
 #'   observation forward (eg. `AVAL`) within each `by_vars`.
+#'
+#' @param keep_vars Variables that need carrying the last observation forward
+#'
+#'   Keep variables that need carrying the last observation forward other than `analysis_var`
+#'   (e.g., `PARAMN`, `VISITNUM`). If by default `NULL`, only variables specified in
+#'   `by_vars` and `analysis_var` will be populated in the newly created records.
 #'
 #' @author G Gayatri
 #'
@@ -32,9 +43,9 @@
 #' by_vars parameter) those observations from dataset_expected_obs are added to
 #' the output dataset
 #' - which do not have a corresponding observation in the input dataset or
-#' - for which `AVAL` is NA for the corresponding observation in the input dataset.
+#' - for which `analysis_var` is NA for the corresponding observation in the input dataset.
 #'
-#'   For the new observations, `AVAL` is set to the non-missing `AVAL` of the
+#'   For the new observations, `analysis_var` is set to the non-missing `analysis_var` of the
 #'   previous observation in the input dataset (when sorted by `order`) and
 #'   `DTYPE` is set to "LOCF".
 #'
@@ -53,29 +64,29 @@
 #' library(tibble)
 #'
 #' advs <- tribble(
-#'   ~STUDYID,  ~USUBJID,      ~PARAMCD, ~AVAL, ~AVISITN, ~AVISIT,
-#'   "CDISC01", "01-701-1015", "PULSE",     61,        0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "PULSE",     60,        2, "WEEK 6",
-#'   "CDISC01", "01-701-1015", "DIABP",     51,        0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "DIABP",     50,        2, "WEEK 2",
-#'   "CDISC01", "01-701-1015", "DIABP",     51,        4, "WEEK 4",
-#'   "CDISC01", "01-701-1015", "DIABP",     50,        6, "WEEK 6",
-#'   "CDISC01", "01-701-1015", "SYSBP",    121,        0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "SYSBP",    121,        2, "WEEK 2",
-#'   "CDISC01", "01-701-1015", "SYSBP",    121,        4, "WEEK 4",
-#'   "CDISC01", "01-701-1015", "SYSBP",    121,        6, "WEEK 6",
-#'   "CDISC01", "01-701-1028", "PULSE",     65,        0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "DIABP",     79,        0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "DIABP",     80,        2, "WEEK 2",
-#'   "CDISC01", "01-701-1028", "DIABP",     NA,        4, "WEEK 4",
-#'   "CDISC01", "01-701-1028", "DIABP",     NA,        6, "WEEK 6",
-#'   "CDISC01", "01-701-1028", "SYSBP",    130,        0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "SYSBP",    132,        2, "WEEK 2"
+#'   ~STUDYID,  ~USUBJID,      ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
+#'   "CDISC01", "01-701-1015", "PULSE",        1,    61,        0, "BASELINE",
+#'   "CDISC01", "01-701-1015", "PULSE",        1,    60,        2, "WEEK 6",
+#'   "CDISC01", "01-701-1015", "DIABP",        2,    51,        0, "BASELINE",
+#'   "CDISC01", "01-701-1015", "DIABP",        2,    50,        2, "WEEK 2",
+#'   "CDISC01", "01-701-1015", "DIABP",        2,    51,        4, "WEEK 4",
+#'   "CDISC01", "01-701-1015", "DIABP",        2,    50,        6, "WEEK 6",
+#'   "CDISC01", "01-701-1015", "SYSBP",        3,   121,        0, "BASELINE",
+#'   "CDISC01", "01-701-1015", "SYSBP",        3,   121,        2, "WEEK 2",
+#'   "CDISC01", "01-701-1015", "SYSBP",        3,   121,        4, "WEEK 4",
+#'   "CDISC01", "01-701-1015", "SYSBP",        3,   121,        6, "WEEK 6",
+#'   "CDISC01", "01-701-1028", "PULSE",        1,    65,        0, "BASELINE",
+#'   "CDISC01", "01-701-1028", "DIABP",        2,    79,        0, "BASELINE",
+#'   "CDISC01", "01-701-1028", "DIABP",        2,    80,        2, "WEEK 2",
+#'   "CDISC01", "01-701-1028", "DIABP",        2,    NA,        4, "WEEK 4",
+#'   "CDISC01", "01-701-1028", "DIABP",        2,    NA,        6, "WEEK 6",
+#'   "CDISC01", "01-701-1028", "SYSBP",        3,   130,        0, "BASELINE",
+#'   "CDISC01", "01-701-1028", "SYSBP",        3,   132,        2, "WEEK 2"
 #' )
 #'
 #'
 #' # A dataset with all the combinations of PARAMCD, PARAM, AVISIT, AVISITN, ... which are expected.
-#' advs_expected_obsv <- tibble::tribble(
+#' advs_expected_obsv <- tribble(
 #'   ~PARAMCD, ~AVISITN, ~AVISIT,
 #'   "PULSE",         0, "BASELINE",
 #'   "PULSE",         6, "WEEK 6",
@@ -92,26 +103,35 @@
 #' derive_locf_records(
 #'   data = advs,
 #'   dataset_expected_obs = advs_expected_obsv,
-#'   by_vars = vars(STUDYID, USUBJID, PARAMCD),
-#'   order = vars(AVISITN, AVISIT)
+#'   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+#'   order = exprs(AVISITN, AVISIT),
+#'   keep_vars = exprs(PARAMN)
 #' )
 #'
 derive_locf_records <- function(dataset,
                                 dataset_expected_obs,
                                 by_vars,
-                                order) {
+                                analysis_var = AVAL,
+                                order,
+                                keep_vars = NULL) {
   #### Input Checking ####
+  analysis_var <- assert_symbol(enexpr(analysis_var))
 
   # Check if input parameters is a valid list of variables
   assert_vars(by_vars, optional = TRUE)
+  assert_vars(keep_vars, optional = TRUE)
   assert_order_vars(order)
 
   # Check by_vars and order variables in input datasets
   assert_data_frame(dataset_expected_obs)
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, extract_vars(order), chr2vars(colnames(dataset_expected_obs)))
+    required_vars = expr_c(
+      by_vars, analysis_var, extract_vars(order), keep_vars,
+      chr2vars(colnames(dataset_expected_obs))
+    )
   )
+
 
   #### Prepping 'dataset_expected_obs' ####
 
@@ -129,12 +149,12 @@ derive_locf_records <- function(dataset,
 
   ##### Add LOCF records ####
 
-  # Split input dataset into the missing and non-missing AVAL records
+  # Split input dataset into the missing and non-missing analysis_var (e.g., AVAL) records
   aval_missing <- dataset %>%
-    filter(is.na(AVAL))
+    filter(is.na(!!analysis_var))
 
   aval_not_missing <- dataset %>%
-    drop_na(AVAL)
+    drop_na(!!analysis_var)
 
 
   # Get the variable names from the expected observation dataset
@@ -143,7 +163,7 @@ derive_locf_records <- function(dataset,
 
 
   # Get unique combination of visits/timepoints per parameter per subject
-  # from the original input dataset (with non-missing AVAL)
+  # from the original input dataset (with non-missing analysis_var)
   advs_unique_original <- aval_not_missing %>%
     select(all_of(exp_obs_vars)) %>%
     distinct()
@@ -152,14 +172,14 @@ derive_locf_records <- function(dataset,
   tmp_dtype <- get_new_tmp_var(exp_obsv, prefix = "tmp_dtype")
 
   # Get all the expected observations that are to be added to the input
-  # dataset (with non-missing AVAL)
+  # dataset (with non-missing analysis_var)
   advs_exp_obsv3 <- exp_obsv %>%
     mutate(!!tmp_dtype := "LOCF") %>%
     anti_join(advs_unique_original, by = c(exp_obs_vars))
 
-  # Merge the expected observations with the input dataset (with non-missing AVAL)
+  # Merge the expected observations with the input dataset (with non-missing analysis_var)
   # Arrange the dataset by 'order' and group it by 'by_vars'
-  # Use fill() to fill the AVAL from the previous observation for the newly added records
+  # Use fill() to fill the analysis_var from the previous observation for the newly added records
 
 
   aval_not_missing_locf <- aval_not_missing %>%
@@ -176,11 +196,11 @@ derive_locf_records <- function(dataset,
   aval_not_missing_locf <- aval_not_missing_locf %>%
     arrange(!!!by_vars, !!!order) %>%
     group_by(!!!by_vars) %>%
-    fill("AVAL") %>%
+    fill(!!analysis_var, !!!keep_vars) %>%
     ungroup()
 
 
 
-  # Output dataset - merge the AVAL missing with non-missing+newly added LOCF records
+  # Output dataset - merge the analysis_var missing with non-missing+newly added LOCF records
   bind_rows(aval_not_missing_locf, aval_missing)
 }

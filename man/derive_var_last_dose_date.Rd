@@ -8,8 +8,8 @@ derive_var_last_dose_date(
   dataset,
   dataset_ex,
   filter_ex = NULL,
-  by_vars = vars(STUDYID, USUBJID),
-  dose_id = vars(),
+  by_vars = exprs(STUDYID, USUBJID),
+  dose_id = exprs(),
   dose_date,
   analysis_date,
   single_dose_condition = (EXDOSFRQ == "ONCE"),
@@ -30,10 +30,10 @@ and source variables from \code{traceability_vars} parameter are expected.}
 For example, it can be used to filter for valid dose.
 Defaults to NULL.}
 
-\item{by_vars}{Variables to join by (created by \code{dplyr::vars}).}
+\item{by_vars}{Variables to join by (created by \code{rlang::exprs}).}
 
-\item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
-Defaults to empty \code{vars()}.}
+\item{dose_id}{Variables to identify unique dose (created by \code{rlang::exprs}).
+Defaults to empty \code{exprs()}.}
 
 \item{dose_date}{The EX dose date variable. A date or date-time object is expected.}
 
@@ -46,8 +46,8 @@ is issued if the condition is not true. Defaults to \code{(EXDOSFRQ == "ONCE")}.
 
 \item{output_datetime}{Display \code{new_var} as datetime or as date only. Defaults to \code{TRUE}.}
 
-\item{traceability_vars}{A named list returned by \code{\link[=vars]{vars()}} listing the traceability variables,
-e.g. \code{vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)}.
+\item{traceability_vars}{A named list returned by \code{\link[=exprs]{exprs()}} listing the traceability variables,
+e.g. \code{exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)}.
 The left-hand side (names of the list elements) gives the names of the traceability variables
 in the returned dataset.
 The right-hand side (values of the list elements) gives the values of the traceability variables
@@ -101,7 +101,7 @@ adae \%>\%
     dose_date = EXENDTM,
     analysis_date = ASTDTM,
     new_var = LDOSEDTM,
-    traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
+    traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSEDTM)
 }
@@ -109,8 +109,8 @@ adae \%>\%
 \code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_grp}()},
 \code{\link{derive_var_merged_cat}()},
@@ -119,16 +119,12 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
-\code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},
 \code{\link{get_summary_records}()}
-}
-\author{
-Ben Straub
 }
 \concept{der_gen}
 \keyword{der_gen}

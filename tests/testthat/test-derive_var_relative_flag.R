@@ -25,8 +25,8 @@ test_that("derive_var_relative_flag Test 1: flag observations up to first PD", {
     base = expected,
     compare = derive_var_relative_flag(
       response,
-      by_vars = vars(USUBJID),
-      order = vars(AVISITN),
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISITN),
       new_var = ANL02FL,
       condition = AVALC == "PD",
       mode = "first",
@@ -57,8 +57,8 @@ test_that("derive_var_relative_flag Test 2: Flag AEs after COVID AE", {
     base = expected,
     compare = derive_var_relative_flag(
       adae,
-      by_vars = vars(USUBJID),
-      order = vars(ASTDY, AESEQ),
+      by_vars = exprs(USUBJID),
+      order = exprs(ASTDY, AESEQ),
       new_var = PSTCOVFL,
       condition = ACOVFL == "Y",
       mode = "first",

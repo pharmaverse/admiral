@@ -19,7 +19,6 @@
 #'
 #' @return Input dataset with additional column `new_var`.
 #'
-#' @author Ben Straub
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -57,27 +56,27 @@
 #'     dose_date = EXENDTM,
 #'     analysis_date = ASTDTM,
 #'     new_var = LDOSEDTM,
-#'     traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
+#'     traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSEDTM)
 derive_var_last_dose_date <- function(dataset,
                                       dataset_ex,
                                       filter_ex = NULL,
-                                      by_vars = vars(STUDYID, USUBJID),
-                                      dose_id = vars(),
+                                      by_vars = exprs(STUDYID, USUBJID),
+                                      dose_id = exprs(),
                                       dose_date,
                                       analysis_date,
                                       single_dose_condition = (EXDOSFRQ == "ONCE"),
                                       new_var,
                                       output_datetime = TRUE,
                                       traceability_vars = NULL) {
-  filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
+  filter_ex <- assert_filter_cond(enexpr(filter_ex), optional = TRUE)
   by_vars <- assert_vars(by_vars)
   dose_id <- assert_vars(dose_id)
-  dose_date <- assert_symbol(enquo(dose_date))
-  analysis_date <- assert_symbol(enquo(analysis_date))
-  single_dose_condition <- assert_filter_cond(enquo(single_dose_condition))
-  new_var <- assert_symbol(enquo(new_var))
+  dose_date <- assert_symbol(enexpr(dose_date))
+  analysis_date <- assert_symbol(enexpr(analysis_date))
+  single_dose_condition <- assert_filter_cond(enexpr(single_dose_condition))
+  new_var <- assert_symbol(enexpr(new_var))
   assert_logical_scalar(output_datetime)
 
   res <- derive_vars_last_dose(
@@ -89,7 +88,7 @@ derive_var_last_dose_date <- function(dataset,
     dose_date = !!dose_date,
     analysis_date = !!analysis_date,
     single_dose_condition = !!single_dose_condition,
-    new_vars = vars(!!new_var := !!dose_date),
+    new_vars = exprs(!!new_var := !!dose_date),
     traceability_vars = traceability_vars
   )
 

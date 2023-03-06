@@ -12,14 +12,14 @@
 #'
 #' @param by_vars Grouping variables
 #'
-#'   *Permitted Values:* list of variables created by `vars()`
+#'   *Permitted Values:* list of variables created by `exprs()`
 #'
 #' @param order Sort order
 #'
 #'   Within each by group the observations are ordered by the specified order.
 #'
 #'   *Permitted Values:* list of variables or `desc(<variable>)` function calls
-#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))`
+#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))`
 #'
 #' @param condition Condition for Reference Observation
 #'
@@ -64,7 +64,6 @@
 #'   (`condition` parameter) is fulfilled the first or last time (`order`
 #'   parameter and `mode` parameter) is included in the output dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return A dataset containing for each by group the observations before or
 #'   after the observation where the condition was fulfilled the first or last
@@ -100,8 +99,8 @@
 #' # Select observations up to first PD for each patient
 #' response %>%
 #'   filter_relative(
-#'     by_vars = vars(USUBJID),
-#'     order = vars(AVISITN),
+#'     by_vars = exprs(USUBJID),
+#'     order = exprs(AVISITN),
 #'     condition = AVALC == "PD",
 #'     mode = "first",
 #'     selection = "before",
@@ -111,8 +110,8 @@
 #' # Select observations after last CR, PR, or SD for each patient
 #' response %>%
 #'   filter_relative(
-#'     by_vars = vars(USUBJID),
-#'     order = vars(AVISITN),
+#'     by_vars = exprs(USUBJID),
+#'     order = exprs(AVISITN),
 #'     condition = AVALC %in% c("CR", "PR", "SD"),
 #'     mode = "last",
 #'     selection = "after",
@@ -122,8 +121,8 @@
 #' # Select observations from first response to first PD
 #' response %>%
 #'   filter_relative(
-#'     by_vars = vars(USUBJID),
-#'     order = vars(AVISITN),
+#'     by_vars = exprs(USUBJID),
+#'     order = exprs(AVISITN),
 #'     condition = AVALC %in% c("CR", "PR"),
 #'     mode = "first",
 #'     selection = "after",
@@ -131,8 +130,8 @@
 #'     keep_no_ref_groups = FALSE
 #'   ) %>%
 #'   filter_relative(
-#'     by_vars = vars(USUBJID),
-#'     order = vars(AVISITN),
+#'     by_vars = exprs(USUBJID),
+#'     order = exprs(AVISITN),
 #'     condition = AVALC == "PD",
 #'     mode = "first",
 #'     selection = "before",
@@ -149,7 +148,7 @@ filter_relative <- function(dataset,
                             check_type = "warning") {
   assert_vars(by_vars)
   assert_order_vars(order)
-  condition <- assert_filter_cond(enquo(condition))
+  condition <- assert_filter_cond(enexpr(condition))
   mode <-
     assert_character_scalar(
       mode,
@@ -163,7 +162,7 @@ filter_relative <- function(dataset,
       case_sensitive = FALSE
     )
   assert_logical_scalar(inclusive)
-  assert_data_frame(dataset, required_vars = quo_c(by_vars, extract_vars(order)))
+  assert_data_frame(dataset, required_vars = expr_c(by_vars, extract_vars(order)))
   check_type <-
     assert_character_scalar(
       check_type,
@@ -192,7 +191,7 @@ filter_relative <- function(dataset,
   data <- derive_vars_merged(
     data,
     dataset_add = cond_nrs,
-    new_vars = vars(tmp_obs_nr_match_filter_relative = tmp_obs_nr_filter_relative),
+    new_vars = exprs(tmp_obs_nr_match_filter_relative = tmp_obs_nr_filter_relative),
     by_vars = by_vars
   )
 

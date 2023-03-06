@@ -40,9 +40,9 @@ test_that("derive_vars_last_dose Test 1: function works as expected", {
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = vars(STUDYID, USUBJID),
+    by_vars = exprs(STUDYID, USUBJID),
     dose_date = EXENDT,
-    new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDT, EXSTDT),
+    new_vars = exprs(EXDOSE, EXTRT, EXSEQ, EXENDT, EXSTDT),
     analysis_date = AESTDT,
     single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = NULL
@@ -70,7 +70,7 @@ test_that("derive_vars_last_dose Test 2: function checks validity of start and e
       input_ae,
       input_ex_wrong,
       filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-      by_vars = vars(STUDYID, USUBJID),
+      by_vars = exprs(STUDYID, USUBJID),
       dose_date = EXENDT,
       analysis_date = AESTDT,
       single_dose_condition = (EXSTDTC == EXENDTC),
@@ -100,11 +100,11 @@ test_that("derive_vars_last_dose Test 3: function returns traceability vars", {
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = vars(STUDYID, USUBJID),
+    by_vars = exprs(STUDYID, USUBJID),
     dose_date = EXENDT,
     analysis_date = AESTDT,
     single_dose_condition = (EXSTDTC == EXENDTC),
-    traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+    traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
   )
 
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
@@ -140,7 +140,7 @@ test_that("derive_vars_last_dose Test 4: function errors when multiple doses are
       input_ae,
       input_ex_dup,
       filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-      by_vars = vars(STUDYID, USUBJID),
+      by_vars = exprs(STUDYID, USUBJID),
       dose_date = EXENDT,
       analysis_date = AESTDT,
       single_dose_condition = (EXSTDTC == EXENDTC),
@@ -176,10 +176,10 @@ test_that("derive_vars_last_dose Test 5: multiple doses on same date - dose_id s
     input_ae,
     input_ex_dup,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = vars(STUDYID, USUBJID),
+    by_vars = exprs(STUDYID, USUBJID),
     dose_date = EXENDT,
-    dose_id = vars(EXSEQ),
-    new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXSTDT, EXENDT),
+    dose_id = exprs(EXSEQ),
+    new_vars = exprs(EXDOSE, EXTRT, EXSEQ, EXSTDT, EXENDT),
     analysis_date = AESTDT,
     single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = NULL
@@ -224,9 +224,9 @@ test_that("derive_vars_last_dose Test 6: error is issued if same variable is fou
       input_ae,
       input_ex,
       filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-      by_vars = vars(STUDYID, USUBJID),
+      by_vars = exprs(STUDYID, USUBJID),
       dose_date = EXENDT,
-      new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDT, EXSTDT),
+      new_vars = exprs(EXDOSE, EXTRT, EXSEQ, EXENDT, EXSTDT),
       analysis_date = EXSTDT,
       single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
@@ -259,10 +259,10 @@ test_that("derive_vars_last_dose Test 7: no error is raised when setting `dose_d
     derive_vars_last_dose(
       adae,
       adex_single,
-      by_vars = vars(USUBJID),
+      by_vars = exprs(USUBJID),
       dose_date = EXSTDT,
       analysis_date = ASTDT,
-      new_vars = vars(EXSTDT = ASTDT)
+      new_vars = exprs(EXSTDT = ASTDT)
     ),
     NA
   )

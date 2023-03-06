@@ -9,7 +9,7 @@ extract_duplicate_records(dataset, by_vars)
 \arguments{
 \item{dataset}{A data frame}
 
-\item{by_vars}{A list of variables created using \code{vars()} identifying groups of
+\item{by_vars}{A list of variables created using \code{exprs()} identifying groups of
 records in which to look for duplicates}
 }
 \value{
@@ -24,16 +24,13 @@ data(admiral_adsl)
 # Duplicate the first record
 adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 
-extract_duplicate_records(adsl, vars(USUBJID))
+extract_duplicate_records(adsl, exprs(USUBJID))
 }
 \seealso{
 Utilities for Dataset Checking: 
 \code{\link{get_duplicates_dataset}()},
 \code{\link{get_many_to_one_dataset}()},
 \code{\link{get_one_to_many_dataset}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{utils_ds_chk}
 \keyword{utils_ds_chk}

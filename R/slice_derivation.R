@@ -8,9 +8,18 @@
 #'
 #' @param derivation Derivation
 #'
+#'   A function that performs a specific derivation is expected. A derivation
+#'   adds variables or observations to a dataset. The first argument of a
+#'   derivation must expect a dataset and the derivation must return a dataset.
+#'   The function must provide the `dataset` argument and all arguments
+#'   specified in the `params()` objects passed to the `arg` argument.
+#'
+#'   Please note that it is not possible to specify `{dplyr}`
+#'   functions like `mutate()` or `summarize()`.
+#'
 #' @param args Arguments of the derivation
 #'
-#'   A `param()` object is expected.
+#'   A `params()` object is expected.
 #'
 #' @param ... A `derivation_slice()` object is expected
 #'
@@ -39,7 +48,6 @@
 #' @family high_order_function
 #' @keywords high_order_function
 #'
-#' @author Stefan Bundfuss
 #'
 #' @seealso [params()] [restrict_derivation()]
 #'
@@ -145,7 +153,6 @@ slice_derivation <- function(dataset,
 #'
 #' @return An object of class `derivation_slice`
 
-#' @author Stefan Bundfuss
 #'
 #' @seealso [slice_derivation()], [params()]
 #'
@@ -153,13 +160,11 @@ slice_derivation <- function(dataset,
 #' @keywords high_order_function
 #'
 #' @export
-#'
-#' @return An object of class `slice`.
 derivation_slice <- function(filter,
-                             args) {
+                             args = NULL) {
   out <- list(
-    filter = assert_filter_cond(enquo(filter)),
-    args = assert_s3_class(args, "params")
+    filter = assert_filter_cond(enexpr(filter)),
+    args = assert_s3_class(args, "params", optional = TRUE)
   )
   class(out) <- c("derivation_slice", "source", "list")
   out

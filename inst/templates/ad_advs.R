@@ -24,7 +24,7 @@ vs <- admiral_vs
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 vs <- convert_blanks_to_na(vs)
 
@@ -75,28 +75,28 @@ format_avalcat1n <- function(param, aval) {
 # Derivations ----
 
 # Get list of ADSL vars required for derivations
-adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
 advs <- vs %>%
   # Join ADSL with VS (need TRTSDT for ADY derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   ## Calculate ADT, ADY ----
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = VSDTC
   ) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
 advs <- advs %>%
   ## Add PARAMCD only - add PARAM etc later ----
   derive_vars_merged_lookup(
     dataset_add = param_lookup,
-    new_vars = vars(PARAMCD),
-    by_vars = vars(VSTESTCD)
+    new_vars = exprs(PARAMCD),
+    by_vars = exprs(VSTESTCD)
   ) %>%
   ## Calculate AVAL and AVALC ----
   mutate(
@@ -110,23 +110,23 @@ advs <- advs %>%
 
   # Derive Mean Arterial Pressure
   derive_param_map(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
-    set_values_to = vars(PARAMCD = "MAP"),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
+    set_values_to = exprs(PARAMCD = "MAP"),
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   ) %>%
   # Derive Body Surface Area
   derive_param_bsa(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     method = "Mosteller",
-    set_values_to = vars(PARAMCD = "BSA"),
+    set_values_to = exprs(PARAMCD = "BSA"),
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   ) %>%
   # Derive Body Mass Index
   derive_param_bmi(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
-    set_values_to = vars(PARAMCD = "BMI"),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
+    set_values_to = exprs(PARAMCD = "BMI"),
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   )
@@ -134,7 +134,7 @@ advs <- advs %>%
 
 ## Get visit info ----
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits)
+# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#visits)
 advs <- advs %>%
   # Derive Timing
   mutate(
@@ -155,11 +155,11 @@ advs <- advs %>%
 ## Derive a new record as a summary record (e.g. mean of the triplicates at each time point) ----
 advs <- advs %>%
   derive_summary_records(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT, ADY),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT, ADY),
     filter = !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = mean,
-    set_values_to = vars(DTYPE = "AVERAGE")
+    set_values_to = exprs(DTYPE = "AVERAGE")
   )
 
 advs <- advs %>%
@@ -174,7 +174,7 @@ advs <- advs %>%
 ## Calculate ANRIND : requires the reference ranges ANRLO, ANRHI ----
 # Also accommodates the ranges A1LO, A1HI
 advs <- advs %>%
-  derive_vars_merged(dataset_add = range_lookup, by_vars = vars(PARAMCD)) %>%
+  derive_vars_merged(dataset_add = range_lookup, by_vars = exprs(PARAMCD)) %>%
   # Calculate ANRIND
   derive_var_anrind()
 
@@ -193,8 +193,8 @@ advs <- advs %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
-      order = vars(ADT, VISITNUM, VSSEQ),
+      by_vars = exprs(STUDYID, USUBJID, BASETYPE, PARAMCD),
+      order = exprs(ADT, VISITNUM, VSSEQ),
       new_var = ABLFL,
       mode = "last"
     ),
@@ -206,19 +206,19 @@ advs <- advs %>%
 advs <- advs %>%
   # Calculate BASE
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   ) %>%
   # Calculate BASEC
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVALC,
     new_var = BASEC
   ) %>%
   # Calculate BNRIND
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ANRIND,
     new_var = BNRIND
   ) %>%
@@ -234,8 +234,8 @@ advs <- advs %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ANL01FL,
-      by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
-      order = vars(ADT, AVAL),
+      by_vars = exprs(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
+      order = exprs(ADT, AVAL),
       mode = "last"
     ),
     filter = !is.na(AVISITN) & ONTRTFL == "Y"
@@ -243,15 +243,15 @@ advs <- advs %>%
 
 ## Get treatment information ----
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
+# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_bds)
 advs <- advs %>%
   # Assign TRTA, TRTP
   # Create End of Treatment Record
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = vars(STUDYID, USUBJID, PARAMCD, ATPTN),
-      order = vars(ADT),
+      by_vars = exprs(STUDYID, USUBJID, PARAMCD, ATPTN),
+      order = exprs(ADT),
       new_var = EOTFL,
       mode = "last"
     ),
@@ -275,22 +275,22 @@ advs <- advs %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = vars(STUDYID, USUBJID),
-    order = vars(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
+    by_vars = exprs(STUDYID, USUBJID),
+    order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
     check_type = "error"
   ) %>%
   # Derive AVALCA1N and AVALCAT1
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
-  derive_vars_merged(dataset_add = avalcat_lookup, by_vars = vars(PARAMCD, AVALCA1N)) %>%
+  derive_vars_merged(dataset_add = avalcat_lookup, by_vars = exprs(PARAMCD, AVALCA1N)) %>%
   # Derive PARAM and PARAMN
-  derive_vars_merged(dataset_add = select(param_lookup, -VSTESTCD), by_vars = vars(PARAMCD))
+  derive_vars_merged(dataset_add = select(param_lookup, -VSTESTCD), by_vars = exprs(PARAMCD))
 
 
 # Add all ADSL variables
 advs <- advs %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   )
 
 # Final Steps, Select final variables and Add labels

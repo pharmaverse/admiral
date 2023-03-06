@@ -53,14 +53,14 @@
 #'
 #' @param set_values_to Variables to set
 #'
-#'   A named list returned by `vars()` defining the variables to be set for the
-#'   new parameter, e.g. `vars(PARAMCD = "OS", PARAM = "Overall Survival")` is
+#'   A named list returned by `exprs()` defining the variables to be set for the
+#'   new parameter, e.g. `exprs(PARAMCD = "OS", PARAM = "Overall Survival")` is
 #'   expected. The values must be symbols, character strings, numeric values,
 #'   expressions, or `NA`.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#'   A list of symbols created using `vars()` is expected.
+#'   A list of symbols created using `exprs()` is expected.
 #'
 #' @details The following steps are performed to create the observations of the
 #'   new parameter:
@@ -111,15 +111,16 @@
 #'   observation is selected. If an event is available, the event observation is
 #'   selected. Otherwise the censoring observation is selected.
 #'
-#'   Finally
-#'   1. the variables specified for `start_date` and `start_imputation_flag` are
-#'   joined from the ADSL dataset,
-#'   1. the variables as defined by the `set_values_to` parameter are added,
-#'   1. the `ADT`/`ADTM` variable is set to the maximum of `ADT`/`ADTM` and
-#'   `STARTDT`/`STARTDTM` (depending on the `create_datetime` parameter), and
-#'   1. the new observations are added to the output dataset.
+#'   Finally:
+#'   1. The variables specified for `start_date` and `start_imputation_flag` are
+#'   joined from the ADSL dataset. Only subjects in both datasets are kept,
+#'   i.e., subjects with both an event or censoring and an observation in
+#'   `dataset_adsl`.
+#'   1. The variables as defined by the `set_values_to` parameter are added.
+#'   1. The `ADT`/`ADTM` variable is set to the maximum of `ADT`/`ADTM` and
+#'   `STARTDT`/`STARTDTM` (depending on the `create_datetime` parameter).
+#'   1. The new observations are added to the output dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the new parameter added
 #'
@@ -136,11 +137,12 @@
 #'
 #' adsl <- admiral_adsl
 #'
+#' # derive overall survival parameter
 #' death <- event_source(
 #'   dataset_name = "adsl",
 #'   filter = DTHFL == "Y",
 #'   date = DTHDT,
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     EVNTDESC = "DEATH",
 #'     SRCDOM = "ADSL",
 #'     SRCVAR = "DTHDT"
@@ -150,7 +152,7 @@
 #' last_alive_dt <- censor_source(
 #'   dataset_name = "adsl",
 #'   date = LSTALVDT,
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     EVNTDESC = "LAST DATE KNOWN ALIVE",
 #'     SRCDOM = "ADSL",
 #'     SRCVAR = "LSTALVDT"
@@ -162,7 +164,7 @@
 #'   event_conditions = list(death),
 #'   censor_conditions = list(last_alive_dt),
 #'   source_datasets = list(adsl = adsl),
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "OS",
 #'     PARAM = "Overall Survival"
 #'   )
@@ -170,7 +172,88 @@
 #'   select(-STUDYID) %>%
 #'   filter(row_number() %in% 20:30)
 #'
-#' # derive time to adverse event for each preferred term #
+#' # derive duration of response
+#' # only observations for subjects in dataset_adsl are created
+#' adsl <- tribble(
+#'   ~USUBJID, ~DTHFL, ~DTHDT,            ~RSPDT,
+#'   "01",     "Y",    ymd("2021-06-12"), ymd("2021-03-04"),
+#'   "02",     "N",    NA,                NA,
+#'   "03",     "Y",    ymd("2021-08-21"), NA,
+#'   "04",     "N",    NA,                ymd("2021-04-14")
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' adrs <- tribble(
+#'   ~USUBJID, ~AVALC, ~ADT,              ~ASEQ,
+#'   "01",     "SD",   ymd("2021-01-03"), 1,
+#'   "01",     "PR",   ymd("2021-03-04"), 2,
+#'   "01",     "PD",   ymd("2021-05-05"), 3,
+#'   "02",     "PD",   ymd("2021-02-03"), 1,
+#'   "04",     "SD",   ymd("2021-02-13"), 1,
+#'   "04",     "PR",   ymd("2021-04-14"), 2,
+#'   "04",     "CR",   ymd("2021-05-15"), 3
+#' ) %>%
+#'   mutate(STUDYID = "AB42", PARAMCD = "OVR")
+#'
+#' pd <- event_source(
+#'   dataset_name = "adrs",
+#'   filter = AVALC == "PD",
+#'   date = ADT,
+#'   set_values_to = exprs(
+#'     EVENTDESC = "PD",
+#'     SRCDOM = "ADRS",
+#'     SRCVAR = "ADTM",
+#'     SRCSEQ = ASEQ
+#'   )
+#' )
+#'
+#' death <- event_source(
+#'   dataset_name = "adsl",
+#'   filter = DTHFL == "Y",
+#'   date = DTHDT,
+#'   set_values_to = exprs(
+#'     EVENTDESC = "DEATH",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "DTHDT"
+#'   )
+#' )
+#'
+#' lastvisit <- censor_source(
+#'   dataset_name = "adrs",
+#'   date = ADT,
+#'   censor = 1,
+#'   set_values_to = exprs(
+#'     EVENTDESC = "LAST TUMOR ASSESSMENT",
+#'     SRCDOM = "ADRS",
+#'     SRCVAR = "ADTM",
+#'     SRCSEQ = ASEQ
+#'   )
+#' )
+#'
+#' first_response <- censor_source(
+#'   dataset_name = "adsl",
+#'   date = RSPDT,
+#'   censor = 1,
+#'   set_values_to = exprs(
+#'     EVENTDESC = "FIRST RESPONSE",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "RSPDT"
+#'   )
+#' )
+#'
+#' derive_param_tte(
+#'   dataset_adsl = filter(adsl, !is.na(RSPDT)),
+#'   start_date = RSPDT,
+#'   event_conditions = list(pd, death),
+#'   censor_conditions = list(lastvisit, first_response),
+#'   source_datasets = list(adsl = adsl, adrs = adrs),
+#'   set_values_to = exprs(
+#'     PARAMCD = "DURRSP",
+#'     PARAM = "Duration of Response"
+#'   )
+#' )
+#'
+#' # derive time to adverse event for each preferred term
 #' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -197,7 +280,7 @@
 #' ttae <- event_source(
 #'   dataset_name = "ae",
 #'   date = AESTDT,
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     EVNTDESC = "AE",
 #'     SRCDOM = "AE",
 #'     SRCVAR = "AESTDTC",
@@ -208,7 +291,7 @@
 #' eos <- censor_source(
 #'   dataset_name = "adsl",
 #'   date = EOSDT,
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     EVNTDESC = "END OF STUDY",
 #'     SRCDOM = "ADSL",
 #'     SRCVAR = "EOSDT"
@@ -217,12 +300,12 @@
 #'
 #' derive_param_tte(
 #'   dataset_adsl = adsl,
-#'   by_vars = vars(AEDECOD),
+#'   by_vars = exprs(AEDECOD),
 #'   start_date = TRTSDT,
 #'   event_conditions = list(ttae),
 #'   censor_conditions = list(eos),
 #'   source_datasets = list(adsl = adsl, ae = ae_ext),
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
 #'     PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
 #'     PARCAT1 = "TTAE",
@@ -243,8 +326,8 @@ derive_param_tte <- function(dataset = NULL,
   # checking and quoting #
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
-  start_date <- assert_symbol(enquo(start_date))
-  assert_data_frame(dataset_adsl, required_vars = vars(!!start_date))
+  start_date <- assert_symbol(enexpr(start_date))
+  assert_data_frame(dataset_adsl, required_vars = exprs(!!start_date))
   assert_vars(subject_keys)
   assert_list_of(event_conditions, "event_source")
   assert_list_of(censor_conditions, "censor_source")
@@ -277,7 +360,7 @@ derive_param_tte <- function(dataset = NULL,
   assert_logical_scalar(create_datetime)
   assert_varval_list(set_values_to, accept_expr = TRUE, optional = TRUE)
   if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
-    assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+    assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
   if (!is.null(by_vars)) {
     source_datasets <- extend_source_datasets(
@@ -317,7 +400,7 @@ derive_param_tte <- function(dataset = NULL,
     date_var <- sym("ADT")
     start_var <- sym("STARTDT")
   }
-  adsl_vars <- vars(
+  adsl_vars <- exprs(
     !!!subject_keys,
     !!start_var := !!start_date
   )
@@ -325,7 +408,7 @@ derive_param_tte <- function(dataset = NULL,
   start_date_imputation_flag <- gsub("(DT|DTM)$", "DTF", as_name(start_date))
   if (start_date_imputation_flag %in% colnames(dataset_adsl) &
     as_name(start_date) != start_date_imputation_flag) {
-    adsl_vars <- vars(
+    adsl_vars <- exprs(
       !!!adsl_vars,
       STARTDTF = !!sym(start_date_imputation_flag)
     )
@@ -334,7 +417,7 @@ derive_param_tte <- function(dataset = NULL,
   start_time_imputation_flag <- gsub("DTM$", "TMF", as_name(start_date))
   if (start_time_imputation_flag %in% colnames(dataset_adsl) &
     as_name(start_date) != start_time_imputation_flag) {
-    adsl_vars <- vars(
+    adsl_vars <- exprs(
       !!!adsl_vars,
       STARTTMF = !!sym(start_time_imputation_flag)
     )
@@ -346,13 +429,13 @@ derive_param_tte <- function(dataset = NULL,
   # create observations for new parameter #
   new_param <- filter_extreme(
     bind_rows(event_data, censor_data),
-    by_vars = quo_c(subject_keys, by_vars),
-    order = vars(!!tmp_event),
+    by_vars = expr_c(subject_keys, by_vars),
+    order = exprs(!!tmp_event),
     mode = "last"
   ) %>%
-    derive_vars_merged(
-      dataset_add = adsl,
-      by_vars = subject_keys
+    inner_join(
+      adsl,
+      by = vars2chr(subject_keys)
     )
   tryCatch(
     new_param <- mutate(new_param, !!!set_values_to),
@@ -365,7 +448,7 @@ derive_param_tte <- function(dataset = NULL,
             " ",
             names(set_values_to),
             "=",
-            lapply(set_values_to, quo_get_expr),
+            set_values_to,
             collapse = "\n"
           ),
           "\n)\nError message:\n  ",
@@ -381,7 +464,7 @@ derive_param_tte <- function(dataset = NULL,
 
   if (!is.null(by_vars)) {
     if (!is.null(set_values_to$PARAMCD)) {
-      assert_one_to_one(new_param, vars(PARAMCD), by_vars)
+      assert_one_to_one(new_param, exprs(PARAMCD), by_vars)
     }
 
     # -vars2chr(by_vars) does not work for 3.5 #
@@ -389,7 +472,7 @@ derive_param_tte <- function(dataset = NULL,
   }
 
   # add new parameter to input dataset #
-  all_data <- bind_rows(dataset, new_param)
+  bind_rows(dataset, new_param)
 }
 
 #' Select the First or Last Date from Several Sources
@@ -418,7 +501,7 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#'   A list of symbols created using `vars()` is expected.
+#'   A list of symbols created using `exprs()` is expected.
 #'
 #' @param mode Selection mode (first or last)
 #'
@@ -452,10 +535,9 @@ derive_param_tte <- function(dataset = NULL,
 #' @return A dataset with one observation per subject as described in the
 #'   "Details" section.
 #'
-#' @author Stefan Bundfuss
 #'
-#' @keywords source_specifications
-#' @family source_specifications
+#' @keywords other_advanced
+#' @family other_advanced
 #'
 #' @export
 #'
@@ -485,7 +567,7 @@ derive_param_tte <- function(dataset = NULL,
 #' ttae <- event_source(
 #'   dataset_name = "ae",
 #'   date = AESTDT,
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     EVNTDESC = "AE",
 #'     SRCDOM = "AE",
 #'     SRCVAR = "AESTDTC",
@@ -496,7 +578,7 @@ derive_param_tte <- function(dataset = NULL,
 #' filter_date_sources(
 #'   sources = list(ttae),
 #'   source_datasets = list(adsl = adsl, ae = ae),
-#'   by_vars = vars(AEDECOD),
+#'   by_vars = exprs(AEDECOD),
 #'   create_datetime = FALSE,
 #'   subject_keys = get_admiral_option("subject_keys"),
 #'   mode = "first"
@@ -535,17 +617,17 @@ filter_date_sources <- function(sources,
     data[[i]] <- source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
       filter_extreme(
-        order = vars(!!date),
-        by_vars = quo_c(subject_keys, by_vars),
+        order = exprs(!!date),
+        by_vars = expr_c(subject_keys, by_vars),
         mode = mode,
         check_type = "none"
       )
 
     # add date variable and accompanying variables
     if (create_datetime) {
-      date_derv <- vars(!!date_var := as_datetime(!!date))
+      date_derv <- exprs(!!date_var := as_datetime(!!date))
     } else {
-      date_derv <- vars(!!date_var := date(!!date))
+      date_derv <- exprs(!!date_var := date(!!date))
     }
 
     data[[i]] <- transmute(
@@ -563,8 +645,8 @@ filter_date_sources <- function(sources,
     bind_rows() %>%
     filter(!is.na(!!date_var)) %>%
     filter_extreme(
-      by_vars = quo_c(subject_keys, by_vars),
-      order = vars(!!date_var),
+      by_vars = expr_c(subject_keys, by_vars),
+      order = exprs(!!date_var),
       mode = mode,
       check_type = "none"
     )
@@ -592,10 +674,9 @@ filter_date_sources <- function(sources,
 #'
 #' @return The list of extended source datasets
 #'
-#' @author Stefan Bundfuss
 #'
-#' @keywords source_specifications
-#' @family source_specifications
+#' @keywords other_advanced
+#' @family other_advanced
 #'
 #' @examples
 #' library(tibble)
@@ -619,7 +700,7 @@ filter_date_sources <- function(sources,
 #'
 #' extend_source_datasets(
 #'   source_datasets = list(adsl = adsl, ae = ae),
-#'   by_vars = vars(AEDECOD)
+#'   by_vars = exprs(AEDECOD)
 #' )
 #' @export
 extend_source_datasets <- function(source_datasets,
@@ -702,12 +783,11 @@ extend_source_datasets <- function(source_datasets,
 #'   CDISC strongly recommends using `0` for events and positive integers for
 #'   censoring.
 #'
-#' @param set_values_to A named list returned by `vars()` defining the variables
-#'   to be set for the event or censoring, e.g. `vars(EVENTDESC = "DEATH",
+#' @param set_values_to A named list returned by `exprs()` defining the variables
+#'   to be set for the event or censoring, e.g. `exprs(EVENTDESC = "DEATH",
 #'   SRCDOM = "ADSL", SRCVAR = "DTHDT")`. The values must be a symbol, a
 #'   character string, a numeric value, or `NA`.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords source_specifications
 #' @family source_specifications
@@ -722,8 +802,8 @@ tte_source <- function(dataset_name,
                        set_values_to = NULL) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
-    filter = assert_filter_cond(enquo(filter), optional = TRUE),
-    date = assert_symbol(enquo(date)),
+    filter = assert_filter_cond(enexpr(filter), optional = TRUE),
+    date = assert_symbol(enexpr(date)),
     censor = assert_integer_scalar(censor),
     set_values_to = assert_varval_list(
       set_values_to,
@@ -741,7 +821,6 @@ tte_source <- function(dataset_name,
 #'
 #' @inheritParams tte_source
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family source_specifications
 #' @keywords source_specifications
@@ -759,7 +838,7 @@ tte_source <- function(dataset_name,
 #'   dataset_name = "adsl",
 #'   filter = DTHFL == "Y",
 #'   date = DTHDT,
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     EVNTDESC = "DEATH",
 #'     SRCDOM = "ADSL",
 #'     SRCVAR = "DTHDT"
@@ -771,8 +850,8 @@ event_source <- function(dataset_name,
                          set_values_to = NULL) {
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),
-    filter = !!enquo(filter),
-    date = !!assert_symbol(enquo(date)),
+    filter = !!enexpr(filter),
+    date = !!assert_symbol(enexpr(date)),
     censor = 0,
     set_values_to = set_values_to
   )
@@ -787,7 +866,6 @@ event_source <- function(dataset_name,
 #'
 #' @inheritParams tte_source
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family source_specifications
 #' @keywords source_specifications
@@ -804,7 +882,7 @@ event_source <- function(dataset_name,
 #' censor_source(
 #'   dataset_name = "adsl",
 #'   date = LSTALVDT,
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     EVNTDESC = "ALIVE",
 #'     SRCDOM = "ADSL",
 #'     SRCVAR = "LSTALVDT"
@@ -817,8 +895,8 @@ censor_source <- function(dataset_name,
                           set_values_to = NULL) {
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),
-    filter = !!enquo(filter),
-    date = !!assert_symbol(enquo(date)),
+    filter = !!enexpr(filter),
+    date = !!assert_symbol(enexpr(date)),
     censor = assert_integer_scalar(censor, subset = "positive"),
     set_values_to = set_values_to
   )
@@ -834,12 +912,11 @@ censor_source <- function(dataset_name,
 #' A `data.frame` where each row corresponds to one `tte_source` object or `NULL`
 #' if `package` does not contain any `tte_source` objects
 #'
-#' @author Thomas Neitmann
 #'
 #' @export
 #'
-#' @family source_specifications
-#' @keywords source_specifications
+#' @family other_advanced
+#' @keywords other_advanced
 #'
 #' @examples
 #' list_tte_source_objects()
@@ -866,13 +943,13 @@ list_tte_source_objects <- function(package = "admiral") {
     data.frame(
       object = obj_name,
       dataset_name = obj$dataset_name,
-      filter = rlang::quo_text(obj$filter),
-      date = rlang::quo_text(obj$date),
+      filter = as_label(obj$filter),
+      date = as_name(obj$date),
       censor = obj$censor,
       set_values_to = paste(
         paste(
           names(obj$set_values_to),
-          purrr::map_chr(obj$set_values_to, rlang::quo_text, width = 100),
+          purrr::map_chr(obj$set_values_to, as_label),
           sep = ": "
         ),
         collapse = "<br>"

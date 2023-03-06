@@ -17,7 +17,7 @@ get_summary_records(
 \item{dataset}{A data frame.}
 
 \item{by_vars}{Variables to consider for generation of groupwise summary
-records. Providing the names of variables in \code{\link[=vars]{vars()}} will create a
+records. Providing the names of variables in \code{\link[=exprs]{exprs()}} will create a
 groupwise summary and generate summary records for the specified groups.}
 
 \item{filter}{Filter condition as logical expression to apply during
@@ -48,7 +48,7 @@ Set a list of variables to some specified value for the new observation(s)
 \item LHS refer to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
 value or NA.
-(e.g.  \code{vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
+(e.g.  \code{exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
 More general expression are not allowed.
 }}
 }
@@ -95,10 +95,10 @@ adeg <- tribble(
 # Summarize the average of the triplicate ECG interval values (AVAL)
 get_summary_records(
   adeg,
-  by_vars = vars(USUBJID, PARAM, AVISIT),
+  by_vars = exprs(USUBJID, PARAM, AVISIT),
   analysis_var = AVAL,
   summary_fun = function(x) mean(x, na.rm = TRUE),
-  set_values_to = vars(DTYPE = "AVERAGE")
+  set_values_to = exprs(DTYPE = "AVERAGE")
 )
 
 advs <- tribble(
@@ -115,16 +115,16 @@ advs <- tribble(
 # and `DTYPE = AVERAGE` refers to `mean()` records.
 get_summary_records(
   advs,
-  by_vars = vars(USUBJID, PARAM),
+  by_vars = exprs(USUBJID, PARAM),
   analysis_var = AVAL,
   summary_fun = max,
-  set_values_to = vars(DTYPE = "MAXIMUM")
+  set_values_to = exprs(DTYPE = "MAXIMUM")
 ) \%>\%
   get_summary_records(
-    by_vars = vars(USUBJID, PARAM),
+    by_vars = exprs(USUBJID, PARAM),
     analysis_var = AVAL,
     summary_fun = mean,
-    set_values_to = vars(DTYPE = "AVERAGE")
+    set_values_to = exprs(DTYPE = "AVERAGE")
   )
 
 # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
@@ -150,19 +150,19 @@ adeg <- tribble(
 # by group
 get_summary_records(
   adeg,
-  by_vars = vars(USUBJID, PARAM, AVISIT),
+  by_vars = exprs(USUBJID, PARAM, AVISIT),
   filter = n() > 2,
   analysis_var = AVAL,
   summary_fun = function(x) mean(x, na.rm = TRUE),
-  set_values_to = vars(DTYPE = "AVERAGE")
+  set_values_to = exprs(DTYPE = "AVERAGE")
 )
 }
 \seealso{
 \code{derive_summary_records()}
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
@@ -172,15 +172,11 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
-\code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()}
-}
-\author{
-Pavan Kumar, updated by Alana Harris
 }
 \concept{der_gen}
 \keyword{der_gen}

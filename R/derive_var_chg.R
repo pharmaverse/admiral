@@ -9,7 +9,6 @@
 #' Change from baseline is calculated by subtracting the baseline value
 #' from the analysis value.
 #'
-#' @author Thomas Neitmann
 #'
 #' @return The input dataset with an additional column named `CHG`
 #'
@@ -31,7 +30,7 @@
 #' )
 #' derive_var_chg(advs)
 derive_var_chg <- function(dataset) {
-  assert_data_frame(dataset, required_vars = vars(AVAL, BASE))
+  assert_data_frame(dataset, required_vars = exprs(AVAL, BASE))
 
   dataset %>%
     mutate(CHG = AVAL - BASE)

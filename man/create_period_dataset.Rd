@@ -19,7 +19,7 @@ hand side value must be available in the dataset.}
 
 \item{new_vars}{New variables
 
-A named list of variables like \code{vars(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)} is expected. The left hand side of the elements defines a
+A named list of variables like \code{exprs(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)} is expected. The left hand side of the elements defines a
 variable of the output dataset, the right hand side defines the source
 variables from the ADSL dataset in CDISC notation.
 
@@ -34,8 +34,8 @@ reference datasets must be created.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of quosures where the expressions are symbols as returned by
-\code{vars()} is expected.}
+A list of expressions where the expressions are symbols as returned by
+\code{exprs()} is expected.}
 }
 \value{
 A period reference dataset (see "Details" section)
@@ -80,7 +80,7 @@ adsl <- tribble(
 
 create_period_dataset(
   adsl,
-  new_vars = vars(APERSDT = APxxSDT, APEREDT = APxxEDT, TRTA = TRTxxA)
+  new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT, TRTA = TRTxxA)
 )
 
 # Create reference dataset for phases
@@ -98,7 +98,7 @@ adsl <- tribble(
 
 create_period_dataset(
   adsl,
-  new_vars = vars(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
+  new_vars = exprs(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
 )
 
 # Create reference datasets for subperiods
@@ -116,18 +116,16 @@ adsl <- tribble(
 
 create_period_dataset(
   adsl,
-  new_vars = vars(ASPRSDT = PxxSwSDT, ASPREDT = PxxSwEDT)
+  new_vars = exprs(ASPRSDT = PxxSwSDT, ASPREDT = PxxSwEDT)
 )
 }
 \seealso{
 \code{\link[=derive_vars_period]{derive_vars_period()}}
 
 Creating auxiliary datasets: 
+\code{\link{consolidate_metadata}()},
 \code{\link{create_query_data}()},
 \code{\link{create_single_dose_dataset}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{create_aux}
 \keyword{create_aux}

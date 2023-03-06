@@ -39,7 +39,6 @@
 #'   order specified for the `order` parameter and the mode specified for the
 #'   `mode` parameter) is included in the output dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return A dataset containing all observations and variables of the input
 #'   dataset and additionally the variable specified by the `new_var` parameter.
@@ -56,10 +55,9 @@
 #'
 #' admiral_vs %>%
 #'   select(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
-#'   filter(VSTESTCD %in% c("HEIGHT", "WEIGHT")) %>%
 #'   derive_var_obs_number(
-#'     by_vars = vars(USUBJID, VSTESTCD),
-#'     order = vars(VISITNUM, VSTPTNUM)
+#'     by_vars = exprs(USUBJID, VSTESTCD),
+#'     order = exprs(VISITNUM, desc(VSTPTNUM))
 #'   )
 derive_var_obs_number <- function(dataset,
                                   by_vars = NULL,
@@ -67,7 +65,7 @@ derive_var_obs_number <- function(dataset,
                                   new_var = ASEQ,
                                   check_type = "none") {
   # checks and quoting
-  new_var <- assert_symbol(enquo(new_var))
+  new_var <- assert_symbol(enexpr(new_var))
   assert_vars(by_vars, optional = TRUE)
   assert_order_vars(order, optional = TRUE)
   if (!is.null(by_vars)) {
@@ -76,7 +74,7 @@ derive_var_obs_number <- function(dataset,
     required_vars <- NULL
   }
   if (!is.null(order)) {
-    required_vars <- vars(!!!required_vars, !!!extract_vars(order))
+    required_vars <- exprs(!!!required_vars, !!!extract_vars(order))
   }
   assert_data_frame(dataset, required_vars = required_vars)
   check_type <-
@@ -118,6 +116,6 @@ derive_var_obs_number <- function(dataset,
   }
 
   data %>%
-    mutate(!!enquo(new_var) := row_number()) %>%
+    mutate(!!new_var := row_number()) %>%
     ungroup()
 }

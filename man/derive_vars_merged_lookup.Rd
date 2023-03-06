@@ -30,9 +30,11 @@ The variables specified by the \code{by_vars} argument are expected.}
 
 The input dataset and the selected observations from the additional dataset
 are merged by the specified by variables. The by variables must be a unique
-key of the selected observations.
+key of the selected observations. Variables from the additional dataset can
+be renamed by naming the element, i.e., \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to
+the dplyr joins.
 
-\emph{Permitted Values}: list of variables created by \code{vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{order}{Sort order
 
@@ -43,17 +45,17 @@ specified order.
 \emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))} or \code{NULL}}
+created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{new_vars}{Variables to add
 
 The specified variables from the additional dataset are added to the output
-dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = vars(<new name> = <old name>)}.
+dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = exprs(<new name> = <old name>)}.
 
-For example \code{new_vars = vars(var1, var2)} adds variables \code{var1} and \code{var2}
+For example \code{new_vars = exprs(var1, var2)} adds variables \code{var1} and \code{var2}
 from \code{dataset_add} to the input dataset.
 
-And \code{new_vars = vars(var1, new_var2 = old_var2)} takes \code{var1} and
+And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 \code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
 \code{old_var2} to \code{new_var2}.
 
@@ -62,7 +64,7 @@ additional dataset (\code{dataset_add}) are added.
 
 \emph{Default}: \code{NULL}
 
-\emph{Permitted Values}: list of variables created by \code{vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{mode}{Selection mode
 
@@ -142,15 +144,15 @@ param_lookup <- tribble(
 derive_vars_merged_lookup(
   dataset = admiral_vs,
   dataset_add = param_lookup,
-  by_vars = vars(VSTESTCD),
-  new_vars = vars(PARAMCD),
+  by_vars = exprs(VSTESTCD),
+  new_vars = exprs(PARAMCD),
   print_not_mapped = TRUE
 )
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
@@ -160,15 +162,11 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
-\code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},
 \code{\link{get_summary_records}()}
-}
-\author{
-Annie Yang
 }
 \concept{der_gen}
 \keyword{der_gen}

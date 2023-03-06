@@ -13,7 +13,8 @@ create_single_dose_dataset(
   end_datetime = NULL,
   lookup_table = dose_freq_lookup,
   lookup_column = CDISC_VALUE,
-  keep_source_vars = quo_c(vars(USUBJID), dose_freq, start_date, start_datetime,
+  nominal_time = NULL,
+  keep_source_vars = expr_c(exprs(USUBJID), dose_freq, start_date, start_datetime,
     end_date, end_datetime)
 )
 }
@@ -78,6 +79,16 @@ Permitted Values for \code{DOSE_WINDOW}: \code{"MINUTE"}, \code{"HOUR"}, \code{"
 
 The column of \code{lookup_table}.}
 
+\item{nominal_time}{The nominal relative time from first dose (\code{NFRLT})
+
+Used for PK analysis, this will be in hours and should be 0 for
+the first dose.  It can be derived as \code{(VISITDY - 1) * 24} for example.
+This will be expanded as the single dose dataset is created.  For example
+an \code{EXDOFRQ} of \code{"QD"} will result in the nominal_time being incremented by
+24 hours for each expanded record.
+
+The value can be NULL if not needed.}
+
 \item{keep_source_vars}{List of variables to be retained from source dataset
 
 This parameter can be specified if additional information is required in
@@ -110,6 +121,7 @@ unchanged.
 library(lubridate)
 library(stringr)
 library(tibble)
+library(dplyr)
 
 data <- tribble(
   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
@@ -122,7 +134,6 @@ data <- tribble(
 )
 
 create_single_dose_dataset(data)
-
 
 # Example with custom lookup
 
@@ -146,14 +157,132 @@ create_single_dose_dataset(data,
   start_datetime = ASTDTM,
   end_datetime = AENDTM
 )
+# Example with nominal time
+
+data <- tribble(
+  ~USUBJID, ~EXDOSFRQ, ~NFRLT, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
+  "P01", "BID", 0, ymd("2021-01-01"), ymd_hms("2021-01-01 08:00:00"),
+  ymd("2021-01-07"), ymd_hms("2021-01-07 20:00:00"),
+  "P01", "BID", 168, ymd("2021-01-08"), ymd_hms("2021-01-08 08:00:00"),
+  ymd("2021-01-14"), ymd_hms("2021-01-14 20:00:00"),
+  "P01", "BID", 336, ymd("2021-01-15"), ymd_hms("2021-01-15 08:00:00"),
+  ymd("2021-01-29"), ymd_hms("2021-01-29 20:00:00")
+)
+
+create_single_dose_dataset(data,
+  dose_freq = EXDOSFRQ,
+  start_date = ASTDT,
+  start_datetime = ASTDTM,
+  end_date = AENDT,
+  end_datetime = AENDTM,
+  lookup_table = dose_freq_lookup,
+  lookup_column = CDISC_VALUE,
+  nominal_time = NFRLT,
+  keep_source_vars = exprs(
+    USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, NFRLT
+  )
+)
+
+# Example - derive a single dose dataset with imputations
+
+# For either single drug administration records, or multiple drug administration
+# records covering a range of dates, fill-in of missing treatment end datetime
+# `EXENDTC` by substitution with an acceptable alternate, for example date of
+# death, date of datacut may be required. This example shows the
+# maximum possible number of single dose records to be derived. The example
+# requires the date of datacut `DCUTDT` to be specified correctly, or
+# if not appropriate to use `DCUTDT` as missing treatment end data and missing
+# treatment end datetime could set equal to treatment start date and treatment
+# start datetime. ADSL variables `DTHDT` and `DCUTDT` are preferred for
+# imputation use.
+#
+# All available trial treatments are included, allowing multiple different
+# last dose variables to be created in for example `use_ad_template("ADAE")`
+# if required.
+
+adsl <- tribble(
+  ~STUDYID, ~USUBJID, ~DTHDT,
+  "01", "1211", ymd("2013-01-14"),
+  "01", "1083", ymd("2013-08-02"),
+  "01", "1445", ymd("2014-11-01"),
+  "01", "1015", NA,
+  "01", "1023", NA
+)
+
+ex <- tribble(
+  ~STUDYID, ~USUBJID, ~EXSEQ, ~EXTRT, ~EXDOSE, ~EXDOSU, ~EXDOSFRQ, ~EXSTDTC, ~EXENDTC,
+  "01", "1015", 1, "PLAC", 0, "mg", "QD", "2014-01-02", "2014-01-16",
+  "01", "1015", 2, "PLAC", 0, "mg", "QD", "2014-06-17", "2014-06-18",
+  "01", "1015", 3, "PLAC", 0, "mg", "QD", "2014-06-19", NA_character_,
+  "01", "1023", 1, "PLAC", 0, "mg", "QD", "2012-08-05", "2012-08-27",
+  "01", "1023", 2, "PLAC", 0, "mg", "QD", "2012-08-28", "2012-09-01",
+  "01", "1211", 1, "XANO", 54, "mg", "QD", "2012-11-15", "2012-11-28",
+  "01", "1211", 2, "XANO", 54, "mg", "QD", "2012-11-29", NA_character_,
+  "01", "1445", 1, "PLAC", 0, "mg", "QD", "2014-05-11", "2014-05-25",
+  "01", "1445", 2, "PLAC", 0, "mg", "QD", "2014-05-26", "2014-11-01",
+  "01", "1083", 1, "PLAC", 0, "mg", "QD", "2013-07-22", "2013-08-01"
+)
+
+adsl_death <- adsl \%>\%
+  mutate(
+    DTHDTM = convert_date_to_dtm(DTHDT),
+    # Remove `DCUT` setup line below if ADSL `DCUTDT` is populated.
+    DCUTDT = convert_dtc_to_dt("2015-03-06"), # Example only, enter date.
+    DCUTDTM = convert_date_to_dtm(DCUTDT)
+  )
+
+# Select valid dose records, non-missing `EXSTDTC` and `EXDOSE`.
+ex_mod <- ex \%>\%
+  filter(!is.na(EXSTDTC) & !is.na(EXDOSE)) \%>\%
+  derive_vars_merged(adsl_death, by_vars = exprs(STUDYID, USUBJID)) \%>\%
+  # Example, set up missing `EXDOSFRQ` as QD daily dosing regime.
+  # Replace with study dosing regime per trial treatment.
+  mutate(EXDOSFRQ = if_else(is.na(EXDOSFRQ), "QD", EXDOSFRQ)) \%>\%
+  # Create EXxxDTM variables and replace missing `EXENDTM`.
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST",
+    date_imputation = "first",
+    time_imputation = "first",
+    flag_imputation = "none",
+  ) \%>\%
+  derive_vars_dtm_to_dt(exprs(EXSTDTM)) \%>\%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN",
+    # Maximum imputed treatment end date must not be not greater than
+    # date of death or after the datacut date.
+    max_dates = exprs(DTHDTM, DCUTDTM),
+    date_imputation = "last",
+    time_imputation = "last",
+    flag_imputation = "none",
+    highest_imputation = "Y",
+  ) \%>\%
+  derive_vars_dtm_to_dt(exprs(EXENDTM)) \%>\%
+  # Select only unique values.
+  # Removes duplicated records before final step.
+  distinct(
+    STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ, DCUTDT, DTHDT, EXSTDT,
+    EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
+  )
+
+create_single_dose_dataset(
+  ex_mod,
+  start_date = EXSTDT,
+  start_datetime = EXSTDTM,
+  end_date = EXENDT,
+  end_datetime = EXENDTM,
+  keep_source_vars = exprs(
+    STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ,
+    DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
+  )
+)
 }
 \seealso{
 Creating auxiliary datasets: 
+\code{\link{consolidate_metadata}()},
 \code{\link{create_period_dataset}()},
 \code{\link{create_query_data}()}
-}
-\author{
-Michael Thorpe, Andrew Smith
 }
 \concept{create_aux}
 \keyword{create_aux}

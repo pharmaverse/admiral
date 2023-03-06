@@ -99,7 +99,7 @@ data("admiral_ae")
 derive_var_merged_exist_flag(
   admiral_dm,
   dataset_add = admiral_ae,
-  by_vars = vars(STUDYID, USUBJID),
+  by_vars = exprs(STUDYID, USUBJID),
   new_var = AERELFL,
   condition = AEREL == "PROBABLE"
 ) \%>\%
@@ -109,7 +109,7 @@ data("admiral_vs")
 derive_var_merged_exist_flag(
   admiral_dm,
   dataset_add = admiral_vs,
-  by_vars = vars(STUDYID, USUBJID),
+  by_vars = exprs(STUDYID, USUBJID),
   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
   new_var = WTBLHIFL,
   condition = VSSTRESN > 90,
@@ -120,8 +120,8 @@ derive_var_merged_exist_flag(
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
@@ -130,16 +130,12 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
-\code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},
 \code{\link{get_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_gen}
 \keyword{der_gen}

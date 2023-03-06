@@ -59,8 +59,8 @@ Permitted Values: logical expression.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of quosures where the expressions are symbols as returned by
-\code{vars()} is expected.}
+A list of expressions where the expressions are symbols as returned by
+\code{exprs()} is expected.}
 }
 \value{
 The input dataset with the disposition status (\code{new_var}) added.
@@ -74,71 +74,27 @@ defined by \code{format_new_var} (e.g. when the default format is used, the func
 "ONGOING" otherwise).
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, Please define your own function and use that as input for the
+\code{cat_fun} argument in \code{derive_var_merged_cat()} instead.
+
 Derive a disposition status from the the relevant records in the disposition domain.
 }
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("admiral_dm")
-data("admiral_ds")
-
-# Default derivation: EOSSTT =
-#- NOT STARTED when status_var is SCREEN FAILURE or SCREENING NOT COMPLETED
-#- COMPLETED when status_var is COMPLETED
-#- DISCONTINUED when status_var is not COMPLETED nor SCREEN FAILURE nor
-#  SCREENING NOT COMPLETED nor NA
-#- ONGOING otherwise
-
-admiral_dm \%>\%
-  derive_var_disposition_status(
-    dataset_ds = admiral_ds,
-    new_var = EOSSTT,
-    status_var = DSDECOD,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
-  ) \%>\%
-  select(STUDYID, USUBJID, EOSSTT)
-
-# Specific derivation: EOSSTT =
-#- NOT STARTED when status_var = SCREEN FAILURE
-#- COMPLETED when status_var = COMPLETED
-#- DISCONTINUED DUE TO AE when status_var = ADVERSE EVENT
-#- DISCONTINUED NOT DUE TO AE when status_var != ADVERSE EVENT nor COMPLETED
-#  nor SCREEN FAILURE nor missing
-#- ONGOING otherwise
-
-format_eoxxstt1 <- function(x) {
-  case_when(
-    x == "SCREEN FAILURE" ~ "NOT STARTED",
-    x == "COMPLETED" ~ "COMPLETED",
-    x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
-    !(x \%in\% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~
-      "DISCONTINUED NOT DUE TO AE",
-    TRUE ~ "ONGOING"
-  )
-}
-
-admiral_dm \%>\%
-  derive_var_disposition_status(
-    dataset_ds = admiral_ds,
-    new_var = EOSSTT,
-    status_var = DSDECOD,
-    format_new_var = format_eoxxstt1,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
-  ) \%>\%
-  select(STUDYID, USUBJID, EOSSTT)
-}
 \seealso{
-ADSL Functions that returns variable appended to dataset: 
-\code{\link{derive_var_age_years}()},
-\code{\link{derive_var_dthcaus}()},
-\code{\link{derive_var_extreme_dtm}()},
-\code{\link{derive_var_extreme_dt}()},
-\code{\link{derive_vars_aage}()},
+Other deprecated: 
+\code{\link{derive_derived_param}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_var_confirmation_flag}()},
+\code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_disposition_reason}()},
-\code{\link{derive_vars_period}()}
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()},
+\code{\link{filter_confirmation}()},
+\code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()},
+\code{\link{vars}()}
 }
-\author{
-Samia Kabi
-}
-\concept{der_adsl}
-\keyword{der_adsl}
+\concept{deprecated}
+\keyword{deprecated}

@@ -9,7 +9,7 @@ get_admiral_option(option)
 \arguments{
 \item{option}{A character scalar of commonly used admiral function inputs.
 
-As of now, support only available for "subject_keys".
+As of now, support only available for "subject_keys" or "force_admiral_vars".
 See \code{set_admiral_options()} for a description of the options.}
 }
 \value{
@@ -37,16 +37,12 @@ derive_vars_merged(
   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 }
 \seealso{
-\code{\link[=vars]{vars()}}, \code{\link[=set_admiral_options]{set_admiral_options()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},
-\code{\link[=derive_param_first_event]{derive_param_first_event()}}, \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=derive_var_disposition_status]{derive_var_disposition_status()}},
-\code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}},
-\code{\link[=derive_vars_period]{derive_vars_period()}}, \code{\link[=create_period_dataset]{create_period_dataset()}}
+\code{\link[=set_admiral_options]{set_admiral_options()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}}, \code{\link[=derive_param_tte]{derive_param_tte()}}
+\code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_period]{derive_vars_period()}},
+\code{\link[=create_period_dataset]{create_period_dataset()}}
 
 Other admiral_options: 
 \code{\link{set_admiral_options}()}
-}
-\author{
-Zelos Zhu
 }
 \concept{admiral_options}
 \keyword{admiral_options}

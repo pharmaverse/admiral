@@ -36,7 +36,6 @@
 #'
 #'   `create_query_data()` can be used to create the dataset.
 #'
-#' @author Ondrej Slama, Shimeng Huang
 #'
 #' @return The input dataset with query variables derived.
 #'
@@ -66,15 +65,11 @@ derive_vars_query <- function(dataset, dataset_queries) {
   assert_data_frame(dataset_queries)
   assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
   assert_data_frame(dataset,
-    required_vars = vars(!!!syms(unique(dataset_queries$TERM_LEVEL))),
+    required_vars = exprs(!!!syms(unique(dataset_queries$TERM_LEVEL))),
     optional = FALSE
   )
 
-  # replace all "" by NA
-  dataset_queries <- dataset_queries %>%
-    dplyr::mutate_if(is.character, function(x) {
-      ifelse(x == "", NA_character_, x)
-    })
+  dataset_queries <- convert_blanks_to_na(dataset_queries)
 
   # names of new columns
   if ("QUERY_ID" %notin% names(dataset_queries)) {
@@ -171,7 +166,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
   # Change non-static numeric vars to character
   df_fix_numeric <- dataset %>%
     select(-static_cols) %>%
-    mutate_if(is.numeric, as.character)
+    mutate(across(where(is.numeric), as.character))
 
 
   joined <- cbind(df_static, df_fix_numeric) %>%
@@ -188,7 +183,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
     ungroup()
 
   # join queries to input dataset
-  derive_vars_merged(dataset, dataset_add = joined, by_vars = vars(!!!syms(static_cols))) %>%
+  derive_vars_merged(dataset, dataset_add = joined, by_vars = exprs(!!!syms(static_cols))) %>%
     select(-starts_with("temp_"))
 }
 
@@ -210,10 +205,9 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #'
 #' @param queries_name Name of the queries dataset, a string.
 #'
-#' @author Shimeng Huang, Ondrej Slama
 #'
-#' @keywords source_specifications
-#' @family source_specifications
+#' @keywords other_advanced
+#' @family other_advanced
 #'
 #' @export
 #'
@@ -230,7 +224,7 @@ assert_valid_queries <- function(queries, queries_name) {
   )
 
   # check duplicate rows
-  signal_duplicate_records(queries, by_vars = quos(!!!syms(colnames(queries))))
+  signal_duplicate_records(queries, by_vars = exprs(!!!syms(colnames(queries))))
 
   # check illegal prefix category
   is_good_prefix <- grepl("^[a-zA-Z]{2,3}", queries$VAR_PREFIX)
@@ -336,5 +330,10 @@ assert_valid_queries <- function(queries, queries_name) {
       paste(count_unique$VAR_PREFIX[idx], collapse = ", "),
       "' is not unique."
     ))
+  }
+
+  # check QUERY_SCOPE and QUERY_SCOPE_NUM are one to one if available
+  if ("QUERY_SCOPE" %in% names(queries) & "QUERY_SCOPE_NUM" %in% names(queries)) {
+    assert_one_to_one(queries, exprs(QUERY_SCOPE), exprs(QUERY_SCOPE_NUM))
   }
 }

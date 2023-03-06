@@ -30,7 +30,7 @@ lb <- admiral_lb
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 dm <- convert_blanks_to_na(dm)
 ds <- convert_blanks_to_na(ds)
@@ -78,11 +78,11 @@ format_lddthgr1 <- function(x) {
 }
 
 # EOSSTT mapping
-format_eoxxstt <- function(x) {
+format_eosstt <- function(x) {
   case_when(
     x %in% c("COMPLETED") ~ "COMPLETED",
-    !(x %in% c("COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~ "DISCONTINUED",
     x %in% c("SCREEN FAILURE") ~ NA_character_,
+    !is.na(x) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 }
@@ -103,7 +103,7 @@ ex_ext <- ex %>%
 adsl <- dm %>%
   ## derive treatment variables (TRT01P, TRT01A) ----
   # See also the "Visit and Period Variables" vignette
-  # (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_adsl)
+  # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_adsl)
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
   ## derive treatment start date (TRTSDTM) ----
   derive_vars_merged(
@@ -112,10 +112,10 @@ adsl <- dm %>%
       (EXDOSE == 0 &
         str_detect(EXTRT, "PLACEBO"))) &
       !is.na(EXSTDTM),
-    new_vars = vars(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
-    order = vars(EXSTDTM, EXSEQ),
+    new_vars = exprs(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
+    order = exprs(EXSTDTM, EXSEQ),
     mode = "first",
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   ## derive treatment end date (TRTEDTM) ----
   derive_vars_merged(
@@ -123,13 +123,13 @@ adsl <- dm %>%
     filter_add = (EXDOSE > 0 |
       (EXDOSE == 0 &
         str_detect(EXTRT, "PLACEBO"))) & !is.na(EXENDTM),
-    new_vars = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
-    order = vars(EXENDTM, EXSEQ),
+    new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+    order = exprs(EXENDTM, EXSEQ),
     mode = "last",
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   ## Derive treatment end/start date TRTSDT/TRTEDT ----
-  derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM)) %>%
+  derive_vars_dtm_to_dt(source_vars = exprs(TRTSDTM, TRTEDTM)) %>%
   ## derive treatment duration (TRTDURD) ----
   derive_var_trtdurd()
 
@@ -145,37 +145,39 @@ ds_ext <- derive_vars_dt(
 adsl <- adsl %>%
   derive_vars_merged(
     dataset_add = ds_ext,
-    by_vars = vars(STUDYID, USUBJID),
-    new_vars = vars(SCRFDT = DSSTDT),
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(SCRFDT = DSSTDT),
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE"
   ) %>%
   derive_vars_merged(
     dataset_add = ds_ext,
-    by_vars = vars(STUDYID, USUBJID),
-    new_vars = vars(EOSDT = DSSTDT),
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(EOSDT = DSSTDT),
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   ) %>%
   # EOS status
-  derive_var_disposition_status(
-    dataset_ds = ds_ext,
+  derive_var_merged_cat(
+    dataset_add = ds_ext,
+    by_vars = exprs(STUDYID, USUBJID),
+    filter_add = DSCAT == "DISPOSITION EVENT",
     new_var = EOSSTT,
-    status_var = DSDECOD,
-    format_new_var = format_eoxxstt,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
+    source_var = DSDECOD,
+    cat_fun = format_eosstt,
+    missing_value = NA_character_
   ) %>%
   # Last retrieval date
   derive_vars_merged(
     dataset_add = ds_ext,
-    by_vars = vars(STUDYID, USUBJID),
-    new_vars = vars(FRVDT = DSSTDT),
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(FRVDT = DSSTDT),
     filter_add = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
   ) %>%
   # Derive Randomization Date
   derive_vars_merged(
     dataset_add = ds_ext,
     filter_add = DSDECOD == "RANDOMIZED",
-    by_vars = vars(STUDYID, USUBJID),
-    new_vars = vars(RANDDT = DSSTDT)
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(RANDDT = DSSTDT)
   ) %>%
   # Death date - impute partial date to first day/month
   derive_vars_dt(
@@ -247,7 +249,7 @@ adsl <- adsl %>%
   ) %>%
   derive_var_merged_exist_flag(
     dataset_add = ex,
-    by_vars = vars(STUDYID, USUBJID),
+    by_vars = exprs(STUDYID, USUBJID),
     new_var = SAFFL,
     condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
   ) %>%

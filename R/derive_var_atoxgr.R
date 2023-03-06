@@ -59,7 +59,6 @@
 #' - "0" is where a grade can be derived and is not grade "1", "2", "3" or "4".
 #' - NA is where a grade cannot be derived.
 #'
-#' @author Gordon Miller
 #'
 #' @return The input dataset with the character variable added
 #'
@@ -113,20 +112,20 @@ derive_var_atoxgr_dir <- function(dataset,
                                   meta_criteria,
                                   criteria_direction,
                                   get_unit_expr) {
-  new_var <- assert_symbol(enquo(new_var))
-  tox_description_var <- assert_symbol(enquo(tox_description_var))
-  get_unit_expr <- assert_expr(enquo(get_unit_expr))
+  new_var <- assert_symbol(enexpr(new_var))
+  tox_description_var <- assert_symbol(enexpr(tox_description_var))
+  get_unit_expr <- assert_expr(enexpr(get_unit_expr))
 
   # check input parameter has correct value
   assert_character_scalar(criteria_direction, values = c("L", "H"))
 
   # Check Grade description variable exists on input data set
-  assert_data_frame(dataset, required_vars = vars(!!tox_description_var))
+  assert_data_frame(dataset, required_vars = exprs(!!tox_description_var))
 
   # Check metadata data set has required variables
   assert_data_frame(
     meta_criteria,
-    required_vars = vars(TERM, GRADE_CRITERIA_CODE, DIRECTION, SI_UNIT_CHECK, VAR_CHECK)
+    required_vars = exprs(TERM, GRADE_CRITERIA_CODE, DIRECTION, SI_UNIT_CHECK, VAR_CHECK)
   )
   # check DIRECTION has expected values L or H
   assert_character_vector(meta_criteria$DIRECTION, values = c("L", "H"))
@@ -180,7 +179,7 @@ derive_var_atoxgr_dir <- function(dataset,
       filter(!!tox_description_var == list_of_terms$TERM[i])
 
     # check variables required in criteria exist on data
-    assert_data_frame(grade_this_term, required_vars = vars(!!!syms(list_of_vars)))
+    assert_data_frame(grade_this_term, required_vars = exprs(!!!syms(list_of_vars)))
 
     # apply criteria when SI unit matches
     grade_this_term <- grade_this_term %>%
@@ -236,7 +235,6 @@ derive_var_atoxgr_dir <- function(dataset,
 #' - (Only low direction OR high direction is NORMAL) and low grade normal - overall NORMAL
 #' - otherwise set to missing
 #'
-#' @author Gordon Miller
 #'
 #' @return The input data set with the character variable added
 #'
@@ -262,12 +260,12 @@ derive_var_atoxgr_dir <- function(dataset,
 derive_var_atoxgr <- function(dataset,
                               lotox_description_var = ATOXDSCL,
                               hitox_description_var = ATOXDSCH) {
-  lotox_description_var <- assert_symbol(enquo(lotox_description_var))
-  hitox_description_var <- assert_symbol(enquo(hitox_description_var))
+  lotox_description_var <- assert_symbol(enexpr(lotox_description_var))
+  hitox_description_var <- assert_symbol(enexpr(hitox_description_var))
 
   assert_data_frame(
     dataset,
-    required_vars = vars(
+    required_vars = exprs(
       !!lotox_description_var,
       ATOXGRL,
       !!hitox_description_var,

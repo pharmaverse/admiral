@@ -24,14 +24,14 @@ expected.}
 
 \emph{Default}: \code{NULL}
 
-\emph{Permitted Values:} list of variables created by \code{vars()}}
+\emph{Permitted Values:} list of variables created by \code{exprs()}}
 
 \item{order}{Sort order
 
 Within each by group the observations are ordered by the specified order.
 
 \emph{Permitted Values:} list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))}}
+created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}}
 
 \item{mode}{Selection mode (first or last)
 
@@ -70,7 +70,7 @@ A list of variable name-value pairs is expected.
 \itemize{
 \item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
-symbol, a numeric value or \code{NA}, e.g., \code{vars(PARAMCD = "TDOSE", PARCAT1 =   "OVERALL")}. More general expression are not allowed.
+symbol, a numeric value or \code{NA}, e.g., \code{exprs(PARAMCD = "TDOSE", PARCAT1 =   "OVERALL")}. More general expression are not allowed.
 }}
 }
 \value{
@@ -114,11 +114,11 @@ adlb <- tribble(
 # AVISITN. Set AVISITN = 97 and DTYPE = MINIMUM for these new records.
 derive_extreme_records(
   adlb,
-  by_vars = vars(USUBJID),
-  order = vars(AVAL, AVISITN),
+  by_vars = exprs(USUBJID),
+  order = exprs(AVAL, AVISITN),
   mode = "first",
   filter = !is.na(AVAL),
-  set_values_to = vars(
+  set_values_to = exprs(
     AVISITN = 97,
     DTYPE = "MINIMUM"
   )
@@ -129,11 +129,11 @@ derive_extreme_records(
 # AVISITN. Set AVISITN = 98 and DTYPE = MAXIMUM for these new records.
 derive_extreme_records(
   adlb,
-  by_vars = vars(USUBJID),
-  order = vars(desc(AVAL), AVISITN),
+  by_vars = exprs(USUBJID),
+  order = exprs(desc(AVAL), AVISITN),
   mode = "first",
   filter = !is.na(AVAL),
-  set_values_to = vars(
+  set_values_to = exprs(
     AVISITN = 98,
     DTYPE = "MAXIMUM"
   )
@@ -143,10 +143,10 @@ derive_extreme_records(
 # Set AVISITN = 99 and DTYPE = LOV for these new records.
 derive_extreme_records(
   adlb,
-  by_vars = vars(USUBJID),
-  order = vars(AVISITN),
+  by_vars = exprs(USUBJID),
+  order = exprs(AVISITN),
   mode = "last",
-  set_values_to = vars(
+  set_values_to = exprs(
     AVISITN = 99,
     DTYPE = "LOV"
   )
@@ -155,6 +155,8 @@ derive_extreme_records(
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_event}()},
 \code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
 \code{\link{derive_param_bsa}()},
@@ -169,9 +171,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

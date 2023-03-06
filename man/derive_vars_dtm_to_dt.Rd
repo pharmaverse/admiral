@@ -9,7 +9,7 @@ derive_vars_dtm_to_dt(dataset, source_vars)
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{source_vars}{A list of datetime variables created using \code{vars()} from
+\item{source_vars}{A list of datetime variables created using \code{exprs()} from
 which dates are to be extracted}
 }
 \value{
@@ -39,7 +39,7 @@ adcm <- tribble(
   )
 
 adcm \%>\%
-  derive_vars_dtm_to_dt(vars(TRTSDTM, ASTDTM, AENDTM)) \%>\%
+  derive_vars_dtm_to_dt(exprs(TRTSDTM, ASTDTM, AENDTM)) \%>\%
   select(USUBJID, starts_with("TRT"), starts_with("AST"), starts_with("AEN"))
 }
 \seealso{
@@ -50,9 +50,6 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \code{\link{derive_vars_dt}()},
 \code{\link{derive_vars_duration}()},
 \code{\link{derive_vars_dy}()}
-}
-\author{
-Teckla Akinyi
 }
 \concept{der_date_time}
 \keyword{der_date_time}

@@ -9,7 +9,17 @@ call_derivation(dataset = NULL, derivation, variable_params, ...)
 \arguments{
 \item{dataset}{The input dataset}
 
-\item{derivation}{The derivation function to call}
+\item{derivation}{The derivation function to call
+
+A function that performs a specific derivation is expected. A derivation
+adds variables or observations to a dataset. The first argument of a
+derivation must expect a dataset and the derivation must return a dataset.
+The function must provide the \code{dataset} argument and all arguments
+specified in the \code{params()} objects passed to the \code{variable_params} and
+\code{...} argument.
+
+Please note that it is not possible to specify \code{{dplyr}}
+functions like \code{mutate()} or \code{summarize()}.}
 
 \item{variable_params}{A \code{list} of function arguments that are different across iterations.
 Each set of function arguments must be created using \code{\link[=params]{params()}}.}
@@ -36,8 +46,8 @@ adae <-
   select(admiral_ae[sample(1:nrow(admiral_ae), 1000), ], USUBJID, AESTDTC, AEENDTC) \%>\%
   derive_vars_merged(
     dataset_add = admiral_adsl,
-    new_vars = vars(TRTSDT, TRTEDT),
-    by_vars = vars(USUBJID)
+    new_vars = exprs(TRTSDT, TRTEDT),
+    by_vars = exprs(USUBJID)
   )
 
 ## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
@@ -49,8 +59,8 @@ call_derivation(
     params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
     params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
   ),
-  min_dates = vars(TRTSDT),
-  max_dates = vars(TRTEDT)
+  min_dates = exprs(TRTSDT),
+  max_dates = exprs(TRTEDT)
 )
 
 ## The above call using `call_derivation()` is equivalent to the following
@@ -59,15 +69,15 @@ adae \%>\%
     new_vars_prefix = "AST",
     dtc = AESTDTC,
     date_imputation = "first",
-    min_dates = vars(TRTSDT),
-    max_dates = vars(TRTEDT)
+    min_dates = exprs(TRTSDT),
+    max_dates = exprs(TRTEDT)
   ) \%>\%
   derive_vars_dt(
     new_vars_prefix = "AEN",
     dtc = AEENDTC,
     date_imputation = "last",
-    min_dates = vars(TRTSDT),
-    max_dates = vars(TRTEDT)
+    min_dates = exprs(TRTSDT),
+    max_dates = exprs(TRTEDT)
   )
 }
 \seealso{
@@ -77,9 +87,6 @@ Higher Order Functions:
 \code{\link{derivation_slice}()},
 \code{\link{restrict_derivation}()},
 \code{\link{slice_derivation}()}
-}
-\author{
-Thomas Neitmann, Stefan Bundfuss, Tracey Wang
 }
 \concept{high_order_function}
 \keyword{high_order_function}

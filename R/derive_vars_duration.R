@@ -35,7 +35,8 @@
 #'
 #'   Default: 'days'
 #'
-#'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'
+#'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
+#'   'seconds', 'sec'
 #'
 #' @param out_unit Output unit
 #'
@@ -43,7 +44,8 @@
 #'
 #'   Default: 'days'
 #'
-#'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'
+#'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
+#'   'seconds', 'sec'
 #'
 #' @param floor_in Round down input dates?
 #'
@@ -75,7 +77,6 @@
 #'   is negative. The start and end date variable must be present in the specified
 #'   input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the duration and unit variable added
 #'
@@ -144,6 +145,26 @@
 #'   out_unit = "minutes",
 #'   add_one = FALSE
 #' )
+#'
+#' # Derive adverse event start time since last dose in hours
+#' data <- tribble(
+#'   ~USUBJID, ~ASTDTM, ~LDOSEDTM,
+#'   "P01", ymd_hms("2019-08-09T04:30:56"), ymd_hms("2019-08-08T10:05:00"),
+#'   "P02", ymd_hms("2019-11-11T23:59:59"), ymd_hms("2019-10-11T11:37:00"),
+#'   "P03", ymd_hms("2019-11-11T00:00:00"), ymd_hms("2019-11-10T23:59:59"),
+#'   "P04", ymd_hms("2019-11-11T12:34:56"), NA,
+#'   "P05", NA, ymd_hms("2019-09-28T12:34:56")
+#' )
+#' derive_vars_duration(
+#'   data,
+#'   new_var = LDRELTM,
+#'   new_var_unit = LDRELTMU,
+#'   start_date = LDOSEDTM,
+#'   end_date = ASTDTM,
+#'   in_unit = "hours",
+#'   out_unit = "hours",
+#'   add_one = FALSE
+#' )
 derive_vars_duration <- function(dataset,
                                  new_var,
                                  new_var_unit = NULL,
@@ -154,13 +175,16 @@ derive_vars_duration <- function(dataset,
                                  floor_in = TRUE,
                                  add_one = TRUE,
                                  trunc_out = FALSE) {
-  new_var <- assert_symbol(enquo(new_var))
-  new_var_unit <- assert_symbol(enquo(new_var_unit), optional = TRUE)
-  start_date <- assert_symbol(enquo(start_date))
-  end_date <- assert_symbol(enquo(end_date))
-  assert_data_frame(dataset, required_vars = vars(!!start_date, !!end_date))
+  new_var <- assert_symbol(enexpr(new_var))
+  new_var_unit <- assert_symbol(enexpr(new_var_unit), optional = TRUE)
+  start_date <- assert_symbol(enexpr(start_date))
+  end_date <- assert_symbol(enexpr(end_date))
+  assert_data_frame(dataset, required_vars = exprs(!!start_date, !!end_date))
   assert_character_scalar(in_unit, values = valid_time_units())
-  assert_character_scalar(out_unit, values = c(valid_time_units(), "weeks"))
+  assert_character_scalar(out_unit, values = c(
+    valid_time_units(), "weeks",
+    "min", "sec"
+  ))
   assert_logical_scalar(floor_in)
   assert_logical_scalar(add_one)
   assert_logical_scalar(trunc_out)
@@ -186,7 +210,7 @@ derive_vars_duration <- function(dataset,
       )
     )
 
-  if (!quo_is_null(new_var_unit)) {
+  if (!is.null(new_var_unit)) {
     dataset <- dataset %>%
       mutate(!!new_var_unit := if_else(is.na(!!new_var), NA_character_, toupper(out_unit)))
   }

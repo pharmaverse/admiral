@@ -85,9 +85,7 @@ library(tibble)
 data("admiral_lb")
 
 adsl <- admiral_adsl
-lb <- admiral_lb
-
-lb <- convert_blanks_to_na(lb)
+lb <- convert_blanks_to_na(admiral_lb)
 ```
 ```{r echo=FALSE}
 lb <- filter(lb, USUBJID %in% c("01-701-1115", "01-705-1186", "01-705-1349", "01-708-1286", "01-707-1037", "01-716-1024"))
@@ -102,7 +100,7 @@ The list of terms defined in the `{admiral}` metadata to implement NCI-CTCAEv4 i
 atoxgr_criteria_ctcv4 %>%
   filter(!is.na(TERM)) %>%
   dataset_vignette(
-    display_vars = vars(TERM)
+    display_vars = exprs(TERM)
   )
 ```
 <br>
@@ -117,7 +115,7 @@ which are not present in NCI-CTCAEv5.
 atoxgr_criteria_ctcv5 %>%
   filter(!is.na(TERM)) %>%
   dataset_vignette(
-    display_vars = vars(TERM)
+    display_vars = exprs(TERM)
   )
 ```
 <br>
@@ -186,8 +184,8 @@ adlb <- lb %>%
   ## Add PARAMCD PARAM and PARAMN - from LOOK-UP table
   derive_vars_merged_lookup(
     dataset_add = param_lookup,
-    new_vars = vars(PARAMCD, PARAM, PARAMN),
-    by_vars = vars(LBTESTCD)
+    new_vars = exprs(PARAMCD, PARAM, PARAMN),
+    by_vars = exprs(LBTESTCD)
   ) %>%
   ## Calculate PARCAT1 AVAL AVALC ANRLO ANRHI
   ## Dummy the values for BASE
@@ -235,7 +233,7 @@ grade_lookup <- tibble::tribble(
 adlb <- adlb %>%
   derive_vars_merged(
     dataset_add = grade_lookup,
-    by_vars = vars(PARAMCD),
+    by_vars = exprs(PARAMCD),
   )
 ```
 
@@ -274,7 +272,7 @@ Please see `SI_UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctc
 atoxgr_criteria_ctcv4 %>%
   filter(!is.na(SI_UNIT_CHECK)) %>%
   dataset_vignette(
-    display_vars = vars(TERM, SI_UNIT_CHECK),
+    display_vars = exprs(TERM, SI_UNIT_CHECK),
   )
 ```
 <br>
@@ -293,7 +291,7 @@ adlb <- adlb %>%
 adlb %>%
   filter((ATOXGRL == "1") | (ATOXGRH == "1")) %>%
   dataset_vignette(
-    display_vars = vars(ATOXDSCL, ATOXDSCH, ATOXGRL, ATOXGRH, ATOXGR)
+    display_vars = exprs(ATOXDSCL, ATOXDSCH, ATOXGRL, ATOXGRH, ATOXGR)
   )
 ```
 
@@ -366,7 +364,7 @@ the metadata:
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "calcemia")) %>%
   dataset_vignette(
-    display_vars = vars(TERM, COMMENT)
+    display_vars = exprs(TERM, COMMENT)
   )
 ```
 <br>
@@ -380,7 +378,7 @@ be split into 2 rows:
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "glycemia")) %>%
   dataset_vignette(
-    display_vars = vars(TERM, COMMENT)
+    display_vars = exprs(TERM, COMMENT)
   )
 ```
 <br>
@@ -395,7 +393,7 @@ For term "INR Increased" there is the following criteria:
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
-    display_vars = vars(TERM, Grade_1)
+    display_vars = exprs(TERM, Grade_1)
   )
 ```
 <br>
@@ -408,7 +406,7 @@ lab value against ULN and also BASE. The decision made was put in the `COMMENT` 
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
-    display_vars = vars(TERM, COMMENT)
+    display_vars = exprs(TERM, COMMENT)
   )
 ```
 <br>
@@ -422,7 +420,7 @@ put in the `COMMENT` field.
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "Hyperuricemia")) %>%
   dataset_vignette(
-    display_vars = vars(TERM, Grade_1, Grade_3, COMMENT)
+    display_vars = exprs(TERM, Grade_1, Grade_3, COMMENT)
   )
 ```
 <br>
@@ -436,7 +434,7 @@ The decision made was put in the `COMMENT` field.
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "Hypokalemia")) %>%
   dataset_vignette(
-    display_vars = vars(TERM, Grade_1, Grade_2, COMMENT)
+    display_vars = exprs(TERM, Grade_1, Grade_2, COMMENT)
   )
 ```
 <br>
@@ -514,7 +512,7 @@ the metadata:
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "calcemia")) %>%
   dataset_vignette(
-    display_vars = vars(TERM, COMMENT)
+    display_vars = exprs(TERM, COMMENT)
   )
 ```
 <br>
@@ -529,7 +527,7 @@ For term "INR Increased" there is the following criteria:
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
-    display_vars = vars(TERM, Grade_1)
+    display_vars = exprs(TERM, Grade_1)
   )
 ```
 <br>
@@ -542,7 +540,7 @@ lab value against ULN and also BASE. The decision made was put in the `COMMENT` 
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
-    display_vars = vars(TERM, COMMENT)
+    display_vars = exprs(TERM, COMMENT)
   )
 ```
 <br>
@@ -554,7 +552,7 @@ Similarly, for terms "Lipase Increased" and "Serum amylase increased" there is t
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "INR") | str_detect(TERM, "amylase")) %>%
   dataset_vignette(
-    display_vars = vars(TERM, Grade_2, Grade_3, Grade_4)
+    display_vars = exprs(TERM, Grade_2, Grade_3, Grade_4)
   )
 ```
 <br>
@@ -567,7 +565,7 @@ The decision made was put in the `COMMENT` field.
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "INR") | str_detect(TERM, "amylase")) %>%
   dataset_vignette(
-    display_vars = vars(TERM, COMMENT)
+    display_vars = exprs(TERM, COMMENT)
   )
 ```
 <br>
@@ -581,7 +579,7 @@ put in the `COMMENT` field.
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "Hyperuricemia")) %>%
   dataset_vignette(
-    display_vars = vars(TERM, Grade_1, Grade_3, COMMENT)
+    display_vars = exprs(TERM, Grade_1, Grade_3, COMMENT)
   )
 ```
 <br>
@@ -597,7 +595,7 @@ The decision made was put in the `COMMENT` field.
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "Hypokalemia") | str_detect(TERM, "Hyponatremia")) %>%
   dataset_vignette(
-    display_vars = vars(TERM, Grade_1, Grade_2, Grade_3, COMMENT)
+    display_vars = exprs(TERM, Grade_1, Grade_2, Grade_3, COMMENT)
   )
 ```
 <br>

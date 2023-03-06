@@ -11,7 +11,6 @@
 #' This function allows flexibility for function inputs that may need to be repeated
 #' multiple times in a script, such as `subject_keys`.
 #'
-#' @author Zelos Zhu
 #'
 #' @return
 #' The value of the specified option.
@@ -21,10 +20,9 @@
 #'
 #' @export
 #'
-#' @seealso [vars()], [set_admiral_options()], [derive_param_exist_flag()],
-#' [derive_param_first_event()], [derive_param_tte()], [derive_var_disposition_status()],
-#' [derive_var_dthcaus()], [derive_var_extreme_dtm()], [derive_vars_disposition_reason()],
-#' [derive_vars_period()], [create_period_dataset()]
+#' @seealso [set_admiral_options()], [derive_param_exist_flag()], [derive_param_tte()]
+#'  [derive_var_dthcaus()], [derive_var_extreme_dtm()], [derive_vars_period()],
+#'  [create_period_dataset()]
 #'
 #'
 #' @examples
@@ -64,14 +62,18 @@ get_admiral_option <- function(option) {
 #' Set the Values of Admiral Options That Can Be Modified for Advanced Users.
 #'
 #' @param subject_keys Variables to uniquely identify a subject, defaults to
-#'   `vars(STUDYID, USUBJID)`. This option is used as default value for the
+#'   `exprs(STUDYID, USUBJID)`. This option is used as default value for the
 #'   `subject_keys` argument in all admiral functions.
+#'
+#' @param force_admiral_vars If this option is set to `TRUE` (which is the
+#'   default), the admiral definition of `vars()` is forced. This is just a
+#'   temporary solution to allow running scripts which use `vars()` in the
+#'   admiral function calls. It will be removed in a future release.
 #'
 #' @details
 #' Modify an admiral option, e.g `subject_keys`, such that it automatically affects downstream
 #' function inputs where `get_admiral_option()` is called such as `derive_param_exist_flag()`.
 #'
-#' @author Zelos Zhu
 #'
 #' @return
 #' No return value, called for side effects.
@@ -81,16 +83,14 @@ get_admiral_option <- function(option) {
 #'
 #' @export
 #'
-#' @seealso [vars()], [get_admiral_option()], [derive_param_exist_flag()],
-#' [derive_param_first_event()], [derive_param_tte()], [derive_var_disposition_status()],
-#' [derive_var_dthcaus()], [derive_var_extreme_dtm()], [derive_vars_disposition_reason()],
-#' [derive_vars_period()], [create_period_dataset()]
+#' @seealso [get_admiral_option()], [derive_param_exist_flag()],[derive_param_tte()],
+#' [derive_var_dthcaus()], [derive_var_extreme_dtm()], [derive_vars_period()], [create_period_dataset()]
 #'
 #' @examples
 #' library(lubridate)
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(tibble)
-#' set_admiral_options(subject_keys = vars(STUDYID, USUBJID2))
+#' set_admiral_options(subject_keys = exprs(STUDYID, USUBJID2))
 #'
 #' # Derive a new parameter for measurable disease at baseline
 #' adsl <- tribble(
@@ -122,15 +122,20 @@ get_admiral_option <- function(option) {
 #'   condition = TUSTRESC == "TARGET",
 #'   false_value = "N",
 #'   missing_value = "N",
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "MDIS",
 #'     PARAM = "Measurable Disease at Baseline"
 #'   )
 #' )
-set_admiral_options <- function(subject_keys) {
+set_admiral_options <- function(subject_keys, force_admiral_vars) {
   if (!missing(subject_keys)) {
     assert_vars(subject_keys)
     admiral_environment$admiral_options$subject_keys <- subject_keys
+  }
+
+  if (!missing(force_admiral_vars)) {
+    assert_logical_scalar(force_admiral_vars)
+    admiral_environment$admiral_options$force_admiral_vars <- force_admiral_vars
   }
 
   # Add future input to function formals above

@@ -4,7 +4,7 @@
 \alias{derivation_slice}
 \title{Create a \code{derivation_slice} Object}
 \usage{
-derivation_slice(filter, args)
+derivation_slice(filter, args = NULL)
 }
 \arguments{
 \item{filter}{An unquoted condition for defining the observations of the
@@ -16,8 +16,6 @@ A \code{params()} object is expected.}
 }
 \value{
 An object of class \code{derivation_slice}
-
-An object of class \code{slice}.
 }
 \description{
 Create a \code{derivation_slice} object as input for \code{slice_derivation()}.
@@ -29,9 +27,6 @@ Higher Order Functions:
 \code{\link{call_derivation}()},
 \code{\link{restrict_derivation}()},
 \code{\link{slice_derivation}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{high_order_function}
 \keyword{high_order_function}

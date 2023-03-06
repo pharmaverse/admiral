@@ -10,11 +10,11 @@ derive_param_extreme_event(
   dataset_source,
   filter_source,
   order = NULL,
-  new_var = AVALC,
+  new_var = NULL,
   true_value = "Y",
   false_value = "N",
   mode = "first",
-  subject_keys = vars(STUDYID, USUBJID),
+  subject_keys = get_admiral_option("subject_keys"),
   set_values_to,
   check_type = "warning"
 )
@@ -52,7 +52,7 @@ For all other subjects \code{new_var} is set to \code{false_value}.}
 List of symbols for sorting the source dataset (\code{dataset_source}).
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))}.}
+created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}.}
 
 \item{new_var}{New variable
 
@@ -78,12 +78,12 @@ If \code{"last"} is specified, the last observation of each subject is selected.
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of symbols created using \code{vars()} is expected.}
+A list of symbols created using \code{exprs()} is expected.}
 
 \item{set_values_to}{Variables to set
 
-A named list returned by \code{vars()} defining the variables to be set for the
-new parameter, e.g. \code{vars(PARAMCD = "PD", PARAM = "Disease Progression")}
+A named list returned by \code{exprs()} defining the variables to be set for the
+new parameter, e.g. \code{exprs(PARAMCD = "PD", PARAM = "Disease Progression")}
 is expected. The values must be symbols, character strings, numeric values,
 or \code{NA}. Note, if you require a date or datetime variable to be populated,
 this needs to be defined here.}
@@ -115,8 +115,8 @@ the function can derive a parameter for the first disease progression.
 source dataset is selected. This is depending on \code{mode}, (with respect to \code{order},
 if applicable) where the event condition (\code{filter_source} parameter) is fulfilled.
 \item For each observation in \code{dataset_adsl} a new observation is created. For
-subjects with event \code{new_var} is set to \code{true_var}. For all other
-subjects \code{new_var} is set to \code{false_var}.
+subjects with event \code{new_var} is set to \code{true_value}. For all other
+subjects \code{new_var} is set to \code{false_value}.
 For subjects with event all variables from \code{dataset_source} are kept. For
 subjects without event all variables which are in both \code{dataset_adsl} and
 \code{dataset_source} are kept.
@@ -163,12 +163,12 @@ derive_param_extreme_event(
   dataset_adsl = adsl,
   dataset_source = adrs,
   filter_source = PARAMCD == "OVR" & AVALC == "PD",
-  order = vars(ADT),
+  order = exprs(ADT),
   new_var = AVALC,
   true_value = "Y",
   false_value = "N",
   mode = "first",
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = "PD",
     PARAM = "Disease Progression",
     ANL01FL = "Y",
@@ -185,7 +185,7 @@ derive_param_extreme_event(
   true_value = "Y",
   false_value = "N",
   mode = "first",
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = "DEATH",
     PARAM = "Death",
     ANL01FL = "Y",
@@ -196,6 +196,8 @@ derive_param_extreme_event(
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_event}()},
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
@@ -210,9 +212,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
-}
-\author{
-Stefan Bundfuss Sophie Shapcott
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

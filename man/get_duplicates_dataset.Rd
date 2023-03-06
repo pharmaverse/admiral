@@ -29,7 +29,7 @@ data(admiral_adsl)
 # Duplicate the first record
 adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 
-signal_duplicate_records(adsl, vars(USUBJID), cnd_type = "warning")
+signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "warning")
 
 get_duplicates_dataset()
 }
@@ -38,9 +38,6 @@ Utilities for Dataset Checking:
 \code{\link{extract_duplicate_records}()},
 \code{\link{get_many_to_one_dataset}()},
 \code{\link{get_one_to_many_dataset}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{utils_ds_chk}
 \keyword{utils_ds_chk}
