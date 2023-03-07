@@ -1,0 +1,26 @@
+---
+# Source: https://github.com/pharmaverse/admiralci
+# Common workflows designed for Admiral
+# but can be easily used by any other R package
+name: Create Auto-MR main -> patch
+
+on:
+  push:
+    branches:
+      - main
+
+# Docs on concurrency:
+# https://docs.github.com/en/actions/using-jobs/using-concurrency
+concurrency:
+  group: admiral-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  style:
+    name: Code Style
+    uses: pharmaverse/admiralci/.github/workflows/create-auto-mr.yml@main
+    if: github.event_name == 'push'
+    with:
+      source-branch: "main"
+      target-branch: "patch"
+      mr-assignees: '["bundfussr","esimms999-gsk","thomas-neitmann", "bms63"]'
