@@ -1,5 +1,12 @@
 #' Default Format for Disposition Status
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*. This function is a default for `derive_var_disposition_status()`
+#' for the `format_new_var` argument. Please define your own function and use that as input for the
+#' `cat_fun` argument in `derive_var_merged_cat()` instead.
+#'
 #' Define a function to map the disposition status. To be used as an input for
 #' `derive_var_disposition_status()`.
 #'
@@ -12,28 +19,21 @@
 #'  "SCREENING NOT COMPLETED") nor NA,
 #'  "ONGOING" otherwise.
 #'
-#' @author Samia Kabi
 #' @details Usually this function can not be used with `%>%`.
 #' @export
-#' @family utils_fmt
-#' @keywords utils_fmt
-#' @seealso [derive_var_disposition_status()]
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("admiral_dm")
-#' data("admiral_ds")
-#'
-#' admiral_dm %>%
-#'   derive_var_disposition_status(
-#'     dataset_ds = admiral_ds,
-#'     new_var = EOSSTT,
-#'     status_var = DSDECOD,
-#'     format_new_var = format_eoxxstt_default,
-#'     filter_ds = DSCAT == "DISPOSITION EVENT"
-#'   ) %>%
-#'   select(STUDYID, USUBJID, EOSSTT)
+#' @family deprecated
+#' @keywords deprecated
 format_eoxxstt_default <- function(status) {
+  ### DEPRECATION
+  deprecate_warn("0.10.0",
+    "format_eoxxstt_default()",
+    details = paste(
+      "This function is deprecated",
+      "Please define your own function and use that as input for the
+                    `cat_fun` argument in `derive_var_merged_cat()` instead"
+    )
+  )
+
   case_when(
     status %in% c("SCREEN FAILURE", "SCREENING NOT COMPLETED") ~ "NOT STARTED",
     status == "COMPLETED" ~ "COMPLETED",
@@ -44,6 +44,12 @@ format_eoxxstt_default <- function(status) {
 }
 
 #' Derive a Disposition Status at a Specific Timepoint
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, Please define your own function and use that as input for the
+#' `cat_fun` argument in `derive_var_merged_cat()` instead.
 #'
 #' Derive a disposition status from the the relevant records in the disposition domain.
 #'
@@ -89,8 +95,8 @@ format_eoxxstt_default <- function(status) {
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#'   A list of quosures where the expressions are symbols as returned by
-#'   `vars()` is expected.
+#'   A list of expressions where the expressions are symbols as returned by
+#'   `exprs()` is expected.
 #'
 #' @return The input dataset with the disposition status (`new_var`) added.
 #' `new_var` is derived based on the values given in `status_var` and according to the format
@@ -102,63 +108,12 @@ format_eoxxstt_default <- function(status) {
 #'  "SCREENING NOT COMPLETED") nor NA,
 #'  "ONGOING" otherwise).
 #'
-#' @family der_adsl
-#' @keywords der_adsl
+#' @family deprecated
+#' @keywords deprecated
 #'
-#' @author Samia Kabi
 #'
 #' @export
 #'
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("admiral_dm")
-#' data("admiral_ds")
-#'
-#' # Default derivation: EOSSTT =
-#' #- NOT STARTED when status_var is SCREEN FAILURE or SCREENING NOT COMPLETED
-#' #- COMPLETED when status_var is COMPLETED
-#' #- DISCONTINUED when status_var is not COMPLETED nor SCREEN FAILURE nor
-#' #  SCREENING NOT COMPLETED nor NA
-#' #- ONGOING otherwise
-#'
-#' admiral_dm %>%
-#'   derive_var_disposition_status(
-#'     dataset_ds = admiral_ds,
-#'     new_var = EOSSTT,
-#'     status_var = DSDECOD,
-#'     filter_ds = DSCAT == "DISPOSITION EVENT"
-#'   ) %>%
-#'   select(STUDYID, USUBJID, EOSSTT)
-#'
-#' # Specific derivation: EOSSTT =
-#' #- NOT STARTED when status_var = SCREEN FAILURE
-#' #- COMPLETED when status_var = COMPLETED
-#' #- DISCONTINUED DUE TO AE when status_var = ADVERSE EVENT
-#' #- DISCONTINUED NOT DUE TO AE when status_var != ADVERSE EVENT nor COMPLETED
-#' #  nor SCREEN FAILURE nor missing
-#' #- ONGOING otherwise
-#'
-#' format_eoxxstt1 <- function(x) {
-#'   case_when(
-#'     x == "SCREEN FAILURE" ~ "NOT STARTED",
-#'     x == "COMPLETED" ~ "COMPLETED",
-#'     x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
-#'     !(x %in% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~
-#'       "DISCONTINUED NOT DUE TO AE",
-#'     TRUE ~ "ONGOING"
-#'   )
-#' }
-#'
-#' admiral_dm %>%
-#'   derive_var_disposition_status(
-#'     dataset_ds = admiral_ds,
-#'     new_var = EOSSTT,
-#'     status_var = DSDECOD,
-#'     format_new_var = format_eoxxstt1,
-#'     filter_ds = DSCAT == "DISPOSITION EVENT"
-#'   ) %>%
-#'   select(STUDYID, USUBJID, EOSSTT)
 derive_var_disposition_status <- function(dataset,
                                           dataset_ds,
                                           new_var,
@@ -166,13 +121,20 @@ derive_var_disposition_status <- function(dataset,
                                           format_new_var = format_eoxxstt_default,
                                           filter_ds,
                                           subject_keys = get_admiral_option("subject_keys")) {
-  new_var <- assert_symbol(enquo(new_var))
-  status_var <- assert_symbol(enquo(status_var))
-  filter_ds <- assert_filter_cond(enquo(filter_ds))
+  ### DEPRECATION
+  deprecate_warn("0.10.0",
+    "derive_var_disposition_status()",
+    details = "Please use `derive_var_merged_cat()` instead"
+  )
+
+  new_var <- assert_symbol(enexpr(new_var))
+  status_var <- assert_symbol(enexpr(status_var))
+  filter_ds <- assert_filter_cond(enexpr(filter_ds))
+
   assert_s3_class(format_new_var, "function")
   assert_data_frame(dataset)
-  assert_data_frame(dataset_ds, quo_c(status_var))
-  warn_if_vars_exist(dataset, quo_text(new_var))
+  assert_data_frame(dataset_ds, expr_c(status_var))
+  warn_if_vars_exist(dataset, as_name(new_var))
   assert_vars(subject_keys)
 
   # Add the status variable and derive the new dispo status in the input dataset
@@ -180,7 +142,7 @@ derive_var_disposition_status <- function(dataset,
     derive_vars_merged(
       dataset_add = dataset_ds,
       filter_add = !!filter_ds,
-      new_vars = vars(!!status_var),
+      new_vars = exprs(!!status_var),
       by_vars = subject_keys
     ) %>%
     mutate(!!new_var := format_new_var(!!status_var)) %>%

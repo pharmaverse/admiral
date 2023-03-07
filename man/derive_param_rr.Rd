@@ -7,7 +7,7 @@
 derive_param_rr(
   dataset,
   by_vars,
-  set_values_to = vars(PARAMCD = "RRR"),
+  set_values_to = exprs(PARAMCD = "RRR"),
   hr_code = "HR",
   get_unit_expr,
   filter = NULL
@@ -34,7 +34,7 @@ in the newly created records.
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
 code for the new parameter.
 
 \emph{Permitted Values:} List of variable-value pairs}
@@ -90,8 +90,8 @@ adeg <- tribble(
 
 derive_param_rr(
   adeg,
-  by_vars = vars(USUBJID, VISIT),
-  set_values_to = vars(
+  by_vars = exprs(USUBJID, VISIT),
+  set_values_to = exprs(
     PARAMCD = "RRR",
     PARAM = "RR Duration Rederived (msec)",
     AVALU = "msec"
@@ -102,6 +102,8 @@ derive_param_rr(
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_event}()},
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
@@ -116,9 +118,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_qtc}()},
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

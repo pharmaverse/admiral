@@ -17,8 +17,8 @@ jobs:
     with:
       # Whom should the issue be assigned to if errors are encountered
       # in the CRAN status checks?
-      issue-assignees: "bundfussr,esimms999-gsk,thomas-neitmann,bms63,rossfarrugia"
+      issue-assignees: "bundfussr,esimms999-gsk,thomas-neitmann,bms63"
       # Create an issue if one or more of the following
       # statuses are reported on the check report.
-      status-types: "WARNING,ERROR,NOTE"
+      statuses: "WARN,ERROR,NOTE"
  

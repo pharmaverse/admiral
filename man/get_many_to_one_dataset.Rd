@@ -27,7 +27,7 @@ library(admiraldev, warn.conflicts = FALSE)
 data(admiral_adsl)
 
 try(
-  assert_one_to_one(admiral_adsl, vars(SITEID), vars(STUDYID))
+  assert_one_to_one(admiral_adsl, exprs(SITEID), exprs(STUDYID))
 )
 
 get_many_to_one_dataset()
@@ -37,9 +37,6 @@ Utilities for Dataset Checking:
 \code{\link{extract_duplicate_records}()},
 \code{\link{get_duplicates_dataset}()},
 \code{\link{get_one_to_many_dataset}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{utils_ds_chk}
 \keyword{utils_ds_chk}

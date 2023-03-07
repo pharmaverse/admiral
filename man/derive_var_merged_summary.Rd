@@ -30,7 +30,7 @@ The values of \code{analysis_var} are summarized by the specified variables. The
 summarized values are merged to the input dataset (\code{dataset}) by the
 specified by variables.
 
-\emph{Permitted Values}: list of variables created by \code{vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{new_var}{Variable to add
 
@@ -97,7 +97,7 @@ adbds <- tribble(
 derive_var_merged_summary(
   adbds,
   dataset_add = adbds,
-  by_vars = vars(USUBJID, AVISIT),
+  by_vars = exprs(USUBJID, AVISIT),
   new_var = MEANVIS,
   analysis_var = AVAL,
   summary_fun = function(x) mean(x, na.rm = TRUE)
@@ -130,7 +130,7 @@ adtr <- tribble(
 derive_var_merged_summary(
   adsl,
   dataset_add = adtr,
-  by_vars = vars(USUBJID),
+  by_vars = exprs(USUBJID),
   filter_add = AVISIT == "BASELINE",
   new_var = LESIONSBL,
   analysis_var = LESIONID,
@@ -142,8 +142,8 @@ derive_var_merged_summary(
 \code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=get_summary_records]{get_summary_records()}}
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
@@ -152,16 +152,12 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
-\code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},
 \code{\link{get_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_gen}
 \keyword{der_gen}

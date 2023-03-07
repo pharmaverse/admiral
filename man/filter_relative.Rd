@@ -24,14 +24,14 @@ expected.}
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values:} list of variables created by \code{vars()}}
+\emph{Permitted Values:} list of variables created by \code{exprs()}}
 
 \item{order}{Sort order
 
 Within each by group the observations are ordered by the specified order.
 
 \emph{Permitted Values:} list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))}}
+created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}}
 
 \item{condition}{Condition for Reference Observation
 
@@ -112,8 +112,8 @@ response <- tribble(
 # Select observations up to first PD for each patient
 response \%>\%
   filter_relative(
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
     condition = AVALC == "PD",
     mode = "first",
     selection = "before",
@@ -123,8 +123,8 @@ response \%>\%
 # Select observations after last CR, PR, or SD for each patient
 response \%>\%
   filter_relative(
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
     condition = AVALC \%in\% c("CR", "PR", "SD"),
     mode = "last",
     selection = "after",
@@ -134,8 +134,8 @@ response \%>\%
 # Select observations from first response to first PD
 response \%>\%
   filter_relative(
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
     condition = AVALC \%in\% c("CR", "PR"),
     mode = "first",
     selection = "after",
@@ -143,8 +143,8 @@ response \%>\%
     keep_no_ref_groups = FALSE
   ) \%>\%
   filter_relative(
-    by_vars = vars(USUBJID),
-    order = vars(AVISITN),
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
     condition = AVALC == "PD",
     mode = "first",
     selection = "before",
@@ -154,13 +154,10 @@ response \%>\%
 \seealso{
 Utilities for Filtering Observations: 
 \code{\link{count_vals}()},
-\code{\link{filter_confirmation}()},
 \code{\link{filter_extreme}()},
+\code{\link{filter_joined}()},
 \code{\link{max_cond}()},
 \code{\link{min_cond}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{utils_fil}
 \keyword{utils_fil}

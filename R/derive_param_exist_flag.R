@@ -2,7 +2,7 @@
 #'
 #' Add a new parameter indicating that a certain event exists in a dataset.
 #' `AVALC` and `AVAL` indicate if an event occurred or not. For example, the
-#' function can derive a parameter indicating if there is measureable disease at
+#' function can derive a parameter indicating if there is measurable disease at
 #' baseline.
 #'
 #' @param dataset Input dataset
@@ -85,14 +85,14 @@
 #'
 #' @param set_values_to Variables to set
 #'
-#'   A named list returned by `vars()` defining the variables to be set for the
-#'   new parameter, e.g. `vars(PARAMCD = "MDIS", PARAM = "Measurable Disease at
+#'   A named list returned by `exprs()` defining the variables to be set for the
+#'   new parameter, e.g. `exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at
 #'   Baseline")` is expected. The values must be symbols, character strings,
 #'   numeric values, or `NA`.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#'   A list of symbols created using `vars()` is expected.
+#'   A list of symbols created using `exprs()` is expected.
 #'
 #' @details
 #'   1. The additional dataset (`dataset_add`) is restricted to the observations
@@ -118,7 +118,6 @@
 #'
 #'   1. The new observations are added to input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with a new parameter indicating if an event
 #'   occurred (`AVALC`, `AVAL`, and the variables specified by `subject_keys`
@@ -165,7 +164,7 @@
 #'   condition = TUSTRESC == "TARGET",
 #'   false_value = "N",
 #'   missing_value = "N",
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "MDIS",
 #'     PARAM = "Measurable Disease at Baseline"
 #'   )
@@ -182,23 +181,23 @@ derive_param_exist_flag <- function(dataset = NULL,
                                     subject_keys = get_admiral_option("subject_keys"),
                                     set_values_to) {
   # Check input parameters
-  condition <- assert_filter_cond(enquo(condition))
+  condition <- assert_filter_cond(enexpr(condition))
   assert_character_scalar(true_value)
   assert_character_scalar(false_value)
   assert_character_scalar(missing_value)
-  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_function(aval_fun)
   assert_vars(subject_keys)
   assert_data_frame(
     dataset,
-    required_vars = vars(PARAMCD, !!!subject_keys),
+    required_vars = exprs(PARAMCD, !!!subject_keys),
     optional = TRUE
   )
   assert_data_frame(dataset_adsl, required_vars = subject_keys)
   assert_data_frame(dataset_add, required_vars = subject_keys)
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   if (!is.null(dataset)) {
-    assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+    assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
 
   # Create new observations

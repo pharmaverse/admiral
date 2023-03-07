@@ -8,7 +8,7 @@ derive_param_bsa(
   dataset,
   by_vars,
   method,
-  set_values_to = vars(PARAMCD = "BSA"),
+  set_values_to = exprs(PARAMCD = "BSA"),
   height_code = "HEIGHT",
   weight_code = "WEIGHT",
   get_unit_expr,
@@ -55,7 +55,7 @@ Permitted Values: character value}
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
 code for the new parameter.
 
 \emph{Permitted Values:} List of variable-value pairs}
@@ -113,9 +113,9 @@ advs <- tribble(
 
 derive_param_bsa(
   advs,
-  by_vars = vars(USUBJID, VISIT),
+  by_vars = exprs(USUBJID, VISIT),
   method = "Mosteller",
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = "BSA",
     PARAM = "Body Surface Area (m^2)"
   ),
@@ -124,9 +124,9 @@ derive_param_bsa(
 
 derive_param_bsa(
   advs,
-  by_vars = vars(USUBJID, VISIT),
+  by_vars = exprs(USUBJID, VISIT),
   method = "Fujimoto",
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = "BSA",
     PARAM = "Body Surface Area (m^2)"
   ),
@@ -136,6 +136,8 @@ derive_param_bsa(
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_event}()},
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
@@ -150,9 +152,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
-}
-\author{
-Eric Simms
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

@@ -10,7 +10,6 @@ derive_var_extreme_flag(
   order,
   new_var,
   mode,
-  filter = deprecated(),
   check_type = "warning"
 )
 }
@@ -42,8 +41,6 @@ Permitted Values: list of name-value pairs}
 Determines of the first or last observation is flagged.
 
 Permitted Values: \code{"first"}, \code{"last"}}
-
-\item{filter}{Deprecated, please use \code{restrict_derivation()} instead (see examples).}
 
 \item{check_type}{Check uniqueness?
 
@@ -82,8 +79,8 @@ admiral_vs \%>\%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = vars(USUBJID, VSTESTCD, VISIT),
-      order = vars(VSTPTNUM),
+      by_vars = exprs(USUBJID, VSTESTCD, VISIT),
+      order = exprs(VSTPTNUM),
       new_var = LASTFL,
       mode = "last"
     ),
@@ -123,8 +120,8 @@ restrict_derivation(
   input,
   derivation = derive_var_extreme_flag,
   args = params(
-    by_vars = vars(USUBJID, PARAMCD),
-    order = vars(ADT),
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
     new_var = ABLFL,
     mode = "last"
   ),
@@ -136,8 +133,8 @@ restrict_derivation(
   input,
   derivation = derive_var_extreme_flag,
   args = params(
-    by_vars = vars(USUBJID, PARAMCD),
-    order = vars(AVAL, ADT),
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(AVAL, ADT),
     new_var = ABLFL,
     mode = "last"
   ),
@@ -149,8 +146,8 @@ restrict_derivation(
   input,
   derivation = derive_var_extreme_flag,
   args = params(
-    by_vars = vars(USUBJID, PARAMCD),
-    order = vars(desc(AVAL), ADT),
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(desc(AVAL), ADT),
     new_var = ABLFL,
     mode = "last"
   ),
@@ -162,8 +159,8 @@ restrict_derivation(
   input,
   derivation = derive_var_extreme_flag,
   args = params(
-    by_vars = vars(USUBJID, PARAMCD),
-    order = vars(ADT, desc(AVAL)),
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT, desc(AVAL)),
     new_var = ABLFL,
     mode = "last"
   ),
@@ -181,8 +178,8 @@ admiral_ae \%>\%
   ) \%>\%
   derive_var_extreme_flag(
     new_var = AOCCIFL,
-    by_vars = vars(USUBJID),
-    order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+    by_vars = exprs(USUBJID),
+    order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
     mode = "first"
   ) \%>\%
   arrange(USUBJID, AESTDY, AESEQ) \%>\%
@@ -196,8 +193,8 @@ admiral_ae \%>\%
   ) \%>\%
   derive_var_extreme_flag(
     new_var = AOCCSIFL,
-    by_vars = vars(USUBJID, AEBODSYS),
-    order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+    by_vars = exprs(USUBJID, AEBODSYS),
+    order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
     mode = "first"
   ) \%>\%
   arrange(USUBJID, AESTDY, AESEQ) \%>\%
@@ -207,7 +204,7 @@ admiral_ae \%>\%
 \code{\link[=derive_var_worst_flag]{derive_var_worst_flag()}}
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_confirmation_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
@@ -217,16 +214,12 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
-\code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},
 \code{\link{get_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_gen}
 \keyword{der_gen}

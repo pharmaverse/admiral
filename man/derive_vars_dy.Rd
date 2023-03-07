@@ -20,9 +20,9 @@ Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
 
 \item{source_vars}{A list of datetime or date variables created using
-\code{vars()} from which dates are to be extracted. This can either be a list of
+\code{exprs()} from which dates are to be extracted. This can either be a list of
 date(time) variables or named \code{--DY} variables and corresponding --DT(M)
-variables e.g. \code{vars(TRTSDTM, ASTDTM, AENDT)} or \code{vars(TRTSDT, ASTDTM, AENDT, DEATHDY = DTHDT)}. If the source variable does not end in --DT(M), a
+variables e.g. \code{exprs(TRTSDTM, ASTDTM, AENDT)} or \code{exprs(TRTSDT, ASTDTM, AENDT, DEATHDY = DTHDT)}. If the source variable does not end in --DT(M), a
 name for the resulting \code{--DY} variable must be provided.}
 }
 \value{
@@ -59,7 +59,7 @@ datain <- tribble(
 derive_vars_dy(
   datain,
   reference_date = TRTSDTM,
-  source_vars = vars(TRTSDTM, ASTDTM, AENDT)
+  source_vars = exprs(TRTSDTM, ASTDTM, AENDT)
 )
 
 # specifying name of new variables
@@ -75,7 +75,7 @@ datain <- tribble(
 derive_vars_dy(
   datain,
   reference_date = TRTSDT,
-  source_vars = vars(TRTSDT, DEATHDY = DTHDT)
+  source_vars = exprs(TRTSDT, DEATHDY = DTHDT)
 )
 }
 \seealso{
@@ -86,9 +86,6 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \code{\link{derive_vars_dtm}()},
 \code{\link{derive_vars_dt}()},
 \code{\link{derive_vars_duration}()}
-}
-\author{
-Teckla Akinyi
 }
 \concept{der_date_time}
 \keyword{der_date_time}

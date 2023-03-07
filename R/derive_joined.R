@@ -18,9 +18,9 @@
 #'
 #'   The two datasets are joined by the specified variables. Variables from the
 #'   additional dataset can be renamed by naming the element, i.e., `by_vars =
-#'   vars(<name in input dataset> = <name in additional dataset>)`.
+#'   exprs(<name in input dataset> = <name in additional dataset>)`.
 #'
-#'   *Permitted Values*: list of variables created by `vars()`
+#'   *Permitted Values*: list of variables created by `exprs()`
 #'
 #' @param order Sort order
 #'
@@ -32,25 +32,25 @@
 #'   is used for the sorting.
 #'
 #'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))` or `NULL`
+#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param new_vars Variables to add
 #'
 #'   The specified variables from the additional dataset are added to the output
 #'   dataset. Variables can be renamed by naming the element, i.e., `new_vars =
-#'   vars(<new name> = <old name>)`.
+#'   exprs(<new name> = <old name>)`.
 #'
-#'   For example `new_vars = vars(var1, var2)` adds variables `var1` and `var2`
+#'   For example `new_vars = exprs(var1, var2)` adds variables `var1` and `var2`
 #'   from `dataset_add` to the input dataset.
 #'
-#'   And `new_vars = vars(var1, new_var2 = old_var2)` takes `var1` and
+#'   And `new_vars = exprs(var1, new_var2 = old_var2)` takes `var1` and
 #'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
 #'   `old_var2` to `new_var2`.
 #'
 #'   If the argument is not specified or set to `NULL`, all variables from the
 #'   additional dataset (`dataset_add`) are added.
 #'
-#'   *Permitted Values*: list of variables created by `vars()`
+#'   *Permitted Values*: list of variables created by `exprs()`
 #'
 #' @param join_vars Variables to use from additional dataset
 #'
@@ -62,7 +62,7 @@
 #'
 #'   The variables are not included in the output dataset.
 #'
-#'   *Permitted Values*: list of variables created by `vars()`
+#'   *Permitted Values*: list of variables created by `exprs()`
 #'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
@@ -101,7 +101,6 @@
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details
 #'
@@ -179,10 +178,10 @@
 #' derive_vars_joined(
 #'   adbds,
 #'   dataset_add = adbds,
-#'   by_vars = vars(USUBJID),
-#'   order = vars(AVAL),
-#'   new_vars = vars(NADIR = AVAL),
-#'   join_vars = vars(ADY),
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(AVAL),
+#'   new_vars = exprs(NADIR = AVAL),
+#'   join_vars = exprs(ADY),
 #'   filter_add = ADY > 0,
 #'   filter_join = ADY.join < ADY,
 #'   mode = "first",
@@ -213,9 +212,9 @@
 #' derive_vars_joined(
 #'   adae,
 #'   dataset_add = adlb,
-#'   by_vars = vars(USUBJID),
-#'   order = vars(AVAL, desc(ADY)),
-#'   new_vars = vars(HGB_MAX = AVAL, HGB_DY = ADY),
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(AVAL, desc(ADY)),
+#'   new_vars = exprs(HGB_MAX = AVAL, HGB_DY = ADY),
 #'   filter_add = PARAMCD == "HGB",
 #'   filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,
 #'   mode = "last"
@@ -232,7 +231,7 @@
 #'
 #' period_ref <- create_period_dataset(
 #'   adsl,
-#'   new_vars = vars(APERSDT = APxxSDT, APEREDT = APxxEDT)
+#'   new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT)
 #' )
 #'
 #' period_ref
@@ -254,8 +253,8 @@
 #' derive_vars_joined(
 #'   adae,
 #'   dataset_add = period_ref,
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   join_vars = vars(APERSDT, APEREDT),
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   join_vars = exprs(APERSDT, APEREDT),
 #'   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
 #' )
 derive_vars_joined <- function(dataset,
@@ -276,10 +275,10 @@ derive_vars_joined <- function(dataset,
   assert_data_frame(dataset, required_vars = by_vars_left)
   assert_data_frame(
     dataset_add,
-    required_vars = quo_c(by_vars, join_vars, extract_vars(order), new_vars)
+    required_vars = expr_c(by_vars, join_vars, extract_vars(order), new_vars)
   )
-  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
-  filter_join <- assert_filter_cond(enquo(filter_join), optional = TRUE)
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  filter_join <- assert_filter_cond(enexpr(filter_join), optional = TRUE)
 
   if (is.null(new_vars)) {
     new_vars <- chr2vars(colnames(dataset_add))
@@ -316,7 +315,7 @@ derive_vars_joined <- function(dataset,
   if (!is.null(order)) {
     data_return <- filter_extreme(
       data_return,
-      by_vars = quo_c(by_vars_left, quo(!!tmp_obs_nr)),
+      by_vars = expr_c(by_vars_left, tmp_obs_nr),
       order = add_suffix_to_vars(order, vars = common_vars, suffix = ".join"),
       mode = mode,
       check_type = check_type
@@ -332,7 +331,7 @@ derive_vars_joined <- function(dataset,
         !!tmp_obs_nr,
         !!!add_suffix_to_vars(new_vars, vars = common_vars, suffix = ".join")
       ),
-      by_vars = vars(!!!by_vars_left, !!tmp_obs_nr),
+      by_vars = exprs(!!!by_vars_left, !!tmp_obs_nr),
       duplicate_msg = paste(
         paste(
           "After applying `filter_join` the joined dataset contains more",

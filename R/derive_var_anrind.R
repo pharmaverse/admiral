@@ -17,7 +17,6 @@
 #'
 #' @return The input dataset with additional column `ANRIND`
 #'
-#' @author Thomas Neitmann
 #'
 #' @family der_bds_findings
 #' @keywords der_bds_findings
@@ -42,11 +41,11 @@
 #'     AVAL = VSSTRESN
 #'   ) %>%
 #'   filter(PARAMCD %in% c("PULSE", "DIABP")) %>%
-#'   derive_vars_merged(ref_ranges, by_vars = vars(PARAMCD)) %>%
+#'   derive_vars_merged(ref_ranges, by_vars = exprs(PARAMCD)) %>%
 #'   derive_var_anrind() %>%
 #'   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
 derive_var_anrind <- function(dataset) {
-  assert_data_frame(dataset, required_vars = vars(ANRLO, ANRHI, AVAL))
+  assert_data_frame(dataset, required_vars = exprs(ANRLO, ANRHI, AVAL))
 
   # Temporarily add these variables to the dataset if they are not included
   has_a1lo <- "A1LO" %in% colnames(dataset)

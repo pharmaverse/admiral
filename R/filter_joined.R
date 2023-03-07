@@ -1,4 +1,4 @@
-#' Filter Confirmed Observations
+#' Filter Observations Taking Other Observations into Account
 #'
 #' @description
 #'
@@ -32,7 +32,7 @@
 #'   this parameter. The specified variables are added to the joined dataset
 #'   with suffix ".join". For example to select all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
-#'   vars(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
+#'   exprs(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
 #'   AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
@@ -56,6 +56,15 @@
 #' @param order Order
 #'
 #'   The observations are ordered by the specified order.
+#'
+#' @param tmp_obs_nr_var Temporary observation number
+#'
+#'   The specified variable is added to the input dataset and set to the
+#'   observation number with respect to `order`. For each by group (`by_vars`)
+#'   the observation number starts with `1`. The variable can be used in the
+#'   conditions (`filter`, `first_cond`). It is not included in the output
+#'   dataset. It can be used to select consecutive observations or the last
+#'   observation (see last example below).
 #'
 #' @param filter Condition for selecting observations
 #'
@@ -91,7 +100,7 @@
 #'   specified for `join_vars` are kept. The suffix ".join" is added to these
 #'   variables.
 #'
-#'   For example, for `by_vars = USUBJID`, `join_vars = vars(AVISITN, AVALC)` and input dataset
+#'   For example, for `by_vars = USUBJID`, `join_vars = exprs(AVISITN, AVALC)` and input dataset
 #'
 #'   ```{r eval=FALSE}
 #'   # A tibble: 2 x 4
@@ -119,7 +128,7 @@
 #'   `join_type` and `order`.
 #'
 #'   The dataset from the example in the previous step with `join_type =
-#'   "after"` and order = vars(AVISITN)` is restricted to
+#'   "after"` and order = exprs(AVISITN)` is restricted to
 #'
 #'   ```{r eval=FALSE}
 #'   A tibble: 4 x 6
@@ -150,7 +159,6 @@
 #' @returns A subset of the observations of the input dataset. All variables of
 #'   the input dataset are included in the output dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fil
 #' @family utils_fil
@@ -180,12 +188,12 @@
 #'   "4",        21, "N",         41
 #' )
 #'
-#' filter_confirmation(
+#' filter_joined(
 #'   adae,
-#'   by_vars = vars(USUBJID),
-#'   join_vars = vars(ACOVFL, ADY),
+#'   by_vars = exprs(USUBJID),
+#'   join_vars = exprs(ACOVFL, ADY),
 #'   join_type = "all",
-#'   order = vars(ADY),
+#'   order = exprs(ADY),
 #'   filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 #' )
 #'
@@ -203,12 +211,12 @@
 #'   "4",      2,        "N",
 #' )
 #'
-#' filter_confirmation(
+#' filter_joined(
 #'   data,
-#'   by_vars = vars(USUBJID),
-#'   join_vars = vars(AVALC, AVISITN),
+#'   by_vars = exprs(USUBJID),
+#'   join_vars = exprs(AVALC, AVISITN),
 #'   join_type = "after",
-#'   order = vars(AVISITN),
+#'   order = exprs(AVISITN),
 #'   filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
 #' )
 #'
@@ -232,12 +240,12 @@
 #'   "4",      5,        "PR"
 #' )
 #'
-#' filter_confirmation(
+#' filter_joined(
 #'   data,
-#'   by_vars = vars(USUBJID),
-#'   join_vars = vars(AVALC),
+#'   by_vars = exprs(USUBJID),
+#'   join_vars = exprs(AVALC),
 #'   join_type = "after",
-#'   order = vars(AVISITN),
+#'   order = exprs(AVISITN),
 #'   first_cond = AVALC.join == "CR",
 #'   filter = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
 #'     count_vals(var = AVALC.join, val = "NE") <= 1
@@ -264,12 +272,12 @@
 #'   "4",        55, "PR"
 #' )
 #'
-#' filter_confirmation(
+#' filter_joined(
 #'   data,
-#'   by_vars = vars(USUBJID),
-#'   join_vars = vars(AVALC, ADY),
+#'   by_vars = exprs(USUBJID),
+#'   join_vars = exprs(AVALC, ADY),
 #'   join_type = "after",
-#'   order = vars(ADY),
+#'   order = exprs(ADY),
 #'   first_cond = AVALC.join %in% c("CR", "PR") & ADY.join - ADY >= 20,
 #'   filter = AVALC == "PR" &
 #'     all(AVALC.join %in% c("CR", "PR", "NE")) &
@@ -280,14 +288,42 @@
 #'         count_vals(var = AVALC.join, val = "CR") == 0
 #'     )
 #' )
-filter_confirmation <- function(dataset,
-                                by_vars,
-                                join_vars,
-                                join_type,
-                                first_cond = NULL,
-                                order,
-                                filter,
-                                check_type = "warning") {
+#'
+#' # select observations with CRIT1FL == "Y" at two consecutive visits or at the last visit
+#' data <- tribble(
+#'   ~USUBJID, ~AVISITN, ~CRIT1FL,
+#'   "1",      1,        "Y",
+#'   "1",      2,        "N",
+#'   "1",      3,        "Y",
+#'   "1",      5,        "N",
+#'   "2",      1,        "Y",
+#'   "2",      3,        "Y",
+#'   "2",      5,        "N",
+#'   "3",      1,        "Y",
+#'   "4",      1,        "Y",
+#'   "4",      2,        "N",
+#' )
+#'
+#' filter_joined(
+#'   data,
+#'   by_vars = exprs(USUBJID),
+#'   tmp_obs_nr_var = tmp_obs_nr,
+#'   join_vars = exprs(CRIT1FL),
+#'   join_type = "all",
+#'   order = exprs(AVISITN),
+#'   filter = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
+#'     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
+#' )
+#'
+filter_joined <- function(dataset,
+                          by_vars,
+                          join_vars,
+                          join_type,
+                          first_cond = NULL,
+                          order,
+                          tmp_obs_nr_var = NULL,
+                          filter,
+                          check_type = "warning") {
   # Check input parameters
   assert_vars(by_vars)
   assert_vars(join_vars)
@@ -297,9 +333,10 @@ filter_confirmation <- function(dataset,
       values = c("before", "after", "all"),
       case_sensitive = FALSE
     )
-  first_cond <- assert_filter_cond(enquo(first_cond), optional = TRUE)
+  first_cond <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
   assert_order_vars(order)
-  filter <- assert_filter_cond(enquo(filter))
+  tmp_obs_nr_var <- assert_symbol(enexpr(tmp_obs_nr_var), optional = TRUE)
+  filter <- assert_filter_cond(enexpr(filter))
   check_type <-
     assert_character_scalar(
       check_type,
@@ -308,14 +345,17 @@ filter_confirmation <- function(dataset,
     )
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, join_vars, extract_vars(order))
+    required_vars = expr_c(by_vars, join_vars, extract_vars(order))
   )
 
   # number observations of the input dataset to get a unique key
-  # (by_vars and tmp_obs_nr_filter_confirmation)
+  # (by_vars and tmp_obs_nr_var)
+  if (is.null(tmp_obs_nr_var)) {
+    tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")
+  }
   data <- dataset %>%
     derive_var_obs_number(
-      new_var = tmp_obs_nr_filter_confirmation,
+      new_var = !!tmp_obs_nr_var,
       by_vars = by_vars,
       order = order,
       check_type = check_type
@@ -325,7 +365,7 @@ filter_confirmation <- function(dataset,
   data_joined <-
     left_join(
       data,
-      select(data, !!!by_vars, !!!join_vars, tmp_obs_nr_filter_confirmation),
+      select(data, !!!by_vars, !!!join_vars, !!tmp_obs_nr_var),
       by = vars2chr(by_vars),
       suffix = c("", ".join")
     )
@@ -334,21 +374,21 @@ filter_confirmation <- function(dataset,
 
     data_joined <- filter(
       data_joined,
-      !!parse_expr(paste(
-        "tmp_obs_nr_filter_confirmation.join",
+      !!parse_expr(paste0(
+        as_name(tmp_obs_nr_var), ".join",
         operator[join_type],
-        "tmp_obs_nr_filter_confirmation"
+        as_name(tmp_obs_nr_var)
       ))
     )
   }
 
-  if (!quo_is_null(first_cond)) {
+  if (!is.null(first_cond)) {
     # select all observations up to the first confirmation observation
     data_joined <- filter_relative(
       data_joined,
-      by_vars = vars(!!!by_vars, tmp_obs_nr_filter_confirmation),
+      by_vars = expr_c(by_vars, tmp_obs_nr_var),
       condition = !!first_cond,
-      order = vars(tmp_obs_nr_filter_confirmation.join),
+      order = exprs(!!parse_expr(paste0(as_name(tmp_obs_nr_var), ".join"))),
       mode = "first",
       selection = "before",
       inclusive = TRUE,
@@ -358,7 +398,7 @@ filter_confirmation <- function(dataset,
 
   # apply confirmation condition, which may include summary functions
   data_joined %>%
-    group_by(!!!by_vars, tmp_obs_nr_filter_confirmation) %>%
+    group_by(!!!by_vars, !!tmp_obs_nr_var) %>%
     filter(!!filter) %>%
     # select one observation of each group, as the joined variables are removed
     # it doesn't matter which one, so we take just the first one
@@ -375,7 +415,6 @@ filter_confirmation <- function(dataset,
 #'
 #' @param val A value
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fil
 #' @family utils_fil
@@ -421,7 +460,6 @@ count_vals <- function(var, val) {
 #'
 #' @param cond A condition
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fil
 #' @family utils_fil
@@ -454,7 +492,7 @@ count_vals <- function(var, val) {
 #'   pr_after_cr = last_pr_vis > first_cr_vis
 #' )
 min_cond <- function(var, cond) {
-  assert_filter_cond(enquo(cond))
+  assert_filter_cond(enexpr(cond))
   if (length(var[cond]) == 0) {
     NA
   } else {
@@ -471,7 +509,6 @@ min_cond <- function(var, cond) {
 #'
 #' @param cond A condition
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fil
 #' @family utils_fil
@@ -504,10 +541,182 @@ min_cond <- function(var, cond) {
 #'   pr_after_cr = last_pr_vis > first_cr_vis
 #' )
 max_cond <- function(var, cond) {
-  assert_filter_cond(enquo(cond))
+  assert_filter_cond(enexpr(cond))
   if (length(var[cond]) == 0) {
     NA
   } else {
     max(var[cond])
   }
+}
+
+#' Filter Confirmed Observations
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `filter_joined()` instead.
+#'
+#' @param dataset Input dataset
+#'
+#'   The variables specified for `by_vars`, `join_vars`, and `order` are
+#'   expected.
+#'
+#' @param by_vars By variables
+#'
+#'   The specified variables are used as by variables for joining the input
+#'   dataset with itself.
+#'
+#' @param join_vars Variables to keep from joined dataset
+#'
+#'   The variables needed from the other observations should be specified for
+#'   this parameter. The specified variables are added to the joined dataset
+#'   with suffix ".join". For example to select all observations with `AVALC ==
+#'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
+#'   exprs(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
+#'   AVISITN < AVISITN.join` could be specified.
+#'
+#'   The `*.join` variables are not included in the output dataset.
+#'
+#' @param join_type Observations to keep after joining
+#'
+#'   The argument determines which of the joined observations are kept with
+#'   respect to the original observation. For example, if `join_type =
+#'   "after"` is specified all observations after the original observations are
+#'   kept.
+#'
+#'   *Permitted Values:* `"before"`, `"after"`, `"all"`
+#'
+#' @param first_cond Condition for selecting range of data
+#'
+#'   If this argument is specified, the other observations are restricted up to
+#'   the first observation where the specified condition is fulfilled. If the
+#'   condition is not fulfilled for any of the subsequent observations, all
+#'   observations are removed.
+#'
+#' @param order Order
+#'
+#'   The observations are ordered by the specified order.
+#'
+#' @param tmp_obs_nr_var Temporary observation number
+#'
+#'   The specified variable is added to the input dataset and set to the
+#'   observation number with respect to `order`. For each by group (`by_vars`)
+#'   the observation number starts with `1`. The variable can be used in the
+#'   conditions (`filter`, `first_cond`). It is not included in the output
+#'   dataset. It can be used to select consecutive observations or the last
+#'   observation (see last example below).
+#'
+#' @param filter Condition for selecting observations
+#'
+#'   The filter is applied to the joined dataset for selecting the confirmed
+#'   observations. The condition can include summary functions. The joined
+#'   dataset is grouped by the original observations. I.e., the summary function
+#'   are applied to all observations up to the confirmation observation. For
+#'   example in the oncology setting when using this function for confirmed best
+#'   overall response,  `filter = AVALC == "CR" & all(AVALC.join %in% c("CR",
+#'   "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1` selects
+#'   observations with response "CR" and for all observations up to the
+#'   confirmation observation the response is "CR" or "NE" and there is at most
+#'   one "NE".
+#'
+#' @param check_type Check uniqueness?
+#'
+#'   If `"warning"` or `"error"` is specified, the specified message is issued
+#'   if the observations of the input dataset are not unique with respect to the
+#'   by variables and the order.
+#'
+#'   *Default:* `"none"`
+#'
+#'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
+#'
+#' @details
+#'
+#'   The following steps are performed to produce the output dataset.
+#'
+#'   ## Step 1
+#'
+#'   The input dataset is joined with itself by the variables specified for
+#'   `by_vars`. From the right hand side of the join only the variables
+#'   specified for `join_vars` are kept. The suffix ".join" is added to these
+#'   variables.
+#'
+#'   For example, for `by_vars = USUBJID`, `join_vars = exprs(AVISITN, AVALC)` and input dataset
+#'
+#'   ```{r eval=FALSE}
+#'   # A tibble: 2 x 4
+#'   USUBJID AVISITN AVALC  AVAL
+#'   <chr>     <dbl> <chr> <dbl>
+#'   1             1 Y         1
+#'   1             2 N         0
+#'   ```
+#'
+#'   the joined dataset is
+#'
+#'   ```{r eval=FALSE}
+#'   A tibble: 4 x 6
+#'   USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
+#'   <chr>     <dbl> <chr> <dbl>        <dbl> <chr>
+#'   1             1 Y         1            1 Y
+#'   1             1 Y         1            2 N
+#'   1             2 N         0            1 Y
+#'   1             2 N         0            2 N
+#'   ```
+#'
+#'   ## Step 2
+#'
+#'   The joined dataset is restricted to observations with respect to
+#'   `join_type` and `order`.
+#'
+#'   The dataset from the example in the previous step with `join_type =
+#'   "after"` and order = exprs(AVISITN)` is restricted to
+#'
+#'   ```{r eval=FALSE}
+#'   A tibble: 4 x 6
+#'   USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
+#'   <chr>     <dbl> <chr> <dbl>        <dbl> <chr>
+#'   1             1 Y         1            2 N
+#'   ```
+#'
+#'   ## Step 3
+#'
+#'   If `first_cond` is specified, for each observation of the input dataset the
+#'   joined dataset is restricted to observations up to the first observation
+#'   where `first_cond` is fulfilled (the observation fulfilling the condition
+#'   is included). If for an observation of the input dataset the condition is
+#'   not fulfilled, the observation is removed.
+#'
+#'   ## Step 4
+#'
+#'   The joined dataset is grouped by the observations from the input dataset
+#'   and restricted to the observations fulfilling the condition specified by
+#'   `filter`.
+#'
+#'   ## Step 5
+#'
+#'   The first observation of each group is selected and the `*.join` variables
+#'   are dropped.
+#'
+#' @returns A subset of the observations of the input dataset. All variables of
+#'   the input dataset are included in the output dataset.
+#'
+#'
+#' @keywords deprecated
+#' @family deprecated
+#'
+#' @export
+#'
+filter_confirmation <- function(dataset,
+                                by_vars,
+                                join_vars,
+                                join_type,
+                                first_cond = NULL,
+                                order,
+                                tmp_obs_nr_var = NULL,
+                                filter,
+                                check_type = "warning") {
+  deprecate_stop(
+    "0.10.0",
+    "filter_confirmation()",
+    details = "Please use `filter_joined()` instead."
+  )
 }

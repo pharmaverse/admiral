@@ -2,7 +2,7 @@
 % Please edit documentation in R/user_utils.R
 \name{chr2vars}
 \alias{chr2vars}
-\title{Turn a Character Vector into a List of Quosures}
+\title{Turn a Character Vector into a List of Expressions}
 \usage{
 chr2vars(chr)
 }
@@ -10,10 +10,10 @@ chr2vars(chr)
 \item{chr}{A character vector}
 }
 \value{
-A \code{list} of \code{quosures} as returned by \code{\link[=vars]{vars()}}
+A \code{list} of expressions as returned by \code{\link[=exprs]{exprs()}}
 }
 \description{
-Turn a character vector into a list of quosures
+Turn a character vector into a list of expressions
 }
 \examples{
 chr2vars(c("USUBJID", "AVAL"))
@@ -21,9 +21,6 @@ chr2vars(c("USUBJID", "AVAL"))
 \seealso{
 Other utils_quo: 
 \code{\link{negate_vars}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{utils_quo}
 \keyword{utils_quo}

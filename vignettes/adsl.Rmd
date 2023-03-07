@@ -71,11 +71,11 @@ data("admiral_ex")
 data("admiral_ae")
 data("admiral_lb")
 
-dm <- admiral_dm
-ds <- admiral_ds
-ex <- admiral_ex
-ae <- admiral_ae
-lb <- admiral_lb
+dm <- convert_blanks_to_na(admiral_dm)
+ds <- convert_blanks_to_na(admiral_ds)
+ex <- convert_blanks_to_na(admiral_ex)
+ae <- convert_blanks_to_na(admiral_ae)
+lb <- convert_blanks_to_na(admiral_lb)
 ```
 
 The `DM` domain is used as the basis for `ADSL`:
@@ -88,7 +88,7 @@ adsl <- dm %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = vars(USUBJID, RFSTDTC, COUNTRY, AGE, SEX, RACE, ETHNIC, ARM, ACTARM)
+  display_vars = exprs(USUBJID, RFSTDTC, COUNTRY, AGE, SEX, RACE, ETHNIC, ARM, ACTARM)
 )
 ```
 
@@ -143,20 +143,20 @@ adsl <- adsl %>%
     filter_add = (EXDOSE > 0 |
       (EXDOSE == 0 &
         str_detect(EXTRT, "PLACEBO"))) & !is.na(EXSTDTM),
-    new_vars = vars(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
-    order = vars(EXSTDTM, EXSEQ),
+    new_vars = exprs(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
+    order = exprs(EXSTDTM, EXSEQ),
     mode = "first",
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   derive_vars_merged(
     dataset_add = ex_ext,
     filter_add = (EXDOSE > 0 |
       (EXDOSE == 0 &
         str_detect(EXTRT, "PLACEBO"))) & !is.na(EXENDTM),
-    new_vars = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
-    order = vars(EXENDTM, EXSEQ),
+    new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+    order = exprs(EXENDTM, EXSEQ),
     mode = "last",
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   )
 ```
 
@@ -170,7 +170,7 @@ function.
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM))
+  derive_vars_dtm_to_dt(source_vars = exprs(TRTSDTM, TRTEDTM))
 ```
 
 
@@ -185,7 +185,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = vars(USUBJID, RFSTDTC, TRTSDTM, TRTSDT, TRTEDTM, TRTEDT, TRTDURD)
+  display_vars = exprs(USUBJID, RFSTDTC, TRTSDTM, TRTSDT, TRTEDTM, TRTEDT, TRTDURD)
 )
 ```
 
@@ -212,19 +212,16 @@ ds_ext <- derive_vars_dt(
 adsl <- adsl %>%
   derive_vars_merged(
     dataset_add = ds_ext,
-    by_vars = vars(STUDYID, USUBJID),
-    new_vars = vars(EOSDT = DSSTDT),
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(EOSDT = DSSTDT),
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   )
 ```
 
-With `DS`: 
-<a id="link_ds"></a>
-
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   ds,
-  display_vars = vars(USUBJID, DSCAT, DSDECOD, DSTERM, DSSTDTC),
+  display_vars = exprs(USUBJID, DSCAT, DSDECOD, DSTERM, DSSTDTC),
   filter = DSDECOD != "SCREEN FAILURE"
 )
 ```
@@ -232,7 +229,7 @@ dataset_vignette(
 We would get :
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, display_vars = vars(USUBJID, EOSDT))
+dataset_vignette(adsl, display_vars = exprs(USUBJID, EOSDT))
 ```
 
 This call would return the input dataset with the column `EOSDT` added. 
@@ -241,48 +238,26 @@ is to be imputed to the first of the month, then set `date_imputation = "FIRST"`
 
 ### Disposition Status (e.g. `EOSSTT`) {#disposition_status}
 
-The function `derive_var_disposition_status()` can be used to derive a disposition status at a specific
+The function `derive_var_merged_cat()` can be used to derive a disposition status at a specific
 timepoint. The relevant disposition variable (`DS.DSDECOD`) is selected by adjusting the filter 
 parameter and used to derive `EOSSTT`.
 
-To derive the End of Study status (`EOSSTT`), a call could be:
+To derive the End of Study status (`EOSSTT`), the function expects a mapping derivation for the `cat_fun` argument.
+The mapping derivation for the call below is
 
-```{r eval=TRUE}
-adsl <- adsl %>%
-  derive_var_disposition_status(
-    dataset_ds = ds,
-    new_var = EOSSTT,
-    status_var = DSDECOD,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
-  )
-```
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, display_vars = vars(USUBJID, EOSDT, EOSSTT))
-```
-[Link](#link_ds) to `DS`.
-
-This call would return the input dataset with the column `EOSSTT` added. 
-
-By default, the function will derive `EOSSTT` as
-
-- `"NOT STARTED"` if `DSDECOD` is `"SCREEN FAILURE"` or `"SCREENING NOT COMPLETED"`
+- `"NOT STARTED"` if `DSDECOD` is `"SCREEN FAILURE"`
 - `"COMPLETED"` if `DSDECOD == "COMPLETED"`
 - `"DISCONTINUED"` if `DSDECOD` is not `"COMPLETED"` or `NA`
 - `"ONGOING"` otherwise
 
-If the default derivation must be changed, the user can create his/her own function and pass it to 
-the `format_new_var` argument of the function (`format_new_var = new_mapping`) to map `DSDECOD` 
-to a suitable `EOSSTT` value.
-
 Example function `format_eosstt()`:
 
 ```{r eval=TRUE}
-format_eosstt <- function(DSDECOD) {
+format_eosstt <- function(x) {
   case_when(
-    DSDECOD %in% c("COMPLETED") ~ "COMPLETED",
-    DSDECOD %in% c("SCREEN FAILURE") ~ NA_character_,
-    !is.na(DSDECOD) ~ "DISCONTINUED",
+    x %in% c("COMPLETED") ~ "COMPLETED",
+    x %in% c("SCREEN FAILURE") ~ NA_character_,
+    !is.na(x) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 }
@@ -290,89 +265,87 @@ format_eosstt <- function(DSDECOD) {
 
 The customized mapping function `format_eosstt()` can now be passed to the main function:
 
-```{r eval=FALSE}
-
+```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_disposition_status(
-    dataset_ds = ds,
+  derive_var_merged_cat(
+    dataset_add = ds,
+    by_vars = exprs(STUDYID, USUBJID),
+    filter_add = DSCAT == "DISPOSITION EVENT",
     new_var = EOSSTT,
-    status_var = DSDECOD,
-    format_new_var = format_eosstt,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
+    source_var = DSDECOD,
+    cat_fun = format_eosstt,
+    missing_value = "ONGOING"
   )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adsl, display_vars = exprs(USUBJID, EOSDT, EOSSTT))
+```
+
 This call would return the input dataset with the column `EOSSTT` added. 
+
+If the derivation must be changed, the user can create his/her own function and pass it to 
+the `cat_fun` argument of the function (`cat_fun = new_mapping`) to map `DSDECOD` 
+to a suitable `EOSSTT` value.
 
 ### Disposition Reason(s) (e.g. `DCSREAS`, `DCSREASP`) {#disposition_reason}
 
 The main reason for discontinuation is usually stored in `DSDECOD` while `DSTERM` provides 
 additional details regarding subject’s discontinuation (e.g., description of `"OTHER"`).
 
-The function `derive_vars_disposition_reason()` can be used to derive a disposition reason (along with 
-the details, if  required) at a specific timepoint. 
-The relevant disposition variable(s) (`DS.DSDECOD`, `DS.DSTERM`) are selected by adjusting the 
-filter parameter and used to derive the main reason (and details).
+The function `derive_vars_merged()` can be used to derive a disposition reason (along with the details, if required) at a specific timepoint. 
+The relevant disposition variable(s) (`DS.DSDECOD`, `DS.DSTERM`) are selected by adjusting the filter parameter and used to derive the main reason (and details).
 
-To derive the End of Study reason(s) (`DCSREAS` and `DCSREASP`), the call would be:
+To derive the End of Study reason(s) (`DCSREAS` and `DCSREASP`), the function will map 
 
-```{r eval=TRUE}
+- `DCSREAS` as `DSDECOD`, and `DCSREASP` as `DSTERM` if `DSDECOD` is not `"COMPLETED"`, `"SCREEN FAILURE"`, or `NA`, `NA` otherwise
+
+```{r}
 adsl <- adsl %>%
-  derive_vars_disposition_reason(
-    dataset_ds = ds,
-    new_var = DCSREAS,
-    reason_var = DSDECOD,
-    new_var_spe = DCSREASP,
-    reason_var_spe = DSTERM,
-    filter_ds = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
+  derive_vars_merged(
+    dataset_add = ds,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(DCSREAS = DSDECOD, DCSREASP = DSTERM),
+    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %notin% c("SCREEN FAILURE", "COMPLETED", NA)
   )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, display_vars = vars(USUBJID, EOSDT, EOSSTT, DCSREAS, DCSREASP))
+dataset_vignette(adsl, display_vars = exprs(USUBJID, EOSDT, EOSSTT, DCSREAS, DCSREASP))
 ```
-
-[Link](#link_ds) to `DS`.
-
 This call would return the input dataset with the column `DCSREAS` and `DCSREASP` added. 
 
-By default, the function will map 
+If the derivation must be changed, the user can define that derivation in the `filter_add` argument of the function to map `DSDECOD` and  `DSTERM` to a suitable `DCSREAS`/`DCSREASP` value.
+
+The call below maps `DCSREAS` and `DCREASP` as follows:
 
 - `DCSREAS` as `DSDECOD` if `DSDECOD` is not `"COMPLETED"` or `NA`, `NA` otherwise
 - `DCSREASP` as `DSTERM` if `DSDECOD` is equal to `OTHER`, `NA` otherwise
 
-
-If the default derivation must be changed, the user can create his/her own function and pass it to 
-the `format_new_var` argument of the function (`format_new_var = new_mapping`) to map `DSDECOD` 
-and  `DSTERM` to a suitable `DCSREAS`/`DCSREASP` value.
-
-Example function `format_dcsreas()`:
-
-```{r eval=TRUE}
-format_dcsreas <- function(dsdecod, dsterm = NULL) {
-  if (is.null(dsterm)) {
-    if_else(dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod), dsdecod, NA_character_)
-  } else {
-    if_else(dsdecod == "OTHER", dsterm, NA_character_)
-  }
-}
+```{r, eval=TRUE, echo=FALSE}
+adsl <- adsl %>%
+  select(-DCSREAS, -DCSREASP)
 ```
 
-The customized mapping function `format_dcsreas()` can now be passed to the main function:
-
-```{r eval=FALSE}
+```{r}
 adsl <- adsl %>%
-  derive_vars_disposition_reason(
-    dataset_ds = ds,
-    new_var = DCSREAS,
-    reason_var = DSDECOD,
-    new_var_spe = DCSREASP,
-    reason_var_spe = DSTERM,
-    format_new_vars = format_dcsreas,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
+  derive_vars_merged(
+    dataset_add = ds,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(DCSREAS = DSDECOD),
+    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %notin% c("SCREEN FAILURE", "COMPLETED", NA)
+  ) %>%
+  derive_vars_merged(
+    dataset_add = ds,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(DCSREASP = DSTERM),
+    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %in% "OTHER"
   )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adsl, display_vars = exprs(USUBJID, EOSDT, EOSSTT, DCSREAS, DCSREASP))
+```
 
 ### Randomization Date (`RANDDT`) {#randomization_date}
 
@@ -384,8 +357,8 @@ adsl <- adsl %>%
   derive_vars_merged(
     dataset_add = ds_ext,
     filter_add = DSDECOD == "RANDOMIZED",
-    by_vars = vars(STUDYID, USUBJID),
-    new_vars = vars(RANDDT = DSSTDT)
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(RANDDT = DSSTDT)
   )
 ```
 
@@ -393,10 +366,8 @@ adsl <- adsl %>%
 This call would return the input dataset with the column `RANDDT` is added.
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, display_vars = vars(USUBJID, RANDDT))
+dataset_vignette(adsl, display_vars = exprs(USUBJID, RANDDT))
 ```
-
-[Link](#link_ds) to `DS`.
 
 ## Derive Death Variables {#death}
 
@@ -416,7 +387,7 @@ adsl <- adsl %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, display_vars = vars(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHFL))
+dataset_vignette(adsl, display_vars = exprs(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHFL))
 ```
 
 This call would return the input dataset with the columns `DTHDT` added and, by default, the 
@@ -476,7 +447,7 @@ src_ae <- dthcaus_source(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   ae,
-  display_vars = vars(USUBJID, AESTDTC, AEENDTC, AEDECOD, AEOUT),
+  display_vars = exprs(USUBJID, AESTDTC, AEENDTC, AEDECOD, AEOUT),
   filter = AEOUT == "FATAL"
 )
 ```
@@ -494,7 +465,7 @@ src_ds <- dthcaus_source(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   ds,
-  display_vars = vars(USUBJID, DSDECOD, DSTERM, DSSTDTC),
+  display_vars = exprs(USUBJID, DSDECOD, DSTERM, DSSTDTC),
   filter = DSDECOD == "DEATH"
 )
 ```
@@ -517,7 +488,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = vars(USUBJID, EOSDT, DTHDTC, DTHDT, DTHCAUS),
+  display_vars = exprs(USUBJID, EOSDT, DTHDTC, DTHDT, DTHCAUS),
   filter = DTHFL == "Y"
 )
 ```
@@ -534,7 +505,7 @@ src_ae <- dthcaus_source(
   date = AESTDTM,
   mode = "first",
   dthcaus = AEDECOD,
-  traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+  traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
 )
 
 src_ds <- dthcaus_source(
@@ -543,7 +514,7 @@ src_ds <- dthcaus_source(
   date = DSSTDT,
   mode = "first",
   dthcaus = DSTERM,
-  traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+  traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 adsl <- adsl %>%
   select(-DTHCAUS) %>% # remove it before deriving it again
@@ -553,7 +524,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = vars(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHCAUS, DTHDOM, DTHSEQ),
+  display_vars = exprs(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHCAUS, DTHDOM, DTHSEQ),
   filter = DTHFL == "Y"
 )
 ```
@@ -589,7 +560,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = vars(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHCAUS, DTHADY, LDDTHELD),
+  display_vars = exprs(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHCAUS, DTHADY, LDDTHELD),
   filter = DTHFL == "Y"
 )
 ```
@@ -668,7 +639,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT),
+  display_vars = exprs(USUBJID, TRTEDT, DTHDTC, LSTALVDT),
   filter = !is.na(TRTSDT)
 )
 ```
@@ -680,23 +651,23 @@ Similarly to `dthcaus_source()`, the traceability variables can be added by spec
 ae_start_date <- date_source(
   dataset_name = "ae",
   date = AESTDT,
-  traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")
+  traceability_vars = exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")
 )
 ae_end_date <- date_source(
   dataset_name = "ae",
   date = AEENDT,
-  traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC")
+  traceability_vars = exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC")
 )
 lb_date <- date_source(
   dataset_name = "lb",
   date = LBDT,
   filter = !is.na(LBDT),
-  traceability_vars = vars(LALVDOM = "LB", LALVSEQ = LBSEQ, LALVVAR = "LBDTC")
+  traceability_vars = exprs(LALVDOM = "LB", LALVSEQ = LBSEQ, LALVVAR = "LBDTC")
 )
 trt_end_date <- date_source(
   dataset_name = "adsl",
   date = TRTEDTM,
-  traceability_vars = vars(LALVDOM = "ADSL", LALVSEQ = NA_integer_, LALVVAR = "TRTEDTM")
+  traceability_vars = exprs(LALVDOM = "ADSL", LALVSEQ = NA_integer_, LALVVAR = "TRTEDTM")
 )
 
 adsl <- adsl %>%
@@ -712,7 +683,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR),
+  display_vars = exprs(USUBJID, TRTEDT, DTHDTC, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR),
   filter = !is.na(TRTSDT)
 )
 ```
@@ -765,7 +736,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = vars(USUBJID, AGE, SEX, COUNTRY, AGEGR1, REGION1)
+  display_vars = exprs(USUBJID, AGE, SEX, COUNTRY, AGEGR1, REGION1)
 )
 ```
 
@@ -780,7 +751,7 @@ An example of an implementation could be:
 adsl <- adsl %>%
   derive_var_merged_exist_flag(
     dataset_add = ex,
-    by_vars = vars(STUDYID, USUBJID),
+    by_vars = exprs(STUDYID, USUBJID),
     new_var = SAFFL,
     condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
   )
@@ -789,7 +760,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = vars(USUBJID, TRTSDT, ARM, ACTARM, SAFFL)
+  display_vars = exprs(USUBJID, TRTSDT, ARM, ACTARM, SAFFL)
 )
 ```
 

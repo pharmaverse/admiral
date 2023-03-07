@@ -69,14 +69,14 @@ variables \code{ADT} and \code{STARTDT} are created.}
 
 \item{set_values_to}{Variables to set
 
-A named list returned by \code{vars()} defining the variables to be set for the
-new parameter, e.g. \code{vars(PARAMCD = "OS", PARAM = "Overall Survival")} is
+A named list returned by \code{exprs()} defining the variables to be set for the
+new parameter, e.g. \code{exprs(PARAMCD = "OS", PARAM = "Overall Survival")} is
 expected. The values must be symbols, character strings, numeric values,
 expressions, or \code{NA}.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of symbols created using \code{vars()} is expected.}
+A list of symbols created using \code{exprs()} is expected.}
 }
 \value{
 The input dataset with the new parameter added
@@ -134,14 +134,16 @@ For each subject (as defined by the \code{subject_keys} parameter) an
 observation is selected. If an event is available, the event observation is
 selected. Otherwise the censoring observation is selected.
 
-Finally
+Finally:
 \enumerate{
-\item the variables specified for \code{start_date} and \code{start_imputation_flag} are
-joined from the ADSL dataset,
-\item the variables as defined by the \code{set_values_to} parameter are added,
-\item the \code{ADT}/\code{ADTM} variable is set to the maximum of \code{ADT}/\code{ADTM} and
-\code{STARTDT}/\code{STARTDTM} (depending on the \code{create_datetime} parameter), and
-\item the new observations are added to the output dataset.
+\item The variables specified for \code{start_date} and \code{start_imputation_flag} are
+joined from the ADSL dataset. Only subjects in both datasets are kept,
+i.e., subjects with both an event or censoring and an observation in
+\code{dataset_adsl}.
+\item The variables as defined by the \code{set_values_to} parameter are added.
+\item The \code{ADT}/\code{ADTM} variable is set to the maximum of \code{ADT}/\code{ADTM} and
+\code{STARTDT}/\code{STARTDTM} (depending on the \code{create_datetime} parameter).
+\item The new observations are added to the output dataset.
 }
 }
 \examples{
@@ -152,11 +154,12 @@ data("admiral_adsl")
 
 adsl <- admiral_adsl
 
+# derive overall survival parameter
 death <- event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "DEATH",
     SRCDOM = "ADSL",
     SRCVAR = "DTHDT"
@@ -166,7 +169,7 @@ death <- event_source(
 last_alive_dt <- censor_source(
   dataset_name = "adsl",
   date = LSTALVDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "LAST DATE KNOWN ALIVE",
     SRCDOM = "ADSL",
     SRCVAR = "LSTALVDT"
@@ -178,7 +181,7 @@ derive_param_tte(
   event_conditions = list(death),
   censor_conditions = list(last_alive_dt),
   source_datasets = list(adsl = adsl),
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = "OS",
     PARAM = "Overall Survival"
   )
@@ -186,7 +189,88 @@ derive_param_tte(
   select(-STUDYID) \%>\%
   filter(row_number() \%in\% 20:30)
 
-# derive time to adverse event for each preferred term #
+# derive duration of response
+# only observations for subjects in dataset_adsl are created
+adsl <- tribble(
+  ~USUBJID, ~DTHFL, ~DTHDT,            ~RSPDT,
+  "01",     "Y",    ymd("2021-06-12"), ymd("2021-03-04"),
+  "02",     "N",    NA,                NA,
+  "03",     "Y",    ymd("2021-08-21"), NA,
+  "04",     "N",    NA,                ymd("2021-04-14")
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+adrs <- tribble(
+  ~USUBJID, ~AVALC, ~ADT,              ~ASEQ,
+  "01",     "SD",   ymd("2021-01-03"), 1,
+  "01",     "PR",   ymd("2021-03-04"), 2,
+  "01",     "PD",   ymd("2021-05-05"), 3,
+  "02",     "PD",   ymd("2021-02-03"), 1,
+  "04",     "SD",   ymd("2021-02-13"), 1,
+  "04",     "PR",   ymd("2021-04-14"), 2,
+  "04",     "CR",   ymd("2021-05-15"), 3
+) \%>\%
+  mutate(STUDYID = "AB42", PARAMCD = "OVR")
+
+pd <- event_source(
+  dataset_name = "adrs",
+  filter = AVALC == "PD",
+  date = ADT,
+  set_values_to = exprs(
+    EVENTDESC = "PD",
+    SRCDOM = "ADRS",
+    SRCVAR = "ADTM",
+    SRCSEQ = ASEQ
+  )
+)
+
+death <- event_source(
+  dataset_name = "adsl",
+  filter = DTHFL == "Y",
+  date = DTHDT,
+  set_values_to = exprs(
+    EVENTDESC = "DEATH",
+    SRCDOM = "ADSL",
+    SRCVAR = "DTHDT"
+  )
+)
+
+lastvisit <- censor_source(
+  dataset_name = "adrs",
+  date = ADT,
+  censor = 1,
+  set_values_to = exprs(
+    EVENTDESC = "LAST TUMOR ASSESSMENT",
+    SRCDOM = "ADRS",
+    SRCVAR = "ADTM",
+    SRCSEQ = ASEQ
+  )
+)
+
+first_response <- censor_source(
+  dataset_name = "adsl",
+  date = RSPDT,
+  censor = 1,
+  set_values_to = exprs(
+    EVENTDESC = "FIRST RESPONSE",
+    SRCDOM = "ADSL",
+    SRCVAR = "RSPDT"
+  )
+)
+
+derive_param_tte(
+  dataset_adsl = filter(adsl, !is.na(RSPDT)),
+  start_date = RSPDT,
+  event_conditions = list(pd, death),
+  censor_conditions = list(lastvisit, first_response),
+  source_datasets = list(adsl = adsl, adrs = adrs),
+  set_values_to = exprs(
+    PARAMCD = "DURRSP",
+    PARAM = "Duration of Response"
+  )
+)
+
+# derive time to adverse event for each preferred term
 adsl <- tribble(
   ~USUBJID, ~TRTSDT,           ~EOSDT,
   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -213,7 +297,7 @@ ae_ext <- derive_vars_dt(
 ttae <- event_source(
   dataset_name = "ae",
   date = AESTDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "AE",
     SRCDOM = "AE",
     SRCVAR = "AESTDTC",
@@ -224,7 +308,7 @@ ttae <- event_source(
 eos <- censor_source(
   dataset_name = "adsl",
   date = EOSDT,
-  set_values_to = vars(
+  set_values_to = exprs(
     EVNTDESC = "END OF STUDY",
     SRCDOM = "ADSL",
     SRCVAR = "EOSDT"
@@ -233,12 +317,12 @@ eos <- censor_source(
 
 derive_param_tte(
   dataset_adsl = adsl,
-  by_vars = vars(AEDECOD),
+  by_vars = exprs(AEDECOD),
   start_date = TRTSDT,
   event_conditions = list(ttae),
   censor_conditions = list(eos),
   source_datasets = list(adsl = adsl, ae = ae_ext),
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
     PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
     PARCAT1 = "TTAE",
@@ -246,9 +330,6 @@ derive_param_tte(
   )
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_prm_tte}
 \keyword{der_prm_tte}

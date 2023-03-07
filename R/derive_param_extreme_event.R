@@ -42,14 +42,14 @@
 #'
 #' @param set_values_to Variables to set
 #'
-#'   A named list returned by `vars()` defining the variables to be set for the
-#'   new parameter, e.g. `vars(PARAMCD = "PD", PARAM = "Disease Progression")`
+#'   A named list returned by `exprs()` defining the variables to be set for the
+#'   new parameter, e.g. `exprs(PARAMCD = "PD", PARAM = "Disease Progression")`
 #'   is expected. The values must be symbols, character strings, numeric values,
 #'   or `NA`.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#'   A list of symbols created using `vars()` is expected.
+#'   A list of symbols created using `exprs()` is expected.
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -78,7 +78,6 @@
 #'   the new observations.
 #'   1. The new observations are added to input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with a new parameter indicating if and when an
 #'   event occurred
@@ -93,37 +92,14 @@ derive_param_first_event <- function(dataset,
                                      dataset_source,
                                      filter_source,
                                      date_var,
-                                     subject_keys = vars(STUDYID, USUBJID),
+                                     subject_keys = exprs(STUDYID, USUBJID),
                                      set_values_to,
                                      check_type = "warning") {
   ### DEPRECATION
-  deprecate_warn("0.9.0",
+  deprecate_stop("0.9.0",
     "derive_param_first_event()",
     details = "Please use `derive_param_extreme_event()` instead with the `order` argument instead of the `date_var` argument"
   )
-
-  filter_source <- enquo(filter_source)
-  date_var <- enquo(date_var)
-  tmp_var <- get_new_tmp_var(dataset = dataset)
-  tmp_var <- enquo(tmp_var)
-
-  derive_param_extreme_event(
-    dataset = dataset,
-    dataset_adsl = dataset_adsl,
-    dataset_source = dataset_source,
-    filter_source = !!filter_source,
-    order = vars(!!date_var),
-    new_var = !!tmp_var,
-    subject_keys = subject_keys,
-    set_values_to = set_values_to,
-    check_type = check_type,
-    mode = "first"
-  ) %>%
-    mutate(
-      AVALC = coalesce(!!tmp_var, AVALC),
-      AVAL = if_else(!!tmp_var == "Y", true = 1, false = 0)
-    ) %>%
-    remove_tmp_vars()
 }
 
 #' Add an Extreme Event Parameter
@@ -164,7 +140,7 @@ derive_param_first_event <- function(dataset,
 #'   List of symbols for sorting the source dataset (`dataset_source`).
 #'
 #'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))`.
+#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))`.
 #'
 #' @param new_var New variable
 #'
@@ -190,15 +166,15 @@ derive_param_first_event <- function(dataset,
 #'
 #' @param set_values_to Variables to set
 #'
-#'   A named list returned by `vars()` defining the variables to be set for the
-#'   new parameter, e.g. `vars(PARAMCD = "PD", PARAM = "Disease Progression")`
+#'   A named list returned by `exprs()` defining the variables to be set for the
+#'   new parameter, e.g. `exprs(PARAMCD = "PD", PARAM = "Disease Progression")`
 #'   is expected. The values must be symbols, character strings, numeric values,
 #'   or `NA`. Note, if you require a date or datetime variable to be populated,
 #'   this needs to be defined here.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#'   A list of symbols created using `vars()` is expected.
+#'   A list of symbols created using `exprs()` is expected.
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -217,8 +193,8 @@ derive_param_first_event <- function(dataset,
 #'   source dataset is selected. This is depending on `mode`, (with respect to `order`,
 #'   if applicable) where the event condition (`filter_source` parameter) is fulfilled.
 #'   1. For each observation in `dataset_adsl` a new observation is created. For
-#'   subjects with event `new_var` is set to `true_var`. For all other
-#'   subjects `new_var` is set to `false_var`.
+#'   subjects with event `new_var` is set to `true_value`. For all other
+#'   subjects `new_var` is set to `false_value`.
 #'   For subjects with event all variables from `dataset_source` are kept. For
 #'   subjects without event all variables which are in both `dataset_adsl` and
 #'   `dataset_source` are kept.
@@ -226,7 +202,6 @@ derive_param_first_event <- function(dataset,
 #'   the new observations.
 #'   1. The new observations are added to input dataset.
 #'
-#' @author Stefan Bundfuss Sophie Shapcott
 #'
 #' @return The input dataset with a new parameter indicating if and when an
 #'   event occurred
@@ -274,12 +249,12 @@ derive_param_first_event <- function(dataset,
 #'   dataset_adsl = adsl,
 #'   dataset_source = adrs,
 #'   filter_source = PARAMCD == "OVR" & AVALC == "PD",
-#'   order = vars(ADT),
+#'   order = exprs(ADT),
 #'   new_var = AVALC,
 #'   true_value = "Y",
 #'   false_value = "N",
 #'   mode = "first",
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "PD",
 #'     PARAM = "Disease Progression",
 #'     ANL01FL = "Y",
@@ -296,7 +271,7 @@ derive_param_first_event <- function(dataset,
 #'   true_value = "Y",
 #'   false_value = "N",
 #'   mode = "first",
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "DEATH",
 #'     PARAM = "Death",
 #'     ANL01FL = "Y",
@@ -308,21 +283,21 @@ derive_param_extreme_event <- function(dataset = NULL,
                                        dataset_source,
                                        filter_source,
                                        order = NULL,
-                                       new_var = AVALC,
+                                       new_var = NULL,
                                        true_value = "Y",
                                        false_value = "N",
                                        mode = "first",
-                                       subject_keys = vars(STUDYID, USUBJID),
+                                       subject_keys = get_admiral_option("subject_keys"),
                                        set_values_to,
                                        check_type = "warning") {
   # Check input parameters
-  filter_source <- assert_filter_cond(enquo(filter_source))
+  filter_source <- assert_filter_cond(enexpr(filter_source))
   assert_vars(subject_keys)
   assert_vars(order, optional = TRUE)
   assert_data_frame(dataset_source,
-    required_vars = vars(!!!subject_keys, !!!extract_vars(order))
+    required_vars = exprs(!!!subject_keys, !!!extract_vars(order))
   )
-  new_var <- assert_symbol(enquo(new_var))
+  new_var <- assert_symbol(enexpr(new_var), optional = TRUE)
   assert_same_type(true_value, false_value)
   assert_data_frame(dataset, optional = TRUE)
   assert_data_frame(dataset_adsl, required_vars = subject_keys)
@@ -339,7 +314,7 @@ derive_param_extreme_event <- function(dataset = NULL,
   )
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
-    assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+    assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
 
   # Create new observations
@@ -353,15 +328,18 @@ derive_param_extreme_event <- function(dataset = NULL,
       order = order,
       mode = mode,
       check_type = check_type
-    ) %>%
-    mutate(!!new_var := true_value)
+    )
 
   noevents <- anti_join(
     select(dataset_adsl, intersect(source_vars, adsl_vars)),
     select(events, !!!subject_keys),
     by = sapply(subject_keys, as_name)
-  ) %>%
-    mutate(!!new_var := false_value)
+  )
+
+  if (!is.null(new_var)) {
+    events <- mutate(events, !!new_var := true_value)
+    noevents <- mutate(noevents, !!new_var := false_value)
+  }
 
   new_obs <- bind_rows(events, noevents) %>%
     mutate(

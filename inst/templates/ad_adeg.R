@@ -26,7 +26,7 @@ eg <- admiral_eg
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 eg <- convert_blanks_to_na(eg)
 
@@ -98,28 +98,28 @@ format_chgcat1n <- function(paramcd, chg) {
 # Derivations ----
 
 # Get list of ADSL vars required for derivations
-adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
 adeg <- eg %>%
   # Join ADSL & EG (need TRTSDT for ADY derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   ## Calculate ADTM, ADY ----
   derive_vars_dtm(
     new_vars_prefix = "A",
     dtc = EGDTC,
   ) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADTM))
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADTM))
 
 adeg <- adeg %>%
   ## Add PARAMCD only (add PARAM, etc later) ----
   derive_vars_merged_lookup(
     dataset_add = param_lookup,
-    new_vars = vars(PARAMCD),
-    by_vars = vars(EGTESTCD)
+    new_vars = exprs(PARAMCD),
+    by_vars = exprs(EGTESTCD)
   ) %>%
   ## Calculate AVAL and AVALC ----
   mutate(
@@ -133,17 +133,17 @@ adeg <- adeg %>%
 
   # Derive RRR
   derive_param_rr(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
-    set_values_to = vars(PARAMCD = "RRR"),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
+    set_values_to = exprs(PARAMCD = "RRR"),
     hr_code = "HR",
     get_unit_expr = tolower(EGSTRESU),
     filter = EGSTAT != "NOT DONE" | is.na(EGSTAT)
   ) %>%
   # Derive QTCBR
   derive_param_qtc(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     method = "Bazett",
-    set_values_to = vars(PARAMCD = "QTCBR"),
+    set_values_to = exprs(PARAMCD = "QTCBR"),
     qt_code = "QT",
     rr_code = "RR",
     get_unit_expr = EGSTRESU,
@@ -151,9 +151,9 @@ adeg <- adeg %>%
   ) %>%
   # Derive QTCFR
   derive_param_qtc(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     method = "Fridericia",
-    set_values_to = vars(PARAMCD = "QTCFR"),
+    set_values_to = exprs(PARAMCD = "QTCFR"),
     qt_code = "QT",
     rr_code = "RR",
     get_unit_expr = EGSTRESU,
@@ -161,9 +161,9 @@ adeg <- adeg %>%
   ) %>%
   # Derive QTLCR
   derive_param_qtc(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     method = "Sagie",
-    set_values_to = vars(PARAMCD = "QTLCR"),
+    set_values_to = exprs(PARAMCD = "QTLCR"),
     qt_code = "QT",
     rr_code = "RR",
     get_unit_expr = EGSTRESU,
@@ -172,7 +172,7 @@ adeg <- adeg %>%
 
 ## Get visit info ----
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits)
+# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#visits)
 adeg <- adeg %>%
   # Derive Timing
   mutate(
@@ -197,11 +197,11 @@ adeg <- adeg %>%
 # (if least 2 records available) for all parameter except EGINTP
 adeg <- adeg %>%
   derive_summary_records(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT),
     analysis_var = AVAL,
     summary_fun = function(x) mean(x, na.rm = TRUE),
     filter = dplyr::n() >= 2 & PARAMCD != "EGINTP",
-    set_values_to = vars(DTYPE = "AVERAGE")
+    set_values_to = exprs(DTYPE = "AVERAGE")
   )
 
 adeg <- adeg %>%
@@ -219,7 +219,7 @@ adeg <- adeg %>%
 adeg <- adeg %>%
   derive_vars_merged(
     dataset_add = range_lookup,
-    by_vars = vars(PARAMCD)
+    by_vars = exprs(PARAMCD)
   ) %>%
   # Calculate ANRIND
   derive_var_anrind()
@@ -239,8 +239,8 @@ adeg <- adeg %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
-      order = vars(ADT, VISITNUM, EGSEQ),
+      by_vars = exprs(STUDYID, USUBJID, BASETYPE, PARAMCD),
+      order = exprs(ADT, VISITNUM, EGSEQ),
       new_var = ABLFL,
       mode = "last"
     ),
@@ -254,19 +254,19 @@ adeg <- adeg %>%
 adeg <- adeg %>%
   # Calculate BASE
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   ) %>%
   # Calculate BASEC
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVALC,
     new_var = BASEC
   ) %>%
   # Calculate BNRIND
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ANRIND,
     new_var = BNRIND
   ) %>%
@@ -280,8 +280,8 @@ adeg <- adeg %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
-      order = vars(ADT, AVAL),
+      by_vars = exprs(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
+      order = exprs(ADT, AVAL),
       new_var = ANL01FL,
       mode = "last"
     ),
@@ -290,7 +290,7 @@ adeg <- adeg %>%
 
 ## Get treatment information ----
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
+# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_bds)
 adeg <- adeg %>%
   # Assign TRTA, TRTP
   mutate(TRTP = TRT01P, TRTA = TRT01A)
@@ -300,30 +300,30 @@ adeg <- adeg %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = vars(STUDYID, USUBJID),
-    order = vars(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
+    by_vars = exprs(STUDYID, USUBJID),
+    order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
     check_type = "error"
   ) %>%
   # Derive AVALCA1N and AVALCAT1
   mutate(AVALCA1N = format_avalca1n(param = PARAMCD, aval = AVAL)) %>%
   derive_vars_merged(
     dataset_add = avalcat_lookup,
-    by_vars = vars(AVALCA1N)
+    by_vars = exprs(AVALCA1N)
   ) %>%
   # Derive CHGCAT1N and CHGCAT1
   mutate(CHGCAT1N = format_chgcat1n(param = PARAMCD, chg = CHG)) %>%
-  derive_vars_merged(dataset_add = chgcat_lookup, by_vars = vars(CHGCAT1N)) %>%
+  derive_vars_merged(dataset_add = chgcat_lookup, by_vars = exprs(CHGCAT1N)) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(
     dataset_add = select(param_lookup, -EGTESTCD),
-    by_vars = vars(PARAMCD)
+    by_vars = exprs(PARAMCD)
   )
 
 # Add all ADSL variables
 adeg <- adeg %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   )
 
 

@@ -13,7 +13,6 @@ derive_var_worst_flag(
   analysis_var,
   worst_high,
   worst_low,
-  filter = deprecated(),
   check_type = "warning"
 )
 }
@@ -47,8 +46,6 @@ Use \code{character(0)} if not required.}
 referring to "low".
 Use \code{character(0)} if not required.}
 
-\item{filter}{Deprecated, please use \code{restrict_derivation()} instead (see examples).}
-
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
@@ -63,12 +60,15 @@ Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}}
 The input dataset with the new flag variable added.
 }
 \description{
-Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}. Please use \code{slice_derivation()} / \code{derive_var_extreme_flag()}
+to derive extreme flags and adjust the \code{order} argument.
 }
 \details{
 For each group with respect to the variables specified by the \code{by_vars} parameter,
 the maximal / minimal observation of \code{analysis_var}
-is labelled in the \code{new_var} column as \code{"Y"},
+is labeled in the \code{new_var} column as \code{"Y"},
 if its \code{param_var} is in \code{worst_high} / \code{worst_low}.
 Otherwise, it is assigned \code{NA}.
 If there is more than one such maximal / minimal observation,
@@ -77,92 +77,22 @@ direction of "worst" depends on the definition of worst for a specified paramete
 arguments \code{worst_high} / \code{worst_low}, i.e. for some parameters the highest value is the worst
 and for others the worst is the lowest value.
 }
-\examples{
-library(tibble)
-library(dplyr, warn.conflicts = FALSE)
-
-input <- tribble(
-  ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,
-  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,
-  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,
-  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0,
-  "TEST01",  "PAT01", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0,
-  "TEST01",  "PAT01", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,
-  "TEST01",  "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0,
-  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,
-  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0,
-  "TEST01",  "PAT02", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0,
-  "TEST01",  "PAT02", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,
-  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
-  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0,
-  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,
-  "TEST01",  "PAT01", "PARAM02",  "BASELINE", as.Date("2021-04-27"),  10.0,
-  "TEST01",  "PAT01", "PARAM02",    "WEEK 2", as.Date("2021-04-30"),  12.0,
-  "TEST01",  "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
-  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-25"),  14.0,
-  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-23"),  15.0,
-  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-27"),  10.0,
-  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-30"),  12.0,
-  "TEST01",  "PAT02", "PARAM03", "SCREENING", as.Date("2021-04-27"),  15.0,
-  "TEST01",  "PAT02", "PARAM03",  "BASELINE", as.Date("2021-04-25"),  14.0,
-  "TEST01",  "PAT02", "PARAM03",    "WEEK 1", as.Date("2021-04-23"),  15.0,
-  "TEST01",  "PAT02", "PARAM03",    "WEEK 1", as.Date("2021-04-27"),  10.0,
-  "TEST01",  "PAT02", "PARAM03",  "BASELINE", as.Date("2021-04-30"),  12.0
-)
-
-derive_var_worst_flag(
-  input,
-  by_vars = vars(USUBJID, PARAMCD, AVISIT),
-  order = vars(desc(ADT)),
-  new_var = WORSTFL,
-  param_var = PARAMCD,
-  analysis_var = AVAL,
-  worst_high = c("PARAM01", "PARAM03"),
-  worst_low = "PARAM02"
-)
-\dontrun{
-# example with ADVS
-restrict_derivation(
-  advs,
-  derivation = derive_var_worst_flag,
-  args = params(
-    by_vars = vars(USUBJID, PARAMCD, AVISIT),
-    order = vars(ADT, ATPTN),
-    new_var = WORSTFL,
-    param_var = PARAMCD,
-    analysis_var = AVAL,
-    worst_high = c("SYSBP", "DIABP"),
-    worst_low = "RESP"
-  ),
-  filter = !is.na(AVISIT) & !is.na(AVAL)
-)
-}
-
-}
 \seealso{
 \code{\link[=derive_var_extreme_flag]{derive_var_extreme_flag()}}
 
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
+Other deprecated: 
+\code{\link{derive_derived_param}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_var_agegr_fda}()},
 \code{\link{derive_var_confirmation_flag}()},
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_last_dose_amt}()},
-\code{\link{derive_var_last_dose_date}()},
-\code{\link{derive_var_last_dose_grp}()},
-\code{\link{derive_var_merged_cat}()},
-\code{\link{derive_var_merged_character}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_merged_summary}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_last_dose}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_transposed}()},
-\code{\link{get_summary_records}()}
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_vars_disposition_reason}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()},
+\code{\link{filter_confirmation}()},
+\code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()},
+\code{\link{vars}()}
 }
-\author{
-Ondrej Slama
-}
-\concept{der_gen}
-\keyword{der_gen}
+\concept{deprecated}
+\keyword{deprecated}

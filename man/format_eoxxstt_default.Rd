@@ -18,39 +18,32 @@ A \code{character} vector derived based on the values given in \code{status}:
 "ONGOING" otherwise.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}. This function is a default for \code{derive_var_disposition_status()}
+for the \code{format_new_var} argument. Please define your own function and use that as input for the
+\code{cat_fun} argument in \code{derive_var_merged_cat()} instead.
+
 Define a function to map the disposition status. To be used as an input for
 \code{derive_var_disposition_status()}.
 }
 \details{
 Usually this function can not be used with \verb{\%>\%}.
 }
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("admiral_dm")
-data("admiral_ds")
-
-admiral_dm \%>\%
-  derive_var_disposition_status(
-    dataset_ds = admiral_ds,
-    new_var = EOSSTT,
-    status_var = DSDECOD,
-    format_new_var = format_eoxxstt_default,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
-  ) \%>\%
-  select(STUDYID, USUBJID, EOSSTT)
-}
 \seealso{
-\code{\link[=derive_var_disposition_status]{derive_var_disposition_status()}}
-
-Utilities for Formatting Observations: 
-\code{\link{convert_blanks_to_na}()},
-\code{\link{convert_na_to_blanks}()},
+Other deprecated: 
+\code{\link{derive_derived_param}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_var_confirmation_flag}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_disposition_reason}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()},
+\code{\link{filter_confirmation}()},
 \code{\link{format_reason_default}()},
-\code{\link{yn_to_numeric}()}
+\code{\link{vars}()}
 }
-\author{
-Samia Kabi
-}
-\concept{utils_fmt}
-\keyword{utils_fmt}
+\concept{deprecated}
+\keyword{deprecated}

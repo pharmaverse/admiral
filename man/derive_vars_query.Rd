@@ -74,8 +74,5 @@ OCCDS Functions:
 \code{\link{derive_vars_atc}()},
 \code{\link{get_terms_from_db}()}
 }
-\author{
-Ondrej Slama, Shimeng Huang
-}
 \concept{der_occds}
 \keyword{der_occds}

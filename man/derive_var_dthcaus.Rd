@@ -23,8 +23,8 @@ death cause}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of quosures where the expressions are symbols as returned by
-\code{vars()} is expected.}
+A list of expressions where the expressions are symbols as returned by
+\code{exprs()} is expected.}
 }
 \value{
 The input dataset with \code{DTHCAUS} variable added.
@@ -94,7 +94,7 @@ src_ae <- dthcaus_source(
   date = AEDTHDT,
   mode = "first",
   dthcaus = AEDECOD,
-  traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+  traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
 )
 
 src_ds <- dthcaus_source(
@@ -103,7 +103,7 @@ src_ds <- dthcaus_source(
   date = DSSTDT,
   mode = "first",
   dthcaus = DSTERM,
-  traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+  traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 
 derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
@@ -115,7 +115,7 @@ src_ae <- dthcaus_source(
   date = AEDTHDT,
   mode = "first",
   dthcaus = AEDECOD,
-  traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+  traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
 )
 
 src_ds <- dthcaus_source(
@@ -124,7 +124,7 @@ src_ds <- dthcaus_source(
   date = DSSTDT,
   mode = "first",
   dthcaus = DSTERM,
-  traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+  traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 
 src_ds_post <- dthcaus_source(
@@ -133,7 +133,7 @@ src_ds_post <- dthcaus_source(
   date = DSSTDT,
   mode = "first",
   dthcaus = "POST STUDY: UNKNOWN CAUSE",
-  traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+  traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 
 derive_var_dthcaus(adsl, src_ae, src_ds, src_ds_post, source_datasets = list(ae = ae, ds = ds))
@@ -143,15 +143,10 @@ derive_var_dthcaus(adsl, src_ae, src_ds, src_ds_post, source_datasets = list(ae 
 
 ADSL Functions that returns variable appended to dataset: 
 \code{\link{derive_var_age_years}()},
-\code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_period}()}
-}
-\author{
-Shimeng Huang, Samia Kabi, Thomas Neitmann, Tamara Senior
 }
 \concept{der_adsl}
 \keyword{der_adsl}

@@ -26,8 +26,8 @@ character vector to a date object.}
 CDISC strongly recommends using \code{0} for events and positive integers for
 censoring.}
 
-\item{set_values_to}{A named list returned by \code{vars()} defining the variables
-to be set for the event or censoring, e.g. \code{vars(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")}. The values must be a symbol, a
+\item{set_values_to}{A named list returned by \code{exprs()} defining the variables
+to be set for the event or censoring, e.g. \code{exprs(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")}. The values must be a symbol, a
 character string, a numeric value, or \code{NA}.}
 }
 \value{
@@ -39,29 +39,15 @@ The \code{tte_source} object is used to define events and possible censorings.
 \seealso{
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=censor_source]{censor_source()}}, \code{\link[=event_source]{event_source()}}
 
-Source Specifications: 
-\code{\link{assert_db_requirements}()},
-\code{\link{assert_terms}()},
-\code{\link{assert_valid_queries}()},
+Source Objects: 
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
 \code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
-\code{\link{extend_source_datasets}()},
-\code{\link{filter_date_sources}()},
-\code{\link{format.basket_select}()},
-\code{\link{list_tte_source_objects}()},
-\code{\link{params}()},
-\code{\link{query}()},
-\code{\link{sdg_select}()},
-\code{\link{smq_select}()},
-\code{\link{validate_basket_select}()},
-\code{\link{validate_query}()}
-}
-\author{
-Stefan Bundfuss
+\code{\link{event}()},
+\code{\link{query}()}
 }
 \concept{source_specifications}
 \keyword{source_specifications}

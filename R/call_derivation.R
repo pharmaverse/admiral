@@ -5,13 +5,23 @@
 #'
 #' @param dataset The input dataset
 #' @param derivation The derivation function to call
+#'
+#'   A function that performs a specific derivation is expected. A derivation
+#'   adds variables or observations to a dataset. The first argument of a
+#'   derivation must expect a dataset and the derivation must return a dataset.
+#'   The function must provide the `dataset` argument and all arguments
+#'   specified in the `params()` objects passed to the `variable_params` and
+#'   `...` argument.
+#'
+#'   Please note that it is not possible to specify `{dplyr}`
+#'   functions like `mutate()` or `summarize()`.
+#'
 #' @param variable_params A `list` of function arguments that are different across iterations.
 #'   Each set of function arguments must be created using [`params()`].
 #' @param ... Any number of *named* function arguments that stay the same across iterations.
 #'   If a function argument is specified both inside `variable_params` and `...` then
 #'   the value in `variable_params` overwrites the one in `...`
 #'
-#' @author Thomas Neitmann, Stefan Bundfuss, Tracey Wang
 #'
 #' @return
 #' The input dataset with additional records/variables added depending on
@@ -34,8 +44,8 @@
 #'   select(admiral_ae[sample(1:nrow(admiral_ae), 1000), ], USUBJID, AESTDTC, AEENDTC) %>%
 #'   derive_vars_merged(
 #'     dataset_add = admiral_adsl,
-#'     new_vars = vars(TRTSDT, TRTEDT),
-#'     by_vars = vars(USUBJID)
+#'     new_vars = exprs(TRTSDT, TRTEDT),
+#'     by_vars = exprs(USUBJID)
 #'   )
 #'
 #' ## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
@@ -47,8 +57,8 @@
 #'     params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
 #'     params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
 #'   ),
-#'   min_dates = vars(TRTSDT),
-#'   max_dates = vars(TRTEDT)
+#'   min_dates = exprs(TRTSDT),
+#'   max_dates = exprs(TRTEDT)
 #' )
 #'
 #' ## The above call using `call_derivation()` is equivalent to the following
@@ -57,15 +67,15 @@
 #'     new_vars_prefix = "AST",
 #'     dtc = AESTDTC,
 #'     date_imputation = "first",
-#'     min_dates = vars(TRTSDT),
-#'     max_dates = vars(TRTEDT)
+#'     min_dates = exprs(TRTSDT),
+#'     max_dates = exprs(TRTEDT)
 #'   ) %>%
 #'   derive_vars_dt(
 #'     new_vars_prefix = "AEN",
 #'     dtc = AEENDTC,
 #'     date_imputation = "last",
-#'     min_dates = vars(TRTSDT),
-#'     max_dates = vars(TRTEDT)
+#'     min_dates = exprs(TRTSDT),
+#'     max_dates = exprs(TRTEDT)
 #'   )
 call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
   assert_data_frame(dataset, optional = TRUE)
@@ -99,12 +109,11 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'
 #' @param ... One or more named arguments
 #'
-#' @author Thomas Neitmann, Tracey Wang
 #'
 #' @return An object of class `params`
 #'
-#' @family source_specifications
-#' @keywords source_specifications
+#' @family other_advanced
+#' @keywords other_advanced
 #'
 #' @export
 #'
@@ -120,8 +129,8 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'   select(USUBJID, AESTDTC, AEENDTC) %>%
 #'   derive_vars_merged(
 #'     dataset_add = admiral_adsl,
-#'     new_vars = vars(TRTSDT, TRTEDT),
-#'     by_vars = vars(USUBJID)
+#'     new_vars = exprs(TRTSDT, TRTEDT),
+#'     by_vars = exprs(USUBJID)
 #'   )
 #'
 #' ## In order to derive both `ASTDT` and `AENDT` in `ADAE`, one can use `derive_vars_dt()`
@@ -130,15 +139,15 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'     new_vars_prefix = "AST",
 #'     dtc = AESTDTC,
 #'     date_imputation = "first",
-#'     min_dates = vars(TRTSDT),
-#'     max_dates = vars(TRTEDT)
+#'     min_dates = exprs(TRTSDT),
+#'     max_dates = exprs(TRTEDT)
 #'   ) %>%
 #'   derive_vars_dt(
 #'     new_vars_prefix = "AEN",
 #'     dtc = AEENDTC,
 #'     date_imputation = "last",
-#'     min_dates = vars(TRTSDT),
-#'     max_dates = vars(TRTEDT)
+#'     min_dates = exprs(TRTSDT),
+#'     max_dates = exprs(TRTEDT)
 #'   )
 #'
 #' ## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
@@ -154,8 +163,8 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'     params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
 #'     params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
 #'   ),
-#'   min_dates = vars(TRTSDT),
-#'   max_dates = vars(TRTEDT)
+#'   min_dates = exprs(TRTSDT),
+#'   max_dates = exprs(TRTEDT)
 #' )
 #'
 #' ## The above call using `call_derivation()` is equivalent to the call using `derive_vars_dt()`

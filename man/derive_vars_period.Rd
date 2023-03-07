@@ -26,7 +26,7 @@ variables are requested, \code{APHASEN} is expected.}
 
 \item{new_vars}{New variables
 
-A named list of variables like \code{vars(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)} is expected. The left hand side of the elements defines
+A named list of variables like \code{exprs(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)} is expected. The left hand side of the elements defines
 a set of variables (in CDISC notation) to be added to the output dataset.
 The right hand side defines the source variable from the period reference
 dataset.
@@ -42,8 +42,8 @@ must be used.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of quosures where the expressions are symbols as returned by
-\code{vars()} is expected.}
+A list of expressions where the expressions are symbols as returned by
+\code{exprs()} is expected.}
 }
 \value{
 The input dataset with subperiod/period/phase variables added (see
@@ -86,7 +86,7 @@ period_ref <- tribble(
 derive_vars_period(
   adsl,
   dataset_ref = period_ref,
-  new_vars = vars(APxxSDT = APERSDT, APxxEDT = APEREDT)
+  new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
 ) \%>\%
   select(STUDYID, USUBJID, AP01SDT, AP01EDT, AP02SDT, AP02EDT)
 
@@ -106,7 +106,7 @@ phase_ref <- tribble(
 derive_vars_period(
   adsl,
   dataset_ref = phase_ref,
-  new_vars = vars(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
+  new_vars = exprs(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
 ) \%>\%
   select(STUDYID, USUBJID, PH1SDT, PH1EDT, PH2SDT, PH2EDT, APHASE1, APHASE2)
 
@@ -129,7 +129,7 @@ subperiod_ref <- tribble(
 derive_vars_period(
   adsl,
   dataset_ref = subperiod_ref,
-  new_vars = vars(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
+  new_vars = exprs(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
 ) \%>\%
   select(STUDYID, USUBJID, P01S1SDT, P01S1EDT, P01S2SDT, P01S2EDT, P02S1SDT, P02S1EDT)
 }
@@ -138,15 +138,10 @@ derive_vars_period(
 
 ADSL Functions that returns variable appended to dataset: 
 \code{\link{derive_var_age_years}()},
-\code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{derive_var_extreme_dt}()},
-\code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_disposition_reason}()}
-}
-\author{
-Stefan Bundfuss
+\code{\link{derive_vars_aage}()}
 }
 \concept{der_adsl}
 \keyword{der_adsl}

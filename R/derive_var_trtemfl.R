@@ -72,7 +72,6 @@
 #'   *Permitted Values:* A symbol referring to a variable of the input dataset
 #'   or `NULL`
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details For the derivation of the new variable the following cases are
 #'   considered in this order. The first case which applies, defines the value
@@ -164,23 +163,23 @@ derive_var_trtemfl <- function(dataset,
                                ignore_time_for_trt_end = TRUE,
                                initial_intensity = NULL,
                                intensity = NULL) {
-  new_var <- assert_symbol(enquo(new_var))
-  start_date <- assert_symbol(enquo(start_date))
-  end_date <- assert_symbol(enquo(end_date))
-  trt_start_date <- assert_symbol(enquo(trt_start_date))
-  trt_end_date <- assert_symbol(enquo(trt_end_date), optional = TRUE)
+  new_var <- assert_symbol(enexpr(new_var))
+  start_date <- assert_symbol(enexpr(start_date))
+  end_date <- assert_symbol(enexpr(end_date))
+  trt_start_date <- assert_symbol(enexpr(trt_start_date))
+  trt_end_date <- assert_symbol(enexpr(trt_end_date), optional = TRUE)
   assert_integer_scalar(end_window, subset = "non-negative", optional = TRUE)
   assert_logical_scalar(ignore_time_for_trt_end)
-  initial_intensity <- assert_symbol(enquo(initial_intensity), optional = TRUE)
-  intensity <- assert_symbol(enquo(intensity), optional = TRUE)
-  if (quo_is_null(initial_intensity) && !quo_is_null(intensity)) {
+  initial_intensity <- assert_symbol(enexpr(initial_intensity), optional = TRUE)
+  intensity <- assert_symbol(enexpr(intensity), optional = TRUE)
+  if (is.null(initial_intensity) && !is.null(intensity)) {
     abort(paste(
       "`intensity` argument was specified but not `initial_intensity`",
       "Either both or none of them must be specified.",
       sep = "\n"
     ))
   }
-  if (!quo_is_null(initial_intensity) && quo_is_null(intensity)) {
+  if (!is.null(initial_intensity) && is.null(intensity)) {
     abort(paste(
       "`initial_intensity` argument was specified but not `intensity`",
       "Either both or none of them must be specified.",
@@ -189,7 +188,7 @@ derive_var_trtemfl <- function(dataset,
   }
   assert_data_frame(
     dataset,
-    required_vars = quo_c(
+    required_vars = expr_c(
       start_date,
       end_date,
       trt_start_date,
@@ -201,14 +200,14 @@ derive_var_trtemfl <- function(dataset,
   assert_date_var(dataset, var = !!start_date)
   assert_date_var(dataset, var = !!end_date)
   assert_date_var(dataset, var = !!trt_start_date)
-  if (!quo_is_null(trt_end_date)) {
+  if (!is.null(trt_end_date)) {
     assert_date_var(dataset, var = !!trt_end_date)
   }
 
   if (is.null(end_window)) {
     end_cond <- expr(TRUE)
   } else {
-    if (quo_is_null(trt_end_date)) {
+    if (is.null(trt_end_date)) {
       abort(paste(
         "`end_window` argument was specified but not `trt_end_date`",
         "Either both or none of them must be specified.",
@@ -223,7 +222,7 @@ derive_var_trtemfl <- function(dataset,
     }
   }
 
-  if (quo_is_null(intensity)) {
+  if (is.null(intensity)) {
     worsening_cond <- expr(FALSE)
   } else {
     worsening_cond <-

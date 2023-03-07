@@ -39,7 +39,7 @@ Permitted Values: \code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
 code for the new parameter.
 
 \emph{Permitted Values:} List of variable-value pairs}
@@ -99,9 +99,9 @@ adeg <- tribble(
 
 derive_param_qtc(
   adeg,
-  by_vars = vars(USUBJID, VISIT),
+  by_vars = exprs(USUBJID, VISIT),
   method = "Bazett",
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = "QTCBR",
     PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)",
     AVALU = "msec"
@@ -111,9 +111,9 @@ derive_param_qtc(
 
 derive_param_qtc(
   adeg,
-  by_vars = vars(USUBJID, VISIT),
+  by_vars = exprs(USUBJID, VISIT),
   method = "Fridericia",
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = "QTCFR",
     PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)",
     AVALU = "msec"
@@ -123,9 +123,9 @@ derive_param_qtc(
 
 derive_param_qtc(
   adeg,
-  by_vars = vars(USUBJID, VISIT),
+  by_vars = exprs(USUBJID, VISIT),
   method = "Sagie",
-  set_values_to = vars(
+  set_values_to = exprs(
     PARAMCD = "QTLCR",
     PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)",
     AVALU = "msec"
@@ -138,6 +138,8 @@ derive_param_qtc(
 
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_event}()},
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
@@ -152,9 +154,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

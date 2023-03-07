@@ -59,7 +59,7 @@ Set a list of variables to some specified value for the new observation(s)
 \item LHS refer to a variable. It is expected that at least \code{PARAMCD} is defined.
 \item RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
 value or NA.
-(e.g.  \code{vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
+(e.g.  \code{exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
 More general expression are not allowed.
 }
 
@@ -117,8 +117,8 @@ adex <- tribble(
 # Cumulative dose
 adex \%>\%
   derive_param_exposure(
-    by_vars = vars(USUBJID),
-    set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
+    by_vars = exprs(USUBJID),
+    set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
     input_code = "DOSE",
     analysis_var = AVAL,
     summary_fun = function(x) sum(x, na.rm = TRUE)
@@ -128,9 +128,9 @@ adex \%>\%
 # average dose in w2-24
 adex \%>\%
   derive_param_exposure(
-    by_vars = vars(USUBJID),
+    by_vars = exprs(USUBJID),
     filter = VISIT \%in\% c("WEEK 2", "WEEK 24"),
-    set_values_to = vars(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
+    set_values_to = exprs(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
     input_code = "DOSE",
     analysis_var = AVAL,
     summary_fun = function(x) mean(x, na.rm = TRUE)
@@ -140,8 +140,8 @@ adex \%>\%
 # Any dose adjustment?
 adex \%>\%
   derive_param_exposure(
-    by_vars = vars(USUBJID),
-    set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
+    by_vars = exprs(USUBJID),
+    set_values_to = exprs(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
     input_code = "ADJ",
     analysis_var = AVALC,
     summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
@@ -151,6 +151,8 @@ adex \%>\%
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_event}()},
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
@@ -165,9 +167,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
-}
-\author{
-Samia Kabi
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

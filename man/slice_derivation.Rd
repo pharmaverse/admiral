@@ -9,11 +9,20 @@ slice_derivation(dataset, derivation, args = NULL, ...)
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{derivation}{Derivation}
+\item{derivation}{Derivation
+
+A function that performs a specific derivation is expected. A derivation
+adds variables or observations to a dataset. The first argument of a
+derivation must expect a dataset and the derivation must return a dataset.
+The function must provide the \code{dataset} argument and all arguments
+specified in the \code{params()} objects passed to the \code{arg} argument.
+
+Please note that it is not possible to specify \code{{dplyr}}
+functions like \code{mutate()} or \code{summarize()}.}
 
 \item{args}{Arguments of the derivation
 
-A \code{param()} object is expected.}
+A \code{params()} object is expected.}
 
 \item{...}{A \code{derivation_slice()} object is expected
 
@@ -80,9 +89,6 @@ Higher Order Functions:
 \code{\link{call_derivation}()},
 \code{\link{derivation_slice}()},
 \code{\link{restrict_derivation}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{high_order_function}
 \keyword{high_order_function}

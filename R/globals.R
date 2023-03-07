@@ -39,6 +39,7 @@ globalVariables(c(
   "ONTRTFL",
   "PARAMCD",
   "RANDDT",
+  "SOURCE",
   "STUDYID",
   "TRTDURD",
   "TRTEDT",
@@ -53,6 +54,7 @@ globalVariables(c(
   "USUBJID",
   "auto",
   "censor",
+  "check_nom",
   "data",
   "Dataset",
   "dataset_name",
@@ -115,9 +117,10 @@ globalVariables(c(
   "grpseq",
   "time_differential",
   "temp_flag",
-  "tmp_obs_nr_filter_confirmation",
-  "tmp_obs_nr_filter_confirmation.join",
+  "tmp_obs_nr_filter_joined",
+  "tmp_obs_nr_filter_joined.join",
   "tmp_obs_nr_var_conf_flag",
+  "tmp_obs_nr_var",
   "AGE",
   "SEX",
   "SMOKEFL",
@@ -136,5 +139,6 @@ globalVariables(c(
   "TERM",
   "TERM_UPPER",
   "atoxgr_criteria_ctcv4",
-  "DTYPE"
+  "DTYPE",
+  "where" # this entry should be moved to @importFrom tidyselect once we use tidyselect 1.2.0
 ))

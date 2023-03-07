@@ -28,7 +28,6 @@
 #'
 #' @export
 #'
-#' @author Thomas Neitmann
 #'
 #' @family der_bds_findings
 #'
@@ -56,7 +55,7 @@
 #' ## Derive `BASE` variable from `AVAL`
 #' derive_var_base(
 #'   dataset,
-#'   by_vars = vars(USUBJID, PARAMCD),
+#'   by_vars = exprs(USUBJID, PARAMCD),
 #'   source_var = AVAL,
 #'   new_var = BASE
 #' )
@@ -64,7 +63,7 @@
 #' ## Derive `BASEC` variable from `AVALC`
 #' derive_var_base(
 #'   dataset,
-#'   by_vars = vars(USUBJID, PARAMCD),
+#'   by_vars = exprs(USUBJID, PARAMCD),
 #'   source_var = AVALC,
 #'   new_var = BASEC
 #' )
@@ -72,7 +71,7 @@
 #' ## Derive `BNRIND` variable from `ANRIND`
 #' derive_var_base(
 #'   dataset,
-#'   by_vars = vars(USUBJID, PARAMCD),
+#'   by_vars = exprs(USUBJID, PARAMCD),
 #'   source_var = ANRIND,
 #'   new_var = BNRIND
 #' )
@@ -82,20 +81,20 @@ derive_var_base <- function(dataset,
                             new_var = BASE,
                             filter = ABLFL == "Y") {
   by_vars <- assert_vars(by_vars)
-  source_var <- assert_symbol(enquo(source_var))
-  new_var <- assert_symbol(enquo(new_var))
-  filter <- assert_filter_cond(enquo(filter))
+  source_var <- assert_symbol(enexpr(source_var))
+  new_var <- assert_symbol(enexpr(new_var))
+  filter <- assert_filter_cond(enexpr(filter))
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, source_var)
+    required_vars = expr_c(by_vars, source_var)
   )
-  warn_if_vars_exist(dataset, quo_text(new_var))
+  warn_if_vars_exist(dataset, as_name(new_var))
 
   derive_vars_merged(
     dataset,
     dataset_add = dataset,
     filter_add = !!filter,
-    new_vars = vars(!!new_var := !!source_var),
+    new_vars = exprs(!!new_var := !!source_var),
     by_vars = by_vars,
     duplicate_msg = paste(
       "Input dataset contains multiple baseline records with respect to",

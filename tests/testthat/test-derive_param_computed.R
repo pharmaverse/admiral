@@ -30,9 +30,9 @@ test_that("new observations are derived correctly", {
     derive_param_computed(
       input,
       parameters = c("SYSBP", "DIABP"),
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
-      set_values_to = vars(
+      set_values_to = exprs(
         PARAMCD = "MAP",
         PARAM = "Mean arterial pressure (mmHg)",
         AVALU = "mmHg"
@@ -75,11 +75,11 @@ test_that("new observations are derived correctly with constant parameters", {
     derive_param_computed(
       input,
       parameters = c("WEIGHT"),
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       constant_parameters = c("HEIGHT"),
-      constant_by_vars = vars(USUBJID),
+      constant_by_vars = exprs(USUBJID),
       analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
-      set_values_to = vars(
+      set_values_to = exprs(
         PARAMCD = "BMI",
         PARAM = "Body Mass Index (kg/m2)",
         AVALU = "kg/m2"
@@ -108,19 +108,19 @@ test_that("no new observations are added if filtered dataset is empty", {
       input,
       filter = VISIT == "WEEK 24",
       parameters = c("SYSBP", "DIABP"),
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
-      set_values_to = vars(
+      set_values_to = exprs(
         PARAMCD = "MAP",
         PARAM = "Mean arterial pressure (mmHg)",
         AVALU = "mmHg"
       )
-    ),
+    ) %>%
+      expect_dfs_equal(input,
+        keys = c("USUBJID", "PARAMCD", "VISIT")
+      ),
     "The input dataset does not contain any observations fullfiling the filter condition .*"
-  ) %>%
-    expect_dfs_equal(input,
-      keys = c("USUBJID", "PARAMCD", "VISIT")
-    )
+  )
 })
 
 test_that("no new observations are added if a parameter is missing", {
@@ -141,17 +141,18 @@ test_that("no new observations are added if a parameter is missing", {
       input,
       filter = PARAMCD == "DIABP",
       parameters = c("SYSBP", "DIABP"),
-      by_vars = vars(USUBJID, VISIT),
+      by_vars = exprs(USUBJID, VISIT),
       analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
-      set_values_to = vars(
+      set_values_to = exprs(
         PARAMCD = "MAP",
         PARAM = "Mean arterial pressure (mmHg)",
         AVALU = "mmHg"
       )
-    ),
-    "The input dataset does not contain any observations fullfiling the filter condition .*"
-  ) %>%
-    expect_dfs_equal(input,
-      keys = c("USUBJID", "PARAMCD", "VISIT")
     )
+    %>%
+      expect_dfs_equal(input,
+        keys = c("USUBJID", "PARAMCD", "VISIT")
+      ),
+    "The input dataset does not contain any observations fullfiling the filter condition .*"
+  )
 })

@@ -12,14 +12,14 @@
 #'
 #' @param by_vars Grouping variables
 #'
-#'   *Permitted Values:* list of variables created by `vars()`
+#'   *Permitted Values:* list of variables created by `exprs()`
 #'
 #' @param order Sort order
 #'
 #'   Within each by group the observations are ordered by the specified order.
 #'
 #'   *Permitted Values:* list of variables or `desc(<variable>)` function calls
-#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))`
+#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))`
 #'
 #' @param new_var New variable
 #'
@@ -65,7 +65,6 @@
 #'
 #'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details For each by group (`by_vars` argument) the observations before or
 #'   after (`selection` argument) the observations where the condition
@@ -98,8 +97,8 @@
 #'
 #' derive_var_relative_flag(
 #'   adae,
-#'   by_vars = vars(USUBJID),
-#'   order = vars(ASTDY, AESEQ),
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(ASTDY, AESEQ),
 #'   new_var = PSTCOVFL,
 #'   condition = ACOVFL == "Y",
 #'   mode = "first",
@@ -129,8 +128,8 @@
 #' # Flag observations up to first PD for each patient
 #' response %>%
 #'   derive_var_relative_flag(
-#'     by_vars = vars(USUBJID),
-#'     order = vars(AVISITN),
+#'     by_vars = exprs(USUBJID),
+#'     order = exprs(AVISITN),
 #'     new_var = ANL02FL,
 #'     condition = AVALC == "PD",
 #'     mode = "first",
@@ -143,8 +142,8 @@
 #'   restrict_derivation(
 #'     derivation = derive_var_relative_flag,
 #'     args = params(
-#'       by_vars = vars(USUBJID),
-#'       order = vars(AVISITN),
+#'       by_vars = exprs(USUBJID),
+#'       order = exprs(AVISITN),
 #'       new_var = ANL02FL,
 #'       condition = AVALC == "PD",
 #'       mode = "first",
@@ -164,8 +163,8 @@ derive_var_relative_flag <- function(dataset,
                                      inclusive,
                                      flag_no_ref_groups = TRUE,
                                      check_type = "warning") {
-  new_var <- assert_symbol(enquo(new_var))
-  condition <- assert_filter_cond(enquo(condition))
+  new_var <- assert_symbol(enexpr(new_var))
+  condition <- assert_filter_cond(enexpr(condition))
   assert_logical_scalar(flag_no_ref_groups)
 
   # add obs number for merging
@@ -196,7 +195,7 @@ derive_var_relative_flag <- function(dataset,
   derive_var_merged_exist_flag(
     data,
     dataset_add = flag_obs,
-    by_vars = quo_c(by_vars, quo(!!tmp_obs_nr)),
+    by_vars = expr_c(by_vars, tmp_obs_nr),
     new_var = !!new_var,
     condition = TRUE
   ) %>%

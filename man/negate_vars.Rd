@@ -7,10 +7,10 @@
 negate_vars(vars = NULL)
 }
 \arguments{
-\item{vars}{List of variables created by \code{vars()}}
+\item{vars}{List of variables created by \code{exprs()}}
 }
 \value{
-A list of \code{quosures}
+A list of expressions
 }
 \description{
 The function adds a minus sign as prefix to each variable.
@@ -20,14 +20,11 @@ This is useful if a list of variables should be removed from a dataset,
 e.g., \code{select(!!!negate_vars(by_vars))} removes all by variables.
 }
 \examples{
-negate_vars(vars(USUBJID, STUDYID))
+negate_vars(exprs(USUBJID, STUDYID))
 }
 \seealso{
 Other utils_quo: 
 \code{\link{chr2vars}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{utils_quo}
 \keyword{utils_quo}

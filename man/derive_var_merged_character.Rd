@@ -31,9 +31,11 @@ argument are expected.}
 
 The input dataset and the selected observations from the additional dataset
 are merged by the specified by variables. The by variables must be a unique
-key of the selected observations.
+key of the selected observations. Variables from the additional dataset can
+be renamed by naming the element, i.e., \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to
+the dplyr joins.
 
-\emph{Permitted Values}: list of variables created by \code{vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{order}{Sort order
 
@@ -44,7 +46,7 @@ specified order.
 \emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))} or \code{NULL}}
+created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{new_var}{New variable
 
@@ -120,7 +122,7 @@ data("admiral_ds")
 derive_var_merged_character(
   admiral_dm,
   dataset_add = admiral_ds,
-  by_vars = vars(STUDYID, USUBJID),
+  by_vars = exprs(STUDYID, USUBJID),
   new_var = DISPSTAT,
   filter_add = DSCAT == "DISPOSITION EVENT",
   source_var = DSDECOD,
@@ -130,8 +132,8 @@ derive_var_merged_character(
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
@@ -140,16 +142,12 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
-\code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},
 \code{\link{get_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_gen}
 \keyword{der_gen}
