@@ -53,7 +53,7 @@ jobs:
   readme:
     name: Render README
     uses: pharmaverse/admiralci/.github/workflows/readme-render.yml@main
-    if: github.event_name == 'push' && (!startsWith(github.ref, 'refs/tags/v'))
+    if: github.event_name == 'push'
     with:
       r-version: "4.0"
   validation:
@@ -94,8 +94,7 @@ jobs:
     name: Code Coverage
     uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@main
     if: >
-      (github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/v')) || \
-        github.event_name == 'pull_request'
+      github.event_name != 'release'
     with:
       r-version: "4.0"
       # Whether to skip code coverage badge creation
