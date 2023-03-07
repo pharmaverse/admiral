@@ -63,15 +63,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -228,9 +219,9 @@ into account.</p>
     <p>The values of <code>age</code>, <code>sex</code>, <code>smokefl</code>, <code>diabetfl</code> and <code>trthypfl</code> will be
 added to the <code>by_vars</code> list.
 The predicted probability of having cardiovascular disease (CVD)
-within 10-years according to Framingham formula
-<a href="https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579" class="external-link">D'Agostino, 2008</a> is: # nolint
-<strong>For Women:</strong></p>
+within 10-years according to Framingham formula. See AHA Journal article
+General Cardiovascular Risk Profile for Use in Primary Care for reference.</p>
+<p><strong>For Women:</strong></p>
 <table class="table table"><tr><td><strong>Factor</strong></td><td><strong>Amount</strong></td></tr><tr><td>Age</td><td>2.32888</td></tr><tr><td>Total Chol</td><td>1.20904</td></tr><tr><td>HDL Chol</td><td>-0.70833</td></tr><tr><td>Sys BP</td><td>2.76157</td></tr><tr><td>Sys BP + Hypertension Meds</td><td>2.82263</td></tr><tr><td>Smoker</td><td>0.52873</td></tr><tr><td>Non-Smoker</td><td>0</td></tr><tr><td>Diabetic</td><td>0.69154</td></tr><tr><td>Not Diabetic</td><td>0</td></tr><tr><td>Average Risk</td><td>26.1931</td></tr><tr><td>Risk Period</td><td>0.95012</td></tr></table><p><strong>For Men:</strong></p>
 <table class="table table"><tr><td><strong>Factor</strong></td><td><strong>Amount</strong></td></tr><tr><td>Age</td><td>3.06117</td></tr><tr><td>Total Chol</td><td>1.12370</td></tr><tr><td>HDL Chol</td><td>-0.93263</td></tr><tr><td>Sys BP</td><td>1.93303</td></tr><tr><td>Sys BP + Hypertension Meds</td><td>2.99881</td></tr><tr><td>Smoker</td><td>.65451</td></tr><tr><td>Non-Smoker</td><td>0</td></tr><tr><td>Diabetic</td><td>0.57367</td></tr><tr><td>Not Diabetic</td><td>0</td></tr><tr><td>Average Risk</td><td>23.9802</td></tr><tr><td>Risk Period</td><td>0.88936</td></tr></table><p><strong>The equation for calculating risk:</strong></p>
 <p>$$RiskFactors = (log(Age) * AgeFactor)
