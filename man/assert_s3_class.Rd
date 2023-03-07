@@ -4,7 +4,7 @@
 \alias{assert_s3_class}
 \title{Is an Argument an Object of a Specific S3 Class?}
 \usage{
-assert_s3_class(arg, class, optional = TRUE)
+assert_s3_class(arg, class, optional = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
@@ -58,9 +58,6 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()},
 \code{\link{assert_varval_list}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{assertion}
 \keyword{assertion}

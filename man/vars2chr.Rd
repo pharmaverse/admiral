@@ -2,38 +2,37 @@
 % Please edit documentation in R/dev_utilities.R
 \name{vars2chr}
 \alias{vars2chr}
-\title{Turn a List of Quosures into a Character Vector}
+\title{Turn a List of Expressions into a Character Vector}
 \usage{
-vars2chr(quosures)
+vars2chr(expressions, quosures)
 }
 \arguments{
-\item{quosures}{A \code{list} of \code{quosures} created using \code{\link[=vars]{vars()}}}
+\item{expressions}{A \code{list} of expressions created using \code{\link[=exprs]{exprs()}}}
+
+\item{quosures}{\emph{Deprecated}, please use \code{expressions} instead.}
 }
 \value{
 A character vector
 }
 \description{
-Turn a List of Quosures into a Character Vector
+Turn a List of Expressions into a Character Vector
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(rlang)
 
-vars2chr(vars(USUBJID, AVAL))
+vars2chr(exprs(USUBJID, AVAL))
 }
 \seealso{
 Developer Utility Functions: 
 \code{\link{\%notin\%}()},
 \code{\link{\%or\%}()},
 \code{\link{arg_name}()},
-\code{\link{as_name}()},
 \code{\link{contains_vars}()},
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},
 \code{\link{filter_if}()},
 \code{\link{valid_time_units}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{dev_utility}
 \keyword{dev_utility}

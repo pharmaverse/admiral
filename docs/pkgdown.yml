@@ -1,5 +1,5 @@
-pandoc: '2.18'
-pkgdown: 2.0.3
+pandoc: 2.17.1.1
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   admiraldev: admiraldev.html
@@ -10,7 +10,7 @@ articles:
   release_strategy: release_strategy.html
   unit_test_guidance: unit_test_guidance.html
   writing_vignettes: writing_vignettes.html
-last_built: 2022-11-08T06:16Z
+last_built: 2023-01-19T10:49Z
 urls:
   reference: https://pharmaverse.github.io/admiraldev/devel/reference
   article: https://pharmaverse.github.io/admiraldev/devel/articles

@@ -2,7 +2,7 @@
 
 # admiraldev <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
-ADaM in R Asset Library Development Utilities
+Utility Functions and Development Tools for the Admiral Package Family
 
 <!-- badges: start -->
 
@@ -10,13 +10,15 @@ ADaM in R Asset Library Development Utilities
 
 ## Purpose
 
-Tools for developing functions and maintaining a healthy code base
-within the family of admiral R packages. `{admiraldev}` is intended to
-be used when developing `{admiral}` or `{admiral}` extension packages.
+Functions and Tools for developing core `{admiral}` functions. Most
+functions in `{admiraldev}` are around testing inputs going into
+`{admiral}` functions. There are also additional quality of life
+functions/Addins to assist developers of `{admiral}` or `{admiral}`
+extension packages as well as functions to help with rendering
+documentation.
 
 __NOTE:__ This package is not intended for standalone use but rather as
-a central dependency for all developer utilities of `{admiral}` and its
-extension packages
+a central dependency for `{admiral}` and its extension packages
 
 ## Installation
 

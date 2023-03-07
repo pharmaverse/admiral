@@ -2,25 +2,28 @@
 % Please edit documentation in R/assertions.R
 \name{assert_list_of}
 \alias{assert_list_of}
-\title{Is an Argument a List of Objects of a Specific S3 Class?}
+\title{Is an Argument a List of Objects of a Specific S3 Class or Type?}
 \usage{
-assert_list_of(arg, class, optional = TRUE)
+assert_list_of(arg, class, named = FALSE, optional = TRUE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
 
-\item{class}{The S3 class to check for}
+\item{class}{The S3 class or type to check for}
+
+\item{named}{If set to \code{TRUE}, an error is issued if not all elements of the
+list are named.}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
 }
 \value{
-The function throws an error if \code{arg} is not a list or if \code{arg} is a list but its
-elements are not objects inheriting from \code{class}. Otherwise, the input is returned
-invisibly.
+The function throws an error if \code{arg} is not a list or if \code{arg} is a list but
+its elements are not objects inheriting from \code{class} or of type \code{class}.
+Otherwise, the input is returned invisibly.
 }
 \description{
-Checks if an argument is a \code{list} of objects inheriting from the S3 class specified.
+Checks if an argument is a \code{list} of objects inheriting from the S3 class or type specified.
 }
 \examples{
 example_fun <- function(list) {
@@ -32,6 +35,11 @@ example_fun(list(mtcars, iris))
 try(example_fun(list(letters, 1:10)))
 
 try(example_fun(c(TRUE, FALSE)))
+
+example_fun2 <- function(list) {
+  assert_list_of(list, "numeric", named = TRUE)
+}
+try(example_fun2(list(1, 2, 3, d = 4)))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
@@ -59,9 +67,6 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_unit}()},
 \code{\link{assert_vars}()},
 \code{\link{assert_varval_list}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{assertion}
 \keyword{assertion}

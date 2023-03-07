@@ -10,8 +10,8 @@ is_auto(arg)
 \item{arg}{argument to check}
 }
 \value{
-\code{TRUE} if the argument equals the auto keyword, i.e., it is a quosure
-of a symbol named auto.
+\code{TRUE} if the argument equals the auto keyword, i.e., it is an
+expression of a symbol named auto.
 }
 \description{
 Checks if the argument equals the auto keyword
@@ -21,9 +21,6 @@ Identifies type of Object with return of TRUE/FALSE:
 \code{\link{is_named}()},
 \code{\link{is_order_vars}()},
 \code{\link{is_valid_dtc}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{is}
 \keyword{is}

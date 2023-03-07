@@ -24,36 +24,37 @@ test_that("convert_dtm_to_dtc Test 3: Error is thrown if dtm is not in correct f
   )
 })
 
+# filter_if ----
 ## Test 4: Input is returned as is if filter is NULL ----
-test_that("convert_dtm_to_dtc Test 4: Input is returned as is if filter is NULL", {
+test_that("filter_if Test 4: Input is returned as is if filter is NULL", {
   input <- tibble::tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
-    "P01", "WEIGHT", 80.9,
-    "P01", "HEIGHT", 189.2
+    "P01",    "WEIGHT",       80.9,
+    "P01",    "HEIGHT",      189.2
   )
 
   expected_output <- input
 
   expect_dfs_equal(
     expected_output,
-    filter_if(input, quo(NULL)),
+    filter_if(input, expr(NULL)),
     keys = c("USUBJID", "VSTESTCD")
   )
 })
 
 ## Test 5: Input is filtered if filter is not NULL ----
-test_that("convert_dtm_to_dtc Test 5: Input is filtered if filter is not NULL", {
+test_that("filter_if Test 5: Input is filtered if filter is not NULL", {
   input <- tibble::tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
-    "P01", "WEIGHT", 80.9,
-    "P01", "HEIGHT", 189.2
+    "P01",    "WEIGHT",       80.9,
+    "P01",    "HEIGHT",      189.2
   )
 
   expected_output <- input[1L, ]
 
   expect_dfs_equal(
     expected_output,
-    filter_if(input, quo(VSTESTCD == "WEIGHT")),
+    filter_if(input, expr(VSTESTCD == "WEIGHT")),
     keys = c("USUBJID", "VSTESTCD")
   )
 })
@@ -61,10 +62,25 @@ test_that("convert_dtm_to_dtc Test 5: Input is filtered if filter is not NULL", 
 # contains_vars ----
 ## Test 6: returns TRUE for valid arguments ----
 test_that("contains_vars Test 6: returns TRUE for valid arguments", {
-  expect_true(contains_vars(vars(USUBJID, PARAMCD)))
+  expect_true(contains_vars(exprs(USUBJID, PARAMCD)))
 })
 
 ## Test 7: returns TRUE for valid arguments ----
 test_that("contains_vars Test 7: returns TRUE for valid arguments", {
   expect_error(contains_vars(USUBJID))
+})
+# vars2chr ----
+## Test 8: returns character vector ----
+test_that("vars2chr Test 8: returns character vector", {
+  expected <- c("STUDYID", "USUBJID")
+  names(expected) <- c("", "")
+  expect_equal(vars2chr(exprs(STUDYID, USUBJID)), expected)
+})
+
+## Test 9: warning if quosures argument is used ----
+test_that("vars2chr Test 9: warning if quosures argument is used", {
+  expect_warning(
+    vars2chr(quosures = rlang::quos(STUDYID, USUBJID)),
+    class = "lifecycle_warning_deprecated"
+  )
 })
