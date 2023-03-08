@@ -11,13 +11,16 @@ articles:
   faq: faq.html
   generic: generic.html
   higher_order: higher_order.html
+  hys_law: hys_law.html
   imputation: imputation.html
   lab_grading: lab_grading.html
   occds: occds.html
+  pk_adnca: pk_adnca.html
   queries_dataset: queries_dataset.html
+  questionnaires: questionnaires.html
   visits_periods: visits_periods.html
-last_built: 2023-01-05T15:05Z
+last_built: 2023-03-08T17:11Z
 urls:
-  reference: https://pharmaverse.github.io/admiral/reference
-  article: https://pharmaverse.github.io/admiral/articles
+  reference: https://pharmaverse.github.io/admiral/v0.10.0/reference
+  article: https://pharmaverse.github.io/admiral/v0.10.0/articles
 
