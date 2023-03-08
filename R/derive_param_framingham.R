@@ -79,8 +79,9 @@
 #' The values of `age`, `sex`, `smokefl`, `diabetfl` and `trthypfl` will be
 #' added to the `by_vars` list.
 #' The predicted probability of having cardiovascular disease (CVD)
-#' within 10-years according to Framingham formula
-#' \href{https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}{D'Agostino, 2008} is: # nolint
+#' within 10-years according to Framingham formula. See AHA Journal article
+#' General Cardiovascular Risk Profile for Use in Primary Care for reference.
+#'
 #' \strong{For Women:}
 #'
 #' \tabular{rr}{
@@ -124,11 +125,6 @@
 #' + Diabetes Present - AvgRisk}
 #'
 #' \deqn{Risk = 100 * (1 - RiskPeriodFactor^{RiskFactors})}
-#'
-#' @author
-#' Alice Ehmann
-#' Jack McGavigan
-#' Ben Straub
 #'
 #' @return The input dataset with the new parameter added
 #'
@@ -174,8 +170,8 @@
 #'
 #' adcvrisk %>%
 #'   derive_param_framingham(
-#'     by_vars = vars(USUBJID, VISIT),
-#'     set_values_to = vars(
+#'     by_vars = exprs(USUBJID, VISIT),
+#'     set_values_to = exprs(
 #'       PARAMCD = "FCVD101",
 #'       PARAM = "FCVD1-Framingham CVD 10-Year Risk Score (%)"
 #'     ),
@@ -184,8 +180,8 @@
 #'
 #' derive_param_framingham(
 #'   adcvrisk,
-#'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(
+#'   by_vars = exprs(USUBJID, VISIT),
+#'   set_values_to = exprs(
 #'     PARAMCD = "FCVD101",
 #'     PARAM = "FCVD1-Framingham CVD 10-Year Risk Score (%)"
 #'   ),
@@ -193,7 +189,7 @@
 #' )
 derive_param_framingham <- function(dataset,
                                     by_vars,
-                                    set_values_to = vars(PARAMCD = "FCVD101"),
+                                    set_values_to = exprs(PARAMCD = "FCVD101"),
                                     sysbp_code = "SYSBP",
                                     chol_code = "CHOL",
                                     cholhdl_code = "CHOLHDL",
@@ -205,27 +201,33 @@ derive_param_framingham <- function(dataset,
                                     get_unit_expr,
                                     filter = NULL) {
   assert_vars(by_vars)
+  age <- assert_symbol(enexpr(age))
+  sex <- assert_symbol(enexpr(sex))
+  smokefl <- assert_symbol(enexpr(smokefl))
+  diabetfl <- assert_symbol(enexpr(diabetfl))
+  trthypfl <- assert_symbol(enexpr(trthypfl))
 
   assert_data_frame(
     dataset,
-    required_vars = quo_c(
-      vars(!!!by_vars, PARAMCD, AVAL),
-      enquo(age),
-      enquo(sex),
-      enquo(smokefl),
-      enquo(diabetfl),
-      enquo(trthypfl)
+    required_vars = expr_c(
+      by_vars,
+      exprs(PARAMCD, AVAL),
+      age,
+      sex,
+      smokefl,
+      diabetfl,
+      trthypfl
     )
   )
 
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   assert_character_scalar(sysbp_code)
   assert_character_scalar(chol_code)
   assert_character_scalar(cholhdl_code)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
 
-  get_unit_expr <- assert_expr(enquo(get_unit_expr))
+  get_unit_expr <- assert_expr(enexpr(get_unit_expr))
   assert_unit(
     dataset,
     sysbp_code,
@@ -250,11 +252,11 @@ derive_param_framingham <- function(dataset,
       sysbp = !!sym(paste0("AVAL.", sysbp_code)),
       chol = !!sym(paste0("AVAL.", chol_code)),
       cholhdl = !!sym(paste0("AVAL.", cholhdl_code)),
-      age = !!enquo(age),
-      sex = !!enquo(sex),
-      smokefl = !!enquo(smokefl),
-      diabetfl = !!enquo(diabetfl),
-      trthypfl = !!enquo(trthypfl)
+      age = !!age,
+      sex = !!sex,
+      smokefl = !!smokefl,
+      diabetfl = !!diabetfl,
+      trthypfl = !!trthypfl
     )
   )
 
@@ -263,13 +265,13 @@ derive_param_framingham <- function(dataset,
     dataset,
     filter = !!filter,
     parameters = c(sysbp_code, chol_code, cholhdl_code),
-    by_vars = quo_c(
-      vars(!!!by_vars),
-      enquo(age),
-      enquo(sex),
-      enquo(smokefl),
-      enquo(diabetfl),
-      enquo(trthypfl)
+    by_vars = expr_c(
+      by_vars,
+      age,
+      sex,
+      smokefl,
+      diabetfl,
+      trthypfl
     ),
     analysis_value = !!analysis_value,
     set_values_to = set_values_to

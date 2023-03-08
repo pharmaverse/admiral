@@ -142,9 +142,10 @@ dose_freq_lookup <- tibble::tribble(
       str_detect(CDISC_VALUE, "^EVERY (A|E|W)[:alpha:]+") ~ 1,
       str_detect(CDISC_VALUE, "^Q(AM|PM|M|N|D|HS)|^PA$") ~ 1,
       str_detect(CDISC_VALUE, "^QH$") ~ 1,
-      str_detect(CDISC_VALUE, "BI[DM]") ~ 2,
-      str_detect(CDISC_VALUE, "TID") ~ 3,
-      str_detect(CDISC_VALUE, "QID") ~ 4,
+      str_detect(CDISC_VALUE, "BIM") ~ 2,
+      str_detect(CDISC_VALUE, "BID") ~ 1 / 12,
+      str_detect(CDISC_VALUE, "TID") ~ 1 / 8,
+      str_detect(CDISC_VALUE, "QID") ~ 1 / 6,
       str_detect(CDISC_VALUE, "QOD") ~ 0.5,
     ),
     DOSE_WINDOW = case_when(
@@ -157,9 +158,12 @@ dose_freq_lookup <- tibble::tribble(
       CDISC_VALUE %in% c("EVERY AFTERNOON", "EVERY EVENING") ~ "DAY",
       CDISC_VALUE %in% c("EVERY WEEK") ~ "WEEK",
       CDISC_VALUE %in% c(
-        "BID", "TID", "QAM", "QPM", "QHS",
-        "QD", "QN", "QID", "QOD"
+        "QAM", "QPM", "QHS",
+        "QD", "QN", "QOD"
       ) ~ "DAY",
+      CDISC_VALUE %in% c(
+        "BID", "TID", "QID"
+      ) ~ "HOUR",
       CDISC_VALUE %in% c("QM", "BIM") ~ "MONTH",
       CDISC_VALUE == "PA" ~ "YEAR",
     )
@@ -241,6 +245,16 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #'   The column of `lookup_table`.
 #'
+#' @param nominal_time The nominal relative time from first dose (`NFRLT`)
+#'
+#'   Used for PK analysis, this will be in hours and should be 0 for
+#'   the first dose.  It can be derived as `(VISITDY - 1) * 24` for example.
+#'   This will be expanded as the single dose dataset is created.  For example
+#'   an `EXDOFRQ` of `"QD"` will result in the nominal_time being incremented by
+#'   24 hours for each expanded record.
+#'
+#'   The value can be NULL if not needed.
+#'
 #' @param keep_source_vars List of variables to be retained from source dataset
 #'
 #'   This parameter can be specified if additional information is required in
@@ -258,7 +272,6 @@ dose_freq_lookup <- tibble::tribble(
 #'   Observations with dose frequency `"ONCE"` are copied to the output dataset
 #'   unchanged.
 #'
-#' @author Michael Thorpe, Andrew Smith
 #'
 #' @family create_aux
 #' @keywords create_aux
@@ -273,6 +286,7 @@ dose_freq_lookup <- tibble::tribble(
 #' library(lubridate)
 #' library(stringr)
 #' library(tibble)
+#' library(dplyr)
 #'
 #' data <- tribble(
 #'   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
@@ -285,7 +299,6 @@ dose_freq_lookup <- tibble::tribble(
 #' )
 #'
 #' create_single_dose_dataset(data)
-#'
 #'
 #' # Example with custom lookup
 #'
@@ -309,6 +322,126 @@ dose_freq_lookup <- tibble::tribble(
 #'   start_datetime = ASTDTM,
 #'   end_datetime = AENDTM
 #' )
+#' # Example with nominal time
+#'
+#' data <- tribble(
+#'   ~USUBJID, ~EXDOSFRQ, ~NFRLT, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
+#'   "P01", "BID", 0, ymd("2021-01-01"), ymd_hms("2021-01-01 08:00:00"),
+#'   ymd("2021-01-07"), ymd_hms("2021-01-07 20:00:00"),
+#'   "P01", "BID", 168, ymd("2021-01-08"), ymd_hms("2021-01-08 08:00:00"),
+#'   ymd("2021-01-14"), ymd_hms("2021-01-14 20:00:00"),
+#'   "P01", "BID", 336, ymd("2021-01-15"), ymd_hms("2021-01-15 08:00:00"),
+#'   ymd("2021-01-29"), ymd_hms("2021-01-29 20:00:00")
+#' )
+#'
+#' create_single_dose_dataset(data,
+#'   dose_freq = EXDOSFRQ,
+#'   start_date = ASTDT,
+#'   start_datetime = ASTDTM,
+#'   end_date = AENDT,
+#'   end_datetime = AENDTM,
+#'   lookup_table = dose_freq_lookup,
+#'   lookup_column = CDISC_VALUE,
+#'   nominal_time = NFRLT,
+#'   keep_source_vars = exprs(
+#'     USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, NFRLT
+#'   )
+#' )
+#'
+#' # Example - derive a single dose dataset with imputations
+#'
+#' # For either single drug administration records, or multiple drug administration
+#' # records covering a range of dates, fill-in of missing treatment end datetime
+#' # `EXENDTC` by substitution with an acceptable alternate, for example date of
+#' # death, date of datacut may be required. This example shows the
+#' # maximum possible number of single dose records to be derived. The example
+#' # requires the date of datacut `DCUTDT` to be specified correctly, or
+#' # if not appropriate to use `DCUTDT` as missing treatment end data and missing
+#' # treatment end datetime could set equal to treatment start date and treatment
+#' # start datetime. ADSL variables `DTHDT` and `DCUTDT` are preferred for
+#' # imputation use.
+#' #
+#' # All available trial treatments are included, allowing multiple different
+#' # last dose variables to be created in for example `use_ad_template("ADAE")`
+#' # if required.
+#'
+#' adsl <- tribble(
+#'   ~STUDYID, ~USUBJID, ~DTHDT,
+#'   "01", "1211", ymd("2013-01-14"),
+#'   "01", "1083", ymd("2013-08-02"),
+#'   "01", "1445", ymd("2014-11-01"),
+#'   "01", "1015", NA,
+#'   "01", "1023", NA
+#' )
+#'
+#' ex <- tribble(
+#'   ~STUDYID, ~USUBJID, ~EXSEQ, ~EXTRT, ~EXDOSE, ~EXDOSU, ~EXDOSFRQ, ~EXSTDTC, ~EXENDTC,
+#'   "01", "1015", 1, "PLAC", 0, "mg", "QD", "2014-01-02", "2014-01-16",
+#'   "01", "1015", 2, "PLAC", 0, "mg", "QD", "2014-06-17", "2014-06-18",
+#'   "01", "1015", 3, "PLAC", 0, "mg", "QD", "2014-06-19", NA_character_,
+#'   "01", "1023", 1, "PLAC", 0, "mg", "QD", "2012-08-05", "2012-08-27",
+#'   "01", "1023", 2, "PLAC", 0, "mg", "QD", "2012-08-28", "2012-09-01",
+#'   "01", "1211", 1, "XANO", 54, "mg", "QD", "2012-11-15", "2012-11-28",
+#'   "01", "1211", 2, "XANO", 54, "mg", "QD", "2012-11-29", NA_character_,
+#'   "01", "1445", 1, "PLAC", 0, "mg", "QD", "2014-05-11", "2014-05-25",
+#'   "01", "1445", 2, "PLAC", 0, "mg", "QD", "2014-05-26", "2014-11-01",
+#'   "01", "1083", 1, "PLAC", 0, "mg", "QD", "2013-07-22", "2013-08-01"
+#' )
+#'
+#' adsl_death <- adsl %>%
+#'   mutate(
+#'     DTHDTM = convert_date_to_dtm(DTHDT),
+#'     # Remove `DCUT` setup line below if ADSL `DCUTDT` is populated.
+#'     DCUTDT = convert_dtc_to_dt("2015-03-06"), # Example only, enter date.
+#'     DCUTDTM = convert_date_to_dtm(DCUTDT)
+#'   )
+#'
+#' # Select valid dose records, non-missing `EXSTDTC` and `EXDOSE`.
+#' ex_mod <- ex %>%
+#'   filter(!is.na(EXSTDTC) & !is.na(EXDOSE)) %>%
+#'   derive_vars_merged(adsl_death, by_vars = exprs(STUDYID, USUBJID)) %>%
+#'   # Example, set up missing `EXDOSFRQ` as QD daily dosing regime.
+#'   # Replace with study dosing regime per trial treatment.
+#'   mutate(EXDOSFRQ = if_else(is.na(EXDOSFRQ), "QD", EXDOSFRQ)) %>%
+#'   # Create EXxxDTM variables and replace missing `EXENDTM`.
+#'   derive_vars_dtm(
+#'     dtc = EXSTDTC,
+#'     new_vars_prefix = "EXST",
+#'     date_imputation = "first",
+#'     time_imputation = "first",
+#'     flag_imputation = "none",
+#'   ) %>%
+#'   derive_vars_dtm_to_dt(exprs(EXSTDTM)) %>%
+#'   derive_vars_dtm(
+#'     dtc = EXENDTC,
+#'     new_vars_prefix = "EXEN",
+#'     # Maximum imputed treatment end date must not be not greater than
+#'     # date of death or after the datacut date.
+#'     max_dates = exprs(DTHDTM, DCUTDTM),
+#'     date_imputation = "last",
+#'     time_imputation = "last",
+#'     flag_imputation = "none",
+#'     highest_imputation = "Y",
+#'   ) %>%
+#'   derive_vars_dtm_to_dt(exprs(EXENDTM)) %>%
+#'   # Select only unique values.
+#'   # Removes duplicated records before final step.
+#'   distinct(
+#'     STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ, DCUTDT, DTHDT, EXSTDT,
+#'     EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
+#'   )
+#'
+#' create_single_dose_dataset(
+#'   ex_mod,
+#'   start_date = EXSTDT,
+#'   start_datetime = EXSTDTM,
+#'   end_date = EXENDT,
+#'   end_datetime = EXENDTM,
+#'   keep_source_vars = exprs(
+#'     STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ,
+#'     DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
+#'   )
+#' )
 create_single_dose_dataset <- function(dataset,
                                        dose_freq = EXDOSFRQ,
                                        start_date = ASTDT,
@@ -317,20 +450,22 @@ create_single_dose_dataset <- function(dataset,
                                        end_datetime = NULL,
                                        lookup_table = dose_freq_lookup,
                                        lookup_column = CDISC_VALUE,
-                                       keep_source_vars = quo_c(
-                                         vars(USUBJID), dose_freq, start_date, start_datetime,
+                                       nominal_time = NULL,
+                                       keep_source_vars = expr_c(
+                                         exprs(USUBJID), dose_freq, start_date, start_datetime,
                                          end_date, end_datetime
                                        )) {
-  dose_freq <- assert_symbol(enquo(dose_freq))
-  lookup_column <- assert_symbol(enquo(lookup_column))
-  start_date <- assert_symbol(enquo(start_date))
-  start_datetime <- assert_symbol(enquo(start_datetime), optional = TRUE)
-  end_date <- assert_symbol(enquo(end_date))
-  end_datetime <- assert_symbol(enquo(end_datetime), optional = TRUE)
-  assert_data_frame(dataset, required_vars = quo_c(dose_freq, start_date, end_date))
+  dose_freq <- assert_symbol(enexpr(dose_freq))
+  lookup_column <- assert_symbol(enexpr(lookup_column))
+  start_date <- assert_symbol(enexpr(start_date))
+  start_datetime <- assert_symbol(enexpr(start_datetime), optional = TRUE)
+  end_date <- assert_symbol(enexpr(end_date))
+  end_datetime <- assert_symbol(enexpr(end_datetime), optional = TRUE)
+  nominal_time <- assert_symbol(enexpr(nominal_time), optional = TRUE)
+  assert_data_frame(dataset, required_vars = expr_c(dose_freq, start_date, end_date))
   assert_data_frame(
     lookup_table,
-    required_vars = vars(!!lookup_column, DOSE_WINDOW, DOSE_COUNT, CONVERSION_FACTOR)
+    required_vars = exprs(!!lookup_column, DOSE_WINDOW, DOSE_COUNT, CONVERSION_FACTOR)
   )
   assert_data_frame(dataset, required_vars = keep_source_vars)
   col_names <- colnames(dataset)
@@ -372,10 +507,10 @@ create_single_dose_dataset <- function(dataset,
 
   # Check that NAs do not appear in start_date or start_datetime or end_date or end_datetime columns
   condition <- paste0("is.na(", as_name(start_date), ") | is.na(", as_name(end_date), ")")
-  if (!quo_is_null(start_datetime)) {
+  if (!is.null(start_datetime)) {
     condition <- paste(condition, "| is.na(", as_name(start_datetime), ")")
   }
-  if (!quo_is_null(end_datetime)) {
+  if (!is.null(end_datetime)) {
     condition <- paste(condition, "| is.na(", as_name(end_datetime), ")")
   }
   na_check <- data_not_once %>%
@@ -395,11 +530,23 @@ create_single_dose_dataset <- function(dataset,
     abort(err_msg)
   }
 
+  # Check nominal time is NULL or numeric
+
+  if (!is.null(nominal_time)) {
+    check_nominal_time <-
+      mutate(
+        data_not_once,
+        check_nom := !!nominal_time
+      )
+
+    assert_numeric_vector(check_nominal_time$check_nom)
+  }
+
   # Check values of lookup vs. data and return error if values are not covered
 
   value_check <- data_not_once %>%
     select(!!dose_freq) %>%
-    anti_join(lookup, by = as.character(quo_get_expr(dose_freq))) %>%
+    anti_join(lookup, by = as.character(dose_freq)) %>%
     unique()
 
   if (nrow(value_check) > 0) {
@@ -408,7 +555,7 @@ create_single_dose_dataset <- function(dataset,
     err_msg <- paste0(
       sprintf(
         "The following values of %s in %s do not appear in %s:\n",
-        as.character(quo_get_expr(dose_freq)),
+        as.character(dose_freq),
         arg_name(substitute(dataset)),
         arg_name(substitute(lookup_table))
       ), values_not_found
@@ -418,7 +565,7 @@ create_single_dose_dataset <- function(dataset,
 
   # Use compute_duration to determine the number of completed dose periods
 
-  if (quo_is_null(start_datetime)) {
+  if (is.null(start_datetime)) {
     min_hour_cases <- exprs(FALSE ~ 0)
   } else {
     min_hour_cases <- exprs(
@@ -433,11 +580,11 @@ create_single_dose_dataset <- function(dataset,
   data_not_once <- left_join(
     data_not_once,
     lookup,
-    by = as.character(quo_get_expr(dose_freq))
+    by = as.character(dose_freq)
   )
 
   if (any(data_not_once$DOSE_WINDOW %in% c("MINUTE", "HOUR")) &
-    (quo_is_null(start_datetime) | quo_is_null(end_datetime))) {
+    (is.null(start_datetime) | is.null(end_datetime))) {
     abort(
       paste(
         "There are dose frequencies more frequent than once a day.",
@@ -491,11 +638,18 @@ create_single_dose_dataset <- function(dataset,
       !!dose_freq := "ONCE",
       !!start_date := !!start_date + time_differential_dt
     )
-  if (!quo_is_null(start_datetime)) {
+  if (!is.null(start_datetime)) {
     data_not_once <-
       mutate(
         data_not_once,
-        !!start_datetime := !!start_datetime + time_differential
+        !!start_datetime := !!start_datetime + time_differential,
+      )
+  }
+  if (!is.null(nominal_time)) {
+    data_not_once <-
+      mutate(
+        data_not_once,
+        !!nominal_time := !!nominal_time + as.numeric(time_differential) / 3600
       )
   }
 
@@ -504,7 +658,7 @@ create_single_dose_dataset <- function(dataset,
     mutate(
       !!end_date := !!start_date
     )
-  if (!quo_is_null(end_datetime)) {
+  if (!is.null(end_datetime)) {
     data_not_once <-
       mutate(
         data_not_once,
@@ -515,7 +669,7 @@ create_single_dose_dataset <- function(dataset,
         )
       )
   }
-  data_not_once <- select(data_not_once, !!!vars(all_of(col_names)))
+  data_not_once <- select(data_not_once, all_of(col_names))
 
   # Stitch back together
 

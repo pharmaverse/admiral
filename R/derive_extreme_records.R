@@ -37,7 +37,6 @@
 #'   the selected observations.
 #'   1. The observations are added to input dataset.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the first or last observation of each by group
 #'   added as new observations.
@@ -65,11 +64,11 @@
 #' # AVISITN. Set AVISITN = 97 and DTYPE = MINIMUM for these new records.
 #' derive_extreme_records(
 #'   adlb,
-#'   by_vars = vars(USUBJID),
-#'   order = vars(AVAL, AVISITN),
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(AVAL, AVISITN),
 #'   mode = "first",
 #'   filter = !is.na(AVAL),
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     AVISITN = 97,
 #'     DTYPE = "MINIMUM"
 #'   )
@@ -80,11 +79,11 @@
 #' # AVISITN. Set AVISITN = 98 and DTYPE = MAXIMUM for these new records.
 #' derive_extreme_records(
 #'   adlb,
-#'   by_vars = vars(USUBJID),
-#'   order = vars(desc(AVAL), AVISITN),
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(desc(AVAL), AVISITN),
 #'   mode = "first",
 #'   filter = !is.na(AVAL),
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     AVISITN = 98,
 #'     DTYPE = "MAXIMUM"
 #'   )
@@ -94,10 +93,10 @@
 #' # Set AVISITN = 99 and DTYPE = LOV for these new records.
 #' derive_extreme_records(
 #'   adlb,
-#'   by_vars = vars(USUBJID),
-#'   order = vars(AVISITN),
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(AVISITN),
 #'   mode = "last",
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     AVISITN = 99,
 #'     DTYPE = "LOV"
 #'   )
@@ -112,6 +111,12 @@ derive_extreme_records <- function(dataset,
   # Check input parameters
   assert_vars(by_vars, optional = TRUE)
   assert_order_vars(order)
+  assert_data_frame(
+    dataset,
+    required_vars = expr_c(
+      by_vars, extract_vars(order)
+    )
+  )
   mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
   check_type <-
     assert_character_scalar(
@@ -119,7 +124,7 @@ derive_extreme_records <- function(dataset,
       values = c("none", "warning", "error"),
       case_sensitive = FALSE
     )
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_varval_list(set_values_to)
 
   # Create new observations

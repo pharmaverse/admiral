@@ -35,8 +35,8 @@ Permitted Values:  \code{"first"}, \code{"last"}}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of quosures where the expressions are symbols as returned by
-\code{vars()} is expected.}
+A list of expressions where the expressions are symbols as returned by
+\code{exprs()} is expected.}
 }
 \value{
 The input dataset with the new variable added.
@@ -123,7 +123,7 @@ admiral_dm \%>\%
 ae_start <- date_source(
   dataset_name = "ae",
   date = AESTDTM,
-  traceability_vars = vars(
+  traceability_vars = exprs(
     LALVDOM = "AE",
     LALVSEQ = AESEQ,
     LALVVAR = "AESTDTC"
@@ -133,7 +133,7 @@ ae_start <- date_source(
 ae_end <- date_source(
   dataset_name = "ae",
   date = AEENDTM,
-  traceability_vars = vars(
+  traceability_vars = exprs(
     LALVDOM = "AE",
     LALVSEQ = AESEQ,
     LALVVAR = "AEENDTC"
@@ -143,7 +143,7 @@ lb_date <- date_source(
   dataset_name = "lb",
   date = LBDTM,
   filter = !is.na(LBDTM),
-  traceability_vars = vars(
+  traceability_vars = exprs(
     LALVDOM = "LB",
     LALVSEQ = LBSEQ,
     LALVVAR = "LBDTC"
@@ -153,7 +153,7 @@ lb_date <- date_source(
 adsl_date <- date_source(
   dataset_name = "adsl",
   date = TRTEDTM,
-  traceability_vars = vars(
+  traceability_vars = exprs(
     LALVDOM = "ADSL",
     LALVSEQ = NA_integer_,
     LALVVAR = "TRTEDTM"
@@ -179,15 +179,10 @@ admiral_dm \%>\%
 
 ADSL Functions that returns variable appended to dataset: 
 \code{\link{derive_var_age_years}()},
-\code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_period}()}
-}
-\author{
-Stefan Bundfuss, Thomas Neitmann
 }
 \concept{der_adsl}
 \keyword{der_adsl}

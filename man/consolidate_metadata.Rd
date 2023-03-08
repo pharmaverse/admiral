@@ -21,7 +21,7 @@ consolidate_metadata(
 
 The specified variables must be a unique of all input datasets.
 
-\emph{Permitted Values}: A list of variables created by \code{vars()}}
+\emph{Permitted Values}: A list of variables created by \code{exprs()}}
 
 \item{source_var}{Source variable
 
@@ -46,8 +46,8 @@ variables (\code{key_vars}) are not a unique key in all of the input datasets
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 }
 \value{
-A dataset which contains one row for each by group occuring in any of
-the input datasets.
+A dataset which contains one row for each by group occurring in any
+of the input datasets.
 }
 \description{
 The purpose of the function is to consolidate multiple meta datasets into a
@@ -84,7 +84,7 @@ consolidate_metadata(
     project = proj_ranges,
     study = stud_ranges
   ),
-  key_vars = vars(PARAMCD)
+  key_vars = exprs(PARAMCD)
 )
 }
 \seealso{
@@ -92,9 +92,6 @@ Creating auxiliary datasets:
 \code{\link{create_period_dataset}()},
 \code{\link{create_query_data}()},
 \code{\link{create_single_dose_dataset}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{create_aux}
 \keyword{create_aux}

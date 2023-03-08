@@ -114,7 +114,6 @@
 #'
 #' @return A character vector
 #'
-#' @author Samia Kabi, Stefan Bundfuss
 #'
 #' @family com_date_time
 #'
@@ -198,8 +197,8 @@
 #' impute_dtc_dtm(
 #'   c("2020-12", NA_character_),
 #'   min_dates = list(
-#'     ymd_hms("2020-12-06T12:12:12"),
-#'     ymd_hms("2020-11-11T11:11:11")
+#'     ymd_hms("2020-12-06T12:12:12", "2020-01-01T01:01:01"),
+#'     ymd_hms("2020-11-11T11:11:11", NA)
 #'   ),
 #'   highest_imputation = "Y"
 #' )
@@ -302,12 +301,18 @@ impute_dtc_dtm <- function(dtc,
   }
 
   # Handle min_dates and max_dates argument ----
-  restrict_imputed_dtc_dtm(
+  restricted <- restrict_imputed_dtc_dtm(
     dtc,
     imputed_dtc = imputed_dtc,
     min_dates = min_dates,
     max_dates = max_dates
   )
+
+  if (highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)) {
+    warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
+  }
+
+  return(restricted)
 }
 
 #' Create a `dtm_level` object
@@ -323,7 +328,6 @@ impute_dtc_dtm <- function(dtc,
 #' @details A `dtm_level` object is an ordered factor, i.e., two objects can be
 #'   compared.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #'
@@ -354,7 +358,6 @@ dtm_level <- function(level) {
 #' @details The function can be replaced by the parttime parser once it is
 #'   available.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #'
@@ -413,7 +416,6 @@ get_partialdatetime <- function(dtc) {
 #'  component occurs in the imputed DTC value, the imputed DTC value is set to
 #'  `NA_character_` in the imputation functions.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #'
@@ -463,7 +465,6 @@ get_imputation_target_date <- function(date_imputation,
 #'  - For `time_imputation = "last"` `"23"`, `"59"`, `"59"` are returned.
 #'  - For `time_imputation = "<hh>:<mm>:<ss>"` `"<hh>"`, `"<mm>"`, `"<ss>"` are returned.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #'
@@ -503,7 +504,6 @@ get_imputation_target_time <- function(time_imputation) {
 #'   - `imputed_dtc` if the partial DTC date (`dtc`) is not in range of any of
 #'   the minimum or maximum dates.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #'
@@ -514,24 +514,34 @@ restrict_imputed_dtc_dtm <- function(dtc,
                                      imputed_dtc,
                                      min_dates,
                                      max_dates) {
-  if (!is.null(min_dates) | !is.null(max_dates)) {
-    # determine range of possible dates
-    min_dtc <-
-      impute_dtc_dtm(
-        dtc,
-        highest_imputation = "Y",
-        date_imputation = "first",
-        time_imputation = "first"
-      )
-    max_dtc <-
-      impute_dtc_dtm(
-        dtc,
-        highest_imputation = "Y",
-        date_imputation = "last",
-        time_imputation = "last"
-      )
+  if (!(is.null(min_dates) | length(min_dates) == 0) |
+    !(is.null(max_dates) | length(max_dates) == 0)) {
+    suppress_warning(
+      { # nolint
+        # determine range of possible dates
+        min_dtc <-
+          impute_dtc_dtm(
+            dtc,
+            highest_imputation = "Y",
+            date_imputation = "first",
+            time_imputation = "first"
+          )
+        max_dtc <-
+          impute_dtc_dtm(
+            dtc,
+            highest_imputation = "Y",
+            date_imputation = "last",
+            time_imputation = "last"
+          )
+      },
+      # Suppress warning because we need to run without min/max dates but users should not
+      regexpr = "If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
+    )
   }
-  if (!is.null(min_dates)) {
+  if (!(is.null(min_dates) | length(min_dates) == 0)) {
+    if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
+      abort("Length of `min_dates` do not match length of dates to be imputed.")
+    }
     # for each minimum date within the range ensure that the imputed date is not
     # before it
     for (min_date in min_dates) {
@@ -544,8 +554,16 @@ restrict_imputed_dtc_dtm <- function(dtc,
         missing = imputed_dtc
       )
     }
+    imputed_dtc <- if_else(
+      stringr::str_starts(imputed_dtc, "(0000|9999)"),
+      NA_character_,
+      imputed_dtc
+    )
   }
-  if (!is.null(max_dates)) {
+  if (!(is.null(max_dates) | length(max_dates) == 0)) {
+    if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
+      abort("Length of `max_dates` do not match length of dates to be imputed.")
+    }
     # for each maximum date within the range ensure that the imputed date is not
     # after it
     for (max_date in max_dates) {
@@ -562,6 +580,11 @@ restrict_imputed_dtc_dtm <- function(dtc,
         missing = imputed_dtc
       )
     }
+    imputed_dtc <- if_else(
+      stringr::str_starts(imputed_dtc, "(0000|9999)"),
+      NA_character_,
+      imputed_dtc
+    )
   }
   imputed_dtc
 }
@@ -660,7 +683,6 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'
 #' @return A character vector
 #'
-#' @author Samia Kabi, Stefan Bundfuss
 #'
 #' @family com_date_time
 #'
@@ -727,8 +749,8 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #' impute_dtc_dt(
 #'   c("2020-12", NA_character_),
 #'   min_dates = list(
-#'     ymd("2020-12-06"),
-#'     ymd("2020-11-11")
+#'     ymd("2020-12-06", "2020-01-01"),
+#'     ymd("2020-11-11", NA)
 #'   ),
 #'   highest_imputation = "Y"
 #' )
@@ -821,12 +843,18 @@ impute_dtc_dt <- function(dtc,
   }
 
   # Handle min_dates and max_dates argument ----
-  restrict_imputed_dtc_dt(
+  restricted <- restrict_imputed_dtc_dt(
     dtc,
     imputed_dtc = imputed_dtc,
     min_dates = min_dates,
     max_dates = max_dates
   )
+
+  if (highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)) {
+    warning("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
+  }
+
+  return(restricted)
 }
 
 #' Create a `dt_level` object
@@ -841,7 +869,6 @@ impute_dtc_dt <- function(dtc,
 #' @details A `dt_level` object is an ordered factor, i.e., two objects can be
 #'   compared.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #' @keywords utils_impute
@@ -871,7 +898,6 @@ dt_level <- function(level) {
 #'   - `imputed_dtc` if the partial DTC date (`dtc`) is not in range of any of
 #'   the minimum or maximum dates.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @family utils_impute
 #'
@@ -882,22 +908,32 @@ restrict_imputed_dtc_dt <- function(dtc,
                                     imputed_dtc,
                                     min_dates,
                                     max_dates) {
-  if (!is.null(min_dates) | !is.null(max_dates)) {
-    # determine range of possible dates
-    min_dtc <-
-      impute_dtc_dt(
-        dtc,
-        highest_imputation = "Y",
-        date_imputation = "first"
-      )
-    max_dtc <-
-      impute_dtc_dt(
-        dtc,
-        highest_imputation = "Y",
-        date_imputation = "last"
-      )
+  if (!(is.null(min_dates) | length(min_dates) == 0) |
+    !(is.null(max_dates) | length(max_dates) == 0)) {
+    suppress_warning(
+      { # nolint
+        # determine range of possible dates
+        min_dtc <-
+          impute_dtc_dt(
+            dtc,
+            highest_imputation = "Y",
+            date_imputation = "first"
+          )
+        max_dtc <-
+          impute_dtc_dt(
+            dtc,
+            highest_imputation = "Y",
+            date_imputation = "last"
+          )
+      },
+      # Suppress warning because we need to run without min/max dates but users should not
+      regexpr = "If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
+    )
   }
-  if (!is.null(min_dates)) {
+  if (!(is.null(min_dates) | length(min_dates) == 0)) {
+    if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
+      abort("Length of `min_dates` do not match length of dates to be imputed.")
+    }
     # for each minimum date within the range ensure that the imputed date is not
     # before it
     for (min_date in min_dates) {
@@ -910,8 +946,16 @@ restrict_imputed_dtc_dt <- function(dtc,
         missing = imputed_dtc
       )
     }
+    imputed_dtc <- if_else(
+      stringr::str_starts(imputed_dtc, "(0000|9999)"),
+      NA_character_,
+      imputed_dtc
+    )
   }
-  if (!is.null(max_dates)) {
+  if (!(is.null(max_dates) | length(max_dates) == 0)) {
+    if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
+      abort("Length of `max_dates` do not match length of dates to be imputed.")
+    }
     # for each maximum date within the range ensure that the imputed date is not
     # after it
     for (max_date in max_dates) {
@@ -924,6 +968,11 @@ restrict_imputed_dtc_dt <- function(dtc,
         missing = imputed_dtc
       )
     }
+    imputed_dtc <- if_else(
+      stringr::str_starts(imputed_dtc, "(0000|9999)"),
+      NA_character_,
+      imputed_dtc
+    )
   }
   imputed_dtc
 }
@@ -936,7 +985,6 @@ restrict_imputed_dtc_dt <- function(dtc,
 #'
 #' @inheritParams impute_dtc_dt
 #'
-#' @author Samia Kabi
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
@@ -983,7 +1031,6 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @return A datetime object
 #'
-#' @author Samia Kabi, Stefan Bundfuss
 #'
 #' @family com_date_time
 #'
@@ -1031,7 +1078,6 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @return A datetime object
 #'
-#' @author Samia Kabi
 #'
 #' @family com_date_time
 #'
@@ -1089,7 +1135,6 @@ convert_date_to_dtm <- function(dt,
 #'
 #' @return The date imputation flag (`'--DTF'`) (character value of `'D'`, `'M'` , `'Y'` or `NA`)
 #'
-#' @author Samia Kabi
 #'
 #' @family com_date_time
 #'
@@ -1111,7 +1156,7 @@ compute_dtf <- function(dtc, dt) {
 
   case_when(
     (!is_na & n_chr >= 10 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
-    n_chr < 4 ~ "Y",
+    n_chr < 4 | is.na(dtc) ~ "Y",
     n_chr == 4 ~ "M",
     n_chr == 7 ~ "D",
     n_chr == 9 ~ "M" # dates like "2019---07"
@@ -1144,7 +1189,6 @@ compute_dtf <- function(dtc, dt) {
 #'
 #' @return The time imputation flag (`'--TMF'`) (character value of `'H'`, `'M'` , `'S'` or `NA`)
 #'
-#' @author Samia Kabi, Stefan Bundfuss
 #'
 #' @family com_date_time
 #'
@@ -1230,7 +1274,6 @@ compute_tmf <- function(dtc,
 #' The presence of a `'--DTF'` variable is checked and if it already exists in the input dataset,
 #' a warning is issued and `'--DTF'` will be overwritten.
 #'
-#' @author Samia Kabi
 #'
 #' @family der_date_time
 #'
@@ -1313,7 +1356,7 @@ compute_tmf <- function(dtc,
 #'   dtc = AESTDTC,
 #'   new_vars_prefix = "AST",
 #'   highest_imputation = "M",
-#'   min_dates = vars(TRTSDTM)
+#'   min_dates = exprs(TRTSDTM)
 #' )
 #'
 #' # A user imputing dates as middle month/day, i.e. date_imputation = "mid" can
@@ -1341,13 +1384,24 @@ derive_vars_dt <- function(dataset,
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)
   assert_vars(min_dates, optional = TRUE)
-  dtc <- assert_symbol(enquo(dtc))
-  assert_data_frame(dataset, required_vars = vars(!!dtc))
+  dtc <- assert_symbol(enexpr(dtc))
+  assert_data_frame(dataset, required_vars = exprs(!!dtc))
   assert_character_scalar(
     flag_imputation,
     values = c("auto", "date", "none"),
     case_sensitive = FALSE
   )
+  if ((highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)) |
+    (highest_imputation == "Y" & length(min_dates) == 0 & length(max_dates) == 0)) {
+    abort("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
+  }
+
+  if (highest_imputation == "Y" & !is.null(min_dates) & date_imputation != "first") {
+    warning("If `highest_impuation` = \"Y\" and `min_dates` is specified, `date_imputation` should be set to \"first\".") # nolint
+  }
+  if (highest_imputation == "Y" & !is.null(max_dates) & date_imputation != "last") {
+    warning("If `highest_impuation` = \"Y\" and `max_dates` is specified, `date_imputation` should be set to \"last\".") # nolint
+  }
 
   # output varname
   dt <- paste0(new_vars_prefix, "DT")
@@ -1431,7 +1485,6 @@ derive_vars_dt <- function(dataset,
 #' @return  The input dataset with the datetime `'--DTM'` (and the date/time imputation
 #' flag `'--DTF'`, `'--TMF'`) added.
 #'
-#' @author Samia Kabi
 #'
 #' @family der_date_time
 #'
@@ -1476,7 +1529,7 @@ derive_vars_dt <- function(dataset,
 #'   highest_imputation = "M",
 #'   date_imputation = "last",
 #'   time_imputation = "last",
-#'   max_dates = vars(DTHDT, DCUTDT)
+#'   max_dates = exprs(DTHDT, DCUTDT)
 #' )
 #'
 #' # Seconds has been removed from the input dataset.  Function now uses
@@ -1527,19 +1580,31 @@ derive_vars_dtm <- function(dataset,
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)
   assert_vars(min_dates, optional = TRUE)
-  dtc <- assert_symbol(enquo(dtc))
-  assert_data_frame(dataset, required_vars = vars(!!dtc))
+  dtc <- assert_symbol(enexpr(dtc))
+  assert_data_frame(dataset, required_vars = exprs(!!dtc))
   assert_character_scalar(
     flag_imputation,
     values = c("auto", "both", "date", "time", "none"),
     case_sensitive = FALSE
   )
+  if ((highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)) |
+    (highest_imputation == "Y" & length(min_dates) == 0 & length(max_dates) == 0)) {
+    abort("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
+  }
+
+  if (highest_imputation == "Y" & !is.null(min_dates) & date_imputation != "first") {
+    warning("If `highest_impuation` = \"Y\" and `min_dates` is specified, `date_imputation` should be set to \"first\".") # nolint
+  }
+  if (highest_imputation == "Y" & !is.null(max_dates) & date_imputation != "last") {
+    warning("If `highest_impuation` = \"Y\" and `max_dates` is specified, `date_imputation` should be set to \"last\".") # nolint
+  }
 
   dtm <- paste0(new_vars_prefix, "DTM")
 
   # Issue a warning if --DTM already exists
   warn_if_vars_exist(dataset, dtm)
   mask <- rlang::as_data_mask(dataset)
+
   dataset[[dtm]] <- convert_dtc_to_dtm(
     dtc = eval_tidy(dtc, mask),
     highest_imputation = highest_imputation,

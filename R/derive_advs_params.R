@@ -46,7 +46,6 @@
 #' DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
 #' if it is based on diastolic, systolic blood pressure, and heart rate.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
@@ -80,8 +79,8 @@
 #' # Derive MAP based on diastolic and systolic blood pressure
 #' advs %>%
 #'   derive_param_map(
-#'     by_vars = vars(USUBJID, VISIT),
-#'     set_values_to = vars(
+#'     by_vars = exprs(USUBJID, VISIT),
+#'     set_values_to = exprs(
 #'       PARAMCD = "MAP",
 #'       PARAM = "Mean Arterial Pressure (mmHg)"
 #'     ),
@@ -92,9 +91,9 @@
 #' # Derive MAP based on diastolic and systolic blood pressure and heart rate
 #' derive_param_map(
 #'   advs,
-#'   by_vars = vars(USUBJID, VISIT),
+#'   by_vars = exprs(USUBJID, VISIT),
 #'   hr_code = "PULSE",
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "MAP",
 #'     PARAM = "Mean Arterial Pressure (mmHg)"
 #'   ),
@@ -102,21 +101,21 @@
 #' )
 derive_param_map <- function(dataset,
                              by_vars,
-                             set_values_to = vars(PARAMCD = "MAP"),
+                             set_values_to = exprs(PARAMCD = "MAP"),
                              sysbp_code = "SYSBP",
                              diabp_code = "DIABP",
                              hr_code = NULL,
                              get_unit_expr,
                              filter = NULL) {
   assert_vars(by_vars)
-  assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
+  assert_data_frame(dataset, required_vars = exprs(!!!by_vars, PARAMCD, AVAL))
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   assert_character_scalar(sysbp_code)
   assert_character_scalar(diabp_code)
   assert_character_scalar(hr_code, optional = TRUE)
-  get_unit_expr <- assert_expr(enquo(get_unit_expr))
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  get_unit_expr <- assert_expr(enexpr(get_unit_expr))
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
 
   assert_unit(dataset, sysbp_code, required_unit = "mmHg", get_unit_expr = !!get_unit_expr)
   assert_unit(dataset, diabp_code, required_unit = "mmHg", get_unit_expr = !!get_unit_expr)
@@ -167,7 +166,6 @@ derive_param_map <- function(dataset,
 #'
 #'   A numeric vector or `NULL` is expected.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details
 #' \deqn{\frac{2DIABP + SYSBP}{3}}{(2DIABP + SYSBP) / 3}
@@ -256,7 +254,6 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #' @inheritParams derive_param_qtc
 #'
-#' @author Eric Simms
 #'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
@@ -284,9 +281,9 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #' derive_param_bsa(
 #'   advs,
-#'   by_vars = vars(USUBJID, VISIT),
+#'   by_vars = exprs(USUBJID, VISIT),
 #'   method = "Mosteller",
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "BSA",
 #'     PARAM = "Body Surface Area (m^2)"
 #'   ),
@@ -295,9 +292,9 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #' derive_param_bsa(
 #'   advs,
-#'   by_vars = vars(USUBJID, VISIT),
+#'   by_vars = exprs(USUBJID, VISIT),
 #'   method = "Fujimoto",
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "BSA",
 #'     PARAM = "Body Surface Area (m^2)"
 #'   ),
@@ -306,13 +303,13 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 derive_param_bsa <- function(dataset,
                              by_vars,
                              method,
-                             set_values_to = vars(PARAMCD = "BSA"),
+                             set_values_to = exprs(PARAMCD = "BSA"),
                              height_code = "HEIGHT",
                              weight_code = "WEIGHT",
                              get_unit_expr,
                              filter = NULL) {
   assert_vars(by_vars)
-  assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
+  assert_data_frame(dataset, required_vars = exprs(!!!by_vars, PARAMCD, AVAL))
   assert_character_scalar(
     method,
     values = c(
@@ -321,11 +318,11 @@ derive_param_bsa <- function(dataset,
     )
   )
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   assert_character_scalar(height_code)
   assert_character_scalar(weight_code)
-  get_unit_expr <- assert_expr(enquo(get_unit_expr))
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  get_unit_expr <- assert_expr(enexpr(get_unit_expr))
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
 
   assert_unit(
     dataset,
@@ -344,7 +341,7 @@ derive_param_bsa <- function(dataset,
     compute_bsa(
       height = !!sym(paste0("AVAL.", height_code)),
       weight = !!sym(paste0("AVAL.", weight_code)),
-      method = method
+      method = !!method
     )
   )
 
@@ -392,7 +389,6 @@ derive_param_bsa <- function(dataset,
 #'
 #'   Permitted Values: character value
 #'
-#' @author Eric Simms
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
@@ -491,7 +487,6 @@ compute_bsa <- function(height = height,
 #' The analysis value of the new parameter is derived as
 #' \deqn{BMI = \frac{WEIGHT}{HEIGHT^2}}
 #'
-#' @author Pavan Kumar
 #'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
@@ -519,10 +514,10 @@ compute_bsa <- function(height = height,
 #'
 #' derive_param_bmi(
 #'   advs,
-#'   by_vars = vars(USUBJID, AVISIT),
+#'   by_vars = exprs(USUBJID, AVISIT),
 #'   weight_code = "WEIGHT",
 #'   height_code = "HEIGHT",
-#'   set_values_to = vars(
+#'   set_values_to = exprs(
 #'     PARAMCD = "BMI",
 #'     PARAM = "Body Mass Index (kg/m^2)"
 #'   ),
@@ -530,19 +525,19 @@ compute_bsa <- function(height = height,
 #' )
 derive_param_bmi <- function(dataset,
                              by_vars,
-                             set_values_to = vars(PARAMCD = "BMI"),
+                             set_values_to = exprs(PARAMCD = "BMI"),
                              weight_code = "WEIGHT",
                              height_code = "HEIGHT",
                              get_unit_expr,
                              filter = NULL) {
   assert_vars(by_vars)
-  assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
+  assert_data_frame(dataset, required_vars = exprs(!!!by_vars, PARAMCD, AVAL))
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   assert_character_scalar(weight_code)
   assert_character_scalar(height_code)
-  get_unit_expr <- assert_expr(enquo(get_unit_expr))
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  get_unit_expr <- assert_expr(enexpr(get_unit_expr))
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
 
   assert_unit(
     dataset,
@@ -586,7 +581,6 @@ derive_param_bmi <- function(dataset,
 #'
 #'   Permitted Values: numeric vector
 #'
-#' @author Pavan Kumar
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'

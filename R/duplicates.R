@@ -2,7 +2,6 @@
 #'
 #' @export
 #'
-#' @author Thomas Neitmann
 #'
 #' @details
 #' Many {admiral} function check that the input dataset contains only one record
@@ -27,7 +26,7 @@
 #' # Duplicate the first record
 #' adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 #'
-#' signal_duplicate_records(adsl, vars(USUBJID), cnd_type = "warning")
+#' signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "warning")
 #'
 #' get_duplicates_dataset()
 get_duplicates_dataset <- function() {
@@ -37,7 +36,7 @@ get_duplicates_dataset <- function() {
 #' Extract Duplicate Records
 #'
 #' @param dataset A data frame
-#' @param by_vars A list of variables created using `vars()` identifying groups of
+#' @param by_vars A list of variables created using `exprs()` identifying groups of
 #'   records in which to look for duplicates
 #'
 #' @return A `data.frame` of duplicate records within `dataset`
@@ -46,7 +45,6 @@ get_duplicates_dataset <- function() {
 #' @family utils_ds_chk
 #'
 #' @keywords utils_ds_chk
-#' @author Thomas Neitmann
 #'
 #' @examples
 #' data(admiral_adsl)
@@ -54,7 +52,7 @@ get_duplicates_dataset <- function() {
 #' # Duplicate the first record
 #' adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 #'
-#' extract_duplicate_records(adsl, vars(USUBJID))
+#' extract_duplicate_records(adsl, exprs(USUBJID))
 extract_duplicate_records <- function(dataset, by_vars) {
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = by_vars, check_is_grouped = FALSE)
@@ -75,7 +73,7 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' Signal Duplicate Records
 #'
 #' @param dataset A data frame
-#' @param by_vars A list of variables created using `vars()` identifying groups of
+#' @param by_vars A list of variables created using `exprs()` identifying groups of
 #'   records in which to look for duplicates
 #' @param msg The condition message
 #' @param cnd_type Type of condition to signal when detecting duplicate records.
@@ -86,7 +84,6 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' @export
 #' @family utils_help
 #' @keywords utils_help
-#' @author Thomas Neitmann
 #'
 #' @examples
 #' data(admiral_adsl)
@@ -94,7 +91,7 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' # Duplicate the first record
 #' adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 #'
-#' signal_duplicate_records(adsl, vars(USUBJID), cnd_type = "message")
+#' signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "message")
 signal_duplicate_records <- function(dataset,
                                      by_vars,
                                      msg = paste("Dataset contains duplicate records with respect to", enumerate(vars2chr(by_vars))), # nolint

@@ -30,9 +30,9 @@ and the \code{order} argument are expected.}
 \item{by_vars}{Grouping variables
 
 The two datasets are joined by the specified variables. Variables from the
-additional dataset can be renamed by naming the element, i.e., \verb{by_vars = vars(<name in input dataset> = <name in additional dataset>)}.
+additional dataset can be renamed by naming the element, i.e., \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}.
 
-\emph{Permitted Values}: list of variables created by \code{vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{order}{Sort order
 
@@ -44,24 +44,24 @@ available in both \code{dataset} and \code{dataset_add}, the one from \code{data
 is used for the sorting.
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))} or \code{NULL}}
+created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{new_vars}{Variables to add
 
 The specified variables from the additional dataset are added to the output
-dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = vars(<new name> = <old name>)}.
+dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = exprs(<new name> = <old name>)}.
 
-For example \code{new_vars = vars(var1, var2)} adds variables \code{var1} and \code{var2}
+For example \code{new_vars = exprs(var1, var2)} adds variables \code{var1} and \code{var2}
 from \code{dataset_add} to the input dataset.
 
-And \code{new_vars = vars(var1, new_var2 = old_var2)} takes \code{var1} and
+And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 \code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
 \code{old_var2} to \code{new_var2}.
 
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
 
-\emph{Permitted Values}: list of variables created by \code{vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{join_vars}{Variables to use from additional dataset
 
@@ -73,7 +73,7 @@ added to the variable from the additional dataset.
 
 The variables are not included in the output dataset.
 
-\emph{Permitted Values}: list of variables created by \code{vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
@@ -187,10 +187,10 @@ adbds <- tribble(
 derive_vars_joined(
   adbds,
   dataset_add = adbds,
-  by_vars = vars(USUBJID),
-  order = vars(AVAL),
-  new_vars = vars(NADIR = AVAL),
-  join_vars = vars(ADY),
+  by_vars = exprs(USUBJID),
+  order = exprs(AVAL),
+  new_vars = exprs(NADIR = AVAL),
+  join_vars = exprs(ADY),
   filter_add = ADY > 0,
   filter_join = ADY.join < ADY,
   mode = "first",
@@ -221,9 +221,9 @@ adlb <- tribble(
 derive_vars_joined(
   adae,
   dataset_add = adlb,
-  by_vars = vars(USUBJID),
-  order = vars(AVAL, desc(ADY)),
-  new_vars = vars(HGB_MAX = AVAL, HGB_DY = ADY),
+  by_vars = exprs(USUBJID),
+  order = exprs(AVAL, desc(ADY)),
+  new_vars = exprs(HGB_MAX = AVAL, HGB_DY = ADY),
   filter_add = PARAMCD == "HGB",
   filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,
   mode = "last"
@@ -240,7 +240,7 @@ adsl <- tribble(
 
 period_ref <- create_period_dataset(
   adsl,
-  new_vars = vars(APERSDT = APxxSDT, APEREDT = APxxEDT)
+  new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT)
 )
 
 period_ref
@@ -262,15 +262,15 @@ adae <- tribble(
 derive_vars_joined(
   adae,
   dataset_add = period_ref,
-  by_vars = vars(STUDYID, USUBJID),
-  join_vars = vars(APERSDT, APEREDT),
+  by_vars = exprs(STUDYID, USUBJID),
+  join_vars = exprs(APERSDT, APEREDT),
   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
 )
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
@@ -280,15 +280,11 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
-\code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},
 \code{\link{get_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_gen}
 \keyword{der_gen}

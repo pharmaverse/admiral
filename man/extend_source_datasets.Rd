@@ -52,33 +52,20 @@ ae <- tribble(
 
 extend_source_datasets(
   source_datasets = list(adsl = adsl, ae = ae),
-  by_vars = vars(AEDECOD)
+  by_vars = exprs(AEDECOD)
 )
 }
 \seealso{
-Source Specifications: 
+Other Advanced Functions: 
 \code{\link{assert_db_requirements}()},
 \code{\link{assert_terms}()},
 \code{\link{assert_valid_queries}()},
-\code{\link{basket_select}()},
-\code{\link{censor_source}()},
-\code{\link{date_source}()},
-\code{\link{death_event}},
-\code{\link{dthcaus_source}()},
-\code{\link{event_source}()},
 \code{\link{filter_date_sources}()},
 \code{\link{format.basket_select}()},
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
-\code{\link{query}()},
-\code{\link{sdg_select}()},
-\code{\link{smq_select}()},
-\code{\link{tte_source}()},
 \code{\link{validate_basket_select}()},
 \code{\link{validate_query}()}
 }
-\author{
-Stefan Bundfuss
-}
-\concept{source_specifications}
-\keyword{source_specifications}
+\concept{other_advanced}
+\keyword{other_advanced}

@@ -45,7 +45,7 @@
 #'   + LHS refer to a variable. It is expected that at least `PARAMCD` is defined.
 #'   + RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
 #'   value or NA.
-#'   (e.g.  `vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
+#'   (e.g.  `exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
 #'   More general expression are not allowed.
 #'
 #'   *Permitted Values:* List of variable-value pairs
@@ -55,7 +55,6 @@
 #' variables
 #'
 #'
-#' @author Samia Kabi
 #'
 #' @return The input dataset with a new record added for each group (with respect to the variables
 #' specified for the `by_vars` parameter). That is, a variable will only
@@ -100,8 +99,8 @@
 #' # Cumulative dose
 #' adex %>%
 #'   derive_param_exposure(
-#'     by_vars = vars(USUBJID),
-#'     set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
+#'     by_vars = exprs(USUBJID),
+#'     set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
 #'     input_code = "DOSE",
 #'     analysis_var = AVAL,
 #'     summary_fun = function(x) sum(x, na.rm = TRUE)
@@ -111,9 +110,9 @@
 #' # average dose in w2-24
 #' adex %>%
 #'   derive_param_exposure(
-#'     by_vars = vars(USUBJID),
+#'     by_vars = exprs(USUBJID),
 #'     filter = VISIT %in% c("WEEK 2", "WEEK 24"),
-#'     set_values_to = vars(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
+#'     set_values_to = exprs(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
 #'     input_code = "DOSE",
 #'     analysis_var = AVAL,
 #'     summary_fun = function(x) mean(x, na.rm = TRUE)
@@ -123,8 +122,8 @@
 #' # Any dose adjustment?
 #' adex %>%
 #'   derive_param_exposure(
-#'     by_vars = vars(USUBJID),
-#'     set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
+#'     by_vars = exprs(USUBJID),
+#'     set_values_to = exprs(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
 #'     input_code = "ADJ",
 #'     analysis_var = AVALC,
 #'     summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
@@ -138,22 +137,22 @@ derive_param_exposure <- function(dataset,
                                   filter = NULL,
                                   set_values_to = NULL) {
   by_vars <- assert_vars(by_vars)
-  analysis_var <- assert_symbol(enquo(analysis_var))
+  analysis_var <- assert_symbol(enexpr(analysis_var))
 
   dtm <- c("ASTDTM", "AENDTM") %in% colnames(dataset)
   dt <- c("ASTDT", "AENDT") %in% colnames(dataset)
   if (all(dtm)) {
-    dates <- vars(ASTDTM, AENDTM)
+    dates <- exprs(ASTDTM, AENDTM)
   } else {
-    dates <- vars(ASTDT, AENDT)
+    dates <- exprs(ASTDT, AENDT)
   }
 
   assert_data_frame(dataset,
-    required_vars = quo_c(by_vars, analysis_var, vars(PARAMCD), dates)
+    required_vars = expr_c(by_vars, analysis_var, exprs(PARAMCD), dates)
   )
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   assert_character_scalar(input_code)
   params_available <- unique(dataset$PARAMCD)
   assert_character_vector(input_code, values = params_available)
@@ -165,7 +164,7 @@ derive_param_exposure <- function(dataset,
   add_data <- subset_ds %>%
     get_summary_records(
       by_vars = by_vars,
-      filter = PARAMCD == input_code,
+      filter = PARAMCD == !!input_code,
       analysis_var = !!analysis_var,
       summary_fun = summary_fun,
       set_values_to = set_values_to

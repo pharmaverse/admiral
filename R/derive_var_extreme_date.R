@@ -24,8 +24,8 @@
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#'   A list of quosures where the expressions are symbols as returned by
-#'   `vars()` is expected.
+#'   A list of expressions where the expressions are symbols as returned by
+#'   `exprs()` is expected.
 #'
 #' @details The following steps are performed to create the output dataset:
 #'
@@ -49,7 +49,6 @@
 #'
 #' @return The input dataset with the new variable added.
 #'
-#' @author Stefan Bundfuss, Thomas Neitmann
 #'
 #' @family der_adsl
 #' @keywords der_adsl
@@ -119,7 +118,7 @@
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
 #'   date = AESTDTM,
-#'   traceability_vars = vars(
+#'   traceability_vars = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
 #'     LALVVAR = "AESTDTC"
@@ -129,7 +128,7 @@
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
 #'   date = AEENDTM,
-#'   traceability_vars = vars(
+#'   traceability_vars = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
 #'     LALVVAR = "AEENDTC"
@@ -139,7 +138,7 @@
 #'   dataset_name = "lb",
 #'   date = LBDTM,
 #'   filter = !is.na(LBDTM),
-#'   traceability_vars = vars(
+#'   traceability_vars = exprs(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
 #'     LALVVAR = "LBDTC"
@@ -149,7 +148,7 @@
 #' adsl_date <- date_source(
 #'   dataset_name = "adsl",
 #'   date = TRTEDTM,
-#'   traceability_vars = vars(
+#'   traceability_vars = exprs(
 #'     LALVDOM = "ADSL",
 #'     LALVSEQ = NA_integer_,
 #'     LALVVAR = "TRTEDTM"
@@ -176,7 +175,7 @@ derive_var_extreme_dtm <- function(dataset,
                                    subject_keys = get_admiral_option("subject_keys")) {
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
-  new_var <- assert_symbol(enquo(new_var))
+  new_var <- assert_symbol(enexpr(new_var))
   assert_list_of(source_datasets, "data.frame")
   sources <- rlang::list2(...)
   assert_list_of(sources, "date_source")
@@ -200,7 +199,7 @@ derive_var_extreme_dtm <- function(dataset,
     )
   )
 
-  warn_if_vars_exist(dataset, vars2chr(quo_c(new_var)))
+  warn_if_vars_exist(dataset, vars2chr(expr_c(new_var)))
 
   add_data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
@@ -216,7 +215,7 @@ derive_var_extreme_dtm <- function(dataset,
     source_dataset_name <- sources[[i]]$dataset_name
     source_dataset <- source_datasets[[source_dataset_name]]
 
-    date <- quo_get_expr(sources[[i]]$date)
+    date <- sources[[i]]$date
     assert_date_var(
       dataset = source_dataset,
       var = !!date,
@@ -235,7 +234,7 @@ derive_var_extreme_dtm <- function(dataset,
       filter_if(sources[[i]]$filter) %>%
       filter(!is.na(!!date)) %>%
       filter_extreme(
-        order = vars(!!date),
+        order = exprs(!!date),
         by_vars = subject_keys,
         mode = mode,
         check_type = "none"
@@ -253,7 +252,7 @@ derive_var_extreme_dtm <- function(dataset,
     bind_rows() %>%
     filter_extreme(
       by_vars = subject_keys,
-      order = vars(!!new_var),
+      order = exprs(!!new_var),
       mode = mode,
       check_type = "none"
     )
@@ -294,7 +293,6 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' @return The input dataset with the new variable added.
 #'
-#' @author Stefan Bundfuss, Thomas Neitmann
 #'
 #' @family der_adsl
 #' @keywords der_adsl
@@ -364,7 +362,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
 #'   date = AESTDT,
-#'   traceability_vars = vars(
+#'   traceability_vars = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
 #'     LALVVAR = "AESTDTC"
@@ -374,7 +372,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
 #'   date = AEENDT,
-#'   traceability_vars = vars(
+#'   traceability_vars = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
 #'     LALVVAR = "AEENDTC"
@@ -384,7 +382,7 @@ derive_var_extreme_dtm <- function(dataset,
 #'   dataset_name = "lb",
 #'   date = LBDT,
 #'   filter = !is.na(LBDT),
-#'   traceability_vars = vars(
+#'   traceability_vars = exprs(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
 #'     LALVVAR = "LBDTC"
@@ -394,7 +392,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' adsl_date <- date_source(
 #'   dataset_name = "adsl",
 #'   date = TRTEDT,
-#'   traceability_vars = vars(
+#'   traceability_vars = exprs(
 #'     LALVDOM = "ADSL",
 #'     LALVSEQ = NA_integer_,
 #'     LALVVAR = "TRTEDT"
@@ -419,7 +417,7 @@ derive_var_extreme_dt <- function(dataset,
                                   source_datasets,
                                   mode,
                                   subject_keys = get_admiral_option("subject_keys")) {
-  new_var <- assert_symbol(enquo(new_var))
+  new_var <- assert_symbol(enexpr(new_var))
 
   sources <- list(...)
   assert_list_of(sources, "date_source")
@@ -448,21 +446,11 @@ derive_var_extreme_dt <- function(dataset,
 #' @param date A variable providing a date. A date or a datetime can be
 #'   specified. An unquoted symbol is expected.
 #'
-#' @param date_imputation *Deprecated*, please use `derive_vars_dtm()` to
-#'   convert DTC variables to datetime variables in the dataset.
-#'
-#' @param time_imputation *Deprecated*, please use `derive_vars_dtm()` to
-#'   convert DTC variables to datetime variables in the dataset.
-#'
-#' @param preserve *Deprecated*, please use `derive_vars_dtm()` to convert DTC
-#'   variables to datetime variables in the dataset.
-#'
-#' @param traceability_vars A named list returned by `vars()` defining the
-#'   traceability variables, e.g. `vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
+#' @param traceability_vars A named list returned by `exprs()` defining the
+#'   traceability variables, e.g. `exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
 #'   = "AESTDTC")`. The values must be a symbol, a character string, a numeric,
 #'   or `NA`.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @seealso [derive_var_extreme_dtm()], [derive_var_extreme_dt()]
 #'
@@ -492,7 +480,7 @@ derive_var_extreme_dt <- function(dataset,
 #' death_date <- date_source(
 #'   dataset_name = "adsl",
 #'   date = DTHDT,
-#'   traceability_vars = vars(
+#'   traceability_vars = exprs(
 #'     LALVDOM = "ADSL",
 #'     LALVVAR = "DTHDT"
 #'   )
@@ -500,44 +488,11 @@ derive_var_extreme_dt <- function(dataset,
 date_source <- function(dataset_name,
                         filter = NULL,
                         date,
-                        date_imputation = deprecated(),
-                        time_imputation = deprecated(),
-                        preserve = deprecated(),
                         traceability_vars = NULL) {
-  if (!missing(date_imputation)) {
-    deprecate_stop(
-      "0.8.0",
-      "date_source(date_imputation = )",
-      details = paste0(
-        "Please use `derive_vars_dtm()` to convert DTC variables",
-        " to datetime variables in the dataset."
-      )
-    )
-  }
-  if (!missing(time_imputation)) {
-    deprecate_stop(
-      "0.8.0",
-      "date_source(time_imputation = )",
-      details = paste0(
-        "Please use `derive_vars_dtm()` to convert DTC variables",
-        " to datetime variables in the dataset."
-      )
-    )
-  }
-  if (!missing(preserve)) {
-    deprecate_stop(
-      "0.8.0",
-      "date_source(preserve = )",
-      details = paste0(
-        "Please use `derive_vars_dtm()` to convert DTC variables",
-        " to datetime variables in the dataset."
-      )
-    )
-  }
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
-    filter = assert_filter_cond(enquo(filter), optional = TRUE),
-    date = assert_symbol(enquo(date)),
+    filter = assert_filter_cond(enexpr(filter), optional = TRUE),
+    date = assert_symbol(enexpr(date)),
     traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
   )
   class(out) <- c("date_source", "source", "list")

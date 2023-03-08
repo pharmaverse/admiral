@@ -14,7 +14,7 @@
 #' @param dataset A data frame.
 #'
 #' @param by_vars Variables to consider for generation of groupwise summary
-#'   records. Providing the names of variables in [vars()] will create a
+#'   records. Providing the names of variables in [exprs()] will create a
 #'   groupwise summary and generate summary records for the specified groups.
 #'
 #' @param filter Filter condition as logical expression to apply during
@@ -44,10 +44,9 @@
 #'   A list of variable name-value pairs is expected.
 #'   + LHS refers to a variable.
 #'   + RHS refers to the values to set to the variable. This can be a string, a
-#'   symbol, a numeric value or `NA`, e.g., `vars(PARAMCD = "TDOSE", PARCAT1 =
+#'   symbol, a numeric value or `NA`, e.g., `exprs(PARAMCD = "TDOSE", PARCAT1 =
 #'   "OVERALL")`. More general expression are not allowed.
 #'
-#' @author Vignesh Thanikachalam, Ondrej Slama
 #'
 #' @return A data frame with derived records appended to original dataset.
 #'
@@ -87,10 +86,10 @@
 #' # Summarize the average of the triplicate ECG interval values (AVAL)
 #' derive_summary_records(
 #'   adeg,
-#'   by_vars = vars(USUBJID, PARAM, AVISIT),
+#'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   analysis_var = AVAL,
 #'   summary_fun = function(x) mean(x, na.rm = TRUE),
-#'   set_values_to = vars(DTYPE = "AVERAGE")
+#'   set_values_to = exprs(DTYPE = "AVERAGE")
 #' )
 #'
 #' advs <- tribble(
@@ -107,16 +106,16 @@
 #' # and `DTYPE = AVERAGE` refers to `mean()` records.
 #' derive_summary_records(
 #'   advs,
-#'   by_vars = vars(USUBJID, PARAM),
+#'   by_vars = exprs(USUBJID, PARAM),
 #'   analysis_var = AVAL,
 #'   summary_fun = max,
-#'   set_values_to = vars(DTYPE = "MAXIMUM")
+#'   set_values_to = exprs(DTYPE = "MAXIMUM")
 #' ) %>%
 #'   derive_summary_records(
-#'     by_vars = vars(USUBJID, PARAM),
+#'     by_vars = exprs(USUBJID, PARAM),
 #'     analysis_var = AVAL,
 #'     summary_fun = mean,
-#'     set_values_to = vars(DTYPE = "AVERAGE")
+#'     set_values_to = exprs(DTYPE = "AVERAGE")
 #'   )
 #'
 #' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
@@ -142,11 +141,11 @@
 #' # by group
 #' derive_summary_records(
 #'   adeg,
-#'   by_vars = vars(USUBJID, PARAM, AVISIT),
+#'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   filter = n() > 2,
 #'   analysis_var = AVAL,
 #'   summary_fun = function(x) mean(x, na.rm = TRUE),
-#'   set_values_to = vars(DTYPE = "AVERAGE")
+#'   set_values_to = exprs(DTYPE = "AVERAGE")
 #' )
 derive_summary_records <- function(dataset,
                                    by_vars,
@@ -155,12 +154,12 @@ derive_summary_records <- function(dataset,
                                    summary_fun,
                                    set_values_to = NULL) {
   assert_vars(by_vars)
-  analysis_var <- assert_symbol(enquo(analysis_var))
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  analysis_var <- assert_symbol(enexpr(analysis_var))
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_s3_class(summary_fun, "function")
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, analysis_var)
+    required_vars = expr_c(by_vars, analysis_var)
   )
   if (!is.null(set_values_to)) {
     assert_varval_list(set_values_to, optional = TRUE)

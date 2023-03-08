@@ -1,0 +1,613 @@
+---
+title: "Creating Questionnaire ADaMs"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Creating Questionnaire ADaMs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(admiraldev)
+```
+
+# Introduction
+
+This article describes creating questionnaire ADaMs. Although questionnaire data
+is collected in a single SDTM dataset (`QS`), usually it does not make sense to
+create a single `ADQS` dataset for all questionnaire analyses. For example, a
+univariate analysis of scores by visit requires different variables than a
+time-to-event analysis. Therefore this vignette does not provide a programming
+workflow for a complete dataset, but provides examples for deriving common types
+of questionnaire parameters.
+
+At the moment, `{admiral}` does not provide functions or metadata for specific
+questionnaires nor functionality for handling the vast amount of questionnaires
+and related parameters, e.g. a metadata structure for storing parameter
+definitions and functions for reading such metadata. We plan to provide it in
+future releases.
+
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless 
+otherwise specified.*
+
+## Required Packages
+
+The examples of this vignette require the following packages.
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(admiral)
+```
+
+## Example Data
+
+In this vignette we use the example data from the CDISC ADaM Supplements
+([Generalized Anxiety Disorder 7-Item Version 2
+(GAD-7)](https://www.cdisc.org/standards/foundational/qrs/generalized-anxiety-disorder-7-item-version-2-0),
+[Geriatric Depression Scale Short Form
+(GDS-SF)](https://www.cdisc.org/standards/foundational/qrs/geriatric-depression-scale-short-form-0))[^1]:
+
+[^1]: The example `QS` data (`example_qs`) is included in the admiral package.
+
+```{r}
+data("example_qs")
+qs <- example_qs
+```
+
+```{r echo=FALSE}
+dataset_vignette(qs)
+```
+
+```{r}
+adsl <- tribble(
+  ~STUDYID, ~USUBJID, ~SITEID, ~ITTFL,    ~TRTP, ~TRTSDT,                      ~DTHCAUS,
+  "STUDYX",  "P0001",     13L,    "Y", "DRUG A", lubridate::ymd("2012-11-16"), NA_character_,
+  "STUDYX",  "P0002",     11L,    "Y", "DRUG B", lubridate::ymd("2012-11-16"), NA_character_
+)
+```
+```{r echo=FALSE}
+dataset_vignette(adsl)
+```
+# Original Items
+
+The original items, i.e. the answers to the questionnaire questions, can be
+handled in the same way as in a [BDS finding ADaM](bds_finding.html). For
+example:
+
+```{r eval=TRUE}
+adqs <- qs %>%
+  # Add ADSL variables
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = exprs(TRTSDT, DTHCAUS),
+    by_vars = exprs(STUDYID, USUBJID)
+  ) %>%
+  # Add analysis parameter variables
+  mutate(
+    PARAMCD = QSTESTCD,
+    PARAM = QSTEST,
+    PARCAT1 = QSCAT,
+    AVALC = QSORRES,
+    AVAL = QSSTRESN
+  ) %>%
+  # Add timing variables
+  derive_vars_dt(new_vars_prefix = "A", dtc = QSDTC) %>%
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT)) %>%
+  mutate(
+    AVISIT = if_else(ADT <= TRTSDT, "BASELINE", VISIT),
+    AVISITN = if_else(ADT <= TRTSDT, 0, VISITNUM)
+  )
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  arrange(adqs, USUBJID, PARCAT1, ADY, PARAMCD),
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, PARCAT1, AVALC, AVAL, ADY, AVISIT)
+)
+```
+
+We handle unscheduled visits as normal visits. For deriving visits based on
+time-windows, see [Visit and Period Variables](visits_periods.html#visits). And
+for flagging values to be used for analysis, see `derive_var_extreme_flag()`.
+
+Please note that in the example data, the numeric values of the answers are
+mapped in SDTM (`QSSTRESN`) such that they can be used for deriving scores.
+Depending on the question, `QSORRES == "YES"` is mapped to `QSSTRESN = 0` or
+`QSSTRESN = 1`. If the `QSSTRESN` values are not ready to be used for deriving
+scores and require transformation, it is recommended that `QSSTRESN` is kept in
+the ADaM dataset for traceability, and the transformed value is stored in
+`AVAL`, since that’s what will be used for the score calculation.
+
+# Scales and Scores
+
+Scales and Scores are often derived as the sum or the average across a subset of
+the items. For the GAD-7 questionnaire, the total score is derived as the sum.
+The `derive_summary_records()` function with `sum()` can be used to derive it as
+a new parameter. For selecting the parameters to be summarized, regular
+expressions like in the example below may be helpful. In the example we derive a
+separate ADaM dataset for each questionnaire. Depending on the analysis needs, it
+is also possible that an ADaM contains more than one questionnaire or all
+questionnaires.
+```{r eval=TRUE}
+adgad7 <- adqs %>%
+  # Select records to keep in the GAD-7 ADaM
+  filter(PARCAT1 == "GAD-7 V2") %>%
+  derive_summary_records(
+    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT),
+    analysis_var = AVAL,
+    summary_fun = function(x) sum(x, na.rm = TRUE),
+    # Select records contributing to total score
+    filter = str_detect(PARAMCD, "GAD020[1-7]"),
+    set_values_to = exprs(
+      PARAMCD = "GAD02TS",
+      PARAM = "GAD02-Total Score - Analysis"
+    )
+  )
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  arrange(adgad7, USUBJID, ADY, PARAMCD),
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVAL, ADY, AVISIT)
+)
+```
+
+For the GDS-SF questionnaire, the total score is defined as the average of the
+item values transformed to the range [0, 15] and rounded up to the next integer.
+If more than five items are missing, the total score is considered as missing.
+This parameter can be derived by `compute_scale()` and
+`derive_summary_records()`:
+```{r eval=TRUE}
+adgdssf <- adqs %>%
+  # Select records to keep in the GDS-SF ADaM
+  filter(PARCAT1 == "GDS SHORT FORM") %>%
+  derive_summary_records(
+    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT),
+    analysis_var = AVAL,
+    summary_fun = function(x) {
+      compute_scale(
+        x,
+        source_range = c(0, 1),
+        target_range = c(0, 15),
+        min_n = 10
+      ) %>%
+        ceiling()
+    },
+    # Select records contributing to total score
+    filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
+    set_values_to = exprs(
+      PARAMCD = "GDS02TS",
+      PARAM = "GDS02- Total Score - Analysis"
+    )
+  )
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  arrange(adgdssf, USUBJID, ADY, PARAMCD),
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVAL, ADY, AVISIT)
+)
+```
+
+After deriving the scores by visit, the baseline and change from baseline
+variables can be derived:
+```{r eval=TRUE}
+adgdssf <- adgdssf %>%
+  # Flag baseline records (last before treatement start)
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+      order = exprs(ADT),
+      new_var = ABLFL,
+      mode = "last"
+    ),
+    filter = !is.na(AVAL) & ADT <= TRTSDT
+  ) %>%
+  # Derive baseline and change from baseline variables
+  derive_var_base(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    source_var = AVAL,
+    new_var = BASE
+  ) %>%
+  derive_var_chg() %>%
+  derive_var_pchg() %>%
+  # Derive sequence number
+  derive_var_obs_number(
+    by_vars = exprs(STUDYID, USUBJID),
+    order = exprs(PARAMCD, ADT),
+    check_type = "error"
+  )
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  adgdssf,
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVAL, BASE, CHG, PCHG)
+)
+```
+
+# Time to Deterioration/Improvement {#timetodeterioration}
+
+As time to event parameters require specific variables like `CNSR`, `STARTDT`,
+and `EVNTDESC`, it makes sense to create a separate time to event dataset for
+them. However, it might be useful to create flags or categorization variables in
+`ADQS`. For example:
+```{r}
+adgdssf <- adgdssf %>%
+  mutate(
+    AVALCAT1 = if_else(
+      PARAMCD == "GDS02TS",
+      case_when(
+        AVAL <= 5 ~ "Normal",
+        AVAL <= 10 ~ "Possible Depression",
+        AVAL > 10 ~ "Likely Depression"
+      ),
+      NA_character_
+    ),
+    AVALCAT1N = if_else(
+      PARAMCD == "GDS02TS",
+      case_when(
+        AVAL <= 5 ~ 0L,
+        AVAL <= 10 ~ 1L,
+        AVAL > 10 ~ 2L
+      ),
+      NA_integer_
+    )
+  ) %>%
+  derive_var_base(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    source_var = AVALCAT1,
+    new_var = BASECAT1
+  ) %>%
+  derive_var_base(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    source_var = AVALCAT1N,
+    new_var = BASECA1N
+  ) %>%
+  mutate(
+    CHGCAT1 = case_when(
+      AVALCAT1N > BASECA1N ~ "WORSENED",
+      AVALCAT1N == BASECA1N ~ "NO CHANGE",
+      AVALCAT1N < BASECA1N ~ "IMPROVED",
+    )
+  )
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  arrange(adgdssf, USUBJID, desc(PARAMCD), ADY),
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVAL, AVALCAT1, CHGCAT1)
+)
+```
+
+Then a time to deterioration parameter can be derived by:
+```{r}
+# Define event
+deterioration_event <- event_source(
+  dataset_name = "adqs",
+  filter = PARAMCD == "GDS02TS" & CHGCAT1 == "WORSENED",
+  date = ADT,
+  set_values_to = exprs(
+    EVNTDESC = "DEPRESSION WORSENED",
+    SRCDOM = "ADQS",
+    SRCVAR = "ADT",
+    SRCSEQ = ASEQ
+  )
+)
+
+# Define censoring at last assessment
+last_valid_assessment <- censor_source(
+  dataset_name = "adqs",
+  filter = PARAMCD == "GDS02TS" & !is.na(CHGCAT1),
+  date = ADT,
+  set_values_to = exprs(
+    EVNTDESC = "LAST ASSESSMENT",
+    SRCDOM = "ADQS",
+    SRCVAR = "ADT",
+    SRCSEQ = ASEQ
+  )
+)
+
+# Define censoring at treatment start (for subjects without assessment)
+start <- censor_source(
+  dataset_name = "adsl",
+  date = TRTSDT,
+  set_values_to = exprs(
+    EVNTDESC = "TREATMENT START",
+    SRCDOM = "ADSL",
+    SRCVAR = "TRTSDT"
+  )
+)
+
+adgdstte <- derive_param_tte(
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adqs = adgdssf),
+  start_date = TRTSDT,
+  event_conditions = list(deterioration_event),
+  censor_conditions = list(last_valid_assessment, start),
+  set_values_to = exprs(
+    PARAMCD = "TTDEPR",
+    PARAM = "Time to depression"
+  )
+) %>%
+  derive_vars_duration(
+    new_var = AVAL,
+    start_date = STARTDT,
+    end_date = ADT
+  )
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  adgdstte,
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVAL, CNSR, EVNTDESC, SRCDOM, SRCVAR)
+)
+```
+
+# Time to Confirmed/Definitive Deterioration/Improvement 
+
+The derivation of confirmed/definitive deterioration/improvement parameters is
+very similar to the unconfirmed deterioration parameters except that the event
+is not based on `CHGCATy`, but on a confirmation flag variable. This confirmation
+flag can be derived by `derive_var_joined_exist_flag()`. For example, flagging
+deteriorations, which are confirmed by a second assessment at least seven days
+later:
+```{r}
+adgdssf <- adgdssf %>%
+  derive_var_joined_exist_flag(
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = CDETFL,
+    join_vars = exprs(CHGCAT1, ADY),
+    join_type = "after",
+    filter = CHGCAT1 == "WORSENED" &
+      CHGCAT1.join == "WORSENED" &
+      ADY.join >= ADY + 7
+  )
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  arrange(adgdssf, USUBJID, desc(PARAMCD), ADY),
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, ADY, CHGCAT1, CDETFL)
+)
+```
+
+For flagging deteriorations at two consecutive assessments or considering death
+due to progression at the last assessment as confirmation, the `tmp_obs_nr_var`
+argument is helpful:
+```{r}
+# Flagging deterioration at two consecutive assessments
+adgdssf <- adgdssf %>%
+  derive_var_joined_exist_flag(
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = CONDETFL,
+    join_vars = exprs(CHGCAT1),
+    join_type = "after",
+    tmp_obs_nr_var = tmp_obs_nr,
+    filter = CHGCAT1 == "WORSENED" &
+      CHGCAT1.join == "WORSENED" &
+      tmp_obs_nr.join == tmp_obs_nr + 1
+  ) %>%
+  # Flagging deterioration confirmed by
+  # - a second deterioration at least 7 days later or
+  # - deterioration at the last assessment and death due to progression
+  derive_var_joined_exist_flag(
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = CDTDTHFL,
+    join_vars = exprs(CHGCAT1, ADY),
+    join_type = "after",
+    tmp_obs_nr_var = tmp_obs_nr,
+    filter = CHGCAT1 == "WORSENED" & (
+      CHGCAT1.join == "WORSENED" & ADY.join >= ADY + 7 |
+        tmp_obs_nr == max(tmp_obs_nr.join) & DTHCAUS == "PROGRESSIVE DISEASE")
+  )
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  arrange(adgdssf, USUBJID, desc(PARAMCD), ADY),
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, ADY, CHGCAT1, CONDETFL, CDTDTHFL)
+)
+```
+
+For definitive deterioration (deterioration at all following assessments),
+parameter summary functions like `all()` can be used in the filter condition:
+
+```{r}
+adgdssf <- adgdssf %>%
+  derive_var_joined_exist_flag(
+    by_vars = exprs(USUBJID, PARAMCD),
+    order = exprs(ADT),
+    new_var = DEFDETFL,
+    join_vars = exprs(CHGCAT1),
+    join_type = "after",
+    filter = CHGCAT1 == "WORSENED" & all(CHGCAT1.join == "WORSENED")
+  )
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  arrange(adgdssf, USUBJID, desc(PARAMCD), ADY),
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, ADY, CHGCAT1, DEFDETFL)
+)
+```
+
+The time-to-event parameter can be derived in the same way as for the
+unconfirmed parameters (see [Time to
+Deterioration/Improvement](#timetodeterioration)).
+
+# Worst/Best Answer
+
+This class of parameters can be used when the worst answer of a set of yes/no
+answers should be selected. For example, if yes/no answers for "No sleep",
+"Waking up more than three times", "More than 30 minutes to fall asleep" are
+collected, a parameter for the worst sleeping problems could be derived. In the
+example, "no sleeping problems" is assumed if all questions were answered with
+"no".
+```{r}
+adsp <- adqs %>%
+  filter(PARCAT1 == "SLEEPING PROBLEMS") %>%
+  derive_extreme_event(
+    by_vars = exprs(USUBJID, AVISIT),
+    order = exprs(ADY, QSSEQ),
+    mode = "first",
+    events = list(
+      event(
+        condition = PARAMCD == "SP0101" & AVALC == "YES",
+        set_values_to = exprs(
+          AVALC = "No sleep",
+          AVAL = 1
+        )
+      ),
+      event(
+        condition = PARAMCD == "SP0102" & AVALC == "YES",
+        set_values_to = exprs(
+          AVALC = "Waking up more than three times",
+          AVAL = 2
+        )
+      ),
+      event(
+        condition = PARAMCD == "SP0103" & AVALC == "YES",
+        set_values_to = exprs(
+          AVALC = "More than 30 mins to fall asleep",
+          AVAL = 3
+        )
+      ),
+      event(
+        condition = all(AVALC == "NO"),
+        set_values_to = exprs(
+          AVALC = "No sleeping problems",
+          AVAL = 4
+        )
+      ),
+      event(
+        condition = TRUE,
+        set_values_to = exprs(
+          AVALC = "Missing",
+          AVAL = 99
+        )
+      )
+    ),
+    set_values_to = exprs(
+      PARAMCD = "SP01WSP",
+      PARAM = "Worst Sleeping Problems"
+    )
+  )
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  arrange(adsp, USUBJID, ADY, PARAMCD),
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVALC)
+)
+```
+
+# Completion
+
+Parameters for completion, like "at least 90% of the questions were answered", can
+be derived by `derive_summary_records()`.
+```{r}
+adgdssf <- adgdssf %>%
+  derive_summary_records(
+    filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
+    by_vars = exprs(USUBJID, AVISIT),
+    analysis_var = AVAL,
+    summary_fun = function(x) sum(!is.na(x)) / 15 >= 0.9,
+    set_values_to = exprs(
+      PARAMCD = "COMPL90P",
+      PARAM = "Completed at least 90% of questions?",
+    )
+  ) %>%
+  mutate(
+    AVALC = if_else(
+      PARAMCD == "COMPL90P",
+      if_else(
+        AVAL == 1,
+        "YES",
+        "NO"
+      ),
+      AVALC
+    )
+  )
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  arrange(adgdssf, USUBJID, PARAMCD, ADY),
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVALC)
+)
+```
+
+Please note that the denominator may depend on the answers of some of the
+questions. For example, a given questionnaire might direct someone to go from
+question #4 directly to question #8 based on their response to question #4,
+because questions #5, #6 and #7 would not apply in that case.
+
+If missed visits need to be taken into account, the expected records can be
+added to the input dataset by calling `derive_expected_records()`:
+
+```{r}
+# Create dataset with expected visits and parameters (GDS0201 - GDS0215)
+parm_visit_ref <- crossing(
+  tribble(
+    ~AVISIT,    ~AVISITN,
+    "BASELINE",        0,
+    "VISIT 2",         2,
+    "VISIT 3",         3,
+    "VISIT 4",         4,
+    "VISIT 5",         5
+  ),
+  tibble(PARAMCD = sprintf("GDS02%02d", seq(1, 15)))
+)
+
+adgdssf <- adgdssf %>%
+  derive_expected_records(
+    dataset_expected_obs = parm_visit_ref,
+    by_vars = exprs(USUBJID),
+    set_values_to = exprs(
+      filled_in = 1
+    )
+  ) %>%
+  derive_summary_records(
+    filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
+    by_vars = exprs(USUBJID, AVISIT),
+    analysis_var = AVAL,
+    summary_fun = function(x) all(!is.na(x)),
+    set_values_to = exprs(
+      PARAMCD = "COMPLALL",
+      PARAM = "Completed all questions?"
+    )
+  ) %>%
+  mutate(
+    AVALC = if_else(
+      PARAMCD == "COMPLALL",
+      if_else(
+        AVAL == 1,
+        "YES",
+        "NO"
+      ),
+      AVALC
+    )
+  ) %>%
+  filter(is.na(filled_in)) %>%
+  select(-filled_in)
+```
+
+```{r echo=FALSE}
+dataset_vignette(
+  arrange(adgdssf, USUBJID, PARAMCD, ADY),
+  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVALC)
+)
+```

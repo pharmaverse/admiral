@@ -23,28 +23,28 @@ cm <- admiral_cm
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 cm <- convert_blanks_to_na(cm)
 
 # Derivations ----
 
 # Get list of ADSL vars required for derivations
-adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
+adsl_vars <- exprs(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
 
 adcm <- cm %>%
   # Join ADSL with CM (only ADSL vars required for derivations)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by = vars(STUDYID, USUBJID)
+    by = exprs(STUDYID, USUBJID)
   ) %>%
   ## Derive analysis start time ----
   derive_vars_dtm(
     dtc = CMSTDTC,
     new_vars_prefix = "AST",
     highest_imputation = "M",
-    min_dates = vars(TRTSDT)
+    min_dates = exprs(TRTSDT)
   ) %>%
   ## Derive analysis end time ----
   derive_vars_dtm(
@@ -53,14 +53,14 @@ adcm <- cm %>%
     highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last",
-    max_dates = vars(DTHDT, EOSDT)
+    max_dates = exprs(DTHDT, EOSDT)
   ) %>%
   ## Derive analysis end/start date -----
-  derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
+  derive_vars_dtm_to_dt(exprs(ASTDTM, AENDTM)) %>%
   ## Derive analysis start relative day and analysis end relative day ----
   derive_vars_dy(
     reference_date = TRTSDT,
-    source_vars = vars(ASTDT, AENDT)
+    source_vars = exprs(ASTDT, AENDT)
   ) %>%
   ## Derive analysis duration (value and unit) ----
   derive_vars_duration(
@@ -98,8 +98,8 @@ adcm <- adcm %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = AOCCPFL,
-      by_vars = vars(USUBJID, CMDECOD),
-      order = vars(ASTDTM, CMSEQ),
+      by_vars = exprs(USUBJID, CMDECOD),
+      order = exprs(ASTDTM, CMSEQ),
       mode = "first"
     ),
     filter = ANL01FL == "Y"
@@ -109,7 +109,7 @@ adcm <- adcm %>%
 ## Derive APHASE and APHASEN Variable ----
 # Other timing variable can be derived similarly.
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/articles/visits_periods.html)
+# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html)
 adcm <- adcm %>%
   mutate(
     APHASE = case_when(
@@ -133,7 +133,7 @@ adcm <- adcm %>%
 adcm <- adcm %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   )
 
 

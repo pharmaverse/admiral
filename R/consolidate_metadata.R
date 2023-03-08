@@ -12,7 +12,7 @@
 #'
 #'   The specified variables must be a unique of all input datasets.
 #'
-#'   *Permitted Values*: A list of variables created by `vars()`
+#'   *Permitted Values*: A list of variables created by `exprs()`
 #'
 #' @param source_var Source variable
 #'
@@ -36,15 +36,14 @@
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details All observations of the input datasets are put together into a
 #'   single dataset. If a by group (defined by `key_vars`) exists in more than
 #'   one of the input datasets, the observation from the last dataset is
 #'   selected.
 #'
-#' @return A dataset which contains one row for each by group occuring in any of
-#'   the input datasets.
+#' @return A dataset which contains one row for each by group occurring in any
+#'   of the input datasets.
 #'
 #' @keywords create_aux
 #' @family create_aux
@@ -75,7 +74,7 @@
 #'     project = proj_ranges,
 #'     study = stud_ranges
 #'   ),
-#'   key_vars = vars(PARAMCD)
+#'   key_vars = exprs(PARAMCD)
 #' )
 consolidate_metadata <- function(datasets,
                                  key_vars,
@@ -84,7 +83,7 @@ consolidate_metadata <- function(datasets,
                                  check_keys = "error") {
   assert_list_of(datasets, class = "data.frame", named = TRUE)
   assert_vars(key_vars)
-  source_var <- assert_symbol(enquo(source_var))
+  source_var <- assert_symbol(enexpr(source_var))
   check_vars <-
     assert_character_scalar(
       check_vars,
@@ -117,7 +116,7 @@ consolidate_metadata <- function(datasets,
     mutate(!!tmp_source_ord := data_order[!!source_var]) %>%
     filter_extreme(
       by_vars = key_vars,
-      order = vars(!!tmp_source_ord),
+      order = exprs(!!tmp_source_ord),
       mode = "last",
       check_type = check_keys
     ) %>%

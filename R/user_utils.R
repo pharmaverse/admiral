@@ -38,7 +38,6 @@ extract_unit <- function(x) {
 #'
 #' @return An object of the same class as the input
 #'
-#' @author Thomas Neitmann
 #'
 #' @family utils_fmt
 #' @keywords utils_fmt
@@ -103,7 +102,6 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #'
 #' @return An object of the same class as the input
 #'
-#' @author Sadchla Mascary
 #'
 #' @family utils_fmt
 #' @keywords utils_fmt
@@ -154,15 +152,14 @@ convert_na_to_blanks.data.frame <- function(x) { # nolint
 }
 
 
-#' Turn a Character Vector into a List of Quosures
+#' Turn a Character Vector into a List of Expressions
 #'
-#' Turn a character vector into a list of quosures
+#' Turn a character vector into a list of expressions
 #'
 #' @param chr A character vector
 #'
-#' @return A `list` of `quosures` as returned by [`vars()`]
+#' @return A `list` of expressions as returned by [`exprs()`]
 #'
-#' @author Stefan Bundfuss
 #'
 #' @export
 #'
@@ -173,8 +170,8 @@ convert_na_to_blanks.data.frame <- function(x) { # nolint
 #' chr2vars(c("USUBJID", "AVAL"))
 chr2vars <- function(chr) {
   assert_character_vector(chr)
-  rlang::set_names(
-    quos(!!!syms(chr)),
+  set_names(
+    exprs(!!!syms(chr)),
     names(chr)
   )
 }
@@ -183,7 +180,6 @@ chr2vars <- function(chr) {
 #'
 #' @export
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details
 #' If `assert_one_to_one()` detects an issue, the one to many values are stored
@@ -205,7 +201,7 @@ chr2vars <- function(chr) {
 #' data(admiral_adsl)
 #'
 #' try(
-#'   assert_one_to_one(admiral_adsl, vars(STUDYID), vars(SITEID))
+#'   assert_one_to_one(admiral_adsl, exprs(STUDYID), exprs(SITEID))
 #' )
 #'
 #' get_one_to_many_dataset()
@@ -217,7 +213,6 @@ get_one_to_many_dataset <- function() {
 #'
 #' @export
 #'
-#' @author Stefan Bundfuss
 #'
 #' @details
 #' If `assert_one_to_one()` detects an issue, the many to one values are stored
@@ -239,7 +234,7 @@ get_one_to_many_dataset <- function() {
 #' data(admiral_adsl)
 #'
 #' try(
-#'   assert_one_to_one(admiral_adsl, vars(SITEID), vars(STUDYID))
+#'   assert_one_to_one(admiral_adsl, exprs(SITEID), exprs(STUDYID))
 #' )
 #'
 #' get_many_to_one_dataset()
@@ -253,7 +248,6 @@ get_many_to_one_dataset <- function() {
 #'
 #' @param arg Character vector
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_fmt
 #' @family utils_fmt
@@ -282,7 +276,6 @@ yn_to_numeric <- function(arg) {
 #'
 #' @return No return value, called for side effects
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_print
 #' @family utils_print
@@ -312,7 +305,6 @@ print.source <- function(x, ...) {
 #'
 #' @return No return value, called for side effects
 #'
-#' @author Stefan Bundfuss
 #'
 #' @keywords utils_print
 #' @family utils_print
@@ -339,8 +331,8 @@ print_named_list <- function(list, indent = 0) {
     } else {
       if (is.character(list[[name]])) {
         chr_val <- dquote(list[[name]])
-      } else if (is_quosure(list[[name]])) {
-        chr_val <- quo_text(list[[name]])
+      } else if (is_expression(list[[name]])) {
+        chr_val <- as_label(list[[name]])
       } else {
         chr_val <- list[[name]]
       }
@@ -356,11 +348,10 @@ print_named_list <- function(list, indent = 0) {
 #' This is useful if a list of variables should be removed from a dataset,
 #' e.g., `select(!!!negate_vars(by_vars))` removes all by variables.
 #'
-#' @param vars List of variables created by `vars()`
+#' @param vars List of variables created by `exprs()`
 #'
-#' @return A list of `quosures`
+#' @return A list of expressions
 #'
-#' @author Stefan Bundfuss
 #'
 #' @export
 #'
@@ -368,12 +359,12 @@ print_named_list <- function(list, indent = 0) {
 #' @family utils_quo
 #'
 #' @examples
-#' negate_vars(vars(USUBJID, STUDYID))
+#' negate_vars(exprs(USUBJID, STUDYID))
 negate_vars <- function(vars = NULL) {
   assert_vars(vars, optional = TRUE)
   if (is.null(vars)) {
     NULL
   } else {
-    lapply(vars, function(var) expr(-!!quo_get_expr(var)))
+    lapply(vars, function(var) expr(-!!var))
   }
 }

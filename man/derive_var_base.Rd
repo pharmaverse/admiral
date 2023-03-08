@@ -62,7 +62,7 @@ dataset <- tribble(
 ## Derive `BASE` variable from `AVAL`
 derive_var_base(
   dataset,
-  by_vars = vars(USUBJID, PARAMCD),
+  by_vars = exprs(USUBJID, PARAMCD),
   source_var = AVAL,
   new_var = BASE
 )
@@ -70,7 +70,7 @@ derive_var_base(
 ## Derive `BASEC` variable from `AVALC`
 derive_var_base(
   dataset,
-  by_vars = vars(USUBJID, PARAMCD),
+  by_vars = exprs(USUBJID, PARAMCD),
   source_var = AVALC,
   new_var = BASEC
 )
@@ -78,7 +78,7 @@ derive_var_base(
 ## Derive `BNRIND` variable from `ANRIND`
 derive_var_base(
   dataset,
-  by_vars = vars(USUBJID, PARAMCD),
+  by_vars = exprs(USUBJID, PARAMCD),
   source_var = ANRIND,
   new_var = BNRIND
 )
@@ -94,9 +94,6 @@ BDS-Findings Functions that returns variable appended to dataset:
 \code{\link{derive_var_ontrtfl}()},
 \code{\link{derive_var_pchg}()},
 \code{\link{derive_var_shift}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{der_bds_findings}
 \keyword{der_bds_findings}

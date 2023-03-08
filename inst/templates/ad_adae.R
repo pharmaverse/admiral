@@ -25,7 +25,7 @@ suppae <- admiral_suppae
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 ae <- convert_blanks_to_na(ae)
 ex <- convert_blanks_to_na(ex_single)
@@ -34,21 +34,21 @@ ex <- convert_blanks_to_na(ex_single)
 # Derivations ----
 
 # Get list of ADSL vars required for derivations
-adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT)
+adsl_vars <- exprs(TRTSDT, TRTEDT, DTHDT, EOSDT)
 
 adae <- ae %>%
   # join adsl to ae
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by = vars(STUDYID, USUBJID)
+    by = exprs(STUDYID, USUBJID)
   ) %>%
   ## Derive analysis start time ----
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
     highest_imputation = "M",
-    min_dates = vars(TRTSDT)
+    min_dates = exprs(TRTSDT)
   ) %>%
   ## Derive analysis end time ----
   derive_vars_dtm(
@@ -57,14 +57,14 @@ adae <- ae %>%
     highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last",
-    max_dates = vars(DTHDT, EOSDT)
+    max_dates = exprs(DTHDT, EOSDT)
   ) %>%
   ## Derive analysis end/start date ----
-  derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
+  derive_vars_dtm_to_dt(exprs(ASTDTM, AENDTM)) %>%
   ## Derive analysis start relative day and  analysis end relative day ----
   derive_vars_dy(
     reference_date = TRTSDT,
-    source_vars = vars(ASTDT, AENDT)
+    source_vars = exprs(ASTDT, AENDT)
   ) %>%
   ## Derive analysis duration (value and unit) ----
   derive_vars_duration(
@@ -116,8 +116,8 @@ adae <- adae %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = vars(USUBJID),
-      order = vars(desc(ASEVN), ASTDTM, AESEQ),
+      by_vars = exprs(USUBJID),
+      order = exprs(desc(ASEVN), ASTDTM, AESEQ),
       new_var = AOCCIFL,
       mode = "first"
     ),
@@ -128,7 +128,7 @@ adae <- adae %>%
 adae <- adae %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   )
 
 

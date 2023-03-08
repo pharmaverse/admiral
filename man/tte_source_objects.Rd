@@ -60,26 +60,15 @@ for (obj in list_tte_source_objects()$object) {
 \seealso{
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=tte_source]{tte_source()}}, \code{\link[=event_source]{event_source()}}, \code{\link[=censor_source]{censor_source()}}
 
-Source Specifications: 
-\code{\link{assert_db_requirements}()},
-\code{\link{assert_terms}()},
-\code{\link{assert_valid_queries}()},
+Source Objects: 
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
 \code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
-\code{\link{extend_source_datasets}()},
-\code{\link{filter_date_sources}()},
-\code{\link{format.basket_select}()},
-\code{\link{list_tte_source_objects}()},
-\code{\link{params}()},
+\code{\link{event}()},
 \code{\link{query}()},
-\code{\link{sdg_select}()},
-\code{\link{smq_select}()},
-\code{\link{tte_source}()},
-\code{\link{validate_basket_select}()},
-\code{\link{validate_query}()}
+\code{\link{tte_source}()}
 }
 \concept{source_specifications}
 \keyword{source_specifications}

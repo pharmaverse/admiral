@@ -27,7 +27,8 @@
 #'
 #'   Default: 'days'
 #'
-#'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'
+#'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
+#'   'seconds', 'sec'
 #'
 #' @param out_unit Output unit
 #'
@@ -36,7 +37,7 @@
 #'   Default: 'days'
 #'
 #'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
-#'   'seconds'
+#'   'min', 'seconds', 'sec'
 #'
 #' @param floor_in Round down input dates?
 #'
@@ -69,7 +70,6 @@
 #' start to end date in the specified unit. If the end date is before the start
 #' date, the duration is negative.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The duration between the two date in the specified unit
 #'
@@ -124,7 +124,10 @@ compute_duration <- function(start_date,
   assert_date_vector(start_date)
   assert_date_vector(end_date)
   assert_character_scalar(in_unit, values = valid_time_units())
-  assert_character_scalar(out_unit, values = c(valid_time_units(), "weeks"))
+  assert_character_scalar(out_unit, values = c(
+    valid_time_units(), "weeks",
+    "min", "sec"
+  ))
   assert_logical_scalar(floor_in)
   assert_logical_scalar(add_one)
   assert_logical_scalar(trunc_out)

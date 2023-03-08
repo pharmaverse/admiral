@@ -63,7 +63,6 @@
 #'
 #' @inheritParams derive_param_computed
 #'
-#' @author Alice Ehmann
 #'
 #' @return The input dataset with the new parameter rows added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
@@ -92,23 +91,23 @@
 #'
 #' derive_param_doseint(
 #'   adex,
-#'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAMCD = "TNDOSINT"),
+#'   by_vars = exprs(USUBJID, VISIT),
+#'   set_values_to = exprs(PARAMCD = "TNDOSINT"),
 #'   tadm_code = "TNDOSE",
 #'   tpadm_code = "TSNDOSE"
 #' )
 #'
 #' derive_param_doseint(
 #'   adex,
-#'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAMCD = "TDOSINT2"),
+#'   by_vars = exprs(USUBJID, VISIT),
+#'   set_values_to = exprs(PARAMCD = "TDOSINT2"),
 #'   tadm_code = "TNDOSE",
 #'   tpadm_code = "TSNDOSE",
 #'   zero_doses = "100"
 #' )
 derive_param_doseint <- function(dataset,
                                  by_vars,
-                                 set_values_to = vars(PARAMCD = "TNDOSINT"),
+                                 set_values_to = exprs(PARAMCD = "TNDOSINT"),
                                  tadm_code = "TNDOSE",
                                  tpadm_code = "TSNDOSE",
                                  zero_doses = "Inf",
@@ -117,12 +116,12 @@ derive_param_doseint <- function(dataset,
   assert_character_scalar(tpadm_code)
   assert_character_scalar(zero_doses, values = c("Inf", "100"), optional = TRUE)
   assert_vars(by_vars)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_data_frame(dataset,
-    required_vars = vars(!!!by_vars, PARAMCD, AVAL)
+    required_vars = exprs(!!!by_vars, PARAMCD, AVAL)
   )
   assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
-  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
 
   # Create Dose intensity records
   dataset <- derive_param_computed(
@@ -132,7 +131,7 @@ derive_param_doseint <- function(dataset,
     by_vars = by_vars,
     analysis_value = (!!sym(paste0("AVAL.", tadm_code)) /
       !!sym(paste0("AVAL.", tpadm_code)) * 100),
-    set_values_to = vars(
+    set_values_to = exprs(
       !!!set_values_to,
       temp_planned_dose = !!sym(paste0("AVAL.", tpadm_code)),
       temp_admin_dose = !!sym(paste0("AVAL.", tadm_code))

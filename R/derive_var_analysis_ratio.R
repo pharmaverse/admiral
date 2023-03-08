@@ -28,7 +28,6 @@
 #' Reference CDISC ADaM Implementation Guide
 #' Version 1.1 Section 3.3.4 Analysis Parameter Variables for BDS Datasets
 #'
-#' @author Ben Straub
 #'
 #' @return The input dataset with a ratio variable appended
 #'
@@ -65,13 +64,13 @@ derive_var_analysis_ratio <- function(dataset,
                                       numer_var,
                                       denom_var,
                                       new_var = NULL) {
-  numer_var <- assert_symbol(enquo(numer_var))
-  denom_var <- assert_symbol(enquo(denom_var))
+  numer_var <- assert_symbol(enexpr(numer_var))
+  denom_var <- assert_symbol(enexpr(denom_var))
 
-  assert_data_frame(dataset, required_vars = quo_c(numer_var, denom_var))
-  new_var <- assert_symbol(enquo(new_var), optional = TRUE)
+  assert_data_frame(dataset, required_vars = expr_c(numer_var, denom_var))
+  new_var <- assert_symbol(enexpr(new_var), optional = TRUE)
 
-  if (quo_is_null(new_var)) {
+  if (is.null(new_var)) {
     new_var <- sym(paste0("R2", rlang::as_name(denom_var)))
   }
   dataset <- dataset %>%

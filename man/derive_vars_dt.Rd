@@ -214,7 +214,7 @@ derive_vars_dt(
   dtc = AESTDTC,
   new_vars_prefix = "AST",
   highest_imputation = "M",
-  min_dates = vars(TRTSDTM)
+  min_dates = exprs(TRTSDTM)
 )
 
 # A user imputing dates as middle month/day, i.e. date_imputation = "mid" can
@@ -238,9 +238,6 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \code{\link{derive_vars_dtm}()},
 \code{\link{derive_vars_duration}()},
 \code{\link{derive_vars_dy}()}
-}
-\author{
-Samia Kabi
 }
 \concept{der_date_time}
 \keyword{der_date_time}

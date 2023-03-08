@@ -90,7 +90,6 @@
 #'
 #'   Any date imputations needed should be done prior to calling this function.
 #'
-#' @author Alice Ehmann, Teckla Akinyi
 #'
 #' @family der_bds_findings
 #' @keywords der_bds_findings
@@ -188,20 +187,20 @@ derive_var_ontrtfl <- function(dataset,
                                ignore_time_for_ref_end_date = TRUE,
                                filter_pre_timepoint = NULL,
                                span_period = NULL) {
-  new_var <- assert_symbol(enquo(new_var))
-  start_date <- assert_symbol(enquo(start_date))
-  end_date <- assert_symbol(enquo(end_date), optional = TRUE)
-  ref_start_date <- assert_symbol(enquo(ref_start_date))
-  ref_end_date <- assert_symbol(enquo(ref_end_date), optional = TRUE)
+  new_var <- assert_symbol(enexpr(new_var))
+  start_date <- assert_symbol(enexpr(start_date))
+  end_date <- assert_symbol(enexpr(end_date), optional = TRUE)
+  ref_start_date <- assert_symbol(enexpr(ref_start_date))
+  ref_end_date <- assert_symbol(enexpr(ref_end_date), optional = TRUE)
   assert_data_frame(
     dataset,
-    required_vars = quo_c(start_date, end_date, ref_start_date, ref_end_date)
+    required_vars = expr_c(start_date, end_date, ref_start_date, ref_end_date)
   )
-  warn_if_vars_exist(dataset, quo_text(new_var))
+  warn_if_vars_exist(dataset, as_name(new_var))
 
   ref_end_window <- assert_integer_scalar(ref_end_window, "non-negative")
   assert_logical_scalar(ignore_time_for_ref_end_date)
-  filter_pre_timepoint <- assert_filter_cond(enquo(filter_pre_timepoint), optional = TRUE)
+  filter_pre_timepoint <- assert_filter_cond(enexpr(filter_pre_timepoint), optional = TRUE)
   assert_character_scalar(span_period, values = c("Y", "y"), optional = TRUE)
 
   dataset <- mutate(
@@ -214,7 +213,7 @@ derive_var_ontrtfl <- function(dataset,
     )
   )
 
-  if (!quo_is_null(filter_pre_timepoint)) {
+  if (!is.null(filter_pre_timepoint)) {
     dataset <- mutate(
       dataset,
       !!new_var := if_else(!!filter_pre_timepoint, NA_character_, !!new_var,
@@ -223,7 +222,7 @@ derive_var_ontrtfl <- function(dataset,
     )
   }
 
-  if (quo_is_null(ref_end_date)) {
+  if (is.null(ref_end_date)) {
     # Scenario 1: No treatment end date is passed
     dataset <- mutate(
       dataset,
@@ -253,7 +252,7 @@ derive_var_ontrtfl <- function(dataset,
   }
 
   # scenario 3: end_date is passed
-  if (!quo_is_null(end_date)) {
+  if (!is.null(end_date)) {
     dataset <- mutate(
       dataset,
       !!new_var := if_else(

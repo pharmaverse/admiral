@@ -48,7 +48,7 @@ admiral_vs \%>\%
     AVAL = VSSTRESN
   ) \%>\%
   filter(PARAMCD \%in\% c("PULSE", "DIABP")) \%>\%
-  derive_vars_merged(ref_ranges, by_vars = vars(PARAMCD)) \%>\%
+  derive_vars_merged(ref_ranges, by_vars = exprs(PARAMCD)) \%>\%
   derive_var_anrind() \%>\%
   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
 }
@@ -63,9 +63,6 @@ BDS-Findings Functions that returns variable appended to dataset:
 \code{\link{derive_var_ontrtfl}()},
 \code{\link{derive_var_pchg}()},
 \code{\link{derive_var_shift}()}
-}
-\author{
-Thomas Neitmann
 }
 \concept{der_bds_findings}
 \keyword{der_bds_findings}

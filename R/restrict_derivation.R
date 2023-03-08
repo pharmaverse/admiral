@@ -6,6 +6,15 @@
 #'
 #' @param derivation Derivation
 #'
+#'   A function that performs a specific derivation is expected. A derivation
+#'   adds variables or observations to a dataset. The first argument of a
+#'   derivation must expect a dataset and the derivation must return a dataset.
+#'   The function must provide the `dataset` argument and all arguments
+#'   specified in the `params()` objects passed to the `arg` argument.
+#'
+#'   Please note that it is not possible to specify `{dplyr}`
+#'   functions like `mutate()` or `summarize()`.
+#'
 #' @param args Arguments of the derivation
 #'
 #'   A `params()` object is expected.
@@ -15,7 +24,6 @@
 #' @family high_order_function
 #' @keywords high_order_function
 #'
-#' @author Stefan Bundfuss
 #'
 #' @seealso [params()] [slice_derivation()]
 #'
@@ -42,10 +50,10 @@
 #'   adlb,
 #'   derivation = derive_vars_merged,
 #'   args = params(
-#'     by_vars = vars(USUBJID),
+#'     by_vars = exprs(USUBJID),
 #'     dataset_add = adlb,
 #'     filter_add = ABLFL == "Y",
-#'     new_vars = vars(BASE = AVAL)
+#'     new_vars = exprs(BASE = AVAL)
 #'   ),
 #'   filter = AVISITN > 0
 #' )
@@ -55,7 +63,7 @@
 #'   adlb,
 #'   derivation = derive_var_base,
 #'   args = params(
-#'     by_vars = vars(USUBJID)
+#'     by_vars = exprs(USUBJID)
 #'   ),
 #'   filter = AVISITN >= 0
 #' ) %>%
@@ -75,7 +83,7 @@ restrict_derivation <- function(dataset,
   if (!is.null(args)) {
     assert_function_param(deparse(substitute(derivation)), names(args))
   }
-  filter <- assert_filter_cond(enquo(filter))
+  filter <- assert_filter_cond(enexpr(filter))
 
   # Split input dataset
   data_ignore <- dataset %>%

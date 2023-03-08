@@ -39,7 +39,6 @@
 #'   here, results are calculated based on the actual calendar length of months or years
 #'   rather than assuming equal days every month (30.4375 days) or every year (365.25 days).
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return The input dataset with ``AAGE`` and ``AAGEU`` added
 #'
@@ -64,9 +63,9 @@ derive_vars_aage <- function(dataset,
                              start_date = BRTHDT,
                              end_date = RANDDT,
                              unit = "years") {
-  start_date <- assert_symbol(enquo(start_date))
-  end_date <- assert_symbol(enquo(end_date))
-  assert_data_frame(dataset, required_vars = quo_c(start_date, end_date))
+  start_date <- assert_symbol(enexpr(start_date))
+  end_date <- assert_symbol(enexpr(end_date))
+  assert_data_frame(dataset, required_vars = expr_c(start_date, end_date))
   assert_character_scalar(
     unit,
     values = c("years", "months", "weeks", "days", "hours", "minutes", "seconds")
@@ -87,52 +86,80 @@ derive_vars_aage <- function(dataset,
 
 #' Derive Age in Years
 #'
-#' @details This function is used to convert age variables into years.
-#' These can then be used to create age groups.
+#' Converts the given age variable (`age_var`) to the unit 'years' from the current
+#' units given in the `age_var+U` variable or `age_unit` argument and stores
+#' in a new variable (`new_var`).
 #'
 #' @param dataset Input dataset.
-#' @param age_var AGE variable.
-#' @param age_unit AGE unit variable.
 #'
-#'   The AGE unit variable is used to convert AGE to 'years' so that grouping can occur.
-#'   This is only used when the age_var variable does not have a corresponding unit in the dataset.
+#'   The column specified by the `age_var` argument is expected.
+#'
+#' @param age_var Age variable.
+#'
+#'   A numeric object is expected.
+#'
+#' @param age_unit Age unit.
+#'
+#'   The `age_unit` argument is only expected when there is NOT a variable `age_var+U`
+#'   in `dataset`. This gives the unit of the `age_var` variable and is used to convert
+#'   AGE to 'years' so that grouping can occur.
 #'
 #'   Default: NULL
 #'
 #'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 #'
-#' @param new_var New AGE variable to be created in years.
+#' @param new_var New age variable to be created in years. The returned values are
+#'   doubles and NOT integers.
+#''
+#' @details This function is used to convert an age variable into the unit 'years'
+#'   which can then be used to create age groups. The resulting column contains the
+#'   equivalent years as a double. Note, underlying computations assume an equal number
+#'   of days in each year (365.25).
+#'
+#' @author Michael Thorpe
+#'
+#' @return The input dataset (`dataset`) with `new_var` variable added in years.
 #'
 #' @family der_adsl
 #' @keywords der_adsl
 #'
-#' @author Michael Thorpe
-#'
-#' @return The input dataset with new_var parameter added in years.
-#'
 #' @export
 #'
-#' @examples
+#' @seealso [derive_vars_duration()]
 #'
-#' data <- data.frame(
-#'   AGE = c(27, 24, 3, 4, 1),
-#'   AGEU = c("days", "months", "years", "weeks", "years")
+#' @examples
+#' library(tibble)
+#'
+#' # Derive age with age units specified
+#' data <- tribble(
+#'   ~AGE, ~AGEU,
+#'   27, "days",
+#'   24, "months",
+#'   3, "years",
+#'   4, "weeks",
+#'   1, "years"
 #' )
 #'
-#' data %>%
-#'   derive_var_age_years(., AGE, new_var = AAGE)
+#' derive_var_age_years(data, AGE, new_var = AAGE)
 #'
-#' data.frame(AGE = c(12, 24, 36, 48)) %>%
-#'   derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
+#' # Derive age without age units variable specified
+#' data <- tribble(
+#'   ~AGE,
+#'   12,
+#'   24,
+#'   36,
+#'   48
+#' )
+#' derive_var_age_years(data, AGE, age_unit = "months", new_var = AAGE)
 derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
-  age_variable <- assert_symbol(enquo(age_var))
-  assert_data_frame(dataset, required_vars = quo_c(age_variable))
+  age_variable <- assert_symbol(enexpr(age_var))
+  assert_data_frame(dataset, required_vars = expr_c(age_variable))
 
   age_var <- pull(dataset, !!age_variable)
   assert_numeric_vector(age_var)
 
   age_var <- age_variable
-  unit_var <- paste0(quo_get_expr(age_var), "U")
+  unit_var <- paste0(age_var, "U")
 
   age_unit <- assert_character_scalar(
     age_unit,
@@ -144,13 +171,13 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
     optional = TRUE
   )
 
-  new_var <- assert_symbol(enquo(new_var))
-  warn_if_vars_exist(dataset, quo_text(new_var))
+  new_var <- assert_symbol(enexpr(new_var))
+  warn_if_vars_exist(dataset, as_name(new_var))
 
   if (!unit_var %in% colnames(dataset)) {
     if (is.null(age_unit)) {
       err_msg <- paste(
-        "There is no variable unit:", unit_var, "associated with", quo_get_expr(age_var),
+        "There is no variable unit:", unit_var, "associated with", age_var,
         "and the argument `age_unit` is missing. Please specify a value for `age_unit`"
       )
       abort(err_msg)
@@ -175,7 +202,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
     if (!is.null(age_unit)) {
       if (length(unit) > 1) {
         msg <- paste(
-          "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
+          "The variable unit", unit_var, "is associated with", age_var,
           "and contatins multiple values but the argument `age_unit`
           has been specified with a single different value.",
           "The `age_unit` argument is ignored and the grouping will based on",
@@ -184,7 +211,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
         warn(msg)
       } else if (unit != age_unit) {
         msg <- paste(
-          "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
+          "The variable unit", unit_var, "is associated with", age_var,
           "but the argument `age_unit` has been specified with a different value.",
           "The `age_unit` argument is ignored and the grouping will based on",
           unit_var
@@ -206,6 +233,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
     ds <- dataset %>%
       mutate(!!new_var := !!age_var / unname(average_durations[tolower(!!sym(unit_var))]))
   }
+  return(ds)
 }
 
 
@@ -214,7 +242,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' These functions are *deprecated*.
+#' This function is *deprecated*, please create a user defined function instead.
 #'
 #' @param dataset Input dataset
 #'
@@ -225,8 +253,8 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 #' @param new_var New variable to create inside `dataset`
 #'
 #' @keywords deprecated
+#' @family deprecated
 #'
-#' @author Ondrej Slama
 #'
 #' @name derive_var_agegr_fda
 NULL
@@ -234,66 +262,27 @@ NULL
 #' @rdname derive_var_agegr_fda
 #'
 #' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_warn("0.8.0", "derive_var_agegr_fda()", details = "Please create a user defined function instead.")
-
-  age_var <- assert_symbol(enquo(age_var))
-  new_var <- assert_symbol(enquo(new_var))
-  warn_if_vars_exist(dataset, quo_text(new_var))
-
-  ds <- derive_var_age_years(dataset, !!age_var, age_unit, new_var = temp_age)
-
-  out <- ds %>%
-    mutate(
-      !!new_var := cut(
-        x = temp_age,
-        breaks = c(0, 18, 65, Inf),
-        labels = c("<18", "18-64", ">=65"),
-        include.lowest = TRUE,
-        right = FALSE
-      )
-    ) %>%
-    select(-temp_age)
-
-  if (anyNA(dplyr::pull(out, !!new_var))) {
-    out <- mutate(out, !!new_var := addNA(!!new_var))
-  }
-  out
+  deprecate_stop("0.8.0", "derive_var_agegr_fda()",
+    details = "Please create a user defined function instead."
+  )
 }
 
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please create a user defined function instead.
 #' @rdname derive_var_agegr_fda
 #'
 #' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 derive_var_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_warn("0.8.0", "derive_var_agegr_ema()", details = "Please create a user defined function instead.")
-
-  age_var <- assert_symbol(enquo(age_var))
-  new_var <- assert_symbol(enquo(new_var))
-  warn_if_vars_exist(dataset, quo_text(new_var))
-
-  ds <- derive_var_age_years(dataset, !!age_var, age_unit, new_var = temp_age)
-
-  out <- mutate(
-    ds,
-    !!new_var := cut(
-      x = temp_age,
-      breaks = c(-Inf, (28 / 365.25), 2, 12, 18, 65, 85, Inf),
-      labels = c(
-        "0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)",
-        "2-11 (Children)", "12-17 (Adolescents)", "18-64", "65-84", ">=85"
-      ),
-      include.lowest = FALSE,
-      right = FALSE
-    )
-  ) %>%
-    select(-temp_age)
-
-  if (anyNA(dplyr::pull(out, !!new_var))) {
-    out <- mutate(out, !!new_var := addNA(!!new_var))
-  }
-  out
+  deprecate_stop("0.8.0", "derive_var_agegr_ema()",
+    details = "Please create a user defined function instead."
+  )
 }

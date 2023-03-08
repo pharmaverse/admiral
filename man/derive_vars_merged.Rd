@@ -32,9 +32,11 @@ argument are expected.}
 
 The input dataset and the selected observations from the additional dataset
 are merged by the specified by variables. The by variables must be a unique
-key of the selected observations.
+key of the selected observations. Variables from the additional dataset can
+be renamed by naming the element, i.e., \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to
+the dplyr joins.
 
-\emph{Permitted Values}: list of variables created by \code{vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{order}{Sort order
 
@@ -45,17 +47,17 @@ specified order.
 \emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))} or \code{NULL}}
+created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{new_vars}{Variables to add
 
 The specified variables from the additional dataset are added to the output
-dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = vars(<new name> = <old name>)}.
+dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = exprs(<new name> = <old name>)}.
 
-For example \code{new_vars = vars(var1, var2)} adds variables \code{var1} and \code{var2}
+For example \code{new_vars = exprs(var1, var2)} adds variables \code{var1} and \code{var2}
 from \code{dataset_add} to the input dataset.
 
-And \code{new_vars = vars(var1, new_var2 = old_var2)} takes \code{var1} and
+And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 \code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
 \code{old_var2} to \code{new_var2}.
 
@@ -64,7 +66,7 @@ additional dataset (\code{dataset_add}) are added.
 
 \emph{Default}: \code{NULL}
 
-\emph{Permitted Values}: list of variables created by \code{vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{mode}{Selection mode
 
@@ -153,7 +155,7 @@ data("admiral_dm")
 derive_vars_merged(
   admiral_vs,
   dataset_add = select(admiral_dm, -DOMAIN),
-  by_vars = vars(STUDYID, USUBJID)
+  by_vars = exprs(STUDYID, USUBJID)
 ) \%>\%
   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 
@@ -162,10 +164,10 @@ data("admiral_adsl")
 derive_vars_merged(
   admiral_adsl,
   dataset_add = admiral_vs,
-  by_vars = vars(STUDYID, USUBJID),
-  order = vars(VSDTC),
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(VSDTC),
   mode = "last",
-  new_vars = vars(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
+  new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
   filter_add = VSTESTCD == "WEIGHT",
   match_flag = vsdatafl
 ) \%>\%
@@ -186,9 +188,9 @@ ex_ext <- derive_vars_dtm(
 derive_vars_merged(
   select(admiral_dm, STUDYID, USUBJID),
   dataset_add = ex_ext,
-  by_vars = vars(STUDYID, USUBJID),
-  new_vars = vars(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
-  order = vars(EXSTDTM),
+  by_vars = exprs(STUDYID, USUBJID),
+  new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+  order = exprs(EXSTDTM),
   mode = "first"
 )
 
@@ -208,9 +210,9 @@ derive_vars_merged(
   select(admiral_dm, STUDYID, USUBJID),
   dataset_add = ex_ext,
   filter_add = !is.na(EXSTDTM),
-  by_vars = vars(STUDYID, USUBJID),
-  new_vars = vars(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
-  order = vars(EXSTDTM),
+  by_vars = exprs(STUDYID, USUBJID),
+  new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+  order = exprs(EXSTDTM),
   mode = "first"
 )
 
@@ -228,16 +230,16 @@ derive_vars_merged(
   select(admiral_dm, STUDYID, USUBJID),
   dataset_add = ex_ext,
   filter_add = !is.na(EXENDTM),
-  by_vars = vars(STUDYID, USUBJID),
-  new_vars = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
-  order = vars(EXENDTM),
+  by_vars = exprs(STUDYID, USUBJID),
+  new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+  order = exprs(EXENDTM),
   mode = "last"
 )
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
@@ -247,15 +249,11 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
-\code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_transposed}()},
 \code{\link{get_summary_records}()}
-}
-\author{
-Stefan Bundfuss
 }
 \concept{der_gen}
 \keyword{der_gen}
