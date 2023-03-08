@@ -1395,12 +1395,14 @@ derive_vars_dt <- function(dataset,
     (highest_imputation == "Y" & length(min_dates) == 0 & length(max_dates) == 0)) {
     abort("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
   }
-
-  if (highest_imputation == "Y" & !is.null(min_dates) & date_imputation != "first") {
-    warning("If `highest_impuation` = \"Y\" and `min_dates` is specified, `date_imputation` should be set to \"first\".") # nolint
+  if (highest_imputation == "Y") {
+    assert_character_scalar(date_imputation, values = c("first", "last"))
   }
-  if (highest_imputation == "Y" & !is.null(max_dates) & date_imputation != "last") {
-    warning("If `highest_impuation` = \"Y\" and `max_dates` is specified, `date_imputation` should be set to \"last\".") # nolint
+  if (highest_imputation == "Y" & is.null(min_dates) & date_imputation == "first") {
+    warning("If `highest_impuation` = \"Y\" and `date_imputation` = \"first\" is specified, `min_dates` should be specified.") # nolint
+  }
+  if (highest_imputation == "Y" & is.null(max_dates) & date_imputation == "last") {
+    warning("If `highest_impuation` = \"Y\" and `date_imputation` = \"last\" is specified, `max_dates` should be specified.") # nolint
   }
 
   # output varname
@@ -1591,12 +1593,14 @@ derive_vars_dtm <- function(dataset,
     (highest_imputation == "Y" & length(min_dates) == 0 & length(max_dates) == 0)) {
     abort("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
   }
-
-  if (highest_imputation == "Y" & !is.null(min_dates) & date_imputation != "first") {
-    warning("If `highest_impuation` = \"Y\" and `min_dates` is specified, `date_imputation` should be set to \"first\".") # nolint
+  if (highest_imputation == "Y") {
+    assert_character_scalar(date_imputation, values = c("first", "last"))
   }
-  if (highest_imputation == "Y" & !is.null(max_dates) & date_imputation != "last") {
-    warning("If `highest_impuation` = \"Y\" and `max_dates` is specified, `date_imputation` should be set to \"last\".") # nolint
+  if (highest_imputation == "Y" & is.null(min_dates) & date_imputation == "first") {
+    warning("If `highest_impuation` = \"Y\" and `date_imputation` = \"first\" is specified, `min_dates` should be specified.") # nolint
+  }
+  if (highest_imputation == "Y" & is.null(max_dates) & date_imputation == "last") {
+    warning("If `highest_impuation` = \"Y\" and `date_imputation` = \"last\" is specified, `max_dates` should be specified.") # nolint
   }
 
   dtm <- paste0(new_vars_prefix, "DTM")
