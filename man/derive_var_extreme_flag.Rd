@@ -73,9 +73,11 @@ library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 data("admiral_vs")
+less_subjects <- unique(admiral_vs$USUBJID)[1:30]
 
 # Flag last value for each patient, test, and visit, baseline observations are ignored
 admiral_vs \%>\%
+  filter(USUBJID \%in\% less_subjects) \%>\%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
