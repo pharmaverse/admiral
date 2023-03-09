@@ -11,6 +11,8 @@ on:
   # 'push' events are triggered when commits
   # are pushed to one of these branches
   push:
+    tags:
+      - "v*"
     branches:
       - main
       - devel
@@ -67,7 +69,7 @@ jobs:
   docs:
     name: Documentation
     uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || startsWith(github.ref, 'refs/tags/v')
     with:
       r-version: "4.0"
       # Whether to skip multiversion docs
@@ -77,7 +79,7 @@ jobs:
       latest-tag-alt-name: cran-release
       multiversion-docs-landing-page: cran-release
       branches-or-tags-to-list: >-
-        ^cran-release$|^v([0-9]+\\.)?([0-9]+\\.)?([0-9]+)$
+        ^cran-release$|^main$|^v([0-9]+\\.)?([0-9]+\\.)?([0-9]+)$
   linter:
     name: Lint
     uses: pharmaverse/admiralci/.github/workflows/lintr.yml@main
@@ -87,13 +89,12 @@ jobs:
   links:
     name: Links
     uses: pharmaverse/admiralci/.github/workflows/links.yml@main
-    if: >
-      github.event_name == 'push' || github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request'
   coverage:
     name: Code Coverage
     uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@main
     if: >
-      github.event_name == 'push' || github.event_name == 'pull_request'
+      github.event_name != 'release'
     with:
       r-version: "4.0"
       # Whether to skip code coverage badge creation
