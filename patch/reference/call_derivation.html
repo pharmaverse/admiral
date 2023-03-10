@@ -61,17 +61,6 @@ iterations and others varying."><meta property="og:image" content="https://pharm
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -178,16 +167,16 @@ which <code>derivation</code> has been used.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,000 x 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     AESTDTC    AEENDTC    TRTSDT     TRTEDT     ASTDT      AENDT     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-710-1278 2013-02-24 2013-02-26 2012-12-24 2013-02-26 2013-02-24 2013-02-26</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-704-1266 2013-10-27 2013-11-08 2013-10-13 2013-12-06 2013-10-27 2013-11-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-705-1349 2013-08-25 <span style="color: #BB0000;">NA</span>         2013-03-10 2013-09-08 2013-08-25 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-709-1309 2013-06-19 2013-06-20 2013-06-19 2013-12-19 2013-06-19 2013-06-20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-704-1114 2013-02-21 2013-02-23 2013-01-23 2013-07-07 2013-02-21 2013-02-23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-701-1097 2014-03-21 2014-03-21 2014-01-01 2014-07-09 2014-03-21 2014-03-21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-704-1010 2014-07-05 2014-07-06 2014-02-21 2014-07-08 2014-07-05 2014-07-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-718-1371 2013-06-02 2013-06-03 2013-04-26 2013-08-01 2013-06-02 2013-06-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-716-1418 2013-05-05 2013-05-07 2013-05-05 2013-11-20 2013-05-05 2013-05-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-718-1254 2013-07-25 2013-07-25 2013-07-10 2014-01-09 2013-07-25 2013-07-25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-701-1097 2014-04-19 2014-04-22 2014-01-01 2014-07-09 2014-04-19 2014-04-22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-701-1302 2013-09-02 <span style="color: #BB0000;">NA</span>         2013-08-29 2013-11-05 2013-09-02 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-716-1418 2013-05-05 2013-05-07 2013-05-05 2013-11-20 2013-05-05 2013-05-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-708-1316 2014-01-29 <span style="color: #BB0000;">NA</span>         2013-08-23 2014-03-01 2014-01-29 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-709-1309 2013-06-10 2013-07-01 2013-06-19 2013-12-19 2013-06-10 2013-07-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-717-1344 2014-02-28 2014-03-01 2014-01-11 2014-03-14 2014-02-28 2014-03-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-705-1310 2013-11-14 <span style="color: #BB0000;">NA</span>         2013-11-02 2014-01-23 2013-11-14 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-710-1053 2013-01-28 2013-02-11 2012-12-26 2013-02-10 2013-01-28 2013-02-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-718-1355 2013-05-25 <span style="color: #BB0000;">NA</span>         2013-02-28 2013-08-29 2013-05-25 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-703-1042 2013-03-05 2013-03-06 2013-03-02 2013-08-31 2013-03-05 2013-03-06</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 990 more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## The above call using `call_derivation()` is equivalent to the following</span></span></span>
@@ -209,16 +198,16 @@ which <code>derivation</code> has been used.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,000 x 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     AESTDTC    AEENDTC    TRTSDT     TRTEDT     ASTDT      AENDT     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-710-1278 2013-02-24 2013-02-26 2012-12-24 2013-02-26 2013-02-24 2013-02-26</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-704-1266 2013-10-27 2013-11-08 2013-10-13 2013-12-06 2013-10-27 2013-11-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-705-1349 2013-08-25 <span style="color: #BB0000;">NA</span>         2013-03-10 2013-09-08 2013-08-25 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-709-1309 2013-06-19 2013-06-20 2013-06-19 2013-12-19 2013-06-19 2013-06-20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-704-1114 2013-02-21 2013-02-23 2013-01-23 2013-07-07 2013-02-21 2013-02-23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-701-1097 2014-03-21 2014-03-21 2014-01-01 2014-07-09 2014-03-21 2014-03-21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-704-1010 2014-07-05 2014-07-06 2014-02-21 2014-07-08 2014-07-05 2014-07-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-718-1371 2013-06-02 2013-06-03 2013-04-26 2013-08-01 2013-06-02 2013-06-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-716-1418 2013-05-05 2013-05-07 2013-05-05 2013-11-20 2013-05-05 2013-05-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-718-1254 2013-07-25 2013-07-25 2013-07-10 2014-01-09 2013-07-25 2013-07-25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-701-1097 2014-04-19 2014-04-22 2014-01-01 2014-07-09 2014-04-19 2014-04-22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-701-1302 2013-09-02 <span style="color: #BB0000;">NA</span>         2013-08-29 2013-11-05 2013-09-02 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-716-1418 2013-05-05 2013-05-07 2013-05-05 2013-11-20 2013-05-05 2013-05-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-708-1316 2014-01-29 <span style="color: #BB0000;">NA</span>         2013-08-23 2014-03-01 2014-01-29 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-709-1309 2013-06-10 2013-07-01 2013-06-19 2013-12-19 2013-06-10 2013-07-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-717-1344 2014-02-28 2014-03-01 2014-01-11 2014-03-14 2014-02-28 2014-03-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-705-1310 2013-11-14 <span style="color: #BB0000;">NA</span>         2013-11-02 2014-01-23 2013-11-14 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-710-1053 2013-01-28 2013-02-11 2012-12-26 2013-02-10 2013-01-28 2013-02-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-718-1355 2013-05-25 <span style="color: #BB0000;">NA</span>         2013-02-28 2013-08-29 2013-05-25 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-703-1042 2013-03-05 2013-03-06 2013-03-02 2013-08-31 2013-03-05 2013-03-06</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 990 more rows</span></span>
 </code></pre></div>
     </div>
@@ -227,7 +216,7 @@ which <code>derivation</code> has been used.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Thomas Neitmann, Stefan Bundfuss, Ben Straub, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Zhang Kangjie, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p></p><p>Developed by Thomas Neitmann, Stefan Bundfuss, Ben Straub, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
