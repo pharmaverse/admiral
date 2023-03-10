@@ -7,7 +7,7 @@
 assert_varval_list(
   arg,
   required_elements = NULL,
-  accept_expr = FALSE,
+  accept_expr = TRUE,
   accept_var = FALSE,
   optional = FALSE
 )

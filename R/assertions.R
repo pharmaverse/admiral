@@ -1200,7 +1200,7 @@ assert_param_does_not_exist <- function(dataset, param) {
 #' try(example_fun(exprs("AE", DTSEQ = AESEQ)))
 assert_varval_list <- function(arg, # nolint
                                required_elements = NULL,
-                               accept_expr = FALSE,
+                               accept_expr = TRUE,
                                accept_var = FALSE,
                                optional = FALSE) {
   assert_logical_scalar(accept_expr)
