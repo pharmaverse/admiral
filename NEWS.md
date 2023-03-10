@@ -1,3 +1,20 @@
+# admiral 0.11.0
+
+## New Features
+
+## Updates of Existing Functions
+
+- For the `set_values_to` argument expressions are accepted now. This affects
+`derive_param_exist_flag()`. (#1727)
+
+## Breaking Changes
+
+- The `aval_fun` argument of `derive_param_exist_flag()` was deprecated in favor
+of the `set_values_to` argument. (#1727)
+
+## Documentation
+
+
 # admiral 0.10.0
 
 ## New Features

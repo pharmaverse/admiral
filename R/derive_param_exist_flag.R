@@ -78,17 +78,14 @@
 #' @param aval_fun Function to map character analysis value (`AVALC`) to numeric
 #'   analysis value (`AVAL`)
 #'
-#'   The (first) argument of the function must expect a character vector and the
-#'   function must return a numeric vector.
-#'
-#'   *Default:* `yn_to_numeric` (see `yn_to_numeric()` for details)
+#'   *Deprecated*, please use `set_values_to` instead.
 #'
 #' @param set_values_to Variables to set
 #'
 #'   A named list returned by `exprs()` defining the variables to be set for the
 #'   new parameter, e.g. `exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at
 #'   Baseline")` is expected. The values must be symbols, character strings,
-#'   numeric values, or `NA`.
+#'   numeric values, `NA`, or expressions.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
@@ -110,8 +107,6 @@
 #'
 #'       - Otherwise, it is set to the missing value (`missing_value`), i.e., for
 #'         those subject not in `dataset_add`.
-#'
-#'   1. The `AVAL` variable is added and set to `aval_fun(AVALC)`.
 #'
 #'   1. The variables specified by the `set_values_to` parameter are added to
 #'   the new observations.
@@ -165,6 +160,7 @@
 #'   false_value = "N",
 #'   missing_value = "N",
 #'   set_values_to = exprs(
+#'     AVAL = yn_to_numeric(AVALC),
 #'     PARAMCD = "MDIS",
 #'     PARAM = "Measurable Disease at Baseline"
 #'   )
@@ -177,7 +173,7 @@ derive_param_exist_flag <- function(dataset = NULL,
                                     false_value = NA_character_,
                                     missing_value = NA_character_,
                                     filter_add = NULL,
-                                    aval_fun = yn_to_numeric,
+                                    aval_fun ,
                                     subject_keys = get_admiral_option("subject_keys"),
                                     set_values_to) {
   # Check input parameters
@@ -186,7 +182,6 @@ derive_param_exist_flag <- function(dataset = NULL,
   assert_character_scalar(false_value)
   assert_character_scalar(missing_value)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
-  assert_function(aval_fun)
   assert_vars(subject_keys)
   assert_data_frame(
     dataset,
@@ -198,6 +193,12 @@ derive_param_exist_flag <- function(dataset = NULL,
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   if (!is.null(dataset)) {
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
+  }
+
+  if (!missing(aval_fun)) {
+    assert_function(aval_fun)
+    deprecate_warn("0.10.0", "derive_param_exist_flag(aval_fun = )", "derive_param_exist_flag(set_values_to = )")
+    set_values_to <- exprs(!!!set_values_to, AVAL = aval_fun(AVALC))
   }
 
   # Create new observations
@@ -212,16 +213,11 @@ derive_param_exist_flag <- function(dataset = NULL,
     false_value = false_value,
     missing_value = missing_value
   )
-  new_obs <- call_user_fun(mutate(new_obs, AVAL = aval_fun(AVALC)))
 
-  if (!is.numeric(new_obs$AVAL)) {
-    abort(paste(
-      "Calling `aval_fun(AVALC)` did not result in a numeric vector.\n",
-      "A", typeof(new_obs$AVAL), "vector was returned."
-    ))
-  }
-
-  new_obs <- mutate(new_obs, !!!set_values_to)
+  new_obs <- process_set_values_to(
+    new_obs,
+    set_values_to = set_values_to
+  )
 
   # Create output dataset
   bind_rows(dataset, new_obs)
