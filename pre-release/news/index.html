@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,17 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -91,7 +80,10 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.10.0" id="admiral-0100">admiral 0.10.0<a class="anchor" aria-label="anchor" href="#admiral-0100"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.10.1" id="admiral-0101">admiral 0.10.1<a class="anchor" aria-label="anchor" href="#admiral-0101"></a></h2>
+<ul><li>Fix checks on <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> and <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> that were too restrictive. (<a href="https://github.com/pharmaverse/admiral/issues/1810" class="external-link">#1810</a>)</li></ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.10.0" id="admiral-0100">admiral 0.10.0<a class="anchor" aria-label="anchor" href="#admiral-0100"></a></h2><p class="text-muted">CRAN release: 2023-03-08</p>
 <div class="section level3">
 <h3 id="new-features-0-10-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-10-0"></a></h3>
 <ul><li><p>Using <a href="https://testthat.r-lib.org" class="external-link">testthat</a> 3rd edition for unit testing. This is stricter in that messages must be addressed and deprecated functions throw errors. (<a href="https://github.com/pharmaverse/admiral/issues/1754" class="external-link">#1754</a>)</p></li>
@@ -546,8 +538,8 @@
 </ul></div>
 <div class="section level4">
 <h4 id="developer-0-4-0">Developer<a class="anchor" aria-label="anchor" href="#developer-0-4-0"></a></h4>
-<ul><li><p><code><a href="https://pharmaverse.github.io/admiraldev/devel/main/reference/assert_list_element.html" class="external-link">assert_list_element()</a></code> checks if an element of a list of lists/classes fulfills a condition</p></li>
-<li><p><code><a href="https://pharmaverse.github.io/admiraldev/devel/main/reference/assert_one_to_one.html" class="external-link">assert_one_to_one()</a></code> checks if there is a one to one mapping between two lists of variables</p></li>
+<ul><li><p><code><a href="https://pharmaverse.github.io/admiraldev/main/reference/assert_list_element.html" class="external-link">assert_list_element()</a></code> checks if an element of a list of lists/classes fulfills a condition</p></li>
+<li><p><code><a href="https://pharmaverse.github.io/admiraldev/main/reference/assert_one_to_one.html" class="external-link">assert_one_to_one()</a></code> checks if there is a one to one mapping between two lists of variables</p></li>
 <li><p><code><a href="../reference/negate_vars.html">negate_vars()</a></code> negates a list of variables to remove them from a dataset with <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select()</a></code></p></li>
 </ul></div>
 </div>
@@ -734,7 +726,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Thomas Neitmann, Stefan Bundfuss, Ben Straub, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p></p><p>Developed by Thomas Neitmann, Stefan Bundfuss, Ben Straub, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
