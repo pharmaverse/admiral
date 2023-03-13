@@ -40,7 +40,17 @@ quo_c <- function(...) {
 #'
 #' @export
 expr_c <- function(...) {
-  inputs <- unlist(list(...), recursive = TRUE)
+  # transform single expression into list of expression
+  inputs <- map(
+    list(...),
+    function(x)
+      if (typeof(x) != "list") {
+        list(x)
+      } else {
+        x
+      }
+    )
+  inputs <- purrr::flatten(inputs)
   stopifnot(all(map_lgl(inputs, is_expression)))
   is_null <- map_lgl(inputs, is.null)
   inputs[!is_null]
