@@ -13,11 +13,13 @@ assert_order_vars(arg, optional = FALSE)
 is \code{NULL} then an error is thrown}
 }
 \value{
-The function throws an error if \code{arg} is not a list of variables or \code{desc()}
-calls created using \code{exprs()} and returns the input invisibly otherwise.
+The function throws an error if \code{arg} is not a list of variables or
+expressions created using \code{exprs()} and returns the input invisibly
+otherwise.
 }
 \description{
-Checks if an argument is a valid list of order variables created using \code{exprs()}
+Checks if an argument is a valid list of order variables/expressions created
+using \code{exprs()}
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -29,11 +31,11 @@ example_fun <- function(by_vars) {
 
 example_fun(exprs(USUBJID, PARAMCD, desc(AVISITN)))
 
+example_fun(exprs(USUBJID, if_else(AVALC == "Y", 1, 0)))
+
 try(example_fun(quos(USUBJID, PARAMCD)))
 
 try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
-
-try(example_fun(exprs(USUBJID, toupper(PARAMCD), -AVAL)))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 

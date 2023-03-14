@@ -525,26 +525,30 @@ test_that("assert_vars Test 31: error if some elements of `arg` are not unquoted
 # assert_order_vars ----
 ## Test 32: error if `arg` is not a list variable names or `desc()` ----
 test_that("assert_order_vars Test 32: error if `arg` is not a list variable names or `desc()`", {
-  example_fun <- function(arg) {
-    assert_order_vars(arg)
-  }
-
   expect_error(
-    example_fun(TRUE)
+    assert_order_vars(arg <- TRUE),
+    regexp =
+      paste(
+        "`arg` must be a list of unquoted variable names or expressions,",
+        "e.g. `exprs(USUBJID, desc(VISITNUM), -abs(AVAL))`"
+      ),
+    fixed = TRUE
   )
   expect_error(
-    example_fun(1)
+    assert_order_vars(arg <- 1),
+    regexp =
+      paste(
+        "`arg` must be a list of unquoted variable names or expressions,",
+        "e.g. `exprs(USUBJID, desc(VISITNUM), -abs(AVAL))`"
+      ),
+    fixed = TRUE
   )
 })
 
 ## Test 33: no error if `arg` is NULL and optional is TRUE ----
 test_that("assert_order_vars Test 33: no error if `arg` is NULL and optional is TRUE", {
-  example_fun <- function(arg) {
-    assert_order_vars(arg, optional = TRUE)
-  }
-
   expect_invisible(
-    example_fun(NULL)
+    assert_order_vars(arg <- NULL, optional = TRUE)
   )
 })
 

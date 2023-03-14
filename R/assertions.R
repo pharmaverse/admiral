@@ -533,7 +533,8 @@ assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
 
 #' Is an Argument a List of Order Variables?
 #'
-#' Checks if an argument is a valid list of order variables created using `exprs()`
+#' Checks if an argument is a valid list of order variables/expressions created
+#' using `exprs()`
 #'
 #' @param arg A function argument to be checked
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
@@ -541,8 +542,9 @@ assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
 #'
 #'
 #' @return
-#' The function throws an error if `arg` is not a list of variables or `desc()`
-#' calls created using `exprs()` and returns the input invisibly otherwise.
+#' The function throws an error if `arg` is not a list of variables or
+#' expressions created using `exprs()` and returns the input invisibly
+#' otherwise.
 #'
 #' @export
 #'
@@ -558,18 +560,18 @@ assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
 #'
 #' example_fun(exprs(USUBJID, PARAMCD, desc(AVISITN)))
 #'
+#' example_fun(exprs(USUBJID, if_else(AVALC == "Y", 1, 0)))
+#'
 #' try(example_fun(quos(USUBJID, PARAMCD)))
 #'
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
-#'
-#' try(example_fun(exprs(USUBJID, toupper(PARAMCD), -AVAL)))
 assert_order_vars <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
   default_err_msg <- paste(
     backquote(arg_name(substitute(arg))),
-    "must be a list of unquoted variable names or `desc()` calls,",
-    "e.g. `exprs(USUBJID, desc(VISITNUM))`"
+    "must be a list of unquoted variable names or expressions,",
+    "e.g. `exprs(USUBJID, desc(VISITNUM), -abs(AVAL))`"
   )
 
   if (isTRUE(tryCatch(force(arg), error = function(e) TRUE))) {
@@ -584,7 +586,7 @@ assert_order_vars <- function(arg, optional = FALSE) {
     abort(default_err_msg)
   }
 
-  if (isFALSE(is_order_vars(arg))) {
+  if (isFALSE(is_call(arg))) {
     abort(default_err_msg)
   }
 
