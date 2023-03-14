@@ -42,10 +42,8 @@
 #'   Set a list of variables to some specified value for the new observation(s)
 #'   + LHS refer to a variable.
 #'   + RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
-#'   value or NA.
+#'   value, an expression or NA.
 #'   (e.g.  `exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
-#'   More general expression are not allowed.
-#'
 #'
 #' @return A data frame of derived records.
 #'
@@ -162,15 +160,13 @@ get_summary_records <- function(dataset,
     required_vars = expr_c(by_vars, analysis_var),
     check_is_grouped = FALSE
   )
-  if (!is.null(set_values_to)) {
-    assert_varval_list(set_values_to, optional = TRUE)
-  }
+  assert_varval_list(set_values_to, optional = TRUE)
 
   # Summarise the analysis value
   dataset %>%
     group_by(!!!by_vars) %>%
     filter_if(filter) %>%
     summarise(!!analysis_var := summary_fun(!!analysis_var)) %>%
-    mutate(!!!set_values_to) %>%
-    ungroup()
+    ungroup() %>%
+    process_set_values_to(set_values_to)
 }

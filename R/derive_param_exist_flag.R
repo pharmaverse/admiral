@@ -197,7 +197,7 @@ derive_param_exist_flag <- function(dataset = NULL,
 
   if (!missing(aval_fun)) {
     assert_function(aval_fun)
-    deprecate_warn("0.10.0", "derive_param_exist_flag(aval_fun = )", "derive_param_exist_flag(set_values_to = )")
+    deprecate_warn("0.11.0", "derive_param_exist_flag(aval_fun = )", "derive_param_exist_flag(set_values_to = )")
     set_values_to <- exprs(!!!set_values_to, AVAL = aval_fun(AVALC))
   }
 

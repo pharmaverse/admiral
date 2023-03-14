@@ -358,7 +358,7 @@ derive_param_tte <- function(dataset = NULL,
     )
   )
   assert_logical_scalar(create_datetime)
-  assert_varval_list(set_values_to, accept_expr = TRUE, optional = TRUE)
+  assert_varval_list(set_values_to, optional = TRUE)
   if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
@@ -436,29 +436,8 @@ derive_param_tte <- function(dataset = NULL,
     inner_join(
       adsl,
       by = vars2chr(subject_keys)
-    )
-  tryCatch(
-    new_param <- mutate(new_param, !!!set_values_to),
-    error = function(cnd) {
-      abort(
-        paste0(
-          "Assigning new variables failed!\n",
-          "set_values_to = (\n",
-          paste(
-            " ",
-            names(set_values_to),
-            "=",
-            set_values_to,
-            collapse = "\n"
-          ),
-          "\n)\nError message:\n  ",
-          cnd
-        )
-      )
-    }
-  )
-
-  new_param <- new_param %>%
+    ) %>%
+  process_set_values_to(set_values_to) %>%
     mutate(!!date_var := pmax(!!date_var, !!start_var, na.rm = TRUE)) %>%
     remove_tmp_vars()
 
@@ -786,7 +765,7 @@ extend_source_datasets <- function(source_datasets,
 #' @param set_values_to A named list returned by `exprs()` defining the variables
 #'   to be set for the event or censoring, e.g. `exprs(EVENTDESC = "DEATH",
 #'   SRCDOM = "ADSL", SRCVAR = "DTHDT")`. The values must be a symbol, a
-#'   character string, a numeric value, or `NA`.
+#'   character string, a numeric value, an expression, or `NA`.
 #'
 #'
 #' @keywords source_specifications

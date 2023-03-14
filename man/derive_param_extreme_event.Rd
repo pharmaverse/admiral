@@ -85,8 +85,8 @@ A list of symbols created using \code{exprs()} is expected.}
 A named list returned by \code{exprs()} defining the variables to be set for the
 new parameter, e.g. \code{exprs(PARAMCD = "PD", PARAM = "Disease Progression")}
 is expected. The values must be symbols, character strings, numeric values,
-or \code{NA}. Note, if you require a date or datetime variable to be populated,
-this needs to be defined here.}
+\code{NA}, or an expression. Note, if you require a date or datetime variable to
+be populated, this needs to be defined here.}
 
 \item{check_type}{Check uniqueness?
 
@@ -169,6 +169,7 @@ derive_param_extreme_event(
   false_value = "N",
   mode = "first",
   set_values_to = exprs(
+    AVAL = yn_to_numeric(AVALC),
     PARAMCD = "PD",
     PARAM = "Disease Progression",
     ANL01FL = "Y",

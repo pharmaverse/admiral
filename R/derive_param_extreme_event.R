@@ -169,8 +169,8 @@ derive_param_first_event <- function(dataset,
 #'   A named list returned by `exprs()` defining the variables to be set for the
 #'   new parameter, e.g. `exprs(PARAMCD = "PD", PARAM = "Disease Progression")`
 #'   is expected. The values must be symbols, character strings, numeric values,
-#'   or `NA`. Note, if you require a date or datetime variable to be populated,
-#'   this needs to be defined here.
+#'   `NA`, or an expression. Note, if you require a date or datetime variable to
+#'   be populated, this needs to be defined here.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
@@ -255,6 +255,7 @@ derive_param_first_event <- function(dataset,
 #'   false_value = "N",
 #'   mode = "first",
 #'   set_values_to = exprs(
+#'     AVAL = yn_to_numeric(AVALC),
 #'     PARAMCD = "PD",
 #'     PARAM = "Disease Progression",
 #'     ANL01FL = "Y",
@@ -342,8 +343,8 @@ derive_param_extreme_event <- function(dataset = NULL,
   }
 
   new_obs <- bind_rows(events, noevents) %>%
-    mutate(
-      !!!set_values_to
+    process_set_values_to(
+      set_values_to
     )
 
   # Create output dataset

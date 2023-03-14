@@ -5,9 +5,13 @@
 ## Updates of Existing Functions
 
 - For the `set_values_to` argument expressions are accepted now. This affects
-`derive_expected_records()`, `derive_extreme_event()`, `derive_extreme_records()`, `derive_param_bmi()`, `derive_param_bsa()`,
-`derive_param_computed()`, `derive_param_doseint()`, `derive_param_map()`, `derive_param_exist_flag()`, `derive_param_qtc()`,
-`derive_param_rr()`. (#1727)
+`censor_source()`, `derive_expected_records()`, `derive_extreme_event()`,
+`derive_extreme_records()`, `derive_param_bmi()`, `derive_param_bsa()`,
+`derive_param_computed()`, `derive_param_doseint()`, `derive_param_exposure()`,
+`derive_param_framingham()`, `derive_param_map()`, `derive_param_exist_flag()`,
+`derive_param_extreme_event()`, `derive_param_qtc()`, `derive_param_rr()`,
+`derive_param_wbc_abs()`, `derive_summary_records()`, `event_source()`,
+`get_summary_records()`. (#1727)
 
 ## Breaking Changes
 

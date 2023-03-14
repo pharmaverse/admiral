@@ -1,4 +1,5 @@
-test_that("creates a new record for each group and new data frame retains grouping", {
+## Test 1: creates a new record for each group and new data frame retains grouping ----
+test_that("derive_summary_records Test 1: creates a new record for each group and new data frame retains grouping", {
   # group --> 4
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
   actual_output <- input %>%
@@ -12,7 +13,8 @@ test_that("creates a new record for each group and new data frame retains groupi
   expect_equal(dplyr::group_vars(actual_output), dplyr::group_vars(input))
 })
 
-test_that("`fns` as inlined", {
+## Test 2: `fns` as inlined ----
+test_that("derive_summary_records Test 2: `fns` as inlined", {
   input <- tibble(x = rep(1:2, each = 2), y = 9:12, z = 101:104)
   actual_output <- derive_summary_records(
     input,
@@ -29,7 +31,8 @@ test_that("`fns` as inlined", {
   expect_dfs_equal(actual_output, expected_output, keys = c("x", "y", "z"))
 })
 
-test_that("set new value to a derived record", {
+## Test 3: set new value to a derived record ----
+test_that("derive_summary_records Test 3: set new value to a derived record", {
   input <- tibble(x = rep(1:2, each = 2), y = 9:12)
   actual_output <- derive_summary_records(
     input,
@@ -47,7 +50,8 @@ test_that("set new value to a derived record", {
   expect_dfs_equal(actual_output, expected_output, keys = c("x", "y", "z"))
 })
 
-test_that("check `set_values_to` mapping", {
+## Test 4: check `set_values_to` mapping ----
+test_that("derive_summary_records Test 4: check `set_values_to` mapping", {
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
   actual_output <- input %>%
     derive_summary_records(
@@ -82,7 +86,8 @@ test_that("check `set_values_to` mapping", {
   expect_equal(actual_output$p2, tp2)
 })
 
-test_that("Filter record within `by_vars`", {
+## Test 5: Filter record within `by_vars` ----
+test_that("derive_summary_records Test 5: Filter record within `by_vars`", {
   input <- tibble(x = c(rep(1:2, each = 2), 2), y = 9:13, z = c(1, 1, 2, 1, 1))
 
   actual_output <- derive_summary_records(
@@ -120,9 +125,9 @@ test_that("Filter record within `by_vars`", {
   expect_dfs_equal(actual_output, expected_output, keys = c("x", "y", "z"))
 })
 
-# Errors ---
 
-test_that("Errors", {
+## Test 6: Errors ----
+test_that("derive_summary_records Test 6: Errors", {
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
 
   # Is by_vars quosures/`exprs()` object?

@@ -651,7 +651,7 @@ test_that("derive_param_tte Test 9: errors if set_values_to contains invalid exp
       )
     ),
     regexp = paste0(
-      "Assigning new variables failed!\n",
+      "Assigning variables failed!\n",
       "set_values_to = \\(\n",
       "  PARAMCD = paste0\\(\"TTAE\", as.numeric\\(as.factor\\(AEDECOD\\)\\)\\)\n",
       "  PARAM = past\\(\"Time to First\", AEDECOD, \"Adverse Event\"\\)\n",
