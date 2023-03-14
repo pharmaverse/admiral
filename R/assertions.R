@@ -586,7 +586,7 @@ assert_order_vars <- function(arg, optional = FALSE) {
     abort(default_err_msg)
   }
 
-  if (isFALSE(is_call(arg))) {
+  if (isTRUE(is_call(arg))) {
     abort(default_err_msg)
   }
 
