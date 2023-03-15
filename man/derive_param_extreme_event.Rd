@@ -10,7 +10,7 @@ derive_param_extreme_event(
   dataset_source,
   filter_source,
   order = NULL,
-  new_var = AVALC,
+  new_var = NULL,
   true_value = "Y",
   false_value = "N",
   mode = "first",
@@ -115,8 +115,8 @@ the function can derive a parameter for the first disease progression.
 source dataset is selected. This is depending on \code{mode}, (with respect to \code{order},
 if applicable) where the event condition (\code{filter_source} parameter) is fulfilled.
 \item For each observation in \code{dataset_adsl} a new observation is created. For
-subjects with event \code{new_var} is set to \code{true_var}. For all other
-subjects \code{new_var} is set to \code{false_var}.
+subjects with event \code{new_var} is set to \code{true_value}. For all other
+subjects \code{new_var} is set to \code{false_value}.
 For subjects with event all variables from \code{dataset_source} are kept. For
 subjects without event all variables which are in both \code{dataset_adsl} and
 \code{dataset_source} are kept.
@@ -196,6 +196,8 @@ derive_param_extreme_event(
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_event}()},
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},

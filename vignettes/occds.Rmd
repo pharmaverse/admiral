@@ -61,7 +61,7 @@ library(lubridate)
 data("admiral_ae")
 data("admiral_adsl")
 
-ae <- admiral_ae
+ae <- convert_blanks_to_na(admiral_ae)
 adsl <- admiral_adsl
 ```
 ```{r echo = FALSE}
@@ -459,10 +459,10 @@ Standardized Drug Groupings (SDG).
 sdg <- tibble::tribble(
   ~VAR_PREFIX, ~QUERY_NAME,       ~SDG_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL, ~TERM_NAME,         ~TERM_ID,
   "SDG01",     "Diuretics",       11,      "BROAD",      1,                "CMDECOD",   "Diuretic 1",       NA,
-  "SDG01",     "Diuretics",       11,      "BROAD",      2,                "CMDECOD",   "Diuretic 2",       NA,
+  "SDG01",     "Diuretics",       11,      "BROAD",      1,                "CMDECOD",   "Diuretic 2",       NA,
   "SDG02",     "Costicosteroids", 12,      "BROAD",      1,                "CMDECOD",   "Costicosteroid 1", NA,
-  "SDG02",     "Costicosteroids", 12,      "BROAD",      2,                "CMDECOD",   "Costicosteroid 2", NA,
-  "SDG02",     "Costicosteroids", 12,      "BROAD",      2,                "CMDECOD",   "Costicosteroid 3", NA,
+  "SDG02",     "Costicosteroids", 12,      "BROAD",      1,                "CMDECOD",   "Costicosteroid 2", NA,
+  "SDG02",     "Costicosteroids", 12,      "BROAD",      1,                "CMDECOD",   "Costicosteroid 3", NA,
 )
 adcm <- tibble::tribble(
   ~USUBJID, ~ASTDTM,               ~CMDECOD,

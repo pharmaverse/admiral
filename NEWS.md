@@ -2,13 +2,23 @@
 
 ## New Features
 
+- Using `{testthat}` 3rd edition for unit testing. This is stricter in 
+that messages must be addressed and deprecated functions throw errors. (#1754) 
+
 - New function `consolidate_metadata()` for consolidating multiple meta datasets
 into a single one (#1479)
 
 - New function `compute_scale()` for computing the average of a vector and 
 transforming the result from a source to a target range. (#1692)
 
--   New ADPC template script available `ad_adpc.R` which creates PK Concentration Analysis Dataset (#849). This script includes formatting suitable for Non-Compartmental Analysis (ADNCA) (#851)
+- New ADPC template script available `ad_adpc.R` which creates PK Concentration
+Analysis Dataset (#849). This script includes formatting suitable for
+Non-Compartmental Analysis (ADNCA) (#851)
+
+- New function `derive_expected_records()` for adding expected records (#1729)
+
+- New function `derive_extreme_event()` for adding the worst or best observation 
+for each by group as new records (#1755)
 
 ## Updates of Existing Functions
 
@@ -31,6 +41,25 @@ that need carrying the last observation forward other than `analysis_var`
     hours, such as "BID", "TID", and "QID". Previously these values of
     `EXDOSFRQ` may result in duplicate records where the day values are
     incremented but the time values are not (#1643)
+    
+- The function `derive_var_confirmation_flag()` and `filter_confirmation()`
+gained the `tmp_obs_nr_var` argument. It helps flagging or selecting consecutive
+observations or the first or last observation in a by group. (#1724)
+
+- The functions `derive_vars_merged()`, `derive_var_merged_cat()`, 
+`derive_var_merged_character()`, `derive_var_merged_exist_flag()`, 
+`derive_var_merged_summary()`, and `derive_vars_merged_lookup()` were updated to 
+allow renaming in the argument `by_vars` (#1680).
+
+- The units "min" and "sec" are added as valid values of `out_unit` in `compute_duration()` and `derive_vars_duration()` (#1647).
+
+- The function `derive_vars_query()` now includes a consistency check for
+`QUERY_SCOPE` and `QUERY_SCOPE_NUM` values. (#652)
+
+- Argument `new_var` in `derive_param_extreme_event()` is made optional. (#1630)
+
+- `derive_vars_last_dose()` no longer fails if `USUBJID` is not included in the
+input dataset. (#1787)
 
 ## Breaking Changes
 
@@ -49,14 +78,12 @@ USUBJID)` must be used now.
 added for subjects who have both an event or censoring and an observation in
 `dataset_adsl` (#1576).
 
-## Documentation
+- Function `derive_var_disposition_status()` has been deprecated, please use `derive_var_merged_cat()` instead (#1681).
 
-- New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
+- Function `derive_var_worst_flag()` has been deprecated, in favor of `slice_derivation()`/`derive_var_extreme_flag()` (#1682)
 
-- `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
-`HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
-based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
-
+- Function `derive_vars_disposition_reason()` has been deprecated, in favor of `derive_vars_merged()`(#1683)
+  
 - The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1712)
 
   - `derive_derived_param()` 
@@ -80,15 +107,38 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 
   - `meddra_version`, `whodd_version`, `get_smq_fun` and `get_sdg_fun` from the `create_query_data()` function
   - `date_imputation`, `time_imputation` and `preserve` parameters from `date_source()` function
-  - `filter` parameter from `derive_var_extreme_flag()` and `derive_var_worst_flag()` functions
+  - `filter` parameter from `derive_var_extreme_flag()`
+
+- `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
+`HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
+
+- Renamed `derive_var_confirmation_flag()` and `filter_confirmation()` to 
+`derive_var_joined_exist_flag()` and `filter_joined()` respectively (#1738). 
 
 ## Documentation
+
+- New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
+
+- New vignette "Hy's Law Implementation" (#1637)
+
+- New vignette "Creating Questionnaire ADaMs" (#1715)
 
 - The expected value for the `derivation` argument of `restrict_derivation()`,
 `slice_derivation()`, and `call_derivation()` is described now. (#1698)
 
 - Removed authors from function documentation, as we will now only be tracking an overall list of 
 authors for admiral. (#1673)
+
+- Added an imputation example for `create_single_source_dataset()` in function documentation (#1408)(#1760)
+
+- Updates to examples for `derive_var_age_years()` and `derive_vars_duration()` (#1620)(#1634)
+
+- Increased the level of documentation for `derive_var_age_years()` to describe the data type of the newly created `new_var` column. (#970)
+
+## Various
+
+- Functions `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with `NA` values that has now been fixed (#1646)
 
 # admiral 0.9.1
 
@@ -632,7 +682,7 @@ age in different units (#569)
 - `derive_param_tte()` derives time-to-event-parameters (#546)
 
 - For common time-to-event endpoints [event and censoring source
-objects](https://pharmaverse.github.io/admiral/reference/index.html#section-pre-defined-time-to-event-sources) are
+objects](https://pharmaverse.github.io/admiral/cran-release/reference/index.html#section-pre-defined-time-to-event-sources) are
 provided (#612)
 
 ### Developer
@@ -663,13 +713,13 @@ to specify the unit of the input age (#569)
 
 - `derive_vars_dtm()` no longer shifts the time of the input `--DTC` variable (#436)
 
-- `derive_vars_dtm()` Change the min_dates with max_dates in the lapply statement when computing max_dates (#687)
+- `derive_vars_dtm()` Change the min_dates with max_dates in the `lapply` statement when computing max_dates (#687)
 
 ## Documentation
 
-- New vignette [Creating a BDS Time-to-Event ADaM](https://pharmaverse.github.io/admiral/articles/bds_tte.html) (#549)
+- New vignette [Creating a BDS Time-to-Event ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_tte.html) (#549)
 
-- New vignette [Queries Dataset Documentation](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) (#561)
+- New vignette [Queries Dataset Documentation](https://pharmaverse.github.io/admiral/cran-release/articles/queries_dataset.html) (#561)
 
 - New vignette [Writing Vignettes](https://pharmaverse.github.io/admiraldev/main/articles/writing_vignettes.html) (#334)
 
@@ -864,10 +914,10 @@ to specify the unit of the input age (#569)
 
 ## Documentation
 
-- [Frequently Asked Questions](https://pharmaverse.github.io/admiral/articles/faq.html)
+- [Frequently Asked Questions](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html)
 
-- [Creating ADSL](https://pharmaverse.github.io/admiral/articles/adsl.html)
+- [Creating ADSL](https://pharmaverse.github.io/admiral/cran-release/articles/adsl.html)
 
-- [Creating a BDS Finding ADaM](https://pharmaverse.github.io/admiral/articles/bds_finding.html)
+- [Creating a BDS Finding ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html)
 
-- [Creating an OCCDS ADaM](https://pharmaverse.github.io/admiral/articles/occds.html)
+- [Creating an OCCDS ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/occds.html)

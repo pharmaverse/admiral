@@ -86,42 +86,71 @@ derive_vars_aage <- function(dataset,
 
 #' Derive Age in Years
 #'
-#' @details This function is used to convert age variables into years.
-#' These can then be used to create age groups.
+#' Converts the given age variable (`age_var`) to the unit 'years' from the current
+#' units given in the `age_var+U` variable or `age_unit` argument and stores
+#' in a new variable (`new_var`).
 #'
 #' @param dataset Input dataset.
-#' @param age_var AGE variable.
-#' @param age_unit AGE unit variable.
 #'
-#'   The AGE unit variable is used to convert AGE to 'years' so that grouping can occur.
-#'   This is only used when the age_var variable does not have a corresponding unit in the dataset.
+#'   The column specified by the `age_var` argument is expected.
+#'
+#' @param age_var Age variable.
+#'
+#'   A numeric object is expected.
+#'
+#' @param age_unit Age unit.
+#'
+#'   The `age_unit` argument is only expected when there is NOT a variable `age_var+U`
+#'   in `dataset`. This gives the unit of the `age_var` variable and is used to convert
+#'   AGE to 'years' so that grouping can occur.
 #'
 #'   Default: NULL
 #'
 #'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 #'
-#' @param new_var New AGE variable to be created in years.
+#' @param new_var New age variable to be created in years. The returned values are
+#'   doubles and NOT integers.
+#''
+#' @details This function is used to convert an age variable into the unit 'years'
+#'   which can then be used to create age groups. The resulting column contains the
+#'   equivalent years as a double. Note, underlying computations assume an equal number
+#'   of days in each year (365.25).
+#'
+#' @author Michael Thorpe
+#'
+#' @return The input dataset (`dataset`) with `new_var` variable added in years.
 #'
 #' @family der_adsl
 #' @keywords der_adsl
 #'
-#'
-#' @return The input dataset with new_var parameter added in years.
-#'
 #' @export
 #'
-#' @examples
+#' @seealso [derive_vars_duration()]
 #'
-#' data <- data.frame(
-#'   AGE = c(27, 24, 3, 4, 1),
-#'   AGEU = c("days", "months", "years", "weeks", "years")
+#' @examples
+#' library(tibble)
+#'
+#' # Derive age with age units specified
+#' data <- tribble(
+#'   ~AGE, ~AGEU,
+#'   27, "days",
+#'   24, "months",
+#'   3, "years",
+#'   4, "weeks",
+#'   1, "years"
 #' )
 #'
-#' data %>%
-#'   derive_var_age_years(., AGE, new_var = AAGE)
+#' derive_var_age_years(data, AGE, new_var = AAGE)
 #'
-#' data.frame(AGE = c(12, 24, 36, 48)) %>%
-#'   derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
+#' # Derive age without age units variable specified
+#' data <- tribble(
+#'   ~AGE,
+#'   12,
+#'   24,
+#'   36,
+#'   48
+#' )
+#' derive_var_age_years(data, AGE, age_unit = "months", new_var = AAGE)
 derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
   age_variable <- assert_symbol(enexpr(age_var))
   assert_data_frame(dataset, required_vars = expr_c(age_variable))
@@ -204,6 +233,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
     ds <- dataset %>%
       mutate(!!new_var := !!age_var / unname(average_durations[tolower(!!sym(unit_var))]))
   }
+  return(ds)
 }
 
 

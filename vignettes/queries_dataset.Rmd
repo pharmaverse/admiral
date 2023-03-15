@@ -34,8 +34,8 @@ a dataset containing the required information to perform the derivation of the g
 The dataset passed to the `dataset_queries` argument of the
 `derive_vars_query()` function can be created by the `create_query_data()`
 function. For SMQs and SDGs company-specific functions for accessing the SMQ and
-SDG database need to be passed to the `create_query_data()` function (see the
-description of the `get_smq_fun` and `get_sdq_fun` parameter for details).
+SDG database need to be passed to the `create_query_data()` function 
+(see the description of the `get_terms_fun` argument for details).
 
 This vignette describes the expected structure and content of the dataset passed to the
 `dataset_queries` argument in the `derive_vars_query()` function. 

@@ -15,9 +15,23 @@ ex <- tibble::tribble(
   "ST42-3", "2021-03-02"
 ) %>% mutate(STUDYID = "ST42")
 
+input_worst_flag <- tibble::tribble(
+  ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT, ~ADT, ~AVAL,
+  "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
+  "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
+  "TEST01", "PAT01", "PARAM01", "WEEK 2", as.Date("2021-04-30"), 12.0,
+  "TEST01", "PAT02", "PARAM01", "WEEK 2", as.Date("2021-04-30"), 12.0,
+  "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
+  "TEST01", "PAT01", "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
+  "TEST01", "PAT02", "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
+  "TEST01", "PAT02", "PARAM03", "SCREENING", as.Date("2021-04-27"), 15.0,
+  "TEST01", "PAT02", "PARAM03", "WEEK 1", as.Date("2021-04-27"), 10.0,
+  "TEST01", "PAT02", "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
+)
 
-## Test 8: An error is issued if `derive_derived_param()` is called ----
-test_that("deprecation Test 8: An error is issued if `derive_derived_param()`
+
+## Test 1: An error is issued if `derive_derived_param()` is called ----
+test_that("deprecation Test 1: An error is issued if `derive_derived_param()`
           is called", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
@@ -47,8 +61,8 @@ test_that("deprecation Test 8: An error is issued if `derive_derived_param()`
   )
 })
 
-## Test 9: derive_vars_merged_dt: a deprecation error is issued ----
-test_that("deprecation Test 9: derive_vars_merged_dt: a deprecation error
+## Test 2: derive_vars_merged_dt: a deprecation error is issued ----
+test_that("deprecation Test 2: derive_vars_merged_dt: a deprecation error
           is issued", {
   expect_error(
     derive_vars_merged_dt(
@@ -65,8 +79,8 @@ test_that("deprecation Test 9: derive_vars_merged_dt: a deprecation error
   )
 })
 
-## Test 10: derive_vars_merged_dtm: a deprecation error is issued ----
-test_that("deprecation Test 10: derive_vars_merged_dtm: a deprecation error
+## Test 3: derive_vars_merged_dtm: a deprecation error is issued ----
+test_that("deprecation Test 3: derive_vars_merged_dtm: a deprecation error
           is issued", {
   expect_error(
     derive_vars_merged_dtm(
@@ -84,8 +98,8 @@ test_that("deprecation Test 10: derive_vars_merged_dtm: a deprecation error
 })
 
 
-## Test 14: An error is issued if `derive_var_agegr_ema()` is called ----
-test_that("deprecation Test 14: An error is issued if `derive_var_agegr_ema()`
+## Test 4: An error is issued if `derive_var_agegr_ema()` is called ----
+test_that("deprecation Test 4: An error is issued if `derive_var_agegr_ema()`
           is called", {
   rlang::with_options(lifecycle_verbosity = "error", {
     expect_error(
@@ -95,8 +109,8 @@ test_that("deprecation Test 14: An error is issued if `derive_var_agegr_ema()`
   })
 })
 
-## Test 15: An error is issued if `derive_var_agegr_fda()` is called ----
-test_that("deprecation Test 15: An error is issued if `derive_var_agegr_fda()`
+## Test 5: An error is issued if `derive_var_agegr_fda()` is called ----
+test_that("deprecation Test 5: An error is issued if `derive_var_agegr_fda()`
           is called", {
   rlang::with_options(lifecycle_verbosity = "error", {
     expect_error(
@@ -106,8 +120,8 @@ test_that("deprecation Test 15: An error is issued if `derive_var_agegr_fda()`
   })
 })
 
-## Test 16: An error is issued if `derive_param_first_event()` is called ----
-test_that("deprecation Test 16: An error is issued if `derive_param_first_event()`
+## Test 6: An error is issued if `derive_param_first_event()` is called ----
+test_that("deprecation Test 6: An error is issued if `derive_param_first_event()`
           is called", {
   rlang::with_options(lifecycle_verbosity = "error", {
     adsl <- tibble::tribble(
@@ -148,4 +162,88 @@ test_that("deprecation Test 16: An error is issued if `derive_param_first_event(
       class = "lifecycle_error_deprecated"
     )
   })
+})
+
+## Test 7: An warning is issued if `derive_var_worst_flag()` is called ----
+test_that("deprecation Test 7: A warning is issued if Derive worst flag is called", {
+  expect_warning(
+    derive_var_worst_flag(
+      input_worst_flag,
+      by_vars = exprs(USUBJID, PARAMCD, AVISIT),
+      order = exprs(desc(ADT)),
+      new_var = WORSTFL,
+      param_var = PARAMCD,
+      analysis_var = AVAL,
+      worst_high = c("PARAM01", "PARAM03"),
+      worst_low = "PARAM02"
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
+})
+
+## Test 8: A warning is issued if derive confirmation flag is called ----
+test_that("deprecation Test 8: A warning is issued if derive confirmation flag is called", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PR",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
+  expect_error(
+    derive_var_confirmation_flag(
+      data,
+      new_var = CONFFL,
+      by_vars = exprs(USUBJID),
+      join_vars = exprs(AVALC),
+      join_type = "after",
+      order = exprs(AVISITN),
+      filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR")
+    ),
+    class = "lifecycle_error_deprecated"
+  )
+})
+
+
+## Test 9: A warning is issued if filter_joined is called ----
+test_that("deprecation Test 9: A warning is issued if filter_confirmation is called", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PR",
+    "2",      3,        "PD",
+    "3",      1,        "SD",
+    "4",      1,        "PR",
+    "4",      2,        "PD",
+    "4",      3,        "SD",
+    "4",      4,        "SD",
+    "4",      5,        "PR"
+  )
+  expect_error(
+    filter_confirmation(
+      data,
+      by_vars = exprs(USUBJID),
+      join_vars = exprs(AVISITN, AVALC),
+      join_type = "after",
+      order = exprs(AVISITN),
+      filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR") &
+        AVISITN < AVISITN.join
+    ),
+    class = "lifecycle_error_deprecated"
+  )
 })

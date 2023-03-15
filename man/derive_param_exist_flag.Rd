@@ -115,7 +115,7 @@ and \code{set_value_to} are populated for the new parameter)
 \description{
 Add a new parameter indicating that a certain event exists in a dataset.
 \code{AVALC} and \code{AVAL} indicate if an event occurred or not. For example, the
-function can derive a parameter indicating if there is measureable disease at
+function can derive a parameter indicating if there is measurable disease at
 baseline.
 }
 \details{
@@ -183,6 +183,8 @@ derive_param_exist_flag(
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_event}()},
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},

@@ -338,7 +338,7 @@ ae_02 %>%
   dataset_vignette(display_vars = exprs(USUBJID, AEDECOD, AESTDY, AESEV, AENADSEV))
 ```
 
-There exists a further function `derive_var_confirmation_flag()`, which follows
+There exists a further function `derive_var_joied_exist_flag()`, which follows
 a similar principle to the "joined" set as explained here. This can be used for whenever
 one set of observations "confirms" another set in a dataframe, i.e. the flag is only
 set for your observation if both the observation and some other observation meet both

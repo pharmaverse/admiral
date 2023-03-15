@@ -2,7 +2,7 @@
 #'
 #' Add a new parameter indicating that a certain event exists in a dataset.
 #' `AVALC` and `AVAL` indicate if an event occurred or not. For example, the
-#' function can derive a parameter indicating if there is measureable disease at
+#' function can derive a parameter indicating if there is measurable disease at
 #' baseline.
 #'
 #' @param dataset Input dataset

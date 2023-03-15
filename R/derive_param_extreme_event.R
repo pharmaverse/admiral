@@ -197,8 +197,8 @@ derive_param_first_event <- function(dataset,
 #'   source dataset is selected. This is depending on `mode`, (with respect to `order`,
 #'   if applicable) where the event condition (`filter_source` parameter) is fulfilled.
 #'   1. For each observation in `dataset_adsl` a new observation is created. For
-#'   subjects with event `new_var` is set to `true_var`. For all other
-#'   subjects `new_var` is set to `false_var`.
+#'   subjects with event `new_var` is set to `true_value`. For all other
+#'   subjects `new_var` is set to `false_value`.
 #'   For subjects with event all variables from `dataset_source` are kept. For
 #'   subjects without event all variables which are in both `dataset_adsl` and
 #'   `dataset_source` are kept.
@@ -287,7 +287,7 @@ derive_param_extreme_event <- function(dataset = NULL,
                                        dataset_source,
                                        filter_source,
                                        order = NULL,
-                                       new_var = AVALC,
+                                       new_var = NULL,
                                        true_value = "Y",
                                        false_value = "N",
                                        mode = "first",
@@ -301,7 +301,7 @@ derive_param_extreme_event <- function(dataset = NULL,
   assert_data_frame(dataset_source,
     required_vars = exprs(!!!subject_keys, !!!extract_vars(order))
   )
-  new_var <- assert_symbol(enexpr(new_var))
+  new_var <- assert_symbol(enexpr(new_var), optional = TRUE)
   assert_same_type(true_value, false_value)
   assert_data_frame(dataset, optional = TRUE)
   assert_data_frame(dataset_adsl, required_vars = subject_keys)
@@ -332,15 +332,18 @@ derive_param_extreme_event <- function(dataset = NULL,
       order = order,
       mode = mode,
       check_type = check_type
-    ) %>%
-    mutate(!!new_var := true_value)
+    )
 
   noevents <- anti_join(
     select(dataset_adsl, intersect(source_vars, adsl_vars)),
     select(events, !!!subject_keys),
     by = sapply(subject_keys, as_name) # nolint: undesirable_function_linter
-  ) %>%
-    mutate(!!new_var := false_value)
+  )
+
+  if (!is.null(new_var)) {
+    events <- mutate(events, !!new_var := true_value)
+    noevents <- mutate(noevents, !!new_var := false_value)
+  }
 
   new_obs <- bind_rows(events, noevents) %>%
     mutate(

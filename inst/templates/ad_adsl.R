@@ -30,7 +30,7 @@ lb <- admiral_lb
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
 dm <- convert_blanks_to_na(dm)
 ds <- convert_blanks_to_na(ds)
@@ -78,11 +78,11 @@ format_lddthgr1 <- function(x) {
 }
 
 # EOSSTT mapping
-format_eoxxstt <- function(x) {
+format_eosstt <- function(x) {
   case_when(
     x %in% c("COMPLETED") ~ "COMPLETED",
-    !(x %in% c("COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~ "DISCONTINUED",
     x %in% c("SCREEN FAILURE") ~ NA_character_,
+    !is.na(x) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 }
@@ -103,7 +103,7 @@ ex_ext <- ex %>%
 adsl <- dm %>%
   ## derive treatment variables (TRT01P, TRT01A) ----
   # See also the "Visit and Period Variables" vignette
-  # (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_adsl)
+  # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_adsl)
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
   ## derive treatment start date (TRTSDTM) ----
   derive_vars_merged(
@@ -156,12 +156,14 @@ adsl <- adsl %>%
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   ) %>%
   # EOS status
-  derive_var_disposition_status(
-    dataset_ds = ds_ext,
+  derive_var_merged_cat(
+    dataset_add = ds_ext,
+    by_vars = exprs(STUDYID, USUBJID),
+    filter_add = DSCAT == "DISPOSITION EVENT",
     new_var = EOSSTT,
-    status_var = DSDECOD,
-    format_new_var = format_eoxxstt,
-    filter_ds = DSCAT == "DISPOSITION EVENT"
+    source_var = DSDECOD,
+    cat_fun = format_eosstt,
+    missing_value = NA_character_
   ) %>%
   # Last retrieval date
   derive_vars_merged(

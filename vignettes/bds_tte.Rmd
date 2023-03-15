@@ -64,7 +64,7 @@ in `{admiral}`---and the SDTM datasets from `{admiral.test}` are used.
 data("admiral_ae")
 data("admiral_adsl")
 
-ae <- admiral_ae
+ae <- convert_blanks_to_na(admiral_ae)
 adsl <- admiral_adsl
 ```
 

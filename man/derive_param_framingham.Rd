@@ -130,8 +130,9 @@ Adds a record for framingham score (FCVD101) for each by group
 The values of \code{age}, \code{sex}, \code{smokefl}, \code{diabetfl} and \code{trthypfl} will be
 added to the \code{by_vars} list.
 The predicted probability of having cardiovascular disease (CVD)
-within 10-years according to Framingham formula
-\href{https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}{D'Agostino, 2008} is: # nolint
+within 10-years according to Framingham formula. See AHA Journal article
+General Cardiovascular Risk Profile for Use in Primary Care for reference.
+
 \strong{For Women:}
 
 \tabular{rr}{
@@ -234,6 +235,8 @@ derive_param_framingham(
 
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
+\code{\link{derive_expected_records}()},
+\code{\link{derive_extreme_event}()},
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},

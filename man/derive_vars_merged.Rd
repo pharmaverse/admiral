@@ -32,7 +32,9 @@ argument are expected.}
 
 The input dataset and the selected observations from the additional dataset
 are merged by the specified by variables. The by variables must be a unique
-key of the selected observations.
+key of the selected observations. Variables from the additional dataset can
+be renamed by naming the element, i.e., \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to
+the dplyr joins.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}}
 
@@ -236,8 +238,8 @@ derive_vars_merged(
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
@@ -247,7 +249,6 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
-\code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
