@@ -55,8 +55,8 @@ setHook(
         "`set_admiral_options(force_admiral_vars = FALSE)` ",
         "before attaching dplyr."
       ))
-      detach("package:admiral")
-      suppressWarnings(library("admiral",
+      detach("package:admiral") # nolint: undesirable_function_linter
+      suppressWarnings(library("admiral", # nolint: undesirable_function_linter
         pos = 2L,
         warn.conflicts = FALSE,
         quietly = TRUE,
