@@ -47,9 +47,14 @@ A package release is done in five parts:
 1) Verify that all CI/CD checks are passing for the `devel` into the `pre-release` Pull Request, merge and then bundle up and send off to CRAN.
 1) Once the package is available on CRAN, another Pull Request is created for merging the `pre-release` branch into the `main` branch.  This will trigger the GitHub action to rebuild the `{admiral}` website with all the updates for this release.
 1) Use the release button on GitHub to "release" the package onto GitHub.  This release onto Github archives the version of code within the `main` branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file and makes a validation report via the GitHub action `validation` from [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).  Please see past [admiral releases](https://github.com/pharmaverse/admiral/releases) for reference. 
-1) Any issues fixed in the `pre-release/main` branches should be merged back into `devel`.  
+1) Any issues fixed in the `pre-release/main` branches should be merged back into `devel`. 
+1) Once a release is completed the `main` branch should be merged into `patch` to be ready for hotfixes.
 
-**Quarterly Release:**  `devel >> pre-release >> main` 
+**Quarterly Release:**  
+
+* `devel >> pre-release >> main` 
+* `pre-release >> main >> devel` (Fixes done after a CRAN rejection)
+* `main >> patch` (To be prepared in case of a needed hotfix)
 
 ## Hot Fix Release
 
