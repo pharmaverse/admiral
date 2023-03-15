@@ -437,7 +437,7 @@ derive_param_tte <- function(dataset = NULL,
       adsl,
       by = vars2chr(subject_keys)
     ) %>%
-  process_set_values_to(set_values_to) %>%
+    process_set_values_to(set_values_to) %>%
     mutate(!!date_var := pmax(!!date_var, !!start_var, na.rm = TRUE)) %>%
     remove_tmp_vars()
 
