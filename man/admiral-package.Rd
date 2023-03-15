@@ -48,6 +48,9 @@ Authors:
   \item Zelos Zhu
   \item Jeffrey Dickinson
   \item Ania Golab
+  \item Kangjie Zhang
+  \item Daphne Grasselly
+  \item Adam Forys
 }
 
 Other contributors:
