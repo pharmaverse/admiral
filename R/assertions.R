@@ -459,7 +459,7 @@ assert_filter_cond <- function(arg, optional = FALSE) {
   }
 
   provided <- !is_missing(arg)
-  if (provided & !(is_call(arg) | is_logical(arg))) {
+  if (provided && !(is_call(arg) || is_logical(arg))) {
     err_msg <- sprintf(
       "`%s` must be a filter condition but is %s",
       arg_name(substitute(arg)),
@@ -1222,7 +1222,7 @@ assert_varval_list <- function(arg, # nolint
     valid_vals <- "a symbol, character scalar, numeric scalar, or `NA`"
   }
 
-  if (!accept_var & (!inherits(arg, "list") || !is_named(arg))) {
+  if (!accept_var && (!inherits(arg, "list") || !is_named(arg))) {
     err_msg <- sprintf(
       paste0(
         "`%s` must be a named list of expressions where each element is ",
@@ -1236,7 +1236,7 @@ assert_varval_list <- function(arg, # nolint
     abort(err_msg)
   }
 
-  if (accept_var & (!contains_vars(arg))) {
+  if (accept_var && (!contains_vars(arg))) {
     err_msg <- sprintf(
       paste0(
         "`%s` must be a list of expressions where each element is ",
