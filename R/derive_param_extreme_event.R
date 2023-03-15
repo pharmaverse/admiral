@@ -3,7 +3,8 @@
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' This function is *deprecated*, please use `derive_param_extreme_event()` instead with the `order` argument instead of the `date_var` argument.
+#' This function is *deprecated*, please use `derive_param_extreme_event()` instead with the
+#' `order` argument instead of the `date_var` argument.
 #'
 #' @param dataset Input dataset
 #'
@@ -98,7 +99,10 @@ derive_param_first_event <- function(dataset,
   ### DEPRECATION
   deprecate_stop("0.9.0",
     "derive_param_first_event()",
-    details = "Please use `derive_param_extreme_event()` instead with the `order` argument instead of the `date_var` argument"
+    details = paste(
+      "Please use `derive_param_extreme_event()` instead with the `order` argument",
+      "instead of the `date_var` argument"
+    )
   )
 }
 
@@ -314,7 +318,7 @@ derive_param_extreme_event <- function(dataset = NULL,
     case_sensitive = FALSE
   )
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
+  if (!is.null(set_values_to$PARAMCD) && !is.null(dataset)) {
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
 
@@ -334,7 +338,7 @@ derive_param_extreme_event <- function(dataset = NULL,
   noevents <- anti_join(
     select(dataset_adsl, intersect(source_vars, adsl_vars)),
     select(events, !!!subject_keys),
-    by = sapply(subject_keys, as_name)
+    by = sapply(subject_keys, as_name) # nolint: undesirable_function_linter
   )
 
   if (!is.null(new_var)) {

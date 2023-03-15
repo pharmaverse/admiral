@@ -6,7 +6,7 @@
 # * https://r-pkgs.org/tests.html
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
-library(testthat)
-library(admiral)
+library(testthat) # nolint: undesirable_function_linter
+library(admiral) # nolint: undesirable_function_linter
 
 test_check("admiral")

@@ -4,7 +4,8 @@
 #'
 #' @param option A character scalar of commonly used admiral function inputs.
 #'
-#'   As of now, support only available for `r enumerate(names(admiral_environment$admiral_options), quote_fun = dquote, conjunction = "or")`.
+#'   As of now, support only available for
+#'   `r enumerate(names(admiral_environment$admiral_options), quote_fun = dquote, conjunction = "or")`.
 #'   See `set_admiral_options()` for a description of the options.
 #'
 #' @details
@@ -84,7 +85,8 @@ get_admiral_option <- function(option) {
 #' @export
 #'
 #' @seealso [get_admiral_option()], [derive_param_exist_flag()],[derive_param_tte()],
-#' [derive_var_dthcaus()], [derive_var_extreme_dtm()], [derive_vars_period()], [create_period_dataset()]
+#' [derive_var_dthcaus()], [derive_var_extreme_dtm()], [derive_vars_period()],
+#' [create_period_dataset()]
 #'
 #' @examples
 #' library(lubridate)

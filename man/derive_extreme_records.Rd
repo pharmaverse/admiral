@@ -70,7 +70,7 @@ A list of variable name-value pairs is expected.
 \itemize{
 \item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
-symbol, a numeric value or \code{NA}, e.g., \code{exprs(PARAMCD = "TDOSE", PARCAT1 =   "OVERALL")}. More general expression are not allowed.
+symbol, a numeric value, an expression, or \code{NA}, e.g., \code{exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")}.
 }}
 }
 \value{
