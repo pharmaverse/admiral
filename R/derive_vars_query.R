@@ -254,7 +254,7 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
   # check illegal query name
-  if (any(queries$QUERY_NAME == "") | any(is.na(queries$QUERY_NAME))) {
+  if (any(queries$QUERY_NAME == "") || any(is.na(queries$QUERY_NAME))) {
     abort(paste0(
       "`QUERY_NAME` in `", queries_name,
       "` cannot be empty string or NA."
@@ -294,7 +294,7 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
   # check illegal term name
-  if (any(is.na(queries$TERM_NAME) & is.na(queries$TERM_ID)) |
+  if (any(is.na(queries$TERM_NAME) & is.na(queries$TERM_ID)) ||
     any(queries$TERM_NAME == "" & is.na(queries$TERM_ID))) {
     abort(paste0(
       "Either `TERM_NAME` or `TERM_ID` need to be specified",
@@ -333,7 +333,7 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
   # check QUERY_SCOPE and QUERY_SCOPE_NUM are one to one if available
-  if ("QUERY_SCOPE" %in% names(queries) & "QUERY_SCOPE_NUM" %in% names(queries)) {
+  if ("QUERY_SCOPE" %in% names(queries) && "QUERY_SCOPE_NUM" %in% names(queries)) {
     assert_one_to_one(queries, exprs(QUERY_SCOPE), exprs(QUERY_SCOPE_NUM))
   }
 }
