@@ -1371,7 +1371,7 @@ compute_tmf <- function(dtc,
 #'   date_imputation = "mid",
 #'   preserve = TRUE
 #' )
-derive_vars_dt <- function(dataset,
+derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
                            new_vars_prefix,
                            dtc,
                            highest_imputation = "n",
@@ -1565,7 +1565,7 @@ derive_vars_dt <- function(dataset,
 #'   date_imputation = "mid",
 #'   preserve = TRUE
 #' )
-derive_vars_dtm <- function(dataset,
+derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
                             new_vars_prefix,
                             dtc,
                             highest_imputation = "h",

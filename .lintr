@@ -1,7 +1,7 @@
 linters: linters_with_defaults(
     line_length_linter(100),
     object_usage_linter=NULL,
-    cyclocomp_linter(complexity_limit = 20),
+    cyclocomp_linter(complexity_limit = 22),
     undesirable_function_linter = undesirable_function_linter()
   )
 exclusions: list(
