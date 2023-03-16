@@ -1398,10 +1398,10 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
   if (highest_imputation == "Y") {
     assert_character_scalar(date_imputation, values = c("first", "last"))
   }
-  if (highest_imputation == "Y" & is.null(min_dates) & date_imputation == "first") {
+  if (highest_imputation == "Y" && is.null(min_dates) && date_imputation == "first") {
     warning("If `highest_impuation` = \"Y\" and `date_imputation` = \"first\" is specified, `min_dates` should be specified.") # nolint
   }
-  if (highest_imputation == "Y" & is.null(max_dates) & date_imputation == "last") {
+  if (highest_imputation == "Y" && is.null(max_dates) && date_imputation == "last") {
     warning("If `highest_impuation` = \"Y\" and `date_imputation` = \"last\" is specified, `max_dates` should be specified.") # nolint
   }
 
@@ -1596,10 +1596,10 @@ derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
   if (highest_imputation == "Y") {
     assert_character_scalar(date_imputation, values = c("first", "last"))
   }
-  if (highest_imputation == "Y" & is.null(min_dates) & date_imputation == "first") {
+  if (highest_imputation == "Y" && is.null(min_dates) && date_imputation == "first") {
     warning("If `highest_impuation` = \"Y\" and `date_imputation` = \"first\" is specified, `min_dates` should be specified.") # nolint
   }
-  if (highest_imputation == "Y" & is.null(max_dates) & date_imputation == "last") {
+  if (highest_imputation == "Y" && is.null(max_dates) && date_imputation == "last") {
     warning("If `highest_impuation` = \"Y\" and `date_imputation` = \"last\" is specified, `max_dates` should be specified.") # nolint
   }
 
