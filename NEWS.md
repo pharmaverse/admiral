@@ -13,6 +13,12 @@
 
 ## Documentation
 
+# admiral 0.10.1
+
+- Fix checks on `derive_vars_dtm()` and `derive_vars_dt()` 
+that were too restrictive. (#1810)
+
+
 # admiral 0.10.0
 
 ## New Features
