@@ -62,13 +62,20 @@
 #' @examples
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("admiral_vs")
-#' less_subjects <- unique(admiral_vs$USUBJID)[1:30]
+#' example_vs <- tribble(
+#'   ~USUBJID, ~VSTESTCD,      ~VISIT,  ~VISITNUM, ~VSTPTNUM, ~VSSTRESN,
+#'     "1001",   "DIABP", "SCREENING",          1,        10,        64,
+#'     "1001",   "DIABP", "SCREENING",          1,        11,        66,
+#'     "1001",   "DIABP",  "BASELINE",          2,       100,        68,
+#'     "1001",   "DIABP",  "BASELINE",          2,       101,        68,
+#'     "1001",   "DIABP",    "WEEK 2",          3,       200,        72,
+#'     "1001",   "DIABP",    "WEEK 2",          3,       201,        71,
+#'     "1001",   "DIABP",    "WEEK 4",          4,       300,        70,
+#'     "1001",   "DIABP",    "WEEK 4",          4,       301,        70
+#' )
 #'
 #' # Flag last value for each patient, test, and visit, baseline observations are ignored
-#' admiral_vs %>%
-#'   filter(USUBJID %in% less_subjects) %>%
+#' example_vs %>%
 #'   restrict_derivation(
 #'     derivation = derive_var_extreme_flag,
 #'     args = params(
@@ -161,10 +168,19 @@
 #' )
 #'
 #' # OCCURDS Examples
-#' data("admiral_ae")
+#' example_ae <- tribble(
+#'        ~USUBJID,                                              ~AEBODSYS,                               ~AEDECOD,   ~AESEV, ~AESTDY, ~AESEQ,
+#'   "01-701-1015", "GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS",            "APPLICATION SITE ERYTHEMA",   "MILD",       2,      1,
+#'   "01-701-1015", "GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS",            "APPLICATION SITE PRURITUS",   "MILD",       2,      2,
+#'   "01-701-1015",                           "GASTROINTESTINAL DISORDERS",                            "DIARRHOEA",   "MILD",       8,      3,
+#'   "01-701-1023",                                    "CARDIAC DISORDERS", "ATRIOVENTRICULAR BLOCK SECOND DEGREE",   "MILD",      22,      4,
+#'   "01-701-1023",               "SKIN AND SUBCUTANEOUS TISSUE DISORDERS",                             "ERYTHEMA",   "MILD",       3,      1,
+#'   "01-701-1023",               "SKIN AND SUBCUTANEOUS TISSUE DISORDERS",                             "ERYTHEMA", "SEVERE",       5,      2,
+#'   "01-701-1023",               "SKIN AND SUBCUTANEOUS TISSUE DISORDERS",                             "ERYTHEMA",   "MILD",       8,      3
+#' )
 #'
 #' # Most severe AE first occurrence per patient
-#' admiral_ae %>%
+#' example_ae %>%
 #'   mutate(
 #'     TEMP_AESEVN =
 #'       as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
@@ -179,7 +195,7 @@
 #'   select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
 #'
 #' # Most severe AE first occurrence per patient per body system
-#' admiral_ae %>%
+#' example_ae %>%
 #'   mutate(
 #'     TEMP_AESEVN =
 #'       as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
