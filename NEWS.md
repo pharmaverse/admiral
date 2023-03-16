@@ -1,3 +1,12 @@
+# admiraldev 0.4.0
+
+## New Features
+
+- New function `assert_named()` to check if all elements of an argument are
+named (#241)
+- New function `assert_expr_list()` to check if an argument is a list of
+expressions (#241)
+
 # admiraldev 0.3.0
 
 ## New Features

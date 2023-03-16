@@ -6,7 +6,7 @@
 #' @param arg A function argument to be checked
 #' @param required_vars A list of variables created using `exprs()`
 #' @param check_is_grouped Throw an error is `dataset` is grouped? Defaults to `TRUE`.
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
 #'
@@ -92,7 +92,7 @@ assert_data_frame <- function(arg,
 #' @param case_sensitive Should the argument be handled case-sensitive?
 #' If set to `FALSE`, the argument is converted to lower case for checking the
 #' permitted values and returning the argument.
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
 #'
@@ -116,7 +116,7 @@ assert_data_frame <- function(arg,
 #'
 #' try(example_fun(TRUE))
 #'
-#' # handling parameters case-insensitive
+#' # handling arguments case-insensitive
 #' example_fun2 <- function(msg_type) {
 #'   msg_type <- assert_character_scalar(
 #'     msg_type,
@@ -202,7 +202,7 @@ assert_character_scalar <- function(arg,
 #' @param values A `character` vector of valid values for `arg`
 #' @param named If set to `TRUE`, an error is issued if not all elements of the
 #'   vector are named.
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
 #'
@@ -260,20 +260,8 @@ assert_character_vector <- function(arg, values = NULL, named = FALSE, optional 
     }
   }
 
-  if (named && length(arg) > 0) {
-    if (is.null(names(arg))) {
-      abort(paste0(
-        "All elements of ", arg_name(substitute(arg)), " must be named.\n",
-        "No element is named."
-      ))
-    }
-    unnamed <- which(names(arg) == "")
-    if (length(unnamed) > 0) {
-      abort(paste0(
-        "All elements of ", arg_name(substitute(arg)), " must be named.\n",
-        "The following elements are not named: ", enumerate(unnamed, quote_fun = NULL)
-      ))
-    }
+  if (named) {
+    assert_named(arg)
   }
 }
 
@@ -283,7 +271,7 @@ assert_character_vector <- function(arg, values = NULL, named = FALSE, optional 
 #'
 #' @param arg A function argument to be checked
 #'
-#' @param optional Is the checked parameter optional?
+#' @param optional Is the checked argument optional?
 #'
 #' If set to `FALSE` and `arg` is `NULL` then an error is thrown. Otherwise,
 #' `NULL` is considered as valid value.
@@ -331,7 +319,7 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #' Checks if an argument is a symbol
 #'
 #' @param arg A function argument to be checked. Must be a `symbol`. See examples.
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
 #'
@@ -442,7 +430,7 @@ assert_expr <- function(arg, optional = FALSE) {
 #' library(rlang)
 #' data(admiral_dm)
 #'
-#' # typical usage in a function as a parameter check
+#' # typical usage in a function as an argument check
 #' example_fun <- function(dat, x) {
 #'   x <- assert_filter_cond(enquo(x))
 #'   filter(dat, !!x)
@@ -480,7 +468,7 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' @param expect_names If the argument is set to `TRUE`, it is checked if all
 #'   variables are named, e.g., `exprs(APERSDT = APxxSDT, APEREDT = APxxEDT)`.
 #'
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
 #'
@@ -537,7 +525,7 @@ assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
 #' using `exprs()`
 #'
 #' @param arg A function argument to be checked
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
 #'
@@ -586,8 +574,18 @@ assert_order_vars <- function(arg, optional = FALSE) {
     abort(default_err_msg)
   }
 
-  if (isTRUE(is_call(arg))) {
-    abort(default_err_msg)
+  is_valid <- map_lgl(arg, ~ is.call(.x) || is_expression(.x))
+  if (!all(is_valid)) {
+    info_msg <- paste(
+      sprintf("\u2716 Element %s is %s", which(!is_valid), map_chr(arg[!is_valid], what_is_it)),
+      collapse = "\n"
+    )
+    err_msg <- sprintf(
+      "Each element of `%s` must be an expression but the following are not:\n%s",
+      arg_name(substitute(arg)),
+      info_msg
+    )
+    abort(err_msg)
   }
 
   invisible(arg)
@@ -600,7 +598,7 @@ assert_order_vars <- function(arg, optional = FALSE) {
 #' @param arg A function argument to be checked
 #' @param subset A subset of integers that `arg` should be part of. Should be one
 #'   of `"none"` (the default), `"positive"`, `"non-negative"` or `"negative"`.
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #'   is `NULL` then an error is thrown
 #'
 #'
@@ -657,7 +655,7 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
 #' Checks if an argument is a numeric vector
 #'
 #' @param arg A function argument to be checked
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
 #'
@@ -699,7 +697,7 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
 #' Checks if an argument is an atomic vector
 #'
 #' @param arg A function argument to be checked
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
 #'
@@ -741,7 +739,7 @@ assert_atomic_vector <- function(arg, optional = FALSE) {
 #' Checks if an argument is an object inheriting from the S3 class specified.
 #' @param arg A function argument to be checked
 #' @param class The S3 class to check for
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #'   is `NULL` then an error is thrown
 #'
 #'
@@ -792,7 +790,7 @@ assert_s3_class <- function(arg, class, optional = FALSE) {
 #' @param class The S3 class or type to check for
 #' @param named If set to `TRUE`, an error is issued if not all elements of the
 #'   list are named.
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #'   is `NULL` then an error is thrown
 #'
 #'
@@ -863,6 +861,42 @@ assert_list_of <- function(arg, class, named = FALSE, optional = TRUE) {
   }
 
   invisible(arg)
+}
+
+#' Assert Argument is a Named List or Vector
+#'
+#' Assert that all elements of the argument are named.
+#'
+#' @inheritParams assert_data_frame
+#'
+#' @keywords assertion
+#' @family assertion
+#'
+#' @return
+#' The function throws an error if `arg` is not a named list or vector or
+#' returns the input invisibly otherwise
+#'
+#' @export
+assert_named <- function(arg, optional = FALSE) {
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (length(arg) > 0) {
+    if (is.null(names(arg))) {
+      abort(paste0(
+        "All elements of `", arg_name(substitute(arg)), "` must be named.\n",
+        "No element is named."
+      ))
+    }
+    unnamed <- which(names(arg) == "")
+    if (length(unnamed) > 0) {
+      abort(paste0(
+        "All elements of `", arg_name(substitute(arg)), "` must be named.\n",
+        "The following elements are not named: ", enumerate(unnamed, quote_fun = NULL)
+      ))
+    }
+  }
 }
 
 #' Assert Argument is a Named List of Expressions
@@ -940,14 +974,14 @@ assert_has_variables <- function(dataset, required_vars) {
 
 #' Is Argument a Function?
 #'
-#' Checks if the argument is a function and if all expected parameters are
+#' Checks if the argument is a function and if all expected arguments are
 #' provided by the function.
 #'
 #' @param arg A function argument to be checked
 #'
-#' @param params A character vector of expected parameter names
+#' @param params A character vector of expected argument names
 #'
-#' @param optional Is the checked parameter optional?
+#' @param optional Is the checked argument optional?
 #'
 #' If set to `FALSE` and `arg` is `NULL` then an error is thrown.
 #'
@@ -956,8 +990,8 @@ assert_has_variables <- function(dataset, required_vars) {
 #'
 #'  - if the argument is not a function or
 #'
-#'  - if the function does not provide all parameters as specified for the
-#'  `params` parameter.
+#'  - if the function does not provide all arguments as specified for the
+#'  `params` argument.
 #'
 #' @export
 #'
@@ -1001,9 +1035,9 @@ assert_function <- function(arg, params = NULL, optional = FALSE) {
     is_param <- params %in% names(formals(arg))
     if (!all(is_param)) {
       txt <- if (sum(!is_param) == 1L) {
-        "%s is not a parameter of the function specified for `%s`"
+        "%s is not an argument of the function specified for `%s`"
       } else {
-        "%s are not parameters of the function specified for `%s`"
+        "%s are not arguments of the function specified for `%s`"
       }
       err_msg <- sprintf(txt, enumerate(params[!is_param]), arg_name(substitute(arg)))
       abort(err_msg)
@@ -1021,7 +1055,7 @@ assert_function <- function(arg, params = NULL, optional = FALSE) {
 #' @family assertion
 #'
 #' @return
-#' The function throws an error if any elements of `params` is not a parameter of
+#' The function throws an error if any elements of `params` is not an argument of
 #' the function given by `arg`
 #'
 #' @export
@@ -1042,9 +1076,9 @@ assert_function_param <- function(arg, params) {
   is_param <- params %in% names(formals(fun))
   if (!all(is_param)) {
     txt <- if (sum(!is_param) == 1L) {
-      "%s is not a parameter of `%s()`"
+      "%s is not an argument of `%s()`"
     } else {
-      "%s are not parameters of `%s()`"
+      "%s are not arguments of `%s()`"
     }
     err_msg <- sprintf(txt, enumerate(params[!is_param]), arg)
     abort(err_msg)
@@ -1170,15 +1204,15 @@ assert_param_does_not_exist <- function(dataset, param) {
 #' Is an Argument a Variable-Value List?
 #'
 #' Checks if the argument is a list of expressions where the expressions are
-#' variable-value pairs. The value can be a symbol, a string, a numeric, or
-#' `NA`. More general expression are not allowed.
+#' variable-value pairs. The value can be a symbol, a string, a numeric, an
+#' expression, or `NA`.
 #'
 #' @param arg A function argument to be checked
 #' @param required_elements A `character` vector of names that must be present in `arg`
 #' @param accept_expr Should expressions on the right hand side be accepted?
 #' @param accept_var Should unnamed variable names (e.g. `exprs(USUBJID)`) on the
 #'   right hand side be accepted?
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown.
 #'
 #'
@@ -1288,6 +1322,100 @@ assert_varval_list <- function(arg, # nolint
         " must be ",
         valid_vals,
         ".\n",
+        paste(
+          names(invalids),
+          "=",
+          map_chr(invalids, expr_label),
+          "is of type",
+          map_chr(invalids, typeof),
+          collapse = "\n"
+        )
+      )
+    )
+  }
+
+  invisible(arg)
+}
+
+#' Is an Argument a List of Expressions?
+#'
+#' Checks if the argument is a list of expressions.
+#'
+#' @param arg A function argument to be checked
+#' @param required_elements A `character` vector of names that must be present in `arg`
+#' @param named If set to `TRUE`, an error is issued if not all elements of the
+#'   list are named.
+#' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown.
+#'
+#' @return
+#' The function throws an error if `arg` is not a list of expressions.
+#' Otherwise, the input it returned invisibly.
+#'
+#' @keywords assertion
+#' @family assertion
+#' @export
+#'
+#' @examples
+#' library(rlang)
+#'
+#' example_fun <- function(vars) {
+#'   assert_expr_list(vars)
+#' }
+#' example_fun(exprs(DTHDOM = "AE", DTHSEQ = AESEQ))
+#'
+#' try(example_fun(exprs("AE", DTSEQ = AESEQ, !!mean)))
+assert_expr_list <- function(arg, # nolint
+                             required_elements = NULL,
+                             named = FALSE,
+                             optional = FALSE) {
+  assert_logical_scalar(named)
+  assert_logical_scalar(optional)
+  assert_character_vector(required_elements, optional = TRUE)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!inherits(arg, "list")) {
+    err_msg <- sprintf(
+      paste0(
+        "`%s` must be a named list of expressions but it is %s\n",
+        "\u2139 To create a list of expressions use `exprs()`"
+      ),
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+
+  if (named) {
+    assert_named(arg)
+  }
+
+  if (!is.null(required_elements)) {
+    missing_elements <- setdiff(required_elements, names(arg))
+    if (length(missing_elements) >= 1L) {
+      err_msg <- sprintf(
+        "The following required elements are missing in `%s`: %s",
+        arg_name(substitute(arg)),
+        enumerate(missing_elements, quote_fun = squote)
+      )
+      abort(err_msg)
+    }
+  }
+
+  invalids <- arg[!map_lgl(
+      arg,
+      ~ is_call(.x) || is_expression(.x)
+    )]
+
+  if (length(invalids) > 0) {
+    abort(
+      paste0(
+        "The elements of the list ",
+        arg_name(substitute(arg)),
+        " must be expressions.\n",
         paste(
           names(invalids),
           "=",
@@ -1526,7 +1654,7 @@ assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) 
 #'
 #' @param arg The function argument to be checked
 #'
-#' @param optional Is the checked parameter optional? If set to `FALSE`
+#' @param optional Is the checked argument optional? If set to `FALSE`
 #' and `arg` is `NULL` then the function `assert_date_vector` exits early and throw and error.
 #'
 #' @return
