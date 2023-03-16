@@ -242,7 +242,10 @@ derive_vars_merged <- function(dataset,
   assert_order_vars(order, optional = TRUE)
   assert_vars(new_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars_left)
-  assert_data_frame(dataset_add, required_vars = expr_c(by_vars_right, extract_vars(order), new_vars))
+  assert_data_frame(
+    dataset_add,
+    required_vars = expr_c(by_vars_right, extract_vars(order), new_vars)
+  )
   match_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
 
   add_data <- filter_if(dataset_add, filter_add)
