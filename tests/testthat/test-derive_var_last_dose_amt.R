@@ -30,49 +30,38 @@ input_ex <- tibble::tribble(
 # derive_var_last_dose_amt ----
 ## Test 1: works as expected ----
 test_that("derive_var_last_dose_amt Test 1: works as expected", {
-  expected_output <- mutate(
-    input_ae,
-    LDOSE = c(10, 10, 10, NA, 0, NA, NA)
+  expect_warning(
+    derive_var_last_dose_amt(
+      input_ae,
+      input_ex,
+      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = exprs(STUDYID, USUBJID),
+      dose_date = EXENDT,
+      analysis_date = AESTDT,
+      new_var = LDOSE,
+      dose_var = EXDOSE,
+      single_dose_condition = (EXSTDTC == EXENDTC),
+      traceability_vars = NULL
+    ),
+    class = "lifecycle_warning_deprecated"
   )
-
-  res <- derive_var_last_dose_amt(
-    input_ae,
-    input_ex,
-    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = exprs(STUDYID, USUBJID),
-    dose_date = EXENDT,
-    analysis_date = AESTDT,
-    new_var = LDOSE,
-    dose_var = EXDOSE,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    traceability_vars = NULL
-  )
-
-  expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })
 
 ## Test 2: returns traceability vars ----
 test_that("derive_var_last_dose_amt Test 2: returns traceability vars", {
-  expected_output <- mutate(
-    input_ae,
-    LDOSEDOM = c("EX", "EX", "EX", NA, "EX", NA, NA),
-    LDOSESEQ = c(1, 2, 3, NA, 2, NA, NA),
-    LDOSEVAR = c("EXSTDTC", "EXSTDTC", "EXSTDTC", NA, "EXSTDTC", NA, NA),
-    LDOSE = c(10, 10, 10, NA, 0, NA, NA)
+  expect_warning(
+    derive_var_last_dose_amt(
+      input_ae,
+      input_ex,
+      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = exprs(STUDYID, USUBJID),
+      dose_date = EXENDT,
+      analysis_date = AESTDT,
+      new_var = LDOSE,
+      dose_var = EXDOSE,
+      single_dose_condition = (EXSTDTC == EXENDTC),
+      traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+    ),
+    class = "lifecycle_warning_deprecated"
   )
-
-  res <- derive_var_last_dose_amt(
-    input_ae,
-    input_ex,
-    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = exprs(STUDYID, USUBJID),
-    dose_date = EXENDT,
-    analysis_date = AESTDT,
-    new_var = LDOSE,
-    dose_var = EXDOSE,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
-  )
-
-  expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })

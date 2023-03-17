@@ -271,9 +271,6 @@ derive_vars_joined(
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_last_dose_amt}()},
-\code{\link{derive_var_last_dose_date}()},
-\code{\link{derive_var_last_dose_grp}()},
 \code{\link{derive_var_merged_cat}()},
 \code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},

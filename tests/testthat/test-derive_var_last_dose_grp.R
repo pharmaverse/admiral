@@ -26,32 +26,21 @@ input_ex <- tibble::tribble(
 # derive_var_last_dose_grp
 ## Test 1: works as expected ----
 test_that("derive_var_last_dose_grp Test 1: works as expected", {
-  expected_output <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC, ~LDGRP,
-    "my_study", "subject1", 1, "2020-01-02", "G1",
-    "my_study", "subject1", 2, "2020-08-31", "G1",
-    "my_study", "subject1", 3, "2020-10-10", "G1",
-    "my_study", "subject2", 2, "2020-02-20", "G2",
-    "my_study", "subject3", 1, "2020-03-02", "G2",
-    "my_study", "subject4", 1, "2020-11-02", "G3"
-  ) %>%
-    mutate(
-      AESTDT = ymd(AESTDTC)
-    )
-
-  res <- derive_var_last_dose_grp(input_ae,
-    input_ex,
-    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = exprs(STUDYID, USUBJID),
-    dose_date = EXENDT,
-    new_var = LDGRP,
-    grp_brks = c(1, 5, 10, 15),
-    grp_lbls = c("G1", "G2", "G3"),
-    dose_var = EXDOSE,
-    analysis_date = AESTDT,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    traceability_vars = NULL
+  expect_warning(
+    derive_var_last_dose_grp(
+      input_ae,
+      input_ex,
+      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = exprs(STUDYID, USUBJID),
+      dose_date = EXENDT,
+      new_var = LDGRP,
+      grp_brks = c(1, 5, 10, 15),
+      grp_lbls = c("G1", "G2", "G3"),
+      dose_var = EXDOSE,
+      analysis_date = AESTDT,
+      single_dose_condition = (EXSTDTC == EXENDTC),
+      traceability_vars = NULL
+    ),
+    class = "lifecycle_warning_deprecated"
   )
-
-  expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })
