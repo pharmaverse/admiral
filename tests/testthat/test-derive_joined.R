@@ -98,8 +98,42 @@ test_that("derive_vars_joined Test 3: by_vars with rename", {
   )
 })
 
-## Test 4: no join_vars, no filter_join ----
-test_that("derive_vars_joined Test 4: no join_vars, no filter_join", {
+## Test 4: order with expression ----
+test_that("derive_vars_joined Test 4: order with expression", {
+  adae <- tibble::tribble(
+    ~AEGRPID,
+    "1",
+    "2"
+  ) %>%
+    mutate(
+      TRTSDTM = ymd_hms("2020-01-06T12:00:00")
+    )
+
+  faae <- tibble::tribble(
+    ~FAGRPID, ~FADTC,       ~FAORRES,
+    "1",      "2020-01-01", "1",
+    "1",      "2020-01-03", "2",
+    "1",      "2020-01-05", "3",
+    "1",      "2020-01-08", "4"
+  )
+  expect_dfs_equal(
+    base = mutate(adae, ATOXGR_pre = c("3", NA)),
+    comp = derive_vars_joined(
+      adae,
+      dataset_add = faae,
+      by_vars = exprs(AEGRPID = FAGRPID),
+      order = exprs(FADT = convert_dtc_to_dt(FADTC)),
+      new_vars = exprs(ATOXGR_pre = FAORRES),
+      join_vars = exprs(FADT),
+      filter_join = FADT < TRTSDTM,
+      mode = "last"
+    ),
+    keys = c("AEGRPID")
+  )
+})
+
+## Test 5: no join_vars, no filter_join ----
+test_that("derive_vars_joined Test 5: no join_vars, no filter_join", {
   adae <- tibble::tribble(
     ~AEGRPID,
     "1",

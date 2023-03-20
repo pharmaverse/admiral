@@ -13,6 +13,8 @@
 `derive_param_wbc_abs()`, `derive_summary_records()`, `event_source()`,
 `get_summary_records()`. (#1727)
 
+- For the `order` argument expressions are accepted now. (#1727)
+
 ## Breaking Changes
 
 - The `aval_fun` argument of `derive_param_exist_flag()` was deprecated in favor

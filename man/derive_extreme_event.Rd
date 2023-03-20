@@ -37,8 +37,8 @@ meet the filter \code{condition}, take the first record sorted by \code{order}.}
 If a particular event from \code{events} has more than one observation, within
 the event and by group, the records are ordered by the specified order.
 
-\emph{Permitted Values:} list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}}
+\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
 
 \item{mode}{Selection mode (first or last)
 

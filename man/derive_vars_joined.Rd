@@ -2,7 +2,8 @@
 % Please edit documentation in R/derive_joined.R
 \name{derive_vars_joined}
 \alias{derive_vars_joined}
-\title{Add Variables from an Additional Dataset Based on Conditions from Both Datasets}
+\title{Add Variables from an Additional Dataset Based on Conditions from Both
+Datasets}
 \usage{
 derive_vars_joined(
   dataset,
@@ -43,8 +44,7 @@ expected in the additional dataset (\code{dataset_add}). If a variable is
 available in both \code{dataset} and \code{dataset_add}, the one from \code{dataset_add}
 is used for the sorting.
 
-\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{new_vars}{Variables to add
 
@@ -102,8 +102,8 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
-if the observations of the (restricted) joined dataset are not unique
-with respect to the by variables and the order.
+if the observations of the (restricted) joined dataset are not unique with
+respect to the by variables and the order.
 
 This argument is ignored if \code{order} is not specified. In this case an error
 is issued independent of \code{check_type} if the restricted joined dataset
@@ -125,10 +125,10 @@ before the current observation.
 }
 \details{
 \enumerate{
-\item The records from the additional dataset (\code{dataset_add}) are restricted
-to those matching the \code{filter_add} condition.
-\item The input dataset and the (restricted) additional dataset are left
-joined by the grouping variables (\code{by_vars}). If no grouping variables are
+\item The records from the additional dataset (\code{dataset_add}) are restricted to
+those matching the \code{filter_add} condition.
+\item The input dataset and the (restricted) additional dataset are left joined
+by the grouping variables (\code{by_vars}). If no grouping variables are
 specified, a full join is performed.
 \item The joined dataset is restricted by the \code{filter_join} condition.
 \item If \code{order} is specified, for each observation of the input dataset the
@@ -137,8 +137,8 @@ first or last observation (depending on \code{mode}) is selected.
 merged to the input dataset. I.e., the output dataset contains all
 observations from the input dataset. For observations without a matching
 observation in the joined dataset the new variables are set to \code{NA}.
-Observations in the additional dataset which have no matching observation
-in the input dataset are ignored.
+Observations in the additional dataset which have no matching observation in
+the input dataset are ignored.
 }
 }
 \examples{

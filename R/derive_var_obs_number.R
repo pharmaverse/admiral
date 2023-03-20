@@ -97,7 +97,7 @@ derive_var_obs_number <- function(dataset,
       if (check_type != "none") {
         signal_duplicate_records(
           data,
-          by_vars = required_vars,
+          by_vars = expr_c(by_vars, order),
           cnd_type = check_type
         )
       }

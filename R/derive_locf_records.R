@@ -26,10 +26,10 @@
 #'
 #'   *Permitted Values*: a variable
 #'
-#' @param order List of variables for sorting a dataset
+#' @param order Sort order
 #'
-#'   The dataset is sorted by `order` before carrying the last
-#'   observation forward (eg. `AVAL`) within each `by_vars`.
+#'   The dataset is sorted by `order` before carrying the last observation
+#'   forward (e.g. `AVAL`) within each `by_vars`.
 #'
 #' @param keep_vars Variables that need carrying the last observation forward
 #'

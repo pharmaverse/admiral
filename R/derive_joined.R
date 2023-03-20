@@ -1,4 +1,5 @@
-#' Add Variables from an Additional Dataset Based on Conditions from Both Datasets
+#' Add Variables from an Additional Dataset Based on Conditions from Both
+#' Datasets
 #'
 #' The function adds variables from an additional dataset to the input dataset.
 #' The selection of the observations from the additional dataset can depend on
@@ -31,8 +32,7 @@
 #'   available in both `dataset` and `dataset_add`, the one from `dataset_add`
 #'   is used for the sorting.
 #'
-#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))` or `NULL`
+#'   *Permitted Values*: list of expressions created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param new_vars Variables to add
 #'
@@ -91,8 +91,8 @@
 #' @param check_type Check uniqueness?
 #'
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
-#'   if the observations of the (restricted) joined dataset are not unique
-#'   with respect to the by variables and the order.
+#'   if the observations of the (restricted) joined dataset are not unique with
+#'   respect to the by variables and the order.
 #'
 #'   This argument is ignored if `order` is not specified. In this case an error
 #'   is issued independent of `check_type` if the restricted joined dataset
@@ -104,24 +104,24 @@
 #'
 #' @details
 #'
-#'   1. The records from the additional dataset (`dataset_add`) are restricted
-#'   to those matching the `filter_add` condition.
+#' 1. The records from the additional dataset (`dataset_add`) are restricted to
+#' those matching the `filter_add` condition.
 #'
-#'   1. The input dataset and the (restricted) additional dataset are left
-#'   joined by the grouping variables (`by_vars`). If no grouping variables are
-#'   specified, a full join is performed.
+#' 1. The input dataset and the (restricted) additional dataset are left joined
+#' by the grouping variables (`by_vars`). If no grouping variables are
+#' specified, a full join is performed.
 #'
-#'   1. The joined dataset is restricted by the `filter_join` condition.
+#' 1. The joined dataset is restricted by the `filter_join` condition.
 #'
-#'   1. If `order` is specified, for each observation of the input dataset the
-#'   first or last observation (depending on `mode`) is selected.
+#' 1. If `order` is specified, for each observation of the input dataset the
+#' first or last observation (depending on `mode`) is selected.
 #'
-#'   1. The variables specified for `new_vars` are renamed (if requested) and
-#'   merged to the input dataset. I.e., the output dataset contains all
-#'   observations from the input dataset. For observations without a matching
-#'   observation in the joined dataset the new variables are set to `NA`.
-#'   Observations in the additional dataset which have no matching observation
-#'   in the input dataset are ignored.
+#' 1. The variables specified for `new_vars` are renamed (if requested) and
+#' merged to the input dataset. I.e., the output dataset contains all
+#' observations from the input dataset. For observations without a matching
+#' observation in the joined dataset the new variables are set to `NA`.
+#' Observations in the additional dataset which have no matching observation in
+#' the input dataset are ignored.
 #'
 #' @return The output dataset contains all observations and variables of the
 #'   input dataset and additionally the variables specified for `new_vars` from
@@ -273,10 +273,21 @@ derive_vars_joined <- function(dataset,
   assert_vars(new_vars, optional = TRUE)
   assert_vars(join_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars_left)
-  assert_data_frame(
-    dataset_add,
-    required_vars = expr_c(by_vars, join_vars, extract_vars(order), new_vars)
-  )
+  if (is.null(order)) {
+    assert_data_frame(
+      dataset_add,
+      required_vars = expr_c(by_vars, join_vars, extract_vars(order), new_vars))
+  } else {
+    assert_data_frame(
+      dataset_add,
+      required_vars = expr_c(by_vars, extract_vars(order), new_vars)
+    )
+    dataset_add <- mutate(dataset_add, !!!order)
+    assert_data_frame(
+      dataset_add,
+      required_vars = join_vars
+    )
+  }
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   filter_join <- assert_filter_cond(enexpr(filter_join), optional = TRUE)
 
@@ -316,7 +327,11 @@ derive_vars_joined <- function(dataset,
     data_return <- filter_extreme(
       data_return,
       by_vars = expr_c(by_vars_left, tmp_obs_nr),
-      order = add_suffix_to_vars(order, vars = common_vars, suffix = ".join"),
+      order = add_suffix_to_vars(
+        replace_values_by_names(order),
+        vars = common_vars,
+        suffix = ".join"
+      ),
       mode = mode,
       check_type = check_type
     )
