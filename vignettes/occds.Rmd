@@ -238,15 +238,15 @@ ex_single <- derive_vars_dtm(
 )
 
 adae <- derive_vars_joined(
-    adae,
-    ex_single,
-    by_vars = exprs(STUDYID, USUBJID),
-    new_vars = exprs(LDOSEDTM = EXSTDTM),
-    join_vars = exprs(EXSTDTM),
-    order = exprs(EXSTDTM),
-    filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
-    filter_join = EXSTDTM <= ASTDTM,
-    mode = "last"
+  adae,
+  ex_single,
+  by_vars = exprs(STUDYID, USUBJID),
+  new_vars = exprs(LDOSEDTM = EXSTDTM),
+  join_vars = exprs(EXSTDTM),
+  order = exprs(EXSTDTM),
+  filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
+  filter_join = EXSTDTM <= ASTDTM,
+  mode = "last"
 )
 ```
 
@@ -255,7 +255,7 @@ dataset_vignette(
   adae,
   display_vars = exprs(
     USUBJID, AEDECOD, AESEQ, AESTDTC, AEENDTC,
-    ASTDT, AENDT#, LDOSEDTM
+    ASTDT, AENDT # , LDOSEDTM
   )
 )
 ```
