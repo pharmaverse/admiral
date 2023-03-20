@@ -237,16 +237,17 @@ ex_single <- derive_vars_dtm(
   flag_imputation = "none"
 )
 
-# adae <- derive_vars_joined(
-#     adae,
-#     ex_single,
-#     by_vars = exprs(STUDYID, USUBJID),
-#     new_vars = exprs(LDOSEDT = EXSTDTM),
-#     join_vars = exprs(EXSTDTM),
-#     filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
-#     filter_join = EXSTDTM <= ASTDTM,
-#     mode = "last"
-# )
+adae <- derive_vars_joined(
+    adae,
+    ex_single,
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(LDOSEDTM = EXSTDTM),
+    join_vars = exprs(EXSTDTM),
+    order = exprs(EXSTDTM),
+    filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
+    filter_join = EXSTDTM <= ASTDTM,
+    mode = "last"
+)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}

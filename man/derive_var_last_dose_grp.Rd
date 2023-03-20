@@ -129,8 +129,7 @@ adae \%>\%
     dose_var = EXDOSE,
     analysis_date = ASTDTM,
     traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
-  ) \%>\%
-  select(USUBJID, LDGRP, LDOSEDOM, LDOSESEQ, LDOSEVAR)
+  )
 }
 \seealso{
 \code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}, \code{\link[=cut]{cut()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}

@@ -103,8 +103,7 @@ adae \%>\%
     analysis_date = ASTDTM,
     new_var = LDOSE,
     dose_var = EXDOSE
-  ) \%>\%
-  select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSE)
+  )
 
 # or with traceability variables
 adae \%>\%
@@ -121,8 +120,7 @@ adae \%>\%
       LDOSESEQ = EXSEQ,
       LDOSEVAR = "EXDOSE"
     )
-  ) \%>\%
-  select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSE)
+  )
 }
 \seealso{
 \code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}

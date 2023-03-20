@@ -59,8 +59,7 @@
 #'     analysis_date = ASTDTM,
 #'     new_var = LDOSE,
 #'     dose_var = EXDOSE
-#'   ) %>%
-#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSE)
+#'   )
 #'
 #' # or with traceability variables
 #' adae %>%
@@ -77,8 +76,7 @@
 #'       LDOSESEQ = EXSEQ,
 #'       LDOSEVAR = "EXDOSE"
 #'     )
-#'   ) %>%
-#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSE)
+#'   )
 derive_var_last_dose_amt <- function(dataset,
                                      dataset_ex,
                                      filter_ex = NULL,

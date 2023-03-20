@@ -76,8 +76,7 @@
 #'     dose_var = EXDOSE,
 #'     analysis_date = ASTDTM,
 #'     traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
-#'   ) %>%
-#'   select(USUBJID, LDGRP, LDOSEDOM, LDOSESEQ, LDOSEVAR)
+#'   )
 derive_var_last_dose_grp <- function(dataset,
                                      dataset_ex,
                                      filter_ex = NULL,
