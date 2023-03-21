@@ -173,7 +173,7 @@ derive_param_exist_flag <- function(dataset = NULL,
                                     false_value = NA_character_,
                                     missing_value = NA_character_,
                                     filter_add = NULL,
-                                    aval_fun ,
+                                    aval_fun,
                                     subject_keys = get_admiral_option("subject_keys"),
                                     set_values_to) {
   # Check input parameters

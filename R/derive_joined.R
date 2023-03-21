@@ -276,7 +276,8 @@ derive_vars_joined <- function(dataset,
   if (is.null(order)) {
     assert_data_frame(
       dataset_add,
-      required_vars = expr_c(by_vars, join_vars, extract_vars(order), new_vars))
+      required_vars = expr_c(by_vars, join_vars, extract_vars(order), new_vars)
+    )
   } else {
     assert_data_frame(
       dataset_add,
