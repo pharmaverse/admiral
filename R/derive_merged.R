@@ -21,10 +21,8 @@
 #'   last observation from the additional dataset is selected with respect to the
 #'   specified order.
 #'
-#'   *Default*: `NULL`
-#'
-#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))` or `NULL`
+#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param new_vars Variables to add
 #'
@@ -155,7 +153,7 @@
 #'   admiral_adsl,
 #'   dataset_add = admiral_vs,
 #'   by_vars = exprs(STUDYID, USUBJID),
-#'   order = exprs(VSDTC),
+#'   order = exprs(convert_dtc_to_dtm(VSDTC)),
 #'   mode = "last",
 #'   new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
 #'   filter_add = VSTESTCD == "WEIGHT",
@@ -239,7 +237,7 @@ derive_vars_merged <- function(dataset,
   assert_vars(by_vars)
   by_vars_left <- replace_values_by_names(by_vars)
   by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
-  assert_order_vars(order, optional = TRUE)
+  assert_expr_list(order, optional = TRUE)
   assert_vars(new_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars_left)
   assert_data_frame(

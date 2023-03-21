@@ -234,13 +234,12 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param order Sort order
 #'
-#'   Additional variables to be used for sorting the `dataset` which is ordered by the
-#'   `date` and `order`. Can be used to avoid duplicate record warning.
+#'   Additional variables/expressions to be used for sorting the `dataset`. The
+#'   dataset is ordered by `date` and `order`. Can be used to avoid duplicate
+#'   record warning.
 #'
-#'   *Default*: `NULL`
-#'
-#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))` or `NULL`
+#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param mode One of `"first"` or `"last"`.
 #' Either the `"first"` or `"last"` observation is preserved from the `dataset`
@@ -298,7 +297,7 @@ dthcaus_source <- function(dataset_name,
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
     date = assert_symbol(enexpr(date)),
-    order = assert_order_vars(order, optional = TRUE),
+    order = assert_expr_list(order, optional = TRUE),
     mode = assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE),
     dthcaus = assert_symbol(enexpr(dthcaus)) %or% assert_character_scalar(dthcaus),
     traceability = assert_varval_list(traceability_vars, optional = TRUE)

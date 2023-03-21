@@ -112,7 +112,7 @@ derive_extreme_event <- function(dataset,
   # Check input parameters
   assert_vars(by_vars, optional = TRUE)
   assert_list_of(events, "event")
-  assert_order_vars(order)
+  assert_expr_list(order)
   assert_data_frame(
     dataset,
     required_vars = by_vars

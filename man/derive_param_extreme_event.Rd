@@ -36,7 +36,7 @@ All observations in the specified dataset fulfilling the condition
 specified by \code{filter_source} are considered as an event.
 
 The variables specified by the \code{subject_keys} and
-\code{order} parameter (if applicable) are expected.}
+\code{order} argument (if applicable) are expected.}
 
 \item{filter_source}{Source filter
 
@@ -51,8 +51,8 @@ For all other subjects \code{new_var} is set to \code{false_value}.}
 
 List of symbols for sorting the source dataset (\code{dataset_source}).
 
-\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}.}
+\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}.}
 
 \item{new_var}{New variable
 
@@ -91,9 +91,9 @@ be populated, this needs to be defined here.}
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, a message is issued if the
-observations of the input dataset restricted to the source parameter
-(\code{source_param}) are not unique with respect to the subject keys
-(\code{subject_key} parameter) and order variables (\code{order} parameter).
+observations of the source dataset (\code{dataset_source}) restricted by
+\code{filter_source} are not unique with respect to the subject keys
+(\code{subject_key} argument) and \code{order}.
 
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 }
@@ -111,16 +111,16 @@ the function can derive a parameter for the first disease progression.
 \item The source dataset (\code{dataset_source}) is restricted to observations fulfilling
 \code{filter_source}.
 \item For each subject (with respect to the variables specified for the
-\code{subject_keys} parameter) either the first or last observation from the restricted
+\code{subject_keys} argument) either the first or last observation from the restricted
 source dataset is selected. This is depending on \code{mode}, (with respect to \code{order},
-if applicable) where the event condition (\code{filter_source} parameter) is fulfilled.
+if applicable) where the event condition (\code{filter_source} argument) is fulfilled.
 \item For each observation in \code{dataset_adsl} a new observation is created. For
 subjects with event \code{new_var} is set to \code{true_value}. For all other
 subjects \code{new_var} is set to \code{false_value}.
 For subjects with event all variables from \code{dataset_source} are kept. For
 subjects without event all variables which are in both \code{dataset_adsl} and
 \code{dataset_source} are kept.
-\item The variables specified by the \code{set_values_to} parameter are added to
+\item The variables specified by the \code{set_values_to} argument are added to
 the new observations.
 \item The new observations are added to input dataset.
 }

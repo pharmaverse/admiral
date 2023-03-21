@@ -24,13 +24,12 @@ the death cause.}
 
 \item{order}{Sort order
 
-Additional variables to be used for sorting the \code{dataset} which is ordered by the
-\code{date} and \code{order}. Can be used to avoid duplicate record warning.
+Additional variables/expressions to be used for sorting the \code{dataset}. The
+dataset is ordered by \code{date} and \code{order}. Can be used to avoid duplicate
+record warning.
 
-\emph{Default}: \code{NULL}
-
-\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{mode}{One of \code{"first"} or \code{"last"}.
 Either the \code{"first"} or \code{"last"} observation is preserved from the \code{dataset}

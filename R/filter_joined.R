@@ -57,6 +57,9 @@
 #'
 #'   The observations are ordered by the specified order.
 #'
+#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))`
+#'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
 #'   The specified variable is added to the input dataset and set to the
@@ -128,7 +131,7 @@
 #'   `join_type` and `order`.
 #'
 #'   The dataset from the example in the previous step with `join_type =
-#'   "after"` and order = exprs(AVISITN)` is restricted to
+#'   "after"` and `order = exprs(AVISITN)` is restricted to
 #'
 #'   ```{r eval=FALSE}
 #'   A tibble: 4 x 6
@@ -334,7 +337,7 @@ filter_joined <- function(dataset,
       case_sensitive = FALSE
     )
   first_cond <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
-  assert_order_vars(order)
+  assert_expr_list(order)
   tmp_obs_nr_var <- assert_symbol(enexpr(tmp_obs_nr_var), optional = TRUE)
   filter <- assert_filter_cond(enexpr(filter))
   check_type <-

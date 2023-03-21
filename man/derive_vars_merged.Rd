@@ -44,10 +44,8 @@ If the argument is set to a non-null value, for each by group the first or
 last observation from the additional dataset is selected with respect to the
 specified order.
 
-\emph{Default}: \code{NULL}
-
-\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{new_vars}{Variables to add
 
@@ -165,7 +163,7 @@ derive_vars_merged(
   admiral_adsl,
   dataset_add = admiral_vs,
   by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(VSDTC),
+  order = exprs(convert_dtc_to_dtm(VSDTC)),
   mode = "last",
   new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
   filter_add = VSTESTCD == "WEIGHT",
