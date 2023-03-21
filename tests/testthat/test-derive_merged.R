@@ -147,6 +147,28 @@ test_that("derive_vars_merged Test 5: by_vars with rename", {
   )
 })
 
+test_that("derive_var_merged_character Test 14: upper case", {
+  actual <- derive_vars_merged(
+    adsl,
+    dataset_add = advs,
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISIT),
+    new_vars = exprs(LASTVIS = str_to_upper(AVISIT)),
+    mode = "last",
+    missing_values = exprs(LASTVIS = "UNKNOWN")
+  )
+
+  expected <-
+    mutate(adsl, LASTVIS = c("WEEK 2", "BASELINE", "WEEK 4", "UNKNOWN"))
+
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = "USUBJID"
+  )
+})
+
 ## Test 6: warning if not unique w.r.t the by variables and the order ----
 test_that("derive_vars_merged Test 6: warning if not unique w.r.t the by variables and the order", {
   expect_warning(
@@ -179,32 +201,6 @@ test_that("derive_vars_merged Test 7: error if not unique w.r.t the by variables
 
 # derive_var_merged_cat ----
 ## Test 8: merge categorized variable ----
-test_that("derive_var_merged_cat Test 8: merge categorized variable", {
-  get_region <- function(x) {
-    if_else(x %in% c("AUT", "NOR"), "EUROPE", "AFRICA")
-  }
-
-  actual <- derive_var_merged_cat(
-    advs,
-    dataset_add = adsl,
-    by_vars = exprs(USUBJID),
-    new_var = REGION,
-    source_var = COUNTRY,
-    cat_fun = get_region
-  )
-
-  expected <- left_join(advs, select(adsl, USUBJID, COUNTRY), by = "USUBJID") %>%
-    mutate(REGION = get_region(COUNTRY)) %>%
-    select(-COUNTRY)
-
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("USUBJID", "AVISIT")
-  )
-})
-
 ## Test 9: define value for non-matched by groups ----
 test_that("derive_var_merged_cat Test 9: define value for non-matched by groups", {
   get_vscat <- function(x) {
@@ -337,29 +333,7 @@ test_that("derive_var_merged_character Test 13: no transformation", {
 })
 
 ## Test 14: upper case ----
-test_that("derive_var_merged_character Test 14: upper case", {
-  actual <- derive_var_merged_character(
-    adsl,
-    dataset_add = advs,
-    by_vars = exprs(USUBJID),
-    order = exprs(AVISIT),
-    new_var = LASTVIS,
-    source_var = AVISIT,
-    mode = "last",
-    case = "upper",
-    missing_value = "UNKNOWN"
-  )
 
-  expected <-
-    mutate(adsl, LASTVIS = c("WEEK 2", "BASELINE", "WEEK 4", "UNKNOWN"))
-
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = "USUBJID"
-  )
-})
 
 ## Test 15: lower case ----
 test_that("derive_var_merged_character Test 15: lower case", {

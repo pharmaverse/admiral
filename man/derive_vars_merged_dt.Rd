@@ -71,8 +71,6 @@ Only observations fulfilling the specified condition are taken into account
 for merging. If the argument is not specified, all observations are
 considered.
 
-\emph{Default}: \code{NULL}
-
 \emph{Permitted Values}: a condition}
 
 \item{mode}{Selection mode
@@ -81,8 +79,6 @@ Determines if the first or last observation is selected. If the \code{order}
 argument is specified, \code{mode} must be non-null.
 
 If the \code{order} argument is not specified, the \code{mode} argument is ignored.
-
-\emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
 
@@ -165,8 +161,6 @@ Default: \code{FALSE}}
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
 if the observations of the (restricted) additional dataset are not unique
 with respect to the by variables and the order.
-
-\emph{Default}: \code{"warning"}
 
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 

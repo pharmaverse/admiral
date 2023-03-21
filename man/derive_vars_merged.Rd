@@ -14,6 +14,7 @@ derive_vars_merged(
   mode = NULL,
   filter_add = NULL,
   match_flag = NULL,
+  missing_values = NULL,
   check_type = "warning",
   duplicate_msg = NULL
 )
@@ -59,12 +60,14 @@ And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 \code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
 \code{old_var2} to \code{new_var2}.
 
+Values of the added variables can be modified by specifying an expression.
+For example, \code{new_vars = LASTRSP = exprs(str_to_upper(AVALC))} adds the
+variable \code{LASTRSP} and sets it to the lower case value of \code{AVALC}.
+
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
 
-\emph{Default}: \code{NULL}
-
-\emph{Permitted Values}: list of variables created by \code{exprs()}}
+\emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
 
 \item{mode}{Selection mode
 
@@ -73,8 +76,6 @@ argument is specified, \code{mode} must be non-null.
 
 If the \code{order} argument is not specified, the \code{mode} argument is ignored.
 
-\emph{Default}: \code{NULL}
-
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
@@ -82,8 +83,6 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 Only observations fulfilling the specified condition are taken into account
 for merging. If the argument is not specified, all observations are
 considered.
-
-\emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: a condition}
 
@@ -94,8 +93,6 @@ variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
 be \code{TRUE} for all selected records from \code{dataset_add} which are merged into
 the input dataset, and \code{NA} otherwise.
 
-\emph{Default}: \code{NULL}
-
 \emph{Permitted Values}: Variable name}
 
 \item{check_type}{Check uniqueness?
@@ -103,8 +100,6 @@ the input dataset, and \code{NA} otherwise.
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
 if the observations of the (restricted) additional dataset are not unique
 with respect to the by variables and the order.
-
-\emph{Default}: \code{"warning"}
 
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 

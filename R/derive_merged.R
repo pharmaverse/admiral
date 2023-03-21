@@ -37,12 +37,14 @@
 #'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
 #'   `old_var2` to `new_var2`.
 #'
+#'   Values of the added variables can be modified by specifying an expression.
+#'   For example, `new_vars = LASTRSP = exprs(str_to_upper(AVALC))` adds the
+#'   variable `LASTRSP` and sets it to the lower case value of `AVALC`.
+#'
 #'   If the argument is not specified or set to `NULL`, all variables from the
 #'   additional dataset (`dataset_add`) are added.
 #'
-#'   *Default*: `NULL`
-#'
-#'   *Permitted Values*: list of variables created by `exprs()`
+#'   *Permitted Values*: list of variables or named expressions created by `exprs()`
 #'
 #' @param mode Selection mode
 #'
@@ -50,8 +52,6 @@
 #'   argument is specified, `mode` must be non-null.
 #'
 #'   If the `order` argument is not specified, the `mode` argument is ignored.
-#'
-#'   *Default*: `NULL`
 #'
 #'   *Permitted Values*: `"first"`, `"last"`, `NULL`
 #'
@@ -72,8 +72,6 @@
 #'   for merging. If the argument is not specified, all observations are
 #'   considered.
 #'
-#'   *Default*: `NULL`
-#'
 #'   *Permitted Values*: a condition
 #'
 #' @param match_flag Match flag
@@ -83,8 +81,6 @@
 #'   be `TRUE` for all selected records from `dataset_add` which are merged into
 #'   the input dataset, and `NA` otherwise.
 #'
-#'   *Default*: `NULL`
-#'
 #'   *Permitted Values*: Variable name
 #'
 #' @param check_type Check uniqueness?
@@ -92,8 +88,6 @@
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
 #'   if the observations of the (restricted) additional dataset are not unique
 #'   with respect to the by variables and the order.
-#'
-#'   *Default*: `"warning"`
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
@@ -231,6 +225,7 @@ derive_vars_merged <- function(dataset,
                                mode = NULL,
                                filter_add = NULL,
                                match_flag = NULL,
+                               missing_values = NULL,
                                check_type = "warning",
                                duplicate_msg = NULL) {
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
@@ -238,13 +233,14 @@ derive_vars_merged <- function(dataset,
   by_vars_left <- replace_values_by_names(by_vars)
   by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
   assert_expr_list(order, optional = TRUE)
-  assert_vars(new_vars, optional = TRUE)
+  assert_expr_list(new_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars_left)
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(by_vars_right, extract_vars(order), new_vars)
+    required_vars = expr_c(by_vars_right, extract_vars(order), extract_vars(new_vars))
   )
   match_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
+  assert_expr_list(missing_values, named = TRUE, optional = TRUE)
 
   add_data <- filter_if(dataset_add, filter_add)
   if (!is.null(order)) {
@@ -269,12 +265,21 @@ derive_vars_merged <- function(dataset,
     )
   }
   if (!is.null(new_vars)) {
-    add_data <- select(add_data, !!!by_vars_right, !!!new_vars)
+    add_data <- add_data %>%
+      mutate(!!!new_vars) %>%
+      select(!!!by_vars_right, !!!replace_values_by_names(new_vars))
   }
-  if (!is.null(match_flag)) {
+
+  if (!is.null(missing_values)) {
+    match_flag_var <- get_new_tmp_var(add_data, prefix = "tmp_match_flag")
+  } else {
+    match_flag_var <- match_flag
+  }
+
+  if (!is.null(match_flag_var)) {
     add_data <- mutate(
       add_data,
-      !!match_flag := TRUE
+      !!match_flag_var := TRUE
     )
   }
   # check if there are any variables in both datasets which are not by vars
@@ -298,7 +303,19 @@ derive_vars_merged <- function(dataset,
       )
     ))
   }
-  left_join(dataset, add_data, by = vars2chr(by_vars))
+  dataset <- left_join(dataset, add_data, by = vars2chr(by_vars))
+  if (!is.null(missing_values)) {
+    update_missings <- map2(
+      syms(names(missing_values)),
+      missing_values,
+      ~ expr(if_else(is.na(!!match_flag_var), !!.y, !!.x))
+    )
+    names(update_missings) <- names(missing_values)
+    dataset <- dataset %>%
+      mutate(!!!update_missings) %>%
+      remove_tmp_vars()
+  }
+  dataset
 }
 
 #' Merge a (Imputed) Date Variable
