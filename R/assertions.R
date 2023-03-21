@@ -521,6 +521,11 @@ assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
 
 #' Is an Argument a List of Order Variables?
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `assert_expr_list()` instead.
+#'
 #' Checks if an argument is a valid list of order variables/expressions created
 #' using `exprs()`
 #'
@@ -536,59 +541,14 @@ assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
-#' @family assertion
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(rlang)
-#'
-#' example_fun <- function(by_vars) {
-#'   assert_order_vars(by_vars)
-#' }
-#'
-#' example_fun(exprs(USUBJID, PARAMCD, desc(AVISITN)))
-#'
-#' example_fun(exprs(USUBJID, if_else(AVALC == "Y", 1, 0)))
-#'
-#' try(example_fun(quos(USUBJID, PARAMCD)))
-#'
-#' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
+#' @keywords deprecated
+#' @family deprecated
 assert_order_vars <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
-  default_err_msg <- paste(
-    backquote(arg_name(substitute(arg))),
-    "must be a list of unquoted variable names or expressions,",
-    "e.g. `exprs(USUBJID, desc(VISITNUM), -abs(AVAL))`"
-  )
+  deprecate_warn("0.11.0", "assert_order_vars()", "assert_expr_list()")
 
-  if (isTRUE(tryCatch(force(arg), error = function(e) TRUE))) {
-    abort(default_err_msg)
-  }
-
-  if (optional && is.null(arg)) {
-    return(invisible(arg))
-  }
-
-  if (!inherits(arg, "list")) {
-    abort(default_err_msg)
-  }
-
-  is_valid <- map_lgl(arg, ~ is.call(.x) || is_expression(.x))
-  if (!all(is_valid)) {
-    info_msg <- paste(
-      sprintf("\u2716 Element %s is %s", which(!is_valid), map_chr(arg[!is_valid], what_is_it)),
-      collapse = "\n"
-    )
-    err_msg <- sprintf(
-      "Each element of `%s` must be an expression but the following are not:\n%s",
-      arg_name(substitute(arg)),
-      info_msg
-    )
-    abort(err_msg)
-  }
-
-  invisible(arg)
+  assert_expr_list(arg, optional = optional)
 }
 
 #' Is an Argument an Integer Scalar?

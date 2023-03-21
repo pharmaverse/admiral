@@ -234,7 +234,7 @@ replace_symbol_in_expr <- function(expression,
 add_suffix_to_vars <- function(order,
                                vars,
                                suffix) {
-  assert_order_vars(order)
+  assert_expr_list(order)
   assert_vars(vars)
   assert_character_scalar(suffix)
   for (i in seq_along(vars)) {
