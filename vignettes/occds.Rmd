@@ -255,7 +255,7 @@ dataset_vignette(
   adae,
   display_vars = exprs(
     USUBJID, AEDECOD, AESEQ, AESTDTC, AEENDTC,
-    ASTDT, AENDT # , LDOSEDTM
+    ASTDT, AENDT, LDOSEDTM
   )
 )
 ```
