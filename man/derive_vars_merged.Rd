@@ -95,6 +95,16 @@ the input dataset, and \code{NA} otherwise.
 
 \emph{Permitted Values}: Variable name}
 
+\item{missing_values}{Values for non-matching observations
+
+For observations of the input dataset (\code{dataset}) which do not have a
+matching observation in the additional dataset (\code{dataset_add}) the values
+of the specified variables are set to the specified value. Only variables
+specified for \code{new_vars} can be specified for \code{missing_values}.
+
+\emph{Permitted Values}: named list of expressions, e.g.,
+\code{exprs(BASEC = "MISSING", BASE = -1)}}
+
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
@@ -141,6 +151,7 @@ observation in the input dataset are ignored.
 \examples{
 library(admiral.test)
 library(dplyr, warn.conflicts = FALSE)
+library(tibble)
 data("admiral_vs")
 data("admiral_dm")
 
@@ -228,6 +239,36 @@ derive_vars_merged(
   order = exprs(EXENDTM),
   mode = "last"
 )
+
+# Modify merged values and set value for non matching observations
+adsl <- tribble(
+  ~USUBJID, ~SEX, ~COUNTRY,
+  "ST42-1", "F",  "AUT",
+  "ST42-2", "M",  "MWI",
+  "ST42-3", "M",  "NOR",
+  "ST42-4", "F",  "UGA"
+) \%>\% mutate(STUDYID = "ST42")
+
+advs <- tribble(
+  ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVISITN, ~AVAL,
+  "ST42-1", "WEIGHT", "BASELINE",        0,    66,
+  "ST42-1", "WEIGHT", "WEEK 2",          1,    68,
+  "ST42-2", "WEIGHT", "BASELINE",        0,    88,
+  "ST42-3", "WEIGHT", "WEEK 2",          1,    55,
+  "ST42-3", "WEIGHT", "WEEK 4",          2,    50
+) \%>\% mutate(STUDYID = "ST42")
+
+derive_vars_merged(
+  adsl,
+  dataset_add = advs,
+  by_vars = exprs(USUBJID),
+  new_vars = exprs(
+    LSTVSCAT = if_else(AVISIT == "BASELINE", "BASELINE", "POST-BASELINE")
+  ),
+  order = exprs(AVISITN),
+  mode = "last",
+  missing_value = exprs(LSTVSCAT = "MISSING")
+)
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
@@ -236,8 +277,6 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
-\code{\link{derive_var_merged_cat}()},
-\code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},

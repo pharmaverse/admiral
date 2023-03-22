@@ -88,6 +88,10 @@ input dataset and additionally the variable specified for \code{new_var} derived
 from the additional dataset (\code{dataset_add}).
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_vars_merged()} instead.
+
 Merge a categorization variable from a dataset to the input dataset. The
 observations to merge can be selected by a condition and/or selecting the
 first or last observation for each by group.
@@ -102,66 +106,22 @@ first or last observation for each by group.
 \item The categorization variable is merged to the input dataset.
 }
 }
-\examples{
-library(admiral.test)
-library(dplyr, warn.conflicts = FALSE)
-data("admiral_dm")
-data("admiral_vs")
-
-wgt_cat <- function(wgt) {
-  case_when(
-    wgt < 50 ~ "low",
-    wgt > 90 ~ "high",
-    TRUE ~ "normal"
-  )
-}
-
-derive_var_merged_cat(
-  admiral_dm,
-  dataset_add = admiral_vs,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(VSDTC, VSSEQ),
-  filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
-  new_var = WGTBLCAT,
-  source_var = VSSTRESN,
-  cat_fun = wgt_cat,
-  mode = "last"
-) \%>\%
-  select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
-
-# defining a value for missing VS data
-derive_var_merged_cat(
-  admiral_dm,
-  dataset_add = admiral_vs,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(VSDTC, VSSEQ),
-  filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
-  new_var = WGTBLCAT,
-  source_var = VSSTRESN,
-  cat_fun = wgt_cat,
-  mode = "last",
-  missing_value = "MISSING"
-) \%>\%
-  select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
-}
 \seealso{
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_last_dose_amt}()},
-\code{\link{derive_var_last_dose_date}()},
-\code{\link{derive_var_last_dose_grp}()},
+Other deprecated: 
+\code{\link{derive_derived_param}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_var_confirmation_flag}()},
+\code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_merged_character}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_merged_summary}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_last_dose}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_transposed}()},
-\code{\link{get_summary_records}()}
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_disposition_reason}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()},
+\code{\link{filter_confirmation}()},
+\code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()},
+\code{\link{vars}()}
 }
-\concept{der_gen}
-\keyword{der_gen}
+\concept{deprecated}
+\keyword{deprecated}

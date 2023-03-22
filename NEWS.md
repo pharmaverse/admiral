@@ -15,10 +15,16 @@
 
 - For the `order` argument expressions are accepted now. (#1727)
 
+- `derive_vars_merge()` gained the `missing_values` argument to assign values to
+the new variables for non-matching observations. (#1727)
+
 ## Breaking Changes
 
 - The `aval_fun` argument of `derive_param_exist_flag()` was deprecated in favor
 of the `set_values_to` argument. (#1727)
+
+- `derive_var_merged_cat()` and `derive_var_merged_character()` have been
+deprecated in favor of `derive_vars_merged()`. (#1727)
 
 ## Documentation
 

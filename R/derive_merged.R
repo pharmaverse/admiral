@@ -83,6 +83,16 @@
 #'
 #'   *Permitted Values*: Variable name
 #'
+#' @param missing_values Values for non-matching observations
+#'
+#'   For observations of the input dataset (`dataset`) which do not have a
+#'   matching observation in the additional dataset (`dataset_add`) the values
+#'   of the specified variables are set to the specified value. Only variables
+#'   specified for `new_vars` can be specified for `missing_values`.
+#'
+#'   *Permitted Values*: named list of expressions, e.g.,
+#'   `exprs(BASEC = "MISSING", BASE = -1)`
+#'
 #' @param check_type Check uniqueness?
 #'
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
@@ -130,6 +140,7 @@
 #' @examples
 #' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(tibble)
 #' data("admiral_vs")
 #' data("admiral_dm")
 #'
@@ -217,6 +228,36 @@
 #'   order = exprs(EXENDTM),
 #'   mode = "last"
 #' )
+#'
+#' # Modify merged values and set value for non matching observations
+#' adsl <- tribble(
+#'   ~USUBJID, ~SEX, ~COUNTRY,
+#'   "ST42-1", "F",  "AUT",
+#'   "ST42-2", "M",  "MWI",
+#'   "ST42-3", "M",  "NOR",
+#'   "ST42-4", "F",  "UGA"
+#' ) %>% mutate(STUDYID = "ST42")
+#'
+#' advs <- tribble(
+#'   ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVISITN, ~AVAL,
+#'   "ST42-1", "WEIGHT", "BASELINE",        0,    66,
+#'   "ST42-1", "WEIGHT", "WEEK 2",          1,    68,
+#'   "ST42-2", "WEIGHT", "BASELINE",        0,    88,
+#'   "ST42-3", "WEIGHT", "WEEK 2",          1,    55,
+#'   "ST42-3", "WEIGHT", "WEEK 4",          2,    50
+#' ) %>% mutate(STUDYID = "ST42")
+#'
+#' derive_vars_merged(
+#'   adsl,
+#'   dataset_add = advs,
+#'   by_vars = exprs(USUBJID),
+#'   new_vars = exprs(
+#'     LSTVSCAT = if_else(AVISIT == "BASELINE", "BASELINE", "POST-BASELINE")
+#'   ),
+#'   order = exprs(AVISITN),
+#'   mode = "last",
+#'   missing_value = exprs(LSTVSCAT = "MISSING")
+#' )
 derive_vars_merged <- function(dataset,
                                dataset_add,
                                by_vars,
@@ -241,6 +282,19 @@ derive_vars_merged <- function(dataset,
   )
   match_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
   assert_expr_list(missing_values, named = TRUE, optional = TRUE)
+  if (!is.null(missing_values)) {
+    invalid_vars <- setdiff(
+      names(missing_values),
+      vars2chr(replace_values_by_names(new_vars))
+    )
+    if (length(invalid_vars) > 0) {
+      abort(paste(
+        "The variables",
+        enumerate(invalid_vars),
+        "were specified for `missing_values` but not for `new_vars`."
+      ))
+    }
+  }
 
   add_data <- filter_if(dataset_add, filter_add)
   if (!is.null(order)) {
@@ -304,6 +358,7 @@ derive_vars_merged <- function(dataset,
     ))
   }
   dataset <- left_join(dataset, add_data, by = vars2chr(by_vars))
+
   if (!is.null(missing_values)) {
     update_missings <- map2(
       syms(names(missing_values)),
@@ -481,6 +536,11 @@ derive_vars_merged_dtm <- function(dataset,
 
 #' Merge a Categorization Variable
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_merged()` instead.
+#'
 #' Merge a categorization variable from a dataset to the input dataset. The
 #' observations to merge can be selected by a condition and/or selecting the
 #' first or last observation for each by group.
@@ -528,52 +588,10 @@ derive_vars_merged_dtm <- function(dataset,
 #'   1. The categorization variable is merged to the input dataset.
 #'
 #'
-#' @family der_gen
-#' @keywords der_gen
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @export
-#'
-#' @examples
-#' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_dm")
-#' data("admiral_vs")
-#'
-#' wgt_cat <- function(wgt) {
-#'   case_when(
-#'     wgt < 50 ~ "low",
-#'     wgt > 90 ~ "high",
-#'     TRUE ~ "normal"
-#'   )
-#' }
-#'
-#' derive_var_merged_cat(
-#'   admiral_dm,
-#'   dataset_add = admiral_vs,
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   order = exprs(VSDTC, VSSEQ),
-#'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
-#'   new_var = WGTBLCAT,
-#'   source_var = VSSTRESN,
-#'   cat_fun = wgt_cat,
-#'   mode = "last"
-#' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
-#'
-#' # defining a value for missing VS data
-#' derive_var_merged_cat(
-#'   admiral_dm,
-#'   dataset_add = admiral_vs,
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   order = exprs(VSDTC, VSSEQ),
-#'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
-#'   new_var = WGTBLCAT,
-#'   source_var = VSSTRESN,
-#'   cat_fun = wgt_cat,
-#'   mode = "last",
-#'   missing_value = "MISSING"
-#' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 derive_var_merged_cat <- function(dataset,
                                   dataset_add,
                                   by_vars,
@@ -584,24 +602,22 @@ derive_var_merged_cat <- function(dataset,
                                   filter_add = NULL,
                                   mode = NULL,
                                   missing_value = NA_character_) {
+  deprecate_warn("0.11.0", "derive_var_merged_cat()", "derive_vars_merged()")
   new_var <- assert_symbol(enexpr(new_var))
   source_var <- assert_symbol(enexpr(source_var))
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = expr_c(by_vars, source_var))
 
-  add_data <- filter_if(dataset_add, filter_add) %>%
-    mutate(!!new_var := cat_fun(!!source_var))
   derive_vars_merged(
     dataset,
-    dataset_add = add_data,
+    dataset_add = dataset_add,
+    filter_add = !!filter_add,
     by_vars = by_vars,
     order = order,
-    new_vars = exprs(!!new_var),
-    match_flag = temp_match_flag,
-    mode = mode
-  ) %>%
-    mutate(!!new_var := if_else(temp_match_flag, !!new_var, missing_value, missing_value)) %>%
-    select(-temp_match_flag)
+    new_vars = exprs(!!new_var := {{cat_fun}}(!!source_var)),
+    mode = mode,
+    missing_values = exprs(!!new_var := !!missing_value)
+  )
 }
 
 #' Merge an Existence Flag
@@ -739,6 +755,11 @@ derive_var_merged_exist_flag <- function(dataset,
 
 #' Merge a Character Variable
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_merged()` instead.
+#'
 #' Merge a character variable from a dataset to the input dataset. The
 #' observations to merge can be selected by a condition and/or selecting the
 #' first or last observation for each by group.
@@ -791,27 +812,10 @@ derive_var_merged_exist_flag <- function(dataset,
 #'   1. The character variable is merged to the input dataset.
 #'
 #'
-#' @family der_gen
-#' @keywords der_gen
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @export
-#'
-#' @examples
-#' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_dm")
-#' data("admiral_ds")
-#'
-#' derive_var_merged_character(
-#'   admiral_dm,
-#'   dataset_add = admiral_ds,
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   new_var = DISPSTAT,
-#'   filter_add = DSCAT == "DISPOSITION EVENT",
-#'   source_var = DSDECOD,
-#'   case = "title"
-#' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, DISPSTAT)
 derive_var_merged_character <- function(dataset,
                                         dataset_add,
                                         by_vars,
@@ -822,6 +826,9 @@ derive_var_merged_character <- function(dataset,
                                         filter_add = NULL,
                                         mode = NULL,
                                         missing_value = NA_character_) {
+
+  deprecate_warn("0.11.0", "derive_var_merged_character()", "derive_vars_merged()")
+
   new_var <- assert_symbol(enexpr(new_var))
   source_var <- assert_symbol(enexpr(source_var))
   case <-
@@ -844,19 +851,15 @@ derive_var_merged_character <- function(dataset,
   } else if (case == "title") {
     trans <- expr(str_to_title(!!source_var))
   }
-  add_data <- filter_if(dataset_add, filter_add) %>%
-    mutate(!!new_var := !!trans)
   derive_vars_merged(
     dataset,
-    dataset_add = add_data,
+    dataset_add = dataset_add,
     by_vars = by_vars,
     order = order,
-    new_vars = exprs(!!new_var),
-    match_flag = temp_match_flag,
-    mode = mode
-  ) %>%
-    mutate(!!new_var := if_else(temp_match_flag, !!new_var, missing_value, missing_value)) %>%
-    select(-temp_match_flag)
+    new_vars = exprs(!!new_var := !!trans),
+    mode = mode,
+    missing_values = exprs(!!new_var := !!missing_value)
+  )
 }
 
 
