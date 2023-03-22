@@ -1,4 +1,3 @@
-
 get_smq <- function(basket_select,
                     version,
                     keep_id = FALSE,
