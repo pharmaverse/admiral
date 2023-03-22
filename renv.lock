@@ -1310,7 +1310,7 @@
     },
     "styler": {
       "Package": "styler",
-      "Version": "1.8.0",
+      "Version": "1.9.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
