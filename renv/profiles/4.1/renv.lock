@@ -1316,7 +1316,7 @@
     },
     "styler": {
       "Package": "styler",
-      "Version": "1.8.0",
+      "Version": "1.9.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1331,7 +1331,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "c855e70eb69b3dd8883660b7110e0c44"
+      "Hash": "ed8c90822b7da46beee603f263a85fe0"
     },
     "sys": {
       "Package": "sys",
