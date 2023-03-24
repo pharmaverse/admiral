@@ -125,7 +125,8 @@ and impute missing date or time components. Conversion and imputation is done by
 Example calls:
 
 ```{r eval=TRUE}
-# impute start and end time of exposure to first and last respectively, do not impute date
+# impute start and end time of exposure to first and last respectively,
+# do not impute date
 ex_ext <- ex %>%
   derive_vars_dtm(
     dtc = EXSTDTC,
@@ -196,10 +197,13 @@ dataset_vignette(
 
 The functions `derive_vars_dt()` and `derive_vars_merged()` can be used to
 derive a disposition date. First the character disposition date (`DS.DSSTDTC`)
-is converted to a numeric date (`DSSTDT`) calling `derive_vars_dt()`. Then the
-relevant disposition date is selected by adjusting the `filter_add` parameter.
+is converted to a numeric date (`DSSTDT`) calling `derive_vars_dt()`. The `DS`
+dataset is extended by the `DSSTDT` variable because the date is required by
+other derivations, e.g., `RANDDT` as well. Then the relevant disposition date is
+selected by adjusting the `filter_add` argument.
 
-To derive the End of Study date (`EOSDT`), a call could be:
+To derive the End of Study date (`EOSDT`), a call could be the following. It
+returns the input dataset with the variable `EOSDT` added.
 
 ```{r eval=TRUE}
 # convert character date to numeric date without imputation
@@ -218,37 +222,36 @@ adsl <- adsl %>%
   )
 ```
 
+The `ds_ext` dataset:
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  ds,
-  display_vars = exprs(USUBJID, DSCAT, DSDECOD, DSTERM, DSSTDTC),
+  ds_ext,
+  display_vars = exprs(USUBJID, DSCAT, DSDECOD, DSTERM, DSSTDT, DSSTDTC),
   filter = DSDECOD != "SCREEN FAILURE"
 )
 ```
 
-We would get :
-
+The `adsl` dataset:
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(adsl, display_vars = exprs(USUBJID, EOSDT))
 ```
 
-This call would return the input dataset with the column `EOSDT` added. 
-This function allows the user to impute partial dates as well. If imputation is needed and the date 
-is to be imputed to the first of the month, then set `date_imputation = "FIRST"`.
+The `derive_vars_dt()` function allows to impute partial dates as well. If
+imputation is needed and missing days are to be imputed to the first of the
+month and missing months to the first month of the year, set `highest_imputation
+= "M"`.
 
 ### Disposition Status (e.g. `EOSSTT`) {#disposition_status}
 
-The function `derive_var_merged_cat()` can be used to derive a disposition status at a specific
-timepoint. The relevant disposition variable (`DS.DSDECOD`) is selected by adjusting the filter 
-parameter and used to derive `EOSSTT`.
+The function `derive_vars_merged()` can be used to derive the End of Study
+status (`EOSSTT`) based on `DSCAT` and `DSDECOD` from `DS`. The relevant
+observations are selected by adjusting the `filter_add` argument. A function
+mapping `DSDECOD` values to `EOSSTT` values can be defined and used in the
+`new_vars` argument. The mapping for the call below is
 
-To derive the End of Study status (`EOSSTT`), the function expects a mapping derivation for the `cat_fun` argument.
-The mapping derivation for the call below is
-
-- `"NOT STARTED"` if `DSDECOD` is `"SCREEN FAILURE"`
 - `"COMPLETED"` if `DSDECOD == "COMPLETED"`
-- `"DISCONTINUED"` if `DSDECOD` is not `"COMPLETED"` or `NA`
-- `"ONGOING"` otherwise
+- `NA_character_` if `DSDECOD` is `"SCREEN FAILURE"`
+- `"DISCONTINUED"` otherwise
 
 Example function `format_eosstt()`:
 
@@ -257,24 +260,23 @@ format_eosstt <- function(x) {
   case_when(
     x %in% c("COMPLETED") ~ "COMPLETED",
     x %in% c("SCREEN FAILURE") ~ NA_character_,
-    !is.na(x) ~ "DISCONTINUED",
-    TRUE ~ "ONGOING"
+    TRUE ~ "DISCONTINUED"
   )
 }
 ```
 
-The customized mapping function `format_eosstt()` can now be passed to the main function:
+The customized mapping function `format_eosstt()` can now be passed to the main
+function. For subjects without a disposition event the end of study status is
+set to `"ONGOING"` by specifying the `missing_values` argument.
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_merged_cat(
+  derive_vars_merged(
     dataset_add = ds,
     by_vars = exprs(STUDYID, USUBJID),
     filter_add = DSCAT == "DISPOSITION EVENT",
-    new_var = EOSSTT,
-    source_var = DSDECOD,
-    cat_fun = format_eosstt,
-    missing_value = "ONGOING"
+    new_vars = exprs(EOSSTT = format_eosstt(DSDECOD)),
+    missing_value = exprs(EOSSTT = "ONGOING")
   )
 ```
 
@@ -284,21 +286,21 @@ dataset_vignette(adsl, display_vars = exprs(USUBJID, EOSDT, EOSSTT))
 
 This call would return the input dataset with the column `EOSSTT` added. 
 
-If the derivation must be changed, the user can create his/her own function and pass it to 
-the `cat_fun` argument of the function (`cat_fun = new_mapping`) to map `DSDECOD` 
-to a suitable `EOSSTT` value.
+If the derivation must be changed, the user can create his/her own function to
+map `DSDECOD` to a suitable `EOSSTT` value.
 
 ### Disposition Reason(s) (e.g. `DCSREAS`, `DCSREASP`) {#disposition_reason}
 
 The main reason for discontinuation is usually stored in `DSDECOD` while `DSTERM` provides 
 additional details regarding subject’s discontinuation (e.g., description of `"OTHER"`).
 
-The function `derive_vars_merged()` can be used to derive a disposition reason (along with the details, if required) at a specific timepoint. 
-The relevant disposition variable(s) (`DS.DSDECOD`, `DS.DSTERM`) are selected by adjusting the filter parameter and used to derive the main reason (and details).
+The function `derive_vars_merged()` can be used to derive a disposition reason
+(along with the details, if required) at a specific timepoint. The relevant
+observations are selected by adjusting the `filter_add` argument.
 
-To derive the End of Study reason(s) (`DCSREAS` and `DCSREASP`), the function will map 
-
-- `DCSREAS` as `DSDECOD`, and `DCSREASP` as `DSTERM` if `DSDECOD` is not `"COMPLETED"`, `"SCREEN FAILURE"`, or `NA`, `NA` otherwise
+To derive the End of Study reason(s) (`DCSREAS` and `DCSREASP`), the function
+will map `DCSREAS` as `DSDECOD`, and `DCSREASP` as `DSTERM` if `DSDECOD` is not
+`"COMPLETED"`, `"SCREEN FAILURE"`, or `NA`, `NA` otherwise.
 
 ```{r}
 adsl <- adsl %>%
@@ -306,7 +308,8 @@ adsl <- adsl %>%
     dataset_add = ds,
     by_vars = exprs(USUBJID),
     new_vars = exprs(DCSREAS = DSDECOD, DCSREASP = DSTERM),
-    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %notin% c("SCREEN FAILURE", "COMPLETED", NA)
+    filter_add = DSCAT == "DISPOSITION EVENT" &
+      DSDECOD %notin% c("SCREEN FAILURE", "COMPLETED", NA)
   )
 ```
 
@@ -333,7 +336,8 @@ adsl <- adsl %>%
     dataset_add = ds,
     by_vars = exprs(USUBJID),
     new_vars = exprs(DCSREAS = DSDECOD),
-    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %notin% c("SCREEN FAILURE", "COMPLETED", NA)
+    filter_add = DSCAT == "DISPOSITION EVENT" &
+      DSDECOD %notin% c("SCREEN FAILURE", "COMPLETED", NA)
   ) %>%
   derive_vars_merged(
     dataset_add = ds,
@@ -772,8 +776,6 @@ The following functions are helpful for many ADSL derivations:
 
   - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
   - `derive_var_merged_exist_flag()` - Merge an Existence Flag
-  - `derive_var_merged_cat()` - Merge a Categorization Variable
-  - `derive_var_merged_character()` - Merge a Character Variable
   - `derive_var_merged_summary()` - Merge a Summary Variable
 
 See also [Generic Functions](generic.html).

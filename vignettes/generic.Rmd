@@ -215,9 +215,7 @@ dataset_vignette(
 ```
 
 Some further examples of "merged" functions are `derive_vars_merged_lookup()` to
-join a user-defined lookup table as commonly used in BDS ADaMs,
-`derive_var_merged_cat()` to create a categorization variable from the
-information joined from the additional dataframe, or
+join a user-defined lookup table as commonly used in BDS ADaMs or
 `derive_var_merged_summary()` to merge summarized values from the additional
 dataframe.
 
