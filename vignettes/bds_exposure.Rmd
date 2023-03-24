@@ -76,7 +76,6 @@ At this step, it may be useful to join `ADSL` to your `EX` domain as well. Only 
 
 
 ```{r eval=TRUE}
-
 adsl_vars <- exprs(TRTSDT, TRTSDTM, TRTEDT, TRTEDTM)
 
 adex <- derive_vars_merged(
