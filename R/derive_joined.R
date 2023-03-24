@@ -270,7 +270,7 @@ derive_vars_joined <- function(dataset,
   assert_vars(by_vars, optional = TRUE)
   by_vars_left <- replace_values_by_names(by_vars)
   assert_expr_list(order, optional = TRUE)
-  assert_vars(new_vars, optional = TRUE)
+  assert_expr_list(new_vars, optional = TRUE)
   assert_vars(join_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars_left)
   if (is.null(order)) {

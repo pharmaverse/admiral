@@ -11,8 +11,8 @@ derive_vars_merged(
   by_vars,
   order = NULL,
   new_vars = NULL,
-  mode = NULL,
   filter_add = NULL,
+  mode = NULL,
   match_flag = NULL,
   missing_values = NULL,
   check_type = "warning",
@@ -45,6 +45,8 @@ If the argument is set to a non-null value, for each by group the first or
 last observation from the additional dataset is selected with respect to the
 specified order.
 
+Variables defined by \code{new_vars} can be used in the sort order.
+
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
@@ -69,6 +71,16 @@ additional dataset (\code{dataset_add}) are added.
 
 \emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
 
+\item{filter_add}{Filter for additional dataset (\code{dataset_add})
+
+Only observations fulfilling the specified condition are taken into account
+for merging. If the argument is not specified, all observations are
+considered.
+
+Variables defined by \code{new_vars} can be used in the filter condition.
+
+\emph{Permitted Values}: a condition}
+
 \item{mode}{Selection mode
 
 Determines if the first or last observation is selected. If the \code{order}
@@ -77,14 +89,6 @@ argument is specified, \code{mode} must be non-null.
 If the \code{order} argument is not specified, the \code{mode} argument is ignored.
 
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
-
-\item{filter_add}{Filter for additional dataset (\code{dataset_add})
-
-Only observations fulfilling the specified condition are taken into account
-for merging. If the argument is not specified, all observations are
-considered.
-
-\emph{Permitted Values}: a condition}
 
 \item{match_flag}{Match flag
 
@@ -136,16 +140,19 @@ each by group (\code{order} and \code{mode} argument).
 }
 \details{
 \enumerate{
+\item The new variables (\code{new_vars}) are added to the additional dataset
+(\code{dataset_add}).
 \item The records from the additional dataset (\code{dataset_add}) are restricted
 to those matching the \code{filter_add} condition.
 \item If \code{order} is specified, for each by group the first or last observation
 (depending on \code{mode}) is selected.
-\item The variables specified for \code{new_vars} are renamed (if requested) and
-merged to the input dataset using \code{left_join()}. I.e., the output dataset
-contains all observations from the input dataset. For observations without
-a matching observation in the additional dataset the new variables are set
-to \code{NA}. Observations in the additional dataset which have no matching
-observation in the input dataset are ignored.
+\item The variables specified for \code{new_vars} are merged to the input dataset
+using \code{left_join()}. I.e., the output dataset contains all observations
+from the input dataset. For observations without a matching observation in
+the additional dataset the new variables are set as specified by
+\code{missing_values} (or to \code{NA} for variables not in \code{missing_values}).
+Observations in the additional dataset which have no matching observation
+in the input dataset are ignored.
 }
 }
 \examples{
@@ -192,27 +199,6 @@ ex_ext <- derive_vars_dtm(
 derive_vars_merged(
   select(admiral_dm, STUDYID, USUBJID),
   dataset_add = ex_ext,
-  by_vars = exprs(STUDYID, USUBJID),
-  new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
-  order = exprs(EXSTDTM),
-  mode = "first"
-)
-
-# Derive treatment start datetime (TRTSDTM)
-data(admiral_ex)
-
-## Impute exposure start date to first date/time
-ex_ext <- derive_vars_dtm(
-  admiral_ex,
-  dtc = EXSTDTC,
-  new_vars_prefix = "EXST",
-  highest_imputation = "M",
-)
-
-## Add first exposure datetime and imputation flags to adsl
-derive_vars_merged(
-  select(admiral_dm, STUDYID, USUBJID),
-  dataset_add = ex_ext,
   filter_add = !is.na(EXSTDTM),
   by_vars = exprs(STUDYID, USUBJID),
   new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
@@ -221,22 +207,15 @@ derive_vars_merged(
 )
 
 # Derive treatment end datetime (TRTEDTM)
-## Impute exposure end datetime to last time, no date imputation
-ex_ext <- derive_vars_dtm(
-  admiral_ex,
-  dtc = EXENDTC,
-  new_vars_prefix = "EXEN",
-  time_imputation = "last",
-)
-
-## Add last exposure datetime and imputation flag to adsl
+# The conversion from DTC to DTM is done within new_vars
+# The new variable can be used in filter_add and order
 derive_vars_merged(
   select(admiral_dm, STUDYID, USUBJID),
   dataset_add = ex_ext,
-  filter_add = !is.na(EXENDTM),
+  filter_add = !is.na(TRTEDTM),
   by_vars = exprs(STUDYID, USUBJID),
-  new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
-  order = exprs(EXENDTM),
+  new_vars = exprs(TRTEDTM = convert_dtc_to_dtm(EXENDTC)),
+  order = exprs(TRTEDTM),
   mode = "last"
 )
 

@@ -43,6 +43,8 @@ If the argument is set to a non-null value, for each by group the first or
 last observation from the additional dataset is selected with respect to the
 specified order.
 
+Variables defined by \code{new_vars} can be used in the sort order.
+
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
@@ -66,6 +68,8 @@ Changes the case of the values of the new variable.
 Only observations fulfilling the specified condition are taken into account
 for merging. If the argument is not specified, all observations are
 considered.
+
+Variables defined by \code{new_vars} can be used in the filter condition.
 
 \emph{Permitted Values}: a condition}
 

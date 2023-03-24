@@ -71,6 +71,8 @@ Only observations fulfilling the specified condition are taken into account
 for merging. If the argument is not specified, all observations are
 considered.
 
+Variables defined by \code{new_vars} can be used in the filter condition.
+
 \emph{Permitted Values}: a condition}
 
 \item{mode}{Selection mode

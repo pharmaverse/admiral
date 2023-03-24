@@ -15,11 +15,24 @@
 #'   The variables specified by the `by_vars`, the `new_vars`, and the `order`
 #'   argument are expected.
 #'
+#' @param by_vars Grouping variables
+#'
+#'   The input dataset and the selected observations from the additional dataset
+#'   are merged by the specified by variables. The by variables must be a unique
+#'   key of the selected observations. Variables from the additional dataset can
+#'   be renamed by naming the element, i.e., `by_vars =
+#'   exprs(<name in input dataset> = <name in additional dataset>)`, similar to
+#'   the dplyr joins.
+#'
+#'   *Permitted Values*: list of variables created by `exprs()`
+#'
 #' @param order Sort order
 #'
 #'   If the argument is set to a non-null value, for each by group the first or
 #'   last observation from the additional dataset is selected with respect to the
 #'   specified order.
+#'
+#'   Variables defined by `new_vars` can be used in the sort order.
 #'
 #'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))` or `NULL`
@@ -46,6 +59,16 @@
 #'
 #'   *Permitted Values*: list of variables or named expressions created by `exprs()`
 #'
+#' @param filter_add Filter for additional dataset (`dataset_add`)
+#'
+#'   Only observations fulfilling the specified condition are taken into account
+#'   for merging. If the argument is not specified, all observations are
+#'   considered.
+#'
+#'   Variables defined by `new_vars` can be used in the filter condition.
+#'
+#'   *Permitted Values*: a condition
+#'
 #' @param mode Selection mode
 #'
 #'   Determines if the first or last observation is selected. If the `order`
@@ -54,25 +77,6 @@
 #'   If the `order` argument is not specified, the `mode` argument is ignored.
 #'
 #'   *Permitted Values*: `"first"`, `"last"`, `NULL`
-#'
-#' @param by_vars Grouping variables
-#'
-#'   The input dataset and the selected observations from the additional dataset
-#'   are merged by the specified by variables. The by variables must be a unique
-#'   key of the selected observations. Variables from the additional dataset can
-#'   be renamed by naming the element, i.e., `by_vars =
-#'   exprs(<name in input dataset> = <name in additional dataset>)`, similar to
-#'   the dplyr joins.
-#'
-#'   *Permitted Values*: list of variables created by `exprs()`
-#'
-#' @param filter_add Filter for additional dataset (`dataset_add`)
-#'
-#'   Only observations fulfilling the specified condition are taken into account
-#'   for merging. If the argument is not specified, all observations are
-#'   considered.
-#'
-#'   *Permitted Values*: a condition
 #'
 #' @param match_flag Match flag
 #'
@@ -118,19 +122,22 @@
 #'
 #' @details
 #'
+#'   1. The new variables (`new_vars`) are added to the additional dataset
+#'   (`dataset_add`).
+#'
 #'   1. The records from the additional dataset (`dataset_add`) are restricted
 #'   to those matching the `filter_add` condition.
 #'
 #'   1. If `order` is specified, for each by group the first or last observation
 #'   (depending on `mode`) is selected.
 #'
-#'   1. The variables specified for `new_vars` are renamed (if requested) and
-#'   merged to the input dataset using `left_join()`. I.e., the output dataset
-#'   contains all observations from the input dataset. For observations without
-#'   a matching observation in the additional dataset the new variables are set
-#'   to `NA`. Observations in the additional dataset which have no matching
-#'   observation in the input dataset are ignored.
-#'
+#'   1. The variables specified for `new_vars` are merged to the input dataset
+#'   using `left_join()`. I.e., the output dataset contains all observations
+#'   from the input dataset. For observations without a matching observation in
+#'   the additional dataset the new variables are set as specified by
+#'   `missing_values` (or to `NA` for variables not in `missing_values`).
+#'   Observations in the additional dataset which have no matching observation
+#'   in the input dataset are ignored.
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -181,27 +188,6 @@
 #' derive_vars_merged(
 #'   select(admiral_dm, STUDYID, USUBJID),
 #'   dataset_add = ex_ext,
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
-#'   order = exprs(EXSTDTM),
-#'   mode = "first"
-#' )
-#'
-#' # Derive treatment start datetime (TRTSDTM)
-#' data(admiral_ex)
-#'
-#' ## Impute exposure start date to first date/time
-#' ex_ext <- derive_vars_dtm(
-#'   admiral_ex,
-#'   dtc = EXSTDTC,
-#'   new_vars_prefix = "EXST",
-#'   highest_imputation = "M",
-#' )
-#'
-#' ## Add first exposure datetime and imputation flags to adsl
-#' derive_vars_merged(
-#'   select(admiral_dm, STUDYID, USUBJID),
-#'   dataset_add = ex_ext,
 #'   filter_add = !is.na(EXSTDTM),
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
@@ -210,22 +196,15 @@
 #' )
 #'
 #' # Derive treatment end datetime (TRTEDTM)
-#' ## Impute exposure end datetime to last time, no date imputation
-#' ex_ext <- derive_vars_dtm(
-#'   admiral_ex,
-#'   dtc = EXENDTC,
-#'   new_vars_prefix = "EXEN",
-#'   time_imputation = "last",
-#' )
-#'
-#' ## Add last exposure datetime and imputation flag to adsl
+#' # The conversion from DTC to DTM is done within new_vars
+#' # The new variable can be used in filter_add and order
 #' derive_vars_merged(
 #'   select(admiral_dm, STUDYID, USUBJID),
 #'   dataset_add = ex_ext,
-#'   filter_add = !is.na(EXENDTM),
+#'   filter_add = !is.na(TRTEDTM),
 #'   by_vars = exprs(STUDYID, USUBJID),
-#'   new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
-#'   order = exprs(EXENDTM),
+#'   new_vars = exprs(TRTEDTM = convert_dtc_to_dtm(EXENDTC)),
+#'   order = exprs(TRTEDTM),
 #'   mode = "last"
 #' )
 #'
@@ -263,8 +242,8 @@ derive_vars_merged <- function(dataset,
                                by_vars,
                                order = NULL,
                                new_vars = NULL,
-                               mode = NULL,
                                filter_add = NULL,
+                               mode = NULL,
                                match_flag = NULL,
                                missing_values = NULL,
                                check_type = "warning",
@@ -278,7 +257,11 @@ derive_vars_merged <- function(dataset,
   assert_data_frame(dataset, required_vars = by_vars_left)
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(by_vars_right, extract_vars(order), extract_vars(new_vars))
+    required_vars = expr_c(
+      by_vars_right,
+      setdiff(extract_vars(order), replace_values_by_names(new_vars)),
+      extract_vars(new_vars)
+    )
   )
   match_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
   assert_expr_list(missing_values, named = TRUE, optional = TRUE)
@@ -296,7 +279,10 @@ derive_vars_merged <- function(dataset,
     }
   }
 
-  add_data <- filter_if(dataset_add, filter_add)
+  add_data <- dataset_add %>%
+    mutate(!!!new_vars) %>%
+    filter_if(filter_add)
+
   if (!is.null(order)) {
     add_data <- filter_extreme(
       add_data,
@@ -320,7 +306,6 @@ derive_vars_merged <- function(dataset,
   }
   if (!is.null(new_vars)) {
     add_data <- add_data %>%
-      mutate(!!!new_vars) %>%
       select(!!!by_vars_right, !!!replace_values_by_names(new_vars))
   }
 
