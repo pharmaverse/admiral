@@ -695,13 +695,16 @@ arguments which are not passed as `exprs()` argument (e.g. `new_var = VAR1` or
 
 ## Unit Testing
 
-Unit tests for deprecated functions and arguments must be added to the test
-file of the function to ensure that a warning or error is issued.
+Unit tests for deprecated functions and arguments must be added to the test file [^1] of the function to ensure that a warning or error is issued.
+
+[^1]: For example, if `derive_var_example()` is going to be deprecated and
+it is defined in `examples.R`, the unit tests are in
+`tests/testthat/test-examples.R`.
 
 When writing the unit test, check that the error or warning has the right class,
-i.e. `"lifecycle_error_deprecated"` or `"lifecycle_warning_deprecated"`,
+i.e., `"lifecycle_error_deprecated"` or `"lifecycle_warning_deprecated"`,
 respectively. The unit-test should follow the corresponding format, per the
-[unit test guidance](unit_test_guidance.html#writing-unit-tests-in-admiral-).
+[unit test guidance](unit_test_guidance.html#writing-unit-tests-in-admiral).
 
 ### For Deprecated Functions that Issues a Warning (Phase 1)
 
