@@ -1,3 +1,10 @@
+# admiraldev 0.4.0
+
+## Documentation
+
+- The deprecation strategy was updated regarding unit tests for deprecated
+functions/arguments in phase 1. (#247)
+
 # admiraldev 0.3.0
 
 ## New Features
