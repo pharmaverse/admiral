@@ -102,6 +102,9 @@ quo_not_missing <- function(x) {
 #'
 #' @return A list of expressions
 #' @export
+#'
+#' @examples
+#' replace_values_by_names(exprs(AVAL, ADT = convert_dtc_to_dt(EXSTDTC)))
 replace_values_by_names <- function(expressions, quosures) {
   if (!missing(quosures)) {
     deprecate_warn(
@@ -110,6 +113,9 @@ replace_values_by_names <- function(expressions, quosures) {
       "replace_values_by_names(expressions = )"
     )
     expressions <- map(quosures, rlang::quo_get_expr)
+  }
+  if (is.null(names(expressions))) {
+    return(expressions)
   }
   map2(expressions, names(expressions), function(e, n) {
     if (n == "") {
