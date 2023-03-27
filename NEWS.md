@@ -15,8 +15,15 @@
 
 - For the `order` argument expressions are accepted now. (#1727)
 
-- `derive_vars_merge()` gained the `missing_values` argument to assign values to
-the new variables for non-matching observations. (#1727)
+- `derive_vars_merged()` updates: (#1727)
+    - The `missing_values` argument to assign values to
+the new variables for non-matching observations was added.
+    - The `new_vars` argument accepts expressions now.
+    
+- `derive_vars_joined()` updates: (#1727)
+    - The `missing_values` argument to assign values to the new variables for
+      non-matching observations was added.
+    - The `new_vars` and the `join_vars` argument accept expressions now.
 
 ## Breaking Changes
 

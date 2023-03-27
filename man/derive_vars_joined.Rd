@@ -15,6 +15,7 @@ derive_vars_joined(
   filter_add = NULL,
   filter_join = NULL,
   mode = NULL,
+  missing_values = NULL,
   check_type = "warning"
 )
 }
@@ -99,6 +100,16 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
 
+\item{missing_values}{Values for non-matching observations
+
+For observations of the input dataset (\code{dataset}) which do not have a
+matching observation in the additional dataset (\code{dataset_add}) the values
+of the specified variables are set to the specified value. Only variables
+specified for \code{new_vars} can be specified for \code{missing_values}.
+
+\emph{Permitted Values}: named list of expressions, e.g.,
+\code{exprs(BASEC = "MISSING", BASE = -1)}}
+
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
@@ -125,6 +136,10 @@ before the current observation.
 }
 \details{
 \enumerate{
+\item The variables specified by \code{order} are added to the additional dataset
+(\code{dataset_add}).
+\item The variables specified by \code{join_vars} are added to the additional dataset
+(\code{dataset_add}).
 \item The records from the additional dataset (\code{dataset_add}) are restricted to
 those matching the \code{filter_add} condition.
 \item The input dataset and the (restricted) additional dataset are left joined
@@ -133,7 +148,7 @@ specified, a full join is performed.
 \item The joined dataset is restricted by the \code{filter_join} condition.
 \item If \code{order} is specified, for each observation of the input dataset the
 first or last observation (depending on \code{mode}) is selected.
-\item The variables specified for \code{new_vars} are renamed (if requested) and
+\item The variables specified for \code{new_vars} are created (if requested) and
 merged to the input dataset. I.e., the output dataset contains all
 observations from the input dataset. For observations without a matching
 observation in the joined dataset the new variables are set to \code{NA}.

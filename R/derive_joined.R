@@ -104,6 +104,12 @@
 #'
 #' @details
 #'
+#' 1. The variables specified by `order` are added to the additional dataset
+#' (`dataset_add`).
+#'
+#' 1. The variables specified by `join_vars` are added to the additional dataset
+#' (`dataset_add`).
+#'
 #' 1. The records from the additional dataset (`dataset_add`) are restricted to
 #' those matching the `filter_add` condition.
 #'
@@ -116,12 +122,14 @@
 #' 1. If `order` is specified, for each observation of the input dataset the
 #' first or last observation (depending on `mode`) is selected.
 #'
-#' 1. The variables specified for `new_vars` are renamed (if requested) and
+#' 1. The variables specified for `new_vars` are created (if requested) and
 #' merged to the input dataset. I.e., the output dataset contains all
 #' observations from the input dataset. For observations without a matching
 #' observation in the joined dataset the new variables are set to `NA`.
 #' Observations in the additional dataset which have no matching observation in
 #' the input dataset are ignored.
+#'
+#' @inheritParams derive_vars_merged
 #'
 #' @return The output dataset contains all observations and variables of the
 #'   input dataset and additionally the variables specified for `new_vars` from
@@ -266,29 +274,23 @@ derive_vars_joined <- function(dataset,
                                filter_add = NULL,
                                filter_join = NULL,
                                mode = NULL,
+                               missing_values = NULL,
                                check_type = "warning") {
   assert_vars(by_vars, optional = TRUE)
   by_vars_left <- replace_values_by_names(by_vars)
   assert_expr_list(order, optional = TRUE)
   assert_expr_list(new_vars, optional = TRUE)
-  assert_vars(join_vars, optional = TRUE)
+  assert_expr_list(join_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars_left)
-  if (is.null(order)) {
-    assert_data_frame(
+  assert_data_frame(
       dataset_add,
-      required_vars = expr_c(by_vars, join_vars, extract_vars(order), new_vars)
+      required_vars = expr_c(
+        by_vars,
+        extract_vars(order),
+        setdiff(extract_vars(join_vars), replace_values_by_names(order))
+      )
     )
-  } else {
-    assert_data_frame(
-      dataset_add,
-      required_vars = expr_c(by_vars, extract_vars(order), new_vars)
-    )
-    dataset_add <- mutate(dataset_add, !!!order)
-    assert_data_frame(
-      dataset_add,
-      required_vars = join_vars
-    )
-  }
+
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   filter_join <- assert_filter_cond(enexpr(filter_join), optional = TRUE)
 
@@ -308,8 +310,15 @@ derive_vars_joined <- function(dataset,
 
   # prepare right side of the join,
   # by_vars are renamed here, new_vars will be renamed at the end
-  data_right <- filter_if(dataset_add, filter_add) %>%
-    select(!!!by_vars, !!!join_vars, !!!unname(new_vars))
+  data_right <- dataset_add %>%
+    mutate(!!!order, !!!join_vars) %>%
+    filter_if(filter_add) %>%
+    select(
+      !!!by_vars,
+      !!!chr2vars(names(order)),
+      !!!replace_values_by_names(join_vars),
+      !!!intersect(unname(extract_vars(new_vars)), chr2vars(colnames(dataset_add)))
+    )
 
   # join dataset (if no by variable, a full join is performed)
   data_joined <- left_join(
@@ -341,13 +350,10 @@ derive_vars_joined <- function(dataset,
   # merge new variables to the input dataset and rename them
   data %>%
     derive_vars_merged(
-      dataset_add = select(
-        data_return,
-        !!!by_vars_left,
-        !!tmp_obs_nr,
-        !!!add_suffix_to_vars(new_vars, vars = common_vars, suffix = ".join")
-      ),
+      dataset_add = data_return,
       by_vars = exprs(!!!by_vars_left, !!tmp_obs_nr),
+      new_vars = add_suffix_to_vars(new_vars, vars = common_vars, suffix = ".join"),
+      missing_values = missing_values,
       duplicate_msg = paste(
         paste(
           "After applying `filter_join` the joined dataset contains more",
