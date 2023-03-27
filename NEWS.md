@@ -8,6 +8,24 @@
 
 ## Breaking Changes
 
+- The following functions, which were deprecated in previous `{admiral}` versions, have been removed (#1747):
+
+  - `derive_vars_merged_dt()`
+  - `derive_vars_merged_dtm()`
+  - `derive_var_agegr_ema()`
+  - `derive_var_agegr_fda()`
+  - `derive_param_first_event()`
+  - `derive_derived_param()`
+  - `derive_var_confirmation_flag()`
+
+- The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process (#1747):
+
+  - `derive_var_disposition_status()`
+  - `derive_vars_disposition_reason()`
+  - `format_eoxxstt_default()`
+  - `format_reason_default()`
+  - `derive_var_worst_flag()`
+
 ## Various
 
 

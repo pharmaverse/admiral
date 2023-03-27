@@ -31,7 +31,7 @@ NULL
 #'
 #' @export
 vars <- function(...) {
-  deprecate_warn(
+  deprecate_stop(
     "0.10.0",
     "vars()",
     "exprs()",
@@ -41,7 +41,6 @@ vars <- function(...) {
       "Please update your function calls ASAP."
     )
   )
-  exprs(...)
 }
 
 # Force admiral definition of vars().
