@@ -45,7 +45,13 @@ expected in the additional dataset (\code{dataset_add}). If a variable is
 available in both \code{dataset} and \code{dataset_add}, the one from \code{dataset_add}
 is used for the sorting.
 
-\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+If an expression is named, e.g., \code{exprs(EXSTDT = convert_dtc_to_dt(EXSTDTC), EXSEQ)}, a corresponding variable (\code{EXSTDT}) is
+added to the additional dataset and can be used in the filter conditions
+(\code{filter_add}, \code{filter_join}) and for \code{join_vars} and \code{new_vars}. The
+variable is not included in the output dataset.
+
+\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{new_vars}{Variables to add
 
@@ -59,10 +65,14 @@ And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 \code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
 \code{old_var2} to \code{new_var2}.
 
+Values of the added variables can be modified by specifying an expression.
+For example, \code{new_vars = LASTRSP = exprs(str_to_upper(AVALC))} adds the
+variable \code{LASTRSP} and sets it to the upper case value of \code{AVALC}.
+
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}}
+\emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
 
 \item{join_vars}{Variables to use from additional dataset
 
@@ -72,9 +82,14 @@ do not need to be repeated for \code{join_vars}. If a specified variable exists
 in both the input dataset and the additional dataset, the suffix ".join" is
 added to the variable from the additional dataset.
 
+If an expression is named, e.g., \code{exprs(EXTDT = convert_dtc_to_dt(EXSTDTC))}, a corresponding variable is added to the
+additional dataset and can be used in the filter conditions (\code{filter_add},
+\code{filter_join}) and for \code{new_vars}. The variable is not included in the
+output dataset.
+
 The variables are not included in the output dataset.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}}
+\emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
@@ -82,12 +97,16 @@ Only observations from \code{dataset_add} fulfilling the specified condition are
 joined to the input dataset. If the argument is not specified, all
 observations are joined.
 
+Variables created by \code{order} or \code{new_vars} can be used in the condition.
+
 \emph{Permitted Values}: a condition}
 
 \item{filter_join}{Filter for the joined dataset
 
 The specified condition is applied to the joined dataset. Therefore
 variables from both datasets \code{dataset} and \code{dataset_add} can be used.
+
+Variables created by \code{order} or \code{new_vars} can be used in the condition.
 
 \emph{Permitted Values}: a condition}
 
@@ -151,7 +170,8 @@ first or last observation (depending on \code{mode}) is selected.
 \item The variables specified for \code{new_vars} are created (if requested) and
 merged to the input dataset. I.e., the output dataset contains all
 observations from the input dataset. For observations without a matching
-observation in the joined dataset the new variables are set to \code{NA}.
+observation in the joined dataset the new variables are set as specified by
+\code{missing_values} (or to \code{NA} for variables not in \code{missing_values}).
 Observations in the additional dataset which have no matching observation in
 the input dataset are ignored.
 }
@@ -280,6 +300,35 @@ derive_vars_joined(
   by_vars = exprs(STUDYID, USUBJID),
   join_vars = exprs(APERSDT, APEREDT),
   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
+)
+
+# Add day since last dose (LDRELD)
+adae <- tribble(
+  ~USUBJID, ~ASTDT,       ~AESEQ,
+  "1",      "2020-02-02",      1,
+  "1",      "2020-02-04",      2
+) \%>\%
+  mutate(ASTDT = ymd(ASTDT))
+
+ex <- tribble(
+  ~USUBJID, ~EXSDTC,
+  "1",      "2020-01-10",
+  "1",      "2020-01",
+  "1",      "2020-01-20",
+  "1",      "2020-02-03"
+)
+
+derive_vars_joined(
+  adae,
+  dataset_add = ex,
+  by_vars = exprs(USUBJID),
+  order = exprs(EXSDT = convert_dtc_to_dt(EXSDTC)),
+  new_vars = exprs(LDRELD = compute_duration(
+    start_date = EXSDT, end_date = ASTDT
+  )),
+  filter_add = !is.na(EXSDT),
+  filter_join = EXSDT <= ASTDT,
+  mode = "last"
 )
 }
 \seealso{

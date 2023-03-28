@@ -61,7 +61,7 @@ And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 
 Values of the added variables can be modified by specifying an expression.
 For example, \code{new_vars = LASTRSP = exprs(str_to_upper(AVALC))} adds the
-variable \code{LASTRSP} and sets it to the lower case value of \code{AVALC}.
+variable \code{LASTRSP} and sets it to the upper case value of \code{AVALC}.
 
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.

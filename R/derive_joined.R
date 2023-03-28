@@ -32,7 +32,14 @@
 #'   available in both `dataset` and `dataset_add`, the one from `dataset_add`
 #'   is used for the sorting.
 #'
-#'   *Permitted Values*: list of expressions created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))` or `NULL`
+#'   If an expression is named, e.g., `exprs(EXSTDT =
+#'   convert_dtc_to_dt(EXSTDTC), EXSEQ)`, a corresponding variable (`EXSTDT`) is
+#'   added to the additional dataset and can be used in the filter conditions
+#'   (`filter_add`, `filter_join`) and for `join_vars` and `new_vars`. The
+#'   variable is not included in the output dataset.
+#'
+#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#'    `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param new_vars Variables to add
 #'
@@ -47,10 +54,14 @@
 #'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
 #'   `old_var2` to `new_var2`.
 #'
+#'   Values of the added variables can be modified by specifying an expression.
+#'   For example, `new_vars = LASTRSP = exprs(str_to_upper(AVALC))` adds the
+#'   variable `LASTRSP` and sets it to the upper case value of `AVALC`.
+#'
 #'   If the argument is not specified or set to `NULL`, all variables from the
 #'   additional dataset (`dataset_add`) are added.
 #'
-#'   *Permitted Values*: list of variables created by `exprs()`
+#'   *Permitted Values*: list of variables or named expressions created by `exprs()`
 #'
 #' @param join_vars Variables to use from additional dataset
 #'
@@ -60,9 +71,15 @@
 #'   in both the input dataset and the additional dataset, the suffix ".join" is
 #'   added to the variable from the additional dataset.
 #'
+#'   If an expression is named, e.g., `exprs(EXTDT =
+#'   convert_dtc_to_dt(EXSTDTC))`, a corresponding variable is added to the
+#'   additional dataset and can be used in the filter conditions (`filter_add`,
+#'   `filter_join`) and for `new_vars`. The variable is not included in the
+#'   output dataset.
+#'
 #'   The variables are not included in the output dataset.
 #'
-#'   *Permitted Values*: list of variables created by `exprs()`
+#'   *Permitted Values*: list of variables or named expressions created by `exprs()`
 #'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
@@ -70,12 +87,16 @@
 #'   joined to the input dataset. If the argument is not specified, all
 #'   observations are joined.
 #'
+#'   Variables created by `order` or `new_vars` can be used in the condition.
+#'
 #'   *Permitted Values*: a condition
 #'
 #' @param filter_join Filter for the joined dataset
 #'
 #'   The specified condition is applied to the joined dataset. Therefore
 #'   variables from both datasets `dataset` and `dataset_add` can be used.
+#'
+#'   Variables created by `order` or `new_vars` can be used in the condition.
 #'
 #'   *Permitted Values*: a condition
 #'
@@ -125,7 +146,8 @@
 #' 1. The variables specified for `new_vars` are created (if requested) and
 #' merged to the input dataset. I.e., the output dataset contains all
 #' observations from the input dataset. For observations without a matching
-#' observation in the joined dataset the new variables are set to `NA`.
+#' observation in the joined dataset the new variables are set as specified by
+#' `missing_values` (or to `NA` for variables not in `missing_values`).
 #' Observations in the additional dataset which have no matching observation in
 #' the input dataset are ignored.
 #'
@@ -265,6 +287,37 @@
 #'   join_vars = exprs(APERSDT, APEREDT),
 #'   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
 #' )
+#'
+#' # Add day since last dose (LDRELD)
+#' adae <- tribble(
+#'   ~USUBJID, ~ASTDT,       ~AESEQ,
+#'   "1",      "2020-02-02",      1,
+#'   "1",      "2020-02-04",      2
+#' ) %>%
+#'   mutate(ASTDT = ymd(ASTDT))
+#'
+#' ex <- tribble(
+#'   ~USUBJID, ~EXSDTC,
+#'   "1",      "2020-01-10",
+#'   "1",      "2020-01",
+#'   "1",      "2020-01-20",
+#'   "1",      "2020-02-03"
+#' )
+#'
+#' ## Please note that EXSDT is created via the order argument and then used
+#' ## for new_vars, filter_add, and filter_join
+#' derive_vars_joined(
+#'   adae,
+#'   dataset_add = ex,
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(EXSDT = convert_dtc_to_dt(EXSDTC)),
+#'   new_vars = exprs(LDRELD = compute_duration(
+#'     start_date = EXSDT, end_date = ASTDT
+#'   )),
+#'   filter_add = !is.na(EXSDT),
+#'   filter_join = EXSDT <= ASTDT,
+#'   mode = "last"
+#' )
 derive_vars_joined <- function(dataset,
                                dataset_add,
                                by_vars = NULL,
@@ -283,13 +336,13 @@ derive_vars_joined <- function(dataset,
   assert_expr_list(join_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars_left)
   assert_data_frame(
-      dataset_add,
-      required_vars = expr_c(
-        by_vars,
-        extract_vars(order),
-        setdiff(extract_vars(join_vars), replace_values_by_names(order))
-      )
+    dataset_add,
+    required_vars = expr_c(
+      by_vars,
+      extract_vars(order),
+      setdiff(extract_vars(join_vars), replace_values_by_names(order))
     )
+  )
 
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   filter_join <- assert_filter_cond(enexpr(filter_join), optional = TRUE)

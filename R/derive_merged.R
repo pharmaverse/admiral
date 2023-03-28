@@ -52,7 +52,7 @@
 #'
 #'   Values of the added variables can be modified by specifying an expression.
 #'   For example, `new_vars = LASTRSP = exprs(str_to_upper(AVALC))` adds the
-#'   variable `LASTRSP` and sets it to the lower case value of `AVALC`.
+#'   variable `LASTRSP` and sets it to the upper case value of `AVALC`.
 #'
 #'   If the argument is not specified or set to `NULL`, all variables from the
 #'   additional dataset (`dataset_add`) are added.
