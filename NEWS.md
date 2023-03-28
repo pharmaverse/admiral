@@ -28,6 +28,7 @@
 
 ## Various
 
+`vars()` which was used in the admiral function calls that expected a list of quosures have being removed (#1747).
 
 ## Documentation
 

@@ -87,8 +87,7 @@ Other deprecated:
 \code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_disposition_reason}()},
 \code{\link{format_eoxxstt_default}()},
-\code{\link{format_reason_default}()},
-\code{\link{vars}()}
+\code{\link{format_reason_default}()}
 }
 \concept{deprecated}
 \keyword{deprecated}
