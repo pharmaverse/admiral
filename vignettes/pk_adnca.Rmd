@@ -150,7 +150,6 @@ is a traditional variable that will provide a handy tool to identify
 records but will be dropped from the final dataset in this example.
 
 ```{r eval=TRUE}
-
 adsl_vars <- exprs(TRTSDT, TRTSDTM, TRT01P, TRT01A)
 
 adpc <- pc %>%
@@ -197,7 +196,6 @@ times may be used based on study details. Here we create `NFRLT` for
 using `dplyr::mutate`.
 
 ```{r eval=TRUE, echo=TRUE}
-
 # ---- Get dosing information ----
 
 ex <- ex %>%
@@ -496,7 +494,6 @@ We calculate the maximum date for concentration records and only keep
 the dosing records up to that date.
 
 ```{r eval=TRUE, echo=TRUE}
-
 # ---- Combine ADPC and EX data ----
 # Derive Relative Time Variables
 
@@ -570,7 +567,6 @@ For nominal relative times we calculate `NRRLT` generally as
 `NFRLT - NFRLT_prev` and `NXRLT` as `NFRLT - NFRLT_next`.
 
 ```{r eval=TRUE, echo=TRUE}
-
 adpc <- adpc %>%
   # Derive Nominal Relative Time from Reference Dose (NRRLT)
   mutate(
@@ -795,7 +791,6 @@ intermediate variables such as those ending with "\_prev" and "\_next".
 Finally we derive `PARAM` and `PARAMN` from a lookup table.
 
 ```{r eval=TRUE, echo=TRUE}
-
 # ---- Derive BASE and Calculate Change from Baseline ----
 
 adpc <- adpc %>%
@@ -845,7 +840,6 @@ available. Baseline lab values could also be derived from `LB` or `ADLB`
 in a similar manner.
 
 ```{r eval=TRUE, echo=TRUE}
-
 # Derive additional baselines from VS
 adpc <- adpc %>%
   derive_vars_merged(
