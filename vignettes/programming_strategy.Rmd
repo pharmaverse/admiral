@@ -82,19 +82,19 @@ For example:
 
   * The source variables or newly created variables and conditions for selecting observations should not be hard-coded.
 
-  * It is useful if a parameter triggers optional steps, e.g. if the filter parameter is specified, the input dataset
+  * It is useful if an argument triggers optional steps, e.g. if the `filter` argument is specified, the input dataset
 is restricted, otherwise this step is skipped.
 
-  * However, parameters should not trigger completely different algorithms. For example `BNRIND` could be derived based
+  * However, arguments should not trigger completely different algorithms. For example `BNRIND` could be derived based
 on `BASE` or based on `ANRIND`. It should not be implemented within one function as the algorithms are completely different.
 If `BASE` is used, the values are categorized while if `ANRIND` is used, the values are merged from the baseline observation.
 
 ## Input, Output, and Side-effects
 
 * The behavior of the function is only determined by its input, not by any global object,  
-i.e. all input like datasets, variable names, options, … must be provided to the function by parameters.
+i.e. all input like datasets, variable names, options, … must be provided to the function by arguments.
 * It is expected that the input datasets are not grouped. If any are grouped, the function must issue an error.
-* If a function requires grouping, the function must provide the `by_vars` parameter.
+* If a function requires grouping, the function must provide the `by_vars` argument.
 * The output dataset must be ungrouped.
 * The functions should not sort (arrange) the output dataset at the end.
 * If the function needs to create temporary variables in an input dataset, names
@@ -150,25 +150,25 @@ documentation of `set_admiral_options()`.
 
 
 
-Please note that the appropriate *var*/*vars* prefix should be used for all cases in which the function creates any variable(s), regardless of the presence of a `new_var` parameter in the function call. 
+Please note that the appropriate *var*/*vars* prefix should be used for all cases in which the function creates any variable(s), regardless of the presence of a `new_var` argument in the function call. 
 
-## Function Parameters
+## Function Arguments
 
-The default value of optional parameters should be `NULL`.
+The default value of optional arguments should be `NULL`.
 
-There is a recommended parameter order that all contributors are asked to adhere to 
+There is a recommended argument order that all contributors are asked to adhere to 
 (in order to keep consistency across functions):
 
 1. `dataset` (and any additional datasets denoted by `dataset_*`)
 1. `by_vars`
 1. `order`
-1. `new_var` (and any related `new_var_*` parameters)
+1. `new_var` (and any related `new_var_*` arguments)
 1. `filter` (and any additional filters denoted by `filter_*`)
 1. all additional arguments:
     * Make sure to always mention `start_date` before `end_date` (or related).
 
 Names of variables inside a dataset should be passed as symbols rather than strings, i.e. `AVAL` rather than `"AVAL"`.
-If a parameter accepts one or more variables as input, the variables should be wrapped inside `exprs()`.
+If an argument accepts one or more variables as input, the variables should be wrapped inside `exprs()`.
 
 For example:
 
@@ -177,8 +177,8 @@ For example:
 * `filter = PARAMCD == "TEMP"`
 * `order = exprs(AVISIT, desc(AESEV))`
 
-Parameter must not accept expressions for assigning the value of the new
-variable. Instead separate parameters need to be provided for defining the
+Argument must not accept expressions for assigning the value of the new
+variable. Instead separate arguments need to be provided for defining the
 value. For example, if a function derives a variable which may be imputed, the
 following is **not acceptable**.
 
@@ -190,7 +190,7 @@ following is **not acceptable**.
     ...
 ```
 
-Separate parameters for the imputation must be provided, e.g.:
+Separate arguments for the imputation must be provided, e.g.:
 ```
     ...
     new_var = mydtm,
@@ -200,7 +200,7 @@ Separate parameters for the imputation must be provided, e.g.:
     ...
 ```
 
-Each function parameter needs to be tested with `assert_` type of function. 
+Each function argument needs to be tested with `assert_` type of function. 
 
 Each expression needs to be tested for the following 
 (there are many utility functions in `{admiral}` available to the contributor):
@@ -210,31 +210,34 @@ Each expression needs to be tested for the following
 
 The only exception to this is `derive_var_basetype()` where we allowed the use of `rlang::exprs()`. 
 The reason is that in this case the user needs to have the flexibility to provide not just symbols but 
-usually more complicated filtering conditions (that may be based on multiple input parameters).
+usually more complicated filtering conditions (that may be based on multiple input arguments).
 
 
-## Common Function Parameters Naming Convention
+## Common Function Arguments Naming Convention
 
-The first parameter of `derive_` functions should be the input dataset and it should be named `dataset`. 
-If more than one input dataset is required, the other input dataset should start with `dataset_`, e.g., `dataset_ex.`
+The first argument of `derive_` functions should be the input dataset and it
+should be named `dataset`. If more than one input dataset is required, the other
+input dataset should start with `dataset_`, e.g., `dataset_ex.`
 
-Parameters for specifying items to add should start with `new_`. 
-If a variable is added, the second part of the parameter name should be var, if a parameter is added, it should be `param.` 
-For example: `new_var`, `new_var_unit`, `new_param`.
+Arguments for specifying items to add should start with `new_`. If a variable is
+added, the second part of the argument name should be var, if a parameter is
+added, it should be `param.` For example: `new_var`, `new_var_unit`,
+`new_param`.
 
-Parameters which expect a boolean or boolean vector must start with a verb, e.g., `is_imputed` or `impute_date`.
+Arguments which expect a boolean or boolean vector must start with a verb, e.g.,
+`is_imputed` or `impute_date`.
 
 
-## List of Common Parameters
+## List of Common Arguments
 
-| Parameter Name   | Description                                                                                                        |
+| Argument Name   | Description                                                                                                        |
 |------------------|--------------------------------------------------------------------------------------------------------------------|
 | `dataset`        | The input dataset. Expects a data.frame or a tibble.                                                               |
 | `by_vars`        | Variables to group by.                                                                                             |
 | `order`          | List of expressions for sorting a dataset, e.g., `exprs(PARAMCD, AVISITN, desc(AVAL))`.                             |
 | `new_var`        | Name of a single variable to be added to the dataset.                                                              |
 | `new_vars`       | List of variables to be added to the dataset.                                                                      |
-| `new_var_unit`   | Name of the unit variable to be added. It should be the unit of the variable specified for the new_var parameter.  |
+| `new_var_unit`   | Name of the unit variable to be added. It should be the unit of the variable specified for the `new_var` argument.  |
 | `filter`         | Expression to filter a dataset, e.g., `PARAMCD == "TEMP"`.                                                         |
 | `start_date`     | The start date of an event/interval. Expects a date object.                                                        |
 | `end_date`       | The end date of an event/interval. Expects a date object.                                                          |
@@ -321,16 +324,16 @@ here only a warning should be displayed and the function should continue executi
 Inputs should be checked using custom assertion functions defined in [`R/assertions.R`](https://github.com/pharmaverse/admiraldev/blob/main/R/assertions.R).
 These custom assertion functions should either return an error in case of an invalid input or return nothing.
 
-For the most common types of input parameters like a single variable, a list of
+For the most common types of input arguments like a single variable, a list of
 variables, a dataset, ... functions for checking are available (see
 [assertions](../reference/index.html#section-assertions)).
 
-Parameters which expect keywords should handle them in a case-insensitive manner, e.g., both
-`date_imputation = "FIRST"` and `date_imputation = "first"` should be accepted.
-The `assert_character_scalar()` function helps with handling parameters in a 
-case-insensitive manner.
+Arguments which expect keywords should handle them in a case-insensitive manner,
+e.g., both `date_imputation = "FIRST"` and `date_imputation = "first"` should be
+accepted. The `assert_character_scalar()` function helps with handling arguments
+in a case-insensitive manner.
 
-A parameter should not be checked in an outer function if the parameter name is the same as in the inner function. 
+A argument should not be checked in an outer function if the argument name is the same as in the inner function. 
 This rule is applicable only if both functions are part of `{admiral}`.
 
 
@@ -339,7 +342,7 @@ This rule is applicable only if both functions are part of `{admiral}`.
 Every function that is exported from the package must have an accompanying header 
 that should be formatted according to the [roxygen2](https://roxygen2.r-lib.org/) convention. 
 
-In addition to the roxygen2 parameters, `@keywords` is also used. 
+In addition to the roxygen2 tags, `@keywords` is also used. 
 
 The keywords are used to categorize the function. Please see section "Categorization of functions".
 
@@ -354,7 +357,7 @@ An example is given below:
 #' @param dataset Input dataset
 #'
 #'   The columns specified by the `reference_date` and the `source_vars`
-#'   parameter are expected.
+#'   argument are expected.
 #'
 #' @param reference_date The start date column, e.g., date of first treatment
 #'
@@ -410,8 +413,8 @@ An example is given below:
 
 The following fields are mandatory:
 
-* `@param`: One entry per function parameter. 
-The following attributes should be described: expected data type (e.g. `data.frame`, `logical`, `numeric` etc.), default value (if any), permitted values (if applicable), optionality (i.e. is this a required parameter). 
+* `@param`: One entry per function argument. 
+The following attributes should be described: expected data type (e.g. `data.frame`, `logical`, `numeric` etc.), default value (if any), permitted values (if applicable), optionality (i.e. is this a required argument). 
 If the expected input is a dataset then the required variables should be clearly stated.
 * `@details`: A natural-language description of the derivation used inside the function.
 * `@keyword`: One applicable tag to the function - identical to family.
@@ -426,22 +429,22 @@ If other functions are called in the example, please specify `library(pkg_name)`
 Make sure to align columns as this ensures quick code readability. 
 
 Copying descriptions should be avoided as it makes the documentation hard to
-maintain. For example if the same parameter with the same description is used by
-more than one function, the parameter should be described for one function and
+maintain. For example if the same argument with the same description is used by
+more than one function, the argument should be described for one function and
 the other functions should use `@inheritParams <function name where the
-parameter is described>`.
+argument is described>`.
 
 Please note that if `@inheritParams func_first` is used in the header of the
-`func_second()` function, those parameter descriptions of `func_first()` are
+`func_second()` function, those argument descriptions of `func_first()` are
 included in the documentation of `func_second()` for which
 
-- the parameter is offered by `func_second()` and
-- no `@param` tag for the parameter is included in the header of
+- the argument is offered by `func_second()` and
+- no `@param` tag for the argument is included in the header of
 `func_second()`.
 
 The order of the `@param` tags should be the same as in the function definition.
 The `@inheritParams` tags should be after the `@param`. This does not affect the
-order of the parameter description in the rendered documentation but makes it
+order of the argument description in the rendered documentation but makes it
 easier to maintain the headers.
 
 Variable names, expressions, functions, and any other code must be enclosed
@@ -569,30 +572,37 @@ See [Writing Unit Tests in {admiral}](unit_test_guidance.html#writing-unit-tests
 
 # Deprecation
 
-As `{admiral}` is still evolving, functions or parameters may need to be removed or replaced with more 
-efficient options from one release to another. In such cases, the relevant function or parameter 
-must be marked as deprecated. This deprecation is done in three phases over our release cycles.
+As `{admiral}` is still evolving, functions or arguments may need to be removed
+or replaced with more efficient options from one release to another. In such
+cases, the relevant function or argument must be marked as deprecated. This
+deprecation is done in three phases over our release cycles.
 
--  **Phase 1:** In the release where the identified function or parameter is to be deprecated there will be a warning issued when using the function or parameter using `deprecate_warn()`
+-  **Phase 1:** In the release where the identified function or argument is to
+be deprecated there will be a warning issued when using the function or argument
+using `deprecate_warn()`.
 
--  **Phase 2:** In the next release an error will be thrown using `deprecate_stop()`
+-  **Phase 2:** In the next release an error will be thrown using
+`deprecate_stop()`.
 
--  **Phase 3:** Finally in the 3rd release thereafter the function will be removed from the package altogether
+-  **Phase 3:** Finally in the 3rd release thereafter the function will be
+removed from the package altogether.
 
 Information about deprecation timelines must be added to the warning/error message.
 
-Note that the deprecation cycle time for a function or parameter based on our current release schedule is 6 months.
+Note that the deprecation cycle time for a function or argument based on our
+current release schedule is 6 months.
 
 ## Documentation
 
-If a function or parameter is removed, the documentation must be updated to indicate the function 
-or the parameter is now deprecated and which new function/parameter should be used instead.
+If a function or argument is removed, the documentation must be updated to
+indicate the function or the argument is now deprecated and which new
+function/argument should be used instead.
 
 The documentation will be updated at:
 
 + the description level for a function, 
 + the keywords will be replaced with `deprecated`
-+ the @family roxygen tag will become `deprecated`
++ the `@family` roxygen tag will become `deprecated`
 
     ```{r, eval=FALSE}
 #' Title of the function
@@ -610,25 +620,27 @@ The documentation will be updated at:
 
 + the `@examples` section should be removed.
 
-+ the `@param` level for a parameter.
++ the `@param` level for a argument.
 
     ```
     @param old_param *Deprecated*, please use `new_param` instead.
     ```
 
-## Handling of warning and error
+## Handling of Warning and Error
 
-When a function or parameter is deprecated, the function must be updated to issue a
-warning or error using `deprecate_warn()` and `deprecate_stop()`, respectively, as
-described above.
+When a function or argument is deprecated, the function must be updated to issue
+a warning or error using `deprecate_warn()` and `deprecate_stop()`,
+respectively, as described above.
 
-There should be a test case added in `tests/testthat/test-deprecation.R` that checks whether this warning/error is issued as appropriate when using the deprecated function or parameter.
+There should be a test case added in the test file of the function that checks
+whether this warning/error is issued as appropriate when using the deprecated
+function or argument.
 
 ### Function
 
-In the initial release in which a function is deprecated the original function body
-must be replaced with a call to `deprecate_warn()` and subsequently all arguments
-should be passed on to the new function.
+In the initial release in which a function is deprecated the original function
+body must be replaced with a call to `deprecate_warn()` and subsequently all
+arguments should be passed on to the new function.
 
 ```r
 fun_xxx <- function(dataset, some_param, other_param) {
@@ -652,9 +664,9 @@ fun_xxx <- function(dataset, some_param, other_param) {
 
 Finally, in the next release the function should be removed from the package.
 
-### Parameter
+### Argument
 
-If a parameter is removed and is not replaced, an **error** must be generated:
+If an argument is removed and is not replaced, an **error** must be generated:
 
 ```
 ### BEGIN DEPRECATION
@@ -664,9 +676,9 @@ If a parameter is removed and is not replaced, an **error** must be generated:
 ### END DEPRECATION
 ```
 
-If the parameter is renamed or replaced, a **warning** must be issued and the
-new parameter takes the value of the old parameter until the next release. Note:
-parameters which are not passed as `exprs()` argument (e.g. `new_var = VAR1` or
+If the argument is renamed or replaced, a **warning** must be issued and the
+new argument takes the value of the old argument until the next release. Note:
+arguments which are not passed as `exprs()` argument (e.g. `new_var = VAR1` or
 `filter = AVAL >10`) will need to be quoted.
 
 ``` 
@@ -683,30 +695,23 @@ parameters which are not passed as `exprs()` argument (e.g. `new_var = VAR1` or
 
 ## Unit Testing
 
-Unit tests for deprecated functions and parameters must be added to
-`tests/testthat/test-deprecation.R` to ensure that a warning or error is issued. 
+Unit tests for deprecated functions and arguments must be added to the test file [^1] of the function to ensure that a warning or error is issued.
 
-When writing the unit test, check that the error or warning has the right class, i.e. "lifecycle_error_deprecated" or "lifecycle_warning_deprecated", respectively. The unit-test should follow the corresponding format, per the [unit test guidance](unit_test_guidance.html#writing-unit-tests-in-admiral-):
+[^1]: For example, if `derive_var_example()` is going to be deprecated and
+it is defined in `examples.R`, the unit tests are in
+`tests/testthat/test-examples.R`.
 
+When writing the unit test, check that the error or warning has the right class,
+i.e., `"lifecycle_error_deprecated"` or `"lifecycle_warning_deprecated"`,
+respectively. The unit-test should follow the corresponding format, per the
+[unit test guidance](unit_test_guidance.html#writing-unit-tests-in-admiral).
+
+### For Deprecated Functions that Issues a Warning (Phase 1)
+
+A unit test like the following must be added.
 ```
-# For deprecated functions that issues error
-
-## Test #: An error is thrown if `derive_var_example()` is called ----
-test_that("deprecation Test #: derive_var_example() An error is thrown if
-          `derive_var_example()` is called", {
-  expect_error(
-    derive_var_example(),
-    class = "lifecycle_error_deprecated"
-  )
-})
-```
-
-```
-# For deprecated functions that issues warning
-
-## Test #: A warning is thrown if `derive_var_example()` is called ----
-test_that("deprecation Test #: derive_var_example() A warning is thrown if
-          `derive_var_example()` is called", {
+## Test #: deprecation warning if function is called ----
+test_that("derive_var_example() Test #: deprecation warning if function is called", {
   expect_warning(
     derive_var_example(),
     class = "lifecycle_warning_deprecated"
@@ -714,19 +719,40 @@ test_that("deprecation Test #: derive_var_example() A warning is thrown if
 })
 ```
 
+In the existing unit tests the call of the deprecated function need to be enclosed by `suppress_warning()`. For example,
+```
+  actual <- suppress_warning(
+    derive_var_example(),
+    regexpr = "was deprecated"
+  )
+```
+The `regexpr` argument must be specified to ensure that only the deprecation
+warning is suppressed.
 
-Other unit tests of deprecated functions must be removed.
+### For Deprecated Functions that Issues an Error (Phase 2)
+
+A unit test like the following must be added.
+```
+## Test #: error if function is called ----
+test_that("derive_var_example() Test #: deprecation error if function is called", {
+  expect_error(
+    derive_var_example(),
+    class = "lifecycle_error_deprecated"
+  )
+})
+```
+Other unit tests of the deprecated function must be removed.
 
 # Best Practices and Hints
 
 Please take the following list as recommendation and try to adhere to its rules if possible.
 
-* Parameters in function calls should be named except for the first parameter 
+* Arguments in function calls should be named except for the first parameter 
 (e.g. `assert_data_frame(dataset, required_vars = exprs(var1, var2), optional = TRUE)`).
 * `dplyr::if_else()` should be used when there are only two conditions. 
-Try to always set the `missing` parameter whenever appropriate.
+Try to always set the `missing` argument whenever appropriate.
 
-# R and package versions for development
+# R and Package Versions for Development
 
 * The choice of R Version is not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in the earliest of the three latest R Versions. This need for a common development environment also carries over for our choice of package versions.  
 * GitHub allows us through the Actions/Workflows to test `{admiral}` under several versions of R as well as several versions of dependent R packages needed for `{admiral}`.  Currently we test `{admiral}` against the three latest R Versions and the closest snapshots of packages to those R versions.  You can view this workflow and others on our [admiralci GitHub Repository](https://github.com/pharmaverse/admiralci).

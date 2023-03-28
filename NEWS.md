@@ -11,6 +11,11 @@ expressions (#241)
 
 - `assert_order_vars()` was deprecated in favor of `assert_expr_list()`. (#241)
 
+## Documentation
+
+- The deprecation strategy was updated regarding unit tests for deprecated
+functions/arguments in phase 1. (#247)
+
 # admiraldev 0.3.0
 
 ## New Features
