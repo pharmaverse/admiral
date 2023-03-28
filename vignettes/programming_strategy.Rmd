@@ -168,7 +168,7 @@ There is a recommended argument order that all contributors are asked to adhere 
     * Make sure to always mention `start_date` before `end_date` (or related).
 
 Names of variables inside a dataset should be passed as symbols rather than strings, i.e. `AVAL` rather than `"AVAL"`.
-If an argument accepts one or more variables as input, the variables should be wrapped inside `exprs()`.
+If an argument accepts one or more variables or expressions as input, the variables should be wrapped inside `exprs()`.
 
 For example:
 
@@ -176,29 +176,7 @@ For example:
 * `by_vars = exprs(PARAMCD, AVISIT)`
 * `filter = PARAMCD == "TEMP"`
 * `order = exprs(AVISIT, desc(AESEV))`
-
-Argument must not accept expressions for assigning the value of the new
-variable. Instead separate arguments need to be provided for defining the
-value. For example, if a function derives a variable which may be imputed, the
-following is **not acceptable**.
-
-```
-    ...
-    new_var = exprs(mydtm = convert_dtc_to_dtm(impute_dtc(cmstdtc,
-                                                          date_imputation = "last",
-                                                          time_imputation = "last"))),
-    ...
-```
-
-Separate arguments for the imputation must be provided, e.g.:
-```
-    ...
-    new_var = mydtm,
-    source_var = cmstdtc,
-    date_imputation = "last",
-    time_imputation = "last",
-    ...
-```
+* `new_vars = exprs(LDOSE = EXDOSE, LDOSEDT = convert_dtc_to_dt(EXSTDTC))`
 
 Each function argument needs to be tested with `assert_` type of function. 
 
@@ -207,11 +185,6 @@ Each expression needs to be tested for the following
 
 * whether it is an expression (or a list of expressions, depending on the function)
 * whether it is a valid expression (i.e. whether it evaluates without error)
-
-The only exception to this is `derive_var_basetype()` where we allowed the use of `rlang::exprs()`. 
-The reason is that in this case the user needs to have the flexibility to provide not just symbols but 
-usually more complicated filtering conditions (that may be based on multiple input arguments).
-
 
 ## Common Function Arguments Naming Convention
 
