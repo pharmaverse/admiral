@@ -59,18 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -95,8 +83,32 @@
 <h2 class="pkg-version" data-toc-text="0.11.0" id="admiral-0110">admiral 0.11.0<a class="anchor" aria-label="anchor" href="#admiral-0110"></a></h2>
 <div class="section level3"><h3 id="new-features-0-11-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-11-0"></a></h3></div>
 <div class="section level3"><h3 id="updates-of-existing-functions-0-11-0">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-0-11-0"></a></h3></div>
-<div class="section level3"><h3 id="breaking-changes-0-11-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-11-0"></a></h3></div>
-<div class="section level3"><h3 id="various-0-11-0">Various<a class="anchor" aria-label="anchor" href="#various-0-11-0"></a></h3></div>
+<div class="section level3">
+<h3 id="breaking-changes-0-11-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-11-0"></a></h3>
+<ul><li>
+<p>The following functions, which were deprecated in previous <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> versions, have been removed (<a href="https://github.com/pharmaverse/admiral/issues/1747" class="external-link">#1747</a>):</p>
+<ul><li><code>derive_vars_merged_dt()</code></li>
+<li><code>derive_vars_merged_dtm()</code></li>
+<li><code>derive_var_agegr_ema()</code></li>
+<li><code>derive_var_agegr_fda()</code></li>
+<li><code>derive_param_first_event()</code></li>
+<li><code>derive_derived_param()</code></li>
+<li><code><a href="../reference/derive_var_confirmation_flag.html">derive_var_confirmation_flag()</a></code></li>
+<li><code>filter_confirmation()</code></li>
+</ul></li>
+<li>
+<p>The following functions have been deprecated from previous <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> versions using the next phase of the deprecation process (<a href="https://github.com/pharmaverse/admiral/issues/1747" class="external-link">#1747</a>):</p>
+<ul><li><code><a href="../reference/derive_var_disposition_status.html">derive_var_disposition_status()</a></code></li>
+<li><code><a href="../reference/derive_vars_disposition_reason.html">derive_vars_disposition_reason()</a></code></li>
+<li><code><a href="../reference/format_eoxxstt_default.html">format_eoxxstt_default()</a></code></li>
+<li><code><a href="../reference/format_reason_default.html">format_reason_default()</a></code></li>
+<li><code><a href="../reference/derive_var_worst_flag.html">derive_var_worst_flag()</a></code></li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="various-0-11-0">Various<a class="anchor" aria-label="anchor" href="#various-0-11-0"></a></h3>
+<p><code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code> which was used in the admiral function calls that expected a list of quosures has been removed (<a href="https://github.com/pharmaverse/admiral/issues/1747" class="external-link">#1747</a>).</p>
+</div>
 <div class="section level3"><h3 id="documentation-0-11-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-11-0"></a></h3></div>
 </div>
     <div class="section level2">
@@ -118,7 +130,7 @@
 <ul><li><p>Arguments <code>analysis_var</code>, <code>keep_vars</code> were added to <code><a href="../reference/derive_locf_records.html">derive_locf_records()</a></code>,<br><code>analysis_var</code> allows to specify analysis variable, <code>keep_vars</code> keeps variables that need carrying the last observation forward other than <code>analysis_var</code> (e.g., <code>PARAMN</code>, <code>VISITNUM</code>) (<a href="https://github.com/pharmaverse/admiral/issues/1636" class="external-link">#1636</a>).</p></li>
 <li><p>The function <code><a href="../reference/create_single_dose_dataset.html">create_single_dose_dataset()</a></code> adds support for expanding relative nominal time (e.g. NFRLT) used in Pharmacokinetic (PK) analyses. The new parameter <code>nominal_time</code> defaults as <code>NULL</code> and does not change the normal operation of the function. If a <code>nominal_time</code> is specified such as NFRLT (Nominal Relative Time from First Dose) then the nominal time is incremented by the interval specified in <code>EXDOSFRQ</code> for example for “QD” records the NFRLT is incremented by 24 hours, e.g. 0, 24, 48…(<a href="https://github.com/pharmaverse/admiral/issues/1640" class="external-link">#1640</a>).</p></li>
 <li><p><code><a href="../reference/create_single_dose_dataset.html">create_single_dose_dataset()</a></code> is also updated for values of <code>EXDOSFRQ</code> with units in days but expected values less than 24 hours, such as “BID”, “TID”, and “QID”. Previously these values of <code>EXDOSFRQ</code> may result in duplicate records where the day values are incremented but the time values are not (<a href="https://github.com/pharmaverse/admiral/issues/1643" class="external-link">#1643</a>)</p></li>
-<li><p>The function <code><a href="../reference/derive_var_confirmation_flag.html">derive_var_confirmation_flag()</a></code> and <code><a href="../reference/filter_confirmation.html">filter_confirmation()</a></code> gained the <code>tmp_obs_nr_var</code> argument. It helps flagging or selecting consecutive observations or the first or last observation in a by group. (<a href="https://github.com/pharmaverse/admiral/issues/1724" class="external-link">#1724</a>)</p></li>
+<li><p>The function <code><a href="../reference/derive_var_confirmation_flag.html">derive_var_confirmation_flag()</a></code> and <code>filter_confirmation()</code> gained the <code>tmp_obs_nr_var</code> argument. It helps flagging or selecting consecutive observations or the first or last observation in a by group. (<a href="https://github.com/pharmaverse/admiral/issues/1724" class="external-link">#1724</a>)</p></li>
 <li><p>The functions <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code>, <code><a href="../reference/derive_var_merged_cat.html">derive_var_merged_cat()</a></code>, <code><a href="../reference/derive_var_merged_character.html">derive_var_merged_character()</a></code>, <code><a href="../reference/derive_var_merged_exist_flag.html">derive_var_merged_exist_flag()</a></code>, <code><a href="../reference/derive_var_merged_summary.html">derive_var_merged_summary()</a></code>, and <code><a href="../reference/derive_vars_merged_lookup.html">derive_vars_merged_lookup()</a></code> were updated to allow renaming in the argument <code>by_vars</code> (<a href="https://github.com/pharmaverse/admiral/issues/1680" class="external-link">#1680</a>).</p></li>
 <li><p>The units “min” and “sec” are added as valid values of <code>out_unit</code> in <code><a href="../reference/compute_duration.html">compute_duration()</a></code> and <code><a href="../reference/derive_vars_duration.html">derive_vars_duration()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/1647" class="external-link">#1647</a>).</p></li>
 <li><p>The function <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> now includes a consistency check for <code>QUERY_SCOPE</code> and <code>QUERY_SCOPE_NUM</code> values. (<a href="https://github.com/pharmaverse/admiral/issues/652" class="external-link">#652</a>)</p></li>
@@ -128,8 +140,8 @@
 <div class="section level3">
 <h3 id="breaking-changes-0-10-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-0"></a></h3>
 <ul><li>
-<p>All function arguments which expected a list of quosures created by <code><a href="../reference/vars.html">vars()</a></code> are now expecting a list of expressions created by <code><a href="../reference/reexport-exprs.html">exprs()</a></code>. For example, instead of <code>by_vars = vars(STUDYID, USUBJID)</code> <code>by_vars = exprs(STUDYID, USUBJID)</code> must be used now.</p>
-<p>To enable running old scripts using <code><a href="../reference/vars.html">vars()</a></code> in the admiral function calls admiral redefines the <code><a href="../reference/vars.html">vars()</a></code> function such that it returns a list of expressions. This can be disabled by the admiral option <code>force_admiral_vars</code> (see <code><a href="../reference/set_admiral_options.html">set_admiral_options()</a></code>). Please note that this is a temporary solution and will be removed in a future admiral release. (<a href="https://github.com/pharmaverse/admiral/issues/1627" class="external-link">#1627</a>)</p>
+<p>All function arguments which expected a list of quosures created by <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code> are now expecting a list of expressions created by <code><a href="../reference/reexport-exprs.html">exprs()</a></code>. For example, instead of <code>by_vars = vars(STUDYID, USUBJID)</code> <code>by_vars = exprs(STUDYID, USUBJID)</code> must be used now.</p>
+<p>To enable running old scripts using <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code> in the admiral function calls admiral redefines the <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code> function such that it returns a list of expressions. This can be disabled by the admiral option <code>force_admiral_vars</code> (see <code><a href="../reference/set_admiral_options.html">set_admiral_options()</a></code>). Please note that this is a temporary solution and will be removed in a future admiral release. (<a href="https://github.com/pharmaverse/admiral/issues/1627" class="external-link">#1627</a>)</p>
 </li>
 <li><p>Function <code><a href="../reference/derive_param_tte.html">derive_param_tte()</a></code> has been updated such that only observations are added for subjects who have both an event or censoring and an observation in <code>dataset_adsl</code> (<a href="https://github.com/pharmaverse/admiral/issues/1576" class="external-link">#1576</a>).</p></li>
 <li><p>Function <code><a href="../reference/derive_var_disposition_status.html">derive_var_disposition_status()</a></code> has been deprecated, please use <code><a href="../reference/derive_var_merged_cat.html">derive_var_merged_cat()</a></code> instead (<a href="https://github.com/pharmaverse/admiral/issues/1681" class="external-link">#1681</a>).</p></li>
@@ -137,12 +149,12 @@
 <li><p>Function <code><a href="../reference/derive_vars_disposition_reason.html">derive_vars_disposition_reason()</a></code> has been deprecated, in favor of <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code>(<a href="https://github.com/pharmaverse/admiral/issues/1683" class="external-link">#1683</a>)</p></li>
 <li>
 <p>The following functions have been deprecated from previous <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> versions using the next phase of the deprecation process: (<a href="https://github.com/pharmaverse/admiral/issues/1712" class="external-link">#1712</a>)</p>
-<ul><li><code><a href="../reference/derive_derived_param.html">derive_derived_param()</a></code></li>
-<li><code><a href="../reference/derive_param_first_event.html">derive_param_first_event()</a></code></li>
-<li><code><a href="../reference/derive_vars_merged_dt.html">derive_vars_merged_dt()</a></code></li>
-<li><code><a href="../reference/derive_vars_merged_dtm.html">derive_vars_merged_dtm()</a></code></li>
-<li><code><a href="../reference/derive_var_agegr_fda.html">derive_var_agegr_ema()</a></code></li>
-<li><code><a href="../reference/derive_var_agegr_fda.html">derive_var_agegr_fda()</a></code></li>
+<ul><li><code>derive_derived_param()</code></li>
+<li><code>derive_param_first_event()</code></li>
+<li><code>derive_vars_merged_dt()</code></li>
+<li><code>derive_vars_merged_dtm()</code></li>
+<li><code>derive_var_agegr_ema()</code></li>
+<li><code>derive_var_agegr_fda()</code></li>
 </ul></li>
 <li>
 <p>The following functions, which were deprecated in previous <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> versions, have been removed (<a href="https://github.com/pharmaverse/admiral/issues/1712" class="external-link">#1712</a>):</p>
@@ -165,7 +177,7 @@
 </li>
 </ul></li>
 <li><p><code>ADLB</code> metadata data set called <code>atoxgr_criteria_ctcv5</code> updated to remove unit check for <code>HYPERURICEMIA</code> as grade criteria based on <code>ANRHI</code> only. This metadata holds criteria for lab grading based on <a href="https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm" class="external-link">Common Terminology Criteria for Adverse Events (CTCAE) v5.0</a> (<a href="https://github.com/pharmaverse/admiral/issues/1650" class="external-link">#1650</a>)</p></li>
-<li><p>Renamed <code><a href="../reference/derive_var_confirmation_flag.html">derive_var_confirmation_flag()</a></code> and <code><a href="../reference/filter_confirmation.html">filter_confirmation()</a></code> to <code><a href="../reference/derive_var_joined_exist_flag.html">derive_var_joined_exist_flag()</a></code> and <code><a href="../reference/filter_joined.html">filter_joined()</a></code> respectively (<a href="https://github.com/pharmaverse/admiral/issues/1738" class="external-link">#1738</a>).</p></li>
+<li><p>Renamed <code><a href="../reference/derive_var_confirmation_flag.html">derive_var_confirmation_flag()</a></code> and <code>filter_confirmation()</code> to <code><a href="../reference/derive_var_joined_exist_flag.html">derive_var_joined_exist_flag()</a></code> and <code><a href="../reference/filter_joined.html">filter_joined()</a></code> respectively (<a href="https://github.com/pharmaverse/admiral/issues/1738" class="external-link">#1738</a>).</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-0-10-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-10-0"></a></h3>
@@ -206,7 +218,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="updates-of-existing-functions-0-9-0">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-0-9-0"></a></h3>
-<ul><li><p>Function <code><a href="../reference/derive_param_first_event.html">derive_param_first_event()</a></code> has been replaced by a more generalized <code><a href="../reference/derive_param_extreme_event.html">derive_param_extreme_event()</a></code> function with new argument <code>mode</code> allowing for the selection of either the <code>"first"</code> or <code>"last"</code> event record according to the conditions provided. Also the <code>date_var</code> argument has been replaced with the <code>order</code> argument instead. In addition, three new arguments <code>new_var</code>, <code>true_value</code>, and <code>false_value</code> have been added to allow the user to choose what variable is used to indicate whether an event happened, and the values it is given (<a href="https://github.com/pharmaverse/admiral/issues/1317" class="external-link">#1317</a>) (<a href="https://github.com/pharmaverse/admiral/issues/1242" class="external-link">#1242</a>).</p></li>
+<ul><li><p>Function <code>derive_param_first_event()</code> has been replaced by a more generalized <code><a href="../reference/derive_param_extreme_event.html">derive_param_extreme_event()</a></code> function with new argument <code>mode</code> allowing for the selection of either the <code>"first"</code> or <code>"last"</code> event record according to the conditions provided. Also the <code>date_var</code> argument has been replaced with the <code>order</code> argument instead. In addition, three new arguments <code>new_var</code>, <code>true_value</code>, and <code>false_value</code> have been added to allow the user to choose what variable is used to indicate whether an event happened, and the values it is given (<a href="https://github.com/pharmaverse/admiral/issues/1317" class="external-link">#1317</a>) (<a href="https://github.com/pharmaverse/admiral/issues/1242" class="external-link">#1242</a>).</p></li>
 <li><p>Argument <code>ignore_time_for_ref_end_date</code> was added to <code><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl()</a></code>, which controls if time is considered for the condition if <code>start_date</code> is after <code>ref_end_date</code> + <code>ref_end_window</code> days (<a href="https://github.com/pharmaverse/admiral/issues/989" class="external-link">#989</a>).</p></li>
 <li><p><code><a href="../reference/derive_var_atoxgr_dir.html">derive_var_atoxgr_dir()</a></code> default value of <code>atoxgr_criteria_ctcv4</code> removed for parameter <code>meta_criteria</code>. Can now also choose <code>atoxgr_criteria_ctcv5</code> for parameter <code>meta_criteria</code>, to implement NCI-CTCAEv5 grading criteria .</p></li>
 <li><p><em>Environment</em> objects were consolidated into a single <code>admiral_environment</code> object under <code>R/admiral__environment.R</code>. (<a href="https://github.com/pharmaverse/admiral/issues/1572" class="external-link">#1572</a>)</p></li>
@@ -215,7 +227,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-0-9-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-9-0"></a></h3>
-<ul><li><p>Function <code><a href="../reference/derive_param_first_event.html">derive_param_first_event()</a></code> has been deprecated. Please use <code><a href="../reference/derive_param_extreme_event.html">derive_param_extreme_event()</a></code> with the <code>order</code> argument instead of the <code>date_var</code> argument (<a href="https://github.com/pharmaverse/admiral/issues/1317" class="external-link">#1317</a>).</p></li>
+<ul><li><p>Function <code>derive_param_first_event()</code> has been deprecated. Please use <code><a href="../reference/derive_param_extreme_event.html">derive_param_extreme_event()</a></code> with the <code>order</code> argument instead of the <code>date_var</code> argument (<a href="https://github.com/pharmaverse/admiral/issues/1317" class="external-link">#1317</a>).</p></li>
 <li><p>Functions <code>smq_select()</code> and <code>sdg_select()</code> have been deprecated and replaced with <code><a href="../reference/basket_select.html">basket_select()</a></code>. In the <code><a href="../reference/create_query_data.html">create_query_data()</a></code> function, <code>meddra_version</code> and <code>whodd_version</code> argument has been replaced by <code>version</code> and <code>get_smq_fun</code> and <code>get_sdg_fun</code> argument by <code>get_terms_fun</code>. (<a href="https://github.com/pharmaverse/admiral/issues/1597" class="external-link">#1597</a>)</p></li>
 </ul></div>
 <div class="section level3">
@@ -254,7 +266,7 @@
 <li><p><code><a href="../reference/derive_param_framingham.html">derive_param_framingham()</a></code> adds a Parameter for Framingham Heart Study Cardiovascular Disease 10-Year Risk Score (<a href="https://github.com/pharmaverse/admiral/issues/977" class="external-link">#977</a>)</p></li>
 <li><p><code><a href="../reference/compute_qual_imputation.html">compute_qual_imputation()</a></code> imputes values when qualifier exists in character result (<a href="https://github.com/pharmaverse/admiral/issues/976" class="external-link">#976</a>)</p></li>
 <li><p><code><a href="../reference/derive_vars_merged_lookup.html">derive_vars_merged_lookup()</a></code> maps lookup tables (<a href="https://github.com/pharmaverse/admiral/issues/940" class="external-link">#940</a>)</p></li>
-<li><p><code><a href="../reference/filter_confirmation.html">filter_confirmation()</a></code> filters out confirmed observations (<a href="https://github.com/pharmaverse/admiral/issues/1292" class="external-link">#1292</a>) including supporting functions <code><a href="../reference/count_vals.html">count_vals()</a></code>, <code><a href="../reference/min_cond.html">min_cond()</a></code>, and <code><a href="../reference/max_cond.html">max_cond()</a></code>.</p></li>
+<li><p><code>filter_confirmation()</code> filters out confirmed observations (<a href="https://github.com/pharmaverse/admiral/issues/1292" class="external-link">#1292</a>) including supporting functions <code><a href="../reference/count_vals.html">count_vals()</a></code>, <code><a href="../reference/min_cond.html">min_cond()</a></code>, and <code><a href="../reference/max_cond.html">max_cond()</a></code>.</p></li>
 <li><p><code><a href="../reference/derive_var_confirmation_flag.html">derive_var_confirmation_flag()</a></code> derives a flag which depends on other observations of the input dataset (<a href="https://github.com/pharmaverse/admiral/issues/1293" class="external-link">#1293</a>)</p></li>
 <li><p><code><a href="../reference/derive_var_atoxgr.html">derive_var_atoxgr()</a></code> derives lab toxicity/severity grade <code>ATOXGR</code> from <code>ATOXGRL</code> and <code>ATOXGRH</code>. <code>ATOXGRL</code> holds toxicity/severity grade for low lab values, and <code>ATOXGRH</code> holds toxicity/severity grade for high lab values.</p></li>
 <li><p><code><a href="../reference/derive_var_atoxgr_dir.html">derive_var_atoxgr_dir()</a></code> derives lab toxicity/severity grade for low lab values (<code>ATOXGRL</code>) or for high lab values (<code>ATOXGRH</code>). The grading is created from metadata.</p></li>
@@ -265,7 +277,7 @@
 <ul><li><p><code><a href="../reference/list_tte_source_objects.html">list_tte_source_objects()</a></code> gains a <code>package</code> parameter and is now exported (<a href="https://github.com/pharmaverse/admiral/issues/1212" class="external-link">#1212</a>)</p></li>
 <li><p><code><a href="../reference/list_all_templates.html">list_all_templates()</a></code> and <code><a href="../reference/use_ad_template.html">use_ad_template()</a></code> gain a <code>package</code> parameter which can be used to indicate in which package to look for templates (<a href="https://github.com/pharmaverse/admiral/issues/1205" class="external-link">#1205</a>)</p></li>
 <li><p>Randomization Date <code>RANDDT</code> variable added to ADSL template and vignette (<a href="https://github.com/pharmaverse/admiral/issues/1126" class="external-link">#1126</a>)</p></li>
-<li><p>Renamed <code><a href="../reference/derive_derived_param.html">derive_derived_param()</a></code> to <code><a href="../reference/derive_param_computed.html">derive_param_computed()</a></code> and added a deprecation notice (<a href="https://github.com/pharmaverse/admiral/issues/1229" class="external-link">#1229</a>)</p></li>
+<li><p>Renamed <code>derive_derived_param()</code> to <code><a href="../reference/derive_param_computed.html">derive_param_computed()</a></code> and added a deprecation notice (<a href="https://github.com/pharmaverse/admiral/issues/1229" class="external-link">#1229</a>)</p></li>
 <li><p><code><a href="../reference/derive_vars_duration.html">derive_vars_duration()</a></code> updated to not display units when there is missing duration (<a href="https://github.com/pharmaverse/admiral/issues/1207" class="external-link">#1207</a>)</p></li>
 <li><p><code>value_var</code> parameter added to <code><a href="../reference/derive_vars_atc.html">derive_vars_atc()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/1120" class="external-link">#1120</a>)</p></li>
 <li><p><code><a href="../reference/format_eoxxstt_default.html">format_eoxxstt_default()</a></code> - Updated the default value of EOSSTT for screen failure patients (<a href="https://github.com/pharmaverse/admiral/issues/885" class="external-link">#885</a>)</p></li>
@@ -285,7 +297,7 @@
 <h3 id="breaking-changes-0-8-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-8-0"></a></h3>
 <ul><li><p>Moved all developer-facing functions and vignettes to <a href="https://pharmaverse.github.io/admiraldev/main/" class="external-link">admiraldev</a>. <a href="https://pharmaverse.github.io/admiraldev/main/" class="external-link">admiraldev</a> is now a dependency of <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> (<a href="https://github.com/pharmaverse/admiral/issues/1231" class="external-link">#1231</a>)</p></li>
 <li><p>All ADaM datasets but <code>admiral_adsl</code> have been removed from the package (<a href="https://github.com/pharmaverse/admiral/issues/1234" class="external-link">#1234</a>)</p></li>
-<li><p><code><a href="../reference/derive_var_agegr_fda.html">derive_var_agegr_ema()</a></code> and <code><a href="../reference/derive_var_agegr_fda.html">derive_var_agegr_fda()</a></code> have been deprecated (<a href="https://github.com/pharmaverse/admiral/issues/1333" class="external-link">#1333</a>)</p></li>
+<li><p><code>derive_var_agegr_ema()</code> and <code>derive_var_agegr_fda()</code> have been deprecated (<a href="https://github.com/pharmaverse/admiral/issues/1333" class="external-link">#1333</a>)</p></li>
 <li>
 <p>Imputation related arguments have been deprecated for all functions except the imputation functions themselves (<a href="https://github.com/pharmaverse/admiral/issues/1299" class="external-link">#1299</a>). I.e., if a derivation like last known alive date is based on dates, DTC variables have to be converted to numeric date or datetime variables in a preprocessing step. For examples see the <a href="https://pharmaverse.github.io/admiral/articles/adsl.html" class="external-link">ADSL vignette</a>.</p>
 <p>The following arguments were deprecated:</p>
@@ -299,8 +311,8 @@
 <code>dose_date</code> and <code>analysis_date</code> in <code><a href="../reference/derive_vars_last_dose.html">derive_vars_last_dose()</a></code>, <code><a href="../reference/derive_var_last_dose_amt.html">derive_var_last_dose_amt()</a></code>, <code><a href="../reference/derive_var_last_dose_date.html">derive_var_last_dose_date()</a></code>, <code><a href="../reference/derive_var_last_dose_grp.html">derive_var_last_dose_grp()</a></code>
 </li>
 </ul><p>The following functions were deprecated:</p>
-<ul><li><code><a href="../reference/derive_vars_merged_dt.html">derive_vars_merged_dt()</a></code></li>
-<li><code><a href="../reference/derive_vars_merged_dtm.html">derive_vars_merged_dtm()</a></code></li>
+<ul><li><code>derive_vars_merged_dt()</code></li>
+<li><code>derive_vars_merged_dtm()</code></li>
 </ul></li>
 <li><p>For the <code>date_imputation</code> and the <code>time_imputation</code> argument of the imputation functions (<code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code>, <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code>, <code><a href="../reference/convert_dtc_to_dtm.html">convert_dtc_to_dtm()</a></code>, <code><a href="../reference/convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code>) <code>NULL</code> is no longer a permitted value. The level of imputation can be controlled by the <code>highest_imputation</code> argument now.</p></li>
 <li>
@@ -341,7 +353,7 @@
 <ul><li><p><code><a href="../reference/derive_vars_last_dose.html">derive_vars_last_dose()</a></code> no longer fails when a variable renamed in <code>new_vars</code> is supplied to the <code>dose_date</code> parameter (<a href="https://github.com/pharmaverse/admiral/issues/1206" class="external-link">#1206</a>)</p></li>
 <li><p><code><a href="../reference/derive_vars_duration.html">derive_vars_duration()</a></code> updated to not display units when there is missing duration (<a href="https://github.com/pharmaverse/admiral/issues/1207" class="external-link">#1207</a>)</p></li>
 <li>
-<p><code><a href="../reference/derive_param_first_event.html">derive_param_first_event()</a></code> was updated (<a href="https://github.com/pharmaverse/admiral/issues/1214" class="external-link">#1214</a>) such that</p>
+<p><code>derive_param_first_event()</code> was updated (<a href="https://github.com/pharmaverse/admiral/issues/1214" class="external-link">#1214</a>) such that</p>
 <ul><li>
 <code>AVAL</code> is derived instead of <code>AVALN</code> and</li>
 <li>all variables from the source dataset are kept.</li>
@@ -363,9 +375,9 @@
 <ul><li>
 <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code> - Merge Variables from a Dataset to the Input Dataset</li>
 <li>
-<code><a href="../reference/derive_vars_merged_dt.html">derive_vars_merged_dt()</a></code> - Merge a (Imputed) Date Variable</li>
+<code>derive_vars_merged_dt()</code> - Merge a (Imputed) Date Variable</li>
 <li>
-<code><a href="../reference/derive_vars_merged_dtm.html">derive_vars_merged_dtm()</a></code> - Merge a (Imputed) Datetime Variable</li>
+<code>derive_vars_merged_dtm()</code> - Merge a (Imputed) Datetime Variable</li>
 <li>
 <code><a href="../reference/derive_var_merged_cat.html">derive_var_merged_cat()</a></code> - Merge a Categorization Variable</li>
 <li>
@@ -383,7 +395,7 @@
 <code><a href="../reference/derive_var_extreme_dt.html">derive_var_extreme_dt()</a></code> - Derive First or Last Date from Multiple Sources</li>
 </ul></li>
 <li><p>New function <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> for adding the first or last observation within each by group to the dataset (<a href="https://github.com/pharmaverse/admiral/issues/1042" class="external-link">#1042</a>)</p></li>
-<li><p>New function <code><a href="../reference/derive_param_first_event.html">derive_param_first_event()</a></code>: Add a new parameter for the first event occurring in a dataset. (<a href="https://github.com/pharmaverse/admiral/issues/1063" class="external-link">#1063</a>)</p></li>
+<li><p>New function <code>derive_param_first_event()</code>: Add a new parameter for the first event occurring in a dataset. (<a href="https://github.com/pharmaverse/admiral/issues/1063" class="external-link">#1063</a>)</p></li>
 <li><p>New function <code><a href="../reference/derive_param_exist_flag.html">derive_param_exist_flag()</a></code>: Add a new parameter indicating that a certain event exists in a dataset. (<a href="https://github.com/pharmaverse/admiral/issues/1064" class="external-link">#1064</a>)</p></li>
 <li>
 <p>New high order functions (<a href="https://github.com/pharmaverse/admiral/issues/701" class="external-link">#701</a>):</p>
@@ -445,13 +457,13 @@
 <code>derive_var_astdy()</code> - Derive Analysis Start Relative Day</li>
 </ul></li>
 <li>
-<p>The following functions were deprecated in favor of <code><a href="../reference/derive_vars_merged_dtm.html">derive_vars_merged_dtm()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/1076" class="external-link">#1076</a>):</p>
+<p>The following functions were deprecated in favor of <code>derive_vars_merged_dtm()</code> (<a href="https://github.com/pharmaverse/admiral/issues/1076" class="external-link">#1076</a>):</p>
 <ul><li>
 <code>derive_var_trtedtm()</code> - Derive Datetime of Last Exposure to Treatment</li>
 <li>
 <code>derive_var_trtsdtm()</code> - Derive Datetime of First Exposure to Treatment</li>
 </ul></li>
-<li><p>The <code>derive_var_disposition_dt()</code> function was deprecated in favor of <code><a href="../reference/derive_vars_merged_dt.html">derive_vars_merged_dt()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/1076" class="external-link">#1076</a>)</p></li>
+<li><p>The <code>derive_var_disposition_dt()</code> function was deprecated in favor of <code>derive_vars_merged_dt()</code> (<a href="https://github.com/pharmaverse/admiral/issues/1076" class="external-link">#1076</a>)</p></li>
 <li><p>The <code>derive_var_atirel()</code> function was deprecated, as it is deemed as too specific for admiral. Derivations like this can be implemented calling <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when()</a></code>.</p></li>
 </ul></div>
 <div class="section level3">
@@ -492,7 +504,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-0-6-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-6-0"></a></h3>
-<ul><li><p><code>derive_agegr_ema()</code>, <code>derive_agegr_fda()</code>, <code>derive_disposition_dt()</code>, <code>derive_disposition_status()</code>,<code>derive_extreme_flag()</code>, <code>derive_worst_flag()</code>, <code>derive_obs_number()</code>, <code>derive_disposition_reason()</code> have been deprecated and renamed in favor of <code><a href="../reference/derive_var_agegr_fda.html">derive_var_agegr_ema()</a></code>, <code><a href="../reference/derive_var_agegr_fda.html">derive_var_agegr_fda()</a></code>, <code>derive_var_disposition_dt()</code>, <code><a href="../reference/derive_var_disposition_status.html">derive_var_disposition_status()</a></code>, <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code>, <code><a href="../reference/derive_var_worst_flag.html">derive_var_worst_flag()</a></code>, <code>derive_var_last_dose()</code>, <code><a href="../reference/derive_var_obs_number.html">derive_var_obs_number()</a></code>, and <code><a href="../reference/derive_vars_disposition_reason.html">derive_vars_disposition_reason()</a></code> respectively (<a href="https://github.com/pharmaverse/admiral/issues/738" class="external-link">#738</a>)</p></li>
+<ul><li><p><code>derive_agegr_ema()</code>, <code>derive_agegr_fda()</code>, <code>derive_disposition_dt()</code>, <code>derive_disposition_status()</code>,<code>derive_extreme_flag()</code>, <code>derive_worst_flag()</code>, <code>derive_obs_number()</code>, <code>derive_disposition_reason()</code> have been deprecated and renamed in favor of <code>derive_var_agegr_ema()</code>, <code>derive_var_agegr_fda()</code>, <code>derive_var_disposition_dt()</code>, <code><a href="../reference/derive_var_disposition_status.html">derive_var_disposition_status()</a></code>, <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code>, <code><a href="../reference/derive_var_worst_flag.html">derive_var_worst_flag()</a></code>, <code>derive_var_last_dose()</code>, <code><a href="../reference/derive_var_obs_number.html">derive_var_obs_number()</a></code>, and <code><a href="../reference/derive_vars_disposition_reason.html">derive_vars_disposition_reason()</a></code> respectively (<a href="https://github.com/pharmaverse/admiral/issues/738" class="external-link">#738</a>)</p></li>
 <li><p><code>derive_var_basec()</code> and <code>derive_baseline()</code> have been deprecated in favor of the extended <code><a href="../reference/derive_var_base.html">derive_var_base()</a></code> function (<a href="https://github.com/pharmaverse/admiral/issues/695" class="external-link">#695</a>)</p></li>
 <li><p><code>derive_params_exposure()</code> has been deprecated and renamed as <code><a href="../reference/derive_param_exposure.html">derive_param_exposure()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/722" class="external-link">#722</a>)</p></li>
 <li><p>The <code>derive_last_dose()</code> function has been deprecated in favor of <code><a href="../reference/derive_var_last_dose_date.html">derive_var_last_dose_date()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/385" class="external-link">#385</a>)</p></li>
@@ -521,7 +533,7 @@
 <code>date</code> parameter in <code><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl()</a></code>
 </li>
 </ul></li>
-<li><p><code><a href="../reference/derive_var_agegr_fda.html">derive_var_agegr_fda()</a></code> has been updated to use ranges &lt;18, 18-64, &gt;=65 (<a href="https://github.com/pharmaverse/admiral/issues/829" class="external-link">#829</a>)</p></li>
+<li><p><code>derive_var_agegr_fda()</code> has been updated to use ranges &lt;18, 18-64, &gt;=65 (<a href="https://github.com/pharmaverse/admiral/issues/829" class="external-link">#829</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-0-6-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-6-0"></a></h3>
@@ -571,7 +583,7 @@
 <div class="section level3">
 <h3 id="breaking-changes-0-4-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-4-0"></a></h3>
 <ul><li><p>All SDTM datasets have been moved to the {admiral.test} package (<a href="https://github.com/pharmaverse/admiral/issues/639" class="external-link">#639</a>)</p></li>
-<li><p>The <code>min_dates</code> and <code>max_dates</code> parameters of <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> no longer expect a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> but <code><a href="../reference/vars.html">vars()</a></code> as input (<a href="https://github.com/pharmaverse/admiral/issues/405" class="external-link">#405</a>)</p></li>
+<li><p>The <code>min_dates</code> and <code>max_dates</code> parameters of <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> no longer expect a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> but <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code> as input (<a href="https://github.com/pharmaverse/admiral/issues/405" class="external-link">#405</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-4-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4-0"></a></h3>
@@ -603,7 +615,7 @@
 </ul></div>
 <div class="section level4">
 <h4 id="bds-0-3-0">BDS<a class="anchor" aria-label="anchor" href="#bds-0-3-0"></a></h4>
-<ul><li><p><code><a href="../reference/derive_derived_param.html">derive_derived_param()</a></code> can be used to derive a new parameter from existing parameters in a BDS dataset (<a href="https://github.com/pharmaverse/admiral/issues/325" class="external-link">#325</a>)</p></li>
+<ul><li><p><code>derive_derived_param()</code> can be used to derive a new parameter from existing parameters in a BDS dataset (<a href="https://github.com/pharmaverse/admiral/issues/325" class="external-link">#325</a>)</p></li>
 <li><p><code><a href="../reference/derive_param_bmi.html">derive_param_bmi()</a></code>, <code><a href="../reference/derive_param_bsa.html">derive_param_bsa()</a></code> and <code><a href="../reference/derive_param_map.html">derive_param_map()</a></code> enables the derivation of the body mass index, body surface area and mean arterial pressure parameters respectively (<a href="https://github.com/pharmaverse/admiral/issues/368" class="external-link">#368</a>)</p></li>
 <li><p><code><a href="../reference/derive_param_qtc.html">derive_param_qtc()</a></code> enables the derivation of corrected QT intervals according to the formula of Bazett, Fridericia or Sagie (<a href="https://github.com/pharmaverse/admiral/issues/325" class="external-link">#325</a>)</p></li>
 <li><p><code><a href="../reference/derive_param_rr.html">derive_param_rr()</a></code> enables the derivation of the RR interval (<a href="https://github.com/pharmaverse/admiral/issues/325" class="external-link">#325</a>)</p></li>
@@ -700,7 +712,7 @@
 <h3 id="breaking-changes-0-2-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-2-0"></a></h3>
 <ul><li><p><code>derive_merged_vars()</code> has been removed from {admiral} in favor of smaller special purpose functions, e.g. <code>derive_disposition_status()</code> (<a href="https://github.com/pharmaverse/admiral/issues/167" class="external-link">#167</a>)</p></li>
 <li>
-<p>Function arguments no longer accept expressions created with <code><a href="https://dplyr.tidyverse.org/reference/tidyeval-compat.html" class="external-link">expr()</a></code> or <code><a href="../reference/reexport-exprs.html">exprs()</a></code> as inputs; instead filter expressions can be passed “as is” and multiple variables have to be wrapped inside <code><a href="../reference/vars.html">vars()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/187" class="external-link">#187</a>)</p>
+<p>Function arguments no longer accept expressions created with <code><a href="https://dplyr.tidyverse.org/reference/tidyeval-compat.html" class="external-link">expr()</a></code> or <code><a href="../reference/reexport-exprs.html">exprs()</a></code> as inputs; instead filter expressions can be passed “as is” and multiple variables have to be wrapped inside <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/187" class="external-link">#187</a>)</p>
 <p><strong>Old:</strong></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
@@ -718,8 +730,8 @@
 <span class="fu">derive_extreme_flag</span><span class="op">(</span>
   <span class="va">vs</span>,
   new_var <span class="op">=</span> <span class="va">LASTFL</span>,
-  by_vars <span class="op">=</span> <span class="fu"><a href="../reference/vars.html">vars</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">VSTESTCD</span>, <span class="va">VISIT</span><span class="op">)</span>,
-  order <span class="op">=</span> <span class="fu"><a href="../reference/vars.html">vars</a></span><span class="op">(</span><span class="va">VSTPTNUM</span><span class="op">)</span>,
+  by_vars <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">VSTESTCD</span>, <span class="va">VISIT</span><span class="op">)</span>,
+  order <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">VSTPTNUM</span><span class="op">)</span>,
   mode <span class="op">=</span> <span class="st">"last"</span>,
   flag_filter <span class="op">=</span> <span class="va">VISIT</span> <span class="op">!=</span> <span class="st">"BASELINE"</span>
 <span class="op">)</span></code></pre></div>
