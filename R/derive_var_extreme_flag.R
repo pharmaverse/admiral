@@ -287,79 +287,8 @@ derive_var_worst_flag <- function(dataset,
                                   worst_low,
                                   check_type = "warning") {
   ### DEPRECATION
-  deprecate_warn("0.10.0",
+  deprecate_stop("0.10.0",
     "derive_var_worst_flag()",
-    details = paste(
-      "Please use `slice_derivation()` / `derive_var_extreme_flag()`",
-      "to derive extreme flags by changing the `order` argument"
-    )
-  )
-
-  # perform argument checks
-  new_var <- assert_symbol(enexpr(new_var))
-  param_var <- assert_symbol(enexpr(param_var))
-  analysis_var <- assert_symbol(enexpr(analysis_var))
-  assert_vars(by_vars)
-  assert_order_vars(order)
-  assert_data_frame(
-    dataset,
-    required_vars = expr_c(by_vars, extract_vars(order), param_var, analysis_var)
-  )
-  assert_character_vector(worst_high)
-  assert_character_vector(worst_low)
-
-  # additional checks for worstflag - parameters overlap
-  if (length(intersect(worst_high, worst_low)) > 0) {
-    err_msg <- paste(
-      "The following parameter(-s) are both assigned to `worst_high` and `worst_low` flags:",
-      paste0(intersect(worst_high, worst_low), collapse = ", ")
-    )
-    abort(err_msg)
-  }
-
-  # additional checks for worstflag - parameters not available
-  param_var_str <- as_string(param_var)
-  if (length(worst_high) > 0 &&
-    !all(worst_high %in% dataset[[param_var_str]])) {
-    err_msg <- paste0(
-      "The following parameter(-s) in `worst_high` are not available in column ",
-      param_var_str,
-      ": ",
-      paste0(worst_high[!worst_high %in% dataset[[param_var_str]]], collapse = ", ")
-    )
-    abort(err_msg)
-  }
-
-  # additional checks for worstflag - parameters not available
-  if (length(worst_low) > 0 &&
-    !all(worst_low %in% dataset[[param_var_str]])) {
-    err_msg <- paste0(
-      "The following parameter(-s) in `worst_low` are not available in column ",
-      param_var_str,
-      ": ",
-      paste0(worst_low[!worst_low %in% dataset[[param_var_str]]], collapse = ", ")
-    )
-    abort(err_msg)
-  }
-
-  # derive worst-flag
-  bind_rows(
-    derive_var_extreme_flag(
-      dataset = dplyr::filter(dataset, !!param_var %in% worst_low),
-      by_vars = by_vars,
-      order = expr_c(analysis_var, order),
-      new_var = !!new_var,
-      mode = "first",
-      check_type = check_type
-    ),
-    derive_var_extreme_flag(
-      dataset = dplyr::filter(dataset, !!param_var %in% worst_high),
-      by_vars = by_vars,
-      order = expr_c(expr(desc(!!analysis_var)), order),
-      new_var = !!new_var,
-      mode = "first",
-      check_type = check_type
-    ),
-    dplyr::filter(dataset, !(!!param_var %in% c(worst_low, worst_high)))
+    details = "Please use `slice_derivation()` / `derive_var_extreme_flag()`"
   )
 }
