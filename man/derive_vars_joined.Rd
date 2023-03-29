@@ -318,6 +318,8 @@ ex <- tribble(
   "1",      "2020-02-03"
 )
 
+## Please note that EXSDT is created via the order argument and then used
+## for new_vars, filter_add, and filter_join
 derive_vars_joined(
   adae,
   dataset_add = ex,
