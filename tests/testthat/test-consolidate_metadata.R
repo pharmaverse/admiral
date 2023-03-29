@@ -1,4 +1,3 @@
-
 ## Test 1: consolidation works ----
 test_that("consolidate_metadata Test 1: consolidation works", {
   glob <- tibble::tribble(

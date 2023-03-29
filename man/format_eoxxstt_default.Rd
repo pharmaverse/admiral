@@ -32,20 +32,13 @@ Usually this function can not be used with \verb{\%>\%}.
 }
 \seealso{
 Other deprecated: 
-\code{\link{derive_derived_param}()},
-\code{\link{derive_param_first_event}()},
-\code{\link{derive_var_agegr_fda}()},
 \code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_merged_cat}()},
 \code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_disposition_reason}()},
-\code{\link{derive_vars_merged_dtm}()},
-\code{\link{derive_vars_merged_dt}()},
-\code{\link{filter_confirmation}()},
-\code{\link{format_reason_default}()},
-\code{\link{vars}()}
+\code{\link{format_reason_default}()}
 }
 \concept{deprecated}
 \keyword{deprecated}
