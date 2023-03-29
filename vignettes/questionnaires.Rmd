@@ -528,17 +528,7 @@ adgdssf <- adgdssf %>%
     set_values_to = exprs(
       PARAMCD = "COMPL90P",
       PARAM = "Completed at least 90% of questions?",
-    )
-  ) %>%
-  mutate(
-    AVALC = if_else(
-      PARAMCD == "COMPL90P",
-      if_else(
-        AVAL == 1,
-        "YES",
-        "NO"
-      ),
-      AVALC
+      AVALC = if_else(AVAL == 1, "YES", "NO")
     )
   )
 ```
@@ -587,18 +577,8 @@ adgdssf <- adgdssf %>%
     summary_fun = function(x) all(!is.na(x)),
     set_values_to = exprs(
       PARAMCD = "COMPLALL",
-      PARAM = "Completed all questions?"
-    )
-  ) %>%
-  mutate(
-    AVALC = if_else(
-      PARAMCD == "COMPLALL",
-      if_else(
-        AVAL == 1,
-        "YES",
-        "NO"
-      ),
-      AVALC
+      PARAM = "Completed all questions?",
+      AVALC = if_else(AVAL == 1, "YES", "NO")
     )
   ) %>%
   filter(is.na(filled_in)) %>%

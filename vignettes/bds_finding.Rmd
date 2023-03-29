@@ -589,7 +589,7 @@ each `BASETYPE`.
 ```{r eval=TRUE}
 advs <- derive_var_basetype(
   dataset = advs,
-  basetypes = rlang::exprs(
+  basetypes = exprs(
     "LAST: AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
     "LAST: AFTER STANDING FOR 1 MINUTE" = ATPTN == 816,
     "LAST: AFTER STANDING FOR 3 MINUTES" = ATPTN == 817,
@@ -861,8 +861,8 @@ assigned:
 ```{r eval=TRUE}
 avalcat_lookup <- tibble::tribble(
   ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
-  "HEIGHT", 1, ">140 cm",
-  "HEIGHT", 2, "<= 140 cm"
+  "HEIGHT",         1, ">140 cm",
+  "HEIGHT",         2, "<= 140 cm"
 )
 
 format_avalcat1n <- function(param, aval) {
