@@ -17,6 +17,7 @@
   - `derive_param_first_event()`
   - `derive_derived_param()`
   - `derive_var_confirmation_flag()`
+  - `filter_confirmation()`
 
 - The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process (#1747):
 
