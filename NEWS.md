@@ -25,6 +25,9 @@ the new variables for non-matching observations was added.
       non-matching observations was added.
     - The `new_vars` and the `join_vars` argument accept expressions now.
 
+- The `date` field of `date_source()` accepts expressions now. This affects
+`derive_var_extreme_dt()` and `derive_var_extreme_dtm()`. (#1727)
+
 ## Breaking Changes
 
 - The `aval_fun` argument of `derive_param_exist_flag()` was deprecated in favor
