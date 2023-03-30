@@ -264,10 +264,10 @@
     },
     "cpp11": {
       "Package": "cpp11",
-      "Version": "0.2.7",
+      "Version": "0.4.3",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "730eebcc741a5c36761f7d4d0f5e37b8"
+      "Repository": "CRAN",
+      "Hash": "ed588261931ee3be2c700d22e94a29ab"
     },
     "crayon": {
       "Package": "crayon",
