@@ -393,11 +393,10 @@ assert_expr <- function(arg, optional = FALSE) {
   }
 
   if (is_missing(arg)) {
-    err_msg <- sprintf("Argument `%s` missing, with no default", arg_name(substitute(arg)))
-    abort(err_msg)
+    abort("Argument `arg` missing, with no default")
   }
 
-  if (!is_symbolic(arg)) {
+  if (!(is_call(arg) || is_expression(arg))) {
     err_msg <- sprintf(
       "`%s` must be an expression but is %s",
       arg_name(substitute(arg)),

@@ -432,67 +432,33 @@ test_that("assert_symbol Test 25: `assert_symbol` does not throw an error if `ar
 # assert_expr ----
 ## Test 26: `assert_expr` does not throw an error if `arg` is an expression ----
 test_that("assert_expr Test 26: `assert_expr` does not throw an error if `arg` is an expression", {
-  f <- function(var) {
-    v <- enexpr(var)
-  }
-
-  example_fun <- function(arg) {
-    assert_expr(arg)
-  }
-
   expect_invisible(
-    example_fun(
-      f(admiral.test::admiral_dm)
-    )
+    assert_expr(var <- expr(admiral.test::admiral_dm))
   )
 })
 
 ## Test 27: no error if optional is TRUE and `arg` is NULL ----
 test_that("assert_expr Test 27: no error if optional is TRUE and `arg` is NULL", {
-  f <- function(var) {
-    v <- enexpr(var)
-  }
-
-  example_fun <- function(arg) {
-    assert_expr(arg, optional = TRUE)
-  }
-
   expect_invisible(
-    example_fun(
-      f(NULL)
-    )
+    assert_expr(var <- NULL, optional = TRUE)
   )
 })
 
 ## Test 28: `assert_expr` throws an error if `arg` is missing ----
 test_that("assert_expr Test 28: `assert_expr` throws an error if `arg` is missing", {
-  f <- function(var) {
-    v <- enexpr(var)
-  }
-
-  example_fun <- function(arg) {
-    assert_expr(arg)
-  }
-
   expect_error(
-    example_fun(f())
+    assert_expr(),
+    regexp = "Argument `arg` missing, with no default",
+    fixed = TRUE
   )
 })
 
 ## Test 29: `assert_expr` throws an error if `arg` is not an expression ----
 test_that("assert_expr Test 29: `assert_expr` throws an error if `arg` is not an expression", {
-  f <- function(var) {
-    v <- enexpr(var)
-  }
-
-  example_fun <- function(arg) {
-    assert_expr(arg)
-  }
-
   expect_error(
-    example_fun(
-      f(NULL)
-    )
+    assert_expr(var <- c(1, 2)),
+    regexp = "`var` must be an expression but is a double vector",
+    fixed = TRUE
   )
 })
 
