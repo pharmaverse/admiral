@@ -443,7 +443,7 @@ An example call to define the sources would be:
 src_ae <- dthcaus_source(
   dataset_name = "ae",
   filter = AEOUT == "FATAL",
-  date = AESTDTM,
+  date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
   mode = "first",
   dthcaus = AEDECOD
 )
@@ -478,16 +478,11 @@ dataset_vignette(
 Once the sources are defined, the function `derive_var_dthcaus()` can be used to derive `DTHCAUS`:
 
 ```{r eval=TRUE}
-ae_ext <- derive_vars_dtm(
-  ae,
-  dtc = AESTDTC,
-  new_vars_prefix = "AEST",
-  highest_imputation = "M",
-  flag_imputation = "none"
-)
-
 adsl <- adsl %>%
-  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae_ext, ds = ds_ext))
+  derive_var_dthcaus(
+    src_ae, src_ds,
+    source_datasets = list(ae = ae, ds = ds_ext)
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -507,7 +502,7 @@ arguments:
 src_ae <- dthcaus_source(
   dataset_name = "ae",
   filter = AEOUT == "FATAL",
-  date = AESTDTM,
+  date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
   mode = "first",
   dthcaus = AEDECOD,
   traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
@@ -523,7 +518,10 @@ src_ds <- dthcaus_source(
 )
 adsl <- adsl %>%
   select(-DTHCAUS) %>% # remove it before deriving it again
-  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae_ext, ds = ds_ext))
+  derive_var_dthcaus(
+    src_ae, src_ds,
+    source_datasets = list(ae = ae, ds = ds_ext)
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}

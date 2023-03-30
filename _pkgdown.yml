@@ -162,7 +162,7 @@ navbar:
       text: User Guides
       menu:
       - text: Getting Started
-      - text: Creating a basic ADSL
+      - text: Creating a Basic ADSL
         href: articles/adsl.html
       - text: FAQ
         href: articles/faq.html
