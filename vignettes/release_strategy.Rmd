@@ -71,7 +71,7 @@ Occasionally we will need to release a hot fix to address a package breaking bug
 **Hot Fix Release**: `patch >> pre-release >> main  >> devel`
 
 # Releasing to Github
-Under the [Releases](https://github.com/pharmaverse/admiral/releases) section in the main repo, select `Draft a New Release`. Proceed by creating the appropriate release tag and header, denoted as "vX.X.X" and "admiral X.X.X" respectively, for the release:
+Under the [Releases](https://github.com/pharmaverse/admiral/releases) section in the main repo, select `Draft a New Release`. Proceed by creating the appropriate release tag and header, denoted as `vX.X.X` and `admiral X.X.X` respectively, for the release:
 
 ![](https://user-images.githubusercontent.com/43018762/228875673-5b6daa64-1909-47c9-bd61-69b810c2f742.png)
 
@@ -79,7 +79,7 @@ Copy the contents of the `NEWS.md` section for the release, paste it into the re
 
 ![](https://user-images.githubusercontent.com/43018762/228875743-d17729fe-9b38-432a-9bb0-5fdc157ec231.png)
 
-Then in the upload box where it says, "Attach binaries by dropping them here or selecting them" upload the appropriate "admiral_X.X.X.tar.gz" file available for download at the  [CRAN website](https://cran.r-project.org/web/packages/admiral/index.html). Click `Publish Release` and you're all done!
+Then in the upload box where it says, "Attach binaries by dropping them here or selecting them" upload the appropriate `admiral_X.X.X.tar.gz` file available for download at the  [CRAN website](https://cran.r-project.org/web/packages/admiral/index.html). Click `Publish Release` and you're all done!
 
 # Communications
 
