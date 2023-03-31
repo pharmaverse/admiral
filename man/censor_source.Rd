@@ -22,7 +22,7 @@ of \code{derive_param_tte()}.}
 \code{dataset} which are events or possible censoring time points.}
 
 \item{date}{A variable or expression providing the date of the event or
-censoring. A date, or a datetime can be specified. An unquoted symol or
+censoring. A date, or a datetime can be specified. An unquoted symbol or
 expression is expected.
 
 Refer to \code{derive_vars_dt()} or \code{convert_dtc_to_dt()} to impute and derive a

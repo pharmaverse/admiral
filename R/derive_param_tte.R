@@ -763,7 +763,7 @@ extend_source_datasets <- function(source_datasets,
 #'   `dataset` which are events or possible censoring time points.
 #'
 #' @param date A variable or expression providing the date of the event or
-#'   censoring. A date, or a datetime can be specified. An unquoted symol or
+#'   censoring. A date, or a datetime can be specified. An unquoted symbol or
 #'   expression is expected.
 #'
 #'   Refer to `derive_vars_dt()` or `convert_dtc_to_dt()` to impute and derive a
