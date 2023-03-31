@@ -438,7 +438,7 @@ derive_var_merged_cat <- function(dataset,
     filter_add = !!filter_add,
     by_vars = by_vars,
     order = order,
-    new_vars = exprs(!!new_var := {{cat_fun}}(!!source_var)),
+    new_vars = exprs(!!new_var := {{ cat_fun }}(!!source_var)),
     mode = mode,
     missing_values = exprs(!!new_var := !!missing_value)
   )
@@ -650,7 +650,6 @@ derive_var_merged_character <- function(dataset,
                                         filter_add = NULL,
                                         mode = NULL,
                                         missing_value = NA_character_) {
-
   deprecate_warn("0.11.0", "derive_var_merged_character()", "derive_vars_merged()")
 
   new_var <- assert_symbol(enexpr(new_var))

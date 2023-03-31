@@ -248,10 +248,9 @@ test_that("derive_vars_merged Test 10: error if variables are in missing_values 
       new_vars = exprs(LASTVIS = str_to_upper(AVISIT)),
       mode = "last",
       missing_values = exprs(LASTVIS = "UNKNOWN", LASTVISN = -1)
-    )
-  ,
-  regexp = "The variables `LASTVISN` were specified for `missing_values` but not for `new_vars`.",
-  fixed = TRUE
+    ),
+    regexp = "The variables `LASTVISN` were specified for `missing_values` but not for `new_vars`.",
+    fixed = TRUE
   )
 })
 
@@ -413,14 +412,14 @@ test_that("derive_var_merged_character Test 16: deprecation warning", {
 test_that("derive_var_merged_character Test 17: no transformation", {
   actual <- suppress_warning(
     derive_var_merged_character(
-    adsl,
-    dataset_add = advs,
-    by_vars = exprs(USUBJID),
-    order = exprs(AVISIT),
-    new_var = LASTVIS,
-    source_var = AVISIT,
-    mode = "last"
-  ),
+      adsl,
+      dataset_add = advs,
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISIT),
+      new_var = LASTVIS,
+      source_var = AVISIT,
+      mode = "last"
+    ),
     regexpr = "was deprecated"
   )
 
@@ -439,17 +438,17 @@ test_that("derive_var_merged_character Test 17: no transformation", {
 test_that("derive_var_merged_character Test 18: upper case", {
   actual <- suppress_warning(
     derive_var_merged_character(
-    adsl,
-    dataset_add = advs,
-    by_vars = exprs(USUBJID),
-    order = exprs(AVISIT),
-    new_var = LASTVIS,
-    source_var = AVISIT,
-    mode = "last",
-    case = "upper",
-    missing_value = "UNKNOWN"
-  ),
-  regexpr = "was deprecated"
+      adsl,
+      dataset_add = advs,
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISIT),
+      new_var = LASTVIS,
+      source_var = AVISIT,
+      mode = "last",
+      case = "upper",
+      missing_value = "UNKNOWN"
+    ),
+    regexpr = "was deprecated"
   )
 
   expected <-
@@ -467,17 +466,17 @@ test_that("derive_var_merged_character Test 18: upper case", {
 test_that("derive_var_merged_character Test 19: lower case", {
   actual <- suppress_warning(
     derive_var_merged_character(
-    adsl,
-    dataset_add = advs,
-    by_vars = exprs(USUBJID),
-    order = exprs(AVISIT),
-    new_var = LASTVIS,
-    source_var = AVISIT,
-    mode = "last",
-    case = "lower"
-  ),
-  regexpr = "was deprecated"
-)
+      adsl,
+      dataset_add = advs,
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISIT),
+      new_var = LASTVIS,
+      source_var = AVISIT,
+      mode = "last",
+      case = "lower"
+    ),
+    regexpr = "was deprecated"
+  )
 
   expected <-
     mutate(adsl, LASTVIS = c("week 2", "baseline", "week 4", NA_character_))
@@ -494,17 +493,17 @@ test_that("derive_var_merged_character Test 19: lower case", {
 test_that("derive_var_merged_character Test 20: title case", {
   actual <- suppress_warning(
     derive_var_merged_character(
-    adsl,
-    dataset_add = advs,
-    by_vars = exprs(USUBJID),
-    order = exprs(AVISIT),
-    new_var = LASTVIS,
-    source_var = AVISIT,
-    mode = "last",
-    case = "title"
-  ),
-  regexpr = "was deprecated"
-)
+      adsl,
+      dataset_add = advs,
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISIT),
+      new_var = LASTVIS,
+      source_var = AVISIT,
+      mode = "last",
+      case = "title"
+    ),
+    regexpr = "was deprecated"
+  )
 
   expected <-
     mutate(adsl, LASTVIS = c("Week 2", "Baseline", "Week 4", NA_character_))
@@ -521,16 +520,16 @@ test_that("derive_var_merged_character Test 20: title case", {
 test_that("derive_var_merged_character Test 21: by_vars with rename", {
   actual <- suppress_warning(
     derive_var_merged_character(
-    adsl,
-    dataset_add = advs1,
-    by_vars = exprs(USUBJID = ID),
-    order = exprs(AVISIT),
-    new_var = LASTVIS,
-    source_var = AVISIT,
-    mode = "last"
-  ),
-  regexpr = "was deprecated"
-)
+      adsl,
+      dataset_add = advs1,
+      by_vars = exprs(USUBJID = ID),
+      order = exprs(AVISIT),
+      new_var = LASTVIS,
+      source_var = AVISIT,
+      mode = "last"
+    ),
+    regexpr = "was deprecated"
+  )
 
   expected <-
     mutate(adsl, LASTVIS = c("Week 2", "BASELINE", "Week 4", NA_character_))

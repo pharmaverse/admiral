@@ -157,21 +157,21 @@ test_that("derive_vars_joined Test 5: join_vars with expression", {
       ADT = ymd(ADT)
     )
 
-expect_dfs_equal(
-  base = expected,
-  comp = derive_vars_joined(
-    select(expected, -AVAL),
-    dataset_add = add,
-    by_vars = exprs(USUBJID),
-    order = exprs(TRSTRESN),
-    new_vars = exprs(AVAL = TRSTRESN),
-    join_vars = exprs(TRDT = convert_dtc_to_dt(TRDTC)),
-    filter_join = TRDT <= ADT,
-    mode = "first",
-    check_type = "none"
-  ),
-  keys = c("USUBJID", "ADT")
-)
+  expect_dfs_equal(
+    base = expected,
+    comp = derive_vars_joined(
+      select(expected, -AVAL),
+      dataset_add = add,
+      by_vars = exprs(USUBJID),
+      order = exprs(TRSTRESN),
+      new_vars = exprs(AVAL = TRSTRESN),
+      join_vars = exprs(TRDT = convert_dtc_to_dt(TRDTC)),
+      filter_join = TRDT <= ADT,
+      mode = "first",
+      check_type = "none"
+    ),
+    keys = c("USUBJID", "ADT")
+  )
 })
 
 
@@ -228,7 +228,7 @@ test_that("derive_vars_joined Test 7: new_vars expressions using variables from 
   expect_dfs_equal(
     base = expected,
     compare = derive_vars_joined(
-      select(expected,-LSTDSDUR),
+      select(expected, -LSTDSDUR),
       dataset_add = ex,
       by_vars = exprs(USUBJID),
       order = exprs(EXSDT = convert_dtc_to_dt(EXSDTC)),
