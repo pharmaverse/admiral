@@ -44,9 +44,9 @@ updates via the community meetings, especially any anticipated breaking changes.
 A package release is done in five parts:
 
 1) Create a Pull Request from `devel` into the `main` branch.  Issues identified in this Pull Request should have work done in separate branches and merged once again into `devel`.
-1) Verify that all CI/CD checks are passing for the `devel` into the `main` Pull Request, merge and then bundle up and send off to CRAN.
+1) Verify that all CI/CD checks are passing for the `devel` into the `main` Pull Request, merge and then bundle up and send off to CRAN. See the [chapter](https://r-pkgs.org/release.html#decide-the-release-type) in R Packages for more details.
 1) If CRAN asks for modifications, repeat steps 1-2 as necessary.
-1) Once the package is accepted and available on CRAN, a GitHub action is set up to rebuild the `{admiral}` website with all the updates for this release.
+1) Once the package is accepted and available on CRAN, a [GitHub action](https://github.com/pharmaverse/admiral/actions/workflows/pages/pages-build-deployment) is set up to rebuild the `{admiral}` website with all the updates for this release.
 1) Use the release button on GitHub to "release" the package onto GitHub.  This release onto Github archives the version of code within the `main` branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file and makes a validation report via the GitHub action `validation` from [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).  Please see past [admiral releases](https://github.com/pharmaverse/admiral/releases) for reference and the [Releasing to Github](release_strategy.html#releasing-to-github) section for more details.
 1) Any issues fixed in the `main` branches should be merged back into `devel`. 
 1) Once a release is completed the `main` branch should be merged into `patch` to be ready for hotfixes.
@@ -56,6 +56,8 @@ A package release is done in five parts:
 * `devel >> main` 
 * `main >> patch` (To be prepared in case of a needed hotfix)
 
+Be on the look out for an automated check PR whenever `devel` goes into `main` as a future upcoming feature.
+
 ## Hot Fix Release
 
 Occasionally we will need to release a hot fix to address a package breaking bug.  A hot fix release is done in 6 parts:
@@ -63,8 +65,9 @@ Occasionally we will need to release a hot fix to address a package breaking bug
 1) Identify all the bugs that need to be fixed for this hot fix release and label with hot fix label.
 1) Branches addressing the bugs should have Pull Requests merged into the `patch` branch **NOT** the `devel` branch.
 1) When naming the branch follow the [naming conventions](git_usage.html#implementing-an-issue) guide but use the `@main` suffix 
-1) Create a Pull Request from `patch` into the `main` branch.  Verify that all CI/CD checks are passing, merge and bundle up and send off to CRAN.
+1) Create a Pull Request from `patch` into the `main` branch.  Verify that all CI/CD checks are passing, merge and them bundle up and send off to CRAN. See the [chapter](https://r-pkgs.org/release.html#decide-the-release-type) in R Packages for more details.
 1) If CRAN asks for modifications, repeat steps 1-4 as necessary.
+1) Once the package is accepted and available on CRAN, a [GitHub action](https://github.com/pharmaverse/admiral/actions/workflows/pages/pages-build-deployment) is set up to rebuild the `{admiral}` website with all the updates for this release.
 1) Use the release button on GitHub to "release" the package onto GitHub.  This release onto Github archives the version of code within the `main` branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file and makes a validation report via the GitHub action `validation` from [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).  Please see past [admiral releases](https://github.com/pharmaverse/admiral/releases) for reference and the [Releasing to Github](release_strategy.html#releasing-to-github) section for more details.
 1) These hot fixes should then be merged into the `devel` branch through an additional Pull Request.  
 
