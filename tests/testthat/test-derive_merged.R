@@ -237,8 +237,8 @@ test_that("derive_vars_merged Test 9: error if not unique w.r.t the by variables
   )
 })
 
-## Test 10: error if variables are in missing_values but not in new_vars ----
-test_that("derive_vars_merged Test 10: error if variables are in missing_values but not in new_vars", {
+## Test 10: error if variables in missing_values but not in new_vars ----
+test_that("derive_vars_merged Test 10: error if variables in missing_values but not in new_vars", {
   expect_error(
     derive_vars_merged(
       adsl,

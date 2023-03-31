@@ -1,5 +1,5 @@
-## Test 1: creates a new record for each group and new data frame retains grouping ----
-test_that("derive_summary_records Test 1: creates a new record for each group and new data frame retains grouping", {
+## Test 1: creates new record per group and groups are retained ----
+test_that("derive_summary_records Test 1: creates new record per group and groups are retained", {
   # group --> 4
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
   actual_output <- input %>%
