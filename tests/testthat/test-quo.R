@@ -53,8 +53,7 @@ test_that("expr_c Test 5: concatenating named list of expressions", {
     expected = exprs(PARAMCD = "DOSE", PARAMN = 1),
     object = expr_c(exprs(PARAMCD = "DOSE", PARAMN = 1, NULL))
   )
-}
-)
+})
 
 ## Test 6: concatenating list and single expression ----
 test_that("expr_c Test 6: concatenating list and single expression", {

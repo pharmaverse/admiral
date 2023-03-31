@@ -1365,9 +1365,9 @@ assert_expr_list <- function(arg, # nolint
   }
 
   invalids <- arg[!map_lgl(
-      arg,
-      ~ is_call(.x) || is_expression(.x)
-    )]
+    arg,
+    ~ is_call(.x) || is_expression(.x)
+  )]
 
   if (length(invalids) > 0) {
     abort(

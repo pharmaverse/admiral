@@ -987,7 +987,8 @@ test_that("assert_expr_list Test 75: error if `required_elements` are missing fr
   expect_error(
     assert_expr_list(
       arg <- exprs(DTHSEQ = AESEQ),
-      required_elements = "DTHDOM"),
+      required_elements = "DTHDOM"
+    ),
     regexp = "The following required elements are missing in `arg`: 'DTHDOM'",
     fixed = TRUE
   )
@@ -1015,8 +1016,8 @@ test_that("assert_expr_list Test 78: no error if argument is valid", {
     assert_expr_list(arg <- exprs(
       DTHDOM = "AE",
       DTHSEQ = AESEQ,
-      DTHVAR = if_else(!is.na(AEDECOD), "AEDECOD", NA))
-      )
+      DTHVAR = if_else(!is.na(AEDECOD), "AEDECOD", NA)
+    ))
   )
 })
 
