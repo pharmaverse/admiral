@@ -31,6 +31,9 @@ the new variables for non-matching observations was added.
 - The `date` and `dthcaus` field of `dthcaus_source()` accept expressions now.
 This affects `derive_var_dthcaus()`. (#1727)
 
+- The `date` field of `event_source()` and `censor_source()` accepts expressions
+now. This affects `derive_param_tte()`. (#1727)
+
 ## Breaking Changes
 
 - The `aval_fun` argument of `derive_param_exist_flag()` was deprecated in favor

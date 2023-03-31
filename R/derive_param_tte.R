@@ -127,6 +127,8 @@
 #' @family der_prm_tte
 #' @keywords der_prm_tte
 #'
+#' @seealso [event_source()], [censor_source()]
+#'
 #' @export
 #'
 #' @examples
@@ -586,17 +588,26 @@ filter_date_sources <- function(sources,
 
   data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
-    date <- sources[[i]]$date
+    source_date <- sources[[i]]$date
     source_dataset <- source_datasets[[sources[[i]]$dataset_name]]
+    if (is.symbol(source_date)) {
+      source_date_var <- source_date
+    } else {
+      source_date_var <- get_new_tmp_var(dataset = source_dataset, prefix = "tmp_date")
+      source_dataset <- mutate(
+        source_dataset,
+        !!source_date_var := !!source_date
+      )
+    }
     assert_date_var(
       dataset = source_dataset,
-      var = !!date,
+      var = !!source_date_var,
       dataset_name = sources[[i]]$dataset_name
     )
     data[[i]] <- source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
       filter_extreme(
-        order = exprs(!!date),
+        order = exprs(!!source_date_var),
         by_vars = expr_c(subject_keys, by_vars),
         mode = mode,
         check_type = "none"
@@ -604,9 +615,9 @@ filter_date_sources <- function(sources,
 
     # add date variable and accompanying variables
     if (create_datetime) {
-      date_derv <- exprs(!!date_var := as_datetime(!!date))
+      date_derv <- exprs(!!date_var := as_datetime(!!source_date_var))
     } else {
-      date_derv <- exprs(!!date_var := date(!!date))
+      date_derv <- exprs(!!date_var := date(!!source_date_var))
     }
 
     data[[i]] <- transmute(
@@ -751,11 +762,12 @@ extend_source_datasets <- function(source_datasets,
 #' @param filter An unquoted condition for selecting the observations from
 #'   `dataset` which are events or possible censoring time points.
 #'
-#' @param date A variable providing the date of the event or censoring. A date,
-#'   or a datetime can be specified. An unquoted symbol is expected.
+#' @param date A variable or expression providing the date of the event or
+#'   censoring. A date, or a datetime can be specified. An unquoted symol or
+#'   expression is expected.
 #'
-#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
-#'   character vector to a date object.
+#'   Refer to `derive_vars_dt()` or `convert_dtc_to_dt()` to impute and derive a
+#'   date from a date character vector to a date object.
 #'
 #' @param censor Censoring value
 #'
@@ -782,10 +794,11 @@ tte_source <- function(dataset_name,
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
-    date = assert_symbol(enexpr(date)),
+    date = assert_expr(enexpr(date)),
     censor = assert_integer_scalar(censor),
-    set_values_to = assert_varval_list(
+    set_values_to = assert_expr_list(
       set_values_to,
+      named = TRUE,
       optional = TRUE
     )
   )
@@ -830,7 +843,7 @@ event_source <- function(dataset_name,
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),
     filter = !!enexpr(filter),
-    date = !!assert_symbol(enexpr(date)),
+    date = !!assert_expr(enexpr(date)),
     censor = 0,
     set_values_to = set_values_to
   )
@@ -875,7 +888,7 @@ censor_source <- function(dataset_name,
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),
     filter = !!enexpr(filter),
-    date = !!assert_symbol(enexpr(date)),
+    date = !!assert_expr(enexpr(date)),
     censor = assert_integer_scalar(censor, subset = "positive"),
     set_values_to = set_values_to
   )
