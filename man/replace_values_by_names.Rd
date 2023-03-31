@@ -18,6 +18,7 @@ A list of expressions
 Replace Expression Value with Name
 }
 \examples{
+library(rlang)
 replace_values_by_names(exprs(AVAL, ADT = convert_dtc_to_dt(EXSTDTC)))
 }
 \seealso{

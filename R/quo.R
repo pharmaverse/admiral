@@ -104,6 +104,7 @@ quo_not_missing <- function(x) {
 #' @export
 #'
 #' @examples
+#' library(rlang)
 #' replace_values_by_names(exprs(AVAL, ADT = convert_dtc_to_dt(EXSTDTC)))
 replace_values_by_names <- function(expressions, quosures) {
   if (!missing(quosures)) {
