@@ -946,11 +946,6 @@ restrict_imputed_dtc_dt <- function(dtc,
         missing = imputed_dtc
       )
     }
-    imputed_dtc <- if_else(
-      stringr::str_starts(imputed_dtc, "(0000|9999)"),
-      NA_character_,
-      imputed_dtc
-    )
   }
   if (!(is.null(max_dates) || length(max_dates) == 0)) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
@@ -968,11 +963,6 @@ restrict_imputed_dtc_dt <- function(dtc,
         missing = imputed_dtc
       )
     }
-    imputed_dtc <- if_else(
-      stringr::str_starts(imputed_dtc, "(0000|9999)"),
-      NA_character_,
-      imputed_dtc
-    )
   }
   imputed_dtc
 }
