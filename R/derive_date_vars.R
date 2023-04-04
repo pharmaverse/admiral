@@ -997,7 +997,7 @@ convert_dtc_to_dt <- function(dtc,
     preserve = preserve
   )
   imputed_dtc <- if_else(
-    stringr::str_starts(imputed_dtc, "(0000|9999)") | imputed_dtc %in% c("0000-01-01", "9999-12-31"), #nolint
+    stringr::str_starts(imputed_dtc, "(0000|9999)") | imputed_dtc %in% c("0000-01-01", "9999-12-31"), # nolint
     NA_character_,
     imputed_dtc
   )
@@ -1048,7 +1048,7 @@ convert_dtc_to_dtm <- function(dtc,
   )
 
   imputed_dtc <- if_else(
-    stringr::str_starts(imputed_dtc, "(0000|9999)") | imputed_dtc %in% c("0000-01-01", "9999-12-31"), #nolint
+    stringr::str_starts(imputed_dtc, "(0000|9999)") | imputed_dtc %in% c("0000-01-01", "9999-12-31"), # nolint
     NA_character_,
     imputed_dtc
   )
