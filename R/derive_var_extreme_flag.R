@@ -169,14 +169,14 @@
 #'
 #' # OCCURDS Examples
 #' example_ae <- tribble(
-#' ~USUBJID,           ~AEBODSYS,   ~AEDECOD,   ~AESEV, ~AESTDY, ~AESEQ,
-#'   "1015", "GENERAL DISORDERS",  "ERYTHEMA",   "MILD",       2,      1,
-#'   "1015", "GENERAL DISORDERS",  "PRURITUS",   "MILD",       2,      2,
-#'   "1015",      "GI DISORDERS", "DIARRHOEA",   "MILD",       8,      3,
-#'   "1023", "CARDIAC DISORDERS",  "AV BLOCK",   "MILD",      22,      4,
-#'   "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       3,      1,
-#'   "1023",    "SKIN DISORDERS",  "ERYTHEMA", "SEVERE",       5,      2,
-#'   "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       8,      3
+#'   ~USUBJID,           ~AEBODSYS,    ~AEDECOD,   ~AESEV, ~AESTDY, ~AESEQ,
+#'     "1015", "GENERAL DISORDERS",  "ERYTHEMA",   "MILD",       2,      1,
+#'     "1015", "GENERAL DISORDERS",  "PRURITUS",   "MILD",       2,      2,
+#'     "1015",      "GI DISORDERS", "DIARRHOEA",   "MILD",       8,      3,
+#'     "1023", "CARDIAC DISORDERS",  "AV BLOCK",   "MILD",      22,      4,
+#'     "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       3,      1,
+#'     "1023",    "SKIN DISORDERS",  "ERYTHEMA", "SEVERE",       5,      2,
+#'     "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       8,      3
 #' )
 #'
 #' # Most severe AE first occurrence per patient
