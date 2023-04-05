@@ -8,10 +8,13 @@
 
 ## Breaking Changes
 
+
 ## Various
 
 
 ## Documentation
+
+- Examples for `derive_var_extreme_flag()` were reworked to reduce runtime that occasionally led to failing CI check (#1780)
 
 # admiral 0.10.1
 
