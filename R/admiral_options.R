@@ -25,20 +25,31 @@
 #'  [derive_var_dthcaus()], [derive_var_extreme_dtm()], [derive_vars_period()],
 #'  [create_period_dataset()]
 #'
-#'
 #' @examples
-#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_vs")
-#' data("admiral_dm")
+#' dm <- tribble(
+#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+#'   "PILOT01",    "DM", "01-1302",   61, "YEARS",
+#'   "PILOT01",    "DM", "17-1344",   64, "YEARS"
+#' )
 #'
-#' # Merging all dm variables to vs
+#' vs <- tribble(
+#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~VSTESTCD,     ~VISIT,     ~VSTPT, ~VSSTRESN,
+#'   "PILOT01",    "VS", "01-1302",   "DIABP", "BASELINE",    "LYING",        76,
+#'   "PILOT01",    "VS", "01-1302",   "DIABP", "BASELINE", "STANDING",        87,
+#'   "PILOT01",    "VS", "01-1302",   "DIABP",   "WEEK 2",    "LYING",        71,
+#'   "PILOT01",    "VS", "01-1302",   "DIABP",   "WEEK 2", "STANDING",        79,
+#'   "PILOT01",    "VS", "17-1344",   "DIABP", "BASELINE",    "LYING",        88,
+#'   "PILOT01",    "VS", "17-1344",   "DIABP", "BASELINE", "STANDING",        86,
+#'   "PILOT01",    "VS", "17-1344",   "DIABP",   "WEEK 2",    "LYING",        84,
+#'   "PILOT01",    "VS", "17-1344",   "DIABP",   "WEEK 2", "STANDING",        82
+#' )
+#'
 #' derive_vars_merged(
-#'   admiral_vs,
-#'   dataset_add = select(admiral_dm, -DOMAIN),
+#'   vs,
+#'   dataset_add = select(dm, -DOMAIN),
 #'   by_vars = get_admiral_option("subject_keys")
-#' ) %>%
-#'   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
+#' )
 get_admiral_option <- function(option) {
   # Check for valid option - catch function abuse
   assert_character_scalar(option)
