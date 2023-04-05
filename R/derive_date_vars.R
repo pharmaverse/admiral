@@ -366,7 +366,7 @@ dtm_level <- function(level) {
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 get_partialdatetime <- function(dtc) {
   two <- "(\\d{2}|-?)"
-  partialdate <- stringr::str_match(dtc, paste0(
+  partialdate <- str_match(dtc, paste0(
     "(\\d{4}|-?)-?",
     two,
     "-?",
@@ -771,7 +771,7 @@ impute_dtc_dt <- function(dtc,
 
   # Parse character date ----
   two <- "(\\d{2}|-?)"
-  partialdate <- stringr::str_match(dtc, paste0(
+  partialdate <- str_match(dtc, paste0(
     "(\\d{4}|-?)-?",
     two,
     "-?",
@@ -997,7 +997,7 @@ convert_dtc_to_dt <- function(dtc,
     preserve = preserve
   )
   imputed_dtc <- if_else(
-    stringr::str_starts(imputed_dtc, "(0000|9999)") | imputed_dtc %in% c("0000-01-01", "9999-12-31"), # nolint
+    str_starts(imputed_dtc, "(0000|9999)") | imputed_dtc %in% c("0000-01-01", "9999-12-31"), # nolint
     NA_character_,
     imputed_dtc
   )
@@ -1048,7 +1048,7 @@ convert_dtc_to_dtm <- function(dtc,
   )
 
   imputed_dtc <- if_else(
-    stringr::str_starts(imputed_dtc, "(0000|9999)") | imputed_dtc %in% c("0000-01-01", "9999-12-31"), # nolint
+    str_starts(imputed_dtc, "(0000|9999)") | imputed_dtc %in% c("0000-01-01", "9999-12-31"), # nolint
     NA_character_,
     imputed_dtc
   )

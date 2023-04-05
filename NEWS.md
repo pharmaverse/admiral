@@ -29,7 +29,9 @@
 
 ## Various
 
-`vars()` which was used in the admiral function calls that expected a list of quosures has been removed (#1747).
+- `vars()` which was used in the admiral function calls that expected a list of quosures has been removed (#1747).
+
+- `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with supplying both `min_dates` and `max_dates` that has now been resolved (#1843)
 
 ## Documentation
 
