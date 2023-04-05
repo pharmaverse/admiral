@@ -63,15 +63,15 @@
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #' example_vs <- tribble(
-#'   ~USUBJID, ~VSTESTCD, ~VISIT, ~VISITNUM, ~VSTPTNUM, ~VSSTRESN,
-#'   "1001", "DIABP", "SCREENING", 1, 10, 64,
-#'   "1001", "DIABP", "SCREENING", 1, 11, 66,
-#'   "1001", "DIABP", "BASELINE", 2, 100, 68,
-#'   "1001", "DIABP", "BASELINE", 2, 101, 68,
-#'   "1001", "DIABP", "WEEK 2", 3, 200, 72,
-#'   "1001", "DIABP", "WEEK 2", 3, 201, 71,
-#'   "1001", "DIABP", "WEEK 4", 4, 300, 70,
-#'   "1001", "DIABP", "WEEK 4", 4, 301, 70
+#'   ~USUBJID, ~VSTESTCD,      ~VISIT, ~VISITNUM, ~VSTPTNUM, ~VSSTRESN,
+#'   "1001",     "DIABP", "SCREENING",         1,        10,        64,
+#'   "1001",     "DIABP", "SCREENING",         1,        11,        66,
+#'   "1001",     "DIABP",  "BASELINE",         2,       100,        68,
+#'   "1001",     "DIABP",  "BASELINE",         2,       101,        68,
+#'   "1001",     "DIABP",    "WEEK 2",         3,       200,        72,
+#'   "1001",     "DIABP",    "WEEK 2",         3,       201,        71,
+#'   "1001",     "DIABP",    "WEEK 4",         4,       300,        70,
+#'   "1001",     "DIABP",    "WEEK 4",         4,       301,        70
 #' )
 #'
 #' # Flag last value for each patient, test, and visit, baseline observations are ignored
@@ -169,14 +169,14 @@
 #'
 #' # OCCURDS Examples
 #' example_ae <- tribble(
-#'   ~USUBJID, ~AEBODSYS, ~AEDECOD, ~AESEV, ~AESTDY, ~AESEQ,
-#'   "1015", "GENERAL DISORDERS", "ERYTHEMA", "MILD", 2, 1,
-#'   "1015", "GENERAL DISORDERS", "PRURITUS", "MILD", 2, 2,
-#'   "1015", "GI DISORDERS", "DIARRHOEA", "MILD", 8, 3,
-#'   "1023", "CARDIAC DISORDERS", "AV BLOCK", "MILD", 22, 4,
-#'   "1023", "SKIN DISORDERS", "ERYTHEMA", "MILD", 3, 1,
-#'   "1023", "SKIN DISORDERS", "ERYTHEMA", "SEVERE", 5, 2,
-#'   "1023", "SKIN DISORDERS", "ERYTHEMA", "MILD", 8, 3
+#'   ~USUBJID,         ~AEBODSYS,    ~AEDECOD,   ~AESEV, ~AESTDY, ~AESEQ,
+#'   "1015", "GENERAL DISORDERS",  "ERYTHEMA",   "MILD",       2,      1,
+#'   "1015", "GENERAL DISORDERS",  "PRURITUS",   "MILD",       2,      2,
+#'   "1015",      "GI DISORDERS", "DIARRHOEA",   "MILD",       8,      3,
+#'   "1023", "CARDIAC DISORDERS",  "AV BLOCK",   "MILD",      22,      4,
+#'   "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       3,      1,
+#'   "1023",    "SKIN DISORDERS",  "ERYTHEMA", "SEVERE",       5,      2,
+#'   "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       8,      3
 #' )
 #'
 #' # Most severe AE first occurrence per patient
@@ -305,79 +305,8 @@ derive_var_worst_flag <- function(dataset,
                                   worst_low,
                                   check_type = "warning") {
   ### DEPRECATION
-  deprecate_warn("0.10.0",
+  deprecate_stop("0.10.0",
     "derive_var_worst_flag()",
-    details = paste(
-      "Please use `slice_derivation()` / `derive_var_extreme_flag()`",
-      "to derive extreme flags by changing the `order` argument"
-    )
-  )
-
-  # perform argument checks
-  new_var <- assert_symbol(enexpr(new_var))
-  param_var <- assert_symbol(enexpr(param_var))
-  analysis_var <- assert_symbol(enexpr(analysis_var))
-  assert_vars(by_vars)
-  assert_order_vars(order)
-  assert_data_frame(
-    dataset,
-    required_vars = expr_c(by_vars, extract_vars(order), param_var, analysis_var)
-  )
-  assert_character_vector(worst_high)
-  assert_character_vector(worst_low)
-
-  # additional checks for worstflag - parameters overlap
-  if (length(intersect(worst_high, worst_low)) > 0) {
-    err_msg <- paste(
-      "The following parameter(-s) are both assigned to `worst_high` and `worst_low` flags:",
-      paste0(intersect(worst_high, worst_low), collapse = ", ")
-    )
-    abort(err_msg)
-  }
-
-  # additional checks for worstflag - parameters not available
-  param_var_str <- as_string(param_var)
-  if (length(worst_high) > 0 &&
-    !all(worst_high %in% dataset[[param_var_str]])) {
-    err_msg <- paste0(
-      "The following parameter(-s) in `worst_high` are not available in column ",
-      param_var_str,
-      ": ",
-      paste0(worst_high[!worst_high %in% dataset[[param_var_str]]], collapse = ", ")
-    )
-    abort(err_msg)
-  }
-
-  # additional checks for worstflag - parameters not available
-  if (length(worst_low) > 0 &&
-    !all(worst_low %in% dataset[[param_var_str]])) {
-    err_msg <- paste0(
-      "The following parameter(-s) in `worst_low` are not available in column ",
-      param_var_str,
-      ": ",
-      paste0(worst_low[!worst_low %in% dataset[[param_var_str]]], collapse = ", ")
-    )
-    abort(err_msg)
-  }
-
-  # derive worst-flag
-  bind_rows(
-    derive_var_extreme_flag(
-      dataset = dplyr::filter(dataset, !!param_var %in% worst_low),
-      by_vars = by_vars,
-      order = expr_c(analysis_var, order),
-      new_var = !!new_var,
-      mode = "first",
-      check_type = check_type
-    ),
-    derive_var_extreme_flag(
-      dataset = dplyr::filter(dataset, !!param_var %in% worst_high),
-      by_vars = by_vars,
-      order = expr_c(expr(desc(!!analysis_var)), order),
-      new_var = !!new_var,
-      mode = "first",
-      check_type = check_type
-    ),
-    dplyr::filter(dataset, !(!!param_var %in% c(worst_low, worst_high)))
+    details = "Please use `slice_derivation()` / `derive_var_extreme_flag()`"
   )
 }
