@@ -29,9 +29,13 @@
 
 ## Various
 
-`vars()` which was used in the admiral function calls that expected a list of quosures has been removed (#1747).
+- `vars()` which was used in the admiral function calls that expected a list of quosures has been removed (#1747).
+
+- Examples for `derive_var_extreme_flag()` were reworked to reduce runtime that occasionally led to failing CI check (#1780)
+
 
 ## Documentation
+
 
 # admiral 0.10.1
 
