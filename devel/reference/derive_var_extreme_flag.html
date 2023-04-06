@@ -59,18 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -192,11 +180,20 @@ parameter the first or last record will be flagged across the whole dataset.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">admiral.test</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_vs"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">example_vs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">VSTESTCD</span>,      <span class="op">~</span><span class="va">VISIT</span>, <span class="op">~</span><span class="va">VISITNUM</span>, <span class="op">~</span><span class="va">VSTPTNUM</span>, <span class="op">~</span><span class="va">VSSTRESN</span>,</span>
+<span class="r-in">  <span class="st">"1001"</span>,     <span class="st">"DIABP"</span>, <span class="st">"SCREENING"</span>,         <span class="fl">1</span>,        <span class="fl">10</span>,        <span class="fl">64</span>,</span>
+<span class="r-in">  <span class="st">"1001"</span>,     <span class="st">"DIABP"</span>, <span class="st">"SCREENING"</span>,         <span class="fl">1</span>,        <span class="fl">11</span>,        <span class="fl">66</span>,</span>
+<span class="r-in">  <span class="st">"1001"</span>,     <span class="st">"DIABP"</span>,  <span class="st">"BASELINE"</span>,         <span class="fl">2</span>,       <span class="fl">100</span>,        <span class="fl">68</span>,</span>
+<span class="r-in">  <span class="st">"1001"</span>,     <span class="st">"DIABP"</span>,  <span class="st">"BASELINE"</span>,         <span class="fl">2</span>,       <span class="fl">101</span>,        <span class="fl">68</span>,</span>
+<span class="r-in">  <span class="st">"1001"</span>,     <span class="st">"DIABP"</span>,    <span class="st">"WEEK 2"</span>,         <span class="fl">3</span>,       <span class="fl">200</span>,        <span class="fl">72</span>,</span>
+<span class="r-in">  <span class="st">"1001"</span>,     <span class="st">"DIABP"</span>,    <span class="st">"WEEK 2"</span>,         <span class="fl">3</span>,       <span class="fl">201</span>,        <span class="fl">71</span>,</span>
+<span class="r-in">  <span class="st">"1001"</span>,     <span class="st">"DIABP"</span>,    <span class="st">"WEEK 4"</span>,         <span class="fl">4</span>,       <span class="fl">300</span>,        <span class="fl">70</span>,</span>
+<span class="r-in">  <span class="st">"1001"</span>,     <span class="st">"DIABP"</span>,    <span class="st">"WEEK 4"</span>,         <span class="fl">4</span>,       <span class="fl">301</span>,        <span class="fl">70</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Flag last value for each patient, test, and visit, baseline observations are ignored</span></span>
-<span class="r-in"><span class="va">admiral_vs</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in"><span class="va">example_vs</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="restrict_derivation.html">restrict_derivation</a></span><span class="op">(</span></span>
 <span class="r-in">    derivation <span class="op">=</span> <span class="va">derive_var_extreme_flag</span>,</span>
 <span class="r-in">    args <span class="op">=</span> <span class="fu"><a href="params.html">params</a></span><span class="op">(</span></span>
@@ -209,20 +206,17 @@ parameter the first or last record will be flagged across the whole dataset.</p>
 <span class="r-in">  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">VSTESTCD</span>, <span class="va">VISITNUM</span>, <span class="va">VSTPTNUM</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">VSTESTCD</span>, <span class="va">VISIT</span>, <span class="va">VSTPTNUM</span>, <span class="va">VSSTRESN</span>, <span class="va">LASTFL</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 29,643 x 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     VSTESTCD VISIT               VSTPTNUM VSSTRESN LASTFL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                  </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span><span> 01-701-1015 DIABP    SCREENING 1              815       64 </span><span style="color: #BB0000;">NA</span><span>    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span><span> 01-701-1015 DIABP    SCREENING 1              816       83 </span><span style="color: #BB0000;">NA</span><span>    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span><span> 01-701-1015 DIABP    SCREENING 1              817       57 Y     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span><span> 01-701-1015 DIABP    SCREENING 2              815       68 </span><span style="color: #BB0000;">NA</span><span>    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span><span> 01-701-1015 DIABP    SCREENING 2              816       59 </span><span style="color: #BB0000;">NA</span><span>    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span><span> 01-701-1015 DIABP    SCREENING 2              817       71 Y     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span><span> 01-701-1015 DIABP    BASELINE                 815       56 </span><span style="color: #BB0000;">NA</span><span>    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span><span> 01-701-1015 DIABP    BASELINE                 816       51 </span><span style="color: #BB0000;">NA</span><span>    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span><span> 01-701-1015 DIABP    BASELINE                 817       61 </span><span style="color: #BB0000;">NA</span><span>    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span><span> 01-701-1015 DIABP    AMBUL ECG PLACEMENT      815       67 </span><span style="color: #BB0000;">NA</span><span>    </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 29,633 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 x 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID VSTESTCD VISIT     VSTPTNUM VSSTRESN LASTFL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>        </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> 1001    DIABP    SCREENING       10       64 </span><span style="color: #BB0000;">NA</span><span>    </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> 1001    DIABP    SCREENING       11       66 Y     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span><span> 1001    DIABP    BASELINE       100       68 </span><span style="color: #BB0000;">NA</span><span>    </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span><span> 1001    DIABP    BASELINE       101       68 </span><span style="color: #BB0000;">NA</span><span>    </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span><span> 1001    DIABP    WEEK 2         200       72 </span><span style="color: #BB0000;">NA</span><span>    </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span><span> 1001    DIABP    WEEK 2         201       71 Y     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span><span> 1001    DIABP    WEEK 4         300       70 </span><span style="color: #BB0000;">NA</span><span>    </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span><span> 1001    DIABP    WEEK 4         301       70 Y     </span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Baseline (ABLFL) examples:</span></span>
 <span class="r-in"></span>
@@ -395,10 +389,19 @@ parameter the first or last record will be flagged across the whole dataset.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">20</span><span> TEST01  PAT02   PARAM02 BASELINE  2021-04-30    12 </span><span style="color: #BB0000;">NA</span><span>      </span><span style="color: #BB0000;">NA</span><span>   </span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># OCCURDS Examples</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_ae"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">example_ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>,         <span class="op">~</span><span class="va">AEBODSYS</span>,    <span class="op">~</span><span class="va">AEDECOD</span>,   <span class="op">~</span><span class="va">AESEV</span>, <span class="op">~</span><span class="va">AESTDY</span>, <span class="op">~</span><span class="va">AESEQ</span>,</span>
+<span class="r-in">  <span class="st">"1015"</span>, <span class="st">"GENERAL DISORDERS"</span>,  <span class="st">"ERYTHEMA"</span>,   <span class="st">"MILD"</span>,       <span class="fl">2</span>,      <span class="fl">1</span>,</span>
+<span class="r-in">  <span class="st">"1015"</span>, <span class="st">"GENERAL DISORDERS"</span>,  <span class="st">"PRURITUS"</span>,   <span class="st">"MILD"</span>,       <span class="fl">2</span>,      <span class="fl">2</span>,</span>
+<span class="r-in">  <span class="st">"1015"</span>,      <span class="st">"GI DISORDERS"</span>, <span class="st">"DIARRHOEA"</span>,   <span class="st">"MILD"</span>,       <span class="fl">8</span>,      <span class="fl">3</span>,</span>
+<span class="r-in">  <span class="st">"1023"</span>, <span class="st">"CARDIAC DISORDERS"</span>,  <span class="st">"AV BLOCK"</span>,   <span class="st">"MILD"</span>,      <span class="fl">22</span>,      <span class="fl">4</span>,</span>
+<span class="r-in">  <span class="st">"1023"</span>,    <span class="st">"SKIN DISORDERS"</span>,  <span class="st">"ERYTHEMA"</span>,   <span class="st">"MILD"</span>,       <span class="fl">3</span>,      <span class="fl">1</span>,</span>
+<span class="r-in">  <span class="st">"1023"</span>,    <span class="st">"SKIN DISORDERS"</span>,  <span class="st">"ERYTHEMA"</span>, <span class="st">"SEVERE"</span>,       <span class="fl">5</span>,      <span class="fl">2</span>,</span>
+<span class="r-in">  <span class="st">"1023"</span>,    <span class="st">"SKIN DISORDERS"</span>,  <span class="st">"ERYTHEMA"</span>,   <span class="st">"MILD"</span>,       <span class="fl">8</span>,      <span class="fl">3</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Most severe AE first occurrence per patient</span></span>
-<span class="r-in"><span class="va">admiral_ae</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in"><span class="va">example_ae</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span class="r-in">    TEMP_AESEVN <span class="op">=</span></span>
 <span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">AESEV</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SEVERE"</span>, <span class="st">"MODERATE"</span>, <span class="st">"MILD"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -411,23 +414,19 @@ parameter the first or last record will be flagged across the whole dataset.</p>
 <span class="r-in">  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">AESTDY</span>, <span class="va">AESEQ</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">AEDECOD</span>, <span class="va">AESEV</span>, <span class="va">AESTDY</span>, <span class="va">AESEQ</span>, <span class="va">AOCCIFL</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,191 x 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     AEDECOD                              AESEV   AESTDY AESEQ AOCCIFL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                                </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span><span> 01-701-1015 APPLICATION SITE ERYTHEMA            MILD         2     1 Y      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span><span> 01-701-1015 APPLICATION SITE PRURITUS            MILD         2     2 </span><span style="color: #BB0000;">NA</span><span>     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span><span> 01-701-1015 DIARRHOEA                            MILD         8     3 </span><span style="color: #BB0000;">NA</span><span>     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span><span> 01-701-1023 ERYTHEMA                             MILD         3     1 </span><span style="color: #BB0000;">NA</span><span>     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span><span> 01-701-1023 ERYTHEMA                             MODERA…      3     2 Y      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span><span> 01-701-1023 ERYTHEMA                             MILD         3     4 </span><span style="color: #BB0000;">NA</span><span>     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span><span> 01-701-1023 ATRIOVENTRICULAR BLOCK SECOND DEGREE MILD        22     3 </span><span style="color: #BB0000;">NA</span><span>     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span><span> 01-701-1028 APPLICATION SITE ERYTHEMA            MILD         3     1 Y      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span><span> 01-701-1028 APPLICATION SITE PRURITUS            MILD        21     2 </span><span style="color: #BB0000;">NA</span><span>     </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span><span> 01-701-1034 APPLICATION SITE PRURITUS            MILD        58     1 Y      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1,181 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 x 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID AEDECOD   AESEV  AESTDY AESEQ AOCCIFL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> 1015    ERYTHEMA  MILD        2     1 Y      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> 1015    PRURITUS  MILD        2     2 </span><span style="color: #BB0000;">NA</span><span>     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span><span> 1015    DIARRHOEA MILD        8     3 </span><span style="color: #BB0000;">NA</span><span>     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span><span> 1023    ERYTHEMA  MILD        3     1 </span><span style="color: #BB0000;">NA</span><span>     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span><span> 1023    ERYTHEMA  SEVERE      5     2 Y      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span><span> 1023    ERYTHEMA  MILD        8     3 </span><span style="color: #BB0000;">NA</span><span>     </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span><span> 1023    AV BLOCK  MILD       22     4 </span><span style="color: #BB0000;">NA</span><span>     </span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Most severe AE first occurrence per patient per body system</span></span>
-<span class="r-in"><span class="va">admiral_ae</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in"><span class="va">example_ae</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span class="r-in">    TEMP_AESEVN <span class="op">=</span></span>
 <span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">AESEV</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SEVERE"</span>, <span class="st">"MODERATE"</span>, <span class="st">"MILD"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -440,20 +439,16 @@ parameter the first or last record will be flagged across the whole dataset.</p>
 <span class="r-in">  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">AESTDY</span>, <span class="va">AESEQ</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">AEBODSYS</span>, <span class="va">AESEV</span>, <span class="va">AESTDY</span>, <span class="va">AOCCSIFL</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,191 x 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     AEBODSYS                                  AESEV   AESTDY AOCCSIFL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                                     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span><span> 01-701-1015 GENERAL DISORDERS AND ADMINISTRATION SIT… MILD         2 Y       </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span><span> 01-701-1015 GENERAL DISORDERS AND ADMINISTRATION SIT… MILD         2 </span><span style="color: #BB0000;">NA</span><span>      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span><span> 01-701-1015 GASTROINTESTINAL DISORDERS                MILD         8 Y       </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span><span> 01-701-1023 SKIN AND SUBCUTANEOUS TISSUE DISORDERS    MILD         3 </span><span style="color: #BB0000;">NA</span><span>      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span><span> 01-701-1023 SKIN AND SUBCUTANEOUS TISSUE DISORDERS    MODERA…      3 Y       </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span><span> 01-701-1023 SKIN AND SUBCUTANEOUS TISSUE DISORDERS    MILD         3 </span><span style="color: #BB0000;">NA</span><span>      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span><span> 01-701-1023 CARDIAC DISORDERS                         MILD        22 Y       </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span><span> 01-701-1028 GENERAL DISORDERS AND ADMINISTRATION SIT… MILD         3 Y       </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span><span> 01-701-1028 GENERAL DISORDERS AND ADMINISTRATION SIT… MILD        21 </span><span style="color: #BB0000;">NA</span><span>      </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span><span> 01-701-1034 GENERAL DISORDERS AND ADMINISTRATION SIT… MILD        58 Y       </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1,181 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 x 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID AEBODSYS          AESEV  AESTDY AOCCSIFL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>             </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span><span> 1015    GENERAL DISORDERS MILD        2 Y       </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span><span> 1015    GENERAL DISORDERS MILD        2 </span><span style="color: #BB0000;">NA</span><span>      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span><span> 1015    GI DISORDERS      MILD        8 Y       </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span><span> 1023    SKIN DISORDERS    MILD        3 </span><span style="color: #BB0000;">NA</span><span>      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span><span> 1023    SKIN DISORDERS    SEVERE      5 Y       </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span><span> 1023    SKIN DISORDERS    MILD        8 </span><span style="color: #BB0000;">NA</span><span>      </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span><span> 1023    CARDIAC DISORDERS MILD       22 Y       </span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
