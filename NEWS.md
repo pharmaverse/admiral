@@ -33,7 +33,10 @@
 
 - `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with supplying both `min_dates` and `max_dates` that has now been resolved (#1843)
 
+- Examples for `derive_var_extreme_flag()` were reworked to reduce runtime that occasionally led to failing CI check (#1780)
+
 ## Documentation
+
 
 # admiral 0.10.1
 
