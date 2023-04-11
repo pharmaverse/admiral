@@ -1,3 +1,48 @@
+# admiral 0.11.0
+
+## New Features
+
+
+## Updates of Existing Functions
+
+
+## Breaking Changes
+
+- The following functions, which were deprecated in previous `{admiral}` versions, have been removed (#1747):
+
+  - `derive_vars_merged_dt()`
+  - `derive_vars_merged_dtm()`
+  - `derive_var_agegr_ema()`
+  - `derive_var_agegr_fda()`
+  - `derive_param_first_event()`
+  - `derive_derived_param()`
+  - `derive_var_confirmation_flag()`
+  - `filter_confirmation()`
+
+- The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process (#1747):
+
+  - `derive_var_disposition_status()`
+  - `derive_vars_disposition_reason()`
+  - `format_eoxxstt_default()`
+  - `format_reason_default()`
+  - `derive_var_worst_flag()`
+
+## Various
+
+- `vars()` which was used in the admiral function calls that expected a list of quosures has been removed (#1747).
+
+- Examples for `derive_var_extreme_flag()` were reworked to reduce runtime that occasionally led to failing CI check (#1780)
+
+
+## Documentation
+
+
+# admiral 0.10.1
+
+- Fix checks on `derive_vars_dtm()` and `derive_vars_dt()` 
+that were too restrictive. (#1810)
+
+
 # admiral 0.10.0
 
 ## New Features

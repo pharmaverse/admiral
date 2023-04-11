@@ -71,16 +71,15 @@
 #'                     indicates whether a subject is treated for high blood
 #'                     pressure
 #'
-#' @inheritParams derive_derived_param
-#'
 #' @inheritParams derive_param_qtc
 #'
 #' @details
 #' The values of `age`, `sex`, `smokefl`, `diabetfl` and `trthypfl` will be
 #' added to the `by_vars` list.
 #' The predicted probability of having cardiovascular disease (CVD)
-#' within 10-years according to Framingham formula
-#' \href{https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}{D'Agostino, 2008} is: # nolint
+#' within 10-years according to Framingham formula. See AHA Journal article
+#' General Cardiovascular Risk Profile for Use in Primary Care for reference.
+#'
 #' \strong{For Women:}
 #'
 #' \tabular{rr}{

@@ -1,4 +1,3 @@
-
 # ---- derive_var_atoxgr, test 1: ATOXGR cannot be graded ----
 test_that("derive_var_atoxgr, test 1: ATOXGR cannot be graded", {
   exp_out_1 <- tibble::tribble(
