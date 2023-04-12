@@ -1391,7 +1391,7 @@ assert_expr_list <- function(arg, # nolint
         paste0(
           argname,
           "[[",
-          if_else(names(invalidargs) == "", as.character(which(invalids)),  names(invalidargs)),
+          if_else(names(invalidargs) == "", as.character(which(invalids)), names(invalidargs)),
           "]] = ",
           map_chr(invalidargs, expr_label),
           " is of type ",
