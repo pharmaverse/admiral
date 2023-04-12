@@ -2,6 +2,8 @@
 
 ## New Features
 
+- Added a "Report a bug" link to `{admiral}` website
+
 
 ## Updates of Existing Functions
 
