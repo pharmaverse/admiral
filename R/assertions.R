@@ -1387,7 +1387,7 @@ assert_expr_list <- function(arg, # nolint
       paste0(
         "All elements of `",
         argname,
-        "` must be expressions.\n",
+        "` must be an expression.\n",
         paste0(
           argname,
           "[[",

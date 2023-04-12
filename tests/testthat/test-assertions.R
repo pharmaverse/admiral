@@ -1005,7 +1005,7 @@ test_that("assert_expr_list Test 76: no error if `arg` is NULL and optional is T
 test_that("assert_expr_list Test 77: error if element is invalid", {
   expect_error(
     assert_expr_list(arg <- exprs(DTHSEQ = !!mean)),
-    regexp = "All elements of `arg` must be expressions.",
+    regexp = "All elements of `arg` must be an expression.",
     fixed = TRUE
   )
 })
