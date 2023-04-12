@@ -19,10 +19,10 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
+  <a class="nav-link" href="../articles/">Get Started</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../reference/">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
@@ -59,18 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -312,7 +300,7 @@
 <li><p>All ADaM datasets but <code>admiral_adsl</code> have been removed from the package (<a href="https://github.com/pharmaverse/admiral/issues/1234" class="external-link">#1234</a>)</p></li>
 <li><p><code>derive_var_agegr_ema()</code> and <code>derive_var_agegr_fda()</code> have been deprecated (<a href="https://github.com/pharmaverse/admiral/issues/1333" class="external-link">#1333</a>)</p></li>
 <li>
-<p>Imputation related arguments have been deprecated for all functions except the imputation functions themselves (<a href="https://github.com/pharmaverse/admiral/issues/1299" class="external-link">#1299</a>). I.e., if a derivation like last known alive date is based on dates, DTC variables have to be converted to numeric date or datetime variables in a preprocessing step. For examples see the <a href="https://pharmaverse.github.io/admiral/articles/adsl.html" class="external-link">ADSL vignette</a>.</p>
+<p>Imputation related arguments have been deprecated for all functions except the imputation functions themselves (<a href="https://github.com/pharmaverse/admiral/issues/1299" class="external-link">#1299</a>). I.e., if a derivation like last known alive date is based on dates, DTC variables have to be converted to numeric date or datetime variables in a preprocessing step. For examples see the <a href="https://pharmaverse.github.io/admiral/v0.8.4/articles/adsl.html" class="external-link">ADSL vignette</a>.</p>
 <p>The following arguments were deprecated:</p>
 <ul><li>
 <code>date_imputation</code>, <code>time_imputation</code>, and <code>preserve</code> in <code><a href="../reference/date_source.html">date_source()</a></code>
@@ -398,7 +386,7 @@
 <li>
 <code><a href="../reference/derive_var_merged_character.html">derive_var_merged_character()</a></code> - Merge a Character Variable</li>
 </ul></li>
-<li><p><code><a href="../reference/create_query_data.html">create_query_data()</a></code> is provided to create the <a href="https://pharmaverse.github.io/admiral/articles/queries_dataset.html" class="external-link">queries dataset</a> required as input for <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/606" class="external-link">#606</a>)</p></li>
+<li><p><code><a href="../reference/create_query_data.html">create_query_data()</a></code> is provided to create the <a href="https://pharmaverse.github.io/admiral/v0.7.1/articles/queries_dataset.html" class="external-link">queries dataset</a> required as input for <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/606" class="external-link">#606</a>)</p></li>
 <li><p><code><a href="../reference/create_single_dose_dataset.html">create_single_dose_dataset()</a></code> - Derives dataset of single dose from aggregate dose information (<a href="https://github.com/pharmaverse/admiral/issues/660" class="external-link">#660</a>)</p></li>
 <li>
 <p>New functions for deriving first or last dates from multiple source datasets (<a href="https://github.com/pharmaverse/admiral/issues/753" class="external-link">#753</a>):</p>
