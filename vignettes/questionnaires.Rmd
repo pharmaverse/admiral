@@ -70,7 +70,7 @@ dataset_vignette(qs)
 adsl <- tribble(
   ~STUDYID, ~USUBJID, ~SITEID, ~ITTFL,    ~TRTP, ~TRTSDT,                      ~DTHCAUS,
   "STUDYX",  "P0001",     13L,    "Y", "DRUG A", lubridate::ymd("2012-11-16"), NA_character_,
-  "STUDYX",  "P0002",     11L,    "Y", "DRUG B", lubridate::ymd("2012-11-16"), NA_character_
+  "STUDYX",  "P0002",     11L,    "Y", "DRUG B", lubridate::ymd("2012-11-16"), "PROGRESSIVE DISEASE"
 )
 ```
 ```{r echo=FALSE}
