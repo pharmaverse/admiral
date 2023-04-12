@@ -10,8 +10,8 @@ articles:
   release_strategy: release_strategy.html
   unit_test_guidance: unit_test_guidance.html
   writing_vignettes: writing_vignettes.html
-last_built: 2023-03-31T14:13Z
+last_built: 2023-04-12T17:21Z
 urls:
-  reference: https://pharmaverse.github.io/admiraldev/main/reference
-  article: https://pharmaverse.github.io/admiraldev/main/articles
+  reference: https://pharmaverse.github.io/admiraldev/devel/reference
+  article: https://pharmaverse.github.io/admiraldev/devel/articles
 
