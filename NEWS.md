@@ -2,7 +2,7 @@
 
 ## New Features
 
-- Added a "Report a bug" link to `{admiral}` website
+- Added a "Report a bug" link to `{admiral}` website (#1836)
 
 
 ## Updates of Existing Functions
