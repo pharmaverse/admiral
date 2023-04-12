@@ -1,5 +1,13 @@
 # admiraldev 0.4.0
 
+## New Features 
+
+- Added a **Report a bug** link on `admiraldev` website (#257)
+
+## Updates of Existing Functions
+
+## Breaking Changes
+
 ## Documentation
 
 - The deprecation strategy was updated regarding unit tests for deprecated
