@@ -167,8 +167,10 @@ There is a recommended argument order that all contributors are asked to adhere 
 1. all additional arguments:
     * Make sure to always mention `start_date` before `end_date` (or related).
 
-Names of variables inside a dataset should be passed as symbols rather than strings, i.e. `AVAL` rather than `"AVAL"`.
-If an argument accepts one or more variables or expressions as input, the variables should be wrapped inside `exprs()`.
+Names of variables inside a dataset should be passed as symbols rather than
+strings, i.e. `AVAL` rather than `"AVAL"`. If an argument accepts one or more
+variables or expressions as input then the variables and expressions should be
+wrapped inside `exprs()`.
 
 For example:
 

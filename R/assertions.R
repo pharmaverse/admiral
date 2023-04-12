@@ -545,7 +545,7 @@ assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
 assert_order_vars <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
-  deprecate_warn("0.11.0", "assert_order_vars()", "assert_expr_list()")
+  deprecate_warn("0.4.0", "assert_order_vars()", "assert_expr_list()")
 
   assert_expr_list(arg, optional = optional)
 }
@@ -836,6 +836,17 @@ assert_list_of <- function(arg, class, named = FALSE, optional = TRUE) {
 #' returns the input invisibly otherwise
 #'
 #' @export
+#'
+#' @examples
+#' example_fun <- function(varval_list) {
+#'   assert_named(varval_list)
+#' }
+#'
+#' example_fun(list(var1 = 1, var2 = "x"))
+#'
+#' try(example_fun(list(1, "x")))
+#'
+#' try(example_fun(list(var = 1, "x")))
 assert_named <- function(arg, optional = FALSE) {
   if (optional && is.null(arg)) {
     return(invisible(arg))
@@ -1323,7 +1334,7 @@ assert_varval_list <- function(arg, # nolint
 #' }
 #' example_fun(exprs(DTHDOM = "AE", DTHSEQ = AESEQ))
 #'
-#' try(example_fun(exprs("AE", DTSEQ = AESEQ, !!mean)))
+#' try(example_fun(exprs("AE", DTSEQ = AESEQ, !!list("a"))))
 assert_expr_list <- function(arg, # nolint
                              required_elements = NULL,
                              named = FALSE,
@@ -1364,23 +1375,27 @@ assert_expr_list <- function(arg, # nolint
     }
   }
 
-  invalids <- arg[!map_lgl(
+  invalids <- !map_lgl(
     arg,
     ~ is_call(.x) || is_expression(.x)
-  )]
+  )
+  invalidargs <- arg[invalids]
 
-  if (length(invalids) > 0) {
+  if (any(invalids)) {
+    argname <- arg_name(substitute(arg))
     abort(
       paste0(
-        "The elements of the list ",
-        arg_name(substitute(arg)),
-        " must be expressions.\n",
-        paste(
-          names(invalids),
-          "=",
-          map_chr(invalids, expr_label),
-          "is of type",
-          map_chr(invalids, typeof),
+        "All elements of `",
+        argname,
+        "` must be expressions.\n",
+        paste0(
+          argname,
+          "[[",
+          if_else(names(invalidargs) == "", as.character(which(invalids)),  names(invalidargs)),
+          "]] = ",
+          map_chr(invalidargs, expr_label),
+          " is of type ",
+          map_chr(invalidargs, typeof),
           collapse = "\n"
         )
       )

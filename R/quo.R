@@ -40,7 +40,7 @@ quo_c <- function(...) {
 #'
 #' @export
 expr_c <- function(...) {
-  # transform single expression into list of expression
+  # Transform single expression into list of expression
   inputs <- map(
     list(...),
     function(x) {
@@ -51,7 +51,7 @@ expr_c <- function(...) {
       }
     }
   )
-  inputs <- purrr::flatten(inputs)
+  inputs <- flatten(inputs)
   stopifnot(all(map_lgl(inputs, is_expression)))
   is_null <- map_lgl(inputs, is.null)
   inputs[!is_null]

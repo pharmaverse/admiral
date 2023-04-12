@@ -19,6 +19,17 @@ returns the input invisibly otherwise
 \description{
 Assert that all elements of the argument are named.
 }
+\examples{
+example_fun <- function(varval_list) {
+  assert_named(varval_list)
+}
+
+example_fun(list(var1 = 1, var2 = "x"))
+
+try(example_fun(list(1, "x")))
+
+try(example_fun(list(var = 1, "x")))
+}
 \seealso{
 Checks for valid input and returns warning or errors messages: 
 \code{\link{assert_atomic_vector}()},
