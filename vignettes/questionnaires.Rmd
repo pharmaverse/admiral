@@ -141,7 +141,7 @@ adgad7 <- adqs %>%
   # Select records to keep in the GAD-7 ADaM
   filter(PARCAT1 == "GAD-7 V2") %>%
   derive_summary_records(
-    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT),
+    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
     analysis_var = AVAL,
     summary_fun = function(x) sum(x, na.rm = TRUE),
     # Select records contributing to total score
@@ -170,7 +170,7 @@ adgdssf <- adqs %>%
   # Select records to keep in the GDS-SF ADaM
   filter(PARCAT1 == "GDS SHORT FORM") %>%
   derive_summary_records(
-    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT),
+    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
     analysis_var = AVAL,
     summary_fun = function(x) {
       compute_scale(
