@@ -407,7 +407,7 @@ adgdssf <- adgdssf %>%
     order = exprs(ADT),
     new_var = CDTDTHFL,
     join_vars = exprs(CHGCAT1, ADY),
-    join_type = "after",
+    join_type = "all",
     tmp_obs_nr_var = tmp_obs_nr,
     filter = CHGCAT1 == "WORSENED" & (
       CHGCAT1.join == "WORSENED" & ADY.join >= ADY + 7 |
