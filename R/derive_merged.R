@@ -136,24 +136,53 @@
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_vs")
-#' data("admiral_dm")
+#' vs <- tribble(
+#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~VSTESTCD,      ~VISIT, ~VSSTRESN, ~VSSTRESU,       ~VSDTC,
+#'   "PILOT01",    "VS", "01-1302",  "HEIGHT", "SCREENING",     177.8,      "cm", "2013-08-20",
+#'   "PILOT01",    "VS", "01-1302",  "WEIGHT", "SCREENING",     81.19,      "kg", "2013-08-20",
+#'   "PILOT01",    "VS", "01-1302",  "WEIGHT",  "BASELINE",      82.1,      "kg", "2013-08-29",
+#'   "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 2",     81.19,      "kg", "2013-09-15",
+#'   "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 4",     82.56,      "kg", "2013-09-24",
+#'   "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 6",     80.74,      "kg", "2013-10-08",
+#'   "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 8",      82.1,      "kg", "2013-10-22",
+#'   "PILOT01",    "VS", "01-1302",  "WEIGHT",   "WEEK 12",      82.1,      "kg", "2013-11-05",
+#'   "PILOT01",    "VS", "17-1344",  "HEIGHT", "SCREENING",     163.5,      "cm", "2014-01-01",
+#'   "PILOT01",    "VS", "17-1344",  "WEIGHT", "SCREENING",     58.06,      "kg", "2014-01-01",
+#'   "PILOT01",    "VS", "17-1344",  "WEIGHT",  "BASELINE",     58.06,      "kg", "2014-01-11",
+#'   "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 2",     58.97,      "kg", "2014-01-24",
+#'   "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 4",     57.97,      "kg", "2014-02-07",
+#'   "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 6",     58.97,      "kg", "2014-02-19",
+#'   "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 8",     57.79,      "kg", "2014-03-14"
+#' )
+#'
+#' dm <- tribble(
+#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+#'   "PILOT01",    "DM", "01-1302",   61, "YEARS",
+#'   "PILOT01",    "DM", "17-1344",   64, "YEARS"
+#' )
+#'
 #'
 #' # Merging all dm variables to vs
 #' derive_vars_merged(
-#'   admiral_vs,
-#'   dataset_add = select(admiral_dm, -DOMAIN),
+#'   vs,
+#'   dataset_add = select(dm, -DOMAIN),
 #'   by_vars = exprs(STUDYID, USUBJID)
 #' ) %>%
-#'   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
+#'   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
+#'
 #'
 #' # Merge last weight to adsl
-#' data("admiral_adsl")
+#' adsl <- tribble(
+#'   ~STUDYID,  ~USUBJID, ~AGE,   ~AGEU,
+#'   "PILOT01", "01-1302",   61, "YEARS",
+#'   "PILOT01", "17-1344",   64, "YEARS"
+#' )
+#'
+#'
 #' derive_vars_merged(
-#'   admiral_adsl,
-#'   dataset_add = admiral_vs,
+#'   adsl,
+#'   dataset_add = vs,
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   order = exprs(VSDTC),
 #'   mode = "last",
@@ -163,20 +192,25 @@
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 #'
-#' # Derive treatment start datetime (TRTSDTM)
-#' data(admiral_ex)
 #'
+#' # Derive treatment start datetime (TRTSDTM)
+#' ex <- tribble(
+#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~EXSTDY, ~EXENDY,     ~EXSTDTC,     ~EXENDTC,
+#'   "PILOT01",    "EX", "01-1302",       1,      18, "2013-08-29", "2013-09-15",
+#'   "PILOT01",    "EX", "01-1302",      19,      69, "2013-09-16", "2013-11-05",
+#'   "PILOT01",    "EX", "17-1344",       1,      14, "2014-01-11", "2014-01-24",
+#'   "PILOT01",    "EX", "17-1344",      15,      63, "2014-01-25", "2014-03-14"
+#' )
 #' ## Impute exposure start date to first date/time
 #' ex_ext <- derive_vars_dtm(
-#'   admiral_ex,
+#'   ex,
 #'   dtc = EXSTDTC,
 #'   new_vars_prefix = "EXST",
 #'   highest_imputation = "M",
 #' )
-#'
 #' ## Add first exposure datetime and imputation flags to adsl
 #' derive_vars_merged(
-#'   select(admiral_dm, STUDYID, USUBJID),
+#'   select(dm, STUDYID, USUBJID),
 #'   dataset_add = ex_ext,
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
@@ -184,40 +218,18 @@
 #'   mode = "first"
 #' )
 #'
-#' # Derive treatment start datetime (TRTSDTM)
-#' data(admiral_ex)
-#'
-#' ## Impute exposure start date to first date/time
-#' ex_ext <- derive_vars_dtm(
-#'   admiral_ex,
-#'   dtc = EXSTDTC,
-#'   new_vars_prefix = "EXST",
-#'   highest_imputation = "M",
-#' )
-#'
-#' ## Add first exposure datetime and imputation flags to adsl
-#' derive_vars_merged(
-#'   select(admiral_dm, STUDYID, USUBJID),
-#'   dataset_add = ex_ext,
-#'   filter_add = !is.na(EXSTDTM),
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
-#'   order = exprs(EXSTDTM),
-#'   mode = "first"
-#' )
 #'
 #' # Derive treatment end datetime (TRTEDTM)
 #' ## Impute exposure end datetime to last time, no date imputation
 #' ex_ext <- derive_vars_dtm(
-#'   admiral_ex,
+#'   ex,
 #'   dtc = EXENDTC,
 #'   new_vars_prefix = "EXEN",
 #'   time_imputation = "last",
 #' )
-#'
 #' ## Add last exposure datetime and imputation flag to adsl
 #' derive_vars_merged(
-#'   select(admiral_dm, STUDYID, USUBJID),
+#'   select(adsl, STUDYID, USUBJID),
 #'   dataset_add = ex_ext,
 #'   filter_add = !is.na(EXENDTM),
 #'   by_vars = exprs(STUDYID, USUBJID),
@@ -519,11 +531,29 @@ derive_vars_merged_dtm <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_dm")
-#' data("admiral_vs")
 #'
+#' vs <- tribble(
+#'   ~STUDYID, ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSSEQ,       ~VSDTC,
+#'   "PILOT01",    "VS", "04-1127", "SCREENING",  "HEIGHT",     165.1,     43, "2013-09-16",
+#'   "PILOT01",    "VS", "04-1127", "SCREENING",  "WEIGHT",     42.87,    142, "2013-09-16",
+#'   "PILOT01",    "VS", "04-1127",  "BASELINE",  "WEIGHT",     41.05,    143, "2013-10-02",
+#'   "PILOT01",    "VS", "04-1127",    "WEEK 2",  "WEIGHT",     42.64,    144, "2013-10-16",
+#'   "PILOT01",    "VS", "04-1127",    "WEEK 4",  "WEIGHT",     41.73,    145, "2013-10-30",
+#'   "PILOT01",    "VS", "04-1127",   "WEEK 26",  "WEIGHT",     43.09,    152, "2014-03-31",
+#'   "PILOT01",    "VS", "06-1049", "SCREENING",  "HEIGHT",    167.64,     28, "2013-04-30",
+#'   "PILOT01",    "VS", "06-1049", "SCREENING",  "WEIGHT",     57.61,     92, "2013-04-30",
+#'   "PILOT01",    "VS", "06-1049",  "BASELINE",  "WEIGHT",     57.83,     93, "2013-05-14",
+#'   "PILOT01",    "VS", "06-1049",    "WEEK 2",  "WEIGHT",     58.29,     94, "2013-05-28",
+#'   "PILOT01",    "VS", "06-1049",    "WEEK 4",  "WEIGHT",     58.97,     95, "2013-06-11"
+#' )
+#'
+#' dm <- tribble(
+#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+#'   "PILOT01",    "DM", "01-1057",   59, "YEARS",
+#'   "PILOT01",    "DM", "04-1127",   84, "YEARS",
+#'   "PILOT01",    "DM", "06-1049",   60, "YEARS"
+#' )
 #' wgt_cat <- function(wgt) {
 #'   case_when(
 #'     wgt < 50 ~ "low",
@@ -533,8 +563,8 @@ derive_vars_merged_dtm <- function(dataset,
 #' }
 #'
 #' derive_var_merged_cat(
-#'   admiral_dm,
-#'   dataset_add = admiral_vs,
+#'   dm,
+#'   dataset_add = vs,
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   order = exprs(VSDTC, VSSEQ),
 #'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
@@ -545,10 +575,12 @@ derive_vars_merged_dtm <- function(dataset,
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 #'
+#'
+#'
 #' # defining a value for missing VS data
 #' derive_var_merged_cat(
-#'   admiral_dm,
-#'   dataset_add = admiral_vs,
+#'   dm,
+#'   dataset_add = vs,
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   order = exprs(VSDTC, VSSEQ),
 #'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
@@ -668,23 +700,51 @@ derive_var_merged_cat <- function(dataset,
 #'
 #' @examples
 #'
-#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_dm")
-#' data("admiral_ae")
+#'
+#' dm <- tribble(
+#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+#'   "PILOT01",    "DM", "01-1028",   71, "YEARS",
+#'   "PILOT01",    "DM", "04-1127",   84, "YEARS",
+#'   "PILOT01",    "DM", "06-1049",   60, "YEARS"
+#' )
+#'
+#' ae <- tribble(
+#'   ~STUDYID, ~DOMAIN,  ~USUBJID,    ~AETERM,     ~AEREL,
+#'   "PILOT01",    "AE", "01-1028", "ERYTHEMA", "POSSIBLE",
+#'   "PILOT01",    "AE", "01-1028", "PRURITUS", "PROBABLE",
+#'   "PILOT01",    "AE", "06-1049",  "SYNCOPE", "POSSIBLE",
+#'   "PILOT01",    "AE", "06-1049",  "SYNCOPE", "PROBABLE"
+#' )
+#'
+#'
 #' derive_var_merged_exist_flag(
-#'   admiral_dm,
-#'   dataset_add = admiral_ae,
+#'   dm,
+#'   dataset_add = ae,
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   new_var = AERELFL,
 #'   condition = AEREL == "PROBABLE"
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
 #'
-#' data("admiral_vs")
+#' vs <- tribble(
+#'   ~STUDYID, ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSBLFL,
+#'   "PILOT01",    "VS", "01-1028", "SCREENING",  "HEIGHT",     177.8,      NA,
+#'   "PILOT01",    "VS", "01-1028", "SCREENING",  "WEIGHT",     98.88,      NA,
+#'   "PILOT01",    "VS", "01-1028",  "BASELINE",  "WEIGHT",     99.34,     "Y",
+#'   "PILOT01",    "VS", "01-1028",    "WEEK 4",  "WEIGHT",     98.88,      NA,
+#'   "PILOT01",    "VS", "04-1127", "SCREENING",  "HEIGHT",     165.1,      NA,
+#'   "PILOT01",    "VS", "04-1127", "SCREENING",  "WEIGHT",     42.87,      NA,
+#'   "PILOT01",    "VS", "04-1127",  "BASELINE",  "WEIGHT",     41.05,     "Y",
+#'   "PILOT01",    "VS", "04-1127",    "WEEK 4",  "WEIGHT",     41.73,      NA,
+#'   "PILOT01",    "VS", "06-1049", "SCREENING",  "HEIGHT",    167.64,      NA,
+#'   "PILOT01",    "VS", "06-1049", "SCREENING",  "WEIGHT",     57.61,      NA,
+#'   "PILOT01",    "VS", "06-1049",  "BASELINE",  "WEIGHT",     57.83,     "Y",
+#'   "PILOT01",    "VS", "06-1049",    "WEEK 4",  "WEIGHT",     58.97,      NA
+#' )
 #' derive_var_merged_exist_flag(
-#'   admiral_dm,
-#'   dataset_add = admiral_vs,
+#'   dm,
+#'   dataset_add = vs,
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
 #'   new_var = WTBLHIFL,
@@ -693,6 +753,7 @@ derive_var_merged_cat <- function(dataset,
 #'   missing_value = "M"
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
+
 derive_var_merged_exist_flag <- function(dataset,
                                          dataset_add,
                                          by_vars,
@@ -782,17 +843,35 @@ derive_var_merged_exist_flag <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_dm")
-#' data("admiral_ds")
+#' dm <- tribble(
+#'   ~STUDYID, ~DOMAIN, ~USUBJID, ~AGE,   ~AGEU,
+#'   "PILOT01",    "DM",   "1023",   64, "YEARS",
+#'   "PILOT01",    "DM",   "1028",   71, "YEARS",
+#'   "PILOT01",    "DM",   "1033",   74, "YEARS"
+#' )
+#'
+#' ds <- tribble(
+#'   ~STUDYID, ~DOMAIN, ~USUBJID,      ~VISIT,           ~DSCAT,          ~DSDECOD,
+#'   "PILOT01",    "DS",   "1023",  "BASELINE", "PROT MILESTONE",      "RANDOMIZED",
+#'   "PILOT01",    "DS",   "1023",    "WEEK 4",     "DISP EVENT",   "ADVERSE EVENT",
+#'   "PILOT01",    "DS",   "1023",    "WEEK 4",    "OTHER EVENT", "FINAL LAB VISIT",
+#'   "PILOT01",    "DS",   "1023", "RETRIEVAL",    "OTHER EVENT", "FINAL RET VISIT",
+#'   "PILOT01",    "DS",   "1028",  "BASELINE", "PROT MILESTONE",      "RANDOMIZED",
+#'   "PILOT01",    "DS",   "1028",   "WEEK 26",     "DISP EVENT",       "COMPLETED",
+#'   "PILOT01",    "DS",   "1028",   "WEEK 26",    "OTHER EVENT", "FINAL LAB VISIT",
+#'   "PILOT01",    "DS",   "1033",  "BASELINE", "PROT MILESTONE",      "RANDOMIZED",
+#'   "PILOT01",    "DS",   "1033",    "WEEK 4",     "DISP EVENT", "TERM BY SPONSOR",
+#'   "PILOT01",    "DS",   "1033",    "WEEK 4",    "OTHER EVENT", "FINAL LAB VISIT",
+#'   "PILOT01",    "DS",   "1033", "RETRIEVAL",    "OTHER EVENT", "FINAL RET VISIT"
+#' )
 #'
 #' derive_var_merged_character(
-#'   admiral_dm,
-#'   dataset_add = admiral_ds,
+#'   dm,
+#'   dataset_add = ds,
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   new_var = DISPSTAT,
-#'   filter_add = DSCAT == "DISPOSITION EVENT",
+#'   filter_add = DSCAT == "DISP EVENT",
 #'   source_var = DSDECOD,
 #'   case = "title"
 #' ) %>%
@@ -878,25 +957,48 @@ derive_var_merged_character <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
-#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_vs")
-#' param_lookup <- tribble(
-#'   ~VSTESTCD, ~VSTEST, ~PARAMCD, ~PARAM,
-#'   "SYSBP", "Systolic Blood Pressure", "SYSBP", "Systolic Blood Pressure (mmHg)",
-#'   "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
-#'   "HEIGHT", "Height", "HEIGHT", "Height (cm)",
-#'   "TEMP", "Temperature", "TEMP", "Temperature (C)",
-#'   "MAP", "Mean Arterial Pressure", "MAP", "Mean Arterial Pressure (mmHg)",
-#'   "BMI", "Body Mass Index", "BMI", "Body Mass Index(kg/m^2)",
-#'   "BSA", "Body Surface Area", "BSA", "Body Surface Area(m^2)"
+#' vs <- tribble(
+#'   ~STUDYID, ~DOMAIN,  ~USUBJID,        ~VISIT, ~VSTESTCD,       ~VSTEST,
+#'   "PILOT01",    "VS", "01-1028",   "SCREENING",  "HEIGHT",      "Height",
+#'   "PILOT01",    "VS", "01-1028",   "SCREENING",    "TEMP", "Temperature",
+#'   "PILOT01",    "VS", "01-1028",    "BASELINE",    "TEMP", "Temperature",
+#'   "PILOT01",    "VS", "01-1028",      "WEEK 4",    "TEMP", "Temperature",
+#'   "PILOT01",    "VS", "01-1028", "SCREENING 1",  "WEIGHT",      "Weight",
+#'   "PILOT01",    "VS", "01-1028",    "BASELINE",  "WEIGHT",      "Weight",
+#'   "PILOT01",    "VS", "01-1028",      "WEEK 4",  "WEIGHT",      "Weight",
+#'   "PILOT01",    "VS", "04-1325",   "SCREENING",  "HEIGHT",      "Height",
+#'   "PILOT01",    "VS", "04-1325",   "SCREENING",    "TEMP", "Temperature",
+#'   "PILOT01",    "VS", "04-1325",    "BASELINE",    "TEMP", "Temperature",
+#'   "PILOT01",    "VS", "04-1325",      "WEEK 4",    "TEMP", "Temperature",
+#'   "PILOT01",    "VS", "04-1325", "SCREENING 1",  "WEIGHT",      "Weight",
+#'   "PILOT01",    "VS", "04-1325",    "BASELINE",  "WEIGHT",      "Weight",
+#'   "PILOT01",    "VS", "04-1325",      "WEEK 4",  "WEIGHT",      "Weight",
+#'   "PILOT01",    "VS", "10-1027",   "SCREENING",  "HEIGHT",      "Height",
+#'   "PILOT01",    "VS", "10-1027",   "SCREENING",    "TEMP", "Temperature",
+#'   "PILOT01",    "VS", "10-1027",    "BASELINE",    "TEMP", "Temperature",
+#'   "PILOT01",    "VS", "10-1027",      "WEEK 4",    "TEMP", "Temperature",
+#'   "PILOT01",    "VS", "10-1027", "SCREENING 1",  "WEIGHT",      "Weight",
+#'   "PILOT01",    "VS", "10-1027",    "BASELINE",  "WEIGHT",      "Weight",
+#'   "PILOT01",    "VS", "10-1027",      "WEEK 4",  "WEIGHT",      "Weight"
 #' )
+#'
+#' param_lookup <- tribble(
+#'  ~VSTESTCD,                   ~VSTEST, ~PARAMCD,                       ~PARAM,
+#'    "SYSBP", "Systolic Blood Pressure",  "SYSBP", "Syst Blood Pressure (mmHg)",
+#'   "WEIGHT",                  "Weight", "WEIGHT",                "Weight (kg)",
+#'   "HEIGHT",                  "Height", "HEIGHT",                "Height (cm)",
+#'     "TEMP",             "Temperature",   "TEMP",            "Temperature (C)",
+#'      "MAP",  "Mean Arterial Pressure",    "MAP",   "Mean Art Pressure (mmHg)",
+#'      "BMI",         "Body Mass Index",    "BMI",    "Body Mass Index(kg/m^2)",
+#'      "BSA",       "Body Surface Area",    "BSA",     "Body Surface Area(m^2)"
+#'      )
+#'
 #' derive_vars_merged_lookup(
-#'   dataset = admiral_vs,
+#'   dataset = vs,
 #'   dataset_add = param_lookup,
 #'   by_vars = exprs(VSTESTCD),
-#'   new_vars = exprs(PARAMCD),
+#'   new_vars = exprs(PARAMCD, PARAM),
 #'   print_not_mapped = TRUE
 #' )
 derive_vars_merged_lookup <- function(dataset,

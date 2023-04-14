@@ -31,10 +31,42 @@ is less than or equal \code{A1HI}
 }
 }
 \examples{
-library(tibble)
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(admiral_vs)
+vs <- tribble(
+  ~STUDYID, ~DOMAIN,  ~USUBJID,     ~VISIT, ~VSTESTCD, ~VSSTRESN,
+  "PILOT01",    "VS", "04-1025", "BASELINE",   "DIABP",        82,
+  "PILOT01",    "VS", "04-1025", "BASELINE",   "DIABP",        82,
+  "PILOT01",    "VS", "04-1025", "BASELINE",   "DIABP",        86,
+  "PILOT01",    "VS", "04-1025",   "WEEK 4",   "DIABP",        80,
+  "PILOT01",    "VS", "04-1025",   "WEEK 4",   "DIABP",        88,
+  "PILOT01",    "VS", "04-1025",   "WEEK 4",   "DIABP",        84,
+  "PILOT01",    "VS", "04-1025", "BASELINE",   "PULSE",        68,
+  "PILOT01",    "VS", "04-1025", "BASELINE",   "PULSE",        66,
+  "PILOT01",    "VS", "04-1025", "BASELINE",   "PULSE",        74,
+  "PILOT01",    "VS", "04-1025",   "WEEK 4",   "PULSE",        86,
+  "PILOT01",    "VS", "04-1025",   "WEEK 4",   "PULSE",        92,
+  "PILOT01",    "VS", "04-1025",   "WEEK 4",   "PULSE",        88,
+  "PILOT01",    "VS", "04-1025", "BASELINE",  "WEIGHT",     55.52,
+  "PILOT01",    "VS", "04-1025",   "WEEK 4",  "WEIGHT",     55.57,
+  "PILOT01",    "VS", "11-1143", "BASELINE",   "DIABP",        76,
+  "PILOT01",    "VS", "11-1143", "BASELINE",   "DIABP",        72,
+  "PILOT01",    "VS", "11-1143", "BASELINE",   "DIABP",        72,
+  "PILOT01",    "VS", "11-1143",   "WEEK 4",   "DIABP",        80,
+  "PILOT01",    "VS", "11-1143",   "WEEK 4",   "DIABP",        72,
+  "PILOT01",    "VS", "11-1143",   "WEEK 4",   "DIABP",        72,
+  "PILOT01",    "VS", "11-1143", "BASELINE",   "PULSE",        72,
+  "PILOT01",    "VS", "11-1143", "BASELINE",   "PULSE",        68,
+  "PILOT01",    "VS", "11-1143", "BASELINE",   "PULSE",        68,
+  "PILOT01",    "VS", "11-1143",   "WEEK 4",   "PULSE",        60,
+  "PILOT01",    "VS", "11-1143",   "WEEK 4",   "PULSE",        80,
+  "PILOT01",    "VS", "11-1143",   "WEEK 4",   "PULSE",        80,
+  "PILOT01",    "VS", "11-1143", "BASELINE",  "WEIGHT",     64.64,
+  "PILOT01",    "VS", "11-1143",   "WEEK 4",  "WEIGHT",     66.45
+) \%>\%
+  mutate(
+    PARAMCD = VSTESTCD,
+    AVAL = VSSTRESN
+  )
 
 ref_ranges <- tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
@@ -42,12 +74,7 @@ ref_ranges <- tribble(
   "PULSE",      60,    100,    40,   110
 )
 
-admiral_vs \%>\%
-  mutate(
-    PARAMCD = VSTESTCD,
-    AVAL = VSSTRESN
-  ) \%>\%
-  filter(PARAMCD \%in\% c("PULSE", "DIABP")) \%>\%
+vs \%>\% filter(PARAMCD \%in\% c("PULSE", "DIABP")) \%>\%
   derive_vars_merged(ref_ranges, by_vars = exprs(PARAMCD)) \%>\%
   derive_var_anrind() \%>\%
   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)

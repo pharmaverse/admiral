@@ -127,25 +127,48 @@ list of records from the input dataset that do not have corresponding
 mapping from the lookup table.
 }
 \examples{
-library(admiral.test)
-library(tibble)
 library(dplyr, warn.conflicts = FALSE)
-data("admiral_vs")
-param_lookup <- tribble(
-  ~VSTESTCD, ~VSTEST, ~PARAMCD, ~PARAM,
-  "SYSBP", "Systolic Blood Pressure", "SYSBP", "Systolic Blood Pressure (mmHg)",
-  "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
-  "HEIGHT", "Height", "HEIGHT", "Height (cm)",
-  "TEMP", "Temperature", "TEMP", "Temperature (C)",
-  "MAP", "Mean Arterial Pressure", "MAP", "Mean Arterial Pressure (mmHg)",
-  "BMI", "Body Mass Index", "BMI", "Body Mass Index(kg/m^2)",
-  "BSA", "Body Surface Area", "BSA", "Body Surface Area(m^2)"
+vs <- tribble(
+  ~STUDYID, ~DOMAIN,  ~USUBJID,        ~VISIT, ~VSTESTCD,       ~VSTEST,
+  "PILOT01",    "VS", "01-1028",   "SCREENING",  "HEIGHT",      "Height",
+  "PILOT01",    "VS", "01-1028",   "SCREENING",    "TEMP", "Temperature",
+  "PILOT01",    "VS", "01-1028",    "BASELINE",    "TEMP", "Temperature",
+  "PILOT01",    "VS", "01-1028",      "WEEK 4",    "TEMP", "Temperature",
+  "PILOT01",    "VS", "01-1028", "SCREENING 1",  "WEIGHT",      "Weight",
+  "PILOT01",    "VS", "01-1028",    "BASELINE",  "WEIGHT",      "Weight",
+  "PILOT01",    "VS", "01-1028",      "WEEK 4",  "WEIGHT",      "Weight",
+  "PILOT01",    "VS", "04-1325",   "SCREENING",  "HEIGHT",      "Height",
+  "PILOT01",    "VS", "04-1325",   "SCREENING",    "TEMP", "Temperature",
+  "PILOT01",    "VS", "04-1325",    "BASELINE",    "TEMP", "Temperature",
+  "PILOT01",    "VS", "04-1325",      "WEEK 4",    "TEMP", "Temperature",
+  "PILOT01",    "VS", "04-1325", "SCREENING 1",  "WEIGHT",      "Weight",
+  "PILOT01",    "VS", "04-1325",    "BASELINE",  "WEIGHT",      "Weight",
+  "PILOT01",    "VS", "04-1325",      "WEEK 4",  "WEIGHT",      "Weight",
+  "PILOT01",    "VS", "10-1027",   "SCREENING",  "HEIGHT",      "Height",
+  "PILOT01",    "VS", "10-1027",   "SCREENING",    "TEMP", "Temperature",
+  "PILOT01",    "VS", "10-1027",    "BASELINE",    "TEMP", "Temperature",
+  "PILOT01",    "VS", "10-1027",      "WEEK 4",    "TEMP", "Temperature",
+  "PILOT01",    "VS", "10-1027", "SCREENING 1",  "WEIGHT",      "Weight",
+  "PILOT01",    "VS", "10-1027",    "BASELINE",  "WEIGHT",      "Weight",
+  "PILOT01",    "VS", "10-1027",      "WEEK 4",  "WEIGHT",      "Weight"
 )
+
+param_lookup <- tribble(
+ ~VSTESTCD,                   ~VSTEST, ~PARAMCD,                       ~PARAM,
+   "SYSBP", "Systolic Blood Pressure",  "SYSBP", "Syst Blood Pressure (mmHg)",
+  "WEIGHT",                  "Weight", "WEIGHT",                "Weight (kg)",
+  "HEIGHT",                  "Height", "HEIGHT",                "Height (cm)",
+    "TEMP",             "Temperature",   "TEMP",            "Temperature (C)",
+     "MAP",  "Mean Arterial Pressure",    "MAP",   "Mean Art Pressure (mmHg)",
+     "BMI",         "Body Mass Index",    "BMI",    "Body Mass Index(kg/m^2)",
+     "BSA",       "Body Surface Area",    "BSA",     "Body Surface Area(m^2)"
+     )
+
 derive_vars_merged_lookup(
-  dataset = admiral_vs,
+  dataset = vs,
   dataset_add = param_lookup,
   by_vars = exprs(VSTESTCD),
-  new_vars = exprs(PARAMCD),
+  new_vars = exprs(PARAMCD, PARAM),
   print_not_mapped = TRUE
 )
 }
