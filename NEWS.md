@@ -489,8 +489,7 @@ empty (#1309)
   - `derive_var_merged_character()` - Merge a Character Variable
   
 
-- `create_query_data()` is provided to create the [queries
-dataset](https://pharmaverse.github.io/admiral/v0.7.1/articles/queries_dataset.html) required as input for `derive_vars_query()` (#606)
+- `create_query_data()` is provided to create the queries dataset required as input for `derive_vars_query()` (#606)
 
 - `create_single_dose_dataset()` - Derives dataset of single dose from aggregate dose information (#660)
 
@@ -523,7 +522,7 @@ first disease progression. (#1023)
 ### ADLB
 
   - New ADLB template script available `ad_adlb.R`, specific ADLB functions developed and
-  [BDS Finding vignette](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html) has examples enhanced with ADLB functions. (#1122)
+  `BDS Finding vignette`has examples enhanced with ADLB functions. (#1122)
 
   - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in values based on user-defined pairing (#944)
   - `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables from a BDS dataset, e.g. ADLB. (#943)
@@ -602,11 +601,9 @@ specific for admiral. Derivations like this can be implemented calling
 - Additional explanation added to `derive_param_*` and `derive_derived_param` functions regarding which variables are populated in the additional rows (#939)
 
 
-- Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/cran-release/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/cran-release/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
+- Updated `derive_var_worst_flag()`and `derive_var_extreme_flag()` vignettes to clarify their purpose (#691)
 
-- Added example of ASEQ derivation in ADCM to 
-[OCCDS vignette](https://pharmaverse.github.io/admiral/cran-release/articles/occds.html#aseq)
-(#720)
+- Added example of ASEQ derivation in ADCM to `OCCDS vignette` (#720)
 
 - Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
 
