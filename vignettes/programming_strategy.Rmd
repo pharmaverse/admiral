@@ -474,6 +474,7 @@ add an issue in GitHub for discussion.
 | `utils_ds_chk`                                                                    | Utilities for Dataset Checking                                                                                           |	
 | `utils_fil`                                                                       | Utilities for Filtering Observations                                                                                     |
 | `utils_fmt`                                                                       | Utilities for Formatting Observations                                                                                    |	
+| `utils_print`                                                                       | Utilities for Printing Objects in the Console                                                                                    |	
 | `utils_help` 	                                                                    | Utilities used within Derivation functions                                                                               |	
 | `utils_examples`                                                                  | Utilities used for examples and template scripts                                                                         |
 | `source_specifications` 	                                                        | Source Objects                                                                                                             |	
