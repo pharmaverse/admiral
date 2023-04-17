@@ -83,18 +83,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -116,7 +104,8 @@
 
 
 
-<script src="contribution_model_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Contribution to {admiral}</h1>
             
@@ -130,17 +119,39 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This vignette gives you an overview of the anticipated contribution model. The goal is to enable users of <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> to contribute and test the contribution model for <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>. Adjustments might be made over time.</p>
-<p>Our contribution model is still in a testing phase so we advise you to contact us when an issue is created via <a href="https://app.slack.com/client/T028PB489D3/C02M8KN8269" class="external-link">Slack</a> <em>(If you don’t have access, use this <a href="https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A" class="external-link">link</a> to join)</em>. We can discuss details or align expectations if you are not familiar with the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> philosophy and programming strategy. The team will try to review the issues within the next sprint and give some initial feedback. Since we are not a 100% fully resourced software development team it might be that some issues will take longer to respond to depending on the amount of overall issues.</p>
+<p>This vignette gives you an overview of the anticipated contribution
+model. The goal is to enable users of <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> to
+contribute and test the contribution model for <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>.
+Adjustments might be made over time.</p>
+<p>Our contribution model is still in a testing phase so we advise you
+to contact us when an issue is created via <a href="https://app.slack.com/client/T028PB489D3/C02M8KN8269" class="external-link">Slack</a>
+<em>(If you don’t have access, use this <a href="https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A" class="external-link">link</a>
+to join)</em>. We can discuss details or align expectations if you are
+not familiar with the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> philosophy and programming
+strategy. The team will try to review the issues within the next sprint
+and give some initial feedback. Since we are not a 100% fully resourced
+software development team it might be that some issues will take longer
+to respond to depending on the amount of overall issues.</p>
 </div>
 <div class="section level2">
 <h2 id="basics">Basics<a class="anchor" aria-label="anchor" href="#basics"></a>
 </h2>
 <ul>
-<li><p>For each new contribution, the user creates an issue on the issue tab on <a href="https://github.com/pharmaverse/admiral/issues" class="external-link">GitHub</a> to put it in our backlog.</p></li>
-<li><p>Familiarize yourself with our <a href="https://pharmaverse.github.io/admiraldev/devel/articles/programming_strategy.html" class="external-link">programming strategy</a>, guidance for <a href="https://pharmaverse.github.io/admiraldev/devel/articles/git_usage.html" class="external-link">GitHub usage</a> and <a href="https://pharmaverse.github.io/admiraldev/devel/articles/unit_test_guidance.html" class="external-link">unit testing</a>.</p></li>
-<li><p>All <a href="https://github.com/pharmaverse/admiral/issues" class="external-link">created issues</a> will be reviewed within the next sprint and the creator will receive an initial feedback via a comment. Someone from the core development team will then triage new issues by assigning the appropriate labels (such as “user request” so we can easily identify new requests).</p></li>
-<li><p>Issues are meant to be taken on by users from the Pharma programming community and not exclusively by the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> team from GSK and Roche.</p></li>
+<li><p>For each new contribution, the user creates an issue on the issue
+tab on <a href="https://github.com/pharmaverse/admiral/issues" class="external-link">GitHub</a> to put
+it in our backlog.</p></li>
+<li><p>Familiarize yourself with our <a href="https://pharmaverse.github.io/admiraldev/devel/articles/programming_strategy.html" class="external-link">programming
+strategy</a>, guidance for <a href="https://pharmaverse.github.io/admiraldev/devel/articles/git_usage.html" class="external-link">GitHub
+usage</a> and <a href="https://pharmaverse.github.io/admiraldev/devel/articles/unit_test_guidance.html" class="external-link">unit
+testing</a>.</p></li>
+<li><p>All <a href="https://github.com/pharmaverse/admiral/issues" class="external-link">created issues</a>
+will be reviewed within the next sprint and the creator will receive an
+initial feedback via a comment. Someone from the core development team
+will then triage new issues by assigning the appropriate labels (such as
+“user request” so we can easily identify new requests).</p></li>
+<li><p>Issues are meant to be taken on by users from the Pharma
+programming community and not exclusively by the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>
+team from GSK and Roche.</p></li>
 </ul>
 </div>
 <div class="section level2">
@@ -149,14 +160,20 @@
 <p><img src="admiral_contribution_model.png" width="120%"></p>
 <p>Type 1 Contribution with Code:</p>
 <ul>
-<li><p>First, the user creates an issue or comments on an existing issue to notify that they’d like to contribute code.</p></li>
-<li><p>Follow our <a href="https://pharmaverse.github.io/admiraldev/devel/articles/development_process.html" class="external-link">development process</a> step-by-step guide.</p></li>
-<li><p>We advise to contact an <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> core development team directly via <a href="https://app.slack.com/client/T028PB489D3/C02M8KN8269" class="external-link">Slack</a> before submitting code for complex functionality.</p></li>
+<li><p>First, the user creates an issue or comments on an existing issue
+to notify that they’d like to contribute code.</p></li>
+<li><p>Follow our <a href="https://pharmaverse.github.io/admiraldev/devel/articles/development_process.html" class="external-link">development
+process</a> step-by-step guide.</p></li>
+<li><p>We advise to contact an <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> core development
+team directly via <a href="https://app.slack.com/client/T028PB489D3/C02M8KN8269" class="external-link">Slack</a>
+before submitting code for complex functionality.</p></li>
 </ul>
 <p>Type 2 Contribution without Code:</p>
 <ul>
-<li><p>User creates an issue and ideally contacts an <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> team member via <a href="https://app.slack.com/client/T028PB489D3/C02M8KN8269" class="external-link">Slack</a>.</p></li>
-<li><p>The <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> core development team will contact the issue creator as soon as possible to discuss further details.</p></li>
+<li><p>User creates an issue and ideally contacts an
+<a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> team member via <a href="https://app.slack.com/client/T028PB489D3/C02M8KN8269" class="external-link">Slack</a>.</p></li>
+<li><p>The <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> core development team will contact the
+issue creator as soon as possible to discuss further details.</p></li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
