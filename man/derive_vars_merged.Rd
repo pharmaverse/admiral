@@ -228,7 +228,7 @@ adsl <- tribble(
   "ST42-2", "M",  "MWI",
   "ST42-3", "M",  "NOR",
   "ST42-4", "F",  "UGA"
-) \%>\% mutate(STUDYID = "ST42")
+)
 
 advs <- tribble(
   ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVISITN, ~AVAL,
@@ -237,7 +237,7 @@ advs <- tribble(
   "ST42-2", "WEIGHT", "BASELINE",        0,    88,
   "ST42-3", "WEIGHT", "WEEK 2",          1,    55,
   "ST42-3", "WEIGHT", "WEEK 4",          2,    50
-) \%>\% mutate(STUDYID = "ST42")
+)
 
 derive_vars_merged(
   adsl,
