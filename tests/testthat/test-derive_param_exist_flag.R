@@ -63,8 +63,8 @@ test_that("derive_param_merged_exist_flag Test 1: derive parameter indicating PD
   )
 })
 
-## Test 2: error is issued if paramter already exists ----
-test_that("derive_param_merged_exist_flag Test 2: error is issued if paramter already exists", {
+## Test 2: error is issued if parameter already exists ----
+test_that("derive_param_merged_exist_flag Test 2: error is issued if parameter already exists", {
   expect_error(
     derive_param_exist_flag(
       dataset = adrs,

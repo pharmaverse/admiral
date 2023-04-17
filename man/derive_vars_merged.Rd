@@ -45,7 +45,7 @@ If the argument is set to a non-null value, for each by group the first or
 last observation from the additional dataset is selected with respect to the
 specified order.
 
-Variables defined by \code{new_vars} can be used in the sort order.
+Variables defined by the \code{new_vars} argument can be used in the sort order.
 
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
@@ -64,7 +64,8 @@ And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 
 Values of the added variables can be modified by specifying an expression.
 For example, \code{new_vars = LASTRSP = exprs(str_to_upper(AVALC))} adds the
-variable \code{LASTRSP} and sets it to the upper case value of \code{AVALC}.
+variable \code{LASTRSP} to the dataset and sets it to the upper case value of
+\code{AVALC}.
 
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
@@ -77,7 +78,8 @@ Only observations fulfilling the specified condition are taken into account
 for merging. If the argument is not specified, all observations are
 considered.
 
-Variables defined by \code{new_vars} can be used in the filter condition.
+Variables defined by the \code{new_vars} argument can be used in the filter
+condition.
 
 \emph{Permitted Values}: a condition}
 

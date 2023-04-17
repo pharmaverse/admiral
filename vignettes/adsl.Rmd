@@ -309,7 +309,7 @@ adsl <- adsl %>%
     by_vars = exprs(USUBJID),
     new_vars = exprs(DCSREAS = DSDECOD, DCSREASP = DSTERM),
     filter_add = DSCAT == "DISPOSITION EVENT" &
-      DSDECOD %notin% c("SCREEN FAILURE", "COMPLETED", NA)
+      !(DSDECOD %in% c("SCREEN FAILURE", "COMPLETED", NA))
   )
 ```
 

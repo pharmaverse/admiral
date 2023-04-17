@@ -67,7 +67,8 @@ And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 
 Values of the added variables can be modified by specifying an expression.
 For example, \code{new_vars = LASTRSP = exprs(str_to_upper(AVALC))} adds the
-variable \code{LASTRSP} and sets it to the upper case value of \code{AVALC}.
+variable \code{LASTRSP} to the dataset and sets it to the upper case value of
+\code{AVALC}.
 
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
@@ -97,7 +98,8 @@ Only observations from \code{dataset_add} fulfilling the specified condition are
 joined to the input dataset. If the argument is not specified, all
 observations are joined.
 
-Variables created by \code{order} or \code{new_vars} can be used in the condition.
+Variables created by \code{order} or \code{new_vars} arguments can be used in the
+condition.
 
 \emph{Permitted Values}: a condition}
 
@@ -106,7 +108,8 @@ Variables created by \code{order} or \code{new_vars} can be used in the conditio
 The specified condition is applied to the joined dataset. Therefore
 variables from both datasets \code{dataset} and \code{dataset_add} can be used.
 
-Variables created by \code{order} or \code{new_vars} can be used in the condition.
+Variables created by \code{order} or \code{new_vars} arguments can be used in the
+condition.
 
 \emph{Permitted Values}: a condition}
 

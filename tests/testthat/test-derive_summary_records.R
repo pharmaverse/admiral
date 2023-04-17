@@ -1,7 +1,7 @@
 ## Test 1: creates new record per group and groups are retained ----
 test_that("derive_summary_records Test 1: creates new record per group and groups are retained", {
   # group --> 4
-  input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
+  input <- tibble::tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
   actual_output <- input %>%
     derive_summary_records(
       by_vars = exprs(x, y),
@@ -15,14 +15,14 @@ test_that("derive_summary_records Test 1: creates new record per group and group
 
 ## Test 2: `fns` as inlined ----
 test_that("derive_summary_records Test 2: `fns` as inlined", {
-  input <- tibble(x = rep(1:2, each = 2), y = 9:12, z = 101:104)
+  input <- tibble::tibble(x = rep(1:2, each = 2), y = 9:12, z = 101:104)
   actual_output <- derive_summary_records(
     input,
     by_vars = exprs(x),
     analysis_var = y,
     summary_fun = function(x) mean(x, na.rm = TRUE)
   )
-  expected_output <- tibble(
+  expected_output <- tibble::tibble(
     x = rep(1:2, each = 3),
     y = c(9:10, 9.5, 11:12, 11.5),
     z = c(101:102, NA, 103:104, NA)
@@ -33,7 +33,7 @@ test_that("derive_summary_records Test 2: `fns` as inlined", {
 
 ## Test 3: set new value to a derived record ----
 test_that("derive_summary_records Test 3: set new value to a derived record", {
-  input <- tibble(x = rep(1:2, each = 2), y = 9:12)
+  input <- tibble::tibble(x = rep(1:2, each = 2), y = 9:12)
   actual_output <- derive_summary_records(
     input,
     by_vars = exprs(x),
@@ -41,7 +41,7 @@ test_that("derive_summary_records Test 3: set new value to a derived record", {
     summary_fun = mean,
     set_values_to = exprs(z = "MEAN")
   )
-  expected_output <- tibble(
+  expected_output <- tibble::tibble(
     x = rep(1:2, each = 3),
     y = c(9:10, 9.5, 11:12, 11.5),
     z = c(NA, NA, "MEAN", NA, NA, "MEAN")
@@ -52,7 +52,7 @@ test_that("derive_summary_records Test 3: set new value to a derived record", {
 
 ## Test 4: check `set_values_to` mapping ----
 test_that("derive_summary_records Test 4: check `set_values_to` mapping", {
-  input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
+  input <- tibble::tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
   actual_output <- input %>%
     derive_summary_records(
       by_vars = exprs(x, y),
@@ -88,7 +88,7 @@ test_that("derive_summary_records Test 4: check `set_values_to` mapping", {
 
 ## Test 5: Filter record within `by_vars` ----
 test_that("derive_summary_records Test 5: Filter record within `by_vars`", {
-  input <- tibble(x = c(rep(1:2, each = 2), 2), y = 9:13, z = c(1, 1, 2, 1, 1))
+  input <- tibble::tibble(x = c(rep(1:2, each = 2), 2), y = 9:13, z = c(1, 1, 2, 1, 1))
 
   actual_output <- derive_summary_records(
     input,
@@ -98,7 +98,7 @@ test_that("derive_summary_records Test 5: Filter record within `by_vars`", {
     filter = n() > 2,
     set_values_to = exprs(d = "MEAN")
   )
-  expected_output <- tibble(
+  expected_output <- tibble::tibble(
     x = c(rep(1, 2), rep(2, 4)),
     y = c(9:13, 12),
     z = c(1, 1, 2, 1, 1, NA),
@@ -115,7 +115,7 @@ test_that("derive_summary_records Test 5: Filter record within `by_vars`", {
     filter = z == 1,
     set_values_to = exprs(d = "MEAN")
   )
-  expected_output <- tibble(
+  expected_output <- tibble::tibble(
     x = c(rep(1, 3), rep(2, 4)),
     y = c(9:10, 9.5, 11:13, 12.5),
     z = c(1, 1, NA, 2, 1, 1, NA),
@@ -128,7 +128,7 @@ test_that("derive_summary_records Test 5: Filter record within `by_vars`", {
 
 ## Test 6: Errors ----
 test_that("derive_summary_records Test 6: Errors", {
-  input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
+  input <- tibble::tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
 
   # Is by_vars quosures/`exprs()` object?
   expect_error(

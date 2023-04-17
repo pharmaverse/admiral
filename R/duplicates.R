@@ -59,14 +59,19 @@ extract_duplicate_records <- function(dataset, by_vars) {
 
   data_by <- dataset %>%
     ungroup() %>%
+    # evaluate expressions in by_vars
     transmute(!!!by_vars)
 
   is_duplicate <- duplicated(data_by) | duplicated(data_by, fromLast = TRUE)
 
   dataset %>%
     ungroup() %>%
+    # evaluate expressions in by_vars
     mutate(!!!by_vars) %>%
-    select(!!!syms(map(replace_values_by_names(by_vars), as_label)), dplyr::everything()) %>%
+    # move by variables to the beginning
+    # if by_vars includes unnamed expressions, the unevaluated expression is
+    # used as variable name
+    select(!!!syms(map(replace_values_by_names(by_vars), as_label)), everything()) %>%
     filter(is_duplicate) %>%
     arrange(!!!by_vars)
 }
@@ -118,7 +123,7 @@ signal_duplicate_records <- function(dataset,
 
 #' Print `duplicates` Objects
 #'
-#' @param x An `duplicates` object
+#' @param x A `duplicates` object
 #' @param ... Not used
 #'
 #' @return No return value, called for side effects

@@ -7,7 +7,7 @@
 \method{print}{duplicates}(x, ...)
 }
 \arguments{
-\item{x}{An \code{duplicates} object}
+\item{x}{A \code{duplicates} object}
 
 \item{...}{Not used}
 }

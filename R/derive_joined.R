@@ -56,7 +56,8 @@
 #'
 #'   Values of the added variables can be modified by specifying an expression.
 #'   For example, `new_vars = LASTRSP = exprs(str_to_upper(AVALC))` adds the
-#'   variable `LASTRSP` and sets it to the upper case value of `AVALC`.
+#'   variable `LASTRSP` to the dataset and sets it to the upper case value of
+#'   `AVALC`.
 #'
 #'   If the argument is not specified or set to `NULL`, all variables from the
 #'   additional dataset (`dataset_add`) are added.
@@ -87,7 +88,8 @@
 #'   joined to the input dataset. If the argument is not specified, all
 #'   observations are joined.
 #'
-#'   Variables created by `order` or `new_vars` can be used in the condition.
+#'   Variables created by `order` or `new_vars` arguments can be used in the
+#'   condition.
 #'
 #'   *Permitted Values*: a condition
 #'
@@ -96,7 +98,8 @@
 #'   The specified condition is applied to the joined dataset. Therefore
 #'   variables from both datasets `dataset` and `dataset_add` can be used.
 #'
-#'   Variables created by `order` or `new_vars` can be used in the condition.
+#'   Variables created by `order` or `new_vars` arguments can be used in the
+#'   condition.
 #'
 #'   *Permitted Values*: a condition
 #'
