@@ -17,6 +17,11 @@ news:
 
 reference:
 - title: Derivations for Adding Variables
+
+- subtitle: All hellos
+  contents:
+  - has_keyword("der_adxx")
+
 - subtitle: All ADaMs
   contents:
   - has_keyword("der_gen")
