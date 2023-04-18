@@ -18,6 +18,7 @@ A list of expressions
 Extract All Symbols from a List of Expressions
 }
 \examples{
+library(rlang)
 extract_vars(exprs(PARAMCD, (BASE - AVAL)/BASE + 100))
 extract_vars(AVAL ~ ARMCD + AGEGR1)
 extract_vars(AVAL ~ ARMCD + AGEGR1, side = "rhs")
