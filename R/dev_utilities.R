@@ -73,7 +73,7 @@ arg_name <- function(expr) { # nolint
 #'
 #' @examples
 #' library(rlang)
-#' extract_vars(exprs(PARAMCD, (BASE - AVAL)/BASE + 100))
+#' extract_vars(exprs(PARAMCD, (BASE - AVAL) / BASE + 100))
 #' extract_vars(AVAL ~ ARMCD + AGEGR1)
 #' extract_vars(AVAL ~ ARMCD + AGEGR1, side = "rhs")
 extract_vars <- function(x, side = "lhs") {
