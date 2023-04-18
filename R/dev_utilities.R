@@ -62,7 +62,7 @@ arg_name <- function(expr) { # nolint
 #' Extract All Symbols from a List of Expressions
 #'
 #' @param x An `R` object
-#' @param side One of `"lhs"` (the default) or `"rhs"`
+#' @param side One of `"lhs"` (the default) or `"rhs"` for formulas
 #'
 #' @return A list of expressions
 #'
@@ -70,6 +70,11 @@ arg_name <- function(expr) { # nolint
 #' @keywords dev_utility
 #' @family dev_utility
 #' @export
+#'
+#' @examples
+#' extract_vars(exprs(PARAMCD, (BASE - AVAL)/BASE + 100))
+#' extract_vars(AVAL ~ ARMCD + AGEGR1)
+#' extract_vars(AVAL ~ ARMCD + AGEGR1, side = "rhs")
 extract_vars <- function(x, side = "lhs") {
   if (is.null(x)) {
     NULL
@@ -80,9 +85,9 @@ extract_vars <- function(x, side = "lhs") {
   } else if (is_formula(x)) {
     funs <- list("lhs" = f_lhs, "rhs" = f_rhs)
     assert_character_scalar(side, values = names(funs))
-    expr(!!funs[[side]](x))
-  } else {
-    abort()
+    extract_vars(expr(!!funs[[side]](x)))
+  } else if (is_call(x)) {
+    extract_vars(as.list(x[-1]))
   }
 }
 
