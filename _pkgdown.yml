@@ -145,10 +145,10 @@ navbar:
   components:
     getstarted:
       text: Get Started
-      href: articles/admiral.html
+      href: articles/
     reference:
       text: Reference
-      href: reference/index.html
+      href: reference/
     community:
       text: Community
       menu:
