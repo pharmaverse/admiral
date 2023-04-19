@@ -2,6 +2,8 @@
 
 ## New Features
 
+- Added a "Report a bug" link to `{admiral}` website (#1836)
+
 ## Updates of Existing Functions
 
 - For the `set_values_to` argument expressions are accepted now. For example,
@@ -69,8 +71,6 @@ deprecated in favor of `derive_vars_merged()`. (#1727)
 - `vars()` which was used in the admiral function calls that expected a list of quosures has been removed (#1747).
 
 - Examples for `derive_var_extreme_flag()` were reworked to reduce runtime that occasionally led to failing CI check (#1780)
-
-
 
 
 # admiral 0.10.1
