@@ -2,6 +2,7 @@
 
 ## New Features
 
+- New function `compute_age_years()` for converting a vector of age values to years. (#1794)
 
 ## Updates of Existing Functions
 
