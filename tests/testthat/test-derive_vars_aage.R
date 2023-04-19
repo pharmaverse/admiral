@@ -28,7 +28,8 @@ test_that("derive_var_age_years Test 2: derive_var_age_years works as expected w
 
 ## Test 3: derive_var_age_years works as expected when AGEU doesn't exist and
 ## `age_unit` is used ----
-test_that("derive_var_age_years Test 3: derive_var_age_years works as expected when AGEU doesn't exist and `age_unit` is used", {
+test_that("derive_var_age_years Test 3: derive_var_age_years works as expected
+          when AGEU doesn't exist and `age_unit` is used", {
   input <- tibble::tibble(AGE = c(12, 24, 36, 48, 60))
 
   expected_output <- mutate(

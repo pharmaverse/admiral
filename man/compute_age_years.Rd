@@ -18,7 +18,7 @@ vector containing the time units of each age in \code{age} is expected. Note tha
 permitted values are cases insensitive (e.g. 'YEARS' is treated the same
 as 'years' and 'Years').
 
-Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
+Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'.}
 }
 \value{
 The ages contained in \code{age} converted to years.
