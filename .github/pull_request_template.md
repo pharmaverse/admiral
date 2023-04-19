@@ -10,9 +10,9 @@ Please check off each taskbox as an acknowledgment that you completed the task o
 - [ ] Run `devtools::document()` so all `.Rd` files in the `man` folder and the `NAMESPACE` file in the project root are updated appropriately
 - [ ] Address any updates needed for vignettes and/or templates
 - [ ] Update `NEWS.md` if the changes pertain to a user-facing function (i.e. it has an `@export` tag) or documentation aimed at users (rather than developers)
-- [ ] Build admiral site `pkgdown::build_site()` and check that all affected examples are displayed correctly and that all new functions occur on the "[Reference](https://pharmaverse.github.io/admiral/reference/index.html)" page. 
+- [ ] Build admiral site `pkgdown::build_site()` and check that all affected examples are displayed correctly and that all new functions occur on the "[Reference](https://pharmaverse.github.io/admiral/cran-release/reference/)" page.
 - [ ] Address or fix all lintr warnings and errors - `lintr::lint_package()`
 - [ ] Run `R CMD check` locally and address all errors and warnings - `devtools::check()`
 - [ ] Link the issue in the Development Section on the right hand side.
-- [ ] Address all merge conflicts and resolve appropriately 
+- [ ] Address all merge conflicts and resolve appropriately
 - [ ] Pat yourself on the back for a job well done! Much love to your accomplishment!
