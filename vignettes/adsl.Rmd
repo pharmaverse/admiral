@@ -202,8 +202,7 @@ dataset is extended by the `DSSTDT` variable because the date is required by
 other derivations, e.g., `RANDDT` as well. Then the relevant disposition date is
 selected by adjusting the `filter_add` argument.
 
-To derive the End of Study date (`EOSDT`), a call could be the following. It
-returns the input dataset with the variable `EOSDT` added.
+To add the End of Study date (`EOSDT`) to the input dataset, a call could be:
 
 ```{r eval=TRUE}
 # convert character date to numeric date without imputation

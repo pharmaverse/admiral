@@ -4,7 +4,8 @@
 
 ## Updates of Existing Functions
 
-- For the `set_values_to` argument expressions are accepted now. This affects
+- For the `set_values_to` argument expressions are accepted now. For example,
+`set_values_to = exprs(PARAMCD = str_to_upper(QSTESTCD))`. This affects
 `censor_source()`, `derive_expected_records()`, `derive_extreme_event()`,
 `derive_extreme_records()`, `derive_param_bmi()`, `derive_param_bsa()`,
 `derive_param_computed()`, `derive_param_doseint()`, `derive_param_exposure()`,
