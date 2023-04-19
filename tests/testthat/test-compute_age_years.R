@@ -6,8 +6,9 @@ test_that("compute_age_years Test 1: compute_age_years() works as expected when 
   expected_output <- c(20, 30, 40, NA)
 
   expect_equal(
-    compute_age_years(age_input,
-                      age_unit_input
+    compute_age_years(
+      age_input,
+      age_unit_input
     ),
     expected_output
   )
@@ -21,8 +22,9 @@ test_that("compute_age_years Test 2: compute_age_years() works as expected when 
   expected_output <- rep(28, 3)
 
   expect_equal(
-    compute_age_years(age_input,
-                      age_unit_input
+    compute_age_years(
+      age_input,
+      age_unit_input
     ),
     expected_output
   )
@@ -52,8 +54,9 @@ test_that("compute_age_years Test 4: `age_unit` processes values in a case insen
   expected_output <- c(20, 30, 40)
 
   expect_equal(
-    compute_age_years(age_input,
-                      age_unit_input
+    compute_age_years(
+      age_input,
+      age_unit_input
     ),
     expected_output
   )

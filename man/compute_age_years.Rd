@@ -31,7 +31,6 @@ Returns a numeric vector of ages in years. Note, underlying computations
 assume an equal number of days in each year (365.25).
 }
 \examples{
-
 compute_age_years(
   age = c(240, 360, 480),
   age_unit = "MONTHS"
