@@ -1,9 +1,9 @@
 ## Test 1: compute_age_years() works as expected when `age_unit` is a string ----
 test_that("compute_age_years Test 1: compute_age_years() works as expected when `age_unit` is a string", {
-  age_input <- c(240, 360, 480)
+  age_input <- c(240, 360, 480, NA)
   age_unit_input <- "MONTHS"
 
-  expected_output <- c(20, 30, 40)
+  expected_output <- c(20, 30, 40, NA)
 
   expect_equal(
     compute_age_years(age_input,
