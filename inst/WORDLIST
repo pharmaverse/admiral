@@ -5,7 +5,6 @@ ADEX
 ADJAE
 ADLB
 ADLBHY
-adlbhy
 ADMH
 ADNCA
 ADPC
@@ -26,7 +25,6 @@ ARRLT
 ASEQ
 AST
 ASTDTM
-aspartate
 ATC
 ATOXGR
 AVAL
@@ -35,13 +33,13 @@ Alanine
 Analyte
 Aspartate
 BDS
+BILI
 BLQ
 BMI
 BOR
 Basetype
 Bazett
 Bazett's
-BILI
 Biologics
 CDISC
 COVID
@@ -55,9 +53,8 @@ CTCAEv
 CVD
 Chol
 Creatinine
-D'Agostino
-DILI
 DIABP
+DILI
 DT
 DTC
 DTF
@@ -76,6 +73,7 @@ Framingham
 Fridericia
 Fridericia's
 Fujimoto
+GDS
 GGT
 GSK
 Gehan
@@ -84,6 +82,7 @@ GxP
 HDL
 Haptoglobin
 Hoffmann
+Hy's
 Hypercalcemia
 Hyperkalemia
 Hypermagnesemia
@@ -96,7 +95,6 @@ Hypokalemia
 Hypomagnesemia
 Hyponatremia
 Hypophosphatemia
-Hy's
 IG
 INR
 LLC
@@ -132,7 +130,6 @@ Pharmacokinetics
 Pre
 QD
 QID
-Quosures
 README
 SCE
 SCN
@@ -161,6 +158,7 @@ Takahira
 Timepoint
 ULN
 USUBJID
+USUBJIDs
 VAD
 WBC
 XXXXXXXX
@@ -169,17 +167,20 @@ adamig
 adeg
 adex
 adlb
+adlbhy
 admiralci
 admiralxxx
 adpc
 adsl
 advs
+adxx
 alanine
 aminotransferase
 analyte
 analytes
 analytics
 anticoagulation
+aspartate
 atoxgr
 basetypes
 bds
@@ -210,7 +211,6 @@ findable
 fmt
 framingham
 funder
-GDS
 groupwise
 hms
 https
@@ -222,7 +222,6 @@ mmHg
 mmol
 modularized
 msec
-nolint
 occds
 onwards
 parttime
@@ -238,7 +237,6 @@ rlang
 roche
 roxygen
 scalable
-str
 submittable
 subperiod
 subperiods
@@ -254,6 +252,6 @@ tte
 ungrouped
 usethis
 www
+xULN
 xportr
 xpt
-xULN
