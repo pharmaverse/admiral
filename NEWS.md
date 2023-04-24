@@ -38,6 +38,7 @@
 
 ## Documentation
 
+- Updated example dataset to trigger deterioration flags in the vignette "Creating Questionnaire ADaMs" (#1853, #1854)
 
 # admiral 0.10.1
 
