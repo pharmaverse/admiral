@@ -3,6 +3,7 @@
 #' @param adevent
 #' @param sources
 #' @param source_datasets
+#' @param by_vars
 #' @param order
 #' @param mode
 #' @param set_values_to
@@ -17,36 +18,37 @@
 #' Note that this implementation assumes that all data frames in source_datasets have the same column names as the corresponding ADaM datasets. If this is not the case, you may need to adjust the code accordingly.
 
 #' @examples
-derive_param_extreme_record <- function(adevent,
+derive_param_extreme_record <- function(aevent,
                                         sources,
                                         source_datasets,
+                                        by_vars = NULL,
                                         order,
                                         mode,
                                         set_values_to) {
+  # Create Empty list to contain source datasets
+  data_list <- vector("list", length(sources))
 
-  # Create a list of data frames with the selected records from each source
-  selected_records <- lapply(sources, function(source) {
-    dataset_name <- source$dataset_name
-    filter_expr <- source$filter
-    new_vars <- source$new_vars
+  # Evaluate the expressions contained in the sources
+  for (i in seq_along(sources)) {
+    source_dataset <- source_datasets[[sources[[i]]$dataset_name]]
+    data_list[[i]] <- source_dataset %>%
+      filter_if(sources[[i]]$filter) %>%
+      mutate(!!!sources[[i]]$new_vars) %>%
+      select(!!!by_vars, ADT, AVALC)
+  }
 
-    # Filter the source dataset based on the given expression
-    source_dataset <- source_datasets[[dataset_name]] %>%
-      filter(!!filter_expr)
+  # Bind the source datasets together and parse out the extreme value
+  param_data <- bind_rows(data_list) %>%
+    group_by(!!!by_vars)%>%
+    distinct() %>%
+    ungroup() %>%
+    filter_extreme(.,
+                   by_vars = by_vars,
+                   order = order,
+                   mode = mode) %>%
+    mutate(!!!set_values_to)
 
-    # Create new variables based on the given expressions
-    new_vars_values <- source_dataset %>%
-      transmute_at(vars(all_of(names(new_vars))), .funs = list(~eval(new_vars[[as.character(substitute(.))]])))
-
-    # Return the selected record with the new variables
-    new_vars_values[order(new_vars_values$ADT), ][mode == "first", ]
-  })
-
-  # Select the extreme record based on the given mode
-  extreme_record <- do.call(rbind, selected_records)[order(do.call(c, order)), ][mode == "first", ]
-
-  # Add the new row to the input ADaM dataset with the given values
-  new_row <- set_values_to %>%
-    mutate_at(vars(all_of(names(extreme_record))), .funs = list(~eval(set_values_to[[as.character(substitute(.))]])))
-  bind_rows(adevent, new_row)
+  # Bind the parameter rows back to original adevent dataset
+  data <- bind_rows(aevent, param_data)
+  return(data)
 }
