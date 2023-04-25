@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,18 +93,6 @@
 <li class="nav-item">
   <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -130,7 +118,9 @@
 </h1>
 </div>
 <!-- badges: start -->
-<!-- badges: end --><p>ADaM in R Asset Library</p>
+
+<!-- badges: end -->
+<p>ADaM in R Asset Library</p>
 <div class="section level2">
 <h2 id="purpose">Purpose<a class="anchor" aria-label="anchor" href="#purpose"></a>
 </h2>
@@ -160,6 +150,11 @@
 </li>
 </ul>
 <table class="table">
+<colgroup>
+<col width="23%">
+<col width="38%">
+<col width="38%">
+</colgroup>
 <thead><tr class="header">
 <th>Release Schedule</th>
 <th>Phase 1- Date and Packages</th>
@@ -181,7 +176,7 @@
 <tr class="odd">
 <td></td>
 <td><a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a></td>
-<td><code>{admiralophtha}</code></td>
+<td><a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a></td>
 </tr>
 <tr class="even">
 <td>Q3-2023</td>
@@ -198,7 +193,7 @@
 <tr class="even">
 <td></td>
 <td><a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a></td>
-<td><code>{admiralophtha}</code></td>
+<td><a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a></td>
 </tr>
 </tbody>
 </table>
@@ -217,7 +212,7 @@
 <ul>
 <li>A toolbox of re-usable functions and utilities to create ADaM datasets using R scripts in a modular manner (an “opinionated” design strategy)</li>
 <li>Pharmaceutical communities and companies are encouraged to contribute to <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> following the provided programming strategy and modular approach</li>
-<li>Functions that are comprehensively documented and tested, including example calls—these are all listed in the <a href="https://pharmaverse.github.io/admiral/reference/index.html" class="external-link">Reference section</a>
+<li>Functions that are comprehensively documented and tested, including example calls—these are all listed in the <a href="https://pharmaverse.github.io/admiral/cran-release/reference/index.html" class="external-link">Reference section</a>
 </li>
 <li>Vignettes on how to create ADSL, BDS and OCCDS datasets, including example scripts</li>
 <li>Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs …)</li>
@@ -293,7 +288,7 @@
 <li>Please see the <a href="https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q" class="external-link">pharmaverse YouTube channel</a> for videos related to <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>.</li>
 <li>Please see the <a href="https://pharmaverse.github.io/admiraldev/main/articles/programming_strategy.html" class="external-link">Programming Strategy</a> to understand how functions are created</li>
 <li>Please see the <a href="https://pharmaverse.github.io/admiral/cran-release/articles/faq.html" class="external-link">FAQ</a> for the most frequent questions</li>
-<li>Please see the <a href="https://pharmaverse.github.io/admiral/articles/contribution_model.html" class="external-link">Contribution Model</a> for how to get involved with making contributions</li>
+<li>Please see the <a href="https://pharmaverse.github.io/admiral/cran-release/articles/contribution_model.html" class="external-link">Contribution Model</a> for how to get involved with making contributions</li>
 <li>Please see <a href="https://pharmaverse.github.io/admiral/cran-release/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development" class="external-link">FAQ: R and Package Versions</a> for why we develop with certain R and package versions.</li>
 </ul>
 </div>
@@ -353,9 +348,9 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Thomas Neitmann <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Ben Straub <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Stefan Bundfuss <br><small class="roles"> Author </small>  </li>
-<li>Ben Straub <br><small class="roles"> Author </small>  </li>
+<li>Thomas Neitmann <br><small class="roles"> Author </small>  </li>
 <li>Samia Kabi <br><small class="roles"> Author </small>  </li>
 <li>Gordon Miller <br><small class="roles"> Author </small>  </li>
 <li>Teckla Akinyi <br><small class="roles"> Author </small>  </li>
@@ -403,7 +398,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Thomas Neitmann, Stefan Bundfuss, Ben Straub, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+<p>Developed by Ben Straub, Stefan Bundfuss, Thomas Neitmann, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
