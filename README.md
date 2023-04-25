@@ -74,7 +74,7 @@ We will provide:
 * Pharmaceutical communities and companies are encouraged to contribute to `{admiral}` following
   the provided programming strategy and modular approach
 * Functions that are comprehensively documented and tested, including example calls---these are
-  all listed in the [Reference section](https://pharmaverse.github.io/admiral/reference/index.html)
+  all listed in the [Reference section](https://pharmaverse.github.io/admiral/cran-release/reference/index.html)
 * Vignettes on how to create ADSL, BDS and OCCDS datasets, including example scripts
 * Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation,
   SMQs ...)
@@ -163,7 +163,7 @@ that all our developers and contributors must follow, so that all our code has a
 * Please see the [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) for videos related to `{admiral}`.
 * Please see the [Programming Strategy](https://pharmaverse.github.io/admiraldev/main/articles/programming_strategy.html) to understand how functions are created
 * Please see the [FAQ](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html) for the most frequent questions
-* Please see the [Contribution Model](https://pharmaverse.github.io/admiral/articles/contribution_model.html) for how to get involved with making contributions
+* Please see the [Contribution Model](https://pharmaverse.github.io/admiral/cran-release/articles/contribution_model.html) for how to get involved with making contributions
 * Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
 
 ## Conference Presentations

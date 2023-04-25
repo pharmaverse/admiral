@@ -1,3 +1,7 @@
+# admiral 0.10.2
+
+- Changing package maintainer from Thomas Neitmann to Ben Straub (#1848)
+
 # admiral 0.10.1
 
 - Fix checks on `derive_vars_dtm()` and `derive_vars_dt()` 
@@ -350,7 +354,7 @@ updated to process additional parameter (#1125).
 imputation functions themselves (#1299). I.e., if a derivation like last known alive
 date is based on dates, DTC variables have to be converted to numeric date or
 datetime variables in a preprocessing step. For examples see the [ADSL
-vignette](https://pharmaverse.github.io/admiral/articles/adsl.html).
+vignette](https://pharmaverse.github.io/admiral/cran-release/articles/adsl.html).
 
   The following arguments were deprecated:
 
@@ -450,7 +454,7 @@ empty (#1309)
   
 
 - `create_query_data()` is provided to create the [queries
-dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for `derive_vars_query()` (#606)
+dataset](https://pharmaverse.github.io/admiral/cran-release/articles/queries_dataset.html) required as input for `derive_vars_query()` (#606)
 
 - `create_single_dose_dataset()` - Derives dataset of single dose from aggregate dose information (#660)
 
@@ -483,7 +487,7 @@ first disease progression. (#1023)
 ### ADLB
 
   - New ADLB template script available `ad_adlb.R`, specific ADLB functions developed and
-  [BDS Finding vignette](https://pharmaverse.github.io/admiral/articles/bds_finding.html) has examples enhanced with ADLB functions. (#1122)
+  [BDS Finding vignette](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html) has examples enhanced with ADLB functions. (#1122)
 
   - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in values based on user-defined pairing (#944)
   - `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables from a BDS dataset, e.g. ADLB. (#943)
@@ -562,10 +566,10 @@ specific for admiral. Derivations like this can be implemented calling
 - Additional explanation added to `derive_param_*` and `derive_derived_param` functions regarding which variables are populated in the additional rows (#939)
 
 
-- Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
+- Updated `derive_var_worst_flag()` and `derive_var_extreme_flag()` vignettes to clarify their purpose (#691)
 
 - Added example of ASEQ derivation in ADCM to 
-[OCCDS vignette](https://pharmaverse.github.io/admiral/articles/occds.html#aseq)
+[OCCDS vignette](https://pharmaverse.github.io/admiral/cran-release/articles/occds.html#aseq)
 (#720)
 
 - Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
@@ -665,7 +669,7 @@ this case the day is imputed as `15` (#592)
 
 - The first truly open source release licensed under Apache 2.0 (#680)
 
-- New vignette [Contributing to admiral](https://pharmaverse.github.io/admiral/articles/contribution_model.html) (#679)
+- New vignette [Contributing to admiral](https://pharmaverse.github.io/admiral/cran-release/articles/contribution_model.html) (#679)
 
 - New vignette [Unit Test Guidance](https://pharmaverse.github.io/admiraldev/main/articles/unit_test_guidance.html) (#679)
 
