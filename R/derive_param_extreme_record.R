@@ -57,9 +57,6 @@
 #'   symbol, a numeric value or `NA`, e.g., `exprs(PARAMCD = "TDOSE", PARCAT1 =
 #'   "OVERALL")`. More general expression are not allowed.
 #'
-#' @return The input dataset with the new parameter added. Note, a variable will only
-#'    be populated in the new parameter rows if it is specified in `by_vars`.
-#'
 #' @details The following steps are performed to create the output dataset:
 #'
 #'   \enumerate{
@@ -77,8 +74,9 @@
 #'   `ADT` variable) from multiple sources is selected and added back to the original
 #'   dataset. }
 #'
-#' @return The input dataset with the first or last observation of each by group
-#'   added as new observations.
+#' @return
+#' The input dataset with the first or last observation of each by group
+#' added as new observations.
 #'
 #' @family der_prm_bds_findings
 #' @keywords der_prm_bds_findings
@@ -110,7 +108,7 @@
 #'   "1001",        "3",    "ACS", "2022-12-25",
 #' )
 #' derive_param_extreme_record(
-#'   aevent = aevent_samp,
+#'   dataset = aevent_samp,
 #'   sources = list(
 #'     records_source(
 #'       dataset_name = "cm",
@@ -201,7 +199,8 @@ derive_param_extreme_record <- function(dataset,
 #'
 #' @seealso [derive_param_extreme_record()]
 #'
-#' @return
+#' @return  An object of class `records_source`
+#' @export
 records_source <- function(dataset_name,
                            filter = NULL,
                            new_vars = NULL) {

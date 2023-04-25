@@ -32,6 +32,9 @@ additional dataset (\code{dataset_add}) are added.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}}
 }
+\value{
+An object of class \code{records_source}
+}
 \description{
 The \code{records_source} object is used to find extreme records of interest.
 }

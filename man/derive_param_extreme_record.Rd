@@ -72,9 +72,6 @@ symbol, a numeric value or \code{NA}, e.g., \code{exprs(PARAMCD = "TDOSE", PARCA
 }}
 }
 \value{
-The input dataset with the new parameter added. Note, a variable will only
-be populated in the new parameter rows if it is specified in \code{by_vars}.
-
 The input dataset with the first or last observation of each by group
 added as new observations.
 }
@@ -125,7 +122,7 @@ pr <- tibble::tribble(
   "1001",        "3",    "ACS", "2022-12-25",
 )
 derive_param_extreme_record(
-  aevent = aevent_samp,
+  dataset = aevent_samp,
   sources = list(
     records_source(
       dataset_name = "cm",
