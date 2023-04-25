@@ -1,3 +1,7 @@
+# admiral 0.10.2
+
+- Changing package maintainer from Thomas Neitmann to Ben Straub (#1848)
+
 # admiral 0.10.1
 
 - Fix checks on `derive_vars_dtm()` and `derive_vars_dt()` 
