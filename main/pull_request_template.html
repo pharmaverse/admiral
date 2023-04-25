@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,18 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -94,7 +82,7 @@
 
 <p>Thank you for your Pull Request! We have developed this task checklist from the <a href="https://pharmaverse.github.io/admiraldev/devel/articles/development_process.html" class="external-link">Development Process Guide</a> to help with the final steps of the process. Completing the below tasks helps to ensure our reviewers can maximize their time on your code as well as making sure the admiral codebase remains robust and consistent.</p>
 <p>Please check off each taskbox as an acknowledgment that you completed the task or check off that it is not relevant to your Pull Request. This checklist is part of the Github Action workflows and the Pull Request will not be merged into the <code>devel</code> branch until you have checked off each task.</p>
-<ul><li>
+<ul class="task-list"><li>
 <input type="checkbox" disabled>Place Closes #<insert_issue_number> into the beginning of your Pull Request Title (Use Edit button in top-right if you need to update)</insert_issue_number></li>
 <li>
 <input type="checkbox" disabled>Code is formatted according to the <a href="https://style.tidyverse.org/" class="external-link">tidyverse style guide</a>. Run <code><a href="https://styler.r-lib.org/reference/style_file.html" class="external-link">styler::style_file()</a></code> to style R and Rmd files</li>
@@ -112,7 +100,7 @@
 <li>
 <input type="checkbox" disabled>Update <code>NEWS.md</code> if the changes pertain to a user-facing function (i.e. it has an <code>@export</code> tag) or documentation aimed at users (rather than developers)</li>
 <li>
-<input type="checkbox" disabled>Build admiral site <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> and check that all affected examples are displayed correctly and that all new functions occur on the “<a href="https://pharmaverse.github.io/admiral/reference/index.html" class="external-link">Reference</a>” page.</li>
+<input type="checkbox" disabled>Build admiral site <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> and check that all affected examples are displayed correctly and that all new functions occur on the “<a href="https://pharmaverse.github.io/admiral/cran-release/reference/index.html" class="external-link">Reference</a>” page.</li>
 <li>
 <input type="checkbox" disabled>Address or fix all lintr warnings and errors - <code><a href="https://rdrr.io/pkg/lintr/man/lint_package.html" class="external-link">lintr::lint_package()</a></code>
 </li>
@@ -129,7 +117,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Thomas Neitmann, Stefan Bundfuss, Ben Straub, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Thomas Neitmann, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">

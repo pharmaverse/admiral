@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,18 +83,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -116,7 +104,8 @@
 
 
 
-<script src="visits_periods_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Visit and Period Variables</h1>
             
@@ -130,7 +119,15 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>The derivation of visit variables like <code>AVISIT</code>, <code>AVISITN</code>, <code>AWLO</code>, <code>AWHI</code>, … or period, subperiod, or phase variables like <code>APERIOD</code>, <code>TRT01A</code>, <code>TRT02A</code>, <code>ASPER</code>, <code>PHSDTM</code>, <code>PHEDTM</code>, … is highly study-specific. Therefore admiral cannot provide functions which derive these variables. However, for common scenarios like visit assignments based on time windows or deriving BDS period variables from ADSL period variables, functions are provided which support those derivations.</p>
+<p>The derivation of visit variables like <code>AVISIT</code>,
+<code>AVISITN</code>, <code>AWLO</code>, <code>AWHI</code>, … or period,
+subperiod, or phase variables like <code>APERIOD</code>,
+<code>TRT01A</code>, <code>TRT02A</code>, <code>ASPER</code>,
+<code>PHSDTM</code>, <code>PHEDTM</code>, … is highly study-specific.
+Therefore admiral cannot provide functions which derive these variables.
+However, for common scenarios like visit assignments based on time
+windows or deriving BDS period variables from ADSL period variables,
+functions are provided which support those derivations.</p>
 <div class="section level3">
 <h3 id="required-packages">Required Packages<a class="anchor" aria-label="anchor" href="#required-packages"></a>
 </h3>
@@ -143,15 +140,23 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="visits">Visit variables (<code>AVISIT</code>, <code>AVISITN</code>, <code>AWLO</code>, <code>AWHI</code>, …)<a class="anchor" aria-label="anchor" href="#visits"></a>
+<h2 id="visits">Visit variables (<code>AVISIT</code>, <code>AVISITN</code>,
+<code>AWLO</code>, <code>AWHI</code>, …)<a class="anchor" aria-label="anchor" href="#visits"></a>
 </h2>
-<p>The most common ways of deriving <code>AVISIT</code> and <code>AVISITN</code> are:</p>
+<p>The most common ways of deriving <code>AVISIT</code> and
+<code>AVISITN</code> are:</p>
 <ul>
-<li>The variables are set to the collected visits (<code>VISIT</code> and <code>VISITNUM</code>).</li>
+<li>The variables are set to the collected visits (<code>VISIT</code>
+and <code>VISITNUM</code>).</li>
 <li>The variables are set based on time windows.</li>
 </ul>
-<p>The former can be achieved simply by calling <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code>, like in the vignettes and the template scripts.</p>
-<p>For the latter a (study-specific) reference dataset needs to be created which provides for each visit the start and end day (<code>AWLO</code> and <code>AWHI</code>) and the values of other visit related variables (<code>AVISIT</code>, <code>AVISITN</code>, <code>AWTARGET</code>, …).</p>
+<p>The former can be achieved simply by calling <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code>,
+like in the vignettes and the template scripts.</p>
+<p>For the latter a (study-specific) reference dataset needs to be
+created which provides for each visit the start and end day
+(<code>AWLO</code> and <code>AWHI</code>) and the values of other visit
+related variables (<code>AVISIT</code>, <code>AVISITN</code>,
+<code>AWTARGET</code>, …).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">windows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">AVISIT</span>,    <span class="op">~</span><span class="va">AWLO</span>, <span class="op">~</span><span class="va">AWHI</span>, <span class="op">~</span><span class="va">AVISITN</span>, <span class="op">~</span><span class="va">AWTARGET</span>,</span>
@@ -161,7 +166,8 @@
 <span>  <span class="st">"WEEK 3"</span>,      <span class="fl">16</span>,    <span class="fl">22</span>,        <span class="fl">3</span>,        <span class="fl">19</span>,</span>
 <span>  <span class="st">"WEEK 4"</span>,      <span class="fl">23</span>,    <span class="fl">30</span>,        <span class="fl">4</span>,        <span class="fl">26</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Then the visits can be assigned based on the analysis day (<code>ADY</code>) by calling <code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code>:</p>
+<p>Then the visits can be assigned based on the analysis day
+(<code>ADY</code>) by calling <code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adbds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">ADY</span>,</span>
@@ -189,24 +195,38 @@
 <div class="section level2">
 <h2 id="period-subperiod-and-phase-variables">Period, Subperiod, and Phase Variables<a class="anchor" aria-label="anchor" href="#period-subperiod-and-phase-variables"></a>
 </h2>
-<p>If periods, subperiods, or phases are used, the corresponding variables have to be consistent across all datasets. This can be achieved by defining the periods, subperiods, or phases once and then use this definition for all datasets. The definition can be stored in ADSL or in a separate dataset. In the following examples, this separate dataset is called period reference dataset.</p>
+<p>If periods, subperiods, or phases are used, the corresponding
+variables have to be consistent across all datasets. This can be
+achieved by defining the periods, subperiods, or phases once and then
+use this definition for all datasets. The definition can be stored in
+ADSL or in a separate dataset. In the following examples, this separate
+dataset is called period reference dataset.</p>
 <div class="section level3">
 <h3 id="period-reference-dataset">Period Reference Dataset<a class="anchor" aria-label="anchor" href="#period-reference-dataset"></a>
 </h3>
-<p>The period reference dataset contains one observation per subject and period, subperiod, or phase. For example:</p>
+<p>The period reference dataset contains one observation per subject and
+period, subperiod, or phase. For example:</p>
 <pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 x 6</span></span></span>
 <span><span class="co">#&gt;   STUDYID USUBJID APHASEN PHSDT      PHEDT      APHASE   </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> xyz     1             1 2021-01-04 2021-02-06 TREATMENT</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> xyz     1             2 2021-02-07 2021-03-07 FUP      </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> xyz     2             1 2021-02-02 2021-03-02 TREATMENT</span></span></code></pre>
-<p>The admiral functions expect separate datasets for periods, subperiods, and phases. For periods the numeric variable <code>APERIOD</code> is expected, for subperiods the numeric variables <code>APERIOD</code> and <code>ASPER</code>, and for phases the numeric variable <code>APHASEN</code>.</p>
+<p>The admiral functions expect separate datasets for periods,
+subperiods, and phases. For periods the numeric variable
+<code>APERIOD</code> is expected, for subperiods the numeric variables
+<code>APERIOD</code> and <code>ASPER</code>, and for phases the numeric
+variable <code>APHASEN</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="periods_adsl">Creating ADSL Period, Subperiod, or Phase Variables<a class="anchor" aria-label="anchor" href="#periods_adsl"></a>
 </h3>
-<p>If a period reference dataset is available, the ADSL variables for periods, subperiods, or phases can be created from this dataset by calling <code><a href="../reference/derive_vars_period.html">derive_vars_period()</a></code>.</p>
-<p>For example the period reference dataset from the previous section can be used to add the phase variables (<code>PHwSDT</code>, <code>PHwEDT</code>, and <code>APHASEw</code>) to ADSL:</p>
+<p>If a period reference dataset is available, the ADSL variables for
+periods, subperiods, or phases can be created from this dataset by
+calling <code><a href="../reference/derive_vars_period.html">derive_vars_period()</a></code>.</p>
+<p>For example the period reference dataset from the previous section
+can be used to add the phase variables (<code>PHwSDT</code>,
+<code>PHwEDT</code>, and <code>APHASEw</code>) to ADSL:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>STUDYID <span class="op">=</span> <span class="st">"xyz"</span>, USUBJID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -227,8 +247,12 @@
 <div class="section level3">
 <h3 id="periods_bds">Creating BDS and OCCDS Period, Subperiod, or Phase Variables<a class="anchor" aria-label="anchor" href="#periods_bds"></a>
 </h3>
-<p>If a period reference dataset is available, BDS and OCCDS variables for periods, subperiods, or phases can be created by calling <code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code>.</p>
-<p>For example the variables <code>APHASEN</code>, <code>PHSDT</code>, <code>PHEDT</code>, <code>APHASE</code> can be derived from the period reference dataset defined above.</p>
+<p>If a period reference dataset is available, BDS and OCCDS variables
+for periods, subperiods, or phases can be created by calling
+<code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code>.</p>
+<p>For example the variables <code>APHASEN</code>, <code>PHSDT</code>,
+<code>PHEDT</code>, <code>APHASE</code> can be derived from the period
+reference dataset defined above.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">ASTDT</span>,</span>
@@ -256,8 +280,11 @@
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 1       2021-03-05 xyz           2 2021-02-07 2021-03-07 FUP      </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 1       2021-04-05 <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 2       2021-02-15 xyz           1 2021-02-02 2021-03-02 TREATMENT</span></span></code></pre></div>
-<p>If no period reference dataset is available but period variables are in ADSL, the period reference dataset can be created from ADSL by calling <code><a href="../reference/create_period_dataset.html">create_period_dataset()</a></code>.</p>
-<p>For example, a period reference dataset for phases can be created from the ADSL dataset created above:</p>
+<p>If no period reference dataset is available but period variables are
+in ADSL, the period reference dataset can be created from ADSL by
+calling <code><a href="../reference/create_period_dataset.html">create_period_dataset()</a></code>.</p>
+<p>For example, a period reference dataset for phases can be created
+from the ADSL dataset created above:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/create_period_dataset.html">create_period_dataset</a></span><span class="op">(</span></span>
 <span>  <span class="va">adsl</span>,</span>
@@ -272,13 +299,23 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="treatment-variables-trtxxp-trtxxa-trtp-trta">Treatment Variables (<code>TRTxxP</code>, <code>TRTxxA</code>, <code>TRTP</code>, <code>TRTA</code>, …)<a class="anchor" aria-label="anchor" href="#treatment-variables-trtxxp-trtxxa-trtp-trta"></a>
+<h2 id="treatment-variables-trtxxp-trtxxa-trtp-trta">Treatment Variables (<code>TRTxxP</code>, <code>TRTxxA</code>,
+<code>TRTP</code>, <code>TRTA</code>, …)<a class="anchor" aria-label="anchor" href="#treatment-variables-trtxxp-trtxxa-trtp-trta"></a>
 </h2>
-<p>In studies with multiple periods the treatment can differ by period, e.g. for a crossover trial. CDISC defines variables for planned and actual treatments in ADSL (<code>TRTxxP</code>, <code>TRTxxA</code>, <code>TRxxPGy</code>, <code>TRxxAGy</code>, …) and corresponding variables in BDS and OCCDS datasets (<code>TRTP</code>, <code>TRTA</code>, <code>TRTPGy</code>, <code>TRTAGy</code>, …). They can be derived in the same way (and same step) as the period, subperiod, and phase variables.</p>
+<p>In studies with multiple periods the treatment can differ by period,
+e.g. for a crossover trial. CDISC defines variables for planned and
+actual treatments in ADSL (<code>TRTxxP</code>, <code>TRTxxA</code>,
+<code>TRxxPGy</code>, <code>TRxxAGy</code>, …) and corresponding
+variables in BDS and OCCDS datasets (<code>TRTP</code>,
+<code>TRTA</code>, <code>TRTPGy</code>, <code>TRTAGy</code>, …). They
+can be derived in the same way (and same step) as the period, subperiod,
+and phase variables.</p>
 <div class="section level3">
 <h3 id="treatment_adsl">Creating ADSL Treatment Variables<a class="anchor" aria-label="anchor" href="#treatment_adsl"></a>
 </h3>
-<p>If the treatment information is included in the period reference dataset, the treatment ADSL variables can be created by calling <code><a href="../reference/derive_vars_period.html">derive_vars_period()</a></code>:</p>
+<p>If the treatment information is included in the period reference
+dataset, the treatment ADSL variables can be created by calling
+<code><a href="../reference/derive_vars_period.html">derive_vars_period()</a></code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Add period variables to ADSL</span></span>
 <span><span class="va">period_ref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
@@ -319,8 +356,11 @@
 <div class="section level3">
 <h3 id="treatment_bds">Creating BDS and OCCDS Treatment Variables<a class="anchor" aria-label="anchor" href="#treatment_bds"></a>
 </h3>
-<p>If a period reference dataset is available, BDS and OCCDS variables for treatment can be created by calling <code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code>.</p>
-<p>For example the variables <code>APERIOD</code> and <code>TRTA</code> can be derived from the period reference dataset defined above.</p>
+<p>If a period reference dataset is available, BDS and OCCDS variables
+for treatment can be created by calling
+<code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code>.</p>
+<p>For example the variables <code>APERIOD</code> and <code>TRTA</code>
+can be derived from the period reference dataset defined above.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">ASTDT</span>,</span>
@@ -353,8 +393,11 @@
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 1       2021-04-05 xyz          <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 2       2021-02-15 xyz           1 DRUG B</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 2       2021-03-10 xyz           2 DRUG B</span></span></code></pre></div>
-<p>If no period reference dataset is available but period variables are in ADSL, the period reference dataset can be created from ADSL by calling <code><a href="../reference/create_period_dataset.html">create_period_dataset()</a></code>.</p>
-<p>For example, a period reference dataset for periods and treatments can be created from the ADSL dataset created above:</p>
+<p>If no period reference dataset is available but period variables are
+in ADSL, the period reference dataset can be created from ADSL by
+calling <code><a href="../reference/create_period_dataset.html">create_period_dataset()</a></code>.</p>
+<p>For example, a period reference dataset for periods and treatments
+can be created from the ADSL dataset created above:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/create_period_dataset.html">create_period_dataset</a></span><span class="op">(</span></span>
 <span>  <span class="va">adsl</span>,</span>
@@ -377,7 +420,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Thomas Neitmann, Stefan Bundfuss, Ben Straub, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+<p>Developed by Ben Straub, Stefan Bundfuss, Thomas Neitmann, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
