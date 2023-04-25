@@ -69,13 +69,38 @@ all parameters in the dataset depending on the \code{order} and the \code{mode},
 parameter the first or last record will be flagged across the whole dataset.
 }
 \examples{
-library(tibble)
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("admiral_vs")
+
+vs <- tribble(
+  ~STUDYID, ~DOMAIN,  ~USUBJID, ~VSTESTCD, ~VSSTRESN,      ~VISIT, ~VSTPTNUM,
+  "PILOT01",    "VS", "10-1187",   "DIABP",        70, "SCREENING",       815,
+  "PILOT01",    "VS", "10-1187",   "DIABP",        78, "SCREENING",       816,
+  "PILOT01",    "VS", "10-1187",   "DIABP",        80, "SCREENING",       817,
+  "PILOT01",    "VS", "10-1187",   "DIABP",        68,  "BASELINE",       815,
+  "PILOT01",    "VS", "10-1187",   "DIABP",        78,  "BASELINE",       816,
+  "PILOT01",    "VS", "10-1187",   "DIABP",        74,  "BASELINE",       817,
+  "PILOT01",    "VS", "10-1187",   "DIABP",        60,    "WEEK 4",       815,
+  "PILOT01",    "VS", "10-1187",   "DIABP",        70,    "WEEK 4",       816,
+  "PILOT01",    "VS", "10-1187",   "DIABP",        74,    "WEEK 4",       817,
+  "PILOT01",    "VS", "10-1187",  "WEIGHT",      49.9, "SCREENING",        NA,
+  "PILOT01",    "VS", "10-1187",  "WEIGHT",      49.9,  "BASELINE",        NA,
+  "PILOT01",    "VS", "10-1187",  "WEIGHT",     49.44,    "WEEK 4",        NA,
+  "PILOT01",    "VS", "10-1271",   "DIABP",        68, "SCREENING",       815,
+  "PILOT01",    "VS", "10-1271",   "DIABP",        70, "SCREENING",       816,
+  "PILOT01",    "VS", "10-1271",   "DIABP",        72, "SCREENING",       817,
+  "PILOT01",    "VS", "10-1271",   "DIABP",        80,  "BASELINE",       815,
+  "PILOT01",    "VS", "10-1271",   "DIABP",        86,  "BASELINE",       816,
+  "PILOT01",    "VS", "10-1271",   "DIABP",        84,  "BASELINE",       817,
+  "PILOT01",    "VS", "10-1271",   "DIABP",        80,    "WEEK 4",       815,
+  "PILOT01",    "VS", "10-1271",   "DIABP",        88,    "WEEK 4",       816,
+  "PILOT01",    "VS", "10-1271",   "DIABP",        86,    "WEEK 4",       817,
+  "PILOT01",    "VS", "10-1271",  "WEIGHT",     47.17, "SCREENING",        NA,
+  "PILOT01",    "VS", "10-1271",  "WEIGHT",     47.63,  "BASELINE",        NA,
+  "PILOT01",    "VS", "10-1271",  "WEIGHT",     49.44,    "WEEK 4",        NA
+)
 
 # Flag last value for each patient, test, and visit, baseline observations are ignored
-admiral_vs \%>\%
+vs \%>\%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
@@ -86,34 +111,37 @@ admiral_vs \%>\%
     ),
     filter = VISIT != "BASELINE"
   ) \%>\%
-  arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
+  arrange(USUBJID, VSTESTCD, VISIT, VSTPTNUM) \%>\%
   select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
 
 # Baseline (ABLFL) examples:
 
 input <- tribble(
-  ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,    ~DTYPE,
-  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,        NA,
-  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,
-  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0, "AVERAGE",
-  "TEST01",  "PAT01", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0, "AVERAGE",
-  "TEST01",  "PAT01", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,        NA,
-  "TEST01",  "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0, "AVERAGE",
-  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0, "AVERAGE",
-  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0, "AVERAGE",
-  "TEST01",  "PAT02", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0, "AVERAGE",
-  "TEST01",  "PAT02", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0, "AVERAGE",
-  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0, "AVERAGE",
-  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0, "AVERAGE",
-  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,        NA,
-  "TEST01",  "PAT01", "PARAM02",  "BASELINE", as.Date("2021-04-27"),  10.0, "AVERAGE",
-  "TEST01",  "PAT01", "PARAM02",    "WEEK 2", as.Date("2021-04-30"),  12.0,        NA,
-  "TEST01",  "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,        NA,
-  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,
-  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-23"),  15.0,        NA,
-  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-27"),  10.0,        NA,
-  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-30"),  12.0,        NA
-)
+  ~STUDYID,   ~USUBJID,  ~PARAMCD,     ~AVISIT,          ~ADT, ~AVAL,    ~DTYPE,
+  "PILOT01",  "10-1187", "PARAM01",  "BASELINE",  "2021-04-27",  15.0,        NA,
+  "PILOT01",  "10-1187", "PARAM01",  "BASELINE",  "2021-04-25",  14.0,        NA,
+  "PILOT01",  "10-1187", "PARAM01",  "BASELINE",  "2021-04-23",  15.0, "AVERAGE",
+  "PILOT01",  "10-1187", "PARAM01",    "WEEK 1",  "2021-04-27",  10.0, "AVERAGE",
+  "PILOT01",  "10-1187", "PARAM01",    "WEEK 2",  "2021-04-30",  12.0,        NA,
+  "PILOT01",  "10-1271", "PARAM01", "SCREENING",  "2021-04-27",  15.0, "AVERAGE",
+  "PILOT01",  "10-1271", "PARAM01",  "BASELINE",  "2021-04-25",  14.0, "AVERAGE",
+  "PILOT01",  "10-1271", "PARAM01",  "BASELINE",  "2021-04-23",  15.0, "AVERAGE",
+  "PILOT01",  "10-1271", "PARAM01",    "WEEK 1",  "2021-04-27",  10.0, "AVERAGE",
+  "PILOT01",  "10-1271", "PARAM01",    "WEEK 2",  "2021-04-30",  12.0, "AVERAGE",
+  "PILOT01",  "10-1271", "PARAM02", "SCREENING",  "2021-04-27",  15.0, "AVERAGE",
+  "PILOT01",  "10-1271", "PARAM02", "SCREENING",  "2021-04-25",  14.0, "AVERAGE",
+  "PILOT01",  "10-1271", "PARAM02", "SCREENING",  "2021-04-23",  15.0,        NA,
+  "PILOT01",  "10-1271", "PARAM02",  "BASELINE",  "2021-04-27",  10.0, "AVERAGE",
+  "PILOT01",  "10-1271", "PARAM02",    "WEEK 2",  "2021-04-30",  12.0,        NA,
+  "PILOT01",  "10-1187", "PARAM02", "SCREENING",  "2021-04-27",  15.0,        NA,
+  "PILOT01",  "10-1187", "PARAM02",  "BASELINE",  "2021-04-25",  14.0,        NA,
+  "PILOT01",  "10-1187", "PARAM02",    "WEEK 1",  "2021-04-23",  15.0,        NA,
+  "PILOT01",  "10-1187", "PARAM02",    "WEEK 1",  "2021-04-27",  10.0,        NA,
+  "PILOT01",  "10-1187", "PARAM02",  "BASELINE",  "2021-04-30",  12.0,        NA
+) \%>\%
+  mutate(
+    ADT = as.Date(ADT)
+  )
 
 # Last observation
 restrict_derivation(
@@ -168,10 +196,18 @@ restrict_derivation(
 )
 
 # OCCURDS Examples
-data("admiral_ae")
+ae <- tribble(
+  ~STUDYID, ~DOMAIN,  ~USUBJID, ~AESEQ,        ~AEDECOD,     ~AEBODSYS,     ~AESEV, ~AESTDY,
+  "PILOT01",    "AE", "10-1187",      1,    "IRRITATION",     "GENERAL",     "MILD",      44,
+  "PILOT01",    "AE", "10-1271",      3,  "FIBRILLATION",     "CARDIAC", "MODERATE",      56,
+  "PILOT01",    "AE", "10-1271",      4,       "CARDIAC",     "CARDIAC", "MODERATE",      57,
+  "PILOT01",    "AE", "10-1271",      1,      "DYSPNOEA", "RESPIRATORY", "MODERATE",      56,
+  "PILOT01",    "AE", "10-1271",      5, "HYPONATRAEMIA",  "METABOLISM", "MODERATE",      57,
+  "PILOT01",    "AE", "10-1271",      2,    "MYOCARDIAL",     "CARDIAC",   "SEVERE",      56
+)
 
 # Most severe AE first occurrence per patient
-admiral_ae \%>\%
+ae \%>\%
   mutate(
     TEMP_AESEVN =
       as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
@@ -186,7 +222,7 @@ admiral_ae \%>\%
   select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
 
 # Most severe AE first occurrence per patient per body system
-admiral_ae \%>\%
+ae \%>\%
   mutate(
     TEMP_AESEVN =
       as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
