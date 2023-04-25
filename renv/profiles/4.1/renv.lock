@@ -12,11 +12,11 @@
       }
     ]
   },
-  "Packages": {
+  "Packages": { 
     "DT": {
       "Package": "DT",
       "Version": "0.21",
-      "Source": "Repository",
+      "Source": "Repository", 
       "Repository": "RSPM",
       "Requirements": [
         "crosstalk",

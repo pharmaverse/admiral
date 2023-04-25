@@ -12,8 +12,8 @@
       }
     ]
   },
-  "Packages": {
-    "BH": {
+  "Packages": { 
+    "BH": { 
       "Package": "BH",
       "Version": "1.75.0-0",
       "Source": "Repository",
