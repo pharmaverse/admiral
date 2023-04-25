@@ -19,12 +19,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Thomas Neitmann \email{thomas.neitmann@roche.com}
+\strong{Maintainer}: Ben Straub \email{ben.x.straub@gsk.com}
 
 Authors:
 \itemize{
   \item Stefan Bundfuss
-  \item Ben Straub
+  \item Thomas Neitmann
   \item Samia Kabi
   \item Gordon Miller
   \item Teckla Akinyi
