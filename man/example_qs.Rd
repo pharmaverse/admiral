@@ -5,7 +5,7 @@
 \alias{example_qs}
 \title{Example \code{QS} Dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 176 rows and 11 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 161 rows and 11 columns.
 }
 \source{
 Created by (\url{https://github.com/pharmaverse/admiral/blob/main/inst/example_scripts/example_qs.R})

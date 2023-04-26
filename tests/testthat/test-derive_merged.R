@@ -1,4 +1,3 @@
-
 adsl <- tibble::tribble(
   ~USUBJID, ~SEX, ~COUNTRY,
   "ST42-1", "F",  "AUT",

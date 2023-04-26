@@ -1,4 +1,3 @@
-
 ## Test 1: flag observations up to first PD ----
 test_that("derive_var_relative_flag Test 1: flag observations up to first PD", {
   expected <- tibble::tribble(
