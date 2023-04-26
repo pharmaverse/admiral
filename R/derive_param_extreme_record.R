@@ -140,6 +140,20 @@ derive_param_extreme_record <- function(dataset,
                                         order,
                                         mode,
                                         set_values_to) {
+  # Check arguments assertions
+  assert_data_frame(dataset, optional = TRUE)
+  assert_list_of(sources, "records_source")
+  assert_list_of(source_datasets, "data.frame")
+  assert_vars(by_vars, optional = TRUE)
+  assert_character_scalar(
+    mode,
+    values = c("first", "last"),
+    case_sensitive = FALSE
+  )
+  assert_varval_list(set_values_to, accept_expr = TRUE, optional = TRUE)
+
+  source_names <- names(source_datasets)
+
   # Create Empty list to contain source datasets
   data_list <- vector("list", length(sources))
 
