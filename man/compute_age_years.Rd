@@ -15,10 +15,10 @@ A numeric vector is expected.}
 
 Either a string containing the time unit of all ages in \code{age} or a character
 vector containing the time units of each age in \code{age} is expected. Note that
-permitted values are cases insensitive (e.g. 'YEARS' is treated the same
-as 'years' and 'Years').
+permitted values are cases insensitive (e.g. "YEARS" is treated the same
+as "years" and "Years").
 
-Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'.}
+Permitted Values: "years", "months", "weeks", "days", "hours", "minutes", "seconds".}
 }
 \value{
 The ages contained in \code{age} converted to years.
@@ -27,8 +27,8 @@ The ages contained in \code{age} converted to years.
 Converts a set of age values from the specified time unit to years.
 }
 \details{
-Returns a numeric vector of ages in years. Note, underlying computations
-assume an equal number of days in each year (365.25).
+Returns a numeric vector of ages in years as doubles. Note, underlying
+computations assume an equal number of days in each year (365.25).
 }
 \examples{
 compute_age_years(
@@ -37,7 +37,7 @@ compute_age_years(
 )
 
 compute_age_years(
-  age = c(28, 1461, 10227),
+  age = c(10, 520, 3650),
   age_unit = c("YEARS", "WEEKS", "DAYS")
 )
 
