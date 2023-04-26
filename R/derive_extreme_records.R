@@ -1,10 +1,54 @@
 #' Add the First or Last Observation for Each By Group as New Records
 #'
-#' Add the first or last observation for each by group as new observations. It
-#' can be used for example for adding the maximum or minimum value as a separate
-#' visit. All variables of the selected observation are kept. This distinguish
-#' `derive_extreme_records()` from `derive_summary_records()`, where only the by
-#' variables are populated for the new records.
+#' Add the first or last observation for each by group as new observations. The
+#' new observations can be selected from the input dataset or an additional
+#' dataset. It can be used for example for adding the maximum or minimum value
+#' as a separate visit. All variables of the selected observation are kept. This
+#' distinguish `derive_extreme_records()` from `derive_summary_records()`, where
+#' only the by variables are populated for the new records.
+#'
+#' @param dataset Input dataset
+#'
+#'   If `dataset_add` is not specified, the new records are selected from the
+#'   input dataset. In this case the variables specified by `by_vars` and
+#'   `order` are expected.
+#'
+#' @param dataset_ref Reference dataset
+#'
+#'   The variables specified for `by_vars` are expected. For each
+#'   observation of the specified dataset a new observation is added to the
+#'   input dataset.
+#'
+#' @param dataset_add Additional dataset
+#'
+#'   Observations from the specified dataset are added as new records to the
+#'   input dataset (`dataset`).
+#'
+#'   All observations in the specified dataset fulfilling the condition
+#'   specified by `filter_source` are considered. If `mode` and `order` are
+#'   specified, the first or last one within each by group defined by `by_vars`
+#'   is selected.
+#'
+#'   If the argument is not specified, the input dataset (`dataset`) is used.
+#'
+#'   The variables specified by the `by_vars` and `order` argument (if
+#'   applicable) are expected.
+#'
+#' @param by_vars Grouping variables
+#'
+#'   If `dataset_ref` is specified, this argument must be specified.
+#'
+#'   *Permitted Values*: list of variables created by `exprs()`
+#'
+#' @param filter_add Filter for additional dataset (`dataset_add`)
+#'
+#'   Only observations in `dataset_add` fulfilling the specified condition are
+#'   considered.
+#'
+#'   For by groups with at least one observation `exist_flag` is set to
+#'   `true_value`.
+#'
+#'   For all other by groups `exist_flag` is set to `false_value`.
 #'
 #' @param mode Selection mode (first or last)
 #'
@@ -14,13 +58,40 @@
 #'
 #'   *Permitted Values:* `"first"`, `"last"`
 #'
+#' @param check_type Check uniqueness?
+#'
+#'   If `"warning"` or `"error"` is specified, the specified message is issued
+#'   if the observations of the (restricted) additional dataset are not unique
+#'   with respect to the by variables and the order.
+#'
+#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
+#'
+#' @param exist_flag Existence flag
+#'
+#'   The specified variable is added to the output dataset. It is set to
+#'   `true_value` for observations from the additional dataset (`dataset_add`).
+#'   For all other new observations it is set to `false_value`.
+#'
+#'   *Permitted Values:* Variable name
+#'
+#' @param true_value True value
+#'
+#'   For new observations selected from the additional dataset (`dataset_add`),
+#'   `exist_flag` is set to the specified value.
+#'
+#' @param false_value False value
+#'
+#'   For new observations not selected from the additional dataset
+#'   (`dataset_add`), `exist_flag` is set to the specified value.
+#'
+#'
 #' @param filter Filter for observations to consider
 #'
-#'   Only observations fulfilling the specified condition are taken into account
-#'   for selecting the first or last observation. If the parameter is not
-#'   specified, all observations are considered.
+#'   *Deprecated*, please use `filter_add` instead.
 #'
-#'   *Default*: `NULL`
+#'   Only observations fulfilling the specified condition are taken into account
+#'   for selecting the first or last observation. If the argument is not
+#'   specified, all observations are considered.
 #'
 #'   *Permitted Values*: a condition
 #'
@@ -28,12 +99,15 @@
 #' @inheritParams derive_summary_records
 #'
 #' @details
-#'   1. The input dataset is restricted as specified by the `filter` parameter.
+#'   1. The additional dataset (`dataset_add`) is restricted as specified by the
+#'   `filter_add` argument.
 #'   1. For each group (with respect to the variables specified for the
-#'   `by_vars` parameter) the first or last observation (with respect to the
-#'   order specified for the `order` parameter and the mode specified for the
-#'   `mode` parameter) is selected.
-#'   1. The variables specified by the `set_values_to` parameter are added to
+#'   `by_vars` argument) the first or last observation (with respect to the
+#'   order specified for the `order` argument and the mode specified for the
+#'   `mode` argument) is selected.
+#'   1. If `dataset_ref` is specified, observations which are in `dataset_ref`
+#'   but not in the selected records are added.
+#'   1. The variables specified by the `set_values_to` argument are added to
 #'   the selected observations.
 #'   1. The observations are added to input dataset.
 #'
@@ -48,6 +122,8 @@
 #'
 #' @examples
 #' library(tibble)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(lubridate)
 #'
 #' adlb <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
@@ -67,7 +143,7 @@
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(AVAL, AVISITN),
 #'   mode = "first",
-#'   filter = !is.na(AVAL),
+#'   filter_add = !is.na(AVAL),
 #'   set_values_to = exprs(
 #'     AVISITN = 97,
 #'     DTYPE = "MINIMUM"
@@ -82,7 +158,7 @@
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(desc(AVAL), AVISITN),
 #'   mode = "first",
-#'   filter = !is.na(AVAL),
+#'   filter_add = !is.na(AVAL),
 #'   set_values_to = exprs(
 #'     AVISITN = 98,
 #'     DTYPE = "MAXIMUM"
@@ -101,10 +177,6 @@
 #'     DTYPE = "LOV"
 #'   )
 #' )
-#'
-#' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate)
 #'
 #' # Derive a new parameter for the first disease progression (PD)
 #' adsl <- tribble(
@@ -134,13 +206,14 @@
 #'   ) %>%
 #'   select(-ADTC)
 #'
-#' derive_param_extreme_event(
+#' derive_extreme_records(
 #'   adrs,
-#'   dataset_adsl = adsl,
-#'   dataset_source = adrs,
-#'   filter_source = PARAMCD == "OVR" & AVALC == "PD",
+#'   dataset_ref = adsl,
+#'   dataset_add = adrs,
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   filter_add = PARAMCD == "OVR" & AVALC == "PD",
 #'   order = exprs(ADT),
-#'   new_var = AVALC,
+#'   exist_flag = AVALC,
 #'   true_value = "Y",
 #'   false_value = "N",
 #'   mode = "first",
@@ -153,11 +226,12 @@
 #' )
 #'
 #' # derive parameter indicating death
-#' derive_param_extreme_event(
-#'   dataset_adsl = adsl,
-#'   dataset_source = adsl,
-#'   filter_source = !is.na(DTHDT),
-#'   new_var = AVALC,
+#' derive_extreme_records(
+#'   dataset_ref = adsl,
+#'   dataset_add = adsl,
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   filter_add = !is.na(DTHDT),
+#'   exist_flag = AVALC,
 #'   true_value = "Y",
 #'   false_value = "N",
 #'   mode = "first",
@@ -186,8 +260,8 @@ derive_extreme_records <- function(dataset = NULL,
     filter_add <- enexpr(filter)
   }
 
-  # Check input parameters
-  assert_vars(by_vars, optional = TRUE)
+  # Check input arguments
+  assert_vars(by_vars, optional = is.null(dataset_ref))
   assert_order_vars(order, optional = TRUE)
   assert_data_frame(
     dataset,

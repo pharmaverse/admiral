@@ -7,6 +7,8 @@
 
 ## Updates of Existing Functions
 
+- `derive_extreme_records()` was enhanced such that it includes the
+functionality of `derive_param_extreme_event()`. (#1725)
 
 ## Breaking Changes
 
@@ -31,6 +33,9 @@
 
 - `derive_param_extreme_event()` was deprecated in favor of
 `derive_extreme_records()`. (#1725)
+
+- The `filter` argument in `derive_extreme_records()` was deprecated in favor of
+the `filter_add` argument. (#1725)
 
 ## Various
 
