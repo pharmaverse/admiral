@@ -13,7 +13,8 @@
 #'   permitted values are cases insensitive (e.g. `"YEARS"` is treated the same
 #'   as `"years"` and `"Years"`).
 #'
-#'   Permitted Values: `"years"`, `"months"`, `"weeks"`, `"days"`, `"hours"`, `"minutes"`, `"seconds"`.
+#'   Permitted Values: `"years"`, `"months"`, `"weeks"`, `"days"`, `"hours"`, `"minutes"`,
+#'   `"seconds"`.
 #'
 #' @details Returns a numeric vector of ages in years as doubles. Note, underlying
 #' computations assume an equal number of days in each year (365.25).
