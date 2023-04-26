@@ -1,6 +1,5 @@
 ## Test 1: compute_age_years() works as expected when `age_unit` is a string ----
-test_that("compute_age_years Test 1: compute_age_years() works as expected when
-          `age_unit` is a string", {
+test_that("compute_age_years Test 1: compute_age_years() works as expected when `age_unit` is a string", {
   age_input <- c(240, 360, 480, NA)
   age_unit_input <- "MONTHS"
 
@@ -16,8 +15,7 @@ test_that("compute_age_years Test 1: compute_age_years() works as expected when
 })
 
 ## Test 2: compute_age_years() works as expected when `age_unit` is a vector ----
-test_that("compute_age_years Test 2: compute_age_years() works as expected when
-          `age_unit` is a vector", {
+test_that("compute_age_years Test 2: compute_age_years() works as expected when `age_unit` is a vector", {
   age_input <- c(28, 1461, 10227)
   age_unit_input <- c("YEARS", "WEEKS", "DAYS")
 
@@ -32,10 +30,8 @@ test_that("compute_age_years Test 2: compute_age_years() works as expected when
   )
 })
 
-## Test 3: Error is issued when `age_unit` is not a string or a vector with the
-## same length as `age` ----
-test_that("compute_age_years Test 3: Error is issued when `age_unit` is not a
-          string or a vector with the same length as `age`", {
+## Test 3: Error is issued when `age_unit` is not a string or a vector with the same length as `age` ----
+test_that("compute_age_years Test 3: Error is issued when `age_unit` is not a string or a vector with the same length as `age`", {
   age_input <- c(28, 1461, 10227)
   age_unit_input <- c("YEARS", "WEEKS")
 
