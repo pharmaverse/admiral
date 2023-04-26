@@ -15,10 +15,10 @@ A numeric vector is expected.}
 
 Either a string containing the time unit of all ages in \code{age} or a character
 vector containing the time units of each age in \code{age} is expected. Note that
-permitted values are cases insensitive (e.g. "YEARS" is treated the same
-as "years" and "Years").
+permitted values are cases insensitive (e.g. \code{"YEARS"} is treated the same
+as \code{"years"} and \code{"Years"}).
 
-Permitted Values: "years", "months", "weeks", "days", "hours", "minutes", "seconds".}
+Permitted Values: \code{"years"}, \code{"months"}, \code{"weeks"}, \code{"days"}, \code{"hours"}, \code{"minutes"}, \code{"seconds"}.}
 }
 \value{
 The ages contained in \code{age} converted to years.
