@@ -366,7 +366,7 @@ dtm_level <- function(level) {
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 get_partialdatetime <- function(dtc) {
   two <- "(\\d{2}|-?)"
-  partialdate <- stringr::str_match(dtc, paste0(
+  partialdate <- str_match(dtc, paste0(
     "(\\d{4}|-?)-?",
     two,
     "-?",
@@ -554,11 +554,6 @@ restrict_imputed_dtc_dtm <- function(dtc,
         missing = imputed_dtc
       )
     }
-    imputed_dtc <- if_else(
-      stringr::str_starts(imputed_dtc, "(0000|9999)"),
-      NA_character_,
-      imputed_dtc
-    )
   }
   if (!(is.null(max_dates) || length(max_dates) == 0)) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
@@ -580,11 +575,6 @@ restrict_imputed_dtc_dtm <- function(dtc,
         missing = imputed_dtc
       )
     }
-    imputed_dtc <- if_else(
-      stringr::str_starts(imputed_dtc, "(0000|9999)"),
-      NA_character_,
-      imputed_dtc
-    )
   }
   imputed_dtc
 }
@@ -781,7 +771,7 @@ impute_dtc_dt <- function(dtc,
 
   # Parse character date ----
   two <- "(\\d{2}|-?)"
-  partialdate <- stringr::str_match(dtc, paste0(
+  partialdate <- str_match(dtc, paste0(
     "(\\d{4}|-?)-?",
     two,
     "-?",
@@ -946,11 +936,6 @@ restrict_imputed_dtc_dt <- function(dtc,
         missing = imputed_dtc
       )
     }
-    imputed_dtc <- if_else(
-      stringr::str_starts(imputed_dtc, "(0000|9999)"),
-      NA_character_,
-      imputed_dtc
-    )
   }
   if (!(is.null(max_dates) || length(max_dates) == 0)) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
@@ -968,11 +953,6 @@ restrict_imputed_dtc_dt <- function(dtc,
         missing = imputed_dtc
       )
     }
-    imputed_dtc <- if_else(
-      stringr::str_starts(imputed_dtc, "(0000|9999)"),
-      NA_character_,
-      imputed_dtc
-    )
   }
   imputed_dtc
 }
@@ -1016,6 +996,11 @@ convert_dtc_to_dt <- function(dtc,
     max_dates = max_dates,
     preserve = preserve
   )
+  imputed_dtc <- if_else(
+    str_starts(imputed_dtc, "(0000|9999)") | imputed_dtc %in% c("0000-01-01", "9999-12-31"), # nolint
+    NA_character_,
+    imputed_dtc
+  )
   ymd(imputed_dtc)
 }
 
@@ -1052,16 +1037,23 @@ convert_dtc_to_dtm <- function(dtc,
   assert_character_vector(dtc)
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
 
-  dtc %>%
-    impute_dtc_dtm(
-      highest_imputation = highest_imputation,
-      date_imputation = date_imputation,
-      time_imputation = time_imputation,
-      min_dates = min_dates,
-      max_dates = max_dates,
-      preserve = preserve
-    ) %>%
-    ymd_hms()
+  imputed_dtc <- impute_dtc_dtm(
+    dtc = dtc,
+    highest_imputation = highest_imputation,
+    date_imputation = date_imputation,
+    time_imputation = time_imputation,
+    min_dates = min_dates,
+    max_dates = max_dates,
+    preserve = preserve
+  )
+
+  imputed_dtc <- if_else(
+    str_starts(imputed_dtc, "(0000|9999)") | imputed_dtc %in% c("0000-01-01", "9999-12-31"), # nolint
+    NA_character_,
+    imputed_dtc
+  )
+
+  ymd_hms(imputed_dtc)
 }
 
 #' Convert a Date into a Datetime Object
