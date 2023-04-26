@@ -29,6 +29,9 @@
   - `format_reason_default()`
   - `derive_var_worst_flag()`
 
+- `derive_param_extreme_event()` was deprecated in favor of
+`derive_extreme_records()`. (#1725)
+
 ## Various
 
 - `vars()` which was used in the admiral function calls that expected a list of quosures has been removed (#1747).

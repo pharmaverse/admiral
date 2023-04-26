@@ -101,6 +101,73 @@
 #'     DTYPE = "LOV"
 #'   )
 #' )
+#'
+#' library(tibble)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(lubridate)
+#'
+#' # Derive a new parameter for the first disease progression (PD)
+#' adsl <- tribble(
+#'   ~USUBJID, ~DTHDT,
+#'   "1",      ymd("2022-05-13"),
+#'   "2",      ymd(""),
+#'   "3",      ymd("")
+#' ) %>%
+#'   mutate(STUDYID = "XX1234")
+#'
+#' adrs <- tribble(
+#'   ~USUBJID, ~ADTC,        ~AVALC,
+#'   "1",      "2020-01-02", "PR",
+#'   "1",      "2020-02-01", "CR",
+#'   "1",      "2020-03-01", "CR",
+#'   "1",      "2020-04-01", "SD",
+#'   "2",      "2021-06-15", "SD",
+#'   "2",      "2021-07-16", "PD",
+#'   "2",      "2021-09-14", "PD"
+#' ) %>%
+#'   mutate(
+#'     STUDYID = "XX1234",
+#'     ADT = ymd(ADTC),
+#'     PARAMCD = "OVR",
+#'     PARAM = "Overall Response",
+#'     ANL01FL = "Y"
+#'   ) %>%
+#'   select(-ADTC)
+#'
+#' derive_param_extreme_event(
+#'   adrs,
+#'   dataset_adsl = adsl,
+#'   dataset_source = adrs,
+#'   filter_source = PARAMCD == "OVR" & AVALC == "PD",
+#'   order = exprs(ADT),
+#'   new_var = AVALC,
+#'   true_value = "Y",
+#'   false_value = "N",
+#'   mode = "first",
+#'   set_values_to = exprs(
+#'     PARAMCD = "PD",
+#'     PARAM = "Disease Progression",
+#'     ANL01FL = "Y",
+#'     ADT = ADT
+#'   )
+#' )
+#'
+#' # derive parameter indicating death
+#' derive_param_extreme_event(
+#'   dataset_adsl = adsl,
+#'   dataset_source = adsl,
+#'   filter_source = !is.na(DTHDT),
+#'   new_var = AVALC,
+#'   true_value = "Y",
+#'   false_value = "N",
+#'   mode = "first",
+#'   set_values_to = exprs(
+#'     PARAMCD = "DEATH",
+#'     PARAM = "Death",
+#'     ANL01FL = "Y",
+#'     ADT = DTHDT
+#'   )
+#' )
 derive_extreme_records <- function(dataset = NULL,
                                    dataset_add = NULL,
                                    dataset_ref = NULL,

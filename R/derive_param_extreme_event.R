@@ -1,8 +1,14 @@
 #' Add an Extreme Event Parameter
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_extreme_records()` instead.
+#'
 #' Add a new parameter for the first or last event occurring in a dataset. The
-#'  variable given in `new_var` indicates if an event occurred or not. For example,
-#'  the function can derive a parameter for the first disease progression.
+#' variable given in `new_var` indicates if an event occurred or not. For
+#' example, the function can derive a parameter for the first disease
+#' progression.
 #'
 #' @param dataset Input dataset
 #'
@@ -102,78 +108,10 @@
 #' @return The input dataset with a new parameter indicating if and when an
 #'   event occurred
 #'
-#' @family der_prm_bds_findings
-#' @keywords der_prm_bds_findings
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @export
-#'
-#' @examples
-#' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate)
-#'
-#' # Derive a new parameter for the first disease progression (PD)
-#' adsl <- tribble(
-#'   ~USUBJID, ~DTHDT,
-#'   "1",      ymd("2022-05-13"),
-#'   "2",      ymd(""),
-#'   "3",      ymd("")
-#' ) %>%
-#'   mutate(STUDYID = "XX1234")
-#'
-#' adrs <- tribble(
-#'   ~USUBJID, ~ADTC,        ~AVALC,
-#'   "1",      "2020-01-02", "PR",
-#'   "1",      "2020-02-01", "CR",
-#'   "1",      "2020-03-01", "CR",
-#'   "1",      "2020-04-01", "SD",
-#'   "2",      "2021-06-15", "SD",
-#'   "2",      "2021-07-16", "PD",
-#'   "2",      "2021-09-14", "PD"
-#' ) %>%
-#'   mutate(
-#'     STUDYID = "XX1234",
-#'     ADT = ymd(ADTC),
-#'     PARAMCD = "OVR",
-#'     PARAM = "Overall Response",
-#'     ANL01FL = "Y"
-#'   ) %>%
-#'   select(-ADTC)
-#'
-#' derive_param_extreme_event(
-#'   adrs,
-#'   dataset_adsl = adsl,
-#'   dataset_source = adrs,
-#'   filter_source = PARAMCD == "OVR" & AVALC == "PD",
-#'   order = exprs(ADT),
-#'   new_var = AVALC,
-#'   true_value = "Y",
-#'   false_value = "N",
-#'   mode = "first",
-#'   set_values_to = exprs(
-#'     PARAMCD = "PD",
-#'     PARAM = "Disease Progression",
-#'     ANL01FL = "Y",
-#'     ADT = ADT
-#'   )
-#' )
-#'
-#' # derive parameter indicating death
-#' derive_param_extreme_event(
-#'   dataset_adsl = adsl,
-#'   dataset_source = adsl,
-#'   filter_source = !is.na(DTHDT),
-#'   new_var = AVALC,
-#'   true_value = "Y",
-#'   false_value = "N",
-#'   mode = "first",
-#'   set_values_to = exprs(
-#'     PARAMCD = "DEATH",
-#'     PARAM = "Death",
-#'     ANL01FL = "Y",
-#'     ADT = DTHDT
-#'   )
-#' )
 derive_param_extreme_event <- function(dataset = NULL,
                                        dataset_adsl,
                                        dataset_source,
@@ -186,6 +124,9 @@ derive_param_extreme_event <- function(dataset = NULL,
                                        subject_keys = get_admiral_option("subject_keys"),
                                        set_values_to,
                                        check_type = "warning") {
+  deprecate_warn("0.11.0", "derive_param_extreme_event()", "derive_extreme_records()")
+
+
   # Check input parameters
   filter_source <- assert_filter_cond(enexpr(filter_source))
   assert_vars(subject_keys)
@@ -213,35 +154,18 @@ derive_param_extreme_event <- function(dataset = NULL,
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
 
-  # Create new observations
-  source_vars <- colnames(dataset_source)
-  adsl_vars <- colnames(dataset_adsl)
-
-  events <- dataset_source %>%
-    filter_if(filter_source) %>%
-    filter_extreme(
-      by_vars = subject_keys,
-      order = order,
-      mode = mode,
-      check_type = check_type
-    )
-
-  noevents <- anti_join(
-    select(dataset_adsl, intersect(source_vars, adsl_vars)),
-    select(events, !!!subject_keys),
-    by = sapply(subject_keys, as_name) # nolint: undesirable_function_linter
+  derive_extreme_records(
+    dataset,
+    dataset_add = dataset_source,
+    dataset_ref = dataset_adsl,
+    by_vars = subject_keys,
+    order = order,
+    mode = mode,
+    filter_add = !!filter_source,
+    check_type = check_type,
+    exist_flag = !!new_var,
+    true_value = true_value,
+    false_value = false_value,
+    set_values_to = set_values_to
   )
-
-  if (!is.null(new_var)) {
-    events <- mutate(events, !!new_var := true_value)
-    noevents <- mutate(noevents, !!new_var := false_value)
-  }
-
-  new_obs <- bind_rows(events, noevents) %>%
-    mutate(
-      !!!set_values_to
-    )
-
-  # Create output dataset
-  bind_rows(dataset, new_obs)
 }

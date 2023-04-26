@@ -5,13 +5,19 @@
 \title{Add the First or Last Observation for Each By Group as New Records}
 \usage{
 derive_extreme_records(
-  dataset,
+  dataset = NULL,
+  dataset_add = NULL,
+  dataset_ref = NULL,
   by_vars = NULL,
-  order,
-  mode,
+  order = NULL,
+  mode = NULL,
+  filter_add = NULL,
   check_type = "warning",
-  filter = NULL,
-  set_values_to
+  exist_flag = NULL,
+  true_value = "Y",
+  false_value = "N",
+  set_values_to,
+  filter
 )
 }
 \arguments{
@@ -51,16 +57,6 @@ by variables and the order.
 
 \emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
 
-\item{filter}{Filter for observations to consider
-
-Only observations fulfilling the specified condition are taken into account
-for selecting the first or last observation. If the parameter is not
-specified, all observations are considered.
-
-\emph{Default}: \code{NULL}
-
-\emph{Permitted Values}: a condition}
-
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
@@ -72,6 +68,16 @@ A list of variable name-value pairs is expected.
 \item RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value or \code{NA}, e.g., \code{exprs(PARAMCD = "TDOSE", PARCAT1 =   "OVERALL")}. More general expression are not allowed.
 }}
+
+\item{filter}{Filter for observations to consider
+
+Only observations fulfilling the specified condition are taken into account
+for selecting the first or last observation. If the parameter is not
+specified, all observations are considered.
+
+\emph{Default}: \code{NULL}
+
+\emph{Permitted Values}: a condition}
 }
 \value{
 The input dataset with the first or last observation of each by group
@@ -151,6 +157,73 @@ derive_extreme_records(
     DTYPE = "LOV"
   )
 )
+
+library(tibble)
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate)
+
+# Derive a new parameter for the first disease progression (PD)
+adsl <- tribble(
+  ~USUBJID, ~DTHDT,
+  "1",      ymd("2022-05-13"),
+  "2",      ymd(""),
+  "3",      ymd("")
+) \%>\%
+  mutate(STUDYID = "XX1234")
+
+adrs <- tribble(
+  ~USUBJID, ~ADTC,        ~AVALC,
+  "1",      "2020-01-02", "PR",
+  "1",      "2020-02-01", "CR",
+  "1",      "2020-03-01", "CR",
+  "1",      "2020-04-01", "SD",
+  "2",      "2021-06-15", "SD",
+  "2",      "2021-07-16", "PD",
+  "2",      "2021-09-14", "PD"
+) \%>\%
+  mutate(
+    STUDYID = "XX1234",
+    ADT = ymd(ADTC),
+    PARAMCD = "OVR",
+    PARAM = "Overall Response",
+    ANL01FL = "Y"
+  ) \%>\%
+  select(-ADTC)
+
+derive_param_extreme_event(
+  adrs,
+  dataset_adsl = adsl,
+  dataset_source = adrs,
+  filter_source = PARAMCD == "OVR" & AVALC == "PD",
+  order = exprs(ADT),
+  new_var = AVALC,
+  true_value = "Y",
+  false_value = "N",
+  mode = "first",
+  set_values_to = exprs(
+    PARAMCD = "PD",
+    PARAM = "Disease Progression",
+    ANL01FL = "Y",
+    ADT = ADT
+  )
+)
+
+# derive parameter indicating death
+derive_param_extreme_event(
+  dataset_adsl = adsl,
+  dataset_source = adsl,
+  filter_source = !is.na(DTHDT),
+  new_var = AVALC,
+  true_value = "Y",
+  false_value = "N",
+  mode = "first",
+  set_values_to = exprs(
+    PARAMCD = "DEATH",
+    PARAM = "Death",
+    ANL01FL = "Y",
+    ADT = DTHDT
+  )
+)
 }
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 
@@ -164,7 +237,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_extreme_event}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},
