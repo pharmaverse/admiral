@@ -498,6 +498,7 @@ empty (#1309)
   
 
 - `create_query_data()` is provided to create the [queries
+dataset](https://pharmaverse.github.io/admiral/cran-release/articles/queries_dataset.html) required as input for `derive_vars_query()` (#606)
 
 - `create_single_dose_dataset()` - Derives dataset of single dose from aggregate dose information (#660)
 
