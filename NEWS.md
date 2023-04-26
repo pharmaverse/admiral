@@ -4,6 +4,7 @@
 
 - Added a "Report a bug" link to `{admiral}` website (#1836)
 
+- New function `compute_age_years()` for converting a vector of age values to years. (#1794)
 
 ## Updates of Existing Functions
 

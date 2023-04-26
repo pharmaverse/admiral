@@ -127,6 +127,7 @@ compute_duration(
 }
 \seealso{
 Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_age_years}()},
 \code{\link{compute_dtf}()},
 \code{\link{compute_tmf}()},
 \code{\link{convert_date_to_dtm}()},
