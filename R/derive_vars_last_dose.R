@@ -256,7 +256,7 @@ derive_vars_last_dose <- function(dataset,
       order = c(exprs(tmp_dose_date), dose_id),
       mode = "last"
     ) %>%
-    select(tmp_seq_var, !!!new_vars_name, !!!syms(trace_vars_str), -by_vars_str)
+    select(tmp_seq_var, !!!new_vars_name, !!!syms(trace_vars_str), !!!negate_vars(by_vars))
 
   # return observations from original dataset with last dose variables added
   derive_vars_merged(
