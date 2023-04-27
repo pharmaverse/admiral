@@ -59,19 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -135,6 +122,10 @@
 <ul><li>Updated example dataset to trigger deterioration flags in the vignette “Creating Questionnaire ADaMs” (<a href="https://github.com/pharmaverse/admiral/issues/1853" class="external-link">#1853</a>, <a href="https://github.com/pharmaverse/admiral/issues/1854" class="external-link">#1854</a>)</li>
 </ul></div>
 </div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.10.2" id="admiral-0102">admiral 0.10.2<a class="anchor" aria-label="anchor" href="#admiral-0102"></a></h2><p class="text-muted">CRAN release: 2023-04-25</p>
+<ul><li>Changing package maintainer from Thomas Neitmann to Ben Straub (<a href="https://github.com/pharmaverse/admiral/issues/1848" class="external-link">#1848</a>)</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.1" id="admiral-0101">admiral 0.10.1<a class="anchor" aria-label="anchor" href="#admiral-0101"></a></h2><p class="text-muted">CRAN release: 2023-03-14</p>
 <ul><li>Fix checks on <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> and <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> that were too restrictive. (<a href="https://github.com/pharmaverse/admiral/issues/1810" class="external-link">#1810</a>)</li>
@@ -329,8 +320,7 @@
 <li><p>All ADaM datasets but <code>admiral_adsl</code> have been removed from the package (<a href="https://github.com/pharmaverse/admiral/issues/1234" class="external-link">#1234</a>)</p></li>
 <li><p><code>derive_var_agegr_ema()</code> and <code>derive_var_agegr_fda()</code> have been deprecated (<a href="https://github.com/pharmaverse/admiral/issues/1333" class="external-link">#1333</a>)</p></li>
 <li>
-<p>Imputation related arguments have been deprecated for all functions except the imputation functions themselves (<a href="https://github.com/pharmaverse/admiral/issues/1299" class="external-link">#1299</a>). I.e., if a derivation like last known alive date is based on dates, DTC variables have to be converted to numeric date or datetime variables in a preprocessing step. For examples see the <a href="https://pharmaverse.github.io/admiral/v0.8.4/articles/adsl.html" class="external-link">ADSL vignette</a>.</p>
-<p>The following arguments were deprecated:</p>
+<p>Imputation related arguments have been deprecated for all functions except the imputation functions themselves (<a href="https://github.com/pharmaverse/admiral/issues/1299" class="external-link">#1299</a>). I.e., if a derivation like last known alive date is based on dates, DTC variables have to be converted to numeric date or datetime variables in a preprocessing step. For examples see the <a href="https://pharmaverse.github.io/admiral/cran-release/articles/adsl.html" class="external-link">ADSL vignette</a>. The following arguments were deprecated:</p>
 <ul><li>
 <code>date_imputation</code>, <code>time_imputation</code>, and <code>preserve</code> in <code><a href="../reference/date_source.html">date_source()</a></code>
 </li>
@@ -416,7 +406,7 @@
 <li>
 <code><a href="../reference/derive_var_merged_character.html">derive_var_merged_character()</a></code> - Merge a Character Variable</li>
 </ul></li>
-<li><p><code><a href="../reference/create_query_data.html">create_query_data()</a></code> is provided to create the queries dataset required as input for <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/606" class="external-link">#606</a>)</p></li>
+<li><p><code><a href="../reference/create_query_data.html">create_query_data()</a></code> is provided to create the <a href="https://pharmaverse.github.io/admiral/cran-release/articles/queries_dataset.html" class="external-link">queries dataset</a> required as input for <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/606" class="external-link">#606</a>)</p></li>
 <li><p><code><a href="../reference/create_single_dose_dataset.html">create_single_dose_dataset()</a></code> - Derives dataset of single dose from aggregate dose information (<a href="https://github.com/pharmaverse/admiral/issues/660" class="external-link">#660</a>)</p></li>
 <li>
 <p>New functions for deriving first or last dates from multiple source datasets (<a href="https://github.com/pharmaverse/admiral/issues/753" class="external-link">#753</a>):</p>
@@ -438,7 +428,7 @@
 <li><p><code><a href="../reference/filter_relative.html">filter_relative()</a></code> - Selects observations before or after the observation where a specified condition is fulfilled. For example, all observations up to first disease progression. (<a href="https://github.com/pharmaverse/admiral/issues/1023" class="external-link">#1023</a>)</p></li>
 </ul><div class="section level4">
 <h4 id="adlb-0-7-0">ADLB<a class="anchor" aria-label="anchor" href="#adlb-0-7-0"></a></h4>
-<ul><li><p>New ADLB template script available <code>ad_adlb.R</code>, specific ADLB functions developed and <code>BDS Finding vignette</code>has examples enhanced with ADLB functions. (<a href="https://github.com/pharmaverse/admiral/issues/1122" class="external-link">#1122</a>)</p></li>
+<ul><li><p>New ADLB template script available <code>ad_adlb.R</code>, specific ADLB functions developed and <a href="https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html" class="external-link">BDS Finding vignette</a> has examples enhanced with ADLB functions. (<a href="https://github.com/pharmaverse/admiral/issues/1122" class="external-link">#1122</a>)</p></li>
 <li><p><code><a href="../reference/derive_var_shift.html">derive_var_shift()</a></code> - Derives a character shift variable containing concatenated shift in values based on user-defined pairing (<a href="https://github.com/pharmaverse/admiral/issues/944" class="external-link">#944</a>)</p></li>
 <li><p><code><a href="../reference/derive_var_analysis_ratio.html">derive_var_analysis_ratio()</a></code> - Derives a ratio variable based on user-supplied variables from a BDS dataset, e.g. ADLB. (<a href="https://github.com/pharmaverse/admiral/issues/943" class="external-link">#943</a>)</p></li>
 <li><p><code><a href="../reference/derive_param_wbc_abs.html">derive_param_wbc_abs()</a></code> - Adds a parameter for lab differentials converted to absolute values. (<a href="https://github.com/pharmaverse/admiral/issues/941" class="external-link">#941</a>)</p></li>
@@ -501,8 +491,8 @@
 <div class="section level3">
 <h3 id="documentation-0-7-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-7-0"></a></h3>
 <ul><li><p>Additional explanation added to <code>derive_param_*</code> and <code>derive_derived_param</code> functions regarding which variables are populated in the additional rows (<a href="https://github.com/pharmaverse/admiral/issues/939" class="external-link">#939</a>)</p></li>
-<li><p>Updated <code><a href="../reference/derive_var_worst_flag.html">derive_var_worst_flag()</a></code>and <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> vignettes to clarify their purpose (<a href="https://github.com/pharmaverse/admiral/issues/691" class="external-link">#691</a>)</p></li>
-<li><p>Added example of ASEQ derivation in ADCM to <code>OCCDS vignette</code> (<a href="https://github.com/pharmaverse/admiral/issues/720" class="external-link">#720</a>)</p></li>
+<li><p>Updated <code><a href="../reference/derive_var_worst_flag.html">derive_var_worst_flag()</a></code> and <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> vignettes to clarify their purpose (<a href="https://github.com/pharmaverse/admiral/issues/691" class="external-link">#691</a>)</p></li>
+<li><p>Added example of ASEQ derivation in ADCM to <a href="https://pharmaverse.github.io/admiral/cran-release/articles/occds.html#aseq" class="external-link">OCCDS vignette</a> (<a href="https://github.com/pharmaverse/admiral/issues/720" class="external-link">#720</a>)</p></li>
 <li><p>Examples have been added for <code><a href="../reference/format_reason_default.html">format_reason_default()</a></code>, <code><a href="../reference/format_eoxxstt_default.html">format_eoxxstt_default()</a></code>, <code><a href="../reference/extend_source_datasets.html">extend_source_datasets()</a></code> and <code><a href="../reference/filter_date_sources.html">filter_date_sources()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/745" class="external-link">#745</a>)</p></li>
 </ul></div>
 <div class="section level3">
@@ -796,7 +786,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Thomas Neitmann, Stefan Bundfuss, Ben Straub, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Thomas Neitmann, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
