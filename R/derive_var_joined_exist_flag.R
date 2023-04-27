@@ -388,6 +388,7 @@ derive_var_joined_exist_flag <- function(dataset,
   ) %>%
     remove_tmp_vars()
 }
+
 #' Derive Confirmation Flag
 #'
 #' @description

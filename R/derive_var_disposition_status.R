@@ -25,21 +25,13 @@
 #' @keywords deprecated
 format_eoxxstt_default <- function(status) {
   ### DEPRECATION
-  deprecate_warn("0.10.0",
+  deprecate_stop("0.10.0",
     "format_eoxxstt_default()",
     details = paste(
       "This function is deprecated",
       "Please define your own function and use that as input for the
                     `cat_fun` argument in `derive_var_merged_cat()` instead"
     )
-  )
-
-  case_when(
-    status %in% c("SCREEN FAILURE", "SCREENING NOT COMPLETED") ~ "NOT STARTED",
-    status == "COMPLETED" ~ "COMPLETED",
-    !status %in% c("COMPLETED", "SCREEN FAILURE", "SCREENING NOT COMPLETED") &
-      !is.na(status) ~ "DISCONTINUED",
-    TRUE ~ "ONGOING"
   )
 }
 
@@ -122,29 +114,8 @@ derive_var_disposition_status <- function(dataset,
                                           filter_ds,
                                           subject_keys = get_admiral_option("subject_keys")) {
   ### DEPRECATION
-  deprecate_warn("0.10.0",
+  deprecate_stop("0.10.0",
     "derive_var_disposition_status()",
     details = "Please use `derive_var_merged_cat()` instead"
   )
-
-  new_var <- assert_symbol(enexpr(new_var))
-  status_var <- assert_symbol(enexpr(status_var))
-  filter_ds <- assert_filter_cond(enexpr(filter_ds))
-
-  assert_s3_class(format_new_var, "function")
-  assert_data_frame(dataset)
-  assert_data_frame(dataset_ds, expr_c(status_var))
-  warn_if_vars_exist(dataset, as_name(new_var))
-  assert_vars(subject_keys)
-
-  # Add the status variable and derive the new dispo status in the input dataset
-  dataset %>%
-    derive_vars_merged(
-      dataset_add = dataset_ds,
-      filter_add = !!filter_ds,
-      new_vars = exprs(!!status_var),
-      by_vars = subject_keys
-    ) %>%
-    mutate(!!new_var := format_new_var(!!status_var)) %>%
-    select(-!!status_var)
 }

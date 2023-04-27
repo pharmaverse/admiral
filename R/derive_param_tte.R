@@ -752,7 +752,8 @@ extend_source_datasets <- function(source_datasets,
         full_join(
           mutate(by_groups, temp_dummy = 1),
           mutate(source_datasets[[i]], temp_dummy = 1),
-          by = "temp_dummy"
+          by = "temp_dummy",
+          relationship = "many-to-many"
         ) %>%
         select(-temp_dummy)
     }

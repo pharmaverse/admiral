@@ -11,8 +11,8 @@ test_that("derive_vars_aage Test 1: duration and unit variable are added", {
 })
 
 # derive_var_age_years ----
-## Test 2: derive_var_age_years works as expected ----
-test_that("derive_var_age_years Test 2: derive_var_age_years works as expected", {
+## Test 2: derive_var_age_years works as expected when AGEU exists ----
+test_that("derive_var_age_years Test 2: derive_var_age_years works as expected when AGEU exists", {
   input <- tibble::tibble(
     AGE = c(12, 24, 36, 48, 60),
     AGEU = c("months", "months", "months", "months", "months")
@@ -26,8 +26,10 @@ test_that("derive_var_age_years Test 2: derive_var_age_years works as expected",
   expect_dfs_equal(derive_var_age_years(input, AGE, new_var = AAGE), expected_output, keys = "AGE")
 })
 
-## Test 3: derive_var_age_years works as expected ----
-test_that("derive_var_age_years Test 3: derive_var_age_years works as expected", {
+## Test 3: derive_var_age_years works as expected when AGEU doesn't exist and
+## `age_unit` is used ----
+test_that("derive_var_age_years Test 3: derive_var_age_years works as expected
+          when AGEU doesn't exist and `age_unit` is used", {
   input <- tibble::tibble(AGE = c(12, 24, 36, 48, 60))
 
   expected_output <- mutate(
