@@ -289,8 +289,8 @@ derive_extreme_records <- function(dataset = NULL,
     abort(paste(
       "Neither `dataset` nor `dataset_add` is specified.",
       "At least one of them must be specified.",
-      sep = "\n")
-    )
+      sep = "\n"
+    ))
   }
 
   # Create new observations

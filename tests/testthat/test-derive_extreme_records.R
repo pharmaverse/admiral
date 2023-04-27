@@ -33,22 +33,22 @@ adrs <- tibble::tribble(
 ## Test 1: add last observation for each group ----
 test_that("derive_extreme_records Test 1: add last observation for each group", {
   input <- tibble::tribble(
-     ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
-            1,        1,    12,      1,
-            1,        3,     9,      2,
-            2,        2,    42,      1,
-            3,        3,    14,      1,
-            3,        3,    10,      2
-     )
+    ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
+    "1",             1,    12,      1,
+    "1",             3,     9,      2,
+    "2",             2,    42,      1,
+    "3",             3,    14,      1,
+    "3",             3,    10,      2
+  )
 
   expected_output <- bind_rows(
     input,
     tibble::tribble(
-       ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
-              1,        3,     9,      2,
-              2,        2,    42,      1,
-              3,        3,    10,      2
-       ) %>%
+      ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
+      "1",             3,     9,      2,
+      "2",             2,    42,      1,
+      "3",             3,    10,      2
+    ) %>%
       mutate(DTYPE = "LOV")
   )
 
