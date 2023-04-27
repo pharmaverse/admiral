@@ -1,6 +1,6 @@
 # Contribution to {admiral} 
 
-This outlines how to propose a change to the admiral package. For more detailed info about contributing to {admiral}, and other [pharmaverse packages](https://pharmaverse.org/), please see the [development process guide](https://pharmaverse.github.io/admiraldev/main/articles/development_process.html) as well as other Developer Guides in the Articles section of the [{admiral} website](https://pharmaverse.github.io/admiral/)
+This outlines how to propose a change to the admiral package. For more detailed info about contributing to {admiral}, and other [pharmaverse packages](https://pharmaverse.org/), please see the [development process guide](https://pharmaverse.github.io/admiraldev/main/articles/development_process.html) as well as other Developer Guides in the Articles section of the [{admiral} website](https://pharmaverse.github.io/admiral/cran-release/index.html)
 
 # Basics
  * For each new contribution, the user creates an issue on the issue tab on [GitHub](https://github.com/pharmaverse/admiral/issues) to put it in our backlog. The issues can range from bug identification and/or fixes, enhancements to functions, documentation, tests or new features.   
