@@ -394,14 +394,14 @@ An example is given below:
 #' library(tibble)
 #'
 #' datain <- tribble(
-#'   ~TRTSDTM,             ~ASTDTM,               ~AENDT,
-#'  "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
+#'   ~TRTSDTM, ~ASTDTM, ~AENDT,
+#'   "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
 #' ) %>%
-#'  mutate(
-#'    TRTSDTM = as_datetime(TRTSDTM),
-#'    ASTDTM = as_datetime(ASTDTM),
-#'    AENDT = ymd(AENDT)
-#'  )
+#'   mutate(
+#'     TRTSDTM = as_datetime(TRTSDTM),
+#'     ASTDTM = as_datetime(ASTDTM),
+#'     AENDT = ymd(AENDT)
+#'   )
 #'
 #' derive_vars_dy(
 #'   datain,
