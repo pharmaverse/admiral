@@ -160,10 +160,11 @@ derive_param_extreme_record <- function(dataset,
   # Evaluate the expressions contained in the sources
   for (i in seq_along(sources)) {
     source_dataset <- source_datasets[[sources[[i]]$dataset_name]]
+    new_vars_colnames <- chr2vars(names(sources[[i]]$new_vars))
     data_list[[i]] <- source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
       mutate(!!!sources[[i]]$new_vars) %>%
-      select(!!!by_vars, ADT, AVALC)
+      select(!!!by_vars, !!!new_vars_colnames)
   }
 
   # Bind the source datasets together and parse out the extreme value
@@ -174,7 +175,7 @@ derive_param_extreme_record <- function(dataset,
                    mode = mode) %>%
     mutate(!!!set_values_to)
 
-  # Bind the parameter rows back to original adevent dataset
+  # Bind the parameter rows back to original dataset
   data <- bind_rows(dataset, param_data)
   return(data)
 }
