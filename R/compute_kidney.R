@@ -90,6 +90,7 @@
 #' )
 #'
 #' library(tibble)
+#' library(dplyr)
 #'
 #' base <- tribble(
 #'   ~STUDYID, ~USUBJID, ~AGE, ~SEX, ~RACE, ~WTBL, ~CREATBL, ~CREATBLU,
@@ -101,9 +102,18 @@
 #'
 #' base_egfr <- base %>%
 #'   mutate(
-#'     CRCL_CG = compute_egfr(creat = CREATBL, age = AGE, wt = WTBL, sex = SEX, method = "CRCL"),
-#'     EGFR_EPI = compute_egfr(creat = CREATBL, age = AGE, wt = WTBL, sex = SEX, method = "CKD-EPI"),
-#'     EGFR_MDRD = compute_egfr(creat = CREATBL, age = AGE, wt = WTBL, sex = SEX, race = RACE, method = "MDRD"),
+#'     CRCL_CG = compute_egfr(
+#'       creat = CREATBL, age = AGE, wt = WTBL, sex = SEX,
+#'       method = "CRCL"
+#'     ),
+#'     EGFR_EPI = compute_egfr(
+#'       creat = CREATBL, age = AGE, wt = WTBL, sex = SEX,
+#'       method = "CKD-EPI"
+#'     ),
+#'     EGFR_MDRD = compute_egfr(
+#'       creat = CREATBL, age = AGE, wt = WTBL, sex = SEX,
+#'       race = RACE, method = "MDRD"
+#'     ),
 #'   )
 compute_egfr <- function(creat, age, wt, sex, race, method) {
   assert_numeric_vector(creat)
@@ -122,7 +132,8 @@ compute_egfr <- function(creat, age, wt, sex, race, method) {
     assert_character_vector(race)
 
     egfr <- case_when(
-      race == "BLACK OR AFRICAN AMERICAN" & sex == "F" ~ 175 * (scr^-1.154) * (age^-0.203) * 0.742 * 1.212,
+      race == "BLACK OR AFRICAN AMERICAN" & sex == "F" ~ 175 * (scr^-1.154) *
+        (age^-0.203) * 0.742 * 1.212,
       race == "BLACK OR AFRICAN AMERICAN" ~ 175 * (scr^-1.154) * (age^-0.203) * 1.212,
       sex == "F" ~ 175 * (scr^-1.154) * (age^-0.203) * 0.742,
       TRUE ~ 175 * (scr^-1.154) * (age^-0.203)
