@@ -256,7 +256,11 @@ derive_extreme_records <- function(dataset = NULL,
                                    set_values_to,
                                    filter) {
   if (!missing(filter)) {
-    deprecate_warn("0.11.0", "derive_extreme_records(filter = )", "derive_extreme_records(filter_add = )")
+    deprecate_warn(
+      "0.11.0",
+      "derive_extreme_records(filter = )",
+      "derive_extreme_records(filter_add = )"
+    )
     filter_add <- enexpr(filter)
   }
 
