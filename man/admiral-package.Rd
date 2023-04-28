@@ -15,16 +15,17 @@ Useful links:
 \itemize{
   \item \url{https://pharmaverse.github.io/admiral/}
   \item \url{https://github.com/pharmaverse/admiral}
+  \item Report bugs at \url{https://github.com/pharmaverse/admiral/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Thomas Neitmann \email{thomas.neitmann@roche.com}
+\strong{Maintainer}: Ben Straub \email{ben.x.straub@gsk.com}
 
 Authors:
 \itemize{
   \item Stefan Bundfuss
-  \item Ben Straub
+  \item Thomas Neitmann
   \item Samia Kabi
   \item Gordon Miller
   \item Teckla Akinyi

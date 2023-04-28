@@ -1,4 +1,3 @@
-
 ## Test 1: multiple variables ----
 test_that("derive_vars_dtm_to_dt Test 1: multiple variables", {
   input <- tibble::tribble(

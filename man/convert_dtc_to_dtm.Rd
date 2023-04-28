@@ -136,6 +136,7 @@ convert_dtc_to_dtm("2019-07-18")
 }
 \seealso{
 Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_age_years}()},
 \code{\link{compute_dtf}()},
 \code{\link{compute_duration}()},
 \code{\link{compute_tmf}()},

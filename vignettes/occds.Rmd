@@ -73,7 +73,6 @@ At this step, it may be useful to join `ADSL` to your `AE` domain as well. Only 
 relevant `ADSL` variables would be added later.
 
 ```{r eval=TRUE}
-
 adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT)
 
 adae <- derive_vars_merged(
