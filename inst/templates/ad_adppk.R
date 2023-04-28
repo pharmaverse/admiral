@@ -340,12 +340,12 @@ adppk <- adppk %>%
       TRT01P == "Xanomeline Low Dose" ~ 54
     ),
     # Derive ARMN
-    ARMN= case_when(
+    ARMN = case_when(
       TRT01P == "Xanomeline High Dose" ~ 2,
       TRT01P == "Xanomeline Low Dose" ~ 1
     ),
     # Derive ACTARMN
-    ACTARMN= case_when(
+    ACTARMN = case_when(
       TRT01A == "Xanomeline High Dose" ~ 2,
       TRT01A == "Xanomeline Low Dose" ~ 1
     ),
