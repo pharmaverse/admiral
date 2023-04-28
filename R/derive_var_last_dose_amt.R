@@ -89,15 +89,25 @@ derive_var_last_dose_amt <- function(dataset,
                                      dose_var = EXDOSE,
                                      traceability_vars = NULL) {
   deprecate_warn("0.11.0", "derive_var_last_dose_amt()", "derive_vars_joined()")
-  # derive_vars_joined(dataset = dataset,
-  #                    dataset_add = dataset_ex,
-  #                    by_vars = by_vars,
-  #                    order = NULL,
-  #                    new_vars = new_var,
-  #                    join_vars = dose_id,
-  #                    filter_add = filter_ex,
-  #                    filter_join = dose_var,
-  #                    mode = NULL,
-  #                    check_type = "warning"
-  # )
+  filter_ex <- assert_filter_cond(enexpr(filter_ex), optional = TRUE)
+  by_vars <- assert_vars(by_vars)
+  dose_id <- assert_vars(dose_id)
+  dose_date <- assert_symbol(enexpr(dose_date))
+  analysis_date <- assert_symbol(enexpr(analysis_date))
+  single_dose_condition <- assert_filter_cond(enexpr(single_dose_condition))
+  new_var <- assert_symbol(enexpr(new_var))
+  dose_var <- assert_symbol(enexpr(dose_var))
+
+  derive_vars_last_dose(
+    dataset = dataset,
+    dataset_ex = dataset_ex,
+    filter_ex = !!filter_ex,
+    by_vars = by_vars,
+    dose_id = dose_id,
+    dose_date = !!dose_date,
+    analysis_date = !!analysis_date,
+    single_dose_condition = !!single_dose_condition,
+    new_vars = exprs(!!new_var := !!dose_var),
+    traceability_vars = traceability_vars
+  )
 }

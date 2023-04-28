@@ -75,15 +75,32 @@ derive_var_last_dose_date <- function(dataset,
                                       output_datetime = TRUE,
                                       traceability_vars = NULL) {
   deprecate_warn("0.11.0", "derive_var_last_dose_date()", "derive_vars_joined()")
-  # derive_vars_joined(dataset = dataset,
-  #                    dataset_add = dataset_ex,
-  #                    by_vars = by_vars,
-  #                    order = NULL,
-  #                    new_vars = new_var,
-  #                    join_vars = dose_id,
-  #                    filter_add = filter_ex,
-  #                    filter_join = dose_var,
-  #                    mode = NULL,
-  #                    check_type = "warning"
-  # )
+  filter_ex <- assert_filter_cond(enexpr(filter_ex), optional = TRUE)
+  by_vars <- assert_vars(by_vars)
+  dose_id <- assert_vars(dose_id)
+  dose_date <- assert_symbol(enexpr(dose_date))
+  analysis_date <- assert_symbol(enexpr(analysis_date))
+  single_dose_condition <- assert_filter_cond(enexpr(single_dose_condition))
+  new_var <- assert_symbol(enexpr(new_var))
+  assert_logical_scalar(output_datetime)
+
+  res <- derive_vars_last_dose(
+    dataset = dataset,
+    dataset_ex = dataset_ex,
+    filter_ex = !!filter_ex,
+    by_vars = by_vars,
+    dose_id = dose_id,
+    dose_date = !!dose_date,
+    analysis_date = !!analysis_date,
+    single_dose_condition = !!single_dose_condition,
+    new_vars = exprs(!!new_var := !!dose_date),
+    traceability_vars = traceability_vars
+  )
+
+  # return either date or date-time variable
+  if (!output_datetime) {
+    res %>% mutate(!!new_var := as.Date(!!new_var))
+  } else {
+    res %>% mutate(!!new_var := as.POSIXct(as.character(!!new_var), tz = "UTC"))
+  }
 }
