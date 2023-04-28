@@ -268,7 +268,6 @@ Please see `SI_UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctc
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
-
 atoxgr_criteria_ctcv4 %>%
   filter(!is.na(SI_UNIT_CHECK)) %>%
   dataset_vignette(
@@ -389,7 +388,6 @@ For term "INR Increased" there is the following criteria:
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
@@ -523,7 +521,6 @@ For term "INR Increased" there is the following criteria:
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
@@ -548,7 +545,6 @@ Similarly, for terms "Lipase Increased" and "Serum amylase increased" there is t
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "INR") | str_detect(TERM, "amylase")) %>%
   dataset_vignette(

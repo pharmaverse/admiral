@@ -71,8 +71,6 @@
 #'                     indicates whether a subject is treated for high blood
 #'                     pressure
 #'
-#' @inheritParams derive_derived_param
-#'
 #' @inheritParams derive_param_qtc
 #'
 #' @details
