@@ -136,8 +136,8 @@ Add the first or last observation for each by group as new observations. The
 new observations can be selected from the input dataset or an additional
 dataset. It can be used for example for adding the maximum or minimum value
 as a separate visit. All variables of the selected observation are kept. This
-distinguish \code{derive_extreme_records()} from \code{derive_summary_records()}, where
-only the by variables are populated for the new records.
+distinguishes \code{derive_extreme_records()} from \code{derive_summary_records()},
+where only the by variables are populated for the new records.
 }
 \details{
 \enumerate{

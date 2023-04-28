@@ -249,3 +249,71 @@ test_that("derive_extreme_records Test 5: latest evaluable tumor assessment date
     keys = c("USUBJID", "PARAMCD", "ADT")
   )
 })
+
+## Test 6: warning if filter argument is used ----
+test_that("derive_extreme_records Test 6: warning if filter argument is used", {
+  actual <- derive_extreme_records(
+    adrs,
+    dataset_ref = adsl,
+    dataset_add = adrs,
+    by_vars = exprs(USUBJID),
+    filter_add = PARAMCD == "OVR" & AVALC == "PD",
+    exist_flag = AVALC,
+    order = exprs(ADT),
+    mode = "first",
+    set_values_to = exprs(
+      PARAMCD = "PD",
+      ANL01FL = "Y",
+      ADT = ADT
+    )
+  )
+
+  expected <- bind_rows(
+    adrs,
+    tibble::tribble(
+      ~USUBJID, ~ADT,              ~AVALC,
+      "1",      ymd(""),           "N",
+      "2",      ymd("2021-07-16"), "Y",
+      "3",      ymd(""),           "N"
+    ) %>%
+      mutate(
+        STUDYID = "XX1234",
+        PARAMCD = "PD",
+        ANL01FL = "Y"
+      )
+  )
+
+  expect_warning(
+    derive_extreme_records(
+      adrs,
+      dataset_ref = adsl,
+      dataset_add = adrs,
+      by_vars = exprs(USUBJID),
+      filter = PARAMCD == "OVR" & AVALC == "PD",
+      exist_flag = AVALC,
+      order = exprs(ADT),
+      mode = "first",
+      set_values_to = exprs(
+        PARAMCD = "PD",
+        ANL01FL = "Y",
+        ADT = ADT
+      )
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
+})
+
+## Test 7: error if no input data ----
+test_that("derive_extreme_records Test 7: error if no input data", {
+  expect_error(
+    derive_extreme_records(
+      set_values_to = exprs(PARAMCD = "HELLO")
+    ),
+    regexp = paste(
+      "Neither `dataset` nor `dataset_add` is specified.",
+      "At least one of them must be specified.",
+      sep = "\n"
+    ),
+    fixed = TRUE
+  )
+})

@@ -4,8 +4,8 @@
 #' new observations can be selected from the input dataset or an additional
 #' dataset. It can be used for example for adding the maximum or minimum value
 #' as a separate visit. All variables of the selected observation are kept. This
-#' distinguish `derive_extreme_records()` from `derive_summary_records()`, where
-#' only the by variables are populated for the new records.
+#' distinguishes `derive_extreme_records()` from `derive_summary_records()`,
+#' where only the by variables are populated for the new records.
 #'
 #' @param dataset Input dataset
 #'
