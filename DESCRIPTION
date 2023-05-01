@@ -22,6 +22,7 @@ Description: Utility functions to check data, variables and conditions for funct
  'admiral' and 'admiral' extension packages.  Additional utility helper functions to assist developers 
  with maintaining documentation, testing and general upkeep of 'admiral' and 'admiral' extension packages.  
 License: Apache License (>= 2)
+BugReports: https://github.com/pharmaverse/admiraldev/issues
 URL: https://pharmaverse.github.io/admiraldev/main/, https://github.com/pharmaverse/admiraldev/
 Encoding: UTF-8
 Language: en-US
