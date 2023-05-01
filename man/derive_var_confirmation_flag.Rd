@@ -200,6 +200,7 @@ Other deprecated:
 \code{\link{derive_var_last_dose_grp}()},
 \code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_disposition_reason}()},
+\code{\link{derive_vars_last_dose}()},
 \code{\link{format_eoxxstt_default}()},
 \code{\link{format_reason_default}()}
 }

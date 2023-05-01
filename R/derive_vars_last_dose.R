@@ -2,6 +2,11 @@
 #'
 #' Add EX source variables from last dose to the input dataset.
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_joined()` instead.
+#'
 #' @param dataset Input dataset.
 #' The variables specified by the `by_vars` and `analysis_date` parameters are expected.
 #'
@@ -73,8 +78,8 @@
 #' @return Input dataset with EX source variables from last dose added.
 #'
 #'
-#' @family der_gen
-#' @keywords der_gen
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @seealso [derive_var_last_dose_amt()], [derive_var_last_dose_date()],
 #'   [derive_var_last_dose_grp()], [create_single_dose_dataset()]
@@ -137,6 +142,7 @@ derive_vars_last_dose <- function(dataset,
                                   single_dose_condition = EXDOSFRQ == "ONCE",
                                   new_vars = NULL,
                                   traceability_vars = NULL) {
+  deprecate_warn("0.11.0", "derive_vars_last()", "derive_vars_joined()")
   filter_ex <- assert_filter_cond(enexpr(filter_ex), optional = TRUE)
   by_vars <- assert_vars(by_vars)
   dose_id <- assert_vars(dose_id)

@@ -59,9 +59,13 @@ These can be either strings or symbols referring to existing variables.}
 Input dataset with EX source variables from last dose added.
 }
 \description{
-Add EX source variables from last dose to the input dataset.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_vars_joined()} instead.
 }
 \details{
+Add EX source variables from last dose to the input dataset.
+
 When doing date comparison to identify last dose, date-time imputations are done as follows:
 \itemize{
 \item \code{dose_date}: time is imputed to \code{00:00:00} if the variable is a date variable
@@ -146,20 +150,16 @@ adae \%>\%
 \code{\link[=derive_var_last_dose_amt]{derive_var_last_dose_amt()}}, \code{\link[=derive_var_last_dose_date]{derive_var_last_dose_date()}},
 \code{\link[=derive_var_last_dose_grp]{derive_var_last_dose_grp()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
 
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_cat}()},
-\code{\link{derive_var_merged_character}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_merged_summary}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_transposed}()},
-\code{\link{get_summary_records}()}
+Other deprecated: 
+\code{\link{derive_var_confirmation_flag}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_last_dose_amt}()},
+\code{\link{derive_var_last_dose_date}()},
+\code{\link{derive_var_last_dose_grp}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_disposition_reason}()},
+\code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()}
 }
-\concept{der_gen}
-\keyword{der_gen}
+\concept{deprecated}
+\keyword{deprecated}
