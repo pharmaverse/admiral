@@ -6,7 +6,6 @@ Utility Functions and Development Tools for the Admiral Package Family
 
 <!-- badges: start -->
 
-[<img src="http://pharmaverse.org/shields/admiral.svg">](https://pharmaverse.org)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/admiraldev)](https://CRAN.R-project.org/package=admiraldev)
 [![Test
