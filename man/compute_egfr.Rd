@@ -4,12 +4,17 @@
 \alias{compute_egfr}
 \title{Compute Estimated Glomerular Filtration Rate (eGFR) for Kidney Function}
 \usage{
-compute_egfr(creat, age, wt, sex, race, method)
+compute_egfr(creat, creatu = "SI", age, wt, sex, race = NULL, method)
 }
 \arguments{
-\item{creat}{Creatinine (umol/L)
+\item{creat}{Creatinine
 
 A numeric vector is expected.}
+
+\item{creatu}{Creatinine Units
+
+A character vector is expected.
+Expected Values: 'SI' 'CV' 'umol/L' 'mg/dL'}
 
 \item{age}{Age (years)
 
@@ -94,6 +99,7 @@ compute_egfr(
 )
 
 library(tibble)
+library(dplyr)
 
 base <- tribble(
   ~STUDYID, ~USUBJID, ~AGE, ~SEX, ~RACE, ~WTBL, ~CREATBL, ~CREATBLU,
@@ -105,9 +111,18 @@ base <- tribble(
 
 base_egfr <- base \%>\%
   mutate(
-    CRCL_CG = compute_egfr(creat = CREATBL, age = AGE, wt = WTBL, sex = SEX, method = "CRCL"),
-    EGFR_EPI = compute_egfr(creat = CREATBL, age = AGE, wt = WTBL, sex = SEX, method = "CKD-EPI"),
-    EGFR_MDRD = compute_egfr(creat = CREATBL, age = AGE, wt = WTBL, sex = SEX, race = RACE, method = "MDRD"),
+    CRCL_CG = compute_egfr(
+      creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
+      method = "CRCL"
+    ),
+    EGFR_EPI = compute_egfr(
+      creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
+      method = "CKD-EPI"
+    ),
+    EGFR_MDRD = compute_egfr(
+      creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
+      race = RACE, method = "MDRD"
+    ),
   )
 }
 \seealso{

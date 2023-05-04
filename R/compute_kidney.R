@@ -4,9 +4,14 @@
 #'   Estimated Creatinine Clearance (CRCL) by Cockcroft-Gault equation
 #'   Estimated Glomerular Filtration Rate (eGFR) by CKD-EPI or MDRD equations
 #'
-#' @param creat Creatinine (umol/L)
+#' @param creat Creatinine
 #'
 #'   A numeric vector is expected.
+#'
+#' @param creatu Creatinine Units
+#'
+#'   A character vector is expected.
+#'   Expected Values: 'SI' 'CV' 'umol/L' 'mg/dL'
 #'
 #' @param age Age (years)
 #'
@@ -103,22 +108,24 @@
 #' base_egfr <- base %>%
 #'   mutate(
 #'     CRCL_CG = compute_egfr(
-#'       creat = CREATBL, age = AGE, wt = WTBL, sex = SEX,
+#'       creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
 #'       method = "CRCL"
 #'     ),
 #'     EGFR_EPI = compute_egfr(
-#'       creat = CREATBL, age = AGE, wt = WTBL, sex = SEX,
+#'       creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
 #'       method = "CKD-EPI"
 #'     ),
 #'     EGFR_MDRD = compute_egfr(
-#'       creat = CREATBL, age = AGE, wt = WTBL, sex = SEX,
+#'       creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
 #'       race = RACE, method = "MDRD"
 #'     ),
 #'   )
-compute_egfr <- function(creat, age, wt, sex, race, method) {
+compute_egfr <- function(creat, creatu = "SI", age, wt, sex, race = NULL, method) {
   assert_numeric_vector(creat)
+  assert_character_vector(creatu, values = c("SI", "CV", "mg/dL", "umol/L", NA_character_))
   assert_numeric_vector(age)
   assert_character_vector(sex, values = c("M", "F"))
+  assert_character_vector(race, optional = TRUE)
   assert_character_scalar(
     method,
     values = c(
@@ -126,7 +133,9 @@ compute_egfr <- function(creat, age, wt, sex, race, method) {
     )
   )
 
-  scr <- creat / 88.42
+  scr <- if_else(
+    tolower(creatu) %in% c("cv", "mg/dl"), creat, creat / 88.42
+  )
 
   if (method == "MDRD") {
     assert_character_vector(race)
@@ -136,15 +145,18 @@ compute_egfr <- function(creat, age, wt, sex, race, method) {
         (age^-0.203) * 0.742 * 1.212,
       race == "BLACK OR AFRICAN AMERICAN" ~ 175 * (scr^-1.154) * (age^-0.203) * 1.212,
       sex == "F" ~ 175 * (scr^-1.154) * (age^-0.203) * 0.742,
-      TRUE ~ 175 * (scr^-1.154) * (age^-0.203)
+      sex == "M" ~ 175 * (scr^-1.154) * (age^-0.203)
     )
   } else if (method == "CRCL") {
     assert_numeric_vector(wt)
 
-    egfr <- if_else(
-      sex == "F",
-      ((140 - age) * wt * 1.04) / creat,
-      ((140 - age) * wt * 1.23) / creat
+    egfr <- case_when(
+      tolower(creatu) %in% c("cv", "mg/dl") & sex == "F" ~
+        ((140 - age) * wt * 0.85) / (creat * 72),
+      tolower(creatu) %in% c("cv", "mg/dl") & sex == "M" ~
+        ((140 - age) * wt) / (creat * 72),
+      sex == "F" ~ ((140 - age) * wt * 1.04) / creat,
+      sex == "M" ~ ((140 - age) * wt * 1.23) / creat
     )
   } else if (method == "CKD-EPI") {
     kappa <- case_when(
