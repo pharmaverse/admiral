@@ -40,10 +40,10 @@ library(tibble)
 convert_na_to_blanks(c("a", "b", NA, "d", NA))
 
 df <- tribble(
-  ~USUBJID,     ~RFICDTC,
-  "1001"  , "2000-01-01",
-  "1002"  , "2001-01-01",
-  "1003"  ,           NA
+  ~USUBJID,   ~RFICDTC,
+  "1001", "2000-01-01",
+  "1002", "2001-01-01",
+  "1003",           NA
 )
 print(df)
 convert_na_to_blanks(df)
