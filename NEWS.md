@@ -30,17 +30,19 @@
   - `format_reason_default()`
   - `derive_var_worst_flag()`
 
+## Documentation
+
+- Updated example dataset to trigger deterioration flags in the vignette "Creating Questionnaire ADaMs" (#1853, #1854)
+
 ## Various
 
-- `vars()` which was used in the admiral function calls that expected a list of quosures has been removed (#1747).
+- `vars()` which was used in the admiral function calls that expected a list of
+quosures has been removed. The admiral option `force_admiral_vars` was removed
+as well. (#1694)
 
 - `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with supplying both `min_dates` and `max_dates` that has now been resolved (#1843)
 
 - Examples for `derive_var_extreme_flag()` were reworked to reduce runtime that occasionally led to failing CI check (#1780)
-
-## Documentation
-
-- Updated example dataset to trigger deterioration flags in the vignette "Creating Questionnaire ADaMs" (#1853, #1854)
 
 # admiral 0.10.2
 
