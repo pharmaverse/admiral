@@ -41,9 +41,15 @@
 #'
 #' \strong{CRCL Creatinine Clearance (Cockcroft-Gault)}
 #'
+#' For Creatinine in umol/L:
+#'
 #' \deqn{\frac{(140 - age) \times weight(kg) \times constant}{Serum\:Creatinine(\mu mol/L)}}
 #'
 #' \deqn{Constant = 1.04\:for\:females, 1.23\:for\:males}
+#'
+#' For Creatinine in mg/dL:
+#'
+#' \deqn{\frac{(140 - age) \times weight(kg) \times (0.85\:if\:female)}{72 \times Serum\:Creatinine(mg/dL)}}
 #'
 #' units = mL/min
 #'
@@ -78,20 +84,20 @@
 #'
 #' @examples
 #' compute_egfr(
-#'   creat = 90, age = 53, wt = 85, sex = "M", method = "CRCL"
+#'   creat = 90, creatu = "umol/L", age = 53, wt = 85, sex = "M", method = "CRCL"
 #' )
 #'
 #' compute_egfr(
-#'   creat = 90, age = 53, sex = "M", race = "ASIAN", method = "MDRD"
+#'   creat = 90, creatu = "umol/L", age = 53, sex = "M", race = "ASIAN", method = "MDRD"
 #' )
 #'
 #' compute_egfr(
-#'   creat = 70, age = 52, sex = "F", race = "BLACK OR AFRICAN AMERICAN",
+#'   creat = 70, creatu = "umol/L", age = 52, sex = "F", race = "BLACK OR AFRICAN AMERICAN",
 #'   method = "MDRD"
 #' )
 #'
 #' compute_egfr(
-#'   creat = 90, age = 53, sex = "M", method = "CKD-EPI"
+#'   creat = 90, creatu = "umol/L", age = 53, sex = "M", method = "CKD-EPI"
 #' )
 #'
 #' library(tibble)
