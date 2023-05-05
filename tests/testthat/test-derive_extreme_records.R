@@ -1,4 +1,3 @@
-
 # derive_extreme_records ----
 ## Test 1: add last observation for each group ----
 test_that("derive_extreme_records Test 1: add last observation for each group", {
