@@ -320,7 +320,7 @@ derive_extreme_records <- function(dataset = NULL,
     new_ref_obs <- anti_join(
       select(dataset_ref, intersect(add_vars, ref_vars)),
       select(new_add_obs, !!!by_vars),
-      by = sapply(by_vars, as_name) # nolint: undesirable_function_linter
+      by = map_chr(by_vars, as_name)
     )
 
     if (!is.null(exist_flag)) {
