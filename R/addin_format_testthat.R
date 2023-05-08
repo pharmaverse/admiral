@@ -1,4 +1,3 @@
-
 # Returns the call for updating a given test_that test file
 # by adding a function name, a test number, and a section.
 # Call the function either by using RStudio Addin "format_test_that_file" or
