@@ -8,15 +8,15 @@ signal_duplicate_records(
   dataset,
   by_vars,
   msg = paste("Dataset contains duplicate records with respect to",
-    enumerate(vars2chr(by_vars))),
+    enumerate(replace_values_by_names(by_vars))),
   cnd_type = "error"
 )
 }
 \arguments{
 \item{dataset}{A data frame}
 
-\item{by_vars}{A list of variables created using \code{exprs()} identifying groups of
-records in which to look for duplicates}
+\item{by_vars}{A list of expressions created using \code{exprs()} identifying
+groups of records in which to look for duplicates}
 
 \item{msg}{The condition message}
 

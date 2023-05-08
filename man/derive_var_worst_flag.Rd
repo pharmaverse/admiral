@@ -84,6 +84,8 @@ Other deprecated:
 \code{\link{derive_param_extreme_event}()},
 \code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
 \code{\link{derive_vars_disposition_reason}()},
 \code{\link{format_eoxxstt_default}()},
 \code{\link{format_reason_default}()}

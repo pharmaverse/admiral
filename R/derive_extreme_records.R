@@ -220,6 +220,7 @@
 #'   set_values_to = exprs(
 #'     PARAMCD = "PD",
 #'     PARAM = "Disease Progression",
+#'     AVAL = yn_to_numeric(AVALC),
 #'     ANL01FL = "Y",
 #'     ADT = ADT
 #'   )
@@ -266,7 +267,7 @@ derive_extreme_records <- function(dataset = NULL,
 
   # Check input arguments
   assert_vars(by_vars, optional = is.null(dataset_ref))
-  assert_order_vars(order, optional = TRUE)
+  assert_expr_list(order, optional = TRUE)
   assert_data_frame(
     dataset,
     required_vars = expr_c(

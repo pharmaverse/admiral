@@ -26,7 +26,7 @@
 #'   specified by `filter_source` are considered as an event.
 #'
 #'   The variables specified by the `subject_keys` and
-#'   `order` parameter (if applicable) are expected.
+#'   `order` argument (if applicable) are expected.
 #'
 #' @param filter_source Source filter
 #'
@@ -41,8 +41,8 @@
 #'
 #'   List of symbols for sorting the source dataset (`dataset_source`).
 #'
-#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))`.
+#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))`.
 #'
 #' @param new_var New variable
 #'
@@ -71,8 +71,8 @@
 #'   A named list returned by `exprs()` defining the variables to be set for the
 #'   new parameter, e.g. `exprs(PARAMCD = "PD", PARAM = "Disease Progression")`
 #'   is expected. The values must be symbols, character strings, numeric values,
-#'   or `NA`. Note, if you require a date or datetime variable to be populated,
-#'   this needs to be defined here.
+#'   `NA`, or an expression. Note, if you require a date or datetime variable to
+#'   be populated, this needs to be defined here.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
@@ -81,9 +81,9 @@
 #' @param check_type Check uniqueness?
 #'
 #'   If `"warning"` or `"error"` is specified, a message is issued if the
-#'   observations of the input dataset restricted to the source parameter
-#'   (`source_param`) are not unique with respect to the subject keys
-#'   (`subject_key` parameter) and order variables (`order` parameter).
+#'   observations of the source dataset (`dataset_source`) restricted by
+#'   `filter_source` are not unique with respect to the subject keys
+#'   (`subject_key` argument) and `order`.
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
@@ -91,16 +91,16 @@
 #'   1. The source dataset (`dataset_source`) is restricted to observations fulfilling
 #'   `filter_source`.
 #'   1. For each subject (with respect to the variables specified for the
-#'   `subject_keys` parameter) either the first or last observation from the restricted
+#'   `subject_keys` argument) either the first or last observation from the restricted
 #'   source dataset is selected. This is depending on `mode`, (with respect to `order`,
-#'   if applicable) where the event condition (`filter_source` parameter) is fulfilled.
+#'   if applicable) where the event condition (`filter_source` argument) is fulfilled.
 #'   1. For each observation in `dataset_adsl` a new observation is created. For
 #'   subjects with event `new_var` is set to `true_value`. For all other
 #'   subjects `new_var` is set to `false_value`.
 #'   For subjects with event all variables from `dataset_source` are kept. For
 #'   subjects without event all variables which are in both `dataset_adsl` and
 #'   `dataset_source` are kept.
-#'   1. The variables specified by the `set_values_to` parameter are added to
+#'   1. The variables specified by the `set_values_to` argument are added to
 #'   the new observations.
 #'   1. The new observations are added to input dataset.
 #'
@@ -126,11 +126,10 @@ derive_param_extreme_event <- function(dataset = NULL,
                                        check_type = "warning") {
   deprecate_warn("0.11.0", "derive_param_extreme_event()", "derive_extreme_records()")
 
-
-  # Check input parameters
+  # Check input arguments
   filter_source <- assert_filter_cond(enexpr(filter_source))
   assert_vars(subject_keys)
-  assert_vars(order, optional = TRUE)
+  assert_expr_list(order, optional = TRUE)
   assert_data_frame(dataset_source,
     required_vars = exprs(!!!subject_keys, !!!extract_vars(order))
   )

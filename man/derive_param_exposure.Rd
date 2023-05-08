@@ -58,9 +58,8 @@ Set a list of variables to some specified value for the new observation(s)
 \itemize{
 \item LHS refer to a variable. It is expected that at least \code{PARAMCD} is defined.
 \item RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
-value or NA.
+value, \code{NA}, or an expression.
 (e.g.  \code{exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
-More general expression are not allowed.
 }
 
 \emph{Permitted Values:} List of variable-value pairs}
