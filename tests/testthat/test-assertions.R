@@ -1060,6 +1060,7 @@ test_that("assert_one_to_one Test 81: error if there is a one to many mapping", 
   expect_error(
     assert_one_to_one(admiral.test::admiral_dm, exprs(DOMAIN), exprs(USUBJID))
   )
+  admiraldev_environment$one_to_many <- NULL
 })
 
 ## Test 82: error if there is a many to one mapping ----
@@ -1067,6 +1068,7 @@ test_that("assert_one_to_one Test 82: error if there is a many to one mapping", 
   expect_error(
     assert_one_to_one(admiral.test::admiral_dm, exprs(USUBJID), exprs(DOMAIN))
   )
+  admiraldev_environment$many_to_one <- NULL
 })
 
 # assert_date_var ----
