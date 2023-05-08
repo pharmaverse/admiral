@@ -34,8 +34,8 @@ input dataset (\code{dataset}).
 
 All observations in the specified dataset fulfilling the condition
 specified by \code{filter_source} are considered. If \code{mode} and \code{order} are
-specified, the first or last one within each by group defined by \code{by_vars}
-is selected.
+specified, the first or last observation within each by group, defined by
+\code{by_vars}, is selected.
 
 If the argument is not specified, the input dataset (\code{dataset}) is used.
 
@@ -72,12 +72,7 @@ each by group is added to the input dataset.
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
 Only observations in \code{dataset_add} fulfilling the specified condition are
-considered.
-
-For by groups with at least one observation \code{exist_flag} is set to
-\code{true_value}.
-
-For all other by groups \code{exist_flag} is set to \code{false_value}.}
+considered.}
 
 \item{check_type}{Check uniqueness?
 
@@ -89,9 +84,14 @@ with respect to the by variables and the order.
 
 \item{exist_flag}{Existence flag
 
-The specified variable is added to the output dataset. It is set to
-\code{true_value} for observations from the additional dataset (\code{dataset_add}).
-For all other new observations it is set to \code{false_value}.
+The specified variable is added to the output dataset.
+
+For by groups with at least one observation in the additional dataset
+(\code{dataset_add}) \code{exist_flag} is set to the value specified by the
+\code{true_value} argument.
+
+For all other by groups \code{exist_flag} is set to the value specified by the
+\code{false_value} argument.
 
 \emph{Permitted Values:} Variable name}
 
@@ -119,7 +119,7 @@ symbol, a numeric value or \code{NA}, e.g., \code{exprs(PARAMCD = "TDOSE", PARCA
 
 \item{filter}{Filter for observations to consider
 
-\emph{Deprecated}, please use \code{filter_add} instead.
+\emph{Deprecated}, please use the above \code{filter_add} argument instead.
 
 Only observations fulfilling the specified condition are taken into account
 for selecting the first or last observation. If the argument is not
@@ -134,7 +134,7 @@ added as new observations.
 \description{
 Add the first or last observation for each by group as new observations. The
 new observations can be selected from the input dataset or an additional
-dataset. It can be used for example for adding the maximum or minimum value
+dataset. This function can be used for adding the maximum or minimum value
 as a separate visit. All variables of the selected observation are kept. This
 distinguishes \code{derive_extreme_records()} from \code{derive_summary_records()},
 where only the by variables are populated for the new records.

@@ -2,7 +2,7 @@
 #'
 #' Add the first or last observation for each by group as new observations. The
 #' new observations can be selected from the input dataset or an additional
-#' dataset. It can be used for example for adding the maximum or minimum value
+#' dataset. This function can be used for adding the maximum or minimum value
 #' as a separate visit. All variables of the selected observation are kept. This
 #' distinguishes `derive_extreme_records()` from `derive_summary_records()`,
 #' where only the by variables are populated for the new records.
@@ -26,8 +26,8 @@
 #'
 #'   All observations in the specified dataset fulfilling the condition
 #'   specified by `filter_source` are considered. If `mode` and `order` are
-#'   specified, the first or last one within each by group defined by `by_vars`
-#'   is selected.
+#'   specified, the first or last observation within each by group, defined by
+#'   `by_vars`, is selected.
 #'
 #'   If the argument is not specified, the input dataset (`dataset`) is used.
 #'
@@ -44,11 +44,6 @@
 #'
 #'   Only observations in `dataset_add` fulfilling the specified condition are
 #'   considered.
-#'
-#'   For by groups with at least one observation `exist_flag` is set to
-#'   `true_value`.
-#'
-#'   For all other by groups `exist_flag` is set to `false_value`.
 #'
 #' @param mode Selection mode (first or last)
 #'
@@ -68,9 +63,14 @@
 #'
 #' @param exist_flag Existence flag
 #'
-#'   The specified variable is added to the output dataset. It is set to
-#'   `true_value` for observations from the additional dataset (`dataset_add`).
-#'   For all other new observations it is set to `false_value`.
+#'   The specified variable is added to the output dataset.
+#'
+#'   For by groups with at least one observation in the additional dataset
+#'   (`dataset_add`) `exist_flag` is set to the value specified by the
+#'   `true_value` argument.
+#'
+#'   For all other by groups `exist_flag` is set to the value specified by the
+#'   `false_value` argument.
 #'
 #'   *Permitted Values:* Variable name
 #'
@@ -87,7 +87,7 @@
 #'
 #' @param filter Filter for observations to consider
 #'
-#'   *Deprecated*, please use `filter_add` instead.
+#'   *Deprecated*, please use the above `filter_add` argument instead.
 #'
 #'   Only observations fulfilling the specified condition are taken into account
 #'   for selecting the first or last observation. If the argument is not
