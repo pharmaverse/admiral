@@ -77,11 +77,6 @@ get_admiral_option <- function(option) {
 #'   `exprs(STUDYID, USUBJID)`. This option is used as default value for the
 #'   `subject_keys` argument in all admiral functions.
 #'
-#' @param force_admiral_vars If this option is set to `TRUE` (which is the
-#'   default), the admiral definition of `vars()` is forced. This is just a
-#'   temporary solution to allow running scripts which use `vars()` in the
-#'   admiral function calls. It will be removed in a future release.
-#'
 #' @details
 #' Modify an admiral option, e.g `subject_keys`, such that it automatically affects downstream
 #' function inputs where `get_admiral_option()` is called such as `derive_param_exist_flag()`.
@@ -140,15 +135,10 @@ get_admiral_option <- function(option) {
 #'     PARAM = "Measurable Disease at Baseline"
 #'   )
 #' )
-set_admiral_options <- function(subject_keys, force_admiral_vars) {
+set_admiral_options <- function(subject_keys) {
   if (!missing(subject_keys)) {
     assert_vars(subject_keys)
     admiral_environment$admiral_options$subject_keys <- subject_keys
-  }
-
-  if (!missing(force_admiral_vars)) {
-    assert_logical_scalar(force_admiral_vars)
-    admiral_environment$admiral_options$force_admiral_vars <- force_admiral_vars
   }
 
   # Add future input to function formals above

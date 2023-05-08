@@ -70,7 +70,6 @@ parameter the first or last record will be flagged across the whole dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-
 vs <- tribble(
   ~STUDYID, ~DOMAIN,  ~USUBJID, ~VSTESTCD, ~VSSTRESN,      ~VISIT, ~VSTPTNUM,
   "PILOT01",    "VS", "10-1187",   "DIABP",        70, "SCREENING",       815,

@@ -3,9 +3,9 @@ Type: Package
 Title: ADaM in R Asset Library
 Version: 0.11.0
 Authors@R: c(
-    person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
+    person("Ben", "Straub", email = "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
-    person("Ben", "Straub", role = "aut"),
+    person("Thomas", "Neitmann", role = "aut"),
     person("Samia", "Kabi", role = "aut"),
     person("Gordon", "Miller", role = "aut"),
     person("Teckla", "Akinyi", role = "aut"),
@@ -69,6 +69,7 @@ Description: A toolbox for programming Clinical Data Interchange Standards Conso
     (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
 Language: en-US
 License: Apache License (>= 2)
+BugReports: https://github.com/pharmaverse/admiral/issues
 URL: https://pharmaverse.github.io/admiral/, https://github.com/pharmaverse/admiral
 Encoding: UTF-8
 LazyData: true

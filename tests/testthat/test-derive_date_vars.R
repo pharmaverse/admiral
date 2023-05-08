@@ -889,6 +889,34 @@ test_that("derive_vars_dt Test 42: Supplying both min/max dates for highest_impu
   expect_dfs_equal(actual, expected, keys = c("ASTDT", "ASTDTF"))
 })
 
+## Test 43: Supplying both min/max dates for highest_imputation = Y works ----
+test_that("derive_vars_dt Test 43: Supplying both min/max dates for highest_imputation = Y works", { # nolint
+  actual <- data.frame(
+    AESTDTC = c(NA_character_, NA_character_),
+    TRTSDT = c(ymd("2022-01-01"), NA),
+    TRTEDT = c(ymd("2022-01-31"), NA)
+  ) %>%
+    mutate(AESTDTC = as.character(AESTDTC)) %>%
+    derive_vars_dt(
+      dtc = AESTDTC,
+      new_vars_prefix = "AST",
+      highest_imputation = "Y",
+      date_imputation = "last",
+      min_dates = exprs(TRTSDT),
+      max_dates = exprs(TRTEDT)
+    )
+
+  expected <- data.frame(
+    AESTDTC = c(NA_character_, NA_character_),
+    TRTSDT = c(ymd("2022-01-01"), NA),
+    TRTEDT = c(ymd("2022-01-31"), NA),
+    ASTDT = c(ymd("2022-01-31"), NA),
+    ASTDTF = c("Y", NA)
+  )
+
+  expect_dfs_equal(actual, expected, keys = c("ASTDT", "ASTDTF"))
+})
+
 # derive_vars_dtm ----
 
 input <- tibble::tribble(
@@ -902,8 +930,8 @@ input <- tibble::tribble(
   "2019---07"
 )
 
-## Test 43: default behavior ----
-test_that("derive_vars_dtm Test 43: default behavior", {
+## Test 44: default behavior ----
+test_that("derive_vars_dtm Test 44: default behavior", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
@@ -928,8 +956,8 @@ test_that("derive_vars_dtm Test 43: default behavior", {
   )
 })
 
-## Test 44: date imputed to first, auto DTF/TMF ----
-test_that("derive_vars_dtm Test 44: date imputed to first, auto DTF/TMF", {
+## Test 45: date imputed to first, auto DTF/TMF ----
+test_that("derive_vars_dtm Test 45: date imputed to first, auto DTF/TMF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTDTF,       ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
@@ -956,8 +984,8 @@ test_that("derive_vars_dtm Test 44: date imputed to first, auto DTF/TMF", {
   )
 })
 
-## Test 45: date and time imputed to last, no DTF/TMF ----
-test_that("derive_vars_dtm Test 45: date and time imputed to last, no DTF/TMF", {
+## Test 46: date and time imputed to last, no DTF/TMF ----
+test_that("derive_vars_dtm Test 46: date and time imputed to last, no DTF/TMF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~AENDTM,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"),
@@ -986,8 +1014,8 @@ test_that("derive_vars_dtm Test 45: date and time imputed to last, no DTF/TMF", 
   )
 })
 
-## Test 46: date and time imputed to last, DTF only ----
-test_that("derive_vars_dtm Test 46: date and time imputed to last, DTF only", {
+## Test 47: date and time imputed to last, DTF only ----
+test_that("derive_vars_dtm Test 47: date and time imputed to last, DTF only", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~AENDTM,                        ~AENDTF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
@@ -1016,8 +1044,8 @@ test_that("derive_vars_dtm Test 46: date and time imputed to last, DTF only", {
   )
 })
 
-## Test 47: date imputed to MID, time to first, TMF only ----
-test_that("derive_vars_dtm Test 47: date imputed to MID, time to first, TMF only", {
+## Test 48: date imputed to MID, time to first, TMF only ----
+test_that("derive_vars_dtm Test 48: date imputed to MID, time to first, TMF only", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
@@ -1046,8 +1074,8 @@ test_that("derive_vars_dtm Test 47: date imputed to MID, time to first, TMF only
   )
 })
 
-## Test 48: No re-derivation is done if --DTF variable already exists ----
-test_that("derive_vars_dtm Test 48: No re-derivation is done if --DTF variable already exists", {
+## Test 49: No re-derivation is done if --DTF variable already exists ----
+test_that("derive_vars_dtm Test 49: No re-derivation is done if --DTF variable already exists", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,              ~ASTDTM,                        ~ASTDTF,       ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
@@ -1078,8 +1106,8 @@ test_that("derive_vars_dtm Test 48: No re-derivation is done if --DTF variable a
   )
 })
 
-## Test 49: max_dates parameter works as expected ----
-test_that("derive_vars_dtm Test 49: max_dates parameter works as expected", {
+## Test 50: max_dates parameter works as expected ----
+test_that("derive_vars_dtm Test 50: max_dates parameter works as expected", {
   expected_output <- tibble::tribble(
     ~XXSTDTC,    ~ASTDTM,                        ~ASTDTF, ~ASTTMF,
     "2019-02",   ymd_hms("2019-02-10T00:00:00"), "D",     "H",
@@ -1115,8 +1143,8 @@ input_secs <- tibble::tribble(
   "2019---07"
 )
 
-## Test 50: NA imputation for highest_imputation = Y & max_dates ----
-test_that("derive_vars_dtm Test 50: NA imputation for highest_imputation = Y & max_dates", {
+## Test 51: NA imputation for highest_imputation = Y & max_dates ----
+test_that("derive_vars_dtm Test 51: NA imputation for highest_imputation = Y & max_dates", {
   actual <- data.frame(
     AESTDTC = c(NA_character_, NA_character_),
     TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
@@ -1143,8 +1171,8 @@ test_that("derive_vars_dtm Test 50: NA imputation for highest_imputation = Y & m
   expect_dfs_equal(actual, expected, keys = c("ASTDTM", "ASTDTF", "ASTTMF"))
 })
 
-## Test 51: NA imputation for highest_imputation = Y & max_dates but date_imputation = first ----
-test_that("derive_vars_dtm Test 51: NA imputation for highest_imputation = Y & max_dates but date_imputation = first", { # nolint
+## Test 52: NA imputation for highest_imputation = Y & max_dates but date_imputation = first ----
+test_that("derive_vars_dtm Test 52: NA imputation for highest_imputation = Y & max_dates but date_imputation = first", { # nolint
   expect_warning(
     (data.frame(
       AESTDTC = c(NA_character_, NA_character_),
@@ -1164,8 +1192,8 @@ test_that("derive_vars_dtm Test 51: NA imputation for highest_imputation = Y & m
   )
 })
 
-## Test 52: NA imputation for highest_imputation = Y & min_dates ----
-test_that("derive_vars_dtm Test 52: NA imputation for highest_imputation = Y & min_dates", {
+## Test 53: NA imputation for highest_imputation = Y & min_dates ----
+test_that("derive_vars_dtm Test 53: NA imputation for highest_imputation = Y & min_dates", {
   actual <- data.frame(
     AESTDTC = c(NA_character_, NA_character_),
     TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
@@ -1192,8 +1220,8 @@ test_that("derive_vars_dtm Test 52: NA imputation for highest_imputation = Y & m
   expect_dfs_equal(actual, expected, keys = c("ASTDTM", "ASTDTF", "ASTTMF"))
 })
 
-## Test 53: NA imputation for highest_imputation = Y & min_dates but date_imputation = last ----
-test_that("derive_vars_dtm Test 53: NA imputation for highest_imputation = Y & min_dates but date_imputation = last", { # nolint
+## Test 54: NA imputation for highest_imputation = Y & min_dates but date_imputation = last ----
+test_that("derive_vars_dtm Test 54: NA imputation for highest_imputation = Y & min_dates but date_imputation = last", { # nolint
   expect_warning(
     (data.frame(
       AESTDTC = c(NA_character_, NA_character_),
@@ -1213,8 +1241,8 @@ test_that("derive_vars_dtm Test 53: NA imputation for highest_imputation = Y & m
   )
 })
 
-## Test 54: NA imputation for highest_imputation = Y but null min/max dates fails ----
-test_that("derive_vars_dtm Test 54: NA imputation for highest_imputation = Y but null min/max dates fails", { # nolint
+## Test 55: NA imputation for highest_imputation = Y but null min/max dates fails ----
+test_that("derive_vars_dtm Test 55: NA imputation for highest_imputation = Y but null min/max dates fails", { # nolint
   expect_error(
     (data.frame(
       AESTDTC = c(NA_character_, NA_character_),
@@ -1233,8 +1261,8 @@ test_that("derive_vars_dtm Test 54: NA imputation for highest_imputation = Y but
   )
 })
 
-## Test 55: Supplying both min/max dates for highest_imputation = Y works ----
-test_that("derive_vars_dtm Test 55: Supplying both min/max dates for highest_imputation = Y works", { # nolint
+## Test 56: Supplying both min/max dates for highest_imputation = Y works ----
+test_that("derive_vars_dtm Test 56: Supplying both min/max dates for highest_imputation = Y works", { # nolint
   actual <- data.frame(
     AESTDTC = c(NA_character_, NA_character_),
     TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA),
@@ -1245,7 +1273,8 @@ test_that("derive_vars_dtm Test 55: Supplying both min/max dates for highest_imp
       dtc = AESTDTC,
       new_vars_prefix = "AST",
       highest_imputation = "Y",
-      time_imputation = "last",
+      date_imputation = "first",
+      time_imputation = "first",
       min_dates = exprs(TRTSDTM),
       max_dates = exprs(TRTEDTM)
     )
@@ -1260,4 +1289,34 @@ test_that("derive_vars_dtm Test 55: Supplying both min/max dates for highest_imp
   )
 
   expect_dfs_equal(actual, expected, keys = c("ASTDTM", "ASTDTF", "ASTTMF"))
+})
+
+## Test 57: Supplying both min/max dates for highest_imputation = Y works ----
+test_that("derive_vars_dtm Test 57: Supplying both min/max dates for highest_imputation = Y works", { # nolint
+  actual <- data.frame(
+    AESTDTC = c(NA_character_, NA_character_),
+    TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA),
+    TRTEDTM = c(ymd_hms("2022-01-31 23:59:59"), NA)
+  ) %>%
+    mutate(AESTDTC = as.character(AESTDTC)) %>%
+    derive_vars_dtm(
+      dtc = AESTDTC,
+      new_vars_prefix = "AEN",
+      highest_imputation = "Y",
+      date_imputation = "last",
+      time_imputation = "last",
+      min_dates = exprs(TRTSDTM),
+      max_dates = exprs(TRTEDTM)
+    )
+
+  expected <- data.frame(
+    AESTDTC = c(NA_character_, NA_character_),
+    TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA),
+    TRTEDTM = c(ymd_hms("2022-01-31 23:59:59"), NA),
+    AENDTM  = c(ymd_hms("2022-01-31 23:59:59"), NA),
+    AENDTF  = c("Y", NA),
+    AENTMF  = c("H", NA)
+  )
+
+  expect_dfs_equal(actual, expected, keys = c("AENDTM", "AENDTF", "AENTMF"))
 })
