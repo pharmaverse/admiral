@@ -31,8 +31,8 @@ expected.}
 
 Within each by group the observations are ordered by the specified order.
 
-\emph{Permitted Values:} list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}}
+\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
 
 \item{new_var}{New variable
 
@@ -173,8 +173,6 @@ response \%>\%
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_cat}()},
-\code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},

@@ -18,8 +18,8 @@
 #'
 #'   Within each by group the observations are ordered by the specified order.
 #'
-#'   *Permitted Values:* list of variables or `desc(<variable>)` function calls
-#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))`
+#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))`
 #'
 #' @param condition Condition for Reference Observation
 #'
@@ -147,7 +147,7 @@ filter_relative <- function(dataset,
                             keep_no_ref_groups = TRUE,
                             check_type = "warning") {
   assert_vars(by_vars)
-  assert_order_vars(order)
+  assert_expr_list(order)
   condition <- assert_filter_cond(enexpr(condition))
   mode <-
     assert_character_scalar(
