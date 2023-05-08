@@ -101,10 +101,8 @@
 #'   creat = 90, creatu = "umol/L", age = 53, sex = "M", method = "CKD-EPI"
 #' )
 #'
-#' library(tibble)
-#' library(dplyr)
 #'
-#' base <- tribble(
+#' base <- tibble::tribble(
 #'   ~STUDYID, ~USUBJID, ~AGE, ~SEX, ~RACE, ~WTBL, ~CREATBL, ~CREATBLU,
 #'   "P01", "P01-1001", 55, "M", "WHITE", 90.7, 96.3, "umol/L",
 #'   "P01", "P01-1002", 52, "F", "BLACK OR AFRICAN AMERICAN", 68.5, 70, "umol/L",
@@ -113,7 +111,7 @@
 #' )
 #'
 #' base_egfr <- base %>%
-#'   mutate(
+#'   dplyr::mutate(
 #'     CRCL_CG = compute_egfr(
 #'       creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
 #'       method = "CRCL"
