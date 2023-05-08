@@ -17,6 +17,10 @@ A list of expressions
 \description{
 Replace Expression Value with Name
 }
+\examples{
+library(rlang)
+replace_values_by_names(exprs(AVAL, ADT = convert_dtc_to_dt(EXSTDTC)))
+}
 \seealso{
 Helpers for working with Quosures: 
 \code{\link{add_suffix_to_vars}()},

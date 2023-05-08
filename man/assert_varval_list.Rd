@@ -7,7 +7,7 @@
 assert_varval_list(
   arg,
   required_elements = NULL,
-  accept_expr = FALSE,
+  accept_expr = TRUE,
   accept_var = FALSE,
   optional = FALSE
 )
@@ -22,7 +22,7 @@ assert_varval_list(
 \item{accept_var}{Should unnamed variable names (e.g. \code{exprs(USUBJID)}) on the
 right hand side be accepted?}
 
-\item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
+\item{optional}{Is the checked argument optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown.}
 }
 \value{
@@ -31,8 +31,8 @@ Otherwise, the input it returned invisibly.
 }
 \description{
 Checks if the argument is a list of expressions where the expressions are
-variable-value pairs. The value can be a symbol, a string, a numeric, or
-\code{NA}. More general expression are not allowed.
+variable-value pairs. The value can be a symbol, a string, a numeric, an
+expression, or \code{NA}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -52,6 +52,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_character_vector}()},
 \code{\link{assert_data_frame}()},
 \code{\link{assert_date_vector}()},
+\code{\link{assert_expr_list}()},
 \code{\link{assert_expr}()},
 \code{\link{assert_filter_cond}()},
 \code{\link{assert_function_param}()},
@@ -62,9 +63,9 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_list_of}()},
 \code{\link{assert_logical_scalar}()},
 \code{\link{assert_named_exprs}()},
+\code{\link{assert_named}()},
 \code{\link{assert_numeric_vector}()},
 \code{\link{assert_one_to_one}()},
-\code{\link{assert_order_vars}()},
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_s3_class}()},
 \code{\link{assert_same_type}()},

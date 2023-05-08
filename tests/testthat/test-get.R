@@ -57,7 +57,7 @@ test_that("get_source_vars Test 4: x is a list of expressions", {
 test_that("get_source_vars Test 5: NULL returns NULL", {
   expect_equal(
     get_source_vars(NULL),
-    expr_c(NULL)
+    NULL
   )
 })
 

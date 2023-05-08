@@ -4,7 +4,7 @@
 \alias{process_set_values_to}
 \title{Process \code{set_values_to} Argument}
 \usage{
-process_set_values_to(dataset, set_values_to, expected_types = NULL)
+process_set_values_to(dataset, set_values_to = NULL, expected_types = NULL)
 }
 \arguments{
 \item{dataset}{Input dataset}

@@ -1,4 +1,4 @@
-url: https://pharmaverse.github.io/admiraldev
+url: https://pharmaverse.github.io/admiraldev/devel
 
 template:
   bootstrap: 5
@@ -77,6 +77,20 @@ reference:
   desc: Utilities without a theme
   contents:
   - has_keyword('dev_utility')
+
+- title: Deprecated
+  desc: |
+    As `{admiral}` is still evolving, functions/arguments may need to be removed or replaced over time. In such cases, the function/argument will enter the following 6-month deprecation cycle:
+
+    * In the first release (0-3 months), there will be a warning issued if you use the function/argument, but it will still be available to use.
+    * In the following release (3-6 months), an error will be produced if you use the function/argument.
+    * Finally, from the 3rd release (6 months) onwards, the function/argument will be removed from `{admiral}` and its documentation completely.
+
+    *Note: Guidance on replacement functionality can be found in the warning/error message produced or in the function's documentation.*
+
+    Below, you can find a list of functions in the process of being deprecated:
+  contents:
+  - has_keyword("deprecated")
 
 navbar:
  components:

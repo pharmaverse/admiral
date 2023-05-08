@@ -84,3 +84,29 @@ test_that("vars2chr Test 9: warning if quosures argument is used", {
     class = "lifecycle_warning_deprecated"
   )
 })
+
+# extract_vars ----
+## Test 10: works with formulas (lhs) ----
+test_that("extract_vars Test 10: works with formulas (lhs)", {
+  expect_equal(
+    object = extract_vars(AVAL ~ ARMCD + AGEGR1),
+    expected = unname(exprs(AVAL))
+  )
+})
+
+## Test 11: works with formulas (rhs) ----
+test_that("extract_vars Test 11: works with formulas (rhs)", {
+  expect_equal(
+    object = extract_vars(AVAL ~ ARMCD + AGEGR1, side = "rhs"),
+    expected = unname(exprs(ARMCD, AGEGR1))
+  )
+})
+
+## Test 12: works with calls ----
+test_that("extract_vars Test 12: works with calls", {
+  fun <- mean
+  expect_equal(
+    object = extract_vars(expr({{ fun }}((BASE - AVAL) / BASE * 100, LLQ / 2))),
+    expected = unname(exprs(BASE, AVAL, LLQ))
+  )
+})
