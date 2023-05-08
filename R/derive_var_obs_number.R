@@ -50,15 +50,39 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("admiral_vs")
-#'
-#' admiral_vs %>%
-#'   select(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
+#' vs <- tribble(
+#'         ~STUDYID, ~DOMAIN,      ~USUBJID, ~VSTESTCD, ~VISITNUM, ~VSTPTNUM,
+#'   "CDISCPILOT01",    "VS", "01-703-1182",   "DIABP",         3,       815,
+#'   "CDISCPILOT01",    "VS", "01-703-1182",   "DIABP",         3,       816,
+#'   "CDISCPILOT01",    "VS", "01-703-1182",   "DIABP",         4,       815,
+#'   "CDISCPILOT01",    "VS", "01-703-1182",   "DIABP",         4,       816,
+#'   "CDISCPILOT01",    "VS", "01-703-1182",   "PULSE",         3,       815,
+#'   "CDISCPILOT01",    "VS", "01-703-1182",   "PULSE",         3,       816,
+#'   "CDISCPILOT01",    "VS", "01-703-1182",   "PULSE",         4,       815,
+#'   "CDISCPILOT01",    "VS", "01-703-1182",   "PULSE",         4,       816,
+#'   "CDISCPILOT01",    "VS", "01-703-1182",   "SYSBP",         3,       815,
+#'   "CDISCPILOT01",    "VS", "01-703-1182",   "SYSBP",         3,       816,
+#'   "CDISCPILOT01",    "VS", "01-703-1182",   "SYSBP",         4,       815,
+#'   "CDISCPILOT01",    "VS", "01-703-1182",   "SYSBP",         4,       816,
+#'   "CDISCPILOT01",    "VS", "01-716-1229",   "DIABP",         3,       815,
+#'   "CDISCPILOT01",    "VS", "01-716-1229",   "DIABP",         3,       816,
+#'   "CDISCPILOT01",    "VS", "01-716-1229",   "DIABP",         4,       815,
+#'   "CDISCPILOT01",    "VS", "01-716-1229",   "DIABP",         4,       816,
+#'   "CDISCPILOT01",    "VS", "01-716-1229",   "PULSE",         3,       815,
+#'   "CDISCPILOT01",    "VS", "01-716-1229",   "PULSE",         3,       816,
+#'   "CDISCPILOT01",    "VS", "01-716-1229",   "PULSE",         4,       815,
+#'   "CDISCPILOT01",    "VS", "01-716-1229",   "PULSE",         4,       816,
+#'   "CDISCPILOT01",    "VS", "01-716-1229",   "SYSBP",         3,       815,
+#'   "CDISCPILOT01",    "VS", "01-716-1229",   "SYSBP",         3,       816,
+#'   "CDISCPILOT01",    "VS", "01-716-1229",   "SYSBP",         4,       815,
+#'   "CDISCPILOT01",    "VS", "01-716-1229",   "SYSBP",         4,       816
+#' )
+#' vs %>%
 #'   derive_var_obs_number(
 #'     by_vars = exprs(USUBJID, VSTESTCD),
 #'     order = exprs(VISITNUM, desc(VSTPTNUM))
 #'   )
+
 derive_var_obs_number <- function(dataset,
                                   by_vars = NULL,
                                   order = NULL,
