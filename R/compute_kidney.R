@@ -49,7 +49,8 @@
 #'
 #' For Creatinine in mg/dL:
 #'
-#' \deqn{\frac{(140 - age) \times weight(kg) \times (0.85\:if\:female)}{72 \times Serum\:Creatinine(mg/dL)}}
+#' \deqn{\frac{(140 - age) \times weight(kg) \times (0.85\:if\:female)}{72 \times
+#' Serum\:Creatinine(mg/dL)}}
 #'
 #' units = mL/min
 #'

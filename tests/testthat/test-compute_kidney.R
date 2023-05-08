@@ -64,7 +64,6 @@ test_that("compute_egfr Test 01.06: EGFR MDRD calculation", {
 
 
 test_that("compute_egfr Test 01.07: CKD-EPI calculated on input data", {
-
   input <- tribble(
     ~STUDYID, ~USUBJID, ~AGE, ~SEX, ~RACE, ~WTBL, ~CREATBL, ~CREATBLU,
     "P01", "P01-1001", 55, "M", "WHITE", 90.7, 96.3, "umol/L",
