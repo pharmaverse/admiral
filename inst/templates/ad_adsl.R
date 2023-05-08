@@ -156,14 +156,11 @@ adsl <- adsl %>%
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   ) %>%
   # EOS status
-  derive_var_merged_cat(
+  derive_vars_merged(
     dataset_add = ds_ext,
     by_vars = exprs(STUDYID, USUBJID),
     filter_add = DSCAT == "DISPOSITION EVENT",
-    new_var = EOSSTT,
-    source_var = DSDECOD,
-    cat_fun = format_eosstt,
-    missing_value = NA_character_
+    new_vars = exprs(EOSSTT = format_eosstt(DSDECOD))
   ) %>%
   # Last retrieval date
   derive_vars_merged(
@@ -201,50 +198,30 @@ adsl <- adsl %>%
   )
 
 ## Last known alive date ----
+## DTC variables are converted to numeric dates imputing missing day and month
+## to the first
 ae_start_date <- date_source(
   dataset_name = "ae",
-  date = AESTDT
+  date = convert_dtc_to_dt(AESTDTC, highest_imputation = "M")
 )
 ae_end_date <- date_source(
   dataset_name = "ae",
-  date = AEENDT
+  date = convert_dtc_to_dt(AEENDTC, highest_imputation = "M")
 )
 lb_date <- date_source(
   dataset_name = "lb",
-  date = LBDT,
-  filter = !is.na(LBDT)
+  date = convert_dtc_to_dt(LBDTC, highest_imputation = "M")
 )
 trt_end_date <- date_source(
   dataset_name = "adsl",
   date = TRTEDT
 )
 
-# impute AE start and end date to first
-ae_ext <- ae %>%
-  derive_vars_dt(
-    dtc = AESTDTC,
-    new_vars_prefix = "AEST",
-    highest_imputation = "M"
-  ) %>%
-  derive_vars_dt(
-    dtc = AEENDTC,
-    new_vars_prefix = "AEEN",
-    highest_imputation = "M"
-  )
-
-# impute LB date to first
-lb_ext <- derive_vars_dt(
-  lb,
-  dtc = LBDTC,
-  new_vars_prefix = "LB",
-  highest_imputation = "M"
-)
-
 adsl <- adsl %>%
   derive_var_extreme_dt(
     new_var = LSTALVDT,
     ae_start_date, ae_end_date, lb_date, trt_end_date,
-    source_datasets = list(ae = ae_ext, lb = lb_ext, adsl = adsl),
+    source_datasets = list(ae = ae, lb = lb, adsl = adsl),
     mode = "last"
   ) %>%
   derive_var_merged_exist_flag(

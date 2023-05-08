@@ -44,17 +44,14 @@
 #'   Set a list of variables to some specified value for the new observation(s)
 #'   + LHS refer to a variable. It is expected that at least `PARAMCD` is defined.
 #'   + RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
-#'   value or NA.
+#'   value, `NA`, or an expression.
 #'   (e.g.  `exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
-#'   More general expression are not allowed.
 #'
 #'   *Permitted Values:* List of variable-value pairs
 #'
 #' @details For each group (with respect to the variables specified for the `by_vars` parameter),
 #' an observation is added to the output dataset and the defined values are set to the defined
 #' variables
-#'
-#'
 #'
 #' @return The input dataset with a new record added for each group (with respect to the variables
 #' specified for the `by_vars` parameter). That is, a variable will only
