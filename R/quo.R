@@ -40,7 +40,18 @@ quo_c <- function(...) {
 #'
 #' @export
 expr_c <- function(...) {
-  inputs <- unlist(list(...), recursive = TRUE)
+  # Transform single expression into list of expression
+  inputs <- map(
+    list(...),
+    function(x) {
+      if (typeof(x) != "list") {
+        list(x)
+      } else {
+        x
+      }
+    }
+  )
+  inputs <- flatten(inputs)
   stopifnot(all(map_lgl(inputs, is_expression)))
   is_null <- map_lgl(inputs, is.null)
   inputs[!is_null]
@@ -92,6 +103,10 @@ quo_not_missing <- function(x) {
 #'
 #' @return A list of expressions
 #' @export
+#'
+#' @examples
+#' library(rlang)
+#' replace_values_by_names(exprs(AVAL, ADT = convert_dtc_to_dt(EXSTDTC)))
 replace_values_by_names <- function(expressions, quosures) {
   if (!missing(quosures)) {
     deprecate_warn(
@@ -100,6 +115,9 @@ replace_values_by_names <- function(expressions, quosures) {
       "replace_values_by_names(expressions = )"
     )
     expressions <- map(quosures, rlang::quo_get_expr)
+  }
+  if (is.null(names(expressions))) {
+    return(expressions)
   }
   map2(expressions, names(expressions), function(e, n) {
     if (n == "") {
@@ -224,7 +242,7 @@ replace_symbol_in_expr <- function(expression,
 add_suffix_to_vars <- function(order,
                                vars,
                                suffix) {
-  assert_order_vars(order)
+  assert_expr_list(order)
   assert_vars(vars)
   assert_character_scalar(suffix)
   for (i in seq_along(vars)) {

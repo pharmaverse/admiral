@@ -9,7 +9,7 @@ assert_named_exprs(arg, optional = FALSE)
 \arguments{
 \item{arg}{A function argument to be checked}
 
-\item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
+\item{optional}{Is the checked argument optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
 }
 \value{
@@ -26,6 +26,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_character_vector}()},
 \code{\link{assert_data_frame}()},
 \code{\link{assert_date_vector}()},
+\code{\link{assert_expr_list}()},
 \code{\link{assert_expr}()},
 \code{\link{assert_filter_cond}()},
 \code{\link{assert_function_param}()},
@@ -35,9 +36,9 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_list_element}()},
 \code{\link{assert_list_of}()},
 \code{\link{assert_logical_scalar}()},
+\code{\link{assert_named}()},
 \code{\link{assert_numeric_vector}()},
 \code{\link{assert_one_to_one}()},
-\code{\link{assert_order_vars}()},
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_s3_class}()},
 \code{\link{assert_same_type}()},

@@ -56,10 +56,10 @@
 #'   )
 #' )
 process_set_values_to <- function(dataset,
-                                  set_values_to,
+                                  set_values_to = NULL,
                                   expected_types = NULL) {
   assert_data_frame(dataset)
-  assert_varval_list(set_values_to, accept_expr = TRUE)
+  assert_varval_list(set_values_to, optional = TRUE)
   assert_character_vector(
     expected_types,
     values = c("numeric", "character"),

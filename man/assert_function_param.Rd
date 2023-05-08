@@ -12,7 +12,7 @@ assert_function_param(arg, params)
 \item{params}{A character vector of function parameters}
 }
 \value{
-The function throws an error if any elements of \code{params} is not a parameter of
+The function throws an error if any elements of \code{params} is not an argument of
 the function given by \code{arg}
 }
 \description{
@@ -34,6 +34,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_character_vector}()},
 \code{\link{assert_data_frame}()},
 \code{\link{assert_date_vector}()},
+\code{\link{assert_expr_list}()},
 \code{\link{assert_expr}()},
 \code{\link{assert_filter_cond}()},
 \code{\link{assert_function}()},
@@ -43,9 +44,9 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_list_of}()},
 \code{\link{assert_logical_scalar}()},
 \code{\link{assert_named_exprs}()},
+\code{\link{assert_named}()},
 \code{\link{assert_numeric_vector}()},
 \code{\link{assert_one_to_one}()},
-\code{\link{assert_order_vars}()},
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_s3_class}()},
 \code{\link{assert_same_type}()},

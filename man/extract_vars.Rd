@@ -9,13 +9,19 @@ extract_vars(x, side = "lhs")
 \arguments{
 \item{x}{An \code{R} object}
 
-\item{side}{One of \code{"lhs"} (the default) or \code{"rhs"}}
+\item{side}{One of \code{"lhs"} (the default) or \code{"rhs"} for formulas}
 }
 \value{
 A list of expressions
 }
 \description{
 Extract All Symbols from a List of Expressions
+}
+\examples{
+library(rlang)
+extract_vars(exprs(PARAMCD, (BASE - AVAL) / BASE + 100))
+extract_vars(AVAL ~ ARMCD + AGEGR1)
+extract_vars(AVAL ~ ARMCD + AGEGR1, side = "rhs")
 }
 \seealso{
 Developer Utility Functions: 
