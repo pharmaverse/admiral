@@ -33,17 +33,14 @@ test_that("derive_var_dthcaus Test 2: DTHCAUS is added from AE and DS", {
     "TEST01", "PAT01", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-01",
     "TEST01", "PAT01", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
     "TEST01", "PAT01", 3, "ADVERSE EVENT", "ADVERSE EVENT", "2021-12-01",
-    "TEST01", "PAT01", 4, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01",
+    "TEST01", "PAT01", 4, "DEATH", "DEATH DUE TO progression of disease", "2022-02-01",
     "TEST01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-02",
     "TEST01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
     "TEST01", "PAT02", 3, "COMPLETED", "PROTOCOL COMPLETED", "2021-12-01",
     "TEST01", "PAT03", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
     "TEST01", "PAT03", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
     "TEST01", "PAT03", 3, "COMPLETED", "PROTOCOL COMPLETED", "2021-12-01"
-  ) %>%
-    mutate(
-      DSSTDT = ymd(DSSTDTC)
-    )
+  )
 
   src_ae <- dthcaus_source(
     dataset_name = "ae",
@@ -56,9 +53,9 @@ test_that("derive_var_dthcaus Test 2: DTHCAUS is added from AE and DS", {
   src_ds <- dthcaus_source(
     dataset_name = "ds",
     filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-    date = DSSTDT,
+    date = convert_dtc_to_dt(DSSTDTC),
     mode = "first",
-    dthcaus = DSTERM
+    dthcaus = str_to_upper(DSTERM)
   )
 
   expected_output <- tibble::tribble(

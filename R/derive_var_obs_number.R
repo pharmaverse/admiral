@@ -67,7 +67,7 @@ derive_var_obs_number <- function(dataset,
   # checks and quoting
   new_var <- assert_symbol(enexpr(new_var))
   assert_vars(by_vars, optional = TRUE)
-  assert_order_vars(order, optional = TRUE)
+  assert_expr_list(order, optional = TRUE)
   if (!is.null(by_vars)) {
     required_vars <- by_vars
   } else {
@@ -97,7 +97,7 @@ derive_var_obs_number <- function(dataset,
       if (check_type != "none") {
         signal_duplicate_records(
           data,
-          by_vars = required_vars,
+          by_vars = expr_c(by_vars, order),
           cnd_type = check_type
         )
       }
