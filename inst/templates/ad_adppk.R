@@ -199,25 +199,10 @@ adppk_prev <- adppk_first_dose %>%
     check_type = "none"
   )
 
-# ---- Find previous nominal time ----
-
-adppk_nom_prev <- adppk_prev %>%
-  derive_vars_joined(
-    dataset_add = ex_exp,
-    by_vars = exprs(USUBJID),
-    order = exprs(NFRLT),
-    new_vars = exprs(NFRLT_prev = NFRLT),
-    join_vars = exprs(NFRLT),
-    filter_add = NULL,
-    filter_join = NFRLT > NFRLT.join,
-    mode = "last",
-    check_type = "none"
-  )
-
 # ---- Combine ADPPK and EX data ----
 # Derive Relative Time Variables
 
-adppk_arrlt <- bind_rows(adppk_nom_prev, ex_exp) %>%
+adppk_aprlt <- bind_rows(adppk_prev, ex_exp) %>%
   group_by(USUBJID, DRUG) %>%
   mutate(
     FANLDTM = min(FANLDTM, na.rm = TRUE),
@@ -236,34 +221,25 @@ adppk_arrlt <- bind_rows(adppk_nom_prev, ex_exp) %>%
     floor_in = FALSE,
     add_one = FALSE
   ) %>%
-  # Derive Actual Relative Time from Reference Dose (ARRLT)
+  # Derive Actual Relative Time from Reference Dose (APRLT)
   derive_vars_duration(
-    new_var = ARRLT,
+    new_var = APRLT,
     start_date = ADTM_prev,
     end_date = ADTM,
     out_unit = "hours",
     floor_in = FALSE,
     add_one = FALSE
   ) %>%
-  # Derive ARRLT
+  # Derive APRLT
   mutate(
-    ARRLT = case_when(
+    APRLT = case_when(
       EVID == 1 ~ 0,
-      is.na(ARRLT) ~ AFRLT,
-      TRUE ~ ARRLT
+      is.na(APRLT) ~ AFRLT,
+      TRUE ~ APRLT
     )
   )
 
-# Derive Nominal Relative Time from Reference Dose (NRRLT)
 
-adppk_nrrlt <- adppk_arrlt %>%
-  mutate(
-    NRRLT = case_when(
-      EVID == 1 ~ 0,
-      is.na(NFRLT_prev) ~ NFRLT - min_NFRLT,
-      TRUE ~ NFRLT - NFRLT_prev
-    )
-  )
 
 # ---- Derive Analysis Variables ----
 # Derive ATPTN, ATPT, ATPTREF, ABLFL and BASETYPE
@@ -271,7 +247,7 @@ adppk_nrrlt <- adppk_arrlt %>%
 # Derive PARAMCD and relative time units
 # Derive AVAL, AVALU and AVALCAT1
 
-adppk_aval <- adppk_nrrlt %>%
+adppk_aval <- adppk_aprlt %>%
   mutate(
     # Derive Actual Dose
     DOSEA = case_when(
