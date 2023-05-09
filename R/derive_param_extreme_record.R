@@ -85,15 +85,15 @@
 #' @examples
 #' aevent_samp <- tibble::tribble(
 #'   ~USUBJID, ~AESEQ, ~AETERM,     ~AESTDTC,
-#'   "1"     ,      1,     "X", "2022-01-01",
-#'   "1"     ,      2,     "Y", "2022-01-02",
-#'   "1"     ,      3,     "Z", "2022-01-03",
-#'   "2"     ,      1,     "A", "2021-01-01",
-#'   "2"     ,      2,     "B", "2021-01-02",
-#'   "2"     ,      3,     "C", "2021-01-03",
-#'   "3"     ,      1,     "J", "2023-01-01",
-#'   "3"     ,      2,     "K", "2023-01-02",
-#'   "3"     ,      3,     "L", "2023-01-03"
+#'   "1",           1,     "X", "2022-01-01",
+#'   "1",           2,     "Y", "2022-01-02",
+#'   "1",           3,     "Z", "2022-01-03",
+#'   "2",           1,     "A", "2021-01-01",
+#'   "2",           2,     "B", "2021-01-02",
+#'   "2",           3,     "C", "2021-01-03",
+#'   "3",           1,     "J", "2023-01-01",
+#'   "3",           2,     "K", "2023-01-02",
+#'   "3",           3,     "L", "2023-01-03"
 #' )
 #'
 #' cm <- tibble::tribble(
@@ -115,15 +115,18 @@
 #'       filter = CMDECOD == "ACT",
 #'       new_vars = exprs(
 #'         ADT = convert_dtc_to_dt(CMSTDTC),
-#'         AVALC = CMDECOD)
+#'         AVALC = CMDECOD
+#'       )
 #'     ),
 #'     records_source(
 #'       dataset_name = "pr",
 #'       filter = PRDECOD == "ACS",
 #'       new_vars = exprs(
 #'         ADT = convert_dtc_to_dt(PRSTDTC),
-#'         AVALC = PRDECOD)
-#'     )),
+#'         AVALC = PRDECOD
+#'       )
+#'     )
+#'   ),
 #'   source_datasets = list(cm = cm, pr = pr),
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(ADT),
@@ -170,9 +173,10 @@ derive_param_extreme_record <- function(dataset,
   # Bind the source datasets together and parse out the extreme value
   param_data <- bind_rows(data_list) %>%
     filter_extreme(.,
-                   by_vars = by_vars,
-                   order = order,
-                   mode = mode) %>%
+      by_vars = by_vars,
+      order = order,
+      mode = mode
+    ) %>%
     mutate(!!!set_values_to)
 
   # Bind the parameter rows back to original dataset
