@@ -133,20 +133,14 @@ intermediate additional dataframe would use `derive_vars_merged()` as follows.
 adsl_01 <- dm %>%
   select(-DOMAIN)
 
-# Convert disposition character date to numeric date without imputation
-ds_ext <- derive_vars_dt(
-  dataset = ds,
-  dtc = DSSTDTC,
-  new_vars_prefix = "DSST"
-)
-
-# Join randomization date to ADSL
+# Convert disposition character date to numeric date and
+# join as randomization date to ADSL
 adsl_02 <- adsl_01 %>%
   derive_vars_merged(
-    dataset_add = ds_ext,
+    dataset_add = ds,
     filter_add = DSDECOD == "RANDOMIZED",
     by_vars = exprs(STUDYID, USUBJID),
-    new_vars = exprs(RANDDT = DSSTDT)
+    new_vars = exprs(RANDDT = convert_dtc_to_dt(DSSTDTC))
   )
 ```
 
@@ -158,20 +152,15 @@ to select the required observations from the additional dataframe. Note: the
 `filter_add` argument here shows a possible method for checking only for valid doses.
 
 ```{r eval=TRUE}
-# Convert exposure start date to numeric date without imputation
-ex_ext <- derive_vars_dt(
-  dataset = ex,
-  dtc = EXSTDTC,
-  new_vars_prefix = "EXST"
-)
-
-# Determine first exposure datetime and add to ADSL
+# Convert exposure start date to numeric date without imputation,
+# determine first exposure datetime and add to ADSL
 adsl_03 <- adsl_02 %>%
   derive_vars_merged(
-    dataset_add = ex_ext,
-    filter_add = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & !is.na(EXSTDT),
-    new_vars = exprs(TRTSDT = EXSTDT),
-    order = exprs(EXSTDT, EXSEQ),
+    dataset_add = ex,
+    filter_add = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) &
+      !is.na(TRTSDT),
+    new_vars = exprs(TRTSDT = convert_dtc_to_dt(EXSTDTC)),
+    order = exprs(TRTSDT, EXSEQ),
     mode = "first",
     by_vars = exprs(STUDYID, USUBJID)
   )
@@ -215,9 +204,7 @@ dataset_vignette(
 ```
 
 Some further examples of "merged" functions are `derive_vars_merged_lookup()` to
-join a user-defined lookup table as commonly used in BDS ADaMs,
-`derive_var_merged_cat()` to create a categorization variable from the
-information joined from the additional dataframe, or
+join a user-defined lookup table as commonly used in BDS ADaMs or
 `derive_var_merged_summary()` to merge summarized values from the additional
 dataframe.
 
@@ -249,6 +236,13 @@ The above mentioned randomization date variable (let's call it `RAND30DT` here)
 would use `derive_vars_joined()` as follows.
 
 ```{r eval=TRUE}
+# Convert disposition character date to numeric date without imputation
+ds_ext <- derive_vars_dt(
+  dataset = ds,
+  dtc = DSSTDTC,
+  new_vars_prefix = "DSST"
+)
+
 # Join randomization date to ADSL only for safety population patients
 adsl_05 <- adsl_04 %>%
   derive_vars_joined(
@@ -312,17 +306,14 @@ Here is how you would derive the highest severity AE the patient has occurred
 post-baseline up to and excluding the current AE day.
 
 ```{r eval=TRUE}
-# Add a numeric version of severity for sorting with severe=1, moderate=2, mild=3
-ae_ext <- ae_01 %>%
-  mutate(TEMP_SEVN = as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD"))))
-
 # Derive nadir severity (AENADSEV)
-ae_02 <- ae_ext %>%
+# Use a numeric version of severity for sorting with severe=1, moderate=2, mild=3
+ae_02 <- ae_01 %>%
   derive_vars_joined(
-    dataset_add = ae_ext,
+    dataset_add = ae_01,
     filter_add = AESTDY > 0,
     by_vars = exprs(USUBJID),
-    order = exprs(TEMP_SEVN),
+    order = exprs(as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))),
     new_vars = exprs(AENADSEV = AESEV),
     join_vars = exprs(AESTDY),
     filter_join = AESTDY.join < AESTDY,
@@ -366,7 +357,10 @@ ae_03 <- ae_02 %>%
   derive_var_extreme_flag(
     new_var = AEHSEVFL,
     by_vars = exprs(USUBJID),
-    order = exprs(TEMP_SEVN, AESTDY, AESEQ),
+    order = exprs(
+      as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD"))),
+      AESTDY, AESEQ
+    ),
     mode = "first"
   )
 ```

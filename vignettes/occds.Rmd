@@ -360,8 +360,8 @@ derive_var_ontrtfl(
 
 ## Derive Occurrence Flags {#occflag}
 
-The function `derive_var_extreme_flag()` can help derive variables such as `AOCCIFL`, 
-`AOCCPIFL`, `AOCCSIFL`, `AOCXIFL`, `AOCXPIFL`, and `AOCXSIFL`.
+The function `derive_var_extreme_flag()` can help derive variables such as
+`AOCCIFL`, `AOCCPIFL`, `AOCCSIFL`, and `AOCCzzFL`.
 
 If grades were collected, the following can be used to flag first occurrence of
 maximum toxicity grade.
@@ -386,14 +386,17 @@ Flag first occurrence of most severe adverse event:
 
 ```{r, eval=TRUE}
 adae <- adae %>%
-  mutate(
-    ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
-  ) %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
       by_vars = exprs(USUBJID),
-      order = exprs(desc(ASEVN), ASTDTM, AESEQ),
+      order = exprs(
+        as.integer(factor(
+          ASEV,
+          levels = c("DEATH THREATENING", "SEVERE", "MODERATE", "MILD")
+        )),
+        ASTDTM, AESEQ
+      ),
       new_var = AOCCIFL,
       mode = "first"
     ),
@@ -405,8 +408,7 @@ adae <- adae %>%
 dataset_vignette(
   adae,
   display_vars = exprs(
-    USUBJID, ASTDTM, ASEV, ASEVN, AESEQ, TRTEMFL,
-    AOCCIFL
+    USUBJID, ASTDTM, ASEV, AESEQ, TRTEMFL, AOCCIFL
   )
 )
 ```

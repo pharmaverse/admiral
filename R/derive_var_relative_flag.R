@@ -18,8 +18,8 @@
 #'
 #'   Within each by group the observations are ordered by the specified order.
 #'
-#'   *Permitted Values:* list of variables or `desc(<variable>)` function calls
-#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))`
+#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))`
 #'
 #' @param new_var New variable
 #'

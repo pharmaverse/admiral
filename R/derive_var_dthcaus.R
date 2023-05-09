@@ -35,7 +35,6 @@
 #' @examples
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate)
 #'
 #' adsl <- tribble(
 #'   ~STUDYID,  ~USUBJID,
@@ -46,26 +45,21 @@
 #' ae <- tribble(
 #'   ~STUDYID,  ~USUBJID, ~AESEQ, ~AEDECOD,       ~AEOUT,  ~AEDTHDTC,
 #'   "STUDY01", "PAT01",  12,     "SUDDEN DEATH", "FATAL", "2021-04-04"
-#' ) %>%
-#'   mutate(
-#'     AEDTHDT = ymd(AEDTHDTC)
-#'   )
+#' )
+#'
 #' ds <- tribble(
 #'   ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
 #'   "STUDY01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
 #'   "STUDY01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
 #'   "STUDY01", "PAT02", 3, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01",
 #'   "STUDY01", "PAT03", 1, "DEATH", "POST STUDY REPORTING OF DEATH", "2022-03-03"
-#' ) %>%
-#'   mutate(
-#'     DSSTDT = ymd(DSSTDTC)
-#'   )
+#' )
 #'
 #' # Derive `DTHCAUS` only - for on-study deaths only
 #' src_ae <- dthcaus_source(
 #'   dataset_name = "ae",
 #'   filter = AEOUT == "FATAL",
-#'   date = AEDTHDT,
+#'   date = convert_dtc_to_dt(AEDTHDTC),
 #'   mode = "first",
 #'   dthcaus = AEDECOD
 #' )
@@ -73,7 +67,7 @@
 #' src_ds <- dthcaus_source(
 #'   dataset_name = "ds",
 #'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-#'   date = DSSTDT,
+#'   date = convert_dtc_to_dt(DSSTDTC),
 #'   mode = "first",
 #'   dthcaus = DSTERM
 #' )
@@ -84,7 +78,7 @@
 #' src_ae <- dthcaus_source(
 #'   dataset_name = "ae",
 #'   filter = AEOUT == "FATAL",
-#'   date = AEDTHDT,
+#'   date = convert_dtc_to_dt(AEDTHDTC),
 #'   mode = "first",
 #'   dthcaus = AEDECOD,
 #'   traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
@@ -93,7 +87,7 @@
 #' src_ds <- dthcaus_source(
 #'   dataset_name = "ds",
 #'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-#'   date = DSSTDT,
+#'   date = convert_dtc_to_dt(DSSTDTC),
 #'   mode = "first",
 #'   dthcaus = DSTERM,
 #'   traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
@@ -105,10 +99,15 @@
 #' src_ae <- dthcaus_source(
 #'   dataset_name = "ae",
 #'   filter = AEOUT == "FATAL",
-#'   date = AEDTHDT,
+#'   date = convert_dtc_to_dt(AEDTHDTC),
 #'   mode = "first",
 #'   dthcaus = AEDECOD,
 #'   traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
+#' )
+#'
+#' ds <- mutate(
+#'   ds,
+#'   DSSTDT = convert_dtc_to_dt(DSSTDTC)
 #' )
 #'
 #' src_ds <- dthcaus_source(
@@ -129,7 +128,11 @@
 #'   traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 #' )
 #'
-#' derive_var_dthcaus(adsl, src_ae, src_ds, src_ds_post, source_datasets = list(ae = ae, ds = ds))
+#' derive_var_dthcaus(
+#'   adsl,
+#'   src_ae, src_ds, src_ds_post,
+#'   source_datasets = list(ae = ae, ds = ds)
+#' )
 derive_var_dthcaus <- function(dataset,
                                ...,
                                source_datasets,
@@ -164,9 +167,19 @@ derive_var_dthcaus <- function(dataset,
     add_data[[ii]] <- source_dataset %>%
       filter_if(sources[[ii]]$filter)
 
+    date <- sources[[ii]]$date
+    if (is.symbol(date)) {
+      date_var <- date
+    } else {
+      date_var <- get_new_tmp_var(dataset = add_data[[ii]], prefix = "tmp_date")
+      add_data[[ii]] <- mutate(
+        add_data[[ii]],
+        !!date_var := !!date
+      )
+    }
     assert_date_var(
       dataset = add_data[[ii]],
-      var = !!sources[[ii]]$date,
+      var = !!date_var,
       dataset_name = source_dataset_name
     )
 
@@ -175,13 +188,13 @@ derive_var_dthcaus <- function(dataset,
     tmp_date <- get_new_tmp_var(dataset)
     add_data[[ii]] <- add_data[[ii]] %>%
       filter_extreme(
-        order = exprs(!!sources[[ii]]$date, !!!sources[[ii]]$order),
+        order = exprs(!!date_var, !!!sources[[ii]]$order),
         by_vars = subject_keys,
         mode = sources[[ii]]$mode
       ) %>%
       mutate(
         !!tmp_source_nr := ii,
-        !!tmp_date := !!sources[[ii]]$date,
+        !!tmp_date := !!date_var,
         DTHCAUS = !!sources[[ii]]$dthcaus
       )
 
@@ -230,34 +243,37 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param filter An expression used for filtering `dataset`.
 #'
-#' @param date A date or datetime variable to be used for sorting `dataset`.
+#' @param date A date or datetime variable or an expression to be used for
+#'   sorting `dataset`.
 #'
 #' @param order Sort order
 #'
-#'   Additional variables to be used for sorting the `dataset` which is ordered by the
-#'   `date` and `order`. Can be used to avoid duplicate record warning.
+#'   Additional variables/expressions to be used for sorting the `dataset`. The
+#'   dataset is ordered by `date` and `order`. Can be used to avoid duplicate
+#'   record warning.
 #'
-#'   *Default*: `NULL`
-#'
-#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))` or `NULL`
+#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param mode One of `"first"` or `"last"`.
 #' Either the `"first"` or `"last"` observation is preserved from the `dataset`
 #' which is ordered by `date`.
 #'
-#' @param dthcaus A variable name or a string literal --- if a variable name, e.g., `AEDECOD`,
-#'   it is the variable in the source dataset to be used to assign values to
-#'   `DTHCAUS`; if a string literal, e.g. `"Adverse Event"`, it is the fixed value
-#'   to be assigned to `DTHCAUS`.
+#' @param dthcaus A variable name, an expression, or a string literal
 #'
-#' @param traceability_vars A named list returned by [`exprs()`] listing the traceability variables,
-#' e.g. `exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)`.
-#' The left-hand side (names of the list elements) gives the names of the traceability variables
-#' in the returned dataset.
-#' The right-hand side (values of the list elements) gives the values of the traceability variables
-#' in the returned dataset.
-#' These can be either strings or symbols referring to existing variables.
+#'   If a variable name is specified, e.g., `AEDECOD`, it is the variable in the
+#'   source dataset to be used to assign values to `DTHCAUS`; if an expression,
+#'   e.g., `str_to_upper(AEDECOD)`, it is evaluated in the source dataset and
+#'   the results is assigned to `DTHCAUS`; if a string literal, e.g. `"Adverse
+#'   Event"`, it is the fixed value to be assigned to `DTHCAUS`.
+#'
+#' @param traceability_vars A named list returned by [`exprs()`] listing the
+#'   traceability variables, e.g. `exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)`. The
+#'   left-hand side (names of the list elements) gives the names of the
+#'   traceability variables in the returned dataset. The right-hand side (values
+#'   of the list elements) gives the values of the traceability variables in the
+#'   returned dataset. These can be either strings, numbers, symbols, or
+#'   expressions referring to existing variables.
 #'
 #' @keywords source_specifications
 #' @family source_specifications
@@ -283,7 +299,7 @@ derive_var_dthcaus <- function(dataset,
 #' src_ds <- dthcaus_source(
 #'   dataset_name = "ds",
 #'   filter = DSDECOD == "DEATH",
-#'   date = DSSTDT,
+#'   date = convert_dtc_to_dt(DSSTDTC),
 #'   mode = "first",
 #'   dthcaus = DSTERM
 #' )
@@ -297,11 +313,11 @@ dthcaus_source <- function(dataset_name,
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
-    date = assert_symbol(enexpr(date)),
-    order = assert_order_vars(order, optional = TRUE),
+    date = assert_expr(enexpr(date)),
+    order = assert_expr_list(order, optional = TRUE),
     mode = assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE),
-    dthcaus = assert_symbol(enexpr(dthcaus)) %or% assert_character_scalar(dthcaus),
-    traceability = assert_varval_list(traceability_vars, optional = TRUE)
+    dthcaus = assert_expr(enexpr(dthcaus)),
+    traceability = assert_expr_list(traceability_vars, named = TRUE, optional = TRUE)
   )
   class(out) <- c("dthcaus_source", "source", "list")
   out
