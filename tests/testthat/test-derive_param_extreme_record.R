@@ -26,7 +26,7 @@ test_that("derive_param_extreme_record Test 1: Analysis date are derived correct
     "1001",        "3", "2023-01-01",      "TST",                      "TEST",                           NA,     NA, # nolint
     "1001",        "1",           NA, "FIRSTACT", "First Anti-Cancer Therapy", lubridate::ymd("2020-12-25"),  "ACT", # nolint
     "1001",        "2",           NA, "FIRSTACT", "First Anti-Cancer Therapy", lubridate::ymd("2021-12-25"),  "ACS", # nolint
-    "1001",        "3",           NA, "FIRSTACT", "First Anti-Cancer Therapy", lubridate::ymd("2022-12-25"),  "ACS"  # nolint
+    "1001",        "3",           NA, "FIRSTACT", "First Anti-Cancer Therapy", lubridate::ymd("2022-12-25"),  "ACS" # nolint
   )
   actual_output <- derive_param_extreme_record(
     dataset = aevent,
