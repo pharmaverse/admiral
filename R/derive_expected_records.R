@@ -27,8 +27,8 @@
 #'   A list of variable name-value pairs is expected.
 #'   + LHS refers to a variable.
 #'   + RHS refers to the values to set to the variable. This can be a string, a
-#'   symbol, a numeric value or `NA`, e.g., `exprs(PARAMCD = "TDOSE", PARCAT1 =
-#'   "OVERALL")`. More general expression are not allowed.
+#'   symbol, a numeric value, `NA`, or expressions, e.g., `exprs(PARAMCD =
+#'   "TDOSE", PARCAT1 = "OVERALL")`.
 #'
 #' @details For each group (the variables specified in the `by_vars` parameter),
 #' those records from `dataset_expected_obs` that are missing in the input

@@ -4,17 +4,12 @@
 \alias{set_admiral_options}
 \title{Set the Value of Admiral Options}
 \usage{
-set_admiral_options(subject_keys, force_admiral_vars)
+set_admiral_options(subject_keys)
 }
 \arguments{
 \item{subject_keys}{Variables to uniquely identify a subject, defaults to
 \code{exprs(STUDYID, USUBJID)}. This option is used as default value for the
 \code{subject_keys} argument in all admiral functions.}
-
-\item{force_admiral_vars}{If this option is set to \code{TRUE} (which is the
-default), the admiral definition of \code{vars()} is forced. This is just a
-temporary solution to allow running scripts which use \code{vars()} in the
-admiral function calls. It will be removed in a future release.}
 }
 \value{
 No return value, called for side effects.

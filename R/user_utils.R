@@ -169,7 +169,7 @@ convert_na_to_blanks.data.frame <- function(x) { # nolint
 #' @examples
 #' chr2vars(c("USUBJID", "AVAL"))
 chr2vars <- function(chr) {
-  assert_character_vector(chr)
+  assert_character_vector(chr, optional = TRUE)
   set_names(
     exprs(!!!syms(chr)),
     names(chr)
