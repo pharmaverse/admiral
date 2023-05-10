@@ -117,6 +117,8 @@ The details associated with the reason for discontinuation are derived based on
 Other deprecated: 
 \code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_worst_flag}()},
 \code{\link{format_eoxxstt_default}()},
 \code{\link{format_reason_default}()}

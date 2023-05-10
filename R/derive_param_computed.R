@@ -239,7 +239,8 @@ derive_param_computed <- function(dataset,
       c(parameters, constant_parameters),
       ~ str_c("!is.na(AVAL.", .x, ")")
     ))) %>%
-    mutate(AVAL = !!enexpr(analysis_value), !!!set_values_to) %>%
+    process_set_values_to(exprs(AVAL = !!enexpr(analysis_value))) %>%
+    process_set_values_to(set_values_to) %>%
     select(-starts_with("AVAL."))
 
   bind_rows(dataset, hori_data)

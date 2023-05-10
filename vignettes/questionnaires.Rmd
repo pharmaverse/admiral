@@ -68,9 +68,9 @@ dataset_vignette(qs)
 
 ```{r}
 adsl <- tribble(
-  ~STUDYID, ~USUBJID, ~SITEID, ~ITTFL,    ~TRTP, ~TRTSDT,                      ~DTHCAUS,
-  "STUDYX",  "P0001",     13L,    "Y", "DRUG A", lubridate::ymd("2012-11-16"), NA_character_,
-  "STUDYX",  "P0002",     11L,    "Y", "DRUG B", lubridate::ymd("2012-11-16"), NA_character_
+  ~STUDYID, ~USUBJID, ~SITEID, ~ITTFL, ~TRTSDT,                      ~DTHCAUS,
+  "STUDYX",  "P0001",     13L,    "Y", lubridate::ymd("2012-11-16"), NA_character_,
+  "STUDYX",  "P0002",     11L,    "Y", lubridate::ymd("2012-11-16"), "PROGRESSIVE DISEASE"
 )
 ```
 ```{r echo=FALSE}
@@ -141,7 +141,7 @@ adgad7 <- adqs %>%
   # Select records to keep in the GAD-7 ADaM
   filter(PARCAT1 == "GAD-7 V2") %>%
   derive_summary_records(
-    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT),
+    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
     analysis_var = AVAL,
     summary_fun = function(x) sum(x, na.rm = TRUE),
     # Select records contributing to total score
@@ -170,7 +170,7 @@ adgdssf <- adqs %>%
   # Select records to keep in the GDS-SF ADaM
   filter(PARCAT1 == "GDS SHORT FORM") %>%
   derive_summary_records(
-    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT),
+    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
     analysis_var = AVAL,
     summary_fun = function(x) {
       compute_scale(
@@ -407,7 +407,7 @@ adgdssf <- adgdssf %>%
     order = exprs(ADT),
     new_var = CDTDTHFL,
     join_vars = exprs(CHGCAT1, ADY),
-    join_type = "after",
+    join_type = "all",
     tmp_obs_nr_var = tmp_obs_nr,
     filter = CHGCAT1 == "WORSENED" & (
       CHGCAT1.join == "WORSENED" & ADY.join >= ADY + 7 |
@@ -528,17 +528,7 @@ adgdssf <- adgdssf %>%
     set_values_to = exprs(
       PARAMCD = "COMPL90P",
       PARAM = "Completed at least 90% of questions?",
-    )
-  ) %>%
-  mutate(
-    AVALC = if_else(
-      PARAMCD == "COMPL90P",
-      if_else(
-        AVAL == 1,
-        "YES",
-        "NO"
-      ),
-      AVALC
+      AVALC = if_else(AVAL == 1, "YES", "NO")
     )
   )
 ```
@@ -587,18 +577,8 @@ adgdssf <- adgdssf %>%
     summary_fun = function(x) all(!is.na(x)),
     set_values_to = exprs(
       PARAMCD = "COMPLALL",
-      PARAM = "Completed all questions?"
-    )
-  ) %>%
-  mutate(
-    AVALC = if_else(
-      PARAMCD == "COMPLALL",
-      if_else(
-        AVAL == 1,
-        "YES",
-        "NO"
-      ),
-      AVALC
+      PARAM = "Completed all questions?",
+      AVALC = if_else(AVAL == 1, "YES", "NO")
     )
   ) %>%
   filter(is.na(filled_in)) %>%

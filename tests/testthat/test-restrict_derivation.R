@@ -54,3 +54,30 @@ test_that("restrict_derivation Test 2: restrict derivation without parameters", 
     keys = c("USUBJID", "AVISITN")
   )
 })
+
+## restrict_derivation Test 3: access functions from the parent environment ----
+test_that("restrict_derivation Test 3: access functions from the parent environment", {
+  my_derivation <- function(dataset, new_var) {
+    mutate(
+      dataset,
+      !!enexpr(new_var) := 42
+    )
+  }
+
+  my_data <- tibble::tribble(
+    ~PARAMCD,
+    "A",
+    "B"
+  )
+
+  expect_silent({
+    restrict_derivation(
+      my_data,
+      derivation = my_derivation,
+      args = params(
+        new_var = X
+      ),
+      filter = PARAMCD == "A"
+    )
+  })
+})

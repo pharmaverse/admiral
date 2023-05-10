@@ -74,7 +74,7 @@ We will provide:
 * Pharmaceutical communities and companies are encouraged to contribute to `{admiral}` following
   the provided programming strategy and modular approach
 * Functions that are comprehensively documented and tested, including example calls---these are
-  all listed in the [Reference section](https://pharmaverse.github.io/admiral/cran-release/reference/)
+  all listed in the [Reference section](https://pharmaverse.github.io/admiral/cran-release/reference/index.html)
 * Vignettes on how to create ADSL, BDS and OCCDS datasets, including example scripts
 * Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation,
   SMQs ...)
