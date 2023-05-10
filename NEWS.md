@@ -2,6 +2,9 @@
 
 ## New Features
 
+  - New functions `filter_exist()` and `filter_not_exist()` for selecting records from
+  a dataset dependent on the existence of the corresponding by groups in a filtered 
+  source dataset. (#1699)
 
 ## Updates of Existing Functions
 
