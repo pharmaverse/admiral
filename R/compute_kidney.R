@@ -14,7 +14,7 @@
 #'
 #'   Expected Values:
 #'
-#'   `"SI"` `"CV"` `"umol/L"` `"µmol/L"` `"mg/dL"`
+#'   `"SI"` `"CV"` `"umol/L"` `"mg/dL"`
 #'
 #' @param age Age (years)
 #'
@@ -141,8 +141,7 @@
 compute_egfr <- function(creat, creatu = "SI", age, wt, sex, race = NULL, method) {
   assert_numeric_vector(creat)
   assert_character_vector(creatu, values = c(
-    "SI", "CV", "mg/dL", "umol/L",
-    "µmol/L", NA_character_
+    "SI", "CV", "mg/dL", "umol/L", NA_character_
   ))
   assert_numeric_vector(age)
   assert_character_vector(sex, values = c("M", "F"))

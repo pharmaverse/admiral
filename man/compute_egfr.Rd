@@ -17,7 +17,7 @@ A character vector is expected.
 
 Expected Values:
 
-\code{"SI"} \code{"CV"} \code{"umol/L"} \code{"µmol/L"} \code{"mg/dL"}}
+\code{"SI"} \code{"CV"} \code{"umol/L"} \code{"mg/dL"}}
 
 \item{age}{Age (years)
 
