@@ -45,35 +45,35 @@ groups that exist in \code{dataset} don't exist in \code{dataset_add}, an empty 
 be returned.
 }
 \examples{
-  # Get demographic information about subjects who didn't take vitamin supplements
-  # during the study
+# Get demographic information about subjects who didn't take vitamin supplements
+# during the study
 
-  library(tibble)
+library(tibble)
 
-  adsl <- tribble(
-    ~USUBJID,      ~AGE, ~SEX,
-    "01-701-1015", 63,   "F",
-    "01-701-1023", 64,   "M",
-    "01-701-1034", 77,   "F",
-    "01-701-1118", 52,   "M"
-  )
+adsl <- tribble(
+  ~USUBJID,      ~AGE, ~SEX,
+  "01-701-1015", 63,   "F",
+  "01-701-1023", 64,   "M",
+  "01-701-1034", 77,   "F",
+  "01-701-1118", 52,   "M"
+)
 
-  adcm <- tribble(
-    ~USUBJID,      ~CMTRT,         ~CMSTDTC,
-    "01-701-1015", "ASPIRIN",      "2013-05-14",
-    "01-701-1023", "MYLANTA",      "2014-01-04",
-    "01-701-1023", "CALCIUM",      "2014-02-25",
-    "01-701-1034", "VITAMIN C",    "2013-12-12",
-    "01-701-1034", "CALCIUM",      "2013-03-27",
-    "01-701-1118", "MULTIVITAMIN", "2013-02-21"
-  )
+adcm <- tribble(
+  ~USUBJID,      ~CMTRT,         ~CMSTDTC,
+  "01-701-1015", "ASPIRIN",      "2013-05-14",
+  "01-701-1023", "MYLANTA",      "2014-01-04",
+  "01-701-1023", "CALCIUM",      "2014-02-25",
+  "01-701-1034", "VITAMIN C",    "2013-12-12",
+  "01-701-1034", "CALCIUM",      "2013-03-27",
+  "01-701-1118", "MULTIVITAMIN", "2013-02-21"
+)
 
-  filter_not_exist(
-    dataset = adsl,
-    dataset_add = adcm,
-    by_vars = exprs(USUBJID),
-    filter_add = str_detect(CMTRT, "VITAMIN")
-  )
+filter_not_exist(
+  dataset = adsl,
+  dataset_add = adcm,
+  by_vars = exprs(USUBJID),
+  filter_add = str_detect(CMTRT, "VITAMIN")
+)
 
 }
 \seealso{

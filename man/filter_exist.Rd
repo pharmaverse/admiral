@@ -44,35 +44,35 @@ after being filtered according to \code{filter_add}. If there are no by groups t
 in both datasets, an empty dataset will be returned.
 }
 \examples{
-  # Get demographic information about subjects who have suffered from moderate or
-  # severe fatigue
+# Get demographic information about subjects who have suffered from moderate or
+# severe fatigue
 
-  library(tibble)
+library(tibble)
 
-  adsl <- tribble(
-    ~USUBJID,      ~AGE, ~SEX,
-    "01-701-1015", 63,   "F",
-    "01-701-1034", 77,   "F",
-    "01-701-1115", 84,   "M",
-    "01-701-1146", 75,   "F",
-    "01-701-1444", 63,   "M"
-  )
+adsl <- tribble(
+  ~USUBJID,      ~AGE, ~SEX,
+  "01-701-1015", 63,   "F",
+  "01-701-1034", 77,   "F",
+  "01-701-1115", 84,   "M",
+  "01-701-1146", 75,   "F",
+  "01-701-1444", 63,   "M"
+)
 
-  adae <- tribble(
-    ~USUBJID,      ~AEDECOD,                    ~AESEV,     ~AESTDTC,
-    "01-701-1015", "DIARRHOEA",                 "MODERATE", "2014-01-09",
-    "01-701-1034", "FATIGUE",                   "SEVERE",   "2014-11-02",
-    "01-701-1034", "APPLICATION SITE PRURITUS", "MODERATE", "2014-08-27",
-    "01-701-1115", "FATIGUE",                   "MILD",     "2013-01-14",
-    "01-701-1146", "FATIGUE",                   "MODERATE", "2013-06-03"
-  )
+adae <- tribble(
+  ~USUBJID,      ~AEDECOD,                    ~AESEV,     ~AESTDTC,
+  "01-701-1015", "DIARRHOEA",                 "MODERATE", "2014-01-09",
+  "01-701-1034", "FATIGUE",                   "SEVERE",   "2014-11-02",
+  "01-701-1034", "APPLICATION SITE PRURITUS", "MODERATE", "2014-08-27",
+  "01-701-1115", "FATIGUE",                   "MILD",     "2013-01-14",
+  "01-701-1146", "FATIGUE",                   "MODERATE", "2013-06-03"
+)
 
-  filter_exist(
-    dataset = adsl,
-    dataset_add = adae,
-    by_vars = exprs(USUBJID),
-    filter_add = AEDECOD == "FATIGUE" & AESEV \%in\% c("MODERATE", "SEVERE")
-  )
+filter_exist(
+  dataset = adsl,
+  dataset_add = adae,
+  by_vars = exprs(USUBJID),
+  filter_add = AEDECOD == "FATIGUE" & AESEV \%in\% c("MODERATE", "SEVERE")
+)
 
 }
 \seealso{
