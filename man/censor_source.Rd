@@ -21,11 +21,12 @@ of \code{derive_param_tte()}.}
 \item{filter}{An unquoted condition for selecting the observations from
 \code{dataset} which are events or possible censoring time points.}
 
-\item{date}{A variable providing the date of the event or censoring. A date,
-or a datetime can be specified. An unquoted symbol is expected.
+\item{date}{A variable or expression providing the date of the event or
+censoring. A date, or a datetime can be specified. An unquoted symbol or
+expression is expected.
 
-Refer to \code{derive_vars_dt()} to impute and derive a date from a date
-character vector to a date object.}
+Refer to \code{derive_vars_dt()} or \code{convert_dtc_to_dt()} to impute and derive a
+date from a date character vector to a date object.}
 
 \item{censor}{Censoring value
 
@@ -34,7 +35,7 @@ censoring.}
 
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
 to be set for the event or censoring, e.g. \code{exprs(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")}. The values must be a symbol, a
-character string, a numeric value, or \code{NA}.}
+character string, a numeric value, an expression, or \code{NA}.}
 }
 \value{
 An object of class \code{censor_source}, inheriting from class \code{tte_source}

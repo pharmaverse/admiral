@@ -331,5 +331,8 @@ derive_param_tte(
 ) \%>\%
   select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 }
+\seealso{
+\code{\link[=event_source]{event_source()}}, \code{\link[=censor_source]{censor_source()}}
+}
 \concept{der_prm_tte}
 \keyword{der_prm_tte}
