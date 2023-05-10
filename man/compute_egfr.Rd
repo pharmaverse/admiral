@@ -14,7 +14,10 @@ A numeric vector is expected.}
 \item{creatu}{Creatinine Units
 
 A character vector is expected.
-Expected Values: 'SI' 'CV' 'umol/L' 'mg/dL'}
+
+Expected Values:
+
+\code{"SI"} \code{"CV"} \code{"umol/L"} \code{"µmol/L"} \code{"mg/dL"}}
 
 \item{age}{Age (years)
 
@@ -22,30 +25,41 @@ A numeric vector is expected.}
 
 \item{wt}{Weight (kg)
 
-A numeric vector is expected if method = 'CRCL'}
+A numeric vector is expected if \code{method = "CRCL"}}
 
 \item{sex}{Gender
 
 A character vector is expected.
-Expected Values: 'M' 'F'}
+
+Expected Values:
+
+\code{"M"} \code{"F"}}
 
 \item{race}{Race
 
-A character vector is expected if method = 'MDRD'
-Expected Values: 'BLACK OR AFRICAN AMERICAN' and others}
+A character vector is expected if \code{method = "MDRD"}
+
+Expected Values:
+
+\code{"BLACK OR AFRICAN AMERICAN"} and others}
 
 \item{method}{Method
 
 A character vector is expected.
-Expected Values: 'CRCL' 'CKD-EPI' 'MDRD'}
+
+Expected Values:
+
+\code{"CRCL"} \code{"CKD-EPI"} \code{"MDRD"}}
 }
 \value{
 A numeric vector of egfr values
 }
 \description{
 Compute Kidney Function Tests:
-Estimated Creatinine Clearance (CRCL) by Cockcroft-Gault equation
-Estimated Glomerular Filtration Rate (eGFR) by CKD-EPI or MDRD equations
+\itemize{
+\item Estimated Creatinine Clearance (CRCL) by Cockcroft-Gault equation
+\item Estimated Glomerular Filtration Rate (eGFR) by CKD-EPI or MDRD equations
+}
 }
 \details{
 Calculates an estimate of Glomerular Filtration Rate (eGFR)
@@ -114,7 +128,7 @@ base <- tibble::tribble(
   "P01", "P01-1004", 76, "F", "ASIAN", 60.7, 65, "umol/L",
 )
 
-base_egfr <- base \%>\%
+base \%>\%
   dplyr::mutate(
     CRCL_CG = compute_egfr(
       creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,

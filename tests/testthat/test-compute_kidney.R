@@ -1,45 +1,50 @@
 # compute_egfr: (Test 01.xx) ----
 
-test_that("compute_egfr Test 01.01: EGFR CKD-EPI calculation", {
+## Test 1: compute_egfr Test 01.01: EGFR CKD-EPI calculation ----
+test_that("compute_kidney Test 1: compute_egfr Test 01.01: EGFR CKD-EPI calculation", {
   # Expected values are taken from the National Kidney Foundation's
   # CKD-EPI Creatinine Equation (2021) calculator at
-  # https://www.kidney.org/content/ckd-epi-creatinine-equation-2021
+  # https://www.kidney.org/professionals/kdoqi/gfr_calculator
   expect_equal(round(compute_egfr(
     creat = 1.09, creatu = "mg/dL", age = 55, sex = "M", method = "CKD-EPI"
   ), 0L), 80)
 })
 
-test_that("compute_egfr Test 01.02: EGFR CKD-EPI calculation", {
+## Test 2: compute_egfr Test 01.02: EGFR CKD-EPI calculation ----
+test_that("compute_kidney Test 2: compute_egfr Test 01.02: EGFR CKD-EPI calculation", {
   # Expected values are taken from the National Kidney Foundation's
   # CKD-EPI Creatinine Equation (2021) calculator at
-  # https://www.kidney.org/content/ckd-epi-creatinine-equation-2021
+  # https://www.kidney.org/professionals/kdoqi/gfr_calculator
   expect_equal(round(compute_egfr(
     creat = 85, creatu = "umol/L", age = 65, sex = "F", method = "CKD-EPI"
   ), 0L), 66)
 })
 
 
-test_that("compute_egfr Test 01.03: CRCL calculation", {
+## Test 3: compute_egfr Test 01.03: CRCL calculation ----
+test_that("compute_kidney Test 3: compute_egfr Test 01.03: CRCL calculation", {
   # Expected values are taken from the National Kidney Foundation's
   # CRCL Cockcroft and Gault (1973) calculator at
-  # https://www.kidney.org/professionals/kdoqi/gfr_calculator
+  # https://www.kidney.org/professionals/kdoqi/gfr_calculatorCoc
   expect_equal(round(compute_egfr(
     creat = 1.09, creatu = "mg/dL", age = 55, sex = "M", wt = 90, method = "CRCL"
   ), 0L), 97)
 })
 
 
-test_that("compute_egfr Test 01.04: CRCL calculation", {
+## Test 4: compute_egfr Test 01.04: CRCL calculation ----
+test_that("compute_kidney Test 4: compute_egfr Test 01.04: CRCL calculation", {
   # Expected values are taken from the National Kidney Foundation's
   # CRCL Cockcroft and Gault (1973) calculator at
-  # https://www.kidney.org/professionals/kdoqi/gfr_calculator
+  # https://www.kidney.org/professionals/kdoqi/gfr_calculatorCoc
   expect_equal(round(compute_egfr(
     creat = 85, creatu = "umol/L", age = 65, sex = "F", wt = 60, method = "CRCL"
   ), 0L), 55)
 })
 
 
-test_that("compute_egfr Test 01.05: EGFR MDRD calculation", {
+## Test 5: compute_egfr Test 01.05: EGFR MDRD calculation ----
+test_that("compute_kidney Test 5: compute_egfr Test 01.05: EGFR MDRD calculation", {
   # Expected values are taken from the MD Calc
   # MDRD GFR calculator at
   # https://www.mdcalc.com/calc/76/mdrd-gfr-equation
@@ -49,7 +54,8 @@ test_that("compute_egfr Test 01.05: EGFR MDRD calculation", {
   ), 1L), 70.2)
 })
 
-test_that("compute_egfr Test 01.06: EGFR MDRD calculation", {
+## Test 6: compute_egfr Test 01.06: EGFR MDRD calculation ----
+test_that("compute_kidney Test 6: compute_egfr Test 01.06: EGFR MDRD calculation", {
   # Expected values are taken from the MD Calc
   # MDRD GFR calculator at
   # https://www.mdcalc.com/calc/76/mdrd-gfr-equation
@@ -60,7 +66,8 @@ test_that("compute_egfr Test 01.06: EGFR MDRD calculation", {
 })
 
 
-test_that("compute_egfr Test 01.07: CKD-EPI calculated on input data", {
+## Test 7: compute_egfr Test 01.07: CKD-EPI calculated on input data ----
+test_that("compute_kidney Test 7: compute_egfr Test 01.07: CKD-EPI calculated on input data", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AGE, ~SEX, ~RACE, ~WTBL, ~CREATBL, ~CREATBLU,
     "P01", "P01-1001", 55, "M", "WHITE", 90.7, 96.3, "umol/L",

@@ -1,8 +1,8 @@
 #' Compute Estimated Glomerular Filtration Rate (eGFR) for Kidney Function
 #'
 #' Compute Kidney Function Tests:
-#'   Estimated Creatinine Clearance (CRCL) by Cockcroft-Gault equation
-#'   Estimated Glomerular Filtration Rate (eGFR) by CKD-EPI or MDRD equations
+#'   - Estimated Creatinine Clearance (CRCL) by Cockcroft-Gault equation
+#'   - Estimated Glomerular Filtration Rate (eGFR) by CKD-EPI or MDRD equations
 #'
 #' @param creat Creatinine
 #'
@@ -11,7 +11,10 @@
 #' @param creatu Creatinine Units
 #'
 #'   A character vector is expected.
-#'   Expected Values: 'SI' 'CV' 'umol/L' 'mg/dL'
+#'
+#'   Expected Values:
+#'
+#'   `"SI"` `"CV"` `"umol/L"` `"µmol/L"` `"mg/dL"`
 #'
 #' @param age Age (years)
 #'
@@ -19,24 +22,34 @@
 #'
 #' @param wt Weight (kg)
 #'
-#'   A numeric vector is expected if method = 'CRCL'
+#'   A numeric vector is expected if `method = "CRCL"`
 #'
 #' @param sex Gender
 #'
 #'   A character vector is expected.
-#'   Expected Values: 'M' 'F'
+#'
+#'   Expected Values:
+#'
+#'   `"M"` `"F"`
 #'
 #' @param race Race
 #'
-#'   A character vector is expected if method = 'MDRD'
-#'   Expected Values: 'BLACK OR AFRICAN AMERICAN' and others
+#'   A character vector is expected if `method = "MDRD"`
+#'
+#'   Expected Values:
+#'
+#'   `"BLACK OR AFRICAN AMERICAN"` and others
 #'
 #' @param method Method
 #'
 #'   A character vector is expected.
-#'   Expected Values: 'CRCL' 'CKD-EPI' 'MDRD'
+#'
+#'   Expected Values:
+#'
+#'   `"CRCL"` `"CKD-EPI"` `"MDRD"`
 #'
 #' @details
+#'
 #' Calculates an estimate of Glomerular Filtration Rate (eGFR)
 #'
 #' \strong{CRCL Creatinine Clearance (Cockcroft-Gault)}
@@ -110,7 +123,7 @@
 #'   "P01", "P01-1004", 76, "F", "ASIAN", 60.7, 65, "umol/L",
 #' )
 #'
-#' base_egfr <- base %>%
+#' base %>%
 #'   dplyr::mutate(
 #'     CRCL_CG = compute_egfr(
 #'       creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
@@ -127,7 +140,10 @@
 #'   )
 compute_egfr <- function(creat, creatu = "SI", age, wt, sex, race = NULL, method) {
   assert_numeric_vector(creat)
-  assert_character_vector(creatu, values = c("SI", "CV", "mg/dL", "umol/L", NA_character_))
+  assert_character_vector(creatu, values = c(
+    "SI", "CV", "mg/dL", "umol/L",
+    "µmol/L", NA_character_
+  ))
   assert_numeric_vector(age)
   assert_character_vector(sex, values = c("M", "F"))
   assert_character_vector(race, optional = TRUE)
