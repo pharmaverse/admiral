@@ -25,10 +25,8 @@ from \code{dataset_add} to the input dataset.
 
 And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 \code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
-\code{old_var2} to \code{new_var2}.
-
-If the argument is not specified or set to \code{NULL}, all variables from the
-additional dataset (\code{dataset_add}) are added.
+\code{old_var2} to \code{new_var2}. Expressions can be used to create new variables
+(see for example \code{new_vars} argument in \code{derive_vars_merged()}).
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}}
 }

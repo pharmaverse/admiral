@@ -61,8 +61,8 @@ test_that("derive_param_extreme_record Test 1: Analysis date are derived correct
   expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "PARAMCD", "PARAM", "ADT", "AVALC")) # nolint
 })
 
-## Test 2: Error order variable not inside source datasets ----
-test_that("derive_param_extreme_record Test 2: Error order variable not inside source datasets", {
+## Test 2: Error given when order variable is not inside source datasets ----
+test_that("derive_param_extreme_record Test 2: Error given when order variable is not inside source datasets", {
   aevent <- tibble::tribble(
     ~STUDYID, ~USUBJID,     ~LBSTDTC, ~PARAMCD, ~PARAM,
     "1001",        "1", "2023-01-01",    "TST", "TEST",
@@ -114,8 +114,8 @@ test_that("derive_param_extreme_record Test 2: Error order variable not inside s
   )
 })
 
-## Test 3: Sources is not in proper list format ----
-test_that("derive_param_extreme_record Test 3: Sources is not in proper list format", {
+## Test 3: Error given when sources is not in proper list format ----
+test_that("derive_param_extreme_record Test 3: Error given when sources is not in proper list format", { # nolint
   aevent <- tibble::tribble(
     ~STUDYID, ~USUBJID,     ~LBSTDTC, ~PARAMCD, ~PARAM,
     "1001",        "1", "2023-01-01",    "TST", "TEST",

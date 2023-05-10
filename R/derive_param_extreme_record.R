@@ -1,11 +1,8 @@
-#' Adds a Parameter based on first or last record from multiple sources
+#' Adds a Parameter Based on First or Last Record from Multiple Sources
 #'
-#' Adds a Parameter based on first or last record from multiple sources
+#' Adds a Parameter Based on First or Last Record from Multiple Sources
 #'
 #' @param dataset Input dataset
-#'
-#'   The variables specified by the `order` and the `by_vars` parameter are
-#'   expected.
 #'
 #' @param sources Sources
 #'
@@ -14,7 +11,8 @@
 #' @param source_datasets Source datasets
 #'
 #'   A named list of datasets is expected. The `dataset_name` field of
-#'   `records_source()` refers to the dataset provided in the list.
+#'   `records_source()` refers to the dataset provided in the list. The variables
+#'   specified by the `order` and the `by_vars` parameter are expected after applying `new_vars`.
 #'
 #' @param by_vars By variables
 #'
@@ -84,16 +82,10 @@
 #' @export
 #' @examples
 #' aevent_samp <- tibble::tribble(
-#'   ~USUBJID, ~AESEQ, ~AETERM,     ~AESTDTC,
-#'   "1",           1,     "X", "2022-01-01",
-#'   "1",           2,     "Y", "2022-01-02",
-#'   "1",           3,     "Z", "2022-01-03",
-#'   "2",           1,     "A", "2021-01-01",
-#'   "2",           2,     "B", "2021-01-02",
-#'   "2",           3,     "C", "2021-01-03",
-#'   "3",           1,     "J", "2023-01-01",
-#'   "3",           2,     "K", "2023-01-02",
-#'   "3",           3,     "L", "2023-01-03"
+#'   ~USUBJID, ~PARAMCD,                       ~PARAM,     ~RSSTDTC,
+#'   "1",          "PD",  "First Progressive Disease", "2022-04-01",
+#'   "2",          "PD",  "First Progressive Disease", "2021-04-01",
+#'   "3",          "PD",  "First Progressive Disease", "2023-04-01"
 #' )
 #'
 #' cm <- tibble::tribble(
@@ -136,7 +128,7 @@
 #'     PARAM = "First Anti-Cancer Therapy"
 #'   )
 #' )
-derive_param_extreme_record <- function(dataset,
+derive_param_extreme_record <- function(dataset = NULL,
                                         sources,
                                         source_datasets,
                                         by_vars = NULL,
@@ -163,7 +155,7 @@ derive_param_extreme_record <- function(dataset,
   # Evaluate the expressions contained in the sources
   for (i in seq_along(sources)) {
     source_dataset <- source_datasets[[sources[[i]]$dataset_name]]
-    new_vars_colnames <- chr2vars(names(sources[[i]]$new_vars))
+    new_vars_colnames <- replace_values_by_names(sources[[i]]$new_vars)
     data_list[[i]] <- source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
       mutate(!!!sources[[i]]$new_vars) %>%
@@ -177,12 +169,14 @@ derive_param_extreme_record <- function(dataset,
       order = order,
       mode = mode
     ) %>%
-    mutate(!!!set_values_to)
+    process_set_values_to(
+      set_values_to
+    )
 
   # Bind the parameter rows back to original dataset
-  data <- bind_rows(dataset, param_data)
-  return(data)
+  bind_rows(dataset, param_data)
 }
+
 #' Create a `records_source` Object
 #'
 #' The `records_source` object is used to find extreme records of interest.
@@ -206,10 +200,8 @@ derive_param_extreme_record <- function(dataset,
 #'
 #'   And `new_vars = exprs(var1, new_var2 = old_var2)` takes `var1` and
 #'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
-#'   `old_var2` to `new_var2`.
-#'
-#'   If the argument is not specified or set to `NULL`, all variables from the
-#'   additional dataset (`dataset_add`) are added.
+#'   `old_var2` to `new_var2`. Expressions can be used to create new variables
+#'   (see for example `new_vars` argument in `derive_vars_merged()`).
 #'
 #'   *Permitted Values*: list of variables created by `exprs()`
 #'

@@ -2,10 +2,10 @@
 % Please edit documentation in R/derive_param_extreme_record.R
 \name{derive_param_extreme_record}
 \alias{derive_param_extreme_record}
-\title{Adds a Parameter based on first or last record from multiple sources}
+\title{Adds a Parameter Based on First or Last Record from Multiple Sources}
 \usage{
 derive_param_extreme_record(
-  dataset,
+  dataset = NULL,
   sources,
   source_datasets,
   by_vars = NULL,
@@ -15,10 +15,7 @@ derive_param_extreme_record(
 )
 }
 \arguments{
-\item{dataset}{Input dataset
-
-The variables specified by the \code{order} and the \code{by_vars} parameter are
-expected.}
+\item{dataset}{Input dataset}
 
 \item{sources}{Sources
 
@@ -27,7 +24,8 @@ A list of \code{records_source()} objects is expected.}
 \item{source_datasets}{Source datasets
 
 A named list of datasets is expected. The \code{dataset_name} field of
-\code{records_source()} refers to the dataset provided in the list.}
+\code{records_source()} refers to the dataset provided in the list. The variables
+specified by the \code{order} and the \code{by_vars} parameter are expected after applying \code{new_vars}.}
 
 \item{by_vars}{By variables
 
@@ -76,7 +74,7 @@ The input dataset with the first or last observation of each by group
 added as new observations.
 }
 \description{
-Adds a Parameter based on first or last record from multiple sources
+Adds a Parameter Based on First or Last Record from Multiple Sources
 }
 \details{
 The following steps are performed to create the output dataset:
@@ -98,16 +96,10 @@ dataset. }
 }
 \examples{
 aevent_samp <- tibble::tribble(
-  ~USUBJID, ~AESEQ, ~AETERM,     ~AESTDTC,
-  "1",           1,     "X", "2022-01-01",
-  "1",           2,     "Y", "2022-01-02",
-  "1",           3,     "Z", "2022-01-03",
-  "2",           1,     "A", "2021-01-01",
-  "2",           2,     "B", "2021-01-02",
-  "2",           3,     "C", "2021-01-03",
-  "3",           1,     "J", "2023-01-01",
-  "3",           2,     "K", "2023-01-02",
-  "3",           3,     "L", "2023-01-03"
+  ~USUBJID, ~PARAMCD,                       ~PARAM,     ~RSSTDTC,
+  "1",          "PD",  "First Progressive Disease", "2022-04-01",
+  "2",          "PD",  "First Progressive Disease", "2021-04-01",
+  "3",          "PD",  "First Progressive Disease", "2023-04-01"
 )
 
 cm <- tibble::tribble(
