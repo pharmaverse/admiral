@@ -110,7 +110,7 @@ derive_extreme_records <- function(dataset,
                                    set_values_to) {
   # Check input parameters
   assert_vars(by_vars, optional = TRUE)
-  assert_order_vars(order)
+  assert_expr_list(order)
   assert_data_frame(
     dataset,
     required_vars = expr_c(

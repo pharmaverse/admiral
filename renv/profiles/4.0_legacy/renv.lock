@@ -1078,6 +1078,16 @@
       ],
       "Hash": "430a0908aee75b1fcba0e62857cab0ce"
     },
+    "renv": {
+      "Package": "renv",
+      "Version": "0.17.0",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "utils"
+      ],
+      "Hash": "ce3065fc1a0b64a859f55ac3998d6927"
+    },
     "rex": {
       "Package": "rex",
       "Version": "1.2.0",
