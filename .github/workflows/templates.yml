@@ -9,7 +9,7 @@ on:
 jobs:
   templates:
     name: Check Templates
-    uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@check-templates-fix
     if: github.event.review.state == 'approved'
     with:
       r-version: "4.0"
