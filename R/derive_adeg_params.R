@@ -2,7 +2,7 @@
 #'
 #' Adds a record for corrected QT using either Bazett's, Fridericia's or Sagie's
 #' formula for each by group (e.g., subject and visit) where the source parameters
-#' are available.
+#' are available. This is a wrapper function for the more generic `derive_param_computed()`.
 #'
 #' @param dataset Input dataset
 #'
