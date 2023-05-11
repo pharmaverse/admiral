@@ -1,4 +1,6 @@
-#' Returns all records that fit into an existing by group in a filtered source dataset
+#' Returns records that fit into existing by groups in a filtered source dataset
+#'
+#' Returns all records that fit into an existing by group in a filtered source dataset.
 #'
 #' @param dataset Input dataset
 #'

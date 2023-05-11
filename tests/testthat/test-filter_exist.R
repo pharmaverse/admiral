@@ -25,7 +25,8 @@ test_that("filter_exist Test 1: filter_exist() works as expected", {
       dataset = input_dataset,
       dataset_add = input_dataset_add,
       by_vars = exprs(USUBJID),
-      filter_add = AEDECOD == "FATIGUE"),
+      filter_add = AEDECOD == "FATIGUE"
+    ),
     expected_output
   )
 })
@@ -57,7 +58,8 @@ test_that("filter_not_exist Test 2: filter_not_exist() works as expected", {
       dataset = input_dataset,
       dataset_add = input_dataset_add,
       by_vars = exprs(USUBJID),
-      filter_add = AEDECOD == "FATIGUE"),
+      filter_add = AEDECOD == "FATIGUE"
+    ),
     expected_output
   )
 })
