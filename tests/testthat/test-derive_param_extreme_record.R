@@ -110,7 +110,8 @@ test_that("derive_param_extreme_record Test 2: Error given when order variable i
         PARAMCD = "FIRSTACT",
         PARAM = "First Anti-Cancer Therapy"
       )
-    )
+    ),
+    regexp = "Required variable `ADT2` is missing"
   )
 })
 
@@ -148,6 +149,7 @@ test_that("derive_param_extreme_record Test 3: Error given when sources is not i
         PARAMCD = "FIRSTACT",
         PARAM = "First Anti-Cancer Therapy"
       )
-    )
+    ),
+    regexp = "Each element of `sources` must be an object of class/type 'records_source' but the following are not:"
   )
 })
