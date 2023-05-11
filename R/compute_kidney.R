@@ -12,9 +12,9 @@
 #'
 #'   A character vector is expected.
 #'
-#'   Expected Values:
+#'   Default: `"SI"`
 #'
-#'   `"SI"` `"CV"` `"umol/L"` `"mg/dL"`
+#'   Expected Values: `"SI"`, `"CV"`, `"umol/L"`, `"mg/dL"`
 #'
 #' @param age Age (years)
 #'
@@ -28,25 +28,19 @@
 #'
 #'   A character vector is expected.
 #'
-#'   Expected Values:
-#'
-#'   `"M"` `"F"`
+#'   Expected Values: `"M"`, `"F"`
 #'
 #' @param race Race
 #'
 #'   A character vector is expected if `method = "MDRD"`
 #'
-#'   Expected Values:
-#'
-#'   `"BLACK OR AFRICAN AMERICAN"` and others
+#'   Expected Values: `"BLACK OR AFRICAN AMERICAN"` and others
 #'
 #' @param method Method
 #'
 #'   A character vector is expected.
 #'
-#'   Expected Values:
-#'
-#'   `"CRCL"` `"CKD-EPI"` `"MDRD"`
+#'   Expected Values: `"CRCL"`, `"CKD-EPI"`, `"MDRD"`
 #'
 #' @details
 #'

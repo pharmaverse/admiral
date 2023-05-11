@@ -15,9 +15,9 @@ A numeric vector is expected.}
 
 A character vector is expected.
 
-Expected Values:
+Default: \code{"SI"}
 
-\code{"SI"} \code{"CV"} \code{"umol/L"} \code{"mg/dL"}}
+Expected Values: \code{"SI"}, \code{"CV"}, \code{"umol/L"}, \code{"mg/dL"}}
 
 \item{age}{Age (years)
 
@@ -31,25 +31,19 @@ A numeric vector is expected if \code{method = "CRCL"}}
 
 A character vector is expected.
 
-Expected Values:
-
-\code{"M"} \code{"F"}}
+Expected Values: \code{"M"}, \code{"F"}}
 
 \item{race}{Race
 
 A character vector is expected if \code{method = "MDRD"}
 
-Expected Values:
-
-\code{"BLACK OR AFRICAN AMERICAN"} and others}
+Expected Values: \code{"BLACK OR AFRICAN AMERICAN"} and others}
 
 \item{method}{Method
 
 A character vector is expected.
 
-Expected Values:
-
-\code{"CRCL"} \code{"CKD-EPI"} \code{"MDRD"}}
+Expected Values: \code{"CRCL"}, \code{"CKD-EPI"}, \code{"MDRD"}}
 }
 \value{
 A numeric vector of egfr values
