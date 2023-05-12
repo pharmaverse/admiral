@@ -12,6 +12,7 @@ library(stringr)
 
 library(admiral.test) # Contains example datasets from the CDISC pilot project or simulated
 
+
 # ---- Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
@@ -23,6 +24,7 @@ library(admiral.test) # Contains example datasets from the CDISC pilot project o
 data("admiral_pc")
 data("admiral_ex")
 data("admiral_vs")
+data("admiral_lb")
 
 data("admiral_adsl")
 
@@ -44,6 +46,10 @@ pc <- convert_blanks_to_na(admiral_pc)
 # Load VS for baseline height and weight
 
 vs <- convert_blanks_to_na(admiral_vs)
+
+# Load LB for baseline lab values
+
+lb <- convert_blanks_to_na(admiral_lb)
 
 # ---- Lookup tables ----
 param_lookup <- tibble::tribble(
@@ -303,7 +309,7 @@ adppk_aval <- adppk_aprlt %>%
     MDV = case_when(
       EVID == 1 ~ 1,
       is.na(DV) ~ 1,
-      TRUE ~ NA
+      TRUE ~ NA_real_
     ),
     AVALU = case_when(
       EVID == 1 ~ EXDOSU,
@@ -377,9 +383,9 @@ covar <- adsl %>%
     RACE, RACEN, ARM, ARMN, ACTARM, ACTARMN, FORM, FORMN
   )
 
-#---- Derive additional baselines from VS ----
+#---- Derive additional baselines from VS and LB ----
 
-covar_vs <- covar %>%
+covar_vslb <- covar %>%
   derive_vars_merged(
     dataset_add = vs,
     filter_add = VSTESTCD == "HEIGHT",
@@ -392,16 +398,35 @@ covar_vs <- covar %>%
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(WTBL = VSSTRESN, WTBLU = VSSTRESU)
   ) %>%
+  derive_vars_merged(
+    dataset_add = lb,
+    filter_add = LBTESTCD == "ALT" & LBBLFL == "Y",
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(ALTBL = LBSTRESN, ALTBLU = LBSTRESU)
+  ) %>%
+  derive_vars_merged(
+    dataset_add = lb,
+    filter_add = LBTESTCD == "AST" & LBBLFL == "Y",
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(ASTBL = LBSTRESN, ASTBLU = LBSTRESU)
+  ) %>%
   mutate(
     BMIBL = compute_bmi(height = HTBL, weight = WTBL),
-    BMIBLU = "kg/m^2"
+    BMIBLU = "kg/m^2",
+    BSABL = compute_bsa(
+      height = HTBL,
+      weight = HTBL,
+      method = "Mosteller"
+    ),
+    BSABLU = "m^2"
   )
+
 
 # Combine covariates with APPPK data
 
 adppk <- adppk_aseq %>%
   derive_vars_merged(
-    dataset_add = covar_vs,
+    dataset_add = covar_vslb,
     by_vars = exprs(STUDYID, USUBJID)
   )
 
