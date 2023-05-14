@@ -1,6 +1,7 @@
 #' Derive Last Dose with User-Defined Groupings
 #'
 #' Add a variable for user-defined dose grouping of the last dose to the input dataset.
+#' This is a wrapper function for the function `derive_vars_last_dose()`.
 #'
 #' @inheritParams derive_vars_last_dose
 #' @param new_var The output variable defined by the user.

@@ -1,6 +1,7 @@
 #' Derive Total Treatment Duration (Days)
 #'
-#' Derives total treatment duration (days) (`TRTDURD`)
+#' Derives total treatment duration (days) (`TRTDURD`). This is a wrapper
+#' function for the more generic `derive_vars_duration()`.
 #'
 #' @param dataset Input dataset
 #'

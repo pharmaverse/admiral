@@ -239,7 +239,8 @@ compute_qtc <- function(qt, rr, method) {
 #' Adds a Parameter for Derived RR (an ECG measurement)
 #'
 #' Adds a record for derived RR based on heart rate for each by group (e.g.,
-#' subject and visit) where the source parameters are available.
+#' subject and visit) where the source parameters are available. This is a wrapper
+#' function for the more generic `derive_param_computed()`.
 #'
 #' The analysis value of the new parameter is derived as
 #' \deqn{\frac{60000}{HR}}{60000 / HR}
