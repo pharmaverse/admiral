@@ -61,7 +61,8 @@ The output dataset contains all observations and variables of the
 input dataset and additionally the variable specified for \code{new_var}.
 }
 \description{
-Merge a summary variable from a dataset to the input dataset.
+Merge a summary variable from a dataset to the input dataset. This is a
+wrapper function for the more generic \code{derive_vars_merged}.
 }
 \details{
 \enumerate{

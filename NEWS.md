@@ -70,6 +70,8 @@ deprecated in favor of `derive_vars_merged()`. (#1727)
 
 - Updated example dataset to trigger deterioration flags in the vignette "Creating Questionnaire ADaMs" (#1853, #1854)
 
+- Increased documentation for those functions which are regarded as wrapper functions (#1726)
+
 ## Various
 
 - `vars()` which was used in the admiral function calls that expected a list of

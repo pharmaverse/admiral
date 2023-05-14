@@ -59,6 +59,7 @@ Input dataset with additional column \code{new_var}.
 }
 \description{
 Add a variable for the dose date or datetime of the last dose to the input dataset.
+This is a wrapper function for the function \code{derive_vars_last_dose()}.
 }
 \details{
 The last dose date is derived as the maximum dose date where the

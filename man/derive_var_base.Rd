@@ -31,7 +31,8 @@ A new \code{data.frame} containing all records and variables of the input
 dataset plus the \code{new_var} variable
 }
 \description{
-Derive baseline variables, e.g. \code{BASE} or \code{BNRIND}, in a BDS dataset
+Derive baseline variables, e.g. \code{BASE} or \code{BNRIND}, in a BDS dataset. This is
+a wrapper function for the more generic \code{derive_vars_merged()}.
 }
 \details{
 For each \code{by_vars} group, the baseline record is identified by the

@@ -43,7 +43,8 @@ The input dataset with the new variable added.
 }
 \description{
 Add the first or last date from multiple sources to the dataset, e.g.,
-the last known alive date (\code{LSTALVDT}).
+the last known alive date (\code{LSTALVDT}). This is a wrapper function for the
+function \code{derive_var_extreme_dtm()}.
 }
 \details{
 The following steps are performed to create the output dataset:
