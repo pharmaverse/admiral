@@ -135,7 +135,7 @@
 compute_egfr <- function(creat, creatu = "SI", age, wt, sex, race = NULL, method) {
   assert_numeric_vector(creat)
   assert_character_vector(creatu, values = c(
-    "SI", "CV", "mg/dL", "umol/L", NA_character_
+    "SI", "CV", "mg/dL", "umol/L", NA_character_, optional = TRUE
   ))
   assert_numeric_vector(age)
   assert_character_vector(sex, values = c("M", "F"))
@@ -147,8 +147,9 @@ compute_egfr <- function(creat, creatu = "SI", age, wt, sex, race = NULL, method
     )
   )
 
-  scr <- if_else(
-    tolower(creatu) %in% c("cv", "mg/dl"), creat, creat / 88.42
+  scr <- case_when(
+    tolower(creatu) %in% c("cv", "mg/dl") ~ creat,
+    TRUE ~ creat / 88.42
   )
 
   if (method == "MDRD") {
