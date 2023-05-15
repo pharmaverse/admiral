@@ -383,3 +383,41 @@ test_that("derive_vars_period Test 11: error if different type of LHSs", {
     fixed = TRUE
   )
 })
+
+## Test 12: DT and DTM columns exist, pulls only one unique col ----
+test_that("create_period_dataset Test 12: DT and DTM columns exist, pulls only one unique col", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~AP01SDT,     ~AP01SDTM,                 ~AP01EDT,     ~AP02SDT,     ~AP02EDT,
+    "1",      "2021-01-04", "2021-01-04T12:00:00", "2021-02-06", "2021-02-07", "2021-03-07",
+    "2",      "2021-02-02", "2021-02-02T12:00:00", "2021-03-02", "2021-03-03", "2021-04-01"
+  ) %>%
+    mutate(
+      dplyr::across(matches("AP\\d\\d[ES]DT\\b"), ymd),
+      dplyr::across(matches("AP\\d\\d[ES]DTM"), ymd_hms),
+    ) %>%
+    mutate(
+      STUDYID = "xyz"
+    )
+
+  expected <- tibble::tribble(
+    ~USUBJID, ~APERIOD, ~APERSDT,     ~APEREDT,
+    "1",             1, "2021-01-04", "2021-02-06",
+    "1",             2, "2021-02-07", "2021-03-07",
+    "2",             1, "2021-02-02", "2021-03-02",
+    "2",             2, "2021-03-03", "2021-04-01"
+  ) %>%
+    mutate(
+      STUDYID = "xyz",
+      APERIOD = as.integer(APERIOD),
+      dplyr::across(matches("APER[ES]DT"), ymd)
+    )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = create_period_dataset(
+      adsl,
+      new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT)
+    ),
+    keys = c("USUBJID", "APERIOD")
+  )
+})

@@ -89,6 +89,8 @@ as well. (#1694)
 
 - Examples for `derive_var_extreme_flag()` were reworked to reduce runtime that occasionally led to failing CI check (#1780)
 
+- `create_period_dataset()` had a bug that led to an error when both DT and DTM columns existed. (#1845)
+
 # admiral 0.10.2
 
 - Changing package maintainer from Thomas Neitmann to Ben Straub (#1848)
