@@ -112,6 +112,7 @@ adae \%>\%
 \code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
 
 Other deprecated: 
+\code{\link{derive_param_extreme_event}()},
 \code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_last_dose_amt}()},
