@@ -113,6 +113,7 @@ first or last observation for each by group.
 }
 \seealso{
 Other deprecated: 
+\code{\link{derive_param_extreme_event}()},
 \code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_last_dose_amt}()},
