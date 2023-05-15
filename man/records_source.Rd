@@ -9,26 +9,27 @@ records_source(dataset_name, filter = NULL, new_vars = NULL)
 \arguments{
 \item{dataset_name}{The name of the source dataset
 
-The name refers to the dataset provided by the \code{source_datasets} parameter
+The name refers to the dataset provided by the \code{source_datasets} argument
 of \code{derive_param_extreme_record()}.}
 
 \item{filter}{An unquoted condition for selecting the observations from
-\code{dataset} which are events or possible censoring time points.}
+\code{dataset}.}
 
 \item{new_vars}{Variables to add
 
-The specified variables from the additional dataset are added to the output
+The specified variables from the source datasets are added to the output
 dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = exprs(<new name> = <old name>)}.
 
 For example \code{new_vars = exprs(var1, var2)} adds variables \code{var1} and \code{var2}
-from \code{dataset_add} to the input dataset.
+from to the input dataset.
 
 And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
-\code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
+\code{old_var2} from the source dataset and adds them to the input dataset renaming
 \code{old_var2} to \code{new_var2}. Expressions can be used to create new variables
 (see for example \code{new_vars} argument in \code{derive_vars_merged()}).
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}}
+\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
 }
 \value{
 An object of class \code{records_source}

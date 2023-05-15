@@ -25,34 +25,32 @@ A list of \code{records_source()} objects is expected.}
 
 A named list of datasets is expected. The \code{dataset_name} field of
 \code{records_source()} refers to the dataset provided in the list. The variables
-specified by the \code{order} and the \code{by_vars} parameter are expected after applying \code{new_vars}.}
+specified by the \code{order} and the \code{by_vars} arguments are expected after applying \code{new_vars}.}
 
 \item{by_vars}{By variables
 
-If the parameter is specified, for each by group the observations are
+If the argument is specified, for each by group the observations are
 selected separately.}
 
 \item{order}{Sort order
 
 If the argument is set to a non-null value, for each by group the first or
 last observation from the additional dataset is selected with respect to
-the specified order. The imputed date variable can be specified as well
-(see examples below).
+the specified order. Variables created via \code{new_vars} e.g., imputed date variables,
+can be specified as well (see examples below).
 
 Please note that \code{NA} is considered as the last value. I.e., if a order
 variable is \code{NA} and \code{mode = "last"}, this observation is chosen while for
 \code{mode = "first"} the observation is chosen only if there are no
-observations where the variable is not 'NA'.
+observations where the variable is not \code{NA}.
 
-\emph{Default}: \code{NULL}
-
-\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \verb{exprs(ADT, desc(AVAL)} or \code{NULL}}
+\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
 
 \item{mode}{Selection mode (first or last)
 
-If \code{"first"} is specified, for each subject the first observation with
-respect to the date is included in the output dataset. If \code{"last"} is
+If \code{"first"} is specified, for each by group the first observation with
+respect to \code{order} is included in the output dataset. If \code{"last"} is
 specified, the last observation is included in the output dataset.
 
 Permitted Values:  \code{"first"}, \code{"last"}}
@@ -81,18 +79,13 @@ The following steps are performed to create the output dataset:
 
 \enumerate{
 \item For each source dataset the observations as specified by
-the \code{filter} element are selected. Then for each patient the first or last
-observation (with respect to \code{order}) is selected.
+the \code{filter} element are selected.
 
-\item The \code{ADT} variable is set to the variable specified by the
-\code{date} element. If the date variable is a datetime variable, only
-the datepart is copied. If the source variable is a character variable, it
-is converted to a date. If the date is incomplete, it is imputed as
-the first possible date.
+\item Variables specified by \code{new_vars} are created for each source dataset.
 
-\item For each patient the first or last observation (with respect to the
-\code{ADT} variable) from multiple sources is selected and added back to the original
-dataset. }
+\item The first or last observation (with respect to the
+\code{order} variable) for each by group (specified by \code{by_vars}) from multiple sources
+is selected and added to the input dataset. }
 }
 \examples{
 aevent_samp <- tibble::tribble(

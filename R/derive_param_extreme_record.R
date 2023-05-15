@@ -12,34 +12,32 @@
 #'
 #'   A named list of datasets is expected. The `dataset_name` field of
 #'   `records_source()` refers to the dataset provided in the list. The variables
-#'   specified by the `order` and the `by_vars` parameter are expected after applying `new_vars`.
+#'   specified by the `order` and the `by_vars` arguments are expected after applying `new_vars`.
 #'
 #' @param by_vars By variables
 #'
-#'   If the parameter is specified, for each by group the observations are
+#'   If the argument is specified, for each by group the observations are
 #'   selected separately.
 #'
 #' @param order Sort order
 #'
 #'   If the argument is set to a non-null value, for each by group the first or
 #'   last observation from the additional dataset is selected with respect to
-#'   the specified order. The imputed date variable can be specified as well
-#'   (see examples below).
+#'   the specified order. Variables created via `new_vars` e.g., imputed date variables,
+#'   can be specified as well (see examples below).
 #'
 #'   Please note that `NA` is considered as the last value. I.e., if a order
 #'   variable is `NA` and `mode = "last"`, this observation is chosen while for
 #'   `mode = "first"` the observation is chosen only if there are no
-#'   observations where the variable is not 'NA'.
+#'   observations where the variable is not `NA`.
 #'
-#'   *Default*: `NULL`
-#'
-#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL)` or `NULL`
+#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))`
 #'
 #' @param mode Selection mode (first or last)
 #'
-#'   If `"first"` is specified, for each subject the first observation with
-#'   respect to the date is included in the output dataset. If `"last"` is
+#'   If `"first"` is specified, for each by group the first observation with
+#'   respect to `order` is included in the output dataset. If `"last"` is
 #'   specified, the last observation is included in the output dataset.
 #'
 #'   Permitted Values:  `"first"`, `"last"`
@@ -59,18 +57,13 @@
 #'
 #'   \enumerate{
 #'   \item For each source dataset the observations as specified by
-#'   the `filter` element are selected. Then for each patient the first or last
-#'   observation (with respect to `order`) is selected.
+#'   the `filter` element are selected.
 #'
-#'   \item The `ADT` variable is set to the variable specified by the
-#'   \code{date} element. If the date variable is a datetime variable, only
-#'   the datepart is copied. If the source variable is a character variable, it
-#'   is converted to a date. If the date is incomplete, it is imputed as
-#'   the first possible date.
+#'   \item Variables specified by `new_vars` are created for each source dataset.
 #'
-#'   \item For each patient the first or last observation (with respect to the
-#'   `ADT` variable) from multiple sources is selected and added back to the original
-#'   dataset. }
+#'   \item The first or last observation (with respect to the
+#'   `order` variable) for each by group (specified by `by_vars`) from multiple sources
+#'   is selected and added to the input dataset. }
 #'
 #' @return
 #' The input dataset with the first or last observation of each by group
@@ -183,27 +176,28 @@ derive_param_extreme_record <- function(dataset = NULL,
 #'
 #' @param dataset_name The name of the source dataset
 #'
-#'   The name refers to the dataset provided by the `source_datasets` parameter
+#'   The name refers to the dataset provided by the `source_datasets` argument
 #'   of `derive_param_extreme_record()`.
 #'
 #' @param filter An unquoted condition for selecting the observations from
-#'   `dataset` which are events or possible censoring time points.
+#'   `dataset`.
 #'
 #' @param new_vars Variables to add
 #'
-#'   The specified variables from the additional dataset are added to the output
+#'   The specified variables from the source datasets are added to the output
 #'   dataset. Variables can be renamed by naming the element, i.e., `new_vars =
 #'   exprs(<new name> = <old name>)`.
 #'
 #'   For example `new_vars = exprs(var1, var2)` adds variables `var1` and `var2`
-#'   from `dataset_add` to the input dataset.
+#'   from to the input dataset.
 #'
 #'   And `new_vars = exprs(var1, new_var2 = old_var2)` takes `var1` and
-#'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
+#'   `old_var2` from the source dataset and adds them to the input dataset renaming
 #'   `old_var2` to `new_var2`. Expressions can be used to create new variables
 #'   (see for example `new_vars` argument in `derive_vars_merged()`).
 #'
-#'   *Permitted Values*: list of variables created by `exprs()`
+#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))`
 #'
 #' @keywords source_specifications
 #' @family source_specifications
