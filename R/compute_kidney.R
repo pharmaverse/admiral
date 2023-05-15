@@ -135,7 +135,8 @@
 compute_egfr <- function(creat, creatu = "SI", age, wt, sex, race = NULL, method) {
   assert_numeric_vector(creat)
   assert_character_vector(creatu, values = c(
-    "SI", "CV", "mg/dL", "umol/L", NA_character_, optional = TRUE
+    "SI", "CV", "mg/dL", "umol/L", NA_character_,
+    optional = TRUE
   ))
   assert_numeric_vector(age)
   assert_character_vector(sex, values = c("M", "F"))

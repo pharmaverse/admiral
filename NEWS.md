@@ -6,6 +6,8 @@
 
 - New function `compute_age_years()` for converting a vector of age values to years. (#1794)
 
+- New function `compute_egfr()` for calculating Estimated Glomerular Filtration Rate (eGFR) and Creatinine Clearance for Kidney Function (#1826)
+
 ## Updates of Existing Functions
 
 - For the `set_values_to` argument expressions are accepted now. For example,
