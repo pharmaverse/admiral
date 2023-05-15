@@ -8,6 +8,9 @@
 
 ## Updates of Existing Functions
 
+- `derive_extreme_records()` was enhanced such that it includes the
+functionality of `derive_param_extreme_event()`. (#1725)
+
 - For the `set_values_to` argument expressions are accepted now. For example,
 `set_values_to = exprs(PARAMCD = str_to_upper(QSTESTCD))`. This affects
 `censor_source()`, `derive_expected_records()`, `derive_extreme_event()`,
@@ -65,6 +68,12 @@ deprecated in favor of `derive_vars_merged()`. (#1727)
   - `format_eoxxstt_default()`
   - `format_reason_default()`
   - `derive_var_worst_flag()`
+
+- `derive_param_extreme_event()` was deprecated in favor of
+`derive_extreme_records()`. (#1725)
+
+- The `filter` argument in `derive_extreme_records()` was deprecated in favor of
+the `filter_add` argument. (#1725)
 
 ## Documentation
 
