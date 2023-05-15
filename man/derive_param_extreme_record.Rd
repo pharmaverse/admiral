@@ -72,7 +72,9 @@ The input dataset with the first or last observation of each by group
 added as new observations.
 }
 \description{
-Adds a Parameter Based on First or Last Record from Multiple Sources
+Generates parameter based on the first or last observation from multiple
+source datasets, based on user-defined filter, order and by group criteria.
+All variables of the selected observation are kept.
 }
 \details{
 The following steps are performed to create the output dataset:
