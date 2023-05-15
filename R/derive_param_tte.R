@@ -810,8 +810,9 @@ tte_source <- function(dataset_name,
 #' Create an `event_source` Object
 #'
 #' `event_source` objects are used to define events as input for the
-#' `derive_param_tte()` function. This is a wrapper function for the
-#' more generic `tte_source()`.
+#' `derive_param_tte()` function.
+#'
+#' **Note:** This is a wrapper function for the more generic `tte_source()`.
 #'
 #' @inheritParams tte_source
 #'
@@ -856,8 +857,9 @@ event_source <- function(dataset_name,
 #' Create a `censor_source` Object
 #'
 #' `censor_source` objects are used to define censorings as input for the
-#' `derive_param_tte()` function. This is a wrapper function for the more
-#' generic `tte_source()`.
+#' `derive_param_tte()` function.
+#'
+#' **Note:** This is a wrapper function for the more generic `tte_source()`.
 #'
 #' @inheritParams tte_source
 #'

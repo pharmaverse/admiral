@@ -99,7 +99,8 @@ derive_vars_transposed <- function(dataset,
 #' Derive ATC Class Variables
 #'
 #' Add Anatomical Therapeutic Chemical class variables from `FACM` to `ADCM`.
-#' This is a wrapper function for the more generic `derive_vars_transposed()`.
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_vars_transposed()`.
 #'
 #' @param dataset Input dataset
 #'

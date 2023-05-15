@@ -456,8 +456,9 @@ compute_bsa <- function(height = height,
 #' Adds a Parameter for BMI
 #'
 #' Adds a record for BMI/Body Mass Index using Weight and Height each by group
-#' (e.g., subject and visit) where the source parameters are available. This is
-#' a wrapper function for the more generic `derive_param_computed()`.
+#' (e.g., subject and visit) where the source parameters are available.
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_param_computed()`.
 #'
 #' @param dataset Input dataset
 #'
