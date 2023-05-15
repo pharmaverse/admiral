@@ -12,13 +12,11 @@ library(stringr)
 
 library(admiral.test) # Contains example datasets from the CDISC pilot project or simulated
 
-
 # ---- Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
-
 
 # Load PC, EX, VS and ADSL
 data("admiral_pc")
@@ -80,14 +78,12 @@ pc_dates <- pc %>%
   # Derive dates and times from date/times
   derive_vars_dtm_to_dt(exprs(ADTM)) %>%
   derive_vars_dtm_to_tm(exprs(ADTM)) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT)) %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
     EVID = 0,
     DRUG = PCTEST,
     NFRLT = if_else(PCTPTNUM < 0, 0, PCTPTNUM), .after = USUBJID
   )
-
 
 # ---- Get dosing information ----
 
@@ -161,8 +157,7 @@ ex_exp <- ex_dates %>%
   derive_vars_dtm_to_dt(exprs(ADTM)) %>%
   derive_vars_dtm_to_tm(exprs(ADTM)) %>%
   derive_vars_dtm_to_tm(exprs(ASTDTM)) %>%
-  derive_vars_dtm_to_tm(exprs(AENDTM)) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
+  derive_vars_dtm_to_tm(exprs(AENDTM))
 
 
 # ---- Find first dose per treatment per subject ----
@@ -207,10 +202,25 @@ adppk_prev <- adppk_first_dose %>%
     check_type = "none"
   )
 
+# ---- Find previous nominal dose ----
+
+adppk_nom_prev <- adppk_prev %>%
+  derive_vars_joined(
+    dataset_add = ex_exp,
+    by_vars = exprs(USUBJID),
+    order = exprs(NFRLT),
+    new_vars = exprs(NFRLT_prev = NFRLT),
+    join_vars = exprs(NFRLT),
+    filter_add = NULL,
+    filter_join = NFRLT > NFRLT.join,
+    mode = "last",
+    check_type = "none"
+  )
+
 # ---- Combine ADPPK and EX data ----
 # Derive Relative Time Variables
 
-adppk_aprlt <- bind_rows(adppk_prev, ex_exp) %>%
+adppk_aprlt <- bind_rows(adppk_nom_prev, ex_exp) %>%
   group_by(USUBJID, DRUG) %>%
   mutate(
     FANLDTM = min(FANLDTM, na.rm = TRUE),
@@ -244,10 +254,13 @@ adppk_aprlt <- bind_rows(adppk_prev, ex_exp) %>%
       EVID == 1 ~ 0,
       is.na(APRLT) ~ AFRLT,
       TRUE ~ APRLT
+    ),
+    NPRLT = case_when(
+      EVID == 1 ~ 0,
+      is.na(NFRLT_prev) ~ NFRLT - min_NFRLT,
+      TRUE ~ NFRLT - NFRLT_prev
     )
   )
-
-
 
 # ---- Derive Analysis Variables ----
 # Derive ATPTN, ATPT, ATPTREF, ABLFL and BASETYPE
@@ -269,8 +282,6 @@ adppk_aval <- adppk_aprlt %>%
       TRT01P == "Xanomeline Low Dose" ~ 54,
       TRT01P == "Placebo" ~ 0
     ),
-    DOSEAU = "mg",
-    DOSEPU = "mg",
     # Derive PARAMCD
     PARAMCD = case_when(
       EVID == 1 ~ "DOSE",
@@ -315,9 +326,10 @@ adppk_aval <- adppk_aprlt %>%
       EVID == 1 ~ EXDOSU,
       TRUE ~ PCSTRESU
     ),
-    EVDTC = format_ISO8601(ADTM)
+    UDTC = format_ISO8601(ADTM),
+    II = if_else(EVID == 1, 1, 0),
+    SS = if_else(EVID == 1, 1, 0)
   )
-
 
 # ---- Add ASEQ ----
 
@@ -331,12 +343,17 @@ adppk_aseq <- adppk_aval %>%
   ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(dataset_add = select(param_lookup, -PCTESTCD), by_vars = exprs(PARAMCD)) %>%
+  mutate(
+    PROJID = DRUG,
+    PROJIDN = 1
+  ) %>%
   # Remove temporary variables
   select(
     -DOMAIN, -starts_with("min"), -starts_with("max"), -starts_with("EX"),
     -starts_with("PC"), -ends_with("first"), -ends_with("prev"),
-    -ends_with("DTM"), -ends_with("DT"), -ends_with("TM"),
-    -ends_with("TMF"), -starts_with("TRT"), -starts_with("ATPT"), -DRUG
+    -ends_with("DTM"), -ends_with("DT"), -ends_with("TM"), -starts_with("VISIT"),
+    -starts_with("AVISIT"), -starts_with("PARAM"),
+    -ends_with("TMF"), -starts_with("TRT"), -starts_with("ATPT"), -DRUG, -ASEQ
   )
 
 #---- Derive Covariates ----
@@ -347,6 +364,7 @@ covar <- adsl %>%
     STUDYIDN = as.numeric(word(USUBJID, 1, sep = fixed("-"))),
     SITEIDN = as.numeric(word(USUBJID, 2, sep = fixed("-"))),
     USUBJIDN = as.numeric(word(USUBJID, 3, sep = fixed("-"))),
+    SUBJIDN = as.numeric(SUBJID),
     SEXN = case_when(
       SEX == "M" ~ 1,
       SEX == "F" ~ 2,
@@ -372,55 +390,75 @@ covar <- adsl %>%
       ACTARM == "Xanomeline High Dose" ~ 2,
       TRUE ~ 3
     ),
+    COHORT = ARMN,
+    COHORTC = ARM,
+    ROUTE = unique(ex$EXROUTE),
+    ROUTEN = case_when(
+      ROUTE == "TRANSDERMAL" ~ 3,
+      TRUE ~ NA_real_
+    ),
     FORM = unique(ex$EXDOSFRM),
     FORMN = case_when(
       FORM == "PATCH" ~ 3,
       TRUE ~ 4
-    )
+    ),
+    COUNTRYN = case_when(
+      COUNTRY == "USA" ~ 1,
+      COUNTRY == "CAN" ~ 2,
+      COUNTRY == "GBR" ~ 3
+    ),
+    REGION1N = COUNTRYN,
   ) %>%
   select(
-    STUDYID, STUDYIDN, SITEID, SITEIDN, USUBJID, USUBJIDN, AGE, SEX, SEXN,
-    RACE, RACEN, ARM, ARMN, ACTARM, ACTARMN, FORM, FORMN
+    STUDYID, STUDYIDN, SITEID, SITEIDN, USUBJID, USUBJIDN,
+    SUBJID, SUBJIDN, AGE, SEX, SEXN, COHORT, COHORTC, ROUTE, ROUTEN,
+    RACE, RACEN, ARM, ARMN, ACTARM, ACTARMN, FORM, FORMN, COUNTRY, COUNTRYN,
+    REGION1, REGION1N
   )
 
 #---- Derive additional baselines from VS and LB ----
+
+labsbl <- lb %>%
+  filter(LBBLFL == "Y" & LBTESTCD %in% c("CREAT", "ALT", "AST", "BILI")) %>%
+  mutate(LBTESTCDB = paste0(LBTESTCD, "BL")) %>%
+  select(STUDYID, USUBJID, LBTESTCDB, LBSTRESN)
 
 covar_vslb <- covar %>%
   derive_vars_merged(
     dataset_add = vs,
     filter_add = VSTESTCD == "HEIGHT",
     by_vars = exprs(STUDYID, USUBJID),
-    new_vars = exprs(HTBL = VSSTRESN, HTBLU = VSSTRESU)
+    new_vars = exprs(HTBL = VSSTRESN)
   ) %>%
   derive_vars_merged(
     dataset_add = vs,
     filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
     by_vars = exprs(STUDYID, USUBJID),
-    new_vars = exprs(WTBL = VSSTRESN, WTBLU = VSSTRESU)
+    new_vars = exprs(WTBL = VSSTRESN)
   ) %>%
-  derive_vars_merged(
-    dataset_add = lb,
-    filter_add = LBTESTCD == "ALT" & LBBLFL == "Y",
+  derive_vars_transposed(
+    dataset_merge = labsbl,
     by_vars = exprs(STUDYID, USUBJID),
-    new_vars = exprs(ALTBL = LBSTRESN, ALTBLU = LBSTRESU)
-  ) %>%
-  derive_vars_merged(
-    dataset_add = lb,
-    filter_add = LBTESTCD == "AST" & LBBLFL == "Y",
-    by_vars = exprs(STUDYID, USUBJID),
-    new_vars = exprs(ASTBL = LBSTRESN, ASTBLU = LBSTRESU)
+    key_var = LBTESTCDB,
+    value_var = LBSTRESN
   ) %>%
   mutate(
     BMIBL = compute_bmi(height = HTBL, weight = WTBL),
-    BMIBLU = "kg/m^2",
     BSABL = compute_bsa(
       height = HTBL,
       weight = HTBL,
       method = "Mosteller"
     ),
-    BSABLU = "m^2"
-  )
-
+    CRCLBL = compute_egfr(
+      creat = CREATBL, creatu = "SI", age = AGE, wt = WTBL, sex = SEX,
+      method = "CRCL"
+    ),
+    EGFRBL = compute_egfr(
+      creat = CREATBL, creatu = "SI", age = AGE, wt = WTBL, sex = SEX,
+      method = "CKD-EPI"
+    )
+  ) %>%
+  rename(TBILBL = BILIBL)
 
 # Combine covariates with APPPK data
 
@@ -428,7 +466,9 @@ adppk <- adppk_aseq %>%
   derive_vars_merged(
     dataset_add = covar_vslb,
     by_vars = exprs(STUDYID, USUBJID)
-  )
+  ) %>%
+  arrange(STUDYIDN, USUBJIDN, AFRLT, EVID) %>%
+  mutate(RECSEQ = row_number())
 
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
