@@ -82,7 +82,7 @@ filter_exist <- function(
   )
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_data_frame(
-    dataset,
+    dataset_add,
     required_vars = by_vars
   )
 
@@ -163,7 +163,7 @@ filter_not_exist <- function(
   )
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_data_frame(
-    dataset,
+    dataset_add,
     required_vars = by_vars
   )
 
