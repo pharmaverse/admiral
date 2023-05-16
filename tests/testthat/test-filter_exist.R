@@ -1,7 +1,7 @@
 # filter_exist ----
 ## Test 1: filter_exist() works as expected ----
 test_that("filter_exist Test 1: filter_exist() works as expected", {
-  input_dataset <- tribble(
+  input_dataset <- tibble::tribble(
     ~USUBJID, ~AGE, ~SEX,
     "01-701-1015", 63, "F",
     "01-701-1034", 77, "F",
