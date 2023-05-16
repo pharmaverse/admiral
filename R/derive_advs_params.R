@@ -1,8 +1,9 @@
 #' Adds a Parameter for Mean Arterial Pressure
 #'
-#' Adds a record for mean arterial pressure (MAP) for each by group
+#' @description Adds a record for mean arterial pressure (MAP) for each by group
 #' (e.g., subject and visit) where the source parameters are available.
-#' This is a wrapper function for the more generic `derive_param_computed()`.
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_param_computed()`.
 #'
 #' @param dataset Input dataset
 #'
@@ -205,9 +206,11 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 
 #' Adds a Parameter for BSA (Body Surface Area) Using the Specified Method
 #'
-#' Adds a record for BSA (Body Surface Area) using the specified derivation method
-#' for each by group (e.g., subject and visit) where the source parameters are available.
-#' This is a wrapper function for the more generic `derive_param_computed()`.
+#' @description Adds a record for BSA (Body Surface Area) using the specified derivation
+#' method for each by group (e.g., subject and visit) where the source parameters are
+#' available.
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_param_computed()`.
 #'
 #' @param dataset Input dataset
 #'
@@ -455,7 +458,7 @@ compute_bsa <- function(height = height,
 
 #' Adds a Parameter for BMI
 #'
-#' Adds a record for BMI/Body Mass Index using Weight and Height each by group
+#' @description Adds a record for BMI/Body Mass Index using Weight and Height each by group
 #' (e.g., subject and visit) where the source parameters are available.
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_param_computed()`.

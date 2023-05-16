@@ -42,9 +42,10 @@ A list of expressions where the expressions are symbols as returned by
 The input dataset with the new variable added.
 }
 \description{
-Add the first or last date from multiple sources to the dataset, e.g.,
-the last known alive date (\code{LSTALVDT}). This is a wrapper function for the
-function \code{derive_var_extreme_dtm()}.
+Add the first or last date from multiple sources to the
+dataset, e.g., the last known alive date (\code{LSTALVDT}).
+
+\strong{Note:} This is a wrapper function for the function \code{derive_var_extreme_dtm()}.
 }
 \details{
 The following steps are performed to create the output dataset:

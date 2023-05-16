@@ -31,8 +31,9 @@ An object of class \code{event_source}, inheriting from class \code{tte_source}
 }
 \description{
 \code{event_source} objects are used to define events as input for the
-\code{derive_param_tte()} function. This is a wrapper function for the
-more generic \code{tte_source()}.
+\code{derive_param_tte()} function.
+
+\strong{Note:} This is a wrapper function for the more generic \code{tte_source()}.
 }
 \examples{
 # Death event

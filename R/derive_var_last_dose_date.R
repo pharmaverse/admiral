@@ -1,6 +1,7 @@
 #' Derive Last Dose Date-Time
 #'
-#' Add a variable for the dose date or datetime of the last dose to the input dataset.
+#' @description Add a variable for the dose date or datetime of the last dose to
+#' the input dataset.
 #'
 #' **Note:** This is a wrapper function for the function `derive_vars_last_dose()`.
 #'

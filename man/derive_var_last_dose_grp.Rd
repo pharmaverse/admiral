@@ -76,8 +76,10 @@ These can be either strings or symbols referring to existing variables.}
 Input dataset with additional column \code{new_var}.
 }
 \description{
-Add a variable for user-defined dose grouping of the last dose to the input dataset.
-This is a wrapper function for the function \code{derive_vars_last_dose()}.
+Add a variable for user-defined dose grouping of the last dose
+to the input dataset.
+
+\strong{Note:} This is a wrapper function for the function \code{derive_vars_last_dose()}.
 }
 \details{
 Last dose is the dose with maximum \code{dose_date} that is lower to or equal to the
