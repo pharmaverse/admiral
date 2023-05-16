@@ -4,7 +4,7 @@
 \alias{records_source}
 \title{Create a \code{records_source} Object}
 \usage{
-records_source(dataset_name, filter = NULL, new_vars = NULL)
+records_source(dataset_name, filter = NULL, new_vars)
 }
 \arguments{
 \item{dataset_name}{The name of the source dataset
