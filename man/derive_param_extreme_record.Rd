@@ -35,7 +35,7 @@ selected separately.}
 \item{order}{Sort order
 
 If the argument is set to a non-null value, for each by group the first or
-last observation from the additional dataset is selected with respect to
+last observation from the source datasets is selected with respect to
 the specified order. Variables created via \code{new_vars} e.g., imputed date variables,
 can be specified as well (see examples below).
 
@@ -64,7 +64,7 @@ A list of variable name-value pairs is expected.
 \itemize{
 \item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
-symbol, a numeric value or \code{NA}, e.g., \code{exprs(PARAMCD = "TDOSE", PARCAT1 =   "OVERALL")}. More general expression are not allowed.
+symbol, a numeric value or \code{NA}, e.g., \code{exprs(PARAMCD = "PD", PARAM =   "First Progressive Disease")}.
 }}
 }
 \value{

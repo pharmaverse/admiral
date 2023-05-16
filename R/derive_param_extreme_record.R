@@ -24,7 +24,7 @@
 #' @param order Sort order
 #'
 #'   If the argument is set to a non-null value, for each by group the first or
-#'   last observation from the additional dataset is selected with respect to
+#'   last observation from the source datasets is selected with respect to
 #'   the specified order. Variables created via `new_vars` e.g., imputed date variables,
 #'   can be specified as well (see examples below).
 #'
@@ -52,8 +52,8 @@
 #'   A list of variable name-value pairs is expected.
 #'   + LHS refers to a variable.
 #'   + RHS refers to the values to set to the variable. This can be a string, a
-#'   symbol, a numeric value or `NA`, e.g., `exprs(PARAMCD = "TDOSE", PARCAT1 =
-#'   "OVERALL")`. More general expression are not allowed.
+#'   symbol, a numeric value or `NA`, e.g., `exprs(PARAMCD = "PD", PARAM =
+#'   "First Progressive Disease")`.
 #'
 #' @details The following steps are performed to create the output dataset:
 #'
@@ -214,7 +214,7 @@ records_source <- function(dataset_name,
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
-    new_vars = assert_expr_list(new_vars, optional = TRUE)
+    new_vars = assert_expr_list(new_vars)
   )
   class(out) <- c("records_source", "source", "list")
   out
