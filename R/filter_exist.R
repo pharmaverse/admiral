@@ -1,6 +1,9 @@
 #' Returns records that fit into existing by groups in a filtered source dataset
 #'
-#' Returns all records that fit into an existing by group in a filtered source dataset.
+#' Returns all records in the input dataset that belong to by groups that are present
+#' in a source dataset, after the source dataset is optionally filtered. For example,
+#' this could be used to return ADSL records for subjects that experienced a certain
+#' adverse event during the course of the study (as per records in ADAE).
 #'
 #' @param dataset Input dataset
 #'
@@ -94,7 +97,12 @@ filter_exist <- function(
     )
 }
 
-#' Returns all records that don't fit into an existing by group in a filtered source dataset
+#' Returns records that don't fit into existing by groups in a filtered source dataset
+#'
+#' Returns all records in the input dataset that belong to by groups that are not
+#' present in a source dataset, after the source dataset is optionally filtered. For
+#' example, this could be used to return ADSL records for subjects that didn't take certain
+#' concomitant medications during the course of the study (as per records in ADCM).
 #'
 #' @inheritParams filter_exist
 #'

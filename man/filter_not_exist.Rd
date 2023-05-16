@@ -2,7 +2,7 @@
 % Please edit documentation in R/filter_exist.R
 \name{filter_not_exist}
 \alias{filter_not_exist}
-\title{Returns all records that don't fit into an existing by group in a filtered source dataset}
+\title{Returns records that don't fit into existing by groups in a filtered source dataset}
 \usage{
 filter_not_exist(dataset, dataset_add, by_vars, filter_add = TRUE)
 }
@@ -36,7 +36,10 @@ The records in the input dataset which are not contained within any existing by
 group in the filtered source dataset.
 }
 \description{
-Returns all records that don't fit into an existing by group in a filtered source dataset
+Returns all records in the input dataset that belong to by groups that are not
+present in a source dataset, after the source dataset is optionally filtered. For
+example, this could be used to return ADSL records for subjects that didn't take certain
+concomitant medications during the course of the study (as per records in ADCM).
 }
 \details{
 Returns the records in \code{dataset} which don't match any existing by groups in
