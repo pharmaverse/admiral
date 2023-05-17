@@ -115,6 +115,7 @@ The details associated with the reason for discontinuation are derived based on
 \code{\link[=format_reason_default]{format_reason_default()}}
 
 Other deprecated: 
+\code{\link{derive_param_extreme_event}()},
 \code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_merged_cat}()},
