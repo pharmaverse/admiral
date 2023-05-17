@@ -81,6 +81,8 @@ the `filter_add` argument. (#1725)
 
 - Updated example dataset to trigger deterioration flags in the vignette "Creating Questionnaire ADaMs" (#1853, #1854)
 
+- Updated PK Programming vignette to include new Population PK Template `ad_adppk.R` (#1772)
+
 ## Various
 
 - `vars()` which was used in the admiral function calls that expected a list of

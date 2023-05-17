@@ -178,7 +178,7 @@ navbar:
         href: articles/bds_tte.html
       - text: Creating Questionnaire ADaMs
         href: articles/questionnaires.html
-      - text: Creating a PK NCA ADaM (ADPC/ADNCA)
+      - text: Creating a PK NCA or Population PK ADaM
         href: articles/pk_adnca.html
       - text: "Advanced User Guides"
       - text: Date and Time Imputation

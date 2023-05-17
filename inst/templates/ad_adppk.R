@@ -1,10 +1,10 @@
 # Name: ADPPK
 #
-# Label: Population PK Analysis Dataset
+# Label: Population PK Analysis Data
 #
 # Description: Based on simulated data, create ADPPK analysis dataset
 #
-# Input: pc, ex, vs, adsl
+# Input: pc, ex, vs, lb, adsl
 library(admiral)
 library(dplyr)
 library(lubridate)
@@ -18,7 +18,7 @@ library(admiral.test) # Contains example datasets from the CDISC pilot project o
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-# Load PC, EX, VS and ADSL
+# Load PC, EX, VS, LB and ADSL
 data("admiral_pc")
 data("admiral_ex")
 data("admiral_vs")
@@ -263,10 +263,8 @@ adppk_aprlt <- bind_rows(adppk_nom_prev, ex_exp) %>%
   )
 
 # ---- Derive Analysis Variables ----
-# Derive ATPTN, ATPT, ATPTREF, ABLFL and BASETYPE
-# Derive planned dose DOSEP, actual dose DOSEA and units
-# Derive PARAMCD and relative time units
-# Derive AVAL, AVALU and AVALCAT1
+# Derive actual dose DOSEA and planned dose DOSEP,
+# Derive AVAL and DV
 
 adppk_aval <- adppk_aprlt %>%
   mutate(
@@ -302,28 +300,25 @@ adppk_aval <- adppk_aprlt %>%
       PCSTRESC == "<BLQ" ~ 1,
       TRUE ~ 0
     ),
-    # Derive AVAL
-    AVAL = case_when(
-      EVID == 1 ~ EXDOSE,
-      PCSTRESC == "<BLQ" ~ 0,
-      TRUE ~ PCSTRESN
-    ),
     AMT = case_when(
       EVID == 1 ~ EXDOSE,
       TRUE ~ NA_real_
     ),
-    DV = AVAL,
+    # Derive DV and AVAL
+    DV = PCSTRESN,
+    AVAL = DV,
     DVL = case_when(
       DV != 0 ~ log(DV),
       TRUE ~ NA_real_
     ),
+    # Derive MDV
     MDV = case_when(
       EVID == 1 ~ 1,
       is.na(DV) ~ 1,
-      TRUE ~ NA_real_
+      TRUE ~ 0
     ),
     AVALU = case_when(
-      EVID == 1 ~ EXDOSU,
+      EVID == 1 ~ NA_character_,
       TRUE ~ PCSTRESU
     ),
     UDTC = format_ISO8601(ADTM),
@@ -353,7 +348,7 @@ adppk_aseq <- adppk_aval %>%
     -starts_with("PC"), -ends_with("first"), -ends_with("prev"),
     -ends_with("DTM"), -ends_with("DT"), -ends_with("TM"), -starts_with("VISIT"),
     -starts_with("AVISIT"), -starts_with("PARAM"),
-    -ends_with("TMF"), -starts_with("TRT"), -starts_with("ATPT"), -DRUG, -ASEQ
+    -ends_with("TMF"), -starts_with("TRT"), -starts_with("ATPT"), -DRUG
   )
 
 #---- Derive Covariates ----
@@ -377,6 +372,11 @@ covar <- adsl %>%
       RACE == "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" ~ 4,
       RACE == "WHITE" ~ 5,
       TRUE ~ 6
+    ),
+    ETHNICN = case_when(
+      ETHNIC == "HISPANIC OR LATINO" ~ 1,
+      ETHNIC == "NOT HISPANIC OR LATINO" ~ 2,
+      TRUE ~ 3
     ),
     ARMN = case_when(
       ARM == "Placebo" ~ 0,
@@ -412,7 +412,7 @@ covar <- adsl %>%
   select(
     STUDYID, STUDYIDN, SITEID, SITEIDN, USUBJID, USUBJIDN,
     SUBJID, SUBJIDN, AGE, SEX, SEXN, COHORT, COHORTC, ROUTE, ROUTEN,
-    RACE, RACEN, ARM, ARMN, ACTARM, ACTARMN, FORM, FORMN, COUNTRY, COUNTRYN,
+    RACE, RACEN, ETHNIC, ETHNICN, FORM, FORMN, COUNTRY, COUNTRYN,
     REGION1, REGION1N
   )
 
