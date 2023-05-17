@@ -10,6 +10,9 @@
 a dataset dependent on the existence of the corresponding by groups in a filtered 
 source dataset. (#1699)
 
+- New function `derive_param_extreme_record()` that adds parameter based on the first or last record from multiple sources. (#1822)
+
+
 ## Updates of Existing Functions
 
 - `derive_extreme_records()` was enhanced such that it includes the

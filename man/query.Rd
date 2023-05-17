@@ -142,6 +142,7 @@ Source Objects:
 \code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{event}()},
+\code{\link{records_source}()},
 \code{\link{tte_source}()}
 }
 \concept{source_specifications}
