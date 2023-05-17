@@ -70,6 +70,9 @@ deprecated in favor of `derive_vars_merged()`. (#1727)
 
 - Updated example dataset to trigger deterioration flags in the vignette "Creating Questionnaire ADaMs" (#1853, #1854)
 
+- Updated "Lab Grading" Vignette to link to grading metadata available in `{admiral}` and clarify how abnormal baseline
+values are assigned in NCICTCAE-v5 (#1863).
+
 ## Various
 
 - `vars()` which was used in the admiral function calls that expected a list of
