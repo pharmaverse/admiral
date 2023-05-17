@@ -6,6 +6,8 @@
 
 - New function `compute_age_years()` for converting a vector of age values to years. (#1794)
 
+- New function `derive_param_extreme_record()` that adds parameter based on the first or last record from multiple sources. (#1822)
+
 - New ADPPK template script available `ad_adppk.R` which creates Population PK Analysis Dataset (#1772) based on forthcoming CDISC Implementation guide.
 
 ## Updates of Existing Functions
