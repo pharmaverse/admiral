@@ -142,8 +142,14 @@ param_lookup <- tibble::tribble(
 ```
 
 ```{r echo=FALSE}
-ex <- filter(ex, USUBJID %in% c("01-701-1028", "01-701-1033", "01-701-1442", "01-714-1288", "01-718-1101"))
-pc <- filter(pc, USUBJID %in% c("01-701-1028", "01-701-1033", "01-701-1442", "01-714-1288", "01-718-1101"))
+ex <- filter(ex, USUBJID %in% c(
+  "01-701-1028", "01-701-1033", "01-701-1442",
+  "01-714-1288", "01-718-1101"
+))
+pc <- filter(pc, USUBJID %in% c(
+  "01-701-1028", "01-701-1033", "01-701-1442",
+  "01-714-1288", "01-718-1101"
+))
 ```
 
 At this step, it may be useful to join `ADSL` to your `PC` and `EX`
@@ -789,7 +795,10 @@ adpc_dtype <- bind_rows(adpc_aval, dtype) %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 adpc_dtype %>%
-  dataset_vignette(display_vars = exprs(STUDYID, USUBJID, BASETYPE, ADTM, ATPT, NFRLT, NRRLT, ARRLT, MRRLT))
+  dataset_vignette(display_vars = exprs(
+    STUDYID, USUBJID, BASETYPE, ADTM, ATPT,
+    NFRLT, NRRLT, ARRLT, MRRLT
+  ))
 ```
 
 ## Calculate Change from Baseline and Assign `ASEQ` {#aseq}
@@ -1443,6 +1452,6 @@ example](https://examples.pharmaverse.org/data/adsl/).
 # Example Scripts {#example}
 
 | ADaM  | Sample Code                                                                                               |
-|-------|-----------------------------------------------------------------------------------------------------------|
+|------------|------------------------------------------------------------|
 | ADPC  | [ad_adpc.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adpc.R){target="_blank"}   |
 | ADPPK | [ad_adppk.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adppk.R){target="_blank"} |
