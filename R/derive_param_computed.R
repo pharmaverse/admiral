@@ -148,6 +148,7 @@
 #'   constant_by_vars = exprs(USUBJID)
 #' )
 derive_param_computed <- function(dataset,
+                                  dataset_add,
                                   by_vars,
                                   parameters,
                                   analysis_value,
@@ -160,18 +161,32 @@ derive_param_computed <- function(dataset,
   assert_data_frame(dataset, required_vars = exprs(!!!by_vars, PARAMCD, AVAL))
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   params_available <- unique(dataset$PARAMCD)
-  assert_character_vector(parameters, values = params_available)
-  assert_character_vector(constant_parameters, values = params_available, optional = TRUE)
+  # assert_character_vector(parameters, values = params_available)
+  # assert_character_vector(constant_parameters, values = params_available, optional = TRUE)
   assert_varval_list(set_values_to)
   if (!is.null(set_values_to$PARAMCD)) {
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
 
   # select observations and variables required for new observations
-  data_filtered <- dataset %>%
-    filter_if(filter)
+  data_source <- dataset %>%
+    filter_if(filter) %>%
+    bind_rows(dataset_add)
 
-  data_parameters <- data_filtered %>%
+  # determine parameter values
+  param_values <- map2(parameters, names(parameters), ~ if_else(.y == "", as_label(.x), .y))
+
+  new_params <- parameters[names(parameters) != ""]
+  new_names <- names(new_params)
+
+  new_data <- vector("list", length(new_params))
+  for (i in seq_along(new_params)) {
+    new_data[[i]] <- filter(data_source, !!new_params[[i]]) %>%
+      mutate(PARAMCD == new_names[[i]])
+  }
+
+  data_parameters <- data_source %>%
+    bind_rows(new_data) %>%
     filter(PARAMCD %in% parameters)
 
   if (nrow(data_parameters) == 0L) {
@@ -217,7 +232,11 @@ derive_param_computed <- function(dataset,
     )
   )
 
-  # horizontalize data, AVAL for PARAMCD = "PARAMx" -> AVAL.PARAMx
+  # horizontalize data, e.g., AVAL for PARAMCD = "PARAMx" -> AVAL.PARAMx
+  vars_hori <- extract_vars(analysis_value) %>%
+    str_split(pattern = "\\.") %>%
+    map_chr(`[[`, 1) %>%
+    unique()
   hori_data <- data_parameters %>%
     pivot_wider(names_from = PARAMCD, values_from = AVAL, names_prefix = "AVAL.")
 

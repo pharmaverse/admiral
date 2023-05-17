@@ -1,4 +1,5 @@
-test_that("new observations are derived correctly", {
+## Test 1: new observations are derived correctly ----
+test_that("derive_param_computed Test 1: new observations are derived correctly", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
@@ -43,7 +44,8 @@ test_that("new observations are derived correctly", {
   )
 })
 
-test_that("new observations are derived correctly with constant parameters", {
+## Test 2: new observations are derived correctly with constant parameters ----
+test_that("derive_param_computed Test 2: new observations are derived correctly with constant parameters", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
@@ -90,7 +92,8 @@ test_that("new observations are derived correctly with constant parameters", {
   )
 })
 
-test_that("no new observations are added if filtered dataset is empty", {
+## Test 3: no new observations are added if filtered dataset is empty ----
+test_that("derive_param_computed Test 3: no new observations are added if filtered dataset is empty", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
@@ -123,7 +126,8 @@ test_that("no new observations are added if filtered dataset is empty", {
   )
 })
 
-test_that("no new observations are added if a parameter is missing", {
+## Test 4: no new observations are added if a parameter is missing ----
+test_that("derive_param_computed Test 4: no new observations are added if a parameter is missing", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
@@ -154,5 +158,45 @@ test_that("no new observations are added if a parameter is missing", {
         keys = c("USUBJID", "PARAMCD", "VISIT")
       ),
     "The input dataset does not contain any observations fullfiling the filter condition .*"
+  )
+})
+
+
+## Test 5: `dataset_add`, creating new parameters ----
+test_that("derive_param_computed Test 5: `dataset_add`, creating new parameters", {
+  qs <- tibble::tribble(
+    ~USUBJID, ~VISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
+    "1",      "WEEK 2", "CHSF112", NA,       1,
+    "1",      "WEEK 2", "CHSF113", "Yes",    NA,
+    "1",      "WEEK 2", "CHSF114", NA,       1,
+    "1",      "WEEK 4", "CHSF112", NA,       2,
+    "1",      "WEEK 4", "CHSF113", "No",    NA,
+    "1",      "WEEK 4", "CHSF114", NA,       1
+  )
+
+  adchsf <- tibble::tribble(
+    ~USUBJID, ~AVISIT,  ~PARAMCD, ~QSORRES, ~QSSTRESN, ~AVAL,
+    "1",      "WEEK 2", "CHSF12", NA,       1,             6,
+    "1",      "WEEK 2", "CHSF14", NA,       1,             6,
+    "1",      "WEEK 4", "CHSF12", NA,       2,            12,
+    "1",      "WEEK 4", "CHSF14", NA,       1,             6
+
+  )
+
+  derive_param_computed(
+    adchsf,
+    dataset_add = qs,
+    by_vars = exprs(USUBJID, AVISIT),
+    parameters = exprs(CHSF12, CHSF13 = QSTESTCD %in% c("CHSF113", "CHSF213"), CHSF14),
+    analysis_value = case_when(
+      QSORRES.CHSF13 == "Not applicable" ~ 0,
+      QSORRES.CHSF13 == "Yes" ~ 38,
+      QSORRES.CHSF13 == "No" ~ if_else(
+        QSSTRESN.CHSF12 > QSSTRESN.CHSF14,
+        25,
+        0
+      )
+    ),
+    set_values_to = exprs(PARAMCD = "CHSF13")
   )
 })
