@@ -8,7 +8,7 @@
       },
       {
         "Name": "RSPM",
-        "URL": "https://packagemanager.rstudio.com/cran/2022-03-10"
+        "URL": "https://packagemanager.posit.co/cran/2022-03-10"
       }
     ]
   },
@@ -16,7 +16,7 @@
     "DT": {
       "Package": "DT",
       "Version": "0.21",
-      "Source": "Repository",
+      "Source": "Repository", 
       "Repository": "RSPM",
       "Requirements": [
         "crosstalk",
@@ -1118,7 +1118,7 @@
     },
     "roxygen2": {
       "Package": "roxygen2",
-      "Version": "7.2.3",
+      "Version": "7.2.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1129,6 +1129,7 @@
         "commonmark",
         "cpp11",
         "desc",
+        "digest",
         "knitr",
         "methods",
         "pkgload",
@@ -1140,7 +1141,7 @@
         "withr",
         "xml2"
       ],
-      "Hash": "7b153c746193b143c14baa072bae4e27"
+      "Hash": "da1f278262e563c835345872f2fef537"
     },
     "rprojroot": {
       "Package": "rprojroot",
