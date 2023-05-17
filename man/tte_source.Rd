@@ -48,7 +48,8 @@ Source Objects:
 \code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{event}()},
-\code{\link{query}()}
+\code{\link{query}()},
+\code{\link{records_source}()}
 }
 \concept{source_specifications}
 \keyword{source_specifications}
