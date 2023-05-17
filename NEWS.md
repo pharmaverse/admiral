@@ -82,7 +82,7 @@ the `filter_add` argument. (#1725)
 - Updated example dataset to trigger deterioration flags in the vignette "Creating Questionnaire ADaMs" (#1853, #1854)
 
 - Updated "Lab Grading" Vignette to link to grading metadata available in `{admiral}` and clarify how abnormal baseline
-values are assigned in NCICTCAE-v5 (#1863).
+values are assigned in NCI-CTCAEv5 (#1863).
 
 ## Various
 
