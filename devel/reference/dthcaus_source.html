@@ -28,7 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
     <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating a Basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
@@ -59,19 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -122,16 +109,17 @@ the death cause.</p></dd>
 
 
 <dt>date</dt>
-<dd><p>A date or datetime variable to be used for sorting <code>dataset</code>.</p></dd>
+<dd><p>A date or datetime variable or an expression to be used for
+sorting <code>dataset</code>.</p></dd>
 
 
 <dt>order</dt>
 <dd><p>Sort order</p>
-<p>Additional variables to be used for sorting the <code>dataset</code> which is ordered by the
-<code>date</code> and <code>order</code>. Can be used to avoid duplicate record warning.</p>
-<p><em>Default</em>: <code>NULL</code></p>
-<p><em>Permitted Values</em>: list of variables or <code>desc(&lt;variable&gt;)</code> function calls
-created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g., <code>exprs(ADT, desc(AVAL))</code> or <code>NULL</code></p></dd>
+<p>Additional variables/expressions to be used for sorting the <code>dataset</code>. The
+dataset is ordered by <code>date</code> and <code>order</code>. Can be used to avoid duplicate
+record warning.</p>
+<p><em>Permitted Values</em>: list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
+<code>exprs(ADT, desc(AVAL))</code> or <code>NULL</code></p></dd>
 
 
 <dt>mode</dt>
@@ -141,20 +129,21 @@ which is ordered by <code>date</code>.</p></dd>
 
 
 <dt>dthcaus</dt>
-<dd><p>A variable name or a string literal --- if a variable name, e.g., <code>AEDECOD</code>,
-it is the variable in the source dataset to be used to assign values to
-<code>DTHCAUS</code>; if a string literal, e.g. <code>"Adverse Event"</code>, it is the fixed value
-to be assigned to <code>DTHCAUS</code>.</p></dd>
+<dd><p>A variable name, an expression, or a string literal</p>
+<p>If a variable name is specified, e.g., <code>AEDECOD</code>, it is the variable in the
+source dataset to be used to assign values to <code>DTHCAUS</code>; if an expression,
+e.g., <code>str_to_upper(AEDECOD)</code>, it is evaluated in the source dataset and
+the results is assigned to <code>DTHCAUS</code>; if a string literal, e.g. <code>"Adverse Event"</code>, it is the fixed value to be assigned to <code>DTHCAUS</code>.</p></dd>
 
 
 <dt>traceability_vars</dt>
-<dd><p>A named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> listing the traceability variables,
-e.g. <code>exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)</code>.
-The left-hand side (names of the list elements) gives the names of the traceability variables
-in the returned dataset.
-The right-hand side (values of the list elements) gives the values of the traceability variables
-in the returned dataset.
-These can be either strings or symbols referring to existing variables.</p></dd>
+<dd><p>A named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> listing the
+traceability variables, e.g. <code>exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)</code>. The
+left-hand side (names of the list elements) gives the names of the
+traceability variables in the returned dataset. The right-hand side (values
+of the list elements) gives the values of the traceability variables in the
+returned dataset. These can be either strings, numbers, symbols, or
+expressions referring to existing variables.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -174,6 +163,7 @@ These can be either strings or symbols referring to existing variables.</p></dd>
 <code><a href="event_source.html">event_source</a>()</code>,
 <code><a href="event.html">event</a>()</code>,
 <code><a href="query.html">query</a>()</code>,
+<code><a href="records_source.html">records_source</a>()</code>,
 <code><a href="tte_source.html">tte_source</a>()</code></p></div>
     </div>
 
@@ -192,7 +182,7 @@ These can be either strings or symbols referring to existing variables.</p></dd>
 <span class="r-in"><span class="va">src_ds</span> <span class="op">&lt;-</span> <span class="fu">dthcaus_source</span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ds"</span>,</span>
 <span class="r-in">  filter <span class="op">=</span> <span class="va">DSDECOD</span> <span class="op">==</span> <span class="st">"DEATH"</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">DSSTDT</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="fu"><a href="convert_dtc_to_dt.html">convert_dtc_to_dt</a></span><span class="op">(</span><span class="va">DSSTDTC</span><span class="op">)</span>,</span>
 <span class="r-in">  mode <span class="op">=</span> <span class="st">"first"</span>,</span>
 <span class="r-in">  dthcaus <span class="op">=</span> <span class="va">DSTERM</span></span>
 <span class="r-in"><span class="op">)</span></span>

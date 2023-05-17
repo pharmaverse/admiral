@@ -34,7 +34,7 @@ baseline."><meta property="og:image" content="https://pharmaverse.github.io/admi
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
     <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating a Basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
@@ -65,19 +65,6 @@ baseline."><meta property="og:image" content="https://pharmaverse.github.io/admi
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -117,7 +104,7 @@ baseline.</p>
   false_value <span class="op">=</span> <span class="cn">NA_character_</span>,
   missing_value <span class="op">=</span> <span class="cn">NA_character_</span>,
   filter_add <span class="op">=</span> <span class="cn">NULL</span>,
-  aval_fun <span class="op">=</span> <span class="va">yn_to_numeric</span>,
+  <span class="va">aval_fun</span>,
   subject_keys <span class="op">=</span> <span class="fu"><a href="get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span>,
   <span class="va">set_values_to</span>
 <span class="op">)</span></code></pre></div>
@@ -195,9 +182,7 @@ considered.</p>
 <dt>aval_fun</dt>
 <dd><p>Function to map character analysis value (<code>AVALC</code>) to numeric
 analysis value (<code>AVAL</code>)</p>
-<p>The (first) argument of the function must expect a character vector and the
-function must return a numeric vector.</p>
-<p><em>Default:</em> <code>yn_to_numeric</code> (see <code><a href="yn_to_numeric.html">yn_to_numeric()</a></code> for details)</p></dd>
+<p><em>Deprecated</em>, please use <code>set_values_to</code> instead.</p></dd>
 
 
 <dt>subject_keys</dt>
@@ -209,7 +194,7 @@ function must return a numeric vector.</p>
 <dd><p>Variables to set</p>
 <p>A named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> defining the variables to be set for the
 new parameter, e.g. <code>exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at Baseline")</code> is expected. The values must be symbols, character strings,
-numeric values, or <code>NA</code>.</p></dd>
+numeric values, <code>NA</code>, or expressions.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -236,7 +221,6 @@ to <code>FALSE</code> or <code>NA</code>.</p></li>
 <li><p>Otherwise, it is set to the missing value (<code>missing_value</code>), i.e., for
 those subject not in <code>dataset_add</code>.</p></li>
 </ul></li>
-<li><p>The <code>AVAL</code> variable is added and set to <code>aval_fun(AVALC)</code>.</p></li>
 <li><p>The variables specified by the <code>set_values_to</code> parameter are added to
 the new observations.</p></li>
 <li><p>The new observations are added to input dataset.</p></li>
@@ -254,7 +238,7 @@ the new observations.</p></li>
 <code><a href="derive_param_computed.html">derive_param_computed</a>()</code>,
 <code><a href="derive_param_doseint.html">derive_param_doseint</a>()</code>,
 <code><a href="derive_param_exposure.html">derive_param_exposure</a>()</code>,
-<code><a href="derive_param_extreme_event.html">derive_param_extreme_event</a>()</code>,
+<code><a href="derive_param_extreme_record.html">derive_param_extreme_record</a>()</code>,
 <code><a href="derive_param_framingham.html">derive_param_framingham</a>()</code>,
 <code><a href="derive_param_map.html">derive_param_map</a>()</code>,
 <code><a href="derive_param_qtc.html">derive_param_qtc</a>()</code>,
@@ -300,6 +284,7 @@ the new observations.</p></li>
 <span class="r-in">  false_value <span class="op">=</span> <span class="st">"N"</span>,</span>
 <span class="r-in">  missing_value <span class="op">=</span> <span class="st">"N"</span>,</span>
 <span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">    AVAL <span class="op">=</span> <span class="fu"><a href="yn_to_numeric.html">yn_to_numeric</a></span><span class="op">(</span><span class="va">AVALC</span><span class="op">)</span>,</span>
 <span class="r-in">    PARAMCD <span class="op">=</span> <span class="st">"MDIS"</span>,</span>
 <span class="r-in">    PARAM <span class="op">=</span> <span class="st">"Measurable Disease at Baseline"</span></span>
 <span class="r-in">  <span class="op">)</span></span>

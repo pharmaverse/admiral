@@ -34,7 +34,7 @@ records has been added to a dataset."><meta property="og:image" content="https:/
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
     <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating a Basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
@@ -65,19 +65,6 @@ records has been added to a dataset."><meta property="og:image" content="https:/
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -158,9 +145,8 @@ for example <code>mean</code> or <code>function(x) mean(x, na.rm = TRUE)</code>.
 if you need to change the values of any newly derived records.</p>
 <p>Set a list of variables to some specified value for the new observation(s)</p><ul><li><p>LHS refer to a variable.</p></li>
 <li><p>RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
-value or NA.
-(e.g.  <code>exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")</code>).
-More general expression are not allowed.</p></li>
+value, an expression or NA.
+(e.g.  <code>exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")</code>).</p></li>
 </ul></dd>
 
 </dl></div>
@@ -185,8 +171,6 @@ see the <code><a href="derive_summary_records.html">derive_summary_records()</a>
 <code><a href="derive_var_last_dose_amt.html">derive_var_last_dose_amt</a>()</code>,
 <code><a href="derive_var_last_dose_date.html">derive_var_last_dose_date</a>()</code>,
 <code><a href="derive_var_last_dose_grp.html">derive_var_last_dose_grp</a>()</code>,
-<code><a href="derive_var_merged_cat.html">derive_var_merged_cat</a>()</code>,
-<code><a href="derive_var_merged_character.html">derive_var_merged_character</a>()</code>,
 <code><a href="derive_var_merged_exist_flag.html">derive_var_merged_exist_flag</a>()</code>,
 <code><a href="derive_var_merged_summary.html">derive_var_merged_summary</a>()</code>,
 <code><a href="derive_var_obs_number.html">derive_var_obs_number</a>()</code>,

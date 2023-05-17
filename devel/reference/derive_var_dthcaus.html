@@ -28,7 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
     <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
-    <a class="dropdown-item" href="../articles/adsl.html">Creating a basic ADSL</a>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating a Basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Deep Dives on ADaMs</h6>
@@ -59,19 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -158,7 +145,6 @@ the preferred order.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="op">~</span><span class="va">STUDYID</span>,  <span class="op">~</span><span class="va">USUBJID</span>,</span>
@@ -169,26 +155,21 @@ the preferred order.</p>
 <span class="r-in"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="op">~</span><span class="va">STUDYID</span>,  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AESEQ</span>, <span class="op">~</span><span class="va">AEDECOD</span>,       <span class="op">~</span><span class="va">AEOUT</span>,  <span class="op">~</span><span class="va">AEDTHDTC</span>,</span>
 <span class="r-in">  <span class="st">"STUDY01"</span>, <span class="st">"PAT01"</span>,  <span class="fl">12</span>,     <span class="st">"SUDDEN DEATH"</span>, <span class="st">"FATAL"</span>, <span class="st">"2021-04-04"</span></span>
-<span class="r-in"><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span class="r-in">    AEDTHDT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">AEDTHDTC</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="op">~</span><span class="va">STUDYID</span>, <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">DSSEQ</span>, <span class="op">~</span><span class="va">DSDECOD</span>, <span class="op">~</span><span class="va">DSTERM</span>, <span class="op">~</span><span class="va">DSSTDTC</span>,</span>
 <span class="r-in">  <span class="st">"STUDY01"</span>, <span class="st">"PAT02"</span>, <span class="fl">1</span>, <span class="st">"INFORMED CONSENT OBTAINED"</span>, <span class="st">"INFORMED CONSENT OBTAINED"</span>, <span class="st">"2021-04-03"</span>,</span>
 <span class="r-in">  <span class="st">"STUDY01"</span>, <span class="st">"PAT02"</span>, <span class="fl">2</span>, <span class="st">"RANDOMIZATION"</span>, <span class="st">"RANDOMIZATION"</span>, <span class="st">"2021-04-11"</span>,</span>
 <span class="r-in">  <span class="st">"STUDY01"</span>, <span class="st">"PAT02"</span>, <span class="fl">3</span>, <span class="st">"DEATH"</span>, <span class="st">"DEATH DUE TO PROGRESSION OF DISEASE"</span>, <span class="st">"2022-02-01"</span>,</span>
 <span class="r-in">  <span class="st">"STUDY01"</span>, <span class="st">"PAT03"</span>, <span class="fl">1</span>, <span class="st">"DEATH"</span>, <span class="st">"POST STUDY REPORTING OF DEATH"</span>, <span class="st">"2022-03-03"</span></span>
-<span class="r-in"><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span class="r-in">    DSSTDT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">DSSTDTC</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Derive `DTHCAUS` only - for on-study deaths only</span></span>
 <span class="r-in"><span class="va">src_ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="dthcaus_source.html">dthcaus_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ae"</span>,</span>
 <span class="r-in">  filter <span class="op">=</span> <span class="va">AEOUT</span> <span class="op">==</span> <span class="st">"FATAL"</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">AEDTHDT</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="fu"><a href="convert_dtc_to_dt.html">convert_dtc_to_dt</a></span><span class="op">(</span><span class="va">AEDTHDTC</span><span class="op">)</span>,</span>
 <span class="r-in">  mode <span class="op">=</span> <span class="st">"first"</span>,</span>
 <span class="r-in">  dthcaus <span class="op">=</span> <span class="va">AEDECOD</span></span>
 <span class="r-in"><span class="op">)</span></span>
@@ -196,7 +177,7 @@ the preferred order.</p>
 <span class="r-in"><span class="va">src_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="dthcaus_source.html">dthcaus_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ds"</span>,</span>
 <span class="r-in">  filter <span class="op">=</span> <span class="va">DSDECOD</span> <span class="op">==</span> <span class="st">"DEATH"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"DEATH DUE TO"</span>, <span class="va">DSTERM</span><span class="op">)</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">DSSTDT</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="fu"><a href="convert_dtc_to_dt.html">convert_dtc_to_dt</a></span><span class="op">(</span><span class="va">DSSTDTC</span><span class="op">)</span>,</span>
 <span class="r-in">  mode <span class="op">=</span> <span class="st">"first"</span>,</span>
 <span class="r-in">  dthcaus <span class="op">=</span> <span class="va">DSTERM</span></span>
 <span class="r-in"><span class="op">)</span></span>
@@ -213,7 +194,7 @@ the preferred order.</p>
 <span class="r-in"><span class="va">src_ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="dthcaus_source.html">dthcaus_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ae"</span>,</span>
 <span class="r-in">  filter <span class="op">=</span> <span class="va">AEOUT</span> <span class="op">==</span> <span class="st">"FATAL"</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">AEDTHDT</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="fu"><a href="convert_dtc_to_dt.html">convert_dtc_to_dt</a></span><span class="op">(</span><span class="va">AEDTHDTC</span><span class="op">)</span>,</span>
 <span class="r-in">  mode <span class="op">=</span> <span class="st">"first"</span>,</span>
 <span class="r-in">  dthcaus <span class="op">=</span> <span class="va">AEDECOD</span>,</span>
 <span class="r-in">  traceability_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>DTHDOM <span class="op">=</span> <span class="st">"AE"</span>, DTHSEQ <span class="op">=</span> <span class="va">AESEQ</span><span class="op">)</span></span>
@@ -222,7 +203,7 @@ the preferred order.</p>
 <span class="r-in"><span class="va">src_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="dthcaus_source.html">dthcaus_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ds"</span>,</span>
 <span class="r-in">  filter <span class="op">=</span> <span class="va">DSDECOD</span> <span class="op">==</span> <span class="st">"DEATH"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"DEATH DUE TO"</span>, <span class="va">DSTERM</span><span class="op">)</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">DSSTDT</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="fu"><a href="convert_dtc_to_dt.html">convert_dtc_to_dt</a></span><span class="op">(</span><span class="va">DSSTDTC</span><span class="op">)</span>,</span>
 <span class="r-in">  mode <span class="op">=</span> <span class="st">"first"</span>,</span>
 <span class="r-in">  dthcaus <span class="op">=</span> <span class="va">DSTERM</span>,</span>
 <span class="r-in">  traceability_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>DTHDOM <span class="op">=</span> <span class="st">"DS"</span>, DTHSEQ <span class="op">=</span> <span class="va">DSSEQ</span><span class="op">)</span></span>
@@ -240,10 +221,15 @@ the preferred order.</p>
 <span class="r-in"><span class="va">src_ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="dthcaus_source.html">dthcaus_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ae"</span>,</span>
 <span class="r-in">  filter <span class="op">=</span> <span class="va">AEOUT</span> <span class="op">==</span> <span class="st">"FATAL"</span>,</span>
-<span class="r-in">  date <span class="op">=</span> <span class="va">AEDTHDT</span>,</span>
+<span class="r-in">  date <span class="op">=</span> <span class="fu"><a href="convert_dtc_to_dt.html">convert_dtc_to_dt</a></span><span class="op">(</span><span class="va">AEDTHDTC</span><span class="op">)</span>,</span>
 <span class="r-in">  mode <span class="op">=</span> <span class="st">"first"</span>,</span>
 <span class="r-in">  dthcaus <span class="op">=</span> <span class="va">AEDECOD</span>,</span>
 <span class="r-in">  traceability_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>DTHDOM <span class="op">=</span> <span class="st">"AE"</span>, DTHSEQ <span class="op">=</span> <span class="va">AESEQ</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">ds</span>,</span>
+<span class="r-in">  DSSTDT <span class="op">=</span> <span class="fu"><a href="convert_dtc_to_dt.html">convert_dtc_to_dt</a></span><span class="op">(</span><span class="va">DSSTDTC</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">src_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="dthcaus_source.html">dthcaus_source</a></span><span class="op">(</span></span>
@@ -264,7 +250,11 @@ the preferred order.</p>
 <span class="r-in">  traceability_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>DTHDOM <span class="op">=</span> <span class="st">"DS"</span>, DTHSEQ <span class="op">=</span> <span class="va">DSSEQ</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="fu">derive_var_dthcaus</span><span class="op">(</span><span class="va">adsl</span>, <span class="va">src_ae</span>, <span class="va">src_ds</span>, <span class="va">src_ds_post</span>, source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ae <span class="op">=</span> <span class="va">ae</span>, ds <span class="op">=</span> <span class="va">ds</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">derive_var_dthcaus</span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">adsl</span>,</span>
+<span class="r-in">  <span class="va">src_ae</span>, <span class="va">src_ds</span>, <span class="va">src_ds_post</span>,</span>
+<span class="r-in">  source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ae <span class="op">=</span> <span class="va">ae</span>, ds <span class="op">=</span> <span class="va">ds</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 x 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID USUBJID DTHCAUS                             DTHDOM DTHSEQ</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                               </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span></span>

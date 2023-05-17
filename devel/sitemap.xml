@@ -229,6 +229,9 @@
     <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_param_extreme_event.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_param_extreme_record.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_param_framingham.html</loc>
   </url>
   <url>
@@ -505,6 +508,9 @@
     <loc>https://pharmaverse.github.io/admiral/devel/reference/print.adam_templates.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/devel/reference/print.duplicates.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/print.source.html</loc>
   </url>
   <url>
@@ -518,6 +524,9 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/query.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/devel/reference/records_source.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/reexport-desc.html</loc>
