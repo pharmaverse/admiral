@@ -18,7 +18,7 @@ expressions (#241)
 ## Documentation
 
 - The deprecation strategy was updated regarding unit tests for deprecated
-functions/arguments in phase 1. (#247)
+functions/arguments in phase 1 and 2. (#247, #272)
 
 # admiraldev 0.3.0
 
