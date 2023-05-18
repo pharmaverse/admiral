@@ -25,5 +25,12 @@ This function is \emph{deprecated}, please use \code{assert_expr_list()} instead
 Checks if an argument is a valid list of order variables/expressions created
 using \code{exprs()}
 }
+\seealso{
+Other deprecated: 
+\code{\link{quo_c}()},
+\code{\link{quo_not_missing}()},
+\code{\link{replace_symbol_in_quo}()},
+\code{\link{replace_values_by_names}()}
+}
 \concept{deprecated}
 \keyword{deprecated}

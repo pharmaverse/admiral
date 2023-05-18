@@ -1,9 +1,9 @@
 # quo_c ----
 ## Test 1: issues deprecation warning ----
 test_that("quo_c Test 1: issues deprecation warning", {
-  expect_warning(
+  expect_error(
     quo_c(quo(USUBJID), quo(STUDYID)),
-    class = "lifecycle_warning_deprecated"
+    class = "lifecycle_error_deprecated"
   )
 })
 
@@ -12,13 +12,13 @@ test_that("quo_c Test 2: `quo_c` works in concatenating and indexing quosures", 
   x <- quo(USUBJID)
   y <- quo(STUDYID)
 
-  expect_equal(
-    expected = quo(USUBJID),
-    object = quo_c(x, NULL, y)[[1]]
+  expect_error(
+    quo_c(x, NULL, y)[[1]],
+    class = "lifecycle_error_deprecated"
   )
-  expect_equal(
-    expected = quo(STUDYID),
-    object = quo_c(x, NULL, y)[[2]]
+  expect_error(
+    object = quo_c(x, NULL, y)[[2]],
+    class = "lifecycle_error_deprecated"
   )
 })
 
@@ -27,7 +27,8 @@ test_that("quo_c Test 3: `quo_c` returns error if non-quosures are input", {
   USUBJID <- "01-701-1015" # nolint
 
   expect_error(
-    object = quo_c(quo(USUBJID), USUBJID)
+    object = quo_c(quo(USUBJID), USUBJID),
+    class = "lifecycle_error_deprecated"
   )
 })
 
@@ -77,9 +78,9 @@ test_that("quo_not_missing Test 8: issues deprecation warning", {
     x <- enquo(x)
     !isTRUE(quo_not_missing(x))
   }
-  expect_warning(
+  expect_error(
     test_fun(my_variable),
-    class = "lifecycle_warning_deprecated"
+    class = "lifecycle_error_deprecated"
   )
 })
 
@@ -134,9 +135,9 @@ test_that("replace_values_by_names Test 11: names of argument is NULL", {
 
 ## Test 12: warning if quosures argument is used ----
 test_that("replace_values_by_names Test 12: warning if quosures argument is used", {
-  expect_warning(
+  expect_error(
     replace_values_by_names(quosures = rlang::quos(STUDYID, USUBJID)),
-    class = "lifecycle_warning_deprecated"
+    class = "lifecycle_error_deprecated"
   )
 })
 
