@@ -389,8 +389,12 @@ An example is given below:
 The following fields are mandatory:
 
 * `@param`: One entry per function argument. 
-The following attributes should be described: expected data type (e.g. `data.frame`, `logical`, `numeric` etc.), default value (if any), permitted values (if applicable), optionality (i.e. is this a required argument). 
-If the expected input is a dataset then the required variables should be clearly stated.
+The following attributes should be described: expected data type (e.g. `data.frame`, `logical`, `numeric` etc.), permitted values (if applicable), optionality (i.e. is this a required argument). If the expected input is a dataset then the required variables should be clearly stated. Describing the default value becomes difficult to maintain and subject to manual error when it is already declared in the function arguments. The description for permitted values should be written as a separate line italicizing the phrase "Permitted Values", example below: 
+
+```
+#'   *Permitted Values*: example description of permitted values here
+```
+
 * `@details`: A natural-language description of the derivation used inside the function.
 * `@keyword`: One applicable tag to the function - identical to family.
 * `@family`: One applicable tag to the function - identical to keyword.
