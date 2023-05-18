@@ -1137,7 +1137,6 @@ consistency with CDISC ADaM standards. `MDV` missing dependent variable
 will also be included.
 
 ```{r eval=TRUE, echo=TRUE}
-
 # ---- Derive Analysis Variables ----
 # Derive actual dose DOSEA and planned dose DOSEP,
 # Derive AVAL and DV
