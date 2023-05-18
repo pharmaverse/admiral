@@ -524,6 +524,7 @@ If a package is used only in examples and/or unit tests then it should be listed
 Functions from other packages have to be explicitly imported by using the `@importFrom` tag in the `R/admiral-package.R` file. 
 To import the `if_else()` and `mutate()` function from `dplyr` the following line would have to be included in that file:
 `#' @importFrom dplyr if_else mutate`.
+By using the `@importFrom` tag, it is easier to track all of our dependencies in one place and improves code readability. 
 
 Some of these functions become critically important while using admiral and
 should be included as an export. This applies to functions which are frequently
