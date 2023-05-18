@@ -143,12 +143,10 @@ param_lookup <- tibble::tribble(
 
 ```{r echo=FALSE}
 ex <- filter(ex, USUBJID %in% c(
-  "01-701-1028", "01-701-1033", "01-701-1442",
-  "01-714-1288", "01-718-1101"
+  "01-701-1028", "01-701-1033", "01-701-1442", "01-714-1288", "01-718-1101"
 ))
 pc <- filter(pc, USUBJID %in% c(
-  "01-701-1028", "01-701-1033", "01-701-1442",
-  "01-714-1288", "01-718-1101"
+  "01-701-1028", "01-701-1033", "01-701-1442", "01-714-1288", "01-718-1101"
 ))
 ```
 
@@ -300,8 +298,7 @@ ex_exp <- ex_dates %>%
     keep_source_vars = exprs(
       STUDYID, USUBJID, EVID, EXDOSFRQ, EXDOSFRM,
       NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
-      VISIT, VISITNUM, VISITDY,
-      TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
+      VISIT, VISITNUM, VISITDY, TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
     )
   ) %>%
   # Derive AVISIT based on nominal relative time
@@ -324,7 +321,9 @@ ex_exp <- ex_dates %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   ex_exp,
-  display_vars = exprs(USUBJID, DRUG, EXDOSFRQ, ASTDTM, AENDTM, AVISIT, NFRLT)
+  display_vars = exprs(
+    USUBJID, DRUG, EXDOSFRQ, ASTDTM, AENDTM, AVISIT, NFRLT
+  )
 )
 ```
 
@@ -355,14 +354,16 @@ adpc_first_dose <- pc_dates %>%
   # Define AVISIT based on nominal day
   mutate(
     AVISITN = NFRLT %/% 24 + 1,
-    AVISIT = paste("Day", AVISITN),
+    AVISIT = paste("Day", AVISITN)
   )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adpc_first_dose,
-  display_vars = exprs(USUBJID, FANLDTM, AVISIT, ADTM, PCTPT)
+  display_vars = exprs(
+    USUBJID, FANLDTM, AVISIT, ADTM, PCTPT
+  )
 )
 ```
 
@@ -400,8 +401,7 @@ adpc_prev <- adpc_first_dose %>%
 dataset_vignette(
   adpc_prev,
   display_vars = exprs(
-    USUBJID,
-    VISIT, ADTM, VISIT, PCTPT, ADTM_prev, EXDOSE_prev, AVISIT_prev
+    USUBJID, VISIT, ADTM, VISIT, PCTPT, ADTM_prev, EXDOSE_prev, AVISIT_prev
   )
 )
 ```
@@ -578,7 +578,9 @@ adpc_arrlt <- bind_rows(adpc_nom_next, ex_exp) %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adpc_arrlt,
-  display_vars = exprs(USUBJID, FANLDTM, AVISIT, PCTPT, AFRLT, ARRLT, AXRLT)
+  display_vars = exprs(
+    USUBJID, FANLDTM, AVISIT, PCTPT, AFRLT, ARRLT, AXRLT
+  )
 )
 ```
 
@@ -604,7 +606,9 @@ adpc_nrrlt <- adpc_arrlt %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adpc_nrrlt,
-  display_vars = exprs(USUBJID, AVISIT, PCTPT, NFRLT, NRRLT, NXRLT)
+  display_vars = exprs(
+    USUBJID, AVISIT, PCTPT, NFRLT, NRRLT, NXRLT
+  )
 )
 ```
 
@@ -711,7 +715,9 @@ adpc_aval <- adpc_nrrlt %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adpc_aval,
-  display_vars = exprs(USUBJID, NFRLT, AVISIT, ATPT, ABLFL, ATPTREF, AVAL, AVALCAT1)
+  display_vars = exprs(
+    USUBJID, NFRLT, AVISIT, ATPT, ABLFL, ATPTREF, AVAL, AVALCAT1
+  )
 )
 ```
 
@@ -763,7 +769,9 @@ dtype <- adpc_aval %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   dtype,
-  display_vars = exprs(USUBJID, DTYPE, ATPT, NFRLT, NRRLT, AFRLT, ARRLT, BASETYPE)
+  display_vars = exprs(
+    USUBJID, DTYPE, ATPT, NFRLT, NRRLT, AFRLT, ARRLT, BASETYPE
+  )
 )
 ```
 
@@ -796,8 +804,7 @@ adpc_dtype <- bind_rows(adpc_aval, dtype) %>%
 ```{r, eval=TRUE, echo=FALSE}
 adpc_dtype %>%
   dataset_vignette(display_vars = exprs(
-    STUDYID, USUBJID, BASETYPE, ADTM, ATPT,
-    NFRLT, NRRLT, ARRLT, MRRLT
+    STUDYID, USUBJID, BASETYPE, ADTM, ATPT, NFRLT, NRRLT, ARRLT, MRRLT
   ))
 ```
 
@@ -843,7 +850,9 @@ adpc_aseq <- adpc_chg %>%
     -ends_with("prev"), -DRUG, -EVID, -AXRLT, -NXRLT, -VISITDY
   ) %>%
   # Derive PARAM and PARAMN
-  derive_vars_merged(dataset_add = select(param_lookup, -PCTESTCD), by_vars = exprs(PARAMCD))
+  derive_vars_merged(
+    dataset_add = select(param_lookup, -PCTESTCD), by_vars = exprs(PARAMCD)
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -994,7 +1003,9 @@ adppk_first_dose <- pc_dates %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adppk_first_dose,
-  display_vars = exprs(USUBJID, FANLDTM, AVISIT, ADTM, PCTPT)
+  display_vars = exprs(
+    USUBJID, FANLDTM, AVISIT, ADTM, PCTPT
+  )
 )
 ```
 
@@ -1046,8 +1057,7 @@ adppk_nom_prev <- adppk_prev %>%
 dataset_vignette(
   adppk_nom_prev,
   display_vars = exprs(
-    USUBJID,
-    VISIT, ADTM, VISIT, PCTPT, ADTM_prev, NFRLT_prev
+    USUBJID, VISIT, ADTM, VISIT, PCTPT, ADTM_prev, NFRLT_prev
   )
 )
 ```
@@ -1113,8 +1123,7 @@ adppk_aprlt <- bind_rows(adppk_nom_prev, ex_exp) %>%
 dataset_vignette(
   adppk_aprlt,
   display_vars = exprs(
-    USUBJID,
-    EVID, NFRLT, AFRLT, APRLT, NPRLT
+    USUBJID, EVID, NFRLT, AFRLT, APRLT, NPRLT
   )
 )
 ```
@@ -1198,8 +1207,7 @@ adppk_aval <- adppk_aprlt %>%
 dataset_vignette(
   adppk_aval,
   display_vars = exprs(
-    USUBJID,
-    EVID, DOSEA, AMT, NFRLT, AFRLT, CMT, DV, MDV, BLQFN
+    USUBJID, EVID, DOSEA, AMT, NFRLT, AFRLT, CMT, DV, MDV, BLQFN
   )
 )
 ```
@@ -1241,8 +1249,7 @@ adppk_aseq <- adppk_aval %>%
 dataset_vignette(
   adppk_aseq,
   display_vars = exprs(
-    USUBJID,
-    EVID, DOSEA, AMT, NFRLT, AFRLT, CMT, DV, MDV, BLQFN, ASEQ
+    USUBJID, EVID, DOSEA, AMT, NFRLT, AFRLT, CMT, DV, MDV, BLQFN, ASEQ
   )
 )
 ```
@@ -1325,8 +1332,7 @@ covar <- adsl %>%
 dataset_vignette(
   covar,
   display_vars = exprs(
-    STUDYIDN, USUBJIDN,
-    SITEIDN, AGE, SEXN, RACEN, COHORT, ROUTEN
+    STUDYIDN, USUBJIDN, SITEIDN, AGE, SEXN, RACEN, COHORT, ROUTEN
   )
 )
 ```
@@ -1391,8 +1397,7 @@ covar_vslb <- covar %>%
 dataset_vignette(
   covar_vslb,
   display_vars = exprs(
-    USUBJIDN,
-    AGE, SEXN, HTBL, WTBL, CREATBL, ALTBL, ASTBL
+    USUBJIDN, AGE, SEXN, HTBL, WTBL, CREATBL, ALTBL, ASTBL
   )
 )
 ```
@@ -1417,8 +1422,7 @@ adppk <- adppk_aseq %>%
 dataset_vignette(
   adppk,
   display_vars = exprs(
-    USUBJIDN,
-    AGE, SEXN, CREATBL, EVID, AMT, DV, MDV, RECSEQ
+    USUBJIDN, AGE, SEXN, CREATBL, EVID, AMT, DV, MDV, RECSEQ
   )
 )
 ```
