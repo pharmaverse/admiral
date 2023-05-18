@@ -168,6 +168,11 @@ that all our developers and contributors must follow, so that all our code has a
 
 ## Conference Presentations
 
+* [{admiral} Pilot 3: Paving the Way for Clinical Submissions in R]()
+* [An Overview of {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/US/Summit/PRE_Summit03.pdf) (slides from PHUSE SDE in Summit, NJ)
+* [{admiralonco}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS12.mp4)
+* [Programming ADNCA using R and {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS09.mp4) (recording of presentation from PHUSE US Connect 2023) (recording for talk at Phuse US Connect 2023, slides also available [here](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/PRE_OS12.pdf))
+* [Clinical Reporting in R](https://www.youtube.com/watch?v=9eod8MLF5ys&list=PLMtxz1fUYA5AWYQHB5mZAs-yamNJ5Tm_8&index=2) (recording of workshop at R in Pharma 2022)
 * [R/Pharma 2021 talk](https://www.youtube.com/watch?v=N7Bw8c3D5fU) (recording)
 * [PHUSE US Connect 2022 pharmaverse workshop](https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022) (slides and materials---including `{admiral}`
   workshop slides from PHUSE EU Connect 2021)
