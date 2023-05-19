@@ -44,9 +44,8 @@
 #'   A list of variable name-value pairs is expected.
 #'   + LHS refers to a variable.
 #'   + RHS refers to the values to set to the variable. This can be a string, a
-#'   symbol, a numeric value or `NA`, e.g., `exprs(PARAMCD = "TDOSE", PARCAT1 =
-#'   "OVERALL")`. More general expression are not allowed.
-#'
+#'   symbol, a numeric value, an expression, or `NA`, e.g., `exprs(PARAMCD =
+#'   "TDOSE", PARCAT1 = "OVERALL")`.
 #'
 #' @return A data frame with derived records appended to original dataset.
 #'
@@ -161,9 +160,7 @@ derive_summary_records <- function(dataset,
     dataset,
     required_vars = expr_c(by_vars, analysis_var)
   )
-  if (!is.null(set_values_to)) {
-    assert_varval_list(set_values_to, optional = TRUE)
-  }
+  assert_varval_list(set_values_to, optional = TRUE)
 
   # Summarise the analysis value and bind to the original dataset
   bind_rows(

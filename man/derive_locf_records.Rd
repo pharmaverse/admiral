@@ -37,10 +37,10 @@ in the input dataset.}
 
 \emph{Permitted Values}: a variable}
 
-\item{order}{List of variables for sorting a dataset
+\item{order}{Sort order
 
-The dataset is sorted by \code{order} before carrying the last
-observation forward (eg. \code{AVAL}) within each \code{by_vars}.}
+The dataset is sorted by \code{order} before carrying the last observation
+forward (e.g. \code{AVAL}) within each \code{by_vars}.}
 
 \item{keep_vars}{Variables that need carrying the last observation forward
 
@@ -133,7 +133,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_param_extreme_record}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

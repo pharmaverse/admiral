@@ -15,16 +15,27 @@
 #'   The variables specified by the `by_vars`, the `new_vars`, and the `order`
 #'   argument are expected.
 #'
+#' @param by_vars Grouping variables
+#'
+#'   The input dataset and the selected observations from the additional dataset
+#'   are merged by the specified by variables. The by variables must be a unique
+#'   key of the selected observations. Variables from the additional dataset can
+#'   be renamed by naming the element, i.e., `by_vars =
+#'   exprs(<name in input dataset> = <name in additional dataset>)`, similar to
+#'   the dplyr joins.
+#'
+#'   *Permitted Values*: list of variables created by `exprs()`
+#'
 #' @param order Sort order
 #'
 #'   If the argument is set to a non-null value, for each by group the first or
 #'   last observation from the additional dataset is selected with respect to the
 #'   specified order.
 #'
-#'   *Default*: `NULL`
+#'   Variables defined by the `new_vars` argument can be used in the sort order.
 #'
-#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))` or `NULL`
+#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param new_vars Variables to add
 #'
@@ -39,12 +50,26 @@
 #'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
 #'   `old_var2` to `new_var2`.
 #'
+#'   Values of the added variables can be modified by specifying an expression.
+#'   For example, `new_vars = LASTRSP = exprs(str_to_upper(AVALC))` adds the
+#'   variable `LASTRSP` to the dataset and sets it to the upper case value of
+#'   `AVALC`.
+#'
 #'   If the argument is not specified or set to `NULL`, all variables from the
 #'   additional dataset (`dataset_add`) are added.
 #'
-#'   *Default*: `NULL`
+#'   *Permitted Values*: list of variables or named expressions created by `exprs()`
 #'
-#'   *Permitted Values*: list of variables created by `exprs()`
+#' @param filter_add Filter for additional dataset (`dataset_add`)
+#'
+#'   Only observations fulfilling the specified condition are taken into account
+#'   for merging. If the argument is not specified, all observations are
+#'   considered.
+#'
+#'   Variables defined by the `new_vars` argument can be used in the filter
+#'   condition.
+#'
+#'   *Permitted Values*: a condition
 #'
 #' @param mode Selection mode
 #'
@@ -53,30 +78,7 @@
 #'
 #'   If the `order` argument is not specified, the `mode` argument is ignored.
 #'
-#'   *Default*: `NULL`
-#'
 #'   *Permitted Values*: `"first"`, `"last"`, `NULL`
-#'
-#' @param by_vars Grouping variables
-#'
-#'   The input dataset and the selected observations from the additional dataset
-#'   are merged by the specified by variables. The by variables must be a unique
-#'   key of the selected observations. Variables from the additional dataset can
-#'   be renamed by naming the element, i.e., `by_vars =
-#'   exprs(<name in input dataset> = <name in additional dataset>)`, similar to
-#'   the dplyr joins.
-#'
-#'   *Permitted Values*: list of variables created by `exprs()`
-#'
-#' @param filter_add Filter for additional dataset (`dataset_add`)
-#'
-#'   Only observations fulfilling the specified condition are taken into account
-#'   for merging. If the argument is not specified, all observations are
-#'   considered.
-#'
-#'   *Default*: `NULL`
-#'
-#'   *Permitted Values*: a condition
 #'
 #' @param match_flag Match flag
 #'
@@ -85,17 +87,23 @@
 #'   be `TRUE` for all selected records from `dataset_add` which are merged into
 #'   the input dataset, and `NA` otherwise.
 #'
-#'   *Default*: `NULL`
-#'
 #'   *Permitted Values*: Variable name
+#'
+#' @param missing_values Values for non-matching observations
+#'
+#'   For observations of the input dataset (`dataset`) which do not have a
+#'   matching observation in the additional dataset (`dataset_add`) the values
+#'   of the specified variables are set to the specified value. Only variables
+#'   specified for `new_vars` can be specified for `missing_values`.
+#'
+#'   *Permitted Values*: named list of expressions, e.g.,
+#'   `exprs(BASEC = "MISSING", BASE = -1)`
 #'
 #' @param check_type Check uniqueness?
 #'
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
 #'   if the observations of the (restricted) additional dataset are not unique
 #'   with respect to the by variables and the order.
-#'
-#'   *Default*: `"warning"`
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
@@ -116,19 +124,22 @@
 #'
 #' @details
 #'
+#'   1. The new variables (`new_vars`) are added to the additional dataset
+#'   (`dataset_add`).
+#'
 #'   1. The records from the additional dataset (`dataset_add`) are restricted
 #'   to those matching the `filter_add` condition.
 #'
 #'   1. If `order` is specified, for each by group the first or last observation
 #'   (depending on `mode`) is selected.
 #'
-#'   1. The variables specified for `new_vars` are renamed (if requested) and
-#'   merged to the input dataset using `left_join()`. I.e., the output dataset
-#'   contains all observations from the input dataset. For observations without
-#'   a matching observation in the additional dataset the new variables are set
-#'   to `NA`. Observations in the additional dataset which have no matching
-#'   observation in the input dataset are ignored.
-#'
+#'   1. The variables specified for `new_vars` are merged to the input dataset
+#'   using `left_join()`. I.e., the output dataset contains all observations
+#'   from the input dataset. For observations without a matching observation in
+#'   the additional dataset the new variables are set as specified by
+#'   `missing_values` (or to `NA` for variables not in `missing_values`).
+#'   Observations in the additional dataset which have no matching observation
+#'   in the input dataset are ignored.
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -138,6 +149,7 @@
 #' @examples
 #' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(tibble)
 #' data("admiral_vs")
 #' data("admiral_dm")
 #'
@@ -155,34 +167,13 @@
 #'   admiral_adsl,
 #'   dataset_add = admiral_vs,
 #'   by_vars = exprs(STUDYID, USUBJID),
-#'   order = exprs(VSDTC),
+#'   order = exprs(convert_dtc_to_dtm(VSDTC)),
 #'   mode = "last",
 #'   new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
 #'   filter_add = VSTESTCD == "WEIGHT",
 #'   match_flag = vsdatafl
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
-#'
-#' # Derive treatment start datetime (TRTSDTM)
-#' data(admiral_ex)
-#'
-#' ## Impute exposure start date to first date/time
-#' ex_ext <- derive_vars_dtm(
-#'   admiral_ex,
-#'   dtc = EXSTDTC,
-#'   new_vars_prefix = "EXST",
-#'   highest_imputation = "M",
-#' )
-#'
-#' ## Add first exposure datetime and imputation flags to adsl
-#' derive_vars_merged(
-#'   select(admiral_dm, STUDYID, USUBJID),
-#'   dataset_add = ex_ext,
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
-#'   order = exprs(EXSTDTM),
-#'   mode = "first"
-#' )
 #'
 #' # Derive treatment start datetime (TRTSDTM)
 #' data(admiral_ex)
@@ -207,45 +198,93 @@
 #' )
 #'
 #' # Derive treatment end datetime (TRTEDTM)
-#' ## Impute exposure end datetime to last time, no date imputation
-#' ex_ext <- derive_vars_dtm(
-#'   admiral_ex,
-#'   dtc = EXENDTC,
-#'   new_vars_prefix = "EXEN",
-#'   time_imputation = "last",
-#' )
-#'
-#' ## Add last exposure datetime and imputation flag to adsl
+#' # The conversion from DTC to DTM is done within new_vars
+#' # The new variable can be used in filter_add and order
 #' derive_vars_merged(
 #'   select(admiral_dm, STUDYID, USUBJID),
 #'   dataset_add = ex_ext,
-#'   filter_add = !is.na(EXENDTM),
+#'   filter_add = !is.na(TRTEDTM),
 #'   by_vars = exprs(STUDYID, USUBJID),
-#'   new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
-#'   order = exprs(EXENDTM),
+#'   new_vars = exprs(TRTEDTM = convert_dtc_to_dtm(EXENDTC)),
+#'   order = exprs(TRTEDTM),
 #'   mode = "last"
+#' )
+#'
+#' # Modify merged values and set value for non matching observations
+#' adsl <- tribble(
+#'   ~USUBJID, ~SEX, ~COUNTRY,
+#'   "ST42-1", "F",  "AUT",
+#'   "ST42-2", "M",  "MWI",
+#'   "ST42-3", "M",  "NOR",
+#'   "ST42-4", "F",  "UGA"
+#' )
+#'
+#' advs <- tribble(
+#'   ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVISITN, ~AVAL,
+#'   "ST42-1", "WEIGHT", "BASELINE",        0,    66,
+#'   "ST42-1", "WEIGHT", "WEEK 2",          1,    68,
+#'   "ST42-2", "WEIGHT", "BASELINE",        0,    88,
+#'   "ST42-3", "WEIGHT", "WEEK 2",          1,    55,
+#'   "ST42-3", "WEIGHT", "WEEK 4",          2,    50
+#' )
+#'
+#' derive_vars_merged(
+#'   adsl,
+#'   dataset_add = advs,
+#'   by_vars = exprs(USUBJID),
+#'   new_vars = exprs(
+#'     LSTVSCAT = if_else(AVISIT == "BASELINE", "BASELINE", "POST-BASELINE")
+#'   ),
+#'   order = exprs(AVISITN),
+#'   mode = "last",
+#'   missing_value = exprs(LSTVSCAT = "MISSING")
 #' )
 derive_vars_merged <- function(dataset,
                                dataset_add,
                                by_vars,
                                order = NULL,
                                new_vars = NULL,
-                               mode = NULL,
                                filter_add = NULL,
+                               mode = NULL,
                                match_flag = NULL,
+                               missing_values = NULL,
                                check_type = "warning",
                                duplicate_msg = NULL) {
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_vars(by_vars)
   by_vars_left <- replace_values_by_names(by_vars)
   by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
-  assert_order_vars(order, optional = TRUE)
-  assert_vars(new_vars, optional = TRUE)
+  assert_expr_list(order, optional = TRUE)
+  assert_expr_list(new_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars_left)
-  assert_data_frame(dataset_add, required_vars = expr_c(by_vars_right, extract_vars(order), new_vars))
+  assert_data_frame(
+    dataset_add,
+    required_vars = expr_c(
+      by_vars_right,
+      setdiff(extract_vars(order), replace_values_by_names(new_vars)),
+      extract_vars(new_vars)
+    )
+  )
   match_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
+  assert_expr_list(missing_values, named = TRUE, optional = TRUE)
+  if (!is.null(missing_values)) {
+    invalid_vars <- setdiff(
+      names(missing_values),
+      vars2chr(replace_values_by_names(new_vars))
+    )
+    if (length(invalid_vars) > 0) {
+      abort(paste(
+        "The variables",
+        enumerate(invalid_vars),
+        "were specified for `missing_values` but not for `new_vars`."
+      ))
+    }
+  }
 
-  add_data <- filter_if(dataset_add, filter_add)
+  add_data <- dataset_add %>%
+    mutate(!!!new_vars) %>%
+    filter_if(filter_add)
+
   if (!is.null(order)) {
     add_data <- filter_extreme(
       add_data,
@@ -268,12 +307,20 @@ derive_vars_merged <- function(dataset,
     )
   }
   if (!is.null(new_vars)) {
-    add_data <- select(add_data, !!!by_vars_right, !!!new_vars)
+    add_data <- add_data %>%
+      select(!!!by_vars_right, !!!replace_values_by_names(new_vars))
   }
-  if (!is.null(match_flag)) {
+
+  if (!is.null(missing_values)) {
+    match_flag_var <- get_new_tmp_var(add_data, prefix = "tmp_match_flag")
+  } else {
+    match_flag_var <- match_flag
+  }
+
+  if (!is.null(match_flag_var)) {
     add_data <- mutate(
       add_data,
-      !!match_flag := TRUE
+      !!match_flag_var := TRUE
     )
   }
   # check if there are any variables in both datasets which are not by vars
@@ -297,171 +344,28 @@ derive_vars_merged <- function(dataset,
       )
     ))
   }
-  left_join(dataset, add_data, by = vars2chr(by_vars))
-}
+  dataset <- left_join(dataset, add_data, by = vars2chr(by_vars))
 
-#' Merge a (Imputed) Date Variable
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*, please use `derive_vars_dt()` and
-#' `derive_vars_merged()` instead.
-#'
-#' Merge a imputed date variable and date imputation  flag from a dataset to the
-#' input dataset. The observations to merge can be selected by a condition
-#' and/or selecting the first or last observation for each by group.
-#'
-#' @param dataset_add Additional dataset
-#'
-#'   The variables specified by the `by_vars`, the `dtc`, and the `order`
-#'   argument are expected.
-#'
-#' @param order Sort order
-#'
-#'   If the argument is set to a non-null value, for each by group the first or
-#'   last observation from the additional dataset is selected with respect to
-#'   the specified order. The imputed date variable can be specified as well
-#'   (see examples below).
-#'
-#'   Please note that `NA` is considered as the last value. I.e., if a order
-#'   variable is `NA` and `mode = "last"`, this observation is chosen while for
-#'   `mode = "first"` the observation is chosen only if there are no
-#'   observations where the variable is not 'NA'.
-#'
-#'   *Default*: `NULL`
-#'
-#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL)` or `NULL`
-#'
-#' @inheritParams derive_vars_merged
-#' @inheritParams derive_vars_dt
-#'
-#' @return The output dataset contains all observations and variables of the
-#'   input dataset and additionally the variable `<new_vars_prefix>DT` and
-#'   optionally the variable `<new_vars_prefix>DTF` derived from the additional
-#'   dataset (`dataset_add`).
-#'
-#' @details
-#'
-#'   1. The additional dataset is restricted to the observations matching the
-#'   `filter_add` condition.
-#'
-#'   1. The date variable and if requested, the date imputation flag is added to
-#'   the additional dataset.
-#'
-#'   1. If `order` is specified, for each by group the first or last observation
-#'   (depending on `mode`) is selected.
-#'
-#'   1. The date and flag variables are merged to the input dataset.
-#'
-#' @keywords deprecated
-#' @family deprecated
-#'
-#' @export
-#'
-derive_vars_merged_dt <- function(dataset,
-                                  dataset_add,
-                                  by_vars,
-                                  order = NULL,
-                                  new_vars_prefix,
-                                  filter_add = NULL,
-                                  mode = NULL,
-                                  dtc,
-                                  date_imputation = NULL,
-                                  flag_imputation = "auto",
-                                  min_dates = NULL,
-                                  max_dates = NULL,
-                                  preserve = FALSE,
-                                  check_type = "warning",
-                                  duplicate_msg = NULL) {
-  deprecate_stop(
-    "0.8.0",
-    "derive_vars_merged_dt()",
-    details = "Please use `derive_vars_dt()` and `derive_vars_merged()` instead."
-  )
-}
-
-#' Merge a (Imputed) Datetime Variable
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*, please use `derive_vars_dtm()` and
-#' `derive_vars_merged()` instead.
-#'
-#' Merge a imputed datetime variable, date imputation  flag, and time imputation
-#' flag from a dataset to the input dataset. The observations to merge can be
-#' selected by a condition and/or selecting the first or last observation for
-#' each by group.
-#'
-#' @param dataset_add Additional dataset
-#'
-#'   The variables specified by the `by_vars`, the `dtc`, and the `order`
-#'   argument are expected.
-#'
-#' @param order Sort order
-#'
-#'   If the argument is set to a non-null value, for each by group the first or
-#'   last observation from the additional dataset is selected with respect to
-#'   the specified order. The imputed datetime variable can be specified as well
-#'   (see examples below).
-#'
-#'   *Default*: `NULL`
-#'
-#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL)` or `NULL`
-#'
-#' @inheritParams derive_vars_merged
-#' @inheritParams derive_vars_dtm
-#'
-#' @return The output dataset contains all observations and variables of the
-#'   input dataset and additionally the variable `<new_vars_prefix>DT` and
-#'   optionally the variables `<new_vars_prefix>DTF` and `<new_vars_prefix>TMF`
-#'   derived from the additional dataset (`dataset_add`).
-#'
-#' @details
-#'
-#'   1. The additional dataset is restricted to the observations matching the
-#'   `filter_add` condition.
-#'
-#'   1. The datetime variable and if requested, the date imputation flag and
-#'   time imputation flag is added to the additional dataset.
-#'
-#'   1. If `order` is specified, for each by group the first or last observation
-#'   (depending on `mode`) is selected.
-#'
-#'   1. The date and flag variables are merged to the input dataset.
-#'
-#' @keywords deprecated
-#' @family deprecated
-#'
-#' @export
-#'
-derive_vars_merged_dtm <- function(dataset,
-                                   dataset_add,
-                                   by_vars,
-                                   order = NULL,
-                                   new_vars_prefix,
-                                   filter_add = NULL,
-                                   mode = NULL,
-                                   dtc,
-                                   date_imputation = NULL,
-                                   time_imputation = "00:00:00",
-                                   flag_imputation = "auto",
-                                   min_dates = NULL,
-                                   max_dates = NULL,
-                                   preserve = FALSE,
-                                   check_type = "warning",
-                                   duplicate_msg = NULL) {
-  deprecate_stop(
-    "0.8.0",
-    "derive_vars_merged_dtm()",
-    details = "Please use `derive_vars_dtm()` and `derive_vars_merged()` instead."
-  )
+  if (!is.null(missing_values)) {
+    update_missings <- map2(
+      syms(names(missing_values)),
+      missing_values,
+      ~ expr(if_else(is.na(!!match_flag_var), !!.y, !!.x))
+    )
+    names(update_missings) <- names(missing_values)
+    dataset <- dataset %>%
+      mutate(!!!update_missings) %>%
+      remove_tmp_vars()
+  }
+  dataset
 }
 
 #' Merge a Categorization Variable
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_merged()` instead.
 #'
 #' Merge a categorization variable from a dataset to the input dataset. The
 #' observations to merge can be selected by a condition and/or selecting the
@@ -510,52 +414,10 @@ derive_vars_merged_dtm <- function(dataset,
 #'   1. The categorization variable is merged to the input dataset.
 #'
 #'
-#' @family der_gen
-#' @keywords der_gen
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @export
-#'
-#' @examples
-#' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_dm")
-#' data("admiral_vs")
-#'
-#' wgt_cat <- function(wgt) {
-#'   case_when(
-#'     wgt < 50 ~ "low",
-#'     wgt > 90 ~ "high",
-#'     TRUE ~ "normal"
-#'   )
-#' }
-#'
-#' derive_var_merged_cat(
-#'   admiral_dm,
-#'   dataset_add = admiral_vs,
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   order = exprs(VSDTC, VSSEQ),
-#'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
-#'   new_var = WGTBLCAT,
-#'   source_var = VSSTRESN,
-#'   cat_fun = wgt_cat,
-#'   mode = "last"
-#' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
-#'
-#' # defining a value for missing VS data
-#' derive_var_merged_cat(
-#'   admiral_dm,
-#'   dataset_add = admiral_vs,
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   order = exprs(VSDTC, VSSEQ),
-#'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
-#'   new_var = WGTBLCAT,
-#'   source_var = VSSTRESN,
-#'   cat_fun = wgt_cat,
-#'   mode = "last",
-#'   missing_value = "MISSING"
-#' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 derive_var_merged_cat <- function(dataset,
                                   dataset_add,
                                   by_vars,
@@ -566,24 +428,22 @@ derive_var_merged_cat <- function(dataset,
                                   filter_add = NULL,
                                   mode = NULL,
                                   missing_value = NA_character_) {
+  deprecate_warn("0.11.0", "derive_var_merged_cat()", "derive_vars_merged()")
   new_var <- assert_symbol(enexpr(new_var))
   source_var <- assert_symbol(enexpr(source_var))
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = expr_c(by_vars, source_var))
 
-  add_data <- filter_if(dataset_add, filter_add) %>%
-    mutate(!!new_var := cat_fun(!!source_var))
   derive_vars_merged(
     dataset,
-    dataset_add = add_data,
+    dataset_add = dataset_add,
+    filter_add = !!filter_add,
     by_vars = by_vars,
     order = order,
-    new_vars = exprs(!!new_var),
-    match_flag = temp_match_flag,
-    mode = mode
-  ) %>%
-    mutate(!!new_var := if_else(temp_match_flag, !!new_var, missing_value, missing_value)) %>%
-    select(-temp_match_flag)
+    new_vars = exprs(!!new_var := {{ cat_fun }}(!!source_var)),
+    mode = mode,
+    missing_values = exprs(!!new_var := !!missing_value)
+  )
 }
 
 #' Merge an Existence Flag
@@ -721,6 +581,11 @@ derive_var_merged_exist_flag <- function(dataset,
 
 #' Merge a Character Variable
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_merged()` instead.
+#'
 #' Merge a character variable from a dataset to the input dataset. The
 #' observations to merge can be selected by a condition and/or selecting the
 #' first or last observation for each by group.
@@ -773,27 +638,10 @@ derive_var_merged_exist_flag <- function(dataset,
 #'   1. The character variable is merged to the input dataset.
 #'
 #'
-#' @family der_gen
-#' @keywords der_gen
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @export
-#'
-#' @examples
-#' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_dm")
-#' data("admiral_ds")
-#'
-#' derive_var_merged_character(
-#'   admiral_dm,
-#'   dataset_add = admiral_ds,
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   new_var = DISPSTAT,
-#'   filter_add = DSCAT == "DISPOSITION EVENT",
-#'   source_var = DSDECOD,
-#'   case = "title"
-#' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, DISPSTAT)
 derive_var_merged_character <- function(dataset,
                                         dataset_add,
                                         by_vars,
@@ -804,6 +652,8 @@ derive_var_merged_character <- function(dataset,
                                         filter_add = NULL,
                                         mode = NULL,
                                         missing_value = NA_character_) {
+  deprecate_warn("0.11.0", "derive_var_merged_character()", "derive_vars_merged()")
+
   new_var <- assert_symbol(enexpr(new_var))
   source_var <- assert_symbol(enexpr(source_var))
   case <-
@@ -826,19 +676,15 @@ derive_var_merged_character <- function(dataset,
   } else if (case == "title") {
     trans <- expr(str_to_title(!!source_var))
   }
-  add_data <- filter_if(dataset_add, filter_add) %>%
-    mutate(!!new_var := !!trans)
   derive_vars_merged(
     dataset,
-    dataset_add = add_data,
+    dataset_add = dataset_add,
     by_vars = by_vars,
     order = order,
-    new_vars = exprs(!!new_var),
-    match_flag = temp_match_flag,
-    mode = mode
-  ) %>%
-    mutate(!!new_var := if_else(temp_match_flag, !!new_var, missing_value, missing_value)) %>%
-    select(-temp_match_flag)
+    new_vars = exprs(!!new_var := !!trans),
+    mode = mode,
+    missing_values = exprs(!!new_var := !!missing_value)
+  )
 }
 
 

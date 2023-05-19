@@ -9,7 +9,8 @@ get_admiral_option(option)
 \arguments{
 \item{option}{A character scalar of commonly used admiral function inputs.
 
-As of now, support only available for "subject_keys" or "force_admiral_vars".
+As of now, support only available for
+"subject_keys".
 See \code{set_admiral_options()} for a description of the options.}
 }
 \value{

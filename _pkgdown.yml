@@ -145,10 +145,10 @@ navbar:
   components:
     getstarted:
       text: Get Started
-      href: articles/admiral.html
+      href: articles/
     reference:
       text: Reference
-      href: reference/index.html
+      href: reference/
     community:
       text: Community
       menu:
@@ -162,7 +162,7 @@ navbar:
       text: User Guides
       menu:
       - text: Getting Started
-      - text: Creating a basic ADSL
+      - text: Creating a Basic ADSL
         href: articles/adsl.html
       - text: FAQ
         href: articles/faq.html

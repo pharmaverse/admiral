@@ -28,7 +28,7 @@
 #' @seealso [derive_vars_disposition_reason()]
 format_reason_default <- function(reason, reason_spe = NULL) {
   ### DEPRECATION
-  deprecate_warn("0.10.0",
+  deprecate_stop("0.10.0",
     "format_reason_default()",
     details = paste(
       "This function is a default for `derive_vars_disposition_reason() and is being deprecated`",
@@ -36,12 +36,6 @@ format_reason_default <- function(reason, reason_spe = NULL) {
       "specify the `filter_add` argument to derive the respective variables."
     )
   )
-
-  if (is.null(reason_spe)) {
-    if_else(reason != "COMPLETED" & !is.na(reason), reason, NA_character_)
-  } else {
-    if_else(reason == "OTHER", reason_spe, NA_character_)
-  }
 }
 
 #' Derive a Disposition Reason at a Specific Timepoint
@@ -154,58 +148,11 @@ derive_vars_disposition_reason <- function(dataset,
                                            filter_ds,
                                            subject_keys = get_admiral_option("subject_keys")) {
   ### DEPRECATION
-  deprecate_warn("0.10.0",
+  deprecate_stop("0.10.0",
     "derive_vars_disposition_reason()",
     details = paste(
       "Please use `derive_vars_merged()`",
       "and specify the `filter_add` argument to derive the respective variables"
     )
   )
-
-  new_var <- assert_symbol(enexpr(new_var))
-  reason_var <- assert_symbol(enexpr(reason_var))
-  new_var_spe <- assert_symbol(enexpr(new_var_spe), optional = T)
-  reason_var_spe <- assert_symbol(enexpr(reason_var_spe), optional = T)
-  assert_s3_class(format_new_vars, "function")
-  filter_ds <- assert_filter_cond(enexpr(filter_ds))
-  assert_vars(subject_keys)
-  assert_data_frame(dataset, required_vars = subject_keys)
-  assert_data_frame(
-    dataset_ds,
-    required_vars = expr_c(subject_keys, reason_var, reason_var_spe)
-  )
-  warn_if_vars_exist(dataset, as_name(new_var))
-
-  # Additional checks
-  if (!is.null(new_var_spe)) {
-    if (!is.null(reason_var_spe)) {
-      statusvar <- c(as_name(reason_var), as_name(reason_var_spe))
-    } else {
-      err_msg <- paste(
-        "`new_var_spe` is specified as ", as_name(new_var_spe),
-        "but `reason_var_spe` is NULL.",
-        "Please specify `reason_var_spe` together with `new_var_spe`."
-      )
-      abort(err_msg)
-    }
-  } else {
-    statusvar <- as_name(reason_var)
-  }
-
-  dataset <- dataset %>%
-    derive_vars_merged(
-      dataset_add = dataset_ds,
-      filter_add = !!filter_ds,
-      new_vars = expr_c(reason_var, reason_var_spe),
-      by_vars = subject_keys
-    ) %>%
-    mutate(!!new_var := format_new_vars(!!reason_var))
-
-  if (!is.null(new_var_spe)) {
-    dataset <- mutate(
-      dataset,
-      !!new_var_spe := format_new_vars(!!reason_var, !!reason_var_spe)
-    )
-  }
-  select(dataset, -statusvar)
 }

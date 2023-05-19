@@ -239,37 +239,9 @@ derive_param_computed <- function(dataset,
       c(parameters, constant_parameters),
       ~ str_c("!is.na(AVAL.", .x, ")")
     ))) %>%
-    mutate(AVAL = !!enexpr(analysis_value), !!!set_values_to) %>%
+    process_set_values_to(exprs(AVAL = !!enexpr(analysis_value))) %>%
+    process_set_values_to(set_values_to) %>%
     select(-starts_with("AVAL."))
 
   bind_rows(dataset, hori_data)
-}
-
-#' Adds a Parameter Computed from the Analysis Value of Other Parameters
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is deprecated.  Please use `derive_param_computed()` instead.
-#'
-#' @inheritParams derive_param_computed
-#'
-#'
-#' @return The input dataset with the new parameter added. Note, a variable will only
-#'    be populated in the new parameter rows if it is specified in `by_vars`.
-#'
-#' @keywords deprecated
-#' @family deprecated
-#'
-#' @export
-#'
-derive_derived_param <- function(dataset,
-                                 by_vars,
-                                 parameters,
-                                 analysis_value,
-                                 set_values_to,
-                                 filter = NULL,
-                                 constant_by_vars = NULL,
-                                 constant_parameters = NULL) {
-  deprecate_stop("0.8.0", "derive_derived_param()", "derive_param_computed()")
 }

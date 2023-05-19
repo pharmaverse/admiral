@@ -111,24 +111,24 @@ derive_vars_query <- function(dataset, dataset_queries) {
   # queries restructured
   queries_wide <- dataset_queries %>%
     mutate(
-      TERM_NAME = toupper(.data$TERM_NAME),
-      VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM")
+      TERM_NAME = toupper(TERM_NAME),
+      VAR_PREFIX_NAM = paste0(VAR_PREFIX, "NAM")
     ) %>%
-    pivot_wider(names_from = .data$VAR_PREFIX_NAM, values_from = .data$QUERY_NAME) %>%
-    mutate(VAR_PREFIX_CD = paste0(.data$VAR_PREFIX, "CD")) %>%
-    pivot_wider(names_from = .data$VAR_PREFIX_CD, values_from = .data$QUERY_ID) %>%
-    mutate(VAR_PREFIX_SC = paste0(.data$VAR_PREFIX, "SC")) %>%
-    pivot_wider(names_from = .data$VAR_PREFIX_SC, values_from = .data$QUERY_SCOPE) %>%
-    mutate(VAR_PREFIX_SCN = paste0(.data$VAR_PREFIX, "SCN")) %>%
-    pivot_wider(names_from = .data$VAR_PREFIX_SCN, values_from = .data$QUERY_SCOPE_NUM) %>%
+    pivot_wider(names_from = VAR_PREFIX_NAM, values_from = QUERY_NAME) %>%
+    mutate(VAR_PREFIX_CD = paste0(VAR_PREFIX, "CD")) %>%
+    pivot_wider(names_from = VAR_PREFIX_CD, values_from = QUERY_ID) %>%
+    mutate(VAR_PREFIX_SC = paste0(VAR_PREFIX, "SC")) %>%
+    pivot_wider(names_from = VAR_PREFIX_SC, values_from = QUERY_SCOPE) %>%
+    mutate(VAR_PREFIX_SCN = paste0(VAR_PREFIX, "SCN")) %>%
+    pivot_wider(names_from = VAR_PREFIX_SCN, values_from = QUERY_SCOPE_NUM) %>%
     select(-VAR_PREFIX) %>%
     # determine join column based on type of TERM_LEVEL
     # numeric -> TERM_ID, character -> TERM_NAME, otherwise -> error
     mutate(
-      tmp_col_type = vapply(dataset[.data$TERM_LEVEL], typeof, character(1)),
+      tmp_col_type = vapply(dataset[TERM_LEVEL], typeof, character(1)),
       TERM_NAME_ID = case_when(
-        .data$tmp_col_type == "character" ~ .data$TERM_NAME,
-        .data$tmp_col_type %in% c("double", "integer") ~ as.character(.data$TERM_ID),
+        tmp_col_type == "character" ~ TERM_NAME,
+        tmp_col_type %in% c("double", "integer") ~ as.character(TERM_ID),
         TRUE ~ NA_character_
       )
     )
@@ -153,7 +153,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
   static_cols <- setdiff(names(dataset), unique(dataset_queries$TERM_LEVEL))
   # if dataset does not have a unique key, create a temp one
   no_key <- dataset %>%
-    select(!!!syms(static_cols)) %>%
+    select(all_of(static_cols)) %>%
     distinct()
   if (nrow(no_key) != nrow(dataset)) {
     dataset$temp_key <- seq_len(nrow(dataset))
@@ -161,18 +161,18 @@ derive_vars_query <- function(dataset, dataset_queries) {
   }
 
   # Keep static variables - will add back on once non-static vars fixed
-  df_static <- dataset %>% select(static_cols)
+  df_static <- dataset %>% select(all_of(static_cols))
 
   # Change non-static numeric vars to character
   df_fix_numeric <- dataset %>%
-    select(-static_cols) %>%
+    select(-all_of(static_cols)) %>%
     mutate(across(where(is.numeric), as.character))
 
 
   joined <- cbind(df_static, df_fix_numeric) %>%
-    pivot_longer(-static_cols, names_to = "TERM_LEVEL", values_to = "TERM_NAME_ID") %>%
-    drop_na(.data$TERM_NAME_ID) %>%
-    mutate(TERM_NAME_ID = toupper(.data$TERM_NAME_ID))
+    pivot_longer(-all_of(static_cols), names_to = "TERM_LEVEL", values_to = "TERM_NAME_ID") %>%
+    drop_na(TERM_NAME_ID) %>%
+    mutate(TERM_NAME_ID = toupper(TERM_NAME_ID))
 
   # join restructured queries to input dataset
   joined <- joined %>%
@@ -254,7 +254,7 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
   # check illegal query name
-  if (any(queries$QUERY_NAME == "") | any(is.na(queries$QUERY_NAME))) {
+  if (any(queries$QUERY_NAME == "") || any(is.na(queries$QUERY_NAME))) {
     abort(paste0(
       "`QUERY_NAME` in `", queries_name,
       "` cannot be empty string or NA."
@@ -294,7 +294,7 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
   # check illegal term name
-  if (any(is.na(queries$TERM_NAME) & is.na(queries$TERM_ID)) |
+  if (any(is.na(queries$TERM_NAME) & is.na(queries$TERM_ID)) ||
     any(queries$TERM_NAME == "" & is.na(queries$TERM_ID))) {
     abort(paste0(
       "Either `TERM_NAME` or `TERM_ID` need to be specified",
@@ -333,7 +333,7 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
   # check QUERY_SCOPE and QUERY_SCOPE_NUM are one to one if available
-  if ("QUERY_SCOPE" %in% names(queries) & "QUERY_SCOPE_NUM" %in% names(queries)) {
+  if ("QUERY_SCOPE" %in% names(queries) && "QUERY_SCOPE_NUM" %in% names(queries)) {
     assert_one_to_one(queries, exprs(QUERY_SCOPE), exprs(QUERY_SCOPE_NUM))
   }
 }

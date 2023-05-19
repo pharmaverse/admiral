@@ -1,11 +1,11 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.10.0
+Version: 0.11.0
 Authors@R: c(
-    person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
+    person("Ben", "Straub", email = "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
-    person("Ben", "Straub", role = "aut"),
+    person("Thomas", "Neitmann", role = "aut"),
     person("Samia", "Kabi", role = "aut"),
     person("Gordon", "Miller", role = "aut"),
     person("Teckla", "Akinyi", role = "aut"),
@@ -29,6 +29,9 @@ Authors@R: c(
     person("Zelos", "Zhu", role = "aut"),
     person("Jeffrey", "Dickinson", role = "aut"),
     person("Ania", "Golab", role = "aut"),
+    person("Kangjie", "Zhang", role = "aut"),
+    person("Daphne", "Grasselly", role = "aut"),
+    person("Adam", "Forys", role = "aut"),
     person("Michael", "Thorpe", role = "ctb"),
     person("Declan", "Hodges", role = "ctb"),
     person("Jaxon", "Abercrombie", role = "ctb"),
@@ -66,6 +69,7 @@ Description: A toolbox for programming Clinical Data Interchange Standards Conso
     (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
 Language: en-US
 License: Apache License (>= 2)
+BugReports: https://github.com/pharmaverse/admiral/issues
 URL: https://pharmaverse.github.io/admiral/, https://github.com/pharmaverse/admiral
 Encoding: UTF-8
 LazyData: true
@@ -73,7 +77,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Depends: R (>= 3.5)
 Imports:
-    admiraldev (>= 0.3.0),
+    admiraldev (>= 0.4.0),
     dplyr (>= 0.8.4),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),

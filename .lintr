@@ -1,2 +1,12 @@
-linters: with_defaults(line_length_linter(100), object_usage_linter=NULL, cyclocomp_linter(complexity_limit = 20))
-exclusions: list("R/data.R")
+linters: linters_with_defaults(
+    line_length_linter(100),
+    object_usage_linter=NULL,
+    cyclocomp_linter(complexity_limit = 22),
+    undesirable_function_linter = undesirable_function_linter()
+  )
+exclusions: list(
+    "R/data.R" = Inf,
+    "inst" = list(undesirable_function_linter = Inf),
+    "vignettes" = list(undesirable_function_linter = Inf),
+    "R/admiral_options.R" = list(line_length_linter = 8)
+  )
