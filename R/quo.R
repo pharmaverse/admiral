@@ -15,7 +15,7 @@
 #' @export
 quo_c <- function(...) {
   deprecate_stop(
-    "0.10.0",
+    "0.3.0",
     "quo_c()",
     "expr_c()",
     details = paste(
@@ -97,7 +97,7 @@ quo_not_missing <- function(x) {
 replace_values_by_names <- function(expressions, quosures) {
   if (!missing(quosures)) {
     deprecate_stop(
-      "0.10.0",
+      "0.3.0",
       "replace_values_by_names(quosures = )",
       "replace_values_by_names(expressions = )"
     )
@@ -138,7 +138,7 @@ replace_symbol_in_quo <- function(quosure,
                                   target,
                                   replace) {
   deprecate_stop(
-    "0.10.0",
+    "0.3.0",
     "replace_symbol_in_quo()",
     "replace_symbol_in_expr()",
     details = paste(
