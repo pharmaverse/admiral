@@ -27,7 +27,7 @@
 #'   Alternatively, if no filter condition is supplied, no subsetting of the source
 #'   dataset will be performed.
 #'
-#'   Default: `TRUE` (i.e. no filtering will be performed)
+#'   Default: `NULL` (i.e. no filtering will be performed)
 #'
 #' @details Returns the records in `dataset` which match an existing by group in `dataset_add`,
 #'   after being filtered according to `filter_add`. If there are no by groups that exist
@@ -77,7 +77,7 @@ filter_exist <- function(
     dataset,
     dataset_add,
     by_vars,
-    filter_add = TRUE) {
+    filter_add = NULL) {
   assert_vars(by_vars)
   assert_data_frame(
     dataset,
@@ -92,7 +92,7 @@ filter_exist <- function(
   dataset %>%
     semi_join(
       dataset_add %>%
-        filter(!!filter_add),
+        filter_if(filter_add),
       by = vars2chr(by_vars)
     )
 }
@@ -163,7 +163,7 @@ filter_not_exist <- function(
     dataset,
     dataset_add,
     by_vars,
-    filter_add = TRUE) {
+    filter_add = NULL) {
   assert_vars(by_vars)
   assert_data_frame(
     dataset,
@@ -178,7 +178,7 @@ filter_not_exist <- function(
   dataset %>%
     anti_join(
       dataset_add %>%
-        filter(!!filter_add),
+        filter_if(filter_add),
       by = vars2chr(by_vars)
     )
 }

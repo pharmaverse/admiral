@@ -4,7 +4,7 @@
 \alias{filter_exist}
 \title{Returns records that fit into existing by groups in a filtered source dataset}
 \usage{
-filter_exist(dataset, dataset_add, by_vars, filter_add = TRUE)
+filter_exist(dataset, dataset_add, by_vars, filter_add = NULL)
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -29,7 +29,7 @@ The filter condition which will be used to subset the source dataset.
 Alternatively, if no filter condition is supplied, no subsetting of the source
 dataset will be performed.
 
-Default: \code{TRUE} (i.e. no filtering will be performed)}
+Default: \code{NULL} (i.e. no filtering will be performed)}
 }
 \value{
 The records in the input dataset which are contained within an existing by group in
