@@ -50,6 +50,11 @@ reference:
   contents:
   - has_keyword("metadata")
 
+- title: Example Datasets
+  desc: You can run `use_ad_template()` to produce additional datasets
+  contents:
+  - has_keyword('datasets')
+
 - title: Advanced Functions
 - subtitle: Admiral Options
   contents:
@@ -112,11 +117,6 @@ reference:
 - subtitle: Utilities for Printing
   contents:
   - has_keyword('utils_print')
-
-- title: Example Datasets
-  desc: You can run `use_ad_template()` to produce additional datasets
-  contents:
-  - has_keyword('datasets')
 
 - title: Objects exported from other packages
   desc: |
