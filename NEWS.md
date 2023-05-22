@@ -10,6 +10,8 @@
 
 - New ADPPK template script available `ad_adppk.R` which creates Population PK Analysis Dataset (#1772) based on forthcoming CDISC Implementation guide.
 
+- New function `compute_egfr()` for calculating Estimated Glomerular Filtration Rate (eGFR) and Creatinine Clearance for Kidney Function (#1826)
+
 ## Updates of Existing Functions
 
 - `derive_extreme_records()` was enhanced such that it includes the
@@ -84,6 +86,9 @@ the `filter_add` argument. (#1725)
 - Updated example dataset to trigger deterioration flags in the vignette "Creating Questionnaire ADaMs" (#1853, #1854)
 
 - Updated PK Programming vignette to include new Population PK Template `ad_adppk.R` (#1772)
+
+- Updated "Lab Grading" Vignette to link to grading metadata available in `{admiral}` and clarify how abnormal baseline
+values are assigned in NCI-CTCAEv5 (#1863).
 
 ## Various
 

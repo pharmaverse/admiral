@@ -44,9 +44,11 @@ Bazett
 Bazett's
 Biologics
 CDISC
+CKD
 COVID
 CPK
 CQ
+CRCL
 CRF
 CTC
 CTCAE
@@ -54,6 +56,8 @@ CTCAEV
 CTCAEv
 CVD
 Chol
+Cockcroft
+Creat
 Creatinine
 D'Agostino
 DIABP
@@ -68,6 +72,7 @@ DuBois
 Durations
 EMA
 EOSSTT
+EPI
 FACM
 FCVD
 Fibrinogen
@@ -79,8 +84,10 @@ Fujimoto
 GDS
 GGT
 GSK
+Gault
 Gehan
 GlaxoSmithKline
+Glomerular
 GxP
 HDL
 Haptoglobin
@@ -105,6 +112,7 @@ LLOQ
 LOCF
 Leukocytosis
 Lipase
+MDRD
 MH
 MRRLT
 MedDRA
@@ -138,6 +146,7 @@ Quosures
 README
 SCE
 SCN
+SCr
 SDG
 SDGs
 SDTM
@@ -210,6 +219,7 @@ dtc
 dthcaus
 eGFR
 eg
+egfr
 exprs
 fil
 findability
@@ -222,6 +232,7 @@ groupwise
 hms
 https
 lockfile
+mL
 magrittr
 metacore
 metatools
@@ -259,9 +270,12 @@ timeframe
 timepart
 timepoint
 tte
+umol
 ungrouped
 usethis
 www
 xULN
 xportr
 xpt
+α
+κ
