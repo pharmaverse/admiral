@@ -104,6 +104,7 @@ test_that("derive_vars_last_dose Test 3: function returns traceability vars", {
       dose_date = EXENDT,
       analysis_date = AESTDT,
       single_dose_condition = (EXSTDTC == EXENDTC),
+      new_vars = exprs(EXSTDTC, EXENDTC, EXENDT, EXSTDT, EXSEQ, EXDOSE, EXTRT),
       traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
     )
   )
