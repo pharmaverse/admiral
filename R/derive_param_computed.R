@@ -167,6 +167,7 @@ derive_param_computed <- function(dataset,
   if (!is.null(set_values_to$PARAMCD)) {
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
+  analysis_value <- enexpr(analysis_value)
 
   # select observations and variables required for new observations
   data_source <- dataset %>%
@@ -182,12 +183,12 @@ derive_param_computed <- function(dataset,
   new_data <- vector("list", length(new_params))
   for (i in seq_along(new_params)) {
     new_data[[i]] <- filter(data_source, !!new_params[[i]]) %>%
-      mutate(PARAMCD == new_names[[i]])
+      mutate(PARAMCD = new_names[[i]])
   }
 
   data_parameters <- data_source %>%
     bind_rows(new_data) %>%
-    filter(PARAMCD %in% parameters)
+    filter(PARAMCD %in% param_values)
 
   if (nrow(data_parameters) == 0L) {
     warn(
@@ -202,8 +203,8 @@ derive_param_computed <- function(dataset,
     return(dataset)
   }
 
-  params_available <- unique(data_filtered$PARAMCD)
-  params_missing <- setdiff(c(parameters, constant_parameters), params_available)
+  params_available <- unique(data_parameters$PARAMCD)
+  params_missing <- setdiff(c(param_values, constant_parameters), params_available)
   if (length(params_missing) > 0) {
     warn(
       paste0(
@@ -216,9 +217,6 @@ derive_param_computed <- function(dataset,
     )
     return(dataset)
   }
-
-  data_parameters <- data_parameters %>%
-    select(!!!by_vars, PARAMCD, AVAL)
 
   signal_duplicate_records(
     data_parameters,
@@ -233,12 +231,35 @@ derive_param_computed <- function(dataset,
   )
 
   # horizontalize data, e.g., AVAL for PARAMCD = "PARAMx" -> AVAL.PARAMx
-  vars_hori <- extract_vars(analysis_value) %>%
+  analysis_vars <- extract_vars(analysis_value)
+  analysis_vars_chr <- vars2chr(analysis_vars)
+  vars_hori <- analysis_vars_chr %>%
     str_split(pattern = "\\.") %>%
     map_chr(`[[`, 1) %>%
     unique()
-  hori_data <- data_parameters %>%
-    pivot_wider(names_from = PARAMCD, values_from = AVAL, names_prefix = "AVAL.")
+
+  data_parameters <- data_parameters %>%
+    select(!!!by_vars, PARAMCD, !!!chr2vars(vars_hori))
+
+  hori_data <- data_parameters
+  for (i in seq_along(vars_hori)) {
+    pivoted_data <- pivot_wider(
+      data_parameters,
+      names_from = PARAMCD,
+      values_from = sym(vars_hori[[i]]),
+      names_prefix = paste0(vars_hori[[i]], ".")
+    )
+    if (i == 1) {
+      hori_data <- pivoted_data
+    } else {
+      hori_data <- left_join(
+        hori_data,
+        pivoted_data,
+        by = vars2chr(by_vars))
+    }
+  }
+  hori_data <- bind_rows(hori_data) %>%
+    select(!!!by_vars, !!!analysis_vars)
 
   if (!is.null(constant_parameters)) {
     data_const_parameters <- data_filtered %>%
@@ -255,12 +276,12 @@ derive_param_computed <- function(dataset,
   hori_data <- hori_data %>%
     # keep only observations where all analysis values are available
     filter(!!!parse_exprs(map_chr(
-      c(parameters, constant_parameters),
-      ~ str_c("!is.na(AVAL.", .x, ")")
+      analysis_vars_chr,
+      ~ str_c("!is.na(", .x, ")")
     ))) %>%
-    process_set_values_to(exprs(AVAL = !!enexpr(analysis_value))) %>%
+    process_set_values_to(exprs(AVAL = !!analysis_value)) %>%
     process_set_values_to(set_values_to) %>%
-    select(-starts_with("AVAL."))
+    select(-all_of(analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]))
 
   bind_rows(dataset, hori_data)
 }

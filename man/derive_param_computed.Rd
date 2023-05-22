@@ -6,6 +6,7 @@
 \usage{
 derive_param_computed(
   dataset,
+  dataset_add,
   by_vars,
   parameters,
   analysis_value,

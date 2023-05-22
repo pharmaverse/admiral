@@ -165,13 +165,13 @@ test_that("derive_param_computed Test 4: no new observations are added if a para
 ## Test 5: `dataset_add`, creating new parameters ----
 test_that("derive_param_computed Test 5: `dataset_add`, creating new parameters", {
   qs <- tibble::tribble(
-    ~USUBJID, ~VISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
-    "1",      "WEEK 2", "CHSF112", NA,       1,
-    "1",      "WEEK 2", "CHSF113", "Yes",    NA,
-    "1",      "WEEK 2", "CHSF114", NA,       1,
-    "1",      "WEEK 4", "CHSF112", NA,       2,
-    "1",      "WEEK 4", "CHSF113", "No",    NA,
-    "1",      "WEEK 4", "CHSF114", NA,       1
+    ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
+    "1",      "WEEK 2",  "CHSF112", NA,       1,
+    "1",      "WEEK 2",  "CHSF113", "Yes",    NA,
+    "1",      "WEEK 2",  "CHSF114", NA,       1,
+    "1",      "WEEK 4",  "CHSF112", NA,       2,
+    "1",      "WEEK 4",  "CHSF113", "No",    NA,
+    "1",      "WEEK 4",  "CHSF114", NA,       1
   )
 
   adchsf <- tibble::tribble(
