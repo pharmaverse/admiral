@@ -15,7 +15,8 @@ derive_param_exist_flag(
   filter_add = NULL,
   aval_fun = yn_to_numeric,
   by_vars = get_admiral_option("subject_keys"),
-  set_values_to
+  set_values_to,
+  dataset_adsl
 )
 }
 \arguments{
@@ -24,7 +25,7 @@ derive_param_exist_flag(
 The variables specified for \code{by_vars} and the \code{PARAMCD} variable are
 expected.}
 
-\item{dataset_ref}{ADSL input dataset
+\item{dataset_ref}{Input dataset
 
 The variables specified for \code{by_vars} are expected. For each subject
 (as defined by \code{by_vars}) from the specified dataset (\code{dataset_ref}),
@@ -106,6 +107,8 @@ A list of symbols created using \code{exprs()} is expected.}
 A named list returned by \code{exprs()} defining the variables to be set for the
 new parameter, e.g. \code{exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at Baseline")} is expected. The values must be symbols, character strings,
 numeric values, or \code{NA}.}
+
+\item{dataset_adsl}{\emph{Deprecated}, please use \code{dataset_ref} instead.}
 }
 \value{
 The input dataset with a new parameter indicating if an event

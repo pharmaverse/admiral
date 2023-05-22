@@ -10,7 +10,7 @@
 #'   The variables specified for `by_vars` and the `PARAMCD` variable are
 #'   expected.
 #'
-#' @param dataset_ref ADSL input dataset
+#' @param dataset_ref Input dataset
 #'
 #'   The variables specified for `by_vars` are expected. For each subject
 #'   (as defined by `by_vars`) from the specified dataset (`dataset_ref`),
@@ -93,6 +93,8 @@
 #' @param by_vars Variables to uniquely identify a subject
 #'
 #'   A list of symbols created using `exprs()` is expected.
+#'
+#' @param dataset_adsl *Deprecated*, please use `dataset_ref` instead.
 #'
 #' @details
 #'   1. The additional dataset (`dataset_add`) is restricted to the observations
@@ -179,7 +181,16 @@ derive_param_exist_flag <- function(dataset = NULL,
                                     filter_add = NULL,
                                     aval_fun = yn_to_numeric,
                                     by_vars = get_admiral_option("subject_keys"),
-                                    set_values_to) {
+                                    set_values_to,
+                                    dataset_adsl) {
+  ### BEGIN DEPRECATION
+  if (!missing(dataset_adsl)) {
+    deprecate_warn("0.11.0", "derive_param_exist_flag(dataset_adsl = )", "derive_param_exit_flag(dataset_ref = )")
+    # assign deprecated argument to new variable
+    dataset_ref <- dataset_adsl
+  }
+  ### END DEPRECATION
+
   # Check input parameters
   condition <- assert_filter_cond(enexpr(condition))
   assert_character_scalar(true_value)
