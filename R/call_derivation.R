@@ -37,19 +37,19 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' adsl <- tribble(
-#'    ~STUDYID,  ~USUBJID,      ~TRTSDT,      ~TRTEDT,
+#'   ~STUDYID,   ~USUBJID,      ~TRTSDT,      ~TRTEDT,
 #'   "PILOT01", "01-1307",           NA,           NA,
 #'   "PILOT01", "05-1377", "2014-01-04", "2014-01-25",
 #'   "PILOT01", "06-1384", "2012-09-15", "2012-09-24",
 #'   "PILOT01", "15-1085", "2013-02-16", "2013-08-18",
 #'   "PILOT01", "16-1298", "2013-04-08", "2013-06-28"
-#' )  %>%
+#' ) %>%
 #'   mutate(
 #'     across(TRTSDT:TRTEDT, as.Date)
 #'   )
 #'
 #' ae <- tribble(
-#'    ~STUDYID, ~DOMAIN,  ~USUBJID,     ~AESTDTC,     ~AEENDTC,
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID,     ~AESTDTC,     ~AEENDTC,
 #'   "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
 #'   "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
 #'   "PILOT01",    "AE", "06-1384", "2012-09-23", "2012-09-29",
@@ -104,7 +104,6 @@
 #'     min_dates = exprs(TRTSDT),
 #'     max_dates = exprs(TRTEDT)
 #'   )
-
 call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
   assert_data_frame(dataset, optional = TRUE)
   assert_s3_class(derivation, "function")
@@ -151,19 +150,19 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #' library(dplyr, warn.conflicts = FALSE)
 #'
 #' adsl <- tribble(
-#'    ~STUDYID,  ~USUBJID,      ~TRTSDT,      ~TRTEDT,
+#'   ~STUDYID,   ~USUBJID,      ~TRTSDT,      ~TRTEDT,
 #'   "PILOT01", "01-1307",           NA,           NA,
 #'   "PILOT01", "05-1377", "2014-01-04", "2014-01-25",
 #'   "PILOT01", "06-1384", "2012-09-15", "2012-09-24",
 #'   "PILOT01", "15-1085", "2013-02-16", "2013-08-18",
 #'   "PILOT01", "16-1298", "2013-04-08", "2013-06-28"
-#' )  %>%
+#' ) %>%
 #'   mutate(
 #'     across(TRTSDT:TRTEDT, as.Date)
 #'   )
 #'
 #' ae <- tribble(
-#'    ~STUDYID, ~DOMAIN,  ~USUBJID,     ~AESTDTC,     ~AEENDTC,
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID,     ~AESTDTC,     ~AEENDTC,
 #'   "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
 #'   "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
 #'   "PILOT01",    "AE", "06-1384", "2012-09-23", "2012-09-29",

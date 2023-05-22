@@ -62,7 +62,7 @@
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #' dm <- tribble(
-#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
 #'   "PILOT01",    "DM", "01-1130",   84, "YEARS",
 #'   "PILOT01",    "DM", "01-1133",   81, "YEARS",
 #'   "PILOT01",    "DM", "01-1211",   76, "YEARS",
@@ -70,7 +70,7 @@
 #'   "PILOT01",    "DM", "09-1088",   69, "YEARS"
 #' )
 #' ae <- tribble(
-#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,     ~AEENDTC,
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,     ~AEENDTC,
 #'   "PILOT01",    "AE", "01-1130",      5, "2014-05-09", "2014-05-09",
 #'   "PILOT01",    "AE", "01-1130",      6, "2014-05-22",           NA,
 #'   "PILOT01",    "AE", "01-1130",      4, "2014-05-09", "2014-05-09",
@@ -98,7 +98,7 @@
 #'   "PILOT01",    "AE", "09-1088",      2, "2014-08-02",           NA
 #' )
 #' lb <- tribble(
-#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~LBSEQ,             ~LBDTC,
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~LBSEQ,             ~LBDTC,
 #'   "PILOT01",    "LB", "01-1130",    219, "2014-06-07T13:20",
 #'   "PILOT01",    "LB", "01-1130",    322, "2014-08-16T13:10",
 #'   "PILOT01",    "LB", "01-1133",    268, "2013-04-18T15:30",
@@ -111,7 +111,7 @@
 #'   "PILOT01",    "LB", "09-1088",    322, "2014-10-09T13:25"
 #' )
 #' adsl <- tribble(
-#'    ~STUDYID,  ~USUBJID,              ~TRTEDTM,
+#'   ~STUDYID,   ~USUBJID,              ~TRTEDTM,
 #'   "PILOT01", "01-1130", "2014-08-16 23:59:59",
 #'   "PILOT01", "01-1133", "2013-04-28 23:59:59",
 #'   "PILOT01", "01-1211", "2013-01-12 23:59:59",
@@ -360,7 +360,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' ae <- tribble(
-#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,     ~AEENDTC,
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,     ~AEENDTC,
 #'   "PILOT01",    "AE", "01-1130",      5, "2014-05-09", "2014-05-09",
 #'   "PILOT01",    "AE", "01-1130",      6, "2014-05-22",           NA,
 #'   "PILOT01",    "AE", "01-1130",      4, "2014-05-09", "2014-05-09",
@@ -389,7 +389,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' )
 #'
 #' adsl <- tribble(
-#'    ~STUDYID,  ~USUBJID,              ~TRTEDTM,      ~TRTEDT,
+#'   ~STUDYID,   ~USUBJID,              ~TRTEDTM,      ~TRTEDT,
 #'   "PILOT01", "01-1130", "2014-08-16 23:59:59", "2014-08-16",
 #'   "PILOT01", "01-1133", "2013-04-28 23:59:59", "2013-04-28",
 #'   "PILOT01", "01-1211", "2013-01-12 23:59:59", "2013-01-12",
@@ -402,7 +402,7 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #'
 #' lb <- tribble(
-#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~LBSEQ,             ~LBDTC,
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~LBSEQ,             ~LBDTC,
 #'   "PILOT01",    "LB", "01-1130",    219, "2014-06-07T13:20",
 #'   "PILOT01",    "LB", "01-1130",    322, "2014-08-16T13:10",
 #'   "PILOT01",    "LB", "01-1133",    268, "2013-04-18T15:30",
@@ -416,7 +416,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' )
 #'
 #' dm <- tribble(
-#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
 #'   "PILOT01",    "DM", "01-1130",   84, "YEARS",
 #'   "PILOT01",    "DM", "01-1133",   81, "YEARS",
 #'   "PILOT01",    "DM", "01-1211",   76, "YEARS",
@@ -536,7 +536,7 @@ derive_var_extreme_dt <- function(dataset,
   sources <- list(...)
   assert_list_of(sources, "date_source")
 
-derive_var_extreme_dtm(
+  derive_var_extreme_dtm(
     dataset,
     new_var = !!new_var,
     !!!sources,
