@@ -1380,14 +1380,14 @@ covar_vslb <- covar %>%
       method = "Mosteller"
     ),
     # Derive CRCLBL and EGFRBL using new function
-    # CRCLBL = compute_egfr(
-    #   creat = CREATBL, creatu = "SI", age = AGE, wt = WTBL, sex = SEX,
-    #   method = "CRCL"
-    # ),
-    # EGFRBL = compute_egfr(
-    #   creat = CREATBL, creatu = "SI", age = AGE, wt = WTBL, sex = SEX,
-    #   method = "CKD-EPI"
-    # )
+    CRCLBL = compute_egfr(
+      creat = CREATBL, creatu = "SI", age = AGE, wt = WTBL, sex = SEX,
+      method = "CRCL"
+    ),
+    EGFRBL = compute_egfr(
+      creat = CREATBL, creatu = "SI", age = AGE, wt = WTBL, sex = SEX,
+      method = "CKD-EPI"
+    )
   ) %>%
   rename(TBILBL = BILIBL)
 ```
