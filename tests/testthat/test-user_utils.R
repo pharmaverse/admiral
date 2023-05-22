@@ -185,10 +185,10 @@ test_that("print.source Test 15: `source` objects containing `data.frame`", {
     "add_scope_num: FALSE",
     "definition:",
     "# A tibble: 2 x 3",
-    "  TERMNAME                    TERMID  TERMLEVEL",
-    "  <chr>                        <int> <chr>     ",
-    "1 APPLICATION SITE ERYTHEMA 10003041 AEDECOD   ",
-    "2 APPLICATION SITE PRURITUS 10003053 AEDECOD   "
+    "  TERMNAME                    TERMID SRCVAR ",
+    "  <chr>                        <int> <chr>  ",
+    "1 APPLICATION SITE ERYTHEMA 10003041 AEDECOD",
+    "2 APPLICATION SITE PRURITUS 10003053 AEDECOD"
   )
   # replace × with x due to differences between R versions and remove formatting
   expect_identical(
