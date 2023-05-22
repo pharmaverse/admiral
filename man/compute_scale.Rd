@@ -83,6 +83,7 @@ compute_scale(
 BDS-Findings Functions that returns a vector: 
 \code{\link{compute_bmi}()},
 \code{\link{compute_bsa}()},
+\code{\link{compute_egfr}()},
 \code{\link{compute_framingham}()},
 \code{\link{compute_map}()},
 \code{\link{compute_qtc}()},
