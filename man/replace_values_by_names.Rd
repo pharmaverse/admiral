@@ -22,11 +22,10 @@ library(rlang)
 replace_values_by_names(exprs(AVAL, ADT = convert_dtc_to_dt(EXSTDTC)))
 }
 \seealso{
-Other deprecated: 
-\code{\link{assert_order_vars}()},
-\code{\link{quo_c}()},
-\code{\link{quo_not_missing}()},
-\code{\link{replace_symbol_in_quo}()}
+Helpers for working with Quosures: 
+\code{\link{add_suffix_to_vars}()},
+\code{\link{expr_c}()},
+\code{\link{replace_symbol_in_expr}()}
 }
-\concept{deprecated}
-\keyword{deprecated}
+\concept{quo}
+\keyword{quo}

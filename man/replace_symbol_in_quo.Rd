@@ -27,8 +27,7 @@ This function is \emph{deprecated}, please use \code{replace_symbol_in_expr()} i
 Other deprecated: 
 \code{\link{assert_order_vars}()},
 \code{\link{quo_c}()},
-\code{\link{quo_not_missing}()},
-\code{\link{replace_values_by_names}()}
+\code{\link{quo_not_missing}()}
 }
 \concept{deprecated}
 \keyword{deprecated}

@@ -84,8 +84,8 @@ quo_not_missing <- function(x) {
 #' @param quosures *Deprecated*, please use `expressions` instead.
 #'
 #'
-#' @keywords deprecated
-#' @family deprecated
+#' @keywords quo
+#' @family quo
 #'
 #'
 #' @return A list of expressions

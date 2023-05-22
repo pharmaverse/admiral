@@ -22,8 +22,7 @@ This function is \emph{deprecated}, please use \code{expr_c()} instead.
 Other deprecated: 
 \code{\link{assert_order_vars}()},
 \code{\link{quo_not_missing}()},
-\code{\link{replace_symbol_in_quo}()},
-\code{\link{replace_values_by_names}()}
+\code{\link{replace_symbol_in_quo}()}
 }
 \concept{deprecated}
 \keyword{deprecated}

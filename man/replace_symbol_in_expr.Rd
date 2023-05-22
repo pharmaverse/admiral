@@ -31,7 +31,8 @@ replace_symbol_in_expr(expr(desc(AVAL)), target = AVAL, replace = AVAL.join)
 \seealso{
 Helpers for working with Quosures: 
 \code{\link{add_suffix_to_vars}()},
-\code{\link{expr_c}()}
+\code{\link{expr_c}()},
+\code{\link{replace_values_by_names}()}
 }
 \author{
 Stefan Bundfuss

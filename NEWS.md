@@ -18,9 +18,8 @@ expressions (#241)
 
   - `quo_c()`
   - `quo_not_missing()`
-  - `replace_values_by_names()`
   - `replace_symbol_in_quo()`
-
+- The `quosures` argument was replaced by the `expressions` argument in `replace_values_by_names()`.
 
 ## Documentation
 
