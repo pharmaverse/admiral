@@ -4,11 +4,11 @@ test_that("derive_vars_query Test 1: Derive CQ and SMQ variables with two term l
   # nolint start
   queries <- tibble::tribble(
     ~PREFIX, ~GRPNAME, ~GRPID, ~SCOPE, ~SCOPEN, ~SRCVAR, ~TERMNAME,
-    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW",  1, "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
-    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW",  1, "AEDECOD",                 "AMMONIA ABNORMALL",
-    "SMQ03",                            "Immune-Mediated Hypothyroidism",  20000161, "NARROW",  1, "AEDECOD",                 "BASEDOW'S DISEASE",
-    "SMQ05",                               "Immune-Mediated Pneumonitis",        NA, "NARROW",  1, "AEDECOD",              "ALVEOLAR PROTEINOSIS",
-    "CQ06",                                                 "Some query",     11111,       NA, NA,   "AELLT",                         "SOME TERM"
+    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
+    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "AMMONIA ABNORMALL",
+    "SMQ03", "Immune-Mediated Hypothyroidism", 20000161, "NARROW", 1, "AEDECOD", "BASEDOW'S DISEASE",
+    "SMQ05", "Immune-Mediated Pneumonitis", NA, "NARROW", 1, "AEDECOD", "ALVEOLAR PROTEINOSIS",
+    "CQ06", "Some query", 11111, NA, NA, "AELLT", "SOME TERM"
   ) %>% dplyr::mutate(
     TERMID = as.integer(as.factor(.data$TERMNAME))
   )

@@ -64,4 +64,3 @@ queries_mh <- queries %>%
   mutate(SRCVAR = ifelse(SRCVAR == "AELLT", "MHLLT", "MHDECOD"))
 
 derive_vars_query(admh, queries_mh)
-
