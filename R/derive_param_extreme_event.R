@@ -313,7 +313,7 @@ derive_param_extreme_event <- function(dataset = NULL,
     case_sensitive = FALSE
   )
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
+  if (!is.null(set_values_to$PARAMCD) && !is.null(dataset)) {
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
 

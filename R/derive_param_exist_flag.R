@@ -96,6 +96,8 @@
 #'
 #' @param dataset_adsl *Deprecated*, please use `dataset_ref` instead.
 #'
+#' @param subject_keys *Deprecated*, please use `by_vars` instead.
+#'
 #' @details
 #'   1. The additional dataset (`dataset_add`) is restricted to the observations
 #'   matching the `filter_add` condition.
@@ -182,12 +184,19 @@ derive_param_exist_flag <- function(dataset = NULL,
                                     aval_fun = yn_to_numeric,
                                     by_vars = get_admiral_option("subject_keys"),
                                     set_values_to,
-                                    dataset_adsl) {
+                                    dataset_adsl,
+                                    subject_keys) {
   ### BEGIN DEPRECATION
   if (!missing(dataset_adsl)) {
     deprecate_warn("0.11.0", "derive_param_exist_flag(dataset_adsl = )", "derive_param_exit_flag(dataset_ref = )")
     # assign deprecated argument to new variable
     dataset_ref <- dataset_adsl
+  }
+
+  if (!missing(subject_keys)) {
+    deprecate_warn("0.11.0", "derive_param_exist_flag(subject_keys = )", "derive_param_exit_flag(by_vars = )")
+    # assign deprecated argument to new variable
+    by_vars <- subject_keys
   }
   ### END DEPRECATION
 

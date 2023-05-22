@@ -16,7 +16,8 @@ derive_param_exist_flag(
   aval_fun = yn_to_numeric,
   by_vars = get_admiral_option("subject_keys"),
   set_values_to,
-  dataset_adsl
+  dataset_adsl,
+  subject_keys
 )
 }
 \arguments{
@@ -109,6 +110,8 @@ new parameter, e.g. \code{exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at
 numeric values, or \code{NA}.}
 
 \item{dataset_adsl}{\emph{Deprecated}, please use \code{dataset_ref} instead.}
+
+\item{subject_keys}{\emph{Deprecated}, please use \code{by_vars} instead.}
 }
 \value{
 The input dataset with a new parameter indicating if an event

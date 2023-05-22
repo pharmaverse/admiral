@@ -359,7 +359,7 @@ derive_param_tte <- function(dataset = NULL,
   )
   assert_logical_scalar(create_datetime)
   assert_varval_list(set_values_to, accept_expr = TRUE, optional = TRUE)
-  if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
+  if (!is.null(set_values_to$PARAMCD) && !is.null(dataset)) {
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
   if (!is.null(by_vars)) {
@@ -406,7 +406,7 @@ derive_param_tte <- function(dataset = NULL,
   )
 
   start_date_imputation_flag <- gsub("(DT|DTM)$", "DTF", as_name(start_date))
-  if (start_date_imputation_flag %in% colnames(dataset_adsl) &
+  if (start_date_imputation_flag %in% colnames(dataset_adsl) &&
     as_name(start_date) != start_date_imputation_flag) {
     adsl_vars <- exprs(
       !!!adsl_vars,
@@ -415,7 +415,7 @@ derive_param_tte <- function(dataset = NULL,
   }
 
   start_time_imputation_flag <- gsub("DTM$", "TMF", as_name(start_date))
-  if (start_time_imputation_flag %in% colnames(dataset_adsl) &
+  if (start_time_imputation_flag %in% colnames(dataset_adsl) &&
     as_name(start_date) != start_time_imputation_flag) {
     adsl_vars <- exprs(
       !!!adsl_vars,
