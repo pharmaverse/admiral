@@ -114,7 +114,7 @@
 #'     dataset_ex = ex_single,
 #'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
 #'       !is.na(EXENDTM),
-#'     new_vars = exprs(EXDOSE, EXTRT, EXSEQ, EXENDTC, EXENDTM, VISIT),
+#'     new_vars = exprs(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
 #'     dose_date = EXENDTM,
 #'     analysis_date = ASTDTM
 #'   ) %>%
@@ -146,11 +146,11 @@ derive_vars_last_dose <- function(dataset,
   derive_vars_joined(dataset = dataset,
                      dataset_add = dataset_ex,
                      by_vars = by_vars,
-                     order = expr_c(dose_id),
+                     order = expr_c(enexpr(dose_date), dose_id),
                      new_vars = expr_c({{new_vars}}, {{traceability_vars}}),
-                     join_vars = expr_c(dose_id),
+                     join_vars = expr_c(enexpr(dose_date), dose_id),
                      filter_add = {{filter_ex}},
                      filter_join = {{dose_date}} <= {{analysis_date}},
                      mode = "last",
-                     )
+  )
 }
