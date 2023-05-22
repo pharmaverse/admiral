@@ -12,6 +12,7 @@ source dataset. (#1699)
 
 - New function `derive_param_extreme_record()` that adds parameter based on the first or last record from multiple sources. (#1822)
 
+- New function `compute_egfr()` for calculating Estimated Glomerular Filtration Rate (eGFR) and Creatinine Clearance for Kidney Function (#1826)
 
 ## Updates of Existing Functions
 
