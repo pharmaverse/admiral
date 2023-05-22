@@ -138,7 +138,7 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' vs <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~VSTESTCD,      ~VISIT, ~VSSTRESN, ~VSSTRESU,       ~VSDTC,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~VSTESTCD,      ~VISIT, ~VSSTRESN, ~VSSTRESU,       ~VSDTC,
 #'   "PILOT01",    "VS", "01-1302",  "HEIGHT", "SCREENING",     177.8,      "cm", "2013-08-20",
 #'   "PILOT01",    "VS", "01-1302",  "WEIGHT", "SCREENING",     81.19,      "kg", "2013-08-20",
 #'   "PILOT01",    "VS", "01-1302",  "WEIGHT",  "BASELINE",      82.1,      "kg", "2013-08-29",
@@ -157,7 +157,7 @@
 #' )
 #'
 #' dm <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
 #'   "PILOT01",    "DM", "01-1302",   61, "YEARS",
 #'   "PILOT01",    "DM", "17-1344",   64, "YEARS"
 #' )
@@ -174,7 +174,7 @@
 #'
 #' # Merge last weight to adsl
 #' adsl <- tribble(
-#'   ~STUDYID,  ~USUBJID, ~AGE,   ~AGEU,
+#'    ~STUDYID,  ~USUBJID, ~AGE,   ~AGEU,
 #'   "PILOT01", "01-1302",   61, "YEARS",
 #'   "PILOT01", "17-1344",   64, "YEARS"
 #' )
@@ -195,7 +195,7 @@
 #'
 #' # Derive treatment start datetime (TRTSDTM)
 #' ex <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~EXSTDY, ~EXENDY,     ~EXSTDTC,     ~EXENDTC,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~EXSTDY, ~EXENDY,     ~EXSTDTC,     ~EXENDTC,
 #'   "PILOT01",    "EX", "01-1302",       1,      18, "2013-08-29", "2013-09-15",
 #'   "PILOT01",    "EX", "01-1302",      19,      69, "2013-09-16", "2013-11-05",
 #'   "PILOT01",    "EX", "17-1344",       1,      14, "2014-01-11", "2014-01-24",
@@ -373,7 +373,7 @@ derive_vars_merged <- function(dataset,
 #' library(dplyr, warn.conflicts = FALSE)
 #'
 #' vs <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSSEQ,       ~VSDTC,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSSEQ,       ~VSDTC,
 #'   "PILOT01",    "VS", "04-1127", "SCREENING",  "HEIGHT",     165.1,     43, "2013-09-16",
 #'   "PILOT01",    "VS", "04-1127", "SCREENING",  "WEIGHT",     42.87,    142, "2013-09-16",
 #'   "PILOT01",    "VS", "04-1127",  "BASELINE",  "WEIGHT",     41.05,    143, "2013-10-02",
@@ -388,7 +388,7 @@ derive_vars_merged <- function(dataset,
 #' )
 #'
 #' dm <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
 #'   "PILOT01",    "DM", "01-1057",   59, "YEARS",
 #'   "PILOT01",    "DM", "04-1127",   84, "YEARS",
 #'   "PILOT01",    "DM", "06-1049",   60, "YEARS"
@@ -542,14 +542,14 @@ derive_var_merged_cat <- function(dataset,
 #' library(dplyr, warn.conflicts = FALSE)
 #'
 #' dm <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
 #'   "PILOT01",    "DM", "01-1028",   71, "YEARS",
 #'   "PILOT01",    "DM", "04-1127",   84, "YEARS",
 #'   "PILOT01",    "DM", "06-1049",   60, "YEARS"
 #' )
 #'
 #' ae <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID,    ~AETERM,     ~AEREL,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID,    ~AETERM,     ~AEREL,
 #'   "PILOT01",    "AE", "01-1028", "ERYTHEMA", "POSSIBLE",
 #'   "PILOT01",    "AE", "01-1028", "PRURITUS", "PROBABLE",
 #'   "PILOT01",    "AE", "06-1049",  "SYNCOPE", "POSSIBLE",
@@ -567,7 +567,7 @@ derive_var_merged_cat <- function(dataset,
 #'   select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
 #'
 #' vs <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSBLFL,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSBLFL,
 #'   "PILOT01",    "VS", "01-1028", "SCREENING",  "HEIGHT",     177.8,      NA,
 #'   "PILOT01",    "VS", "01-1028", "SCREENING",  "WEIGHT",     98.88,      NA,
 #'   "PILOT01",    "VS", "01-1028",  "BASELINE",  "WEIGHT",     99.34,     "Y",
@@ -684,14 +684,14 @@ derive_var_merged_exist_flag <- function(dataset,
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' dm <- tribble(
-#'   ~STUDYID, ~DOMAIN, ~USUBJID, ~AGE,   ~AGEU,
+#'    ~STUDYID, ~DOMAIN, ~USUBJID, ~AGE,   ~AGEU,
 #'   "PILOT01",    "DM",   "1023",   64, "YEARS",
 #'   "PILOT01",    "DM",   "1028",   71, "YEARS",
 #'   "PILOT01",    "DM",   "1033",   74, "YEARS"
 #' )
 #'
 #' ds <- tribble(
-#'   ~STUDYID, ~DOMAIN, ~USUBJID,      ~VISIT,           ~DSCAT,          ~DSDECOD,
+#'    ~STUDYID, ~DOMAIN, ~USUBJID,      ~VISIT,           ~DSCAT,          ~DSDECOD,
 #'   "PILOT01",    "DS",   "1023",  "BASELINE", "PROT MILESTONE",      "RANDOMIZED",
 #'   "PILOT01",    "DS",   "1023",    "WEEK 4",     "DISP EVENT",   "ADVERSE EVENT",
 #'   "PILOT01",    "DS",   "1023",    "WEEK 4",    "OTHER EVENT", "FINAL LAB VISIT",
@@ -798,7 +798,7 @@ derive_var_merged_character <- function(dataset,
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' vs <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID,        ~VISIT, ~VSTESTCD,       ~VSTEST,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID,        ~VISIT, ~VSTESTCD,       ~VSTEST,
 #'   "PILOT01",    "VS", "01-1028",   "SCREENING",  "HEIGHT",      "Height",
 #'   "PILOT01",    "VS", "01-1028",   "SCREENING",    "TEMP", "Temperature",
 #'   "PILOT01",    "VS", "01-1028",    "BASELINE",    "TEMP", "Temperature",
@@ -982,16 +982,16 @@ get_not_mapped <- function() {
 #'
 #' # Add a variable for the mean of AVAL within each visit
 #' adbds <- tribble(
-#'   ~USUBJID, ~AVISIT,  ~ASEQ, ~AVAL,
-#'   "1",      "WEEK 1",     1,    10,
-#'   "1",      "WEEK 1",     2,    NA,
-#'   "1",      "WEEK 2",     3,    NA,
-#'   "1",      "WEEK 3",     4,    42,
-#'   "1",      "WEEK 4",     5,    12,
-#'   "1",      "WEEK 4",     6,    12,
-#'   "1",      "WEEK 4",     7,    15,
-#'   "2",      "WEEK 1",     1,    21,
-#'   "2",      "WEEK 4",     2,    22
+#'   ~USUBJID,  ~AVISIT,  ~ASEQ, ~AVAL,
+#'        "1", "WEEK 1",      1,    10,
+#'        "1", "WEEK 1",      2,    NA,
+#'        "1", "WEEK 2",      3,    NA,
+#'        "1", "WEEK 3",      4,    42,
+#'        "1", "WEEK 4",      5,    12,
+#'        "1", "WEEK 4",      6,    12,
+#'        "1", "WEEK 4",      7,    15,
+#'        "2", "WEEK 1",      1,    21,
+#'        "2", "WEEK 4",      2,    22
 #' )
 #'
 #' derive_var_merged_summary(
@@ -1006,25 +1006,25 @@ get_not_mapped <- function() {
 #' # Add a variable listing the lesion ids at baseline
 #' adsl <- tribble(
 #'   ~USUBJID,
-#'   "1",
-#'   "2",
-#'   "3"
+#'        "1",
+#'        "2",
+#'        "3"
 #' )
 #'
 #' adtr <- tribble(
-#'   ~USUBJID, ~AVISIT,    ~LESIONID,
-#'   "1",      "BASELINE", "INV-T1",
-#'   "1",      "BASELINE", "INV-T2",
-#'   "1",      "BASELINE", "INV-T3",
-#'   "1",      "BASELINE", "INV-T4",
-#'   "1",      "WEEK 1",   "INV-T1",
-#'   "1",      "WEEK 1",   "INV-T2",
-#'   "1",      "WEEK 1",   "INV-T4",
-#'   "2",      "BASELINE", "INV-T1",
-#'   "2",      "BASELINE", "INV-T2",
-#'   "2",      "BASELINE", "INV-T3",
-#'   "2",      "WEEK 1",   "INV-T1",
-#'   "2",      "WEEK 1",   "INV-N1"
+#'   ~USUBJID,     ~AVISIT, ~LESIONID,
+#'        "1",  "BASELINE",  "INV-T1",
+#'        "1",  "BASELINE",  "INV-T2",
+#'        "1",  "BASELINE",  "INV-T3",
+#'        "1",  "BASELINE",  "INV-T4",
+#'        "1",    "WEEK 1",  "INV-T1",
+#'        "1",    "WEEK 1",  "INV-T2",
+#'        "1",    "WEEK 1",  "INV-T4",
+#'        "2",  "BASELINE",  "INV-T1",
+#'        "2",  "BASELINE",  "INV-T2",
+#'        "2",  "BASELINE",  "INV-T3",
+#'        "2",    "WEEK 1",  "INV-T1",
+#'        "2",    "WEEK 1",  "INV-N1"
 #' )
 #'
 #' derive_var_merged_summary(

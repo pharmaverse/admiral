@@ -26,7 +26,7 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' vs <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID,     ~VISIT, ~VSTESTCD, ~VSSTRESN,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID,     ~VISIT, ~VSTESTCD, ~VSSTRESN,
 #'   "PILOT01",    "VS", "04-1025", "BASELINE",   "DIABP",        82,
 #'   "PILOT01",    "VS", "04-1025", "BASELINE",   "DIABP",        82,
 #'   "PILOT01",    "VS", "04-1025", "BASELINE",   "DIABP",        86,
@@ -63,8 +63,8 @@
 #'
 #' ref_ranges <- tribble(
 #'   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-#'   "DIABP",      60,     80,    40,    90,
-#'   "PULSE",      60,    100,    40,   110
+#'    "DIABP",     60,     80,    40,    90,
+#'    "PULSE",     60,    100,    40,   110
 #' )
 #'
 #' vs %>% filter(PARAMCD %in% c("PULSE", "DIABP")) %>%

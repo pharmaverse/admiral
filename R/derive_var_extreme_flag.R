@@ -62,7 +62,7 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' vs <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~VSTESTCD, ~VSSTRESN,      ~VISIT, ~VSTPTNUM,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~VSTESTCD, ~VSSTRESN,      ~VISIT, ~VSTPTNUM,
 #'   "PILOT01",    "VS", "10-1187",   "DIABP",        70, "SCREENING",       815,
 #'   "PILOT01",    "VS", "10-1187",   "DIABP",        78, "SCREENING",       816,
 #'   "PILOT01",    "VS", "10-1187",   "DIABP",        80, "SCREENING",       817,
@@ -107,7 +107,7 @@
 #' # Baseline (ABLFL) examples:
 #'
 #' input <- tribble(
-#'   ~STUDYID,   ~USUBJID,  ~PARAMCD,     ~AVISIT,          ~ADT, ~AVAL,    ~DTYPE,
+#'    ~STUDYID,   ~USUBJID,  ~PARAMCD,     ~AVISIT,          ~ADT, ~AVAL,    ~DTYPE,
 #'   "PILOT01",  "10-1187", "PARAM01",  "BASELINE",  "2021-04-27",  15.0,        NA,
 #'   "PILOT01",  "10-1187", "PARAM01",  "BASELINE",  "2021-04-25",  14.0,        NA,
 #'   "PILOT01",  "10-1187", "PARAM01",  "BASELINE",  "2021-04-23",  15.0, "AVERAGE",
@@ -187,7 +187,7 @@
 #'
 #' # OCCURDS Examples
 #' ae <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~AESEQ,        ~AEDECOD,     ~AEBODSYS,     ~AESEV, ~AESTDY,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~AESEQ,        ~AEDECOD,     ~AEBODSYS,     ~AESEV, ~AESTDY,
 #'   "PILOT01",    "AE", "10-1187",      1,    "IRRITATION",     "GENERAL",     "MILD",      44,
 #'   "PILOT01",    "AE", "10-1271",      3,  "FIBRILLATION",     "CARDIAC", "MODERATE",      56,
 #'   "PILOT01",    "AE", "10-1271",      4,       "CARDIAC",     "CARDIAC", "MODERATE",      57,

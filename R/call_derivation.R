@@ -37,7 +37,7 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' adsl <- tribble(
-#'   ~STUDYID,  ~USUBJID,      ~TRTSDT,      ~TRTEDT,
+#'    ~STUDYID,  ~USUBJID,      ~TRTSDT,      ~TRTEDT,
 #'   "PILOT01", "01-1307",           NA,           NA,
 #'   "PILOT01", "05-1377", "2014-01-04", "2014-01-25",
 #'   "PILOT01", "06-1384", "2012-09-15", "2012-09-24",
@@ -49,7 +49,7 @@
 #'   )
 #'
 #' ae <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID,     ~AESTDTC,     ~AEENDTC,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID,     ~AESTDTC,     ~AEENDTC,
 #'   "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
 #'   "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
 #'   "PILOT01",    "AE", "06-1384", "2012-09-23", "2012-09-29",
@@ -151,7 +151,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #' library(dplyr, warn.conflicts = FALSE)
 #'
 #' adsl <- tribble(
-#'   ~STUDYID,  ~USUBJID,      ~TRTSDT,      ~TRTEDT,
+#'    ~STUDYID,  ~USUBJID,      ~TRTSDT,      ~TRTEDT,
 #'   "PILOT01", "01-1307",           NA,           NA,
 #'   "PILOT01", "05-1377", "2014-01-04", "2014-01-25",
 #'   "PILOT01", "06-1384", "2012-09-15", "2012-09-24",
@@ -163,7 +163,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'   )
 #'
 #' ae <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID,     ~AESTDTC,     ~AEENDTC,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID,     ~AESTDTC,     ~AEENDTC,
 #'   "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
 #'   "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
 #'   "PILOT01",    "AE", "06-1384", "2012-09-23", "2012-09-29",

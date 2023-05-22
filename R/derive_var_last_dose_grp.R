@@ -38,7 +38,7 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' ex_single <- tribble(
-#'  ~STUDYID, ~DOMAIN,  ~USUBJID, ~EXSEQ, ~EXDOSE,  ~EXTRT,     ~EXENDTC,     ~EXSTDTC, ~EXDOSFRQ,
+#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~EXSEQ, ~EXDOSE,  ~EXTRT,     ~EXENDTC,     ~EXSTDTC, ~EXDOSFRQ,
 #'   "PILOT1",    "EX", "18-1066",     1L,      54, "XANO", "2013-07-07", "2013-07-07",    "ONCE",
 #'   "PILOT1",    "EX", "18-1066",     2L,      54, "XANO", "2013-07-08", "2013-07-08",    "ONCE",
 #'   "PILOT1",    "EX", "18-1066",     3L,      54, "XANO", "2013-07-09", "2013-07-09",    "ONCE",
@@ -63,7 +63,7 @@
 #' )
 #'
 #' ae <- tribble(
-#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,                 ~AETERM,
+#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,                 ~AETERM,
 #'   "PILOT01",    "AE", "10-1083",      1, "2013-08-02", "MYOCARDIAL INFARCTION",
 #'   "PILOT01",    "AE", "18-1066",      2, "2013-07-18",             "AGITATION",
 #'   "PILOT01",    "AE", "18-1066",      4, "2013-07-30",          "INFLAMMATION",
