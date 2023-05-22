@@ -28,13 +28,13 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' dm <- tribble(
-#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
-#'   "PILOT01",    "DM", "01-1302",   61, "YEARS",
-#'   "PILOT01",    "DM", "17-1344",   64, "YEARS"
+#'   ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+#'   "PILOT01",   "DM", "01-1302",   61, "YEARS",
+#'   "PILOT01",   "DM", "17-1344",   64, "YEARS"
 #' )
 #'
 #' vs <- tribble(
-#'    ~STUDYID, ~DOMAIN,  ~USUBJID, ~VSTESTCD,     ~VISIT,     ~VSTPT, ~VSSTRESN,
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~VSTESTCD,     ~VISIT,     ~VSTPT, ~VSSTRESN,
 #'   "PILOT01",    "VS", "01-1302",   "DIABP", "BASELINE",    "LYING",        76,
 #'   "PILOT01",    "VS", "01-1302",   "DIABP", "BASELINE", "STANDING",        87,
 #'   "PILOT01",    "VS", "01-1302",   "DIABP",   "WEEK 2",    "LYING",        71,
@@ -103,20 +103,20 @@ get_admiral_option <- function(option) {
 #' # Derive a new parameter for measurable disease at baseline
 #' adsl <- tribble(
 #'   ~USUBJID2,
-#'         "1",
-#'         "2",
-#'         "3"
+#'   "1",
+#'   "2",
+#'   "3"
 #' ) %>%
 #'   mutate(STUDYID = "XX1234")
 #'
 #' tu <- tribble(
 #'   ~USUBJID2,      ~VISIT,    ~TUSTRESC,
-#'         "1", "SCREENING",     "TARGET",
-#'         "1",    "WEEK 1",     "TARGET",
-#'         "1",    "WEEK 5",     "TARGET",
-#'         "1",    "WEEK 9", "NON-TARGET",
-#'         "2", "SCREENING", "NON-TARGET",
-#'         "2", "SCREENING", "NON-TARGET"
+#'   "1",       "SCREENING",     "TARGET",
+#'   "1",          "WEEK 1",     "TARGET",
+#'   "1",          "WEEK 5",     "TARGET",
+#'   "1",          "WEEK 9", "NON-TARGET",
+#'   "2",       "SCREENING", "NON-TARGET",
+#'   "2",       "SCREENING", "NON-TARGET"
 #' ) %>%
 #'   mutate(
 #'     STUDYID = "XX1234",
