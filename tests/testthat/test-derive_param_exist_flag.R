@@ -32,7 +32,7 @@ adrs <- tibble::tribble(
 ## derive_param_merge_exist_flag Test 1: derive parameter indicating PD ----
 test_that("derive_param_exist_flag Test 1: derive parameter indicating PD", {
   actual <- derive_param_exist_flag(
-    dataset_adsl = adsl,
+    dataset_ref = adsl,
     dataset_add = adrs,
     filter_add = PARAMCD == "OVR",
     condition = AVALC == "PD",
@@ -66,7 +66,7 @@ test_that("derive_param_exist_flag Test 1: derive parameter indicating PD", {
 test_that("derive_param_exist_flag Test 2: error is issued if aval_fun returns wrong type", {
   expect_error(
     derive_param_exist_flag(
-      dataset_adsl = adsl,
+      dataset_ref = adsl,
       dataset_add = adrs,
       filter_add = PARAMCD == "OVR",
       condition = AVALC == "PD",
@@ -91,7 +91,7 @@ test_that("derive_param_exist_flag Test 3: error is issued if paramter already e
   expect_error(
     derive_param_exist_flag(
       dataset = adrs,
-      dataset_adsl = adsl,
+      dataset_ref = adsl,
       dataset_add = adrs,
       filter_add = PARAMCD == "OVR",
       condition = AVALC == "PD",
