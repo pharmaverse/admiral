@@ -33,7 +33,7 @@ is less than or equal \code{A1HI}
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 vs <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID,     ~VISIT, ~VSTESTCD, ~VSSTRESN,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID,     ~VISIT, ~VSTESTCD, ~VSSTRESN,
   "PILOT01",    "VS", "04-1025", "BASELINE",   "DIABP",        82,
   "PILOT01",    "VS", "04-1025", "BASELINE",   "DIABP",        82,
   "PILOT01",    "VS", "04-1025", "BASELINE",   "DIABP",        86,
@@ -74,7 +74,8 @@ ref_ranges <- tribble(
   "PULSE",      60,    100,    40,   110
 )
 
-vs \%>\% filter(PARAMCD \%in\% c("PULSE", "DIABP")) \%>\%
+vs \%>\%
+  filter(PARAMCD \%in\% c("PULSE", "DIABP")) \%>\%
   derive_vars_merged(ref_ranges, by_vars = exprs(PARAMCD)) \%>\%
   derive_var_anrind() \%>\%
   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)

@@ -116,14 +116,14 @@ first or last observation for each by group.
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 dm <- tribble(
-  ~STUDYID, ~DOMAIN, ~USUBJID, ~AGE,   ~AGEU,
+  ~STUDYID,  ~DOMAIN, ~USUBJID, ~AGE,   ~AGEU,
   "PILOT01",    "DM",   "1023",   64, "YEARS",
   "PILOT01",    "DM",   "1028",   71, "YEARS",
   "PILOT01",    "DM",   "1033",   74, "YEARS"
 )
 
 ds <- tribble(
-  ~STUDYID, ~DOMAIN, ~USUBJID,      ~VISIT,           ~DSCAT,          ~DSDECOD,
+  ~STUDYID,  ~DOMAIN, ~USUBJID,      ~VISIT,           ~DSCAT,          ~DSDECOD,
   "PILOT01",    "DS",   "1023",  "BASELINE", "PROT MILESTONE",      "RANDOMIZED",
   "PILOT01",    "DS",   "1023",    "WEEK 4",     "DISP EVENT",   "ADVERSE EVENT",
   "PILOT01",    "DS",   "1023",    "WEEK 4",    "OTHER EVENT", "FINAL LAB VISIT",

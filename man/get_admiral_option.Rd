@@ -27,12 +27,12 @@ multiple times in a script, such as \code{subject_keys}.
 library(dplyr, warn.conflicts = FALSE)
 dm <- tribble(
   ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
-  "PILOT01",    "DM", "01-1302",   61, "YEARS",
-  "PILOT01",    "DM", "17-1344",   64, "YEARS"
+  "PILOT01",   "DM", "01-1302",   61, "YEARS",
+  "PILOT01",   "DM", "17-1344",   64, "YEARS"
 )
 
 vs <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID, ~VSTESTCD,     ~VISIT,     ~VSTPT, ~VSSTRESN,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~VSTESTCD,     ~VISIT,     ~VSTPT, ~VSSTRESN,
   "PILOT01",    "VS", "01-1302",   "DIABP", "BASELINE",    "LYING",        76,
   "PILOT01",    "VS", "01-1302",   "DIABP", "BASELINE", "STANDING",        87,
   "PILOT01",    "VS", "01-1302",   "DIABP",   "WEEK 2",    "LYING",        71,

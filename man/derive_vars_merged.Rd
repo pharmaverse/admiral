@@ -148,7 +148,7 @@ observation in the input dataset are ignored.
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 vs <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID, ~VSTESTCD,      ~VISIT, ~VSSTRESN, ~VSSTRESU,       ~VSDTC,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~VSTESTCD,      ~VISIT, ~VSSTRESN, ~VSSTRESU,       ~VSDTC,
   "PILOT01",    "VS", "01-1302",  "HEIGHT", "SCREENING",     177.8,      "cm", "2013-08-20",
   "PILOT01",    "VS", "01-1302",  "WEIGHT", "SCREENING",     81.19,      "kg", "2013-08-20",
   "PILOT01",    "VS", "01-1302",  "WEIGHT",  "BASELINE",      82.1,      "kg", "2013-08-29",
@@ -167,7 +167,7 @@ vs <- tribble(
 )
 
 dm <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
   "PILOT01",    "DM", "01-1302",   61, "YEARS",
   "PILOT01",    "DM", "17-1344",   64, "YEARS"
 )
@@ -184,7 +184,7 @@ derive_vars_merged(
 
 # Merge last weight to adsl
 adsl <- tribble(
-  ~STUDYID,  ~USUBJID, ~AGE,   ~AGEU,
+  ~STUDYID,   ~USUBJID, ~AGE,   ~AGEU,
   "PILOT01", "01-1302",   61, "YEARS",
   "PILOT01", "17-1344",   64, "YEARS"
 )
@@ -205,7 +205,7 @@ derive_vars_merged(
 
 # Derive treatment start datetime (TRTSDTM)
 ex <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID, ~EXSTDY, ~EXENDY,     ~EXSTDTC,     ~EXENDTC,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~EXSTDY, ~EXENDY,     ~EXSTDTC,     ~EXENDTC,
   "PILOT01",    "EX", "01-1302",       1,      18, "2013-08-29", "2013-09-15",
   "PILOT01",    "EX", "01-1302",      19,      69, "2013-09-16", "2013-11-05",
   "PILOT01",    "EX", "17-1344",       1,      14, "2014-01-11", "2014-01-24",

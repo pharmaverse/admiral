@@ -592,7 +592,6 @@ derive_var_merged_cat <- function(dataset,
 #'   missing_value = "M"
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
-
 derive_var_merged_exist_flag <- function(dataset,
                                          dataset_add,
                                          by_vars,
@@ -823,15 +822,15 @@ derive_var_merged_character <- function(dataset,
 #' )
 #'
 #' param_lookup <- tribble(
-#'  ~VSTESTCD,                 ~VSTEST, ~PARAMCD,                       ~PARAM,
-#'  "SYSBP", "Systolic Blood Pressure",  "SYSBP", "Syst Blood Pressure (mmHg)",
-#'  "WEIGHT",                 "Weight", "WEIGHT",                "Weight (kg)",
-#'  "HEIGHT",                 "Height", "HEIGHT",                "Height (cm)",
-#'  "TEMP",              "Temperature",   "TEMP",            "Temperature (C)",
-#'  "MAP",    "Mean Arterial Pressure",    "MAP",   "Mean Art Pressure (mmHg)",
-#'  "BMI",           "Body Mass Index",    "BMI",    "Body Mass Index(kg/m^2)",
-#'  "BSA",         "Body Surface Area",    "BSA",     "Body Surface Area(m^2)"
-#'      )
+#'   ~VSTESTCD,                 ~VSTEST, ~PARAMCD,                       ~PARAM,
+#'   "SYSBP", "Systolic Blood Pressure",  "SYSBP", "Syst Blood Pressure (mmHg)",
+#'   "WEIGHT",                 "Weight", "WEIGHT",                "Weight (kg)",
+#'   "HEIGHT",                 "Height", "HEIGHT",                "Height (cm)",
+#'   "TEMP",              "Temperature",   "TEMP",            "Temperature (C)",
+#'   "MAP",    "Mean Arterial Pressure",    "MAP",   "Mean Art Pressure (mmHg)",
+#'   "BMI",           "Body Mass Index",    "BMI",    "Body Mass Index(kg/m^2)",
+#'   "BSA",         "Body Surface Area",    "BSA",     "Body Surface Area(m^2)"
+#' )
 #'
 #' derive_vars_merged_lookup(
 #'   dataset = vs,
@@ -992,9 +991,9 @@ get_not_mapped <- function() {
 #'   "1",      "WEEK 4",      7,    15,
 #'   "2",      "WEEK 1",      1,    21,
 #'   "2",      "WEEK 4",      2,    22
+#' )
 #'
-#'
-#'      derive_var_merged_summary(
+#' derive_var_merged_summary(
 #'   adbds,
 #'   dataset_add = adbds,
 #'   by_vars = exprs(USUBJID, AVISIT),

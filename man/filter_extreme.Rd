@@ -59,7 +59,7 @@ order specified for the \code{order} parameter and the mode specified for the
 library(dplyr, warn.conflicts = FALSE)
 
 ex <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID, ~EXSEQ, ~EXDOSE,    ~EXTRT,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~EXSEQ, ~EXDOSE,    ~EXTRT,
   "PILOT01",    "EX", "01-1442",      1,      54,    "XANO",
   "PILOT01",    "EX", "01-1442",      2,      54,    "XANO",
   "PILOT01",    "EX", "01-1442",      3,      54,    "XANO",

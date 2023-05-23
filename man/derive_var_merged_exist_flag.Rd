@@ -95,14 +95,14 @@ observation exists and for all observations the condition evaluates to
 library(dplyr, warn.conflicts = FALSE)
 
 dm <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
   "PILOT01",    "DM", "01-1028",   71, "YEARS",
   "PILOT01",    "DM", "04-1127",   84, "YEARS",
   "PILOT01",    "DM", "06-1049",   60, "YEARS"
 )
 
 ae <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID,    ~AETERM,     ~AEREL,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID,    ~AETERM,     ~AEREL,
   "PILOT01",    "AE", "01-1028", "ERYTHEMA", "POSSIBLE",
   "PILOT01",    "AE", "01-1028", "PRURITUS", "PROBABLE",
   "PILOT01",    "AE", "06-1049",  "SYNCOPE", "POSSIBLE",
@@ -120,7 +120,7 @@ derive_var_merged_exist_flag(
   select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
 
 vs <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSBLFL,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSBLFL,
   "PILOT01",    "VS", "01-1028", "SCREENING",  "HEIGHT",     177.8,      NA,
   "PILOT01",    "VS", "01-1028", "SCREENING",  "WEIGHT",     98.88,      NA,
   "PILOT01",    "VS", "01-1028",  "BASELINE",  "WEIGHT",     99.34,     "Y",
