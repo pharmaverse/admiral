@@ -6,34 +6,42 @@
 \usage{
 derive_param_exist_flag(
   dataset = NULL,
-  dataset_adsl,
+  dataset_ref,
   dataset_add,
   condition,
   true_value = "Y",
   false_value = NA_character_,
   missing_value = NA_character_,
   filter_add = NULL,
+<<<<<<< Updated upstream
   aval_fun,
   subject_keys = get_admiral_option("subject_keys"),
   set_values_to
+=======
+  aval_fun = yn_to_numeric,
+  by_vars = get_admiral_option("subject_keys"),
+  set_values_to,
+  dataset_adsl,
+  subject_keys
+>>>>>>> Stashed changes
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified for \code{subject_keys} and the \code{PARAMCD} variable are
+The variables specified for \code{by_vars} and the \code{PARAMCD} variable are
 expected.}
 
-\item{dataset_adsl}{ADSL input dataset
+\item{dataset_ref}{(ADSL) input dataset
 
-The variables specified for \code{subject_keys} are expected. For each subject
-(as defined by \code{subject_keys}) from the specified dataset (\code{dataset_adsl}),
+The variables specified for \code{by_vars} are expected. For each subject
+(as defined by \code{by_vars}) from the specified dataset (\code{dataset_ref}),
 the existence flag is calculated and added as a new observation to the
 input datasets (\code{dataset})}
 
 \item{dataset_add}{Additional dataset
 
-The variables specified by the \code{subject_keys} parameter are expected.
+The variables specified by the \code{by_vars} parameter are expected.
 
 This dataset is used to check if an event occurred or not. Any observation
 in the dataset fulfilling the event condition (\code{condition}) is considered
@@ -94,7 +102,7 @@ analysis value (\code{AVAL})
 
 \emph{Deprecated}, please use \code{set_values_to} instead.}
 
-\item{subject_keys}{Variables to uniquely identify a subject
+\item{by_vars}{Variables to uniquely identify a subject
 
 A list of symbols created using \code{exprs()} is expected.}
 
@@ -102,11 +110,16 @@ A list of symbols created using \code{exprs()} is expected.}
 
 A named list returned by \code{exprs()} defining the variables to be set for the
 new parameter, e.g. \code{exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at Baseline")} is expected. The values must be symbols, character strings,
-numeric values, \code{NA}, or expressions.}
+numeric values, or \code{NA}.}
+
+\item{dataset_adsl}{\emph{Deprecated}, please use \code{dataset_ref} instead.}
+
+\item{subject_keys}{\emph{Deprecated}, please use \code{by_vars} instead.}
+
 }
 \value{
 The input dataset with a new parameter indicating if an event
-occurred (\code{AVALC}, \code{AVAL}, and the variables specified by \code{subject_keys}
+occurred (\code{AVALC}, \code{AVAL}, and the variables specified by \code{by_vars}
 and \code{set_value_to} are populated for the new parameter)
 }
 \description{
@@ -119,7 +132,7 @@ baseline.
 \enumerate{
 \item The additional dataset (\code{dataset_add}) is restricted to the observations
 matching the \code{filter_add} condition.
-\item For each subject in \code{dataset_adsl} a new observation is created.
+\item For each subject in \code{dataset_ref} a new observation is created.
 \itemize{
 \item The \code{AVALC} variable is added and set to the true value (\code{true_value})
 if for the subject at least one observation exists in the (restricted)
@@ -164,7 +177,7 @@ tu <- tribble(
   )
 
 derive_param_exist_flag(
-  dataset_adsl = adsl,
+  dataset_ref = adsl,
   dataset_add = tu,
   filter_add = TUTESTCD == "TUMIDENT" & VISIT == "SCREENING",
   condition = TUSTRESC == "TARGET",
@@ -178,7 +191,7 @@ derive_param_exist_flag(
 )
 }
 \seealso{
-BDS-Findings Functions for adding Parameters/Records: 
+BDS-Findings Functions for adding Parameters/Records:
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_event}()},

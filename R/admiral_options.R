@@ -113,7 +113,7 @@ get_admiral_option <- function(option) {
 #'   )
 #'
 #' derive_param_exist_flag(
-#'   dataset_adsl = adsl,
+#'   dataset_ref = adsl,
 #'   dataset_add = tu,
 #'   filter_add = TUTESTCD == "TUMIDENT" & VISIT == "SCREENING",
 #'   condition = TUSTRESC == "TARGET",
