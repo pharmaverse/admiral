@@ -94,11 +94,8 @@ local({
       return(repos)
   
     # if we're testing, re-use the test repositories
-    if (renv_bootstrap_tests_running()) {
-      repos <- getOption("renv.tests.repos")
-      if (!is.null(repos))
-        return(repos)
-    }
+    if (renv_bootstrap_tests_running())
+      return(getOption("renv.tests.repos"))
   
     # retrieve current repos
     repos <- getOption("repos")
@@ -347,7 +344,8 @@ local({
       return()
   
     # allow directories
-    if (dir.exists(tarball)) {
+    info <- file.info(tarball, extra_cols = FALSE)
+    if (identical(info$isdir, TRUE)) {
       name <- sprintf("renv_%s.tar.gz", version)
       tarball <- file.path(tarball, name)
     }
@@ -661,8 +659,8 @@ local({
     if (version == loadedversion)
       return(TRUE)
   
-    # assume four-component versions are from GitHub;
-    # three-component versions are from CRAN
+    # assume four-component versions are from GitHub; three-component
+    # versions are from CRAN
     components <- strsplit(loadedversion, "[.-]")[[1]]
     remote <- if (length(components) == 4L)
       paste("rstudio/renv", loadedversion, sep = "@")
@@ -701,12 +699,6 @@ local({
   
     # warn if the version of renv loaded does not match
     renv_bootstrap_validate_version(version)
-  
-    # execute renv load hooks, if any
-    hooks <- getHook("renv::autoload")
-    for (hook in hooks)
-      if (is.function(hook))
-        tryCatch(hook(), error = warning)
   
     # load the project
     renv::load(project)
@@ -850,29 +842,11 @@ local({
   
   renv_json_read <- function(file = NULL, text = NULL) {
   
-    jlerr <- NULL
-  
     # if jsonlite is loaded, use that instead
-    if ("jsonlite" %in% loadedNamespaces()) {
-  
-      json <- catch(renv_json_read_jsonlite(file, text))
-      if (!inherits(json, "error"))
-        return(json)
-  
-      jlerr <- json
-  
-    }
-  
-    # otherwise, fall back to the default JSON reader
-    json <- catch(renv_json_read_default(file, text))
-    if (!inherits(json, "error"))
-      return(json)
-  
-    # report an error
-    if (!is.null(jlerr))
-      stop(jlerr)
+    if ("jsonlite" %in% loadedNamespaces())
+      renv_json_read_jsonlite(file, text)
     else
-      stop(json)
+      renv_json_read_default(file, text)
   
   }
   
