@@ -258,7 +258,6 @@ derive_vars_merged(
   order = exprs(EXENDTM),
   mode = "last"
 )
-
 # Modify merged values and set value for non matching observations
 adsl <- tribble(
   ~USUBJID, ~SEX, ~COUNTRY,
