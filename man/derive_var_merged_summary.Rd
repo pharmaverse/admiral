@@ -94,7 +94,7 @@ adbds <- tribble(
   "2",      "WEEK 4",      2,    22
 )
 
- derive_var_merged_summary(
+derive_var_merged_summary(
   adbds,
   dataset_add = adbds,
   by_vars = exprs(USUBJID, AVISIT),
@@ -147,8 +147,6 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
-\code{\link{derive_var_merged_cat}()},
-\code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},

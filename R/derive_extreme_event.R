@@ -12,9 +12,8 @@
 #'   If a particular event from `events` has more than one observation, within
 #'   the event and by group, the records are ordered by the specified order.
 #'
-#'   *Permitted Values:* list of variables or `desc(<variable>)` function calls
-#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))`
-#'
+#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))`
 #'
 #' @param mode Selection mode (first or last)
 #'
@@ -113,7 +112,7 @@ derive_extreme_event <- function(dataset,
   # Check input parameters
   assert_vars(by_vars, optional = TRUE)
   assert_list_of(events, "event")
-  assert_order_vars(order)
+  assert_expr_list(order)
   assert_data_frame(
     dataset,
     required_vars = by_vars

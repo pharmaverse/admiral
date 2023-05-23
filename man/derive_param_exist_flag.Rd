@@ -13,7 +13,7 @@ derive_param_exist_flag(
   false_value = NA_character_,
   missing_value = NA_character_,
   filter_add = NULL,
-  aval_fun = yn_to_numeric,
+  aval_fun,
   subject_keys = get_admiral_option("subject_keys"),
   set_values_to
 )
@@ -92,10 +92,7 @@ considered.
 \item{aval_fun}{Function to map character analysis value (\code{AVALC}) to numeric
 analysis value (\code{AVAL})
 
-The (first) argument of the function must expect a character vector and the
-function must return a numeric vector.
-
-\emph{Default:} \code{yn_to_numeric} (see \code{yn_to_numeric()} for details)}
+\emph{Deprecated}, please use \code{set_values_to} instead.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
@@ -105,7 +102,7 @@ A list of symbols created using \code{exprs()} is expected.}
 
 A named list returned by \code{exprs()} defining the variables to be set for the
 new parameter, e.g. \code{exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at Baseline")} is expected. The values must be symbols, character strings,
-numeric values, or \code{NA}.}
+numeric values, \code{NA}, or expressions.}
 }
 \value{
 The input dataset with a new parameter indicating if an event
@@ -133,7 +130,6 @@ to \code{FALSE} or \code{NA}.
 \item Otherwise, it is set to the missing value (\code{missing_value}), i.e., for
 those subject not in \code{dataset_add}.
 }
-\item The \code{AVAL} variable is added and set to \code{aval_fun(AVALC)}.
 \item The variables specified by the \code{set_values_to} parameter are added to
 the new observations.
 \item The new observations are added to input dataset.
@@ -175,6 +171,7 @@ derive_param_exist_flag(
   false_value = "N",
   missing_value = "N",
   set_values_to = exprs(
+    AVAL = yn_to_numeric(AVALC),
     PARAMCD = "MDIS",
     PARAM = "Measurable Disease at Baseline"
   )
@@ -192,7 +189,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_computed}()},
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_param_extreme_record}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

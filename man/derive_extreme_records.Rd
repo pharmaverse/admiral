@@ -5,33 +5,61 @@
 \title{Add the First or Last Observation for Each By Group as New Records}
 \usage{
 derive_extreme_records(
-  dataset,
+  dataset = NULL,
+  dataset_add = NULL,
+  dataset_ref = NULL,
   by_vars = NULL,
-  order,
-  mode,
+  order = NULL,
+  mode = NULL,
+  filter_add = NULL,
   check_type = "warning",
-  filter = NULL,
-  set_values_to
+  exist_flag = NULL,
+  true_value = "Y",
+  false_value = "N",
+  set_values_to,
+  filter
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{order} and the \code{by_vars} parameter are
-expected.}
+If \code{dataset_add} is not specified, the new records are selected from the
+input dataset. In this case the variables specified by \code{by_vars} and
+\code{order} are expected.}
+
+\item{dataset_add}{Additional dataset
+
+Observations from the specified dataset are added as new records to the
+input dataset (\code{dataset}).
+
+All observations in the specified dataset fulfilling the condition
+specified by \code{filter_source} are considered. If \code{mode} and \code{order} are
+specified, the first or last observation within each by group, defined by
+\code{by_vars}, is selected.
+
+If the argument is not specified, the input dataset (\code{dataset}) is used.
+
+The variables specified by the \code{by_vars} and \code{order} argument (if
+applicable) are expected.}
+
+\item{dataset_ref}{Reference dataset
+
+The variables specified for \code{by_vars} are expected. For each
+observation of the specified dataset a new observation is added to the
+input dataset.}
 
 \item{by_vars}{Grouping variables
 
-\emph{Default}: \code{NULL}
+If \code{dataset_ref} is specified, this argument must be specified.
 
-\emph{Permitted Values:} list of variables created by \code{exprs()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{order}{Sort order
 
 Within each by group the observations are ordered by the specified order.
 
-\emph{Permitted Values:} list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}}
+\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
 
 \item{mode}{Selection mode (first or last)
 
@@ -41,25 +69,41 @@ each by group is added to the input dataset.
 
 \emph{Permitted Values:} \code{"first"}, \code{"last"}}
 
+\item{filter_add}{Filter for additional dataset (\code{dataset_add})
+
+Only observations in \code{dataset_add} fulfilling the specified condition are
+considered.}
+
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
-if the observations of the input dataset are not unique with respect to the
-by variables and the order.
+if the observations of the (restricted) additional dataset are not unique
+with respect to the by variables and the order.
 
-\emph{Default:} \code{"warning"}
+\emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 
-\emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
+\item{exist_flag}{Existence flag
 
-\item{filter}{Filter for observations to consider
+The specified variable is added to the output dataset.
 
-Only observations fulfilling the specified condition are taken into account
-for selecting the first or last observation. If the parameter is not
-specified, all observations are considered.
+For by groups with at least one observation in the additional dataset
+(\code{dataset_add}) \code{exist_flag} is set to the value specified by the
+\code{true_value} argument.
 
-\emph{Default}: \code{NULL}
+For all other by groups \code{exist_flag} is set to the value specified by the
+\code{false_value} argument.
 
-\emph{Permitted Values}: a condition}
+\emph{Permitted Values:} Variable name}
+
+\item{true_value}{True value
+
+For new observations selected from the additional dataset (\code{dataset_add}),
+\code{exist_flag} is set to the specified value.}
+
+\item{false_value}{False value
+
+For new observations not selected from the additional dataset
+(\code{dataset_add}), \code{exist_flag} is set to the specified value.}
 
 \item{set_values_to}{Variables to be set
 
@@ -70,34 +114,50 @@ A list of variable name-value pairs is expected.
 \itemize{
 \item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
-symbol, a numeric value or \code{NA}, e.g., \code{exprs(PARAMCD = "TDOSE", PARCAT1 =   "OVERALL")}. More general expression are not allowed.
+symbol, a numeric value, an expression, or \code{NA}, e.g., \code{exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")}.
 }}
+
+\item{filter}{Filter for observations to consider
+
+\emph{Deprecated}, please use the above \code{filter_add} argument instead.
+
+Only observations fulfilling the specified condition are taken into account
+for selecting the first or last observation. If the argument is not
+specified, all observations are considered.
+
+\emph{Permitted Values}: a condition}
 }
 \value{
 The input dataset with the first or last observation of each by group
 added as new observations.
 }
 \description{
-Add the first or last observation for each by group as new observations. It
-can be used for example for adding the maximum or minimum value as a separate
-visit. All variables of the selected observation are kept. This distinguish
-\code{derive_extreme_records()} from \code{derive_summary_records()}, where only the by
-variables are populated for the new records.
+Add the first or last observation for each by group as new observations. The
+new observations can be selected from the input dataset or an additional
+dataset. This function can be used for adding the maximum or minimum value
+as a separate visit. All variables of the selected observation are kept. This
+distinguishes \code{derive_extreme_records()} from \code{derive_summary_records()},
+where only the by variables are populated for the new records.
 }
 \details{
 \enumerate{
-\item The input dataset is restricted as specified by the \code{filter} parameter.
+\item The additional dataset (\code{dataset_add}) is restricted as specified by the
+\code{filter_add} argument.
 \item For each group (with respect to the variables specified for the
-\code{by_vars} parameter) the first or last observation (with respect to the
-order specified for the \code{order} parameter and the mode specified for the
-\code{mode} parameter) is selected.
-\item The variables specified by the \code{set_values_to} parameter are added to
+\code{by_vars} argument) the first or last observation (with respect to the
+order specified for the \code{order} argument and the mode specified for the
+\code{mode} argument) is selected.
+\item If \code{dataset_ref} is specified, observations which are in \code{dataset_ref}
+but not in the selected records are added.
+\item The variables specified by the \code{set_values_to} argument are added to
 the selected observations.
 \item The observations are added to input dataset.
 }
 }
 \examples{
 library(tibble)
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate)
 
 adlb <- tribble(
   ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
@@ -117,7 +177,7 @@ derive_extreme_records(
   by_vars = exprs(USUBJID),
   order = exprs(AVAL, AVISITN),
   mode = "first",
-  filter = !is.na(AVAL),
+  filter_add = !is.na(AVAL),
   set_values_to = exprs(
     AVISITN = 97,
     DTYPE = "MINIMUM"
@@ -132,7 +192,7 @@ derive_extreme_records(
   by_vars = exprs(USUBJID),
   order = exprs(desc(AVAL), AVISITN),
   mode = "first",
-  filter = !is.na(AVAL),
+  filter_add = !is.na(AVAL),
   set_values_to = exprs(
     AVISITN = 98,
     DTYPE = "MAXIMUM"
@@ -151,6 +211,72 @@ derive_extreme_records(
     DTYPE = "LOV"
   )
 )
+
+# Derive a new parameter for the first disease progression (PD)
+adsl <- tribble(
+  ~USUBJID, ~DTHDT,
+  "1",      ymd("2022-05-13"),
+  "2",      ymd(""),
+  "3",      ymd("")
+) \%>\%
+  mutate(STUDYID = "XX1234")
+
+adrs <- tribble(
+  ~USUBJID, ~ADTC,        ~AVALC,
+  "1",      "2020-01-02", "PR",
+  "1",      "2020-02-01", "CR",
+  "1",      "2020-03-01", "CR",
+  "1",      "2020-04-01", "SD",
+  "2",      "2021-06-15", "SD",
+  "2",      "2021-07-16", "PD",
+  "2",      "2021-09-14", "PD"
+) \%>\%
+  mutate(
+    STUDYID = "XX1234",
+    ADT = ymd(ADTC),
+    PARAMCD = "OVR",
+    PARAM = "Overall Response",
+    ANL01FL = "Y"
+  ) \%>\%
+  select(-ADTC)
+
+derive_extreme_records(
+  adrs,
+  dataset_ref = adsl,
+  dataset_add = adrs,
+  by_vars = exprs(STUDYID, USUBJID),
+  filter_add = PARAMCD == "OVR" & AVALC == "PD",
+  order = exprs(ADT),
+  exist_flag = AVALC,
+  true_value = "Y",
+  false_value = "N",
+  mode = "first",
+  set_values_to = exprs(
+    PARAMCD = "PD",
+    PARAM = "Disease Progression",
+    AVAL = yn_to_numeric(AVALC),
+    ANL01FL = "Y",
+    ADT = ADT
+  )
+)
+
+# derive parameter indicating death
+derive_extreme_records(
+  dataset_ref = adsl,
+  dataset_add = adsl,
+  by_vars = exprs(STUDYID, USUBJID),
+  filter_add = !is.na(DTHDT),
+  exist_flag = AVALC,
+  true_value = "Y",
+  false_value = "N",
+  mode = "first",
+  set_values_to = exprs(
+    PARAMCD = "DEATH",
+    PARAM = "Death",
+    ANL01FL = "Y",
+    ADT = DTHDT
+  )
+)
 }
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 
@@ -164,7 +290,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_param_extreme_record}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

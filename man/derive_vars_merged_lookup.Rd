@@ -42,10 +42,10 @@ If the argument is set to a non-null value, for each by group the first or
 last observation from the additional dataset is selected with respect to the
 specified order.
 
-\emph{Default}: \code{NULL}
+Variables defined by the \code{new_vars} argument can be used in the sort order.
 
-\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{new_vars}{Variables to add
 
@@ -59,12 +59,15 @@ And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 \code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
 \code{old_var2} to \code{new_var2}.
 
+Values of the added variables can be modified by specifying an expression.
+For example, \code{new_vars = LASTRSP = exprs(str_to_upper(AVALC))} adds the
+variable \code{LASTRSP} to the dataset and sets it to the upper case value of
+\code{AVALC}.
+
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
 
-\emph{Default}: \code{NULL}
-
-\emph{Permitted Values}: list of variables created by \code{exprs()}}
+\emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
 
 \item{mode}{Selection mode
 
@@ -72,8 +75,6 @@ Determines if the first or last observation is selected. If the \code{order}
 argument is specified, \code{mode} must be non-null.
 
 If the \code{order} argument is not specified, the \code{mode} argument is ignored.
-
-\emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
 
@@ -83,7 +84,8 @@ Only observations fulfilling the specified condition are taken into account
 for merging. If the argument is not specified, all observations are
 considered.
 
-\emph{Default}: \code{NULL}
+Variables defined by the \code{new_vars} argument can be used in the filter
+condition.
 
 \emph{Permitted Values}: a condition}
 
@@ -92,8 +94,6 @@ considered.
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
 if the observations of the (restricted) additional dataset are not unique
 with respect to the by variables and the order.
-
-\emph{Default}: \code{"warning"}
 
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 
@@ -154,15 +154,15 @@ vs <- tribble(
 )
 
 param_lookup <- tribble(
- ~VSTESTCD,                 ~VSTEST, ~PARAMCD,                       ~PARAM,
- "SYSBP", "Systolic Blood Pressure",  "SYSBP", "Syst Blood Pressure (mmHg)",
- "WEIGHT",                 "Weight", "WEIGHT",                "Weight (kg)",
- "HEIGHT",                 "Height", "HEIGHT",                "Height (cm)",
- "TEMP",              "Temperature",   "TEMP",            "Temperature (C)",
- "MAP",    "Mean Arterial Pressure",    "MAP",   "Mean Art Pressure (mmHg)",
- "BMI",           "Body Mass Index",    "BMI",    "Body Mass Index(kg/m^2)",
- "BSA",         "Body Surface Area",    "BSA",     "Body Surface Area(m^2)"
-     )
+  ~VSTESTCD,                 ~VSTEST, ~PARAMCD,                       ~PARAM,
+  "SYSBP", "Systolic Blood Pressure",  "SYSBP", "Syst Blood Pressure (mmHg)",
+  "WEIGHT",                 "Weight", "WEIGHT",                "Weight (kg)",
+  "HEIGHT",                 "Height", "HEIGHT",                "Height (cm)",
+  "TEMP",              "Temperature",   "TEMP",            "Temperature (C)",
+  "MAP",    "Mean Arterial Pressure",    "MAP",   "Mean Art Pressure (mmHg)",
+  "BMI",           "Body Mass Index",    "BMI",    "Body Mass Index(kg/m^2)",
+  "BSA",         "Body Surface Area",    "BSA",     "Body Surface Area(m^2)"
+)
 
 derive_vars_merged_lookup(
   dataset = vs,
@@ -179,8 +179,6 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
-\code{\link{derive_var_merged_cat}()},
-\code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},

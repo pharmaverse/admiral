@@ -30,20 +30,43 @@ adrs <- tibble::tribble(
   select(-ADTC)
 
 # derive_param_extreme_event ----
-## Test 1: derive first PD date ----
-test_that("derive_param_extreme_event Test 1: derive first PD date", {
-  actual <- derive_param_extreme_event(
-    adrs,
-    dataset_adsl = adsl,
-    dataset_source = adrs,
-    filter_source = PARAMCD == "OVR" & AVALC == "PD",
-    new_var = AVALC,
-    order = exprs(ADT),
-    set_values_to = exprs(
-      PARAMCD = "PD",
-      ANL01FL = "Y",
-      ADT = ADT
-    )
+## Test 1: deprecation warning if function is called ----
+test_that("derive_param_extreme_event Test 1: deprecation warning if function is called", {
+  expect_warning(
+    derive_param_extreme_event(
+      adrs,
+      dataset_adsl = adsl,
+      dataset_source = adrs,
+      filter_source = PARAMCD == "OVR" & AVALC == "PD",
+      new_var = AVALC,
+      order = exprs(ADT),
+      set_values_to = exprs(
+        PARAMCD = "PD",
+        ANL01FL = "Y",
+        ADT = ADT
+      )
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
+})
+
+## Test 2: derive first PD date ----
+test_that("derive_param_extreme_event Test 2: derive first PD date", {
+  actual <- suppress_warning(
+    derive_param_extreme_event(
+      adrs,
+      dataset_adsl = adsl,
+      dataset_source = adrs,
+      filter_source = PARAMCD == "OVR" & AVALC == "PD",
+      new_var = AVALC,
+      order = exprs(ADT),
+      set_values_to = exprs(
+        PARAMCD = "PD",
+        ANL01FL = "Y",
+        ADT = ADT
+      )
+    ),
+    regexpr = "was deprecated"
   )
 
   expected <- bind_rows(
@@ -68,21 +91,24 @@ test_that("derive_param_extreme_event Test 1: derive first PD date", {
   )
 })
 
-## Test 2: derive death date parameter ----
-test_that("derive_param_extreme_event Test 2: derive death date parameter", {
-  actual <- derive_param_extreme_event(
-    dataset_adsl = adsl,
-    dataset_source = adsl,
-    filter_source = !is.na(DTHDT),
-    new_var = AVAL,
-    true_value = 1,
-    false_value = 0,
-    mode = "first",
-    set_values_to = exprs(
-      PARAMCD = "DEATH",
-      ANL01FL = "Y",
-      ADT = DTHDT
-    )
+## Test 3: derive death date parameter ----
+test_that("derive_param_extreme_event Test 3: derive death date parameter", {
+  actual <- suppress_warning(
+    derive_param_extreme_event(
+      dataset_adsl = adsl,
+      dataset_source = adsl,
+      filter_source = !is.na(DTHDT),
+      new_var = AVAL,
+      true_value = 1,
+      false_value = 0,
+      mode = "first",
+      set_values_to = exprs(
+        PARAMCD = "DEATH",
+        ANL01FL = "Y",
+        ADT = DTHDT
+      )
+    ),
+    regexpr = "was deprecated"
   )
 
   expected <- tibble::tribble(
@@ -129,23 +155,26 @@ adrs <- tibble::tribble(
   ) %>%
   select(-ADTC)
 
-## Test 3: latest evaluable tumor assessment date parameter ----
-test_that("derive_param_extreme_event Test 3: latest evaluable tumor assessment date parameter", {
-  actual <- derive_param_extreme_event(
-    dataset = adrs,
-    dataset_adsl = adsl,
-    dataset_source = adrs,
-    filter_source = PARAMCD == "OVR" & AVALC != "NE",
-    order = exprs(ADT),
-    new_var = AVALC,
-    true_value = "Y",
-    false_value = "N",
-    mode = "last",
-    set_values_to = exprs(
-      PARAMCD = "LSTEVLDT",
-      ANL01FL = "Y",
-      ADT = ADT
-    )
+## Test 4: latest evaluable tumor assessment date parameter ----
+test_that("derive_param_extreme_event Test 4: latest evaluable tumor assessment date parameter", {
+  actual <- suppress_warning(
+    derive_param_extreme_event(
+      dataset = adrs,
+      dataset_adsl = adsl,
+      dataset_source = adrs,
+      filter_source = PARAMCD == "OVR" & AVALC != "NE",
+      order = exprs(ADT),
+      new_var = AVALC,
+      true_value = "Y",
+      false_value = "N",
+      mode = "last",
+      set_values_to = exprs(
+        PARAMCD = "LSTEVLDT",
+        ANL01FL = "Y",
+        ADT = ADT
+      )
+    ),
+    regexpr = "was deprecated"
   )
 
   expected <- bind_rows(
@@ -170,21 +199,24 @@ test_that("derive_param_extreme_event Test 3: latest evaluable tumor assessment 
   )
 })
 
-## Test 4: latest evaluable tumor assessment date parameter without overwriting existing result ----
-test_that("derive_param_extreme_event Test 4: latest evaluable tumor assessment date parameter without overwriting existing result", { # nolint
-  actual <- derive_param_extreme_event(
-    dataset = adrs,
-    dataset_adsl = adsl,
-    dataset_source = adrs,
-    filter_source = PARAMCD == "OVR" & AVALC != "NE",
-    order = exprs(ADT),
-    new_var = NULL,
-    mode = "last",
-    set_values_to = exprs(
-      PARAMCD = "LSTEVLDT",
-      ANL01FL = "Y",
-      ADT = ADT
-    )
+## Test 5: latest evaluable tumor assessment date parameter without overwriting existing result ----
+test_that("derive_param_extreme_event Test 5: latest evaluable tumor assessment date parameter without overwriting existing result", { # nolint
+  actual <- suppress_warning(
+    derive_param_extreme_event(
+      dataset = adrs,
+      dataset_adsl = adsl,
+      dataset_source = adrs,
+      filter_source = PARAMCD == "OVR" & AVALC != "NE",
+      order = exprs(ADT),
+      new_var = NULL,
+      mode = "last",
+      set_values_to = exprs(
+        PARAMCD = "LSTEVLDT",
+        ANL01FL = "Y",
+        ADT = ADT
+      )
+    ),
+    regexpr = "was deprecated"
   )
 
   expected <- bind_rows(

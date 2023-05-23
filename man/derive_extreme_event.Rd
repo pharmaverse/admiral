@@ -37,8 +37,8 @@ meet the filter \code{condition}, take the first record sorted by \code{order}.}
 If a particular event from \code{events} has more than one observation, within
 the event and by group, the records are ordered by the specified order.
 
-\emph{Permitted Values:} list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}}
+\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
 
 \item{mode}{Selection mode (first or last)
 
@@ -67,7 +67,7 @@ A list of variable name-value pairs is expected.
 \itemize{
 \item LHS refers to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
-symbol, a numeric value or \code{NA}, e.g., \code{exprs(PARAMCD = "TDOSE", PARCAT1 =   "OVERALL")}. More general expression are not allowed.
+symbol, a numeric value, an expression, or \code{NA}, e.g., \code{exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")}.
 }}
 }
 \value{
@@ -158,7 +158,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_param_extreme_record}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

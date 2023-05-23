@@ -1,8 +1,14 @@
 #' Add an Extreme Event Parameter
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_extreme_records()` instead.
+#'
 #' Add a new parameter for the first or last event occurring in a dataset. The
-#'  variable given in `new_var` indicates if an event occurred or not. For example,
-#'  the function can derive a parameter for the first disease progression.
+#' variable given in `new_var` indicates if an event occurred or not. For
+#' example, the function can derive a parameter for the first disease
+#' progression.
 #'
 #' @param dataset Input dataset
 #'
@@ -20,7 +26,7 @@
 #'   specified by `filter_source` are considered as an event.
 #'
 #'   The variables specified by the `subject_keys` and
-#'   `order` parameter (if applicable) are expected.
+#'   `order` argument (if applicable) are expected.
 #'
 #' @param filter_source Source filter
 #'
@@ -35,8 +41,8 @@
 #'
 #'   List of symbols for sorting the source dataset (`dataset_source`).
 #'
-#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))`.
+#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))`.
 #'
 #' @param new_var New variable
 #'
@@ -65,8 +71,8 @@
 #'   A named list returned by `exprs()` defining the variables to be set for the
 #'   new parameter, e.g. `exprs(PARAMCD = "PD", PARAM = "Disease Progression")`
 #'   is expected. The values must be symbols, character strings, numeric values,
-#'   or `NA`. Note, if you require a date or datetime variable to be populated,
-#'   this needs to be defined here.
+#'   `NA`, or an expression. Note, if you require a date or datetime variable to
+#'   be populated, this needs to be defined here.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
@@ -75,9 +81,9 @@
 #' @param check_type Check uniqueness?
 #'
 #'   If `"warning"` or `"error"` is specified, a message is issued if the
-#'   observations of the input dataset restricted to the source parameter
-#'   (`source_param`) are not unique with respect to the subject keys
-#'   (`subject_key` parameter) and order variables (`order` parameter).
+#'   observations of the source dataset (`dataset_source`) restricted by
+#'   `filter_source` are not unique with respect to the subject keys
+#'   (`subject_key` argument) and `order`.
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
@@ -85,16 +91,16 @@
 #'   1. The source dataset (`dataset_source`) is restricted to observations fulfilling
 #'   `filter_source`.
 #'   1. For each subject (with respect to the variables specified for the
-#'   `subject_keys` parameter) either the first or last observation from the restricted
+#'   `subject_keys` argument) either the first or last observation from the restricted
 #'   source dataset is selected. This is depending on `mode`, (with respect to `order`,
-#'   if applicable) where the event condition (`filter_source` parameter) is fulfilled.
+#'   if applicable) where the event condition (`filter_source` argument) is fulfilled.
 #'   1. For each observation in `dataset_adsl` a new observation is created. For
 #'   subjects with event `new_var` is set to `true_value`. For all other
 #'   subjects `new_var` is set to `false_value`.
 #'   For subjects with event all variables from `dataset_source` are kept. For
 #'   subjects without event all variables which are in both `dataset_adsl` and
 #'   `dataset_source` are kept.
-#'   1. The variables specified by the `set_values_to` parameter are added to
+#'   1. The variables specified by the `set_values_to` argument are added to
 #'   the new observations.
 #'   1. The new observations are added to input dataset.
 #'
@@ -102,78 +108,10 @@
 #' @return The input dataset with a new parameter indicating if and when an
 #'   event occurred
 #'
-#' @family der_prm_bds_findings
-#' @keywords der_prm_bds_findings
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @export
-#'
-#' @examples
-#' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate)
-#'
-#' # Derive a new parameter for the first disease progression (PD)
-#' adsl <- tribble(
-#'   ~USUBJID, ~DTHDT,
-#'   "1",      ymd("2022-05-13"),
-#'   "2",      ymd(""),
-#'   "3",      ymd("")
-#' ) %>%
-#'   mutate(STUDYID = "XX1234")
-#'
-#' adrs <- tribble(
-#'   ~USUBJID, ~ADTC,        ~AVALC,
-#'   "1",      "2020-01-02", "PR",
-#'   "1",      "2020-02-01", "CR",
-#'   "1",      "2020-03-01", "CR",
-#'   "1",      "2020-04-01", "SD",
-#'   "2",      "2021-06-15", "SD",
-#'   "2",      "2021-07-16", "PD",
-#'   "2",      "2021-09-14", "PD"
-#' ) %>%
-#'   mutate(
-#'     STUDYID = "XX1234",
-#'     ADT = ymd(ADTC),
-#'     PARAMCD = "OVR",
-#'     PARAM = "Overall Response",
-#'     ANL01FL = "Y"
-#'   ) %>%
-#'   select(-ADTC)
-#'
-#' derive_param_extreme_event(
-#'   adrs,
-#'   dataset_adsl = adsl,
-#'   dataset_source = adrs,
-#'   filter_source = PARAMCD == "OVR" & AVALC == "PD",
-#'   order = exprs(ADT),
-#'   new_var = AVALC,
-#'   true_value = "Y",
-#'   false_value = "N",
-#'   mode = "first",
-#'   set_values_to = exprs(
-#'     PARAMCD = "PD",
-#'     PARAM = "Disease Progression",
-#'     ANL01FL = "Y",
-#'     ADT = ADT
-#'   )
-#' )
-#'
-#' # derive parameter indicating death
-#' derive_param_extreme_event(
-#'   dataset_adsl = adsl,
-#'   dataset_source = adsl,
-#'   filter_source = !is.na(DTHDT),
-#'   new_var = AVALC,
-#'   true_value = "Y",
-#'   false_value = "N",
-#'   mode = "first",
-#'   set_values_to = exprs(
-#'     PARAMCD = "DEATH",
-#'     PARAM = "Death",
-#'     ANL01FL = "Y",
-#'     ADT = DTHDT
-#'   )
-#' )
 derive_param_extreme_event <- function(dataset = NULL,
                                        dataset_adsl,
                                        dataset_source,
@@ -186,10 +124,12 @@ derive_param_extreme_event <- function(dataset = NULL,
                                        subject_keys = get_admiral_option("subject_keys"),
                                        set_values_to,
                                        check_type = "warning") {
-  # Check input parameters
+  deprecate_warn("0.11.0", "derive_param_extreme_event()", "derive_extreme_records()")
+
+  # Check input arguments
   filter_source <- assert_filter_cond(enexpr(filter_source))
   assert_vars(subject_keys)
-  assert_vars(order, optional = TRUE)
+  assert_expr_list(order, optional = TRUE)
   assert_data_frame(dataset_source,
     required_vars = exprs(!!!subject_keys, !!!extract_vars(order))
   )
@@ -213,35 +153,18 @@ derive_param_extreme_event <- function(dataset = NULL,
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
 
-  # Create new observations
-  source_vars <- colnames(dataset_source)
-  adsl_vars <- colnames(dataset_adsl)
-
-  events <- dataset_source %>%
-    filter_if(filter_source) %>%
-    filter_extreme(
-      by_vars = subject_keys,
-      order = order,
-      mode = mode,
-      check_type = check_type
-    )
-
-  noevents <- anti_join(
-    select(dataset_adsl, intersect(source_vars, adsl_vars)),
-    select(events, !!!subject_keys),
-    by = sapply(subject_keys, as_name) # nolint: undesirable_function_linter
+  derive_extreme_records(
+    dataset,
+    dataset_add = dataset_source,
+    dataset_ref = dataset_adsl,
+    by_vars = subject_keys,
+    order = order,
+    mode = mode,
+    filter_add = !!filter_source,
+    check_type = check_type,
+    exist_flag = !!new_var,
+    true_value = true_value,
+    false_value = false_value,
+    set_values_to = set_values_to
   )
-
-  if (!is.null(new_var)) {
-    events <- mutate(events, !!new_var := true_value)
-    noevents <- mutate(noevents, !!new_var := false_value)
-  }
-
-  new_obs <- bind_rows(events, noevents) %>%
-    mutate(
-      !!!set_values_to
-    )
-
-  # Create output dataset
-  bind_rows(dataset, new_obs)
 }
