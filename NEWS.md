@@ -12,6 +12,7 @@ source dataset. (#1699)
 
 - New function `derive_param_extreme_record()` that adds parameter based on the first or last record from multiple sources. (#1822)
 
+- New function `compute_egfr()` for calculating Estimated Glomerular Filtration Rate (eGFR) and Creatinine Clearance for Kidney Function (#1826)
 
 ## Updates of Existing Functions
 
@@ -85,6 +86,9 @@ the `filter_add` argument. (#1725)
 ## Documentation
 
 - Updated example dataset to trigger deterioration flags in the vignette "Creating Questionnaire ADaMs" (#1853, #1854)
+
+- Updated "Lab Grading" Vignette to link to grading metadata available in `{admiral}` and clarify how abnormal baseline
+values are assigned in NCI-CTCAEv5 (#1863).
 
 ## Various
 
