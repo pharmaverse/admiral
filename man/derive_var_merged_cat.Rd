@@ -112,7 +112,7 @@ first or last observation for each by group.
 library(dplyr, warn.conflicts = FALSE)
 
 vs <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSSEQ,       ~VSDTC,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSSEQ,       ~VSDTC,
   "PILOT01",    "VS", "04-1127", "SCREENING",  "HEIGHT",     165.1,     43, "2013-09-16",
   "PILOT01",    "VS", "04-1127", "SCREENING",  "WEIGHT",     42.87,    142, "2013-09-16",
   "PILOT01",    "VS", "04-1127",  "BASELINE",  "WEIGHT",     41.05,    143, "2013-10-02",
@@ -127,7 +127,7 @@ vs <- tribble(
 )
 
 dm <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
   "PILOT01",    "DM", "01-1057",   59, "YEARS",
   "PILOT01",    "DM", "04-1127",   84, "YEARS",
   "PILOT01",    "DM", "06-1049",   60, "YEARS"

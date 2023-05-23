@@ -73,7 +73,7 @@ aggregate dose information and satisfy \code{single_dose_condition}.
 library(dplyr, warn.conflicts = FALSE)
 
 ex_single <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID, ~EXSEQ,     ~EXENDTC,    ~EXTRT, ~EXDOSE, ~EXDOSFRQ,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~EXSEQ,     ~EXENDTC,    ~EXTRT, ~EXDOSE, ~EXDOSFRQ,
   "PILOT01",    "EX", "18-1066",     1L, "2013-07-07",    "XANO",      54,    "ONCE",
   "PILOT01",    "EX", "18-1066",     2L, "2013-07-08",    "XANO",      54,    "ONCE",
   "PILOT01",    "EX", "18-1066",     3L, "2013-07-09",    "XANO",      54,    "ONCE",
@@ -100,7 +100,7 @@ ex_single <- tribble(
 
 
 ae <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,                 ~AETERM,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,                 ~AETERM,
   "PILOT01",    "AE", "10-1083",      1, "2013-08-02", "MYOCARDIAL INFARCTION",
   "PILOT01",    "AE", "18-1066",      2, "2013-07-18",             "AGITATION",
   "PILOT01",    "AE", "18-1066",      4, "2013-07-30",          "INFLAMMATION",

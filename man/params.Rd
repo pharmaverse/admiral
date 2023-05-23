@@ -19,19 +19,19 @@ Create a set of variable parameters/function arguments to be used in \code{\link
 library(dplyr, warn.conflicts = FALSE)
 
 adsl <- tribble(
-  ~STUDYID,  ~USUBJID,      ~TRTSDT,      ~TRTEDT,
+  ~STUDYID,   ~USUBJID,      ~TRTSDT,      ~TRTEDT,
   "PILOT01", "01-1307",           NA,           NA,
   "PILOT01", "05-1377", "2014-01-04", "2014-01-25",
   "PILOT01", "06-1384", "2012-09-15", "2012-09-24",
   "PILOT01", "15-1085", "2013-02-16", "2013-08-18",
   "PILOT01", "16-1298", "2013-04-08", "2013-06-28"
-)  \%>\%
+) \%>\%
   mutate(
     across(TRTSDT:TRTEDT, as.Date)
   )
 
 ae <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID,     ~AESTDTC,     ~AEENDTC,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID,     ~AESTDTC,     ~AEENDTC,
   "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
   "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
   "PILOT01",    "AE", "06-1384", "2012-09-23", "2012-09-29",

@@ -992,9 +992,9 @@ get_not_mapped <- function() {
 #'   "1",      "WEEK 4",      7,    15,
 #'   "2",      "WEEK 1",      1,    21,
 #'   "2",      "WEEK 4",      2,    22
+#' )
 #'
-#'
-#'      derive_var_merged_summary(
+#'  derive_var_merged_summary(
 #'   adbds,
 #'   dataset_add = adbds,
 #'   by_vars = exprs(USUBJID, AVISIT),

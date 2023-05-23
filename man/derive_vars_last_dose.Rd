@@ -99,7 +99,7 @@ variables from \code{dataset_ex} (e.g. \code{new_vars = exprs(LSTEXVIS = VISIT)}
 library(dplyr, warn.conflicts = FALSE)
 ex_single <- cbind(
   tribble(
-    ~STUDYID, ~DOMAIN,  ~USUBJID, ~EXSEQ,  ~VISIT,
+    ~STUDYID, ~DOMAIN,  ~USUBJID, ~EXSEQ, ~VISIT,
     "PILOT1",    "EX", "18-1066",     1L, "BASE",
     "PILOT1",    "EX", "18-1066",     2L, "BASE",
     "PILOT1",    "EX", "18-1066",     3L, "BASE",
@@ -123,32 +123,33 @@ ex_single <- cbind(
     "PILOT1",    "EX", "10-1083",    11L, "BASE"
   ),
   tribble(
-    ~EXDOSE,    ~EXTRT,     ~EXENDTC,     ~EXSTDTC, ~EXDOSFRQ,
-    54,    "XANO", "2013-07-07", "2013-07-07",    "ONCE",
-    54,    "XANO", "2013-07-08", "2013-07-08",    "ONCE",
-    54,    "XANO", "2013-07-09", "2013-07-09",    "ONCE",
-    54,    "XANO", "2013-07-10", "2013-07-10",    "ONCE",
-    54,    "XANO", "2013-07-11", "2013-07-11",    "ONCE",
-    54,    "XANO", "2013-07-12", "2013-07-12",    "ONCE",
-    54,    "XANO", "2013-07-13", "2013-07-13",    "ONCE",
-    54,    "XANO", "2013-07-14", "2013-07-14",    "ONCE",
-    54,    "XANO", "2013-07-15", "2013-07-15",    "ONCE",
-    54,    "XANO", "2013-07-16", "2013-07-16",    "ONCE",
-    0, "PLACEBO", "2013-07-22", "2013-07-22",    "ONCE",
-    0, "PLACEBO", "2013-07-23", "2013-07-23",    "ONCE",
-    0, "PLACEBO", "2013-07-24", "2013-07-24",    "ONCE",
-    0, "PLACEBO", "2013-07-25", "2013-07-25",    "ONCE",
-    0, "PLACEBO", "2013-07-26", "2013-07-26",    "ONCE",
-    0, "PLACEBO", "2013-07-27", "2013-07-27",    "ONCE",
-    0, "PLACEBO", "2013-07-28", "2013-07-28",    "ONCE",
-    0, "PLACEBO", "2013-07-29", "2013-07-29",    "ONCE",
-    0, "PLACEBO", "2013-07-30", "2013-07-30",    "ONCE",
-    0, "PLACEBO", "2013-07-31", "2013-07-31",    "ONCE",
-    0, "PLACEBO", "2013-08-01", "2013-08-01",    "ONCE"
-  ))
+    ~EXDOSE, ~EXTRT,     ~EXENDTC,     ~EXSTDTC, ~EXDOSFRQ,
+    54,      "XANO", "2013-07-07", "2013-07-07",    "ONCE",
+    54,      "XANO", "2013-07-08", "2013-07-08",    "ONCE",
+    54,      "XANO", "2013-07-09", "2013-07-09",    "ONCE",
+    54,      "XANO", "2013-07-10", "2013-07-10",    "ONCE",
+    54,      "XANO", "2013-07-11", "2013-07-11",    "ONCE",
+    54,      "XANO", "2013-07-12", "2013-07-12",    "ONCE",
+    54,      "XANO", "2013-07-13", "2013-07-13",    "ONCE",
+    54,      "XANO", "2013-07-14", "2013-07-14",    "ONCE",
+    54,      "XANO", "2013-07-15", "2013-07-15",    "ONCE",
+    54,      "XANO", "2013-07-16", "2013-07-16",    "ONCE",
+    0,    "PLACEBO", "2013-07-22", "2013-07-22",    "ONCE",
+    0,    "PLACEBO", "2013-07-23", "2013-07-23",    "ONCE",
+    0,    "PLACEBO", "2013-07-24", "2013-07-24",    "ONCE",
+    0,    "PLACEBO", "2013-07-25", "2013-07-25",    "ONCE",
+    0,    "PLACEBO", "2013-07-26", "2013-07-26",    "ONCE",
+    0,    "PLACEBO", "2013-07-27", "2013-07-27",    "ONCE",
+    0,    "PLACEBO", "2013-07-28", "2013-07-28",    "ONCE",
+    0,    "PLACEBO", "2013-07-29", "2013-07-29",    "ONCE",
+    0,    "PLACEBO", "2013-07-30", "2013-07-30",    "ONCE",
+    0,    "PLACEBO", "2013-07-31", "2013-07-31",    "ONCE",
+    0,    "PLACEBO", "2013-08-01", "2013-08-01",    "ONCE"
+  )
+)
 
 ae <- tribble(
-  ~STUDYID, ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,                 ~AETERM,
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,                 ~AETERM,
   "PILOT01",    "AE", "10-1083",      1, "2013-08-02", "MYOCARDIAL INFARCTION",
   "PILOT01",    "AE", "18-1066",      2, "2013-07-18",             "AGITATION",
   "PILOT01",    "AE", "18-1066",      4, "2013-07-30",          "INFLAMMATION",
