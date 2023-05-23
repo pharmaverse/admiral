@@ -184,15 +184,19 @@ derive_param_exist_flag <- function(dataset = NULL,
                                     subject_keys) {
   ### BEGIN DEPRECATION
   if (!missing(dataset_adsl)) {
-    deprecate_warn("0.11.0", "derive_param_exist_flag(dataset_adsl = )",
-                   "derive_param_exit_flag(dataset_ref = )")
+    deprecate_warn(
+      "0.11.0", "derive_param_exist_flag(dataset_adsl = )",
+      "derive_param_exit_flag(dataset_ref = )"
+    )
     # assign deprecated argument to new variable
     dataset_ref <- dataset_adsl
   }
 
   if (!missing(subject_keys)) {
-    deprecate_warn("0.11.0", "derive_param_exist_flag(subject_keys = )",
-                   "derive_param_exit_flag(by_vars = )")
+    deprecate_warn(
+      "0.11.0", "derive_param_exist_flag(subject_keys = )",
+      "derive_param_exit_flag(by_vars = )"
+    )
     # assign deprecated argument to new variable
     by_vars <- subject_keys
   }

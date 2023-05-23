@@ -63,37 +63,10 @@ test_that("derive_param_merged_exist_flag Test 1: derive parameter indicating PD
   )
 })
 
-<<<<<<< Updated upstream
-## Test 2: error is issued if parameter already exists ----
-test_that("derive_param_merged_exist_flag Test 2: error is issued if parameter already exists", {
-=======
-## derive_param_exist_flag Test 2: error is issued if aval_fun returns wrong type ----
-test_that("derive_param_exist_flag Test 2: error is issued if aval_fun returns wrong type", {
-  expect_error(
-    derive_param_exist_flag(
-      dataset_ref = adsl,
-      dataset_add = adrs,
-      filter_add = PARAMCD == "OVR",
-      condition = AVALC == "PD",
-      false_value = "N",
-      aval_fun = function(x) x,
-      set_values_to = exprs(
-        PARAMCD = "PD",
-        ANL01FL = "Y"
-      )
-    ),
-    regexp = paste(
-      "Calling `aval_fun(AVALC)` did not result in a numeric vector.\n",
-      "A character vector was returned."
-    ),
-    fixed = TRUE
-  )
-})
 
 
 ## derive_param_exist_flag Test 3: error is issued if paramter already exists in dataset ----
 test_that("derive_param_exist_flag Test 3: error is issued if paramter already exists in dataset", {
->>>>>>> Stashed changes
   expect_error(
     derive_param_exist_flag(
       dataset = adrs,

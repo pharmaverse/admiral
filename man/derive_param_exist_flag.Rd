@@ -13,17 +13,11 @@ derive_param_exist_flag(
   false_value = NA_character_,
   missing_value = NA_character_,
   filter_add = NULL,
-<<<<<<< Updated upstream
   aval_fun,
-  subject_keys = get_admiral_option("subject_keys"),
-  set_values_to
-=======
-  aval_fun = yn_to_numeric,
   by_vars = get_admiral_option("subject_keys"),
   set_values_to,
   dataset_adsl,
   subject_keys
->>>>>>> Stashed changes
 )
 }
 \arguments{
@@ -110,12 +104,11 @@ A list of symbols created using \code{exprs()} is expected.}
 
 A named list returned by \code{exprs()} defining the variables to be set for the
 new parameter, e.g. \code{exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at Baseline")} is expected. The values must be symbols, character strings,
-numeric values, or \code{NA}.}
+numeric values, \code{NA}, or expressions.}
 
 \item{dataset_adsl}{\emph{Deprecated}, please use \code{dataset_ref} instead.}
 
 \item{subject_keys}{\emph{Deprecated}, please use \code{by_vars} instead.}
-
 }
 \value{
 The input dataset with a new parameter indicating if an event
@@ -191,7 +184,7 @@ derive_param_exist_flag(
 )
 }
 \seealso{
-BDS-Findings Functions for adding Parameters/Records:
+BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_event}()},
