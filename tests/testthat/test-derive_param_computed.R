@@ -30,7 +30,7 @@ test_that("derive_param_computed Test 1: new observations are derived correctly"
   expect_dfs_equal(
     derive_param_computed(
       input,
-      parameters = c("SYSBP", "DIABP"),
+      parameters = exprs(SYSBP, DIABP),
       by_vars = exprs(USUBJID, VISIT),
       analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
       set_values_to = exprs(
@@ -47,15 +47,15 @@ test_that("derive_param_computed Test 1: new observations are derived correctly"
 ## Test 2: new observations are derived correctly with constant parameters ----
 test_that("derive_param_computed Test 2: new observations are derived correctly with constant parameters", {
   input <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
-    "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
-    "01-701-1015", "WEIGHT", "Weight (kg)", 54.0, "kg", "SCREENING",
-    "01-701-1015", "WEIGHT", "Weight (kg)", 54.4, "kg", "BASELINE",
-    "01-701-1015", "WEIGHT", "Weight (kg)", 53.1, "kg", "WEEK 2",
-    "01-701-1028", "HEIGHT", "Height (cm)", 163, "cm", "SCREENING",
-    "01-701-1028", "WEIGHT", "Weight (kg)", 78.5, "kg", "SCREENING",
-    "01-701-1028", "WEIGHT", "Weight (kg)", 80.3, "kg", "BASELINE",
-    "01-701-1028", "WEIGHT", "Weight (kg)", 80.7, "kg", "WEEK 2"
+    ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
+    "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
+    "01-701-1028", "HEIGHT", "Height (cm)", 163.0, "cm",   "SCREENING",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
   )
 
   new_obs <-
@@ -144,7 +144,7 @@ test_that("derive_param_computed Test 4: no new observations are added if a para
     derive_param_computed(
       input,
       filter = PARAMCD == "DIABP",
-      parameters = c("SYSBP", "DIABP"),
+      parameters = exprs(SYSBP, DIABP),
       by_vars = exprs(USUBJID, VISIT),
       analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
       set_values_to = exprs(
@@ -183,7 +183,18 @@ test_that("derive_param_computed Test 5: `dataset_add`, creating new parameters"
 
   )
 
-  derive_param_computed(
+  expected <- bind_rows(
+    adchsf,
+    tibble::tribble(
+      ~USUBJID, ~AVISIT,  ~PARAMCD, ~AVAL,
+      "1",      "WEEK 2", "CHSF13",    38,
+      "1",      "WEEK 4", "CHSF13",    25
+    )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = derive_param_computed(
     adchsf,
     dataset_add = qs,
     by_vars = exprs(USUBJID, AVISIT),
@@ -198,5 +209,60 @@ test_that("derive_param_computed Test 5: `dataset_add`, creating new parameters"
       )
     ),
     set_values_to = exprs(PARAMCD = "CHSF13")
+  ),
+  keys = c("USUBJID", "PARAMCD", "AVISIT")
+  )
+})
+
+## Test 6: new observations with constant parameters using an expression ----
+test_that("derive_param_computed Test 6: new observations with constant parameters using an expression", {
+  input <- tibble::tribble(
+    ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
+    "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
+    "01-701-1028", "HEIGHT", "Height (cm)", 163.0, "cm",   "SCREENING",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
+  )
+
+  vs <- tibble::tribble(
+    ~USUBJID,      ~VSTESTCD, ~VSTEST,  ~VSSTRESN, ~VSSTRESU,
+    "01-701-1015", "HGHT",    "Height",     147.0, "cm"
+  )
+
+  new_obs <-
+    inner_join(vs %>% filter(VSTESTCD == "HGHT") %>% select(USUBJID, AVAL = VSSTRESN),
+               input %>% filter(PARAMCD == "WEIGHT") %>% select(USUBJID, VISIT, AVAL),
+               by = c("USUBJID"),
+               suffix = c(".HEIGHT", ".WEIGHT")
+    ) %>%
+    mutate(
+      AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
+      PARAMCD = "BMI",
+      PARAM = "Body Mass Index (kg/m2)",
+      AVALU = "kg/m2"
+    ) %>%
+    select(-AVAL.HEIGHT, -AVAL.WEIGHT)
+  expected_output <- bind_rows(input, new_obs)
+
+  expect_dfs_equal(
+    derive_param_computed(
+      input,
+      dataset_add = vs,
+      parameters = exprs(WEIGHT),
+      by_vars = exprs(USUBJID, VISIT),
+      constant_parameters = exprs("HEIGHT" = VSTESTCD == "HGHT"),
+      constant_by_vars = exprs(USUBJID),
+      analysis_value = AVAL.WEIGHT / (VSSTRESN.HEIGHT / 100)^2,
+      set_values_to = exprs(
+        PARAMCD = "BMI",
+        PARAM = "Body Mass Index (kg/m2)",
+        AVALU = "kg/m2"
+      )
+    ),
+    expected_output,
+    keys = c("USUBJID", "PARAMCD", "VISIT")
   )
 })

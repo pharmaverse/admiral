@@ -5,8 +5,8 @@
 \title{Adds a Parameter Computed from the Analysis Value of Other Parameters}
 \usage{
 derive_param_computed(
-  dataset,
-  dataset_add,
+  dataset = NULL,
+  dataset_add = NULL,
   by_vars,
   parameters,
   analysis_value,
@@ -160,6 +160,54 @@ derive_param_computed(
   constant_parameters = c("HEIGHT"),
   constant_by_vars = exprs(USUBJID)
 )
+
+# Example 3: Using data from an additional dataset and other variables than AVAL
+qs <- tibble::tribble(
+~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
+"1",      "WEEK 2",  "CHSF112", NA,       1,
+"1",      "WEEK 2",  "CHSF113", "Yes",    NA,
+"1",      "WEEK 2",  "CHSF114", NA,       1,
+"1",      "WEEK 4",  "CHSF112", NA,       2,
+"1",      "WEEK 4",  "CHSF113", "No",    NA,
+"1",      "WEEK 4",  "CHSF114", NA,       1
+)
+
+adchsf <- tibble::tribble(
+  ~USUBJID, ~AVISIT,  ~PARAMCD, ~QSORRES, ~QSSTRESN, ~AVAL,
+  "1",      "WEEK 2", "CHSF12", NA,       1,             6,
+  "1",      "WEEK 2", "CHSF14", NA,       1,             6,
+  "1",      "WEEK 4", "CHSF12", NA,       2,            12,
+  "1",      "WEEK 4", "CHSF14", NA,       1,             6
+
+)
+
+expected <- bind_rows(
+  adchsf,
+  tibble::tribble(
+    ~USUBJID, ~AVISIT,  ~PARAMCD, ~AVAL,
+    "1",      "WEEK 2", "CHSF13",    38,
+    "1",      "WEEK 4", "CHSF13",    25
+  )
+)
+
+expect_dfs_equal(
+  base = expected,
+  compare = derive_param_computed(
+    adchsf,
+    dataset_add = qs,
+    by_vars = exprs(USUBJID, AVISIT),
+    parameters = exprs(CHSF12, CHSF13 = QSTESTCD \%in\% c("CHSF113", "CHSF213"), CHSF14),
+    analysis_value = case_when(
+      QSORRES.CHSF13 == "Not applicable" ~ 0,
+      QSORRES.CHSF13 == "Yes" ~ 38,
+      QSORRES.CHSF13 == "No" ~ if_else(
+        QSSTRESN.CHSF12 > QSSTRESN.CHSF14,
+        25,
+        0
+      )
+    ),
+    set_values_to = exprs(PARAMCD = "CHSF13")
+  )
 }
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 

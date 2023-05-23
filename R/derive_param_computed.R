@@ -147,8 +147,54 @@
 #'   constant_parameters = c("HEIGHT"),
 #'   constant_by_vars = exprs(USUBJID)
 #' )
-derive_param_computed <- function(dataset,
-                                  dataset_add,
+#'
+#' # Example 3: Using data from an additional dataset and other variables than AVAL
+#' qs <- tibble::tribble(
+#' ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
+#' "1",      "WEEK 2",  "CHSF112", NA,       1,
+#' "1",      "WEEK 2",  "CHSF113", "Yes",    NA,
+#' "1",      "WEEK 2",  "CHSF114", NA,       1,
+#' "1",      "WEEK 4",  "CHSF112", NA,       2,
+#' "1",      "WEEK 4",  "CHSF113", "No",    NA,
+#' "1",      "WEEK 4",  "CHSF114", NA,       1
+#' )
+#'
+#' adchsf <- tibble::tribble(
+#'   ~USUBJID, ~AVISIT,  ~PARAMCD, ~QSORRES, ~QSSTRESN, ~AVAL,
+#'   "1",      "WEEK 2", "CHSF12", NA,       1,             6,
+#'   "1",      "WEEK 2", "CHSF14", NA,       1,             6,
+#'   "1",      "WEEK 4", "CHSF12", NA,       2,            12,
+#'   "1",      "WEEK 4", "CHSF14", NA,       1,             6
+#'
+#' )
+#'
+#' expected <- bind_rows(
+#'   adchsf,
+#'   tibble::tribble(
+#'     ~USUBJID, ~AVISIT,  ~PARAMCD, ~AVAL,
+#'     "1",      "WEEK 2", "CHSF13",    38,
+#'     "1",      "WEEK 4", "CHSF13",    25
+#'   )
+#' )
+#'
+#' derive_param_computed(
+#'     adchsf,
+#'     dataset_add = qs,
+#'     by_vars = exprs(USUBJID, AVISIT),
+#'     parameters = exprs(CHSF12, CHSF13 = QSTESTCD %in% c("CHSF113", "CHSF213"), CHSF14),
+#'     analysis_value = case_when(
+#'       QSORRES.CHSF13 == "Not applicable" ~ 0,
+#'       QSORRES.CHSF13 == "Yes" ~ 38,
+#'       QSORRES.CHSF13 == "No" ~ if_else(
+#'         QSSTRESN.CHSF12 > QSSTRESN.CHSF14,
+#'         25,
+#'         0
+#'       )
+#'     ),
+#'     set_values_to = exprs(PARAMCD = "CHSF13")
+#'   )
+derive_param_computed <- function(dataset = NULL,
+                                  dataset_add = NULL,
                                   by_vars,
                                   parameters,
                                   analysis_value,
@@ -158,7 +204,8 @@ derive_param_computed <- function(dataset,
                                   constant_parameters = NULL) {
   assert_vars(by_vars)
   assert_vars(constant_by_vars, optional = TRUE)
-  assert_data_frame(dataset, required_vars = exprs(!!!by_vars, PARAMCD, AVAL))
+  assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
+  assert_data_frame(dataset_add, optional = TRUE)
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   params_available <- unique(dataset$PARAMCD)
   # assert_character_vector(parameters, values = params_available)
@@ -169,24 +216,88 @@ derive_param_computed <- function(dataset,
   }
   analysis_value <- enexpr(analysis_value)
 
+  if (typeof(parameters) == "character") {
+    parameters <- map(parameters, sym)
+  }
+  if (typeof(constant_parameters) == "character") {
+    constant_parameters <- map(constant_parameters, sym)
+  }
+
   # select observations and variables required for new observations
   data_source <- dataset %>%
     filter_if(filter) %>%
     bind_rows(dataset_add)
 
+  hori_return <- get_hori_data(
+    data_source,
+    by_vars = by_vars,
+    parameters = parameters,
+    analysis_value = analysis_value,
+    filter = filter
+  )
+  hori_data <-  hori_return[["hori_data"]]
+  if(is.null(hori_data)) {
+    return(dataset)
+  }
+  analysis_vars_chr <- hori_return[["analysis_vars_chr"]]
+
+  if (!is.null(constant_parameters)) {
+    hori_const_data <- get_hori_data(
+      data_source,
+      by_vars = constant_by_vars,
+      parameters = constant_parameters,
+      analysis_value = analysis_value,
+      filter = filter
+    )[["hori_data"]]
+
+    if(is.null(hori_const_data)) {
+      return(dataset)
+    }
+
+    hori_data <- inner_join(hori_data, hori_const_data, by = vars2chr(constant_by_vars))
+  }
+
+  # add analysis value (AVAL) and parameter variables, e.g., PARAMCD
+  hori_data <- hori_data %>%
+    # keep only observations where all analysis values are available
+    filter(!!!parse_exprs(map_chr(
+      analysis_vars_chr,
+      ~ str_c("!is.na(", .x, ")")
+    ))) %>%
+    process_set_values_to(exprs(AVAL = !!analysis_value)) %>%
+    process_set_values_to(set_values_to) %>%
+    select(-all_of(analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]))
+
+  bind_rows(dataset, hori_data)
+}
+
+get_hori_data <- function(dataset,
+                          by_vars,
+                          parameters,
+                          analysis_value,
+                          filter
+) {
   # determine parameter values
-  param_values <- map2(parameters, names(parameters), ~ if_else(.y == "", as_label(.x), .y))
+  if (is.null(names(parameters))) {
+    param_values <- map(parameters, as_label)
+  } else {
+    param_values <- map2(
+      parameters,
+      names(parameters),
+      ~ if_else(.y == "", as_label(.x), .y)
+    )
+  }
 
   new_params <- parameters[names(parameters) != ""]
   new_names <- names(new_params)
 
   new_data <- vector("list", length(new_params))
   for (i in seq_along(new_params)) {
-    new_data[[i]] <- filter(data_source, !!new_params[[i]]) %>%
+    new_data[[i]] <- filter(dataset, !!new_params[[i]]) %>%
       mutate(PARAMCD = new_names[[i]])
   }
 
-  data_parameters <- data_source %>%
+  data_parameters <- dataset %>%
     bind_rows(new_data) %>%
     filter(PARAMCD %in% param_values)
 
@@ -196,15 +307,15 @@ derive_param_computed <- function(dataset,
         "The input dataset does not contain any observations fullfiling the filter condition (",
         expr_label(filter),
         ") for the parameter codes (PARAMCD) ",
-        enumerate(parameters),
+        enumerate(param_values),
         "\nNo new observations were added."
       )
     )
-    return(dataset)
+    return(list(hori_data = NULL))
   }
 
   params_available <- unique(data_parameters$PARAMCD)
-  params_missing <- setdiff(c(param_values, constant_parameters), params_available)
+  params_missing <- setdiff(param_values, params_available)
   if (length(params_missing) > 0) {
     warn(
       paste0(
@@ -215,7 +326,7 @@ derive_param_computed <- function(dataset,
         "\nNo new observations were added."
       )
     )
-    return(dataset)
+    return(list(hori_data = NULL))
   }
 
   signal_duplicate_records(
@@ -258,30 +369,10 @@ derive_param_computed <- function(dataset,
         by = vars2chr(by_vars))
     }
   }
-  hori_data <- bind_rows(hori_data) %>%
-    select(!!!by_vars, !!!analysis_vars)
 
-  if (!is.null(constant_parameters)) {
-    data_const_parameters <- data_filtered %>%
-      filter(PARAMCD %in% constant_parameters) %>%
-      select(!!!exprs(!!!constant_by_vars, PARAMCD, AVAL))
-
-    hori_const_data <- data_const_parameters %>%
-      pivot_wider(names_from = PARAMCD, values_from = AVAL, names_prefix = "AVAL.")
-
-    hori_data <- inner_join(hori_data, hori_const_data, by = vars2chr(constant_by_vars))
-  }
-
-  # add analysis value (AVAL) and parameter variables, e.g., PARAMCD
-  hori_data <- hori_data %>%
-    # keep only observations where all analysis values are available
-    filter(!!!parse_exprs(map_chr(
-      analysis_vars_chr,
-      ~ str_c("!is.na(", .x, ")")
-    ))) %>%
-    process_set_values_to(exprs(AVAL = !!analysis_value)) %>%
-    process_set_values_to(set_values_to) %>%
-    select(-all_of(analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]))
-
-  bind_rows(dataset, hori_data)
+  list(
+    hori_data = bind_rows(hori_data) %>%
+    select(!!!by_vars, any_of(analysis_vars_chr)),
+    analysis_vars_chr = analysis_vars_chr
+  )
 }
