@@ -131,7 +131,7 @@
 #'     analysis_date = ASTDTM,
 #'     traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
 #'   ) %>%
-#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, EXENDTM, LDOSEDOM, LDOSESEQ, LDOSEVAR)
+#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 derive_vars_last_dose <- function(dataset,
                                   dataset_ex,
                                   filter_ex = NULL,
