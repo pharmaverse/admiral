@@ -130,6 +130,7 @@ dm <- tribble(
   "PILOT01",    "DM", "09-1088",   69, "YEARS"
 )
 
+
 ae_start <- date_source(
   dataset_name = "ae",
   date = convert_dtc_to_dt(AESTDTC, highest_imputation = "M")
@@ -155,6 +156,7 @@ lb_date <- date_source(
   dataset_name = "lb",
   date = convert_dtc_to_dt(LBDTC)
 )
+
 
 lb_ext <- derive_vars_dt(
   lb,
@@ -234,7 +236,7 @@ dm \%>\%
 \seealso{
 \code{\link[=date_source]{date_source()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_merged]{derive_vars_merged()}}
 
-ADSL Functions that returns variable appended to dataset: 
+ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_var_age_years}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dtm}()},

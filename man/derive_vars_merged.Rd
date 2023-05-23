@@ -184,7 +184,10 @@ dm <- tribble(
   "PILOT01",    "DM", "17-1344",   64, "YEARS"
 )
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0da2501a8a909a0dd2571e78df4e43374fd2b75d
 # Merging all dm variables to vs
 derive_vars_merged(
   vs,
@@ -215,6 +218,7 @@ derive_vars_merged(
   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 
 
+
 # Derive treatment start datetime (TRTSDTM)
 ex <- tribble(
   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~EXSTDY, ~EXENDY,     ~EXSTDTC,     ~EXENDTC,
@@ -223,7 +227,7 @@ ex <- tribble(
   "PILOT01",    "EX", "17-1344",       1,      14, "2014-01-11", "2014-01-24",
   "PILOT01",    "EX", "17-1344",      15,      63, "2014-01-25", "2014-03-14"
 )
-## Impute exposure start date to first date/time
+## Add first exposure datetime and imputation flags to adsl
 ex_ext <- derive_vars_dtm(
   ex,
   dtc = EXSTDTC,
@@ -257,7 +261,7 @@ derive_vars_merged(
   new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
   order = exprs(EXENDTM),
   mode = "last"
-)
+
 
 # Modify merged values and set value for non matching observations
 adsl <- tribble(

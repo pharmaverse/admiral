@@ -235,7 +235,7 @@ dm \%>\%
 \code{\link[=date_source]{date_source()}}, \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}},
 \code{\link[=derive_vars_merged]{derive_vars_merged()}}
 
-ADSL Functions that returns variable appended to dataset: 
+ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_var_age_years}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},
