@@ -91,25 +91,38 @@
 #'
 #' # Add a new record for each USUBJID storing for the last value.
 #' # Set AVISITN = 99 and DTYPE = LOV for these new records.
+#' # Specify the variables that need to be kept in the new records.
 #' derive_extreme_records(
 #'   adlb,
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(AVISITN),
 #'   mode = "last",
+#'   keep_vars_source = exprs(USUBJID, AVAL),
 #'   set_values_to = exprs(
 #'     AVISITN = 99,
 #'     DTYPE = "LOV"
 #'   )
 #' )
+#'
+
 derive_extreme_records <- function(dataset,
                                    by_vars = NULL,
                                    order,
                                    mode,
                                    check_type = "warning",
                                    filter = NULL,
+                                   keep_vars_source = NULL,
                                    set_values_to) {
   # Check input parameters
   assert_vars(by_vars, optional = TRUE)
+  assert_vars(keep_vars_source, optional = TRUE)
+
+  if (!is.null(keep_vars_source)) {
+    keep_vars_source <- keep_vars_source
+  } else {
+    keep_vars_source <- exprs(everything())
+  }
+
   assert_order_vars(order)
   assert_data_frame(
     dataset,
@@ -117,6 +130,7 @@ derive_extreme_records <- function(dataset,
       by_vars, extract_vars(order)
     )
   )
+
   mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
   check_type <-
     assert_character_scalar(
@@ -136,6 +150,7 @@ derive_extreme_records <- function(dataset,
       mode = mode,
       check_type = check_type
     ) %>%
+    select(!!!keep_vars_source) %>%
     mutate(!!!set_values_to)
 
   # Create output dataset
