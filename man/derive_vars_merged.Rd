@@ -11,9 +11,10 @@ derive_vars_merged(
   by_vars,
   order = NULL,
   new_vars = NULL,
-  mode = NULL,
   filter_add = NULL,
+  mode = NULL,
   match_flag = NULL,
+  missing_values = NULL,
   check_type = "warning",
   duplicate_msg = NULL
 )
@@ -44,10 +45,10 @@ If the argument is set to a non-null value, for each by group the first or
 last observation from the additional dataset is selected with respect to the
 specified order.
 
-\emph{Default}: \code{NULL}
+Variables defined by the \code{new_vars} argument can be used in the sort order.
 
-\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{new_vars}{Variables to add
 
@@ -61,12 +62,26 @@ And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 \code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
 \code{old_var2} to \code{new_var2}.
 
+Values of the added variables can be modified by specifying an expression.
+For example, \code{new_vars = LASTRSP = exprs(str_to_upper(AVALC))} adds the
+variable \code{LASTRSP} to the dataset and sets it to the upper case value of
+\code{AVALC}.
+
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
 
-\emph{Default}: \code{NULL}
+\emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}}
+\item{filter_add}{Filter for additional dataset (\code{dataset_add})
+
+Only observations fulfilling the specified condition are taken into account
+for merging. If the argument is not specified, all observations are
+considered.
+
+Variables defined by the \code{new_vars} argument can be used in the filter
+condition.
+
+\emph{Permitted Values}: a condition}
 
 \item{mode}{Selection mode
 
@@ -75,19 +90,7 @@ argument is specified, \code{mode} must be non-null.
 
 If the \code{order} argument is not specified, the \code{mode} argument is ignored.
 
-\emph{Default}: \code{NULL}
-
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
-
-\item{filter_add}{Filter for additional dataset (\code{dataset_add})
-
-Only observations fulfilling the specified condition are taken into account
-for merging. If the argument is not specified, all observations are
-considered.
-
-\emph{Default}: \code{NULL}
-
-\emph{Permitted Values}: a condition}
 
 \item{match_flag}{Match flag
 
@@ -96,17 +99,23 @@ variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
 be \code{TRUE} for all selected records from \code{dataset_add} which are merged into
 the input dataset, and \code{NA} otherwise.
 
-\emph{Default}: \code{NULL}
-
 \emph{Permitted Values}: Variable name}
+
+\item{missing_values}{Values for non-matching observations
+
+For observations of the input dataset (\code{dataset}) which do not have a
+matching observation in the additional dataset (\code{dataset_add}) the values
+of the specified variables are set to the specified value. Only variables
+specified for \code{new_vars} can be specified for \code{missing_values}.
+
+\emph{Permitted Values}: named list of expressions, e.g.,
+\code{exprs(BASEC = "MISSING", BASE = -1)}}
 
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
 if the observations of the (restricted) additional dataset are not unique
 with respect to the by variables and the order.
-
-\emph{Default}: \code{"warning"}
 
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 
@@ -133,16 +142,19 @@ each by group (\code{order} and \code{mode} argument).
 }
 \details{
 \enumerate{
+\item The new variables (\code{new_vars}) are added to the additional dataset
+(\code{dataset_add}).
 \item The records from the additional dataset (\code{dataset_add}) are restricted
 to those matching the \code{filter_add} condition.
 \item If \code{order} is specified, for each by group the first or last observation
 (depending on \code{mode}) is selected.
-\item The variables specified for \code{new_vars} are renamed (if requested) and
-merged to the input dataset using \code{left_join()}. I.e., the output dataset
-contains all observations from the input dataset. For observations without
-a matching observation in the additional dataset the new variables are set
-to \code{NA}. Observations in the additional dataset which have no matching
-observation in the input dataset are ignored.
+\item The variables specified for \code{new_vars} are merged to the input dataset
+using \code{left_join()}. I.e., the output dataset contains all observations
+from the input dataset. For observations without a matching observation in
+the additional dataset the new variables are set as specified by
+\code{missing_values} (or to \code{NA} for variables not in \code{missing_values}).
+Observations in the additional dataset which have no matching observation
+in the input dataset are ignored.
 }
 }
 \examples{
@@ -172,7 +184,6 @@ dm <- tribble(
   "PILOT01",    "DM", "17-1344",   64, "YEARS"
 )
 
-
 # Merging all dm variables to vs
 derive_vars_merged(
   vs,
@@ -194,13 +205,14 @@ derive_vars_merged(
   adsl,
   dataset_add = vs,
   by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(VSDTC),
+  order = exprs(convert_dtc_to_dtm(VSDTC)),
   mode = "last",
   new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
   filter_add = VSTESTCD == "WEIGHT",
   match_flag = vsdatafl
 ) \%>\%
   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
+
 
 
 # Derive treatment start datetime (TRTSDTM)
@@ -211,13 +223,14 @@ ex <- tribble(
   "PILOT01",    "EX", "17-1344",       1,      14, "2014-01-11", "2014-01-24",
   "PILOT01",    "EX", "17-1344",      15,      63, "2014-01-25", "2014-03-14"
 )
-## Impute exposure start date to first date/time
+## Add first exposure datetime and imputation flags to adsl
 ex_ext <- derive_vars_dtm(
   ex,
   dtc = EXSTDTC,
   new_vars_prefix = "EXST",
   highest_imputation = "M",
 )
+
 ## Add first exposure datetime and imputation flags to adsl
 derive_vars_merged(
   select(dm, STUDYID, USUBJID),
@@ -227,7 +240,6 @@ derive_vars_merged(
   order = exprs(EXSTDTM),
   mode = "first"
 )
-
 
 # Derive treatment end datetime (TRTEDTM)
 ## Impute exposure end datetime to last time, no date imputation
@@ -246,6 +258,36 @@ derive_vars_merged(
   new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
   order = exprs(EXENDTM),
   mode = "last"
+
+  
+# Modify merged values and set value for non matching observations
+adsl <- tribble(
+  ~USUBJID, ~SEX, ~COUNTRY,
+  "ST42-1", "F",  "AUT",
+  "ST42-2", "M",  "MWI",
+  "ST42-3", "M",  "NOR",
+  "ST42-4", "F",  "UGA"
+)
+
+advs <- tribble(
+  ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVISITN, ~AVAL,
+  "ST42-1", "WEIGHT", "BASELINE",        0,    66,
+  "ST42-1", "WEIGHT", "WEEK 2",          1,    68,
+  "ST42-2", "WEIGHT", "BASELINE",        0,    88,
+  "ST42-3", "WEIGHT", "WEEK 2",          1,    55,
+  "ST42-3", "WEIGHT", "WEEK 4",          2,    50
+)
+
+derive_vars_merged(
+  adsl,
+  dataset_add = advs,
+  by_vars = exprs(USUBJID),
+  new_vars = exprs(
+    LSTVSCAT = if_else(AVISIT == "BASELINE", "BASELINE", "POST-BASELINE")
+  ),
+  order = exprs(AVISITN),
+  mode = "last",
+  missing_value = exprs(LSTVSCAT = "MISSING")
 )
 }
 \seealso{
@@ -255,8 +297,6 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
-\code{\link{derive_var_merged_cat}()},
-\code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},

@@ -52,9 +52,9 @@ The following steps are performed to create the output dataset:
 element are selected and observations where \code{date} is \code{NA} are removed.
 Then for each patient the first or last observation (with respect to \code{date}
 and \code{mode}) is selected.
-\item The new variable is set to the variable specified by the \code{date} element.
-If this is a date variable (rather than datetime), then the time is imputed
-as \code{"00:00:00"}.
+\item The new variable is set to the variable or expression specified by the
+\code{date} element. If this is a date variable (rather than datetime), then the
+time is imputed as \code{"00:00:00"}.
 \item The variables specified by the \code{traceability_vars} element are added.
 \item The selected observations of all source datasets are combined into a
 single dataset.
@@ -130,11 +130,11 @@ adsl <- tribble(
 # derive last known alive datetime (LSTALVDTM)
 ae_start <- date_source(
   dataset_name = "ae",
-  date = AESTDTM
+  date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
 )
 ae_end <- date_source(
   dataset_name = "ae",
-  date = AEENDTM
+  date = convert_dtc_to_dtm(AEENDTC, highest_imputation = "M"),
 )
 
 ae_ext <- ae \%>\%
@@ -151,8 +151,7 @@ ae_ext <- ae \%>\%
 
 lb_date <- date_source(
   dataset_name = "lb",
-  date = LBDTM,
-  filter = !is.na(LBDTM)
+  date = convert_dtc_to_dtm(LBDTC),
 )
 
 lb_ext <- derive_vars_dtm(
@@ -169,7 +168,8 @@ dm \%>\%
     ae_start, ae_end, lb_date, adsl_date,
     source_datasets = list(
       adsl = adsl,
-      ae = ae_ext, lb = lb_ext
+      ae = ae_ext, 
+      lb = lb_ext
     ),
     mode = "last"
   ) \%>\%
@@ -178,7 +178,7 @@ dm \%>\%
 # derive last alive datetime and traceability variables
 ae_start <- date_source(
   dataset_name = "ae",
-  date = AESTDTM,
+  date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
   traceability_vars = exprs(
     LALVDOM = "AE",
     LALVSEQ = AESEQ,
@@ -188,7 +188,7 @@ ae_start <- date_source(
 
 ae_end <- date_source(
   dataset_name = "ae",
-  date = AEENDTM,
+  date = convert_dtc_to_dtm(AEENDTC, highest_imputation = "M"),
   traceability_vars = exprs(
     LALVDOM = "AE",
     LALVSEQ = AESEQ,
@@ -197,8 +197,7 @@ ae_end <- date_source(
 )
 lb_date <- date_source(
   dataset_name = "lb",
-  date = LBDTM,
-  filter = !is.na(LBDTM),
+  date = convert_dtc_to_dtm(LBDTC),
   traceability_vars = exprs(
     LALVDOM = "LB",
     LALVSEQ = LBSEQ,

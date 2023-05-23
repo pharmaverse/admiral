@@ -34,9 +34,9 @@
 #'   Then for each patient the first or last observation (with respect to `date`
 #'   and `mode`) is selected.
 #'
-#'   1. The new variable is set to the variable specified by the `date` element.
-#'   If this is a date variable (rather than datetime), then the time is imputed
-#'   as `"00:00:00"`.
+#'   1. The new variable is set to the variable or expression specified by the
+#'   `date` element. If this is a date variable (rather than datetime), then the
+#'   time is imputed as `"00:00:00"`.
 #'
 #'   1. The variables specified by the `traceability_vars` element are added.
 #'
@@ -125,11 +125,11 @@
 #' # derive last known alive datetime (LSTALVDTM)
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
-#'   date = AESTDTM
+#'   date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
 #' )
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
-#'   date = AEENDTM
+#'   date = convert_dtc_to_dtm(AEENDTC, highest_imputation = "M"),
 #' )
 #'
 #' ae_ext <- ae %>%
@@ -146,8 +146,7 @@
 #'
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
-#'   date = LBDTM,
-#'   filter = !is.na(LBDTM)
+#'   date = convert_dtc_to_dtm(LBDTC),
 #' )
 #'
 #' lb_ext <- derive_vars_dtm(
@@ -156,7 +155,10 @@
 #'   new_vars_prefix = "LB"
 #' )
 #'
-#' adsl_date <- date_source(dataset_name = "adsl", date = TRTEDTM)
+#' adsl_date <- date_source(
+#'   dataset_name = "adsl",
+#'   date = TRTEDTM
+#' )
 #'
 #' dm %>%
 #'   derive_var_extreme_dtm(
@@ -164,7 +166,8 @@
 #'     ae_start, ae_end, lb_date, adsl_date,
 #'     source_datasets = list(
 #'       adsl = adsl,
-#'       ae = ae_ext, lb = lb_ext
+#'       ae = ae_ext, 
+#'       lb = lb_ext
 #'     ),
 #'     mode = "last"
 #'   ) %>%
@@ -173,7 +176,7 @@
 #' # derive last alive datetime and traceability variables
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
-#'   date = AESTDTM,
+#'   date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
 #'   traceability_vars = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
@@ -183,7 +186,7 @@
 #'
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
-#'   date = AEENDTM,
+#'   date = convert_dtc_to_dtm(AEENDTC, highest_imputation = "M"),
 #'   traceability_vars = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
@@ -192,8 +195,7 @@
 #' )
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
-#'   date = LBDTM,
-#'   filter = !is.na(LBDTM),
+#'   date = convert_dtc_to_dtm(LBDTC),
 #'   traceability_vars = exprs(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
@@ -272,9 +274,18 @@ derive_var_extreme_dtm <- function(dataset,
     source_dataset <- source_datasets[[source_dataset_name]]
 
     date <- sources[[i]]$date
+    if (is.symbol(date)) {
+      date_var <- date
+    } else {
+      date_var <- get_new_tmp_var(dataset = source_dataset, prefix = "tmp_date")
+      source_dataset <- mutate(
+        source_dataset,
+        !!date_var := !!date
+      )
+    }
     assert_date_var(
       dataset = source_dataset,
-      var = !!date,
+      var = !!date_var,
       dataset_name = source_dataset_name
     )
 
@@ -288,9 +299,9 @@ derive_var_extreme_dtm <- function(dataset,
 
     add_data[[i]] <- source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
-      filter(!is.na(!!date)) %>%
+      filter(!is.na(!!date_var)) %>%
       filter_extreme(
-        order = exprs(!!date),
+        order = exprs(!!date_var),
         by_vars = subject_keys,
         mode = mode,
         check_type = "none"
@@ -300,7 +311,7 @@ derive_var_extreme_dtm <- function(dataset,
       add_data[[i]],
       !!!subject_keys,
       !!!sources[[i]]$traceability_vars,
-      !!new_var := convert_date_to_dtm(!!date)
+      !!new_var := convert_date_to_dtm(!!date_var)
     )
   }
 
@@ -334,7 +345,8 @@ derive_var_extreme_dtm <- function(dataset,
 #'   Then for each patient the first or last observation (with respect to `date`
 #'   and `mode`) is selected.
 #'
-#'   1. The new variable is set to the variable specified by the `date` element.
+#'   1. The new variable is set to the variable or expression specified by the
+#'   `date` element.
 #'
 #'   1. The variables specified by the `traceability_vars` element are added.
 #'
@@ -426,11 +438,11 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
-#'   date = AESTDT
+#'   date = convert_dtc_to_dt(AESTDTC, highest_imputation = "M")
 #' )
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
-#'   date = AEENDT
+#'   date = convert_dtc_to_dt(AEENDTC, highest_imputation = "M")
 #' )
 #'
 #' ae_ext <- ae %>%
@@ -447,8 +459,7 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
-#'   date = LBDT,
-#'   filter = !is.na(LBDT),
+#'   date = convert_dtc_to_dt(LBDTC)
 #' )
 #'
 #' lb_ext <- derive_vars_dt(
@@ -475,7 +486,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' # derive last alive date and traceability variables
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
-#'   date = AESTDT,
+#'   date = convert_dtc_to_dt(AESTDTC, highest_imputation = "M"),
 #'   traceability_vars = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
@@ -485,17 +496,17 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
-#'   date = AEENDT,
+#'   date = convert_dtc_to_dt(AEENDTC, highest_imputation = "M"),
 #'   traceability_vars = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
 #'     LALVVAR = "AEENDTC"
 #'   )
 #' )
+#'
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
-#'   date = LBDT,
-#'   filter = !is.na(LBDT),
+#'   date = convert_dtc_to_dt(LBDTC),
 #'   traceability_vars = exprs(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
@@ -557,13 +568,13 @@ derive_var_extreme_dt <- function(dataset,
 #'
 #' @param filter An unquoted condition for filtering `dataset`.
 #'
-#' @param date A variable providing a date. A date or a datetime can be
-#'   specified. An unquoted symbol is expected.
+#' @param date A variable or an expression providing a date. A date or a
+#'   datetime can be specified. An unquoted symbol or expression is expected.
 #'
 #' @param traceability_vars A named list returned by `exprs()` defining the
 #'   traceability variables, e.g. `exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
 #'   = "AESTDTC")`. The values must be a symbol, a character string, a numeric,
-#'   or `NA`.
+#'   an expression, or `NA`.
 #'
 #'
 #' @seealso [derive_var_extreme_dtm()], [derive_var_extreme_dt()]
@@ -587,7 +598,7 @@ derive_var_extreme_dt <- function(dataset,
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
 #'   filter = LBSTAT != "NOT DONE" | is.na(LBSTAT),
-#'   date = LBDT
+#'   date = convert_dtc_to_dt(LBDTC)
 #' )
 #'
 #' # death date from ADSL including traceability variables
@@ -606,8 +617,8 @@ date_source <- function(dataset_name,
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
-    date = assert_symbol(enexpr(date)),
-    traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
+    date = assert_expr(enexpr(date)),
+    traceability_vars = assert_expr_list(traceability_vars, named = TRUE, optional = TRUE)
   )
   class(out) <- c("date_source", "source", "list")
   out

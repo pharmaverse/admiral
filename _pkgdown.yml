@@ -50,6 +50,11 @@ reference:
   contents:
   - has_keyword("metadata")
 
+- title: Example Datasets
+  desc: You can run `use_ad_template()` to produce additional datasets
+  contents:
+  - has_keyword('datasets')
+
 - title: Advanced Functions
 - subtitle: Admiral Options
   contents:
@@ -113,11 +118,6 @@ reference:
   contents:
   - has_keyword('utils_print')
 
-- title: Example Datasets
-  desc: You can run `use_ad_template()` to produce additional datasets
-  contents:
-  - has_keyword('datasets')
-
 - title: Objects exported from other packages
   desc: |
     To maximize the user-friendliness of `{admiral}`, functions from other packages are provided
@@ -162,7 +162,7 @@ navbar:
       text: User Guides
       menu:
       - text: Getting Started
-      - text: Creating a basic ADSL
+      - text: Creating a Basic ADSL
         href: articles/adsl.html
       - text: FAQ
         href: articles/faq.html

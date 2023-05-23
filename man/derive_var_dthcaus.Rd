@@ -42,7 +42,6 @@ the preferred order.
 \examples{
 library(tibble)
 library(dplyr, warn.conflicts = FALSE)
-library(lubridate)
 
 adsl <- tribble(
   ~STUDYID,  ~USUBJID,
@@ -53,26 +52,21 @@ adsl <- tribble(
 ae <- tribble(
   ~STUDYID,  ~USUBJID, ~AESEQ, ~AEDECOD,       ~AEOUT,  ~AEDTHDTC,
   "STUDY01", "PAT01",  12,     "SUDDEN DEATH", "FATAL", "2021-04-04"
-) \%>\%
-  mutate(
-    AEDTHDT = ymd(AEDTHDTC)
-  )
+)
+
 ds <- tribble(
   ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
   "STUDY01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
   "STUDY01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
   "STUDY01", "PAT02", 3, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01",
   "STUDY01", "PAT03", 1, "DEATH", "POST STUDY REPORTING OF DEATH", "2022-03-03"
-) \%>\%
-  mutate(
-    DSSTDT = ymd(DSSTDTC)
-  )
+)
 
 # Derive `DTHCAUS` only - for on-study deaths only
 src_ae <- dthcaus_source(
   dataset_name = "ae",
   filter = AEOUT == "FATAL",
-  date = AEDTHDT,
+  date = convert_dtc_to_dt(AEDTHDTC),
   mode = "first",
   dthcaus = AEDECOD
 )
@@ -80,7 +74,7 @@ src_ae <- dthcaus_source(
 src_ds <- dthcaus_source(
   dataset_name = "ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-  date = DSSTDT,
+  date = convert_dtc_to_dt(DSSTDTC),
   mode = "first",
   dthcaus = DSTERM
 )
@@ -91,7 +85,7 @@ derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds
 src_ae <- dthcaus_source(
   dataset_name = "ae",
   filter = AEOUT == "FATAL",
-  date = AEDTHDT,
+  date = convert_dtc_to_dt(AEDTHDTC),
   mode = "first",
   dthcaus = AEDECOD,
   traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
@@ -100,7 +94,7 @@ src_ae <- dthcaus_source(
 src_ds <- dthcaus_source(
   dataset_name = "ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-  date = DSSTDT,
+  date = convert_dtc_to_dt(DSSTDTC),
   mode = "first",
   dthcaus = DSTERM,
   traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
@@ -112,10 +106,15 @@ derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds
 src_ae <- dthcaus_source(
   dataset_name = "ae",
   filter = AEOUT == "FATAL",
-  date = AEDTHDT,
+  date = convert_dtc_to_dt(AEDTHDTC),
   mode = "first",
   dthcaus = AEDECOD,
   traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
+)
+
+ds <- mutate(
+  ds,
+  DSSTDT = convert_dtc_to_dt(DSSTDTC)
 )
 
 src_ds <- dthcaus_source(
@@ -136,7 +135,11 @@ src_ds_post <- dthcaus_source(
   traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 
-derive_var_dthcaus(adsl, src_ae, src_ds, src_ds_post, source_datasets = list(ae = ae, ds = ds))
+derive_var_dthcaus(
+  adsl,
+  src_ae, src_ds, src_ds_post,
+  source_datasets = list(ae = ae, ds = ds)
+)
 }
 \seealso{
 \code{\link[=dthcaus_source]{dthcaus_source()}}

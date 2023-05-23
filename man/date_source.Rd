@@ -12,12 +12,12 @@ the date.}
 
 \item{filter}{An unquoted condition for filtering \code{dataset}.}
 
-\item{date}{A variable providing a date. A date or a datetime can be
-specified. An unquoted symbol is expected.}
+\item{date}{A variable or an expression providing a date. A date or a
+datetime can be specified. An unquoted symbol or expression is expected.}
 
 \item{traceability_vars}{A named list returned by \code{exprs()} defining the
 traceability variables, e.g. \code{exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, a numeric,
-or \code{NA}.}
+an expression, or \code{NA}.}
 }
 \value{
 An object of class \code{date_source}.
@@ -38,7 +38,7 @@ trt_end_date <- date_source(
 lb_date <- date_source(
   dataset_name = "lb",
   filter = LBSTAT != "NOT DONE" | is.na(LBSTAT),
-  date = LBDT
+  date = convert_dtc_to_dt(LBDTC)
 )
 
 # death date from ADSL including traceability variables
@@ -62,6 +62,7 @@ Source Objects:
 \code{\link{event_source}()},
 \code{\link{event}()},
 \code{\link{query}()},
+\code{\link{records_source}()},
 \code{\link{tte_source}()}
 }
 \concept{source_specifications}
