@@ -71,7 +71,7 @@ derive_var_analysis_ratio <- function(dataset,
   new_var <- assert_symbol(enexpr(new_var), optional = TRUE)
 
   if (is.null(new_var)) {
-    new_var <- sym(paste0("R2", rlang::as_name(denom_var)))
+    new_var <- sym(paste0("R2", as_name(denom_var)))
   }
   dataset <- dataset %>%
     mutate(
