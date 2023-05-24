@@ -127,7 +127,7 @@ test_that("derive_vars_last_dose Test 4: function errors when multiple doses are
 
   # single_dose_condition not part of `derive_vars_joined()`
   expect_warning(
-    suppressWarnings(
+    suppress_warning(
       derive_vars_last_dose(
         input_ae,
         input_ex_dup,
@@ -137,9 +137,13 @@ test_that("derive_vars_last_dose Test 4: function errors when multiple doses are
         analysis_date = AESTDT,
         single_dose_condition = (EXSTDTC == EXENDTC),
         traceability_vars = NULL
+      ),
+      regexpr = paste(
+        "Dataset contains duplicate records with respect to",
+        "`STUDYID`, `USUBJID`, `tmp_obs_nr_1` and `EXENDT`"
       )
     ),
-    NA
+    class = "lifecycle_warning_deprecated"
   )
 })
 
