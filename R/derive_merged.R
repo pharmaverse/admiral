@@ -682,6 +682,7 @@ derive_var_merged_character <- function(dataset,
     by_vars = by_vars,
     order = order,
     new_vars = exprs(!!new_var := !!trans),
+    filter_add = !!filter_add,
     mode = mode,
     missing_values = exprs(!!new_var := !!missing_value)
   )
