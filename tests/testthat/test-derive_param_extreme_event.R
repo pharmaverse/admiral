@@ -208,3 +208,116 @@ test_that("derive_param_extreme_event Test 4: latest evaluable tumor assessment 
     keys = c("USUBJID", "PARAMCD", "ADT")
   )
 })
+
+
+
+adrs <- tibble::tribble(
+  ~USUBJID, ~RSSEQ, ~ADTC,        ~AVALC,
+  "1",      1,      "2020-01-02", "PR",
+  "1",      2,      "2020-02-01", "CR",
+  "1",      3,      "2020-03-01", "PD",
+  "1",      4,      "2020-04-01", "SD",
+  "2",      1,      "2021-06-15", "SD",
+  "2",      2,      "2021-07-16", "PD",
+  "2",      3,      "2021-09-14", "PD",
+  "3",      1,      "2021-10-10", "PD",
+  "3",      2,      "2021-11-11", "CR",
+  "3",      3,      "2021-12-12", "PD"
+) %>%
+  mutate(
+    STUDYID = "XX1234",
+    ADT = ymd(ADTC),
+    PARAMCD = "OVR",
+    PARAM = "Overall Response",
+    ANL01FL = "Y"
+  ) %>%
+  select(-ADTC)
+
+# derive_param_extreme_event ----
+## Test 5: keep variables specified in `keep_vars_source` in the new records ----
+test_that("derive_param_extreme_event Test 5: keep variables specified in `keep_vars_source` in the new records", { # nolint
+  actual <- derive_param_extreme_event(
+    adrs,
+    dataset_adsl = adsl,
+    dataset_source = adrs,
+    filter_source = PARAMCD == "OVR" & AVALC == "PD",
+    order = exprs(ADT),
+    new_var = AVALC,
+    keep_vars_source = ,
+    true_value = "Y",
+    false_value = "N",
+    mode = "first",
+    set_values_to = exprs(
+      PARAMCD = "PD",
+      PARAM = "Disease Progression",
+      ANL01FL = "Y"
+    )
+  )
+
+  expected <- bind_rows(
+    adrs,
+    tibble::tribble(
+      ~USUBJID, ~RSSEQ, ~ADT,              ~AVALC,
+      "1",      3,      ymd("2020-03-01"), "Y",
+      "2",      2,      ymd("2021-07-16"), "Y",
+      "3",      1,      ymd("2021-10-10"), "Y"
+    ) %>%
+      mutate(
+        STUDYID = "XX1234",
+        PARAMCD = "PD",
+        PARAM = "Disease Progression",
+        ANL01FL = "Y"
+      )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "PARAMCD", "ADT")
+  )
+})
+
+
+# derive_param_extreme_event ----
+## Test 6: keep all variables in the new records when `keep_vars_source` is NULL ----
+test_that("derive_param_extreme_event Test 6: keep all variables in the new records when `keep_vars_source` is NULL", { # nolint
+  actual <- derive_param_extreme_event(
+    adrs,
+    dataset_adsl = adsl,
+    dataset_source = adrs,
+    filter_source = PARAMCD == "OVR" & AVALC == "PD",
+    order = exprs(ADT),
+    new_var = AVALC,
+    keep_vars_source = exprs(USUBJID, STUDYID, ADT),
+    true_value = "Y",
+    false_value = "N",
+    mode = "first",
+    set_values_to = exprs(
+      PARAMCD = "PD",
+      PARAM = "Disease Progression",
+      ANL01FL = "Y"
+    )
+  )
+
+  expected <- bind_rows(
+    adrs,
+    tibble::tribble(
+      ~USUBJID, ~ADT,              ~AVALC,
+      "1",      ymd("2020-03-01"), "Y",
+      "2",      ymd("2021-07-16"), "Y",
+      "3",      ymd("2021-10-10"), "Y"
+    ) %>%
+      mutate(
+        STUDYID = "XX1234",
+        PARAMCD = "PD",
+        PARAM = "Disease Progression",
+        ANL01FL = "Y"
+      )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "PARAMCD", "ADT")
+  )
+})

@@ -15,6 +15,7 @@ derive_param_extreme_event(
   false_value = "N",
   mode = "first",
   subject_keys = get_admiral_option("subject_keys"),
+  keep_vars_source = NULL,
   set_values_to,
   check_type = "warning"
 )
@@ -80,6 +81,13 @@ If \code{"last"} is specified, the last observation of each subject is selected.
 
 A list of symbols created using \code{exprs()} is expected.}
 
+\item{keep_vars_source}{Variables to be kept in the new records
+
+A named list returned by \code{exprs()} defining the variables to be kept for the
+new records.
+
+\emph{Default}: \code{everything()}}
+
 \item{set_values_to}{Variables to set
 
 A named list returned by \code{exprs()} defining the variables to be set for the
@@ -131,6 +139,7 @@ library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 
 # Derive a new parameter for the first disease progression (PD)
+# Specify the variables that need to be kept in the new records.
 adsl <- tribble(
   ~USUBJID, ~DTHDT,
   "1",      ymd("2022-05-13"),
@@ -140,14 +149,14 @@ adsl <- tribble(
   mutate(STUDYID = "XX1234")
 
 adrs <- tribble(
-  ~USUBJID, ~ADTC,        ~AVALC,
-  "1",      "2020-01-02", "PR",
-  "1",      "2020-02-01", "CR",
-  "1",      "2020-03-01", "CR",
-  "1",      "2020-04-01", "SD",
-  "2",      "2021-06-15", "SD",
-  "2",      "2021-07-16", "PD",
-  "2",      "2021-09-14", "PD"
+  ~USUBJID, ~RSSEQ, ~ADTC,        ~AVALC,
+  "1",      1,      "2020-01-02", "PR",
+  "1",      2,      "2020-02-01", "CR",
+  "1",      3,      "2020-03-01", "CR",
+  "1",      4,      "2020-04-01", "SD",
+  "2",      1,      "2021-06-15", "SD",
+  "2",      2,      "2021-07-16", "PD",
+  "2",      3,      "2021-09-14", "PD"
 ) \%>\%
   mutate(
     STUDYID = "XX1234",
@@ -168,11 +177,11 @@ derive_param_extreme_event(
   true_value = "Y",
   false_value = "N",
   mode = "first",
+  keep_vars_source = exprs(USUBJID, STUDYID, ADT),
   set_values_to = exprs(
     PARAMCD = "PD",
     PARAM = "Disease Progression",
-    ANL01FL = "Y",
-    ADT = ADT
+    ANL01FL = "Y"
   )
 )
 
@@ -185,6 +194,7 @@ derive_param_extreme_event(
   true_value = "Y",
   false_value = "N",
   mode = "first",
+  keep_vars_source = NULL,
   set_values_to = exprs(
     PARAMCD = "DEATH",
     PARAM = "Death",

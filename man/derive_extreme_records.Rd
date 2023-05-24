@@ -11,6 +11,7 @@ derive_extreme_records(
   mode,
   check_type = "warning",
   filter = NULL,
+  keep_vars_source = NULL,
   set_values_to
 )
 }
@@ -60,6 +61,13 @@ specified, all observations are considered.
 \emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: a condition}
+
+\item{keep_vars_source}{Variables to be kept in the new records
+
+A named list returned by \code{exprs()} defining the variables to be kept for the
+new records.
+
+\emph{Default}: \code{everything()}}
 
 \item{set_values_to}{Variables to be set
 
@@ -118,6 +126,7 @@ derive_extreme_records(
   order = exprs(AVAL, AVISITN),
   mode = "first",
   filter = !is.na(AVAL),
+  keep_vars_source = NULL,
   set_values_to = exprs(
     AVISITN = 97,
     DTYPE = "MINIMUM"
@@ -133,6 +142,7 @@ derive_extreme_records(
   order = exprs(desc(AVAL), AVISITN),
   mode = "first",
   filter = !is.na(AVAL),
+  keep_vars_source = NULL,
   set_values_to = exprs(
     AVISITN = 98,
     DTYPE = "MAXIMUM"
@@ -141,16 +151,19 @@ derive_extreme_records(
 
 # Add a new record for each USUBJID storing for the last value.
 # Set AVISITN = 99 and DTYPE = LOV for these new records.
+# Specify the variables that need to be kept in the new records.
 derive_extreme_records(
   adlb,
   by_vars = exprs(USUBJID),
   order = exprs(AVISITN),
   mode = "last",
+  keep_vars_source = exprs(USUBJID, AVAL),
   set_values_to = exprs(
     AVISITN = 99,
     DTYPE = "LOV"
   )
 )
+
 }
 \seealso{
 BDS-Findings Functions for adding Parameters/Records: 

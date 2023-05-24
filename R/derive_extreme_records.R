@@ -24,6 +24,13 @@
 #'
 #'   *Permitted Values*: a condition
 #'
+#' @param keep_vars_source Variables to be kept in the new records
+#'
+#'   A named list returned by `exprs()` defining the variables to be kept for the
+#'   new records.
+#'
+#'   *Default*: `everything()`
+#'
 #' @inheritParams filter_extreme
 #' @inheritParams derive_summary_records
 #'
@@ -68,6 +75,7 @@
 #'   order = exprs(AVAL, AVISITN),
 #'   mode = "first",
 #'   filter = !is.na(AVAL),
+#'   keep_vars_source = NULL,
 #'   set_values_to = exprs(
 #'     AVISITN = 97,
 #'     DTYPE = "MINIMUM"
@@ -83,6 +91,7 @@
 #'   order = exprs(desc(AVAL), AVISITN),
 #'   mode = "first",
 #'   filter = !is.na(AVAL),
+#'   keep_vars_source = NULL,
 #'   set_values_to = exprs(
 #'     AVISITN = 98,
 #'     DTYPE = "MAXIMUM"
@@ -104,7 +113,6 @@
 #'   )
 #' )
 #'
-
 derive_extreme_records <- function(dataset,
                                    by_vars = NULL,
                                    order,

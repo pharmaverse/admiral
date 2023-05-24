@@ -7,6 +7,9 @@
 
 ## Updates of Existing Functions
 
+- Argument `keep_vars_source` was added to `derive_extreme_records()` and `derive_param_extreme_event()` which allows to 
+specify which variables in the new observations should be kept. (#1697) 
+
 
 ## Breaking Changes
 

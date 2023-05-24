@@ -37,8 +37,8 @@ test_that("derive_extreme_records Test 1: add last observation for each group", 
 })
 
 # derive_extreme_records ----
-## derive_extreme_records Test 2: keep specified variables in the new records ----
-test_that("derive_extreme_records Test 2: keep specified variables in the new records", {
+## derive_extreme_records Test 2: keep variables specified in `keep_vars_source` in the new records ---- # nolint
+test_that("derive_extreme_records Test 2: keep variables specified in `keep_vars_source` in the new records", { # nolint
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
     1, 1, 12, 1,
@@ -77,8 +77,8 @@ test_that("derive_extreme_records Test 2: keep specified variables in the new re
 })
 
 # derive_extreme_records ----
-## derive_extreme_records Test 3: keep all variables in the new records when `keep_vars_source` not specified is NULL ----
-test_that("derive_extreme_records Test 3: keep all variables in the new records when `keep_vars_source` not specified is NULL", {
+## derive_extreme_records Test 3: keep all variables in the new records when `keep_vars_source` is NULL ---- # nolint
+test_that("derive_extreme_records Test 3: keep all variables in the new records when `keep_vars_source` is NULL", { # nolint
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
     1, 1, 12, 1,
