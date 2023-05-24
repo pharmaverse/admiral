@@ -7,8 +7,8 @@
 derive_param_extreme_event(
   dataset = NULL,
   dataset_adsl,
-  dataset_source,
-  filter_source,
+  dataset_add,
+  filter_add,
   order = NULL,
   new_var = NULL,
   true_value = "Y",
@@ -16,7 +16,9 @@ derive_param_extreme_event(
   mode = "first",
   subject_keys = get_admiral_option("subject_keys"),
   set_values_to,
-  check_type = "warning"
+  check_type = "warning",
+  dataset_source,
+  filter_source
 )
 }
 \arguments{
@@ -30,17 +32,17 @@ The variables specified for \code{subject_keys} are expected. For each
 observation of the specified dataset a new observation is added to the
 input dataset.}
 
-\item{dataset_source}{Source dataset
+\item{dataset_add}{Source dataset
 
 All observations in the specified dataset fulfilling the condition
-specified by \code{filter_source} are considered as an event.
+specified by \code{filter_add} are considered as an event.
 
 The variables specified by the \code{subject_keys} and
 \code{order} argument (if applicable) are expected.}
 
-\item{filter_source}{Source filter
+\item{filter_add}{Source filter
 
-All observations in \code{dataset_source} fulfilling the specified condition are
+All observations in \code{dataset_add} fulfilling the specified condition are
 considered as an event.
 
 For subjects with at least one event \code{new_var} is set to \code{true_value}.
@@ -49,7 +51,7 @@ For all other subjects \code{new_var} is set to \code{false_value}.}
 
 \item{order}{Order variable
 
-List of symbols for sorting the source dataset (\code{dataset_source}).
+List of symbols for sorting the source dataset (\code{dataset_add}).
 
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))}.}
@@ -61,7 +63,7 @@ The name of the variable which will indicate whether an event happened or not.}
 \item{true_value}{True value
 
 For all subjects with at least one observation in the source dataset
-(\code{dataset_source}) fulfilling the event condition (\code{filter_source}),
+(\code{dataset_add}) fulfilling the event condition (\code{filter_add}),
 \code{new_var} is set to the specified value \code{true_value}.}
 
 \item{false_value}{False value
@@ -91,11 +93,15 @@ be populated, this needs to be defined here.}
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, a message is issued if the
-observations of the source dataset (\code{dataset_source}) restricted by
-\code{filter_source} are not unique with respect to the subject keys
+observations of the source dataset (\code{dataset_add}) restricted by
+\code{filter_add} are not unique with respect to the subject keys
 (\code{subject_key} argument) and \code{order}.
 
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
+
+\item{dataset_source}{\emph{Deprecated}, please use \code{dataset_add} instead.}
+
+\item{filter_source}{\emph{Deprecated}, please use \code{filter_add} instead.}
 }
 \value{
 The input dataset with a new parameter indicating if and when an
@@ -113,18 +119,18 @@ progression.
 }
 \details{
 \enumerate{
-\item The source dataset (\code{dataset_source}) is restricted to observations fulfilling
-\code{filter_source}.
+\item The source dataset (\code{dataset_add}) is restricted to observations fulfilling
+\code{filter_add}.
 \item For each subject (with respect to the variables specified for the
 \code{subject_keys} argument) either the first or last observation from the restricted
 source dataset is selected. This is depending on \code{mode}, (with respect to \code{order},
-if applicable) where the event condition (\code{filter_source} argument) is fulfilled.
+if applicable) where the event condition (\code{filter_add} argument) is fulfilled.
 \item For each observation in \code{dataset_adsl} a new observation is created. For
 subjects with event \code{new_var} is set to \code{true_value}. For all other
 subjects \code{new_var} is set to \code{false_value}.
-For subjects with event all variables from \code{dataset_source} are kept. For
+For subjects with event all variables from \code{dataset_add} are kept. For
 subjects without event all variables which are in both \code{dataset_adsl} and
-\code{dataset_source} are kept.
+\code{dataset_add} are kept.
 \item The variables specified by the \code{set_values_to} argument are added to
 the new observations.
 \item The new observations are added to input dataset.

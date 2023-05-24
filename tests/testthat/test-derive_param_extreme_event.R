@@ -36,8 +36,8 @@ test_that("derive_param_extreme_event Test 1: deprecation warning if function is
     derive_param_extreme_event(
       adrs,
       dataset_adsl = adsl,
-      dataset_source = adrs,
-      filter_source = PARAMCD == "OVR" & AVALC == "PD",
+      dataset_add = adrs,
+      filter_add = PARAMCD == "OVR" & AVALC == "PD",
       new_var = AVALC,
       order = exprs(ADT),
       set_values_to = exprs(
@@ -50,14 +50,17 @@ test_that("derive_param_extreme_event Test 1: deprecation warning if function is
   )
 })
 
+
+
+
 ## Test 2: derive first PD date ----
 test_that("derive_param_extreme_event Test 2: derive first PD date", {
   actual <- suppress_warning(
     derive_param_extreme_event(
       adrs,
       dataset_adsl = adsl,
-      dataset_source = adrs,
-      filter_source = PARAMCD == "OVR" & AVALC == "PD",
+      dataset_add = adrs,
+      filter_add = PARAMCD == "OVR" & AVALC == "PD",
       new_var = AVALC,
       order = exprs(ADT),
       set_values_to = exprs(
@@ -96,8 +99,8 @@ test_that("derive_param_extreme_event Test 3: derive death date parameter", {
   actual <- suppress_warning(
     derive_param_extreme_event(
       dataset_adsl = adsl,
-      dataset_source = adsl,
-      filter_source = !is.na(DTHDT),
+      dataset_add = adsl,
+      filter_add = !is.na(DTHDT),
       new_var = AVAL,
       true_value = 1,
       false_value = 0,
@@ -161,8 +164,8 @@ test_that("derive_param_extreme_event Test 4: latest evaluable tumor assessment 
     derive_param_extreme_event(
       dataset = adrs,
       dataset_adsl = adsl,
-      dataset_source = adrs,
-      filter_source = PARAMCD == "OVR" & AVALC != "NE",
+      dataset_add = adrs,
+      filter_add = PARAMCD == "OVR" & AVALC != "NE",
       order = exprs(ADT),
       new_var = AVALC,
       true_value = "Y",
@@ -205,8 +208,8 @@ test_that("derive_param_extreme_event Test 5: latest evaluable tumor assessment 
     derive_param_extreme_event(
       dataset = adrs,
       dataset_adsl = adsl,
-      dataset_source = adrs,
-      filter_source = PARAMCD == "OVR" & AVALC != "NE",
+      dataset_add = adrs,
+      filter_add = PARAMCD == "OVR" & AVALC != "NE",
       order = exprs(ADT),
       new_var = NULL,
       mode = "last",
@@ -240,3 +243,55 @@ test_that("derive_param_extreme_event Test 5: latest evaluable tumor assessment 
     keys = c("USUBJID", "PARAMCD", "ADT")
   )
 })
+
+
+## Test 6: deprecation warning for dataset_source call ----
+test_that(
+  "derive_param_extreme_event Test 6: deprecation warning if dataset_source is used",
+  {
+    expect_warning(
+      suppress_warning( # overall deprecation warning must be suppressed
+        regexpr = "was deprecated",
+        derive_param_extreme_event(
+          adrs,
+          dataset_adsl = adsl,
+          dataset_source = adrs,
+          filter_add = PARAMCD == "OVR" & AVALC == "PD",
+          new_var = AVALC,
+          order = exprs(ADT),
+          set_values_to = exprs(
+            PARAMCD = "PD",
+            ANL01FL = "Y",
+            ADT = ADT
+          )
+        )
+      )
+    )
+  }
+)
+
+
+## Test 7: deprecation warning for filter_source call ----
+test_that(
+  "derive_param_extreme_event Test 7: deprecation warning if filter_source is used",
+  {
+    expect_warning(
+      suppress_warning( # overall deprecation warning must be suppressed
+        regexpr = "was deprecated",
+        derive_param_extreme_event(
+          adrs,
+          dataset_adsl = adsl,
+          dataset_add = adrs,
+          filter_source = PARAMCD == "OVR" & AVALC == "PD",
+          new_var = AVALC,
+          order = exprs(ADT),
+          set_values_to = exprs(
+            PARAMCD = "PD",
+            ANL01FL = "Y",
+            ADT = ADT
+          )
+        )
+      )
+    )
+  }
+)

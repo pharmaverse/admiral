@@ -20,17 +20,17 @@
 #'   observation of the specified dataset a new observation is added to the
 #'   input dataset.
 #'
-#' @param dataset_source Source dataset
+#' @param dataset_add Source dataset
 #'
 #'   All observations in the specified dataset fulfilling the condition
-#'   specified by `filter_source` are considered as an event.
+#'   specified by `filter_add` are considered as an event.
 #'
 #'   The variables specified by the `subject_keys` and
 #'   `order` argument (if applicable) are expected.
 #'
-#' @param filter_source Source filter
+#' @param filter_add Source filter
 #'
-#'   All observations in `dataset_source` fulfilling the specified condition are
+#'   All observations in `dataset_add` fulfilling the specified condition are
 #'   considered as an event.
 #'
 #'   For subjects with at least one event `new_var` is set to `true_value`.
@@ -39,7 +39,7 @@
 #'
 #' @param order Order variable
 #'
-#'   List of symbols for sorting the source dataset (`dataset_source`).
+#'   List of symbols for sorting the source dataset (`dataset_add`).
 #'
 #'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))`.
@@ -51,7 +51,7 @@
 #' @param true_value True value
 #'
 #'   For all subjects with at least one observation in the source dataset
-#'   (`dataset_source`) fulfilling the event condition (`filter_source`),
+#'   (`dataset_add`) fulfilling the event condition (`filter_add`),
 #'   `new_var` is set to the specified value `true_value`.
 #'
 #' @param false_value False value
@@ -81,25 +81,29 @@
 #' @param check_type Check uniqueness?
 #'
 #'   If `"warning"` or `"error"` is specified, a message is issued if the
-#'   observations of the source dataset (`dataset_source`) restricted by
-#'   `filter_source` are not unique with respect to the subject keys
+#'   observations of the source dataset (`dataset_add`) restricted by
+#'   `filter_add` are not unique with respect to the subject keys
 #'   (`subject_key` argument) and `order`.
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
+#' @param dataset_source *Deprecated*, please use `dataset_add` instead.
+#'
+#' @param filter_source *Deprecated*, please use `filter_add` instead.
+#'
 #' @details
-#'   1. The source dataset (`dataset_source`) is restricted to observations fulfilling
-#'   `filter_source`.
+#'   1. The source dataset (`dataset_add`) is restricted to observations fulfilling
+#'   `filter_add`.
 #'   1. For each subject (with respect to the variables specified for the
 #'   `subject_keys` argument) either the first or last observation from the restricted
 #'   source dataset is selected. This is depending on `mode`, (with respect to `order`,
-#'   if applicable) where the event condition (`filter_source` argument) is fulfilled.
+#'   if applicable) where the event condition (`filter_add` argument) is fulfilled.
 #'   1. For each observation in `dataset_adsl` a new observation is created. For
 #'   subjects with event `new_var` is set to `true_value`. For all other
 #'   subjects `new_var` is set to `false_value`.
-#'   For subjects with event all variables from `dataset_source` are kept. For
+#'   For subjects with event all variables from `dataset_add` are kept. For
 #'   subjects without event all variables which are in both `dataset_adsl` and
-#'   `dataset_source` are kept.
+#'   `dataset_add` are kept.
 #'   1. The variables specified by the `set_values_to` argument are added to
 #'   the new observations.
 #'   1. The new observations are added to input dataset.
@@ -114,8 +118,8 @@
 #' @export
 derive_param_extreme_event <- function(dataset = NULL,
                                        dataset_adsl,
-                                       dataset_source,
-                                       filter_source,
+                                       dataset_add,
+                                       filter_add,
                                        order = NULL,
                                        new_var = NULL,
                                        true_value = "Y",
@@ -123,14 +127,38 @@ derive_param_extreme_event <- function(dataset = NULL,
                                        mode = "first",
                                        subject_keys = get_admiral_option("subject_keys"),
                                        set_values_to,
-                                       check_type = "warning") {
+                                       check_type = "warning",
+                                       dataset_source,
+                                       filter_source) {
+  ### BEGIN DEPRECATION
   deprecate_warn("0.11.0", "derive_param_extreme_event()", "derive_extreme_records()")
 
+  if (!missing(dataset_source)) {
+    deprecate_warn(
+      "0.11.0",
+      "derive_param_extreme_event(dataset_source = )",
+      "derive_param_extreme_event(dataset_add = )"
+    )
+    dataset_add <- dataset_source
+  }
+
+  if (!missing(filter_source)) {
+    deprecate_warn(
+      "0.11.0",
+      "derive_param_extreme_event(filter_add = )",
+      "derive_param_extreme_event(filter_source = )"
+    )
+    filter_add <- enexpr(filter_source)
+  }
+
+  ### END DEPRECATION
+
+
   # Check input arguments
-  filter_source <- assert_filter_cond(enexpr(filter_source))
+  filter_add <- assert_filter_cond(enexpr(filter_add))
   assert_vars(subject_keys)
   assert_expr_list(order, optional = TRUE)
-  assert_data_frame(dataset_source,
+  assert_data_frame(dataset_add,
     required_vars = exprs(!!!subject_keys, !!!extract_vars(order))
   )
   new_var <- assert_symbol(enexpr(new_var), optional = TRUE)
@@ -155,12 +183,12 @@ derive_param_extreme_event <- function(dataset = NULL,
 
   derive_extreme_records(
     dataset,
-    dataset_add = dataset_source,
+    dataset_add = dataset_add,
     dataset_ref = dataset_adsl,
     by_vars = subject_keys,
     order = order,
     mode = mode,
-    filter_add = !!filter_source,
+    filter_add = !!filter_add,
     check_type = check_type,
     exist_flag = !!new_var,
     true_value = true_value,
