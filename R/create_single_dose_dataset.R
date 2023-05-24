@@ -472,7 +472,7 @@ create_single_dose_dataset <- function(dataset,
 
   # Checking that the dates specified follow the ADaM naming convention of ending in DT
   start_datec <- as_string(as_name(start_date))
-  start_date_chk <- stringr::str_locate_all(start_datec, "DT")
+  start_date_chk <- str_locate_all(start_datec, "DT")
   start_date_chk_pos <- as.vector(start_date_chk[[1]])
 
   if (str_length(start_datec) != start_date_chk_pos[-1]) {
@@ -484,7 +484,7 @@ create_single_dose_dataset <- function(dataset,
   }
 
   end_datec <- as_string(as_name(end_date))
-  end_date_chk <- stringr::str_locate_all(end_datec, "DT")
+  end_date_chk <- str_locate_all(end_datec, "DT")
   end_date_chk_pos <- as.vector(end_date_chk[[1]])
 
   if (str_length(end_datec) != end_date_chk_pos[-1]) {
