@@ -166,12 +166,12 @@ test_that("derive_param_computed Test 4: no new observations are added if a para
 test_that("derive_param_computed Test 5: `dataset_add`, creating new parameters", {
   qs <- tibble::tribble(
     ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
-    "1",      "WEEK 2",  "CHSF112", NA,       1,
-    "1",      "WEEK 2",  "CHSF113", "Yes",    NA,
-    "1",      "WEEK 2",  "CHSF114", NA,       1,
-    "1",      "WEEK 4",  "CHSF112", NA,       2,
-    "1",      "WEEK 4",  "CHSF113", "No",    NA,
-    "1",      "WEEK 4",  "CHSF114", NA,       1
+    "1",      "WEEK 2",  "CHSF112", NA,               1,
+    "1",      "WEEK 2",  "CHSF113", "Yes",           NA,
+    "1",      "WEEK 2",  "CHSF114", NA,               1,
+    "1",      "WEEK 4",  "CHSF112", NA,               2,
+    "1",      "WEEK 4",  "CHSF113", "No",            NA,
+    "1",      "WEEK 4",  "CHSF114", NA,               1
   )
 
   adchsf <- tibble::tribble(
@@ -180,7 +180,6 @@ test_that("derive_param_computed Test 5: `dataset_add`, creating new parameters"
     "1",      "WEEK 2", "CHSF14", NA,       1,             6,
     "1",      "WEEK 4", "CHSF12", NA,       2,            12,
     "1",      "WEEK 4", "CHSF14", NA,       1,             6
-
   )
 
   expected <- bind_rows(
@@ -195,22 +194,22 @@ test_that("derive_param_computed Test 5: `dataset_add`, creating new parameters"
   expect_dfs_equal(
     base = expected,
     compare = derive_param_computed(
-    adchsf,
-    dataset_add = qs,
-    by_vars = exprs(USUBJID, AVISIT),
-    parameters = exprs(CHSF12, CHSF13 = QSTESTCD %in% c("CHSF113", "CHSF213"), CHSF14),
-    analysis_value = case_when(
-      QSORRES.CHSF13 == "Not applicable" ~ 0,
-      QSORRES.CHSF13 == "Yes" ~ 38,
-      QSORRES.CHSF13 == "No" ~ if_else(
-        QSSTRESN.CHSF12 > QSSTRESN.CHSF14,
-        25,
-        0
-      )
+      adchsf,
+      dataset_add = qs,
+      by_vars = exprs(USUBJID, AVISIT),
+      parameters = exprs(CHSF12, CHSF13 = QSTESTCD %in% c("CHSF113", "CHSF213"), CHSF14),
+      analysis_value = case_when(
+        QSORRES.CHSF13 == "Not applicable" ~ 0,
+        QSORRES.CHSF13 == "Yes" ~ 38,
+        QSORRES.CHSF13 == "No" ~ if_else(
+          QSSTRESN.CHSF12 > QSSTRESN.CHSF14,
+          25,
+          0
+        )
+      ),
+      set_values_to = exprs(PARAMCD = "CHSF13")
     ),
-    set_values_to = exprs(PARAMCD = "CHSF13")
-  ),
-  keys = c("USUBJID", "PARAMCD", "AVISIT")
+    keys = c("USUBJID", "PARAMCD", "AVISIT")
   )
 })
 
@@ -234,9 +233,9 @@ test_that("derive_param_computed Test 6: new observations with constant paramete
 
   new_obs <-
     inner_join(vs %>% filter(VSTESTCD == "HGHT") %>% select(USUBJID, AVAL = VSSTRESN),
-               input %>% filter(PARAMCD == "WEIGHT") %>% select(USUBJID, VISIT, AVAL),
-               by = c("USUBJID"),
-               suffix = c(".HEIGHT", ".WEIGHT")
+      input %>% filter(PARAMCD == "WEIGHT") %>% select(USUBJID, VISIT, AVAL),
+      by = c("USUBJID"),
+      suffix = c(".HEIGHT", ".WEIGHT")
     ) %>%
     mutate(
       AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
