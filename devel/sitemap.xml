@@ -430,10 +430,16 @@
     <loc>https://pharmaverse.github.io/admiral/devel/reference/filter_date_sources.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/devel/reference/filter_exist.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/filter_extreme.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/filter_joined.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/devel/reference/filter_not_exist.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/filter_relative.html</loc>
