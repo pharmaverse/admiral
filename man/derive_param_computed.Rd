@@ -9,6 +9,7 @@ derive_param_computed(
   dataset_add = NULL,
   by_vars,
   parameters,
+  analysis_var = AVAL,
   analysis_value,
   set_values_to,
   filter = NULL,
@@ -65,6 +66,13 @@ codes. For example, \code{parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT"
 parameter code \code{"HGHT"}.
 
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions}
+
+\item{analysis_var}{Analysis variable
+
+The specified variable is set to the value of \code{analysis_value} for the new
+observations.
+
+\emph{Permitted Values}: An unquoted symbol}
 
 \item{analysis_value}{Definition of the analysis value
 

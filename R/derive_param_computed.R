@@ -57,6 +57,13 @@
 #'
 #'   *Permitted Values:* A character vector of `PARAMCD` values or a list of expressions
 #'
+#' @param analysis_var Analysis variable
+#'
+#'   The specified variable is set to the value of `analysis_value` for the new
+#'   observations.
+#'
+#'   *Permitted Values*: An unquoted symbol
+#'
 #' @param by_vars Grouping variables
 #'
 #'   For each group defined by `by_vars` an observation is added to the output

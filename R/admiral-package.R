@@ -21,7 +21,7 @@
 #' @importFrom lubridate as_datetime ceiling_date date days duration floor_date is.Date is.instant
 #'             rollback time_length %--% ymd ymd_hms weeks years hours minutes
 #' @importFrom tidyr crossing drop_na fill nest pivot_longer pivot_wider unnest
-#' @importFrom tidyselect all_of contains matches vars_select
+#' @importFrom tidyselect all_of any_of contains matches vars_select
 #' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
 "_PACKAGE"
