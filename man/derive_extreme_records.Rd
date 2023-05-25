@@ -16,6 +16,7 @@ derive_extreme_records(
   exist_flag = NULL,
   true_value = "Y",
   false_value = "N",
+  keep_vars_source = NULL,
   set_values_to,
   filter
 )
@@ -105,6 +106,13 @@ For new observations selected from the additional dataset (\code{dataset_add}),
 For new observations not selected from the additional dataset
 (\code{dataset_add}), \code{exist_flag} is set to the specified value.}
 
+\item{keep_vars_source}{Variables to be kept in the new records
+
+A named list returned by \code{exprs()} defining the variables to be kept for the
+new records.
+
+\emph{Default}: \code{everything()}}
+
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
@@ -172,12 +180,14 @@ adlb <- tribble(
 # Add a new record for each USUBJID storing the minimum value (first AVAL).
 # If multiple records meet the minimum criterion, take the first value by
 # AVISITN. Set AVISITN = 97 and DTYPE = MINIMUM for these new records.
+# Specify the variables that need to be kept in the new records.
 derive_extreme_records(
   adlb,
   by_vars = exprs(USUBJID),
   order = exprs(AVAL, AVISITN),
   mode = "first",
   filter_add = !is.na(AVAL),
+  keep_vars_source = exprs(USUBJID, AVAL),
   set_values_to = exprs(
     AVISITN = 97,
     DTYPE = "MINIMUM"
@@ -193,6 +203,7 @@ derive_extreme_records(
   order = exprs(desc(AVAL), AVISITN),
   mode = "first",
   filter_add = !is.na(AVAL),
+  keep_vars_source = ,
   set_values_to = exprs(
     AVISITN = 98,
     DTYPE = "MAXIMUM"
@@ -206,6 +217,7 @@ derive_extreme_records(
   by_vars = exprs(USUBJID),
   order = exprs(AVISITN),
   mode = "last",
+  keep_vars_source = ,
   set_values_to = exprs(
     AVISITN = 99,
     DTYPE = "LOV"
@@ -251,6 +263,7 @@ derive_extreme_records(
   true_value = "Y",
   false_value = "N",
   mode = "first",
+  keep_vars_source = ,
   set_values_to = exprs(
     PARAMCD = "PD",
     PARAM = "Disease Progression",
@@ -270,6 +283,7 @@ derive_extreme_records(
   true_value = "Y",
   false_value = "N",
   mode = "first",
+  keep_vars_source = ,
   set_values_to = exprs(
     PARAMCD = "DEATH",
     PARAM = "Death",
