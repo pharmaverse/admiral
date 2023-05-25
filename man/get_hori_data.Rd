@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_param_computed.R
 \name{get_hori_data}
 \alias{get_hori_data}
-\title{Horizontalize a Dataset Creating \verb{<variable>.<parameter>} Variables}
+\title{Creating Temporary Parameters and \verb{<variable>.<parameter>} Variables}
 \usage{
 get_hori_data(dataset, by_vars, parameters, analysis_value, filter)
 }
@@ -35,11 +35,11 @@ applied to the input dataset.}
 \value{
 A dataset with one observation per by group. It contains the
 variables specified for \code{by_vars} and all variables of the form
-\verb{<variable>.<parameter>} occuring in \code{analysis_value}.
+\verb{<variable>.<parameter>} occurring in \code{analysis_value}.
 }
 \description{
-The function creates variables of the form \verb{<variable>.<parameter>}, e.g.,
-\code{AVAL.WEIGHT}.
+The function creates temporary parameters and variables of the form
+\verb{<variable>.<parameter>}, e.g., \code{AVAL.WEIGHT}.
 }
 \seealso{
 Other Advanced Functions: 

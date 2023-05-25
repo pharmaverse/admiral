@@ -347,10 +347,10 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
   parameters
 }
 
-#' Horizontalize a Dataset Creating `<variable>.<parameter>` Variables
+#' Creating Temporary Parameters and `<variable>.<parameter>` Variables
 #'
-#' The function creates variables of the form `<variable>.<parameter>`, e.g.,
-#' `AVAL.WEIGHT`.
+#' The function creates temporary parameters and variables of the form
+#' `<variable>.<parameter>`, e.g., `AVAL.WEIGHT`.
 #'
 #' @param dataset Input dataset
 #'
@@ -381,7 +381,7 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'
 #' @return A dataset with one observation per by group. It contains the
 #'   variables specified for `by_vars` and all variables of the form
-#'   `<variable>.<parameter>` occuring in `analysis_value`.
+#'   `<variable>.<parameter>` occurring in `analysis_value`.
 #'
 #' @keywords other_advanced
 #' @family other_advanced
