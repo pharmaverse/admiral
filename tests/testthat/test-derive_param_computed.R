@@ -45,8 +45,8 @@ test_that("derive_param_computed Test 1: new observations are derived correctly"
   )
 })
 
-## Test 2: new observations are derived correctly with constant parameters ----
-test_that("derive_param_computed Test 2: new observations are derived correctly with constant parameters", {
+## Test 2: new observations with constant parameters ----
+test_that("derive_param_computed Test 2: new observations with constant parameters", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
@@ -93,8 +93,8 @@ test_that("derive_param_computed Test 2: new observations are derived correctly 
   )
 })
 
-## Test 3: no new observations are added if filtered dataset is empty ----
-test_that("derive_param_computed Test 3: no new observations are added if filtered dataset is empty", {
+## Test 3: no new observations if filtered dataset is empty ----
+test_that("derive_param_computed Test 3: no new observations if filtered dataset is empty", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
@@ -214,8 +214,8 @@ test_that("derive_param_computed Test 5: `dataset_add`, creating new parameters"
   )
 })
 
-## Test 6: new observations with constant parameters using an expression ----
-test_that("derive_param_computed Test 6: new observations with constant parameters using an expression", {
+## Test 6: expression in constant_parameters ----
+test_that("derive_param_computed Test 6: expression in constant_parameters", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
@@ -312,7 +312,8 @@ test_that("derive_param_computed Test 7: no new observations if a constant param
 })
 
 # assert_parameters_argument ----
-test_that("error if argument is of wrong type", {
+## Test 8: error if argument is of wrong type ----
+test_that("assert_parameters_argument Test 8: error if argument is of wrong type", {
   expect_error(
     assert_parameters_argument(myparameters <- c(1, 2, 3)),
     regexp = paste(
