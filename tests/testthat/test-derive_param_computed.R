@@ -318,7 +318,7 @@ test_that("error if argument is of wrong type", {
     regexp = paste(
       "`myparameters` must be a character vector or a list of expressions",
       "but it is a double vector."
-      ),
+    ),
     fixed = TRUE
   )
 })
