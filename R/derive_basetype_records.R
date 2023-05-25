@@ -57,7 +57,7 @@
 #'   "P02",    "OPEN-LABEL",   "PARAM01",     5,  10.8
 #' )
 #'
-#' bds_with_basetype <- derive_var_basetype(
+#' bds_with_basetype <- derive_basetype_records(
 #'   dataset = bds,
 #'   basetypes = exprs(
 #'     "RUN-IN" = EPOCH %in% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
@@ -83,7 +83,7 @@
 #'   "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1
 #' )
 #'
-#' bds_with_basetype <- derive_var_basetype(
+#' bds_with_basetype <- derive_basetype_records(
 #'   dataset = bds,
 #'   basetypes = exprs(
 #'     "LAST" = TRUE,
@@ -94,7 +94,7 @@
 #' print(bds_with_basetype, n = Inf)
 #'
 #' count(bds_with_basetype, BASETYPE, name = "Number of Records")
-derive_var_basetype <- function(dataset, basetypes) {
+derive_basetype_records <- function(dataset, basetypes) {
   assert_data_frame(dataset)
   assert_named_exprs(basetypes)
 

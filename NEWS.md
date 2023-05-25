@@ -83,6 +83,8 @@ deprecated in favor of `derive_vars_merged()`. (#1727)
 - The `filter` argument in `derive_extreme_records()` was deprecated in favor of
 the `filter_add` argument. (#1725)
 
+- `derive_var_basetype()` was renamed to `derive_basetype_records()`. (#1796)
+
 ## Documentation
 
 - Updated example dataset to trigger deterioration flags in the vignette "Creating Questionnaire ADaMs" (#1853, #1854)
