@@ -227,12 +227,14 @@ derive_param_computed <- function(dataset = NULL,
                                   dataset_add = NULL,
                                   by_vars,
                                   parameters,
+                                  analysis_var = AVAL,
                                   analysis_value,
                                   set_values_to,
                                   filter = NULL,
                                   constant_by_vars = NULL,
                                   constant_parameters = NULL) {
   assert_vars(by_vars)
+  analysis_var <- assert_symbol(enexpr(analysis_var))
   assert_vars(constant_by_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
   assert_data_frame(dataset_add, optional = TRUE)
@@ -287,7 +289,7 @@ derive_param_computed <- function(dataset = NULL,
       analysis_vars_chr,
       ~ str_c("!is.na(", .x, ")")
     ))) %>%
-    process_set_values_to(exprs(AVAL = !!analysis_value)) %>%
+    process_set_values_to(exprs(!!analysis_var := !!analysis_value)) %>%
     process_set_values_to(set_values_to) %>%
     select(-all_of(analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]))
 

@@ -1,3 +1,4 @@
+# derive_param_computed ----
 ## Test 1: new observations are derived correctly ----
 test_that("derive_param_computed Test 1: new observations are derived correctly", {
   input <- tibble::tribble(
@@ -263,5 +264,61 @@ test_that("derive_param_computed Test 6: new observations with constant paramete
     ),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
+  )
+})
+
+## Test 7: no new observations if a constant parameter is missing ----
+test_that("derive_param_computed Test 7: no new observations if a constant parameter is missing", {
+  input <- tibble::tribble(
+    ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
+    "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
+  )
+
+  expect_warning(
+    output <- derive_param_computed(
+      input,
+      parameters = c("WEIGHT"),
+      by_vars = exprs(USUBJID, VISIT),
+      constant_parameters = c("HEIGHT"),
+      constant_by_vars = exprs(USUBJID),
+      analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
+      set_values_to = exprs(
+        PARAMCD = "BMI",
+        PARAM = "Body Mass Index (kg/m2)",
+        AVALU = "kg/m2"
+      )
+    ),
+    regexp = paste(
+      paste(
+        "The input dataset does not contain any observations fullfiling the filter",
+        "condition (NULL) for the parameter codes (PARAMCD) `HEIGHT`"
+      ),
+      "No new observations were added.",
+      sep = "\n"
+    ),
+    fixed = TRUE
+  )
+
+  expect_dfs_equal(
+    output,
+    input,
+    keys = c("USUBJID", "PARAMCD", "VISIT")
+  )
+})
+
+# assert_parameters_argument ----
+test_that("error if argument is of wrong type", {
+  expect_error(
+    assert_parameters_argument(myparameters <- c(1, 2, 3)),
+    regexp = paste(
+      "`myparameters` must be a character vector or a list of expressions",
+      "but it is a double vector."
+      ),
+    fixed = TRUE
   )
 })
