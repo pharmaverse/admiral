@@ -1,6 +1,8 @@
 #' Derive Baseline Variables
 #'
-#' Derive baseline variables, e.g. `BASE` or `BNRIND`, in a BDS dataset
+#' @description Derive baseline variables, e.g. `BASE` or `BNRIND`, in a BDS dataset.
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_vars_merged()`.
 #'
 #' @param dataset The input dataset
 #'

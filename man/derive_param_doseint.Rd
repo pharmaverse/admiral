@@ -97,8 +97,9 @@ be populated in the new parameter rows if it is specified in \code{by_vars}.
 \description{
 Adds a record for the dose intensity for each by group
 (e.g., subject and visit) where the source parameters are available.
-}
-\details{
+
+\strong{Note:} This is a wrapper function for the more generic \code{derive_param_computed()}.
+
 The analysis value of the new parameter is derived as
 Total Dose / Planned Dose * 100
 }
