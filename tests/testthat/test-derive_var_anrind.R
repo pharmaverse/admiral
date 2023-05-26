@@ -36,7 +36,7 @@ test_that("implicitly missing extreme ranges are supported", {
   input <- select(expected_output, USUBJID:ANRHI)
 
   expect_dfs_equal(
-    derive_var_anrind(input),
+    derive_var_anrind(input, use_a1hia1lo = FALSE),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "ASEQ")
   )
@@ -94,7 +94,7 @@ test_that("missing `AVAL` is handled properly", {
   input <- select(expected_output, USUBJID:ANRHI)
 
   expect_dfs_equal(
-    derive_var_anrind(input),
+    derive_var_anrind(input, use_a1hia1lo = FALSE),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "ASEQ")
   )

@@ -2,7 +2,7 @@
 #'
 #' @param dataset The input dataset
 #' @param use_a1hia1lo Boolean value indicating whether to use `A1H1` and `A1LO` in
-#' the derivation of `ANRIND`
+#' the derivation of `ANRIND`. Defaults to TRUE.
 #'
 #' @details
 #' In the case that `A1H1` and `A1LO` are to be used, `ANRIND` is set to:
