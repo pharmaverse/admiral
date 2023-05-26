@@ -64,36 +64,31 @@
 #'   derive_vars_merged(ref_ranges2, by_vars = exprs(PARAMCD))
 #'
 #' vs_anrind1 <- vs1
-#'   derive_var_anrind(use_a1hia1lo = TRUE) %>%
+#' derive_var_anrind(use_a1hia1lo = TRUE) %>%
 #'   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
 #'
 #' vs_anrind2 <- vs2
-#'   derive_var_anrind(use_a1hia1lo = FALSE) %>%
+#' derive_var_anrind(use_a1hia1lo = FALSE) %>%
 #'   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
 #'
 #' vs_anrind1
 #' vs_anrind2
 derive_var_anrind <- function(dataset,
                               use_a1hia1lo = TRUE) {
-
-  if (use_a1hia1lo){
-
+  if (use_a1hia1lo) {
     assert_data_frame(dataset, required_vars = exprs(ANRLO, ANRHI, A1HI, A1LO, AVAL))
 
     low_cond <- "AVAL < ANRLO & (is.na(A1LO) | AVAL >= A1LO)"
     high_cond <- "AVAL > ANRHI & (is.na(A1HI) | AVAL <= A1HI)"
     lowlow_cond <- "AVAL < A1LO"
-    highigh_cond <- "AVAL > A1HI"
-
-  }else{
-
+    highhigh_cond <- "AVAL > A1HI"
+  } else {
     assert_data_frame(dataset, required_vars = exprs(ANRLO, ANRHI, AVAL))
 
     low_cond <- "AVAL < ANRLO"
     high_cond <- "AVAL > ANRHI"
     lowlow_cond <- "FALSE"
-    highigh_cond <- "FALSE"
-
+    highhigh_cond <- "FALSE"
   }
 
   result <- dataset %>%
@@ -102,10 +97,10 @@ derive_var_anrind <- function(dataset,
         AVAL >= ANRLO & is.na(ANRHI) ~ "NORMAL",
         AVAL <= ANRHI & is.na(ANRLO) ~ "NORMAL",
         AVAL >= ANRLO & AVAL <= ANRHI ~ "NORMAL",
-        eval(parse(low_cond)) ~ "LOW",
-        eval(parse(high_cond)) ~ "HIGH",
-        eval(parse(lowlow_cond)) ~ "LOW LOW",
-        eval(parse(highhigh_cond)) ~ "HIGH HIGH",
+        eval(parse(text = low_cond)) ~ "LOW",
+        eval(parse(text = high_cond)) ~ "HIGH",
+        eval(parse(text = lowlow_cond)) ~ "LOW LOW",
+        eval(parse(text = highhigh_cond)) ~ "HIGH HIGH",
         TRUE ~ NA_character_
       )
     )
