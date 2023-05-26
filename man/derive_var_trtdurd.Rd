@@ -34,7 +34,9 @@ Default: \code{TRTEDT}}
 The input dataset with \code{TRTDURD} added
 }
 \description{
-Derives total treatment duration (days) (\code{TRTDURD})
+Derives total treatment duration (days) (\code{TRTDURD}).
+
+\strong{Note:} This is a wrapper function for the more generic \code{derive_vars_duration()}.
 }
 \details{
 The total treatment duration is derived as the number of days from
