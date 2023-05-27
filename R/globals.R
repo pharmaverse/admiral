@@ -143,6 +143,7 @@ globalVariables(c(
   "TERM",
   "SRCVAR",
   "TERMNAME",
+  "TERM_NAME_ID",
   "TERM_UPPER",
   "atoxgr_criteria_ctcv4",
   "DTYPE",
