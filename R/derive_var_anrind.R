@@ -1,8 +1,8 @@
 #' Derive Reference Range Indicator
 #'
 #' @param dataset The input dataset
-#' @param use_a1hia1lo Boolean value indicating whether to use `A1H1` and `A1LO` in
-#' the derivation of `ANRIND`. Defaults to TRUE.
+#' @param use_a1hia1lo A logical value indicating whether to use `A1H1` and `A1LO` in
+#' the derivation of `ANRIND`.
 #'
 #' @details
 #' In the case that `A1H1` and `A1LO` are to be used, `ANRIND` is set to:
@@ -63,11 +63,11 @@
 #' vs2 <- vs %>%
 #'   derive_vars_merged(ref_ranges2, by_vars = exprs(PARAMCD))
 #'
-#' vs_anrind1 <- vs1
+#' vs_anrind1 <- vs1 %>%
 #' derive_var_anrind(use_a1hia1lo = TRUE) %>%
 #'   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
 #'
-#' vs_anrind2 <- vs2
+#' vs_anrind2 <- vs2 %>%
 #' derive_var_anrind(use_a1hia1lo = FALSE) %>%
 #'   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
 #'

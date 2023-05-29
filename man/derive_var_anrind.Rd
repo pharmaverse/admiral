@@ -4,10 +4,13 @@
 \alias{derive_var_anrind}
 \title{Derive Reference Range Indicator}
 \usage{
-derive_var_anrind(dataset)
+derive_var_anrind(dataset, use_a1hia1lo = TRUE)
 }
 \arguments{
 \item{dataset}{The input dataset}
+
+\item{use_a1hia1lo}{A logical value indicating whether to use \code{A1H1} and \code{A1LO} in
+the derivation of \code{ANRIND}.}
 }
 \value{
 The input dataset with additional column \code{ANRIND}
@@ -16,7 +19,7 @@ The input dataset with additional column \code{ANRIND}
 Derive Reference Range Indicator
 }
 \details{
-\code{ANRIND} is set to
+In the case that \code{A1H1} and \code{A1LO} are to be used, \code{ANRIND} is set to:
 \itemize{
 \item \code{"NORMAL"} if \code{AVAL} is greater or equal \code{ANRLO} and less than
 or equal \code{ANRHI}; or if \code{AVAL} is greater than or equal \code{ANRLO} and \code{ANRHI}
@@ -29,6 +32,16 @@ is less than or equal \code{A1HI}
 \item \code{"LOW LOW"} if \code{AVAL} is less than \code{A1LO}
 \item \code{"HIGH HIGH"} if \code{AVAL} is greater than \code{A1HI}
 }
+
+In the case that \code{A1H1} and \code{A1LO} are not to be used, \code{ANRIND} is set to:
+\itemize{
+\item \code{"NORMAL"} if \code{AVAL} is greater or equal \code{ANRLO} and less than
+or equal \code{ANRHI}; or if \code{AVAL} is greater than or equal \code{ANRLO} and \code{ANRHI}
+is missing; or if \code{AVAL} is less than or equal \code{ANRHI} and \code{ANRLO} is
+missing
+\item \code{"LOW"} if \code{AVAL} is less than \code{ANRLO}
+\item \code{"HIGH"} if \code{AVAL} is greater than \code{ANRHI}
+}
 }
 \examples{
 library(tibble)
@@ -36,21 +49,41 @@ library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 data(admiral_vs)
 
-ref_ranges <- tribble(
+ref_ranges1 <- tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
   "DIABP",      60,     80,    40,    90,
   "PULSE",      60,    100,    40,   110
 )
 
-admiral_vs \%>\%
+ref_ranges2 <- tribble(
+  ~PARAMCD, ~ANRLO, ~ANRHI,
+  "DIABP",      60,     80,
+  "PULSE",      60,    100
+)
+
+vs <- admiral_vs \%>\%
   mutate(
     PARAMCD = VSTESTCD,
     AVAL = VSSTRESN
   ) \%>\%
-  filter(PARAMCD \%in\% c("PULSE", "DIABP")) \%>\%
-  derive_vars_merged(ref_ranges, by_vars = exprs(PARAMCD)) \%>\%
-  derive_var_anrind() \%>\%
+  filter(PARAMCD \%in\% c("PULSE", "DIABP"))
+
+vs1 <- vs \%>\%
+  derive_vars_merged(ref_ranges1, by_vars = exprs(PARAMCD))
+
+vs2 <- vs \%>\%
+  derive_vars_merged(ref_ranges2, by_vars = exprs(PARAMCD))
+
+vs_anrind1 <- vs1 \%>\%
+derive_var_anrind(use_a1hia1lo = TRUE) \%>\%
   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
+
+vs_anrind2 <- vs2 \%>\%
+derive_var_anrind(use_a1hia1lo = FALSE) \%>\%
+  select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
+
+vs_anrind1
+vs_anrind2
 }
 \seealso{
 BDS-Findings Functions that returns variable appended to dataset: 

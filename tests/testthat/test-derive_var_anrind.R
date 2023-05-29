@@ -20,6 +20,28 @@ test_that("two-sided reference ranges work", {
   )
 })
 
+test_that("explicitly requesting to use `A1LO` and `A1HI` works", {
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI, ~ANRIND,
+    "P01", "PUL", 1, 69, 60, 100, 40, 110, "NORMAL",
+    "P01", "PUL", 2, 55, 60, 100, 40, 110, "LOW",
+    "P01", "PUL", 3, 60, 60, 100, 40, 110, "NORMAL",
+    "P01", "DIABP", 1, 102, 60, 80, 40, 90, "HIGH HIGH",
+    "P02", "PUL", 1, 107, 60, 100, 40, 110, "HIGH",
+    "P02", "PUL", 2, 100, 60, 100, 40, 110, "NORMAL",
+    "P02", "DIABP", 1, 51, 60, 80, 40, 90, "LOW",
+    "P03", "PUL", 1, 32, 60, 100, 40, 110, "LOW LOW",
+    "P03", "PUL", 2, 107, 60, 100, 40, 110, "HIGH"
+  )
+  input <- select(expected_output, USUBJID:A1HI)
+
+  expect_dfs_equal(
+    derive_var_anrind(input, use_a1hia1lo = TRUE),
+    expected_output,
+    keys = c("USUBJID", "PARAMCD", "ASEQ")
+  )
+})
+
 test_that("implicitly missing extreme ranges are supported", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~ANRIND,
