@@ -75,11 +75,11 @@ vs2 <- vs \%>\%
   derive_vars_merged(ref_ranges2, by_vars = exprs(PARAMCD))
 
 vs_anrind1 <- vs1 \%>\%
-derive_var_anrind(use_a1hia1lo = TRUE) \%>\%
+  derive_var_anrind(use_a1hia1lo = TRUE) \%>\%
   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
 
 vs_anrind2 <- vs2 \%>\%
-derive_var_anrind(use_a1hia1lo = FALSE) \%>\%
+  derive_var_anrind(use_a1hia1lo = FALSE) \%>\%
   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
 
 vs_anrind1
