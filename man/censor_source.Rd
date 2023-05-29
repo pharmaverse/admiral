@@ -43,6 +43,8 @@ An object of class \code{censor_source}, inheriting from class \code{tte_source}
 \description{
 \code{censor_source} objects are used to define censorings as input for the
 \code{derive_param_tte()} function.
+
+\strong{Note:} This is a wrapper function for the more generic \code{tte_source()}.
 }
 \examples{
 # Last study date known alive censor
