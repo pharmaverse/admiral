@@ -325,7 +325,8 @@ test_that("assert_parameters_argument Test 8: error if argument is of wrong type
 })
 
 # get_hori_data ----
-test_that("error if variables with more than one dot",{
+## Test 9: error if variables with more than one dot ----
+test_that("get_hori_data Test 9: error if variables with more than one dot", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
