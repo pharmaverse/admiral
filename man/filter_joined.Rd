@@ -326,7 +326,9 @@ filter_joined(
 
 Utilities for Filtering Observations: 
 \code{\link{count_vals}()},
+\code{\link{filter_exist}()},
 \code{\link{filter_extreme}()},
+\code{\link{filter_not_exist}()},
 \code{\link{filter_relative}()},
 \code{\link{max_cond}()},
 \code{\link{min_cond}()}

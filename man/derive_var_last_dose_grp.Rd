@@ -76,13 +76,16 @@ These can be either strings or symbols referring to existing variables.}
 Input dataset with additional column \code{new_var}.
 }
 \description{
+Add a variable for user-defined dose grouping of the last dose
+to the input dataset.
+
+\strong{Note:} This is a wrapper function for the function \code{derive_vars_last_dose()}.
+
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
 This function is \emph{deprecated}, please use \code{derive_vars_joined()} instead.
 }
 \details{
-Add a variable for user-defined dose grouping of the last dose to the input dataset.
-
 Last dose is the dose with maximum \code{dose_date} that is lower to or equal to the
 \code{analysis_date} per \code{by_vars} for each observation in \code{dataset}.
 The last dose group is then derived by user-defined grouping, which groups

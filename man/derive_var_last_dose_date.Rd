@@ -58,13 +58,16 @@ These can be either strings or symbols referring to existing variables.}
 Input dataset with additional column \code{new_var}.
 }
 \description{
+Add a variable for the dose date or datetime of the last dose to
+the input dataset.
+
+\strong{Note:} This is a wrapper function for the function \code{derive_vars_last_dose()}.
+
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
 This function is \emph{deprecated}, please use \code{derive_vars_joined()} instead.
 }
 \details{
-Add a variable for the dose date or datetime of the last dose to the input dataset.
-
 The last dose date is derived as the maximum dose date where the
 \code{dose_date} is lower to or equal to the \code{analysis_date} per \code{by_vars} for
 each observation in \code{dataset}. When \code{output_datetime} is \code{TRUE} and time is
