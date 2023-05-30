@@ -8,7 +8,7 @@
       },
       {
         "Name": "RSPM",
-        "URL": "https://packagemanager.rstudio.com/cran/2023-04-20"
+        "URL": "https://packagemanager.posit.co/cran/2023-04-20"
       }
     ]
   },
