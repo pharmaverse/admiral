@@ -37,7 +37,7 @@
     <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
     <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     <a class="dropdown-item" href="../articles/questionnaires.html">Creating Questionnaire ADaMs</a>
-    <a class="dropdown-item" href="../articles/pk_adnca.html">Creating a PK NCA ADaM (ADPC/ADNCA)</a>
+    <a class="dropdown-item" href="../articles/pk_adnca.html">Creating a PK NCA or Population PK ADaM</a>
     <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
     <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
     <a class="dropdown-item" href="../articles/visits_periods.html">Visit and Period Variables</a>
@@ -59,19 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -100,6 +87,7 @@
 <li><p>New function <code><a href="../reference/compute_age_years.html">compute_age_years()</a></code> for converting a vector of age values to years. (<a href="https://github.com/pharmaverse/admiral/issues/1794" class="external-link">#1794</a>)</p></li>
 <li><p>New functions <code><a href="../reference/filter_exist.html">filter_exist()</a></code> and <code><a href="../reference/filter_not_exist.html">filter_not_exist()</a></code> for selecting records from a dataset dependent on the existence of the corresponding by groups in a filtered source dataset. (<a href="https://github.com/pharmaverse/admiral/issues/1699" class="external-link">#1699</a>)</p></li>
 <li><p>New function <code><a href="../reference/derive_param_extreme_record.html">derive_param_extreme_record()</a></code> that adds parameter based on the first or last record from multiple sources. (<a href="https://github.com/pharmaverse/admiral/issues/1822" class="external-link">#1822</a>)</p></li>
+<li><p>New ADPPK template script available <code>ad_adppk.R</code> which creates Population PK Analysis Dataset (<a href="https://github.com/pharmaverse/admiral/issues/1772" class="external-link">#1772</a>) based on forthcoming CDISC Implementation guide.</p></li>
 <li><p>New function <code><a href="../reference/compute_egfr.html">compute_egfr()</a></code> for calculating Estimated Glomerular Filtration Rate (eGFR) and Creatinine Clearance for Kidney Function (<a href="https://github.com/pharmaverse/admiral/issues/1826" class="external-link">#1826</a>)</p></li>
 </ul></div>
 <div class="section level3">
@@ -150,6 +138,7 @@
 <div class="section level3">
 <h3 id="documentation-0-11-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-11-0"></a></h3>
 <ul><li><p>Updated example dataset to trigger deterioration flags in the vignette “Creating Questionnaire ADaMs” (<a href="https://github.com/pharmaverse/admiral/issues/1853" class="external-link">#1853</a>, <a href="https://github.com/pharmaverse/admiral/issues/1854" class="external-link">#1854</a>)</p></li>
+<li><p>Updated PK Programming vignette to include new Population PK Template <code>ad_adppk.R</code> (<a href="https://github.com/pharmaverse/admiral/issues/1772" class="external-link">#1772</a>)</p></li>
 <li><p>Updated “Lab Grading” Vignette to link to grading metadata available in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> and clarify how abnormal baseline values are assigned in NCI-CTCAEv5 (<a href="https://github.com/pharmaverse/admiral/issues/1863" class="external-link">#1863</a>).</p></li>
 <li><p>Increased documentation for those functions which are regarded as wrapper functions (<a href="https://github.com/pharmaverse/admiral/issues/1726" class="external-link">#1726</a>)</p></li>
 </ul></div>

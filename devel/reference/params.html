@@ -37,7 +37,7 @@
     <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
     <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     <a class="dropdown-item" href="../articles/questionnaires.html">Creating Questionnaire ADaMs</a>
-    <a class="dropdown-item" href="../articles/pk_adnca.html">Creating a PK NCA ADaM (ADPC/ADNCA)</a>
+    <a class="dropdown-item" href="../articles/pk_adnca.html">Creating a PK NCA or Population PK ADaM</a>
     <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
     <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
     <a class="dropdown-item" href="../articles/visits_periods.html">Visit and Period Variables</a>
@@ -59,19 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -165,16 +152,16 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,000 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     AESTDTC    AEENDTC    TRTSDT     TRTEDT     ASTDT      AENDT     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-701-1324 2012-10-22 <span style="color: #BB0000;">NA</span>         2012-10-02 2013-04-02 2012-10-22 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-711-1036 2012-07-29 <span style="color: #BB0000;">NA</span>         2012-07-29 2013-02-10 2012-07-29 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-717-1004 2014-01-15 <span style="color: #BB0000;">NA</span>         2014-01-14 2014-07-16 2014-01-15 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-710-1166 2013-03-19 2013-03-20 2012-11-30 2013-03-19 2013-03-19 2013-03-20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-701-1028 2013-08-08 <span style="color: #BB0000;">NA</span>         2013-07-19 2014-01-14 2013-08-08 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-709-1168 2013-08-17 2013-09-06 2013-08-02 2013-09-26 2013-08-17 2013-09-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-703-1335 2014-03-15 2014-03-30 2014-03-17 2014-05-07 2014-03-15 2014-03-30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-714-1068 2013-09-20 <span style="color: #BB0000;">NA</span>         2013-08-08 2013-10-08 2013-09-20 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-703-1100 2013-04-05 2013-04-16 2013-03-13 2013-09-14 2013-04-05 2013-04-16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-701-1415 2014-01-21 2014-02-10 2013-09-23 2014-03-24 2014-01-21 2014-02-10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-709-1088 2014-08-02 <span style="color: #BB0000;">NA</span>         2014-04-12 2014-10-09 2014-08-02 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-716-1311 2014-05-28 2014-09-22 2014-05-14 2014-09-21 2014-05-28 2014-09-22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-710-1271 2012-11-21 2012-11-21 2012-09-27 2012-11-21 2012-11-21 2012-11-21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-711-1143 2013-04-29 2013-05-15 2013-04-03 2013-05-30 2013-04-29 2013-05-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-710-1385 2012-12-18 <span style="color: #BB0000;">NA</span>         2012-10-29 2013-02-18 2012-12-18 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-718-1427 2013-01-05 2013-01-05 2012-12-17 2013-02-11 2013-01-05 2013-01-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-709-1306 2014-04-20 2014-06-23 2014-02-03 2014-06-16 2014-04-20 2014-06-23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-716-1167 2012-12-03 <span style="color: #BB0000;">NA</span>         2012-10-08 2013-04-12 2012-12-03 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-709-1217 2013-03-26 2013-06-18 2013-03-04 2013-06-11 2013-03-26 2013-06-18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-717-1004 2014-01-15 2014-02-08 2014-01-14 2014-07-16 2014-01-15 2014-02-08</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 990 more rows</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`</span></span>
@@ -196,16 +183,16 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,000 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     AESTDTC    AEENDTC    TRTSDT     TRTEDT     ASTDT      AENDT     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-701-1324 2012-10-22 <span style="color: #BB0000;">NA</span>         2012-10-02 2013-04-02 2012-10-22 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-711-1036 2012-07-29 <span style="color: #BB0000;">NA</span>         2012-07-29 2013-02-10 2012-07-29 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-717-1004 2014-01-15 <span style="color: #BB0000;">NA</span>         2014-01-14 2014-07-16 2014-01-15 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-710-1166 2013-03-19 2013-03-20 2012-11-30 2013-03-19 2013-03-19 2013-03-20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-701-1028 2013-08-08 <span style="color: #BB0000;">NA</span>         2013-07-19 2014-01-14 2013-08-08 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-709-1168 2013-08-17 2013-09-06 2013-08-02 2013-09-26 2013-08-17 2013-09-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-703-1335 2014-03-15 2014-03-30 2014-03-17 2014-05-07 2014-03-15 2014-03-30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-714-1068 2013-09-20 <span style="color: #BB0000;">NA</span>         2013-08-08 2013-10-08 2013-09-20 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-703-1100 2013-04-05 2013-04-16 2013-03-13 2013-09-14 2013-04-05 2013-04-16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-701-1415 2014-01-21 2014-02-10 2013-09-23 2014-03-24 2014-01-21 2014-02-10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-709-1088 2014-08-02 <span style="color: #BB0000;">NA</span>         2014-04-12 2014-10-09 2014-08-02 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-716-1311 2014-05-28 2014-09-22 2014-05-14 2014-09-21 2014-05-28 2014-09-22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-710-1271 2012-11-21 2012-11-21 2012-09-27 2012-11-21 2012-11-21 2012-11-21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-711-1143 2013-04-29 2013-05-15 2013-04-03 2013-05-30 2013-04-29 2013-05-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-710-1385 2012-12-18 <span style="color: #BB0000;">NA</span>         2012-10-29 2013-02-18 2012-12-18 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-718-1427 2013-01-05 2013-01-05 2012-12-17 2013-02-11 2013-01-05 2013-01-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-709-1306 2014-04-20 2014-06-23 2014-02-03 2014-06-16 2014-04-20 2014-06-23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-716-1167 2012-12-03 <span style="color: #BB0000;">NA</span>         2012-10-08 2013-04-12 2012-12-03 <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-709-1217 2013-03-26 2013-06-18 2013-03-04 2013-06-11 2013-03-26 2013-06-18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-717-1004 2014-01-15 2014-02-08 2014-01-14 2014-07-16 2014-01-15 2014-02-08</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 990 more rows</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## The above call using `call_derivation()` is equivalent to the call using `derive_vars_dt()`</span></span>
