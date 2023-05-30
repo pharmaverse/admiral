@@ -177,12 +177,12 @@ for (pkg in base_recommended_pkgs) {
 assign(".lib.loc", ".library", envir = environment(.libPaths))
 
 r_version <- getRversion()
-if (grepl("^4.0", r_version)) {
-  options(repos = "https://cran.microsoft.com/snapshot/2021-03-31")
-} else if (grepl("^4.1", r_version)) {
-  options(repos = "https://cran.microsoft.com/snapshot/2022-03-10")
-} else if (grepl("release", r_version)) {
-  options(repos = "https://cran.microsoft.com/snapshot/2022-06-23")
+if (grepl("^4.1", r_version)) {
+  options(repos = "https://packagemanager.posit.co/cran/2021-05-03/")
+} else if (grepl("^4.2", r_version)) {
+  options(repos = "https://packagemanager.posit.co/cran/2022-01-03/")
+} else if (grepl("^4.3", r_version)) {
+  options(repos = "https://packagemanager.posit.co/cran/2023-04-20/")
 } else {
   options(repos = "https://cran.rstudio.com")
 }
