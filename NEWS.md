@@ -92,6 +92,8 @@ values are assigned in NCI-CTCAEv5 (#1863).
 
 - Updated "Visit and Period Variables" Vignette to add more detail about Study Specific Code that is required (#1831).
 
+- Increased documentation for those functions which are regarded as wrapper functions (#1726)
+
 ## Various
 
 - `vars()` which was used in the admiral function calls that expected a list of
