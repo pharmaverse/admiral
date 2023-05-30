@@ -90,6 +90,8 @@ the `filter_add` argument. (#1725)
 - Updated "Lab Grading" Vignette to link to grading metadata available in `{admiral}` and clarify how abnormal baseline
 values are assigned in NCI-CTCAEv5 (#1863).
 
+- Increased documentation for those functions which are regarded as wrapper functions (#1726)
+
 ## Various
 
 - `vars()` which was used in the admiral function calls that expected a list of

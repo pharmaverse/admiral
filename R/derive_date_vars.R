@@ -1058,7 +1058,10 @@ convert_dtc_to_dtm <- function(dtc,
 
 #' Convert a Date into a Datetime Object
 #'
-#' Convert a date (datetime, date, or date character) into a Date vector (usually `'--DTM'`).
+#' @description Convert a date (datetime, date, or date character) into a Date
+#' vector (usually `'--DTM'`).
+#'
+#' **Note:** This is a wrapper function for the function `convert_dtc_to_dtm()`.
 #'
 #' @param dt The date to convert.
 #'
