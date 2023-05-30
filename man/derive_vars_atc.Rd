@@ -34,7 +34,9 @@ Default: \code{FASTRESC}}
 The input dataset with ATC variables added
 }
 \description{
-Add Anatomical Therapeutic Chemical class variables from \code{FACM} to \code{ADCM}
+Add Anatomical Therapeutic Chemical class variables from \code{FACM} to \code{ADCM}.
+
+\strong{Note:} This is a wrapper function for the more generic \code{derive_vars_transposed()}.
 }
 \examples{
 library(tibble)

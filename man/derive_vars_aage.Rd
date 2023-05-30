@@ -47,7 +47,9 @@ Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'secon
 The input dataset with \code{AAGE} and \code{AAGEU} added
 }
 \description{
-Derives analysis age (\code{AAGE}) and analysis age unit (\code{AAGEU})
+Derives analysis age (\code{AAGE}) and analysis age unit (\code{AAGEU}).
+
+\strong{Note:} This is a wrapper function for the more generic \code{derive_vars_duration()}.
 }
 \details{
 The age is derived as the integer part of the duration from start to
