@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<script src="../deps/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -83,19 +83,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -196,14 +183,14 @@ related variables (<code>AVISIT</code>, <code>AVISITN</code>,
   dataset_add <span class="op">=</span> <span class="va">windows</span>,
   filter_join <span class="op">=</span> <span class="va">AWLO</span> <span class="op">&lt;=</span> <span class="va">ADY</span> <span class="op">&amp;</span> <span class="va">ADY</span> <span class="op">&lt;=</span> <span class="va">AWHI</span>
 <span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 x 7</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 7</span></span>
 <span class="co">#&gt;   USUBJID   ADY AVISIT    AWLO  AWHI AVISITN AWTARGET</span>
-<span class="co">#&gt;   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span><span> 1         -</span><span style="color: #BB0000;">33</span><span> </span><span style="color: #BB0000;">NA</span><span>          </span><span style="color: #BB0000;">NA</span><span>    </span><span style="color: #BB0000;">NA</span><span>      </span><span style="color: #BB0000;">NA</span><span>       </span><span style="color: #BB0000;">NA</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span><span> 1          -</span><span style="color: #BB0000;">2</span><span> BASELINE   -</span><span style="color: #BB0000;">30</span><span>     1       0        1</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span><span> 1           3 WEEK 1       2     7       1        5</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span><span> 1          24 WEEK 4      23    30       4       26</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span><span> 2          </span><span style="color: #BB0000;">NA</span><span> </span><span style="color: #BB0000;">NA</span><span>          </span><span style="color: #BB0000;">NA</span><span>    </span><span style="color: #BB0000;">NA</span><span>      </span><span style="color: #BB0000;">NA</span><span>       </span><span style="color: #BB0000;">NA</span></span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1         -<span style="color: #BB0000;">33</span> <span style="color: #BB0000;">NA</span>          <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1          -<span style="color: #BB0000;">2</span> BASELINE   -<span style="color: #BB0000;">30</span>     1       0        1</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 1           3 WEEK 1       2     7       1        5</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 1          24 WEEK 4      23    30       4       26</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 2          <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>          <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="period-subperiod-and-phase-variables">Period, Subperiod, and Phase Variables<a class="anchor" aria-label="anchor" href="#period-subperiod-and-phase-variables"></a>
@@ -219,12 +206,12 @@ dataset is called period reference dataset.</p>
 </h3>
 <p>The period reference dataset contains one observation per subject and
 period, subperiod, or phase. For example:</p>
-<pre><code><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 x 6</span></span>
+<pre><code><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 6</span></span>
 <span class="co">#&gt;   STUDYID USUBJID APHASEN PHSDT      PHEDT      APHASE   </span>
-<span class="co">#&gt;   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span><span> xyz     1             1 2021-01-04 2021-02-06 TREATMENT</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span><span> xyz     1             2 2021-02-07 2021-03-07 FUP      </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span><span> xyz     2             1 2021-02-02 2021-03-02 TREATMENT</span></span></code></pre>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> xyz     1             1 2021-01-04 2021-02-06 TREATMENT</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> xyz     1             2 2021-02-07 2021-03-07 FUP      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> xyz     2             1 2021-02-02 2021-03-02 TREATMENT</span></code></pre>
 <p>The admiral functions expect separate datasets for periods,
 subperiods, and phases. For periods the numeric variable
 <code>APERIOD</code> is expected, for subperiods the numeric variables
@@ -251,11 +238,11 @@ can be used to add the phase variables (<code>PHwSDT</code>,
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span>, <span class="va">PH1SDT</span>, <span class="va">PH1EDT</span>, <span class="va">PH2SDT</span>, <span class="va">PH2EDT</span>, <span class="va">APHASE1</span>, <span class="va">APHASE2</span><span class="op">)</span>
 
 <span class="va">adsl</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 x 8</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 8</span></span>
 <span class="co">#&gt;   STUDYID USUBJID PH1SDT     PH1EDT     PH2SDT     PH2EDT     APHASE1   APHASE2</span>
-<span class="co">#&gt;   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>  </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span><span> xyz     1       2021-01-04 2021-02-06 2021-02-07 2021-03-07 TREATMENT FUP    </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span><span> xyz     2       2021-02-02 2021-03-02 </span><span style="color: #BB0000;">NA</span><span>         </span><span style="color: #BB0000;">NA</span><span>         TREATMENT </span><span style="color: #BB0000;">NA</span></span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> xyz     1       2021-01-04 2021-02-06 2021-02-07 2021-03-07 TREATMENT FUP    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> xyz     2       2021-02-02 2021-03-02 <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         TREATMENT <span style="color: #BB0000;">NA</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="periods_bds">Creating BDS and OCCDS Period, Subperiod, or Phase Variables<a class="anchor" aria-label="anchor" href="#periods_bds"></a>
@@ -284,15 +271,15 @@ reference dataset defined above.</p>
   by_vars <span class="op">=</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,
   filter_join <span class="op">=</span> <span class="va">PHSDT</span> <span class="op">&lt;=</span> <span class="va">ASTDT</span> <span class="op">&amp;</span> <span class="va">ASTDT</span> <span class="op">&lt;=</span> <span class="va">PHEDT</span>
 <span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 x 7</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span>
 <span class="co">#&gt;   USUBJID ASTDT      STUDYID APHASEN PHSDT      PHEDT      APHASE   </span>
-<span class="co">#&gt;   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span><span> 1       2021-01-01 </span><span style="color: #BB0000;">NA</span><span>           </span><span style="color: #BB0000;">NA</span><span> </span><span style="color: #BB0000;">NA</span><span>         </span><span style="color: #BB0000;">NA</span><span>         </span><span style="color: #BB0000;">NA</span><span>       </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span><span> 1       2021-01-05 xyz           1 2021-01-04 2021-02-06 TREATMENT</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span><span> 1       2021-02-05 xyz           1 2021-01-04 2021-02-06 TREATMENT</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span><span> 1       2021-03-05 xyz           2 2021-02-07 2021-03-07 FUP      </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span><span> 1       2021-04-05 </span><span style="color: #BB0000;">NA</span><span>           </span><span style="color: #BB0000;">NA</span><span> </span><span style="color: #BB0000;">NA</span><span>         </span><span style="color: #BB0000;">NA</span><span>         </span><span style="color: #BB0000;">NA</span><span>       </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span><span> 2       2021-02-15 xyz           1 2021-02-02 2021-03-02 TREATMENT</span></span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1       2021-01-01 <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1       2021-01-05 xyz           1 2021-01-04 2021-02-06 TREATMENT</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 1       2021-02-05 xyz           1 2021-01-04 2021-02-06 TREATMENT</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 1       2021-03-05 xyz           2 2021-02-07 2021-03-07 FUP      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 1       2021-04-05 <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 2       2021-02-15 xyz           1 2021-02-02 2021-03-02 TREATMENT</span></code></pre></div>
 <p>If no period reference dataset is available but period variables are
 in ADSL, the period reference dataset can be created from ADSL by
 calling <code><a href="../reference/create_period_dataset.html">create_period_dataset()</a></code>.</p>
@@ -303,12 +290,12 @@ from the ADSL dataset created above:</p>
   <span class="va">adsl</span>,
   new_vars <span class="op">=</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span>PHSDT <span class="op">=</span> <span class="va">PHwSDT</span>, PHEDT <span class="op">=</span> <span class="va">PHwEDT</span>, APHASE <span class="op">=</span> <span class="va">APHASEw</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 x 6</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 6</span></span>
 <span class="co">#&gt;   STUDYID USUBJID APHASEN PHSDT      PHEDT      APHASE   </span>
-<span class="co">#&gt;   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span><span> xyz     1             1 2021-01-04 2021-02-06 TREATMENT</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span><span> xyz     1             2 2021-02-07 2021-03-07 FUP      </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span><span> xyz     2             1 2021-02-02 2021-03-02 TREATMENT</span></span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> xyz     1             1 2021-01-04 2021-02-06 TREATMENT</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> xyz     1             2 2021-02-07 2021-03-07 FUP      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> xyz     2             1 2021-02-02 2021-03-02 TREATMENT</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -360,11 +347,11 @@ dataset, the treatment ADSL variables can be created by calling
   <span class="op">)</span>
 
 <span class="va">adsl</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 x 8</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 8</span></span>
 <span class="co">#&gt;   STUDYID USUBJID TRT01A TRT02A AP01SDT    AP01EDT    AP02SDT    AP02EDT   </span>
-<span class="co">#&gt;   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>    </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span><span> xyz     1       DRUG A DRUG B 2021-01-04 2021-02-06 2021-02-07 2021-03-07</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span><span> xyz     2       DRUG B DRUG B 2021-02-02 2021-03-02 2021-03-03 2021-04-01</span></span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> xyz     1       DRUG A DRUG B 2021-01-04 2021-02-06 2021-02-07 2021-03-07</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> xyz     2       DRUG B DRUG B 2021-02-02 2021-03-02 2021-03-03 2021-04-01</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="treatment_bds">Creating BDS and OCCDS Treatment Variables<a class="anchor" aria-label="anchor" href="#treatment_bds"></a>
@@ -397,15 +384,15 @@ can be derived from the period reference dataset defined above.</p>
   join_vars <span class="op">=</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">APERSDT</span>, <span class="va">APEREDT</span><span class="op">)</span>,
   filter_join <span class="op">=</span> <span class="va">APERSDT</span> <span class="op">&lt;=</span> <span class="va">ASTDT</span> <span class="op">&amp;</span> <span class="va">ASTDT</span> <span class="op">&lt;=</span> <span class="va">APEREDT</span>
 <span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 x 5</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span>
 <span class="co">#&gt;   USUBJID ASTDT      STUDYID APERIOD TRTA  </span>
-<span class="co">#&gt;   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span><span> 1       2021-01-05 xyz           1 DRUG A</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span><span> 1       2021-02-05 xyz           1 DRUG A</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span><span> 1       2021-03-05 xyz           2 DRUG B</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span><span> 1       2021-04-05 xyz          </span><span style="color: #BB0000;">NA</span><span> </span><span style="color: #BB0000;">NA</span><span>    </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span><span> 2       2021-02-15 xyz           1 DRUG B</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span><span> 2       2021-03-10 xyz           2 DRUG B</span></span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1       2021-01-05 xyz           1 DRUG A</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1       2021-02-05 xyz           1 DRUG A</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 1       2021-03-05 xyz           2 DRUG B</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 1       2021-04-05 xyz          <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 2       2021-02-15 xyz           1 DRUG B</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 2       2021-03-10 xyz           2 DRUG B</span></code></pre></div>
 <p>If no period reference dataset is available but period variables are
 in ADSL, the period reference dataset can be created from ADSL by
 calling <code><a href="../reference/create_period_dataset.html">create_period_dataset()</a></code>.</p>
@@ -416,13 +403,13 @@ can be created from the ADSL dataset created above:</p>
   <span class="va">adsl</span>,
   new_vars <span class="op">=</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span>APERSDT <span class="op">=</span> <span class="va">APxxSDT</span>, APEREDT <span class="op">=</span> <span class="va">APxxEDT</span>, TRTA <span class="op">=</span> <span class="va">TRTxxA</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 x 6</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 6</span></span>
 <span class="co">#&gt;   STUDYID USUBJID APERIOD APERSDT    APEREDT    TRTA  </span>
-<span class="co">#&gt;   <span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span><span> xyz     1             1 2021-01-04 2021-02-06 DRUG A</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span><span> xyz     1             2 2021-02-07 2021-03-07 DRUG B</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span><span> xyz     2             1 2021-02-02 2021-03-02 DRUG B</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span><span> xyz     2             2 2021-03-03 2021-04-01 DRUG B</span></span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> xyz     1             1 2021-01-04 2021-02-06 DRUG A</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> xyz     1             2 2021-02-07 2021-03-07 DRUG B</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> xyz     2             1 2021-02-02 2021-03-02 DRUG B</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> xyz     2             2 2021-03-03 2021-04-01 DRUG B</span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
