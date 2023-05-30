@@ -77,9 +77,11 @@ observations.
 \item{analysis_value}{Definition of the analysis value
 
 An expression defining the analysis value (\code{AVAL}) of the new parameter is
-expected. The values variables of the parameters specified by \code{parameters}
-can be accessed using \verb{<variable name>.<parameter code>}, e.g.,
-\code{AVAL.SYSBP}.
+expected. The values of variables of the parameters specified by
+\code{parameters} can be accessed using \verb{<variable name>.<parameter code>},
+e.g., \code{AVAL.SYSBP}.
+
+Variable names in the expression must not contain more than one dot.
 
 \emph{Permitted Values:} An unquoted expression}
 

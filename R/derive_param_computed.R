@@ -106,9 +106,11 @@
 #' @param analysis_value Definition of the analysis value
 #'
 #'   An expression defining the analysis value (`AVAL`) of the new parameter is
-#'   expected. The values variables of the parameters specified by `parameters`
-#'   can be accessed using `<variable name>.<parameter code>`, e.g.,
-#'   `AVAL.SYSBP`.
+#'   expected. The values of variables of the parameters specified by
+#'   `parameters` can be accessed using `<variable name>.<parameter code>`,
+#'   e.g., `AVAL.SYSBP`.
+#'
+#'   Variable names in the expression must not contain more than one dot.
 #'
 #'   *Permitted Values:* An unquoted expression
 #'
@@ -459,18 +461,25 @@ get_hori_data <- function(dataset,
   # horizontalize data, e.g., AVAL for PARAMCD = "PARAMx" -> AVAL.PARAMx
   analysis_vars <- extract_vars(analysis_value)
   analysis_vars_chr <- vars2chr(analysis_vars)
+  multi_dot_names <- str_count(analysis_vars_chr, "\\.") > 1
+  if (any(multi_dot_names)) {
+    abort(
+      paste(
+        "The `analysis_value` argument contains variable names with more than on dot:",
+        enumerate(analysis_vars_chr[multi_dot_names]),
+        sep = "\n"
+      )
+    )
+  }
   vars_hori <- analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")] %>%
     str_split(pattern = "\\.") %>%
     map_chr(`[[`, 1) %>%
     unique()
 
-  data_parameters <- data_parameters %>%
-    select(!!!by_vars, PARAMCD, !!!chr2vars(vars_hori))
-
   hori_data <- data_parameters
   for (i in seq_along(vars_hori)) {
     pivoted_data <- pivot_wider(
-      data_parameters,
+      select(data_parameters, !!!by_vars, PARAMCD, sym(vars_hori[[i]])),
       names_from = PARAMCD,
       values_from = sym(vars_hori[[i]]),
       names_prefix = paste0(vars_hori[[i]], ".")

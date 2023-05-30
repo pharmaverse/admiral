@@ -323,3 +323,34 @@ test_that("assert_parameters_argument Test 8: error if argument is of wrong type
     fixed = TRUE
   )
 })
+
+# get_hori_data ----
+test_that("error if variables with more than one dot",{
+  input <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+    "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
+    "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
+    "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "BASELINE",
+    "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "WEEK 2",
+    "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, "mmHg", "BASELINE",
+    "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, "mmHg", "WEEK 2",
+    "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, "mmHg", "BASELINE",
+    "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
+  )
+
+  expect_error(
+    get_hori_data(
+      input,
+      parameters = exprs(SYSBP, DIABP),
+      by_vars = exprs(USUBJID, VISIT),
+      analysis_value = expr((AVAL.SYSBP + 2 * AVAL.DIA.BP) / 3),
+      filter = NULL
+    ),
+    regexp = paste(
+      "The `analysis_value` argument contains variable names with more than on dot:",
+      "`AVAL.DIA.BP`",
+      sep = "\n"
+    ),
+    fixed = TRUE
+  )
+})
