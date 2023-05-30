@@ -1,6 +1,8 @@
 #' Derive Last Dose Amount
 #'
-#' Add a variable for dose amount from the last dose to the input dataset.
+#' @description Add a variable for dose amount from the last dose to the input dataset.
+#'
+#' **Note:** This is a wrapper function for the function `derive_vars_last_dose()`.
 #'
 #' @inheritParams derive_vars_last_dose
 #' @param new_var The new variable added to `dataset`.

@@ -74,8 +74,11 @@ input dataset and additionally the variable specified for \code{new_var} derived
 from the additional dataset (\code{dataset_add}).
 }
 \description{
-Adds a flag variable to the input dataset which indicates if there exists at
-least one observation in another dataset fulfilling a certain condition.
+Adds a flag variable to the input dataset which indicates if
+there exists at least one observation in another dataset fulfilling a certain
+condition.
+
+\strong{Note:} This is a wrapper function for the more generic \code{derive_vars_merged()}.
 }
 \details{
 \enumerate{
