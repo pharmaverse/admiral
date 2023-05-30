@@ -9,7 +9,7 @@ if (file.exists("./renv/profile")){
   message("This repository do not contains the renv profile for your R version.")
 }
 
-if (Sys.getenv("GITHUB_ACTIONS") == "" || (Sys.getenv("GITHUB_ACTIONS") == "true" && getRversion()$major == 3 && getRversion()$minor == 6)) {
+if (Sys.getenv("GITHUB_ACTIONS") == "") {
   source("renv/activate.R")
 } else {
   options(repos = c(CRAN = "https://cran.rstudio.com"))
