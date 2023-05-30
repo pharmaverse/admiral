@@ -50,19 +50,22 @@ This affects `derive_var_dthcaus()`. (#1727)
 - The `date` field of `event_source()` and `censor_source()` accepts expressions
 now. This affects `derive_param_tte()`. (#1727)
 
+
+## Breaking Changes
+
 - `create_query_data()` and `derive_vars_query()` updated to rename variables in 
 query data set as follows:
 
   - `VAR_PREFIX` to `PREFIX`
-  - `QUERY_NAME` TO `GRPNAME`
-  - `QUERY_ID` TO `GRPID`
-  - `QUERY_SCOPE` TO `SCOPE`
-  - `QUERY_SCOPE_NUM` TO `SCOPEN`
-  - `TERM_LEVEL` TO `SRCVAR`
-  - `TERM_NAME` TO `TERMNAME`
-  - `TERM_ID` TO `TERMID`
-
-## Breaking Changes
+  - `QUERY_NAME` to `GRPNAME`
+  - `QUERY_ID` to `GRPID`
+  - `QUERY_SCOPE` to `SCOPE`
+  - `QUERY_SCOPE_NUM` to `SCOPEN`
+  - `TERM_LEVEL` to `SRCVAR`
+  - `TERM_NAME` to `TERMNAME`
+  - `TERM_ID` to `TERMID`
+  
+Users need to adjust their `get_terms` function accordingly.
 
 - The `aval_fun` argument of `derive_param_exist_flag()` was deprecated in favor
 of the `set_values_to` argument. (#1727)
