@@ -63,19 +63,6 @@ as input to create_query_data()."><meta property="og:image" content="https://pha
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -111,12 +98,12 @@ as input to <code><a href="create_query_data.html">create_query_data()</a></code
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>prefix</dt>
-<dd><p>The value is used to populate <code>VAR_PREFIX</code> in the output
+<dd><p>The value is used to populate <code>PREFIX</code> in the output
 dataset of <code><a href="create_query_data.html">create_query_data()</a></code>, e.g., <code>"SMQ03"</code></p></dd>
 
 
 <dt>name</dt>
-<dd><p>The value is used to populate <code>QUERY_NAME</code> in the output dataset
+<dd><p>The value is used to populate <code>GRPNAME</code> in the output dataset
 of <code><a href="create_query_data.html">create_query_data()</a></code>. If the <code>auto</code> keyword is specified, the variable
 is set to the name of the query in the SMQ/SDG database.</p>
 <p><em>Permitted Values</em>: A character scalar or the <code>auto</code> keyword. The <code>auto</code>
@@ -125,7 +112,7 @@ keyword is permitted only for queries which are defined by an
 
 
 <dt>id</dt>
-<dd><p>The value is used to populate <code>QUERY_ID</code> in the output dataset of
+<dd><p>The value is used to populate <code>GRPID</code> in the output dataset of
 <code><a href="create_query_data.html">create_query_data()</a></code>. If the <code>auto</code> keyword is specified, the variable is
 set to the id of the query in the SMQ/SDG database.</p>
 <p><em>Permitted Values</em>: A integer scalar or the <code>auto</code> keyword. The <code>auto</code>
@@ -134,7 +121,7 @@ keyword is permitted only for queries which are defined by an
 
 
 <dt>add_scope_num</dt>
-<dd><p>Determines if  <code>QUERY_SCOPE_NUM</code> in the output dataset
+<dd><p>Determines if  <code>SCOPEN</code> in the output dataset
 of <code><a href="create_query_data.html">create_query_data()</a></code> is populated</p>
 <p>If the parameter is set to <code>TRUE</code>, the definition must be an <code><a href="basket_select.html">basket_select()</a></code>
 object.</p>
@@ -146,16 +133,16 @@ object.</p>
 <dd><p>Definition of terms belonging to the query</p>
 <p>There are three different ways to define the terms:</p><ul><li><p>An <code><a href="basket_select.html">basket_select()</a></code> object is specified to select a query from the SMQ
 database.</p></li>
-<li><p>A data frame with columns <code>TERM_LEVEL</code> and <code>TERM_NAME</code> or <code>TERM_ID</code> can
-be specified to define the terms of a customized query. The <code>TERM_LEVEL</code>
+<li><p>A data frame with columns <code>SRCVAR</code> and <code>TERMNAME</code> or <code>TERMID</code> can
+be specified to define the terms of a customized query. The <code>SRCVAR</code>
 should be set to the name of the variable which should be used to select
-the terms, e.g., <code>"AEDECOD"</code> or <code>"AELLTCD"</code>. <code>TERM_LEVEL</code> does not need
+the terms, e.g., <code>"AEDECOD"</code> or <code>"AELLTCD"</code>. <code>SRCVAR</code> does not need
 to be constant within a query. For example a query can be based on
 <code>AEDECOD</code> and <code>AELLT</code>.</p>
-<p>If <code>TERM_LEVEL</code> refers to a character variable, <code>TERM_NAME</code> should be set
-to the value the variable. If it refers to a numeric variable, <code>TERM_ID</code>
+<p>If <code>SRCVAR</code> refers to a character variable, <code>TERMNAME</code> should be set
+to the value the variable. If it refers to a numeric variable, <code>TERMID</code>
 should be set to the value of the variable. If only character variables
-or only numeric variables are used, <code>TERM_ID</code> or <code>TERM_NAME</code> respectively
+or only numeric variables are used, <code>TERMID</code> or <code>TERMNAME</code> respectively
 can be omitted.</p></li>
 <li><p>A list of data frames and <code><a href="basket_select.html">basket_select()</a></code> objects can be specified to
 define a customized query based on custom terms and SMQs. The data frames
@@ -238,11 +225,11 @@ data frame, or a list of data frames and <code><a href="basket_select.html">bask
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># creating a query for a customized query</span></span>
 <span class="r-in"><span class="va">cqterms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="op">~</span><span class="va">TERM_NAME</span>, <span class="op">~</span><span class="va">TERM_ID</span>,</span>
+<span class="r-in">  <span class="op">~</span><span class="va">TERMNAME</span>,                     <span class="op">~</span><span class="va">TERMID</span>,</span>
 <span class="r-in">  <span class="st">"APPLICATION SITE ERYTHEMA"</span>, <span class="fl">10003041L</span>,</span>
 <span class="r-in">  <span class="st">"APPLICATION SITE PRURITUS"</span>, <span class="fl">10003053L</span></span>
 <span class="r-in"><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>TERM_LEVEL <span class="op">=</span> <span class="st">"AEDECOD"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>SRCVAR <span class="op">=</span> <span class="st">"AEDECOD"</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">query</span><span class="op">(</span></span>
 <span class="r-in">  prefix <span class="op">=</span> <span class="st">"CQ01"</span>,</span>
@@ -255,10 +242,10 @@ data frame, or a list of data frames and <code><a href="basket_select.html">bask
 <span class="r-out co"><span class="r-pr">#&gt;</span> add_scope_num: FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> definition:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   TERM_NAME                  TERM_ID TERM_LEVEL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> APPLICATION SITE ERYTHEMA 10<span style="text-decoration: underline;">003</span>041 AEDECOD   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> APPLICATION SITE PRURITUS 10<span style="text-decoration: underline;">003</span>053 AEDECOD   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   TERMNAME                    TERMID SRCVAR </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> APPLICATION SITE ERYTHEMA 10<span style="text-decoration: underline;">003</span>041 AEDECOD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> APPLICATION SITE PRURITUS 10<span style="text-decoration: underline;">003</span>053 AEDECOD</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># creating a customized query based on SMQs and additional terms</span></span>
 <span class="r-in"><span class="fu">query</span><span class="op">(</span></span>
@@ -285,10 +272,10 @@ data frame, or a list of data frames and <code><a href="basket_select.html">bask
 <span class="r-out co"><span class="r-pr">#&gt;</span> definition:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   TERM_NAME                  TERM_ID TERM_LEVEL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> APPLICATION SITE ERYTHEMA 10<span style="text-decoration: underline;">003</span>041 AEDECOD   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> APPLICATION SITE PRURITUS 10<span style="text-decoration: underline;">003</span>053 AEDECOD   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   TERMNAME                    TERMID SRCVAR </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> APPLICATION SITE ERYTHEMA 10<span style="text-decoration: underline;">003</span>041 AEDECOD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> APPLICATION SITE PRURITUS 10<span style="text-decoration: underline;">003</span>053 AEDECOD</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;basket_select&gt; object</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     name: "Pregnancy and neonatal topics (SMQ)"</span>

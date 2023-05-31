@@ -63,19 +63,6 @@ in the derive_vars_query() function as defined in the Queries Dataset Documentat
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -133,20 +120,20 @@ specified function is called to retrieve the terms defining the query.
 This function is not provided by admiral as it is company specific, i.e.,
 it has to be implemented at company level.</p>
 <p>The function must return a dataset with all the terms defining the basket.
-The output dataset must contain the following variables.</p><ul><li><p><code>TERM_LEVEL</code>: the variable to be used for defining a term of the basket,
+The output dataset must contain the following variables.</p><ul><li><p><code>SRCVAR</code>: the variable to be used for defining a term of the basket,
 e.g., <code>AEDECOD</code></p></li>
-<li><p><code>TERM_NAME</code>: the name of the term if the variable <code>TERM_LEVEL</code> is
+<li><p><code>TERMNAME</code>: the name of the term if the variable <code>SRCVAR</code> is
 referring to is character</p></li>
-<li><p><code>TERM_ID</code> the numeric id of the term if the variable <code>TERM_LEVEL</code> is
+<li><p><code>TERMID</code> the numeric id of the term if the variable <code>SRCVAR</code> is
 referring to is numeric</p></li>
-<li><p><code>QUERY_NAME</code>: the name of the basket. The values must be the same for
+<li><p><code>GRPNAME</code>: the name of the basket. The values must be the same for
 all observations.</p></li>
 </ul><p>The function must provide the following parameters</p><ul><li><p><code>basket_select</code>: A <code><a href="basket_select.html">basket_select()</a></code> object.</p></li>
 <li><p><code>version</code>: The dictionary version. The value specified for the
 <code>version</code> in the <code>create_query_data()</code> call is passed to this
 parameter.</p></li>
 <li><p><code>keep_id</code>: If set to <code>TRUE</code>, the output dataset must contain the
-<code>QUERY_ID</code> variable. The variable must be set to the numeric id of the basket.</p></li>
+<code>GRPID</code> variable. The variable must be set to the numeric id of the basket.</p></li>
 <li><p><code>temp_env</code>: A temporary environment is passed to this parameter. It can
 be used to store data which is used for all baskets in the
 <code>create_query_data()</code> call. For example if SMQs need to be read from a
@@ -170,7 +157,7 @@ environment instead of accessing the database again.</p></li>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>For each <code><a href="query.html">query()</a></code> object listed in the <code>queries</code> argument, the terms belonging
-to the query (<code>TERM_LEVEL</code>, <code>TERM_NAME</code>, <code>TERM_ID</code>) are determined with respect
+to the query (<code>SRCVAR</code>, <code>TERMNAME</code>, <code>TERMID</code>) are determined with respect
 to the <code>definition</code> field of the query: if the definition field of the
 <code><a href="query.html">query()</a></code> object is</p><ul><li><p>a <code><a href="basket_select.html">basket_select()</a></code> object, the terms are read from the basket
 database by calling the function specified for the <code>get_terms_fun</code> parameter.</p></li>
@@ -178,24 +165,24 @@ database by calling the function specified for the <code>get_terms_fun</code> pa
 <li><p>a list of data frames and <code><a href="basket_select.html">basket_select()</a></code> objects, all terms from
 the data frames and all terms read from the basket database referenced by the
 <code><a href="basket_select.html">basket_select()</a></code> objects are collated.</p></li>
-</ul><p>The following variables (as described in <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>) are created:</p><ul><li><p><code>VAR_PREFIX</code>: Prefix of the variables to be created by
+</ul><p>The following variables (as described in <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>) are created:</p><ul><li><p><code>PREFIX</code>: Prefix of the variables to be created by
 <code><a href="derive_vars_query.html">derive_vars_query()</a></code> as specified by the <code>prefix</code> element.</p></li>
-<li><p><code>QUERY_NAME</code>: Name of the query as specified by the <code>name</code> element.</p></li>
-<li><p><code>QUERY_ID</code>: Id of the query as specified by the <code>id</code> element. If the <code>id</code>
+<li><p><code>GRPNAME</code>: Name of the query as specified by the <code>name</code> element.</p></li>
+<li><p><code>GRPID</code>: Id of the query as specified by the <code>id</code> element. If the <code>id</code>
 element is not specified for a query, the variable is set to <code>NA</code>. If the
 <code>id</code> element is not specified for any query, the variable is not created.</p></li>
-<li><p><code>QUERY_SCOPE</code>: scope of the query as specified by the <code>scope</code> element of
+<li><p><code>SCOPE</code>: scope of the query as specified by the <code>scope</code> element of
 the <code><a href="basket_select.html">basket_select()</a></code> object. For queries not defined by a <code><a href="basket_select.html">basket_select()</a></code>
 object, the variable is set to <code>NA</code>. If none of the queries is defined by a
 <code><a href="basket_select.html">basket_select()</a></code> object, the variable is not created.</p></li>
-<li><p><code>QUERY_SCOPE_NUM</code>: numeric scope of the query. It is set to <code>1</code> if the
+<li><p><code>SCOPEN</code>: numeric scope of the query. It is set to <code>1</code> if the
 scope is broad. Otherwise it is set to <code>2</code>. If the <code>add_scope_num</code> element
 equals <code>FALSE</code>, the variable is set to <code>NA</code>. If the <code>add_scope_num</code> element
 equals <code>FALSE</code> for all baskets or none of the queries is an basket , the variable
 is not created.</p></li>
-<li><p><code>TERM_LEVEL</code>: Name of the variable used to identify the terms.</p></li>
-<li><p><code>TERM_NAME</code>: Value of the term variable if it is a character variable.</p></li>
-<li><p><code>TERM_ID</code>: Value of the term variable if it is a numeric variable.</p></li>
+<li><p><code>SRCVAR</code>: Name of the variable used to identify the terms.</p></li>
+<li><p><code>TERMNAME</code>: Value of the term variable if it is a character variable.</p></li>
+<li><p><code>TERMID</code>: Value of the term variable if it is a numeric variable.</p></li>
 <li><p><code>VERSION</code>: Set to the value of the <code>version</code> argument. If it is not
 specified, the variable is not created.</p></li>
 </ul></div>
@@ -217,11 +204,11 @@ specified, the variable is not created.</p></li>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># creating a query dataset for a customized query</span></span>
 <span class="r-in"><span class="va">cqterms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="op">~</span><span class="va">TERM_NAME</span>, <span class="op">~</span><span class="va">TERM_ID</span>,</span>
+<span class="r-in">  <span class="op">~</span><span class="va">TERMNAME</span>,                     <span class="op">~</span><span class="va">TERMID</span>,</span>
 <span class="r-in">  <span class="st">"APPLICATION SITE ERYTHEMA"</span>, <span class="fl">10003041L</span>,</span>
 <span class="r-in">  <span class="st">"APPLICATION SITE PRURITUS"</span>, <span class="fl">10003053L</span></span>
 <span class="r-in"><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>TERM_LEVEL <span class="op">=</span> <span class="st">"AEDECOD"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>SRCVAR <span class="op">=</span> <span class="st">"AEDECOD"</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">cq</span> <span class="op">&lt;-</span> <span class="fu"><a href="query.html">query</a></span><span class="op">(</span></span>
 <span class="r-in">  prefix <span class="op">=</span> <span class="st">"CQ01"</span>,</span>
@@ -231,10 +218,10 @@ specified, the variable is not created.</p></li>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">create_query_data</span><span class="op">(</span>queries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">cq</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   TERM_NAME                  TERM_ID TERM_LEVEL VAR_PREFIX QUERY_NAME           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> APPLICATION SITE ERYTHEMA 10<span style="text-decoration: underline;">003</span>041 AEDECOD    CQ01       Application Site Iss…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> APPLICATION SITE PRURITUS 10<span style="text-decoration: underline;">003</span>053 AEDECOD    CQ01       Application Site Iss…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   TERMNAME                    TERMID SRCVAR  PREFIX GRPNAME                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> APPLICATION SITE ERYTHEMA 10<span style="text-decoration: underline;">003</span>041 AEDECOD CQ01   Application Site Issues</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> APPLICATION SITE PRURITUS 10<span style="text-decoration: underline;">003</span>053 AEDECOD CQ01   Application Site Issues</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># create a query dataset for SMQs</span></span>
 <span class="r-in"><span class="va">pregsmq</span> <span class="op">&lt;-</span> <span class="fu"><a href="query.html">query</a></span><span class="op">(</span></span>
@@ -264,18 +251,18 @@ specified, the variable is not created.</p></li>
 <span class="r-in">  version <span class="op">=</span> <span class="st">"20.1"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 43 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    TERM_NAME       TERM_LEVEL QUERY_NAME QUERY_ID QUERY_SCOPE VAR_PREFIX VERSION</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Achromotrichia… AEDECOD    Pregnancy… 20<span style="text-decoration: underline;">000</span>185 NARROW      SMQ02      20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Craniosynostos… AEDECOD    Pregnancy… 20<span style="text-decoration: underline;">000</span>185 NARROW      SMQ02      20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Hypophosphatas… AEDECOD    Pregnancy… 20<span style="text-decoration: underline;">000</span>185 NARROW      SMQ02      20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Congenital pye… AEDECOD    Pregnancy… 20<span style="text-decoration: underline;">000</span>185 NARROW      SMQ02      20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Uterine contra… AEDECOD    Pregnancy… 20<span style="text-decoration: underline;">000</span>185 NARROW      SMQ02      20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Ductus arterio… AEDECOD    Pregnancy… 20<span style="text-decoration: underline;">000</span>185 NARROW      SMQ02      20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Pseudotruncus … AEDECOD    Pregnancy… 20<span style="text-decoration: underline;">000</span>185 NARROW      SMQ02      20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Lipomeningocele AEDECOD    Pregnancy… 20<span style="text-decoration: underline;">000</span>185 NARROW      SMQ02      20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Macrocephaly    AEDECOD    Pregnancy… 20<span style="text-decoration: underline;">000</span>185 NARROW      SMQ02      20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Carnitine palm… AEDECOD    Pregnancy… 20<span style="text-decoration: underline;">000</span>185 NARROW      SMQ02      20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    TERMNAME                           SRCVAR GRPNAME  GRPID SCOPE PREFIX VERSION</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Achromotrichia congenital          AEDEC… Pregna… 2.00<span style="color: #949494;">e</span>7 NARR… SMQ02  20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Craniosynostosis                   AEDEC… Pregna… 2.00<span style="color: #949494;">e</span>7 NARR… SMQ02  20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Hypophosphatasia                   AEDEC… Pregna… 2.00<span style="color: #949494;">e</span>7 NARR… SMQ02  20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Congenital pyelocaliectasis        AEDEC… Pregna… 2.00<span style="color: #949494;">e</span>7 NARR… SMQ02  20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Uterine contractions during pregn… AEDEC… Pregna… 2.00<span style="color: #949494;">e</span>7 NARR… SMQ02  20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Ductus arteriosus premature closu… AEDEC… Pregna… 2.00<span style="color: #949494;">e</span>7 NARR… SMQ02  20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Pseudotruncus arteriosus           AEDEC… Pregna… 2.00<span style="color: #949494;">e</span>7 NARR… SMQ02  20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Lipomeningocele                    AEDEC… Pregna… 2.00<span style="color: #949494;">e</span>7 NARR… SMQ02  20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Macrocephaly                       AEDEC… Pregna… 2.00<span style="color: #949494;">e</span>7 NARR… SMQ02  20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Carnitine palmitoyltransferase de… AEDEC… Pregna… 2.00<span style="color: #949494;">e</span>7 NARR… SMQ02  20.1   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 33 more rows</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># create a query dataset for SDGs</span></span>
@@ -297,24 +284,24 @@ specified, the variable is not created.</p></li>
 <span class="r-in">  version <span class="op">=</span> <span class="st">"2019-09"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 16 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    TERM_NAME       TERM_LEVEL QUERY_NAME QUERY_ID QUERY_SCOPE VAR_PREFIX VERSION</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> AMINOSALICYLIC… CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> AMINOSALICYLAT… CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> AMINOSALICYLAT… CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> AMINOSALICYLAT… CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> SODIUM AMINOSA… CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> AMINOSALICYLAT… CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> SULFASALAZINE   CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> CALCIUM BENZAM… CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> OLSALAZINE      CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> OLSALAZINE SOD… CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> MESALAZINE      CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> BALSALAZIDE     CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> BALSALAZIDE SO… CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> BALSALAZIDE DI… CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> DERSALAZINE     CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> DERSALAZINE SO… CMDECOD    5-aminosa…      220 <span style="color: #BB0000;">NA</span>          SDG01      2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    TERMNAME                            SRCVAR GRPNAME GRPID SCOPE PREFIX VERSION</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> AMINOSALICYLIC ACID                 CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> AMINOSALICYLATE CALCIUM             CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> AMINOSALICYLATE CALCIUM ALUMINIUM   CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> AMINOSALICYLATE SODIUM              CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> SODIUM AMINOSALICYLATE DIHYDRATE    CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> AMINOSALICYLATE SODIUM;AMINOSALICY… CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> SULFASALAZINE                       CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> CALCIUM BENZAMIDOSALICYLATE         CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> OLSALAZINE                          CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> OLSALAZINE SODIUM                   CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> MESALAZINE                          CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> BALSALAZIDE                         CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> BALSALAZIDE SODIUM                  CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> BALSALAZIDE DISODIUM DIHYDRATE      CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> DERSALAZINE                         CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> DERSALAZINE SODIUM                  CMDEC… 5-amin…   220 <span style="color: #BB0000;">NA</span>    SDG01  2019-09</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># creating a query dataset for a customized query including SMQs</span></span>
 <span class="r-in"><span class="co"># The get_terms function from admiral.test is used for this example.</span></span>
@@ -338,18 +325,18 @@ specified, the variable is not created.</p></li>
 <span class="r-in">  version <span class="op">=</span> <span class="st">"20.1"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 23 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    TERM_NAME                    TERM_LEVEL QUERY_NAME TERM_ID VAR_PREFIX VERSION</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Achromotrichia congenital    AEDECOD    Special i…      <span style="color: #BB0000;">NA</span> CQ03       20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Craniosynostosis             AEDECOD    Special i…      <span style="color: #BB0000;">NA</span> CQ03       20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Hypophosphatasia             AEDECOD    Special i…      <span style="color: #BB0000;">NA</span> CQ03       20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Congenital pyelocaliectasis  AEDECOD    Special i…      <span style="color: #BB0000;">NA</span> CQ03       20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Uterine contractions during… AEDECOD    Special i…      <span style="color: #BB0000;">NA</span> CQ03       20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Ductus arteriosus premature… AEDECOD    Special i…      <span style="color: #BB0000;">NA</span> CQ03       20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Pseudotruncus arteriosus     AEDECOD    Special i…      <span style="color: #BB0000;">NA</span> CQ03       20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Lipomeningocele              AEDECOD    Special i…      <span style="color: #BB0000;">NA</span> CQ03       20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Macrocephaly                 AEDECOD    Special i…      <span style="color: #BB0000;">NA</span> CQ03       20.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Carnitine palmitoyltransfer… AEDECOD    Special i…      <span style="color: #BB0000;">NA</span> CQ03       20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    TERMNAME                                 SRCVAR GRPNAME TERMID PREFIX VERSION</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Achromotrichia congenital                AEDEC… Specia…     <span style="color: #BB0000;">NA</span> CQ03   20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Craniosynostosis                         AEDEC… Specia…     <span style="color: #BB0000;">NA</span> CQ03   20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Hypophosphatasia                         AEDEC… Specia…     <span style="color: #BB0000;">NA</span> CQ03   20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Congenital pyelocaliectasis              AEDEC… Specia…     <span style="color: #BB0000;">NA</span> CQ03   20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Uterine contractions during pregnancy    AEDEC… Specia…     <span style="color: #BB0000;">NA</span> CQ03   20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Ductus arteriosus premature closure      AEDEC… Specia…     <span style="color: #BB0000;">NA</span> CQ03   20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Pseudotruncus arteriosus                 AEDEC… Specia…     <span style="color: #BB0000;">NA</span> CQ03   20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Lipomeningocele                          AEDEC… Specia…     <span style="color: #BB0000;">NA</span> CQ03   20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Macrocephaly                             AEDEC… Specia…     <span style="color: #BB0000;">NA</span> CQ03   20.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Carnitine palmitoyltransferase deficien… AEDEC… Specia…     <span style="color: #BB0000;">NA</span> CQ03   20.1   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 13 more rows</span></span>
 </code></pre></div>
     </div>

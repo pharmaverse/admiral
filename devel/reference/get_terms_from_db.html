@@ -65,19 +65,6 @@ is in the expected format (see assert_terms())."><meta property="og:image" conte
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -113,8 +100,8 @@ is in the expected format (see <code><a href="assert_terms.html">assert_terms()<
   <span class="va">fun</span>,
   <span class="va">queries</span>,
   <span class="va">definition</span>,
-  expect_query_name <span class="op">=</span> <span class="cn">FALSE</span>,
-  expect_query_id <span class="op">=</span> <span class="cn">FALSE</span>,
+  expect_grpname <span class="op">=</span> <span class="cn">FALSE</span>,
+  expect_grpid <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">i</span>,
   <span class="va">temp_env</span>
 <span class="op">)</span></code></pre></div>
@@ -146,12 +133,12 @@ messages.</p></dd>
 returned.</p></dd>
 
 
-<dt>expect_query_name</dt>
-<dd><p>Is <code>QUERY_NAME</code> expected in the output dataset?</p></dd>
+<dt>expect_grpname</dt>
+<dd><p>Is <code>GRPNAME</code> expected in the output dataset?</p></dd>
 
 
-<dt>expect_query_id</dt>
-<dd><p>Is <code>QUERY_ID</code> expected in the output dataset?</p></dd>
+<dt>expect_grpid</dt>
+<dd><p>Is <code>GRPID</code> expected in the output dataset?</p></dd>
 
 
 <dt>i</dt>

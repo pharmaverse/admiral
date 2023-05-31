@@ -59,19 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -124,7 +111,35 @@
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-0-11-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-11-0"></a></h3>
-<ul><li><p>The <code>aval_fun</code> argument of <code><a href="../reference/derive_param_exist_flag.html">derive_param_exist_flag()</a></code> was deprecated in favor of the <code>set_values_to</code> argument. (<a href="https://github.com/pharmaverse/admiral/issues/1727" class="external-link">#1727</a>)</p></li>
+<ul><li>
+<p><code><a href="../reference/create_query_data.html">create_query_data()</a></code> and <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> updated to rename variables in query data set as follows:</p>
+<ul><li>
+<code>VAR_PREFIX</code> to <code>PREFIX</code>
+</li>
+<li>
+<code>QUERY_NAME</code> to <code>GRPNAME</code>
+</li>
+<li>
+<code>QUERY_ID</code> to <code>GRPID</code>
+</li>
+<li>
+<code>QUERY_SCOPE</code> to <code>SCOPE</code>
+</li>
+<li>
+<code>QUERY_SCOPE_NUM</code> to <code>SCOPEN</code>
+</li>
+<li>
+<code>TERM_LEVEL</code> to <code>SRCVAR</code>
+</li>
+<li>
+<code>TERM_NAME</code> to <code>TERMNAME</code>
+</li>
+<li>
+<code>TERM_ID</code> to <code>TERMID</code>
+</li>
+</ul><p>Users need to adjust their <code><a href="https://rdrr.io/pkg/admiral.test/man/get_terms.html" class="external-link">get_terms()</a></code> function accordingly.</p>
+</li>
+<li><p>The <code>aval_fun</code> argument of <code><a href="../reference/derive_param_exist_flag.html">derive_param_exist_flag()</a></code> was deprecated in favor of the <code>set_values_to</code> argument. (<a href="https://github.com/pharmaverse/admiral/issues/1727" class="external-link">#1727</a>)</p></li>
 <li><p><code><a href="../reference/derive_var_merged_cat.html">derive_var_merged_cat()</a></code> and <code><a href="../reference/derive_var_merged_character.html">derive_var_merged_character()</a></code> have been deprecated in favor of <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1727" class="external-link">#1727</a>)</p></li>
 <li>
 <p>The following functions, which were deprecated in previous <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> versions, have been removed (<a href="https://github.com/pharmaverse/admiral/issues/1747" class="external-link">#1747</a>):</p>

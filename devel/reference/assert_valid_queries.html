@@ -59,19 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -120,16 +107,16 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Check if the dataset has the following columns</p><ul><li><p><code>VAR_PREFIX</code>, e.g., SMQ01, CQ12</p></li>
-<li><p><code>QUERY_NAME</code>, non NA, must be unique per each <code>VAR_PREFIX</code></p></li>
-<li><p><code>QUERY_ID</code>, could be NA, must be unique per each <code>VAR_PREFIX</code></p></li>
-<li><p><code>QUERY_SCOPE</code>, 'BROAD', 'NARROW', or NA</p></li>
-<li><p><code>QUERY_SCOPE_NUM</code>, 1, 2, or NA</p></li>
-<li><p><code>TERM_LEVEL</code>, e.g., <code>"AEDECOD"</code>, <code>"AELLT"</code>, <code>"AELLTCD"</code>, ...</p></li>
-<li><p><code>TERM_NAME</code>, character, could be NA only at those observations
-where <code>TERM_ID</code> is non-NA</p></li>
-<li><p><code>TERM_ID</code>, integer, could be NA only at those observations
-where <code>TERM_NAME</code> is non-NA</p></li>
+    <p>Check if the dataset has the following columns</p><ul><li><p><code>PREFIX</code>, e.g., SMQ01, CQ12</p></li>
+<li><p><code>GRPNAME</code>, non NA, must be unique per each <code>PREFIX</code></p></li>
+<li><p><code>GRPID</code>, could be NA, must be unique per each <code>PREFIX</code></p></li>
+<li><p><code>SCOPE</code>, 'BROAD', 'NARROW', or NA</p></li>
+<li><p><code>SCOPEN</code>, 1, 2, or NA</p></li>
+<li><p><code>SRCVAR</code>, e.g., <code>"AEDECOD"</code>, <code>"AELLT"</code>, <code>"AELLTCD"</code>, ...</p></li>
+<li><p><code>TERMNAME</code>, character, could be NA only at those observations
+where <code>TERMID</code> is non-NA</p></li>
+<li><p><code>TERMID</code>, integer, could be NA only at those observations
+where <code>TERMNAME</code> is non-NA</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

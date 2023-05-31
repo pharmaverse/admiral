@@ -59,19 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -109,9 +96,9 @@
 
 
 <dt>dataset_queries</dt>
-<dd><p>A dataset containing required columns <code>VAR_PREFIX</code>,
-<code>QUERY_NAME</code>, <code>TERM_LEVEL</code>, <code>TERM_NAME</code>, <code>TERM_ID</code>, and optional columns
-<code>QUERY_ID</code>, <code>QUERY_SCOPE</code>, <code>QUERY_SCOPE_NUM</code>.</p>
+<dd><p>A dataset containing required columns <code>PREFIX</code>,
+<code>GRPNAME</code>, <code>SRCVAR</code>, <code>TERMNAME</code>, <code>TERMID</code>, and optional columns
+<code>GRPID</code>, <code>SCOPE</code>, <code>SCOPEN</code>.</p>
 <p>The content of the dataset will be verified by <code><a href="assert_valid_queries.html">assert_valid_queries()</a></code>.</p>
 <p><code><a href="create_query_data.html">create_query_data()</a></code> can be used to create the dataset.</p></dd>
 
@@ -132,19 +119,19 @@ An example usage of this function can be found in the
 <p>A query dataset is expected as an input to this function. See the
 <a href="../articles/queries_dataset.html">Queries Dataset Documentation vignette</a>
 for descriptions, or call <code>data("queries")</code> for an example of a query dataset.</p>
-<p>For each unique element in <code>VAR_PREFIX</code>, the corresponding "NAM"
-variable will be created. For each unique <code>VAR_PREFIX</code>, if <code>QUERY_ID</code> is
+<p>For each unique element in <code>PREFIX</code>, the corresponding "NAM"
+variable will be created. For each unique <code>PREFIX</code>, if <code>GRPID</code> is
 not "" or NA, then the corresponding "CD" variable is created; similarly,
-if <code>QUERY_SCOPE</code> is not "" or NA, then the corresponding "SC" variable will
-be created; if <code>QUERY_SCOPE_NUM</code> is not "" or NA, then the corresponding
+if <code>SCOPE</code> is not "" or NA, then the corresponding "SC" variable will
+be created; if <code>SCOPEN</code> is not "" or NA, then the corresponding
 "SCN" variable will be created.</p>
 <p>For each record in <code>dataset</code>, the "NAM" variable takes the value of
-<code>QUERY_NAME</code> if the value of <code>TERM_NAME</code> or <code>TERM_ID</code> in <code>dataset_queries</code> matches
-the value of the respective TERM_LEVEL in <code>dataset</code>.
-Note that <code>TERM_NAME</code> in <code>dataset_queries</code> dataset may be NA only when <code>TERM_ID</code>
+<code>GRPNAME</code> if the value of <code>TERMNAME</code> or <code>TERMID</code> in <code>dataset_queries</code> matches
+the value of the respective SRCVAR in <code>dataset</code>.
+Note that <code>TERMNAME</code> in <code>dataset_queries</code> dataset may be NA only when <code>TERMID</code>
 is non-NA and vice versa.
 The "CD", "SC", and "SCN" variables are derived accordingly based on
-<code>QUERY_ID</code>, <code>QUERY_SCOPE</code>, and <code>QUERY_SCOPE_NUM</code> respectively,
+<code>GRPID</code>, <code>SCOPE</code>, and <code>SCOPEN</code> respectively,
 whenever not missing.</p>
     </div>
     <div class="section level2">
@@ -179,9 +166,9 @@ whenever not missing.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 02      2020-06-0… BASED…     5 Basedo… <span style="color: #BB0000;">NA</span>          1 <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 03      2020-06-0… SOME …     2 Some q… Some…      <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 05      2020-06-0… ALVEO…     7 Alveol… <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 14 more variables: SMQ02SCN &lt;dbl&gt;, SMQ03NAM &lt;chr&gt;, SMQ03CD &lt;int&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SMQ03SC &lt;chr&gt;, SMQ03SCN &lt;dbl&gt;, SMQ05NAM &lt;chr&gt;, SMQ05CD &lt;int&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SMQ05SC &lt;chr&gt;, SMQ05SCN &lt;dbl&gt;, CQ01NAM &lt;chr&gt;, CQ04NAM &lt;chr&gt;, CQ04CD &lt;int&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 14 more variables: SMQ02SCN &lt;int&gt;, SMQ03NAM &lt;chr&gt;, SMQ03CD &lt;int&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SMQ03SC &lt;chr&gt;, SMQ03SCN &lt;int&gt;, SMQ05NAM &lt;chr&gt;, SMQ05CD &lt;int&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SMQ05SC &lt;chr&gt;, SMQ05SCN &lt;int&gt;, CQ01NAM &lt;chr&gt;, CQ04NAM &lt;chr&gt;, CQ04CD &lt;int&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   CQ06NAM &lt;chr&gt;, CQ06CD &lt;int&gt;</span></span>
 </code></pre></div>
     </div>
