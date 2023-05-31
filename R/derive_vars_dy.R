@@ -104,7 +104,7 @@ derive_vars_dy <- function(dataset,
 
   dy_vars <- if_else(
     source_names == "",
-    stringr::str_replace_all(vars2chr(source_vars), "(DT|DTM)$", "DY"),
+    str_replace_all(vars2chr(source_vars), "(DT|DTM)$", "DY"),
     source_names
   )
   warn_if_vars_exist(dataset, dy_vars)
