@@ -9,8 +9,8 @@ get_terms_from_db(
   fun,
   queries,
   definition,
-  expect_query_name = FALSE,
-  expect_query_id = FALSE,
+  expect_grpname = FALSE,
+  expect_grpid = FALSE,
   i,
   temp_env
 )
@@ -36,9 +36,9 @@ messages.}
 The definition is passed to the access function. It defines which terms are
 returned.}
 
-\item{expect_query_name}{Is \code{QUERY_NAME} expected in the output dataset?}
+\item{expect_grpname}{Is \code{GRPNAME} expected in the output dataset?}
 
-\item{expect_query_id}{Is \code{QUERY_ID} expected in the output dataset?}
+\item{expect_grpid}{Is \code{GRPID} expected in the output dataset?}
 
 \item{i}{Index of \code{definition} in \code{queries}
 
