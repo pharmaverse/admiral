@@ -40,20 +40,20 @@ test_that("derive_var_last_dose_date Test 1: works as expected output_datetime =
       LDOSEDTM = as.Date(LDOSEDTM),
       AESTDT = ymd(AESTDTC)
     )
-
-  res <- derive_var_last_dose_date(
-    input_ae,
-    input_ex,
-    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = exprs(STUDYID, USUBJID),
-    dose_date = EXENDT,
-    analysis_date = AESTDT,
-    new_var = LDOSEDTM,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    output_datetime = FALSE,
-    traceability_vars = NULL
+  suppressWarnings(
+    res <- derive_var_last_dose_date(
+      input_ae,
+      input_ex,
+      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = exprs(STUDYID, USUBJID),
+      dose_date = EXENDT,
+      analysis_date = AESTDT,
+      new_var = LDOSEDTM,
+      single_dose_condition = (EXSTDTC == EXENDTC),
+      output_datetime = FALSE,
+      traceability_vars = NULL
+    )
   )
-
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })
 
@@ -73,20 +73,20 @@ test_that("derive_var_last_dose_date Test 2: works as expected with output_datet
       LDOSEDTM = as.POSIXct(as.character(LDOSEDTM), tz = "UTC"),
       AESTDT = ymd(AESTDTC)
     )
-
-  res <- derive_var_last_dose_date(
-    input_ae,
-    input_ex,
-    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = exprs(STUDYID, USUBJID),
-    dose_date = EXENDT,
-    analysis_date = AESTDT,
-    new_var = LDOSEDTM,
-    output_datetime = TRUE,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    traceability_vars = NULL
+  suppressWarnings(
+    res <- derive_var_last_dose_date(
+      input_ae,
+      input_ex,
+      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = exprs(STUDYID, USUBJID),
+      dose_date = EXENDT,
+      analysis_date = AESTDT,
+      new_var = LDOSEDTM,
+      output_datetime = TRUE,
+      single_dose_condition = (EXSTDTC == EXENDTC),
+      traceability_vars = NULL
+    )
   )
-
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })
 
@@ -109,19 +109,19 @@ test_that("derive_var_last_dose_date Test 3: returns traceability vars", {
       LDOSEVAR = c("EXENDTC", "EXENDTC", "EXENDTC", NA, "EXENDTC", NA, NA),
       AESTDT = ymd(AESTDTC)
     )
-
-  res <- derive_var_last_dose_date(
-    input_ae,
-    input_ex,
-    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = exprs(STUDYID, USUBJID),
-    dose_date = EXENDT,
-    analysis_date = AESTDT,
-    new_var = LDOSEDTM,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    output_datetime = TRUE,
-    traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
+  suppressWarnings(
+    res <- derive_var_last_dose_date(
+      input_ae,
+      input_ex,
+      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = exprs(STUDYID, USUBJID),
+      dose_date = EXENDT,
+      analysis_date = AESTDT,
+      new_var = LDOSEDTM,
+      single_dose_condition = (EXSTDTC == EXENDTC),
+      output_datetime = TRUE,
+      traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
+    )
   )
-
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })
