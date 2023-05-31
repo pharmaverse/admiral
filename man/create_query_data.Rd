@@ -33,13 +33,13 @@ it has to be implemented at company level.
 The function must return a dataset with all the terms defining the basket.
 The output dataset must contain the following variables.
 \itemize{
-\item \code{TERM_LEVEL}: the variable to be used for defining a term of the basket,
+\item \code{SRCVAR}: the variable to be used for defining a term of the basket,
 e.g., \code{AEDECOD}
-\item \code{TERM_NAME}: the name of the term if the variable \code{TERM_LEVEL} is
+\item \code{TERMNAME}: the name of the term if the variable \code{SRCVAR} is
 referring to is character
-\item \code{TERM_ID} the numeric id of the term if the variable \code{TERM_LEVEL} is
+\item \code{TERMID} the numeric id of the term if the variable \code{SRCVAR} is
 referring to is numeric
-\item \code{QUERY_NAME}: the name of the basket. The values must be the same for
+\item \code{GRPNAME}: the name of the basket. The values must be the same for
 all observations.
 }
 
@@ -50,7 +50,7 @@ The function must provide the following parameters
 \code{version} in the \code{create_query_data()} call is passed to this
 parameter.
 \item \code{keep_id}: If set to \code{TRUE}, the output dataset must contain the
-\code{QUERY_ID} variable. The variable must be set to the numeric id of the basket.
+\code{GRPID} variable. The variable must be set to the numeric id of the basket.
 \item \code{temp_env}: A temporary environment is passed to this parameter. It can
 be used to store data which is used for all baskets in the
 \code{create_query_data()} call. For example if SMQs need to be read from a
@@ -69,7 +69,7 @@ in the \code{derive_vars_query()} function as defined in the \href{../articles/q
 }
 \details{
 For each \code{query()} object listed in the \code{queries} argument, the terms belonging
-to the query (\code{TERM_LEVEL}, \code{TERM_NAME}, \code{TERM_ID}) are determined with respect
+to the query (\code{SRCVAR}, \code{TERMNAME}, \code{TERMID}) are determined with respect
 to the \code{definition} field of the query: if the definition field of the
 \code{query()} object is
 \itemize{
@@ -83,24 +83,24 @@ the data frames and all terms read from the basket database referenced by the
 
 The following variables (as described in \href{../articles/queries_dataset.html}{Queries Dataset Documentation}) are created:
 \itemize{
-\item \code{VAR_PREFIX}: Prefix of the variables to be created by
+\item \code{PREFIX}: Prefix of the variables to be created by
 \code{derive_vars_query()} as specified by the \code{prefix} element.
-\item \code{QUERY_NAME}: Name of the query as specified by the \code{name} element.
-\item \code{QUERY_ID}: Id of the query as specified by the \code{id} element. If the \code{id}
+\item \code{GRPNAME}: Name of the query as specified by the \code{name} element.
+\item \code{GRPID}: Id of the query as specified by the \code{id} element. If the \code{id}
 element is not specified for a query, the variable is set to \code{NA}. If the
 \code{id} element is not specified for any query, the variable is not created.
-\item \code{QUERY_SCOPE}: scope of the query as specified by the \code{scope} element of
+\item \code{SCOPE}: scope of the query as specified by the \code{scope} element of
 the \code{basket_select()} object. For queries not defined by a \code{basket_select()}
 object, the variable is set to \code{NA}. If none of the queries is defined by a
 \code{basket_select()} object, the variable is not created.
-\item \code{QUERY_SCOPE_NUM}: numeric scope of the query. It is set to \code{1} if the
+\item \code{SCOPEN}: numeric scope of the query. It is set to \code{1} if the
 scope is broad. Otherwise it is set to \code{2}. If the \code{add_scope_num} element
 equals \code{FALSE}, the variable is set to \code{NA}. If the \code{add_scope_num} element
 equals \code{FALSE} for all baskets or none of the queries is an basket , the variable
 is not created.
-\item \code{TERM_LEVEL}: Name of the variable used to identify the terms.
-\item \code{TERM_NAME}: Value of the term variable if it is a character variable.
-\item \code{TERM_ID}: Value of the term variable if it is a numeric variable.
+\item \code{SRCVAR}: Name of the variable used to identify the terms.
+\item \code{TERMNAME}: Value of the term variable if it is a character variable.
+\item \code{TERMID}: Value of the term variable if it is a numeric variable.
 \item \code{VERSION}: Set to the value of the \code{version} argument. If it is not
 specified, the variable is not created.
 }
@@ -113,11 +113,11 @@ library(admiral)
 
 # creating a query dataset for a customized query
 cqterms <- tribble(
-  ~TERM_NAME, ~TERM_ID,
+  ~TERMNAME,                     ~TERMID,
   "APPLICATION SITE ERYTHEMA", 10003041L,
   "APPLICATION SITE PRURITUS", 10003053L
 ) \%>\%
-  mutate(TERM_LEVEL = "AEDECOD")
+  mutate(SRCVAR = "AEDECOD")
 
 cq <- query(
   prefix = "CQ01",
