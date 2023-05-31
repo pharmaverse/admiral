@@ -98,11 +98,13 @@ values are assigned in NCI-CTCAEv5 (#1863).
 quosures has been removed. The admiral option `force_admiral_vars` was removed
 as well. (#1694)
 
-- `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with supplying both `min_dates` and `max_dates` that has now been resolved (#1843)
+- `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with supplying both `min_dates` and `max_dates` that has now been resolved. (#1843)
 
-- Examples for `derive_var_extreme_flag()` were reworked to reduce runtime that occasionally led to failing CI check (#1780)
+- Examples for `derive_var_extreme_flag()` were reworked to reduce runtime that occasionally led to failing CI check. (#1780)
 
 - `create_period_dataset()` had a bug that led to an error when both DT and DTM columns existed. (#1845)
+
+- External functions are now consistently imported via namespace. `package::function()` calls have been removed from `admiral` functions. (#1842)
 
 # admiral 0.10.2
 
@@ -198,7 +200,7 @@ added for subjects who have both an event or censoring and an observation in
 
 - Function `derive_var_worst_flag()` has been deprecated, in favor of `slice_derivation()`/`derive_var_extreme_flag()` (#1682)
 
-- Function `derive_vars_disposition_reason()` has been deprecated, in favor of `derive_vars_merged()`(#1683)
+- Function `derive_vars_disposition_reason()` has been deprecated, in favor of `derive_vars_merged()` (#1683)
   
 - The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1712)
 
