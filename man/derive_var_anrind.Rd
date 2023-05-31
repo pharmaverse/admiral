@@ -4,7 +4,7 @@
 \alias{derive_var_anrind}
 \title{Derive Reference Range Indicator}
 \usage{
-derive_var_anrind(dataset, use_a1hia1lo = TRUE)
+derive_var_anrind(dataset, use_a1hia1lo = FALSE)
 }
 \arguments{
 \item{dataset}{The input dataset}
@@ -46,44 +46,23 @@ missing
 \examples{
 library(tibble)
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(admiral_vs)
 
-ref_ranges1 <- tribble(
-  ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-  "DIABP",      60,     80,    40,    90,
-  "PULSE",      60,    100,    40,   110
+vs <- tibble::tribble(
+   ~USUBJID, ~PARAMCD, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
+   "P01", "PUL", 70, 60, 100, 40, 110, "NORMAL",
+   "P01", "PUL", 57, 60, 100, 40, 110, "LOW",
+   "P01", "PUL", 60, 60, 100, 40, 110, "NORMAL",
+   "P01", "DIABP", 102, 60, 80, 40, 90, "HIGH HIGH",
+   "P02", "PUL", 109, 60, 100, 40, 110, "HIGH",
+   "P02", "PUL", 100, 60, 100, 40, 110, "NORMAL",
+   "P02", "DIABP", 80, 60, 80, 40, 90, "NORMAL",
+   "P03", "PUL", 39, 60, 100, 40, 110, "LOW LOW",
+   "P03", "PUL", 40, 60, 100, 40, 110, "LOW"
 )
 
-ref_ranges2 <- tribble(
-  ~PARAMCD, ~ANRLO, ~ANRHI,
-  "DIABP",      60,     80,
-  "PULSE",      60,    100
-)
+vs \%>\% derive_var_anrind(use_a1hia1lo = TRUE)
+vs \%>\% derive_var_anrind(use_a1hia1lo = FALSE)
 
-vs <- admiral_vs \%>\%
-  mutate(
-    PARAMCD = VSTESTCD,
-    AVAL = VSSTRESN
-  ) \%>\%
-  filter(PARAMCD \%in\% c("PULSE", "DIABP"))
-
-vs1 <- vs \%>\%
-  derive_vars_merged(ref_ranges1, by_vars = exprs(PARAMCD))
-
-vs2 <- vs \%>\%
-  derive_vars_merged(ref_ranges2, by_vars = exprs(PARAMCD))
-
-vs_anrind1 <- vs1 \%>\%
-  derive_var_anrind(use_a1hia1lo = TRUE) \%>\%
-  select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
-
-vs_anrind2 <- vs2 \%>\%
-  derive_var_anrind(use_a1hia1lo = FALSE) \%>\%
-  select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
-
-vs_anrind1
-vs_anrind2
 }
 \seealso{
 BDS-Findings Functions that returns variable appended to dataset: 

@@ -1,4 +1,7 @@
-test_that("two-sided reference ranges work", {
+# derive_var_anrind ---
+
+## Test 1: two-sided reference ranges work ----
+test_that("derive_var_anrind Test 1: two-sided reference ranges work", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI, ~ANRIND,
     "P01", "PUL", 1, 70, 60, 100, 40, 110, "NORMAL",
@@ -14,13 +17,14 @@ test_that("two-sided reference ranges work", {
   input <- select(expected_output, USUBJID:A1HI)
 
   expect_dfs_equal(
-    derive_var_anrind(input),
+    derive_var_anrind(input, use_a1hia1lo = TRUE),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "ASEQ")
   )
 })
 
-test_that("explicitly requesting to use `A1LO` and `A1HI` works", {
+## Test 2: explicitly requesting to use `A1LO` and `A1HI` works ----
+test_that("derive_var_anrind Test 2: explicitly requesting to use `A1LO` and `A1HI` works", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI, ~ANRIND,
     "P01", "PUL", 1, 69, 60, 100, 40, 110, "NORMAL",
@@ -42,7 +46,8 @@ test_that("explicitly requesting to use `A1LO` and `A1HI` works", {
   )
 })
 
-test_that("implicitly missing extreme ranges are supported", {
+## Test 3: implicitly missing extreme ranges are supported ----
+test_that("derive_var_anrind Test 3: implicitly missing extreme ranges are supported", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~ANRIND,
     "P01", "PUL", 1, 70, 60, 100, "NORMAL",
@@ -64,7 +69,8 @@ test_that("implicitly missing extreme ranges are supported", {
   )
 })
 
-test_that("explicitly missing extreme ranges are supported", {
+## Test 4: explicitly missing extreme ranges are supported ----
+test_that("derive_var_anrind Test 4: explicitly missing extreme ranges are supported", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI, ~ANRIND,
     "P01", "PUL", 1, 70, 60, 100, NA, NA, "NORMAL",
@@ -80,13 +86,14 @@ test_that("explicitly missing extreme ranges are supported", {
   input <- select(expected_output, USUBJID:A1HI)
 
   expect_dfs_equal(
-    derive_var_anrind(input),
+    derive_var_anrind(input, use_a1hia1lo = TRUE),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "ASEQ")
   )
 })
 
-test_that("one-sided reference ranges work", {
+## Test 5: one-sided reference ranges work ----
+test_that("derive_var_anrind Test 5: one-sided reference ranges work", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI, ~ANRIND,
     "P01", "PUL", 1, 101, NA, 100, NA, 120, "HIGH",
@@ -102,13 +109,14 @@ test_that("one-sided reference ranges work", {
   input <- select(expected_output, USUBJID:A1HI)
 
   expect_dfs_equal(
-    derive_var_anrind(input),
+    derive_var_anrind(input, use_a1hia1lo = TRUE),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "ASEQ")
   )
 })
 
-test_that("missing `AVAL` is handled properly", {
+## Test 6: missing `AVAL` is handled properly ----
+test_that("derive_var_anrind Test 6: missing `AVAL` is handled properly", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL,    ~ANRLO, ~ANRHI, ~ANRIND,
     "P01",    "PUL",    1,     NA_real_, 60,     100,    NA_character_
@@ -116,7 +124,7 @@ test_that("missing `AVAL` is handled properly", {
   input <- select(expected_output, USUBJID:ANRHI)
 
   expect_dfs_equal(
-    derive_var_anrind(input, use_a1hia1lo = FALSE),
+    derive_var_anrind(input),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "ASEQ")
   )
