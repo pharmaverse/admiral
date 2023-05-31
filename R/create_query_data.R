@@ -29,13 +29,13 @@
 #'   The function must return a dataset with all the terms defining the basket.
 #'   The output dataset must contain the following variables.
 #'
-#'   - `TERM_LEVEL`: the variable to be used for defining a term of the basket,
+#'   - `SRCVAR`: the variable to be used for defining a term of the basket,
 #'    e.g., `AEDECOD`
-#'   - `TERM_NAME`: the name of the term if the variable `TERM_LEVEL` is
+#'   - `TERMNAME`: the name of the term if the variable `SRCVAR` is
 #'   referring to is character
-#'   - `TERM_ID` the numeric id of the term if the variable `TERM_LEVEL` is
+#'   - `TERMID` the numeric id of the term if the variable `SRCVAR` is
 #'   referring to is numeric
-#'   - `QUERY_NAME`: the name of the basket. The values must be the same for
+#'   - `GRPNAME`: the name of the basket. The values must be the same for
 #'   all observations.
 #'
 #'   The function must provide the following parameters
@@ -45,7 +45,7 @@
 #'   `version` in the `create_query_data()` call is passed to this
 #'   parameter.
 #'   - `keep_id`: If set to `TRUE`, the output dataset must contain the
-#'   `QUERY_ID` variable. The variable must be set to the numeric id of the basket.
+#'   `GRPID` variable. The variable must be set to the numeric id of the basket.
 #'   - `temp_env`: A temporary environment is passed to this parameter. It can
 #'   be used to store data which is used for all baskets in the
 #'   `create_query_data()` call. For example if SMQs need to be read from a
@@ -56,7 +56,7 @@
 #' @details
 #'
 #'   For each `query()` object listed in the `queries` argument, the terms belonging
-#'   to the query (`TERM_LEVEL`, `TERM_NAME`, `TERM_ID`) are determined with respect
+#'   to the query (`SRCVAR`, `TERMNAME`, `TERMID`) are determined with respect
 #'   to the `definition` field of the query: if the definition field of the
 #'   `query()` object is
 #'
@@ -70,24 +70,24 @@
 #' The following variables (as described in [Queries Dataset
 #' Documentation](../articles/queries_dataset.html)) are created:
 #'
-#'   * `VAR_PREFIX`: Prefix of the variables to be created by
+#'   * `PREFIX`: Prefix of the variables to be created by
 #'   `derive_vars_query()` as specified by the `prefix` element.
-#'   * `QUERY_NAME`: Name of the query as specified by the `name` element.
-#'   * `QUERY_ID`: Id of the query as specified by the `id` element. If the `id`
+#'   * `GRPNAME`: Name of the query as specified by the `name` element.
+#'   * `GRPID`: Id of the query as specified by the `id` element. If the `id`
 #'   element is not specified for a query, the variable is set to `NA`. If the
 #'   `id` element is not specified for any query, the variable is not created.
-#'   * `QUERY_SCOPE`: scope of the query as specified by the `scope` element of
+#'   * `SCOPE`: scope of the query as specified by the `scope` element of
 #'   the `basket_select()` object. For queries not defined by a `basket_select()`
 #'   object, the variable is set to `NA`. If none of the queries is defined by a
 #'   `basket_select()` object, the variable is not created.
-#'   * `QUERY_SCOPE_NUM`: numeric scope of the query. It is set to `1` if the
+#'   * `SCOPEN`: numeric scope of the query. It is set to `1` if the
 #'   scope is broad. Otherwise it is set to `2`. If the `add_scope_num` element
 #'   equals `FALSE`, the variable is set to `NA`. If the `add_scope_num` element
 #'   equals `FALSE` for all baskets or none of the queries is an basket , the variable
 #'   is not created.
-#'   * `TERM_LEVEL`: Name of the variable used to identify the terms.
-#'   * `TERM_NAME`: Value of the term variable if it is a character variable.
-#'   * `TERM_ID`: Value of the term variable if it is a numeric variable.
+#'   * `SRCVAR`: Name of the variable used to identify the terms.
+#'   * `TERMNAME`: Value of the term variable if it is a character variable.
+#'   * `TERMID`: Value of the term variable if it is a numeric variable.
 #'   * `VERSION`: Set to the value of the `version` argument. If it is not
 #'   specified, the variable is not created.
 #'
@@ -111,11 +111,11 @@
 #'
 #' # creating a query dataset for a customized query
 #' cqterms <- tribble(
-#'   ~TERM_NAME, ~TERM_ID,
+#'   ~TERMNAME,                     ~TERMID,
 #'   "APPLICATION SITE ERYTHEMA", 10003041L,
 #'   "APPLICATION SITE PRURITUS", 10003053L
 #' ) %>%
-#'   mutate(TERM_LEVEL = "AEDECOD")
+#'   mutate(SRCVAR = "AEDECOD")
 #'
 #' cq <- query(
 #'   prefix = "CQ01",
@@ -217,18 +217,18 @@ create_query_data <- function(queries,
         fun = get_terms_fun,
         queries = queries,
         definition = queries[[i]]$definition,
-        expect_query_name = TRUE,
-        expect_query_id = !is.null(queries[[i]]$id),
+        expect_grpname = TRUE,
+        expect_grpid = !is.null(queries[[i]]$id),
         i = i,
         temp_env = temp_env
       )
       query_data[[i]] <- mutate(query_data[[i]],
-        QUERY_SCOPE = queries[[i]]$definition$scope
+        SCOPE = queries[[i]]$definition$scope
       )
       if (queries[[i]]$add_scope_num) {
         query_data[[i]] <-
           mutate(query_data[[i]],
-            QUERY_SCOPE_NUM = if_else(QUERY_SCOPE == "BROAD", 1, 2)
+            SCOPEN = if_else(SCOPE == "BROAD", 1, 2)
           )
       }
     } else if (is.data.frame(queries[[i]]$definition)) {
@@ -258,20 +258,20 @@ create_query_data <- function(queries,
     # add mandatory variables
     query_data[[i]] <- mutate(
       query_data[[i]],
-      VAR_PREFIX = queries[[i]]$prefix
+      PREFIX = queries[[i]]$prefix
     )
 
     if (!is_auto(queries[[i]]$name)) {
       query_data[[i]] <- mutate(
         query_data[[i]],
-        QUERY_NAME = queries[[i]]$name
+        GRPNAME = queries[[i]]$name
       )
     }
 
     # add optional variables
     if (!is.null(queries[[i]]$id) && !is_auto(queries[[i]]$id)) {
       query_data[[i]] <- mutate(query_data[[i]],
-        QUERY_ID = queries[[i]]$id
+        GRPID = queries[[i]]$id
       )
     }
   }
@@ -313,9 +313,9 @@ create_query_data <- function(queries,
 #'   The definition is passed to the access function. It defines which terms are
 #'   returned.
 #'
-#' @param expect_query_name Is `QUERY_NAME` expected in the output dataset?
+#' @param expect_grpname Is `GRPNAME` expected in the output dataset?
 #'
-#' @param expect_query_id Is `QUERY_ID` expected in the output dataset?
+#' @param expect_grpid Is `GRPID` expected in the output dataset?
 #'
 #' @param i Index of `definition` in `queries`
 #'
@@ -334,8 +334,8 @@ get_terms_from_db <- function(version,
                               fun,
                               queries,
                               definition,
-                              expect_query_name = FALSE,
-                              expect_query_id = FALSE,
+                              expect_grpname = FALSE,
+                              expect_grpid = FALSE,
                               i,
                               temp_env) {
   assert_db_requirements(
@@ -350,21 +350,21 @@ get_terms_from_db <- function(version,
     fun(
       basket_select = definition,
       version = version,
-      keep_id = expect_query_id,
+      keep_id = expect_grpid,
       temp_env = temp_env
     )
   )
   assert_terms(
     terms,
-    expect_query_name = expect_query_name,
-    expect_query_id = expect_query_id,
+    expect_grpname = expect_grpname,
+    expect_grpid = expect_grpid,
     source_text = paste0(
       "object returned by calling get_terms_fun(basket_select = ",
       format(definition),
       ", version = ",
       dquote(version),
       ", keep_id = ",
-      expect_query_id,
+      expect_grpid,
       ")"
     )
   )
@@ -432,10 +432,10 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' Standardized Drug Grouping (SDG), or a customized query (CQ). It is used
 #' as input to `create_query_data()`.
 #'
-#' @param prefix The value is used to populate `VAR_PREFIX` in the output
+#' @param prefix The value is used to populate `PREFIX` in the output
 #'   dataset of `create_query_data()`, e.g., `"SMQ03"`
 #'
-#' @param name The value is used to populate `QUERY_NAME` in the output dataset
+#' @param name The value is used to populate `GRPNAME` in the output dataset
 #'   of `create_query_data()`. If the `auto` keyword is specified, the variable
 #'   is set to the name of the query in the SMQ/SDG database.
 #'
@@ -443,7 +443,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'   keyword is permitted only for queries which are defined by an
 #'   `basket_select()` object.
 #'
-#' @param id The value is used to populate `QUERY_ID` in the output dataset of
+#' @param id The value is used to populate `GRPID` in the output dataset of
 #'   `create_query_data()`. If the `auto` keyword is specified, the variable is
 #'   set to the id of the query in the SMQ/SDG database.
 #'
@@ -451,7 +451,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'   keyword is permitted only for queries which are defined by an
 #'   `basket_select()` object.
 #'
-#' @param add_scope_num Determines if  `QUERY_SCOPE_NUM` in the output dataset
+#' @param add_scope_num Determines if  `SCOPEN` in the output dataset
 #'   of `create_query_data()` is populated
 #'
 #'   If the parameter is set to `TRUE`, the definition must be an `basket_select()`
@@ -468,17 +468,17 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'   * An `basket_select()` object is specified to select a query from the SMQ
 #'     database.
 #'
-#'   * A data frame with columns `TERM_LEVEL` and `TERM_NAME` or `TERM_ID` can
-#'     be specified to define the terms of a customized query. The `TERM_LEVEL`
+#'   * A data frame with columns `SRCVAR` and `TERMNAME` or `TERMID` can
+#'     be specified to define the terms of a customized query. The `SRCVAR`
 #'     should be set to the name of the variable which should be used to select
-#'     the terms, e.g., `"AEDECOD"` or `"AELLTCD"`. `TERM_LEVEL` does not need
+#'     the terms, e.g., `"AEDECOD"` or `"AELLTCD"`. `SRCVAR` does not need
 #'     to be constant within a query. For example a query can be based on
 #'     `AEDECOD` and `AELLT`.
 #'
-#'     If `TERM_LEVEL` refers to a character variable, `TERM_NAME` should be set
-#'     to the value the variable. If it refers to a numeric variable, `TERM_ID`
+#'     If `SRCVAR` refers to a character variable, `TERMNAME` should be set
+#'     to the value the variable. If it refers to a numeric variable, `TERMID`
 #'     should be set to the value of the variable. If only character variables
-#'     or only numeric variables are used, `TERM_ID` or `TERM_NAME` respectively
+#'     or only numeric variables are used, `TERMID` or `TERMNAME` respectively
 #'     can be omitted.
 #'
 #'   * A list of data frames and `basket_select()` objects can be specified to
@@ -529,11 +529,11 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'
 #' # creating a query for a customized query
 #' cqterms <- tribble(
-#'   ~TERM_NAME, ~TERM_ID,
+#'   ~TERMNAME,                     ~TERMID,
 #'   "APPLICATION SITE ERYTHEMA", 10003041L,
 #'   "APPLICATION SITE PRURITUS", 10003053L
 #' ) %>%
-#'   mutate(TERM_LEVEL = "AEDECOD")
+#'   mutate(SRCVAR = "AEDECOD")
 #'
 #' query(
 #'   prefix = "CQ01",
@@ -701,9 +701,9 @@ validate_query <- function(obj) {
 #'
 #' @param terms Terms provided by user
 #'
-#' @param expect_query_name Is the `QUERY_NAME` column expected?
+#' @param expect_grpname Is the `GRPNAME` column expected?
 #'
-#' @param expect_query_id Is the `QUERY_ID` column expected?
+#' @param expect_grpid Is the `GRPID` column expected?
 #'
 #' @param source_text Text describing the source of the terms, e.g., `"the data
 #'   frame provided for the `definition` element"`.
@@ -712,10 +712,10 @@ validate_query <- function(obj) {
 #'
 #' - `terms` is not a data frame,
 #' - `terms` has zero observations,
-#' - the `TERM_LEVEL` variable is not in `terms`,
-#' - neither the `TERM_NAME` nor the `TERM_ID` variable is in `terms`,
-#' - `expect_query_name == TRUE` and the `QUERY_NAME` variable is not in `terms`,
-#' - `expect_query_id == TRUE` and the `QUERY_ID` variable is not in `terms`,
+#' - the `SRCVAR` variable is not in `terms`,
+#' - neither the `TERMNAME` nor the `TERMID` variable is in `terms`,
+#' - `expect_grpname == TRUE` and the `GRPNAME` variable is not in `terms`,
+#' - `expect_grpid == TRUE` and the `GRPID` variable is not in `terms`,
 #'
 #' @examples
 #'
@@ -733,8 +733,8 @@ validate_query <- function(obj) {
 #' @family other_advanced
 #'
 assert_terms <- function(terms,
-                         expect_query_name = FALSE,
-                         expect_query_id = FALSE,
+                         expect_grpname = FALSE,
+                         expect_grpid = FALSE,
                          source_text) {
   if (!is.data.frame(terms)) {
     abort(paste0(
@@ -753,41 +753,41 @@ assert_terms <- function(terms,
   }
 
   vars <- names(terms)
-  if (!"TERM_LEVEL" %in% vars) {
+  if (!"SRCVAR" %in% vars) {
     abort(
       paste0(
-        "Required variable `TERM_LEVEL` is missing in ",
+        "Required variable `SRCVAR` is missing in ",
         source_text,
         "."
       )
     )
   }
-  if (expect_query_name) {
-    if (!"QUERY_NAME" %in% vars) {
+  if (expect_grpname) {
+    if (!"GRPNAME" %in% vars) {
       abort(
         paste0(
-          "Required variable `QUERY_NAME` is missing in ",
+          "Required variable `GRPNAME` is missing in ",
           source_text,
           "."
         )
       )
     }
   }
-  if (expect_query_id) {
-    if (!"QUERY_ID" %in% vars) {
+  if (expect_grpid) {
+    if (!"GRPID" %in% vars) {
       abort(
         paste0(
-          "Required variable `QUERY_ID` is missing in ",
+          "Required variable `GRPID` is missing in ",
           source_text,
           "."
         )
       )
     }
   }
-  if (!"TERM_NAME" %in% vars && !"TERM_ID" %in% vars) {
+  if (!"TERMNAME" %in% vars && !"TERMID" %in% vars) {
     abort(
       paste0(
-        "Variable `TERM_NAME` or `TERM_ID` is required.\n",
+        "Variable `TERMNAME` or `TERMID` is required.\n",
         "None of them is in ",
         source_text,
         ".\n",

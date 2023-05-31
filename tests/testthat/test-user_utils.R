@@ -167,11 +167,11 @@ test_that("print.source Test 14: `source` objects containing `source` objects", 
 ## Test 15: `source` objects containing `data.frame` ----
 test_that("print.source Test 15: `source` objects containing `data.frame`", {
   cqterms <- tibble::tribble(
-    ~TERM_NAME,                  ~TERM_ID,
+    ~TERMNAME,                     ~TERMID,
     "APPLICATION SITE ERYTHEMA", 10003041L,
     "APPLICATION SITE PRURITUS", 10003053L
   ) %>%
-    mutate(TERM_LEVEL = "AEDECOD")
+    mutate(SRCVAR = "AEDECOD")
 
   cq <- query(
     prefix = "CQ01",
@@ -185,10 +185,10 @@ test_that("print.source Test 15: `source` objects containing `data.frame`", {
     "add_scope_num: FALSE",
     "definition:",
     "# A tibble: 2 x 3",
-    "  TERM_NAME                  TERM_ID TERM_LEVEL",
-    "  <chr>                        <int> <chr>     ",
-    "1 APPLICATION SITE ERYTHEMA 10003041 AEDECOD   ",
-    "2 APPLICATION SITE PRURITUS 10003053 AEDECOD   "
+    "  TERMNAME                    TERMID SRCVAR ",
+    "  <chr>                        <int> <chr>  ",
+    "1 APPLICATION SITE ERYTHEMA 10003041 AEDECOD",
+    "2 APPLICATION SITE PRURITUS 10003053 AEDECOD"
   )
   # replace × with x due to differences between R versions and remove formatting
   expect_identical(
