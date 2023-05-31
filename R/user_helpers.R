@@ -64,7 +64,7 @@ use_ad_template <- function(adam_name = "adsl",
   }
 
   if (open) {
-    utils::file.edit(save_path)
+    file.edit(save_path)
   }
 
   invisible(TRUE)
