@@ -321,9 +321,8 @@ derive_param_computed <- function(dataset = NULL,
 #'
 #' @keywords other_advanced
 #' @family other_advanced
-#'
-#' @export
 assert_parameters_argument <- function(parameters, optional = TRUE) {
+  assert_logical_scalar(optional)
   if (optional && is.null(parameters)) {
     return(invisible(parameters))
   }
@@ -387,13 +386,17 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'
 #' @keywords other_advanced
 #' @family other_advanced
-#'
-#' @export
 get_hori_data <- function(dataset,
                           by_vars,
                           parameters,
                           analysis_value,
                           filter) {
+  assert_vars(by_vars)
+  assert_data_frame(dataset, required_vars = by_vars)
+  assert_parameters_argument(parameters)
+  assert_expr(analysis_value)
+  assert_expr(filter)
+
   # determine parameter values
   if (is.null(names(parameters))) {
     param_values <- map(parameters, as_label)
