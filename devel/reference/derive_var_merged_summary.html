@@ -61,19 +61,6 @@ Note: This is a wrapper function for the more generic derive_vars_merged."><meta
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -208,16 +195,16 @@ are ignored.</p></li>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Add a variable for the mean of AVAL within each visit</span></span>
 <span class="r-in"><span class="va">adbds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AVISIT</span>,  <span class="op">~</span><span class="va">ASEQ</span>, <span class="op">~</span><span class="va">AVAL</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 1"</span>,     <span class="fl">1</span>,    <span class="fl">10</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 1"</span>,     <span class="fl">2</span>,    <span class="cn">NA</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 2"</span>,     <span class="fl">3</span>,    <span class="cn">NA</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 3"</span>,     <span class="fl">4</span>,    <span class="fl">42</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>,     <span class="fl">5</span>,    <span class="fl">12</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>,     <span class="fl">6</span>,    <span class="fl">12</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>,     <span class="fl">7</span>,    <span class="fl">15</span>,</span>
-<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"WEEK 1"</span>,     <span class="fl">1</span>,    <span class="fl">21</span>,</span>
-<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"WEEK 4"</span>,     <span class="fl">2</span>,    <span class="fl">22</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>,  <span class="op">~</span><span class="va">AVISIT</span>,  <span class="op">~</span><span class="va">ASEQ</span>, <span class="op">~</span><span class="va">AVAL</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 1"</span>,      <span class="fl">1</span>,    <span class="fl">10</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 1"</span>,      <span class="fl">2</span>,    <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 2"</span>,      <span class="fl">3</span>,    <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 3"</span>,      <span class="fl">4</span>,    <span class="fl">42</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>,      <span class="fl">5</span>,    <span class="fl">12</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>,      <span class="fl">6</span>,    <span class="fl">12</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>,      <span class="fl">7</span>,    <span class="fl">15</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"WEEK 1"</span>,      <span class="fl">1</span>,    <span class="fl">21</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"WEEK 4"</span>,      <span class="fl">2</span>,    <span class="fl">22</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">derive_var_merged_summary</span><span class="op">(</span></span>
@@ -250,19 +237,19 @@ are ignored.</p></li>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">adtr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AVISIT</span>,    <span class="op">~</span><span class="va">LESIONID</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"BASELINE"</span>, <span class="st">"INV-T1"</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"BASELINE"</span>, <span class="st">"INV-T2"</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"BASELINE"</span>, <span class="st">"INV-T3"</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"BASELINE"</span>, <span class="st">"INV-T4"</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 1"</span>,   <span class="st">"INV-T1"</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 1"</span>,   <span class="st">"INV-T2"</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 1"</span>,   <span class="st">"INV-T4"</span>,</span>
-<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"BASELINE"</span>, <span class="st">"INV-T1"</span>,</span>
-<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"BASELINE"</span>, <span class="st">"INV-T2"</span>,</span>
-<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"BASELINE"</span>, <span class="st">"INV-T3"</span>,</span>
-<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"WEEK 1"</span>,   <span class="st">"INV-T1"</span>,</span>
-<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"WEEK 1"</span>,   <span class="st">"INV-N1"</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>,     <span class="op">~</span><span class="va">AVISIT</span>, <span class="op">~</span><span class="va">LESIONID</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,       <span class="st">"BASELINE"</span>,  <span class="st">"INV-T1"</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,       <span class="st">"BASELINE"</span>,  <span class="st">"INV-T2"</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,       <span class="st">"BASELINE"</span>,  <span class="st">"INV-T3"</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,       <span class="st">"BASELINE"</span>,  <span class="st">"INV-T4"</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,         <span class="st">"WEEK 1"</span>,  <span class="st">"INV-T1"</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,         <span class="st">"WEEK 1"</span>,  <span class="st">"INV-T2"</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,         <span class="st">"WEEK 1"</span>,  <span class="st">"INV-T4"</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,       <span class="st">"BASELINE"</span>,  <span class="st">"INV-T1"</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,       <span class="st">"BASELINE"</span>,  <span class="st">"INV-T2"</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,       <span class="st">"BASELINE"</span>,  <span class="st">"INV-T3"</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,         <span class="st">"WEEK 1"</span>,  <span class="st">"INV-T1"</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,         <span class="st">"WEEK 1"</span>,  <span class="st">"INV-N1"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">derive_var_merged_summary</span><span class="op">(</span></span>

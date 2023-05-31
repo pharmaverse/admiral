@@ -59,19 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -134,14 +121,43 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">admiral.test</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">admiral_ae</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">admiral_adsl</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">adae</span> <span class="op">&lt;-</span> <span class="va">admiral_ae</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">admiral_ae</span><span class="op">)</span>, <span class="fl">1000</span><span class="op">)</span>, <span class="op">]</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">STUDYID</span>,   <span class="op">~</span><span class="va">USUBJID</span>,      <span class="op">~</span><span class="va">TRTSDT</span>,      <span class="op">~</span><span class="va">TRTEDT</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>, <span class="st">"01-1307"</span>,           <span class="cn">NA</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>, <span class="st">"05-1377"</span>, <span class="st">"2014-01-04"</span>, <span class="st">"2014-01-25"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>, <span class="st">"06-1384"</span>, <span class="st">"2012-09-15"</span>, <span class="st">"2012-09-24"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>, <span class="st">"15-1085"</span>, <span class="st">"2013-02-16"</span>, <span class="st">"2013-08-18"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>, <span class="st">"16-1298"</span>, <span class="st">"2013-04-08"</span>, <span class="st">"2013-06-28"</span></span>
+<span class="r-in"><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span class="r-in">    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="va">TRTSDT</span><span class="op">:</span><span class="va">TRTEDT</span>, <span class="va">as.Date</span><span class="op">)</span></span>
+<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">STUDYID</span>,  <span class="op">~</span><span class="va">DOMAIN</span>,  <span class="op">~</span><span class="va">USUBJID</span>,     <span class="op">~</span><span class="va">AESTDTC</span>,     <span class="op">~</span><span class="va">AEENDTC</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"06-1384"</span>, <span class="st">"2012-09-15"</span>, <span class="st">"2012-09-29"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"06-1384"</span>, <span class="st">"2012-09-15"</span>, <span class="st">"2012-09-29"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"06-1384"</span>, <span class="st">"2012-09-23"</span>, <span class="st">"2012-09-29"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"06-1384"</span>, <span class="st">"2012-09-23"</span>, <span class="st">"2012-09-29"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"06-1384"</span>, <span class="st">"2012-09-15"</span>, <span class="st">"2012-09-29"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"06-1384"</span>, <span class="st">"2012-09-15"</span>, <span class="st">"2012-09-29"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"06-1384"</span>, <span class="st">"2012-09-15"</span>, <span class="st">"2012-09-29"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"06-1384"</span>, <span class="st">"2012-09-15"</span>, <span class="st">"2012-09-29"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"06-1384"</span>, <span class="st">"2012-09-23"</span>, <span class="st">"2012-09-29"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"06-1384"</span>, <span class="st">"2012-09-23"</span>, <span class="st">"2012-09-29"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"16-1298"</span>, <span class="st">"2013-06-08"</span>, <span class="st">"2013-07-06"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"16-1298"</span>, <span class="st">"2013-06-08"</span>, <span class="st">"2013-07-06"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"16-1298"</span>, <span class="st">"2013-04-22"</span>, <span class="st">"2013-07-06"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"16-1298"</span>, <span class="st">"2013-04-22"</span>, <span class="st">"2013-07-06"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"16-1298"</span>, <span class="st">"2013-04-22"</span>, <span class="st">"2013-07-06"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"16-1298"</span>, <span class="st">"2013-04-22"</span>, <span class="st">"2013-07-06"</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">adae</span> <span class="op">&lt;-</span> <span class="va">ae</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">AESTDTC</span>, <span class="va">AEENDTC</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="derive_vars_merged.html">derive_vars_merged</a></span><span class="op">(</span></span>
-<span class="r-in">    dataset_add <span class="op">=</span> <span class="va">admiral_adsl</span>,</span>
+<span class="r-in">    dataset_add <span class="op">=</span> <span class="va">adsl</span>,</span>
 <span class="r-in">    new_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">TRTSDT</span>, <span class="va">TRTEDT</span><span class="op">)</span>,</span>
 <span class="r-in">    by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">)</span></span>
@@ -162,20 +178,26 @@
 <span class="r-in">    min_dates <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">TRTSDT</span><span class="op">)</span>,</span>
 <span class="r-in">    max_dates <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">TRTEDT</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,000 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     AESTDTC    AEENDTC    TRTSDT     TRTEDT     ASTDT      AENDT     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-709-1088 2014-08-02 <span style="color: #BB0000;">NA</span>         2014-04-12 2014-10-09 2014-08-02 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-716-1311 2014-05-28 2014-09-22 2014-05-14 2014-09-21 2014-05-28 2014-09-22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-710-1271 2012-11-21 2012-11-21 2012-09-27 2012-11-21 2012-11-21 2012-11-21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-711-1143 2013-04-29 2013-05-15 2013-04-03 2013-05-30 2013-04-29 2013-05-15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-710-1385 2012-12-18 <span style="color: #BB0000;">NA</span>         2012-10-29 2013-02-18 2012-12-18 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-718-1427 2013-01-05 2013-01-05 2012-12-17 2013-02-11 2013-01-05 2013-01-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-709-1306 2014-04-20 2014-06-23 2014-02-03 2014-06-16 2014-04-20 2014-06-23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-716-1167 2012-12-03 <span style="color: #BB0000;">NA</span>         2012-10-08 2013-04-12 2012-12-03 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-709-1217 2013-03-26 2013-06-18 2013-03-04 2013-06-11 2013-03-26 2013-06-18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-717-1004 2014-01-15 2014-02-08 2014-01-14 2014-07-16 2014-01-15 2014-02-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 990 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 16 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID AESTDTC    AEENDTC    TRTSDT     TRTEDT     ASTDT      AENDT     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 06-1384 2012-09-15 2012-09-29 2012-09-15 2012-09-24 2012-09-15 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 06-1384 2012-09-15 2012-09-29 2012-09-15 2012-09-24 2012-09-15 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 06-1384 2012-09-23 2012-09-29 2012-09-15 2012-09-24 2012-09-23 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 06-1384 2012-09-23 2012-09-29 2012-09-15 2012-09-24 2012-09-23 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 06-1384 2012-09-15 2012-09-29 2012-09-15 2012-09-24 2012-09-15 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 06-1384 2012-09-15 2012-09-29 2012-09-15 2012-09-24 2012-09-15 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 06-1384 2012-09-15 2012-09-29 2012-09-15 2012-09-24 2012-09-15 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 06-1384 2012-09-15 2012-09-29 2012-09-15 2012-09-24 2012-09-15 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 06-1384 2012-09-23 2012-09-29 2012-09-15 2012-09-24 2012-09-23 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 06-1384 2012-09-23 2012-09-29 2012-09-15 2012-09-24 2012-09-23 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 16-1298 2013-06-08 2013-07-06 2013-04-08 2013-06-28 2013-06-08 2013-07-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 16-1298 2013-06-08 2013-07-06 2013-04-08 2013-06-28 2013-06-08 2013-07-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> 16-1298 2013-04-22 2013-07-06 2013-04-08 2013-06-28 2013-04-22 2013-07-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> 16-1298 2013-04-22 2013-07-06 2013-04-08 2013-06-28 2013-04-22 2013-07-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> 16-1298 2013-04-22 2013-07-06 2013-04-08 2013-06-28 2013-04-22 2013-07-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> 16-1298 2013-04-22 2013-07-06 2013-04-08 2013-06-28 2013-04-22 2013-07-06</span>
+<span class="r-in"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`</span></span>
 <span class="r-in"><span class="co">## one can add multiple variables in one go.</span></span>
@@ -193,20 +215,25 @@
 <span class="r-in">  min_dates <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">TRTSDT</span><span class="op">)</span>,</span>
 <span class="r-in">  max_dates <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">TRTEDT</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,000 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     AESTDTC    AEENDTC    TRTSDT     TRTEDT     ASTDT      AENDT     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-709-1088 2014-08-02 <span style="color: #BB0000;">NA</span>         2014-04-12 2014-10-09 2014-08-02 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-716-1311 2014-05-28 2014-09-22 2014-05-14 2014-09-21 2014-05-28 2014-09-22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-710-1271 2012-11-21 2012-11-21 2012-09-27 2012-11-21 2012-11-21 2012-11-21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-711-1143 2013-04-29 2013-05-15 2013-04-03 2013-05-30 2013-04-29 2013-05-15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-710-1385 2012-12-18 <span style="color: #BB0000;">NA</span>         2012-10-29 2013-02-18 2012-12-18 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-718-1427 2013-01-05 2013-01-05 2012-12-17 2013-02-11 2013-01-05 2013-01-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-709-1306 2014-04-20 2014-06-23 2014-02-03 2014-06-16 2014-04-20 2014-06-23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-716-1167 2012-12-03 <span style="color: #BB0000;">NA</span>         2012-10-08 2013-04-12 2012-12-03 <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-709-1217 2013-03-26 2013-06-18 2013-03-04 2013-06-11 2013-03-26 2013-06-18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-717-1004 2014-01-15 2014-02-08 2014-01-14 2014-07-16 2014-01-15 2014-02-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 990 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 16 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID AESTDTC    AEENDTC    TRTSDT     TRTEDT     ASTDT      AENDT     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 06-1384 2012-09-15 2012-09-29 2012-09-15 2012-09-24 2012-09-15 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 06-1384 2012-09-15 2012-09-29 2012-09-15 2012-09-24 2012-09-15 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 06-1384 2012-09-23 2012-09-29 2012-09-15 2012-09-24 2012-09-23 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 06-1384 2012-09-23 2012-09-29 2012-09-15 2012-09-24 2012-09-23 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 06-1384 2012-09-15 2012-09-29 2012-09-15 2012-09-24 2012-09-15 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 06-1384 2012-09-15 2012-09-29 2012-09-15 2012-09-24 2012-09-15 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 06-1384 2012-09-15 2012-09-29 2012-09-15 2012-09-24 2012-09-15 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 06-1384 2012-09-15 2012-09-29 2012-09-15 2012-09-24 2012-09-15 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 06-1384 2012-09-23 2012-09-29 2012-09-15 2012-09-24 2012-09-23 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 06-1384 2012-09-23 2012-09-29 2012-09-15 2012-09-24 2012-09-23 2012-09-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 16-1298 2013-06-08 2013-07-06 2013-04-08 2013-06-28 2013-06-08 2013-07-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 16-1298 2013-06-08 2013-07-06 2013-04-08 2013-06-28 2013-06-08 2013-07-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> 16-1298 2013-04-22 2013-07-06 2013-04-08 2013-06-28 2013-04-22 2013-07-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> 16-1298 2013-04-22 2013-07-06 2013-04-08 2013-06-28 2013-04-22 2013-07-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> 16-1298 2013-04-22 2013-07-06 2013-04-08 2013-06-28 2013-04-22 2013-07-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> 16-1298 2013-04-22 2013-07-06 2013-04-08 2013-06-28 2013-04-22 2013-07-06</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## The above call using `call_derivation()` is equivalent to the call using `derive_vars_dt()`</span></span>
 <span class="r-in"><span class="co">## to derive variables `ASTDT` and `AENDT` separately at the beginning.</span></span>

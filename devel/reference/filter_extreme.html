@@ -59,19 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -168,34 +155,56 @@ order specified for the <code>order</code> parameter and the mode specified for 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">admiral.test</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_ex"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">STUDYID</span>,  <span class="op">~</span><span class="va">DOMAIN</span>,  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">EXSEQ</span>, <span class="op">~</span><span class="va">EXDOSE</span>,    <span class="op">~</span><span class="va">EXTRT</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"01-1442"</span>,      <span class="fl">1</span>,      <span class="fl">54</span>,    <span class="st">"XANO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"01-1442"</span>,      <span class="fl">2</span>,      <span class="fl">54</span>,    <span class="st">"XANO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"01-1442"</span>,      <span class="fl">3</span>,      <span class="fl">54</span>,    <span class="st">"XANO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"01-1444"</span>,      <span class="fl">1</span>,      <span class="fl">54</span>,    <span class="st">"XANO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"01-1444"</span>,      <span class="fl">2</span>,      <span class="fl">81</span>,    <span class="st">"XANO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"05-1382"</span>,      <span class="fl">1</span>,      <span class="fl">54</span>,    <span class="st">"XANO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"08-1213"</span>,      <span class="fl">1</span>,      <span class="fl">54</span>,    <span class="st">"XANO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"10-1053"</span>,      <span class="fl">1</span>,      <span class="fl">54</span>,    <span class="st">"XANO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"10-1053"</span>,      <span class="fl">2</span>,      <span class="fl">54</span>,    <span class="st">"XANO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"10-1183"</span>,      <span class="fl">1</span>,       <span class="fl">0</span>, <span class="st">"PLACEBO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"10-1183"</span>,      <span class="fl">2</span>,       <span class="fl">0</span>, <span class="st">"PLACEBO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"10-1183"</span>,      <span class="fl">3</span>,       <span class="fl">0</span>, <span class="st">"PLACEBO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"11-1036"</span>,      <span class="fl">1</span>,       <span class="fl">0</span>, <span class="st">"PLACEBO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"11-1036"</span>,      <span class="fl">2</span>,       <span class="fl">0</span>, <span class="st">"PLACEBO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"11-1036"</span>,      <span class="fl">3</span>,       <span class="fl">0</span>, <span class="st">"PLACEBO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"14-1425"</span>,      <span class="fl">1</span>,      <span class="fl">54</span>,    <span class="st">"XANO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"15-1319"</span>,      <span class="fl">1</span>,      <span class="fl">54</span>,    <span class="st">"XANO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"15-1319"</span>,      <span class="fl">2</span>,      <span class="fl">81</span>,    <span class="st">"XANO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"16-1151"</span>,      <span class="fl">1</span>,      <span class="fl">54</span>,    <span class="st">"XANO"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"EX"</span>, <span class="st">"16-1151"</span>,      <span class="fl">2</span>,      <span class="fl">54</span>,    <span class="st">"XANO"</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Select first dose for each patient</span></span>
-<span class="r-in"><span class="va">admiral_ex</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in"><span class="va">ex</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu">filter_extreme</span><span class="op">(</span></span>
 <span class="r-in">    by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span>
 <span class="r-in">    order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">EXSEQ</span><span class="op">)</span>,</span>
 <span class="r-in">    mode <span class="op">=</span> <span class="st">"first"</span></span>
 <span class="r-in">  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">EXSEQ</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 254 × 2</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     EXSEQ</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-701-1015     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-701-1023     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-701-1028     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-701-1033     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-701-1034     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-701-1047     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-701-1097     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-701-1111     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-701-1115     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-701-1118     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 244 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID EXSEQ</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-1442     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-1444     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 05-1382     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 08-1213     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 10-1053     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 10-1183     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 11-1036     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 14-1425     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 15-1319     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 16-1151     1</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Select highest dose for each patient on the active drug</span></span>
-<span class="r-in"><span class="va">admiral_ex</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in"><span class="va">ex</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">EXTRT</span> <span class="op">!=</span> <span class="st">"PLACEBO"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu">filter_extreme</span><span class="op">(</span></span>
 <span class="r-in">    by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span>
@@ -204,20 +213,17 @@ order specified for the <code>order</code> parameter and the mode specified for 
 <span class="r-in">    check_type <span class="op">=</span> <span class="st">"none"</span></span>
 <span class="r-in">  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">EXTRT</span>, <span class="va">EXDOSE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 168 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     EXTRT      EXDOSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-701-1028 XANOMELINE     81</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-701-1033 XANOMELINE     54</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-701-1034 XANOMELINE     81</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-701-1097 XANOMELINE     54</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-701-1111 XANOMELINE     54</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-701-1115 XANOMELINE     54</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-701-1133 XANOMELINE     81</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-701-1146 XANOMELINE     81</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-701-1148 XANOMELINE     81</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-701-1180 XANOMELINE     81</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 158 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID EXTRT EXDOSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 01-1442 XANO      54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 01-1444 XANO      81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 05-1382 XANO      54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 08-1213 XANO      54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 10-1053 XANO      54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 14-1425 XANO      54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 15-1319 XANO      81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> 16-1151 XANO      54</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

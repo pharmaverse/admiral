@@ -61,19 +61,6 @@ the last known alive datetime (LSTALVDTM)."><meta property="og:image" content="h
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -183,10 +170,67 @@ variable is merged to the input dataset.</p></li>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">admiral.test</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_ae"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_lb"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_adsl"</span><span class="op">)</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="va">dm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">STUDYID</span>,  <span class="op">~</span><span class="va">DOMAIN</span>,  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AGE</span>,   <span class="op">~</span><span class="va">AGEU</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"DM"</span>, <span class="st">"01-1130"</span>,   <span class="fl">84</span>, <span class="st">"YEARS"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"DM"</span>, <span class="st">"01-1133"</span>,   <span class="fl">81</span>, <span class="st">"YEARS"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"DM"</span>, <span class="st">"01-1211"</span>,   <span class="fl">76</span>, <span class="st">"YEARS"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"DM"</span>, <span class="st">"09-1081"</span>,   <span class="fl">86</span>, <span class="st">"YEARS"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"DM"</span>, <span class="st">"09-1088"</span>,   <span class="fl">69</span>, <span class="st">"YEARS"</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">STUDYID</span>,  <span class="op">~</span><span class="va">DOMAIN</span>,  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AESEQ</span>,     <span class="op">~</span><span class="va">AESTDTC</span>,     <span class="op">~</span><span class="va">AEENDTC</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1130"</span>,      <span class="fl">5</span>, <span class="st">"2014-05-09"</span>, <span class="st">"2014-05-09"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1130"</span>,      <span class="fl">6</span>, <span class="st">"2014-05-22"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1130"</span>,      <span class="fl">4</span>, <span class="st">"2014-05-09"</span>, <span class="st">"2014-05-09"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1130"</span>,      <span class="fl">8</span>, <span class="st">"2014-05-22"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1130"</span>,      <span class="fl">7</span>, <span class="st">"2014-05-22"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1130"</span>,      <span class="fl">2</span>, <span class="st">"2014-03-09"</span>, <span class="st">"2014-03-09"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1130"</span>,      <span class="fl">1</span>, <span class="st">"2014-03-09"</span>, <span class="st">"2014-03-16"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1130"</span>,      <span class="fl">3</span>, <span class="st">"2014-03-09"</span>, <span class="st">"2014-03-16"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1133"</span>,      <span class="fl">1</span>, <span class="st">"2012-12-27"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1133"</span>,      <span class="fl">3</span>, <span class="st">"2012-12-27"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1133"</span>,      <span class="fl">2</span>, <span class="st">"2012-12-27"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1133"</span>,      <span class="fl">4</span>, <span class="st">"2012-12-27"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1211"</span>,      <span class="fl">5</span>, <span class="st">"2012-11-29"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1211"</span>,      <span class="fl">1</span>, <span class="st">"2012-11-16"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1211"</span>,      <span class="fl">7</span>, <span class="st">"2013-01-11"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1211"</span>,      <span class="fl">8</span>, <span class="st">"2013-01-11"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1211"</span>,      <span class="fl">4</span>, <span class="st">"2012-11-22"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1211"</span>,      <span class="fl">2</span>, <span class="st">"2012-11-21"</span>, <span class="st">"2012-11-21"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1211"</span>,      <span class="fl">3</span>, <span class="st">"2012-11-21"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1211"</span>,      <span class="fl">6</span>, <span class="st">"2012-12-09"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"01-1211"</span>,      <span class="fl">9</span>, <span class="st">"2013-01-14"</span>, <span class="st">"2013-01-14"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"09-1081"</span>,      <span class="fl">2</span>, <span class="st">"2014-05-01"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"09-1081"</span>,      <span class="fl">1</span>, <span class="st">"2014-04-07"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"09-1088"</span>,      <span class="fl">1</span>, <span class="st">"2014-05-08"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"AE"</span>, <span class="st">"09-1088"</span>,      <span class="fl">2</span>, <span class="st">"2014-08-02"</span>,           <span class="cn">NA</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span class="va">lb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">STUDYID</span>,  <span class="op">~</span><span class="va">DOMAIN</span>,  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">LBSEQ</span>,             <span class="op">~</span><span class="va">LBDTC</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"LB"</span>, <span class="st">"01-1130"</span>,    <span class="fl">219</span>, <span class="st">"2014-06-07T13:20"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"LB"</span>, <span class="st">"01-1130"</span>,    <span class="fl">322</span>, <span class="st">"2014-08-16T13:10"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"LB"</span>, <span class="st">"01-1133"</span>,    <span class="fl">268</span>, <span class="st">"2013-04-18T15:30"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"LB"</span>, <span class="st">"01-1133"</span>,    <span class="fl">304</span>, <span class="st">"2013-04-29T10:13"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"LB"</span>, <span class="st">"01-1211"</span>,      <span class="fl">8</span>, <span class="st">"2012-10-30T14:26"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"LB"</span>, <span class="st">"01-1211"</span>,    <span class="fl">162</span>, <span class="st">"2013-01-08T12:13"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"LB"</span>, <span class="st">"09-1081"</span>,     <span class="fl">47</span>, <span class="st">"2014-02-01T10:55"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"LB"</span>, <span class="st">"09-1081"</span>,    <span class="fl">219</span>, <span class="st">"2014-05-10T11:15"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"LB"</span>, <span class="st">"09-1088"</span>,    <span class="fl">283</span>, <span class="st">"2014-09-27T12:13"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>,    <span class="st">"LB"</span>, <span class="st">"09-1088"</span>,    <span class="fl">322</span>, <span class="st">"2014-10-09T13:25"</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">STUDYID</span>,   <span class="op">~</span><span class="va">USUBJID</span>,              <span class="op">~</span><span class="va">TRTEDTM</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>, <span class="st">"01-1130"</span>, <span class="st">"2014-08-16 23:59:59"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>, <span class="st">"01-1133"</span>, <span class="st">"2013-04-28 23:59:59"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>, <span class="st">"01-1211"</span>, <span class="st">"2013-01-12 23:59:59"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>, <span class="st">"09-1081"</span>, <span class="st">"2014-04-27 23:59:59"</span>,</span>
+<span class="r-in">  <span class="st">"PILOT01"</span>, <span class="st">"09-1088"</span>, <span class="st">"2014-10-09 23:59:59"</span></span>
+<span class="r-in"><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span class="r-in">    TRTEDTM <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">TRTEDTM</span><span class="op">)</span></span>
+<span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># derive last known alive datetime (LSTALVDTM)</span></span>
 <span class="r-in"><span class="va">ae_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
@@ -198,9 +242,27 @@ variable is merged to the input dataset.</p></li>
 <span class="r-in">  date <span class="op">=</span> <span class="fu"><a href="convert_dtc_to_dtm.html">convert_dtc_to_dtm</a></span><span class="op">(</span><span class="va">AEENDTC</span>, highest_imputation <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span>,</span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
+<span class="r-in"><span class="va">ae_ext</span> <span class="op">&lt;-</span> <span class="va">ae</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="derive_vars_dtm.html">derive_vars_dtm</a></span><span class="op">(</span></span>
+<span class="r-in">    dtc <span class="op">=</span> <span class="va">AESTDTC</span>,</span>
+<span class="r-in">    new_vars_prefix <span class="op">=</span> <span class="st">"AEST"</span>,</span>
+<span class="r-in">    highest_imputation <span class="op">=</span> <span class="st">"M"</span></span>
+<span class="r-in">  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="derive_vars_dtm.html">derive_vars_dtm</a></span><span class="op">(</span></span>
+<span class="r-in">    dtc <span class="op">=</span> <span class="va">AEENDTC</span>,</span>
+<span class="r-in">    new_vars_prefix <span class="op">=</span> <span class="st">"AEEN"</span>,</span>
+<span class="r-in">    highest_imputation <span class="op">=</span> <span class="st">"M"</span></span>
+<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="va">lb_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"lb"</span>,</span>
 <span class="r-in">  date <span class="op">=</span> <span class="fu"><a href="convert_dtc_to_dtm.html">convert_dtc_to_dtm</a></span><span class="op">(</span><span class="va">LBDTC</span><span class="op">)</span>,</span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">lb_ext</span> <span class="op">&lt;-</span> <span class="fu"><a href="derive_vars_dtm.html">derive_vars_dtm</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">lb</span>,</span>
+<span class="r-in">  dtc <span class="op">=</span> <span class="va">LBDTC</span>,</span>
+<span class="r-in">  new_vars_prefix <span class="op">=</span> <span class="st">"LB"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">adsl_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
@@ -208,32 +270,26 @@ variable is merged to the input dataset.</p></li>
 <span class="r-in">  date <span class="op">=</span> <span class="va">TRTEDTM</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">admiral_dm</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in"><span class="va">dm</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu">derive_var_extreme_dtm</span><span class="op">(</span></span>
 <span class="r-in">    new_var <span class="op">=</span> <span class="va">LSTALVDTM</span>,</span>
 <span class="r-in">    <span class="va">ae_start</span>, <span class="va">ae_end</span>, <span class="va">lb_date</span>, <span class="va">adsl_date</span>,</span>
 <span class="r-in">    source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">      adsl <span class="op">=</span> <span class="va">admiral_adsl</span>,</span>
-<span class="r-in">      ae <span class="op">=</span> <span class="va">admiral_ae</span>,</span>
-<span class="r-in">      lb <span class="op">=</span> <span class="va">admiral_lb</span></span>
+<span class="r-in">      adsl <span class="op">=</span> <span class="va">adsl</span>,</span>
+<span class="r-in">      ae <span class="op">=</span> <span class="va">ae_ext</span>,</span>
+<span class="r-in">      lb <span class="op">=</span> <span class="va">lb_ext</span></span>
 <span class="r-in">    <span class="op">)</span>,</span>
 <span class="r-in">    mode <span class="op">=</span> <span class="st">"last"</span></span>
 <span class="r-in">  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">LSTALVDTM</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 306 × 2</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     LSTALVDTM          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-701-1015 2014-07-02 <span style="color: #949494;">23:59:59</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-701-1023 2012-09-02 <span style="color: #949494;">10:15:00</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-701-1028 2014-01-14 <span style="color: #949494;">23:59:59</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-701-1033 2014-04-14 <span style="color: #949494;">10:38:00</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-701-1034 2014-12-30 <span style="color: #949494;">23:59:59</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-701-1047 2013-04-07 <span style="color: #949494;">11:20:00</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-701-1057 <span style="color: #BB0000;">NA</span>                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-701-1097 2014-07-09 <span style="color: #949494;">23:59:59</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-701-1111 2012-09-17 <span style="color: #949494;">11:48:00</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-701-1115 2013-01-23 <span style="color: #949494;">23:59:59</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 296 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID LSTALVDTM          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 01-1130 2014-08-16 <span style="color: #949494;">23:59:59</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 01-1133 2013-04-29 <span style="color: #949494;">10:13:00</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 01-1211 2013-01-14 <span style="color: #949494;">00:00:00</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 09-1081 2014-05-10 <span style="color: #949494;">11:15:00</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 09-1088 2014-10-09 <span style="color: #949494;">23:59:59</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># derive last alive datetime and traceability variables</span></span>
 <span class="r-in"><span class="va">ae_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
@@ -275,32 +331,26 @@ variable is merged to the input dataset.</p></li>
 <span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">admiral_dm</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in"><span class="va">dm</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu">derive_var_extreme_dtm</span><span class="op">(</span></span>
 <span class="r-in">    new_var <span class="op">=</span> <span class="va">LSTALVDTM</span>,</span>
 <span class="r-in">    <span class="va">ae_start</span>, <span class="va">ae_end</span>, <span class="va">lb_date</span>, <span class="va">adsl_date</span>,</span>
 <span class="r-in">    source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">      adsl <span class="op">=</span> <span class="va">admiral_adsl</span>,</span>
-<span class="r-in">      ae <span class="op">=</span> <span class="va">admiral_ae</span>,</span>
-<span class="r-in">      lb <span class="op">=</span> <span class="va">admiral_lb</span></span>
+<span class="r-in">      adsl <span class="op">=</span> <span class="va">adsl</span>,</span>
+<span class="r-in">      ae <span class="op">=</span> <span class="va">ae_ext</span>,</span>
+<span class="r-in">      lb <span class="op">=</span> <span class="va">lb_ext</span></span>
 <span class="r-in">    <span class="op">)</span>,</span>
 <span class="r-in">    mode <span class="op">=</span> <span class="st">"last"</span></span>
 <span class="r-in">  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">LSTALVDTM</span>, <span class="va">LALVDOM</span>, <span class="va">LALVSEQ</span>, <span class="va">LALVVAR</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 306 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     LSTALVDTM           LALVDOM LALVSEQ LALVVAR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-701-1015 2014-07-02 <span style="color: #949494;">23:59:59</span> ADSL         <span style="color: #BB0000;">NA</span> TRTEDTM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-701-1023 2012-09-02 <span style="color: #949494;">10:15:00</span> LB          107 LBDTC  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-701-1028 2014-01-14 <span style="color: #949494;">23:59:59</span> ADSL         <span style="color: #BB0000;">NA</span> TRTEDTM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-701-1033 2014-04-14 <span style="color: #949494;">10:38:00</span> LB          107 LBDTC  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-701-1034 2014-12-30 <span style="color: #949494;">23:59:59</span> ADSL         <span style="color: #BB0000;">NA</span> TRTEDTM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-701-1047 2013-04-07 <span style="color: #949494;">11:20:00</span> LB          134 LBDTC  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-701-1057 <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-701-1097 2014-07-09 <span style="color: #949494;">23:59:59</span> ADSL         <span style="color: #BB0000;">NA</span> TRTEDTM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-701-1111 2012-09-17 <span style="color: #949494;">11:48:00</span> LB           73 LBDTC  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-701-1115 2013-01-23 <span style="color: #949494;">23:59:59</span> ADSL         <span style="color: #BB0000;">NA</span> TRTEDTM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 296 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID LSTALVDTM           LALVDOM LALVSEQ LALVVAR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 01-1130 2014-08-16 <span style="color: #949494;">23:59:59</span> ADSL         <span style="color: #BB0000;">NA</span> TRTEDTM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 01-1133 2013-04-29 <span style="color: #949494;">10:13:00</span> LB          304 LBDTC  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 01-1211 2013-01-14 <span style="color: #949494;">00:00:00</span> AE            9 AEENDTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 09-1081 2014-05-10 <span style="color: #949494;">11:15:00</span> LB          219 LBDTC  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 09-1088 2014-10-09 <span style="color: #949494;">23:59:59</span> ADSL         <span style="color: #BB0000;">NA</span> TRTEDTM</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
