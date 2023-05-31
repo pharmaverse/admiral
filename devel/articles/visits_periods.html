@@ -83,19 +83,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -215,7 +202,7 @@ use this definition for all datasets. The definition can be stored in
 ADSL or in a separate dataset. In the following examples, this separate
 dataset is called period reference dataset.</p>
 <div class="section level3">
-<h3 id="period-reference-dataset">Period Reference Dataset<a class="anchor" aria-label="anchor" href="#period-reference-dataset"></a>
+<h3 id="reference">Period Reference Dataset<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h3>
 <p>The period reference dataset contains one observation per subject and
 period, subperiod, or phase. For example:</p>
@@ -296,8 +283,9 @@ reference dataset defined above.</p>
 <p>If no period reference dataset is available but period variables are
 in ADSL, the period reference dataset can be created from ADSL by
 calling <code><a href="../reference/create_period_dataset.html">create_period_dataset()</a></code>.</p>
-<p>For example, a period reference dataset for phases can be created
-from the ADSL dataset created above:</p>
+<p>For <span id="adsl_example">example</span>, a period reference
+dataset for phases can be created from the ADSL dataset created
+above:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/create_period_dataset.html">create_period_dataset</a></span><span class="op">(</span>
   <span class="va">adsl</span>,
@@ -424,6 +412,32 @@ can be created from the ADSL dataset created above:</p>
 <span class="co">#&gt; <span style="color: #BCBCBC;">3</span> xyz     2             1 2021-02-02 2021-03-02 DRUG B</span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">4</span> xyz     2             2 2021-03-03 2021-04-01 DRUG B</span></code></pre></div>
 </div>
+</div>
+<div class="section level2">
+<h2 id="study-specific-code">Study Specific Code<a class="anchor" aria-label="anchor" href="#study-specific-code"></a>
+</h2>
+<p>At some point study specific code is required to derive
+period/subperiod variables. There are two options:</p>
+<ul>
+<li><p>Study specific code is used to derive the variables
+<code>PxxSwSDT</code> and <code>PxxSwEDT</code> in ADSL. Then
+<code><a href="../reference/create_period_dataset.html">create_period_dataset()</a></code> and
+<code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code> can be used to derive period/subperiod
+variables like <code>ASPER</code> or <code>ASPRSDT</code> in BDS and
+OCCDS datasets. (See <a href="#adsl_example">example</a>.)</p></li>
+<li><p>Study specific code is used to derive a dataset with one
+observations per patient, period, and subperiod (see <a href="#reference">period reference dataset</a> ). Then
+<code><a href="../reference/derive_vars_period.html">derive_vars_period()</a></code> can be used to derive
+<code>PxxSwSDT</code> and <code>PxxSwEDT</code> in ADSL and
+<code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code> can be used to derive period/subperiod
+variables like <code>ASPER</code> or <code>ASPRSDT</code> in BDS and
+OCCDS datasets.</p></li>
+</ul>
+<p>It depends on the specific definition of the periods/subperiods which
+option works best. If the definition is based on other ADSL variables,
+the first option would work best. If the definition is based on
+vertically structured data like exposure data (EX dataset), the second
+option should be used.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
