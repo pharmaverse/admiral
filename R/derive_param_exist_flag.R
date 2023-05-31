@@ -10,12 +10,12 @@
 #'   The variables specified for `by_vars` and the `PARAMCD` variable are
 #'   expected.
 #'
-#' @param dataset_ref (ADSL) input dataset
+#' @param dataset_ref Reference dataset, e.g., ADSL
 #'
-#'   The variables specified for `by_vars` are expected. For each subject
+#'   The variables specified in `by_vars` are expected. For each group
 #'   (as defined by `by_vars`) from the specified dataset (`dataset_ref`),
 #'   the existence flag is calculated and added as a new observation to the
-#'   input datasets (`dataset`)
+#'   input datasets (`dataset`).
 #'
 #' @param dataset_add Additional dataset
 #'
@@ -29,18 +29,18 @@
 #'
 #'   The condition is evaluated at the additional dataset (`dataset_add`).
 #'
-#'   For all subjects where it evaluates as `TRUE` at least once `AVALC` is set
+#'   For all groups where it evaluates as `TRUE` at least once `AVALC` is set
 #'   to the true value (`true_value`) for the new observations.
 #'
-#'   For all subjects where it evaluates as `FALSE` or `NA` for all observations
+#'   For all groups where it evaluates as `FALSE` or `NA` for all observations
 #'   `AVALC` is set to the false value (`false_value`).
 #'
-#'   For all subjects not present in the additional dataset `AVALC` is set to
+#'   For all groups not present in the additional dataset `AVALC` is set to
 #'   the missing value (`missing_value`).
 #'
 #' @param true_value True value
 #'
-#'   For all subjects with at least one observations in the additional dataset
+#'   For all groups with at least one observations in the additional dataset
 #'   (`dataset_add`) fulfilling the event condition (`condition`), `AVALC` is
 #'   set to the specified value (`true_value`).
 #'
@@ -50,7 +50,7 @@
 #'
 #' @param false_value False value
 #'
-#'   For all subjects with at least one observations in the additional dataset
+#'   For all groups with at least one observations in the additional dataset
 #'   (`dataset_add`) but none of them is fulfilling the event condition
 #'   (`condition`), `AVALC` is set to the specified value (`false_value`).
 #'
@@ -60,7 +60,7 @@
 #'
 #' @param missing_value Values used for missing information
 #'
-#'   For all subjects without an observation in the additional dataset
+#'   For all groups without an observation in the additional dataset
 #'   (`dataset_add`), `AVALC` is set to the specified value (`missing_value`).
 #'
 #'   *Default*: `NA_character_`
@@ -87,7 +87,7 @@
 #'   Baseline")` is expected. The values must be symbols, character strings,
 #'   numeric values, `NA`, or expressions.
 #'
-#' @param by_vars Variables to uniquely identify a subject
+#' @param by_vars Variables to uniquely identify a group
 #'
 #'   A list of symbols created using `exprs()` is expected.
 #'
@@ -99,18 +99,18 @@
 #'   1. The additional dataset (`dataset_add`) is restricted to the observations
 #'   matching the `filter_add` condition.
 #'
-#'   1. For each subject in `dataset_ref` a new observation is created.
+#'   1. For each group in `dataset_ref` a new observation is created.
 #'
 #'       - The `AVALC` variable is added and set to the true value (`true_value`)
-#'         if for the subject at least one observation exists in the (restricted)
+#'         if for the group at least one observation exists in the (restricted)
 #'         additional dataset where the condition evaluates to `TRUE`.
 #'
-#'       - It is set to the false value (`false_value`) if for the subject at least
+#'       - It is set to the false value (`false_value`) if for the group at least
 #'         one observation exists and for all observations the condition evaluates
 #'         to `FALSE` or `NA`.
 #'
 #'       - Otherwise, it is set to the missing value (`missing_value`), i.e., for
-#'         those subject not in `dataset_add`.
+#'         those groups not in `dataset_add`.
 #'
 #'   1. The variables specified by the `set_values_to` parameter are added to
 #'   the new observations.
@@ -119,8 +119,8 @@
 #'
 #'
 #' @return The input dataset with a new parameter indicating if an event
-#'   occurred (`AVALC`, `AVAL`, and the variables specified by `by_vars`
-#'   and `set_value_to` are populated for the new parameter)
+#'   occurred (`AVALC` and the variables specified by `by_vars`
+#'   and `set_value_to` are populated for the new parameter).
 #'
 #' @family der_prm_bds_findings
 #'

@@ -26,12 +26,12 @@ derive_param_exist_flag(
 The variables specified for \code{by_vars} and the \code{PARAMCD} variable are
 expected.}
 
-\item{dataset_ref}{(ADSL) input dataset
+\item{dataset_ref}{Reference dataset, e.g., ADSL
 
-The variables specified for \code{by_vars} are expected. For each subject
+The variables specified in \code{by_vars} are expected. For each group
 (as defined by \code{by_vars}) from the specified dataset (\code{dataset_ref}),
 the existence flag is calculated and added as a new observation to the
-input datasets (\code{dataset})}
+input datasets (\code{dataset}).}
 
 \item{dataset_add}{Additional dataset
 
@@ -112,8 +112,8 @@ numeric values, \code{NA}, or expressions.}
 }
 \value{
 The input dataset with a new parameter indicating if an event
-occurred (\code{AVALC}, \code{AVAL}, and the variables specified by \code{by_vars}
-and \code{set_value_to} are populated for the new parameter)
+occurred (\code{AVALC} and the variables specified by \code{by_vars}
+and \code{set_value_to} are populated for the new parameter).
 }
 \description{
 Add a new parameter indicating that a certain event exists in a dataset.
@@ -125,16 +125,16 @@ baseline.
 \enumerate{
 \item The additional dataset (\code{dataset_add}) is restricted to the observations
 matching the \code{filter_add} condition.
-\item For each subject in \code{dataset_ref} a new observation is created.
+\item For each group in \code{dataset_ref} a new observation is created.
 \itemize{
 \item The \code{AVALC} variable is added and set to the true value (\code{true_value})
-if for the subject at least one observation exists in the (restricted)
+if for the group at least one observation exists in the (restricted)
 additional dataset where the condition evaluates to \code{TRUE}.
-\item It is set to the false value (\code{false_value}) if for the subject at least
+\item It is set to the false value (\code{false_value}) if for the group at least
 one observation exists and for all observations the condition evaluates
 to \code{FALSE} or \code{NA}.
 \item Otherwise, it is set to the missing value (\code{missing_value}), i.e., for
-those subject not in \code{dataset_add}.
+those groups not in \code{dataset_add}.
 }
 \item The variables specified by the \code{set_values_to} parameter are added to
 the new observations.
