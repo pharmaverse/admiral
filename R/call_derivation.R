@@ -117,7 +117,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
     abort("All arguments inside `...` must be named")
   }
 
-  all_params <- base::union(unlist(map(variable_params, names)), names(fixed_params))
+  all_params <- union(unlist(map(variable_params, names)), names(fixed_params))
   assert_function_param(deparse(substitute(derivation)), all_params)
 
   for (i in seq_along(variable_params)) {

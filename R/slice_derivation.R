@@ -92,7 +92,7 @@ slice_derivation <- function(dataset,
   if (!is.null(args)) {
     assert_function_param(deparse(substitute(derivation)), names(args))
   }
-  slices <- rlang::list2(...)
+  slices <- list2(...)
   assert_list_of(slices, "derivation_slice")
 
   # the variable temp_slicenr is added to the dataset which indicates to which

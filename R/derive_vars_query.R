@@ -101,8 +101,8 @@ derive_vars_query <- function(dataset, dataset_queries) {
     pivot_longer(c(NAM, CD, SC, SCN), names_to = "key", values_to = "value") %>%
     filter(!is.na(value)) %>%
     mutate(
-      order1 = stringr::str_extract(value, "^[a-zA-Z]{2,3}"),
-      order2 = stringr::str_extract(value, "\\d{2}"),
+      order1 = str_extract(value, "^[a-zA-Z]{2,3}"),
+      order2 = str_extract(value, "\\d{2}"),
       order3 = as.integer(factor(key, levels = c("NAM", "CD", "SC", "SCN")))
     ) %>%
     arrange(desc(order1), order2, order3) %>%
@@ -178,8 +178,8 @@ derive_vars_query <- function(dataset, dataset_queries) {
   joined <- joined %>%
     inner_join(queries_wide, by = c("SRCVAR", "TERM_NAME_ID")) %>%
     select(!!!syms(c(static_cols, new_col_names))) %>%
-    dplyr::group_by_at(static_cols) %>%
-    dplyr::summarise_all(~ dplyr::first(na.omit(.))) %>%
+    group_by_at(static_cols) %>%
+    summarise_all(~ first(na.omit(.))) %>%
     ungroup()
 
   # join queries to input dataset
@@ -306,7 +306,7 @@ assert_valid_queries <- function(queries, queries_name) {
   # each PREFIX must have unique GRPNAME, GRPID if the columns exist
   count_unique <- queries %>%
     group_by(PREFIX) %>%
-    dplyr::summarise(
+    summarise(
       n_qnam = length(unique(GRPNAME)),
       n_qid = ifelse("GRPID" %in% names(queries),
         length(unique(GRPID)), 0
