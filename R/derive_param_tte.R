@@ -946,7 +946,7 @@ list_tte_source_objects <- function(package = "admiral") {
       set_values_to = paste(
         paste(
           names(obj$set_values_to),
-          purrr::map_chr(obj$set_values_to, as_label),
+          map_chr(obj$set_values_to, as_label),
           sep = ": "
         ),
         collapse = "<br>"

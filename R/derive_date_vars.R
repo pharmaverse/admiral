@@ -1093,7 +1093,7 @@ convert_date_to_dtm <- function(dt,
                                 min_dates = NULL,
                                 max_dates = NULL,
                                 preserve = FALSE) {
-  if (lubridate::is.POSIXct(dt)) {
+  if (is.POSIXct(dt)) {
     return(dt)
   } else {
     if (is.instant(dt)) {
@@ -1411,8 +1411,8 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
         dtc = !!dtc,
         highest_imputation = highest_imputation,
         date_imputation = date_imputation,
-        min_dates = lapply(min_dates, eval_tidy, data = rlang::as_data_mask(.)),
-        max_dates = lapply(max_dates, eval_tidy, data = rlang::as_data_mask(.)),
+        min_dates = lapply(min_dates, eval_tidy, data = as_data_mask(.)),
+        max_dates = lapply(max_dates, eval_tidy, data = as_data_mask(.)),
         preserve = preserve
       )
     )
@@ -1602,7 +1602,7 @@ derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
 
   # Issue a warning if --DTM already exists
   warn_if_vars_exist(dataset, dtm)
-  mask <- rlang::as_data_mask(dataset)
+  mask <- as_data_mask(dataset)
 
   dataset[[dtm]] <- convert_dtc_to_dtm(
     dtc = eval_tidy(dtc, mask),
