@@ -17,14 +17,43 @@ Create a set of variable parameters/function arguments to be used in \code{\link
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(admiral_ae)
-data(admiral_adsl)
 
-adae <- admiral_ae[sample(1:nrow(admiral_ae), 1000), ] \%>\%
+adsl <- tribble(
+  ~STUDYID,   ~USUBJID,      ~TRTSDT,      ~TRTEDT,
+  "PILOT01", "01-1307",           NA,           NA,
+  "PILOT01", "05-1377", "2014-01-04", "2014-01-25",
+  "PILOT01", "06-1384", "2012-09-15", "2012-09-24",
+  "PILOT01", "15-1085", "2013-02-16", "2013-08-18",
+  "PILOT01", "16-1298", "2013-04-08", "2013-06-28"
+) \%>\%
+  mutate(
+    across(TRTSDT:TRTEDT, as.Date)
+  )
+
+ae <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID,     ~AESTDTC,     ~AEENDTC,
+  "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
+  "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
+  "PILOT01",    "AE", "06-1384", "2012-09-23", "2012-09-29",
+  "PILOT01",    "AE", "06-1384", "2012-09-23", "2012-09-29",
+  "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
+  "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
+  "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
+  "PILOT01",    "AE", "06-1384", "2012-09-15", "2012-09-29",
+  "PILOT01",    "AE", "06-1384", "2012-09-23", "2012-09-29",
+  "PILOT01",    "AE", "06-1384", "2012-09-23", "2012-09-29",
+  "PILOT01",    "AE", "16-1298", "2013-06-08", "2013-07-06",
+  "PILOT01",    "AE", "16-1298", "2013-06-08", "2013-07-06",
+  "PILOT01",    "AE", "16-1298", "2013-04-22", "2013-07-06",
+  "PILOT01",    "AE", "16-1298", "2013-04-22", "2013-07-06",
+  "PILOT01",    "AE", "16-1298", "2013-04-22", "2013-07-06",
+  "PILOT01",    "AE", "16-1298", "2013-04-22", "2013-07-06"
+)
+
+adae <- ae \%>\%
   select(USUBJID, AESTDTC, AEENDTC) \%>\%
   derive_vars_merged(
-    dataset_add = admiral_adsl,
+    dataset_add = adsl,
     new_vars = exprs(TRTSDT, TRTEDT),
     by_vars = exprs(USUBJID)
   )
@@ -45,6 +74,7 @@ adae \%>\%
     min_dates = exprs(TRTSDT),
     max_dates = exprs(TRTEDT)
   )
+
 
 ## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
 ## one can add multiple variables in one go.
