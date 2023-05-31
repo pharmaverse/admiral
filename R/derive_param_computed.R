@@ -393,7 +393,7 @@ get_hori_data <- function(dataset,
                           filter) {
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = by_vars)
-  assert_parameters_argument(parameters)
+  parameters <- assert_parameters_argument(parameters)
   assert_expr(analysis_value)
   assert_expr(filter)
 
