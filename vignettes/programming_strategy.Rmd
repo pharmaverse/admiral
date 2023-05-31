@@ -389,8 +389,12 @@ An example is given below:
 The following fields are mandatory:
 
 * `@param`: One entry per function argument. 
-The following attributes should be described: expected data type (e.g. `data.frame`, `logical`, `numeric` etc.), default value (if any), permitted values (if applicable), optionality (i.e. is this a required argument). 
-If the expected input is a dataset then the required variables should be clearly stated.
+The following attributes should be described: expected data type (e.g. `data.frame`, `logical`, `numeric` etc.), permitted values (if applicable), optionality (i.e. is this a required argument). If the expected input is a dataset then the required variables should be clearly stated. Describing the default value becomes difficult to maintain and subject to manual error when it is already declared in the function arguments. The description for permitted values should be written as a separate line italicizing the phrase "Permitted Values", example below: 
+
+```
+#'   *Permitted Values*: example description of permitted values here
+```
+
 * `@details`: A natural-language description of the derivation used inside the function.
 * `@keyword`: One applicable tag to the function - identical to family.
 * `@family`: One applicable tag to the function - identical to keyword.
@@ -524,6 +528,7 @@ If a package is used only in examples and/or unit tests then it should be listed
 Functions from other packages have to be explicitly imported by using the `@importFrom` tag in the `R/admiral-package.R` file. 
 To import the `if_else()` and `mutate()` function from `dplyr` the following line would have to be included in that file:
 `#' @importFrom dplyr if_else mutate`.
+By using the `@importFrom` tag, it is easier to track all of our dependencies in one place and improves code readability. 
 
 Some of these functions become critically important while using admiral and
 should be included as an export. This applies to functions which are frequently

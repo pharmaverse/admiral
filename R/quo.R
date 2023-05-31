@@ -9,13 +9,13 @@
 #' @return An object of class `quosures`
 #'
 #'
-#' @keywords quo
-#' @family quo
+#' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 quo_c <- function(...) {
-  deprecate_warn(
-    "0.10.0",
+  deprecate_stop(
+    "0.3.0",
     "quo_c()",
     "expr_c()",
     details = paste(
@@ -23,10 +23,6 @@ quo_c <- function(...) {
       "instead of quosures created by `vars()`."
     )
   )
-  inputs <- unlist(list(...), recursive = TRUE)
-  stopifnot(all(map_lgl(inputs, is_quosure)))
-  is_null <- map_lgl(inputs, quo_is_null)
-  rlang::as_quosures(inputs[!is_null])
 }
 
 #' Concatenate One or More Expressions
@@ -64,12 +60,12 @@ expr_c <- function(...) {
 #' @return TRUE or error.
 #'
 #'
-#' @keywords quo
-#' @family quo
+#' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 quo_not_missing <- function(x) {
-  deprecate_warn(
+  deprecate_stop(
     "0.3.0",
     "quo_not_missing()",
     details = paste(
@@ -78,15 +74,6 @@ quo_not_missing <- function(x) {
       sep = "\n"
     )
   )
-  !rlang::quo_is_missing(x)
-
-  if (is.null(missing(x)) || quo_is_missing(x)) {
-    stop(paste0(
-      "Argument `",
-      deparse(substitute(x)),
-      "` is missing, with no default"
-    ))
-  }
 }
 
 
@@ -109,8 +96,8 @@ quo_not_missing <- function(x) {
 #' replace_values_by_names(exprs(AVAL, ADT = convert_dtc_to_dt(EXSTDTC)))
 replace_values_by_names <- function(expressions, quosures) {
   if (!missing(quosures)) {
-    deprecate_warn(
-      "0.10.0",
+    deprecate_stop(
+      "0.3.0",
       "replace_values_by_names(quosures = )",
       "replace_values_by_names(expressions = )"
     )
@@ -143,15 +130,15 @@ replace_values_by_names <- function(expressions, quosures) {
 #' @return The quosure where every occurrence of the symbol `target` is replaced
 #'   by `replace`
 #'
-#' @keywords quo
-#' @family quo
+#' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 replace_symbol_in_quo <- function(quosure,
                                   target,
                                   replace) {
   deprecate_stop(
-    "0.10.0",
+    "0.3.0",
     "replace_symbol_in_quo()",
     "replace_symbol_in_expr()",
     details = paste(
