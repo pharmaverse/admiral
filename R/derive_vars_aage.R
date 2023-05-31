@@ -1,6 +1,8 @@
 #' Derive Analysis Age
 #'
-#' Derives analysis age (`AAGE`) and analysis age unit (`AAGEU`)
+#' @description Derives analysis age (`AAGE`) and analysis age unit (`AAGEU`).
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_vars_duration()`.
 #'
 #' @param dataset Input dataset
 #'

@@ -448,8 +448,11 @@ derive_var_merged_cat <- function(dataset,
 
 #' Merge an Existence Flag
 #'
-#' Adds a flag variable to the input dataset which indicates if there exists at
-#' least one observation in another dataset fulfilling a certain condition.
+#' @description Adds a flag variable to the input dataset which indicates if
+#' there exists at least one observation in another dataset fulfilling a certain
+#' condition.
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_vars_merged()`.
 #'
 #' @param dataset_add Additional dataset
 #'
@@ -682,6 +685,7 @@ derive_var_merged_character <- function(dataset,
     by_vars = by_vars,
     order = order,
     new_vars = exprs(!!new_var := !!trans),
+    filter_add = !!filter_add,
     mode = mode,
     missing_values = exprs(!!new_var := !!missing_value)
   )
@@ -810,7 +814,9 @@ get_not_mapped <- function() {
 
 #' Merge a Summary Variable
 #'
-#' Merge a summary variable from a dataset to the input dataset.
+#' @description Merge a summary variable from a dataset to the input dataset.
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_vars_merged`.
 #'
 #' @param dataset Input dataset
 #'
