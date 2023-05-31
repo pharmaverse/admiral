@@ -133,7 +133,7 @@ derive_extreme_event <- function(dataset,
   event_order <- map(seq_len(length(events)), function(x) x)
   tmp_event_no <- get_new_tmp_var(dataset, prefix = "tmp_event_no")
 
-  selected_records_ls <- purrr::pmap(
+  selected_records_ls <- pmap(
     list(condition_ls, set_values_to_ls, event_order),
     function(x, y, z) {
       dataset %>%
