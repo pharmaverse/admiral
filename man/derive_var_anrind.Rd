@@ -48,16 +48,16 @@ library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 
 vs <- tibble::tribble(
-   ~USUBJID, ~PARAMCD, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-   "P01", "PUL", 70, 60, 100, 40, 110, "NORMAL",
-   "P01", "PUL", 57, 60, 100, 40, 110, "LOW",
-   "P01", "PUL", 60, 60, 100, 40, 110, "NORMAL",
-   "P01", "DIABP", 102, 60, 80, 40, 90, "HIGH HIGH",
-   "P02", "PUL", 109, 60, 100, 40, 110, "HIGH",
-   "P02", "PUL", 100, 60, 100, 40, 110, "NORMAL",
-   "P02", "DIABP", 80, 60, 80, 40, 90, "NORMAL",
-   "P03", "PUL", 39, 60, 100, 40, 110, "LOW LOW",
-   "P03", "PUL", 40, 60, 100, 40, 110, "LOW"
+  ~USUBJID, ~PARAMCD, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
+  "P01", "PUL", 70, 60, 100, 40, 110,
+  "P01", "PUL", 57, 60, 100, 40, 110,
+  "P01", "PUL", 60, 60, 100, 40, 110,
+  "P01", "DIABP", 102, 60, 80, 40, 90,
+  "P02", "PUL", 109, 60, 100, 40, 110,
+  "P02", "PUL", 100, 60, 100, 40, 110,
+  "P02", "DIABP", 80, 60, 80, 40, 90,
+  "P03", "PUL", 39, 60, 100, 40, 110,
+  "P03", "PUL", 40, 60, 100, 40, 110
 )
 
 vs \%>\% derive_var_anrind(use_a1hia1lo = TRUE)
