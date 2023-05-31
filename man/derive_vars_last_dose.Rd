@@ -101,20 +101,74 @@ variables from \code{dataset_ex} (e.g. \code{new_vars = exprs(LSTEXVIS = VISIT)}
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(admiral_ae)
-data(ex_single)
+ex_single <- cbind(
+  tribble(
+    ~STUDYID, ~DOMAIN,  ~USUBJID, ~EXSEQ, ~VISIT,
+    "PILOT1",    "EX", "18-1066",     1L, "BASE",
+    "PILOT1",    "EX", "18-1066",     2L, "BASE",
+    "PILOT1",    "EX", "18-1066",     3L, "BASE",
+    "PILOT1",    "EX", "18-1066",     4L, "BASE",
+    "PILOT1",    "EX", "18-1066",     5L, "BASE",
+    "PILOT1",    "EX", "18-1066",     6L, "BASE",
+    "PILOT1",    "EX", "18-1066",     7L, "BASE",
+    "PILOT1",    "EX", "18-1066",     8L, "BASE",
+    "PILOT1",    "EX", "18-1066",     9L, "BASE",
+    "PILOT1",    "EX", "18-1066",    10L, "BASE",
+    "PILOT1",    "EX", "10-1083",     1L, "BASE",
+    "PILOT1",    "EX", "10-1083",     2L, "BASE",
+    "PILOT1",    "EX", "10-1083",     3L, "BASE",
+    "PILOT1",    "EX", "10-1083",     4L, "BASE",
+    "PILOT1",    "EX", "10-1083",     5L, "BASE",
+    "PILOT1",    "EX", "10-1083",     6L, "BASE",
+    "PILOT1",    "EX", "10-1083",     7L, "BASE",
+    "PILOT1",    "EX", "10-1083",     8L, "BASE",
+    "PILOT1",    "EX", "10-1083",     9L, "BASE",
+    "PILOT1",    "EX", "10-1083",    10L, "BASE",
+    "PILOT1",    "EX", "10-1083",    11L, "BASE"
+  ),
+  tribble(
+    ~EXDOSE, ~EXTRT,     ~EXENDTC,     ~EXSTDTC, ~EXDOSFRQ,
+    54,      "XANO", "2013-07-07", "2013-07-07",    "ONCE",
+    54,      "XANO", "2013-07-08", "2013-07-08",    "ONCE",
+    54,      "XANO", "2013-07-09", "2013-07-09",    "ONCE",
+    54,      "XANO", "2013-07-10", "2013-07-10",    "ONCE",
+    54,      "XANO", "2013-07-11", "2013-07-11",    "ONCE",
+    54,      "XANO", "2013-07-12", "2013-07-12",    "ONCE",
+    54,      "XANO", "2013-07-13", "2013-07-13",    "ONCE",
+    54,      "XANO", "2013-07-14", "2013-07-14",    "ONCE",
+    54,      "XANO", "2013-07-15", "2013-07-15",    "ONCE",
+    54,      "XANO", "2013-07-16", "2013-07-16",    "ONCE",
+    0,    "PLACEBO", "2013-07-22", "2013-07-22",    "ONCE",
+    0,    "PLACEBO", "2013-07-23", "2013-07-23",    "ONCE",
+    0,    "PLACEBO", "2013-07-24", "2013-07-24",    "ONCE",
+    0,    "PLACEBO", "2013-07-25", "2013-07-25",    "ONCE",
+    0,    "PLACEBO", "2013-07-26", "2013-07-26",    "ONCE",
+    0,    "PLACEBO", "2013-07-27", "2013-07-27",    "ONCE",
+    0,    "PLACEBO", "2013-07-28", "2013-07-28",    "ONCE",
+    0,    "PLACEBO", "2013-07-29", "2013-07-29",    "ONCE",
+    0,    "PLACEBO", "2013-07-30", "2013-07-30",    "ONCE",
+    0,    "PLACEBO", "2013-07-31", "2013-07-31",    "ONCE",
+    0,    "PLACEBO", "2013-08-01", "2013-08-01",    "ONCE"
+  )
+)
 
+ae <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,                 ~AETERM,
+  "PILOT01",    "AE", "10-1083",      1, "2013-08-02", "MYOCARDIAL INFARCTION",
+  "PILOT01",    "AE", "18-1066",      2, "2013-07-18",             "AGITATION",
+  "PILOT01",    "AE", "18-1066",      4, "2013-07-30",          "INFLAMMATION",
+  "PILOT01",    "AE", "18-1066",      1, "2013-07-16",               "SYNCOPE",
+  "PILOT01",    "AE", "18-1066",      3, "2013-07-30",               "SYNCOPE"
+)
 # create datetime variables in input datasets
 ex_single <- derive_vars_dtm(
-  head(ex_single, 100),
+  ex_single,
   dtc = EXENDTC,
   new_vars_prefix = "EXEN",
   flag_imputation = "none"
 )
 
-adae <- admiral_ae \%>\%
-  head(100) \%>\%
+adae <- ae \%>\%
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",

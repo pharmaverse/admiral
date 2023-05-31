@@ -158,25 +158,53 @@ in the input dataset are ignored.
 }
 }
 \examples{
-library(admiral.test)
 library(dplyr, warn.conflicts = FALSE)
-library(tibble)
-data("admiral_vs")
-data("admiral_dm")
+vs <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~VSTESTCD,      ~VISIT, ~VSSTRESN, ~VSSTRESU,       ~VSDTC,
+  "PILOT01",    "VS", "01-1302",  "HEIGHT", "SCREENING",     177.8,      "cm", "2013-08-20",
+  "PILOT01",    "VS", "01-1302",  "WEIGHT", "SCREENING",     81.19,      "kg", "2013-08-20",
+  "PILOT01",    "VS", "01-1302",  "WEIGHT",  "BASELINE",      82.1,      "kg", "2013-08-29",
+  "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 2",     81.19,      "kg", "2013-09-15",
+  "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 4",     82.56,      "kg", "2013-09-24",
+  "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 6",     80.74,      "kg", "2013-10-08",
+  "PILOT01",    "VS", "01-1302",  "WEIGHT",    "WEEK 8",      82.1,      "kg", "2013-10-22",
+  "PILOT01",    "VS", "01-1302",  "WEIGHT",   "WEEK 12",      82.1,      "kg", "2013-11-05",
+  "PILOT01",    "VS", "17-1344",  "HEIGHT", "SCREENING",     163.5,      "cm", "2014-01-01",
+  "PILOT01",    "VS", "17-1344",  "WEIGHT", "SCREENING",     58.06,      "kg", "2014-01-01",
+  "PILOT01",    "VS", "17-1344",  "WEIGHT",  "BASELINE",     58.06,      "kg", "2014-01-11",
+  "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 2",     58.97,      "kg", "2014-01-24",
+  "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 4",     57.97,      "kg", "2014-02-07",
+  "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 6",     58.97,      "kg", "2014-02-19",
+  "PILOT01",    "VS", "17-1344",  "WEIGHT",    "WEEK 8",     57.79,      "kg", "2014-03-14"
+)
+
+dm <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+  "PILOT01",    "DM", "01-1302",   61, "YEARS",
+  "PILOT01",    "DM", "17-1344",   64, "YEARS"
+)
+
 
 # Merging all dm variables to vs
 derive_vars_merged(
-  admiral_vs,
-  dataset_add = select(admiral_dm, -DOMAIN),
+  vs,
+  dataset_add = select(dm, -DOMAIN),
   by_vars = exprs(STUDYID, USUBJID)
 ) \%>\%
-  select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
+  select(STUDYID, USUBJID, VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
+
 
 # Merge last weight to adsl
-data("admiral_adsl")
+adsl <- tribble(
+  ~STUDYID,   ~USUBJID, ~AGE,   ~AGEU,
+  "PILOT01", "01-1302",   61, "YEARS",
+  "PILOT01", "17-1344",   64, "YEARS"
+)
+
+
 derive_vars_merged(
-  admiral_adsl,
-  dataset_add = admiral_vs,
+  adsl,
+  dataset_add = vs,
   by_vars = exprs(STUDYID, USUBJID),
   order = exprs(convert_dtc_to_dtm(VSDTC)),
   mode = "last",
@@ -186,22 +214,26 @@ derive_vars_merged(
 ) \%>\%
   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 
-# Derive treatment start datetime (TRTSDTM)
-data(admiral_ex)
 
+# Derive treatment start datetime (TRTSDTM)
+ex <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~EXSTDY, ~EXENDY,     ~EXSTDTC,     ~EXENDTC,
+  "PILOT01",    "EX", "01-1302",       1,      18, "2013-08-29", "2013-09-15",
+  "PILOT01",    "EX", "01-1302",      19,      69, "2013-09-16", "2013-11-05",
+  "PILOT01",    "EX", "17-1344",       1,      14, "2014-01-11", "2014-01-24",
+  "PILOT01",    "EX", "17-1344",      15,      63, "2014-01-25", "2014-03-14"
+)
 ## Impute exposure start date to first date/time
 ex_ext <- derive_vars_dtm(
-  admiral_ex,
+  ex,
   dtc = EXSTDTC,
   new_vars_prefix = "EXST",
   highest_imputation = "M",
 )
-
 ## Add first exposure datetime and imputation flags to adsl
 derive_vars_merged(
-  select(admiral_dm, STUDYID, USUBJID),
+  select(dm, STUDYID, USUBJID),
   dataset_add = ex_ext,
-  filter_add = !is.na(EXSTDTM),
   by_vars = exprs(STUDYID, USUBJID),
   new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
   order = exprs(EXSTDTM),
@@ -209,18 +241,23 @@ derive_vars_merged(
 )
 
 # Derive treatment end datetime (TRTEDTM)
-# The conversion from DTC to DTM is done within new_vars
-# The new variable can be used in filter_add and order
+## Impute exposure end datetime to last time, no date imputation
+ex_ext <- derive_vars_dtm(
+  ex,
+  dtc = EXENDTC,
+  new_vars_prefix = "EXEN",
+  time_imputation = "last",
+)
+## Add last exposure datetime and imputation flag to adsl
 derive_vars_merged(
-  select(admiral_dm, STUDYID, USUBJID),
+  select(adsl, STUDYID, USUBJID),
   dataset_add = ex_ext,
-  filter_add = !is.na(TRTEDTM),
+  filter_add = !is.na(EXENDTM),
   by_vars = exprs(STUDYID, USUBJID),
-  new_vars = exprs(TRTEDTM = convert_dtc_to_dtm(EXENDTC)),
-  order = exprs(TRTEDTM),
+  new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+  order = exprs(EXENDTM),
   mode = "last"
 )
-
 # Modify merged values and set value for non matching observations
 adsl <- tribble(
   ~USUBJID, ~SEX, ~COUNTRY,
@@ -248,7 +285,7 @@ derive_vars_merged(
   ),
   order = exprs(AVISITN),
   mode = "last",
-  missing_value = exprs(LSTVSCAT = "MISSING")
+  missing_values = exprs(LSTVSCAT = "MISSING")
 )
 }
 \seealso{

@@ -37,19 +37,50 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data(admiral_ae)
-#' data(ex_single)
+#'
+#' ex_single <- tribble(
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~EXSEQ,     ~EXENDTC,    ~EXTRT, ~EXDOSE, ~EXDOSFRQ,
+#'   "PILOT01",    "EX", "18-1066",     1L, "2013-07-07",    "XANO",      54,    "ONCE",
+#'   "PILOT01",    "EX", "18-1066",     2L, "2013-07-08",    "XANO",      54,    "ONCE",
+#'   "PILOT01",    "EX", "18-1066",     3L, "2013-07-09",    "XANO",      54,    "ONCE",
+#'   "PILOT01",    "EX", "18-1066",     4L, "2013-07-10",    "XANO",      54,    "ONCE",
+#'   "PILOT01",    "EX", "18-1066",     5L, "2013-07-11",    "XANO",      54,    "ONCE",
+#'   "PILOT01",    "EX", "18-1066",     6L, "2013-07-12",    "XANO",      54,    "ONCE",
+#'   "PILOT01",    "EX", "18-1066",     7L, "2013-07-13",    "XANO",      54,    "ONCE",
+#'   "PILOT01",    "EX", "18-1066",     8L, "2013-07-14",    "XANO",      54,    "ONCE",
+#'   "PILOT01",    "EX", "18-1066",     9L, "2013-07-15",    "XANO",      54,    "ONCE",
+#'   "PILOT01",    "EX", "18-1066",    10L, "2013-07-16",    "XANO",      54,    "ONCE",
+#'   "PILOT01",    "EX", "10-1083",     1L, "2013-07-22", "PLACEBO",       0,    "ONCE",
+#'   "PILOT01",    "EX", "10-1083",     2L, "2013-07-23", "PLACEBO",       0,    "ONCE",
+#'   "PILOT01",    "EX", "10-1083",     3L, "2013-07-24", "PLACEBO",       0,    "ONCE",
+#'   "PILOT01",    "EX", "10-1083",     4L, "2013-07-25", "PLACEBO",       0,    "ONCE",
+#'   "PILOT01",    "EX", "10-1083",     5L, "2013-07-26", "PLACEBO",       0,    "ONCE",
+#'   "PILOT01",    "EX", "10-1083",     6L, "2013-07-27", "PLACEBO",       0,    "ONCE",
+#'   "PILOT01",    "EX", "10-1083",     7L, "2013-07-28", "PLACEBO",       0,    "ONCE",
+#'   "PILOT01",    "EX", "10-1083",     8L, "2013-07-29", "PLACEBO",       0,    "ONCE",
+#'   "PILOT01",    "EX", "10-1083",     9L, "2013-07-30", "PLACEBO",       0,    "ONCE",
+#'   "PILOT01",    "EX", "10-1083",    10L, "2013-07-31", "PLACEBO",       0,    "ONCE",
+#'   "PILOT01",    "EX", "10-1083",    11L, "2013-08-01", "PLACEBO",       0,    "ONCE"
+#' )
+#'
+#' ae <- tribble(
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,                 ~AETERM,
+#'   "PILOT01",    "AE", "10-1083",      1, "2013-08-02", "MYOCARDIAL INFARCTION",
+#'   "PILOT01",    "AE", "18-1066",      2, "2013-07-18",             "AGITATION",
+#'   "PILOT01",    "AE", "18-1066",      4, "2013-07-30",          "INFLAMMATION",
+#'   "PILOT01",    "AE", "18-1066",      1, "2013-07-16",               "SYNCOPE",
+#'   "PILOT01",    "AE", "18-1066",      3, "2013-07-30",               "SYNCOPE"
+#' )
+#'
 #'
 #' ex_single <- derive_vars_dtm(
-#'   head(ex_single, 100),
+#'   ex_single,
 #'   dtc = EXENDTC,
 #'   new_vars_prefix = "EXEN",
 #'   flag_imputation = "none"
 #' )
 #'
-#' adae <- admiral_ae %>%
-#'   head(100) %>%
+#' adae <- ae %>%
 #'   derive_vars_dtm(
 #'     dtc = AESTDTC,
 #'     new_vars_prefix = "AST",
@@ -65,7 +96,8 @@
 #'     analysis_date = ASTDTM,
 #'     new_var = LDOSEDTM,
 #'     traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
-#'   )
+#'   ) %>%
+#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSE)
 derive_var_last_dose_date <- function(dataset,
                                       dataset_ex,
                                       filter_ex = NULL,

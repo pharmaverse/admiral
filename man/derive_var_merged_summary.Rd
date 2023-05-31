@@ -84,16 +84,16 @@ library(tibble)
 
 # Add a variable for the mean of AVAL within each visit
 adbds <- tribble(
-  ~USUBJID, ~AVISIT,  ~ASEQ, ~AVAL,
-  "1",      "WEEK 1",     1,    10,
-  "1",      "WEEK 1",     2,    NA,
-  "1",      "WEEK 2",     3,    NA,
-  "1",      "WEEK 3",     4,    42,
-  "1",      "WEEK 4",     5,    12,
-  "1",      "WEEK 4",     6,    12,
-  "1",      "WEEK 4",     7,    15,
-  "2",      "WEEK 1",     1,    21,
-  "2",      "WEEK 4",     2,    22
+  ~USUBJID,  ~AVISIT,  ~ASEQ, ~AVAL,
+  "1",      "WEEK 1",      1,    10,
+  "1",      "WEEK 1",      2,    NA,
+  "1",      "WEEK 2",      3,    NA,
+  "1",      "WEEK 3",      4,    42,
+  "1",      "WEEK 4",      5,    12,
+  "1",      "WEEK 4",      6,    12,
+  "1",      "WEEK 4",      7,    15,
+  "2",      "WEEK 1",      1,    21,
+  "2",      "WEEK 4",      2,    22
 )
 
 derive_var_merged_summary(
@@ -114,19 +114,19 @@ adsl <- tribble(
 )
 
 adtr <- tribble(
-  ~USUBJID, ~AVISIT,    ~LESIONID,
-  "1",      "BASELINE", "INV-T1",
-  "1",      "BASELINE", "INV-T2",
-  "1",      "BASELINE", "INV-T3",
-  "1",      "BASELINE", "INV-T4",
-  "1",      "WEEK 1",   "INV-T1",
-  "1",      "WEEK 1",   "INV-T2",
-  "1",      "WEEK 1",   "INV-T4",
-  "2",      "BASELINE", "INV-T1",
-  "2",      "BASELINE", "INV-T2",
-  "2",      "BASELINE", "INV-T3",
-  "2",      "WEEK 1",   "INV-T1",
-  "2",      "WEEK 1",   "INV-N1"
+  ~USUBJID,     ~AVISIT, ~LESIONID,
+  "1",       "BASELINE",  "INV-T1",
+  "1",       "BASELINE",  "INV-T2",
+  "1",       "BASELINE",  "INV-T3",
+  "1",       "BASELINE",  "INV-T4",
+  "1",         "WEEK 1",  "INV-T1",
+  "1",         "WEEK 1",  "INV-T2",
+  "1",         "WEEK 1",  "INV-T4",
+  "2",       "BASELINE",  "INV-T1",
+  "2",       "BASELINE",  "INV-T2",
+  "2",       "BASELINE",  "INV-T3",
+  "2",         "WEEK 1",  "INV-T1",
+  "2",         "WEEK 1",  "INV-N1"
 )
 
 derive_var_merged_summary(
