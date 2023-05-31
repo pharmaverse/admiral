@@ -378,7 +378,6 @@ previous dose (`ADTM_prev)`, we also keep the actual dose amount
 ```{r eval=TRUE, echo=TRUE}
 # ---- Find previous dose  ----
 # Use derive_vars_joined() for consistency with other variables
-# This is equivalent to derive_vars_last_dose() in this case
 
 adpc_prev <- adpc_first_dose %>%
   derive_vars_joined(
@@ -1019,7 +1018,6 @@ and nominal time. We will use `derive_vars_joined()` as we did for
 ```{r eval=TRUE, echo=TRUE}
 # ---- Find previous dose  ----
 # Use derive_vars_joined for consistency with other variables
-# This is equivalent to derive_vars_last_dose in this case
 
 adppk_prev <- adppk_first_dose %>%
   derive_vars_joined(
