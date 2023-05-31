@@ -183,7 +183,6 @@ adppk_first_dose <- pc_dates %>%
 
 
 # ---- Find previous dose  ----
-# Use derive_vars_joined for consistency with other variables
 
 adppk_prev <- adppk_first_dose %>%
   derive_vars_joined(

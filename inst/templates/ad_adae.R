@@ -86,6 +86,7 @@ ex_ext <- derive_vars_dtm(
 )
 
 adae <- adae %>%
+  ## Derive last dose date/time ----
   derive_vars_joined(
     dataset_add = ex_ext,
     by_vars = exprs(STUDYID, USUBJID),
