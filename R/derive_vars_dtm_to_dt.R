@@ -60,6 +60,6 @@ derive_vars_dtm_to_dt <- function(dataset, source_vars) {
       rename_with(.cols = ends_with("new"), .fn = ~ str_replace(., "DTM_new", "DT"))
   } else {
     dataset %>%
-      mutate(!!sym(dt_vars) := lubridate::date(!!sym(dtm_vars2)))
+      mutate(!!sym(dt_vars) := date(!!sym(dtm_vars2)))
   }
 }
