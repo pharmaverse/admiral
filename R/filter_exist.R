@@ -73,11 +73,10 @@
 #'   filter_add = AEDECOD == "FATIGUE" & AESEV %in% c("MODERATE", "SEVERE")
 #' )
 #'
-filter_exist <- function(
-    dataset,
-    dataset_add,
-    by_vars,
-    filter_add = NULL) {
+filter_exist <- function(dataset,
+                         dataset_add,
+                         by_vars,
+                         filter_add = NULL) {
   assert_vars(by_vars)
   assert_data_frame(
     dataset,
@@ -159,11 +158,10 @@ filter_exist <- function(
 #'   filter_add = str_detect(CMTRT, "VITAMIN")
 #' )
 #'
-filter_not_exist <- function(
-    dataset,
-    dataset_add,
-    by_vars,
-    filter_add = NULL) {
+filter_not_exist <- function(dataset,
+                             dataset_add,
+                             by_vars,
+                             filter_add = NULL) {
   assert_vars(by_vars)
   assert_data_frame(
     dataset,
