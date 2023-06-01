@@ -1,9 +1,11 @@
 #' Derive Reference Range Indicator
 #'
 #' @param dataset The input dataset
+#' @param use_a1hia1lo A logical value indicating whether to use `A1H1` and `A1LO` in
+#' the derivation of `ANRIND`.
 #'
 #' @details
-#' `ANRIND` is set to
+#' In the case that `A1H1` and `A1LO` are to be used, `ANRIND` is set to:
 #' - `"NORMAL"` if `AVAL` is greater or equal `ANRLO` and less than
 #'   or equal `ANRHI`; or if `AVAL` is greater than or equal `ANRLO` and `ANRHI`
 #'   is missing; or if `AVAL` is less than or equal `ANRHI` and `ANRLO` is
@@ -15,8 +17,15 @@
 #' - `"LOW LOW"` if `AVAL` is less than `A1LO`
 #' - `"HIGH HIGH"` if `AVAL` is greater than `A1HI`
 #'
-#' @return The input dataset with additional column `ANRIND`
+#' In the case that `A1H1` and `A1LO` are not to be used, `ANRIND` is set to:
+#' - `"NORMAL"` if `AVAL` is greater or equal `ANRLO` and less than
+#'   or equal `ANRHI`; or if `AVAL` is greater than or equal `ANRLO` and `ANRHI`
+#'   is missing; or if `AVAL` is less than or equal `ANRHI` and `ANRLO` is
+#'   missing
+#' - `"LOW"` if `AVAL` is less than `ANRLO`
+#' - `"HIGH"` if `AVAL` is greater than `ANRHI`
 #'
+#' @return The input dataset with additional column `ANRIND`
 #'
 #' @family der_bds_findings
 #' @keywords der_bds_findings
@@ -26,32 +35,40 @@
 #' @examples
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data(admiral_vs)
 #'
-#' ref_ranges <- tribble(
-#'   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-#'   "DIABP",      60,     80,    40,    90,
-#'   "PULSE",      60,    100,    40,   110
+#' vs <- tibble::tribble(
+#'   ~USUBJID, ~PARAMCD, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
+#'   "P01",       "PUL",    70,     60,    100,    40,   110,
+#'   "P01",       "PUL",    57,     60,    100,    40,   110,
+#'   "P01",       "PUL",    60,     60,    100,    40,   110,
+#'   "P01",     "DIABP",   102,     60,     80,    40,    90,
+#'   "P02",       "PUL",   109,     60,    100,    40,   110,
+#'   "P02",       "PUL",   100,     60,    100,    40,   110,
+#'   "P02",     "DIABP",    80,     60,     80,    40,    90,
+#'   "P03",       "PUL",    39,     60,    100,    40,   110,
+#'   "P03",       "PUL",    40,     60,    100,    40,   110
 #' )
 #'
-#' admiral_vs %>%
-#'   mutate(
-#'     PARAMCD = VSTESTCD,
-#'     AVAL = VSSTRESN
-#'   ) %>%
-#'   filter(PARAMCD %in% c("PULSE", "DIABP")) %>%
-#'   derive_vars_merged(ref_ranges, by_vars = exprs(PARAMCD)) %>%
-#'   derive_var_anrind() %>%
-#'   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
-derive_var_anrind <- function(dataset) {
-  assert_data_frame(dataset, required_vars = exprs(ANRLO, ANRHI, AVAL))
+#' vs %>% derive_var_anrind(use_a1hia1lo = TRUE)
+#' vs %>% derive_var_anrind(use_a1hia1lo = FALSE)
+#'
+derive_var_anrind <- function(dataset,
+                              use_a1hia1lo = FALSE) {
+  if (use_a1hia1lo) {
+    assert_data_frame(dataset, required_vars = exprs(ANRLO, ANRHI, A1HI, A1LO, AVAL))
 
-  # Temporarily add these variables to the dataset if they are not included
-  has_a1lo <- "A1LO" %in% colnames(dataset)
-  has_a1hi <- "A1HI" %in% colnames(dataset)
-  if (!has_a1lo) dataset[["A1LO"]] <- NA_character_
-  if (!has_a1hi) dataset[["A1HI"]] <- NA_character_
+    low_cond <- "AVAL < ANRLO & (is.na(A1LO) | AVAL >= A1LO)"
+    high_cond <- "AVAL > ANRHI & (is.na(A1HI) | AVAL <= A1HI)"
+    lowlow_cond <- "AVAL < A1LO"
+    highhigh_cond <- "AVAL > A1HI"
+  } else {
+    assert_data_frame(dataset, required_vars = exprs(ANRLO, ANRHI, AVAL))
+
+    low_cond <- "AVAL < ANRLO"
+    high_cond <- "AVAL > ANRHI"
+    lowlow_cond <- "FALSE"
+    highhigh_cond <- "FALSE"
+  }
 
   result <- dataset %>%
     mutate(
@@ -59,17 +76,13 @@ derive_var_anrind <- function(dataset) {
         AVAL >= ANRLO & is.na(ANRHI) ~ "NORMAL",
         AVAL <= ANRHI & is.na(ANRLO) ~ "NORMAL",
         AVAL >= ANRLO & AVAL <= ANRHI ~ "NORMAL",
-        AVAL < ANRLO & (is.na(A1LO) | AVAL >= A1LO) ~ "LOW",
-        AVAL > ANRHI & (is.na(A1HI) | AVAL <= A1HI) ~ "HIGH",
-        AVAL < A1LO ~ "LOW LOW",
-        AVAL > A1HI ~ "HIGH HIGH",
+        eval(parse(text = low_cond)) ~ "LOW",
+        eval(parse(text = high_cond)) ~ "HIGH",
+        eval(parse(text = lowlow_cond)) ~ "LOW LOW",
+        eval(parse(text = highhigh_cond)) ~ "HIGH HIGH",
         TRUE ~ NA_character_
       )
     )
-
-  # Remove the variables if they have been added above
-  if (!has_a1lo) result[["A1LO"]] <- NULL
-  if (!has_a1hi) result[["A1HI"]] <- NULL
 
   result
 }

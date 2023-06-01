@@ -1,6 +1,14 @@
 #' Derive Last Dose with User-Defined Groupings
 #'
-#' Add a variable for user-defined dose grouping of the last dose to the input dataset.
+#' @description Add a variable for user-defined dose grouping of the last dose
+#' to the input dataset.
+#'
+#' **Note:** This is a wrapper function for the function `derive_vars_last_dose()`.
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_joined()` instead.
 #'
 #' @inheritParams derive_vars_last_dose
 #' @param new_var The output variable defined by the user.
@@ -28,51 +36,12 @@
 #' @return Input dataset with additional column `new_var`.
 #'
 #'
-#' @family der_gen
-#' @keywords der_gen
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @export
 #'
 #' @seealso [derive_vars_last_dose()], [cut()], [create_single_dose_dataset()]
-#'
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data(admiral_ae)
-#' data(ex_single)
-#'
-#' ex_single <- derive_vars_dtm(
-#'   head(ex_single, 100),
-#'   dtc = EXSTDTC,
-#'   new_vars_prefix = "EXST",
-#'   flag_imputation = "none"
-#' )
-#'
-#' adae <- admiral_ae %>%
-#'   head(100) %>%
-#'   derive_vars_dtm(
-#'     dtc = AESTDTC,
-#'     new_vars_prefix = "AST",
-#'     highest_imputation = "M"
-#'   )
-#'
-#' adae %>%
-#'   derive_var_last_dose_grp(
-#'     dataset_ex = ex_single,
-#'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-#'       !is.na(EXSTDTM),
-#'     by_vars = exprs(STUDYID, USUBJID),
-#'     dose_date = EXSTDTM,
-#'     new_var = LDGRP,
-#'     grp_brks = c(0, 20, 40, 60),
-#'     grp_lbls = c("Low", "Medium", "High"),
-#'     include_lowest = TRUE,
-#'     right = TRUE,
-#'     dose_var = EXDOSE,
-#'     analysis_date = ASTDTM,
-#'     traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
-#'   ) %>%
-#'   select(USUBJID, LDGRP, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 derive_var_last_dose_grp <- function(dataset,
                                      dataset_ex,
                                      filter_ex = NULL,
@@ -88,6 +57,7 @@ derive_var_last_dose_grp <- function(dataset,
                                      right = TRUE,
                                      dose_var = EXDOSE,
                                      traceability_vars = NULL) {
+  deprecate_warn("0.11.0", "derive_var_last_dose_grp()", "derive_vars_joined()")
   filter_ex <- assert_filter_cond(enexpr(filter_ex), optional = TRUE)
   by_vars <- assert_vars(by_vars)
   dose_date <- assert_symbol(enexpr(dose_date))

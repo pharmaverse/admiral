@@ -1,7 +1,9 @@
 #' Adds a Parameter for Dose Intensity
 #'
-#' Adds a record for the dose intensity for each by group
+#' @description Adds a record for the dose intensity for each by group
 #' (e.g., subject and visit) where the source parameters are available.
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_param_computed()`.
 #'
 #' The analysis value of the new parameter is derived as
 #' Total Dose / Planned Dose * 100
