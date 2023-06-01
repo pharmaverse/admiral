@@ -151,7 +151,7 @@
 #'   order = exprs(AVAL, AVISITN),
 #'   mode = "first",
 #'   filter_add = !is.na(AVAL),
-#'   keep_vars_source = exprs(USUBJID, AVAL),
+#'   keep_vars_source = exprs(USUBJID, AVAL, DTYPE),
 #'   set_values_to = exprs(
 #'     AVISITN = 97,
 #'     DTYPE = "MINIMUM"
@@ -349,10 +349,10 @@ derive_extreme_records <- function(dataset = NULL,
   }
 
   new_obs <- new_obs %>%
-    select(!!!keep_vars_source) %>%
     process_set_values_to(
       set_values_to = set_values_to
-    )
+    ) %>%
+    select(!!!keep_vars_source)
 
 
   # Create output dataset

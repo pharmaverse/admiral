@@ -185,7 +185,7 @@ derive_extreme_records(
   order = exprs(AVAL, AVISITN),
   mode = "first",
   filter_add = !is.na(AVAL),
-  keep_vars_source = exprs(USUBJID, AVAL),
+  keep_vars_source = exprs(USUBJID, AVAL, DTYPE),
   set_values_to = exprs(
     AVISITN = 97,
     DTYPE = "MINIMUM"
