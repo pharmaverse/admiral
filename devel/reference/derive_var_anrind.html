@@ -59,19 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -99,13 +86,18 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">derive_var_anrind</span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">derive_var_anrind</span><span class="op">(</span><span class="va">dataset</span>, use_a1hia1lo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dataset</dt>
 <dd><p>The input dataset</p></dd>
+
+
+<dt>use_a1hia1lo</dt>
+<dd><p>A logical value indicating whether to use <code>A1H1</code> and <code>A1LO</code> in
+the derivation of <code>ANRIND</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -118,7 +110,7 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><code>ANRIND</code> is set to</p><ul><li><p><code>"NORMAL"</code> if <code>AVAL</code> is greater or equal <code>ANRLO</code> and less than
+    <p>In the case that <code>A1H1</code> and <code>A1LO</code> are to be used, <code>ANRIND</code> is set to:</p><ul><li><p><code>"NORMAL"</code> if <code>AVAL</code> is greater or equal <code>ANRLO</code> and less than
 or equal <code>ANRHI</code>; or if <code>AVAL</code> is greater than or equal <code>ANRLO</code> and <code>ANRHI</code>
 is missing; or if <code>AVAL</code> is less than or equal <code>ANRHI</code> and <code>ANRLO</code> is
 missing</p></li>
@@ -128,6 +120,12 @@ is greater than or equal <code>A1LO</code></p></li>
 is less than or equal <code>A1HI</code></p></li>
 <li><p><code>"LOW LOW"</code> if <code>AVAL</code> is less than <code>A1LO</code></p></li>
 <li><p><code>"HIGH HIGH"</code> if <code>AVAL</code> is greater than <code>A1HI</code></p></li>
+</ul><p>In the case that <code>A1H1</code> and <code>A1LO</code> are not to be used, <code>ANRIND</code> is set to:</p><ul><li><p><code>"NORMAL"</code> if <code>AVAL</code> is greater or equal <code>ANRLO</code> and less than
+or equal <code>ANRHI</code>; or if <code>AVAL</code> is greater than or equal <code>ANRLO</code> and <code>ANRHI</code>
+is missing; or if <code>AVAL</code> is less than or equal <code>ANRHI</code> and <code>ANRLO</code> is
+missing</p></li>
+<li><p><code>"LOW"</code> if <code>AVAL</code> is less than <code>ANRLO</code></p></li>
+<li><p><code>"HIGH"</code> if <code>AVAL</code> is greater than <code>ANRHI</code></p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -147,38 +145,47 @@ is less than or equal <code>A1HI</code></p></li>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">admiral.test</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">admiral_vs</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">ref_ranges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">ANRLO</span>, <span class="op">~</span><span class="va">ANRHI</span>, <span class="op">~</span><span class="va">A1LO</span>, <span class="op">~</span><span class="va">A1HI</span>,</span>
-<span class="r-in">  <span class="st">"DIABP"</span>,      <span class="fl">60</span>,     <span class="fl">80</span>,    <span class="fl">40</span>,    <span class="fl">90</span>,</span>
-<span class="r-in">  <span class="st">"PULSE"</span>,      <span class="fl">60</span>,    <span class="fl">100</span>,    <span class="fl">40</span>,   <span class="fl">110</span></span>
+<span class="r-in"><span class="va">vs</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">AVAL</span>, <span class="op">~</span><span class="va">ANRLO</span>, <span class="op">~</span><span class="va">ANRHI</span>, <span class="op">~</span><span class="va">A1LO</span>, <span class="op">~</span><span class="va">A1HI</span>,</span>
+<span class="r-in">  <span class="st">"P01"</span>,       <span class="st">"PUL"</span>,    <span class="fl">70</span>,     <span class="fl">60</span>,    <span class="fl">100</span>,    <span class="fl">40</span>,   <span class="fl">110</span>,</span>
+<span class="r-in">  <span class="st">"P01"</span>,       <span class="st">"PUL"</span>,    <span class="fl">57</span>,     <span class="fl">60</span>,    <span class="fl">100</span>,    <span class="fl">40</span>,   <span class="fl">110</span>,</span>
+<span class="r-in">  <span class="st">"P01"</span>,       <span class="st">"PUL"</span>,    <span class="fl">60</span>,     <span class="fl">60</span>,    <span class="fl">100</span>,    <span class="fl">40</span>,   <span class="fl">110</span>,</span>
+<span class="r-in">  <span class="st">"P01"</span>,     <span class="st">"DIABP"</span>,   <span class="fl">102</span>,     <span class="fl">60</span>,     <span class="fl">80</span>,    <span class="fl">40</span>,    <span class="fl">90</span>,</span>
+<span class="r-in">  <span class="st">"P02"</span>,       <span class="st">"PUL"</span>,   <span class="fl">109</span>,     <span class="fl">60</span>,    <span class="fl">100</span>,    <span class="fl">40</span>,   <span class="fl">110</span>,</span>
+<span class="r-in">  <span class="st">"P02"</span>,       <span class="st">"PUL"</span>,   <span class="fl">100</span>,     <span class="fl">60</span>,    <span class="fl">100</span>,    <span class="fl">40</span>,   <span class="fl">110</span>,</span>
+<span class="r-in">  <span class="st">"P02"</span>,     <span class="st">"DIABP"</span>,    <span class="fl">80</span>,     <span class="fl">60</span>,     <span class="fl">80</span>,    <span class="fl">40</span>,    <span class="fl">90</span>,</span>
+<span class="r-in">  <span class="st">"P03"</span>,       <span class="st">"PUL"</span>,    <span class="fl">39</span>,     <span class="fl">60</span>,    <span class="fl">100</span>,    <span class="fl">40</span>,   <span class="fl">110</span>,</span>
+<span class="r-in">  <span class="st">"P03"</span>,       <span class="st">"PUL"</span>,    <span class="fl">40</span>,     <span class="fl">60</span>,    <span class="fl">100</span>,    <span class="fl">40</span>,   <span class="fl">110</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">admiral_vs</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span class="r-in">    PARAMCD <span class="op">=</span> <span class="va">VSTESTCD</span>,</span>
-<span class="r-in">    AVAL <span class="op">=</span> <span class="va">VSSTRESN</span></span>
-<span class="r-in">  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">PARAMCD</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PULSE"</span>, <span class="st">"DIABP"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="derive_vars_merged.html">derive_vars_merged</a></span><span class="op">(</span><span class="va">ref_ranges</span>, by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">PARAMCD</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">derive_var_anrind</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">PARAMCD</span>, <span class="va">AVAL</span>, <span class="va">ANRLO</span><span class="op">:</span><span class="va">ANRIND</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 16,411 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     PARAMCD  AVAL ANRLO ANRHI  A1LO  A1HI ANRIND</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-701-1015 DIABP      64    60    80    40    90 NORMAL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-701-1015 DIABP      83    60    80    40    90 HIGH  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-701-1015 DIABP      57    60    80    40    90 LOW   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-701-1015 DIABP      68    60    80    40    90 NORMAL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-701-1015 DIABP      59    60    80    40    90 LOW   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-701-1015 DIABP      71    60    80    40    90 NORMAL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-701-1015 DIABP      56    60    80    40    90 LOW   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-701-1015 DIABP      51    60    80    40    90 LOW   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-701-1015 DIABP      61    60    80    40    90 NORMAL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-701-1015 DIABP      67    60    80    40    90 NORMAL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 16,401 more rows</span></span>
+<span class="r-in"><span class="va">vs</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">derive_var_anrind</span><span class="op">(</span>use_a1hia1lo <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID PARAMCD  AVAL ANRLO ANRHI  A1LO  A1HI ANRIND   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> P01     PUL        70    60   100    40   110 NORMAL   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> P01     PUL        57    60   100    40   110 LOW      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> P01     PUL        60    60   100    40   110 NORMAL   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> P01     DIABP     102    60    80    40    90 HIGH HIGH</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> P02     PUL       109    60   100    40   110 HIGH     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> P02     PUL       100    60   100    40   110 NORMAL   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> P02     DIABP      80    60    80    40    90 NORMAL   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> P03     PUL        39    60   100    40   110 LOW LOW  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> P03     PUL        40    60   100    40   110 LOW      </span>
+<span class="r-in"><span class="va">vs</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">derive_var_anrind</span><span class="op">(</span>use_a1hia1lo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID PARAMCD  AVAL ANRLO ANRHI  A1LO  A1HI ANRIND</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> P01     PUL        70    60   100    40   110 NORMAL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> P01     PUL        57    60   100    40   110 LOW   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> P01     PUL        60    60   100    40   110 NORMAL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> P01     DIABP     102    60    80    40    90 HIGH  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> P02     PUL       109    60   100    40   110 HIGH  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> P02     PUL       100    60   100    40   110 NORMAL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> P02     DIABP      80    60    80    40    90 NORMAL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> P03     PUL        39    60   100    40   110 LOW   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> P03     PUL        40    60   100    40   110 LOW   </span>
+<span class="r-in"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
