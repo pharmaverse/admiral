@@ -61,6 +61,10 @@ Input dataset with additional column \code{new_var}.
 Add a variable for dose amount from the last dose to the input dataset.
 
 \strong{Note:} This is a wrapper function for the function \code{derive_vars_last_dose()}.
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_vars_joined()} instead.
 }
 \details{
 The last dose amount is derived as the dose amount where the maximum \code{dose_date} is
@@ -71,105 +75,22 @@ over a period defined by a start and end date) the function
 \code{create_single_dose_dataset()} can be used to generate single doses from
 aggregate dose information and satisfy \code{single_dose_condition}.
 }
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-
-ex_single <- tribble(
-  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~EXSEQ,     ~EXENDTC,    ~EXTRT, ~EXDOSE, ~EXDOSFRQ,
-  "PILOT01",    "EX", "18-1066",     1L, "2013-07-07",    "XANO",      54,    "ONCE",
-  "PILOT01",    "EX", "18-1066",     2L, "2013-07-08",    "XANO",      54,    "ONCE",
-  "PILOT01",    "EX", "18-1066",     3L, "2013-07-09",    "XANO",      54,    "ONCE",
-  "PILOT01",    "EX", "18-1066",     4L, "2013-07-10",    "XANO",      54,    "ONCE",
-  "PILOT01",    "EX", "18-1066",     5L, "2013-07-11",    "XANO",      54,    "ONCE",
-  "PILOT01",    "EX", "18-1066",     6L, "2013-07-12",    "XANO",      54,    "ONCE",
-  "PILOT01",    "EX", "18-1066",     7L, "2013-07-13",    "XANO",      54,    "ONCE",
-  "PILOT01",    "EX", "18-1066",     8L, "2013-07-14",    "XANO",      54,    "ONCE",
-  "PILOT01",    "EX", "18-1066",     9L, "2013-07-15",    "XANO",      54,    "ONCE",
-  "PILOT01",    "EX", "18-1066",    10L, "2013-07-16",    "XANO",      54,    "ONCE",
-  "PILOT01",    "EX", "10-1083",     1L, "2013-07-22", "PLACEBO",       0,    "ONCE",
-  "PILOT01",    "EX", "10-1083",     2L, "2013-07-23", "PLACEBO",       0,    "ONCE",
-  "PILOT01",    "EX", "10-1083",     3L, "2013-07-24", "PLACEBO",       0,    "ONCE",
-  "PILOT01",    "EX", "10-1083",     4L, "2013-07-25", "PLACEBO",       0,    "ONCE",
-  "PILOT01",    "EX", "10-1083",     5L, "2013-07-26", "PLACEBO",       0,    "ONCE",
-  "PILOT01",    "EX", "10-1083",     6L, "2013-07-27", "PLACEBO",       0,    "ONCE",
-  "PILOT01",    "EX", "10-1083",     7L, "2013-07-28", "PLACEBO",       0,    "ONCE",
-  "PILOT01",    "EX", "10-1083",     8L, "2013-07-29", "PLACEBO",       0,    "ONCE",
-  "PILOT01",    "EX", "10-1083",     9L, "2013-07-30", "PLACEBO",       0,    "ONCE",
-  "PILOT01",    "EX", "10-1083",    10L, "2013-07-31", "PLACEBO",       0,    "ONCE",
-  "PILOT01",    "EX", "10-1083",    11L, "2013-08-01", "PLACEBO",       0,    "ONCE"
-)
-
-
-
-ae <- tribble(
-  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,                 ~AETERM,
-  "PILOT01",    "AE", "10-1083",      1, "2013-08-02", "MYOCARDIAL INFARCTION",
-  "PILOT01",    "AE", "18-1066",      2, "2013-07-18",             "AGITATION",
-  "PILOT01",    "AE", "18-1066",      4, "2013-07-30",          "INFLAMMATION",
-  "PILOT01",    "AE", "18-1066",      1, "2013-07-16",               "SYNCOPE",
-  "PILOT01",    "AE", "18-1066",      3, "2013-07-30",               "SYNCOPE"
-)
-
-
-ex_single <- derive_vars_dtm(
-  head(ex_single, 100),
-  dtc = EXENDTC,
-  new_vars_prefix = "EXEN",
-  flag_imputation = "none"
-)
-adae <- ae \%>\%
-  derive_vars_dtm(
-    dtc = AESTDTC,
-    new_vars_prefix = "AST",
-    highest_imputation = "M"
-  )
-adae \%>\%
-  derive_var_last_dose_amt(
-    dataset_ex = ex_single,
-    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      !is.na(EXENDTM),
-    dose_date = EXENDTM,
-    analysis_date = ASTDTM,
-    new_var = LDOSE,
-    dose_var = EXDOSE
-  ) \%>\%
-  select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSE)
-# or with traceability variables
-adae \%>\%
-  derive_var_last_dose_amt(
-    dataset_ex = ex_single,
-    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      !is.na(EXENDTM),
-    dose_date = EXENDTM,
-    analysis_date = ASTDTM,
-    new_var = LDOSE,
-    dose_var = EXDOSE,
-    traceability_vars = exprs(
-      LDOSEDOM = "EX",
-      LDOSESEQ = EXSEQ,
-      LDOSEVAR = "EXDOSE"
-    )
-  ) \%>\%
-  select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSE)
-}
 \seealso{
 \code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
 
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
+Other deprecated: 
+\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_var_confirmation_flag}()},
+\code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_merged_summary}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_joined}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_last_dose}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_transposed}()},
-\code{\link{get_summary_records}()}
+\code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()}
 }
-\concept{der_gen}
-\keyword{der_gen}
+\concept{deprecated}
+\keyword{deprecated}

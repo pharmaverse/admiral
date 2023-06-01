@@ -119,6 +119,8 @@ the `filter_add` argument. (#1725)
 - Updated "Lab Grading" Vignette to link to grading metadata available in `{admiral}` and clarify how abnormal baseline
 values are assigned in NCI-CTCAEv5 (#1863).
 
+- Updated "Visit and Period Variables" Vignette to add more detail about Study Specific Code that is required (#1831).
+
 - Increased documentation for those functions which are regarded as wrapper functions (#1726)
 
 ## Various
