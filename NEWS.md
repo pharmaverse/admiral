@@ -6,7 +6,13 @@
 
 - New function `compute_age_years()` for converting a vector of age values to years. (#1794)
 
+- New functions `filter_exist()` and `filter_not_exist()` for selecting records from
+a dataset dependent on the existence of the corresponding by groups in a filtered 
+source dataset. (#1699)
+
 - New function `derive_param_extreme_record()` that adds parameter based on the first or last record from multiple sources. (#1822)
+
+- New ADPPK template script available `ad_adppk.R` which creates Population PK Analysis Dataset (#1772) based on forthcoming CDISC Implementation guide.
 
 - New function `compute_egfr()` for calculating Estimated Glomerular Filtration Rate (eGFR) and Creatinine Clearance for Kidney Function (#1826)
 
@@ -52,6 +58,20 @@ specify which variables in the new observations should be kept. (#1697)
 
 ## Breaking Changes
 
+- `create_query_data()` and `derive_vars_query()` updated to rename variables in 
+    query data set as follows:
+
+    - `VAR_PREFIX` to `PREFIX`
+    - `QUERY_NAME` to `GRPNAME`
+    - `QUERY_ID` to `GRPID`
+    - `QUERY_SCOPE` to `SCOPE`
+    - `QUERY_SCOPE_NUM` to `SCOPEN`
+    - `TERM_LEVEL` to `SRCVAR`
+    - `TERM_NAME` to `TERMNAME`
+    - `TERM_ID` to `TERMID`
+  
+    Users need to adjust their `get_terms()` function accordingly.
+
 - The `aval_fun` argument of `derive_param_exist_flag()` was deprecated in favor
 of the `set_values_to` argument. (#1727)
 
@@ -87,8 +107,14 @@ the `filter_add` argument. (#1725)
 
 - Updated example dataset to trigger deterioration flags in the vignette "Creating Questionnaire ADaMs" (#1853, #1854)
 
+- Updated PK Programming vignette to include new Population PK Template `ad_adppk.R` (#1772)
+
 - Updated "Lab Grading" Vignette to link to grading metadata available in `{admiral}` and clarify how abnormal baseline
 values are assigned in NCI-CTCAEv5 (#1863).
+
+- Updated "Visit and Period Variables" Vignette to add more detail about Study Specific Code that is required (#1831).
+
+- Increased documentation for those functions which are regarded as wrapper functions (#1726)
 
 ## Various
 
@@ -96,11 +122,13 @@ values are assigned in NCI-CTCAEv5 (#1863).
 quosures has been removed. The admiral option `force_admiral_vars` was removed
 as well. (#1694)
 
-- `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with supplying both `min_dates` and `max_dates` that has now been resolved (#1843)
+- `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with supplying both `min_dates` and `max_dates` that has now been resolved. (#1843)
 
-- Examples for `derive_var_extreme_flag()` were reworked to reduce runtime that occasionally led to failing CI check (#1780)
+- Examples for `derive_var_extreme_flag()` were reworked to reduce runtime that occasionally led to failing CI check. (#1780)
 
 - `create_period_dataset()` had a bug that led to an error when both DT and DTM columns existed. (#1845)
+
+- External functions are now consistently imported via namespace. `package::function()` calls have been removed from `admiral` functions. (#1842)
 
 # admiral 0.10.2
 
@@ -196,7 +224,7 @@ added for subjects who have both an event or censoring and an observation in
 
 - Function `derive_var_worst_flag()` has been deprecated, in favor of `slice_derivation()`/`derive_var_extreme_flag()` (#1682)
 
-- Function `derive_vars_disposition_reason()` has been deprecated, in favor of `derive_vars_merged()`(#1683)
+- Function `derive_vars_disposition_reason()` has been deprecated, in favor of `derive_vars_merged()` (#1683)
   
 - The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1712)
 
