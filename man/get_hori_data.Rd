@@ -30,7 +30,9 @@ the parameter. E.g., \code{AVAL.WEIGHT} is set to the value of \code{AVAL} where
 \item{filter}{Filter condition used for restricting the input dataset
 
 The specified filter condition is used in the warnings only. It is not
-applied to the input dataset.}
+applied to the input dataset.
+
+\emph{Permitted Values:} An unquoted expression}
 }
 \value{
 A dataset with one observation per by group. It contains the

@@ -266,8 +266,8 @@ derive_param_computed <- function(dataset = NULL,
     data_source,
     by_vars = by_vars,
     parameters = parameters,
-    analysis_value = analysis_value,
-    filter = filter
+    analysis_value = !!analysis_value,
+    filter = !!filter
   )
   hori_data <- hori_return[["hori_data"]]
   if (is.null(hori_data)) {
@@ -280,8 +280,8 @@ derive_param_computed <- function(dataset = NULL,
       data_source,
       by_vars = constant_by_vars,
       parameters = constant_parameters,
-      analysis_value = analysis_value,
-      filter = filter
+      analysis_value = !!analysis_value,
+      filter = !!filter
     )[["hori_data"]]
 
     if (is.null(hori_const_data)) {
@@ -380,6 +380,8 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'    The specified filter condition is used in the warnings only. It is not
 #'    applied to the input dataset.
 #'
+#'   *Permitted Values:* An unquoted expression
+#'
 #' @return A dataset with one observation per by group. It contains the
 #'   variables specified for `by_vars` and all variables of the form
 #'   `<variable>.<parameter>` occurring in `analysis_value`.
@@ -394,8 +396,8 @@ get_hori_data <- function(dataset,
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = by_vars)
   parameters <- assert_parameters_argument(parameters)
-  assert_expr(analysis_value)
-  assert_expr(filter)
+  analysis_value <- enexpr(analysis_value)
+  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
 
   # determine parameter values
   if (is.null(names(parameters))) {

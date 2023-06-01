@@ -344,7 +344,7 @@ test_that("get_hori_data Test 9: error if variables with more than one dot", {
       input,
       parameters = exprs(SYSBP, DIABP),
       by_vars = exprs(USUBJID, VISIT),
-      analysis_value = expr((AVAL.SYSBP + 2 * AVAL.DIA.BP) / 3),
+      analysis_value = (AVAL.SYSBP + 2 * AVAL.DIA.BP) / 3,
       filter = NULL
     ),
     regexp = paste(
