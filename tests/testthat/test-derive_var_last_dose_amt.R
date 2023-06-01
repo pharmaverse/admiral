@@ -34,20 +34,20 @@ test_that("derive_var_last_dose_amt Test 1: works as expected", {
     input_ae,
     LDOSE = c(10, 10, 10, NA, 0, NA, NA)
   )
-
-  res <- derive_var_last_dose_amt(
-    input_ae,
-    input_ex,
-    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = exprs(STUDYID, USUBJID),
-    dose_date = EXENDT,
-    analysis_date = AESTDT,
-    new_var = LDOSE,
-    dose_var = EXDOSE,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    traceability_vars = NULL
+  suppressWarnings(
+    res <- derive_var_last_dose_amt(
+      input_ae,
+      input_ex,
+      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = exprs(STUDYID, USUBJID),
+      dose_date = EXENDT,
+      analysis_date = AESTDT,
+      new_var = LDOSE,
+      dose_var = EXDOSE,
+      single_dose_condition = (EXSTDTC == EXENDTC),
+      traceability_vars = NULL
+    )
   )
-
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })
 
@@ -60,19 +60,19 @@ test_that("derive_var_last_dose_amt Test 2: returns traceability vars", {
     LDOSEVAR = c("EXSTDTC", "EXSTDTC", "EXSTDTC", NA, "EXSTDTC", NA, NA),
     LDOSE = c(10, 10, 10, NA, 0, NA, NA)
   )
-
-  res <- derive_var_last_dose_amt(
-    input_ae,
-    input_ex,
-    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = exprs(STUDYID, USUBJID),
-    dose_date = EXENDT,
-    analysis_date = AESTDT,
-    new_var = LDOSE,
-    dose_var = EXDOSE,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+  suppressWarnings(
+    res <- derive_var_last_dose_amt(
+      input_ae,
+      input_ex,
+      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = exprs(STUDYID, USUBJID),
+      dose_date = EXENDT,
+      analysis_date = AESTDT,
+      new_var = LDOSE,
+      dose_var = EXDOSE,
+      single_dose_condition = (EXSTDTC == EXENDTC),
+      traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+    )
   )
-
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })

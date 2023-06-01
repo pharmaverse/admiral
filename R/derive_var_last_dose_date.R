@@ -5,6 +5,11 @@
 #'
 #' **Note:** This is a wrapper function for the function `derive_vars_last_dose()`.
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_joined()` instead.
+#'
 #' @inheritParams derive_vars_last_dose
 #' @param new_var The new date or datetime variable added to `dataset`.
 #' @param output_datetime  Display `new_var` as datetime or as date only. Defaults to `TRUE`.
@@ -23,76 +28,12 @@
 #' @return Input dataset with additional column `new_var`.
 #'
 #'
-#' @family der_gen
-#' @keywords der_gen
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @export
 #'
 #' @seealso [derive_vars_last_dose()], [create_single_dose_dataset()]
-#'
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#'
-#' ex_single <- tribble(
-#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~EXSEQ,     ~EXENDTC,    ~EXTRT, ~EXDOSE, ~EXDOSFRQ,
-#'   "PILOT01",    "EX", "18-1066",     1L, "2013-07-07",    "XANO",      54,    "ONCE",
-#'   "PILOT01",    "EX", "18-1066",     2L, "2013-07-08",    "XANO",      54,    "ONCE",
-#'   "PILOT01",    "EX", "18-1066",     3L, "2013-07-09",    "XANO",      54,    "ONCE",
-#'   "PILOT01",    "EX", "18-1066",     4L, "2013-07-10",    "XANO",      54,    "ONCE",
-#'   "PILOT01",    "EX", "18-1066",     5L, "2013-07-11",    "XANO",      54,    "ONCE",
-#'   "PILOT01",    "EX", "18-1066",     6L, "2013-07-12",    "XANO",      54,    "ONCE",
-#'   "PILOT01",    "EX", "18-1066",     7L, "2013-07-13",    "XANO",      54,    "ONCE",
-#'   "PILOT01",    "EX", "18-1066",     8L, "2013-07-14",    "XANO",      54,    "ONCE",
-#'   "PILOT01",    "EX", "18-1066",     9L, "2013-07-15",    "XANO",      54,    "ONCE",
-#'   "PILOT01",    "EX", "18-1066",    10L, "2013-07-16",    "XANO",      54,    "ONCE",
-#'   "PILOT01",    "EX", "10-1083",     1L, "2013-07-22", "PLACEBO",       0,    "ONCE",
-#'   "PILOT01",    "EX", "10-1083",     2L, "2013-07-23", "PLACEBO",       0,    "ONCE",
-#'   "PILOT01",    "EX", "10-1083",     3L, "2013-07-24", "PLACEBO",       0,    "ONCE",
-#'   "PILOT01",    "EX", "10-1083",     4L, "2013-07-25", "PLACEBO",       0,    "ONCE",
-#'   "PILOT01",    "EX", "10-1083",     5L, "2013-07-26", "PLACEBO",       0,    "ONCE",
-#'   "PILOT01",    "EX", "10-1083",     6L, "2013-07-27", "PLACEBO",       0,    "ONCE",
-#'   "PILOT01",    "EX", "10-1083",     7L, "2013-07-28", "PLACEBO",       0,    "ONCE",
-#'   "PILOT01",    "EX", "10-1083",     8L, "2013-07-29", "PLACEBO",       0,    "ONCE",
-#'   "PILOT01",    "EX", "10-1083",     9L, "2013-07-30", "PLACEBO",       0,    "ONCE",
-#'   "PILOT01",    "EX", "10-1083",    10L, "2013-07-31", "PLACEBO",       0,    "ONCE",
-#'   "PILOT01",    "EX", "10-1083",    11L, "2013-08-01", "PLACEBO",       0,    "ONCE"
-#' )
-#'
-#' ae <- tribble(
-#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,                 ~AETERM,
-#'   "PILOT01",    "AE", "10-1083",      1, "2013-08-02", "MYOCARDIAL INFARCTION",
-#'   "PILOT01",    "AE", "18-1066",      2, "2013-07-18",             "AGITATION",
-#'   "PILOT01",    "AE", "18-1066",      4, "2013-07-30",          "INFLAMMATION",
-#'   "PILOT01",    "AE", "18-1066",      1, "2013-07-16",               "SYNCOPE",
-#'   "PILOT01",    "AE", "18-1066",      3, "2013-07-30",               "SYNCOPE"
-#' )
-#'
-#'
-#' ex_single <- derive_vars_dtm(
-#'   ex_single,
-#'   dtc = EXENDTC,
-#'   new_vars_prefix = "EXEN",
-#'   flag_imputation = "none"
-#' )
-#'
-#' adae <- ae %>%
-#'   derive_vars_dtm(
-#'     dtc = AESTDTC,
-#'     new_vars_prefix = "AST",
-#'     highest_imputation = "M"
-#'   )
-#'
-#' adae %>%
-#'   derive_var_last_dose_date(
-#'     dataset_ex = ex_single,
-#'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-#'       !is.na(EXENDTM),
-#'     dose_date = EXENDTM,
-#'     analysis_date = ASTDTM,
-#'     new_var = LDOSEDTM,
-#'     traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
-#'   ) %>%
-#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSEDTM)
 derive_var_last_dose_date <- function(dataset,
                                       dataset_ex,
                                       filter_ex = NULL,
@@ -104,6 +45,7 @@ derive_var_last_dose_date <- function(dataset,
                                       new_var,
                                       output_datetime = TRUE,
                                       traceability_vars = NULL) {
+  deprecate_warn("0.11.0", "derive_var_last_dose_date()", "derive_vars_joined()")
   filter_ex <- assert_filter_cond(enexpr(filter_ex), optional = TRUE)
   by_vars <- assert_vars(by_vars)
   dose_id <- assert_vars(dose_id)

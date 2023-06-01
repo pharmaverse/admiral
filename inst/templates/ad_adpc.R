@@ -195,8 +195,6 @@ adpc_first_dose <- pc_dates %>%
 
 
 # ---- Find previous dose  ----
-# Use derive_vars_joined for consistency with other variables
-# This is equivalent to derive_vars_last_dose in this case
 
 adpc_prev <- adpc_first_dose %>%
   derive_vars_joined(
