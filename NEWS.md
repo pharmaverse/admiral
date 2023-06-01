@@ -2,6 +2,8 @@
 
 ## New Features
 
+- In the function `derive_var_anrind()`, added argument `use_a1hia1lo` to turn the usage of `A1HI` and `A1LO` off and on, with the default being off. (#1795)
+
 - Added a "Report a bug" link to `{admiral}` website (#1836)
 
 - New function `compute_age_years()` for converting a vector of age values to years. (#1794)
