@@ -416,8 +416,8 @@ test_that("derive_extreme_records Test 8: keep vars in `keep_vars_source` in the
   )
 })
 
-## Test 9: keep all vars in the new records when `keep_vars_source` is NULL ----
-test_that("derive_extreme_records Test 9: keep all vars in the new records when `keep_vars_source` is NULL", { # nolint
+## Test 9: keep all vars in the new records when `keep_vars_source` is 'exprs(everything())' ----
+test_that("derive_extreme_records Test 9: keep all vars in the new records when `keep_vars_source` is 'exprs(everything())'", { # nolint
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
     1, 1, 12, 1,
@@ -443,7 +443,7 @@ test_that("derive_extreme_records Test 9: keep all vars in the new records when 
     order = exprs(AVISITN, LBSEQ),
     by_vars = exprs(USUBJID),
     mode = "last",
-    keep_vars_source = ,
+    keep_vars_source = exprs(everything()),
     set_values_to = exprs(DTYPE = "LOV")
   )
 

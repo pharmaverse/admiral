@@ -16,7 +16,7 @@ derive_extreme_records(
   exist_flag = NULL,
   true_value = "Y",
   false_value = "N",
-  keep_vars_source = NULL,
+  keep_vars_source = exprs(everything()),
   set_values_to,
   filter
 )
@@ -108,10 +108,8 @@ For new observations not selected from the additional dataset
 
 \item{keep_vars_source}{Variables to be kept in the new records
 
-A named list returned by \code{exprs()} defining the variables to be kept for the
-new records.
-
-\emph{Default}: \code{everything()}}
+A named list or tidyselect expressions returned by \code{exprs()} defining the
+variables to be kept for the new records.}
 
 \item{set_values_to}{Variables to be set
 
@@ -203,7 +201,7 @@ derive_extreme_records(
   order = exprs(desc(AVAL), AVISITN),
   mode = "first",
   filter_add = !is.na(AVAL),
-  keep_vars_source = ,
+  keep_vars_source = exprs(everything()),
   set_values_to = exprs(
     AVISITN = 98,
     DTYPE = "MAXIMUM"
@@ -217,7 +215,7 @@ derive_extreme_records(
   by_vars = exprs(USUBJID),
   order = exprs(AVISITN),
   mode = "last",
-  keep_vars_source = ,
+  keep_vars_source = exprs(everything()),
   set_values_to = exprs(
     AVISITN = 99,
     DTYPE = "LOV"
@@ -263,7 +261,7 @@ derive_extreme_records(
   true_value = "Y",
   false_value = "N",
   mode = "first",
-  keep_vars_source = ,
+  keep_vars_source = exprs(everything()),
   set_values_to = exprs(
     PARAMCD = "PD",
     PARAM = "Disease Progression",
@@ -283,7 +281,7 @@ derive_extreme_records(
   true_value = "Y",
   false_value = "N",
   mode = "first",
-  keep_vars_source = ,
+  keep_vars_source = exprs(everything()),
   set_values_to = exprs(
     PARAMCD = "DEATH",
     PARAM = "Death",
