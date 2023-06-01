@@ -82,6 +82,7 @@ and for others the worst is the lowest value.
 
 Other deprecated: 
 \code{\link{derive_param_extreme_event}()},
+\code{\link{derive_var_basetype}()},
 \code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_merged_cat}()},

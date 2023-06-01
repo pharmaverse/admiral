@@ -83,7 +83,7 @@ deprecated in favor of `derive_vars_merged()`. (#1727)
 - The `filter` argument in `derive_extreme_records()` was deprecated in favor of
 the `filter_add` argument. (#1725)
 
-- `derive_var_basetype()` was renamed to `derive_basetype_records()`. (#1796)
+- `derive_var_basetype()` was deprecated in favor of `derive_basetype_records()`. (#1796)
 
 ## Documentation
 
