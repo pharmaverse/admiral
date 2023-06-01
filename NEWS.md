@@ -56,7 +56,7 @@ now. This affects `derive_param_tte()`. (#1727)
 ## Breaking Changes
 
 - `create_query_data()` and `derive_vars_query()` updated to rename variables in 
-    query data set as follows:
+    query data set as follows: (#1907)
 
     - `VAR_PREFIX` to `PREFIX`
     - `QUERY_NAME` to `GRPNAME`
@@ -114,6 +114,10 @@ values are assigned in NCI-CTCAEv5 (#1863).
 
 - Increased documentation for those functions which are regarded as wrapper functions (#1726)
 
+- Examples in function documentation no longer rely on `library(admiral.test)`. (#1752) 
+
+- Conferences where `{admiral}` was presented were updated on the `README.md`. (#1890)
+
 ## Various
 
 - `vars()` which was used in the admiral function calls that expected a list of
@@ -127,6 +131,8 @@ as well. (#1694)
 - `create_period_dataset()` had a bug that led to an error when both DT and DTM columns existed. (#1845)
 
 - External functions are now consistently imported via namespace. `package::function()` calls have been removed from `admiral` functions. (#1842)
+
+- `restrict_derivation()` had a bug which led to failure if the `derivation` argument was not in the global environment. (#1765)
 
 # admiral 0.10.2
 
