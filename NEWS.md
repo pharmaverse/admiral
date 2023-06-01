@@ -2,6 +2,8 @@
 
 ## New Features
 
+- In the function `derive_var_anrind()`, added argument `use_a1hia1lo` to turn the usage of `A1HI` and `A1LO` off and on, with the default being off. (#1795)
+
 - Added a "Report a bug" link to `{admiral}` website (#1836)
 
 - New function `compute_age_years()` for converting a vector of age values to years. (#1794)
@@ -111,6 +113,8 @@ the `filter_add` argument. (#1725)
 
 - Updated "Lab Grading" Vignette to link to grading metadata available in `{admiral}` and clarify how abnormal baseline
 values are assigned in NCI-CTCAEv5 (#1863).
+
+- Updated "Visit and Period Variables" Vignette to add more detail about Study Specific Code that is required (#1831).
 
 - Increased documentation for those functions which are regarded as wrapper functions (#1726)
 
