@@ -35,19 +35,19 @@ test_that("derive_vars_last_dose Test 1: function works as expected", {
     EXDOSE = c(10, 10, 10, NA, 0, NA, NA),
     EXTRT = c("treatment", "treatment", "treatment", NA, "placebo", NA, NA)
   )
-
-  res <- derive_vars_last_dose(
-    input_ae,
-    input_ex,
-    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = exprs(STUDYID, USUBJID),
-    dose_date = EXENDT,
-    new_vars = exprs(EXDOSE, EXTRT, EXSEQ, EXENDT, EXSTDT),
-    analysis_date = AESTDT,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    traceability_vars = NULL
+  suppressWarnings(
+    res <- derive_vars_last_dose(
+      input_ae,
+      input_ex,
+      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = exprs(STUDYID, USUBJID),
+      dose_date = EXENDT,
+      new_vars = exprs(EXDOSE, EXTRT, EXSEQ, EXENDT, EXSTDT),
+      analysis_date = AESTDT,
+      single_dose_condition = (EXSTDTC == EXENDTC),
+      traceability_vars = NULL
+    )
   )
-
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })
 
@@ -65,7 +65,7 @@ test_that("derive_vars_last_dose Test 2: function checks validity of start and e
       )
   )
 
-  expect_error(
+  expect_warning(
     derive_vars_last_dose(
       input_ae,
       input_ex_wrong,
@@ -76,7 +76,7 @@ test_that("derive_vars_last_dose Test 2: function checks validity of start and e
       single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
-    regexp = "Specified `single_dose_condition` is not satisfied."
+    class = "lifecycle_warning_deprecated"
   )
 })
 
@@ -95,18 +95,19 @@ test_that("derive_vars_last_dose Test 3: function returns traceability vars", {
     LDOSESEQ = c(1, 2, 3, NA, 2, NA, NA),
     LDOSEVAR = c("EXSTDTC", "EXSTDTC", "EXSTDTC", NA, "EXSTDTC", NA, NA)
   )
-
-  res <- derive_vars_last_dose(
-    input_ae,
-    input_ex,
-    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = exprs(STUDYID, USUBJID),
-    dose_date = EXENDT,
-    analysis_date = AESTDT,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+  suppressWarnings(
+    res <- derive_vars_last_dose(
+      input_ae,
+      input_ex,
+      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = exprs(STUDYID, USUBJID),
+      dose_date = EXENDT,
+      analysis_date = AESTDT,
+      single_dose_condition = (EXSTDTC == EXENDTC),
+      new_vars = exprs(EXSTDTC, EXENDTC, EXENDT, EXSTDT, EXSEQ, EXDOSE, EXTRT),
+      traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+    )
   )
-
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })
 
@@ -124,29 +125,25 @@ test_that("derive_vars_last_dose Test 4: function errors when multiple doses are
       )
   )
 
-  expected_output <- mutate(
-    input_ae,
-    EXSTDTC = c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA),
-    EXENDTC = c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA),
-    EXSTDT = ymd(EXSTDTC),
-    EXENDT = ymd(EXENDTC),
-    EXSEQ = c(1, 2, 3, NA, 3, NA, NA),
-    EXDOSE = c(10, 10, 10, NA, 0, NA, NA),
-    EXTRT = c("treatment", "treatment", "treatment", NA, "placebo", NA, NA)
-  )
-
-  expect_error(
-    derive_vars_last_dose(
-      input_ae,
-      input_ex_dup,
-      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-      by_vars = exprs(STUDYID, USUBJID),
-      dose_date = EXENDT,
-      analysis_date = AESTDT,
-      single_dose_condition = (EXSTDTC == EXENDTC),
-      traceability_vars = NULL
+  # single_dose_condition not part of `derive_vars_joined()`
+  expect_warning(
+    suppress_warning(
+      derive_vars_last_dose(
+        input_ae,
+        input_ex_dup,
+        filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+        by_vars = exprs(STUDYID, USUBJID),
+        dose_date = EXENDT,
+        analysis_date = AESTDT,
+        single_dose_condition = (EXSTDTC == EXENDTC),
+        traceability_vars = NULL
+      ),
+      regexpr = paste(
+        "Dataset contains duplicate records with respect to",
+        "`STUDYID`, `USUBJID`, `tmp_obs_nr_1` and `EXENDT`"
+      )
     ),
-    regexp = "Multiple doses exist for the same `dose_date`. Update `dose_id` to identify unique doses." # nolint
+    class = "lifecycle_warning_deprecated"
   )
 })
 
@@ -171,20 +168,20 @@ test_that("derive_vars_last_dose Test 5: multiple doses on same date - dose_id s
     EXDOSE = c(10, 10, 10, NA, 0, NA, NA),
     EXTRT = c("treatment", "treatment", "treatment", NA, "placebo", NA, NA)
   )
-
-  res <- derive_vars_last_dose(
-    input_ae,
-    input_ex_dup,
-    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-    by_vars = exprs(STUDYID, USUBJID),
-    dose_date = EXENDT,
-    dose_id = exprs(EXSEQ),
-    new_vars = exprs(EXDOSE, EXTRT, EXSEQ, EXSTDT, EXENDT),
-    analysis_date = AESTDT,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    traceability_vars = NULL
+  suppressWarnings(
+    res <- derive_vars_last_dose(
+      input_ae,
+      input_ex_dup,
+      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = exprs(STUDYID, USUBJID),
+      dose_date = EXENDT,
+      dose_id = exprs(EXSEQ),
+      new_vars = exprs(EXDOSE, EXTRT, EXSEQ, EXSTDT, EXENDT),
+      analysis_date = AESTDT,
+      single_dose_condition = (EXSTDTC == EXENDTC),
+      traceability_vars = NULL
+    )
   )
-
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })
 
@@ -219,7 +216,7 @@ test_that("derive_vars_last_dose Test 6: error is issued if same variable is fou
       EXENDT = as.Date(EXENDTC)
     )
 
-  expect_error(
+  expect_warning(
     derive_vars_last_dose(
       input_ae,
       input_ex,
@@ -231,8 +228,7 @@ test_that("derive_vars_last_dose Test 6: error is issued if same variable is fou
       single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
-    "Variable(s) `EXSTDT` found in both datasets, cannot perform join",
-    fixed = TRUE
+    class = "lifecycle_warning_deprecated"
   )
 })
 
@@ -256,14 +252,16 @@ test_that("derive_vars_last_dose Test 7: no error is raised when setting `dose_d
   (adex_single <- create_single_dose_dataset(adex))
 
   expect_error(
-    derive_vars_last_dose(
-      adae,
-      adex_single,
-      by_vars = exprs(USUBJID),
-      dose_date = EXSTDT,
-      analysis_date = ASTDT,
-      new_vars = exprs(EXSTDT = ASTDT)
+    suppressWarnings(
+      derive_vars_last_dose(
+        adae,
+        adex_single,
+        by_vars = exprs(USUBJID),
+        dose_date = EXSTDT,
+        analysis_date = ASTDT,
+        new_vars = exprs(EXSTDT = ASTDT)
+      )
     ),
-    NA
+    regexp = "Required variable `EXSTDT` is missing"
   )
 })
