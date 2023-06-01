@@ -9,6 +9,7 @@ ADMH
 ADNCA
 ADPC
 ADPP
+ADPPK
 ADSL
 ADVS
 ADaM
@@ -21,6 +22,7 @@ AENDTM
 AEs
 AFRLT
 ANRLO
+APRLT
 ARRLT
 ASEQ
 AST
@@ -79,6 +81,8 @@ Fridericia's
 Fujimoto
 GDS
 GGT
+GRPID
+GRPNAME
 GSK
 Gault
 Gehan
@@ -120,6 +124,7 @@ NCA
 NCI
 NCICTCAEv
 NFRLT
+NPRLT
 NRRLT
 NUM
 Neutrophil
@@ -140,13 +145,16 @@ QID
 README
 SCE
 SCN
+SCOPEN
 SCr
+SDE
 SDG
 SDGs
 SDTM
 SGPT
 SMQ
 SMQs
+SRCVAR
 SYSBP
 Sagie
 Sagie's
@@ -157,6 +165,8 @@ TADJ
 TADJAE
 TDOSE
 TDURD
+TERMID
+TERMNAME
 TID
 TLFs
 TMF
@@ -177,8 +187,10 @@ adex
 adlb
 adlbhy
 admiralci
+admiralonco
 admiralxxx
 adpc
+adppk
 adsl
 advs
 alanine
@@ -221,6 +233,7 @@ findable
 fmt
 framingham
 funder
+glomerular
 groupwise
 hms
 https
@@ -238,6 +251,7 @@ onwards
 parttime
 pharmaverse
 phosphatase
+poppk
 pre
 prev
 prm

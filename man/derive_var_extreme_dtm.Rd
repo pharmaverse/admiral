@@ -65,10 +65,67 @@ variable is merged to the input dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("admiral_ae")
-data("admiral_lb")
-data("admiral_adsl")
+library(lubridate)
+dm <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+  "PILOT01",    "DM", "01-1130",   84, "YEARS",
+  "PILOT01",    "DM", "01-1133",   81, "YEARS",
+  "PILOT01",    "DM", "01-1211",   76, "YEARS",
+  "PILOT01",    "DM", "09-1081",   86, "YEARS",
+  "PILOT01",    "DM", "09-1088",   69, "YEARS"
+)
+ae <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,     ~AEENDTC,
+  "PILOT01",    "AE", "01-1130",      5, "2014-05-09", "2014-05-09",
+  "PILOT01",    "AE", "01-1130",      6, "2014-05-22",           NA,
+  "PILOT01",    "AE", "01-1130",      4, "2014-05-09", "2014-05-09",
+  "PILOT01",    "AE", "01-1130",      8, "2014-05-22",           NA,
+  "PILOT01",    "AE", "01-1130",      7, "2014-05-22",           NA,
+  "PILOT01",    "AE", "01-1130",      2, "2014-03-09", "2014-03-09",
+  "PILOT01",    "AE", "01-1130",      1, "2014-03-09", "2014-03-16",
+  "PILOT01",    "AE", "01-1130",      3, "2014-03-09", "2014-03-16",
+  "PILOT01",    "AE", "01-1133",      1, "2012-12-27",           NA,
+  "PILOT01",    "AE", "01-1133",      3, "2012-12-27",           NA,
+  "PILOT01",    "AE", "01-1133",      2, "2012-12-27",           NA,
+  "PILOT01",    "AE", "01-1133",      4, "2012-12-27",           NA,
+  "PILOT01",    "AE", "01-1211",      5, "2012-11-29",           NA,
+  "PILOT01",    "AE", "01-1211",      1, "2012-11-16",           NA,
+  "PILOT01",    "AE", "01-1211",      7, "2013-01-11",           NA,
+  "PILOT01",    "AE", "01-1211",      8, "2013-01-11",           NA,
+  "PILOT01",    "AE", "01-1211",      4, "2012-11-22",           NA,
+  "PILOT01",    "AE", "01-1211",      2, "2012-11-21", "2012-11-21",
+  "PILOT01",    "AE", "01-1211",      3, "2012-11-21",           NA,
+  "PILOT01",    "AE", "01-1211",      6, "2012-12-09",           NA,
+  "PILOT01",    "AE", "01-1211",      9, "2013-01-14", "2013-01-14",
+  "PILOT01",    "AE", "09-1081",      2, "2014-05-01",           NA,
+  "PILOT01",    "AE", "09-1081",      1, "2014-04-07",           NA,
+  "PILOT01",    "AE", "09-1088",      1, "2014-05-08",           NA,
+  "PILOT01",    "AE", "09-1088",      2, "2014-08-02",           NA
+)
+lb <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~LBSEQ,             ~LBDTC,
+  "PILOT01",    "LB", "01-1130",    219, "2014-06-07T13:20",
+  "PILOT01",    "LB", "01-1130",    322, "2014-08-16T13:10",
+  "PILOT01",    "LB", "01-1133",    268, "2013-04-18T15:30",
+  "PILOT01",    "LB", "01-1133",    304, "2013-04-29T10:13",
+  "PILOT01",    "LB", "01-1211",      8, "2012-10-30T14:26",
+  "PILOT01",    "LB", "01-1211",    162, "2013-01-08T12:13",
+  "PILOT01",    "LB", "09-1081",     47, "2014-02-01T10:55",
+  "PILOT01",    "LB", "09-1081",    219, "2014-05-10T11:15",
+  "PILOT01",    "LB", "09-1088",    283, "2014-09-27T12:13",
+  "PILOT01",    "LB", "09-1088",    322, "2014-10-09T13:25"
+)
+adsl <- tribble(
+  ~STUDYID,   ~USUBJID,              ~TRTEDTM,
+  "PILOT01", "01-1130", "2014-08-16 23:59:59",
+  "PILOT01", "01-1133", "2013-04-28 23:59:59",
+  "PILOT01", "01-1211", "2013-01-12 23:59:59",
+  "PILOT01", "09-1081", "2014-04-27 23:59:59",
+  "PILOT01", "09-1088", "2014-10-09 23:59:59"
+) \%>\%
+  mutate(
+    TRTEDTM = as_datetime(TRTEDTM)
+  )
 
 # derive last known alive datetime (LSTALVDTM)
 ae_start <- date_source(
@@ -80,9 +137,27 @@ ae_end <- date_source(
   date = convert_dtc_to_dtm(AEENDTC, highest_imputation = "M"),
 )
 
+ae_ext <- ae \%>\%
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AEST",
+    highest_imputation = "M"
+  ) \%>\%
+  derive_vars_dtm(
+    dtc = AEENDTC,
+    new_vars_prefix = "AEEN",
+    highest_imputation = "M"
+  )
+
 lb_date <- date_source(
   dataset_name = "lb",
   date = convert_dtc_to_dtm(LBDTC),
+)
+
+lb_ext <- derive_vars_dtm(
+  lb,
+  dtc = LBDTC,
+  new_vars_prefix = "LB"
 )
 
 adsl_date <- date_source(
@@ -90,14 +165,14 @@ adsl_date <- date_source(
   date = TRTEDTM
 )
 
-admiral_dm \%>\%
+dm \%>\%
   derive_var_extreme_dtm(
     new_var = LSTALVDTM,
     ae_start, ae_end, lb_date, adsl_date,
     source_datasets = list(
-      adsl = admiral_adsl,
-      ae = admiral_ae,
-      lb = admiral_lb
+      adsl = adsl,
+      ae = ae_ext,
+      lb = lb_ext
     ),
     mode = "last"
   ) \%>\%
@@ -143,14 +218,14 @@ adsl_date <- date_source(
   )
 )
 
-admiral_dm \%>\%
+dm \%>\%
   derive_var_extreme_dtm(
     new_var = LSTALVDTM,
     ae_start, ae_end, lb_date, adsl_date,
     source_datasets = list(
-      adsl = admiral_adsl,
-      ae = admiral_ae,
-      lb = admiral_lb
+      adsl = adsl,
+      ae = ae_ext,
+      lb = lb_ext
     ),
     mode = "last"
   ) \%>\%

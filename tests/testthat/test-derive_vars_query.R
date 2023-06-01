@@ -3,14 +3,14 @@
 test_that("derive_vars_query Test 1: Derive CQ and SMQ variables with two term levels", {
   # nolint start
   queries <- tibble::tribble(
-    ~VAR_PREFIX, ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL, ~TERM_NAME,
+    ~PREFIX, ~GRPNAME, ~GRPID, ~SCOPE, ~SCOPEN, ~SRCVAR, ~TERMNAME,
     "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
     "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "AMMONIA ABNORMALL",
     "SMQ03", "Immune-Mediated Hypothyroidism", 20000161, "NARROW", 1, "AEDECOD", "BASEDOW'S DISEASE",
     "SMQ05", "Immune-Mediated Pneumonitis", NA, "NARROW", 1, "AEDECOD", "ALVEOLAR PROTEINOSIS",
     "CQ06", "Some query", 11111, NA, NA, "AELLT", "SOME TERM"
   ) %>% dplyr::mutate(
-    TERM_ID = as.integer(as.factor(.data$TERM_NAME))
+    TERMID = as.integer(as.factor(.data$TERMNAME))
   )
 
   adae <- tibble::tribble(
@@ -35,28 +35,28 @@ test_that("derive_vars_query Test 1: Derive CQ and SMQ variables with two term l
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
 
-## Test 2: Derive when no unique key excluding `TERM_LEVEL` columns ----
-test_that("derive_vars_query Test 2: Derive when no unique key excluding `TERM_LEVEL` columns", {
+## Test 2: Derive when no unique key excluding `SRCVAR` columns ----
+test_that("derive_vars_query Test 2: Derive when no unique key excluding `SRCVAR` columns", {
   query <- tibble::tribble(
-    ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
-    "CQ42", "My Query", "AEDECOD", "PTSI", 1, NA_real_,
-    "CQ42", "My Query", "AELLT", "LLTSI", 1, NA_real_
+    ~PREFIX,  ~GRPNAME,   ~SRCVAR, ~TERMNAME, ~GRPID,  ~TERMID,
+    "CQ42", "My Query", "AEDECOD",    "PTSI",      1, NA_real_,
+    "CQ42", "My Query",   "AELLT",   "LLTSI",      1, NA_real_
   )
 
   my_ae <- tibble::tribble(
-    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT,
-    "1", 1, "PTSI", "other",
-    "1", 2, "something", "LLTSI",
-    "1", 2, "PTSI", "LLTSI",
-    "1", 2, "something", "other"
+    ~USUBJID, ~ASTDY,    ~AEDECOD,  ~AELLT,
+    "1",           1,      "PTSI", "other",
+    "1",           2, "something", "LLTSI",
+    "1",           2,      "PTSI", "LLTSI",
+    "1",           2, "something", "other"
   )
 
   expected_output <- tibble::tribble(
-    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~CQ42NAM, ~CQ42CD,
-    "1", 1, "PTSI", "other", "My Query", 1,
-    "1", 2, "something", "LLTSI", "My Query", 1,
-    "1", 2, "PTSI", "LLTSI", "My Query", 1,
-    "1", 2, "something", "other", NA_character_, NA_integer_
+    ~USUBJID, ~ASTDY,    ~AEDECOD, ~AELLT,       ~CQ42NAM,     ~CQ42CD,
+    "1",           1,      "PTSI", "other",    "My Query",           1,
+    "1",           2, "something", "LLTSI",    "My Query",           1,
+    "1",           2,      "PTSI", "LLTSI",    "My Query",           1,
+    "1",           2, "something", "other", NA_character_, NA_integer_
   )
 
   actual_output <- derive_vars_query(my_ae, dataset_queries = query)
@@ -67,9 +67,9 @@ test_that("derive_vars_query Test 2: Derive when no unique key excluding `TERM_L
 ## Test 3: Derive when an adverse event is in multiple baskets ----
 test_that("derive_vars_query Test 3: Derive when an adverse event is in multiple baskets", {
   query <- tibble::tribble(
-    ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
-    "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA_real_,
-    "CQ42", "My Query 2", "AELLT", "LLTSI", 2, NA_real_
+    ~PREFIX,    ~GRPNAME,   ~SRCVAR, ~TERMNAME, ~GRPID,  ~TERMID,
+    "CQ40", "My Query 1", "AEDECOD",    "PTSI",      1, NA_real_,
+    "CQ42", "My Query 2",   "AELLT",   "LLTSI",      2, NA_real_
   )
 
   my_ae <- tibble::tribble(
@@ -94,10 +94,10 @@ test_that("derive_vars_query Test 3: Derive when an adverse event is in multiple
 })
 
 
-## Test 4: Derive when no QUERY_ID or QUERY_SCOPE column ----
-test_that("derive_vars_query Test 4: Derive when no QUERY_ID or QUERY_SCOPE column", {
+## Test 4: Derive when no GRPID or SCOPE column ----
+test_that("derive_vars_query Test 4: Derive when no GRPID or SCOPE column", {
   query <- tibble::tribble(
-    ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~TERM_ID,
+    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMNAME, ~TERMID,
     "CQ42", "My Query", "AEDECOD", "PTSI", NA_real_,
     "CQ42", "My Query", "AELLT", "LLTSI", NA_real_
   )
@@ -123,10 +123,10 @@ test_that("derive_vars_query Test 4: Derive when no QUERY_ID or QUERY_SCOPE colu
   expect_equal(expected_output, actual_output)
 })
 
-## Test 5: Derive decides between TERM_NAME and TERM_ID based on type ----
-test_that("derive_vars_query Test 5: Derive decides between TERM_NAME and TERM_ID based on type", {
+## Test 5: Derive decides between TERMNAME and TERMID based on type ----
+test_that("derive_vars_query Test 5: Derive decides between TERMNAME and TERMID based on type", {
   query <- tibble::tribble(
-    ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
+    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMNAME, ~GRPID, ~TERMID,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
     "CQ42", "My Query 2", "AELLTCD", NA_character_, 2, 1
   )
@@ -159,96 +159,96 @@ test_that("derive_vars_query Test 5: Derive decides between TERM_NAME and TERM_I
 ## Test 6: assert_valid_queries checks ----
 test_that("assert_valid_queries Test 6: assert_valid_queries checks", {
   query <- tibble::tribble(
-    ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
+    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMNAME, ~GRPID, ~TERMID,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
     "CQ42", "My Query 2", "AELLTCD", NA_character_, 2, 1
   )
 
   expect_error(
     assert_valid_queries(
-      mutate(query, VAR_PREFIX = c("30", "55")),
+      mutate(query, PREFIX = c("30", "55")),
       "test"
     ),
-    regexp = "`VAR_PREFIX` in `test` must start with 2-3 letters.. Problem with `30` and `55`."
+    regexp = "`PREFIX` in `test` must start with 2-3 letters.. Problem with `30` and `55`."
   )
 
   expect_error(
     assert_valid_queries(
-      mutate(query, VAR_PREFIX = c("AA", "BB")),
+      mutate(query, PREFIX = c("AA", "BB")),
       "test"
     ),
-    regexp = "`VAR_PREFIX` in `test` must end with 2-digit numbers. Issue with `AA` and `BB`."
+    regexp = "`PREFIX` in `test` must end with 2-digit numbers. Issue with `AA` and `BB`."
   )
 
   expect_error(
     assert_valid_queries(
-      mutate(query, QUERY_NAME = c("", "A")),
+      mutate(query, GRPNAME = c("", "A")),
       "test"
     ),
-    regexp = "`QUERY_NAME` in `test` cannot be empty string or NA."
+    regexp = "`GRPNAME` in `test` cannot be empty string or NA."
   )
 
   expect_error(
     assert_valid_queries(
-      mutate(query, QUERY_ID = as.character(QUERY_ID)),
+      mutate(query, GRPID = as.character(GRPID)),
       "test"
     ),
-    regexp = "`QUERY_ID` in `test` should be numeric."
+    regexp = "`GRPID` in `test` should be numeric."
   )
 
   expect_error(
     assert_valid_queries(
-      mutate(query, QUERY_SCOPE = letters[1:2]),
+      mutate(query, SCOPE = letters[1:2]),
       "test"
     ),
-    regexp = "`QUERY_SCOPE` in `test` can only be 'BROAD', 'NARROW' or `NA`."
+    regexp = "`SCOPE` in `test` can only be 'BROAD', 'NARROW' or `NA`."
   )
 
   expect_error(
     assert_valid_queries(
-      mutate(query, QUERY_SCOPE_NUM = 10:11),
+      mutate(query, SCOPEN = 10:11),
       "test"
     ),
-    regexp = "`QUERY_SCOPE_NUM` in `test` must be one of 1, 2, or NA. Issue with `10` and `11`."
+    regexp = "`SCOPEN` in `test` must be one of 1, 2, or NA. Issue with `10` and `11`."
   )
 
   expect_error(
     assert_valid_queries(
-      mutate(query, TERM_NAME = c(NA, NA)),
+      mutate(query, TERMNAME = c(NA, NA)),
       "test"
     ),
     regexp = paste(
-      "Either `TERM_NAME` or `TERM_ID` need to be specified in `test`.",
+      "Either `TERMNAME` or `TERMID` need to be specified in `test`.",
       "They both cannot be NA or empty."
     )
   )
 
   expect_error(
     assert_valid_queries(
-      mutate(query, VAR_PREFIX = c("CQ40", "CQ40")),
+      mutate(query, PREFIX = c("CQ40", "CQ40")),
       "test"
     ),
-    regexp = "In `test`, `QUERY_NAME` of 'CQ40' is not unique."
+    regexp = "In `test`, `GRPNAME` of 'CQ40' is not unique."
   )
 
   expect_error(
     assert_valid_queries(
       mutate(
         query,
-        VAR_PREFIX = c("CQ40", "CQ40"),
-        QUERY_NAME = c("My Query 1", "My Query 1")
+        PREFIX = c("CQ40", "CQ40"),
+        GRPNAME = c("My Query 1", "My Query 1")
       ),
       "test"
     ),
-    regexp = "In `test`, `QUERY_ID` of 'CQ40' is not unique."
+    regexp = "In `test`, `GRPID` of 'CQ40' is not unique."
   )
 
   expect_error(
     assert_valid_queries(
       mutate(
         query,
-        QUERY_SCOPE = c("BROAD", "NARROW"),
-        QUERY_SCOPE_NUM = c(1, 1)
+        SCOPE = c("BROAD", "NARROW"),
+        SCOPEN = c(1, 1)
       ),
       "test"
     )
