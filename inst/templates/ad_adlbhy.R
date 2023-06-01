@@ -74,12 +74,12 @@ hylaw_records_fls <- hylaw_records %>%
 
 # Create new parameters based on records that present potential case
 hylaw_params <- derive_param_exist_flag(
-  dataset_adsl = hylaw_records_pts_visits,
+  dataset_ref = hylaw_records_pts_visits,
   dataset_add = hylaw_records_fls,
   condition = CRIT1FL == "Y" & BILI_CRITFL == "Y",
   false_value = "N",
   missing_value = "N",
-  subject_keys = exprs(STUDYID, USUBJID, TRT01A), # add AVISIT, ADT for by visit
+  by_vars = exprs(STUDYID, USUBJID, TRT01A), # add AVISIT, ADT for by visit
   set_values_to = exprs(
     PARAMCD = "HYSLAW",
     PARAM = "ALT/AST >= 3xULN and BILI >= 2xULN"
