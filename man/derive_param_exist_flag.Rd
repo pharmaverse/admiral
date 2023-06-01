@@ -45,18 +45,18 @@ as an event.}
 
 The condition is evaluated at the additional dataset (\code{dataset_add}).
 
-For all subjects where it evaluates as \code{TRUE} at least once \code{AVALC} is set
+For all groups where it evaluates as \code{TRUE} at least once \code{AVALC} is set
 to the true value (\code{true_value}) for the new observations.
 
-For all subjects where it evaluates as \code{FALSE} or \code{NA} for all observations
+For all groups where it evaluates as \code{FALSE} or \code{NA} for all observations
 \code{AVALC} is set to the false value (\code{false_value}).
 
-For all subjects not present in the additional dataset \code{AVALC} is set to
+For all groups not present in the additional dataset \code{AVALC} is set to
 the missing value (\code{missing_value}).}
 
 \item{true_value}{True value
 
-For all subjects with at least one observations in the additional dataset
+For all groups with at least one observations in the additional dataset
 (\code{dataset_add}) fulfilling the event condition (\code{condition}), \code{AVALC} is
 set to the specified value (\code{true_value}).
 
@@ -66,7 +66,7 @@ set to the specified value (\code{true_value}).
 
 \item{false_value}{False value
 
-For all subjects with at least one observations in the additional dataset
+For all groups with at least one observations in the additional dataset
 (\code{dataset_add}) but none of them is fulfilling the event condition
 (\code{condition}), \code{AVALC} is set to the specified value (\code{false_value}).
 
@@ -76,7 +76,7 @@ For all subjects with at least one observations in the additional dataset
 
 \item{missing_value}{Values used for missing information
 
-For all subjects without an observation in the additional dataset
+For all groups without an observation in the additional dataset
 (\code{dataset_add}), \code{AVALC} is set to the specified value (\code{missing_value}).
 
 \emph{Default}: \code{NA_character_}
@@ -96,7 +96,7 @@ analysis value (\code{AVAL})
 
 \emph{Deprecated}, please use \code{set_values_to} instead.}
 
-\item{by_vars}{Variables to uniquely identify a subject
+\item{by_vars}{Variables to uniquely identify a group
 
 A list of symbols created using \code{exprs()} is expected.}
 
