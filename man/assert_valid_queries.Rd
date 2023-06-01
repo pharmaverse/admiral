@@ -20,16 +20,16 @@ Verify if a Dataset Has the Required Format as Queries Dataset.
 \details{
 Check if the dataset has the following columns
 \itemize{
-\item \code{VAR_PREFIX}, e.g., SMQ01, CQ12
-\item \code{QUERY_NAME}, non NA, must be unique per each \code{VAR_PREFIX}
-\item \code{QUERY_ID}, could be NA, must be unique per each \code{VAR_PREFIX}
-\item \code{QUERY_SCOPE}, 'BROAD', 'NARROW', or NA
-\item \code{QUERY_SCOPE_NUM}, 1, 2, or NA
-\item \code{TERM_LEVEL}, e.g., \code{"AEDECOD"}, \code{"AELLT"}, \code{"AELLTCD"}, ...
-\item \code{TERM_NAME}, character, could be NA only at those observations
-where \code{TERM_ID} is non-NA
-\item \code{TERM_ID}, integer, could be NA only at those observations
-where \code{TERM_NAME} is non-NA
+\item \code{PREFIX}, e.g., SMQ01, CQ12
+\item \code{GRPNAME}, non NA, must be unique per each \code{PREFIX}
+\item \code{GRPID}, could be NA, must be unique per each \code{PREFIX}
+\item \code{SCOPE}, 'BROAD', 'NARROW', or NA
+\item \code{SCOPEN}, 1, 2, or NA
+\item \code{SRCVAR}, e.g., \code{"AEDECOD"}, \code{"AELLT"}, \code{"AELLTCD"}, ...
+\item \code{TERMNAME}, character, could be NA only at those observations
+where \code{TERMID} is non-NA
+\item \code{TERMID}, integer, could be NA only at those observations
+where \code{TERMNAME} is non-NA
 }
 }
 \examples{
