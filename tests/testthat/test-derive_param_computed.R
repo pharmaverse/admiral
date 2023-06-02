@@ -214,8 +214,51 @@ test_that("derive_param_computed Test 5: `dataset_add`, creating new parameters"
   )
 })
 
-## Test 6: expression in constant_parameters ----
-test_that("derive_param_computed Test 6: expression in constant_parameters", {
+## Test 6: no input dataset ----
+test_that("derive_param_computed Test 6: no input dataset", {
+  qs <- tibble::tribble(
+    ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
+    "1",      "WEEK 2",  "CHSF112", NA,               1,
+    "1",      "WEEK 2",  "CHSF113", "Yes",           NA,
+    "1",      "WEEK 2",  "CHSF114", NA,               1,
+    "1",      "WEEK 4",  "CHSF112", NA,               2,
+    "1",      "WEEK 4",  "CHSF213", "No",            NA,
+    "1",      "WEEK 4",  "CHSF114", NA,               1
+  )
+
+  expected <- tibble::tribble(
+    ~USUBJID, ~AVISIT,  ~PARAMCD, ~AVAL,
+    "1",      "WEEK 2", "CHSF13",    38,
+    "1",      "WEEK 4", "CHSF13",    25
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = derive_param_computed(
+      dataset_add = qs,
+      by_vars = exprs(USUBJID, AVISIT),
+      parameters = exprs(
+        CHSF12 = QSTESTCD == "CHSF112",
+        CHSF13 = QSTESTCD %in% c("CHSF113", "CHSF213"),
+        CHSF14 = QSTESTCD == "CHSF114"
+      ),
+      analysis_value = case_when(
+        QSORRES.CHSF13 == "Not applicable" ~ 0,
+        QSORRES.CHSF13 == "Yes" ~ 38,
+        QSORRES.CHSF13 == "No" ~ if_else(
+          QSSTRESN.CHSF12 > QSSTRESN.CHSF14,
+          25,
+          0
+        )
+      ),
+      set_values_to = exprs(PARAMCD = "CHSF13")
+    ),
+    keys = c("USUBJID", "PARAMCD", "AVISIT")
+  )
+})
+
+## Test 7: expression in constant_parameters ----
+test_that("derive_param_computed Test 7: expression in constant_parameters", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
@@ -267,8 +310,8 @@ test_that("derive_param_computed Test 6: expression in constant_parameters", {
   )
 })
 
-## Test 7: no new observations if a constant parameter is missing ----
-test_that("derive_param_computed Test 7: no new observations if a constant parameter is missing", {
+## Test 8: no new observations if a constant parameter is missing ----
+test_that("derive_param_computed Test 8: no new observations if a constant parameter is missing", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
@@ -312,8 +355,8 @@ test_that("derive_param_computed Test 7: no new observations if a constant param
 })
 
 # assert_parameters_argument ----
-## Test 8: error if argument is of wrong type ----
-test_that("assert_parameters_argument Test 8: error if argument is of wrong type", {
+## Test 9: error if argument is of wrong type ----
+test_that("assert_parameters_argument Test 9: error if argument is of wrong type", {
   expect_error(
     assert_parameters_argument(myparameters <- c(1, 2, 3)),
     regexp = paste(
@@ -325,8 +368,8 @@ test_that("assert_parameters_argument Test 8: error if argument is of wrong type
 })
 
 # get_hori_data ----
-## Test 9: error if variables with more than one dot ----
-test_that("get_hori_data Test 9: error if variables with more than one dot", {
+## Test 10: error if variables with more than one dot ----
+test_that("get_hori_data Test 10: error if variables with more than one dot", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",

@@ -249,7 +249,7 @@ derive_param_computed <- function(dataset = NULL,
   assert_data_frame(dataset_add, optional = TRUE)
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_varval_list(set_values_to)
-  if (!is.null(set_values_to$PARAMCD)) {
+  if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
   analysis_value <- enexpr(analysis_value)
@@ -258,9 +258,13 @@ derive_param_computed <- function(dataset = NULL,
   constant_parameters <- assert_parameters_argument(constant_parameters, optional = TRUE)
 
   # select observations and variables required for new observations
-  data_source <- dataset %>%
+  if (is.null(dataset)) {
+    data_source <- dataset_add
+  } else {
+    data_source <- dataset %>%
     filter_if(filter) %>%
     bind_rows(dataset_add)
+  }
 
   hori_return <- get_hori_data(
     data_source,
