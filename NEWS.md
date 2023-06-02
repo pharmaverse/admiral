@@ -104,6 +104,9 @@ the `filter_add` argument. (#1725)
 
 - `derive_var_basetype()` was deprecated in favor of `derive_basetype_records()`. (#1796)
 
+- In the function `derive_param_exist_flag()` the arguments `dataset_adsl` and
+`subject_keys` have been renamed to `dataset_ref` and `by_vars` respectively. (#1793)
+
 ## Documentation
 
 - Updated example dataset to trigger deterioration flags in the vignette "Creating Questionnaire ADaMs". (#1853, #1854)
