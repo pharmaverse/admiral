@@ -262,8 +262,8 @@ derive_param_computed <- function(dataset = NULL,
     data_source <- dataset_add
   } else {
     data_source <- dataset %>%
-    filter_if(filter) %>%
-    bind_rows(dataset_add)
+      filter_if(filter) %>%
+      bind_rows(dataset_add)
   }
 
   hori_return <- get_hori_data(
