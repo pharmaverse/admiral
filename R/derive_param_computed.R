@@ -249,7 +249,7 @@ derive_param_computed <- function(dataset = NULL,
   assert_data_frame(dataset_add, optional = TRUE)
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_varval_list(set_values_to)
-  if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
+  if (!is.null(set_values_to$PARAMCD) && !is.null(dataset)) {
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
   analysis_value <- enexpr(analysis_value)
