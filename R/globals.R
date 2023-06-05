@@ -19,6 +19,8 @@ globalVariables(c(
   "AVAL",
   "AVALC",
   "AVALU",
+  "A1HI",
+  "A1LO",
   "BASE",
   "BASEC",
   "BASETYPE",
