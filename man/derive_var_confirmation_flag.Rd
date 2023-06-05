@@ -195,6 +195,7 @@ previous step. For the other observations it is set to \code{false_value}.
 \seealso{
 Other deprecated: 
 \code{\link{derive_param_extreme_event}()},
+\code{\link{derive_var_basetype}()},
 \code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},

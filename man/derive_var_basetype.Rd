@@ -21,6 +21,10 @@ and the expressions are used to subset the input dataset.}
 The input dataset with variable \code{BASETYPE} added
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_basetype_records()} instead.
+
 Baseline Type \code{BASETYPE} is needed when there is more than one definition of
 baseline for a given Analysis Parameter \code{PARAM} in the same dataset.  For a
 given parameter, if Baseline Value \code{BASE} is populated, and there is more than
@@ -29,85 +33,31 @@ any type for that parameter. Each value of \code{BASETYPE} refers to a definitio
 baseline that characterizes the value of \code{BASE} on that row.  Please see
 section 4.2.1.6 of the ADaM Implementation Guide, version 1.3 for further
 background.
-}
-\details{
+
 Adds the \code{BASETYPE} variable to a dataset and duplicates records based upon
 the provided conditions.
-
+}
+\details{
 For each element of \code{basetypes} the input dataset is subset based upon
 the provided expression and the \code{BASETYPE} variable is set to the name of the
 expression. Then, all subsets are stacked. Records which do not match any
 condition are kept and \code{BASETYPE} is set to \code{NA}.
 }
-\examples{
-library(tibble)
-library(dplyr, warn.conflicts = FALSE)
-library(rlang)
-
-bds <- tribble(
-  ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
-  "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
-  "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
-  "P01",    "DOUBLE-BLIND", "PARAM01",     3,   9.2,
-  "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1,
-  "P01",    "OPEN-LABEL",   "PARAM01",     5,  10.4,
-  "P01",    "OPEN-LABEL",   "PARAM01",     6,   9.9,
-  "P02",    "RUN-IN",       "PARAM01",     1,  12.1,
-  "P02",    "DOUBLE-BLIND", "PARAM01",     2,  10.2,
-  "P02",    "DOUBLE-BLIND", "PARAM01",     3,  10.8,
-  "P02",    "OPEN-LABEL",   "PARAM01",     4,  11.4,
-  "P02",    "OPEN-LABEL",   "PARAM01",     5,  10.8
-)
-
-bds_with_basetype <- derive_var_basetype(
-  dataset = bds,
-  basetypes = exprs(
-    "RUN-IN" = EPOCH \%in\% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
-    "DOUBLE-BLIND" = EPOCH \%in\% c("DOUBLE-BLIND", "OPEN-LABEL"),
-    "OPEN-LABEL" = EPOCH == "OPEN-LABEL"
-  )
-)
-
-
-# Below print statement will print all 23 records in the data frame
-# bds_with_basetype
-print(bds_with_basetype, n = Inf)
-
-count(bds_with_basetype, BASETYPE, name = "Number of Records")
-
-# An example where all parameter records need to be included for 2 different
-# baseline type derivations (such as LAST and WORST)
-bds <- tribble(
-  ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
-  "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
-  "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
-  "P01",    "DOUBLE-BLIND", "PARAM01",     3,   9.2,
-  "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1
-)
-
-bds_with_basetype <- derive_var_basetype(
-  dataset = bds,
-  basetypes = exprs(
-    "LAST" = TRUE,
-    "WORST" = TRUE
-  )
-)
-
-print(bds_with_basetype, n = Inf)
-
-count(bds_with_basetype, BASETYPE, name = "Number of Records")
-}
 \seealso{
-BDS-Findings Functions that returns variable appended to dataset: 
-\code{\link{derive_var_analysis_ratio}()},
-\code{\link{derive_var_anrind}()},
-\code{\link{derive_var_atoxgr_dir}()},
-\code{\link{derive_var_atoxgr}()},
-\code{\link{derive_var_base}()},
-\code{\link{derive_var_chg}()},
-\code{\link{derive_var_ontrtfl}()},
-\code{\link{derive_var_pchg}()},
-\code{\link{derive_var_shift}()}
+Other deprecated: 
+\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_var_confirmation_flag}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_last_dose_amt}()},
+\code{\link{derive_var_last_dose_date}()},
+\code{\link{derive_var_last_dose_grp}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_disposition_reason}()},
+\code{\link{derive_vars_last_dose}()},
+\code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()}
 }
-\concept{der_bds_findings}
-\keyword{der_bds_findings}
+\concept{deprecated}
+\keyword{deprecated}
