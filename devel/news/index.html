@@ -59,19 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -122,6 +109,13 @@
 <li><p>The <code>date</code> field of <code><a href="../reference/date_source.html">date_source()</a></code> accepts expressions now. This affects <code><a href="../reference/derive_var_extreme_dt.html">derive_var_extreme_dt()</a></code> and <code><a href="../reference/derive_var_extreme_dtm.html">derive_var_extreme_dtm()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1727" class="external-link">#1727</a>)</p></li>
 <li><p>The <code>date</code> and <code>dthcaus</code> field of <code><a href="../reference/dthcaus_source.html">dthcaus_source()</a></code> accept expressions now. This affects <code><a href="../reference/derive_var_dthcaus.html">derive_var_dthcaus()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1727" class="external-link">#1727</a>)</p></li>
 <li><p>The <code>date</code> field of <code><a href="../reference/event_source.html">event_source()</a></code> and <code><a href="../reference/censor_source.html">censor_source()</a></code> accepts expressions now. This affects <code><a href="../reference/derive_param_tte.html">derive_param_tte()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1727" class="external-link">#1727</a>)</p></li>
+<li>
+<p>The <code><a href="../reference/derive_param_computed.html">derive_param_computed()</a></code> function was enhanced: (<a href="https://github.com/pharmaverse/admiral/issues/1873" class="external-link">#1873</a>)</p>
+<ul><li>The new <code>dataset_add</code> argument allows to consider parameters from a different dataset than the input dataset.</li>
+<li>The new <code>analysis_var</code> argument allows to specify the variable to be populated, e.g., <code>AVALC</code>.</li>
+<li>For <code>parameters</code> and <code>constant_parameters</code> a list of expressions can be specified now. This allows to create temporary parameter codes, e.g., if SDTM data is used as input.</li>
+<li>The <code>analysis_value</code> argument was enhanced such that any variable of the form <code>&lt;variable&gt;.&lt;parameter&gt;</code> can be used, e.g., <code>QSORRES.CHSF13</code>.</li>
+</ul></li>
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-0-11-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-11-0"></a></h3>

@@ -69,19 +69,6 @@ $$MAP = \frac{SYSBP + 2 DIABP}{3}$$"><meta property="og:image" content="https://
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -115,9 +102,11 @@ $$MAP = \frac{SYSBP + 2 DIABP}{3}$$</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">derive_param_computed</span><span class="op">(</span>
-  <span class="va">dataset</span>,
+  dataset <span class="op">=</span> <span class="cn">NULL</span>,
+  dataset_add <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">by_vars</span>,
   <span class="va">parameters</span>,
+  analysis_var <span class="op">=</span> <span class="va">AVAL</span>,
   <span class="va">analysis_value</span>,
   <span class="va">set_values_to</span>,
   filter <span class="op">=</span> <span class="cn">NULL</span>,
@@ -130,11 +119,21 @@ $$MAP = \frac{SYSBP + 2 DIABP}{3}$$</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dataset</dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> parameter, <code>PARAMCD</code>, and <code>AVAL</code>
-are expected.</p>
+<p>The variables specified by the <code>by_vars</code> parameter are expected.</p>
 <p>The variable specified by <code>by_vars</code> and <code>PARAMCD</code> must be a unique key of
 the input dataset after restricting it by the filter condition (<code>filter</code>
 parameter) and to the parameters specified by <code>parameters</code>.</p></dd>
+
+
+<dt>dataset_add</dt>
+<dd><p>Additional dataset</p>
+<p>The variables specified by the <code>by_vars</code> parameter are expected.</p>
+<p>The variable specified by <code>by_vars</code> and <code>PARAMCD</code> must be a unique key of
+the additional dataset after restricting it to the parameters specified by
+<code>parameters</code>.</p>
+<p>If the argument is specified, the observations of the additional dataset
+are considered in addition to the observations from the input dataset
+(<code>dataset</code> restricted by <code>filter</code>).</p></dd>
 
 
 <dt>by_vars</dt>
@@ -150,14 +149,34 @@ in the newly created records.</p>
 <p>It is expected that all parameter codes (<code>PARAMCD</code>) which are required to
 derive the new parameter are specified for this parameter or the
 <code>constant_parameters</code> parameter.</p>
-<p><em>Permitted Values:</em> A character vector of <code>PARAMCD</code> values</p></dd>
+<p>If observations should be considered which do not have a parameter code,
+e.g., if an SDTM dataset is used, temporary parameter codes can be derived
+by specifying a list of expressions. The name of the element defines the
+temporary parameter code and the expression the condition for selecting the
+records. For example <code>parameters = exprs(HGHT = VSTESTCD == "HEIGHT")</code>
+selects the observations with <code>VSTESTCD == "HEIGHT"</code> from the input data
+(<code>dataset</code> and <code>dataset_add</code>), sets <code>PARAMCD = "HGHT"</code> for these
+observations, and adds them to the observations to consider.</p>
+<p>Unnamed elements in the list of expressions are considered as parameter
+codes. For example, <code>parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT")</code> uses the parameter code <code>"WEIGHT"</code> and creates a temporary
+parameter code <code>"HGHT"</code>.</p>
+<p><em>Permitted Values:</em> A character vector of <code>PARAMCD</code> values or a list of expressions</p></dd>
+
+
+<dt>analysis_var</dt>
+<dd><p>Analysis variable</p>
+<p>The specified variable is set to the value of <code>analysis_value</code> for the new
+observations.</p>
+<p><em>Permitted Values</em>: An unquoted symbol</p></dd>
 
 
 <dt>analysis_value</dt>
 <dd><p>Definition of the analysis value</p>
 <p>An expression defining the analysis value (<code>AVAL</code>) of the new parameter is
-expected. The analysis values of the parameters specified by <code>parameters</code>
-can be accessed using <code>AVAL.&lt;parameter code&gt;</code>, e.g., <code>AVAL.SYSBP</code>.</p>
+expected. The values of variables of the parameters specified by
+<code>parameters</code> can be accessed using <code>&lt;variable name&gt;.&lt;parameter code&gt;</code>,
+e.g., <code>AVAL.SYSBP</code>.</p>
+<p>Variable names in the expression must not contain more than one dot.</p>
 <p><em>Permitted Values:</em> An unquoted expression</p></dd>
 
 
@@ -191,7 +210,17 @@ to derive the new parameter and are measured only once are specified here.
 For example if BMI should be derived and height is measured only once while
 weight is measured at each visit. Height could be specified in the
 <code>constant_parameters</code> parameter. (Refer to Example 2)</p>
-<p><em>Permitted Values:</em> A character vector of <code>PARAMCD</code> values</p></dd>
+<p>If observations should be considered which do not have a parameter code,
+e.g., if an SDTM dataset is used, temporary parameter codes can be derived
+by specifying a list of expressions. The name of the element defines the
+temporary parameter code and the expression the condition for selecting the
+records. For example <code>constant_parameters = exprs(HGHT = VSTESTCD == "HEIGHT")</code> selects the observations with <code>VSTESTCD == "HEIGHT"</code> from the
+input data (<code>dataset</code> and <code>dataset_add</code>), sets <code>PARAMCD = "HGHT"</code> for these
+observations, and adds them to the observations to consider.</p>
+<p>Unnamed elements in the list of expressions are considered as parameter
+codes. For example, <code>constant_parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT")</code> uses the parameter code <code>"WEIGHT"</code> and creates a temporary
+parameter code <code>"HGHT"</code>.</p>
+<p><em>Permitted Values:</em> A character vector of <code>PARAMCD</code> values or a list of expressions</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -205,8 +234,9 @@ be populated in the new parameter rows if it is specified in <code>by_vars</code
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>For each group (with respect to the variables specified for the
 <code>by_vars</code> parameter) an observation is added to the output dataset if the
-filtered input dataset contains exactly one observation for each parameter
-code specified for <code>parameters</code>.</p>
+filtered input dataset (<code>dataset</code>) or the additional dataset
+(<code>dataset_add</code>) contains exactly one observation for each parameter code
+specified for <code>parameters</code>.</p>
 <p>For the new observations <code>AVAL</code> is set to the value specified by
 <code>analysis_value</code> and the variables specified for <code>set_values_to</code> are set to
 the provided values. The values of the other variables of the input dataset
@@ -240,15 +270,15 @@ are set to <code>NA</code>.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Example 1: Derive MAP</span></span>
 <span class="r-in"><span class="va">advs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">PARAM</span>, <span class="op">~</span><span class="va">AVAL</span>, <span class="op">~</span><span class="va">AVALU</span>, <span class="op">~</span><span class="va">VISIT</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"DIABP"</span>, <span class="st">"Diastolic Blood Pressure (mmHg)"</span>, <span class="fl">51</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"DIABP"</span>, <span class="st">"Diastolic Blood Pressure (mmHg)"</span>, <span class="fl">50</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"SYSBP"</span>, <span class="st">"Systolic Blood Pressure (mmHg)"</span>, <span class="fl">121</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"SYSBP"</span>, <span class="st">"Systolic Blood Pressure (mmHg)"</span>, <span class="fl">121</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"DIABP"</span>, <span class="st">"Diastolic Blood Pressure (mmHg)"</span>, <span class="fl">79</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"DIABP"</span>, <span class="st">"Diastolic Blood Pressure (mmHg)"</span>, <span class="fl">80</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"SYSBP"</span>, <span class="st">"Systolic Blood Pressure (mmHg)"</span>, <span class="fl">130</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"SYSBP"</span>, <span class="st">"Systolic Blood Pressure (mmHg)"</span>, <span class="fl">132</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>,      <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">PARAM</span>,                            <span class="op">~</span><span class="va">AVAL</span>, <span class="op">~</span><span class="va">AVALU</span>, <span class="op">~</span><span class="va">VISIT</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"DIABP"</span>,  <span class="st">"Diastolic Blood Pressure (mmHg)"</span>,    <span class="fl">51</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"DIABP"</span>,  <span class="st">"Diastolic Blood Pressure (mmHg)"</span>,    <span class="fl">50</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"SYSBP"</span>,  <span class="st">"Systolic Blood Pressure (mmHg)"</span>,    <span class="fl">121</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"SYSBP"</span>,  <span class="st">"Systolic Blood Pressure (mmHg)"</span>,    <span class="fl">121</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"DIABP"</span>,  <span class="st">"Diastolic Blood Pressure (mmHg)"</span>,    <span class="fl">79</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"DIABP"</span>,  <span class="st">"Diastolic Blood Pressure (mmHg)"</span>,    <span class="fl">80</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"SYSBP"</span>,  <span class="st">"Systolic Blood Pressure (mmHg)"</span>,    <span class="fl">130</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"SYSBP"</span>,  <span class="st">"Systolic Blood Pressure (mmHg)"</span>,    <span class="fl">132</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">derive_param_computed</span><span class="op">(</span></span>
@@ -280,15 +310,15 @@ are set to <code>NA</code>.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Example 2: Derive BMI where height is measured only once</span></span>
 <span class="r-in"><span class="va">advs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">PARAM</span>, <span class="op">~</span><span class="va">AVAL</span>, <span class="op">~</span><span class="va">AVALU</span>, <span class="op">~</span><span class="va">VISIT</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"HEIGHT"</span>, <span class="st">"Height (cm)"</span>, <span class="fl">147</span>, <span class="st">"cm"</span>, <span class="st">"SCREENING"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"WEIGHT"</span>, <span class="st">"Weight (kg)"</span>, <span class="fl">54.0</span>, <span class="st">"kg"</span>, <span class="st">"SCREENING"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"WEIGHT"</span>, <span class="st">"Weight (kg)"</span>, <span class="fl">54.4</span>, <span class="st">"kg"</span>, <span class="st">"BASELINE"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"WEIGHT"</span>, <span class="st">"Weight (kg)"</span>, <span class="fl">53.1</span>, <span class="st">"kg"</span>, <span class="st">"WEEK 2"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"HEIGHT"</span>, <span class="st">"Height (cm)"</span>, <span class="fl">163</span>, <span class="st">"cm"</span>, <span class="st">"SCREENING"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"WEIGHT"</span>, <span class="st">"Weight (kg)"</span>, <span class="fl">78.5</span>, <span class="st">"kg"</span>, <span class="st">"SCREENING"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"WEIGHT"</span>, <span class="st">"Weight (kg)"</span>, <span class="fl">80.3</span>, <span class="st">"kg"</span>, <span class="st">"BASELINE"</span>,</span>
-<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"WEIGHT"</span>, <span class="st">"Weight (kg)"</span>, <span class="fl">80.7</span>, <span class="st">"kg"</span>, <span class="st">"WEEK 2"</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>,      <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">PARAM</span>,        <span class="op">~</span><span class="va">AVAL</span>, <span class="op">~</span><span class="va">AVALU</span>, <span class="op">~</span><span class="va">VISIT</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"HEIGHT"</span>, <span class="st">"Height (cm)"</span>, <span class="fl">147.0</span>, <span class="st">"cm"</span>,   <span class="st">"SCREENING"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"WEIGHT"</span>, <span class="st">"Weight (kg)"</span>,  <span class="fl">54.0</span>, <span class="st">"kg"</span>,   <span class="st">"SCREENING"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"WEIGHT"</span>, <span class="st">"Weight (kg)"</span>,  <span class="fl">54.4</span>, <span class="st">"kg"</span>,   <span class="st">"BASELINE"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"WEIGHT"</span>, <span class="st">"Weight (kg)"</span>,  <span class="fl">53.1</span>, <span class="st">"kg"</span>,   <span class="st">"WEEK 2"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"HEIGHT"</span>, <span class="st">"Height (cm)"</span>, <span class="fl">163.0</span>, <span class="st">"cm"</span>,   <span class="st">"SCREENING"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"WEIGHT"</span>, <span class="st">"Weight (kg)"</span>,  <span class="fl">78.5</span>, <span class="st">"kg"</span>,   <span class="st">"SCREENING"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"WEIGHT"</span>, <span class="st">"Weight (kg)"</span>,  <span class="fl">80.3</span>, <span class="st">"kg"</span>,   <span class="st">"BASELINE"</span>,</span>
+<span class="r-in">  <span class="st">"01-701-1028"</span>, <span class="st">"WEIGHT"</span>, <span class="st">"Weight (kg)"</span>,  <span class="fl">80.7</span>, <span class="st">"kg"</span>,   <span class="st">"WEEK 2"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">derive_param_computed</span><span class="op">(</span></span>
@@ -321,6 +351,51 @@ are set to <code>NA</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 01-701-1028 BMI     Body Mass Index (kg/m^2)  29.5 kg/m^2 SCREENING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> 01-701-1028 BMI     Body Mass Index (kg/m^2)  30.2 kg/m^2 BASELINE </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> 01-701-1028 BMI     Body Mass Index (kg/m^2)  30.4 kg/m^2 WEEK 2   </span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Example 3: Using data from an additional dataset and other variables than AVAL</span></span>
+<span class="r-in"><span class="va">qs</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AVISIT</span>,   <span class="op">~</span><span class="va">QSTESTCD</span>, <span class="op">~</span><span class="va">QSORRES</span>, <span class="op">~</span><span class="va">QSSTRESN</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 2"</span>,  <span class="st">"CHSF112"</span>, <span class="cn">NA</span>,               <span class="fl">1</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 2"</span>,  <span class="st">"CHSF113"</span>, <span class="st">"Yes"</span>,           <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 2"</span>,  <span class="st">"CHSF114"</span>, <span class="cn">NA</span>,               <span class="fl">1</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>,  <span class="st">"CHSF112"</span>, <span class="cn">NA</span>,               <span class="fl">2</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>,  <span class="st">"CHSF113"</span>, <span class="st">"No"</span>,            <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>,  <span class="st">"CHSF114"</span>, <span class="cn">NA</span>,               <span class="fl">1</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">adchsf</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AVISIT</span>,  <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">QSORRES</span>, <span class="op">~</span><span class="va">QSSTRESN</span>, <span class="op">~</span><span class="va">AVAL</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 2"</span>, <span class="st">"CHSF12"</span>, <span class="cn">NA</span>,       <span class="fl">1</span>,             <span class="fl">6</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 2"</span>, <span class="st">"CHSF14"</span>, <span class="cn">NA</span>,       <span class="fl">1</span>,             <span class="fl">6</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>, <span class="st">"CHSF12"</span>, <span class="cn">NA</span>,       <span class="fl">2</span>,            <span class="fl">12</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>, <span class="st">"CHSF14"</span>, <span class="cn">NA</span>,       <span class="fl">1</span>,             <span class="fl">6</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu">derive_param_computed</span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">adchsf</span>,</span>
+<span class="r-in">  dataset_add <span class="op">=</span> <span class="va">qs</span>,</span>
+<span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">AVISIT</span><span class="op">)</span>,</span>
+<span class="r-in">  parameters <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">CHSF12</span>, CHSF13 <span class="op">=</span> <span class="va">QSTESTCD</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CHSF113"</span>, <span class="st">"CHSF213"</span><span class="op">)</span>, <span class="va">CHSF14</span><span class="op">)</span>,</span>
+<span class="r-in">  analysis_value <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span class="r-in">    <span class="va">QSORRES.CHSF13</span> <span class="op">==</span> <span class="st">"Not applicable"</span> <span class="op">~</span> <span class="fl">0</span>,</span>
+<span class="r-in">    <span class="va">QSORRES.CHSF13</span> <span class="op">==</span> <span class="st">"Yes"</span> <span class="op">~</span> <span class="fl">38</span>,</span>
+<span class="r-in">    <span class="va">QSORRES.CHSF13</span> <span class="op">==</span> <span class="st">"No"</span> <span class="op">~</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span></span>
+<span class="r-in">      <span class="va">QSSTRESN.CHSF12</span> <span class="op">&gt;</span> <span class="va">QSSTRESN.CHSF14</span>,</span>
+<span class="r-in">      <span class="fl">25</span>,</span>
+<span class="r-in">      <span class="fl">0</span></span>
+<span class="r-in">    <span class="op">)</span></span>
+<span class="r-in">  <span class="op">)</span>,</span>
+<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>PARAMCD <span class="op">=</span> <span class="st">"CHSF13"</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID AVISIT PARAMCD QSORRES QSSTRESN  AVAL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1       WEEK 2 CHSF12  <span style="color: #BB0000;">NA</span>             1     6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 1       WEEK 2 CHSF14  <span style="color: #BB0000;">NA</span>             1     6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 1       WEEK 4 CHSF12  <span style="color: #BB0000;">NA</span>             2    12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 1       WEEK 4 CHSF14  <span style="color: #BB0000;">NA</span>             1     6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 1       WEEK 2 CHSF13  <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>    38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 1       WEEK 4 CHSF13  <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>    25</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

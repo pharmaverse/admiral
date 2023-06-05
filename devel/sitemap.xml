@@ -91,6 +91,9 @@
     <loc>https://pharmaverse.github.io/admiral/devel/reference/assert_db_requirements.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/devel/reference/assert_parameters_argument.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/assert_terms.html</loc>
   </url>
   <url>
@@ -458,6 +461,9 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/get_duplicates_dataset.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/devel/reference/get_hori_data.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/get_imputation_target_date.html</loc>
