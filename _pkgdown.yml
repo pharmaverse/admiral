@@ -11,7 +11,7 @@ repo:
     issue: https://github.com/pharmaverse/admiraldev/issues/
     user: https://github.com/
 news:
-  cran_dates: false
+  cran_dates: true
 
 reference:
 - title: Assertion Functions
