@@ -54,6 +54,16 @@ This affects `derive_var_dthcaus()`. (#1727)
 - The `date` field of `event_source()` and `censor_source()` accepts expressions
 now. This affects `derive_param_tte()`. (#1727)
 
+- The `derive_param_computed()` function was enhanced: (#1873)
+    - The new `dataset_add` argument allows to consider parameters from a
+      different dataset than the input dataset.
+    - The new `analysis_var` argument allows to specify the variable to be
+      populated, e.g., `AVALC`.
+    - For `parameters` and `constant_parameters` a list of expressions can be
+      specified now. This allows to create temporary parameter codes, e.g., if
+      SDTM data is used as input.
+    - The `analysis_value` argument was enhanced such that any variable of the
+      form `<variable>.<parameter>` can be used, e.g., `QSORRES.CHSF13`.
 
 ## Breaking Changes
 

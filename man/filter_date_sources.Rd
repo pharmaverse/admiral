@@ -121,10 +121,12 @@ filter_date_sources(
 \seealso{
 Other Advanced Functions: 
 \code{\link{assert_db_requirements}()},
+\code{\link{assert_parameters_argument}()},
 \code{\link{assert_terms}()},
 \code{\link{assert_valid_queries}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{format.basket_select}()},
+\code{\link{get_hori_data}()},
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
 \code{\link{validate_basket_select}()},
