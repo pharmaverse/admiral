@@ -45,7 +45,7 @@ Phases:
 | Q3-2023         | September 4th                   | September 11th             | 
 |                 | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            | 
 |                 | `{admiral}`                     | `{admiralophtha}`          | 
-| Q4-2023         | December 4th                    | December 12th              | 
+| Q4-2023         | December 4th                    | December 11th              | 
 |                 | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            |
 |                 | `{admiral}`                     | `{admiralophtha}`          |  
 
