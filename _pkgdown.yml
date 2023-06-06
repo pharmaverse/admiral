@@ -15,6 +15,15 @@ repo:
 news:
   cran_dates: true
 
+authors:
+  footer:
+    roles: [aut, ctb, cre, fnd]
+    text: "Developed by"
+  sidebar:
+    roles: [aut]
+  before: "This package is proudly brought to you by:"
+  after: "<our definition of what it means to be an author/contributor>"
+
 reference:
 - title: Derivations for Adding Variables
 - subtitle: All ADaMs
