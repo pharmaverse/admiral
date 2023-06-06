@@ -59,19 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -133,7 +120,7 @@
 <div class="section level3">
 <h3 id="breaking-changes-0-11-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-11-0"></a></h3>
 <ul><li>
-<p><code><a href="../reference/create_query_data.html">create_query_data()</a></code> and <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> updated to rename variables in query data set as follows:</p>
+<p><code><a href="../reference/create_query_data.html">create_query_data()</a></code> and <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> updated to rename variables in query data set as follows: (<a href="https://github.com/pharmaverse/admiral/issues/1907" class="external-link">#1907</a>)</p>
 <ul><li>
 <code>VAR_PREFIX</code> to <code>PREFIX</code>
 </li>
@@ -183,6 +170,7 @@
 </ul></li>
 <li><p><code><a href="../reference/derive_param_extreme_event.html">derive_param_extreme_event()</a></code> was deprecated in favor of <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1725" class="external-link">#1725</a>)</p></li>
 <li><p>The <code>filter</code> argument in <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> was deprecated in favor of the <code>filter_add</code> argument. (<a href="https://github.com/pharmaverse/admiral/issues/1725" class="external-link">#1725</a>)</p></li>
+<li><p><code><a href="../reference/derive_vars_last_dose.html">derive_vars_last_dose()</a></code>, <code><a href="../reference/derive_var_last_dose_amt.html">derive_var_last_dose_amt()</a></code>, <code><a href="../reference/derive_var_last_dose_date.html">derive_var_last_dose_date()</a></code>, <code><a href="../reference/derive_var_last_dose_grp.html">derive_var_last_dose_grp()</a></code>, were deprecated in favor of <code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1797" class="external-link">#1797</a>)</p></li>
 <li><p><code><a href="../reference/derive_var_basetype.html">derive_var_basetype()</a></code> was deprecated in favor of <code><a href="../reference/derive_basetype_records.html">derive_basetype_records()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1796" class="external-link">#1796</a>)</p></li>
 <li><p>In the function <code><a href="../reference/derive_param_exist_flag.html">derive_param_exist_flag()</a></code> the arguments <code>dataset_adsl</code> and <code>subject_keys</code> have been renamed to <code>dataset_ref</code> and <code>by_vars</code> respectively. (<a href="https://github.com/pharmaverse/admiral/issues/1793" class="external-link">#1793</a>)</p></li>
 </ul></div>
@@ -193,6 +181,8 @@
 <li><p>Updated “Lab Grading” Vignette to link to grading metadata available in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> and clarify how abnormal baseline values are assigned in NCI-CTCAEv5. (<a href="https://github.com/pharmaverse/admiral/issues/1863" class="external-link">#1863</a>)</p></li>
 <li><p>Updated “Visit and Period Variables” Vignette to add more detail about Study Specific Code that is required. (<a href="https://github.com/pharmaverse/admiral/issues/1831" class="external-link">#1831</a>)</p></li>
 <li><p>Increased documentation for those functions which are regarded as wrapper functions. (<a href="https://github.com/pharmaverse/admiral/issues/1726" class="external-link">#1726</a>)</p></li>
+<li><p>Examples in function documentation no longer rely on <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(admiral.test)</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1752" class="external-link">#1752</a>)</p></li>
+<li><p>Conferences where <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> was presented were updated on the <code>README.md</code>. (<a href="https://github.com/pharmaverse/admiral/issues/1890" class="external-link">#1890</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="various-0-11-0">Various<a class="anchor" aria-label="anchor" href="#various-0-11-0"></a></h3>
@@ -201,6 +191,7 @@
 <li><p>Examples for <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> were reworked to reduce runtime that occasionally led to failing CI check. (<a href="https://github.com/pharmaverse/admiral/issues/1780" class="external-link">#1780</a>)</p></li>
 <li><p><code><a href="../reference/create_period_dataset.html">create_period_dataset()</a></code> had a bug that led to an error when both DT and DTM columns existed. (<a href="https://github.com/pharmaverse/admiral/issues/1845" class="external-link">#1845</a>)</p></li>
 <li><p>External functions are now consistently imported via namespace. <code>package::function()</code> calls have been removed from <code>admiral</code> functions. (<a href="https://github.com/pharmaverse/admiral/issues/1842" class="external-link">#1842</a>)</p></li>
+<li><p><code><a href="../reference/restrict_derivation.html">restrict_derivation()</a></code> had a bug which led to failure if the <code>derivation</code> argument was not in the global environment. (<a href="https://github.com/pharmaverse/admiral/issues/1765" class="external-link">#1765</a>)</p></li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -867,7 +858,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Thomas Neitmann, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Thomas Neitmann, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, Edoardo Mancini, Stefan Thoma, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
