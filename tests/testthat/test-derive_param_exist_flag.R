@@ -29,15 +29,16 @@ adrs <- tibble::tribble(
   )
 
 # derive_param_merged_exist_flag ----
-## derive_param_merge_exist_flag Test 1: derive parameter indicating PD ----
-test_that("derive_param_exist_flag Test 1: derive parameter indicating PD", {
+## Test 1: derive parameter indicating PD ----
+test_that("derive_param_merged_exist_flag Test 1: derive parameter indicating PD", {
   actual <- derive_param_exist_flag(
-    dataset_adsl = adsl,
+    dataset_ref = adsl,
     dataset_add = adrs,
     filter_add = PARAMCD == "OVR",
     condition = AVALC == "PD",
     false_value = "N",
     set_values_to = exprs(
+      AVAL = yn_to_numeric(AVALC),
       PARAMCD = "PD",
       ANL01FL = "Y"
     )
@@ -62,28 +63,6 @@ test_that("derive_param_exist_flag Test 1: derive parameter indicating PD", {
   )
 })
 
-## derive_param_exist_flag Test 2: error is issued if aval_fun returns wrong type ----
-test_that("derive_param_exist_flag Test 2: error is issued if aval_fun returns wrong type", {
-  expect_error(
-    derive_param_exist_flag(
-      dataset_adsl = adsl,
-      dataset_add = adrs,
-      filter_add = PARAMCD == "OVR",
-      condition = AVALC == "PD",
-      false_value = "N",
-      aval_fun = function(x) x,
-      set_values_to = exprs(
-        PARAMCD = "PD",
-        ANL01FL = "Y"
-      )
-    ),
-    regexp = paste(
-      "Calling `aval_fun(AVALC)` did not result in a numeric vector.\n",
-      "A character vector was returned."
-    ),
-    fixed = TRUE
-  )
-})
 
 
 ## derive_param_exist_flag Test 3: error is issued if paramter already exists in dataset ----
@@ -91,7 +70,7 @@ test_that("derive_param_exist_flag Test 3: error is issued if paramter already e
   expect_error(
     derive_param_exist_flag(
       dataset = adrs,
-      dataset_adsl = adsl,
+      dataset_ref = adsl,
       dataset_add = adrs,
       filter_add = PARAMCD == "OVR",
       condition = AVALC == "PD",
@@ -106,4 +85,37 @@ test_that("derive_param_exist_flag Test 3: error is issued if paramter already e
     ),
     fixed = TRUE
   )
+})
+
+
+
+## derive_param_merge_exist_flag Test 4: warning for deprecated parameter  ----
+test_that("derive_param_exist_flag Test 4: warning for deprecated param `dataset_adsl`", {
+  expect_warning(derive_param_exist_flag(
+    dataset_adsl = adsl,
+    dataset_add = adrs,
+    filter_add = PARAMCD == "OVR",
+    condition = AVALC == "PD",
+    false_value = "N",
+    set_values_to = exprs(
+      PARAMCD = "PD",
+      ANL01FL = "Y"
+    )
+  ))
+})
+
+## derive_param_merge_exist_flag Test 5: warning for deprecated parameter  ----
+test_that("derive_param_exist_flag Test 5: warning for deprecated param `subject_keys`", {
+  expect_warning(derive_param_exist_flag(
+    dataset_ref = adsl,
+    dataset_add = adrs,
+    subject_keys = get_admiral_option("subject_keys"),
+    filter_add = PARAMCD == "OVR",
+    condition = AVALC == "PD",
+    false_value = "N",
+    set_values_to = exprs(
+      PARAMCD = "PD",
+      ANL01FL = "Y"
+    )
+  ))
 })

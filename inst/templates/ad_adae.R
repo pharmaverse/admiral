@@ -87,15 +87,15 @@ ex_ext <- derive_vars_dtm(
 
 adae <- adae %>%
   ## Derive last dose date/time ----
-  derive_var_last_dose_date(
-    ex_ext,
-    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      !is.na(EXSTDTM),
-    dose_date = EXSTDTM,
-    analysis_date = ASTDT,
-    new_var = LDOSEDTM,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    output_datetime = TRUE
+  derive_vars_joined(
+    dataset_add = ex_ext,
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(LDOSEDTM = EXSTDTM),
+    join_vars = exprs(EXSTDTM),
+    order = exprs(EXSTDTM),
+    filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
+    filter_join = EXSTDTM <= ASTDTM,
+    mode = "last"
   ) %>%
   ## Derive severity / causality / ... ----
   mutate(

@@ -98,8 +98,85 @@ test_that("derive_vars_joined Test 3: by_vars with rename", {
   )
 })
 
-## Test 4: no join_vars, no filter_join ----
-test_that("derive_vars_joined Test 4: no join_vars, no filter_join", {
+## Test 4: order with expression ----
+test_that("derive_vars_joined Test 4: order with expression", {
+  adae <- tibble::tribble(
+    ~AEGRPID,
+    "1",
+    "2"
+  ) %>%
+    mutate(
+      TRTSDTM = ymd_hms("2020-01-06T12:00:00")
+    )
+
+  faae <- tibble::tribble(
+    ~FAGRPID, ~FADTC,       ~FAORRES,
+    "1",      "2020-01-01", "1",
+    "1",      "2020-01-03", "2",
+    "1",      "2020-01-05", "3",
+    "1",      "2020-01-08", "4"
+  )
+  expect_dfs_equal(
+    base = mutate(adae, ATOXGR_pre = c("3", NA)),
+    comp = derive_vars_joined(
+      adae,
+      dataset_add = faae,
+      by_vars = exprs(AEGRPID = FAGRPID),
+      order = exprs(FADT = convert_dtc_to_dt(FADTC)),
+      new_vars = exprs(ATOXGR_pre = FAORRES),
+      join_vars = exprs(FADT),
+      filter_join = FADT < TRTSDTM,
+      mode = "last"
+    ),
+    keys = c("AEGRPID")
+  )
+})
+
+## Test 5: join_vars with expression ----
+test_that("derive_vars_joined Test 5: join_vars with expression", {
+  add <- tibble::tribble(
+    ~USUBJID, ~TRDTC,       ~TRSTRESN,
+    "1",      "2020-02-01",        10,
+    "1",      "2020-02-04",        12,
+    "1",      "2020-02-08",        11,
+    "1",      "2020-02-13",         9,
+    "1",      "2020-02-24",        14,
+    "1",      "2020-03-01",        12,
+    "2",      "2021-01-13",         8
+  )
+
+  expected <- tibble::tribble(
+    ~USUBJID, ~ADT,         ~AVAL,
+    "1",      "2020-02-09",    10,
+    "1",      "2020-02-13",     9,
+    "1",      "2020-02-24",     9,
+    "1",      "2020-03-01",     9,
+    "2",      "2021-01-13",     8
+  ) %>%
+    mutate(
+      ADT = ymd(ADT)
+    )
+
+  expect_dfs_equal(
+    base = expected,
+    comp = derive_vars_joined(
+      select(expected, -AVAL),
+      dataset_add = add,
+      by_vars = exprs(USUBJID),
+      order = exprs(TRSTRESN),
+      new_vars = exprs(AVAL = TRSTRESN),
+      join_vars = exprs(TRDT = convert_dtc_to_dt(TRDTC)),
+      filter_join = TRDT <= ADT,
+      mode = "first",
+      check_type = "none"
+    ),
+    keys = c("USUBJID", "ADT")
+  )
+})
+
+
+## Test 6: no join_vars, no filter_join ----
+test_that("derive_vars_joined Test 6: no join_vars, no filter_join", {
   adae <- tibble::tribble(
     ~AEGRPID,
     "1",
@@ -128,5 +205,40 @@ test_that("derive_vars_joined Test 4: no join_vars, no filter_join", {
       mode = "first"
     ),
     keys = c("AEGRPID")
+  )
+})
+
+## Test 7: new_vars expressions using variables from both datasets ----
+test_that("derive_vars_joined Test 7: new_vars expressions using variables from both datasets", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~ASTDT,       ~AESEQ, ~LSTDSDUR,
+    "1",      "2020-02-02",      1,        14,
+    "1",      "2020-02-04",      2,         2
+  ) %>%
+    mutate(ASTDT = ymd(ASTDT))
+
+  ex <- tibble::tribble(
+    ~USUBJID, ~EXSDTC,
+    "1",      "2020-01-10",
+    "1",      "2020-01",
+    "1",      "2020-01-20",
+    "1",      "2020-02-03"
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = derive_vars_joined(
+      select(expected, -LSTDSDUR),
+      dataset_add = ex,
+      by_vars = exprs(USUBJID),
+      order = exprs(EXSDT = convert_dtc_to_dt(EXSDTC)),
+      new_vars = exprs(LSTDSDUR = compute_duration(
+        start_date = EXSDT, end_date = ASTDT
+      )),
+      filter_add = !is.na(EXSDT),
+      filter_join = EXSDT <= ASTDT,
+      mode = "last"
+    ),
+    keys = c("USUBJID", "AESEQ")
   )
 })

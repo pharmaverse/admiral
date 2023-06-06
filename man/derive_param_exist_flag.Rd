@@ -6,34 +6,36 @@
 \usage{
 derive_param_exist_flag(
   dataset = NULL,
-  dataset_adsl,
+  dataset_ref,
   dataset_add,
   condition,
   true_value = "Y",
   false_value = NA_character_,
   missing_value = NA_character_,
   filter_add = NULL,
-  aval_fun = yn_to_numeric,
-  subject_keys = get_admiral_option("subject_keys"),
-  set_values_to
+  aval_fun,
+  by_vars = get_admiral_option("subject_keys"),
+  set_values_to,
+  dataset_adsl,
+  subject_keys
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified for \code{subject_keys} and the \code{PARAMCD} variable are
+The variables specified for \code{by_vars} and the \code{PARAMCD} variable are
 expected.}
 
-\item{dataset_adsl}{ADSL input dataset
+\item{dataset_ref}{Reference dataset, e.g., ADSL
 
-The variables specified for \code{subject_keys} are expected. For each subject
-(as defined by \code{subject_keys}) from the specified dataset (\code{dataset_adsl}),
+The variables specified in \code{by_vars} are expected. For each group
+(as defined by \code{by_vars}) from the specified dataset (\code{dataset_ref}),
 the existence flag is calculated and added as a new observation to the
-input datasets (\code{dataset})}
+input datasets (\code{dataset}).}
 
 \item{dataset_add}{Additional dataset
 
-The variables specified by the \code{subject_keys} parameter are expected.
+The variables specified by the \code{by_vars} parameter are expected.
 
 This dataset is used to check if an event occurred or not. Any observation
 in the dataset fulfilling the event condition (\code{condition}) is considered
@@ -43,18 +45,18 @@ as an event.}
 
 The condition is evaluated at the additional dataset (\code{dataset_add}).
 
-For all subjects where it evaluates as \code{TRUE} at least once \code{AVALC} is set
+For all groups where it evaluates as \code{TRUE} at least once \code{AVALC} is set
 to the true value (\code{true_value}) for the new observations.
 
-For all subjects where it evaluates as \code{FALSE} or \code{NA} for all observations
+For all groups where it evaluates as \code{FALSE} or \code{NA} for all observations
 \code{AVALC} is set to the false value (\code{false_value}).
 
-For all subjects not present in the additional dataset \code{AVALC} is set to
+For all groups not present in the additional dataset \code{AVALC} is set to
 the missing value (\code{missing_value}).}
 
 \item{true_value}{True value
 
-For all subjects with at least one observations in the additional dataset
+For all groups with at least one observations in the additional dataset
 (\code{dataset_add}) fulfilling the event condition (\code{condition}), \code{AVALC} is
 set to the specified value (\code{true_value}).
 
@@ -64,7 +66,7 @@ set to the specified value (\code{true_value}).
 
 \item{false_value}{False value
 
-For all subjects with at least one observations in the additional dataset
+For all groups with at least one observations in the additional dataset
 (\code{dataset_add}) but none of them is fulfilling the event condition
 (\code{condition}), \code{AVALC} is set to the specified value (\code{false_value}).
 
@@ -74,7 +76,7 @@ For all subjects with at least one observations in the additional dataset
 
 \item{missing_value}{Values used for missing information
 
-For all subjects without an observation in the additional dataset
+For all groups without an observation in the additional dataset
 (\code{dataset_add}), \code{AVALC} is set to the specified value (\code{missing_value}).
 
 \emph{Default}: \code{NA_character_}
@@ -92,12 +94,9 @@ considered.
 \item{aval_fun}{Function to map character analysis value (\code{AVALC}) to numeric
 analysis value (\code{AVAL})
 
-The (first) argument of the function must expect a character vector and the
-function must return a numeric vector.
+\emph{Deprecated}, please use \code{set_values_to} instead.}
 
-\emph{Default:} \code{yn_to_numeric} (see \code{yn_to_numeric()} for details)}
-
-\item{subject_keys}{Variables to uniquely identify a subject
+\item{by_vars}{Variables to uniquely identify a group
 
 A list of symbols created using \code{exprs()} is expected.}
 
@@ -105,12 +104,16 @@ A list of symbols created using \code{exprs()} is expected.}
 
 A named list returned by \code{exprs()} defining the variables to be set for the
 new parameter, e.g. \code{exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at Baseline")} is expected. The values must be symbols, character strings,
-numeric values, or \code{NA}.}
+numeric values, \code{NA}, or expressions.}
+
+\item{dataset_adsl}{\emph{Deprecated}, please use \code{dataset_ref} instead.}
+
+\item{subject_keys}{\emph{Deprecated}, please use \code{by_vars} instead.}
 }
 \value{
 The input dataset with a new parameter indicating if an event
-occurred (\code{AVALC}, \code{AVAL}, and the variables specified by \code{subject_keys}
-and \code{set_value_to} are populated for the new parameter)
+occurred (\code{AVALC} and the variables specified by \code{by_vars}
+and \code{set_value_to} are populated for the new parameter).
 }
 \description{
 Add a new parameter indicating that a certain event exists in a dataset.
@@ -122,18 +125,17 @@ baseline.
 \enumerate{
 \item The additional dataset (\code{dataset_add}) is restricted to the observations
 matching the \code{filter_add} condition.
-\item For each subject in \code{dataset_adsl} a new observation is created.
+\item For each group in \code{dataset_ref} a new observation is created.
 \itemize{
 \item The \code{AVALC} variable is added and set to the true value (\code{true_value})
-if for the subject at least one observation exists in the (restricted)
+if for the group at least one observation exists in the (restricted)
 additional dataset where the condition evaluates to \code{TRUE}.
-\item It is set to the false value (\code{false_value}) if for the subject at least
+\item It is set to the false value (\code{false_value}) if for the group at least
 one observation exists and for all observations the condition evaluates
 to \code{FALSE} or \code{NA}.
 \item Otherwise, it is set to the missing value (\code{missing_value}), i.e., for
-those subject not in \code{dataset_add}.
+those groups not in \code{dataset_add}.
 }
-\item The \code{AVAL} variable is added and set to \code{aval_fun(AVALC)}.
 \item The variables specified by the \code{set_values_to} parameter are added to
 the new observations.
 \item The new observations are added to input dataset.
@@ -168,13 +170,14 @@ tu <- tribble(
   )
 
 derive_param_exist_flag(
-  dataset_adsl = adsl,
+  dataset_ref = adsl,
   dataset_add = tu,
   filter_add = TUTESTCD == "TUMIDENT" & VISIT == "SCREENING",
   condition = TUSTRESC == "TARGET",
   false_value = "N",
   missing_value = "N",
   set_values_to = exprs(
+    AVAL = yn_to_numeric(AVALC),
     PARAMCD = "MDIS",
     PARAM = "Measurable Disease at Baseline"
   )
@@ -192,7 +195,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_computed}()},
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_param_extreme_record}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

@@ -57,6 +57,9 @@
 #'
 #'   The observations are ordered by the specified order.
 #'
+#'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))`
+#'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
 #'   The specified variable is added to the input dataset and set to the
@@ -128,7 +131,7 @@
 #'   `join_type` and `order`.
 #'
 #'   The dataset from the example in the previous step with `join_type =
-#'   "after"` and order = exprs(AVISITN)` is restricted to
+#'   "after"` and `order = exprs(AVISITN)` is restricted to
 #'
 #'   ```{r eval=FALSE}
 #'   A tibble: 4 x 6
@@ -334,7 +337,7 @@ filter_joined <- function(dataset,
       case_sensitive = FALSE
     )
   first_cond <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
-  assert_order_vars(order)
+  assert_expr_list(order)
   tmp_obs_nr_var <- assert_symbol(enexpr(tmp_obs_nr_var), optional = TRUE)
   filter <- assert_filter_cond(enexpr(filter))
   check_type <-
@@ -547,176 +550,4 @@ max_cond <- function(var, cond) {
   } else {
     max(var[cond])
   }
-}
-
-#' Filter Confirmed Observations
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*, please use `filter_joined()` instead.
-#'
-#' @param dataset Input dataset
-#'
-#'   The variables specified for `by_vars`, `join_vars`, and `order` are
-#'   expected.
-#'
-#' @param by_vars By variables
-#'
-#'   The specified variables are used as by variables for joining the input
-#'   dataset with itself.
-#'
-#' @param join_vars Variables to keep from joined dataset
-#'
-#'   The variables needed from the other observations should be specified for
-#'   this parameter. The specified variables are added to the joined dataset
-#'   with suffix ".join". For example to select all observations with `AVALC ==
-#'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
-#'   exprs(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
-#'   AVISITN < AVISITN.join` could be specified.
-#'
-#'   The `*.join` variables are not included in the output dataset.
-#'
-#' @param join_type Observations to keep after joining
-#'
-#'   The argument determines which of the joined observations are kept with
-#'   respect to the original observation. For example, if `join_type =
-#'   "after"` is specified all observations after the original observations are
-#'   kept.
-#'
-#'   *Permitted Values:* `"before"`, `"after"`, `"all"`
-#'
-#' @param first_cond Condition for selecting range of data
-#'
-#'   If this argument is specified, the other observations are restricted up to
-#'   the first observation where the specified condition is fulfilled. If the
-#'   condition is not fulfilled for any of the subsequent observations, all
-#'   observations are removed.
-#'
-#' @param order Order
-#'
-#'   The observations are ordered by the specified order.
-#'
-#' @param tmp_obs_nr_var Temporary observation number
-#'
-#'   The specified variable is added to the input dataset and set to the
-#'   observation number with respect to `order`. For each by group (`by_vars`)
-#'   the observation number starts with `1`. The variable can be used in the
-#'   conditions (`filter`, `first_cond`). It is not included in the output
-#'   dataset. It can be used to select consecutive observations or the last
-#'   observation (see last example below).
-#'
-#' @param filter Condition for selecting observations
-#'
-#'   The filter is applied to the joined dataset for selecting the confirmed
-#'   observations. The condition can include summary functions. The joined
-#'   dataset is grouped by the original observations. I.e., the summary function
-#'   are applied to all observations up to the confirmation observation. For
-#'   example in the oncology setting when using this function for confirmed best
-#'   overall response,  `filter = AVALC == "CR" & all(AVALC.join %in% c("CR",
-#'   "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1` selects
-#'   observations with response "CR" and for all observations up to the
-#'   confirmation observation the response is "CR" or "NE" and there is at most
-#'   one "NE".
-#'
-#' @param check_type Check uniqueness?
-#'
-#'   If `"warning"` or `"error"` is specified, the specified message is issued
-#'   if the observations of the input dataset are not unique with respect to the
-#'   by variables and the order.
-#'
-#'   *Default:* `"none"`
-#'
-#'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
-#'
-#' @details
-#'
-#'   The following steps are performed to produce the output dataset.
-#'
-#'   ## Step 1
-#'
-#'   The input dataset is joined with itself by the variables specified for
-#'   `by_vars`. From the right hand side of the join only the variables
-#'   specified for `join_vars` are kept. The suffix ".join" is added to these
-#'   variables.
-#'
-#'   For example, for `by_vars = USUBJID`, `join_vars = exprs(AVISITN, AVALC)` and input dataset
-#'
-#'   ```{r eval=FALSE}
-#'   # A tibble: 2 x 4
-#'   USUBJID AVISITN AVALC  AVAL
-#'   <chr>     <dbl> <chr> <dbl>
-#'   1             1 Y         1
-#'   1             2 N         0
-#'   ```
-#'
-#'   the joined dataset is
-#'
-#'   ```{r eval=FALSE}
-#'   A tibble: 4 x 6
-#'   USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
-#'   <chr>     <dbl> <chr> <dbl>        <dbl> <chr>
-#'   1             1 Y         1            1 Y
-#'   1             1 Y         1            2 N
-#'   1             2 N         0            1 Y
-#'   1             2 N         0            2 N
-#'   ```
-#'
-#'   ## Step 2
-#'
-#'   The joined dataset is restricted to observations with respect to
-#'   `join_type` and `order`.
-#'
-#'   The dataset from the example in the previous step with `join_type =
-#'   "after"` and order = exprs(AVISITN)` is restricted to
-#'
-#'   ```{r eval=FALSE}
-#'   A tibble: 4 x 6
-#'   USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
-#'   <chr>     <dbl> <chr> <dbl>        <dbl> <chr>
-#'   1             1 Y         1            2 N
-#'   ```
-#'
-#'   ## Step 3
-#'
-#'   If `first_cond` is specified, for each observation of the input dataset the
-#'   joined dataset is restricted to observations up to the first observation
-#'   where `first_cond` is fulfilled (the observation fulfilling the condition
-#'   is included). If for an observation of the input dataset the condition is
-#'   not fulfilled, the observation is removed.
-#'
-#'   ## Step 4
-#'
-#'   The joined dataset is grouped by the observations from the input dataset
-#'   and restricted to the observations fulfilling the condition specified by
-#'   `filter`.
-#'
-#'   ## Step 5
-#'
-#'   The first observation of each group is selected and the `*.join` variables
-#'   are dropped.
-#'
-#' @returns A subset of the observations of the input dataset. All variables of
-#'   the input dataset are included in the output dataset.
-#'
-#'
-#' @keywords deprecated
-#' @family deprecated
-#'
-#' @export
-#'
-filter_confirmation <- function(dataset,
-                                by_vars,
-                                join_vars,
-                                join_type,
-                                first_cond = NULL,
-                                order,
-                                tmp_obs_nr_var = NULL,
-                                filter,
-                                check_type = "warning") {
-  deprecate_stop(
-    "0.10.0",
-    "filter_confirmation()",
-    details = "Please use `filter_joined()` instead."
-  )
 }

@@ -181,8 +181,8 @@ advs <- advs %>%
 ## Derive baseline flags ----
 advs <- advs %>%
   # Calculate BASETYPE
-  derive_var_basetype(
-    basetypes = rlang::exprs(
+  derive_basetype_records(
+    basetypes = exprs(
       "LAST: AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
       "LAST: AFTER STANDING FOR 1 MINUTE" = ATPTN == 816,
       "LAST: AFTER STANDING FOR 3 MINUTES" = ATPTN == 817,
@@ -247,24 +247,17 @@ advs <- advs %>%
 advs <- advs %>%
   # Assign TRTA, TRTP
   # Create End of Treatment Record
-  restrict_derivation(
-    derivation = derive_var_extreme_flag,
-    args = params(
-      by_vars = exprs(STUDYID, USUBJID, PARAMCD, ATPTN),
-      order = exprs(ADT),
-      new_var = EOTFL,
-      mode = "last"
-    ),
-    filter = (4 < VISITNUM &
-      VISITNUM <= 13 & ANL01FL == "Y" & is.na(DTYPE))
+  derive_extreme_records(
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, ATPTN),
+    order = exprs(ADT, AVISITN, AVAL),
+    mode = "last",
+    filter_add = (4 < AVISITN & AVISITN <= 13 & ANL01FL == "Y" & is.na(DTYPE)),
+    set_values_to = exprs(
+      AVISIT = "End of Treatment",
+      AVISITN = 99,
+      DTYPE = "LOV"
+    )
   ) %>%
-  filter(EOTFL == "Y") %>%
-  mutate(
-    AVISIT = "End of Treatment",
-    AVISITN = 99
-  ) %>%
-  union_all(advs) %>%
-  select(-EOTFL) %>%
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A

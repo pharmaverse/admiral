@@ -36,7 +36,7 @@ All observations in the specified dataset fulfilling the condition
 specified by \code{filter_source} are considered as an event.
 
 The variables specified by the \code{subject_keys} and
-\code{order} parameter (if applicable) are expected.}
+\code{order} argument (if applicable) are expected.}
 
 \item{filter_source}{Source filter
 
@@ -51,8 +51,8 @@ For all other subjects \code{new_var} is set to \code{false_value}.}
 
 List of symbols for sorting the source dataset (\code{dataset_source}).
 
-\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))}.}
+\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}.}
 
 \item{new_var}{New variable
 
@@ -85,15 +85,15 @@ A list of symbols created using \code{exprs()} is expected.}
 A named list returned by \code{exprs()} defining the variables to be set for the
 new parameter, e.g. \code{exprs(PARAMCD = "PD", PARAM = "Disease Progression")}
 is expected. The values must be symbols, character strings, numeric values,
-or \code{NA}. Note, if you require a date or datetime variable to be populated,
-this needs to be defined here.}
+\code{NA}, or an expression. Note, if you require a date or datetime variable to
+be populated, this needs to be defined here.}
 
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, a message is issued if the
-observations of the input dataset restricted to the source parameter
-(\code{source_param}) are not unique with respect to the subject keys
-(\code{subject_key} parameter) and order variables (\code{order} parameter).
+observations of the source dataset (\code{dataset_source}) restricted by
+\code{filter_source} are not unique with respect to the subject keys
+(\code{subject_key} argument) and \code{order}.
 
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 }
@@ -102,116 +102,49 @@ The input dataset with a new parameter indicating if and when an
 event occurred
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_extreme_records()} instead.
+
 Add a new parameter for the first or last event occurring in a dataset. The
-variable given in \code{new_var} indicates if an event occurred or not. For example,
-the function can derive a parameter for the first disease progression.
+variable given in \code{new_var} indicates if an event occurred or not. For
+example, the function can derive a parameter for the first disease
+progression.
 }
 \details{
 \enumerate{
 \item The source dataset (\code{dataset_source}) is restricted to observations fulfilling
 \code{filter_source}.
 \item For each subject (with respect to the variables specified for the
-\code{subject_keys} parameter) either the first or last observation from the restricted
+\code{subject_keys} argument) either the first or last observation from the restricted
 source dataset is selected. This is depending on \code{mode}, (with respect to \code{order},
-if applicable) where the event condition (\code{filter_source} parameter) is fulfilled.
+if applicable) where the event condition (\code{filter_source} argument) is fulfilled.
 \item For each observation in \code{dataset_adsl} a new observation is created. For
 subjects with event \code{new_var} is set to \code{true_value}. For all other
 subjects \code{new_var} is set to \code{false_value}.
 For subjects with event all variables from \code{dataset_source} are kept. For
 subjects without event all variables which are in both \code{dataset_adsl} and
 \code{dataset_source} are kept.
-\item The variables specified by the \code{set_values_to} parameter are added to
+\item The variables specified by the \code{set_values_to} argument are added to
 the new observations.
 \item The new observations are added to input dataset.
 }
 }
-\examples{
-library(tibble)
-library(dplyr, warn.conflicts = FALSE)
-library(lubridate)
-
-# Derive a new parameter for the first disease progression (PD)
-adsl <- tribble(
-  ~USUBJID, ~DTHDT,
-  "1",      ymd("2022-05-13"),
-  "2",      ymd(""),
-  "3",      ymd("")
-) \%>\%
-  mutate(STUDYID = "XX1234")
-
-adrs <- tribble(
-  ~USUBJID, ~ADTC,        ~AVALC,
-  "1",      "2020-01-02", "PR",
-  "1",      "2020-02-01", "CR",
-  "1",      "2020-03-01", "CR",
-  "1",      "2020-04-01", "SD",
-  "2",      "2021-06-15", "SD",
-  "2",      "2021-07-16", "PD",
-  "2",      "2021-09-14", "PD"
-) \%>\%
-  mutate(
-    STUDYID = "XX1234",
-    ADT = ymd(ADTC),
-    PARAMCD = "OVR",
-    PARAM = "Overall Response",
-    ANL01FL = "Y"
-  ) \%>\%
-  select(-ADTC)
-
-derive_param_extreme_event(
-  adrs,
-  dataset_adsl = adsl,
-  dataset_source = adrs,
-  filter_source = PARAMCD == "OVR" & AVALC == "PD",
-  order = exprs(ADT),
-  new_var = AVALC,
-  true_value = "Y",
-  false_value = "N",
-  mode = "first",
-  set_values_to = exprs(
-    PARAMCD = "PD",
-    PARAM = "Disease Progression",
-    ANL01FL = "Y",
-    ADT = ADT
-  )
-)
-
-# derive parameter indicating death
-derive_param_extreme_event(
-  dataset_adsl = adsl,
-  dataset_source = adsl,
-  filter_source = !is.na(DTHDT),
-  new_var = AVALC,
-  true_value = "Y",
-  false_value = "N",
-  mode = "first",
-  set_values_to = exprs(
-    PARAMCD = "DEATH",
-    PARAM = "Death",
-    ANL01FL = "Y",
-    ADT = DTHDT
-  )
-)
-}
 \seealso{
-BDS-Findings Functions for adding Parameters/Records: 
-\code{\link{default_qtc_paramcd}()},
-\code{\link{derive_expected_records}()},
-\code{\link{derive_extreme_event}()},
-\code{\link{derive_extreme_records}()},
-\code{\link{derive_locf_records}()},
-\code{\link{derive_param_bmi}()},
-\code{\link{derive_param_bsa}()},
-\code{\link{derive_param_computed}()},
-\code{\link{derive_param_doseint}()},
-\code{\link{derive_param_exist_flag}()},
-\code{\link{derive_param_exposure}()},
-\code{\link{derive_param_framingham}()},
-\code{\link{derive_param_map}()},
-\code{\link{derive_param_qtc}()},
-\code{\link{derive_param_rr}()},
-\code{\link{derive_param_wbc_abs}()},
-\code{\link{derive_summary_records}()}
+Other deprecated: 
+\code{\link{derive_var_basetype}()},
+\code{\link{derive_var_confirmation_flag}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_last_dose_amt}()},
+\code{\link{derive_var_last_dose_date}()},
+\code{\link{derive_var_last_dose_grp}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_disposition_reason}()},
+\code{\link{derive_vars_last_dose}()},
+\code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()}
 }
-\concept{der_prm_bds_findings}
-\keyword{der_prm_bds_findings}
+\concept{deprecated}
+\keyword{deprecated}

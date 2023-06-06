@@ -40,7 +40,7 @@
 #'
 #' @rdname dose_freq_lookup
 
-dose_freq_lookup <- tibble::tribble(
+dose_freq_lookup <- tribble(
   ~NCI_CODE, ~CDISC_VALUE,
   "C64526", "1 TIME PER WEEK",
   "C139179", "10 DAYS PER MONTH",
@@ -472,7 +472,7 @@ create_single_dose_dataset <- function(dataset,
 
   # Checking that the dates specified follow the ADaM naming convention of ending in DT
   start_datec <- as_string(as_name(start_date))
-  start_date_chk <- stringr::str_locate_all(start_datec, "DT")
+  start_date_chk <- str_locate_all(start_datec, "DT")
   start_date_chk_pos <- as.vector(start_date_chk[[1]])
 
   if (str_length(start_datec) != start_date_chk_pos[-1]) {
@@ -484,7 +484,7 @@ create_single_dose_dataset <- function(dataset,
   }
 
   end_datec <- as_string(as_name(end_date))
-  end_date_chk <- stringr::str_locate_all(end_datec, "DT")
+  end_date_chk <- str_locate_all(end_datec, "DT")
   end_date_chk_pos <- as.vector(end_date_chk[[1]])
 
   if (str_length(end_datec) != end_date_chk_pos[-1]) {
@@ -583,8 +583,8 @@ create_single_dose_dataset <- function(dataset,
     by = as.character(dose_freq)
   )
 
-  if (any(data_not_once$DOSE_WINDOW %in% c("MINUTE", "HOUR")) &
-    (is.null(start_datetime) | is.null(end_datetime))) {
+  if (any(data_not_once$DOSE_WINDOW %in% c("MINUTE", "HOUR")) &&
+    (is.null(start_datetime) || is.null(end_datetime))) {
     abort(
       paste(
         "There are dose frequencies more frequent than once a day.",

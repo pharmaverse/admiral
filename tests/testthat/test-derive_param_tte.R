@@ -332,9 +332,9 @@ test_that("derive_param_tte Test 4: error is issued if DTC variables specified f
 ## Test 5: by_vars parameter works correctly ----
 test_that("derive_param_tte Test 5: by_vars parameter works correctly", {
   adsl <- tibble::tribble(
-    ~USUBJID, ~TRTSDT,           ~EOSDT,
-    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
-    "02",     ymd("2021-01-16"), ymd("2021-02-03")
+    ~USUBJID, ~TRTSDT,           ~TRTEDT,           ~EOSDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-02"), ymd("2021-03-06"),
+    "02",     ymd("2021-01-16"), ymd("2021-01-20"), ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
@@ -360,24 +360,24 @@ test_that("derive_param_tte Test 5: by_vars parameter works correctly", {
     )
   )
 
-  eos <- censor_source(
+  eot <- censor_source(
     dataset_name = "adsl",
-    date = EOSDT,
+    date = pmin(TRTEDT + days(10), EOSDT),
     censor = 1,
     set_values_to = exprs(
-      EVENTDESC = "END OF STUDY",
+      EVENTDESC = "END OF TRT",
       SRCDOM = "ADSL",
-      SRCVAR = "EOSDT"
+      SRCVAR = "TRTEDT"
     )
   )
 
   # nolint start
   expected_output <- tibble::tribble(
-    ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ, ~PARCAT2, ~PARAMCD,
-    "01",     ymd("2021-01-01"),    0L, "AE",           "AE",    "AESTDTC",       3, "Flu",    "TTAE2",
-    "02",     ymd("2021-02-03"),    1L, "END OF STUDY", "ADSL",  "EOSDT",        NA, "Flu",    "TTAE2",
-    "01",     ymd("2021-03-04"),    0L, "AE",           "AE",    "AESTDTC",       2, "Cough",  "TTAE1",
-    "02",     ymd("2021-02-03"),    1L, "END OF STUDY", "ADSL",  "EOSDT",        NA, "Cough",  "TTAE1"
+    ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,   ~SRCDOM, ~SRCVAR,   ~SRCSEQ, ~PARCAT2, ~PARAMCD,
+    "01",     ymd("2021-01-01"),    0L, "AE",         "AE",    "AESTDTC",       3, "Flu",    "TTAE2",
+    "02",     ymd("2021-01-30"),    1L, "END OF TRT", "ADSL",  "TRTEDT",       NA, "Flu",    "TTAE2",
+    "01",     ymd("2021-03-04"),    0L, "AE",         "AE",    "AESTDTC",       2, "Cough",  "TTAE1",
+    "02",     ymd("2021-01-30"),    1L, "END OF TRT", "ADSL",  "TRTEDT",       NA, "Cough",  "TTAE1"
   ) %>%
     # nolint end
     mutate(
@@ -393,7 +393,7 @@ test_that("derive_param_tte Test 5: by_vars parameter works correctly", {
       by_vars = exprs(AEDECOD),
       start_date = TRTSDT,
       event_conditions = list(ttae),
-      censor_conditions = list(eos),
+      censor_conditions = list(eot),
       source_datasets = list(adsl = adsl, ae = ae),
       set_values_to = exprs(
         PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
@@ -651,7 +651,7 @@ test_that("derive_param_tte Test 9: errors if set_values_to contains invalid exp
       )
     ),
     regexp = paste0(
-      "Assigning new variables failed!\n",
+      "Assigning variables failed!\n",
       "set_values_to = \\(\n",
       "  PARAMCD = paste0\\(\"TTAE\", as.numeric\\(as.factor\\(AEDECOD\\)\\)\\)\n",
       "  PARAM = past\\(\"Time to First\", AEDECOD, \"Adverse Event\"\\)\n",
@@ -805,8 +805,9 @@ test_that("derive_param_tte Test 11: ensuring ADT is not NA because of missing s
   )
 })
 
+# list_tte_source_objects ----
 ## Test 12: error is issued if package does not exist ----
-test_that("derive_param_tte Test 12: error is issued if package does not exist", {
+test_that("list_tte_source_objects Test 12: error is issued if package does not exist", {
   expect_error(
     list_tte_source_objects(package = "tte"),
     regexp = "No package called 'tte' is installed and hence no `tte_source` objects are available"
@@ -814,7 +815,7 @@ test_that("derive_param_tte Test 12: error is issued if package does not exist",
 })
 
 ## Test 13: expected objects produced ----
-test_that("derive_param_tte Test 13: expected objects produced", {
+test_that("list_tte_source_objects Test 13: expected objects produced", {
   expected_output <- tibble::tribble(
     ~object, ~dataset_name, ~filter, ~date, ~censor,
     "ae_ser_event", "adae", quote(TRTEMFL == "Y" & AESER == "Y"), "ASTDT", 0,

@@ -74,8 +74,11 @@ input dataset and additionally the variable specified for \code{new_var} derived
 from the additional dataset (\code{dataset_add}).
 }
 \description{
-Adds a flag variable to the input dataset which indicates if there exists at
-least one observation in another dataset fulfilling a certain condition.
+Adds a flag variable to the input dataset which indicates if
+there exists at least one observation in another dataset fulfilling a certain
+condition.
+
+\strong{Note:} This is a wrapper function for the more generic \code{derive_vars_merged()}.
 }
 \details{
 \enumerate{
@@ -92,23 +95,51 @@ observation exists and for all observations the condition evaluates to
 }
 \examples{
 
-library(admiral.test)
 library(dplyr, warn.conflicts = FALSE)
-data("admiral_dm")
-data("admiral_ae")
+
+dm <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+  "PILOT01",    "DM", "01-1028",   71, "YEARS",
+  "PILOT01",    "DM", "04-1127",   84, "YEARS",
+  "PILOT01",    "DM", "06-1049",   60, "YEARS"
+)
+
+ae <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID,    ~AETERM,     ~AEREL,
+  "PILOT01",    "AE", "01-1028", "ERYTHEMA", "POSSIBLE",
+  "PILOT01",    "AE", "01-1028", "PRURITUS", "PROBABLE",
+  "PILOT01",    "AE", "06-1049",  "SYNCOPE", "POSSIBLE",
+  "PILOT01",    "AE", "06-1049",  "SYNCOPE", "PROBABLE"
+)
+
+
 derive_var_merged_exist_flag(
-  admiral_dm,
-  dataset_add = admiral_ae,
+  dm,
+  dataset_add = ae,
   by_vars = exprs(STUDYID, USUBJID),
   new_var = AERELFL,
   condition = AEREL == "PROBABLE"
 ) \%>\%
   select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
 
-data("admiral_vs")
+vs <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSBLFL,
+  "PILOT01",    "VS", "01-1028", "SCREENING",  "HEIGHT",     177.8,      NA,
+  "PILOT01",    "VS", "01-1028", "SCREENING",  "WEIGHT",     98.88,      NA,
+  "PILOT01",    "VS", "01-1028",  "BASELINE",  "WEIGHT",     99.34,     "Y",
+  "PILOT01",    "VS", "01-1028",    "WEEK 4",  "WEIGHT",     98.88,      NA,
+  "PILOT01",    "VS", "04-1127", "SCREENING",  "HEIGHT",     165.1,      NA,
+  "PILOT01",    "VS", "04-1127", "SCREENING",  "WEIGHT",     42.87,      NA,
+  "PILOT01",    "VS", "04-1127",  "BASELINE",  "WEIGHT",     41.05,     "Y",
+  "PILOT01",    "VS", "04-1127",    "WEEK 4",  "WEIGHT",     41.73,      NA,
+  "PILOT01",    "VS", "06-1049", "SCREENING",  "HEIGHT",    167.64,      NA,
+  "PILOT01",    "VS", "06-1049", "SCREENING",  "WEIGHT",     57.61,      NA,
+  "PILOT01",    "VS", "06-1049",  "BASELINE",  "WEIGHT",     57.83,     "Y",
+  "PILOT01",    "VS", "06-1049",    "WEEK 4",  "WEIGHT",     58.97,      NA
+)
 derive_var_merged_exist_flag(
-  admiral_dm,
-  dataset_add = admiral_vs,
+  dm,
+  dataset_add = vs,
   by_vars = exprs(STUDYID, USUBJID),
   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
   new_var = WTBLHIFL,
@@ -122,16 +153,10 @@ derive_var_merged_exist_flag(
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_last_dose_amt}()},
-\code{\link{derive_var_last_dose_date}()},
-\code{\link{derive_var_last_dose_grp}()},
-\code{\link{derive_var_merged_cat}()},
-\code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},

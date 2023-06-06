@@ -80,7 +80,6 @@ At this step, it may be useful to join `ADSL` to your `VS` domain. Only the
 relevant `ADSL` variables would be added later.
 
 ```{r eval=TRUE}
-
 adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
 advs <- derive_vars_merged(
@@ -340,7 +339,6 @@ Similarly, for `ADEG`, the parameters `QTCBF` `QTCBS` and `QTCL` can be
 created with a function call. See example below for `PARAMCD` = `QTCF`.
 
 ```{r eval=FALSE}
-
 adeg <- tibble::tribble(
   ~USUBJID, ~EGSTRESU, ~PARAMCD, ~AVAL, ~VISIT,
   "P01", "msec", "QT", 350, "CYCLE 1 DAY 1",
@@ -389,7 +387,6 @@ When all `PARAMCD` have been derived and added to the dataset, the other informa
 from the look-up table (`PARAM`, `PARAMCAT1`,...) should be added.
 
 ```{r eval=TRUE}
-
 # Derive PARAM and PARAMN
 advs <- derive_vars_merged(
   advs,
@@ -579,7 +576,7 @@ dataset_vignette(
 
 ## Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`, `BNRIND`) {#baseline}
 
-The `BASETYPE` should be derived using the function `derive_var_basetype()`.
+The `BASETYPE` should be derived using the function `derive_basetype_records()`.
 The parameter `basetypes` of this function requires a named list of expression 
 detailing how the `BASETYPE` should be assigned.  Note, if a record falls into
 multiple expressions within the basetypes expression, a row will be produced for 
@@ -587,9 +584,9 @@ each `BASETYPE`.
 
 
 ```{r eval=TRUE}
-advs <- derive_var_basetype(
+advs <- derive_basetype_records(
   dataset = advs,
-  basetypes = rlang::exprs(
+  basetypes = exprs(
     "LAST: AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
     "LAST: AFTER STANDING FOR 1 MINUTE" = ATPTN == 816,
     "LAST: AFTER STANDING FOR 3 MINUTES" = ATPTN == 817,
@@ -755,7 +752,6 @@ For this example, we will assume we would like to choose the latest and
 highest value by `USUBJID`, `PARAMCD`, `AVISIT`, and `ATPT`.
 
 ```{r eval=TRUE}
-
 advs <- restrict_derivation(
   advs,
   derivation = derive_var_extreme_flag,
@@ -861,8 +857,8 @@ assigned:
 ```{r eval=TRUE}
 avalcat_lookup <- tibble::tribble(
   ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
-  "HEIGHT", 1, ">140 cm",
-  "HEIGHT", 2, "<= 140 cm"
+  "HEIGHT",         1, ">140 cm",
+  "HEIGHT",         2, "<= 140 cm"
 )
 
 format_avalcat1n <- function(param, aval) {

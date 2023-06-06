@@ -1,7 +1,9 @@
 #' Adds a Parameter for Dose Intensity
 #'
-#' Adds a record for the dose intensity for each by group
+#' @description Adds a record for the dose intensity for each by group
 #' (e.g., subject and visit) where the source parameters are available.
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_param_computed()`.
 #'
 #' The analysis value of the new parameter is derived as
 #' Total Dose / Planned Dose * 100
@@ -124,33 +126,30 @@ derive_param_doseint <- function(dataset,
   assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
 
   # Create Dose intensity records
-  dataset <- derive_param_computed(
+  aval_tadm <- sym(paste0("AVAL.", tadm_code))
+  aval_tpdm <- sym(paste0("AVAL.", tpadm_code))
+
+  # handle 0 doses planned if needed
+  if (zero_doses == "100") {
+    update_aval <- exprs(
+      AVAL = case_when(
+        !!aval_tpdm == 0 &
+          !!aval_tadm > 0 ~ 100,
+        !!aval_tpdm == 0 &
+          !!aval_tadm == 0 ~ 0,
+        TRUE ~ AVAL
+      )
+    )
+  } else {
+    update_aval <- NULL
+  }
+
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(tadm_code, tpadm_code),
     by_vars = by_vars,
-    analysis_value = (!!sym(paste0("AVAL.", tadm_code)) /
-      !!sym(paste0("AVAL.", tpadm_code)) * 100),
-    set_values_to = exprs(
-      !!!set_values_to,
-      temp_planned_dose = !!sym(paste0("AVAL.", tpadm_code)),
-      temp_admin_dose = !!sym(paste0("AVAL.", tadm_code))
-    )
+    analysis_value = (!!aval_tadm / !!aval_tpdm * 100),
+    set_values_to = expr_c(set_values_to, update_aval)
   )
-
-  # # handle 0 doses planned if needed
-  if (zero_doses == "100") {
-    dataset <- mutate(dataset,
-      AVAL = case_when(
-        temp_planned_dose == 0 &
-          temp_admin_dose > 0 ~ 100,
-        temp_planned_dose == 0 &
-          temp_admin_dose == 0 ~ 0,
-        TRUE ~ AVAL
-      )
-    )
-  }
-
-
-  dataset %>% select(-starts_with("temp"))
 }

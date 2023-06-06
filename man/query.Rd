@@ -7,10 +7,10 @@
 query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
 }
 \arguments{
-\item{prefix}{The value is used to populate \code{VAR_PREFIX} in the output
+\item{prefix}{The value is used to populate \code{PREFIX} in the output
 dataset of \code{create_query_data()}, e.g., \code{"SMQ03"}}
 
-\item{name}{The value is used to populate \code{QUERY_NAME} in the output dataset
+\item{name}{The value is used to populate \code{GRPNAME} in the output dataset
 of \code{create_query_data()}. If the \code{auto} keyword is specified, the variable
 is set to the name of the query in the SMQ/SDG database.
 
@@ -18,7 +18,7 @@ is set to the name of the query in the SMQ/SDG database.
 keyword is permitted only for queries which are defined by an
 \code{basket_select()} object.}
 
-\item{id}{The value is used to populate \code{QUERY_ID} in the output dataset of
+\item{id}{The value is used to populate \code{GRPID} in the output dataset of
 \code{create_query_data()}. If the \code{auto} keyword is specified, the variable is
 set to the id of the query in the SMQ/SDG database.
 
@@ -26,7 +26,7 @@ set to the id of the query in the SMQ/SDG database.
 keyword is permitted only for queries which are defined by an
 \code{basket_select()} object.}
 
-\item{add_scope_num}{Determines if  \code{QUERY_SCOPE_NUM} in the output dataset
+\item{add_scope_num}{Determines if  \code{SCOPEN} in the output dataset
 of \code{create_query_data()} is populated
 
 If the parameter is set to \code{TRUE}, the definition must be an \code{basket_select()}
@@ -42,17 +42,17 @@ There are three different ways to define the terms:
 \itemize{
 \item An \code{basket_select()} object is specified to select a query from the SMQ
 database.
-\item A data frame with columns \code{TERM_LEVEL} and \code{TERM_NAME} or \code{TERM_ID} can
-be specified to define the terms of a customized query. The \code{TERM_LEVEL}
+\item A data frame with columns \code{SRCVAR} and \code{TERMNAME} or \code{TERMID} can
+be specified to define the terms of a customized query. The \code{SRCVAR}
 should be set to the name of the variable which should be used to select
-the terms, e.g., \code{"AEDECOD"} or \code{"AELLTCD"}. \code{TERM_LEVEL} does not need
+the terms, e.g., \code{"AEDECOD"} or \code{"AELLTCD"}. \code{SRCVAR} does not need
 to be constant within a query. For example a query can be based on
 \code{AEDECOD} and \code{AELLT}.
 
-If \code{TERM_LEVEL} refers to a character variable, \code{TERM_NAME} should be set
-to the value the variable. If it refers to a numeric variable, \code{TERM_ID}
+If \code{SRCVAR} refers to a character variable, \code{TERMNAME} should be set
+to the value the variable. If it refers to a numeric variable, \code{TERMID}
 should be set to the value of the variable. If only character variables
-or only numeric variables are used, \code{TERM_ID} or \code{TERM_NAME} respectively
+or only numeric variables are used, \code{TERMID} or \code{TERMNAME} respectively
 can be omitted.
 \item A list of data frames and \code{basket_select()} objects can be specified to
 define a customized query based on custom terms and SMQs. The data frames
@@ -100,11 +100,11 @@ query(
 
 # creating a query for a customized query
 cqterms <- tribble(
-  ~TERM_NAME, ~TERM_ID,
+  ~TERMNAME,                     ~TERMID,
   "APPLICATION SITE ERYTHEMA", 10003041L,
   "APPLICATION SITE PRURITUS", 10003053L
 ) \%>\%
-  mutate(TERM_LEVEL = "AEDECOD")
+  mutate(SRCVAR = "AEDECOD")
 
 query(
   prefix = "CQ01",
@@ -142,6 +142,7 @@ Source Objects:
 \code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{event}()},
+\code{\link{records_source}()},
 \code{\link{tte_source}()}
 }
 \concept{source_specifications}

@@ -71,11 +71,20 @@ parameter the first or last record will be flagged across the whole dataset.
 \examples{
 library(tibble)
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("admiral_vs")
+example_vs <- tribble(
+  ~USUBJID, ~VSTESTCD,      ~VISIT, ~VISITNUM, ~VSTPTNUM, ~VSSTRESN,
+  "1001",     "DIABP", "SCREENING",         1,        10,        64,
+  "1001",     "DIABP", "SCREENING",         1,        11,        66,
+  "1001",     "DIABP",  "BASELINE",         2,       100,        68,
+  "1001",     "DIABP",  "BASELINE",         2,       101,        68,
+  "1001",     "DIABP",    "WEEK 2",         3,       200,        72,
+  "1001",     "DIABP",    "WEEK 2",         3,       201,        71,
+  "1001",     "DIABP",    "WEEK 4",         4,       300,        70,
+  "1001",     "DIABP",    "WEEK 4",         4,       301,        70
+)
 
 # Flag last value for each patient, test, and visit, baseline observations are ignored
-admiral_vs \%>\%
+example_vs \%>\%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
@@ -168,10 +177,19 @@ restrict_derivation(
 )
 
 # OCCURDS Examples
-data("admiral_ae")
+example_ae <- tribble(
+  ~USUBJID,         ~AEBODSYS,    ~AEDECOD,   ~AESEV, ~AESTDY, ~AESEQ,
+  "1015", "GENERAL DISORDERS",  "ERYTHEMA",   "MILD",       2,      1,
+  "1015", "GENERAL DISORDERS",  "PRURITUS",   "MILD",       2,      2,
+  "1015",      "GI DISORDERS", "DIARRHOEA",   "MILD",       8,      3,
+  "1023", "CARDIAC DISORDERS",  "AV BLOCK",   "MILD",      22,      4,
+  "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       3,      1,
+  "1023",    "SKIN DISORDERS",  "ERYTHEMA", "SEVERE",       5,      2,
+  "1023",    "SKIN DISORDERS",  "ERYTHEMA",   "MILD",       8,      3
+)
 
 # Most severe AE first occurrence per patient
-admiral_ae \%>\%
+example_ae \%>\%
   mutate(
     TEMP_AESEVN =
       as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
@@ -186,7 +204,7 @@ admiral_ae \%>\%
   select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
 
 # Most severe AE first occurrence per patient per body system
-admiral_ae \%>\%
+example_ae \%>\%
   mutate(
     TEMP_AESEVN =
       as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
@@ -205,17 +223,11 @@ admiral_ae \%>\%
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_last_dose_amt}()},
-\code{\link{derive_var_last_dose_date}()},
-\code{\link{derive_var_last_dose_grp}()},
-\code{\link{derive_var_merged_cat}()},
-\code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},

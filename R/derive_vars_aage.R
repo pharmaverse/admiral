@@ -1,6 +1,8 @@
 #' Derive Analysis Age
 #'
-#' Derives analysis age (`AAGE`) and analysis age unit (`AAGEU`)
+#' @description Derives analysis age (`AAGE`) and analysis age unit (`AAGEU`).
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_vars_duration()`.
 #'
 #' @param dataset Input dataset
 #'
@@ -116,8 +118,6 @@ derive_vars_aage <- function(dataset,
 #'   equivalent years as a double. Note, underlying computations assume an equal number
 #'   of days in each year (365.25).
 #'
-#' @author Michael Thorpe
-#'
 #' @return The input dataset (`dataset`) with `new_var` variable added in years.
 #'
 #' @family der_adsl
@@ -183,11 +183,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
       abort(err_msg)
     } else {
       ds <- dataset %>%
-        mutate(
-          !!new_var := time_length(duration(!!age_var, units = age_unit),
-            unit = "years"
-          )
-        )
+        mutate(!!new_var := compute_age_years(!!age_var, age_unit))
     }
   } else {
     unit <- unique(tolower(pull(dataset, !!sym(unit_var))))
@@ -220,69 +216,8 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
       }
     }
 
-    average_durations <- c(
-      seconds = 365.25 * 24 * 60 * 60,
-      minutes = 365.25 * 24 * 60,
-      hours = 365.25 * 24,
-      days = 365.25,
-      weeks = 365.25 / 7,
-      months = 12,
-      years = 1
-    )
-
     ds <- dataset %>%
-      mutate(!!new_var := !!age_var / unname(average_durations[tolower(!!sym(unit_var))]))
+      mutate(!!new_var := compute_age_years(!!age_var, !!sym(unit_var)))
   }
   return(ds)
-}
-
-
-#' Derive Age Groups
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*, please create a user defined function instead.
-#'
-#' @param dataset Input dataset
-#'
-#' @param age_var AGE variable
-#'
-#' @param age_unit AGE unit variable
-#'
-#' @param new_var New variable to create inside `dataset`
-#'
-#' @keywords deprecated
-#' @family deprecated
-#'
-#'
-#' @name derive_var_agegr_fda
-NULL
-
-#' @rdname derive_var_agegr_fda
-#'
-#' @keywords deprecated
-#' @family deprecated
-#'
-#' @export
-derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_stop("0.8.0", "derive_var_agegr_fda()",
-    details = "Please create a user defined function instead."
-  )
-}
-
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*, please create a user defined function instead.
-#' @rdname derive_var_agegr_fda
-#'
-#' @keywords deprecated
-#' @family deprecated
-#'
-#' @export
-derive_var_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_stop("0.8.0", "derive_var_agegr_ema()",
-    details = "Please create a user defined function instead."
-  )
 }

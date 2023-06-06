@@ -1,8 +1,10 @@
 #' Adds a Parameter for Corrected QT (an ECG measurement)
 #'
-#' Adds a record for corrected QT using either Bazett's, Fridericia's or Sagie's
+#' @description Adds a record for corrected QT using either Bazett's, Fridericia's or Sagie's
 #' formula for each by group (e.g., subject and visit) where the source parameters
 #' are available.
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_param_computed()`.
 #'
 #' @param dataset Input dataset
 #'
@@ -238,8 +240,10 @@ compute_qtc <- function(qt, rr, method) {
 
 #' Adds a Parameter for Derived RR (an ECG measurement)
 #'
-#' Adds a record for derived RR based on heart rate for each by group (e.g.,
+#' @description Adds a record for derived RR based on heart rate for each by group (e.g.,
 #' subject and visit) where the source parameters are available.
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_param_computed()`.
 #'
 #' The analysis value of the new parameter is derived as
 #' \deqn{\frac{60000}{HR}}{60000 / HR}

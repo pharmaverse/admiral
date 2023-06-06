@@ -126,7 +126,10 @@ Permitted Values: \code{TRUE}, \code{FALSE}
 A datetime object
 }
 \description{
-Convert a date (datetime, date, or date character) into a Date vector (usually \code{'--DTM'}).
+Convert a date (datetime, date, or date character) into a Date
+vector (usually \code{'--DTM'}).
+
+\strong{Note:} This is a wrapper function for the function \code{convert_dtc_to_dtm()}.
 }
 \details{
 Usually this computation function can not be used with \verb{\%>\%}.
@@ -140,6 +143,7 @@ convert_date_to_dtm("2019-07-18")
 }
 \seealso{
 Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_age_years}()},
 \code{\link{compute_dtf}()},
 \code{\link{compute_duration}()},
 \code{\link{compute_tmf}()},

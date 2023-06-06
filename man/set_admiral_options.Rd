@@ -4,17 +4,12 @@
 \alias{set_admiral_options}
 \title{Set the Value of Admiral Options}
 \usage{
-set_admiral_options(subject_keys, force_admiral_vars)
+set_admiral_options(subject_keys)
 }
 \arguments{
 \item{subject_keys}{Variables to uniquely identify a subject, defaults to
 \code{exprs(STUDYID, USUBJID)}. This option is used as default value for the
 \code{subject_keys} argument in all admiral functions.}
-
-\item{force_admiral_vars}{If this option is set to \code{TRUE} (which is the
-default), the admiral definition of \code{vars()} is forced. This is just a
-temporary solution to allow running scripts which use \code{vars()} in the
-admiral function calls. It will be removed in a future release.}
 }
 \value{
 No return value, called for side effects.
@@ -42,11 +37,11 @@ adsl <- tribble(
   mutate(STUDYID = "XX1234")
 
 tu <- tribble(
-  ~USUBJID2, ~VISIT,      ~TUSTRESC,
-  "1",       "SCREENING", "TARGET",
-  "1",       "WEEK 1",    "TARGET",
-  "1",       "WEEK 5",    "TARGET",
-  "1",       "WEEK 9",    "NON-TARGET",
+  ~USUBJID2,      ~VISIT,    ~TUSTRESC,
+  "1",       "SCREENING",     "TARGET",
+  "1",          "WEEK 1",     "TARGET",
+  "1",          "WEEK 5",     "TARGET",
+  "1",          "WEEK 9", "NON-TARGET",
   "2",       "SCREENING", "NON-TARGET",
   "2",       "SCREENING", "NON-TARGET"
 ) \%>\%
@@ -56,7 +51,7 @@ tu <- tribble(
   )
 
 derive_param_exist_flag(
-  dataset_adsl = adsl,
+  dataset_ref = adsl,
   dataset_add = tu,
   filter_add = TUTESTCD == "TUMIDENT" & VISIT == "SCREENING",
   condition = TUSTRESC == "TARGET",
@@ -70,7 +65,8 @@ derive_param_exist_flag(
 }
 \seealso{
 \code{\link[=get_admiral_option]{get_admiral_option()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},\code{\link[=derive_param_tte]{derive_param_tte()}},
-\code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_period]{derive_vars_period()}}, \code{\link[=create_period_dataset]{create_period_dataset()}}
+\code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_period]{derive_vars_period()}},
+\code{\link[=create_period_dataset]{create_period_dataset()}}
 
 Other admiral_options: 
 \code{\link{get_admiral_option}()}

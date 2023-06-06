@@ -1,11 +1,167 @@
+# admiral 0.11.0
+
+## New Features
+
+- In the function `derive_var_anrind()`, added argument `use_a1hia1lo` to turn the usage of `A1HI` and `A1LO` off and on, with the default being off. (#1795)
+
+- Added a "Report a bug" link to `{admiral}` website. (#1836)
+
+- New function `compute_age_years()` for converting a vector of age values to years. (#1794)
+
+- New functions `filter_exist()` and `filter_not_exist()` for selecting records from
+a dataset dependent on the existence of the corresponding by groups in a filtered 
+source dataset. (#1699)
+
+- New function `derive_param_extreme_record()` that adds parameter based on the first or last record from multiple sources. (#1822)
+
+- New ADPPK template script available `ad_adppk.R` which creates Population PK Analysis Dataset based on forthcoming CDISC Implementation guide. (#1772)
+
+- New function `compute_egfr()` for calculating Estimated Glomerular Filtration Rate (eGFR) and Creatinine Clearance for Kidney Function. (#1826)
+
+## Updates of Existing Functions
+
+- `derive_extreme_records()` was enhanced such that it includes the
+functionality of `derive_param_extreme_event()`. (#1725)
+
+- For the `set_values_to` argument expressions are accepted now. For example,
+`set_values_to = exprs(PARAMCD = str_to_upper(QSTESTCD))`. This affects
+`censor_source()`, `derive_expected_records()`, `derive_extreme_event()`,
+`derive_extreme_records()`, `derive_param_bmi()`, `derive_param_bsa()`,
+`derive_param_computed()`, `derive_param_doseint()`, `derive_param_exposure()`,
+`derive_param_framingham()`, `derive_param_map()`, `derive_param_exist_flag()`,
+`derive_param_extreme_event()`, `derive_param_qtc()`, `derive_param_rr()`,
+`derive_param_wbc_abs()`, `derive_summary_records()`, `event_source()`,
+`get_summary_records()`. (#1727)
+
+- For the `order` argument expressions are accepted now. (#1727)
+
+- `derive_vars_merged()` updates: (#1727)
+    - The `missing_values` argument to assign values to
+the new variables for non-matching observations was added.
+    - The `new_vars` argument accepts expressions now.
+    
+- `derive_vars_joined()` updates: (#1727)
+    - The `missing_values` argument to assign values to the new variables for
+      non-matching observations was added.
+    - The `new_vars` and the `join_vars` argument accept expressions now.
+
+- The `date` field of `date_source()` accepts expressions now. This affects
+`derive_var_extreme_dt()` and `derive_var_extreme_dtm()`. (#1727)
+
+- The `date` and `dthcaus` field of `dthcaus_source()` accept expressions now.
+This affects `derive_var_dthcaus()`. (#1727)
+
+- The `date` field of `event_source()` and `censor_source()` accepts expressions
+now. This affects `derive_param_tte()`. (#1727)
+
+- The `derive_param_computed()` function was enhanced: (#1873)
+    - The new `dataset_add` argument allows to consider parameters from a
+      different dataset than the input dataset.
+    - The new `analysis_var` argument allows to specify the variable to be
+      populated, e.g., `AVALC`.
+    - For `parameters` and `constant_parameters` a list of expressions can be
+      specified now. This allows to create temporary parameter codes, e.g., if
+      SDTM data is used as input.
+    - The `analysis_value` argument was enhanced such that any variable of the
+      form `<variable>.<parameter>` can be used, e.g., `QSORRES.CHSF13`.
+
+## Breaking Changes
+
+- `create_query_data()` and `derive_vars_query()` updated to rename variables in 
+    query data set as follows: (#1907)
+
+    - `VAR_PREFIX` to `PREFIX`
+    - `QUERY_NAME` to `GRPNAME`
+    - `QUERY_ID` to `GRPID`
+    - `QUERY_SCOPE` to `SCOPE`
+    - `QUERY_SCOPE_NUM` to `SCOPEN`
+    - `TERM_LEVEL` to `SRCVAR`
+    - `TERM_NAME` to `TERMNAME`
+    - `TERM_ID` to `TERMID`
+  
+    Users need to adjust their `get_terms()` function accordingly.
+
+- The `aval_fun` argument of `derive_param_exist_flag()` was deprecated in favor
+of the `set_values_to` argument. (#1727)
+
+- `derive_var_merged_cat()` and `derive_var_merged_character()` have been
+deprecated in favor of `derive_vars_merged()`. (#1727)
+
+- The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1747)
+
+  - `derive_vars_merged_dt()`
+  - `derive_vars_merged_dtm()`
+  - `derive_var_agegr_ema()`
+  - `derive_var_agegr_fda()`
+  - `derive_param_first_event()`
+  - `derive_derived_param()`
+  - `derive_var_confirmation_flag()`
+  - `filter_confirmation()`
+
+- The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1747)
+
+  - `derive_var_disposition_status()`
+  - `derive_vars_disposition_reason()`
+  - `format_eoxxstt_default()`
+  - `format_reason_default()`
+  - `derive_var_worst_flag()`
+
+- `derive_param_extreme_event()` was deprecated in favor of
+`derive_extreme_records()`. (#1725)
+
+- The `filter` argument in `derive_extreme_records()` was deprecated in favor of
+the `filter_add` argument. (#1725)
+
+- `derive_vars_last_dose()`, `derive_var_last_dose_amt()`, `derive_var_last_dose_date()`, `derive_var_last_dose_grp()`,
+were deprecated in favor of `derive_vars_joined()`. (#1797)
+
+- `derive_var_basetype()` was deprecated in favor of `derive_basetype_records()`. (#1796)
+
+- In the function `derive_param_exist_flag()` the arguments `dataset_adsl` and
+`subject_keys` have been renamed to `dataset_ref` and `by_vars` respectively. (#1793)
+
+## Documentation
+
+- Updated example dataset to trigger deterioration flags in the vignette "Creating Questionnaire ADaMs". (#1853, #1854)
+
+- Updated PK Programming vignette to include new Population PK Template `ad_adppk.R`. (#1772)
+
+- Updated "Lab Grading" Vignette to link to grading metadata available in `{admiral}` and clarify how abnormal baseline
+values are assigned in NCI-CTCAEv5. (#1863)
+
+- Updated "Visit and Period Variables" Vignette to add more detail about Study Specific Code that is required. (#1831)
+
+- Increased documentation for those functions which are regarded as wrapper functions. (#1726)
+
+- Examples in function documentation no longer rely on `library(admiral.test)`. (#1752) 
+
+- Conferences where `{admiral}` was presented were updated on the `README.md`. (#1890)
+
+## Various
+
+- `vars()` which was used in the admiral function calls that expected a list of
+quosures has been removed. The admiral option `force_admiral_vars` was removed
+as well. (#1694)
+
+- `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with supplying both `min_dates` and `max_dates` that has now been resolved. (#1843)
+
+- Examples for `derive_var_extreme_flag()` were reworked to reduce runtime that occasionally led to failing CI check. (#1780)
+
+- `create_period_dataset()` had a bug that led to an error when both DT and DTM columns existed. (#1845)
+
+- External functions are now consistently imported via namespace. `package::function()` calls have been removed from `admiral` functions. (#1842)
+
+- `restrict_derivation()` had a bug which led to failure if the `derivation` argument was not in the global environment. (#1765)
+
 # admiral 0.10.2
 
-- Changing package maintainer from Thomas Neitmann to Ben Straub (#1848)
+- Changing package maintainer from Thomas Neitmann to Ben Straub. (#1848)
 
 # admiral 0.10.1
 
 - Fix checks on `derive_vars_dtm()` and `derive_vars_dt()` 
 that were too restrictive. (#1810)
+
 
 # admiral 0.10.0
 
@@ -15,26 +171,26 @@ that were too restrictive. (#1810)
 that messages must be addressed and deprecated functions throw errors. (#1754) 
 
 - New function `consolidate_metadata()` for consolidating multiple meta datasets
-into a single one (#1479)
+into a single one. (#1479)
 
 - New function `compute_scale()` for computing the average of a vector and 
 transforming the result from a source to a target range. (#1692)
 
 - New ADPC template script available `ad_adpc.R` which creates PK Concentration
 Analysis Dataset (#849). This script includes formatting suitable for
-Non-Compartmental Analysis (ADNCA) (#851)
+Non-Compartmental Analysis (ADNCA). (#851)
 
-- New function `derive_expected_records()` for adding expected records (#1729)
+- New function `derive_expected_records()` for adding expected records. (#1729)
 
 - New function `derive_extreme_event()` for adding the worst or best observation 
-for each by group as new records (#1755)
+for each by group as new records. (#1755)
 
 ## Updates of Existing Functions
 
 - Arguments `analysis_var`, `keep_vars` were added to `derive_locf_records()`,   
 `analysis_var` allows to specify analysis variable, `keep_vars` keeps variables 
 that need carrying the last observation forward other than `analysis_var` 
-(e.g., `PARAMN`, `VISITNUM`) (#1636).
+(e.g., `PARAMN`, `VISITNUM`). (#1636)
 
 -   The function `create_single_dose_dataset()` adds support for
     expanding relative nominal time (e.g. NFRLT) used in Pharmacokinetic
@@ -43,13 +199,13 @@ that need carrying the last observation forward other than `analysis_var`
     `nominal_time` is specified such as NFRLT (Nominal Relative Time
     from First Dose) then the nominal time is incremented by the
     interval specified in `EXDOSFRQ` for example for "QD" records the
-    NFRLT is incremented by 24 hours, e.g. 0, 24, 48...(#1640).
+    NFRLT is incremented by 24 hours, e.g. 0, 24, 48... (#1640)
     
 -   `create_single_dose_dataset()` is also updated for values of
     `EXDOSFRQ` with units in days but expected values less than 24
     hours, such as "BID", "TID", and "QID". Previously these values of
     `EXDOSFRQ` may result in duplicate records where the day values are
-    incremented but the time values are not (#1643)
+    incremented but the time values are not. (#1643)
     
 - The function `derive_var_confirmation_flag()` and `filter_confirmation()`
 gained the `tmp_obs_nr_var` argument. It helps flagging or selecting consecutive
@@ -58,9 +214,9 @@ observations or the first or last observation in a by group. (#1724)
 - The functions `derive_vars_merged()`, `derive_var_merged_cat()`, 
 `derive_var_merged_character()`, `derive_var_merged_exist_flag()`, 
 `derive_var_merged_summary()`, and `derive_vars_merged_lookup()` were updated to 
-allow renaming in the argument `by_vars` (#1680).
+allow renaming in the argument `by_vars`. (#1680)
 
-- The units "min" and "sec" are added as valid values of `out_unit` in `compute_duration()` and `derive_vars_duration()` (#1647).
+- The units "min" and "sec" are added as valid values of `out_unit` in `compute_duration()` and `derive_vars_duration()`. (#1647)
 
 - The function `derive_vars_query()` now includes a consistency check for
 `QUERY_SCOPE` and `QUERY_SCOPE_NUM` values. (#652)
@@ -85,13 +241,13 @@ USUBJID)` must be used now.
 
 - Function `derive_param_tte()` has been updated such that only observations are
 added for subjects who have both an event or censoring and an observation in
-`dataset_adsl` (#1576).
+`dataset_adsl`. (#1576)
 
-- Function `derive_var_disposition_status()` has been deprecated, please use `derive_var_merged_cat()` instead (#1681).
+- Function `derive_var_disposition_status()` has been deprecated, please use `derive_var_merged_cat()` instead. (#1681)
 
-- Function `derive_var_worst_flag()` has been deprecated, in favor of `slice_derivation()`/`derive_var_extreme_flag()` (#1682)
+- Function `derive_var_worst_flag()` has been deprecated, in favor of `slice_derivation()`/`derive_var_extreme_flag()`. (#1682)
 
-- Function `derive_vars_disposition_reason()` has been deprecated, in favor of `derive_vars_merged()`(#1683)
+- Function `derive_vars_disposition_reason()` has been deprecated, in favor of `derive_vars_merged()`. (#1683)
   
 - The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1712)
 
@@ -102,7 +258,7 @@ added for subjects who have both an event or censoring and an observation in
   - `derive_var_agegr_ema()`
   - `derive_var_agegr_fda()`
 
-- The following functions, which were deprecated in previous `{admiral}` versions, have been removed (#1712):
+- The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1712)
 
   - `derive_var_ady()`
   - `derive_var_aendy()`
@@ -112,7 +268,7 @@ added for subjects who have both an event or censoring and an observation in
   - `smq_select()`
   - `sdg_select()`
 
-- The following parameters, which were deprecated in previous `{admiral}` versions, have been removed (#1712):
+- The following parameters, which were deprecated in previous `{admiral}` versions, have been removed: (#1712)
 
   - `meddra_version`, `whodd_version`, `get_smq_fun` and `get_sdg_fun` from the `create_query_data()` function
   - `date_imputation`, `time_imputation` and `preserve` parameters from `date_source()` function
@@ -120,18 +276,18 @@ added for subjects who have both an event or censoring and an observation in
 
 - `ADLB` metadata data set called `atoxgr_criteria_ctcv5` updated to remove unit check for
 `HYPERURICEMIA` as grade criteria based on `ANRHI` only.  This metadata holds criteria for lab grading
-based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm) (#1650)
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm). (#1650)
 
 - Renamed `derive_var_confirmation_flag()` and `filter_confirmation()` to 
-`derive_var_joined_exist_flag()` and `filter_joined()` respectively (#1738). 
+`derive_var_joined_exist_flag()` and `filter_joined()` respectively. (#1738)
 
 ## Documentation
 
-- New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)" (#1639)
+- New vignette "Creating a PK NCA ADaM (ADPC/ADNCA)". (#1639)
 
-- New vignette "Hy's Law Implementation" (#1637)
+- New vignette "Hy's Law Implementation". (#1637)
 
-- New vignette "Creating Questionnaire ADaMs" (#1715)
+- New vignette "Creating Questionnaire ADaMs". (#1715)
 
 - The expected value for the `derivation` argument of `restrict_derivation()`,
 `slice_derivation()`, and `call_derivation()` is described now. (#1698)
@@ -139,15 +295,15 @@ based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://c
 - Removed authors from function documentation, as we will now only be tracking an overall list of 
 authors for admiral. (#1673)
 
-- Added an imputation example for `create_single_source_dataset()` in function documentation (#1408)(#1760)
+- Added an imputation example for `create_single_source_dataset()` in function documentation. (#1408, #1760)
 
-- Updates to examples for `derive_var_age_years()` and `derive_vars_duration()` (#1620)(#1634)
+- Updates to examples for `derive_var_age_years()` and `derive_vars_duration()`. (#1620, #1634)
 
 - Increased the level of documentation for `derive_var_age_years()` to describe the data type of the newly created `new_var` column. (#970)
 
 ## Various
 
-- Functions `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with `NA` values that has now been fixed (#1646)
+- Functions `derive_vars_dtm()` and `derive_vars_dt()` had a bug pertaining to imputations associated with `NA` values that has now been fixed. (#1646)
 
 # admiral 0.9.1
 
@@ -162,15 +318,14 @@ affects `derive_vars_dtm()` and `and compute_tmf()`. (#1641)
 dataset. The selection of the observations can depend on variables from both
 datasets. This can be used for adding `AVISIT`, `AWLO`, `AWHI` based on time
 windows and `ADY` or deriving the lowest value (nadir) before the current
-observation (#1448).
+observation. (#1448)
 
-- New function `derive_var_trtemfl()` for deriving treatment emergent flags (#989)
+- New function `derive_var_trtemfl()` for deriving treatment emergent flags. (#989)
 
-- The new function `chr2vars()` turns a character vector into a list of quosures
-(#1448).
+- The new function `chr2vars()` turns a character vector into a list of quosures. (#1448)
 
 - New function `derive_var_relative_flag()` for flagging observations before or
-after a condition is fulfilled (#1453)
+after a condition is fulfilled. (#1453)
 
 - New functions `get_admiral_option()` and `set_admiral_options()` to allow more 
 flexibility on common function inputs; e.g. like `subject_keys` to avoid several 
@@ -186,70 +341,70 @@ variables to ADSL. The values for the new variables are provided by a period
 reference dataset. (#1477)
 
 - New function `derive_var_merged_summary()` adds a variable of summarized
-values to the input dataset (#1564)
+values to the input dataset. (#1564)
 
 - A `print()` method was added for all S3 objects defined by admiral, e.g.,
 `date_source()`, `dthcaus_source()`, ... (#858)
 
 - New metadata data set called `atoxgr_criteria_ctcv5` which holds criteria for lab grading
-based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm).
 
-- Removed the `{assertthat}` dependency in `{admiral}` (#1392)
+- Removed the `{assertthat}` dependency in `{admiral}`. (#1392)
 
 - Removed R Version 3.6 check in CI/CD workflows in favor of the three most recent versions: 4.0, 4.1 and 4.2. (#1556)
 
 - The new function `derive_locf_records()` adds LOCF records as new observations. 
 This can be used when the input dataset does not contain observations for missed 
-visits/time points or when `AVAL` is `NA` for particular visits/time points (#1316).
+visits/time points or when `AVAL` is `NA` for particular visits/time points. (#1316)
 
-- New function `convert_na_to_blanks()` to convert character `NA` to blanks (#1624)
+- New function `convert_na_to_blanks()` to convert character `NA` to blanks. (#1624)
 
 
 ## Updates of Existing Functions
 
-- Function `derive_param_first_event()` has been replaced by a more generalized `derive_param_extreme_event()` function with new argument `mode` allowing for the selection of either the `"first"` or `"last"` event record according to the conditions provided. Also the `date_var` argument has been replaced with the `order` argument instead. In addition, three new arguments `new_var`, `true_value`, and `false_value` have been added to allow the user to choose what variable is used to indicate whether an event happened, and the values it is given (#1317) (#1242).
+- Function `derive_param_first_event()` has been replaced by a more generalized `derive_param_extreme_event()` function with new argument `mode` allowing for the selection of either the `"first"` or `"last"` event record according to the conditions provided. Also the `date_var` argument has been replaced with the `order` argument instead. In addition, three new arguments `new_var`, `true_value`, and `false_value` have been added to allow the user to choose what variable is used to indicate whether an event happened, and the values it is given. (#1317, #1242)
 
 - Argument `ignore_time_for_ref_end_date` was added to `derive_var_ontrtfl()`,
 which controls if time is considered for the condition if `start_date` is after
-`ref_end_date` + `ref_end_window` days (#989).
+`ref_end_date` + `ref_end_window` days. (#989)
 
 - `derive_var_atoxgr_dir()` default value of `atoxgr_criteria_ctcv4` removed for
 parameter `meta_criteria`. Can now also choose `atoxgr_criteria_ctcv5` for parameter 
-`meta_criteria`, to implement NCI-CTCAEv5 grading criteria .
+`meta_criteria`, to implement NCI-CTCAEv5 grading criteria.
 
 - _Environment_ objects were consolidated into a single `admiral_environment` object under `R/admiral__environment.R`. (#1572)
 
 - The default value of the `keep_source_vars` argument in
 `create_single_dose_dataset()` was updated such that it takes the values of the
 other arguments into account and the `start_datetime` and `end_datetime`
-arguments are optional now (#1598).
+arguments are optional now. (#1598)
 
 - Function `create_query_data()` has been updated such that the dictionary
-version is stored in the output dataset (#1337).
+version is stored in the output dataset. (#1337)
 
 ## Breaking Changes
 
-- Function `derive_param_first_event()` has been deprecated. Please use `derive_param_extreme_event()` with the `order` argument instead of the `date_var` argument (#1317).
+- Function `derive_param_first_event()` has been deprecated. Please use `derive_param_extreme_event()` with the `order` argument instead of the `date_var` argument. (#1317)
 
 - Functions `smq_select()` and `sdg_select()` have been deprecated and replaced with `basket_select()`. In the `create_query_data()` function, `meddra_version` and `whodd_version` argument has been replaced by `version` and `get_smq_fun` and `get_sdg_fun` argument by `get_terms_fun`. (#1597) 
 
 ## Documentation
 
-- New vignette "Generic Functions" (#734)
-- New vignette "Visit and Period Variables" (#1478)
+- New vignette "Generic Functions". (#734)
+- New vignette "Visit and Period Variables". (#1478)
 
 ## Various
 
 - Function `derive_param_tte()` had a bug that set `ADT` to `NA` when `start_date` 
-was missing, which has now been fixed (#1540)
+was missing, which has now been fixed. (#1540)
 
 - Function `derive_vars_merged()` had an improperly formatted error message 
-which has been corrected (#1473)
+which has been corrected. (#1473)
 
-- Templates now save datasets as `.rds` instead of `.rda` (#1501)
+- Templates now save datasets as `.rds` instead of `.rda`. (#1501)
 
 - Function `create_single_dose_dataset()` no longer fails if the input dataset
-contains observations with dose frequency `"ONCE"` (#1375).
+contains observations with dose frequency `"ONCE"`. (#1375)
 
 # admiral 0.8.4
 
@@ -355,7 +510,6 @@ imputation functions themselves (#1299). I.e., if a derivation like last known a
 date is based on dates, DTC variables have to be converted to numeric date or
 datetime variables in a preprocessing step. For examples see the [ADSL
 vignette](https://pharmaverse.github.io/admiral/cran-release/articles/adsl.html).
-
   The following arguments were deprecated:
 
   - `date_imputation`, `time_imputation`, and `preserve` in `date_source()`

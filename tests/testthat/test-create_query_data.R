@@ -1,4 +1,3 @@
-
 get_smq <- function(basket_select,
                     version,
                     keep_id = FALSE,
@@ -12,10 +11,10 @@ get_smq <- function(basket_select,
   if (is.null(basket_select$name)) {
     basket_select$name <- paste("SMQ name of", basket_select$id)
   }
-  terms <- tibble(TERM_NAME = paste(basket_select$name, "Term", c(1:end), "(", version, ")"))
-  terms <- mutate(terms, TERM_LEVEL = "AEDECOD", QUERY_NAME = basket_select$name)
+  terms <- tibble(TERMNAME = paste(basket_select$name, "Term", c(1:end), "(", version, ")"))
+  terms <- mutate(terms, SRCVAR = "AEDECOD", GRPNAME = basket_select$name)
   if (keep_id) {
-    mutate(terms, QUERY_ID = 42)
+    mutate(terms, GRPID = 42)
   } else {
     terms
   }
@@ -25,21 +24,21 @@ get_sdg <- function(basket_select,
                     version,
                     keep_id = FALSE,
                     temp_env) {
-  terms <- tibble(TERM_NAME = paste(basket_select$name, "Term", c(1:4)))
-  terms <- mutate(terms, TERM_LEVEL = "CMDECOD", QUERY_NAME = basket_select$name)
+  terms <- tibble(TERMNAME = paste(basket_select$name, "Term", c(1:4)))
+  terms <- mutate(terms, SRCVAR = "CMDECOD", GRPNAME = basket_select$name)
   if (keep_id) {
-    mutate(terms, QUERY_ID = 42)
+    mutate(terms, GRPID = 42)
   } else {
     terms
   }
 }
 
 cqterms <- tibble::tribble(
-  ~TERM_NAME, ~TERM_ID,
+  ~TERMNAME, ~TERMID,
   "APPLICATION SITE ERYTHEMA", 10003041L,
   "APPLICATION SITE PRURITUS", 10003053L
 ) %>%
-  mutate(TERM_LEVEL = "AEDECOD")
+  mutate(SRCVAR = "AEDECOD")
 # create_query_data ----
 # customized query defined by terms ----
 ## Test 1: customized query defined by terms ----
@@ -53,14 +52,14 @@ test_that("create_query_data Test 1: customized query defined by terms", {
   actual_output <- create_query_data(queries = list(cq))
 
   expected_output <- cqterms %>% mutate(
-    QUERY_NAME = "Application Site Issues",
-    VAR_PREFIX = "CQ01"
+    GRPNAME = "Application Site Issues",
+    PREFIX = "CQ01"
   )
 
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("VAR_PREFIX", "TERM_NAME")
+    keys = c("PREFIX", "TERMNAME")
   )
 })
 
@@ -110,15 +109,15 @@ test_that("create_query_data Test 2: customized query defined by SMQs", {
       )
     ) %>%
     mutate(
-      QUERY_NAME = "Immune-Mediated Meningoencephalitis",
-      VAR_PREFIX = "CQ02",
+      GRPNAME = "Immune-Mediated Meningoencephalitis",
+      PREFIX = "CQ02",
       VERSION = "20.0"
     )
 
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("VAR_PREFIX", "TERM_NAME")
+    keys = c("PREFIX", "TERMNAME")
   )
 })
 
@@ -169,15 +168,15 @@ test_that("create_query_data Test 3: customized query defined by terms and SMQs"
       )
     ) %>%
     mutate(
-      QUERY_NAME = "Immune-Mediated Meningoencephalitis or Application Site Issues",
-      VAR_PREFIX = "CQ03",
+      GRPNAME = "Immune-Mediated Meningoencephalitis or Application Site Issues",
+      PREFIX = "CQ03",
       VERSION = "20.1"
     )
 
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("VAR_PREFIX", "TERM_NAME")
+    keys = c("PREFIX", "TERMNAME")
   )
 })
 
@@ -222,11 +221,11 @@ test_that("SMQs Test 4: SMQs", {
         version = "20.0"
       ) %>%
         mutate(
-          QUERY_NAME = "Pregnancy and neonatal topics (SMQ)",
-          QUERY_ID = 13,
-          QUERY_SCOPE = "NARROW",
-          QUERY_SCOPE_NUM = 2,
-          VAR_PREFIX = "SMQ02"
+          GRPNAME = "Pregnancy and neonatal topics (SMQ)",
+          GRPID = 13,
+          SCOPE = "NARROW",
+          SCOPEN = 2,
+          PREFIX = "SMQ02"
         ),
       get_smq(
         basket_select(
@@ -237,8 +236,8 @@ test_that("SMQs Test 4: SMQs", {
         version = "20.0"
       ) %>%
         mutate(
-          QUERY_SCOPE = "BROAD",
-          VAR_PREFIX = "SMQ04"
+          SCOPE = "BROAD",
+          PREFIX = "SMQ04"
         )
     ) %>%
     mutate(
@@ -248,7 +247,7 @@ test_that("SMQs Test 4: SMQs", {
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("VAR_PREFIX", "TERM_NAME")
+    keys = c("PREFIX", "TERMNAME")
   )
 })
 
@@ -302,16 +301,16 @@ test_that("SDGs Test 6: SDGs", {
       version = "2019_09"
     ) %>%
     mutate(
-      QUERY_ID = 42,
-      VAR_PREFIX = "SDG01",
-      QUERY_SCOPE = NA_character_,
+      GRPID = 42,
+      PREFIX = "SDG01",
+      SCOPE = NA_character_,
       VERSION = "2019_09"
     )
 
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("VAR_PREFIX", "TERM_NAME")
+    keys = c("PREFIX", "TERMNAME")
   )
 })
 
@@ -381,30 +380,30 @@ test_that("SDGs Test 10: query: error: invalid definition", {
 })
 
 # assert_terms ----
-# assert_terms: error: TERM_LEVEL missing ----
-## Test 11: assert_terms: error: TERM_LEVEL missing ----
-test_that("assert_terms Test 11: assert_terms: error: TERM_LEVEL missing", {
+# assert_terms: error: SRCVAR missing ----
+## Test 11: assert_terms: error: SRCVAR missing ----
+test_that("assert_terms Test 11: assert_terms: error: SRCVAR missing", {
   expect_error(
     assert_terms(
-      terms = select(cqterms, -TERM_LEVEL),
+      terms = select(cqterms, -SRCVAR),
       source_text = "my test data"
     ),
-    regexp = "Required variable `TERM_LEVEL` is missing in my test data.",
+    regexp = "Required variable `SRCVAR` is missing in my test data.",
     fixed = TRUE
   )
 })
 
-# assert_terms: error: TERM_NAME and TERM_ID missing ----
-## Test 12: assert_terms: error: TERM_NAME and TERM_ID missing ----
-test_that("assert_terms Test 12: assert_terms: error: TERM_NAME and TERM_ID missing", {
+# assert_terms: error: TERMNAME and TERMID missing ----
+## Test 12: assert_terms: error: TERMNAME and TERMID missing ----
+test_that("assert_terms Test 12: assert_terms: error: TERMNAME and TERMID missing", {
   expect_error(
     assert_terms(
-      terms = select(cqterms, TERM_LEVEL),
+      terms = select(cqterms, SRCVAR),
       source_text = "my test data"
     ),
     regexp = paste0(
-      "Variable `TERM_NAME` or `TERM_ID` is required.\n",
-      "None of them is in my test data.\nProvided variables: `TERM_LEVEL`"
+      "Variable `TERMNAME` or `TERMID` is required.\n",
+      "None of them is in my test data.\nProvided variables: `SRCVAR`"
     ),
     fixed = TRUE
   )
@@ -428,7 +427,7 @@ test_that("assert_terms Test 13: assert_terms: error: no data frame", {
 test_that("assert_terms Test 14: assert_terms: error: no observations", {
   expect_error(
     assert_terms(
-      terms = filter(cqterms, TERM_ID == 42),
+      terms = filter(cqterms, TERMID == 42),
       source_text = "object returned by calling get_my_smq"
     ),
     regexp = "object returned by calling get_my_smq does not contain any observations.",
@@ -436,30 +435,30 @@ test_that("assert_terms Test 14: assert_terms: error: no observations", {
   )
 })
 
-# assert_terms: error: QUERY_NAME is missing ----
-## Test 15: assert_terms: error: QUERY_NAME is missing ----
-test_that("assert_terms Test 15: assert_terms: error: QUERY_NAME is missing", {
+# assert_terms: error: GRPNAME is missing ----
+## Test 15: assert_terms: error: GRPNAME is missing ----
+test_that("assert_terms Test 15: assert_terms: error: GRPNAME is missing", {
   expect_error(
     assert_terms(
       terms = cqterms,
-      expect_query_name = TRUE,
+      expect_grpname = TRUE,
       source_text = "object returned by calling get_my_smq"
     ),
-    regexp = "Required variable `QUERY_NAME` is missing in object returned by calling get_my_smq.",
+    regexp = "Required variable `GRPNAME` is missing in object returned by calling get_my_smq.",
     fixed = TRUE
   )
 })
 
-# assert_terms: error: QUERY_ID is missing ----
-## Test 16: assert_terms: error: QUERY_ID is missing ----
-test_that("assert_terms Test 16: assert_terms: error: QUERY_ID is missing", {
+# assert_terms: error: GRPID is missing ----
+## Test 16: assert_terms: error: GRPID is missing ----
+test_that("assert_terms Test 16: assert_terms: error: GRPID is missing", {
   expect_error(
     assert_terms(
       terms = cqterms,
-      expect_query_id = TRUE,
+      expect_grpid = TRUE,
       source_text = "object returned by calling get_my_smq"
     ),
-    regexp = "Required variable `QUERY_ID` is missing in object returned by calling get_my_smq.",
+    regexp = "Required variable `GRPID` is missing in object returned by calling get_my_smq.",
     fixed = TRUE
   )
 })

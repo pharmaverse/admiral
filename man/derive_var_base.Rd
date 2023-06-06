@@ -31,7 +31,9 @@ A new \code{data.frame} containing all records and variables of the input
 dataset plus the \code{new_var} variable
 }
 \description{
-Derive baseline variables, e.g. \code{BASE} or \code{BNRIND}, in a BDS dataset
+Derive baseline variables, e.g. \code{BASE} or \code{BNRIND}, in a BDS dataset.
+
+\strong{Note:} This is a wrapper function for the more generic \code{derive_vars_merged()}.
 }
 \details{
 For each \code{by_vars} group, the baseline record is identified by the
@@ -85,11 +87,11 @@ derive_var_base(
 }
 \seealso{
 BDS-Findings Functions that returns variable appended to dataset: 
+\code{\link{derive_basetype_records}()},
 \code{\link{derive_var_analysis_ratio}()},
 \code{\link{derive_var_anrind}()},
 \code{\link{derive_var_atoxgr_dir}()},
 \code{\link{derive_var_atoxgr}()},
-\code{\link{derive_var_basetype}()},
 \code{\link{derive_var_chg}()},
 \code{\link{derive_var_ontrtfl}()},
 \code{\link{derive_var_pchg}()},

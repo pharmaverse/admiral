@@ -26,10 +26,10 @@
 #'
 #'   *Permitted Values*: a variable
 #'
-#' @param order List of variables for sorting a dataset
+#' @param order Sort order
 #'
-#'   The dataset is sorted by `order` before carrying the last
-#'   observation forward (eg. `AVAL`) within each `by_vars`.
+#'   The dataset is sorted by `order` before carrying the last observation
+#'   forward (e.g. `AVAL`) within each `by_vars`.
 #'
 #' @param keep_vars Variables that need carrying the last observation forward
 #'
@@ -120,7 +120,7 @@ derive_locf_records <- function(dataset,
   # Check if input parameters is a valid list of variables
   assert_vars(by_vars, optional = TRUE)
   assert_vars(keep_vars, optional = TRUE)
-  assert_order_vars(order)
+  assert_expr_list(order)
 
   # Check by_vars and order variables in input datasets
   assert_data_frame(dataset_expected_obs)

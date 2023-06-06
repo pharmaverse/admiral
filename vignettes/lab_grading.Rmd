@@ -41,9 +41,11 @@ The NCI-CTCAEv5 criteria can be found under the heading
 
 # Grading metadata
 
-`{admiral}` will store a metadata data set with required variables and optional variables, the
-optional variables are purely for transparency, and will contain detailed information about
-the grading criteria. The required variables are those used by `{admiral}` to create the grade.
+`{admiral}` will store a metadata data set for each set of grading criteria in the data folder of 
+`{admiral}`. Currently, we have `atoxgr_criteria_ctcv4()` for NCI-CTCAEv4 and `atoxgr_criteria_ctcv5()`
+for NCI-CTCAEv5. Each metadata data set has required variables and optional variables, the optional 
+variables are purely for transparency, and will contain detailed information about the grading criteria. 
+The required variables are those used by `{admiral}` to create the grade.
 
 ## Structure of metadata set
 
@@ -263,12 +265,11 @@ adlb <- adlb %>%
 
 Note: `{admiral}` does not grade 'Anemia' or 'Hemoglobin Increased' because the metadata is 
 based on the SI unit of 'g/L', however the CDISC data has SI unit of 'mmol/L'.
-Please see `SI_UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctcv4` or 
-`atoxgr_criteria_ctcv5`, the metadata is in the data folder of `{admiral}`.
+Please see `SI_UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctcv4()` or 
+`atoxgr_criteria_ctcv5()`, the metadata is in the data folder of `{admiral}`.
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
-
 atoxgr_criteria_ctcv4 %>%
   filter(!is.na(SI_UNIT_CHECK)) %>%
   dataset_vignette(
@@ -389,7 +390,6 @@ For term "INR Increased" there is the following criteria:
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-
 atoxgr_criteria_ctcv4 %>%
   filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
@@ -519,11 +519,16 @@ atoxgr_criteria_ctcv5 %>%
 
 ## Assumptions made when grading
 
+For terms "Alanine aminotransferase increased", "Alkaline phosphatase increased",
+"Aspartate aminotransferase increased", "Blood bilirubin increased" and "GGT increased" the criteria
+is dependent on the Baseline Value `BASE` being normal or abnormal. For `BASE` to be abnormal we compare
+it with the Upper Limit of Normal (ULN) `ANRHI`, i.e. `BASE > ANRHI`.
+This means if `BASE` is abnormal then the grade is always zero for the baseline observation.
+
 For term "INR Increased" there is the following criteria:
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-
 atoxgr_criteria_ctcv5 %>%
   filter(str_detect(TERM, "INR")) %>%
   dataset_vignette(
@@ -548,9 +553,8 @@ Similarly, for terms "Lipase Increased" and "Serum amylase increased" there is t
 
 <br>
 ```{r, eval=TRUE, echo=FALSE}
-
 atoxgr_criteria_ctcv5 %>%
-  filter(str_detect(TERM, "INR") | str_detect(TERM, "amylase")) %>%
+  filter(str_detect(TERM, "Lipase") | str_detect(TERM, "amylase")) %>%
   dataset_vignette(
     display_vars = exprs(TERM, Grade_2, Grade_3, Grade_4)
   )

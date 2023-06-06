@@ -81,18 +81,19 @@ and for others the worst is the lowest value.
 \code{\link[=derive_var_extreme_flag]{derive_var_extreme_flag()}}
 
 Other deprecated: 
-\code{\link{derive_derived_param}()},
-\code{\link{derive_param_first_event}()},
-\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_var_basetype}()},
 \code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_last_dose_amt}()},
+\code{\link{derive_var_last_dose_date}()},
+\code{\link{derive_var_last_dose_grp}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
 \code{\link{derive_vars_disposition_reason}()},
-\code{\link{derive_vars_merged_dtm}()},
-\code{\link{derive_vars_merged_dt}()},
-\code{\link{filter_confirmation}()},
+\code{\link{derive_vars_last_dose}()},
 \code{\link{format_eoxxstt_default}()},
-\code{\link{format_reason_default}()},
-\code{\link{vars}()}
+\code{\link{format_reason_default}()}
 }
 \concept{deprecated}
 \keyword{deprecated}

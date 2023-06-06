@@ -127,6 +127,8 @@
 #' @family der_prm_tte
 #' @keywords der_prm_tte
 #'
+#' @seealso [event_source()], [censor_source()]
+#'
 #' @export
 #'
 #' @examples
@@ -358,8 +360,8 @@ derive_param_tte <- function(dataset = NULL,
     )
   )
   assert_logical_scalar(create_datetime)
-  assert_varval_list(set_values_to, accept_expr = TRUE, optional = TRUE)
-  if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
+  assert_varval_list(set_values_to, optional = TRUE)
+  if (!is.null(set_values_to$PARAMCD) && !is.null(dataset)) {
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
   if (!is.null(by_vars)) {
@@ -406,7 +408,7 @@ derive_param_tte <- function(dataset = NULL,
   )
 
   start_date_imputation_flag <- gsub("(DT|DTM)$", "DTF", as_name(start_date))
-  if (start_date_imputation_flag %in% colnames(dataset_adsl) &
+  if (start_date_imputation_flag %in% colnames(dataset_adsl) &&
     as_name(start_date) != start_date_imputation_flag) {
     adsl_vars <- exprs(
       !!!adsl_vars,
@@ -415,7 +417,7 @@ derive_param_tte <- function(dataset = NULL,
   }
 
   start_time_imputation_flag <- gsub("DTM$", "TMF", as_name(start_date))
-  if (start_time_imputation_flag %in% colnames(dataset_adsl) &
+  if (start_time_imputation_flag %in% colnames(dataset_adsl) &&
     as_name(start_date) != start_time_imputation_flag) {
     adsl_vars <- exprs(
       !!!adsl_vars,
@@ -436,29 +438,8 @@ derive_param_tte <- function(dataset = NULL,
     inner_join(
       adsl,
       by = vars2chr(subject_keys)
-    )
-  tryCatch(
-    new_param <- mutate(new_param, !!!set_values_to),
-    error = function(cnd) {
-      abort(
-        paste0(
-          "Assigning new variables failed!\n",
-          "set_values_to = (\n",
-          paste(
-            " ",
-            names(set_values_to),
-            "=",
-            set_values_to,
-            collapse = "\n"
-          ),
-          "\n)\nError message:\n  ",
-          cnd
-        )
-      )
-    }
-  )
-
-  new_param <- new_param %>%
+    ) %>%
+    process_set_values_to(set_values_to) %>%
     mutate(!!date_var := pmax(!!date_var, !!start_var, na.rm = TRUE)) %>%
     remove_tmp_vars()
 
@@ -607,17 +588,26 @@ filter_date_sources <- function(sources,
 
   data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
-    date <- sources[[i]]$date
+    source_date <- sources[[i]]$date
     source_dataset <- source_datasets[[sources[[i]]$dataset_name]]
+    if (is.symbol(source_date)) {
+      source_date_var <- source_date
+    } else {
+      source_date_var <- get_new_tmp_var(dataset = source_dataset, prefix = "tmp_date")
+      source_dataset <- mutate(
+        source_dataset,
+        !!source_date_var := !!source_date
+      )
+    }
     assert_date_var(
       dataset = source_dataset,
-      var = !!date,
+      var = !!source_date_var,
       dataset_name = sources[[i]]$dataset_name
     )
     data[[i]] <- source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
       filter_extreme(
-        order = exprs(!!date),
+        order = exprs(!!source_date_var),
         by_vars = expr_c(subject_keys, by_vars),
         mode = mode,
         check_type = "none"
@@ -625,9 +615,9 @@ filter_date_sources <- function(sources,
 
     # add date variable and accompanying variables
     if (create_datetime) {
-      date_derv <- exprs(!!date_var := as_datetime(!!date))
+      date_derv <- exprs(!!date_var := as_datetime(!!source_date_var))
     } else {
-      date_derv <- exprs(!!date_var := date(!!date))
+      date_derv <- exprs(!!date_var := date(!!source_date_var))
     }
 
     data[[i]] <- transmute(
@@ -752,7 +742,8 @@ extend_source_datasets <- function(source_datasets,
         full_join(
           mutate(by_groups, temp_dummy = 1),
           mutate(source_datasets[[i]], temp_dummy = 1),
-          by = "temp_dummy"
+          by = "temp_dummy",
+          relationship = "many-to-many"
         ) %>%
         select(-temp_dummy)
     }
@@ -772,11 +763,12 @@ extend_source_datasets <- function(source_datasets,
 #' @param filter An unquoted condition for selecting the observations from
 #'   `dataset` which are events or possible censoring time points.
 #'
-#' @param date A variable providing the date of the event or censoring. A date,
-#'   or a datetime can be specified. An unquoted symbol is expected.
+#' @param date A variable or expression providing the date of the event or
+#'   censoring. A date, or a datetime can be specified. An unquoted symbol or
+#'   expression is expected.
 #'
-#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
-#'   character vector to a date object.
+#'   Refer to `derive_vars_dt()` or `convert_dtc_to_dt()` to impute and derive a
+#'   date from a date character vector to a date object.
 #'
 #' @param censor Censoring value
 #'
@@ -786,7 +778,7 @@ extend_source_datasets <- function(source_datasets,
 #' @param set_values_to A named list returned by `exprs()` defining the variables
 #'   to be set for the event or censoring, e.g. `exprs(EVENTDESC = "DEATH",
 #'   SRCDOM = "ADSL", SRCVAR = "DTHDT")`. The values must be a symbol, a
-#'   character string, a numeric value, or `NA`.
+#'   character string, a numeric value, an expression, or `NA`.
 #'
 #'
 #' @keywords source_specifications
@@ -803,10 +795,11 @@ tte_source <- function(dataset_name,
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
-    date = assert_symbol(enexpr(date)),
+    date = assert_expr(enexpr(date)),
     censor = assert_integer_scalar(censor),
-    set_values_to = assert_varval_list(
+    set_values_to = assert_expr_list(
       set_values_to,
+      named = TRUE,
       optional = TRUE
     )
   )
@@ -816,8 +809,10 @@ tte_source <- function(dataset_name,
 
 #' Create an `event_source` Object
 #'
-#' `event_source` objects are used to define events as input for the
+#' @description `event_source` objects are used to define events as input for the
 #' `derive_param_tte()` function.
+#'
+#' **Note:** This is a wrapper function for the more generic `tte_source()`.
 #'
 #' @inheritParams tte_source
 #'
@@ -851,7 +846,7 @@ event_source <- function(dataset_name,
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),
     filter = !!enexpr(filter),
-    date = !!assert_symbol(enexpr(date)),
+    date = !!assert_expr(enexpr(date)),
     censor = 0,
     set_values_to = set_values_to
   )
@@ -861,8 +856,10 @@ event_source <- function(dataset_name,
 
 #' Create a `censor_source` Object
 #'
-#' `censor_source` objects are used to define censorings as input for the
+#' @description `censor_source` objects are used to define censorings as input for the
 #' `derive_param_tte()` function.
+#'
+#' **Note:** This is a wrapper function for the more generic `tte_source()`.
 #'
 #' @inheritParams tte_source
 #'
@@ -896,7 +893,7 @@ censor_source <- function(dataset_name,
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),
     filter = !!enexpr(filter),
-    date = !!assert_symbol(enexpr(date)),
+    date = !!assert_expr(enexpr(date)),
     censor = assert_integer_scalar(censor, subset = "positive"),
     set_values_to = set_values_to
   )
@@ -949,7 +946,7 @@ list_tte_source_objects <- function(package = "admiral") {
       set_values_to = paste(
         paste(
           names(obj$set_values_to),
-          purrr::map_chr(obj$set_values_to, as_label),
+          map_chr(obj$set_values_to, as_label),
           sep = ": "
         ),
         collapse = "<br>"
