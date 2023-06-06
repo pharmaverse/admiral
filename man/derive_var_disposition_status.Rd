@@ -84,6 +84,7 @@ Derive a disposition status from the the relevant records in the disposition dom
 \seealso{
 Other deprecated: 
 \code{\link{derive_param_extreme_event}()},
+\code{\link{derive_var_basetype}()},
 \code{\link{derive_var_confirmation_flag}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
