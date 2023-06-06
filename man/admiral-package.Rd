@@ -52,6 +52,8 @@ Authors:
   \item Kangjie Zhang
   \item Daphne Grasselly
   \item Adam Forys
+  \item Edoardo Mancini
+  \item Stefan Thoma
 }
 
 Other contributors:
