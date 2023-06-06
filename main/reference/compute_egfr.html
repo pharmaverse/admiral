@@ -67,19 +67,6 @@ Estimated Glomerular Filtration Rate (eGFR) by CKD-EPI or MDRD equations
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -171,12 +158,12 @@ Estimated Glomerular Filtration Rate (eGFR) by CKD-EPI or MDRD equations
 Serum\:Creatinine(mg/dL)}$$</p>
 <p>units = mL/min</p>
 <p><strong>CKD-EPI Chronic Kidney Disease Epidemiology Collaboration formula</strong></p>
-<p>$$eGFR = 142 \times min(SCr/κ, 1)^{α} \times max(SCr/κ, 1)^{-1.200}
+<p>$$eGFR = 142 \times min(SCr/{\kappa}, 1)^{\alpha} \times max(SCr/{\kappa}, 1)^{-1.200}
 \times 0.9938^{Age} \times 1.012 [if\:female]$$</p>
 <p>SCr = standardized serum creatinine in mg/dL
 (Note SCr(mg/dL) = Creat(umol/L) / 88.42)</p>
-<p>κ = 0.7 (females) or 0.9 (males)
-α = -0.241 (female) or -0.302 (male)
+<p>$$\kappa$$ = 0.7 (females) or 0.9 (males)
+$$\alpha$$ = -0.241 (female) or -0.302 (male)
 units = mL/min/1.73 m2</p>
 <p><strong>MDRD Modification of Diet in Renal Disease formula</strong></p>
 <p>$$eGFR = 175 \times (SCr)^{-1.154} \times (age)^{-0.203}
