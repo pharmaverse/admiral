@@ -9,58 +9,27 @@ assert_order_vars(arg, optional = FALSE)
 \arguments{
 \item{arg}{A function argument to be checked}
 
-\item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
+\item{optional}{Is the checked argument optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
 }
 \value{
-The function throws an error if \code{arg} is not a list of variables or \code{desc()}
-calls created using \code{exprs()} and returns the input invisibly otherwise.
+The function throws an error if \code{arg} is not a list of variables or
+expressions created using \code{exprs()} and returns the input invisibly
+otherwise.
 }
 \description{
-Checks if an argument is a valid list of order variables created using \code{exprs()}
-}
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-library(rlang)
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-example_fun <- function(by_vars) {
-  assert_order_vars(by_vars)
-}
+This function is \emph{deprecated}, please use \code{assert_expr_list()} instead.
 
-example_fun(exprs(USUBJID, PARAMCD, desc(AVISITN)))
-
-try(example_fun(quos(USUBJID, PARAMCD)))
-
-try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
-
-try(example_fun(exprs(USUBJID, toupper(PARAMCD), -AVAL)))
+Checks if an argument is a valid list of order variables/expressions created
+using \code{exprs()}
 }
 \seealso{
-Checks for valid input and returns warning or errors messages: 
-\code{\link{assert_atomic_vector}()},
-\code{\link{assert_character_scalar}()},
-\code{\link{assert_character_vector}()},
-\code{\link{assert_data_frame}()},
-\code{\link{assert_date_vector}()},
-\code{\link{assert_expr}()},
-\code{\link{assert_filter_cond}()},
-\code{\link{assert_function_param}()},
-\code{\link{assert_function}()},
-\code{\link{assert_has_variables}()},
-\code{\link{assert_integer_scalar}()},
-\code{\link{assert_list_element}()},
-\code{\link{assert_list_of}()},
-\code{\link{assert_logical_scalar}()},
-\code{\link{assert_named_exprs}()},
-\code{\link{assert_numeric_vector}()},
-\code{\link{assert_one_to_one}()},
-\code{\link{assert_param_does_not_exist}()},
-\code{\link{assert_s3_class}()},
-\code{\link{assert_same_type}()},
-\code{\link{assert_symbol}()},
-\code{\link{assert_unit}()},
-\code{\link{assert_vars}()},
-\code{\link{assert_varval_list}()}
+Other deprecated: 
+\code{\link{quo_c}()},
+\code{\link{quo_not_missing}()},
+\code{\link{replace_symbol_in_quo}()}
 }
-\concept{assertion}
-\keyword{assertion}
+\concept{deprecated}
+\keyword{deprecated}

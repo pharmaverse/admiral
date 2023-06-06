@@ -1,7 +1,7 @@
 Package: admiraldev
 Type: Package
 Title: Utility Functions and Development Tools for the Admiral Package Family
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: c(
     person("Ben", "Straub", email = "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
@@ -22,15 +22,16 @@ Description: Utility functions to check data, variables and conditions for funct
  'admiral' and 'admiral' extension packages.  Additional utility helper functions to assist developers 
  with maintaining documentation, testing and general upkeep of 'admiral' and 'admiral' extension packages.  
 License: Apache License (>= 2)
+BugReports: https://github.com/pharmaverse/admiraldev/issues
 URL: https://pharmaverse.github.io/admiraldev/main/, https://github.com/pharmaverse/admiraldev/
 Encoding: UTF-8
 Language: en-US
 LazyData: false
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Depends: R (>= 3.5)
 Imports:
-    dplyr (>= 0.8.4),
+    dplyr (>= 1.0.5),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
     lubridate (>= 1.7.4),

@@ -1,3 +1,33 @@
+# admiraldev 0.4.0
+
+## New Features
+
+- New function `assert_named()` to check if all elements of an argument are
+named (#241)
+- New function `assert_expr_list()` to check if an argument is a list of
+expressions (#241)
+
+- Added a **Report a bug** link on `admiraldev` website (#257)
+
+## Updates of Existing Functions
+
+## Breaking Changes
+
+- `assert_order_vars()` was deprecated in favor of `assert_expr_list()`. (#241)
+- The following functions have been deprecated from previous admiral versions using the next phase of the deprecation process: (#272)
+
+  - `quo_c()`
+  - `quo_not_missing()`
+  - `replace_symbol_in_quo()`
+- The `quosures` argument was replaced by the `expressions` argument in `replace_values_by_names()`.
+
+## Documentation
+
+- The deprecation strategy was updated regarding unit tests for deprecated
+functions/arguments in phase 1. (#247)
+
+- The programming strategy was updated regarding permitted values and calling functions from package dependencies (#72, #253)
+
 # admiraldev 0.3.0
 
 ## New Features

@@ -9,13 +9,13 @@
 #' @return An object of class `quosures`
 #'
 #'
-#' @keywords quo
-#' @family quo
+#' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 quo_c <- function(...) {
-  deprecate_warn(
-    "0.10.0",
+  deprecate_stop(
+    "0.3.0",
     "quo_c()",
     "expr_c()",
     details = paste(
@@ -23,10 +23,6 @@ quo_c <- function(...) {
       "instead of quosures created by `vars()`."
     )
   )
-  inputs <- unlist(list(...), recursive = TRUE)
-  stopifnot(all(map_lgl(inputs, is_quosure)))
-  is_null <- map_lgl(inputs, quo_is_null)
-  rlang::as_quosures(inputs[!is_null])
 }
 
 #' Concatenate One or More Expressions
@@ -40,7 +36,18 @@ quo_c <- function(...) {
 #'
 #' @export
 expr_c <- function(...) {
-  inputs <- unlist(list(...), recursive = TRUE)
+  # Transform single expression into list of expression
+  inputs <- map(
+    list(...),
+    function(x) {
+      if (typeof(x) != "list") {
+        list(x)
+      } else {
+        x
+      }
+    }
+  )
+  inputs <- flatten(inputs)
   stopifnot(all(map_lgl(inputs, is_expression)))
   is_null <- map_lgl(inputs, is.null)
   inputs[!is_null]
@@ -53,12 +60,12 @@ expr_c <- function(...) {
 #' @return TRUE or error.
 #'
 #'
-#' @keywords quo
-#' @family quo
+#' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 quo_not_missing <- function(x) {
-  deprecate_warn(
+  deprecate_stop(
     "0.3.0",
     "quo_not_missing()",
     details = paste(
@@ -67,15 +74,6 @@ quo_not_missing <- function(x) {
       sep = "\n"
     )
   )
-  !rlang::quo_is_missing(x)
-
-  if (is.null(missing(x)) || quo_is_missing(x)) {
-    stop(paste0(
-      "Argument `",
-      deparse(substitute(x)),
-      "` is missing, with no default"
-    ))
-  }
 }
 
 
@@ -92,14 +90,21 @@ quo_not_missing <- function(x) {
 #'
 #' @return A list of expressions
 #' @export
+#'
+#' @examples
+#' library(rlang)
+#' replace_values_by_names(exprs(AVAL, ADT = convert_dtc_to_dt(EXSTDTC)))
 replace_values_by_names <- function(expressions, quosures) {
   if (!missing(quosures)) {
-    deprecate_warn(
-      "0.10.0",
+    deprecate_stop(
+      "0.3.0",
       "replace_values_by_names(quosures = )",
       "replace_values_by_names(expressions = )"
     )
     expressions <- map(quosures, rlang::quo_get_expr)
+  }
+  if (is.null(names(expressions))) {
+    return(expressions)
   }
   map2(expressions, names(expressions), function(e, n) {
     if (n == "") {
@@ -125,15 +130,15 @@ replace_values_by_names <- function(expressions, quosures) {
 #' @return The quosure where every occurrence of the symbol `target` is replaced
 #'   by `replace`
 #'
-#' @keywords quo
-#' @family quo
+#' @keywords deprecated
+#' @family deprecated
 #'
 #' @export
 replace_symbol_in_quo <- function(quosure,
                                   target,
                                   replace) {
   deprecate_stop(
-    "0.10.0",
+    "0.3.0",
     "replace_symbol_in_quo()",
     "replace_symbol_in_expr()",
     details = paste(
@@ -224,7 +229,7 @@ replace_symbol_in_expr <- function(expression,
 add_suffix_to_vars <- function(order,
                                vars,
                                suffix) {
-  assert_order_vars(order)
+  assert_expr_list(order)
   assert_vars(vars)
   assert_character_scalar(suffix)
   for (i in seq_along(vars)) {

@@ -24,13 +24,10 @@ by \code{replace}
 This function is \emph{deprecated}, please use \code{replace_symbol_in_expr()} instead.
 }
 \seealso{
-Helpers for working with Quosures: 
-\code{\link{add_suffix_to_vars}()},
-\code{\link{expr_c}()},
+Other deprecated: 
+\code{\link{assert_order_vars}()},
 \code{\link{quo_c}()},
-\code{\link{quo_not_missing}()},
-\code{\link{replace_symbol_in_expr}()},
-\code{\link{replace_values_by_names}()}
+\code{\link{quo_not_missing}()}
 }
-\concept{quo}
-\keyword{quo}
+\concept{deprecated}
+\keyword{deprecated}

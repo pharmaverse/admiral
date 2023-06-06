@@ -201,7 +201,7 @@ suppress_warning <- function(expr, regexpr) {
   withCallingHandlers(
     expr,
     warning = function(w) {
-      if (grepl(regexpr, w$message)) {
+      if (any(grepl(regexpr, w$message))) {
         invokeRestart("muffleWarning")
       }
     }

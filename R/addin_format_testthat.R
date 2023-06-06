@@ -1,4 +1,3 @@
-
 # Returns the call for updating a given test_that test file
 # by adding a function name, a test number, and a section.
 # Call the function either by using RStudio Addin "format_test_that_file" or
@@ -13,7 +12,7 @@ prepare_test_that_file <- function(path) {
   }
 
   # check that testthat is used and testing file is opened
-  uses_test_file <- grepl("tests/testthat/test-", path, fixed = T)
+  uses_test_file <- grepl("tests/testthat/test-", path, fixed = TRUE)
   if (!uses_test_file) {
     stop("This Addin works only on unit test files that follow a testthat structure.")
   }
