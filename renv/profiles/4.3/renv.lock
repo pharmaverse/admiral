@@ -12,7 +12,7 @@
       }
     ]
   },
-  "Packages": { 
+  "Packages": {
     "DT": {
       "Package": "DT",
       "Version": "0.27",
