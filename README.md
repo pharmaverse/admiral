@@ -41,13 +41,13 @@ Phases:
 * Phase 2 release is extension packages, e.g. `{admiralonco}`, `admiralophtha`
 
 |Release Schedule | Phase 1- Date and Packages      | Phase 2- Date and Packages |
-|---------------- | --------------------------      | -------------------------- | 
-| Q2-2023         | June 5th                        | June 12th                  | 
-|                 | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            |
-|                 | `{admiral}`                     | `{admiralophtha}`          |   
+|---------------- | --------------------------      | -------------------------- |   
 | Q3-2023         | September 4th                   | September 11th             | 
 |                 | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            | 
 |                 | `{admiral}`                     | `{admiralophtha}`          | 
+| Q4-2023         | December 4th                    | December 11th              | 
+|                 | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            |
+|                 | `{admiral}`                     | `{admiralophtha}`          |  
 
 ## Main Goal
 

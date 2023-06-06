@@ -32,6 +32,8 @@ Authors@R: c(
     person("Kangjie", "Zhang", role = "aut"),
     person("Daphne", "Grasselly", role = "aut"),
     person("Adam", "Forys", role = "aut"),
+    person("Edoardo", "Mancini", role = "aut"),
+    person("Stefan", "Thoma", role = "aut"),
     person("Michael", "Thorpe", role = "ctb"),
     person("Declan", "Hodges", role = "ctb"),
     person("Jaxon", "Abercrombie", role = "ctb"),
@@ -102,7 +104,6 @@ Suggests:
     rmarkdown,
     roxygen2,
     spelling,
-    styler,
     testthat (>= 3.0.0),
     tibble,
     usethis
