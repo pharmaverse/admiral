@@ -75,14 +75,14 @@ units = mL/min
 
 \strong{CKD-EPI Chronic Kidney Disease Epidemiology Collaboration formula}
 
-\deqn{eGFR = 142 \times min(SCr/κ, 1)^{α} \times max(SCr/κ, 1)^{-1.200}
+\deqn{eGFR = 142 \times min(SCr/{\kappa}, 1)^{\alpha} \times max(SCr/{\kappa}, 1)^{-1.200}
 \times 0.9938^{Age} \times 1.012 [if\:female]}
 
 SCr = standardized serum creatinine in mg/dL
 (Note SCr(mg/dL) = Creat(umol/L) / 88.42)
 
-κ = 0.7 (females) or 0.9 (males)
-α = -0.241 (female) or -0.302 (male)
+\deqn{\kappa} = 0.7 (females) or 0.9 (males)
+\deqn{\alpha} = -0.241 (female) or -0.302 (male)
 units = mL/min/1.73 m2
 
 \strong{MDRD Modification of Diet in Renal Disease formula}
