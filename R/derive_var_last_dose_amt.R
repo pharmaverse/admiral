@@ -9,6 +9,7 @@
 #'
 #' This function is *deprecated*, please use `derive_vars_joined()` instead.
 #'
+#' @inheritParams derive_vars_last_dose
 #' @param new_var The new variable added to `dataset`.
 #' @param dose_var The EX source dose amount variable. Defaults to `EXDOSE`.
 #'

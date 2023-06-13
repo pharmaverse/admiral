@@ -10,6 +10,7 @@
 #'
 #' This function is *deprecated*, please use `derive_vars_joined()` instead.
 #'
+#' @inheritParams derive_vars_last_dose
 #' @param new_var The new date or datetime variable added to `dataset`.
 #' @param output_datetime  Display `new_var` as datetime or as date only. Defaults to `TRUE`.
 #'
@@ -32,7 +33,6 @@
 #'
 #' @export
 #'
-#' @seealso [derive_vars_last_dose()], [create_single_dose_dataset()]
 derive_var_last_dose_date <- function(dataset,
                                       dataset_ex,
                                       filter_ex = NULL,

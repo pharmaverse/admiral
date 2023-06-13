@@ -100,9 +100,6 @@ then join cannot be performed properly and an error is issued. To resolve the er
 variables from \code{dataset_ex} (e.g. \code{new_vars = exprs(LSTEXVIS = VISIT)}).
 }
 \seealso{
-\code{\link[=derive_var_last_dose_date]{derive_var_last_dose_date()}},
-\code{\link[=derive_var_last_dose_grp]{derive_var_last_dose_grp()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
-
 Other deprecated: 
 \code{\link{derive_param_extreme_event}()},
 \code{\link{derive_var_basetype}()},

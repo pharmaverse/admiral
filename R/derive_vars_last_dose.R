@@ -81,9 +81,6 @@
 #' @family deprecated
 #' @keywords deprecated
 #'
-#' @seealso [derive_var_last_dose_date()],
-#'   [derive_var_last_dose_grp()], [create_single_dose_dataset()]
-#'
 #' @export
 derive_vars_last_dose <- function(dataset,
                                   dataset_ex,
