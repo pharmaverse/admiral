@@ -12,7 +12,9 @@ derive_param_bsa(
   height_code = "HEIGHT",
   weight_code = "WEIGHT",
   get_unit_expr,
-  filter = NULL
+  filter = NULL,
+  constant_height = FALSE,
+  constant_by_vars = NULL
 )
 }
 \arguments{
@@ -87,6 +89,22 @@ new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
 \emph{Permitted Values:} a condition}
+
+\item{constant_height}{HEIGHT parameter is constant
+
+If the HEIGHT value is considered constant (e.g. measured once at screening),
+the values of BSA will be calculated for each WEIGHT value.
+
+Permitted Values: logical scalar
+
+Default Values: FALSE}
+
+\item{constant_by_vars}{By variables for constant parameters
+
+The constant parameters (parameters that are measured only once) are merged
+to the other parameters using the specified variables. (Refer to Example 2)
+
+\emph{Permitted Values:} list of variables}
 }
 \value{
 The input dataset with the new parameter added. Note, a variable will only
@@ -134,6 +152,19 @@ derive_param_bsa(
     PARAM = "Body Surface Area (m^2)"
   ),
   get_unit_expr = extract_unit(PARAM)
+)
+
+derive_param_bsa(
+  advs,
+  by_vars = exprs(USUBJID, VISIT),
+  method = "Mosteller",
+  set_values_to = exprs(
+    PARAMCD = "BSA",
+    PARAM = "Body Surface Area (m^2)"
+  ),
+  get_unit_expr = extract_unit(PARAM),
+  constant_height = TRUE,
+  constant_by_vars = exprs(USUBJID)
 )
 }
 \seealso{

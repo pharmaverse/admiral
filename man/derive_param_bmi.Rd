@@ -11,7 +11,9 @@ derive_param_bmi(
   weight_code = "WEIGHT",
   height_code = "HEIGHT",
   get_unit_expr,
-  filter = NULL
+  filter = NULL,
+  constant_height = FALSE,
+  constant_by_vars = NULL
 )
 }
 \arguments{
@@ -67,6 +69,22 @@ new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
 \emph{Permitted Values:} a condition}
+
+\item{constant_height}{HEIGHT parameter is constant
+
+If the HEIGHT value is considered constant (e.g. measured once at screening),
+the values of BSA will be calculated for each WEIGHT value.
+
+Permitted Values: logical scalar
+
+Default Values: FALSE}
+
+\item{constant_by_vars}{By variables for constant parameters
+
+The constant parameters (parameters that are measured only once) are merged
+to the other parameters using the specified variables. (Refer to Example 2)
+
+\emph{Permitted Values:} list of variables}
 }
 \value{
 The input dataset with the new parameter added. Note, a variable will only
@@ -107,6 +125,21 @@ derive_param_bmi(
     PARAM = "Body Mass Index (kg/m^2)"
   ),
   get_unit_expr = extract_unit(PARAM)
+)
+
+# Example 2: Derive BMI where height is measured only once
+derive_param_bmi(
+  advs,
+  by_vars = exprs(USUBJID, AVISIT),
+  weight_code = "WEIGHT",
+  height_code = "HEIGHT",
+  set_values_to = exprs(
+    PARAMCD = "BMI",
+    PARAM = "Body Mass Index (kg/m^2)"
+  ),
+  get_unit_expr = extract_unit(PARAM),
+  constant_height = TRUE,
+  constant_by_vars = exprs(USUBJID)
 )
 }
 \seealso{

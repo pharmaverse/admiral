@@ -255,6 +255,15 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #'   Permitted Values: character value
 #'
+#' @param constant_height HEIGHT parameter is constant
+#'
+#'   If the HEIGHT value is considered constant (e.g. measured once at screening),
+#'   the values of BSA will be calculated for each WEIGHT value.
+#'
+#'   Permitted Values: logical scalar
+#'
+#'   Default Values: FALSE
+#'
 #' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
@@ -305,6 +314,19 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'   ),
 #'   get_unit_expr = extract_unit(PARAM)
 #' )
+#'
+#' derive_param_bsa(
+#'   advs,
+#'   by_vars = exprs(USUBJID, VISIT),
+#'   method = "Mosteller",
+#'   set_values_to = exprs(
+#'     PARAMCD = "BSA",
+#'     PARAM = "Body Surface Area (m^2)"
+#'   ),
+#'   get_unit_expr = extract_unit(PARAM),
+#'   constant_height = TRUE,
+#'   constant_by_vars = exprs(USUBJID)
+#' )
 derive_param_bsa <- function(dataset,
                              by_vars,
                              method,
@@ -312,7 +334,9 @@ derive_param_bsa <- function(dataset,
                              height_code = "HEIGHT",
                              weight_code = "WEIGHT",
                              get_unit_expr,
-                             filter = NULL) {
+                             filter = NULL,
+                             constant_height = FALSE,
+                             constant_by_vars = NULL) {
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = exprs(!!!by_vars, PARAMCD, AVAL))
   assert_character_scalar(
@@ -328,6 +352,8 @@ derive_param_bsa <- function(dataset,
   assert_character_scalar(weight_code)
   get_unit_expr <- assert_expr(enexpr(get_unit_expr))
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  assert_vars(constant_by_vars, optional = TRUE)
+  assert_logical_scalar(constant_height)
 
   assert_unit(
     dataset,
@@ -350,14 +376,33 @@ derive_param_bsa <- function(dataset,
     )
   )
 
-  derive_param_computed(
-    dataset,
-    filter = !!filter,
-    parameters = c(height_code, weight_code),
-    by_vars = by_vars,
-    analysis_value = !!bsa_formula,
-    set_values_to = set_values_to
-  )
+  if (constant_height == FALSE) {
+    derive_param_computed(
+      dataset,
+      filter = !!filter,
+      parameters = c(height_code, weight_code),
+      by_vars = by_vars,
+      analysis_value = !!bsa_formula,
+      set_values_to = set_values_to
+    )
+  } else {
+    if (is.null(constant_by_vars)) {
+      abort(
+        "constant_by_vars is expected when constant_height is TRUE"
+      )
+    } else {
+      derive_param_computed(
+        dataset,
+        filter = !!filter,
+        parameters = c(weight_code),
+        by_vars = by_vars,
+        analysis_value = !!bsa_formula,
+        set_values_to = set_values_to,
+        constant_parameters = c(height_code),
+        constant_by_vars = constant_by_vars
+      )
+    }
+  }
 }
 
 #' Compute Body Surface Area (BSA)
@@ -486,6 +531,15 @@ compute_bsa <- function(height = height,
 #'
 #'   Permitted Values: character value
 #'
+#' @param constant_height HEIGHT parameter is constant
+#'
+#'   If the HEIGHT value is considered constant (e.g. measured once at screening),
+#'   the values of BSA will be calculated for each WEIGHT value.
+#'
+#'   Permitted Values: logical scalar
+#'
+#'   Default Values: FALSE
+#'
 #' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
@@ -530,13 +584,30 @@ compute_bsa <- function(height = height,
 #'   ),
 #'   get_unit_expr = extract_unit(PARAM)
 #' )
+#'
+#' # Example 2: Derive BMI where height is measured only once
+#' derive_param_bmi(
+#'   advs,
+#'   by_vars = exprs(USUBJID, AVISIT),
+#'   weight_code = "WEIGHT",
+#'   height_code = "HEIGHT",
+#'   set_values_to = exprs(
+#'     PARAMCD = "BMI",
+#'     PARAM = "Body Mass Index (kg/m^2)"
+#'   ),
+#'   get_unit_expr = extract_unit(PARAM),
+#'   constant_height = TRUE,
+#'   constant_by_vars = exprs(USUBJID)
+#' )
 derive_param_bmi <- function(dataset,
                              by_vars,
                              set_values_to = exprs(PARAMCD = "BMI"),
                              weight_code = "WEIGHT",
                              height_code = "HEIGHT",
                              get_unit_expr,
-                             filter = NULL) {
+                             filter = NULL,
+                             constant_height = FALSE,
+                             constant_by_vars = NULL) {
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = exprs(!!!by_vars, PARAMCD, AVAL))
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
@@ -545,6 +616,9 @@ derive_param_bmi <- function(dataset,
   assert_character_scalar(height_code)
   get_unit_expr <- assert_expr(enexpr(get_unit_expr))
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  assert_vars(constant_by_vars, optional = TRUE)
+  assert_logical_scalar(constant_height)
+
 
   assert_unit(
     dataset,
@@ -559,17 +633,39 @@ derive_param_bmi <- function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
-  derive_param_computed(
-    dataset,
-    filter = !!filter,
-    parameters = c(weight_code, height_code),
-    by_vars = by_vars,
-    analysis_value = compute_bmi(
-      height = !!sym(paste0("AVAL.", height_code)),
-      weight = !!sym(paste0("AVAL.", weight_code))
-    ),
-    set_values_to = set_values_to
-  )
+  if (constant_height == FALSE) {
+    derive_param_computed(
+      dataset,
+      filter = !!filter,
+      parameters = c(weight_code, height_code),
+      by_vars = by_vars,
+      analysis_value = compute_bmi(
+        height = !!sym(paste0("AVAL.", height_code)),
+        weight = !!sym(paste0("AVAL.", weight_code))
+      ),
+      set_values_to = set_values_to
+    )
+  } else {
+    if (is.null(constant_by_vars)) {
+      abort(
+        "constant_by_vars is expected when constant_height is TRUE"
+      )
+    } else {
+      derive_param_computed(
+        dataset,
+        filter = !!filter,
+        parameters = c(weight_code),
+        by_vars = by_vars,
+        analysis_value = compute_bmi(
+          height = !!sym(paste0("AVAL.", height_code)),
+          weight = !!sym(paste0("AVAL.", weight_code))
+        ),
+        set_values_to = set_values_to,
+        constant_parameters = c(height_code),
+        constant_by_vars = constant_by_vars
+      )
+    }
+  }
 }
 
 #' Compute Body Mass Index (BMI)
