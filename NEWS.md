@@ -1,3 +1,43 @@
+# admiral 0.12.0
+
+## New Features
+
+
+## Updates of Existing Functions
+
+
+## Breaking Changes
+- The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)
+
+  - `derive_var_disposition_status()`
+  - `derive_vars_disposition_reason()`
+  - `format_eoxxstt_default()`
+  - `format_reason_default()`
+  - `derive_var_worst_flag()`
+
+- The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1950)
+
+  - `derive_param_extreme_event()`
+  - `derive_vars_last_dose()`
+  - `derive_var_last_dose_amt()`
+  - `derive_var_last_dose_date()`
+  - `derive_var_last_dose_grp()`
+  - `derive_var_basetype()`
+  - `derive_var_merged_cat()`
+  - `derive_var_merged_character()`
+  
+- The arguments `dataset_adsl` in the function `derive_param_exist_flag()` and
+`subject_keys` have been deprecated versions using the next phase of the deprecation process. (#1950)
+
+- The `filter` argument in `derive_extreme_records()` was deprecated in favor of
+the `filter_add` using the next phase of the deprecation process. (#1950)
+
+## Documentation
+
+
+## Various
+
+
 # admiral 0.11.0
 
 ## New Features

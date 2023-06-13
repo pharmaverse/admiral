@@ -124,47 +124,5 @@ derive_param_extreme_event <- function(dataset = NULL,
                                        subject_keys = get_admiral_option("subject_keys"),
                                        set_values_to,
                                        check_type = "warning") {
-  deprecate_warn("0.11.0", "derive_param_extreme_event()", "derive_extreme_records()")
-
-  # Check input arguments
-  filter_source <- assert_filter_cond(enexpr(filter_source))
-  assert_vars(subject_keys)
-  assert_expr_list(order, optional = TRUE)
-  assert_data_frame(dataset_source,
-    required_vars = exprs(!!!subject_keys, !!!extract_vars(order))
-  )
-  new_var <- assert_symbol(enexpr(new_var), optional = TRUE)
-  assert_same_type(true_value, false_value)
-  assert_data_frame(dataset, optional = TRUE)
-  assert_data_frame(dataset_adsl, required_vars = subject_keys)
-  check_type <-
-    assert_character_scalar(
-      check_type,
-      values = c("none", "warning", "error"),
-      case_sensitive = FALSE
-    )
-  mode <- assert_character_scalar(
-    mode,
-    values = c("first", "last"),
-    case_sensitive = FALSE
-  )
-  assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  if (!is.null(set_values_to$PARAMCD) && !is.null(dataset)) {
-    assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
-  }
-
-  derive_extreme_records(
-    dataset,
-    dataset_add = dataset_source,
-    dataset_ref = dataset_adsl,
-    by_vars = subject_keys,
-    order = order,
-    mode = mode,
-    filter_add = !!filter_source,
-    check_type = check_type,
-    exist_flag = !!new_var,
-    true_value = true_value,
-    false_value = false_value,
-    set_values_to = set_values_to
-  )
+  deprecate_stop("0.11.0", "derive_param_extreme_event()", "derive_extreme_records()")
 }
