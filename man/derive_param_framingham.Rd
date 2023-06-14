@@ -34,11 +34,10 @@ and \code{hdl_code}.}
 
 \item{by_vars}{Grouping variables
 
-For each group defined by \code{by_vars} an observation is added to the output
-dataset. Only variables specified in \code{by_vars} will be populated
+Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-\emph{Permitted Values:} list of variables}
+Permitted Values: list of variables}
 
 \item{set_values_to}{Variables to be set
 
@@ -245,7 +244,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_param_extreme_record}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},
 \code{\link{derive_param_rr}()},

@@ -59,6 +59,12 @@ Input dataset with additional column \code{new_var}.
 }
 \description{
 Add a variable for dose amount from the last dose to the input dataset.
+
+\strong{Note:} This is a wrapper function for the function \code{derive_vars_last_dose()}.
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_vars_joined()} instead.
 }
 \details{
 The last dose amount is derived as the dose amount where the maximum \code{dose_date} is
@@ -69,77 +75,23 @@ over a period defined by a start and end date) the function
 \code{create_single_dose_dataset()} can be used to generate single doses from
 aggregate dose information and satisfy \code{single_dose_condition}.
 }
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(admiral_ae)
-data(ex_single)
-
-ex_single <- derive_vars_dtm(
-  head(ex_single, 100),
-  dtc = EXENDTC,
-  new_vars_prefix = "EXEN",
-  flag_imputation = "none"
-)
-
-adae <- admiral_ae \%>\%
-  head(100) \%>\%
-  derive_vars_dtm(
-    dtc = AESTDTC,
-    new_vars_prefix = "AST",
-    highest_imputation = "M"
-  )
-
-adae \%>\%
-  derive_var_last_dose_amt(
-    dataset_ex = ex_single,
-    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      !is.na(EXENDTM),
-    dose_date = EXENDTM,
-    analysis_date = ASTDTM,
-    new_var = LDOSE,
-    dose_var = EXDOSE
-  ) \%>\%
-  select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSE)
-
-# or with traceability variables
-adae \%>\%
-  derive_var_last_dose_amt(
-    dataset_ex = ex_single,
-    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      !is.na(EXENDTM),
-    dose_date = EXENDTM,
-    analysis_date = ASTDTM,
-    new_var = LDOSE,
-    dose_var = EXDOSE,
-    traceability_vars = exprs(
-      LDOSEDOM = "EX",
-      LDOSESEQ = EXSEQ,
-      LDOSEVAR = "EXDOSE"
-    )
-  ) \%>\%
-  select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSE)
-}
 \seealso{
 \code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
 
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
+Other deprecated: 
+\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_var_basetype}()},
+\code{\link{derive_var_confirmation_flag}()},
+\code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
 \code{\link{derive_var_merged_cat}()},
 \code{\link{derive_var_merged_character}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_merged_summary}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_joined}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_last_dose}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_transposed}()},
-\code{\link{get_summary_records}()}
+\code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()}
 }
-\concept{der_gen}
-\keyword{der_gen}
+\concept{deprecated}
+\keyword{deprecated}

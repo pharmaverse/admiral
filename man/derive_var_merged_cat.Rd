@@ -43,10 +43,10 @@ If the argument is set to a non-null value, for each by group the first or
 last observation from the additional dataset is selected with respect to the
 specified order.
 
-\emph{Default}: \code{NULL}
+Variables defined by the \code{new_vars} argument can be used in the sort order.
 
-\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{new_var}{New variable
 
@@ -66,7 +66,8 @@ Only observations fulfilling the specified condition are taken into account
 for merging. If the argument is not specified, all observations are
 considered.
 
-\emph{Default}: \code{NULL}
+Variables defined by the \code{new_vars} argument can be used in the filter
+condition.
 
 \emph{Permitted Values}: a condition}
 
@@ -76,8 +77,6 @@ Determines if the first or last observation is selected. If the \code{order}
 argument is specified, \code{mode} must be non-null.
 
 If the \code{order} argument is not specified, the \code{mode} argument is ignored.
-
-\emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
 
@@ -94,6 +93,10 @@ input dataset and additionally the variable specified for \code{new_var} derived
 from the additional dataset (\code{dataset_add}).
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_vars_merged()} instead.
+
 Merge a categorization variable from a dataset to the input dataset. The
 observations to merge can be selected by a condition and/or selecting the
 first or last observation for each by group.
@@ -109,11 +112,29 @@ first or last observation for each by group.
 }
 }
 \examples{
-library(admiral.test)
 library(dplyr, warn.conflicts = FALSE)
-data("admiral_dm")
-data("admiral_vs")
 
+vs <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSSEQ,       ~VSDTC,
+  "PILOT01",    "VS", "04-1127", "SCREENING",  "HEIGHT",     165.1,     43, "2013-09-16",
+  "PILOT01",    "VS", "04-1127", "SCREENING",  "WEIGHT",     42.87,    142, "2013-09-16",
+  "PILOT01",    "VS", "04-1127",  "BASELINE",  "WEIGHT",     41.05,    143, "2013-10-02",
+  "PILOT01",    "VS", "04-1127",    "WEEK 2",  "WEIGHT",     42.64,    144, "2013-10-16",
+  "PILOT01",    "VS", "04-1127",    "WEEK 4",  "WEIGHT",     41.73,    145, "2013-10-30",
+  "PILOT01",    "VS", "04-1127",   "WEEK 26",  "WEIGHT",     43.09,    152, "2014-03-31",
+  "PILOT01",    "VS", "06-1049", "SCREENING",  "HEIGHT",    167.64,     28, "2013-04-30",
+  "PILOT01",    "VS", "06-1049", "SCREENING",  "WEIGHT",     57.61,     92, "2013-04-30",
+  "PILOT01",    "VS", "06-1049",  "BASELINE",  "WEIGHT",     57.83,     93, "2013-05-14",
+  "PILOT01",    "VS", "06-1049",    "WEEK 2",  "WEIGHT",     58.29,     94, "2013-05-28",
+  "PILOT01",    "VS", "06-1049",    "WEEK 4",  "WEIGHT",     58.97,     95, "2013-06-11"
+)
+
+dm <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+  "PILOT01",    "DM", "01-1057",   59, "YEARS",
+  "PILOT01",    "DM", "04-1127",   84, "YEARS",
+  "PILOT01",    "DM", "06-1049",   60, "YEARS"
+)
 wgt_cat <- function(wgt) {
   case_when(
     wgt < 50 ~ "low",
@@ -123,8 +144,8 @@ wgt_cat <- function(wgt) {
 }
 
 derive_var_merged_cat(
-  admiral_dm,
-  dataset_add = admiral_vs,
+  dm,
+  dataset_add = vs,
   by_vars = exprs(STUDYID, USUBJID),
   order = exprs(VSDTC, VSSEQ),
   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
@@ -135,10 +156,12 @@ derive_var_merged_cat(
 ) \%>\%
   select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 
+
+
 # defining a value for missing VS data
 derive_var_merged_cat(
-  admiral_dm,
-  dataset_add = admiral_vs,
+  dm,
+  dataset_add = vs,
   by_vars = exprs(STUDYID, USUBJID),
   order = exprs(VSDTC, VSSEQ),
   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
@@ -151,23 +174,20 @@ derive_var_merged_cat(
   select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 }
 \seealso{
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
+Other deprecated: 
+\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_var_basetype}()},
+\code{\link{derive_var_confirmation_flag}()},
+\code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
 \code{\link{derive_var_merged_character}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_merged_summary}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_joined}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_disposition_reason}()},
 \code{\link{derive_vars_last_dose}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_transposed}()},
-\code{\link{get_summary_records}()}
+\code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()}
 }
-\concept{der_gen}
-\keyword{der_gen}
+\concept{deprecated}
+\keyword{deprecated}

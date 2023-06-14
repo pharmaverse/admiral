@@ -52,7 +52,10 @@ observations are removed.}
 
 \item{order}{Order
 
-The observations are ordered by the specified order.}
+The observations are ordered by the specified order.
+
+\emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))}}
 
 \item{tmp_obs_nr_var}{Temporary observation number
 
@@ -138,7 +141,7 @@ USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
 The joined dataset is restricted to observations with respect to
 \code{join_type} and \code{order}.
 
-The dataset from the example in the previous step with \code{join_type = "after"} and order = exprs(AVISITN)` is restricted to
+The dataset from the example in the previous step with \code{join_type = "after"} and \code{order = exprs(AVISITN)} is restricted to
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{A tibble: 4 x 6
 USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
@@ -323,7 +326,9 @@ filter_joined(
 
 Utilities for Filtering Observations: 
 \code{\link{count_vals}()},
+\code{\link{filter_exist}()},
 \code{\link{filter_extreme}()},
+\code{\link{filter_not_exist}()},
 \code{\link{filter_relative}()},
 \code{\link{max_cond}()},
 \code{\link{min_cond}()}

@@ -2,7 +2,8 @@
 % Please edit documentation in R/derive_joined.R
 \name{derive_vars_joined}
 \alias{derive_vars_joined}
-\title{Add Variables from an Additional Dataset Based on Conditions from Both Datasets}
+\title{Add Variables from an Additional Dataset Based on Conditions from Both
+Datasets}
 \usage{
 derive_vars_joined(
   dataset,
@@ -14,6 +15,7 @@ derive_vars_joined(
   filter_add = NULL,
   filter_join = NULL,
   mode = NULL,
+  missing_values = NULL,
   check_type = "warning"
 )
 }
@@ -43,8 +45,13 @@ expected in the additional dataset (\code{dataset_add}). If a variable is
 available in both \code{dataset} and \code{dataset_add}, the one from \code{dataset_add}
 is used for the sorting.
 
-\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{exprs()}, e.g., \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
+If an expression is named, e.g., \code{exprs(EXSTDT = convert_dtc_to_dt(EXSTDTC), EXSEQ)}, a corresponding variable (\code{EXSTDT}) is
+added to the additional dataset and can be used in the filter conditions
+(\code{filter_add}, \code{filter_join}) and for \code{join_vars} and \code{new_vars}. The
+variable is not included in the output dataset.
+
+\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{new_vars}{Variables to add
 
@@ -58,10 +65,15 @@ And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
 \code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
 \code{old_var2} to \code{new_var2}.
 
+Values of the added variables can be modified by specifying an expression.
+For example, \code{new_vars = LASTRSP = exprs(str_to_upper(AVALC))} adds the
+variable \code{LASTRSP} to the dataset and sets it to the upper case value of
+\code{AVALC}.
+
 If the argument is not specified or set to \code{NULL}, all variables from the
 additional dataset (\code{dataset_add}) are added.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}}
+\emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
 
 \item{join_vars}{Variables to use from additional dataset
 
@@ -71,9 +83,14 @@ do not need to be repeated for \code{join_vars}. If a specified variable exists
 in both the input dataset and the additional dataset, the suffix ".join" is
 added to the variable from the additional dataset.
 
+If an expression is named, e.g., \code{exprs(EXTDT = convert_dtc_to_dt(EXSTDTC))}, a corresponding variable is added to the
+additional dataset and can be used in the filter conditions (\code{filter_add},
+\code{filter_join}) and for \code{new_vars}. The variable is not included in the
+output dataset.
+
 The variables are not included in the output dataset.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}}
+\emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
@@ -81,12 +98,18 @@ Only observations from \code{dataset_add} fulfilling the specified condition are
 joined to the input dataset. If the argument is not specified, all
 observations are joined.
 
+Variables created by \code{order} or \code{new_vars} arguments can be used in the
+condition.
+
 \emph{Permitted Values}: a condition}
 
 \item{filter_join}{Filter for the joined dataset
 
 The specified condition is applied to the joined dataset. Therefore
 variables from both datasets \code{dataset} and \code{dataset_add} can be used.
+
+Variables created by \code{order} or \code{new_vars} arguments can be used in the
+condition.
 
 \emph{Permitted Values}: a condition}
 
@@ -99,11 +122,21 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
 
+\item{missing_values}{Values for non-matching observations
+
+For observations of the input dataset (\code{dataset}) which do not have a
+matching observation in the additional dataset (\code{dataset_add}) the values
+of the specified variables are set to the specified value. Only variables
+specified for \code{new_vars} can be specified for \code{missing_values}.
+
+\emph{Permitted Values}: named list of expressions, e.g.,
+\code{exprs(BASEC = "MISSING", BASE = -1)}}
+
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
-if the observations of the (restricted) joined dataset are not unique
-with respect to the by variables and the order.
+if the observations of the (restricted) joined dataset are not unique with
+respect to the by variables and the order.
 
 This argument is ignored if \code{order} is not specified. In this case an error
 is issued independent of \code{check_type} if the restricted joined dataset
@@ -125,20 +158,25 @@ before the current observation.
 }
 \details{
 \enumerate{
-\item The records from the additional dataset (\code{dataset_add}) are restricted
-to those matching the \code{filter_add} condition.
-\item The input dataset and the (restricted) additional dataset are left
-joined by the grouping variables (\code{by_vars}). If no grouping variables are
+\item The variables specified by \code{order} are added to the additional dataset
+(\code{dataset_add}).
+\item The variables specified by \code{join_vars} are added to the additional dataset
+(\code{dataset_add}).
+\item The records from the additional dataset (\code{dataset_add}) are restricted to
+those matching the \code{filter_add} condition.
+\item The input dataset and the (restricted) additional dataset are left joined
+by the grouping variables (\code{by_vars}). If no grouping variables are
 specified, a full join is performed.
 \item The joined dataset is restricted by the \code{filter_join} condition.
 \item If \code{order} is specified, for each observation of the input dataset the
 first or last observation (depending on \code{mode}) is selected.
-\item The variables specified for \code{new_vars} are renamed (if requested) and
+\item The variables specified for \code{new_vars} are created (if requested) and
 merged to the input dataset. I.e., the output dataset contains all
 observations from the input dataset. For observations without a matching
-observation in the joined dataset the new variables are set to \code{NA}.
-Observations in the additional dataset which have no matching observation
-in the input dataset are ignored.
+observation in the joined dataset the new variables are set as specified by
+\code{missing_values} (or to \code{NA} for variables not in \code{missing_values}).
+Observations in the additional dataset which have no matching observation in
+the input dataset are ignored.
 }
 }
 \examples{
@@ -266,21 +304,46 @@ derive_vars_joined(
   join_vars = exprs(APERSDT, APEREDT),
   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
 )
+
+# Add day since last dose (LDRELD)
+adae <- tribble(
+  ~USUBJID, ~ASTDT,       ~AESEQ,
+  "1",      "2020-02-02",      1,
+  "1",      "2020-02-04",      2
+) \%>\%
+  mutate(ASTDT = ymd(ASTDT))
+
+ex <- tribble(
+  ~USUBJID, ~EXSDTC,
+  "1",      "2020-01-10",
+  "1",      "2020-01",
+  "1",      "2020-01-20",
+  "1",      "2020-02-03"
+)
+
+## Please note that EXSDT is created via the order argument and then used
+## for new_vars, filter_add, and filter_join
+derive_vars_joined(
+  adae,
+  dataset_add = ex,
+  by_vars = exprs(USUBJID),
+  order = exprs(EXSDT = convert_dtc_to_dt(EXSDTC)),
+  new_vars = exprs(LDRELD = compute_duration(
+    start_date = EXSDT, end_date = ASTDT
+  )),
+  filter_add = !is.na(EXSDT),
+  filter_join = EXSDT <= ASTDT,
+  mode = "last"
+)
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_last_dose_amt}()},
-\code{\link{derive_var_last_dose_date}()},
-\code{\link{derive_var_last_dose_grp}()},
-\code{\link{derive_var_merged_cat}()},
-\code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},

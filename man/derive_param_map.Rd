@@ -84,6 +84,8 @@ be populated in the new parameter rows if it is specified in \code{by_vars}.
 \description{
 Adds a record for mean arterial pressure (MAP) for each by group
 (e.g., subject and visit) where the source parameters are available.
+
+\strong{Note:} This is a wrapper function for the more generic \code{derive_param_computed()}.
 }
 \details{
 The analysis value of the new parameter is derived as
@@ -150,7 +152,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_param_extreme_record}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_qtc}()},
 \code{\link{derive_param_rr}()},

@@ -14,5 +14,5 @@ Please check off each taskbox as an acknowledgment that you completed the task o
 - [ ] Address or fix all lintr warnings and errors - `lintr::lint_package()`
 - [ ] Run `R CMD check` locally and address all errors and warnings - `devtools::check()`
 - [ ] Link the issue in the Development Section on the right hand side.
-- [ ] Address all merge conflicts and resolve appropriately 
+- [ ] Address all merge conflicts and resolve appropriately
 - [ ] Pat yourself on the back for a job well done! Much love to your accomplishment!

@@ -111,6 +111,7 @@ convert_dtc_to_dt("2019-07")
 }
 \seealso{
 Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_age_years}()},
 \code{\link{compute_dtf}()},
 \code{\link{compute_duration}()},
 \code{\link{compute_tmf}()},

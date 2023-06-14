@@ -4,19 +4,14 @@
 \alias{assert_terms}
 \title{Asserts Requirements for Terms for Queries}
 \usage{
-assert_terms(
-  terms,
-  expect_query_name = FALSE,
-  expect_query_id = FALSE,
-  source_text
-)
+assert_terms(terms, expect_grpname = FALSE, expect_grpid = FALSE, source_text)
 }
 \arguments{
 \item{terms}{Terms provided by user}
 
-\item{expect_query_name}{Is the \code{QUERY_NAME} column expected?}
+\item{expect_grpname}{Is the \code{GRPNAME} column expected?}
 
-\item{expect_query_id}{Is the \code{QUERY_ID} column expected?}
+\item{expect_grpid}{Is the \code{GRPID} column expected?}
 
 \item{source_text}{Text describing the source of the terms, e.g., \verb{"the data frame provided for the }definition\verb{ element"}.}
 }
@@ -25,10 +20,10 @@ An error is issued if
 \itemize{
 \item \code{terms} is not a data frame,
 \item \code{terms} has zero observations,
-\item the \code{TERM_LEVEL} variable is not in \code{terms},
-\item neither the \code{TERM_NAME} nor the \code{TERM_ID} variable is in \code{terms},
-\item \code{expect_query_name == TRUE} and the \code{QUERY_NAME} variable is not in \code{terms},
-\item \code{expect_query_id == TRUE} and the \code{QUERY_ID} variable is not in \code{terms},
+\item the \code{SRCVAR} variable is not in \code{terms},
+\item neither the \code{TERMNAME} nor the \code{TERMID} variable is in \code{terms},
+\item \code{expect_grpname == TRUE} and the \code{GRPNAME} variable is not in \code{terms},
+\item \code{expect_grpid == TRUE} and the \code{GRPID} variable is not in \code{terms},
 }
 }
 \description{
@@ -50,10 +45,12 @@ try(
 
 Other Advanced Functions: 
 \code{\link{assert_db_requirements}()},
+\code{\link{assert_parameters_argument}()},
 \code{\link{assert_valid_queries}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{filter_date_sources}()},
 \code{\link{format.basket_select}()},
+\code{\link{get_hori_data}()},
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
 \code{\link{validate_basket_select}()},

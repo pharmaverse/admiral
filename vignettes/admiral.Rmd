@@ -149,7 +149,7 @@ The most important functions in `{admiral}` are the
 [derivations](../reference/index.html#derivations-for-adding-variables).
 Derivations add variables or observations to the input dataset. Existing
 variables and observations of the input dataset are not changed. Derivation
-functions start with `derive_`. The first parameter of these functions expects
+functions start with `derive_`. The first argument of these functions expects
 the input dataset. This allows us to string together derivations using the `%>%`
 operator.
 
@@ -180,17 +180,13 @@ input and return a vector. Usually these computation functions can not be used w
 example below:
 
 ```{r, eval=TRUE}
-# Derive final lab visit date
-ds_final_lab_visit <- ds %>%
-  filter(DSDECOD == "FINAL LAB VISIT") %>%
-  transmute(USUBJID, FINLABDT = convert_dtc_to_dt(DSSTDTC))
-
-# Derive treatment variables
+# Add the date of the final lab visit to ADSL
 adsl <- dm %>%
-  # Merge on final lab visit date
   derive_vars_merged(
-    dataset_add = ds_final_lab_visit,
-    by_vars = exprs(USUBJID)
+    dataset_add = ds,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(FINLABDT = convert_dtc_to_dt(DSSTDTC)),
+    filter_add = DSDECOD == "FINAL LAB VISIT"
   )
 ```
 
@@ -201,21 +197,21 @@ dataset_vignette(
 )
 ```
 
-# Parameters
+# Arguments
 
-For parameters which expect variable names or expressions of variable names, 
+For arguments which expect variable names or expressions of variable names, 
 symbols or expressions must be specified rather than strings.
 
-- For parameters which expect a single variable name, the name can be specified
+- For arguments which expect a single variable name, the name can be specified
 without quotes and quotation, e.g. `new_var = TEMPBL`
 
-- For parameters which expect one or more variable names, a list of symbols is
+- For arguments which expect one or more variable names, a list of symbols is
 expected, e.g. `by_vars = exprs(PARAMCD, AVISIT)` 
 
-- For parameters which expect a single expression, the expression needs to be
+- For arguments which expect a single expression, the expression needs to be
 passed "as is", e.g. `filter = PARAMCD == "TEMP"`
 
-- For parameters which expect one or more expressions, a list of expressions is
+- For arguments which expect one or more expressions, a list of expressions is
 expected, e.g. `order = exprs(AVISIT, desc(AESEV))`
 
 # Handling of Missing Values

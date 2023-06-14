@@ -60,11 +60,34 @@ order specified for the \code{order} parameter and the mode specified for the
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("admiral_vs")
-
-admiral_vs \%>\%
-  select(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
+vs <- tribble(
+  ~STUDYID,  ~DOMAIN,      ~USUBJID, ~VSTESTCD, ~VISITNUM, ~VSTPTNUM,
+  "PILOT01",    "VS", "01-703-1182",   "DIABP",         3,       815,
+  "PILOT01",    "VS", "01-703-1182",   "DIABP",         3,       816,
+  "PILOT01",    "VS", "01-703-1182",   "DIABP",         4,       815,
+  "PILOT01",    "VS", "01-703-1182",   "DIABP",         4,       816,
+  "PILOT01",    "VS", "01-703-1182",   "PULSE",         3,       815,
+  "PILOT01",    "VS", "01-703-1182",   "PULSE",         3,       816,
+  "PILOT01",    "VS", "01-703-1182",   "PULSE",         4,       815,
+  "PILOT01",    "VS", "01-703-1182",   "PULSE",         4,       816,
+  "PILOT01",    "VS", "01-703-1182",   "SYSBP",         3,       815,
+  "PILOT01",    "VS", "01-703-1182",   "SYSBP",         3,       816,
+  "PILOT01",    "VS", "01-703-1182",   "SYSBP",         4,       815,
+  "PILOT01",    "VS", "01-703-1182",   "SYSBP",         4,       816,
+  "PILOT01",    "VS", "01-716-1229",   "DIABP",         3,       815,
+  "PILOT01",    "VS", "01-716-1229",   "DIABP",         3,       816,
+  "PILOT01",    "VS", "01-716-1229",   "DIABP",         4,       815,
+  "PILOT01",    "VS", "01-716-1229",   "DIABP",         4,       816,
+  "PILOT01",    "VS", "01-716-1229",   "PULSE",         3,       815,
+  "PILOT01",    "VS", "01-716-1229",   "PULSE",         3,       816,
+  "PILOT01",    "VS", "01-716-1229",   "PULSE",         4,       815,
+  "PILOT01",    "VS", "01-716-1229",   "PULSE",         4,       816,
+  "PILOT01",    "VS", "01-716-1229",   "SYSBP",         3,       815,
+  "PILOT01",    "VS", "01-716-1229",   "SYSBP",         3,       816,
+  "PILOT01",    "VS", "01-716-1229",   "SYSBP",         4,       815,
+  "PILOT01",    "VS", "01-716-1229",   "SYSBP",         4,       816
+)
+vs \%>\%
   derive_var_obs_number(
     by_vars = exprs(USUBJID, VSTESTCD),
     order = exprs(VISITNUM, desc(VSTPTNUM))
@@ -74,16 +97,10 @@ admiral_vs \%>\%
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_last_dose_amt}()},
-\code{\link{derive_var_last_dose_date}()},
-\code{\link{derive_var_last_dose_grp}()},
-\code{\link{derive_var_merged_cat}()},
-\code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},

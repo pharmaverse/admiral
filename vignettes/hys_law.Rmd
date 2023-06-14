@@ -130,7 +130,7 @@ hylaw_records %>%
 
 ## How to Create New Parameters and Rows {#newparams}
 
-Using `derive_param_exist_flag()` you can create a variety of parameters for your final dataset with `AVAL = 1/0` for your specific Hy's Law analysis. Below is an example of how to indicate a potential Hy's Law event, with `PARAMCD` set as `"HYSLAW"` and `PARAM` set to `"ALT/AST >= 3xULN and BILI >= 2xULN"` for **each patient** using the flags from the prior dataset. This method allows for flexibility as well, if parameters for each visit was desired, you would add `AVISIT` and `ADT` to the `select()` and `subject_keys` lines as denoted from the following code. 
+Using `derive_param_exist_flag()` you can create a variety of parameters for your final dataset with `AVAL = 1/0` for your specific Hy's Law analysis. Below is an example of how to indicate a potential Hy's Law event, with `PARAMCD` set as `"HYSLAW"` and `PARAM` set to `"ALT/AST >= 3xULN and BILI >= 2xULN"` for **each patient** using the flags from the prior dataset. This method allows for flexibility as well, if parameters for each visit was desired, you would add `AVISIT` and `ADT` to the `select()` and `by_vars` lines as denoted from the following code. 
 
 Additional modifications can be made such as:
 
@@ -148,15 +148,16 @@ hylaw_records_fls <- hylaw_records %>%
   distinct()
 
 hylaw_params <- derive_param_exist_flag(
-  dataset_adsl = hylaw_records_pts_visits,
+  dataset_ref = hylaw_records_pts_visits,
   dataset_add = hylaw_records_fls,
   condition = CRIT1FL == "Y" & BILI_CRITFL == "Y",
   false_value = "N",
   missing_value = "N",
-  subject_keys = exprs(STUDYID, USUBJID, TRT01A), # add AVISIT, ADT for by visit
+  by_vars = exprs(STUDYID, USUBJID, TRT01A), # add AVISIT, ADT for by visit
   set_values_to = exprs(
     PARAMCD = "HYSLAW",
-    PARAM = "ALT/AST >= 3xULN and BILI >= 2xULN"
+    PARAM = "ALT/AST >= 3xULN and BILI >= 2xULN",
+    AVAL = yn_to_numeric(AVALC)
   )
 )
 ```

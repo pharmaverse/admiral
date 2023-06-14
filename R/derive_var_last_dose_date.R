@@ -1,6 +1,14 @@
 #' Derive Last Dose Date-Time
 #'
-#' Add a variable for the dose date or datetime of the last dose to the input dataset.
+#' @description Add a variable for the dose date or datetime of the last dose to
+#' the input dataset.
+#'
+#' **Note:** This is a wrapper function for the function `derive_vars_last_dose()`.
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_joined()` instead.
 #'
 #' @inheritParams derive_vars_last_dose
 #' @param new_var The new date or datetime variable added to `dataset`.
@@ -20,45 +28,12 @@
 #' @return Input dataset with additional column `new_var`.
 #'
 #'
-#' @family der_gen
-#' @keywords der_gen
+#' @family deprecated
+#' @keywords deprecated
 #'
 #' @export
 #'
 #' @seealso [derive_vars_last_dose()], [create_single_dose_dataset()]
-#'
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data(admiral_ae)
-#' data(ex_single)
-#'
-#' ex_single <- derive_vars_dtm(
-#'   head(ex_single, 100),
-#'   dtc = EXENDTC,
-#'   new_vars_prefix = "EXEN",
-#'   flag_imputation = "none"
-#' )
-#'
-#' adae <- admiral_ae %>%
-#'   head(100) %>%
-#'   derive_vars_dtm(
-#'     dtc = AESTDTC,
-#'     new_vars_prefix = "AST",
-#'     highest_imputation = "M"
-#'   )
-#'
-#' adae %>%
-#'   derive_var_last_dose_date(
-#'     dataset_ex = ex_single,
-#'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-#'       !is.na(EXENDTM),
-#'     dose_date = EXENDTM,
-#'     analysis_date = ASTDTM,
-#'     new_var = LDOSEDTM,
-#'     traceability_vars = exprs(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
-#'   ) %>%
-#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSEDTM)
 derive_var_last_dose_date <- function(dataset,
                                       dataset_ex,
                                       filter_ex = NULL,
@@ -70,6 +45,7 @@ derive_var_last_dose_date <- function(dataset,
                                       new_var,
                                       output_datetime = TRUE,
                                       traceability_vars = NULL) {
+  deprecate_warn("0.11.0", "derive_var_last_dose_date()", "derive_vars_joined()")
   filter_ex <- assert_filter_cond(enexpr(filter_ex), optional = TRUE)
   by_vars <- assert_vars(by_vars)
   dose_id <- assert_vars(dose_id)

@@ -67,8 +67,9 @@ be populated in the new parameter rows if it is specified in \code{by_vars}.
 \description{
 Adds a record for derived RR based on heart rate for each by group (e.g.,
 subject and visit) where the source parameters are available.
-}
-\details{
+
+\strong{Note:} This is a wrapper function for the more generic \code{derive_param_computed()}.
+
 The analysis value of the new parameter is derived as
 \deqn{\frac{60000}{HR}}{60000 / HR}
 }
@@ -112,7 +113,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_param_extreme_record}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

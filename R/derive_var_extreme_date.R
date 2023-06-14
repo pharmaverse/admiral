@@ -34,9 +34,9 @@
 #'   Then for each patient the first or last observation (with respect to `date`
 #'   and `mode`) is selected.
 #'
-#'   1. The new variable is set to the variable specified by the `date` element.
-#'   If this is a date variable (rather than datetime), then the time is imputed
-#'   as `"00:00:00"`.
+#'   1. The new variable is set to the variable or expression specified by the
+#'   `date` element. If this is a date variable (rather than datetime), then the
+#'   time is imputed as `"00:00:00"`.
 #'
 #'   1. The variables specified by the `traceability_vars` element are added.
 #'
@@ -60,23 +60,79 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("admiral_dm")
-#' data("admiral_ae")
-#' data("admiral_lb")
-#' data("admiral_adsl")
+#' library(lubridate)
+#' dm <- tribble(
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+#'   "PILOT01",    "DM", "01-1130",   84, "YEARS",
+#'   "PILOT01",    "DM", "01-1133",   81, "YEARS",
+#'   "PILOT01",    "DM", "01-1211",   76, "YEARS",
+#'   "PILOT01",    "DM", "09-1081",   86, "YEARS",
+#'   "PILOT01",    "DM", "09-1088",   69, "YEARS"
+#' )
+#' ae <- tribble(
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,     ~AEENDTC,
+#'   "PILOT01",    "AE", "01-1130",      5, "2014-05-09", "2014-05-09",
+#'   "PILOT01",    "AE", "01-1130",      6, "2014-05-22",           NA,
+#'   "PILOT01",    "AE", "01-1130",      4, "2014-05-09", "2014-05-09",
+#'   "PILOT01",    "AE", "01-1130",      8, "2014-05-22",           NA,
+#'   "PILOT01",    "AE", "01-1130",      7, "2014-05-22",           NA,
+#'   "PILOT01",    "AE", "01-1130",      2, "2014-03-09", "2014-03-09",
+#'   "PILOT01",    "AE", "01-1130",      1, "2014-03-09", "2014-03-16",
+#'   "PILOT01",    "AE", "01-1130",      3, "2014-03-09", "2014-03-16",
+#'   "PILOT01",    "AE", "01-1133",      1, "2012-12-27",           NA,
+#'   "PILOT01",    "AE", "01-1133",      3, "2012-12-27",           NA,
+#'   "PILOT01",    "AE", "01-1133",      2, "2012-12-27",           NA,
+#'   "PILOT01",    "AE", "01-1133",      4, "2012-12-27",           NA,
+#'   "PILOT01",    "AE", "01-1211",      5, "2012-11-29",           NA,
+#'   "PILOT01",    "AE", "01-1211",      1, "2012-11-16",           NA,
+#'   "PILOT01",    "AE", "01-1211",      7, "2013-01-11",           NA,
+#'   "PILOT01",    "AE", "01-1211",      8, "2013-01-11",           NA,
+#'   "PILOT01",    "AE", "01-1211",      4, "2012-11-22",           NA,
+#'   "PILOT01",    "AE", "01-1211",      2, "2012-11-21", "2012-11-21",
+#'   "PILOT01",    "AE", "01-1211",      3, "2012-11-21",           NA,
+#'   "PILOT01",    "AE", "01-1211",      6, "2012-12-09",           NA,
+#'   "PILOT01",    "AE", "01-1211",      9, "2013-01-14", "2013-01-14",
+#'   "PILOT01",    "AE", "09-1081",      2, "2014-05-01",           NA,
+#'   "PILOT01",    "AE", "09-1081",      1, "2014-04-07",           NA,
+#'   "PILOT01",    "AE", "09-1088",      1, "2014-05-08",           NA,
+#'   "PILOT01",    "AE", "09-1088",      2, "2014-08-02",           NA
+#' )
+#' lb <- tribble(
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~LBSEQ,             ~LBDTC,
+#'   "PILOT01",    "LB", "01-1130",    219, "2014-06-07T13:20",
+#'   "PILOT01",    "LB", "01-1130",    322, "2014-08-16T13:10",
+#'   "PILOT01",    "LB", "01-1133",    268, "2013-04-18T15:30",
+#'   "PILOT01",    "LB", "01-1133",    304, "2013-04-29T10:13",
+#'   "PILOT01",    "LB", "01-1211",      8, "2012-10-30T14:26",
+#'   "PILOT01",    "LB", "01-1211",    162, "2013-01-08T12:13",
+#'   "PILOT01",    "LB", "09-1081",     47, "2014-02-01T10:55",
+#'   "PILOT01",    "LB", "09-1081",    219, "2014-05-10T11:15",
+#'   "PILOT01",    "LB", "09-1088",    283, "2014-09-27T12:13",
+#'   "PILOT01",    "LB", "09-1088",    322, "2014-10-09T13:25"
+#' )
+#' adsl <- tribble(
+#'   ~STUDYID,   ~USUBJID,              ~TRTEDTM,
+#'   "PILOT01", "01-1130", "2014-08-16 23:59:59",
+#'   "PILOT01", "01-1133", "2013-04-28 23:59:59",
+#'   "PILOT01", "01-1211", "2013-01-12 23:59:59",
+#'   "PILOT01", "09-1081", "2014-04-27 23:59:59",
+#'   "PILOT01", "09-1088", "2014-10-09 23:59:59"
+#' ) %>%
+#'   mutate(
+#'     TRTEDTM = as_datetime(TRTEDTM)
+#'   )
 #'
 #' # derive last known alive datetime (LSTALVDTM)
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
-#'   date = AESTDTM
+#'   date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
 #' )
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
-#'   date = AEENDTM
+#'   date = convert_dtc_to_dtm(AEENDTC, highest_imputation = "M"),
 #' )
 #'
-#' ae_ext <- admiral_ae %>%
+#' ae_ext <- ae %>%
 #'   derive_vars_dtm(
 #'     dtc = AESTDTC,
 #'     new_vars_prefix = "AEST",
@@ -90,25 +146,28 @@
 #'
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
-#'   date = LBDTM,
-#'   filter = !is.na(LBDTM)
+#'   date = convert_dtc_to_dtm(LBDTC),
 #' )
 #'
 #' lb_ext <- derive_vars_dtm(
-#'   admiral_lb,
+#'   lb,
 #'   dtc = LBDTC,
 #'   new_vars_prefix = "LB"
 #' )
 #'
-#' adsl_date <- date_source(dataset_name = "adsl", date = TRTEDTM)
+#' adsl_date <- date_source(
+#'   dataset_name = "adsl",
+#'   date = TRTEDTM
+#' )
 #'
-#' admiral_dm %>%
+#' dm %>%
 #'   derive_var_extreme_dtm(
 #'     new_var = LSTALVDTM,
 #'     ae_start, ae_end, lb_date, adsl_date,
 #'     source_datasets = list(
-#'       adsl = admiral_adsl,
-#'       ae = ae_ext, lb = lb_ext
+#'       adsl = adsl,
+#'       ae = ae_ext,
+#'       lb = lb_ext
 #'     ),
 #'     mode = "last"
 #'   ) %>%
@@ -117,7 +176,7 @@
 #' # derive last alive datetime and traceability variables
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
-#'   date = AESTDTM,
+#'   date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
 #'   traceability_vars = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
@@ -127,7 +186,7 @@
 #'
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
-#'   date = AEENDTM,
+#'   date = convert_dtc_to_dtm(AEENDTC, highest_imputation = "M"),
 #'   traceability_vars = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
@@ -136,8 +195,7 @@
 #' )
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
-#'   date = LBDTM,
-#'   filter = !is.na(LBDTM),
+#'   date = convert_dtc_to_dtm(LBDTC),
 #'   traceability_vars = exprs(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
@@ -155,12 +213,12 @@
 #'   )
 #' )
 #'
-#' admiral_dm %>%
+#' dm %>%
 #'   derive_var_extreme_dtm(
 #'     new_var = LSTALVDTM,
 #'     ae_start, ae_end, lb_date, adsl_date,
 #'     source_datasets = list(
-#'       adsl = admiral_adsl,
+#'       adsl = adsl,
 #'       ae = ae_ext,
 #'       lb = lb_ext
 #'     ),
@@ -177,7 +235,7 @@ derive_var_extreme_dtm <- function(dataset,
   assert_data_frame(dataset, required_vars = subject_keys)
   new_var <- assert_symbol(enexpr(new_var))
   assert_list_of(source_datasets, "data.frame")
-  sources <- rlang::list2(...)
+  sources <- list2(...)
   assert_list_of(sources, "date_source")
   mode <- assert_character_scalar(
     mode,
@@ -216,9 +274,18 @@ derive_var_extreme_dtm <- function(dataset,
     source_dataset <- source_datasets[[source_dataset_name]]
 
     date <- sources[[i]]$date
+    if (is.symbol(date)) {
+      date_var <- date
+    } else {
+      date_var <- get_new_tmp_var(dataset = source_dataset, prefix = "tmp_date")
+      source_dataset <- mutate(
+        source_dataset,
+        !!date_var := !!date
+      )
+    }
     assert_date_var(
       dataset = source_dataset,
-      var = !!date,
+      var = !!date_var,
       dataset_name = source_dataset_name
     )
 
@@ -232,9 +299,9 @@ derive_var_extreme_dtm <- function(dataset,
 
     add_data[[i]] <- source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
-      filter(!is.na(!!date)) %>%
+      filter(!is.na(!!date_var)) %>%
       filter_extreme(
-        order = exprs(!!date),
+        order = exprs(!!date_var),
         by_vars = subject_keys,
         mode = mode,
         check_type = "none"
@@ -244,7 +311,7 @@ derive_var_extreme_dtm <- function(dataset,
       add_data[[i]],
       !!!subject_keys,
       !!!sources[[i]]$traceability_vars,
-      !!new_var := convert_date_to_dtm(!!date)
+      !!new_var := convert_date_to_dtm(!!date_var)
     )
   }
 
@@ -266,8 +333,10 @@ derive_var_extreme_dtm <- function(dataset,
 
 #' Derive First or Last Date from Multiple Sources
 #'
-#' Add the first or last date from multiple sources to the dataset, e.g.,
-#' the last known alive date (`LSTALVDT`).
+#' @description Add the first or last date from multiple sources to the
+#' dataset, e.g., the last known alive date (`LSTALVDT`).
+#'
+#' **Note:** This is a wrapper function for the function `derive_var_extreme_dtm()`.
 #'
 #' @inheritParams derive_var_extreme_dtm
 #'
@@ -278,7 +347,8 @@ derive_var_extreme_dtm <- function(dataset,
 #'   Then for each patient the first or last observation (with respect to `date`
 #'   and `mode`) is selected.
 #'
-#'   1. The new variable is set to the variable specified by the `date` element.
+#'   1. The new variable is set to the variable or expression specified by the
+#'   `date` element.
 #'
 #'   1. The variables specified by the `traceability_vars` element are added.
 #'
@@ -303,23 +373,81 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("admiral_dm")
-#' data("admiral_ae")
-#' data("admiral_lb")
-#' data("admiral_adsl")
+#' ae <- tribble(
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AESEQ,     ~AESTDTC,     ~AEENDTC,
+#'   "PILOT01",    "AE", "01-1130",      5, "2014-05-09", "2014-05-09",
+#'   "PILOT01",    "AE", "01-1130",      6, "2014-05-22",           NA,
+#'   "PILOT01",    "AE", "01-1130",      4, "2014-05-09", "2014-05-09",
+#'   "PILOT01",    "AE", "01-1130",      8, "2014-05-22",           NA,
+#'   "PILOT01",    "AE", "01-1130",      7, "2014-05-22",           NA,
+#'   "PILOT01",    "AE", "01-1130",      2, "2014-03-09", "2014-03-09",
+#'   "PILOT01",    "AE", "01-1130",      1, "2014-03-09", "2014-03-16",
+#'   "PILOT01",    "AE", "01-1130",      3, "2014-03-09", "2014-03-16",
+#'   "PILOT01",    "AE", "01-1133",      1, "2012-12-27",           NA,
+#'   "PILOT01",    "AE", "01-1133",      3, "2012-12-27",           NA,
+#'   "PILOT01",    "AE", "01-1133",      2, "2012-12-27",           NA,
+#'   "PILOT01",    "AE", "01-1133",      4, "2012-12-27",           NA,
+#'   "PILOT01",    "AE", "01-1211",      5, "2012-11-29",           NA,
+#'   "PILOT01",    "AE", "01-1211",      1, "2012-11-16",           NA,
+#'   "PILOT01",    "AE", "01-1211",      7, "2013-01-11",           NA,
+#'   "PILOT01",    "AE", "01-1211",      8, "2013-01-11",           NA,
+#'   "PILOT01",    "AE", "01-1211",      4, "2012-11-22",           NA,
+#'   "PILOT01",    "AE", "01-1211",      2, "2012-11-21", "2012-11-21",
+#'   "PILOT01",    "AE", "01-1211",      3, "2012-11-21",           NA,
+#'   "PILOT01",    "AE", "01-1211",      6, "2012-12-09",           NA,
+#'   "PILOT01",    "AE", "01-1211",      9, "2013-01-14", "2013-01-14",
+#'   "PILOT01",    "AE", "09-1081",      2, "2014-05-01",           NA,
+#'   "PILOT01",    "AE", "09-1081",      1, "2014-04-07",           NA,
+#'   "PILOT01",    "AE", "09-1088",      1, "2014-05-08",           NA,
+#'   "PILOT01",    "AE", "09-1088",      2, "2014-08-02",           NA
+#' )
 #'
-#' # derive last known alive date (LSTALVDT)
+#' adsl <- tribble(
+#'   ~STUDYID,   ~USUBJID,              ~TRTEDTM,      ~TRTEDT,
+#'   "PILOT01", "01-1130", "2014-08-16 23:59:59", "2014-08-16",
+#'   "PILOT01", "01-1133", "2013-04-28 23:59:59", "2013-04-28",
+#'   "PILOT01", "01-1211", "2013-01-12 23:59:59", "2013-01-12",
+#'   "PILOT01", "09-1081", "2014-04-27 23:59:59", "2014-04-27",
+#'   "PILOT01", "09-1088", "2014-10-09 23:59:59", "2014-10-09"
+#' ) %>%
+#'   mutate(
+#'     across(TRTEDTM:TRTEDT, as.Date)
+#'   )
+#'
+#'
+#' lb <- tribble(
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~LBSEQ,             ~LBDTC,
+#'   "PILOT01",    "LB", "01-1130",    219, "2014-06-07T13:20",
+#'   "PILOT01",    "LB", "01-1130",    322, "2014-08-16T13:10",
+#'   "PILOT01",    "LB", "01-1133",    268, "2013-04-18T15:30",
+#'   "PILOT01",    "LB", "01-1133",    304, "2013-04-29T10:13",
+#'   "PILOT01",    "LB", "01-1211",      8, "2012-10-30T14:26",
+#'   "PILOT01",    "LB", "01-1211",    162, "2013-01-08T12:13",
+#'   "PILOT01",    "LB", "09-1081",     47, "2014-02-01T10:55",
+#'   "PILOT01",    "LB", "09-1081",    219, "2014-05-10T11:15",
+#'   "PILOT01",    "LB", "09-1088",    283, "2014-09-27T12:13",
+#'   "PILOT01",    "LB", "09-1088",    322, "2014-10-09T13:25"
+#' )
+#'
+#' dm <- tribble(
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+#'   "PILOT01",    "DM", "01-1130",   84, "YEARS",
+#'   "PILOT01",    "DM", "01-1133",   81, "YEARS",
+#'   "PILOT01",    "DM", "01-1211",   76, "YEARS",
+#'   "PILOT01",    "DM", "09-1081",   86, "YEARS",
+#'   "PILOT01",    "DM", "09-1088",   69, "YEARS"
+#' )
+#'
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
-#'   date = AESTDT
+#'   date = convert_dtc_to_dt(AESTDTC, highest_imputation = "M")
 #' )
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
-#'   date = AEENDT
+#'   date = convert_dtc_to_dt(AEENDTC, highest_imputation = "M")
 #' )
 #'
-#' ae_ext <- admiral_ae %>%
+#' ae_ext <- ae %>%
 #'   derive_vars_dt(
 #'     dtc = AESTDTC,
 #'     new_vars_prefix = "AEST",
@@ -333,24 +461,23 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
-#'   date = LBDT,
-#'   filter = !is.na(LBDT),
+#'   date = convert_dtc_to_dt(LBDTC)
 #' )
 #'
 #' lb_ext <- derive_vars_dt(
-#'   admiral_lb,
+#'   lb,
 #'   dtc = LBDTC,
 #'   new_vars_prefix = "LB"
 #' )
 #'
 #' adsl_date <- date_source(dataset_name = "adsl", date = TRTEDT)
 #'
-#' admiral_dm %>%
+#' dm %>%
 #'   derive_var_extreme_dt(
 #'     new_var = LSTALVDT,
 #'     ae_start, ae_end, lb_date, adsl_date,
 #'     source_datasets = list(
-#'       adsl = admiral_adsl,
+#'       adsl = adsl,
 #'       ae = ae_ext,
 #'       lb = lb_ext
 #'     ),
@@ -361,7 +488,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' # derive last alive date and traceability variables
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
-#'   date = AESTDT,
+#'   date = convert_dtc_to_dt(AESTDTC, highest_imputation = "M"),
 #'   traceability_vars = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
@@ -371,17 +498,17 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
-#'   date = AEENDT,
+#'   date = convert_dtc_to_dt(AEENDTC, highest_imputation = "M"),
 #'   traceability_vars = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
 #'     LALVVAR = "AEENDTC"
 #'   )
 #' )
+#'
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
-#'   date = LBDT,
-#'   filter = !is.na(LBDT),
+#'   date = convert_dtc_to_dt(LBDTC),
 #'   traceability_vars = exprs(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
@@ -399,12 +526,12 @@ derive_var_extreme_dtm <- function(dataset,
 #'   )
 #' )
 #'
-#' admiral_dm %>%
+#' dm %>%
 #'   derive_var_extreme_dt(
 #'     new_var = LSTALVDT,
 #'     ae_start, ae_end, lb_date, adsl_date,
 #'     source_datasets = list(
-#'       adsl = admiral_adsl,
+#'       adsl = adsl,
 #'       ae = ae_ext,
 #'       lb = lb_ext
 #'     ),
@@ -443,13 +570,13 @@ derive_var_extreme_dt <- function(dataset,
 #'
 #' @param filter An unquoted condition for filtering `dataset`.
 #'
-#' @param date A variable providing a date. A date or a datetime can be
-#'   specified. An unquoted symbol is expected.
+#' @param date A variable or an expression providing a date. A date or a
+#'   datetime can be specified. An unquoted symbol or expression is expected.
 #'
 #' @param traceability_vars A named list returned by `exprs()` defining the
 #'   traceability variables, e.g. `exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
 #'   = "AESTDTC")`. The values must be a symbol, a character string, a numeric,
-#'   or `NA`.
+#'   an expression, or `NA`.
 #'
 #'
 #' @seealso [derive_var_extreme_dtm()], [derive_var_extreme_dt()]
@@ -473,7 +600,7 @@ derive_var_extreme_dt <- function(dataset,
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
 #'   filter = LBSTAT != "NOT DONE" | is.na(LBSTAT),
-#'   date = LBDT
+#'   date = convert_dtc_to_dt(LBDTC)
 #' )
 #'
 #' # death date from ADSL including traceability variables
@@ -492,8 +619,8 @@ date_source <- function(dataset_name,
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
-    date = assert_symbol(enexpr(date)),
-    traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
+    date = assert_expr(enexpr(date)),
+    traceability_vars = assert_expr_list(traceability_vars, named = TRUE, optional = TRUE)
   )
   class(out) <- c("date_source", "source", "list")
   out

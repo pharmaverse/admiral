@@ -9,7 +9,8 @@ get_admiral_option(option)
 \arguments{
 \item{option}{A character scalar of commonly used admiral function inputs.
 
-As of now, support only available for "subject_keys" or "force_admiral_vars".
+As of now, support only available for
+"subject_keys".
 See \code{set_admiral_options()} for a description of the options.}
 }
 \value{
@@ -23,18 +24,31 @@ This function allows flexibility for function inputs that may need to be repeate
 multiple times in a script, such as \code{subject_keys}.
 }
 \examples{
-library(admiral.test)
 library(dplyr, warn.conflicts = FALSE)
-data("admiral_vs")
-data("admiral_dm")
+dm <- tribble(
+  ~STUDYID, ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
+  "PILOT01",   "DM", "01-1302",   61, "YEARS",
+  "PILOT01",   "DM", "17-1344",   64, "YEARS"
+)
+
+vs <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~VSTESTCD,     ~VISIT,     ~VSTPT, ~VSSTRESN,
+  "PILOT01",    "VS", "01-1302",   "DIABP", "BASELINE",    "LYING",        76,
+  "PILOT01",    "VS", "01-1302",   "DIABP", "BASELINE", "STANDING",        87,
+  "PILOT01",    "VS", "01-1302",   "DIABP",   "WEEK 2",    "LYING",        71,
+  "PILOT01",    "VS", "01-1302",   "DIABP",   "WEEK 2", "STANDING",        79,
+  "PILOT01",    "VS", "17-1344",   "DIABP", "BASELINE",    "LYING",        88,
+  "PILOT01",    "VS", "17-1344",   "DIABP", "BASELINE", "STANDING",        86,
+  "PILOT01",    "VS", "17-1344",   "DIABP",   "WEEK 2",    "LYING",        84,
+  "PILOT01",    "VS", "17-1344",   "DIABP",   "WEEK 2", "STANDING",        82
+)
 
 # Merging all dm variables to vs
 derive_vars_merged(
-  admiral_vs,
-  dataset_add = select(admiral_dm, -DOMAIN),
+  vs,
+  dataset_add = select(dm, -DOMAIN),
   by_vars = get_admiral_option("subject_keys")
-) \%>\%
-  select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
+)
 }
 \seealso{
 \code{\link[=set_admiral_options]{set_admiral_options()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}}, \code{\link[=derive_param_tte]{derive_param_tte()}}

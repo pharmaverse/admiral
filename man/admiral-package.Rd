@@ -15,6 +15,7 @@ Useful links:
 \itemize{
   \item \url{https://pharmaverse.github.io/admiral/}
   \item \url{https://github.com/pharmaverse/admiral}
+  \item Report bugs at \url{https://github.com/pharmaverse/admiral/issues}
 }
 
 }
@@ -51,6 +52,8 @@ Authors:
   \item Kangjie Zhang
   \item Daphne Grasselly
   \item Adam Forys
+  \item Edoardo Mancini
+  \item Stefan Thoma
 }
 
 Other contributors:

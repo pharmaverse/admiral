@@ -50,11 +50,34 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("admiral_vs")
-#'
-#' admiral_vs %>%
-#'   select(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
+#' vs <- tribble(
+#'   ~STUDYID,  ~DOMAIN,      ~USUBJID, ~VSTESTCD, ~VISITNUM, ~VSTPTNUM,
+#'   "PILOT01",    "VS", "01-703-1182",   "DIABP",         3,       815,
+#'   "PILOT01",    "VS", "01-703-1182",   "DIABP",         3,       816,
+#'   "PILOT01",    "VS", "01-703-1182",   "DIABP",         4,       815,
+#'   "PILOT01",    "VS", "01-703-1182",   "DIABP",         4,       816,
+#'   "PILOT01",    "VS", "01-703-1182",   "PULSE",         3,       815,
+#'   "PILOT01",    "VS", "01-703-1182",   "PULSE",         3,       816,
+#'   "PILOT01",    "VS", "01-703-1182",   "PULSE",         4,       815,
+#'   "PILOT01",    "VS", "01-703-1182",   "PULSE",         4,       816,
+#'   "PILOT01",    "VS", "01-703-1182",   "SYSBP",         3,       815,
+#'   "PILOT01",    "VS", "01-703-1182",   "SYSBP",         3,       816,
+#'   "PILOT01",    "VS", "01-703-1182",   "SYSBP",         4,       815,
+#'   "PILOT01",    "VS", "01-703-1182",   "SYSBP",         4,       816,
+#'   "PILOT01",    "VS", "01-716-1229",   "DIABP",         3,       815,
+#'   "PILOT01",    "VS", "01-716-1229",   "DIABP",         3,       816,
+#'   "PILOT01",    "VS", "01-716-1229",   "DIABP",         4,       815,
+#'   "PILOT01",    "VS", "01-716-1229",   "DIABP",         4,       816,
+#'   "PILOT01",    "VS", "01-716-1229",   "PULSE",         3,       815,
+#'   "PILOT01",    "VS", "01-716-1229",   "PULSE",         3,       816,
+#'   "PILOT01",    "VS", "01-716-1229",   "PULSE",         4,       815,
+#'   "PILOT01",    "VS", "01-716-1229",   "PULSE",         4,       816,
+#'   "PILOT01",    "VS", "01-716-1229",   "SYSBP",         3,       815,
+#'   "PILOT01",    "VS", "01-716-1229",   "SYSBP",         3,       816,
+#'   "PILOT01",    "VS", "01-716-1229",   "SYSBP",         4,       815,
+#'   "PILOT01",    "VS", "01-716-1229",   "SYSBP",         4,       816
+#' )
+#' vs %>%
 #'   derive_var_obs_number(
 #'     by_vars = exprs(USUBJID, VSTESTCD),
 #'     order = exprs(VISITNUM, desc(VSTPTNUM))
@@ -67,7 +90,7 @@ derive_var_obs_number <- function(dataset,
   # checks and quoting
   new_var <- assert_symbol(enexpr(new_var))
   assert_vars(by_vars, optional = TRUE)
-  assert_order_vars(order, optional = TRUE)
+  assert_expr_list(order, optional = TRUE)
   if (!is.null(by_vars)) {
     required_vars <- by_vars
   } else {
@@ -87,7 +110,7 @@ derive_var_obs_number <- function(dataset,
   # derivation
   data <- dataset
 
-  if (!is.null(by_vars) | !is.null(order)) {
+  if (!is.null(by_vars) || !is.null(order)) {
     # group and sort input dataset
     if (!is.null(by_vars)) {
       data <- data %>%
@@ -97,7 +120,7 @@ derive_var_obs_number <- function(dataset,
       if (check_type != "none") {
         signal_duplicate_records(
           data,
-          by_vars = required_vars,
+          by_vars = expr_c(by_vars, order),
           cnd_type = check_type
         )
       }

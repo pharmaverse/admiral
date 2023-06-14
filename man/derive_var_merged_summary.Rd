@@ -62,6 +62,8 @@ input dataset and additionally the variable specified for \code{new_var}.
 }
 \description{
 Merge a summary variable from a dataset to the input dataset.
+
+\strong{Note:} This is a wrapper function for the more generic \code{derive_vars_merged}.
 }
 \details{
 \enumerate{
@@ -82,16 +84,16 @@ library(tibble)
 
 # Add a variable for the mean of AVAL within each visit
 adbds <- tribble(
-  ~USUBJID, ~AVISIT,  ~ASEQ, ~AVAL,
-  "1",      "WEEK 1",     1,    10,
-  "1",      "WEEK 1",     2,    NA,
-  "1",      "WEEK 2",     3,    NA,
-  "1",      "WEEK 3",     4,    42,
-  "1",      "WEEK 4",     5,    12,
-  "1",      "WEEK 4",     6,    12,
-  "1",      "WEEK 4",     7,    15,
-  "2",      "WEEK 1",     1,    21,
-  "2",      "WEEK 4",     2,    22
+  ~USUBJID,  ~AVISIT,  ~ASEQ, ~AVAL,
+  "1",      "WEEK 1",      1,    10,
+  "1",      "WEEK 1",      2,    NA,
+  "1",      "WEEK 2",      3,    NA,
+  "1",      "WEEK 3",      4,    42,
+  "1",      "WEEK 4",      5,    12,
+  "1",      "WEEK 4",      6,    12,
+  "1",      "WEEK 4",      7,    15,
+  "2",      "WEEK 1",      1,    21,
+  "2",      "WEEK 4",      2,    22
 )
 
 derive_var_merged_summary(
@@ -112,19 +114,19 @@ adsl <- tribble(
 )
 
 adtr <- tribble(
-  ~USUBJID, ~AVISIT,    ~LESIONID,
-  "1",      "BASELINE", "INV-T1",
-  "1",      "BASELINE", "INV-T2",
-  "1",      "BASELINE", "INV-T3",
-  "1",      "BASELINE", "INV-T4",
-  "1",      "WEEK 1",   "INV-T1",
-  "1",      "WEEK 1",   "INV-T2",
-  "1",      "WEEK 1",   "INV-T4",
-  "2",      "BASELINE", "INV-T1",
-  "2",      "BASELINE", "INV-T2",
-  "2",      "BASELINE", "INV-T3",
-  "2",      "WEEK 1",   "INV-T1",
-  "2",      "WEEK 1",   "INV-N1"
+  ~USUBJID,     ~AVISIT, ~LESIONID,
+  "1",       "BASELINE",  "INV-T1",
+  "1",       "BASELINE",  "INV-T2",
+  "1",       "BASELINE",  "INV-T3",
+  "1",       "BASELINE",  "INV-T4",
+  "1",         "WEEK 1",  "INV-T1",
+  "1",         "WEEK 1",  "INV-T2",
+  "1",         "WEEK 1",  "INV-T4",
+  "2",       "BASELINE",  "INV-T1",
+  "2",       "BASELINE",  "INV-T2",
+  "2",       "BASELINE",  "INV-T3",
+  "2",         "WEEK 1",  "INV-T1",
+  "2",         "WEEK 1",  "INV-N1"
 )
 
 derive_var_merged_summary(
@@ -144,16 +146,10 @@ derive_var_merged_summary(
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_last_dose_amt}()},
-\code{\link{derive_var_last_dose_date}()},
-\code{\link{derive_var_last_dose_grp}()},
-\code{\link{derive_var_merged_cat}()},
-\code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
 \code{\link{derive_vars_transposed}()},
