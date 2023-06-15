@@ -11,13 +11,13 @@ compute_bmi(height, weight)
 
 It is expected that HEIGHT is in cm.
 
-Permitted Values: numeric vector}
+\emph{Permitted Values:} numeric vector}
 
 \item{weight}{WEIGHT value
 
 It is expected that WEIGHT is in kg.
 
-Permitted Values: numeric vector}
+\emph{Permitted Values:} numeric vector}
 }
 \value{
 The BMI (Body Mass Index Area) in kg/m^2.
