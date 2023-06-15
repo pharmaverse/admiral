@@ -29,7 +29,6 @@
 #'
 #' @export
 #'
-#' @seealso [create_single_dose_dataset()]
 derive_var_last_dose_amt <- function(dataset,
                                      dataset_ex,
                                      filter_ex = NULL,

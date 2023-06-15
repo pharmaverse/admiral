@@ -76,8 +76,6 @@ over a period defined by a start and end date) the function
 aggregate dose information and satisfy \code{single_dose_condition}.
 }
 \seealso{
-\code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
-
 Other deprecated: 
 \code{\link{derive_param_extreme_event}()},
 \code{\link{derive_var_basetype}()},
