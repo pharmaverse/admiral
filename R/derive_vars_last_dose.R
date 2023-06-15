@@ -81,9 +81,6 @@
 #' @family deprecated
 #' @keywords deprecated
 #'
-#' @seealso [derive_var_last_dose_amt()], [derive_var_last_dose_date()],
-#'   [derive_var_last_dose_grp()], [create_single_dose_dataset()]
-#'
 #' @export
 derive_vars_last_dose <- function(dataset,
                                   dataset_ex,
@@ -95,16 +92,5 @@ derive_vars_last_dose <- function(dataset,
                                   single_dose_condition = EXDOSFRQ == "ONCE",
                                   new_vars = NULL,
                                   traceability_vars = NULL) {
-  deprecate_warn("0.11.0", "derive_vars_last_dose()", "derive_vars_joined()")
-  derive_vars_joined(
-    dataset = dataset,
-    dataset_add = dataset_ex,
-    by_vars = by_vars,
-    order = expr_c(enexpr(dose_date), dose_id),
-    new_vars = expr_c({{ new_vars }}, {{ traceability_vars }}),
-    join_vars = expr_c(enexpr(dose_date), dose_id),
-    filter_add = {{ filter_ex }},
-    filter_join = {{ dose_date }} <= {{ analysis_date }},
-    mode = "last",
-  )
+  deprecate_stop("0.11.0", "derive_vars_last_dose()", "derive_vars_joined()")
 }
