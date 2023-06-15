@@ -71,3 +71,59 @@ test_that("compute_duration Test 6: Duration in hours", {
     4.5
   )
 })
+
+
+test_that("compute_duration Test 7a: Duration in minutes (minutes option)", {
+  expect_equal(
+    compute_duration(
+      ymd_hms("2020-12-06T13:00:00"),
+      ymd_hms("2020-12-06T13:30:00"),
+      out_unit = "minutes",
+      floor_in = FALSE,
+      add_one = FALSE
+    ),
+    30
+  )
+})
+
+test_that("compute_duration Test 7b: Duration in minutes (min option)", {
+  expect_equal(
+    compute_duration(
+      ymd_hms("2020-12-06T13:00:00"),
+      ymd_hms("2020-12-06T13:30:00"),
+      out_unit = "min",
+      floor_in = FALSE,
+      add_one = FALSE
+    ),
+    30
+  )
+})
+
+
+test_that("compute_duration Test 8a: Duration in seconds (seconds option)", {
+  expect_equal(
+    compute_duration(
+      ymd_hms("2020-12-06T13:30:00"),
+      ymd_hms("2020-12-06T13:30:29"),
+      out_unit = "seconds",
+      floor_in = FALSE,
+      add_one = FALSE
+    ),
+    29
+  )
+})
+
+
+
+test_that("compute_duration Test 8b: Duration in seconds (sec option)", {
+  expect_equal(
+    compute_duration(
+      ymd_hms("2020-12-06T13:30:00"),
+      ymd_hms("2020-12-06T13:30:29"),
+      out_unit = "sec",
+      floor_in = FALSE,
+      add_one = FALSE
+    ),
+    29
+  )
+})
