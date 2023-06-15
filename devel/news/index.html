@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,20 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -93,6 +79,45 @@
       <small>Source: <a href="https://github.com/pharmaverse/admiral/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.12.0" id="admiral-0120">admiral 0.12.0<a class="anchor" aria-label="anchor" href="#admiral-0120"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-12-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-12-0"></a></h3>
+</div>
+<div class="section level3">
+<h3 id="updates-of-existing-functions-0-12-0">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-0-12-0"></a></h3>
+</div>
+<div class="section level3">
+<h3 id="breaking-changes-0-12-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-12-0"></a></h3>
+<ul><li>
+<p>The following functions, which were deprecated in previous <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> versions, have been removed: (<a href="https://github.com/pharmaverse/admiral/issues/1950" class="external-link">#1950</a>)</p>
+<ul><li><code>derive_var_disposition_status()</code></li>
+<li><code>derive_vars_disposition_reason()</code></li>
+<li><code>format_eoxxstt_default()</code></li>
+<li><code>format_reason_default()</code></li>
+<li><code>derive_var_worst_flag()</code></li>
+</ul></li>
+<li>
+<p>The following functions have been deprecated from previous <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> versions using the next phase of the deprecation process: (<a href="https://github.com/pharmaverse/admiral/issues/1950" class="external-link">#1950</a>)</p>
+<ul><li><code><a href="../reference/derive_param_extreme_event.html">derive_param_extreme_event()</a></code></li>
+<li><code><a href="../reference/derive_vars_last_dose.html">derive_vars_last_dose()</a></code></li>
+<li><code><a href="../reference/derive_var_last_dose_amt.html">derive_var_last_dose_amt()</a></code></li>
+<li><code><a href="../reference/derive_var_last_dose_date.html">derive_var_last_dose_date()</a></code></li>
+<li><code><a href="../reference/derive_var_last_dose_grp.html">derive_var_last_dose_grp()</a></code></li>
+<li><code><a href="../reference/derive_var_basetype.html">derive_var_basetype()</a></code></li>
+<li><code><a href="../reference/derive_var_merged_cat.html">derive_var_merged_cat()</a></code></li>
+<li><code><a href="../reference/derive_var_merged_character.html">derive_var_merged_character()</a></code></li>
+</ul></li>
+<li><p>The arguments <code>dataset_adsl</code> in the function <code><a href="../reference/derive_param_exist_flag.html">derive_param_exist_flag()</a></code> and <code>subject_keys</code> have been deprecated versions using the next phase of the deprecation process. (<a href="https://github.com/pharmaverse/admiral/issues/1950" class="external-link">#1950</a>)</p></li>
+<li><p>The <code>filter</code> argument in <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> was deprecated in favor of the <code>filter_add</code> using the next phase of the deprecation process. (<a href="https://github.com/pharmaverse/admiral/issues/1950" class="external-link">#1950</a>)</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-12-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-12-0"></a></h3>
+</div>
+<div class="section level3">
+<h3 id="various-0-12-0">Various<a class="anchor" aria-label="anchor" href="#various-0-12-0"></a></h3>
+</div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.11.0" id="admiral-0110">admiral 0.11.0<a class="anchor" aria-label="anchor" href="#admiral-0110"></a></h2><p class="text-muted">CRAN release: 2023-06-08</p>
 <div class="section level3">
@@ -176,11 +201,11 @@
 </ul></li>
 <li>
 <p>The following functions have been deprecated from previous <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> versions using the next phase of the deprecation process: (<a href="https://github.com/pharmaverse/admiral/issues/1747" class="external-link">#1747</a>)</p>
-<ul><li><code><a href="../reference/derive_var_disposition_status.html">derive_var_disposition_status()</a></code></li>
-<li><code><a href="../reference/derive_vars_disposition_reason.html">derive_vars_disposition_reason()</a></code></li>
-<li><code><a href="../reference/format_eoxxstt_default.html">format_eoxxstt_default()</a></code></li>
-<li><code><a href="../reference/format_reason_default.html">format_reason_default()</a></code></li>
-<li><code><a href="../reference/derive_var_worst_flag.html">derive_var_worst_flag()</a></code></li>
+<ul><li><code>derive_var_disposition_status()</code></li>
+<li><code>derive_vars_disposition_reason()</code></li>
+<li><code>format_eoxxstt_default()</code></li>
+<li><code>format_reason_default()</code></li>
+<li><code>derive_var_worst_flag()</code></li>
 </ul></li>
 <li><p><code><a href="../reference/derive_param_extreme_event.html">derive_param_extreme_event()</a></code> was deprecated in favor of <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1725" class="external-link">#1725</a>)</p></li>
 <li><p>The <code>filter</code> argument in <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> was deprecated in favor of the <code>filter_add</code> argument. (<a href="https://github.com/pharmaverse/admiral/issues/1725" class="external-link">#1725</a>)</p></li>
@@ -246,9 +271,9 @@
 <p>To enable running old scripts using <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code> in the admiral function calls admiral redefines the <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code> function such that it returns a list of expressions. This can be disabled by the admiral option <code>force_admiral_vars</code> (see <code><a href="../reference/set_admiral_options.html">set_admiral_options()</a></code>). Please note that this is a temporary solution and will be removed in a future admiral release. (<a href="https://github.com/pharmaverse/admiral/issues/1627" class="external-link">#1627</a>)</p>
 </li>
 <li><p>Function <code><a href="../reference/derive_param_tte.html">derive_param_tte()</a></code> has been updated such that only observations are added for subjects who have both an event or censoring and an observation in <code>dataset_adsl</code>. (<a href="https://github.com/pharmaverse/admiral/issues/1576" class="external-link">#1576</a>)</p></li>
-<li><p>Function <code><a href="../reference/derive_var_disposition_status.html">derive_var_disposition_status()</a></code> has been deprecated, please use <code><a href="../reference/derive_var_merged_cat.html">derive_var_merged_cat()</a></code> instead. (<a href="https://github.com/pharmaverse/admiral/issues/1681" class="external-link">#1681</a>)</p></li>
-<li><p>Function <code><a href="../reference/derive_var_worst_flag.html">derive_var_worst_flag()</a></code> has been deprecated, in favor of <code><a href="../reference/slice_derivation.html">slice_derivation()</a></code>/<code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1682" class="external-link">#1682</a>)</p></li>
-<li><p>Function <code><a href="../reference/derive_vars_disposition_reason.html">derive_vars_disposition_reason()</a></code> has been deprecated, in favor of <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1683" class="external-link">#1683</a>)</p></li>
+<li><p>Function <code>derive_var_disposition_status()</code> has been deprecated, please use <code><a href="../reference/derive_var_merged_cat.html">derive_var_merged_cat()</a></code> instead. (<a href="https://github.com/pharmaverse/admiral/issues/1681" class="external-link">#1681</a>)</p></li>
+<li><p>Function <code>derive_var_worst_flag()</code> has been deprecated, in favor of <code><a href="../reference/slice_derivation.html">slice_derivation()</a></code>/<code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1682" class="external-link">#1682</a>)</p></li>
+<li><p>Function <code>derive_vars_disposition_reason()</code> has been deprecated, in favor of <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1683" class="external-link">#1683</a>)</p></li>
 <li>
 <p>The following functions have been deprecated from previous <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> versions using the next phase of the deprecation process: (<a href="https://github.com/pharmaverse/admiral/issues/1712" class="external-link">#1712</a>)</p>
 <ul><li><code>derive_derived_param()</code></li>
@@ -387,7 +412,7 @@
 <li><p>Renamed <code>derive_derived_param()</code> to <code><a href="../reference/derive_param_computed.html">derive_param_computed()</a></code> and added a deprecation notice (<a href="https://github.com/pharmaverse/admiral/issues/1229" class="external-link">#1229</a>)</p></li>
 <li><p><code><a href="../reference/derive_vars_duration.html">derive_vars_duration()</a></code> updated to not display units when there is missing duration (<a href="https://github.com/pharmaverse/admiral/issues/1207" class="external-link">#1207</a>)</p></li>
 <li><p><code>value_var</code> parameter added to <code><a href="../reference/derive_vars_atc.html">derive_vars_atc()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/1120" class="external-link">#1120</a>)</p></li>
-<li><p><code><a href="../reference/format_eoxxstt_default.html">format_eoxxstt_default()</a></code> - Updated the default value of EOSSTT for screen failure patients (<a href="https://github.com/pharmaverse/admiral/issues/885" class="external-link">#885</a>)</p></li>
+<li><p><code>format_eoxxstt_default()</code> - Updated the default value of EOSSTT for screen failure patients (<a href="https://github.com/pharmaverse/admiral/issues/885" class="external-link">#885</a>)</p></li>
 <li>
 <p>The imputation functions (<code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code>, <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code>, <code><a href="../reference/convert_dtc_to_dtm.html">convert_dtc_to_dtm()</a></code>, <code><a href="../reference/convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code>) have been enhanced to address users feedback (<a href="https://github.com/pharmaverse/admiral/issues/1300" class="external-link">#1300</a>):</p>
 <ul><li><p>Partial dates with missing components in the middle like <code>"2003-12-15T-:15:18"</code>, <code>"2003-12-15T13:-:19"</code>, <code>"2020-07--T00:00"</code> are handled now.</p></li>
@@ -437,7 +462,7 @@
 <li><code>derive_var_astdy()</code></li>
 <li><code>derive_var_atirel()</code></li>
 <li>
-<code>filter</code> parameter in <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> and <code><a href="../reference/derive_var_worst_flag.html">derive_var_worst_flag()</a></code>
+<code>filter</code> parameter in <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> and <code>derive_var_worst_flag()</code>
 </li>
 </ul></li>
 </ul></div>
@@ -446,7 +471,7 @@
 <ul><li><p>New ADMH template script can be accessed using <code>admiral::use_ad_template("admh")</code> (<a href="https://github.com/pharmaverse/admiral/issues/502" class="external-link">#502</a>)</p></li>
 <li><p>New vignette “Higher Order Functions” (<a href="https://github.com/pharmaverse/admiral/issues/1047" class="external-link">#1047</a>)</p></li>
 <li><p>New vignette “Lab Grading” (<a href="https://github.com/pharmaverse/admiral/issues/1369" class="external-link">#1369</a>)</p></li>
-<li><p>Fixed <code><a href="../reference/derive_var_disposition_status.html">derive_var_disposition_status()</a></code> argument to render correctly (<a href="https://github.com/pharmaverse/admiral/issues/1268" class="external-link">#1268</a>)</p></li>
+<li><p>Fixed <code>derive_var_disposition_status()</code> argument to render correctly (<a href="https://github.com/pharmaverse/admiral/issues/1268" class="external-link">#1268</a>)</p></li>
 <li><p>Added link to <a href="https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q" class="external-link">pharmaverse YouTube channel</a> to README</p></li>
 </ul></div>
 <div class="section level3">
@@ -529,14 +554,14 @@
 <ul><li><p>Datasets internal to the package have been renamed with prefix <code>admiral_</code>, e.g. <code>adsl</code> has been renamed to <code>admiral_adsl</code>. Corresponding SDTM datasets in <code>{admiral.test}</code> have also been renamed, e.g.<code>dm</code> to <code>admiral_dm</code>. These changes will impact examples, vignettes, unit tests and templates (<a href="https://github.com/pharmaverse/admiral/issues/1108" class="external-link">#1108</a> and <a href="https://github.com/pharmaverse/admiral/issues/1088" class="external-link">#1088</a>)</p></li>
 <li><p>When <code><a href="../reference/derive_vars_dtm_to_tm.html">derive_vars_dtm_to_tm()</a></code> was called for variables created by <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> the function failed. This bug was fixed (<a href="https://github.com/pharmaverse/admiral/issues/1097" class="external-link">#1097</a>).</p></li>
 <li><p><code>impute_dtc()</code> - Fixed imputation bug. A user setting <code>date_imputation = MID</code> and <code>preserve = FALSE</code> would expect the date <code>2019---07</code> to be imputed to <code>2019-06-30</code>, but the function was returning <code>2019-06-15</code>. Now returns it correctly. This bug fix also addresses the issue in the downstream functions <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1081" class="external-link">#1081</a>)</p></li>
-<li><p><code><a href="../reference/format_eoxxstt_default.html">format_eoxxstt_default()</a></code> - Updated to have a more meaningful parameter name i.e. the parameter that was x is now status (<a href="https://github.com/pharmaverse/admiral/issues/911" class="external-link">#911</a>)</p></li>
+<li><p><code>format_eoxxstt_default()</code> - Updated to have a more meaningful parameter name i.e. the parameter that was x is now status (<a href="https://github.com/pharmaverse/admiral/issues/911" class="external-link">#911</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-0-7-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-7-0"></a></h3>
 <ul><li><p><code>derive_var_lstalvdt()</code> has been deprecated in favor of <code><a href="../reference/derive_var_extreme_dt.html">derive_var_extreme_dt()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/753" class="external-link">#753</a>).</p></li>
-<li><p><code><a href="../reference/derive_vars_disposition_reason.html">derive_vars_disposition_reason()</a></code> now is updated such that the default is populating <code>DCSREASP</code> only when <code>DSDECOD</code> is equal to <code>'OTHER'</code>, which is consistent with ADaMIG_v1.3 (<a href="https://github.com/pharmaverse/admiral/issues/886" class="external-link">#886</a>).</p></li>
+<li><p><code>derive_vars_disposition_reason()</code> now is updated such that the default is populating <code>DCSREASP</code> only when <code>DSDECOD</code> is equal to <code>'OTHER'</code>, which is consistent with ADaMIG_v1.3 (<a href="https://github.com/pharmaverse/admiral/issues/886" class="external-link">#886</a>).</p></li>
 <li><p><code>derive_vars_suppqual()</code> has been removed from {admiral} as adding supplementary qualifiers is now done in another package called <a href="https://github.com/pharmaverse/metatools" class="external-link">{metatools}</a> in a function called <code>combine_supp()</code> and is available on CRAN (<a href="https://github.com/pharmaverse/admiral/issues/950" class="external-link">#950</a>)</p></li>
-<li><p>The <code>filter</code> parameter in <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> and <code><a href="../reference/derive_var_worst_flag.html">derive_var_worst_flag()</a></code> has been deprecated in favor of <code><a href="../reference/restrict_derivation.html">restrict_derivation()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/701" class="external-link">#701</a>).</p></li>
+<li><p>The <code>filter</code> parameter in <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> and <code>derive_var_worst_flag()</code> has been deprecated in favor of <code><a href="../reference/restrict_derivation.html">restrict_derivation()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/701" class="external-link">#701</a>).</p></li>
 <li>
 <p>The following functions and parameters, which were deprecated in previous {admiral} versions, have been removed (<a href="https://github.com/pharmaverse/admiral/issues/1056" class="external-link">#1056</a>):</p>
 <ul><li><code>derive_agegr_ema()</code></li>
@@ -577,9 +602,9 @@
 <div class="section level3">
 <h3 id="documentation-0-7-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-7-0"></a></h3>
 <ul><li><p>Additional explanation added to <code>derive_param_*</code> and <code>derive_derived_param</code> functions regarding which variables are populated in the additional rows (<a href="https://github.com/pharmaverse/admiral/issues/939" class="external-link">#939</a>)</p></li>
-<li><p>Updated <code><a href="../reference/derive_var_worst_flag.html">derive_var_worst_flag()</a></code> and <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> vignettes to clarify their purpose (<a href="https://github.com/pharmaverse/admiral/issues/691" class="external-link">#691</a>)</p></li>
+<li><p>Updated <code>derive_var_worst_flag()</code> and <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> vignettes to clarify their purpose (<a href="https://github.com/pharmaverse/admiral/issues/691" class="external-link">#691</a>)</p></li>
 <li><p>Added example of ASEQ derivation in ADCM to <a href="https://pharmaverse.github.io/admiral/cran-release/articles/occds.html#aseq" class="external-link">OCCDS vignette</a> (<a href="https://github.com/pharmaverse/admiral/issues/720" class="external-link">#720</a>)</p></li>
-<li><p>Examples have been added for <code><a href="../reference/format_reason_default.html">format_reason_default()</a></code>, <code><a href="../reference/format_eoxxstt_default.html">format_eoxxstt_default()</a></code>, <code><a href="../reference/extend_source_datasets.html">extend_source_datasets()</a></code> and <code><a href="../reference/filter_date_sources.html">filter_date_sources()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/745" class="external-link">#745</a>)</p></li>
+<li><p>Examples have been added for <code>format_reason_default()</code>, <code>format_eoxxstt_default()</code>, <code><a href="../reference/extend_source_datasets.html">extend_source_datasets()</a></code> and <code><a href="../reference/filter_date_sources.html">filter_date_sources()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/745" class="external-link">#745</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="various-0-7-0">Various<a class="anchor" aria-label="anchor" href="#various-0-7-0"></a></h3>
@@ -614,7 +639,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-0-6-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-6-0"></a></h3>
-<ul><li><p><code>derive_agegr_ema()</code>, <code>derive_agegr_fda()</code>, <code>derive_disposition_dt()</code>, <code>derive_disposition_status()</code>,<code>derive_extreme_flag()</code>, <code>derive_worst_flag()</code>, <code>derive_obs_number()</code>, <code>derive_disposition_reason()</code> have been deprecated and renamed in favor of <code>derive_var_agegr_ema()</code>, <code>derive_var_agegr_fda()</code>, <code>derive_var_disposition_dt()</code>, <code><a href="../reference/derive_var_disposition_status.html">derive_var_disposition_status()</a></code>, <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code>, <code><a href="../reference/derive_var_worst_flag.html">derive_var_worst_flag()</a></code>, <code>derive_var_last_dose()</code>, <code><a href="../reference/derive_var_obs_number.html">derive_var_obs_number()</a></code>, and <code><a href="../reference/derive_vars_disposition_reason.html">derive_vars_disposition_reason()</a></code> respectively (<a href="https://github.com/pharmaverse/admiral/issues/738" class="external-link">#738</a>)</p></li>
+<ul><li><p><code>derive_agegr_ema()</code>, <code>derive_agegr_fda()</code>, <code>derive_disposition_dt()</code>, <code>derive_disposition_status()</code>,<code>derive_extreme_flag()</code>, <code>derive_worst_flag()</code>, <code>derive_obs_number()</code>, <code>derive_disposition_reason()</code> have been deprecated and renamed in favor of <code>derive_var_agegr_ema()</code>, <code>derive_var_agegr_fda()</code>, <code>derive_var_disposition_dt()</code>, <code>derive_var_disposition_status()</code>, <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code>, <code>derive_var_worst_flag()</code>, <code>derive_var_last_dose()</code>, <code><a href="../reference/derive_var_obs_number.html">derive_var_obs_number()</a></code>, and <code>derive_vars_disposition_reason()</code> respectively (<a href="https://github.com/pharmaverse/admiral/issues/738" class="external-link">#738</a>)</p></li>
 <li><p><code>derive_var_basec()</code> and <code>derive_baseline()</code> have been deprecated in favor of the extended <code><a href="../reference/derive_var_base.html">derive_var_base()</a></code> function (<a href="https://github.com/pharmaverse/admiral/issues/695" class="external-link">#695</a>)</p></li>
 <li><p><code>derive_params_exposure()</code> has been deprecated and renamed as <code><a href="../reference/derive_param_exposure.html">derive_param_exposure()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/722" class="external-link">#722</a>)</p></li>
 <li><p>The <code>derive_last_dose()</code> function has been deprecated in favor of <code><a href="../reference/derive_var_last_dose_date.html">derive_var_last_dose_date()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/385" class="external-link">#385</a>)</p></li>

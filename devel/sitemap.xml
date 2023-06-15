@@ -289,9 +289,6 @@
     <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_var_confirmation_flag.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_var_disposition_status.html</loc>
-  </url>
-  <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_var_dthcaus.html</loc>
   </url>
   <url>
@@ -349,16 +346,10 @@
     <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_var_trtemfl.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_var_worst_flag.html</loc>
-  </url>
-  <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_vars_aage.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_vars_atc.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_vars_disposition_reason.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/derive_vars_dt.html</loc>
@@ -452,12 +443,6 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/format.basket_select.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/devel/reference/format_eoxxstt_default.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/devel/reference/format_reason_default.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/devel/reference/get_admiral_option.html</loc>
