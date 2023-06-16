@@ -111,83 +111,16 @@ first or last observation for each by group.
 \item The categorization variable is merged to the input dataset.
 }
 }
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-
-vs <- tribble(
-  ~STUDYID,  ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSSEQ,       ~VSDTC,
-  "PILOT01",    "VS", "04-1127", "SCREENING",  "HEIGHT",     165.1,     43, "2013-09-16",
-  "PILOT01",    "VS", "04-1127", "SCREENING",  "WEIGHT",     42.87,    142, "2013-09-16",
-  "PILOT01",    "VS", "04-1127",  "BASELINE",  "WEIGHT",     41.05,    143, "2013-10-02",
-  "PILOT01",    "VS", "04-1127",    "WEEK 2",  "WEIGHT",     42.64,    144, "2013-10-16",
-  "PILOT01",    "VS", "04-1127",    "WEEK 4",  "WEIGHT",     41.73,    145, "2013-10-30",
-  "PILOT01",    "VS", "04-1127",   "WEEK 26",  "WEIGHT",     43.09,    152, "2014-03-31",
-  "PILOT01",    "VS", "06-1049", "SCREENING",  "HEIGHT",    167.64,     28, "2013-04-30",
-  "PILOT01",    "VS", "06-1049", "SCREENING",  "WEIGHT",     57.61,     92, "2013-04-30",
-  "PILOT01",    "VS", "06-1049",  "BASELINE",  "WEIGHT",     57.83,     93, "2013-05-14",
-  "PILOT01",    "VS", "06-1049",    "WEEK 2",  "WEIGHT",     58.29,     94, "2013-05-28",
-  "PILOT01",    "VS", "06-1049",    "WEEK 4",  "WEIGHT",     58.97,     95, "2013-06-11"
-)
-
-dm <- tribble(
-  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
-  "PILOT01",    "DM", "01-1057",   59, "YEARS",
-  "PILOT01",    "DM", "04-1127",   84, "YEARS",
-  "PILOT01",    "DM", "06-1049",   60, "YEARS"
-)
-wgt_cat <- function(wgt) {
-  case_when(
-    wgt < 50 ~ "low",
-    wgt > 90 ~ "high",
-    TRUE ~ "normal"
-  )
-}
-
-derive_var_merged_cat(
-  dm,
-  dataset_add = vs,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(VSDTC, VSSEQ),
-  filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
-  new_var = WGTBLCAT,
-  source_var = VSSTRESN,
-  cat_fun = wgt_cat,
-  mode = "last"
-) \%>\%
-  select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
-
-
-
-# defining a value for missing VS data
-derive_var_merged_cat(
-  dm,
-  dataset_add = vs,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(VSDTC, VSSEQ),
-  filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
-  new_var = WGTBLCAT,
-  source_var = VSSTRESN,
-  cat_fun = wgt_cat,
-  mode = "last",
-  missing_value = "MISSING"
-) \%>\%
-  select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
-}
 \seealso{
 Other deprecated: 
 \code{\link{derive_param_extreme_event}()},
 \code{\link{derive_var_basetype}()},
 \code{\link{derive_var_confirmation_flag}()},
-\code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
 \code{\link{derive_var_merged_character}()},
-\code{\link{derive_var_worst_flag}()},
-\code{\link{derive_vars_disposition_reason}()},
-\code{\link{derive_vars_last_dose}()},
-\code{\link{format_eoxxstt_default}()},
-\code{\link{format_reason_default}()}
+\code{\link{derive_vars_last_dose}()}
 }
 \concept{deprecated}
 \keyword{deprecated}
