@@ -1,3 +1,6 @@
+#compute_duration ----
+
+## Test 1: Default duration, i.e., relative day ----
 test_that("compute_duration Test 1: Default duration, i.e., relative day", {
   expect_equal(
     compute_duration(
@@ -8,6 +11,7 @@ test_that("compute_duration Test 1: Default duration, i.e., relative day", {
   )
 })
 
+## Test 2: Fractional duration ----
 test_that("compute_duration Test 2: Fractional duration", {
   expect_equal(
     compute_duration(
@@ -20,6 +24,7 @@ test_that("compute_duration Test 2: Fractional duration", {
   )
 })
 
+## Test 3: Age in years ----
 test_that("compute_duration Test 3: Age in years", {
   expect_equal(
     compute_duration(
@@ -33,6 +38,7 @@ test_that("compute_duration Test 3: Age in years", {
   )
 })
 
+## Test 4: Age in months ----
 test_that("compute_duration Test 4: Age in months", {
   expect_equal(
     compute_duration(
@@ -46,6 +52,7 @@ test_that("compute_duration Test 4: Age in months", {
   )
 })
 
+## Test 5: Age in weeks ----
 test_that("compute_duration Test 5: Age in weeks", {
   expect_equal(
     compute_duration(
@@ -59,6 +66,7 @@ test_that("compute_duration Test 5: Age in weeks", {
   )
 })
 
+## Test 6: Duration in hours ----
 test_that("compute_duration Test 6: Duration in hours", {
   expect_equal(
     compute_duration(
@@ -73,7 +81,8 @@ test_that("compute_duration Test 6: Duration in hours", {
 })
 
 
-test_that("compute_duration Test 7a: Duration in minutes (minutes option)", {
+## Test 7: Duration in minutes (minutes option) ----
+test_that("compute_duration Test 7: Duration in minutes (minutes option)", {
   expect_equal(
     compute_duration(
       ymd_hms("2020-12-06T13:00:00"),
@@ -86,7 +95,8 @@ test_that("compute_duration Test 7a: Duration in minutes (minutes option)", {
   )
 })
 
-test_that("compute_duration Test 7b: Duration in minutes (min option)", {
+## Test 8: Duration in minutes (min option) ----
+test_that("compute_duration Test 8: Duration in minutes (min option)", {
   expect_equal(
     compute_duration(
       ymd_hms("2020-12-06T13:00:00"),
@@ -100,7 +110,8 @@ test_that("compute_duration Test 7b: Duration in minutes (min option)", {
 })
 
 
-test_that("compute_duration Test 8a: Duration in seconds (seconds option)", {
+## Test 9: Duration in seconds (seconds option) ----
+test_that("compute_duration Test 9: Duration in seconds (seconds option)", {
   expect_equal(
     compute_duration(
       ymd_hms("2020-12-06T13:30:00"),
@@ -115,7 +126,8 @@ test_that("compute_duration Test 8a: Duration in seconds (seconds option)", {
 
 
 
-test_that("compute_duration Test 8b: Duration in seconds (sec option)", {
+## Test 10: Duration in seconds (sec option) ----
+test_that("compute_duration Test 10: Duration in seconds (sec option)", {
   expect_equal(
     compute_duration(
       ymd_hms("2020-12-06T13:30:00"),
