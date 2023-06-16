@@ -134,17 +134,12 @@ the new observations.
 Other deprecated: 
 \code{\link{derive_var_basetype}()},
 \code{\link{derive_var_confirmation_flag}()},
-\code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_last_dose_amt}()},
 \code{\link{derive_var_last_dose_date}()},
 \code{\link{derive_var_last_dose_grp}()},
 \code{\link{derive_var_merged_cat}()},
 \code{\link{derive_var_merged_character}()},
-\code{\link{derive_var_worst_flag}()},
-\code{\link{derive_vars_disposition_reason}()},
-\code{\link{derive_vars_last_dose}()},
-\code{\link{format_eoxxstt_default}()},
-\code{\link{format_reason_default}()}
+\code{\link{derive_vars_last_dose}()}
 }
 \concept{deprecated}
 \keyword{deprecated}

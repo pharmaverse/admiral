@@ -456,67 +456,6 @@ derive_vars_merged <- function(dataset,
 #'
 #' @export
 #'
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#'
-#' vs <- tribble(
-#'   ~STUDYID,  ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSSEQ,       ~VSDTC,
-#'   "PILOT01",    "VS", "04-1127", "SCREENING",  "HEIGHT",     165.1,     43, "2013-09-16",
-#'   "PILOT01",    "VS", "04-1127", "SCREENING",  "WEIGHT",     42.87,    142, "2013-09-16",
-#'   "PILOT01",    "VS", "04-1127",  "BASELINE",  "WEIGHT",     41.05,    143, "2013-10-02",
-#'   "PILOT01",    "VS", "04-1127",    "WEEK 2",  "WEIGHT",     42.64,    144, "2013-10-16",
-#'   "PILOT01",    "VS", "04-1127",    "WEEK 4",  "WEIGHT",     41.73,    145, "2013-10-30",
-#'   "PILOT01",    "VS", "04-1127",   "WEEK 26",  "WEIGHT",     43.09,    152, "2014-03-31",
-#'   "PILOT01",    "VS", "06-1049", "SCREENING",  "HEIGHT",    167.64,     28, "2013-04-30",
-#'   "PILOT01",    "VS", "06-1049", "SCREENING",  "WEIGHT",     57.61,     92, "2013-04-30",
-#'   "PILOT01",    "VS", "06-1049",  "BASELINE",  "WEIGHT",     57.83,     93, "2013-05-14",
-#'   "PILOT01",    "VS", "06-1049",    "WEEK 2",  "WEIGHT",     58.29,     94, "2013-05-28",
-#'   "PILOT01",    "VS", "06-1049",    "WEEK 4",  "WEIGHT",     58.97,     95, "2013-06-11"
-#' )
-#'
-#' dm <- tribble(
-#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
-#'   "PILOT01",    "DM", "01-1057",   59, "YEARS",
-#'   "PILOT01",    "DM", "04-1127",   84, "YEARS",
-#'   "PILOT01",    "DM", "06-1049",   60, "YEARS"
-#' )
-#' wgt_cat <- function(wgt) {
-#'   case_when(
-#'     wgt < 50 ~ "low",
-#'     wgt > 90 ~ "high",
-#'     TRUE ~ "normal"
-#'   )
-#' }
-#'
-#' derive_var_merged_cat(
-#'   dm,
-#'   dataset_add = vs,
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   order = exprs(VSDTC, VSSEQ),
-#'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
-#'   new_var = WGTBLCAT,
-#'   source_var = VSSTRESN,
-#'   cat_fun = wgt_cat,
-#'   mode = "last"
-#' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
-#'
-#'
-#'
-#' # defining a value for missing VS data
-#' derive_var_merged_cat(
-#'   dm,
-#'   dataset_add = vs,
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   order = exprs(VSDTC, VSSEQ),
-#'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
-#'   new_var = WGTBLCAT,
-#'   source_var = VSSTRESN,
-#'   cat_fun = wgt_cat,
-#'   mode = "last",
-#'   missing_value = "MISSING"
-#' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 derive_var_merged_cat <- function(dataset,
                                   dataset_add,
                                   by_vars,
@@ -527,22 +466,7 @@ derive_var_merged_cat <- function(dataset,
                                   filter_add = NULL,
                                   mode = NULL,
                                   missing_value = NA_character_) {
-  deprecate_warn("0.11.0", "derive_var_merged_cat()", "derive_vars_merged()")
-  new_var <- assert_symbol(enexpr(new_var))
-  source_var <- assert_symbol(enexpr(source_var))
-  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
-  assert_data_frame(dataset_add, required_vars = expr_c(by_vars, source_var))
-
-  derive_vars_merged(
-    dataset,
-    dataset_add = dataset_add,
-    filter_add = !!filter_add,
-    by_vars = by_vars,
-    order = order,
-    new_vars = exprs(!!new_var := {{ cat_fun }}(!!source_var)),
-    mode = mode,
-    missing_values = exprs(!!new_var := !!missing_value)
-  )
+  deprecate_stop("0.11.0", "derive_var_merged_cat()", "derive_vars_merged()")
 }
 
 #' Merge an Existence Flag
@@ -782,40 +706,7 @@ derive_var_merged_character <- function(dataset,
                                         filter_add = NULL,
                                         mode = NULL,
                                         missing_value = NA_character_) {
-  deprecate_warn("0.11.0", "derive_var_merged_character()", "derive_vars_merged()")
-
-  new_var <- assert_symbol(enexpr(new_var))
-  source_var <- assert_symbol(enexpr(source_var))
-  case <-
-    assert_character_scalar(
-      case,
-      values = c("lower", "upper", "title"),
-      case_sensitive = FALSE,
-      optional = TRUE
-    )
-  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
-  assert_data_frame(dataset_add, required_vars = expr_c(by_vars, source_var))
-  assert_character_scalar(missing_value)
-
-  if (is.null(case)) {
-    trans <- expr(!!source_var)
-  } else if (case == "lower") {
-    trans <- expr(str_to_lower(!!source_var))
-  } else if (case == "upper") {
-    trans <- expr(str_to_upper(!!source_var))
-  } else if (case == "title") {
-    trans <- expr(str_to_title(!!source_var))
-  }
-  derive_vars_merged(
-    dataset,
-    dataset_add = dataset_add,
-    by_vars = by_vars,
-    order = order,
-    new_vars = exprs(!!new_var := !!trans),
-    filter_add = !!filter_add,
-    mode = mode,
-    missing_values = exprs(!!new_var := !!missing_value)
-  )
+  deprecate_stop("0.11.0", "derive_var_merged_character()", "derive_vars_merged()")
 }
 
 
