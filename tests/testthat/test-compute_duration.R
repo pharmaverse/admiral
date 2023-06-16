@@ -1,4 +1,4 @@
-#compute_duration ----
+# compute_duration ----
 
 ## Test 1: Default duration, i.e., relative day ----
 test_that("compute_duration Test 1: Default duration, i.e., relative day", {
