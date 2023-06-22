@@ -181,7 +181,7 @@ advs <- advs %>%
 ## Derive baseline flags ----
 advs <- advs %>%
   # Calculate BASETYPE
-  derive_var_basetype(
+  derive_basetype_records(
     basetypes = exprs(
       "LAST: AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
       "LAST: AFTER STANDING FOR 1 MINUTE" = ATPTN == 816,
@@ -251,7 +251,7 @@ advs <- advs %>%
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, ATPTN),
     order = exprs(ADT, AVISITN, AVAL),
     mode = "last",
-    filter = (4 < AVISITN & AVISITN <= 13 & ANL01FL == "Y" & is.na(DTYPE)),
+    filter_add = (4 < AVISITN & AVISITN <= 13 & ANL01FL == "Y" & is.na(DTYPE)),
     set_values_to = exprs(
       AVISIT = "End of Treatment",
       AVISITN = 99,

@@ -184,21 +184,17 @@ derive_param_exist_flag <- function(dataset = NULL,
                                     subject_keys) {
   ### BEGIN DEPRECATION
   if (!missing(dataset_adsl)) {
-    deprecate_warn(
+    deprecate_stop(
       "0.11.0", "derive_param_exist_flag(dataset_adsl = )",
       "derive_param_exit_flag(dataset_ref = )"
     )
-    # assign deprecated argument to new variable
-    dataset_ref <- dataset_adsl
   }
 
   if (!missing(subject_keys)) {
-    deprecate_warn(
+    deprecate_stop(
       "0.11.0", "derive_param_exist_flag(subject_keys = )",
       "derive_param_exit_flag(by_vars = )"
     )
-    # assign deprecated argument to new variable
-    by_vars <- subject_keys
   }
   ### END DEPRECATION
 
@@ -223,12 +219,11 @@ derive_param_exist_flag <- function(dataset = NULL,
 
   if (!missing(aval_fun)) {
     assert_function(aval_fun)
-    deprecate_warn(
+    deprecate_stop(
       "0.11.0",
       "derive_param_exist_flag(aval_fun = )",
       "derive_param_exist_flag(set_values_to = )"
     )
-    set_values_to <- exprs(!!!set_values_to, AVAL = aval_fun(AVALC))
   }
 
   # Create new observations

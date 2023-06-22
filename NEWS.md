@@ -1,3 +1,43 @@
+# admiral 0.12.0
+
+## New Features
+
+
+## Updates of Existing Functions
+
+
+## Breaking Changes
+- The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)
+
+  - `derive_var_disposition_status()`
+  - `derive_vars_disposition_reason()`
+  - `format_eoxxstt_default()`
+  - `format_reason_default()`
+  - `derive_var_worst_flag()`
+
+- The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1950)
+
+  - `derive_param_extreme_event()`
+  - `derive_vars_last_dose()`
+  - `derive_var_last_dose_amt()`
+  - `derive_var_last_dose_date()`
+  - `derive_var_last_dose_grp()`
+  - `derive_var_basetype()`
+  - `derive_var_merged_cat()`
+  - `derive_var_merged_character()`
+  
+- The arguments `dataset_adsl` in the function `derive_param_exist_flag()` and
+`subject_keys` have been deprecated versions using the next phase of the deprecation process. (#1950)
+
+- The `filter` argument in `derive_extreme_records()` was deprecated in favor of
+the `filter_add` using the next phase of the deprecation process. (#1950)
+
+## Documentation
+
+
+## Various
+
+
 # admiral 0.11.0
 
 ## New Features
@@ -68,7 +108,7 @@ now. This affects `derive_param_tte()`. (#1727)
 ## Breaking Changes
 
 - `create_query_data()` and `derive_vars_query()` updated to rename variables in 
-    query data set as follows:
+    query data set as follows: (#1907)
 
     - `VAR_PREFIX` to `PREFIX`
     - `QUERY_NAME` to `GRPNAME`
@@ -112,6 +152,9 @@ deprecated in favor of `derive_vars_merged()`. (#1727)
 - The `filter` argument in `derive_extreme_records()` was deprecated in favor of
 the `filter_add` argument. (#1725)
 
+- `derive_vars_last_dose()`, `derive_var_last_dose_amt()`, `derive_var_last_dose_date()`, `derive_var_last_dose_grp()`,
+were deprecated in favor of `derive_vars_joined()`. (#1797)
+
 - `derive_var_basetype()` was deprecated in favor of `derive_basetype_records()`. (#1796)
 
 - In the function `derive_param_exist_flag()` the arguments `dataset_adsl` and
@@ -130,6 +173,10 @@ values are assigned in NCI-CTCAEv5. (#1863)
 
 - Increased documentation for those functions which are regarded as wrapper functions. (#1726)
 
+- Examples in function documentation no longer rely on `library(admiral.test)`. (#1752) 
+
+- Conferences where `{admiral}` was presented were updated on the `README.md`. (#1890)
+
 ## Various
 
 - `vars()` which was used in the admiral function calls that expected a list of
@@ -143,6 +190,8 @@ as well. (#1694)
 - `create_period_dataset()` had a bug that led to an error when both DT and DTM columns existed. (#1845)
 
 - External functions are now consistently imported via namespace. `package::function()` calls have been removed from `admiral` functions. (#1842)
+
+- `restrict_derivation()` had a bug which led to failure if the `derivation` argument was not in the global environment. (#1765)
 
 # admiral 0.10.2
 
