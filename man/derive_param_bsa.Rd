@@ -93,8 +93,11 @@ The input dataset with the new parameter added. Note, a variable will only
 be populated in the new parameter rows if it is specified in \code{by_vars}.
 }
 \description{
-Adds a record for BSA (Body Surface Area) using the specified derivation method
-for each by group (e.g., subject and visit) where the source parameters are available.
+Adds a record for BSA (Body Surface Area) using the specified derivation
+method for each by group (e.g., subject and visit) where the source parameters are
+available.
+
+\strong{Note:} This is a wrapper function for the more generic \code{derive_param_computed()}.
 }
 \examples{
 library(tibble)
@@ -145,7 +148,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_param_extreme_record}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},

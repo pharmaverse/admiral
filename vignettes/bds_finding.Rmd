@@ -576,7 +576,7 @@ dataset_vignette(
 
 ## Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`, `BNRIND`) {#baseline}
 
-The `BASETYPE` should be derived using the function `derive_var_basetype()`.
+The `BASETYPE` should be derived using the function `derive_basetype_records()`.
 The parameter `basetypes` of this function requires a named list of expression 
 detailing how the `BASETYPE` should be assigned.  Note, if a record falls into
 multiple expressions within the basetypes expression, a row will be produced for 
@@ -584,7 +584,7 @@ each `BASETYPE`.
 
 
 ```{r eval=TRUE}
-advs <- derive_var_basetype(
+advs <- derive_basetype_records(
   dataset = advs,
   basetypes = exprs(
     "LAST: AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
@@ -928,7 +928,7 @@ advs_ex1 <- advs %>%
     by_vars = exprs(STUDYID, USUBJID, PARAMCD),
     order = exprs(ADT, AVISITN, ATPTN, AVAL),
     mode = "last",
-    filter = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y"),
+    filter_add = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y"),
     set_values_to = exprs(
       AVISIT = "End of Treatment",
       AVISITN = 99,
@@ -957,7 +957,7 @@ advs_ex1 <- advs %>%
     by_vars = exprs(STUDYID, USUBJID, PARAMCD),
     order = exprs(AVAL, ADT, AVISITN, ATPTN),
     mode = "first",
-    filter = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y" & !is.na(AVAL)),
+    filter_add = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y" & !is.na(AVAL)),
     set_values_to = exprs(
       AVISIT = "Minimum on Treatment",
       AVISITN = 98,

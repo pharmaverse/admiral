@@ -1,13 +1,13 @@
-# VAR_PREFIX, e.g., SMQ01, CQ12
-# QUERY_NAME, non NULL
-# QUERY_ID, could be NULL
-# QUERY_SCOPE, ‘BROAD’, ‘NARROW’, or NULL
-# TERM_LEVEL, e.g., AEDECOD, AELLT, ...
-# TERM_NAME, non NULL
+# PREFIX, e.g., SMQ01, CQ12
+# GRPNAME, non NULL
+# GRPID, could be NULL
+# SCOPE, ‘BROAD’, ‘NARROW’, or NULL
+# SRCVAR, e.g., AEDECOD, AELLT, ...
+# TERMNAME, non NULL
 
 queries <- tibble::tribble(
-  ~VAR_PREFIX, ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE,
-  ~QUERY_SCOPE_NUM, ~TERM_LEVEL, ~TERM_NAME, ~TERM_ID,
+  ~PREFIX, ~GRPNAME, ~GRPID, ~SCOPE,
+  ~SCOPEN, ~SRCVAR, ~TERMNAME, ~TERMID,
   "CQ01", "Dermatologic events", NA_integer_, NA_character_,
   NA_integer_, "AELLT", "APPLICATION SITE ERYTHEMA", NA_integer_,
   "CQ01", "Dermatologic events", NA_integer_, NA_character_,
@@ -23,7 +23,7 @@ queries <- tibble::tribble(
   "SMQ02", "Immune-Mediated Hypothyroidism", 20000160L, "BROAD",
   1L, "AEDECOD", "BLOOD THYROID STIMULATING HORMONE ABNORMAL", NA_integer_,
   "SMQ02", "Immune-Mediated Hypothyroidism", 20000160L, "NARROW",
-  1L, "AEDECOD", "BIOPSY THYROID GLAND INCREASED", NA_integer_,
+  2L, "AEDECOD", "BIOPSY THYROID GLAND INCREASED", NA_integer_,
   "SMQ03", "Immune-Mediated Guillain-Barre Syndrome", 20000131L, "NARROW",
   2L, "AEDECOD", "GUILLAIN-BARRE SYNDROME", NA_integer_,
   "SMQ03", "Immune-Mediated Guillain-Barre Syndrome", 20000131L, "NARROW",
@@ -41,17 +41,17 @@ queries <- tibble::tribble(
 )
 
 adae <- tibble::tribble(
-  ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
+  ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
   "01", "2020-06-02 23:59:59", "ERYTHEMA", 3,
-  "Erythema", "Localized erythema",
+  "Erythema", "Localized erythema", NA_integer_,
   "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE", 5,
-  "Basedow's disease", NA_character_,
+  "Basedow's disease", NA_character_, NA_integer_,
   "02", "2020-06-05 23:59:59", "ALVEOLAR PROTEINOSIS", 1,
-  "Alveolar proteinosis", NA_character_,
+  "Alveolar proteinosis", NA_character_, NA_integer_,
   "03", "2020-06-07 23:59:59", "SOME TERM", 2,
-  "Some query", "Some term",
+  "Some query", "Some term", NA_integer_,
   "04", "2020-06-10 23:59:59", "APPLICATION SITE ERYTHEMA", 7,
-  "APPLICATION SITE ERYTHEMA", "Application site erythema",
+  "APPLICATION SITE ERYTHEMA", "Application site erythema", 1
 )
 
 # try below:
@@ -60,7 +60,7 @@ derive_vars_query(adae, queries)
 
 # example to use for ADMH:
 queries_mh <- queries %>%
-  filter(TERM_LEVEL %in% c("AELLT", "AEDECOD")) %>%
-  mutate(TERM_LEVEL = ifelse(TERM_LEVEL == "AELLT", "MHLLT", "MHDECOD"))
+  filter(SRCVAR %in% c("AELLT", "AEDECOD")) %>%
+  mutate(SRCVAR = ifelse(SRCVAR == "AELLT", "MHLLT", "MHDECOD"))
 
 derive_vars_query(admh, queries_mh)

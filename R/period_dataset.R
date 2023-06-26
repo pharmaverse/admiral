@@ -187,8 +187,8 @@ create_period_dataset <- function(dataset,
     }
     if (mode == "subperiod") {
       period_ref[[i]] <- pivot_longer(
-        select(dataset, !!!subject_keys, matches(cols[[i]])),
-        matches(cols[[i]]),
+        select(dataset, !!!subject_keys, matches(paste0(cols[[i]], "\\b"))),
+        matches(paste0(cols[[i]], "\\b")),
         names_to = c(".value", "APERIOD", num_var_chr[[mode]]),
         names_pattern = names_pattern[[i]]
       ) %>%
@@ -201,8 +201,8 @@ create_period_dataset <- function(dataset,
       by_vars <- exprs(APERIOD, !!sym(num_var[[mode]]))
     } else {
       period_ref[[i]] <- pivot_longer(
-        select(dataset, !!!subject_keys, matches(cols[[i]])),
-        matches(cols[[i]]),
+        select(dataset, !!!subject_keys, matches(paste0(cols[[i]], "\\b"))),
+        matches(paste0(cols[[i]], "\\b")),
         names_to = c(".value", num_var_chr[[mode]]),
         names_pattern = names_pattern[[i]]
       ) %>%

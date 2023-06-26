@@ -39,11 +39,11 @@ library(tibble)
 
 convert_na_to_blanks(c("a", "b", NA, "d", NA))
 
-df <- tibble(
-  a = structure(c("a", "b", NA, "c"), label = "A"),
-  b = structure(c(1, NA, 21, 9), label = "B"),
-  c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
-  d = structure(c(NA, NA, "s", "q"), label = "D")
+df <- tribble(
+  ~USUBJID,   ~RFICDTC,
+  "1001", "2000-01-01",
+  "1002", "2001-01-01",
+  "1003",           NA
 )
 print(df)
 convert_na_to_blanks(df)
