@@ -93,20 +93,6 @@
 <li class="nav-item">
   <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -150,9 +136,9 @@
   <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
 <span class="op">}</span>
 
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiral.test"</span>, ref <span class="op">=</span> <span class="st">"devel"</span><span class="op">)</span> <span class="co"># This is a required dependency of {admiral}</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiraldev"</span>, ref <span class="op">=</span> <span class="st">"devel"</span><span class="op">)</span> <span class="co"># This is a required dependency of {admiral}</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiral"</span>, ref <span class="op">=</span> <span class="st">"devel"</span><span class="op">)</span></code></pre></div>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiral.test"</span><span class="op">)</span> <span class="co"># This is a required dependency of {admiral}</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiraldev"</span><span class="op">)</span> <span class="co"># This is a required dependency of {admiral}</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiral"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="release-schedule">Release Schedule<a class="anchor" aria-label="anchor" href="#release-schedule"></a>
@@ -337,6 +323,11 @@
 <a href="https://github.com/pharmaverse/admiral/issues" class="external-link">GitHub Issues</a>—for direct feedback, enhancement requests or raising bugs</li>
 </ul>
 </div>
+<div class="section level2">
+<h2 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a>
+</h2>
+<p>Along with the authors and contributors, thanks to the following people for their work on the package: Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Bill Denney, Alice Ehmann, Ania Golab, Alana Harris, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Konstantina Koukourikou, Pavan Kumar, Wenyi Liu, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Yohann Omnes, Barbara O’Reilly, Hamza Rahal, Nick Ramirez, Tom Ratford, Tamara Senior, Sophie Shapcott, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay and Franciszek Walkowiak.</p>
+</div>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
@@ -375,37 +366,18 @@
 <ul class="list-unstyled">
 <li>Ben Straub <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Stefan Bundfuss <br><small class="roles"> Author </small>  </li>
-<li>Thomas Neitmann <br><small class="roles"> Author </small>  </li>
-<li>Samia Kabi <br><small class="roles"> Author </small>  </li>
-<li>Gordon Miller <br><small class="roles"> Author </small>  </li>
-<li>Teckla Akinyi <br><small class="roles"> Author </small>  </li>
-<li>Andrew Smith <br><small class="roles"> Author </small>  </li>
-<li>Konstantina Koukourikou <br><small class="roles"> Author </small>  </li>
-<li>Ross Farrugia <br><small class="roles"> Author </small>  </li>
-<li>Eric Simms <br><small class="roles"> Author </small>  </li>
-<li>Annie Yang <br><small class="roles"> Author </small>  </li>
-<li>Robin Koeger <br><small class="roles"> Author </small>  </li>
-<li>Sophie Shapcott <br><small class="roles"> Author </small>  </li>
-<li>Ojesh Upadhyay <br><small class="roles"> Author </small>  </li>
-<li>Jack McGavigan <br><small class="roles"> Author </small>  </li>
-<li>Kamila Duniec <br><small class="roles"> Author </small>  </li>
-<li>Gayatri G <br><small class="roles"> Author </small>  </li>
-<li>Alana Harris <br><small class="roles"> Author </small>  </li>
-<li>Mahdi About <br><small class="roles"> Author </small>  </li>
-<li>Pooja Kumari <br><small class="roles"> Author </small>  </li>
-<li>Claudia Carlucci <br><small class="roles"> Author </small>  </li>
-<li>Daniil Stefonishin <br><small class="roles"> Author </small>  </li>
-<li>Sadchla Mascary <br><small class="roles"> Author </small>  </li>
-<li>Zelos Zhu <br><small class="roles"> Author </small>  </li>
 <li>Jeffrey Dickinson <br><small class="roles"> Author </small>  </li>
-<li>Ania Golab <br><small class="roles"> Author </small>  </li>
-<li>Kangjie Zhang <br><small class="roles"> Author </small>  </li>
-<li>Daphne Grasselly <br><small class="roles"> Author </small>  </li>
+<li>Ross Farrugia <br><small class="roles"> Author </small>  </li>
 <li>Adam Forys <br><small class="roles"> Author </small>  </li>
+<li>Daphne Grasselly <br><small class="roles"> Author </small>  </li>
+<li>Dinakar Kulkarni <br><small class="roles"> Author </small>  </li>
 <li>Edoardo Mancini <br><small class="roles"> Author </small>  </li>
+<li>Sadchla Mascary <br><small class="roles"> Author </small>  </li>
+<li>Gordon Miller <br><small class="roles"> Author </small>  </li>
+<li>Eric Simms <br><small class="roles"> Author </small>  </li>
 <li>Stefan Thoma <br><small class="roles"> Author </small>  </li>
-<li>F. Hoffmann-La Roche AG <br><small class="roles"> Copyright holder, funder </small>  </li>
-<li>GlaxoSmithKline LLC <br><small class="roles"> Copyright holder, funder </small>  </li>
+<li>Kangjie Zhang <br><small class="roles"> Author </small>  </li>
+<li>Zelos Zhu <br><small class="roles"> Author </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -425,7 +397,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Ben Straub, Stefan Bundfuss, Thomas Neitmann, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, Edoardo Mancini, Stefan Thoma, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+<p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Eric Simms, Stefan Thoma, Kangjie Zhang, Zelos Zhu, Kamila Duniec, G Gayatri, Declan Hodges, Robin Koeger, Pooja Kumari, Shan Lee, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
