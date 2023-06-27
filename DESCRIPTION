@@ -56,20 +56,10 @@ Imports:
     tidyselect (>= 1.1.0)
 Suggests:
     admiral.test (>= 0.6.0),
-    covr,
-    devtools,
     DT,
-    diffdf,
-    knitr,
-    lintr,
     methods,
-    pkgdown,
     readxl,
-    rmarkdown,
-    roxygen2,
-    spelling,
     testthat (>= 3.0.0),
-    tibble,
-    usethis
+    tibble
 VignetteBuilder: knitr
 Config/testthat/edition: 3
