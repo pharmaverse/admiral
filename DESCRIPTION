@@ -57,6 +57,7 @@ Imports:
 Suggests:
     admiral.test (>= 0.6.0),
     DT,
+    diffdf,
     knitr,
     methods,
     readxl,
