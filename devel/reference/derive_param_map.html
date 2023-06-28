@@ -63,20 +63,6 @@ Note: This is a wrapper function for the more generic derive_param_computed().">
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -150,21 +136,21 @@ code for the new parameter.</p>
 <dd><p>Systolic blood pressure parameter code</p>
 <p>The observations where <code>PARAMCD</code> equals the specified value are considered
 as the systolic blood pressure assessments.</p>
-<p>Permitted Values: character value</p></dd>
+<p><em>Permitted Values:</em> character value</p></dd>
 
 
 <dt>diabp_code</dt>
 <dd><p>Diastolic blood pressure parameter code</p>
 <p>The observations where <code>PARAMCD</code> equals the specified value are considered
 as the diastolic blood pressure assessments.</p>
-<p>Permitted Values: character value</p></dd>
+<p><em>Permitted Values:</em> character value</p></dd>
 
 
 <dt>hr_code</dt>
 <dd><p>Heart rate parameter code</p>
 <p>The observations where <code>PARAMCD</code> equals the specified value are considered
 as the heart rate assessments.</p>
-<p>Permitted Values: character value</p></dd>
+<p><em>Permitted Values:</em> character value</p></dd>
 
 
 <dt>get_unit_expr</dt>
@@ -223,7 +209,7 @@ if it is based on diastolic, systolic blood pressure, and heart rate.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">advs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in"><span class="va">advs</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">PARAM</span>, <span class="op">~</span><span class="va">AVAL</span>, <span class="op">~</span><span class="va">VISIT</span>,</span>
 <span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"PULSE"</span>, <span class="st">"Pulse (beats/min)"</span>, <span class="fl">59</span>, <span class="st">"BASELINE"</span>,</span>
 <span class="r-in">  <span class="st">"01-701-1015"</span>, <span class="st">"PULSE"</span>, <span class="st">"Pulse (beats/min)"</span>, <span class="fl">61</span>, <span class="st">"WEEK 2"</span>,</span>
