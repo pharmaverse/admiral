@@ -115,7 +115,7 @@ filter_extreme <- function(dataset,
   # group and sort input dataset
   tmp_obs_nr <- get_new_tmp_var(dataset)
   if (!is.null(by_vars)) {
-    assert_data_frame(dataset, required_vars = exprs(!!!by_vars))
+    assert_data_frame(dataset, required_vars = by_vars)
 
     data <- dataset %>%
       derive_var_obs_number(
