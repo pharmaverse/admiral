@@ -261,7 +261,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'   to the other parameters using the specified variables.
 #'
 #'   If height is constant (e.g. only measured once at screening or baseline) then
-#'   use `constant_by_vars` to select the subject-level variable to merge on (e.g. USUBJID).
+#'   use `constant_by_vars` to select the subject-level variable to merge on (e.g. `USUBJID`).
 #'   This will produce BSA at all visits where weight is measured.  Otherwise
 #'   it will only be calculated at visits with both height and weight collected.
 #'
@@ -558,7 +558,7 @@ compute_bsa <- function(height = height,
 #'   to the other parameters using the specified variables.
 #'
 #'   If height is constant (e.g. only measured once at screening or baseline) then
-#'   use `constant_by_vars` to select the subject-level variable to merge on (e.g. USUBJID).
+#'   use `constant_by_vars` to select the subject-level variable to merge on (e.g. `USUBJID`).
 #'   This will produce BMI at all visits where weight is measured.  Otherwise
 #'   it will only be calculated at visits with both height and weight collected.
 #'

@@ -77,7 +77,7 @@ When HEIGHT is constant, the HEIGHT parameters (measured only once) are merged
 to the other parameters using the specified variables.
 
 If height is constant (e.g. only measured once at screening or baseline) then
-use \code{constant_by_vars} to select the subject-level variable to merge on (e.g. USUBJID).
+use \code{constant_by_vars} to select the subject-level variable to merge on (e.g. \code{USUBJID}).
 This will produce BMI at all visits where weight is measured.  Otherwise
 it will only be calculated at visits with both height and weight collected.
 
