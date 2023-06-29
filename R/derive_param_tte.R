@@ -738,9 +738,9 @@ extend_source_datasets <- function(source_datasets,
   by_groups <- unique(bind_rows(by_groups))
   for (i in seq_along(source_datasets)) {
     if (extend[[i]]) {
-        crossing(by_groups, source_datasets[[i]]);
+      crossing(by_groups, source_datasets[[i]]);
     }
-}
+  }
   source_datasets
 }
 
