@@ -2,9 +2,8 @@
 
 ## New Features
 
-
 ## Updates of Existing Functions
-
+- The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
 
 ## Breaking Changes
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)
@@ -38,7 +37,6 @@ the `filter_add` using the next phase of the deprecation process. (#1950)
 ## Various
 
 - The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as *authors*, whereas those who made a significant contribution in the past are now down as *contributors*. All other acknowledgements have been moved to README section (#1941).
-
 
 # admiral 0.11.0
 
