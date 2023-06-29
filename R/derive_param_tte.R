@@ -740,7 +740,7 @@ extend_source_datasets <- function(source_datasets,
     if (extend[[i]]) {
         crossing(by_groups, source_datasets[[i]]);
     }
-}
+  }
   source_datasets
 }
 
