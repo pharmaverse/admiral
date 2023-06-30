@@ -375,7 +375,7 @@ derive_vars_joined <- function(dataset,
     filter_if(filter_add) %>%
     select(
       !!!by_vars,
-      !!!extract_vars(order),
+      !!!replace_values_by_names(order),
       !!!replace_values_by_names(join_vars),
       !!!intersect(unname(extract_vars(new_vars)), chr2vars(colnames(dataset_add)))
     )
