@@ -90,7 +90,7 @@ slice_derivation <- function(dataset,
   assert_function(derivation, params = c("dataset"))
   assert_s3_class(args, "params", optional = TRUE)
   if (!is.null(args)) {
-    assert_function_param(deparse(substitute(derivation)), names(args))
+    assert_function(derivation, names(args))
   }
   slices <- list2(...)
   assert_list_of(slices, "derivation_slice")

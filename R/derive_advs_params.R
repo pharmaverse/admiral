@@ -20,21 +20,21 @@
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the systolic blood pressure assessments.
 #'
-#'   Permitted Values: character value
+#'   *Permitted Values:* character value
 #'
 #' @param diabp_code Diastolic blood pressure parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the diastolic blood pressure assessments.
 #'
-#'   Permitted Values: character value
+#'   *Permitted Values:* character value
 #'
 #' @param hr_code Heart rate parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the heart rate assessments.
 #'
-#'   Permitted Values: character value
+#'   *Permitted Values:* character value
 #'
 #' @inheritParams derive_param_computed
 #'
@@ -62,7 +62,7 @@
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #'
-#' advs <- tribble(
+#' advs <- tibble::tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
 #'   "01-701-1015", "PULSE", "Pulse (beats/min)", 59, "BASELINE",
 #'   "01-701-1015", "PULSE", "Pulse (beats/min)", 61, "WEEK 2",
@@ -239,21 +239,33 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #'   Takahira: `0.007241 * height ^ 0.725 * weight ^ 0.425`
 #'
-#'   Permitted Values: character value
+#'   *Permitted Values:* character value
 #'
 #' @param height_code HEIGHT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the HEIGHT assessments. It is expected that HEIGHT is measured in cm.
 #'
-#'   Permitted Values: character value
+#'   *Permitted Values:* character value
 #'
 #' @param weight_code WEIGHT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the WEIGHT assessments. It is expected that WEIGHT is measured in kg.
 #'
-#'   Permitted Values: character value
+#'   *Permitted Values:* character value
+#'
+#' @param constant_by_vars By variables for when HEIGHT is constant
+#'
+#'   When HEIGHT is constant, the HEIGHT parameters (measured only once) are merged
+#'   to the other parameters using the specified variables.
+#'
+#'   If height is constant (e.g. only measured once at screening or baseline) then
+#'   use `constant_by_vars` to select the subject-level variable to merge on (e.g. `USUBJID`).
+#'   This will produce BSA at all visits where weight is measured.  Otherwise
+#'   it will only be calculated at visits with both height and weight collected.
+#'
+#'   *Permitted Values:* list of variables
 #'
 #' @inheritParams derive_param_computed
 #'
@@ -272,7 +284,8 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #' @examples
 #' library(tibble)
 #'
-#' advs <- tribble(
+#' # Example 1: Derive BSA where height is measured only once using constant_by_vars
+#' advs <- tibble::tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
 #'   "01-701-1015", "HEIGHT", "Height (cm)", 170, "BASELINE",
 #'   "01-701-1015", "WEIGHT", "Weight (kg)", 75, "BASELINE",
@@ -292,13 +305,52 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'     PARAMCD = "BSA",
 #'     PARAM = "Body Surface Area (m^2)"
 #'   ),
-#'   get_unit_expr = extract_unit(PARAM)
+#'   get_unit_expr = extract_unit(PARAM),
+#'   constant_by_vars = exprs(USUBJID)
 #' )
 #'
 #' derive_param_bsa(
 #'   advs,
 #'   by_vars = exprs(USUBJID, VISIT),
 #'   method = "Fujimoto",
+#'   set_values_to = exprs(
+#'     PARAMCD = "BSA",
+#'     PARAM = "Body Surface Area (m^2)"
+#'   ),
+#'   get_unit_expr = extract_unit(PARAM),
+#'   constant_by_vars = exprs(USUBJID)
+#' )
+#'
+#' # Example 2: Derive BSA where height is measured only once and keep only one record
+#' # where both height and weight are measured.
+#'
+#' derive_param_bsa(
+#'   advs,
+#'   by_vars = exprs(USUBJID, VISIT),
+#'   method = "Mosteller",
+#'   set_values_to = exprs(
+#'     PARAMCD = "BSA",
+#'     PARAM = "Body Surface Area (m^2)"
+#'   ),
+#'   get_unit_expr = extract_unit(PARAM)
+#' )
+#'
+#' # Example 3: Pediatric study where height and weight are measured multiple times
+#' advs <- tibble::tribble(
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
+#'   "01-101-1001", "HEIGHT", "Height (cm)", 47.1, "BASELINE",
+#'   "01-101-1001", "HEIGHT", "Height (cm)", 59.1, "WEEK 12",
+#'   "01-101-1001", "HEIGHT", "Height (cm)", 64.7, "WEEK 24",
+#'   "01-101-1001", "HEIGHT", "Height (cm)", 68.2, "WEEK 48",
+#'   "01-101-1001", "WEIGHT", "Weight (kg)", 2.6, "BASELINE",
+#'   "01-101-1001", "WEIGHT", "Weight (kg)", 5.3, "WEEK 12",
+#'   "01-101-1001", "WEIGHT", "Weight (kg)", 6.7, "WEEK 24",
+#'   "01-101-1001", "WEIGHT", "Weight (kg)", 7.4, "WEEK 48",
+#' )
+#' derive_param_bsa(
+#'   advs,
+#'   by_vars = exprs(USUBJID, VISIT),
+#'   method = "Mosteller",
 #'   set_values_to = exprs(
 #'     PARAMCD = "BSA",
 #'     PARAM = "Body Surface Area (m^2)"
@@ -312,7 +364,8 @@ derive_param_bsa <- function(dataset,
                              height_code = "HEIGHT",
                              weight_code = "WEIGHT",
                              get_unit_expr,
-                             filter = NULL) {
+                             filter = NULL,
+                             constant_by_vars = NULL) {
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = exprs(!!!by_vars, PARAMCD, AVAL))
   assert_character_scalar(
@@ -328,6 +381,7 @@ derive_param_bsa <- function(dataset,
   assert_character_scalar(weight_code)
   get_unit_expr <- assert_expr(enexpr(get_unit_expr))
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  assert_vars(constant_by_vars, optional = TRUE)
 
   assert_unit(
     dataset,
@@ -350,13 +404,23 @@ derive_param_bsa <- function(dataset,
     )
   )
 
+  if (is.null(constant_by_vars)) {
+    parameters <- c(weight_code, height_code)
+    constant_parameters <- NULL
+  } else {
+    parameters <- c(weight_code)
+    constant_parameters <- c(height_code)
+  }
+
   derive_param_computed(
     dataset,
     filter = !!filter,
-    parameters = c(height_code, weight_code),
+    parameters = parameters,
     by_vars = by_vars,
     analysis_value = !!bsa_formula,
-    set_values_to = set_values_to
+    set_values_to = set_values_to,
+    constant_parameters = constant_parameters,
+    constant_by_vars = constant_by_vars
   )
 }
 
@@ -368,13 +432,13 @@ derive_param_bsa <- function(dataset,
 #'
 #'   It is expected that HEIGHT is in cm.
 #'
-#'   Permitted Values: numeric vector
+#'   *Permitted Values:* numeric vector
 #'
 #' @param weight WEIGHT value
 #'
 #'   It is expected that WEIGHT is in kg.
 #'
-#'   Permitted Values: numeric vector
+#'   *Permitted Values:* numeric vector
 #'
 #' @param method Derivation method to use:
 #'
@@ -392,7 +456,7 @@ derive_param_bsa <- function(dataset,
 #'
 #'   Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425
 #'
-#'   Permitted Values: character value
+#'   *Permitted Values:* character value
 #'
 #'
 #' @details Usually this computation function can not be used with `%>%`.
@@ -477,14 +541,28 @@ compute_bsa <- function(height = height,
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the WEIGHT. It is expected that WEIGHT is measured in kg
 #'
-#'   Permitted Values: character value
+#'   *Permitted Values:* character value
 #'
 #' @param height_code HEIGHT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the HEIGHT. It is expected that HEIGHT is measured in cm
 #'
-#'   Permitted Values: character value
+#'   *Permitted Values:* character value
+#'
+#'   *Permitted Values:* logical scalar
+#'
+#' @param constant_by_vars By variables for when HEIGHT is constant
+#'
+#'   When HEIGHT is constant, the HEIGHT parameters (measured only once) are merged
+#'   to the other parameters using the specified variables.
+#'
+#'   If height is constant (e.g. only measured once at screening or baseline) then
+#'   use `constant_by_vars` to select the subject-level variable to merge on (e.g. `USUBJID`).
+#'   This will produce BMI at all visits where weight is measured.  Otherwise
+#'   it will only be calculated at visits with both height and weight collected.
+#'
+#'   *Permitted Values:* list of variables
 #'
 #' @inheritParams derive_param_computed
 #'
@@ -505,23 +583,63 @@ compute_bsa <- function(height = height,
 #' @export
 #'
 #' @examples
-#' library(tibble)
 #'
-#' advs <- tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVISIT,
-#'   "01-701-1015", "HEIGHT", "Height (cm)", 147,   "SCREENING",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.0,  "SCREENING",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.4,  "BASELINE",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)", 53.1,  "WEEK 2",
-#'   "01-701-1028", "HEIGHT", "Height (cm)", 163,   "SCREENING",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)", 78.5,  "SCREENING",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.3,  "BASELINE",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7,  "WEEK 2"
+#' # Example 1: Derive BMI where height is measured only once using constant_by_vars
+#' advs <- tibble::tribble(
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISIT,
+#'   "01-701-1015", "HEIGHT", "Height (cm)", 147, "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.0, "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.4, "BASELINE",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 53.1, "WEEK 2",
+#'   "01-701-1028", "HEIGHT", "Height (cm)", 163, "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 78.5, "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.3, "BASELINE",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7, "WEEK 2"
 #' )
 #'
 #' derive_param_bmi(
 #'   advs,
 #'   by_vars = exprs(USUBJID, AVISIT),
+#'   weight_code = "WEIGHT",
+#'   height_code = "HEIGHT",
+#'   set_values_to = exprs(
+#'     PARAMCD = "BMI",
+#'     PARAM = "Body Mass Index (kg/m^2)"
+#'   ),
+#'   get_unit_expr = extract_unit(PARAM),
+#'   constant_by_vars = exprs(USUBJID)
+#' )
+#'
+#' # Example 2: Derive BMI where height is measured only once and keep only one record
+#' # where both height and weight are measured.
+#' derive_param_bmi(
+#'   advs,
+#'   by_vars = exprs(USUBJID, AVISIT),
+#'   weight_code = "WEIGHT",
+#'   height_code = "HEIGHT",
+#'   set_values_to = exprs(
+#'     PARAMCD = "BMI",
+#'     PARAM = "Body Mass Index (kg/m^2)"
+#'   ),
+#'   get_unit_expr = extract_unit(PARAM)
+#' )
+#'
+#' # Example 3: Pediatric study where height and weight are measured multiple times
+#' advs <- tibble::tribble(
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
+#'   "01-101-1001", "HEIGHT", "Height (cm)", 47.1, "BASELINE",
+#'   "01-101-1001", "HEIGHT", "Height (cm)", 59.1, "WEEK 12",
+#'   "01-101-1001", "HEIGHT", "Height (cm)", 64.7, "WEEK 24",
+#'   "01-101-1001", "HEIGHT", "Height (cm)", 68.2, "WEEK 48",
+#'   "01-101-1001", "WEIGHT", "Weight (kg)", 2.6, "BASELINE",
+#'   "01-101-1001", "WEIGHT", "Weight (kg)", 5.3, "WEEK 12",
+#'   "01-101-1001", "WEIGHT", "Weight (kg)", 6.7, "WEEK 24",
+#'   "01-101-1001", "WEIGHT", "Weight (kg)", 7.4, "WEEK 48",
+#' )
+#'
+#' derive_param_bmi(
+#'   advs,
+#'   by_vars = exprs(USUBJID, VISIT),
 #'   weight_code = "WEIGHT",
 #'   height_code = "HEIGHT",
 #'   set_values_to = exprs(
@@ -536,7 +654,8 @@ derive_param_bmi <- function(dataset,
                              weight_code = "WEIGHT",
                              height_code = "HEIGHT",
                              get_unit_expr,
-                             filter = NULL) {
+                             filter = NULL,
+                             constant_by_vars = NULL) {
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = exprs(!!!by_vars, PARAMCD, AVAL))
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
@@ -545,6 +664,8 @@ derive_param_bmi <- function(dataset,
   assert_character_scalar(height_code)
   get_unit_expr <- assert_expr(enexpr(get_unit_expr))
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  assert_vars(constant_by_vars, optional = TRUE)
+
 
   assert_unit(
     dataset,
@@ -559,16 +680,30 @@ derive_param_bmi <- function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
+  bmi_formula <- expr(
+    compute_bmi(
+      height = !!sym(paste0("AVAL.", height_code)),
+      weight = !!sym(paste0("AVAL.", weight_code))
+    )
+  )
+
+  if (is.null(constant_by_vars)) {
+    parameters <- c(weight_code, height_code)
+    constant_parameters <- NULL
+  } else {
+    parameters <- c(weight_code)
+    constant_parameters <- c(height_code)
+  }
+
   derive_param_computed(
     dataset,
     filter = !!filter,
-    parameters = c(weight_code, height_code),
+    parameters = parameters,
     by_vars = by_vars,
-    analysis_value = compute_bmi(
-      height = !!sym(paste0("AVAL.", height_code)),
-      weight = !!sym(paste0("AVAL.", weight_code))
-    ),
-    set_values_to = set_values_to
+    analysis_value = !!bmi_formula,
+    set_values_to = set_values_to,
+    constant_parameters = constant_parameters,
+    constant_by_vars = constant_by_vars
   )
 }
 
@@ -580,13 +715,13 @@ derive_param_bmi <- function(dataset,
 #'
 #'   It is expected that HEIGHT is in cm.
 #'
-#'   Permitted Values: numeric vector
+#'   *Permitted Values:* numeric vector
 #'
 #' @param weight WEIGHT value
 #'
 #'   It is expected that WEIGHT is in kg.
 #'
-#'   Permitted Values: numeric vector
+#'   *Permitted Values:* numeric vector
 #'
 #'
 #' @details Usually this computation function can not be used with `%>%`.
