@@ -422,5 +422,6 @@ derive_vars_joined <- function(dataset,
         sep = "\n"
       )
     ) %>%
-    remove_tmp_vars()
+    remove_tmp_vars() %>%
+    select(-ends_with(".join"))
 }
