@@ -218,9 +218,9 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #' assert_valid_queries(queries, "queries")
 assert_valid_queries <- function(queries, queries_name) {
   # check required columns
-  assert_has_variables(
+  assert_data_frame(
     queries,
-    c("PREFIX", "GRPNAME", "SRCVAR", "TERMNAME", "TERMID")
+    required_vars = exprs(PREFIX, GRPNAME, SRCVAR, TERMNAME, TERMID)
   )
 
   # check duplicate rows

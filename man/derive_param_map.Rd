@@ -47,21 +47,21 @@ code for the new parameter.
 The observations where \code{PARAMCD} equals the specified value are considered
 as the systolic blood pressure assessments.
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 
 \item{diabp_code}{Diastolic blood pressure parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the diastolic blood pressure assessments.
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 
 \item{hr_code}{Heart rate parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the heart rate assessments.
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
@@ -99,7 +99,7 @@ if it is based on diastolic, systolic blood pressure, and heart rate.
 library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 
-advs <- tribble(
+advs <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
   "01-701-1015", "PULSE", "Pulse (beats/min)", 59, "BASELINE",
   "01-701-1015", "PULSE", "Pulse (beats/min)", 61, "WEEK 2",
