@@ -352,6 +352,10 @@ derive_vars_joined <- function(dataset,
 
   if (is.null(new_vars)) {
     new_vars <- chr2vars(colnames(dataset_add))
+    if (any(colnames(dataset_add) %in% colnames(dataset))) {
+      warn_if_vars_exist(dataset, new_vars)
+      warn("Be careful to set appropriate expressions for `by_vars`, `join_vars` and `new_vars`.")
+    }
   }
 
   # number observations of the input dataset to get a unique key
@@ -422,6 +426,5 @@ derive_vars_joined <- function(dataset,
         sep = "\n"
       )
     ) %>%
-    remove_tmp_vars() %>%
-    select(-ends_with(".join"))
+    remove_tmp_vars()
 }
