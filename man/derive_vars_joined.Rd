@@ -260,7 +260,7 @@ derive_vars_joined(
   adae,
   dataset_add = adlb,
   by_vars = exprs(USUBJID),
-  order = exprs(AVAL, desc(ADY)),
+  order = exprs(AVAL, ADY = desc(ADY)),
   new_vars = exprs(HGB_MAX = AVAL, HGB_DY = ADY),
   filter_add = PARAMCD == "HGB",
   filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,

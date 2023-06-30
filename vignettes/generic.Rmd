@@ -313,7 +313,7 @@ ae_02 <- ae_01 %>%
     dataset_add = ae_01,
     filter_add = AESTDY > 0,
     by_vars = exprs(USUBJID),
-    order = exprs(as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))),
+    order = exprs(AESEV = as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))),
     new_vars = exprs(AENADSEV = AESEV),
     join_vars = exprs(AESTDY),
     filter_join = AESTDY.join < AESTDY,
@@ -358,7 +358,7 @@ ae_03 <- ae_02 %>%
     new_var = AEHSEVFL,
     by_vars = exprs(USUBJID),
     order = exprs(
-      as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD"))),
+      AESEV = as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD"))),
       AESTDY, AESEQ
     ),
     mode = "first"

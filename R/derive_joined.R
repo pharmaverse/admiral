@@ -246,7 +246,7 @@
 #'   adae,
 #'   dataset_add = adlb,
 #'   by_vars = exprs(USUBJID),
-#'   order = exprs(AVAL, desc(ADY)),
+#'   order = exprs(AVAL, ADY = desc(ADY)),
 #'   new_vars = exprs(HGB_MAX = AVAL, HGB_DY = ADY),
 #'   filter_add = PARAMCD == "HGB",
 #'   filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,
@@ -375,7 +375,6 @@ derive_vars_joined <- function(dataset,
     filter_if(filter_add) %>%
     select(
       !!!by_vars,
-      !!!chr2vars(names(order)),
       !!!replace_values_by_names(order),
       !!!replace_values_by_names(join_vars),
       !!!intersect(unname(extract_vars(new_vars)), chr2vars(colnames(dataset_add)))
