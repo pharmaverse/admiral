@@ -37,17 +37,17 @@ remotes::install_github("pharmaverse/admiral", ref = "devel")
 The `admiral` family has several downstream and upstream dependencies and so this release shall be done in three
 Phases:
 
-* Phase 1 release is for `{admiraldev}`, `{admiral.test}`, and `{admiral}` core 
+* Phase 1 release is for `{admiraldev}`, `{admiral.test}`, and `{admiral}` core
 * Phase 2 release is extension packages, e.g. `{admiralonco}`, `admiralophtha`
 
-|Release Schedule | Phase 1- Date and Packages      | Phase 2- Date and Packages |
-|---------------- | --------------------------      | -------------------------- |   
-| Q3-2023         | September 4th                   | September 11th             | 
-|                 | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            | 
-|                 | `{admiral}`                     | `{admiralophtha}`          | 
-| Q4-2023         | December 4th                    | December 11th              | 
-|                 | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            |
-|                 | `{admiral}`                     | `{admiralophtha}`          |  
+| Release Schedule | Phase 1- Date and Packages      | Phase 2- Date and Packages |
+| ---------------- | ------------------------------- | -------------------------- |
+| Q3-2023          | September 4th                   | September 11th             |
+|                  | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            |
+|                  | `{admiral}`                     | `{admiralophtha}`          |
+| Q4-2023          | December 4th                    | December 11th              |
+|                  | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            |
+|                  | `{admiral}`                     | `{admiralophtha}`          |
 
 ## Main Goal
 
@@ -171,8 +171,8 @@ that all our developers and contributors must follow, so that all our code has a
 * [Paving the way for clinical submissions in R](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/EU/London/PRE_London09.pdf) (slides from PHUSE SDE in London)
 * [An Overview of {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/US/Summit/PRE_Summit03.pdf) (slides from PHUSE SDE in Summit, NJ)
 * [{admiralonco}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS12.mp4) (recording for talk at PHUSE US Connect 2023, slides also available [here](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/PRE_OS12.pdf))
-* [Programming ADNCA using R and {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS09.mp4) (recording of presentation from PHUSE US Connect 2023) 
-* [Clinical Reporting in R](https://www.youtube.com/watch?v=9eod8MLF5ys&list=PLMtxz1fUYA5AWYQHB5mZAs-yamNJ5Tm_8&index=2) (recording of workshop at R in Pharma 2022)
+* [Programming ADNCA using R and {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS09.mp4) (recording of presentation from PHUSE US Connect 2023)
+* [Clinical Reporting in R](https://www.youtube.com/watch?v=9eod8MLF5ys\&list=PLMtxz1fUYA5AWYQHB5mZAs-yamNJ5Tm_8\&index=2) (recording of workshop at R in Pharma 2022)
 * [Introducing {admiral}](https://www.youtube.com/watch?v=N7Bw8c3D5fU) (recording of talk for R in Pharma 2021)
 * [Pharmaverse workshop](https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022) (slides and materials from PHUSE US Connect 2022---including `{admiral}`
   workshop slides from PHUSE EU Connect 2021)
