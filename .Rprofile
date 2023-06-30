@@ -1,5 +1,4 @@
 # Set renv profile base on R version.
-bootstrap_renv = TRUE
 renv_profile <- paste(R.version$major, substr(R.version$minor, 1, 1), sep = ".")
 if (file.exists("./renv/profile")) {
    message("Using renv profile from `renv/profile` file.")
@@ -11,8 +10,7 @@ if (file.exists("./renv/profile")) {
 }
 
 if ((Sys.getenv("GITHUB_ACTIONS") != "") || (Sys.getenv("DOCKER_CONTAINER_CONTEXT") != "")) {
-  bootstrap_renv = FALSE
   options(repos = c(CRAN = "https://cran.rstudio.com"))
+  Sys.setenv(RENV_AUTOLOADER_ENABLED=FALSE)
 }
-
-renv::activate(bootstrap=bootstrap_renv)
+source("renv/activate.R")
