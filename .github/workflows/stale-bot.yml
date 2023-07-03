@@ -17,6 +17,7 @@ jobs:
           days-before-issue-stale: 90
           days-before-issue-close: 14
           stale-issue-label: "stale"
+          exempt-issue-labels: ("release Q3-2023", "release Q4-2023", "release Q1-2024")
           stale-issue-message: "This issue is stale because it has been open for 90 days with no activity."
           close-issue-message: "This issue was closed because it has been inactive for 14 days since being marked as stale."
           days-before-pr-stale: 15
