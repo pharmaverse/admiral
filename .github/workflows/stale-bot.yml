@@ -1,4 +1,6 @@
-name: Close inactive issues
+# https://github.com/actions/stale
+
+name: Close Inactive Issues and Pull Requests
 on:
   schedule:
     - cron: "30 1 * * *"
