@@ -144,7 +144,6 @@ globalVariables(c(
   "VAR_CHECK",
   "TERM",
   "SRCVAR",
-  "TERMID",
   "TERMNAME",
   "TERM_NAME_ID",
   "TERM_UPPER",

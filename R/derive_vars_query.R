@@ -65,8 +65,8 @@ derive_vars_query <- function(dataset, dataset_queries) {
   assert_data_frame(dataset_queries)
   assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
   assert_data_frame(dataset,
-    required_vars = exprs(!!!syms(unique(dataset_queries$SRCVAR))),
-    optional = FALSE
+                    required_vars = exprs(!!!syms(unique(dataset_queries$SRCVAR))),
+                    optional = FALSE
   )
 
   dataset_queries <- convert_blanks_to_na(dataset_queries)
@@ -86,13 +86,13 @@ derive_vars_query <- function(dataset, dataset_queries) {
     mutate(
       NAM = paste0(PREFIX, "NAM"),
       CD = ifelse(!all(is.na(GRPID)),
-        paste0(PREFIX, "CD"), NA_character_
+                  paste0(PREFIX, "CD"), NA_character_
       ),
       SC = ifelse(!all(is.na(SCOPE)),
-        paste0(PREFIX, "SC"), NA_character_
+                  paste0(PREFIX, "SC"), NA_character_
       ),
       SCN = ifelse(!all(is.na(SCOPEN)),
-        paste0(PREFIX, "SCN"), NA_character_
+                   paste0(PREFIX, "SCN"), NA_character_
       )
     ) %>%
     ungroup() %>%
@@ -218,9 +218,9 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #' assert_valid_queries(queries, "queries")
 assert_valid_queries <- function(queries, queries_name) {
   # check required columns
-  assert_data_frame(
+  assert_has_variables(
     queries,
-    required_vars = exprs(PREFIX, GRPNAME, SRCVAR, TERMNAME, TERMID)
+    c("PREFIX", "GRPNAME", "SRCVAR", "TERMNAME", "TERMID")
   )
 
   # check duplicate rows
@@ -271,7 +271,7 @@ assert_valid_queries <- function(queries, queries_name) {
 
   # check illegal query scope
   if ("SCOPE" %in% names(queries) &&
-    any(unique(queries$SCOPE) %notin% c("BROAD", "NARROW", "", NA_character_))) {
+      any(unique(queries$SCOPE) %notin% c("BROAD", "NARROW", "", NA_character_))) {
     abort(paste0(
       "`SCOPE` in `", queries_name,
       "` can only be 'BROAD', 'NARROW' or `NA`."
@@ -295,7 +295,7 @@ assert_valid_queries <- function(queries, queries_name) {
 
   # check illegal term name
   if (any(is.na(queries$TERMNAME) & is.na(queries$TERMID)) ||
-    any(queries$TERMNAME == "" & is.na(queries$TERMID))) {
+      any(queries$TERMNAME == "" & is.na(queries$TERMID))) {
     abort(paste0(
       "Either `TERMNAME` or `TERMID` need to be specified",
       " in `", queries_name, "`. ",
@@ -309,7 +309,7 @@ assert_valid_queries <- function(queries, queries_name) {
     summarise(
       n_qnam = length(unique(GRPNAME)),
       n_qid = ifelse("GRPID" %in% names(queries),
-        length(unique(GRPID)), 0
+                     length(unique(GRPID)), 0
       )
     ) %>%
     ungroup()

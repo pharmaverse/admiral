@@ -1,7 +1,7 @@
 # admiral 0.11.1
 
-- Fix bugs in both `derive_vars_joined()` (#1966) and `derive_param_tte()` (#1962)
-- Get Started page now points to correct article (#1969)
+- Fix bug in `derive_param_tte()`. (#1962)
+- Get Started page now points to correct article. (#1969)
 
 # admiral 0.11.0
 

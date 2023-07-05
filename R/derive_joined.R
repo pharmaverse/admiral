@@ -246,7 +246,7 @@
 #'   adae,
 #'   dataset_add = adlb,
 #'   by_vars = exprs(USUBJID),
-#'   order = exprs(AVAL, ADY = desc(ADY)),
+#'   order = exprs(AVAL, desc(ADY)),
 #'   new_vars = exprs(HGB_MAX = AVAL, HGB_DY = ADY),
 #'   filter_add = PARAMCD == "HGB",
 #'   filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,
@@ -352,10 +352,6 @@ derive_vars_joined <- function(dataset,
 
   if (is.null(new_vars)) {
     new_vars <- chr2vars(colnames(dataset_add))
-    if (any(colnames(dataset_add) %in% colnames(dataset))) {
-      warn_if_vars_exist(dataset, new_vars)
-      warn("Be careful to set appropriate expressions for `by_vars`, `join_vars` and `new_vars`.")
-    }
   }
 
   # number observations of the input dataset to get a unique key
@@ -375,7 +371,7 @@ derive_vars_joined <- function(dataset,
     filter_if(filter_add) %>%
     select(
       !!!by_vars,
-      !!!replace_values_by_names(order),
+      !!!chr2vars(names(order)),
       !!!replace_values_by_names(join_vars),
       !!!intersect(unname(extract_vars(new_vars)), chr2vars(colnames(dataset_add)))
     )
