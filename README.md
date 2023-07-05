@@ -33,21 +33,24 @@ remotes::install_github("pharmaverse/admiral")
 
 ## Release Schedule
 
-`{admiral}` releases are targeted for the first Monday of the last month of each quarter.  Pull Requests will be frozen the week before a release.
-The `admiral` family has several downstream and upstream dependencies and so this release shall be done in three
+[{admiral}](https://pharmaverse.github.io/admiral/main/)` releases are targeted for the first Monday of the last month of each quarter.  Pull Requests will be frozen the week before a release.
+The {admiral} family has several downstream and upstream dependencies and so this release shall be done in three
 Phases:
 
-* Phase 1 release is for `{admiraldev}`, `{admiral.test}`, and `{admiral}` core 
-* Phase 2 release is extension packages, e.g. `{admiralonco}`, `admiralophtha`
+* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/), {admiral.test}, and [{admiral}](https://pharmaverse.github.io/admiral/main/) core 
+* Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/)
 
-|Release Schedule | Phase 1- Date and Packages      | Phase 2- Date and Packages |
-|---------------- | --------------------------      | -------------------------- |   
-| Q3-2023         | September 4th                   | September 11th             | 
-|                 | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            | 
-|                 | `{admiral}`                     | `{admiralophtha}`          | 
-| Q4-2023         | December 4th                    | December 11th              | 
-|                 | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            |
-|                 | `{admiral}`                     | `{admiralophtha}`          |  
+
+|Release Schedule | Phase 1- Date and Packages                                        | Phase 2- Date and Packages                                                    |
+|---------------- | --------------------------                                        | --------------------------                                                    |   
+| Q3-2023         | September 4th                                                     | September 11th                                                                | 
+|                 | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)    | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)              | 
+|                 | {admiral.test}                                                    | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)          | 
+|                 | [{admiral}](https://pharmaverse.github.io/admiral/main/)          | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/)        | 
+| Q4-2023         | December 4th                                                      | December 11th                                                                 | 
+|                 | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)    | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)              |
+|                 | {admiral.test}                                                    | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)          |  
+|                 | [{admiral}](https://pharmaverse.github.io/admiral/main/)          | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/)        | 
 
 ## Main Goal
 
