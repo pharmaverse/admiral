@@ -2,6 +2,8 @@
 
 ## New Features
 
+- Function `my_first_fcn()` created as part of onboarding task
+
 ## Updates of Existing Functions
 - The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
 
@@ -1124,3 +1126,4 @@ to specify the unit of the input age (#569)
 - [Creating a BDS Finding ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html)
 
 - [Creating an OCCDS ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/occds.html)
+
