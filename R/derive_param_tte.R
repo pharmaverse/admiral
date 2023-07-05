@@ -738,14 +738,7 @@ extend_source_datasets <- function(source_datasets,
   by_groups <- unique(bind_rows(by_groups))
   for (i in seq_along(source_datasets)) {
     if (extend[[i]]) {
-      source_datasets[[i]] <-
-        full_join(
-          mutate(by_groups, temp_dummy = 1),
-          mutate(source_datasets[[i]], temp_dummy = 1),
-          by = "temp_dummy",
-          relationship = "many-to-many"
-        ) %>%
-        select(-temp_dummy)
+      source_datasets[[i]] <- crossing(by_groups, source_datasets[[i]])
     }
   }
   source_datasets

@@ -1,3 +1,8 @@
+# admiral 0.11.1
+
+- Fix bug in `derive_param_tte()`. (#1962)
+- Get Started page now points to correct article. (#1969)
+
 # admiral 0.11.0
 
 ## New Features
