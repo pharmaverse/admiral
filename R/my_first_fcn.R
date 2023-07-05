@@ -22,12 +22,11 @@
 #' welcome_fun(anything = 2)
 #' welcome_fun(anything = NULL)
 #' welcome_fun(anything = data.frame(1:10, 2:11))
-welcome_fun <- function(anything = NULL){
-
-  if(is.null(anything)){
-
-    cat("Welcome to the admiral family!")
-
-  } else {cat("Welcome to the admiral family!")}
-
+welcome_fun <- function(anything = NULL) {
+  if (is.null(anything)) {
+    out <- "Welcome to the admiral family!"
+  } else {
+    out <- "Welcome to the admiral family!"
+  }
+  return(out)
 }
