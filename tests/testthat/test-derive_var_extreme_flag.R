@@ -80,20 +80,3 @@ test_that("last observation for each group is flagged", {
     keys = c("USUBJID", "AVISITN", "AVAL")
   )
 })
-
-## Test 7: An error is issued if `derive_var_worst_flag()` is called ----
-test_that("deprecation Test 7: An error is issued if Derive worst flag is called", {
-  expect_error(
-    derive_var_worst_flag(
-      input_worst_flag,
-      by_vars = exprs(USUBJID, PARAMCD, AVISIT),
-      order = exprs(desc(ADT)),
-      new_var = WORSTFL,
-      param_var = PARAMCD,
-      analysis_var = AVAL,
-      worst_high = c("PARAM01", "PARAM03"),
-      worst_low = "PARAM02"
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})

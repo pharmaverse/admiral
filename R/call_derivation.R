@@ -118,7 +118,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
   }
 
   all_params <- union(unlist(map(variable_params, names)), names(fixed_params))
-  assert_function_param(deparse(substitute(derivation)), all_params)
+  assert_function(derivation, all_params)
 
   for (i in seq_along(variable_params)) {
     fixed_params_ <- fixed_params[names(fixed_params) %notin% names(variable_params[[i]])]

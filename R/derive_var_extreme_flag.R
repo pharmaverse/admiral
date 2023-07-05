@@ -49,8 +49,6 @@
 #'   all parameters in the dataset depending on the `order` and the `mode`, i.e. for every
 #'   parameter the first or last record will be flagged across the whole dataset.
 #'
-#' @seealso [derive_var_worst_flag()]
-#'
 #'
 #' @return The input dataset with the new flag variable added
 #'
@@ -246,67 +244,4 @@ derive_var_extreme_flag <- function(dataset,
 
   # Remove temporary variable
   data %>% select(-temp_obs_nr)
-}
-
-#' Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*. Please use `slice_derivation()` / `derive_var_extreme_flag()`
-#' to derive extreme flags and adjust the `order` argument.
-#'
-#' @inheritParams derive_var_extreme_flag
-#' @param dataset Input dataset.
-#' Variables specified by `by_vars`, `order`, `param_var`, and `analysis_var` are expected.
-#' @param order Sort order.
-#' Used to determine maximal / minimal observation if they are not unique,
-#' see Details section for more information.
-#' @param new_var Variable to add to the `dataset`.
-#' It is set `"Y"` for the maximal / minimal observation of each group,
-#' see Details section for more information.
-#' @param param_var Variable with the parameter values for which the maximal / minimal
-#' value is calculated.
-#' @param analysis_var Variable with the measurement values for which the maximal / minimal
-#' value is calculated.
-#' @param worst_high Character with `param_var` values specifying the parameters
-#' referring to "high".
-#' Use `character(0)` if not required.
-#' @param worst_low Character with `param_var` values specifying the parameters
-#' referring to "low".
-#' Use `character(0)` if not required.
-#'
-#' @details For each group with respect to the variables specified by the `by_vars` parameter,
-#' the maximal / minimal observation of `analysis_var`
-#' is labeled in the `new_var` column as `"Y"`,
-#' if its `param_var` is in `worst_high` / `worst_low`.
-#' Otherwise, it is assigned `NA`.
-#' If there is more than one such maximal / minimal observation,
-#' the first one with respect to the order specified by the `order` parameter is flagged. The
-#' direction of "worst" depends on the definition of worst for a specified parameters in the
-#' arguments `worst_high` / `worst_low`, i.e. for some parameters the highest value is the worst
-#' and for others the worst is the lowest value.
-#'
-#' @seealso [derive_var_extreme_flag()]
-#'
-#'
-#' @return The input dataset with the new flag variable added.
-#'
-#' @family deprecated
-#' @keywords deprecated
-#'
-#' @export
-derive_var_worst_flag <- function(dataset,
-                                  by_vars,
-                                  order,
-                                  new_var,
-                                  param_var,
-                                  analysis_var,
-                                  worst_high,
-                                  worst_low,
-                                  check_type = "warning") {
-  ### DEPRECATION
-  deprecate_stop("0.10.0",
-    "derive_var_worst_flag()",
-    details = "Please use `slice_derivation()` / `derive_var_extreme_flag()`"
-  )
 }

@@ -1,0 +1,15 @@
+# This a CODEOWNERS file, where you can establish code owners.
+# Code owners are automatically requested for review when someone opens a pull request
+# that modifies code that they own.
+#
+# Lab related files for Gordon Miller
+vignettes/lab_grading.Rmd @millerg23
+inst/adlb_grading/* @millerg23
+R/derive_var_atoxgr.R @millerg23
+data/atoxgr_criteria_ctcv5.rda @millerg23
+
+# PKPD related files for Jeff Dickinson
+inst/templates/ad_adppk.R @jeffreyad
+inst/templates/ad_adpc.R @jeffreyad
+R/compute_kidney.R @jeffreyad
+vignettes/pk_adnca.Rmd @jeffreyad
