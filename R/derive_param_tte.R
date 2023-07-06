@@ -8,7 +8,7 @@
 #'
 #' @param dataset_adsl ADSL input dataset
 #'
-#'   The variables specified for `start_date`, `start_imputation_flag`, and
+#'   The variables specified for `start_date`, and
 #'   `subject_keys` are expected.
 #'
 #' @param source_datasets Source datasets
@@ -34,9 +34,6 @@
 #'
 #'   If the event or censoring date is before the origin date, `ADT` is set to
 #'   the origin date.
-#'
-#'   If the specified variable is imputed, the corresponding date imputation
-#'   flag must specified for `start_imputation_flag`.
 #'
 #' @param event_conditions Sources and conditions defining events
 #'
@@ -112,8 +109,8 @@
 #'   selected. Otherwise the censoring observation is selected.
 #'
 #'   Finally:
-#'   1. The variables specified for `start_date` and `start_imputation_flag` are
-#'   joined from the ADSL dataset. Only subjects in both datasets are kept,
+#'   1. The variable specified for `start_date` is joined from the
+#'   ADSL dataset. Only subjects in both datasets are kept,
 #'   i.e., subjects with both an event or censoring and an observation in
 #'   `dataset_adsl`.
 #'   1. The variables as defined by the `set_values_to` parameter are added.
