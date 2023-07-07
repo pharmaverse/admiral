@@ -2,7 +2,7 @@
 
 ## New Features
 
-- Function `my_first_fcn()` created as part of onboarding task
+- Function `my_first_fcn()` created as part of on boarding task
 
 ## Updates of Existing Functions
 - The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
