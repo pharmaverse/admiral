@@ -24,7 +24,7 @@ The \code{PARAMCD} variable is expected.}
 
 \item{dataset_adsl}{ADSL input dataset
 
-The variables specified for \code{start_date}, \code{start_imputation_flag}, and
+The variables specified for \code{start_date}, and
 \code{subject_keys} are expected.}
 
 \item{source_datasets}{Source datasets
@@ -49,10 +49,7 @@ The variable \code{STARTDT} is set to the specified date. The value is taken
 from the ADSL dataset.
 
 If the event or censoring date is before the origin date, \code{ADT} is set to
-the origin date.
-
-If the specified variable is imputed, the corresponding date imputation
-flag must specified for \code{start_imputation_flag}.}
+the origin date.}
 
 \item{event_conditions}{Sources and conditions defining events
 
@@ -136,8 +133,8 @@ selected. Otherwise the censoring observation is selected.
 
 Finally:
 \enumerate{
-\item The variables specified for \code{start_date} and \code{start_imputation_flag} are
-joined from the ADSL dataset. Only subjects in both datasets are kept,
+\item The variable specified for \code{start_date} is joined from the
+ADSL dataset. Only subjects in both datasets are kept,
 i.e., subjects with both an event or censoring and an observation in
 \code{dataset_adsl}.
 \item The variables as defined by the \code{set_values_to} parameter are added.
