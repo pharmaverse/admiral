@@ -40,6 +40,11 @@ the `filter_add` using the next phase of the deprecation process. (#1950)
 
 - The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as *authors*, whereas those who made a significant contribution in the past are now down as *contributors*. All other acknowledgements have been moved to README section (#1941).
 
+# admiral 0.11.1
+
+- Fix bug in `derive_param_tte()`. (#1962)
+- Get Started page now points to correct article. (#1969)
+
 # admiral 0.11.0
 
 ## New Features
