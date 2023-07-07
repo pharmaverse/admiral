@@ -59,21 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -124,7 +109,7 @@
 
 <dt>dataset_adsl</dt>
 <dd><p>ADSL input dataset</p>
-<p>The variables specified for <code>start_date</code>, <code>start_imputation_flag</code>, and
+<p>The variables specified for <code>start_date</code>, and
 <code>subject_keys</code> are expected.</p></dd>
 
 
@@ -149,9 +134,7 @@ variables.</p>
 <p>The variable <code>STARTDT</code> is set to the specified date. The value is taken
 from the ADSL dataset.</p>
 <p>If the event or censoring date is before the origin date, <code>ADT</code> is set to
-the origin date.</p>
-<p>If the specified variable is imputed, the corresponding date imputation
-flag must specified for <code>start_imputation_flag</code>.</p></dd>
+the origin date.</p></dd>
 
 
 <dt>event_conditions</dt>
@@ -224,8 +207,8 @@ variable) from the single dataset is selected.</p></li>
 </ol><p>For each subject (as defined by the <code>subject_keys</code> parameter) an
 observation is selected. If an event is available, the event observation is
 selected. Otherwise the censoring observation is selected.</p>
-<p>Finally:</p><ol><li><p>The variables specified for <code>start_date</code> and <code>start_imputation_flag</code> are
-joined from the ADSL dataset. Only subjects in both datasets are kept,
+<p>Finally:</p><ol><li><p>The variable specified for <code>start_date</code> is joined from the
+ADSL dataset. Only subjects in both datasets are kept,
 i.e., subjects with both an event or censoring and an observation in
 <code>dataset_adsl</code>.</p></li>
 <li><p>The variables as defined by the <code>set_values_to</code> parameter are added.</p></li>
