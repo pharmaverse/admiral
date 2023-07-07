@@ -170,6 +170,7 @@ navbar:
       text: User Guides
       menu:
       - text: Getting Started
+        href: articles/admiral.html
       - text: Creating a Basic ADSL
         href: articles/adsl.html
       - text: FAQ
