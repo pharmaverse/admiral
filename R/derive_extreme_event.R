@@ -107,17 +107,33 @@ derive_extreme_event <- function(dataset,
                                  events,
                                  order,
                                  mode,
+                                 source_datasets = NULL,
                                  check_type = "warning",
                                  set_values_to) {
   # Check input parameters
   assert_vars(by_vars, optional = TRUE)
-  assert_list_of(events, "event")
+  assert_list_of(events, "event_def")
   assert_expr_list(order)
   assert_data_frame(
     dataset,
     required_vars = by_vars
   )
   mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
+  assert_list_of(source_datasets, "data.frame")
+  source_names <- names(source_datasets)
+  assert_list_element(
+    list = events,
+    element = "dataset_name",
+    condition = is.null(dataset_name) || dataset_name %in% source_names,
+    source_names = source_names,
+    message_text = paste0(
+      "The dataset names must be included in the list specified for the ",
+      "`source_datasets` parameter.\n",
+      "Following names were provided by `source_datasets`:\n",
+      enumerate(source_names, quote_fun = squote)
+    )
+  )
+
   check_type <-
     assert_character_scalar(
       check_type,
@@ -128,19 +144,45 @@ derive_extreme_event <- function(dataset,
 
   # Create new observations
   ## Create a dataset (selected_records) from `events`
-  condition_ls <- map(events, "condition")
-  set_values_to_ls <- map(events, "set_values_to")
-  event_order <- map(seq_len(length(events)), function(x) x)
+  event_order <- as.list(seq_along(events))
   tmp_event_no <- get_new_tmp_var(dataset, prefix = "tmp_event_no")
 
-  selected_records_ls <- pmap(
-    list(condition_ls, set_values_to_ls, event_order),
-    function(x, y, z) {
-      dataset %>%
-        group_by(!!!by_vars) %>%
-        filter(!!enexpr(x)) %>%
-        mutate(!!!y, !!tmp_event_no := z) %>%
-        ungroup()
+  selected_records_ls <- map2(
+    events,
+    event_order,
+    function(event, index) {
+      if (is.null(event$dataset_name)) {
+        data_source <- dataset
+      } else {
+        data_source <- source_datasets[[event$dataset_name]]
+      }
+      if (inherits(event, "event")) {
+        data_events <- dataset %>%
+          group_by(!!!by_vars) %>%
+          filter_if(event$condition) %>%
+          ungroup()
+        if (!is.null(event$mode)) {
+          data_events <- filter_extreme(
+            data_events,
+            by_vars = by_vars,
+            order = event$order,
+            mode = event$mode
+          )
+        }
+      } else {
+        data_events <- filter_joined(
+          dataset,
+          by_vars = by_vars,
+          join_vars = event$join_vars,
+          join_type = event$join_type,
+          first_cond = event$first_cond,
+          order = event$order,
+          filter = event$condition
+        )
+      }
+      data_events %>%
+        mutate(!!tmp_event_no := index) %>%
+        process_set_values_to(set_values_to = event$set_values_to)
     }
   )
   selected_records <- bind_rows(selected_records_ls)
@@ -180,32 +222,159 @@ derive_extreme_event <- function(dataset,
 #' The `event` object is used to define events as input for the
 #' `derive_extreme_event()` function.
 #'
+#' @param dataset_name Dataset name of the dataset to be used as input for the
+#'   event. The name refers to the dataset specified for `source_datasets` in
+#'   `derive_extreme_event()`. If the argument is not specified, the input
+#'   dataset (`dataset`) of `derive_extreme_event()` is used.
+#'
 #' @param condition An unquoted condition for selecting the observations, which
-#'   will contribute to the extreme event.
+#'   will contribute to the extreme event. If the condition contains summary
+#'   functions like `all()`, they are evaluated for each by group separately.
+#'
+#'   *Permitted Values*: an unquoted condition
+#'
+#' @param mode If specified, the first or last observation with respect to `order` is
+#'   selected for each by group.
+#'
+#'   *Permitted Values*: `"first"`, `"last"`, `NULL`
+#'
+#' @param order The specified variables or expressions are used to select the
+#'   first or last observation if `mode` is specified.
+#'
+#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param set_values_to A named list returned by `exprs()` defining the variables
-#'   to be set for the extreme answer, e.g. `exprs(PARAMCD = "WSP",
-#'   PARAM  = "Worst Sleeping Problems"`. The values must be a symbol, a
-#'   character string, a numeric value, or `NA`.
-#'
+#'   to be set for the event, e.g. `exprs(PARAMCD = "WSP",
+#'   PARAM  = "Worst Sleeping Problems")`. The values can be a symbol, a
+#'   character string, a numeric value, `NA` or an expression.
 #'
 #' @keywords source_specifications
 #' @family source_specifications
 #'
-#' @seealso [derive_extreme_event()]
+#' @seealso [derive_extreme_event()], [event_joined()]
 #'
 #' @export
 #'
 #' @return An object of class `event`
-event <- function(condition,
+event <- function(dataset_name = NULL,
+                  condition = NULL,
+                  mode = NULL,
+                  order = NULL,
                   set_values_to = NULL) {
   out <- list(
+    dataset_name = assert_character_scalar(dataset_name, optional = TRUE),
     condition = assert_filter_cond(enexpr(condition), optional = TRUE),
-    set_values_to = assert_varval_list(
+    mode = assert_character_scalar(
+      mode,
+      values = c("first", "last"),
+      case_sensitive = FALSE,
+      optional = TRUE
+    ),
+    order = assert_expr_list(order, optional = TRUE),
+    set_values_to = assert_expr_list(
       set_values_to,
+      named = TRUE,
       optional = TRUE
     )
   )
-  class(out) <- c("event", "source", "list")
+  class(out) <- c("event", "event_def", "source", "list")
+  out
+}
+
+#' Create a `event_joined` Object
+#'
+#' @description
+#'
+#' The `event_joined` object is used to define events as input for the
+#' `derive_extreme_event()` function. This object should be used if the event
+#' does not depend on a single observation of the source dataset but on multiple
+#' observations. For example, if the event needs to be confirmed by a second
+#' observation of the source dataset.
+#'
+#' The events are selected by calling `filter_joined()`. See its documentation
+#' for more details.
+#'
+#' @param dataset_name Dataset name of the dataset to be used as input for the
+#'   event. The name refers to the dataset specified for `source_datasets` in
+#'   `derive_extreme_event()`. If the argument is not specified, the input
+#'   dataset (`dataset`) of `derive_extreme_event()` is used.
+#'
+#' @param condition An unquoted condition for selecting the observations, which
+#'   will contribute to the extreme event.
+#'
+#'   *Permitted Values*: an unquoted condition
+#'
+#' @param join_vars Variables to keep from joined dataset
+#'
+#'   The variables needed from the other observations should be specified for
+#'   this parameter. The specified variables are added to the joined dataset
+#'   with suffix ".join". For example to select all observations with `AVALC ==
+#'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
+#'   exprs(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
+#'   AVISITN < AVISITN.join` could be specified.
+#'
+#'   The `*.join` variables are not included in the output dataset.
+#'
+#' @param join_type Observations to keep after joining
+#'
+#'   The argument determines which of the joined observations are kept with
+#'   respect to the original observation. For example, if `join_type =
+#'   "after"` is specified all observations after the original observations are
+#'   kept.
+#'
+#'   *Permitted Values:* `"before"`, `"after"`, `"all"`
+#'
+#' @param first_cond Condition for selecting range of data
+#'
+#'   If this argument is specified, the other observations are restricted up to
+#'   the first observation where the specified condition is fulfilled. If the
+#'   condition is not fulfilled for any of the subsequent observations, all
+#'   observations are removed.
+#'
+#' @param order If specified, the specified variables or expressions are used to
+#'   select the first observation.
+#'
+#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#'   `exprs(ADT, desc(AVAL))` or `NULL`
+#'
+#' @param set_values_to A named list returned by `exprs()` defining the variables
+#'   to be set for the event, e.g. `exprs(PARAMCD = "WSP",
+#'   PARAM  = "Worst Sleeping Problems")`. The values can be a symbol, a
+#'   character string, a numeric value, `NA` or an expression.
+#'
+#' @keywords source_specifications
+#' @family source_specifications
+#'
+#' @seealso [derive_extreme_event()], [event()]
+#'
+#' @export
+#'
+#' @return An object of class `event_joined`
+event_joined <- function(dataset_name = NULL,
+                  condition,
+                  order = NULL,
+                  join_vars,
+                  join_type,
+                  first_cond = NULL,
+                  set_values_to = NULL) {
+  out <- list(
+    dataset_name = assert_character_scalar(dataset_name, optional = TRUE),
+    condition = assert_filter_cond(enexpr(condition), optional = TRUE),
+    order = assert_expr_list(order, optional = TRUE),
+    join_vars = assert_vars(join_vars),
+    join_type = assert_character_scalar(
+      join_type,
+      values = c("before", "after", "all"),
+      case_sensitive = FALSE
+    ),
+    first_cond = assert_filter_cond(enexpr(first_cond), optional = TRUE),
+    set_values_to = assert_expr_list(
+      set_values_to,
+      named = TRUE,
+      optional = TRUE
+    )
+  )
+  class(out) <- c("event_joined", "event_def", "source", "list")
   out
 }

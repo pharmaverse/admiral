@@ -46,6 +46,7 @@ Source Objects:
 \code{\link{date_source}()},
 \code{\link{death_event}},
 \code{\link{dthcaus_source}()},
+\code{\link{event_joined}()},
 \code{\link{event_source}()},
 \code{\link{event}()},
 \code{\link{query}()},
