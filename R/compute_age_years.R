@@ -59,10 +59,10 @@ compute_age_years <- function(age,
     ))
   }
 
-  for (i in 1 : length(age_unit)){
-    if (is.na(age_unit[i])){
-      age[i] = NA
-      age_unit[i] = "years"
+  for (i in 1:length(age_unit)) {
+    if (is.na(age_unit[i])) {
+      age[i] <- NA
+      age_unit[i] <- "years"
     }
   }
 
