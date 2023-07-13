@@ -4,6 +4,7 @@
 
 ## Updates of Existing Functions
 - The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
+- The functions `derive_var_age_years` and `compute_age_years` are updated to return an `NA` age in the case that the age unit is missing (#2001).
 
 ## Breaking Changes
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)
