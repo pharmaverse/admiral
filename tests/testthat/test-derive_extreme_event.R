@@ -190,7 +190,7 @@ test_that("derive_extreme_records Test 3: `source_datasets` works", {
       by_vars = exprs(STUDYID, USUBJID),
       new_vars = exprs(TRTSDT)
     )
-  expected_01 <- bind_rows(
+  expected <- bind_rows(
     adrs,
     tibble::tribble(
       ~USUBJID, ~ADTC, ~AVALC, ~AVAL, ~TRTSDTC, ~CHECKKEPTCOL,
@@ -213,7 +213,7 @@ test_that("derive_extreme_records Test 3: `source_datasets` works", {
       select(-ADTC, -TRTSDTC)
   )
 
-  actual_01 <- derive_extreme_event(
+  actual <- derive_extreme_event(
     dataset = adrs,
     by_vars = exprs(STUDYID, USUBJID),
     order = exprs(ADT),
@@ -237,8 +237,8 @@ test_that("derive_extreme_records Test 3: `source_datasets` works", {
   )
 
   expect_dfs_equal(
-    base    = expected_01,
-    compare = actual_01,
+    base    = expected,
+    compare = actual,
     keys    = c("USUBJID", "PARAMCD", "ADT")
   )
 })
