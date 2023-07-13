@@ -1,0 +1,25 @@
+# https://github.com/actions/stale
+
+name: Close Inactive Issues and Pull Requests
+on:
+  schedule:
+    - cron: "30 1 * * *"
+
+jobs:
+  close-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v8
+        with:
+          days-before-issue-stale: 90
+          days-before-issue-close: -1
+          stale-issue-label: "stale"
+          stale-issue-message: "This issue is stale because it has been open for 90 days with no activity."
+          days-before-pr-stale: 15
+          days-before-pr-close: -1
+          stale-pr-label: "stale"
+          stale-pr-message: "This Pull Request is stale because it has not been worked on in 15 days."
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
