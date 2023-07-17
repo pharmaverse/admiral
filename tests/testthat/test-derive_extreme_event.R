@@ -134,15 +134,15 @@ test_that("derive_extreme_records Test 2: `mode` = last", {
 ## Test 3: `source_datasets` works ----
 test_that("derive_extreme_records Test 3: `source_datasets` works", {
   adsl <- tibble::tribble(
-    ~USUBJID, ~TRTSDTC,      ~CHECKKEPTCOL, ~CHECKNOTKEPTCOL,
-    "1",      "2020-01-01",  "001",         "991",
-    "2",      "2019-12-12",  "002",         "992",
-    "3",      "2019-11-11",  "003",         "993",
-    "4",      "2019-12-30",  "004",         "994",
-    "5",      "2020-01-01",  "005",         "995",
-    "6",      "2020-02-02",  "006",         "996",
-    "7",      "2020-02-02",  "007",         "997",
-    "8",      "2020-04-01",  "008",         "999"
+    ~USUBJID, ~TRTSDTC,
+    "1",      "2020-01-01",
+    "2",      "2019-12-12",
+    "3",      "2019-11-11",
+    "4",      "2019-12-30",
+    "5",      "2020-01-01",
+    "6",      "2020-02-02",
+    "7",      "2020-02-02",
+    "8",      "2020-04-01"
   ) %>%
     mutate(
       TRTSDT = lubridate::ymd(TRTSDTC),
@@ -150,34 +150,34 @@ test_that("derive_extreme_records Test 3: `source_datasets` works", {
     )
 
   adrs <- tibble::tribble(
-    ~USUBJID, ~ADTC, ~AVALC, ~CHECKKEPTCOL,
-    "1", "2020-01-01", "PR", "001",
-    "1", "2020-02-01", "CR", "001",
-    "1", "2020-02-16", "NE", "001",
-    "1", "2020-03-01", "CR", "001",
-    "1", "2020-04-01", "SD", "001",
-    "2", "2020-01-01", "SD", "002",
-    "2", "2020-02-01", "PR", "002",
-    "2", "2020-03-01", "SD", "002",
-    "2", "2020-03-13", "CR", "002",
-    "3", "2019-11-12", "CR", "003",
-    "3", "2019-12-02", "CR", "003",
-    "3", "2020-01-01", "SD", "003",
-    "4", "2020-01-01", "PR", "004",
-    "4", "2020-03-01", "SD", "004",
-    "4", "2020-04-01", "SD", "004",
-    "4", "2020-05-01", "PR", "004",
-    "4", "2020-05-15", "NON-CR/NON-PD", "004",
-    "5", "2020-01-01", "PR", "005",
-    "5", "2020-01-10", "SD", "005",
-    "5", "2020-01-20", "PR", "005",
-    "5", "2020-05-15", "NON-CR/NON-PD", "005",
-    "6", "2020-02-06", "PR", "006",
-    "6", "2020-02-16", "CR", "006",
-    "6", "2020-03-30", "PR", "006",
-    "7", "2020-02-06", "PR", "007",
-    "7", "2020-02-16", "CR", "007",
-    "7", "2020-04-01", "NE", "007"
+    ~USUBJID, ~ADTC, ~AVALC,
+    "1", "2020-01-01", "PR",
+    "1", "2020-02-01", "CR",
+    "1", "2020-02-16", "NE",
+    "1", "2020-03-01", "CR",
+    "1", "2020-04-01", "SD",
+    "2", "2020-01-01", "SD",
+    "2", "2020-02-01", "PR",
+    "2", "2020-03-01", "SD",
+    "2", "2020-03-13", "CR",
+    "3", "2019-11-12", "CR",
+    "3", "2019-12-02", "CR",
+    "3", "2020-01-01", "SD",
+    "4", "2020-01-01", "PR",
+    "4", "2020-03-01", "SD",
+    "4", "2020-04-01", "SD",
+    "4", "2020-05-01", "PR",
+    "4", "2020-05-15", "NON-CR/NON-PD",
+    "5", "2020-01-01", "PR",
+    "5", "2020-01-10", "SD",
+    "5", "2020-01-20", "PR",
+    "5", "2020-05-15", "NON-CR/NON-PD",
+    "6", "2020-02-06", "PR",
+    "6", "2020-02-16", "CR",
+    "6", "2020-03-30", "PR",
+    "7", "2020-02-06", "PR",
+    "7", "2020-02-16", "CR",
+    "7", "2020-04-01", "NE"
   ) %>%
     mutate(
       PARAMCD = "OVR",
@@ -193,15 +193,15 @@ test_that("derive_extreme_records Test 3: `source_datasets` works", {
   expected <- bind_rows(
     adrs,
     tibble::tribble(
-      ~USUBJID, ~ADTC, ~AVALC, ~AVAL, ~TRTSDTC, ~CHECKKEPTCOL,
-      "1", "2020-02-01", "CR", 11, "2020-01-01", "001",
-      "2", "2020-03-13", "CR", 11, "2019-12-12", "002",
-      "3", "2019-11-12", "CR", 11, "2019-11-11", "003",
-      "4", "2020-01-01", "PR", 22, "2019-12-30", "004",
-      "5", "2020-01-01", "PR", 22, "2020-01-01", "005",
-      "6", "2020-02-16", "CR", 11, "2020-02-02", "006",
-      "7", "2020-02-16", "CR", 11, "2020-02-02", "007",
-      "8", "", "MISSING", 77, "2020-04-01", "008"
+      ~USUBJID, ~ADTC,        ~AVALC,    ~TRTSDTC,
+      "1",      "2020-02-01", "CR",      "2020-01-01",
+      "2",      "2020-03-13", "CR",      "2019-12-12",
+      "3",      "2019-11-12", "CR",      "2019-11-11",
+      "4",      "2020-01-01", "PR",      "2019-12-30",
+      "5",      "2020-01-01", "PR",      "2020-01-01",
+      "6",      "2020-02-16", "CR",      "2020-02-02",
+      "7",      "2020-02-16", "CR",      "2020-02-02",
+      "8",      "",           "MISSING", "2020-04-01"
     ) %>%
       mutate(
         ADT = lubridate::ymd(ADTC),
@@ -218,19 +218,54 @@ test_that("derive_extreme_records Test 3: `source_datasets` works", {
     by_vars = exprs(STUDYID, USUBJID),
     order = exprs(ADT),
     mode = "first",
-    filter_source = PARAMCD == "OVR",
     source_datasets = list(adsl = adsl),
     events = list(
       event(
         condition = AVALC == "CR",
         set_values_to = exprs(
           AVALC = "CR"
-        )    )
+        )
+      ),
+      event(
+        condition = AVALC == "PR",
+        set_values_to = exprs(
+          AVALC = "PR"
+        )
+      ),
+      event(
+        condition = AVALC == "SD" & ADT >= TRTSDT + 28,
+        set_values_to = exprs(
+          AVALC = "CR"
+        )
+      ),
+      event(
+        condition = AVALC == "NON-CR/NON-PD" & ADT >= TRTSDT + 28,
+        set_values_to = exprs(
+          AVALC = "CR"
+        )
+      ),
+      event(
+        condition = AVALC == "PD",
+        set_values_to = exprs(
+          AVALC = "PD"
+        )
+      ),
+      event(
+        condition = AVALC %in% c("SD", "NON-CR/NON-PD"),
+        set_values_to = exprs(
+          AVALC = "NE"
+        )
+      ),
+      event(
+        dataset_name = "adsl",
+        condition = TRUE,
+        set_values_to = exprs(
+          AVALC = "MISSING"
+        ),
+        keep_vars_source = exprs()
+      )
     ),
-    reference_date = TRTSDT,
-    ref_start_window = 28,
     set_values_to = exprs(
-      AVAL = {{ aval_fun_pass }}(AVALC),
       PARAMCD = "BOR",
       PARAM = "Best Overall Response"
     )

@@ -109,7 +109,8 @@ derive_extreme_event <- function(dataset,
                                  mode,
                                  source_datasets = NULL,
                                  check_type = "warning",
-                                 set_values_to) {
+                                 set_values_to,
+                                 keep_vars_source = exprs(everything())) {
   # Check input parameters
   assert_vars(by_vars, optional = TRUE)
   assert_list_of(events, "event_def")
@@ -144,6 +145,7 @@ derive_extreme_event <- function(dataset,
       case_sensitive = FALSE
     )
   assert_varval_list(set_values_to)
+  keep_vars_source <- assert_expr_list(keep_vars_source)
 
   # Create new observations
   ## Create a dataset (selected_records) from `events`
@@ -160,13 +162,13 @@ derive_extreme_event <- function(dataset,
         data_source <- source_datasets[[event$dataset_name]]
       }
       if (inherits(event, "event")) {
-        data_events <- dataset %>%
+        data_events <- data_source %>%
           group_by(!!!by_vars) %>%
           filter_if(event$condition) %>%
           ungroup()
         if (!is.null(event$mode)) {
           data_events <- filter_extreme(
-            data_events,
+            data_source,
             by_vars = by_vars,
             order = event$order,
             mode = event$mode
@@ -183,9 +185,15 @@ derive_extreme_event <- function(dataset,
           filter = event$condition
         )
       }
+      if (is.null(event$keep_vars_source)) {
+        event_keep_vars_source <- keep_vars_source
+      } else {
+        event_keep_vars_source <- event$keep_vars_source
+      }
       data_events %>%
         mutate(!!tmp_event_no := index) %>%
-        process_set_values_to(set_values_to = event$set_values_to)
+        process_set_values_to(set_values_to = event$set_values_to) %>%
+        select(names(set_values_to), !!!event_keep_vars_source)
     }
   )
   selected_records <- bind_rows(selected_records_ls)
@@ -264,7 +272,8 @@ event <- function(dataset_name = NULL,
                   condition = NULL,
                   mode = NULL,
                   order = NULL,
-                  set_values_to = NULL) {
+                  set_values_to = NULL,
+                  keep_vars_source = NULL) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name, optional = TRUE),
     condition = assert_filter_cond(enexpr(condition), optional = TRUE),
@@ -279,7 +288,8 @@ event <- function(dataset_name = NULL,
       set_values_to,
       named = TRUE,
       optional = TRUE
-    )
+    ),
+    keep_vars_source = assert_expr_list(keep_vars_source, optional = TRUE)
   )
   class(out) <- c("event", "event_def", "source", "list")
   out
@@ -360,7 +370,8 @@ event_joined <- function(dataset_name = NULL,
                   join_vars,
                   join_type,
                   first_cond = NULL,
-                  set_values_to = NULL) {
+                  set_values_to = NULL,
+                  keep_vars_source = NULL) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name, optional = TRUE),
     condition = assert_filter_cond(enexpr(condition), optional = TRUE),
@@ -376,7 +387,8 @@ event_joined <- function(dataset_name = NULL,
       set_values_to,
       named = TRUE,
       optional = TRUE
-    )
+    ),
+    keep_vars_source = assert_expr_list(keep_vars_source, optional = TRUE)
   )
   class(out) <- c("event_joined", "event_def", "source", "list")
   out
