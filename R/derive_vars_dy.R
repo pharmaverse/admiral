@@ -115,7 +115,8 @@ derive_vars_dy <- function(dataset,
     mutate(
       across(
         .cols = vars2chr(unname(source_vars)),
-        .fns = ~compute_duration(start_date = !!reference_date, end_date = .x),
+        .fns = ~ compute_duration(start_date = !!reference_date, end_date = .x),
         .names = "{dy_vars}"
-      ))
+      )
+    )
 }
