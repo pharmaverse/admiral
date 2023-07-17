@@ -102,31 +102,20 @@ derive_vars_dy <- function(dataset,
     abort(err_msg)
   }
 
-  dy_vars <- if_else(
+  # named vector passed to `.names` in `across()` to derive name of dy_vars
+  dy_vars <- set_names(if_else(
     source_names == "",
     str_replace_all(vars2chr(source_vars), "(DT|DTM)$", "DY"),
     source_names
-  )
+  ), vars2chr(source_vars))
+
   warn_if_vars_exist(dataset, dy_vars)
 
-  if (n_vars > 1L) {
-    dataset %>%
-      mutate(
-        across(
-          .cols = vars2chr(unname(source_vars)),
-          .fns = list(temp = ~
-            compute_duration(start_date = !!reference_date, end_date = .))
-        )
-      ) %>%
-      rename_with(
-        .cols = ends_with("temp"),
-        .fn = ~dy_vars
-      )
-  } else {
-    dataset %>%
-      mutate(
-        !!sym(dy_vars) :=
-          compute_duration(start_date = !!reference_date, end_date = !!source_vars[[1]])
-      )
-  }
+  dataset %>%
+    mutate(
+      across(
+        .cols = vars2chr(unname(source_vars)),
+        .fns = ~compute_duration(start_date = !!reference_date, end_date = .x),
+        .names = "{dy_vars}"
+      ))
 }
