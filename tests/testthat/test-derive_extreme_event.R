@@ -280,64 +280,64 @@ test_that("derive_extreme_records Test 3: `source_datasets` works", {
 
 ## Test 4: event_joined() is handled correctly ----
 test_that("derive_extreme_records Test 4: event_joined() is handled correctly", {
-adsl <- tibble::tribble(
-  ~USUBJID, ~TRTSDTC,
-  "1",      "2020-01-01",
-  "2",      "2019-12-12",
-  "3",      "2019-11-11",
-  "4",      "2019-12-30",
-  "5",      "2020-01-01",
-  "6",      "2020-02-02",
-  "7",      "2020-02-02",
-  "8",      "2020-04-01",
-  "9",      "2020-02-01"
-) %>%
-  mutate(
-    TRTSDT = lubridate::ymd(TRTSDTC),
-    STUDYID = "XX1234"
-  )
-
-adrs <- tibble::tribble(
-  ~USUBJID, ~ADTC,        ~AVALC,
-  "1",      "2020-01-01", "PR",
-  "1",      "2020-02-01", "CR",
-  "1",      "2020-02-16", "NE",
-  "1",      "2020-03-01", "CR",
-  "1",      "2020-04-01", "SD",
-  "2",      "2020-01-01", "SD",
-  "2",      "2020-02-01", "PR",
-  "2",      "2020-03-01", "SD",
-  "2",      "2020-03-13", "CR",
-  "3",      "2019-11-12", "CR",
-  "3",      "2019-12-02", "CR",
-  "3",      "2020-01-01", "SD",
-  "4",      "2020-01-01", "PR",
-  "4",      "2020-03-01", "SD",
-  "4",      "2020-04-01", "SD",
-  "4",      "2020-05-01", "PR",
-  "4",      "2020-05-15", "NON-CR/NON-PD",
-  "5",      "2020-01-01", "PR",
-  "5",      "2020-01-10", "SD",
-  "5",      "2020-01-20", "PR",
-  "5",      "2020-05-15", "NON-CR/NON-PD",
-  "6",      "2020-02-06", "PR",
-  "6",      "2020-02-16", "CR",
-  "6",      "2020-03-30", "PR",
-  "7",      "2020-02-06", "PR",
-  "7",      "2020-02-16", "CR",
-  "7",      "2020-04-01", "NE",
-  "9",      "2020-02-16", "PD"
-) %>%
-  mutate(
-    PARAMCD = "OVR",
-    ADT = lubridate::ymd(ADTC),
-    STUDYID = "XX1234"
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDTC,
+    "1",      "2020-01-01",
+    "2",      "2019-12-12",
+    "3",      "2019-11-11",
+    "4",      "2019-12-30",
+    "5",      "2020-01-01",
+    "6",      "2020-02-02",
+    "7",      "2020-02-02",
+    "8",      "2020-04-01",
+    "9",      "2020-02-01"
   ) %>%
-  derive_vars_merged(
-    dataset_add = adsl,
-    by_vars = exprs(STUDYID, USUBJID),
-    new_vars = exprs(TRTSDT)
-  )
+    mutate(
+      TRTSDT = lubridate::ymd(TRTSDTC),
+      STUDYID = "XX1234"
+    )
+
+  adrs <- tibble::tribble(
+    ~USUBJID, ~ADTC,        ~AVALC,
+    "1",      "2020-01-01", "PR",
+    "1",      "2020-02-01", "CR",
+    "1",      "2020-02-16", "NE",
+    "1",      "2020-03-01", "CR",
+    "1",      "2020-04-01", "SD",
+    "2",      "2020-01-01", "SD",
+    "2",      "2020-02-01", "PR",
+    "2",      "2020-03-01", "SD",
+    "2",      "2020-03-13", "CR",
+    "3",      "2019-11-12", "CR",
+    "3",      "2019-12-02", "CR",
+    "3",      "2020-01-01", "SD",
+    "4",      "2020-01-01", "PR",
+    "4",      "2020-03-01", "SD",
+    "4",      "2020-04-01", "SD",
+    "4",      "2020-05-01", "PR",
+    "4",      "2020-05-15", "NON-CR/NON-PD",
+    "5",      "2020-01-01", "PR",
+    "5",      "2020-01-10", "SD",
+    "5",      "2020-01-20", "PR",
+    "5",      "2020-05-15", "NON-CR/NON-PD",
+    "6",      "2020-02-06", "PR",
+    "6",      "2020-02-16", "CR",
+    "6",      "2020-03-30", "PR",
+    "7",      "2020-02-06", "PR",
+    "7",      "2020-02-16", "CR",
+    "7",      "2020-04-01", "NE",
+    "9",      "2020-02-16", "PD"
+  ) %>%
+    mutate(
+      PARAMCD = "OVR",
+      ADT = lubridate::ymd(ADTC),
+      STUDYID = "XX1234"
+    ) %>%
+    derive_vars_merged(
+      dataset_add = adsl,
+      by_vars = exprs(STUDYID, USUBJID),
+      new_vars = exprs(TRTSDT)
+    )
 
   actual <-
     derive_extreme_event(
@@ -411,7 +411,6 @@ adrs <- tibble::tribble(
           ),
           keep_vars_source = exprs(TRTSDT)
         )
-
       ),
       set_values_to = exprs(
         PARAMCD = "CBOR",
@@ -419,37 +418,36 @@ adrs <- tibble::tribble(
       )
     )
 
-expected <- bind_rows(
-  adrs,
-  tibble::tribble(
-    ~USUBJID, ~ADTC,         ~AVALC,
-    "1",      "2020-02-01",  "CR",
-    "2",      "2020-02-01",  "SD",
-    "3",      "2020-01-01",  "SD",
-    "4",      "2020-03-01",  "SD",
-    "5",      "2020-05-15",  "NON-CR/NON-PD",
-    "6",      "2020-03-30",  "SD",
-    "7",      "2020-02-06",  "NE",
-    "8",      NA_character_, "MISSING",
-    "9",      "2020-02-16",  "PD"
-  ) %>%
-    mutate(
-      ADT = lubridate::ymd(ADTC),
-      STUDYID = "XX1234",
-      PARAMCD = "CBOR",
-      PARAM = "Best Confirmed Overall Response by Investigator"
+  expected <- bind_rows(
+    adrs,
+    tibble::tribble(
+      ~USUBJID, ~ADTC,         ~AVALC,
+      "1",      "2020-02-01",  "CR",
+      "2",      "2020-02-01",  "SD",
+      "3",      "2020-01-01",  "SD",
+      "4",      "2020-03-01",  "SD",
+      "5",      "2020-05-15",  "NON-CR/NON-PD",
+      "6",      "2020-03-30",  "SD",
+      "7",      "2020-02-06",  "NE",
+      "8",      NA_character_, "MISSING",
+      "9",      "2020-02-16",  "PD"
     ) %>%
-    derive_vars_merged(
-      dataset_add = adsl,
-      by_vars = exprs(STUDYID, USUBJID),
-      new_vars = exprs(TRTSDT)
-    )
-)
+      mutate(
+        ADT = lubridate::ymd(ADTC),
+        STUDYID = "XX1234",
+        PARAMCD = "CBOR",
+        PARAM = "Best Confirmed Overall Response by Investigator"
+      ) %>%
+      derive_vars_merged(
+        dataset_add = adsl,
+        by_vars = exprs(STUDYID, USUBJID),
+        new_vars = exprs(TRTSDT)
+      )
+  )
 
-expect_dfs_equal(
-  base = expected,
-  compare = actual,
-  keys = c("USUBJID", "PARAMCD", "ADT")
-)
-
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "PARAMCD", "ADT")
+  )
 })

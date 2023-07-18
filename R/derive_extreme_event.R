@@ -410,13 +410,13 @@ event <- function(dataset_name = NULL,
 #'
 #' @return An object of class `event_joined`
 event_joined <- function(dataset_name = NULL,
-                  condition,
-                  order = NULL,
-                  join_vars,
-                  join_type,
-                  first_cond = NULL,
-                  set_values_to = NULL,
-                  keep_vars_source = NULL) {
+                         condition,
+                         order = NULL,
+                         join_vars,
+                         join_type,
+                         first_cond = NULL,
+                         set_values_to = NULL,
+                         keep_vars_source = NULL) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name, optional = TRUE),
     condition = assert_filter_cond(enexpr(condition), optional = TRUE),
