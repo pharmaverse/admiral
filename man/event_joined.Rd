@@ -7,12 +7,12 @@
 event_joined(
   dataset_name = NULL,
   condition,
-  mode = NULL,
   order = NULL,
   join_vars,
   join_type,
   first_cond = NULL,
-  set_values_to = NULL
+  set_values_to = NULL,
+  keep_vars_source = NULL
 )
 }
 \arguments{
@@ -26,13 +26,8 @@ will contribute to the extreme event.
 
 \emph{Permitted Values}: an unquoted condition}
 
-\item{mode}{If specified, the first or last observation with respect to \code{order} is
-selected for each by group.
-
-\emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
-
-\item{order}{The specified variable or expression are used to select the
-first or last observation if \code{mode} is specified.
+\item{order}{If specified, the specified variables or expressions are used to
+select the first observation.
 
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
@@ -63,6 +58,15 @@ observations are removed.}
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
 to be set for the event, e.g. \code{exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")}. The values can be a symbol, a
 character string, a numeric value, \code{NA} or an expression.}
+
+\item{keep_vars_source}{Variables to keep from the source dataset
+
+The specified variables are kept for the selected observations. The
+variables specified for \code{by_vars} (of \code{derive_extreme_event()}) and created
+by \code{set_values_to} are always kept.
+
+\emph{Permitted Values}: A list of expressions where each element is
+a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
 }
 \value{
 An object of class \code{event_joined}

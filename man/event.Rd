@@ -6,10 +6,11 @@
 \usage{
 event(
   dataset_name = NULL,
-  condition,
+  condition = NULL,
   mode = NULL,
   order = NULL,
-  set_values_to = NULL
+  set_values_to = NULL,
+  keep_vars_source = NULL
 )
 }
 \arguments{
@@ -19,7 +20,8 @@ event. The name refers to the dataset specified for \code{source_datasets} in
 dataset (\code{dataset}) of \code{derive_extreme_event()} is used.}
 
 \item{condition}{An unquoted condition for selecting the observations, which
-will contribute to the extreme event.
+will contribute to the extreme event. If the condition contains summary
+functions like \code{all()}, they are evaluated for each by group separately.
 
 \emph{Permitted Values}: an unquoted condition}
 
@@ -28,7 +30,7 @@ selected for each by group.
 
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
 
-\item{order}{The specified variable or expression are used to select the
+\item{order}{The specified variables or expressions are used to select the
 first or last observation if \code{mode} is specified.
 
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
@@ -37,6 +39,15 @@ first or last observation if \code{mode} is specified.
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
 to be set for the event, e.g. \code{exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")}. The values can be a symbol, a
 character string, a numeric value, \code{NA} or an expression.}
+
+\item{keep_vars_source}{Variables to keep from the source dataset
+
+The specified variables are kept for the selected observations. The
+variables specified for \code{by_vars} (of \code{derive_extreme_event()}) and created
+by \code{set_values_to} are always kept.
+
+\emph{Permitted Values}: A list of expressions where each element is
+a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
 }
 \value{
 An object of class \code{event}

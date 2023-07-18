@@ -10,8 +10,10 @@ derive_extreme_event(
   events,
   order,
   mode,
+  source_datasets = NULL,
   check_type = "warning",
-  set_values_to
+  set_values_to,
+  keep_vars_source = exprs(everything())
 )
 }
 \arguments{
@@ -28,9 +30,14 @@ expected.}
 
 \item{events}{Conditions and new values defining events
 
-A list of \code{event()} objects is expected. Only observations listed in the
-\code{events} are considered for deriving extreme event. If multiple records
-meet the filter \code{condition}, take the first record sorted by \code{order}.}
+A list of \code{event()} or \code{event_joined()} objects is expected. Only
+observations listed in the \code{events} are considered for deriving extreme
+event. If multiple records meet the filter \code{condition}, take the first
+record sorted by \code{order}. The data is grouped by \code{by_vars}, i.e., summary
+functions like \code{all()} or \code{any()} can be used in \code{condition}.
+
+For \code{event_joined()} events the observations are selected by calling
+\code{filter_joined}. The \code{condition} field is passed to the \code{filter} argument.}
 
 \item{order}{Sort order
 
@@ -47,6 +54,11 @@ If a particular event from \code{events} has more than one observation,
 sorting by \code{order}.
 
 \emph{Permitted Values:} \code{"first"}, \code{"last"}}
+
+\item{source_datasets}{Source datasets
+
+A named list of datasets is expected. The \code{dataset_name} field of \code{event()}
+and \code{event_joined()} refers to the dataset provided in the list.}
 
 \item{check_type}{Check uniqueness?
 
@@ -69,6 +81,15 @@ A list of variable name-value pairs is expected.
 \item RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value, an expression, or \code{NA}, e.g., \code{exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")}.
 }}
+
+\item{keep_vars_source}{Variables to keep from the source dataset
+
+For each event the specified variables are kept from the selected
+observations. The variables specified for \code{by_vars} and created by
+\code{set_values_to} are always kept.
+
+\emph{Permitted Values}: A list of expressions where each element is
+a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
 }
 \value{
 The input dataset with the best or worst observation of each by group
@@ -84,10 +105,23 @@ variables.
 }
 \details{
 \enumerate{
-\item Construct a dataset based on \code{events}: apply the filter \code{condition} and
-\code{set_values_to} to the input dataset.
+\item For each event select the observations to consider:
+\enumerate{
+\item If the event is of class \code{event}, the observations of the source dataset
+are restricted by \code{condition} and then the first or last (\code{mode})
+observation per by group (\code{by_vars}) is selected.
+
+If the event is of class \code{event_joined}, \code{filter_joined()} is called to
+select the observations.
+\item The variables specified by the \code{set_values_to} field of the event
+are added to the selected observations.
+\item Only the variables specified for the \code{keep_vars_source} field of the
+event, and the by variables (\code{by_vars}) and the variables created by
+\code{set_values_to} are kept.
+}
 \item For each group (with respect to the variables specified for the
-\code{by_vars} parameter) the first or last observation (with respect to the
+\code{by_vars} parameter) the first event is selected. If there is more than one
+observation per event the first or last observation (with respect to the
 order specified for the \code{order} parameter and the mode specified for the
 \code{mode} parameter) is selected.
 \item The variables specified by the \code{set_values_to} parameter are added to

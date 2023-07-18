@@ -7,6 +7,17 @@
 #' where extreme records are derived based on certain order of existing
 #' variables.
 #'
+#' @param events Conditions and new values defining events
+#'
+#'   A list of `event()` or `event_joined()` objects is expected. Only
+#'   observations listed in the `events` are considered for deriving extreme
+#'   event. If multiple records meet the filter `condition`, take the first
+#'   record sorted by `order`. The data is grouped by `by_vars`, i.e., summary
+#'   functions like `all()` or `any()` can be used in `condition`.
+#'
+#'   For `event_joined()` events the observations are selected by calling
+#'   `filter_joined`. The `condition` field is passed to the `filter` argument.
+#'
 #' @param order Sort order
 #'
 #'   If a particular event from `events` has more than one observation, within
@@ -23,20 +34,42 @@
 #'
 #'   *Permitted Values:* `"first"`, `"last"`
 #'
-#' @param events Conditions and new values defining events
+#' @param source_datasets Source datasets
 #'
-#'   A list of `event()` objects is expected. Only observations listed in the
-#'   `events` are considered for deriving extreme event. If multiple records
-#'   meet the filter `condition`, take the first record sorted by `order`.
+#'   A named list of datasets is expected. The `dataset_name` field of `event()`
+#'   and `event_joined()` refers to the dataset provided in the list.
+#'
+#' @param keep_vars_source Variables to keep from the source dataset
+#'
+#'   For each event the specified variables are kept from the selected
+#'   observations. The variables specified for `by_vars` and created by
+#'   `set_values_to` are always kept.
+#'
+#'   *Permitted Values*: A list of expressions where each element is
+#'   a symbol or a tidyselect expression, e.g., `exprs(VISIT, VISITNUM,
+#'   starts_with("RS"))`.
 #'
 #' @inheritParams filter_extreme
 #' @inheritParams derive_summary_records
 #'
 #' @details
-#'   1. Construct a dataset based on `events`: apply the filter `condition` and
-#'   `set_values_to` to the input dataset.
+#'   1. For each event select the observations to consider:
+#'
+#'       1. If the event is of class `event`, the observations of the source dataset
+#'       are restricted by `condition` and then the first or last (`mode`)
+#'       observation per by group (`by_vars`) is selected.
+#'
+#'           If the event is of class `event_joined`, `filter_joined()` is called to
+#'           select the observations.
+#'
+#'       1. The variables specified by the `set_values_to` field of the event
+#'       are added to the selected observations.
+#'       1. Only the variables specified for the `keep_vars_source` field of the
+#'       event, and the by variables (`by_vars`) and the variables created by
+#'       `set_values_to` are kept.
 #'   1. For each group (with respect to the variables specified for the
-#'   `by_vars` parameter) the first or last observation (with respect to the
+#'   `by_vars` parameter) the first event is selected. If there is more than one
+#'   observation per event the first or last observation (with respect to the
 #'   order specified for the `order` parameter and the mode specified for the
 #'   `mode` parameter) is selected.
 #'   1. The variables specified by the `set_values_to` parameter are added to
@@ -149,12 +182,12 @@ derive_extreme_event <- function(dataset,
 
   # Create new observations
   ## Create a dataset (selected_records) from `events`
-  event_order <- as.list(seq_along(events))
+  event_index <- as.list(seq_along(events))
   tmp_event_no <- get_new_tmp_var(dataset, prefix = "tmp_event_no")
 
   selected_records_ls <- map2(
     events,
-    event_order,
+    event_index,
     function(event, index) {
       if (is.null(event$dataset_name)) {
         data_source <- dataset
@@ -175,14 +208,19 @@ derive_extreme_event <- function(dataset,
           )
         }
       } else {
+        if (is.null(event$order)) {
+          event_order <- order
+        } else {
+          event_order <- event$order
+        }
         data_events <- filter_joined(
           dataset,
           by_vars = by_vars,
           join_vars = event$join_vars,
           join_type = event$join_type,
-          first_cond = event$first_cond,
-          order = event$order,
-          filter = event$condition
+          first_cond = !!event$first_cond,
+          order = event_order,
+          filter = !!event$condition
         )
       }
       if (is.null(event$keep_vars_source)) {
@@ -193,14 +231,14 @@ derive_extreme_event <- function(dataset,
       data_events %>%
         mutate(!!tmp_event_no := index) %>%
         process_set_values_to(set_values_to = event$set_values_to) %>%
-        select(names(set_values_to), !!!event_keep_vars_source)
+        select(!!!event_keep_vars_source, !!!by_vars, names(event$set_values_to))
     }
   )
   selected_records <- bind_rows(selected_records_ls)
 
   ## tmp obs number within by_vars and a type of event
   tmp_obs <- get_new_tmp_var(selected_records)
-  selected_records_obs <- selected_records %>%
+  selected_records <- selected_records %>%
     derive_var_obs_number(
       new_var = !!tmp_obs,
       order = order,
@@ -214,7 +252,7 @@ derive_extreme_event <- function(dataset,
   } else {
     tmp_obs_expr <- expr(desc(!!tmp_obs))
   }
-  new_obs <- selected_records_obs %>%
+  new_obs <- selected_records %>%
     filter_extreme(
       by_vars = by_vars,
       order = expr_c(expr(!!tmp_event_no), tmp_obs_expr),
@@ -259,6 +297,16 @@ derive_extreme_event <- function(dataset,
 #'   to be set for the event, e.g. `exprs(PARAMCD = "WSP",
 #'   PARAM  = "Worst Sleeping Problems")`. The values can be a symbol, a
 #'   character string, a numeric value, `NA` or an expression.
+#'
+#' @param keep_vars_source Variables to keep from the source dataset
+#'
+#'   The specified variables are kept for the selected observations. The
+#'   variables specified for `by_vars` (of `derive_extreme_event()`) and created
+#'   by `set_values_to` are always kept.
+#'
+#'   *Permitted Values*: A list of expressions where each element is
+#'   a symbol or a tidyselect expression, e.g., `exprs(VISIT, VISITNUM,
+#'   starts_with("RS"))`.
 #'
 #' @keywords source_specifications
 #' @family source_specifications
@@ -351,10 +399,7 @@ event <- function(dataset_name = NULL,
 #'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))` or `NULL`
 #'
-#' @param set_values_to A named list returned by `exprs()` defining the variables
-#'   to be set for the event, e.g. `exprs(PARAMCD = "WSP",
-#'   PARAM  = "Worst Sleeping Problems")`. The values can be a symbol, a
-#'   character string, a numeric value, `NA` or an expression.
+#' @inheritParams event
 #'
 #' @keywords source_specifications
 #' @family source_specifications
