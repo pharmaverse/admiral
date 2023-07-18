@@ -5,6 +5,24 @@
 ## Updates of Existing Functions
 - The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
 
+- `derive_extreme_event()` was enhanced (#1960):
+
+    - `event_joined()` events can be specified for the `events` argument. This
+    allows to define events based on more than one observation, e.g., events
+    which need to be confirmed by a second assessment.
+    
+    - The `source_datasets` argument was added to the function and the
+    `dataset_name` field to `event()`. It can be used to define events based on
+    a different dataset than the input dataset.
+    
+    - The `keep_vars_source` argument was added to the function and the
+    `keep_vars_source` field to `event()`. It allows to select which variables
+    should be kept for the selected observations.
+    
+    - The `mode` and `order` field were added to `event()`. They allow to select
+    the first or last observation per by group if there are multiple observation
+    fulfilling the event condition.
+
 ## Breaking Changes
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)
 
