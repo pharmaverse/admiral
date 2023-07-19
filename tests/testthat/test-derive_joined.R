@@ -242,3 +242,65 @@ test_that("derive_vars_joined Test 7: new_vars expressions using variables from 
     keys = c("USUBJID", "AESEQ")
   )
 })
+## Test 8: NULL new_vars will still remove .join columns ----
+test_that("derive_vars_joined Test 8: NULL new_vars will still remove .join columns", {
+  myd <- data.frame(day = c(1, 2, 3), val = c(0, 17, 21))
+  expect_dfs_equal(
+    base = myd,
+    compare = derive_vars_joined(
+      myd,
+      dataset_add = myd,
+      order = exprs(day),
+      mode = "last",
+      filter_join = day < day.join
+    ),
+    keys = c("day", "val")
+  )
+})
+## Test 9: check_type suppressed until the final derive_vars_merged() chunk ----
+test_that("derive_vars_joined Test 9: check_type suppressed until the final derive_vars_merged() chunk", {
+  adlb_ast <- tribble(
+    ~ADT,         ~ASEQ,
+    "2002-01-01", 1,
+    "2002-02-02", 2,
+    "2002-02-02", 3
+  ) %>%
+    mutate(
+      STUDYID = "ABC",
+      USUBJID = "1",
+      ADT = ymd(ADT),
+      ADTM = as_datetime(ADT)
+    )
+
+  adlb_tbili_pbl <- tribble(
+    ~ADT,         ~ASEQ,
+    "2002-01-01", 4,
+    "2002-02-02", 5,
+    "2002-02-02", 6
+  ) %>%
+    mutate(
+      STUDYID = "ABC",
+      USUBJID = "1",
+      ADT = ymd(ADT),
+      ADTM = as_datetime(ADT)
+    )
+
+  adlb_joined <- derive_vars_joined(
+    adlb_ast,
+    dataset_add = adlb_tbili_pbl,
+    by_vars = exprs(STUDYID, USUBJID),
+    order = exprs(ADTM, ASEQ),
+    new_vars = exprs(TBILI_ADT = ADT),
+    filter_join = ADT <= ADT.join,
+    mode = "first"
+  )
+
+  expected <- adlb_ast %>%
+    mutate(TBILI_ADT = as.Date(c("2002-01-01", "2002-02-02", "2002-02-02"), "%Y-%m-%d"))
+
+  expect_dfs_equal(
+    base = expected,
+    compare = adlb_joined,
+    keys = c("ADT", "ASEQ", "STUDYID", "USUBJID", "ADTM", "TBILI_ADT")
+  )
+})
