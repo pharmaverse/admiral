@@ -258,7 +258,7 @@ test_that("derive_vars_joined Test 8: NULL new_vars will still remove .join colu
   )
 })
 ## Test 9: check_type suppressed until the final derive_vars_merged() chunk ----
-test_that("derive_vars_joined Test 9: check_type suppressed until the final derive_vars_merged() chunk", {
+test_that("derive_vars_joined Test 9: check_type suppressed until the final derive_vars_merged() chunk", { # nolint
   adlb_ast <- tribble(
     ~ADT,         ~ASEQ,
     "2002-01-01", 1,
