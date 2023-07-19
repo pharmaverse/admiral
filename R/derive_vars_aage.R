@@ -27,7 +27,7 @@
 #'
 #'   Default: `RANDDT`
 #'
-#' @param unit Unit
+#' @param age_unit Age unit
 #'
 #'   The age is derived in the specified unit
 #'
@@ -64,12 +64,12 @@
 derive_vars_aage <- function(dataset,
                              start_date = BRTHDT,
                              end_date = RANDDT,
-                             unit = "years") {
+                             age_unit = "years") {
   start_date <- assert_symbol(enexpr(start_date))
   end_date <- assert_symbol(enexpr(end_date))
   assert_data_frame(dataset, required_vars = expr_c(start_date, end_date))
   assert_character_scalar(
-    unit,
+    age_unit,
     values = c("years", "months", "weeks", "days", "hours", "minutes", "seconds")
   )
 
@@ -79,7 +79,7 @@ derive_vars_aage <- function(dataset,
     new_var_unit = AAGEU,
     start_date = !!start_date,
     end_date = !!end_date,
-    out_unit = unit,
+    out_unit = age_unit,
     add_one = FALSE,
     trunc_out = TRUE
   )

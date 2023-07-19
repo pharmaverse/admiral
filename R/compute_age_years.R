@@ -59,16 +59,16 @@ compute_age_years <- function(age,
     ))
   }
 
-  for (i in seq_along(age_unit)) {
-    if (is.na(age_unit[i])) {
-      age[i] <- NA
-      age_unit[i] <- "years"
-    }
+  if (length(age_unit) == 1){
+    age_unit_rep <- rep(age_unit, length(age))
+  }else{
+    age_unit_rep <- age_unit
   }
 
   age_years <- time_length(
-    duration(age,
-      units = tolower(age_unit)
+    duration(
+      num = if_else(is.na(age_unit_rep), NA_real_, age),
+      units = if_else(is.na(age_unit_rep), "years", tolower(age_unit_rep))
     ),
     unit = "years"
   )
