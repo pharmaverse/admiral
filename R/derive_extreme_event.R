@@ -138,7 +138,45 @@
 #'   )
 #' )
 #'
-#' # derive confirmed best overall response
+#' # use different mode by event
+#' adhy <- tribble(
+#'   ~USUBJID, ~AVISITN, ~CRIT1FL,
+#'   "1",             1, "Y",
+#'   "1",             2, "Y",
+#'   "2",             1, "Y",
+#'   "2",             2, NA_character_,
+#'   "2",             3, "Y",
+#'   "2",             4, NA_character_
+#' ) %>%
+#'   mutate(
+#'     PARAMCD = "ALKPH",
+#'     PARAM = "Alkaline Phosphatase (U/L)"
+#'   )
+#'
+#' derive_extreme_event(
+#'   adhy,
+#'   by_vars = exprs(USUBJID),
+#'   events = list(
+#'     event(
+#'       condition = is.na(CRIT1FL),
+#'       set_values_to = exprs(AVALC = "N")
+#'     ),
+#'     event(
+#'       condition = CRIT1FL == "Y",
+#'       mode = "last",
+#'       set_values_to = exprs(AVALC = "Y")
+#'     )
+#'   ),
+#'   order = exprs(AVISITN),
+#'   mode = "first",
+#'   keep_vars_source = exprs(AVISITN),
+#'   set_values_to = exprs(
+#'     PARAMCD = "ALK2",
+#'     PARAM = "ALKPH <= 2 times ULN"
+#'   )
+#' )
+#'
+#' # derive confirmed best overall response (using event_joined())
 #' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDTC,
 #'   "1",      "2020-01-01",
@@ -318,6 +356,11 @@ derive_extreme_event <- function(dataset,
       } else {
         data_source <- source_datasets[[event$dataset_name]]
       }
+      if (is.null(event$order)) {
+        event_order <- order
+      } else {
+        event_order <- event$order
+      }
       if (inherits(event, "event")) {
         data_events <- data_source %>%
           group_by(!!!by_vars) %>%
@@ -327,16 +370,11 @@ derive_extreme_event <- function(dataset,
           data_events <- filter_extreme(
             data_source,
             by_vars = by_vars,
-            order = event$order,
+            order = event_order,
             mode = event$mode
           )
         }
       } else {
-        if (is.null(event$order)) {
-          event_order <- order
-        } else {
-          event_order <- event$order
-        }
         data_events <- filter_joined(
           dataset,
           by_vars = by_vars,
@@ -355,7 +393,7 @@ derive_extreme_event <- function(dataset,
       data_events %>%
         mutate(!!tmp_event_no := index) %>%
         process_set_values_to(set_values_to = event$set_values_to) %>%
-        select(!!!event_keep_vars_source, !!!by_vars, names(event$set_values_to))
+        select(!!!event_keep_vars_source, !!tmp_event_no, !!!by_vars, names(event$set_values_to))
     }
   )
   selected_records <- bind_rows(selected_records_ls)

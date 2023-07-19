@@ -278,8 +278,67 @@ test_that("derive_extreme_records Test 3: `source_datasets` works", {
   )
 })
 
-## Test 4: event_joined() is handled correctly ----
-test_that("derive_extreme_records Test 4: event_joined() is handled correctly", {
+## Test 4: event-specific mode ----
+test_that("derive_extreme_records Test 4: event-specific mode", {
+  adhy <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~CRIT1FL,
+    "1",             1, "Y",
+    "1",             2, "Y",
+    "2",             1, "Y",
+    "2",             2, NA_character_,
+    "2",             3, "Y",
+    "2",             4, NA_character_
+  ) %>%
+    mutate(
+      PARAMCD = "ALKPH",
+      PARAM = "Alkaline Phosphatase (U/L)"
+    )
+
+  actual <- derive_extreme_event(
+    adhy,
+    by_vars = exprs(USUBJID),
+    events = list(
+      event(
+        condition = is.na(CRIT1FL),
+        set_values_to = exprs(AVALC = "N")
+      ),
+      event(
+        condition = CRIT1FL == "Y",
+        mode = "last",
+        set_values_to = exprs(AVALC = "Y")
+      )
+    ),
+    order = exprs(AVISITN),
+    mode = "first",
+    keep_vars_source = exprs(AVISITN),
+    set_values_to = exprs(
+      PARAMCD = "ALK2",
+      PARAM = "ALKPH <= 2 times ULN"
+    )
+  )
+
+  expected <- bind_rows(
+    adhy,
+    tribble(
+      ~USUBJID, ~AVISITN, ~AVALC,
+      "1",             2, "Y",
+      "2",             2, "N"
+    ) %>%
+      mutate(
+        PARAMCD = "ALK2",
+        PARAM = "ALKPH <= 2 times ULN"
+      )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISITN", "PARAMCD")
+  )
+})
+
+## Test 5: event_joined() is handled correctly ----
+test_that("derive_extreme_records Test 5: event_joined() is handled correctly", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDTC,
     "1",      "2020-01-01",

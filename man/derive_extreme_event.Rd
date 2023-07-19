@@ -182,17 +182,55 @@ derive_extreme_event(
   )
 )
 
-# derive confirmed best overall response
+# use different mode by event
+adhy <- tribble(
+  ~USUBJID, ~AVISITN, ~CRIT1FL,
+  "1",             1, "Y",
+  "1",             2, "Y",
+  "2",             1, "Y",
+  "2",             2, NA_character_,
+  "2",             3, "Y",
+  "2",             4, NA_character_
+) \%>\%
+  mutate(
+    PARAMCD = "ALKPH",
+    PARAM = "Alkaline Phosphatase (U/L)"
+  )
+
+derive_extreme_event(
+  adhy,
+  by_vars = exprs(USUBJID),
+  events = list(
+    event(
+      condition = is.na(CRIT1FL),
+      set_values_to = exprs(AVALC = "N")
+    ),
+    event(
+      condition = CRIT1FL == "Y",
+      mode = "last",
+      set_values_to = exprs(AVALC = "Y")
+    )
+  ),
+  order = exprs(AVISITN),
+  mode = "first",
+  keep_vars_source = exprs(AVISITN),
+  set_values_to = exprs(
+    PARAMCD = "ALK2",
+    PARAM = "ALKPH <= 2 times ULN"
+  )
+)
+
+# derive confirmed best overall response (using event_joined())
 adsl <- tribble(
-~USUBJID, ~TRTSDTC,
-"1",      "2020-01-01",
-"2",      "2019-12-12",
-"3",      "2019-11-11",
-"4",      "2019-12-30",
-"5",      "2020-01-01",
-"6",      "2020-02-02",
-"7",      "2020-02-02",
-"8",      "2020-02-01"
+  ~USUBJID, ~TRTSDTC,
+  "1",      "2020-01-01",
+  "2",      "2019-12-12",
+  "3",      "2019-11-11",
+  "4",      "2019-12-30",
+  "5",      "2020-01-01",
+  "6",      "2020-02-02",
+  "7",      "2020-02-02",
+  "8",      "2020-02-01"
 ) \%>\%
   mutate(TRTSDT = ymd(TRTSDTC))
 
@@ -234,75 +272,74 @@ adrs <- tribble(
   )
 
 derive_extreme_event(
-    adrs,
-    by_vars = exprs(USUBJID),
-    order = exprs(ADT),
-    mode = "first",
-    source_datasets = list(adsl = adsl),
-    events = list(
-      # CR needs to be confirmed by a second CR at least 28 days later
-      # at most one NE is acceptable between the two assessments
-      event_joined(
-        join_vars = exprs(AVALC, ADT),
-        join_type = "after",
-        first_cond = AVALC.join == "CR" &
-          ADT.join >= ADT + 28,
-        condition = AVALC == "CR" &
-          all(AVALC.join \%in\% c("CR", "NE")) &
-          count_vals(var = AVALC.join, val = "NE") <= 1,
-        set_values_to = exprs(
-          AVALC = "CR"
-        )
-      ),
-      # CR needs to be confirmed by a second CR or PR at least 28 days later
-      # at most one NE is acceptable between the two assessments
-      event_joined(
-        join_vars = exprs(AVALC, ADT),
-        join_type = "after",
-        first_cond = AVALC.join \%in\% c("CR", "PR") &
-          ADT.join >= ADT + 28,
-        condition = AVALC == "PR" &
-          all(AVALC.join \%in\% c("CR", "PR", "NE")) &
-          count_vals(var = AVALC.join, val = "NE") <= 1,
-        set_values_to = exprs(
-          AVALC = "PR"
-        )
-      ),
-      event(
-        condition = AVALC \%in\% c("CR", "PR", "SD") & ADT >= TRTSDT + 28,
-        set_values_to = exprs(
-          AVALC = "SD"
-        )
-      ),
-      event(
-        condition = AVALC == "PD",
-        set_values_to = exprs(
-          AVALC = "PD"
-        )
-      ),
-      event(
-        condition = AVALC \%in\% c("CR", "PR", "SD", "NE"),
-        set_values_to = exprs(
-          AVALC = "NE"
-        )
-      ),
-      # set response to MISSING for patients without records in ADRS
-      event(
-        dataset_name = "adsl",
-        condition = TRUE,
-        set_values_to = exprs(
-          AVALC = "MISSING"
-        ),
-        keep_vars_source = exprs(TRTSDT)
+  adrs,
+  by_vars = exprs(USUBJID),
+  order = exprs(ADT),
+  mode = "first",
+  source_datasets = list(adsl = adsl),
+  events = list(
+    # CR needs to be confirmed by a second CR at least 28 days later
+    # at most one NE is acceptable between the two assessments
+    event_joined(
+      join_vars = exprs(AVALC, ADT),
+      join_type = "after",
+      first_cond = AVALC.join == "CR" &
+        ADT.join >= ADT + 28,
+      condition = AVALC == "CR" &
+        all(AVALC.join \%in\% c("CR", "NE")) &
+        count_vals(var = AVALC.join, val = "NE") <= 1,
+      set_values_to = exprs(
+        AVALC = "CR"
       )
     ),
-    set_values_to = exprs(
-      PARAMCD = "CBOR",
-      PARAM = "Best Confirmed Overall Response by Investigator"
+    # CR needs to be confirmed by a second CR or PR at least 28 days later
+    # at most one NE is acceptable between the two assessments
+    event_joined(
+      join_vars = exprs(AVALC, ADT),
+      join_type = "after",
+      first_cond = AVALC.join \%in\% c("CR", "PR") &
+        ADT.join >= ADT + 28,
+      condition = AVALC == "PR" &
+        all(AVALC.join \%in\% c("CR", "PR", "NE")) &
+        count_vals(var = AVALC.join, val = "NE") <= 1,
+      set_values_to = exprs(
+        AVALC = "PR"
+      )
+    ),
+    event(
+      condition = AVALC \%in\% c("CR", "PR", "SD") & ADT >= TRTSDT + 28,
+      set_values_to = exprs(
+        AVALC = "SD"
+      )
+    ),
+    event(
+      condition = AVALC == "PD",
+      set_values_to = exprs(
+        AVALC = "PD"
+      )
+    ),
+    event(
+      condition = AVALC \%in\% c("CR", "PR", "SD", "NE"),
+      set_values_to = exprs(
+        AVALC = "NE"
+      )
+    ),
+    # set response to MISSING for patients without records in ADRS
+    event(
+      dataset_name = "adsl",
+      condition = TRUE,
+      set_values_to = exprs(
+        AVALC = "MISSING"
+      ),
+      keep_vars_source = exprs(TRTSDT)
     )
-  ) \%>\%
+  ),
+  set_values_to = exprs(
+    PARAMCD = "CBOR",
+    PARAM = "Best Confirmed Overall Response by Investigator"
+  )
+) \%>\%
   filter(PARAMCD == "CBOR")
-
 
 }
 \seealso{
