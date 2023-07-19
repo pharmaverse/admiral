@@ -38,6 +38,8 @@ the `filter_add` using the next phase of the deprecation process. (#1950)
 
 - The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as *authors*, whereas those who made a significant contribution in the past are now down as *contributors*. All other acknowledgements have been moved to README section (#1941).
 
+- `derive_vars_joined()` had two bugs with regards to duplicates messaging and when `new_vars` was set to `NULL` that have no been addressed (#1966). 
+
 # admiral 0.11.1
 
 - Fix bug in `derive_param_tte()`. (#1962)
