@@ -349,8 +349,8 @@ derive_vars_joined <- function(dataset,
 
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   filter_join <- assert_filter_cond(enexpr(filter_join), optional = TRUE)
+  original_new_vars <- new_vars
   if (is.null(new_vars)) {
-    original_new_vars <- new_vars
     new_vars <- chr2vars(colnames(dataset_add))
   }
 
@@ -425,7 +425,7 @@ derive_vars_joined <- function(dataset,
     ) %>%
     remove_tmp_vars()
 
-  if(is.null(original_new_vars)){
+  if (is.null(original_new_vars)) {
     data_final <- data_final %>%
       select(-ends_with("join"))
   }
