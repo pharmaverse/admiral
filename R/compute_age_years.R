@@ -59,9 +59,9 @@ compute_age_years <- function(age,
     ))
   }
 
-  if (length(age_unit) == 1){
+  if (length(age_unit) == 1) {
     age_unit_rep <- rep(age_unit, length(age))
-  }else{
+  } else {
     age_unit_rep <- age_unit
   }
 
