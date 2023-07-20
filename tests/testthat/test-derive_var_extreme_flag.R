@@ -122,12 +122,12 @@ test_that("derive_var_extreme_flag Test 4: flag_all = TRUE when mode is first", 
     order = exprs(ADTM),
     new_var = FIRSTFL,
     mode = "first",
-    check_type = "none",
     flag_all = TRUE
   )
 
   expect_true(all.equal(expected_output, actual_output))
 })
+
 ## Test 5: flag_all = FALSE when mode is last ----
 test_that("derive_var_extreme_flag Test 5: flag_all = FALSE when mode is last", {
   expected_output <- test_flag_all %>%
@@ -157,7 +157,6 @@ test_that("derive_var_extreme_flag Test 6: flag_all = TRUE when mode is last", {
     order = exprs(ADTM),
     new_var = LASTFL,
     mode = "last",
-    check_type = "none",
     flag_all = TRUE
   )
 

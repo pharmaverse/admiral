@@ -230,13 +230,24 @@ derive_var_extreme_flag <- function(dataset,
   )
 
   # Create flag
-  data <- dataset %>%
-    derive_var_obs_number(
-      new_var = temp_obs_nr,
-      order = order,
-      by_vars = by_vars,
-      check_type = check_type
-    )
+  if (flag_all == TRUE) {
+    data <- dataset %>%
+      derive_var_obs_number(
+        new_var = temp_obs_nr,
+        order = order,
+        by_vars = by_vars,
+        check_type = "none"
+      )
+  }
+  else {
+    data <- dataset %>%
+      derive_var_obs_number(
+        new_var = temp_obs_nr,
+        order = order,
+        by_vars = by_vars,
+        check_type = check_type
+      )
+  }
 
   if (mode == "first") {
     data <- data %>%
@@ -261,6 +272,7 @@ derive_var_extreme_flag <- function(dataset,
         ungroup()
     }
   }
+
 
   # Remove temporary variable
   data %>% select(-temp_obs_nr)
