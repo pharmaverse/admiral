@@ -64,9 +64,9 @@ and \code{event_joined()} refers to the dataset provided in the list.}
 \item{ignore_event_order}{Ignore event order
 
 If the argument is set to \code{TRUE}, all events defined by \code{events} are
-considered as equipollent. If there is more than one observation per by
-group the first or last (with respect to \code{mode} and \code{order}) is select
-without taking the order of the events into account.
+considered equivalent. If there is more than one observation per by group
+the first or last (with respect to \code{mode} and \code{order}) is select without
+taking the order of the events into account.
 
 \emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
 

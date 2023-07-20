@@ -42,9 +42,9 @@
 #' @param ignore_event_order Ignore event order
 #'
 #'   If the argument is set to `TRUE`, all events defined by `events` are
-#'   considered as equipollent. If there is more than one observation per by
-#'   group the first or last (with respect to `mode` and `order`) is select
-#'   without taking the order of the events into account.
+#'   considered equivalent. If there is more than one observation per by group
+#'   the first or last (with respect to `mode` and `order`) is select without
+#'   taking the order of the events into account.
 #'
 #'   *Permitted Values:* `TRUE`, `FALSE`
 #'
