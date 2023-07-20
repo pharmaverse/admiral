@@ -510,3 +510,55 @@ test_that("derive_extreme_records Test 5: event_joined() is handled correctly", 
     keys = c("USUBJID", "PARAMCD", "ADT")
   )
 })
+
+## Test 6: ignore_event_order ----
+test_that("derive_extreme_records Test 6: ignore_event_order", {
+  adrs <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",             1, "PR",
+    "1",             2, "CR",
+    "1",             3, "CR"
+  ) %>%
+    mutate(PARAMCD = "OVR")
+
+  actual <- derive_extreme_event(
+    adrs,
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN),
+    mode = "first",
+    events = list(
+      event_joined(
+        join_vars = exprs(AVALC),
+        join_type = "after",
+        first_cond = AVALC.join == "CR",
+        condition = AVALC == "CR",
+        set_values_to = exprs(AVALC = "Y")
+      ),
+      event_joined(
+        join_vars = exprs(AVALC),
+        join_type = "after",
+        first_cond = AVALC.join %in% c("CR", "PR"),
+        condition = AVALC == "PR",
+        set_values_to = exprs(AVALC = "Y")
+      )
+    ),
+    ignore_event_order = TRUE,
+    set_values_to = exprs(
+      PARAMCD = "CRSP"
+    )
+  )
+
+  expected <- bind_rows(
+    adrs,
+    tibble::tribble(
+      ~USUBJID, ~AVISITN, ~AVALC, ~PARAMCD,
+      "1",             1, "Y",    "CRSP"
+    )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "PARAMCD", "AVISITN")
+  )
+})

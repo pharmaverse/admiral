@@ -11,6 +11,7 @@ derive_extreme_event(
   order,
   mode,
   source_datasets = NULL,
+  ignore_event_order = FALSE,
   check_type = "warning",
   set_values_to,
   keep_vars_source = exprs(everything())
@@ -59,6 +60,15 @@ sorting by \code{order}.
 
 A named list of datasets is expected. The \code{dataset_name} field of \code{event()}
 and \code{event_joined()} refers to the dataset provided in the list.}
+
+\item{ignore_event_order}{Ignore event order
+
+If the argument is set to \code{TRUE}, all events defined by \code{events} are
+considered as equipollent. If there is more than one observation per by
+group the first or last (with respect to \code{mode} and \code{order}) is select
+without taking the order of the events into account.
+
+\emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
 
 \item{check_type}{Check uniqueness?
 

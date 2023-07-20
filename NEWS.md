@@ -22,6 +22,8 @@
     - The `mode` and `order` field were added to `event()`. They allow to select
     the first or last observation per by group if there are multiple observation
     fulfilling the event condition.
+    
+    - The `ignore_event_order` argument was added.
 
 ## Breaking Changes
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)

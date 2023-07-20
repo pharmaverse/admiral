@@ -39,6 +39,15 @@
 #'   A named list of datasets is expected. The `dataset_name` field of `event()`
 #'   and `event_joined()` refers to the dataset provided in the list.
 #'
+#' @param ignore_event_order Ignore event order
+#'
+#'   If the argument is set to `TRUE`, all events defined by `events` are
+#'   considered as equipollent. If there is more than one observation per by
+#'   group the first or last (with respect to `mode` and `order`) is select
+#'   without taking the order of the events into account.
+#'
+#'   *Permitted Values:* `TRUE`, `FALSE`
+#'
 #' @param keep_vars_source Variables to keep from the source dataset
 #'
 #'   For each event the specified variables are kept from the selected
@@ -303,6 +312,7 @@ derive_extreme_event <- function(dataset,
                                  order,
                                  mode,
                                  source_datasets = NULL,
+                                 ignore_event_order = FALSE,
                                  check_type = "warning",
                                  set_values_to,
                                  keep_vars_source = exprs(everything())) {
@@ -333,6 +343,7 @@ derive_extreme_event <- function(dataset,
     )
   }
 
+  assert_logical_scalar(ignore_event_order)
   check_type <-
     assert_character_scalar(
       check_type,
@@ -345,7 +356,11 @@ derive_extreme_event <- function(dataset,
   # Create new observations
   ## Create a dataset (selected_records) from `events`
   event_index <- as.list(seq_along(events))
-  tmp_event_no <- get_new_tmp_var(dataset, prefix = "tmp_event_no")
+  if (ignore_event_order) {
+    tmp_event_no <- NULL
+  } else {
+    tmp_event_no <- get_new_tmp_var(dataset, prefix = "tmp_event_no")
+  }
 
   selected_records_ls <- map2(
     events,
@@ -390,8 +405,10 @@ derive_extreme_event <- function(dataset,
       } else {
         event_keep_vars_source <- event$keep_vars_source
       }
+      if (!ignore_event_order) {
+        data_events <- mutate(data_events, !!tmp_event_no := index)
+      }
       data_events %>%
-        mutate(!!tmp_event_no := index) %>%
         process_set_values_to(set_values_to = event$set_values_to) %>%
         select(!!!event_keep_vars_source, !!tmp_event_no, !!!by_vars, names(event$set_values_to))
     }
@@ -404,7 +421,7 @@ derive_extreme_event <- function(dataset,
     derive_var_obs_number(
       new_var = !!tmp_obs,
       order = order,
-      by_vars = expr_c(by_vars, expr(!!tmp_event_no)),
+      by_vars = expr_c(by_vars, tmp_event_no),
       check_type = check_type
     )
 
@@ -417,7 +434,7 @@ derive_extreme_event <- function(dataset,
   new_obs <- selected_records %>%
     filter_extreme(
       by_vars = by_vars,
-      order = expr_c(expr(!!tmp_event_no), tmp_obs_expr),
+      order = expr_c(tmp_event_no, tmp_obs_expr),
       mode = "first",
       check_type = check_type
     ) %>%
