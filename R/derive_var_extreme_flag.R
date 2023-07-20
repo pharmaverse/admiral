@@ -238,8 +238,7 @@ derive_var_extreme_flag <- function(dataset,
         by_vars = by_vars,
         check_type = "none"
       )
-  }
-  else {
+  } else {
     data <- dataset %>%
       derive_var_obs_number(
         new_var = temp_obs_nr,
