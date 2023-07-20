@@ -5,7 +5,7 @@
 ## Updates of Existing Functions
 - The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
 
-- The function `derive_var_extreme_flag()` has a new function argument, `flag_all` to additionally flags all records if the first or last record is not unique. (#1979)
+- The function `derive_var_extreme_flag()` has a new function argument, `flag_all` that additionally flags all records if the first or last record is not unique. (#1979)
 
 ## Breaking Changes
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)
