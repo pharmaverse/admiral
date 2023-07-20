@@ -26,6 +26,11 @@
 #'
 #'   Permitted Values: `"first"`, `"last"`
 #'
+#' @param flag_all Flag setting
+#'
+#'   A logical value where if set to TRUE, all records are flagged
+#'   and no error or warning is issued if the first or last record is not unique.
+#'
 #' @param by_vars Grouping variables
 #'
 #'   Permitted Values: list of variables
@@ -211,6 +216,7 @@ derive_var_extreme_flag <- function(dataset,
                                     order,
                                     new_var,
                                     mode,
+                                    flag_all = FALSE,
                                     check_type = "warning") {
   new_var <- assert_symbol(enexpr(new_var))
   assert_vars(by_vars)
@@ -240,6 +246,20 @@ derive_var_extreme_flag <- function(dataset,
       group_by(!!!by_vars) %>%
       mutate(!!new_var := if_else(temp_obs_nr == n(), "Y", NA_character_)) %>%
       ungroup()
+  }
+
+  if (flag_all == TRUE) {
+    if (mode == "first") {
+      data <- data %>%
+        group_by(!!!by_vars, !!!order) %>%
+        fill(!!new_var, .direction = "down") %>%
+        ungroup()
+    } else {
+      data <- data %>%
+        group_by(!!!by_vars, !!!order) %>%
+        fill(!!new_var, .direction = "up") %>%
+        ungroup()
+    }
   }
 
   # Remove temporary variable

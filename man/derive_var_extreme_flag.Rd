@@ -10,6 +10,7 @@ derive_var_extreme_flag(
   order,
   new_var,
   mode,
+  flag_all = FALSE,
   check_type = "warning"
 )
 }
@@ -41,6 +42,11 @@ Permitted Values: list of name-value pairs}
 Determines of the first or last observation is flagged.
 
 Permitted Values: \code{"first"}, \code{"last"}}
+
+\item{flag_all}{Flag setting
+
+A logical value where if set to TRUE, all records are flagged
+and no error or warning is issued if the first or last record is not unique.}
 
 \item{check_type}{Check uniqueness?
 
