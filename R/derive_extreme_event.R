@@ -391,7 +391,7 @@ derive_extreme_event <- function(dataset,
         }
       } else {
         data_events <- filter_joined(
-          dataset,
+          data_source,
           by_vars = by_vars,
           join_vars = event$join_vars,
           join_type = event$join_type,
