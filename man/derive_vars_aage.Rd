@@ -8,6 +8,7 @@ derive_vars_aage(
   dataset,
   start_date = BRTHDT,
   end_date = RANDDT,
+  unit = "years",
   age_unit = "years"
 )
 }
@@ -34,6 +35,8 @@ Refer to \code{derive_vars_dt()} to impute and derive a date from a date charact
 vector to a date object.
 
 Default: \code{RANDDT}}
+
+\item{unit}{\emph{Deprecated}, please use \code{age_unit} instead.}
 
 \item{age_unit}{Age unit
 
