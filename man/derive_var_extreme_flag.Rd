@@ -68,7 +68,9 @@ Add a variable flagging the first or last observation within each by group
 For each group (with respect to the variables specified for the
 \code{by_vars} parameter), \code{new_var} is set to "Y" for the first or last observation
 (with respect to the order specified for the \code{order} parameter and the flag mode
-specified for the \code{mode} parameter). Only observations included by the \code{filter} parameter
+specified for the \code{mode} parameter). In the case where the user wants to flag multiple records
+of a grouping, for example records that all happen on the same visit and time, the argument
+\code{flag_all} can be set to \code{TRUE}. Only observations included by the \code{filter} parameter
 are considered for flagging.
 Otherwise, \code{new_var} is set to \code{NA}. Thus, the direction of "worst" is considered fixed for
 all parameters in the dataset depending on the \code{order} and the \code{mode}, i.e. for every

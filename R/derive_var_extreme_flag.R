@@ -48,7 +48,9 @@
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter), `new_var` is set to "Y" for the first or last observation
 #'   (with respect to the order specified for the `order` parameter and the flag mode
-#'   specified for the `mode` parameter). Only observations included by the `filter` parameter
+#'   specified for the `mode` parameter). In the case where the user wants to flag multiple records
+#'   of a grouping, for example records that all happen on the same visit and time, the argument
+#'   `flag_all` can be set to `TRUE`. Only observations included by the `filter` parameter
 #'   are considered for flagging.
 #'   Otherwise, `new_var` is set to `NA`. Thus, the direction of "worst" is considered fixed for
 #'   all parameters in the dataset depending on the `order` and the `mode`, i.e. for every
