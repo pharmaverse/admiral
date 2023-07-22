@@ -19,7 +19,7 @@ permitted values are cases insensitive (e.g. \code{"YEARS"} is treated the same
 as \code{"years"} and \code{"Years"}).
 
 Permitted Values: \code{"years"}, \code{"months"}, \code{"weeks"}, \code{"days"}, \code{"hours"}, \code{"minutes"},
-\verb{"seconds", NA_character_}.}
+\code{"seconds"}, \code{NA_character_}.}
 }
 \value{
 The ages contained in \code{age} converted to years.
