@@ -14,7 +14,7 @@
 #'   as `"years"` and `"Years"`).
 #'
 #'   Permitted Values: `"years"`, `"months"`, `"weeks"`, `"days"`, `"hours"`, `"minutes"`,
-#'   `"seconds", NA_character_`.
+#'   `"seconds"`, `NA_character_`.
 #'
 #' @details Returns a numeric vector of ages in years as doubles. Note
 #' that passing `NA_character_` as a unit will result in an `NA` value for the outputted
