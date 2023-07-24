@@ -19,7 +19,7 @@ permitted values are cases insensitive (e.g. \code{"YEARS"} is treated the same
 as \code{"years"} and \code{"Years"}).
 
 Permitted Values: \code{"years"}, \code{"months"}, \code{"weeks"}, \code{"days"}, \code{"hours"}, \code{"minutes"},
-\code{"seconds"}.}
+\code{"seconds"}, \code{NA_character_}.}
 }
 \value{
 The ages contained in \code{age} converted to years.
@@ -28,8 +28,10 @@ The ages contained in \code{age} converted to years.
 Converts a set of age values from the specified time unit to years.
 }
 \details{
-Returns a numeric vector of ages in years as doubles. Note, underlying
-computations assume an equal number of days in each year (365.25).
+Returns a numeric vector of ages in years as doubles. Note
+that passing \code{NA_character_} as a unit will result in an \code{NA} value for the outputted
+age. Also note, underlying computations assume an equal number of days in each
+year (365.25).
 }
 \examples{
 compute_age_years(
@@ -38,8 +40,8 @@ compute_age_years(
 )
 
 compute_age_years(
-  age = c(10, 520, 3650),
-  age_unit = c("YEARS", "WEEKS", "DAYS")
+  age = c(10, 520, 3650, 1000),
+  age_unit = c("YEARS", "WEEKS", "DAYS", NA_character_)
 )
 
 }
