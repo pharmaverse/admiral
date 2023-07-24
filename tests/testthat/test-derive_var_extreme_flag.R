@@ -57,12 +57,12 @@ test_that("derive_var_extreme_flag Test 2: last observation for each group is fl
 
 
 test_flag_all <- tibble::tribble(
-  ~STUDYID, ~USUBJID,               ~ADTM, ~AVISITN, ~BASETYPE,
-  "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt",
-  "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt",
-  "TEST01",  "PAT01",  "2020-02-01T12:01",        1,   "ontrt",
-  "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt",
-  "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt"
+  ~STUDYID, ~USUBJID,               ~ADTM, ~AVISITN, ~BASETYPE,  ~PARAM,
+  "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt", "test1",
+  "TEST01",  "PAT01",  "2020-02-01T12:00",        1,   "ontrt", "test2",
+  "TEST01",  "PAT01",  "2020-02-01T12:01",        1,   "ontrt", "test1",
+  "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt", "test1",
+  "TEST01",  "PAT01",  "2020-02-01T13:00",        1,   "ontrt", "test2"
 )
 
 ## Test 3: flag_all = FALSE when mode is first ----
@@ -80,7 +80,10 @@ test_that("derive_var_extreme_flag Test 3: flag_all = FALSE when mode is first",
     flag_all = FALSE
   )
 
-  expect_true(all.equal(expected_output, actual_output))
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("STUDYID", "USUBJID", "BASETYPE", "AVISITN", "ADTM", "FIRSTFL", "PARAM"))
 })
 
 ## Test 4: flag_all = TRUE when mode is first ----
@@ -97,7 +100,10 @@ test_that("derive_var_extreme_flag Test 4: flag_all = TRUE when mode is first", 
     flag_all = TRUE
   )
 
-  expect_true(all.equal(expected_output, actual_output))
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("STUDYID", "USUBJID", "BASETYPE", "AVISITN", "ADTM", "FIRSTFL", "PARAM"))
 })
 
 ## Test 5: flag_all = FALSE when mode is last ----
@@ -115,7 +121,10 @@ test_that("derive_var_extreme_flag Test 5: flag_all = FALSE when mode is last", 
     flag_all = FALSE
   )
 
-  expect_true(all.equal(expected_output, actual_output))
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("STUDYID", "USUBJID", "BASETYPE", "AVISITN", "ADTM", "LASTFL", "PARAM"))
 })
 
 ## Test 6: flag_all = TRUE when mode is last ----
@@ -132,7 +141,10 @@ test_that("derive_var_extreme_flag Test 6: flag_all = TRUE when mode is last", {
     flag_all = TRUE
   )
 
-  expect_true(all.equal(expected_output, actual_output))
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("STUDYID", "USUBJID", "BASETYPE", "AVISITN", "ADTM", "LASTFL", "PARAM"))
 })
 ## Test 7: case for missing order variables ----
 test_that("derive_var_extreme_flag Test 7: case for missing order variables", {

@@ -28,7 +28,7 @@
 #'
 #' @param flag_all Flag setting
 #'
-#'   A logical value where if set to TRUE, all records are flagged
+#'   A logical value where if set to `TRUE`, all records are flagged
 #'   and no error or warning is issued if the first or last record is not unique.
 #'
 #' @param by_vars Grouping variables
@@ -46,12 +46,11 @@
 #'   Permitted Values: `"none"`, `"warning"`, `"error"`
 #'
 #' @details For each group (with respect to the variables specified for the
-#'   `by_vars` parameter), `new_var` is set to "Y" for the first or last observation
+#'   `by_vars` parameter), `new_var` is set to `"Y"` for the first or last observation
 #'   (with respect to the order specified for the `order` parameter and the flag mode
 #'   specified for the `mode` parameter). In the case where the user wants to flag multiple records
 #'   of a grouping, for example records that all happen on the same visit and time, the argument
-#'   `flag_all` can be set to `TRUE`. Only observations included by the `filter` parameter
-#'   are considered for flagging.
+#'   `flag_all` can be set to `TRUE`.
 #'   Otherwise, `new_var` is set to `NA`. Thus, the direction of "worst" is considered fixed for
 #'   all parameters in the dataset depending on the `order` and the `mode`, i.e. for every
 #'   parameter the first or last record will be flagged across the whole dataset.
@@ -199,6 +198,22 @@
 #'   arrange(USUBJID, AESTDY, AESEQ) %>%
 #'   select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
 #'
+#' # Most severe AE first occurrence per patient (flag all cases)
+#' example_ae %>%
+#'   mutate(
+#'     TEMP_AESEVN =
+#'       as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
+#'   ) %>%
+#'   derive_var_extreme_flag(
+#'     new_var = AOCCIFL,
+#'     by_vars = exprs(USUBJID),
+#'     order = exprs(TEMP_AESEVN, AESTDY),
+#'     mode = "first",
+#'     flag_all = TRUE
+#'   ) %>%
+#'   arrange(USUBJID, AESTDY) %>%
+#'   select(USUBJID, AEDECOD, AESEV, AESTDY, AOCCIFL)
+#'
 #' # Most severe AE first occurrence per patient per body system
 #' example_ae %>%
 #'   mutate(
@@ -225,6 +240,7 @@ derive_var_extreme_flag <- function(dataset,
   assert_expr_list(order)
   assert_data_frame(dataset, required_vars = exprs(!!!by_vars, !!!extract_vars(order)))
   mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
+  flag_all <- assert_logical_scalar(flag_all)
   check_type <- assert_character_scalar(
     check_type,
     values = c("none", "warning", "error"),
@@ -232,49 +248,40 @@ derive_var_extreme_flag <- function(dataset,
   )
 
   # Create flag
-  if (flag_all == TRUE) {
-    data <- dataset %>%
-      derive_var_obs_number(
-        new_var = temp_obs_nr,
-        order = order,
-        by_vars = by_vars,
-        check_type = "none"
-      )
-  } else {
-    data <- dataset %>%
-      derive_var_obs_number(
-        new_var = temp_obs_nr,
-        order = order,
-        by_vars = by_vars,
-        check_type = check_type
-      )
+  if (flag_all) {
+    check_type <- "none"
   }
+
+  # Create observation number to identify the extreme record
+  tmp_obs_nr <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr")
+  data <- dataset %>%
+    derive_var_obs_number(
+      new_var = !!tmp_obs_nr,
+      order = order,
+      by_vars = by_vars,
+      check_type = check_type
+    )
 
   if (mode == "first") {
     data <- data %>%
-      mutate(!!new_var := if_else(temp_obs_nr == 1, "Y", NA_character_))
+      mutate(!!new_var := if_else(!!tmp_obs_nr == 1, "Y", NA_character_))
   } else {
     data <- data %>%
       group_by(!!!by_vars) %>%
-      mutate(!!new_var := if_else(temp_obs_nr == n(), "Y", NA_character_)) %>%
+      mutate(!!new_var := if_else(!!tmp_obs_nr == n(), "Y", NA_character_)) %>%
       ungroup()
   }
 
-  if (flag_all == TRUE) {
-    if (mode == "first") {
-      data <- data %>%
-        group_by(!!!by_vars, !!!order) %>%
-        fill(!!new_var, .direction = "down") %>%
-        ungroup()
-    } else {
-      data <- data %>%
-        group_by(!!!by_vars, !!!order) %>%
-        fill(!!new_var, .direction = "up") %>%
-        ungroup()
-    }
+  if (flag_all) {
+    flag_direction = ifelse(mode == "first", "down", "up")
+    data <- data %>%
+      group_by(!!!by_vars, !!!order) %>%
+      fill(!!new_var, .direction = flag_direction) %>%
+      ungroup()
   }
 
 
   # Remove temporary variable
-  data %>% select(-temp_obs_nr)
+  data %>%
+    remove_tmp_vars()
 }
