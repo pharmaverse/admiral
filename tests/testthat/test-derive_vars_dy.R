@@ -298,7 +298,7 @@ test_that("derive_vars_dy Test 10: no error if input with variable end with `_te
     )
 
   expected_output <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT,  ~test_temp, ~ASTDY,
+    ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT, ~test_temp, ~ASTDY,
     "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", "test", 2
   ) %>%
     mutate(
@@ -307,8 +307,8 @@ test_that("derive_vars_dy Test 10: no error if input with variable end with `_te
     )
 
   actual_output <- derive_vars_dy(datain,
-                                  reference_date = TRTSDTM,
-                                  source_vars = exprs(ASTDT)
+    reference_date = TRTSDTM,
+    source_vars = exprs(ASTDT)
   )
 
   expect_dfs_equal(
