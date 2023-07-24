@@ -8,7 +8,8 @@ derive_vars_aage(
   dataset,
   start_date = BRTHDT,
   end_date = RANDDT,
-  unit = "years"
+  unit = "years",
+  age_unit = "years"
 )
 }
 \arguments{
@@ -35,7 +36,9 @@ vector to a date object.
 
 Default: \code{RANDDT}}
 
-\item{unit}{Unit
+\item{unit}{\emph{Deprecated}, please use \code{age_unit} instead.}
+
+\item{age_unit}{Age unit
 
 The age is derived in the specified unit
 

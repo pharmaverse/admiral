@@ -16,10 +16,10 @@ test_that("compute_age_years Test 1: compute_age_years() works when `age_unit` i
 
 ## Test 2: compute_age_years() works when `age_unit` is a vector ----
 test_that("compute_age_years Test 2: compute_age_years() works when `age_unit` is a vector", {
-  age_input <- c(28, 1461, 10227)
-  age_unit_input <- c("YEARS", "WEEKS", "DAYS")
+  age_input <- c(28, 1461, 10227, 32)
+  age_unit_input <- c("YEARS", "WEEKS", "DAYS", NA_character_)
 
-  expected_output <- rep(28, 3)
+  expected_output <- c(28, 28, 28, NA)
 
   expect_equal(
     compute_age_years(

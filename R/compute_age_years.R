@@ -14,10 +14,12 @@
 #'   as `"years"` and `"Years"`).
 #'
 #'   Permitted Values: `"years"`, `"months"`, `"weeks"`, `"days"`, `"hours"`, `"minutes"`,
-#'   `"seconds"`.
+#'   `"seconds"`, `NA_character_`.
 #'
-#' @details Returns a numeric vector of ages in years as doubles. Note, underlying
-#' computations assume an equal number of days in each year (365.25).
+#' @details Returns a numeric vector of ages in years as doubles. Note
+#' that passing `NA_character_` as a unit will result in an `NA` value for the outputted
+#' age. Also note, underlying computations assume an equal number of days in each
+#' year (365.25).
 #'
 #' @return The ages contained in `age` converted to years.
 #'
@@ -34,8 +36,8 @@
 #' )
 #'
 #' compute_age_years(
-#'   age = c(10, 520, 3650),
-#'   age_unit = c("YEARS", "WEEKS", "DAYS")
+#'   age = c(10, 520, 3650, 1000),
+#'   age_unit = c("YEARS", "WEEKS", "DAYS", NA_character_)
 #' )
 #'
 compute_age_years <- function(age,
@@ -57,9 +59,16 @@ compute_age_years <- function(age,
     ))
   }
 
+  if (length(age_unit) == 1) {
+    age_unit_rep <- rep(age_unit, length(age))
+  } else {
+    age_unit_rep <- age_unit
+  }
+
   age_years <- time_length(
-    duration(age,
-      units = tolower(age_unit)
+    duration(
+      num = if_else(is.na(age_unit_rep), NA_real_, age),
+      units = if_else(is.na(age_unit_rep), "years", tolower(age_unit_rep))
     ),
     unit = "years"
   )
