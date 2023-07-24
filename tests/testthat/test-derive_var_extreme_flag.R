@@ -83,7 +83,8 @@ test_that("derive_var_extreme_flag Test 3: flag_all = FALSE when mode is first",
   expect_dfs_equal(
     expected_output,
     actual_output,
-    keys = c("STUDYID", "USUBJID", "BASETYPE", "AVISITN", "ADTM", "FIRSTFL", "PARAM"))
+    keys = c("STUDYID", "USUBJID", "BASETYPE", "AVISITN", "ADTM", "FIRSTFL", "PARAM")
+  )
 })
 
 ## Test 4: flag_all = TRUE when mode is first ----
@@ -103,7 +104,8 @@ test_that("derive_var_extreme_flag Test 4: flag_all = TRUE when mode is first", 
   expect_dfs_equal(
     expected_output,
     actual_output,
-    keys = c("STUDYID", "USUBJID", "BASETYPE", "AVISITN", "ADTM", "FIRSTFL", "PARAM"))
+    keys = c("STUDYID", "USUBJID", "BASETYPE", "AVISITN", "ADTM", "FIRSTFL", "PARAM")
+  )
 })
 
 ## Test 5: flag_all = FALSE when mode is last ----
@@ -124,7 +126,8 @@ test_that("derive_var_extreme_flag Test 5: flag_all = FALSE when mode is last", 
   expect_dfs_equal(
     expected_output,
     actual_output,
-    keys = c("STUDYID", "USUBJID", "BASETYPE", "AVISITN", "ADTM", "LASTFL", "PARAM"))
+    keys = c("STUDYID", "USUBJID", "BASETYPE", "AVISITN", "ADTM", "LASTFL", "PARAM")
+  )
 })
 
 ## Test 6: flag_all = TRUE when mode is last ----
@@ -144,7 +147,8 @@ test_that("derive_var_extreme_flag Test 6: flag_all = TRUE when mode is last", {
   expect_dfs_equal(
     expected_output,
     actual_output,
-    keys = c("STUDYID", "USUBJID", "BASETYPE", "AVISITN", "ADTM", "LASTFL", "PARAM"))
+    keys = c("STUDYID", "USUBJID", "BASETYPE", "AVISITN", "ADTM", "LASTFL", "PARAM")
+  )
 })
 ## Test 7: case for missing order variables ----
 test_that("derive_var_extreme_flag Test 7: case for missing order variables", {
