@@ -137,7 +137,7 @@ test_that("print.source Test 13: `source` objects are printed as intended", {
     "dataset_name: \"ae\"",
     "filter: NULL",
     "date: AESTDTC",
-    "censor: 0L",
+    "censor: 0",
     "set_values_to:",
     "  EVENTDESC: \"AE\"",
     "  SRCDOM: \"AE\"",
