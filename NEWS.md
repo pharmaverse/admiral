@@ -1,3 +1,7 @@
+# admiral (development version)
+
+* The `derive_var_ontrtfl()` function has been updated to allow the case when the column passed in `ref_end_date` contains `NA` values. When these dates are missing, the treatment is assumed to b ongoing. (#1984)
+
 # admiral 0.12.0
 
 ## New Features
