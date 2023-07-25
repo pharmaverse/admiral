@@ -59,21 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -107,6 +92,7 @@
   <span class="va">order</span>,
   <span class="va">new_var</span>,
   <span class="va">mode</span>,
+  flag_all <span class="op">=</span> <span class="cn">FALSE</span>,
   check_type <span class="op">=</span> <span class="st">"warning"</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -143,6 +129,12 @@ for the first or last observation (depending on the mode) of each by group.</p>
 <p>Permitted Values: <code>"first"</code>, <code>"last"</code></p></dd>
 
 
+<dt>flag_all</dt>
+<dd><p>Flag setting</p>
+<p>A logical value where if set to <code>TRUE</code>, all records are flagged
+and no error or warning is issued if the first or last record is not unique.</p></dd>
+
+
 <dt>check_type</dt>
 <dd><p>Check uniqueness?</p>
 <p>If <code>"warning"</code> or <code>"error"</code> is specified, the specified message is issued
@@ -161,10 +153,11 @@ by variables and the order.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>For each group (with respect to the variables specified for the
-<code>by_vars</code> parameter), <code>new_var</code> is set to "Y" for the first or last observation
+<code>by_vars</code> parameter), <code>new_var</code> is set to <code>"Y"</code> for the first or last observation
 (with respect to the order specified for the <code>order</code> parameter and the flag mode
-specified for the <code>mode</code> parameter). Only observations included by the <code>filter</code> parameter
-are considered for flagging.
+specified for the <code>mode</code> parameter). In the case where the user wants to flag multiple records
+of a grouping, for example records that all happen on the same visit and time, the argument
+<code>flag_all</code> can be set to <code>TRUE</code>.
 Otherwise, <code>new_var</code> is set to <code>NA</code>. Thus, the direction of "worst" is considered fixed for
 all parameters in the dataset depending on the <code>order</code> and the <code>mode</code>, i.e. for every
 parameter the first or last record will be flagged across the whole dataset.</p>
@@ -432,6 +425,32 @@ parameter the first or last record will be flagged across the whole dataset.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 1023    ERYTHEMA  SEVERE      5     2 Y      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 1023    ERYTHEMA  MILD        8     3 <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 1023    AV BLOCK  MILD       22     4 <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Most severe AE first occurrence per patient (flag all cases)</span></span>
+<span class="r-in"><span class="va">example_ae</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span class="r-in">    TEMP_AESEVN <span class="op">=</span></span>
+<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">AESEV</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SEVERE"</span>, <span class="st">"MODERATE"</span>, <span class="st">"MILD"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu">derive_var_extreme_flag</span><span class="op">(</span></span>
+<span class="r-in">    new_var <span class="op">=</span> <span class="va">AOCCIFL</span>,</span>
+<span class="r-in">    by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span class="r-in">    order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">TEMP_AESEVN</span>, <span class="va">AESTDY</span><span class="op">)</span>,</span>
+<span class="r-in">    mode <span class="op">=</span> <span class="st">"first"</span>,</span>
+<span class="r-in">    flag_all <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span class="r-in">  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">AESTDY</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">AEDECOD</span>, <span class="va">AESEV</span>, <span class="va">AESTDY</span>, <span class="va">AOCCIFL</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID AEDECOD   AESEV  AESTDY AOCCIFL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1015    ERYTHEMA  MILD        2 Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 1015    PRURITUS  MILD        2 Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 1015    DIARRHOEA MILD        8 <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 1023    ERYTHEMA  MILD        3 <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 1023    ERYTHEMA  SEVERE      5 Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 1023    ERYTHEMA  MILD        8 <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 1023    AV BLOCK  MILD       22 <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Most severe AE first occurrence per patient per body system</span></span>
 <span class="r-in"><span class="va">example_ae</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
