@@ -407,10 +407,10 @@ test_that("derive_var_ontrtfl Test 14: start_date < ref_start_date and end_date 
 ## Test 15: if trt end date is missing, the obs may still be flagged ----
 test_that("derive_var_ontrtfl Test 15: if trt end date is missing, the obs may still be flagged", { # nolint
   adcm <- tibble::tribble(
-    ~USUBJID, ~ASTDT,            ~TRTSDT,           ~TRTEDT,    ~AENDT,
-    "P01",    ymd("2018-03-15"), ymd("2019-01-01"), NA,      ymd("2022-12-01"),
-    "P02",    ymd("2020-04-30"), ymd("2019-01-01"), NA,      ymd("2022-03-15"),
-    "P03",    ymd("2020-04-30"), ymd("2019-01-01"), NA,      NA,
+    ~USUBJID, ~ASTDT, ~TRTSDT, ~TRTEDT, ~AENDT,
+    "P01", ymd("2018-03-15"), ymd("2019-01-01"), NA, ymd("2022-12-01"),
+    "P02", ymd("2020-04-30"), ymd("2019-01-01"), NA, ymd("2022-03-15"),
+    "P03", ymd("2020-04-30"), ymd("2019-01-01"), NA, NA,
   ) %>%
     as.data.frame()
 
