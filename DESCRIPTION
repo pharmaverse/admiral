@@ -59,6 +59,7 @@ Suggests:
     DT,
     diffdf,
     knitr,
+    rmarkdown,
     methods,
     readxl,
     testthat (>= 3.0.0),
