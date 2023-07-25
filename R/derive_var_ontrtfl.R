@@ -244,7 +244,7 @@ derive_var_ontrtfl <- function(dataset,
       end_cond <- expr(
         (!!start_date <= !!ref_end_date + days(!!ref_end_window)) |
           is.na(!!ref_end_date)
-        )
+      )
     }
     dataset <- mutate(
       dataset,
