@@ -245,16 +245,17 @@ test_that("derive_vars_joined Test 7: new_vars expressions using variables from 
 ## Test 8: NULL new_vars will still remove .join columns ----
 test_that("derive_vars_joined Test 8: NULL new_vars will still remove .join columns", {
   myd <- data.frame(day = c(1, 2, 3), val = c(0, 17, 21))
-  expect_dfs_equal(
-    base = myd,
-    compare = derive_vars_joined(
+  expect_error(
+    derive_vars_joined(
       myd,
       dataset_add = myd,
       order = exprs(day),
       mode = "last",
       filter_join = day < day.join
     ),
-    keys = c("day", "val")
+    regexp = paste(
+      "The following columns in `dataset_add` have naming conflicts with `dataset`"
+    )
   )
 })
 ## Test 9: fixing a bug from issue 1966 ----

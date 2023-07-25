@@ -349,9 +349,20 @@ derive_vars_joined <- function(dataset,
 
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   filter_join <- assert_filter_cond(enexpr(filter_join), optional = TRUE)
-  original_new_vars <- new_vars
+
   if (is.null(new_vars)) {
     new_vars <- chr2vars(colnames(dataset_add))
+    preexisting_vars <- chr2vars(colnames(dataset))
+    if (any(new_vars %in% preexisting_vars[which(!(preexisting_vars %in% by_vars))])) {
+      err_msg <- sprintf(
+        paste(
+          "The following columns in `dataset_add` have naming conflicts with `dataset`,\n",
+          "please make the appropriate modifications to `new_vars`, with respect to:\n%s"
+        ),
+        enumerate(vars2chr(new_vars[which(new_vars %in% preexisting_vars)]))
+      )
+      abort(err_msg)
+    }
   }
 
   # number observations of the input dataset to get a unique key
@@ -404,7 +415,7 @@ derive_vars_joined <- function(dataset,
   }
 
   # merge new variables to the input dataset and rename them
-  data_final <- data %>%
+  data %>%
     derive_vars_merged(
       dataset_add = data_return,
       by_vars = exprs(!!!by_vars_left, !!tmp_obs_nr),
@@ -424,10 +435,4 @@ derive_vars_joined <- function(dataset,
       )
     ) %>%
     remove_tmp_vars()
-
-  if (is.null(original_new_vars)) {
-    data_final <- data_final %>%
-      select(-ends_with("join"))
-  }
-  return(data_final)
 }
