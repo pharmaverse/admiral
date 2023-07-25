@@ -371,7 +371,7 @@ derive_vars_joined <- function(dataset,
     filter_if(filter_add) %>%
     select(
       !!!by_vars,
-      !!!chr2vars(names(order)),
+      !!!replace_values_by_names(extract_vars(order)),
       !!!replace_values_by_names(join_vars),
       !!!intersect(unname(extract_vars(new_vars)), chr2vars(colnames(dataset_add)))
     )
@@ -394,12 +394,12 @@ derive_vars_joined <- function(dataset,
       data_return,
       by_vars = expr_c(by_vars_left, tmp_obs_nr),
       order = add_suffix_to_vars(
-        replace_values_by_names(order),
+        replace_values_by_names(extract_vars(order)),
         vars = common_vars,
         suffix = ".join"
       ),
       mode = mode,
-      check_type = "none"
+      check_type = check_type
     )
   }
 
