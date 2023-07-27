@@ -31,6 +31,9 @@
 - The `filter` argument in `derive_extreme_records()` was deprecated in favor of
 the `filter_add` using the next phase of the deprecation process. (#1950)
 
+- The `na_val` argument in `derive_var_shift()` has been deprecated in favor of 
+`missing_value` using the first phase of the deprecation process. (#2014)
+
 ## Documentation
 
 
