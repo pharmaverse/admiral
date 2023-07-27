@@ -406,7 +406,7 @@ derive_vars_joined <- function(dataset,
       data_return,
       by_vars = expr_c(by_vars_left, tmp_obs_nr),
       order = add_suffix_to_vars(
-        replace_values_by_names(extract_vars(order)),
+        replace_values_by_names(order),
         vars = common_vars,
         suffix = ".join"
       ),
