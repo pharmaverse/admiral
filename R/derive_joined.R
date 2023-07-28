@@ -352,18 +352,19 @@ derive_vars_joined <- function(dataset,
 
   if (is.null(new_vars)) {
     new_vars <- chr2vars(colnames(dataset_add))
-    preexisting_vars <- chr2vars(colnames(dataset))
-    preexisting_vars_no_by_vars <- preexisting_vars[which(!(preexisting_vars %in% by_vars))]
-    if (any(new_vars %in% preexisting_vars_no_by_vars)) {
-      err_msg <- sprintf(
-        paste(
-          "The following columns in `dataset_add` have naming conflicts with `dataset`,\n",
-          "please make the appropriate modifications to `new_vars`, with respect to:\n%s"
-        ),
-        enumerate(vars2chr(new_vars[which(new_vars %in% preexisting_vars_no_by_vars)]))
-      )
-      abort(err_msg)
-    }
+  }
+  preexisting_vars <- chr2vars(colnames(dataset))
+  preexisting_vars_no_by_vars <- preexisting_vars[which(!(preexisting_vars %in% by_vars))]
+  duplicates <- intersect(replace_values_by_names(new_vars), preexisting_vars_no_by_vars)
+  if (length(duplicates) > 0) {
+    err_msg <- sprintf(
+      paste(
+        "The following columns in `dataset_add` have naming conflicts with `dataset`,\n",
+        "please make the appropriate modifications to `new_vars`, with respect to:\n%s"
+      ),
+      enumerate(vars2chr(duplicates))
+    )
+    abort(err_msg)
   }
 
   # number observations of the input dataset to get a unique key
