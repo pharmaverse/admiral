@@ -231,7 +231,7 @@ derive_param_computed(
 )
 
 # Example 3: Using data from an additional dataset and other variables than AVAL
-qs <- tibble::tribble(
+qs <- tribble(
   ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
   "1",      "WEEK 2",  "CHSF112", NA,               1,
   "1",      "WEEK 2",  "CHSF113", "Yes",           NA,
@@ -241,13 +241,14 @@ qs <- tibble::tribble(
   "1",      "WEEK 4",  "CHSF114", NA,               1
 )
 
-adchsf <- tibble::tribble(
-  ~USUBJID, ~AVISIT,  ~PARAMCD, ~QSORRES, ~QSSTRESN, ~AVAL,
-  "1",      "WEEK 2", "CHSF12", NA,       1,             6,
-  "1",      "WEEK 2", "CHSF14", NA,       1,             6,
-  "1",      "WEEK 4", "CHSF12", NA,       2,            12,
-  "1",      "WEEK 4", "CHSF14", NA,       1,             6
-)
+adchsf <- tribble(
+  ~USUBJID, ~AVISIT,  ~PARAMCD, ~QSSTRESN, ~AVAL,
+  "1",      "WEEK 2", "CHSF12", 1,             6,
+  "1",      "WEEK 2", "CHSF14", 1,             6,
+  "1",      "WEEK 4", "CHSF12", 2,            12,
+  "1",      "WEEK 4", "CHSF14", 1,             6
+) \%>\%
+  mutate(QSORRES = NA_character_)
 
 derive_param_computed(
   adchsf,

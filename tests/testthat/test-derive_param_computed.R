@@ -176,11 +176,13 @@ test_that("derive_param_computed Test 5: `dataset_add`, creating new parameters"
   )
 
   adchsf <- tibble::tribble(
-    ~USUBJID, ~AVISIT,  ~PARAMCD, ~QSORRES, ~QSSTRESN, ~AVAL,
-    "1",      "WEEK 2", "CHSF12", NA,       1,             6,
-    "1",      "WEEK 2", "CHSF14", NA,       1,             6,
-    "1",      "WEEK 4", "CHSF12", NA,       2,            12,
-    "1",      "WEEK 4", "CHSF14", NA,       1,             6
+    ~USUBJID, ~AVISIT,  ~PARAMCD, ~QSSTRESN, ~AVAL,
+    "1",      "WEEK 2", "CHSF12", 1,             6,
+    "1",      "WEEK 2", "CHSF14", 1,             6,
+    "1",      "WEEK 4", "CHSF12", 2,            12,
+    "1",      "WEEK 4", "CHSF14", 1,             6
+  ) %>% mutate(
+    QSORRES = NA_character_
   )
 
   expected <- bind_rows(
