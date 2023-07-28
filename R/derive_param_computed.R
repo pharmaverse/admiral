@@ -264,8 +264,8 @@
 #'   "2",      "TBILI2", "N",    "2021-11-11", NA_character_,
 #'   "3",      "ALK2",   "N",    "2021-04-03", NA_character_,
 #'   "3",      "TBILI2", "N",    "2021-04-04", NA_character_
-#'   ) %>%
-#'     mutate(ADTM = ymd(ADTM))
+#' ) %>%
+#'   mutate(ADTM = ymd(ADTM))
 #'
 #' derive_param_computed(
 #'   dataset_add = adlb_tbilialk,
@@ -315,7 +315,7 @@ derive_param_computed <- function(dataset = NULL,
       "derive_param_computed(analysis_value = )",
       "derive_param_computed(set_values_to = )"
     )
-    set_values_to = exprs(!!analysis_var := !!enexpr(analysis_value), !!!set_values_to)
+    set_values_to <- exprs(!!analysis_var := !!enexpr(analysis_value), !!!set_values_to)
   }
 
   parameters <- assert_parameters_argument(parameters)
@@ -367,7 +367,8 @@ derive_param_computed <- function(dataset = NULL,
       !!!parse_exprs(map_chr(
         analysis_vars_chr,
         ~ str_c("!is.na(", .x, ")")
-      )))
+      ))
+    )
   }
   hori_data <- hori_data %>%
     process_set_values_to(set_values_to) %>%

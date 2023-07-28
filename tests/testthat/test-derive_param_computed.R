@@ -14,7 +14,8 @@ test_that("derive_param_computed Test 1: new observations are derived correctly"
   )
 
   new_obs <-
-    inner_join(input %>% filter(PARAMCD == "DIABP") %>% select(USUBJID, VISIT, AVAL),
+    inner_join(
+      input %>% filter(PARAMCD == "DIABP") %>% select(USUBJID, VISIT, AVAL),
       input %>% filter(PARAMCD == "SYSBP") %>% select(USUBJID, VISIT, AVAL),
       by = c("USUBJID", "VISIT"),
       suffix = c(".DIABP", ".SYSBP")
@@ -388,19 +389,19 @@ test_that("derive_param_computed Test 9: compute multiple variables, keep_nas", 
   expect_dfs_equal(
     base = expected,
     compare = derive_param_computed(
-    dataset_add = adlb_tbilialk,
-    by_vars = exprs(USUBJID),
-    parameters = c("ALK2", "TBILI2"),
-    set_values_to = exprs(
-      AVALC = if_else(AVALC.TBILI2 == "Y" & AVALC.ALK2 == "Y", "Y", "N"),
-      ADTM = pmax(ADTM.TBILI2, ADTM.ALK2),
-      ADTF = if_else(ADTM == ADTM.TBILI2, ADTF.TBILI2, ADTF.ALK2),
-      PARAMCD = "TB2AK2",
-      PARAM = "TBILI > 2 times ULN and ALKPH <= 2 times ULN"
+      dataset_add = adlb_tbilialk,
+      by_vars = exprs(USUBJID),
+      parameters = c("ALK2", "TBILI2"),
+      set_values_to = exprs(
+        AVALC = if_else(AVALC.TBILI2 == "Y" & AVALC.ALK2 == "Y", "Y", "N"),
+        ADTM = pmax(ADTM.TBILI2, ADTM.ALK2),
+        ADTF = if_else(ADTM == ADTM.TBILI2, ADTF.TBILI2, ADTF.ALK2),
+        PARAMCD = "TB2AK2",
+        PARAM = "TBILI > 2 times ULN and ALKPH <= 2 times ULN"
+      ),
+      keep_nas = TRUE
     ),
-    keep_nas = TRUE
-  ),
-  keys = c("USUBJID")
+    keys = c("USUBJID")
   )
 })
 
@@ -419,10 +420,11 @@ test_that("derive_param_computed Test 10: deprecation warning if analysis_value 
   )
 
   new_obs <-
-    inner_join(input %>% filter(PARAMCD == "DIABP") %>% select(USUBJID, VISIT, AVAL),
-               input %>% filter(PARAMCD == "SYSBP") %>% select(USUBJID, VISIT, AVAL),
-               by = c("USUBJID", "VISIT"),
-               suffix = c(".DIABP", ".SYSBP")
+    inner_join(
+      input %>% filter(PARAMCD == "DIABP") %>% select(USUBJID, VISIT, AVAL),
+      input %>% filter(PARAMCD == "SYSBP") %>% select(USUBJID, VISIT, AVAL),
+      by = c("USUBJID", "VISIT"),
+      suffix = c(".DIABP", ".SYSBP")
     ) %>%
     mutate(
       AVAL = (2 * AVAL.DIABP + AVAL.SYSBP) / 3,
