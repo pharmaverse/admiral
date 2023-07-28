@@ -176,6 +176,7 @@ dataset are set to \code{NA}.
 }
 \examples{
 library(tibble)
+library(dplyr)
 library(lubridate)
 
 # Example 1: Derive MAP
@@ -278,8 +279,8 @@ adlb_tbilialk <- tribble(
   "2",      "TBILI2", "N",    "2021-11-11", NA_character_,
   "3",      "ALK2",   "N",    "2021-04-03", NA_character_,
   "3",      "TBILI2", "N",    "2021-04-04", NA_character_
-  ) \%>\%
-    mutate(ADTM = ymd(ADTM))
+) \%>\%
+  mutate(ADTM = ymd(ADTM))
 
 derive_param_computed(
   dataset_add = adlb_tbilialk,

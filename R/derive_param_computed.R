@@ -162,6 +162,7 @@
 #'
 #' @examples
 #' library(tibble)
+#' library(dplyr)
 #' library(lubridate)
 #'
 #' # Example 1: Derive MAP
@@ -438,14 +439,14 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'
 #'   *Permitted Values:* A character vector of `PARAMCD` values or a list of expressions
 #'
-#' @param analysis_value
+#' @param set_values_to
 #'
 #'   All variables of the form `<variable>.<parameter>` like `AVAL.WEIGHT` are
 #'   added to the input dataset. They are set to the value of the variable for
 #'   the parameter. E.g., `AVAL.WEIGHT` is set to the value of `AVAL` where
 #'   `PARAMCD == "WEIGHT"`.
 #'
-#'   *Permitted Values:* An unquoted expression
+#'   *Permitted Values:* A list of expressions
 #'
 #' @param filter Filter condition used for restricting the input dataset
 #'
@@ -536,7 +537,7 @@ get_hori_data <- function(dataset,
   )
 
   # horizontalize data, e.g., AVAL for PARAMCD = "PARAMx" -> AVAL.PARAMx
-  analysis_vars <- flatten(map(set_values_to, extract_vars))
+  analysis_vars <- flatten(map(unname(set_values_to), extract_vars))
   analysis_vars_chr <- vars2chr(analysis_vars)
   multi_dot_names <- str_count(analysis_vars_chr, "\\.") > 1
   if (any(multi_dot_names)) {

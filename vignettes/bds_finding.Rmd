@@ -1018,8 +1018,8 @@ advs_ex3 <- derive_param_computed(
   advs,
   by_vars = exprs(USUBJID, VISIT, ATPT),
   parameters = c("SYSBP", "DIABP"),
-  analysis_value = (AVAL.SYSBP - AVAL.DIABP) / 3 + AVAL.DIABP,
   set_values_to = exprs(
+    AVAL = (AVAL.SYSBP - AVAL.DIABP) / 3 + AVAL.DIABP,
     PARAMCD = "MAP2",
     PARAM = "Mean Arterial Pressure 2 (mmHg)"
   )

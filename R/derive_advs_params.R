@@ -154,8 +154,10 @@ derive_param_map <- function(dataset,
     filter = !!filter,
     parameters = c(sysbp_code, diabp_code, hr_code),
     by_vars = by_vars,
-    analysis_value = !!analysis_value,
-    set_values_to = set_values_to
+    set_values_to = exprs(
+      AVAL = !!analysis_value,
+      !!!set_values_to
+    )
   )
 }
 
@@ -427,8 +429,10 @@ derive_param_bsa <- function(dataset,
     filter = !!filter,
     parameters = parameters,
     by_vars = by_vars,
-    analysis_value = !!bsa_formula,
-    set_values_to = set_values_to,
+    set_values_to = exprs(
+      AVAL = !!bsa_formula,
+      !!!set_values_to
+    ),
     constant_parameters = constant_parameters,
     constant_by_vars = constant_by_vars
   )
@@ -712,8 +716,10 @@ derive_param_bmi <- function(dataset,
     filter = !!filter,
     parameters = parameters,
     by_vars = by_vars,
-    analysis_value = !!bmi_formula,
-    set_values_to = set_values_to,
+    set_values_to = exprs(
+      AVAL = !!bmi_formula,
+      !!!set_values_to
+    ),
     constant_parameters = constant_parameters,
     constant_by_vars = constant_by_vars
   )
