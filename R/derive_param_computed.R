@@ -59,6 +59,8 @@
 #'
 #' @param analysis_var Analysis variable
 #'
+#'   *Deprecated*, please use `set_values_to` instead.
+#'
 #'   The specified variable is set to the value of `analysis_value` for the new
 #'   observations.
 #'
@@ -105,6 +107,8 @@
 #'
 #' @param analysis_value Definition of the analysis value
 #'
+#'   *Deprecated*, please use `set_values_to` instead.
+#'
 #'   An expression defining the analysis value (`AVAL`) of the new parameter is
 #'   expected. The values of variables of the parameters specified by
 #'   `parameters` can be accessed using `<variable name>.<parameter code>`,
@@ -117,8 +121,18 @@
 #' @param set_values_to Variables to be set
 #'
 #'   The specified variables are set to the specified values for the new
-#'   observations. For example `exprs(PARAMCD = "MAP")` defines the parameter
-#'   code for the new parameter.
+#'   observations. For example
+#'   ```
+#'   exprs(
+#'     AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+#'     PARAMCD = "MAP"
+#'   )```
+#'   defines the analysis value and parameter
+#'   code for the new parameter. The values of variables of the parameters
+#'   specified by `parameters` can be accessed using `<variable name>.<parameter
+#'   code>`, e.g., `AVAL.SYSBP`.
+#'
+#'   Variable names in the expression must not contain more than one dot.
 #'
 #'   *Permitted Values:* List of variable-value pairs
 #'
@@ -241,8 +255,16 @@ derive_param_computed <- function(dataset = NULL,
                                   set_values_to,
                                   filter = NULL,
                                   constant_by_vars = NULL,
-                                  constant_parameters = NULL) {
+                                  constant_parameters = NULL,
+                                  keep_nas = FALSE) {
   assert_vars(by_vars)
+  if (!missing(analysis_var)) {
+    deprecate_warn(
+      "0.12.0",
+      "derive_param_computed(analysis_var = )",
+      "derive_param_computed(set_values_to = )"
+    )
+  }
   analysis_var <- assert_symbol(enexpr(analysis_var))
   assert_vars(constant_by_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
@@ -252,7 +274,15 @@ derive_param_computed <- function(dataset = NULL,
   if (!is.null(set_values_to$PARAMCD) && !is.null(dataset)) {
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
-  analysis_value <- enexpr(analysis_value)
+  assert_logical_scalar(keep_nas)
+  if (!missing(analysis_value)) {
+    deprecate_warn(
+      "0.12.0",
+      "derive_param_computed(analysis_value = )",
+      "derive_param_computed(set_values_to = )"
+    )
+    set_values_to = exprs(!!analysis_var := !!enexpr(analysis_value), !!!set_values_to)
+  }
 
   parameters <- assert_parameters_argument(parameters)
   constant_parameters <- assert_parameters_argument(constant_parameters, optional = TRUE)
@@ -270,7 +300,7 @@ derive_param_computed <- function(dataset = NULL,
     data_source,
     by_vars = by_vars,
     parameters = parameters,
-    analysis_value = !!analysis_value,
+    set_values_to = set_values_to,
     filter = !!filter
   )
   hori_data <- hori_return[["hori_data"]]
@@ -284,7 +314,7 @@ derive_param_computed <- function(dataset = NULL,
       data_source,
       by_vars = constant_by_vars,
       parameters = constant_parameters,
-      analysis_value = !!analysis_value,
+      set_values_to = set_values_to,
       filter = !!filter
     )[["hori_data"]]
 
@@ -296,13 +326,16 @@ derive_param_computed <- function(dataset = NULL,
   }
 
   # add analysis value (AVAL) and parameter variables, e.g., PARAMCD
-  hori_data <- hori_data %>%
+  if (!keep_nas) {
     # keep only observations where all analysis values are available
-    filter(!!!parse_exprs(map_chr(
-      analysis_vars_chr,
-      ~ str_c("!is.na(", .x, ")")
-    ))) %>%
-    process_set_values_to(exprs(!!analysis_var := !!analysis_value)) %>%
+    hori_data <- filter(
+      hori_data,
+      !!!parse_exprs(map_chr(
+        analysis_vars_chr,
+        ~ str_c("!is.na(", .x, ")")
+      )))
+  }
+  hori_data <- hori_data %>%
     process_set_values_to(set_values_to) %>%
     select(-all_of(analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]))
 
@@ -395,12 +428,12 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 get_hori_data <- function(dataset,
                           by_vars,
                           parameters,
-                          analysis_value,
+                          set_values_to,
                           filter) {
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = by_vars)
   parameters <- assert_parameters_argument(parameters)
-  analysis_value <- enexpr(analysis_value)
+  assert_expr_list(set_values_to)
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
 
   # determine parameter values
@@ -468,7 +501,7 @@ get_hori_data <- function(dataset,
   )
 
   # horizontalize data, e.g., AVAL for PARAMCD = "PARAMx" -> AVAL.PARAMx
-  analysis_vars <- extract_vars(analysis_value)
+  analysis_vars <- flatten(map(set_values_to, extract_vars))
   analysis_vars_chr <- vars2chr(analysis_vars)
   multi_dot_names <- str_count(analysis_vars_chr, "\\.") > 1
   if (any(multi_dot_names)) {
@@ -507,6 +540,6 @@ get_hori_data <- function(dataset,
   list(
     hori_data = bind_rows(hori_data) %>%
       select(!!!by_vars, any_of(analysis_vars_chr)),
-    analysis_vars_chr = analysis_vars_chr
+    analysis_vars_chr = analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]
   )
 }

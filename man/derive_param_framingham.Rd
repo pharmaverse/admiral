@@ -42,10 +42,21 @@ Permitted Values: list of variables}
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+observations. For example
 
-\emph{Permitted Values:} List of variable-value pairs}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{exprs(
+  AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+  PARAMCD = "MAP"
+)```
+defines the analysis value and parameter
+code for the new parameter. The values of variables of the parameters
+specified by `parameters` can be accessed using `<variable name>.<parameter
+code>`, e.g., `AVAL.SYSBP`.
+
+Variable names in the expression must not contain more than one dot.
+
+*Permitted Values:* List of variable-value pairs
+}\if{html}{\out{</div>}}}
 
 \item{sysbp_code}{Systolic blood pressure parameter code
 

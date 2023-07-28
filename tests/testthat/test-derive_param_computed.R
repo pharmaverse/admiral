@@ -33,8 +33,8 @@ test_that("derive_param_computed Test 1: new observations are derived correctly"
       input,
       parameters = exprs(SYSBP, DIABP),
       by_vars = exprs(USUBJID, VISIT),
-      analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
       set_values_to = exprs(
+        AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
         PARAMCD = "MAP",
         PARAM = "Mean arterial pressure (mmHg)",
         AVALU = "mmHg"
@@ -81,8 +81,8 @@ test_that("derive_param_computed Test 2: new observations with constant paramete
       by_vars = exprs(USUBJID, VISIT),
       constant_parameters = c("HEIGHT"),
       constant_by_vars = exprs(USUBJID),
-      analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
       set_values_to = exprs(
+        AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
         PARAMCD = "BMI",
         PARAM = "Body Mass Index (kg/m2)",
         AVALU = "kg/m2"
@@ -113,8 +113,8 @@ test_that("derive_param_computed Test 3: no new observations if filtered dataset
       filter = VISIT == "WEEK 24",
       parameters = c("SYSBP", "DIABP"),
       by_vars = exprs(USUBJID, VISIT),
-      analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
       set_values_to = exprs(
+        AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
         PARAMCD = "MAP",
         PARAM = "Mean arterial pressure (mmHg)",
         AVALU = "mmHg"
@@ -147,8 +147,8 @@ test_that("derive_param_computed Test 4: no new observations are added if a para
       filter = PARAMCD == "DIABP",
       parameters = exprs(SYSBP, DIABP),
       by_vars = exprs(USUBJID, VISIT),
-      analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
       set_values_to = exprs(
+        AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
         PARAMCD = "MAP",
         PARAM = "Mean arterial pressure (mmHg)",
         AVALU = "mmHg"
@@ -199,16 +199,18 @@ test_that("derive_param_computed Test 5: `dataset_add`, creating new parameters"
       dataset_add = qs,
       by_vars = exprs(USUBJID, AVISIT),
       parameters = exprs(CHSF12, CHSF13 = QSTESTCD %in% c("CHSF113", "CHSF213"), CHSF14),
-      analysis_value = case_when(
-        QSORRES.CHSF13 == "Not applicable" ~ 0,
-        QSORRES.CHSF13 == "Yes" ~ 38,
-        QSORRES.CHSF13 == "No" ~ if_else(
-          QSSTRESN.CHSF12 > QSSTRESN.CHSF14,
-          25,
-          0
-        )
-      ),
-      set_values_to = exprs(PARAMCD = "CHSF13")
+      set_values_to = exprs(
+        AVAL = case_when(
+          QSORRES.CHSF13 == "Not applicable" ~ 0,
+          QSORRES.CHSF13 == "Yes" ~ 38,
+          QSORRES.CHSF13 == "No" ~ if_else(
+            QSSTRESN.CHSF12 > QSSTRESN.CHSF14,
+            25,
+            0
+          )
+        ),
+        PARAMCD = "CHSF13"
+      )
     ),
     keys = c("USUBJID", "PARAMCD", "AVISIT")
   )
@@ -242,16 +244,18 @@ test_that("derive_param_computed Test 6: no input dataset", {
         CHSF13 = QSTESTCD %in% c("CHSF113", "CHSF213"),
         CHSF14 = QSTESTCD == "CHSF114"
       ),
-      analysis_value = case_when(
-        QSORRES.CHSF13 == "Not applicable" ~ 0,
-        QSORRES.CHSF13 == "Yes" ~ 38,
-        QSORRES.CHSF13 == "No" ~ if_else(
-          QSSTRESN.CHSF12 > QSSTRESN.CHSF14,
-          25,
-          0
-        )
-      ),
-      set_values_to = exprs(PARAMCD = "CHSF13")
+      set_values_to = exprs(
+        AVAL = case_when(
+          QSORRES.CHSF13 == "Not applicable" ~ 0,
+          QSORRES.CHSF13 == "Yes" ~ 38,
+          QSORRES.CHSF13 == "No" ~ if_else(
+            QSSTRESN.CHSF12 > QSSTRESN.CHSF14,
+            25,
+            0
+          )
+        ),
+        PARAMCD = "CHSF13"
+      )
     ),
     keys = c("USUBJID", "PARAMCD", "AVISIT")
   )
@@ -298,8 +302,8 @@ test_that("derive_param_computed Test 7: expression in constant_parameters", {
       by_vars = exprs(USUBJID, VISIT),
       constant_parameters = exprs("HEIGHT" = VSTESTCD == "HGHT"),
       constant_by_vars = exprs(USUBJID),
-      analysis_value = AVAL.WEIGHT / (VSSTRESN.HEIGHT / 100)^2,
       set_values_to = exprs(
+        AVAL = AVAL.WEIGHT / (VSSTRESN.HEIGHT / 100)^2,
         PARAMCD = "BMI",
         PARAM = "Body Mass Index (kg/m2)",
         AVALU = "kg/m2"
@@ -329,8 +333,8 @@ test_that("derive_param_computed Test 8: no new observations if a constant param
       by_vars = exprs(USUBJID, VISIT),
       constant_parameters = c("HEIGHT"),
       constant_by_vars = exprs(USUBJID),
-      analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
       set_values_to = exprs(
+        AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
         PARAMCD = "BMI",
         PARAM = "Body Mass Index (kg/m2)",
         AVALU = "kg/m2"
@@ -354,9 +358,120 @@ test_that("derive_param_computed Test 8: no new observations if a constant param
   )
 })
 
+## Test 9: compute multiple variables ----
+test_that("derive_param_computed Test 9: compute multiple variables, keep_nas", {
+  adlb_tbilialk <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVALC, ~ADTM,        ~ADTF,
+    "1",      "ALK2",   "Y",    "2021-05-13", NA_character_,
+    "1",      "TBILI2", "Y",    "2021-06-30", "D",
+    "2",      "ALK2",   "Y",    "2021-12-31", "M",
+    "2",      "TBILI2", "N",    "2021-11-11", NA_character_,
+    "3",      "ALK2",   "N",    "2021-04-03", NA_character_,
+    "3",      "TBILI2", "N",    "2021-04-04", NA_character_
+  ) %>%
+    mutate(
+      ADTM = lubridate::ymd(ADTM)
+    )
+
+  expected <- tibble::tribble(
+    ~USUBJID, ~AVALC, ~ADTM,        ~ADTF,
+    "1",      "Y",    "2021-06-30", "D",
+    "2",      "N",    "2021-12-31", "M",
+    "3",      "N",    "2021-04-04", NA_character_
+  ) %>%
+    mutate(
+      ADTM = lubridate::ymd(ADTM),
+      PARAMCD = "TB2AK2",
+      PARAM = "TBILI > 2 times ULN and ALKPH <= 2 times ULN"
+    )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = derive_param_computed(
+    dataset_add = adlb_tbilialk,
+    by_vars = exprs(USUBJID),
+    parameters = c("ALK2", "TBILI2"),
+    set_values_to = exprs(
+      AVALC = if_else(AVALC.TBILI2 == "Y" & AVALC.ALK2 == "Y", "Y", "N"),
+      ADTM = pmax(ADTM.TBILI2, ADTM.ALK2),
+      ADTF = if_else(ADTM == ADTM.TBILI2, ADTF.TBILI2, ADTF.ALK2),
+      PARAMCD = "TB2AK2",
+      PARAM = "TBILI > 2 times ULN and ALKPH <= 2 times ULN"
+    ),
+    keep_nas = TRUE
+  ),
+  keys = c("USUBJID")
+  )
+})
+
+## Test 10: deprecation warning if analysis_value is used ----
+test_that("derive_param_computed Test 10: deprecation warning if analysis_value is used", {
+  input <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+    "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
+    "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
+    "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "BASELINE",
+    "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "WEEK 2",
+    "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, "mmHg", "BASELINE",
+    "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, "mmHg", "WEEK 2",
+    "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, "mmHg", "BASELINE",
+    "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
+  )
+
+  new_obs <-
+    inner_join(input %>% filter(PARAMCD == "DIABP") %>% select(USUBJID, VISIT, AVAL),
+               input %>% filter(PARAMCD == "SYSBP") %>% select(USUBJID, VISIT, AVAL),
+               by = c("USUBJID", "VISIT"),
+               suffix = c(".DIABP", ".SYSBP")
+    ) %>%
+    mutate(
+      AVAL = (2 * AVAL.DIABP + AVAL.SYSBP) / 3,
+      PARAMCD = "MAP",
+      PARAM = "Mean arterial pressure (mmHg)",
+      AVALU = "mmHg"
+    ) %>%
+    select(-AVAL.DIABP, -AVAL.SYSBP)
+  expected_output <- bind_rows(input, new_obs)
+
+  expect_warning(
+    derive_param_computed(
+      input,
+      parameters = exprs(SYSBP, DIABP),
+      by_vars = exprs(USUBJID, VISIT),
+      analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+      set_values_to = exprs(
+        PARAMCD = "MAP",
+        PARAM = "Mean arterial pressure (mmHg)",
+        AVALU = "mmHg"
+      )
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
+
+  expect_dfs_equal(
+    suppress_warning(
+      derive_param_computed(
+        input,
+        parameters = exprs(SYSBP, DIABP),
+        by_vars = exprs(USUBJID, VISIT),
+        analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+        set_values_to = exprs(
+          PARAMCD = "MAP",
+          PARAM = "Mean arterial pressure (mmHg)",
+          AVALU = "mmHg"
+        )
+      ),
+      regexpr = "is deprecated"
+    ),
+    expected_output,
+    keys = c("USUBJID", "PARAMCD", "VISIT")
+  )
+})
+
+
 # assert_parameters_argument ----
-## Test 9: error if argument is of wrong type ----
-test_that("assert_parameters_argument Test 9: error if argument is of wrong type", {
+## Test 11: error if argument is of wrong type ----
+test_that("assert_parameters_argument Test 11: error if argument is of wrong type", {
   expect_error(
     assert_parameters_argument(myparameters <- c(1, 2, 3)),
     regexp = paste(
@@ -368,8 +483,8 @@ test_that("assert_parameters_argument Test 9: error if argument is of wrong type
 })
 
 # get_hori_data ----
-## Test 10: error if variables with more than one dot ----
-test_that("get_hori_data Test 10: error if variables with more than one dot", {
+## Test 12: error if variables with more than one dot ----
+test_that("get_hori_data Test 12: error if variables with more than one dot", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
@@ -387,7 +502,7 @@ test_that("get_hori_data Test 10: error if variables with more than one dot", {
       input,
       parameters = exprs(SYSBP, DIABP),
       by_vars = exprs(USUBJID, VISIT),
-      analysis_value = (AVAL.SYSBP + 2 * AVAL.DIA.BP) / 3,
+      set_values_to = exprs(AVAL = (AVAL.SYSBP + 2 * AVAL.DIA.BP) / 3),
       filter = NULL
     ),
     regexp = paste(

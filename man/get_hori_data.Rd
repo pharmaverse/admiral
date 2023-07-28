@@ -4,7 +4,7 @@
 \alias{get_hori_data}
 \title{Creating Temporary Parameters and \verb{<variable>.<parameter>} Variables}
 \usage{
-get_hori_data(dataset, by_vars, parameters, analysis_value, filter)
+get_hori_data(dataset, by_vars, parameters, set_values_to, filter)
 }
 \arguments{
 \item{dataset}{Input dataset}
@@ -20,17 +20,17 @@ expression the observations to select.
 
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions}
 
-\item{analysis_value}{All variables of the form \verb{<variable>.<parameter>} like \code{AVAL.WEIGHT} are
-added to the input dataset. They are set to the value of the variable for
-the parameter. E.g., \code{AVAL.WEIGHT} is set to the value of \code{AVAL} where
-\code{PARAMCD == "WEIGHT"}.
-
-\emph{Permitted Values:} An unquoted expression}
-
 \item{filter}{Filter condition used for restricting the input dataset
 
 The specified filter condition is used in the warnings only. It is not
 applied to the input dataset.
+
+\emph{Permitted Values:} An unquoted expression}
+
+\item{analysis_value}{All variables of the form \verb{<variable>.<parameter>} like \code{AVAL.WEIGHT} are
+added to the input dataset. They are set to the value of the variable for
+the parameter. E.g., \code{AVAL.WEIGHT} is set to the value of \code{AVAL} where
+\code{PARAMCD == "WEIGHT"}.
 
 \emph{Permitted Values:} An unquoted expression}
 }

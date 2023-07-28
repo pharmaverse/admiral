@@ -8,6 +8,13 @@
 
 - The function `derive_var_extreme_flag()` has a new function argument, `flag_all` that additionally flags all records if the first or last record is not unique. (#1979)
 
+- The function `derive_param_computed()` was enhanced (#1968):
+
+  - The `analysis_value` and `analysis_var` argument were deprecated in favor of
+  `set_values_to`. This enables to compute more than one variable.
+  - The `keep_nas` argument was added. If it is set to `TRUE`, observations are
+  created even if values contributing to the computed values are `NA`.
+
 ## Breaking Changes
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)
 

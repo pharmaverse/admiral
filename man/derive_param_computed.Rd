@@ -14,7 +14,8 @@ derive_param_computed(
   set_values_to,
   filter = NULL,
   constant_by_vars = NULL,
-  constant_parameters = NULL
+  constant_parameters = NULL,
+  keep_nas = FALSE
 )
 }
 \arguments{
@@ -69,12 +70,16 @@ parameter code \code{"HGHT"}.
 
 \item{analysis_var}{Analysis variable
 
+\emph{Deprecated}, please use \code{set_values_to} instead.
+
 The specified variable is set to the value of \code{analysis_value} for the new
 observations.
 
 \emph{Permitted Values}: An unquoted symbol}
 
 \item{analysis_value}{Definition of the analysis value
+
+\emph{Deprecated}, please use \code{set_values_to} instead.
 
 An expression defining the analysis value (\code{AVAL}) of the new parameter is
 expected. The values of variables of the parameters specified by
@@ -88,10 +93,21 @@ Variable names in the expression must not contain more than one dot.
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+observations. For example
 
-\emph{Permitted Values:} List of variable-value pairs}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{exprs(
+  AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+  PARAMCD = "MAP"
+)```
+defines the analysis value and parameter
+code for the new parameter. The values of variables of the parameters
+specified by `parameters` can be accessed using `<variable name>.<parameter
+code>`, e.g., `AVAL.SYSBP`.
+
+Variable names in the expression must not contain more than one dot.
+
+*Permitted Values:* List of variable-value pairs
+}\if{html}{\out{</div>}}}
 
 \item{filter}{Filter condition
 
