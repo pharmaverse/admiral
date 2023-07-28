@@ -14,7 +14,9 @@
 #'
 #' @param to_var Variable containing value to shift to.
 #'
-#' @param na_val Character string to replace missing values in `from_var` or `to_var`.
+#' @param na_val *Deprecated*, please use `missing_value` instead.
+#'
+#' @param missing_value Character string to replace missing values in `from_var` or `to_var`.
 #'
 #'  Default: "NULL"
 #'
@@ -24,7 +26,7 @@
 #'
 #' @details `new_var` is derived by concatenating the values of `from_var` to values of `to_var`
 #' (e.g. "NORMAL to HIGH"). When `from_var` or `to_var` has missing value, the
-#' missing value is replaced by `na_val` (e.g. "NORMAL to NULL").
+#' missing value is replaced by `missing_value` (e.g. "NORMAL to NULL").
 #'
 #'
 #' @return The input dataset with the character shift variable added
@@ -71,20 +73,28 @@ derive_var_shift <- function(dataset,
                              new_var,
                              from_var,
                              to_var,
-                             na_val = "NULL",
+                             na_val,
+                             missing_value = "NULL",
                              sep_val = " to ") {
+  ### BEGIN DEPRECATION
+  if (!missing(na_val)) {
+    deprecate_warn("0.12.0", "derive_var_shift(na_val = )", "derive_var_shift(missing_value = )")
+    missing_value <- na_val
+  }
+  ### END DEPRECATION
+
   new_var <- assert_symbol(enexpr(new_var))
   from_var <- assert_symbol(enexpr(from_var))
   to_var <- assert_symbol(enexpr(to_var))
-  na_val <- assert_character_scalar(na_val)
+  missing_value <- assert_character_scalar(missing_value)
   sep_val <- assert_character_scalar(sep_val)
   assert_data_frame(dataset, required_vars = exprs(!!from_var, !!to_var))
 
   # Derive shift variable. If from_var or to_var has missing value then set to na_val.
   dataset %>%
     mutate(
-      temp_from_var = if_else(is.na(!!from_var), !!na_val, as.character(!!from_var)),
-      temp_to_var = if_else(is.na(!!to_var), !!na_val, as.character(!!to_var))
+      temp_from_var = if_else(is.na(!!from_var), !!missing_value, as.character(!!from_var)),
+      temp_to_var = if_else(is.na(!!to_var), !!missing_value, as.character(!!to_var))
     ) %>%
     mutate(
       !!new_var := paste(temp_from_var, temp_to_var, sep = !!sep_val)
