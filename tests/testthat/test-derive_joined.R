@@ -242,8 +242,9 @@ test_that("derive_vars_joined Test 7: new_vars expressions using variables from 
     keys = c("USUBJID", "AESEQ")
   )
 })
-## Test 8: NULL new_vars will still remove .join columns ----
-test_that("derive_vars_joined Test 8: NULL new_vars will still remove .join columns", {
+
+## Test 8: error if new_vars are already in dataset ----
+test_that("derive_vars_joined Test 8: error if new_vars are already in dataset", {
   myd <- data.frame(day = c(1, 2, 3), val = c(0, 17, 21))
   expect_error(
     derive_vars_joined(
@@ -258,6 +259,7 @@ test_that("derive_vars_joined Test 8: NULL new_vars will still remove .join colu
     )
   )
 })
+
 ## Test 9: fixing a bug from issue 1966 ----
 test_that("derive_vars_joined Test 9: fixing a bug from issue 1966", { # nolint
   adlb_ast <- tribble(
@@ -303,5 +305,31 @@ test_that("derive_vars_joined Test 9: fixing a bug from issue 1966", { # nolint
     base = expected,
     compare = adlb_joined,
     keys = c("ADT", "ASEQ", "STUDYID", "USUBJID", "ADTM", "TBILI_ADT")
+  )
+})
+
+## Test 10: order vars are selected properly in function body ----
+test_that("derive_vars_joined Test 10: order vars are selected properly in function body", {
+  myd <- data.frame(day = c(1, 2, 3), val = c(0, 17, 21))
+  actual <- derive_vars_joined(
+    myd,
+    dataset_add = myd,
+    new_vars = exprs(first_val = val),
+    join_vars = exprs(day),
+    order = exprs(-day),
+    mode = "last",
+    filter_join = day < day.join
+  )
+  expected <- tribble(
+    ~day, ~val, ~first_val,
+    1,       0,         17,
+    2,      17,         21,
+    3,      21,         NA
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("day", "val", "first_val")
   )
 })
