@@ -132,7 +132,6 @@ test_that("derive_var_shift Test 4: Shift with user-specified missing_value and 
 
 ## Test 5: Test deprecation warning of na_val argument ----
 test_that("derive_var_shift Test 5: Test deprecation warning of na_val argument", {
-
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,
     "P01", "ALB", 33, "Y", "LOW", "LOW",
