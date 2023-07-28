@@ -36,6 +36,14 @@
 #'
 #'   *Permitted Values:* character value
 #'
+#' @param set_values_to Variables to be set
+#'
+#' The specified variables are set to the specified values for the new
+#' observations. For example exprs(PARAMCD = "MAP") defines the parameter code
+#' for the new parameter.
+#'
+#' *Permitted Values*: List of variable-value pairs
+#'
 #' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
@@ -266,6 +274,8 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'   it will only be calculated at visits with both height and weight collected.
 #'
 #'   *Permitted Values:* list of variables
+#'
+#' @inheritParams derive_param_map
 #'
 #' @inheritParams derive_param_computed
 #'
@@ -563,6 +573,8 @@ compute_bsa <- function(height = height,
 #'   it will only be calculated at visits with both height and weight collected.
 #'
 #'   *Permitted Values:* list of variables
+#'
+#' @inheritParams derive_param_map
 #'
 #' @inheritParams derive_param_computed
 #'

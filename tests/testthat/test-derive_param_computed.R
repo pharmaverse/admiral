@@ -369,9 +369,7 @@ test_that("derive_param_computed Test 9: compute multiple variables, keep_nas", 
     "3",      "ALK2",   "N",    "2021-04-03", NA_character_,
     "3",      "TBILI2", "N",    "2021-04-04", NA_character_
   ) %>%
-    mutate(
-      ADTM = lubridate::ymd(ADTM)
-    )
+    mutate(ADTM = lubridate::ymd(ADTM))
 
   expected <- tibble::tribble(
     ~USUBJID, ~AVALC, ~ADTM,        ~ADTF,

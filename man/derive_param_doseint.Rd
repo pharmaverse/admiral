@@ -34,21 +34,21 @@ Permitted Values: list of variables}
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example
+observations. The values of variables of the parameters specified by
+\code{parameters} can be accessed using \verb{<variable name>.<parameter code>},
+e.g., \code{AVAL.SYSBP}. For example
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{exprs(
   AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
   PARAMCD = "MAP"
-)```
-defines the analysis value and parameter
-code for the new parameter. The values of variables of the parameters
-specified by `parameters` can be accessed using `<variable name>.<parameter
-code>`, e.g., `AVAL.SYSBP`.
+)
+}\if{html}{\out{</div>}}
+
+defines the analysis value and parameter code for the new parameter.
 
 Variable names in the expression must not contain more than one dot.
 
-*Permitted Values:* List of variable-value pairs
-}\if{html}{\out{</div>}}}
+\emph{Permitted Values:} List of variable-value pairs}
 
 \item{tadm_code}{Total Doses Administered parameter code
 

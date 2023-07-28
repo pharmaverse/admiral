@@ -41,6 +41,9 @@
 - The `filter` argument in `derive_extreme_records()` was deprecated in favor of
 the `filter_add` using the next phase of the deprecation process. (#1950)
 
+- The `analysis_value` and `analysis_var` argument in `derive_param_computed()`
+were deprecated in favor of `set_values_to` (#1968).
+
 ## Documentation
 
 

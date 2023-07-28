@@ -47,6 +47,8 @@
 #'
 #'   Permitted Values: A variable of the input dataset or a function call
 #'
+#' @inheritParams derive_param_map
+#'
 #' @inheritParams derive_param_computed
 #'
 #' @seealso [compute_qtc()]
@@ -263,6 +265,8 @@ compute_qtc <- function(qt, rr, method) {
 #'   as the heart rate assessments.
 #'
 #'   Permitted Values: character value
+#'
+#' @inheritParams derive_param_map
 #'
 #' @inheritParams derive_param_computed
 #'
