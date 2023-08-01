@@ -508,7 +508,7 @@ test_that("get_hori_data Test 12: error if variables with more than one dot", {
       filter = NULL
     ),
     regexp = paste(
-      "The `analysis_value` argument contains variable names with more than on dot:",
+      "The `set_values_to` argument contains variable names with more than on dot:",
       "`AVAL.DIA.BP`",
       sep = "\n"
     ),

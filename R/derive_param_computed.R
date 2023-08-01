@@ -543,7 +543,7 @@ get_hori_data <- function(dataset,
   if (any(multi_dot_names)) {
     abort(
       paste(
-        "The `analysis_value` argument contains variable names with more than on dot:",
+        "The `set_values_to` argument contains variable names with more than on dot:",
         enumerate(analysis_vars_chr[multi_dot_names]),
         sep = "\n"
       )
