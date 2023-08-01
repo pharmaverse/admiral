@@ -9,6 +9,9 @@
 
 - The function `derive_var_extreme_flag()` has a new function argument, `flag_all` that additionally flags all records if the first or last record is not unique. (#1979)
 
+- The function `derive_vars_dy()` is updated to avoid potential error when the input `dataset` with columns ending with `temp`. (#2012)
+
+
 ## Breaking Changes
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)
 
@@ -35,12 +38,17 @@
 - The `filter` argument in `derive_extreme_records()` was deprecated in favor of
 the `filter_add` using the next phase of the deprecation process. (#1950)
 
+- The `na_val` argument in `derive_var_shift()` has been deprecated in favor of 
+`missing_value` using the first phase of the deprecation process. (#2014)
+
 ## Documentation
 
 
 ## Various
 
 - The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as *authors*, whereas those who made a significant contribution in the past are now down as *contributors*. All other acknowledgements have been moved to README section (#1941).
+
+- `derive_vars_joined()` had two bugs with regards to duplicates messaging and when `new_vars` was set to `NULL` that have now been addressed (#1966). 
 
 # admiral 0.11.1
 

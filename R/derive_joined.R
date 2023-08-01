@@ -353,6 +353,19 @@ derive_vars_joined <- function(dataset,
   if (is.null(new_vars)) {
     new_vars <- chr2vars(colnames(dataset_add))
   }
+  preexisting_vars <- chr2vars(colnames(dataset))
+  preexisting_vars_no_by_vars <- preexisting_vars[which(!(preexisting_vars %in% by_vars))]
+  duplicates <- intersect(replace_values_by_names(new_vars), preexisting_vars_no_by_vars)
+  if (length(duplicates) > 0) {
+    err_msg <- sprintf(
+      paste(
+        "The following columns in `dataset_add` have naming conflicts with `dataset`,\n",
+        "please make the appropriate modifications to `new_vars`, with respect to:\n%s"
+      ),
+      enumerate(vars2chr(duplicates))
+    )
+    abort(err_msg)
+  }
 
   # number observations of the input dataset to get a unique key
   # (by_vars and tmp_obs_nr)
@@ -371,7 +384,7 @@ derive_vars_joined <- function(dataset,
     filter_if(filter_add) %>%
     select(
       !!!by_vars,
-      !!!chr2vars(names(order)),
+      !!!replace_values_by_names(extract_vars(order)),
       !!!replace_values_by_names(join_vars),
       !!!intersect(unname(extract_vars(new_vars)), chr2vars(colnames(dataset_add)))
     )
@@ -410,6 +423,7 @@ derive_vars_joined <- function(dataset,
       by_vars = exprs(!!!by_vars_left, !!tmp_obs_nr),
       new_vars = add_suffix_to_vars(new_vars, vars = common_vars, suffix = ".join"),
       missing_values = missing_values,
+      check_type = check_type,
       duplicate_msg = paste(
         paste(
           "After applying `filter_join` the joined dataset contains more",
