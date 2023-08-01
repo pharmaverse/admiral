@@ -9,7 +9,8 @@ derive_var_shift(
   new_var,
   from_var,
   to_var,
-  na_val = "NULL",
+  na_val,
+  missing_value = "NULL",
   sep_val = " to "
 )
 }
@@ -24,7 +25,9 @@ The columns specified by \code{from_var} and the \code{to_var} parameters are ex
 
 \item{to_var}{Variable containing value to shift to.}
 
-\item{na_val}{Character string to replace missing values in \code{from_var} or \code{to_var}.
+\item{na_val}{\emph{Deprecated}, please use \code{missing_value} instead.}
+
+\item{missing_value}{Character string to replace missing values in \code{from_var} or \code{to_var}.
 
 Default: "NULL"}
 
@@ -43,7 +46,7 @@ analysis value, shift from baseline grade to analysis grade, ...
 \details{
 \code{new_var} is derived by concatenating the values of \code{from_var} to values of \code{to_var}
 (e.g. "NORMAL to HIGH"). When \code{from_var} or \code{to_var} has missing value, the
-missing value is replaced by \code{na_val} (e.g. "NORMAL to NULL").
+missing value is replaced by \code{missing_value} (e.g. "NORMAL to NULL").
 }
 \examples{
 library(tibble)
