@@ -59,21 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -136,7 +121,8 @@
 </div>
 <div class="section level3">
 <h3 id="various-0-12-0">Various<a class="anchor" aria-label="anchor" href="#various-0-12-0"></a></h3>
-<ul><li>The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as <em>authors</em>, whereas those who made a significant contribution in the past are now down as <em>contributors</em>. All other acknowledgements have been moved to README section (<a href="https://github.com/pharmaverse/admiral/issues/1941" class="external-link">#1941</a>).</li>
+<ul><li><p>The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as <em>authors</em>, whereas those who made a significant contribution in the past are now down as <em>contributors</em>. All other acknowledgements have been moved to README section (<a href="https://github.com/pharmaverse/admiral/issues/1941" class="external-link">#1941</a>).</p></li>
+<li><p><code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code> had two bugs with regards to duplicates messaging and when <code>new_vars</code> was set to <code>NULL</code> that have now been addressed (<a href="https://github.com/pharmaverse/admiral/issues/1966" class="external-link">#1966</a>).</p></li>
 </ul></div>
 </div>
     <div class="section level2">
