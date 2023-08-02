@@ -16,7 +16,7 @@
 #'   parameter) and to the parameters specified by `qt_code` and `rr_code`.
 #'
 #'
-#' @param by_vars Grouping variables
+#' @param by_vars `r roxygen_param_by_var()`
 #'
 #'   Only variables specified in `by_vars` will be populated
 #'   in the newly created records.
