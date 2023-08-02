@@ -59,7 +59,7 @@
 #'
 #' @param analysis_var Analysis variable
 #'
-#'   *Deprecated*, please use `set_values_to` instead.
+#'   \lifecycle{deprecated} Please use `set_values_to` instead.
 #'
 #'   The specified variable is set to the value of `analysis_value` for the new
 #'   observations.
@@ -107,7 +107,7 @@
 #'
 #' @param analysis_value Definition of the analysis value
 #'
-#'   *Deprecated*, please use `set_values_to` instead.
+#'  \lifecycle{deprecated} Please use `set_values_to` instead.
 #'
 #'   An expression defining the analysis value (`AVAL`) of the new parameter is
 #'   expected. The values of variables of the parameters specified by
