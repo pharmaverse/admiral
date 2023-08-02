@@ -194,7 +194,7 @@ derive_var_ontrtfl <- function(dataset,
       when = "0.12.0",
       what = "admiral::derive_var_ontrtfl(span_period = 'must be TRUE or FALSE')",
       details =
-         c(i = stringr::str_glue("Use `derive_var_ontrtfl(span_period={span_period})` instead."))
+        c(i = stringr::str_glue("Use `derive_var_ontrtfl(span_period={span_period})` instead."))
     )
   }
   new_var <- assert_symbol(enexpr(new_var))
