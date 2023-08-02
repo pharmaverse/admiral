@@ -44,6 +44,9 @@ the `filter_add` using the next phase of the deprecation process. (#1950)
 - The `dataset_expected_obs` argument in `derive_expected_records()` and `derive_locf_records()`
 has been deprecated in favor of `dataset_ref`. (#2037)
 
+- The `derive_var_ontrtfl(span_period)` argument has been updated to only accept 
+`TRUE` or `FALSE`, where is previously accepted `"Y"` and `NULL`. (#2033)
+
 ## Documentation
 
 
