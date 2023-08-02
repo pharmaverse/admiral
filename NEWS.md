@@ -50,6 +50,9 @@ were deprecated in favor of `set_values_to` (#1968).
 - The `na_val` argument in `derive_var_shift()` has been deprecated in favor of 
 `missing_value` using the first phase of the deprecation process. (#2014)
 
+- The `dataset_expected_obs` argument in `derive_expected_records()` and `derive_locf_records()`
+has been deprecated in favor of `dataset_ref`. (#2037)
+
 ## Documentation
 
 
