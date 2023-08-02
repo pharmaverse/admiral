@@ -386,21 +386,23 @@ test_that("derive_param_computed Test 9: compute multiple variables, keep_nas", 
       PARAM = "TBILI > 2 times ULN and ALKPH <= 2 times ULN"
     )
 
+  actual <- derive_param_computed(
+    dataset_add = adlb_tbilialk,
+    by_vars = exprs(USUBJID),
+    parameters = c("ALK2", "TBILI2"),
+    set_values_to = exprs(
+      AVALC = if_else(AVALC.TBILI2 == "Y" & AVALC.ALK2 == "Y", "Y", "N"),
+      ADTM = pmax(ADTM.TBILI2, ADTM.ALK2),
+      ADTF = if_else(ADTM == ADTM.TBILI2, ADTF.TBILI2, ADTF.ALK2),
+      PARAMCD = "TB2AK2",
+      PARAM = "TBILI > 2 times ULN and ALKPH <= 2 times ULN"
+    ),
+    keep_nas = TRUE
+  )
+
   expect_dfs_equal(
     base = expected,
-    compare = derive_param_computed(
-      dataset_add = adlb_tbilialk,
-      by_vars = exprs(USUBJID),
-      parameters = c("ALK2", "TBILI2"),
-      set_values_to = exprs(
-        AVALC = if_else(AVALC.TBILI2 == "Y" & AVALC.ALK2 == "Y", "Y", "N"),
-        ADTM = pmax(ADTM.TBILI2, ADTM.ALK2),
-        ADTF = if_else(ADTM == ADTM.TBILI2, ADTF.TBILI2, ADTF.ALK2),
-        PARAMCD = "TB2AK2",
-        PARAM = "TBILI > 2 times ULN and ALKPH <= 2 times ULN"
-      ),
-      keep_nas = TRUE
-    ),
+    compare = actual,
     keys = c("USUBJID")
   )
 })

@@ -94,8 +94,8 @@ Variable names in the expression must not contain more than one dot.
 
 The specified variables are set to the specified values for the new
 observations. The values of variables of the parameters specified by
-\code{parameters} can be accessed using \verb{<variable name>.<parameter code>},
-e.g., \code{AVAL.SYSBP}. For example
+\code{parameters} can be accessed using \verb{<variable name>.<parameter code>}. For
+example
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{exprs(
   AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,

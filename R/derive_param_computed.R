@@ -122,8 +122,8 @@
 #'
 #'   The specified variables are set to the specified values for the new
 #'   observations. The values of variables of the parameters specified by
-#'   `parameters` can be accessed using `<variable name>.<parameter code>`,
-#'   e.g., `AVAL.SYSBP`. For example
+#'   `parameters` can be accessed using `<variable name>.<parameter code>`. For
+#'   example
 #'   ```
 #'   exprs(
 #'     AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
