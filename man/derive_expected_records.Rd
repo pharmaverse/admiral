@@ -7,6 +7,7 @@
 derive_expected_records(
   dataset,
   dataset_expected_obs,
+  dataset_ref,
   by_vars = NULL,
   set_values_to = NULL
 )
@@ -14,17 +15,19 @@ derive_expected_records(
 \arguments{
 \item{dataset}{Input dataset
 
-A data frame, the columns from \code{dataset_expected_obs} and specified by the
+A data frame, the columns from \code{dataset_ref} and specified by the
 \code{by_vars} parameter are expected.}
 
-\item{dataset_expected_obs}{Expected observations dataset
+\item{dataset_expected_obs}{\emph{Deprecated}, please use \code{dataset_ref} instead.}
+
+\item{dataset_ref}{Expected observations dataset
 
 Data frame with the expected observations, e.g., all the expected
 combinations of \code{PARAMCD}, \code{PARAM}, \code{AVISIT}, \code{AVISITN}, ...}
 
 \item{by_vars}{Grouping variables
 
-For each group defined by \code{by_vars} those observations from \code{dataset_expected_obs}
+For each group defined by \code{by_vars} those observations from \code{dataset_ref}
 are added to the output dataset which do not have a corresponding observation
 in the input dataset.}
 
@@ -51,7 +54,7 @@ contains missing observations.
 }
 \details{
 For each group (the variables specified in the \code{by_vars} parameter),
-those records from \code{dataset_expected_obs} that are missing in the input
+those records from \code{dataset_ref} that are missing in the input
 dataset are added to the output dataset.
 }
 \examples{
@@ -74,7 +77,7 @@ parm_visit_ref <- tribble(
 
 derive_expected_records(
   dataset = adqs,
-  dataset_expected_obs = parm_visit_ref,
+  dataset_ref = parm_visit_ref,
   by_vars = exprs(USUBJID, PARAMCD),
   set_values_to = exprs(DTYPE = "DERIVED")
 )
@@ -89,7 +92,7 @@ parm_visit_ref <- tribble(
 
 derive_expected_records(
   dataset = adqs,
-  dataset_expected_obs = parm_visit_ref,
+  dataset_ref = parm_visit_ref,
   by_vars = exprs(USUBJID, PARAMCD),
   set_values_to = exprs(DTYPE = "DERIVED")
 )
