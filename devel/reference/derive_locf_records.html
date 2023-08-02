@@ -61,21 +61,6 @@ does not contain observations for missed visits/time points."><meta property="og
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -107,6 +92,7 @@ does not contain observations for missed visits/time points.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">derive_locf_records</span><span class="op">(</span>
   <span class="va">dataset</span>,
   <span class="va">dataset_expected_obs</span>,
+  <span class="va">dataset_ref</span>,
   <span class="va">by_vars</span>,
   analysis_var <span class="op">=</span> <span class="va">AVAL</span>,
   <span class="va">order</span>,
@@ -123,6 +109,10 @@ does not contain observations for missed visits/time points.</p>
 
 
 <dt>dataset_expected_obs</dt>
+<dd><p><em>Deprecated</em>, please use <code>dataset_ref</code> instead.</p></dd>
+
+
+<dt>dataset_ref</dt>
 <dd><p>Expected observations dataset</p>
 <p>Data frame with all the combinations of <code>PARAMCD</code>, <code>PARAM</code>, <code>AVISIT</code>,
 <code>AVISITN</code>, ... which are expected in the dataset is expected.</p></dd>
@@ -130,7 +120,7 @@ does not contain observations for missed visits/time points.</p>
 
 <dt>by_vars</dt>
 <dd><p>Grouping variables</p>
-<p>For each group defined by <code>by_vars</code> those observations from <code>dataset_expected_obs</code>
+<p>For each group defined by <code>by_vars</code> those observations from <code>dataset_ref</code>
 are added to the output dataset which do not have a corresponding observation
 in the input dataset or for which <code>analysis_var</code> is <code>NA</code> for the corresponding observation
 in the input dataset.</p></dd>
@@ -166,7 +156,7 @@ if it is specified in <code>by_vars</code>.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>For each group (with respect to the variables specified for the
-by_vars parameter) those observations from dataset_expected_obs are added to
+by_vars parameter) those observations from <code>dataset_ref</code> are added to
 the output dataset</p><ul><li><p>which do not have a corresponding observation in the input dataset or</p></li>
 <li><p>for which <code>analysis_var</code> is NA for the corresponding observation in the input dataset.</p>
 <p>For the new observations, <code>analysis_var</code> is set to the non-missing <code>analysis_var</code> of the
@@ -243,8 +233,8 @@ previous observation in the input dataset (when sorted by <code>order</code>) an
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">derive_locf_records</span><span class="op">(</span></span>
-<span class="r-in">  data <span class="op">=</span> <span class="va">advs</span>,</span>
-<span class="r-in">  dataset_expected_obs <span class="op">=</span> <span class="va">advs_expected_obsv</span>,</span>
+<span class="r-in">  dataset <span class="op">=</span> <span class="va">advs</span>,</span>
+<span class="r-in">  dataset_ref <span class="op">=</span> <span class="va">advs_expected_obsv</span>,</span>
 <span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span>, <span class="va">PARAMCD</span><span class="op">)</span>,</span>
 <span class="r-in">  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVISITN</span>, <span class="va">AVISIT</span><span class="op">)</span>,</span>
 <span class="r-in">  keep_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">PARAMN</span><span class="op">)</span></span>

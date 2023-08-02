@@ -61,21 +61,6 @@ contains missing observations."><meta property="og:image" content="https://pharm
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -107,6 +92,7 @@ contains missing observations.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">derive_expected_records</span><span class="op">(</span>
   <span class="va">dataset</span>,
   <span class="va">dataset_expected_obs</span>,
+  <span class="va">dataset_ref</span>,
   by_vars <span class="op">=</span> <span class="cn">NULL</span>,
   set_values_to <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
@@ -116,11 +102,15 @@ contains missing observations.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dataset</dt>
 <dd><p>Input dataset</p>
-<p>A data frame, the columns from <code>dataset_expected_obs</code> and specified by the
+<p>A data frame, the columns from <code>dataset_ref</code> and specified by the
 <code>by_vars</code> parameter are expected.</p></dd>
 
 
 <dt>dataset_expected_obs</dt>
+<dd><p><em>Deprecated</em>, please use <code>dataset_ref</code> instead.</p></dd>
+
+
+<dt>dataset_ref</dt>
 <dd><p>Expected observations dataset</p>
 <p>Data frame with the expected observations, e.g., all the expected
 combinations of <code>PARAMCD</code>, <code>PARAM</code>, <code>AVISIT</code>, <code>AVISITN</code>, ...</p></dd>
@@ -128,7 +118,7 @@ combinations of <code>PARAMCD</code>, <code>PARAM</code>, <code>AVISIT</code>, <
 
 <dt>by_vars</dt>
 <dd><p>Grouping variables</p>
-<p>For each group defined by <code>by_vars</code> those observations from <code>dataset_expected_obs</code>
+<p>For each group defined by <code>by_vars</code> those observations from <code>dataset_ref</code>
 are added to the output dataset which do not have a corresponding observation
 in the input dataset.</p></dd>
 
@@ -154,7 +144,7 @@ if it is specified in <code>by_vars</code> or <code>set_values_to</code>.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>For each group (the variables specified in the <code>by_vars</code> parameter),
-those records from <code>dataset_expected_obs</code> that are missing in the input
+those records from <code>dataset_ref</code> that are missing in the input
 dataset are added to the output dataset.</p>
     </div>
     <div class="section level2">
@@ -200,7 +190,7 @@ dataset are added to the output dataset.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">derive_expected_records</span><span class="op">(</span></span>
 <span class="r-in">  dataset <span class="op">=</span> <span class="va">adqs</span>,</span>
-<span class="r-in">  dataset_expected_obs <span class="op">=</span> <span class="va">parm_visit_ref</span>,</span>
+<span class="r-in">  dataset_ref <span class="op">=</span> <span class="va">parm_visit_ref</span>,</span>
 <span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">PARAMCD</span><span class="op">)</span>,</span>
 <span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>DTYPE <span class="op">=</span> <span class="st">"DERIVED"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
@@ -226,7 +216,7 @@ dataset are added to the output dataset.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">derive_expected_records</span><span class="op">(</span></span>
 <span class="r-in">  dataset <span class="op">=</span> <span class="va">adqs</span>,</span>
-<span class="r-in">  dataset_expected_obs <span class="op">=</span> <span class="va">parm_visit_ref</span>,</span>
+<span class="r-in">  dataset_ref <span class="op">=</span> <span class="va">parm_visit_ref</span>,</span>
 <span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">PARAMCD</span><span class="op">)</span>,</span>
 <span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>DTYPE <span class="op">=</span> <span class="st">"DERIVED"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
