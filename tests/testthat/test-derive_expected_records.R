@@ -30,7 +30,7 @@ test_that("derive_expected_records Test 1: missing values in `by_vars`", {
 
   actual_output <- derive_expected_records(
     dataset = input,
-    dataset_expected_obs = expected_obsv,
+    dataset_ref = expected_obsv,
     by_vars = exprs(USUBJID),
     set_values_to = exprs(DTYPE = "DERIVED")
   )
@@ -71,7 +71,7 @@ test_that("derive_expected_records Test 2: `by_vars` = NULL", {
 
   actual_output <- derive_expected_records(
     dataset = input,
-    dataset_expected_obs = expected_obsv,
+    dataset_ref = expected_obsv,
     by_vars = NULL,
     set_values_to = exprs(DTYPE = "DERIVED")
   )
@@ -114,7 +114,7 @@ test_that("derive_expected_records Test 3: visit variables are parameter indepen
 
   actual_output <- derive_expected_records(
     dataset = input,
-    dataset_expected_obs = expected_obsv,
+    dataset_ref = expected_obsv,
     by_vars = exprs(USUBJID, PARAMCD),
     set_values_to = exprs(DTYPE = "DERIVED")
   )
@@ -157,7 +157,7 @@ test_that("derive_expected_records Test 4: visit variables are parameter depende
 
   actual_output <- derive_expected_records(
     dataset = input,
-    dataset_expected_obs = expected_obsv,
+    dataset_ref = expected_obsv,
     by_vars = exprs(USUBJID),
     set_values_to = exprs(DTYPE = "DERIVED")
   )
