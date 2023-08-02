@@ -139,3 +139,18 @@ test_that("compute_duration Test 10: Duration in seconds (sec option)", {
     29
   )
 })
+
+
+## Test 11: Duration (instead of interval) ----
+test_that("compute_duration Test 10: Duration in seconds (sec option)", {
+  expect_equal(
+    compute_duration(
+      ymd("2000-02-01"),
+      ymd("2000-03-01"),
+      out_unit = "months",
+      add_one = FALSE,
+      type = "duration"
+    ),
+   29 / (365.25 / 12) # 29 days divided by the average month length
+  )
+})
