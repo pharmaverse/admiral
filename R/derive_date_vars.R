@@ -1151,20 +1151,22 @@ compute_dtf <- function(dtc, dt) {
   warn_if_invalid_dtc(dtc, valid_dtc)
 
   # Find date portion
-  date_portion <- ifelse(grepl("T", inputdtc),
-                         substr(inputdtc, 1, gregexpr("T", inputdtc)),
-                         substr(inputdtc, 1, 10))
+  date_portion <- ifelse(grepl("T", dtc),
+    gsub("T", "", substr(dtc, 1, gregexpr("T", dtc))),
+    substr(dtc, 1, 10)
+  )
+  n_chr_date_portion <- nchar(date_portion)
 
   # Location of the first instance of the double hyphen to determine if its month/day imputation
-  location_of_double_hyphen <- unlist(gregexpr('--', date_portion))
+  location_of_double_hyphen <- unlist(gregexpr("--", date_portion))
 
   case_when(
-    n_chr < 4 ~ "Y",
-    n_chr == 4 ~ "M",
-    n_chr == 7 ~ "D",
-    location_of_double_hyphen == 5 ~ "M", # dates like "2019---07"
-    location_of_double_hyphen == 8 ~ "D", # dates like "2019-07--"
-    (!is_na & n_chr >= 10 & valid_dtc) | is_na | !valid_dtc ~ NA_character_
+    (!is_na & n_chr >= 10 & n_chr_date_portion == 10 & valid_dtc) | is_na | !valid_dtc ~ NA_character_, # nolint
+    n_chr_date_portion < 4 | is.na(dtc) ~ "Y",
+    n_chr_date_portion == 4 ~ "M",
+    n_chr_date_portion == 7 ~ "D",
+    n_chr_date_portion < 10 & location_of_double_hyphen == 5 ~ "M", # dates like "2019---07"
+    n_chr_date_portion < 10 & location_of_double_hyphen == 8 ~ "D", # dates like "2019-07--"
   )
 }
 

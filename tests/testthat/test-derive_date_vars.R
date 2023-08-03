@@ -532,13 +532,15 @@ inputdtc <- c(
   "2019-07-18",
   "2019-02",
   "2019",
-  "2019---07"
+  "2019---07",
+  "2019-06--T00:00"
 )
 inputdt <- c(
   as.Date("2019-07-18"),
   as.Date("2019-02-01"),
   as.Date("2019-01-01"),
-  as.Date("2019-01-01")
+  as.Date("2019-01-01"),
+  as.Date("2019-06-01")
 )
 
 ## Test 29: compute DTF ----
@@ -547,7 +549,8 @@ test_that("compute_dtf Test 29: compute DTF", {
     NA_character_,
     "D",
     "M",
-    "M"
+    "M",
+    "D"
   )
   expect_equal(
     compute_dtf(
