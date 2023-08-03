@@ -6,8 +6,7 @@
 	"containerEnv": {
 		"ROOT": "true",
 		"PASSWORD": "rstudio",
-		"DISABLE_AUTH": "true",
-        "DOCKER_CONTAINER_CONTEXT": ""
+		"DISABLE_AUTH": "true"
 	},
 	"features": {
 		"ghcr.io/rocker-org/devcontainer-features/r-rig:1": {
