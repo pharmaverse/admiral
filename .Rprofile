@@ -10,7 +10,7 @@ if (file.exists("./renv/profiles")) {
   }
 }
 
-if ((Sys.getenv("GITHUB_ACTIONS") != "") || (Sys.getenv("DOCKER_CONTAINER_CONTEXT") != "")) {
+if (Sys.getenv("GITHUB_ACTIONS") != "") {
   options(repos = c(CRAN = "https://cran.rstudio.com"))
   Sys.setenv(RENV_AUTOLOADER_ENABLED=FALSE)
 }
