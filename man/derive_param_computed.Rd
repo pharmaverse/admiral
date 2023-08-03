@@ -70,7 +70,7 @@ parameter code \code{"HGHT"}.
 
 \item{analysis_var}{Analysis variable
 
-\lifecycle{deprecated} Please use \code{set_values_to} instead.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.
 
 The specified variable is set to the value of \code{analysis_value} for the new
 observations.
@@ -79,7 +79,7 @@ observations.
 
 \item{analysis_value}{Definition of the analysis value
 
-\lifecycle{deprecated} Please use \code{set_values_to} instead.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.
 
 An expression defining the analysis value (\code{AVAL}) of the new parameter is
 expected. The values of variables of the parameters specified by
