@@ -411,6 +411,7 @@ test_that("derive_var_ontrtfl Test 15: if trt end date is missing, the obs may s
     "P01", ymd("2018-03-15"), ymd("2019-01-01"), NA, ymd("2022-12-01"),
     "P02", ymd("2020-04-30"), ymd("2019-01-01"), NA, ymd("2022-03-15"),
     "P03", ymd("2020-04-30"), ymd("2019-01-01"), NA, NA,
+    "P04", ymd("2020-04-30"), NA, NA, NA
   ) %>%
     as.data.frame()
 
