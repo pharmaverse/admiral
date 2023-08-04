@@ -281,7 +281,7 @@ derive_var_ontrtfl <- function(dataset,
   }
 
   # scenario 4: end_date and span_period are passed
-  if (isTRUE(span_period)) {
+  if (span_period) {
     dataset <- mutate(
       dataset,
       !!new_var := if_else(
