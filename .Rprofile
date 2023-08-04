@@ -19,7 +19,7 @@
       ))
     )
   )
-  packages[!(packages %in% c("admiral", "admiraldev", "admiralci", "admiral.test"))]
+  packages[!(packages %in% c("admiral", "admiraldev", "admiralci", "admiral.test", getwd()))]
 }
 
 options(renv.snapshot.filter = .get_dependencies)
