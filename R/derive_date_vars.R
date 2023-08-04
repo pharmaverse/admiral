@@ -1141,6 +1141,8 @@ convert_date_to_dtm <- function(dt,
 #' compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 #' compute_dtf(dtc = "2022-06--T00:00", dt = as.Date("2022-06-01"))
+#' compute_dtf(dtc = "2022---01T00:00", dt = as.Date("2022-06-01"))
+#' compute_dtf(dtc = "2022----T00:00", dt = as.Date("2022-06-01"))
 compute_dtf <- function(dtc, dt) {
   assert_character_vector(dtc)
   assert_date_vector(dt)
@@ -1152,13 +1154,13 @@ compute_dtf <- function(dtc, dt) {
 
   # Find date portion
   date_portion <- ifelse(grepl("T", dtc),
-    gsub("T", "", substr(dtc, 1, gregexpr("T", dtc))),
+    gsub("T", "", substr(dtc, 1, str_locate(dtc, "T")[, 1])),
     substr(dtc, 1, 10)
   )
   n_chr_date_portion <- nchar(date_portion)
 
   # Location of the first instance of the double hyphen to determine if its month/day imputation
-  location_of_double_hyphen <- unlist(gregexpr("--", date_portion))
+  location_of_double_hyphen <- str_locate(date_portion, "--")[, 1]
 
   case_when(
     (!is_na & n_chr >= 10 & n_chr_date_portion == 10 & valid_dtc) | is_na | !valid_dtc ~ NA_character_, # nolint
