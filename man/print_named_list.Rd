@@ -25,7 +25,6 @@ print_named_list(death_event)
 \seealso{
 Utilities for printing: 
 \code{\link{print.adam_templates}()},
-\code{\link{print.duplicates}()},
 \code{\link{print.source}()}
 }
 \concept{utils_print}
