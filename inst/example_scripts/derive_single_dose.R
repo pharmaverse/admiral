@@ -1,4 +1,3 @@
-
 library(pharmaversesdtm)
 library(admiral)
 library(dplyr)
