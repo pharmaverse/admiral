@@ -527,7 +527,7 @@ advs <- derive_var_ontrtfl(
   end_date = AENDT,
   ref_start_date = AP01SDT,
   ref_end_date = AP01EDT,
-  span_period = "Y"
+  span_period = TRUE
 )
 ```
 ```{r, eval=TRUE, echo=FALSE}
