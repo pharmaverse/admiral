@@ -11,6 +11,8 @@
 
 - The function `derive_vars_dy()` is updated to avoid potential error when the input `dataset` with columns ending with `temp`. (#2012)
 
+- Templates, vignettes, and other uses of `{admiral.test}` SDTM data are updated to use `{pharmaversesdtm}` instead. (#2040)
+
 
 ## Breaking Changes
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)

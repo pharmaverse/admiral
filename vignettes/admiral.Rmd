@@ -26,22 +26,22 @@ for example the following script which creates a (very simple) ADSL dataset.
 
 ## Load Packages and Example Datasets
 
-First, we will load our packages and example datasets to help with our `ADSL` creation. The `{dplyr}` and `{lubridate}` packages are `{tidyverse}` packages and used heavily throughout this script.  The `{admiral}` package also leverages the `{admiral.test}` package for example SDTM datasets which are from the CDISC Pilot Study.
+First, we will load our packages and example datasets to help with our `ADSL` creation. The `{dplyr}` and `{lubridate}` packages are `{tidyverse}` packages and used heavily throughout this script.  The `{admiral}` package also leverages the `{pharmaversesdtm}` package for example SDTM datasets which are from the CDISC Pilot Study.
 
 ```{r, message=FALSE, warning=FALSE}
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 library(admiral)
-library(admiral.test)
+library(pharmaversesdtm)
 
 # Read in SDTM datasets
-data("admiral_dm")
-data("admiral_ds")
-data("admiral_ex")
+data("dm")
+data("ds")
+data("ex")
 
-dm <- convert_blanks_to_na(admiral_dm)
-ds <- convert_blanks_to_na(admiral_ds)
-ex <- convert_blanks_to_na(admiral_ex)
+dm <- convert_blanks_to_na(dm)
+ds <- convert_blanks_to_na(ds)
+ex <- convert_blanks_to_na(ex)
 ```
 
 ## Derive Treatment Variables (`TRT0xP`, `TRT0xA`) {#treatmentvargs}
