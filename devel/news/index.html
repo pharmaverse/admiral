@@ -59,21 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -132,6 +117,7 @@
 <li><p>The <code>filter</code> argument in <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> was deprecated in favor of the <code>filter_add</code> using the next phase of the deprecation process. (<a href="https://github.com/pharmaverse/admiral/issues/1950" class="external-link">#1950</a>)</p></li>
 <li><p>The <code>na_val</code> argument in <code><a href="../reference/derive_var_shift.html">derive_var_shift()</a></code> has been deprecated in favor of <code>missing_value</code> using the first phase of the deprecation process. (<a href="https://github.com/pharmaverse/admiral/issues/2014" class="external-link">#2014</a>)</p></li>
 <li><p>The <code>dataset_expected_obs</code> argument in <code><a href="../reference/derive_expected_records.html">derive_expected_records()</a></code> and <code><a href="../reference/derive_locf_records.html">derive_locf_records()</a></code> has been deprecated in favor of <code>dataset_ref</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2037" class="external-link">#2037</a>)</p></li>
+<li><p>The <code>span_period</code> argument in <code><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl()</a></code> has been updated to only accept <code>TRUE</code> or <code>FALSE</code>, where is previously accepted <code>"Y"</code> and <code>NULL</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2033" class="external-link">#2033</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-0-12-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-12-0"></a></h3>

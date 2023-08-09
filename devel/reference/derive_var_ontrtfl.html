@@ -63,21 +63,6 @@ ASTDT/AENDT)."><meta property="og:image" content="https://pharmaverse.github.io/
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -117,7 +102,7 @@ assessment date (e.g <code>ADT</code>) or event start and end dates (e.g.
   ref_end_window <span class="op">=</span> <span class="fl">0</span>,
   ignore_time_for_ref_end_date <span class="op">=</span> <span class="cn">TRUE</span>,
   filter_pre_timepoint <span class="op">=</span> <span class="cn">NULL</span>,
-  span_period <span class="op">=</span> <span class="cn">NULL</span>
+  span_period <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -188,9 +173,9 @@ on-treatment flag should be set to null. Optional; default is <code>NULL</code>.
 
 
 <dt>span_period</dt>
-<dd><p>A <code>"Y"</code> scalar character. If <code>"Y"</code>, events that started
+<dd><p>A logical scalar. If <code>TRUE</code>, events that started
 prior to the <code>ref_start_date</code>and are ongoing or end after the
-<code>ref_start_date</code> are flagged as <code>"Y"</code>. Optional; default is <code>NULL</code>.</p></dd>
+<code>ref_start_date</code> are flagged as <code>"Y"</code>. Optional; default is <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -219,7 +204,7 @@ the filter provided in <code>filter_pre_timepoint</code> is not true.</p></li>
 </ol><p>If the <code>end_date</code> is provided and the <code>end_date</code> &lt; ref_start_date then the
 <code>ONTRTFL</code> is set to <code>NULL</code>.This would be applicable to cases where the
 <code>start_date</code> is missing and <code>ONTRTFL</code> has been assigned as <code>"Y"</code> above.</p>
-<p>If the <code>span_period</code> is specified as <code>"Y"</code>, this allows the user to assign
+<p>If the <code>span_period</code> is <code>TRUE</code>, this allows the user to assign
 <code>ONTRTFL</code> as <code>"Y"</code> to cases where the record started prior to the
 <code>ref_start_date</code> and was ongoing or ended after the <code>ref_start_date</code>.</p>
 <p>Any date imputations needed should be done prior to calling this function.</p>
@@ -318,7 +303,7 @@ the filter provided in <code>filter_pre_timepoint</code> is not true.</p></li>
 <span class="r-in">  ref_start_date <span class="op">=</span> <span class="va">TRTSDT</span>,</span>
 <span class="r-in">  ref_end_date <span class="op">=</span> <span class="va">TRTEDT</span>,</span>
 <span class="r-in">  ref_end_window <span class="op">=</span> <span class="fl">60</span>,</span>
-<span class="r-in">  span_period <span class="op">=</span> <span class="st">"Y"</span></span>
+<span class="r-in">  span_period <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID ASTDT      TRTSDT     TRTEDT     AENDT      ONTRTFL</span>
@@ -340,7 +325,7 @@ the filter provided in <code>filter_pre_timepoint</code> is not true.</p></li>
 <span class="r-in">  end_date <span class="op">=</span> <span class="va">AENDT</span>,</span>
 <span class="r-in">  ref_start_date <span class="op">=</span> <span class="va">AP01SDT</span>,</span>
 <span class="r-in">  ref_end_date <span class="op">=</span> <span class="va">AP01EDT</span>,</span>
-<span class="r-in">  span_period <span class="op">=</span> <span class="st">"Y"</span></span>
+<span class="r-in">  span_period <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID ASTDT      AP01SDT    AP01EDT    AENDT      ONTR01FL</span>
