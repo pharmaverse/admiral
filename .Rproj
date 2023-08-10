@@ -1,0 +1,17 @@
+Version: 1.0
+
+RestoreWorkspace: Default
+SaveWorkspace: Default
+AlwaysSaveHistory: Default
+
+EnableCodeIndexing: Yes
+UseSpacesForTab: Yes
+NumSpacesForTab: 2
+Encoding: UTF-8
+
+RStudioLayoutVersion: 0.1
+
+ProjectTemplate: Default
+
+## Specify the working directory here
+WorkingDirectory: /admiral

@@ -1,4 +1,8 @@
 # Set renv profile base on R version.
+# echo "RENV_PATHS_LIBRARY=/renv/lib/R-4.3/x86_64-pc-linux-gnu" >>$R_HOME/etc/Renviron.site
+# .libPaths() Sys.getenv("R_LIBS") Sys.getenv("RENV_PATHS_LIBRARY")
+#Sys.setenv("RENV_AUTOLOADER_ENABLED" = FALSE)
+#Sys.setenv("RENV_PATHS_LIBRARY" = "/renv/lib/R-4.3/x86_64-pc-linux-gnu") :
 .get_dependencies <- function(project_dir) {
 
   admdev_loc <- find.package("admiraldev", lib.loc = .libPaths(), quiet = TRUE)
@@ -46,3 +50,4 @@ if (Sys.getenv("GITHUB_ACTIONS") != "") {
 Sys.setenv("RENV_CONFIG_SANDBOX_ENABLED" = FALSE)
 Sys.setenv("RENV_CONFIG_AUTO_SNAPSHOT" = FALSE)
 source("renv/activate.R")
+.libPaths(c(Sys.getenv("R_LIBS"), .libPaths()))

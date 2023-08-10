@@ -1,7 +1,7 @@
 {
-	// https://containers.dev/implementors/json_reference/
+	// https://containers.dev/implementors/json_reference/ 
 	"name": "Admiral R-4.3 (RStudio) container",
-	"image": "ghcr.io/pharmaverse/admiralci-4.3:latest",
+	"image": "ghcr.io/insightsengineering/admiralcitest-4.3:latest",
 	// Install Dev Container Features. More info: https://containers.dev/features
 	"containerEnv": {
 		"ROOT": "true",
