@@ -54,6 +54,9 @@ were deprecated in favor of `set_values_to` (#1968).
 - The `dataset_expected_obs` argument in `derive_expected_records()` and `derive_locf_records()`
 has been deprecated in favor of `dataset_ref`. (#2037)
 
+- The `span_period` argument in `derive_var_ontrtfl()` has been updated to only accept 
+`TRUE` or `FALSE`, where is previously accepted `"Y"` and `NULL`. (#2033)
+
 ## Documentation
 
 
