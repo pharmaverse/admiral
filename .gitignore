@@ -40,7 +40,6 @@ vignettes/*.pdf
 
 # website documents
 /docs/*
-!/docs/pkgdown.yml
 doc
 Meta
 admiral.Rcheck/
