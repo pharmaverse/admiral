@@ -11,7 +11,7 @@
 
 - The function `derive_param_computed()` was enhanced: (#1968)
 
-  - The `analysis_value` and `analysis_var` argument were deprecated in favor of
+  - The `analysis_value` and `analysis_var` arguments were deprecated in favor of
   `set_values_to`. This enables users to compute more than one variable.
   - The `keep_nas` argument was added. If it is set to `TRUE`, observations are
   created even if values contributing to the computed values are `NA`.
