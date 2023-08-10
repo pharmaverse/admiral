@@ -1,0 +1,27 @@
+name: General Issue
+description: Issue that is difficult to fit into bug, feature or documentation issue.
+title: "General Issue: <Insert Issue Title Here>"
+labels: ["general issue"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Example:** General Issue: Linked In Blog Post for updates on the latest admiral release?
+  - type: textarea
+    id: background
+    attributes:
+      label: Background Information
+      description: Please provide the context and purpose of this piece of work. Links and screenshots are encouraged.     
+      placeholder: "Example:  Use changelog/news.md file to gather relevant changes and create into a nice post for Linked In.  The more information the better and the faster we can get this issue completed."
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Definition of Done
+      description: Please define the deliverable or the desired outcome.
+      placeholder: "Example:  All changes since last release are highlighted in Blog Post and posted to Linked In"
+    validations:
+      required: false

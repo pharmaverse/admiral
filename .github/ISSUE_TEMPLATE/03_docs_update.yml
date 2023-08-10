@@ -1,0 +1,30 @@
+name:  Updates or Enhancements for Documentation
+description: Documents out of date?  Examples need reworking? Got an idea for a new article?
+title: "Documentation:  <Insert Issue Title Here>"
+labels: ["vignettes", "website", "documentation"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The admiral team loves documentation!  Help us keep it up to date and fresh!
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: Please select a category the issue is focused on?
+      multiple: true
+      options:
+        - Function Documentation
+        - User Guides
+        - Developer Guides
+        - Other
+        - I have a new documentation idea! Yay!
+  - type: textarea
+    id: docs-out-if-sync
+    attributes:
+      label: Let us know where something needs a refresh or put your idea here!
+      description: Screen shots are super helpful here!  You can do a screenshot and cut and paste it here right in here.
+      placeholder: "Something is out of sync or needs a refresh"
+    validations:
+      required: true

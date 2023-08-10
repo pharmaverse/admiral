@@ -1,0 +1,43 @@
+name: Feature Request
+description: Enchancement to admiral functionality
+title: "Feature Request:  <Insert Issue Title Here>"
+labels: ["enhancement", "programming"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature request!  We love keeping admiral fresh!
+  - type: textarea
+    id: feature
+    attributes:
+      label: Feature Idea
+      description: Tell us your idea in as few words as possible
+      placeholder: "`derive_var_dtm` should do x, y and z"
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Relevant Input
+      description: Can you provide what the inputs should look like?
+      placeholder: "What should the input look like? REMINDER: no patient level data or company sensitive information should be shared via this open public issue"
+    validations:
+      required: false
+  - type: textarea
+    id: output
+    attributes:
+      label: Relevant Output
+      description: Can you provide what the final output should look like?
+      placeholder: "What should the output look like? REMINDER: no patient level data or company sensitive information should be shared via this open public issue"
+    validations:
+      required: false
+  - type: textarea
+    id: code
+    attributes:
+      label: Reproducible Example/Pseudo Code
+      description: Can you provide a working example or a sketch of how the code should work?
+      placeholder: "We love example code and it will speed up the process! REMINDER: no patient level data or company sensitive information should be shared via this open public issue"
+    validations:
+      required: false
