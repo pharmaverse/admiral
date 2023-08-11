@@ -142,7 +142,7 @@
 #' - `SOC`: variable to hold the SOC of the lab test criteria.
 #' - `TERM`: variable to hold the term describing the criteria applied to a particular lab test,
 #'   eg. 'Anemia' or 'INR Increased'. Note: the variable is case insensitive.
-#' - `SUBGROUP` : Description of sub-group of subjects were grading will be applied (ie >= 18 years)
+#' - `SUBGROUP` : Description of sub-group of subjects were grading will be applied (i.e. >= 18 years)
 #' - `Grade 1`: Criteria defining lab value as Grade 1.
 #' - `Grade 2`: Criteria defining lab value as Grade 2.
 #' - `Grade 3`: Criteria defining lab value as Grade 3.
@@ -162,7 +162,6 @@
 #' Note: Variables `SOC`, `TERM`, `SUBGROUP`, `Grade 1`, `Grade 2`,`Grade 3`,`Grade 4`,`Grade 5`, `Definition`
 #' are from the source document on DAIDS website defining the grading criteria.
 #' [**Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events
-#' (Corrected Version 2.1 - July 2017)**](https://https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf)
 #' From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
 #' traceability only.
 #'

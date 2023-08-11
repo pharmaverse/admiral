@@ -22,7 +22,7 @@ The dataset contained in there has the following columns:
 \item \code{SOC}: variable to hold the SOC of the lab test criteria.
 \item \code{TERM}: variable to hold the term describing the criteria applied to a particular lab test,
 eg. 'Anemia' or 'INR Increased'. Note: the variable is case insensitive.
-\item \code{SUBGROUP} : Description of sub-group of subjects were grading will be applied (ie >= 18 years)
+\item \code{SUBGROUP} : Description of sub-group of subjects were grading will be applied (i.e. >= 18 years)
 \item \verb{Grade 1}: Criteria defining lab value as Grade 1.
 \item \verb{Grade 2}: Criteria defining lab value as Grade 2.
 \item \verb{Grade 3}: Criteria defining lab value as Grade 3.
@@ -42,7 +42,7 @@ value. 'L' is for LOW values, 'H' is for HIGH values. Note: the variable is case
 
 Note: Variables \code{SOC}, \code{TERM}, \code{SUBGROUP}, \verb{Grade 1}, \verb{Grade 2},\verb{Grade 3},\verb{Grade 4},\verb{Grade 5}, \code{Definition}
 are from the source document on DAIDS website defining the grading criteria.
-\href{https://https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf}{\strong{Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events (Corrected Version 2.1 - July 2017)}}
+[**Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events
 From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
 traceability only.
 }
