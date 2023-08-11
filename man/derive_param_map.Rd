@@ -47,21 +47,21 @@ code for the new parameter.
 The observations where \code{PARAMCD} equals the specified value are considered
 as the systolic blood pressure assessments.
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 
 \item{diabp_code}{Diastolic blood pressure parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the diastolic blood pressure assessments.
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 
 \item{hr_code}{Heart rate parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the heart rate assessments.
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
@@ -84,6 +84,8 @@ be populated in the new parameter rows if it is specified in \code{by_vars}.
 \description{
 Adds a record for mean arterial pressure (MAP) for each by group
 (e.g., subject and visit) where the source parameters are available.
+
+\strong{Note:} This is a wrapper function for the more generic \code{derive_param_computed()}.
 }
 \details{
 The analysis value of the new parameter is derived as
@@ -97,7 +99,7 @@ if it is based on diastolic, systolic blood pressure, and heart rate.
 library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 
-advs <- tribble(
+advs <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
   "01-701-1015", "PULSE", "Pulse (beats/min)", 59, "BASELINE",
   "01-701-1015", "PULSE", "Pulse (beats/min)", 61, "WEEK 2",
@@ -150,7 +152,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_doseint}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
-\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_param_extreme_record}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_qtc}()},
 \code{\link{derive_param_rr}()},

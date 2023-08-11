@@ -54,11 +54,34 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("admiral_ex")
+#'
+#' ex <- tribble(
+#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~EXSEQ, ~EXDOSE,    ~EXTRT,
+#'   "PILOT01",    "EX", "01-1442",      1,      54,    "XANO",
+#'   "PILOT01",    "EX", "01-1442",      2,      54,    "XANO",
+#'   "PILOT01",    "EX", "01-1442",      3,      54,    "XANO",
+#'   "PILOT01",    "EX", "01-1444",      1,      54,    "XANO",
+#'   "PILOT01",    "EX", "01-1444",      2,      81,    "XANO",
+#'   "PILOT01",    "EX", "05-1382",      1,      54,    "XANO",
+#'   "PILOT01",    "EX", "08-1213",      1,      54,    "XANO",
+#'   "PILOT01",    "EX", "10-1053",      1,      54,    "XANO",
+#'   "PILOT01",    "EX", "10-1053",      2,      54,    "XANO",
+#'   "PILOT01",    "EX", "10-1183",      1,       0, "PLACEBO",
+#'   "PILOT01",    "EX", "10-1183",      2,       0, "PLACEBO",
+#'   "PILOT01",    "EX", "10-1183",      3,       0, "PLACEBO",
+#'   "PILOT01",    "EX", "11-1036",      1,       0, "PLACEBO",
+#'   "PILOT01",    "EX", "11-1036",      2,       0, "PLACEBO",
+#'   "PILOT01",    "EX", "11-1036",      3,       0, "PLACEBO",
+#'   "PILOT01",    "EX", "14-1425",      1,      54,    "XANO",
+#'   "PILOT01",    "EX", "15-1319",      1,      54,    "XANO",
+#'   "PILOT01",    "EX", "15-1319",      2,      81,    "XANO",
+#'   "PILOT01",    "EX", "16-1151",      1,      54,    "XANO",
+#'   "PILOT01",    "EX", "16-1151",      2,      54,    "XANO"
+#' )
+#'
 #'
 #' # Select first dose for each patient
-#' admiral_ex %>%
+#' ex %>%
 #'   filter_extreme(
 #'     by_vars = exprs(USUBJID),
 #'     order = exprs(EXSEQ),
@@ -67,7 +90,7 @@
 #'   select(USUBJID, EXSEQ)
 #'
 #' # Select highest dose for each patient on the active drug
-#' admiral_ex %>%
+#' ex %>%
 #'   filter(EXTRT != "PLACEBO") %>%
 #'   filter_extreme(
 #'     by_vars = exprs(USUBJID),
@@ -88,12 +111,11 @@ filter_extreme <- function(dataset,
       values = c("none", "warning", "error"),
       case_sensitive = FALSE
     )
+  assert_data_frame(dataset, required_vars = by_vars)
 
   # group and sort input dataset
   tmp_obs_nr <- get_new_tmp_var(dataset)
   if (!is.null(by_vars)) {
-    assert_has_variables(dataset, vars2chr(by_vars))
-
     data <- dataset %>%
       derive_var_obs_number(
         new_var = !!tmp_obs_nr,

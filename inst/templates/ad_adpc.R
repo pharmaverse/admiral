@@ -70,7 +70,7 @@ format_avalcat1n <- function(param, aval) {
 # Get list of ADSL vars required for derivations
 adsl_vars <- exprs(TRTSDT, TRTSDTM, TRT01P, TRT01A)
 
-adpc <- pc %>%
+pc_dates <- pc %>%
   # Join ADSL with PC (need TRTSDT for ADY derivation)
   derive_vars_merged(
     dataset_add = adsl,
@@ -98,7 +98,7 @@ adpc <- pc %>%
 
 # ---- Get dosing information ----
 
-ex <- ex %>%
+ex_dates <- ex %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
@@ -138,7 +138,7 @@ ex <- ex %>%
 # ---- Expand dosing records between start and end dates ----
 # Updated function includes nominal_time parameter
 
-ex_exp <- ex %>%
+ex_exp <- ex_dates %>%
   create_single_dose_dataset(
     dose_freq = EXDOSFRQ,
     start_date = ASTDT,
@@ -175,7 +175,7 @@ ex_exp <- ex %>%
 # ---- Find first dose per treatment per subject ----
 # ---- Join with ADPC data and keep only subjects with dosing ----
 
-adpc <- adpc %>%
+adpc_first_dose <- pc_dates %>%
   derive_vars_merged(
     dataset_add = ex_exp,
     filter_add = (EXDOSE > 0 & !is.na(ADTM)),
@@ -195,10 +195,8 @@ adpc <- adpc %>%
 
 
 # ---- Find previous dose  ----
-# Use derive_vars_joined for consistency with other variables
-# This is equivalent to derive_vars_last_dose in this case
 
-adpc <- adpc %>%
+adpc_prev <- adpc_first_dose %>%
   derive_vars_joined(
     dataset_add = ex_exp,
     by_vars = exprs(USUBJID),
@@ -216,7 +214,7 @@ adpc <- adpc %>%
 
 # ---- Find next dose  ----
 
-adpc <- adpc %>%
+adpc_next <- adpc_prev %>%
   derive_vars_joined(
     dataset_add = ex_exp,
     by_vars = exprs(USUBJID),
@@ -234,7 +232,7 @@ adpc <- adpc %>%
 
 # ---- Find previous nominal time ----
 
-adpc <- adpc %>%
+adpc_nom_prev <- adpc_next %>%
   derive_vars_joined(
     dataset_add = ex_exp,
     by_vars = exprs(USUBJID),
@@ -249,7 +247,7 @@ adpc <- adpc %>%
 
 # ---- Find next nominal time ----
 
-adpc <- adpc %>%
+adpc_nom_next <- adpc_nom_prev %>%
   derive_vars_joined(
     dataset_add = ex_exp,
     by_vars = exprs(USUBJID),
@@ -265,7 +263,7 @@ adpc <- adpc %>%
 # ---- Combine ADPC and EX data ----
 # Derive Relative Time Variables
 
-adpc <- bind_rows(adpc, ex_exp) %>%
+adpc_arrlt <- bind_rows(adpc_nom_next, ex_exp) %>%
   group_by(USUBJID, DRUG) %>%
   mutate(
     FANLDTM = min(FANLDTM, na.rm = TRUE),
@@ -323,7 +321,7 @@ adpc <- bind_rows(adpc, ex_exp) %>%
 
 # Derive Nominal Relative Time from Reference Dose (NRRLT)
 
-adpc <- adpc %>%
+adpc_nrrlt <- adpc_arrlt %>%
   mutate(
     NRRLT = case_when(
       EVID == 1 ~ 0,
@@ -342,7 +340,7 @@ adpc <- adpc %>%
 # Derive PARAMCD and relative time units
 # Derive AVAL, AVALU and AVALCAT1
 
-adpc <- adpc %>%
+adpc_aval <- adpc_nrrlt %>%
   mutate(
     ATPTN = case_when(
       EVID == 1 ~ 0,
@@ -369,7 +367,7 @@ adpc <- adpc %>%
     DOSEA = case_when(
       EVID == 1 ~ EXDOSE,
       is.na(EXDOSE_prev) ~ EXDOSE_next,
-      TRUE ~ EXDOSE_next
+      TRUE ~ EXDOSE_prev
     ),
     # Derive Planned Dose
     DOSEP = case_when(
@@ -407,7 +405,7 @@ adpc <- adpc %>%
 
 # ---- Create DTYPE copy records ----
 
-dtype <- adpc %>%
+dtype <- adpc_aval %>%
   filter(NFRLT > 0 & NXRLT == 0 & EVID == 0 & !is.na(AVISIT_next)) %>%
   select(-PCRFTDT, -PCRFTTM) %>%
   # Re-derive variables in for DTYPE copy records
@@ -429,7 +427,7 @@ dtype <- adpc %>%
 
 # ---- Combine original records and DTYPE copy records ----
 
-adpc <- bind_rows(adpc, dtype) %>%
+adpc_dtype <- bind_rows(adpc_aval, dtype) %>%
   arrange(STUDYID, USUBJID, BASETYPE, ADTM, NFRLT) %>%
   mutate(
     # Derive MRRLT, ANL01FL and ANL02FL
@@ -440,7 +438,7 @@ adpc <- bind_rows(adpc, dtype) %>%
 
 # ---- Derive BASE and Calculate Change from Baseline ----
 
-adpc <- adpc %>%
+adpc_base <- adpc_dtype %>%
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
@@ -448,11 +446,11 @@ adpc <- adpc %>%
     filter = ABLFL == "Y"
   )
 
-adpc <- derive_var_chg(adpc)
+adpc_chg <- derive_var_chg(adpc_base)
 
 # ---- Add ASEQ ----
 
-adpc <- adpc %>%
+adpc_aseq <- adpc_chg %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
@@ -472,7 +470,7 @@ adpc <- adpc %>%
 
 #---- Derive additional baselines from VS ----
 
-adpc <- adpc %>%
+adpc_baselines <- adpc_aseq %>%
   derive_vars_merged(
     dataset_add = vs,
     filter_add = VSTESTCD == "HEIGHT",
@@ -493,7 +491,7 @@ adpc <- adpc %>%
 # ---- Add all ADSL variables ----
 
 # Add all ADSL variables
-adpc <- adpc %>%
+adpc <- adpc_baselines %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = exprs(STUDYID, USUBJID)

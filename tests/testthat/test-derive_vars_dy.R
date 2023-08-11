@@ -285,3 +285,35 @@ test_that("derive_vars_dy Test 9: Single named --DT input when ref date is --DTM
     keys = c("STUDYID", "USUBJID")
   )
 })
+
+## Test 10: no error if input with variable end with `_temp` ----
+test_that("derive_vars_dy Test 10: no error if input with variable end with `_temp`", {
+  datain <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT, ~test_temp,
+    "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", "test"
+  ) %>%
+    mutate(
+      TRTSDTM = lubridate::as_datetime(TRTSDTM),
+      ASTDT = lubridate::ymd(ASTDT)
+    )
+
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT, ~test_temp, ~ASTDY,
+    "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", "test", 2
+  ) %>%
+    mutate(
+      TRTSDTM = lubridate::as_datetime(TRTSDTM),
+      ASTDT = lubridate::ymd(ASTDT)
+    )
+
+  actual_output <- derive_vars_dy(datain,
+    reference_date = TRTSDTM,
+    source_vars = exprs(ASTDT)
+  )
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("STUDYID", "USUBJID")
+  )
+})

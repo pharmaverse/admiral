@@ -28,7 +28,7 @@ call_user_fun <- function(call) {
     eval_tidy(call),
     error = function(cnd) {
       abort(
-        paste0("Calling ", rlang::as_label(enexpr(call)), " caused the following error:\n", cnd)
+        paste0("Calling ", as_label(enexpr(call)), " caused the following error:\n", cnd)
       )
     }
   )

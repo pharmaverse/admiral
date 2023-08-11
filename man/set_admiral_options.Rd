@@ -37,11 +37,11 @@ adsl <- tribble(
   mutate(STUDYID = "XX1234")
 
 tu <- tribble(
-  ~USUBJID2, ~VISIT,      ~TUSTRESC,
-  "1",       "SCREENING", "TARGET",
-  "1",       "WEEK 1",    "TARGET",
-  "1",       "WEEK 5",    "TARGET",
-  "1",       "WEEK 9",    "NON-TARGET",
+  ~USUBJID2,      ~VISIT,    ~TUSTRESC,
+  "1",       "SCREENING",     "TARGET",
+  "1",          "WEEK 1",     "TARGET",
+  "1",          "WEEK 5",     "TARGET",
+  "1",          "WEEK 9", "NON-TARGET",
   "2",       "SCREENING", "NON-TARGET",
   "2",       "SCREENING", "NON-TARGET"
 ) \%>\%
@@ -51,7 +51,7 @@ tu <- tribble(
   )
 
 derive_param_exist_flag(
-  dataset_adsl = adsl,
+  dataset_ref = adsl,
   dataset_add = tu,
   filter_add = TUTESTCD == "TUMIDENT" & VISIT == "SCREENING",
   condition = TUSTRESC == "TARGET",

@@ -15,6 +15,14 @@ repo:
 news:
   cran_dates: true
 
+authors:
+  before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/cran-release/)."
+  footer:
+    roles: [aut, ctb, cre, fnd]
+    text: "Developed by"
+  sidebar:
+    roles: [aut]
+
 reference:
 - title: Derivations for Adding Variables
 - subtitle: All ADaMs
@@ -49,6 +57,11 @@ reference:
   desc: Auxiliary datasets providing definitions as input for derivations, e.g. grading criteria or dose frequencies
   contents:
   - has_keyword("metadata")
+
+- title: Example Datasets
+  desc: You can run `use_ad_template()` to produce additional datasets
+  contents:
+  - has_keyword('datasets')
 
 - title: Advanced Functions
 - subtitle: Admiral Options
@@ -113,11 +126,6 @@ reference:
   contents:
   - has_keyword('utils_print')
 
-- title: Example Datasets
-  desc: You can run `use_ad_template()` to produce additional datasets
-  contents:
-  - has_keyword('datasets')
-
 - title: Objects exported from other packages
   desc: |
     To maximize the user-friendliness of `{admiral}`, functions from other packages are provided
@@ -162,6 +170,7 @@ navbar:
       text: User Guides
       menu:
       - text: Getting Started
+        href: articles/admiral.html
       - text: Creating a Basic ADSL
         href: articles/adsl.html
       - text: FAQ
@@ -178,7 +187,7 @@ navbar:
         href: articles/bds_tte.html
       - text: Creating Questionnaire ADaMs
         href: articles/questionnaires.html
-      - text: Creating a PK NCA ADaM (ADPC/ADNCA)
+      - text: Creating a PK NCA or Population PK ADaM
         href: articles/pk_adnca.html
       - text: "Advanced User Guides"
       - text: Date and Time Imputation
