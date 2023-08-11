@@ -170,4 +170,3 @@
 #' @keywords metadata
 #' @family metadata
 "atoxgr_criteria_daids"
-
