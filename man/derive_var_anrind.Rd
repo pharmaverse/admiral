@@ -4,10 +4,13 @@
 \alias{derive_var_anrind}
 \title{Derive Reference Range Indicator}
 \usage{
-derive_var_anrind(dataset)
+derive_var_anrind(dataset, use_a1hia1lo = FALSE)
 }
 \arguments{
 \item{dataset}{The input dataset}
+
+\item{use_a1hia1lo}{A logical value indicating whether to use \code{A1H1} and \code{A1LO} in
+the derivation of \code{ANRIND}.}
 }
 \value{
 The input dataset with additional column \code{ANRIND}
@@ -16,7 +19,7 @@ The input dataset with additional column \code{ANRIND}
 Derive Reference Range Indicator
 }
 \details{
-\code{ANRIND} is set to
+In the case that \code{A1H1} and \code{A1LO} are to be used, \code{ANRIND} is set to:
 \itemize{
 \item \code{"NORMAL"} if \code{AVAL} is greater or equal \code{ANRLO} and less than
 or equal \code{ANRHI}; or if \code{AVAL} is greater than or equal \code{ANRLO} and \code{ANRHI}
@@ -29,35 +32,44 @@ is less than or equal \code{A1HI}
 \item \code{"LOW LOW"} if \code{AVAL} is less than \code{A1LO}
 \item \code{"HIGH HIGH"} if \code{AVAL} is greater than \code{A1HI}
 }
+
+In the case that \code{A1H1} and \code{A1LO} are not to be used, \code{ANRIND} is set to:
+\itemize{
+\item \code{"NORMAL"} if \code{AVAL} is greater or equal \code{ANRLO} and less than
+or equal \code{ANRHI}; or if \code{AVAL} is greater than or equal \code{ANRLO} and \code{ANRHI}
+is missing; or if \code{AVAL} is less than or equal \code{ANRHI} and \code{ANRLO} is
+missing
+\item \code{"LOW"} if \code{AVAL} is less than \code{ANRLO}
+\item \code{"HIGH"} if \code{AVAL} is greater than \code{ANRHI}
+}
 }
 \examples{
 library(tibble)
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(admiral_vs)
 
-ref_ranges <- tribble(
-  ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-  "DIABP",      60,     80,    40,    90,
-  "PULSE",      60,    100,    40,   110
+vs <- tibble::tribble(
+  ~USUBJID, ~PARAMCD, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
+  "P01",       "PUL",    70,     60,    100,    40,   110,
+  "P01",       "PUL",    57,     60,    100,    40,   110,
+  "P01",       "PUL",    60,     60,    100,    40,   110,
+  "P01",     "DIABP",   102,     60,     80,    40,    90,
+  "P02",       "PUL",   109,     60,    100,    40,   110,
+  "P02",       "PUL",   100,     60,    100,    40,   110,
+  "P02",     "DIABP",    80,     60,     80,    40,    90,
+  "P03",       "PUL",    39,     60,    100,    40,   110,
+  "P03",       "PUL",    40,     60,    100,    40,   110
 )
 
-admiral_vs \%>\%
-  mutate(
-    PARAMCD = VSTESTCD,
-    AVAL = VSSTRESN
-  ) \%>\%
-  filter(PARAMCD \%in\% c("PULSE", "DIABP")) \%>\%
-  derive_vars_merged(ref_ranges, by_vars = exprs(PARAMCD)) \%>\%
-  derive_var_anrind() \%>\%
-  select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
+vs \%>\% derive_var_anrind(use_a1hia1lo = TRUE)
+vs \%>\% derive_var_anrind(use_a1hia1lo = FALSE)
+
 }
 \seealso{
 BDS-Findings Functions that returns variable appended to dataset: 
+\code{\link{derive_basetype_records}()},
 \code{\link{derive_var_analysis_ratio}()},
 \code{\link{derive_var_atoxgr_dir}()},
 \code{\link{derive_var_atoxgr}()},
-\code{\link{derive_var_basetype}()},
 \code{\link{derive_var_base}()},
 \code{\link{derive_var_chg}()},
 \code{\link{derive_var_ontrtfl}()},

@@ -11,13 +11,13 @@ compute_bmi(height, weight)
 
 It is expected that HEIGHT is in cm.
 
-Permitted Values: numeric vector}
+\emph{Permitted Values:} numeric vector}
 
 \item{weight}{WEIGHT value
 
 It is expected that WEIGHT is in kg.
 
-Permitted Values: numeric vector}
+\emph{Permitted Values:} numeric vector}
 }
 \value{
 The BMI (Body Mass Index Area) in kg/m^2.
@@ -34,6 +34,7 @@ compute_bmi(height = 170, weight = 75)
 \seealso{
 BDS-Findings Functions that returns a vector: 
 \code{\link{compute_bsa}()},
+\code{\link{compute_egfr}()},
 \code{\link{compute_framingham}()},
 \code{\link{compute_map}()},
 \code{\link{compute_qtc}()},

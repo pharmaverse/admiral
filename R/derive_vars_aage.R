@@ -1,6 +1,8 @@
 #' Derive Analysis Age
 #'
-#' Derives analysis age (`AAGE`) and analysis age unit (`AAGEU`)
+#' @description Derives analysis age (`AAGE`) and analysis age unit (`AAGEU`).
+#'
+#' **Note:** This is a wrapper function for the more generic `derive_vars_duration()`.
 #'
 #' @param dataset Input dataset
 #'
@@ -25,13 +27,15 @@
 #'
 #'   Default: `RANDDT`
 #'
-#' @param unit Unit
+#' @param age_unit Age unit
 #'
 #'   The age is derived in the specified unit
 #'
 #'   Default: 'years'
 #'
 #'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
+#'
+#' @param unit *Deprecated*, please use `age_unit` instead.
 #'
 #' @details The age is derived as the integer part of the duration from start to
 #'   end date in the specified unit. When 'years' or 'months' are specified in the `out_unit`
@@ -62,12 +66,18 @@
 derive_vars_aage <- function(dataset,
                              start_date = BRTHDT,
                              end_date = RANDDT,
-                             unit = "years") {
+                             unit = "years",
+                             age_unit = "years") {
+  if (!missing(unit)) {
+    deprecate_warn("0.12.0", "derive_vars_aage(unit = )", "derive_vars_aage(age_unit = )")
+    age_unit <- unit
+  }
+
   start_date <- assert_symbol(enexpr(start_date))
   end_date <- assert_symbol(enexpr(end_date))
   assert_data_frame(dataset, required_vars = expr_c(start_date, end_date))
   assert_character_scalar(
-    unit,
+    age_unit,
     values = c("years", "months", "weeks", "days", "hours", "minutes", "seconds")
   )
 
@@ -77,7 +87,7 @@ derive_vars_aage <- function(dataset,
     new_var_unit = AAGEU,
     start_date = !!start_date,
     end_date = !!end_date,
-    out_unit = unit,
+    out_unit = age_unit,
     add_one = FALSE,
     trunc_out = TRUE
   )

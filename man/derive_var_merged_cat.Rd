@@ -113,13 +113,14 @@ first or last observation for each by group.
 }
 \seealso{
 Other deprecated: 
+\code{\link{derive_param_extreme_event}()},
+\code{\link{derive_var_basetype}()},
 \code{\link{derive_var_confirmation_flag}()},
-\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_last_dose_amt}()},
+\code{\link{derive_var_last_dose_date}()},
+\code{\link{derive_var_last_dose_grp}()},
 \code{\link{derive_var_merged_character}()},
-\code{\link{derive_var_worst_flag}()},
-\code{\link{derive_vars_disposition_reason}()},
-\code{\link{format_eoxxstt_default}()},
-\code{\link{format_reason_default}()}
+\code{\link{derive_vars_last_dose}()}
 }
 \concept{deprecated}
 \keyword{deprecated}

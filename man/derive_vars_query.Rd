@@ -9,9 +9,9 @@ derive_vars_query(dataset, dataset_queries)
 \arguments{
 \item{dataset}{Input dataset.}
 
-\item{dataset_queries}{A dataset containing required columns \code{VAR_PREFIX},
-\code{QUERY_NAME}, \code{TERM_LEVEL}, \code{TERM_NAME}, \code{TERM_ID}, and optional columns
-\code{QUERY_ID}, \code{QUERY_SCOPE}, \code{QUERY_SCOPE_NUM}.
+\item{dataset_queries}{A dataset containing required columns \code{PREFIX},
+\code{GRPNAME}, \code{SRCVAR}, \code{TERMNAME}, \code{TERMID}, and optional columns
+\code{GRPID}, \code{SCOPE}, \code{SCOPEN}.
 
 The content of the dataset will be verified by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.
 
@@ -34,20 +34,20 @@ A query dataset is expected as an input to this function. See the
 \href{../articles/queries_dataset.html}{Queries Dataset Documentation vignette}
 for descriptions, or call \code{data("queries")} for an example of a query dataset.
 
-For each unique element in \code{VAR_PREFIX}, the corresponding "NAM"
-variable will be created. For each unique \code{VAR_PREFIX}, if \code{QUERY_ID} is
+For each unique element in \code{PREFIX}, the corresponding "NAM"
+variable will be created. For each unique \code{PREFIX}, if \code{GRPID} is
 not "" or NA, then the corresponding "CD" variable is created; similarly,
-if \code{QUERY_SCOPE} is not "" or NA, then the corresponding "SC" variable will
-be created; if \code{QUERY_SCOPE_NUM} is not "" or NA, then the corresponding
+if \code{SCOPE} is not "" or NA, then the corresponding "SC" variable will
+be created; if \code{SCOPEN} is not "" or NA, then the corresponding
 "SCN" variable will be created.
 
 For each record in \code{dataset}, the "NAM" variable takes the value of
-\code{QUERY_NAME} if the value of \code{TERM_NAME} or \code{TERM_ID} in \code{dataset_queries} matches
-the value of the respective TERM_LEVEL in \code{dataset}.
-Note that \code{TERM_NAME} in \code{dataset_queries} dataset may be NA only when \code{TERM_ID}
+\code{GRPNAME} if the value of \code{TERMNAME} or \code{TERMID} in \code{dataset_queries} matches
+the value of the respective SRCVAR in \code{dataset}.
+Note that \code{TERMNAME} in \code{dataset_queries} dataset may be NA only when \code{TERMID}
 is non-NA and vice versa.
 The "CD", "SC", and "SCN" variables are derived accordingly based on
-\code{QUERY_ID}, \code{QUERY_SCOPE}, and \code{QUERY_SCOPE_NUM} respectively,
+\code{GRPID}, \code{SCOPE}, and \code{SCOPEN} respectively,
 whenever not missing.
 }
 \examples{

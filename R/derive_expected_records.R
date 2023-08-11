@@ -5,17 +5,19 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   A data frame, the columns from `dataset_expected_obs` and specified by the
+#'   A data frame, the columns from `dataset_ref` and specified by the
 #'   `by_vars` parameter are expected.
 #'
-#' @param dataset_expected_obs Expected observations dataset
+#' @param dataset_expected_obs *Deprecated*, please use `dataset_ref` instead.
+#'
+#' @param dataset_ref Expected observations dataset
 #'
 #'   Data frame with the expected observations, e.g., all the expected
 #'   combinations of `PARAMCD`, `PARAM`, `AVISIT`, `AVISITN`, ...
 #'
 #' @param by_vars Grouping variables
 #'
-#'   For each group defined by `by_vars` those observations from `dataset_expected_obs`
+#'   For each group defined by `by_vars` those observations from `dataset_ref`
 #'   are added to the output dataset which do not have a corresponding observation
 #'   in the input dataset.
 #'
@@ -31,7 +33,7 @@
 #'   "TDOSE", PARCAT1 = "OVERALL")`.
 #'
 #' @details For each group (the variables specified in the `by_vars` parameter),
-#' those records from `dataset_expected_obs` that are missing in the input
+#' those records from `dataset_ref` that are missing in the input
 #' dataset are added to the output dataset.
 #'
 #' @return The input dataset with the missed expected observations added for each
@@ -63,7 +65,7 @@
 #'
 #' derive_expected_records(
 #'   dataset = adqs,
-#'   dataset_expected_obs = parm_visit_ref,
+#'   dataset_ref = parm_visit_ref,
 #'   by_vars = exprs(USUBJID, PARAMCD),
 #'   set_values_to = exprs(DTYPE = "DERIVED")
 #' )
@@ -78,35 +80,46 @@
 #'
 #' derive_expected_records(
 #'   dataset = adqs,
-#'   dataset_expected_obs = parm_visit_ref,
+#'   dataset_ref = parm_visit_ref,
 #'   by_vars = exprs(USUBJID, PARAMCD),
 #'   set_values_to = exprs(DTYPE = "DERIVED")
 #' )
 #'
 derive_expected_records <- function(dataset,
                                     dataset_expected_obs,
+                                    dataset_ref,
                                     by_vars = NULL,
                                     set_values_to = NULL) {
+  if (!missing(dataset_expected_obs)) {
+    deprecate_warn(
+      "0.12.0",
+      "derive_expected_records(dataset_expected_obs = )",
+      "derive_expected_records(dataset_ref = )"
+    )
+    assert_data_frame(dataset_expected_obs)
+    dataset_ref <- dataset_expected_obs
+  }
+
   # Check input parameters
   assert_vars(by_vars, optional = TRUE)
-  assert_data_frame(dataset_expected_obs)
+  assert_data_frame(dataset_ref)
   assert_data_frame(
     dataset,
-    required_vars = expr_c(by_vars, chr2vars(colnames(dataset_expected_obs)))
+    required_vars = expr_c(by_vars, chr2vars(colnames(dataset_ref)))
   )
   assert_varval_list(set_values_to, optional = TRUE)
 
   # Derive expected records
-  ## ids: Variables from by_vars but not in dataset_expected_obs
+  ## ids: Variables from by_vars but not in dataset_ref
   ids <- dataset %>%
-    select(!!!setdiff(by_vars, chr2vars(colnames(dataset_expected_obs)))) %>%
+    select(!!!setdiff(by_vars, chr2vars(colnames(dataset_ref)))) %>%
     distinct()
 
   if (ncol(ids) > 0) {
     exp_obsv <- ids %>%
-      crossing(dataset_expected_obs)
+      crossing(dataset_ref)
   } else {
-    exp_obsv <- dataset_expected_obs
+    exp_obsv <- dataset_ref
   } # tmp workaround, update after using tidyr 1.2.0
 
   exp_obs_vars <- exp_obsv %>%

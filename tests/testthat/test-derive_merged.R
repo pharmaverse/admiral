@@ -256,13 +256,13 @@ test_that("derive_vars_merged Test 10: error if variables in missing_values but 
 
 # derive_var_merged_cat ----
 
-## Test 11: deprecation warning ----
-test_that("derive_var_merged_cat Test 11: deprecation warning", {
+## Test 11: deprecation error ----
+test_that("derive_var_merged_cat Test 11: deprecation error", {
   get_vscat <- function(x) {
     if_else(x == "BASELINE", "BASELINE", "POST-BASELINE")
   }
 
-  expect_warning(
+  expect_error(
     derive_var_merged_cat(
       adsl,
       dataset_add = advs,
@@ -274,82 +274,14 @@ test_that("derive_var_merged_cat Test 11: deprecation warning", {
       mode = "last",
       missing_value = "MISSING"
     ),
-    class = "lifecycle_warning_deprecated"
+    class = "lifecycle_error_deprecated"
   )
 })
 
-## Test 12: define value for non-matched by groups ----
-test_that("derive_var_merged_cat Test 12: define value for non-matched by groups", {
-  get_vscat <- function(x) {
-    if_else(x == "BASELINE", "BASELINE", "POST-BASELINE")
-  }
-
-  actual <- suppress_warning(
-    derive_var_merged_cat(
-      adsl,
-      dataset_add = advs,
-      by_vars = exprs(USUBJID),
-      new_var = LSTVSCAT,
-      source_var = AVISIT,
-      cat_fun = get_vscat,
-      order = exprs(AVISIT),
-      mode = "last",
-      missing_value = "MISSING"
-    ),
-    regexpr = "was deprecated"
-  )
-
-  expected <-
-    mutate(adsl,
-      LSTVSCAT = c("POST-BASELINE", "BASELINE", "POST-BASELINE", "MISSING")
-    )
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("USUBJID")
-  )
-})
-
-## Test 13: by_vars with rename ----
-test_that("derive_var_merged_cat Test 13: by_vars with rename", {
-  get_region <- function(x) {
-    if_else(x %in% c("AUT", "NOR"), "EUROPE", "AFRICA")
-  }
-
-  actual <- suppress_warning(
-    derive_var_merged_cat(
-      advs,
-      dataset_add = adsl1,
-      by_vars = exprs(USUBJID = ID),
-      new_var = REGION,
-      source_var = COUNTRY,
-      cat_fun = get_region,
-      filter_add = SEX == "M"
-    ),
-    regexpr = "was deprecated"
-  )
-
-  adsl_1 <- adsl1 %>% filter(SEX == "M")
-  expected <- left_join(advs, select(adsl_1, ID, COUNTRY), by = c("USUBJID" = "ID")) %>%
-    mutate(REGION = get_region(COUNTRY)) %>%
-    mutate(REGION = case_when(
-      !is.na(COUNTRY) ~ REGION,
-      TRUE ~ NA_character_
-    )) %>%
-    select(-COUNTRY)
-
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("USUBJID", "AVISIT")
-  )
-})
 
 # derive_var_merged_exist_flag ----
-## Test 14: merge existence flag ----
-test_that("derive_var_merged_exist_flag Test 14: merge existence flag", {
+## Test 12: merge existence flag ----
+test_that("derive_var_merged_exist_flag Test 12: merge existence flag", {
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs,
@@ -369,8 +301,8 @@ test_that("derive_var_merged_exist_flag Test 14: merge existence flag", {
   )
 })
 
-## Test 15: by_vars with rename ----
-test_that("derive_var_merged_exist_flag Test 15: by_vars with rename", {
+## Test 13: by_vars with rename ----
+test_that("derive_var_merged_exist_flag Test 13: by_vars with rename", {
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs1,
@@ -392,9 +324,9 @@ test_that("derive_var_merged_exist_flag Test 15: by_vars with rename", {
 
 # derive_var_merged_character ----
 
-## Test 16: deprecation warning ----
-test_that("derive_var_merged_character Test 16: deprecation warning", {
-  expect_warning(
+## Test 14: deprecation error ----
+test_that("derive_var_merged_character Test 14: deprecation error", {
+  expect_error(
     derive_var_merged_character(
       adsl,
       dataset_add = advs,
@@ -404,148 +336,14 @@ test_that("derive_var_merged_character Test 16: deprecation warning", {
       source_var = AVISIT,
       mode = "last"
     ),
-    class = "lifecycle_warning_deprecated"
-  )
-})
-
-## Test 17: no transformation ----
-test_that("derive_var_merged_character Test 17: no transformation", {
-  actual <- suppress_warning(
-    derive_var_merged_character(
-      adsl,
-      dataset_add = advs,
-      by_vars = exprs(USUBJID),
-      order = exprs(AVISIT),
-      new_var = LASTVIS,
-      source_var = AVISIT,
-      mode = "last"
-    ),
-    regexpr = "was deprecated"
-  )
-
-  expected <-
-    mutate(adsl, LASTVIS = c("Week 2", "BASELINE", "Week 4", NA_character_))
-
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = "USUBJID"
-  )
-})
-
-## Test 18: upper case ----
-test_that("derive_var_merged_character Test 18: upper case", {
-  actual <- suppress_warning(
-    derive_var_merged_character(
-      adsl,
-      dataset_add = advs,
-      by_vars = exprs(USUBJID),
-      order = exprs(AVISIT),
-      new_var = LASTVIS,
-      source_var = AVISIT,
-      mode = "last",
-      case = "upper",
-      missing_value = "UNKNOWN"
-    ),
-    regexpr = "was deprecated"
-  )
-
-  expected <-
-    mutate(adsl, LASTVIS = c("WEEK 2", "BASELINE", "WEEK 4", "UNKNOWN"))
-
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = "USUBJID"
-  )
-})
-
-## Test 19: lower case ----
-test_that("derive_var_merged_character Test 19: lower case", {
-  actual <- suppress_warning(
-    derive_var_merged_character(
-      adsl,
-      dataset_add = advs,
-      by_vars = exprs(USUBJID),
-      order = exprs(AVISIT),
-      new_var = LASTVIS,
-      source_var = AVISIT,
-      mode = "last",
-      case = "lower"
-    ),
-    regexpr = "was deprecated"
-  )
-
-  expected <-
-    mutate(adsl, LASTVIS = c("week 2", "baseline", "week 4", NA_character_))
-
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = "USUBJID"
-  )
-})
-
-## Test 20: title case ----
-test_that("derive_var_merged_character Test 20: title case", {
-  actual <- suppress_warning(
-    derive_var_merged_character(
-      adsl,
-      dataset_add = advs,
-      by_vars = exprs(USUBJID),
-      order = exprs(AVISIT),
-      new_var = LASTVIS,
-      source_var = AVISIT,
-      mode = "last",
-      case = "title"
-    ),
-    regexpr = "was deprecated"
-  )
-
-  expected <-
-    mutate(adsl, LASTVIS = c("Week 2", "Baseline", "Week 4", NA_character_))
-
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = "USUBJID"
-  )
-})
-
-## Test 21: by_vars with rename ----
-test_that("derive_var_merged_character Test 21: by_vars with rename", {
-  actual <- suppress_warning(
-    derive_var_merged_character(
-      adsl,
-      dataset_add = advs1,
-      by_vars = exprs(USUBJID = ID),
-      order = exprs(AVISIT),
-      new_var = LASTVIS,
-      source_var = AVISIT,
-      mode = "last"
-    ),
-    regexpr = "was deprecated"
-  )
-
-  expected <-
-    mutate(adsl, LASTVIS = c("Week 2", "BASELINE", "Week 4", NA_character_))
-
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = "USUBJID"
+    class = "lifecycle_error_deprecated"
   )
 })
 
 
 # derive_vars_merged_lookup ----
-## Test 22: merge lookup table ----
-test_that("derive_vars_merged_lookup Test 22: merge lookup table", {
+## Test 15: merge lookup table ----
+test_that("derive_vars_merged_lookup Test 15: merge lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -582,8 +380,8 @@ test_that("derive_vars_merged_lookup Test 22: merge lookup table", {
 
 
 ## the lookup table
-## Test 23:  all by_vars have records in the lookup table ----
-test_that("derive_vars_merged_lookup Test 23:  all by_vars have records in the lookup table", {
+## Test 16:  all by_vars have records in the lookup table ----
+test_that("derive_vars_merged_lookup Test 16:  all by_vars have records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -618,8 +416,8 @@ test_that("derive_vars_merged_lookup Test 23:  all by_vars have records in the l
   )
 })
 
-## Test 24: by_vars with rename ----
-test_that("derive_vars_merged_lookup Test 24: by_vars with rename", {
+## Test 17: by_vars with rename ----
+test_that("derive_vars_merged_lookup Test 17: by_vars with rename", {
   param_lookup <- tibble::tribble(
     ~TESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -655,8 +453,8 @@ test_that("derive_vars_merged_lookup Test 24: by_vars with rename", {
 
 
 # get_not_mapped ----
-## Test 25: not all by_vars have records in the lookup table ----
-test_that("get_not_mapped Test 25: not all by_vars have records in the lookup table", {
+## Test 18: not all by_vars have records in the lookup table ----
+test_that("get_not_mapped Test 18: not all by_vars have records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -694,8 +492,8 @@ test_that("get_not_mapped Test 25: not all by_vars have records in the lookup ta
 })
 
 # derive_var_merged_summary ----
-## Test 26: dataset == dataset_add, no filter ----
-test_that("derive_var_merged_summary Test 26: dataset == dataset_add, no filter", {
+## Test 19: dataset == dataset_add, no filter ----
+test_that("derive_var_merged_summary Test 19: dataset == dataset_add, no filter", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -723,8 +521,8 @@ test_that("derive_var_merged_summary Test 26: dataset == dataset_add, no filter"
   )
 })
 
-## Test 27: dataset != dataset_add, filter ----
-test_that("derive_var_merged_summary Test 27: dataset != dataset_add, filter", {
+## Test 20: dataset != dataset_add, filter ----
+test_that("derive_var_merged_summary Test 20: dataset != dataset_add, filter", {
   expected <- tibble::tribble(
     ~USUBJID, ~MEANPBL,
     "1",          13.5,
@@ -757,8 +555,8 @@ test_that("derive_var_merged_summary Test 27: dataset != dataset_add, filter", {
   )
 })
 
-## Test 28: by_vars with rename ----
-test_that("derive_var_merged_summary Test 28: by_vars with rename", {
+## Test 21: by_vars with rename ----
+test_that("derive_var_merged_summary Test 21: by_vars with rename", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,

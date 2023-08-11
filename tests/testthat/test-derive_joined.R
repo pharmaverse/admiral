@@ -242,3 +242,94 @@ test_that("derive_vars_joined Test 7: new_vars expressions using variables from 
     keys = c("USUBJID", "AESEQ")
   )
 })
+
+## Test 8: error if new_vars are already in dataset ----
+test_that("derive_vars_joined Test 8: error if new_vars are already in dataset", {
+  myd <- data.frame(day = c(1, 2, 3), val = c(0, 17, 21))
+  expect_error(
+    derive_vars_joined(
+      myd,
+      dataset_add = myd,
+      order = exprs(day),
+      mode = "last",
+      filter_join = day < day.join
+    ),
+    regexp = paste(
+      "The following columns in `dataset_add` have naming conflicts with `dataset`"
+    )
+  )
+})
+
+## Test 9: fixing a bug from issue 1966 ----
+test_that("derive_vars_joined Test 9: fixing a bug from issue 1966", { # nolint
+  adlb_ast <- tribble(
+    ~ADT,         ~ASEQ,
+    "2002-01-01", 1,
+    "2002-02-02", 2,
+    "2002-02-02", 3
+  ) %>%
+    mutate(
+      STUDYID = "ABC",
+      USUBJID = "1",
+      ADT = ymd(ADT),
+      ADTM = as_datetime(ADT)
+    )
+
+  adlb_tbili_pbl <- tribble(
+    ~ADT,         ~ASEQ,
+    "2002-01-01", 4,
+    "2002-02-02", 5,
+    "2002-02-02", 6
+  ) %>%
+    mutate(
+      STUDYID = "ABC",
+      USUBJID = "1",
+      ADT = ymd(ADT),
+      ADTM = as_datetime(ADT)
+    )
+
+  adlb_joined <- derive_vars_joined(
+    adlb_ast,
+    dataset_add = adlb_tbili_pbl,
+    by_vars = exprs(STUDYID, USUBJID),
+    order = exprs(ADTM, ASEQ),
+    new_vars = exprs(TBILI_ADT = ADT),
+    filter_join = ADT <= ADT.join,
+    mode = "first"
+  )
+
+  expected <- adlb_ast %>%
+    mutate(TBILI_ADT = as.Date(c("2002-01-01", "2002-02-02", "2002-02-02"), "%Y-%m-%d"))
+
+  expect_dfs_equal(
+    base = expected,
+    compare = adlb_joined,
+    keys = c("ADT", "ASEQ", "STUDYID", "USUBJID", "ADTM", "TBILI_ADT")
+  )
+})
+
+## Test 10: order vars are selected properly in function body ----
+test_that("derive_vars_joined Test 10: order vars are selected properly in function body", {
+  myd <- data.frame(day = c(1, 2, 3), val = c(0, 17, 21))
+  actual <- derive_vars_joined(
+    myd,
+    dataset_add = myd,
+    new_vars = exprs(first_val = val),
+    join_vars = exprs(day),
+    order = exprs(-day),
+    mode = "last",
+    filter_join = day < day.join
+  )
+  expected <- tribble(
+    ~day, ~val, ~first_val,
+    1,       0,         17,
+    2,      17,         21,
+    3,      21,         NA
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("day", "val", "first_val")
+  )
+})

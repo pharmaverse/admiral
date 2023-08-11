@@ -26,6 +26,11 @@
 #'
 #'   Permitted Values: `"first"`, `"last"`
 #'
+#' @param flag_all Flag setting
+#'
+#'   A logical value where if set to `TRUE`, all records are flagged
+#'   and no error or warning is issued if the first or last record is not unique.
+#'
 #' @param by_vars Grouping variables
 #'
 #'   Permitted Values: list of variables
@@ -41,15 +46,14 @@
 #'   Permitted Values: `"none"`, `"warning"`, `"error"`
 #'
 #' @details For each group (with respect to the variables specified for the
-#'   `by_vars` parameter), `new_var` is set to "Y" for the first or last observation
+#'   `by_vars` parameter), `new_var` is set to `"Y"` for the first or last observation
 #'   (with respect to the order specified for the `order` parameter and the flag mode
-#'   specified for the `mode` parameter). Only observations included by the `filter` parameter
-#'   are considered for flagging.
+#'   specified for the `mode` parameter). In the case where the user wants to flag multiple records
+#'   of a grouping, for example records that all happen on the same visit and time, the argument
+#'   `flag_all` can be set to `TRUE`.
 #'   Otherwise, `new_var` is set to `NA`. Thus, the direction of "worst" is considered fixed for
 #'   all parameters in the dataset depending on the `order` and the `mode`, i.e. for every
 #'   parameter the first or last record will be flagged across the whole dataset.
-#'
-#' @seealso [derive_var_worst_flag()]
 #'
 #'
 #' @return The input dataset with the new flag variable added
@@ -194,6 +198,22 @@
 #'   arrange(USUBJID, AESTDY, AESEQ) %>%
 #'   select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
 #'
+#' # Most severe AE first occurrence per patient (flag all cases)
+#' example_ae %>%
+#'   mutate(
+#'     TEMP_AESEVN =
+#'       as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
+#'   ) %>%
+#'   derive_var_extreme_flag(
+#'     new_var = AOCCIFL,
+#'     by_vars = exprs(USUBJID),
+#'     order = exprs(TEMP_AESEVN, AESTDY),
+#'     mode = "first",
+#'     flag_all = TRUE
+#'   ) %>%
+#'   arrange(USUBJID, AESTDY) %>%
+#'   select(USUBJID, AEDECOD, AESEV, AESTDY, AOCCIFL)
+#'
 #' # Most severe AE first occurrence per patient per body system
 #' example_ae %>%
 #'   mutate(
@@ -213,12 +233,14 @@ derive_var_extreme_flag <- function(dataset,
                                     order,
                                     new_var,
                                     mode,
+                                    flag_all = FALSE,
                                     check_type = "warning") {
   new_var <- assert_symbol(enexpr(new_var))
   assert_vars(by_vars)
   assert_expr_list(order)
   assert_data_frame(dataset, required_vars = exprs(!!!by_vars, !!!extract_vars(order)))
   mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
+  flag_all <- assert_logical_scalar(flag_all)
   check_type <- assert_character_scalar(
     check_type,
     values = c("none", "warning", "error"),
@@ -226,9 +248,15 @@ derive_var_extreme_flag <- function(dataset,
   )
 
   # Create flag
+  if (flag_all) {
+    check_type <- "none"
+  }
+
+  # Create observation number to identify the extreme record
+  tmp_obs_nr <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr")
   data <- dataset %>%
     derive_var_obs_number(
-      new_var = temp_obs_nr,
+      new_var = !!tmp_obs_nr,
       order = order,
       by_vars = by_vars,
       check_type = check_type
@@ -236,77 +264,24 @@ derive_var_extreme_flag <- function(dataset,
 
   if (mode == "first") {
     data <- data %>%
-      mutate(!!new_var := if_else(temp_obs_nr == 1, "Y", NA_character_))
+      mutate(!!new_var := if_else(!!tmp_obs_nr == 1, "Y", NA_character_))
   } else {
     data <- data %>%
       group_by(!!!by_vars) %>%
-      mutate(!!new_var := if_else(temp_obs_nr == n(), "Y", NA_character_)) %>%
+      mutate(!!new_var := if_else(!!tmp_obs_nr == n(), "Y", NA_character_)) %>%
       ungroup()
   }
 
-  # Remove temporary variable
-  data %>% select(-temp_obs_nr)
-}
+  if (flag_all) {
+    flag_direction <- ifelse(mode == "first", "down", "up")
+    data <- data %>%
+      group_by(!!!by_vars, !!!order) %>%
+      fill(!!new_var, .direction = flag_direction) %>%
+      ungroup()
+  }
 
-#' Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*. Please use `slice_derivation()` / `derive_var_extreme_flag()`
-#' to derive extreme flags and adjust the `order` argument.
-#'
-#' @inheritParams derive_var_extreme_flag
-#' @param dataset Input dataset.
-#' Variables specified by `by_vars`, `order`, `param_var`, and `analysis_var` are expected.
-#' @param order Sort order.
-#' Used to determine maximal / minimal observation if they are not unique,
-#' see Details section for more information.
-#' @param new_var Variable to add to the `dataset`.
-#' It is set `"Y"` for the maximal / minimal observation of each group,
-#' see Details section for more information.
-#' @param param_var Variable with the parameter values for which the maximal / minimal
-#' value is calculated.
-#' @param analysis_var Variable with the measurement values for which the maximal / minimal
-#' value is calculated.
-#' @param worst_high Character with `param_var` values specifying the parameters
-#' referring to "high".
-#' Use `character(0)` if not required.
-#' @param worst_low Character with `param_var` values specifying the parameters
-#' referring to "low".
-#' Use `character(0)` if not required.
-#'
-#' @details For each group with respect to the variables specified by the `by_vars` parameter,
-#' the maximal / minimal observation of `analysis_var`
-#' is labeled in the `new_var` column as `"Y"`,
-#' if its `param_var` is in `worst_high` / `worst_low`.
-#' Otherwise, it is assigned `NA`.
-#' If there is more than one such maximal / minimal observation,
-#' the first one with respect to the order specified by the `order` parameter is flagged. The
-#' direction of "worst" depends on the definition of worst for a specified parameters in the
-#' arguments `worst_high` / `worst_low`, i.e. for some parameters the highest value is the worst
-#' and for others the worst is the lowest value.
-#'
-#' @seealso [derive_var_extreme_flag()]
-#'
-#'
-#' @return The input dataset with the new flag variable added.
-#'
-#' @family deprecated
-#' @keywords deprecated
-#'
-#' @export
-derive_var_worst_flag <- function(dataset,
-                                  by_vars,
-                                  order,
-                                  new_var,
-                                  param_var,
-                                  analysis_var,
-                                  worst_high,
-                                  worst_low,
-                                  check_type = "warning") {
-  ### DEPRECATION
-  deprecate_stop("0.10.0",
-    "derive_var_worst_flag()",
-    details = "Please use `slice_derivation()` / `derive_var_extreme_flag()`"
-  )
+
+  # Remove temporary variable
+  data %>%
+    remove_tmp_vars()
 }
