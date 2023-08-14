@@ -3249,21 +3249,23 @@ test_that("derive_var_atoxgr Test 82: DAIDS PT", {
 ### Grade 1:   2 to 2.499 x 10e9/L
 
 expected_wbcd_daids_gt7d <- tibble::tribble(
-  ~ATOXDSCL,        ~AVAL, ~AVALU,   ~ATOXGRL, ~TESTNUM,
-  "Not a term",     1,     "10^9/L", NA,       1,
-  NA_character_,    2,     "10^9/L", NA,       2,
-  "WBC, Decreased", 0.9,   "MM3",    NA,       3,
-  "WBC, Decreased", 0.9,   "10^9/L", "4",      4,
-  "WBC, Decreased", 1,     "10^9/L", "3",      5,
-  "WBC, Decreased", 1.49,  "10^9/L", "3",      6,
-  "WBC, Decreased", 1.5,   "10^9/L", "2",      7,
-  "WBC, Decreased", 1.99,  "10^9/L", "2",      8,
-  "WBC, Decreased", 2,     "10^9/L", "1",      9,
-  "WBC, Decreased", 2.49,  "10^9/L", "1",     10,
-  "WBC, Decreased", 2.5,   "10^9/L", "0",     11,
+  ~ATOXDSCL,        ~AVAL, ~AVALU,    ~ATOXGRL, ~TESTNUM,
+  "Not a term",     1,     "10^9/L",  NA,       1,
+  NA_character_,    2,     "10^9/L",  NA,       2,
+  "WBC, Decreased", 0.9,   "MM3",     NA,       3,
+  "WBC, Decreased", 0.9,   "10^9/L",  "4",      4,
+  "WBC, Decreased", 1,     "10^9/L",  "3",      5,
+  "WBC, Decreased", 1.49,  "10^9/L",  "3",      6,
+  "WBC, Decreased", 1.5,   "10^9/L",  "2",      7,
+  "WBC, Decreased", 1.99,  "10^9/L",  "2",      8,
+  "WBC, Decreased", 2,     "10^9/L",  "1",      9,
+  "WBC, Decreased", 2.49,  "10^9/L",  "1",      10,
+  "WBC, Decreased", 2.5,   "10^9/L",  "0",      11,
 ) %>%
-  mutate(BRTHDT = lubridate::ymd("2023-07-01"),
-         LBDT = lubridate::ymd("2023-07-09"))
+  mutate(
+    BRTHDT = lubridate::ymd("2023-07-01"),
+    LBDT = lubridate::ymd("2023-07-09")
+  )
 
 ### White blood cell decreased (<= 7 days of age)
 ### Grade 4: <2.500 x 10e9/L
@@ -3283,20 +3285,25 @@ expected_wbcd_daids_le7d <- tibble::tribble(
   "WBC, Decreased", 6.99,  "10^9/L", "1",      19,
   "WBC, Decreased", 7,     "10^9/L", "0",      20,
 ) %>%
-  mutate(BRTHDT = lubridate::ymd("2023-07-01"),
-         LBDT = lubridate::ymd("2023-07-08"))
+  mutate(
+    BRTHDT = lubridate::ymd("2023-07-01"),
+    LBDT = lubridate::ymd("2023-07-08")
+  )
 
 expected_wbcd_daids_noage <- expected_wbcd_daids_gt7d %>%
-  filter(TESTNUM %in% c(10,11)) %>%
-  mutate(BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
-         LBDT = if_else(TESTNUM == 11, NA, LBDT),
-         ATOXGRL = NA_character_,
-         TESTNUM = TESTNUM + 11
+  filter(TESTNUM %in% c(10, 11)) %>%
+  mutate(
+    BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
+    LBDT = if_else(TESTNUM == 11, NA, LBDT),
+    ATOXGRL = NA_character_,
+    TESTNUM = TESTNUM + 11
   )
 
 expected_wbcd_daids <- expected_wbcd_daids_gt7d %>%
-  bind_rows(expected_wbcd_daids_le7d,
-            expected_wbcd_daids_noage)
+  bind_rows(
+    expected_wbcd_daids_le7d,
+    expected_wbcd_daids_noage
+  )
 
 input_wbcd_daids <- expected_wbcd_daids %>%
   select(-ATOXGRL)

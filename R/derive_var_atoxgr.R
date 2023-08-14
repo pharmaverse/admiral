@@ -186,7 +186,6 @@ derive_var_atoxgr_dir <- function(dataset,
     # Within each TERM check if there are FILTERs to be applied
     # if FILTER not missing then loop through each FILTER for the TERM already specified
     for (j in seq_along(meta_this_term$FILTER)) {
-
       # subset using FILTER if its not empty
       if (!is.na(meta_this_term$FILTER[j])) {
         meta_this_filter <- meta_this_term %>%
@@ -202,8 +201,7 @@ derive_var_atoxgr_dir <- function(dataset,
         # filter lab data using FILTER from metadata
         grade_this_filter <- grade_this_term %>%
           filter(eval(parse(text = meta_this_filter$FILTER)))
-      }
-      else {
+      } else {
         grade_this_filter <- grade_this_term
       }
 
@@ -217,7 +215,7 @@ derive_var_atoxgr_dir <- function(dataset,
             is.na(meta_this_filter$SI_UNIT_UPPER),
           !!new_var := if_else(
             temp_flag, eval(parse(text = meta_this_filter$GRADE_CRITERIA_CODE)), NA_character_
-            )
+          )
         ) %>%
         select(-temp_flag)
 
@@ -234,7 +232,6 @@ derive_var_atoxgr_dir <- function(dataset,
     # remove lab data with TERM just graded from data still to be graded
     to_be_graded <- to_be_graded %>%
       filter(!!tox_description_var != list_of_terms$TERM[i])
-
   }
 
   out_data
