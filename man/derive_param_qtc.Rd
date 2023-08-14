@@ -138,6 +138,8 @@ derive_param_qtc(
 \seealso{
 \code{\link[=compute_qtc]{compute_qtc()}}
 
+\code{\link[=compute_qtc]{compute_qtc()}}
+
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
