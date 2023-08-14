@@ -15,7 +15,7 @@
 #'
 #' @param meta_criteria Metadata data set holding the criteria (normally a case statement)
 #'
-#' Permitted Values: atoxgr_criteria_ctcv4, atoxgr_criteria_ctcv5
+#' Permitted Values: atoxgr_criteria_ctcv4, atoxgr_criteria_ctcv5, atoxgr_criteria_daids
 #'
 #'   {admiral} metadata data set `atoxgr_criteria_ctcv4` implements
 #'   [Common Terminology Criteria for Adverse Events (CTCAE)
@@ -23,6 +23,9 @@
 #'   {admiral} metadata data set `atoxgr_criteria_ctcv5` implements
 #'   [Common Terminology Criteria for Adverse Events (CTCAE)
 #'    v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
+#'   {admiral} metadata data set `atoxgr_criteria_daids` implements
+#'   [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric
+#'    Adverse Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf)
 #'
 #'   The metadata should have the following variables:
 #'
@@ -35,6 +38,8 @@
 #' - `VAR_CHECK`: variable to hold comma separated list of variables used in criteria. Used to check
 #'   against input data that variables exist.
 #' - `GRADE_CRITERIA_CODE`: variable to hold code that creates grade based on defined criteria.
+#' - `FILTER`: Required only for DAIDS grading, specifies `admiral` code to filter the lab data based
+#'    on a subset of subjects (e.g. AGE > 18 YEARS)
 #'
 #' @param criteria_direction Direction (L= Low, H = High) of toxicity grade.
 #'
@@ -122,10 +127,13 @@ derive_var_atoxgr_dir <- function(dataset,
   # Check Grade description variable exists on input data set
   assert_data_frame(dataset, required_vars = exprs(!!tox_description_var))
 
+  # Add FILTER to metadata if not there already (FILTER used for DAIDS grading)
+  if (!"FILTER" %in% colnames(meta_criteria)) meta_criteria[["FILTER"]] <- NA_character_
+
   # Check metadata data set has required variables
   assert_data_frame(
     meta_criteria,
-    required_vars = exprs(TERM, GRADE_CRITERIA_CODE, DIRECTION, SI_UNIT_CHECK, VAR_CHECK)
+    required_vars = exprs(TERM, GRADE_CRITERIA_CODE, FILTER, DIRECTION, SI_UNIT_CHECK, VAR_CHECK)
   )
   # check DIRECTION has expected values L or H
   assert_character_vector(meta_criteria$DIRECTION, values = c("L", "H"))
@@ -135,7 +143,7 @@ derive_var_atoxgr_dir <- function(dataset,
   # L = low (Hypo) H = high (Hyper)
   atoxgr_dir <- meta_criteria %>%
     filter(!is.na(GRADE_CRITERIA_CODE) & toupper(DIRECTION) == toupper(criteria_direction)) %>%
-    select(TERM, DIRECTION, SI_UNIT_CHECK, GRADE_CRITERIA_CODE, VAR_CHECK) %>%
+    select(TERM, DIRECTION, SI_UNIT_CHECK, FILTER, GRADE_CRITERIA_CODE, VAR_CHECK) %>%
     mutate(
       TERM_UPPER = toupper(TERM),
       SI_UNIT_UPPER = toupper(SI_UNIT_CHECK)
@@ -171,33 +179,62 @@ derive_var_atoxgr_dir <- function(dataset,
     meta_this_term <- atoxgr_dir %>%
       filter(TERM_UPPER == list_of_terms$TERM_UPPER[i])
 
-    # Put list of variables required for criteria in a vector
-    list_of_vars <- gsub("\\s+", "", unlist(strsplit(meta_this_term$VAR_CHECK, ",")))
-
-    # filter lab data on term and apply criteria to derive grade
     grade_this_term <- to_be_graded %>%
       filter(!!tox_description_var == list_of_terms$TERM[i])
 
-    # check variables required in criteria exist on data
-    assert_data_frame(grade_this_term, required_vars = exprs(!!!syms(list_of_vars)))
 
-    # apply criteria when SI unit matches
-    grade_this_term <- grade_this_term %>%
-      mutate(
-        temp_flag = meta_this_term$SI_UNIT_UPPER == toupper(!!get_unit_expr) |
-          is.na(meta_this_term$SI_UNIT_UPPER),
-        !!new_var := if_else(
-          temp_flag, eval(parse(text = meta_this_term$GRADE_CRITERIA_CODE)), NA_character_
-        )
-      ) %>%
-      select(-temp_flag)
+    # Within each TERM check if there are FILTERs to be applied
+    # if FILTER not missing then loop through each FILTER for the TERM already specified
+    for (j in seq_along(meta_this_term$FILTER)) {
 
-    # remove lab data just graded from data still to be graded
+      # subset using FILTER if its not empty
+      if (!is.na(meta_this_term$FILTER[j])) {
+        meta_this_filter <- meta_this_term %>%
+          filter(FILTER == meta_this_term$FILTER[j])
+      } else {
+        meta_this_filter <- meta_this_term
+      }
+
+      # Put list of variables required for criteria in a vector
+      list_of_vars <- gsub("\\s+", "", unlist(strsplit(meta_this_filter$VAR_CHECK, ",")))
+
+      if (!is.na(meta_this_filter$FILTER)) {
+        # filter lab data using FILTER from metadata
+        grade_this_filter <- grade_this_term %>%
+          filter(eval(parse(text = meta_this_filter$FILTER)))
+      }
+      else {
+        grade_this_filter <- grade_this_term
+      }
+
+      # check variables required in criteria exist on data
+      assert_data_frame(grade_this_filter, required_vars = exprs(!!!syms(list_of_vars)))
+
+      # apply criteria when SI unit matches
+      grade_this_filter <- grade_this_filter %>%
+        mutate(
+          temp_flag = meta_this_filter$SI_UNIT_UPPER == toupper(!!get_unit_expr) |
+            is.na(meta_this_filter$SI_UNIT_UPPER),
+          !!new_var := if_else(
+            temp_flag, eval(parse(text = meta_this_filter$GRADE_CRITERIA_CODE)), NA_character_
+            )
+        ) %>%
+        select(-temp_flag)
+
+      # add data just graded to data already processed
+      out_data <- bind_rows(out_data, grade_this_filter)
+
+      if (!is.na(meta_this_filter$FILTER)) {
+        # remove lab data just graded from data still to be graded for the specified TERM
+        grade_this_term <- grade_this_term %>%
+          filter(!(eval(parse(text = meta_this_filter$FILTER))))
+      }
+    }
+
+    # remove lab data with TERM just graded from data still to be graded
     to_be_graded <- to_be_graded %>%
       filter(!!tox_description_var != list_of_terms$TERM[i])
 
-    # append lab data just graded to output data
-    out_data <- bind_rows(out_data, grade_this_term)
   }
 
   out_data
