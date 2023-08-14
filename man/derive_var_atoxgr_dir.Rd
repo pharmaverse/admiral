@@ -26,12 +26,14 @@ criteria. For example: "Anemia" or "INR Increased".}
 
 \item{meta_criteria}{Metadata data set holding the criteria (normally a case statement)
 
-Permitted Values: atoxgr_criteria_ctcv4, atoxgr_criteria_ctcv5
+Permitted Values: atoxgr_criteria_ctcv4, atoxgr_criteria_ctcv5, atoxgr_criteria_daids
 
 {admiral} metadata data set \code{atoxgr_criteria_ctcv4} implements
 \href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm}{Common Terminology Criteria for Adverse Events (CTCAE) v4.0}
 {admiral} metadata data set \code{atoxgr_criteria_ctcv5} implements
 \href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm}{Common Terminology Criteria for Adverse Events (CTCAE) v5.0}
+{admiral} metadata data set \code{atoxgr_criteria_daids} implements
+\href{https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf}{Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events}
 
 The metadata should have the following variables:
 \itemize{
@@ -44,6 +46,8 @@ if criteria is based on absolute values.
 \item \code{VAR_CHECK}: variable to hold comma separated list of variables used in criteria. Used to check
 against input data that variables exist.
 \item \code{GRADE_CRITERIA_CODE}: variable to hold code that creates grade based on defined criteria.
+\item \code{FILTER}: Required only for DAIDS grading, specifies \code{admiral} code to filter the lab data based
+on a subset of subjects (e.g. AGE > 18 YEARS)
 }}
 
 \item{criteria_direction}{Direction (L= Low, H = High) of toxicity grade.
