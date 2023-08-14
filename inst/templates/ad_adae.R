@@ -17,9 +17,9 @@ library(lubridate)
 data("ae")
 data("admiral_adsl")
 data("ex_single")
+data("suppae")
 
 adsl <- admiral_adsl
-suppae <- admiral_suppae
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing

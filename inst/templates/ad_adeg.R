@@ -18,9 +18,10 @@ library(stringr)
 # For illustration purposes read in admiral test data
 
 data("admiral_adsl")
-data("eg")
+data("admiral_eg")
 
 adsl <- admiral_adsl
+eg <- admiral_eg
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
