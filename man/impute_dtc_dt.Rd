@@ -133,7 +133,7 @@ impute_dtc_dt(
   highest_imputation = "M"
 )
 # Same as above
-impute_dtc_dtm(
+impute_dtc_dt(
   dtc = dates,
   highest_imputation = "M",
   date_imputation = "01-01"
