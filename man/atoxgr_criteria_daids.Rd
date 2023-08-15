@@ -5,7 +5,7 @@
 \alias{atoxgr_criteria_daids}
 \title{Metadata Holding Grading Criteria for DAIDs}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 57 rows and 15 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 59 rows and 15 columns.
 }
 \usage{
 atoxgr_criteria_daids

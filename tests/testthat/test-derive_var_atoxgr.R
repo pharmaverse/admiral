@@ -3593,21 +3593,21 @@ test_that("derive_var_atoxgr Test 85: DAIDS Methemoglobin", {
 ### Grade 1: 1.1 to < 1.66 x ULN
 
 expected_ptti_daids <- tibble::tribble(
-  ~ATOXDSCH,     ~AVAL,  ~ANRHI,  ~AVALU,        ~ATOXGRH,
-  "Not a term",  80,     80,     NA_character_,  NA,
-  NA_character_, 60,     80,     NA_character_,  NA,
-  "PTT, High",   240,    80,     NA_character_,  "4",
-  "PTT, High",   239,    80,     NA_character_,  "3",
-  "PTT, High",   186.4,  80,     NA_character_,  "3",
-  "PTT, High",   186.3,  80,     NA_character_,  "2",
-  "PTT, High",   132.8,  80,     NA_character_,  "2",
-  "PTT, High",   132.7,  80,     NA_character_,  "1",
-  "PTT, High",   88,     80,     NA_character_,  "1",
-  "PTT, High",   87,     80,     NA_character_,  "0",
+  ~ATOXDSCH,     ~AVAL, ~ANRHI, ~AVALU,        ~ATOXGRH,
+  "Not a term",  80,    80,     NA_character_, NA,
+  NA_character_, 60,    80,     NA_character_, NA,
+  "PTT, High",   240,   80,     NA_character_, "4",
+  "PTT, High",   239,   80,     NA_character_, "3",
+  "PTT, High",   186.4, 80,     NA_character_, "3",
+  "PTT, High",   186.3, 80,     NA_character_, "2",
+  "PTT, High",   132.8, 80,     NA_character_, "2",
+  "PTT, High",   132.7, 80,     NA_character_, "1",
+  "PTT, High",   88,    80,     NA_character_, "1",
+  "PTT, High",   87,    80,     NA_character_, "0",
   # ANRHI missing - cannot grade
-  "PTT, High",   100,    NA,     NA_character_,  NA,
+  "PTT, High",   100,   NA,     NA_character_, NA,
   # AVAL missing cannot grade
-  "PTT, High",   NA,     80,     NA_character_,  NA,
+  "PTT, High",   NA,    80,     NA_character_, NA,
 )
 input_ptti_daids <- expected_ptti_daids %>%
   select(-ATOXGRH)
