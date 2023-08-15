@@ -38,8 +38,8 @@
 #' - `VAR_CHECK`: variable to hold comma separated list of variables used in criteria. Used to check
 #'   against input data that variables exist.
 #' - `GRADE_CRITERIA_CODE`: variable to hold code that creates grade based on defined criteria.
-#' - `FILTER`: Required only for DAIDS grading, specifies `admiral` code to filter the lab data based
-#'   on a subset of subjects (e.g. AGE > 18 YEARS)
+#' - `FILTER`: Required only for DAIDS grading, specifies `admiral` code to filter the lab data
+#'   based on a subset of subjects (e.g. AGE > 18 YEARS)
 #'
 #' @param criteria_direction Direction (L= Low, H = High) of toxicity grade.
 #'

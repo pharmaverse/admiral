@@ -46,8 +46,8 @@ if criteria is based on absolute values.
 \item \code{VAR_CHECK}: variable to hold comma separated list of variables used in criteria. Used to check
 against input data that variables exist.
 \item \code{GRADE_CRITERIA_CODE}: variable to hold code that creates grade based on defined criteria.
-\item \code{FILTER}: Required only for DAIDS grading, specifies \code{admiral} code to filter the lab data based
-on a subset of subjects (e.g. AGE > 18 YEARS)
+\item \code{FILTER}: Required only for DAIDS grading, specifies \code{admiral} code to filter the lab data
+based on a subset of subjects (e.g. AGE > 18 YEARS)
 }}
 
 \item{criteria_direction}{Direction (L= Low, H = High) of toxicity grade.

@@ -3196,6 +3196,482 @@ test_that("derive_var_atoxgr Test 81: CTCAEv4 Hypophosphatemia", {
 
 # DAIDS grading----
 
+### Fibrinogen Decreased
+### Grade 4: <0.5 g/L OR < 0.25 x LLN
+### Grade 3: 0.5 to <0.75 g/L OR 0.25 to < 0.50 x LLN
+### Grade 2: 0.75 to <1 g/L OR ≥ 0.50 to < 0.75 x LLN
+### Grade 1: 1 to < 2 g/L OR 0.75 to < 1.00 x LLN
+
+
+expected_fibd_daids <- tibble::tribble(
+  ~ATOXDSCL,              ~AVAL, ~ANRLO, ~AVALU, ~ATOXGRL, ~TESTNUM,
+  "Not a term",           2,     1,      "g/L",  NA,       1,
+  NA_character_,          2,     1,      "g/L",  NA,       2,
+  "Fibrinogen Decreased", 2,     1,      "g/dL", NA,       3,
+  # test first half of criteria
+  "Fibrinogen Decreased", 0.49,  1,      "g/L",  "4",      4,
+  "Fibrinogen Decreased", 0.5,   1,      "g/L",  "3",      5,
+  "Fibrinogen Decreased", 0.74,  1,      "g/L",  "3",      6,
+  "Fibrinogen Decreased", 0.75,  1,      "g/L",  "2",      7,
+  "Fibrinogen Decreased", 0.99,  1,      "g/L",  "2",      8,
+  "Fibrinogen Decreased", 1,     1,      "g/L",  "1",      9,
+  "Fibrinogen Decreased", 1.99,  1,      "g/L",  "1",      10,
+  "Fibrinogen Decreased", 2,     1,      "g/L",  "0",      11,
+  # test second half of criteria
+  "Fibrinogen Decreased", 0.74,  3,      "g/L",  "4",      12,
+  "Fibrinogen Decreased", 0.75,  3,      "g/L",  "3",      13,
+  "Fibrinogen Decreased", 1.49,  3,      "g/L",  "3",      14,
+  "Fibrinogen Decreased", 1.5,   3,      "g/L",  "2",      15,
+  "Fibrinogen Decreased", 2.24,  3,      "g/L",  "2",      16,
+  "Fibrinogen Decreased", 2.25,  3,      "g/L",  "1",      17,
+  "Fibrinogen Decreased", 2.99,  3,      "g/L",  "1",      18,
+  "Fibrinogen Decreased", 3,     3,      "g/L",  "0",      19,
+  # TEST for missing values
+  "Fibrinogen Decreased", 0.49,  NA,     "g/L",  "4",      20,
+  "Fibrinogen Decreased", 0.5,   NA,     "g/L",  NA,       21,
+  "Fibrinogen Decreased", 2,     1,      NA,     NA,       22,
+  "Fibrinogen Decreased", NA,    1,      "g/L",  NA,       23,
+)
+
+input_fibd_daids <- expected_fibd_daids %>%
+  select(-ATOXGRL)
+
+## Test 82: DAIDS Fibrinogen Decreased ----
+test_that("derive_var_atoxgr Test 82: DAIDS Fibrinogen Decreased", {
+  actual_fibd_daids <- derive_var_atoxgr_dir(
+    input_fibd_daids,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_fibd_daids,
+    compare = actual_fibd_daids,
+    keys = c("TESTNUM")
+  )
+})
+
+
+
+### Hemoglobin, Low
+
+### >= 13 years of age (male only)
+
+### Grade 4: < 70 g/L
+### Grade 3: 70 to < 90 g/L
+### Grade 2: 90 to < 100 g/L
+### Grade 1: 100 to 109 g/L
+
+expected_hgbd_daids_ge13ym <- tibble::tribble(
+  ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~SEX, ~TESTNUM,
+  "Hemoglobin, Low", 69,    "MM3",  NA,       "M",  1,
+  "Hemoglobin, Low", 69,    "g/L",  "4",      "M",  2,
+  "Hemoglobin, Low", 70,    "g/L",  "3",      "M",  3,
+  "Hemoglobin, Low", 89,    "g/L",  "3",      "M",  4,
+  "Hemoglobin, Low", 90,    "g/L",  "2",      "M",  5,
+  "Hemoglobin, Low", 99,    "g/L",  "2",      "M",  6,
+  "Hemoglobin, Low", 100,   "g/L",  "1",      "M",  7,
+  "Hemoglobin, Low", 109,   "g/L",  "1",      "M",  8,
+  "Hemoglobin, Low", 110,   "g/L",  "0",      "M",  9,
+  "Hemoglobin, Low", NA,    "g/L",  NA,       "M",  10,
+  "Hemoglobin, Low", 110,   NA,     NA,       "M",  11,
+  "Hemoglobin, Low", 110,   "g/L",  NA,       NA,   12,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2010-07-01"),
+    LBDT = lubridate::ymd("2023-07-01")
+  )
+
+### >= 13 years of age (female only)
+
+### Grade 4: < 65 g/L
+### Grade 3: 65 to < 85 g/L
+### Grade 2: 85 to < 95 g/L
+### Grade 1: 95 to 104 g/L
+
+expected_hgbd_daids_ge13yf <- tibble::tribble(
+  ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~SEX, ~TESTNUM,
+  "Hemoglobin, Low", 64,    "MM3",  NA,       "F",  13,
+  "Hemoglobin, Low", 64,    "g/L",  "4",      "F",  14,
+  "Hemoglobin, Low", 65,    "g/L",  "3",      "F",  15,
+  "Hemoglobin, Low", 84,    "g/L",  "3",      "F",  16,
+  "Hemoglobin, Low", 85,    "g/L",  "2",      "F",  17,
+  "Hemoglobin, Low", 94,    "g/L",  "2",      "F",  18,
+  "Hemoglobin, Low", 95,    "g/L",  "1",      "F",  19,
+  "Hemoglobin, Low", 104,   "g/L",  "1",      "F",  20,
+  "Hemoglobin, Low", 105,   "g/L",  "0",      "F",  21,
+  "Hemoglobin, Low", NA,    "g/L",  NA,       "F",  22,
+  "Hemoglobin, Low", 110,   NA,     NA,       "F",  23,
+  "Hemoglobin, Low", 110,   "g/L",  NA,       NA,   24,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2010-07-01"),
+    LBDT = lubridate::ymd("2023-07-01")
+  )
+
+
+### 57 days to < 13 years of age (male and female)
+
+### Grade 4: < 65 g/L
+### Grade 3: 65 to < 85 g/L
+### Grade 2: 85 to < 95 g/L
+### Grade 1: 95 to 104 g/L
+
+expected_hgbd_daids_lt13y <- tibble::tribble(
+  ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~TESTNUM,
+  "Hemoglobin, Low", 64,    "MM3",  NA,       25,
+  "Hemoglobin, Low", 64,    "g/L",  "4",      26,
+  "Hemoglobin, Low", 65,    "g/L",  "3",      27,
+  "Hemoglobin, Low", 84,    "g/L",  "3",      28,
+  "Hemoglobin, Low", 85,    "g/L",  "2",      29,
+  "Hemoglobin, Low", 94,    "g/L",  "2",      30,
+  "Hemoglobin, Low", 95,    "g/L",  "1",      31,
+  "Hemoglobin, Low", 104,   "g/L",  "1",      32,
+  "Hemoglobin, Low", 105,   "g/L",  "0",      33,
+  "Hemoglobin, Low", NA,    "g/L",  NA,       34,
+  "Hemoglobin, Low", 110,   NA,     NA,       35,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2010-07-01"),
+    LBDT = lubridate::ymd("2023-06-30")
+  )
+
+### 36 to ≤ 56 days of age (male and female)
+
+### Grade 4: < 60 g/L
+### Grade 3: 60 to < 70 g/L
+### Grade 2: 70 to < 85 g/L
+### Grade 1: 85 to 96 g/L
+
+expected_hgbd_daids_le56d <- tibble::tribble(
+  ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~TESTNUM,
+  "Hemoglobin, Low", 59,    "MM3",  NA,       36,
+  "Hemoglobin, Low", 59,    "g/L",  "4",      37,
+  "Hemoglobin, Low", 60,    "g/L",  "3",      38,
+  "Hemoglobin, Low", 69,    "g/L",  "3",      39,
+  "Hemoglobin, Low", 70,    "g/L",  "2",      40,
+  "Hemoglobin, Low", 84,    "g/L",  "2",      41,
+  "Hemoglobin, Low", 85,    "g/L",  "1",      42,
+  "Hemoglobin, Low", 96,    "g/L",  "1",      43,
+  "Hemoglobin, Low", 97,    "g/L",  "0",      44,
+  "Hemoglobin, Low", NA,    "g/L",  NA,       45,
+  "Hemoglobin, Low", 110,   NA,     NA,       46,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2023-07-01"),
+    LBDT = lubridate::ymd("2023-08-26")
+  )
+
+
+### 22 to ≤ 35 days of age (male and female)
+
+### Grade 4: < 67 g/L
+### Grade 3: 67 to < 80 g/L
+### Grade 2: 80 to < 95 g/L
+### Grade 1: 95 to 110 g/L
+
+expected_hgbd_daids_le35d <- tibble::tribble(
+  ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~TESTNUM,
+  "Hemoglobin, Low", 66,    "MM3",  NA,       47,
+  "Hemoglobin, Low", 66,    "g/L",  "4",      48,
+  "Hemoglobin, Low", 67,    "g/L",  "3",      49,
+  "Hemoglobin, Low", 79,    "g/L",  "3",      50,
+  "Hemoglobin, Low", 80,    "g/L",  "2",      51,
+  "Hemoglobin, Low", 94,    "g/L",  "2",      52,
+  "Hemoglobin, Low", 95,    "g/L",  "1",      53,
+  "Hemoglobin, Low", 110,   "g/L",  "1",      54,
+  "Hemoglobin, Low", 111,   "g/L",  "0",      55,
+  "Hemoglobin, Low", NA,    "g/L",  NA,       56,
+  "Hemoglobin, Low", 110,   NA,     NA,       57,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2023-07-01"),
+    LBDT = lubridate::ymd("2023-08-05")
+  )
+
+
+### 8 to ≤ 21 days of age (male and female)
+
+### Grade 4: < 80 g/L
+### Grade 3: 80 to < 90 g/L
+### Grade 2: 90 to < 110 g/L
+### Grade 1: 110 to 130 g/L
+
+expected_hgbd_daids_le21d <- tibble::tribble(
+  ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~TESTNUM,
+  "Hemoglobin, Low", 79,    "MM3",  NA,       58,
+  "Hemoglobin, Low", 79,    "g/L",  "4",      59,
+  "Hemoglobin, Low", 80,    "g/L",  "3",      60,
+  "Hemoglobin, Low", 89,    "g/L",  "3",      61,
+  "Hemoglobin, Low", 90,    "g/L",  "2",      62,
+  "Hemoglobin, Low", 109,   "g/L",  "2",      63,
+  "Hemoglobin, Low", 110,   "g/L",  "1",      64,
+  "Hemoglobin, Low", 130,   "g/L",  "1",      65,
+  "Hemoglobin, Low", 131,   "g/L",  "0",      66,
+  "Hemoglobin, Low", NA,    "g/L",  NA,       67,
+  "Hemoglobin, Low", 110,   NA,     NA,       68,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2023-07-01"),
+    LBDT = lubridate::ymd("2023-07-22")
+  )
+
+### ≤ 7 days of age (male and female)
+
+### Grade 4: < 90 g/L
+### Grade 3: 90 to < 100 g/L
+### Grade 2: 100 to < 130 g/L
+### Grade 1: 130 to 140 g/L
+
+expected_hgbd_daids_le7d <- tibble::tribble(
+  ~ATOXDSCL,         ~AVAL, ~AVALU, ~ATOXGRL, ~TESTNUM,
+  "Hemoglobin, Low", 89,    "MM3",  NA,       69,
+  "Hemoglobin, Low", 89,    "g/L",  "4",      70,
+  "Hemoglobin, Low", 90,    "g/L",  "3",      71,
+  "Hemoglobin, Low", 99,    "g/L",  "3",      72,
+  "Hemoglobin, Low", 100,   "g/L",  "2",      73,
+  "Hemoglobin, Low", 129,   "g/L",  "2",      74,
+  "Hemoglobin, Low", 130,   "g/L",  "1",      75,
+  "Hemoglobin, Low", 140,   "g/L",  "1",      76,
+  "Hemoglobin, Low", 141,   "g/L",  "0",      77,
+  "Hemoglobin, Low", NA,    "g/L",  NA,       78,
+  "Hemoglobin, Low", 110,   NA,     NA,       79,
+) %>%
+  mutate(
+    BRTHDT = lubridate::ymd("2023-07-01"),
+    LBDT = lubridate::ymd("2023-07-08")
+  )
+
+expected_hgbd_daids <- expected_hgbd_daids_ge13ym %>%
+  bind_rows(
+    expected_hgbd_daids_ge13yf,
+    expected_hgbd_daids_lt13y,
+    expected_hgbd_daids_le56d,
+    expected_hgbd_daids_le35d,
+    expected_hgbd_daids_le21d,
+    expected_hgbd_daids_le7d
+  )
+
+# Set lab date to missing fo each type, ie SEX is M, F or missing
+expected_hgbd_daids_noage <- expected_hgbd_daids %>%
+  filter(TESTNUM %in% c(5, 17, 29)) %>%
+  mutate(
+    LBDT = NA,
+    ATOXGRL = NA,
+    TESTNUM = case_when(
+      TESTNUM == 5 ~ 80,
+      TESTNUM == 17 ~ 81,
+      TESTNUM == 29 ~ 82
+    )
+  )
+
+expected_hgbd_daids <- expected_hgbd_daids %>%
+  bind_rows(expected_hgbd_daids_noage)
+
+
+input_hgbd_daids <- expected_hgbd_daids %>%
+  select(-ATOXGRL)
+
+## Test 83: DAIDS HGB Low ----
+test_that("derive_var_atoxgr Test 83: DAIDS HGB Low", {
+  actual_hgbd_daids <- derive_var_atoxgr_dir(
+    input_hgbd_daids,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_hgbd_daids,
+    compare = actual_hgbd_daids,
+    keys = c("ATOXDSCL", "TESTNUM")
+  )
+})
+
+
+### INR, high
+
+### Grade 4: >=3 x ULN
+### Grade 3: 2 to <3 x ULN
+### Grade 2: 1.5 to < 2 x ULN
+### Grade 1: 1.1 to < 1.5 x ULN
+
+expected_inri_daids <- tibble::tribble(
+  ~ATOXDSCH,     ~AVAL,  ~ANRHI, ~AVALU,         ~ATOXGRH,
+  "Not a term",  80,     80,     NA_character_,  NA,
+  NA_character_, 60,     80,     NA_character_,  NA,
+  "INR, High",   240,    80,     NA_character_,  "4",
+  "INR, High",   239,    80,     NA_character_,  "3",
+  "INR, High",   160,    80,     NA_character_,  "3",
+  "INR, High",   159,    80,     NA_character_,  "2",
+  "INR, High",   120,    80,     NA_character_,  "2",
+  "INR, High",   119,    80,     NA_character_,  "1",
+  "INR, High",   88,     80,     NA_character_,  "1",
+  "INR, High",   87,     80,     NA_character_,  "0",
+  # ANRHI missing - cannot grade
+  "INR, High",   100,    NA,     NA_character_,  NA,
+  # AVAL missing cannot grade
+  "INR, High",   NA,     80,     NA_character_,  NA,
+)
+input_inri_daids <- expected_inri_daids %>%
+  select(-ATOXGRH)
+
+## Test 84: DAIDS INR High ----
+test_that("derive_var_atoxgr Test 84: DAIDS INR High", {
+  actual_inri_daids <- derive_var_atoxgr_dir(
+    input_inri_daids,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_inri_daids,
+    compare = actual_inri_daids,
+    keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
+  )
+})
+
+
+### Methemoglobin
+
+### Grade 4: >=20.0%
+### Grade 3: 15 to < 20%
+### Grade 2: 10 to < 15%
+### Grade 1: 5 to <10%
+
+expected_methi_daids <- tibble::tribble(
+  ~ATOXDSCH,         ~AVAL, ~AVALU,  ~ATOXGRH,
+  "Not a term",      20,    "%",     NA,
+  NA_character_,     20,    "%",     NA,
+  "Methemoglobin",   20,    "%",     "4",
+  "Methemoglobin",   19,    "%",     "3",
+  "Methemoglobin",   15,    "%",     "3",
+  "Methemoglobin",   14,    "%",     "2",
+  "Methemoglobin",   10,    "%",     "2",
+  "Methemoglobin",   9,     "%",     "1",
+  "Methemoglobin",   5,     "%",     "1",
+  "Methemoglobin",   4,     "%",     "0",
+  # Unit wrong - cannot grade
+  "Methemoglobin",   100,   NA,      NA,
+  # AVAL missing cannot grade
+  "Methemoglobin",   NA,    "%",     NA,
+)
+input_methi_daids <- expected_methi_daids %>%
+  select(-ATOXGRH)
+
+## Test 85: DAIDS Methemoglobin ----
+test_that("derive_var_atoxgr Test 85: DAIDS Methemoglobin", {
+  actual_methi_daids <- derive_var_atoxgr_dir(
+    input_methi_daids,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_methi_daids,
+    compare = actual_methi_daids,
+    keys = c("ATOXDSCH", "AVAL", "AVALU")
+  )
+})
+
+### PTT, high
+
+### Grade 4: >=3 x ULN
+### Grade 3: 2.33 to <3 x ULN
+### Grade 2: 1.66 to < 2.33 x ULN
+### Grade 1: 1.1 to < 1.66 x ULN
+
+expected_ptti_daids <- tibble::tribble(
+  ~ATOXDSCH,     ~AVAL,  ~ANRHI,  ~AVALU,        ~ATOXGRH,
+  "Not a term",  80,     80,     NA_character_,  NA,
+  NA_character_, 60,     80,     NA_character_,  NA,
+  "PTT, High",   240,    80,     NA_character_,  "4",
+  "PTT, High",   239,    80,     NA_character_,  "3",
+  "PTT, High",   186.4,  80,     NA_character_,  "3",
+  "PTT, High",   186.3,  80,     NA_character_,  "2",
+  "PTT, High",   132.8,  80,     NA_character_,  "2",
+  "PTT, High",   132.7,  80,     NA_character_,  "1",
+  "PTT, High",   88,     80,     NA_character_,  "1",
+  "PTT, High",   87,     80,     NA_character_,  "0",
+  # ANRHI missing - cannot grade
+  "PTT, High",   100,    NA,     NA_character_,  NA,
+  # AVAL missing cannot grade
+  "PTT, High",   NA,     80,     NA_character_,  NA,
+)
+input_ptti_daids <- expected_ptti_daids %>%
+  select(-ATOXGRH)
+
+## Test 86: DAIDS PTT High ----
+test_that("derive_var_atoxgr Test 86: DAIDS PTT High", {
+  actual_ptti_daids <- derive_var_atoxgr_dir(
+    input_ptti_daids,
+    new_var = ATOXGRH,
+    meta_criteria = atoxgr_criteria_daids,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_ptti_daids,
+    compare = actual_ptti_daids,
+    keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
+  )
+})
+
+
+### Platelets, Decreased
+### Grade 4: <25 x 10e9 /L
+### Grade 3: 25 to <50  x 10e9 /L
+### Grade 2: 50 to <100 - x 10e9
+### Grade 1: 100 - 125 x 10e9 /L
+
+expected_plated_daids <- tibble::tribble(
+  ~ATOXDSCL,              ~AVAL, ~AVALU,    ~ATOXGRL, ~TESTNUM,
+  "Not a term",           126,   "10^9/L",  NA,       1,
+  NA_character_,          120,   "10^9/L",  NA,       2,
+  "Platelets, Decreased", 115,   "MM3",     NA,       3,
+  "Platelets, Decreased", 24.9,  "10^9/L",  "4",      4,
+  "Platelets, Decreased", 25,    "10^9/L",  "3",      5,
+  "Platelets, Decreased", 49.9,  "10^9/L",  "3",      6,
+  "Platelets, Decreased", 50,    "10^9/L",  "2",      7,
+  "Platelets, Decreased", 99.9,  "10^9/L",  "2",      8,
+  "Platelets, Decreased", 100,   "10^9/L",  "1",      9,
+  "Platelets, Decreased", 124.9, "10^9/L",  "1",      10,
+  "Platelets, Decreased", 125,   "10^9/L",  "0",      11,
+)
+
+input_plated_daids <- expected_plated_daids %>%
+  select(-ATOXGRL)
+
+## Test 87: DAIDS Platelets decreased ----
+test_that("derive_var_atoxgr Test 87: DAIDS Platelets decreased", {
+  actual_plated_daids <- derive_var_atoxgr_dir(
+    input_plated_daids,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_daids,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
+  )
+
+  expect_dfs_equal(
+    base = expected_plated_daids,
+    compare = actual_plated_daids,
+    keys = c("TESTNUM")
+  )
+})
 
 ### PT, high
 
@@ -3204,7 +3680,7 @@ test_that("derive_var_atoxgr Test 81: CTCAEv4 Hypophosphatemia", {
 ### Grade 2: 1.25 - <1.5 x ULN
 ### Grade 1: 1.1 - <1.25 x ULN
 
-expected_pt_daids <- tibble::tribble(
+expected_pti_daids <- tibble::tribble(
   ~ATOXDSCH,     ~AVAL,  ~ANRHI,  ~AVALU,         ~ATOXGRH,
   "Not a term",  80,     100,     NA_character_,  NA,
   NA_character_, 60,     100,     NA_character_,  NA,
@@ -3221,13 +3697,13 @@ expected_pt_daids <- tibble::tribble(
   # AVAL missing cannot grade
   "PT, High",    NA,     100,     NA_character_,  NA,
 )
-input_pt_daids <- expected_pt_daids %>%
+input_pti_daids <- expected_pti_daids %>%
   select(-ATOXGRH)
 
-## Test 82: DAIDS PT ----
-test_that("derive_var_atoxgr Test 82: DAIDS PT", {
-  actual_pt_daids <- derive_var_atoxgr_dir(
-    input_pt_daids,
+## Test 88: DAIDS PT High ----
+test_that("derive_var_atoxgr Test 88: DAIDS PT High", {
+  actual_pti_daids <- derive_var_atoxgr_dir(
+    input_pti_daids,
     new_var = ATOXGRH,
     meta_criteria = atoxgr_criteria_daids,
     tox_description_var = ATOXDSCH,
@@ -3236,17 +3712,17 @@ test_that("derive_var_atoxgr Test 82: DAIDS PT", {
   )
 
   expect_dfs_equal(
-    base = expected_pt_daids,
-    compare = actual_pt_daids,
+    base = expected_pti_daids,
+    compare = actual_pti_daids,
     keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
   )
 })
 
 ### White blood cell decreased (> 7 days of age)
 ### Grade 4: <1 x 10e9/L
-### Grade 3:   1 to 1.499 x 10e9/L
+### Grade 3: 1 to 1.499 x 10e9/L
 ### Grade 2: 1.5 to 1.999 x 10e9/L
-### Grade 1:   2 to 2.499 x 10e9/L
+### Grade 1: 2 to 2.499 x 10e9/L
 
 expected_wbcd_daids_gt7d <- tibble::tribble(
   ~ATOXDSCL,        ~AVAL, ~AVALU,    ~ATOXGRL, ~TESTNUM,
@@ -3308,8 +3784,8 @@ expected_wbcd_daids <- expected_wbcd_daids_gt7d %>%
 input_wbcd_daids <- expected_wbcd_daids %>%
   select(-ATOXGRL)
 
-## Test 83: DAIDS White blood cell decreased ----
-test_that("derive_var_atoxgr Test 83: DAIDS White blood cell decreased", {
+## Test 89: DAIDS White blood cell decreased ----
+test_that("derive_var_atoxgr Test 89: DAIDS White blood cell decreased", {
   actual_wbcd_daids <- derive_var_atoxgr_dir(
     input_wbcd_daids,
     new_var = ATOXGRL,
