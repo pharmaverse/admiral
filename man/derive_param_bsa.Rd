@@ -190,6 +190,8 @@ derive_param_bsa(
 )
 }
 \seealso{
+\code{\link[=compute_bsa]{compute_bsa()}}
+
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
