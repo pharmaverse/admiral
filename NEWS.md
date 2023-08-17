@@ -4,6 +4,13 @@
 
 ## Updates of Existing Functions
 - The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
+- The functions `derive_var_age_years()` and `compute_age_years()` are updated to return an `NA` age in the case that the age unit is missing. (#2001) The argument `unit` for `derive_vars_aage()` is also changed to `age_unit` for consistency between these age-related functions. (#2025)
+- The `derive_var_ontrtfl()` function has been updated to allow for the column passed in `ref_end_date` to contain `NA` values. Previously, if the end date was `NA`, the row would never be flagged. Now, an `NA` value is interpreted as the treatment being ongoing, for example. (#1984)
+
+- The function `derive_var_extreme_flag()` has a new function argument, `flag_all` that additionally flags all records if the first or last record is not unique. (#1979)
+
+- The function `derive_vars_dy()` is updated to avoid potential error when the input `dataset` with columns ending with `temp`. (#2012)
+
 
 - `derive_extreme_event()` was enhanced (#1960):
 
@@ -48,8 +55,19 @@
 - The arguments `dataset_adsl` in the function `derive_param_exist_flag()` and
 `subject_keys` have been deprecated versions using the next phase of the deprecation process. (#1950)
 
+- The argument `wt` in the function `compute_egfr()` was deprecated in favor of `weight` using the first phase of the deprecation process. (#2020)
+
 - The `filter` argument in `derive_extreme_records()` was deprecated in favor of
 the `filter_add` using the next phase of the deprecation process. (#1950)
+
+- The `na_val` argument in `derive_var_shift()` has been deprecated in favor of 
+`missing_value` using the first phase of the deprecation process. (#2014)
+
+- The `dataset_expected_obs` argument in `derive_expected_records()` and `derive_locf_records()`
+has been deprecated in favor of `dataset_ref`. (#2037)
+
+- The `span_period` argument in `derive_var_ontrtfl()` has been updated to only accept 
+`TRUE` or `FALSE`, where is previously accepted `"Y"` and `NULL`. (#2033)
 
 ## Documentation
 
@@ -57,6 +75,8 @@ the `filter_add` using the next phase of the deprecation process. (#1950)
 ## Various
 
 - The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as *authors*, whereas those who made a significant contribution in the past are now down as *contributors*. All other acknowledgements have been moved to README section (#1941).
+
+- `derive_vars_joined()` had two bugs with regards to duplicates messaging and when `new_vars` was set to `NULL` that have now been addressed (#1966). 
 
 # admiral 0.11.1
 

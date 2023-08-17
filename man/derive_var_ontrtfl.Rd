@@ -14,7 +14,7 @@ derive_var_ontrtfl(
   ref_end_window = 0,
   ignore_time_for_ref_end_date = TRUE,
   filter_pre_timepoint = NULL,
-  span_period = NULL
+  span_period = FALSE
 )
 }
 \arguments{
@@ -73,9 +73,9 @@ on-treatment when \code{date} = \code{ref_start_date}. For example, if observati
 where \code{VSTPT = PRE} should not be considered on-treatment when \code{date = ref_start_date}, \code{filter_pre_timepoint} should be used to denote when the
 on-treatment flag should be set to null. Optional; default is \code{NULL}.}
 
-\item{span_period}{A \code{"Y"} scalar character. If \code{"Y"}, events that started
+\item{span_period}{A logical scalar. If \code{TRUE}, events that started
 prior to the \code{ref_start_date}and are ongoing or end after the
-\code{ref_start_date} are flagged as \code{"Y"}. Optional; default is \code{NULL}.}
+\code{ref_start_date} are flagged as \code{"Y"}. Optional; default is \code{FALSE}.}
 }
 \value{
 The input dataset with an additional column named \code{ONTRTFL} with a
@@ -107,7 +107,7 @@ If the \code{end_date} is provided and the \code{end_date} < ref_start_date then
 \code{ONTRTFL} is set to \code{NULL}.This would be applicable to cases where the
 \code{start_date} is missing and \code{ONTRTFL} has been assigned as \code{"Y"} above.
 
-If the \code{span_period} is specified as \code{"Y"}, this allows the user to assign
+If the \code{span_period} is \code{TRUE}, this allows the user to assign
 \code{ONTRTFL} as \code{"Y"} to cases where the record started prior to the
 \code{ref_start_date} and was ongoing or ended after the \code{ref_start_date}.
 
@@ -173,7 +173,7 @@ derive_var_ontrtfl(
   ref_start_date = TRTSDT,
   ref_end_date = TRTEDT,
   ref_end_window = 60,
-  span_period = "Y"
+  span_period = TRUE
 )
 
 advs <- tribble(
@@ -189,7 +189,7 @@ derive_var_ontrtfl(
   end_date = AENDT,
   ref_start_date = AP01SDT,
   ref_end_date = AP01EDT,
-  span_period = "Y"
+  span_period = TRUE
 )
 }
 \seealso{

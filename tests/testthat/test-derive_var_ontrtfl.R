@@ -334,7 +334,7 @@ test_that("derive_var_ontrtfl Test 12: end_date is NA and start_date < ref_start
     ref_start_date = TRTSDT,
     ref_end_date = TRTEDT,
     ref_end_window = 60,
-    span_period = "Y"
+    span_period = TRUE
   )
 
   expect_dfs_equal(
@@ -363,7 +363,7 @@ test_that("derive_var_ontrtfl Test 13: end_date is NA and start_date < ref_start
     ref_start_date = TRTSDT,
     ref_end_date = TRTEDT,
     ref_end_window = 60,
-    span_period = "Y"
+    span_period = TRUE
   )
 
   expect_dfs_equal(
@@ -393,12 +393,82 @@ test_that("derive_var_ontrtfl Test 14: start_date < ref_start_date and end_date 
     end_date = AENDT,
     ref_start_date = AP01SDT,
     ref_end_date = AP01EDT,
-    span_period = "Y"
+    span_period = TRUE
   )
 
   expect_dfs_equal(
     expected_output,
     actual_output,
     keys = c("STUDYID", "USUBJID", "ASTDT")
+  )
+})
+
+
+## Test 15: if trt end date is missing, the obs may still be flagged ----
+test_that("derive_var_ontrtfl Test 15: if trt end date is missing, the obs may still be flagged", { # nolint
+  adcm <- tibble::tribble(
+    ~USUBJID, ~ASTDT, ~TRTSDT, ~TRTEDT, ~AENDT,
+    "P01", ymd("2018-03-15"), ymd("2019-01-01"), NA, ymd("2022-12-01"),
+    "P02", ymd("2020-04-30"), ymd("2019-01-01"), NA, ymd("2022-03-15"),
+    "P03", ymd("2020-04-30"), ymd("2019-01-01"), NA, NA,
+    "P04", ymd("2020-04-30"), NA, NA, NA
+  ) %>%
+    as.data.frame()
+
+  # all flags should be "Y" because span_period flag is TRUE
+  expect_snapshot(
+    derive_var_ontrtfl(
+      adcm,
+      start_date = ASTDT,
+      end_date = AENDT,
+      ref_start_date = TRTSDT,
+      ref_end_date = TRTEDT,
+      span_period = TRUE
+    )
+  )
+
+  # first obs started before treatment, and it should NOT be flagged
+  expect_snapshot(
+    derive_var_ontrtfl(
+      adcm,
+      start_date = ASTDT,
+      end_date = AENDT,
+      ref_start_date = TRTSDT,
+      ref_end_date = TRTEDT
+    )
+  )
+})
+
+## Test 16: expected deprecation messaging ----
+test_that("derive_var_ontrtfl Test 16: expected deprecation messaging", { # nolint
+  adcm <- tibble::tribble(
+    ~USUBJID, ~ASTDT, ~TRTSDT, ~TRTEDT, ~AENDT,
+    "P01", ymd("2018-03-15"), ymd("2019-01-01"), NA, ymd("2022-12-01"),
+    "P02", ymd("2020-04-30"), ymd("2019-01-01"), NA, ymd("2022-03-15"),
+    "P03", ymd("2020-04-30"), ymd("2019-01-01"), NA, NA,
+  )
+
+  # all flags should be "Y" because span_period flag is TRUE
+  lifecycle::expect_deprecated(
+    derive_var_ontrtfl(
+      adcm,
+      start_date = ASTDT,
+      end_date = AENDT,
+      ref_start_date = TRTSDT,
+      ref_end_date = TRTEDT,
+      span_period = "Y"
+    )
+  )
+
+  # first obs started before treatment, and it should NOT be flagged
+  lifecycle::expect_deprecated(
+    derive_var_ontrtfl(
+      adcm,
+      start_date = ASTDT,
+      end_date = AENDT,
+      ref_start_date = TRTSDT,
+      ref_end_date = TRTEDT,
+      span_period = NULL
+    )
   )
 })

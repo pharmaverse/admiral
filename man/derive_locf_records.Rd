@@ -7,6 +7,7 @@
 derive_locf_records(
   dataset,
   dataset_expected_obs,
+  dataset_ref,
   by_vars,
   analysis_var = AVAL,
   order,
@@ -19,14 +20,16 @@ derive_locf_records(
 The columns specified by the \code{by_vars}, \code{analysis_var}, \code{order},
 \code{keep_vars} parameters are expected.}
 
-\item{dataset_expected_obs}{Expected observations dataset
+\item{dataset_expected_obs}{\emph{Deprecated}, please use \code{dataset_ref} instead.}
+
+\item{dataset_ref}{Expected observations dataset
 
 Data frame with all the combinations of \code{PARAMCD}, \code{PARAM}, \code{AVISIT},
 \code{AVISITN}, ... which are expected in the dataset is expected.}
 
 \item{by_vars}{Grouping variables
 
-For each group defined by \code{by_vars} those observations from \code{dataset_expected_obs}
+For each group defined by \code{by_vars} those observations from \code{dataset_ref}
 are added to the output dataset which do not have a corresponding observation
 in the input dataset or for which \code{analysis_var} is \code{NA} for the corresponding observation
 in the input dataset.}
@@ -59,7 +62,7 @@ does not contain observations for missed visits/time points.
 }
 \details{
 For each group (with respect to the variables specified for the
-by_vars parameter) those observations from dataset_expected_obs are added to
+by_vars parameter) those observations from \code{dataset_ref} are added to
 the output dataset
 \itemize{
 \item which do not have a corresponding observation in the input dataset or
@@ -113,8 +116,8 @@ advs_expected_obsv <- tribble(
 )
 
 derive_locf_records(
-  data = advs,
-  dataset_expected_obs = advs_expected_obsv,
+  dataset = advs,
+  dataset_ref = advs_expected_obsv,
   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
   order = exprs(AVISITN, AVISIT),
   keep_vars = exprs(PARAMN)

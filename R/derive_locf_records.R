@@ -8,14 +8,17 @@
 #'   The columns specified by the `by_vars`, `analysis_var`, `order`,
 #'   `keep_vars` parameters are expected.
 #'
-#' @param dataset_expected_obs Expected observations dataset
+#' @param dataset_expected_obs *Deprecated*, please use `dataset_ref` instead.
+#'
+#' @param dataset_ref Expected observations dataset
 #'
 #'   Data frame with all the combinations of `PARAMCD`, `PARAM`, `AVISIT`,
 #'   `AVISITN`, ... which are expected in the dataset is expected.
 #'
+#'
 #' @param by_vars Grouping variables
 #'
-#'   For each group defined by `by_vars` those observations from `dataset_expected_obs`
+#'   For each group defined by `by_vars` those observations from `dataset_ref`
 #'   are added to the output dataset which do not have a corresponding observation
 #'   in the input dataset or for which `analysis_var` is `NA` for the corresponding observation
 #'   in the input dataset.
@@ -40,7 +43,7 @@
 #' @author G Gayatri
 #'
 #' @details For each group (with respect to the variables specified for the
-#' by_vars parameter) those observations from dataset_expected_obs are added to
+#' by_vars parameter) those observations from `dataset_ref` are added to
 #' the output dataset
 #' - which do not have a corresponding observation in the input dataset or
 #' - for which `analysis_var` is NA for the corresponding observation in the input dataset.
@@ -101,8 +104,8 @@
 #' )
 #'
 #' derive_locf_records(
-#'   data = advs,
-#'   dataset_expected_obs = advs_expected_obsv,
+#'   dataset = advs,
+#'   dataset_ref = advs_expected_obsv,
 #'   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
 #'   order = exprs(AVISITN, AVISIT),
 #'   keep_vars = exprs(PARAMN)
@@ -110,10 +113,21 @@
 #'
 derive_locf_records <- function(dataset,
                                 dataset_expected_obs,
+                                dataset_ref,
                                 by_vars,
                                 analysis_var = AVAL,
                                 order,
                                 keep_vars = NULL) {
+  if (!missing(dataset_expected_obs)) {
+    deprecate_warn(
+      "0.12.0",
+      "derive_locf_records(dataset_expected_obs = )",
+      "derive_locf_records(dataset_ref = )"
+    )
+    assert_data_frame(dataset_expected_obs)
+    dataset_ref <- dataset_expected_obs
+  }
+
   #### Input Checking ####
   analysis_var <- assert_symbol(enexpr(analysis_var))
 
@@ -123,27 +137,27 @@ derive_locf_records <- function(dataset,
   assert_expr_list(order)
 
   # Check by_vars and order variables in input datasets
-  assert_data_frame(dataset_expected_obs)
+  assert_data_frame(dataset_ref)
   assert_data_frame(
     dataset,
     required_vars = expr_c(
       by_vars, analysis_var, extract_vars(order), keep_vars,
-      chr2vars(colnames(dataset_expected_obs))
+      chr2vars(colnames(dataset_ref))
     )
   )
 
 
-  #### Prepping 'dataset_expected_obs' ####
+  #### Prepping 'dataset_ref' ####
 
 
   # Get the IDs from input dataset for which the expected observations are to be added
 
   ids <- dataset %>%
-    select(!!!setdiff(by_vars, chr2vars(colnames(dataset_expected_obs)))) %>%
+    select(!!!setdiff(by_vars, chr2vars(colnames(dataset_ref)))) %>%
     distinct()
 
   exp_obsv <- ids %>%
-    crossing(dataset_expected_obs)
+    crossing(dataset_ref)
 
 
 
