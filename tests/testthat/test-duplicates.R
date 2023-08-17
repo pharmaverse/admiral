@@ -1,4 +1,6 @@
-test_that("duplicate records are extracted", {
+# extract_duplicate_records ----
+## Test 1: duplicate records are extracted ----
+test_that("extract_duplicate_records Test 1: duplicate records are extracted", {
   input <- tibble::tribble(
     ~USUBJID, ~COUNTRY, ~AAGE,
     "P01",    "GER",    22,
@@ -16,7 +18,9 @@ test_that("duplicate records are extracted", {
   )
 })
 
-test_that("dataset of duplicate records can be accessed using `get_duplicates_dataset()`", {
+# signal_duplicate_records ----
+## Test 2: dataset of duplicate records can be accessed using `get_duplicates_dataset()` ----
+test_that("signal_duplicate_records Test 2: dataset of duplicate records can be accessed using `get_duplicates_dataset()`", { # nolint
   input <- tibble::tribble(
     ~USUBJID, ~COUNTRY, ~AAGE,
     "P01",    "GER",    22,
@@ -35,4 +39,34 @@ test_that("dataset of duplicate records can be accessed using `get_duplicates_da
   )
 
   expect_true(all(expected_ouput == get_duplicates_dataset()))
+})
+
+
+# print.duplicates ----
+## Test 3: print statement works ----
+test_that("print.duplicates Test 3: print statement works", {
+  input <- tibble::tribble(
+    ~USUBJID, ~COUNTRY, ~AAGE,
+    "P01",    "GER",    22,
+    "P01",    "JPN",    34,
+    "P02",    "CZE",    41,
+    "P03",    "AUS",    39,
+    "P04",    "BRA",    21,
+    "P04",    "BRA",    21
+  )
+
+  expect_error(
+    signal_duplicate_records(input, exprs(USUBJID)),
+    "Dataset contains duplicate records with respect to `USUBJID`",
+    fixed = TRUE
+  )
+
+  # This is where the print.duplicates object would be run by the user
+  capture <- capture_output(get_duplicates_dataset(), print = TRUE)
+
+  # Define the expected output
+  expected_output <- "Duplicate records with respect to `USUBJID`."
+
+  # Compare captured output with expected output
+  expect_true(stringr::str_detect(capture, expected_output))
 })

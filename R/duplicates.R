@@ -120,3 +120,25 @@ signal_duplicate_records <- function(dataset,
     cnd_funs[[cnd_type]](full_msg)
   }
 }
+
+#' Print `duplicates` Objects
+#'
+#' @param x A `duplicates` object
+#' @param ... Not used
+#'
+#' @return No return value, called for side effects
+#'
+#'
+#' @keywords utils_print
+#' @family utils_print
+#'
+#' @export
+print.duplicates <- function(x, ...) {
+  cat(
+    "Duplicate records with respect to ",
+    enumerate(attr(x, "by_vars")),
+    ".\n",
+    sep = ""
+  )
+  NextMethod()
+}
