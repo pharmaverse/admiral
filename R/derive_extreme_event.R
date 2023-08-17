@@ -48,7 +48,7 @@
 #'
 #'   *Permitted Values:* `TRUE`, `FALSE`
 #'
-#' @param keep_vars_source Variables to keep from the source dataset
+#' @param keep_source_vars Variables to keep from the source dataset
 #'
 #'   For each event the specified variables are kept from the selected
 #'   observations. The variables specified for `by_vars` and created by
@@ -73,7 +73,7 @@
 #'
 #'       1. The variables specified by the `set_values_to` field of the event
 #'       are added to the selected observations.
-#'       1. Only the variables specified for the `keep_vars_source` field of the
+#'       1. Only the variables specified for the `keep_source_vars` field of the
 #'       event, and the by variables (`by_vars`) and the variables created by
 #'       `set_values_to` are kept.
 #'   1. For each group (with respect to the variables specified for the
@@ -178,7 +178,7 @@
 #'   ),
 #'   order = exprs(AVISITN),
 #'   mode = "first",
-#'   keep_vars_source = exprs(AVISITN),
+#'   keep_source_vars = exprs(AVISITN),
 #'   set_values_to = exprs(
 #'     PARAMCD = "ALK2",
 #'     PARAM = "ALKPH <= 2 times ULN"
@@ -296,7 +296,7 @@
 #'       set_values_to = exprs(
 #'         AVALC = "MISSING"
 #'       ),
-#'       keep_vars_source = exprs(TRTSDT)
+#'       keep_source_vars = exprs(TRTSDT)
 #'     )
 #'   ),
 #'   set_values_to = exprs(
@@ -315,7 +315,7 @@ derive_extreme_event <- function(dataset,
                                  ignore_event_order = FALSE,
                                  check_type = "warning",
                                  set_values_to,
-                                 keep_vars_source = exprs(everything())) {
+                                 keep_source_vars = exprs(everything())) {
   # Check input parameters
   assert_vars(by_vars, optional = TRUE)
   assert_list_of(events, "event_def")
@@ -351,7 +351,7 @@ derive_extreme_event <- function(dataset,
       case_sensitive = FALSE
     )
   assert_varval_list(set_values_to)
-  keep_vars_source <- assert_expr_list(keep_vars_source)
+  keep_source_vars <- assert_expr_list(keep_source_vars)
 
   # Create new observations
   ## Create a dataset (selected_records) from `events`
@@ -400,17 +400,17 @@ derive_extreme_event <- function(dataset,
           filter = !!event$condition
         )
       }
-      if (is.null(event$keep_vars_source)) {
-        event_keep_vars_source <- keep_vars_source
+      if (is.null(event$keep_source_vars)) {
+        event_keep_source_vars <- keep_source_vars
       } else {
-        event_keep_vars_source <- event$keep_vars_source
+        event_keep_source_vars <- event$keep_source_vars
       }
       if (!ignore_event_order) {
         data_events <- mutate(data_events, !!tmp_event_no := index)
       }
       data_events %>%
         process_set_values_to(set_values_to = event$set_values_to) %>%
-        select(!!!event_keep_vars_source, !!tmp_event_no, !!!by_vars, names(event$set_values_to))
+        select(!!!event_keep_source_vars, !!tmp_event_no, !!!by_vars, names(event$set_values_to))
     }
   )
   selected_records <- bind_rows(selected_records_ls)
@@ -477,7 +477,7 @@ derive_extreme_event <- function(dataset,
 #'   PARAM  = "Worst Sleeping Problems")`. The values can be a symbol, a
 #'   character string, a numeric value, `NA` or an expression.
 #'
-#' @param keep_vars_source Variables to keep from the source dataset
+#' @param keep_source_vars Variables to keep from the source dataset
 #'
 #'   The specified variables are kept for the selected observations. The
 #'   variables specified for `by_vars` (of `derive_extreme_event()`) and created
@@ -500,7 +500,7 @@ event <- function(dataset_name = NULL,
                   mode = NULL,
                   order = NULL,
                   set_values_to = NULL,
-                  keep_vars_source = NULL) {
+                  keep_source_vars = NULL) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name, optional = TRUE),
     condition = assert_filter_cond(enexpr(condition), optional = TRUE),
@@ -516,7 +516,7 @@ event <- function(dataset_name = NULL,
       named = TRUE,
       optional = TRUE
     ),
-    keep_vars_source = assert_expr_list(keep_vars_source, optional = TRUE)
+    keep_source_vars = assert_expr_list(keep_source_vars, optional = TRUE)
   )
   class(out) <- c("event", "event_def", "source", "list")
   out
@@ -595,7 +595,7 @@ event_joined <- function(dataset_name = NULL,
                          join_type,
                          first_cond = NULL,
                          set_values_to = NULL,
-                         keep_vars_source = NULL) {
+                         keep_source_vars = NULL) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name, optional = TRUE),
     condition = assert_filter_cond(enexpr(condition), optional = TRUE),
@@ -612,7 +612,7 @@ event_joined <- function(dataset_name = NULL,
       named = TRUE,
       optional = TRUE
     ),
-    keep_vars_source = assert_expr_list(keep_vars_source, optional = TRUE)
+    keep_source_vars = assert_expr_list(keep_source_vars, optional = TRUE)
   )
   class(out) <- c("event_joined", "event_def", "source", "list")
   out

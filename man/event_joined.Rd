@@ -12,7 +12,7 @@ event_joined(
   join_type,
   first_cond = NULL,
   set_values_to = NULL,
-  keep_vars_source = NULL
+  keep_source_vars = NULL
 )
 }
 \arguments{
@@ -59,7 +59,7 @@ observations are removed.}
 to be set for the event, e.g. \code{exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")}. The values can be a symbol, a
 character string, a numeric value, \code{NA} or an expression.}
 
-\item{keep_vars_source}{Variables to keep from the source dataset
+\item{keep_source_vars}{Variables to keep from the source dataset
 
 The specified variables are kept for the selected observations. The
 variables specified for \code{by_vars} (of \code{derive_extreme_event()}) and created

@@ -14,7 +14,7 @@ derive_extreme_event(
   ignore_event_order = FALSE,
   check_type = "warning",
   set_values_to,
-  keep_vars_source = exprs(everything())
+  keep_source_vars = exprs(everything())
 )
 }
 \arguments{
@@ -92,7 +92,7 @@ A list of variable name-value pairs is expected.
 symbol, a numeric value, an expression, or \code{NA}, e.g., \code{exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")}.
 }}
 
-\item{keep_vars_source}{Variables to keep from the source dataset
+\item{keep_source_vars}{Variables to keep from the source dataset
 
 For each event the specified variables are kept from the selected
 observations. The variables specified for \code{by_vars} and created by
@@ -125,7 +125,7 @@ If the event is of class \code{event_joined}, \code{filter_joined()} is called t
 select the observations.
 \item The variables specified by the \code{set_values_to} field of the event
 are added to the selected observations.
-\item Only the variables specified for the \code{keep_vars_source} field of the
+\item Only the variables specified for the \code{keep_source_vars} field of the
 event, and the by variables (\code{by_vars}) and the variables created by
 \code{set_values_to} are kept.
 }
@@ -223,7 +223,7 @@ derive_extreme_event(
   ),
   order = exprs(AVISITN),
   mode = "first",
-  keep_vars_source = exprs(AVISITN),
+  keep_source_vars = exprs(AVISITN),
   set_values_to = exprs(
     PARAMCD = "ALK2",
     PARAM = "ALKPH <= 2 times ULN"
@@ -341,7 +341,7 @@ derive_extreme_event(
       set_values_to = exprs(
         AVALC = "MISSING"
       ),
-      keep_vars_source = exprs(TRTSDT)
+      keep_source_vars = exprs(TRTSDT)
     )
   ),
   set_values_to = exprs(

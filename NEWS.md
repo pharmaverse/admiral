@@ -22,8 +22,8 @@
     `dataset_name` field to `event()`. It can be used to define events based on
     a different dataset than the input dataset.
     
-    - The `keep_vars_source` argument was added to the function and the
-    `keep_vars_source` field to `event()`. It allows to select which variables
+    - The `keep_source_vars` argument was added to the function and the
+    `keep_source_vars` field to `event()`. It allows to select which variables
     should be kept for the selected observations.
     
     - The `mode` and `order` field were added to `event()`. They allow to select

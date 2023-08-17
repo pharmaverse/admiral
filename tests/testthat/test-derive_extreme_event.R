@@ -262,7 +262,7 @@ test_that("derive_extreme_records Test 3: `source_datasets` works", {
         set_values_to = exprs(
           AVALC = "MISSING"
         ),
-        keep_vars_source = exprs(TRTSDT)
+        keep_source_vars = exprs(TRTSDT)
       )
     ),
     set_values_to = exprs(
@@ -310,7 +310,7 @@ test_that("derive_extreme_records Test 4: event-specific mode", {
     ),
     order = exprs(AVISITN),
     mode = "first",
-    keep_vars_source = exprs(AVISITN),
+    keep_source_vars = exprs(AVISITN),
     set_values_to = exprs(
       PARAMCD = "ALK2",
       PARAM = "ALKPH <= 2 times ULN"
@@ -468,7 +468,7 @@ test_that("derive_extreme_records Test 5: event_joined() is handled correctly", 
           set_values_to = exprs(
             AVALC = "MISSING"
           ),
-          keep_vars_source = exprs(TRTSDT)
+          keep_source_vars = exprs(TRTSDT)
         )
       ),
       set_values_to = exprs(
