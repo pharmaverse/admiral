@@ -1140,6 +1140,7 @@ convert_date_to_dtm <- function(dt,
 #' @examples
 #' compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
+#' compute_dtf(dtc = "--06-01T00:00", dt = as.Date("2022-06-01"))
 #' compute_dtf(dtc = "2022-06--T00:00", dt = as.Date("2022-06-01"))
 #' compute_dtf(dtc = "2022---01T00:00", dt = as.Date("2022-06-01"))
 #' compute_dtf(dtc = "2022----T00:00", dt = as.Date("2022-06-01"))
@@ -1165,9 +1166,10 @@ compute_dtf <- function(dtc, dt) {
   case_when(
     (!is_na & n_chr >= 10 & n_chr_date_portion == 10 & valid_dtc) | is_na | !valid_dtc ~ NA_character_, # nolint
     n_chr_date_portion < 4 | is.na(dtc) ~ "Y",
+    n_chr_date_portion < 10 & location_of_double_hyphen == 1 ~ "Y", # dates like "--07-07"
     n_chr_date_portion == 4 ~ "M",
-    n_chr_date_portion == 7 ~ "D",
     n_chr_date_portion < 10 & location_of_double_hyphen == 5 ~ "M", # dates like "2019---07"
+    n_chr_date_portion == 7 ~ "D",
     n_chr_date_portion < 10 & location_of_double_hyphen == 8 ~ "D", # dates like "2019-07--"
   )
 }
