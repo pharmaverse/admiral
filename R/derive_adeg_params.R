@@ -53,7 +53,6 @@
 #'
 #' @seealso [compute_qtc()]
 #'
-#'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
@@ -62,6 +61,8 @@
 #' @keywords der_prm_bds_findings
 #'
 #' @export
+#'
+#' @seealso [compute_qtc()]
 #'
 #' @examples
 #' library(tibble)
@@ -180,6 +181,8 @@ derive_param_qtc <- function(dataset,
 #' @family der_prm_bds_findings
 #' @keywords der_prm_bds_findings
 #'
+#' @seealso [derive_param_qtc()]
+#'
 #' @examples
 #' default_qtc_paramcd("Sagie")
 default_qtc_paramcd <- function(method) {
@@ -222,6 +225,8 @@ default_qtc_paramcd <- function(method) {
 #' @keywords com_bds_findings
 #'
 #' @export
+#'
+#' @seealso [derive_param_qtc()]
 #'
 #' @examples
 #' compute_qtc(qt = 350, rr = 56.54, method = "Bazett")
@@ -282,6 +287,8 @@ compute_qtc <- function(qt, rr, method) {
 #' @keywords der_prm_bds_findings
 #'
 #' @export
+#'
+#' @seealso [compute_rr()]
 #'
 #' @examples
 #' library(tibble)
@@ -365,6 +372,8 @@ derive_param_rr <- function(dataset,
 #' @keywords com_bds_findings
 #'
 #' @export
+#'
+#' @seealso [derive_param_rr()]
 #'
 #' @examples
 #' compute_rr(hr = 70.14)

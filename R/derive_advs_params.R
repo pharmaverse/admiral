@@ -66,6 +66,8 @@
 #'
 #' @export
 #'
+#' @seealso [compute_map()]
+#'
 #' @examples
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
@@ -196,6 +198,8 @@ derive_param_map <- function(dataset,
 #'
 #' @export
 #'
+#' @seealso [derive_param_map()]
+#'
 #' @examples
 #' # Compute MAP based on diastolic and systolic blood pressure
 #' compute_map(diabp = 51, sysbp = 121)
@@ -292,6 +296,8 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #' @keywords der_prm_bds_findings
 #'
 #' @export
+#'
+#' @seealso [compute_bsa()]
 #'
 #' @examples
 #' library(tibble)
@@ -483,6 +489,8 @@ derive_param_bsa <- function(dataset,
 #'
 #' @export
 #'
+#' @seealso [derive_param_bsa()]
+#'
 #' @examples
 #' # Derive BSA by the Mosteller method
 #' compute_bsa(
@@ -597,6 +605,8 @@ compute_bsa <- function(height = height,
 #' @keywords der_prm_bds_findings
 #'
 #' @export
+#'
+#' @seealso [compute_bmi()]
 #'
 #' @examples
 #'
@@ -751,6 +761,8 @@ derive_param_bmi <- function(dataset,
 #' @keywords com_bds_findings
 #'
 #' @export
+#'
+#' @seealso [derive_param_bmi()]
 #'
 #' @examples
 #' compute_bmi(height = 170, weight = 75)

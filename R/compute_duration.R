@@ -79,6 +79,8 @@
 #'
 #' @export
 #'
+#' @seealso [derive_vars_duration()]
+#'
 #' @examples
 #' library(lubridate)
 #'

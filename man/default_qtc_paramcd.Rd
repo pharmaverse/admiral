@@ -22,6 +22,8 @@ Get Default Parameter Code for Corrected QT
 default_qtc_paramcd("Sagie")
 }
 \seealso{
+\code{\link[=derive_param_qtc]{derive_param_qtc()}}
+
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_event}()},
