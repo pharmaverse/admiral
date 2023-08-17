@@ -704,7 +704,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'   highest_imputation = "M"
 #' )
 #' # Same as above
-#' impute_dtc_dtm(
+#' impute_dtc_dt(
 #'   dtc = dates,
 #'   highest_imputation = "M",
 #'   date_imputation = "01-01"
