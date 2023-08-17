@@ -35,6 +35,8 @@
 - The arguments `dataset_adsl` in the function `derive_param_exist_flag()` and
 `subject_keys` have been deprecated versions using the next phase of the deprecation process. (#1950)
 
+- The argument `wt` in the function `compute_egfr()` was deprecated in favor of `weight` using the first phase of the deprecation process. (#2020)
+
 - The `filter` argument in `derive_extreme_records()` was deprecated in favor of
 the `filter_add` using the next phase of the deprecation process. (#1950)
 
@@ -43,6 +45,9 @@ the `filter_add` using the next phase of the deprecation process. (#1950)
 
 - The `dataset_expected_obs` argument in `derive_expected_records()` and `derive_locf_records()`
 has been deprecated in favor of `dataset_ref`. (#2037)
+
+- The `span_period` argument in `derive_var_ontrtfl()` has been updated to only accept 
+`TRUE` or `FALSE`, where is previously accepted `"Y"` and `NULL`. (#2033)
 
 ## Documentation
 

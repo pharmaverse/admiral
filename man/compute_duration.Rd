@@ -126,6 +126,8 @@ compute_duration(
 )
 }
 \seealso{
+\code{\link[=derive_vars_duration]{derive_vars_duration()}}
+
 Date/Time Computation Functions that returns a vector: 
 \code{\link{compute_age_years}()},
 \code{\link{compute_dtf}()},
