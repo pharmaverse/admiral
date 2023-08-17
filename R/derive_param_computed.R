@@ -392,8 +392,7 @@ derive_param_computed <- function(dataset = NULL,
 #' @return The `parameters` argument (converted to a list of symbol, if it is a
 #'   character vector)
 #'
-#' @keywords other_advanced
-#' @family other_advanced
+#' @keywords internal
 assert_parameters_argument <- function(parameters, optional = TRUE) {
   assert_logical_scalar(optional)
   if (optional && is.null(parameters)) {
@@ -459,8 +458,7 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'   variables specified for `by_vars` and all variables of the form
 #'   `<variable>.<parameter>` occurring in `analysis_value`.
 #'
-#' @keywords other_advanced
-#' @family other_advanced
+#' @keywords internal
 get_hori_data <- function(dataset,
                           by_vars,
                           parameters,

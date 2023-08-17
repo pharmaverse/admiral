@@ -43,19 +43,4 @@ variables specified for \code{by_vars} and all variables of the form
 The function creates temporary parameters and variables of the form
 \verb{<variable>.<parameter>}, e.g., \code{AVAL.WEIGHT}.
 }
-\seealso{
-Other Advanced Functions: 
-\code{\link{assert_db_requirements}()},
-\code{\link{assert_parameters_argument}()},
-\code{\link{assert_terms}()},
-\code{\link{assert_valid_queries}()},
-\code{\link{extend_source_datasets}()},
-\code{\link{filter_date_sources}()},
-\code{\link{format.basket_select}()},
-\code{\link{list_tte_source_objects}()},
-\code{\link{params}()},
-\code{\link{validate_basket_select}()},
-\code{\link{validate_query}()}
-}
-\concept{other_advanced}
-\keyword{other_advanced}
+\keyword{internal}
