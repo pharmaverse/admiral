@@ -10,7 +10,8 @@ event(
   mode = NULL,
   order = NULL,
   set_values_to = NULL,
-  keep_source_vars = NULL
+  keep_source_vars = NULL,
+  description = NULL
 )
 }
 \arguments{
@@ -48,6 +49,11 @@ by \code{set_values_to} are always kept.
 
 \emph{Permitted Values}: A list of expressions where each element is
 a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
+
+\item{description}{Description of the event
+
+The description does not affect the derivations where the event is used. It
+is intended for documentation only.}
 }
 \value{
 An object of class \code{event}

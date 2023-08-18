@@ -31,6 +31,9 @@
     fulfilling the event condition.
     
     - The `ignore_event_order` argument was added.
+    
+    - The `description` field was added to `event()`. It can be used to provide
+    a description of the event in plain language.
 
 ## Breaking Changes
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)

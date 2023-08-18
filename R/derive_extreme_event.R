@@ -92,6 +92,8 @@
 #' @family der_prm_bds_findings
 #' @keywords der_prm_bds_findings
 #'
+#' @seealso [event()], [event_joined()]
+#'
 #' @export
 #'
 #' @examples
@@ -243,9 +245,11 @@
 #'   mode = "first",
 #'   source_datasets = list(adsl = adsl),
 #'   events = list(
-#'     # CR needs to be confirmed by a second CR at least 28 days later
-#'     # at most one NE is acceptable between the two assessments
 #'     event_joined(
+#'       description = paste(
+#'         "CR needs to be confirmed by a second CR at least 28 days later",
+#'         "at most one NE is acceptable between the two assessments"
+#'       ),
 #'       join_vars = exprs(AVALC, ADT),
 #'       join_type = "after",
 #'       first_cond = AVALC.join == "CR" &
@@ -257,9 +261,11 @@
 #'         AVALC = "CR"
 #'       )
 #'     ),
-#'     # CR needs to be confirmed by a second CR or PR at least 28 days later
-#'     # at most one NE is acceptable between the two assessments
 #'     event_joined(
+#'       description = paste(
+#'         "CR needs to be confirmed by a second CR or PR at least 28 days later,",
+#'         "at most one NE is acceptable between the two assessments"
+#'       ),
 #'       join_vars = exprs(AVALC, ADT),
 #'       join_type = "after",
 #'       first_cond = AVALC.join %in% c("CR", "PR") &
@@ -272,6 +278,10 @@
 #'       )
 #'     ),
 #'     event(
+#'       description = paste(
+#'         "CR, PR, or SD are considered as SD if occurring at least 28",
+#'         "after treatment start"
+#'       ),
 #'       condition = AVALC %in% c("CR", "PR", "SD") & ADT >= TRTSDT + 28,
 #'       set_values_to = exprs(
 #'         AVALC = "SD"
@@ -289,8 +299,8 @@
 #'         AVALC = "NE"
 #'       )
 #'     ),
-#'     # set response to MISSING for patients without records in ADRS
 #'     event(
+#'       description = "set response to MISSING for patients without records in ADRS",
 #'       dataset_name = "adsl",
 #'       condition = TRUE,
 #'       set_values_to = exprs(
@@ -487,6 +497,11 @@ derive_extreme_event <- function(dataset,
 #'   a symbol or a tidyselect expression, e.g., `exprs(VISIT, VISITNUM,
 #'   starts_with("RS"))`.
 #'
+#' @param description Description of the event
+#'
+#'   The description does not affect the derivations where the event is used. It
+#'   is intended for documentation only.
+#'
 #' @keywords source_specifications
 #' @family source_specifications
 #'
@@ -500,8 +515,10 @@ event <- function(dataset_name = NULL,
                   mode = NULL,
                   order = NULL,
                   set_values_to = NULL,
-                  keep_source_vars = NULL) {
+                  keep_source_vars = NULL,
+                  description = NULL) {
   out <- list(
+    description = assert_character_scalar(description, optional = TRUE),
     dataset_name = assert_character_scalar(dataset_name, optional = TRUE),
     condition = assert_filter_cond(enexpr(condition), optional = TRUE),
     mode = assert_character_scalar(
@@ -595,8 +612,10 @@ event_joined <- function(dataset_name = NULL,
                          join_type,
                          first_cond = NULL,
                          set_values_to = NULL,
-                         keep_source_vars = NULL) {
+                         keep_source_vars = NULL,
+                         description = NULL) {
   out <- list(
+    description = assert_character_scalar(description, optional = TRUE),
     dataset_name = assert_character_scalar(dataset_name, optional = TRUE),
     condition = assert_filter_cond(enexpr(condition), optional = TRUE),
     order = assert_expr_list(order, optional = TRUE),

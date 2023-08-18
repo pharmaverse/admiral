@@ -288,9 +288,11 @@ derive_extreme_event(
   mode = "first",
   source_datasets = list(adsl = adsl),
   events = list(
-    # CR needs to be confirmed by a second CR at least 28 days later
-    # at most one NE is acceptable between the two assessments
     event_joined(
+      description = paste(
+        "CR needs to be confirmed by a second CR at least 28 days later",
+        "at most one NE is acceptable between the two assessments"
+      ),
       join_vars = exprs(AVALC, ADT),
       join_type = "after",
       first_cond = AVALC.join == "CR" &
@@ -302,9 +304,11 @@ derive_extreme_event(
         AVALC = "CR"
       )
     ),
-    # CR needs to be confirmed by a second CR or PR at least 28 days later
-    # at most one NE is acceptable between the two assessments
     event_joined(
+      description = paste(
+        "CR needs to be confirmed by a second CR or PR at least 28 days later,",
+        "at most one NE is acceptable between the two assessments"
+      ),
       join_vars = exprs(AVALC, ADT),
       join_type = "after",
       first_cond = AVALC.join \%in\% c("CR", "PR") &
@@ -317,6 +321,10 @@ derive_extreme_event(
       )
     ),
     event(
+      description = paste(
+        "CR, PR, or SD are considered as SD if occurring at least 28",
+        "after treatment start"
+      ),
       condition = AVALC \%in\% c("CR", "PR", "SD") & ADT >= TRTSDT + 28,
       set_values_to = exprs(
         AVALC = "SD"
@@ -334,8 +342,8 @@ derive_extreme_event(
         AVALC = "NE"
       )
     ),
-    # set response to MISSING for patients without records in ADRS
     event(
+      description = "set response to MISSING for patients without records in ADRS",
       dataset_name = "adsl",
       condition = TRUE,
       set_values_to = exprs(
@@ -353,6 +361,8 @@ derive_extreme_event(
 
 }
 \seealso{
+\code{\link[=event]{event()}}, \code{\link[=event_joined]{event_joined()}}
+
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
