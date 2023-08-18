@@ -187,8 +187,7 @@ dose_freq_lookup <- tribble(
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by `dose_freq`, `start_date` and the `end_date`
-#'   parameters are expected.
+#'   `r roxygen_param_dataset(expected_vars_args = c("dose_freq", "start_date", "end_date"))`
 #'
 #' @param dose_freq The dose frequency
 #'
