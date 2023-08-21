@@ -59,21 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -105,6 +90,11 @@
 <li><p>The functions <code><a href="../reference/derive_var_age_years.html">derive_var_age_years()</a></code> and <code><a href="../reference/compute_age_years.html">compute_age_years()</a></code> are updated to return an <code>NA</code> age in the case that the age unit is missing. (<a href="https://github.com/pharmaverse/admiral/issues/2001" class="external-link">#2001</a>) The argument <code>unit</code> for <code><a href="../reference/derive_vars_aage.html">derive_vars_aage()</a></code> is also changed to <code>age_unit</code> for consistency between these age-related functions. (<a href="https://github.com/pharmaverse/admiral/issues/2025" class="external-link">#2025</a>)</p></li>
 <li><p>The <code><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl()</a></code> function has been updated to allow for the column passed in <code>ref_end_date</code> to contain <code>NA</code> values. Previously, if the end date was <code>NA</code>, the row would never be flagged. Now, an <code>NA</code> value is interpreted as the treatment being ongoing, for example. (<a href="https://github.com/pharmaverse/admiral/issues/1984" class="external-link">#1984</a>)</p></li>
 <li><p>The function <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> has a new function argument, <code>flag_all</code> that additionally flags all records if the first or last record is not unique. (<a href="https://github.com/pharmaverse/admiral/issues/1979" class="external-link">#1979</a>)</p></li>
+<li>
+<p>The function <code><a href="../reference/derive_param_computed.html">derive_param_computed()</a></code> was enhanced: (<a href="https://github.com/pharmaverse/admiral/issues/1968" class="external-link">#1968</a>)</p>
+<ul><li>The <code>analysis_value</code> and <code>analysis_var</code> arguments were deprecated in favor of <code>set_values_to</code>. This enables users to compute more than one variable.</li>
+<li>The <code>keep_nas</code> argument was added. If it is set to <code>TRUE</code>, observations are created even if values contributing to the computed values are <code>NA</code>.</li>
+</ul></li>
 <li><p>The function <code><a href="../reference/derive_vars_dy.html">derive_vars_dy()</a></code> is updated to avoid potential error when the input <code>dataset</code> with columns ending with <code>temp</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2012" class="external-link">#2012</a>)</p></li>
 </ul></div>
 <div class="section level3">
@@ -131,6 +121,7 @@
 <li><p>The arguments <code>dataset_adsl</code> in the function <code><a href="../reference/derive_param_exist_flag.html">derive_param_exist_flag()</a></code> and <code>subject_keys</code> have been deprecated versions using the next phase of the deprecation process. (<a href="https://github.com/pharmaverse/admiral/issues/1950" class="external-link">#1950</a>)</p></li>
 <li><p>The argument <code>wt</code> in the function <code><a href="../reference/compute_egfr.html">compute_egfr()</a></code> was deprecated in favor of <code>weight</code> using the first phase of the deprecation process. (<a href="https://github.com/pharmaverse/admiral/issues/2020" class="external-link">#2020</a>)</p></li>
 <li><p>The <code>filter</code> argument in <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> was deprecated in favor of the <code>filter_add</code> using the next phase of the deprecation process. (<a href="https://github.com/pharmaverse/admiral/issues/1950" class="external-link">#1950</a>)</p></li>
+<li><p>The <code>analysis_value</code> and <code>analysis_var</code> arguments in <code><a href="../reference/derive_param_computed.html">derive_param_computed()</a></code> were deprecated in favor of <code>set_values_to</code> (<a href="https://github.com/pharmaverse/admiral/issues/1968" class="external-link">#1968</a>).</p></li>
 <li><p>The <code>na_val</code> argument in <code><a href="../reference/derive_var_shift.html">derive_var_shift()</a></code> has been deprecated in favor of <code>missing_value</code> using the first phase of the deprecation process. (<a href="https://github.com/pharmaverse/admiral/issues/2014" class="external-link">#2014</a>)</p></li>
 <li><p>The <code>dataset_expected_obs</code> argument in <code><a href="../reference/derive_expected_records.html">derive_expected_records()</a></code> and <code><a href="../reference/derive_locf_records.html">derive_locf_records()</a></code> has been deprecated in favor of <code>dataset_ref</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2037" class="external-link">#2037</a>)</p></li>
 <li><p>The <code>span_period</code> argument in <code><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl()</a></code> has been updated to only accept <code>TRUE</code> or <code>FALSE</code>, where is previously accepted <code>"Y"</code> and <code>NULL</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2033" class="external-link">#2033</a>)</p></li>

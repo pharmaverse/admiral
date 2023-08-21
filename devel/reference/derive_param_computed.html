@@ -69,21 +69,6 @@ $$MAP = \frac{SYSBP + 2 DIABP}{3}$$"><meta property="og:image" content="https://
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -126,7 +111,8 @@ $$MAP = \frac{SYSBP + 2 DIABP}{3}$$</p>
   <span class="va">set_values_to</span>,
   filter <span class="op">=</span> <span class="cn">NULL</span>,
   constant_by_vars <span class="op">=</span> <span class="cn">NULL</span>,
-  constant_parameters <span class="op">=</span> <span class="cn">NULL</span>
+  constant_parameters <span class="op">=</span> <span class="cn">NULL</span>,
+  keep_nas <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -180,6 +166,7 @@ parameter code <code>"HGHT"</code>.</p>
 
 <dt>analysis_var</dt>
 <dd><p>Analysis variable</p>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>set_values_to</code> instead.</p>
 <p>The specified variable is set to the value of <code>analysis_value</code> for the new
 observations.</p>
 <p><em>Permitted Values</em>: An unquoted symbol</p></dd>
@@ -187,6 +174,7 @@ observations.</p>
 
 <dt>analysis_value</dt>
 <dd><p>Definition of the analysis value</p>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>set_values_to</code> instead.</p>
 <p>An expression defining the analysis value (<code>AVAL</code>) of the new parameter is
 expected. The values of variables of the parameters specified by
 <code>parameters</code> can be accessed using <code>&lt;variable name&gt;.&lt;parameter code&gt;</code>,
@@ -198,8 +186,15 @@ e.g., <code>AVAL.SYSBP</code>.</p>
 <dt>set_values_to</dt>
 <dd><p>Variables to be set</p>
 <p>The specified variables are set to the specified values for the new
-observations. For example <code>exprs(PARAMCD = "MAP")</code> defines the parameter
-code for the new parameter.</p>
+observations. The values of variables of the parameters specified by
+<code>parameters</code> can be accessed using <code>&lt;variable name&gt;.&lt;parameter code&gt;</code>. For
+example</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exprs</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">AVAL =</span> (AVAL.SYSBP <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> AVAL.DIABP) <span class="sc">/</span> <span class="dv">3</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">PARAMCD =</span> <span class="st">"MAP"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre><p></p></div>
+<p>defines the analysis value and parameter code for the new parameter.</p>
+<p>Variable names in the expression must not contain more than one dot.</p>
 <p><em>Permitted Values:</em> List of variable-value pairs</p></dd>
 
 
@@ -237,6 +232,12 @@ codes. For example, <code>constant_parameters = exprs(WEIGHT, HGHT = VSTESTCD ==
 parameter code <code>"HGHT"</code>.</p>
 <p><em>Permitted Values:</em> A character vector of <code>PARAMCD</code> values or a list of expressions</p></dd>
 
+
+<dt>keep_nas</dt>
+<dd><p>Keep observations with <code>NA</code>s</p>
+<p>If the argument is set to <code>TRUE</code>, observations are added even if some of
+the values contributing to the computed value are <code>NA</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -252,10 +253,9 @@ be populated in the new parameter rows if it is specified in <code>by_vars</code
 filtered input dataset (<code>dataset</code>) or the additional dataset
 (<code>dataset_add</code>) contains exactly one observation for each parameter code
 specified for <code>parameters</code>.</p>
-<p>For the new observations <code>AVAL</code> is set to the value specified by
-<code>analysis_value</code> and the variables specified for <code>set_values_to</code> are set to
-the provided values. The values of the other variables of the input dataset
-are set to <code>NA</code>.</p>
+<p>For the new observations the variables specified for <code>set_values_to</code> are
+set to the provided values. The values of the other variables of the input
+dataset are set to <code>NA</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -282,6 +282,8 @@ are set to <code>NA</code>.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Example 1: Derive MAP</span></span>
 <span class="r-in"><span class="va">advs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
@@ -300,8 +302,8 @@ are set to <code>NA</code>.</p>
 <span class="r-in">  <span class="va">advs</span>,</span>
 <span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">VISIT</span><span class="op">)</span>,</span>
 <span class="r-in">  parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SYSBP"</span>, <span class="st">"DIABP"</span><span class="op">)</span>,</span>
-<span class="r-in">  analysis_value <span class="op">=</span> <span class="op">(</span><span class="va">AVAL.SYSBP</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">AVAL.DIABP</span><span class="op">)</span> <span class="op">/</span> <span class="fl">3</span>,</span>
 <span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">    AVAL <span class="op">=</span> <span class="op">(</span><span class="va">AVAL.SYSBP</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">AVAL.DIABP</span><span class="op">)</span> <span class="op">/</span> <span class="fl">3</span>,</span>
 <span class="r-in">    PARAMCD <span class="op">=</span> <span class="st">"MAP"</span>,</span>
 <span class="r-in">    PARAM <span class="op">=</span> <span class="st">"Mean Arterial Pressure (mmHg)"</span>,</span>
 <span class="r-in">    AVALU <span class="op">=</span> <span class="st">"mmHg"</span></span>
@@ -340,8 +342,8 @@ are set to <code>NA</code>.</p>
 <span class="r-in">  <span class="va">advs</span>,</span>
 <span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">VISIT</span><span class="op">)</span>,</span>
 <span class="r-in">  parameters <span class="op">=</span> <span class="st">"WEIGHT"</span>,</span>
-<span class="r-in">  analysis_value <span class="op">=</span> <span class="va">AVAL.WEIGHT</span> <span class="op">/</span> <span class="op">(</span><span class="va">AVAL.HEIGHT</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>,</span>
 <span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">    AVAL <span class="op">=</span> <span class="va">AVAL.WEIGHT</span> <span class="op">/</span> <span class="op">(</span><span class="va">AVAL.HEIGHT</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>,</span>
 <span class="r-in">    PARAMCD <span class="op">=</span> <span class="st">"BMI"</span>,</span>
 <span class="r-in">    PARAM <span class="op">=</span> <span class="st">"Body Mass Index (kg/m^2)"</span>,</span>
 <span class="r-in">    AVALU <span class="op">=</span> <span class="st">"kg/m^2"</span></span>
@@ -368,7 +370,7 @@ are set to <code>NA</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> 01-701-1028 BMI     Body Mass Index (kg/m^2)  30.4 kg/m^2 WEEK 2   </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Example 3: Using data from an additional dataset and other variables than AVAL</span></span>
-<span class="r-in"><span class="va">qs</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in"><span class="va">qs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AVISIT</span>,   <span class="op">~</span><span class="va">QSTESTCD</span>, <span class="op">~</span><span class="va">QSORRES</span>, <span class="op">~</span><span class="va">QSSTRESN</span>,</span>
 <span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 2"</span>,  <span class="st">"CHSF112"</span>, <span class="cn">NA</span>,               <span class="fl">1</span>,</span>
 <span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 2"</span>,  <span class="st">"CHSF113"</span>, <span class="st">"Yes"</span>,           <span class="cn">NA</span>,</span>
@@ -378,39 +380,74 @@ are set to <code>NA</code>.</p>
 <span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>,  <span class="st">"CHSF114"</span>, <span class="cn">NA</span>,               <span class="fl">1</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">adchsf</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AVISIT</span>,  <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">QSORRES</span>, <span class="op">~</span><span class="va">QSSTRESN</span>, <span class="op">~</span><span class="va">AVAL</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 2"</span>, <span class="st">"CHSF12"</span>, <span class="cn">NA</span>,       <span class="fl">1</span>,             <span class="fl">6</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 2"</span>, <span class="st">"CHSF14"</span>, <span class="cn">NA</span>,       <span class="fl">1</span>,             <span class="fl">6</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>, <span class="st">"CHSF12"</span>, <span class="cn">NA</span>,       <span class="fl">2</span>,            <span class="fl">12</span>,</span>
-<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>, <span class="st">"CHSF14"</span>, <span class="cn">NA</span>,       <span class="fl">1</span>,             <span class="fl">6</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span class="va">adchsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AVISIT</span>,  <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">QSSTRESN</span>, <span class="op">~</span><span class="va">AVAL</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 2"</span>, <span class="st">"CHSF12"</span>, <span class="fl">1</span>,             <span class="fl">6</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 2"</span>, <span class="st">"CHSF14"</span>, <span class="fl">1</span>,             <span class="fl">6</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>, <span class="st">"CHSF12"</span>, <span class="fl">2</span>,            <span class="fl">12</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"WEEK 4"</span>, <span class="st">"CHSF14"</span>, <span class="fl">1</span>,             <span class="fl">6</span></span>
+<span class="r-in"><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>QSORRES <span class="op">=</span> <span class="cn">NA_character_</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">derive_param_computed</span><span class="op">(</span></span>
 <span class="r-in">  <span class="va">adchsf</span>,</span>
 <span class="r-in">  dataset_add <span class="op">=</span> <span class="va">qs</span>,</span>
 <span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">AVISIT</span><span class="op">)</span>,</span>
 <span class="r-in">  parameters <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">CHSF12</span>, CHSF13 <span class="op">=</span> <span class="va">QSTESTCD</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CHSF113"</span>, <span class="st">"CHSF213"</span><span class="op">)</span>, <span class="va">CHSF14</span><span class="op">)</span>,</span>
-<span class="r-in">  analysis_value <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">QSORRES.CHSF13</span> <span class="op">==</span> <span class="st">"Not applicable"</span> <span class="op">~</span> <span class="fl">0</span>,</span>
-<span class="r-in">    <span class="va">QSORRES.CHSF13</span> <span class="op">==</span> <span class="st">"Yes"</span> <span class="op">~</span> <span class="fl">38</span>,</span>
-<span class="r-in">    <span class="va">QSORRES.CHSF13</span> <span class="op">==</span> <span class="st">"No"</span> <span class="op">~</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="va">QSSTRESN.CHSF12</span> <span class="op">&gt;</span> <span class="va">QSSTRESN.CHSF14</span>,</span>
-<span class="r-in">      <span class="fl">25</span>,</span>
-<span class="r-in">      <span class="fl">0</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>PARAMCD <span class="op">=</span> <span class="st">"CHSF13"</span><span class="op">)</span></span>
+<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">    AVAL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span class="r-in">      <span class="va">QSORRES.CHSF13</span> <span class="op">==</span> <span class="st">"Not applicable"</span> <span class="op">~</span> <span class="fl">0</span>,</span>
+<span class="r-in">      <span class="va">QSORRES.CHSF13</span> <span class="op">==</span> <span class="st">"Yes"</span> <span class="op">~</span> <span class="fl">38</span>,</span>
+<span class="r-in">      <span class="va">QSORRES.CHSF13</span> <span class="op">==</span> <span class="st">"No"</span> <span class="op">~</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span></span>
+<span class="r-in">        <span class="va">QSSTRESN.CHSF12</span> <span class="op">&gt;</span> <span class="va">QSSTRESN.CHSF14</span>,</span>
+<span class="r-in">        <span class="fl">25</span>,</span>
+<span class="r-in">        <span class="fl">0</span></span>
+<span class="r-in">      <span class="op">)</span></span>
+<span class="r-in">    <span class="op">)</span>,</span>
+<span class="r-in">    PARAMCD <span class="op">=</span> <span class="st">"CHSF13"</span></span>
+<span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID AVISIT PARAMCD QSORRES QSSTRESN  AVAL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1       WEEK 2 CHSF12  <span style="color: #BB0000;">NA</span>             1     6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 1       WEEK 2 CHSF14  <span style="color: #BB0000;">NA</span>             1     6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 1       WEEK 4 CHSF12  <span style="color: #BB0000;">NA</span>             2    12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 1       WEEK 4 CHSF14  <span style="color: #BB0000;">NA</span>             1     6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 1       WEEK 2 CHSF13  <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>    38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 1       WEEK 4 CHSF13  <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>    25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID AVISIT PARAMCD QSSTRESN  AVAL QSORRES</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1       WEEK 2 CHSF12         1     6 <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 1       WEEK 2 CHSF14         1     6 <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 1       WEEK 4 CHSF12         2    12 <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 1       WEEK 4 CHSF14         1     6 <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 1       WEEK 2 CHSF13        <span style="color: #BB0000;">NA</span>    38 <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 1       WEEK 4 CHSF13        <span style="color: #BB0000;">NA</span>    25 <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Example 4: Computing more than one variable</span></span>
+<span class="r-in"><span class="va">adlb_tbilialk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">AVALC</span>, <span class="op">~</span><span class="va">ADTM</span>,        <span class="op">~</span><span class="va">ADTF</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"ALK2"</span>,   <span class="st">"Y"</span>,    <span class="st">"2021-05-13"</span>, <span class="cn">NA_character_</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"TBILI2"</span>, <span class="st">"Y"</span>,    <span class="st">"2021-06-30"</span>, <span class="st">"D"</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"ALK2"</span>,   <span class="st">"Y"</span>,    <span class="st">"2021-12-31"</span>, <span class="st">"M"</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"TBILI2"</span>, <span class="st">"N"</span>,    <span class="st">"2021-11-11"</span>, <span class="cn">NA_character_</span>,</span>
+<span class="r-in">  <span class="st">"3"</span>,      <span class="st">"ALK2"</span>,   <span class="st">"N"</span>,    <span class="st">"2021-04-03"</span>, <span class="cn">NA_character_</span>,</span>
+<span class="r-in">  <span class="st">"3"</span>,      <span class="st">"TBILI2"</span>, <span class="st">"N"</span>,    <span class="st">"2021-04-04"</span>, <span class="cn">NA_character_</span></span>
+<span class="r-in"><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ADTM <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">ADTM</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu">derive_param_computed</span><span class="op">(</span></span>
+<span class="r-in">  dataset_add <span class="op">=</span> <span class="va">adlb_tbilialk</span>,</span>
+<span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span class="r-in">  parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ALK2"</span>, <span class="st">"TBILI2"</span><span class="op">)</span>,</span>
+<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">    AVALC <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">AVALC.TBILI2</span> <span class="op">==</span> <span class="st">"Y"</span> <span class="op">&amp;</span> <span class="va">AVALC.ALK2</span> <span class="op">==</span> <span class="st">"Y"</span>, <span class="st">"Y"</span>, <span class="st">"N"</span><span class="op">)</span>,</span>
+<span class="r-in">    ADTM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="va">ADTM.TBILI2</span>, <span class="va">ADTM.ALK2</span><span class="op">)</span>,</span>
+<span class="r-in">    ADTF <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">ADTM</span> <span class="op">==</span> <span class="va">ADTM.TBILI2</span>, <span class="va">ADTF.TBILI2</span>, <span class="va">ADTF.ALK2</span><span class="op">)</span>,</span>
+<span class="r-in">    PARAMCD <span class="op">=</span> <span class="st">"TB2AK2"</span>,</span>
+<span class="r-in">    PARAM <span class="op">=</span> <span class="st">"TBILI &gt; 2 times ULN and ALKPH &lt;= 2 times ULN"</span></span>
+<span class="r-in">  <span class="op">)</span>,</span>
+<span class="r-in">  keep_nas <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID AVALC ADTM       ADTF  PARAMCD PARAM                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1       Y     2021-06-30 D     TB2AK2  TBILI &gt; 2 times ULN and ALKPH &lt;= 2 tim…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2       N     2021-12-31 M     TB2AK2  TBILI &gt; 2 times ULN and ALKPH &lt;= 2 tim…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3       N     2021-04-04 <span style="color: #BB0000;">NA</span>    TB2AK2  TBILI &gt; 2 times ULN and ALKPH &lt;= 2 tim…</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
