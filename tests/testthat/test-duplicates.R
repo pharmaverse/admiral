@@ -40,9 +40,5 @@ test_that("signal_duplicate_records Test 2: dataset of duplicate records can be 
 
   expect_true(all(expected_ouput == get_duplicates_dataset()))
 
-
-  # This is where print.duplicates comes in play when run by the user
-  capture <- capture_output(get_duplicates_dataset(), print = TRUE)
-  expected_print_output <- "Duplicate records with respect to `USUBJID`."
-  expect_true(stringr::str_detect(capture, expected_print_output))
+  expect_snapshot(get_duplicates_dataset())
 })
