@@ -58,6 +58,8 @@ has been deprecated in favor of `dataset_ref`. (#2037)
 
 - `derive_vars_joined()` had two bugs with regards to duplicates messaging and when `new_vars` was set to `NULL` that have now been addressed (#1966). 
 
+- `compute_dtf()` had a bug with regards to imputing days to full date-time character strings. (#2042)
+
 # admiral 0.11.1
 
 - Fix bug in `derive_param_tte()`. (#1962)
