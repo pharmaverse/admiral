@@ -9,6 +9,13 @@
 
 - The function `derive_var_extreme_flag()` has a new function argument, `flag_all` that additionally flags all records if the first or last record is not unique. (#1979)
 
+- The function `derive_param_computed()` was enhanced: (#1968)
+
+  - The `analysis_value` and `analysis_var` arguments were deprecated in favor of
+  `set_values_to`. This enables users to compute more than one variable.
+  - The `keep_nas` argument was added. If it is set to `TRUE`, observations are
+  created even if values contributing to the computed values are `NA`.
+
 - The function `derive_vars_dy()` is updated to avoid potential error when the input `dataset` with columns ending with `temp`. (#2012)
 
 
@@ -63,6 +70,9 @@
 - The `filter` argument in `derive_extreme_records()` was deprecated in favor of
 the `filter_add` using the next phase of the deprecation process. (#1950)
 
+- The `analysis_value` and `analysis_var` arguments in `derive_param_computed()`
+were deprecated in favor of `set_values_to` (#1968).
+
 - The `na_val` argument in `derive_var_shift()` has been deprecated in favor of 
 `missing_value` using the first phase of the deprecation process. (#2014)
 
@@ -80,6 +90,8 @@ has been deprecated in favor of `dataset_ref`. (#2037)
 - The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as *authors*, whereas those who made a significant contribution in the past are now down as *contributors*. All other acknowledgements have been moved to README section (#1941).
 
 - `derive_vars_joined()` had two bugs with regards to duplicates messaging and when `new_vars` was set to `NULL` that have now been addressed (#1966). 
+
+- `compute_dtf()` had a bug with regards to imputing days to full date-time character strings. (#2042)
 
 # admiral 0.11.1
 
