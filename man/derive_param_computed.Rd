@@ -14,7 +14,8 @@ derive_param_computed(
   set_values_to,
   filter = NULL,
   constant_by_vars = NULL,
-  constant_parameters = NULL
+  constant_parameters = NULL,
+  keep_nas = FALSE
 )
 }
 \arguments{
@@ -69,12 +70,16 @@ parameter code \code{"HGHT"}.
 
 \item{analysis_var}{Analysis variable
 
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.
+
 The specified variable is set to the value of \code{analysis_value} for the new
 observations.
 
 \emph{Permitted Values}: An unquoted symbol}
 
 \item{analysis_value}{Definition of the analysis value
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.
 
 An expression defining the analysis value (\code{AVAL}) of the new parameter is
 expected. The values of variables of the parameters specified by
@@ -88,8 +93,19 @@ Variable names in the expression must not contain more than one dot.
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+observations. The values of variables of the parameters specified by
+\code{parameters} can be accessed using \verb{<variable name>.<parameter code>}. For
+example
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{exprs(
+  AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+  PARAMCD = "MAP"
+)
+}\if{html}{\out{</div>}}
+
+defines the analysis value and parameter code for the new parameter.
+
+Variable names in the expression must not contain more than one dot.
 
 \emph{Permitted Values:} List of variable-value pairs}
 
@@ -129,6 +145,11 @@ codes. For example, \code{constant_parameters = exprs(WEIGHT, HGHT = VSTESTCD ==
 parameter code \code{"HGHT"}.
 
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions}
+
+\item{keep_nas}{Keep observations with \code{NA}s
+
+If the argument is set to \code{TRUE}, observations are added even if some of
+the values contributing to the computed value are \code{NA}.}
 }
 \value{
 The input dataset with the new parameter added. Note, a variable will only
@@ -149,13 +170,14 @@ filtered input dataset (\code{dataset}) or the additional dataset
 (\code{dataset_add}) contains exactly one observation for each parameter code
 specified for \code{parameters}.
 
-For the new observations \code{AVAL} is set to the value specified by
-\code{analysis_value} and the variables specified for \code{set_values_to} are set to
-the provided values. The values of the other variables of the input dataset
-are set to \code{NA}.
+For the new observations the variables specified for \code{set_values_to} are
+set to the provided values. The values of the other variables of the input
+dataset are set to \code{NA}.
 }
 \examples{
 library(tibble)
+library(dplyr)
+library(lubridate)
 
 # Example 1: Derive MAP
 advs <- tribble(
@@ -174,8 +196,8 @@ derive_param_computed(
   advs,
   by_vars = exprs(USUBJID, VISIT),
   parameters = c("SYSBP", "DIABP"),
-  analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
   set_values_to = exprs(
+    AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
     PARAMCD = "MAP",
     PARAM = "Mean Arterial Pressure (mmHg)",
     AVALU = "mmHg"
@@ -199,8 +221,8 @@ derive_param_computed(
   advs,
   by_vars = exprs(USUBJID, VISIT),
   parameters = "WEIGHT",
-  analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
   set_values_to = exprs(
+    AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
     PARAMCD = "BMI",
     PARAM = "Body Mass Index (kg/m^2)",
     AVALU = "kg/m^2"
@@ -210,7 +232,7 @@ derive_param_computed(
 )
 
 # Example 3: Using data from an additional dataset and other variables than AVAL
-qs <- tibble::tribble(
+qs <- tribble(
   ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
   "1",      "WEEK 2",  "CHSF112", NA,               1,
   "1",      "WEEK 2",  "CHSF113", "Yes",           NA,
@@ -220,29 +242,58 @@ qs <- tibble::tribble(
   "1",      "WEEK 4",  "CHSF114", NA,               1
 )
 
-adchsf <- tibble::tribble(
-  ~USUBJID, ~AVISIT,  ~PARAMCD, ~QSORRES, ~QSSTRESN, ~AVAL,
-  "1",      "WEEK 2", "CHSF12", NA,       1,             6,
-  "1",      "WEEK 2", "CHSF14", NA,       1,             6,
-  "1",      "WEEK 4", "CHSF12", NA,       2,            12,
-  "1",      "WEEK 4", "CHSF14", NA,       1,             6
-)
+adchsf <- tribble(
+  ~USUBJID, ~AVISIT,  ~PARAMCD, ~QSSTRESN, ~AVAL,
+  "1",      "WEEK 2", "CHSF12", 1,             6,
+  "1",      "WEEK 2", "CHSF14", 1,             6,
+  "1",      "WEEK 4", "CHSF12", 2,            12,
+  "1",      "WEEK 4", "CHSF14", 1,             6
+) \%>\%
+  mutate(QSORRES = NA_character_)
 
 derive_param_computed(
   adchsf,
   dataset_add = qs,
   by_vars = exprs(USUBJID, AVISIT),
   parameters = exprs(CHSF12, CHSF13 = QSTESTCD \%in\% c("CHSF113", "CHSF213"), CHSF14),
-  analysis_value = case_when(
-    QSORRES.CHSF13 == "Not applicable" ~ 0,
-    QSORRES.CHSF13 == "Yes" ~ 38,
-    QSORRES.CHSF13 == "No" ~ if_else(
-      QSSTRESN.CHSF12 > QSSTRESN.CHSF14,
-      25,
-      0
-    )
+  set_values_to = exprs(
+    AVAL = case_when(
+      QSORRES.CHSF13 == "Not applicable" ~ 0,
+      QSORRES.CHSF13 == "Yes" ~ 38,
+      QSORRES.CHSF13 == "No" ~ if_else(
+        QSSTRESN.CHSF12 > QSSTRESN.CHSF14,
+        25,
+        0
+      )
+    ),
+    PARAMCD = "CHSF13"
+  )
+)
+
+# Example 4: Computing more than one variable
+adlb_tbilialk <- tribble(
+  ~USUBJID, ~PARAMCD, ~AVALC, ~ADTM,        ~ADTF,
+  "1",      "ALK2",   "Y",    "2021-05-13", NA_character_,
+  "1",      "TBILI2", "Y",    "2021-06-30", "D",
+  "2",      "ALK2",   "Y",    "2021-12-31", "M",
+  "2",      "TBILI2", "N",    "2021-11-11", NA_character_,
+  "3",      "ALK2",   "N",    "2021-04-03", NA_character_,
+  "3",      "TBILI2", "N",    "2021-04-04", NA_character_
+) \%>\%
+  mutate(ADTM = ymd(ADTM))
+
+derive_param_computed(
+  dataset_add = adlb_tbilialk,
+  by_vars = exprs(USUBJID),
+  parameters = c("ALK2", "TBILI2"),
+  set_values_to = exprs(
+    AVALC = if_else(AVALC.TBILI2 == "Y" & AVALC.ALK2 == "Y", "Y", "N"),
+    ADTM = pmax(ADTM.TBILI2, ADTM.ALK2),
+    ADTF = if_else(ADTM == ADTM.TBILI2, ADTF.TBILI2, ADTF.ALK2),
+    PARAMCD = "TB2AK2",
+    PARAM = "TBILI > 2 times ULN and ALKPH <= 2 times ULN"
   ),
-  set_values_to = exprs(PARAMCD = "CHSF13")
+  keep_nas = TRUE
 )
 }
 \seealso{

@@ -214,13 +214,17 @@ adex <- adex %>%
     variable_params = list(
       params(
         parameters = c("TDOSE", "TDURD"),
-        analysis_value = (AVAL.TDOSE / AVAL.TDURD),
-        set_values_to = exprs(PARAMCD = "AVDDSE")
+        set_values_to = exprs(
+          AVAL = (AVAL.TDOSE / AVAL.TDURD),
+          PARAMCD = "AVDDSE"
+        )
       ),
       params(
         parameters = c("PDOSE", "PDURD"),
-        analysis_value = (AVAL.PDOSE / AVAL.PDURD),
-        set_values_to = exprs(PARAMCD = "PAVDDSE")
+        set_values_to = exprs(
+          AVAL = (AVAL.PDOSE / AVAL.PDURD),
+          PARAMCD = "PAVDDSE"
+        )
       )
     ),
     by_vars = exprs(
