@@ -63,6 +63,8 @@
 #'   2. If the planned dose (`tpadm_code`) is 0 and the administered dose
 #'   (`tadm_code`) is > 0, 100 is returned.
 #'
+#' @inheritParams derive_param_map
+#'
 #' @inheritParams derive_param_computed
 #'
 #'
