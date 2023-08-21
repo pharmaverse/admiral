@@ -16,7 +16,7 @@ derive_extreme_records(
   exist_flag = NULL,
   true_value = "Y",
   false_value = "N",
-  keep_vars_source = exprs(everything()),
+  keep_source_vars = exprs(everything()),
   set_values_to,
   filter
 )
@@ -106,7 +106,7 @@ For new observations selected from the additional dataset (\code{dataset_add}),
 For new observations not selected from the additional dataset
 (\code{dataset_add}), \code{exist_flag} is set to the specified value.}
 
-\item{keep_vars_source}{Variables to be kept in the new records
+\item{keep_source_vars}{Variables to be kept in the new records
 
 A named list or tidyselect expressions returned by \code{exprs()} defining the
 variables to be kept for the new records.}
@@ -185,7 +185,7 @@ derive_extreme_records(
   order = exprs(AVAL, AVISITN),
   mode = "first",
   filter_add = !is.na(AVAL),
-  keep_vars_source = exprs(USUBJID, AVAL, DTYPE),
+  keep_source_vars = exprs(USUBJID, AVAL, DTYPE),
   set_values_to = exprs(
     AVISITN = 97,
     DTYPE = "MINIMUM"
@@ -201,7 +201,7 @@ derive_extreme_records(
   order = exprs(desc(AVAL), AVISITN),
   mode = "first",
   filter_add = !is.na(AVAL),
-  keep_vars_source = exprs(everything()),
+  keep_source_vars = exprs(everything()),
   set_values_to = exprs(
     AVISITN = 98,
     DTYPE = "MAXIMUM"
@@ -215,7 +215,7 @@ derive_extreme_records(
   by_vars = exprs(USUBJID),
   order = exprs(AVISITN),
   mode = "last",
-  keep_vars_source = exprs(everything()),
+  keep_source_vars = exprs(everything()),
   set_values_to = exprs(
     AVISITN = 99,
     DTYPE = "LOV"
@@ -261,7 +261,7 @@ derive_extreme_records(
   true_value = "Y",
   false_value = "N",
   mode = "first",
-  keep_vars_source = exprs(everything()),
+  keep_source_vars = exprs(everything()),
   set_values_to = exprs(
     PARAMCD = "PD",
     PARAM = "Disease Progression",
@@ -281,7 +281,7 @@ derive_extreme_records(
   true_value = "Y",
   false_value = "N",
   mode = "first",
-  keep_vars_source = exprs(everything()),
+  keep_source_vars = exprs(everything()),
   set_values_to = exprs(
     PARAMCD = "DEATH",
     PARAM = "Death",

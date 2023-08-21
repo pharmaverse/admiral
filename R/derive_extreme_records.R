@@ -95,7 +95,7 @@
 #'
 #'   *Permitted Values*: a condition
 #'
-#' @param keep_vars_source Variables to be kept in the new records
+#' @param keep_source_vars Variables to be kept in the new records
 #'
 #'   A named list or tidyselect expressions returned by `exprs()` defining the
 #'   variables to be kept for the new records.
@@ -151,7 +151,7 @@
 #'   order = exprs(AVAL, AVISITN),
 #'   mode = "first",
 #'   filter_add = !is.na(AVAL),
-#'   keep_vars_source = exprs(USUBJID, AVAL, DTYPE),
+#'   keep_source_vars = exprs(USUBJID, AVAL, DTYPE),
 #'   set_values_to = exprs(
 #'     AVISITN = 97,
 #'     DTYPE = "MINIMUM"
@@ -167,7 +167,7 @@
 #'   order = exprs(desc(AVAL), AVISITN),
 #'   mode = "first",
 #'   filter_add = !is.na(AVAL),
-#'   keep_vars_source = exprs(everything()),
+#'   keep_source_vars = exprs(everything()),
 #'   set_values_to = exprs(
 #'     AVISITN = 98,
 #'     DTYPE = "MAXIMUM"
@@ -181,7 +181,7 @@
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(AVISITN),
 #'   mode = "last",
-#'   keep_vars_source = exprs(everything()),
+#'   keep_source_vars = exprs(everything()),
 #'   set_values_to = exprs(
 #'     AVISITN = 99,
 #'     DTYPE = "LOV"
@@ -227,7 +227,7 @@
 #'   true_value = "Y",
 #'   false_value = "N",
 #'   mode = "first",
-#'   keep_vars_source = exprs(everything()),
+#'   keep_source_vars = exprs(everything()),
 #'   set_values_to = exprs(
 #'     PARAMCD = "PD",
 #'     PARAM = "Disease Progression",
@@ -247,7 +247,7 @@
 #'   true_value = "Y",
 #'   false_value = "N",
 #'   mode = "first",
-#'   keep_vars_source = exprs(everything()),
+#'   keep_source_vars = exprs(everything()),
 #'   set_values_to = exprs(
 #'     PARAMCD = "DEATH",
 #'     PARAM = "Death",
@@ -266,7 +266,7 @@ derive_extreme_records <- function(dataset = NULL,
                                    exist_flag = NULL,
                                    true_value = "Y",
                                    false_value = "N",
-                                   keep_vars_source = exprs(everything()),
+                                   keep_source_vars = exprs(everything()),
                                    set_values_to,
                                    filter) {
   if (!missing(filter)) {
@@ -281,7 +281,7 @@ derive_extreme_records <- function(dataset = NULL,
   # Check input arguments
   assert_vars(by_vars, optional = is.null(dataset_ref))
   assert_expr_list(order, optional = TRUE)
-  assert_expr_list(keep_vars_source, optional = TRUE)
+  assert_expr_list(keep_source_vars, optional = TRUE)
 
   assert_data_frame(
     dataset,
@@ -352,7 +352,7 @@ derive_extreme_records <- function(dataset = NULL,
     process_set_values_to(
       set_values_to = set_values_to
     ) %>%
-    select(!!!keep_vars_source)
+    select(!!!keep_source_vars)
 
 
   # Create output dataset
