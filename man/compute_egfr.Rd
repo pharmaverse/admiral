@@ -4,7 +4,7 @@
 \alias{compute_egfr}
 \title{Compute Estimated Glomerular Filtration Rate (eGFR) for Kidney Function}
 \usage{
-compute_egfr(creat, creatu = "SI", age, wt, sex, race = NULL, method)
+compute_egfr(creat, creatu = "SI", age, weight, sex, race = NULL, method, wt)
 }
 \arguments{
 \item{creat}{Creatinine
@@ -23,7 +23,7 @@ Expected Values: \code{"SI"}, \code{"CV"}, \code{"umol/L"}, \code{"mg/dL"}}
 
 A numeric vector is expected.}
 
-\item{wt}{Weight (kg)
+\item{weight}{Weight (kg)
 
 A numeric vector is expected if \code{method = "CRCL"}}
 
@@ -44,6 +44,8 @@ Expected Values: \code{"BLACK OR AFRICAN AMERICAN"} and others}
 A character vector is expected.
 
 Expected Values: \code{"CRCL"}, \code{"CKD-EPI"}, \code{"MDRD"}}
+
+\item{wt}{\emph{Deprecated}, please use \code{weight} instead.}
 }
 \value{
 A numeric vector of egfr values
@@ -75,14 +77,14 @@ units = mL/min
 
 \strong{CKD-EPI Chronic Kidney Disease Epidemiology Collaboration formula}
 
-\deqn{eGFR = 142 \times min(SCr/κ, 1)^{α} \times max(SCr/κ, 1)^{-1.200}
+\deqn{eGFR = 142 \times min(SCr/{\kappa}, 1)^{\alpha} \times max(SCr/{\kappa}, 1)^{-1.200}
 \times 0.9938^{Age} \times 1.012 [if\:female]}
 
 SCr = standardized serum creatinine in mg/dL
 (Note SCr(mg/dL) = Creat(umol/L) / 88.42)
 
-κ = 0.7 (females) or 0.9 (males)
-α = -0.241 (female) or -0.302 (male)
+\deqn{\kappa} = 0.7 (females) or 0.9 (males)
+\deqn{\alpha} = -0.241 (female) or -0.302 (male)
 units = mL/min/1.73 m2
 
 \strong{MDRD Modification of Diet in Renal Disease formula}
@@ -97,7 +99,7 @@ units = mL/min/1.73 m2
 }
 \examples{
 compute_egfr(
-  creat = 90, creatu = "umol/L", age = 53, wt = 85, sex = "M", method = "CRCL"
+  creat = 90, creatu = "umol/L", age = 53, weight = 85, sex = "M", method = "CRCL"
 )
 
 compute_egfr(
@@ -125,15 +127,15 @@ base <- tibble::tribble(
 base \%>\%
   dplyr::mutate(
     CRCL_CG = compute_egfr(
-      creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
+      creat = CREATBL, creatu = CREATBLU, age = AGE, weight = WTBL, sex = SEX,
       method = "CRCL"
     ),
     EGFR_EPI = compute_egfr(
-      creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
+      creat = CREATBL, creatu = CREATBLU, age = AGE, weight = WTBL, sex = SEX,
       method = "CKD-EPI"
     ),
     EGFR_MDRD = compute_egfr(
-      creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
+      creat = CREATBL, creatu = CREATBLU, age = AGE, weight = WTBL, sex = SEX,
       race = RACE, method = "MDRD"
     ),
   )

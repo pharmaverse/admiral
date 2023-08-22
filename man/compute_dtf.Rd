@@ -28,6 +28,10 @@ Usually this computation function can not be used with \verb{\%>\%}.
 \examples{
 compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
+compute_dtf(dtc = "--06-01T00:00", dt = as.Date("2022-06-01"))
+compute_dtf(dtc = "2022-06--T00:00", dt = as.Date("2022-06-01"))
+compute_dtf(dtc = "2022---01T00:00", dt = as.Date("2022-06-01"))
+compute_dtf(dtc = "2022----T00:00", dt = as.Date("2022-06-01"))
 }
 \seealso{
 Date/Time Computation Functions that returns a vector: 

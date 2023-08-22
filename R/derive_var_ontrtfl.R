@@ -62,9 +62,9 @@
 #'   ref_start_date`, `filter_pre_timepoint` should be used to denote when the
 #'   on-treatment flag should be set to null. Optional; default is `NULL`.
 #'
-#' @param span_period A `"Y"` scalar character. If `"Y"`, events that started
+#' @param span_period A logical scalar. If `TRUE`, events that started
 #'   prior to the `ref_start_date`and are ongoing or end after the
-#'   `ref_start_date` are flagged as `"Y"`. Optional; default is `NULL`.
+#'   `ref_start_date` are flagged as `"Y"`. Optional; default is `FALSE`.
 #'
 #' @details On-Treatment is calculated by determining whether the assessment
 #'   date or start/stop dates fall between 2 dates. The following logic is used
@@ -84,7 +84,7 @@
 #'   `ONTRTFL` is set to `NULL`.This would be applicable to cases where the
 #'   `start_date` is missing and `ONTRTFL` has been assigned as `"Y"` above.
 #'
-#'   If the `span_period` is specified as `"Y"`, this allows the user to assign
+#'   If the `span_period` is `TRUE`, this allows the user to assign
 #'   `ONTRTFL` as `"Y"` to cases where the record started prior to the
 #'   `ref_start_date` and was ongoing or ended after the `ref_start_date`.
 #'
@@ -159,7 +159,7 @@
 #'   ref_start_date = TRTSDT,
 #'   ref_end_date = TRTEDT,
 #'   ref_end_window = 60,
-#'   span_period = "Y"
+#'   span_period = TRUE
 #' )
 #'
 #' advs <- tribble(
@@ -175,7 +175,7 @@
 #'   end_date = AENDT,
 #'   ref_start_date = AP01SDT,
 #'   ref_end_date = AP01EDT,
-#'   span_period = "Y"
+#'   span_period = TRUE
 #' )
 derive_var_ontrtfl <- function(dataset,
                                new_var = ONTRTFL,
@@ -186,7 +186,17 @@ derive_var_ontrtfl <- function(dataset,
                                ref_end_window = 0,
                                ignore_time_for_ref_end_date = TRUE,
                                filter_pre_timepoint = NULL,
-                               span_period = NULL) {
+                               span_period = FALSE) {
+  if (is.null(span_period) || span_period %in% c("Y", "y")) {
+    # replace span_period with lgl version
+    span_period <- !is.null(span_period)
+    deprecate_warn(
+      when = "0.12.0",
+      what = "admiral::derive_var_ontrtfl(span_period = 'must be TRUE or FALSE')",
+      details =
+        c(i = stringr::str_glue("Use `derive_var_ontrtfl(span_period={span_period})` instead."))
+    )
+  }
   new_var <- assert_symbol(enexpr(new_var))
   start_date <- assert_symbol(enexpr(start_date))
   end_date <- assert_symbol(enexpr(end_date), optional = TRUE)
@@ -201,7 +211,7 @@ derive_var_ontrtfl <- function(dataset,
   ref_end_window <- assert_integer_scalar(ref_end_window, "non-negative")
   assert_logical_scalar(ignore_time_for_ref_end_date)
   filter_pre_timepoint <- assert_filter_cond(enexpr(filter_pre_timepoint), optional = TRUE)
-  assert_character_scalar(span_period, values = c("Y", "y"), optional = TRUE)
+  assert_logical_scalar(span_period)
 
   dataset <- mutate(
     dataset,
@@ -236,9 +246,15 @@ derive_var_ontrtfl <- function(dataset,
   } else {
     # Scenario 2: Treatment end date is passed, window added above
     if (ignore_time_for_ref_end_date) {
-      end_cond <- expr(date(!!start_date) <= date(!!ref_end_date) + days(!!ref_end_window))
+      end_cond <- expr(
+        (date(!!start_date) <= date(!!ref_end_date) + days(!!ref_end_window)) |
+          (!is.na(!!ref_start_date) & is.na(!!ref_end_date))
+      )
     } else {
-      end_cond <- expr(!!start_date <= !!ref_end_date + days(!!ref_end_window))
+      end_cond <- expr(
+        (!!start_date <= !!ref_end_date + days(!!ref_end_window)) |
+          (!is.na(!!ref_start_date) & is.na(!!ref_end_date))
+      )
     }
     dataset <- mutate(
       dataset,
@@ -265,7 +281,7 @@ derive_var_ontrtfl <- function(dataset,
   }
 
   # scenario 4: end_date and span_period are passed
-  if (!is.null(span_period)) {
+  if (span_period) {
     dataset <- mutate(
       dataset,
       !!new_var := if_else(

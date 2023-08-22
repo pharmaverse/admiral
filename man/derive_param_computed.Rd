@@ -5,25 +5,39 @@
 \title{Adds a Parameter Computed from the Analysis Value of Other Parameters}
 \usage{
 derive_param_computed(
-  dataset,
+  dataset = NULL,
+  dataset_add = NULL,
   by_vars,
   parameters,
+  analysis_var = AVAL,
   analysis_value,
   set_values_to,
   filter = NULL,
   constant_by_vars = NULL,
-  constant_parameters = NULL
+  constant_parameters = NULL,
+  keep_nas = FALSE
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and \code{AVAL}
-are expected.
+The variables specified by the \code{by_vars} parameter are expected.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{parameters}.}
+
+\item{dataset_add}{Additional dataset
+
+The variables specified by the \code{by_vars} parameter are expected.
+
+The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
+the additional dataset after restricting it to the parameters specified by
+\code{parameters}.
+
+If the argument is specified, the observations of the additional dataset
+are considered in addition to the observations from the input dataset
+(\code{dataset} restricted by \code{filter}).}
 
 \item{by_vars}{Grouping variables
 
@@ -39,21 +53,59 @@ It is expected that all parameter codes (\code{PARAMCD}) which are required to
 derive the new parameter are specified for this parameter or the
 \code{constant_parameters} parameter.
 
-\emph{Permitted Values:} A character vector of \code{PARAMCD} values}
+If observations should be considered which do not have a parameter code,
+e.g., if an SDTM dataset is used, temporary parameter codes can be derived
+by specifying a list of expressions. The name of the element defines the
+temporary parameter code and the expression the condition for selecting the
+records. For example \code{parameters = exprs(HGHT = VSTESTCD == "HEIGHT")}
+selects the observations with \code{VSTESTCD == "HEIGHT"} from the input data
+(\code{dataset} and \code{dataset_add}), sets \code{PARAMCD = "HGHT"} for these
+observations, and adds them to the observations to consider.
+
+Unnamed elements in the list of expressions are considered as parameter
+codes. For example, \code{parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT")} uses the parameter code \code{"WEIGHT"} and creates a temporary
+parameter code \code{"HGHT"}.
+
+\emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions}
+
+\item{analysis_var}{Analysis variable
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.
+
+The specified variable is set to the value of \code{analysis_value} for the new
+observations.
+
+\emph{Permitted Values}: An unquoted symbol}
 
 \item{analysis_value}{Definition of the analysis value
 
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.
+
 An expression defining the analysis value (\code{AVAL}) of the new parameter is
-expected. The analysis values of the parameters specified by \code{parameters}
-can be accessed using \verb{AVAL.<parameter code>}, e.g., \code{AVAL.SYSBP}.
+expected. The values of variables of the parameters specified by
+\code{parameters} can be accessed using \verb{<variable name>.<parameter code>},
+e.g., \code{AVAL.SYSBP}.
+
+Variable names in the expression must not contain more than one dot.
 
 \emph{Permitted Values:} An unquoted expression}
 
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+observations. The values of variables of the parameters specified by
+\code{parameters} can be accessed using \verb{<variable name>.<parameter code>}. For
+example
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{exprs(
+  AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+  PARAMCD = "MAP"
+)
+}\if{html}{\out{</div>}}
+
+defines the analysis value and parameter code for the new parameter.
+
+Variable names in the expression must not contain more than one dot.
 
 \emph{Permitted Values:} List of variable-value pairs}
 
@@ -80,7 +132,24 @@ For example if BMI should be derived and height is measured only once while
 weight is measured at each visit. Height could be specified in the
 \code{constant_parameters} parameter. (Refer to Example 2)
 
-\emph{Permitted Values:} A character vector of \code{PARAMCD} values}
+If observations should be considered which do not have a parameter code,
+e.g., if an SDTM dataset is used, temporary parameter codes can be derived
+by specifying a list of expressions. The name of the element defines the
+temporary parameter code and the expression the condition for selecting the
+records. For example \code{constant_parameters = exprs(HGHT = VSTESTCD == "HEIGHT")} selects the observations with \code{VSTESTCD == "HEIGHT"} from the
+input data (\code{dataset} and \code{dataset_add}), sets \code{PARAMCD = "HGHT"} for these
+observations, and adds them to the observations to consider.
+
+Unnamed elements in the list of expressions are considered as parameter
+codes. For example, \code{constant_parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT")} uses the parameter code \code{"WEIGHT"} and creates a temporary
+parameter code \code{"HGHT"}.
+
+\emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions}
+
+\item{keep_nas}{Keep observations with \code{NA}s
+
+If the argument is set to \code{TRUE}, observations are added even if some of
+the values contributing to the computed value are \code{NA}.}
 }
 \value{
 The input dataset with the new parameter added. Note, a variable will only
@@ -97,36 +166,38 @@ blood pressure (DIABP) with the formula
 \details{
 For each group (with respect to the variables specified for the
 \code{by_vars} parameter) an observation is added to the output dataset if the
-filtered input dataset contains exactly one observation for each parameter
-code specified for \code{parameters}.
+filtered input dataset (\code{dataset}) or the additional dataset
+(\code{dataset_add}) contains exactly one observation for each parameter code
+specified for \code{parameters}.
 
-For the new observations \code{AVAL} is set to the value specified by
-\code{analysis_value} and the variables specified for \code{set_values_to} are set to
-the provided values. The values of the other variables of the input dataset
-are set to \code{NA}.
+For the new observations the variables specified for \code{set_values_to} are
+set to the provided values. The values of the other variables of the input
+dataset are set to \code{NA}.
 }
 \examples{
 library(tibble)
+library(dplyr)
+library(lubridate)
 
 # Example 1: Derive MAP
 advs <- tribble(
-  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
-  "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
-  "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
-  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "BASELINE",
-  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "WEEK 2",
-  "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, "mmHg", "BASELINE",
-  "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, "mmHg", "WEEK 2",
-  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, "mmHg", "BASELINE",
-  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
+  ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU, ~VISIT,
+  "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "mmHg", "BASELINE",
+  "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    50, "mmHg", "WEEK 2",
+  "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "mmHg", "BASELINE",
+  "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "mmHg", "WEEK 2",
+  "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    79, "mmHg", "BASELINE",
+  "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    80, "mmHg", "WEEK 2",
+  "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",    130, "mmHg", "BASELINE",
+  "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",    132, "mmHg", "WEEK 2"
 )
 
 derive_param_computed(
   advs,
   by_vars = exprs(USUBJID, VISIT),
   parameters = c("SYSBP", "DIABP"),
-  analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
   set_values_to = exprs(
+    AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
     PARAMCD = "MAP",
     PARAM = "Mean Arterial Pressure (mmHg)",
     AVALU = "mmHg"
@@ -135,29 +206,94 @@ derive_param_computed(
 
 # Example 2: Derive BMI where height is measured only once
 advs <- tribble(
-  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
-  "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
-  "01-701-1015", "WEIGHT", "Weight (kg)", 54.0, "kg", "SCREENING",
-  "01-701-1015", "WEIGHT", "Weight (kg)", 54.4, "kg", "BASELINE",
-  "01-701-1015", "WEIGHT", "Weight (kg)", 53.1, "kg", "WEEK 2",
-  "01-701-1028", "HEIGHT", "Height (cm)", 163, "cm", "SCREENING",
-  "01-701-1028", "WEIGHT", "Weight (kg)", 78.5, "kg", "SCREENING",
-  "01-701-1028", "WEIGHT", "Weight (kg)", 80.3, "kg", "BASELINE",
-  "01-701-1028", "WEIGHT", "Weight (kg)", 80.7, "kg", "WEEK 2"
+  ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
+  "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
+  "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
+  "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
+  "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
+  "01-701-1028", "HEIGHT", "Height (cm)", 163.0, "cm",   "SCREENING",
+  "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
+  "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
+  "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
 )
 
 derive_param_computed(
   advs,
   by_vars = exprs(USUBJID, VISIT),
   parameters = "WEIGHT",
-  analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
   set_values_to = exprs(
+    AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
     PARAMCD = "BMI",
     PARAM = "Body Mass Index (kg/m^2)",
     AVALU = "kg/m^2"
   ),
   constant_parameters = c("HEIGHT"),
   constant_by_vars = exprs(USUBJID)
+)
+
+# Example 3: Using data from an additional dataset and other variables than AVAL
+qs <- tribble(
+  ~USUBJID, ~AVISIT,   ~QSTESTCD, ~QSORRES, ~QSSTRESN,
+  "1",      "WEEK 2",  "CHSF112", NA,               1,
+  "1",      "WEEK 2",  "CHSF113", "Yes",           NA,
+  "1",      "WEEK 2",  "CHSF114", NA,               1,
+  "1",      "WEEK 4",  "CHSF112", NA,               2,
+  "1",      "WEEK 4",  "CHSF113", "No",            NA,
+  "1",      "WEEK 4",  "CHSF114", NA,               1
+)
+
+adchsf <- tribble(
+  ~USUBJID, ~AVISIT,  ~PARAMCD, ~QSSTRESN, ~AVAL,
+  "1",      "WEEK 2", "CHSF12", 1,             6,
+  "1",      "WEEK 2", "CHSF14", 1,             6,
+  "1",      "WEEK 4", "CHSF12", 2,            12,
+  "1",      "WEEK 4", "CHSF14", 1,             6
+) \%>\%
+  mutate(QSORRES = NA_character_)
+
+derive_param_computed(
+  adchsf,
+  dataset_add = qs,
+  by_vars = exprs(USUBJID, AVISIT),
+  parameters = exprs(CHSF12, CHSF13 = QSTESTCD \%in\% c("CHSF113", "CHSF213"), CHSF14),
+  set_values_to = exprs(
+    AVAL = case_when(
+      QSORRES.CHSF13 == "Not applicable" ~ 0,
+      QSORRES.CHSF13 == "Yes" ~ 38,
+      QSORRES.CHSF13 == "No" ~ if_else(
+        QSSTRESN.CHSF12 > QSSTRESN.CHSF14,
+        25,
+        0
+      )
+    ),
+    PARAMCD = "CHSF13"
+  )
+)
+
+# Example 4: Computing more than one variable
+adlb_tbilialk <- tribble(
+  ~USUBJID, ~PARAMCD, ~AVALC, ~ADTM,        ~ADTF,
+  "1",      "ALK2",   "Y",    "2021-05-13", NA_character_,
+  "1",      "TBILI2", "Y",    "2021-06-30", "D",
+  "2",      "ALK2",   "Y",    "2021-12-31", "M",
+  "2",      "TBILI2", "N",    "2021-11-11", NA_character_,
+  "3",      "ALK2",   "N",    "2021-04-03", NA_character_,
+  "3",      "TBILI2", "N",    "2021-04-04", NA_character_
+) \%>\%
+  mutate(ADTM = ymd(ADTM))
+
+derive_param_computed(
+  dataset_add = adlb_tbilialk,
+  by_vars = exprs(USUBJID),
+  parameters = c("ALK2", "TBILI2"),
+  set_values_to = exprs(
+    AVALC = if_else(AVALC.TBILI2 == "Y" & AVALC.ALK2 == "Y", "Y", "N"),
+    ADTM = pmax(ADTM.TBILI2, ADTM.ALK2),
+    ADTF = if_else(ADTM == ADTM.TBILI2, ADTF.TBILI2, ADTF.ALK2),
+    PARAMCD = "TB2AK2",
+    PARAM = "TBILI > 2 times ULN and ALKPH <= 2 times ULN"
+  ),
+  keep_nas = TRUE
 )
 }
 \seealso{

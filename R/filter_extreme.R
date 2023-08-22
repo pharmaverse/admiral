@@ -111,12 +111,11 @@ filter_extreme <- function(dataset,
       values = c("none", "warning", "error"),
       case_sensitive = FALSE
     )
+  assert_data_frame(dataset, required_vars = by_vars)
 
   # group and sort input dataset
   tmp_obs_nr <- get_new_tmp_var(dataset)
   if (!is.null(by_vars)) {
-    assert_has_variables(dataset, vars2chr(by_vars))
-
     data <- dataset %>%
       derive_var_obs_number(
         new_var = !!tmp_obs_nr,

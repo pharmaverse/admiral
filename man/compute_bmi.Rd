@@ -11,13 +11,13 @@ compute_bmi(height, weight)
 
 It is expected that HEIGHT is in cm.
 
-Permitted Values: numeric vector}
+\emph{Permitted Values:} numeric vector}
 
 \item{weight}{WEIGHT value
 
 It is expected that WEIGHT is in kg.
 
-Permitted Values: numeric vector}
+\emph{Permitted Values:} numeric vector}
 }
 \value{
 The BMI (Body Mass Index Area) in kg/m^2.
@@ -32,6 +32,8 @@ Usually this computation function can not be used with \verb{\%>\%}.
 compute_bmi(height = 170, weight = 75)
 }
 \seealso{
+\code{\link[=derive_param_bmi]{derive_param_bmi()}}
+
 BDS-Findings Functions that returns a vector: 
 \code{\link{compute_bsa}()},
 \code{\link{compute_egfr}()},

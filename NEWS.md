@@ -1,3 +1,82 @@
+# admiral 0.12.0
+
+## New Features
+
+## Updates of Existing Functions
+- The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
+- The functions `derive_var_age_years()` and `compute_age_years()` are updated to return an `NA` age in the case that the age unit is missing. (#2001) The argument `unit` for `derive_vars_aage()` is also changed to `age_unit` for consistency between these age-related functions. (#2025)
+- The `derive_var_ontrtfl()` function has been updated to allow for the column passed in `ref_end_date` to contain `NA` values. Previously, if the end date was `NA`, the row would never be flagged. Now, an `NA` value is interpreted as the treatment being ongoing, for example. (#1984)
+
+- The function `derive_var_extreme_flag()` has a new function argument, `flag_all` that additionally flags all records if the first or last record is not unique. (#1979)
+
+- The function `derive_param_computed()` was enhanced: (#1968)
+
+  - The `analysis_value` and `analysis_var` arguments were deprecated in favor of
+  `set_values_to`. This enables users to compute more than one variable.
+  - The `keep_nas` argument was added. If it is set to `TRUE`, observations are
+  created even if values contributing to the computed values are `NA`.
+
+- The function `derive_vars_dy()` is updated to avoid potential error when the input `dataset` with columns ending with `temp`. (#2012)
+- Argument `keep_source_vars` was added to `derive_extreme_records()` which allows to 
+specify which variables in the new observations should be kept. (#1697) 
+
+
+## Breaking Changes
+- The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)
+
+  - `derive_var_disposition_status()`
+  - `derive_vars_disposition_reason()`
+  - `format_eoxxstt_default()`
+  - `format_reason_default()`
+  - `derive_var_worst_flag()`
+
+- The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1950)
+
+  - `derive_param_extreme_event()`
+  - `derive_vars_last_dose()`
+  - `derive_var_last_dose_amt()`
+  - `derive_var_last_dose_date()`
+  - `derive_var_last_dose_grp()`
+  - `derive_var_basetype()`
+  - `derive_var_merged_cat()`
+  - `derive_var_merged_character()`
+  
+- The arguments `dataset_adsl` in the function `derive_param_exist_flag()` and
+`subject_keys` have been deprecated versions using the next phase of the deprecation process. (#1950)
+
+- The argument `wt` in the function `compute_egfr()` was deprecated in favor of `weight` using the first phase of the deprecation process. (#2020)
+
+- The `filter` argument in `derive_extreme_records()` was deprecated in favor of
+the `filter_add` using the next phase of the deprecation process. (#1950)
+
+- The `analysis_value` and `analysis_var` arguments in `derive_param_computed()`
+were deprecated in favor of `set_values_to` (#1968).
+
+- The `na_val` argument in `derive_var_shift()` has been deprecated in favor of 
+`missing_value` using the first phase of the deprecation process. (#2014)
+
+- The `dataset_expected_obs` argument in `derive_expected_records()` and `derive_locf_records()`
+has been deprecated in favor of `dataset_ref`. (#2037)
+
+- The `span_period` argument in `derive_var_ontrtfl()` has been updated to only accept 
+`TRUE` or `FALSE`, where is previously accepted `"Y"` and `NULL`. (#2033)
+
+## Documentation
+
+
+## Various
+
+- The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as *authors*, whereas those who made a significant contribution in the past are now down as *contributors*. All other acknowledgements have been moved to README section (#1941).
+
+- `derive_vars_joined()` had two bugs with regards to duplicates messaging and when `new_vars` was set to `NULL` that have now been addressed (#1966). 
+
+- `compute_dtf()` had a bug with regards to imputing days to full date-time character strings. (#2042)
+
+# admiral 0.11.1
+
+- Fix bug in `derive_param_tte()`. (#1962)
+- Get Started page now points to correct article. (#1969)
+
 # admiral 0.11.0
 
 ## New Features
@@ -54,14 +133,22 @@ This affects `derive_var_dthcaus()`. (#1727)
 - The `date` field of `event_source()` and `censor_source()` accepts expressions
 now. This affects `derive_param_tte()`. (#1727)
 
-- Argument `keep_vars_source` was added to `derive_extreme_records()` which allows to 
-specify which variables in the new observations should be kept. (#1697) 
+- The `derive_param_computed()` function was enhanced: (#1873)
+    - The new `dataset_add` argument allows to consider parameters from a
+      different dataset than the input dataset.
+    - The new `analysis_var` argument allows to specify the variable to be
+      populated, e.g., `AVALC`.
+    - For `parameters` and `constant_parameters` a list of expressions can be
+      specified now. This allows to create temporary parameter codes, e.g., if
+      SDTM data is used as input.
+    - The `analysis_value` argument was enhanced such that any variable of the
+      form `<variable>.<parameter>` can be used, e.g., `QSORRES.CHSF13`.
 
 
 ## Breaking Changes
 
 - `create_query_data()` and `derive_vars_query()` updated to rename variables in 
-    query data set as follows:
+    query data set as follows: (#1907)
 
     - `VAR_PREFIX` to `PREFIX`
     - `QUERY_NAME` to `GRPNAME`
@@ -105,6 +192,11 @@ deprecated in favor of `derive_vars_merged()`. (#1727)
 - The `filter` argument in `derive_extreme_records()` was deprecated in favor of
 the `filter_add` argument. (#1725)
 
+- `derive_vars_last_dose()`, `derive_var_last_dose_amt()`, `derive_var_last_dose_date()`, `derive_var_last_dose_grp()`,
+were deprecated in favor of `derive_vars_joined()`. (#1797)
+
+- `derive_var_basetype()` was deprecated in favor of `derive_basetype_records()`. (#1796)
+
 - In the function `derive_param_exist_flag()` the arguments `dataset_adsl` and
 `subject_keys` have been renamed to `dataset_ref` and `by_vars` respectively. (#1793)
 
@@ -121,6 +213,10 @@ values are assigned in NCI-CTCAEv5. (#1863)
 
 - Increased documentation for those functions which are regarded as wrapper functions. (#1726)
 
+- Examples in function documentation no longer rely on `library(admiral.test)`. (#1752) 
+
+- Conferences where `{admiral}` was presented were updated on the `README.md`. (#1890)
+
 ## Various
 
 - `vars()` which was used in the admiral function calls that expected a list of
@@ -134,6 +230,8 @@ as well. (#1694)
 - `create_period_dataset()` had a bug that led to an error when both DT and DTM columns existed. (#1845)
 
 - External functions are now consistently imported via namespace. `package::function()` calls have been removed from `admiral` functions. (#1842)
+
+- `restrict_derivation()` had a bug which led to failure if the `derivation` argument was not in the global environment. (#1765)
 
 # admiral 0.10.2
 

@@ -342,7 +342,7 @@ test_that("derive_extreme_records Test 6: warning if filter argument is used", {
     )
   )
 
-  expect_warning(
+  expect_error(
     derive_extreme_records(
       adrs,
       dataset_ref = adsl,
@@ -358,7 +358,7 @@ test_that("derive_extreme_records Test 6: warning if filter argument is used", {
         ADT = ADT
       )
     ),
-    class = "lifecycle_warning_deprecated"
+    class = "lifecycle_error_deprecated"
   )
 })
 

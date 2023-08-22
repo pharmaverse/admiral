@@ -37,31 +37,31 @@ in the newly created records.
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter code
+for the new parameter.
 
-\emph{Permitted Values:} List of variable-value pairs}
+\emph{Permitted Values}: List of variable-value pairs}
 
 \item{sysbp_code}{Systolic blood pressure parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the systolic blood pressure assessments.
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 
 \item{diabp_code}{Diastolic blood pressure parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the diastolic blood pressure assessments.
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 
 \item{hr_code}{Heart rate parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the heart rate assessments.
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
@@ -99,7 +99,7 @@ if it is based on diastolic, systolic blood pressure, and heart rate.
 library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 
-advs <- tribble(
+advs <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
   "01-701-1015", "PULSE", "Pulse (beats/min)", 59, "BASELINE",
   "01-701-1015", "PULSE", "Pulse (beats/min)", 61, "WEEK 2",
@@ -140,6 +140,8 @@ derive_param_map(
 )
 }
 \seealso{
+\code{\link[=compute_map]{compute_map()}}
+
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},

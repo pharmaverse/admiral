@@ -12,7 +12,8 @@ derive_param_bsa(
   height_code = "HEIGHT",
   weight_code = "WEIGHT",
   get_unit_expr,
-  filter = NULL
+  filter = NULL,
+  constant_by_vars = NULL
 )
 }
 \arguments{
@@ -50,29 +51,29 @@ Fujimoto: \code{0.008883 * height ^ 0.663 * weight ^ 0.444}
 
 Takahira: \code{0.007241 * height ^ 0.725 * weight ^ 0.425}
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter code
+for the new parameter.
 
-\emph{Permitted Values:} List of variable-value pairs}
+\emph{Permitted Values}: List of variable-value pairs}
 
 \item{height_code}{HEIGHT parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the HEIGHT assessments. It is expected that HEIGHT is measured in cm.
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 
 \item{weight_code}{WEIGHT parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the WEIGHT assessments. It is expected that WEIGHT is measured in kg.
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
@@ -87,6 +88,18 @@ new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
 \emph{Permitted Values:} a condition}
+
+\item{constant_by_vars}{By variables for when HEIGHT is constant
+
+When HEIGHT is constant, the HEIGHT parameters (measured only once) are merged
+to the other parameters using the specified variables.
+
+If height is constant (e.g. only measured once at screening or baseline) then
+use \code{constant_by_vars} to select the subject-level variable to merge on (e.g. \code{USUBJID}).
+This will produce BSA at all visits where weight is measured.  Otherwise
+it will only be calculated at visits with both height and weight collected.
+
+\emph{Permitted Values:} list of variables}
 }
 \value{
 The input dataset with the new parameter added. Note, a variable will only
@@ -102,7 +115,8 @@ available.
 \examples{
 library(tibble)
 
-advs <- tribble(
+# Example 1: Derive BSA where height is measured only once using constant_by_vars
+advs <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 170, "BASELINE",
   "01-701-1015", "WEIGHT", "Weight (kg)", 75, "BASELINE",
@@ -122,7 +136,8 @@ derive_param_bsa(
     PARAMCD = "BSA",
     PARAM = "Body Surface Area (m^2)"
   ),
-  get_unit_expr = extract_unit(PARAM)
+  get_unit_expr = extract_unit(PARAM),
+  constant_by_vars = exprs(USUBJID)
 )
 
 derive_param_bsa(
@@ -133,10 +148,50 @@ derive_param_bsa(
     PARAMCD = "BSA",
     PARAM = "Body Surface Area (m^2)"
   ),
+  get_unit_expr = extract_unit(PARAM),
+  constant_by_vars = exprs(USUBJID)
+)
+
+# Example 2: Derive BSA where height is measured only once and keep only one record
+# where both height and weight are measured.
+
+derive_param_bsa(
+  advs,
+  by_vars = exprs(USUBJID, VISIT),
+  method = "Mosteller",
+  set_values_to = exprs(
+    PARAMCD = "BSA",
+    PARAM = "Body Surface Area (m^2)"
+  ),
+  get_unit_expr = extract_unit(PARAM)
+)
+
+# Example 3: Pediatric study where height and weight are measured multiple times
+advs <- tibble::tribble(
+  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
+  "01-101-1001", "HEIGHT", "Height (cm)", 47.1, "BASELINE",
+  "01-101-1001", "HEIGHT", "Height (cm)", 59.1, "WEEK 12",
+  "01-101-1001", "HEIGHT", "Height (cm)", 64.7, "WEEK 24",
+  "01-101-1001", "HEIGHT", "Height (cm)", 68.2, "WEEK 48",
+  "01-101-1001", "WEIGHT", "Weight (kg)", 2.6, "BASELINE",
+  "01-101-1001", "WEIGHT", "Weight (kg)", 5.3, "WEEK 12",
+  "01-101-1001", "WEIGHT", "Weight (kg)", 6.7, "WEEK 24",
+  "01-101-1001", "WEIGHT", "Weight (kg)", 7.4, "WEEK 48",
+)
+derive_param_bsa(
+  advs,
+  by_vars = exprs(USUBJID, VISIT),
+  method = "Mosteller",
+  set_values_to = exprs(
+    PARAMCD = "BSA",
+    PARAM = "Body Surface Area (m^2)"
+  ),
   get_unit_expr = extract_unit(PARAM)
 )
 }
 \seealso{
+\code{\link[=compute_bsa]{compute_bsa()}}
+
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},

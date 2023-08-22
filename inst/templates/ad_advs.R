@@ -121,14 +121,16 @@ advs <- advs %>%
     method = "Mosteller",
     set_values_to = exprs(PARAMCD = "BSA"),
     get_unit_expr = VSSTRESU,
-    filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
+    filter = VSSTAT != "NOT DONE" | is.na(VSSTAT),
+    constant_by_vars = exprs(USUBJID)
   ) %>%
   # Derive Body Mass Index
   derive_param_bmi(
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = exprs(PARAMCD = "BMI"),
     get_unit_expr = VSSTRESU,
-    filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
+    filter = VSSTAT != "NOT DONE" | is.na(VSSTAT),
+    constant_by_vars = exprs(USUBJID)
   )
 
 
@@ -181,7 +183,7 @@ advs <- advs %>%
 ## Derive baseline flags ----
 advs <- advs %>%
   # Calculate BASETYPE
-  derive_var_basetype(
+  derive_basetype_records(
     basetypes = exprs(
       "LAST: AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
       "LAST: AFTER STANDING FOR 1 MINUTE" = ATPTN == 816,
@@ -251,7 +253,7 @@ advs <- advs %>%
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, ATPTN),
     order = exprs(ADT, AVISITN, AVAL),
     mode = "last",
-    filter = (4 < AVISITN & AVISITN <= 13 & ANL01FL == "Y" & is.na(DTYPE)),
+    filter_add = (4 < AVISITN & AVISITN <= 13 & ANL01FL == "Y" & is.na(DTYPE)),
     set_values_to = exprs(
       AVISIT = "End of Treatment",
       AVISITN = 99,
