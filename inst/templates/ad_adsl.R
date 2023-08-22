@@ -4,7 +4,7 @@
 #
 # Input: dm, ex, ds
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -15,17 +15,11 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("admiral_dm")
-data("admiral_ds")
-data("admiral_ex")
-data("admiral_ae")
-data("admiral_lb")
-
-dm <- admiral_dm
-ds <- admiral_ds
-ex <- admiral_ex
-ae <- admiral_ae
-lb <- admiral_lb
+data("dm")
+data("ds")
+data("ex")
+data("ae")
+data("lb")
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing

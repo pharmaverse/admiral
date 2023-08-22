@@ -26,7 +26,7 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
 
-remotes::install_github("pharmaverse/admiral.test") # This is a required dependency of {admiral}
+remotes::install_github("pharmaverse/pharmaversesdtm") # This is a required dependency of {admiral}
 remotes::install_github("pharmaverse/admiraldev") # This is a required dependency of {admiral}
 remotes::install_github("pharmaverse/admiral")
 ```
@@ -37,7 +37,7 @@ remotes::install_github("pharmaverse/admiral")
 The {admiral} family has several downstream and upstream dependencies and so this release shall be done in three
 Phases:
 
-* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/), {admiral.test}, and [{admiral}](https://pharmaverse.github.io/admiral/cran-release/) core 
+* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/), {pharmaversesdtm}, and [{admiral}](https://pharmaverse.github.io/admiral/cran-release/) core 
 * Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/)
 
 
@@ -45,11 +45,11 @@ Phases:
 |---------------- | --------------------------                                        | --------------------------                                                    |   
 | Q3-2023         | September 4th                                                     | September 11th                                                                | 
 |                 | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)    | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)              | 
-|                 | {admiral.test}                                                    | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)          | 
+|                 | {pharmaversesdtm}                                                    | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)          | 
 |                 | [{admiral}](https://pharmaverse.github.io/admiral/main/)          | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/)        | 
 | Q4-2023         | December 4th                                                      | December 11th                                                                 | 
 |                 | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)    | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)              |
-|                 | {admiral.test}                                                    | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)          |  
+|                 | {pharmaversesdtm}                                                    | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)          |  
 |                 | [{admiral}](https://pharmaverse.github.io/admiral/main/)          | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/)        | 
 
 ## Main Goal

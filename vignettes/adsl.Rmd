@@ -56,26 +56,26 @@ the environment. This will be a company specific process. Some of the
 data frames needed may be `DM`, `EX`, `DS`, `AE`, and `LB`.
 
 For example purpose, the CDISC Pilot SDTM datasets---which are included in 
-`{admiral.test}`---are used.
+`{pharmaversesdtm}`---are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(pharmaversesdtm)
 library(lubridate)
 library(stringr)
 
-data("admiral_dm")
-data("admiral_ds")
-data("admiral_ex")
-data("admiral_ae")
-data("admiral_lb")
+data("dm")
+data("ds")
+data("ex")
+data("ae")
+data("lb")
 
-dm <- convert_blanks_to_na(admiral_dm)
-ds <- convert_blanks_to_na(admiral_ds)
-ex <- convert_blanks_to_na(admiral_ex)
-ae <- convert_blanks_to_na(admiral_ae)
-lb <- convert_blanks_to_na(admiral_lb)
+dm <- convert_blanks_to_na(dm)
+ds <- convert_blanks_to_na(ds)
+ex <- convert_blanks_to_na(ex)
+ae <- convert_blanks_to_na(ae)
+lb <- convert_blanks_to_na(lb)
 ```
 
 The `DM` domain is used as the basis for `ADSL`:
