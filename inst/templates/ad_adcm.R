@@ -76,7 +76,7 @@ adcm <- cm %>%
 ## Derive flags ----
 adcm <- adcm %>%
   # Derive On-Treatment flag
-  # Set `span_period = "Y"` if you want occurrences that started prior to drug
+  # Set `span_period = TRUE` if you want occurrences that started prior to drug
   # intake and ongoing or ended after this time to be considered as on-treatment.
   derive_var_ontrtfl(
     start_date = ASTDT,

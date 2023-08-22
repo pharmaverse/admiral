@@ -20,7 +20,7 @@
 #'
 #'   A numeric vector is expected.
 #'
-#' @param wt Weight (kg)
+#' @param weight Weight (kg)
 #'
 #'   A numeric vector is expected if `method = "CRCL"`
 #'
@@ -41,6 +41,8 @@
 #'   A character vector is expected.
 #'
 #'   Expected Values: `"CRCL"`, `"CKD-EPI"`, `"MDRD"`
+#'
+#' @param wt *Deprecated*, please use `weight` instead.
 #'
 #' @details
 #'
@@ -92,7 +94,7 @@
 #'
 #' @examples
 #' compute_egfr(
-#'   creat = 90, creatu = "umol/L", age = 53, wt = 85, sex = "M", method = "CRCL"
+#'   creat = 90, creatu = "umol/L", age = 53, weight = 85, sex = "M", method = "CRCL"
 #' )
 #'
 #' compute_egfr(
@@ -120,19 +122,27 @@
 #' base %>%
 #'   dplyr::mutate(
 #'     CRCL_CG = compute_egfr(
-#'       creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
+#'       creat = CREATBL, creatu = CREATBLU, age = AGE, weight = WTBL, sex = SEX,
 #'       method = "CRCL"
 #'     ),
 #'     EGFR_EPI = compute_egfr(
-#'       creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
+#'       creat = CREATBL, creatu = CREATBLU, age = AGE, weight = WTBL, sex = SEX,
 #'       method = "CKD-EPI"
 #'     ),
 #'     EGFR_MDRD = compute_egfr(
-#'       creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
+#'       creat = CREATBL, creatu = CREATBLU, age = AGE, weight = WTBL, sex = SEX,
 #'       race = RACE, method = "MDRD"
 #'     ),
 #'   )
-compute_egfr <- function(creat, creatu = "SI", age, wt, sex, race = NULL, method) {
+compute_egfr <- function(creat, creatu = "SI", age, weight, sex, race = NULL, method, wt) {
+  ### BEGIN DEPRECATION
+  if (!missing(wt)) {
+    deprecate_warn("0.12.0", "compute_egfr(old_param = 'wt')", "compute_egfr(new_param = 'weight')")
+    # old_param is given using exprs()
+    weight <- wt
+  }
+  ### END DEPRECATION
+
   assert_numeric_vector(creat)
   assert_character_vector(creatu, values = c(
     "SI", "CV", "mg/dL", "umol/L", NA_character_,
@@ -164,15 +174,15 @@ compute_egfr <- function(creat, creatu = "SI", age, wt, sex, race = NULL, method
       sex == "M" ~ 175 * (scr^-1.154) * (age^-0.203)
     )
   } else if (method == "CRCL") {
-    assert_numeric_vector(wt)
+    assert_numeric_vector(weight)
 
     egfr <- case_when(
       tolower(creatu) %in% c("cv", "mg/dl") & sex == "F" ~
-        ((140 - age) * wt * 0.85) / (creat * 72),
+        ((140 - age) * weight * 0.85) / (creat * 72),
       tolower(creatu) %in% c("cv", "mg/dl") & sex == "M" ~
-        ((140 - age) * wt) / (creat * 72),
-      sex == "F" ~ ((140 - age) * wt * 1.04) / creat,
-      sex == "M" ~ ((140 - age) * wt * 1.23) / creat
+        ((140 - age) * weight) / (creat * 72),
+      sex == "F" ~ ((140 - age) * weight * 1.04) / creat,
+      sex == "M" ~ ((140 - age) * weight * 1.23) / creat
     )
   } else if (method == "CKD-EPI") {
     kappa <- case_when(

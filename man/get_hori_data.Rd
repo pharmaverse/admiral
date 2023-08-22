@@ -4,7 +4,7 @@
 \alias{get_hori_data}
 \title{Creating Temporary Parameters and \verb{<variable>.<parameter>} Variables}
 \usage{
-get_hori_data(dataset, by_vars, parameters, analysis_value, filter)
+get_hori_data(dataset, by_vars, parameters, set_values_to, filter)
 }
 \arguments{
 \item{dataset}{Input dataset}
@@ -20,12 +20,12 @@ expression the observations to select.
 
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions}
 
-\item{analysis_value}{All variables of the form \verb{<variable>.<parameter>} like \code{AVAL.WEIGHT} are
+\item{set_values_to}{All variables of the form \verb{<variable>.<parameter>} like \code{AVAL.WEIGHT} are
 added to the input dataset. They are set to the value of the variable for
 the parameter. E.g., \code{AVAL.WEIGHT} is set to the value of \code{AVAL} where
 \code{PARAMCD == "WEIGHT"}.
 
-\emph{Permitted Values:} An unquoted expression}
+\emph{Permitted Values:} A list of expressions}
 
 \item{filter}{Filter condition used for restricting the input dataset
 
@@ -43,19 +43,4 @@ variables specified for \code{by_vars} and all variables of the form
 The function creates temporary parameters and variables of the form
 \verb{<variable>.<parameter>}, e.g., \code{AVAL.WEIGHT}.
 }
-\seealso{
-Other Advanced Functions: 
-\code{\link{assert_db_requirements}()},
-\code{\link{assert_parameters_argument}()},
-\code{\link{assert_terms}()},
-\code{\link{assert_valid_queries}()},
-\code{\link{extend_source_datasets}()},
-\code{\link{filter_date_sources}()},
-\code{\link{format.basket_select}()},
-\code{\link{list_tte_source_objects}()},
-\code{\link{params}()},
-\code{\link{validate_basket_select}()},
-\code{\link{validate_query}()}
-}
-\concept{other_advanced}
-\keyword{other_advanced}
+\keyword{internal}

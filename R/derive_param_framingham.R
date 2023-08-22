@@ -271,7 +271,9 @@ derive_param_framingham <- function(dataset,
       diabetfl,
       trthypfl
     ),
-    analysis_value = !!analysis_value,
-    set_values_to = set_values_to
+    set_values_to = exprs(
+      AVAL = !!analysis_value,
+      !!!set_values_to
+    )
   )
 }
