@@ -59,21 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -111,6 +96,7 @@
 <li>The <code>keep_nas</code> argument was added. If it is set to <code>TRUE</code>, observations are created even if values contributing to the computed values are <code>NA</code>.</li>
 </ul></li>
 <li><p>The function <code><a href="../reference/derive_vars_dy.html">derive_vars_dy()</a></code> is updated to avoid potential error when the input <code>dataset</code> with columns ending with <code>temp</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2012" class="external-link">#2012</a>)</p></li>
+<li><p>Templates, vignettes, and other uses of <code>{admiral.test}</code> SDTM data are updated to use <a href="https://pharmaverse.github.io/pharmaversesdtm" class="external-link">pharmaversesdtm</a> instead. (<a href="https://github.com/pharmaverse/admiral/issues/2040" class="external-link">#2040</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-0-12-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-12-0"></a></h3>
@@ -222,7 +208,7 @@
 <li>
 <code>TERM_ID</code> to <code>TERMID</code>
 </li>
-</ul><p>Users need to adjust their <code><a href="https://rdrr.io/pkg/admiral.test/man/get_terms.html" class="external-link">get_terms()</a></code> function accordingly.</p>
+</ul><p>Users need to adjust their <code><a href="https://rdrr.io/pkg/pharmaversesdtm/man/get_terms.html" class="external-link">get_terms()</a></code> function accordingly.</p>
 </li>
 <li><p>The <code>aval_fun</code> argument of <code><a href="../reference/derive_param_exist_flag.html">derive_param_exist_flag()</a></code> was deprecated in favor of the <code>set_values_to</code> argument. (<a href="https://github.com/pharmaverse/admiral/issues/1727" class="external-link">#1727</a>)</p></li>
 <li><p><code><a href="../reference/derive_var_merged_cat.html">derive_var_merged_cat()</a></code> and <code><a href="../reference/derive_var_merged_character.html">derive_var_merged_character()</a></code> have been deprecated in favor of <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/1727" class="external-link">#1727</a>)</p></li>
