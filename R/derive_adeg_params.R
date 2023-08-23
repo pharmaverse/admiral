@@ -6,10 +6,9 @@
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_param_computed()`.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` and the `unit_var` parameter,
-#'   `PARAMCD`, and `AVAL` are expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars", "get_unit_expr"))`
+#'   `PARAMCD`, and `AVAL` are expected as well.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`

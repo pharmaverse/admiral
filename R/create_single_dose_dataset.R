@@ -186,7 +186,7 @@ dose_freq_lookup <- tribble(
 #' or deriving a total dose parameter in `ADEX` when `EXDOSFRQ != ONCE`.
 #'
 #' @param dataset
-#' `r roxygen_param_dataset(expected_vars_args = c("dose_freq", "start_date", "end_date"))`
+#' `r roxygen_param_dataset(expected_vars = c("dose_freq", "start_date", "end_date"))`
 #'
 #' @param dose_freq The dose frequency
 #'
