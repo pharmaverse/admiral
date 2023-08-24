@@ -56,10 +56,10 @@ Takahira: \code{0.007241 * height ^ 0.725 * weight ^ 0.425}
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter code
+for the new parameter.
 
-\emph{Permitted Values:} List of variable-value pairs}
+\emph{Permitted Values}: List of variable-value pairs}
 
 \item{height_code}{HEIGHT parameter code
 
@@ -190,6 +190,8 @@ derive_param_bsa(
 )
 }
 \seealso{
+\code{\link[=compute_bsa]{compute_bsa()}}
+
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},

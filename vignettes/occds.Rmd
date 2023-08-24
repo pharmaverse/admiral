@@ -50,18 +50,18 @@ the environment. This will be a company specific process. Some of the data
 frames needed may be `AE` and `ADSL`
 
 For example purpose, the CDISC Pilot SDTM and ADaM datasets ---which are
-included in `{admiral.test}`--- are used.
+included in `{pharmaversesdtm}`--- are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(pharmaversesdtm)
 library(lubridate)
 
-data("admiral_ae")
+data("ae")
 data("admiral_adsl")
 
-ae <- convert_blanks_to_na(admiral_ae)
+ae <- convert_blanks_to_na(ae)
 adsl <- admiral_adsl
 ```
 ```{r echo = FALSE}
@@ -304,7 +304,7 @@ The expected result is the input dataset with an additional column named
 `ONTRTFL` with a value of `"Y"` or `NA`.
 
 If you want to also check an end date, you could add the `end_date` argument.
-Note that in this scenario you could set `span_period = "Y"` if you want occurrences that started
+Note that in this scenario you could set `span_period = TRUE` if you want occurrences that started
 prior to drug intake, and was ongoing or ended after this time to be considered as on-treatment.
 
 ```{r eval=TRUE}

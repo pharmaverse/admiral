@@ -434,8 +434,8 @@ test_that("derive_param_bmi Test 38: Derive BMI where height is measured only on
     input,
     by_vars = exprs(USUBJID, VISIT),
     parameters = "WEIGHT",
-    analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
     set_values_to = exprs(
+      AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
       PARAMCD = "BMI",
       PARAM = "Body Mass Index (kg/m^2)",
       AVALU = "kg/m^2"
@@ -859,11 +859,11 @@ test_that("derive_param_bsa Test 51: Derive BSA where height is measured only on
     input,
     by_vars = exprs(USUBJID, VISIT),
     parameters = "WEIGHT",
-    analysis_value = compute_bsa(
-      height = AVAL.HEIGHT, weight = AVAL.WEIGHT,
-      method = "Mosteller"
-    ),
     set_values_to = exprs(
+      AVAL = compute_bsa(
+        height = AVAL.HEIGHT, weight = AVAL.WEIGHT,
+        method = "Mosteller"
+      ),
       PARAMCD = "BSA",
       PARAM = "Body Surface Area (m^2)",
       AVALU = "m^2"

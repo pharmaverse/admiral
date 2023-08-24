@@ -4,7 +4,7 @@
 #
 # Input: cm, adsl
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
@@ -14,11 +14,10 @@ library(lubridate)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("admiral_cm")
+data("cm")
 data("admiral_adsl")
 
 adsl <- admiral_adsl
-cm <- admiral_cm
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
@@ -77,7 +76,7 @@ adcm <- cm %>%
 ## Derive flags ----
 adcm <- adcm %>%
   # Derive On-Treatment flag
-  # Set `span_period = "Y"` if you want occurrences that started prior to drug
+  # Set `span_period = TRUE` if you want occurrences that started prior to drug
   # intake and ongoing or ended after this time to be considered as on-treatment.
   derive_var_ontrtfl(
     start_date = ASTDT,

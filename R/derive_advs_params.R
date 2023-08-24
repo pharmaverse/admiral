@@ -36,6 +36,14 @@
 #'
 #'   *Permitted Values:* character value
 #'
+#' @param set_values_to Variables to be set
+#'
+#' The specified variables are set to the specified values for the new
+#' observations. For example `exprs(PARAMCD = "MAP")` defines the parameter code
+#' for the new parameter.
+#'
+#' *Permitted Values*: List of variable-value pairs
+#'
 #' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
@@ -57,6 +65,8 @@
 #' @keywords der_prm_bds_findings
 #'
 #' @export
+#'
+#' @seealso [compute_map()]
 #'
 #' @examples
 #' library(tibble)
@@ -146,8 +156,10 @@ derive_param_map <- function(dataset,
     filter = !!filter,
     parameters = c(sysbp_code, diabp_code, hr_code),
     by_vars = by_vars,
-    analysis_value = !!analysis_value,
-    set_values_to = set_values_to
+    set_values_to = exprs(
+      AVAL = !!analysis_value,
+      !!!set_values_to
+    )
   )
 }
 
@@ -185,6 +197,8 @@ derive_param_map <- function(dataset,
 #' @keywords com_bds_findings
 #'
 #' @export
+#'
+#' @seealso [derive_param_map()]
 #'
 #' @examples
 #' # Compute MAP based on diastolic and systolic blood pressure
@@ -267,6 +281,8 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #'   *Permitted Values:* list of variables
 #'
+#' @inheritParams derive_param_map
+#'
 #' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
@@ -280,6 +296,8 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #' @keywords der_prm_bds_findings
 #'
 #' @export
+#'
+#' @seealso [compute_bsa()]
 #'
 #' @examples
 #' library(tibble)
@@ -417,8 +435,10 @@ derive_param_bsa <- function(dataset,
     filter = !!filter,
     parameters = parameters,
     by_vars = by_vars,
-    analysis_value = !!bsa_formula,
-    set_values_to = set_values_to,
+    set_values_to = exprs(
+      AVAL = !!bsa_formula,
+      !!!set_values_to
+    ),
     constant_parameters = constant_parameters,
     constant_by_vars = constant_by_vars
   )
@@ -468,6 +488,8 @@ derive_param_bsa <- function(dataset,
 #' @keywords com_bds_findings
 #'
 #' @export
+#'
+#' @seealso [derive_param_bsa()]
 #'
 #' @examples
 #' # Derive BSA by the Mosteller method
@@ -564,6 +586,8 @@ compute_bsa <- function(height = height,
 #'
 #'   *Permitted Values:* list of variables
 #'
+#' @inheritParams derive_param_map
+#'
 #' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
@@ -581,6 +605,8 @@ compute_bsa <- function(height = height,
 #' @keywords der_prm_bds_findings
 #'
 #' @export
+#'
+#' @seealso [compute_bmi()]
 #'
 #' @examples
 #'
@@ -700,8 +726,10 @@ derive_param_bmi <- function(dataset,
     filter = !!filter,
     parameters = parameters,
     by_vars = by_vars,
-    analysis_value = !!bmi_formula,
-    set_values_to = set_values_to,
+    set_values_to = exprs(
+      AVAL = !!bmi_formula,
+      !!!set_values_to
+    ),
     constant_parameters = constant_parameters,
     constant_by_vars = constant_by_vars
   )
@@ -733,6 +761,8 @@ derive_param_bmi <- function(dataset,
 #' @keywords com_bds_findings
 #'
 #' @export
+#'
+#' @seealso [derive_param_bmi()]
 #'
 #' @examples
 #' compute_bmi(height = 170, weight = 75)
