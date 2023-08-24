@@ -81,7 +81,7 @@
 #' @section Duration Type:
 #'
 #' The [lubridate](https://lubridate.tidyverse.org/) package calculates two
-#' types of spans between two dates: durations and intervals.
+#' types of spans between two dates: duration and interval.
 #' While these calculations are largely the same, when the unit of the time period
 #' is month or year the result can be slightly different.
 #'
