@@ -64,5 +64,6 @@ Suggests:
     readxl,
     testthat (>= 3.0.0),
     tibble
+Remotes: pharmaverse/pharmaversesdtm
 VignetteBuilder: knitr
 Config/testthat/edition: 3
