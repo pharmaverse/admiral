@@ -188,8 +188,7 @@ compute_duration <- function(start_date,
 
   # derive the duration in the output unit
   duration <-
-    switch(
-      type,
+    switch(type,
       "interval" = start_date %--% end_date,
       "duration" = lubridate::as.duration(start_date %--% end_date)
     ) %>%

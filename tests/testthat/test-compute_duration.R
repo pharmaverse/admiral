@@ -190,4 +190,3 @@ test_that("compute_duration Test 10: Duration in seconds (sec option)", {
     1
   )
 })
-
