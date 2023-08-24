@@ -66,13 +66,13 @@
 #'
 #'   Permitted Values: `TRUE`, `FALSE`
 #'
-#' @param type lubridate duration type. Must be one of `c("interval", "duration")`.
+#' @param type lubridate duration type.
 #'
 #'   See below for details.
 #'
-#'   Default: `"interval"`
+#'   Default: `"duration"`
 #'
-#'   Permitted Values: `"interval"`, `"duration"`
+#'   Permitted Values: `"duration"`, `"interval"`
 #'
 #' @details The output is a numeric vector providing the duration as time from
 #' start to end date in the specified unit. If the end date is before the start
@@ -148,7 +148,7 @@ compute_duration <- function(start_date,
                              floor_in = TRUE,
                              add_one = TRUE,
                              trunc_out = FALSE,
-                             type = "interval") {
+                             type = "duration") {
   # Checks
   assert_date_vector(start_date)
   assert_date_vector(end_date)

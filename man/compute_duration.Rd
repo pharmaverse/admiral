@@ -12,7 +12,7 @@ compute_duration(
   floor_in = TRUE,
   add_one = TRUE,
   trunc_out = FALSE,
-  type = "interval"
+  type = "duration"
 )
 }
 \arguments{
@@ -79,13 +79,13 @@ Default: \code{FALSE}
 
 Permitted Values: \code{TRUE}, \code{FALSE}}
 
-\item{type}{lubridate duration type. Must be one of \code{c("interval", "duration")}.
+\item{type}{lubridate duration type.
 
 See below for details.
 
-Default: \code{"interval"}
+Default: \code{"duration"}
 
-Permitted Values: \code{"interval"}, \code{"duration"}}
+Permitted Values: \code{"duration"}, \code{"interval"}}
 }
 \value{
 The duration between the two date in the specified unit
