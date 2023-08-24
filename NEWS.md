@@ -22,6 +22,8 @@
 
 
 ## Breaking Changes
+- The `compute_duration(type)` argument added the `"duration"` type calculation, and this is the new default (previously `"interval"` differences were returned). See function help file for details on the difference between `"duration"` and `"interval"` calculations. (#1875)
+
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)
 
   - `derive_var_disposition_status()`
