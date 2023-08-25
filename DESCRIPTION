@@ -64,5 +64,6 @@ Suggests:
     readxl,
     testthat (>= 3.0.0),
     tibble
+Additional_repositories: https://pharmaverse.r-universe.dev
 VignetteBuilder: knitr
 Config/testthat/edition: 3
