@@ -70,7 +70,6 @@
 #'
 #'   See below for details.
 #'
-#'   Default: `"duration"`
 #'
 #'   Permitted Values: `"duration"`, `"interval"`
 #'
