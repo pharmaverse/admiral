@@ -71,7 +71,7 @@
 #'   See below for details.
 #'
 #'
-#'   Permitted Values: `"duration"`, `"interval"`
+#'   _Permitted Values_: `"duration"`, `"interval"`
 #'
 #' @details The output is a numeric vector providing the duration as time from
 #' start to end date in the specified unit. If the end date is before the start
