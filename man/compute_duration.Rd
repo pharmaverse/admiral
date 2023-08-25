@@ -38,18 +38,14 @@ Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.}
 
 See floor_in and add_one parameter for details.
 
-Default: 'days'
-
-Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
+\emph{Permitted Values}: 'years', 'months', 'days', 'hours', 'minutes', 'min',
 'seconds', 'sec'}
 
 \item{out_unit}{Output unit
 
 The duration is derived in the specified unit
 
-Default: 'days'
-
-Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
+\emph{Permitted Values}: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
 'min', 'seconds', 'sec'}
 
 \item{floor_in}{Round down input dates?
@@ -57,35 +53,27 @@ Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
 The input dates are round down with respect to the input unit, e.g., if the
 input unit is 'days', the time of the input dates is ignored.
 
-Default: `TRUE``
-
-Permitted Values: \code{TRUE}, \code{FALSE}}
+\emph{Permitted Values}: \code{TRUE}, \code{FALSE}}
 
 \item{add_one}{Add one input unit?
 
 If the duration is non-negative, one input unit is added. i.e., the
 duration can not be zero.
 
-Default: \code{TRUE}
-
-Permitted Values: \code{TRUE}, \code{FALSE}}
+\emph{Permitted Values}: \code{TRUE}, \code{FALSE}}
 
 \item{trunc_out}{Return integer part
 
 The fractional part of the duration (in output unit) is removed, i.e., the
 integer part is returned.
 
-Default: \code{FALSE}
-
-Permitted Values: \code{TRUE}, \code{FALSE}}
+\emph{Permitted Values}: \code{TRUE}, \code{FALSE}}
 
 \item{type}{lubridate duration type.
 
 See below for details.
 
-Default: \code{"duration"}
-
-Permitted Values: \code{"duration"}, \code{"interval"}}
+\emph{Permitted Values}: \code{"duration"}, \code{"interval"}}
 }
 \value{
 The duration between the two date in the specified unit

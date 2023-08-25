@@ -25,18 +25,14 @@
 #'
 #'   See floor_in and add_one parameter for details.
 #'
-#'   Default: 'days'
-#'
-#'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
+#'   _Permitted Values_: 'years', 'months', 'days', 'hours', 'minutes', 'min',
 #'   'seconds', 'sec'
 #'
 #' @param out_unit Output unit
 #'
 #'   The duration is derived in the specified unit
 #'
-#'   Default: 'days'
-#'
-#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
+#'   _Permitted Values_: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
 #'   'min', 'seconds', 'sec'
 #'
 #' @param floor_in Round down input dates?
@@ -44,32 +40,25 @@
 #'   The input dates are round down with respect to the input unit, e.g., if the
 #'   input unit is 'days', the time of the input dates is ignored.
 #'
-#'   Default: `TRUE``
-#'
-#'   Permitted Values: `TRUE`, `FALSE`
+#'   _Permitted Values_: `TRUE`, `FALSE`
 #'
 #' @param add_one Add one input unit?
 #'
 #'   If the duration is non-negative, one input unit is added. i.e., the
 #'   duration can not be zero.
 #'
-#'   Default: `TRUE`
-#'
-#'   Permitted Values: `TRUE`, `FALSE`
+#'   _Permitted Values_: `TRUE`, `FALSE`
 #'
 #' @param trunc_out Return integer part
 #'
 #'   The fractional part of the duration (in output unit) is removed, i.e., the
 #'   integer part is returned.
 #'
-#'   Default: `FALSE`
-#'
-#'   Permitted Values: `TRUE`, `FALSE`
+#'   _Permitted Values_: `TRUE`, `FALSE`
 #'
 #' @param type lubridate duration type.
 #'
 #'   See below for details.
-#'
 #'
 #'   _Permitted Values_: `"duration"`, `"interval"`
 #'
