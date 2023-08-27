@@ -4,7 +4,7 @@
 #
 # Input: mh, adsl
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
@@ -13,12 +13,11 @@ library(lubridate)
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
-data("admiral_mh")
+data("mh")
 data("admiral_adsl")
 data("queries_mh")
 
 adsl <- admiral_adsl
-mh <- admiral_mh
 
 mh <- convert_blanks_to_na(mh)
 
