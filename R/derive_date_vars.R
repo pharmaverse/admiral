@@ -330,8 +330,7 @@ impute_dtc_dtm <- function(dtc,
 #'
 #'
 #' @family utils_impute
-#'
-#' @keywords utils_impute
+#' @keywords internal
 dtm_level <- function(level) {
   out <-
     factor(
@@ -361,7 +360,7 @@ dtm_level <- function(level) {
 #'
 #' @family utils_impute
 #'
-#' @keywords utils_impute
+#' @keywords internal
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 get_partialdatetime <- function(dtc) {
@@ -419,7 +418,7 @@ get_partialdatetime <- function(dtc) {
 #'
 #' @family utils_impute
 #'
-#' @keywords utils_impute
+#' @keywords internal
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 get_imputation_target_date <- function(date_imputation,
@@ -468,7 +467,7 @@ get_imputation_target_date <- function(date_imputation,
 #'
 #' @family utils_impute
 #'
-#' @keywords utils_impute
+#' @keywords internal
 #'
 #' @seealso  [impute_dtc_dtm()]
 get_imputation_target_time <- function(time_imputation) {
@@ -507,7 +506,7 @@ get_imputation_target_time <- function(time_imputation) {
 #'
 #' @family utils_impute
 #'
-#' @keywords utils_impute
+#' @keywords internal
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 restrict_imputed_dtc_dtm <- function(dtc,
@@ -859,10 +858,8 @@ impute_dtc_dt <- function(dtc,
 #' @details A `dt_level` object is an ordered factor, i.e., two objects can be
 #'   compared.
 #'
-#'
 #' @family utils_impute
-#' @keywords utils_impute
-#'
+#' @keywords internal
 dt_level <- function(level) {
   out <-
     factor(
@@ -891,7 +888,7 @@ dt_level <- function(level) {
 #'
 #' @family utils_impute
 #'
-#' @keywords utils_impute
+#' @keywords internal
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 restrict_imputed_dtc_dt <- function(dtc,

@@ -64,7 +64,7 @@ Restrict Imputed DTC date to Minimum/Maximum Dates
 \seealso{
 \code{\link[=impute_dtc_dtm]{impute_dtc_dtm()}}, \code{\link[=impute_dtc_dt]{impute_dtc_dt()}}
 
-Utilities used for date imputation: 
+Other utils_impute: 
 \code{\link{dt_level}()},
 \code{\link{dtm_level}()},
 \code{\link{get_imputation_target_date}()},
@@ -73,4 +73,4 @@ Utilities used for date imputation:
 \code{\link{restrict_imputed_dtc_dtm}()}
 }
 \concept{utils_impute}
-\keyword{utils_impute}
+\keyword{internal}

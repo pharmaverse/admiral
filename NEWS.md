@@ -63,6 +63,7 @@ has been deprecated in favor of `dataset_ref`. (#2037)
 
 ## Documentation
 
+- Non-exported utility functions were previously listed on the admiral pkgdown reference page. They have been removed. (#2049)
 
 ## Various
 
