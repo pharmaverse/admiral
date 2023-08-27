@@ -12,9 +12,8 @@ derive_vars_dy(dataset, reference_date, source_vars)
 The columns specified by the \code{reference_date} and the \code{source_vars}
 parameter are expected.}
 
-\item{reference_date}{The start date column, e.g., date of first treatment
-
-A date or date-time object column is expected.
+\item{reference_date}{A date or date-time column, e.g., date of first treatment
+or date-time of last exposure to treatment.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
