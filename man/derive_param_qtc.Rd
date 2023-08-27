@@ -39,10 +39,10 @@ Permitted Values: \code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter code
+for the new parameter.
 
-\emph{Permitted Values:} List of variable-value pairs}
+\emph{Permitted Values}: List of variable-value pairs}
 
 \item{qt_code}{QT parameter code
 
@@ -136,6 +136,8 @@ derive_param_qtc(
 )
 }
 \seealso{
+\code{\link[=compute_qtc]{compute_qtc()}}
+
 \code{\link[=compute_qtc]{compute_qtc()}}
 
 BDS-Findings Functions for adding Parameters/Records: 

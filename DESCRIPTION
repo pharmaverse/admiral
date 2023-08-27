@@ -55,7 +55,7 @@ Imports:
     tidyr (>= 1.0.2),
     tidyselect (>= 1.1.0)
 Suggests:
-    admiral.test (>= 0.6.0),
+    pharmaversesdtm,
     DT,
     diffdf,
     knitr,

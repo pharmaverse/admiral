@@ -159,8 +159,10 @@ derive_param_wbc_abs <- function(dataset,
         diff_code
       ),
       by_vars = by_vars,
-      analysis_value = !!analysis_value,
-      set_values_to = set_values_to
+      set_values_to = exprs(
+        AVAL = !!analysis_value,
+        !!!set_values_to
+      )
     ) %>%
     filter(PARAMCD == !!set_values_to$PARAMCD) %>%
     select(-starts_with("temp_"))
