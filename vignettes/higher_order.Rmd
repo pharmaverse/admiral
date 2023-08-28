@@ -39,19 +39,19 @@ derivation may vary depending on the slice.
 The examples of this vignette require the following packages.
 
 For example purpose, the ADSL dataset---which is included
-in `{admiral}`---and the SDTM datasets from `{admiral.test}` are used.
+in `{admiral}`---and the SDTM datasets from `{pharmaversesdtm}` are used.
 
 ```{r, warning=FALSE, message=FALSE}
 library(admiral)
-library(admiral.test)
+library(pharmaversesdtm)
 library(dplyr, warn.conflicts = FALSE)
 
 data("admiral_adsl")
-data("admiral_ae")
-data("admiral_vs")
+data("ae")
+data("vs")
 adsl <- admiral_adsl
-ae <- convert_blanks_to_na(admiral_ae)
-vs <- convert_blanks_to_na(admiral_vs)
+ae <- convert_blanks_to_na(ae)
+vs <- convert_blanks_to_na(vs)
 ```
 ```{r echo=FALSE}
 adsl <- filter(adsl, USUBJID %in% c("01-701-1111", "01-705-1393"))

@@ -4,7 +4,7 @@
 #
 # Input: adsl, lb
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -15,10 +15,9 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("admiral_lb")
+data("lb")
 data("admiral_adsl")
 
-lb <- admiral_lb
 adsl <- admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing

@@ -73,4 +73,4 @@ Utilities used for date imputation:
 \code{\link{restrict_imputed_dtc_dtm}()}
 }
 \concept{utils_impute}
-\keyword{utils_impute}
+\keyword{internal}

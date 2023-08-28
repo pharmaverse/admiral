@@ -46,6 +46,8 @@
 #'
 #'   Permitted Values: A variable of the input dataset or a function call
 #'
+#' @inheritParams derive_param_map
+#'
 #' @inheritParams derive_param_computed
 #'
 #' @seealso [compute_qtc()]
@@ -151,12 +153,14 @@ derive_param_qtc <- function(dataset,
     filter = !!filter,
     parameters = c(qt_code, rr_code),
     by_vars = by_vars,
-    analysis_value = compute_qtc(
-      qt = !!sym(paste0("AVAL.", qt_code)),
-      rr = !!sym(paste0("AVAL.", rr_code)),
-      method = !!method
-    ),
-    set_values_to = set_values_to
+    set_values_to = exprs(
+      AVAL = compute_qtc(
+        qt = !!sym(paste0("AVAL.", qt_code)),
+        rr = !!sym(paste0("AVAL.", rr_code)),
+        method = !!method
+      ),
+      !!!set_values_to
+    )
   )
 }
 
@@ -268,6 +272,8 @@ compute_qtc <- function(qt, rr, method) {
 #'
 #'   Permitted Values: character value
 #'
+#' @inheritParams derive_param_map
+#'
 #' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
@@ -338,8 +344,10 @@ derive_param_rr <- function(dataset,
     filter = !!filter,
     parameters = c(hr_code),
     by_vars = by_vars,
-    analysis_value = compute_rr(!!sym(paste0("AVAL.", hr_code))),
-    set_values_to = set_values_to
+    set_values_to = exprs(
+      AVAL = compute_rr(!!sym(paste0("AVAL.", hr_code))),
+      !!!set_values_to
+    )
   )
 }
 

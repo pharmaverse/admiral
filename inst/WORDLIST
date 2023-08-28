@@ -288,6 +288,7 @@ groupwise
 hms
 https
 lockfile
+lubridate
 mL
 magrittr
 metacore
@@ -301,6 +302,7 @@ occds
 onwards
 parttime
 pharmaverse
+pharmaversesdtm
 phosphatase
 poppk
 pre
