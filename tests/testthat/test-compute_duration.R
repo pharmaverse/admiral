@@ -142,7 +142,7 @@ test_that("compute_duration Test 10: Duration in seconds (sec option)", {
 
 
 ## Test 11: Duration (instead of interval) ----
-test_that("compute_duration Test 10: Duration in seconds (sec option)", {
+test_that("compute_duration Test 11: Duration (instead of interval)", {
   expect_equal(
     compute_duration(
       ymd("2000-02-01"),
@@ -167,7 +167,7 @@ test_that("compute_duration Test 10: Duration in seconds (sec option)", {
 })
 
 ## Test 12: Interval (instead of duration) ----
-test_that("compute_duration Test 10: Duration in seconds (sec option)", {
+test_that("compute_duration Test 12: Interval (instead of duration)", {
   expect_equal(
     compute_duration(
       ymd("2000-02-01"),
@@ -188,5 +188,42 @@ test_that("compute_duration Test 10: Duration in seconds (sec option)", {
       type = "interval"
     ),
     1
+  )
+})
+
+## Test 13: Interval with duration/interval invariant units ----
+test_that("compute_duration Test 13: Interval with duration/interval invariant units", {
+  expect_equal(
+    compute_duration(
+      ymd("2000-02-01"),
+      ymd("2000-03-01"),
+      out_unit = "days",
+      add_one = FALSE,
+      type = "interval"
+    ),
+    compute_duration(
+      ymd("2000-02-01"),
+      ymd("2000-03-01"),
+      out_unit = "days",
+      add_one = FALSE,
+      type = "duration"
+    )
+  )
+
+  expect_equal(
+    compute_duration(
+      ymd("2000-02-01"),
+      ymd("2001-02-01"),
+      out_unit = "weeks",
+      add_one = FALSE,
+      type = "interval"
+    ),
+    compute_duration(
+      ymd("2000-02-01"),
+      ymd("2001-02-01"),
+      out_unit = "weeks",
+      add_one = FALSE,
+      type = "duration"
+    )
   )
 })
