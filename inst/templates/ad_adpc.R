@@ -501,6 +501,9 @@ adpc <- adpc_baselines %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 # ---- Save output ----
-
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
+dir <- "./tmp"
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
 saveRDS(adpc, file = file.path(dir, "adpc.rds"), compress = "bzip2")

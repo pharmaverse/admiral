@@ -151,5 +151,9 @@ adpp <- adpp %>%
 # ...
 # Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
+dir <- "./tmp"
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
 saveRDS(adpp, file = file.path(dir, "adpp.rds"), compress = "bzip2")

@@ -329,5 +329,9 @@ adeg <- adeg %>%
 
 # Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
+dir <- "./tmp"
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
 saveRDS(adeg, file = file.path(dir, "adeg.rds"), compress = "bzip2")
