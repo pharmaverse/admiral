@@ -65,6 +65,9 @@ has been deprecated in favor of `dataset_ref`. (#2037)
 
 - Non-exported utility functions were previously listed on the admiral website reference page. They have been removed. (#2049)
 
+- The description of the argument `reference_date` in the function `derive_vars_dy()` 
+has been clarified to make it agnostic to start/end  selection. (#2027)
+
 ## Various
 
 - The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as *authors*, whereas those who made a significant contribution in the past are now down as *contributors*. All other acknowledgements have been moved to README section (#1941).
