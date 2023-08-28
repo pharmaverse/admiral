@@ -18,7 +18,7 @@
 
 - The function `derive_vars_dy()` is updated to avoid potential error when the input `dataset` with columns ending with `temp`. (#2012)
 - Argument `keep_source_vars` was added to `derive_extreme_records()` which
-specify which variables in the new observations should be kept. (#1697) 
+specifies which variables in the new observations should be kept. (#1697) 
 
 
 ## Breaking Changes
