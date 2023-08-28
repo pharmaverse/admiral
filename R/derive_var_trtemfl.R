@@ -2,10 +2,8 @@
 #'
 #' Derive treatment emergent analysis flag (e.g., `TRTEMFL`).
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by `start_date`, `end_date`, `trt_start_date`,
-#'   `trt_end_date`, `initial_intensity`, and `intensity` are expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("start_date", "end_date", "trt_start_date", "trt_end_date", "initial_intensity", "intensity"))`
 #'
 #' @param new_var New variable
 #'

@@ -3,9 +3,8 @@
 #' @description
 #' Derives a character lab grade based on severity/toxicity criteria.
 #'
-#' @param dataset Input data set
-#'
-#'   The columns specified by `tox_description_var` parameter is expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("tox_description_var"))`
 #'
 #' @param new_var Name of the character grade variable to create, for example, `ATOXGRH`
 #' or `ATOXGRL`.
@@ -210,10 +209,9 @@ derive_var_atoxgr_dir <- function(dataset,
 #'
 #' Derives character lab grade based on high and low severity/toxicity grade(s).
 #'
-#' @param dataset Input data set
-#'
-#'   The columns `ATOXGRL`, `ATOXGRH` and specified by `lotox_description_var`,
-#'   and `hitox_description_var` parameters are expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("lotox_description_var", "hitox_description_var"))`
+#'   `ATOXGRL`, and `ATOXGRH` are expected as well.
 #'
 #' @param lotox_description_var Variable containing the toxicity grade description
 #' for low values, eg. "Anemia"

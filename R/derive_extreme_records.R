@@ -7,7 +7,7 @@
 #' distinguishes `derive_extreme_records()` from `derive_summary_records()`,
 #' where only the by variables are populated for the new records.
 #'
-#' @param dataset Input dataset
+#' @param dataset `r roxygen_param_dataset()`
 #'
 #'   If `dataset_add` is not specified, the new records are selected from the
 #'   input dataset. In this case the variables specified by `by_vars` and

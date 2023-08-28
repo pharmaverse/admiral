@@ -4,6 +4,8 @@
 #'
 #' @param dataset The input dataset. Required variables are `AVAL` and
 #' `BASE`.
+#' @param dataset
+#'   `r roxygen_param_dataset()` `AVAL` and `BASE` are expected.
 #'
 #' @details
 #' Change from baseline is calculated by subtracting the baseline value

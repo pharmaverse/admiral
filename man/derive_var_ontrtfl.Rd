@@ -18,10 +18,8 @@ derive_var_ontrtfl(
 )
 }
 \arguments{
-\item{dataset}{Input dataset.
-
-Required columns are \code{start_date}, \code{end_date}, \code{ref_start_date} and
-\code{ref_end_date}.}
+\item{dataset}{Input dataset
+\code{start_date}, \code{end_date}, \code{ref_start_date} and \code{ref_end_date} are expected.}
 
 \item{new_var}{On-treatment flag variable name to be created.
 

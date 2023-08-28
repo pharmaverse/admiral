@@ -11,7 +11,7 @@
 #' to the original dataset observations. If you would like to this instead,
 #' see the `derive_summary_records()` function.
 #'
-#' @param dataset A data frame.
+#' @param dataset `r roxygen_param_dataset()`
 #'
 #' @param by_vars Variables to consider for generation of groupwise summary
 #'   records. Providing the names of variables in [exprs()] will create a

@@ -6,9 +6,8 @@
 #' variables from both datasets. For example, add the lowest value (nadir)
 #' before the current observation.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by `by_vars` are expected.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param dataset_add Additional dataset
 #'

@@ -17,7 +17,7 @@ derive_var_shift(
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by \code{from_var} and the \code{to_var} parameters are expected.}
+The variables specified by the \code{from_var} and \code{to_var} argument(s) to be expected.}
 
 \item{new_var}{Name of the character shift variable to create.}
 

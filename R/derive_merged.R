@@ -6,9 +6,8 @@
 #' (`filter_add` argument) and/or selecting the first or last observation for
 #' each by group (`order` and `mode` argument).
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` argument are expected.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param dataset_add Additional dataset
 #'
@@ -859,9 +858,8 @@ get_not_mapped <- function() {
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_vars_merged`.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` argument are expected.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param dataset_add Additional dataset
 #'

@@ -2,9 +2,8 @@
 #'
 #' Derive death cause (`DTHCAUS`) and add traceability variables if required.
 #'
-#' @param dataset Input dataset.
-#'
-#'   The variables specified by `subject_keys` are required.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("subject_keys"))`
 #'
 #' @param source_datasets A named `list` containing datasets in which to search for the
 #'   death cause

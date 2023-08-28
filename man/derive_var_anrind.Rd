@@ -7,7 +7,9 @@
 derive_var_anrind(dataset, use_a1hia1lo = FALSE)
 }
 \arguments{
-\item{dataset}{The input dataset}
+\item{dataset}{Input dataset
+\code{ANRLO}, \code{ANRHI}, and \code{AVAL} are expected and if \code{use_a1hia1lo} is set to \code{TRUE},
+\code{A1LO} and \code{A1H1} are expected as well.}
 
 \item{use_a1hia1lo}{A logical value indicating whether to use \code{A1H1} and \code{A1LO} in
 the derivation of \code{ANRIND}.}

@@ -15,11 +15,6 @@ derive_locf_records(
 )
 }
 \arguments{
-\item{dataset}{Input dataset
-
-The columns specified by the \code{by_vars}, \code{analysis_var}, \code{order},
-\code{keep_vars} parameters are expected.}
-
 \item{dataset_expected_obs}{\emph{Deprecated}, please use \code{dataset_ref} instead.}
 
 \item{dataset_ref}{Expected observations dataset
@@ -61,6 +56,11 @@ Adds LOCF records as new observations for each 'by group' when the dataset
 does not contain observations for missed visits/time points.
 }
 \details{
+#' @param dataset
+Input dataset
+
+The variables specified by the \code{by_vars}, \code{analysis_var}, \code{order} and \code{keep_vars} argument(s) to be expected.
+
 For each group (with respect to the variables specified for the
 by_vars parameter) those observations from \code{dataset_ref} are added to
 the output dataset

@@ -14,9 +14,9 @@ derive_var_atoxgr_dir(
 )
 }
 \arguments{
-\item{dataset}{Input data set
+\item{dataset}{Input dataset
 
-The columns specified by \code{tox_description_var} parameter is expected.}
+The variables specified by the \code{tox_description_var} argument(s) to be expected.}
 
 \item{new_var}{Name of the character grade variable to create, for example, \code{ATOXGRH}
 or \code{ATOXGRL}.}

@@ -3,10 +3,8 @@
 #' Derives duration between two dates, specified by the variables present in
 #' input dataset e.g., duration of adverse events, relative day, age, ...
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `start_date` and the `end_date` parameter are
-#'   expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("start_date", "end_date"))`
 #'
 #' @param new_var Name of variable to create
 #'

@@ -2,7 +2,8 @@
 #'
 #' This function creates date(s) as output from datetime variable(s)
 #'
-#' @param dataset Input dataset
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("source_vars"))`
 #'
 #' @param source_vars A list of datetime variables created using `exprs()` from
 #'   which dates are to be extracted

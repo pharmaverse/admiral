@@ -3,10 +3,8 @@
 #' Add expected records as new observations for each 'by group' when the dataset
 #' contains missing observations.
 #'
-#' @param dataset Input dataset
-#'
-#'   A data frame, the columns from `dataset_ref` and specified by the
-#'   `by_vars` parameter are expected.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("dataset_ref", "by_vars"))`
 #'
 #' @param dataset_expected_obs *Deprecated*, please use `dataset_ref` instead.
 #'

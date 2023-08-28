@@ -7,7 +7,7 @@
 extract_duplicate_records(dataset, by_vars)
 }
 \arguments{
-\item{dataset}{A data frame}
+\item{dataset}{Input dataset}
 
 \item{by_vars}{A list of expressions created using \code{exprs()} identifying
 groups of records in which to look for duplicates}

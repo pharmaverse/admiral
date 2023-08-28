@@ -19,8 +19,7 @@ derive_param_tte(
 }
 \arguments{
 \item{dataset}{Input dataset
-
-The \code{PARAMCD} variable is expected.}
+\code{PARAMCD} is expected..}
 
 \item{dataset_adsl}{ADSL input dataset
 

@@ -20,8 +20,7 @@ derive_var_trtemfl(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by \code{start_date}, \code{end_date}, \code{trt_start_date},
-\code{trt_end_date}, \code{initial_intensity}, and \code{intensity} are expected.}
+The variables specified by the \code{start_date}, \code{end_date}, \code{trt_start_date}, \code{trt_end_date}, \code{initial_intensity} and \code{intensity} argument(s) to be expected.}
 
 \item{new_var}{New variable}
 

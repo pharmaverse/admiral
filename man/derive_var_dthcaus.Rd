@@ -12,9 +12,9 @@ derive_var_dthcaus(
 )
 }
 \arguments{
-\item{dataset}{Input dataset.
+\item{dataset}{Input dataset
 
-The variables specified by \code{subject_keys} are required.}
+The variables specified by the \code{subject_keys} argument(s) to be expected.}
 
 \item{...}{Objects of class "dthcaus_source" created by \code{\link[=dthcaus_source]{dthcaus_source()}}.}
 

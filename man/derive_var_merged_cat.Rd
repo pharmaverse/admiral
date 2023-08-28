@@ -20,7 +20,7 @@ derive_var_merged_cat(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected.}
+The variables specified by the \code{by_vars} argument(s) to be expected.}
 
 \item{dataset_add}{Additional dataset
 

@@ -15,7 +15,7 @@ derive_param_extreme_record(
 )
 }
 \arguments{
-\item{dataset}{Input dataset}
+\item{dataset}{Input dataset.}
 
 \item{sources}{Sources
 
