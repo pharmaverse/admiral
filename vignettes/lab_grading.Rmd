@@ -139,7 +139,7 @@ Finally, the list of terms defined in the `{admiral}` metadata to implement DAID
 ```{r, eval=TRUE, echo=FALSE}
 atoxgr_criteria_daids %>%
   filter(!is.na(TERM)) %>%
-  distinct(TERM) %>% 
+  distinct(TERM) %>%
   dataset_vignette(
     display_vars = exprs(TERM)
   )

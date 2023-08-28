@@ -3623,8 +3623,9 @@ expected_dbiligt28d_daids <- tibble::tribble(
   # AVAL missing cannot grade
   "Direct Bilirubin, High",   NA,     8,      "umol/L", NA,       9,
 ) %>%
-  mutate(BRTHDT = lubridate::ymd("2023-01-01"),
-         LBDT = lubridate::ymd("2023-01-30")
+  mutate(
+    BRTHDT = lubridate::ymd("2023-01-01"),
+    LBDT = lubridate::ymd("2023-01-30")
   )
 
 ### <= 28 days of age
@@ -3661,30 +3662,32 @@ expected_dbilile28d_daids <- tibble::tribble(
   # AVAL missing cannot grade
   "Direct Bilirubin, High",   NA,     8,      "umol/L", NA,       28,
 ) %>%
-  mutate(BRTHDT = lubridate::ymd("2023-01-01"),
-         LBDT = lubridate::ymd("2023-01-29")
+  mutate(
+    BRTHDT = lubridate::ymd("2023-01-01"),
+    LBDT = lubridate::ymd("2023-01-29")
   )
 
 ### add subjects with missing LBDT or BRTHDT
 
 expected_dbilinoage_daids <- expected_dbilile28d_daids %>%
   filter(TESTNUM %in% c(18, 19)) %>%
-  mutate(LBDT = if_else(TESTNUM == 18, NA, LBDT),
-         BRTHDT = if_else(TESTNUM == 19, NA, BRTHDT),
-         ATOXGRH = NA_character_,
-         TESTNUM = if_else(TESTNUM == 18, 29, 30)
-         )
+  mutate(
+    LBDT = if_else(TESTNUM == 18, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 19, NA, BRTHDT),
+    ATOXGRH = NA_character_,
+    TESTNUM = if_else(TESTNUM == 18, 29, 30)
+  )
 
 ### put all data together
 expected_dbili_daids <- expected_dbilinoage_daids %>%
-  bind_rows(expected_dbilile28d_daids,
-            expected_dbiligt28d_daids
+  bind_rows(
+    expected_dbilile28d_daids,
+    expected_dbiligt28d_daids
   )
 
 
 ## Test 90: DAIDS Direct Bilirubin, High ----
 test_that("derive_var_atoxgr Test 90: DAIDS Direct Bilirubin, High", {
-
   input_dbili_daids <- expected_dbili_daids %>%
     select(-ATOXGRH)
 
@@ -3740,28 +3743,31 @@ expected_tbiligt28d_daids <- tibble::tribble(
 
 ### make Age <= 28 all results NA for ATOXGRH
 expected_tbilile28d_daids <- expected_tbiligt28d_daids %>%
-  mutate(LBDT = lubridate::ymd("2023-01-29"),
-         ATOXGRH = NA_character_,
-         TESTNUM = TESTNUM + 13
-         )
+  mutate(
+    LBDT = lubridate::ymd("2023-01-29"),
+    ATOXGRH = NA_character_,
+    TESTNUM = TESTNUM + 13
+  )
 
 ### make Age missing results NA for ATOXGRH
 expected_tbilinoage_daids <- expected_tbiligt28d_daids %>%
-  filter(TESTNUM %in% c(10,11)) %>%
-  mutate(LBDT = if_else(TESTNUM == 10, NA, LBDT),
-         BRTHDT = if_else(TESTNUM == 11, NA, BRTHDT),
-         ATOXGRH = NA_character_,
-         TESTNUM = if_else(TESTNUM == 10, 27, 28)
+  filter(TESTNUM %in% c(10, 11)) %>%
+  mutate(
+    LBDT = if_else(TESTNUM == 10, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 11, NA, BRTHDT),
+    ATOXGRH = NA_character_,
+    TESTNUM = if_else(TESTNUM == 10, 27, 28)
   )
 
 expected_tbili_daids <- expected_tbilinoage_daids %>%
-  bind_rows(expected_tbiligt28d_daids,
-            expected_tbilile28d_daids)
+  bind_rows(
+    expected_tbiligt28d_daids,
+    expected_tbilile28d_daids
+  )
 
 
 ## Test 91: DAIDS Total Bilirubin, High ----
 test_that("derive_var_atoxgr Test 91: DAIDS Total Bilirubin, High", {
-
   input_tbili_daids <- expected_tbili_daids %>%
     select(-ATOXGRH)
 
@@ -3779,7 +3785,6 @@ test_that("derive_var_atoxgr Test 91: DAIDS Total Bilirubin, High", {
     compare = actual_tbili_daids,
     keys = c("ATOXDSCH", "TESTNUM")
   )
-
 })
 
 
@@ -3809,8 +3814,10 @@ expected_calcige7d_daids <- tibble::tribble(
   # AVAL missing cannot grade
   "Calcium, High", NA,     "mmol/L",  NA,       12,
 ) %>%
-  mutate(BRTHDT = lubridate::ymd("2023-01-01"),
-         LBDT = lubridate::ymd("2023-01-08"))
+  mutate(
+    BRTHDT = lubridate::ymd("2023-01-01"),
+    LBDT = lubridate::ymd("2023-01-08")
+  )
 
 ### < 7 days of age
 ### Grade 4: >= 3.38 mmol/L
@@ -3836,15 +3843,18 @@ expected_calcilt7d_daids <- tibble::tribble(
   # AVAL missing cannot grade
   "Calcium, High", NA,     "mmol/L",  NA,       24,
 ) %>%
-  mutate(BRTHDT = lubridate::ymd("2023-01-01"),
-         LBDT = lubridate::ymd("2023-01-07"))
+  mutate(
+    BRTHDT = lubridate::ymd("2023-01-01"),
+    LBDT = lubridate::ymd("2023-01-07")
+  )
 
 expected_calcinoage_daids <- expected_calcige7d_daids %>%
   filter(TESTNUM %in% c(9, 10)) %>%
-  mutate(LBDT = if_else(TESTNUM == 9, NA, LBDT),
-         BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
-         ATOXGRH = NA_character_,
-         TESTNUM = if_else(TESTNUM == 9, 25, 26)
+  mutate(
+    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
+    ATOXGRH = NA_character_,
+    TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
 
 expected_calci_daids <- expected_calcinoage_daids %>%
@@ -3856,7 +3866,6 @@ expected_calci_daids <- expected_calcinoage_daids %>%
 
 ## Test 92: DAIDS Calcium, High ----
 test_that("derive_var_atoxgr Test 92: DAIDS Calcium, High", {
-
   input_calci_daids <- expected_calci_daids %>%
     select(-ATOXGRH)
 
@@ -3959,8 +3968,10 @@ expected_calcdge7d_daids <- tibble::tribble(
   # AVAL missing cannot grade
   "Calcium, Low",  NA,     "mmol/L",  NA,       12,
 ) %>%
-  mutate(BRTHDT = lubridate::ymd("2023-01-01"),
-         LBDT = lubridate::ymd("2023-01-08"))
+  mutate(
+    BRTHDT = lubridate::ymd("2023-01-01"),
+    LBDT = lubridate::ymd("2023-01-08")
+  )
 
 ### < 7 days of age
 ### Grade 4: < 1.38 mmol/L
@@ -3969,32 +3980,35 @@ expected_calcdge7d_daids <- tibble::tribble(
 ### Grade 1: 1.63 -< 1.88 mmol/L
 
 expected_calcdlt7d_daids <- tibble::tribble(
-  ~ATOXDSCL,       ~AVAL,  ~AVALU,    ~ATOXGRL, ~TESTNUM,
-  "Not a term",    2.2,    "mmol/L",  NA,       13,
-  NA_character_,   2.2,    "mmol/L",  NA,       14,
+  ~ATOXDSCL,      ~AVAL, ~AVALU,   ~ATOXGRL, ~TESTNUM,
+  "Not a term",   2.2,   "mmol/L", NA,       13,
+  NA_character_,  2.2,   "mmol/L", NA,       14,
   # ANRLO not missing
-  "Calcium, Low", 1.37,    "mmol/L",  "4",      15,
-  "Calcium, Low", 1.38,    "mmol/L",  "3",      16,
-  "Calcium, Low", 1.49,    "mmol/L",  "3",      17,
-  "Calcium, Low", 1.5,     "mmol/L",  "2",      18,
-  "Calcium, Low", 1.62,    "mmol/L",  "2",      19,
-  "Calcium, Low", 1.63,    "mmol/L",  "1",      20,
-  "Calcium, Low", 1.87,    "mmol/L",  "1",      21,
-  "Calcium, Low", 1.88,    "mmol/L",  "0",      22,
+  "Calcium, Low", 1.37,  "mmol/L", "4",      15,
+  "Calcium, Low", 1.38,  "mmol/L", "3",      16,
+  "Calcium, Low", 1.49,  "mmol/L", "3",      17,
+  "Calcium, Low", 1.5,   "mmol/L", "2",      18,
+  "Calcium, Low", 1.62,  "mmol/L", "2",      19,
+  "Calcium, Low", 1.63,  "mmol/L", "1",      20,
+  "Calcium, Low", 1.87,  "mmol/L", "1",      21,
+  "Calcium, Low", 1.88,  "mmol/L", "0",      22,
   # Unit missing cannot grade
-  "Calcium, Low", 2.2,     NA,        NA,       23,
+  "Calcium, Low", 2.2,   NA,       NA,       23,
   # AVAL missing cannot grade
-  "Calcium, Low", NA,      "mmol/L",  NA,       24,
+  "Calcium, Low", NA,    "mmol/L", NA,       24,
 ) %>%
-  mutate(BRTHDT = lubridate::ymd("2023-01-01"),
-         LBDT = lubridate::ymd("2023-01-07"))
+  mutate(
+    BRTHDT = lubridate::ymd("2023-01-01"),
+    LBDT = lubridate::ymd("2023-01-07")
+  )
 
 expected_calcdnoage_daids <- expected_calcdge7d_daids %>%
   filter(TESTNUM %in% c(9, 10)) %>%
-  mutate(LBDT = if_else(TESTNUM == 9, NA, LBDT),
-         BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
-         ATOXGRL = NA_character_,
-         TESTNUM = if_else(TESTNUM == 9, 25, 26)
+  mutate(
+    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
+    ATOXGRL = NA_character_,
+    TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
 
 expected_calcd_daids <- expected_calcdnoage_daids %>%
@@ -4006,7 +4020,6 @@ expected_calcd_daids <- expected_calcdnoage_daids %>%
 
 ## Test 94: DAIDS Calcium, Low ----
 test_that("derive_var_atoxgr Test 94: DAIDS Calcium, Low", {
-
   input_calcd_daids <- expected_calcd_daids %>%
     select(-ATOXGRL)
 
@@ -4035,36 +4048,36 @@ test_that("derive_var_atoxgr Test 94: DAIDS Calcium, Low", {
 
 ## Test 95: DAIDS Calcium (Ionized), Low ----
 test_that("derive_var_atoxgr Test 95: DAIDS Calcium (Ionized), Low", {
-expected_caliond_daids <- tibble::tribble(
-  ~ATOXDSCL,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL, ~TESTNUM,
-  "Not a term",              0.79,   1.1,    100,    "mmol/L",  NA,       1,
-  NA_character_,             0.79,   1.1,    100,    "mmol/L",  NA,       2,
-  # ANRLO not missing
-  "Calcium (Ionized), Low",  0.79,   1.1,    100,    "mmol/L",  "4",      3,
-  "Calcium (Ionized), Low",  0.8,    1.1,    100,    "mmol/L",  "3",      4,
-  "Calcium (Ionized), Low",  0.89,   1.1,    100,    "mmol/L",  "3",      5,
-  "Calcium (Ionized), Low",  0.9,    1.1,    100,    "mmol/L",  "2",      6,
-  "Calcium (Ionized), Low",  0.99,   1.1,    100,    "mmol/L",  "2",      7,
-  "Calcium (Ionized), Low",  1,      1.1,    100,    "mmol/L",  "1",      8,
-  "Calcium (Ionized), Low",  1.09,   1.1,    100,    "mmol/L",  "1",      9,
-  "Calcium (Ionized), Low",  1.1,    1.1,    100,    "mmol/L",  "0",      10,
-  # ANRLO missing - can grade 2-4
-  "Calcium (Ionized), Low",  0.79,   NA,     100,    "mmol/L",  "4",      11,
-  "Calcium (Ionized), Low",  0.8,    NA,     100,    "mmol/L",  "3",      12,
-  "Calcium (Ionized), Low",  0.89,   NA,     100,    "mmol/L",  "3",      13,
-  "Calcium (Ionized), Low",  0.9,    NA,     100,    "mmol/L",  "2",      14,
-  "Calcium (Ionized), Low",  0.99,   NA,     100,    "mmol/L",  "2",      15,
-  # ANRLO missing - can NOT grade 0 or 1
-  "Calcium (Ionized), Low",  1,      1.1,    NA,     "mmol/L",  "1",      16,
-  "Calcium (Ionized), Low",  1.09,   1.1,    NA,     "mmol/L",  "1",      17,
-  "Calcium (Ionized), Low",  1.1,    1.1,    NA,     "mmol/L",  "0",      18,
-  # Unit missing cannot grade
-  "Calcium (Ionized), Low",  1.1,    1.1,    100,    NA,        NA,       19,
-  # AVAL missing cannot grade
-  "Calcium (Ionized), Low",  NA,     1.1,    100,    "mmol/L",  NA,       20,
-)
-input_caliond_daids <- expected_caliond_daids %>%
-  select(-ATOXGRL)
+  expected_caliond_daids <- tibble::tribble(
+    ~ATOXDSCL,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL, ~TESTNUM,
+    "Not a term",              0.79,   1.1,    100,    "mmol/L",  NA,       1,
+    NA_character_,             0.79,   1.1,    100,    "mmol/L",  NA,       2,
+    # ANRLO not missing
+    "Calcium (Ionized), Low",  0.79,   1.1,    100,    "mmol/L",  "4",      3,
+    "Calcium (Ionized), Low",  0.8,    1.1,    100,    "mmol/L",  "3",      4,
+    "Calcium (Ionized), Low",  0.89,   1.1,    100,    "mmol/L",  "3",      5,
+    "Calcium (Ionized), Low",  0.9,    1.1,    100,    "mmol/L",  "2",      6,
+    "Calcium (Ionized), Low",  0.99,   1.1,    100,    "mmol/L",  "2",      7,
+    "Calcium (Ionized), Low",  1,      1.1,    100,    "mmol/L",  "1",      8,
+    "Calcium (Ionized), Low",  1.09,   1.1,    100,    "mmol/L",  "1",      9,
+    "Calcium (Ionized), Low",  1.1,    1.1,    100,    "mmol/L",  "0",      10,
+    # ANRLO missing - can grade 2-4
+    "Calcium (Ionized), Low",  0.79,   NA,     100,    "mmol/L",  "4",      11,
+    "Calcium (Ionized), Low",  0.8,    NA,     100,    "mmol/L",  "3",      12,
+    "Calcium (Ionized), Low",  0.89,   NA,     100,    "mmol/L",  "3",      13,
+    "Calcium (Ionized), Low",  0.9,    NA,     100,    "mmol/L",  "2",      14,
+    "Calcium (Ionized), Low",  0.99,   NA,     100,    "mmol/L",  "2",      15,
+    # ANRLO missing - can NOT grade 0 or 1
+    "Calcium (Ionized), Low",  1,      1.1,    NA,     "mmol/L",  "1",      16,
+    "Calcium (Ionized), Low",  1.09,   1.1,    NA,     "mmol/L",  "1",      17,
+    "Calcium (Ionized), Low",  1.1,    1.1,    NA,     "mmol/L",  "0",      18,
+    # Unit missing cannot grade
+    "Calcium (Ionized), Low",  1.1,    1.1,    100,    NA,        NA,       19,
+    # AVAL missing cannot grade
+    "Calcium (Ionized), Low",  NA,     1.1,    100,    "mmol/L",  NA,       20,
+  )
+  input_caliond_daids <- expected_caliond_daids %>%
+    select(-ATOXGRL)
 
   actual_caliond_daids <- derive_var_atoxgr_dir(
     input_caliond_daids,
@@ -4092,21 +4105,21 @@ input_caliond_daids <- expected_caliond_daids %>%
 ## Test 96: DAIDS Creatine Kinase, High ----
 test_that("derive_var_atoxgr Test 96: DAIDS Creatine Kinase, High", {
   expected_cki_daids <- tibble::tribble(
-    ~ATOXDSCH,                ~AVAL, ~ANRHI,~AVALU,        ~ATOXGRH, ~TESTNUM,
-    "Not a term",             10,    5,     NA_character_, NA,       1,
-    NA_character_,            10,    5,     NA_character_, NA,       2,
-    "Creatine Kinase, High",  100,   5,     NA_character_, "4",      3,
-    "Creatine Kinase, High",  99,    5,     NA_character_, "3",      4,
-    "Creatine Kinase, High",  50,    5,     NA_character_, "3",      5,
-    "Creatine Kinase, High",  49,    5,     NA_character_, "2",      6,
-    "Creatine Kinase, High",  30,    5,     NA_character_, "2",      7,
-    "Creatine Kinase, High",  29,    5,     NA_character_, "1",      8,
-    "Creatine Kinase, High",  15,    5,     NA_character_, "1",      9,
-    "Creatine Kinase, High",  14,    5,     NA_character_, "0",      10,
+    ~ATOXDSCH,               ~AVAL, ~ANRHI, ~AVALU,        ~ATOXGRH, ~TESTNUM,
+    "Not a term",            10,    5,      NA_character_, NA,       1,
+    NA_character_,           10,    5,      NA_character_, NA,       2,
+    "Creatine Kinase, High", 100,   5,      NA_character_, "4",      3,
+    "Creatine Kinase, High", 99,    5,      NA_character_, "3",      4,
+    "Creatine Kinase, High", 50,    5,      NA_character_, "3",      5,
+    "Creatine Kinase, High", 49,    5,      NA_character_, "2",      6,
+    "Creatine Kinase, High", 30,    5,      NA_character_, "2",      7,
+    "Creatine Kinase, High", 29,    5,      NA_character_, "1",      8,
+    "Creatine Kinase, High", 15,    5,      NA_character_, "1",      9,
+    "Creatine Kinase, High", 14,    5,      NA_character_, "0",      10,
     # ANRHI missing - cannot grade
-    "Creatine Kinase, High",  4,     NA,    NA_character_, NA,       11,
+    "Creatine Kinase, High", 4,     NA,     NA_character_, NA,       11,
     # AVAL missing cannot grade
-    "Creatine Kinase, High",  NA,    NA,    NA_character_, NA,       12,
+    "Creatine Kinase, High", NA,    NA,     NA_character_, NA,       12,
   )
 
   input_cki_daids <- expected_cki_daids %>%
@@ -4346,12 +4359,11 @@ expected_glucd_daids <- expected_glucdnoage_daids %>%
   bind_rows(
     expected_glucdge1m_daids,
     expected_glucdlt1m_daids
-    )
+  )
 
 
 ## Test 100:  DAIDS Glucose, Low ----
 test_that("derive_var_atoxgr Test 100:  DAIDS Glucose, Low", {
-
   input_glucd_daids <- expected_glucd_daids %>%
     select(-ATOXGRL)
 
@@ -4484,8 +4496,10 @@ expected_cholfige18y_daids <- tibble::tribble(
   # AVAL missing cannot grade
   "Cholesterol, Fasting, High", NA,     "mmol/L",  NA,       10,
 ) %>%
-  mutate(BRTHDT = lubridate::ymd("2005-01-08"),
-         LBDT = lubridate::ymd("2023-01-08"))
+  mutate(
+    BRTHDT = lubridate::ymd("2005-01-08"),
+    LBDT = lubridate::ymd("2023-01-08")
+  )
 
 ### < 18 years of age
 ### Grade 3: >= 7.77 mmol/L
@@ -4507,15 +4521,18 @@ expected_cholfilt18y_daids <- tibble::tribble(
   # AVAL missing cannot grade
   "Cholesterol, Fasting, High", NA,     "mmol/L",  NA,       22,
 ) %>%
-  mutate(BRTHDT = lubridate::ymd("2005-01-08"),
-         LBDT = lubridate::ymd("2023-01-07"))
+  mutate(
+    BRTHDT = lubridate::ymd("2005-01-08"),
+    LBDT = lubridate::ymd("2023-01-07")
+  )
 
 expected_cholfinoage_daids <- expected_cholfige18y_daids %>%
   filter(TESTNUM %in% c(9, 10)) %>%
-  mutate(LBDT = if_else(TESTNUM == 9, NA, LBDT),
-         BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
-         ATOXGRH = NA_character_,
-         TESTNUM = if_else(TESTNUM == 9, 25, 26)
+  mutate(
+    LBDT = if_else(TESTNUM == 9, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 10, NA, BRTHDT),
+    ATOXGRH = NA_character_,
+    TESTNUM = if_else(TESTNUM == 9, 25, 26)
   )
 
 expected_cholfi_daids <- expected_cholfinoage_daids %>%
@@ -4527,7 +4544,6 @@ expected_cholfi_daids <- expected_cholfinoage_daids %>%
 
 ## Test 103: DAIDS Cholesterol, Fasting, High ----
 test_that("derive_var_atoxgr Test 103: DAIDS Cholesterol, Fasting, High", {
-
   input_cholfi_daids <- expected_cholfi_daids %>%
     select(-ATOXGRH)
 
@@ -4571,8 +4587,10 @@ expected_ldlfige18y_daids <- tibble::tribble(
   # AVAL missing cannot grade
   "LDL, Fasting, High", NA,     "mmol/L",  NA,       10,
 ) %>%
-  mutate(BRTHDT = lubridate::ymd("2005-01-08"),
-         LBDT = lubridate::ymd("2023-01-08"))
+  mutate(
+    BRTHDT = lubridate::ymd("2005-01-08"),
+    LBDT = lubridate::ymd("2023-01-08")
+  )
 
 ### > 2 to < 18 years of age
 ### Grade 3: >= 4.90 mmol/L
@@ -4594,22 +4612,26 @@ expected_ldlfilt18y_daids <- tibble::tribble(
   # AVAL missing cannot grade
   "LDL, Fasting, High", NA,     "mmol/L",  NA,       20,
 ) %>%
-  mutate(BRTHDT = lubridate::ymd("2020-01-07"),
-         LBDT = lubridate::ymd("2023-01-07"))
+  mutate(
+    BRTHDT = lubridate::ymd("2020-01-07"),
+    LBDT = lubridate::ymd("2023-01-07")
+  )
 
 expected_ldlfinoage_daids <- expected_ldlfige18y_daids %>%
   filter(TESTNUM %in% c(7, 8)) %>%
-  mutate(LBDT = if_else(TESTNUM == 7, NA, LBDT),
-         BRTHDT = if_else(TESTNUM == 8, NA, BRTHDT),
-         ATOXGRH = NA_character_,
-         TESTNUM = if_else(TESTNUM == 7, 25, 26)
+  mutate(
+    LBDT = if_else(TESTNUM == 7, NA, LBDT),
+    BRTHDT = if_else(TESTNUM == 8, NA, BRTHDT),
+    ATOXGRH = NA_character_,
+    TESTNUM = if_else(TESTNUM == 7, 25, 26)
   )
 
 expected_ldlfile2y_daids <- expected_ldlfige18y_daids %>%
   filter(TESTNUM %in% c(7, 8)) %>%
-  mutate(BRTHDT = if_else(TESTNUM == 7, lubridate::ymd("2021-01-07"), lubridate::ymd("2022-01-07")),
-         ATOXGRH = NA_character_,
-         TESTNUM = if_else(TESTNUM == 7, 27, 28)
+  mutate(
+    BRTHDT = if_else(TESTNUM == 7, lubridate::ymd("2021-01-07"), lubridate::ymd("2022-01-07")),
+    ATOXGRH = NA_character_,
+    TESTNUM = if_else(TESTNUM == 7, 27, 28)
   )
 
 expected_ldlfi_daids <- expected_ldlfile2y_daids %>%
@@ -4622,7 +4644,6 @@ expected_ldlfi_daids <- expected_ldlfile2y_daids %>%
 
 ## Test 104: DAIDS LDL, Fasting, High ----
 test_that("derive_var_atoxgr Test 104: DAIDS LDL, Fasting, High", {
-
   input_ldlfi_daids <- expected_ldlfi_daids %>%
     select(-ATOXGRH)
 
@@ -4749,31 +4770,30 @@ test_that("derive_var_atoxgr Test 106: DAIDS Magnesium, Low", {
 ### Grade 1: 0.65 mmol/L to < LLN mmol/L
 
 expected_phosd_daids_gt14y <- tibble::tribble(
-  ~AVAL,  ~ANRLO, ~AVALU,    ~ATOXGRL, ~TESTNUM,
-  0.9,    0.8,    "MM3",     NA,       1,
-  0.31 ,  0.8,    "mmol/L",  "4",      2,
-  0.32,   0.8,    "mmol/L",  "3",      3,
-  0.44,   0.8,    "mmol/L",  "3",      4,
-  0.45,   0.8,    "mmol/L",  "2",      5,
-  0.64,   0.8,    "mmol/L",  "2",      6,
-  0.65,   0.8,    "mmol/L",  "1",      7,
-  0.79,   0.8,    "mmol/L",  "1",      8,
-  0.8,    0.8,    "mmol/L",  "0",      9,
+  ~AVAL, ~ANRLO, ~AVALU,   ~ATOXGRL, ~TESTNUM,
+  0.9,   0.8,    "MM3",    NA,       1,
+  0.31,  0.8,    "mmol/L", "4",      2,
+  0.32,  0.8,    "mmol/L", "3",      3,
+  0.44,  0.8,    "mmol/L", "3",      4,
+  0.45,  0.8,    "mmol/L", "2",      5,
+  0.64,  0.8,    "mmol/L", "2",      6,
+  0.65,  0.8,    "mmol/L", "1",      7,
+  0.79,  0.8,    "mmol/L", "1",      8,
+  0.8,   0.8,    "mmol/L", "0",      9,
   # missing ANRLO - can grade 2 - 4
-  0.31 ,  0.8,    "mmol/L",  "4",      10,
-  0.32,   0.8,    "mmol/L",  "3",      11,
-  0.44,   0.8,    "mmol/L",  "3",      12,
-  0.45,   0.8,    "mmol/L",  "2",      13,
-  0.64,   0.8,    "mmol/L",  "2",      14,
+  0.31,  0.8,    "mmol/L", "4",      10,
+  0.32,  0.8,    "mmol/L", "3",      11,
+  0.44,  0.8,    "mmol/L", "3",      12,
+  0.45,  0.8,    "mmol/L", "2",      13,
+  0.64,  0.8,    "mmol/L", "2",      14,
   # missing ANRLO - can grade 0 - 1
-  0.65,   0.8,    "mmol/L",  "1",      15,
-  0.79,   0.8,    "mmol/L",  "1",      16,
-  0.8,    0.8,    "mmol/L",  "0",      17,
-
+  0.65,  0.8,    "mmol/L", "1",      15,
+  0.79,  0.8,    "mmol/L", "1",      16,
+  0.8,   0.8,    "mmol/L", "0",      17,
   # missing AVAL
-  NA,     0.8,    "mmol/L",  NA,       18,
+  NA,    0.8,    "mmol/L", NA,       18,
   # missing UNIT
-  1,      0.8,    NA,        NA,       19,
+  1,     0.8,    NA,       NA,       19,
 ) %>%
   mutate(
     ATOXDSCL = "Phosphate, Low",
@@ -4856,7 +4876,6 @@ expected_phosd_daids <- expected_phosd_daids_gt14y %>%
 
 ## Test 107: DAIDS Phosphate, Low ----
 test_that("derive_var_atoxgr Test 107: DAIDS Phosphate, Low", {
-
   input_phosd_daids <- expected_phosd_daids %>%
     select(-ATOXGRL)
 
@@ -4874,8 +4893,7 @@ test_that("derive_var_atoxgr Test 107: DAIDS Phosphate, Low", {
     compare = actual_phosd_daids,
     keys = c("TESTNUM")
   )
-}
-)
+})
 
 
 
@@ -5152,23 +5170,26 @@ test_that("derive_var_atoxgr Test 113: DAIDS Absolute Lymphocyte Count, Low", {
 
   # no criteria for age <= 5 years set grade to missing
   expected_cd4d_daids_le5y <- expected_cd4d_daids_gt5y %>%
-    mutate(LBDT = lubridate::ymd("2028-07-01"),
-           ATOXGRL = NA_character_,
-           TESTNUM = TESTNUM + 11
+    mutate(
+      LBDT = lubridate::ymd("2028-07-01"),
+      ATOXGRL = NA_character_,
+      TESTNUM = TESTNUM + 11
     )
 
   # add missing LBDT and BRTHDT
   expected_cd4d_daids_noage <- expected_cd4d_daids_gt5y %>%
-    filter(TESTNUM %in% c(5,6)) %>%
-    mutate(LBDT = if_else(TESTNUM == 5, NA, LBDT),
-           BRTHDT = if_else(TESTNUM == 6, NA, BRTHDT),
-           ATOXGRL = NA_character_,
-           TESTNUM = if_else(TESTNUM == 5, 23, 24)
+    filter(TESTNUM %in% c(5, 6)) %>%
+    mutate(
+      LBDT = if_else(TESTNUM == 5, NA, LBDT),
+      BRTHDT = if_else(TESTNUM == 6, NA, BRTHDT),
+      ATOXGRL = NA_character_,
+      TESTNUM = if_else(TESTNUM == 5, 23, 24)
     )
 
   expected_cd4d_daids <- expected_cd4d_daids_gt5y %>%
-    bind_rows(expected_cd4d_daids_le5y,
-              expected_cd4d_daids_noage
+    bind_rows(
+      expected_cd4d_daids_le5y,
+      expected_cd4d_daids_noage
     )
 
   input_cd4d_daids <- expected_cd4d_daids %>%
@@ -5188,8 +5209,7 @@ test_that("derive_var_atoxgr Test 113: DAIDS Absolute Lymphocyte Count, Low", {
     compare = actual_cd4d_daids,
     keys = c("TESTNUM")
   )
-}
-)
+})
 
 
 ### Absolute Lymphocyte Count, Low
@@ -5225,23 +5245,26 @@ test_that("derive_var_atoxgr Test 114: DAIDS Absolute Lymphocyte Count, Low", {
 
   # no criteria for age <= 5 years set grade to missing
   expected_lymphd_daids_le5y <- expected_lymphd_daids_gt5y %>%
-    mutate(LBDT = lubridate::ymd("2028-07-01"),
-           ATOXGRL = NA_character_,
-           TESTNUM = TESTNUM + 11
+    mutate(
+      LBDT = lubridate::ymd("2028-07-01"),
+      ATOXGRL = NA_character_,
+      TESTNUM = TESTNUM + 11
     )
 
   # add missing LBDT and BRTHDT
   expected_lymphd_daids_noage <- expected_lymphd_daids_gt5y %>%
-    filter(TESTNUM %in% c(5,6)) %>%
-    mutate(LBDT = if_else(TESTNUM == 5, NA, LBDT),
-           BRTHDT = if_else(TESTNUM == 6, NA, BRTHDT),
-           ATOXGRL = NA_character_,
-           TESTNUM = if_else(TESTNUM == 5, 23, 24)
+    filter(TESTNUM %in% c(5, 6)) %>%
+    mutate(
+      LBDT = if_else(TESTNUM == 5, NA, LBDT),
+      BRTHDT = if_else(TESTNUM == 6, NA, BRTHDT),
+      ATOXGRL = NA_character_,
+      TESTNUM = if_else(TESTNUM == 5, 23, 24)
     )
 
   expected_lymphd_daids <- expected_lymphd_daids_gt5y %>%
-    bind_rows(expected_lymphd_daids_le5y,
-              expected_lymphd_daids_noage
+    bind_rows(
+      expected_lymphd_daids_le5y,
+      expected_lymphd_daids_noage
     )
 
   input_lymphd_daids <- expected_lymphd_daids %>%
@@ -5261,8 +5284,7 @@ test_that("derive_var_atoxgr Test 114: DAIDS Absolute Lymphocyte Count, Low", {
     compare = actual_lymphd_daids,
     keys = c("TESTNUM")
   )
-}
-)
+})
 
 
 ### Absolute Neutrophil Count (ANC), Low
@@ -5391,8 +5413,7 @@ test_that("derive_var_atoxgr Test 115: DAIDS ANC Low", {
     compare = actual_ancd_daids,
     keys = c("TESTNUM")
   )
-}
-)
+})
 
 
 ### Fibrinogen Decreased
