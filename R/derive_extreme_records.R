@@ -97,7 +97,7 @@
 #'
 #' @param keep_source_vars Variables to be kept in the new records
 #'
-#'   A named list or tidyselect expressions returned by `exprs()` defining the
+#'   A named list or tidyselect expressions created by `exprs()` defining the
 #'   variables to be kept for the new records.
 #'
 #'
