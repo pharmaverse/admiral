@@ -290,6 +290,7 @@ groupwise
 hms
 https
 lockfile
+lubridate
 mL
 magrittr
 metacore
