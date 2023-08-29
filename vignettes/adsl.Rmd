@@ -275,7 +275,7 @@ adsl <- adsl %>%
     by_vars = exprs(STUDYID, USUBJID),
     filter_add = DSCAT == "DISPOSITION EVENT",
     new_vars = exprs(EOSSTT = format_eosstt(DSDECOD)),
-    missing_value = exprs(EOSSTT = "ONGOING")
+    missing_values = exprs(EOSSTT = "ONGOING")
   )
 ```
 
