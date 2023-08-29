@@ -473,7 +473,7 @@ adppk <- adppk_aseq %>%
 # ...
 # ---- Save output ----
 
-dir <- file.path(setwd(), "tmp")
+dir <- file.path(getwd(), "tmp")
 print(dir)
 if (!file.exists(dir)) {
   # Create the folder
