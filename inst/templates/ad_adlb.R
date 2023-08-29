@@ -441,7 +441,8 @@ adlb <- adlb %>%
 
 # Save output ----
 
-dir <- "./tmp"
+dir <- file.path(setwd(), "tmp")
+print(dir)
 if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
