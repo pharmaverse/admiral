@@ -56,7 +56,7 @@ Then for each patient the first or last observation (with respect to \code{date}
 and \code{mode}) is selected.
 \item The new variable is set to the variable or expression specified by the
 \code{date} element.
-\item The variables specified by the \code{traceability_vars} element are added.
+\item The variables specified by the \code{set_values_to} element are added.
 \item The selected observations of all source datasets are combined into a
 single dataset.
 \item For each patient the first or last observation (with respect to the new
@@ -183,7 +183,7 @@ dm \%>\%
 ae_start <- date_source(
   dataset_name = "ae",
   date = convert_dtc_to_dt(AESTDTC, highest_imputation = "M"),
-  traceability_vars = exprs(
+  set_values_to = exprs(
     LALVDOM = "AE",
     LALVSEQ = AESEQ,
     LALVVAR = "AESTDTC"
@@ -193,7 +193,7 @@ ae_start <- date_source(
 ae_end <- date_source(
   dataset_name = "ae",
   date = convert_dtc_to_dt(AEENDTC, highest_imputation = "M"),
-  traceability_vars = exprs(
+  set_values_to = exprs(
     LALVDOM = "AE",
     LALVSEQ = AESEQ,
     LALVVAR = "AEENDTC"
@@ -203,7 +203,7 @@ ae_end <- date_source(
 lb_date <- date_source(
   dataset_name = "lb",
   date = convert_dtc_to_dt(LBDTC),
-  traceability_vars = exprs(
+  set_values_to = exprs(
     LALVDOM = "LB",
     LALVSEQ = LBSEQ,
     LALVVAR = "LBDTC"
@@ -213,7 +213,7 @@ lb_date <- date_source(
 adsl_date <- date_source(
   dataset_name = "adsl",
   date = TRTEDT,
-  traceability_vars = exprs(
+  set_values_to = exprs(
     LALVDOM = "ADSL",
     LALVSEQ = NA_integer_,
     LALVVAR = "TRTEDT"

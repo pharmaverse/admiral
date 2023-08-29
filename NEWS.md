@@ -20,6 +20,8 @@
 
 - Templates, vignettes, and other uses of `{admiral.test}` SDTM data are updated to use `{pharmaversesdtm}` instead. (#2040)
 
+- The `traceability_vars` argument in `date_source()` and `dthcaus_source` were deprecated in favor of `set_values_to`. The `date_source()` function creates a date_source object as input for derive_var_extreme_dt() and derive_var_extreme_dtm(),users now have define the traceability variables by assigning those variables to the `set_values_to`argument.Similarly, the `dthcaus_source` creates a dthcaus_source Object. (#2068)
+
 
 ## Breaking Changes
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)
