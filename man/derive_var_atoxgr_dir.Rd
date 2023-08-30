@@ -10,7 +10,8 @@ derive_var_atoxgr_dir(
   tox_description_var,
   meta_criteria,
   criteria_direction,
-  get_unit_expr
+  get_unit_expr,
+  signif_dig = 15
 )
 }
 \arguments{
@@ -61,6 +62,11 @@ The result is used to check the units of the input parameters. Compared with
 
 Permitted Values: A variable containing unit from the input dataset, or a function call,
 for example, \code{get_unit_expr = extract_unit(PARAM)}.}
+
+\item{signif_dig}{Number of significant digits to use when comparing a lab value against another
+value.
+
+Significant digits used to avoid floating point discrepancies when comparing numeric values.}
 }
 \value{
 The input dataset with the character variable added

@@ -54,6 +54,11 @@
 #'   for example, `get_unit_expr = extract_unit(PARAM)`.
 #'
 #'
+#' @param signif_dig Number of significant digits to use when comparing a lab value against another
+#' value.
+#'
+#'   Significant digits used to avoid floating point discrepancies when comparing numeric values.
+#'
 #' @details
 #' `new_var` is derived with values NA, "0", "1", "2", "3", "4", where "4" is the most
 #' severe grade
@@ -116,7 +121,8 @@ derive_var_atoxgr_dir <- function(dataset,
                                   tox_description_var,
                                   meta_criteria,
                                   criteria_direction,
-                                  get_unit_expr) {
+                                  get_unit_expr,
+                                  signif_dig = 15) {
   new_var <- assert_symbol(enexpr(new_var))
   tox_description_var <- assert_symbol(enexpr(tox_description_var))
   get_unit_expr <- assert_expr(enexpr(get_unit_expr))
