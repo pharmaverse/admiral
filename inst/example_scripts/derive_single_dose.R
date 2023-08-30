@@ -1,9 +1,7 @@
-
-library(admiral.test)
+library(pharmaversesdtm)
 library(admiral)
 library(dplyr)
-data(admiral_ex)
-ex <- admiral_ex
+data(ex)
 
 # check that there is only one start/end date of exposure per subject and visit
 check_cond <- ex %>%
