@@ -4,8 +4,8 @@
 #' assessment date (e.g `ADT`) or event start and end dates (e.g.
 #' `ASTDT`/`AENDT`).
 #'
-#' @param dataset `r roxygen_param_dataset()`
-#' `start_date`, `end_date`, `ref_start_date` and `ref_end_date` are expected.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("start_date", "end_date", "ref_start_date", "ref_end_date"))` # nolint
 #'
 #' @param new_var On-treatment flag variable name to be created.
 #'

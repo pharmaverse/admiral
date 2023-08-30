@@ -3,7 +3,7 @@
 #' Add a time-to-event parameter to the input dataset.
 #'
 #' @param dataset `r roxygen_param_dataset()`
-#'   `PARAMCD` is expected..
+#'   `PARAMCD` is expected.
 #'
 #' @param dataset_adsl ADSL input dataset
 #'

@@ -35,7 +35,7 @@ get_duplicates_dataset <- function() {
 
 #' Extract Duplicate Records
 #'
-#' @param dataset `r roxygen_param_dataset()`
+#' @param dataset `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #' @param by_vars A list of expressions created using `exprs()` identifying
 #'   groups of records in which to look for duplicates
 #'
@@ -78,7 +78,7 @@ extract_duplicate_records <- function(dataset, by_vars) {
 
 #' Signal Duplicate Records
 #'
-#' @param dataset `r roxygen_param_dataset()`
+#' @param dataset `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #' @param by_vars A list of expressions created using `exprs()` identifying
 #'   groups of records in which to look for duplicates
 #' @param msg The condition message

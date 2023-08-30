@@ -13,7 +13,9 @@ signal_duplicate_records(
 )
 }
 \arguments{
-\item{dataset}{Input dataset}
+\item{dataset}{Input dataset
+
+The variables specified by the \code{by_vars} argument(s) to be expected.}
 
 \item{by_vars}{A list of expressions created using \code{exprs()} identifying
 groups of records in which to look for duplicates}

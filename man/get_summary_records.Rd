@@ -14,7 +14,9 @@ get_summary_records(
 )
 }
 \arguments{
-\item{dataset}{Input dataset}
+\item{dataset}{Input dataset
+
+The variables specified by the \code{by_vars} and \code{analysis_var} argument(s) to be expected.}
 
 \item{by_vars}{Variables to consider for generation of groupwise summary
 records. Providing the names of variables in \code{\link[=exprs]{exprs()}} will create a

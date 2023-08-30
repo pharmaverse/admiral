@@ -4,7 +4,7 @@
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_vars_merged()`.
 #'
-#' @param dataset `r roxygen_param_dataset()`
+#' @param dataset `r roxygen_param_dataset(expected_vars = c("by_vars", "source_var"))`
 #'
 #' @param by_vars Grouping variables uniquely identifying a set
 #'        of records for which to calculate `new_var`

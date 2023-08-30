@@ -13,7 +13,9 @@ derive_var_base(
 )
 }
 \arguments{
-\item{dataset}{Input dataset}
+\item{dataset}{Input dataset
+
+The variables specified by the \code{by_vars} and \code{source_var} argument(s) to be expected.}
 
 \item{by_vars}{Grouping variables uniquely identifying a set
 of records for which to calculate \code{new_var}}
