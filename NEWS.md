@@ -2,6 +2,11 @@
 
 ## New Features
 
+- `event_joined()` events were added. They can be specified for the `events`
+argument in `derive_extreme_event()`. This allows to define events based on more
+than one observation, e.g., events which need to be confirmed by a second
+assessment. (#1960)
+
 ## Updates of Existing Functions
 - The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
 - The functions `derive_var_age_years()` and `compute_age_years()` are updated to return an `NA` age in the case that the age unit is missing. (#2001) The argument `unit` for `derive_vars_aage()` is also changed to `age_unit` for consistency between these age-related functions. (#2025)
@@ -22,6 +27,29 @@
 
 - The `traceability_vars` argument in `date_source()` and `dthcaus_source` were deprecated in favor of `set_values_to`. The `date_source()` function creates a date_source object as input for derive_var_extreme_dt() and derive_var_extreme_dtm(),users now have define the traceability variables by assigning those variables to the `set_values_to`argument.Similarly, the `dthcaus_source` creates a dthcaus_source Object. (#2068)
 
+
+- `derive_extreme_event()` was enhanced (#1960):
+
+    - `event_joined()` events can be specified for the `events` argument. This
+    allows to define events based on more than one observation, e.g., events
+    which need to be confirmed by a second assessment.
+    
+    - The `source_datasets` argument was added to the function and the
+    `dataset_name` field to `event()`. It can be used to define events based on
+    a different dataset than the input dataset.
+    
+    - The `keep_source_vars` argument was added to the function and the
+    `keep_source_vars` field to `event()`. It allows to select which variables
+    should be kept for the selected observations.
+    
+    - The `mode` and `order` field were added to `event()`. They allow to select
+    the first or last observation per by group if there are multiple observation
+    fulfilling the event condition.
+    
+    - The `ignore_event_order` argument was added.
+    
+    - The `description` field was added to `event()`. It can be used to provide
+    a description of the event in plain language.
 
 ## Breaking Changes
 - The `compute_duration(type)` argument added the `"duration"` type calculation, and this is the new default (previously `"interval"` differences were returned). See function help file for details on the difference between `"duration"` and `"interval"` calculations. (#1875)

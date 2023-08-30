@@ -327,16 +327,29 @@ print_named_list <- function(list, indent = 0) {
       print(list[[name]])
     } else if (is.list(list[[name]])) {
       cat(strrep(" ", indent), name, ":\n", sep = "")
-      print_named_list(list[[name]], indent = indent + 2)
+      if (is_named(list[[name]])) {
+        print_named_list(list[[name]], indent = indent + 2)
+      } else {
+        for (item in list[[name]]) {
+          if (is.character(item)) {
+            chr_val <- dquote(item)
+          } else if (is_expression(item)) {
+            chr_val <- format(item)
+          } else {
+            chr_val <- item
+          }
+          cat(strrep(" ", indent + 2), paste0(chr_val, collapse = "\n"), "\n", sep = "")
+        }
+      }
     } else {
       if (is.character(list[[name]])) {
         chr_val <- dquote(list[[name]])
       } else if (is_expression(list[[name]])) {
-        chr_val <- as_label(list[[name]])
+        chr_val <- format(list[[name]])
       } else {
         chr_val <- list[[name]]
       }
-      cat(strrep(" ", indent), name, ": ", chr_val, "\n", sep = "")
+      cat(strrep(" ", indent), name, ": ", paste0(chr_val, collapse = "\n"), "\n", sep = "")
     }
   }
 }
