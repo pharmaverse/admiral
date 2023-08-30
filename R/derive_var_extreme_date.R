@@ -627,7 +627,6 @@ date_source <- function(dataset_name,
       "date_source(set_values_to = )"
     )
     set_values_to <- traceability_vars
-
   }
 
   out <- list(
