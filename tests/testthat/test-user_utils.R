@@ -228,7 +228,7 @@ test_that("print_named_list Test 18: named list with unamed list", {
   expect_snapshot(
     print_named_list(list(
       list_item = list("Hello World!", expr(universe), list(42)),
-      another_one = ymd("2020-02-02"))
-    )
+      another_one = ymd("2020-02-02")
+    ))
   )
 })
