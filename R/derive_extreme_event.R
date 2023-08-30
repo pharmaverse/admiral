@@ -3,7 +3,7 @@
 #' Add the first available record from `events` for each by group as new
 #' records, all variables of the selected observation are kept. It can be used
 #' for selecting the extreme observation from a series of user-defined events.
-#' This distinguish `derive_extreme_event()` from `derive_extreme_records()`,
+#' This distinguishes `derive_extreme_event()` from `derive_extreme_records()`,
 #' where extreme records are derived based on certain order of existing
 #' variables.
 #'
@@ -149,7 +149,7 @@
 #'   )
 #' )
 #'
-#' # use different mode by event
+#' # Use different mode by event
 #' adhy <- tribble(
 #'   ~USUBJID, ~AVISITN, ~CRIT1FL,
 #'   "1",             1, "Y",
@@ -187,7 +187,9 @@
 #'   )
 #' )
 #'
-#' # derive confirmed best overall response (using event_joined())
+#' # Derive confirmed best overall response (using event_joined())
+#' # CR - complete response, PR - partial response, SD - stable disease
+#' # NE - not evaluable, PD - progressive disease
 #' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDTC,
 #'   "1",      "2020-01-01",
@@ -263,7 +265,7 @@
 #'     ),
 #'     event_joined(
 #'       description = paste(
-#'         "CR needs to be confirmed by a second CR or PR at least 28 days later,",
+#'         "PR needs to be confirmed by a second CR or PR at least 28 days later,",
 #'         "at most one NE is acceptable between the two assessments"
 #'       ),
 #'       join_vars = exprs(AVALC, ADT),

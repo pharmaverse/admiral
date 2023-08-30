@@ -2,6 +2,11 @@
 
 ## New Features
 
+- `event_joined()` events were added. They can be specified for the `events`
+argument in `derive_extreme_event()`. This allows to define events based on more
+than one observation, e.g., events which need to be confirmed by a second
+assessment. (#1960)
+
 ## Updates of Existing Functions
 - The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
 - The functions `derive_var_age_years()` and `compute_age_years()` are updated to return an `NA` age in the case that the age unit is missing. (#2001) The argument `unit` for `derive_vars_aage()` is also changed to `age_unit` for consistency between these age-related functions. (#2025)
