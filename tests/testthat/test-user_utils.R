@@ -36,8 +36,9 @@ test_that("convert_blanks_to_na Test 3: blank strings are turned into `NA` insid
 })
 
 
+# convert_blanks_to_na.list ----
 ## Test 4: `convert_blanks_to_na.list` produces a lists ----
-test_that("convert_blanks_to_na Test 4: `convert_blanks_to_na.list` produces a lists", {
+test_that("convert_blanks_to_na.list Test 4: `convert_blanks_to_na.list` produces a lists", {
   x <- c("", "", "")
   expected_output <- lapply(x, convert_blanks_to_na)
   actual_output <- convert_blanks_to_na.list(x)
@@ -45,9 +46,9 @@ test_that("convert_blanks_to_na Test 4: `convert_blanks_to_na.list` produces a l
   expect_equal(expected_output, actual_output)
 })
 
-#  Test 5: convert_na_to_blanks Test 5----
+# convert_na_to_blanks ----
 ## Test 5: `NA` strings are turned into blank  ----
-test_that("convert_blanks_to_na Test 5: `NA` strings are turned into blank ", {
+test_that("convert_na_to_blanks Test 5: `NA` strings are turned into blank ", {
   expect_identical(
     convert_na_to_blanks(c("a", NA, "b")),
     c("a", "", "b")
@@ -55,7 +56,7 @@ test_that("convert_blanks_to_na Test 5: `NA` strings are turned into blank ", {
 })
 
 ## Test 6: attributes are preserved when converting `NA` to blanks ----
-test_that("convert_blanks_to_na Test 6: attributes are preserved when converting `NA` to blanks", {
+test_that("convert_na_to_blanks Test 6: attributes are preserved when converting `NA` to blanks", {
   input <- structure(letters, names = rev(letters), label = "Letters")
   input[c(1, 9, 23)] <- NA_character_
   output <- convert_na_to_blanks(input)
@@ -64,8 +65,9 @@ test_that("convert_blanks_to_na Test 6: attributes are preserved when converting
   expect_identical(names(output), rev(letters))
 })
 
+# convert_na_to_blanks.data.frame ----
 ## Test 7: `NA` are turned into blank strings inside data frames ----
-test_that("convert_blanks_to_na Test 7: `NA` are turned into blank strings inside data frames", {
+test_that("convert_na_to_blanks.data.frame Test 7: `NA` are turned into blank strings inside data frames", {
   input <- tibble::tibble(
     a = structure(c("a", "b", NA, "c"), label = "A"),
     b = structure(c(1, NA, 21, 9), label = "B"),
@@ -200,7 +202,6 @@ test_that("print.source Test 15: `source` objects containing `data.frame`", {
 })
 
 # print_named_list ----
-## Test 16 print_named_list ----
 ## Test 16: named list ----
 test_that("print_named_list Test 16: named list", {
   expect_identical(
