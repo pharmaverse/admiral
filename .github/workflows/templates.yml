@@ -13,6 +13,7 @@ jobs:
   templates:
     name: Check Templates
     uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@618_templates_action
+    secrets: inherit
     #if: github.event_name == 'pull_request'
     with:
       r-version: "4.1"
