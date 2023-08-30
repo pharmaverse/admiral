@@ -8,9 +8,8 @@
 #'   The columns specified by the `reference_date` and the `source_vars`
 #'   parameter are expected.
 #'
-#' @param reference_date The start date column, e.g., date of first treatment
-#'
-#'   A date or date-time object column is expected.
+#' @param reference_date A date or date-time column, e.g., date of first treatment
+#'   or date-time of last exposure to treatment.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
