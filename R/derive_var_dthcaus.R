@@ -80,7 +80,7 @@
 #'   date = convert_dtc_to_dt(AEDTHDTC),
 #'   mode = "first",
 #'   dthcaus = AEDECOD,
-#'   traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
+#'   set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
 #' )
 #'
 #' src_ds <- dthcaus_source(
@@ -89,7 +89,7 @@
 #'   date = convert_dtc_to_dt(DSSTDTC),
 #'   mode = "first",
 #'   dthcaus = DSTERM,
-#'   traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
+#'   set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 #' )
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
@@ -101,7 +101,7 @@
 #'   date = convert_dtc_to_dt(AEDTHDTC),
 #'   mode = "first",
 #'   dthcaus = AEDECOD,
-#'   traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
+#'   set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
 #' )
 #'
 #' ds <- mutate(
@@ -115,7 +115,7 @@
 #'   date = DSSTDT,
 #'   mode = "first",
 #'   dthcaus = DSTERM,
-#'   traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
+#'   set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 #' )
 #'
 #' src_ds_post <- dthcaus_source(
@@ -124,7 +124,7 @@
 #'   date = DSSTDT,
 #'   mode = "first",
 #'   dthcaus = "POST STUDY: UNKNOWN CAUSE",
-#'   traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
+#'   set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 #' )
 #'
 #' derive_var_dthcaus(
@@ -266,6 +266,7 @@ derive_var_dthcaus <- function(dataset,
 #'   the results is assigned to `DTHCAUS`; if a string literal, e.g. `"Adverse
 #'   Event"`, it is the fixed value to be assigned to `DTHCAUS`.
 #'
+#'
 #' @param traceability_vars A named list returned by [`exprs()`] listing the
 #'   traceability variables, e.g. `exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)`. The
 #'   left-hand side (names of the list elements) gives the names of the
@@ -273,6 +274,10 @@ derive_var_dthcaus <- function(dataset,
 #'   of the list elements) gives the values of the traceability variables in the
 #'   returned dataset. These can be either strings, numbers, symbols, or
 #'   expressions referring to existing variables.
+#'
+#'    `r lifecycle::badge("deprecated")` Please use `set_values_to` instead.
+#'
+#' @param set_values_to Variables to be set to trace the source dataset
 #'
 #' @keywords source_specifications
 #' @family source_specifications
@@ -308,7 +313,17 @@ dthcaus_source <- function(dataset_name,
                            order = NULL,
                            mode = "first",
                            dthcaus,
+                           set_values_to = NULL,
                            traceability_vars = NULL) {
+  if (!is.null(traceability_vars)) {
+    deprecate_warn(
+      "0.12.0",
+      "dthcaus_source(traceability_vars = )",
+      "dthcaus_source(set_values_to = )"
+    )
+    set_values_to <- traceability_vars
+  }
+
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
@@ -316,7 +331,7 @@ dthcaus_source <- function(dataset_name,
     order = assert_expr_list(order, optional = TRUE),
     mode = assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE),
     dthcaus = assert_expr(enexpr(dthcaus)),
-    traceability = assert_expr_list(traceability_vars, named = TRUE, optional = TRUE)
+    traceability = assert_expr_list(set_values_to, named = TRUE, optional = TRUE)
   )
   class(out) <- c("dthcaus_source", "source", "list")
   out

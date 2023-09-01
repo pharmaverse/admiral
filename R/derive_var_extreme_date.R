@@ -37,7 +37,7 @@
 #'   `date` element. If this is a date variable (rather than datetime), then the
 #'   time is imputed as `"00:00:00"`.
 #'
-#'   1. The variables specified by the `traceability_vars` element are added.
+#'   1. The variables specified by the `set_values_to` element are added.
 #'
 #'   1. The selected observations of all source datasets are combined into a
 #'   single dataset.
@@ -176,7 +176,7 @@
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
 #'   date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
-#'   traceability_vars = exprs(
+#'   set_values_to = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
 #'     LALVVAR = "AESTDTC"
@@ -186,7 +186,7 @@
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
 #'   date = convert_dtc_to_dtm(AEENDTC, highest_imputation = "M"),
-#'   traceability_vars = exprs(
+#'   set_values_to = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
 #'     LALVVAR = "AEENDTC"
@@ -195,7 +195,7 @@
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
 #'   date = convert_dtc_to_dtm(LBDTC),
-#'   traceability_vars = exprs(
+#'   set_values_to = exprs(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
 #'     LALVVAR = "LBDTC"
@@ -205,7 +205,7 @@
 #' adsl_date <- date_source(
 #'   dataset_name = "adsl",
 #'   date = TRTEDTM,
-#'   traceability_vars = exprs(
+#'   set_values_to = exprs(
 #'     LALVDOM = "ADSL",
 #'     LALVSEQ = NA_integer_,
 #'     LALVVAR = "TRTEDTM"
@@ -262,8 +262,8 @@ derive_var_extreme_dtm <- function(dataset,
   for (i in seq_along(sources)) {
     if (i > 1) {
       warn_if_inconsistent_list(
-        base = sources[[i - 1]]$traceability_vars,
-        compare = sources[[i]]$traceability_vars,
+        base = sources[[i - 1]]$set_values_to,
+        compare = sources[[i]]$set_values_to,
         list_name = "date_source()",
         i = i
       )
@@ -288,11 +288,11 @@ derive_var_extreme_dtm <- function(dataset,
       dataset_name = source_dataset_name
     )
 
-    if (!is.null(sources[[i]]$traceability_vars)) {
-      warn_if_vars_exist(source_dataset, names(sources[[i]]$traceability_vars))
+    if (!is.null(sources[[i]]$set_values_to)) {
+      warn_if_vars_exist(source_dataset, names(sources[[i]]$set_values_to))
       assert_data_frame(
         source_dataset,
-        required_vars = get_source_vars(sources[[i]]$traceability_vars)
+        required_vars = get_source_vars(sources[[i]]$set_values_to)
       )
     }
 
@@ -309,7 +309,7 @@ derive_var_extreme_dtm <- function(dataset,
     add_data[[i]] <- transmute(
       add_data[[i]],
       !!!subject_keys,
-      !!!sources[[i]]$traceability_vars,
+      !!!sources[[i]]$set_values_to,
       !!new_var := convert_date_to_dtm(!!date_var)
     )
   }
@@ -349,7 +349,7 @@ derive_var_extreme_dtm <- function(dataset,
 #'   1. The new variable is set to the variable or expression specified by the
 #'   `date` element.
 #'
-#'   1. The variables specified by the `traceability_vars` element are added.
+#'   1. The variables specified by the `set_values_to` element are added.
 #'
 #'   1. The selected observations of all source datasets are combined into a
 #'   single dataset.
@@ -488,7 +488,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
 #'   date = convert_dtc_to_dt(AESTDTC, highest_imputation = "M"),
-#'   traceability_vars = exprs(
+#'   set_values_to = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
 #'     LALVVAR = "AESTDTC"
@@ -498,7 +498,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
 #'   date = convert_dtc_to_dt(AEENDTC, highest_imputation = "M"),
-#'   traceability_vars = exprs(
+#'   set_values_to = exprs(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
 #'     LALVVAR = "AEENDTC"
@@ -508,7 +508,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
 #'   date = convert_dtc_to_dt(LBDTC),
-#'   traceability_vars = exprs(
+#'   set_values_to = exprs(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
 #'     LALVVAR = "LBDTC"
@@ -518,7 +518,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' adsl_date <- date_source(
 #'   dataset_name = "adsl",
 #'   date = TRTEDT,
-#'   traceability_vars = exprs(
+#'   set_values_to = exprs(
 #'     LALVDOM = "ADSL",
 #'     LALVSEQ = NA_integer_,
 #'     LALVVAR = "TRTEDT"
@@ -577,6 +577,9 @@ derive_var_extreme_dt <- function(dataset,
 #'   = "AESTDTC")`. The values must be a symbol, a character string, a numeric,
 #'   an expression, or `NA`.
 #'
+#'    `r lifecycle::badge("deprecated")` Please use `set_values_to` instead.
+#'
+#' @param set_values_to Variables to be set
 #'
 #' @seealso [derive_var_extreme_dtm()], [derive_var_extreme_dt()]
 #'
@@ -606,7 +609,7 @@ derive_var_extreme_dt <- function(dataset,
 #' death_date <- date_source(
 #'   dataset_name = "adsl",
 #'   date = DTHDT,
-#'   traceability_vars = exprs(
+#'   set_values_to = exprs(
 #'     LALVDOM = "ADSL",
 #'     LALVVAR = "DTHDT"
 #'   )
@@ -614,12 +617,22 @@ derive_var_extreme_dt <- function(dataset,
 date_source <- function(dataset_name,
                         filter = NULL,
                         date,
-                        traceability_vars = NULL) {
+                        traceability_vars = NULL,
+                        set_values_to = NULL) {
+  if (!is.null(traceability_vars)) {
+    deprecate_warn(
+      "0.12.0",
+      "date_source(traceability_vars = )",
+      "date_source(set_values_to = )"
+    )
+    set_values_to <- traceability_vars
+  }
+
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
     date = assert_expr(enexpr(date)),
-    traceability_vars = assert_expr_list(traceability_vars, named = TRUE, optional = TRUE)
+    set_values_to = assert_expr_list(set_values_to, named = TRUE, optional = TRUE)
   )
   class(out) <- c("date_source", "source", "list")
   out
