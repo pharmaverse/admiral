@@ -7,6 +7,8 @@ argument in `derive_extreme_event()`. This allows to define events based on more
 than one observation, e.g., events which need to be confirmed by a second
 assessment. (#1960)
 
+- `data/atoxgr_criteria_daids.rda` added, which holds metadata for [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf)
+
 ## Updates of Existing Functions
 - The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
 - The functions `derive_var_age_years()` and `compute_age_years()` are updated to return an `NA` age in the case that the age unit is missing. (#2001) The argument `unit` for `derive_vars_aage()` is also changed to `age_unit` for consistency between these age-related functions. (#2025)
@@ -50,6 +52,12 @@ assessment. (#1960)
     
     - The `description` field was added to `event()`. It can be used to provide
     a description of the event in plain language.
+    
+- `derive_var_atoxgr_dir()` was enhanced (#1859):
+  
+  - can now select `atoxgr_criteria_daids` in argument `meta_criteria` to create `ATOXGRL` and `ATOXGRH` based on [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf)
+  
+  - new argument `signif_dig` added to control the number of significant digits to use when comparing 2 numeric values.
 
 ## Breaking Changes
 - The `compute_duration(type)` argument added the `"duration"` type calculation, and this is the new default (previously `"interval"` differences were returned). See function help file for details on the difference between `"duration"` and `"interval"` calculations. (#1875)
