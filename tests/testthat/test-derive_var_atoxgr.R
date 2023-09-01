@@ -3729,7 +3729,7 @@ expected_tbiligt28d_daids <- tibble::tribble(
   "Total Bilirubin, High",  15.9,   10,     "umol/L",  "1",      8,
   "Total Bilirubin, High",  11,     10,     "umol/L",  "1",      9,
   "Total Bilirubin, High",  10.9,   10,     "umol/L",  "0",      10,
-  # Unit missing can grade
+  # Unit missing can grade - grade based on comparison of AVAL with ANRHI
   "Total Bilirubin, High",  10.9,   10,     NA,        "0",      11,
   # ANRHI missing - cannot grade
   "Total Bilirubin, High",  10.9,   NA,     "umol/L",  NA,       12,
@@ -3895,32 +3895,32 @@ test_that("derive_var_atoxgr Test 92: DAIDS Calcium, High", {
 ## Test 93: DAIDS Calcium (Ionized), High ----
 test_that("derive_var_atoxgr Test 93: DAIDS Calcium (Ionized), High", {
   expected_calioni_daids <- tibble::tribble(
-    ~ATOXDSCH,                  ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH, ~TESTNUM,
-    "Not a term",               1.8,    1.1,    1.4,    "mmol/L",  NA,       1,
-    NA_character_,              1.79,   1.1,    1.4,    "mmol/L",  NA,       2,
+    ~ATOXDSCH,                 ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRH, ~TESTNUM,
+    "Not a term",              1.8,   1.1,    1.4,    "mmol/L", NA,       1,
+    NA_character_,             1.79,  1.1,    1.4,    "mmol/L", NA,       2,
     # ANRHI not missing
-    "Calcium (Ionized), High",  1.8,    1.1,    1.4,    "mmol/L",  "4",      3,
-    "Calcium (Ionized), High",  1.79,   1.1,    1.4,    "mmol/L",  "3",      4,
-    "Calcium (Ionized), High",  1.6,    1.1,    1.4,    "mmol/L",  "3",      5,
-    "Calcium (Ionized), High",  1.59,   1.1,    1.4,    "mmol/L",  "2",      6,
-    "Calcium (Ionized), High",  1.5,    1.1,    1.4,    "mmol/L",  "2",      7,
-    "Calcium (Ionized), High",  1.49,   1.1,    1.4,    "mmol/L",  "1",      8,
-    "Calcium (Ionized), High",  1.41,   1.1,    1.4,    "mmol/L",  "1",      9,
-    "Calcium (Ionized), High",  1.4,    1.1,    1.4,    "mmol/L",  "0",      10,
+    "Calcium (Ionized), High", 1.8,   1.1,    1.4,    "mmol/L", "4",      3,
+    "Calcium (Ionized), High", 1.79,  1.1,    1.4,    "mmol/L", "3",      4,
+    "Calcium (Ionized), High", 1.6,   1.1,    1.4,    "mmol/L", "3",      5,
+    "Calcium (Ionized), High", 1.59,  1.1,    1.4,    "mmol/L", "2",      6,
+    "Calcium (Ionized), High", 1.5,   1.1,    1.4,    "mmol/L", "2",      7,
+    "Calcium (Ionized), High", 1.49,  1.1,    1.4,    "mmol/L", "1",      8,
+    "Calcium (Ionized), High", 1.41,  1.1,    1.4,    "mmol/L", "1",      9,
+    "Calcium (Ionized), High", 1.4,   1.1,    1.4,    "mmol/L", "0",      10,
     # ANRHI missing - can grade 2-4
-    "Calcium (Ionized), High",  1.8,    1.1,     NA,    "mmol/L",  "4",      11,
-    "Calcium (Ionized), High",  1.79,   1.1,     NA,    "mmol/L",  "3",      12,
-    "Calcium (Ionized), High",  1.6,    1.1,     NA,    "mmol/L",  "3",      13,
-    "Calcium (Ionized), High",  1.59,   1.1,     NA,    "mmol/L",  "2",      14,
-    "Calcium (Ionized), High",  1.5,    1.1,     NA,    "mmol/L",  "2",      15,
+    "Calcium (Ionized), High", 1.8,   1.1,    NA,     "mmol/L", "4",      11,
+    "Calcium (Ionized), High", 1.79,  1.1,    NA,     "mmol/L", "3",      12,
+    "Calcium (Ionized), High", 1.6,   1.1,    NA,     "mmol/L", "3",      13,
+    "Calcium (Ionized), High", 1.59,  1.1,    NA,     "mmol/L", "2",      14,
+    "Calcium (Ionized), High", 1.5,   1.1,    NA,     "mmol/L", "2",      15,
     # ANRHI missing - can NOT grade 0 or 1
-    "Calcium (Ionized), High",  1.49,   1.1,    NA,     "mmol/L",  NA,       16,
-    "Calcium (Ionized), High",  1.41,   1.1,    NA,     "mmol/L",  NA,       17,
-    "Calcium (Ionized), High",  1.4,    1.1,    NA,     "mmol/L",  NA,       18,
+    "Calcium (Ionized), High", 1.49,  1.1,    NA,     "mmol/L", NA,       16,
+    "Calcium (Ionized), High", 1.41,  1.1,    NA,     "mmol/L", NA,       17,
+    "Calcium (Ionized), High", 1.4,   1.1,    NA,     "mmol/L", NA,       18,
     # Unit missing cannot grade
-    "Calcium (Ionized), High",  1.3,    1.1,    1.4,    NA,        NA,       19,
+    "Calcium (Ionized), High", 1.3,   1.1,    1.4,    NA,       NA,       19,
     # AVAL missing cannot grade
-    "Calcium (Ionized), High",  NA,     1.1,    1.4,    "mmol/L",  NA,       20,
+    "Calcium (Ionized), High", NA,    1.1,    1.4,    "mmol/L", NA,       20,
   )
   input_calioni_daids <- expected_calioni_daids %>%
     select(-ATOXGRH)
@@ -4049,32 +4049,32 @@ test_that("derive_var_atoxgr Test 94: DAIDS Calcium, Low", {
 ## Test 95: DAIDS Calcium (Ionized), Low ----
 test_that("derive_var_atoxgr Test 95: DAIDS Calcium (Ionized), Low", {
   expected_caliond_daids <- tibble::tribble(
-    ~ATOXDSCL,                 ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL, ~TESTNUM,
-    "Not a term",              0.79,   1.1,    100,    "mmol/L",  NA,       1,
-    NA_character_,             0.79,   1.1,    100,    "mmol/L",  NA,       2,
+    ~ATOXDSCL,                ~AVAL, ~ANRLO, ~ANRHI, ~AVALU,   ~ATOXGRL, ~TESTNUM,
+    "Not a term",             0.79,  1.1,    100,    "mmol/L", NA,       1,
+    NA_character_,            0.79,  1.1,    100,    "mmol/L", NA,       2,
     # ANRLO not missing
-    "Calcium (Ionized), Low",  0.79,   1.1,    100,    "mmol/L",  "4",      3,
-    "Calcium (Ionized), Low",  0.8,    1.1,    100,    "mmol/L",  "3",      4,
-    "Calcium (Ionized), Low",  0.89,   1.1,    100,    "mmol/L",  "3",      5,
-    "Calcium (Ionized), Low",  0.9,    1.1,    100,    "mmol/L",  "2",      6,
-    "Calcium (Ionized), Low",  0.99,   1.1,    100,    "mmol/L",  "2",      7,
-    "Calcium (Ionized), Low",  1,      1.1,    100,    "mmol/L",  "1",      8,
-    "Calcium (Ionized), Low",  1.09,   1.1,    100,    "mmol/L",  "1",      9,
-    "Calcium (Ionized), Low",  1.1,    1.1,    100,    "mmol/L",  "0",      10,
+    "Calcium (Ionized), Low", 0.79,  1.1,    100,    "mmol/L", "4",      3,
+    "Calcium (Ionized), Low", 0.8,   1.1,    100,    "mmol/L", "3",      4,
+    "Calcium (Ionized), Low", 0.89,  1.1,    100,    "mmol/L", "3",      5,
+    "Calcium (Ionized), Low", 0.9,   1.1,    100,    "mmol/L", "2",      6,
+    "Calcium (Ionized), Low", 0.99,  1.1,    100,    "mmol/L", "2",      7,
+    "Calcium (Ionized), Low", 1,     1.1,    100,    "mmol/L", "1",      8,
+    "Calcium (Ionized), Low", 1.09,  1.1,    100,    "mmol/L", "1",      9,
+    "Calcium (Ionized), Low", 1.1,   1.1,    100,    "mmol/L", "0",      10,
     # ANRLO missing - can grade 2-4
-    "Calcium (Ionized), Low",  0.79,   NA,     100,    "mmol/L",  "4",      11,
-    "Calcium (Ionized), Low",  0.8,    NA,     100,    "mmol/L",  "3",      12,
-    "Calcium (Ionized), Low",  0.89,   NA,     100,    "mmol/L",  "3",      13,
-    "Calcium (Ionized), Low",  0.9,    NA,     100,    "mmol/L",  "2",      14,
-    "Calcium (Ionized), Low",  0.99,   NA,     100,    "mmol/L",  "2",      15,
+    "Calcium (Ionized), Low", 0.79,  NA,     100,    "mmol/L", "4",      11,
+    "Calcium (Ionized), Low", 0.8,   NA,     100,    "mmol/L", "3",      12,
+    "Calcium (Ionized), Low", 0.89,  NA,     100,    "mmol/L", "3",      13,
+    "Calcium (Ionized), Low", 0.9,   NA,     100,    "mmol/L", "2",      14,
+    "Calcium (Ionized), Low", 0.99,  NA,     100,    "mmol/L", "2",      15,
     # ANRLO missing - can NOT grade 0 or 1
-    "Calcium (Ionized), Low",  1,      NA,    100,     "mmol/L",  NA,      16,
-    "Calcium (Ionized), Low",  1.09,   NA,    100,     "mmol/L",  NA,      17,
-    "Calcium (Ionized), Low",  1.1,    NA,    100,     "mmol/L",  NA,      18,
+    "Calcium (Ionized), Low", 1,     NA,     100,    "mmol/L", NA,       16,
+    "Calcium (Ionized), Low", 1.09,  NA,     100,    "mmol/L", NA,       17,
+    "Calcium (Ionized), Low", 1.1,   NA,     100,    "mmol/L", NA,       18,
     # Unit missing cannot grade
-    "Calcium (Ionized), Low",  1.1,    1.1,    100,    NA,        NA,       19,
+    "Calcium (Ionized), Low", 1.1,   1.1,    100,    NA,       NA,       19,
     # AVAL missing cannot grade
-    "Calcium (Ionized), Low",  NA,     1.1,    100,    "mmol/L",  NA,       20,
+    "Calcium (Ionized), Low", NA,    1.1,    100,    "mmol/L", NA,       20,
   )
   input_caliond_daids <- expected_caliond_daids %>%
     select(-ATOXGRL)
@@ -5376,7 +5376,7 @@ expected_ancd_daids <- expected_ancd_daids_gt7d %>%
     expected_ancd_daids_le1d
   )
 
-# Set lab date to missing fo each type, ie SEX is M, F or missing
+# Set lab date/birth date to missing
 expected_ancd_daids_noage <- expected_ancd_daids %>%
   filter(TESTNUM %in% c(20, 31)) %>%
   mutate(
