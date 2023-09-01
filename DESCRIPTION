@@ -13,6 +13,7 @@ Authors@R: c(
     person("Edoardo", "Mancini", role = "aut"),
     person("Sadchla", "Mascary", role = "aut"),
     person("Gordon", "Miller", role = "aut"),
+    person("Sophie", "Shapcott", role = "aut"),
     person("Eric", "Simms", role = "aut"),
     person("Stefan", "Thoma", role = "aut"),
     person("Kangjie", "Zhang", role = "aut"),

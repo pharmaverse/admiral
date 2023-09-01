@@ -154,6 +154,7 @@ that all our developers and contributors must follow, so that all our code has a
 
 ## Conference Presentations
 
+* [Cross Industry Package Development](https://www.youtube.com/watch?v=M4L1PPMu0pU) (recording from R in Pharma 2022)
 * [Paving the way for clinical submissions in R](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/EU/London/PRE_London09.pdf) (slides from PHUSE SDE in London)
 * [An Overview of {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/US/Summit/PRE_Summit03.pdf) (slides from PHUSE SDE in Summit, NJ)
 * [{admiralonco}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS12.mp4) (recording for talk at PHUSE US Connect 2023, slides also available [here](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/PRE_OS12.pdf))
