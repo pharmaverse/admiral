@@ -4242,10 +4242,10 @@ test_that("derive_var_atoxgr Test 98:  DAIDS Glucose Fasting, High", {
 
 ### Glucose Nonfasting, High
 
-### Grade 4: >= 27.75
-### Grade 3: 13.89 -< 27.75
-### Grade 2: 8.89 -< 13.89
-### Grade 1: 6.44 -< 8.89
+### Grade 4: >= 27.75 mmol/L
+### Grade 3: 13.89 -< 27.75 mmol/L
+### Grade 2: 8.89 -< 13.89 mmol/L
+### Grade 1: 6.44 -< 8.89 mmol/L
 
 ## Test 99:  DAIDS Glucose Nonfasting, High ----
 test_that("derive_var_atoxgr Test 99:  DAIDS Glucose Nonfasting, High", {
