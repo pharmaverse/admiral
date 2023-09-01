@@ -4068,9 +4068,9 @@ test_that("derive_var_atoxgr Test 95: DAIDS Calcium (Ionized), Low", {
     "Calcium (Ionized), Low",  0.9,    NA,     100,    "mmol/L",  "2",      14,
     "Calcium (Ionized), Low",  0.99,   NA,     100,    "mmol/L",  "2",      15,
     # ANRLO missing - can NOT grade 0 or 1
-    "Calcium (Ionized), Low",  1,      1.1,    NA,     "mmol/L",  "1",      16,
-    "Calcium (Ionized), Low",  1.09,   1.1,    NA,     "mmol/L",  "1",      17,
-    "Calcium (Ionized), Low",  1.1,    1.1,    NA,     "mmol/L",  "0",      18,
+    "Calcium (Ionized), Low",  1,      NA,    100,     "mmol/L",  NA,      16,
+    "Calcium (Ionized), Low",  1.09,   NA,    100,     "mmol/L",  NA,      17,
+    "Calcium (Ionized), Low",  1.1,    NA,    100,     "mmol/L",  NA,      18,
     # Unit missing cannot grade
     "Calcium (Ionized), Low",  1.1,    1.1,    100,    NA,        NA,       19,
     # AVAL missing cannot grade
