@@ -4667,7 +4667,7 @@ test_that("derive_var_atoxgr Test 104: DAIDS LDL, Fasting, High", {
 ### Triglycerides, Fasting, High
 
 ### Grade 4: > 11.4 mmol/L
-### Grade 3: >5.7 - 11.5 mmol/L
+### Grade 3: >5.7 - 11.4 mmol/L
 ### Grade 2: >3.42 - 5.7 mmol/L
 ### Grade 1: 1.71 - 3.42 mmol/L
 
