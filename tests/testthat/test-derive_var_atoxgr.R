@@ -4196,10 +4196,10 @@ test_that("derive_var_atoxgr Test 97: DAIDS Creatinine, High", {
 
 ### Glucose Fasting, High
 
-### Grade 4: >= 27.75
-### Grade 3: 13.89 -< 27.75
-### Grade 2: 6.95 -< 13.89
-### Grade 1: 6.11 -< 6.95
+### Grade 4: >= 27.75 mmol/L
+### Grade 3: 13.89 -< 27.75 mmol/L
+### Grade 2: 6.95 -< 13.89 mmol/L
+### Grade 1: 6.11 -< 6.95 mmol/L
 
 ## Test 98:  DAIDS Glucose Fasting, High ----
 test_that("derive_var_atoxgr Test 98:  DAIDS Glucose Fasting, High", {
