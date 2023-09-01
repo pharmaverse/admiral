@@ -3908,11 +3908,11 @@ test_that("derive_var_atoxgr Test 93: DAIDS Calcium (Ionized), High", {
     "Calcium (Ionized), High",  1.41,   1.1,    1.4,    "mmol/L",  "1",      9,
     "Calcium (Ionized), High",  1.4,    1.1,    1.4,    "mmol/L",  "0",      10,
     # ANRHI missing - can grade 2-4
-    "Calcium (Ionized), High",  1.8,    NA,     1.4,    "mmol/L",  "4",      11,
-    "Calcium (Ionized), High",  1.79,   NA,     1.4,    "mmol/L",  "3",      12,
-    "Calcium (Ionized), High",  1.6,    NA,     1.4,    "mmol/L",  "3",      13,
-    "Calcium (Ionized), High",  1.59,   NA,     1.4,    "mmol/L",  "2",      14,
-    "Calcium (Ionized), High",  1.5,    NA,     1.4,    "mmol/L",  "2",      15,
+    "Calcium (Ionized), High",  1.8,    1.1,     NA,    "mmol/L",  "4",      11,
+    "Calcium (Ionized), High",  1.79,   1.1,     NA,    "mmol/L",  "3",      12,
+    "Calcium (Ionized), High",  1.6,    1.1,     NA,    "mmol/L",  "3",      13,
+    "Calcium (Ionized), High",  1.59,   1.1,     NA,    "mmol/L",  "2",      14,
+    "Calcium (Ionized), High",  1.5,    1.1,     NA,    "mmol/L",  "2",      15,
     # ANRHI missing - can NOT grade 0 or 1
     "Calcium (Ionized), High",  1.49,   1.1,    NA,     "mmol/L",  NA,       16,
     "Calcium (Ionized), High",  1.41,   1.1,    NA,     "mmol/L",  NA,       17,
