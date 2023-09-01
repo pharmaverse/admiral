@@ -59,21 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -114,6 +99,7 @@
 </ul></li>
 <li><p>The function <code><a href="../reference/derive_vars_dy.html">derive_vars_dy()</a></code> is updated to avoid potential error when the input <code>dataset</code> with columns ending with <code>temp</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2012" class="external-link">#2012</a>)</p></li>
 <li><p>Templates, vignettes, and other uses of <code>{admiral.test}</code> SDTM data are updated to use <a href="https://pharmaverse.github.io/pharmaversesdtm" class="external-link">pharmaversesdtm</a> instead. (<a href="https://github.com/pharmaverse/admiral/issues/2040" class="external-link">#2040</a>)</p></li>
+<li><p>The <code>traceability_vars</code> argument in <code><a href="../reference/date_source.html">date_source()</a></code> and <code>dthcaus_source</code> were deprecated in favor of <code>set_values_to</code>. The <code><a href="../reference/date_source.html">date_source()</a></code> function creates a date_source object as input for <code><a href="../reference/derive_var_extreme_dt.html">derive_var_extreme_dt()</a></code> and <code><a href="../reference/derive_var_extreme_dtm.html">derive_var_extreme_dtm()</a></code>,users can now define the traceability variables by assigning those variables to the <code>set_values_to</code>argument.Similarly, the <code>dthcaus_source</code> creates a dthcaus_source Object. (<a href="https://github.com/pharmaverse/admiral/issues/2068" class="external-link">#2068</a>)</p></li>
 <li>
 <p><code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code> was enhanced (<a href="https://github.com/pharmaverse/admiral/issues/1960" class="external-link">#1960</a>):</p>
 <ul><li><p><code><a href="../reference/event_joined.html">event_joined()</a></code> events can be specified for the <code>events</code> argument. This allows to define events based on more than one observation, e.g., events which need to be confirmed by a second assessment.</p></li>

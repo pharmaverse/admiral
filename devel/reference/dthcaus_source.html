@@ -59,21 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -108,6 +93,7 @@
   order <span class="op">=</span> <span class="cn">NULL</span>,
   mode <span class="op">=</span> <span class="st">"first"</span>,
   <span class="va">dthcaus</span>,
+  set_values_to <span class="op">=</span> <span class="cn">NULL</span>,
   traceability_vars <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -151,6 +137,10 @@ e.g., <code>str_to_upper(AEDECOD)</code>, it is evaluated in the source dataset 
 the results is assigned to <code>DTHCAUS</code>; if a string literal, e.g. <code>"Adverse Event"</code>, it is the fixed value to be assigned to <code>DTHCAUS</code>.</p></dd>
 
 
+<dt>set_values_to</dt>
+<dd><p>Variables to be set to trace the source dataset</p></dd>
+
+
 <dt>traceability_vars</dt>
 <dd><p>A named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> listing the
 traceability variables, e.g. <code>exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)</code>. The
@@ -158,7 +148,8 @@ left-hand side (names of the list elements) gives the names of the
 traceability variables in the returned dataset. The right-hand side (values
 of the list elements) gives the values of the traceability variables in the
 returned dataset. These can be either strings, numbers, symbols, or
-expressions referring to existing variables.</p></dd>
+expressions referring to existing variables.</p>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>set_values_to</code> instead.</p></dd>
 
 </dl></div>
     <div class="section level2">
