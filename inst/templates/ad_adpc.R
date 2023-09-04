@@ -501,7 +501,7 @@ adpc <- adpc_baselines %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 # ---- Save output ----
-dir <- file.path(setwd(), "tmp")
+dir <- file.path(getwd(), "tmp")
 print(dir)
 if (!file.exists(dir)) {
   # Create the folder
