@@ -1,8 +1,8 @@
-# Name: ADAE
+# Name: ADCM
 #
-# Label: Adverse Event Analysis Dataset
+# Label: Concomitant Medications Analysis Dataset
 #
-# Input: ae, adsl, ex_single
+# Input: cm, adsl
 library(admiral)
 library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
@@ -14,10 +14,8 @@ library(lubridate)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("ae")
+data("cm")
 data("admiral_adsl")
-data("ex_single")
-data("suppae")
 
 adsl <- admiral_adsl
 
@@ -26,17 +24,15 @@ adsl <- admiral_adsl
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
-ae <- convert_blanks_to_na(ae)
-ex <- convert_blanks_to_na(ex_single)
-
+cm <- convert_blanks_to_na(cm)
 
 # Derivations ----
 
 # Get list of ADSL vars required for derivations
-adsl_vars <- exprs(TRTSDT, TRTEDT, DTHDT, EOSDT)
+adsl_vars <- exprs(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
 
-adae <- ae %>%
-  # join adsl to ae
+adcm <- cm %>%
+  # Join ADSL with CM (only ADSL vars required for derivations)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
@@ -44,23 +40,23 @@ adae <- ae %>%
   ) %>%
   ## Derive analysis start time ----
   derive_vars_dtm(
-    dtc = AESTDTC,
+    dtc = CMSTDTC,
     new_vars_prefix = "AST",
     highest_imputation = "M",
     min_dates = exprs(TRTSDT)
   ) %>%
   ## Derive analysis end time ----
   derive_vars_dtm(
-    dtc = AEENDTC,
+    dtc = CMENDTC,
     new_vars_prefix = "AEN",
     highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last",
     max_dates = exprs(DTHDT, EOSDT)
   ) %>%
-  ## Derive analysis end/start date ----
+  ## Derive analysis end/start date -----
   derive_vars_dtm_to_dt(exprs(ASTDTM, AENDTM)) %>%
-  ## Derive analysis start relative day and  analysis end relative day ----
+  ## Derive analysis start relative day and analysis end relative day ----
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = exprs(ASTDT, AENDT)
@@ -77,54 +73,63 @@ adae <- ae %>%
     trunc_out = FALSE
   )
 
-ex_ext <- derive_vars_dtm(
-  ex,
-  dtc = EXSTDTC,
-  new_vars_prefix = "EXST",
-  flag_imputation = "none"
-)
-
-adae <- adae %>%
-  ## Derive last dose date/time ----
-  derive_vars_joined(
-    dataset_add = ex_ext,
-    by_vars = exprs(STUDYID, USUBJID),
-    new_vars = exprs(LDOSEDTM = EXSTDTM),
-    join_vars = exprs(EXSTDTM),
-    order = exprs(EXSTDTM),
-    filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
-    filter_join = EXSTDTM <= ASTDTM,
-    mode = "last"
+## Derive flags ----
+adcm <- adcm %>%
+  # Derive On-Treatment flag
+  # Set `span_period = TRUE` if you want occurrences that started prior to drug
+  # intake and ongoing or ended after this time to be considered as on-treatment.
+  derive_var_ontrtfl(
+    start_date = ASTDT,
+    end_date = AENDT,
+    ref_start_date = TRTSDT,
+    ref_end_date = TRTEDT
   ) %>%
-  ## Derive severity / causality / ... ----
-  mutate(
-    ASEV = AESEV,
-    AREL = AEREL
-  ) %>%
-  ## Derive treatment emergent flag ----
-  derive_var_trtemfl(
-    trt_start_date = TRTSDT,
-    trt_end_date = TRTEDT,
-    end_window = 30
-  ) %>%
-  ## Derive occurrence flags: first occurrence of most severe AE ----
-  # create numeric value ASEVN for severity
-  mutate(
-    ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
-  ) %>%
+  # Derive Pre-Treatment flag
+  mutate(PREFL = if_else(ASTDT < TRTSDT, "Y", NA_character_)) %>%
+  # Derive Follow-Up flag
+  mutate(FUPFL = if_else(ASTDT > TRTEDT, "Y", NA_character_)) %>%
+  # Derive ANL01FL
+  # This variable is sponsor specific and may be used to indicate particular
+  # records to be used in subsequent derivations or analysis.
+  mutate(ANL01FL = if_else(ONTRTFL == "Y", "Y", NA_character_)) %>%
+  # Derive 1st Occurrence of Preferred Term Flag
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = exprs(USUBJID),
-      order = exprs(desc(ASEVN), ASTDTM, AESEQ),
-      new_var = AOCCIFL,
+      new_var = AOCCPFL,
+      by_vars = exprs(USUBJID, CMDECOD),
+      order = exprs(ASTDTM, CMSEQ),
       mode = "first"
     ),
-    filter = TRTEMFL == "Y"
+    filter = ANL01FL == "Y"
   )
 
-# Join all ADSL with AE
-adae <- adae %>%
+
+## Derive APHASE and APHASEN Variable ----
+# Other timing variable can be derived similarly.
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html)
+adcm <- adcm %>%
+  mutate(
+    APHASE = case_when(
+      PREFL == "Y" ~ "Pre-Treatment",
+      ONTRTFL == "Y" ~ "On-Treatment",
+      FUPFL == "Y" ~ "Follow-Up"
+    ),
+    APHASEN = case_when(
+      PREFL == "Y" ~ 1,
+      ONTRTFL == "Y" ~ 2,
+      FUPFL == "Y" ~ 3
+    )
+  ) %>%
+  # Assign TRTP/TRTA
+  mutate(
+    TRTP = TRT01P,
+    TRTA = TRT01A
+  )
+
+# Join all ADSL with CM
+adcm <- adcm %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = exprs(STUDYID, USUBJID)
@@ -133,11 +138,10 @@ adae <- adae %>%
 
 # Save output ----
 
-
 dir <- file.path(setwd(), "tmp")
 print(dir)
 if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
-saveRDS(adae, file = file.path(dir, "adae.rds"), compress = "bzip2")
+saveRDS(adcm, file = file.path(dir, "adcm.rds"), compress = "bzip2")
