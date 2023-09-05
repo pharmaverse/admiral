@@ -19,7 +19,7 @@ library(stringr)
 # For illustration purposes read in admiral test data
 
 # Load PP and Adsl
-data("admiral_pp")
+data("pp")
 data("admiral_adsl")
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
