@@ -9,8 +9,7 @@ library(admiral)
 library(dplyr)
 library(lubridate)
 library(stringr)
-
-library(admiral.test) # Contains example datasets from the CDISC pilot project or simulated
+library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project or simulated
 
 # ---- Load source datasets ----
 
@@ -19,10 +18,10 @@ library(admiral.test) # Contains example datasets from the CDISC pilot project o
 # For illustration purposes read in admiral test data
 
 # Load PC, EX, VS, LB and ADSL
-data("admiral_pc")
-data("admiral_ex")
-data("admiral_vs")
-data("admiral_lb")
+data("pc")
+data("ex")
+data("vs")
+data("lb")
 
 data("admiral_adsl")
 
