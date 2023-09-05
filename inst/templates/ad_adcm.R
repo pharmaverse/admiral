@@ -144,4 +144,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
-saveRDS(adcm, file = file.path(dir, "adcm.rds"), compress = "bzip2")
+save(adcm, file = file.path(dir, "adcm.rda"), compress = "bzip2")

@@ -507,4 +507,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
-saveRDS(adpc, file = file.path(dir, "adpc.rds"), compress = "bzip2")
+save(adpc, file = file.path(dir, "adpc.rda"), compress = "bzip2")

@@ -157,4 +157,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
-saveRDS(adpp, file = file.path(dir, "adpp.rds"), compress = "bzip2")
+save(adpp, file = file.path(dir, "adpp.rda"), compress = "bzip2")

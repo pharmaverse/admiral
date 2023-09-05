@@ -447,4 +447,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
-saveRDS(adlb, file = file.path(dir, "adlb.rds"), compress = "bzip2")
+save(adlb, file = file.path(dir, "adlb.rda"), compress = "bzip2")

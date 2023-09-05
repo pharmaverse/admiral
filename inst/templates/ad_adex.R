@@ -309,4 +309,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
-saveRDS(adex, file = file.path(dir, "adex.rds"), compress = "bzip2")
+save(adex, file = file.path(dir, "adex.rda"), compress = "bzip2")

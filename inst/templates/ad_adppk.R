@@ -479,4 +479,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
-saveRDS(adppk, file = file.path(dir, "adppk.rds"), compress = "bzip2")
+save(adppk, file = file.path(dir, "adppk.rda"), compress = "bzip2")

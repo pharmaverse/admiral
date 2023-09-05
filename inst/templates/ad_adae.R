@@ -140,4 +140,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
-saveRDS(adae, file = file.path(dir, "adae.rds"), compress = "bzip2")
+save(adae, file = file.path(dir, "adae.rda"), compress = "bzip2")
