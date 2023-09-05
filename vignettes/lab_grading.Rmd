@@ -763,7 +763,7 @@ atoxgr_criteria_daids %>%
 
 For term "Acidosis", "Alkalosis" and "Direct Bilirubin, High (> 28 days of age)",
 {admiral} grades as high as possible, so assumes worst case and subject has
-"lifethreatening consequences".
+"life-threatening consequences".
 This is captured in COMMENT field.
 
 <br>
