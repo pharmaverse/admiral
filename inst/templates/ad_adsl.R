@@ -245,4 +245,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
-saveRDS(adsl, file = file.path(dir, "adsl.rda"), compress = "bzip2")
+save(adsl, file = file.path(dir, "adsl.rda"), compress = "bzip2")
