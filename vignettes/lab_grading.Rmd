@@ -81,6 +81,13 @@ Variable | Scope |  Type | Example Value
 **DEFINITION** | Definition of abnormality, normally from source document.|  Character | "A finding based on laboratory test results that indicate an increase in the level of alanine aminotransferase (ALT or SGPT) in the blood specimen.".
 **COMMENT** | Description of any decisions made by `{admiral}` to implement grading criteria, where grading criteria alone was ambiguous. | Character | "Take worst case and assume on anticoagulation".
 
+# Handling floating points when comparing numeric values
+
+When comparing numeric values, for example `AVAL > 1.1*ANRHI`, unexpected results can occur
+due to floating point issues. To solve this issue {admiral} used the `signif()` function on
+both side of the equation, the number of significant digits used to compare is passed into the 
+function `derive_var_atoxgr_dir` via the argument `signif_dig`. Please see documentation of the 
+function for more details.
 
 # Creating the lab grade
 
@@ -629,6 +636,183 @@ atoxgr_criteria_ctcv5 %>%
   )
 ```
 <br>
+
+# DAIDS implementation {#implement_daids}
+
+## Terms graded
+
+Grading is implemented for those lab tests where a lab value is included in the grading definition,
+`{admiral}` does NOT try to read any other data to determine the grade, and only the ADLB VAD is used.
+The following DAIDS SOC values were identified for grading, these are “Chemistries" and 
+“Hematology”.
+
+From these SOC values the following terms criteria is implemented in `{admiral}` 
+
+From SOC = “Chemistries" there are 31 DAIDS Terms:
+
+  + Acidosis
+  + Albumin, Low
+  + Alkaline Phosphatase, High
+  + Alkalosis
+  + ALT, High
+  + Amylase, High
+  + AST, High
+  + Bicarbonate, Low
+  + Direct Bilirubin, High
+  + Total Bilirubin, High
+  + Calcium, High
+  + Calcium (Ionized), High
+  + Calcium, Low
+  + Calcium (Ionized), Low
+  + Creatine Kinase, High
+  + Creatinine, High
+  + Glucose Fasting, High
+  + Glucose Nonfasting, High
+  + Glucose, Low
+  + Lactate, High
+  + Lipase, High
+  + Cholesterol, Fasting, High
+  + LDL, Fasting, High
+  + Triglycerides, Fasting, High
+  + Magnesium, Low
+  + Phosphate, Low
+  + Potassium, High
+  + Potassium, Low
+  + Sodium, High
+  + Sodium, Low
+  + Uric Acid, High
+  
+Note: {admiral} does not grade for TERM = "Total Bilirubin, High" when AGE <= 28 days,
+these criteria are in Appendix of [**DAIDS Table for Grading the Severity of Adult and Pediatric Adverse Events Corrected Version 2.1**](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf).
+
+From the SOC =  “Hematology” there are 11 DAIDS Terms:
+
+  + Absolute CD4+ Count, Low
+  + Absolute Lymphocyte Count, Low
+  + Absolute Neutrophil Count (ANC), Low
+  + Fibrinogen Decreased
+  + Hemoglobin, Low
+  + INR, High
+  + Methemoglobin
+  + PTT, High
+  + Platelets, Decreased
+  + PT, High
+  + WBC, Decreased
+
+## Terms with age or sex dependent grading criteria
+
+Some terms defined in DAIDS have age or sex dependent grading criteria, {admiral}
+handles this in variable `FILTER` in the metadata. We use {admiral} function
+`compute_duration` to calculate age, see TERM = "Cholesterol, Fasting, High":
+<br>
+
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(TERM, "Cholesterol")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, FILTER)
+  )
+```
+<br>
+
+Note: All possible values must be covered for each TERM defined, for TERM =
+"Absolute Lymphocyte Count, Low" and "Absolute CD4+ Count, Low" there is only grading 
+criteria defined for age > 5 years. Therefore, we add another row with age <= 5 years
+and set grade to missing. Similarly, for TERM = "LDL, Fasting, High" there is only grading 
+criteria defined for age > 2 years. Therefore, we add another row with age <= 2 years and 
+set grade to missing.
+
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(COMMENT, "No criteria given")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, FILTER, GRADE_CRITERIA_CODE)
+  )
+```
+
+
+## Assumptions made when grading
+
+
+For terms "INR, High", "PT, High" and "PTT, High",  the criteria is based on subjects 
+"not on anticoagulation therapy", this is captured in COMMENT field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(TERM %in% c("INR, High", "PT, High", "PTT, High")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, COMMENT)
+  )
+```
+<br>
+
+Similarly, for terms "Absolute CD4+ Count, Low" and "Absolute Lymphocyte Count, Low", 
+the criteria is based on subjects "not HIV infected", this is captured in COMMENT field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(COMMENT, "HIV infected")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, COMMENT)
+  )
+```
+<br>
+
+
+For term "Acidosis", "Alkalosis" and "Direct Bilirubin, High (> 28 days of age)",
+{admiral} grades as high as possible, so assumes worst case and subject has
+"lifethreatening consequences".
+This is captured in COMMENT field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(COMMENT, "lifethreatening")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, COMMENT)
+  )
+```
+<br>
+Similarly, for term "Lactate, High", {admiral} only grade 1 and 2, and there is the following criteria:
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(TERM, "Lactate")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, Grade_1, Grade_1)
+  )
+```
+<br>
+
+`{admiral}` assumed worst case and assume "without acidosis". 
+The decision made was put in the `COMMENT` field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(TERM, "Lactate")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, COMMENT)
+  )
+```
+<br>
+
+For TERM "Direct Bilirubin, High (<= 28 days of age)" and "Uric Acid, High" the 
+criteria is not given in SI unit. The conversion to SI unit is in the comment field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(COMMENT, "conver")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, FILTER, COMMENT)
+  )
+```
+<br>
+
 
 # Conclusion
 
