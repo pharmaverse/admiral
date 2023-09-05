@@ -33,6 +33,7 @@ Authors:
   \item Edoardo Mancini
   \item Sadchla Mascary
   \item Gordon Miller
+  \item Sophie Shapcott
   \item Eric Simms
   \item Stefan Thoma
   \item Kangjie Zhang
