@@ -32,21 +32,10 @@ adsl <- admiral_adsl
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
-# Load EX
-
-ex <- convert_blanks_to_na(admiral_ex)
-
-# Load PC
-
-pc <- convert_blanks_to_na(admiral_pc)
-
-# Load VS for baseline height and weight
-
-vs <- convert_blanks_to_na(admiral_vs)
-
-# Load LB for baseline lab values
-
-lb <- convert_blanks_to_na(admiral_lb)
+ex <- convert_blanks_to_na(ex)
+pc <- convert_blanks_to_na(pc)
+vs <- convert_blanks_to_na(vs)
+lb <- convert_blanks_to_na(lb)
 
 # ---- Lookup tables ----
 param_lookup <- tibble::tribble(
