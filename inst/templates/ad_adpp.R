@@ -27,7 +27,7 @@ data("admiral_adsl")
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
-pp <- convert_blanks_to_na(admiral_pp)
+pp <- convert_blanks_to_na(pp)
 
 # Lookup tables ----
 param_lookup <- tibble::tribble(
