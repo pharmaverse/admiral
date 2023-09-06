@@ -14,3 +14,9 @@ atoxgr_criteria_ctcv5 <- atoxgr_criteria %>%
   dplyr::mutate(GRADE_CRITERIA_CODE = gsub("[\r\n]", " ", GRADE_CRITERIA_CODE))
 
 save(atoxgr_criteria_ctcv5, file = "data/atoxgr_criteria_ctcv5.rda")
+
+atoxgr_criteria_daids <- atoxgr_criteria %>%
+  readxl::read_excel(sheet = "DAIDS") %>%
+  dplyr::mutate(GRADE_CRITERIA_CODE = gsub("[\r\n]", " ", GRADE_CRITERIA_CODE))
+
+save(atoxgr_criteria_daids, file = "data/atoxgr_criteria_daids.rda")

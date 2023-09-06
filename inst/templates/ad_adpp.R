@@ -6,7 +6,7 @@
 #
 # Input: pp, adsl
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -19,7 +19,7 @@ library(stringr)
 # For illustration purposes read in admiral test data
 
 # Load PP and Adsl
-data("admiral_pp")
+data("pp")
 data("admiral_adsl")
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
@@ -27,7 +27,7 @@ data("admiral_adsl")
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
-pp <- convert_blanks_to_na(admiral_pp)
+pp <- convert_blanks_to_na(pp)
 
 # Lookup tables ----
 param_lookup <- tibble::tribble(

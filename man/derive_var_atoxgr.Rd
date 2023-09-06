@@ -20,7 +20,7 @@ The variables specified by the \code{lotox_description_var} and \code{hitox_desc
 for low values, eg. "Anemia"}
 
 \item{hitox_description_var}{Variable containing the toxicity grade description
-for low values, eg. "Hemoglobin Increased".}
+for high values, eg. "Hemoglobin Increased".}
 }
 \value{
 The input data set with the character variable added
