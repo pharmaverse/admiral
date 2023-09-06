@@ -648,7 +648,7 @@ The following DAIDS SOC values were identified for grading, these are “Chemist
 
 From these SOC values the following terms criteria is implemented in `{admiral}` 
 
-From SOC = “Chemistries" there are 31 DAIDS Terms:
+From SOC = "Chemistries" there are 31 DAIDS Terms:
 
   + Acidosis
   + Albumin, Low
