@@ -86,7 +86,7 @@ Variable | Scope |  Type | Example Value
 When comparing numeric values, for example `AVAL > 1.1*ANRHI`, unexpected results can occur
 due to floating point issues. To solve this issue {admiral} used the `signif()` function on
 both side of the equation, the number of significant digits used to compare is passed into the 
-function `derive_var_atoxgr_dir` via the argument `signif_dig`. Please see documentation of the 
+function `derive_var_atoxgr_dir()` via the argument `signif_dig`. Please see documentation of the 
 function for more details.
 
 # Creating the lab grade
