@@ -27,17 +27,13 @@ criteria. For example: "Anemia" or "INR Increased".}
 
 \item{meta_criteria}{Metadata data set holding the criteria (normally a case statement)
 
-Permitted Values: atoxgr_criteria_ctcv4, atoxgr_criteria_ctcv5, atoxgr_criteria_daids
-
-{admiral} metadata data set \code{atoxgr_criteria_ctcv4} implements
-\href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm}{Common Terminology Criteria for Adverse Events (CTCAE) v4.0}
-{admiral} metadata data set \code{atoxgr_criteria_ctcv5} implements
-\href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm}{Common Terminology Criteria for Adverse Events (CTCAE) v5.0}
-{admiral} metadata data set \code{atoxgr_criteria_daids} implements
-\href{https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf}{Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events}
+Permitted Values: \code{atoxgr_criteria_ctcv4}, \code{atoxgr_criteria_ctcv5}, \code{atoxgr_criteria_daids}
+\itemize{
+\item \code{atoxgr_criteria_ctcv4} implements \href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm}{Common Terminology Criteria for Adverse Events (CTCAE) v4.0}
+\item \code{atoxgr_criteria_ctcv5} implements \href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm}{Common Terminology Criteria for Adverse Events (CTCAE) v5.0}
+\item \code{atoxgr_criteria_daids} implements \href{https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf}{Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events}
 
 The metadata should have the following variables:
-\itemize{
 \item \code{TERM}: variable to hold the term describing the criteria applied to a particular lab test,
 eg. "Anemia" or "INR Increased". Note: the variable is case insensitive.
 \item \code{DIRECTION}: variable to hold the direction of the abnormality of a particular lab test
@@ -92,7 +88,7 @@ library(tibble)
 data <- tribble(
   ~ATOXDSCL,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
   "Hypoglycemia",                119,    4,        7,      "Glucose (mmol/L)",
-  "Hypoglycemia",                120,    4,        7,      "Glucose (mmol/L)",
+  "Lymphocyte count decreased" , 0.7,    1,        4,      "Lymphocytes Abs (10^9/L)",
   "Anemia",                      129,    120,      180,    "Hemoglobin (g/L)",
   "White blood cell decreased",  10,     5,        20,     "White blood cell (10^9/L)",
   "White blood cell decreased",  15,     5,        20,     "White blood cell (10^9/L)",
@@ -102,15 +98,13 @@ data <- tribble(
 derive_var_atoxgr_dir(data,
   new_var = ATOXGRL,
   tox_description_var = ATOXDSCL,
-  meta_criteria = atoxgr_criteria_ctcv4,
+  meta_criteria = atoxgr_criteria_ctcv5,
   criteria_direction = "L",
   get_unit_expr = extract_unit(PARAM)
 )
 
 data <- tribble(
   ~ATOXDSCH,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
-  "Hyperglycemia",               119,    4,        7,      "Glucose (mmol/L)",
-  "Hyperglycemia",               120,    4,        7,      "Glucose  (mmol/L)",
   "GGT increased",               129,    0,        30,     "Gamma Glutamyl Transferase (U/L)",
   "Lymphocyte count increased",  4,      1,        4,      "Lymphocytes Abs (10^9/L)",
   "Lymphocyte count increased",  2,      1,        4,      "Lymphocytes Abs (10^9/L)",
@@ -120,7 +114,7 @@ data <- tribble(
 derive_var_atoxgr_dir(data,
   new_var = ATOXGRH,
   tox_description_var = ATOXDSCH,
-  meta_criteria = atoxgr_criteria_ctcv4,
+  meta_criteria = atoxgr_criteria_ctcv5,
   criteria_direction = "H",
   get_unit_expr = extract_unit(PARAM)
 )
