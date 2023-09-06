@@ -21,8 +21,9 @@
 #'    v4.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
 #' - `atoxgr_criteria_ctcv5` implements [Common Terminology Criteria for Adverse Events (CTCAE)
 #'    v5.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
-#' - `atoxgr_criteria_daids` implements [Division of AIDS (DAIDS) Table for Grading the Severity of
-#'    Adult and Pediatric Adverse Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf)
+#' - `atoxgr_criteria_daids` implements
+#'    [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse
+#'    Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf)
 #'
 #'   The metadata should have the following variables:
 #'
