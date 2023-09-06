@@ -98,10 +98,10 @@
 #'
 #' data <- tribble(
 #'   ~ATOXDSCH,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
-#'   "GGT increased",               129,    0,        30,     "Gamma Glutamyl Transferase (U/L)",
+#'   "CPK increased",               129,    0,        30,     "Creatine Kinase (U/L)",
 #'   "Lymphocyte count increased",  4,      1,        4,      "Lymphocytes Abs (10^9/L)",
 #'   "Lymphocyte count increased",  2,      1,        4,      "Lymphocytes Abs (10^9/L)",
-#'   "GGT increased",               140,    120,      180,    "Gamma Glutamyl Transferase (U/L)"
+#'   "CPK increased",               140,    120,      180,    "Creatine Kinase (U/L)"
 #' )
 #'
 #' derive_var_atoxgr_dir(data,
