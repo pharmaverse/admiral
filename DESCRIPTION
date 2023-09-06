@@ -18,12 +18,7 @@ Authors@R: c(
     person("Stefan", "Thoma", role = "aut"),
     person("Kangjie", "Zhang", role = "aut"),
     person("Zelos", "Zhu", role = "aut"),
-    person("Kamila", "Duniec", role = "ctb"),
     person("G", "Gayatri", role = "ctb"),
-    person("Declan", "Hodges", role = "ctb"),
-    person("Robin", "Koeger", role = "ctb"),
-    person("Pooja", "Kumari", role = "ctb"),
-    person("Shan", "Lee", role = "ctb"),
     person("Thomas", "Neitmann", role = "ctb"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
