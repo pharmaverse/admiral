@@ -277,7 +277,7 @@ yn_to_numeric <- function(arg) {
 #' @return No return value, called for side effects
 #'
 #'
-#' @keywords utils_print
+#' @keywords internal
 #' @family utils_print
 #'
 #' @export
@@ -306,7 +306,7 @@ print.source <- function(x, ...) {
 #' @return No return value, called for side effects
 #'
 #'
-#' @keywords utils_print
+#' @keywords internal
 #' @family utils_print
 #'
 #' @export

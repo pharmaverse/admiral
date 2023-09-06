@@ -104,7 +104,7 @@ has been deprecated in favor of `dataset_ref`. (#2037)
 
 ## Documentation
 
-- Non-exported utility functions were previously listed on the admiral website reference page. They have been removed. (#2049)
+- Non-exported utility and print functions were previously listed on the admiral website reference page. They have been removed. (#2049, #2050)
 
 - The description of the argument `reference_date` in the function `derive_vars_dy()` 
 has been clarified to make it agnostic to start/end  selection. (#2027)
