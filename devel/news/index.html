@@ -59,21 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -98,8 +83,8 @@
 <h2 class="pkg-version" data-toc-text="0.12.0" id="admiral-0120">admiral 0.12.0<a class="anchor" aria-label="anchor" href="#admiral-0120"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-12-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-12-0"></a></h3>
-<ul><li>
-<code><a href="../reference/event_joined.html">event_joined()</a></code> events were added. They can be specified for the <code>events</code> argument in <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code>. This allows to define events based on more than one observation, e.g., events which need to be confirmed by a second assessment. (<a href="https://github.com/pharmaverse/admiral/issues/1960" class="external-link">#1960</a>)</li>
+<ul><li><p><code><a href="../reference/event_joined.html">event_joined()</a></code> events were added. They can be specified for the <code>events</code> argument in <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code>. This allows to define events based on more than one observation, e.g., events which need to be confirmed by a second assessment. (<a href="https://github.com/pharmaverse/admiral/issues/1960" class="external-link">#1960</a>)</p></li>
+<li><p><code>atoxgr_criteria_daids.rda</code> added, which holds metadata for <a href="https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf" class="external-link">Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events</a>. You can find additional documentation here <code><a href="../reference/atoxgr_criteria_daids.html">atoxgr_criteria_daids()</a></code></p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="updates-of-existing-functions-0-12-0">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-0-12-0"></a></h3>
@@ -123,6 +108,11 @@
 <li><p>The <code>mode</code> and <code>order</code> field were added to <code><a href="../reference/event.html">event()</a></code>. They allow to select the first or last observation per by group if there are multiple observation fulfilling the event condition.</p></li>
 <li><p>The <code>ignore_event_order</code> argument was added.</p></li>
 <li><p>The <code>description</code> field was added to <code><a href="../reference/event.html">event()</a></code>. It can be used to provide a description of the event in plain language.</p></li>
+</ul></li>
+<li>
+<p><code><a href="../reference/derive_var_atoxgr_dir.html">derive_var_atoxgr_dir()</a></code> was enhanced (<a href="https://github.com/pharmaverse/admiral/issues/1859" class="external-link">#1859</a>):</p>
+<ul><li><p>Can now select <code>atoxgr_criteria_daids</code> in argument <code>meta_criteria</code> to create <code>ATOXGRL</code> and <code>ATOXGRH</code> based on <a href="https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf" class="external-link">Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events</a></p></li>
+<li><p>New argument <code>signif_dig</code> added to control the number of significant digits to use when comparing 2 numeric values. (<a href="https://github.com/pharmaverse/admiral/pull/2060" class="external-link uri">https://github.com/pharmaverse/admiral/pull/2060</a>)</p></li>
 </ul></li>
 </ul></div>
 <div class="section level3">
