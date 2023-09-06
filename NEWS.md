@@ -57,7 +57,7 @@ assessment. (#1960)
   
   - can now select `atoxgr_criteria_daids` in argument `meta_criteria` to create `ATOXGRL` and `ATOXGRH` based on [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf)
   
-  - new argument `signif_dig` added to control the number of significant digits to use when comparing 2 numeric values.
+  - New argument `signif_dig` added to control the number of significant digits to use when comparing 2 numeric values.
 
 ## Breaking Changes
 - The `compute_duration(type)` argument added the `"duration"` type calculation, and this is the new default (previously `"interval"` differences were returned). See function help file for details on the difference between `"duration"` and `"interval"` calculations. (#1875)
