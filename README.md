@@ -153,7 +153,7 @@ that all our developers and contributors must follow, so that all our code has a
 * Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
 
 ## Pharmaverse Blog
-If you are interested in R and Clinical Reporting, then visit the [pharmaverse blog](https://pharmaverse.github.io/blog/). This contains regular, bitesize posts showcasing how `{admiral}` and other packages in the pharmaverse can be used to realize the vision of full end-to-end Clinical Reporting in R.
+If you are interested in R and Clinical Reporting, then visit the [pharmaverse blog](https://pharmaverse.github.io/blog/). This contains regular, bite-sized posts showcasing how `{admiral}` and other packages in the pharmaverse can be used to realize the vision of full end-to-end Clinical Reporting in R.
 
 We are also always looking for keen `{admiral}` users to publish their own blog posts about how they use the package. If this could be you, feel free make an issue in the [GitHub repo](https://github.com/pharmaverse/blog) and get started!
 
