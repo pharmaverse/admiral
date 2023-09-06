@@ -7,7 +7,7 @@ argument in `derive_extreme_event()`. This allows to define events based on more
 than one observation, e.g., events which need to be confirmed by a second
 assessment. (#1960)
 
-- `data/atoxgr_criteria_daids.rda` added, which holds metadata for [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf)
+- `atoxgr_criteria_daids.rda` added, which holds metadata for [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf). You can find additional documentation here `atoxgr_criteria_daids()`
 
 ## Updates of Existing Functions
 - The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
