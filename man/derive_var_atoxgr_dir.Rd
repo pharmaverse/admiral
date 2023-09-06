@@ -86,13 +86,13 @@ severe grade
 library(tibble)
 
 data <- tribble(
-  ~ATOXDSCL,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
-  "Hypoglycemia",                119,    4,        7,      "Glucose (mmol/L)",
-  "Lymphocyte count decreased" , 0.7,    1,        4,      "Lymphocytes Abs (10^9/L)",
-  "Anemia",                      129,    120,      180,    "Hemoglobin (g/L)",
-  "White blood cell decreased",  10,     5,        20,     "White blood cell (10^9/L)",
-  "White blood cell decreased",  15,     5,        20,     "White blood cell (10^9/L)",
-  "Anemia",                      140,    120,      180,    "Hemoglobin (g/L)"
+  ~ATOXDSCL,                    ~AVAL, ~ANRLO, ~ANRHI, ~PARAM,
+  "Hypoglycemia",               119,   4,      7,      "Glucose (mmol/L)",
+  "Lymphocyte count decreased", 0.7,   1,      4,      "Lymphocytes Abs (10^9/L)",
+  "Anemia",                     129,   120,    180,    "Hemoglobin (g/L)",
+  "White blood cell decreased", 10,    5,      20,     "White blood cell (10^9/L)",
+  "White blood cell decreased", 15,    5,      20,     "White blood cell (10^9/L)",
+  "Anemia",                     140,   120,    180,    "Hemoglobin (g/L)"
 )
 
 derive_var_atoxgr_dir(data,
