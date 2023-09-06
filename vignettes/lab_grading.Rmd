@@ -685,7 +685,7 @@ From SOC = “Chemistries" there are 31 DAIDS Terms:
 Note: {admiral} does not grade for TERM = "Total Bilirubin, High" when AGE <= 28 days,
 these criteria are in Appendix of [**DAIDS Table for Grading the Severity of Adult and Pediatric Adverse Events Corrected Version 2.1**](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf).
 
-From the SOC =  “Hematology” there are 11 DAIDS Terms:
+From the SOC =  "Hematology" there are 11 DAIDS Terms:
 
   + Absolute CD4+ Count, Low
   + Absolute Lymphocyte Count, Low
