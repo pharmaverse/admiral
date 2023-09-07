@@ -33,7 +33,6 @@ ATOXGR
 AVAL
 AVISITN
 Abercrombie
-
 Akinyi
 Alkalosis
 Alanine
@@ -190,7 +189,6 @@ Pooja
 Pre
 QD
 QID
-Quosures
 README
 Rahal
 Ratford
@@ -236,6 +234,7 @@ Thanikachalam
 Timepoint
 ULN
 USUBJID
+USUBJIDs
 Upadhyay
 VAD
 Vignesh
@@ -313,7 +312,6 @@ mmHg
 mmol
 modularized
 msec
-nolint
 occds
 onwards
 parttime
@@ -331,7 +329,6 @@ rlang
 roche
 roxygen
 scalable
-str
 submittable
 subperiod
 subperiods
@@ -339,6 +336,7 @@ subscale
 summarization
 th
 thromboplastin
+tidyselect
 tidyverse
 tidyselect
 timeframe
