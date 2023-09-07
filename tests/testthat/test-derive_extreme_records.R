@@ -405,7 +405,7 @@ test_that("derive_extreme_records Test 8: keep vars in `keep_source_vars` in the
     order = exprs(AVISITN, LBSEQ),
     by_vars = exprs(USUBJID),
     mode = "last",
-    keep_source_vars = exprs(USUBJID, AVISITN, AVAL, DTYPE),
+    keep_source_vars = exprs(AVISITN, AVAL),
     set_values_to = exprs(DTYPE = "LOV")
   )
 

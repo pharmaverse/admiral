@@ -98,7 +98,9 @@
 #' @param keep_source_vars Variables to be kept in the new records
 #'
 #'   A named list or tidyselect expressions created by `exprs()` defining the
-#'   variables to be kept for the new records.
+#'   variables to be kept for the new records. The variables specified for
+#'   `by_vars` and `set_values_to` need not be specified here as they are kept
+#'   automatically.
 #'
 #'
 #' @inheritParams filter_extreme
@@ -151,7 +153,7 @@
 #'   order = exprs(AVAL, AVISITN),
 #'   mode = "first",
 #'   filter_add = !is.na(AVAL),
-#'   keep_source_vars = exprs(USUBJID, AVAL, DTYPE),
+#'   keep_source_vars = exprs(AVAL),
 #'   set_values_to = exprs(
 #'     AVISITN = 97,
 #'     DTYPE = "MINIMUM"
@@ -167,7 +169,6 @@
 #'   order = exprs(desc(AVAL), AVISITN),
 #'   mode = "first",
 #'   filter_add = !is.na(AVAL),
-#'   keep_source_vars = exprs(everything()),
 #'   set_values_to = exprs(
 #'     AVISITN = 98,
 #'     DTYPE = "MAXIMUM"
@@ -181,7 +182,6 @@
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(AVISITN),
 #'   mode = "last",
-#'   keep_source_vars = exprs(everything()),
 #'   set_values_to = exprs(
 #'     AVISITN = 99,
 #'     DTYPE = "LOV"
@@ -227,7 +227,6 @@
 #'   true_value = "Y",
 #'   false_value = "N",
 #'   mode = "first",
-#'   keep_source_vars = exprs(everything()),
 #'   set_values_to = exprs(
 #'     PARAMCD = "PD",
 #'     PARAM = "Disease Progression",
@@ -247,7 +246,6 @@
 #'   true_value = "Y",
 #'   false_value = "N",
 #'   mode = "first",
-#'   keep_source_vars = exprs(everything()),
 #'   set_values_to = exprs(
 #'     PARAMCD = "DEATH",
 #'     PARAM = "Death",
@@ -352,7 +350,7 @@ derive_extreme_records <- function(dataset = NULL,
     process_set_values_to(
       set_values_to = set_values_to
     ) %>%
-    select(!!!keep_source_vars)
+    select(!!!by_vars, names(set_values_to), !!!keep_source_vars)
 
 
   # Create output dataset
