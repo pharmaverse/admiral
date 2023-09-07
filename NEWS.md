@@ -24,6 +24,8 @@ assessment. (#1960)
   created even if values contributing to the computed values are `NA`.
 
 - The function `derive_vars_dy()` is updated to avoid potential error when the input `dataset` with columns ending with `temp`. (#2012)
+- Argument `keep_source_vars` was added to `derive_extreme_records()` which
+specifies which variables in the new observations should be kept. (#1697) 
 
 - Templates, vignettes, and other uses of `{admiral.test}` SDTM data are updated to use `{pharmaversesdtm}` instead. (#2040)
 
@@ -191,6 +193,7 @@ now. This affects `derive_param_tte()`. (#1727)
       SDTM data is used as input.
     - The `analysis_value` argument was enhanced such that any variable of the
       form `<variable>.<parameter>` can be used, e.g., `QSORRES.CHSF13`.
+
 
 ## Breaking Changes
 
