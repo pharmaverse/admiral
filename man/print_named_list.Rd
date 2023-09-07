@@ -29,4 +29,4 @@ Utilities for printing:
 \code{\link{print.source}()}
 }
 \concept{utils_print}
-\keyword{utils_print}
+\keyword{internal}

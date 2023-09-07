@@ -21,6 +21,7 @@ AELLTCD
 AENDTM
 AEs
 AFRLT
+ANC
 ANRLO
 APRLT
 ARRLT
@@ -33,6 +34,7 @@ AVAL
 AVISITN
 Abercrombie
 Akinyi
+Alkalosis
 Alanine
 Analyte
 Ania
@@ -59,10 +61,14 @@ CTCAEV
 CTCAEv
 CVD
 Carlucci
+Chemistries
 Chol
 Cockcroft
 Creat
+Creatine
 Creatinine
+D'Agostino
+DAIDs
 DIABP
 DILI
 DT
@@ -127,6 +133,7 @@ Konstantina
 Koukourikou
 Kumar
 Kumari
+LDL
 LLC
 LLOQ
 LOCF
@@ -141,6 +148,7 @@ McGavigan
 MedDRA
 Meds
 Metatools
+Methemoglobin
 Modularity
 Morrish
 Mosteller
@@ -154,6 +162,7 @@ NRRLT
 NUM
 Neutrophil
 Nom
+Nonfasting
 O'Reilly
 OCCDS
 Ojesh
@@ -164,6 +173,7 @@ PARAMCD
 PARAMN
 PHUSE
 PLDOSE
+PTT
 Param
 Pavan
 Pharma
@@ -260,6 +270,7 @@ constructible
 creatinine
 ctcv
 dL
+daids
 datacut
 datepart
 datetime
@@ -286,6 +297,7 @@ groupwise
 hms
 https
 lockfile
+lubridate
 mL
 magrittr
 metacore
@@ -298,6 +310,7 @@ occds
 onwards
 parttime
 pharmaverse
+pharmaversesdtm
 phosphatase
 poppk
 pre
@@ -319,6 +332,7 @@ th
 thromboplastin
 tidyselect
 tidyverse
+tidyselect
 timeframe
 timepart
 timepoint

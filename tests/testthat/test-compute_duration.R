@@ -139,3 +139,91 @@ test_that("compute_duration Test 10: Duration in seconds (sec option)", {
     29
   )
 })
+
+
+## Test 11: Duration (instead of interval) ----
+test_that("compute_duration Test 11: Duration (instead of interval)", {
+  expect_equal(
+    compute_duration(
+      ymd("2000-02-01"),
+      ymd("2000-03-01"),
+      out_unit = "months",
+      add_one = FALSE,
+      type = "duration"
+    ),
+    29 / (365.25 / 12) # 29 days divided by the average month length
+  )
+
+  expect_equal(
+    compute_duration(
+      ymd("2000-02-01"),
+      ymd("2001-02-01"),
+      out_unit = "years",
+      add_one = FALSE,
+      type = "duration"
+    ),
+    366 / 365.25 # 366 days in this leap year divided by the average year length
+  )
+})
+
+## Test 12: Interval (instead of duration) ----
+test_that("compute_duration Test 12: Interval (instead of duration)", {
+  expect_equal(
+    compute_duration(
+      ymd("2000-02-01"),
+      ymd("2000-03-01"),
+      out_unit = "months",
+      add_one = FALSE,
+      type = "interval"
+    ),
+    1
+  )
+
+  expect_equal(
+    compute_duration(
+      ymd("2000-02-01"),
+      ymd("2001-02-01"),
+      out_unit = "years",
+      add_one = FALSE,
+      type = "interval"
+    ),
+    1
+  )
+})
+
+## Test 13: Interval with duration/interval invariant units ----
+test_that("compute_duration Test 13: Interval with duration/interval invariant units", {
+  expect_equal(
+    compute_duration(
+      ymd("2000-02-01"),
+      ymd("2000-03-01"),
+      out_unit = "days",
+      add_one = FALSE,
+      type = "interval"
+    ),
+    compute_duration(
+      ymd("2000-02-01"),
+      ymd("2000-03-01"),
+      out_unit = "days",
+      add_one = FALSE,
+      type = "duration"
+    )
+  )
+
+  expect_equal(
+    compute_duration(
+      ymd("2000-02-01"),
+      ymd("2001-02-01"),
+      out_unit = "weeks",
+      add_one = FALSE,
+      type = "interval"
+    ),
+    compute_duration(
+      ymd("2000-02-01"),
+      ymd("2001-02-01"),
+      out_unit = "weeks",
+      add_one = FALSE,
+      type = "duration"
+    )
+  )
+})

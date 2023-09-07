@@ -5,7 +5,8 @@
     "admiral",
     "admiraldev",
     "admiral.test",
-    "admiralci"
+    "admiralci",
+    "pharmaversesdtm"
   ],
   "package.dependency.fields": [
     "Imports",

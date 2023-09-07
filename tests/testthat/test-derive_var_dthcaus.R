@@ -135,8 +135,8 @@ test_that("derive_var_dthcaus Test 3: `dthcaus` handles symbols and string liter
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
 
-## Test 4: DTHCAUS and traceability vars are added from AE and DS ----
-test_that("derive_var_dthcaus Test 4: DTHCAUS and traceability vars are added from AE and DS", {
+## Test 4: traceability variables are added from AE and DS ----
+test_that("derive_var_dthcaus Test 4: traceability variables are added from AE and DS", {
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
@@ -175,7 +175,7 @@ test_that("derive_var_dthcaus Test 4: DTHCAUS and traceability vars are added fr
     date = AEDTHDT,
     mode = "first",
     dthcaus = AEDECOD,
-    traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
+    set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
   )
 
   src_ds <- dthcaus_source(
@@ -184,7 +184,7 @@ test_that("derive_var_dthcaus Test 4: DTHCAUS and traceability vars are added fr
     date = DSSTDT,
     mode = "first",
     dthcaus = DSTERM,
-    traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
+    set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
   )
 
   expected_output <- tibble::tribble(
@@ -244,7 +244,7 @@ test_that("derive_var_dthcaus Test 5: DTHCAUS/traceabiity are added from 2 input
     date = AEDTHDT,
     mode = "first",
     dthcaus = AEDECOD,
-    traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
+    set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
   )
 
   src_ds <- dthcaus_source(
@@ -253,7 +253,7 @@ test_that("derive_var_dthcaus Test 5: DTHCAUS/traceabiity are added from 2 input
     date = DSSTDT,
     mode = "first",
     dthcaus = DSTERM,
-    traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
+    set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
   )
 
   expected_output <- tibble::tribble(
@@ -412,4 +412,28 @@ test_that("derive_var_dthcaus Test 8: `dataset` is sorted using the `order` para
   )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
+})
+
+## Test 9: returns a warning when traceability_vars is used ----
+test_that("dthcaus_source Test 9: returns a warning when traceability_vars is used", {
+  ae <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
+    "TEST01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
+  )
+
+  expect_warning(
+    src_ae <- dthcaus_source(
+      dataset_name = "ae",
+      filter = AEOUT == "FATAL",
+      date = AEDTHDT,
+      mode = "first",
+      dthcaus = AEDECOD,
+      traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ),
+      set_values_to = exprs(
+        DTHDOM = "AE",
+        DTHSEQ = AESEQ
+      )
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
 })

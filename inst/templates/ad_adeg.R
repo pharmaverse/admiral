@@ -6,7 +6,7 @@
 #
 # Input: adsl, eg
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -18,10 +18,10 @@ library(stringr)
 # For illustration purposes read in admiral test data
 
 data("admiral_adsl")
-data("admiral_eg")
+data("eg")
 
 adsl <- admiral_adsl
-eg <- admiral_eg
+eg <- eg
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing

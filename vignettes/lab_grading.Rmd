@@ -27,7 +27,7 @@ a set of criteria for particular lab tests that grade the severity or abnormalit
 a lab value. The grades are from 0 to 4, where grade 0 can be viewed generally as a 
 “NORMAL” value. The higher the grade the more severe or more abnormal the lab value is.
 There are several sets of lab grading criteria, currently `{admiral}` has implemented
-NCI-CTCAEv4 and NCI-CTCAEv5 grading criteria. In future releases `{admiral}` may look
+NCI-CTCAEv4, NCI-CTCAEv5 and DAIDS grading criteria. In future releases `{admiral}` may look
 to implement further grading criteria.
 
 The NCI-CTCAE version 4 and 5 grading criteria can be found 
@@ -39,13 +39,21 @@ The NCI-CTCAEv4 criteria can be found under the heading
 The NCI-CTCAEv5 criteria can be found under the heading
 [**Common Terminology Criteria for Adverse Events (CTCAE)v5.0**](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm#ctc_50)
 
+The DAIDS grading criteria can be found 
+here: https://rsc.niaid.nih.gov/clinical-research-sites/daids-adverse-event-grading-tables .
+
+The DAIDS criteria can be found under the heading
+[**DAIDS Table for Grading the Severity of Adult and Pediatric Adverse Events Corrected Version 2.1**](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf)
+
+
 # Grading metadata
 
 `{admiral}` will store a metadata data set for each set of grading criteria in the data folder of 
-`{admiral}`. Currently, we have `atoxgr_criteria_ctcv4()` for NCI-CTCAEv4 and `atoxgr_criteria_ctcv5()`
-for NCI-CTCAEv5. Each metadata data set has required variables and optional variables, the optional 
-variables are purely for transparency, and will contain detailed information about the grading criteria. 
-The required variables are those used by `{admiral}` to create the grade.
+`{admiral}`. Currently, we have `atoxgr_criteria_ctcv4()` for NCI-CTCAEv4, `atoxgr_criteria_ctcv5()`
+for NCI-CTCAEv5 and `atoxgr_criteria_daids()` for DAIDS. Each metadata data set has required 
+variables and optional variables, the optional variables are purely for transparency, and will
+contain detailed information about the grading criteria. The required variables are those used by
+`{admiral}` to create the grade.
 
 ## Structure of metadata set
 
@@ -57,13 +65,15 @@ Variable | Scope |  Type | Example Value
 **DIRECTION** | The direction of the abnormality of a particular lab test value|   Character | "L" or "H".
 **SI_UNIT_CHECK** | Unit of lab test, to check against input data if criteria is based on absolute values. |  Character | "mmol/L"
 **VAR_CHECK** | Comma separated list of variables used in criteria, to check input data that variables exist. |  Character | "AVAL, ANRLO"
-**GRADE_CRITERIA_CODE** | Variable to hold code that creates grade based on defined criteria. |  Character |R code that is a valid case statement within a `mutate` function call
+**FILTER** | Only required for DAIDS grading. Variable to hold code that filters the lab data based on contents of column SUBGROUP. |  Character |R code that is valid within a `filter` function call.
+**GRADE_CRITERIA_CODE** | Variable to hold code that creates grade based on defined criteria. |  Character |R code that is a valid case statement within a `mutate` function call.
 
 The metadata data set has the following structure for the optional variables:
 
 Variable | Scope |  Type | Example Value
 ------- | -------- | ------ | -------- 
 **SOC** | System Organ Class the lab test belongs to.|  Character |  "Investigations" 
+**SUBGROUP** | Only required for DAIDS grading. Description of subgroup of lab data.|   Character | "> 15 years of age".
 **GRADE_1** | Grade 1 criteria for lab test, normally straight from source document.|   Character | ">ULN - 3.0 x ULN".
 **GRADE_2** | Grade 2 criteria for lab test, normally straight from source document.|   Character | ">3.0 - 5.0 x ULN".
 **GRADE_3** | Grade 3 criteria for lab test, normally straight from source document.|   Character | ">5.0 - 20.0 x ULN".
@@ -71,6 +81,13 @@ Variable | Scope |  Type | Example Value
 **DEFINITION** | Definition of abnormality, normally from source document.|  Character | "A finding based on laboratory test results that indicate an increase in the level of alanine aminotransferase (ALT or SGPT) in the blood specimen.".
 **COMMENT** | Description of any decisions made by `{admiral}` to implement grading criteria, where grading criteria alone was ambiguous. | Character | "Take worst case and assume on anticoagulation".
 
+# Handling floating points when comparing numeric values
+
+When comparing numeric values, for example `AVAL > 1.1*ANRHI`, unexpected results can occur
+due to floating point issues. To solve this issue {admiral} used the `signif()` function on
+both side of the equation, the number of significant digits used to compare is passed into the 
+function `derive_var_atoxgr_dir()` via the argument `signif_dig`. Please see documentation of the 
+function for more details.
 
 # Creating the lab grade
 
@@ -79,15 +96,15 @@ Variable | Scope |  Type | Example Value
 
 ```{r message=FALSE}
 library(admiral)
-library(admiral.test)
+library(pharmaversesdtm)
 library(dplyr, warn.conflicts = FALSE)
 library(stringr)
 library(tibble)
 
-data("admiral_lb")
+data("lb")
 
 adsl <- admiral_adsl
-lb <- convert_blanks_to_na(admiral_lb)
+lb <- convert_blanks_to_na(lb)
 ```
 ```{r echo=FALSE}
 lb <- filter(lb, USUBJID %in% c("01-701-1115", "01-705-1186", "01-705-1349", "01-708-1286", "01-707-1037", "01-716-1024"))
@@ -116,6 +133,20 @@ which are not present in NCI-CTCAEv5.
 ```{r, eval=TRUE, echo=FALSE}
 atoxgr_criteria_ctcv5 %>%
   filter(!is.na(TERM)) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM)
+  )
+```
+<br>
+
+<br>
+Finally, the list of terms defined in the `{admiral}` metadata to implement DAIDS is below:
+<br>
+
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(!is.na(TERM)) %>%
+  distinct(TERM) %>%
   dataset_vignette(
     display_vars = exprs(TERM)
   )
@@ -243,7 +274,8 @@ It is now straightforward to create the grade, for low lab values the grade will
 be held in `ATOXGRL` and for high lab values the grade will be held in `ATOXGRH`.
 
 Note: for NCICTCAEv5 grading, you would update `meta_criteria` parameter to
-`atoxgr_criteria_ctcv5`.
+`atoxgr_criteria_ctcv5` and for DAIDS grading you would update `meta_criteria` 
+parameter to `atoxgr_criteria_daids`
 
 ```{r, eval=TRUE}
 adlb <- adlb %>%
@@ -266,7 +298,8 @@ adlb <- adlb %>%
 Note: `{admiral}` does not grade 'Anemia' or 'Hemoglobin Increased' because the metadata is 
 based on the SI unit of 'g/L', however the CDISC data has SI unit of 'mmol/L'.
 Please see `SI_UNIT_CHECK` variable in `{admiral}` metadata `atoxgr_criteria_ctcv4()` or 
-`atoxgr_criteria_ctcv5()`, the metadata is in the data folder of `{admiral}`.
+`atoxgr_criteria_ctcv5()` or `atoxgr_criteria_daids()`, the metadata is in the data folder
+of `{admiral}`.
 <br>
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -604,9 +637,187 @@ atoxgr_criteria_ctcv5 %>%
 ```
 <br>
 
+# DAIDS implementation {#implement_daids}
+
+## Terms graded
+
+Grading is implemented for those lab tests where a lab value is included in the grading definition,
+`{admiral}` does NOT try to read any other data to determine the grade, and only the ADLB VAD is used.
+The following DAIDS SOC values were identified for grading, these are “Chemistries" and 
+“Hematology”.
+
+From these SOC values the following terms criteria is implemented in `{admiral}` 
+
+From SOC = "Chemistries" there are 31 DAIDS Terms:
+
+  + Acidosis
+  + Albumin, Low
+  + Alkaline Phosphatase, High
+  + Alkalosis
+  + ALT, High
+  + Amylase, High
+  + AST, High
+  + Bicarbonate, Low
+  + Direct Bilirubin, High
+  + Total Bilirubin, High
+  + Calcium, High
+  + Calcium (Ionized), High
+  + Calcium, Low
+  + Calcium (Ionized), Low
+  + Creatine Kinase, High
+  + Creatinine, High
+  + Glucose Fasting, High
+  + Glucose Nonfasting, High
+  + Glucose, Low
+  + Lactate, High
+  + Lipase, High
+  + Cholesterol, Fasting, High
+  + LDL, Fasting, High
+  + Triglycerides, Fasting, High
+  + Magnesium, Low
+  + Phosphate, Low
+  + Potassium, High
+  + Potassium, Low
+  + Sodium, High
+  + Sodium, Low
+  + Uric Acid, High
+  
+Note: {admiral} does not grade for TERM = "Total Bilirubin, High" when AGE <= 28 days,
+these criteria are in Appendix of [**DAIDS Table for Grading the Severity of Adult and Pediatric Adverse Events Corrected Version 2.1**](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf).
+
+From the SOC =  "Hematology" there are 11 DAIDS Terms:
+
+  + Absolute CD4+ Count, Low
+  + Absolute Lymphocyte Count, Low
+  + Absolute Neutrophil Count (ANC), Low
+  + Fibrinogen Decreased
+  + Hemoglobin, Low
+  + INR, High
+  + Methemoglobin
+  + PTT, High
+  + Platelets, Decreased
+  + PT, High
+  + WBC, Decreased
+
+## Terms with age or sex dependent grading criteria
+
+Some terms defined in DAIDS have age or sex dependent grading criteria, {admiral}
+handles this in variable `FILTER` in the metadata. We use {admiral} function
+`compute_duration` to calculate age, see TERM = "Cholesterol, Fasting, High":
+<br>
+
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(TERM, "Cholesterol")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, FILTER)
+  )
+```
+<br>
+
+Note: All possible values must be covered for each TERM defined, for TERM =
+"Absolute Lymphocyte Count, Low" and "Absolute CD4+ Count, Low" there is only grading 
+criteria defined for age > 5 years. Therefore, we add another row with age <= 5 years
+and set grade to missing. Similarly, for TERM = "LDL, Fasting, High" there is only grading 
+criteria defined for age > 2 years. Therefore, we add another row with age <= 2 years and 
+set grade to missing.
+
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(COMMENT, "No criteria given")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, FILTER, GRADE_CRITERIA_CODE)
+  )
+```
+
+
+## Assumptions made when grading
+
+
+For terms "INR, High", "PT, High" and "PTT, High",  the criteria is based on subjects 
+"not on anticoagulation therapy", this is captured in COMMENT field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(TERM %in% c("INR, High", "PT, High", "PTT, High")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, COMMENT)
+  )
+```
+<br>
+
+Similarly, for terms "Absolute CD4+ Count, Low" and "Absolute Lymphocyte Count, Low", 
+the criteria is based on subjects "not HIV infected", this is captured in COMMENT field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(COMMENT, "HIV infected")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, COMMENT)
+  )
+```
+<br>
+
+
+For term "Acidosis", "Alkalosis" and "Direct Bilirubin, High (> 28 days of age)",
+{admiral} grades as high as possible, so assumes worst case and subject has
+"life-threatening consequences".
+This is captured in COMMENT field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(COMMENT, "lifethreatening")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, COMMENT)
+  )
+```
+<br>
+Similarly, for term "Lactate, High", {admiral} only grade 1 and 2, and there is the following criteria:
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(TERM, "Lactate")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, Grade_1, Grade_1)
+  )
+```
+<br>
+
+`{admiral}` assumed worst case and assume "without acidosis". 
+The decision made was put in the `COMMENT` field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(TERM, "Lactate")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, COMMENT)
+  )
+```
+<br>
+
+For TERM "Direct Bilirubin, High (<= 28 days of age)" and "Uric Acid, High" the 
+criteria is not given in SI unit. The conversion to SI unit is in the comment field.
+
+<br>
+```{r, eval=TRUE, echo=FALSE}
+atoxgr_criteria_daids %>%
+  filter(str_detect(COMMENT, "conver")) %>%
+  dataset_vignette(
+    display_vars = exprs(TERM, FILTER, COMMENT)
+  )
+```
+<br>
+
+
 # Conclusion
 
-With NCI-CTCAEv4 and NCI-CTCAEv5 now implemented, {admiral} may look to implement other
-industry standard grading criteria. Providing tools for users to easily interact with
-the metadata to update criteria, based on their companies needs will also be looked at. 
-Ideally, users should be able to create their own metadata for company specific grading schemes.
+With NCI-CTCAEv4, NCI-CTCAEv5 and DAIDS grading now implemented, {admiral} may look to 
+implement other industry standard grading criteria. Providing tools for users to easily
+interact with the metadata to update criteria, based on their companies needs will also
+be looked at. Ideally, users should be able to create their own metadata for company specific
+grading schemes.
