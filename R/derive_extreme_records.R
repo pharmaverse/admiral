@@ -117,6 +117,9 @@
 #'   but not in the selected records are added.
 #'   1. The variables specified by the `set_values_to` argument are added to
 #'   the selected observations.
+#'   1. The variables specified by the `keep_source_vars` argument are selected
+#'   along with the variables specified in `by_vars` and `set_values_to`
+#'   arguments.
 #'   1. The observations are added to input dataset.
 #'
 #'

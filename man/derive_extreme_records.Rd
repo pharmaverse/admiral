@@ -159,6 +159,9 @@ order specified for the \code{order} argument and the mode specified for the
 but not in the selected records are added.
 \item The variables specified by the \code{set_values_to} argument are added to
 the selected observations.
+\item The variables specified by the \code{keep_source_vars} argument are selected
+along with the variables specified in \code{by_vars} and \code{set_values_to}
+arguments.
 \item The observations are added to input dataset.
 }
 }
