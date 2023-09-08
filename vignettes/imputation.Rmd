@@ -49,7 +49,7 @@ In `{admiral}` users will primarily use two functions `derive_vars_dt()` and `de
 
 The functions that need to do date/time imputation follow a rule that we have called **Highest Imputation**, which has a corresponding argument in all our functions called `highest_imputation`. This rule allows a user to control which components of the DTC value are imputed if they are missing. 
 
-The default imputation for `_dtm()` functions, e.g. `impute_dtc_dtm()`, `derive_vars_dtm()`, is "h" (hours). A user can specify that that no imputation is to be done by setting `highest_imputation = n`. However, for for `_dt()` functions, e.g. `impute_dtc_dt()`, `derive_vars_dt()` the default imputation is already set as `highest_imputation = n`.
+The default imputation for `_dtm()` functions, e.g. `impute_dtc_dtm()`, `derive_vars_dtm()`, is "h" (hours). A user can specify that that no imputation is to be done by setting `highest_imputation = n`. However, for for `_dt()` functions, e.g. `impute_dtc_dt()`, `derive_vars_dt()` the default imputation is already set as `highest_imputation = "n"`.
 
 Care must be taken when deciding on level of imputation. If a component is at a higher level than the highest imputation level is missing, `NA_character_` is returned. For example, for `highest_imputation = "D"` `"2020"` results in `NA_character_` because the month is missing.
 
