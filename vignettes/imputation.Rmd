@@ -20,7 +20,7 @@ library(admiraldev)
 
 This vignette is broken into three major sections.  The first section briefly explores 
 the imputation rules used in `{admiral}`.  The second section focuses on imputation functions
-that work on vectors with lots of small examples to explore the imputation rules. These **vector-based** functions form the backbone of `{admiral}`'s more powerful functions `derive_vars_dt()` and `derive_vars_dtm()` for building ADaM dataset. The final section moves into more detailed examples that a user might  face while working on ADaMs in need of `---DT` and `---DTM` variables. 
+that work on vectors with lots of small examples to explore the imputation rules. These **vector-based** functions form the backbone of `{admiral}`'s more powerful functions `derive_vars_dt()` and `derive_vars_dtm()` for building ADaM dataset. The final section moves into more detailed examples that a user might face while working on ADaMs in need of `---DT` and `---DTM` variables. 
 
 ## Required Packages
 
