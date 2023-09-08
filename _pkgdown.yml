@@ -145,7 +145,7 @@ navbar:
   components:
     getstarted:
       text: Get Started
-      href: articles/
+      href: articles/admiral.html
     reference:
       text: Reference
       href: reference/
