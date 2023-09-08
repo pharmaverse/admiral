@@ -30,4 +30,4 @@ Utilities for printing:
 \code{\link{print_named_list}()}
 }
 \concept{utils_print}
-\keyword{utils_print}
+\keyword{internal}

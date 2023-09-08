@@ -7,6 +7,8 @@ argument in `derive_extreme_event()`. This allows to define events based on more
 than one observation, e.g., events which need to be confirmed by a second
 assessment. (#1960)
 
+- `atoxgr_criteria_daids.rda` added, which holds metadata for [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf). You can find additional documentation here `atoxgr_criteria_daids()`
+
 ## Updates of Existing Functions
 - The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
 - The functions `derive_var_age_years()` and `compute_age_years()` are updated to return an `NA` age in the case that the age unit is missing. (#2001) The argument `unit` for `derive_vars_aage()` is also changed to `age_unit` for consistency between these age-related functions. (#2025)
@@ -22,6 +24,8 @@ assessment. (#1960)
   created even if values contributing to the computed values are `NA`.
 
 - The function `derive_vars_dy()` is updated to avoid potential error when the input `dataset` with columns ending with `temp`. (#2012)
+- Argument `keep_source_vars` was added to `derive_extreme_records()` which
+specifies which variables in the new observations should be kept. (#1697) 
 
 - Templates, vignettes, and other uses of `{admiral.test}` SDTM data are updated to use `{pharmaversesdtm}` instead. (#2040)
 
@@ -50,6 +54,13 @@ assessment. (#1960)
     
     - The `description` field was added to `event()`. It can be used to provide
     a description of the event in plain language.
+    
+- `derive_var_atoxgr_dir()` was enhanced (#1859):
+  
+  - Can now select `atoxgr_criteria_daids` in argument `meta_criteria` to create `ATOXGRL` and `ATOXGRH` based on [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf)
+  
+  - New argument `signif_dig` added to control the number of significant digits to use when comparing 2 numeric values.
+  (https://github.com/pharmaverse/admiral/pull/2060)
 
 ## Breaking Changes
 - The `compute_duration(type)` argument added the `"duration"` type calculation, and this is the new default (previously `"interval"` differences were returned). See function help file for details on the difference between `"duration"` and `"interval"` calculations. (#1875)
@@ -95,7 +106,7 @@ has been deprecated in favor of `dataset_ref`. (#2037)
 
 ## Documentation
 
-- Non-exported utility functions were previously listed on the admiral website reference page. They have been removed. (#2049)
+- Non-exported utility and print functions were previously listed on the admiral website reference page. They have been removed. (#2049, #2050)
 
 - The description of the argument `reference_date` in the function `derive_vars_dy()` 
 has been clarified to make it agnostic to start/end  selection. (#2027)
@@ -179,6 +190,7 @@ now. This affects `derive_param_tte()`. (#1727)
       SDTM data is used as input.
     - The `analysis_value` argument was enhanced such that any variable of the
       form `<variable>.<parameter>` can be used, e.g., `QSORRES.CHSF13`.
+
 
 ## Breaking Changes
 
