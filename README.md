@@ -37,20 +37,25 @@ remotes::install_github("pharmaverse/admiral")
 The {admiral} family has several downstream and upstream dependencies and so this release shall be done in three
 Phases:
 
-* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/), {pharmaversesdtm}, and [{admiral}](https://pharmaverse.github.io/admiral/cran-release/) core 
+* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/), and [{admiral}](https://pharmaverse.github.io/admiral/cran-release/) core 
 * Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/)
 
 
-|Release Schedule | Phase 1- Date and Packages                                                  | Phase 2- Date and Packages                                                    | Phase 3- Date and Packages                                             |
-|---------------- | --------------------------                                                  | --------------------------                                                    | --------------------------                                             |
-| Q3-2023         | September 4th                                                               | September 11th                                                                | September 18th                                                         |
-|                 | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/)    | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)                | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)       |    
-|                 |                                                                             | [{admiral}](https://pharmaverse.github.io/admiral/main/)                      | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)   |
-|                 |                                                                             |                                                                               | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/) |
-| Q4-2023         | December 4th                                                                | December 11th                                                                 |                                                                        |
-|                 | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/)    | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)              |                                                                        |
-|                 | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)              | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)          |                                                                        |
-|                 | [{admiral}](https://pharmaverse.github.io/admiral/main/)                    |                                                                               |                                                                        |
+|Release Schedule | Phase 1- Date and Packages                                                  | Phase 2- Date and Packages                                                    |
+|---------------- | --------------------------                                                  | --------------------------                                                    |
+| Q3-2023         | September 4th                                                               | September 18th                                                                |
+|                 | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/)    | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)              |   
+|                 |                                                                             | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)          |
+|                 | September 11th                                                              | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/)        |
+|                 | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)              |                                                                               |
+|                 | [{admiral}](https://pharmaverse.github.io/admiral/main/)                    |                                                                               |
+|                 |                                                                             |                                                                               |
+| Q4-2023         | December 4th                                                                | December 11th                                                                 |
+|                 | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/)    | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)              |
+|                 | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)              | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)          |
+|                 | [{admiral}](https://pharmaverse.github.io/admiral/main/)                    |                                                                               |
+
+The `{admiral}` Q4-2023 release will officially be `{admiral}`'s version 1.0.0 release, where we commit to increased package maturity and pivot towards focusing on maintenance rather than new contents. This does not mean that there will never be any new content in `{admiral}`, rather it means we will be more mindful about introducing new functionality and/or breaking changes. The release schedule in 2024 and onward will also shift to twice-yearly, rather than quarterly, so that our users have ample time to react to any new content and changes that do make it onto `{admiral}`.
 
 ## Main Goal
 
