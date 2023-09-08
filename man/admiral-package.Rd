@@ -33,6 +33,7 @@ Authors:
   \item Edoardo Mancini
   \item Sadchla Mascary
   \item Gordon Miller
+  \item Sophie Shapcott
   \item Eric Simms
   \item Stefan Thoma
   \item Kangjie Zhang
@@ -41,12 +42,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Kamila Duniec [contributor]
   \item G Gayatri [contributor]
-  \item Declan Hodges [contributor]
-  \item Robin Koeger [contributor]
-  \item Pooja Kumari [contributor]
-  \item Shan Lee [contributor]
   \item Thomas Neitmann [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
