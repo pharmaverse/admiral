@@ -17,3 +17,4 @@ jobs:
     #if: github.event_name == 'pull_request' 
     with:
       r-version: "4.1"
+      exclude-templates-data: "adsl,adae"
