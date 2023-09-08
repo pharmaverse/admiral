@@ -16,6 +16,7 @@ derive_extreme_records(
   exist_flag = NULL,
   true_value = "Y",
   false_value = "N",
+  keep_source_vars = exprs(everything()),
   set_values_to,
   filter
 )
@@ -105,6 +106,13 @@ For new observations selected from the additional dataset (\code{dataset_add}),
 For new observations not selected from the additional dataset
 (\code{dataset_add}), \code{exist_flag} is set to the specified value.}
 
+\item{keep_source_vars}{Variables to be kept in the new records
+
+A named list or tidyselect expressions created by \code{exprs()} defining the
+variables to be kept for the new records. The variables specified for
+\code{by_vars} and \code{set_values_to} need not be specified here as they are kept
+automatically.}
+
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
@@ -151,6 +159,9 @@ order specified for the \code{order} argument and the mode specified for the
 but not in the selected records are added.
 \item The variables specified by the \code{set_values_to} argument are added to
 the selected observations.
+\item The variables specified by the \code{keep_source_vars} argument are selected
+along with the variables specified in \code{by_vars} and \code{set_values_to}
+arguments.
 \item The observations are added to input dataset.
 }
 }
@@ -172,12 +183,14 @@ adlb <- tribble(
 # Add a new record for each USUBJID storing the minimum value (first AVAL).
 # If multiple records meet the minimum criterion, take the first value by
 # AVISITN. Set AVISITN = 97 and DTYPE = MINIMUM for these new records.
+# Specify the variables that need to be kept in the new records.
 derive_extreme_records(
   adlb,
   by_vars = exprs(USUBJID),
   order = exprs(AVAL, AVISITN),
   mode = "first",
   filter_add = !is.na(AVAL),
+  keep_source_vars = exprs(AVAL),
   set_values_to = exprs(
     AVISITN = 97,
     DTYPE = "MINIMUM"

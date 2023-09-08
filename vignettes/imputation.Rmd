@@ -66,7 +66,7 @@ The default imputation for `_dtm()` functions, e.g. `impute_dtc_dtm()`,
 `derive_vars_dtm()`, is "h" (hours). A user can specify that that no imputation
 is to be done by setting `highest_imputation = n`. However, for for `_dt()`
 functions, e.g. `impute_dtc_dt()`, `derive_vars_dt()` the default imputation is
-already set as `highest_imputation = n`.
+already set as `highest_imputation = "n"`.
 
 Care must be taken when deciding on level of imputation. If a component is at a
 higher level than the highest imputation level is missing, `NA_character_` is
@@ -74,7 +74,8 @@ returned. For example, for `highest_imputation = "D"` `"2020"` results in
 `NA_character_` because the month is missing.
 
 We encourage readers to explore in more detail the `highest_imputation` options
-in both the `_dtm()` and `_dt()` function documentations.
+in both the `_dtm()` and `_dt()` function documentations and in the examples
+below.
 
 ## Imputation on a Vector
 

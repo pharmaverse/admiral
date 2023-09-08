@@ -10,6 +10,7 @@ assessment. (#1960)
 - `atoxgr_criteria_daids.rda` added, which holds metadata for [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf). You can find additional documentation here `atoxgr_criteria_daids()`
 
 ## Updates of Existing Functions
+
 - The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
 - The functions `derive_var_age_years()` and `compute_age_years()` are updated to return an `NA` age in the case that the age unit is missing. (#2001) The argument `unit` for `derive_vars_aage()` is also changed to `age_unit` for consistency between these age-related functions. (#2025)
 - The `derive_var_ontrtfl()` function has been updated to allow for the column passed in `ref_end_date` to contain `NA` values. Previously, if the end date was `NA`, the row would never be flagged. Now, an `NA` value is interpreted as the treatment being ongoing, for example. (#1984)
@@ -24,6 +25,8 @@ assessment. (#1960)
   created even if values contributing to the computed values are `NA`.
 
 - The function `derive_vars_dy()` is updated to avoid potential error when the input `dataset` with columns ending with `temp`. (#2012)
+- Argument `keep_source_vars` was added to `derive_extreme_records()` which
+specifies which variables in the new observations should be kept. (#1697) 
 
 - Templates, vignettes, and other uses of `{admiral.test}` SDTM data are updated to use `{pharmaversesdtm}` instead. (#2040)
 
@@ -191,6 +194,7 @@ now. This affects `derive_param_tte()`. (#1727)
       SDTM data is used as input.
     - The `analysis_value` argument was enhanced such that any variable of the
       form `<variable>.<parameter>` can be used, e.g., `QSORRES.CHSF13`.
+
 
 ## Breaking Changes
 
