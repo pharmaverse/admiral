@@ -143,7 +143,7 @@ derive_param_doseint <- function(dataset,
       )
     )
   } else {
-    update_aval <- NULL
+    update_aval <- exprs(AVAL = !!aval_tadm / !!aval_tpdm * 100)
   }
 
   derive_param_computed(
@@ -151,7 +151,6 @@ derive_param_doseint <- function(dataset,
     filter = !!filter,
     parameters = c(tadm_code, tpadm_code),
     by_vars = by_vars,
-    analysis_value = (!!aval_tadm / !!aval_tpdm * 100),
     set_values_to = expr_c(set_values_to, update_aval)
   )
 }
