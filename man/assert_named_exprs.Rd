@@ -17,35 +17,15 @@ The function throws an error if \code{arg} is not a named \code{list} of express
 returns the input invisibly otherwise
 }
 \description{
-Assert Argument is a Named List of Expressions
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{assert_expr_list()} instead.
 }
 \seealso{
-Checks for valid input and returns warning or errors messages: 
-\code{\link{assert_atomic_vector}()},
-\code{\link{assert_character_scalar}()},
-\code{\link{assert_character_vector}()},
-\code{\link{assert_data_frame}()},
-\code{\link{assert_date_vector}()},
-\code{\link{assert_expr_list}()},
-\code{\link{assert_expr}()},
-\code{\link{assert_filter_cond}()},
-\code{\link{assert_function_param}()},
+Other deprecated: 
 \code{\link{assert_function}()},
 \code{\link{assert_has_variables}()},
-\code{\link{assert_integer_scalar}()},
-\code{\link{assert_list_element}()},
-\code{\link{assert_list_of}()},
-\code{\link{assert_logical_scalar}()},
-\code{\link{assert_named}()},
-\code{\link{assert_numeric_vector}()},
-\code{\link{assert_one_to_one}()},
-\code{\link{assert_param_does_not_exist}()},
-\code{\link{assert_s3_class}()},
-\code{\link{assert_same_type}()},
-\code{\link{assert_symbol}()},
-\code{\link{assert_unit}()},
-\code{\link{assert_vars}()},
-\code{\link{assert_varval_list}()}
+\code{\link{assert_order_vars}()}
 }
-\concept{assertion}
-\keyword{assertion}
+\concept{deprecated}
+\keyword{deprecated}

@@ -25,19 +25,20 @@ Useful links:
 Authors:
 \itemize{
   \item Stefan Bundfuss
-  \item Thomas Neitmann
-  \item Samia Kabi
-  \item Pooja Kumari
-  \item Syed Mubasheer
+  \item Jeffrey Dickinson
   \item Ross Farrugia
+  \item Pooja Kumari
+  \item Edoardo Mancini
   \item Sadchla Mascary
   \item Zelos Zhu
-  \item Jeffrey Dickinson
-  \item Ania Golab
 }
 
 Other contributors:
 \itemize{
+  \item Ania Golab [contributor]
+  \item Samia Kabi [contributor]
+  \item Syed Mubasheer [contributor]
+  \item Thomas Neitmann [contributor]
   \item Ondrej Slama [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]

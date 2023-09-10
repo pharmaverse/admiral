@@ -1,0 +1,104 @@
+---
+title: "R CMD Issues"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{R CMD Issues}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Common R CMD Check Issues
+
+`R CMD check` is a command line tool that checks R packages against a standard set of criteria. For a pull request to pass the check must not issue any notes, warnings or errors. Below is a list of common issues and how to resolve them.
+
+## Check Fails Only on One Version
+
+If the `R CMD check` workflow fails only on one or two R versions it can be helpful to reproduce the testing environment locally.
+
+To reproduce a particular R version environment open the `{admiral}` project in the corresponding R version, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
+
+``` r
+Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS = "true")
+
+if (!dir.exists(".library")) {
+  dir.create(".library")
+}
+
+base_recommended_pkgs <- row.names(installed.packages(priority = "high"))
+for (pkg in base_recommended_pkgs) {
+  path <- file.path(.Library, pkg)
+  cmd <- sprintf("cp -r %s .library", path)
+  system(cmd)
+}
+assign(".lib.loc", ".library", envir = environment(.libPaths))
+
+r_version <- getRversion()
+if (grepl("^4.1", r_version)) {
+  options(repos = "https://packagemanager.posit.co/cran/2021-05-03/")
+} else if (grepl("^4.2", r_version)) {
+  options(repos = "https://packagemanager.posit.co/cran/2022-01-03/")
+} else if (grepl("^4.3", r_version)) {
+  options(repos = "https://packagemanager.posit.co/cran/2023-04-20/")
+} else {
+  options(repos = "https://cran.rstudio.com")
+}
+
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+remotes::install_deps(dependencies = TRUE)
+remotes::install_github("pharmaverse/pharmaversesdtm", ref = "devel")
+remotes::install_github("pharmaverse/admiraldev", ref = "devel")
+rcmdcheck::rcmdcheck()
+```
+
+This will ensure that the exact package versions we use in the workflow are installed into the hidden folder `.library`. That way your existing R packages are *not* overwritten.
+
+## Package Dependencies
+
+    > checking package dependencies ... ERROR
+      Namespace dependency not required: ‘pkg’
+
+Add `pkg` to the `Imports` or `Suggests` field in the `DESCRIPTION` file. In general, dependencies should be listed in the `Imports` field. However, if a package is only used inside vignettes or unit tests it should be listed in `Suggests` because all `{admiral}` functions would work without these "soft" dependencies being installed.
+
+## Global Variables
+
+    ❯ checking R code for possible problems ... NOTE
+      function_xyz: no visible binding for global variable ‘some_var’
+
+Add `some_var` to the list of "global" variables in `R/globals.R`.
+
+## Undocumented Function Parameter
+
+    ❯ checking Rd \usage sections ... WARNING
+      Undocumented arguments in documentation object 'function_xyz'
+        ‘some_param’
+
+Add an `@param some_param` section in the header of `function_xyz()` and run `devtools::document()` afterwards.
+
+## Outdated Documentation
+
+    ❯ checking for code/documentation mismatches ... WARNING
+      Codoc mismatches from documentation object 'function_xyz':
+      ...
+      Argument names in code not in docs:
+        new_param_name
+      Argument names in docs not in code:
+        old_param_name
+      Mismatches in argument names:
+        Position: 6 Code: new_param_name Docs: old_param_name
+
+The name of a parameter has been changed in the function code but not yet in the header. Change `@param old_param_name` to `@param new_param_name` and run `devtools::document()`.
+
+For further reading we recommend the [R-pkg manual r-cmd chapter](https://r-pkgs.org/r-cmd-check.html)
+

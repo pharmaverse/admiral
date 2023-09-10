@@ -121,6 +121,19 @@ your function justifies it, e.g. see the test script: https://github.com/pharmav
 
 Don’t forget to add a unit test for each exported function.
 
+## Snapshot Testing
+
+Standard unit tests are not always convenient to record the expected behavior with code.
+Some challenges include:
+
+  - Output that is large, making it painful to define the reference output, and bloating the size of the test file and making it hard to navigate.
+  - Text output that includes many characters like quotes and newlines that require special handling in a string.  
+  - Binary formats like plots or images, which are very difficult to describe in code: i.e. the plot looks right, the error message is useful to a human, the print method uses color effectively.
+
+For these situations, testthat provides an alternative mechanism: snapshot tests.
+Snapshot tests record results in a separate human readable file and records the results, including output, messages, warnings, and errors.
+Review the [{testthat} snapshot vignette](https://testthat.r-lib.org/articles/snapshotting.html) for details.
+
 ## Set up the Test Script
 
 Within the `tests/testthat` folder of the project, add a script with the naming

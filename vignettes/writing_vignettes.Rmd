@@ -127,10 +127,10 @@ function so that it is displayed consistently across the vignettes.E.g.
 ```{r, include=FALSE}
 library(lubridate)
 library(dplyr)
-library(admiral.test)
+library(pharmaversesdtm)
 library(DT)
 
-data(admiral_vs)
+data(vs)
 ```
 
 ```{r, eval=FALSE, echo=TRUE}
@@ -190,7 +190,7 @@ workflow will always describe the data read to demonstrate the use of the `{admi
 
 + Each sub-section within the programming workflow should be tagged (e.g. [Step1] (#step)), so that 
 the user can go on the relevant section from the programming workflow (in addition to the Table of
-contents). Don’t use a tag with a number but use a meaningful name (e.g. do not use `(#link1)`,
+contents). Don't use a tag with a number but use a meaningful name (e.g. do not use `(#link1)`,
 but use `(#this_action)`)
 
 + the last section should link to a template script. 

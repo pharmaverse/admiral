@@ -26,3 +26,4 @@
 ^admiraldev.*\.tgz$
 ^staged_dependencies.yaml$
 ^README.Rmd$
+^\.devcontainer$

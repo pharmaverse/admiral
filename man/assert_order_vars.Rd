@@ -27,9 +27,9 @@ using \code{exprs()}
 }
 \seealso{
 Other deprecated: 
-\code{\link{quo_c}()},
-\code{\link{quo_not_missing}()},
-\code{\link{replace_symbol_in_quo}()}
+\code{\link{assert_function}()},
+\code{\link{assert_has_variables}()},
+\code{\link{assert_named_exprs}()}
 }
 \concept{deprecated}
 \keyword{deprecated}

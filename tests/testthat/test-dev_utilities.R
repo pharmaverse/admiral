@@ -79,9 +79,9 @@ test_that("vars2chr Test 8: returns character vector", {
 
 ## Test 9: warning if quosures argument is used ----
 test_that("vars2chr Test 9: warning if quosures argument is used", {
-  expect_warning(
+  expect_error(
     vars2chr(quosures = rlang::quos(STUDYID, USUBJID)),
-    class = "lifecycle_warning_deprecated"
+    class = "lifecycle_error_deprecated"
   )
 })
 

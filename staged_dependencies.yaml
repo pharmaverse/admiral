@@ -3,6 +3,6 @@ current_repo:
   repo: pharmaverse/admiraldev
   host: https://github.com
 upstream_repos:
-  - repo: pharmaverse/admiral.test
+  - repo: pharmaverse/pharmaversesdtm
     host: https://github.com
 downstream_repos:

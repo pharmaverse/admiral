@@ -1,40 +1,6 @@
-# quo_c ----
-## Test 1: issues deprecation warning ----
-test_that("quo_c Test 1: issues deprecation warning", {
-  expect_error(
-    quo_c(quo(USUBJID), quo(STUDYID)),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
-## Test 2: `quo_c` works in concatenating and indexing quosures ----
-test_that("quo_c Test 2: `quo_c` works in concatenating and indexing quosures", {
-  x <- quo(USUBJID)
-  y <- quo(STUDYID)
-
-  expect_error(
-    quo_c(x, NULL, y)[[1]],
-    class = "lifecycle_error_deprecated"
-  )
-  expect_error(
-    object = quo_c(x, NULL, y)[[2]],
-    class = "lifecycle_error_deprecated"
-  )
-})
-
-## Test 3: `quo_c` returns error if non-quosures are input ----
-test_that("quo_c Test 3: `quo_c` returns error if non-quosures are input", {
-  USUBJID <- "01-701-1015" # nolint
-
-  expect_error(
-    object = quo_c(quo(USUBJID), USUBJID),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
 # expr_c ----
-## Test 4: concatenating and indexing expressions ----
-test_that("expr_c Test 4: concatenating and indexing expressions", {
+## Test 1: concatenating and indexing expressions ----
+test_that("expr_c Test 1: concatenating and indexing expressions", {
   x <- expr(USUBJID)
   y <- expr(STUDYID)
 
@@ -48,54 +14,32 @@ test_that("expr_c Test 4: concatenating and indexing expressions", {
   )
 })
 
-## Test 5: concatenating named list of expressions ----
-test_that("expr_c Test 5: concatenating named list of expressions", {
+## Test 2: concatenating named list of expressions ----
+test_that("expr_c Test 2: concatenating named list of expressions", {
   expect_equal(
     expected = exprs(PARAMCD = "DOSE", PARAMN = 1),
     object = expr_c(exprs(PARAMCD = "DOSE", PARAMN = 1, NULL))
   )
 })
 
-## Test 6: concatenating list and single expression ----
-test_that("expr_c Test 6: concatenating list and single expression", {
+## Test 3: concatenating list and single expression ----
+test_that("expr_c Test 3: concatenating list and single expression", {
   expect_equal(
     expected = exprs(PARAMCD, PARAM, AVAL),
     object = expr_c(exprs(PARAMCD, PARAM), expr(AVAL))
   )
 })
 
-## Test 7: returns error if non-expressions are input ----
-test_that("expr_c Test 7: returns error if non-expressions are input", {
+## Test 4: returns error if non-expressions are input ----
+test_that("expr_c Test 4: returns error if non-expressions are input", {
   expect_error(
     object = expr_c(expr(USUBJID), mean)
   )
 })
 
-# quo_not_missing ----
-## Test 8: issues deprecation warning ----
-test_that("quo_not_missing Test 8: issues deprecation warning", {
-  test_fun <- function(x) {
-    x <- enquo(x)
-    !isTRUE(quo_not_missing(x))
-  }
-  expect_error(
-    test_fun(my_variable),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
-## Test 9: `quo_not_missing` throws an Error if missing argument ----
-test_that("quo_not_missing Test 9: `quo_not_missing` throws an Error if missing argument", {
-  test_fun <- function(x) {
-    x <- enquo(x)
-    isTrue(quo_not_missing(x))
-  }
-  expect_error(test_fun()) # missing argument -> throws error
-})
-
 # replace_values_by_names ----
-## Test 10: names of expressions replace value ----
-test_that("replace_values_by_names Test 10: names of expressions replace value", {
+## Test 5: names of expressions replace value ----
+test_that("replace_values_by_names Test 5: names of expressions replace value", {
   z <- exprs(USUBJID, STUDYID)
 
   z_noname <- replace_values_by_names(z)
@@ -122,8 +66,8 @@ test_that("replace_values_by_names Test 10: names of expressions replace value",
   )
 })
 
-## Test 11: names of argument is NULL ----
-test_that("replace_values_by_names Test 11: names of argument is NULL", {
+## Test 6: names of argument is NULL ----
+test_that("replace_values_by_names Test 6: names of argument is NULL", {
   z <- exprs(USUBJID, STUDYID)
   names(z) <- NULL
 
@@ -133,26 +77,17 @@ test_that("replace_values_by_names Test 11: names of argument is NULL", {
   )
 })
 
-## Test 12: warning if quosures argument is used ----
-test_that("replace_values_by_names Test 12: warning if quosures argument is used", {
+## Test 7: warning if quosures argument is used ----
+test_that("replace_values_by_names Test 7: warning if quosures argument is used", {
   expect_error(
     replace_values_by_names(quosures = rlang::quos(STUDYID, USUBJID)),
     class = "lifecycle_error_deprecated"
   )
 })
 
-# replace_symbol_in_quo ----
-## Test 13: error if called ----
-test_that("replace_symbol_in_quo Test 13: error if called", {
-  expect_error(
-    replace_symbol_in_quo(),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
 # replace_symbol_in_expr ----
-## Test 14: symbol is replaced ----
-test_that("replace_symbol_in_expr Test 14: symbol is replaced", {
+## Test 8: symbol is replaced ----
+test_that("replace_symbol_in_expr Test 8: symbol is replaced", {
   expect_equal(
     expected = expr(AVAL.join),
     object = replace_symbol_in_expr(
@@ -163,8 +98,8 @@ test_that("replace_symbol_in_expr Test 14: symbol is replaced", {
   )
 })
 
-## Test 15: partial match is not replaced ----
-test_that("replace_symbol_in_expr Test 15: partial match is not replaced", {
+## Test 9: partial match is not replaced ----
+test_that("replace_symbol_in_expr Test 9: partial match is not replaced", {
   expect_equal(
     expected = expr(AVALC),
     object = replace_symbol_in_expr(
@@ -175,8 +110,8 @@ test_that("replace_symbol_in_expr Test 15: partial match is not replaced", {
   )
 })
 
-## Test 16: symbol in expression is replaced ----
-test_that("replace_symbol_in_expr Test 16: symbol in expression is replaced", {
+## Test 10: symbol in expression is replaced ----
+test_that("replace_symbol_in_expr Test 10: symbol in expression is replaced", {
   expect_equal(
     expected = expr(desc(AVAL.join)),
     object = replace_symbol_in_expr(
@@ -188,8 +123,8 @@ test_that("replace_symbol_in_expr Test 16: symbol in expression is replaced", {
 })
 
 # add_suffix_to_vars ----
-## Test 17: with single variable ----
-test_that("add_suffix_to_vars Test 17: with single variable", {
+## Test 11: with single variable ----
+test_that("add_suffix_to_vars Test 11: with single variable", {
   expect_equal(
     expected = exprs(ADT, desc(AVAL.join), AVALC),
     object = add_suffix_to_vars(
@@ -200,8 +135,8 @@ test_that("add_suffix_to_vars Test 17: with single variable", {
   )
 })
 
-## Test 18: with more than one variable ----
-test_that("add_suffix_to_vars Test 18: with more than one variable", {
+## Test 12: with more than one variable ----
+test_that("add_suffix_to_vars Test 12: with more than one variable", {
   expect_equal(
     expected = exprs(ADT, desc(AVAL.join), AVALC.join),
     object = add_suffix_to_vars(

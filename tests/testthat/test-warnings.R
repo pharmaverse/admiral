@@ -1,7 +1,7 @@
 # warn_if_vars_exist ----
 ## Test 1: warning if a variable already exists in the input dataset ----
 test_that("warn_if_vars_exist Test 1: warning if a variable already exists in the input dataset", {
-  dm <- admiral.test::admiral_dm
+  dm <- pharmaversesdtm::dm
 
   expect_warning(
     warn_if_vars_exist(dm, "AGE"),
@@ -21,11 +21,12 @@ test_that("warn_if_vars_exist Test 1: warning if a variable already exists in th
   )
 })
 
-# warn_if_invalud_dtc ----
+# warn_if_invalid_dtc ----
 ## Test 2: Warning if vector contains unknown datetime format ----
-test_that("warn_if_invalud_dtc Test 2: Warning if vector contains unknown datetime format", {
+test_that("warn_if_invalid_dtc Test 2: Warning if vector contains unknown datetime format", {
   expect_warning(
-    warn_if_invalid_dtc(dtc = "20210406T12:30:30")
+    warn_if_invalid_dtc(dtc = "20210406T12:30:30"),
+    "Dataset contains incorrect datetime format:"
   )
 })
 

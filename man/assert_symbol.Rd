@@ -20,23 +20,23 @@ invisibly otherwise.
 Checks if an argument is a symbol
 }
 \examples{
-library(admiral.test)
+library(pharmaversesdtm)
 library(dplyr, warn.conflicts = FALSE)
 library(rlang)
-data(admiral_dm)
+data(dm)
 
 example_fun <- function(dat, var) {
   var <- assert_symbol(enexpr(var))
   select(dat, !!var)
 }
 
-example_fun(admiral_dm, USUBJID)
+example_fun(dm, USUBJID)
 
-try(example_fun(admiral_dm))
+try(example_fun(dm))
 
-try(example_fun(admiral_dm, "USUBJID"))
+try(example_fun(dm, "USUBJID"))
 
-try(example_fun(admiral_dm, toupper(PARAMCD)))
+try(example_fun(dm, toupper(PARAMCD)))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
@@ -49,13 +49,10 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_expr}()},
 \code{\link{assert_filter_cond}()},
 \code{\link{assert_function_param}()},
-\code{\link{assert_function}()},
-\code{\link{assert_has_variables}()},
 \code{\link{assert_integer_scalar}()},
 \code{\link{assert_list_element}()},
 \code{\link{assert_list_of}()},
 \code{\link{assert_logical_scalar}()},
-\code{\link{assert_named_exprs}()},
 \code{\link{assert_named}()},
 \code{\link{assert_numeric_vector}()},
 \code{\link{assert_one_to_one}()},

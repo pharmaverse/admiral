@@ -1,4 +1,4 @@
-dm <- select(admiral.test::admiral_dm, USUBJID)
+dm <- select(pharmaversesdtm::dm, USUBJID)
 
 # get_new_tmp_var ----
 ## Test 1: creating temporary variables works ----

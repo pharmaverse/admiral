@@ -1,3 +1,42 @@
+# admiraldev 0.5.0
+
+## New Features
+
+- Calls for `admiral.test` have been swapped with `pharmaversesdtm` (#321)
+- New vignette for package writing extensions is now available (#295, #312)
+- New vignette for creating test data is now available (#282)
+
+## Updates of Existing Functions
+
+- The messaging for `warn_if_invalid_dtc()` was updated to align with what the date/datetime functions in `admiral` currently do. (#316)
+
+## Breaking Changes
+
+- The following functions/arguments have been deprecated from previous admiral versions using the next phase of the deprecation process: (#288)
+  - `assert_order_vars()`
+  - `quo_c()`
+  - `quo_not_missing()`
+  - `replace_symbol_in_quo()`
+  - The `quosures` argument was replaced by the `expressions` argument in `replace_values_by_names()`, `get_source_vars()`, and `vars2chr()`. (#288)
+- `assert_function_param()` was deprecated in favor of `assert_function()`. (#264)
+- `assert_named_expr()` was deprecated in favor of `assert_expr_list()`. (#264)
+- `assert_has_variables()` was deprecated in favor of `assert_data_frame()`. (#264)
+
+## Documentation
+
+- Guidance around issues and merging updated (#286)
+- Common R CMD troubleshooting made into separate vignette (#286)
+- Documentation of `get_dataset()` was improved. (#271)
+- Minor updates to programming strategy were added (#213, #240, #260)
+- Updated unit testing vignette with snapshot testing guidance. (#302)
+- Documentation of `friendly_type_of()` was provided (#22)
+- Minor updates to pull request review guidance were added (#201, #292)
+- Documentation of singular versus plural function argument names was added into the programming strategy vignette. Also documentation on the common arguments `missing_value` and `missing_values` was added. (#296)
+- Documentation highlighting the difference between `set_values_to` and `keep_source_vars` (#318)
+- List of common arguments was updated (#306)
+
+## Various
+
 # admiraldev 0.4.0
 
 ## New Features

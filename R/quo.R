@@ -1,30 +1,3 @@
-#' Concatenate One or More Quosure(s)
-#'
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*, please use `expr_c()` instead.
-#'
-#' @param ... One or more objects of class `quosure` or `quosures`
-#'
-#' @return An object of class `quosures`
-#'
-#'
-#' @keywords deprecated
-#' @family deprecated
-#'
-#' @export
-quo_c <- function(...) {
-  deprecate_stop(
-    "0.3.0",
-    "quo_c()",
-    "expr_c()",
-    details = paste(
-      "Expressions created by `exprs()` must be used",
-      "instead of quosures created by `vars()`."
-    )
-  )
-}
-
 #' Concatenate One or More Expressions
 #'
 #' @param ... One or more expressions or list of expressions
@@ -53,30 +26,6 @@ expr_c <- function(...) {
   inputs[!is_null]
 }
 
-#' Check Whether an Argument Is Not a Quosure of a Missing Argument
-#'
-#' @param x Test object
-#'
-#' @return TRUE or error.
-#'
-#'
-#' @keywords deprecated
-#' @family deprecated
-#'
-#' @export
-quo_not_missing <- function(x) {
-  deprecate_stop(
-    "0.3.0",
-    "quo_not_missing()",
-    details = paste(
-      "Due to changing from `vars()` to `exprs()` the function is no longer required.",
-      "It will be removed in future.",
-      sep = "\n"
-    )
-  )
-}
-
-
 #' Replace Expression Value with Name
 #'
 #' @param expressions A list of expressions
@@ -101,7 +50,6 @@ replace_values_by_names <- function(expressions, quosures) {
       "replace_values_by_names(quosures = )",
       "replace_values_by_names(expressions = )"
     )
-    expressions <- map(quosures, rlang::quo_get_expr)
   }
   if (is.null(names(expressions))) {
     return(expressions)
@@ -112,40 +60,6 @@ replace_values_by_names <- function(expressions, quosures) {
     }
     as.symbol(n)
   })
-}
-
-#' Replace Symbols in a Quosure
-#'
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*, please use `replace_symbol_in_expr()` instead.
-#'
-#' @param quosure Quosure
-#'
-#' @param target Target symbol
-#'
-#' @param replace Replacing symbol
-#'
-#'
-#' @return The quosure where every occurrence of the symbol `target` is replaced
-#'   by `replace`
-#'
-#' @keywords deprecated
-#' @family deprecated
-#'
-#' @export
-replace_symbol_in_quo <- function(quosure,
-                                  target,
-                                  replace) {
-  deprecate_stop(
-    "0.3.0",
-    "replace_symbol_in_quo()",
-    "replace_symbol_in_expr()",
-    details = paste(
-      "Expressions created by `exprs()` must be used",
-      "instead of quosures created by `vars()`."
-    )
-  )
 }
 
 #' Replace Symbols in an Expression

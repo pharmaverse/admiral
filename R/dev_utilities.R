@@ -162,12 +162,11 @@ contains_vars <- function(arg) {
 #' vars2chr(exprs(USUBJID, AVAL))
 vars2chr <- function(expressions, quosures) {
   if (!missing(quosures)) {
-    deprecate_warn(
+    deprecate_stop(
       "0.10.0",
       "vars2chr(quosures = )",
       "vars2chr(expressions = )"
     )
-    expressions <- map(quosures, rlang::quo_get_expr)
   }
   rlang::set_names(
     map_chr(expressions, as_string),

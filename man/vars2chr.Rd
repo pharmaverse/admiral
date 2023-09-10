@@ -32,6 +32,7 @@ Developer Utility Functions:
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},
 \code{\link{filter_if}()},
+\code{\link{friendly_type_of}()},
 \code{\link{valid_time_units}()}
 }
 \concept{dev_utility}

@@ -1,4 +1,4 @@
-url: https://pharmaverse.github.io/admiraldev/devel
+url: https://pharmaverse.github.io/admiraldev
 
 template:
   bootstrap: 5
@@ -12,6 +12,14 @@ repo:
     user: https://github.com/
 news:
   cran_dates: true
+
+authors:
+  before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past."
+  footer:
+    roles: [aut, ctb, cre, fnd]
+    text: "Developed by"
+  sidebar:
+    roles: [aut]
 
 reference:
 - title: Assertion Functions
@@ -112,5 +120,11 @@ navbar:
       href: articles/git_usage.html
     - text: Pull Request Review Guidance
       href: articles/pr_review_guidance.html
+    - text: R CMD Issues
+      href: articles/rcmd_issues.html
     - text: Release Strategy
       href: articles/release_strategy.html
+    - text: Test Data Guidance
+      href: articles/test_data_guidance.html
+    - text: Package Extensions
+      href: articles/package_extensions.html

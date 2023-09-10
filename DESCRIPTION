@@ -1,19 +1,20 @@
 Package: admiraldev
 Type: Package
 Title: Utility Functions and Development Tools for the Admiral Package Family
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: c(
     person("Ben", "Straub", email = "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
-    person("Thomas", "Neitmann", role = "aut"),
-    person("Samia", "Kabi", role = "aut"),
-    person("Pooja", "Kumari", role = "aut"),
-    person("Syed", "Mubasheer", role = "aut"),
+    person("Jeffrey", "Dickinson", role = "aut"),
     person("Ross", "Farrugia", role = "aut"),
+    person("Pooja", "Kumari", role = "aut"),
+    person("Edoardo", "Mancini", role = "aut"),
     person("Sadchla", "Mascary", role = "aut"),
     person("Zelos", "Zhu", role = "aut"),
-    person("Jeffrey", "Dickinson", role = "aut"),
-    person("Ania", "Golab", role = "aut"),
+    person("Ania", "Golab", role = "ctb"),
+    person("Samia", "Kabi", role = "ctb"),
+    person("Syed", "Mubasheer", role = "ctb"),
+    person("Thomas", "Neitmann", role = "ctb"),
     person("Ondrej", "Slama", role = "ctb"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
@@ -42,7 +43,7 @@ Imports:
     tidyr (>= 1.0.2),
     tidyselect (>= 1.0.0)
 Suggests:
-    admiral.test,
+    pharmaversesdtm,
     devtools,
     diffdf,
     lintr,

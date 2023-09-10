@@ -26,11 +26,11 @@ The function returns a new unique temporary variable name to be used inside
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(admiral_dm)
+library(pharmaversesdtm)
+data(dm)
 
-tmp_var <- get_new_tmp_var(admiral_dm)
-mutate(admiral_dm, !!tmp_var := NA)
+tmp_var <- get_new_tmp_var(dm)
+mutate(dm, !!tmp_var := NA)
 }
 \seealso{
 \code{\link[=remove_tmp_vars]{remove_tmp_vars()}}

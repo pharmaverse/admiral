@@ -1,0 +1,114 @@
+---
+title: "Package Extensions"
+output: 
+  rmarkdown::html_vignette
+    
+vignette: >
+  %\VignetteIndexEntry{Package Extensions}
+  %\VignetteEngine{knitr::rmarkdown}
+  
+---
+
+```{css, echo = FALSE}
+.github-button {
+  display: inline-block;
+  padding: 2px 5px;
+  background-color: #e5e5e5;
+  color: #333;
+  border: 0px solid #ccc;
+  border-radius: 20px;
+  font-size: 1em;
+  margin: 0 0px;
+}
+
+.github-button.firstissue {
+  background-color: #7057FF;
+  color: #fff;
+}
+
+.github-button.helpwanted {
+  background-color: #008672;
+  color: #fff;
+}
+
+```
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+`{admiral}` is made up of a family of packages and we foresee this only growing over time to cover more specific areas such as TA (Therapeutic Area) package extensions, with a wider range of companies and individuals getting on board to join development efforts. This step-by-step guidance talks through our recommendations on how new development teams would go about creating such package extensions. It is critical that this guidance is followed, as our users need to feel a consistent experience when working across `{admiral}` packages. If an `{admiral}` package extension doesn't follow these conventions then we wouldn't include it under pharmaverse and as part of the `{admiral}` family.
+
+## Step-by-step Guidance to Create a Package Extension
+_Note: The ordering numbers below are suggested but don't all need to strictly be followed in this sequence._
+
+1. Raise the need for a new `{admiral}` package extension on the `{admiral}` [Slack channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269), or directly with the `{admiral}` package maintainer. The naming convention needs to be `{admiralxxx}` and we request that the scope is not targeted overly narrow, for example instead of a package extension for HIV we'd prefer one across virology. Otherwise the number of packages may become unmanageable.
+
+1. Once agreed, reach out to other company contacts working in similar areas to see if a collaborative development can be achieved. _Our recommendation here is always to target at least 2 companies to start so that any implementation remains robust and we protect from going down a company-specific route. However, consider that if more than 4 or 5 companies get involved too early it may slow down decision-making._
+
+1. From the companies that agree to co-develop, identify a lead from each. One company should act as the driver for the overall package extension and put forward a product owner and technical lead who ultimately have final say on any contentious decisions. The product owner would cover project decisions (e.g. around scope and priorities), whereas the technical lead would cover technical decisions (e.g. around design and implementation). _The technical lead should either: a) already be significantly involved in the `{admiral}` core development team as a developer/contributor, or b) join the core development team simultaneously._ This is so as to ensure that the design is kept true to the manifesto and of consistent style and quality with respect to `{admiral}` standards.
+
+1. Agree on a charter and expectations of each company, e.g. we usually ask for at least 3 developers with at least 25% capacity and a mix of R, GitHub and TA experience. Within the charter make sure the scope and timelines are clear. _It is important here not to try to boil the ocean. Focus first on the very common endpoints required as a foundation and then the package can build up from here via contributions from both the co-development companies and also the wider across-industry admiral community. If useful, the `{admiralonco}` charter could be shared as a guide._
+
+1. Each company should start to identify the required developer resources. Then each developer is required to complete the `{admiral`} [dummy issue for onboarding](https://github.com/pharmaverse/admiral/issues/1839), as well as reading up on the [admiraldev documentation](https://pharmaverse.github.io/admiraldev/devel/index.html), - especially the developer guides, which all need to be followed for package extensions.
+![Dummy issue for new developers](https://github.com/pharmaverse/admiraldev/raw/devel/vignettes/dummy_issue.png){width=100%}
+
+1. Optionally it can be useful to host a kick-off meeting to decide how the team will work, for which we recommend agile/scrum practices.
+
+1. Set up a "admiralxxx_dev" channel on Slack to add all team members to for informal team chat, and agree a way to share working documents across the co-development team. We recommend to use a new folder on the pharmaverse MS Teams - Michael Rimler (michael.s.rimler@gsk.com) could help with this as our rep on the PHUSE board.
+
+1. A useful starter development activity could be to look into `{pharmaversesdtm}` to check that the test data there is sufficient for your TA needs, e.g. for `{admiralonco}` we had to generate new test data for SDTM domains such as RS and TU. Note that no personal data should be used here (even if anonymized) and it is important to keep any data generated in-line with the CDISC pilot data we use here, i.e. use same USUBJIDs as DM etc.
+
+1. Optionally draft, agree and sign a collaboration agreement if the collaborating companies so wish, as this could be useful for protecting secondary IP such as company standard specifications that may be shared within the team. An example is stored [here](https://github.com/pharmaverse/pharmaverse/blob/main/content/contribute/Pharmaverse%20Collaborative%20Agreement%20(template).docx), but work with your Legal teams as required.
+
+1. Share company-specific implementations and specifications to be able to harmonize into your design strategy for the package extension. _Here it is important to remain pragmatic and consider a higher perspective than any one company. Engage your company standards representatives and where you find discrepancies across company approaches then question if you really need to be doing things differently here (do health authorities or patients benefit at all if you do?). Also consider that we always expect a level of company-specifics to be covered in the internal company package extensions._
+
+1. Set up a new public GitHub repo under the [pharmaverse org](https://github.com/pharmaverse) using [admiraltemplate](https://github.com/pharmaverse/admiraltemplate) - this includes set-up pieces (such as CI/CD checks and issue/PR templates) that will enable your package to stay consistent with others in the admiral family, as well as the same core package dependencies and versions. See the `{admiraltemplate}` [Quick Start Guide](https://pharmaverse.github.io/admiraltemplate/cran-release/#quick-start-guide-for-template) _Note that this step requires org member access which could be granted by of the pharmaverse council reps, who are admins for this org. Also you are free to add additional package dependencies as needed assuming only reliable packages are used, but they must not depend on newer versions of other packages (always reply "no" if updates are suggested during installation)._
+<iframe src="https://pharmaverse.github.io/admiraltemplate/cran-release/" width="100%" height="800" title="`admiral` package template"></iframe>
+
+1. Once the repo is available the technical lead could be granted admin access to this repo and then could set up a GitHub team with the same name as the package extension to assign required access for all other co-development team members. Most will only require write access, but you may choose to give the other leads admin access as well so that never a bottle-neck waiting on one person.
+
+1. Update the template license file in your repo by adding the co-development company names in place of Roche & GSK - for `{admiral}` package extensions we use Apache 2.0, which is our preferred permissive license. Agree with the co-development companies any required extra wording for the copyright/IP section.
+
+1. Set up a project board, such as [this](https://github.com/orgs/pharmaverse/projects/12), to help manage your backlog.
+![admiral core project board](https://github.com/pharmaverse/admiraldev/raw/devel/vignettes/project_board.png){width=100%}
+
+1. Assuming you work under agile/scrum, then create a product backlog, prioritize and make a sprint plan.
+
+1. The intention is always to re-use as much as possible from `{admiral}` core package. If you find anything additional needed for the package extension, you should first question whether it might be a common need for other TAs and if so consider instead raising an issue to `{admiral}` core. When designing new functions always try to stay aligned with the [Programming Strategy](https://pharmaverse.github.io/admiraldev/devel/articles/programming_strategy.html). 
+
+1. Start development of your foundational first release 0.1.0. Follow a consistent [Development Process](https://pharmaverse.github.io/admiraldev/devel/articles/development_process.html) to `{admiral}`. 
+
+1. Line up testers from your companies and others and set expectations around when you believe a stable version would be available for user testing. You can use the admiral Slack community to raise interest to get involved.
+
+1. Add a pharmaverse badge to your README: https://pharmaverse.org/contribute/badges/ - needs support from a pharmaverse council rep.\
+[<img src="http://pharmaverse.org/shields/admiral.svg">](https://pharmaverse.org/contribute/badges/)
+
+1. Raise an `{admiral}` repo issue to ensure your package extension site is linked from the core `{admiral}` site here [here](https://pharmaverse.github.io/admiral/cran-release/).`
+
+1. It is important that the `{admiral}` family of packages keep to a similar release schedule and cadence, in order to ease adoption by our users and to give clear expectations. The `{admiral}` core package cadence of releases is one every quarter on a fixed schedule (every first Monday of the last month of a quarter - March, June, September, December). The core package will set the release schedule for the package extensions to follow, i.e. once `{admiral}` releases we'd expect package extension releases targeted within a 2 week window. These releases are communicated via our Slack channel as well as at our quarterly user community meetings.
+
+1. Once you are happy your package extension has been well tested and is at a sufficient state then make a submission to CRAN. The technical lead should be named as maintainer. After the CRAN release, you should advertise this via Slack & LinkedIn.
+
+
+1. Plan any future further enhancements and make issues. When your team feels ready you can open up to development contributions for these from the wider community - see [this page](https://pharmaverse.github.io/admiral/cran-release/). Please use the <span class="github-button firstissue">good first issue</span> (ideal for new starters) & <span class="github-button helpwanted">help wanted</span> (ideal for more experienced contributors) issue labels.
+
+**Note**: the core `{admiral}` team will carry out periodic reviews of of the extension package contents to ensure nothing is duplicated and  ensure standards and best practices are followed. The frequency of these reviews is to be agreed upon by the technical leads of the core and extension packages. 
+
+## Lessons Learned
+
+These are some of the lessons learned from previous package extensions:
+
+* Since ADaM is conceived as TA-agnostic, and TA standards can widely differ across companies, TA package extensions shouldn't contain many new functions. That is, most functionality required to create and ADaM should be present in `{admiral}`, with localized and limited exceptions for truly TA-specific variables/endpoints. As such, _the R folder in package extensions should be relatively lean_!
+
+* Connected to the above, a package extension is more than just R functions - it is also vignettes examples and template programs. In fact, these are just as important as the R functions itself, because that is what the users will turn to for guidance. 
+
+* Making sure the package is always up-to-date with respect to new `{admiral}` releases (e.g. due to the deprecation of functions) is a crucial task. Maintaining the package long-term is the only way to ensure its success.
+
+* _Beware of developing just for the sake of developing!_ You may find that you reach a point of stasis in your extension package journey, where there is not much need for new development. In that case, it vital to avoid working on tangential tasks. Instead, the focus should be on ensuring that existing is as fit-for-purpose as possible.

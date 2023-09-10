@@ -31,6 +31,7 @@ Developer Utility Functions:
 \code{\link{contains_vars}()},
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{filter_if}()},
+\code{\link{friendly_type_of}()},
 \code{\link{valid_time_units}()},
 \code{\link{vars2chr}()}
 }

@@ -17,9 +17,9 @@ Remove All Temporary Variables Created Within the Current Function Environment
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(admiral_dm)
-dm <- select(admiral_dm, USUBJID)
+library(pharmaversesdtm)
+data(dm)
+dm <- select(dm, USUBJID)
 tmp_var <- get_new_tmp_var(dm)
 dm <- mutate(dm, !!tmp_var := NA)
 

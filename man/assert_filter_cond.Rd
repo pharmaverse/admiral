@@ -23,10 +23,10 @@ Check if \code{arg} is a suitable filtering condition to be used in
 functions like \code{subset} or \code{dplyr::filter}.
 }
 \examples{
-library(admiral.test)
+library(pharmaversesdtm)
 library(dplyr, warn.conflicts = FALSE)
 library(rlang)
-data(admiral_dm)
+data(dm)
 
 # typical usage in a function as an argument check
 example_fun <- function(dat, x) {
@@ -34,9 +34,9 @@ example_fun <- function(dat, x) {
   filter(dat, !!x)
 }
 
-example_fun(admiral_dm, AGE == 64)
+example_fun(dm, AGE == 64)
 
-try(example_fun(admiral_dm, USUBJID))
+try(example_fun(dm, USUBJID))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
@@ -48,13 +48,10 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_expr_list}()},
 \code{\link{assert_expr}()},
 \code{\link{assert_function_param}()},
-\code{\link{assert_function}()},
-\code{\link{assert_has_variables}()},
 \code{\link{assert_integer_scalar}()},
 \code{\link{assert_list_element}()},
 \code{\link{assert_list_of}()},
 \code{\link{assert_logical_scalar}()},
-\code{\link{assert_named_exprs}()},
 \code{\link{assert_named}()},
 \code{\link{assert_numeric_vector}()},
 \code{\link{assert_one_to_one}()},

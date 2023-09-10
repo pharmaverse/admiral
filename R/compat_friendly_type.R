@@ -1,10 +1,21 @@
-#' Return English-friendly Type
+#' Return English-friendly messaging for object-types
+#'
 #' @param x Any R object.
 #' @param value Whether to describe the value of `x`.
 #' @param length Whether to mention the length of vectors and lists.
+#'
+#' @details This helper function aids us in forming user-friendly messages that gets
+#' called through `what_is_it()`, which is often used in the assertion functions
+#' to identify what object-type the user passed through an argument instead of
+#' an expected-type.
+#'
+#' @export
+#'
 #' @return A string describing the type. Starts with an indefinite
 #'   article, e.g. "an integer vector".
-#' @noRd
+#'
+#' @keywords dev_utility
+#' @family dev_utility
 friendly_type_of <- function(x, value = TRUE, length = FALSE) { # nolint
   if (rlang::is_missing(x)) {
     return("absent")
@@ -70,6 +81,7 @@ friendly_type_of <- function(x, value = TRUE, length = FALSE) { # nolint
   type
 }
 
+# Used in building `friendly_type_of()` above
 .rlang_as_friendly_vector_type <- function(type, n_dim) {
   if (type == "list") {
     if (n_dim < 2) {
@@ -102,6 +114,7 @@ friendly_type_of <- function(x, value = TRUE, length = FALSE) { # nolint
   sprintf(type, kind)
 }
 
+# Used in building `friendly_type_of()` above
 .rlang_as_friendly_type <- function(type) {
   switch(type,
     list = "a list",
@@ -128,6 +141,7 @@ friendly_type_of <- function(x, value = TRUE, length = FALSE) { # nolint
   )
 }
 
+# Used in building `friendly_type_of()` above
 .rlang_stop_unexpected_typeof <- function(x, call = rlang::caller_env()) {
   rlang::abort(
     sprintf("Unexpected type <%s>.", typeof(x)),

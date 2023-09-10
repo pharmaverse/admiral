@@ -25,6 +25,7 @@ Developer Utility Functions:
 \code{\link{contains_vars}()},
 \code{\link{extract_vars}()},
 \code{\link{filter_if}()},
+\code{\link{friendly_type_of}()},
 \code{\link{valid_time_units}()},
 \code{\link{vars2chr}()}
 }

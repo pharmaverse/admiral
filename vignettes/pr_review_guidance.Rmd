@@ -19,15 +19,15 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This document is intended to be guidance for creators and reviewers of pull requests (PRs) in the `{admiral}` package. PR authors will benefit from shorter review times by closely following the guidance provided here.
+This document is intended to be guidance for creators and reviewers of pull requests (PRs) in the `{admiral}` package family. PR authors will benefit from shorter review times by closely following the guidance provided here.
 
-A pull request into the `devel` branch signifies that an issue that has been "addressed". This issue might be a bug, a feature request or a documentation update. For transparency, we keep the issue open until the `devel` branch is merged into the `main` branch, which usually coincides with a release of `{admiral}` to CRAN. This ensures that repeat issues are not raised and if they are raised are quickly marked as duplicates and closed.
+A pull request into the `devel` branch signifies that an issue has been "addressed". This issue might be a bug, a feature request or a documentation update. Once a Pull Request is merged into `devel` branch, then the issue(s) can be closed.
 
-Closely following the below guidance will ensure that our all our "addressed" issues auto-close once we merge `devel` into `main`.
+Closely following the below guidance will ensure that our all our "addressed" issues auto-close once we merge `devel`.
 
 # Review Criteria
 
-For a pull request to be merged into `devel` it needs to pass the automated `R CMD check`, `lintr`, and `task-list-completed` workflows on GitHub at a minimum. The first two checks can be run locally using the `devtools::check()` and `lintr::lint_package()` commands and are recommended to be done before pushing to GitHub. The `task-list-completed` workflow is exclusive to GitHub and will be discussed later. In addition, the PR creator and reviewer should make sure that
+For a pull request to be merged into `devel` it needs to pass the automated CI checks that will appear at the bottom of the Pull Request. In addition, the PR creator and reviewer should make sure that
 
 -   the [Programming Strategy](programming_strategy.html) and [Development Process](development_process.html) are followed
 
@@ -49,11 +49,15 @@ For a pull request to be merged into `devel` it needs to pass the automated `R C
 
 -   examples print relevant source variables and newly created variables and/or records in their output
 
--   the `NEWS.md` file is updated with an entry that explains the new features or changes
-
--   the author of a function is listed in the `DESCRIPTION` file
+-   the `NEWS.md` file is updated with an entry that explains the new features or changes if the change is user-specific or warrants a mention as a development milestone
 
 -   all files affected by the implemented changes, e.g. vignettes and templates, are updated
+
+## Codeowners and PR Guidance
+
+As the creator of a PR, the assignment of a reviewer can be unclear. For most PRs, feel free to select a few members of the core development team. These individuals scan each repository on a regular basis as well and may provide his/her review even if not originally included as a selected reviewer. 
+
+Sometimes, the development of a function or a vignette falls under a specific-topic, e.g. labs or PK/PD. Please ensure you include an appropriate reviewer if you are modifying files that rely on domain-expertise. We try to maintain an active list for domain-specific topics that will automatically tag an appropriate reviewer using our `CODEOWNERS` file, located in the `.github` folder. If you are interested in being a codeowner, reach out to the development team.
 
 # So much Red Tape!
 
@@ -87,7 +91,9 @@ knitr::include_graphics("./pr_review_actions.png")
 
 Please don't hesitate to reach out to the `{admiral}` team on [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) or through the [GitHub Issues](https://github.com/pharmaverse/admiral/issues) tracker if you think this checklist needs to be amended or further clarity is needed on a check box item.
 
-# GitHub Actions/Workflows
+**Note for Reviewers:** We recommend the use of Squash and Merge when merging in a Pull Request. This will create a clean commit history when doing a final merge of `devel` into `main`.
+
+# GitHub Actions/CI Workflows
 
 The `task-list-completed` workflow is one of the several workflows/actions used within `{admiral}`. These workflows live in the `.github/workflows` folder and it is important to understand their use and how to remedy if the workflow fails. Workflows defined here are responsible for assuring high package quality standards without compromising performance, security, or reproducibility.
 
@@ -150,86 +156,3 @@ Spellchecks are performed by this workflow, and the `{spelling}` R package is us
 ### `style.yml`
 
 Code style is enforced via the `styler` R package. Custom style configurations, if any, will be honored by this workflow. Failed workflows are indicative of unstyled code.
-
-# Common R CMD Check Issues
-
-`R CMD check` is a command line tool that checks R packages against a standard set of criteria. For a pull request to pass the check must not issue any notes, warnings or errors. Below is a list of common issues and how to resolve them.
-
-## Check Fails Only on One Version
-
-If the `R CMD check` workflow fails only on one or two R versions it can be helpful to reproduce the testing environment locally.
-
-To reproduce a particular R version environment open the `{admiral}` project in the corresponding R version, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
-
-``` r
-Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS = "true")
-
-if (!dir.exists(".library")) {
-  dir.create(".library")
-}
-
-base_recommended_pkgs <- row.names(installed.packages(priority = "high"))
-for (pkg in base_recommended_pkgs) {
-  path <- file.path(.Library, pkg)
-  cmd <- sprintf("cp -r %s .library", path)
-  system(cmd)
-}
-assign(".lib.loc", ".library", envir = environment(.libPaths))
-
-r_version <- getRversion()
-if (grepl("^4.1", r_version)) {
-  options(repos = "https://packagemanager.posit.co/cran/2021-05-03/")
-} else if (grepl("^4.2", r_version)) {
-  options(repos = "https://packagemanager.posit.co/cran/2022-01-03/")
-} else if (grepl("^4.3", r_version)) {
-  options(repos = "https://packagemanager.posit.co/cran/2023-04-20/")
-} else {
-  options(repos = "https://cran.rstudio.com")
-}
-
-if (!requireNamespace("remotes", quietly = TRUE)) {
-  install.packages("remotes")
-}
-remotes::install_deps(dependencies = TRUE)
-remotes::install_github("pharmaverse/admiral.test", ref = "devel")
-remotes::install_github("pharmaverse/admiraldev", ref = "devel")
-rcmdcheck::rcmdcheck()
-```
-
-This will ensure that the exact package versions we use in the workflow are installed into the hidden folder `.library`. That way your existing R packages are *not* overwritten.
-
-## Package Dependencies
-
-    > checking package dependencies ... ERROR
-      Namespace dependency not required: ‘pkg’
-
-Add `pkg` to the `Imports` or `Suggests` field in the `DESCRIPTION` file. In general, dependencies should be listed in the `Imports` field. However, if a package is only used inside vignettes or unit tests it should be listed in `Suggests` because all `{admiral}` functions would work without these "soft" dependencies being installed.
-
-## Global Variables
-
-    ❯ checking R code for possible problems ... NOTE
-      function_xyz: no visible binding for global variable ‘some_var’
-
-Add `some_var` to the list of "global" variables in `R/globals.R`.
-
-## Undocumented Function Parameter
-
-    ❯ checking Rd \usage sections ... WARNING
-      Undocumented arguments in documentation object 'function_xyz'
-        ‘some_param’
-
-Add an `@param some_param` section in the header of `function_xyz()` and run `devtools::document()` afterwards.
-
-## Outdated Documentation
-
-    ❯ checking for code/documentation mismatches ... WARNING
-      Codoc mismatches from documentation object 'function_xyz':
-      ...
-      Argument names in code not in docs:
-        new_param_name
-      Argument names in docs not in code:
-        old_param_name
-      Mismatches in argument names:
-        Position: 6 Code: new_param_name Docs: old_param_name
-
-The name of a parameter has been changed in the function code but not yet in the header. Change `@param old_param_name` to `@param new_param_name` and run `devtools::document()`.
