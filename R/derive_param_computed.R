@@ -293,14 +293,6 @@ derive_param_computed <- function(dataset = NULL,
                                   constant_parameters = NULL,
                                   keep_nas = FALSE) {
   assert_vars(by_vars)
-  if (!missing(analysis_var)) {
-    deprecate_warn(
-      "0.12.0",
-      "derive_param_computed(analysis_var = )",
-      "derive_param_computed(set_values_to = )"
-    )
-  }
-  analysis_var <- assert_symbol(enexpr(analysis_var))
   assert_vars(constant_by_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
   assert_data_frame(dataset_add, optional = TRUE)
@@ -310,7 +302,10 @@ derive_param_computed <- function(dataset = NULL,
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
   assert_logical_scalar(keep_nas)
+
+  ### BEGIN DEPRECATION
   if (!missing(analysis_value)) {
+    analysis_var <- assert_symbol(enexpr(analysis_var))
     deprecate_warn(
       "0.12.0",
       "derive_param_computed(analysis_value = )",
@@ -318,6 +313,7 @@ derive_param_computed <- function(dataset = NULL,
     )
     set_values_to <- exprs(!!analysis_var := !!enexpr(analysis_value), !!!set_values_to)
   }
+  ### END DEPRECATION
 
   parameters <- assert_parameters_argument(parameters)
   constant_parameters <- assert_parameters_argument(constant_parameters, optional = TRUE)
