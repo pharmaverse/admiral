@@ -3,17 +3,16 @@ name: Check Templates
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
       - main
       - devel
-      - 618_templates_action
 
 jobs:
   templates:
     name: Check Templates
-    uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@618_templates_action
+    uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
     secrets: inherit
-    #if: github.event_name == 'pull_request'
     with:
       r-version: "4.1"
+      push-templates-data: true
