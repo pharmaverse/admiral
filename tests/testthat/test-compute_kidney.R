@@ -27,7 +27,7 @@ test_that("compute_egfr Test 3: CRCL calculation", {
   # CRCL Cockcroft and Gault (1973) calculator at
   # https://www.kidney.org/professionals/kdoqi/gfr_calculatorCoc
   expect_equal(round(compute_egfr(
-    creat = 1.09, creatu = "mg/dL", age = 55, sex = "M", wt = 90, method = "CRCL"
+    creat = 1.09, creatu = "mg/dL", age = 55, sex = "M", weight = 90, method = "CRCL"
   ), 0L), 97)
 })
 
@@ -38,7 +38,7 @@ test_that("compute_egfr Test 4: CRCL calculation", {
   # CRCL Cockcroft and Gault (1973) calculator at
   # https://www.kidney.org/professionals/kdoqi/gfr_calculatorCoc
   expect_equal(round(compute_egfr(
-    creat = 85, creatu = "umol/L", age = 65, sex = "F", wt = 60, method = "CRCL"
+    creat = 85, creatu = "umol/L", age = 65, sex = "F", weight = 60, method = "CRCL"
   ), 0L), 55)
 })
 
@@ -49,7 +49,7 @@ test_that("compute_egfr Test 5: EGFR MDRD calculation", {
   # MDRD GFR calculator at
   # https://www.mdcalc.com/calc/76/mdrd-gfr-equation
   expect_equal(round(compute_egfr(
-    creat = 1.09, creatu = "mg/dL", age = 55, sex = "M", wt = 90, race = "WHITE",
+    creat = 1.09, creatu = "mg/dL", age = 55, sex = "M", weight = 90, race = "WHITE",
     method = "MDRD"
   ), 1L), 70.2)
 })
@@ -87,7 +87,7 @@ test_that("compute_egfr Test 7: CKD-EPI calculated on input data", {
   egfr <- input %>%
     dplyr::mutate(
       EGFR = compute_egfr(
-        creat = CREATBL, creatu = CREATBLU, age = AGE, wt = WTBL, sex = SEX,
+        creat = CREATBL, creatu = CREATBLU, age = AGE, weight = WTBL, sex = SEX,
         method = "CKD-EPI"
       ),
       EGFR = round(EGFR, 4L)
@@ -97,5 +97,15 @@ test_that("compute_egfr Test 7: CKD-EPI calculated on input data", {
     egfr,
     expected_output,
     keys = c("USUBJID")
+  )
+})
+
+## Test 8: Deprecate wt ----
+test_that("compute_egfr Test 8: 'wt' argument deprecation warning", {
+  # expect deprecation warning
+  expect_warning(
+    compute_egfr(
+      creat = 1.09, creatu = "mg/dL", age = 55, sex = "M", wt = 90, method = "CRCL"
+    )
   )
 })

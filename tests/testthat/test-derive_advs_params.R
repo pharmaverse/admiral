@@ -1,20 +1,23 @@
-# compute_bmi: (Test 01.xx) ----
+# compute_bmi ----
 
-test_that("compute_bmi Test 01.01: BMI calculation - single height and weight values", {
+## Test 1: BMI calculation - single height & weight values ----
+test_that("compute_bmi Test 1: BMI calculation - single height & weight values", {
   # Expected values are taken from the Center of Disease Control and Prevention's
   # (CDC) 'Adult BMI Calculator' at
   # https://cdc.gov/healthyweight/assessing/bmi/adult_bmi/metric_bmi_calculator/bmi_calculator.html
   expect_equal(round(compute_bmi(height = 180, weight = 75), 3L), 23.148)
 })
 
-test_that("compute_bmi Test 01.02: BMI calculation - height and weight vectors", {
+## Test 2: compute_bmi BMI calculation - height & weight vectors ----
+test_that("compute_bmi Test 2: compute_bmi BMI calculation - height & weight vectors", {
   expect_equal(
     round(compute_bmi(height = c(180, 200), weight = c(75, 100)), 3L),
     c(23.148, 25)
   )
 })
 
-test_that("compute_bmi Test 01.03: BMI calculation - height and weight vectors - missing values", {
+## Test 3: BMI height & weight vectors - missing values ----
+test_that("compute_bmi Test 3: BMI height & weight vectors - missing values", {
   expect_equal(
     compute_bmi(height = c(NA, 200, 0), weight = c(75, NA, 75)),
     c(NA_real_, NA_real_, NA_real_)
@@ -23,48 +26,54 @@ test_that("compute_bmi Test 01.03: BMI calculation - height and weight vectors -
 
 # compute_bsa ----
 
-## compute_bsa: Mosteller method (Test 01.xx) ----
+## compute_bsa: Mosteller method ----
 # sqrt (Height x Weight / 3600)
 
-test_that("compute_bsa Test 01.01: Mosteller method - single height and weight values", {
+## Test 4: Mosteller method - single height & weight values ----
+test_that("compute_bsa Test 4: Mosteller method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "Mosteller"), 3L),
     1.882
   )
 })
 
-test_that("compute_bsa Test 01.02: Mosteller method - height and weight vectors", {
+## Test 5: Mosteller method - height & weight vectors ----
+test_that("compute_bsa Test 5: Mosteller method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "Mosteller"), 3L),
     c(1.882, 2.151)
   )
 })
 
-test_that("compute_bsa Test 01.03: Mosteller method - height and weight vectors - missing values", {
+## Test 6: Mosteller method - height & weight vectors - missing values ----
+test_that("compute_bsa Test 6: Mosteller method - height & weight vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "Mosteller"),
     c(NA_real_, NA_real_)
   )
 })
 
-## compute_bsa: DuBois-DuBois method (Test 02.xx) ----
+## compute_bsa: DuBois-DuBois method ----
 #  FORMULA : 0.20247 x (HGT/100)^0.725 x WGT^0.425
 
-test_that("compute_bsa Test 02.01: DuBois-DuBois method - single height and weight values", {
+## Test 7: DuBois-DuBois method - single height & weight values ----
+test_that("compute_bsa Test 7: DuBois-DuBois method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "DuBois-DuBois"), 3L),
     1.864
   )
 })
 
-test_that("compute_bsa Test 02.02: DuBois-DuBois method - height and weight vectors", {
+## Test 8: DuBois-DuBois method - height & weight vectors ----
+test_that("compute_bsa Test 8: DuBois-DuBois method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "DuBois-DuBois"), 3L),
     c(1.864, 2.141)
   )
 })
 
-test_that("compute_bsa Test 02.03: DuBois-DuBois method - hgt and wgt vectors - missing values", {
+## Test 9: DuBois-DuBois method - hgt and wgt vectors - missing values ----
+test_that("compute_bsa Test 9: DuBois-DuBois method - hgt and wgt vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "DuBois-DuBois"),
     c(NA_real_, NA_real_)
@@ -74,129 +83,142 @@ test_that("compute_bsa Test 02.03: DuBois-DuBois method - hgt and wgt vectors - 
 ## compute_bsa: Haycock method (Test 03.xx) ----
 # 0.024265 x HGT^0.3964 x WGT^0.5378
 
-test_that("compute_bsa Test 03.01: Haycock method - single height and weight values", {
+## Test 10: Haycock method - single height & weight values ----
+test_that("compute_bsa Test 10: Haycock method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "Haycock"), 3L),
     1.895
   )
 })
 
-test_that("compute_bsa Test 03.02: Haycock method - height and weight vectors", {
+## Test 11: Haycock method - height & weight vectors ----
+test_that("compute_bsa Test 11: Haycock method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "Haycock"), 3L),
     c(1.895, 2.161)
   )
 })
 
-test_that("compute_bsa Test 03.03: Haycock method - height and weight vectors - missing values", {
+## Test 12: Haycock method - height & weight vectors - missing values ----
+test_that("compute_bsa Test 12: Haycock method - height & weight vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "Haycock"),
     c(NA_real_, NA_real_)
   )
 })
 
-## compute_bsa: Gehan-George method (Test 04.xx) ----
+## compute_bsa: Gehan-George method ----
 # 0.0235 x HGT^0.42246 x WGT^0.51456
 
-test_that("compute_bsa Test 04.01: Gehan-George method - single height and weight values", {
+## Test 13: Gehan-George method - single height & weight values ----
+test_that("compute_bsa Test 13: Gehan-George method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "Gehan-George"), 3L),
     1.897
   )
 })
 
-test_that("compute_bsa Test 04.02: Gehan-George method - height and weight vectors", {
+## Test 14: Gehan-George method - height & weight vectors ----
+test_that("compute_bsa Test 14: Gehan-George method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "Gehan-George"), 3L),
     c(1.897, 2.16)
   )
 })
 
-test_that(paste(
-  "compute_bsa Test 04.03: Gehan-George method - height and",
-  "weight vectors - missing values"
-), {
+## Test 15: Gehan-George method - height & weight vectors - missing values ----
+test_that("compute_bsa Test 15: Gehan-George method - height & weight vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "Gehan-George"),
     c(NA_real_, NA_real_)
   )
 })
 
-## compute_bsa: Boyd method  (Test 05.xx) ----
+## compute_bsa: Boyd method ----
 # 0.0003207 x (HGT^0.3) x (1000 x WGT)^(0.7285 - (0.0188 x log10(1000 x WGT)))
 
-test_that("compute_bsa Test 05.01: Boyd method - single height and weight values", {
+## Test 16: Boyd method - single height & weight values ----
+test_that("compute_bsa Test 16: Boyd method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "Boyd"), 3L),
     1.905
   )
 })
 
-test_that("compute_bsa Test 05.02: Boyd method - height and weight vectors", {
+## Test 17: Boyd method - height & weight vectors ----
+test_that("compute_bsa Test 17: Boyd method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "Boyd"), 3L),
     c(1.905, 2.158)
   )
 })
 
-test_that("compute_bsa Test 05.03: Boyd method - height and weight vectors - missing values", {
+## Test 18: Boyd method - height & weight vectors - missing values ----
+test_that("compute_bsa Test 18: Boyd method - height & weight vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "Boyd"),
     c(NA_real_, NA_real_)
   )
 })
 
-## compute_bsa: Fujimoto method (Test 06.xx) ----
+## compute_bsa: Fujimoto method ----
 # 0.008883 x HGT^0.663 x WGT^0.444
 
-test_that("compute_bsa Test 06.01: Fujimoto method - single height and weight values", {
+## Test 19: Fujimoto method - single height & weight values ----
+test_that("compute_bsa Test 19: Fujimoto method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "Fujimoto"), 3L),
     1.819
   )
 })
 
-test_that("compute_bsa Test 06.02: Fujimoto method - height and weight vectors", {
+## Test 20: Fujimoto method - height & weight vectors ----
+test_that("compute_bsa Test 20: Fujimoto method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "Fujimoto"), 3L),
     c(1.819, 2.086)
   )
 })
 
-test_that("compute_bsa Test 06.03: Fujimoto method - height and weight vectors - missing values", {
+## Test 21: Fujimoto method - height & weight vectors - missing values ----
+test_that("compute_bsa Test 21: Fujimoto method - height & weight vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "Fujimoto"),
     c(NA_real_, NA_real_)
   )
 })
 
-## compute_bsa: Takahira method (Test 07.xx) ----
+## compute_bsa: Takahira method ----
 # 0.007241 x HGT^0.725 x WGT^0.425
 
-test_that("compute_bsa Test 07.01: Takahira method - single height and weight values", {
+## Test 22: Takahira method - single height & weight values ----
+test_that("compute_bsa Test 22: Takahira method - single height & weight values", {
   expect_equal(
     round(compute_bsa(height = 170, weight = 75, method = "Takahira"), 3L),
     1.878
   )
 })
 
-test_that("compute_bsa Test 07.02: Takahira method - height and weight vectors", {
+## Test 23: Takahira method - height & weight vectors ----
+test_that("compute_bsa Test 23: Takahira method - height & weight vectors", {
   expect_equal(
     round(compute_bsa(height = c(170, 185), weight = c(75, 90), method = "Takahira"), 3L),
     c(1.878, 2.158)
   )
 })
 
-test_that("compute_bsa Test 07.03: Takahira method - height and weight vectors - missing values", {
+## Test 24: Takahira method - height & weight vectors - missing values ----
+test_that("compute_bsa Test 24: Takahira method - height & weight vectors - missing values", {
   expect_equal(
     compute_bsa(height = c(NA, 185), weight = c(75, NA), method = "Takahira"),
     c(NA_real_, NA_real_)
   )
 })
 
-## compute_bsa: Check error messages (Test 08.xx) ----
+## compute_bsa: Check error messages ----
 
-test_that("compute_bsa Test 08.01: an error is issued if an invalid method is specified", {
+## Test 25: an error is issued if an invalid method is specified ----
+test_that("compute_bsa Test 25: an error is issued if an invalid method is specified", {
   expect_error(
     compute_bsa(height = c(170, 185), weight = c(75, 90), method = "unknown-method"),
     paste(
@@ -208,74 +230,60 @@ test_that("compute_bsa Test 08.01: an error is issued if an invalid method is sp
 
 # compute_map ----
 
-## compute_map: DBP & SBP (Test 01.xx) ----
+## compute_map: DBP & SBP ----
 # ((2 x DBP) + SBP) / 3
 
-test_that(paste(
-  "compute_map Test 01.01: Mean Arterial Pressure based on diastolic",
-  "& systolic BP - single values"
-), {
+## Test 26: MAP based on diastolic & systolic BP - single values ----
+test_that("compute_map Test 26: MAP based on diastolic & systolic BP - single values", {
   expect_equal(round(compute_map(diabp = 51, sysbp = 121), 3L), 74.333)
 })
 
-test_that(paste(
-  "compute_map Test 01.02: Mean Arterial Pressure based on diastolic",
-  "& systolic BP - vectors"
-), {
+## Test 27: MAP based on diastolic & systolic BP - vectors ----
+test_that("compute_map Test 27: MAP based on diastolic & systolic BP - vectors", {
   expect_equal(
     round(compute_map(diabp = c(51, 61), sysbp = c(121, 141)), 3L), c(74.333, 87.667)
   )
 })
 
-test_that(paste(
-  "compute_map Test 01.03: Mean Arterial Pressure based on diastolic",
-  "& systolic BP - vectors with missing values"
-), {
+## Test 28: MAP based on diastolic & systolic BP with missing values ----
+test_that("compute_map Test 28: MAP based on diastolic & systolic BP with missing values", {
   expect_equal(
     compute_map(diabp = c(NA, 61), sysbp = c(121, NA)), c(NA_real_, NA_real_)
   )
 })
 
-## compute_map: DBP, SBP & HR (Test 02.xx) ----
+## compute_map: DBP, SBP & HR ----
 # DBP + 0.01 x exp(4.14 - 40.74 / PULSE) x (SBP - DBP)
 
-test_that(paste(
-  "compute_map Test 02.01: Mean Arterial Pressure based on diastolic,",
-  "systolic BP & heart rate - single values"
-), {
+## Test 29: MAP based on DBP & SBP & heart rate - single values ----
+test_that("compute_map Test 29: MAP based on DBP & SBP & heart rate - single values", {
   expect_equal(
     round(compute_map(diabp = 51, sysbp = 121, hr = 59), 3L), 73.039
   )
 })
 
-test_that(paste(
-  "compute_map Test 02.02: Mean Arterial Pressure based on diastolic,",
-  "systolic BP & heart rate - vectors"
-), {
+## Test 30: MAP based on diastolic, systolic BP & heart rate - vectors ----
+test_that("compute_map Test 30: MAP based on diastolic, systolic BP & heart rate - vectors", {
   expect_equal(
     round(compute_map(diabp = c(51, 91), sysbp = c(121, 101), hr = c(59, 62)), 3L),
     c(73.039, 94.255)
   )
 })
 
-test_that(paste(
-  "compute_map Test 02.03: Mean Arterial Pressure based on diastolic,",
-  "systolic blood BP & heart rate - vectors with missing values"
-), {
+## Test 31: MAP based on DBP, SBP & heart rate - with missing values ----
+test_that("compute_map Test 31: MAP based on DBP, SBP & heart rate - with missing values", {
   expect_equal(
     compute_map(diabp = c(NA, 61, 51), sysbp = c(121, NA, 121), hr = c(59, 62, NA)),
     c(NA_real_, NA_real_, NA_real_)
   )
 })
 
-# derive_param_bmi  ----
+# derive_param_bmi ----
 
-## derive_param_bmi: Error checks (Test 01.xx) ----
+## derive_param_bmi: Error checks ----
 
-test_that(paste(
-  "derive_param_bmi Test 01.01: BMI parameter NOT added to input dataset",
-  "- wrong unit for hgt"
-), {
+## Test 32: BMI parameter NOT added - wrong hgt unit ----
+test_that("derive_param_bmi Test 32: BMI parameter NOT added - wrong hgt unit", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     # Wrong unit for HEIGHT should be cm
@@ -292,10 +300,8 @@ test_that(paste(
   )
 })
 
-test_that(paste(
-  "derive_param_bmi Test 01.02: BMI parameter NOT added to input dataset",
-  "- wrong unit for wgt"
-), {
+## Test 33: BMI parameter NOT added - wrong wgt unit ----
+test_that("derive_param_bmi Test 33: BMI parameter NOT added - wrong wgt unit", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
@@ -312,10 +318,8 @@ test_that(paste(
   )
 })
 
-test_that(paste(
-  "derive_param_bmi Test 01.03: BMI parameter NOT added to input dataset",
-  "- multiple unit for wgt"
-), {
+## Test 34: BMI parameter NOT added - multiple unit for wgt ----
+test_that("derive_param_bmi Test 34: BMI parameter NOT added - multiple unit for wgt", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
@@ -333,10 +337,8 @@ test_that(paste(
   )
 })
 
-test_that(paste(
-  "derive_param_bmi Test 01.04: BMI parameter NOT added to input dataset",
-  "- PARAMCD not set"
-), {
+## Test 35: BMI parameter NOT added - PARAMCD not set ----
+test_that("derive_param_bmi Test 35: BMI parameter NOT added - PARAMCD not set", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
@@ -354,9 +356,10 @@ test_that(paste(
   )
 })
 
-## derive_param_bmi: No obs added (Test 02.xx)  ----
+## derive_param_bmi: No obs added  ----
 
-test_that("derive_param_bmi Test 02.01: BMI parameter NOT added to input dataset", {
+## Test 36: BMI parameter NOT added ----
+test_that("derive_param_bmi Test 36: BMI parameter NOT added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -378,13 +381,14 @@ test_that("derive_param_bmi Test 02.01: BMI parameter NOT added to input dataset
   )
 })
 
-## derive_param_bmi: Obs created (Test 03.xx)  ----
+## derive_param_bmi: Obs created ----
 
 bmi <- function(hgt, wgt) {
   wgt / (hgt / 100)^2
 }
 
-test_that("derive_param_bmi Test 03.01: BMI parameter is correctly added to input dataset", {
+## Test 37: BMI parameter is correctly added ----
+test_that("derive_param_bmi Test 37: BMI parameter is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -410,14 +414,61 @@ test_that("derive_param_bmi Test 03.01: BMI parameter is correctly added to inpu
   )
 })
 
+
+# Derive BMI where height is measured only once
+## Test 38: Derive BMI where height is measured only once ----
+test_that("derive_param_bmi Test 38: Derive BMI where height is measured only once", {
+  input <- tibble::tribble(
+    ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
+    "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
+    "01-701-1028", "HEIGHT", "Height (cm)", 163.0, "cm",   "SCREENING",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
+  )
+
+  expected_output <- derive_param_computed(
+    input,
+    by_vars = exprs(USUBJID, VISIT),
+    parameters = "WEIGHT",
+    set_values_to = exprs(
+      AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
+      PARAMCD = "BMI",
+      PARAM = "Body Mass Index (kg/m^2)",
+      AVALU = "kg/m^2"
+    ),
+    constant_parameters = c("HEIGHT"),
+    constant_by_vars = exprs(USUBJID)
+  )
+
+  expect_dfs_equal(
+    expected_output,
+    derive_param_bmi(
+      input,
+      by_vars = exprs(USUBJID, VISIT),
+      weight_code = "WEIGHT",
+      height_code = "HEIGHT",
+      set_values_to = exprs(
+        PARAMCD = "BMI",
+        PARAM = "Body Mass Index (kg/m^2)",
+        AVALU = "kg/m^2"
+      ),
+      get_unit_expr = extract_unit(PARAM),
+      constant_by_vars = exprs(USUBJID)
+    ),
+    keys = c("USUBJID", "PARAMCD", "VISIT")
+  )
+})
+
 # derive_param_bsa ----
 
-## derive_param_bsa: Error checks (Test 01.xx) ----
+## derive_param_bsa: Error checks ----
 
-test_that(paste(
-  "derive_param_bsa Test 01.01: BSA parameter NOT added to input dataset",
-  "- wrong unit for height"
-), {
+## Test 39: BSA parameter NOT added - wrong unit for height ----
+test_that("derive_param_bsa Test 39: BSA parameter NOT added - wrong unit for height", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     # Wrong unit for HEIGHT should be cm
@@ -439,10 +490,8 @@ test_that(paste(
   )
 })
 
-test_that(paste(
-  "derive_param_bsa Test 01.02: BSA parameter NOT added to input dataset",
-  "- wrong unit for weight"
-), {
+## Test 40: BSA parameter NOT added - wrong unit for weight ----
+test_that("derive_param_bsa Test 40: BSA parameter NOT added - wrong unit for weight", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
@@ -464,10 +513,8 @@ test_that(paste(
   )
 })
 
-test_that(paste(
-  "derive_param_bsa Test 01.03: BSA parameter NOT added to input dataset",
-  "- multiple unit for weight"
-), {
+## Test 41: BSA parameter NOT added - multiple unit for weight ----
+test_that("derive_param_bsa Test 41: BSA parameter NOT added - multiple unit for weight", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
@@ -490,10 +537,8 @@ test_that(paste(
   )
 })
 
-test_that(paste(
-  "derive_param_bsa Test 01.04: BSA parameter NOT added to input dataset",
-  "- PARAMCD not set"
-), {
+## Test 42: BSA parameter NOT added - PARAMCD not set ----
+test_that("derive_param_bsa Test 42: BSA parameter NOT added - PARAMCD not set", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
@@ -515,9 +560,10 @@ test_that(paste(
   )
 })
 
-## derive_param_bsa: No obs added (Test 02.xx) ----
+## derive_param_bsa: No obs added ----
 
-test_that("derive_param_bsa Test 02.01: BSA parameter NOT added to input dataset", {
+## Test 43: BSA parameter NOT added ----
+test_that("derive_param_bsa Test 43: BSA parameter NOT added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -544,16 +590,14 @@ test_that("derive_param_bsa Test 02.01: BSA parameter NOT added to input dataset
   )
 })
 
-## derive_param_bsa: Obs created (Test 03.xx) ----
+## derive_param_bsa: Obs created ----
 
 mosteller <- function(hgt, wgt) {
   sqrt(hgt * wgt / 3600)
 }
 
-test_that(paste(
-  "derive_param_bsa Test 03.01: BSA parameter (Mosteller method) is",
-  "correctly added to input dataset"
-), {
+## Test 44: BSA parameter (Mosteller Method) is correctly added ----
+test_that("derive_param_bsa Test 44: BSA parameter (Mosteller Method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -587,10 +631,8 @@ dubois <- function(hgt, wgt) {
   0.20247 * (hgt / 100)^0.725 * wgt^0.425
 }
 
-test_that(paste(
-  "derive_param_bsa Test 03.02: BSA parameter (DuBois-DuBois method)",
-  "is correctly added to input dataset"
-), {
+## Test 45: BSA parameter (DuBois-DuBois method) is correctly added ----
+test_that("derive_param_bsa Test 45: BSA parameter (DuBois-DuBois method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -625,10 +667,8 @@ haycock <- function(hgt, wgt) {
   0.024265 * hgt^0.3964 * wgt^0.5378
 }
 
-test_that(paste(
-  "derive_param_bsa Test 03.03: BSA parameter (Haycock method) is",
-  "correctly added to input dataset"
-), {
+## Test 46: BSA parameter (Haycock method) is correctly added ----
+test_that("derive_param_bsa Test 46: BSA parameter (Haycock method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -662,10 +702,8 @@ gehan <- function(hgt, wgt) {
   0.0235 * hgt^0.42246 * wgt^0.51456
 }
 
-test_that(paste(
-  "derive_param_bsa Test 03.04: BSA parameter (Gehan-George method)",
-  "is correctly added to input dataset"
-), {
+## Test 47: BSA parameter (Gehan-George method) is correctly added ----
+test_that("derive_param_bsa Test 47: BSA parameter (Gehan-George method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -700,10 +738,8 @@ boyd <- function(hgt, wgt) {
   0.0003207 * (hgt^0.3) * (1000 * wgt)^(0.7285 - (0.0188 * log10(1000 * wgt))) # nolint
 }
 
-test_that(paste(
-  "derive_param_bsa Test 03.05: BSA parameter (Boyd method) is ",
-  "correctly added to input dataset"
-), {
+## Test 48: BSA parameter (Boyd method) is correctly added ----
+test_that("derive_param_bsa Test 48: BSA parameter (Boyd method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -737,10 +773,8 @@ fujimoto <- function(hgt, wgt) {
   0.008883 * hgt^0.663 * wgt^0.444
 }
 
-test_that(paste(
-  "derive_param_bsa Test 03.06: BSA parameter (Fujimoto method) is",
-  "correctly added to input dataset"
-), {
+## Test 49: BSA parameter (Fujimoto method) is correctly added ----
+test_that("derive_param_bsa Test 49: BSA parameter (Fujimoto method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -774,10 +808,9 @@ test_that(paste(
 takahira <- function(hgt, wgt) {
   0.007241 * hgt^0.725 * wgt^0.425
 }
-test_that(paste(
-  "derive_param_bsa Test 03.07: BSA parameter (Takahira method) is",
-  "correctly added to input dataset"
-), {
+
+## Test 50: BSA parameter (Takahira method) is correctly added ----
+test_that("derive_param_bsa Test 50: BSA parameter (Takahira method) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
@@ -808,14 +841,62 @@ test_that(paste(
   )
 })
 
+## Test 51: Derive BSA where height is measured only once ----
+test_that("derive_param_bsa Test 51: Derive BSA where height is measured only once", {
+  input <- tibble::tribble(
+    ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
+    "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
+    "01-701-1028", "HEIGHT", "Height (cm)", 163.0, "cm",   "SCREENING",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
+  )
+
+  expected_output <- derive_param_computed(
+    input,
+    by_vars = exprs(USUBJID, VISIT),
+    parameters = "WEIGHT",
+    set_values_to = exprs(
+      AVAL = compute_bsa(
+        height = AVAL.HEIGHT, weight = AVAL.WEIGHT,
+        method = "Mosteller"
+      ),
+      PARAMCD = "BSA",
+      PARAM = "Body Surface Area (m^2)",
+      AVALU = "m^2"
+    ),
+    constant_parameters = c("HEIGHT"),
+    constant_by_vars = exprs(USUBJID)
+  )
+
+  expect_dfs_equal(
+    expected_output,
+    derive_param_bsa(
+      input,
+      by_vars = exprs(USUBJID, VISIT),
+      method = "Mosteller",
+      set_values_to = exprs(
+        PARAMCD = "BSA",
+        PARAM = "Body Surface Area (m^2)",
+        AVALU = "m^2"
+      ),
+      get_unit_expr = extract_unit(PARAM),
+      constant_by_vars = exprs(USUBJID)
+    ),
+    keys = c("USUBJID", "PARAMCD", "VISIT")
+  )
+})
+
+
 # derive_param_map ----
 
-## derive_param_map: Error checks (Test 01.xx) ----
+## derive_param_map: Error checks ----
 
-test_that(paste(
-  "derive_param_map Test 01.01: MAP parameter NOT added to input dataset",
-  "- wrong unit for DIABP"
-), {
+## Test 52: MAP parameter NOT added - wrong DIABP unit ----
+test_that("derive_param_map Test 52: MAP parameter NOT added - wrong DIABP unit", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mHg)", 51, "BASELINE",
@@ -835,10 +916,8 @@ test_that(paste(
   )
 })
 
-test_that(paste(
-  "derive_param_map Test 01.02: MAP parameter NOT added to input dataset",
-  "- wrong unit for SYSBP"
-), {
+## Test 53: MAP parameter NOT added - wrong SYSBP unit ----
+test_that("derive_param_map Test 53: MAP parameter NOT added - wrong SYSBP unit", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
     "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
@@ -858,10 +937,8 @@ test_that(paste(
   )
 })
 
-test_that(paste(
-  "derive_param_map Test 01.03: MAP parameter NOT added to input dataset",
-  "- wrong unit for PULSE"
-), {
+## Test 54: MAP parameter NOT added - wrong PULSE unit ----
+test_that("derive_param_map Test 54: MAP parameter NOT added - wrong PULSE unit", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "BASELINE",
@@ -883,10 +960,8 @@ test_that(paste(
   )
 })
 
-test_that(paste(
-  "derive_param_map Test 01.04: MAP parameter NOT added to input dataset",
-  "- PARAMCD not set"
-), {
+## Test 55: MAP parameter NOT added - PARAMCD not set ----
+test_that("derive_param_map Test 55: MAP parameter NOT added - PARAMCD not set", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "BASELINE",
@@ -907,9 +982,10 @@ test_that(paste(
   )
 })
 
-## derive_param_map: No obs added (Test 02.xx) ----
+## derive_param_map: No obs added ----
 
-test_that("derive_param_map Test 02.01: MAP parameter NOT added to input dataset", {
+## Test 56: MAP parameter NOT added ----
+test_that("derive_param_map Test 56: MAP parameter NOT added", {
   expected_output <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
     "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    NA, "BASELINE",
@@ -937,16 +1013,14 @@ test_that("derive_param_map Test 02.01: MAP parameter NOT added to input dataset
   )
 })
 
-## derive_param_map: Obs created (Test 03.xx) ----
+## derive_param_map: Obs created ----
 
 maphr <- function(sbp, dbp, hr) {
   dbp + 0.01 * exp(4.14 - 40.74 / hr) * (sbp - dbp)
 }
 
-test_that(paste(
-  "derive_param_map Test 03.01: MAP parameter (DBP/SBP/PULSE) is correctly",
-  "added to input dataset"
-), {
+## Test 57: MAP parameter (DBP/SBP/PULSE) is correctly added ----
+test_that("derive_param_map Test 57: MAP parameter (DBP/SBP/PULSE) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~AVAL,
     "01-701-1015", "PULSE", "Pulse (beats/min)", "BASELINE", 59,
@@ -981,10 +1055,8 @@ map <- function(sbp, dbp) {
   (2 * dbp + sbp) / 3
 }
 
-test_that(paste(
-  "derive_param_map Test 03.02: MAP parameter (DBP/SBP) is correctly",
-  "added to input dataset"
-), {
+## Test 58: MAP parameter (DBP/SBP) is correctly added ----
+test_that("derive_param_map Test 58: MAP parameter (DBP/SBP) is correctly added", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~AVAL,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", "BASELINE", 51,

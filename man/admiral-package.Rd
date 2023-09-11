@@ -25,65 +25,25 @@ Useful links:
 Authors:
 \itemize{
   \item Stefan Bundfuss
-  \item Thomas Neitmann
-  \item Samia Kabi
-  \item Gordon Miller
-  \item Teckla Akinyi
-  \item Andrew Smith
-  \item Konstantina Koukourikou
-  \item Ross Farrugia
-  \item Eric Simms
-  \item Annie Yang
-  \item Robin Koeger
-  \item Sophie Shapcott
-  \item Ojesh Upadhyay
-  \item Jack McGavigan
-  \item Kamila Duniec
-  \item Gayatri G
-  \item Alana Harris
-  \item Mahdi About
-  \item Pooja Kumari
-  \item Claudia Carlucci
-  \item Daniil Stefonishin
-  \item Sadchla Mascary
-  \item Zelos Zhu
   \item Jeffrey Dickinson
-  \item Ania Golab
-  \item Kangjie Zhang
-  \item Daphne Grasselly
+  \item Ross Farrugia
   \item Adam Forys
+  \item Daphne Grasselly
+  \item Dinakar Kulkarni
   \item Edoardo Mancini
+  \item Sadchla Mascary
+  \item Gordon Miller
+  \item Sophie Shapcott
+  \item Eric Simms
   \item Stefan Thoma
+  \item Kangjie Zhang
+  \item Zelos Zhu
 }
 
 Other contributors:
 \itemize{
-  \item Michael Thorpe [contributor]
-  \item Declan Hodges [contributor]
-  \item Jaxon Abercrombie [contributor]
-  \item Nick Ramirez [contributor]
-  \item Pavan Kumar [contributor]
-  \item Hamza Rahal [contributor]
-  \item Yohann Omnes [contributor]
-  \item Alice Ehmann [contributor]
-  \item Tom Ratford [contributor]
-  \item Vignesh Thanikachalam [contributor]
-  \item Ondrej Slama [contributor]
-  \item Shimeng Huang [contributor]
-  \item James Kim [contributor]
-  \item Shan Lee [contributor]
-  \item Bill Denney [contributor]
-  \item Syed Mubasheer [contributor]
-  \item Wenyi Liu [contributor]
-  \item Dinakar Kulkarni [contributor]
-  \item Franciszek Walkowiak [contributor]
-  \item Tamara Senior [contributor]
-  \item Jordanna Morrish [contributor]
-  \item Anthony Howard [contributor]
-  \item Barbara O'Reilly [contributor]
-  \item John Kirkpatrick [contributor]
-  \item James Black [contributor]
-  \item Leena Khatri [contributor]
+  \item G Gayatri [contributor]
+  \item Thomas Neitmann [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
 }

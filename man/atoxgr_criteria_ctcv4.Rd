@@ -47,6 +47,7 @@ traceability only.
 \seealso{
 Other metadata: 
 \code{\link{atoxgr_criteria_ctcv5}},
+\code{\link{atoxgr_criteria_daids}},
 \code{\link{dose_freq_lookup}}
 }
 \concept{metadata}

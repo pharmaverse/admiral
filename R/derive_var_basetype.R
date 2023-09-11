@@ -42,10 +42,5 @@
 #'
 #' @export
 derive_var_basetype <- function(dataset, basetypes) {
-  deprecate_warn("0.11.0", "derive_var_basetype()", "derive_basetype_records()")
-
-  derive_basetype_records(
-    dataset = dataset,
-    basetypes = basetypes
-  )
+  deprecate_stop("0.11.0", "derive_var_basetype()", "derive_basetype_records()")
 }

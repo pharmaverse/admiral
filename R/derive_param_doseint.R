@@ -63,6 +63,8 @@
 #'   2. If the planned dose (`tpadm_code`) is 0 and the administered dose
 #'   (`tadm_code`) is > 0, 100 is returned.
 #'
+#' @inheritParams derive_param_map
+#'
 #' @inheritParams derive_param_computed
 #'
 #'
@@ -129,6 +131,8 @@ derive_param_doseint <- function(dataset,
   aval_tadm <- sym(paste0("AVAL.", tadm_code))
   aval_tpdm <- sym(paste0("AVAL.", tpadm_code))
 
+  analysis_value <- exprs(AVAL = !!aval_tadm / !!aval_tpdm * 100)
+
   # handle 0 doses planned if needed
   if (zero_doses == "100") {
     update_aval <- exprs(
@@ -149,7 +153,6 @@ derive_param_doseint <- function(dataset,
     filter = !!filter,
     parameters = c(tadm_code, tpadm_code),
     by_vars = by_vars,
-    analysis_value = (!!aval_tadm / !!aval_tpdm * 100),
-    set_values_to = expr_c(set_values_to, update_aval)
+    set_values_to = expr_c(set_values_to, analysis_value, update_aval)
   )
 }

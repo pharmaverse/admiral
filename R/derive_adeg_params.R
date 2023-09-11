@@ -47,10 +47,11 @@
 #'
 #'   Permitted Values: A variable of the input dataset or a function call
 #'
+#' @inheritParams derive_param_map
+#'
 #' @inheritParams derive_param_computed
 #'
 #' @seealso [compute_qtc()]
-#'
 #'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
@@ -60,6 +61,8 @@
 #' @keywords der_prm_bds_findings
 #'
 #' @export
+#'
+#' @seealso [compute_qtc()]
 #'
 #' @examples
 #' library(tibble)
@@ -151,12 +154,14 @@ derive_param_qtc <- function(dataset,
     filter = !!filter,
     parameters = c(qt_code, rr_code),
     by_vars = by_vars,
-    analysis_value = compute_qtc(
-      qt = !!sym(paste0("AVAL.", qt_code)),
-      rr = !!sym(paste0("AVAL.", rr_code)),
-      method = !!method
-    ),
-    set_values_to = set_values_to
+    set_values_to = exprs(
+      AVAL = compute_qtc(
+        qt = !!sym(paste0("AVAL.", qt_code)),
+        rr = !!sym(paste0("AVAL.", rr_code)),
+        method = !!method
+      ),
+      !!!set_values_to
+    )
   )
 }
 
@@ -175,6 +180,8 @@ derive_param_qtc <- function(dataset,
 #'
 #' @family der_prm_bds_findings
 #' @keywords der_prm_bds_findings
+#'
+#' @seealso [derive_param_qtc()]
 #'
 #' @examples
 #' default_qtc_paramcd("Sagie")
@@ -218,6 +225,8 @@ default_qtc_paramcd <- function(method) {
 #' @keywords com_bds_findings
 #'
 #' @export
+#'
+#' @seealso [derive_param_qtc()]
 #'
 #' @examples
 #' compute_qtc(qt = 350, rr = 56.54, method = "Bazett")
@@ -264,6 +273,8 @@ compute_qtc <- function(qt, rr, method) {
 #'
 #'   Permitted Values: character value
 #'
+#' @inheritParams derive_param_map
+#'
 #' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
@@ -276,6 +287,8 @@ compute_qtc <- function(qt, rr, method) {
 #' @keywords der_prm_bds_findings
 #'
 #' @export
+#'
+#' @seealso [compute_rr()]
 #'
 #' @examples
 #' library(tibble)
@@ -332,8 +345,10 @@ derive_param_rr <- function(dataset,
     filter = !!filter,
     parameters = c(hr_code),
     by_vars = by_vars,
-    analysis_value = compute_rr(!!sym(paste0("AVAL.", hr_code))),
-    set_values_to = set_values_to
+    set_values_to = exprs(
+      AVAL = compute_rr(!!sym(paste0("AVAL.", hr_code))),
+      !!!set_values_to
+    )
   )
 }
 
@@ -357,6 +372,8 @@ derive_param_rr <- function(dataset,
 #' @keywords com_bds_findings
 #'
 #' @export
+#'
+#' @seealso [derive_param_rr()]
 #'
 #' @examples
 #' compute_rr(hr = 70.14)

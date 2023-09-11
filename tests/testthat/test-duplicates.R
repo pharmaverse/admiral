@@ -1,4 +1,6 @@
-test_that("duplicate records are extracted", {
+# extract_duplicate_records ----
+## Test 1: duplicate records are extracted ----
+test_that("extract_duplicate_records Test 1: duplicate records are extracted", {
   input <- tibble::tribble(
     ~USUBJID, ~COUNTRY, ~AAGE,
     "P01",    "GER",    22,
@@ -16,7 +18,9 @@ test_that("duplicate records are extracted", {
   )
 })
 
-test_that("dataset of duplicate records can be accessed using `get_duplicates_dataset()`", {
+# signal_duplicate_records ----
+## Test 2: dataset of duplicate records can be accessed using `get_duplicates_dataset()` ----
+test_that("signal_duplicate_records Test 2: dataset of duplicate records can be accessed using `get_duplicates_dataset()`", { # nolint
   input <- tibble::tribble(
     ~USUBJID, ~COUNTRY, ~AAGE,
     "P01",    "GER",    22,
@@ -35,4 +39,6 @@ test_that("dataset of duplicate records can be accessed using `get_duplicates_da
   )
 
   expect_true(all(expected_ouput == get_duplicates_dataset()))
+
+  expect_snapshot(get_duplicates_dataset())
 })

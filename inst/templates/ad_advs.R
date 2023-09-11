@@ -4,7 +4,7 @@
 #
 # Input: adsl, vs
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -15,11 +15,10 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("admiral_vs")
+data("vs")
 data("admiral_adsl")
 
 adsl <- admiral_adsl
-vs <- admiral_vs
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
@@ -121,14 +120,16 @@ advs <- advs %>%
     method = "Mosteller",
     set_values_to = exprs(PARAMCD = "BSA"),
     get_unit_expr = VSSTRESU,
-    filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
+    filter = VSSTAT != "NOT DONE" | is.na(VSSTAT),
+    constant_by_vars = exprs(USUBJID)
   ) %>%
   # Derive Body Mass Index
   derive_param_bmi(
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = exprs(PARAMCD = "BMI"),
     get_unit_expr = VSSTRESU,
-    filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
+    filter = VSSTAT != "NOT DONE" | is.na(VSSTAT),
+    constant_by_vars = exprs(USUBJID)
   )
 
 

@@ -126,7 +126,7 @@ test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables
   ae_start <- date_source(
     dataset_name = "ae",
     date = convert_dtc_to_dtm(AESTDTC),
-    traceability_vars = exprs(
+    set_values_to = exprs(
       LALVDOM = "AE",
       LALVSEQ = AESEQ,
       LALVVAR = "AESTDTC"
@@ -136,7 +136,7 @@ test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables
   ae_end <- date_source(
     dataset_name = "ae",
     date = AEENDTM,
-    traceability_vars = exprs(
+    set_values_to = exprs(
       LALVDOM = "AE",
       LALVSEQ = AESEQ,
       LALVVAR = "AEENDTC"
@@ -146,7 +146,7 @@ test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables
   adsl_trtdate <- date_source(
     dataset_name = "adsl",
     date = TRTEDTM,
-    traceability_vars = exprs(
+    set_values_to = exprs(
       LALVDOM = "ADSL",
       LALVSEQ = NA_integer_,
       LALVVAR = "TRTEDTM"
@@ -157,7 +157,7 @@ test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables
     dataset_name = "adsl",
     date = DTHDT,
     filter = nchar(DTHDTC) >= 10,
-    traceability_vars = exprs(
+    set_values_to = exprs(
       LALVDOM = "ADSL",
       LALVSEQ = NA_integer_,
       LALVVAR = "DTHDTC"
@@ -192,7 +192,7 @@ test_that("derive_var_extreme_dtm Test 5: error is issued if `--DTC` variable is
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTC,
-    traceability_vars = exprs(
+    set_values_to = exprs(
       LALVDOM = "AE",
       LALVSEQ = AESEQ,
       LALVVAR = "AESTDTC"
@@ -208,5 +208,21 @@ test_that("derive_var_extreme_dtm Test 5: error is issued if `--DTC` variable is
       mode = "last"
     ),
     regexp = "`AESTDTC` in dataset `ae` is not a date or datetime variable but is a character vector" # nolint
+  )
+})
+
+## Test 6: Returns a warning when traceability_vars is assigned  ----
+test_that("derive_var_extreme_dtm Test 6: Returns a warning when traceability_vars is assigned", {
+  expect_warning(
+    ae_start <- date_source(
+      dataset_name = "ae",
+      date = convert_dtc_to_dtm(AESTDTC),
+      traceability_vars = exprs(
+        LALVDOM = "AE",
+        LALVSEQ = AESEQ,
+        LALVVAR = "AESTDTC"
+      )
+    ),
+    class = "lifecycle_warning_deprecated"
   )
 })

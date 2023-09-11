@@ -66,9 +66,37 @@
 #'
 #'   Permitted Values: `TRUE`, `FALSE`
 #'
+#' @param type lubridate duration type.
+#'
+#'   See below for details.
+#'
+#'   Default: `"duration"`
+#'
+#'   Permitted Values: `"duration"`, `"interval"`
+#'
 #' @details The output is a numeric vector providing the duration as time from
 #' start to end date in the specified unit. If the end date is before the start
 #' date, the duration is negative.
+#'
+#' @section Duration Type:
+#'
+#' The [lubridate](https://lubridate.tidyverse.org/) package calculates two
+#' types of spans between two dates: duration and interval.
+#' While these calculations are largely the same, when the unit of the time period
+#' is month or year the result can be slightly different.
+#'
+#' The difference arises from the ambiguity in the length of `"1 month"` or
+#' `"1 year"`.
+#' Months may have 31, 30, 28, or 29 days, and years are 365 days and 366 during leap years.
+#' Durations and intervals help solve the ambiguity in these measures.
+#'
+#' The **interval** between `2000-02-01` and `2000-03-01` is `1` (i.e. one month).
+#' The **duration** between these two dates is `0.95`, which accounts for the fact
+#' that the year 2000 is a leap year, February has 29 days, and the average month
+#' length is `30.4375`, i.e. `29 / 30.4375 = 0.95`.
+#'
+#' For additional details, review the
+#' [lubridate time span reference page](https://lubridate.tidyverse.org/reference/timespan.html).
 #'
 #'
 #' @return The duration between the two date in the specified unit
@@ -78,6 +106,8 @@
 #' @keywords com_date_time
 #'
 #' @export
+#'
+#' @seealso [derive_vars_duration()]
 #'
 #' @examples
 #' library(lubridate)
@@ -119,11 +149,13 @@ compute_duration <- function(start_date,
                              out_unit = "days",
                              floor_in = TRUE,
                              add_one = TRUE,
-                             trunc_out = FALSE) {
+                             trunc_out = FALSE,
+                             type = "duration") {
   # Checks
   assert_date_vector(start_date)
   assert_date_vector(end_date)
   assert_character_scalar(in_unit, values = valid_time_units())
+  assert_character_scalar(type, values = c("interval", "duration"))
   assert_character_scalar(out_unit, values = c(
     valid_time_units(), "weeks",
     "min", "sec"
@@ -155,7 +187,13 @@ compute_duration <- function(start_date,
   }
 
   # derive the duration in the output unit
-  duration <- time_length(start_date %--% end_date, unit = out_unit)
+  duration <-
+    switch(type,
+      "interval" = start_date %--% end_date,
+      "duration" = lubridate::as.duration(start_date %--% end_date)
+    ) %>%
+    time_length(unit = out_unit)
+
   if (add_one) {
     # add one unit of the input unit (converted to the output unit), e.g., if
     # input unit is days and output unit is hours, 24 hours are added

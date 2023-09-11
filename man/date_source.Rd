@@ -4,7 +4,13 @@
 \alias{date_source}
 \title{Create a \code{date_source} object}
 \usage{
-date_source(dataset_name, filter = NULL, date, traceability_vars = NULL)
+date_source(
+  dataset_name,
+  filter = NULL,
+  date,
+  traceability_vars = NULL,
+  set_values_to = NULL
+)
 }
 \arguments{
 \item{dataset_name}{The name of the dataset, i.e. a string, used to search for
@@ -17,7 +23,11 @@ datetime can be specified. An unquoted symbol or expression is expected.}
 
 \item{traceability_vars}{A named list returned by \code{exprs()} defining the
 traceability variables, e.g. \code{exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, a numeric,
-an expression, or \code{NA}.}
+an expression, or \code{NA}.
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.}
+
+\item{set_values_to}{Variables to be set}
 }
 \value{
 An object of class \code{date_source}.
@@ -45,7 +55,7 @@ lb_date <- date_source(
 death_date <- date_source(
   dataset_name = "adsl",
   date = DTHDT,
-  traceability_vars = exprs(
+  set_values_to = exprs(
     LALVDOM = "ADSL",
     LALVVAR = "DTHDT"
   )
@@ -59,6 +69,7 @@ Source Objects:
 \code{\link{censor_source}()},
 \code{\link{death_event}},
 \code{\link{dthcaus_source}()},
+\code{\link{event_joined}()},
 \code{\link{event_source}()},
 \code{\link{event}()},
 \code{\link{query}()},

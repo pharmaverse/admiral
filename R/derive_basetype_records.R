@@ -96,7 +96,7 @@
 #' count(bds_with_basetype, BASETYPE, name = "Number of Records")
 derive_basetype_records <- function(dataset, basetypes) {
   assert_data_frame(dataset)
-  assert_named_exprs(basetypes)
+  assert_expr_list(basetypes, named = TRUE)
 
   records_with_basetype <- map2(names(basetypes), basetypes, function(label, condition) {
     dataset %>%

@@ -95,6 +95,14 @@
 #'
 #'   *Permitted Values*: a condition
 #'
+#' @param keep_source_vars Variables to be kept in the new records
+#'
+#'   A named list or tidyselect expressions created by `exprs()` defining the
+#'   variables to be kept for the new records. The variables specified for
+#'   `by_vars` and `set_values_to` need not be specified here as they are kept
+#'   automatically.
+#'
+#'
 #' @inheritParams filter_extreme
 #' @inheritParams derive_summary_records
 #'
@@ -109,6 +117,9 @@
 #'   but not in the selected records are added.
 #'   1. The variables specified by the `set_values_to` argument are added to
 #'   the selected observations.
+#'   1. The variables specified by the `keep_source_vars` argument are selected
+#'   along with the variables specified in `by_vars` and `set_values_to`
+#'   arguments.
 #'   1. The observations are added to input dataset.
 #'
 #'
@@ -138,12 +149,14 @@
 #' # Add a new record for each USUBJID storing the minimum value (first AVAL).
 #' # If multiple records meet the minimum criterion, take the first value by
 #' # AVISITN. Set AVISITN = 97 and DTYPE = MINIMUM for these new records.
+#' # Specify the variables that need to be kept in the new records.
 #' derive_extreme_records(
 #'   adlb,
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(AVAL, AVISITN),
 #'   mode = "first",
 #'   filter_add = !is.na(AVAL),
+#'   keep_source_vars = exprs(AVAL),
 #'   set_values_to = exprs(
 #'     AVISITN = 97,
 #'     DTYPE = "MINIMUM"
@@ -254,10 +267,11 @@ derive_extreme_records <- function(dataset = NULL,
                                    exist_flag = NULL,
                                    true_value = "Y",
                                    false_value = "N",
+                                   keep_source_vars = exprs(everything()),
                                    set_values_to,
                                    filter) {
   if (!missing(filter)) {
-    deprecate_warn(
+    deprecate_stop(
       "0.11.0",
       "derive_extreme_records(filter = )",
       "derive_extreme_records(filter_add = )"
@@ -268,6 +282,8 @@ derive_extreme_records <- function(dataset = NULL,
   # Check input arguments
   assert_vars(by_vars, optional = is.null(dataset_ref))
   assert_expr_list(order, optional = TRUE)
+  assert_expr_list(keep_source_vars, optional = TRUE)
+
   assert_data_frame(
     dataset,
     required_vars = expr_c(
@@ -333,10 +349,12 @@ derive_extreme_records <- function(dataset = NULL,
     new_obs <- new_add_obs
   }
 
-  new_obs <- process_set_values_to(
-    new_obs,
-    set_values_to = set_values_to
-  )
+  new_obs <- new_obs %>%
+    process_set_values_to(
+      set_values_to = set_values_to
+    ) %>%
+    select(!!!by_vars, names(set_values_to), !!!keep_source_vars)
+
 
   # Create output dataset
   bind_rows(dataset, new_obs)

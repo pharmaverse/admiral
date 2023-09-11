@@ -26,28 +26,29 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
 
-remotes::install_github("pharmaverse/admiral.test", ref = "devel") # This is a required dependency of {admiral}
-remotes::install_github("pharmaverse/admiraldev", ref = "devel") # This is a required dependency of {admiral}
-remotes::install_github("pharmaverse/admiral", ref = "devel")
+remotes::install_github("pharmaverse/pharmaversesdtm") # This is a required dependency of {admiral}
+remotes::install_github("pharmaverse/admiraldev") # This is a required dependency of {admiral}
+remotes::install_github("pharmaverse/admiral")
 ```
 
 ## Release Schedule
 
-`{admiral}` releases are targeted for the first Monday of the last month of each quarter.  Pull Requests will be frozen the week before a release.
-The `admiral` family has several downstream and upstream dependencies and so this release shall be done in three
+[{admiral}](https://pharmaverse.github.io/admiral/cran-release/)` releases are targeted for the first Monday of the last month of each quarter.  Pull Requests will be frozen the week before a release.
+The {admiral} family has several downstream and upstream dependencies and so this release shall be done in three
 Phases:
 
-* Phase 1 release is for `{admiraldev}`, `{admiral.test}`, and `{admiral}` core
-* Phase 2 release is extension packages, e.g. `{admiralonco}`, `admiralophtha`
+* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/), and [{admiral}](https://pharmaverse.github.io/admiral/cran-release/) core 
+* Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/)
 
-| Release Schedule | Phase 1- Date and Packages      | Phase 2- Date and Packages |
-| ---------------- | ------------------------------- | -------------------------- |
-| Q3-2023          | September 4th                   | September 11th             |
-|                  | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            |
-|                  | `{admiral}`                     | `{admiralophtha}`          |
-| Q4-2023          | December 4th                    | December 11th              |
-|                  | `{admiraldev}` `{admiral.test}` | `{admiralonco}`            |
-|                  | `{admiral}`                     | `{admiralophtha}`          |
+
+|Release Schedule | Phase 1- Date and Packages                                                  | Phase 2- Date and Packages                                                    |
+|---------------- | --------------------------                                                  | --------------------------                                                    |
+| Q4-2023         | December 4th                                                                | December 11th                                                                 |
+|                 | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/)    | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)              |
+|                 | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)              | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)          |
+|                 | [{admiral}](https://pharmaverse.github.io/admiral/main/)                    |                                                                               |
+
+The `{admiral}` Q4-2023 release will officially be `{admiral}`'s version 1.0.0 release, where we commit to increased package maturity and pivot towards focusing on maintenance rather than new content. This does not mean that there will never be any new content in `{admiral}`, rather it means we will be more mindful about introducing new functionality and/or breaking changes. The release schedule in 2024 and onward will also shift to twice-yearly, rather than quarterly, so that our users have ample time to react to any new content and changes that do make it onto `{admiral}`.
 
 ## Main Goal
 
@@ -76,15 +77,13 @@ We will provide:
 * Functions that are comprehensively documented and tested, including example calls---these are
   all listed in the [Reference section](https://pharmaverse.github.io/admiral/cran-release/reference/index.html)
 * Vignettes on how to create ADSL, BDS and OCCDS datasets, including example scripts
-* Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation,
-  SMQs ...)
+* Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs ...)
 
 ## Types of Packages
 
 There will be 3 foreseeable types of `{admiral}` packages:
 
-* Core package---one package containing all core functions required to create ADaMs,
-  usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS)
+* Core package---one package containing all core functions required to create ADaMs, usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS)
 * TA (Therapeutic Area) package extensions---one package per TA with functions that are
   specific to algorithms and requirements for that particular TA (e.g. [`{admiralonco}`](https://pharmaverse.github.io/admiralonco/))
 * Company package extensions---specific needs and plug-ins for the company, such as access to metadata
@@ -104,23 +103,15 @@ We have four design principles to achieve the main goal:
 
 All `{admiral}` functions should be easy to use.
 
-* Documentation is an absolute priority. Each function reference page should cover the purpose,
-  descriptions of each argument with permitted values, the expected input and output, with clear real-life
-  examples---so that users don’t need to dig through code to find answers.
-* Vignettes that complement the functional documentation to help users see how best the functions can be
-  applied to achieve ADaM requirements.
-* Functions should be written and structured in a way that users are able to read, re-use or extend them
-  for study specific purposes if needed (see Readability below).
+* Documentation is an absolute priority. Each function reference page should cover the purpose, descriptions of each argument with permitted values, the expected input and output, with clear real-life examples---so that users don’t need to dig through code to find answers.
+* Vignettes that complement the functional documentation to help users see how best the functions can be applied to achieve ADaM requirements.
+* Functions should be written and structured in a way that users are able to read, re-use or extend them for study specific purposes if needed (see Readability below).
 
 ### Simplicity
 
 All `{admiral}` functions have a clear purpose.
 
-* We try not to ever design single functions that could achieve numerous very different derivations. For
-  example if you as a user pick up a function with >10 different arguments then chances are it is going to be
-  difficult to understand if this function could be applied for your specific need. The intention is that
-  arguments/parameters can influence how the output of a function is calculated, but not change the purpose of
-  the function.
+* We try not to ever design single functions that could achieve numerous very different derivations. For example if you as a user pick up a function with >10 different arguments then chances are it is going to be difficult to understand if this function could be applied for your specific need. The intention is that arguments/parameters can influence how the output of a function is calculated, but not change the purpose of the function.
 
 * We try to combine similar tasks and algorithms into one function where applicable to reduce the amount of repetitive functions with similar algorithms and to group together similar functionality to increase usability (e.g. one study day calculation rather than a function per variable).
 
@@ -128,20 +119,16 @@ All `{admiral}` functions have a clear purpose.
 
 * Functions should not allow expressions as arguments that are used as code snippets in function calls.
 
-* We recommend to avoid copy and paste of complex computational algorithms or repetitive code like checks
-  and advise to wrap them into a function. However we would also like to avoid multi-layered functional nesting,
-  so this needs to be considered carefully to keep the nesting of 3-4 functions an exception rather than the rule.
+* We recommend to avoid copy and paste of complex computational algorithms or repetitive code like checks and advise to wrap them into a function. However we would also like to avoid multi-layered functional nesting, so this needs to be considered carefully to keep the nesting of 3-4 functions an exception rather than the rule.
 
 ### Findability
 
 All `{admiral}` functions are easily findable.
 
 * In a growing code base, across a family of packages, we make every effort to make our functions easily findable.
-* We use consistent naming conventions across all our functions, and provide vignettes and ADaM templates that
-  help users to get started and build familiarity. Each `{admiral}` family package website is searchable.
+* We use consistent naming conventions across all our functions, and provide vignettes and ADaM templates that help users to get started and build familiarity. Each `{admiral}` family package website is searchable.
 * We avoid repetitive functions that will do similar tasks (as explained above with study day example).
-* Each package extension is kept focused on the specific scope, e.g. features that are relevant across multiple
-  extension packages will be moved to the core `{admiral}` package.
+* Each package extension is kept focused on the specific scope, e.g. features that are relevant across multiple extension packages will be moved to the core `{admiral}` package.
 
 ### Readability
 
@@ -149,13 +136,10 @@ All `{admiral}` functions follow the [Programming Strategy](https://pharmaverse.
 that all our developers and contributors must follow, so that all our code has a high degree of consistency and readability.
 
 * We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.
-* For sections of code that perform the actual derivations (e.g. besides assertions or basic utilities),
-  we try to limit nesting of too many dependencies or functions.
+* For sections of code that perform the actual derivations (e.g. besides assertions or basic utilities), we try to limit nesting of too many dependencies or functions.
 * Modularity is a focus---we don’t try to achieve too many steps in one.
 * All code has to be well commented.
-* We recognize that a user or a Health Authority reviewer may have the wish to delve into the code base (especially
-  given this open source setting), or users may need to extend/adapt the code for their study specific needs. We
-  therefore want any module to be understandable to all, not only the `{admiral}` developers.
+* We recognize that a user or a Health Authority reviewer may have the wish to delve into the code base (especially given this open source setting), or users may need to extend/adapt the code for their study specific needs. We therefore want any module to be understandable to all, not only the `{admiral}` developers.
 
 ## References and Documentation
 
@@ -166,16 +150,22 @@ that all our developers and contributors must follow, so that all our code has a
 * Please see the [Contribution Model](https://pharmaverse.github.io/admiral/cran-release/articles/contribution_model.html) for how to get involved with making contributions
 * Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
 
+## Pharmaverse Blog
+If you are interested in R and Clinical Reporting, then visit the [pharmaverse blog](https://pharmaverse.github.io/blog/). This contains regular, bite-sized posts showcasing how `{admiral}` and other packages in the pharmaverse can be used to realize the vision of full end-to-end Clinical Reporting in R.
+
+We are also always looking for keen `{admiral}` users to publish their own blog posts about how they use the package. If this could be you, feel free make an issue in the [GitHub repo](https://github.com/pharmaverse/blog) and get started!
+
+
 ## Conference Presentations
 
+* [Cross Industry Package Development](https://www.youtube.com/watch?v=M4L1PPMu0pU) (recording from R in Pharma 2022)
 * [Paving the way for clinical submissions in R](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/EU/London/PRE_London09.pdf) (slides from PHUSE SDE in London)
 * [An Overview of {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/US/Summit/PRE_Summit03.pdf) (slides from PHUSE SDE in Summit, NJ)
 * [{admiralonco}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS12.mp4) (recording for talk at PHUSE US Connect 2023, slides also available [here](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/PRE_OS12.pdf))
 * [Programming ADNCA using R and {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS09.mp4) (recording of presentation from PHUSE US Connect 2023)
 * [Clinical Reporting in R](https://www.youtube.com/watch?v=9eod8MLF5ys\&list=PLMtxz1fUYA5AWYQHB5mZAs-yamNJ5Tm_8\&index=2) (recording of workshop at R in Pharma 2022)
 * [Introducing {admiral}](https://www.youtube.com/watch?v=N7Bw8c3D5fU) (recording of talk for R in Pharma 2021)
-* [Pharmaverse workshop](https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022) (slides and materials from PHUSE US Connect 2022---including `{admiral}`
-  workshop slides from PHUSE EU Connect 2021)
+* [Pharmaverse workshop](https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022) (slides and materials from PHUSE US Connect 2022---including `{admiral}` workshop slides from PHUSE EU Connect 2021)
 
 ## Contact
 
@@ -183,3 +173,8 @@ We use the following for support and communications between user and developer c
 
 * [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269)---for informal discussions, Q\&A and building our user community. If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join the pharmaverse Slack workspace
 * [GitHub Issues](https://github.com/pharmaverse/admiral/issues)---for direct feedback, enhancement requests or raising bugs
+
+## Acknowledgments
+
+Along with the authors and contributors, thanks to the following people for their work on the package: 
+Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Bill Denney, Kamila Duniec, Alice Ehmann, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Yohann Omnes, Barbara O'Reilly, Hamza Rahal, Nick Ramirez, Tom Ratford, Tamara Senior, Sophie Shapcott, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay and Franciszek Walkowiak.

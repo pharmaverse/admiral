@@ -88,7 +88,7 @@ src_ae <- dthcaus_source(
   date = convert_dtc_to_dt(AEDTHDTC),
   mode = "first",
   dthcaus = AEDECOD,
-  traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
+  set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
 )
 
 src_ds <- dthcaus_source(
@@ -97,7 +97,7 @@ src_ds <- dthcaus_source(
   date = convert_dtc_to_dt(DSSTDTC),
   mode = "first",
   dthcaus = DSTERM,
-  traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
+  set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 
 derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
@@ -109,7 +109,7 @@ src_ae <- dthcaus_source(
   date = convert_dtc_to_dt(AEDTHDTC),
   mode = "first",
   dthcaus = AEDECOD,
-  traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
+  set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
 )
 
 ds <- mutate(
@@ -123,7 +123,7 @@ src_ds <- dthcaus_source(
   date = DSSTDT,
   mode = "first",
   dthcaus = DSTERM,
-  traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
+  set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 
 src_ds_post <- dthcaus_source(
@@ -132,7 +132,7 @@ src_ds_post <- dthcaus_source(
   date = DSSTDT,
   mode = "first",
   dthcaus = "POST STUDY: UNKNOWN CAUSE",
-  traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
+  set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 
 derive_var_dthcaus(

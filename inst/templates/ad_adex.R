@@ -6,7 +6,7 @@
 #
 
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -16,10 +16,9 @@ library(stringr)
 #  as needed and assign to the variables below.
 # The CDISC pilot datasets are used for demonstration purpose.
 data("admiral_adsl")
-data("admiral_ex")
+data("ex")
 
 adsl <- admiral_adsl
-ex <- admiral_ex
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
@@ -214,13 +213,17 @@ adex <- adex %>%
     variable_params = list(
       params(
         parameters = c("TDOSE", "TDURD"),
-        analysis_value = (AVAL.TDOSE / AVAL.TDURD),
-        set_values_to = exprs(PARAMCD = "AVDDSE")
+        set_values_to = exprs(
+          AVAL = (AVAL.TDOSE / AVAL.TDURD),
+          PARAMCD = "AVDDSE"
+        )
       ),
       params(
         parameters = c("PDOSE", "PDURD"),
-        analysis_value = (AVAL.PDOSE / AVAL.PDURD),
-        set_values_to = exprs(PARAMCD = "PAVDDSE")
+        set_values_to = exprs(
+          AVAL = (AVAL.PDOSE / AVAL.PDURD),
+          PARAMCD = "PAVDDSE"
+        )
       )
     ),
     by_vars = exprs(

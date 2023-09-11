@@ -9,8 +9,7 @@ library(admiral)
 library(dplyr)
 library(lubridate)
 library(stringr)
-
-library(admiral.test) # Contains example datasets from the CDISC pilot project or simulated
+library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project or simulated
 
 # ---- Load source datasets ----
 
@@ -19,10 +18,10 @@ library(admiral.test) # Contains example datasets from the CDISC pilot project o
 # For illustration purposes read in admiral test data
 
 # Load PC, EX, VS, LB and ADSL
-data("admiral_pc")
-data("admiral_ex")
-data("admiral_vs")
-data("admiral_lb")
+data("pc")
+data("ex")
+data("vs")
+data("lb")
 
 data("admiral_adsl")
 
@@ -33,21 +32,10 @@ adsl <- admiral_adsl
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
 
-# Load EX
-
-ex <- convert_blanks_to_na(admiral_ex)
-
-# Load PC
-
-pc <- convert_blanks_to_na(admiral_pc)
-
-# Load VS for baseline height and weight
-
-vs <- convert_blanks_to_na(admiral_vs)
-
-# Load LB for baseline lab values
-
-lb <- convert_blanks_to_na(admiral_lb)
+ex <- convert_blanks_to_na(ex)
+pc <- convert_blanks_to_na(pc)
+vs <- convert_blanks_to_na(vs)
+lb <- convert_blanks_to_na(lb)
 
 # ---- Lookup tables ----
 param_lookup <- tibble::tribble(
@@ -448,11 +436,11 @@ covar_vslb <- covar %>%
       method = "Mosteller"
     ),
     CRCLBL = compute_egfr(
-      creat = CREATBL, creatu = "SI", age = AGE, wt = WTBL, sex = SEX,
+      creat = CREATBL, creatu = "SI", age = AGE, weight = WTBL, sex = SEX,
       method = "CRCL"
     ),
     EGFRBL = compute_egfr(
-      creat = CREATBL, creatu = "SI", age = AGE, wt = WTBL, sex = SEX,
+      creat = CREATBL, creatu = "SI", age = AGE, weight = WTBL, sex = SEX,
       method = "CKD-EPI"
     )
   ) %>%

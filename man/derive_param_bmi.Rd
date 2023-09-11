@@ -11,7 +11,8 @@ derive_param_bmi(
   weight_code = "WEIGHT",
   height_code = "HEIGHT",
   get_unit_expr,
-  filter = NULL
+  filter = NULL,
+  constant_by_vars = NULL
 )
 }
 \arguments{
@@ -35,24 +36,26 @@ in the newly created records.
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+observations. For example \code{exprs(PARAMCD = "MAP")} defines the parameter code
+for the new parameter.
 
-\emph{Permitted Values:} List of variable-value pairs}
+\emph{Permitted Values}: List of variable-value pairs}
 
 \item{weight_code}{WEIGHT parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the WEIGHT. It is expected that WEIGHT is measured in kg
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 
 \item{height_code}{HEIGHT parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
 as the HEIGHT. It is expected that HEIGHT is measured in cm
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value
+
+\emph{Permitted Values:} logical scalar}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
@@ -67,6 +70,18 @@ new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
 \emph{Permitted Values:} a condition}
+
+\item{constant_by_vars}{By variables for when HEIGHT is constant
+
+When HEIGHT is constant, the HEIGHT parameters (measured only once) are merged
+to the other parameters using the specified variables.
+
+If height is constant (e.g. only measured once at screening or baseline) then
+use \code{constant_by_vars} to select the subject-level variable to merge on (e.g. \code{USUBJID}).
+This will produce BMI at all visits where weight is measured.  Otherwise
+it will only be calculated at visits with both height and weight collected.
+
+\emph{Permitted Values:} list of variables}
 }
 \value{
 The input dataset with the new parameter added. Note, a variable will only
@@ -83,18 +98,18 @@ The analysis value of the new parameter is derived as
 \deqn{BMI = \frac{WEIGHT}{HEIGHT^2}}
 }
 \examples{
-library(tibble)
 
-advs <- tribble(
-  ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVISIT,
-  "01-701-1015", "HEIGHT", "Height (cm)", 147,   "SCREENING",
-  "01-701-1015", "WEIGHT", "Weight (kg)", 54.0,  "SCREENING",
-  "01-701-1015", "WEIGHT", "Weight (kg)", 54.4,  "BASELINE",
-  "01-701-1015", "WEIGHT", "Weight (kg)", 53.1,  "WEEK 2",
-  "01-701-1028", "HEIGHT", "Height (cm)", 163,   "SCREENING",
-  "01-701-1028", "WEIGHT", "Weight (kg)", 78.5,  "SCREENING",
-  "01-701-1028", "WEIGHT", "Weight (kg)", 80.3,  "BASELINE",
-  "01-701-1028", "WEIGHT", "Weight (kg)", 80.7,  "WEEK 2"
+# Example 1: Derive BMI where height is measured only once using constant_by_vars
+advs <- tibble::tribble(
+  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVISIT,
+  "01-701-1015", "HEIGHT", "Height (cm)", 147, "SCREENING",
+  "01-701-1015", "WEIGHT", "Weight (kg)", 54.0, "SCREENING",
+  "01-701-1015", "WEIGHT", "Weight (kg)", 54.4, "BASELINE",
+  "01-701-1015", "WEIGHT", "Weight (kg)", 53.1, "WEEK 2",
+  "01-701-1028", "HEIGHT", "Height (cm)", 163, "SCREENING",
+  "01-701-1028", "WEIGHT", "Weight (kg)", 78.5, "SCREENING",
+  "01-701-1028", "WEIGHT", "Weight (kg)", 80.3, "BASELINE",
+  "01-701-1028", "WEIGHT", "Weight (kg)", 80.7, "WEEK 2"
 )
 
 derive_param_bmi(
@@ -106,10 +121,52 @@ derive_param_bmi(
     PARAMCD = "BMI",
     PARAM = "Body Mass Index (kg/m^2)"
   ),
+  get_unit_expr = extract_unit(PARAM),
+  constant_by_vars = exprs(USUBJID)
+)
+
+# Example 2: Derive BMI where height is measured only once and keep only one record
+# where both height and weight are measured.
+derive_param_bmi(
+  advs,
+  by_vars = exprs(USUBJID, AVISIT),
+  weight_code = "WEIGHT",
+  height_code = "HEIGHT",
+  set_values_to = exprs(
+    PARAMCD = "BMI",
+    PARAM = "Body Mass Index (kg/m^2)"
+  ),
+  get_unit_expr = extract_unit(PARAM)
+)
+
+# Example 3: Pediatric study where height and weight are measured multiple times
+advs <- tibble::tribble(
+  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
+  "01-101-1001", "HEIGHT", "Height (cm)", 47.1, "BASELINE",
+  "01-101-1001", "HEIGHT", "Height (cm)", 59.1, "WEEK 12",
+  "01-101-1001", "HEIGHT", "Height (cm)", 64.7, "WEEK 24",
+  "01-101-1001", "HEIGHT", "Height (cm)", 68.2, "WEEK 48",
+  "01-101-1001", "WEIGHT", "Weight (kg)", 2.6, "BASELINE",
+  "01-101-1001", "WEIGHT", "Weight (kg)", 5.3, "WEEK 12",
+  "01-101-1001", "WEIGHT", "Weight (kg)", 6.7, "WEEK 24",
+  "01-101-1001", "WEIGHT", "Weight (kg)", 7.4, "WEEK 48",
+)
+
+derive_param_bmi(
+  advs,
+  by_vars = exprs(USUBJID, VISIT),
+  weight_code = "WEIGHT",
+  height_code = "HEIGHT",
+  set_values_to = exprs(
+    PARAMCD = "BMI",
+    PARAM = "Body Mass Index (kg/m^2)"
+  ),
   get_unit_expr = extract_unit(PARAM)
 )
 }
 \seealso{
+\code{\link[=compute_bmi]{compute_bmi()}}
+
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},

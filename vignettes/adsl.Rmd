@@ -56,26 +56,26 @@ the environment. This will be a company specific process. Some of the
 data frames needed may be `DM`, `EX`, `DS`, `AE`, and `LB`.
 
 For example purpose, the CDISC Pilot SDTM datasets---which are included in 
-`{admiral.test}`---are used.
+`{pharmaversesdtm}`---are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(pharmaversesdtm)
 library(lubridate)
 library(stringr)
 
-data("admiral_dm")
-data("admiral_ds")
-data("admiral_ex")
-data("admiral_ae")
-data("admiral_lb")
+data("dm")
+data("ds")
+data("ex")
+data("ae")
+data("lb")
 
-dm <- convert_blanks_to_na(admiral_dm)
-ds <- convert_blanks_to_na(admiral_ds)
-ex <- convert_blanks_to_na(admiral_ex)
-ae <- convert_blanks_to_na(admiral_ae)
-lb <- convert_blanks_to_na(admiral_lb)
+dm <- convert_blanks_to_na(dm)
+ds <- convert_blanks_to_na(ds)
+ex <- convert_blanks_to_na(ex)
+ae <- convert_blanks_to_na(ae)
+lb <- convert_blanks_to_na(lb)
 ```
 
 The `DM` domain is used as the basis for `ADSL`:
@@ -275,7 +275,7 @@ adsl <- adsl %>%
     by_vars = exprs(STUDYID, USUBJID),
     filter_add = DSCAT == "DISPOSITION EVENT",
     new_vars = exprs(EOSSTT = format_eosstt(DSDECOD)),
-    missing_value = exprs(EOSSTT = "ONGOING")
+    missing_values = exprs(EOSSTT = "ONGOING")
   )
 ```
 
@@ -433,7 +433,7 @@ study requirement.
 - `date`: the date of death,
 - `mode`: `first` or `last` to select the first/last date of death if multiple dates are collected,
 - `dthcaus`: variable  or text used to populate `DTHCAUS`.
-- `traceability_vars`: whether the traceability variables need to be added (e.g source domain,
+- `set_values_to`: whether the traceability variables need to be added (e.g source domain,
 sequence, variable)
 
 An example call to define the sources would be: 
@@ -504,7 +504,7 @@ src_ae <- dthcaus_source(
   date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
   mode = "first",
   dthcaus = AEDECOD,
-  traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
+  set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
 )
 
 src_ds <- dthcaus_source(
@@ -513,7 +513,7 @@ src_ds <- dthcaus_source(
   date = DSSTDT,
   mode = "first",
   dthcaus = DSTERM,
-  traceability_vars = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
+  set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 adsl <- adsl %>%
   select(-DTHCAUS) %>% # remove it before deriving it again
@@ -578,7 +578,7 @@ sources (`date_source()`) are correctly defined.
 - `dataset_name`: the name of the dataset where to search for date information,
 - `filter`: the filter to apply on the datasets,
 - `date`: the date of interest,
-- `traceability_vars`: whether the traceability variables need to be added (e.g
+- `set_values_to`: whether the traceability variables need to be added (e.g
 source domain, sequence, variable)
 
 An example could be (DTC dates are converted to numeric dates imputing missing
@@ -625,28 +625,28 @@ dataset_vignette(
 ```
 
 Similarly to `dthcaus_source()`, the traceability variables can be added by specifying the 
-`traceability_vars` argument in `date_source()`.
+`set_values_to` argument in `date_source()`.
 
 ```{r eval=TRUE}
 ae_start_date <- date_source(
   dataset_name = "ae",
   date = convert_dtc_to_dt(AESTDTC, highest_imputation = "M"),
-  traceability_vars = exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")
+  set_values_to = exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")
 )
 ae_end_date <- date_source(
   dataset_name = "ae",
   date = convert_dtc_to_dt(AEENDTC, highest_imputation = "M"),
-  traceability_vars = exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC")
+  set_values_to = exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC")
 )
 lb_date <- date_source(
   dataset_name = "lb",
   date = convert_dtc_to_dt(LBDTC, highest_imputation = "M"),
-  traceability_vars = exprs(LALVDOM = "LB", LALVSEQ = LBSEQ, LALVVAR = "LBDTC")
+  set_values_to = exprs(LALVDOM = "LB", LALVSEQ = LBSEQ, LALVVAR = "LBDTC")
 )
 trt_end_date <- date_source(
   dataset_name = "adsl",
   date = TRTEDTM,
-  traceability_vars = exprs(LALVDOM = "ADSL", LALVSEQ = NA_integer_, LALVVAR = "TRTEDTM")
+  set_values_to = exprs(LALVDOM = "ADSL", LALVSEQ = NA_integer_, LALVVAR = "TRTEDTM")
 )
 
 adsl <- adsl %>%

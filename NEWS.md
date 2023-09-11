@@ -1,3 +1,129 @@
+
+# admiral 0.12.0
+
+## New Features
+
+- `event_joined()` events were added. They can be specified for the `events`
+argument in `derive_extreme_event()`. This allows to define events based on more
+than one observation, e.g., events which need to be confirmed by a second
+assessment. (#1960)
+
+- `atoxgr_criteria_daids.rda` added, which holds metadata for [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf). You can find additional documentation here `atoxgr_criteria_daids()`
+
+## Updates of Existing Functions
+
+- The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
+- The functions `derive_var_age_years()` and `compute_age_years()` are updated to return an `NA` age in the case that the age unit is missing. (#2001) The argument `unit` for `derive_vars_aage()` is also changed to `age_unit` for consistency between these age-related functions. (#2025)
+- The `derive_var_ontrtfl()` function has been updated to allow for the column passed in `ref_end_date` to contain `NA` values. Previously, if the end date was `NA`, the row would never be flagged. Now, an `NA` value is interpreted as the treatment being ongoing, for example. (#1984)
+
+- The function `derive_var_extreme_flag()` has a new function argument, `flag_all` that additionally flags all records if the first or last record is not unique. (#1979)
+
+- The function `derive_param_computed()` was enhanced: (#1968)
+
+  - The `analysis_value` and `analysis_var` arguments were deprecated in favor of
+  `set_values_to`. This enables users to compute more than one variable.
+  - The `keep_nas` argument was added. If it is set to `TRUE`, observations are
+  created even if values contributing to the computed values are `NA`.
+
+- The function `derive_vars_dy()` is updated to avoid potential error when the input `dataset` with columns ending with `temp`. (#2012)
+- Argument `keep_source_vars` was added to `derive_extreme_records()` which
+specifies which variables in the new observations should be kept. (#1697) 
+
+- Templates, vignettes, and other uses of `{admiral.test}` SDTM data are updated to use `{pharmaversesdtm}` instead. (#2040)
+
+- The `traceability_vars` argument in `date_source()` and `dthcaus_source` were deprecated in favor of `set_values_to`. The `date_source()` function creates a date_source object as input for `derive_var_extreme_dt()` and `derive_var_extreme_dtm()`,users can now define the traceability variables by assigning those variables to the `set_values_to`argument.Similarly, the `dthcaus_source` creates a dthcaus_source Object. (#2068)
+
+
+- `derive_extreme_event()` was enhanced (#1960):
+
+    - `event_joined()` events can be specified for the `events` argument. This
+    allows to define events based on more than one observation, e.g., events
+    which need to be confirmed by a second assessment.
+    
+    - The `source_datasets` argument was added to the function and the
+    `dataset_name` field to `event()`. It can be used to define events based on
+    a different dataset than the input dataset.
+    
+    - The `keep_source_vars` argument was added to the function and the
+    `keep_source_vars` field to `event()`. It allows to select which variables
+    should be kept for the selected observations.
+    
+    - The `mode` and `order` field were added to `event()`. They allow to select
+    the first or last observation per by group if there are multiple observation
+    fulfilling the event condition.
+    
+    - The `ignore_event_order` argument was added.
+    
+    - The `description` field was added to `event()`. It can be used to provide
+    a description of the event in plain language.
+    
+- `derive_var_atoxgr_dir()` was enhanced (#1859):
+  
+  - Can now select `atoxgr_criteria_daids` in argument `meta_criteria` to create `ATOXGRL` and `ATOXGRH` based on [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf)
+  
+  - New argument `signif_dig` added to control the number of significant digits to use when comparing 2 numeric values.
+  (https://github.com/pharmaverse/admiral/pull/2060)
+
+## Breaking Changes
+- The `compute_duration(type)` argument added the `"duration"` type calculation, and this is the new default (previously `"interval"` differences were returned). See function help file for details on the difference between `"duration"` and `"interval"` calculations. (#1875)
+
+- The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#1950)
+
+  - `derive_var_disposition_status()`
+  - `derive_vars_disposition_reason()`
+  - `format_eoxxstt_default()`
+  - `format_reason_default()`
+  - `derive_var_worst_flag()`
+
+- The following functions have been deprecated from previous `{admiral}` versions using the next phase of the deprecation process: (#1950)
+
+  - `derive_param_extreme_event()`
+  - `derive_vars_last_dose()`
+  - `derive_var_last_dose_amt()`
+  - `derive_var_last_dose_date()`
+  - `derive_var_last_dose_grp()`
+  - `derive_var_basetype()`
+  - `derive_var_merged_cat()`
+  - `derive_var_merged_character()`
+  
+- The arguments `dataset_adsl` in the function `derive_param_exist_flag()` and
+`subject_keys` have been deprecated versions using the next phase of the deprecation process. (#1950)
+
+- The argument `wt` in the function `compute_egfr()` was deprecated in favor of `weight` using the first phase of the deprecation process. (#2020)
+
+- The `filter` argument in `derive_extreme_records()` was deprecated in favor of
+the `filter_add` using the next phase of the deprecation process. (#1950)
+
+- The `analysis_value` and `analysis_var` arguments in `derive_param_computed()`
+were deprecated in favor of `set_values_to` (#1968).
+
+- The `na_val` argument in `derive_var_shift()` has been deprecated in favor of 
+`missing_value` using the first phase of the deprecation process. (#2014)
+
+- The `dataset_expected_obs` argument in `derive_expected_records()` and `derive_locf_records()`
+has been deprecated in favor of `dataset_ref`. (#2037)
+
+- The `span_period` argument in `derive_var_ontrtfl()` has been updated to only accept 
+`TRUE` or `FALSE`, where is previously accepted `"Y"` and `NULL`. (#2033)
+
+## Documentation
+
+- Non-exported utility and print functions were previously listed on the admiral website reference page. They have been removed. (#2049, #2050)
+
+- The description of the argument `reference_date` in the function `derive_vars_dy()` 
+has been clarified to make it agnostic to start/end  selection. (#2027)
+
+- Date and Time Imputation User Guide/Vignette has section on preserving partial
+dates updated (#2028)
+
+## Various
+
+- The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as *authors*, whereas those who made a significant contribution in the past are now down as *contributors*. All other acknowledgements have been moved to README section (#1941).
+
+- `derive_vars_joined()` had two bugs with regards to duplicates messaging and when `new_vars` was set to `NULL` that have now been addressed (#1966). 
+
+- `compute_dtf()` had a bug with regards to imputing days to full date-time character strings. (#2042)
+
 # admiral 0.11.1
 
 - Fix bug in `derive_param_tte()`. (#1962)
@@ -69,6 +195,7 @@ now. This affects `derive_param_tte()`. (#1727)
       SDTM data is used as input.
     - The `analysis_value` argument was enhanced such that any variable of the
       form `<variable>.<parameter>` can be used, e.g., `QSORRES.CHSF13`.
+
 
 ## Breaking Changes
 

@@ -106,7 +106,7 @@
 #' @examples
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(pharmaversesdtm)
 #' library(admiral)
 #'
 #' # creating a query dataset for a customized query
@@ -145,11 +145,11 @@
 #'   )
 #' )
 #'
-#' # The get_terms function from admiral.test is used for this example.
+#' # The get_terms function from pharmaversesdtm is used for this example.
 #' # In a real application a company-specific function must be used.
 #' create_query_data(
 #'   queries = list(pregsmq, bilismq),
-#'   get_terms_fun = admiral.test:::get_terms,
+#'   get_terms_fun = pharmaversesdtm:::get_terms,
 #'   version = "20.1"
 #' )
 #'
@@ -164,16 +164,16 @@
 #'   )
 #' )
 #'
-#' # The get_terms function from admiral.test is used for this example.
+#' # The get_terms function from pharmaversesdtm is used for this example.
 #' # In a real application a company-specific function must be used.
 #' create_query_data(
 #'   queries = list(sdg),
-#'   get_terms_fun = admiral.test:::get_terms,
+#'   get_terms_fun = pharmaversesdtm:::get_terms,
 #'   version = "2019-09"
 #' )
 #'
 #' # creating a query dataset for a customized query including SMQs
-#' # The get_terms function from admiral.test is used for this example.
+#' # The get_terms function from pharmaversesdtm is used for this example.
 #' # In a real application a company-specific function must be used.
 #' create_query_data(
 #'   queries = list(
@@ -190,7 +190,7 @@
 #'       )
 #'     )
 #'   ),
-#'   get_terms_fun = admiral.test:::get_terms,
+#'   get_terms_fun = pharmaversesdtm:::get_terms,
 #'   version = "20.1"
 #' )
 create_query_data <- function(queries,

@@ -330,8 +330,7 @@ impute_dtc_dtm <- function(dtc,
 #'
 #'
 #' @family utils_impute
-#'
-#' @keywords utils_impute
+#' @keywords internal
 dtm_level <- function(level) {
   out <-
     factor(
@@ -361,7 +360,7 @@ dtm_level <- function(level) {
 #'
 #' @family utils_impute
 #'
-#' @keywords utils_impute
+#' @keywords internal
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 get_partialdatetime <- function(dtc) {
@@ -419,7 +418,7 @@ get_partialdatetime <- function(dtc) {
 #'
 #' @family utils_impute
 #'
-#' @keywords utils_impute
+#' @keywords internal
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 get_imputation_target_date <- function(date_imputation,
@@ -468,7 +467,7 @@ get_imputation_target_date <- function(date_imputation,
 #'
 #' @family utils_impute
 #'
-#' @keywords utils_impute
+#' @keywords internal
 #'
 #' @seealso  [impute_dtc_dtm()]
 get_imputation_target_time <- function(time_imputation) {
@@ -507,7 +506,7 @@ get_imputation_target_time <- function(time_imputation) {
 #'
 #' @family utils_impute
 #'
-#' @keywords utils_impute
+#' @keywords internal
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 restrict_imputed_dtc_dtm <- function(dtc,
@@ -704,7 +703,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'   highest_imputation = "M"
 #' )
 #' # Same as above
-#' impute_dtc_dtm(
+#' impute_dtc_dt(
 #'   dtc = dates,
 #'   highest_imputation = "M",
 #'   date_imputation = "01-01"
@@ -859,10 +858,8 @@ impute_dtc_dt <- function(dtc,
 #' @details A `dt_level` object is an ordered factor, i.e., two objects can be
 #'   compared.
 #'
-#'
 #' @family utils_impute
-#' @keywords utils_impute
-#'
+#' @keywords internal
 dt_level <- function(level) {
   out <-
     factor(
@@ -891,7 +888,7 @@ dt_level <- function(level) {
 #'
 #' @family utils_impute
 #'
-#' @keywords utils_impute
+#' @keywords internal
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 restrict_imputed_dtc_dt <- function(dtc,
@@ -1140,6 +1137,10 @@ convert_date_to_dtm <- function(dt,
 #' @examples
 #' compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
+#' compute_dtf(dtc = "--06-01T00:00", dt = as.Date("2022-06-01"))
+#' compute_dtf(dtc = "2022-06--T00:00", dt = as.Date("2022-06-01"))
+#' compute_dtf(dtc = "2022---01T00:00", dt = as.Date("2022-06-01"))
+#' compute_dtf(dtc = "2022----T00:00", dt = as.Date("2022-06-01"))
 compute_dtf <- function(dtc, dt) {
   assert_character_vector(dtc)
   assert_date_vector(dt)
@@ -1149,12 +1150,24 @@ compute_dtf <- function(dtc, dt) {
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
 
+  # Find date portion
+  date_portion <- ifelse(grepl("T", dtc),
+    gsub("T", "", substr(dtc, 1, str_locate(dtc, "T")[, 1])),
+    substr(dtc, 1, 10)
+  )
+  n_chr_date_portion <- nchar(date_portion)
+
+  # Location of the first instance of the double hyphen to determine if its month/day imputation
+  location_of_double_hyphen <- str_locate(date_portion, "--")[, 1]
+
   case_when(
-    (!is_na & n_chr >= 10 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
-    n_chr < 4 | is.na(dtc) ~ "Y",
-    n_chr == 4 ~ "M",
-    n_chr == 7 ~ "D",
-    n_chr == 9 ~ "M" # dates like "2019---07"
+    (!is_na & n_chr >= 10 & n_chr_date_portion == 10 & valid_dtc) | is_na | !valid_dtc ~ NA_character_, # nolint
+    n_chr_date_portion < 4 | is.na(dtc) ~ "Y",
+    n_chr_date_portion < 10 & location_of_double_hyphen == 1 ~ "Y", # dates like "--07-07"
+    n_chr_date_portion == 4 ~ "M",
+    n_chr_date_portion < 10 & location_of_double_hyphen == 5 ~ "M", # dates like "2019---07"
+    n_chr_date_portion == 7 ~ "D",
+    n_chr_date_portion < 10 & location_of_double_hyphen == 8 ~ "D", # dates like "2019-07--"
   )
 }
 

@@ -11,13 +11,13 @@ compute_bsa(height = height, weight = weight, method)
 
 It is expected that HEIGHT is in cm.
 
-Permitted Values: numeric vector}
+\emph{Permitted Values:} numeric vector}
 
 \item{weight}{WEIGHT value
 
 It is expected that WEIGHT is in kg.
 
-Permitted Values: numeric vector}
+\emph{Permitted Values:} numeric vector}
 
 \item{method}{Derivation method to use:
 
@@ -35,7 +35,7 @@ Fujimoto: 0.008883 * height ^ 0.663 * weight ^ 0.444
 
 Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425
 
-Permitted Values: character value}
+\emph{Permitted Values:} character value}
 }
 \value{
 The BSA (Body Surface Area) in m^2.
@@ -62,6 +62,8 @@ compute_bsa(
 )
 }
 \seealso{
+\code{\link[=derive_param_bsa]{derive_param_bsa()}}
+
 BDS-Findings Functions that returns a vector: 
 \code{\link{compute_bmi}()},
 \code{\link{compute_egfr}()},

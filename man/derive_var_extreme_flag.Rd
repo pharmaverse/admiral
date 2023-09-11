@@ -10,6 +10,7 @@ derive_var_extreme_flag(
   order,
   new_var,
   mode,
+  flag_all = FALSE,
   check_type = "warning"
 )
 }
@@ -42,6 +43,11 @@ Determines of the first or last observation is flagged.
 
 Permitted Values: \code{"first"}, \code{"last"}}
 
+\item{flag_all}{Flag setting
+
+A logical value where if set to \code{TRUE}, all records are flagged
+and no error or warning is issued if the first or last record is not unique.}
+
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
@@ -60,10 +66,11 @@ Add a variable flagging the first or last observation within each by group
 }
 \details{
 For each group (with respect to the variables specified for the
-\code{by_vars} parameter), \code{new_var} is set to "Y" for the first or last observation
+\code{by_vars} parameter), \code{new_var} is set to \code{"Y"} for the first or last observation
 (with respect to the order specified for the \code{order} parameter and the flag mode
-specified for the \code{mode} parameter). Only observations included by the \code{filter} parameter
-are considered for flagging.
+specified for the \code{mode} parameter). In the case where the user wants to flag multiple records
+of a grouping, for example records that all happen on the same visit and time, the argument
+\code{flag_all} can be set to \code{TRUE}.
 Otherwise, \code{new_var} is set to \code{NA}. Thus, the direction of "worst" is considered fixed for
 all parameters in the dataset depending on the \code{order} and the \code{mode}, i.e. for every
 parameter the first or last record will be flagged across the whole dataset.
@@ -203,6 +210,22 @@ example_ae \%>\%
   arrange(USUBJID, AESTDY, AESEQ) \%>\%
   select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
 
+# Most severe AE first occurrence per patient (flag all cases)
+example_ae \%>\%
+  mutate(
+    TEMP_AESEVN =
+      as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
+  ) \%>\%
+  derive_var_extreme_flag(
+    new_var = AOCCIFL,
+    by_vars = exprs(USUBJID),
+    order = exprs(TEMP_AESEVN, AESTDY),
+    mode = "first",
+    flag_all = TRUE
+  ) \%>\%
+  arrange(USUBJID, AESTDY) \%>\%
+  select(USUBJID, AEDECOD, AESEV, AESTDY, AOCCIFL)
+
 # Most severe AE first occurrence per patient per body system
 example_ae \%>\%
   mutate(
@@ -219,8 +242,6 @@ example_ae \%>\%
   select(USUBJID, AEBODSYS, AESEV, AESTDY, AOCCSIFL)
 }
 \seealso{
-\code{\link[=derive_var_worst_flag]{derive_var_worst_flag()}}
-
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_merged_exist_flag}()},
