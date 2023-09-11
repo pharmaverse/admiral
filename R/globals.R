@@ -137,6 +137,7 @@ globalVariables(c(
   "ATOXGRH",
   "ATOXDSCL",
   "ATOXDSCH",
+  "FILTER",
   "GRADE_CRITERIA_CODE",
   "DIRECTION",
   "SI_UNIT_CHECK",

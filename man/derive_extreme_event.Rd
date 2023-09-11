@@ -10,8 +10,11 @@ derive_extreme_event(
   events,
   order,
   mode,
+  source_datasets = NULL,
+  ignore_event_order = FALSE,
   check_type = "warning",
-  set_values_to
+  set_values_to,
+  keep_source_vars = exprs(everything())
 )
 }
 \arguments{
@@ -28,9 +31,14 @@ expected.}
 
 \item{events}{Conditions and new values defining events
 
-A list of \code{event()} objects is expected. Only observations listed in the
-\code{events} are considered for deriving extreme event. If multiple records
-meet the filter \code{condition}, take the first record sorted by \code{order}.}
+A list of \code{event()} or \code{event_joined()} objects is expected. Only
+observations listed in the \code{events} are considered for deriving extreme
+event. If multiple records meet the filter \code{condition}, take the first
+record sorted by \code{order}. The data is grouped by \code{by_vars}, i.e., summary
+functions like \code{all()} or \code{any()} can be used in \code{condition}.
+
+For \code{event_joined()} events the observations are selected by calling
+\code{filter_joined}. The \code{condition} field is passed to the \code{filter} argument.}
 
 \item{order}{Sort order
 
@@ -47,6 +55,20 @@ If a particular event from \code{events} has more than one observation,
 sorting by \code{order}.
 
 \emph{Permitted Values:} \code{"first"}, \code{"last"}}
+
+\item{source_datasets}{Source datasets
+
+A named list of datasets is expected. The \code{dataset_name} field of \code{event()}
+and \code{event_joined()} refers to the dataset provided in the list.}
+
+\item{ignore_event_order}{Ignore event order
+
+If the argument is set to \code{TRUE}, all events defined by \code{events} are
+considered equivalent. If there is more than one observation per by group
+the first or last (with respect to \code{mode} and \code{order}) is select without
+taking the order of the events into account.
+
+\emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
 
 \item{check_type}{Check uniqueness?
 
@@ -69,6 +91,15 @@ A list of variable name-value pairs is expected.
 \item RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value, an expression, or \code{NA}, e.g., \code{exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")}.
 }}
+
+\item{keep_source_vars}{Variables to keep from the source dataset
+
+For each event the specified variables are kept from the selected
+observations. The variables specified for \code{by_vars} and created by
+\code{set_values_to} are always kept.
+
+\emph{Permitted Values}: A list of expressions where each element is
+a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
 }
 \value{
 The input dataset with the best or worst observation of each by group
@@ -78,16 +109,29 @@ added as new observations.
 Add the first available record from \code{events} for each by group as new
 records, all variables of the selected observation are kept. It can be used
 for selecting the extreme observation from a series of user-defined events.
-This distinguish \code{derive_extreme_event()} from \code{derive_extreme_records()},
+This distinguishes \code{derive_extreme_event()} from \code{derive_extreme_records()},
 where extreme records are derived based on certain order of existing
 variables.
 }
 \details{
 \enumerate{
-\item Construct a dataset based on \code{events}: apply the filter \code{condition} and
-\code{set_values_to} to the input dataset.
+\item For each event select the observations to consider:
+\enumerate{
+\item If the event is of class \code{event}, the observations of the source dataset
+are restricted by \code{condition} and then the first or last (\code{mode})
+observation per by group (\code{by_vars}) is selected.
+
+If the event is of class \code{event_joined}, \code{filter_joined()} is called to
+select the observations.
+\item The variables specified by the \code{set_values_to} field of the event
+are added to the selected observations.
+\item Only the variables specified for the \code{keep_source_vars} field of the
+event, and the by variables (\code{by_vars}) and the variables created by
+\code{set_values_to} are kept.
+}
 \item For each group (with respect to the variables specified for the
-\code{by_vars} parameter) the first or last observation (with respect to the
+\code{by_vars} parameter) the first event is selected. If there is more than one
+observation per event the first or last observation (with respect to the
 order specified for the \code{order} parameter and the mode specified for the
 \code{mode} parameter) is selected.
 \item The variables specified by the \code{set_values_to} parameter are added to
@@ -97,6 +141,8 @@ the selected observations.
 }
 \examples{
 library(tibble)
+library(dplyr)
+library(lubridate)
 
 adqs <- tribble(
   ~USUBJID, ~PARAMCD,       ~AVALC,        ~ADY,
@@ -145,8 +191,180 @@ derive_extreme_event(
     PARAM = "Worst Sleeping Problems"
   )
 )
+
+# Use different mode by event
+adhy <- tribble(
+  ~USUBJID, ~AVISITN, ~CRIT1FL,
+  "1",             1, "Y",
+  "1",             2, "Y",
+  "2",             1, "Y",
+  "2",             2, NA_character_,
+  "2",             3, "Y",
+  "2",             4, NA_character_
+) \%>\%
+  mutate(
+    PARAMCD = "ALKPH",
+    PARAM = "Alkaline Phosphatase (U/L)"
+  )
+
+derive_extreme_event(
+  adhy,
+  by_vars = exprs(USUBJID),
+  events = list(
+    event(
+      condition = is.na(CRIT1FL),
+      set_values_to = exprs(AVALC = "N")
+    ),
+    event(
+      condition = CRIT1FL == "Y",
+      mode = "last",
+      set_values_to = exprs(AVALC = "Y")
+    )
+  ),
+  order = exprs(AVISITN),
+  mode = "first",
+  keep_source_vars = exprs(AVISITN),
+  set_values_to = exprs(
+    PARAMCD = "ALK2",
+    PARAM = "ALKPH <= 2 times ULN"
+  )
+)
+
+# Derive confirmed best overall response (using event_joined())
+# CR - complete response, PR - partial response, SD - stable disease
+# NE - not evaluable, PD - progressive disease
+adsl <- tribble(
+  ~USUBJID, ~TRTSDTC,
+  "1",      "2020-01-01",
+  "2",      "2019-12-12",
+  "3",      "2019-11-11",
+  "4",      "2019-12-30",
+  "5",      "2020-01-01",
+  "6",      "2020-02-02",
+  "7",      "2020-02-02",
+  "8",      "2020-02-01"
+) \%>\%
+  mutate(TRTSDT = ymd(TRTSDTC))
+
+adrs <- tribble(
+  ~USUBJID, ~ADTC,        ~AVALC,
+  "1",      "2020-01-01", "PR",
+  "1",      "2020-02-01", "CR",
+  "1",      "2020-02-16", "NE",
+  "1",      "2020-03-01", "CR",
+  "1",      "2020-04-01", "SD",
+  "2",      "2020-01-01", "SD",
+  "2",      "2020-02-01", "PR",
+  "2",      "2020-03-01", "SD",
+  "2",      "2020-03-13", "CR",
+  "4",      "2020-01-01", "PR",
+  "4",      "2020-03-01", "NE",
+  "4",      "2020-04-01", "NE",
+  "4",      "2020-05-01", "PR",
+  "5",      "2020-01-01", "PR",
+  "5",      "2020-01-10", "PR",
+  "5",      "2020-01-20", "PR",
+  "6",      "2020-02-06", "PR",
+  "6",      "2020-02-16", "CR",
+  "6",      "2020-03-30", "PR",
+  "7",      "2020-02-06", "PR",
+  "7",      "2020-02-16", "CR",
+  "7",      "2020-04-01", "NE",
+  "8",      "2020-02-16", "PD"
+) \%>\%
+  mutate(
+    ADT = ymd(ADTC),
+    PARAMCD = "OVR",
+    PARAM = "Overall Response by Investigator"
+  ) \%>\%
+  derive_vars_merged(
+    dataset_add = adsl,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(TRTSDT)
+  )
+
+derive_extreme_event(
+  adrs,
+  by_vars = exprs(USUBJID),
+  order = exprs(ADT),
+  mode = "first",
+  source_datasets = list(adsl = adsl),
+  events = list(
+    event_joined(
+      description = paste(
+        "CR needs to be confirmed by a second CR at least 28 days later",
+        "at most one NE is acceptable between the two assessments"
+      ),
+      join_vars = exprs(AVALC, ADT),
+      join_type = "after",
+      first_cond = AVALC.join == "CR" &
+        ADT.join >= ADT + 28,
+      condition = AVALC == "CR" &
+        all(AVALC.join \%in\% c("CR", "NE")) &
+        count_vals(var = AVALC.join, val = "NE") <= 1,
+      set_values_to = exprs(
+        AVALC = "CR"
+      )
+    ),
+    event_joined(
+      description = paste(
+        "PR needs to be confirmed by a second CR or PR at least 28 days later,",
+        "at most one NE is acceptable between the two assessments"
+      ),
+      join_vars = exprs(AVALC, ADT),
+      join_type = "after",
+      first_cond = AVALC.join \%in\% c("CR", "PR") &
+        ADT.join >= ADT + 28,
+      condition = AVALC == "PR" &
+        all(AVALC.join \%in\% c("CR", "PR", "NE")) &
+        count_vals(var = AVALC.join, val = "NE") <= 1,
+      set_values_to = exprs(
+        AVALC = "PR"
+      )
+    ),
+    event(
+      description = paste(
+        "CR, PR, or SD are considered as SD if occurring at least 28",
+        "after treatment start"
+      ),
+      condition = AVALC \%in\% c("CR", "PR", "SD") & ADT >= TRTSDT + 28,
+      set_values_to = exprs(
+        AVALC = "SD"
+      )
+    ),
+    event(
+      condition = AVALC == "PD",
+      set_values_to = exprs(
+        AVALC = "PD"
+      )
+    ),
+    event(
+      condition = AVALC \%in\% c("CR", "PR", "SD", "NE"),
+      set_values_to = exprs(
+        AVALC = "NE"
+      )
+    ),
+    event(
+      description = "set response to MISSING for patients without records in ADRS",
+      dataset_name = "adsl",
+      condition = TRUE,
+      set_values_to = exprs(
+        AVALC = "MISSING"
+      ),
+      keep_source_vars = exprs(TRTSDT)
+    )
+  ),
+  set_values_to = exprs(
+    PARAMCD = "CBOR",
+    PARAM = "Best Confirmed Overall Response by Investigator"
+  )
+) \%>\%
+  filter(PARAMCD == "CBOR")
+
 }
 \seealso{
+\code{\link[=event]{event()}}, \code{\link[=event_joined]{event_joined()}}
+
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},

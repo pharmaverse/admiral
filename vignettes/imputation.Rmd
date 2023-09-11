@@ -18,21 +18,14 @@ library(admiraldev)
 
 # Introduction
 
-Date and time is collected in SDTM as character values using the extended [ISO
-8601](https://en.wikipedia.org/wiki/ISO_8601) format. For example,
-`"2019-10-9T13:42:00"`. It allows that some parts of the date or time are
-missing, e.g., `"2019-10"` if the day and the time is unknown.
-
-The ADaM timing variables like `ADTM` (Analysis Datetime) or `ADY` (Analysis
-Relative Day) are numeric variables. They can be derived only if the date or
-datetime is complete. Therefore `{admiral}` provides imputation functions which fill
-in missing date or time parts according to certain imputation rules.
-
-In {admiral} we use only two functions `derive_vars_dt()` and
-`derive_vars_dtm()` for date and datetime imputations respectively. In all other
-functions where dates can be passed as an argument, we expect full dates or
-datetimes (unless otherwise specified), so if any possibility of partials then
-these functions should be used as a first step to make the required imputation.
+This vignette is broken into three major sections. The first section briefly
+explores the imputation rules used in `{admiral}`. The second section focuses on
+imputation functions that work on vectors with lots of small examples to explore
+the imputation rules. These **vector-based** functions form the backbone of
+`{admiral}`'s more powerful functions `derive_vars_dt()` and `derive_vars_dtm()`
+for building ADaM dataset. The final section moves into more detailed examples
+that a user might face while working on ADaMs in need of `---DT` and `---DTM`
+variables. 
 
 ## Required Packages
 
@@ -47,12 +40,50 @@ library(dplyr, warn.conflicts = FALSE)
 
 # Imputation Rules
 
-In {admiral} we don't allow users to pick any single part of the date/time to
-impute, we only enable to impute up to a highest level, i.e. you couldn't choose
-to say impute months, but not days.
+Date and time is collected in SDTM as character values using the extended [ISO
+8601](https://en.wikipedia.org/wiki/ISO_8601) format. For example,
+`"2019-10-9T13:42:00"`. It allows that some parts of the date or time are
+missing, e.g., `"2019-10"` if the day and the time is unknown.
 
-The simplest imputation rule is to set the missing parts to a fixed value. For
-example
+The ADaM timing variables like `ADTM` (Analysis Datetime) or `ADY` (Analysis
+Relative Day) are numeric variables. They can be derived only if the date or
+datetime is complete. Therefore `{admiral}` provides imputation functions which
+fill in missing date or time parts according to certain imputation rules.
+
+In `{admiral}` users will primarily use two functions `derive_vars_dt()` and
+`derive_vars_dtm()` for date and datetime imputations respectively. In all other
+functions where dates can be passed as an argument, we expect full dates or
+datetimes (unless otherwise specified), so if any possibility of partials then
+these functions should be used as a first step to make the required imputation.
+
+The functions that need to do date/time imputation follow a rule that we have
+called **Highest Imputation**, which has a corresponding argument in all our
+functions called `highest_imputation`. The rule is best explained by working
+through the examples below, but to put it briefly, this rule allows a user to
+control which components of the DTC value are imputed if they are missing.
+
+The default imputation for `_dtm()` functions, e.g. `impute_dtc_dtm()`,
+`derive_vars_dtm()`, is "h" (hours). A user can specify that that no imputation
+is to be done by setting `highest_imputation = n`. However, for for `_dt()`
+functions, e.g. `impute_dtc_dt()`, `derive_vars_dt()` the default imputation is
+already set as `highest_imputation = "n"`.
+
+Care must be taken when deciding on level of imputation. If a component is at a
+higher level than the highest imputation level is missing, `NA_character_` is
+returned. For example, for `highest_imputation = "D"` `"2020"` results in
+`NA_character_` because the month is missing.
+
+We encourage readers to explore in more detail the `highest_imputation` options
+in both the `_dtm()` and `_dt()` function documentations and in the examples
+below.
+
+## Imputation on a Vector
+
+In our first example, we will make use of `impute_dtc_dtm()` on `2019-10`
+setting `highest_imputation = "M"`. The argument `date_imputation` and
+`time_imputation` are given expressed inputs of the imputation we would like to
+see done.
+
 
 ```{r}
 impute_dtc_dtm(
@@ -63,7 +94,7 @@ impute_dtc_dtm(
 )
 ```
 
-Sometimes this does not work as it would result in invalid dates, e.g.,
+Next we impute using `2019-02`, which if done naively can result in invalid dates, e.g.,
 
 ```{r}
 impute_dtc_dtm(
@@ -73,9 +104,9 @@ impute_dtc_dtm(
   time_imputation = "00:00:00"
 )
 ```
-
-Therefore the keywords `"first"` or `"last"` can be specified to request that
-missing parts are replaced by the first or last possible value:
+Therefore the keywords `"first"` or `"last"` can be specified in `date_imputation` 
+to request that missing parts are replaced by the first or last possible value - giving
+us a valid date!
 
 ```{r}
 impute_dtc_dtm(
@@ -88,7 +119,7 @@ impute_dtc_dtm(
 
 For dates, there is the additional option to use keyword `"mid"` to impute
 missing day to `15` or missing day and month to `06-30`, but note the
-different behavior below depending on `preserve` argument for case when month
+different behavior below depending on the `preserve` argument for the case when month
 only is missing:
 
 ```{r}
@@ -196,10 +227,10 @@ impute_dtc_dtm(
 ```
 
 It is ensured that the imputed date is not after any of the specified dates.
-Only dates which are in the range of possible dates of the dtc value are
-considered. The possible dates are defined by the missing parts of the dtc date,
+Only dates which are in the range of possible dates of the DTC value are
+considered. The possible dates are defined by the missing parts of the DTC date,
 i.e., for "2019-02" the possible dates range from "2019-02-01" to "2019-02-28".
-Thus "2019-01-14" is ignored. This ensures that the non-missing parts of the dtc
+Thus "2019-01-14" is ignored. This ensures that the non-missing parts of the DTC
 date are not changed.
 
 If the `min_dates` or `max_dates` argument is specified, it is also possible to

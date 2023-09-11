@@ -4,15 +4,56 @@
 \alias{event}
 \title{Create a \code{event} Object}
 \usage{
-event(condition, set_values_to = NULL)
+event(
+  dataset_name = NULL,
+  condition = NULL,
+  mode = NULL,
+  order = NULL,
+  set_values_to = NULL,
+  keep_source_vars = NULL,
+  description = NULL
+)
 }
 \arguments{
+\item{dataset_name}{Dataset name of the dataset to be used as input for the
+event. The name refers to the dataset specified for \code{source_datasets} in
+\code{derive_extreme_event()}. If the argument is not specified, the input
+dataset (\code{dataset}) of \code{derive_extreme_event()} is used.}
+
 \item{condition}{An unquoted condition for selecting the observations, which
-will contribute to the extreme event.}
+will contribute to the extreme event. If the condition contains summary
+functions like \code{all()}, they are evaluated for each by group separately.
+
+\emph{Permitted Values}: an unquoted condition}
+
+\item{mode}{If specified, the first or last observation with respect to \code{order} is
+selected for each by group.
+
+\emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
+
+\item{order}{The specified variables or expressions are used to select the
+first or last observation if \code{mode} is specified.
+
+\emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
+\code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
-to be set for the extreme answer, e.g. \verb{exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems"}. The values must be a symbol, a
-character string, a numeric value, or \code{NA}.}
+to be set for the event, e.g. \code{exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")}. The values can be a symbol, a
+character string, a numeric value, \code{NA} or an expression.}
+
+\item{keep_source_vars}{Variables to keep from the source dataset
+
+The specified variables are kept for the selected observations. The
+variables specified for \code{by_vars} (of \code{derive_extreme_event()}) and created
+by \code{set_values_to} are always kept.
+
+\emph{Permitted Values}: A list of expressions where each element is
+a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
+
+\item{description}{Description of the event
+
+The description does not affect the derivations where the event is used. It
+is intended for documentation only.}
 }
 \value{
 An object of class \code{event}
@@ -22,7 +63,7 @@ The \code{event} object is used to define events as input for the
 \code{derive_extreme_event()} function.
 }
 \seealso{
-\code{\link[=derive_extreme_event]{derive_extreme_event()}}
+\code{\link[=derive_extreme_event]{derive_extreme_event()}}, \code{\link[=event_joined]{event_joined()}}
 
 Source Objects: 
 \code{\link{basket_select}()},
@@ -30,6 +71,7 @@ Source Objects:
 \code{\link{date_source}()},
 \code{\link{death_event}},
 \code{\link{dthcaus_source}()},
+\code{\link{event_joined}()},
 \code{\link{event_source}()},
 \code{\link{query}()},
 \code{\link{records_source}()},

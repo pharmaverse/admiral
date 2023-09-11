@@ -16,7 +16,7 @@ library(stringr)
 #  as needed and assign to the variables below.
 # The CDISC pilot datasets are used for demonstration purpose.
 data("admiral_adsl")
-data("admiral_ex")
+data("ex")
 
 adsl <- admiral_adsl
 
