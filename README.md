@@ -43,13 +43,6 @@ Phases:
 
 |Release Schedule | Phase 1- Date and Packages                                                  | Phase 2- Date and Packages                                                    |
 |---------------- | --------------------------                                                  | --------------------------                                                    |
-| Q3-2023         | September 4th                                                               | September 18th                                                                |
-|                 | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/)    | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)              |   
-|                 |                                                                             | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)          |
-|                 | September 11th                                                              | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/)        |
-|                 | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)              |                                                                               |
-|                 | [{admiral}](https://pharmaverse.github.io/admiral/main/)                    |                                                                               |
-|                 |                                                                             |                                                                               |
 | Q4-2023         | December 4th                                                                | December 11th                                                                 |
 |                 | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/)    | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)              |
 |                 | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)              | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)          |
