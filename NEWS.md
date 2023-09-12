@@ -1,4 +1,4 @@
-# admiraltemplate 1.0.0
+# admiral 1.0.0
 
 ## New Features
 
