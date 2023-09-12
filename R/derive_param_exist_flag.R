@@ -91,10 +91,6 @@
 #'
 #'   A list of symbols created using `exprs()` is expected.
 #'
-#' @param dataset_adsl *Deprecated*, please use `dataset_ref` instead.
-#'
-#' @param subject_keys *Deprecated*, please use `by_vars` instead.
-#'
 #' @details
 #'   1. The additional dataset (`dataset_add`) is restricted to the observations
 #'   matching the `filter_add` condition.
@@ -177,26 +173,8 @@ derive_param_exist_flag <- function(dataset = NULL,
                                     false_value = NA_character_,
                                     missing_value = NA_character_,
                                     filter_add = NULL,
-                                    aval_fun,
                                     by_vars = get_admiral_option("subject_keys"),
-                                    set_values_to,
-                                    dataset_adsl,
-                                    subject_keys) {
-  ### BEGIN DEPRECATION
-  if (!missing(dataset_adsl)) {
-    deprecate_stop(
-      "0.11.0", "derive_param_exist_flag(dataset_adsl = )",
-      "derive_param_exit_flag(dataset_ref = )"
-    )
-  }
-
-  if (!missing(subject_keys)) {
-    deprecate_stop(
-      "0.11.0", "derive_param_exist_flag(subject_keys = )",
-      "derive_param_exit_flag(by_vars = )"
-    )
-  }
-  ### END DEPRECATION
+                                    set_values_to) {
 
   # Check input parameters
   condition <- assert_filter_cond(enexpr(condition))
@@ -215,15 +193,6 @@ derive_param_exist_flag <- function(dataset = NULL,
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   if (!is.null(dataset)) {
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
-  }
-
-  if (!missing(aval_fun)) {
-    assert_function(aval_fun)
-    deprecate_stop(
-      "0.11.0",
-      "derive_param_exist_flag(aval_fun = )",
-      "derive_param_exist_flag(set_values_to = )"
-    )
   }
 
   # Create new observations

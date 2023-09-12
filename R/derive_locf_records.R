@@ -119,7 +119,7 @@ derive_locf_records <- function(dataset,
                                 order,
                                 keep_vars = NULL) {
   if (!missing(dataset_expected_obs)) {
-    deprecate_warn(
+    deprecate_stop(
       "0.12.0",
       "derive_locf_records(dataset_expected_obs = )",
       "derive_locf_records(dataset_ref = )"
