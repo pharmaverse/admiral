@@ -258,7 +258,6 @@ derive_extreme_records <- function(dataset = NULL,
                                    false_value = "N",
                                    keep_source_vars = exprs(everything()),
                                    set_values_to) {
-
   # Check input arguments
   assert_vars(by_vars, optional = is.null(dataset_ref))
   assert_expr_list(order, optional = TRUE)

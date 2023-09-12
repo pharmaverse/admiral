@@ -175,7 +175,6 @@ derive_param_exist_flag <- function(dataset = NULL,
                                     filter_add = NULL,
                                     by_vars = get_admiral_option("subject_keys"),
                                     set_values_to) {
-
   # Check input parameters
   condition <- assert_filter_cond(enexpr(condition))
   assert_character_scalar(true_value)
