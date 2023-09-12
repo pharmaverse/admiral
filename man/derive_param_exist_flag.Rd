@@ -97,11 +97,6 @@ A list of symbols created using \code{exprs()} is expected.}
 A named list returned by \code{exprs()} defining the variables to be set for the
 new parameter, e.g. \code{exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at Baseline")} is expected. The values must be symbols, character strings,
 numeric values, \code{NA}, or expressions.}
-
-\item{aval_fun}{Function to map character analysis value (\code{AVALC}) to numeric
-analysis value (\code{AVAL})
-
-\emph{Deprecated}, please use \code{set_values_to} instead.}
 }
 \value{
 The input dataset with a new parameter indicating if an event

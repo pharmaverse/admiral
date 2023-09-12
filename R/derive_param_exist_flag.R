@@ -75,11 +75,6 @@
 #'
 #'   *Permitted Values*: a condition
 #'
-#' @param aval_fun Function to map character analysis value (`AVALC`) to numeric
-#'   analysis value (`AVAL`)
-#'
-#'   *Deprecated*, please use `set_values_to` instead.
-#'
 #' @param set_values_to Variables to set
 #'
 #'   A named list returned by `exprs()` defining the variables to be set for the
