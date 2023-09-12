@@ -299,8 +299,8 @@ test_that("derive_extreme_records Test 5: latest evaluable tumor assessment date
   )
 })
 
-## Test 7: error if no input data ----
-test_that("derive_extreme_records Test 7: error if no input data", {
+## Test 6: error if no input data ----
+test_that("derive_extreme_records Test 6: error if no input data", {
   expect_error(
     derive_extreme_records(
       set_values_to = exprs(PARAMCD = "HELLO")
@@ -314,8 +314,8 @@ test_that("derive_extreme_records Test 7: error if no input data", {
   )
 })
 
-## Test 8: keep vars in `keep_source_vars` in the new records ----
-test_that("derive_extreme_records Test 8: keep vars in `keep_source_vars` in the new records", {
+## Test 7: keep vars in `keep_source_vars` in the new records ----
+test_that("derive_extreme_records Test 7: keep vars in `keep_source_vars` in the new records", {
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
     1, 1, 12, 1,
@@ -353,8 +353,8 @@ test_that("derive_extreme_records Test 8: keep vars in `keep_source_vars` in the
   )
 })
 
-## Test 9: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())' ----
-test_that("derive_extreme_records Test 9: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())'", { # nolint
+## Test 8: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())' ----
+test_that("derive_extreme_records Test 8: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())'", { # nolint
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
     1, 1, 12, 1,

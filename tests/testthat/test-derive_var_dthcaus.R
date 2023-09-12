@@ -341,7 +341,7 @@ test_that("derive_var_dthcaus Test 6: DTHCAUS is added from AE and DS if filter 
 })
 
 ## Test 7: error on a dthcaus_source object with invalid order ----
-test_that("dthcaus_source Test 7: error on a dthcaus_source object with invalid order", {
+test_that("derive_var_dthcaus Test 7: error on a dthcaus_source object with invalid order", {
   expect_error(dthcaus_source(
     dataset_name = "ae",
     filter = AEOUT == "FATAL",
@@ -352,7 +352,7 @@ test_that("dthcaus_source Test 7: error on a dthcaus_source object with invalid 
   ))
 })
 
-## Test 8: dataset` is sorted using the `order` parameter ----
+## Test 8: `dataset` is sorted using the `order` parameter ----
 test_that("derive_var_dthcaus Test 8: `dataset` is sorted using the `order` parameter", {
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
@@ -415,7 +415,7 @@ test_that("derive_var_dthcaus Test 8: `dataset` is sorted using the `order` para
 })
 
 ## Test 9: returns a warning when traceability_vars is used ----
-test_that("dthcaus_source Test 9: returns a warning when traceability_vars is used", {
+test_that("derive_var_dthcaus Test 9: returns a warning when traceability_vars is used", {
   ae <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
     "TEST01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"

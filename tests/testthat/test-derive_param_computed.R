@@ -361,7 +361,7 @@ test_that("derive_param_computed Test 8: no new observations if a constant param
   )
 })
 
-## Test 9: compute multiple variables ----
+## Test 9: compute multiple variables, keep_nas ----
 test_that("derive_param_computed Test 9: compute multiple variables, keep_nas", {
   adlb_tbilialk <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVALC, ~ADTM,        ~ADTF,
