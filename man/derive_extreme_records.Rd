@@ -11,6 +11,7 @@ derive_extreme_records(
   by_vars = NULL,
   order = NULL,
   mode = NULL,
+  filter_add = NULL,
   check_type = "warning",
   exist_flag = NULL,
   true_value = "Y",
@@ -68,6 +69,11 @@ each by group is added to the input dataset.
 
 \emph{Permitted Values:} \code{"first"}, \code{"last"}}
 
+\item{filter_add}{Filter for additional dataset (\code{dataset_add})
+
+Only observations in \code{dataset_add} fulfilling the specified condition are
+considered.}
+
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
@@ -117,11 +123,6 @@ A list of variable name-value pairs is expected.
 \item RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value, an expression, or \code{NA}, e.g., \code{exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")}.
 }}
-
-\item{filter_add}{Filter for additional dataset (\code{dataset_add})
-
-Only observations in \code{dataset_add} fulfilling the specified condition are
-considered.}
 }
 \value{
 The input dataset with the first or last observation of each by group
