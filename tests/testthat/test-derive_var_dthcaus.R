@@ -421,7 +421,7 @@ test_that("dthcaus_source Test 9: returns a warning when traceability_vars is us
     "TEST01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
   )
 
-  expect_warning(
+  expect_error(
     src_ae <- dthcaus_source(
       dataset_name = "ae",
       filter = AEOUT == "FATAL",
@@ -434,6 +434,6 @@ test_that("dthcaus_source Test 9: returns a warning when traceability_vars is us
         DTHSEQ = AESEQ
       )
     ),
-    class = "lifecycle_warning_deprecated"
+    class = "lifecycle_error_deprecated"
   )
 })

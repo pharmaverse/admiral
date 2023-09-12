@@ -213,7 +213,7 @@ test_that("derive_var_extreme_dtm Test 5: error is issued if `--DTC` variable is
 
 ## Test 6: Returns a warning when traceability_vars is assigned  ----
 test_that("derive_var_extreme_dtm Test 6: Returns a warning when traceability_vars is assigned", {
-  expect_warning(
+  expect_error(
     ae_start <- date_source(
       dataset_name = "ae",
       date = convert_dtc_to_dtm(AESTDTC),
@@ -223,6 +223,6 @@ test_that("derive_var_extreme_dtm Test 6: Returns a warning when traceability_va
         LALVVAR = "AESTDTC"
       )
     ),
-    class = "lifecycle_warning_deprecated"
+    class = "lifecycle_error_deprecated"
   )
 })

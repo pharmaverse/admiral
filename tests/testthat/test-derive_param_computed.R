@@ -437,7 +437,7 @@ test_that("derive_param_computed Test 10: deprecation warning if analysis_value 
     select(-AVAL.DIABP, -AVAL.SYSBP)
   expected_output <- bind_rows(input, new_obs)
 
-  expect_warning(
+  expect_error(
     derive_param_computed(
       input,
       parameters = exprs(SYSBP, DIABP),
@@ -449,26 +449,7 @@ test_that("derive_param_computed Test 10: deprecation warning if analysis_value 
         AVALU = "mmHg"
       )
     ),
-    class = "lifecycle_warning_deprecated"
-  )
-
-  expect_dfs_equal(
-    suppress_warning(
-      derive_param_computed(
-        input,
-        parameters = exprs(SYSBP, DIABP),
-        by_vars = exprs(USUBJID, VISIT),
-        analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
-        set_values_to = exprs(
-          PARAMCD = "MAP",
-          PARAM = "Mean arterial pressure (mmHg)",
-          AVALU = "mmHg"
-        )
-      ),
-      regexpr = "is deprecated"
-    ),
-    expected_output,
-    keys = c("USUBJID", "PARAMCD", "VISIT")
+    class = "lifecycle_error_deprecated"
   )
 })
 
