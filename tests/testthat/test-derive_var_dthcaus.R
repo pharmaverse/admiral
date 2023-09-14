@@ -414,8 +414,8 @@ test_that("derive_var_dthcaus Test 8: `dataset` is sorted using the `order` para
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
 
-## Test 9: returns a warning when traceability_vars is used ----
-test_that("derive_var_dthcaus Test 9: returns a warning when traceability_vars is used", {
+## Test 9: returns a error when traceability_vars is used ----
+test_that("derive_var_dthcaus Test 9: returns a error when traceability_vars is used", {
   ae <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
     "TEST01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
