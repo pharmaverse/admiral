@@ -502,7 +502,6 @@ adpc <- adpc_baselines %>%
 # ...
 # ---- Save output ----
 dir <- file.path(getwd(), "tmp")
-print(dir)
 if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)

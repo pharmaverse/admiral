@@ -135,7 +135,6 @@ adae <- adae %>%
 
 
 dir <- file.path(getwd(), "tmp")
-print(dir)
 if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
