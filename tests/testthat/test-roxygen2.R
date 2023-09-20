@@ -11,5 +11,6 @@ test_that("roxygen_param_dataset Test 2: Input dataset standardized text works",
       "Input dataset \n \n",
       "The variables specified by the `by_vars` argument(s) to be expected."
     ),
-    roxygen_param_dataset(expected_vars = c("by_vars")))
+    roxygen_param_dataset(expected_vars = c("by_vars"))
+  )
 })
