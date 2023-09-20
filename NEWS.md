@@ -1,3 +1,16 @@
+# admiral 1.0.0
+
+## New Features
+
+## Updates of Existing Functions
+
+- Template `ad_adpp.R` updated to replace `left_join()` with `derive_vars_merged()` (#2109).
+
+## Breaking Changes
+
+## Documentation
+
+## Various
 
 # admiral 0.12.0
 
