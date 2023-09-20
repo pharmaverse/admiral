@@ -1,3 +1,4 @@
+# This wizard shit is hard
 # Set renv profile base on R version.
 .get_dependencies <- function(project_dir) {
 
