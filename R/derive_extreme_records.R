@@ -284,7 +284,7 @@ derive_extreme_records <- function(dataset = NULL,
   assert_expr_list(order, optional = TRUE)
   assert_expr_list(keep_source_vars, optional = TRUE)
 
-  if(is.null(dataset_add)){
+  if (is.null(dataset_add)) {
     expected_vars <- expr_c(by_vars, extract_vars(order))
   } else {
     expected_vars <- by_vars

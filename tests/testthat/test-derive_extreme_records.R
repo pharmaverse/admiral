@@ -454,7 +454,8 @@ test_that("derive_extreme_records Test 9: keep all vars in the new records when 
   )
 })
 
-test_that("order vars from dataset_add", {
+## Test 10: order vars from dataset_add ----
+test_that("derive_extreme_records Test 10: order vars from dataset_add", {
   bds <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVALC,
     "1",      "PARAM",  "1"
