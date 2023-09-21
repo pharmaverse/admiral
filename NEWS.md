@@ -1,3 +1,6 @@
+# admiral 0.12.1
+
+- Fix bug in `derive_vars_duration()` and `derive_vars_aage()` that adds `type` argument that gets passed through the `compute_duration()`. (#2112)
 
 # admiral 0.12.0
 
