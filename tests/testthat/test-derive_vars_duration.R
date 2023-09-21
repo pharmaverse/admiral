@@ -125,7 +125,7 @@ test_that("derive_vars_duration Test 5: type argument works for duration", {
   )
   expected_output <- dplyr::mutate(
     input,
-    ADURN = c((28/(365.25 / 12)), (29/(365.25 / 12))),
+    ADURN = c((28 / (365.25 / 12)), (29 / (365.25 / 12))),
     ADURU = c("MONTHS", "MONTHS")
   )
   expect_dfs_equal(actual_output, expected_output, keys = "USUBJID")
