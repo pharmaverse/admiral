@@ -85,12 +85,22 @@ by variables and the order.
 The specified variables are set to the specified values for the new
 observations.
 
-A list of variable name-value pairs is expected.
+Set a list of variables to some specified value for the new records
 \itemize{
-\item LHS refers to a variable.
+\item LHS refer to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
-symbol, a numeric value, an expression, or \code{NA}, e.g., \code{exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")}.
-}}
+symbol, a numeric value, an expression or NA. If summary functions are
+used, the values are summarized by the variables specified for \code{by_vars}.
+}
+
+For example:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  set_values_to = exprs(
+    AVAL = sum(AVAL),
+    PARAMCD = "TDOSE",
+    PARCAT1 = "OVERALL"
+  )
+}\if{html}{\out{</div>}}}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
 
