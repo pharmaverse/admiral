@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
-  <a class="nav-link" href="articles/">Get Started</a>
+  <a class="nav-link" href="articles/admiral.html">Get Started</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="reference/">Reference</a>
@@ -61,7 +61,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
-    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
+    <a class="dropdown-item" href="articles/admiral.html">Getting Started</a>
     <a class="dropdown-item" href="articles/adsl.html">Creating a Basic ADSL</a>
     <a class="dropdown-item" href="articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
@@ -93,22 +93,6 @@
 <li class="nav-item">
   <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -152,17 +136,17 @@
   <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
 <span class="op">}</span>
 
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiral.test"</span>, ref <span class="op">=</span> <span class="st">"devel"</span><span class="op">)</span> <span class="co"># This is a required dependency of {admiral}</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiraldev"</span>, ref <span class="op">=</span> <span class="st">"devel"</span><span class="op">)</span> <span class="co"># This is a required dependency of {admiral}</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiral"</span>, ref <span class="op">=</span> <span class="st">"devel"</span><span class="op">)</span></code></pre></div>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/pharmaversesdtm"</span><span class="op">)</span> <span class="co"># This is a required dependency of {admiral}</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiraldev"</span><span class="op">)</span> <span class="co"># This is a required dependency of {admiral}</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiral"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="release-schedule">Release Schedule<a class="anchor" aria-label="anchor" href="#release-schedule"></a>
 </h2>
-<p><a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> releases are targeted for the first Monday of the last month of each quarter. Pull Requests will be frozen the week before a release. The <code>admiral</code> family has several downstream and upstream dependencies and so this release shall be done in three Phases:</p>
+<p><a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">{admiral}</a>` releases are targeted for the first Monday of the last month of each quarter. Pull Requests will be frozen the week before a release. The {admiral} family has several downstream and upstream dependencies and so this release shall be done in three Phases:</p>
 <ul>
-<li>Phase 1 release is for <a href="https://pharmaverse.github.io/admiraldev/main/" class="external-link">admiraldev</a>, <code>{admiral.test}</code>, and <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> core</li>
-<li>Phase 2 release is extension packages, e.g. <code>{admiralonco}</code>, <code>admiralophtha</code>
+<li>Phase 1 release is for <a href="https://pharmaverse.github.io/admiraldev/main/" class="external-link">{admiraldev}</a>, <a href="https://pharmaverse.github.io/pharmaversesdtm/main/" class="external-link">{pharmaversesdtm}</a>, and <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">{admiral}</a> core</li>
+<li>Phase 2 release is extension packages, e.g. <a href="https://pharmaverse.github.io/admiralonco/main/" class="external-link">{admiralonco}</a>, <a href="https://pharmaverse.github.io/admiralophtha/main/" class="external-link">{admiralophtha}</a>, <a href="https://pharmaverse.github.io/admiralvaccine/main/" class="external-link">{admiralvaccine}</a>
 </li>
 </ul>
 <table class="table">
@@ -178,41 +162,28 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>Q3-2023</td>
-<td>September 4th</td>
-<td>September 11th</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>
-<a href="https://pharmaverse.github.io/admiraldev/main/" class="external-link">admiraldev</a> <code>{admiral.test}</code>
-</td>
-<td><code>{admiralonco}</code></td>
-</tr>
-<tr class="odd">
-<td></td>
-<td><a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a></td>
-<td><a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a></td>
-</tr>
-<tr class="even">
 <td>Q4-2023</td>
 <td>December 4th</td>
 <td>December 11th</td>
 </tr>
+<tr class="even">
+<td></td>
+<td><a href="https://pharmaverse.github.io/pharmaversesdtm/main/" class="external-link">{pharmaversesdtm}</a></td>
+<td><a href="https://pharmaverse.github.io/admiralonco/main/" class="external-link">{admiralonco}</a></td>
+</tr>
 <tr class="odd">
 <td></td>
-<td>
-<a href="https://pharmaverse.github.io/admiraldev/main/" class="external-link">admiraldev</a> <code>{admiral.test}</code>
-</td>
-<td><code>{admiralonco}</code></td>
+<td><a href="https://pharmaverse.github.io/admiraldev/main/" class="external-link">{admiraldev}</a></td>
+<td><a href="https://pharmaverse.github.io/admiralophtha/main/" class="external-link">{admiralophtha}</a></td>
 </tr>
 <tr class="even">
 <td></td>
-<td><a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a></td>
-<td><a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a></td>
+<td><a href="https://pharmaverse.github.io/admiral/main/">{admiral}</a></td>
+<td></td>
 </tr>
 </tbody>
 </table>
+<p>The <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> Q4-2023 release will officially be <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>’s version 1.0.0 release, where we commit to increased package maturity and pivot towards focusing on maintenance rather than new content. This does not mean that there will never be any new content in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>, rather it means we will be more mindful about introducing new functionality and/or breaking changes. The release schedule in 2024 and onward will also shift to twice-yearly, rather than quarterly, so that our users have ample time to react to any new content and changes that do make it onto <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="main-goal">Main Goal<a class="anchor" aria-label="anchor" href="#main-goal"></a>
@@ -309,9 +280,17 @@
 </ul>
 </div>
 <div class="section level2">
+<h2 id="pharmaverse-blog">Pharmaverse Blog<a class="anchor" aria-label="anchor" href="#pharmaverse-blog"></a>
+</h2>
+<p>If you are interested in R and Clinical Reporting, then visit the <a href="https://pharmaverse.github.io/blog/" class="external-link">pharmaverse blog</a>. This contains regular, bite-sized posts showcasing how <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> and other packages in the pharmaverse can be used to realize the vision of full end-to-end Clinical Reporting in R.</p>
+<p>We are also always looking for keen <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> users to publish their own blog posts about how they use the package. If this could be you, feel free make an issue in the <a href="https://github.com/pharmaverse/blog" class="external-link">GitHub repo</a> and get started!</p>
+</div>
+<div class="section level2">
 <h2 id="conference-presentations">Conference Presentations<a class="anchor" aria-label="anchor" href="#conference-presentations"></a>
 </h2>
 <ul>
+<li>
+<a href="https://www.youtube.com/watch?v=M4L1PPMu0pU" class="external-link">Cross Industry Package Development</a> (recording from R in Pharma 2022)</li>
 <li>
 <a href="https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/EU/London/PRE_London09.pdf" class="external-link">Paving the way for clinical submissions in R</a> (slides from PHUSE SDE in London)</li>
 <li>
@@ -338,6 +317,11 @@
 <li>
 <a href="https://github.com/pharmaverse/admiral/issues" class="external-link">GitHub Issues</a>—for direct feedback, enhancement requests or raising bugs</li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a>
+</h2>
+<p>Along with the authors and contributors, thanks to the following people for their work on the package: Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Bill Denney, Kamila Duniec, Alice Ehmann, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Yohann Omnes, Barbara O’Reilly, Hamza Rahal, Nick Ramirez, Tom Ratford, Tamara Senior, Sophie Shapcott, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay and Franciszek Walkowiak.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -377,37 +361,19 @@
 <ul class="list-unstyled">
 <li>Ben Straub <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Stefan Bundfuss <br><small class="roles"> Author </small>  </li>
-<li>Thomas Neitmann <br><small class="roles"> Author </small>  </li>
-<li>Samia Kabi <br><small class="roles"> Author </small>  </li>
-<li>Gordon Miller <br><small class="roles"> Author </small>  </li>
-<li>Teckla Akinyi <br><small class="roles"> Author </small>  </li>
-<li>Andrew Smith <br><small class="roles"> Author </small>  </li>
-<li>Konstantina Koukourikou <br><small class="roles"> Author </small>  </li>
-<li>Ross Farrugia <br><small class="roles"> Author </small>  </li>
-<li>Eric Simms <br><small class="roles"> Author </small>  </li>
-<li>Annie Yang <br><small class="roles"> Author </small>  </li>
-<li>Robin Koeger <br><small class="roles"> Author </small>  </li>
-<li>Sophie Shapcott <br><small class="roles"> Author </small>  </li>
-<li>Ojesh Upadhyay <br><small class="roles"> Author </small>  </li>
-<li>Jack McGavigan <br><small class="roles"> Author </small>  </li>
-<li>Kamila Duniec <br><small class="roles"> Author </small>  </li>
-<li>Gayatri G <br><small class="roles"> Author </small>  </li>
-<li>Alana Harris <br><small class="roles"> Author </small>  </li>
-<li>Mahdi About <br><small class="roles"> Author </small>  </li>
-<li>Pooja Kumari <br><small class="roles"> Author </small>  </li>
-<li>Claudia Carlucci <br><small class="roles"> Author </small>  </li>
-<li>Daniil Stefonishin <br><small class="roles"> Author </small>  </li>
-<li>Sadchla Mascary <br><small class="roles"> Author </small>  </li>
-<li>Zelos Zhu <br><small class="roles"> Author </small>  </li>
 <li>Jeffrey Dickinson <br><small class="roles"> Author </small>  </li>
-<li>Ania Golab <br><small class="roles"> Author </small>  </li>
-<li>Kangjie Zhang <br><small class="roles"> Author </small>  </li>
-<li>Daphne Grasselly <br><small class="roles"> Author </small>  </li>
+<li>Ross Farrugia <br><small class="roles"> Author </small>  </li>
 <li>Adam Forys <br><small class="roles"> Author </small>  </li>
+<li>Daphne Grasselly <br><small class="roles"> Author </small>  </li>
+<li>Dinakar Kulkarni <br><small class="roles"> Author </small>  </li>
 <li>Edoardo Mancini <br><small class="roles"> Author </small>  </li>
+<li>Sadchla Mascary <br><small class="roles"> Author </small>  </li>
+<li>Gordon Miller <br><small class="roles"> Author </small>  </li>
+<li>Sophie Shapcott <br><small class="roles"> Author </small>  </li>
+<li>Eric Simms <br><small class="roles"> Author </small>  </li>
 <li>Stefan Thoma <br><small class="roles"> Author </small>  </li>
-<li>F. Hoffmann-La Roche AG <br><small class="roles"> Copyright holder, funder </small>  </li>
-<li>GlaxoSmithKline LLC <br><small class="roles"> Copyright holder, funder </small>  </li>
+<li>Kangjie Zhang <br><small class="roles"> Author </small>  </li>
+<li>Zelos Zhu <br><small class="roles"> Author </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -427,7 +393,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Ben Straub, Stefan Bundfuss, Thomas Neitmann, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, Edoardo Mancini, Stefan Thoma, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+<p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Stefan Thoma, Kangjie Zhang, Zelos Zhu, G Gayatri, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
