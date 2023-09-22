@@ -83,6 +83,7 @@ will be set to \code{NA}.
 }
 \examples{
 library(tibble)
+library(dplyr)
 
 adeg <- tribble(
   ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
@@ -104,16 +105,20 @@ adeg <- tribble(
   "XYZ-1002", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:50", 412,   "Active 20mg",
   "XYZ-1002", 8,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,   "Active 20mg",
   "XYZ-1002", 9,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402,   "Active 20mg"
+) \%>\%
+mutate(
+  ADTM = convert_dtc_to_dtm(EGDTC)
 )
 
 # Summarize the average of the triplicate ECG interval values (AVAL)
 derive_summary_records(
   adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
-  analysis_var = AVAL,
-  summary_fun = function(x) mean(x, na.rm = TRUE),
-  set_values_to = exprs(DTYPE = "AVERAGE")
-)
+  set_values_to = exprs(
+    AVAL = mean(AVAL, na.rm = TRUE),
+    DTYPE = "AVERAGE")
+) \%>\%
+arrange(USUBJID, AVISIT)
 
 # Derive more than one summary variable
 derive_summary_records(
@@ -121,8 +126,7 @@ derive_summary_records(
   by_vars = exprs(USUBJID, PARAM, AVISIT),
   set_values_to = exprs(
     AVAL = mean(AVAL),
-    ASTDTM = min(convert_dtc_to_dtm(EGDTC)),
-    AENDTM = max(convert_dtc_to_dtm(EGDTC)),
+    ADTM = max(ADTM),
     DTYPE = "AVERAGE")
 ) \%>\%
 arrange(USUBJID, AVISIT) \%>\%
@@ -153,13 +157,15 @@ derive_summary_records(
   adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
   filter = n() > 2,
-  analysis_var = AVAL,
-  summary_fun = function(x) mean(x, na.rm = TRUE),
-  set_values_to = exprs(DTYPE = "AVERAGE")
-)
+  set_values_to = exprs(
+    AVAL =  mean(AVAL, na.rm = TRUE),
+    DTYPE = "AVERAGE"
+  )
+) \%>\%
+arrange(USUBJID, AVISIT)
 }
 \seealso{
-\code{get_summary_records()}
+\code{\link[=get_summary_records]{get_summary_records()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
 
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},

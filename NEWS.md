@@ -1,3 +1,21 @@
+# admiral 0.12.0.9000
+
+## New Features
+
+## Updates of Existing Functions
+
+- `derive_summary_records()`, `derive_var_merged_summary()`, and `get_summary_records()`
+were enhanced such that more than one summary variable can be derived, e.g.,
+`AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
+
+## Breaking Changes
+
+- In `derive_summary_records()` and `get_summary_records()` the arguments
+`analysis_var` and `summary_fun` were deprecated in favor of `set_values_to`.
+(#1792)
+
+- In `derive_var_merged_summary()` the arguments `new_var`, `analysis_var`, and
+`summary_fun` were deprecated in favor of `new_vars`. (#1792)
 
 # admiral 0.12.0
 

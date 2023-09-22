@@ -36,12 +36,13 @@
 #' @family der_prm_bds_findings
 #' @keywords der_prm_bds_findings
 #'
-#' @seealso `get_summary_records()`
+#' @seealso [get_summary_records()], [derive_var_merged_summary()]
 #'
 #' @export
 #'
 #' @examples
 #' library(tibble)
+#' library(dplyr)
 #'
 #' adeg <- tribble(
 #'   ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
@@ -63,16 +64,20 @@
 #'   "XYZ-1002", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:50", 412,   "Active 20mg",
 #'   "XYZ-1002", 8,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,   "Active 20mg",
 #'   "XYZ-1002", 9,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402,   "Active 20mg"
+#' ) %>%
+#' mutate(
+#'   ADTM = convert_dtc_to_dtm(EGDTC)
 #' )
 #'
 #' # Summarize the average of the triplicate ECG interval values (AVAL)
 #' derive_summary_records(
 #'   adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
-#'   analysis_var = AVAL,
-#'   summary_fun = function(x) mean(x, na.rm = TRUE),
-#'   set_values_to = exprs(DTYPE = "AVERAGE")
-#' )
+#'   set_values_to = exprs(
+#'     AVAL = mean(AVAL, na.rm = TRUE),
+#'     DTYPE = "AVERAGE")
+#' ) %>%
+#' arrange(USUBJID, AVISIT)
 #'
 #' # Derive more than one summary variable
 #' derive_summary_records(
@@ -80,8 +85,7 @@
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL),
-#'     ASTDTM = min(convert_dtc_to_dtm(EGDTC)),
-#'     AENDTM = max(convert_dtc_to_dtm(EGDTC)),
+#'     ADTM = max(ADTM),
 #'     DTYPE = "AVERAGE")
 #' ) %>%
 #' arrange(USUBJID, AVISIT) %>%
@@ -112,10 +116,12 @@
 #'   adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   filter = n() > 2,
-#'   analysis_var = AVAL,
-#'   summary_fun = function(x) mean(x, na.rm = TRUE),
-#'   set_values_to = exprs(DTYPE = "AVERAGE")
-#' )
+#'   set_values_to = exprs(
+#'     AVAL =  mean(AVAL, na.rm = TRUE),
+#'     DTYPE = "AVERAGE"
+#'   )
+#' ) %>%
+#' arrange(USUBJID, AVISIT)
 derive_summary_records <- function(dataset,
                                    by_vars,
                                    filter = NULL,
@@ -124,11 +130,11 @@ derive_summary_records <- function(dataset,
                                    set_values_to) {
   assert_vars(by_vars)
   if (!missing(analysis_var)) {
-    deprecate_warn(
-      "1.0.0",
-      "derive_summary_records(analysis_var = )",
-      "derive_summary_records(set_values_to = )"
-    )
+    # deprecate_warn(
+    #   "1.0.0",
+    #   "derive_summary_records(analysis_var = )",
+    #   "derive_summary_records(set_values_to = )"
+    # )
     analysis_var <- assert_symbol(enexpr(analysis_var))
   }
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)

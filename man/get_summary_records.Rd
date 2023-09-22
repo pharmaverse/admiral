@@ -157,7 +157,7 @@ get_summary_records(
 )
 }
 \seealso{
-\code{derive_summary_records()}
+\code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},

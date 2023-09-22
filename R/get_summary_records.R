@@ -67,7 +67,7 @@
 #'
 #' @keywords der_gen
 #'
-#' @seealso `derive_summary_records()`
+#' @seealso [derive_summary_records()], [derive_var_merged_summary()]
 #'
 #' @export
 #'
