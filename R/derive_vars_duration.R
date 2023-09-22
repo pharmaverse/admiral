@@ -76,8 +76,6 @@
 #'
 #'   See below for details.
 #'
-#'   Default: `"duration"`
-#'
 #'   Permitted Values: `"duration"`, `"interval"`
 #'
 #' @details The duration is derived as time from start to end date in the

@@ -92,8 +92,6 @@ Permitted Values: \code{TRUE}, \code{FALSE}}
 
 See below for details.
 
-Default: \code{"duration"}
-
 Permitted Values: \code{"duration"}, \code{"interval"}}
 }
 \value{

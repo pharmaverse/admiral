@@ -51,8 +51,6 @@ Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'secon
 
 See below for details.
 
-Default: \code{"duration"}
-
 Permitted Values: \code{"duration"}, \code{"interval"}}
 }
 \value{
