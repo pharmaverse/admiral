@@ -72,10 +72,34 @@
 #'
 #'   Permitted Values: `TRUE`, `FALSE`
 #'
+#' @param type lubridate duration type.
+#'
+#'   See below for details.
+#'
+#'   Permitted Values: `"duration"`, `"interval"`
+#'
 #' @details The duration is derived as time from start to end date in the
 #'   specified output unit. If the end date is before the start date, the duration
 #'   is negative. The start and end date variable must be present in the specified
 #'   input dataset.
+#'
+#' The [lubridate](https://lubridate.tidyverse.org/) package calculates two
+#' types of spans between two dates: duration and interval.
+#' While these calculations are largely the same, when the unit of the time period
+#' is month or year the result can be slightly different.
+#'
+#' The difference arises from the ambiguity in the length of `"1 month"` or
+#' `"1 year"`.
+#' Months may have 31, 30, 28, or 29 days, and years are 365 days and 366 during leap years.
+#' Durations and intervals help solve the ambiguity in these measures.
+#'
+#' The **interval** between `2000-02-01` and `2000-03-01` is `1` (i.e. one month).
+#' The **duration** between these two dates is `0.95`, which accounts for the fact
+#' that the year 2000 is a leap year, February has 29 days, and the average month
+#' length is `30.4375`, i.e. `29 / 30.4375 = 0.95`.
+#'
+#' For additional details, review the
+#' [lubridate time span reference page](https://lubridate.tidyverse.org/reference/timespan.html).
 #'
 #'
 #' @return The input dataset with the duration and unit variable added
@@ -174,7 +198,8 @@ derive_vars_duration <- function(dataset,
                                  out_unit = "days",
                                  floor_in = TRUE,
                                  add_one = TRUE,
-                                 trunc_out = FALSE) {
+                                 trunc_out = FALSE,
+                                 type = "duration") {
   new_var <- assert_symbol(enexpr(new_var))
   new_var_unit <- assert_symbol(enexpr(new_var_unit), optional = TRUE)
   start_date <- assert_symbol(enexpr(start_date))
@@ -206,7 +231,8 @@ derive_vars_duration <- function(dataset,
         out_unit = out_unit,
         floor_in = floor_in,
         add_one = add_one,
-        trunc_out = trunc_out
+        trunc_out = trunc_out,
+        type = type
       )
     )
 

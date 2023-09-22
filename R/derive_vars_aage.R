@@ -4,6 +4,8 @@
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_vars_duration()`.
 #'
+#' @inheritParams derive_vars_duration
+#'
 #' @param dataset Input dataset
 #'
 #'   The columns specified by the `start_date` and the `end_date` parameter are
@@ -37,12 +39,28 @@
 #'
 #' @param unit *Deprecated*, please use `age_unit` instead.
 #'
-#' @details The age is derived as the integer part of the duration from start to
-#'   end date in the specified unit. When 'years' or 'months' are specified in the `out_unit`
-#'   parameter, because of the underlying `lubridate::time_length()` function that is used
-#'   here, results are calculated based on the actual calendar length of months or years
-#'   rather than assuming equal days every month (30.4375 days) or every year (365.25 days).
+#' @details The duration is derived as time from start to end date in the
+#'   specified output unit. If the end date is before the start date, the duration
+#'   is negative. The start and end date variable must be present in the specified
+#'   input dataset.
 #'
+#'   The [lubridate](https://lubridate.tidyverse.org/) package calculates two
+#'   types of spans between two dates: duration and interval.
+#'   While these calculations are largely the same, when the unit of the time period
+#'   is month or year the result can be slightly different.
+#'
+#'   The difference arises from the ambiguity in the length of `"1 month"` or
+#'   `"1 year"`.
+#'   Months may have 31, 30, 28, or 29 days, and years are 365 days and 366 during leap years.
+#'   Durations and intervals help solve the ambiguity in these measures.
+#'
+#'   The **interval** between `2000-02-01` and `2000-03-01` is `1` (i.e. one month).
+#'   The **duration** between these two dates is `0.95`, which accounts for the fact
+#'   that the year 2000 is a leap year, February has 29 days, and the average month
+#'   length is `30.4375`, i.e. `29 / 30.4375 = 0.95`.
+#'
+#'   For additional details, review the
+#'   [lubridate time span reference page](https://lubridate.tidyverse.org/reference/timespan.html).
 #'
 #' @return The input dataset with ``AAGE`` and ``AAGEU`` added
 #'
@@ -67,7 +85,8 @@ derive_vars_aage <- function(dataset,
                              start_date = BRTHDT,
                              end_date = RANDDT,
                              unit = "years",
-                             age_unit = "years") {
+                             age_unit = "years",
+                             type = "interval") {
   if (!missing(unit)) {
     deprecate_warn("0.12.0", "derive_vars_aage(unit = )", "derive_vars_aage(age_unit = )")
     age_unit <- unit
@@ -89,7 +108,8 @@ derive_vars_aage <- function(dataset,
     end_date = !!end_date,
     out_unit = age_unit,
     add_one = FALSE,
-    trunc_out = TRUE
+    trunc_out = TRUE,
+    type = type
   )
 }
 
