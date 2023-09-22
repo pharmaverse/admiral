@@ -1,6 +1,6 @@
 # admiral 0.12.1
 
-- Fix bug in `derive_vars_duration()` and `derive_vars_aage()` that adds `type` argument that gets passed through the `compute_duration()`. (#2112)
+- The `type` argument in `compute_duration()` changed the underlying default behavior in `derive_vars_duration()` without allowing the user to toggle between `"duration"` and `"interval"` as originally intended. This was fixed by adding the `type` argument for `derive_vars_duration()` and a wrapper function `derive_vars_aage()` such that it gets passed through `compute_duration()` appropriately (#2112)
 
 # admiral 0.12.0
 

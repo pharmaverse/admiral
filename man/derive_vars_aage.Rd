@@ -10,7 +10,7 @@ derive_vars_aage(
   end_date = RANDDT,
   unit = "years",
   age_unit = "years",
-  type = "duration"
+  type = "interval"
 )
 }
 \arguments{
