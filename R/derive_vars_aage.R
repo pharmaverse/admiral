@@ -4,6 +4,8 @@
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_vars_duration()`.
 #'
+#' @inheritParams derive_vars_duration
+#'
 #' @param dataset Input dataset
 #'
 #'   The columns specified by the `start_date` and the `end_date` parameter are
@@ -36,14 +38,6 @@
 #'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 #'
 #' @param unit *Deprecated*, please use `age_unit` instead.
-#'
-#' @param type lubridate duration type.
-#'
-#'   See below for details.
-#'
-#'   Default: `"duration"`
-#'
-#'   Permitted Values: `"duration"`, `"interval"`
 #'
 #' @details The duration is derived as time from start to end date in the
 #'   specified output unit. If the end date is before the start date, the duration
