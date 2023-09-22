@@ -20,7 +20,7 @@ where only the by variables are populated for the new records."><meta property="
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,7 +29,7 @@ where only the by variables are populated for the new records."><meta property="
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/">Get Started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/">Reference</a>
@@ -69,22 +69,6 @@ where only the by variables are populated for the new records."><meta property="
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -129,6 +113,7 @@ where only the by variables are populated for the new records.</p>
   exist_flag <span class="op">=</span> <span class="cn">NULL</span>,
   true_value <span class="op">=</span> <span class="st">"Y"</span>,
   false_value <span class="op">=</span> <span class="st">"N"</span>,
+  keep_source_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
   <span class="va">set_values_to</span>,
   <span class="va">filter</span>
 <span class="op">)</span></code></pre></div>
@@ -221,6 +206,14 @@ with respect to the by variables and the order.</p>
 (<code>dataset_add</code>), <code>exist_flag</code> is set to the specified value.</p></dd>
 
 
+<dt>keep_source_vars</dt>
+<dd><p>Variables to be kept in the new records</p>
+<p>A named list or tidyselect expressions created by <code><a href="reexport-exprs.html">exprs()</a></code> defining the
+variables to be kept for the new records. The variables specified for
+<code>by_vars</code> and <code>set_values_to</code> need not be specified here as they are kept
+automatically.</p></dd>
+
+
 <dt>set_values_to</dt>
 <dd><p>Variables to be set</p>
 <p>The specified variables are set to the specified values for the new
@@ -260,6 +253,9 @@ order specified for the <code>order</code> argument and the mode specified for t
 but not in the selected records are added.</p></li>
 <li><p>The variables specified by the <code>set_values_to</code> argument are added to
 the selected observations.</p></li>
+<li><p>The variables specified by the <code>keep_source_vars</code> argument are selected
+along with the variables specified in <code>by_vars</code> and <code>set_values_to</code>
+arguments.</p></li>
 <li><p>The observations are added to input dataset.</p></li>
 </ol></div>
     <div class="section level2">
@@ -303,12 +299,14 @@ the selected observations.</p></li>
 <span class="r-in"><span class="co"># Add a new record for each USUBJID storing the minimum value (first AVAL).</span></span>
 <span class="r-in"><span class="co"># If multiple records meet the minimum criterion, take the first value by</span></span>
 <span class="r-in"><span class="co"># AVISITN. Set AVISITN = 97 and DTYPE = MINIMUM for these new records.</span></span>
+<span class="r-in"><span class="co"># Specify the variables that need to be kept in the new records.</span></span>
 <span class="r-in"><span class="fu">derive_extreme_records</span><span class="op">(</span></span>
 <span class="r-in">  <span class="va">adlb</span>,</span>
 <span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span>
 <span class="r-in">  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVAL</span>, <span class="va">AVISITN</span><span class="op">)</span>,</span>
 <span class="r-in">  mode <span class="op">=</span> <span class="st">"first"</span>,</span>
 <span class="r-in">  filter_add <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>,</span>
+<span class="r-in">  keep_source_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>,</span>
 <span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
 <span class="r-in">    AVISITN <span class="op">=</span> <span class="fl">97</span>,</span>
 <span class="r-in">    DTYPE <span class="op">=</span> <span class="st">"MINIMUM"</span></span>
@@ -323,8 +321,8 @@ the selected observations.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2             1   101     1 <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2             2   101     2 <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2             3    95     3 <span style="color: #BB0000;">NA</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 1            97   113     1 MINIMUM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> 2            97    95     3 MINIMUM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 1            97   113    <span style="color: #BB0000;">NA</span> MINIMUM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> 2            97    95    <span style="color: #BB0000;">NA</span> MINIMUM</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Add a new record for each USUBJID storing the maximum value (last AVAL).</span></span>
 <span class="r-in"><span class="co"># If multiple records meet the maximum criterion, take the first value by</span></span>
@@ -455,11 +453,11 @@ the selected observations.</p></li>
 <span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID DTHDT      STUDYID AVALC PARAMCD PARAM ANL01FL ADT       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1       2022-05-13 XX1234  Y     DEATH   Death Y       2022-05-13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2       <span style="color: #BB0000;">NA</span>         XX1234  N     DEATH   Death Y       <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3       <span style="color: #BB0000;">NA</span>         XX1234  N     DEATH   Death Y       <span style="color: #BB0000;">NA</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID USUBJID PARAMCD PARAM ANL01FL ADT        DTHDT      AVALC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> XX1234  1       DEATH   Death Y       2022-05-13 2022-05-13 Y    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> XX1234  2       DEATH   Death Y       <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         N    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> XX1234  3       DEATH   Death Y       <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         N    </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -467,7 +465,7 @@ the selected observations.</p></li>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Thomas Neitmann, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, Edoardo Mancini, Stefan Thoma, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Stefan Thoma, Kangjie Zhang, Zelos Zhu, G Gayatri, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">

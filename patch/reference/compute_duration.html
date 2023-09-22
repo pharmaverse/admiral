@@ -12,7 +12,7 @@ relative day, age, ..."><meta property="og:image" content="https://pharmaverse.g
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,7 @@ relative day, age, ..."><meta property="og:image" content="https://pharmaverse.g
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/">Get Started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/">Reference</a>
@@ -61,22 +61,6 @@ relative day, age, ..."><meta property="og:image" content="https://pharmaverse.g
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -112,7 +96,8 @@ relative day, age, ...</p>
   out_unit <span class="op">=</span> <span class="st">"days"</span>,
   floor_in <span class="op">=</span> <span class="cn">TRUE</span>,
   add_one <span class="op">=</span> <span class="cn">TRUE</span>,
-  trunc_out <span class="op">=</span> <span class="cn">FALSE</span>
+  trunc_out <span class="op">=</span> <span class="cn">FALSE</span>,
+  type <span class="op">=</span> <span class="st">"duration"</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -173,6 +158,13 @@ integer part is returned.</p>
 <p>Default: <code>FALSE</code></p>
 <p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></dd>
 
+
+<dt>type</dt>
+<dd><p>lubridate duration type.</p>
+<p>See below for details.</p>
+<p>Default: <code>"duration"</code></p>
+<p>Permitted Values: <code>"duration"</code>, <code>"interval"</code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -187,8 +179,29 @@ start to end date in the specified unit. If the end date is before the start
 date, the duration is negative.</p>
     </div>
     <div class="section level2">
+    <h2 id="duration-type">Duration Type<a class="anchor" aria-label="anchor" href="#duration-type"></a></h2>
+    
+
+
+<p>The <a href="https://lubridate.tidyverse.org/" class="external-link">lubridate</a> package calculates two
+types of spans between two dates: duration and interval.
+While these calculations are largely the same, when the unit of the time period
+is month or year the result can be slightly different.</p>
+<p>The difference arises from the ambiguity in the length of <code>"1 month"</code> or
+<code>"1 year"</code>.
+Months may have 31, 30, 28, or 29 days, and years are 365 days and 366 during leap years.
+Durations and intervals help solve the ambiguity in these measures.</p>
+<p>The <strong>interval</strong> between <code>2000-02-01</code> and <code>2000-03-01</code> is <code>1</code> (i.e. one month).
+The <strong>duration</strong> between these two dates is <code>0.95</code>, which accounts for the fact
+that the year 2000 is a leap year, February has 29 days, and the average month
+length is <code>30.4375</code>, i.e. <code>29 / 30.4375 = 0.95</code>.</p>
+<p>For additional details, review the
+<a href="https://lubridate.tidyverse.org/reference/timespan.html" class="external-link">lubridate time span reference page</a>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Date/Time Computation Functions that returns a vector: 
+    <div class="dont-index"><p><code><a href="derive_vars_duration.html">derive_vars_duration()</a></code></p>
+<p>Date/Time Computation Functions that returns a vector: 
 <code><a href="compute_age_years.html">compute_age_years</a>()</code>,
 <code><a href="compute_dtf.html">compute_dtf</a>()</code>,
 <code><a href="compute_tmf.html">compute_tmf</a>()</code>,
@@ -250,7 +263,7 @@ date, the duration is negative.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Thomas Neitmann, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, Edoardo Mancini, Stefan Thoma, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Stefan Thoma, Kangjie Zhang, Zelos Zhu, G Gayatri, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">

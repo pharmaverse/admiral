@@ -12,7 +12,7 @@ derive_var_extreme_dtm()."><meta property="og:image" content="https://pharmavers
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,7 @@ derive_var_extreme_dtm()."><meta property="og:image" content="https://pharmavers
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/">Get Started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/">Reference</a>
@@ -61,22 +61,6 @@ derive_var_extreme_dtm()."><meta property="og:image" content="https://pharmavers
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -105,7 +89,13 @@ derive_var_extreme_dtm()."><meta property="og:image" content="https://pharmavers
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">date_source</span><span class="op">(</span><span class="va">dataset_name</span>, filter <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">date</span>, traceability_vars <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">date_source</span><span class="op">(</span>
+  <span class="va">dataset_name</span>,
+  filter <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">date</span>,
+  traceability_vars <span class="op">=</span> <span class="cn">NULL</span>,
+  set_values_to <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -127,7 +117,12 @@ datetime can be specified. An unquoted symbol or expression is expected.</p></dd
 <dt>traceability_vars</dt>
 <dd><p>A named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> defining the
 traceability variables, e.g. <code>exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")</code>. The values must be a symbol, a character string, a numeric,
-an expression, or <code>NA</code>.</p></dd>
+an expression, or <code>NA</code>.</p>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>set_values_to</code> instead.</p></dd>
+
+
+<dt>set_values_to</dt>
+<dd><p>Variables to be set</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -144,6 +139,7 @@ an expression, or <code>NA</code>.</p></dd>
 <code><a href="censor_source.html">censor_source</a>()</code>,
 <code><a href="tte_source_objects.html">death_event</a></code>,
 <code><a href="dthcaus_source.html">dthcaus_source</a>()</code>,
+<code><a href="event_joined.html">event_joined</a>()</code>,
 <code><a href="event_source.html">event_source</a>()</code>,
 <code><a href="event.html">event</a>()</code>,
 <code><a href="query.html">query</a>()</code>,
@@ -171,7 +167,7 @@ an expression, or <code>NA</code>.</p></dd>
 <span class="r-in"><span class="va">death_date</span> <span class="op">&lt;-</span> <span class="fu">date_source</span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"adsl"</span>,</span>
 <span class="r-in">  date <span class="op">=</span> <span class="va">DTHDT</span>,</span>
-<span class="r-in">  traceability_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
 <span class="r-in">    LALVDOM <span class="op">=</span> <span class="st">"ADSL"</span>,</span>
 <span class="r-in">    LALVVAR <span class="op">=</span> <span class="st">"DTHDT"</span></span>
 <span class="r-in">  <span class="op">)</span></span>
@@ -183,7 +179,7 @@ an expression, or <code>NA</code>.</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Thomas Neitmann, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, Edoardo Mancini, Stefan Thoma, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Stefan Thoma, Kangjie Zhang, Zelos Zhu, G Gayatri, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">

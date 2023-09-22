@@ -106,6 +106,9 @@
     <loc>https://pharmaverse.github.io/admiral/patch/reference/atoxgr_criteria_ctcv5.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/patch/reference/atoxgr_criteria_daids.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/patch/reference/basket_select.html</loc>
   </url>
   <url>
@@ -289,9 +292,6 @@
     <loc>https://pharmaverse.github.io/admiral/patch/reference/derive_var_confirmation_flag.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiral/patch/reference/derive_var_disposition_status.html</loc>
-  </url>
-  <url>
     <loc>https://pharmaverse.github.io/admiral/patch/reference/derive_var_dthcaus.html</loc>
   </url>
   <url>
@@ -349,16 +349,10 @@
     <loc>https://pharmaverse.github.io/admiral/patch/reference/derive_var_trtemfl.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiral/patch/reference/derive_var_worst_flag.html</loc>
-  </url>
-  <url>
     <loc>https://pharmaverse.github.io/admiral/patch/reference/derive_vars_aage.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/patch/reference/derive_vars_atc.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/patch/reference/derive_vars_disposition_reason.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/patch/reference/derive_vars_dt.html</loc>
@@ -415,6 +409,9 @@
     <loc>https://pharmaverse.github.io/admiral/patch/reference/event.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/patch/reference/event_joined.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/patch/reference/event_source.html</loc>
   </url>
   <url>
@@ -452,12 +449,6 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/patch/reference/format.basket_select.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/patch/reference/format_eoxxstt_default.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/patch/reference/format_reason_default.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/patch/reference/get_admiral_option.html</loc>

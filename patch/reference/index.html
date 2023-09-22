@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,7 +19,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/">Get Started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/">Reference</a>
@@ -59,22 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -483,6 +467,11 @@ Dataset</dd>
         <dd>Metadata Holding Grading Criteria for NCI-CTCAEv5</dd>
       </dl><dl><dt>
           
+          <code><a href="atoxgr_criteria_daids.html">atoxgr_criteria_daids</a></code> 
+        </dt>
+        <dd>Metadata Holding Grading Criteria for DAIDs</dd>
+      </dl><dl><dt>
+          
           <code><a href="dose_freq_lookup.html">dose_freq_lookup</a></code> 
         </dt>
         <dd>Pre-Defined Dose Frequencies</dd>
@@ -655,6 +644,11 @@ Dataset</dd>
         <dd>Create a <code>event</code> Object</dd>
       </dl><dl><dt>
           
+          <code><a href="event_joined.html">event_joined()</a></code> 
+        </dt>
+        <dd>Create a <code>event_joined</code> Object</dd>
+      </dl><dl><dt>
+          
           <code><a href="event_source.html">event_source()</a></code> 
         </dt>
         <dd>Create an <code>event_source</code> Object</dd>
@@ -696,11 +690,6 @@ Dataset</dd>
         <dd>Check required parameters for a basket</dd>
       </dl><dl><dt>
           
-          <code><a href="assert_parameters_argument.html">assert_parameters_argument()</a></code> 
-        </dt>
-        <dd>Asserts <code>parameters</code> Argument and Converts to List of Expressions</dd>
-      </dl><dl><dt>
-          
           <code><a href="assert_terms.html">assert_terms()</a></code> 
         </dt>
         <dd>Asserts Requirements for Terms for Queries</dd>
@@ -724,11 +713,6 @@ Dataset</dd>
           <code><a href="format.basket_select.html">format(<i>&lt;basket_select&gt;</i>)</a></code> 
         </dt>
         <dd>Returns a Character Representation of a <code><a href="../reference/basket_select.html">basket_select()</a></code> Object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_hori_data.html">get_hori_data()</a></code> 
-        </dt>
-        <dd>Creating Temporary Parameters and <code>&lt;variable&gt;.&lt;parameter&gt;</code> Variables</dd>
       </dl><dl><dt>
           
           <code><a href="list_tte_source_objects.html">list_tte_source_objects()</a></code> 
@@ -1019,52 +1003,6 @@ Dataset</dd>
         <dd>Minimum Value on a Subset</dd>
       </dl></div><div class="section level2">
       
-      <h3 id="utilities-used-for-date-imputation">Utilities used for Date Imputation<a class="anchor" aria-label="anchor" href="#utilities-used-for-date-imputation"></a></h3>
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="dt_level.html">dt_level()</a></code> 
-        </dt>
-        <dd>Create a <code>dt_level</code> object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="dtm_level.html">dtm_level()</a></code> 
-        </dt>
-        <dd>Create a <code>dtm_level</code> object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_imputation_target_date.html">get_imputation_target_date()</a></code> 
-        </dt>
-        <dd>Get Date Imputation Targets</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_imputation_target_time.html">get_imputation_target_time()</a></code> 
-        </dt>
-        <dd>Get Time Imputation Targets</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_partialdatetime.html">get_partialdatetime()</a></code> 
-        </dt>
-        <dd>Parse DTC variable and Determine Components</dd>
-      </dl><dl><dt>
-          
-          <code><a href="restrict_imputed_dtc_dt.html">restrict_imputed_dtc_dt()</a></code> 
-        </dt>
-        <dd>Restrict Imputed DTC date to Minimum/Maximum Dates</dd>
-      </dl><dl><dt>
-          
-          <code><a href="restrict_imputed_dtc_dtm.html">restrict_imputed_dtc_dtm()</a></code> 
-        </dt>
-        <dd>Restrict Imputed DTC date to Minimum/Maximum Dates</dd>
-      </dl></div><div class="section level2">
-      
       <h3 id="utilities-for-quosures">Utilities for Quosures<a class="anchor" aria-label="anchor" href="#utilities-for-quosures"></a></h3>
       
 
@@ -1105,37 +1043,6 @@ Dataset</dd>
           <code><a href="use_ad_template.html">use_ad_template()</a></code> 
         </dt>
         <dd>Open an ADaM Template Script</dd>
-      </dl></div><div class="section level2">
-      
-      <h3 id="utilities-for-printing">Utilities for Printing<a class="anchor" aria-label="anchor" href="#utilities-for-printing"></a></h3>
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="print.adam_templates.html">print(<i>&lt;adam_templates&gt;</i>)</a></code> 
-        </dt>
-        <dd>Print <code>adam_templates</code> Objects</dd>
-      </dl><dl><dt>
-          
-          <code><a href="print.duplicates.html">print(<i>&lt;duplicates&gt;</i>)</a></code> 
-        </dt>
-        <dd>Print <code>duplicates</code> Objects</dd>
-      </dl><dl><dt>
-          
-          <code><a href="print.source.html">print(<i>&lt;source&gt;</i>)</a></code> 
-        </dt>
-        <dd>Print <code>source</code> Objects</dd>
-      </dl><dl><dt>
-          
-          <code><a href="print_named_list.html">print_named_list()</a></code> 
-        </dt>
-        <dd>Print Named List</dd>
       </dl></div><div class="section level2">
       <h2 id="objects-exported-from-other-packages">Objects exported from other packages<a class="anchor" aria-label="anchor" href="#objects-exported-from-other-packages"></a></h2>
       
@@ -1193,11 +1100,6 @@ Dataset</dd>
         <dd>Derive Confirmation Flag</dd>
       </dl><dl><dt>
           
-          <code><a href="derive_var_disposition_status.html">derive_var_disposition_status()</a></code> 
-        </dt>
-        <dd>Derive a Disposition Status at a Specific Timepoint</dd>
-      </dl><dl><dt>
-          
           <code><a href="derive_var_last_dose_amt.html">derive_var_last_dose_amt()</a></code> 
         </dt>
         <dd>Derive Last Dose Amount</dd>
@@ -1223,36 +1125,16 @@ Dataset</dd>
         <dd>Merge a Character Variable</dd>
       </dl><dl><dt>
           
-          <code><a href="derive_var_worst_flag.html">derive_var_worst_flag()</a></code> 
-        </dt>
-        <dd>Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations</dd>
-      </dl><dl><dt>
-          
-          <code><a href="derive_vars_disposition_reason.html">derive_vars_disposition_reason()</a></code> 
-        </dt>
-        <dd>Derive a Disposition Reason at a Specific Timepoint</dd>
-      </dl><dl><dt>
-          
           <code><a href="derive_vars_last_dose.html">derive_vars_last_dose()</a></code> 
         </dt>
         <dd>Derive Last Dose</dd>
-      </dl><dl><dt>
-          
-          <code><a href="format_eoxxstt_default.html">format_eoxxstt_default()</a></code> 
-        </dt>
-        <dd>Default Format for Disposition Status</dd>
-      </dl><dl><dt>
-          
-          <code><a href="format_reason_default.html">format_reason_default()</a></code> 
-        </dt>
-        <dd>Default Format for the Disposition Reason</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Thomas Neitmann, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, Edoardo Mancini, Stefan Thoma, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Stefan Thoma, Kangjie Zhang, Zelos Zhu, G Gayatri, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">

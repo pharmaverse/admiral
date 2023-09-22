@@ -12,7 +12,7 @@ the last known alive datetime (LSTALVDTM)."><meta property="og:image" content="h
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,7 @@ the last known alive datetime (LSTALVDTM)."><meta property="og:image" content="h
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/">Get Started</a>
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/">Reference</a>
@@ -61,22 +61,6 @@ the last known alive datetime (LSTALVDTM)."><meta property="og:image" content="h
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -164,7 +148,7 @@ and <code>mode</code>) is selected.</p></li>
 <li><p>The new variable is set to the variable or expression specified by the
 <code>date</code> element. If this is a date variable (rather than datetime), then the
 time is imputed as <code>"00:00:00"</code>.</p></li>
-<li><p>The variables specified by the <code>traceability_vars</code> element are added.</p></li>
+<li><p>The variables specified by the <code>set_values_to</code> element are added.</p></li>
 <li><p>The selected observations of all source datasets are combined into a
 single dataset.</p></li>
 <li><p>For each patient the first or last observation (with respect to the new
@@ -311,7 +295,7 @@ variable is merged to the input dataset.</p></li>
 <span class="r-in"><span class="va">ae_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ae"</span>,</span>
 <span class="r-in">  date <span class="op">=</span> <span class="fu"><a href="convert_dtc_to_dtm.html">convert_dtc_to_dtm</a></span><span class="op">(</span><span class="va">AESTDTC</span>, highest_imputation <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span>,</span>
-<span class="r-in">  traceability_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
 <span class="r-in">    LALVDOM <span class="op">=</span> <span class="st">"AE"</span>,</span>
 <span class="r-in">    LALVSEQ <span class="op">=</span> <span class="va">AESEQ</span>,</span>
 <span class="r-in">    LALVVAR <span class="op">=</span> <span class="st">"AESTDTC"</span></span>
@@ -321,7 +305,7 @@ variable is merged to the input dataset.</p></li>
 <span class="r-in"><span class="va">ae_end</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"ae"</span>,</span>
 <span class="r-in">  date <span class="op">=</span> <span class="fu"><a href="convert_dtc_to_dtm.html">convert_dtc_to_dtm</a></span><span class="op">(</span><span class="va">AEENDTC</span>, highest_imputation <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span>,</span>
-<span class="r-in">  traceability_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
 <span class="r-in">    LALVDOM <span class="op">=</span> <span class="st">"AE"</span>,</span>
 <span class="r-in">    LALVSEQ <span class="op">=</span> <span class="va">AESEQ</span>,</span>
 <span class="r-in">    LALVVAR <span class="op">=</span> <span class="st">"AEENDTC"</span></span>
@@ -330,7 +314,7 @@ variable is merged to the input dataset.</p></li>
 <span class="r-in"><span class="va">lb_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"lb"</span>,</span>
 <span class="r-in">  date <span class="op">=</span> <span class="fu"><a href="convert_dtc_to_dtm.html">convert_dtc_to_dtm</a></span><span class="op">(</span><span class="va">LBDTC</span><span class="op">)</span>,</span>
-<span class="r-in">  traceability_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
 <span class="r-in">    LALVDOM <span class="op">=</span> <span class="st">"LB"</span>,</span>
 <span class="r-in">    LALVSEQ <span class="op">=</span> <span class="va">LBSEQ</span>,</span>
 <span class="r-in">    LALVVAR <span class="op">=</span> <span class="st">"LBDTC"</span></span>
@@ -340,7 +324,7 @@ variable is merged to the input dataset.</p></li>
 <span class="r-in"><span class="va">adsl_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="date_source.html">date_source</a></span><span class="op">(</span></span>
 <span class="r-in">  dataset_name <span class="op">=</span> <span class="st">"adsl"</span>,</span>
 <span class="r-in">  date <span class="op">=</span> <span class="va">TRTEDTM</span>,</span>
-<span class="r-in">  traceability_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
 <span class="r-in">    LALVDOM <span class="op">=</span> <span class="st">"ADSL"</span>,</span>
 <span class="r-in">    LALVSEQ <span class="op">=</span> <span class="cn">NA_integer_</span>,</span>
 <span class="r-in">    LALVVAR <span class="op">=</span> <span class="st">"TRTEDTM"</span></span>
@@ -374,7 +358,7 @@ variable is merged to the input dataset.</p></li>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Thomas Neitmann, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, Sadchla Mascary, Zelos Zhu, Jeffrey Dickinson, Ania Golab, Kangjie Zhang, Daphne Grasselly, Adam Forys, Edoardo Mancini, Stefan Thoma, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Stefan Thoma, Kangjie Zhang, Zelos Zhu, G Gayatri, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
