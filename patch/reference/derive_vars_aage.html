@@ -12,7 +12,7 @@ Note: This is a wrapper function for the more generic derive_vars_duration()."><
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,22 +61,6 @@ Note: This is a wrapper function for the more generic derive_vars_duration()."><
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -110,7 +94,8 @@ Note: This is a wrapper function for the more generic derive_vars_duration()."><
   start_date <span class="op">=</span> <span class="va">BRTHDT</span>,
   end_date <span class="op">=</span> <span class="va">RANDDT</span>,
   unit <span class="op">=</span> <span class="st">"years"</span>,
-  age_unit <span class="op">=</span> <span class="st">"years"</span>
+  age_unit <span class="op">=</span> <span class="st">"years"</span>,
+  type <span class="op">=</span> <span class="st">"interval"</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -148,6 +133,12 @@ vector to a date object.</p>
 <p>Default: 'years'</p>
 <p>Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'</p></dd>
 
+
+<dt>type</dt>
+<dd><p>lubridate duration type.</p>
+<p>See below for details.</p>
+<p>Permitted Values: <code>"duration"</code>, <code>"interval"</code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -157,11 +148,24 @@ vector to a date object.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The age is derived as the integer part of the duration from start to
-end date in the specified unit. When 'years' or 'months' are specified in the <code>out_unit</code>
-parameter, because of the underlying <code><a href="https://lubridate.tidyverse.org/reference/time_length.html" class="external-link">lubridate::time_length()</a></code> function that is used
-here, results are calculated based on the actual calendar length of months or years
-rather than assuming equal days every month (30.4375 days) or every year (365.25 days).</p>
+    <p>The duration is derived as time from start to end date in the
+specified output unit. If the end date is before the start date, the duration
+is negative. The start and end date variable must be present in the specified
+input dataset.</p>
+<p>The <a href="https://lubridate.tidyverse.org/" class="external-link">lubridate</a> package calculates two
+types of spans between two dates: duration and interval.
+While these calculations are largely the same, when the unit of the time period
+is month or year the result can be slightly different.</p>
+<p>The difference arises from the ambiguity in the length of <code>"1 month"</code> or
+<code>"1 year"</code>.
+Months may have 31, 30, 28, or 29 days, and years are 365 days and 366 during leap years.
+Durations and intervals help solve the ambiguity in these measures.</p>
+<p>The <strong>interval</strong> between <code>2000-02-01</code> and <code>2000-03-01</code> is <code>1</code> (i.e. one month).
+The <strong>duration</strong> between these two dates is <code>0.95</code>, which accounts for the fact
+that the year 2000 is a leap year, February has 29 days, and the average month
+length is <code>30.4375</code>, i.e. <code>29 / 30.4375 = 0.95</code>.</p>
+<p>For additional details, review the
+<a href="https://lubridate.tidyverse.org/reference/timespan.html" class="external-link">lubridate time span reference page</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
