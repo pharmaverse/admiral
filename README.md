@@ -33,20 +33,19 @@ remotes::install_github("pharmaverse/admiral")
 
 ## Release Schedule
 
-[{admiral}](https://pharmaverse.github.io/admiral/cran-release/)` releases are targeted for the first Monday of the last month of each quarter.  Pull Requests will be frozen the week before a release.
+[{admiral}](https://pharmaverse.github.io/admiral/cran-release/)\` releases are targeted for the first Monday of the last month of each quarter.  Pull Requests will be frozen the week before a release.
 The {admiral} family has several downstream and upstream dependencies and so this release shall be done in three
 Phases:
 
-* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/), and [{admiral}](https://pharmaverse.github.io/admiral/cran-release/) core 
+* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/), and [{admiral}](https://pharmaverse.github.io/admiral/cran-release/) core
 * Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/)
 
-
-|Release Schedule | Phase 1- Date and Packages                                                  | Phase 2- Date and Packages                                                    |
-|---------------- | --------------------------                                                  | --------------------------                                                    |
-| Q4-2023         | December 4th                                                                | December 11th                                                                 |
-|                 | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/)    | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)              |
-|                 | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)              | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/)          |
-|                 | [{admiral}](https://pharmaverse.github.io/admiral/main/)                    |                                                                               |
+| Release Schedule | Phase 1- Date and Packages                                               | Phase 2- Date and Packages                                           |
+| ---------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| Q4-2023          | December 4th                                                             | December 11th                                                        |
+|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)     |
+|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)           | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/) |
+|                  | [{admiral}](https://pharmaverse.github.io/admiral/main/)                 |                                                                      |
 
 The `{admiral}` Q4-2023 release will officially be `{admiral}`'s version 1.0.0 release, where we commit to increased package maturity and pivot towards focusing on maintenance rather than new content. This does not mean that there will never be any new content in `{admiral}`, rather it means we will be more mindful about introducing new functionality and/or breaking changes. The release schedule in 2024 and onward will also shift to twice-yearly, rather than quarterly, so that our users have ample time to react to any new content and changes that do make it onto `{admiral}`.
 
@@ -151,10 +150,10 @@ that all our developers and contributors must follow, so that all our code has a
 * Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
 
 ## Pharmaverse Blog
+
 If you are interested in R and Clinical Reporting, then visit the [pharmaverse blog](https://pharmaverse.github.io/blog/). This contains regular, bite-sized posts showcasing how `{admiral}` and other packages in the pharmaverse can be used to realize the vision of full end-to-end Clinical Reporting in R.
 
 We are also always looking for keen `{admiral}` users to publish their own blog posts about how they use the package. If this could be you, feel free make an issue in the [GitHub repo](https://github.com/pharmaverse/blog) and get started!
-
 
 ## Conference Presentations
 
@@ -176,5 +175,5 @@ We use the following for support and communications between user and developer c
 
 ## Acknowledgments
 
-Along with the authors and contributors, thanks to the following people for their work on the package: 
+Along with the authors and contributors, thanks to the following people for their work on the package:
 Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Bill Denney, Kamila Duniec, Alice Ehmann, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Yohann Omnes, Barbara O'Reilly, Hamza Rahal, Nick Ramirez, Tom Ratford, Tamara Senior, Sophie Shapcott, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay and Franciszek Walkowiak.

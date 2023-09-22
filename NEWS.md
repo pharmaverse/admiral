@@ -12,6 +12,11 @@
 
 ## Various
 
+# admiral 0.12.1
+
+- `derive_extreme_records()` no longer fails if `dataset_add` is specified and a
+variable specified for `order` is not in `dataset`. (#2113)
+
 # admiral 0.12.0
 
 ## New Features

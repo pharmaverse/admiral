@@ -453,3 +453,44 @@ test_that("derive_extreme_records Test 9: keep all vars in the new records when 
     keys = c("USUBJID", "AVISITN", "LBSEQ", "DTYPE")
   )
 })
+
+## Test 10: order vars from dataset_add ----
+test_that("derive_extreme_records Test 10: order vars from dataset_add", {
+  bds <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVALC,
+    "1",      "PARAM",  "1"
+  )
+
+  xx <- tibble::tribble(
+    ~USUBJID, ~XXTESTCD, ~XXSEQ,
+    "1",      "A",       1,
+    "1",      "A",       2,
+    "1",      "B",       3
+  )
+
+  actual <- derive_extreme_records(
+    bds,
+    dataset_add = xx,
+    dataset_ref = bds,
+    by_vars = exprs(USUBJID),
+    order = exprs(XXSEQ),
+    mode = "first",
+    filter_add = XXTESTCD == "A",
+    exist_flag = AVALC,
+    set_values_to = exprs(
+      PARAMCD = "XXFL"
+    )
+  )
+
+  expected <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVALC, ~XXTESTCD,     ~XXSEQ,
+    "1",      "PARAM",  "1",    NA_character_, NA_real_,
+    "1",      "XXFL",   "Y",    "A",           1
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "PARAMCD")
+  )
+})
