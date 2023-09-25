@@ -853,7 +853,7 @@ get_not_mapped <- function() {
   admiral_environment$nmap
 }
 
-#' Merge a Summary Variable
+#' Merge Summary Variables
 #'
 #' @description Merge a summary variable from a dataset to the input dataset.
 #'
