@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_merged.R
 \name{derive_var_merged_summary}
 \alias{derive_var_merged_summary}
-\title{Merge a Summary Variable}
+\title{Merge Summary Variables}
 \usage{
 derive_var_merged_summary(
   dataset,
@@ -125,7 +125,8 @@ derive_var_merged_summary(
   by_vars = exprs(USUBJID, AVISIT),
   new_vars = exprs(
     MEANVIS = mean(AVAL, na.rm = TRUE),
-    MAXVIS = max(AVAL, na.rm = TRUE))
+    MAXVIS = max(AVAL, na.rm = TRUE)
+  )
 )
 
 # Add a variable listing the lesion ids at baseline

@@ -112,7 +112,8 @@ get_summary_records(
   by_vars = exprs(USUBJID, PARAM, AVISIT),
   set_values_to = exprs(
     AVAL = mean(AVAL, na.rm = TRUE),
-    DTYPE = "AVERAGE")
+    DTYPE = "AVERAGE"
+  )
 )
 
 # Derive more than one summary variable
@@ -123,7 +124,8 @@ get_summary_records(
     AVAL = mean(AVAL),
     ASTDTM = min(convert_dtc_to_dtm(EGDTC)),
     AENDTM = max(convert_dtc_to_dtm(EGDTC)),
-    DTYPE = "AVERAGE")
+    DTYPE = "AVERAGE"
+  )
 )
 
 # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
@@ -153,7 +155,8 @@ get_summary_records(
   filter = n() > 2,
   set_values_to = exprs(
     AVAL = mean(AVAL, na.rm = TRUE),
-    DTYPE = "AVERAGE")
+    DTYPE = "AVERAGE"
+  )
 )
 }
 \seealso{
