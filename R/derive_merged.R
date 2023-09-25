@@ -969,7 +969,8 @@ get_not_mapped <- function() {
 #'   by_vars = exprs(USUBJID, AVISIT),
 #'   new_vars = exprs(
 #'     MEANVIS = mean(AVAL, na.rm = TRUE),
-#'     MAXVIS = max(AVAL, na.rm = TRUE))
+#'     MAXVIS = max(AVAL, na.rm = TRUE)
+#'   )
 #' )
 #'
 #' # Add a variable listing the lesion ids at baseline
@@ -1037,7 +1038,7 @@ derive_var_merged_summary <- function(dataset,
     new_var <- assert_symbol(enexpr(new_var))
     analysis_var <- assert_symbol(enexpr(analysis_var))
     assert_s3_class(summary_fun, "function")
-    new_vars <- exprs(!!new_var := {{summary_fun}}(!!analysis_var), !!!new_vars)
+    new_vars <- exprs(!!new_var := {{ summary_fun }}(!!analysis_var), !!!new_vars)
   }
 
   # Summarise the analysis value and merge to the original dataset

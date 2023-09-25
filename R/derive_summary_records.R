@@ -65,9 +65,9 @@
 #'   "XYZ-1002", 8,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,   "Active 20mg",
 #'   "XYZ-1002", 9,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402,   "Active 20mg"
 #' ) %>%
-#' mutate(
-#'   ADTM = convert_dtc_to_dtm(EGDTC)
-#' )
+#'   mutate(
+#'     ADTM = convert_dtc_to_dtm(EGDTC)
+#'   )
 #'
 #' # Summarize the average of the triplicate ECG interval values (AVAL)
 #' derive_summary_records(
@@ -75,9 +75,10 @@
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL, na.rm = TRUE),
-#'     DTYPE = "AVERAGE")
+#'     DTYPE = "AVERAGE"
+#'   )
 #' ) %>%
-#' arrange(USUBJID, AVISIT)
+#'   arrange(USUBJID, AVISIT)
 #'
 #' # Derive more than one summary variable
 #' derive_summary_records(
@@ -86,10 +87,11 @@
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL),
 #'     ADTM = max(ADTM),
-#'     DTYPE = "AVERAGE")
+#'     DTYPE = "AVERAGE"
+#'   )
 #' ) %>%
-#' arrange(USUBJID, AVISIT) %>%
-#' select(-EGSEQ, -TRTA)
+#'   arrange(USUBJID, AVISIT) %>%
+#'   select(-EGSEQ, -TRTA)
 #'
 #' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
 #' adeg <- tribble(
@@ -117,11 +119,11 @@
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   filter = n() > 2,
 #'   set_values_to = exprs(
-#'     AVAL =  mean(AVAL, na.rm = TRUE),
+#'     AVAL = mean(AVAL, na.rm = TRUE),
 #'     DTYPE = "AVERAGE"
 #'   )
 #' ) %>%
-#' arrange(USUBJID, AVISIT)
+#'   arrange(USUBJID, AVISIT)
 derive_summary_records <- function(dataset,
                                    by_vars,
                                    filter = NULL,
@@ -144,7 +146,7 @@ derive_summary_records <- function(dataset,
     )
     analysis_var <- assert_symbol(enexpr(analysis_var))
     assert_s3_class(summary_fun, "function")
-    set_values_to<- exprs(!!analysis_var := {{summary_fun}}(!!analysis_var), !!!set_values_to)
+    set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
   }
 
   # Summarise the analysis value and bind to the original dataset

@@ -102,7 +102,8 @@
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL, na.rm = TRUE),
-#'     DTYPE = "AVERAGE")
+#'     DTYPE = "AVERAGE"
+#'   )
 #' )
 #'
 #' # Derive more than one summary variable
@@ -113,7 +114,8 @@
 #'     AVAL = mean(AVAL),
 #'     ASTDTM = min(convert_dtc_to_dtm(EGDTC)),
 #'     AENDTM = max(convert_dtc_to_dtm(EGDTC)),
-#'     DTYPE = "AVERAGE")
+#'     DTYPE = "AVERAGE"
+#'   )
 #' )
 #'
 #' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
@@ -143,7 +145,8 @@
 #'   filter = n() > 2,
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL, na.rm = TRUE),
-#'     DTYPE = "AVERAGE")
+#'     DTYPE = "AVERAGE"
+#'   )
 #' )
 get_summary_records <- function(dataset,
                                 by_vars,
@@ -167,7 +170,7 @@ get_summary_records <- function(dataset,
     )
     analysis_var <- assert_symbol(enexpr(analysis_var))
     assert_s3_class(summary_fun, "function")
-    set_values_to<- exprs(!!analysis_var := {{summary_fun}}(!!analysis_var), !!!set_values_to)
+    set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
   }
 
   # Summarise the analysis value
