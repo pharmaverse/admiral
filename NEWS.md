@@ -6,7 +6,7 @@
 
 ## Breaking Changes
 
-- Admiral now only supports R >= 4.0.0 
+- admiral now only supports R >= 4.0.0 
 
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#2098)
   - `derive_param_extreme_event()`
