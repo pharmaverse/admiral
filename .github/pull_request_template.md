@@ -3,6 +3,7 @@ Thank you for your Pull Request! We have developed this task checklist from the 
 Please check off each taskbox as an acknowledgment that you completed the task or check off that it is not relevant to your Pull Request. This checklist is part of the Github Action workflows and the Pull Request will not be merged into the `devel` branch until you have checked off each task.
 
 - [ ] Place Closes #<insert_issue_number> into the beginning of your Pull Request Title (Use Edit button in top-right if you need to update)
+- [ ] Increment the development version number by calling `usethis::use_version("dev")`
 - [ ] Code is formatted according to the [tidyverse style guide](https://style.tidyverse.org/). Run `styler::style_file()` to style R and Rmd files
 - [ ] Updated relevant unit tests or have written new unit tests, which should consider realistic data scenarios and edge cases, e.g. empty datasets, errors, boundary cases etc. - See [Unit Test Guide](https://pharmaverse.github.io/admiraldev/devel/articles/unit_test_guidance.html#tests-should-be-robust-to-cover-realistic-data-scenarios)
 - [ ] If you removed/replaced any function and/or function parameters, did you fully follow the [deprecation guidance](https://pharmaverse.github.io/admiraldev/devel/articles/programming_strategy.html#deprecation)?
@@ -15,5 +16,4 @@ Please check off each taskbox as an acknowledgment that you completed the task o
 - [ ] Run `R CMD check` locally and address all errors and warnings - `devtools::check()`
 - [ ] Link the issue in the Development Section on the right hand side.
 - [ ] Address all merge conflicts and resolve appropriately
-- [ ] Increment the development version number by calling `usethis::use_version("dev")`
 - [ ] Pat yourself on the back for a job well done! Much love to your accomplishment!
