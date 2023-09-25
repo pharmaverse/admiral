@@ -513,9 +513,7 @@ test_that("derive_var_merged_summary Test 19: dataset == dataset_add, no filter"
       adbds,
       dataset_add = adbds,
       by_vars = exprs(AVISIT),
-      new_var = MEANVIS,
-      analysis_var = AVAL,
-      summary_fun = function(x) mean(x, na.rm = TRUE)
+      new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
     ),
     keys = c("AVISIT", "ASEQ")
   )
@@ -546,10 +544,8 @@ test_that("derive_var_merged_summary Test 20: dataset != dataset_add, filter", {
       adsl,
       dataset_add = adbds,
       by_vars = exprs(USUBJID),
-      new_var = MEANPBL,
-      filter_add = ADY > 0,
-      analysis_var = AVAL,
-      summary_fun = function(x) mean(x, na.rm = TRUE)
+      new_vars = exprs(MEANPBL = mean(AVAL, na.rm = TRUE)),
+      filter_add = ADY > 0
     ),
     keys = c("USUBJID")
   )
@@ -577,10 +573,41 @@ test_that("derive_var_merged_summary Test 21: by_vars with rename", {
       adbds,
       dataset_add = adbds1,
       by_vars = exprs(AVISIT = VISIT),
+      new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
+    ),
+    keys = c("AVISIT", "ASEQ")
+  )
+})
+
+test_that("derive_var_merged_summary Test 19: deprecation warning", {
+  expected <- tibble::tribble(
+    ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
+    "WEEK 1",     1,    10,       10,
+    "WEEK 1",     2,    NA,       10,
+    "WEEK 2",     3,    NA,       NA,
+    "WEEK 3",     4,    42,       42,
+    "WEEK 4",     5,    12,       13,
+    "WEEK 4",     6,    12,       13,
+    "WEEK 4",     7,    15,       13
+  )
+
+  adbds <- select(expected, -MEANVIS)
+
+  expect_warning(
+    actual <- derive_var_merged_summary(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(AVISIT),
       new_var = MEANVIS,
       analysis_var = AVAL,
       summary_fun = function(x) mean(x, na.rm = TRUE)
     ),
+    class = "lifecycle_warning_deprecated"
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
     keys = c("AVISIT", "ASEQ")
   )
 })

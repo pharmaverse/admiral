@@ -104,7 +104,8 @@ test_that("derive_summary_records Test 3: Errors", {
   )
 })
 
-test_that("derive_summary_records Test 1: deprecation warning for analysis_var and summary_fun", {
+## Test 4: deprecation warning for analysis_var and summary_fun ----
+test_that("derive_summary_records Test 4: deprecation warning for analysis_var and summary_fun", {
   input <- tibble::tribble(
     ~subj, ~visit,       ~val, ~seq,
     "1",        1,         10,    1,
@@ -133,8 +134,7 @@ test_that("derive_summary_records Test 1: deprecation warning for analysis_var a
         summary_fun = mean,
         set_values_to = exprs(type = "AVERAGE")
       ),
-    class = "lifecycle_warning_deprecated",
-    all = TRUE
+    class = "lifecycle_warning_deprecated"
   )
 
   expect_dfs_equal(
@@ -143,4 +143,3 @@ test_that("derive_summary_records Test 1: deprecation warning for analysis_var a
     keys = c("subj", "visit", "seq", "type")
   )
 })
-

@@ -129,23 +129,7 @@ derive_summary_records <- function(dataset,
                                    summary_fun,
                                    set_values_to) {
   assert_vars(by_vars)
-  if (!missing(analysis_var)) {
-    # deprecate_warn(
-    #   "1.0.0",
-    #   "derive_summary_records(analysis_var = )",
-    #   "derive_summary_records(set_values_to = )"
-    # )
-    analysis_var <- assert_symbol(enexpr(analysis_var))
-  }
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
-  if (!missing(summary_fun)) {
-    deprecate_warn(
-      "1.0.0",
-      "derive_summary_records(summary_fun = )",
-      "derive_summary_records(set_values_to = )"
-    )
-    assert_s3_class(summary_fun, "function")
-  }
   assert_data_frame(
     dataset,
     required_vars = by_vars
@@ -153,6 +137,13 @@ derive_summary_records <- function(dataset,
   assert_varval_list(set_values_to)
 
   if (!missing(analysis_var) || !missing(summary_fun)) {
+    deprecate_warn(
+      "1.0.0",
+      I("derive_summary_records(anaylsis_var = , summary_fun = )"),
+      "derive_summary_records(set_values_to = )"
+    )
+    analysis_var <- assert_symbol(enexpr(analysis_var))
+    assert_s3_class(summary_fun, "function")
     set_values_to<- exprs(!!analysis_var := {{summary_fun}}(!!analysis_var), !!!set_values_to)
   }
 
