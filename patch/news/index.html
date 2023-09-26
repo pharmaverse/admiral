@@ -59,23 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.1">v0.12.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.2">v0.10.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.1">v0.10.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.10.0">v0.10.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.9.1">v0.9.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.8.4">v0.8.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.7.1">v0.7.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -97,7 +80,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.12.1" id="admiral-0121">admiral 0.12.1<a class="anchor" aria-label="anchor" href="#admiral-0121"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.12.1" id="admiral-0121">admiral 0.12.1<a class="anchor" aria-label="anchor" href="#admiral-0121"></a></h2><p class="text-muted">CRAN release: 2023-09-25</p>
 <ul><li><p><code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> no longer fails if <code>dataset_add</code> is specified and a variable specified for <code>order</code> is not in <code>dataset</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2113" class="external-link">#2113</a>)</p></li>
 <li><p>The <code>type</code> argument in <code><a href="../reference/compute_duration.html">compute_duration()</a></code> changed the underlying default behavior in <code><a href="../reference/derive_vars_duration.html">derive_vars_duration()</a></code> without allowing the user to toggle between <code>"duration"</code> and <code>"interval"</code> as originally intended. This was fixed by adding the <code>type</code> argument for <code><a href="../reference/derive_vars_duration.html">derive_vars_duration()</a></code> and a wrapper function <code><a href="../reference/derive_vars_aage.html">derive_vars_aage()</a></code> such that it gets passed through <code><a href="../reference/compute_duration.html">compute_duration()</a></code> appropriately (<a href="https://github.com/pharmaverse/admiral/issues/2112" class="external-link">#2112</a>)</p></li>
 <li><p>Template <code>ad_adpp.R</code> updated to replace <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join()</a></code> with <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/2109" class="external-link">#2109</a>).</p></li>
