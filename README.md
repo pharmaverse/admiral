@@ -33,7 +33,7 @@ remotes::install_github("pharmaverse/admiral")
 
 ## Release Schedule
 
-[{admiral}](https://pharmaverse.github.io/admiral/cran-release/)\` releases are targeted for the first Monday of the last month of each quarter.  Pull Requests will be frozen the week before a release.
+[{admiral}](https://pharmaverse.github.io/admiral/cran-release/) releases are targeted for the first Monday of the last month of each quarter.  Pull Requests will be frozen the week before a release.
 The {admiral} family has several downstream and upstream dependencies and so this release shall be done in three
 Phases:
 
