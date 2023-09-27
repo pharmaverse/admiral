@@ -50,14 +50,14 @@ Permitted Values: \code{"first"}, \code{"last"}}
 The value for the specified variable \code{new_var}, applicable to
 the first or last observation (depending on the mode) of each by group.
 
-Permitted Values: A character scalar}
+Permitted Values: An atomic scalar}
 
 \item{false_value}{False value
 
 The value for the specified variable \code{new_var}, NOT applicable to
 the first or last observation (depending on the mode) of each by group.
 
-Permitted Values: A character scalar}
+Permitted Values: An atomic scalar}
 
 \item{flag_all}{Flag setting
 

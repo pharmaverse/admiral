@@ -31,14 +31,14 @@
 #'   The value for the specified variable `new_var`, applicable to
 #'   the first or last observation (depending on the mode) of each by group.
 #'
-#'   Permitted Values: A character scalar
+#'   Permitted Values: An atomic scalar
 #'
 #' @param false_value False value
 #'
 #'   The value for the specified variable `new_var`, NOT applicable to
 #'   the first or last observation (depending on the mode) of each by group.
 #'
-#'   Permitted Values: A character scalar
+#'   Permitted Values: An atomic scalar
 #'
 #' @param flag_all Flag setting
 #'

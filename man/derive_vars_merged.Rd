@@ -115,6 +115,20 @@ the input dataset, and \code{NA} otherwise.
 
 \emph{Permitted Values}: Variable name}
 
+\item{true_value}{True value
+
+The value for the specified variable \code{exist_flag}, applicable to
+the first or last observation (depending on the mode) of each by group.
+
+Permitted Values: An atomic scalar}
+
+\item{false_value}{False value
+
+The value for the specified variable \code{exist_flag}, NOT applicable to
+the first or last observation (depending on the mode) of each by group.
+
+Permitted Values: An atomic scalar}
+
 \item{missing_values}{Values for non-matching observations
 
 For observations of the input dataset (\code{dataset}) which do not have a

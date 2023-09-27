@@ -100,6 +100,20 @@
 #'
 #'   *Permitted Values*: Variable name
 #'
+#' @param true_value True value
+#'
+#'   The value for the specified variable `exist_flag`, applicable to
+#'   the first or last observation (depending on the mode) of each by group.
+#'
+#'   Permitted Values: An atomic scalar
+#'
+#' @param false_value False value
+#'
+#'   The value for the specified variable `exist_flag`, NOT applicable to
+#'   the first or last observation (depending on the mode) of each by group.
+#'
+#'   Permitted Values: An atomic scalar
+#'
 #' @param missing_values Values for non-matching observations
 #'
 #'   For observations of the input dataset (`dataset`) which do not have a
@@ -316,7 +330,7 @@ derive_vars_merged <- function(dataset,
       extract_vars(new_vars)
     )
   )
-  if(!is.null(match_flag)) {
+  if (!is.null(match_flag)) {
     deprecate_warn(
       "1.0.0",
       "derive_vars_merged(old_param = 'match_flag')",
