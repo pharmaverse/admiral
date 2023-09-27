@@ -65,6 +65,8 @@ jobs:
   check:
     name: Check
     uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@main
+    with:
+      error-on: warning # TODO: find a way to ignore specific notes
     if: github.event_name == 'pull_request'
   docs:
     name: Documentation
