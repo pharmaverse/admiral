@@ -103,7 +103,7 @@ test_that("derive_vars_merged Test 3: merge last value and flag matched by group
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(WEIGHTBL = AVAL),
     mode = "last",
-    match_flag = matched
+    exist_flag = matched
   )
   expected <- adsl %>% mutate(
     WEIGHTBL = c(68, 88, 55, NA),

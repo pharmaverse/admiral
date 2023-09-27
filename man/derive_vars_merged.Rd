@@ -14,6 +14,9 @@ derive_vars_merged(
   filter_add = NULL,
   mode = NULL,
   match_flag = NULL,
+  exist_flag = NULL,
+  true_value = TRUE,
+  false_value = NA,
   missing_values = NULL,
   check_type = "warning",
   duplicate_msg = NULL
@@ -94,7 +97,18 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 
 \item{match_flag}{Match flag
 
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{exist_flag} instead.
+
 If the argument is specified (e.g., \code{match_flag = FLAG}), the specified
+variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
+be \code{TRUE} for all selected records from \code{dataset_add} which are merged into
+the input dataset, and \code{NA} otherwise.
+
+\emph{Permitted Values}: Variable name}
+
+\item{exist_flag}{Exist flag
+
+If the argument is specified (e.g., \code{exist_flag = FLAG}), the specified
 variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
 be \code{TRUE} for all selected records from \code{dataset_add} which are merged into
 the input dataset, and \code{NA} otherwise.
@@ -210,7 +224,7 @@ derive_vars_merged(
   mode = "last",
   new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
   filter_add = VSTESTCD == "WEIGHT",
-  match_flag = vsdatafl
+  exist_flag = vsdatafl
 ) \%>\%
   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 
