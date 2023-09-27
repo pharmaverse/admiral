@@ -316,7 +316,14 @@ derive_vars_merged <- function(dataset,
       extract_vars(new_vars)
     )
   )
-  match_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
+  if(!is.null(match_flag)) {
+    deprecate_warn(
+      "1.0.0",
+      "derive_vars_merged(old_param = 'match_flag')",
+      "derive_vars_merged(new_param = 'exist_flag')"
+    )
+    exist_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
+  }
   exist_flag <- assert_symbol(enexpr(exist_flag), optional = TRUE)
   assert_atomic_vector(true_value, optional = TRUE)
   assert_atomic_vector(false_value, optional = TRUE)
