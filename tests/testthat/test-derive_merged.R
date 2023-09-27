@@ -117,8 +117,32 @@ test_that("derive_vars_merged Test 3: merge last value and flag matched by group
   )
 })
 
-## Test 4: error if variable in both datasets ----
-test_that("derive_vars_merged Test 4: error if variable in both datasets", {
+## Test 4: merge last value and flag matched by groups ----
+test_that("derive_vars_merged Test 4: merge last value and flag matched by groups", {
+  actual <- derive_vars_merged(adsl,
+                               dataset_add = advs,
+                               order = exprs(AVAL),
+                               by_vars = exprs(STUDYID, USUBJID),
+                               new_vars = exprs(WEIGHTBL = AVAL),
+                               mode = "last",
+                               exist_flag = matched,
+                               true_value = "Y",
+                               false_value = "N"
+  )
+  expected <- adsl %>% mutate(
+    WEIGHTBL = c(68, 88, 55, NA),
+    matched = c("Y", "Y", "Y", "N")
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID")
+  )
+})
+
+## Test 5: error if variable in both datasets ----
+test_that("derive_vars_merged Test 5: error if variable in both datasets", {
   expect_error(
     derive_vars_merged(advs,
       dataset_add = adsl,
@@ -128,8 +152,8 @@ test_that("derive_vars_merged Test 4: error if variable in both datasets", {
   )
 })
 
-## Test 5: by_vars with rename ----
-test_that("derive_vars_merged Test 5: by_vars with rename", {
+## Test 6: by_vars with rename ----
+test_that("derive_vars_merged Test 6: by_vars with rename", {
   actual <- derive_vars_merged(advs,
     dataset_add = adsl1,
     by_vars = exprs(STUDYID, USUBJID = ID),
@@ -146,8 +170,8 @@ test_that("derive_vars_merged Test 5: by_vars with rename", {
   )
 })
 
-## Test 6: expressions for new_vars and missing_values ----
-test_that("derive_vars_merged Test 6: expressions for new_vars and missing_values", {
+## Test 7: expressions for new_vars and missing_values ----
+test_that("derive_vars_merged Test 7: expressions for new_vars and missing_values", {
   actual <- derive_vars_merged(
     adsl,
     dataset_add = advs,
@@ -169,8 +193,8 @@ test_that("derive_vars_merged Test 6: expressions for new_vars and missing_value
   )
 })
 
-## Test 7: use new variables in filter_add and order ----
-test_that("derive_vars_merged Test 7: use new variables in filter_add and order", {
+## Test 8: use new variables in filter_add and order ----
+test_that("derive_vars_merged Test 8: use new variables in filter_add and order", {
   expected <- tibble::tribble(
     ~USUBJID, ~TRTSDT,      ~TRTSSEQ,
     "ST42-1", "2020-12-14",        2,
@@ -208,8 +232,8 @@ test_that("derive_vars_merged Test 7: use new variables in filter_add and order"
   )
 })
 
-## Test 8: warning if not unique w.r.t the by variables and the order ----
-test_that("derive_vars_merged Test 8: warning if not unique w.r.t the by variables and the order", {
+## Test 9: warning if not unique w.r.t the by variables and the order ----
+test_that("derive_vars_merged Test 9: warning if not unique w.r.t the by variables and the order", {
   expect_warning(
     actual <- derive_vars_merged(advs,
       dataset_add = adsl2,
@@ -222,8 +246,8 @@ test_that("derive_vars_merged Test 8: warning if not unique w.r.t the by variabl
   )
 })
 
-## Test 9: error if not unique w.r.t the by variables and the order ----
-test_that("derive_vars_merged Test 9: error if not unique w.r.t the by variables and the order", {
+## Test 10: error if not unique w.r.t the by variables and the order ----
+test_that("derive_vars_merged Test 10: error if not unique w.r.t the by variables and the order", {
   expect_error(
     actual <- derive_vars_merged(advs,
       dataset_add = adsl2,
@@ -237,8 +261,8 @@ test_that("derive_vars_merged Test 9: error if not unique w.r.t the by variables
   )
 })
 
-## Test 10: error if variables in missing_values but not in new_vars ----
-test_that("derive_vars_merged Test 10: error if variables in missing_values but not in new_vars", {
+## Test 11: error if variables in missing_values but not in new_vars ----
+test_that("derive_vars_merged Test 11: error if variables in missing_values but not in new_vars", {
   expect_error(
     derive_vars_merged(
       adsl,
@@ -256,8 +280,8 @@ test_that("derive_vars_merged Test 10: error if variables in missing_values but 
 
 # derive_var_merged_cat ----
 
-## Test 11: deprecation error ----
-test_that("derive_var_merged_cat Test 11: deprecation error", {
+## Test 12: deprecation error ----
+test_that("derive_var_merged_cat Test 12: deprecation error", {
   get_vscat <- function(x) {
     if_else(x == "BASELINE", "BASELINE", "POST-BASELINE")
   }
@@ -280,8 +304,8 @@ test_that("derive_var_merged_cat Test 11: deprecation error", {
 
 
 # derive_var_merged_exist_flag ----
-## Test 12: merge existence flag ----
-test_that("derive_var_merged_exist_flag Test 12: merge existence flag", {
+## Test 13: merge existence flag ----
+test_that("derive_var_merged_exist_flag Test 13: merge existence flag", {
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs,
@@ -301,8 +325,8 @@ test_that("derive_var_merged_exist_flag Test 12: merge existence flag", {
   )
 })
 
-## Test 13: by_vars with rename ----
-test_that("derive_var_merged_exist_flag Test 13: by_vars with rename", {
+## Test 14: by_vars with rename ----
+test_that("derive_var_merged_exist_flag Test 14: by_vars with rename", {
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs1,
@@ -324,8 +348,8 @@ test_that("derive_var_merged_exist_flag Test 13: by_vars with rename", {
 
 # derive_var_merged_character ----
 
-## Test 14: deprecation error ----
-test_that("derive_var_merged_character Test 14: deprecation error", {
+## Test 15: deprecation error ----
+test_that("derive_var_merged_character Test 15: deprecation error", {
   expect_error(
     derive_var_merged_character(
       adsl,
@@ -342,8 +366,8 @@ test_that("derive_var_merged_character Test 14: deprecation error", {
 
 
 # derive_vars_merged_lookup ----
-## Test 15: merge lookup table ----
-test_that("derive_vars_merged_lookup Test 15: merge lookup table", {
+## Test 16: merge lookup table ----
+test_that("derive_vars_merged_lookup Test 16: merge lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -380,8 +404,8 @@ test_that("derive_vars_merged_lookup Test 15: merge lookup table", {
 
 
 ## the lookup table
-## Test 16:  all by_vars have records in the lookup table ----
-test_that("derive_vars_merged_lookup Test 16:  all by_vars have records in the lookup table", {
+## Test 17:  all by_vars have records in the lookup table ----
+test_that("derive_vars_merged_lookup Test 17:  all by_vars have records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -416,8 +440,8 @@ test_that("derive_vars_merged_lookup Test 16:  all by_vars have records in the l
   )
 })
 
-## Test 17: by_vars with rename ----
-test_that("derive_vars_merged_lookup Test 17: by_vars with rename", {
+## Test 18: by_vars with rename ----
+test_that("derive_vars_merged_lookup Test 18: by_vars with rename", {
   param_lookup <- tibble::tribble(
     ~TESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -453,8 +477,8 @@ test_that("derive_vars_merged_lookup Test 17: by_vars with rename", {
 
 
 # get_not_mapped ----
-## Test 18: not all by_vars have records in the lookup table ----
-test_that("get_not_mapped Test 18: not all by_vars have records in the lookup table", {
+## Test 19: not all by_vars have records in the lookup table ----
+test_that("get_not_mapped Test 19: not all by_vars have records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -492,8 +516,8 @@ test_that("get_not_mapped Test 18: not all by_vars have records in the lookup ta
 })
 
 # derive_var_merged_summary ----
-## Test 19: dataset == dataset_add, no filter ----
-test_that("derive_var_merged_summary Test 19: dataset == dataset_add, no filter", {
+## Test 20: dataset == dataset_add, no filter ----
+test_that("derive_var_merged_summary Test 20: dataset == dataset_add, no filter", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -521,8 +545,8 @@ test_that("derive_var_merged_summary Test 19: dataset == dataset_add, no filter"
   )
 })
 
-## Test 20: dataset != dataset_add, filter ----
-test_that("derive_var_merged_summary Test 20: dataset != dataset_add, filter", {
+## Test 21: dataset != dataset_add, filter ----
+test_that("derive_var_merged_summary Test 21: dataset != dataset_add, filter", {
   expected <- tibble::tribble(
     ~USUBJID, ~MEANPBL,
     "1",          13.5,
@@ -555,8 +579,8 @@ test_that("derive_var_merged_summary Test 20: dataset != dataset_add, filter", {
   )
 })
 
-## Test 21: by_vars with rename ----
-test_that("derive_var_merged_summary Test 21: by_vars with rename", {
+## Test 22: by_vars with rename ----
+test_that("derive_var_merged_summary Test 22: by_vars with rename", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
