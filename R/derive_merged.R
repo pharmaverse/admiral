@@ -432,8 +432,11 @@ derive_vars_merged <- function(dataset,
       mutate(!!!update_missings) %>%
       remove_tmp_vars()
   }
-  dataset %>%
-    mutate(!!exist_flag_var := ifelse(is.na(!!exist_flag_var), false_value, !!exist_flag_var))
+  if (!is.null(exist_flag_var)) {
+    dataset <- dataset %>%
+      mutate(!!exist_flag_var := ifelse(is.na(!!exist_flag_var), false_value, !!exist_flag_var))
+  }
+  dataset
 }
 
 #' Merge a Categorization Variable
