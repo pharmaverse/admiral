@@ -429,14 +429,14 @@ derive_vars_merged <- function(dataset,
     )
     names(update_missings) <- names(missing_values)
     dataset <- dataset %>%
-      mutate(!!!update_missings) %>%
-      remove_tmp_vars()
+      mutate(!!!update_missings)
   }
   if (!is.null(exist_flag_var)) {
     dataset <- dataset %>%
       mutate(!!exist_flag_var := ifelse(is.na(!!exist_flag_var), false_value, !!exist_flag_var))
   }
-  dataset
+  dataset %>%
+    remove_tmp_vars()
 }
 
 #' Merge a Categorization Variable
