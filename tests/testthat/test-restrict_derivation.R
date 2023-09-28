@@ -81,3 +81,32 @@ test_that("restrict_derivation Test 3: access functions from the parent environm
     )
   })
 })
+
+test_that("allow dplyr functions", {
+  adlb <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVAL,
+    "1",            -1,   113,
+    "1",             0,   113,
+    "1",             3,   117,
+    "2",             0,    95,
+    "3",             0,   111,
+    "3",             1,   101,
+    "3",             2,   123
+  )
+
+  actual <- restrict_derivation(
+    adlb,
+    derivation = mutate,
+    args = params(AVAL = AVAL + 1),
+    filter = USUBJID == "1"
+  )
+
+  expected <- adlb %>%
+    mutate(AVAL = ifelse(USUBJID == "1", AVAL + 1, AVAL))
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISITN")
+  )
+})
