@@ -28,8 +28,8 @@ hand sides of the \code{new_vars} arguments are expected.}
 \item{by_vars}{Grouping variables
 
 The expressions on the left hand sides of \code{new_vars} are evaluated by the
-specified variables. The resulting values are merged to the input dataset
-(\code{dataset}) by the specified by variables.
+specified \emph{variables}. Then the resulting values are merged to the input
+dataset (\code{dataset}) by the specified \emph{variables}.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}}
 
@@ -95,7 +95,8 @@ Merge a summary variable from a dataset to the input dataset.
 \item The records from the additional dataset (\code{dataset_add}) are restricted
 to those matching the \code{filter_add} condition.
 \item The new variables (\code{new_vars}) are created for each by group (\code{by_vars})
-in the additional dataset (\code{dataset_add}).
+in the additional dataset (\code{dataset_add}) by calling \code{summarize()}. I.e.,
+all observations of a by group are summarized to a single observation.
 \item The new variables are merged to the input dataset. For observations
 without a matching observation in the additional dataset the new variables
 are set to \code{NA}. Observations in the additional dataset which have no

@@ -876,8 +876,8 @@ get_not_mapped <- function() {
 #' @param by_vars Grouping variables
 #'
 #'   The expressions on the left hand sides of `new_vars` are evaluated by the
-#'   specified variables. The resulting values are merged to the input dataset
-#'   (`dataset`) by the specified by variables.
+#'   specified *variables*. Then the resulting values are merged to the input
+#'   dataset (`dataset`) by the specified *variables*.
 #'
 #'   *Permitted Values*: list of variables created by `exprs()`
 #'
@@ -929,7 +929,8 @@ get_not_mapped <- function() {
 #'   to those matching the `filter_add` condition.
 #'
 #'   1. The new variables (`new_vars`) are created for each by group (`by_vars`)
-#'   in the additional dataset (`dataset_add`).
+#'   in the additional dataset (`dataset_add`) by calling `summarize()`. I.e.,
+#'   all observations of a by group are summarized to a single observation.
 #'
 #'   1. The new variables are merged to the input dataset. For observations
 #'   without a matching observation in the additional dataset the new variables
