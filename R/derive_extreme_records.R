@@ -284,11 +284,25 @@ derive_extreme_records <- function(dataset = NULL,
   assert_expr_list(order, optional = TRUE)
   assert_expr_list(keep_source_vars, optional = TRUE)
 
+  if (is.null(dataset_add)) {
+    expected_vars <- expr_c(by_vars, extract_vars(order))
+  } else {
+    expected_vars <- by_vars
+  }
+
   assert_data_frame(
     dataset,
-    required_vars = expr_c(
-      by_vars, extract_vars(order)
-    ),
+    required_vars = expected_vars,
+    optional = TRUE
+  )
+  assert_data_frame(
+    dataset_add,
+    required_vars = expr_c(by_vars, extract_vars(order)),
+    optional = TRUE
+  )
+  assert_data_frame(
+    dataset_ref,
+    required_vars = by_vars,
     optional = TRUE
   )
   mode <- assert_character_scalar(

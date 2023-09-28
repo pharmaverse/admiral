@@ -1,3 +1,5 @@
+# derive_vars_duration ----
+## Test 1: Duration and unit variable are added ----
 test_that("derive_vars_duration Test 1: Duration and unit variable are added", {
   input <- tibble::tribble(
     ~USUBJID, ~BRTHDT, ~RANDDT,
@@ -23,6 +25,7 @@ test_that("derive_vars_duration Test 1: Duration and unit variable are added", {
   expect_dfs_equal(actual_output, expected_output, keys = "USUBJID")
 })
 
+## Test 2: Duration and unit variable are added ----
 test_that("derive_vars_duration Test 2: Duration and unit variable are added", {
   input <- tibble::tribble(
     ~USUBJID, ~ASTDT, ~AENDT,
@@ -48,6 +51,7 @@ test_that("derive_vars_duration Test 2: Duration and unit variable are added", {
   expect_dfs_equal(actual_output, expected_output, keys = "USUBJID")
 })
 
+## Test 3: Duration and unit variable are added ----
 test_that("derive_vars_duration Test 3: Duration and unit variable are added", {
   input <- tibble::tribble(
     ~USUBJID, ~ADTM, ~TRTSDTM,
@@ -72,5 +76,57 @@ test_that("derive_vars_duration Test 3: Duration and unit variable are added", {
     add_one = FALSE
   )
 
+  expect_dfs_equal(actual_output, expected_output, keys = "USUBJID")
+})
+
+## Test 4: type argument works for interval ----
+test_that("derive_vars_duration Test 4: type argument works for interval", {
+  input <- tibble::tribble(
+    ~USUBJID, ~TRTSDTM, ~TRTEDTM,
+    "P01", ymd_hms("2019-02-01T00:00:00"), ymd_hms("2019-03-01T00:00:00"),
+    "P02", ymd_hms("2020-02-01T00:00:00"), ymd_hms("2020-03-01T00:00:00")
+  )
+  actual_output <- derive_vars_duration(
+    input,
+    new_var = ADURN,
+    new_var_unit = ADURU,
+    start_date = TRTSDTM,
+    end_date = TRTEDTM,
+    in_unit = "months",
+    out_unit = "months",
+    add_one = FALSE,
+    type = "interval"
+  )
+  expected_output <- dplyr::mutate(
+    input,
+    ADURN = c(1, 1),
+    ADURU = c("MONTHS", "MONTHS")
+  )
+  expect_dfs_equal(actual_output, expected_output, keys = "USUBJID")
+})
+
+## Test 5: type argument works for duration ----
+test_that("derive_vars_duration Test 5: type argument works for duration", {
+  input <- tibble::tribble(
+    ~USUBJID, ~TRTSDTM, ~TRTEDTM,
+    "P01", ymd_hms("2019-02-01T00:00:00"), ymd_hms("2019-03-01T00:00:00"),
+    "P02", ymd_hms("2020-02-01T00:00:00"), ymd_hms("2020-03-01T00:00:00")
+  )
+  actual_output <- derive_vars_duration(
+    input,
+    new_var = ADURN,
+    new_var_unit = ADURU,
+    start_date = TRTSDTM,
+    end_date = TRTEDTM,
+    in_unit = "months",
+    out_unit = "months",
+    add_one = FALSE,
+    type = "duration"
+  )
+  expected_output <- dplyr::mutate(
+    input,
+    ADURN = c((28 / (365.25 / 12)), (29 / (365.25 / 12))),
+    ADURU = c("MONTHS", "MONTHS")
+  )
   expect_dfs_equal(actual_output, expected_output, keys = "USUBJID")
 })

@@ -80,11 +80,12 @@ format_avalcat1n <- function(param, aval) {
 # Get list of ADSL vars required for derivations
 adsl_vars <- exprs(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
 
-adpp <- pp %>%
+adpp_pp <- pp %>%
   # Join ADSL with PP (need TRTSDT for ADY derivation)
-  left_join(
-    select(admiral_adsl, STUDYID, USUBJID, !!!adsl_vars),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = admiral_adsl,
+    new_vars = adsl_vars,
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
   ## Calculate ADT, ADY ----
   derive_vars_dt(
@@ -93,7 +94,7 @@ adpp <- pp %>%
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
-adpp <- adpp %>%
+adpp_aval <- adpp_pp %>%
   ## Add PARAMCD only - add PARAM etc later ----
   left_join(
     select(param_lookup, PPTESTCD, PARAMCD),
@@ -117,7 +118,7 @@ adpp <- adpp %>%
 ## Get visit info ----
 # See also the "Visit and Period Variables" vignette
 # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#visit_bds)
-adpp <- adpp %>%
+adpp_avisit <- adpp_aval %>%
   # Derive Timing
   mutate(
     VISIT = "", # /!\ To remove
@@ -141,9 +142,10 @@ adpp <- adpp %>%
   derive_vars_merged(dataset_add = avalcat_lookup, by_vars = exprs(PARAMCD, AVALCA1N))
 
 # Add all ADSL variables
-adpp <- adpp %>%
-  left_join(admiral_adsl,
-    by = c("STUDYID", "USUBJID")
+adpp <- adpp_avisit %>%
+  derive_vars_merged(
+    dataset_add = select(admiral_adsl, !!!negate_vars(adsl_vars)),
+    by_vars = exprs(STUDYID, USUBJID)
   )
 
 # Final Steps, Select final variables and Add labels
