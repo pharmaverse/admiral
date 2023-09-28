@@ -17,6 +17,15 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 - In `derive_var_merged_summary()` the arguments `new_var`, `analysis_var`, and
 `summary_fun` were deprecated in favor of `new_vars`. (#1792)
 
+# admiral 0.12.1
+
+- `derive_extreme_records()` no longer fails if `dataset_add` is specified and a
+variable specified for `order` is not in `dataset`. (#2113)
+
+- The `type` argument in `compute_duration()` changed the underlying default behavior in `derive_vars_duration()` without allowing the user to toggle between `"duration"` and `"interval"` as originally intended. This was fixed by adding the `type` argument for `derive_vars_duration()` and a wrapper function `derive_vars_aage()` such that it gets passed through `compute_duration()` appropriately (#2112)
+
+- Template `ad_adpp.R` updated to replace `left_join()` with `derive_vars_merged()` (#2109).
+
 # admiral 0.12.0
 
 ## New Features
