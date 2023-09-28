@@ -1,5 +1,5 @@
 # restrict_derivation ----
-## restrict_derivation Test 1: restrict derivation with parameters ----
+## Test 1: restrict derivation with parameters ----
 test_that("restrict_derivation Test 1: restrict derivation with parameters", {
   adlb <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,
@@ -28,7 +28,7 @@ test_that("restrict_derivation Test 1: restrict derivation with parameters", {
   )
 })
 
-## restrict_derivation Test 2: restrict derivation without parameters ----
+## Test 2: restrict derivation without parameters ----
 test_that("restrict_derivation Test 2: restrict derivation without parameters", {
   adlb <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,        ~BASE,
@@ -55,7 +55,7 @@ test_that("restrict_derivation Test 2: restrict derivation without parameters", 
   )
 })
 
-## restrict_derivation Test 3: access functions from the parent environment ----
+## Test 3: access functions from the parent environment ----
 test_that("restrict_derivation Test 3: access functions from the parent environment", {
   my_derivation <- function(dataset, new_var) {
     mutate(
@@ -82,7 +82,8 @@ test_that("restrict_derivation Test 3: access functions from the parent environm
   })
 })
 
-test_that("allow dplyr functions", {
+## Test 4: allow dplyr functions ----
+test_that("restrict_derivation Test 4: allow dplyr functions", {
   adlb <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
     "1",            -1,   113,

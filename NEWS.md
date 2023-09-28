@@ -1,3 +1,17 @@
+# admiral (development version)
+
+## New Features
+
+## Updates of Existing Functions
+
+- `restrict_derivation()` now allows `dplyr` functions like `mutate` in the `derivation argument (#2143)
+
+## Breaking Changes
+
+## Documentation
+
+## Various
+
 # admiral 0.12.1
 
 - `derive_extreme_records()` no longer fails if `dataset_add` is specified and a
