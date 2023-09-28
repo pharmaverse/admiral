@@ -120,14 +120,14 @@ test_that("derive_vars_merged Test 3: merge last value and flag matched by group
 ## Test 4: merge last value and flag matched by groups ----
 test_that("derive_vars_merged Test 4: merge last value and flag matched by groups", {
   actual <- derive_vars_merged(adsl,
-                               dataset_add = advs,
-                               order = exprs(AVAL),
-                               by_vars = exprs(STUDYID, USUBJID),
-                               new_vars = exprs(WEIGHTBL = AVAL),
-                               mode = "last",
-                               exist_flag = matched,
-                               true_value = "Y",
-                               false_value = "N"
+    dataset_add = advs,
+    order = exprs(AVAL),
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(WEIGHTBL = AVAL),
+    mode = "last",
+    exist_flag = matched,
+    true_value = "Y",
+    false_value = "N"
   )
   expected <- adsl %>% mutate(
     WEIGHTBL = c(68, 88, 55, NA),
