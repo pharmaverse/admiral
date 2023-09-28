@@ -1,3 +1,20 @@
+# admiral (development version)
+
+## New Features
+
+## Updates of Existing Functions
+
+- `derive_var_extreme_flag()` and `derive_vars_merged()` were enhanced with the arguments `true_value` and `false_value` to align with preexisting functions that had similar functionality (#2125)
+
+## Breaking Changes
+
+- For the function `derive_vars_merged()`, the argument `match_flag` was renamed to `exist_flag` (#2125)
+
+## Documentation
+
+## Various
+
+
 # admiral 0.12.1
 
 - `derive_extreme_records()` no longer fails if `dataset_add` is specified and a
