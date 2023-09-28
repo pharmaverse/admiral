@@ -107,7 +107,7 @@ test_that("derive_vars_merged Test 3: merge last value and flag matched by group
   )
   expected <- adsl %>% mutate(
     WEIGHTBL = c(68, 88, 55, NA),
-    matched = c(TRUE, TRUE, TRUE, NA)
+    matched = c("Y", "Y", "Y", NA_character_)
   )
 
   expect_dfs_equal(
