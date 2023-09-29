@@ -6,18 +6,27 @@
 \usage{
 filter_joined(
   dataset,
+  dataset_add,
   by_vars,
   join_vars,
   join_type,
   first_cond = NULL,
+  first_cond_lower = NULL,
+  first_cond_upper = NULL,
   order,
   tmp_obs_nr_var = NULL,
-  filter,
+  filter_add = NULL,
+  filter_join,
+  filter = NULL,
   check_type = "warning"
 )
 }
 \arguments{
 \item{dataset}{Input dataset
+
+The variables specified for \code{by_vars} and \code{order} are expected.}
+
+\item{dataset_add}{Additional dataset
 
 The variables specified for \code{by_vars}, \code{join_vars}, and \code{order} are
 expected.}
@@ -44,6 +53,17 @@ kept.
 \emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}}
 
 \item{first_cond}{Condition for selecting range of data
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This argument is \emph{deprecated}, please use \code{first_cond_upper} instead.
+
+If this argument is specified, the other observations are restricted up to
+the first observation where the specified condition is fulfilled. If the
+condition is not fulfilled for any of the subsequent observations, all
+observations are removed.}
+
+\item{first_cond_upper}{Condition for selecting range of data
 
 If this argument is specified, the other observations are restricted up to
 the first observation where the specified condition is fulfilled. If the
@@ -195,11 +215,12 @@ adae <- tribble(
 
 filter_joined(
   adae,
+  dataset_add = adae,
   by_vars = exprs(USUBJID),
   join_vars = exprs(ACOVFL, ADY),
   join_type = "all",
   order = exprs(ADY),
-  filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
+  filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 )
 
 # filter observations with AVALC == "Y" and AVALC == "Y" at a subsequent visit
@@ -218,11 +239,12 @@ data <- tribble(
 
 filter_joined(
   data,
+  dataset_add = data,
   by_vars = exprs(USUBJID),
   join_vars = exprs(AVALC, AVISITN),
   join_type = "after",
   order = exprs(AVISITN),
-  filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
+  filter_join = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
 )
 
 # select observations with AVALC == "CR", AVALC == "CR" at a subsequent visit,
@@ -247,12 +269,13 @@ data <- tribble(
 
 filter_joined(
   data,
+  dataset_add = data,
   by_vars = exprs(USUBJID),
   join_vars = exprs(AVALC),
   join_type = "after",
   order = exprs(AVISITN),
-  first_cond = AVALC.join == "CR",
-  filter = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) &
+  first_cond_upper = AVALC.join == "CR",
+  filter_join = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) &
     count_vals(var = AVALC.join, val = "NE") <= 1
 )
 
@@ -279,12 +302,13 @@ data <- tribble(
 
 filter_joined(
   data,
+  dataset_add = data,
   by_vars = exprs(USUBJID),
   join_vars = exprs(AVALC, ADY),
   join_type = "after",
   order = exprs(ADY),
-  first_cond = AVALC.join \%in\% c("CR", "PR") & ADY.join - ADY >= 20,
-  filter = AVALC == "PR" &
+  first_cond_upper = AVALC.join \%in\% c("CR", "PR") & ADY.join - ADY >= 20,
+  filter_join = AVALC == "PR" &
     all(AVALC.join \%in\% c("CR", "PR", "NE")) &
     count_vals(var = AVALC.join, val = "NE") <= 1 &
     (
@@ -311,12 +335,13 @@ data <- tribble(
 
 filter_joined(
   data,
+  dataset_add = data,
   by_vars = exprs(USUBJID),
   tmp_obs_nr_var = tmp_obs_nr,
   join_vars = exprs(CRIT1FL),
   join_type = "all",
   order = exprs(AVISITN),
-  filter = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
+  filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 )
 

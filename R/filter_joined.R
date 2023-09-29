@@ -18,6 +18,10 @@
 #'
 #' @param dataset Input dataset
 #'
+#'   The variables specified for `by_vars` and `order` are expected.
+#'
+#' @param dataset_add Additional dataset
+#'
 #'   The variables specified for `by_vars`, `join_vars`, and `order` are
 #'   expected.
 #'
@@ -47,6 +51,17 @@
 #'   *Permitted Values:* `"before"`, `"after"`, `"all"`
 #'
 #' @param first_cond Condition for selecting range of data
+#'
+#'   `r lifecycle::badge("deprecated")`
+#'
+#'   This argument is *deprecated*, please use `first_cond_upper` instead.
+#'
+#'   If this argument is specified, the other observations are restricted up to
+#'   the first observation where the specified condition is fulfilled. If the
+#'   condition is not fulfilled for any of the subsequent observations, all
+#'   observations are removed.
+#'
+#' @param first_cond_upper Condition for selecting range of data
 #'
 #'   If this argument is specified, the other observations are restricted up to
 #'   the first observation where the specified condition is fulfilled. If the
@@ -193,11 +208,12 @@
 #'
 #' filter_joined(
 #'   adae,
+#'   dataset_add = adae,
 #'   by_vars = exprs(USUBJID),
 #'   join_vars = exprs(ACOVFL, ADY),
 #'   join_type = "all",
 #'   order = exprs(ADY),
-#'   filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
+#'   filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 #' )
 #'
 #' # filter observations with AVALC == "Y" and AVALC == "Y" at a subsequent visit
@@ -216,11 +232,12 @@
 #'
 #' filter_joined(
 #'   data,
+#'   dataset_add = data,
 #'   by_vars = exprs(USUBJID),
 #'   join_vars = exprs(AVALC, AVISITN),
 #'   join_type = "after",
 #'   order = exprs(AVISITN),
-#'   filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
+#'   filter_join = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
 #' )
 #'
 #' # select observations with AVALC == "CR", AVALC == "CR" at a subsequent visit,
@@ -245,12 +262,13 @@
 #'
 #' filter_joined(
 #'   data,
+#'   dataset_add = data,
 #'   by_vars = exprs(USUBJID),
 #'   join_vars = exprs(AVALC),
 #'   join_type = "after",
 #'   order = exprs(AVISITN),
-#'   first_cond = AVALC.join == "CR",
-#'   filter = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
+#'   first_cond_upper = AVALC.join == "CR",
+#'   filter_join = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
 #'     count_vals(var = AVALC.join, val = "NE") <= 1
 #' )
 #'
@@ -277,12 +295,13 @@
 #'
 #' filter_joined(
 #'   data,
+#'   dataset_add = data,
 #'   by_vars = exprs(USUBJID),
 #'   join_vars = exprs(AVALC, ADY),
 #'   join_type = "after",
 #'   order = exprs(ADY),
-#'   first_cond = AVALC.join %in% c("CR", "PR") & ADY.join - ADY >= 20,
-#'   filter = AVALC == "PR" &
+#'   first_cond_upper = AVALC.join %in% c("CR", "PR") & ADY.join - ADY >= 20,
+#'   filter_join = AVALC == "PR" &
 #'     all(AVALC.join %in% c("CR", "PR", "NE")) &
 #'     count_vals(var = AVALC.join, val = "NE") <= 1 &
 #'     (
@@ -309,23 +328,29 @@
 #'
 #' filter_joined(
 #'   data,
+#'   dataset_add = data,
 #'   by_vars = exprs(USUBJID),
 #'   tmp_obs_nr_var = tmp_obs_nr,
 #'   join_vars = exprs(CRIT1FL),
 #'   join_type = "all",
 #'   order = exprs(AVISITN),
-#'   filter = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
+#'   filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
 #'     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 #' )
 #'
 filter_joined <- function(dataset,
+                          dataset_add,
                           by_vars,
                           join_vars,
                           join_type,
                           first_cond = NULL,
+                          first_cond_lower = NULL,
+                          first_cond_upper = NULL,
                           order,
                           tmp_obs_nr_var = NULL,
-                          filter,
+                          filter_add = NULL,
+                          filter_join,
+                          filter = NULL,
                           check_type = "warning") {
   # Check input parameters
   assert_vars(by_vars)
@@ -336,10 +361,24 @@ filter_joined <- function(dataset,
       values = c("before", "after", "all"),
       case_sensitive = FALSE
     )
-  first_cond <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
+  first_cond_lower <- assert_filter_cond(enexpr(first_cond_lower), optional = TRUE)
+  first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
+  if (!missing(first_cond)) {
+    deprecate_warn(
+      "1.0.0",
+      "filter_joined(first_cond=)",
+      "filter_joined(first_cond_upper=)"
+    )
+    first_cond_upper <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
+  }
   assert_expr_list(order)
   tmp_obs_nr_var <- assert_symbol(enexpr(tmp_obs_nr_var), optional = TRUE)
-  filter <- assert_filter_cond(enexpr(filter))
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  filter_join <- assert_filter_cond(enexpr(filter_join))
+  if (!missing(filter)) {
+    deprecate_warn("1.0.0", "filter_joined(filter=)", "filter_joined(filter_join=)")
+    filter_join <- assert_filter_cond(enexpr(filter))
+  }
   check_type <-
     assert_character_scalar(
       check_type,
@@ -356,6 +395,17 @@ filter_joined <- function(dataset,
   if (is.null(tmp_obs_nr_var)) {
     tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")
   }
+  data_add <- dataset_add %>%
+    group_by(!!!by_vars) %>%
+    filter_if(filter_add) %>%
+    ungroup() %>%
+    derive_var_obs_number(
+      new_var = !!tmp_obs_nr_var,
+      by_vars = by_vars,
+      order = order,
+      check_type = check_type
+    )
+
   data <- dataset %>%
     derive_var_obs_number(
       new_var = !!tmp_obs_nr_var,
@@ -363,15 +413,17 @@ filter_joined <- function(dataset,
       order = order,
       check_type = check_type
     )
+
   # join the input dataset with itself such that to each observation of the
   # input dataset all following observations are joined
   data_joined <-
     left_join(
       data,
-      select(data, !!!by_vars, !!!join_vars, !!tmp_obs_nr_var),
+      select(data_add, !!!by_vars, !!!join_vars, !!tmp_obs_nr_var),
       by = vars2chr(by_vars),
       suffix = c("", ".join")
     )
+
   if (join_type != "all") {
     operator <- c(before = "<", after = ">")
 
@@ -385,12 +437,12 @@ filter_joined <- function(dataset,
     )
   }
 
-  if (!is.null(first_cond)) {
+  if (!is.null(first_cond_upper)) {
     # select all observations up to the first confirmation observation
     data_joined <- filter_relative(
       data_joined,
       by_vars = expr_c(by_vars, tmp_obs_nr_var),
-      condition = !!first_cond,
+      condition = !!first_cond_upper,
       order = exprs(!!parse_expr(paste0(as_name(tmp_obs_nr_var), ".join"))),
       mode = "first",
       selection = "before",
@@ -399,10 +451,23 @@ filter_joined <- function(dataset,
     )
   }
 
+  if (!is.null(first_cond_lower)) {
+    # select all observations up to the first confirmation observation
+    data_joined <- filter_relative(
+      data_joined,
+      by_vars = expr_c(by_vars, tmp_obs_nr_var),
+      condition = !!first_cond_lower,
+      order = exprs(!!parse_expr(paste0("desc(", as_name(tmp_obs_nr_var), ".join)"))),
+      mode = "first",
+      selection = "before",
+      inclusive = TRUE,
+      keep_no_ref_groups = FALSE
+    )
+  }
   # apply confirmation condition, which may include summary functions
   data_joined %>%
     group_by(!!!by_vars, !!tmp_obs_nr_var) %>%
-    filter(!!filter) %>%
+    filter(!!filter_join) %>%
     # select one observation of each group, as the joined variables are removed
     # it doesn't matter which one, so we take just the first one
     slice(1L) %>%

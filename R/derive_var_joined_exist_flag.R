@@ -340,6 +340,7 @@
 #' )
 #'
 derive_var_joined_exist_flag <- function(dataset,
+                                         dataset_add,
                                          by_vars,
                                          order,
                                          new_var,
@@ -347,14 +348,36 @@ derive_var_joined_exist_flag <- function(dataset,
                                          join_vars,
                                          join_type,
                                          first_cond = NULL,
-                                         filter,
+                                         first_cond_lower = NULL,
+                                         first_cond_upper = NULL,
+                                         filter = NULL,
+                                         filter_add = NULL,
+                                         filter_join,
                                          true_value = "Y",
                                          false_value = NA_character_,
                                          check_type = "warning") {
   new_var <- assert_symbol(enexpr(new_var))
   tmp_obs_nr_var <- assert_symbol(enexpr(tmp_obs_nr_var), optional = TRUE)
-  first_cond <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
-  filter <- assert_filter_cond(enexpr(filter))
+  first_cond_lower <- assert_filter_cond(enexpr(first_cond_lower), optional = TRUE)
+  first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
+  if (!missing(first_cond)) {
+    deprecate_warn(
+      "1.0.0",
+      "derive_var_joined_exist_flag(first_cond=)",
+      "derive_var_joined_exist_flag(first_cond_upper=)"
+    )
+    first_cond_upper <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
+  }
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  filter_join <- assert_filter_cond(enexpr(filter_join))
+  if (!missing(filter)) {
+    deprecate_warn(
+      "1.0.0",
+      "derive_var_joined_exist_flag(filter=)",
+      "derive_var_joined_exist_flag(filter_join=)"
+    )
+    filter_join <- assert_filter_cond(enexpr(filter))
+  }
   assert_data_frame(dataset)
 
   tmp_obs_nr <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")
@@ -366,13 +389,14 @@ derive_var_joined_exist_flag <- function(dataset,
 
   data_filtered <- filter_joined(
     data,
+    dataset_add = dataset_add,
     by_vars = by_vars,
     order = order,
     tmp_obs_nr_var = !!tmp_obs_nr_var,
     join_vars = join_vars,
     join_type = join_type,
-    first_cond = !!first_cond,
-    filter = !!filter,
+    first_cond_upper = !!first_cond_upper,
+    filter_join = !!filter_join,
     check_type = check_type
   )
 
