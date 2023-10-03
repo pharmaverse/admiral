@@ -37,15 +37,15 @@ remotes::install_github("pharmaverse/admiral")
 The {admiral} family has several downstream and upstream dependencies and so this release shall be done in three
 Phases:
 
-* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/), and [{admiral}](https://pharmaverse.github.io/admiral/cran-release/) core
-* Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/)
+* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/), and [{admiral}](https://pharmaverse.github.io/admiral/) core
+* Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)
 
 | Release Schedule | Phase 1- Date and Packages                                               | Phase 2- Date and Packages                                           |
 | ---------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- |
 | Q4-2023          | December 4th                                                             | December 11th                                                        |
-|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)     |
-|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)           | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/) |
-|                  | [{admiral}](https://pharmaverse.github.io/admiral/main/)                 |                                                                      |
+|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)     |
+|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)           | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/) |
+|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                 |                                                                      |
 
 The `{admiral}` Q4-2023 release will officially be `{admiral}`'s version 1.0.0 release, where we commit to increased package maturity and pivot towards focusing on maintenance rather than new content. This does not mean that there will never be any new content in `{admiral}`, rather it means we will be more mindful about introducing new functionality and/or breaking changes. The release schedule in 2024 and onward will also shift to twice-yearly, rather than quarterly, so that our users have ample time to react to any new content and changes that do make it onto `{admiral}`.
 
