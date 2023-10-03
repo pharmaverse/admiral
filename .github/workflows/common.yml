@@ -15,11 +15,13 @@ on:
       - "v*"
     branches:
       - main
+      - patch
   # 'pull_request' events are triggered when PRs are
   # created against one of these target branches.
   pull_request:
     branches:
       - main
+      - patch
   # 'release' events are triggered when...
   # you guessed it - when releases are made.
   release:
