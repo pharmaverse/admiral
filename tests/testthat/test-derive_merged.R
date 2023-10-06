@@ -278,40 +278,9 @@ test_that("derive_vars_merged Test 11: error if variables in missing_values but 
   )
 })
 
-<<<<<<< HEAD
-# derive_var_merged_cat ----
-
-## Test 12: deprecation error ----
-test_that("derive_var_merged_cat Test 12: deprecation error", {
-  get_vscat <- function(x) {
-    if_else(x == "BASELINE", "BASELINE", "POST-BASELINE")
-  }
-
-  expect_error(
-    derive_var_merged_cat(
-      adsl,
-      dataset_add = advs,
-      by_vars = exprs(USUBJID),
-      new_var = LSTVSCAT,
-      source_var = AVISIT,
-      cat_fun = get_vscat,
-      order = exprs(AVISIT),
-      mode = "last",
-      missing_value = "MISSING"
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
-
-# derive_var_merged_exist_flag ----
-## Test 13: merge existence flag ----
-test_that("derive_var_merged_exist_flag Test 13: merge existence flag", {
-=======
 # derive_var_merged_exist_flag ----
 ## Test 11: merge existence flag ----
 test_that("derive_var_merged_exist_flag Test 11: merge existence flag", {
->>>>>>> main
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs,
@@ -331,13 +300,8 @@ test_that("derive_var_merged_exist_flag Test 11: merge existence flag", {
   )
 })
 
-<<<<<<< HEAD
-## Test 14: by_vars with rename ----
-test_that("derive_var_merged_exist_flag Test 14: by_vars with rename", {
-=======
 ## Test 12: by_vars with rename ----
 test_that("derive_var_merged_exist_flag Test 12: by_vars with rename", {
->>>>>>> main
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs1,
@@ -357,7 +321,6 @@ test_that("derive_var_merged_exist_flag Test 12: by_vars with rename", {
   )
 })
 
-<<<<<<< HEAD
 # derive_var_merged_character ----
 
 ## Test 15: deprecation error ----
@@ -378,13 +341,8 @@ test_that("derive_var_merged_character Test 15: deprecation error", {
 
 
 # derive_vars_merged_lookup ----
-## Test 16: merge lookup table ----
-test_that("derive_vars_merged_lookup Test 16: merge lookup table", {
-=======
-# derive_vars_merged_lookup ----
 ## Test 13: merge lookup table ----
 test_that("derive_vars_merged_lookup Test 13: merge lookup table", {
->>>>>>> main
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -421,13 +379,8 @@ test_that("derive_vars_merged_lookup Test 13: merge lookup table", {
 
 
 ## the lookup table
-<<<<<<< HEAD
-## Test 17:  all by_vars have records in the lookup table ----
-test_that("derive_vars_merged_lookup Test 17:  all by_vars have records in the lookup table", {
-=======
 ## Test 14:  all by_vars have records in the lookup table ----
 test_that("derive_vars_merged_lookup Test 14:  all by_vars have records in the lookup table", {
->>>>>>> main
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -462,13 +415,8 @@ test_that("derive_vars_merged_lookup Test 14:  all by_vars have records in the l
   )
 })
 
-<<<<<<< HEAD
-## Test 18: by_vars with rename ----
-test_that("derive_vars_merged_lookup Test 18: by_vars with rename", {
-=======
 ## Test 15: by_vars with rename ----
 test_that("derive_vars_merged_lookup Test 15: by_vars with rename", {
->>>>>>> main
   param_lookup <- tibble::tribble(
     ~TESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
