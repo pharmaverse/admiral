@@ -1,3 +1,12 @@
+# admiral 0.12.1
+
+- `derive_extreme_records()` no longer fails if `dataset_add` is specified and a
+variable specified for `order` is not in `dataset`. (#2113)
+
+- The `type` argument in `compute_duration()` changed the underlying default behavior in `derive_vars_duration()` without allowing the user to toggle between `"duration"` and `"interval"` as originally intended. This was fixed by adding the `type` argument for `derive_vars_duration()` and a wrapper function `derive_vars_aage()` such that it gets passed through `compute_duration()` appropriately (#2112)
+
+- Template `ad_adpp.R` updated to replace `left_join()` with `derive_vars_merged()` (#2109).
+
 # admiral 0.12.0
 
 ## New Features
@@ -10,6 +19,7 @@ assessment. (#1960)
 - `atoxgr_criteria_daids.rda` added, which holds metadata for [Division of AIDS (DAIDS) Table for Grading the Severity of Adult and Pediatric Adverse Events](https://rsc.niaid.nih.gov/sites/default/files/daidsgradingcorrectedv21.pdf). You can find additional documentation here `atoxgr_criteria_daids()`
 
 ## Updates of Existing Functions
+
 - The functions `derive_param_bmi()` and `derive_param_bsa()` are updated to have the option of producing more values at visits when only weight is collected (#1228).
 - The functions `derive_var_age_years()` and `compute_age_years()` are updated to return an `NA` age in the case that the age unit is missing. (#2001) The argument `unit` for `derive_vars_aage()` is also changed to `age_unit` for consistency between these age-related functions. (#2025)
 - The `derive_var_ontrtfl()` function has been updated to allow for the column passed in `ref_end_date` to contain `NA` values. Previously, if the end date was `NA`, the row would never be flagged. Now, an `NA` value is interpreted as the treatment being ongoing, for example. (#1984)
@@ -110,6 +120,9 @@ has been deprecated in favor of `dataset_ref`. (#2037)
 
 - The description of the argument `reference_date` in the function `derive_vars_dy()` 
 has been clarified to make it agnostic to start/end  selection. (#2027)
+
+- Date and Time Imputation User Guide/Vignette has section on preserving partial
+dates updated (#2028)
 
 ## Various
 
