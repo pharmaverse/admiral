@@ -55,6 +55,12 @@ value, an expression or NA.
 A data frame of derived records.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+Development on \code{get_summary_records()} is complete, and for new code we recommend
+switching to using the \code{dataset_add} argument in \code{derive_summary_records()},
+which is easier to use, more featureful, and still under active development.
+
 It is not uncommon to have an analysis need whereby one needs to derive an
 analysis value (\code{AVAL}) from multiple records. The ADaM basic dataset
 structure variable \code{DTYPE} is available to indicate when a new derived
