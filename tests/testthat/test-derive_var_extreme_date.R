@@ -96,7 +96,7 @@ test_that("derive_var_extreme_dt Test 2: LSTALVDT is derived for Date class as w
   )
 })
 
-## Test 3: NA dates are excluded ----
+## Test 3: `NA` dates are excluded ----
 test_that("derive_var_extreme_dt Test 3: `NA` dates are excluded", {
   ae_end <- date_source(
     dataset_name = "ae",
@@ -121,7 +121,7 @@ test_that("derive_var_extreme_dt Test 3: `NA` dates are excluded", {
 })
 
 # derive_var_extreme_dtm ----
-## Test 4: LSTALVDTM and traceability variables are derived ----
+## Test 4: `LSTALVDTM` and traceability variables are derived ----
 test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables are derived", {
   ae_start <- date_source(
     dataset_name = "ae",
@@ -187,7 +187,7 @@ test_that("derive_var_extreme_dtm Test 4: `LSTALVDTM` and traceability variables
   )
 })
 
-## Test 5: error is issued if DTC variable is specified ----
+## Test 5: error is issued if `--DTC` variable is specified ----
 test_that("derive_var_extreme_dtm Test 5: error is issued if `--DTC` variable is specified", {
   ae_start <- date_source(
     dataset_name = "ae",
@@ -211,9 +211,9 @@ test_that("derive_var_extreme_dtm Test 5: error is issued if `--DTC` variable is
   )
 })
 
-## Test 6: Returns a warning when traceability_vars is assigned  ----
+## Test 6: Returns a warning when traceability_vars is assigned ----
 test_that("derive_var_extreme_dtm Test 6: Returns a warning when traceability_vars is assigned", {
-  expect_warning(
+  expect_error(
     ae_start <- date_source(
       dataset_name = "ae",
       date = convert_dtc_to_dtm(AESTDTC),
@@ -223,6 +223,6 @@ test_that("derive_var_extreme_dtm Test 6: Returns a warning when traceability_va
         LALVVAR = "AESTDTC"
       )
     ),
-    class = "lifecycle_warning_deprecated"
+    class = "lifecycle_error_deprecated"
   )
 })

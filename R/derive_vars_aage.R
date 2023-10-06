@@ -88,7 +88,7 @@ derive_vars_aage <- function(dataset,
                              age_unit = "years",
                              type = "interval") {
   if (!missing(unit)) {
-    deprecate_warn("0.12.0", "derive_vars_aage(unit = )", "derive_vars_aage(age_unit = )")
+    deprecate_stop("0.12.0", "derive_vars_aage(unit = )", "derive_vars_aage(age_unit = )")
     age_unit <- unit
   }
 
