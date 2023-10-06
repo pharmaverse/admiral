@@ -265,21 +265,7 @@ derive_extreme_records <- function(dataset = NULL,
                                    true_value = "Y",
                                    false_value = "N",
                                    keep_source_vars = exprs(everything()),
-<<<<<<< HEAD
-                                   set_values_to,
-                                   filter) {
-  if (!missing(filter)) {
-    deprecate_stop(
-      "0.11.0",
-      "derive_extreme_records(filter = )",
-      "derive_extreme_records(filter_add = )"
-    )
-    filter_add <- enexpr(filter)
-  }
-
-=======
                                    set_values_to) {
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   # Check input arguments
   assert_vars(by_vars, optional = is.null(dataset_ref))
   assert_expr_list(order, optional = TRUE)

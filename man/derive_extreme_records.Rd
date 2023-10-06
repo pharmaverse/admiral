@@ -17,12 +17,7 @@ derive_extreme_records(
   true_value = "Y",
   false_value = "N",
   keep_source_vars = exprs(everything()),
-<<<<<<< HEAD
-  set_values_to,
-  filter
-=======
   set_values_to
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 )
 }
 \arguments{

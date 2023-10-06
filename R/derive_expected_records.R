@@ -6,16 +6,8 @@
 #' @param dataset
 #' `r roxygen_param_dataset(expected_vars = c("dataset_ref", "by_vars"))`
 #'
-<<<<<<< HEAD
 #' @param dataset_expected_obs *Deprecated*, please use `dataset_ref` instead.
 #'
-=======
-#'   A data frame, the columns from `dataset_ref` and specified by the
-#'   `by_vars` parameter are expected.
-#'
-#' @param dataset_expected_obs *Deprecated*, please use `dataset_ref` instead.
-#'
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 #' @param dataset_ref Expected observations dataset
 #'
 #'   Data frame with the expected observations, e.g., all the expected
@@ -97,11 +89,7 @@ derive_expected_records <- function(dataset,
                                     by_vars = NULL,
                                     set_values_to = NULL) {
   if (!missing(dataset_expected_obs)) {
-<<<<<<< HEAD
-    deprecate_warn(
-=======
     deprecate_stop(
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
       "0.12.0",
       "derive_expected_records(dataset_expected_obs = )",
       "derive_expected_records(dataset_ref = )"

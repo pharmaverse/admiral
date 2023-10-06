@@ -620,11 +620,7 @@ date_source <- function(dataset_name,
                         traceability_vars = NULL,
                         set_values_to = NULL) {
   if (!is.null(traceability_vars)) {
-<<<<<<< HEAD
-    deprecate_warn(
-=======
     deprecate_stop(
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
       "0.12.0",
       "date_source(traceability_vars = )",
       "date_source(set_values_to = )"

@@ -84,10 +84,6 @@ export(derive_var_atoxgr)
 export(derive_var_atoxgr_dir)
 export(derive_var_base)
 export(derive_var_chg)
-<<<<<<< HEAD
-export(derive_var_confirmation_flag)
-=======
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 export(derive_var_dthcaus)
 export(derive_var_extreme_dt)
 export(derive_var_extreme_dtm)

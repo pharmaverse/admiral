@@ -190,11 +190,7 @@ derive_var_ontrtfl <- function(dataset,
   if (is.null(span_period) || span_period %in% c("Y", "y")) {
     # replace span_period with lgl version
     span_period <- !is.null(span_period)
-<<<<<<< HEAD
-    deprecate_warn(
-=======
     deprecate_stop(
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
       when = "0.12.0",
       what = "admiral::derive_var_ontrtfl(span_period = 'must be TRUE or FALSE')",
       details =

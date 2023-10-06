@@ -1,11 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-<<<<<<< HEAD
-Version: 0.12.1
-=======
 Version: 0.12.2.9000
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 Authors@R: c(
     person("Ben", "Straub", email = "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),

@@ -168,29 +168,7 @@ derive_param_exist_flag <- function(dataset = NULL,
                                     missing_value = NA_character_,
                                     filter_add = NULL,
                                     by_vars = get_admiral_option("subject_keys"),
-<<<<<<< HEAD
-                                    set_values_to,
-                                    dataset_adsl,
-                                    subject_keys) {
-  ### BEGIN DEPRECATION
-  if (!missing(dataset_adsl)) {
-    deprecate_stop(
-      "0.11.0", "derive_param_exist_flag(dataset_adsl = )",
-      "derive_param_exit_flag(dataset_ref = )"
-    )
-  }
-
-  if (!missing(subject_keys)) {
-    deprecate_stop(
-      "0.11.0", "derive_param_exist_flag(subject_keys = )",
-      "derive_param_exit_flag(by_vars = )"
-    )
-  }
-  ### END DEPRECATION
-
-=======
                                     set_values_to) {
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   # Check input parameters
   condition <- assert_filter_cond(enexpr(condition))
   assert_character_scalar(true_value)
@@ -210,18 +188,6 @@ derive_param_exist_flag <- function(dataset = NULL,
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
 
-<<<<<<< HEAD
-  if (!missing(aval_fun)) {
-    assert_function(aval_fun)
-    deprecate_stop(
-      "0.11.0",
-      "derive_param_exist_flag(aval_fun = )",
-      "derive_param_exist_flag(set_values_to = )"
-    )
-  }
-
-=======
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   # Create new observations
   new_obs <- derive_var_merged_exist_flag(
     dataset_ref,

@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # admiral (development version)
 
 ## New Features
@@ -38,7 +36,6 @@
 
 - A unit test for `derive_param_computed()` was modified in anticipation of major user-facing changes to R version 4.4 (#2147)
 
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 # admiral 0.12.1
 
 - `derive_extreme_records()` no longer fails if `dataset_add` is specified and a

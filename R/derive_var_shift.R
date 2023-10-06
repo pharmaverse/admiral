@@ -77,11 +77,7 @@ derive_var_shift <- function(dataset,
                              sep_val = " to ") {
   ### BEGIN DEPRECATION
   if (!missing(na_val)) {
-<<<<<<< HEAD
-    deprecate_warn("0.12.0", "derive_var_shift(na_val = )", "derive_var_shift(missing_value = )")
-=======
     deprecate_stop("0.12.0", "derive_var_shift(na_val = )", "derive_var_shift(missing_value = )")
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
     missing_value <- na_val
   }
   ### END DEPRECATION
