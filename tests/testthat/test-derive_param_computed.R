@@ -62,9 +62,9 @@ test_that("derive_param_computed Test 2: new observations with constant paramete
 
   new_obs <-
     inner_join(input %>% filter(PARAMCD == "HEIGHT") %>% select(USUBJID, AVAL),
-      input %>% filter(PARAMCD == "WEIGHT") %>% select(USUBJID, VISIT, AVAL),
-      by = c("USUBJID"),
-      suffix = c(".HEIGHT", ".WEIGHT")
+               input %>% filter(PARAMCD == "WEIGHT") %>% select(USUBJID, VISIT, AVAL),
+               by = c("USUBJID"),
+               suffix = c(".HEIGHT", ".WEIGHT")
     ) %>%
     mutate(
       AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
@@ -122,7 +122,7 @@ test_that("derive_param_computed Test 3: no new observations if filtered dataset
       )
     ) %>%
       expect_dfs_equal(input,
-        keys = c("USUBJID", "PARAMCD", "VISIT")
+                       keys = c("USUBJID", "PARAMCD", "VISIT")
       ),
     "The input dataset does not contain any observations fullfiling the filter condition .*"
   )
@@ -157,7 +157,7 @@ test_that("derive_param_computed Test 4: no new observations are added if a para
     )
     %>%
       expect_dfs_equal(input,
-        keys = c("USUBJID", "PARAMCD", "VISIT")
+                       keys = c("USUBJID", "PARAMCD", "VISIT")
       ),
     "The input dataset does not contain any observations fullfiling the filter condition .*"
   )
@@ -284,9 +284,9 @@ test_that("derive_param_computed Test 7: expression in constant_parameters", {
 
   new_obs <-
     inner_join(vs %>% filter(VSTESTCD == "HGHT") %>% select(USUBJID, AVAL = VSSTRESN),
-      input %>% filter(PARAMCD == "WEIGHT") %>% select(USUBJID, VISIT, AVAL),
-      by = c("USUBJID"),
-      suffix = c(".HEIGHT", ".WEIGHT")
+               input %>% filter(PARAMCD == "WEIGHT") %>% select(USUBJID, VISIT, AVAL),
+               by = c("USUBJID"),
+               suffix = c(".HEIGHT", ".WEIGHT")
     ) %>%
     mutate(
       AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
@@ -353,11 +353,7 @@ test_that("derive_param_computed Test 8: no new observations if a constant param
   )
 })
 
-<<<<<<< HEAD
-## Test 9: compute multiple variables ----
-=======
 ## Test 9: compute multiple variables, keep_nas ----
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 test_that("derive_param_computed Test 9: compute multiple variables, keep_nas", {
   adlb_tbilialk <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVALC, ~ADTM,        ~ADTF,
@@ -433,11 +429,7 @@ test_that("derive_param_computed Test 10: deprecation warning if analysis_value 
     select(-AVAL.DIABP, -AVAL.SYSBP)
   expected_output <- bind_rows(input, new_obs)
 
-<<<<<<< HEAD
-  expect_warning(
-=======
   expect_error(
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
     derive_param_computed(
       input,
       parameters = exprs(SYSBP, DIABP),
@@ -449,30 +441,7 @@ test_that("derive_param_computed Test 10: deprecation warning if analysis_value 
         AVALU = "mmHg"
       )
     ),
-<<<<<<< HEAD
-    class = "lifecycle_warning_deprecated"
-  )
-
-  expect_dfs_equal(
-    suppress_warning(
-      derive_param_computed(
-        input,
-        parameters = exprs(SYSBP, DIABP),
-        by_vars = exprs(USUBJID, VISIT),
-        analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
-        set_values_to = exprs(
-          PARAMCD = "MAP",
-          PARAM = "Mean arterial pressure (mmHg)",
-          AVALU = "mmHg"
-        )
-      ),
-      regexpr = "is deprecated"
-    ),
-    expected_output,
-    keys = c("USUBJID", "PARAMCD", "VISIT")
-=======
     class = "lifecycle_error_deprecated"
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   )
 })
 

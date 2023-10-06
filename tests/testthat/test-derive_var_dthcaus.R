@@ -414,23 +414,14 @@ test_that("derive_var_dthcaus Test 8: `dataset` is sorted using the `order` para
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
 
-<<<<<<< HEAD
-## Test 9: returns a warning when traceability_vars is used ----
-test_that("dthcaus_source Test 9: returns a warning when traceability_vars is used", {
-=======
 ## Test 9: returns a error when traceability_vars is used ----
 test_that("derive_var_dthcaus Test 9: returns a error when traceability_vars is used", {
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   ae <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
     "TEST01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
   )
 
-<<<<<<< HEAD
-  expect_warning(
-=======
   expect_error(
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
     src_ae <- dthcaus_source(
       dataset_name = "ae",
       filter = AEOUT == "FATAL",
@@ -443,10 +434,6 @@ test_that("derive_var_dthcaus Test 9: returns a error when traceability_vars is 
         DTHSEQ = AESEQ
       )
     ),
-<<<<<<< HEAD
-    class = "lifecycle_warning_deprecated"
-=======
     class = "lifecycle_error_deprecated"
->>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   )
 })
