@@ -299,71 +299,8 @@ test_that("derive_extreme_records Test 5: latest evaluable tumor assessment date
   )
 })
 
-## Test 6: warning if filter argument is used ----
-test_that("derive_extreme_records Test 6: warning if filter argument is used", {
-  adsl <- tibble::tribble(
-    ~USUBJID,
-    "1",
-    "2",
-    "3"
-  ) %>%
-    mutate(STUDYID = "XX1234")
-
-  adrs <- tibble::tribble(
-    ~USUBJID, ~ADTC,        ~AVALC, ~PARAMCD,
-    "1",      "2020-01-02", "PR",   "OVR",
-    "1",      "2020-02-01", "CR",   "OVR",
-    "1",      "2020-03-01", "NE",   "OVR",
-    "1",      "2020-04-01", "SD",   "OVR",
-    "2",      "2021-06-15", "SD",   "OVR",
-    "2",      "2021-07-16", "SD",   "OVR",
-    "2",      "2021-09-14", "NE",   "OVR",
-    "3",      "2021-08-03", "NE",   "OVR",
-  ) %>%
-    mutate(
-      STUDYID = "XX1234",
-      ADT = ymd(ADTC)
-    ) %>%
-    select(-ADTC)
-
-  actual <- derive_extreme_records(
-    adrs,
-    dataset_ref = adsl,
-    dataset_add = adrs,
-    by_vars = exprs(USUBJID),
-    filter_add = PARAMCD == "OVR" & AVALC == "PD",
-    exist_flag = AVALC,
-    order = exprs(ADT),
-    mode = "first",
-    set_values_to = exprs(
-      PARAMCD = "PD",
-      ANL01FL = "Y",
-      ADT = ADT
-    )
-  )
-
-  expect_error(
-    derive_extreme_records(
-      adrs,
-      dataset_ref = adsl,
-      dataset_add = adrs,
-      by_vars = exprs(USUBJID),
-      filter = PARAMCD == "OVR" & AVALC == "PD",
-      exist_flag = AVALC,
-      order = exprs(ADT),
-      mode = "first",
-      set_values_to = exprs(
-        PARAMCD = "PD",
-        ANL01FL = "Y",
-        ADT = ADT
-      )
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
-## Test 7: error if no input data ----
-test_that("derive_extreme_records Test 7: error if no input data", {
+## Test 6: error if no input data ----
+test_that("derive_extreme_records Test 6: error if no input data", {
   expect_error(
     derive_extreme_records(
       set_values_to = exprs(PARAMCD = "HELLO")
@@ -377,8 +314,8 @@ test_that("derive_extreme_records Test 7: error if no input data", {
   )
 })
 
-## Test 8: keep vars in `keep_source_vars` in the new records ----
-test_that("derive_extreme_records Test 8: keep vars in `keep_source_vars` in the new records", {
+## Test 7: keep vars in `keep_source_vars` in the new records ----
+test_that("derive_extreme_records Test 7: keep vars in `keep_source_vars` in the new records", {
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
     1, 1, 12, 1,
@@ -416,8 +353,8 @@ test_that("derive_extreme_records Test 8: keep vars in `keep_source_vars` in the
   )
 })
 
-## Test 9: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())' ----
-test_that("derive_extreme_records Test 9: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())'", { # nolint
+## Test 8: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())' ----
+test_that("derive_extreme_records Test 8: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())'", { # nolint
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
     1, 1, 12, 1,
@@ -451,5 +388,46 @@ test_that("derive_extreme_records Test 9: keep all vars in the new records when 
     base = expected_output,
     compare = actual_output,
     keys = c("USUBJID", "AVISITN", "LBSEQ", "DTYPE")
+  )
+})
+
+## Test 10: order vars from dataset_add ----
+test_that("derive_extreme_records Test 10: order vars from dataset_add", {
+  bds <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVALC,
+    "1",      "PARAM",  "1"
+  )
+
+  xx <- tibble::tribble(
+    ~USUBJID, ~XXTESTCD, ~XXSEQ,
+    "1",      "A",       1,
+    "1",      "A",       2,
+    "1",      "B",       3
+  )
+
+  actual <- derive_extreme_records(
+    bds,
+    dataset_add = xx,
+    dataset_ref = bds,
+    by_vars = exprs(USUBJID),
+    order = exprs(XXSEQ),
+    mode = "first",
+    filter_add = XXTESTCD == "A",
+    exist_flag = AVALC,
+    set_values_to = exprs(
+      PARAMCD = "XXFL"
+    )
+  )
+
+  expected <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~AVALC, ~XXTESTCD,     ~XXSEQ,
+    "1",      "PARAM",  "1",    NA_character_, NA_real_,
+    "1",      "XXFL",   "Y",    "A",           1
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "PARAMCD")
   )
 })

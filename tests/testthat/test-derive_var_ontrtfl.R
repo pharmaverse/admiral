@@ -449,7 +449,7 @@ test_that("derive_var_ontrtfl Test 16: expected deprecation messaging", { # noli
   )
 
   # all flags should be "Y" because span_period flag is TRUE
-  lifecycle::expect_deprecated(
+  expect_error(
     derive_var_ontrtfl(
       adcm,
       start_date = ASTDT,
@@ -457,11 +457,12 @@ test_that("derive_var_ontrtfl Test 16: expected deprecation messaging", { # noli
       ref_start_date = TRTSDT,
       ref_end_date = TRTEDT,
       span_period = "Y"
-    )
+    ),
+    class = "lifecycle_error_deprecated"
   )
 
   # first obs started before treatment, and it should NOT be flagged
-  lifecycle::expect_deprecated(
+  expect_error(
     derive_var_ontrtfl(
       adcm,
       start_date = ASTDT,
@@ -469,6 +470,7 @@ test_that("derive_var_ontrtfl Test 16: expected deprecation messaging", { # noli
       ref_start_date = TRTSDT,
       ref_end_date = TRTEDT,
       span_period = NULL
-    )
+    ),
+    class = "lifecycle_error_deprecated"
   )
 })

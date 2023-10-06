@@ -65,8 +65,8 @@ test_that("derive_param_merged_exist_flag Test 1: derive parameter indicating PD
 
 
 
-## derive_param_exist_flag Test 3: error is issued if paramter already exists in dataset ----
-test_that("derive_param_exist_flag Test 3: error is issued if paramter already exists in dataset", {
+## Test 2: error is issued if paramter already exists in dataset ----
+test_that("derive_param_merged_exist_flag Test 2: error is issued if paramter already exists in dataset", { # nolint
   expect_error(
     derive_param_exist_flag(
       dataset = adrs,
@@ -84,44 +84,5 @@ test_that("derive_param_exist_flag Test 3: error is issued if paramter already e
       "The parameter code 'OVR' does already exist in `dataset`."
     ),
     fixed = TRUE
-  )
-})
-
-
-
-## derive_param_merge_exist_flag Test 4: error for deprecated parameter  ----
-test_that("derive_param_exist_flag Test 4: error for deprecated param `dataset_adsl`", {
-  expect_error(
-    derive_param_exist_flag(
-      dataset_adsl = adsl,
-      dataset_add = adrs,
-      filter_add = PARAMCD == "OVR",
-      condition = AVALC == "PD",
-      false_value = "N",
-      set_values_to = exprs(
-        PARAMCD = "PD",
-        ANL01FL = "Y"
-      )
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
-## derive_param_merge_exist_flag Test 5: error for deprecated parameter  ----
-test_that("derive_param_exist_flag Test 5: error for deprecated param `subject_keys`", {
-  expect_error(
-    derive_param_exist_flag(
-      dataset_ref = adsl,
-      dataset_add = adrs,
-      subject_keys = get_admiral_option("subject_keys"),
-      filter_add = PARAMCD == "OVR",
-      condition = AVALC == "PD",
-      false_value = "N",
-      set_values_to = exprs(
-        PARAMCD = "PD",
-        ANL01FL = "Y"
-      )
-    ),
-    class = "lifecycle_error_deprecated"
   )
 })

@@ -91,7 +91,7 @@ derive_expected_records <- function(dataset,
                                     by_vars = NULL,
                                     set_values_to = NULL) {
   if (!missing(dataset_expected_obs)) {
-    deprecate_warn(
+    deprecate_stop(
       "0.12.0",
       "derive_expected_records(dataset_expected_obs = )",
       "derive_expected_records(dataset_ref = )"

@@ -84,17 +84,6 @@
 #'   For new observations not selected from the additional dataset
 #'   (`dataset_add`), `exist_flag` is set to the specified value.
 #'
-#'
-#' @param filter Filter for observations to consider
-#'
-#'   *Deprecated*, please use the above `filter_add` argument instead.
-#'
-#'   Only observations fulfilling the specified condition are taken into account
-#'   for selecting the first or last observation. If the argument is not
-#'   specified, all observations are considered.
-#'
-#'   *Permitted Values*: a condition
-#'
 #' @param keep_source_vars Variables to be kept in the new records
 #'
 #'   A named list or tidyselect expressions created by `exprs()` defining the
@@ -268,27 +257,31 @@ derive_extreme_records <- function(dataset = NULL,
                                    true_value = "Y",
                                    false_value = "N",
                                    keep_source_vars = exprs(everything()),
-                                   set_values_to,
-                                   filter) {
-  if (!missing(filter)) {
-    deprecate_stop(
-      "0.11.0",
-      "derive_extreme_records(filter = )",
-      "derive_extreme_records(filter_add = )"
-    )
-    filter_add <- enexpr(filter)
-  }
-
+                                   set_values_to) {
   # Check input arguments
   assert_vars(by_vars, optional = is.null(dataset_ref))
   assert_expr_list(order, optional = TRUE)
   assert_expr_list(keep_source_vars, optional = TRUE)
 
+  if (is.null(dataset_add)) {
+    expected_vars <- expr_c(by_vars, extract_vars(order))
+  } else {
+    expected_vars <- by_vars
+  }
+
   assert_data_frame(
     dataset,
-    required_vars = expr_c(
-      by_vars, extract_vars(order)
-    ),
+    required_vars = expected_vars,
+    optional = TRUE
+  )
+  assert_data_frame(
+    dataset_add,
+    required_vars = expr_c(by_vars, extract_vars(order)),
+    optional = TRUE
+  )
+  assert_data_frame(
+    dataset_ref,
+    required_vars = by_vars,
     optional = TRUE
   )
   mode <- assert_character_scalar(

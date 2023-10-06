@@ -14,7 +14,8 @@ derive_vars_duration(
   out_unit = "days",
   floor_in = TRUE,
   add_one = TRUE,
-  trunc_out = FALSE
+  trunc_out = FALSE,
+  type = "duration"
 )
 }
 \arguments{
@@ -86,6 +87,12 @@ integer part is returned.
 Default: \code{FALSE}
 
 Permitted Values: \code{TRUE}, \code{FALSE}}
+
+\item{type}{lubridate duration type.
+
+See below for details.
+
+Permitted Values: \code{"duration"}, \code{"interval"}}
 }
 \value{
 The input dataset with the duration and unit variable added
@@ -99,6 +106,24 @@ The duration is derived as time from start to end date in the
 specified output unit. If the end date is before the start date, the duration
 is negative. The start and end date variable must be present in the specified
 input dataset.
+
+The \href{https://lubridate.tidyverse.org/}{lubridate} package calculates two
+types of spans between two dates: duration and interval.
+While these calculations are largely the same, when the unit of the time period
+is month or year the result can be slightly different.
+
+The difference arises from the ambiguity in the length of \code{"1 month"} or
+\code{"1 year"}.
+Months may have 31, 30, 28, or 29 days, and years are 365 days and 366 during leap years.
+Durations and intervals help solve the ambiguity in these measures.
+
+The \strong{interval} between \code{2000-02-01} and \code{2000-03-01} is \code{1} (i.e. one month).
+The \strong{duration} between these two dates is \code{0.95}, which accounts for the fact
+that the year 2000 is a leap year, February has 29 days, and the average month
+length is \code{30.4375}, i.e. \code{29 / 30.4375 = 0.95}.
+
+For additional details, review the
+\href{https://lubridate.tidyverse.org/reference/timespan.html}{lubridate time span reference page}.
 }
 \examples{
 library(lubridate)

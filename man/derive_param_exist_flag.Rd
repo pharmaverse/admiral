@@ -13,11 +13,8 @@ derive_param_exist_flag(
   false_value = NA_character_,
   missing_value = NA_character_,
   filter_add = NULL,
-  aval_fun,
   by_vars = get_admiral_option("subject_keys"),
-  set_values_to,
-  dataset_adsl,
-  subject_keys
+  set_values_to
 )
 }
 \arguments{
@@ -91,11 +88,6 @@ considered.
 
 \emph{Permitted Values}: a condition}
 
-\item{aval_fun}{Function to map character analysis value (\code{AVALC}) to numeric
-analysis value (\code{AVAL})
-
-\emph{Deprecated}, please use \code{set_values_to} instead.}
-
 \item{by_vars}{Variables to uniquely identify a group
 
 A list of symbols created using \code{exprs()} is expected.}
@@ -105,10 +97,6 @@ A list of symbols created using \code{exprs()} is expected.}
 A named list returned by \code{exprs()} defining the variables to be set for the
 new parameter, e.g. \code{exprs(PARAMCD = "MDIS", PARAM = "Measurable Disease at Baseline")} is expected. The values must be symbols, character strings,
 numeric values, \code{NA}, or expressions.}
-
-\item{dataset_adsl}{\emph{Deprecated}, please use \code{dataset_ref} instead.}
-
-\item{subject_keys}{\emph{Deprecated}, please use \code{by_vars} instead.}
 }
 \value{
 The input dataset with a new parameter indicating if an event
