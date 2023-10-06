@@ -5,10 +5,9 @@
 #' function can derive a parameter indicating if there is measurable disease at
 #' baseline.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified for `by_vars` and the `PARAMCD` variable are
-#'   expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'   `PARAMCD` is expected as well.
 #'
 #' @param dataset_ref Reference dataset, e.g., ADSL
 #'

@@ -4,7 +4,7 @@
 #' derivation is called separately. Some or all arguments of the derivation
 #' may vary depending on the slice.
 #'
-#' @param dataset Input dataset
+#' @param dataset `r roxygen_param_dataset()`
 #'
 #' @param derivation Derivation
 #'

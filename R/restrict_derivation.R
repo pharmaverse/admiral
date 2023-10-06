@@ -2,7 +2,7 @@
 #'
 #' Execute a derivation on a subset of the input dataset.
 #'
-#' @param dataset Input dataset
+#' @param dataset `r roxygen_param_dataset()`
 #'
 #' @param derivation Derivation
 #'
