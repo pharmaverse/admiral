@@ -6,7 +6,7 @@
 #'
 #' Development on `get_summary_records()` is complete, and for new code we recommend
 #' switching to using the `dataset_add` argument in `derive_summary_records()`,
-#' which is easier to use, more featureful, and still under active development.
+#' which is easier to use, has more features, and still under active development.
 #'
 #' It is not uncommon to have an analysis need whereby one needs to derive an
 #' analysis value (`AVAL`) from multiple records. The ADaM basic dataset

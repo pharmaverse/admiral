@@ -13,6 +13,10 @@
 #'
 #' @param dataset A data frame.
 #'
+#' @param dataset_add Additional dataset
+#'
+#' @param dataset_ref
+#'
 #' @param by_vars Variables to consider for generation of groupwise summary
 #'   records. Providing the names of variables in [exprs()] will create a
 #'   groupwise summary and generate summary records for the specified groups.
@@ -46,6 +50,8 @@
 #'   + RHS refers to the values to set to the variable. This can be a string, a
 #'   symbol, a numeric value, an expression, or `NA`, e.g., `exprs(PARAMCD =
 #'   "TDOSE", PARCAT1 = "OVERALL")`.
+#'
+#' @param missing_values
 #'
 #' @return A data frame with derived records appended to original dataset.
 #'
@@ -147,31 +153,75 @@
 #'   set_values_to = exprs(DTYPE = "AVERAGE")
 #' )
 derive_summary_records <- function(dataset,
+                                   dataset_add = NULL,
+                                   dataset_ref = NULL,
                                    by_vars,
                                    filter = NULL,
                                    analysis_var,
                                    summary_fun,
-                                   set_values_to = NULL) {
+                                   set_values_to = NULL,
+                                   missing_values = NULL) {
   assert_vars(by_vars)
-  analysis_var <- assert_symbol(enexpr(analysis_var))
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
-  assert_s3_class(summary_fun, "function")
   assert_data_frame(
     dataset,
-    required_vars = expr_c(by_vars, analysis_var)
+    required_vars = expr_c(by_vars)
+  )
+  assert_data_frame(
+    dataset_add,
+    required_vars = expr_c(by_vars),
+    optional = TRUE
+  )
+  assert_data_frame(
+    dataset_ref,
+    required_vars = expr_c(by_vars),
+    optional = TRUE
   )
   assert_varval_list(set_values_to, optional = TRUE)
+  assert_expr_list(missing_values, named = TRUE, optional = TRUE)
 
-  # Summarise the analysis value and bind to the original dataset
-  bind_rows(
-    dataset,
-    get_summary_records(
-      dataset,
-      by_vars = by_vars,
-      filter = !!filter,
-      analysis_var = !!analysis_var,
-      summary_fun = summary_fun,
-      set_values_to = set_values_to
+  if (!missing(analysis_var) || !missing(summary_fun)) {
+    deprecate_warn(
+      "1.0.0",
+      I("derive_summary_records(anaylsis_var = , summary_fun = )"),
+      "derive_summary_records(set_values_to = )"
     )
+    analysis_var <- assert_symbol(enexpr(analysis_var))
+    assert_s3_class(summary_fun, "function")
+    set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
+  }
+
+  if (is.null(dataset_add)) {
+    dataset_add <- dataset
+  }
+
+  summary_records <- dataset_add %>%
+    group_by(!!!by_vars) %>%
+    filter_if(filter) %>%
+    ungroup() %>%
+    process_set_values_to(set_values_to)
+
+  df_return <- bind_rows(
+    dataset,
+    summary_records
   )
+
+  if (!is.null(dataset_ref)) {
+    add_vars <- colnames(dataset_add)
+    ref_vars <- colnames(dataset_ref)
+
+    new_ref_obs <- anti_join(
+      select(dataset_ref, intersect(add_vars, ref_vars)),
+      select(new_add_obs, !!!by_vars),
+      by = map_chr(by_vars, as_name)
+    )
+
+    df_return <- bind_rows(
+      df_return,
+      new_ref_obs
+    )
+  }
+
+
+  return(df_return)
 }
