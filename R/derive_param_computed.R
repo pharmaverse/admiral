@@ -304,7 +304,7 @@ derive_param_computed <- function(dataset = NULL,
   assert_logical_scalar(keep_nas)
   ### BEGIN DEPRECATION
   if (!missing(analysis_var)) {
-    deprecate_warn(
+    deprecate_stop(
       "0.12.0",
       "derive_param_computed(analysis_var = )",
       "derive_param_computed(set_values_to = )"
@@ -313,7 +313,7 @@ derive_param_computed <- function(dataset = NULL,
   analysis_var <- assert_symbol(enexpr(analysis_var))
 
   if (!missing(analysis_value)) {
-    deprecate_warn(
+    deprecate_stop(
       "0.12.0",
       "derive_param_computed(analysis_value = )",
       "derive_param_computed(set_values_to = )"
