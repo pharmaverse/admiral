@@ -7,9 +7,9 @@
 derive_var_age_years(dataset, age_var, age_unit = NULL, new_var)
 }
 \arguments{
-\item{dataset}{Input dataset.
+\item{dataset}{Input dataset
 
-The column specified by the \code{age_var} argument is expected.}
+The variables specified by the \code{age_var} argument(s) to be expected.}
 
 \item{age_var}{Age variable.
 

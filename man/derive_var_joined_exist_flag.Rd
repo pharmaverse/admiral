@@ -22,8 +22,7 @@ derive_var_joined_exist_flag(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{join_vars} parameter are
-expected.}
+The variables specified by the \code{by_vars} and \code{join_vars} argument(s) to be expected.}
 
 \item{by_vars}{By variables
 

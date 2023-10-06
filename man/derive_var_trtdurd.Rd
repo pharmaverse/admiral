@@ -9,8 +9,7 @@ derive_var_trtdurd(dataset, start_date = TRTSDT, end_date = TRTEDT)
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by the \code{start_date} and the \code{end_date} parameter are
-expected.}
+The variables specified by the \code{start_date} and \code{end_date} argument(s) to be expected.}
 
 \item{start_date}{The start date
 

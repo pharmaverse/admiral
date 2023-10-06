@@ -8,10 +8,9 @@
 #' The analysis value of the new parameter is derived as
 #' Total Dose / Planned Dose * 100
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` parameter, `PARAMCD`, and
-#'   `AVAL` are expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'   `PARAMCD`, and `AVAL` are expected as well.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`

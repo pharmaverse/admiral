@@ -17,7 +17,7 @@ derive_var_extreme_flag(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} parameter are expected.}
+The variables specified by the \code{by_vars} argument(s) to be expected.}
 
 \item{by_vars}{Grouping variables
 

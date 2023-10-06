@@ -4,10 +4,9 @@
 #'
 #' Add a parameter by converting lab differentials from fraction or percentage to absolute values
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` argument, `PARAMCD`, and `AVAL`
-#'   are expected to be present.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'   `PARAMCD`, and `AVAL` are expected as well.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset, and to the parameters specified by `wbc_code` and `diff_code`.

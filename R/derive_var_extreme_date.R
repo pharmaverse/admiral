@@ -3,9 +3,8 @@
 #' Add the first or last datetime from multiple sources to the dataset, e.g.,
 #' the last known alive datetime (`LSTALVDTM`).
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by `subject_keys` are required.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("subject_keys"))`
 #'
 #' @param new_var Name of variable to create
 #'
