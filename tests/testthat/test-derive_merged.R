@@ -65,8 +65,8 @@ vs <- tibble::tribble(
 ## Test 1: merge all variables ----
 test_that("derive_vars_merged Test 1: merge all variables", {
   actual <- derive_vars_merged(advs,
-                               dataset_add = adsl,
-                               by_vars = exprs(STUDYID, USUBJID)
+    dataset_add = adsl,
+    by_vars = exprs(STUDYID, USUBJID)
   )
 
   expected <- left_join(advs, adsl, by = c("STUDYID", "USUBJID"))
@@ -81,9 +81,9 @@ test_that("derive_vars_merged Test 1: merge all variables", {
 ## Test 2: merge selected variables ----
 test_that("derive_vars_merged Test 2: merge selected variables", {
   actual <- derive_vars_merged(advs,
-                               dataset_add = adsl,
-                               by_vars = exprs(USUBJID),
-                               new_vars = exprs(SEX)
+    dataset_add = adsl,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(SEX)
   )
 
   expected <- left_join(advs, select(adsl, USUBJID, SEX), by = "USUBJID")
@@ -98,12 +98,12 @@ test_that("derive_vars_merged Test 2: merge selected variables", {
 ## Test 3: merge last value and flag matched by groups ----
 test_that("derive_vars_merged Test 3: merge last value and flag matched by groups", {
   actual <- derive_vars_merged(adsl,
-                               dataset_add = advs,
-                               order = exprs(AVAL),
-                               by_vars = exprs(STUDYID, USUBJID),
-                               new_vars = exprs(WEIGHTBL = AVAL),
-                               mode = "last",
-                               match_flag = matched
+    dataset_add = advs,
+    order = exprs(AVAL),
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(WEIGHTBL = AVAL),
+    mode = "last",
+    match_flag = matched
   )
   expected <- adsl %>% mutate(
     WEIGHTBL = c(68, 88, 55, NA),
@@ -121,8 +121,8 @@ test_that("derive_vars_merged Test 3: merge last value and flag matched by group
 test_that("derive_vars_merged Test 4: error if variable in both datasets", {
   expect_error(
     derive_vars_merged(advs,
-                       dataset_add = adsl,
-                       by_vars = exprs(USUBJID)
+      dataset_add = adsl,
+      by_vars = exprs(USUBJID)
     ),
     regexp = ""
   )
@@ -131,9 +131,9 @@ test_that("derive_vars_merged Test 4: error if variable in both datasets", {
 ## Test 5: by_vars with rename ----
 test_that("derive_vars_merged Test 5: by_vars with rename", {
   actual <- derive_vars_merged(advs,
-                               dataset_add = adsl1,
-                               by_vars = exprs(STUDYID, USUBJID = ID),
-                               filter_add = SEX == "F"
+    dataset_add = adsl1,
+    by_vars = exprs(STUDYID, USUBJID = ID),
+    filter_add = SEX == "F"
   )
 
   adsl_1 <- adsl1 %>% filter(SEX == "F")
@@ -212,11 +212,11 @@ test_that("derive_vars_merged Test 7: use new variables in filter_add and order"
 test_that("derive_vars_merged Test 8: warning if not unique w.r.t the by variables and the order", {
   expect_warning(
     actual <- derive_vars_merged(advs,
-                                 dataset_add = adsl2,
-                                 by_vars = exprs(STUDYID, USUBJID = ID),
-                                 order = exprs(ID),
-                                 mode = "last",
-                                 check_type = "warning"
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = exprs(ID),
+      mode = "last",
+      check_type = "warning"
     ),
     regexp = ""
   )
@@ -226,12 +226,12 @@ test_that("derive_vars_merged Test 8: warning if not unique w.r.t the by variabl
 test_that("derive_vars_merged Test 9: error if not unique w.r.t the by variables and the order", {
   expect_error(
     actual <- derive_vars_merged(advs,
-                                 dataset_add = adsl2,
-                                 by_vars = exprs(STUDYID, USUBJID = ID),
-                                 order = exprs(ID),
-                                 mode = "last",
-                                 check_type = "error",
-                                 duplicate_msg = "Duplicate records present!"
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = exprs(ID),
+      mode = "last",
+      check_type = "error",
+      duplicate_msg = "Duplicate records present!"
     ),
     regexp = ""
   )

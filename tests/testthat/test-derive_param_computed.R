@@ -62,9 +62,9 @@ test_that("derive_param_computed Test 2: new observations with constant paramete
 
   new_obs <-
     inner_join(input %>% filter(PARAMCD == "HEIGHT") %>% select(USUBJID, AVAL),
-               input %>% filter(PARAMCD == "WEIGHT") %>% select(USUBJID, VISIT, AVAL),
-               by = c("USUBJID"),
-               suffix = c(".HEIGHT", ".WEIGHT")
+      input %>% filter(PARAMCD == "WEIGHT") %>% select(USUBJID, VISIT, AVAL),
+      by = c("USUBJID"),
+      suffix = c(".HEIGHT", ".WEIGHT")
     ) %>%
     mutate(
       AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
@@ -122,7 +122,7 @@ test_that("derive_param_computed Test 3: no new observations if filtered dataset
       )
     ) %>%
       expect_dfs_equal(input,
-                       keys = c("USUBJID", "PARAMCD", "VISIT")
+        keys = c("USUBJID", "PARAMCD", "VISIT")
       ),
     "The input dataset does not contain any observations fullfiling the filter condition .*"
   )
@@ -157,7 +157,7 @@ test_that("derive_param_computed Test 4: no new observations are added if a para
     )
     %>%
       expect_dfs_equal(input,
-                       keys = c("USUBJID", "PARAMCD", "VISIT")
+        keys = c("USUBJID", "PARAMCD", "VISIT")
       ),
     "The input dataset does not contain any observations fullfiling the filter condition .*"
   )
@@ -284,9 +284,9 @@ test_that("derive_param_computed Test 7: expression in constant_parameters", {
 
   new_obs <-
     inner_join(vs %>% filter(VSTESTCD == "HGHT") %>% select(USUBJID, AVAL = VSSTRESN),
-               input %>% filter(PARAMCD == "WEIGHT") %>% select(USUBJID, VISIT, AVAL),
-               by = c("USUBJID"),
-               suffix = c(".HEIGHT", ".WEIGHT")
+      input %>% filter(PARAMCD == "WEIGHT") %>% select(USUBJID, VISIT, AVAL),
+      by = c("USUBJID"),
+      suffix = c(".HEIGHT", ".WEIGHT")
     ) %>%
     mutate(
       AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
