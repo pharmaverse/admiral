@@ -11,10 +11,10 @@ create_period_dataset(
 )
 }
 \arguments{
-\item{dataset}{ADSL dataset
+\item{dataset}{Input dataset
 
-The variables specified by \code{new_vars} and \code{subject_keys} are expected. For
-each element of \code{new_vars} at least one variable of the form of the right
+The variables specified by the \code{new_vars} and \code{subject_keys} argument(s) to be expected.
+For each element of \code{new_vars} at least one variable of the form of the right
 hand side value must be available in the dataset.}
 
 \item{new_vars}{New variables

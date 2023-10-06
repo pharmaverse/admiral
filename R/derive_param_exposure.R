@@ -3,10 +3,9 @@
 #' Add a record computed from the aggregated analysis value of another parameter and compute the
 #' start (`ASTDT(M)`)and end date (`AENDT(M)`) as the minimum and maximum date by `by_vars`.
 #'
-#' @param dataset Input dataset
-#'
-#'   + The variables specified by the `by_vars`,`analysis_var` parameters and `PARAMCD` are
-#'   expected,
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars", "analysis_var"))`
+#'   `PARAMCD` is expected as well,
 #'   + Either `ASTDTM` and `AENDTM` or `ASTDT` and `AENDT` are also expected.
 #'
 #' @param filter Filter condition

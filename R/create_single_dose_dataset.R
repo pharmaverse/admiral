@@ -185,10 +185,8 @@ dose_freq_lookup <- tribble(
 #' necessary when e.g. calculating last dose before an adverse event in `ADAE`
 #' or deriving a total dose parameter in `ADEX` when `EXDOSFRQ != ONCE`.
 #'
-#' @param dataset Input dataset
-#'
-#'   The columns specified by `dose_freq`, `start_date` and the `end_date`
-#'   parameters are expected.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("dose_freq", "start_date", "end_date"))`
 #'
 #' @param dose_freq The dose frequency
 #'

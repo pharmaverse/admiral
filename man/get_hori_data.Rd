@@ -7,7 +7,9 @@
 get_hori_data(dataset, by_vars, parameters, set_values_to, filter)
 }
 \arguments{
-\item{dataset}{Input dataset}
+\item{dataset}{Input dataset
+
+The variables specified by the \code{by_vars} argument(s) to be expected.}
 
 \item{by_vars}{By variables}
 

@@ -2,9 +2,8 @@
 #'
 #' Add a variable flagging the first or last observation within each by group
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` parameter are expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param order Sort order
 #'

@@ -6,11 +6,10 @@
 #' `APERIOD`, `APERSDT`, `APEREDT`, `TRTA`, `APHASEN`, `PHSDTM`, `PHEDTM`, ...
 #' in OCCDS and BDS datasets.
 #'
-#' @param dataset ADSL dataset
-#'
-#'   The variables specified by `new_vars` and `subject_keys` are expected. For
-#'   each element of `new_vars` at least one variable of the form of the right
-#'   hand side value must be available in the dataset.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("new_vars", "subject_keys"))`
+#' For each element of `new_vars` at least one variable of the form of the right
+#' hand side value must be available in the dataset.
 #'
 #' @param new_vars New variables
 #'
@@ -232,9 +231,7 @@ create_period_dataset <- function(dataset,
 #' reference dataset which has one observations per patient and subperiod,
 #' period, or phase.
 #'
-#' @param dataset ADSL dataset
-#'
-#'   The variables specified by `subject_keys` are expected.
+#' @param dataset `r roxygen_param_dataset(expected_vars = c("subject_keys"))`
 #'
 #' @param dataset_ref Period reference dataset
 #'

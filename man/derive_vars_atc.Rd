@@ -14,7 +14,7 @@ derive_vars_atc(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} parameter are required}
+The variables specified by the \code{by_vars} argument(s) to be expected.}
 
 \item{dataset_facm}{FACM dataset
 
