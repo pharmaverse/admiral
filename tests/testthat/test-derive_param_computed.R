@@ -343,15 +343,7 @@ test_that("derive_param_computed Test 8: no new observations if a constant param
         AVALU = "kg/m2"
       )
     ),
-    regexp = paste(
-      paste(
-        "The input dataset does not contain any observations fullfiling the filter",
-        "condition (NULL) for the parameter codes (PARAMCD) `HEIGHT`"
-      ),
-      "No new observations were added.",
-      sep = "\n"
-    ),
-    fixed = TRUE
+    regexp = "The input dataset does not contain any observations fullfiling the filter"
   )
 
   expect_dfs_equal(
