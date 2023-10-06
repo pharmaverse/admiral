@@ -6,17 +6,24 @@
 \usage{
 derive_summary_records(
   dataset,
+  dataset_add = NULL,
+  dataset_ref = NULL,
   by_vars,
   filter = NULL,
   analysis_var,
   summary_fun,
-  set_values_to = NULL
+  set_values_to = NULL,
+  missing_values = NULL
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
 The variables specified by the \code{by_vars} and \code{analysis_var} argument(s) to be expected.}
+
+\item{dataset_add}{Additional dataset}
+
+\item{dataset_ref}{}
 
 \item{by_vars}{Variables to consider for generation of groupwise summary
 records. Providing the names of variables in \code{\link[=exprs]{exprs()}} will create a
@@ -53,6 +60,8 @@ A list of variable name-value pairs is expected.
 \item RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value, an expression, or \code{NA}, e.g., \code{exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")}.
 }}
+
+\item{missing_values}{}
 }
 \value{
 A data frame with derived records appended to original dataset.
