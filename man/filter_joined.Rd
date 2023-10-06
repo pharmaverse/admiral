@@ -19,8 +19,7 @@ filter_joined(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified for \code{by_vars}, \code{join_vars}, and \code{order} are
-expected.}
+The variables specified by the \code{by_vars}, \code{order} and \code{join_vars} argument(s) to be expected.}
 
 \item{by_vars}{By variables
 

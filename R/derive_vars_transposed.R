@@ -2,9 +2,8 @@
 #'
 #' Adds variables from a vertical dataset after transposing it into a wide one.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` parameter are required
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param dataset_merge Dataset to transpose and merge
 #'
@@ -102,9 +101,8 @@ derive_vars_transposed <- function(dataset,
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_vars_transposed()`.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` parameter are required
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param dataset_facm FACM dataset
 #'

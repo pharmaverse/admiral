@@ -21,7 +21,7 @@ derive_vars_dtm(
 \arguments{
 \item{dataset}{Input dataset
 
-The date character vector (\code{dtc}) must be present.}
+The variables specified by the \code{dtc} argument(s) to be expected.}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 

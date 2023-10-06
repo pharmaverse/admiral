@@ -32,6 +32,8 @@
   
 ## Documentation
 
+- A way to standardize roxygen labels and descriptions for function arguments was implemented and tested (#2034)
+
 ## Various
 
 # admiral 0.12.2

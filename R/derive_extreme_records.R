@@ -7,7 +7,7 @@
 #' distinguishes `derive_extreme_records()` from `derive_summary_records()`,
 #' where only the by variables are populated for the new records.
 #'
-#' @param dataset Input dataset
+#' @param dataset `r roxygen_param_dataset()`
 #'
 #'   If `dataset_add` is not specified, the new records are selected from the
 #'   input dataset. In this case the variables specified by `by_vars` and
@@ -83,6 +83,14 @@
 #'
 #'   For new observations not selected from the additional dataset
 #'   (`dataset_add`), `exist_flag` is set to the specified value.
+#'
+#' @param keep_source_vars Variables to be kept in the new records
+#'
+#'   A named list or tidyselect expressions created by `exprs()` defining the
+#'   variables to be kept for the new records. The variables specified for
+#'   `by_vars` and `set_values_to` need not be specified here as they are kept
+#'   automatically.
+#'
 #'
 #' @param keep_source_vars Variables to be kept in the new records
 #'

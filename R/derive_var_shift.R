@@ -4,9 +4,8 @@
 #' values based on user-defined pairing, e.g., shift from baseline to
 #' analysis value, shift from baseline grade to analysis grade, ...
 #'
-#' @param dataset Input dataset
-#'
-#'   The columns specified by `from_var` and the `to_var` parameters are expected.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("from_var", "to_var"))`
 #'
 #' @param new_var Name of the character shift variable to create.
 #'
