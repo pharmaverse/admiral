@@ -94,17 +94,6 @@
 <li class="nav-item">
   <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.1">v0.12.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -155,7 +144,7 @@
 <div class="section level2">
 <h2 id="release-schedule">Release Schedule<a class="anchor" aria-label="anchor" href="#release-schedule"></a>
 </h2>
-<p><a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">{admiral}</a> releases are targeted for the first Monday of the last month of each quarter. Pull Requests will be frozen the week before a release. The {admiral} family has several downstream and upstream dependencies and so this release shall be done in three Phases:</p>
+<p><a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">{admiral}</a> releases are targeted for the first Monday of the last month of each quarter. The {admiral} family has several downstream and upstream dependencies and so this release shall be done in three Phases:</p>
 <ul>
 <li>Phase 1 release is for <a href="https://pharmaverse.github.io/admiraldev/main/" class="external-link">{admiraldev}</a>, <a href="https://pharmaverse.github.io/pharmaversesdtm/main/" class="external-link">{pharmaversesdtm}</a>, and <a href="https://pharmaverse.github.io/admiral/cran-release/" class="external-link">{admiral}</a> core</li>
 <li>Phase 2 release is extension packages, e.g. <a href="https://pharmaverse.github.io/admiralonco/main/" class="external-link">{admiralonco}</a>, <a href="https://pharmaverse.github.io/admiralophtha/main/" class="external-link">{admiralophtha}</a>, <a href="https://pharmaverse.github.io/admiralvaccine/main/" class="external-link">{admiralvaccine}</a>
@@ -218,13 +207,32 @@
 </ul>
 </div>
 <div class="section level2">
-<h2 id="types-of-packages">Types of Packages<a class="anchor" aria-label="anchor" href="#types-of-packages"></a>
+<h2 id="the-admiral-family-of-packages">The {admiral} Family of Packages<a class="anchor" aria-label="anchor" href="#the-admiral-family-of-packages"></a>
 </h2>
-<p>There will be 3 foreseeable types of <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> packages:</p>
+<p>There are three types of packages in the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> family:</p>
 <ul>
 <li>Core package—one package containing all core functions required to create ADaMs, usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS)</li>
 <li>TA (Therapeutic Area) package extensions—one package per TA with functions that are specific to algorithms and requirements for that particular TA (e.g. <a href="https://pharmaverse.github.io/admiralonco/" class="external-link"><code>{admiralonco}</code></a>)</li>
 <li>Company package extensions—specific needs and plug-ins for the company, such as access to metadata (e.g. <code>{admiralroche}</code> or <code>{admiralgsk}</code>)</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="related-packages">Related Packages<a class="anchor" aria-label="anchor" href="#related-packages"></a>
+</h2>
+<p>Related data packages include:</p>
+<ul>
+<li>
+<a href="https://pharmaverse.github.io/pharmaversesdtm/main/" class="external-link">{pharmaversesdtm}</a>—this contains test SDTM data sourced from the <a href="https://github.com/cdisc-org/sdtm-adam-pilot-project" class="external-link">CDISC pilot project</a> or constructed ad-hoc by the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> team. This is a prerequisite package for <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>.</li>
+<li>
+<a href="https://pharmaverse.github.io/pharmaverseadam/main/" class="external-link">{pharmaverseadam}</a>—this contains test ADaM data automatically generated by running the ADaM <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> and TA package extensions templates on the <a href="https://pharmaverse.github.io/pharmaversesdtm/main/" class="external-link">{pharmaversesdtm}</a> data.</li>
+</ul>
+<p>Both these packages are developed by the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> team, but can used across the pharmaverse as common, open-source test SDTM or ADaM data.</p>
+<p>The following packages are also useful when working with ADaM datasets:</p>
+<ul>
+<li>
+<a href="https://atorus-research.github.io/metacore/" class="external-link">{metacore}</a> and <a href="https://pharmaverse.github.io/metatools/" class="external-link">{metatools}</a>—these enable users to manipulate and work with dataset metadata.</li>
+<li>
+<a href="https://atorus-research.github.io/xportr/" class="external-link">{xportr}</a>—this provides functionality to get xpt files ready for transport.</li>
 </ul>
 </div>
 <div class="section level2">
