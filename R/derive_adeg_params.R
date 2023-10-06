@@ -6,10 +6,9 @@
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_param_computed()`.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` and the `unit_var` parameter,
-#'   `PARAMCD`, and `AVAL` are expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars", "get_unit_expr"))`
+#'   `PARAMCD`, and `AVAL` are expected as well.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`
@@ -257,10 +256,9 @@ compute_qtc <- function(qt, rr, method) {
 #' The analysis value of the new parameter is derived as
 #' \deqn{\frac{60000}{HR}}{60000 / HR}
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` parameter, `PARAMCD`, and `AVAL`
-#'   are expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'   `PARAMCD`, and `AVAL` are expected as well.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`

@@ -11,7 +11,7 @@
 #' retain those common values in the newly derived records. Otherwise new value
 #' will be set to `NA`.
 #'
-#' @param dataset A data frame.
+#' @param dataset  `r roxygen_param_dataset(expected_vars = c("by_vars", "analysis_var"))`
 #'
 #' @param dataset_add Additional dataset
 #'

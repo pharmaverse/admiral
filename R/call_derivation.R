@@ -3,7 +3,7 @@
 #' Call a single derivation multiple times with some parameters/arguments being fixed across
 #' iterations and others varying.
 #'
-#' @param dataset The input dataset
+#' @param dataset  `r roxygen_param_dataset()`
 #' @param derivation The derivation function to call
 #'
 #'   A function that performs a specific derivation is expected. A derivation

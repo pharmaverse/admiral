@@ -3,10 +3,8 @@
 #' Adds relative day variables (`--DY`) to the dataset, e.g., `ASTDY` and
 #' `AENDY`.
 #'
-#' @param dataset Input dataset
-#'
-#'   The columns specified by the `reference_date` and the `source_vars`
-#'   parameter are expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("reference_date", "source_vars"))`
 #'
 #' @param reference_date A date or date-time column, e.g., date of first treatment
 #'   or date-time of last exposure to treatment.
