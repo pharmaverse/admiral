@@ -343,15 +343,7 @@ test_that("derive_param_computed Test 8: no new observations if a constant param
         AVALU = "kg/m2"
       )
     ),
-    regexp = paste(
-      paste(
-        "The input dataset does not contain any observations fullfiling the filter",
-        "condition (NULL) for the parameter codes (PARAMCD) `HEIGHT`"
-      ),
-      "No new observations were added.",
-      sep = "\n"
-    ),
-    fixed = TRUE
+    regexp = "The input dataset does not contain any observations fullfiling the filter"
   )
 
   expect_dfs_equal(
@@ -361,7 +353,11 @@ test_that("derive_param_computed Test 8: no new observations if a constant param
   )
 })
 
+<<<<<<< HEAD
 ## Test 9: compute multiple variables ----
+=======
+## Test 9: compute multiple variables, keep_nas ----
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 test_that("derive_param_computed Test 9: compute multiple variables, keep_nas", {
   adlb_tbilialk <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVALC, ~ADTM,        ~ADTF,
@@ -437,7 +433,11 @@ test_that("derive_param_computed Test 10: deprecation warning if analysis_value 
     select(-AVAL.DIABP, -AVAL.SYSBP)
   expected_output <- bind_rows(input, new_obs)
 
+<<<<<<< HEAD
   expect_warning(
+=======
+  expect_error(
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
     derive_param_computed(
       input,
       parameters = exprs(SYSBP, DIABP),
@@ -449,6 +449,7 @@ test_that("derive_param_computed Test 10: deprecation warning if analysis_value 
         AVALU = "mmHg"
       )
     ),
+<<<<<<< HEAD
     class = "lifecycle_warning_deprecated"
   )
 
@@ -469,6 +470,9 @@ test_that("derive_param_computed Test 10: deprecation warning if analysis_value 
     ),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
+=======
+    class = "lifecycle_error_deprecated"
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   )
 })
 

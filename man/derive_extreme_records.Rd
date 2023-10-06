@@ -17,8 +17,12 @@ derive_extreme_records(
   true_value = "Y",
   false_value = "N",
   keep_source_vars = exprs(everything()),
+<<<<<<< HEAD
   set_values_to,
   filter
+=======
+  set_values_to
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 )
 }
 \arguments{
@@ -124,16 +128,6 @@ A list of variable name-value pairs is expected.
 \item RHS refers to the values to set to the variable. This can be a string, a
 symbol, a numeric value, an expression, or \code{NA}, e.g., \code{exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")}.
 }}
-
-\item{filter}{Filter for observations to consider
-
-\emph{Deprecated}, please use the above \code{filter_add} argument instead.
-
-Only observations fulfilling the specified condition are taken into account
-for selecting the first or last observation. If the argument is not
-specified, all observations are considered.
-
-\emph{Permitted Values}: a condition}
 }
 \value{
 The input dataset with the first or last observation of each by group

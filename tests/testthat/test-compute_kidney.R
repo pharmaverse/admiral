@@ -100,6 +100,7 @@ test_that("compute_egfr Test 7: CKD-EPI calculated on input data", {
   )
 })
 
+<<<<<<< HEAD
 ## Test 8: Deprecate wt ----
 test_that("compute_egfr Test 8: 'wt' argument deprecation warning", {
   # expect deprecation warning
@@ -107,5 +108,15 @@ test_that("compute_egfr Test 8: 'wt' argument deprecation warning", {
     compute_egfr(
       creat = 1.09, creatu = "mg/dL", age = 55, sex = "M", wt = 90, method = "CRCL"
     )
+=======
+## Test 8: 'wt' argument deprecation warning ----
+test_that("compute_egfr Test 8: 'wt' argument deprecation warning", {
+  # expect deprecation warning
+  expect_error(
+    compute_egfr(
+      creat = 1.09, creatu = "mg/dL", age = 55, sex = "M", wt = 90, method = "CRCL"
+    ),
+    class = "lifecycle_error_deprecated"
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   )
 })

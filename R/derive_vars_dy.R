@@ -6,6 +6,12 @@
 #' @param dataset
 #'   `r roxygen_param_dataset(expected_vars = c("reference_date", "source_vars"))`
 #'
+<<<<<<< HEAD
+=======
+#'   The columns specified by the `reference_date` and the `source_vars`
+#'   parameter are expected.
+#'
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 #' @param reference_date A date or date-time column, e.g., date of first treatment
 #'   or date-time of last exposure to treatment.
 #'

@@ -299,6 +299,7 @@ test_that("derive_extreme_records Test 5: latest evaluable tumor assessment date
   )
 })
 
+<<<<<<< HEAD
 ## Test 6: warning if filter argument is used ----
 test_that("derive_extreme_records Test 6: warning if filter argument is used", {
   adsl <- tibble::tribble(
@@ -364,6 +365,10 @@ test_that("derive_extreme_records Test 6: warning if filter argument is used", {
 
 ## Test 7: error if no input data ----
 test_that("derive_extreme_records Test 7: error if no input data", {
+=======
+## Test 6: error if no input data ----
+test_that("derive_extreme_records Test 6: error if no input data", {
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   expect_error(
     derive_extreme_records(
       set_values_to = exprs(PARAMCD = "HELLO")
@@ -377,8 +382,13 @@ test_that("derive_extreme_records Test 7: error if no input data", {
   )
 })
 
+<<<<<<< HEAD
 ## Test 8: keep vars in `keep_source_vars` in the new records ----
 test_that("derive_extreme_records Test 8: keep vars in `keep_source_vars` in the new records", {
+=======
+## Test 7: keep vars in `keep_source_vars` in the new records ----
+test_that("derive_extreme_records Test 7: keep vars in `keep_source_vars` in the new records", {
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
     1, 1, 12, 1,
@@ -416,8 +426,13 @@ test_that("derive_extreme_records Test 8: keep vars in `keep_source_vars` in the
   )
 })
 
+<<<<<<< HEAD
 ## Test 9: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())' ----
 test_that("derive_extreme_records Test 9: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())'", { # nolint
+=======
+## Test 8: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())' ----
+test_that("derive_extreme_records Test 8: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())'", { # nolint
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
     1, 1, 12, 1,

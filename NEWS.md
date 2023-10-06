@@ -1,3 +1,44 @@
+<<<<<<< HEAD
+=======
+# admiral (development version)
+
+## New Features
+
+## Updates of Existing Functions
+
+## Breaking Changes
+
+- admiral now only supports R >= 4.0.0 
+
+- The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#2098)
+  - `derive_param_extreme_event()`
+  - `derive_vars_last_dose()`
+  - `derive_var_last_dose_amt()`
+  - `derive_var_last_dose_date()`
+  - `derive_var_last_dose_grp()`
+  - `derive_var_basetype()`
+  - `derive_var_merged_cat()`
+  - `derive_var_merged_character()`
+  - `derive_var_confirmation_flag()`
+  
+- The following function arguments are entering the next phase of the deprecation process: (#2098)
+  
+  - `compute_egfr(wt)`
+  - `derive_extreme_records(filter)`
+  - `derive_param_computed(analysis_value, analysis_var)`
+  - `derive_var_shift(na_val)`
+  - `derive_expected_records(dataset_expected_obs)` 
+  - `derive_var_ontrtfl(span_period)` 
+  
+## Documentation
+
+## Various
+
+# admiral 0.12.2
+
+- A unit test for `derive_param_computed()` was modified in anticipation of major user-facing changes to R version 4.4 (#2147)
+
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 # admiral 0.12.1
 
 - `derive_extreme_records()` no longer fails if `dataset_add` is specified and a

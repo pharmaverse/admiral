@@ -84,16 +84,13 @@
 #'   For new observations not selected from the additional dataset
 #'   (`dataset_add`), `exist_flag` is set to the specified value.
 #'
+#' @param keep_source_vars Variables to be kept in the new records
 #'
-#' @param filter Filter for observations to consider
+#'   A named list or tidyselect expressions created by `exprs()` defining the
+#'   variables to be kept for the new records. The variables specified for
+#'   `by_vars` and `set_values_to` need not be specified here as they are kept
+#'   automatically.
 #'
-#'   *Deprecated*, please use the above `filter_add` argument instead.
-#'
-#'   Only observations fulfilling the specified condition are taken into account
-#'   for selecting the first or last observation. If the argument is not
-#'   specified, all observations are considered.
-#'
-#'   *Permitted Values*: a condition
 #'
 #' @param keep_source_vars Variables to be kept in the new records
 #'
@@ -268,6 +265,7 @@ derive_extreme_records <- function(dataset = NULL,
                                    true_value = "Y",
                                    false_value = "N",
                                    keep_source_vars = exprs(everything()),
+<<<<<<< HEAD
                                    set_values_to,
                                    filter) {
   if (!missing(filter)) {
@@ -279,6 +277,9 @@ derive_extreme_records <- function(dataset = NULL,
     filter_add <- enexpr(filter)
   }
 
+=======
+                                   set_values_to) {
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   # Check input arguments
   assert_vars(by_vars, optional = is.null(dataset_ref))
   assert_expr_list(order, optional = TRUE)

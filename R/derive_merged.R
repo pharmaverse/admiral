@@ -396,6 +396,7 @@ derive_vars_merged <- function(dataset,
   dataset
 }
 
+<<<<<<< HEAD
 #' Merge a Categorization Variable
 #'
 #' @description
@@ -468,6 +469,8 @@ derive_var_merged_cat <- function(dataset,
   deprecate_stop("0.11.0", "derive_var_merged_cat()", "derive_vars_merged()")
 }
 
+=======
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 #' Merge an Existence Flag
 #'
 #' @description Adds a flag variable to the input dataset which indicates if
@@ -632,6 +635,7 @@ derive_var_merged_exist_flag <- function(dataset,
     mutate(!!new_var := if_else(!!new_var == 1, true_value, false_value, missing_value))
 }
 
+<<<<<<< HEAD
 #' Merge a Character Variable
 #'
 #' @description
@@ -709,6 +713,8 @@ derive_var_merged_character <- function(dataset,
 }
 
 
+=======
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 #' Merge Lookup Table with Source Dataset
 #'
 #' Merge user-defined lookup table with the input dataset. Optionally print a

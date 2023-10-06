@@ -74,11 +74,6 @@
 #'
 #'   *Permitted Values*: a condition
 #'
-#' @param aval_fun Function to map character analysis value (`AVALC`) to numeric
-#'   analysis value (`AVAL`)
-#'
-#'   *Deprecated*, please use `set_values_to` instead.
-#'
 #' @param set_values_to Variables to set
 #'
 #'   A named list returned by `exprs()` defining the variables to be set for the
@@ -89,10 +84,6 @@
 #' @param by_vars Variables to uniquely identify a group
 #'
 #'   A list of symbols created using `exprs()` is expected.
-#'
-#' @param dataset_adsl *Deprecated*, please use `dataset_ref` instead.
-#'
-#' @param subject_keys *Deprecated*, please use `by_vars` instead.
 #'
 #' @details
 #'   1. The additional dataset (`dataset_add`) is restricted to the observations
@@ -176,8 +167,8 @@ derive_param_exist_flag <- function(dataset = NULL,
                                     false_value = NA_character_,
                                     missing_value = NA_character_,
                                     filter_add = NULL,
-                                    aval_fun,
                                     by_vars = get_admiral_option("subject_keys"),
+<<<<<<< HEAD
                                     set_values_to,
                                     dataset_adsl,
                                     subject_keys) {
@@ -197,6 +188,9 @@ derive_param_exist_flag <- function(dataset = NULL,
   }
   ### END DEPRECATION
 
+=======
+                                    set_values_to) {
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   # Check input parameters
   condition <- assert_filter_cond(enexpr(condition))
   assert_character_scalar(true_value)
@@ -216,6 +210,7 @@ derive_param_exist_flag <- function(dataset = NULL,
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
 
+<<<<<<< HEAD
   if (!missing(aval_fun)) {
     assert_function(aval_fun)
     deprecate_stop(
@@ -225,6 +220,8 @@ derive_param_exist_flag <- function(dataset = NULL,
     )
   }
 
+=======
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
   # Create new observations
   new_obs <- derive_var_merged_exist_flag(
     dataset_ref,

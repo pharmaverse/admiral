@@ -65,8 +65,8 @@ test_that("derive_param_merged_exist_flag Test 1: derive parameter indicating PD
 
 
 
-## derive_param_exist_flag Test 3: error is issued if paramter already exists in dataset ----
-test_that("derive_param_exist_flag Test 3: error is issued if paramter already exists in dataset", {
+## Test 2: error is issued if paramter already exists in dataset ----
+test_that("derive_param_merged_exist_flag Test 2: error is issued if paramter already exists in dataset", { # nolint
   expect_error(
     derive_param_exist_flag(
       dataset = adrs,
@@ -86,6 +86,7 @@ test_that("derive_param_exist_flag Test 3: error is issued if paramter already e
     fixed = TRUE
   )
 })
+<<<<<<< HEAD
 
 
 
@@ -125,3 +126,5 @@ test_that("derive_param_exist_flag Test 5: error for deprecated param `subject_k
     class = "lifecycle_error_deprecated"
   )
 })
+=======
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27

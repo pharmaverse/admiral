@@ -564,7 +564,7 @@ parm_visit_ref <- crossing(
 
 adgdssf <- adgdssf %>%
   derive_expected_records(
-    dataset_expected_obs = parm_visit_ref,
+    dataset_ref = parm_visit_ref,
     by_vars = exprs(USUBJID),
     set_values_to = exprs(
       filled_in = 1

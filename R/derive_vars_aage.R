@@ -5,6 +5,11 @@
 #' **Note:** This is a wrapper function for the more generic `derive_vars_duration()`.
 #'
 #' @inheritParams derive_vars_duration
+<<<<<<< HEAD
+=======
+#'
+#' @param dataset Input dataset
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 #'
 #' @param dataset
 #'   `r roxygen_param_dataset(expected_vars = c("start_date", "end_date"))`
@@ -86,7 +91,11 @@ derive_vars_aage <- function(dataset,
                              age_unit = "years",
                              type = "interval") {
   if (!missing(unit)) {
+<<<<<<< HEAD
     deprecate_warn("0.12.0", "derive_vars_aage(unit = )", "derive_vars_aage(age_unit = )")
+=======
+    deprecate_stop("0.12.0", "derive_vars_aage(unit = )", "derive_vars_aage(age_unit = )")
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
     age_unit <- unit
   }
 

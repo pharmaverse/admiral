@@ -15,6 +15,12 @@ repo:
 news:
   cran_dates: true
 
+<<<<<<< HEAD
+=======
+development:
+  mode: auto
+
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 authors:
   before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/cran-release/)."
   footer:

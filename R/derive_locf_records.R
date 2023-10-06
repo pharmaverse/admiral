@@ -8,6 +8,11 @@
 #'
 #' @param dataset_expected_obs *Deprecated*, please use `dataset_ref` instead.
 #'
+<<<<<<< HEAD
+=======
+#' @param dataset_expected_obs *Deprecated*, please use `dataset_ref` instead.
+#'
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
 #' @param dataset_ref Expected observations dataset
 #'
 #'   Data frame with all the combinations of `PARAMCD`, `PARAM`, `AVISIT`,
@@ -117,7 +122,11 @@ derive_locf_records <- function(dataset,
                                 order,
                                 keep_vars = NULL) {
   if (!missing(dataset_expected_obs)) {
+<<<<<<< HEAD
     deprecate_warn(
+=======
+    deprecate_stop(
+>>>>>>> b800ab103ddbf55701d4f6b2ed0080d3c3525f27
       "0.12.0",
       "derive_locf_records(dataset_expected_obs = )",
       "derive_locf_records(dataset_ref = )"
