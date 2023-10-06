@@ -317,7 +317,7 @@ dthcaus_source <- function(dataset_name,
                            set_values_to = NULL,
                            traceability_vars = NULL) {
   if (!is.null(traceability_vars)) {
-    deprecate_warn(
+    deprecate_stop(
       "0.12.0",
       "dthcaus_source(traceability_vars = )",
       "dthcaus_source(set_values_to = )"
