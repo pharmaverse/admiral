@@ -321,25 +321,6 @@ test_that("derive_var_merged_exist_flag Test 12: by_vars with rename", {
   )
 })
 
-# derive_var_merged_character ----
-
-## Test 15: deprecation error ----
-test_that("derive_var_merged_character Test 15: deprecation error", {
-  expect_error(
-    derive_var_merged_character(
-      adsl,
-      dataset_add = advs,
-      by_vars = exprs(USUBJID),
-      order = exprs(AVISIT),
-      new_var = LASTVIS,
-      source_var = AVISIT,
-      mode = "last"
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
-
 # derive_vars_merged_lookup ----
 ## Test 13: merge lookup table ----
 test_that("derive_vars_merged_lookup Test 13: merge lookup table", {
