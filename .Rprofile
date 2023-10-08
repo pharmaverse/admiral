@@ -1,8 +1,7 @@
 # Set renv profile base on R version.
 .get_dependencies <- function(project_dir) {
-
   admdev_loc <- find.package("admiraldev", lib.loc = .libPaths(), quiet = TRUE)
-  adm_dev_suggests <- if(length(admdev_loc) != 0) {
+  adm_dev_suggests <- if (length(admdev_loc) != 0) {
     renv:::renv_dependencies_discover_description(admdev_loc, fields = c("Depends", "Imports", "LinkingTo", "Suggests"))
   } else {
     data.frame(Packages = character(0))
@@ -19,7 +18,7 @@
       ))
     )
   )
-  packages[!(packages %in% c("admiral", "admiraldev", "admiralci", "admiral.test", "pharmaversesdtm", getwd()))]
+  packages[!(packages %in% c("admiral", "admiraldev", "admiralci", "pharmaversesdtm", getwd()))]
 }
 
 options(renv.snapshot.filter = .get_dependencies)
