@@ -97,11 +97,10 @@ test_that("compute_scale Test 5: compute_scale() works as expected within
       input,
       by_vars = exprs(STUDYID, USUBJID, AVISIT, AVISITN),
       filter = (PARAMCD %in% c("ITEM1", "ITEM2", "ITEM3")),
-      analysis_var = AVAL,
-      summary_fun = function(x) {
-        compute_scale(x, c(1, 5), c(0, 100), flip_direction = TRUE, min_n = 3)
-      },
-      set_values_to = exprs(PARAMCD = "ITEMAVG")
+      set_values_to = exprs(
+        AVAL = compute_scale(AVAL, c(1, 5), c(0, 100), flip_direction = TRUE, min_n = 3),
+        PARAMCD = "ITEMAVG"
+      )
     ),
     expected_output
   )

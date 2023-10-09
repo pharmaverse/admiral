@@ -2,12 +2,13 @@
 % Please edit documentation in R/derive_merged.R
 \name{derive_var_merged_summary}
 \alias{derive_var_merged_summary}
-\title{Merge a Summary Variable}
+\title{Merge Summary Variables}
 \usage{
 derive_var_merged_summary(
   dataset,
   dataset_add,
   by_vars,
+  new_vars = NULL,
   new_var,
   filter_add = NULL,
   analysis_var,
@@ -21,18 +22,40 @@ The variables specified by the \code{by_vars} argument(s) to be expected.}
 
 \item{dataset_add}{Additional dataset
 
-The variables specified by the \code{by_vars} and the \code{analysis_var} arguments
-are expected.}
+The variables specified by the \code{by_vars} and the variables used on the left
+hand sides of the \code{new_vars} arguments are expected.}
 
 \item{by_vars}{Grouping variables
 
-The values of \code{analysis_var} are summarized by the specified variables. The
-summarized values are merged to the input dataset (\code{dataset}) by the
-specified by variables.
+The expressions on the left hand sides of \code{new_vars} are evaluated by the
+specified \emph{variables}. Then the resulting values are merged to the input
+dataset (\code{dataset}) by the specified \emph{variables}.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}}
 
+\item{new_vars}{New variables to add
+
+The specified variables are added to the input dataset.
+
+A named list of expressions is expected:
+\itemize{
+\item LHS refer to a variable.
+\item RHS refers to the values to set to the variable. This can be a string, a
+symbol, a numeric value, an expression or NA. If summary functions are
+used, the values are summarized by the variables specified for \code{by_vars}.
+}
+
+For example:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  new_vars = exprs(
+    DOSESUM = sum(AVAL),
+    DOSEMEAN = mean(AVAL)
+  )
+}\if{html}{\out{</div>}}}
+
 \item{new_var}{Variable to add
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{new_vars} instead.
 
 The specified variable is added to the input dataset (\code{dataset}) and set to
 the summarized values.}
@@ -47,10 +70,14 @@ considered.
 
 \item{analysis_var}{Analysis variable
 
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{new_vars} instead.
+
 The values of the specified variable are summarized by the function
 specified for \code{summary_fun}.}
 
 \item{summary_fun}{Summary function
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{new_vars} instead.
 
 The specified function that takes as input \code{analysis_var} and performs the
 calculation. This can include built-in functions as well as user defined
@@ -58,25 +85,22 @@ functions, for example \code{mean} or \code{function(x) mean(x, na.rm = TRUE)}.}
 }
 \value{
 The output dataset contains all observations and variables of the
-input dataset and additionally the variable specified for \code{new_var}.
+input dataset and additionally the variables specified for \code{new_vars}.
 }
 \description{
 Merge a summary variable from a dataset to the input dataset.
-
-\strong{Note:} This is a wrapper function for the more generic \code{derive_vars_merged}.
 }
 \details{
 \enumerate{
 \item The records from the additional dataset (\code{dataset_add}) are restricted
 to those matching the \code{filter_add} condition.
-\item The values of the analysis variable (\code{analysis_var}) are summarized by
-the summary function (\code{summary_fun}) for each by group (\code{by_vars}) in the
-additional dataset (\code{dataset_add}).
-\item The summarized values are merged to the input dataset as a new variable
-(\code{new_var}). For observations without a matching observation in the
-additional dataset the new variable is set to \code{NA}. Observations in the
-additional dataset which have no matching observation in the input dataset
-are ignored.
+\item The new variables (\code{new_vars}) are created for each by group (\code{by_vars})
+in the additional dataset (\code{dataset_add}) by calling \code{summarize()}. I.e.,
+all observations of a by group are summarized to a single observation.
+\item The new variables are merged to the input dataset. For observations
+without a matching observation in the additional dataset the new variables
+are set to \code{NA}. Observations in the additional dataset which have no
+matching observation in the input dataset are ignored.
 }
 }
 \examples{
@@ -100,9 +124,10 @@ derive_var_merged_summary(
   adbds,
   dataset_add = adbds,
   by_vars = exprs(USUBJID, AVISIT),
-  new_var = MEANVIS,
-  analysis_var = AVAL,
-  summary_fun = function(x) mean(x, na.rm = TRUE)
+  new_vars = exprs(
+    MEANVIS = mean(AVAL, na.rm = TRUE),
+    MAXVIS = max(AVAL, na.rm = TRUE)
+  )
 )
 
 # Add a variable listing the lesion ids at baseline
@@ -134,9 +159,7 @@ derive_var_merged_summary(
   dataset_add = adtr,
   by_vars = exprs(USUBJID),
   filter_add = AVISIT == "BASELINE",
-  new_var = LESIONSBL,
-  analysis_var = LESIONID,
-  summary_fun = function(x) paste(x, collapse = ", ")
+  new_vars = exprs(LESIONSBL = paste(LESIONID, collapse = ", "))
 )
 
 }
