@@ -990,9 +990,10 @@ Set `DTYPE` to `AVERAGE`.
 advs_ex2 <- derive_summary_records(
   advs,
   by_vars = exprs(STUDYID, USUBJID, PARAMCD, VISITNUM, ADT),
-  analysis_var = AVAL,
-  summary_fun = mean,
-  set_values_to = exprs(DTYPE = "AVERAGE")
+  set_values_to = exprs(
+    AVAL = mean(AVAL),
+    DTYPE = "AVERAGE"
+  )
 )
 ```
 
