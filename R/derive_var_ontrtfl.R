@@ -4,7 +4,7 @@
 #' assessment date (e.g `ADT`) or event start and end dates (e.g.
 #' `ASTDT`/`AENDT`).
 #'
-#' @param dataset Input dataset.
+#' @param dataset `r roxygen_param_dataset()`
 #'
 #'   Required columns are `start_date`, `end_date`, `ref_start_date` and
 #'   `ref_end_date`.
@@ -190,7 +190,7 @@ derive_var_ontrtfl <- function(dataset,
   if (is.null(span_period) || span_period %in% c("Y", "y")) {
     # replace span_period with lgl version
     span_period <- !is.null(span_period)
-    deprecate_warn(
+    deprecate_stop(
       when = "0.12.0",
       what = "admiral::derive_var_ontrtfl(span_period = 'must be TRUE or FALSE')",
       details =

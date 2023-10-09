@@ -26,7 +26,7 @@
 #'   `GRPID`, `SCOPE`, and `SCOPEN` respectively,
 #'   whenever not missing.
 #'
-#' @param dataset Input dataset.
+#' @param dataset `r roxygen_param_dataset()`
 #'
 #' @param dataset_queries A dataset containing required columns `PREFIX`,
 #' `GRPNAME`, `SRCVAR`, `TERMNAME`, `TERMID`, and optional columns

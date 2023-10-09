@@ -7,7 +7,7 @@
 call_derivation(dataset = NULL, derivation, variable_params, ...)
 }
 \arguments{
-\item{dataset}{The input dataset}
+\item{dataset}{Input dataset}
 
 \item{derivation}{The derivation function to call
 

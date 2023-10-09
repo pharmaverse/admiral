@@ -3,10 +3,8 @@
 #' Adds LOCF records as new observations for each 'by group' when the dataset
 #' does not contain observations for missed visits/time points.
 #'
-#' @param dataset Input dataset
-#'
-#'   The columns specified by the `by_vars`, `analysis_var`, `order`,
-#'   `keep_vars` parameters are expected.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("by_vars", "analysis_var", "order", "keep_vars"))`
 #'
 #' @param dataset_expected_obs *Deprecated*, please use `dataset_ref` instead.
 #'
@@ -119,7 +117,7 @@ derive_locf_records <- function(dataset,
                                 order,
                                 keep_vars = NULL) {
   if (!missing(dataset_expected_obs)) {
-    deprecate_warn(
+    deprecate_stop(
       "0.12.0",
       "derive_locf_records(dataset_expected_obs = )",
       "derive_locf_records(dataset_ref = )"

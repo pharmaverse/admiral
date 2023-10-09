@@ -6,9 +6,8 @@
 #' (`filter_add` argument) and/or selecting the first or last observation for
 #' each by group (`order` and `mode` argument).
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` argument are expected.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param dataset_add Additional dataset
 #'
@@ -397,78 +396,6 @@ derive_vars_merged <- function(dataset,
   dataset
 }
 
-#' Merge a Categorization Variable
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*, please use `derive_vars_merged()` instead.
-#'
-#' Merge a categorization variable from a dataset to the input dataset. The
-#' observations to merge can be selected by a condition and/or selecting the
-#' first or last observation for each by group.
-#'
-#' @param dataset_add Additional dataset
-#'
-#'   The variables specified by the `by_vars`, the `source_var`, and the `order`
-#'   argument are expected.
-#'
-#' @param new_var New variable
-#'
-#'   The specified variable is added to the additional dataset and set to the
-#'   categorized values, i.e., `cat_fun(<source variable>)`.
-#'
-#' @param source_var Source variable
-#'
-#' @param cat_fun Categorization function
-#'
-#'   A function must be specified for this argument which expects the values of
-#'   the source variable as input and returns the categorized values.
-#'
-#' @param missing_value Values used for missing information
-#'
-#'   The new variable is set to the specified value for all by groups without
-#'   observations in the additional dataset.
-#'
-#'   *Default*: `NA_character_`
-#'
-#' @inheritParams derive_vars_merged
-#'
-#' @return The output dataset contains all observations and variables of the
-#'   input dataset and additionally the variable specified for `new_var` derived
-#'   from the additional dataset (`dataset_add`).
-#'
-#' @details
-#'
-#'   1. The additional dataset is restricted to the observations matching the
-#'   `filter_add` condition.
-#'
-#'   1. The categorization variable is added to the additional dataset.
-#'
-#'   1. If `order` is specified, for each by group the first or last observation
-#'   (depending on `mode`) is selected.
-#'
-#'   1. The categorization variable is merged to the input dataset.
-#'
-#'
-#' @family deprecated
-#' @keywords deprecated
-#'
-#' @export
-#'
-derive_var_merged_cat <- function(dataset,
-                                  dataset_add,
-                                  by_vars,
-                                  order = NULL,
-                                  new_var,
-                                  source_var,
-                                  cat_fun,
-                                  filter_add = NULL,
-                                  mode = NULL,
-                                  missing_value = NA_character_) {
-  deprecate_stop("0.11.0", "derive_var_merged_cat()", "derive_vars_merged()")
-}
-
 #' Merge an Existence Flag
 #'
 #' @description Adds a flag variable to the input dataset which indicates if
@@ -633,83 +560,6 @@ derive_var_merged_exist_flag <- function(dataset,
     mutate(!!new_var := if_else(!!new_var == 1, true_value, false_value, missing_value))
 }
 
-#' Merge a Character Variable
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*, please use `derive_vars_merged()` instead.
-#'
-#' Merge a character variable from a dataset to the input dataset. The
-#' observations to merge can be selected by a condition and/or selecting the
-#' first or last observation for each by group.
-#'
-#' @param dataset_add Additional dataset
-#'
-#'   The variables specified by the `by_vars`, the `source_var`, and the `order`
-#'   argument are expected.
-#'
-#' @param new_var New variable
-#'
-#'   The specified variable is added to the additional dataset and set to the
-#'   transformed value with respect to the `case` argument.
-#'
-#' @param source_var Source variable
-#'
-#' @param case Change case
-#'
-#'   Changes the case of the values of the new variable.
-#'
-#'   *Default*: `NULL`
-#'
-#'   *Permitted Values*: `NULL`, `"lower"`, `"upper"`, `"title"`
-#'
-#' @param missing_value Values used for missing information
-#'
-#'   The new variable is set to the specified value for all by groups without
-#'   observations in the additional dataset.
-#'
-#'   *Default*: `NA_character_`
-#'
-#'   *Permitted Value*: A character scalar
-#'
-#' @inheritParams derive_vars_merged
-#'
-#' @return The output dataset contains all observations and variables of the
-#'   input dataset and additionally the variable specified for `new_var` derived
-#'   from the additional dataset (`dataset_add`).
-#'
-#' @details
-#'
-#'   1. The additional dataset is restricted to the observations matching the
-#'   `filter_add` condition.
-#'
-#'   1. The (transformed) character variable is added to the additional dataset.
-#'
-#'   1. If `order` is specified, for each by group the first or last observation
-#'   (depending on `mode`) is selected.
-#'
-#'   1. The character variable is merged to the input dataset.
-#'
-#'
-#' @family deprecated
-#' @keywords deprecated
-#'
-#' @export
-derive_var_merged_character <- function(dataset,
-                                        dataset_add,
-                                        by_vars,
-                                        order = NULL,
-                                        new_var,
-                                        source_var,
-                                        case = NULL,
-                                        filter_add = NULL,
-                                        mode = NULL,
-                                        missing_value = NA_character_) {
-  deprecate_stop("0.11.0", "derive_var_merged_character()", "derive_vars_merged()")
-}
-
-
 #' Merge Lookup Table with Source Dataset
 #'
 #' Merge user-defined lookup table with the input dataset. Optionally print a
@@ -857,9 +707,8 @@ get_not_mapped <- function() {
 #'
 #' @description Merge a summary variable from a dataset to the input dataset.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` argument are expected.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param dataset_add Additional dataset
 #'

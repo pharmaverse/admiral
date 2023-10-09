@@ -7,8 +7,8 @@
 derive_var_pchg(dataset)
 }
 \arguments{
-\item{dataset}{The input dataset. Required variables are \code{AVAL} and
-\code{BASE}.}
+\item{dataset}{Input dataset
+\code{AVAL} and \code{BASE} are expected.}
 }
 \value{
 The input dataset with an additional column named \code{PCHG}

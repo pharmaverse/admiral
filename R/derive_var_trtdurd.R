@@ -4,10 +4,8 @@
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_vars_duration()`.
 #'
-#' @param dataset Input dataset
-#'
-#'   The columns specified by the `start_date` and the `end_date` parameter are
-#'   expected.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("start_date", "end_date"))`
 #'
 #' @param start_date The start date
 #'
