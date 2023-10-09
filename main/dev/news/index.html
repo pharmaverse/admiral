@@ -59,17 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.2">v0.12.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.1">v0.12.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -97,10 +86,14 @@
 </div>
 <div class="section level3">
 <h3 id="updates-of-existing-functions-development-version">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-development-version"></a></h3>
-</div>
+<ul><li>
+<code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code>, <code><a href="../reference/derive_var_merged_summary.html">derive_var_merged_summary()</a></code>, and <code><a href="../reference/get_summary_records.html">get_summary_records()</a></code> were enhanced such that more than one summary variable can be derived, e.g., <code>AVAL</code> as the sum and <code>ADT</code> as the maximum of the contributing records. (<a href="https://github.com/pharmaverse/admiral/issues/1792" class="external-link">#1792</a>)</li>
+</ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
-<ul><li><p>admiral now only supports R &gt;= 4.0.0</p></li>
+<ul><li><p>In <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> and <code><a href="../reference/get_summary_records.html">get_summary_records()</a></code> the arguments <code>analysis_var</code> and <code>summary_fun</code> were deprecated in favor of <code>set_values_to</code>. (<a href="https://github.com/pharmaverse/admiral/issues/1792" class="external-link">#1792</a>)</p></li>
+<li><p>In <code><a href="../reference/derive_var_merged_summary.html">derive_var_merged_summary()</a></code> the arguments <code>new_var</code>, <code>analysis_var</code>, and <code>summary_fun</code> were deprecated in favor of <code>new_vars</code>. (<a href="https://github.com/pharmaverse/admiral/issues/1792" class="external-link">#1792</a>)</p></li>
+<li><p>admiral now only supports R &gt;= 4.0.0</p></li>
 <li>
 <p>The following functions, which were deprecated in previous <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> versions, have been removed: (<a href="https://github.com/pharmaverse/admiral/issues/2098" class="external-link">#2098</a>)</p>
 <ul><li><code>derive_param_extreme_event()</code></li>
