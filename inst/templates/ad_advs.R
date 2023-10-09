@@ -158,9 +158,10 @@ advs <- advs %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT, ADY),
     filter = !is.na(AVAL),
-    analysis_var = AVAL,
-    summary_fun = mean,
-    set_values_to = exprs(DTYPE = "AVERAGE")
+    set_values_to = exprs(
+      AVAL = mean(AVAL),
+      DTYPE = "AVERAGE"
+    )
   )
 
 advs <- advs %>%

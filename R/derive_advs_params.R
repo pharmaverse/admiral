@@ -5,10 +5,9 @@
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_param_computed()`.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` parameter, `PARAMCD`, and
-#'   `AVAL` are expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'   `PARAMCD`, and `AVAL` are expected as well.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`
@@ -226,10 +225,9 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_param_computed()`.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` parameter, `PARAMCD`, and
-#'   `AVAL` are expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'   `PARAMCD`, and `AVAL` are expected as well.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`
@@ -549,10 +547,9 @@ compute_bsa <- function(height = height,
 #'
 #' **Note:** This is a wrapper function for the more generic `derive_param_computed()`.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` parameter, `PARAMCD`, and
-#'   `AVAL` are expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'   `PARAMCD`, and `AVAL` are expected as well.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`

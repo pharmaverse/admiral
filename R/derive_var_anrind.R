@@ -1,6 +1,10 @@
 #' Derive Reference Range Indicator
 #'
-#' @param dataset The input dataset
+#' @param dataset
+#'   `r roxygen_param_dataset()`
+#'   `ANRLO`, `ANRHI`, and `AVAL` are expected and if `use_a1hia1lo` is set to `TRUE`,
+#'   `A1LO` and `A1H1` are expected as well.
+#'
 #' @param use_a1hia1lo A logical value indicating whether to use `A1H1` and `A1LO` in
 #' the derivation of `ANRIND`.
 #'

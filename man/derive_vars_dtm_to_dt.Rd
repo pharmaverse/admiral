@@ -7,7 +7,9 @@
 derive_vars_dtm_to_dt(dataset, source_vars)
 }
 \arguments{
-\item{dataset}{Input dataset}
+\item{dataset}{Input dataset
+
+The variables specified by the \code{source_vars} argument(s) to be expected.}
 
 \item{source_vars}{A list of datetime variables created using \code{exprs()} from
 which dates are to be extracted}

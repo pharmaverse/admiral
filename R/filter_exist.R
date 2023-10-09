@@ -5,9 +5,7 @@
 #' this could be used to return ADSL records for subjects that experienced a certain
 #' adverse event during the course of the study (as per records in ADAE).
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified in the `by_vars` parameter are expected in this dataset.
+#' @param dataset `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param dataset_add Source dataset
 #'

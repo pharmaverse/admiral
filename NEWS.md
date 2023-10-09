@@ -6,7 +6,18 @@
 
 - `derive_var_extreme_flag()` and `derive_vars_merged()` were enhanced with the arguments `true_value` and `false_value` to align with preexisting functions that had similar functionality (#2125)
 
+- `derive_summary_records()`, `derive_var_merged_summary()`, and `get_summary_records()`
+were enhanced such that more than one summary variable can be derived, e.g.,
+`AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
+
 ## Breaking Changes
+
+- In `derive_summary_records()` and `get_summary_records()` the arguments
+`analysis_var` and `summary_fun` were deprecated in favor of `set_values_to`.
+(#1792)
+
+- In `derive_var_merged_summary()` the arguments `new_var`, `analysis_var`, and
+`summary_fun` were deprecated in favor of `new_vars`. (#1792)
 
 - admiral now only supports R >= 4.0.0 
 
@@ -33,6 +44,8 @@
   - `derive_var_ontrtfl(span_period)` 
   
 ## Documentation
+
+- A way to standardize roxygen labels and descriptions for function arguments was implemented and tested (#2034)
 
 ## Various
 

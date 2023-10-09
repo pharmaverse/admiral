@@ -15,8 +15,7 @@ derive_expected_records(
 \arguments{
 \item{dataset}{Input dataset
 
-A data frame, the columns from \code{dataset_ref} and specified by the
-\code{by_vars} parameter are expected.}
+The variables specified by the \code{dataset_ref} and \code{by_vars} argument(s) to be expected.}
 
 \item{dataset_expected_obs}{\emph{Deprecated}, please use \code{dataset_ref} instead.}
 
