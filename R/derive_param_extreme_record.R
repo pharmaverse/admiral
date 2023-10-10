@@ -4,7 +4,7 @@
 #' source datasets, based on user-defined filter, order and by group criteria.
 #' All variables of the selected observation are kept.
 #'
-#' @param dataset Input dataset
+#' @param dataset `r roxygen_param_dataset()`
 #'
 #' @param sources Sources
 #'

@@ -137,9 +137,7 @@
 compute_egfr <- function(creat, creatu = "SI", age, weight, sex, race = NULL, method, wt) {
   ### BEGIN DEPRECATION
   if (!missing(wt)) {
-    deprecate_warn("0.12.0", "compute_egfr(old_param = 'wt')", "compute_egfr(new_param = 'weight')")
-    # old_param is given using exprs()
-    weight <- wt
+    deprecate_stop("0.12.0", "compute_egfr(old_param = 'wt')", "compute_egfr(new_param = 'weight')")
   }
   ### END DEPRECATION
 

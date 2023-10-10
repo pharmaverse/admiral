@@ -16,9 +16,7 @@
 #' response value can be confirmed by a subsequent assessment. This is commonly
 #' used in endpoints such as best overall response.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified for `by_vars` and `order` are expected.
+#' @param dataset `r roxygen_param_dataset(expected_vars = c("by_vars", "order"))`
 #'
 #' @param dataset_add Additional dataset
 #'

@@ -24,7 +24,7 @@ filter_joined(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified for \code{by_vars} and \code{order} are expected.}
+The variables specified by the \code{by_vars} and \code{order} argument(s) to be expected.}
 
 \item{dataset_add}{Additional dataset
 

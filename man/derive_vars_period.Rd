@@ -12,9 +12,9 @@ derive_vars_period(
 )
 }
 \arguments{
-\item{dataset}{ADSL dataset
+\item{dataset}{Input dataset
 
-The variables specified by \code{subject_keys} are expected.}
+The variables specified by the \code{subject_keys} argument(s) to be expected.}
 
 \item{dataset_ref}{Period reference dataset
 

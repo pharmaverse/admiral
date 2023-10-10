@@ -7,7 +7,7 @@
 #' distinguishes `derive_extreme_records()` from `derive_summary_records()`,
 #' where only the by variables are populated for the new records.
 #'
-#' @param dataset Input dataset
+#' @param dataset `r roxygen_param_dataset()`
 #'
 #'   If `dataset_add` is not specified, the new records are selected from the
 #'   input dataset. In this case the variables specified by `by_vars` and
@@ -84,16 +84,13 @@
 #'   For new observations not selected from the additional dataset
 #'   (`dataset_add`), `exist_flag` is set to the specified value.
 #'
+#' @param keep_source_vars Variables to be kept in the new records
 #'
-#' @param filter Filter for observations to consider
+#'   A named list or tidyselect expressions created by `exprs()` defining the
+#'   variables to be kept for the new records. The variables specified for
+#'   `by_vars` and `set_values_to` need not be specified here as they are kept
+#'   automatically.
 #'
-#'   *Deprecated*, please use the above `filter_add` argument instead.
-#'
-#'   Only observations fulfilling the specified condition are taken into account
-#'   for selecting the first or last observation. If the argument is not
-#'   specified, all observations are considered.
-#'
-#'   *Permitted Values*: a condition
 #'
 #' @param keep_source_vars Variables to be kept in the new records
 #'
@@ -268,17 +265,7 @@ derive_extreme_records <- function(dataset = NULL,
                                    true_value = "Y",
                                    false_value = "N",
                                    keep_source_vars = exprs(everything()),
-                                   set_values_to,
-                                   filter) {
-  if (!missing(filter)) {
-    deprecate_stop(
-      "0.11.0",
-      "derive_extreme_records(filter = )",
-      "derive_extreme_records(filter_add = )"
-    )
-    filter_add <- enexpr(filter)
-  }
-
+                                   set_values_to) {
   # Check input arguments
   assert_vars(by_vars, optional = is.null(dataset_ref))
   assert_expr_list(order, optional = TRUE)

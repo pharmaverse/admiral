@@ -6,6 +6,7 @@
 \usage{
 derive_var_joined_exist_flag(
   dataset,
+  dataset_add,
   by_vars,
   order,
   new_var,
@@ -13,7 +14,11 @@ derive_var_joined_exist_flag(
   join_vars,
   join_type,
   first_cond = NULL,
-  filter,
+  first_cond_lower = NULL,
+  first_cond_upper = NULL,
+  filter = NULL,
+  filter_add = NULL,
+  filter_join,
   true_value = "Y",
   false_value = NA_character_,
   check_type = "warning"
@@ -22,8 +27,7 @@ derive_var_joined_exist_flag(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{join_vars} parameter are
-expected.}
+The variables specified by the \code{by_vars} and \code{join_vars} argument(s) to be expected.}
 
 \item{by_vars}{By variables
 

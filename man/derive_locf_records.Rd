@@ -17,8 +17,7 @@ derive_locf_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by the \code{by_vars}, \code{analysis_var}, \code{order},
-\code{keep_vars} parameters are expected.}
+The variables specified by the \code{by_vars}, \code{analysis_var}, \code{order} and \code{keep_vars} argument(s) to be expected.}
 
 \item{dataset_expected_obs}{\emph{Deprecated}, please use \code{dataset_ref} instead.}
 

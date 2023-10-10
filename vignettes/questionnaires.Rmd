@@ -142,11 +142,10 @@ adgad7 <- adqs %>%
   filter(PARCAT1 == "GAD-7 V2") %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
-    analysis_var = AVAL,
-    summary_fun = function(x) sum(x, na.rm = TRUE),
     # Select records contributing to total score
     filter = str_detect(PARAMCD, "GAD020[1-7]"),
     set_values_to = exprs(
+      AVAL = sum(AVAL, na.rm = TRUE),
       PARAMCD = "GAD02TS",
       PARAM = "GAD02-Total Score - Analysis"
     )
@@ -171,19 +170,16 @@ adgdssf <- adqs %>%
   filter(PARCAT1 == "GDS SHORT FORM") %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
-    analysis_var = AVAL,
-    summary_fun = function(x) {
-      compute_scale(
-        x,
+    # Select records contributing to total score
+    filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
+    set_values_to = exprs(
+      AVAL = compute_scale(
+        AVAL,
         source_range = c(0, 1),
         target_range = c(0, 15),
         min_n = 10
       ) %>%
-        ceiling()
-    },
-    # Select records contributing to total score
-    filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
-    set_values_to = exprs(
+        ceiling(),
       PARAMCD = "GDS02TS",
       PARAM = "GDS02- Total Score - Analysis"
     )
@@ -523,9 +519,8 @@ adgdssf <- adgdssf %>%
   derive_summary_records(
     filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
     by_vars = exprs(USUBJID, AVISIT),
-    analysis_var = AVAL,
-    summary_fun = function(x) sum(!is.na(x)) / 15 >= 0.9,
     set_values_to = exprs(
+      AVAL = sum(!is.na(AVAL)) / 15 >= 0.9,
       PARAMCD = "COMPL90P",
       PARAM = "Completed at least 90% of questions?",
       AVALC = if_else(AVAL == 1, "YES", "NO")
@@ -564,7 +559,7 @@ parm_visit_ref <- crossing(
 
 adgdssf <- adgdssf %>%
   derive_expected_records(
-    dataset_expected_obs = parm_visit_ref,
+    dataset_ref = parm_visit_ref,
     by_vars = exprs(USUBJID),
     set_values_to = exprs(
       filled_in = 1
@@ -573,9 +568,8 @@ adgdssf <- adgdssf %>%
   derive_summary_records(
     filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
     by_vars = exprs(USUBJID, AVISIT),
-    analysis_var = AVAL,
-    summary_fun = function(x) all(!is.na(x)),
     set_values_to = exprs(
+      AVAL = all(!is.na(AVAL)),
       PARAMCD = "COMPLALL",
       PARAM = "Completed all questions?",
       AVALC = if_else(AVAL == 1, "YES", "NO")
