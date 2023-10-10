@@ -161,6 +161,8 @@ derive_var_dthcaus <- function(dataset,
 
   # process each source
   add_data <- vector("list", length(sources))
+  tmp_source_nr <- get_new_tmp_var(dataset)
+  tmp_date <- get_new_tmp_var(dataset)
   for (ii in seq_along(sources)) {
     source_dataset_name <- sources[[ii]]$dataset_name
     source_dataset <- source_datasets[[source_dataset_name]]
@@ -184,8 +186,6 @@ derive_var_dthcaus <- function(dataset,
     )
 
     # if several death records, use the first/last according to 'mode'
-    tmp_source_nr <- get_new_tmp_var(dataset)
-    tmp_date <- get_new_tmp_var(dataset)
     add_data[[ii]] <- add_data[[ii]] %>%
       filter_extreme(
         order = exprs(!!date_var, !!!sources[[ii]]$order),
