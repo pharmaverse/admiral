@@ -224,12 +224,13 @@ adae <- tribble(
 
 derive_var_joined_exist_flag(
   adae,
+  dataset_add = adae,
   new_var = ALCOVFL,
   by_vars = exprs(USUBJID),
   join_vars = exprs(ACOVFL, ADY),
   join_type = "all",
   order = exprs(ADY),
-  filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
+  filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 )
 
 # flag observations with AVALC == "Y" and AVALC == "Y" at one subsequent visit
@@ -248,12 +249,13 @@ data <- tribble(
 
 derive_var_joined_exist_flag(
   data,
+  dataset_add = data,
   by_vars = exprs(USUBJID),
   new_var = CONFFL,
   join_vars = exprs(AVALC, AVISITN),
   join_type = "after",
   order = exprs(AVISITN),
-  filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
+  filter_join = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
 )
 
 # select observations with AVALC == "CR", AVALC == "CR" at a subsequent visit,
@@ -278,13 +280,14 @@ data <- tribble(
 
 derive_var_joined_exist_flag(
   data,
+  dataset_add = data,
   by_vars = exprs(USUBJID),
   join_vars = exprs(AVALC),
   join_type = "after",
   order = exprs(AVISITN),
   new_var = CONFFL,
-  first_cond = AVALC.join == "CR",
-  filter = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) &
+  first_cond_upper = AVALC.join == "CR",
+  filter_join = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) &
     count_vals(var = AVALC.join, val = "NE") <= 1
 )
 
@@ -311,13 +314,14 @@ data <- tribble(
 
 derive_var_joined_exist_flag(
   data,
+  dataset_add = data,
   by_vars = exprs(USUBJID),
   join_vars = exprs(AVALC, ADY),
   join_type = "after",
   order = exprs(ADY),
   new_var = CONFFL,
-  first_cond = AVALC.join \%in\% c("CR", "PR") & ADY.join - ADY >= 20,
-  filter = AVALC == "PR" &
+  first_cond_upper = AVALC.join \%in\% c("CR", "PR") & ADY.join - ADY >= 20,
+  filter_join = AVALC == "PR" &
     all(AVALC.join \%in\% c("CR", "PR", "NE")) &
     count_vals(var = AVALC.join, val = "NE") <= 1 &
     (
@@ -344,13 +348,14 @@ data <- tribble(
 
 derive_var_joined_exist_flag(
   data,
+  dataset_add = data,
   by_vars = exprs(USUBJID),
   new_var = CONFFL,
   tmp_obs_nr_var = tmp_obs_nr,
   join_vars = exprs(CRIT1FL),
   join_type = "all",
   order = exprs(AVISITN),
-  filter = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
+  filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 )
 
