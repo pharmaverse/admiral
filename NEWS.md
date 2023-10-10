@@ -4,7 +4,7 @@
 
 ## Updates of Existing Functions
 
-- `restrict_derivation()` now allows `dplyr` functions like `mutate` in the `derivation argument (#2143)
+- `restrict_derivation()` now allows `{dplyr}` functions like `mutate` in the `derivation argument (#2143)
 
 ## Breaking Changes
 

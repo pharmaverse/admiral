@@ -12,9 +12,6 @@
 #'   The function must provide the `dataset` argument and all arguments
 #'   specified in the `params()` objects passed to the `arg` argument.
 #'
-#'   Please note that it is not advised to specify `{dplyr}`
-#'   functions like `mutate()` or `summarize()`.
-#'
 #' @param args Arguments of the derivation
 #'
 #'   A `params()` object is expected.
