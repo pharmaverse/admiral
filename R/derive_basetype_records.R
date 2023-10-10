@@ -12,9 +12,8 @@
 #' Adds the `BASETYPE` variable to a dataset and duplicates records based upon
 #' the provided conditions.
 #'
-#' @param dataset Input dataset
-#'
-#'   The columns specified in the expressions inside `basetypes` are required.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("basetypes"))`
 #'
 #' @param basetypes A *named* list of expressions created using the
 #' `rlang::exprs()` function

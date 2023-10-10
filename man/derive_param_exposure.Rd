@@ -16,9 +16,10 @@ derive_param_exposure(
 }
 \arguments{
 \item{dataset}{Input dataset
+
+The variables specified by the \code{by_vars} and \code{analysis_var} argument(s) to be expected.
+\code{PARAMCD} is expected as well,
 \itemize{
-\item The variables specified by the \code{by_vars},\code{analysis_var} parameters and \code{PARAMCD} are
-expected,
 \item Either \code{ASTDTM} and \code{AENDTM} or \code{ASTDT} and \code{AENDT} are also expected.
 }}
 

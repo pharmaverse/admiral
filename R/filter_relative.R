@@ -5,10 +5,7 @@
 #' called to select for each subject all observations before the first disease
 #' progression.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `order` and the `by_vars` parameter are
-#'   expected.
+#' @param dataset `r roxygen_param_dataset(expected_vars = c("by_vars", "order"))`
 #'
 #' @param by_vars Grouping variables
 #'

@@ -9,8 +9,7 @@ filter_extreme(dataset, by_vars = NULL, order, mode, check_type = "warning")
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{order} and the \code{by_vars} parameter are
-expected.}
+The variables specified by the \code{by_vars} and \code{order} argument(s) to be expected.}
 
 \item{by_vars}{Grouping variables
 

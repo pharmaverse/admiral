@@ -11,7 +11,8 @@
 #' to the original dataset observations. If you would like to this instead,
 #' see the `derive_summary_records()` function.
 #'
-#' @param dataset A data frame.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("by_vars", "analysis_var"))`
 #'
 #' @param by_vars Variables to consider for generation of groupwise summary
 #'   records. Providing the names of variables in [exprs()] will create a
@@ -31,19 +32,35 @@
 #'
 #' @param analysis_var Analysis variable.
 #'
+#'  `r lifecycle::badge("deprecated")` Please use `set_values_to` instead.
+#'
 #' @param summary_fun Function that takes as an input the `analysis_var` and
 #'   performs the calculation.
+#'
+#'  `r lifecycle::badge("deprecated")` Please use `set_values_to` instead.
+#'
 #'   This can include built-in functions as well as user defined functions,
 #'   for example `mean` or `function(x) mean(x, na.rm = TRUE)`.
 #'
-#' @param set_values_to A list of variable name-value pairs. Use this argument
-#'   if you need to change the values of any newly derived records.
+#' @param set_values_to Variables to be set
 #'
-#'   Set a list of variables to some specified value for the new observation(s)
+#'   The specified variables are set to the specified values for the new
+#'   observations.
+#'
+#'   Set a list of variables to some specified value for the new records
 #'   + LHS refer to a variable.
-#'   + RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
-#'   value, an expression or NA.
-#'   (e.g.  `exprs(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
+#'   + RHS refers to the values to set to the variable. This can be a string, a
+#'   symbol, a numeric value, an expression or NA. If summary functions are
+#'   used, the values are summarized by the variables specified for `by_vars`.
+#'
+#'   For example:
+#'   ```
+#'     set_values_to = exprs(
+#'       AVAL = sum(AVAL),
+#'       PARAMCD = "TDOSE",
+#'       PARCAT1 = "OVERALL"
+#'     )
+#'   ```
 #'
 #' @return A data frame of derived records.
 #'
@@ -51,88 +68,74 @@
 #'
 #' @keywords der_gen
 #'
-#' @seealso `derive_summary_records()`
+#' @seealso [derive_summary_records()], [derive_var_merged_summary()]
 #'
 #' @export
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' adeg <- tribble(
-#'   ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
-#'   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
-#'   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
-#'   "XYZ-1001", 3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396, "",
-#'   "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:45", 384, "Placebo",
-#'   "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:48", 393, "Placebo",
-#'   "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:51", 388, "Placebo",
-#'   "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:45", 385, "Placebo",
-#'   "XYZ-1001", 8, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:48", 394, "Placebo",
-#'   "XYZ-1001", 9, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:51", 402, "Placebo",
-#'   "XYZ-1002", 1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399, "",
-#'   "XYZ-1002", 2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410, "",
-#'   "XYZ-1002", 3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392, "",
-#'   "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:50", 401, "Active 20mg",
-#'   "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:53", 407, "Active 20mg",
-#'   "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:56", 400, "Active 20mg",
-#'   "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:50", 412, "Active 20mg",
-#'   "XYZ-1002", 8, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:53", 414, "Active 20mg",
-#'   "XYZ-1002", 9, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:56", 402, "Active 20mg",
+#'   ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
+#'   "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
+#'   "XYZ-1001", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399,   NA_character_,
+#'   "XYZ-1001", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396,   NA_character_,
+#'   "XYZ-1001", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:45", 384,   "Placebo",
+#'   "XYZ-1001", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393,   "Placebo",
+#'   "XYZ-1001", 6,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388,   "Placebo",
+#'   "XYZ-1001", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:45", 385,   "Placebo",
+#'   "XYZ-1001", 8,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394,   "Placebo",
+#'   "XYZ-1001", 9,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402,   "Placebo",
+#'   "XYZ-1002", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399,   NA_character_,
+#'   "XYZ-1002", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410,   NA_character_,
+#'   "XYZ-1002", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392,   NA_character_,
+#'   "XYZ-1002", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:50", 401,   "Active 20mg",
+#'   "XYZ-1002", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407,   "Active 20mg",
+#'   "XYZ-1002", 6,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400,   "Active 20mg",
+#'   "XYZ-1002", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:50", 412,   "Active 20mg",
+#'   "XYZ-1002", 8,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,   "Active 20mg",
+#'   "XYZ-1002", 9,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402,   "Active 20mg"
 #' )
 #'
 #' # Summarize the average of the triplicate ECG interval values (AVAL)
 #' get_summary_records(
 #'   adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
-#'   analysis_var = AVAL,
-#'   summary_fun = function(x) mean(x, na.rm = TRUE),
-#'   set_values_to = exprs(DTYPE = "AVERAGE")
-#' )
-#'
-#' advs <- tribble(
-#'   ~USUBJID, ~VSSEQ, ~PARAM, ~AVAL, ~VSSTRESU, ~VISIT, ~VSDTC,
-#'   "XYZ-001-001", 1164, "Weight", 99, "kg", "Screening", "2018-03-19",
-#'   "XYZ-001-001", 1165, "Weight", 101, "kg", "Run-In", "2018-03-26",
-#'   "XYZ-001-001", 1166, "Weight", 100, "kg", "Baseline", "2018-04-16",
-#'   "XYZ-001-001", 1167, "Weight", 94, "kg", "Week 24", "2018-09-30",
-#'   "XYZ-001-001", 1168, "Weight", 92, "kg", "Week 48", "2019-03-17",
-#'   "XYZ-001-001", 1169, "Weight", 95, "kg", "Week 52", "2019-04-14",
-#' )
-#'
-#' # Set new values to any variable. Here, `DTYPE = MAXIMUM` refers to `max()` records
-#' # and `DTYPE = AVERAGE` refers to `mean()` records.
-#' get_summary_records(
-#'   advs,
-#'   by_vars = exprs(USUBJID, PARAM),
-#'   analysis_var = AVAL,
-#'   summary_fun = max,
-#'   set_values_to = exprs(DTYPE = "MAXIMUM")
-#' ) %>%
-#'   get_summary_records(
-#'     by_vars = exprs(USUBJID, PARAM),
-#'     analysis_var = AVAL,
-#'     summary_fun = mean,
-#'     set_values_to = exprs(DTYPE = "AVERAGE")
+#'   set_values_to = exprs(
+#'     AVAL = mean(AVAL, na.rm = TRUE),
+#'     DTYPE = "AVERAGE"
 #'   )
+#' )
+#'
+#' # Derive more than one summary variable
+#' get_summary_records(
+#'   adeg,
+#'   by_vars = exprs(USUBJID, PARAM, AVISIT),
+#'   set_values_to = exprs(
+#'     AVAL = mean(AVAL),
+#'     ASTDTM = min(convert_dtc_to_dtm(EGDTC)),
+#'     AENDTM = max(convert_dtc_to_dtm(EGDTC)),
+#'     DTYPE = "AVERAGE"
+#'   )
+#' )
 #'
 #' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
 #' adeg <- tribble(
-#'   ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
-#'   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
-#'   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
-#'   "XYZ-1001", 3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396, "",
-#'   "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:48", 393, "Placebo",
-#'   "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:51", 388, "Placebo",
-#'   "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:48", 394, "Placebo",
-#'   "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:51", 402, "Placebo",
-#'   "XYZ-1002", 1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399, "",
-#'   "XYZ-1002", 2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410, "",
-#'   "XYZ-1002", 3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392, "",
-#'   "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:53", 407, "Active 20mg",
-#'   "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:56", 400, "Active 20mg",
-#'   "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:53", 414, "Active 20mg",
-#'   "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:56", 402, "Active 20mg",
+#'   ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
+#'   "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
+#'   "XYZ-1001", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399,   NA_character_,
+#'   "XYZ-1001", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396,   NA_character_,
+#'   "XYZ-1001", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393,   "Placebo",
+#'   "XYZ-1001", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388,   "Placebo",
+#'   "XYZ-1001", 6,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394,   "Placebo",
+#'   "XYZ-1001", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402,   "Placebo",
+#'   "XYZ-1002", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399,   NA_character_,
+#'   "XYZ-1002", 2,      "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410,   NA_character_,
+#'   "XYZ-1002", 3,      "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392,   NA_character_,
+#'   "XYZ-1002", 4,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407,   "Active 20mg",
+#'   "XYZ-1002", 5,      "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400,   "Active 20mg",
+#'   "XYZ-1002", 6,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414,   "Active 20mg",
+#'   "XYZ-1002", 7,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402,   "Active 20mg"
 #' )
 #'
 #' # Compute the average of AVAL only if there are more than 2 records within the
@@ -141,32 +144,40 @@
 #'   adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   filter = n() > 2,
-#'   analysis_var = AVAL,
-#'   summary_fun = function(x) mean(x, na.rm = TRUE),
-#'   set_values_to = exprs(DTYPE = "AVERAGE")
+#'   set_values_to = exprs(
+#'     AVAL = mean(AVAL, na.rm = TRUE),
+#'     DTYPE = "AVERAGE"
+#'   )
 #' )
 get_summary_records <- function(dataset,
                                 by_vars,
                                 filter = NULL,
                                 analysis_var,
                                 summary_fun,
-                                set_values_to = NULL) {
+                                set_values_to) {
   assert_vars(by_vars)
-  analysis_var <- assert_symbol(enexpr(analysis_var))
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
-  assert_s3_class(summary_fun, "function")
   assert_data_frame(
     dataset,
-    required_vars = expr_c(by_vars, analysis_var),
+    required_vars = by_vars,
     check_is_grouped = FALSE
   )
-  assert_varval_list(set_values_to, optional = TRUE)
+  assert_varval_list(set_values_to)
+  if (!missing(analysis_var) || !missing(summary_fun)) {
+    deprecate_warn(
+      "1.0.0",
+      I("get_summary_records(anaylsis_var = , summary_fun = )"),
+      "get_summary_records(set_values_to = )"
+    )
+    analysis_var <- assert_symbol(enexpr(analysis_var))
+    assert_s3_class(summary_fun, "function")
+    set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
+  }
 
   # Summarise the analysis value
   dataset %>%
     group_by(!!!by_vars) %>%
     filter_if(filter) %>%
-    summarise(!!analysis_var := summary_fun(!!analysis_var)) %>%
-    ungroup() %>%
-    process_set_values_to(set_values_to)
+    summarise(!!!set_values_to) %>%
+    ungroup()
 }

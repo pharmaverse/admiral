@@ -7,7 +7,7 @@
 derive_vars_query(dataset, dataset_queries)
 }
 \arguments{
-\item{dataset}{Input dataset.}
+\item{dataset}{Input dataset}
 
 \item{dataset_queries}{A dataset containing required columns \code{PREFIX},
 \code{GRPNAME}, \code{SRCVAR}, \code{TERMNAME}, \code{TERMID}, and optional columns

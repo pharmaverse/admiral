@@ -18,8 +18,8 @@ derive_param_wbc_abs(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument, \code{PARAMCD}, and \code{AVAL}
-are expected to be present.
+The variables specified by the \code{by_vars} argument(s) to be expected.
+\code{PARAMCD}, and \code{AVAL} are expected as well.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset, and to the parameters specified by \code{wbc_code} and \code{diff_code}.}

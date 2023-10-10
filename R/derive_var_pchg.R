@@ -2,8 +2,8 @@
 #'
 #' Derive percent change from baseline (`PCHG`) in a BDS dataset
 #'
-#' @param dataset The input dataset. Required variables are `AVAL` and
-#' `BASE`.
+#' @param dataset `r roxygen_param_dataset()`
+#' `AVAL` and `BASE` are expected.
 #'
 #' @details
 #' Percent change from baseline is calculated by dividing change from
