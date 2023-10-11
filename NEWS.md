@@ -1,8 +1,9 @@
-# admiral (development version)
+# admiral 0.12.3
 
-- `derive_var_dthcaus()` was fixed. If a subject has observations in more than
-one of the sources, the one from the last source was selected regardless of the
-date. Now the function works as described in its documentation. (#2154)
+- Fixed a bug in `derive_var_dthcaus()` where if a subject has observations in
+more than one of the sources, the one from the last source was selected
+regardless of the date. Now the function works as described in its
+documentation. (#2154)
 
 # admiral 0.12.2
 
