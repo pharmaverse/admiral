@@ -1,3 +1,23 @@
+# admiraldev (development version)
+
+## New Features
+
+## Updates of Existing Functions
+
+## Breaking Changes
+
+- The following functions have been deprecated from previous admiral versions using the next phase of the deprecation process
+  - `assert_function_param()`
+  - `assert_named_expr()`
+  - `assert_has_variables()`
+
+## Documentation
+
+- New documentation in programming strategy around quoting/expressions and standardizing roxygen texts (#233, #332)
+- New documentation on how to use footnotes when writing vignettes (#324)
+
+## Various
+
 # admiraldev 0.5.0
 
 ## New Features

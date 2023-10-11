@@ -77,17 +77,9 @@ test_that("replace_values_by_names Test 6: names of argument is NULL", {
   )
 })
 
-## Test 7: warning if quosures argument is used ----
-test_that("replace_values_by_names Test 7: warning if quosures argument is used", {
-  expect_error(
-    replace_values_by_names(quosures = rlang::quos(STUDYID, USUBJID)),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
 # replace_symbol_in_expr ----
-## Test 8: symbol is replaced ----
-test_that("replace_symbol_in_expr Test 8: symbol is replaced", {
+## Test 7: symbol is replaced ----
+test_that("replace_symbol_in_expr Test 7: symbol is replaced", {
   expect_equal(
     expected = expr(AVAL.join),
     object = replace_symbol_in_expr(
@@ -98,8 +90,8 @@ test_that("replace_symbol_in_expr Test 8: symbol is replaced", {
   )
 })
 
-## Test 9: partial match is not replaced ----
-test_that("replace_symbol_in_expr Test 9: partial match is not replaced", {
+## Test 8: partial match is not replaced ----
+test_that("replace_symbol_in_expr Test 8: partial match is not replaced", {
   expect_equal(
     expected = expr(AVALC),
     object = replace_symbol_in_expr(
@@ -110,8 +102,8 @@ test_that("replace_symbol_in_expr Test 9: partial match is not replaced", {
   )
 })
 
-## Test 10: symbol in expression is replaced ----
-test_that("replace_symbol_in_expr Test 10: symbol in expression is replaced", {
+## Test 9: symbol in expression is replaced ----
+test_that("replace_symbol_in_expr Test 9: symbol in expression is replaced", {
   expect_equal(
     expected = expr(desc(AVAL.join)),
     object = replace_symbol_in_expr(
@@ -123,8 +115,8 @@ test_that("replace_symbol_in_expr Test 10: symbol in expression is replaced", {
 })
 
 # add_suffix_to_vars ----
-## Test 11: with single variable ----
-test_that("add_suffix_to_vars Test 11: with single variable", {
+## Test 10: with single variable ----
+test_that("add_suffix_to_vars Test 10: with single variable", {
   expect_equal(
     expected = exprs(ADT, desc(AVAL.join), AVALC),
     object = add_suffix_to_vars(
@@ -135,8 +127,8 @@ test_that("add_suffix_to_vars Test 11: with single variable", {
   )
 })
 
-## Test 12: with more than one variable ----
-test_that("add_suffix_to_vars Test 12: with more than one variable", {
+## Test 11: with more than one variable ----
+test_that("add_suffix_to_vars Test 11: with more than one variable", {
   expect_equal(
     expected = exprs(ADT, desc(AVAL.join), AVALC.join),
     object = add_suffix_to_vars(

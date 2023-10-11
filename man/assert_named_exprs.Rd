@@ -23,9 +23,8 @@ This function is \emph{deprecated}, please use \code{assert_expr_list()} instead
 }
 \seealso{
 Other deprecated: 
-\code{\link{assert_function}()},
-\code{\link{assert_has_variables}()},
-\code{\link{assert_order_vars}()}
+\code{\link{assert_function_param}()},
+\code{\link{assert_has_variables}()}
 }
 \concept{deprecated}
 \keyword{deprecated}

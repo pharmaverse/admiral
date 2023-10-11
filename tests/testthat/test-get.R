@@ -61,15 +61,8 @@ test_that("get_source_vars Test 5: NULL returns NULL", {
   )
 })
 
-## Test 6: warning if quosures argument is used ----
-test_that("get_source_vars Test 6: warning if quosures argument is used", {
-  expect_error(
-    get_source_vars(quosures = rlang::quos(DTHDOM = "AE", DTHSEQ = AESEQ)),
-    class = "lifecycle_error_deprecated"
-  )
-})
-## Test 7: no source vars returns NULL ----
-test_that("get_source_vars Test 7: no source vars returns NULL", {
+## Test 6: no source vars returns NULL ----
+test_that("get_source_vars Test 6: no source vars returns NULL", {
   expect_equal(
     get_source_vars(x <- exprs(DTHDOM = "AE", DTHVAR = "AEDECOD")),
     NULL
@@ -77,13 +70,13 @@ test_that("get_source_vars Test 7: no source vars returns NULL", {
 })
 
 # get_dataset ----
-## Test 8: get_dataset works ----
-test_that("get_dataset Test 8: get_dataset works", {
+## Test 7: get_dataset works ----
+test_that("get_dataset Test 7: get_dataset works", {
   expect_equal(NULL, get_dataset("one_to_many"))
 })
 
-## Test 9: get_dataset works ----
-test_that("get_dataset Test 9: get_dataset works", {
+## Test 8: get_dataset works ----
+test_that("get_dataset Test 8: get_dataset works", {
   expect_error(
     get_dataset("test"),
     "`name` must be one of 'one_to_many' or 'many_to_one' but is 'test'"

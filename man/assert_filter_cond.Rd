@@ -47,7 +47,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_date_vector}()},
 \code{\link{assert_expr_list}()},
 \code{\link{assert_expr}()},
-\code{\link{assert_function_param}()},
+\code{\link{assert_function}()},
 \code{\link{assert_integer_scalar}()},
 \code{\link{assert_list_element}()},
 \code{\link{assert_list_of}()},

@@ -739,6 +739,21 @@ Please take the following list as recommendation and try to adhere to its rules 
 * `dplyr::if_else()` should be used when there are only two conditions. 
 Try to always set the `missing` argument whenever appropriate.
 
+## How Quoting is used
+
+* Some admiral arguments require selecting one particular option like `mode`, e.g. `mode = "last"`. Use quotation marks to capture these. The expected assertion function corresponding to these arguments is `assert_character_scalar()/assert_character_vector()`.
+* Many admiral arguments require capturing an expression, typically encased in a `exprs()` statement, which are to be evaluated _later_ inside the function body, see arguments like `new_vars`, e.g. `new_vars = exprs(TRTSDTM = EXSTDTM)`. Oftentimes, the assertion function corresponding to these are `assert_expr()/assert_expr_list()`. These arguments are unquoted by using `!!!`.
+* Some admiral arguments like `new_var` or `filter` which expect a _single_ variable or expression are not quoted in the call. In the function body, it has to be quoted by using `enexpr().` Usually this is combined with the assertion, e.g., `new_var <- assert_symbol(enexpr(new_var))`. These arguments are unquoted by using `!!`.
+* Keep in mind `!!` is a one-to-one replacement and `!!!` is a one-to-many replacement. Please see [this chapter](https://adv-r.hadley.nz/quasiquotation.html) in the Advanced R textbook for more details.
+
+## Standardizing Text Used to Label and Describe Arguments
+
+In the following [PR](https://github.com/pharmaverse/admiral/pull/2065/files), you will find an example of how the function argument `dataset` was able to be standardized such that the Label and Description of said function argument was aligned across the codebase. Please see the changes to the file `derive_adeg_params.R` for further details. 
+
+The benefits of having a programmatic way to write documentation is that if any changes need to be made, _making the modification on the corresponding function, in this case, `roxygen_param_dataset()`, scales across the codebase, can be tested, and is less prone to user-error such as typos or grammar mistakes_.
+
+These functions are implemented in `roxygen2.R` and the naming convention for each argument will be as follows `roxygen_param_xxx()`, where "xxx" is the be replaced with the argument name.
+
 # R and Package Versions for Development
 
 * The choice of R Version is not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in the earliest of the three latest R Versions. This need for a common development environment also carries over for our choice of package versions.  

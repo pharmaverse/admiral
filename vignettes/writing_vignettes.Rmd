@@ -134,7 +134,7 @@ data(vs)
 ```
 
 ```{r, eval=FALSE, echo=TRUE}
-vs1 <- admiral_vs %>%
+vs1 <- vs %>%
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = VSDTC,
@@ -145,10 +145,8 @@ vs1 <- admiral_vs %>%
 
   + Output dataset formatted using `dataset_vignette()`...
 
-#TODO - Fix this
-
 ```{r, eval=FALSE, echo=FALSE}
-vs1 <- admiral_vs %>%
+vs1 <- vs %>%
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = VSDTC,
@@ -180,6 +178,25 @@ responsive. In this case the number of displayed observations should be
 restricted either by restricting the source datasets at the beginning of the
 vignette or in the call of `dataset_vignette()` if only some calls are
 affected.
+
+#### Using Footnotes
+
+Footnotes can be useful to add context without adding clutter to the primary subject matter of the vignette being written.
+
+To use footnotes, add a caret and an identifier inside brackets e.g. `([^1])`. The identifiers can be numbers or words, but they can’t contain spaces or tabs.
+
+The following markdown text will render as follows:
+
+```
+Here is an example [^1]
+
+[^1]: Cool note about the example.
+```
+
+Here is an example [^2]
+
+[^2]: Cool note about the example.
+
 
 #### Conventions for ADaM Workflow
 

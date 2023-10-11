@@ -25,9 +25,8 @@ Checks if a dataset contains all required variables
 }
 \seealso{
 Other deprecated: 
-\code{\link{assert_function}()},
-\code{\link{assert_named_exprs}()},
-\code{\link{assert_order_vars}()}
+\code{\link{assert_function_param}()},
+\code{\link{assert_named_exprs}()}
 }
 \concept{deprecated}
 \keyword{deprecated}

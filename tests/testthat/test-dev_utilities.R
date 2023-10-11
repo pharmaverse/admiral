@@ -77,33 +77,25 @@ test_that("vars2chr Test 8: returns character vector", {
   expect_equal(vars2chr(exprs(STUDYID, USUBJID)), expected)
 })
 
-## Test 9: warning if quosures argument is used ----
-test_that("vars2chr Test 9: warning if quosures argument is used", {
-  expect_error(
-    vars2chr(quosures = rlang::quos(STUDYID, USUBJID)),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
 # extract_vars ----
-## Test 10: works with formulas (lhs) ----
-test_that("extract_vars Test 10: works with formulas (lhs)", {
+## Test 9: works with formulas (lhs) ----
+test_that("extract_vars Test 9: works with formulas (lhs)", {
   expect_equal(
     object = extract_vars(AVAL ~ ARMCD + AGEGR1),
     expected = unname(exprs(AVAL))
   )
 })
 
-## Test 11: works with formulas (rhs) ----
-test_that("extract_vars Test 11: works with formulas (rhs)", {
+## Test 10: works with formulas (rhs) ----
+test_that("extract_vars Test 10: works with formulas (rhs)", {
   expect_equal(
     object = extract_vars(AVAL ~ ARMCD + AGEGR1, side = "rhs"),
     expected = unname(exprs(ARMCD, AGEGR1))
   )
 })
 
-## Test 12: works with calls ----
-test_that("extract_vars Test 12: works with calls", {
+## Test 11: works with calls ----
+test_that("extract_vars Test 11: works with calls", {
   fun <- mean
   expect_equal(
     object = extract_vars(expr({{ fun }}((BASE - AVAL) / BASE * 100, LLQ / 2))),
