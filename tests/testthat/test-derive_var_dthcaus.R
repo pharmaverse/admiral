@@ -341,7 +341,7 @@ test_that("derive_var_dthcaus Test 6: DTHCAUS is added from AE and DS if filter 
 })
 
 ## Test 7: error on a dthcaus_source object with invalid order ----
-test_that("dthcaus_source Test 7: error on a dthcaus_source object with invalid order", {
+test_that("derive_var_dthcaus Test 7: error on a dthcaus_source object with invalid order", {
   expect_error(dthcaus_source(
     dataset_name = "ae",
     filter = AEOUT == "FATAL",
@@ -352,7 +352,7 @@ test_that("dthcaus_source Test 7: error on a dthcaus_source object with invalid 
   ))
 })
 
-## Test 8: dataset` is sorted using the `order` parameter ----
+## Test 8: `dataset` is sorted using the `order` parameter ----
 test_that("derive_var_dthcaus Test 8: `dataset` is sorted using the `order` parameter", {
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
@@ -415,7 +415,7 @@ test_that("derive_var_dthcaus Test 8: `dataset` is sorted using the `order` para
 })
 
 ## Test 9: returns a warning when traceability_vars is used ----
-test_that("dthcaus_source Test 9: returns a warning when traceability_vars is used", {
+test_that("derive_var_dthcaus Test 9: returns a warning when traceability_vars is used", {
   ae <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
     "TEST01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
@@ -435,5 +435,117 @@ test_that("dthcaus_source Test 9: returns a warning when traceability_vars is us
       )
     ),
     class = "lifecycle_warning_deprecated"
+  )
+})
+
+## Test 10: multiple observations from different sources ----
+test_that("derive_var_dthcaus Test 10: multiple observations from different sources", {
+  expected <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DTHCAUS,
+    "TEST01", "PAT01",  "SUDDEN DEATH",
+    "TEST01", "PAT02",  NA_character_,
+    "TEST01", "PAT03",  "DEATH DUE TO progression of disease"
+  )
+
+  adsl <- select(expected, -DTHCAUS)
+
+  ae <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
+    "TEST01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
+  ) %>%
+    mutate(
+      AEDTHDT = ymd(AEDTHDTC)
+    )
+
+  ds <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
+    "TEST01", "PAT01", 4, "DEATH", "DEATH DUE TO progression of disease", "2021-04-05",
+    "TEST01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-02",
+    "TEST01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT02", 3, "COMPLETED", "PROTOCOL COMPLETED", "2021-12-01",
+    "TEST01", "PAT03", 1, "DEATH", "DEATH DUE TO progression of disease", "2021-04-07",
+    "TEST01", "PAT03", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT03", 3, "COMPLETED", "PROTOCOL COMPLETED", "2021-12-01"
+  )
+
+  # Derive `DTHCAUS` only - for on-study deaths only
+  src_ae <- dthcaus_source(
+    dataset_name = "ae",
+    filter = AEOUT == "FATAL",
+    date = convert_dtc_to_dt(AEDTHDTC),
+    mode = "first",
+    dthcaus = AEDECOD
+  )
+
+  src_ds <- dthcaus_source(
+    dataset_name = "ds",
+    filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+    date = convert_dtc_to_dt(DSSTDTC),
+    mode = "first",
+    dthcaus = DSTERM
+  )
+  actual <- adsl %>%
+    derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID")
+  )
+})
+
+## Test 11: multiple observations from different sources with same date ----
+test_that("derive_var_dthcaus Test 11: multiple observations with same date", {
+  expected <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DTHCAUS,
+    "TEST01", "PAT01",  "SUDDEN DEATH",
+    "TEST01", "PAT02",  NA_character_,
+    "TEST01", "PAT03",  "DEATH DUE TO progression of disease"
+  )
+
+  adsl <- select(expected, -DTHCAUS)
+
+  ae <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
+    "TEST01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-05"
+  ) %>%
+    mutate(
+      AEDTHDT = ymd(AEDTHDTC)
+    )
+
+  ds <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
+    "TEST01", "PAT01", 4, "DEATH", "DEATH DUE TO progression of disease", "2021-04-05",
+    "TEST01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-02",
+    "TEST01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT02", 3, "COMPLETED", "PROTOCOL COMPLETED", "2021-12-01",
+    "TEST01", "PAT03", 1, "DEATH", "DEATH DUE TO progression of disease", "2021-04-07",
+    "TEST01", "PAT03", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT03", 3, "COMPLETED", "PROTOCOL COMPLETED", "2021-12-01"
+  )
+
+  # Derive `DTHCAUS` only - for on-study deaths only
+  src_ae <- dthcaus_source(
+    dataset_name = "ae",
+    filter = AEOUT == "FATAL",
+    date = convert_dtc_to_dt(AEDTHDTC),
+    mode = "first",
+    dthcaus = AEDECOD
+  )
+
+  src_ds <- dthcaus_source(
+    dataset_name = "ds",
+    filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+    date = convert_dtc_to_dt(DSSTDTC),
+    mode = "first",
+    dthcaus = DSTERM
+  )
+  actual <- adsl %>%
+    derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID")
   )
 })
