@@ -4,7 +4,7 @@
 
 ## Updates of Existing Functions
 
-- `derive_var_extreme_flag()` and `derive_vars_merged()` were enhanced with the arguments `true_value` and `false_value` to align with preexisting functions that had similar functionality (#2125)
+- `derive_extreme_records()`, `derive_var_extreme_flag()`,`derive_vars_joined()` and `derive_vars_merged()` were enhanced with the arguments `true_value` and `false_value` to align with preexisting functions that had similar functionality (#2125)
 
 - `restrict_derivation()` now allows `{dplyr}` functions like `mutate` in the `derivation argument (#2143)
 
