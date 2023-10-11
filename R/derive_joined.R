@@ -419,13 +419,14 @@ derive_vars_joined <- function(dataset,
   }
 
   # merge new variables to the input dataset and rename them
-  data %>%
+  data_final <- data %>%
     derive_vars_merged(
       dataset_add = data_return,
       by_vars = exprs(!!!by_vars_left, !!tmp_obs_nr),
       new_vars = add_suffix_to_vars(new_vars, vars = common_vars, suffix = ".join"),
       missing_values = missing_values,
       check_type = check_type,
+      exist_flag = exist_flag,
       true_value = true_value,
       false_value = false_value,
       duplicate_msg = paste(
@@ -441,4 +442,9 @@ derive_vars_joined <- function(dataset,
       )
     ) %>%
     remove_tmp_vars()
+  if (is.null(exist_flag)) {
+    data_final <- data_final %>%
+      select(-starts_with("exist_"))
+  }
+  data_final
 }
