@@ -13,10 +13,15 @@
 #' @param dataset
 #'   `r roxygen_param_dataset(expected_vars = c("by_vars", "join_vars"))`
 #'
+#' @param dataset_add Additional dataset
+#'
+#'   The variables specified for `by_vars`, `join_vars`, and `order` are
+#'   expected.
+#'
 #' @param by_vars By variables
 #'
 #'   The specified variables are used as by variables for joining the input
-#'   dataset with itself.
+#'   dataset (`dataset`) with the additional dataset (`dataset_add`).
 #'
 #' @param order Order
 #'
@@ -28,12 +33,13 @@
 #'
 #' @param tmp_obs_nr_var Temporary observation number
 #'
-#'   The specified variable is added to the input dataset and set to the
-#'   observation number with respect to `order`. For each by group (`by_vars`)
-#'   the observation number starts with `1`. The variable can be used in the
-#'   conditions (`filter`, `first_cond`). It is not included in the output
-#'   dataset. It can be used to flag consecutive observations or the last
-#'   observation (see last example below).
+#'   The specified variable is added to the input dataset (`dataset`) and the
+#'   additional dataset (`dataset_add`). It is set to the observation number
+#'   with respect to `order`. For each by group (`by_vars`) the observation
+#'   number starts with `1`. The variable can be used in the conditions
+#'   (`filter_join`, `first_cond_upper`, `first_cond_lower`). It is not included
+#'   in the output dataset. It can be used to flag consecutive observations or
+#'   the last observation (see last example below).
 #'
 #' @param join_vars Variables to keep from joined dataset
 #'
@@ -66,6 +72,10 @@
 #'
 #' @param first_cond Condition for selecting range of data
 #'
+#'   `r lifecycle::badge("deprecated")`
+#'
+#'   This argument is *deprecated*, please use `first_cond_upper` instead.
+#'
 #'   If this argument is specified, the other observations are restricted up to
 #'   the first observation where the specified condition is fulfilled. If the
 #'   condition is not fulfilled for any of the other observations, no
@@ -75,7 +85,33 @@
 #'   which should not apply to all observations but only up to the confirmation
 #'   assessment. For an example see the third example below.
 #'
+#' @param first_cond_upper Condition for selecting range of data
+#'
+#'   If this argument is specified, the other observations are restricted up to
+#'   the first observation where the specified condition is fulfilled. If the
+#'   condition is not fulfilled for any of the other observations, no
+#'   observations are considered, i.e., the observation is not flagged.
+#'
+#'   This parameter should be specified if `filter` contains summary functions
+#'   which should not apply to all observations but only up to the confirmation
+#'   assessment. For an example see the third example below.
+#'
+#' @param filter_join Condition for selecting observations
+#'
+#'   The filter is applied to the joined dataset for flagging the confirmed
+#'   observations. The condition can include summary functions. The joined
+#'   dataset is grouped by the original observations. I.e., the summary function
+#'   are applied to all observations up to the confirmation observation. For
+#'   example, `filter_join = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
+#'   count_vals(var = AVALC.join, val = "NE") <= 1` selects observations with
+#'   response "CR" and for all observations up to the confirmation observation
+#'   the response is "CR" or "NE" and there is at most one "NE".
+#'
 #' @param filter Condition for selecting observations
+#'
+#'   `r lifecycle::badge("deprecated")`
+#'
+#'   This argument is *deprecated*, please use `filter_join` instead.
 #'
 #'   The filter is applied to the joined dataset for flagging the confirmed
 #'   observations. The condition can include summary functions. The joined
@@ -92,8 +128,6 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   *Default:* `"warning"`
-#'
 #'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
 #'
 #' @param true_value Value of `new_var` for flagged observations
@@ -109,12 +143,14 @@
 #'
 #'   ## Step 1
 #'
-#'   The input dataset is joined with itself by the variables specified for
-#'   `by_vars`. From the right hand side of the join only the variables
-#'   specified for `join_vars` are kept. The suffix ".join" is added to these
-#'   variables.
+#'   The input dataset (`dataset`) is joined with the additional dataset
+#'   (`dataset_add`) by the variables specified for `by_vars`. From the
+#'   additional dataset only the variables specified for `join_vars` are kept.
+#'   The suffix ".join" is added to those variables which also exist in the
+#'   input dataset.
 #'
-#'   For example, for `by_vars = USUBJID`, `join_vars = exprs(AVISITN, AVALC)` and input dataset
+#'   For example, for `by_vars = USUBJID`, `join_vars = exprs(AVISITN, AVALC)`
+#'   and input dataset and additional dataset
 #'
 #'   ```{r eval=FALSE}
 #'   # A tibble: 2 x 4
@@ -153,17 +189,17 @@
 #'
 #'   ## Step 3
 #'
-#'   If `first_cond` is specified, for each observation of the input dataset the
-#'   joined dataset is restricted to observations up to the first observation
-#'   where `first_cond` is fulfilled (the observation fulfilling the condition
-#'   is included). If for an observation of the input dataset the condition is
-#'   not fulfilled, the observation is removed.
+#'   If `first_cond_upper` is specified, for each observation of the input
+#'   dataset the joined dataset is restricted to observations up to the first
+#'   observation where `first_cond_uppper` is fulfilled (the observation
+#'   fulfilling the condition is included). If for an observation of the input
+#'   dataset the condition is not fulfilled, the observation is removed.
 #'
 #'   ## Step 4
 #'
 #'   The joined dataset is grouped by the observations from the input dataset
 #'   and restricted to the observations fulfilling the condition specified by
-#'   `filter`.
+#'   `filter_join`.
 #'
 #'   ## Step 5
 #'
@@ -181,7 +217,7 @@
 #' @keywords der_gen
 #' @family der_gen
 #'
-#' @seealso [filter_joined()]
+#' @seealso [filter_joined()], [derive_vars_joined()]
 #'
 #' @export
 #'
