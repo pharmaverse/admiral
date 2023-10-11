@@ -43,6 +43,8 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 
 - A way to standardize roxygen labels and descriptions for function arguments was implemented and tested (#2034)
 
+- Link to published CDSIC Population PK (ADPPK) implementation guide added. (#2161)
+
 ## Various
 
 # admiral 0.12.2

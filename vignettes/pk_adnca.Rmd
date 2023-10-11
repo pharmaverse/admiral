@@ -914,10 +914,8 @@ Adding attributes to the `ADPC` file will be discussed
 
 # Programming Population PK (ADPPK) Analysis Data
 
-The Population PK Analysis Data (ADPPK) follows the forthcoming CDISC
-Implementation Guide
-(<https://www.cdisc.org/adam-poppk-implementation-guide-v1-0>). The
-programming workflow for Population PK (ADPPK) Analysis Data is similar
+The Population PK Analysis Data (ADPPK) follows the CDISC Implementation Guide
+(<https://www.cdisc.org/standards/foundational/adam/basic-data-structure-adam-poppk-implementation-guide-v1-0>). The programming workflow for Population PK (ADPPK) Analysis Data is similar
 to the NCA Programming flow with a few key differences. Population PK
 models generally make use of nonlinear mixed effects models that require
 numeric variables. The data used in the models will include both dosing
