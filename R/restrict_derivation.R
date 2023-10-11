@@ -75,8 +75,8 @@ restrict_derivation <- function(dataset,
                                 filter) {
   # Check input
   assert_data_frame(dataset)
-  assert_function(derivation)
   assert_s3_class(args, "params", optional = TRUE)
+  assert_function(derivation, names(args))
   filter <- assert_filter_cond(enexpr(filter))
 
   # Split input dataset
