@@ -887,9 +887,15 @@ assert_has_variables <- function(dataset, required_vars) {
 #' Checks if the argument is a function and if all expected arguments are
 #' provided by the function.
 #'
-#' @param arg A function argument to be checked
+#' @param arg A function
 #'
-#' @param params A character vector of expected argument names
+#' The function to be checked
+#'
+#' @param params A character vector
+#'
+#' A character vector of expected argument names for the aforementioned function in `arg`.
+#' If ellipsis, `...`, is included in the function formals of the function in `arg`,
+#' this argument, `params` will be ignored, accepting all values of the character vector.
 #'
 #' @param optional Is the checked argument optional?
 #'
@@ -901,7 +907,7 @@ assert_has_variables <- function(dataset, required_vars) {
 #'  - if the argument is not a function or
 #'
 #'  - if the function does not provide all arguments as specified for the
-#'  `params` argument.
+#'  `params` argument (assuming ellipsis is not in function formals)
 #'
 #' @export
 #'
@@ -943,6 +949,9 @@ assert_function <- function(arg, params = NULL, optional = FALSE) {
     abort(err_msg)
   }
   if (!is.null(params)) {
+    if ("..." %in% names(formals(arg))) {
+      return(invisible(arg))
+    }
     is_param <- params %in% names(formals(arg))
     if (!all(is_param)) {
       txt <- if (sum(!is_param) == 1L) {

@@ -804,6 +804,15 @@ test_that("assert_function Test 57: error if  `params`  is missing with no defau
   expect_error(example_fun(sum))
 })
 
+## Test 59: If dot-dot-dot is a argument ----
+test_that("assert_function Test 59: If dot-dot-dot is a argument", {
+  example_fun <- function(derivation, args = NULL) {
+    assert_function(derivation, names(args))
+  }
+  expect_invisible(example_fun(mutate, args = exprs(AVAL = x + 1)))
+})
+
+
 
 # assert_function_param ----
 ## Test 58: no error if `arg` is a parameter of a function (deprecation error) ----

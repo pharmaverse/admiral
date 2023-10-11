@@ -13,6 +13,9 @@ repo:
 news:
   cran_dates: true
 
+development:
+  mode: auto
+
 authors:
   before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past."
   footer:
