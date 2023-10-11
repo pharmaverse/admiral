@@ -4,9 +4,12 @@
 
 ## Updates of Existing Functions
 
+- `restrict_derivation()` now allows `{dplyr}` functions like `mutate` in the `derivation argument (#2143)
+
 - `derive_summary_records()`, `derive_var_merged_summary()`, and `get_summary_records()`
 were enhanced such that more than one summary variable can be derived, e.g.,
 `AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
+
 
 ## Breaking Changes
 
