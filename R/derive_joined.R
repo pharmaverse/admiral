@@ -329,6 +329,9 @@ derive_vars_joined <- function(dataset,
                                filter_add = NULL,
                                filter_join = NULL,
                                mode = NULL,
+                               exist_flag = NULL,
+                               true_value = "Y",
+                               false_value = NA_character_,
                                missing_values = NULL,
                                check_type = "warning") {
   assert_vars(by_vars, optional = TRUE)
@@ -423,6 +426,9 @@ derive_vars_joined <- function(dataset,
       new_vars = add_suffix_to_vars(new_vars, vars = common_vars, suffix = ".join"),
       missing_values = missing_values,
       check_type = check_type,
+      exist_flag = exist_flag,
+      true_value = true_value,
+      false_value = false_value,
       duplicate_msg = paste(
         paste(
           "After applying `filter_join` the joined dataset contains more",
