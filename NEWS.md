@@ -6,9 +6,12 @@
 
 - `derive_var_extreme_flag()` and `derive_vars_merged()` were enhanced with the arguments `true_value` and `false_value` to align with preexisting functions that had similar functionality (#2125)
 
+- `restrict_derivation()` now allows `{dplyr}` functions like `mutate` in the `derivation argument (#2143)
+
 - `derive_summary_records()`, `derive_var_merged_summary()`, and `get_summary_records()`
 were enhanced such that more than one summary variable can be derived, e.g.,
 `AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
+
 
 ## Breaking Changes
 
