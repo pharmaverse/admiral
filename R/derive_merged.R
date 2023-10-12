@@ -436,7 +436,8 @@ derive_vars_merged <- function(dataset,
     )
     names(update_missings) <- names(missing_values)
     dataset <- dataset %>%
-      mutate(!!!update_missings)
+      mutate(!!!update_missings) %>%
+      remove_tmp_vars()
   }
 
   if (!is.null(exist_flag)) {
@@ -444,8 +445,7 @@ derive_vars_merged <- function(dataset,
       mutate(!!exist_flag := ifelse(is.na(!!exist_flag), false_value, true_value))
   }
 
-  dataset %>%
-    remove_tmp_vars()
+  dataset
 }
 
 #' Merge an Existence Flag
