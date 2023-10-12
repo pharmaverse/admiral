@@ -385,18 +385,26 @@ derive_vars_merged <- function(dataset,
       select(!!!by_vars_right, !!!replace_values_by_names(new_vars))
   }
 
-  if (!is.null(missing_values)) {
-    exist_flag_var <- get_new_tmp_var(add_data, prefix = "tmp_exist_flag")
-  } else {
-    exist_flag_var <- exist_flag
-  }
-
-  if (!is.null(exist_flag_var)) {
+  if (!is.null(exist_flag)) {
     add_data <- mutate(
       add_data,
-      !!exist_flag_var := true_value
+      !!exist_flag := TRUE
     )
   }
+
+  if (!is.null(missing_values)) {
+    missing_values_var <- get_new_tmp_var(add_data, prefix = "tmp_missing_flag")
+  } else {
+    missing_values_var <- missing_values
+  }
+  if (!is.null(missing_values_var)) {
+    add_data <- mutate(
+      add_data,
+      !!missing_values_var := TRUE
+    )
+  }
+
+
   # check if there are any variables in both datasets which are not by vars
   # in this case an error is issued to avoid renaming of varibles by left_join()
   common_vars <-
@@ -420,20 +428,22 @@ derive_vars_merged <- function(dataset,
   }
   dataset <- left_join(dataset, add_data, by = vars2chr(by_vars))
 
-  if (!is.null(missing_values)) {
+  if (!is.null(missing_values_var)) {
     update_missings <- map2(
       syms(names(missing_values)),
       missing_values,
-      ~ expr(if_else(is.na(!!exist_flag_var), !!.y, !!.x))
+      ~ expr(if_else(is.na(!!missing_values_var), !!.y, !!.x))
     )
     names(update_missings) <- names(missing_values)
     dataset <- dataset %>%
       mutate(!!!update_missings)
   }
-  if (!is.null(exist_flag_var)) {
+
+  if (!is.null(exist_flag)) {
     dataset <- dataset %>%
-      mutate(!!exist_flag_var := ifelse(is.na(!!exist_flag_var), false_value, !!exist_flag_var))
+      mutate(!!exist_flag := ifelse(is.na(!!exist_flag), false_value, true_value))
   }
+
   dataset %>%
     remove_tmp_vars()
 }
