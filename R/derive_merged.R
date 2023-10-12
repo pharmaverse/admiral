@@ -94,8 +94,8 @@
 #'
 #'   If the argument is specified (e.g., `exist_flag = FLAG`), the specified
 #'   variable (e.g., `FLAG`) is added to the input dataset. This variable will
-#'   be `TRUE` for all selected records from `dataset_add` which are merged into
-#'   the input dataset, and `NA` otherwise.
+#'   be the value provided in `true_value` for all selected records from `dataset_add`
+#'   which are merged into the input dataset, and the value provided in `false_value` otherwise.
 #'
 #'   *Permitted Values*: Variable name
 #'

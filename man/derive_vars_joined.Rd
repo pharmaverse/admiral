@@ -129,8 +129,8 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 
 If the argument is specified (e.g., \code{exist_flag = FLAG}), the specified
 variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
-be \code{TRUE} for all selected records from \code{dataset_add} which are merged into
-the input dataset, and \code{NA} otherwise.
+be the value provided in \code{true_value} for all selected records from \code{dataset_add}
+which are merged into the input dataset, and the value provided in \code{false_value} otherwise.
 
 \emph{Permitted Values}: Variable name}
 
