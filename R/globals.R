@@ -105,7 +105,6 @@ globalVariables(c(
   "temp_from_var",
   "temp_to_var",
   "temp_match_flag",
-  "temp_exist_flag",
   "temp_dose_freq",
   "temp_new_dose_no",
   "temp_num_of_doses",

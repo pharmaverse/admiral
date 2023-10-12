@@ -711,14 +711,14 @@ derive_vars_merged_lookup <- function(dataset,
     new_vars = new_vars,
     mode = mode,
     filter_add = !!filter_add,
-    exist_flag = temp_exist_flag,
+    exist_flag = temp_match_flag,
     check_type = check_type,
     duplicate_msg = duplicate_msg
   )
 
   if (print_not_mapped) {
     temp_not_mapped <- res %>%
-      filter(is.na(temp_exist_flag)) %>%
+      filter(is.na(temp_match_flag)) %>%
       distinct(!!!by_vars_left)
 
     if (nrow(temp_not_mapped) > 0) {
@@ -740,7 +740,7 @@ derive_vars_merged_lookup <- function(dataset,
     }
   }
 
-  res %>% select(-temp_exist_flag)
+  res %>% select(-temp_match_flag)
 }
 
 #' Get list of records not mapped from the lookup table.
