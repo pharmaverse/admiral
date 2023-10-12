@@ -205,13 +205,13 @@ test_that("derive_vars_merged Test 8: expressions for new_vars and missing_value
     mode = "last",
     missing_values = exprs(LASTVIS = "UNKNOWN"),
     exist_flag = matched,
-    true_value = "Yes",
+    true_value = NA,
     false_value = "No"
   )
 
   expected <- adsl %>%
     mutate(LASTVIS = c("WEEK 2", "BASELINE", "WEEK 4", "UNKNOWN"),
-           matched = c("Yes", "Yes", "Yes", "No"))
+           matched = c(NA, NA, NA, "No"))
 
 
   expect_dfs_equal(
