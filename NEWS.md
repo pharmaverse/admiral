@@ -6,6 +6,8 @@
 
 - `derive_extreme_records()`, `derive_var_extreme_flag()`,`derive_vars_joined()` and `derive_vars_merged()` were enhanced with the arguments `true_value` and `false_value` to align with preexisting functions that had similar functionality (#2125)
 
+- The default value for the `false_value` argument in `derive_extreme_records()` was changed to `NA_character_` (#2125)
+
 - `restrict_derivation()` now allows `{dplyr}` functions like `mutate` in the `derivation argument (#2143)
 
 - `derive_summary_records()`, `derive_var_merged_summary()`, and `get_summary_records()`
