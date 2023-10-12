@@ -419,7 +419,7 @@ derive_vars_joined <- function(dataset,
   }
 
   # merge new variables to the input dataset and rename them
-  data_final <- data %>%
+  data %>%
     derive_vars_merged(
       dataset_add = data_return,
       by_vars = exprs(!!!by_vars_left, !!tmp_obs_nr),
@@ -442,6 +442,4 @@ derive_vars_joined <- function(dataset,
       )
     ) %>%
     remove_tmp_vars()
-
-  data_final
 }
