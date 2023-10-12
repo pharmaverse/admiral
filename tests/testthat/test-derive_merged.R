@@ -194,8 +194,8 @@ test_that("derive_vars_merged Test 7: expressions for new_vars and missing_value
 })
 
 
-## Test 8: expressions for new_vars and missing_values and exist_flags ----
-test_that("derive_vars_merged Test 8: expressions for new_vars and missing_values and exist_flags", {
+## Test 8: Use of missing_values and exist_flags ----
+test_that("derive_vars_merged Test 8: Use of missing_values and exist_flags", {
   actual <- derive_vars_merged(
     adsl,
     dataset_add = advs,
@@ -263,7 +263,7 @@ test_that("derive_vars_merged Test 9: use new variables in filter_add and order"
 })
 
 ## Test 10: warning if not unique w.r.t the by variables and the order ----
-test_that("derive_vars_merged Test 10: warning if not unique w.r.t the by variables and the order", {
+test_that("derive_vars_merged Test 10: warning if not unique w.r.t the by variables and the order", { # nolint
   expect_warning(
     actual <- derive_vars_merged(advs,
       dataset_add = adsl2,
