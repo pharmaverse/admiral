@@ -325,10 +325,17 @@ derive_vars_joined <- function(dataset,
                                by_vars = NULL,
                                order = NULL,
                                new_vars = NULL,
+                               tmp_obs_nr_var = NULL,
                                join_vars = NULL,
+                               join_type,
                                filter_add = NULL,
+                               first_cond_lower = NULL,
+                               first_cond_upper = NULL,
                                filter_join = NULL,
                                mode = NULL,
+                               exist_flag = NULL,
+                               true_value = "Y",
+                               false_value = NA_character_,
                                missing_values = NULL,
                                check_type = "warning") {
   assert_vars(by_vars, optional = TRUE)
@@ -346,8 +353,12 @@ derive_vars_joined <- function(dataset,
     )
   )
 
+  tmp_obs_nr_var <- assert_symbol(enexpr(tmp_obs_nr_var), optional = TRUE)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  first_cond_lower <- assert_filter_cond(enexpr(first_cond_lower), optional = TRUE)
+  first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
   filter_join <- assert_filter_cond(enexpr(filter_join), optional = TRUE)
+  exist_flag <- assert_symbol(enexpr(exist_flag), optional = TRUE)
 
   if (is.null(new_vars)) {
     new_vars <- chr2vars(colnames(dataset_add))
@@ -376,44 +387,62 @@ derive_vars_joined <- function(dataset,
       check_type = "none"
     )
 
-  # prepare right side of the join,
-  # by_vars are renamed here, new_vars will be renamed at the end
-  data_right <- dataset_add %>%
-    mutate(!!!order, !!!join_vars) %>%
-    filter_if(filter_add) %>%
-    select(
-      !!!by_vars,
-      !!!replace_values_by_names(extract_vars(order)),
-      !!!replace_values_by_names(join_vars),
-      !!!intersect(unname(extract_vars(new_vars)), chr2vars(colnames(dataset_add)))
-    )
-
-  # join dataset (if no by variable, a full join is performed)
-  data_joined <- left_join(
+  data_return <- filter_joined(
     data,
-    data_right,
-    by = vars2chr(by_vars_left),
-    suffix = c("", ".join")
+    dataset_add = dataset_add,
+    by_vars = by_vars,
+    join_vars = expr_c(
+      join_vars,
+      intersect(unname(extract_vars(new_vars)), chr2vars(colnames(dataset_add)))
+    ),
+    join_type = join_type,
+    first_cond_lower = !!first_cond_lower,
+    first_cond_upper = !!first_cond_upper,
+    order = order,
+    tmp_obs_nr_var = !!tmp_obs_nr_var,
+    filter_add = !!filter_add,
+    filter_join = !!filter_join,
+    check_type = check_type
   )
 
-  # select observations for the new variables
-  data_return <- filter_if(data_joined, filter_join)
-
-  common_vars <-
-    chr2vars(setdiff(intersect(colnames(data), colnames(data_right)), vars2chr(by_vars)))
-  if (!is.null(order)) {
-    data_return <- filter_extreme(
-      data_return,
-      by_vars = expr_c(by_vars_left, tmp_obs_nr),
-      order = add_suffix_to_vars(
-        replace_values_by_names(order),
-        vars = common_vars,
-        suffix = ".join"
-      ),
-      mode = mode,
-      check_type = check_type
-    )
-  }
+  # # prepare right side of the join,
+  # # by_vars are renamed here, new_vars will be renamed at the end
+  # data_right <- dataset_add %>%
+  #   mutate(!!!order, !!!join_vars) %>%
+  #   filter_if(filter_add) %>%
+  #   select(
+  #     !!!by_vars,
+  #     !!!replace_values_by_names(extract_vars(order)),
+  #     !!!replace_values_by_names(join_vars),
+  #     !!!intersect(unname(extract_vars(new_vars)), chr2vars(colnames(dataset_add)))
+  #   )
+  #
+  # # join dataset (if no by variable, a full join is performed)
+  # data_joined <- left_join(
+  #   data,
+  #   data_right,
+  #   by = vars2chr(by_vars_left),
+  #   suffix = c("", ".join")
+  # )
+  #
+  # # select observations for the new variables
+  # data_return <- filter_if(data_joined, filter_join)
+  #
+  # common_vars <-
+  #   chr2vars(setdiff(intersect(colnames(data), colnames(data_right)), vars2chr(by_vars)))
+  # if (!is.null(order)) {
+  #   data_return <- filter_extreme(
+  #     data_return,
+  #     by_vars = expr_c(by_vars_left, tmp_obs_nr),
+  #     order = add_suffix_to_vars(
+  #       replace_values_by_names(order),
+  #       vars = common_vars,
+  #       suffix = ".join"
+  #     ),
+  #     mode = mode,
+  #     check_type = check_type
+  #   )
+  # }
 
   # merge new variables to the input dataset and rename them
   data %>%
