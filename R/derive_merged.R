@@ -81,12 +81,37 @@
 #'
 #' @param match_flag Match flag
 #'
+#'  `r lifecycle::badge("deprecated")` Please use `exist_flag` instead.
+#'
 #'   If the argument is specified (e.g., `match_flag = FLAG`), the specified
 #'   variable (e.g., `FLAG`) is added to the input dataset. This variable will
 #'   be `TRUE` for all selected records from `dataset_add` which are merged into
 #'   the input dataset, and `NA` otherwise.
 #'
 #'   *Permitted Values*: Variable name
+#'
+#' @param exist_flag Exist flag
+#'
+#'   If the argument is specified (e.g., `exist_flag = FLAG`), the specified
+#'   variable (e.g., `FLAG`) is added to the input dataset. This variable will
+#'   be the value provided in `true_value` for all selected records from `dataset_add`
+#'   which are merged into the input dataset, and the value provided in `false_value` otherwise.
+#'
+#'   *Permitted Values*: Variable name
+#'
+#' @param true_value True value
+#'
+#'   The value for the specified variable `exist_flag`, applicable to
+#'   the first or last observation (depending on the mode) of each by group.
+#'
+#'   Permitted Values: An atomic scalar
+#'
+#' @param false_value False value
+#'
+#'   The value for the specified variable `exist_flag`, NOT applicable to
+#'   the first or last observation (depending on the mode) of each by group.
+#'
+#'   Permitted Values: An atomic scalar
 #'
 #' @param missing_values Values for non-matching observations
 #'
@@ -198,7 +223,7 @@
 #'   mode = "last",
 #'   new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
 #'   filter_add = VSTESTCD == "WEIGHT",
-#'   match_flag = vsdatafl
+#'   exist_flag = vsdatafl
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 #'
@@ -282,7 +307,10 @@ derive_vars_merged <- function(dataset,
                                new_vars = NULL,
                                filter_add = NULL,
                                mode = NULL,
-                               match_flag = NULL,
+                               match_flag,
+                               exist_flag = NULL,
+                               true_value = "Y",
+                               false_value = NA_character_,
                                missing_values = NULL,
                                check_type = "warning",
                                duplicate_msg = NULL) {
@@ -301,7 +329,17 @@ derive_vars_merged <- function(dataset,
       extract_vars(new_vars)
     )
   )
-  match_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
+  if (!is_missing(enexpr(match_flag))) {
+    deprecate_warn(
+      "1.0.0",
+      "derive_vars_merged(match_flag =)",
+      "derive_vars_merged(exist_flag =)"
+    )
+    exist_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
+  }
+  exist_flag <- assert_symbol(enexpr(exist_flag), optional = TRUE)
+  assert_atomic_vector(true_value, optional = TRUE)
+  assert_atomic_vector(false_value, optional = TRUE)
   assert_expr_list(missing_values, named = TRUE, optional = TRUE)
   if (!is.null(missing_values)) {
     invalid_vars <- setdiff(
@@ -347,18 +385,18 @@ derive_vars_merged <- function(dataset,
       select(!!!by_vars_right, !!!replace_values_by_names(new_vars))
   }
 
-  if (!is.null(missing_values)) {
+  if (!is.null(missing_values) || !is.null(exist_flag)) {
     match_flag_var <- get_new_tmp_var(add_data, prefix = "tmp_match_flag")
   } else {
-    match_flag_var <- match_flag
+    match_flag_var <- NULL
   }
-
   if (!is.null(match_flag_var)) {
     add_data <- mutate(
       add_data,
       !!match_flag_var := TRUE
     )
   }
+
   # check if there are any variables in both datasets which are not by vars
   # in this case an error is issued to avoid renaming of varibles by left_join()
   common_vars <-
@@ -382,7 +420,7 @@ derive_vars_merged <- function(dataset,
   }
   dataset <- left_join(dataset, add_data, by = vars2chr(by_vars))
 
-  if (!is.null(missing_values)) {
+  if (!is.null(match_flag_var)) {
     update_missings <- map2(
       syms(names(missing_values)),
       missing_values,
@@ -390,10 +428,16 @@ derive_vars_merged <- function(dataset,
     )
     names(update_missings) <- names(missing_values)
     dataset <- dataset %>%
-      mutate(!!!update_missings) %>%
-      remove_tmp_vars()
+      mutate(!!!update_missings)
   }
-  dataset
+
+  if (!is.null(exist_flag)) {
+    dataset <- dataset %>%
+      mutate(!!exist_flag := ifelse(is.na(!!match_flag_var), false_value, true_value))
+  }
+
+  dataset %>%
+    remove_tmp_vars()
 }
 
 #' Merge an Existence Flag
@@ -651,6 +695,8 @@ derive_vars_merged_lookup <- function(dataset,
   assert_logical_scalar(print_not_mapped)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
 
+  tmp_lookup_flag <- get_new_tmp_var(dataset_add, prefix = "tmp_lookup_flag")
+
   res <- derive_vars_merged(
     dataset,
     dataset_add,
@@ -659,14 +705,14 @@ derive_vars_merged_lookup <- function(dataset,
     new_vars = new_vars,
     mode = mode,
     filter_add = !!filter_add,
-    match_flag = temp_match_flag,
+    exist_flag = !!tmp_lookup_flag,
     check_type = check_type,
     duplicate_msg = duplicate_msg
   )
 
   if (print_not_mapped) {
     temp_not_mapped <- res %>%
-      filter(is.na(temp_match_flag)) %>%
+      filter(is.na(!!tmp_lookup_flag)) %>%
       distinct(!!!by_vars_left)
 
     if (nrow(temp_not_mapped) > 0) {
@@ -688,7 +734,7 @@ derive_vars_merged_lookup <- function(dataset,
     }
   }
 
-  res %>% select(-temp_match_flag)
+  res %>% remove_tmp_vars()
 }
 
 #' Get list of records not mapped from the lookup table.

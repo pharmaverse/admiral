@@ -15,7 +15,7 @@ derive_extreme_records(
   check_type = "warning",
   exist_flag = NULL,
   true_value = "Y",
-  false_value = "N",
+  false_value = NA_character_,
   keep_source_vars = exprs(everything()),
   set_values_to
 )
