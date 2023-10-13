@@ -67,17 +67,6 @@ before the current observation."><meta property="og:image" content="https://phar
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.2">v0.12.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.1">v0.12.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -119,6 +108,9 @@ before the current observation.</p>
   filter_add <span class="op">=</span> <span class="cn">NULL</span>,
   filter_join <span class="op">=</span> <span class="cn">NULL</span>,
   mode <span class="op">=</span> <span class="cn">NULL</span>,
+  exist_flag <span class="op">=</span> <span class="cn">NULL</span>,
+  true_value <span class="op">=</span> <span class="st">"Y"</span>,
+  false_value <span class="op">=</span> <span class="cn">NA_character_</span>,
   missing_values <span class="op">=</span> <span class="cn">NULL</span>,
   check_type <span class="op">=</span> <span class="st">"warning"</span>
 <span class="op">)</span></code></pre></div>
@@ -218,6 +210,29 @@ condition.</p>
 argument is specified, <code>mode</code> must be non-null.</p>
 <p>If the <code>order</code> argument is not specified, the <code>mode</code> argument is ignored.</p>
 <p><em>Permitted Values</em>: <code>"first"</code>, <code>"last"</code>, <code>NULL</code></p></dd>
+
+
+<dt>exist_flag</dt>
+<dd><p>Exist flag</p>
+<p>If the argument is specified (e.g., <code>exist_flag = FLAG</code>), the specified
+variable (e.g., <code>FLAG</code>) is added to the input dataset. This variable will
+be the value provided in <code>true_value</code> for all selected records from <code>dataset_add</code>
+which are merged into the input dataset, and the value provided in <code>false_value</code> otherwise.</p>
+<p><em>Permitted Values</em>: Variable name</p></dd>
+
+
+<dt>true_value</dt>
+<dd><p>True value</p>
+<p>The value for the specified variable <code>exist_flag</code>, applicable to
+the first or last observation (depending on the mode) of each by group.</p>
+<p>Permitted Values: An atomic scalar</p></dd>
+
+
+<dt>false_value</dt>
+<dd><p>False value</p>
+<p>The value for the specified variable <code>exist_flag</code>, NOT applicable to
+the first or last observation (depending on the mode) of each by group.</p>
+<p>Permitted Values: An atomic scalar</p></dd>
 
 
 <dt>missing_values</dt>

@@ -67,17 +67,6 @@ each by group (order and mode argument)."><meta property="og:image" content="htt
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.2">v0.12.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.1">v0.12.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -117,7 +106,10 @@ each by group (<code>order</code> and <code>mode</code> argument).</p>
   new_vars <span class="op">=</span> <span class="cn">NULL</span>,
   filter_add <span class="op">=</span> <span class="cn">NULL</span>,
   mode <span class="op">=</span> <span class="cn">NULL</span>,
-  match_flag <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">match_flag</span>,
+  exist_flag <span class="op">=</span> <span class="cn">NULL</span>,
+  true_value <span class="op">=</span> <span class="st">"Y"</span>,
+  false_value <span class="op">=</span> <span class="cn">NA_character_</span>,
   missing_values <span class="op">=</span> <span class="cn">NULL</span>,
   check_type <span class="op">=</span> <span class="st">"warning"</span>,
   duplicate_msg <span class="op">=</span> <span class="cn">NULL</span>
@@ -195,11 +187,35 @@ argument is specified, <code>mode</code> must be non-null.</p>
 
 <dt>match_flag</dt>
 <dd><p>Match flag</p>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>exist_flag</code> instead.</p>
 <p>If the argument is specified (e.g., <code>match_flag = FLAG</code>), the specified
 variable (e.g., <code>FLAG</code>) is added to the input dataset. This variable will
 be <code>TRUE</code> for all selected records from <code>dataset_add</code> which are merged into
 the input dataset, and <code>NA</code> otherwise.</p>
 <p><em>Permitted Values</em>: Variable name</p></dd>
+
+
+<dt>exist_flag</dt>
+<dd><p>Exist flag</p>
+<p>If the argument is specified (e.g., <code>exist_flag = FLAG</code>), the specified
+variable (e.g., <code>FLAG</code>) is added to the input dataset. This variable will
+be the value provided in <code>true_value</code> for all selected records from <code>dataset_add</code>
+which are merged into the input dataset, and the value provided in <code>false_value</code> otherwise.</p>
+<p><em>Permitted Values</em>: Variable name</p></dd>
+
+
+<dt>true_value</dt>
+<dd><p>True value</p>
+<p>The value for the specified variable <code>exist_flag</code>, applicable to
+the first or last observation (depending on the mode) of each by group.</p>
+<p>Permitted Values: An atomic scalar</p></dd>
+
+
+<dt>false_value</dt>
+<dd><p>False value</p>
+<p>The value for the specified variable <code>exist_flag</code>, NOT applicable to
+the first or last observation (depending on the mode) of each by group.</p>
+<p>Permitted Values: An atomic scalar</p></dd>
 
 
 <dt>missing_values</dt>
@@ -340,14 +356,14 @@ in the input dataset are ignored.</p></li>
 <span class="r-in">  mode <span class="op">=</span> <span class="st">"last"</span>,</span>
 <span class="r-in">  new_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>LASTWGT <span class="op">=</span> <span class="va">VSSTRESN</span>, LASTWGTU <span class="op">=</span> <span class="va">VSSTRESU</span><span class="op">)</span>,</span>
 <span class="r-in">  filter_add <span class="op">=</span> <span class="va">VSTESTCD</span> <span class="op">==</span> <span class="st">"WEIGHT"</span>,</span>
-<span class="r-in">  match_flag <span class="op">=</span> <span class="va">vsdatafl</span></span>
+<span class="r-in">  exist_flag <span class="op">=</span> <span class="va">vsdatafl</span></span>
 <span class="r-in"><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span>, <span class="va">AGE</span>, <span class="va">AGEU</span>, <span class="va">LASTWGT</span>, <span class="va">LASTWGTU</span>, <span class="va">vsdatafl</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID USUBJID   AGE AGEU  LASTWGT LASTWGTU vsdatafl</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> PILOT01 01-1302    61 YEARS    82.1 kg       TRUE    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> PILOT01 17-1344    64 YEARS    57.8 kg       TRUE    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> PILOT01 01-1302    61 YEARS    82.1 kg       Y       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> PILOT01 17-1344    64 YEARS    57.8 kg       Y       </span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Derive treatment start datetime (TRTSDTM)</span></span>
