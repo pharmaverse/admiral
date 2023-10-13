@@ -395,7 +395,7 @@ derive_vars_merged <- function(dataset,
   if (!is.null(missing_values)) {
     missing_values_var <- get_new_tmp_var(add_data, prefix = "tmp_missing_flag")
   } else {
-    missing_values_var <- missing_values
+    missing_values_var <- NULL
   }
   if (!is.null(missing_values_var)) {
     add_data <- mutate(
