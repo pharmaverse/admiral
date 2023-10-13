@@ -387,7 +387,7 @@ derive_vars_joined <- function(dataset,
       check_type = "none"
     )
 
-  data_return <- filter_joined(
+  data_joined <- get_joined_data(
     data,
     dataset_add = dataset_add,
     by_vars = by_vars,
@@ -428,26 +428,26 @@ derive_vars_joined <- function(dataset,
   # # select observations for the new variables
   # data_return <- filter_if(data_joined, filter_join)
   #
-  # common_vars <-
-  #   chr2vars(setdiff(intersect(colnames(data), colnames(data_right)), vars2chr(by_vars)))
-  # if (!is.null(order)) {
-  #   data_return <- filter_extreme(
-  #     data_return,
-  #     by_vars = expr_c(by_vars_left, tmp_obs_nr),
-  #     order = add_suffix_to_vars(
-  #       replace_values_by_names(order),
-  #       vars = common_vars,
-  #       suffix = ".join"
-  #     ),
-  #     mode = mode,
-  #     check_type = check_type
-  #   )
-  # }
+  common_vars <-
+    chr2vars(setdiff(intersect(colnames(data), colnames(dataset_add)), vars2chr(by_vars)))
+  if (!is.null(order)) {
+    data_joined <- filter_extreme(
+      data_joined,
+      by_vars = expr_c(by_vars_left, tmp_obs_nr),
+      order = add_suffix_to_vars(
+        replace_values_by_names(order),
+        vars = common_vars,
+        suffix = ".join"
+      ),
+      mode = mode,
+      check_type = check_type
+    )
+  }
 
   # merge new variables to the input dataset and rename them
   data %>%
     derive_vars_merged(
-      dataset_add = data_return,
+      dataset_add = data_joined,
       by_vars = exprs(!!!by_vars_left, !!tmp_obs_nr),
       new_vars = add_suffix_to_vars(new_vars, vars = common_vars, suffix = ".join"),
       missing_values = missing_values,
@@ -465,4 +465,292 @@ derive_vars_joined <- function(dataset,
       )
     ) %>%
     remove_tmp_vars()
+}
+
+#' Join Data for "joined" functions
+#'
+#' The helper function joins the data for the "joined" functions. All `.join`
+#'
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'
+#' @param dataset_add Additional dataset
+#'
+#'   The variables specified by the `by_vars`, the `new_vars`, the `join_vars`,
+#'   and the `order` argument are expected.
+#'
+#' @param by_vars Grouping variables
+#'
+#'   The two datasets are joined by the specified variables. Variables from the
+#'   additional dataset can be renamed by naming the element, i.e., `by_vars =
+#'   exprs(<name in input dataset> = <name in additional dataset>)`.
+#'
+#'   *Permitted Values*: list of variables created by `exprs()`
+#'
+#' @param order Sort order
+#'
+#'   If the argument is set to a non-null value, for each observation of the
+#'   input dataset the first or last observation from the joined dataset is
+#'   selected with respect to the specified order. The specified variables are
+#'   expected in the additional dataset (`dataset_add`). If a variable is
+#'   available in both `dataset` and `dataset_add`, the one from `dataset_add`
+#'   is used for the sorting.
+#'
+#'   If an expression is named, e.g., `exprs(EXSTDT =
+#'   convert_dtc_to_dt(EXSTDTC), EXSEQ)`, a corresponding variable (`EXSTDT`) is
+#'   added to the additional dataset and can be used in the filter conditions
+#'   (`filter_add`, `filter_join`) and for `join_vars` and `new_vars`. The
+#'   variable is not included in the output dataset.
+#'
+#'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
+#'    `exprs(ADT, desc(AVAL))` or `NULL`
+#'
+#' @param new_vars Variables to add
+#'
+#'   The specified variables from the additional dataset are added to the output
+#'   dataset. Variables can be renamed by naming the element, i.e., `new_vars =
+#'   exprs(<new name> = <old name>)`.
+#'
+#'   For example `new_vars = exprs(var1, var2)` adds variables `var1` and `var2`
+#'   from `dataset_add` to the input dataset.
+#'
+#'   And `new_vars = exprs(var1, new_var2 = old_var2)` takes `var1` and
+#'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
+#'   `old_var2` to `new_var2`.
+#'
+#'   Values of the added variables can be modified by specifying an expression.
+#'   For example, `new_vars = LASTRSP = exprs(str_to_upper(AVALC))` adds the
+#'   variable `LASTRSP` to the dataset and sets it to the upper case value of
+#'   `AVALC`.
+#'
+#'   If the argument is not specified or set to `NULL`, all variables from the
+#'   additional dataset (`dataset_add`) are added.
+#'
+#'   *Permitted Values*: list of variables or named expressions created by `exprs()`
+#'
+#' @param join_vars Variables to use from additional dataset
+#'
+#'   Any extra variables required from the additional dataset for `filter_join`
+#'   should be specified for this argument. Variables specified for `new_vars`
+#'   do not need to be repeated for `join_vars`. If a specified variable exists
+#'   in both the input dataset and the additional dataset, the suffix ".join" is
+#'   added to the variable from the additional dataset.
+#'
+#'   If an expression is named, e.g., `exprs(EXTDT =
+#'   convert_dtc_to_dt(EXSTDTC))`, a corresponding variable is added to the
+#'   additional dataset and can be used in the filter conditions (`filter_add`,
+#'   `filter_join`) and for `new_vars`. The variable is not included in the
+#'   output dataset.
+#'
+#'   The variables are not included in the output dataset.
+#'
+#'   *Permitted Values*: list of variables or named expressions created by `exprs()`
+#'
+#' @param filter_add Filter for additional dataset (`dataset_add`)
+#'
+#'   Only observations from `dataset_add` fulfilling the specified condition are
+#'   joined to the input dataset. If the argument is not specified, all
+#'   observations are joined.
+#'
+#'   Variables created by `order` or `new_vars` arguments can be used in the
+#'   condition.
+#'
+#'   *Permitted Values*: a condition
+#'
+#' @param filter_join Filter for the joined dataset
+#'
+#'   The specified condition is applied to the joined dataset. Therefore
+#'   variables from both datasets `dataset` and `dataset_add` can be used.
+#'
+#'   Variables created by `order` or `new_vars` arguments can be used in the
+#'   condition.
+#'
+#'   *Permitted Values*: a condition
+#'
+#' @param mode Selection mode
+#'
+#'   Determines if the first or last observation is selected. If the `order`
+#'   argument is specified, `mode` must be non-null.
+#'
+#'   If the `order` argument is not specified, the `mode` argument is ignored.
+#'
+#'   *Permitted Values*: `"first"`, `"last"`, `NULL`
+#'
+#' @param check_type Check uniqueness?
+#'
+#'   If `"warning"` or `"error"` is specified, the specified message is issued
+#'   if the observations of the (restricted) joined dataset are not unique with
+#'   respect to the by variables and the order.
+#'
+#'   This argument is ignored if `order` is not specified. In this case an error
+#'   is issued independent of `check_type` if the restricted joined dataset
+#'   contains more than one observation for any of the observations of the input
+#'   dataset.
+#'
+#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
+#'
+#'
+#' @details
+#'
+#' 1. The variables specified by `order` are added to the additional dataset
+#' (`dataset_add`).
+#'
+#' 1. The variables specified by `join_vars` are added to the additional dataset
+#' (`dataset_add`).
+#'
+#' 1. The records from the additional dataset (`dataset_add`) are restricted to
+#' those matching the `filter_add` condition.
+#'
+#' 1. The input dataset and the (restricted) additional dataset are left joined
+#' by the grouping variables (`by_vars`). If no grouping variables are
+#' specified, a full join is performed.
+#'
+#' 1. The joined dataset is restricted by the `filter_join` condition.
+get_joined_data <- function(dataset,
+                            dataset_add,
+                            by_vars = NULL,
+                            join_vars = NULL,
+                            join_type,
+                            first_cond_lower = NULL,
+                            first_cond_upper = NULL,
+                            order = NULL,
+                            tmp_obs_nr_var = NULL,
+                            filter_add = NULL,
+                            filter_join = NULL,
+                            check_type = "warning") {
+  # Check input parameters
+  assert_vars(by_vars, optional = TRUE)
+  by_vars_left <- replace_values_by_names(by_vars)
+  assert_expr_list(join_vars, optional = TRUE)
+  join_type <-
+    assert_character_scalar(
+      join_type,
+      values = c("before", "after", "all"),
+      case_sensitive = FALSE
+    )
+  first_cond_lower <- assert_filter_cond(enexpr(first_cond_lower), optional = TRUE)
+  first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
+  assert_expr_list(order, optional = TRUE)
+  tmp_obs_nr_var <- assert_symbol(enexpr(tmp_obs_nr_var), optional = TRUE)
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  filter_join <- assert_filter_cond(enexpr(filter_join), optional = TRUE)
+  check_type <-
+    assert_character_scalar(
+      check_type,
+      values = c("none", "warning", "error"),
+      case_sensitive = FALSE
+    )
+  if (join_type != "all" || !is.null(first_cond_lower) || !is.null(first_cond_upper)) {
+    dataset_order_vars <- extract_vars(order)
+  } else {
+    dataset_order_vars <- NULL
+  }
+
+  assert_data_frame(
+    dataset,
+    required_vars = expr_c(by_vars_left, dataset_order_vars)
+  )
+
+  assert_data_frame(
+    dataset_add,
+    required_vars = expr_c(
+      by_vars,
+      extract_vars(order),
+      setdiff(extract_vars(join_vars), replace_values_by_names(order))
+    )
+  )
+
+  # number observations of the input dataset to get a unique key
+  # (by_vars and tmp_obs_nr_var)
+  if (is.null(tmp_obs_nr_var)) {
+    tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr")
+  }
+  data_add <- dataset_add %>%
+    group_by(!!!by_vars) %>%
+    mutate(!!!order, !!!join_vars) %>%
+    filter_if(filter_add) %>%
+    ungroup() %>%
+    derive_var_obs_number(
+      new_var = !!tmp_obs_nr_var,
+      by_vars = by_vars,
+      order = order,
+      check_type = check_type
+    )
+
+  if (all(extract_vars(order) %in% vars2chr(colnames(dataset)))) {
+    # tmp_obs_nr_var is added to the input dataset if possible.
+    # It is required if join_type != "all" or first_cond_lower or first_cond_upper
+    # is specified. It may also be used in filter_join.
+    data <- dataset %>%
+      mutate(!!!order) %>%
+      derive_var_obs_number(
+        new_var = !!tmp_obs_nr_var,
+        by_vars = by_vars,
+        order = order,
+        check_type = check_type
+      )
+  } else {
+    data <- dataset
+  }
+  # join the input dataset with itself such that to each observation of the
+  # input dataset all following observations are joined
+  data_joined <-
+    left_join(
+      data,
+      select(
+        data_add,
+        !!!by_vars,
+        !!!replace_values_by_names(extract_vars(order)),
+        !!!replace_values_by_names(join_vars),
+        !!tmp_obs_nr_var
+      ),
+      by = vars2chr(by_vars_left),
+      suffix = c("", ".join")
+    )
+
+  if (join_type != "all") {
+    operator <- c(before = "<", after = ">")
+
+    data_joined <- filter(
+      data_joined,
+      !!parse_expr(paste0(
+        as_name(tmp_obs_nr_var), ".join",
+        operator[join_type],
+        as_name(tmp_obs_nr_var)
+      ))
+    )
+  }
+
+  if (!is.null(first_cond_upper)) {
+    # select all observations up to the first confirmation observation
+    data_joined <- filter_relative(
+      data_joined,
+      by_vars = expr_c(by_vars_left, tmp_obs_nr_var),
+      condition = !!first_cond_upper,
+      order = exprs(!!parse_expr(paste0(as_name(tmp_obs_nr_var), ".join"))),
+      mode = "first",
+      selection = "before",
+      inclusive = TRUE,
+      keep_no_ref_groups = FALSE
+    )
+  }
+
+  if (!is.null(first_cond_lower)) {
+    # select all observations up to the first confirmation observation
+    data_joined <- filter_relative(
+      data_joined,
+      by_vars = expr_c(by_vars_left, tmp_obs_nr_var),
+      condition = !!first_cond_lower,
+      order = exprs(!!parse_expr(paste0("desc(", as_name(tmp_obs_nr_var), ".join)"))),
+      mode = "first",
+      selection = "before",
+      inclusive = TRUE,
+      keep_no_ref_groups = FALSE
+    )
+  }
+  # apply confirmation condition, which may include summary functions
+  data_joined %>%
+    group_by(!!!by_vars_left, !!tmp_obs_nr_var) %>%
+    filter_if(filter_join) %>%
+    ungroup()
 }

@@ -53,9 +53,9 @@ The specified variable is added to the input dataset (\code{dataset}) and the
 additional dataset (\code{dataset_add}). It is set to the observation number
 with respect to \code{order}. For each by group (\code{by_vars}) the observation
 number starts with \code{1}. The variable can be used in the conditions
-(\code{filter}, \code{first_cond}). It is not included in the output dataset. It can
-be used to flag consecutive observations or the last observation (see last
-example below).}
+(\code{filter_join}, \code{first_cond_upper}, \code{first_cond_lower}). It is not included
+in the output dataset. It can be used to flag consecutive observations or
+the last observation (see last example below).}
 
 \item{join_vars}{Variables to keep from joined dataset
 

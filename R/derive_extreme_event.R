@@ -404,12 +404,14 @@ derive_extreme_event <- function(dataset,
       } else {
         data_events <- filter_joined(
           data_source,
+          dataset_add = data_source,
           by_vars = by_vars,
           join_vars = event$join_vars,
           join_type = event$join_type,
-          first_cond = !!event$first_cond,
+          first_cond_lower = !!event$first_cond_lower,
+          first_cond_upper = !!event$first_cond_upper,
           order = event_order,
-          filter = !!event$condition
+          filter_join = !!event$condition
         )
       }
       if (is.null(event$keep_source_vars)) {
@@ -613,9 +615,22 @@ event_joined <- function(dataset_name = NULL,
                          join_vars,
                          join_type,
                          first_cond = NULL,
+                         first_cond_lower = NULL,
+                         first_cond_upper = NULL,
                          set_values_to = NULL,
                          keep_source_vars = NULL,
                          description = NULL) {
+  if (!missing(first_cond)) {
+    deprecate_warn(
+      "1.0.0",
+      "event_joined(first_cond=)",
+      "event_joined(first_cond_upper=)"
+    )
+    first_cond_upper <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
+  } else {
+    first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
+  }
+
   out <- list(
     description = assert_character_scalar(description, optional = TRUE),
     dataset_name = assert_character_scalar(dataset_name, optional = TRUE),
@@ -627,7 +642,8 @@ event_joined <- function(dataset_name = NULL,
       values = c("before", "after", "all"),
       case_sensitive = FALSE
     ),
-    first_cond = assert_filter_cond(enexpr(first_cond), optional = TRUE),
+    first_cond_lower = assert_filter_cond(enexpr(first_cond_lower), optional = TRUE),
+    first_cond_upper = first_cond_upper,
     set_values_to = assert_expr_list(
       set_values_to,
       named = TRUE,

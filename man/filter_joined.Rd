@@ -80,7 +80,7 @@ The observations are ordered by the specified order.
 \item{tmp_obs_nr_var}{Temporary observation number
 
 The specified variable is added to the input dataset (\code{dataset}) and the
-additional dataest (\code{dataset_add}). It is set to the observation number
+additional dataset (\code{dataset_add}). It is set to the observation number
 with respect to \code{order}. For each by group (\code{by_vars}) the observation
 number starts with \code{1}. The variable can be used in the conditions
 (\code{filter_join}, \code{first_cond_upper}, \code{first_cond_lower}). It is not included

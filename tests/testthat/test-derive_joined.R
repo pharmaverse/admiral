@@ -343,3 +343,49 @@ test_that("derive_vars_joined Test 10: order vars are selected properly in funct
     keys = c("day", "val", "first_val")
   )
 })
+
+# get_joined_data ----
+## Test 11: `first_cond_lower` works ----
+test_that("get_joined_data Test 11: `first_cond_lower` works", {
+  data <- tribble(
+    ~subj, ~day, ~val,
+    "1",      1, "++",
+    "1",      2, "-",
+    "1",      3, "0",
+    "1",      4, "+",
+    "1",      5, "++",
+    "2",      1, "++",
+    "2",      2, "+",
+    "2",      3, "0",
+    "2",      4, "-",
+    "2",      5, "++"
+  )
+
+  expected <- tibble::tribble(
+    ~day.join, ~val.join, ~tmp_obs_nr_1.join,
+    1,         "++",      1L,
+    2,         "+",       2L
+  ) %>%
+    mutate(
+      subj = "2",
+      day = 3,
+      val = "0",
+      tmp_obs_nr_1 = 3L
+    )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = get_joined_data(
+      data,
+      dataset_add = data,
+      by_vars = exprs(subj),
+      order = exprs(day),
+      join_vars = exprs(val),
+      join_type = "before",
+      first_cond_lower = val.join == "++",
+      filter_join = val == "0" & all(val.join %in% c("+", "++"))
+    ),
+    keys = c("subj", "day.join")
+  )
+}
+)

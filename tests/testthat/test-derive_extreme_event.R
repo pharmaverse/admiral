@@ -409,7 +409,7 @@ test_that("derive_extreme_records Test 5: event_joined() is handled correctly", 
         event_joined(
           join_vars = exprs(AVALC, ADT),
           join_type = "after",
-          first_cond = AVALC.join == "CR" &
+          first_cond_upper = AVALC.join == "CR" &
             ADT.join >= ADT + 28,
           condition = AVALC == "CR" &
             all(AVALC.join %in% c("CR", "NE")) &
@@ -421,7 +421,7 @@ test_that("derive_extreme_records Test 5: event_joined() is handled correctly", 
         event_joined(
           join_vars = exprs(AVALC, ADT),
           join_type = "after",
-          first_cond = AVALC.join %in% c("CR", "PR") &
+          first_cond_upper = AVALC.join %in% c("CR", "PR") &
             ADT.join >= ADT + 28,
           condition = AVALC == "PR" &
             all(AVALC.join %in% c("CR", "PR", "NE")) &
@@ -530,14 +530,14 @@ test_that("derive_extreme_records Test 6: ignore_event_order", {
       event_joined(
         join_vars = exprs(AVALC),
         join_type = "after",
-        first_cond = AVALC.join == "CR",
+        first_cond_upper = AVALC.join == "CR",
         condition = AVALC == "CR",
         set_values_to = exprs(AVALC = "Y")
       ),
       event_joined(
         join_vars = exprs(AVALC),
         join_type = "after",
-        first_cond = AVALC.join %in% c("CR", "PR"),
+        first_cond_upper = AVALC.join %in% c("CR", "PR"),
         condition = AVALC == "PR",
         set_values_to = exprs(AVALC = "Y")
       )
@@ -560,5 +560,42 @@ test_that("derive_extreme_records Test 6: ignore_event_order", {
     base = expected,
     compare = actual,
     keys = c("USUBJID", "PARAMCD", "AVISITN")
+  )
+})
+
+# event_joined ----
+## Test 7: deprecation of `first_cond` ----
+test_that("event_joined Test 7: deprecation of `first_cond`", {
+  new_event <- event_joined(
+    join_vars = exprs(AVALC, ADT),
+    join_type = "after",
+    first_cond_upper = AVALC.join == "CR" &
+      ADT.join >= ADT + 28,
+    condition = AVALC == "CR" &
+      all(AVALC.join %in% c("CR", "NE")) &
+      count_vals(var = AVALC.join, val = "NE") <= 1,
+    set_values_to = exprs(
+      AVALC = "CR"
+    )
+  )
+
+  expect_warning(
+    old_event <- event_joined(
+      join_vars = exprs(AVALC, ADT),
+      join_type = "after",
+      first_cond = AVALC.join == "CR" &
+        ADT.join >= ADT + 28,
+      condition = AVALC == "CR" &
+        all(AVALC.join %in% c("CR", "NE")) &
+        count_vals(var = AVALC.join, val = "NE") <= 1,
+      set_values_to = exprs(
+        AVALC = "CR"
+      )
+    )
+  )
+
+  expect_equal(
+    old_event,
+    expected = new_event
   )
 })

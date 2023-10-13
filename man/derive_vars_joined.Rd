@@ -11,10 +11,17 @@ derive_vars_joined(
   by_vars = NULL,
   order = NULL,
   new_vars = NULL,
+  tmp_obs_nr_var = NULL,
   join_vars = NULL,
+  join_type,
   filter_add = NULL,
+  first_cond_lower = NULL,
+  first_cond_upper = NULL,
   filter_join = NULL,
   mode = NULL,
+  exist_flag = NULL,
+  true_value = "Y",
+  false_value = NA_character_,
   missing_values = NULL,
   check_type = "warning"
 )

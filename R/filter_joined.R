@@ -76,7 +76,7 @@
 #' @param tmp_obs_nr_var Temporary observation number
 #'
 #'   The specified variable is added to the input dataset (`dataset`) and the
-#'   additional dataest (`dataset_add`). It is set to the observation number
+#'   additional dataset (`dataset_add`). It is set to the observation number
 #'   with respect to `order`. For each by group (`by_vars`) the observation
 #'   number starts with `1`. The variable can be used in the conditions
 #'   (`filter_join`, `first_cond_upper`, `first_cond_lower`). It is not included
@@ -411,86 +411,104 @@ filter_joined <- function(dataset,
     required_vars = expr_c(by_vars, join_vars, extract_vars(order))
   )
 
-  # number observations of the input dataset to get a unique key
-  # (by_vars and tmp_obs_nr_var)
+  # # number observations of the input dataset to get a unique key
+  # # (by_vars and tmp_obs_nr_var)
+  # if (is.null(tmp_obs_nr_var)) {
+  #   tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")
+  # }
+  # data_add <- dataset_add %>%
+  #   group_by(!!!by_vars) %>%
+  #   filter_if(filter_add) %>%
+  #   ungroup() %>%
+  #   derive_var_obs_number(
+  #     new_var = !!tmp_obs_nr_var,
+  #     by_vars = by_vars,
+  #     order = order,
+  #     check_type = check_type
+  #   )
+  #
+  # data <- dataset %>%
+  #   derive_var_obs_number(
+  #     new_var = !!tmp_obs_nr_var,
+  #     by_vars = by_vars,
+  #     order = order,
+  #     check_type = check_type
+  #   )
+  #
+  # # join the input dataset with itself such that to each observation of the
+  # # input dataset all following observations are joined
+  # data_joined <-
+  #   left_join(
+  #     data,
+  #     select(data_add, !!!by_vars, !!!join_vars, !!tmp_obs_nr_var),
+  #     by = vars2chr(by_vars),
+  #     suffix = c("", ".join")
+  #   )
+  #
+  # if (join_type != "all") {
+  #   operator <- c(before = "<", after = ">")
+  #
+  #   data_joined <- filter(
+  #     data_joined,
+  #     !!parse_expr(paste0(
+  #       as_name(tmp_obs_nr_var), ".join",
+  #       operator[join_type],
+  #       as_name(tmp_obs_nr_var)
+  #     ))
+  #   )
+  # }
+  #
+  # if (!is.null(first_cond_upper)) {
+  #   # select all observations up to the first confirmation observation
+  #   data_joined <- filter_relative(
+  #     data_joined,
+  #     by_vars = expr_c(by_vars, tmp_obs_nr_var),
+  #     condition = !!first_cond_upper,
+  #     order = exprs(!!parse_expr(paste0(as_name(tmp_obs_nr_var), ".join"))),
+  #     mode = "first",
+  #     selection = "before",
+  #     inclusive = TRUE,
+  #     keep_no_ref_groups = FALSE
+  #   )
+  # }
+  #
+  # if (!is.null(first_cond_lower)) {
+  #   # select all observations up to the first confirmation observation
+  #   data_joined <- filter_relative(
+  #     data_joined,
+  #     by_vars = expr_c(by_vars, tmp_obs_nr_var),
+  #     condition = !!first_cond_lower,
+  #     order = exprs(!!parse_expr(paste0("desc(", as_name(tmp_obs_nr_var), ".join)"))),
+  #     mode = "first",
+  #     selection = "before",
+  #     inclusive = TRUE,
+  #     keep_no_ref_groups = FALSE
+  #   )
+  # }
+  # # apply confirmation condition, which may include summary functions
+  # data_joined %>%
+  #   group_by(!!!by_vars, !!tmp_obs_nr_var) %>%
+  #   filter(!!filter_join) %>%
   if (is.null(tmp_obs_nr_var)) {
     tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")
   }
-  data_add <- dataset_add %>%
-    group_by(!!!by_vars) %>%
-    filter_if(filter_add) %>%
-    ungroup() %>%
-    derive_var_obs_number(
-      new_var = !!tmp_obs_nr_var,
-      by_vars = by_vars,
-      order = order,
-      check_type = check_type
-    )
-
-  data <- dataset %>%
-    derive_var_obs_number(
-      new_var = !!tmp_obs_nr_var,
-      by_vars = by_vars,
-      order = order,
-      check_type = check_type
-    )
-
-  # join the input dataset with itself such that to each observation of the
-  # input dataset all following observations are joined
-  data_joined <-
-    left_join(
-      data,
-      select(data_add, !!!by_vars, !!!join_vars, !!tmp_obs_nr_var),
-      by = vars2chr(by_vars),
-      suffix = c("", ".join")
-    )
-
-  if (join_type != "all") {
-    operator <- c(before = "<", after = ">")
-
-    data_joined <- filter(
-      data_joined,
-      !!parse_expr(paste0(
-        as_name(tmp_obs_nr_var), ".join",
-        operator[join_type],
-        as_name(tmp_obs_nr_var)
-      ))
-    )
-  }
-
-  if (!is.null(first_cond_upper)) {
-    # select all observations up to the first confirmation observation
-    data_joined <- filter_relative(
-      data_joined,
-      by_vars = expr_c(by_vars, tmp_obs_nr_var),
-      condition = !!first_cond_upper,
-      order = exprs(!!parse_expr(paste0(as_name(tmp_obs_nr_var), ".join"))),
-      mode = "first",
-      selection = "before",
-      inclusive = TRUE,
-      keep_no_ref_groups = FALSE
-    )
-  }
-
-  if (!is.null(first_cond_lower)) {
-    # select all observations up to the first confirmation observation
-    data_joined <- filter_relative(
-      data_joined,
-      by_vars = expr_c(by_vars, tmp_obs_nr_var),
-      condition = !!first_cond_lower,
-      order = exprs(!!parse_expr(paste0("desc(", as_name(tmp_obs_nr_var), ".join)"))),
-      mode = "first",
-      selection = "before",
-      inclusive = TRUE,
-      keep_no_ref_groups = FALSE
-    )
-  }
-  # apply confirmation condition, which may include summary functions
-  data_joined %>%
-    group_by(!!!by_vars, !!tmp_obs_nr_var) %>%
-    filter(!!filter_join) %>%
+  get_joined_data(
+    dataset,
+    dataset_add = dataset_add,
+    by_vars = by_vars,
+    join_vars = join_vars,
+    join_type = join_type,
+    first_cond_lower = !!first_cond_lower,
+    first_cond_upper = !!first_cond_upper,
+    order = order,
+    tmp_obs_nr_var = !!tmp_obs_nr_var,
+    filter_add = !!filter_add,
+    filter_join = !!filter_join,
+    check_type = check_type
+  ) %>%
     # select one observation of each group, as the joined variables are removed
     # it doesn't matter which one, so we take just the first one
+    group_by(!!!by_vars, !!tmp_obs_nr_var) %>%
     slice(1L) %>%
     ungroup() %>%
     select(colnames(dataset))

@@ -17,7 +17,7 @@ data <- tibble::tribble(
 )
 
 # filter_joined ----
-## Test 1: filter without first_cond ----
+## Test 1: filter without first_cond_upper ----
 test_that("filter_joined Test 1: filter without first_cond_upper", {
   actual <-
     filter_joined(
@@ -98,7 +98,7 @@ test_that("filter_joined Test 3: filter with first_cond and summary function", {
   )
 })
 
-## Test 4: join_type = "all" ----
+## Test 4: join_type = 'all' ----
 test_that("filter_joined Test 4: join_type = 'all'", {
   adae <- tibble::tribble(
     ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
@@ -137,9 +137,69 @@ test_that("filter_joined Test 4: join_type = 'all'", {
   )
 })
 
+## Test 5: deprecation of `filter` ----
+test_that("filter_joined Test 5: deprecation of `filter`", {
+  expect_warning(
+    actual <-
+    filter_joined(
+      data,
+      dataset_add = data,
+      by_vars = exprs(USUBJID),
+      join_vars = exprs(AVISITN, AVALC),
+      join_type = "after",
+      order = exprs(AVISITN),
+      filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR") &
+        AVISITN < AVISITN.join
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
+
+  expected <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "4",      1,        "PR"
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISITN")
+  )
+})
+
+## Test 6: deprecation of `first_cond` ----
+test_that("filter_joined Test 6: deprecation of `first_cond`", {
+  expect_warning(
+    actual <-
+    filter_joined(
+      data,
+      dataset_add = data,
+      by_vars = exprs(USUBJID),
+      join_vars = exprs(AVALC),
+      join_type = "after",
+      first_cond = AVALC == "CR" &
+        AVALC.join == "CR",
+      order = exprs(AVISITN),
+      filter_join = TRUE
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
+
+  expected <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      2,        "CR"
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISITN")
+  )
+})
+
 # min_cond ----
-## Test 1: test it ----
-test_that("min_cond, Test 1: test it", {
+## Test 7: test it ----
+test_that("min_cond Test 7: test it", {
   data <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",
@@ -176,8 +236,8 @@ test_that("min_cond, Test 1: test it", {
 })
 
 # max_cond ----
-## Test 1: test it ----
-test_that("max_cond, Test 1: test it", {
+## Test 8: test it ----
+test_that("max_cond Test 8: test it", {
   data <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",

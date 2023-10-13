@@ -11,6 +11,8 @@ event_joined(
   join_vars,
   join_type,
   first_cond = NULL,
+  first_cond_lower = NULL,
+  first_cond_upper = NULL,
   set_values_to = NULL,
   keep_source_vars = NULL,
   description = NULL
