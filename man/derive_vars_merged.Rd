@@ -13,7 +13,7 @@ derive_vars_merged(
   new_vars = NULL,
   filter_add = NULL,
   mode = NULL,
-  match_flag = NULL,
+  match_flag,
   exist_flag = NULL,
   true_value = "Y",
   false_value = NA_character_,

@@ -307,7 +307,7 @@ derive_vars_merged <- function(dataset,
                                new_vars = NULL,
                                filter_add = NULL,
                                mode = NULL,
-                               match_flag = NULL,
+                               match_flag,
                                exist_flag = NULL,
                                true_value = "Y",
                                false_value = NA_character_,
@@ -329,11 +329,11 @@ derive_vars_merged <- function(dataset,
       extract_vars(new_vars)
     )
   )
-  if (!is.null(match_flag)) {
+  if (!is_missing(match_flag)) {
     deprecate_warn(
       "1.0.0",
-      "derive_vars_merged(old_param = 'match_flag')",
-      "derive_vars_merged(new_param = 'exist_flag')"
+      "derive_vars_merged(match_flag =)",
+      "derive_vars_merged(exist_flag =)"
     )
     exist_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
   }
