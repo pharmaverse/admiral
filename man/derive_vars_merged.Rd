@@ -13,7 +13,10 @@ derive_vars_merged(
   new_vars = NULL,
   filter_add = NULL,
   mode = NULL,
-  match_flag = NULL,
+  match_flag,
+  exist_flag = NULL,
+  true_value = "Y",
+  false_value = NA_character_,
   missing_values = NULL,
   check_type = "warning",
   duplicate_msg = NULL
@@ -94,12 +97,37 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 
 \item{match_flag}{Match flag
 
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{exist_flag} instead.
+
 If the argument is specified (e.g., \code{match_flag = FLAG}), the specified
 variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
 be \code{TRUE} for all selected records from \code{dataset_add} which are merged into
 the input dataset, and \code{NA} otherwise.
 
 \emph{Permitted Values}: Variable name}
+
+\item{exist_flag}{Exist flag
+
+If the argument is specified (e.g., \code{exist_flag = FLAG}), the specified
+variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
+be the value provided in \code{true_value} for all selected records from \code{dataset_add}
+which are merged into the input dataset, and the value provided in \code{false_value} otherwise.
+
+\emph{Permitted Values}: Variable name}
+
+\item{true_value}{True value
+
+The value for the specified variable \code{exist_flag}, applicable to
+the first or last observation (depending on the mode) of each by group.
+
+Permitted Values: An atomic scalar}
+
+\item{false_value}{False value
+
+The value for the specified variable \code{exist_flag}, NOT applicable to
+the first or last observation (depending on the mode) of each by group.
+
+Permitted Values: An atomic scalar}
 
 \item{missing_values}{Values for non-matching observations
 
@@ -210,7 +238,7 @@ derive_vars_merged(
   mode = "last",
   new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
   filter_add = VSTESTCD == "WEIGHT",
-  match_flag = vsdatafl
+  exist_flag = vsdatafl
 ) \%>\%
   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 

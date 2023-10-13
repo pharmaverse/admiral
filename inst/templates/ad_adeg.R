@@ -198,10 +198,11 @@ adeg <- adeg %>%
 adeg <- adeg %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT),
-    analysis_var = AVAL,
-    summary_fun = function(x) mean(x, na.rm = TRUE),
     filter = dplyr::n() >= 2 & PARAMCD != "EGINTP",
-    set_values_to = exprs(DTYPE = "AVERAGE")
+    set_values_to = exprs(
+      AVAL = mean(AVAL, na.rm = TRUE),
+      DTYPE = "AVERAGE"
+    )
   )
 
 adeg <- adeg %>%

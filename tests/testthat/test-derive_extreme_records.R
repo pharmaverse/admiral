@@ -89,9 +89,9 @@ test_that("derive_extreme_records Test 2: derive first PD date", {
     adrs,
     tibble::tribble(
       ~USUBJID, ~ADT,              ~AVALC,
-      "1",      ymd(""),           "N",
+      "1",      ymd(""),           NA_character_,
       "2",      ymd("2021-07-16"), "Y",
-      "3",      ymd(""),           "N"
+      "3",      ymd(""),           NA_character_
     ) %>%
       mutate(
         STUDYID = "XX1234",

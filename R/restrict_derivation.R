@@ -12,9 +12,6 @@
 #'   The function must provide the `dataset` argument and all arguments
 #'   specified in the `params()` objects passed to the `arg` argument.
 #'
-#'   Please note that it is not possible to specify `{dplyr}`
-#'   functions like `mutate()` or `summarize()`.
-#'
 #' @param args Arguments of the derivation
 #'
 #'   A `params()` object is expected.
@@ -78,11 +75,8 @@ restrict_derivation <- function(dataset,
                                 filter) {
   # Check input
   assert_data_frame(dataset)
-  assert_function(derivation, params = c("dataset"))
   assert_s3_class(args, "params", optional = TRUE)
-  if (!is.null(args)) {
-    assert_function(derivation, names(args))
-  }
+  assert_function(derivation, names(args))
   filter <- assert_filter_cond(enexpr(filter))
 
   # Split input dataset

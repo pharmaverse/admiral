@@ -37,8 +37,8 @@ remotes::install_github("pharmaverse/admiral")
 The {admiral} family has several downstream and upstream dependencies and so this release shall be done in three
 Phases:
 
-* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/), and [{admiral}](https://pharmaverse.github.io/admiral/cran-release/) core
-* Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/main/)
+* Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/), and [{admiral}](https://pharmaverse.github.io/admiral/) core
+* Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)
 
 | Release Schedule | Phase 1- Date and Packages                                               | Phase 2- Date and Packages                                           |
 | ---------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- |

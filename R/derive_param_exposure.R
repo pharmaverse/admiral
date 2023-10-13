@@ -137,10 +137,22 @@ derive_param_exposure <- function(dataset,
 
   dtm <- c("ASTDTM", "AENDTM") %in% colnames(dataset)
   dt <- c("ASTDT", "AENDT") %in% colnames(dataset)
+  set_dtm <- NULL
+  set_dt <- NULL
   if (all(dtm)) {
     dates <- exprs(ASTDTM, AENDTM)
+    set_dtm <- exprs(
+      ASTDTM = min(ASTDTM, na.rm = TRUE),
+      AENDTM = max(coalesce(AENDTM, ASTDTM), na.rm = TRUE)
+    )
   } else {
     dates <- exprs(ASTDT, AENDT)
+  }
+  if (all(dt)) {
+    set_dt <- exprs(
+      ASTDT = min(ASTDT, na.rm = TRUE),
+      AENDT = max(coalesce(AENDT, ASTDT), na.rm = TRUE)
+    )
   }
 
   assert_data_frame(dataset,
@@ -154,57 +166,19 @@ derive_param_exposure <- function(dataset,
   assert_character_vector(input_code, values = params_available)
   assert_s3_class(summary_fun, "function")
 
-  subset_ds <- dataset %>%
-    filter_if(filter)
-
-  add_data <- subset_ds %>%
-    get_summary_records(
-      by_vars = by_vars,
-      filter = PARAMCD == !!input_code,
-      analysis_var = !!analysis_var,
-      summary_fun = summary_fun,
-      set_values_to = set_values_to
-    )
-
-  # add the dates for the derived parameters
-  tmp_start <- get_new_tmp_var(dataset)
-  tmp_end <- get_new_tmp_var(dataset)
-  if (all(dtm)) {
-    dates <- subset_ds %>%
-      group_by(!!!by_vars) %>%
-      summarise(
-        !!tmp_start := min(ASTDTM, na.rm = TRUE),
-        !!tmp_end := max(coalesce(AENDTM, ASTDTM), na.rm = TRUE)
-      ) %>%
-      ungroup()
-    expo_data <- add_data %>%
-      derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
-      mutate(
-        ASTDTM = !!tmp_start,
-        AENDTM = !!tmp_end
-      ) %>%
-      remove_tmp_vars()
-
-    if (all(dt)) {
-      expo_data <- expo_data %>%
-        mutate(ASTDT = date(ASTDTM), AENDT = date(AENDTM))
-    }
-  } else {
-    dates <- subset_ds %>%
-      group_by(!!!by_vars) %>%
-      summarise(
-        !!tmp_start := min(ASTDT, na.rm = TRUE),
-        !!tmp_end := max(coalesce(AENDT, ASTDT), na.rm = TRUE)
-      ) %>%
-      ungroup()
-    expo_data <- add_data %>%
-      derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
-      mutate(
-        ASTDT = !!tmp_start,
-        AENDT = !!tmp_end
-      ) %>%
-      remove_tmp_vars()
+  if (is.null(filter)) {
+    filter <- TRUE
   }
 
-  bind_rows(dataset, expo_data)
+  derive_summary_records(
+    dataset,
+    by_vars = by_vars,
+    filter = PARAMCD == !!input_code & !!filter,
+    set_values_to = exprs(
+      !!analysis_var := {{ summary_fun }}(!!analysis_var),
+      !!!set_dtm,
+      !!!set_dt,
+      !!!set_values_to
+    )
+  )
 }

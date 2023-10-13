@@ -81,12 +81,37 @@
 #'
 #' @param match_flag Match flag
 #'
+#'  `r lifecycle::badge("deprecated")` Please use `exist_flag` instead.
+#'
 #'   If the argument is specified (e.g., `match_flag = FLAG`), the specified
 #'   variable (e.g., `FLAG`) is added to the input dataset. This variable will
 #'   be `TRUE` for all selected records from `dataset_add` which are merged into
 #'   the input dataset, and `NA` otherwise.
 #'
 #'   *Permitted Values*: Variable name
+#'
+#' @param exist_flag Exist flag
+#'
+#'   If the argument is specified (e.g., `exist_flag = FLAG`), the specified
+#'   variable (e.g., `FLAG`) is added to the input dataset. This variable will
+#'   be the value provided in `true_value` for all selected records from `dataset_add`
+#'   which are merged into the input dataset, and the value provided in `false_value` otherwise.
+#'
+#'   *Permitted Values*: Variable name
+#'
+#' @param true_value True value
+#'
+#'   The value for the specified variable `exist_flag`, applicable to
+#'   the first or last observation (depending on the mode) of each by group.
+#'
+#'   Permitted Values: An atomic scalar
+#'
+#' @param false_value False value
+#'
+#'   The value for the specified variable `exist_flag`, NOT applicable to
+#'   the first or last observation (depending on the mode) of each by group.
+#'
+#'   Permitted Values: An atomic scalar
 #'
 #' @param missing_values Values for non-matching observations
 #'
@@ -198,7 +223,7 @@
 #'   mode = "last",
 #'   new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
 #'   filter_add = VSTESTCD == "WEIGHT",
-#'   match_flag = vsdatafl
+#'   exist_flag = vsdatafl
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 #'
@@ -282,7 +307,10 @@ derive_vars_merged <- function(dataset,
                                new_vars = NULL,
                                filter_add = NULL,
                                mode = NULL,
-                               match_flag = NULL,
+                               match_flag,
+                               exist_flag = NULL,
+                               true_value = "Y",
+                               false_value = NA_character_,
                                missing_values = NULL,
                                check_type = "warning",
                                duplicate_msg = NULL) {
@@ -301,7 +329,17 @@ derive_vars_merged <- function(dataset,
       extract_vars(new_vars)
     )
   )
-  match_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
+  if (!is_missing(enexpr(match_flag))) {
+    deprecate_warn(
+      "1.0.0",
+      "derive_vars_merged(match_flag =)",
+      "derive_vars_merged(exist_flag =)"
+    )
+    exist_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
+  }
+  exist_flag <- assert_symbol(enexpr(exist_flag), optional = TRUE)
+  assert_atomic_vector(true_value, optional = TRUE)
+  assert_atomic_vector(false_value, optional = TRUE)
   assert_expr_list(missing_values, named = TRUE, optional = TRUE)
   if (!is.null(missing_values)) {
     invalid_vars <- setdiff(
@@ -347,18 +385,18 @@ derive_vars_merged <- function(dataset,
       select(!!!by_vars_right, !!!replace_values_by_names(new_vars))
   }
 
-  if (!is.null(missing_values)) {
+  if (!is.null(missing_values) || !is.null(exist_flag)) {
     match_flag_var <- get_new_tmp_var(add_data, prefix = "tmp_match_flag")
   } else {
-    match_flag_var <- match_flag
+    match_flag_var <- NULL
   }
-
   if (!is.null(match_flag_var)) {
     add_data <- mutate(
       add_data,
       !!match_flag_var := TRUE
     )
   }
+
   # check if there are any variables in both datasets which are not by vars
   # in this case an error is issued to avoid renaming of varibles by left_join()
   common_vars <-
@@ -382,7 +420,7 @@ derive_vars_merged <- function(dataset,
   }
   dataset <- left_join(dataset, add_data, by = vars2chr(by_vars))
 
-  if (!is.null(missing_values)) {
+  if (!is.null(match_flag_var)) {
     update_missings <- map2(
       syms(names(missing_values)),
       missing_values,
@@ -390,10 +428,16 @@ derive_vars_merged <- function(dataset,
     )
     names(update_missings) <- names(missing_values)
     dataset <- dataset %>%
-      mutate(!!!update_missings) %>%
-      remove_tmp_vars()
+      mutate(!!!update_missings)
   }
-  dataset
+
+  if (!is.null(exist_flag)) {
+    dataset <- dataset %>%
+      mutate(!!exist_flag := ifelse(is.na(!!match_flag_var), false_value, true_value))
+  }
+
+  dataset %>%
+    remove_tmp_vars()
 }
 
 #' Merge an Existence Flag
@@ -651,6 +695,8 @@ derive_vars_merged_lookup <- function(dataset,
   assert_logical_scalar(print_not_mapped)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
 
+  tmp_lookup_flag <- get_new_tmp_var(dataset_add, prefix = "tmp_lookup_flag")
+
   res <- derive_vars_merged(
     dataset,
     dataset_add,
@@ -659,14 +705,14 @@ derive_vars_merged_lookup <- function(dataset,
     new_vars = new_vars,
     mode = mode,
     filter_add = !!filter_add,
-    match_flag = temp_match_flag,
+    exist_flag = !!tmp_lookup_flag,
     check_type = check_type,
     duplicate_msg = duplicate_msg
   )
 
   if (print_not_mapped) {
     temp_not_mapped <- res %>%
-      filter(is.na(temp_match_flag)) %>%
+      filter(is.na(!!tmp_lookup_flag)) %>%
       distinct(!!!by_vars_left)
 
     if (nrow(temp_not_mapped) > 0) {
@@ -688,7 +734,7 @@ derive_vars_merged_lookup <- function(dataset,
     }
   }
 
-  res %>% select(-temp_match_flag)
+  res %>% remove_tmp_vars()
 }
 
 #' Get list of records not mapped from the lookup table.
@@ -703,32 +749,50 @@ get_not_mapped <- function() {
   admiral_environment$nmap
 }
 
-#' Merge a Summary Variable
+#' Merge Summary Variables
 #'
 #' @description Merge a summary variable from a dataset to the input dataset.
-#'
-#' **Note:** This is a wrapper function for the more generic `derive_vars_merged`.
 #'
 #' @param dataset
 #' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param dataset_add Additional dataset
 #'
-#'   The variables specified by the `by_vars` and the `analysis_var` arguments
-#'   are expected.
+#'   The variables specified by the `by_vars` and the variables used on the left
+#'   hand sides of the `new_vars` arguments are expected.
 #'
 #' @param new_var Variable to add
+#'
+#'  `r lifecycle::badge("deprecated")` Please use `new_vars` instead.
 #'
 #'   The specified variable is added to the input dataset (`dataset`) and set to
 #'   the summarized values.
 #'
 #' @param by_vars Grouping variables
 #'
-#'   The values of `analysis_var` are summarized by the specified variables. The
-#'   summarized values are merged to the input dataset (`dataset`) by the
-#'   specified by variables.
+#'   The expressions on the left hand sides of `new_vars` are evaluated by the
+#'   specified *variables*. Then the resulting values are merged to the input
+#'   dataset (`dataset`) by the specified *variables*.
 #'
 #'   *Permitted Values*: list of variables created by `exprs()`
+#'
+#' @param new_vars New variables to add
+#'
+#'   The specified variables are added to the input dataset.
+#'
+#'   A named list of expressions is expected:
+#'   + LHS refer to a variable.
+#'   + RHS refers to the values to set to the variable. This can be a string, a
+#'   symbol, a numeric value, an expression or NA. If summary functions are
+#'   used, the values are summarized by the variables specified for `by_vars`.
+#'
+#'   For example:
+#'   ```
+#'     new_vars = exprs(
+#'       DOSESUM = sum(AVAL),
+#'       DOSEMEAN = mean(AVAL)
+#'     )
+#'   ```
 #'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
@@ -740,10 +804,14 @@ get_not_mapped <- function() {
 #'
 #' @param analysis_var Analysis variable
 #'
+#'  `r lifecycle::badge("deprecated")` Please use `new_vars` instead.
+#'
 #'   The values of the specified variable are summarized by the function
 #'   specified for `summary_fun`.
 #'
 #' @param summary_fun Summary function
+#'
+#'  `r lifecycle::badge("deprecated")` Please use `new_vars` instead.
 #'
 #'   The specified function that takes as input `analysis_var` and performs the
 #'   calculation. This can include built-in functions as well as user defined
@@ -755,18 +823,17 @@ get_not_mapped <- function() {
 #'   1. The records from the additional dataset (`dataset_add`) are restricted
 #'   to those matching the `filter_add` condition.
 #'
-#'   1. The values of the analysis variable (`analysis_var`) are summarized by
-#'   the summary function (`summary_fun`) for each by group (`by_vars`) in the
-#'   additional dataset (`dataset_add`).
+#'   1. The new variables (`new_vars`) are created for each by group (`by_vars`)
+#'   in the additional dataset (`dataset_add`) by calling `summarize()`. I.e.,
+#'   all observations of a by group are summarized to a single observation.
 #'
-#'   1. The summarized values are merged to the input dataset as a new variable
-#'   (`new_var`). For observations without a matching observation in the
-#'   additional dataset the new variable is set to `NA`. Observations in the
-#'   additional dataset which have no matching observation in the input dataset
-#'   are ignored.
+#'   1. The new variables are merged to the input dataset. For observations
+#'   without a matching observation in the additional dataset the new variables
+#'   are set to `NA`. Observations in the additional dataset which have no
+#'   matching observation in the input dataset are ignored.
 #'
 #' @return The output dataset contains all observations and variables of the
-#'   input dataset and additionally the variable specified for `new_var`.
+#'   input dataset and additionally the variables specified for `new_vars`.
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -796,9 +863,10 @@ get_not_mapped <- function() {
 #'   adbds,
 #'   dataset_add = adbds,
 #'   by_vars = exprs(USUBJID, AVISIT),
-#'   new_var = MEANVIS,
-#'   analysis_var = AVAL,
-#'   summary_fun = function(x) mean(x, na.rm = TRUE)
+#'   new_vars = exprs(
+#'     MEANVIS = mean(AVAL, na.rm = TRUE),
+#'     MAXVIS = max(AVAL, na.rm = TRUE)
+#'   )
 #' )
 #'
 #' # Add a variable listing the lesion ids at baseline
@@ -830,14 +898,13 @@ get_not_mapped <- function() {
 #'   dataset_add = adtr,
 #'   by_vars = exprs(USUBJID),
 #'   filter_add = AVISIT == "BASELINE",
-#'   new_var = LESIONSBL,
-#'   analysis_var = LESIONID,
-#'   summary_fun = function(x) paste(x, collapse = ", ")
+#'   new_vars = exprs(LESIONSBL = paste(LESIONID, collapse = ", "))
 #' )
 #'
 derive_var_merged_summary <- function(dataset,
                                       dataset_add,
                                       by_vars,
+                                      new_vars = NULL,
                                       new_var,
                                       filter_add = NULL,
                                       analysis_var,
@@ -845,19 +912,30 @@ derive_var_merged_summary <- function(dataset,
   assert_vars(by_vars)
   by_vars_left <- replace_values_by_names(by_vars)
   by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
-  new_var <- assert_symbol(enexpr(new_var))
-  analysis_var <- assert_symbol(enexpr(analysis_var))
+  # once new_var is removed new_vars should be mandatory
+  assert_expr_list(new_vars, named = TRUE, optional = TRUE)
   filter_add <-
     assert_filter_cond(enexpr(filter_add), optional = TRUE)
-  assert_s3_class(summary_fun, "function")
   assert_data_frame(
     dataset,
     required_vars = by_vars_left
   )
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(by_vars_right, analysis_var)
+    required_vars = expr_c(by_vars_right, extract_vars(new_vars))
   )
+
+  if (!missing(new_var) || !missing(analysis_var) || !missing(summary_fun)) {
+    deprecate_warn(
+      "1.0.0",
+      I("derive_var_merged_summary(new_var = , anaylsis_var = , summary_fun = )"),
+      "derive_var_merged_summary(new_vars = )"
+    )
+    new_var <- assert_symbol(enexpr(new_var))
+    analysis_var <- assert_symbol(enexpr(analysis_var))
+    assert_s3_class(summary_fun, "function")
+    new_vars <- exprs(!!new_var := {{ summary_fun }}(!!analysis_var), !!!new_vars)
+  }
 
   # Summarise the analysis value and merge to the original dataset
   derive_vars_merged(
@@ -866,10 +944,9 @@ derive_var_merged_summary <- function(dataset,
       dataset_add,
       by_vars = by_vars_right,
       filter = !!filter_add,
-      analysis_var = !!analysis_var,
-      summary_fun = summary_fun
-    ),
-    by_vars = by_vars,
-    new_vars = exprs(!!new_var := !!analysis_var)
+      set_values_to = new_vars,
+    ) %>%
+      select(!!!by_vars_right, names(new_vars)),
+    by_vars = by_vars
   )
 }
