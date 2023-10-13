@@ -308,6 +308,20 @@ test_that("derive_vars_merged Test 12: error if variables in missing_values but 
   )
 })
 
+test_that("deprecation messaging for match_flag", {
+  expect_warning(
+    derive_vars_merged(adsl,
+      dataset_add = advs,
+      order = exprs(AVAL),
+      by_vars = exprs(STUDYID, USUBJID),
+      new_vars = exprs(WEIGHTBL = AVAL),
+      mode = "last",
+      match_flag = matched
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
+})
+
 # derive_var_merged_exist_flag ----
 ## Test 13: merge existence flag ----
 test_that("derive_var_merged_exist_flag Test 13: merge existence flag", {

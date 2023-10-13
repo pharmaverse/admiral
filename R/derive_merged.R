@@ -329,7 +329,7 @@ derive_vars_merged <- function(dataset,
       extract_vars(new_vars)
     )
   )
-  if (!is_missing(match_flag)) {
+  if (!is_missing(enexpr(match_flag))) {
     deprecate_warn(
       "1.0.0",
       "derive_vars_merged(match_flag =)",
@@ -695,7 +695,7 @@ derive_vars_merged_lookup <- function(dataset,
   assert_logical_scalar(print_not_mapped)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
 
- tmp_lookup_flag <- get_new_tmp_var(dataset_add, prefix = "tmp_lookup_flag")
+  tmp_lookup_flag <- get_new_tmp_var(dataset_add, prefix = "tmp_lookup_flag")
 
   res <- derive_vars_merged(
     dataset,
