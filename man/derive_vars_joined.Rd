@@ -129,6 +129,29 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
 
+\item{exist_flag}{Exist flag
+
+If the argument is specified (e.g., \code{exist_flag = FLAG}), the specified
+variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
+be the value provided in \code{true_value} for all selected records from \code{dataset_add}
+which are merged into the input dataset, and the value provided in \code{false_value} otherwise.
+
+\emph{Permitted Values}: Variable name}
+
+\item{true_value}{True value
+
+The value for the specified variable \code{exist_flag}, applicable to
+the first or last observation (depending on the mode) of each by group.
+
+Permitted Values: An atomic scalar}
+
+\item{false_value}{False value
+
+The value for the specified variable \code{exist_flag}, NOT applicable to
+the first or last observation (depending on the mode) of each by group.
+
+Permitted Values: An atomic scalar}
+
 \item{missing_values}{Values for non-matching observations
 
 For observations of the input dataset (\code{dataset}) which do not have a

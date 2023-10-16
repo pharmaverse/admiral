@@ -452,6 +452,9 @@ derive_vars_joined <- function(dataset,
       new_vars = add_suffix_to_vars(new_vars, vars = common_vars, suffix = ".join"),
       missing_values = missing_values,
       check_type = check_type,
+      exist_flag = !!enexpr(exist_flag),
+      true_value = true_value,
+      false_value = false_value,
       duplicate_msg = paste(
         paste(
           "After applying `filter_join` the joined dataset contains more",

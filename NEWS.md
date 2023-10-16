@@ -4,9 +4,14 @@
 
 ## Updates of Existing Functions
 
+- `derive_extreme_records()`, `derive_var_extreme_flag()`,`derive_vars_joined()` and `derive_vars_merged()` were enhanced with the arguments `true_value` and `false_value` to align with preexisting functions that had similar functionality (#2125)
+
+- `restrict_derivation()` now allows `{dplyr}` functions like `mutate` in the `derivation argument (#2143)
+
 - `derive_summary_records()`, `derive_var_merged_summary()`, and `get_summary_records()`
 were enhanced such that more than one summary variable can be derived, e.g.,
 `AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
+
 
 ## Breaking Changes
 
@@ -18,6 +23,10 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 `summary_fun` were deprecated in favor of `new_vars`. (#1792)
 
 - admiral now only supports R >= 4.0.0 
+
+- For the function `derive_vars_merged()`, the argument `match_flag` was renamed to `exist_flag` (#2125)
+
+- The default value for the `false_value` argument in `derive_extreme_records()` was changed to `NA_character_` (#2125)
 
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#2098)
   - `derive_param_extreme_event()`
@@ -42,6 +51,8 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 ## Documentation
 
 - A way to standardize roxygen labels and descriptions for function arguments was implemented and tested (#2034)
+
+- Link to published CDISC Population PK (ADPPK) implementation guide added. (#2161)
 
 ## Various
 

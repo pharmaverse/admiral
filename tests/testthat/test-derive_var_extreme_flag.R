@@ -205,3 +205,34 @@ test_that("derive_var_extreme_flag Test 8: additional case for missing order var
     keys = c("USUBJID", "AVISITN", "AVAL")
   )
 })
+
+
+## Test 9: changing true/false flag value works ----
+test_that("derive_var_extreme_flag Test 9: changing true/false flag value works", {
+  input <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVAL,
+    1, 1, 12,
+    1, 3, 9,
+    2, 2, 42,
+    3, 3, 14,
+    3, 3, 10
+  )
+
+  expected_output <- input %>% mutate(firstfl = c("Yes", "No", "Yes", "Yes", "No"))
+
+  actual_output <- derive_var_extreme_flag(
+    input,
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN, desc(AVAL)),
+    new_var = firstfl,
+    mode = "first",
+    true_value = "Yes",
+    false_value = "No"
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("USUBJID", "AVISITN", "AVAL")
+  )
+})
