@@ -291,18 +291,18 @@ test_that("derive_var_joined_exist_flag Test 6: tmp_obs_nr_var argument works", 
 ## Test 7: deprecation of `filter` ----
 test_that("derive_var_joined_exist_flag Test 7: deprecation of `filter`", {
   expect_warning(
-  actual <-
-    derive_var_joined_exist_flag(
-      data,
-      dataset_add = data,
-      new_var = CONFFL,
-      by_vars = exprs(USUBJID),
-      join_vars = exprs(AVALC),
-      join_type = "after",
-      order = exprs(AVISITN),
-      filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR")
-    ),
-  class = "lifecycle_warning_deprecated"
+    actual <-
+      derive_var_joined_exist_flag(
+        data,
+        dataset_add = data,
+        new_var = CONFFL,
+        by_vars = exprs(USUBJID),
+        join_vars = exprs(AVALC),
+        join_type = "after",
+        order = exprs(AVISITN),
+        filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR")
+      ),
+    class = "lifecycle_warning_deprecated"
   )
 
   expected <- tibble::tribble(
@@ -350,20 +350,20 @@ test_that("derive_var_joined_exist_flag Test 8: deprecation of `first_cond`", {
   )
 
   expect_warning(
-  actual <-
-    derive_var_joined_exist_flag(
-      data,
-      dataset_add = data,
-      new_var = CONFFL,
-      by_vars = exprs(USUBJID),
-      join_vars = exprs(AVALC),
-      join_type = "after",
-      first_cond = AVALC == "CR" &
-        AVALC.join == "CR",
-      order = exprs(AVISITN),
-      filter_join = TRUE
-    ),
-  class = "lifecycle_warning_deprecated"
+    actual <-
+      derive_var_joined_exist_flag(
+        data,
+        dataset_add = data,
+        new_var = CONFFL,
+        by_vars = exprs(USUBJID),
+        join_vars = exprs(AVALC),
+        join_type = "after",
+        first_cond = AVALC == "CR" &
+          AVALC.join == "CR",
+        order = exprs(AVISITN),
+        filter_join = TRUE
+      ),
+    class = "lifecycle_warning_deprecated"
   )
 
   expected <- tibble::tribble(

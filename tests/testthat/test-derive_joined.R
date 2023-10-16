@@ -423,5 +423,4 @@ test_that("get_joined_data Test 12: `first_cond_lower` works", {
     ),
     keys = c("subj", "day.join")
   )
-}
-)
+})
