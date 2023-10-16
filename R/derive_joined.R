@@ -452,7 +452,7 @@ derive_vars_joined <- function(dataset,
       new_vars = add_suffix_to_vars(new_vars, vars = common_vars, suffix = ".join"),
       missing_values = missing_values,
       check_type = check_type,
-      exist_flag = !!enexpr(exist_flag),
+      exist_flag = !!exist_flag,
       true_value = true_value,
       false_value = false_value,
       duplicate_msg = paste(
@@ -609,6 +609,8 @@ derive_vars_joined <- function(dataset,
 #' specified, a full join is performed.
 #'
 #' 1. The joined dataset is restricted by the `filter_join` condition.
+#'
+#' @keywords internal
 get_joined_data <- function(dataset,
                             dataset_add,
                             by_vars = NULL,
@@ -664,24 +666,39 @@ get_joined_data <- function(dataset,
   )
 
   # number observations of the input dataset to get a unique key
-  # (by_vars and tmp_obs_nr_var)
-  if (is.null(tmp_obs_nr_var)) {
-    tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr")
-  }
+  # (by_vars and tmp_obs_nr_left), it is used later to apply filter_join
+  tmp_obs_nr_left <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_left")
+  data <- dataset %>%
+    derive_var_obs_number(
+      new_var = !!tmp_obs_nr_left,
+      by_vars = by_vars_left,
+      check_type = "none"
+    )
+
   data_add <- dataset_add %>%
     group_by(!!!by_vars) %>%
     mutate(!!!order, !!!join_vars) %>%
     filter_if(filter_add) %>%
-    ungroup() %>%
-    derive_var_obs_number(
-      new_var = !!tmp_obs_nr_var,
-      by_vars = by_vars,
-      order = order,
-      check_type = check_type
-    )
+    ungroup()
 
-  if (join_type != "all" || !is.null(first_cond_lower) || !is.null(first_cond_upper)) {
-    data <- dataset %>%
+  # number observations of the input dataset and the additional dataset for
+  # relation of records, e.g., join_type = before|after, first_cond_lower,
+  # first_cond_upper
+  tmp_obs_nr_var.join <- NULL
+  if (join_type != "all" || !is.null(first_cond_lower) || !is.null(first_cond_upper) || !is.null(tmp_obs_nr_var)) {
+    if (is.null(tmp_obs_nr_var)) {
+      tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr")
+      tmp_obs_nr_var.join <- paste0(as_name(tmp_obs_nr_var), ".join")
+    }
+    data_add <- derive_var_obs_number(
+        dataset_add,
+        new_var = !!tmp_obs_nr_var,
+        by_vars = by_vars,
+        order = order,
+        check_type = check_type
+      )
+
+    data <- data %>%
       mutate(!!!order) %>%
       derive_var_obs_number(
         new_var = !!tmp_obs_nr_var,
@@ -689,9 +706,8 @@ get_joined_data <- function(dataset,
         order = order,
         check_type = check_type
       )
-  } else {
-    data <- dataset
   }
+
   # join the input dataset with itself such that to each observation of the
   # input dataset all following observations are joined
   data_joined <-
@@ -750,7 +766,9 @@ get_joined_data <- function(dataset,
   }
   # apply confirmation condition, which may include summary functions
   data_joined %>%
-    group_by(!!!by_vars_left, !!tmp_obs_nr_var) %>%
+    group_by(!!!by_vars_left, !!tmp_obs_nr_left) %>%
     filter_if(filter_join) %>%
-    ungroup()
+    ungroup() %>%
+    remove_tmp_vars() %>%
+    select(-!!tmp_obs_nr_var.join)
 }

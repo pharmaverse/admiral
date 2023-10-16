@@ -398,15 +398,14 @@ test_that("get_joined_data Test 12: `first_cond_lower` works", {
   )
 
   expected <- tibble::tribble(
-    ~day.join, ~val.join, ~tmp_obs_nr_1.join,
-    1,         "++",      1L,
-    2,         "+",       2L
+    ~day.join, ~val.join,
+    1,         "++",
+    2,         "+"
   ) %>%
     mutate(
       subj = "2",
       day = 3,
-      val = "0",
-      tmp_obs_nr_1 = 3L
+      val = "0"
     )
 
   expect_dfs_equal(
