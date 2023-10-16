@@ -182,6 +182,7 @@ adppk_prev <- adppk_first_dose %>%
       AENDTM_prev = AENDTM
     ),
     join_vars = exprs(ADTM),
+    join_type = "all",
     filter_add = NULL,
     filter_join = ADTM > ADTM.join,
     mode = "last",
@@ -197,6 +198,7 @@ adppk_nom_prev <- adppk_prev %>%
     order = exprs(NFRLT),
     new_vars = exprs(NFRLT_prev = NFRLT),
     join_vars = exprs(NFRLT),
+    join_type = "all",
     filter_add = NULL,
     filter_join = NFRLT > NFRLT.join,
     mode = "last",

@@ -680,10 +680,7 @@ get_joined_data <- function(dataset,
       check_type = check_type
     )
 
-  if (all(extract_vars(order) %in% vars2chr(colnames(dataset)))) {
-    # tmp_obs_nr_var is added to the input dataset if possible.
-    # It is required if join_type != "all" or first_cond_lower or first_cond_upper
-    # is specified. It may also be used in filter_join.
+  if (join_type != "all" || !is.null(first_cond_lower) || !is.null(first_cond_upper)) {
     data <- dataset %>%
       mutate(!!!order) %>%
       derive_var_obs_number(
