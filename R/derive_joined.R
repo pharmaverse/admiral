@@ -405,29 +405,6 @@ derive_vars_joined <- function(dataset,
     check_type = check_type
   )
 
-  # # prepare right side of the join,
-  # # by_vars are renamed here, new_vars will be renamed at the end
-  # data_right <- dataset_add %>%
-  #   mutate(!!!order, !!!join_vars) %>%
-  #   filter_if(filter_add) %>%
-  #   select(
-  #     !!!by_vars,
-  #     !!!replace_values_by_names(extract_vars(order)),
-  #     !!!replace_values_by_names(join_vars),
-  #     !!!intersect(unname(extract_vars(new_vars)), chr2vars(colnames(dataset_add)))
-  #   )
-  #
-  # # join dataset (if no by variable, a full join is performed)
-  # data_joined <- left_join(
-  #   data,
-  #   data_right,
-  #   by = vars2chr(by_vars_left),
-  #   suffix = c("", ".join")
-  # )
-  #
-  # # select observations for the new variables
-  # data_return <- filter_if(data_joined, filter_join)
-  #
   common_vars <-
     chr2vars(setdiff(intersect(colnames(data), colnames(dataset_add)), vars2chr(by_vars)))
   if (!is.null(order)) {
