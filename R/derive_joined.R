@@ -691,12 +691,12 @@ get_joined_data <- function(dataset,
       tmp_obs_nr_var.join <- paste0(as_name(tmp_obs_nr_var), ".join")
     }
     data_add <- derive_var_obs_number(
-        dataset_add,
-        new_var = !!tmp_obs_nr_var,
-        by_vars = by_vars,
-        order = order,
-        check_type = check_type
-      )
+      dataset_add,
+      new_var = !!tmp_obs_nr_var,
+      by_vars = by_vars,
+      order = order,
+      check_type = check_type
+    )
 
     data <- data %>%
       mutate(!!!order) %>%
