@@ -159,6 +159,8 @@
 #'   input dataset and additionally the variables specified for `new_vars` from
 #'   the additional dataset (`dataset_add`).
 #'
+#' @seealso [derive_var_joined_exist_flag()], [filter_joined()]
+#'
 #' @keywords der_gen
 #' @family der_gen
 #'
@@ -192,6 +194,7 @@
 #' derive_vars_joined(
 #'   adbds,
 #'   dataset_add = windows,
+#'   join_type = "all",
 #'   filter_join = AWLO <= ADY & ADY <= AWHI
 #' )
 #'
@@ -214,6 +217,7 @@
 #'   order = exprs(AVAL),
 #'   new_vars = exprs(NADIR = AVAL),
 #'   join_vars = exprs(ADY),
+#'   join_type = "all",
 #'   filter_add = ADY > 0,
 #'   filter_join = ADY.join < ADY,
 #'   mode = "first",
@@ -247,6 +251,7 @@
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(AVAL, desc(ADY)),
 #'   new_vars = exprs(HGB_MAX = AVAL, HGB_DY = ADY),
+#'   join_type = "all",
 #'   filter_add = PARAMCD == "HGB",
 #'   filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,
 #'   mode = "last"
@@ -287,6 +292,7 @@
 #'   dataset_add = period_ref,
 #'   by_vars = exprs(STUDYID, USUBJID),
 #'   join_vars = exprs(APERSDT, APEREDT),
+#'   join_type = "all",
 #'   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
 #' )
 #'
@@ -313,6 +319,7 @@
 #'   dataset_add = ex,
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(EXSDT = convert_dtc_to_dt(EXSDTC)),
+#'   join_type = "all",
 #'   new_vars = exprs(LDRELD = compute_duration(
 #'     start_date = EXSDT, end_date = ASTDT
 #'   )),

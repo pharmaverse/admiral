@@ -237,6 +237,7 @@ windows <- tribble(
 derive_vars_joined(
   adbds,
   dataset_add = windows,
+  join_type = "all",
   filter_join = AWLO <= ADY & ADY <= AWHI
 )
 
@@ -259,6 +260,7 @@ derive_vars_joined(
   order = exprs(AVAL),
   new_vars = exprs(NADIR = AVAL),
   join_vars = exprs(ADY),
+  join_type = "all",
   filter_add = ADY > 0,
   filter_join = ADY.join < ADY,
   mode = "first",
@@ -292,6 +294,7 @@ derive_vars_joined(
   by_vars = exprs(USUBJID),
   order = exprs(AVAL, desc(ADY)),
   new_vars = exprs(HGB_MAX = AVAL, HGB_DY = ADY),
+  join_type = "all",
   filter_add = PARAMCD == "HGB",
   filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,
   mode = "last"
@@ -332,6 +335,7 @@ derive_vars_joined(
   dataset_add = period_ref,
   by_vars = exprs(STUDYID, USUBJID),
   join_vars = exprs(APERSDT, APEREDT),
+  join_type = "all",
   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
 )
 
@@ -358,6 +362,7 @@ derive_vars_joined(
   dataset_add = ex,
   by_vars = exprs(USUBJID),
   order = exprs(EXSDT = convert_dtc_to_dt(EXSDTC)),
+  join_type = "all",
   new_vars = exprs(LDRELD = compute_duration(
     start_date = EXSDT, end_date = ASTDT
   )),
@@ -367,6 +372,8 @@ derive_vars_joined(
 )
 }
 \seealso{
+\code{\link[=derive_var_joined_exist_flag]{derive_var_joined_exist_flag()}}, \code{\link[=filter_joined]{filter_joined()}}
+
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},

@@ -189,9 +189,15 @@
 #'
 #'   ## Step 3
 #'
+#'   If `first_cond_lower` is specified, for each observation of the input
+#'   dataset the joined dataset is restricted to observations up to the first
+#'   observation where `first_cond_lower` is fulfilled (the observation
+#'   fulfilling the condition is included). If for an observation of the input
+#'   dataset the condition is not fulfilled, the observation is removed.
+#'
 #'   If `first_cond_upper` is specified, for each observation of the input
 #'   dataset the joined dataset is restricted to observations up to the first
-#'   observation where `first_cond_uppper` is fulfilled (the observation
+#'   observation where `first_cond_upper` is fulfilled (the observation
 #'   fulfilling the condition is included). If for an observation of the input
 #'   dataset the condition is not fulfilled, the observation is removed.
 #'
@@ -378,6 +384,51 @@
 #'     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 #' )
 #'
+#' # first_cond_lower and first_cond_upper argument
+#'
+#' myd <- tribble(
+#' ~subj, ~day, ~val,
+#' "1",      1, "++",
+#' "1",      2, "-",
+#' "1",      3, "0",
+#' "1",      4, "+",
+#' "1",      5, "++",
+#' "1",      6, "-",
+#' "2",      1, "-",
+#' "2",      2, "++",
+#' "2",      3, "+",
+#' "2",      4, "0",
+#' "2",      5, "-",
+#' "2",      6, "++"
+#' )
+#'
+#' # flag "0" where all results from the first "++" before the "0" up to the "0"
+#' # (excluding the "0") are "+" or "++"
+#' derive_var_joined_exist_flag(
+#'   myd,
+#'   dataset_add = myd,
+#'   by_vars = exprs(subj),
+#'   order = exprs(day),
+#'   new_var = flag,
+#'   join_vars = exprs(val),
+#'   join_type = "before",
+#'   first_cond_lower = val.join == "++",
+#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
+#' )
+#'
+#' # flag "0" where all results from the "0" (excluding the "0") up to the first
+#' # "++" after the "0" are "+" or "++"
+#' derive_var_joined_exist_flag(
+#'   myd,
+#'   dataset_add = myd,
+#'   by_vars = exprs(subj),
+#'   order = exprs(day),
+#'   new_var = flag,
+#'   join_vars = exprs(val),
+#'   join_type = "before",
+#'   first_cond_upper = val.join == "++",
+#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
+#' )
 derive_var_joined_exist_flag <- function(dataset,
                                          dataset_add,
                                          by_vars,
