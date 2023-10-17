@@ -661,11 +661,12 @@ get_joined_data <- function(dataset,
   # number observations of the input dataset and the additional dataset for
   # relation of records, e.g., join_type = before|after, first_cond_lower,
   # first_cond_upper
-  tmp_obs_nr_var.join <- NULL
-  if (join_type != "all" || !is.null(first_cond_lower) || !is.null(first_cond_upper) || !is.null(tmp_obs_nr_var)) {
+  tmp_obs_nr_var_join <- NULL
+  if (join_type != "all" || !is.null(first_cond_lower) || !is.null(first_cond_upper) ||
+    !is.null(tmp_obs_nr_var)) {
     if (is.null(tmp_obs_nr_var)) {
       tmp_obs_nr_var <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr")
-      tmp_obs_nr_var.join <- paste0(as_name(tmp_obs_nr_var), ".join")
+      tmp_obs_nr_var_join <- paste0(as_name(tmp_obs_nr_var), ".join")
     }
     data_add <- derive_var_obs_number(
       dataset_add,
@@ -747,5 +748,5 @@ get_joined_data <- function(dataset,
     filter_if(filter_join) %>%
     ungroup() %>%
     remove_tmp_vars() %>%
-    select(-!!tmp_obs_nr_var.join)
+    select(-!!tmp_obs_nr_var_join)
 }
