@@ -168,12 +168,16 @@ adae <- tribble(
   "1",      "2021-04-05",
   "2",      "2021-02-15",
 ) %>%
+  mutate(
+    STUDYID = "xyz",
+    .before = USUBJID
+  ) %>% 
   mutate(ASTDT = ymd(ASTDT))
 
 derive_vars_joined(
   adae,
   dataset_add = phase_ref,
-  by_vars = exprs(USUBJID),
+  by_vars = exprs(STUDYID, USUBJID),
   filter_join = PHSDT <= ASTDT & ASTDT <= PHEDT,
   join_type = "all"
 )
