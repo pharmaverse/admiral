@@ -171,7 +171,7 @@ adae <- tribble(
   mutate(
     STUDYID = "xyz",
     .before = USUBJID
-  ) %>% 
+  ) %>%
   mutate(ASTDT = ymd(ASTDT))
 
 derive_vars_joined(
