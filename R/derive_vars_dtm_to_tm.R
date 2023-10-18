@@ -11,7 +11,7 @@
 #' @details
 #' The names of the newly added variables are automatically set by replacing the
 #' `--DTM` suffix of the `source_vars` with `--TM`. The `--TM` variables are created
-#' using the {hms} package.
+#' using the `{hms}` package.
 #'
 #' @return
 #' A data frame containing the input dataset with the corresponding time

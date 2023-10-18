@@ -23,7 +23,7 @@ This function creates time variable(s) as output from datetime variable(s)
 \details{
 The names of the newly added variables are automatically set by replacing the
 \code{--DTM} suffix of the \code{source_vars} with \code{--TM}. The \code{--TM} variables are created
-using the {hms} package.
+using the \code{{hms}} package.
 }
 \examples{
 library(tibble)

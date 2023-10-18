@@ -1248,7 +1248,7 @@ compute_tmf <- function(dtc,
 #' The date can be imputed (see `date_imputation` argument)
 #' and the date imputation flag ('`--DTF'`) can be added.
 #'
-#' In {admiral} we don't allow users to pick any single part of the date/time to
+#' In `{admiral}` we don't allow users to pick any single part of the date/time to
 #' impute, we only enable to impute up to a highest level, i.e. you couldn't
 #' choose to say impute months, but not days.
 #'
@@ -1457,7 +1457,7 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
 #' The date and time can be imputed (see `date_imputation`/`time_imputation` arguments)
 #' and the date/time imputation flag (`'--DTF'`, `'--TMF'`) can be added.
 #'
-#' In {admiral} we don't allow users to pick any single part of the date/time to
+#' In `{admiral}` we don't allow users to pick any single part of the date/time to
 #' impute, we only enable to impute up to a highest level, i.e. you couldn't
 #' choose to say impute months, but not days.
 #'
