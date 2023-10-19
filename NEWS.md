@@ -48,6 +48,8 @@ were enhanced such that more than one summary variable can be derived, e.g.,
   - `derive_expected_records(dataset_expected_obs)` 
   - `derive_var_ontrtfl(span_period)` 
   
+- The `derive_param_extreme_record()` function has been superseded in favor of `derive_extreme_event()`. (#2141)
+  
 ## Documentation
 
 - A way to standardize roxygen labels and descriptions for function arguments was implemented and tested (#2034)
