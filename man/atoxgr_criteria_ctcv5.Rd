@@ -41,7 +41,7 @@ value. 'L' is for LOW values, 'H' is for HIGH values. Note: the variable is case
 Note: Variables \code{SOC}, \code{TERM}, \verb{Grade 1}, \verb{Grade 2},\verb{Grade 3},\verb{Grade 4},\verb{Grade 5}, \code{Definition}
 are from the source document on NCI-CTC website defining the grading criteria.
 \href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm#ctc_50}{\strong{Common Terminology Criteria for Adverse Events (CTCAE)v5.0}}
-From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
+From these variables only 'TERM' is used in the \code{{admiral}} code, the rest are for information and
 traceability only.
 }
 \seealso{

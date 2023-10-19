@@ -4,7 +4,7 @@
 #'
 #'
 #' @details
-#' Many {admiral} function check that the input dataset contains only one record
+#' Many `{admiral}` function check that the input dataset contains only one record
 #' per `by_vars` group and throw an error otherwise. The `get_duplicates_dataset()`
 #' function allows one to retrieve the duplicate records that lead to an error.
 #'
