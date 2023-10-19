@@ -101,7 +101,9 @@
 #' `"23:59:59"`. Specifying date variables makes sense only if the date is
 #' imputed. If only time is imputed, date variables do not affect the result.
 
-#' @param preserve Preserve day if month is missing and day is present
+#' @param preserve Preserve lower level date/time part when higher order part
+#' is missing, e.g. preserve day if month is missing or
+#' preserve minute when hour is missing.
 #'
 #' For example `"2019---07"` would return `"2019-06-07` if `preserve = TRUE`
 #' (and `date_imputation = "mid"`).
