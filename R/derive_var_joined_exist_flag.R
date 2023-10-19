@@ -38,8 +38,8 @@
 #'   with respect to `order`. For each by group (`by_vars`) the observation
 #'   number starts with `1`. The variable can be used in the conditions
 #'   (`filter_join`, `first_cond_upper`, `first_cond_lower`). It is not included
-#'   in the output dataset. It can be used to flag consecutive observations or
-#'   the last observation (see last example below).
+#'   in the output dataset. It can also be used to flag consecutive observations
+#'   or the last observation (see last example below).
 #'
 #' @param join_vars Variables to keep from joined dataset
 #'
@@ -47,28 +47,10 @@
 #'   for this parameter. The specified variables are added to the joined dataset
 #'   with suffix ".join". For example to flag all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
-#'   exprs(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
+#'   exprs(AVALC, AVISITN)` and `filter_join = AVALC == "Y" & AVALC.join == "Y" &
 #'   AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
-#'
-#' @param join_type Observations to keep after joining
-#'
-#'   The argument determines which of the joined observations are kept with
-#'   respect to the original observation. For example, if `join_type = "after"`
-#'   is specified all observations after the original observations are kept.
-#'
-#'   For example for confirmed response or BOR in the oncology setting or
-#'   confirmed deterioration in questionnaires the confirmatory assessment must
-#'   be after the assessment to be flagged. Thus `join_type = "after"` could be
-#'   used.
-#'
-#'   Whereas, sometimes you might allow for confirmatory observations to occur
-#'   prior to the observation to be flagged. For example, to flag AEs occurring
-#'   on or after seven days before a COVID AE. Thus `join_type = "all"` could be
-#'   used.
-#'
-#'   *Permitted Values:* `"before"`, `"after"`, `"all"`
 #'
 #' @param first_cond Condition for selecting range of data
 #'
@@ -81,20 +63,33 @@
 #'   condition is not fulfilled for any of the other observations, no
 #'   observations are considered, i.e., the observation is not flagged.
 #'
-#'   This parameter should be specified if `filter` contains summary functions
-#'   which should not apply to all observations but only up to the confirmation
-#'   assessment. For an example see the third example below.
+#'   This parameter should be specified if `filter_join` contains summary
+#'   functions which should not apply to all observations but only up to the
+#'   confirmation assessment. For an example see the third example below.
 #'
-#' @param first_cond_upper Condition for selecting range of data
+#' @param first_cond_lower Condition for selecting range of data (before)
+#'
+#'   If this argument is specified, the other observations are restricted from
+#'   the first observation before the current observation where the specified
+#'   condition is fulfilled up to the current observation. If the condition is
+#'   not fulfilled for any of the other observations, no observations are
+#'   considered, i.e., the observation is not flagged.
+#'
+#'   This parameter should be specified if `filter_join` contains summary
+#'   functions which should not apply to all observations but only from a
+#'   certain observation before the current observation up to the current
+#'   observation. For an example see the last example below.
+#'
+#' @param first_cond_upper Condition for selecting range of data (after)
 #'
 #'   If this argument is specified, the other observations are restricted up to
 #'   the first observation where the specified condition is fulfilled. If the
 #'   condition is not fulfilled for any of the other observations, no
 #'   observations are considered, i.e., the observation is not flagged.
 #'
-#'   This parameter should be specified if `filter` contains summary functions
-#'   which should not apply to all observations but only up to the confirmation
-#'   assessment. For an example see the third example below.
+#'   This parameter should be specified if `filter_join` contains summary
+#'   functions which should not apply to all observations but only up to the
+#'   confirmation assessment. For an example see the third example below.
 #'
 #' @param filter_join Condition for selecting observations
 #'
@@ -138,16 +133,26 @@
 #'
 #'   *Default*: `NA_character_`
 #'
+#' @inheritParams get_joined_data
+#'
 #' @details
 #'   The following steps are performed to produce the output dataset.
 #'
 #'   ## Step 1
 #'
-#'   The input dataset (`dataset`) is joined with the additional dataset
-#'   (`dataset_add`) by the variables specified for `by_vars`. From the
-#'   additional dataset only the variables specified for `join_vars` are kept.
-#'   The suffix ".join" is added to those variables which also exist in the
-#'   input dataset.
+#'   - The variables specified by `order` are added to the additional dataset
+#'   (`dataset_add`).
+#'
+#'   - The variables specified by `join_vars` are added to the additional dataset
+#'   (`dataset_add`).
+#'
+#'   - The records from the additional dataset (`dataset_add`) are restricted to
+#'   those matching the `filter_add` condition.
+#'
+#'   The input dataset (`dataset`) is joined with the restricted additional
+#'   dataset by the variables specified for `by_vars`. From the additional
+#'   dataset only the variables specified for `join_vars` are kept. The suffix
+#'   ".join" is added to those variables which also exist in the input dataset.
 #'
 #'   For example, for `by_vars = USUBJID`, `join_vars = exprs(AVISITN, AVALC)`
 #'   and input dataset and additional dataset
@@ -190,16 +195,19 @@
 #'   ## Step 3
 #'
 #'   If `first_cond_lower` is specified, for each observation of the input
-#'   dataset the joined dataset is restricted to observations up to the first
+#'   dataset the joined dataset is restricted to observations from the first
 #'   observation where `first_cond_lower` is fulfilled (the observation
-#'   fulfilling the condition is included). If for an observation of the input
-#'   dataset the condition is not fulfilled, the observation is removed.
+#'   fulfilling the condition is included) up to the observation of the input
+#'   dataset. If for an observation of the input dataset the condition is not
+#'   fulfilled, the observation is removed.
 #'
 #'   If `first_cond_upper` is specified, for each observation of the input
 #'   dataset the joined dataset is restricted to observations up to the first
 #'   observation where `first_cond_upper` is fulfilled (the observation
 #'   fulfilling the condition is included). If for an observation of the input
 #'   dataset the condition is not fulfilled, the observation is removed.
+#'
+#'   For an example see the last example in the "Examples" section.
 #'
 #'   ## Step 4
 #'
@@ -385,7 +393,6 @@
 #' )
 #'
 #' # first_cond_lower and first_cond_upper argument
-#'
 #' myd <- tribble(
 #' ~subj, ~day, ~val,
 #' "1",      1, "++",
@@ -425,7 +432,7 @@
 #'   order = exprs(day),
 #'   new_var = flag,
 #'   join_vars = exprs(val),
-#'   join_type = "before",
+#'   join_type = "after",
 #'   first_cond_upper = val.join == "++",
 #'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
 #' )
@@ -485,6 +492,7 @@ derive_var_joined_exist_flag <- function(dataset,
     tmp_obs_nr_var = !!tmp_obs_nr_var,
     join_vars = join_vars,
     join_type = join_type,
+    first_cond_lower = !!first_cond_lower,
     first_cond_upper = !!first_cond_upper,
     filter_join = !!filter_join,
     check_type = check_type

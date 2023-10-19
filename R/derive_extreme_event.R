@@ -469,6 +469,8 @@ derive_extreme_event <- function(dataset,
 #'   `derive_extreme_event()`. If the argument is not specified, the input
 #'   dataset (`dataset`) of `derive_extreme_event()` is used.
 #'
+#'   *Permitted Values*: a character scalar
+#'
 #' @param condition An unquoted condition for selecting the observations, which
 #'   will contribute to the extreme event. If the condition contains summary
 #'   functions like `all()`, they are evaluated for each by group separately.
@@ -491,6 +493,8 @@ derive_extreme_event <- function(dataset,
 #'   PARAM  = "Worst Sleeping Problems")`. The values can be a symbol, a
 #'   character string, a numeric value, `NA` or an expression.
 #'
+#'   *Permitted Values*: a named list of expressions, e.g., created by `exprs()`
+#'
 #' @param keep_source_vars Variables to keep from the source dataset
 #'
 #'   The specified variables are kept for the selected observations. The
@@ -505,6 +509,8 @@ derive_extreme_event <- function(dataset,
 #'
 #'   The description does not affect the derivations where the event is used. It
 #'   is intended for documentation only.
+#'
+#'   *Permitted Values*: a character scalar
 #'
 #' @keywords source_specifications
 #' @family source_specifications
@@ -561,8 +567,21 @@ event <- function(dataset_name = NULL,
 #'   `derive_extreme_event()`. If the argument is not specified, the input
 #'   dataset (`dataset`) of `derive_extreme_event()` is used.
 #'
+#'   *Permitted Values*: a character scalar
+#'
 #' @param condition An unquoted condition for selecting the observations, which
 #'   will contribute to the extreme event.
+#'
+#'   The condition is applied to the joined dataset for selecting the confirmed
+#'   observations. The condition can include summary functions. The joined
+#'   dataset is grouped by the original observations. I.e., the summary function
+#'   are applied to all observations up to the confirmation observation. For
+#'   example in the oncology setting when using this function for confirmed best
+#'   overall response,  `condition = AVALC == "CR" & all(AVALC.join %in% c("CR",
+#'   "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1` selects
+#'   observations with response "CR" and for all observations up to the
+#'   confirmation observation the response is "CR" or "NE" and there is at most
+#'   one "NE".
 #'
 #'   *Permitted Values*: an unquoted condition
 #'
@@ -572,10 +591,12 @@ event <- function(dataset_name = NULL,
 #'   this parameter. The specified variables are added to the joined dataset
 #'   with suffix ".join". For example to select all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
-#'   exprs(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
+#'   exprs(AVALC, AVISITN)` and `condition = AVALC == "Y" & AVALC.join == "Y" &
 #'   AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
+#'
+#'   *Permitted Values*: a named list of expressions, e.g., created by `exprs()`
 #'
 #' @param join_type Observations to keep after joining
 #'
@@ -588,10 +609,44 @@ event <- function(dataset_name = NULL,
 #'
 #' @param first_cond Condition for selecting range of data
 #'
+#'   `r lifecycle::badge("deprecated")`
+#'
+#'   This argument is *deprecated*, please use `first_cond_upper` instead.
+#'
 #'   If this argument is specified, the other observations are restricted up to
 #'   the first observation where the specified condition is fulfilled. If the
 #'   condition is not fulfilled for any of the subsequent observations, all
 #'   observations are removed.
+#'
+#'   *Permitted Values*: an unquoted condition
+#'
+#' @param first_cond_lower Condition for selecting range of data (before)
+#'
+#'   If this argument is specified, the other observations are restricted from
+#'   the first observation before the current observation where the specified
+#'   condition is fulfilled up to the current observation. If the condition is
+#'   not fulfilled for any of the other observations, no observations are
+#'   considered, i.e., the observation is not flagged.
+#'
+#'   This parameter should be specified if `condition` contains summary
+#'   functions which should not apply to all observations but only from a
+#'   certain observation before the current observation up to the current
+#'   observation.
+#'
+#'   *Permitted Values*: an unquoted condition
+#'
+#' @param first_cond_upper Condition for selecting range of data (after)
+#'
+#'   If this argument is specified, the other observations are restricted up to
+#'   the first observation where the specified condition is fulfilled. If the
+#'   condition is not fulfilled for any of the other observations, no
+#'   observations are considered, i.e., the observation is not flagged.
+#'
+#'   This parameter should be specified if `condition` contains summary
+#'   functions which should not apply to all observations but only up to the
+#'   confirmation assessment.
+#'
+#'   *Permitted Values*: an unquoted condition
 #'
 #' @param order If specified, the specified variables or expressions are used to
 #'   select the first observation.

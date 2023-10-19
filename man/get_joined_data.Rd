@@ -53,6 +53,46 @@ The variables are not included in the output dataset.
 
 \emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
 
+\item{join_type}{Observations to keep after joining
+
+The argument determines which of the joined observations are kept with
+respect to the original observation. For example, if \code{join_type = "after"}
+is specified all observations after the original observations are kept.
+
+For example for confirmed response or BOR in the oncology setting or
+confirmed deterioration in questionnaires the confirmatory assessment must
+be after the assessment. Thus \code{join_type = "after"} could be used.
+
+Whereas, sometimes you might allow for confirmatory observations to occur
+prior to the observation. For example, to identify AEs occurring on or
+after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
+
+\emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}}
+
+\item{first_cond_lower}{Condition for selecting range of data (before)
+
+If this argument is specified, the other observations are restricted from
+the first observation before the current observation where the specified
+condition is fulfilled up to the current observation. If the condition is
+not fulfilled for any of the other observations, no observations are
+considered, i.e., the observation is not flagged.
+
+This parameter should be specified if \code{filter_join} contains summary
+functions which should not apply to all observations but only from a
+certain observation before the current observation up to the current
+observation.}
+
+\item{first_cond_upper}{Condition for selecting range of data (after)
+
+If this argument is specified, the other observations are restricted up to
+the first observation where the specified condition is fulfilled. If the
+condition is not fulfilled for any of the other observations, no
+observations are considered, i.e., the observation is not flagged.
+
+This parameter should be specified if \code{filter_join} contains summary
+functions which should not apply to all observations but only up to the
+confirmation assessment.}
+
 \item{order}{Sort order
 
 If the argument is set to a non-null value, for each observation of the
@@ -70,6 +110,15 @@ variable is not included in the output dataset.
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
+\item{tmp_obs_nr_var}{Temporary observation number
+
+The specified variable is added to the input dataset (\code{dataset}) and the
+additional dataset (\code{dataset_add}). It is set to the observation number
+with respect to \code{order}. For each by group (\code{by_vars}) the observation
+number starts with \code{1}. The variable can be used in the conditions
+(\code{filter_join}, \code{first_cond_upper}, \code{first_cond_lower}). It can also be
+used to select consecutive observations or the last observation.}
+
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
 Only observations from \code{dataset_add} fulfilling the specified condition are
@@ -78,6 +127,9 @@ observations are joined.
 
 Variables created by \code{order} or \code{new_vars} arguments can be used in the
 condition.
+
+The condition can include summary functions. The additional dataset is
+grouped by the by variables (\code{by_vars}).
 
 \emph{Permitted Values}: a condition}
 

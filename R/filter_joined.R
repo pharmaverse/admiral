@@ -34,19 +34,10 @@
 #'   this parameter. The specified variables are added to the joined dataset
 #'   with suffix ".join". For example to select all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
-#'   exprs(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
-#'   AVISITN < AVISITN.join` could be specified.
+#'   exprs(AVALC, AVISITN)` and `filter_join = AVALC == "Y" & AVALC.join == "Y"
+#'   & AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
-#'
-#' @param join_type Observations to keep after joining
-#'
-#'   The argument determines which of the joined observations are kept with
-#'   respect to the original observation. For example, if `join_type =
-#'   "after"` is specified all observations after the original observations are
-#'   kept.
-#'
-#'   *Permitted Values:* `"before"`, `"after"`, `"all"`
 #'
 #' @param first_cond Condition for selecting range of data
 #'
@@ -59,12 +50,29 @@
 #'   condition is not fulfilled for any of the subsequent observations, all
 #'   observations are removed.
 #'
-#' @param first_cond_upper Condition for selecting range of data
+#' @param first_cond_lower Condition for selecting range of data (before)
+#'
+#'   If this argument is specified, the other observations are restricted from
+#'   the first observation before the current observation where the specified
+#'   condition is fulfilled up to the current observation. If the condition is
+#'   not fulfilled for any of the other observations, no observations are
+#'   considered, i.e., the observation is not flagged.
+#'
+#'   This parameter should be specified if `filter_join` contains summary
+#'   functions which should not apply to all observations but only from a
+#'   certain observation before the current observation up to the current
+#'   observation. For an example see the last example below.
+#'
+#' @param first_cond_upper Condition for selecting range of data (after)
 #'
 #'   If this argument is specified, the other observations are restricted up to
 #'   the first observation where the specified condition is fulfilled. If the
-#'   condition is not fulfilled for any of the subsequent observations, all
-#'   observations are removed.
+#'   condition is not fulfilled for any of the other observations, no
+#'   observations are considered, i.e., the observation is not flagged.
+#'
+#'   This parameter should be specified if `filter_join` contains summary
+#'   functions which should not apply to all observations but only up to the
+#'   confirmation assessment. For an example see the last example below.
 #'
 #' @param order Order
 #'
@@ -80,8 +88,19 @@
 #'   with respect to `order`. For each by group (`by_vars`) the observation
 #'   number starts with `1`. The variable can be used in the conditions
 #'   (`filter_join`, `first_cond_upper`, `first_cond_lower`). It is not included
-#'   in the output dataset. It can be used to select consecutive observations or
-#'   the last observation (see last example below).
+#'   in the output dataset. It can also be used to select consecutive
+#'   observations or the last observation (see example below).
+#'
+#' @param filter_add Filter for additional dataset (`dataset_add`)
+#'
+#'   Only observations from `dataset_add` fulfilling the specified condition are
+#'   joined to the input dataset. If the argument is not specified, all
+#'   observations are joined.
+#'
+#'   Variables created by the `order` argument can be used in the condition.
+#'
+#'   The condition can include summary functions. The additional dataset is
+#'   grouped by the by variables (`by_vars`).
 #'
 #' @param filter Condition for selecting observations
 #'
@@ -121,14 +140,25 @@
 #'
 #'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
 #'
+#' @inheritParams get_joined_data
+#'
 #' @details
 #'
 #'   The following steps are performed to produce the output dataset.
 #'
 #'   ## Step 1
 #'
-#'   The input dataset (`dataset`) is joined with the additional dataset
-#'   (`dataset_add`) by the variables specified for `by_vars`. From the
+#'   - The variables specified by `order` are added to the additional dataset
+#'   (`dataset_add`).
+#'
+#'   - The variables specified by `join_vars` are added to the additional dataset
+#'   (`dataset_add`).
+#'
+#'   - The records from the additional dataset (`dataset_add`) are restricted to
+#'   those matching the `filter_add` condition.
+#'
+#'   Then the  input dataset (`dataset`) is joined with the restricted
+#'   additional dataset by the variables specified for `by_vars`. From the
 #'   additional dataset only the variables specified for `join_vars` are kept.
 #'   The suffix ".join" is added to those variables which are also present in
 #'   the input dataset.
@@ -173,11 +203,20 @@
 #'
 #'   ## Step 3
 #'
+#'   If `first_cond_lower` is specified, for each observation of the input
+#'   dataset the joined dataset is restricted to observations from the first
+#'   observation where `first_cond_lower` is fulfilled (the observation
+#'   fulfilling the condition is included) up to the observation of the input
+#'   dataset. If for an observation of the input dataset the condition is not
+#'   fulfilled, the observation is removed.
+#'
 #'   If `first_cond_upper` is specified, for each observation of the input
 #'   dataset the joined dataset is restricted to observations up to the first
 #'   observation where `first_cond_upper` is fulfilled (the observation
 #'   fulfilling the condition is included). If for an observation of the input
 #'   dataset the condition is not fulfilled, the observation is removed.
+#'
+#'   For an example see the last example in the "Examples" section.
 #'
 #'   ## Step 4
 #'
@@ -354,6 +393,48 @@
 #'     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 #' )
 #'
+#' # first_cond_lower and first_cond_upper argument
+#' myd <- tribble(
+#' ~subj, ~day, ~val,
+#' "1",      1, "++",
+#' "1",      2, "-",
+#' "1",      3, "0",
+#' "1",      4, "+",
+#' "1",      5, "++",
+#' "1",      6, "-",
+#' "2",      1, "-",
+#' "2",      2, "++",
+#' "2",      3, "+",
+#' "2",      4, "0",
+#' "2",      5, "-",
+#' "2",      6, "++"
+#' )
+#'
+#' # select "0" where all results from the first "++" before the "0" up to the "0"
+#' # (excluding the "0") are "+" or "++"
+#' filter_joined(
+#'   myd,
+#'   dataset_add = myd,
+#'   by_vars = exprs(subj),
+#'   order = exprs(day),
+#'   join_vars = exprs(val),
+#'   join_type = "before",
+#'   first_cond_lower = val.join == "++",
+#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
+#' )
+#'
+#' # select "0" where all results from the "0" (excluding the "0") up to the first
+#' # "++" after the "0" are "+" or "++"
+#' filter_joined(
+#'   myd,
+#'   dataset_add = myd,
+#'   by_vars = exprs(subj),
+#'   order = exprs(day),
+#'   join_vars = exprs(val),
+#'   join_type = "after",
+#'   first_cond_upper = val.join == "++",
+#'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
+#' )
 filter_joined <- function(dataset,
                           dataset_add,
                           by_vars,

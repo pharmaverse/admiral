@@ -22,10 +22,22 @@ event_joined(
 \item{dataset_name}{Dataset name of the dataset to be used as input for the
 event. The name refers to the dataset specified for \code{source_datasets} in
 \code{derive_extreme_event()}. If the argument is not specified, the input
-dataset (\code{dataset}) of \code{derive_extreme_event()} is used.}
+dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
+
+\emph{Permitted Values}: a character scalar}
 
 \item{condition}{An unquoted condition for selecting the observations, which
 will contribute to the extreme event.
+
+The condition is applied to the joined dataset for selecting the confirmed
+observations. The condition can include summary functions. The joined
+dataset is grouped by the original observations. I.e., the summary function
+are applied to all observations up to the confirmation observation. For
+example in the oncology setting when using this function for confirmed best
+overall response,  \code{condition = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1} selects
+observations with response "CR" and for all observations up to the
+confirmation observation the response is "CR" or "NE" and there is at most
+one "NE".
 
 \emph{Permitted Values}: an unquoted condition}
 
@@ -39,9 +51,11 @@ select the first observation.
 
 The variables needed from the other observations should be specified for
 this parameter. The specified variables are added to the joined dataset
-with suffix ".join". For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
+with suffix ".join". For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{condition = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
 
-The \verb{*.join} variables are not included in the output dataset.}
+The \verb{*.join} variables are not included in the output dataset.
+
+\emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}}
 
 \item{join_type}{Observations to keep after joining
 
@@ -53,14 +67,50 @@ kept.
 
 \item{first_cond}{Condition for selecting range of data
 
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This argument is \emph{deprecated}, please use \code{first_cond_upper} instead.
+
 If this argument is specified, the other observations are restricted up to
 the first observation where the specified condition is fulfilled. If the
 condition is not fulfilled for any of the subsequent observations, all
-observations are removed.}
+observations are removed.
+
+\emph{Permitted Values}: an unquoted condition}
+
+\item{first_cond_lower}{Condition for selecting range of data (before)
+
+If this argument is specified, the other observations are restricted from
+the first observation before the current observation where the specified
+condition is fulfilled up to the current observation. If the condition is
+not fulfilled for any of the other observations, no observations are
+considered, i.e., the observation is not flagged.
+
+This parameter should be specified if \code{condition} contains summary
+functions which should not apply to all observations but only from a
+certain observation before the current observation up to the current
+observation.
+
+\emph{Permitted Values}: an unquoted condition}
+
+\item{first_cond_upper}{Condition for selecting range of data (after)
+
+If this argument is specified, the other observations are restricted up to
+the first observation where the specified condition is fulfilled. If the
+condition is not fulfilled for any of the other observations, no
+observations are considered, i.e., the observation is not flagged.
+
+This parameter should be specified if \code{condition} contains summary
+functions which should not apply to all observations but only up to the
+confirmation assessment.
+
+\emph{Permitted Values}: an unquoted condition}
 
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
 to be set for the event, e.g. \code{exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")}. The values can be a symbol, a
-character string, a numeric value, \code{NA} or an expression.}
+character string, a numeric value, \code{NA} or an expression.
+
+\emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
 
@@ -74,7 +124,9 @@ a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_w
 \item{description}{Description of the event
 
 The description does not affect the derivations where the event is used. It
-is intended for documentation only.}
+is intended for documentation only.
+
+\emph{Permitted Values}: a character scalar}
 }
 \value{
 An object of class \code{event_joined}
