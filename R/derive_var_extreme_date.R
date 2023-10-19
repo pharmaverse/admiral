@@ -3,9 +3,8 @@
 #' Add the first or last datetime from multiple sources to the dataset, e.g.,
 #' the last known alive datetime (`LSTALVDTM`).
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by `subject_keys` are required.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("subject_keys"))`
 #'
 #' @param new_var Name of variable to create
 #'
@@ -621,7 +620,7 @@ date_source <- function(dataset_name,
                         traceability_vars = NULL,
                         set_values_to = NULL) {
   if (!is.null(traceability_vars)) {
-    deprecate_warn(
+    deprecate_stop(
       "0.12.0",
       "date_source(traceability_vars = )",
       "date_source(set_values_to = )"

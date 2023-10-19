@@ -333,3 +333,37 @@ test_that("derive_vars_joined Test 10: order vars are selected properly in funct
     keys = c("day", "val", "first_val")
   )
 })
+
+## Test 11: Ensure exist_flag, true/false value arguments work ----
+test_that("derive_vars_joined Test 11: Ensure exist_flag, true/false value arguments work", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~ADY, ~AVISIT,    ~AWLO, ~AWHI,  ~flag,
+    "1",        -2, "BASELINE",   -30,     1,  "Yes",
+    "1",         3, "WEEK 1",       2,     7,  "Yes",
+    "1",        24, "WEEK 4",      23,    30,  "Yes",
+    "2",        NA, NA,            NA,    NA,   "No"
+  )
+
+  windows <- tibble::tribble(
+    ~AVISIT,    ~AWLO, ~AWHI,
+    "BASELINE",   -30,     1,
+    "WEEK 1",       2,     7,
+    "WEEK 2",       8,    15,
+    "WEEK 3",      16,    22,
+    "WEEK 4",      23,    30
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    comp = derive_vars_joined(
+      select(expected, USUBJID, ADY),
+      dataset_add = windows,
+      join_vars = exprs(AWHI, AWLO),
+      filter_join = AWLO <= ADY & ADY <= AWHI,
+      exist_flag = flag,
+      true_value = "Yes",
+      false_value = "No"
+    ),
+    keys = c("USUBJID", "ADY")
+  )
+})

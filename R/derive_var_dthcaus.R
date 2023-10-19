@@ -2,9 +2,8 @@
 #'
 #' Derive death cause (`DTHCAUS`) and add traceability variables if required.
 #'
-#' @param dataset Input dataset.
-#'
-#'   The variables specified by `subject_keys` are required.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("subject_keys"))`
 #'
 #' @param source_datasets A named `list` containing datasets in which to search for the
 #'   death cause
@@ -317,7 +316,7 @@ dthcaus_source <- function(dataset_name,
                            set_values_to = NULL,
                            traceability_vars = NULL) {
   if (!is.null(traceability_vars)) {
-    deprecate_warn(
+    deprecate_stop(
       "0.12.0",
       "dthcaus_source(traceability_vars = )",
       "dthcaus_source(set_values_to = )"

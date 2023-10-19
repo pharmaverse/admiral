@@ -9,7 +9,7 @@ filter_exist(dataset, dataset_add, by_vars, filter_add = NULL)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified in the \code{by_vars} parameter are expected in this dataset.}
+The variables specified by the \code{by_vars} argument(s) to be expected.}
 
 \item{dataset_add}{Source dataset
 

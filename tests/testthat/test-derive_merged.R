@@ -103,11 +103,11 @@ test_that("derive_vars_merged Test 3: merge last value and flag matched by group
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(WEIGHTBL = AVAL),
     mode = "last",
-    match_flag = matched
+    exist_flag = matched
   )
   expected <- adsl %>% mutate(
     WEIGHTBL = c(68, 88, 55, NA),
-    matched = c(TRUE, TRUE, TRUE, NA)
+    matched = c("Y", "Y", "Y", NA_character_)
   )
 
   expect_dfs_equal(
@@ -117,8 +117,32 @@ test_that("derive_vars_merged Test 3: merge last value and flag matched by group
   )
 })
 
-## Test 4: error if variable in both datasets ----
-test_that("derive_vars_merged Test 4: error if variable in both datasets", {
+## Test 4: merge last value and flag matched by groups ----
+test_that("derive_vars_merged Test 4: merge last value and flag matched by groups", {
+  actual <- derive_vars_merged(adsl,
+    dataset_add = advs,
+    order = exprs(AVAL),
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(WEIGHTBL = AVAL),
+    mode = "last",
+    exist_flag = matched,
+    true_value = "Y",
+    false_value = "N"
+  )
+  expected <- adsl %>% mutate(
+    WEIGHTBL = c(68, 88, 55, NA),
+    matched = c("Y", "Y", "Y", "N")
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID")
+  )
+})
+
+## Test 5: error if variable in both datasets ----
+test_that("derive_vars_merged Test 5: error if variable in both datasets", {
   expect_error(
     derive_vars_merged(advs,
       dataset_add = adsl,
@@ -128,8 +152,8 @@ test_that("derive_vars_merged Test 4: error if variable in both datasets", {
   )
 })
 
-## Test 5: by_vars with rename ----
-test_that("derive_vars_merged Test 5: by_vars with rename", {
+## Test 6: by_vars with rename ----
+test_that("derive_vars_merged Test 6: by_vars with rename", {
   actual <- derive_vars_merged(advs,
     dataset_add = adsl1,
     by_vars = exprs(STUDYID, USUBJID = ID),
@@ -146,8 +170,8 @@ test_that("derive_vars_merged Test 5: by_vars with rename", {
   )
 })
 
-## Test 6: expressions for new_vars and missing_values ----
-test_that("derive_vars_merged Test 6: expressions for new_vars and missing_values", {
+## Test 7: expressions for new_vars and missing_values ----
+test_that("derive_vars_merged Test 7: expressions for new_vars and missing_values", {
   actual <- derive_vars_merged(
     adsl,
     dataset_add = advs,
@@ -169,8 +193,38 @@ test_that("derive_vars_merged Test 6: expressions for new_vars and missing_value
   )
 })
 
-## Test 7: use new variables in filter_add and order ----
-test_that("derive_vars_merged Test 7: use new variables in filter_add and order", {
+
+## Test 8: Use of missing_values and exist_flags ----
+test_that("derive_vars_merged Test 8: Use of missing_values and exist_flags", {
+  actual <- derive_vars_merged(
+    adsl,
+    dataset_add = advs,
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISIT),
+    new_vars = exprs(LASTVIS = str_to_upper(AVISIT)),
+    mode = "last",
+    missing_values = exprs(LASTVIS = "UNKNOWN"),
+    exist_flag = matched,
+    true_value = NA,
+    false_value = "No"
+  )
+
+  expected <- adsl %>%
+    mutate(
+      LASTVIS = c("WEEK 2", "BASELINE", "WEEK 4", "UNKNOWN"),
+      matched = c(NA, NA, NA, "No")
+    )
+
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = "USUBJID"
+  )
+})
+
+## Test 9: use new variables in filter_add and order ----
+test_that("derive_vars_merged Test 9: use new variables in filter_add and order", {
   expected <- tibble::tribble(
     ~USUBJID, ~TRTSDT,      ~TRTSSEQ,
     "ST42-1", "2020-12-14",        2,
@@ -208,8 +262,8 @@ test_that("derive_vars_merged Test 7: use new variables in filter_add and order"
   )
 })
 
-## Test 8: warning if not unique w.r.t the by variables and the order ----
-test_that("derive_vars_merged Test 8: warning if not unique w.r.t the by variables and the order", {
+## Test 10: warning if not unique w.r.t the by variables and the order ----
+test_that("derive_vars_merged Test 10: warning if not unique w.r.t the by variables and the order", { # nolint
   expect_warning(
     actual <- derive_vars_merged(advs,
       dataset_add = adsl2,
@@ -222,8 +276,8 @@ test_that("derive_vars_merged Test 8: warning if not unique w.r.t the by variabl
   )
 })
 
-## Test 9: error if not unique w.r.t the by variables and the order ----
-test_that("derive_vars_merged Test 9: error if not unique w.r.t the by variables and the order", {
+## Test 11: error if not unique w.r.t the by variables and the order ----
+test_that("derive_vars_merged Test 11: error if not unique w.r.t the by variables and the order", {
   expect_error(
     actual <- derive_vars_merged(advs,
       dataset_add = adsl2,
@@ -237,8 +291,8 @@ test_that("derive_vars_merged Test 9: error if not unique w.r.t the by variables
   )
 })
 
-## Test 10: error if variables in missing_values but not in new_vars ----
-test_that("derive_vars_merged Test 10: error if variables in missing_values but not in new_vars", {
+## Test 12: error if variables in missing_values but not in new_vars ----
+test_that("derive_vars_merged Test 12: error if variables in missing_values but not in new_vars", {
   expect_error(
     derive_vars_merged(
       adsl,
@@ -254,34 +308,23 @@ test_that("derive_vars_merged Test 10: error if variables in missing_values but 
   )
 })
 
-# derive_var_merged_cat ----
-
-## Test 11: deprecation error ----
-test_that("derive_var_merged_cat Test 11: deprecation error", {
-  get_vscat <- function(x) {
-    if_else(x == "BASELINE", "BASELINE", "POST-BASELINE")
-  }
-
-  expect_error(
-    derive_var_merged_cat(
-      adsl,
+test_that("deprecation messaging for match_flag", {
+  expect_warning(
+    derive_vars_merged(adsl,
       dataset_add = advs,
-      by_vars = exprs(USUBJID),
-      new_var = LSTVSCAT,
-      source_var = AVISIT,
-      cat_fun = get_vscat,
-      order = exprs(AVISIT),
+      order = exprs(AVAL),
+      by_vars = exprs(STUDYID, USUBJID),
+      new_vars = exprs(WEIGHTBL = AVAL),
       mode = "last",
-      missing_value = "MISSING"
+      match_flag = matched
     ),
-    class = "lifecycle_error_deprecated"
+    class = "lifecycle_warning_deprecated"
   )
 })
 
-
 # derive_var_merged_exist_flag ----
-## Test 12: merge existence flag ----
-test_that("derive_var_merged_exist_flag Test 12: merge existence flag", {
+## Test 13: merge existence flag ----
+test_that("derive_var_merged_exist_flag Test 13: merge existence flag", {
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs,
@@ -301,8 +344,8 @@ test_that("derive_var_merged_exist_flag Test 12: merge existence flag", {
   )
 })
 
-## Test 13: by_vars with rename ----
-test_that("derive_var_merged_exist_flag Test 13: by_vars with rename", {
+## Test 14: by_vars with rename ----
+test_that("derive_var_merged_exist_flag Test 14: by_vars with rename", {
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs1,
@@ -321,25 +364,6 @@ test_that("derive_var_merged_exist_flag Test 13: by_vars with rename", {
     keys = "USUBJID"
   )
 })
-
-# derive_var_merged_character ----
-
-## Test 14: deprecation error ----
-test_that("derive_var_merged_character Test 14: deprecation error", {
-  expect_error(
-    derive_var_merged_character(
-      adsl,
-      dataset_add = advs,
-      by_vars = exprs(USUBJID),
-      order = exprs(AVISIT),
-      new_var = LASTVIS,
-      source_var = AVISIT,
-      mode = "last"
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
 
 # derive_vars_merged_lookup ----
 ## Test 15: merge lookup table ----
@@ -513,9 +537,7 @@ test_that("derive_var_merged_summary Test 19: dataset == dataset_add, no filter"
       adbds,
       dataset_add = adbds,
       by_vars = exprs(AVISIT),
-      new_var = MEANVIS,
-      analysis_var = AVAL,
-      summary_fun = function(x) mean(x, na.rm = TRUE)
+      new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
     ),
     keys = c("AVISIT", "ASEQ")
   )
@@ -546,10 +568,8 @@ test_that("derive_var_merged_summary Test 20: dataset != dataset_add, filter", {
       adsl,
       dataset_add = adbds,
       by_vars = exprs(USUBJID),
-      new_var = MEANPBL,
-      filter_add = ADY > 0,
-      analysis_var = AVAL,
-      summary_fun = function(x) mean(x, na.rm = TRUE)
+      new_vars = exprs(MEANPBL = mean(AVAL, na.rm = TRUE)),
+      filter_add = ADY > 0
     ),
     keys = c("USUBJID")
   )
@@ -577,10 +597,42 @@ test_that("derive_var_merged_summary Test 21: by_vars with rename", {
       adbds,
       dataset_add = adbds1,
       by_vars = exprs(AVISIT = VISIT),
+      new_vars = exprs(MEANVIS = mean(AVAL, na.rm = TRUE))
+    ),
+    keys = c("AVISIT", "ASEQ")
+  )
+})
+
+## Test 22: deprecation warning ----
+test_that("derive_var_merged_summary Test 22: deprecation warning", {
+  expected <- tibble::tribble(
+    ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
+    "WEEK 1",     1,    10,       10,
+    "WEEK 1",     2,    NA,       10,
+    "WEEK 2",     3,    NA,       NA,
+    "WEEK 3",     4,    42,       42,
+    "WEEK 4",     5,    12,       13,
+    "WEEK 4",     6,    12,       13,
+    "WEEK 4",     7,    15,       13
+  )
+
+  adbds <- select(expected, -MEANVIS)
+
+  expect_warning(
+    actual <- derive_var_merged_summary(
+      adbds,
+      dataset_add = adbds,
+      by_vars = exprs(AVISIT),
       new_var = MEANVIS,
       analysis_var = AVAL,
       summary_fun = function(x) mean(x, na.rm = TRUE)
     ),
+    class = "lifecycle_warning_deprecated"
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
     keys = c("AVISIT", "ASEQ")
   )
 })

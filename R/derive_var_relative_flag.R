@@ -5,10 +5,8 @@
 #' called to flag for each subject all observations before the first disease
 #' progression or to flag all AEs after a specific AE.
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `order` and the `by_vars` argument are
-#'   expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars", "order"))`
 #'
 #' @param by_vars Grouping variables
 #'

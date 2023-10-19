@@ -2,9 +2,8 @@
 #'
 #' Add a variable flagging the first or last observation within each by group
 #'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` parameter are expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param order Sort order
 #'
@@ -15,8 +14,8 @@
 #'
 #' @param new_var Variable to add
 #'
-#'   The specified variable is added to the output dataset. It is set to `"Y"`
-#'   for the first or last observation (depending on the mode) of each by group.
+#'   The specified variable is added to the output dataset. It is set to the value
+#'   set in `true_value` for the first or last observation (depending on the mode) of each by group.
 #'
 #'   Permitted Values: list of name-value pairs
 #'
@@ -25,6 +24,20 @@
 #'   Determines of the first or last observation is flagged.
 #'
 #'   Permitted Values: `"first"`, `"last"`
+#'
+#' @param true_value True value
+#'
+#'   The value for the specified variable `new_var`, applicable to
+#'   the first or last observation (depending on the mode) of each by group.
+#'
+#'   Permitted Values: An atomic scalar
+#'
+#' @param false_value False value
+#'
+#'   The value for the specified variable `new_var`, NOT applicable to
+#'   the first or last observation (depending on the mode) of each by group.
+#'
+#'   Permitted Values: An atomic scalar
 #'
 #' @param flag_all Flag setting
 #'
@@ -233,6 +246,8 @@ derive_var_extreme_flag <- function(dataset,
                                     order,
                                     new_var,
                                     mode,
+                                    true_value = "Y",
+                                    false_value = NA_character_,
                                     flag_all = FALSE,
                                     check_type = "warning") {
   new_var <- assert_symbol(enexpr(new_var))
@@ -240,6 +255,8 @@ derive_var_extreme_flag <- function(dataset,
   assert_expr_list(order)
   assert_data_frame(dataset, required_vars = exprs(!!!by_vars, !!!extract_vars(order)))
   mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
+  assert_atomic_vector(true_value, optional = TRUE)
+  assert_atomic_vector(false_value, optional = TRUE)
   flag_all <- assert_logical_scalar(flag_all)
   check_type <- assert_character_scalar(
     check_type,
@@ -264,11 +281,11 @@ derive_var_extreme_flag <- function(dataset,
 
   if (mode == "first") {
     data <- data %>%
-      mutate(!!new_var := if_else(!!tmp_obs_nr == 1, "Y", NA_character_))
+      mutate(!!new_var := if_else(!!tmp_obs_nr == 1, true_value, false_value))
   } else {
     data <- data %>%
       group_by(!!!by_vars) %>%
-      mutate(!!new_var := if_else(!!tmp_obs_nr == n(), "Y", NA_character_)) %>%
+      mutate(!!new_var := if_else(!!tmp_obs_nr == n(), true_value, false_value)) %>%
       ungroup()
   }
 

@@ -1252,9 +1252,8 @@ compute_tmf <- function(dtc,
 #' impute, we only enable to impute up to a highest level, i.e. you couldn't
 #' choose to say impute months, but not days.
 #'
-#' @param dataset Input dataset.
-#'
-#'   The date character vector (`dtc`) must be present.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("dtc"))`
 #'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'
@@ -1461,9 +1460,8 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
 #' impute, we only enable to impute up to a highest level, i.e. you couldn't
 #' choose to say impute months, but not days.
 #'
-#' @param dataset Input dataset
-#'
-#'   The date character vector (`dtc`) must be present.
+#' @param dataset
+#' `r roxygen_param_dataset(expected_vars = c("dtc"))`
 #'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'

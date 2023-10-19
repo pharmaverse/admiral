@@ -18,8 +18,8 @@ derive_param_bmi(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and
-\code{AVAL} are expected.
+The variables specified by the \code{by_vars} argument(s) to be expected.
+\code{PARAMCD}, and \code{AVAL} are expected as well.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}

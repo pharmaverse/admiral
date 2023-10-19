@@ -21,8 +21,7 @@ create_single_dose_dataset(
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by \code{dose_freq}, \code{start_date} and the \code{end_date}
-parameters are expected.}
+The variables specified by the \code{dose_freq}, \code{start_date} and \code{end_date} argument(s) to be expected.}
 
 \item{dose_freq}{The dose frequency
 

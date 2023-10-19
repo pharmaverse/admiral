@@ -6,10 +6,8 @@
 #'
 #' @inheritParams derive_vars_duration
 #'
-#' @param dataset Input dataset
-#'
-#'   The columns specified by the `start_date` and the `end_date` parameter are
-#'   expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("start_date", "end_date"))`
 #'
 #' @param start_date The start date
 #'
@@ -88,7 +86,7 @@ derive_vars_aage <- function(dataset,
                              age_unit = "years",
                              type = "interval") {
   if (!missing(unit)) {
-    deprecate_warn("0.12.0", "derive_vars_aage(unit = )", "derive_vars_aage(age_unit = )")
+    deprecate_stop("0.12.0", "derive_vars_aage(unit = )", "derive_vars_aage(age_unit = )")
     age_unit <- unit
   }
 
@@ -120,9 +118,8 @@ derive_vars_aage <- function(dataset,
 #' units given in the `age_var+U` variable or `age_unit` argument and stores
 #' in a new variable (`new_var`).
 #'
-#' @param dataset Input dataset.
-#'
-#'   The column specified by the `age_var` argument is expected.
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("age_var"))`
 #'
 #' @param age_var Age variable.
 #'

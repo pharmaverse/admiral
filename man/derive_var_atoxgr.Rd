@@ -11,10 +11,10 @@ derive_var_atoxgr(
 )
 }
 \arguments{
-\item{dataset}{Input data set
+\item{dataset}{Input dataset
 
-The columns \code{ATOXGRL}, \code{ATOXGRH} and specified by \code{lotox_description_var},
-and \code{hitox_description_var} parameters are expected.}
+The variables specified by the \code{lotox_description_var} and \code{hitox_description_var} argument(s) to be expected.
+\code{ATOXGRL}, and \code{ATOXGRH} are expected as well.}
 
 \item{lotox_description_var}{Variable containing the toxicity grade description
 for low values, eg. "Anemia"}

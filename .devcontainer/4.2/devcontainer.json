@@ -31,7 +31,7 @@
 	
 	"postCreateCommand": "bash ./.devcontainer/postCreateCommand.sh",
 
-	"postAttachCommand": "$BROWSER \"https://${CODESPACE_NAME}-8787.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}/\"",
+	"postAttachCommand": "$BROWSER \"https://${CODESPACE_NAME}-8787.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}/\"; echo 'To open rstudio in your browser, just type rstudio in the terminal'",
 
 	"customizations": {
 		"vscode": {

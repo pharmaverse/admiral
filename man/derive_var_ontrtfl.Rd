@@ -18,7 +18,7 @@ derive_var_ontrtfl(
 )
 }
 \arguments{
-\item{dataset}{Input dataset.
+\item{dataset}{Input dataset
 
 Required columns are \code{start_date}, \code{end_date}, \code{ref_start_date} and
 \code{ref_end_date}.}

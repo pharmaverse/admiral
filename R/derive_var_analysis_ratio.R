@@ -2,7 +2,8 @@
 #'
 #' Derives a ratio variable for a BDS dataset based on user specified variables.
 #'
-#' @param dataset Input dataset
+#' @param dataset
+#'   `r roxygen_param_dataset(expected_vars = c("numer_var", "denom_var"))`
 #'
 #' @param numer_var Variable containing numeric values to be used in the numerator of
 #'  the ratio calculation.
