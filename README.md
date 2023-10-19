@@ -17,18 +17,17 @@ to develop ADaM datasets in R.
 
 ## Installation
 
-The package is available from CRAN and can be installed by running `install.packages("admiral")`.
-
-To install the latest development version of the package directly from GitHub use the following code:
+The package is available from CRAN and can be installed with
 
 ```r
-if (!requireNamespace("remotes", quietly = TRUE)) {
-  install.packages("remotes")
-}
+install.packages("admiral")
+```
 
-remotes::install_github("pharmaverse/pharmaversesdtm") # This is a required dependency of {admiral}
-remotes::install_github("pharmaverse/admiraldev") # This is a required dependency of {admiral}
-remotes::install_github("pharmaverse/admiral")
+To install the development version of the package from GitHub run
+
+```r
+# install.packages("devtools")
+devtools::install_github("pharmaverse/admiral")
 ```
 
 ## Release Schedule

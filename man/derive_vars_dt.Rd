@@ -132,7 +132,7 @@ The date can be imputed (see \code{date_imputation} argument)
 and the date imputation flag ('\verb{--DTF'}) can be added.
 }
 \details{
-In {admiral} we don't allow users to pick any single part of the date/time to
+In \code{{admiral}} we don't allow users to pick any single part of the date/time to
 impute, we only enable to impute up to a highest level, i.e. you couldn't
 choose to say impute months, but not days.
 
