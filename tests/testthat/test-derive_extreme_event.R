@@ -576,33 +576,34 @@ test_that("derive_extreme_records Test 7: deprecation of ignore_event_order", {
   ) %>%
     mutate(PARAMCD = "OVR")
 
-  expect_warning(actual <- derive_extreme_event(
-    adrs,
-    by_vars = exprs(USUBJID),
-    order = exprs(AVISITN),
-    mode = "first",
-    events = list(
-      event_joined(
-        join_vars = exprs(AVALC),
-        join_type = "after",
-        first_cond = AVALC.join == "CR",
-        condition = AVALC == "CR",
-        set_values_to = exprs(AVALC = "Y")
+  expect_warning(
+    actual <- derive_extreme_event(
+      adrs,
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISITN),
+      mode = "first",
+      events = list(
+        event_joined(
+          join_vars = exprs(AVALC),
+          join_type = "after",
+          first_cond = AVALC.join == "CR",
+          condition = AVALC == "CR",
+          set_values_to = exprs(AVALC = "Y")
+        ),
+        event_joined(
+          join_vars = exprs(AVALC),
+          join_type = "after",
+          first_cond = AVALC.join %in% c("CR", "PR"),
+          condition = AVALC == "PR",
+          set_values_to = exprs(AVALC = "Y")
+        )
       ),
-      event_joined(
-        join_vars = exprs(AVALC),
-        join_type = "after",
-        first_cond = AVALC.join %in% c("CR", "PR"),
-        condition = AVALC == "PR",
-        set_values_to = exprs(AVALC = "Y")
+      ignore_event_order = TRUE,
+      set_values_to = exprs(
+        PARAMCD = "CRSP"
       )
     ),
-    ignore_event_order = TRUE,
-    set_values_to = exprs(
-      PARAMCD = "CRSP"
-    )
-  ),
-  class = "lifecycle_warning_deprecated"
+    class = "lifecycle_warning_deprecated"
   )
 
   expected <- bind_rows(
