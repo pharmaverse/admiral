@@ -462,7 +462,10 @@ derive_extreme_event <- function(dataset,
       }
       data_events %>%
         process_set_values_to(set_values_to = event$set_values_to) %>%
-        select(!!!event_keep_source_vars, !!tmp_event_nr_var, !!!by_vars, names(event$set_values_to))
+        select(
+          !!!event_keep_source_vars, !!tmp_event_nr_var, !!!by_vars,
+          names(event$set_values_to)
+        )
     }
   )
   selected_records <- bind_rows(selected_records_ls)
