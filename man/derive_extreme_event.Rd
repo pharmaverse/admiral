@@ -306,7 +306,7 @@ derive_extreme_event(
       ),
       join_vars = exprs(AVALC, ADT),
       join_type = "after",
-      first_cond = AVALC.join == "CR" &
+      first_cond_upper = AVALC.join == "CR" &
         ADT.join >= ADT + 28,
       condition = AVALC == "CR" &
         all(AVALC.join \%in\% c("CR", "NE")) &
@@ -322,7 +322,7 @@ derive_extreme_event(
       ),
       join_vars = exprs(AVALC, ADT),
       join_type = "after",
-      first_cond = AVALC.join \%in\% c("CR", "PR") &
+      first_cond_upper = AVALC.join \%in\% c("CR", "PR") &
         ADT.join >= ADT + 28,
       condition = AVALC == "PR" &
         all(AVALC.join \%in\% c("CR", "PR", "NE")) &

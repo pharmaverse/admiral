@@ -94,13 +94,14 @@
 #' @param filter_join Condition for selecting observations
 #'
 #'   The filter is applied to the joined dataset for flagging the confirmed
-#'   observations. The condition can include summary functions. The joined
-#'   dataset is grouped by the original observations. I.e., the summary function
-#'   are applied to all observations up to the confirmation observation. For
-#'   example, `filter_join = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
-#'   count_vals(var = AVALC.join, val = "NE") <= 1` selects observations with
-#'   response "CR" and for all observations up to the confirmation observation
-#'   the response is "CR" or "NE" and there is at most one "NE".
+#'   observations. The condition can include summary functions like `all()` or
+#'   `any()`. The joined dataset is grouped by the original observations. I.e.,
+#'   the summary function are applied to all observations up to the confirmation
+#'   observation. For example, `filter_join = AVALC == "CR" & all(AVALC.join
+#'   %in% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1`
+#'   selects observations with response "CR" and for all observations up to the
+#'   confirmation observation the response is "CR" or "NE" and there is at most
+#'   one "NE".
 #'
 #' @param filter Condition for selecting observations
 #'

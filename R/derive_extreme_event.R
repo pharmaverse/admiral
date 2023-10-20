@@ -254,7 +254,7 @@
 #'       ),
 #'       join_vars = exprs(AVALC, ADT),
 #'       join_type = "after",
-#'       first_cond = AVALC.join == "CR" &
+#'       first_cond_upper = AVALC.join == "CR" &
 #'         ADT.join >= ADT + 28,
 #'       condition = AVALC == "CR" &
 #'         all(AVALC.join %in% c("CR", "NE")) &
@@ -270,7 +270,7 @@
 #'       ),
 #'       join_vars = exprs(AVALC, ADT),
 #'       join_type = "after",
-#'       first_cond = AVALC.join %in% c("CR", "PR") &
+#'       first_cond_upper = AVALC.join %in% c("CR", "PR") &
 #'         ADT.join >= ADT + 28,
 #'       condition = AVALC == "PR" &
 #'         all(AVALC.join %in% c("CR", "PR", "NE")) &
@@ -573,15 +573,15 @@ event <- function(dataset_name = NULL,
 #'   will contribute to the extreme event.
 #'
 #'   The condition is applied to the joined dataset for selecting the confirmed
-#'   observations. The condition can include summary functions. The joined
-#'   dataset is grouped by the original observations. I.e., the summary function
-#'   are applied to all observations up to the confirmation observation. For
-#'   example in the oncology setting when using this function for confirmed best
-#'   overall response,  `condition = AVALC == "CR" & all(AVALC.join %in% c("CR",
-#'   "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1` selects
-#'   observations with response "CR" and for all observations up to the
-#'   confirmation observation the response is "CR" or "NE" and there is at most
-#'   one "NE".
+#'   observations. The condition can include summary functions like `all()` or
+#'   `any()`. The joined dataset is grouped by the original observations. I.e.,
+#'   the summary function are applied to all observations up to the confirmation
+#'   observation. For example in the oncology setting when using this function
+#'   for confirmed best overall response,  `condition = AVALC == "CR" &
+#'   all(AVALC.join %in% c("CR", "NE")) & count_vals(var = AVALC.join, val =
+#'   "NE") <= 1` selects observations with response "CR" and for all
+#'   observations up to the confirmation observation the response is "CR" or
+#'   "NE" and there is at most one "NE".
 #'
 #'   *Permitted Values*: an unquoted condition
 #'

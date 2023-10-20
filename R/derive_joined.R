@@ -123,8 +123,8 @@
 #'   Variables created by `order` or `new_vars` arguments can be used in the
 #'   condition.
 #'
-#'   The condition can include summary functions. The joined dataset is grouped
-#'   by the original observations.
+#'   The condition can include summary functions like `all()` or `any()`. The
+#'   joined dataset is grouped by the original observations.
 #'
 #'   *Permitted Values*: a condition
 #'
@@ -653,8 +653,8 @@ derive_vars_joined <- function(dataset,
 #'   Variables created by `order` or `new_vars` arguments can be used in the
 #'   condition.
 #'
-#'   The condition can include summary functions. The additional dataset is
-#'   grouped by the by variables (`by_vars`).
+#'   The condition can include summary functions like `all()` or `any()`. The
+#'   additional dataset is grouped by the by variables (`by_vars`).
 #'
 #'   *Permitted Values*: a condition
 #'
@@ -689,6 +689,9 @@ derive_vars_joined <- function(dataset,
 #'
 #'   Variables created by `order` or `new_vars` arguments can be used in the
 #'   condition.
+#'
+#'   The condition can include summary functions like `all()` or `any()`. The
+#'   joined dataset is grouped by the original observations.
 #'
 #'   *Permitted Values*: a condition
 #'

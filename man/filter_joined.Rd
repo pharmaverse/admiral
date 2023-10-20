@@ -126,14 +126,13 @@ grouped by the by variables (\code{by_vars}).}
 \item{filter_join}{Condition for selecting observations
 
 The filter is applied to the joined dataset for selecting the confirmed
-observations. The condition can include summary functions. The joined
-dataset is grouped by the original observations. I.e., the summary function
-are applied to all observations up to the confirmation observation. For
-example in the oncology setting when using this function for confirmed best
-overall response,  \code{filter_join = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1} selects
-observations with response "CR" and for all observations up to the
-confirmation observation the response is "CR" or "NE" and there is at most
-one "NE".}
+observations. The condition can include summary functions like \code{all()} or
+\code{any()}. The joined dataset is grouped by the original observations. I.e.,
+the summary function are applied to all observations up to the confirmation
+observation. For example in the oncology setting when using this function
+for confirmed best overall response,  \code{filter_join = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1} selects observations with response "CR" and for all
+observations up to the confirmation observation the response is "CR" or
+"NE" and there is at most one "NE".}
 
 \item{filter}{Condition for selecting observations
 

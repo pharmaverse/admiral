@@ -134,8 +134,8 @@ observations are joined.
 Variables created by \code{order} or \code{new_vars} arguments can be used in the
 condition.
 
-The condition can include summary functions. The additional dataset is
-grouped by the by variables (\code{by_vars}).
+The condition can include summary functions like \code{all()} or \code{any()}. The
+additional dataset is grouped by the by variables (\code{by_vars}).
 
 \emph{Permitted Values}: a condition}
 
@@ -171,8 +171,8 @@ variables from both datasets \code{dataset} and \code{dataset_add} can be used.
 Variables created by \code{order} or \code{new_vars} arguments can be used in the
 condition.
 
-The condition can include summary functions. The joined dataset is grouped
-by the original observations.
+The condition can include summary functions like \code{all()} or \code{any()}. The
+joined dataset is grouped by the original observations.
 
 \emph{Permitted Values}: a condition}
 
