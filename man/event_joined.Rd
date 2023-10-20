@@ -141,6 +141,9 @@ The events are selected by calling \code{filter_joined()}. See its documentation
 for more details.
 }
 \examples{
+library(tibble)
+library(dplyr)
+library(lubridate)
 # Derive confirmed best overall response (using event_joined())
 # CR - complete response, PR - partial response, SD - stable disease
 # NE - not evaluable, PD - progressive disease

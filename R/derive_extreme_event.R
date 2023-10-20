@@ -666,6 +666,9 @@ event <- function(dataset_name = NULL,
 #' @export
 #'
 #' @examples
+#' library(tibble)
+#' library(dplyr)
+#' library(lubridate)
 #' # Derive confirmed best overall response (using event_joined())
 #' # CR - complete response, PR - partial response, SD - stable disease
 #' # NE - not evaluable, PD - progressive disease
