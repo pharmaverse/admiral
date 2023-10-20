@@ -591,7 +591,8 @@ test_that("event_joined Test 7: deprecation of `first_cond`", {
       set_values_to = exprs(
         AVALC = "CR"
       )
-    )
+    ),
+    class = "lifecycle_warning_deprecated"
   )
 
   expect_equal(
