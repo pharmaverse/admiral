@@ -69,9 +69,11 @@
 #'   additional dataset (`dataset_add`). It is set to the observation number
 #'   with respect to `order`. For each by group (`by_vars`) the observation
 #'   number starts with `1`. The variable can be used in the conditions
-#'   (`filter_join`, `first_cond_upper`, `first_cond_lower`). It is not included
-#'   in the output dataset. It can also be used to select consecutive
-#'   observations or the last observation.
+#'   (`filter_join`, `first_cond_upper`, `first_cond_lower`). It can also be
+#'   used to select consecutive observations or the last observation.
+#'
+#'   The variable is not included in the output dataset. To include it specify
+#'   it for `new_vars`.
 #'
 #' @param join_vars Variables to use from additional dataset
 #'

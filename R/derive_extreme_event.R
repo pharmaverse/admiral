@@ -656,6 +656,8 @@ event <- function(dataset_name = NULL,
 #'
 #' @inheritParams event
 #'
+#' @return An object of class `event_joined`
+#'
 #' @keywords source_specifications
 #' @family source_specifications
 #'
@@ -663,7 +665,137 @@ event <- function(dataset_name = NULL,
 #'
 #' @export
 #'
-#' @return An object of class `event_joined`
+#' @examples
+#' # Derive confirmed best overall response (using event_joined())
+#' # CR - complete response, PR - partial response, SD - stable disease
+#' # NE - not evaluable, PD - progressive disease
+#' adsl <- tribble(
+#'   ~USUBJID, ~TRTSDTC,
+#'   "1",      "2020-01-01",
+#'   "2",      "2019-12-12",
+#'   "3",      "2019-11-11",
+#'   "4",      "2019-12-30",
+#'   "5",      "2020-01-01",
+#'   "6",      "2020-02-02",
+#'   "7",      "2020-02-02",
+#'   "8",      "2020-02-01"
+#' ) %>%
+#'   mutate(TRTSDT = ymd(TRTSDTC))
+#'
+#' adrs <- tribble(
+#'   ~USUBJID, ~ADTC,        ~AVALC,
+#'   "1",      "2020-01-01", "PR",
+#'   "1",      "2020-02-01", "CR",
+#'   "1",      "2020-02-16", "NE",
+#'   "1",      "2020-03-01", "CR",
+#'   "1",      "2020-04-01", "SD",
+#'   "2",      "2020-01-01", "SD",
+#'   "2",      "2020-02-01", "PR",
+#'   "2",      "2020-03-01", "SD",
+#'   "2",      "2020-03-13", "CR",
+#'   "4",      "2020-01-01", "PR",
+#'   "4",      "2020-03-01", "NE",
+#'   "4",      "2020-04-01", "NE",
+#'   "4",      "2020-05-01", "PR",
+#'   "5",      "2020-01-01", "PR",
+#'   "5",      "2020-01-10", "PR",
+#'   "5",      "2020-01-20", "PR",
+#'   "6",      "2020-02-06", "PR",
+#'   "6",      "2020-02-16", "CR",
+#'   "6",      "2020-03-30", "PR",
+#'   "7",      "2020-02-06", "PR",
+#'   "7",      "2020-02-16", "CR",
+#'   "7",      "2020-04-01", "NE",
+#'   "8",      "2020-02-16", "PD"
+#' ) %>%
+#'   mutate(
+#'     ADT = ymd(ADTC),
+#'     PARAMCD = "OVR",
+#'     PARAM = "Overall Response by Investigator"
+#'   ) %>%
+#'   derive_vars_merged(
+#'     dataset_add = adsl,
+#'     by_vars = exprs(USUBJID),
+#'     new_vars = exprs(TRTSDT)
+#'   )
+#'
+#' derive_extreme_event(
+#'   adrs,
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(ADT),
+#'   mode = "first",
+#'   source_datasets = list(adsl = adsl),
+#'   events = list(
+#'     event_joined(
+#'       description = paste(
+#'         "CR needs to be confirmed by a second CR at least 28 days later",
+#'         "at most one NE is acceptable between the two assessments"
+#'       ),
+#'       join_vars = exprs(AVALC, ADT),
+#'       join_type = "after",
+#'       first_cond_upper = AVALC.join == "CR" &
+#'         ADT.join >= ADT + 28,
+#'       condition = AVALC == "CR" &
+#'         all(AVALC.join %in% c("CR", "NE")) &
+#'         count_vals(var = AVALC.join, val = "NE") <= 1,
+#'       set_values_to = exprs(
+#'         AVALC = "CR"
+#'       )
+#'     ),
+#'     event_joined(
+#'       description = paste(
+#'         "PR needs to be confirmed by a second CR or PR at least 28 days later,",
+#'         "at most one NE is acceptable between the two assessments"
+#'       ),
+#'       join_vars = exprs(AVALC, ADT),
+#'       join_type = "after",
+#'       first_cond_upper = AVALC.join %in% c("CR", "PR") &
+#'         ADT.join >= ADT + 28,
+#'       condition = AVALC == "PR" &
+#'         all(AVALC.join %in% c("CR", "PR", "NE")) &
+#'         count_vals(var = AVALC.join, val = "NE") <= 1,
+#'       set_values_to = exprs(
+#'         AVALC = "PR"
+#'       )
+#'     ),
+#'     event(
+#'       description = paste(
+#'         "CR, PR, or SD are considered as SD if occurring at least 28",
+#'         "after treatment start"
+#'       ),
+#'       condition = AVALC %in% c("CR", "PR", "SD") & ADT >= TRTSDT + 28,
+#'       set_values_to = exprs(
+#'         AVALC = "SD"
+#'       )
+#'     ),
+#'     event(
+#'       condition = AVALC == "PD",
+#'       set_values_to = exprs(
+#'         AVALC = "PD"
+#'       )
+#'     ),
+#'     event(
+#'       condition = AVALC %in% c("CR", "PR", "SD", "NE"),
+#'       set_values_to = exprs(
+#'         AVALC = "NE"
+#'       )
+#'     ),
+#'     event(
+#'       description = "set response to MISSING for patients without records in ADRS",
+#'       dataset_name = "adsl",
+#'       condition = TRUE,
+#'       set_values_to = exprs(
+#'         AVALC = "MISSING"
+#'       ),
+#'       keep_source_vars = exprs(TRTSDT)
+#'     )
+#'   ),
+#'   set_values_to = exprs(
+#'     PARAMCD = "CBOR",
+#'     PARAM = "Best Confirmed Overall Response by Investigator"
+#'   )
+#' ) %>%
+#'   filter(PARAMCD == "CBOR")
 event_joined <- function(dataset_name = NULL,
                          condition,
                          order = NULL,
