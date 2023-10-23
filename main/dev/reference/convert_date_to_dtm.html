@@ -63,18 +63,6 @@ Note: This is a wrapper function for the function convert_dtc_to_dtm()."><meta p
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.3">v0.12.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.2">v0.12.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.1">v0.12.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -214,7 +202,9 @@ imputed. If only time is imputed, date variables do not affect the result.</p></
 
 
 <dt>preserve</dt>
-<dd><p>Preserve day if month is missing and day is present</p>
+<dd><p>Preserve lower level date/time part when higher order part
+is missing, e.g. preserve day if month is missing or
+preserve minute when hour is missing.</p>
 <p>For example <code>"2019---07"</code> would return <code>"2019-06-07</code> if <code>preserve = TRUE</code>
 (and <code>date_imputation = "mid"</code>).</p>
 <p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p>
@@ -249,7 +239,7 @@ imputed. If only time is imputed, date variables do not affect the result.</p></
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="st">"2019-07-18T15:25:00"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2019-07-18 15:25:00 UTC"</span>
 <span class="r-in"><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-10-23 13:41:08 UTC"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-10-23 15:08:15 UTC"</span>
 <span class="r-in"><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2019-07-18"</span><span class="op">)</span>, time_imputation <span class="op">=</span> <span class="st">"23:59:59"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2019-07-18 23:59:59 UTC"</span>
 <span class="r-in"><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="st">"2019-07-18"</span>, time_imputation <span class="op">=</span> <span class="st">"23:59:59"</span><span class="op">)</span></span>
