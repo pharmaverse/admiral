@@ -145,6 +145,7 @@ reference:
 navbar:
   structure:
     left: [getstarted, reference, articles, community, news]
+    right: [search, slack, newissue, github]
   components:
     getstarted:
       text: Get Started
@@ -199,5 +200,12 @@ navbar:
         href: articles/lab_grading.html
       - text: Hy's Law Implementation
         href: articles/hys_law.html
-
+    slack:
+      icon: fa-slack
+      href: https://app.slack.com/client/T028PB489D3/C02M8KN8269
+      aria-label: Slack
+    newissue:
+      icon: fa-bug
+      href: https://github.com/pharmaverse/admiral/issues/new/choose
+      aria-label: New Issue
 
