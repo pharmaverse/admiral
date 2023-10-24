@@ -13,7 +13,7 @@ A \code{data.frame} or \code{NULL}
 Get Duplicate Records that Led to a Prior Error
 }
 \details{
-Many {admiral} function check that the input dataset contains only one record
+Many \code{{admiral}} function check that the input dataset contains only one record
 per \code{by_vars} group and throw an error otherwise. The \code{get_duplicates_dataset()}
 function allows one to retrieve the duplicate records that lead to an error.
 
