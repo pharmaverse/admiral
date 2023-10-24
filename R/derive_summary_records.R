@@ -157,14 +157,6 @@ derive_summary_records <- function(dataset,
   )
   assert_varval_list(set_values_to, optional = TRUE)
   assert_expr_list(missing_values, named = TRUE, optional = TRUE)
-
-  if (!missing(analysis_var) || !missing(summary_fun)) {
-    deprecate_warn(
-      "1.0.0",
-      I("derive_summary_records(anaylsis_var = , summary_fun = )"),
-      "derive_summary_records(set_values_to = )"
-    required_vars = by_vars
-  )
   assert_varval_list(set_values_to)
 
   if (!missing(analysis_var) || !missing(summary_fun)) {
@@ -179,18 +171,18 @@ derive_summary_records <- function(dataset,
   }
 
   # Summarise the analysis value and bind to the original dataset
-  bind_rows(
-    dataset,
-    get_summary_records(
-      dataset,
-      by_vars = by_vars,
-      filter = !!filter,
-      set_values_to = set_values_to
-    )
-    analysis_var <- assert_symbol(enexpr(analysis_var))
-    assert_s3_class(summary_fun, "function")
-    set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
-  }
+  # bind_rows(
+  #   dataset,
+  #   get_summary_records(
+  #     dataset,
+  #     by_vars = by_vars,
+  #     filter = !!filter,
+  #     set_values_to = set_values_to
+  #   )
+  #   analysis_var <- assert_symbol(enexpr(analysis_var))
+  #   assert_s3_class(summary_fun, "function")
+  #   set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
+  # }
 
   if (is.null(dataset_add)) {
     dataset_add <- dataset

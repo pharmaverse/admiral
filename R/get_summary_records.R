@@ -71,9 +71,9 @@
 #'
 #' @return A data frame of derived records.
 #'
-#' @family der_gen
+#' @family superseded
 #'
-#' @keywords der_gen
+#' @keywords internal
 #'
 #' @seealso [derive_summary_records()], [derive_var_merged_summary()]
 #'
@@ -162,6 +162,7 @@ get_summary_records <- function(dataset,
                                 analysis_var,
                                 summary_fun,
                                 set_values_to = NULL) {
+  # lifecycle::signal_stage("superseded", "get_summary_records()", "derive_summary_records(dataset_add= )")
   inform(
     message = paste0(
       "`get_summary_records()` has been superseded, ",
@@ -169,7 +170,6 @@ get_summary_records <- function(dataset,
       sep = ""
     )
   )
-                                set_values_to) {
   assert_vars(by_vars)
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_data_frame(
