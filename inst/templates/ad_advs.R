@@ -250,6 +250,7 @@ advs <- advs %>%
   # Assign TRTA, TRTP
   # Create End of Treatment Record
   derive_extreme_records(
+    dataset_add = advs,
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, ATPTN),
     order = exprs(ADT, AVISITN, AVAL),
     mode = "last",

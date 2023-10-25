@@ -23,6 +23,7 @@ test_that("derive_extreme_records Test 1: add last observation for each group", 
 
   actual_output <- derive_extreme_records(
     input,
+    dataset_add = input,
     order = exprs(AVISITN, LBSEQ),
     by_vars = exprs(USUBJID),
     mode = "last",
@@ -299,17 +300,13 @@ test_that("derive_extreme_records Test 5: latest evaluable tumor assessment date
   )
 })
 
-## Test 6: error if no input data ----
-test_that("derive_extreme_records Test 6: error if no input data", {
+## Test 6: error if no dataset_add ----
+test_that("derive_extreme_records Test 6: error if no dataset_add", {
   expect_error(
     derive_extreme_records(
       set_values_to = exprs(PARAMCD = "HELLO")
     ),
-    regexp = paste(
-      "Neither `dataset` nor `dataset_add` is specified.",
-      "At least one of them must be specified.",
-      sep = "\n"
-    ),
+    regexp = "`dataset_add` must be a data frame but is `NULL`",
     fixed = TRUE
   )
 })
@@ -339,6 +336,7 @@ test_that("derive_extreme_records Test 7: keep vars in `keep_source_vars` in the
 
   actual_output <- derive_extreme_records(
     input,
+    dataset_add = input,
     order = exprs(AVISITN, LBSEQ),
     by_vars = exprs(USUBJID),
     mode = "last",
@@ -377,6 +375,7 @@ test_that("derive_extreme_records Test 8: keep all vars in the new records when 
 
   actual_output <- derive_extreme_records(
     input,
+    dataset_add = input,
     order = exprs(AVISITN, LBSEQ),
     by_vars = exprs(USUBJID),
     mode = "last",
@@ -391,8 +390,8 @@ test_that("derive_extreme_records Test 8: keep all vars in the new records when 
   )
 })
 
-## Test 10: order vars from dataset_add ----
-test_that("derive_extreme_records Test 10: order vars from dataset_add", {
+## Test 9: order vars from dataset_add ----
+test_that("derive_extreme_records Test 9: order vars from dataset_add", {
   bds <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVALC,
     "1",      "PARAM",  "1"

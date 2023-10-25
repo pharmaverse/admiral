@@ -15,6 +15,8 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 
 ## Breaking Changes
 
+- `derive_extreme_records()` the `dataset_add` argument is now mandatory. (#2139)
+
 - In `derive_summary_records()` and `get_summary_records()` the arguments
 `analysis_var` and `summary_fun` were deprecated in favor of `set_values_to`.
 (#1792)

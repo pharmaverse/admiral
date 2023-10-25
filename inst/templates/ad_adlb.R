@@ -380,6 +380,7 @@ adlb <- adlb %>%
 adlb <- adlb %>%
   # get MINIMUM value
   derive_extreme_records(
+    dataset_add = adlb,
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     order = exprs(AVAL, ADT, AVISITN),
     mode = "first",
@@ -393,6 +394,7 @@ adlb <- adlb %>%
   ) %>%
   # get MAXIMUM value
   derive_extreme_records(
+    dataset_add = adlb,
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     order = exprs(desc(AVAL), ADT, AVISITN),
     mode = "first",
@@ -406,6 +408,7 @@ adlb <- adlb %>%
   ) %>%
   # get LOV value
   derive_extreme_records(
+    dataset_add = adlb,
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     order = exprs(ADT, AVISITN),
     mode = "last",

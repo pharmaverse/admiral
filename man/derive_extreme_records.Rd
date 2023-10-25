@@ -21,26 +21,16 @@ derive_extreme_records(
 )
 }
 \arguments{
-\item{dataset}{Input dataset
+\item{dataset}{Input dataset}
 
-If \code{dataset_add} is not specified, the new records are selected from the
-input dataset. In this case the variables specified by \code{by_vars} and
-\code{order} are expected.}
+\item{dataset_add}{Source dataset
 
-\item{dataset_add}{Additional dataset
+The source dataset, which determines the by groups returned in the input dataset,
+based on the groups that exist in this dataset after being subset by \code{filter_add}.
 
-Observations from the specified dataset are added as new records to the
-input dataset (\code{dataset}).
-
-All observations in the specified dataset fulfilling the condition
-specified by \code{filter_source} are considered. If \code{mode} and \code{order} are
-specified, the first or last observation within each by group, defined by
-\code{by_vars}, is selected.
-
-If the argument is not specified, the input dataset (\code{dataset}) is used.
-
-The variables specified by the \code{by_vars} and \code{order} argument (if
-applicable) are expected.}
+The variables specified in the \code{by_vars} and \code{filter_add} parameters are expected
+in this dataset. If \code{mode} and \code{order} are specified, the first or last observation
+within each by group, defined by \code{by_vars}, is selected.}
 
 \item{dataset_ref}{Reference dataset
 
@@ -69,7 +59,7 @@ each by group is added to the input dataset.
 
 \emph{Permitted Values:} \code{"first"}, \code{"last"}}
 
-\item{filter_add}{Filter for additional dataset (\code{dataset_add})
+\item{filter_add}{Filter for source dataset (\code{dataset_add})
 
 Only observations in \code{dataset_add} fulfilling the specified condition are
 considered.}
@@ -77,7 +67,7 @@ considered.}
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
-if the observations of the (restricted) additional dataset are not unique
+if the observations of the (restricted) source dataset are not unique
 with respect to the by variables and the order.
 
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
@@ -86,7 +76,7 @@ with respect to the by variables and the order.
 
 The specified variable is added to the output dataset.
 
-For by groups with at least one observation in the additional dataset
+For by groups with at least one observation in the source dataset
 (\code{dataset_add}) \code{exist_flag} is set to the value specified by the
 \code{true_value} argument.
 
@@ -97,12 +87,12 @@ For all other by groups \code{exist_flag} is set to the value specified by the
 
 \item{true_value}{True value
 
-For new observations selected from the additional dataset (\code{dataset_add}),
+For new observations selected from the source dataset (\code{dataset_add}),
 \code{exist_flag} is set to the specified value.}
 
 \item{false_value}{False value
 
-For new observations not selected from the additional dataset
+For new observations not selected from the source dataset
 (\code{dataset_add}), \code{exist_flag} is set to the specified value.}
 
 \item{keep_source_vars}{Variables to be kept in the new records
@@ -140,15 +130,15 @@ added as new observations.
 }
 \description{
 Add the first or last observation for each by group as new observations. The
-new observations can be selected from the input dataset or an additional
-dataset. This function can be used for adding the maximum or minimum value
-as a separate visit. All variables of the selected observation are kept. This
-distinguishes \code{derive_extreme_records()} from \code{derive_summary_records()},
+new observations can be selected from the source dataset. This function can
+be used for adding the maximum or minimum value as a separate visit.
+All variables of the selected observation are kept. This distinguishes
+\code{derive_extreme_records()} from \code{derive_summary_records()},
 where only the by variables are populated for the new records.
 }
 \details{
 \enumerate{
-\item The additional dataset (\code{dataset_add}) is restricted as specified by the
+\item The source dataset (\code{dataset_add}) is restricted as specified by the
 \code{filter_add} argument.
 \item For each group (with respect to the variables specified for the
 \code{by_vars} argument) the first or last observation (with respect to the

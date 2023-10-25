@@ -927,6 +927,7 @@ assign a unique `AVISITN` value.
 ```{r eval=TRUE}
 advs_ex1 <- advs %>%
   derive_extreme_records(
+    dataset_add = advs,
     by_vars = exprs(STUDYID, USUBJID, PARAMCD),
     order = exprs(ADT, AVISITN, ATPTN, AVAL),
     mode = "last",
@@ -956,6 +957,7 @@ and assign a unique `AVISITN` value.
 ```{r eval=TRUE}
 advs_ex1 <- advs %>%
   derive_extreme_records(
+    dataset_add = advs,
     by_vars = exprs(STUDYID, USUBJID, PARAMCD),
     order = exprs(AVAL, ADT, AVISITN, ATPTN),
     mode = "first",
