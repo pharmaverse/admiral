@@ -49,7 +49,7 @@ df_tags <- df_tags[!is.na(df_tags$date), ]
 df_tags
 
 lst_tag_dates <-
-  paste0("(", df_tags$date, ")") |>
+  paste0(" (", df_tags$date, ")") |>
   as.list() |>
   setNames(df_tags$name)
 
@@ -58,7 +58,7 @@ str_website_links <-
   lapply(
     X = all_version_folders |> rev(),
     FUN = function(x) {
-      paste0("[", x, " ", lst_tag_dates[[x]], "](", paste0(base_url, x), ")")
+      paste0("[", x, lst_tag_dates[[x]], "](", paste0(base_url, x), ")")
     }
   ) |>
   unlist() |>
