@@ -142,4 +142,4 @@ derive_param_extreme_record(
 )
 }
 \concept{superseded}
-\keyword{internal}
+\keyword{superseded}
