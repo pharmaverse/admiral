@@ -56,6 +56,9 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 
 - Link to published CDISC Population PK (ADPPK) implementation guide added. (#2161)
 
+- Removed Deprecation section in Reference tab.  Added new Superseded section in 
+Reference tab. (#2174)
+
 ## Various
 
 - Website now has button/links to Slack channel and GitHub Issues (#2127)

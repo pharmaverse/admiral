@@ -76,7 +76,7 @@
 #' added as new observations.
 #'
 #' @family superseded
-#' @keywords internal
+#' @keywords superseded
 #'
 #' @export
 #' @examples
