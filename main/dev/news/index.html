@@ -59,18 +59,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/cran-release">cran-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.3">v0.12.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.2">v0.12.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.1">v0.12.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.12.0">v0.12.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.1">v0.11.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiral/v0.11.0">v0.11.0</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -142,11 +130,13 @@
 <li><code>derive_expected_records(dataset_expected_obs)</code></li>
 <li><code>derive_var_ontrtfl(span_period)</code></li>
 </ul></li>
+<li><p>The <code><a href="../reference/derive_param_extreme_record.html">derive_param_extreme_record()</a></code> function has been superseded in favor of <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2141" class="external-link">#2141</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
 <ul><li><p>A way to standardize roxygen labels and descriptions for function arguments was implemented and tested (<a href="https://github.com/pharmaverse/admiral/issues/2034" class="external-link">#2034</a>)</p></li>
 <li><p>Link to published CDISC Population PK (ADPPK) implementation guide added. (<a href="https://github.com/pharmaverse/admiral/issues/2161" class="external-link">#2161</a>)</p></li>
+<li><p>Removed Deprecation section in Reference tab. Added new Superseded section in Reference tab. (<a href="https://github.com/pharmaverse/admiral/issues/2174" class="external-link">#2174</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="various-development-version">Various<a class="anchor" aria-label="anchor" href="#various-development-version"></a></h3>
