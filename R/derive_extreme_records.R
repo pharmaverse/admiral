@@ -139,6 +139,7 @@
 #' # Specify the variables that need to be kept in the new records.
 #' derive_extreme_records(
 #'   adlb,
+#'   dataset_add = adlb,
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(AVAL, AVISITN),
 #'   mode = "first",
@@ -155,6 +156,7 @@
 #' # AVISITN. Set AVISITN = 98 and DTYPE = MAXIMUM for these new records.
 #' derive_extreme_records(
 #'   adlb,
+#'   dataset_add = adlb,
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(desc(AVAL), AVISITN),
 #'   mode = "first",
@@ -169,6 +171,7 @@
 #' # Set AVISITN = 99 and DTYPE = LOV for these new records.
 #' derive_extreme_records(
 #'   adlb,
+#'   dataset_add = adlb,
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(AVISITN),
 #'   mode = "last",
