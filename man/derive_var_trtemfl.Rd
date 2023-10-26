@@ -45,7 +45,7 @@ the input dataset}
 \emph{Permitted Values:} A symbol referring to a date or datetime variable of
 the input dataset or \code{NULL}}
 
-\item{end_window}{If the argument is specified, events starting more than the specified
+\item{end_window}{If the argument is specified (in 'days'), events starting more than the specified
 number of days after end of treatment, are not flagged.
 
 \emph{Permitted Values:} A non-negative integer or \code{NULL}}
