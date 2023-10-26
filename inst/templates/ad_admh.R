@@ -169,5 +169,9 @@ admh <- admh %>%
 
 # Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-saveRDS(admh, file = file.path(dir, "admh.rds"), compress = "bzip2")
+dir <- file.path(getwd(), "tmp")
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
+save(adae, file = file.path(dir, "admh.rda"), compress = "bzip2")

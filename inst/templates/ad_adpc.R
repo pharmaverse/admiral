@@ -502,5 +502,9 @@ adpc <- adpc_baselines %>%
 # ...
 # ---- Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-saveRDS(adpc, file = file.path(dir, "adpc.rds"), compress = "bzip2")
+dir <- file.path(getwd(), "tmp")
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
+save(adae, file = file.path(dir, "adcp.rda"), compress = "bzip2")
