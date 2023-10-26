@@ -446,4 +446,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
-save(adae, file = file.path(dir, "adlb.rda"), compress = "bzip2")
+save(adlb, file = file.path(dir, "adlb.rda"), compress = "bzip2")
