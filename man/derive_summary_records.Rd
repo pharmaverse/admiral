@@ -63,10 +63,6 @@ Set a list of variables to some specified value for the new records
 \itemize{
 \item LHS refer to a variable.
 \item RHS refers to the values to set to the variable. This can be a string, a
-symbol, a numeric value, an expression, or \code{NA}, e.g., \code{exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")}.
-}}
-
-\item{missing_values}{}
 symbol, a numeric value, an expression or NA. If summary functions are
 used, the values are summarized by the variables specified for \code{by_vars}.
 }
@@ -79,6 +75,8 @@ For example:
     PARCAT1 = "OVERALL"
   )
 }\if{html}{\out{</div>}}}
+
+\item{missing_values}{}
 }
 \value{
 A data frame with derived records appended to original dataset.

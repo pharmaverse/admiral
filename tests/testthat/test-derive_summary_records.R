@@ -143,3 +143,41 @@ test_that("derive_summary_records Test 4: deprecation warning for analysis_var a
     keys = c("subj", "visit", "seq", "type")
   )
 })
+
+test_that("make sure dataset_add works", {
+  input <- tibble::tribble(
+    ~subj, ~visit,       ~val, ~seq,
+    "1",        1,         10,    1,
+    "1",        1,         14,    2,
+    "1",        1,          9,    3,
+    "1",        2,         11,    4,
+    "2",        2,   NA_real_,    1
+  )
+  input_add <- tibble::tribble(
+    ~subj, ~visit,       ~add_val, ~seq,
+    "1",        1,            100,    1,
+    "1",        1,            140,    2,
+    "1",        1,             90,    3
+  )
+  expected_output<- bind_rows(
+    input,
+    tibble::tribble(
+      ~subj, ~visit,       ~val,    ~type,
+      "1",        1,        110, "AVERAGE"
+    )
+  )
+  actual_output <- input %>%
+    derive_summary_records(
+      dataset_add = input_add,
+      by_vars = exprs(subj, visit),
+      set_values_to = exprs(
+        val = mean(add_val, na.rm = TRUE),
+        type = "AVERAGE"
+      )
+    )
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("subj", "visit", "seq", "type")
+  )
+})

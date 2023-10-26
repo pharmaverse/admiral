@@ -10,7 +10,7 @@ get_summary_records(
   filter = NULL,
   analysis_var,
   summary_fun,
-  set_values_to
+  set_values_to = NULL
 )
 }
 \arguments{
@@ -169,18 +169,6 @@ get_summary_records(
 }
 \seealso{
 \code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
-
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_merged_summary}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_transposed}()}
 }
-\concept{der_gen}
-\keyword{der_gen}
+\concept{superseded}
+\keyword{internal}

@@ -155,9 +155,9 @@ derive_summary_records <- function(dataset,
     required_vars = expr_c(by_vars),
     optional = TRUE
   )
-  assert_varval_list(set_values_to, optional = TRUE)
-  assert_expr_list(missing_values, named = TRUE, optional = TRUE)
+
   assert_varval_list(set_values_to)
+  assert_expr_list(missing_values, named = TRUE, optional = TRUE)
 
   if (!missing(analysis_var) || !missing(summary_fun)) {
     deprecate_warn(
@@ -170,29 +170,15 @@ derive_summary_records <- function(dataset,
     set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
   }
 
-  # Summarise the analysis value and bind to the original dataset
-  # bind_rows(
-  #   dataset,
-  #   get_summary_records(
-  #     dataset,
-  #     by_vars = by_vars,
-  #     filter = !!filter,
-  #     set_values_to = set_values_to
-  #   )
-  #   analysis_var <- assert_symbol(enexpr(analysis_var))
-  #   assert_s3_class(summary_fun, "function")
-  #   set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
-  # }
-
   if (is.null(dataset_add)) {
     dataset_add <- dataset
   }
 
   summary_records <- dataset_add %>%
     group_by(!!!by_vars) %>%
-    filter_if(filter) %>%
-    ungroup() %>%
-    process_set_values_to(set_values_to)
+    filter_if(filter)  %>%
+    summarise(!!!set_values_to) %>%
+    ungroup()
 
   df_return <- bind_rows(
     dataset,
@@ -215,6 +201,16 @@ derive_summary_records <- function(dataset,
     )
   }
 
+  if (!is.null(missing_values)) {
+    update_missings <- map2(
+      syms(names(missing_values)),
+      missing_values,
+      ~ expr(if_else(is.na(!!missing_var), !!.y, !!.x))
+    )
+    names(update_missings) <- names(missing_values)
+    df_return <- df_return %>%
+      mutate(!!!update_missings)
+  }
 
   return(df_return)
 }

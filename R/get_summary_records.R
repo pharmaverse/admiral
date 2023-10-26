@@ -163,13 +163,13 @@ get_summary_records <- function(dataset,
                                 summary_fun,
                                 set_values_to = NULL) {
   # lifecycle::signal_stage("superseded", "get_summary_records()", "derive_summary_records(dataset_add= )")
-  inform(
-    message = paste0(
-      "`get_summary_records()` has been superseded, ",
-      "please use the `dataset_add` argument in `derive_summary_records()`",
-      sep = ""
-    )
-  )
+  # inform(
+  #   message = paste0(
+  #     "`get_summary_records()` has been superseded, ",
+  #     "please use the `dataset_add` argument in `derive_summary_records()`",
+  #     sep = ""
+  #   )
+  # )
   assert_vars(by_vars)
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_data_frame(
