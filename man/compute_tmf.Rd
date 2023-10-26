@@ -43,6 +43,7 @@ compute_tmf(dtc = "2019-07-18", dtm = ymd("2019-07-18"))
 compute_tmf(dtc = "2022-05--T00:00", dtm = ymd_hms("2022-05-15T23:59:59"))
 compute_tmf(dtc = "2022-05--T23:00", dtm = ymd_hms("2022-05-15T23:59:59"))
 compute_tmf(dtc = "2022-05--T23:59:00", dtm = ymd_hms("2022-05-15T23:59:59"))
+
 }
 \seealso{
 Date/Time Computation Functions that returns a vector: 
