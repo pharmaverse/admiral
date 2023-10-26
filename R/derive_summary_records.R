@@ -69,6 +69,8 @@
 #'   *Permitted Values*: named list of expressions, e.g.,
 #'   `exprs(AVAL = -9999)`
 #'
+#' @inheritParams get_summary_records
+#'
 #' @return A data frame with derived records appended to original dataset.
 #'
 #' @family der_prm_bds_findings

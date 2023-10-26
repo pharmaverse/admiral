@@ -50,6 +50,18 @@ values greater than mean of \code{AVAL} with in \code{by_vars}.
 than 2.
 }}
 
+\item{analysis_var}{Analysis variable.
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.}
+
+\item{summary_fun}{Function that takes as an input the \code{analysis_var} and
+performs the calculation.
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.
+
+This can include built-in functions as well as user defined functions,
+for example \code{mean} or \code{function(x) mean(x, na.rm = TRUE)}.}
+
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
