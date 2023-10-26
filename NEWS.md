@@ -12,6 +12,8 @@
 were enhanced such that more than one summary variable can be derived, e.g.,
 `AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
 
+- `derive_summary_records()` was enhanced with the following optional arguments: `dataset_add`, `dataset_ref`, `missing_values`. These arguemnts respectively, generate summary variables from additional datasets, retaining/add specific records that and impute user-defined missing values. (#2142)
+
 
 ## Breaking Changes
 

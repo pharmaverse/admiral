@@ -11,11 +11,19 @@
 #' retain those common values in the newly derived records. Otherwise new value
 #' will be set to `NA`.
 #'
-#' @param dataset  `r roxygen_param_dataset(expected_vars = c("by_vars", "analysis_var"))`
+#' @param dataset  `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param dataset_add Additional dataset
 #'
-#' @param dataset_ref
+#'    The variables specified for `by_vars` are expected.
+#'   Observations from the specified dataset are going to be used to calculate and added
+#'   as new records to the input dataset (`dataset`).
+#'
+#' @param dataset_ref Reference dataset
+#'
+#'   The variables specified for `by_vars` are expected. For each
+#'   observation of the specified dataset a new observation is added to the
+#'   input dataset.
 #'
 #' @param by_vars Variables to consider for generation of groupwise summary
 #'   records. Providing the names of variables in [exprs()] will create a
@@ -33,9 +41,33 @@
 #'   + `filter = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
 #'
-#' @inheritParams get_summary_records
+#' @param set_values_to Variables to be set
 #'
-#' @param missing_values
+#'   The specified variables are set to the specified values for the new
+#'   observations.
+#'
+#'   Set a list of variables to some specified value for the new records
+#'   + LHS refer to a variable.
+#'   + RHS refers to the values to set to the variable. This can be a string, a
+#'   symbol, a numeric value, an expression or NA. If summary functions are
+#'   used, the values are summarized by the variables specified for `by_vars`.
+#'
+#'   For example:
+#'   ```
+#'     set_values_to = exprs(
+#'       AVAL = sum(AVAL),
+#'       DTYPE = "AVERAGE",
+#'     )
+#'   ```
+#'
+#' @param missing_values Values for missing summary values
+#'
+#'   For observations of the input dataset (`dataset`) or (`dataset_add`) which do not have an
+#'   complete mapping defined by the summarization defined in `set_values_to`.  Only variables
+#'   specified for `set_values_to` can be specified for `missing_values`.
+#'
+#'   *Permitted Values*: named list of expressions, e.g.,
+#'   `exprs(AVAL = -9999)`
 #'
 #' @return A data frame with derived records appended to original dataset.
 #'
@@ -176,7 +208,7 @@ derive_summary_records <- function(dataset,
 
   summary_records <- dataset_add %>%
     group_by(!!!by_vars) %>%
-    filter_if(filter)  %>%
+    filter_if(filter) %>%
     summarise(!!!set_values_to) %>%
     ungroup()
 

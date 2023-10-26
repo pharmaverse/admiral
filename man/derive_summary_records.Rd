@@ -19,11 +19,19 @@ derive_summary_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{analysis_var} argument(s) to be expected.}
+The variables specified by the \code{by_vars} argument(s) to be expected.}
 
-\item{dataset_add}{Additional dataset}
+\item{dataset_add}{Additional dataset
 
-\item{dataset_ref}{}
+The variables specified for \code{by_vars} are expected.
+Observations from the specified dataset are going to be used to calculate and added
+as new records to the input dataset (\code{dataset}).}
+
+\item{dataset_ref}{Reference dataset
+
+The variables specified for \code{by_vars} are expected. For each
+observation of the specified dataset a new observation is added to the
+input dataset.}
 
 \item{by_vars}{Variables to consider for generation of groupwise summary
 records. Providing the names of variables in \code{\link[=exprs]{exprs()}} will create a
@@ -42,18 +50,6 @@ values greater than mean of \code{AVAL} with in \code{by_vars}.
 than 2.
 }}
 
-\item{analysis_var}{Analysis variable.
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.}
-
-\item{summary_fun}{Function that takes as an input the \code{analysis_var} and
-performs the calculation.
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.
-
-This can include built-in functions as well as user defined functions,
-for example \code{mean} or \code{function(x) mean(x, na.rm = TRUE)}.}
-
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
@@ -71,12 +67,18 @@ For example:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  set_values_to = exprs(
     AVAL = sum(AVAL),
-    PARAMCD = "TDOSE",
-    PARCAT1 = "OVERALL"
+    DTYPE = "AVERAGE",
   )
 }\if{html}{\out{</div>}}}
 
-\item{missing_values}{}
+\item{missing_values}{Values for missing summary values
+
+For observations of the input dataset (\code{dataset}) or (\code{dataset_add}) which do not have an
+complete mapping defined by the summarization defined in \code{set_values_to}.  Only variables
+specified for \code{set_values_to} can be specified for \code{missing_values}.
+
+\emph{Permitted Values}: named list of expressions, e.g.,
+\code{exprs(AVAL = -9999)}}
 }
 \value{
 A data frame with derived records appended to original dataset.

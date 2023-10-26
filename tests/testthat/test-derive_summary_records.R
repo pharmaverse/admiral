@@ -160,11 +160,11 @@ test_that("derive_summary_records Test 5: make sure dataset_add works", {
     "1",        1,            140,    2,
     "1",        1,             90,    3
   )
-  expected_output<- bind_rows(
+  expected_output <- bind_rows(
     input,
     tibble::tribble(
-      ~subj, ~visit,       ~val,    ~type,
-      "1",        1,        110, "AVERAGE"
+      ~subj, ~visit, ~val, ~type,
+      "1", 1, 110, "AVERAGE"
     )
   )
   actual_output <- input %>%
@@ -235,10 +235,10 @@ test_that("derive_summary_records Test 7: make sure dataset_ref works", {
 
   input_ref <- tibble::tribble(
     ~subj, ~visit,
-      "1",      1,
-      "1",      2,
-      "2",      1,
-      "2",      2,
+    "1", 1,
+    "1", 2,
+    "2", 1,
+    "2", 2,
   )
   expected_output <- bind_rows(
     input,
@@ -251,7 +251,7 @@ test_that("derive_summary_records Test 7: make sure dataset_ref works", {
       mutate(type = "AVERAGE"),
     tibble::tribble(
       ~subj, ~visit,
-      "2",      1,
+      "2", 1,
     )
   )
 
