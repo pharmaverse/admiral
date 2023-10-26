@@ -197,10 +197,10 @@ test_that("derive_summary_records Test 6: test missing values", {
   expected_output <- bind_rows(
     input,
     tibble::tribble(
-      ~subj, ~visit,       ~val,
-      "1",        1,         11,
-      "1",        2,         11,
-      "2",        2,     999999
+      ~subj, ~visit,       ~aval,
+      "1",        1,          11,
+      "1",        2,          11,
+      "2",        2,      999999
     ) %>%
       mutate(type = "AVERAGE")
   )
@@ -209,10 +209,10 @@ test_that("derive_summary_records Test 6: test missing values", {
     derive_summary_records(
       by_vars = exprs(subj, visit),
       set_values_to = exprs(
-        mean_val = mean(val, na.rm = TRUE),
+        aval = mean(val, na.rm = TRUE),
         type = "AVERAGE"
       ),
-      missing_values = exprs(mean_val = 999999)
+      missing_values = exprs(aval = 999999)
     )
 
   expect_dfs_equal(
