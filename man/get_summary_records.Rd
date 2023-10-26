@@ -169,6 +169,9 @@ get_summary_records(
 }
 \seealso{
 \code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
+
+Other superseded: 
+\code{\link{derive_param_extreme_record}()}
 }
 \concept{superseded}
 \keyword{internal}

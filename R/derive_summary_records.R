@@ -152,7 +152,7 @@ derive_summary_records <- function(dataset,
   )
   assert_data_frame(
     dataset_ref,
-    required_vars = expr_c(by_vars),
+    required_vars = by_vars,
     optional = TRUE
   )
 
@@ -180,6 +180,17 @@ derive_summary_records <- function(dataset,
     summarise(!!!set_values_to) %>%
     ungroup()
 
+  if (!is.null(missing_values)) {
+    update_missings <- map2(
+      syms(names(missing_values)),
+      missing_values,
+      ~ expr(if_else(is.na(!!.x), !!.y, !!.x))
+    )
+    names(update_missings) <- names(missing_values)
+    summary_records <- summary_records %>%
+      mutate(!!!update_missings)
+  }
+
   df_return <- bind_rows(
     dataset,
     summary_records
@@ -191,7 +202,7 @@ derive_summary_records <- function(dataset,
 
     new_ref_obs <- anti_join(
       select(dataset_ref, intersect(add_vars, ref_vars)),
-      select(new_add_obs, !!!by_vars),
+      select(summary_records, !!!by_vars),
       by = map_chr(by_vars, as_name)
     )
 
@@ -199,17 +210,6 @@ derive_summary_records <- function(dataset,
       df_return,
       new_ref_obs
     )
-  }
-
-  if (!is.null(missing_values)) {
-    update_missings <- map2(
-      syms(names(missing_values)),
-      missing_values,
-      ~ expr(if_else(is.na(!!missing_var), !!.y, !!.x))
-    )
-    names(update_missings) <- names(missing_values)
-    df_return <- df_return %>%
-      mutate(!!!update_missings)
   }
 
   return(df_return)
