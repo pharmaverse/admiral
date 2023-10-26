@@ -302,5 +302,9 @@ adex <- adex %>%
 
 # Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-saveRDS(adex, file = file.path(dir, "adex.rds"), compress = "bzip2")
+dir <- file.path(getwd(), "tmp")
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
+save(adex, file = file.path(dir, "adex.rda"), compress = "bzip2")
