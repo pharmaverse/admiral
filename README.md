@@ -51,7 +51,7 @@ The `{admiral}` Q4-2023 release will officially be `{admiral}`'s version 1.0.0 r
 ## Main Goal
 
 Provide users with an open source, modularized toolbox with which to create ADaM datasets
-in R. _As opposed to a “run 1 line and an ADaM appears” black-box solution or an attempt to
+in R. _As opposed to a "run 1 line and an ADaM appears" black-box solution or an attempt to
 automate ADaM._
 
 One of the key aspects of `{admiral}` is its development by the users for the users.
@@ -106,7 +106,7 @@ The following packages are also useful when working with ADaM datasets:
 For `{admiral}` and all extension packages, we prioritize providing our users with a __simple to adopt__ toolkit
 that enables them to produce __readable__ and __easily constructible__ ADaM programs. The following explains
 our philosophy, which we try to adhere to across the `{admiral}` family of packages.
-There isn’t always a clear single, straightforward rule, but there are guiding principles we adhere to for `{admiral}`.
+There isn't always a clear single, straightforward rule, but there are guiding principles we adhere to for `{admiral}`.
 This manifesto helps show the considerations of our developers when making decisions.
 
 We have four design principles to achieve the main goal:
@@ -115,7 +115,7 @@ We have four design principles to achieve the main goal:
 
 All `{admiral}` functions should be easy to use.
 
-* Documentation is an absolute priority. Each function reference page should cover the purpose, descriptions of each argument with permitted values, the expected input and output, with clear real-life examples---so that users don’t need to dig through code to find answers.
+* Documentation is an absolute priority. Each function reference page should cover the purpose, descriptions of each argument with permitted values, the expected input and output, with clear real-life examples---so that users don't need to dig through code to find answers.
 * Vignettes that complement the functional documentation to help users see how best the functions can be applied to achieve ADaM requirements.
 * Functions should be written and structured in a way that users are able to read, re-use or extend them for study specific purposes if needed (see Readability below).
 
@@ -149,7 +149,7 @@ that all our developers and contributors must follow, so that all our code has a
 
 * We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.
 * For sections of code that perform the actual derivations (e.g. besides assertions or basic utilities), we try to limit nesting of too many dependencies or functions.
-* Modularity is a focus---we don’t try to achieve too many steps in one.
+* Modularity is a focus---we don't try to achieve too many steps in one.
 * All code has to be well commented.
 * We recognize that a user or a Health Authority reviewer may have the wish to delve into the code base (especially given this open source setting), or users may need to extend/adapt the code for their study specific needs. We therefore want any module to be understandable to all, not only the `{admiral}` developers.
 
