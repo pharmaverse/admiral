@@ -14,13 +14,14 @@
 #'   warn as_data_mask list2
 #' @importFrom utils capture.output str file.edit
 #' @importFrom purrr map map2 map_chr map_lgl reduce walk keep map_if transpose
-#'             flatten every modify_at modify_if reduce compose pmap
+#'             flatten every modify_at modify_if reduce compose pmap map_dbl
 #' @importFrom stringr str_c str_count str_detect str_extract str_glue
 #'   str_length str_locate str_locate_all str_match str_remove str_remove_all
 #'   str_replace str_replace_all str_split str_starts str_sub str_subset
 #'   str_trim str_to_lower str_to_title str_to_upper
 #' @importFrom lubridate as_datetime ceiling_date date days duration floor_date is.Date is.instant
-#'             rollback time_length %--% ymd ymd_hms weeks years hours minutes is.POSIXct
+#'             rollback time_length %--% ymd ymd_hms weeks years hours minutes is.POSIXct hour
+#'             minute second
 #' @importFrom tidyr crossing drop_na fill nest pivot_longer pivot_wider unnest
 #' @importFrom tidyselect all_of any_of contains matches vars_select
 #' @importFrom hms as_hms
