@@ -335,4 +335,5 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
+print(dir)
 save(adeg, file = file.path(dir, "adeg.rda"), compress = "bzip2")

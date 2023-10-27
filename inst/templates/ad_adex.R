@@ -307,4 +307,5 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
+print(dir)
 save(adex, file = file.path(dir, "adex.rda"), compress = "bzip2")

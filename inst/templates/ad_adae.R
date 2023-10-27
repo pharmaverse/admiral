@@ -138,4 +138,5 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
+print(dir)
 save(adae, file = file.path(dir, "adae.rda"), compress = "bzip2")

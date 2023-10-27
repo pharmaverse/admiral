@@ -143,4 +143,5 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
 }
+print(dir)
 save(adcm, file = file.path(dir, "adcm.rda"), compress = "bzip2")
