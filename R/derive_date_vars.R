@@ -1230,7 +1230,7 @@ compute_tmf <- function(dtc,
   highest_miss <- convert_blanks_to_na(vector("character", length(dtc)))
   hms <- c("hour", "minute", "second")
   time_part <-
-    map(set_names(hms), \(y) map_dbl(dtm, \(x) do.call(y, as.list(x))))
+    map(set_names(hms), \(y) map_dbl(dtm, \(x) exec(y, x)))
   for (c in hms) {
     highest_miss <-
       if_else((is.na(partial[[c]]) & is.na(highest_miss)) |
