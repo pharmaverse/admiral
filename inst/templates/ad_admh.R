@@ -169,7 +169,7 @@ admh <- admh %>%
 
 # Save output ----
 
-dir <- file.path(getwd(), "tmp")
+dir <- tempdir()
 if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
