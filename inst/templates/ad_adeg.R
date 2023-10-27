@@ -330,7 +330,7 @@ adeg <- adeg %>%
 
 # Save output ----
 
-dir <- tempdir()
+dir <- file.path(dirname(tempdir()), "templates_data")
 if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)

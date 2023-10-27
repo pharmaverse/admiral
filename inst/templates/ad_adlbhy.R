@@ -89,7 +89,7 @@ hylaw_params <- derive_param_exist_flag(
 adlbhy <- adlb_annotated %>%
   bind_rows(hylaw_params)
 
-dir <- tempdir()
+dir <- file.path(dirname(tempdir()), "templates_data")
 if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir)
