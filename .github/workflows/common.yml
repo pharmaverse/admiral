@@ -126,3 +126,12 @@ jobs:
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
+  templates:
+    name: Check Templates
+    uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@no-get-r-version-job
+    secrets: inherit
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    needs: get_r_version
+    with:
+      r-version: "${{ needs.get_r_version.outputs.r-version }}"
+      push-templates-data: true
