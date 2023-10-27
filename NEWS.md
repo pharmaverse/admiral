@@ -28,6 +28,8 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 
 - The default value for the `false_value` argument in `derive_extreme_records()` was changed to `NA_character_` (#2125)
 
+- For the function `consolidate_metadata()`, the argument `check_keys` was renamed to `check_type` to align with rest of codebase (#2184)
+
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#2098)
   - `derive_param_extreme_event()`
   - `derive_vars_last_dose()`
