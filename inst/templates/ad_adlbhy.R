@@ -88,3 +88,10 @@ hylaw_params <- derive_param_exist_flag(
 # Row bind back to relevant adlb-like dataset
 adlbhy <- adlb_annotated %>%
   bind_rows(hylaw_params)
+
+dir <- file.path(getwd(), "tmp")
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
+save(adlbhy, file = file.path(dir, "adlbhy.rda"), compress = "bzip2")

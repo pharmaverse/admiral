@@ -461,5 +461,9 @@ adppk <- adppk_aseq %>%
 # ...
 # ---- Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-saveRDS(adppk, file = file.path(dir, "adppk.rds"), compress = "bzip2")
+dir <- file.path(getwd(), "tmp")
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
+save(adppk, file = file.path(dir, "adppk.rda"), compress = "bzip2")
