@@ -69,7 +69,7 @@ jobs:
     uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
     if: github.event_name == 'push' || startsWith(github.ref, 'refs/tags/v')
     with:
-      r-version: "4.1"
+      r-version: "4.3"
       skip-multiversion-docs: true
   linter:
     name: Lint
