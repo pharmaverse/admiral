@@ -4,7 +4,7 @@ new observations can be selected from the input dataset or an additional
 dataset. This function can be used for adding the maximum or minimum value
 as a separate visit. All variables of the selected observation are kept. This
 distinguishes derive_extreme_records() from derive_summary_records(),
-where only the by variables are populated for the new records."><title>Add the First or Last Observation for Each By Group as New Records — derive_extreme_records • admiral</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Add the First or Last Observation for Each By Group as New Records — derive_extreme_records"><meta property="og:description" content="Add the first or last observation for each by group as new observations. The
+where only the by variables are populated for the new records."><title>Add the First or Last Observation for Each By Group as New Records — derive_extreme_records • admiral</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Add the First or Last Observation for Each By Group as New Records — derive_extreme_records"><meta property="og:description" content="Add the first or last observation for each by group as new observations. The
 new observations can be selected from the input dataset or an additional
 dataset. This function can be used for adding the maximum or minimum value
 as a separate visit. All variables of the selected observation are kept. This
@@ -113,21 +113,21 @@ where only the by variables are populated for the new records.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">derive_extreme_records</span><span class="op">(</span></span>
-<span>  dataset <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  dataset_add <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  dataset_ref <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  by_vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  order <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  mode <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  filter_add <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  check_type <span class="op">=</span> <span class="st">"warning"</span>,</span>
-<span>  exist_flag <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  true_value <span class="op">=</span> <span class="st">"Y"</span>,</span>
-<span>  false_value <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
-<span>  keep_source_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  <span class="va">set_values_to</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">derive_extreme_records</span><span class="op">(</span>
+  dataset <span class="op">=</span> <span class="cn">NULL</span>,
+  dataset_add <span class="op">=</span> <span class="cn">NULL</span>,
+  dataset_ref <span class="op">=</span> <span class="cn">NULL</span>,
+  by_vars <span class="op">=</span> <span class="cn">NULL</span>,
+  order <span class="op">=</span> <span class="cn">NULL</span>,
+  mode <span class="op">=</span> <span class="cn">NULL</span>,
+  filter_add <span class="op">=</span> <span class="cn">NULL</span>,
+  check_type <span class="op">=</span> <span class="st">"warning"</span>,
+  exist_flag <span class="op">=</span> <span class="cn">NULL</span>,
+  true_value <span class="op">=</span> <span class="st">"Y"</span>,
+  false_value <span class="op">=</span> <span class="cn">NA_character_</span>,
+  keep_source_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+  <span class="va">set_values_to</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -234,11 +234,11 @@ observations.</p>
 symbol, a numeric value, an expression or NA. If summary functions are
 used, the values are summarized by the variables specified for <code>by_vars</code>.</p></li>
 </ul><p>For example:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>  set_values_to <span class="ot">=</span> <span class="fu">exprs</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>    <span class="at">AVAL =</span> <span class="fu">sum</span>(AVAL),</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="at">PARAMCD =</span> <span class="st">"TDOSE"</span>,</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>    <span class="at">PARCAT1 =</span> <span class="st">"OVERALL"</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  )</span></code></pre><p></p></div></dd>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  set_values_to <span class="ot">=</span> <span class="fu">exprs</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">AVAL =</span> <span class="fu">sum</span>(AVAL),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">PARAMCD =</span> <span class="st">"TDOSE"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">PARCAT1 =</span> <span class="st">"OVERALL"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre><p></p></div></dd>
 
 </dl></div>
     <div class="section level2">
@@ -289,36 +289,36 @@ arguments.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">adlb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AVISITN</span>, <span class="op">~</span><span class="va">AVAL</span>, <span class="op">~</span><span class="va">LBSEQ</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="fl">1</span>,          <span class="fl">113</span>,      <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="fl">2</span>,          <span class="fl">113</span>,      <span class="fl">2</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="fl">3</span>,          <span class="fl">117</span>,      <span class="fl">3</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="fl">1</span>,          <span class="fl">101</span>,      <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="fl">2</span>,          <span class="fl">101</span>,      <span class="fl">2</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="fl">3</span>,           <span class="fl">95</span>,      <span class="fl">3</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Add a new record for each USUBJID storing the minimum value (first AVAL).</span></span></span>
-<span class="r-in"><span><span class="co"># If multiple records meet the minimum criterion, take the first value by</span></span></span>
-<span class="r-in"><span><span class="co"># AVISITN. Set AVISITN = 97 and DTYPE = MINIMUM for these new records.</span></span></span>
-<span class="r-in"><span><span class="co"># Specify the variables that need to be kept in the new records.</span></span></span>
-<span class="r-in"><span><span class="fu">derive_extreme_records</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">adlb</span>,</span></span>
-<span class="r-in"><span>  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVAL</span>, <span class="va">AVISITN</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"first"</span>,</span></span>
-<span class="r-in"><span>  filter_add <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  keep_source_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    AVISITN <span class="op">=</span> <span class="fl">97</span>,</span></span>
-<span class="r-in"><span>    DTYPE <span class="op">=</span> <span class="st">"MINIMUM"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">adlb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AVISITN</span>, <span class="op">~</span><span class="va">AVAL</span>, <span class="op">~</span><span class="va">LBSEQ</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="fl">1</span>,          <span class="fl">113</span>,      <span class="fl">1</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="fl">2</span>,          <span class="fl">113</span>,      <span class="fl">2</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="fl">3</span>,          <span class="fl">117</span>,      <span class="fl">3</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,      <span class="fl">1</span>,          <span class="fl">101</span>,      <span class="fl">1</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,      <span class="fl">2</span>,          <span class="fl">101</span>,      <span class="fl">2</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,      <span class="fl">3</span>,           <span class="fl">95</span>,      <span class="fl">3</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Add a new record for each USUBJID storing the minimum value (first AVAL).</span></span>
+<span class="r-in"><span class="co"># If multiple records meet the minimum criterion, take the first value by</span></span>
+<span class="r-in"><span class="co"># AVISITN. Set AVISITN = 97 and DTYPE = MINIMUM for these new records.</span></span>
+<span class="r-in"><span class="co"># Specify the variables that need to be kept in the new records.</span></span>
+<span class="r-in"><span class="fu">derive_extreme_records</span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">adlb</span>,</span>
+<span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span class="r-in">  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVAL</span>, <span class="va">AVISITN</span><span class="op">)</span>,</span>
+<span class="r-in">  mode <span class="op">=</span> <span class="st">"first"</span>,</span>
+<span class="r-in">  filter_add <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>,</span>
+<span class="r-in">  keep_source_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>,</span>
+<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">    AVISITN <span class="op">=</span> <span class="fl">97</span>,</span>
+<span class="r-in">    DTYPE <span class="op">=</span> <span class="st">"MINIMUM"</span></span>
+<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID AVISITN  AVAL LBSEQ DTYPE  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
@@ -330,21 +330,21 @@ arguments.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2             3    95     3 <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 1            97   113    <span style="color: #BB0000;">NA</span> MINIMUM</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> 2            97    95    <span style="color: #BB0000;">NA</span> MINIMUM</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Add a new record for each USUBJID storing the maximum value (last AVAL).</span></span></span>
-<span class="r-in"><span><span class="co"># If multiple records meet the maximum criterion, take the first value by</span></span></span>
-<span class="r-in"><span><span class="co"># AVISITN. Set AVISITN = 98 and DTYPE = MAXIMUM for these new records.</span></span></span>
-<span class="r-in"><span><span class="fu">derive_extreme_records</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">adlb</span>,</span></span>
-<span class="r-in"><span>  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="fu"><a href="reexport-desc.html">desc</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>, <span class="va">AVISITN</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"first"</span>,</span></span>
-<span class="r-in"><span>  filter_add <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    AVISITN <span class="op">=</span> <span class="fl">98</span>,</span></span>
-<span class="r-in"><span>    DTYPE <span class="op">=</span> <span class="st">"MAXIMUM"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Add a new record for each USUBJID storing the maximum value (last AVAL).</span></span>
+<span class="r-in"><span class="co"># If multiple records meet the maximum criterion, take the first value by</span></span>
+<span class="r-in"><span class="co"># AVISITN. Set AVISITN = 98 and DTYPE = MAXIMUM for these new records.</span></span>
+<span class="r-in"><span class="fu">derive_extreme_records</span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">adlb</span>,</span>
+<span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span class="r-in">  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="fu"><a href="reexport-desc.html">desc</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>, <span class="va">AVISITN</span><span class="op">)</span>,</span>
+<span class="r-in">  mode <span class="op">=</span> <span class="st">"first"</span>,</span>
+<span class="r-in">  filter_add <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>,</span>
+<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">    AVISITN <span class="op">=</span> <span class="fl">98</span>,</span>
+<span class="r-in">    DTYPE <span class="op">=</span> <span class="st">"MAXIMUM"</span></span>
+<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID AVISITN  AVAL LBSEQ DTYPE  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
@@ -356,19 +356,19 @@ arguments.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2             3    95     3 <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 1            98   117     3 MAXIMUM</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> 2            98   101     1 MAXIMUM</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Add a new record for each USUBJID storing for the last value.</span></span></span>
-<span class="r-in"><span><span class="co"># Set AVISITN = 99 and DTYPE = LOV for these new records.</span></span></span>
-<span class="r-in"><span><span class="fu">derive_extreme_records</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">adlb</span>,</span></span>
-<span class="r-in"><span>  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVISITN</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"last"</span>,</span></span>
-<span class="r-in"><span>  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    AVISITN <span class="op">=</span> <span class="fl">99</span>,</span></span>
-<span class="r-in"><span>    DTYPE <span class="op">=</span> <span class="st">"LOV"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Add a new record for each USUBJID storing for the last value.</span></span>
+<span class="r-in"><span class="co"># Set AVISITN = 99 and DTYPE = LOV for these new records.</span></span>
+<span class="r-in"><span class="fu">derive_extreme_records</span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">adlb</span>,</span>
+<span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span class="r-in">  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVISITN</span><span class="op">)</span>,</span>
+<span class="r-in">  mode <span class="op">=</span> <span class="st">"last"</span>,</span>
+<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">    AVISITN <span class="op">=</span> <span class="fl">99</span>,</span>
+<span class="r-in">    DTYPE <span class="op">=</span> <span class="st">"LOV"</span></span>
+<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID AVISITN  AVAL LBSEQ DTYPE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
@@ -380,54 +380,54 @@ arguments.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2             3    95     3 <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 1            99   117     3 LOV  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> 2            99    95     3 LOV  </span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Derive a new parameter for the first disease progression (PD)</span></span></span>
-<span class="r-in"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">DTHDT</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2022-05-13"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"3"</span>,      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYID <span class="op">=</span> <span class="st">"XX1234"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">adrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">ADTC</span>,        <span class="op">~</span><span class="va">AVALC</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="st">"2020-01-02"</span>, <span class="st">"PR"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="st">"2020-02-01"</span>, <span class="st">"CR"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="st">"2020-03-01"</span>, <span class="st">"CR"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="st">"2020-04-01"</span>, <span class="st">"SD"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="st">"2021-06-15"</span>, <span class="st">"SD"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="st">"2021-07-16"</span>, <span class="st">"PD"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="st">"2021-09-14"</span>, <span class="st">"PD"</span></span></span>
-<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    STUDYID <span class="op">=</span> <span class="st">"XX1234"</span>,</span></span>
-<span class="r-in"><span>    ADT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">ADTC</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    PARAMCD <span class="op">=</span> <span class="st">"OVR"</span>,</span></span>
-<span class="r-in"><span>    PARAM <span class="op">=</span> <span class="st">"Overall Response"</span>,</span></span>
-<span class="r-in"><span>    ANL01FL <span class="op">=</span> <span class="st">"Y"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">ADTC</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">derive_extreme_records</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">adrs</span>,</span></span>
-<span class="r-in"><span>  dataset_ref <span class="op">=</span> <span class="va">adsl</span>,</span></span>
-<span class="r-in"><span>  dataset_add <span class="op">=</span> <span class="va">adrs</span>,</span></span>
-<span class="r-in"><span>  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  filter_add <span class="op">=</span> <span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"OVR"</span> <span class="op">&amp;</span> <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"PD"</span>,</span></span>
-<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">ADT</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  exist_flag <span class="op">=</span> <span class="va">AVALC</span>,</span></span>
-<span class="r-in"><span>  true_value <span class="op">=</span> <span class="st">"Y"</span>,</span></span>
-<span class="r-in"><span>  false_value <span class="op">=</span> <span class="st">"N"</span>,</span></span>
-<span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"first"</span>,</span></span>
-<span class="r-in"><span>  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    PARAMCD <span class="op">=</span> <span class="st">"PD"</span>,</span></span>
-<span class="r-in"><span>    PARAM <span class="op">=</span> <span class="st">"Disease Progression"</span>,</span></span>
-<span class="r-in"><span>    AVAL <span class="op">=</span> <span class="fu"><a href="yn_to_numeric.html">yn_to_numeric</a></span><span class="op">(</span><span class="va">AVALC</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    ANL01FL <span class="op">=</span> <span class="st">"Y"</span>,</span></span>
-<span class="r-in"><span>    ADT <span class="op">=</span> <span class="va">ADT</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Derive a new parameter for the first disease progression (PD)</span></span>
+<span class="r-in"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">DTHDT</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2022-05-13"</span><span class="op">)</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span>,</span>
+<span class="r-in">  <span class="st">"3"</span>,      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYID <span class="op">=</span> <span class="st">"XX1234"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">adrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">ADTC</span>,        <span class="op">~</span><span class="va">AVALC</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"2020-01-02"</span>, <span class="st">"PR"</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"2020-02-01"</span>, <span class="st">"CR"</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"2020-03-01"</span>, <span class="st">"CR"</span>,</span>
+<span class="r-in">  <span class="st">"1"</span>,      <span class="st">"2020-04-01"</span>, <span class="st">"SD"</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"2021-06-15"</span>, <span class="st">"SD"</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"2021-07-16"</span>, <span class="st">"PD"</span>,</span>
+<span class="r-in">  <span class="st">"2"</span>,      <span class="st">"2021-09-14"</span>, <span class="st">"PD"</span></span>
+<span class="r-in"><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span class="r-in">    STUDYID <span class="op">=</span> <span class="st">"XX1234"</span>,</span>
+<span class="r-in">    ADT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">ADTC</span><span class="op">)</span>,</span>
+<span class="r-in">    PARAMCD <span class="op">=</span> <span class="st">"OVR"</span>,</span>
+<span class="r-in">    PARAM <span class="op">=</span> <span class="st">"Overall Response"</span>,</span>
+<span class="r-in">    ANL01FL <span class="op">=</span> <span class="st">"Y"</span></span>
+<span class="r-in">  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">ADTC</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu">derive_extreme_records</span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">adrs</span>,</span>
+<span class="r-in">  dataset_ref <span class="op">=</span> <span class="va">adsl</span>,</span>
+<span class="r-in">  dataset_add <span class="op">=</span> <span class="va">adrs</span>,</span>
+<span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span class="r-in">  filter_add <span class="op">=</span> <span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"OVR"</span> <span class="op">&amp;</span> <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"PD"</span>,</span>
+<span class="r-in">  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">ADT</span><span class="op">)</span>,</span>
+<span class="r-in">  exist_flag <span class="op">=</span> <span class="va">AVALC</span>,</span>
+<span class="r-in">  true_value <span class="op">=</span> <span class="st">"Y"</span>,</span>
+<span class="r-in">  false_value <span class="op">=</span> <span class="st">"N"</span>,</span>
+<span class="r-in">  mode <span class="op">=</span> <span class="st">"first"</span>,</span>
+<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">    PARAMCD <span class="op">=</span> <span class="st">"PD"</span>,</span>
+<span class="r-in">    PARAM <span class="op">=</span> <span class="st">"Disease Progression"</span>,</span>
+<span class="r-in">    AVAL <span class="op">=</span> <span class="fu"><a href="yn_to_numeric.html">yn_to_numeric</a></span><span class="op">(</span><span class="va">AVALC</span><span class="op">)</span>,</span>
+<span class="r-in">    ANL01FL <span class="op">=</span> <span class="st">"Y"</span>,</span>
+<span class="r-in">    ADT <span class="op">=</span> <span class="va">ADT</span></span>
+<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID AVALC STUDYID ADT        PARAMCD PARAM               ANL01FL  AVAL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -441,24 +441,24 @@ arguments.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2       Y     XX1234  2021-07-16 PD      Disease Progression Y           1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 1       N     XX1234  <span style="color: #BB0000;">NA</span>         PD      Disease Progression Y           0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 3       N     XX1234  <span style="color: #BB0000;">NA</span>         PD      Disease Progression Y           0</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># derive parameter indicating death</span></span></span>
-<span class="r-in"><span><span class="fu">derive_extreme_records</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  dataset_ref <span class="op">=</span> <span class="va">adsl</span>,</span></span>
-<span class="r-in"><span>  dataset_add <span class="op">=</span> <span class="va">adsl</span>,</span></span>
-<span class="r-in"><span>  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  filter_add <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">DTHDT</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  exist_flag <span class="op">=</span> <span class="va">AVALC</span>,</span></span>
-<span class="r-in"><span>  true_value <span class="op">=</span> <span class="st">"Y"</span>,</span></span>
-<span class="r-in"><span>  false_value <span class="op">=</span> <span class="st">"N"</span>,</span></span>
-<span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"first"</span>,</span></span>
-<span class="r-in"><span>  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    PARAMCD <span class="op">=</span> <span class="st">"DEATH"</span>,</span></span>
-<span class="r-in"><span>    PARAM <span class="op">=</span> <span class="st">"Death"</span>,</span></span>
-<span class="r-in"><span>    ANL01FL <span class="op">=</span> <span class="st">"Y"</span>,</span></span>
-<span class="r-in"><span>    ADT <span class="op">=</span> <span class="va">DTHDT</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># derive parameter indicating death</span></span>
+<span class="r-in"><span class="fu">derive_extreme_records</span><span class="op">(</span></span>
+<span class="r-in">  dataset_ref <span class="op">=</span> <span class="va">adsl</span>,</span>
+<span class="r-in">  dataset_add <span class="op">=</span> <span class="va">adsl</span>,</span>
+<span class="r-in">  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span class="r-in">  filter_add <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">DTHDT</span><span class="op">)</span>,</span>
+<span class="r-in">  exist_flag <span class="op">=</span> <span class="va">AVALC</span>,</span>
+<span class="r-in">  true_value <span class="op">=</span> <span class="st">"Y"</span>,</span>
+<span class="r-in">  false_value <span class="op">=</span> <span class="st">"N"</span>,</span>
+<span class="r-in">  mode <span class="op">=</span> <span class="st">"first"</span>,</span>
+<span class="r-in">  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span class="r-in">    PARAMCD <span class="op">=</span> <span class="st">"DEATH"</span>,</span>
+<span class="r-in">    PARAM <span class="op">=</span> <span class="st">"Death"</span>,</span>
+<span class="r-in">    ANL01FL <span class="op">=</span> <span class="st">"Y"</span>,</span>
+<span class="r-in">    ADT <span class="op">=</span> <span class="va">DTHDT</span></span>
+<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   STUDYID USUBJID PARAMCD PARAM ANL01FL ADT        DTHDT      AVALC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
