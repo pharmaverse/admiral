@@ -122,14 +122,14 @@ admh <- mh %>%
   mutate(ANL01FL = ifelse(MHOCCUR != "N", "Y", NA_character_)) %>%
   ## Assign TRTA, TRTP (company specific variables derivation) ----
   # See also the "Visit and Period Variables" vignette
-  # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_bds)
+  # (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A
   ) %>%
   ## Assign APHASE and APHASEN Variable (company specific variable derivation) ----
   # See also the "Visit and Period Variables" vignette
-  # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#periods_bds)
+  # (https://pharmaverse.github.io/admiral/articles/visits_periods.html#periods_bds)
   mutate(
     APHASE = case_when(
       ADT < TRTSDT ~ "Screening",
@@ -169,5 +169,9 @@ admh <- admh %>%
 
 # Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-saveRDS(admh, file = file.path(dir, "admh.rds"), compress = "bzip2")
+dir <- file.path(getwd(), "tmp")
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
+save(admh, file = file.path(dir, "admh.rda"), compress = "bzip2")

@@ -32,7 +32,7 @@ devtools::install_github("pharmaverse/admiral")
 
 ## Release Schedule
 
-[{admiral}](https://pharmaverse.github.io/admiral/cran-release/) releases are targeted for the first Monday of the last month of each quarter.
+[{admiral}](https://pharmaverse.github.io/admiral/) releases are targeted for the first Monday of the last month of each quarter.
 The {admiral} family has several downstream and upstream dependencies and so this release shall be done in three
 Phases:
 
@@ -44,14 +44,14 @@ Phases:
 | Q4-2023          | December 4th                                                             | December 11th                                                        |
 |                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/main/)     |
 |                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/main/)           | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/main/) |
-|                  | [{admiral}](https://pharmaverse.github.io/admiral/cran-release/)                 |                                                                      |
+|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                 |                                                                      |
 
 The `{admiral}` Q4-2023 release will officially be `{admiral}`'s version 1.0.0 release, where we commit to increased package maturity and pivot towards focusing on maintenance rather than new content. This does not mean that there will never be any new content in `{admiral}`, rather it means we will be more mindful about introducing new functionality and/or breaking changes. The release schedule in 2024 and onward will also shift to twice-yearly, rather than quarterly, so that our users have ample time to react to any new content and changes that do make it onto `{admiral}`.
 
 ## Main Goal
 
 Provide users with an open source, modularized toolbox with which to create ADaM datasets
-in R. _As opposed to a “run 1 line and an ADaM appears” black-box solution or an attempt to
+in R. _As opposed to a "run 1 line and an ADaM appears" black-box solution or an attempt to
 automate ADaM._
 
 One of the key aspects of `{admiral}` is its development by the users for the users.
@@ -73,7 +73,7 @@ We will provide:
 * Pharmaceutical communities and companies are encouraged to contribute to `{admiral}` following
   the provided programming strategy and modular approach
 * Functions that are comprehensively documented and tested, including example calls---these are
-  all listed in the [Reference section](https://pharmaverse.github.io/admiral/cran-release/reference/index.html)
+  all listed in the [Reference section](https://pharmaverse.github.io/admiral/reference/index.html)
 * Vignettes on how to create ADSL, BDS and OCCDS datasets, including example scripts
 * Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs ...)
 
@@ -106,7 +106,7 @@ The following packages are also useful when working with ADaM datasets:
 For `{admiral}` and all extension packages, we prioritize providing our users with a __simple to adopt__ toolkit
 that enables them to produce __readable__ and __easily constructible__ ADaM programs. The following explains
 our philosophy, which we try to adhere to across the `{admiral}` family of packages.
-There isn’t always a clear single, straightforward rule, but there are guiding principles we adhere to for `{admiral}`.
+There isn't always a clear single, straightforward rule, but there are guiding principles we adhere to for `{admiral}`.
 This manifesto helps show the considerations of our developers when making decisions.
 
 We have four design principles to achieve the main goal:
@@ -115,7 +115,7 @@ We have four design principles to achieve the main goal:
 
 All `{admiral}` functions should be easy to use.
 
-* Documentation is an absolute priority. Each function reference page should cover the purpose, descriptions of each argument with permitted values, the expected input and output, with clear real-life examples---so that users don’t need to dig through code to find answers.
+* Documentation is an absolute priority. Each function reference page should cover the purpose, descriptions of each argument with permitted values, the expected input and output, with clear real-life examples---so that users don't need to dig through code to find answers.
 * Vignettes that complement the functional documentation to help users see how best the functions can be applied to achieve ADaM requirements.
 * Functions should be written and structured in a way that users are able to read, re-use or extend them for study specific purposes if needed (see Readability below).
 
@@ -149,18 +149,18 @@ that all our developers and contributors must follow, so that all our code has a
 
 * We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.
 * For sections of code that perform the actual derivations (e.g. besides assertions or basic utilities), we try to limit nesting of too many dependencies or functions.
-* Modularity is a focus---we don’t try to achieve too many steps in one.
+* Modularity is a focus---we don't try to achieve too many steps in one.
 * All code has to be well commented.
 * We recognize that a user or a Health Authority reviewer may have the wish to delve into the code base (especially given this open source setting), or users may need to extend/adapt the code for their study specific needs. We therefore want any module to be understandable to all, not only the `{admiral}` developers.
 
 ## References and Documentation
 
-* Please go to [Get Started](https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html) section to start using `{admiral}`
+* Please go to [Get Started](https://pharmaverse.github.io/admiral/articles/admiral.html) section to start using `{admiral}`
 * Please see the [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) for videos related to `{admiral}`.
 * Please see the [Programming Strategy](https://pharmaverse.github.io/admiraldev/main/articles/programming_strategy.html) to understand how functions are created
-* Please see the [FAQ](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html) for the most frequent questions
-* Please see the [Contribution Model](https://pharmaverse.github.io/admiral/cran-release/articles/contribution_model.html) for how to get involved with making contributions
-* Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
+* Please see the [FAQ](https://pharmaverse.github.io/admiral/articles/faq.html) for the most frequent questions
+* Please see the [Contribution Model](https://pharmaverse.github.io/admiral/articles/contribution_model.html) for how to get involved with making contributions
+* Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
 
 ## Pharmaverse Blog
 

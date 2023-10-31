@@ -31,7 +31,7 @@
 #'
 #' @param end_window
 #'
-#'    If the argument is specified, events starting more than the specified
+#'    If the argument is specified (in 'days'), events starting more than the specified
 #'    number of days after end of treatment, are not flagged.
 #'
 #'    *Permitted Values:* A non-negative integer or `NULL`
@@ -46,7 +46,7 @@
 #' @param initial_intensity Initial severity/intensity or toxicity
 #'
 #'   This derivation assumes AE data collection method as single record per AE
-#'   with “initial” and “most extreme” severity/intensity recorded separately.
+#'   with "initial" and "most extreme" severity/intensity recorded separately.
 #'
 #'   If the argument is specified, events which start before treatment start and
 #'   end after treatment start (or are ongoing) and worsened (i.e., the
