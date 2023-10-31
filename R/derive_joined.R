@@ -545,6 +545,7 @@ derive_vars_joined <- function(dataset,
 #' Join Data for "joined" functions
 #'
 #' The helper function joins the data for the "joined" functions. All `.join`
+#' variables are included in the output dataset.
 #'
 #' @param dataset
 #' `r roxygen_param_dataset(expected_vars = c("by_vars"))`

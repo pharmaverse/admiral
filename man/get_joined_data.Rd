@@ -192,6 +192,7 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 }
 \description{
 The helper function joins the data for the "joined" functions. All \code{.join}
+variables are included in the output dataset.
 }
 \details{
 \enumerate{
