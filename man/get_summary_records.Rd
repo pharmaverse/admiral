@@ -76,8 +76,7 @@ A data frame of derived records.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 
 Development on \code{get_summary_records()} is complete, and for new code we recommend
-switching to using the \code{dataset_add} argument in \code{derive_summary_records()},
-which is easier to use, has more features, and still under active development.
+switching to using the \code{dataset_add} argument in \code{derive_summary_records()}.
 
 It is not uncommon to have an analysis need whereby one needs to derive an
 analysis value (\code{AVAL}) from multiple records. The ADaM basic dataset
@@ -174,4 +173,4 @@ Other superseded:
 \code{\link{derive_param_extreme_record}()}
 }
 \concept{superseded}
-\keyword{internal}
+\keyword{superseded}
