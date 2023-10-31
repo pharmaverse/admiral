@@ -31,7 +31,7 @@
 #'
 #' @param end_window
 #'
-#'    If the argument is specified, events starting more than the specified
+#'    If the argument is specified (in 'days'), events starting more than the specified
 #'    number of days after end of treatment, are not flagged.
 #'
 #'    *Permitted Values:* A non-negative integer or `NULL`
