@@ -25,7 +25,7 @@ data("admiral_adsl")
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
 
 pp <- convert_blanks_to_na(pp)
 
@@ -117,7 +117,7 @@ adpp_aval <- adpp_pp %>%
 
 ## Get visit info ----
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#visit_bds)
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visit_bds)
 adpp_avisit <- adpp_aval %>%
   # Derive Timing
   mutate(
@@ -132,7 +132,7 @@ adpp_avisit <- adpp_aval %>%
   ) %>%
   ## Assign TRTA, TRTP ----
   # See also the "Visit and Period Variables" vignette
-  # (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_bds)
+  # (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A
@@ -153,5 +153,9 @@ adpp <- adpp_avisit %>%
 # ...
 # Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-saveRDS(adpp, file = file.path(dir, "adpp.rds"), compress = "bzip2")
+dir <- file.path(getwd(), "tmp")
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
+save(adpp, file = file.path(dir, "adpp.rda"), compress = "bzip2")

@@ -32,7 +32,7 @@ adsl <- admiral_adsl
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
 
 # Load EX
 
@@ -506,5 +506,9 @@ adpc <- adpc_baselines %>%
 # ...
 # ---- Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-saveRDS(adpc, file = file.path(dir, "adpc.rds"), compress = "bzip2")
+dir <- file.path(getwd(), "tmp")
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
+save(adpc, file = file.path(dir, "adcp.rda"), compress = "bzip2")
