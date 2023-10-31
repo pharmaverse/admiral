@@ -158,7 +158,7 @@ the number of the event.
 event, and the by variables (\code{by_vars}) and the variables created by
 \code{set_values_to} are kept.
 }
-\item All selected observations are bind together.
+\item All selected observations are bound together.
 \item For each group (with respect to the variables specified for the
 \code{by_vars} parameter) the first or last observation (with respect to the
 order specified for the \code{order} parameter and the mode specified for the

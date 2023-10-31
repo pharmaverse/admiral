@@ -95,7 +95,7 @@
 #'       1. Only the variables specified for the `keep_source_vars` field of the
 #'       event, and the by variables (`by_vars`) and the variables created by
 #'       `set_values_to` are kept.
-#'   1. All selected observations are bind together.
+#'   1. All selected observations are bound together.
 #'   1. For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) the first or last observation (with respect to the
 #'   order specified for the `order` parameter and the mode specified for the
@@ -390,7 +390,7 @@ derive_extreme_event <- function(dataset,
       deprecate_details <- c(
         "Please remove `ignore_event_order = FALSE` from the call.",
         "Specify `tmp_event_nr_var`.",
-        "Add the specified variable to `order`"
+        "Add the specified variable to `order`."
       )
     }
     deprecate_warn(
