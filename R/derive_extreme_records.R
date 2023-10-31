@@ -1,7 +1,7 @@
 #' Add the First or Last Observation for Each By Group as New Records
 #'
 #' Add the first or last observation for each by group as new observations. The
-#' new observations can be selected from the source dataset. This function can
+#' new observations can be selected from the additional dataset. This function can
 #' be used for adding the maximum or minimum value as a separate visit.
 #' All variables of the selected observation are kept. This distinguishes
 #' `derive_extreme_records()` from `derive_summary_records()`,
@@ -15,9 +15,9 @@
 #'   observation of the specified dataset a new observation is added to the
 #'   input dataset.
 #'
-#' @param dataset_add Source dataset
+#' @param dataset_add Additional dataset
 #'
-#'   The source dataset, which determines the by groups returned in the input dataset,
+#'   The additional dataset, which determines the by groups returned in the input dataset,
 #'   based on the groups that exist in this dataset after being subset by `filter_add`.
 #'
 #'   The variables specified in the `by_vars` and `filter_add` parameters are expected
@@ -30,7 +30,7 @@
 #'
 #'   *Permitted Values*: list of variables created by `exprs()`
 #'
-#' @param filter_add Filter for source dataset (`dataset_add`)
+#' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
 #'   Only observations in `dataset_add` fulfilling the specified condition are
 #'   considered.
@@ -46,7 +46,7 @@
 #' @param check_type Check uniqueness?
 #'
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
-#'   if the observations of the (restricted) source dataset are not unique
+#'   if the observations of the (restricted) additional dataset are not unique
 #'   with respect to the by variables and the order.
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
@@ -55,7 +55,7 @@
 #'
 #'   The specified variable is added to the output dataset.
 #'
-#'   For by groups with at least one observation in the source dataset
+#'   For by groups with at least one observation in the additional dataset
 #'   (`dataset_add`) `exist_flag` is set to the value specified by the
 #'   `true_value` argument.
 #'
@@ -66,12 +66,12 @@
 #'
 #' @param true_value True value
 #'
-#'   For new observations selected from the source dataset (`dataset_add`),
+#'   For new observations selected from the additional dataset (`dataset_add`),
 #'   `exist_flag` is set to the specified value.
 #'
 #' @param false_value False value
 #'
-#'   For new observations not selected from the source dataset
+#'   For new observations not selected from the additional dataset
 #'   (`dataset_add`), `exist_flag` is set to the specified value.
 #'
 #' @param keep_source_vars Variables to be kept in the new records
@@ -94,7 +94,7 @@
 #' @inheritParams derive_summary_records
 #'
 #' @details
-#'   1. The source dataset (`dataset_add`) is restricted as specified by the
+#'   1. The additional dataset (`dataset_add`) is restricted as specified by the
 #'   `filter_add` argument.
 #'   1. For each group (with respect to the variables specified for the
 #'   `by_vars` argument) the first or last observation (with respect to the
@@ -247,7 +247,7 @@
 #'   )
 #' )
 derive_extreme_records <- function(dataset = NULL,
-                                   dataset_add = NULL,
+                                   dataset_add,
                                    dataset_ref = NULL,
                                    by_vars = NULL,
                                    order = NULL,
@@ -264,15 +264,8 @@ derive_extreme_records <- function(dataset = NULL,
   assert_expr_list(order, optional = TRUE)
   assert_expr_list(keep_source_vars, optional = TRUE)
 
-  if (is.null(dataset_add)) {
-    expected_vars <- expr_c(by_vars, extract_vars(order))
-  } else {
-    expected_vars <- by_vars
-  }
-
   assert_data_frame(
     dataset,
-    required_vars = expected_vars,
     optional = TRUE
   )
   assert_data_frame(

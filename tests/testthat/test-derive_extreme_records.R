@@ -306,7 +306,7 @@ test_that("derive_extreme_records Test 6: error if no dataset_add", {
     derive_extreme_records(
       set_values_to = exprs(PARAMCD = "HELLO")
     ),
-    regexp = "`dataset_add` must be a data frame but is `NULL`",
+    regexp = "argument \"dataset_add\" is missing, with no default",
     fixed = TRUE
   )
 })

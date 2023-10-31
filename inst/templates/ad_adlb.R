@@ -384,8 +384,7 @@ adlb <- adlb %>%
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     order = exprs(AVAL, ADT, AVISITN),
     mode = "first",
-    # "AVISITN < 9997" to evaluate only real visits
-    filter_add = (!is.na(AVAL) & ONTRTFL == "Y" & AVISITN < 9997),
+    filter_add = (!is.na(AVAL) & ONTRTFL == "Y"),
     set_values_to = exprs(
       AVISITN = 9997,
       AVISIT = "POST-BASELINE MINIMUM",
@@ -398,8 +397,7 @@ adlb <- adlb %>%
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     order = exprs(desc(AVAL), ADT, AVISITN),
     mode = "first",
-    # "AVISITN < 9997" to evaluate only real visits
-    filter_add = (!is.na(AVAL) & ONTRTFL == "Y" & AVISITN < 9997),
+    filter_add = (!is.na(AVAL) & ONTRTFL == "Y"),
     set_values_to = exprs(
       AVISITN = 9998,
       AVISIT = "POST-BASELINE MAXIMUM",
@@ -412,8 +410,7 @@ adlb <- adlb %>%
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     order = exprs(ADT, AVISITN),
     mode = "last",
-    # "AVISITN < 9997" to evaluate only real visits
-    filter_add = (ONTRTFL == "Y" & AVISITN < 9997),
+    filter_add = (ONTRTFL == "Y"),
     set_values_to = exprs(
       AVISITN = 9999,
       AVISIT = "POST-BASELINE LAST",
