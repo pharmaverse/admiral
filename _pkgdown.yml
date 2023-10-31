@@ -19,7 +19,7 @@ development:
   mode: auto
 
 authors:
-  before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/cran-release/)."
+  before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/)."
   footer:
     roles: [aut, ctb, cre, fnd]
     text: "Developed by"
@@ -128,23 +128,18 @@ reference:
   contents:
   - has_keyword('reexport')
 
-- title: Deprecated
+- title: Superseded
   desc: |
-    As `{admiral}` is still evolving, functions/parameters may need to be removed or replaced over time. In such cases, the function/parameter will enter the following 6-month deprecation cycle:
-
-    * In the first release (0-3 months), there will be a warning issued if you use the function/parameter, but it will still be available to use.
-    * In the following release (3-6 months), an error will be produced if you use the function/parameter.
-    * Finally, from the 3rd release (6 months) onwards, the function/parameter will be removed from `{admiral}` and its documentation completely.
-
-    *Note: Guidance on replacement functionality can be found in the warning/error message produced or in the function's documentation.*
-
-    Below, you can find a list of functions in the process of being deprecated:
+    Superseded functions have been replaced with better functions. However, we
+    will not be removing these functions from `{admiral}`.  We do strongly
+    encourage you to make the switch over.
   contents:
-  - has_keyword("deprecated")
+  - has_keyword("superseded")
 
 navbar:
   structure:
     left: [getstarted, reference, articles, community, news]
+    right: [search, slack, newissue, github]
   components:
     getstarted:
       text: Get Started
@@ -199,5 +194,12 @@ navbar:
         href: articles/lab_grading.html
       - text: Hy's Law Implementation
         href: articles/hys_law.html
-
+    slack:
+      icon: fa-slack
+      href: https://app.slack.com/client/T028PB489D3/C02M8KN8269
+      aria-label: Slack
+    newissue:
+      icon: fa-bug
+      href: https://github.com/pharmaverse/admiral/issues/new/choose
+      aria-label: New Issue
 
