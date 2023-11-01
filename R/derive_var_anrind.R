@@ -63,7 +63,6 @@
 derive_var_anrind <- function(dataset,
                               signif_dig = get_admiral_option("signif_digits"),
                               use_a1hia1lo = FALSE) {
-
   aval <- "signif(AVAL, signif_dig)"
   anrlo <- "signif(ANRLO, signif_dig)"
   anrhi <- "signif(ANRHI, signif_dig)"
@@ -75,8 +74,8 @@ derive_var_anrind <- function(dataset,
 
     low_cond <- paste(aval, "<", anrlo, "& (is.na(A1LO) |", aval, ">=", a1lo, ")")
     high_cond <- paste(aval, ">", anrhi, "& (is.na(A1HI) |", aval, "<=", a1hi, ")")
-    lowlow_cond <-  paste(aval, "<", a1lo)
-    highhigh_cond <-  paste(aval, ">", a1hi)
+    lowlow_cond <- paste(aval, "<", a1lo)
+    highhigh_cond <- paste(aval, ">", a1hi)
   } else {
     assert_data_frame(dataset, required_vars = exprs(ANRLO, ANRHI, AVAL))
 

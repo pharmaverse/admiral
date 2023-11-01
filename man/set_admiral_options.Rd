@@ -11,7 +11,7 @@ set_admiral_options(subject_keys, signif_digits)
 \code{exprs(STUDYID, USUBJID)}. This option is used as default value for the
 \code{subject_keys} argument in all admiral functions.}
 
-\item{signif_digits}{Holds number of significant digits when comapring to numeric variables,
+\item{signif_digits}{Holds number of significant digits when comparing to numeric variables,
 defaults to \code{15}. This option is used as default value for the  \code{signif_dig} argument in
 admiral functions \code{derive_var_atoxgr_dir()} and \code{derive_var_anrind()}.}
 }

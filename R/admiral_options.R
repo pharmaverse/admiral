@@ -78,7 +78,7 @@ get_admiral_option <- function(option) {
 #'   `exprs(STUDYID, USUBJID)`. This option is used as default value for the
 #'   `subject_keys` argument in all admiral functions.
 #'
-#' @param signif_digits Holds number of significant digits when comapring to numeric variables,
+#' @param signif_digits Holds number of significant digits when comparing to numeric variables,
 #'  defaults to `15`. This option is used as default value for the  `signif_dig` argument in
 #'  admiral functions `derive_var_atoxgr_dir()` and `derive_var_anrind()`.
 #'
