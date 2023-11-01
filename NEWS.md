@@ -59,6 +59,8 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 - Removed Deprecation section in Reference tab.  Added new Superseded section in 
 Reference tab. (#2174)
 
+- Added a link to the previous versions of the website to the navigation bar. (#2205)
+
 ## Various
 
 - Website now has button/links to Slack channel and GitHub Issues (#2127)

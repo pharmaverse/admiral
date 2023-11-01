@@ -194,15 +194,6 @@ navbar:
         href: articles/lab_grading.html
       - text: Hy's Law Implementation
         href: articles/hys_law.html
-    versions:
-      text: Versions
-      menu:
-      - text: Development
-        href: dev/index.html
-      - text: Current Release
-        href: index.html
-      - text: Previous Releases
-        href: articles/website-versions.html
 
     history:
       icon: fa-history
