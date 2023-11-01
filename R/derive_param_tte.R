@@ -58,6 +58,14 @@
 #'
 #'   A list of symbols created using `exprs()` is expected.
 #'
+#' @param keep_source_vars Variables to be kept in the new records
+#'
+#'   A named list or tidyselect expressions created by `exprs()` defining the
+#'   variables to be kept for the new records. The variables specified for
+#'   `by_vars` and `set_values_to` need not be specified here as they are kept
+#'   automatically.
+#'
+#'
 #' @details The following steps are performed to create the observations of the
 #'   new parameter:
 #'
@@ -320,7 +328,8 @@ derive_param_tte <- function(dataset = NULL,
                              censor_conditions,
                              create_datetime = FALSE,
                              set_values_to,
-                             subject_keys = get_admiral_option("subject_keys")) {
+                             subject_keys = get_admiral_option("subject_keys"),
+                             keep_source_vars = exprs(everything())) {
   # checking and quoting #
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
@@ -445,7 +454,7 @@ derive_param_tte <- function(dataset = NULL,
     }
 
     # -vars2chr(by_vars) does not work for 3.5 #
-    new_param <- select(new_param, !!!negate_vars(by_vars))
+    new_param <- select(new_param, !!!negate_vars(by_vars), !!!keep_source_vars)
   }
 
   # add new parameter to input dataset #

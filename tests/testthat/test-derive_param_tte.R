@@ -400,7 +400,8 @@ test_that("derive_param_tte Test 5: by_vars parameter works correctly", {
         PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
         PARCAT1 = "TTAE",
         PARCAT2 = AEDECOD
-      )
+      ),
+      keep_source_vars = exprs(USUBJID)
     ),
     expected_output,
     keys = c("USUBJID", "PARAMCD")

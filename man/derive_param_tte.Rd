@@ -14,7 +14,8 @@ derive_param_tte(
   censor_conditions,
   create_datetime = FALSE,
   set_values_to,
-  subject_keys = get_admiral_option("subject_keys")
+  subject_keys = get_admiral_option("subject_keys"),
+  keep_source_vars = exprs(everything())
 )
 }
 \arguments{
@@ -73,6 +74,13 @@ expressions, or \code{NA}.}
 \item{subject_keys}{Variables to uniquely identify a subject
 
 A list of symbols created using \code{exprs()} is expected.}
+
+\item{keep_source_vars}{Variables to be kept in the new records
+
+A named list or tidyselect expressions created by \code{exprs()} defining the
+variables to be kept for the new records. The variables specified for
+\code{by_vars} and \code{set_values_to} need not be specified here as they are kept
+automatically.}
 }
 \value{
 The input dataset with the new parameter added
