@@ -29,12 +29,13 @@ all_folders <-
   unique()
 
 # subset to all version folders
-all_version_folders <- 
-  all_folders[grep("^v[0-9]+|dev", x = all_folders)] |> 
+all_version_folders <-
+  all_folders[grep("^v[0-9]+|dev", x = all_folders)] |>
   rev()
 # more dev first if it appears
-if ("dev" %in% all_version_folders)
+if ("dev" %in% all_version_folders) {
   all_version_folders <- c("dev", all_version_folders) |> unique()
+}
 
 # release dates of prior tags
 df_tags <- gert::git_tag_list()
