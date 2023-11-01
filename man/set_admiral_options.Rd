@@ -4,12 +4,16 @@
 \alias{set_admiral_options}
 \title{Set the Value of Admiral Options}
 \usage{
-set_admiral_options(subject_keys)
+set_admiral_options(subject_keys, signif_digits)
 }
 \arguments{
 \item{subject_keys}{Variables to uniquely identify a subject, defaults to
 \code{exprs(STUDYID, USUBJID)}. This option is used as default value for the
 \code{subject_keys} argument in all admiral functions.}
+
+\item{signif_digits}{Holds number of significant digits when comapring to numeric variables,
+defaults to \code{15}. This option is used as default value for the  \code{signif_dig} argument in
+admiral functions \code{derive_var_atoxgr_dir()} and \code{derive_var_anrind()}.}
 }
 \value{
 No return value, called for side effects.
@@ -66,7 +70,7 @@ derive_param_exist_flag(
 \seealso{
 \code{\link[=get_admiral_option]{get_admiral_option()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},\code{\link[=derive_param_tte]{derive_param_tte()}},
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_period]{derive_vars_period()}},
-\code{\link[=create_period_dataset]{create_period_dataset()}}
+\code{\link[=create_period_dataset]{create_period_dataset()}}, \code{\link[=derive_var_atoxgr_dir]{derive_var_atoxgr_dir()}}, \code{\link[=derive_var_anrind]{derive_var_anrind()}}
 
 Other admiral_options: 
 \code{\link{get_admiral_option}()}

@@ -5,6 +5,10 @@
 #'   `ANRLO`, `ANRHI`, and `AVAL` are expected and if `use_a1hia1lo` is set to `TRUE`,
 #'   `A1LO` and `A1H1` are expected as well.
 #'
+#' @param signif_dig Number of significant digits to use when comparing values.
+#'
+#'   Significant digits used to avoid floating point discrepancies when comparing numeric values.
+#'
 #' @param use_a1hia1lo A logical value indicating whether to use `A1H1` and `A1LO` in
 #' the derivation of `ANRIND`.
 #'
@@ -57,19 +61,27 @@
 #' vs %>% derive_var_anrind(use_a1hia1lo = FALSE)
 #'
 derive_var_anrind <- function(dataset,
+                              signif_dig = get_admiral_option("signif_digits"),
                               use_a1hia1lo = FALSE) {
+
+  aval <- "signif(AVAL, signif_dig)"
+  anrlo <- "signif(ANRLO, signif_dig)"
+  anrhi <- "signif(ANRHI, signif_dig)"
+  a1lo <- "signif(A1LO, signif_dig)"
+  a1hi <- "signif(A1HI, signif_dig)"
+
   if (use_a1hia1lo) {
     assert_data_frame(dataset, required_vars = exprs(ANRLO, ANRHI, A1HI, A1LO, AVAL))
 
-    low_cond <- "AVAL < ANRLO & (is.na(A1LO) | AVAL >= A1LO)"
-    high_cond <- "AVAL > ANRHI & (is.na(A1HI) | AVAL <= A1HI)"
-    lowlow_cond <- "AVAL < A1LO"
-    highhigh_cond <- "AVAL > A1HI"
+    low_cond <- paste(aval, "<", anrlo, "& (is.na(A1LO) |", aval, ">=", a1lo, ")")
+    high_cond <- paste(aval, ">", anrhi, "& (is.na(A1HI) |", aval, "<=", a1hi, ")")
+    lowlow_cond <-  paste(aval, "<", a1lo)
+    highhigh_cond <-  paste(aval, ">", a1hi)
   } else {
     assert_data_frame(dataset, required_vars = exprs(ANRLO, ANRHI, AVAL))
 
-    low_cond <- "AVAL < ANRLO"
-    high_cond <- "AVAL > ANRHI"
+    low_cond <- paste(aval, "<", anrlo)
+    high_cond <- paste(aval, ">", anrhi)
     lowlow_cond <- "FALSE"
     highhigh_cond <- "FALSE"
   }
@@ -77,9 +89,9 @@ derive_var_anrind <- function(dataset,
   result <- dataset %>%
     mutate(
       ANRIND = case_when(
-        AVAL >= ANRLO & is.na(ANRHI) ~ "NORMAL",
-        AVAL <= ANRHI & is.na(ANRLO) ~ "NORMAL",
-        AVAL >= ANRLO & AVAL <= ANRHI ~ "NORMAL",
+        eval(parse(text = paste(aval, ">=", anrlo, "& is.na(ANRHI)"))) ~ "NORMAL",
+        eval(parse(text = paste(aval, "<=", anrhi, "& is.na(ANRLO)"))) ~ "NORMAL",
+        eval(parse(text = paste(aval, ">=", anrlo, "&", aval, "<=", anrhi))) ~ "NORMAL",
         eval(parse(text = low_cond)) ~ "LOW",
         eval(parse(text = high_cond)) ~ "HIGH",
         eval(parse(text = lowlow_cond)) ~ "LOW LOW",

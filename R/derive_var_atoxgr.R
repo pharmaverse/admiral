@@ -117,7 +117,7 @@ derive_var_atoxgr_dir <- function(dataset,
                                   meta_criteria,
                                   criteria_direction,
                                   get_unit_expr,
-                                  signif_dig = 15) {
+                                  signif_dig = get_admiral_option("signif_digits")) {
   new_var <- assert_symbol(enexpr(new_var))
   tox_description_var <- assert_symbol(enexpr(tox_description_var))
   get_unit_expr <- assert_expr(enexpr(get_unit_expr))

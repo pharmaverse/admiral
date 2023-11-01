@@ -11,7 +11,7 @@ derive_var_atoxgr_dir(
   meta_criteria,
   criteria_direction,
   get_unit_expr,
-  signif_dig = 15
+  signif_dig = get_admiral_option("signif_digits")
 )
 }
 \arguments{
