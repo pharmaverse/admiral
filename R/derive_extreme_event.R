@@ -18,6 +18,16 @@
 #'   For `event_joined()` events the observations are selected by calling
 #'   `filter_joined`. The `condition` field is passed to the `filter` argument.
 #'
+#' @param tmp_event_nr_var Temporary event number variable
+#'
+#'   The specified variable is added to all source datasets and is set to the
+#'   number of the event before selecting the records of the event.
+#'
+#'   It can be used in `order` to determine which record should be used if
+#'   records from more than one event are selected.
+#'
+#'   The variable is not included in the output dataset.
+#'
 #' @param order Sort order
 #'
 #'   If a particular event from `events` has more than one observation, within
@@ -40,6 +50,13 @@
 #'   and `event_joined()` refers to the dataset provided in the list.
 #'
 #' @param ignore_event_order Ignore event order
+#'
+#'   `r lifecycle::badge("deprecated")`
+#'
+#'   This argument is *deprecated*. If event order should be ignored, please
+#'   specify neither `ignore_event_order` nor `tmp_event_nr_var`. If the event
+#'   order should be considered, don't specify `ignore_event_order` but specify
+#'   `tmp_event_nr_var` and and the specified variable to `order`.
 #'
 #'   If the argument is set to `TRUE`, all events defined by `events` are
 #'   considered equivalent. If there is more than one observation per by group
@@ -73,12 +90,14 @@
 #'
 #'       1. The variables specified by the `set_values_to` field of the event
 #'       are added to the selected observations.
+#'       1. The variable specified for `tmp_event_nr_var` is added and set to
+#'       the number of the event.
 #'       1. Only the variables specified for the `keep_source_vars` field of the
 #'       event, and the by variables (`by_vars`) and the variables created by
 #'       `set_values_to` are kept.
+#'   1. All selected observations are bound together.
 #'   1. For each group (with respect to the variables specified for the
-#'   `by_vars` parameter) the first event is selected. If there is more than one
-#'   observation per event the first or last observation (with respect to the
+#'   `by_vars` parameter) the first or last observation (with respect to the
 #'   order specified for the `order` parameter and the mode specified for the
 #'   `mode` parameter) is selected.
 #'   1. The variables specified by the `set_values_to` parameter are added to
@@ -141,8 +160,9 @@
 #'       set_values_to = exprs(AVALC = "Missing", AVAL = 99)
 #'     )
 #'   ),
-#'   order = exprs(ADY),
-#'   mode = "last",
+#'   tmp_event_nr_var = event_nr,
+#'   order = exprs(event_nr, desc(ADY)),
+#'   mode = "first",
 #'   set_values_to = exprs(
 #'     PARAMCD = "WSP",
 #'     PARAM = "Worst Sleeping Problems"
@@ -178,7 +198,8 @@
 #'       set_values_to = exprs(AVALC = "Y")
 #'     )
 #'   ),
-#'   order = exprs(AVISITN),
+#'   tmp_event_nr_var = event_nr,
+#'   order = exprs(event_nr, AVISITN),
 #'   mode = "first",
 #'   keep_source_vars = exprs(AVISITN),
 #'   set_values_to = exprs(
@@ -243,7 +264,8 @@
 #' derive_extreme_event(
 #'   adrs,
 #'   by_vars = exprs(USUBJID),
-#'   order = exprs(ADT),
+#'   tmp_event_nr_var = event_nr,
+#'   order = exprs(event_nr, ADT),
 #'   mode = "first",
 #'   source_datasets = list(adsl = adsl),
 #'   events = list(
@@ -321,6 +343,7 @@
 derive_extreme_event <- function(dataset,
                                  by_vars = NULL,
                                  events,
+                                 tmp_event_nr_var = NULL,
                                  order,
                                  mode,
                                  source_datasets = NULL,
@@ -355,7 +378,29 @@ derive_extreme_event <- function(dataset,
     )
   }
 
-  assert_logical_scalar(ignore_event_order)
+  if (!missing(ignore_event_order)) {
+    assert_logical_scalar(ignore_event_order)
+    if (ignore_event_order) {
+      deprecate_details <- paste(
+        "The event order is ignored by default.",
+        "Please remove `ignore_event_order = TRUE` from the call.",
+        sep = "\n"
+      )
+    } else {
+      deprecate_details <- c(
+        "Please remove `ignore_event_order = FALSE` from the call.",
+        "Specify `tmp_event_nr_var`.",
+        "Add the specified variable to `order`."
+      )
+    }
+    deprecate_warn(
+      "1.0.0",
+      "derive_extreme_event(ignore_event_order=)",
+      "derive_extreme_event(tmp_event_nr_var=)",
+      details = deprecate_details
+    )
+  }
+  tmp_event_nr_var <- assert_symbol(enexpr(tmp_event_nr_var), optional = TRUE)
   check_type <-
     assert_character_scalar(
       check_type,
@@ -368,11 +413,6 @@ derive_extreme_event <- function(dataset,
   # Create new observations
   ## Create a dataset (selected_records) from `events`
   event_index <- as.list(seq_along(events))
-  if (ignore_event_order) {
-    tmp_event_no <- NULL
-  } else {
-    tmp_event_no <- get_new_tmp_var(dataset, prefix = "tmp_event_no")
-  }
 
   selected_records_ls <- map2(
     events,
@@ -382,6 +422,9 @@ derive_extreme_event <- function(dataset,
         data_source <- dataset
       } else {
         data_source <- source_datasets[[event$dataset_name]]
+      }
+      if (!is.null(tmp_event_nr_var)) {
+        data_source <- mutate(data_source, !!tmp_event_nr_var := index)
       }
       if (is.null(event$order)) {
         event_order <- order
@@ -417,41 +460,26 @@ derive_extreme_event <- function(dataset,
       } else {
         event_keep_source_vars <- event$keep_source_vars
       }
-      if (!ignore_event_order) {
-        data_events <- mutate(data_events, !!tmp_event_no := index)
-      }
       data_events %>%
         process_set_values_to(set_values_to = event$set_values_to) %>%
-        select(!!!event_keep_source_vars, !!tmp_event_no, !!!by_vars, names(event$set_values_to))
+        select(
+          !!!event_keep_source_vars, !!tmp_event_nr_var, !!!by_vars,
+          names(event$set_values_to)
+        )
     }
   )
   selected_records <- bind_rows(selected_records_ls)
 
-  ## tmp obs number within by_vars and a type of event
-  tmp_obs <- get_new_tmp_var(selected_records)
-  selected_records <- selected_records %>%
-    derive_var_obs_number(
-      new_var = !!tmp_obs,
-      order = order,
-      by_vars = expr_c(by_vars, tmp_event_no),
-      check_type = check_type
-    )
-
   ## filter_extreme
-  if (mode == "first") {
-    tmp_obs_expr <- expr(!!tmp_obs)
-  } else {
-    tmp_obs_expr <- expr(desc(!!tmp_obs))
-  }
   new_obs <- selected_records %>%
     filter_extreme(
       by_vars = by_vars,
-      order = expr_c(tmp_event_no, tmp_obs_expr),
-      mode = "first",
+      order = order,
+      mode = mode,
       check_type = check_type
     ) %>%
     mutate(!!!set_values_to) %>%
-    select(-!!tmp_event_no, -!!tmp_obs)
+    select(-!!tmp_event_nr_var)
 
   # Create output dataset
   bind_rows(dataset, new_obs)

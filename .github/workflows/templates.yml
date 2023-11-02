@@ -14,4 +14,3 @@ jobs:
     secrets: inherit
     with:
       r-version: "4.1"
-      push-templates-data: true
