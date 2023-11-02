@@ -71,6 +71,8 @@ jobs:
     with:
       r-version: "4.3"
       skip-multiversion-docs: true
+    secrets:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
   linter:
     name: Lint
     uses: pharmaverse/admiralci/.github/workflows/lintr.yml@main

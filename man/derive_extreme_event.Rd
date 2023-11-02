@@ -8,6 +8,7 @@ derive_extreme_event(
   dataset,
   by_vars = NULL,
   events,
+  tmp_event_nr_var = NULL,
   order,
   mode,
   source_datasets = NULL,
@@ -39,6 +40,16 @@ functions like \code{all()} or \code{any()} can be used in \code{condition}.
 For \code{event_joined()} events the observations are selected by calling
 \code{filter_joined}. The \code{condition} field is passed to the \code{filter} argument.}
 
+\item{tmp_event_nr_var}{Temporary event number variable
+
+The specified variable is added to all source datasets and is set to the
+number of the event before selecting the records of the event.
+
+It can be used in \code{order} to determine which record should be used if
+records from more than one event are selected.
+
+The variable is not included in the output dataset.}
+
 \item{order}{Sort order
 
 If a particular event from \code{events} has more than one observation, within
@@ -61,6 +72,13 @@ A named list of datasets is expected. The \code{dataset_name} field of \code{eve
 and \code{event_joined()} refers to the dataset provided in the list.}
 
 \item{ignore_event_order}{Ignore event order
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This argument is \emph{deprecated}. If event order should be ignored, please
+specify neither \code{ignore_event_order} nor \code{tmp_event_nr_var}. If the event
+order should be considered, don't specify \code{ignore_event_order} but specify
+\code{tmp_event_nr_var} and and the specified variable to \code{order}.
 
 If the argument is set to \code{TRUE}, all events defined by \code{events} are
 considered equivalent. If there is more than one observation per by group
@@ -134,13 +152,15 @@ If the event is of class \code{event_joined}, \code{filter_joined()} is called t
 select the observations.
 \item The variables specified by the \code{set_values_to} field of the event
 are added to the selected observations.
+\item The variable specified for \code{tmp_event_nr_var} is added and set to
+the number of the event.
 \item Only the variables specified for the \code{keep_source_vars} field of the
 event, and the by variables (\code{by_vars}) and the variables created by
 \code{set_values_to} are kept.
 }
+\item All selected observations are bound together.
 \item For each group (with respect to the variables specified for the
-\code{by_vars} parameter) the first event is selected. If there is more than one
-observation per event the first or last observation (with respect to the
+\code{by_vars} parameter) the first or last observation (with respect to the
 order specified for the \code{order} parameter and the mode specified for the
 \code{mode} parameter) is selected.
 \item The variables specified by the \code{set_values_to} parameter are added to
@@ -193,8 +213,9 @@ derive_extreme_event(
       set_values_to = exprs(AVALC = "Missing", AVAL = 99)
     )
   ),
-  order = exprs(ADY),
-  mode = "last",
+  tmp_event_nr_var = event_nr,
+  order = exprs(event_nr, desc(ADY)),
+  mode = "first",
   set_values_to = exprs(
     PARAMCD = "WSP",
     PARAM = "Worst Sleeping Problems"
@@ -230,7 +251,8 @@ derive_extreme_event(
       set_values_to = exprs(AVALC = "Y")
     )
   ),
-  order = exprs(AVISITN),
+  tmp_event_nr_var = event_nr,
+  order = exprs(event_nr, AVISITN),
   mode = "first",
   keep_source_vars = exprs(AVISITN),
   set_values_to = exprs(
@@ -295,7 +317,8 @@ adrs <- tribble(
 derive_extreme_event(
   adrs,
   by_vars = exprs(USUBJID),
-  order = exprs(ADT),
+  tmp_event_nr_var = event_nr,
+  order = exprs(event_nr, ADT),
   mode = "first",
   source_datasets = list(adsl = adsl),
   events = list(
