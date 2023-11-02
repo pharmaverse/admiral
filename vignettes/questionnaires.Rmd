@@ -457,7 +457,8 @@ adsp <- adqs %>%
   filter(PARCAT1 == "SLEEPING PROBLEMS") %>%
   derive_extreme_event(
     by_vars = exprs(USUBJID, AVISIT),
-    order = exprs(ADY, QSSEQ),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr, ADY, QSSEQ),
     mode = "first",
     events = list(
       event(
