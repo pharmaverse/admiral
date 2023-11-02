@@ -23,7 +23,9 @@ df_all_files <- tryCatch(gert::git_ls(ref = "gh-pages"), error = function(x) FAL
 if (!isTRUE(as.logical(Sys.getenv("CI"))) && isFALSE(df_all_files)) {
   knitr::knit_exit()
 }
+```
 
+```{r include=FALSE}
 # extract all folders in the root of the branch
 all_folders <-
   sub("/.*", "", df_all_files$path)[grepl(
