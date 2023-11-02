@@ -1228,9 +1228,14 @@ compute_tmf <- function(dtc,
 
   partial <- get_partialdatetime(dtc)
   highest_miss <- convert_blanks_to_na(vector("character", length(dtc)))
+
+  # concatenate lubridate functions: `hour()`, `minute()`, `second()` to map over dtm input
   hms <- c("hour", "minute", "second")
+
+  # extract hour, minute, second over each value of dtm and put into a list time_part
   time_part <-
-    map(set_names(hms), \(y) map_dbl(dtm, \(x) exec(y, x)))
+    map(set_names(hms), function(y) map_dbl(dtm, function(x) exec(y, x)))
+
   for (c in hms) {
     highest_miss <-
       if_else((is.na(partial[[c]]) & is.na(highest_miss)) |
