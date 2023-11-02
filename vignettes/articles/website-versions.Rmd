@@ -17,7 +17,12 @@ base_url <-
   "https://pharmaverse.github.io/admiral/" # include the trailing backslash!
 
 # get list of all files in the `gh-pages` branch
-df_all_files <- gert::git_ls(ref = "gh-pages")
+df_all_files <- tryCatch(gert::git_ls(ref = "gh-pages"), error = function(x) FALSE)
+
+# if a local user (not on CI) does not have a copy of the `gh-pages` branch, exit silently
+if (!isTRUE(as.logical(Sys.getenv("CI"))) && isFALSE(df_all_files)) {
+  knitr::knit_exit()
+}
 
 # extract all folders in the root of the branch
 all_folders <-
