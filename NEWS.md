@@ -17,6 +17,8 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 allow more control of the selection of records. It creates a temporary variable
 for the event number, which can be used in `order`. (#2140)
 
+- The `keep_source_vars` argument was added to `derive_param_tte()` (#2185) 
+
 ## Breaking Changes
 
 - In `derive_summary_records()` and `get_summary_records()` the arguments
