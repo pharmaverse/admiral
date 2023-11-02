@@ -105,8 +105,9 @@
 <div class="section level3">
 <h3 id="updates-of-existing-functions-development-version">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-development-version"></a></h3>
 <ul><li><p><code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code>, <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code>,<code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code> and <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code> were enhanced with the arguments <code>true_value</code> and <code>false_value</code> to align with preexisting functions that had similar functionality (<a href="https://github.com/pharmaverse/admiral/issues/2125" class="external-link">#2125</a>)</p></li>
-<li><p><code><a href="../reference/restrict_derivation.html">restrict_derivation()</a></code> now allows <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> functions like <code>mutate</code> in the `derivation argument (<a href="https://github.com/pharmaverse/admiral/issues/2143" class="external-link">#2143</a>)</p></li>
+<li><p><code><a href="../reference/restrict_derivation.html">restrict_derivation()</a></code> now allows <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> functions like <code>mutate</code> in the <code>derivation</code> argument (<a href="https://github.com/pharmaverse/admiral/issues/2143" class="external-link">#2143</a>)</p></li>
 <li><p><code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code>, <code><a href="../reference/derive_var_merged_summary.html">derive_var_merged_summary()</a></code>, and <code><a href="../reference/get_summary_records.html">get_summary_records()</a></code> were enhanced such that more than one summary variable can be derived, e.g., <code>AVAL</code> as the sum and <code>ADT</code> as the maximum of the contributing records. (<a href="https://github.com/pharmaverse/admiral/issues/1792" class="external-link">#1792</a>)</p></li>
+<li><p>The <code>tmp_event_nr_var</code> argument was added to <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> to allow more control of the selection of records. It creates a temporary variable for the event number, which can be used in <code>order</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2140" class="external-link">#2140</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
@@ -115,6 +116,20 @@
 <li><p>admiral now only supports R &gt;= 4.0.0</p></li>
 <li><p>For the function <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code>, the argument <code>match_flag</code> was renamed to <code>exist_flag</code> (<a href="https://github.com/pharmaverse/admiral/issues/2125" class="external-link">#2125</a>)</p></li>
 <li><p>The default value for the <code>false_value</code> argument in <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> was changed to <code>NA_character_</code> (<a href="https://github.com/pharmaverse/admiral/issues/2125" class="external-link">#2125</a>)</p></li>
+<li>
+<p>The <code>ignore_event_order</code> argument in <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code> was deprecated and the selection of the records was changed to allow more control. Before, the records were selected first by event and then by <code>order</code>. Now they are selected by <code>order</code> only but the event number can be added to it.</p>
+<p>To achieve the old behavior update</p>
+<pre><code>order = exprs(my_order_var),
+ignore_event_order = FALSE,</code></pre>
+<p>to</p>
+<pre><code>tmp_event_nr_var = event_nr,
+order = exprs(event_nr, my_order_var),</code></pre>
+<p>and</p>
+<pre><code>order = exprs(my_order_var),
+ignore_event_order = TRUE,</code></pre>
+<p>to</p>
+<pre><code>order = exprs(my_order_var),</code></pre>
+</li>
 <li>
 <p>The following functions, which were deprecated in previous <a href="https://pharmaverse.github.io/admiral/">admiral</a> versions, have been removed: (<a href="https://github.com/pharmaverse/admiral/issues/2098" class="external-link">#2098</a>)</p>
 <ul><li><code>derive_param_extreme_event()</code></li>
@@ -984,7 +999,7 @@
 <li>
 <p>Function arguments no longer accept expressions created with <code><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr()</a></code> or <code><a href="../reference/reexport-exprs.html">exprs()</a></code> as inputs; instead filter expressions can be passed “as is” and multiple variables have to be wrapped inside <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/187" class="external-link">#187</a>)</p>
 <p><strong>Old:</strong></p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu">derive_extreme_flag</span><span class="op">(</span></span>
 <span>  <span class="va">vs</span>,</span>
@@ -995,7 +1010,7 @@
 <span>  flag_filter <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr</a></span><span class="op">(</span><span class="va">VISIT</span> <span class="op">!=</span> <span class="st">"BASELINE"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><strong>New:</strong></p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu">derive_extreme_flag</span><span class="op">(</span></span>
 <span>  <span class="va">vs</span>,</span>

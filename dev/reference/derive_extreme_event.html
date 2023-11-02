@@ -123,6 +123,7 @@ variables.</p>
 <span>  <span class="va">dataset</span>,</span>
 <span>  by_vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">events</span>,</span>
+<span>  tmp_event_nr_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">order</span>,</span>
 <span>  <span class="va">mode</span>,</span>
 <span>  source_datasets <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -157,6 +158,15 @@ functions like <code><a href="https://rdrr.io/r/base/all.html" class="external-l
 <code>filter_joined</code>. The <code>condition</code> field is passed to the <code>filter</code> argument.</p></dd>
 
 
+<dt>tmp_event_nr_var</dt>
+<dd><p>Temporary event number variable</p>
+<p>The specified variable is added to all source datasets and is set to the
+number of the event before selecting the records of the event.</p>
+<p>It can be used in <code>order</code> to determine which record should be used if
+records from more than one event are selected.</p>
+<p>The variable is not included in the output dataset.</p></dd>
+
+
 <dt>order</dt>
 <dd><p>Sort order</p>
 <p>If a particular event from <code>events</code> has more than one observation, within
@@ -181,6 +191,11 @@ and <code><a href="event_joined.html">event_joined()</a></code> refers to the da
 
 <dt>ignore_event_order</dt>
 <dd><p>Ignore event order</p>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p>
+<p>This argument is <em>deprecated</em>. If event order should be ignored, please
+specify neither <code>ignore_event_order</code> nor <code>tmp_event_nr_var</code>. If the event
+order should be considered, don't specify <code>ignore_event_order</code> but specify
+<code>tmp_event_nr_var</code> and and the specified variable to <code>order</code>.</p>
 <p>If the argument is set to <code>TRUE</code>, all events defined by <code>events</code> are
 considered equivalent. If there is more than one observation per by group
 the first or last (with respect to <code>mode</code> and <code>order</code>) is select without
@@ -239,13 +254,15 @@ observation per by group (<code>by_vars</code>) is selected.</p>
 select the observations.</p></li>
 <li><p>The variables specified by the <code>set_values_to</code> field of the event
 are added to the selected observations.</p></li>
+<li><p>The variable specified for <code>tmp_event_nr_var</code> is added and set to
+the number of the event.</p></li>
 <li><p>Only the variables specified for the <code>keep_source_vars</code> field of the
 event, and the by variables (<code>by_vars</code>) and the variables created by
 <code>set_values_to</code> are kept.</p></li>
 </ol></li>
+<li><p>All selected observations are bound together.</p></li>
 <li><p>For each group (with respect to the variables specified for the
-<code>by_vars</code> parameter) the first event is selected. If there is more than one
-observation per event the first or last observation (with respect to the
+<code>by_vars</code> parameter) the first or last observation (with respect to the
 order specified for the <code>order</code> parameter and the mode specified for the
 <code>mode</code> parameter) is selected.</p></li>
 <li><p>The variables specified by the <code>set_values_to</code> parameter are added to
@@ -320,8 +337,9 @@ the selected observations.</p></li>
 <span class="r-in"><span>      set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>AVALC <span class="op">=</span> <span class="st">"Missing"</span>, AVAL <span class="op">=</span> <span class="fl">99</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">ADY</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"last"</span>,</span></span>
+<span class="r-in"><span>  tmp_event_nr_var <span class="op">=</span> <span class="va">event_nr</span>,</span></span>
+<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">event_nr</span>, <span class="fu"><a href="reexport-desc.html">desc</a></span><span class="op">(</span><span class="va">ADY</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"first"</span>,</span></span>
 <span class="r-in"><span>  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    PARAMCD <span class="op">=</span> <span class="st">"WSP"</span>,</span></span>
 <span class="r-in"><span>    PARAM <span class="op">=</span> <span class="st">"Worst Sleeping Problems"</span></span></span>
@@ -371,7 +389,8 @@ the selected observations.</p></li>
 <span class="r-in"><span>      set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>AVALC <span class="op">=</span> <span class="st">"Y"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVISITN</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  tmp_event_nr_var <span class="op">=</span> <span class="va">event_nr</span>,</span></span>
+<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">event_nr</span>, <span class="va">AVISITN</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"first"</span>,</span></span>
 <span class="r-in"><span>  keep_source_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVISITN</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
@@ -447,7 +466,8 @@ the selected observations.</p></li>
 <span class="r-in"><span><span class="fu">derive_extreme_event</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">adrs</span>,</span></span>
 <span class="r-in"><span>  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">ADT</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  tmp_event_nr_var <span class="op">=</span> <span class="va">event_nr</span>,</span></span>
+<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">event_nr</span>, <span class="va">ADT</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"first"</span>,</span></span>
 <span class="r-in"><span>  source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>adsl <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
