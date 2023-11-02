@@ -602,22 +602,23 @@ test_that("derive_extreme_event Test 7: deprecation of ignore_event_order", {
       ignore_event_order = TRUE,
       set_values_to = exprs(
         PARAMCD = "CRSP"
-      )),
-       class = "lifecycle_warning_deprecated"
+      )
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
+  expected <- bind_rows(
+    adrs,
+    tibble::tribble(
+      ~USUBJID, ~AVISITN, ~AVALC, ~PARAMCD,
+      "1",             1, "Y",    "CRSP"
     )
-        expected <- bind_rows(
-          adrs,
-          tibble::tribble(
-            ~USUBJID, ~AVISITN, ~AVALC, ~PARAMCD,
-            "1",             1, "Y",    "CRSP"
-          )
-        )
+  )
 
-        expect_dfs_equal(
-          base = expected,
-          compare = actual,
-          keys = c("USUBJID", "PARAMCD", "AVISITN")
-        )
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "PARAMCD", "AVISITN")
+  )
 })
 
 # event_joined ----
