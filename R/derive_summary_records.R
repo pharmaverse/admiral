@@ -62,7 +62,7 @@
 #'
 #' @param missing_values Values for missing summary values
 #'
-#'   For observations of the input dataset (`dataset`) or (`dataset_add`) which do not have an
+#'   For observations of the input dataset (`dataset`) or (`dataset_add`) which do not have a
 #'   complete mapping defined by the summarization defined in `set_values_to`.  Only variables
 #'   specified for `set_values_to` can be specified for `missing_values`.
 #'
