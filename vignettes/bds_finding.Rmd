@@ -989,9 +989,10 @@ Set `DTYPE` to `AVERAGE`.
 ```{r eval=TRUE}
 advs_ex2 <- derive_summary_records(
   advs,
+  dataset_add = advs,
   by_vars = exprs(STUDYID, USUBJID, PARAMCD, VISITNUM, ADT),
   set_values_to = exprs(
-    AVAL = mean(AVAL),
+    AVAL = mean(AVAL, na.rm = TRUE),
     DTYPE = "AVERAGE"
   )
 )

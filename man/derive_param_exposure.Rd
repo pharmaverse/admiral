@@ -25,6 +25,12 @@ The variables specified by the \code{by_vars} and \code{analysis_var} argument(s
 \item Either \code{ASTDTM} and \code{AENDTM} or \code{ASTDT} and \code{AENDT} are also expected.
 }}
 
+\item{dataset_add}{Additional dataset
+
+The variables specified for \code{by_vars} are expected.
+Observations from the specified dataset are going to be used to calculate and added
+as new records to the input dataset (\code{dataset}).}
+
 \item{by_vars}{Grouping variables
 
 For each group defined by \code{by_vars} an observation is added to the output
@@ -119,6 +125,7 @@ adex <- tribble(
 # Cumulative dose
 adex \%>\%
   derive_param_exposure(
+    dataset_add = adex,
     by_vars = exprs(USUBJID),
     set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
     input_code = "DOSE",
@@ -130,6 +137,7 @@ adex \%>\%
 # average dose in w2-24
 adex \%>\%
   derive_param_exposure(
+    dataset_add = adex,
     by_vars = exprs(USUBJID),
     filter = VISIT \%in\% c("WEEK 2", "WEEK 24"),
     set_values_to = exprs(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
@@ -142,6 +150,7 @@ adex \%>\%
 # Any dose adjustment?
 adex \%>\%
   derive_param_exposure(
+    dataset_add = adex,
     by_vars = exprs(USUBJID),
     set_values_to = exprs(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
     input_code = "ADJ",

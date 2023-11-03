@@ -112,6 +112,7 @@
 #' # Summarize the average of the triplicate ECG interval values (AVAL)
 #' derive_summary_records(
 #'   adeg,
+#'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL, na.rm = TRUE),
@@ -123,6 +124,7 @@
 #' # Derive more than one summary variable
 #' derive_summary_records(
 #'   adeg,
+#'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL),
@@ -156,6 +158,7 @@
 #' # by group
 #' derive_summary_records(
 #'   adeg,
+#'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   filter = n() > 2,
 #'   set_values_to = exprs(
@@ -172,17 +175,11 @@ derive_summary_records <- function(dataset,
                                    filter_add = NULL,
                                    analysis_var,
                                    summary_fun,
-                                   set_values_to = NULL,
+                                   set_values_to,
                                    missing_values = NULL) {
   assert_vars(by_vars)
-  assert_data_frame(
-    dataset,
-    required_vars = expr_c(by_vars)
-  )
-  assert_data_frame(
-    dataset_add,
-    required_vars = expr_c(by_vars),
-  )
+  assert_data_frame(dataset, required_vars = by_vars)
+  assert_data_frame(dataset_add, required_vars = by_vars)
   assert_data_frame(
     dataset_ref,
     required_vars = by_vars,

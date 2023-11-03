@@ -128,6 +128,7 @@ test_that("derive_param_exposure Test 2: works with DT variables", {
 
   actual_output <- input_no_dtm %>%
     derive_param_exposure(
+      dataset_add = input_no_dtm,
       by_vars = exprs(USUBJID),
       input_code = "DOSE",
       analysis_var = AVAL,
@@ -135,6 +136,7 @@ test_that("derive_param_exposure Test 2: works with DT variables", {
       set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
     ) %>%
     derive_param_exposure(
+      dataset_add = input_no_dtm,
       by_vars = exprs(USUBJID),
       input_code = "DOSE",
       analysis_var = AVAL,
@@ -142,6 +144,7 @@ test_that("derive_param_exposure Test 2: works with DT variables", {
       set_values_to = exprs(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
     ) %>%
     derive_param_exposure(
+      dataset_add = input_no_dtm,
       by_vars = exprs(USUBJID),
       input_code = "ADJ",
       analysis_var = AVALC,
@@ -162,6 +165,7 @@ test_that("derive_param_exposure Test 3: Errors", {
   expect_error(
     input <- input %>%
       derive_param_exposure(
+        dataset_add = input,
         by_vars = exprs(USUBJID),
         input_code = "DOSE",
         analysis_var = AVAL,
@@ -174,6 +178,7 @@ test_that("derive_param_exposure Test 3: Errors", {
   expect_error(
     input <- input %>%
       derive_param_exposure(
+        dataset_add = input,
         by_vars = exprs(USUBJID),
         input_code = "DOSED",
         analysis_var = AVAL,
@@ -191,6 +196,8 @@ test_that("derive_param_exposure Test 3: Errors", {
     input <- input %>%
       select(-starts_with("AST"), -starts_with("AEN")) %>%
       derive_param_exposure(
+        dataset = .,
+        dataset_add = .,
         by_vars = exprs(USUBJID),
         input_code = "DOSE",
         analysis_var = AVAL,

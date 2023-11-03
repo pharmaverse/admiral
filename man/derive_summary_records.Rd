@@ -13,7 +13,7 @@ derive_summary_records(
   filter_add = NULL,
   analysis_var,
   summary_fun,
-  set_values_to = NULL,
+  set_values_to,
   missing_values = NULL
 )
 }
@@ -86,7 +86,7 @@ For example:
 
 \item{missing_values}{Values for missing summary values
 
-For observations of the input dataset (\code{dataset}) or (\code{dataset_add}) which do not have an
+For observations of the input dataset (\code{dataset}) or (\code{dataset_add}) which do not have a
 complete mapping defined by the summarization defined in \code{set_values_to}.  Only variables
 specified for \code{set_values_to} can be specified for \code{missing_values}.
 
@@ -139,6 +139,7 @@ adeg <- tribble(
 # Summarize the average of the triplicate ECG interval values (AVAL)
 derive_summary_records(
   adeg,
+  dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
   set_values_to = exprs(
     AVAL = mean(AVAL, na.rm = TRUE),
@@ -150,6 +151,7 @@ derive_summary_records(
 # Derive more than one summary variable
 derive_summary_records(
   adeg,
+  dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
   set_values_to = exprs(
     AVAL = mean(AVAL),
@@ -183,6 +185,7 @@ adeg <- tribble(
 # by group
 derive_summary_records(
   adeg,
+  dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
   filter = n() > 2,
   set_values_to = exprs(

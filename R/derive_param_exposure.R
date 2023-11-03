@@ -8,6 +8,13 @@
 #'   `PARAMCD` is expected as well,
 #'   + Either `ASTDTM` and `AENDTM` or `ASTDT` and `AENDT` are also expected.
 #'
+#' @param dataset_add Additional dataset
+#'
+#'   The variables specified for `by_vars` are expected.
+#'   Observations from the specified dataset are going to be used to calculate and added
+#'   as new records to the input dataset (`dataset`).
+#'
+#'
 #' @param filter Filter condition
 #'
 #'   The specified condition is applied to the input dataset before deriving the
@@ -95,6 +102,7 @@
 #' # Cumulative dose
 #' adex %>%
 #'   derive_param_exposure(
+#'     dataset_add = adex,
 #'     by_vars = exprs(USUBJID),
 #'     set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
 #'     input_code = "DOSE",
@@ -106,6 +114,7 @@
 #' # average dose in w2-24
 #' adex %>%
 #'   derive_param_exposure(
+#'     dataset_add = adex,
 #'     by_vars = exprs(USUBJID),
 #'     filter = VISIT %in% c("WEEK 2", "WEEK 24"),
 #'     set_values_to = exprs(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
@@ -118,6 +127,7 @@
 #' # Any dose adjustment?
 #' adex %>%
 #'   derive_param_exposure(
+#'     dataset_add = adex,
 #'     by_vars = exprs(USUBJID),
 #'     set_values_to = exprs(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
 #'     input_code = "ADJ",

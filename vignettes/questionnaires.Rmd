@@ -141,6 +141,8 @@ adgad7 <- adqs %>%
   # Select records to keep in the GAD-7 ADaM
   filter(PARCAT1 == "GAD-7 V2") %>%
   derive_summary_records(
+    dataset = .,
+    dataset_add = .,
     by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
     # Select records contributing to total score
     filter_add = str_detect(PARAMCD, "GAD020[1-7]"),
@@ -169,6 +171,8 @@ adgdssf <- adqs %>%
   # Select records to keep in the GDS-SF ADaM
   filter(PARCAT1 == "GDS SHORT FORM") %>%
   derive_summary_records(
+    dataset = .,
+    dataset_add = .,
     by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
     # Select records contributing to total score
     filter_add = str_detect(PARAMCD, "GDS02[01][0-9]"),
@@ -518,6 +522,7 @@ be derived by `derive_summary_records()`.
 ```{r}
 adgdssf <- adgdssf %>%
   derive_summary_records(
+    dataset_add = adgdssf,
     filter_add = str_detect(PARAMCD, "GDS02[01][0-9]"),
     by_vars = exprs(USUBJID, AVISIT),
     set_values_to = exprs(
@@ -567,6 +572,8 @@ adgdssf <- adgdssf %>%
     )
   ) %>%
   derive_summary_records(
+    dataset = .,
+    dataset_add = .,
     filter_add = str_detect(PARAMCD, "GDS02[01][0-9]"),
     by_vars = exprs(USUBJID, AVISIT),
     set_values_to = exprs(
