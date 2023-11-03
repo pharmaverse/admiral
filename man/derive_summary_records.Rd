@@ -5,11 +5,12 @@
 \title{Add New Records Within By Groups Using Aggregation Functions}
 \usage{
 derive_summary_records(
-  dataset,
+  dataset = NULL,
   dataset_add = NULL,
   dataset_ref = NULL,
   by_vars,
   filter = NULL,
+  filter_add = NULL,
   analysis_var,
   summary_fun,
   set_values_to = NULL,

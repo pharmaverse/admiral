@@ -143,7 +143,7 @@ adgad7 <- adqs %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
     # Select records contributing to total score
-    filter = str_detect(PARAMCD, "GAD020[1-7]"),
+    filter_add = str_detect(PARAMCD, "GAD020[1-7]"),
     set_values_to = exprs(
       AVAL = sum(AVAL, na.rm = TRUE),
       PARAMCD = "GAD02TS",
@@ -171,7 +171,7 @@ adgdssf <- adqs %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
     # Select records contributing to total score
-    filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
+    filter_add = str_detect(PARAMCD, "GDS02[01][0-9]"),
     set_values_to = exprs(
       AVAL = compute_scale(
         AVAL,
@@ -518,7 +518,7 @@ be derived by `derive_summary_records()`.
 ```{r}
 adgdssf <- adgdssf %>%
   derive_summary_records(
-    filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
+    filter_add = str_detect(PARAMCD, "GDS02[01][0-9]"),
     by_vars = exprs(USUBJID, AVISIT),
     set_values_to = exprs(
       AVAL = sum(!is.na(AVAL)) / 15 >= 0.9,
@@ -567,7 +567,7 @@ adgdssf <- adgdssf %>%
     )
   ) %>%
   derive_summary_records(
-    filter = str_detect(PARAMCD, "GDS02[01][0-9]"),
+    filter_add = str_detect(PARAMCD, "GDS02[01][0-9]"),
     by_vars = exprs(USUBJID, AVISIT),
     set_values_to = exprs(
       AVAL = all(!is.na(AVAL)),

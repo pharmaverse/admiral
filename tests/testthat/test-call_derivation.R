@@ -10,7 +10,7 @@ test_that("call_derivation Test 1:  Test that call_derivation generates expected
         VSSTRESN = mean(VSSTRESN, na.rm = TRUE),
         DTYPE = "AVERAGE"
       ),
-      filter = dplyr::n() >= 2L
+      filter_add = dplyr::n() >= 2L
     ) %>%
     derive_summary_records(
       by_vars = exprs(USUBJID, VSTESTCD),
@@ -18,7 +18,7 @@ test_that("call_derivation Test 1:  Test that call_derivation generates expected
         VSSTRESN = max(VSSTRESN, na.rm = TRUE),
         DTYPE = "MAXIMUM"
       ),
-      filter = dplyr::n() >= 2L
+      filter_add = dplyr::n() >= 2L
     ) %>%
     derive_summary_records(
       by_vars = exprs(USUBJID, VSTESTCD),
@@ -26,7 +26,7 @@ test_that("call_derivation Test 1:  Test that call_derivation generates expected
         VSSTRESN = min(VSSTRESN, na.rm = TRUE),
         DTYPE = "MINIMUM"
       ),
-      filter = dplyr::n() >= 2L
+      filter_add = dplyr::n() >= 2L
     )
 
   actual_output <- call_derivation(
@@ -53,7 +53,7 @@ test_that("call_derivation Test 1:  Test that call_derivation generates expected
       )
     ),
     by_vars = exprs(USUBJID, VSTESTCD),
-    filter = dplyr::n() >= 2L
+    filter_add = dplyr::n() >= 2L
   )
 
   expect_dfs_equal(

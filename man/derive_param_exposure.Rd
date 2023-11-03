@@ -11,6 +11,7 @@ derive_param_exposure(
   analysis_var,
   summary_fun,
   filter = NULL,
+  filter_add = NULL,
   set_values_to = NULL
 )
 }

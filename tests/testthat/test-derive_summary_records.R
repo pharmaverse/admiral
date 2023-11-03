@@ -51,7 +51,7 @@ test_that("derive_summary_records Test 2: Filter record within `by_vars`", {
   actual_output <- input %>%
     derive_summary_records(
       by_vars = exprs(subj, visit),
-      filter = n() > 2,
+      filter_add = n() > 2,
       set_values_to = exprs(
         val = mean(val),
         seq = max(seq),

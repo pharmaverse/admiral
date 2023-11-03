@@ -164,17 +164,17 @@
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
-derive_summary_records <- function(dataset,
+derive_summary_records <- function(dataset = NULL,
                                    dataset_add = NULL,
                                    dataset_ref = NULL,
                                    by_vars,
                                    filter = NULL,
+                                   filter_add = NULL,
                                    analysis_var,
                                    summary_fun,
                                    set_values_to = NULL,
                                    missing_values = NULL) {
   assert_vars(by_vars)
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_data_frame(
     dataset,
     required_vars = expr_c(by_vars)
@@ -203,6 +203,16 @@ derive_summary_records <- function(dataset,
     assert_s3_class(summary_fun, "function")
     set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
   }
+
+  if (!missing(filter)) {
+    deprecate_warn(
+      "1.0.0",
+      I("derive_summary_records(filter = )"),
+      "derive_summary_records(filter_add = )"
+    )
+    filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  }
+  filter <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
 
   if (is.null(dataset_add)) {
     dataset_add <- dataset

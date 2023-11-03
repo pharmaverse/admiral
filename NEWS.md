@@ -26,6 +26,8 @@ for the event number, which can be used in `order`. (#2140)
 `analysis_var` and `summary_fun` were deprecated in favor of `set_values_to`.
 (#1792)
 
+- In `derive_summary_records()` and `derive_param_exposure()` the argument `filter` was renamed to `filter_add` (#2142)
+
 - In `derive_var_merged_summary()` the arguments `new_var`, `analysis_var`, and
 `summary_fun` were deprecated in favor of `new_vars`. (#1792)
 
