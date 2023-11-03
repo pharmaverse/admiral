@@ -1,7 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.12.2.9001
+Version: 0.12.3.9002
 Authors@R: c(
     person("Ben", "Straub", email = "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
@@ -62,3 +62,4 @@ Suggests:
     tibble
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/Needs/website: gert
