@@ -4,6 +4,10 @@
 
 ## Updates of Existing Functions
 
+- Fixed a bug in `compute_tmf()` where the time imputation flag was being incorrectly
+populated when any of the existing time components (hour, minute and/or second) of the date
+character vector (`'--DTC'`), was imputed. (#2146)
+
 - `derive_extreme_records()`, `derive_var_extreme_flag()`,`derive_vars_joined()` and `derive_vars_merged()` were enhanced with the arguments `true_value` and `false_value` to align with preexisting functions that had similar functionality (#2125)
 
 - `restrict_derivation()` now allows `{dplyr}` functions like `mutate` in the
