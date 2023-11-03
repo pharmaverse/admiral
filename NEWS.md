@@ -6,14 +6,20 @@
 
 - `derive_extreme_records()`, `derive_var_extreme_flag()`,`derive_vars_joined()` and `derive_vars_merged()` were enhanced with the arguments `true_value` and `false_value` to align with preexisting functions that had similar functionality (#2125)
 
-- `restrict_derivation()` now allows `{dplyr}` functions like `mutate` in the `derivation argument (#2143)
+- `restrict_derivation()` now allows `{dplyr}` functions like `mutate` in the
+`derivation` argument (#2143)
 
 - `derive_summary_records()`, `derive_var_merged_summary()`, and `get_summary_records()`
 were enhanced such that more than one summary variable can be derived, e.g.,
 `AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
 
+- The `tmp_event_nr_var` argument was added to `derive_extreme_records()` to
+allow more control of the selection of records. It creates a temporary variable
+for the event number, which can be used in `order`. (#2140)
 
 ## Breaking Changes
+
+- `derive_extreme_records()` the `dataset_add` argument is now mandatory. (#2139)
 
 - In `derive_summary_records()` and `get_summary_records()` the arguments
 `analysis_var` and `summary_fun` were deprecated in favor of `set_values_to`.
@@ -29,6 +35,31 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 - The default value for the `false_value` argument in `derive_extreme_records()` was changed to `NA_character_` (#2125)
 
 - For the function `consolidate_metadata()`, the argument `check_keys` was renamed to `check_type` to align with other functions (#2184)
+- 
+- The `ignore_event_order` argument in `derive_extreme_event()` was deprecated
+and the selection of the records was changed to allow more control. Before, the
+records were selected first by event and then by `order`. Now they are selected
+by `order` only but the event number can be added to it.
+
+   To achieve the old behavior update
+```
+order = exprs(my_order_var),
+ignore_event_order = FALSE,
+```
+to
+```
+tmp_event_nr_var = event_nr,
+order = exprs(event_nr, my_order_var),
+```
+and
+```
+order = exprs(my_order_var),
+ignore_event_order = TRUE,
+```
+to
+```
+order = exprs(my_order_var),
+```
 
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#2098)
   - `derive_param_extreme_event()`
@@ -60,6 +91,8 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 
 - Removed Deprecation section in Reference tab.  Added new Superseded section in 
 Reference tab. (#2174)
+
+- Added a link to the previous versions of the website to the navigation bar. (#2205)
 
 ## Various
 
@@ -727,7 +760,7 @@ updated to process additional parameter (#1125).
 imputation functions themselves (#1299). I.e., if a derivation like last known alive
 date is based on dates, DTC variables have to be converted to numeric date or
 datetime variables in a preprocessing step. For examples see the [ADSL
-vignette](https://pharmaverse.github.io/admiral/cran-release/articles/adsl.html).
+vignette](https://pharmaverse.github.io/admiral/articles/adsl.html).
   The following arguments were deprecated:
 
   - `date_imputation`, `time_imputation`, and `preserve` in `date_source()`
@@ -826,7 +859,7 @@ empty (#1309)
   
 
 - `create_query_data()` is provided to create the [queries
-dataset](https://pharmaverse.github.io/admiral/cran-release/articles/queries_dataset.html) required as input for `derive_vars_query()` (#606)
+dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for `derive_vars_query()` (#606)
 
 - `create_single_dose_dataset()` - Derives dataset of single dose from aggregate dose information (#660)
 
@@ -859,7 +892,7 @@ first disease progression. (#1023)
 ### ADLB
 
   - New ADLB template script available `ad_adlb.R`, specific ADLB functions developed and
-  [BDS Finding vignette](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html) has examples enhanced with ADLB functions. (#1122)
+  [BDS Finding vignette](https://pharmaverse.github.io/admiral/articles/bds_finding.html) has examples enhanced with ADLB functions. (#1122)
 
   - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in values based on user-defined pairing (#944)
   - `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables from a BDS dataset, e.g. ADLB. (#943)
@@ -941,7 +974,7 @@ specific for admiral. Derivations like this can be implemented calling
 - Updated `derive_var_worst_flag()` and `derive_var_extreme_flag()` vignettes to clarify their purpose (#691)
 
 - Added example of ASEQ derivation in ADCM to 
-[OCCDS vignette](https://pharmaverse.github.io/admiral/cran-release/articles/occds.html#aseq)
+[OCCDS vignette](https://pharmaverse.github.io/admiral/articles/occds.html#aseq)
 (#720)
 
 - Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
@@ -1041,7 +1074,7 @@ this case the day is imputed as `15` (#592)
 
 - The first truly open source release licensed under Apache 2.0 (#680)
 
-- New vignette [Contributing to admiral](https://pharmaverse.github.io/admiral/cran-release/articles/contribution_model.html) (#679)
+- New vignette [Contributing to admiral](https://pharmaverse.github.io/admiral/articles/contribution_model.html) (#679)
 
 - New vignette [Unit Test Guidance](https://pharmaverse.github.io/admiraldev/main/articles/unit_test_guidance.html) (#679)
 
@@ -1063,7 +1096,7 @@ age in different units (#569)
 - `derive_param_tte()` derives time-to-event-parameters (#546)
 
 - For common time-to-event endpoints [event and censoring source
-objects](https://pharmaverse.github.io/admiral/cran-release/reference/index.html#section-pre-defined-time-to-event-sources) are
+objects](https://pharmaverse.github.io/admiral/reference/index.html#section-pre-defined-time-to-event-sources) are
 provided (#612)
 
 ### Developer
@@ -1098,9 +1131,9 @@ to specify the unit of the input age (#569)
 
 ## Documentation
 
-- New vignette [Creating a BDS Time-to-Event ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_tte.html) (#549)
+- New vignette [Creating a BDS Time-to-Event ADaM](https://pharmaverse.github.io/admiral/articles/bds_tte.html) (#549)
 
-- New vignette [Queries Dataset Documentation](https://pharmaverse.github.io/admiral/cran-release/articles/queries_dataset.html) (#561)
+- New vignette [Queries Dataset Documentation](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) (#561)
 
 - New vignette [Writing Vignettes](https://pharmaverse.github.io/admiraldev/main/articles/writing_vignettes.html) (#334)
 
@@ -1295,10 +1328,10 @@ to specify the unit of the input age (#569)
 
 ## Documentation
 
-- [Frequently Asked Questions](https://pharmaverse.github.io/admiral/cran-release/articles/faq.html)
+- [Frequently Asked Questions](https://pharmaverse.github.io/admiral/articles/faq.html)
 
-- [Creating ADSL](https://pharmaverse.github.io/admiral/cran-release/articles/adsl.html)
+- [Creating ADSL](https://pharmaverse.github.io/admiral/articles/adsl.html)
 
-- [Creating a BDS Finding ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html)
+- [Creating a BDS Finding ADaM](https://pharmaverse.github.io/admiral/articles/bds_finding.html)
 
-- [Creating an OCCDS ADaM](https://pharmaverse.github.io/admiral/cran-release/articles/occds.html)
+- [Creating an OCCDS ADaM](https://pharmaverse.github.io/admiral/articles/occds.html)

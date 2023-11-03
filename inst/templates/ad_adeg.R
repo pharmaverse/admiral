@@ -26,7 +26,7 @@ eg <- eg
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
 
 eg <- convert_blanks_to_na(eg)
 
@@ -172,7 +172,7 @@ adeg <- adeg %>%
 
 ## Get visit info ----
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#visits)
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits)
 adeg <- adeg %>%
   # Derive Timing
   mutate(
@@ -291,7 +291,7 @@ adeg <- adeg %>%
 
 ## Get treatment information ----
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_bds)
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
 adeg <- adeg %>%
   # Assign TRTA, TRTP
   mutate(TRTP = TRT01P, TRTA = TRT01A)

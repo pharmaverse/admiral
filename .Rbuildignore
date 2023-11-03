@@ -29,3 +29,4 @@
 ^staged_dependencies.yaml$
 ^inst/dev_dependencies.R$
 ^\.devcontainer$
+^vignettes/articles$
