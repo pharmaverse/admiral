@@ -164,8 +164,8 @@
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
-derive_summary_records <- function(dataset = NULL,
-                                   dataset_add = NULL,
+derive_summary_records <- function(dataset,
+                                   dataset_add,
                                    dataset_ref = NULL,
                                    by_vars,
                                    filter = NULL,
@@ -182,7 +182,6 @@ derive_summary_records <- function(dataset = NULL,
   assert_data_frame(
     dataset_add,
     required_vars = expr_c(by_vars),
-    optional = TRUE
   )
   assert_data_frame(
     dataset_ref,
@@ -213,10 +212,6 @@ derive_summary_records <- function(dataset = NULL,
     filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   }
   filter <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
-
-  if (is.null(dataset_add)) {
-    dataset_add <- dataset
-  }
 
   summary_records <- dataset_add %>%
     group_by(!!!by_vars) %>%

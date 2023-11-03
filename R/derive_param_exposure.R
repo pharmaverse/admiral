@@ -126,6 +126,7 @@
 #'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
 derive_param_exposure <- function(dataset,
+                                  dataset_add,
                                   by_vars,
                                   input_code,
                                   analysis_var,
@@ -159,6 +160,8 @@ derive_param_exposure <- function(dataset,
   assert_data_frame(dataset,
     required_vars = expr_c(by_vars, analysis_var, exprs(PARAMCD), dates)
   )
+  assert_data_frame(dataset_add, required_vars = by_vars)
+
   if (!missing(filter)) {
     deprecate_warn(
       "1.0.0",
@@ -181,6 +184,7 @@ derive_param_exposure <- function(dataset,
 
   derive_summary_records(
     dataset,
+    dataset_add,
     by_vars = by_vars,
     filter_add = PARAMCD == !!input_code & !!filter,
     set_values_to = exprs(

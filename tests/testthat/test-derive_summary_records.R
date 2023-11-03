@@ -11,6 +11,7 @@ test_that("derive_summary_records Test 1: creates new record per group and group
 
   actual_output <- input %>%
     derive_summary_records(
+      dataset_add = input,
       by_vars = exprs(subj, visit),
       set_values_to = exprs(
         val = mean(val),
@@ -50,6 +51,7 @@ test_that("derive_summary_records Test 2: Filter record within `by_vars`", {
 
   actual_output <- input %>%
     derive_summary_records(
+      dataset_add = input,
       by_vars = exprs(subj, visit),
       filter_add = n() > 2,
       set_values_to = exprs(
@@ -129,6 +131,7 @@ test_that("derive_summary_records Test 4: deprecation warning for analysis_var a
   expect_warning(
     actual_output <- input %>%
       derive_summary_records(
+        dataset_add = input,
         by_vars = exprs(subj, visit),
         analysis_var = val,
         summary_fun = mean,
@@ -207,6 +210,7 @@ test_that("derive_summary_records Test 6: test missing values", {
 
   actual_output <- input %>%
     derive_summary_records(
+      dataset_add = input,
       by_vars = exprs(subj, visit),
       set_values_to = exprs(
         aval = mean(val, na.rm = TRUE),
@@ -257,6 +261,7 @@ test_that("derive_summary_records Test 7: make sure dataset_ref works", {
 
   actual_output <- input %>%
     derive_summary_records(
+      dataset_add = input,
       dataset_ref = input_ref,
       by_vars = exprs(subj, visit),
       set_values_to = exprs(

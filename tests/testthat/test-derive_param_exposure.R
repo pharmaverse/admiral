@@ -61,6 +61,7 @@ test_that("derive_param_exposure Test 1: works with DTM variables", {
 
   actual_output <- input %>%
     derive_param_exposure(
+      dataset_add = input,
       by_vars = exprs(USUBJID),
       input_code = "DOSE",
       analysis_var = AVAL,
@@ -68,6 +69,7 @@ test_that("derive_param_exposure Test 1: works with DTM variables", {
       set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
     ) %>%
     derive_param_exposure(
+      dataset_add = input,
       by_vars = exprs(USUBJID),
       input_code = "DOSE",
       analysis_var = AVAL,
@@ -75,6 +77,7 @@ test_that("derive_param_exposure Test 1: works with DTM variables", {
       set_values_to = exprs(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
     ) %>%
     derive_param_exposure(
+      dataset_add = input,
       by_vars = exprs(USUBJID),
       input_code = "ADJ",
       analysis_var = AVALC,

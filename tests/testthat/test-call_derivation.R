@@ -5,6 +5,7 @@ test_that("call_derivation Test 1:  Test that call_derivation generates expected
 
   expected_output <- input %>%
     derive_summary_records(
+      dataset_add = input,
       by_vars = exprs(USUBJID, VSTESTCD),
       set_values_to = exprs(
         VSSTRESN = mean(VSSTRESN, na.rm = TRUE),
@@ -13,6 +14,7 @@ test_that("call_derivation Test 1:  Test that call_derivation generates expected
       filter_add = dplyr::n() >= 2L
     ) %>%
     derive_summary_records(
+      dataset_add = input,
       by_vars = exprs(USUBJID, VSTESTCD),
       set_values_to = exprs(
         VSSTRESN = max(VSSTRESN, na.rm = TRUE),
@@ -21,6 +23,7 @@ test_that("call_derivation Test 1:  Test that call_derivation generates expected
       filter_add = dplyr::n() >= 2L
     ) %>%
     derive_summary_records(
+      dataset_add = input,
       by_vars = exprs(USUBJID, VSTESTCD),
       set_values_to = exprs(
         VSSTRESN = min(VSSTRESN, na.rm = TRUE),
@@ -31,6 +34,7 @@ test_that("call_derivation Test 1:  Test that call_derivation generates expected
 
   actual_output <- call_derivation(
     dataset = input,
+    dataset_add = input,
     derivation = derive_summary_records,
     variable_params = list(
       params(

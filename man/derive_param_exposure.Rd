@@ -6,6 +6,7 @@
 \usage{
 derive_param_exposure(
   dataset,
+  dataset_add,
   by_vars,
   input_code,
   analysis_var,
