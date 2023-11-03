@@ -6,14 +6,20 @@
 
 - `derive_extreme_records()`, `derive_var_extreme_flag()`,`derive_vars_joined()` and `derive_vars_merged()` were enhanced with the arguments `true_value` and `false_value` to align with preexisting functions that had similar functionality (#2125)
 
-- `restrict_derivation()` now allows `{dplyr}` functions like `mutate` in the `derivation argument (#2143)
+- `restrict_derivation()` now allows `{dplyr}` functions like `mutate` in the
+`derivation` argument (#2143)
 
 - `derive_summary_records()`, `derive_var_merged_summary()`, and `get_summary_records()`
 were enhanced such that more than one summary variable can be derived, e.g.,
 `AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
 
+- The `tmp_event_nr_var` argument was added to `derive_extreme_records()` to
+allow more control of the selection of records. It creates a temporary variable
+for the event number, which can be used in `order`. (#2140)
 
 ## Breaking Changes
+
+- `derive_extreme_records()` the `dataset_add` argument is now mandatory. (#2139)
 
 - In `derive_summary_records()` and `get_summary_records()` the arguments
 `analysis_var` and `summary_fun` were deprecated in favor of `set_values_to`.
@@ -27,6 +33,31 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 - For the function `derive_vars_merged()`, the argument `match_flag` was renamed to `exist_flag` (#2125)
 
 - The default value for the `false_value` argument in `derive_extreme_records()` was changed to `NA_character_` (#2125)
+
+- The `ignore_event_order` argument in `derive_extreme_event()` was deprecated
+and the selection of the records was changed to allow more control. Before, the
+records were selected first by event and then by `order`. Now they are selected
+by `order` only but the event number can be added to it.
+
+   To achieve the old behavior update
+```
+order = exprs(my_order_var),
+ignore_event_order = FALSE,
+```
+to
+```
+tmp_event_nr_var = event_nr,
+order = exprs(event_nr, my_order_var),
+```
+and
+```
+order = exprs(my_order_var),
+ignore_event_order = TRUE,
+```
+to
+```
+order = exprs(my_order_var),
+```
 
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#2098)
   - `derive_param_extreme_event()`
