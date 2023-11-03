@@ -6,7 +6,7 @@
 \usage{
 derive_extreme_records(
   dataset = NULL,
-  dataset_add = NULL,
+  dataset_add,
   dataset_ref = NULL,
   by_vars = NULL,
   order = NULL,
@@ -21,26 +21,16 @@ derive_extreme_records(
 )
 }
 \arguments{
-\item{dataset}{Input dataset
-
-If \code{dataset_add} is not specified, the new records are selected from the
-input dataset. In this case the variables specified by \code{by_vars} and
-\code{order} are expected.}
+\item{dataset}{Input dataset}
 
 \item{dataset_add}{Additional dataset
 
-Observations from the specified dataset are added as new records to the
-input dataset (\code{dataset}).
+The additional dataset, which determines the by groups returned in the input dataset,
+based on the groups that exist in this dataset after being subset by \code{filter_add}.
 
-All observations in the specified dataset fulfilling the condition
-specified by \code{filter_source} are considered. If \code{mode} and \code{order} are
-specified, the first or last observation within each by group, defined by
-\code{by_vars}, is selected.
-
-If the argument is not specified, the input dataset (\code{dataset}) is used.
-
-The variables specified by the \code{by_vars} and \code{order} argument (if
-applicable) are expected.}
+The variables specified in the \code{by_vars} and \code{filter_add} parameters are expected
+in this dataset. If \code{mode} and \code{order} are specified, the first or last observation
+within each by group, defined by \code{by_vars}, is selected.}
 
 \item{dataset_ref}{Reference dataset
 
@@ -140,10 +130,10 @@ added as new observations.
 }
 \description{
 Add the first or last observation for each by group as new observations. The
-new observations can be selected from the input dataset or an additional
-dataset. This function can be used for adding the maximum or minimum value
-as a separate visit. All variables of the selected observation are kept. This
-distinguishes \code{derive_extreme_records()} from \code{derive_summary_records()},
+new observations can be selected from the additional dataset. This function can
+be used for adding the maximum or minimum value as a separate visit.
+All variables of the selected observation are kept. This distinguishes
+\code{derive_extreme_records()} from \code{derive_summary_records()},
 where only the by variables are populated for the new records.
 }
 \details{
@@ -185,6 +175,7 @@ adlb <- tribble(
 # Specify the variables that need to be kept in the new records.
 derive_extreme_records(
   adlb,
+  dataset_add = adlb,
   by_vars = exprs(USUBJID),
   order = exprs(AVAL, AVISITN),
   mode = "first",
@@ -201,6 +192,7 @@ derive_extreme_records(
 # AVISITN. Set AVISITN = 98 and DTYPE = MAXIMUM for these new records.
 derive_extreme_records(
   adlb,
+  dataset_add = adlb,
   by_vars = exprs(USUBJID),
   order = exprs(desc(AVAL), AVISITN),
   mode = "first",
@@ -215,6 +207,7 @@ derive_extreme_records(
 # Set AVISITN = 99 and DTYPE = LOV for these new records.
 derive_extreme_records(
   adlb,
+  dataset_add = adlb,
   by_vars = exprs(USUBJID),
   order = exprs(AVISITN),
   mode = "last",
