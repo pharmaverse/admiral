@@ -53,13 +53,33 @@ performs the calculation.
 This can include built-in functions as well as user defined functions,
 for example \code{mean} or \code{function(x) mean(x, na.rm = TRUE)}.}
 
-\item{filter}{Filter condition
+\item{filter}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{filter_add} instead.
 
-The specified condition is applied to the input dataset before deriving the
-new parameter, i.e., only observations fulfilling the condition are taken
-into account.
+Filter condition as logical expression to apply during
+summary calculation. By default, filtering expressions are computed within
+\code{by_vars} as this will help when an aggregating, lagging, or ranking
+function is involved.
 
-\emph{Permitted Values:} a condition}
+For example,
+\itemize{
+\item \code{filter = (AVAL > mean(AVAL, na.rm = TRUE))} will filter all \code{AVAL}
+values greater than mean of \code{AVAL} with in \code{by_vars}.
+\item \code{filter = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
+than 2.
+}}
+
+\item{filter_add}{Filter condition as logical expression to apply during
+summary calculation. By default, filtering expressions are computed within
+\code{by_vars} as this will help when an aggregating, lagging, or ranking
+function is involved.
+
+For example,
+\itemize{
+\item \code{filter_add = (AVAL > mean(AVAL, na.rm = TRUE))} will filter all \code{AVAL}
+values greater than mean of \code{AVAL} with in \code{by_vars}.
+\item \code{filter_add = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
+than 2.
+}}
 
 \item{set_values_to}{Variable-value pairs
 

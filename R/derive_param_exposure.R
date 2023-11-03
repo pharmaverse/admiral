@@ -15,13 +15,33 @@
 #'   as new records to the input dataset (`dataset`).
 #'
 #'
-#' @param filter Filter condition
+#' @param filter
 #'
-#'   The specified condition is applied to the input dataset before deriving the
-#'   new parameter, i.e., only observations fulfilling the condition are taken
-#'   into account.
+#'  `r lifecycle::badge("deprecated")` Please use `filter_add` instead.
 #'
-#'   *Permitted Values:* a condition
+#'   Filter condition as logical expression to apply during
+#'   summary calculation. By default, filtering expressions are computed within
+#'   `by_vars` as this will help when an aggregating, lagging, or ranking
+#'   function is involved.
+#'
+#'   For example,
+#'
+#'   + `filter = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all `AVAL`
+#'   values greater than mean of `AVAL` with in `by_vars`.
+#'   + `filter = (dplyr::n() > 2)` will filter n count of `by_vars` greater
+#'   than 2.
+#'
+#' @param filter_add Filter condition as logical expression to apply during
+#'   summary calculation. By default, filtering expressions are computed within
+#'   `by_vars` as this will help when an aggregating, lagging, or ranking
+#'   function is involved.
+#'
+#'   For example,
+#'
+#'   + `filter_add = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all `AVAL`
+#'   values greater than mean of `AVAL` with in `by_vars`.
+#'   + `filter_add = (dplyr::n() > 2)` will filter n count of `by_vars` greater
+#'   than 2.
 #'
 #' @param input_code Required parameter code
 #'

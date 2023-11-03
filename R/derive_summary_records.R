@@ -29,7 +29,11 @@
 #'   records. Providing the names of variables in [exprs()] will create a
 #'   groupwise summary and generate summary records for the specified groups.
 #'
-#' @param filter Filter condition as logical expression to apply during
+#' @param filter
+#'
+#'  `r lifecycle::badge("deprecated")` Please use `filter_add` instead.
+#'
+#'   Filter condition as logical expression to apply during
 #'   summary calculation. By default, filtering expressions are computed within
 #'   `by_vars` as this will help when an aggregating, lagging, or ranking
 #'   function is involved.
@@ -39,6 +43,18 @@
 #'   + `filter = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all `AVAL`
 #'   values greater than mean of `AVAL` with in `by_vars`.
 #'   + `filter = (dplyr::n() > 2)` will filter n count of `by_vars` greater
+#'   than 2.
+#'
+#' @param filter_add Filter condition as logical expression to apply during
+#'   summary calculation. By default, filtering expressions are computed within
+#'   `by_vars` as this will help when an aggregating, lagging, or ranking
+#'   function is involved.
+#'
+#'   For example,
+#'
+#'   + `filter_add = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all `AVAL`
+#'   values greater than mean of `AVAL` with in `by_vars`.
+#'   + `filter_add = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
 #'
 #' @param set_values_to Variables to be set
