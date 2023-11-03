@@ -148,6 +148,7 @@ adex <- adex %>%
         summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       )
     ),
+    dataset_add = adex,
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars)
   ) %>%
   # W2-W24 exposure
