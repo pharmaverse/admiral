@@ -197,6 +197,7 @@ adeg <- adeg %>%
 # (if least 2 records available) for all parameter except EGINTP
 adeg <- adeg %>%
   derive_summary_records(
+    dataset_add = adeg,
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT),
     filter_add = dplyr::n() >= 2 & PARAMCD != "EGINTP",
     set_values_to = exprs(
