@@ -29,41 +29,54 @@ on:
   release:
     types: [published]
 
-env:
-  # R version to use for the workflows
-  R_VERSION: "3.6"
-
 # Docs on concurrency:
 # https://docs.github.com/en/actions/using-jobs/using-concurrency
 concurrency:
   group: admiral-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  R_VERSION: "4.1"
+  
 jobs:
+  get_r_version:
+    name: Get R version
+    runs-on: ubuntu-latest
+    outputs:
+      r-version: ${{ steps.get_r_version.outputs.R_VERSION }}
+    steps:
+      - name: Get R Version for Downstream Container Jobs
+        id: get_r_version
+        run: echo "R_VERSION=$R_VERSION" >> $GITHUB_OUTPUT
+        shell: bash
   style:
     name: Code Style
     uses: pharmaverse/admiralci/.github/workflows/style.yml@main
     if: github.event_name == 'pull_request'
+    needs: get_r_version
     with:
-      r-version: "4.1"
+      r-version: "${{ needs.get_r_version.outputs.r-version }}"
   spellcheck:
     name: Spelling
     uses: pharmaverse/admiralci/.github/workflows/spellcheck.yml@main
     if: github.event_name == 'pull_request'
+    needs: get_r_version
     with:
-      r-version: "4.1"
+      r-version: "${{ needs.get_r_version.outputs.r-version }}"
   readme:
     name: Render README
     uses: pharmaverse/admiralci/.github/workflows/readme-render.yml@main
     if: github.event_name == 'push'
+    needs: get_r_version
     with:
-      r-version: "4.1"
+      r-version: "${{ needs.get_r_version.outputs.r-version }}"
   validation:
     name: Validation
     uses: pharmaverse/admiralci/.github/workflows/r-pkg-validation.yml@main
     if: github.event_name == 'release'
+    needs: get_r_version
     with:
-      r-version: "4.1"
+      r-version: "${{ needs.get_r_version.outputs.r-version }}"
   check:
     name: Check
     uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@main
@@ -74,8 +87,9 @@ jobs:
     name: Documentation
     uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
     if: github.event_name == 'push'
+    needs: get_r_version
     with:
-      r-version: "4.1"
+      r-version: "${{ needs.get_r_version.outputs.r-version }}"
       # Whether to skip multiversion docs
       # Note that if you have multiple versions of docs,
       # your URL links are likely to break due to path changes
@@ -86,8 +100,9 @@ jobs:
     name: Lint
     uses: pharmaverse/admiralci/.github/workflows/lintr.yml@main
     if: github.event_name == 'pull_request'
+    needs: get_r_version
     with:
-      r-version: "4.1"
+      r-version: "${{ needs.get_r_version.outputs.r-version }}"
   links:
     name: Links
     uses: pharmaverse/admiralci/.github/workflows/links.yml@main
@@ -98,8 +113,9 @@ jobs:
     uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@main
     if: >
       github.event_name == 'push' || github.event_name == 'pull_request'
+    needs: get_r_version
     with:
-      r-version: "4.1"
+      r-version: "${{ needs.get_r_version.outputs.r-version }}"
       # Whether to skip code coverage badge creation
       # Setting to 'false' will require you to create
       # an orphan branch called 'badges' in your repository
@@ -108,5 +124,6 @@ jobs:
     name: Man Pages
     uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@main
     if: github.event_name == 'pull_request'
+    needs: get_r_version
     with:
-      r-version: "4.1"
+      r-version: "${{ needs.get_r_version.outputs.r-version }}"
