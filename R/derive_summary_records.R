@@ -232,17 +232,6 @@ derive_summary_records <- function(dataset,
     summarise(!!!set_values_to) %>%
     ungroup()
 
-  if (!is.null(missing_values)) {
-    update_missings <- map2(
-      syms(names(missing_values)),
-      missing_values,
-      ~ expr(if_else(is.na(!!.x), !!.y, !!.x))
-    )
-    names(update_missings) <- names(missing_values)
-    summary_records <- summary_records %>%
-      mutate(!!!update_missings)
-  }
-
   df_return <- bind_rows(
     dataset,
     summary_records
@@ -258,11 +247,28 @@ derive_summary_records <- function(dataset,
       by = map_chr(by_vars, as_name)
     )
 
+    tmp_ref_obs <- get_new_tmp_var(new_ref_obs, prefix = "tmp_ref_obs")
+
+    new_ref_obs <- new_ref_obs %>%
+      mutate(!!tmp_ref_obs  := 1L)
+
     df_return <- bind_rows(
       df_return,
       new_ref_obs
     )
   }
 
-  return(df_return)
+  if (!is.null(missing_values)) {
+    update_missings <- map2(
+      syms(names(missing_values)),
+      missing_values,
+      ~ expr(if_else(is.na(!!.x) & tmp_ref_obs_1 == 1, !!.y, !!.x))
+    )
+    names(update_missings) <- names(missing_values)
+    df_return <- df_return %>%
+     mutate(!!!update_missings)
+  }
+
+  df_return %>%
+    remove_tmp_vars()
 }

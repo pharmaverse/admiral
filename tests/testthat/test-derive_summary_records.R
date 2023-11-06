@@ -187,47 +187,7 @@ test_that("derive_summary_records Test 5: make sure dataset_add works", {
 })
 
 ## Test 6: test missing values ----
-test_that("derive_summary_records Test 6: test missing values", {
-  input <- tibble::tribble(
-    ~subj, ~visit,       ~val, ~seq,
-    "1",        1,         10,    1,
-    "1",        1,         14,    2,
-    "1",        1,          9,    3,
-    "1",        2,         11,    4,
-    "2",        2,   NA_real_,    1
-  )
-
-  expected_output <- bind_rows(
-    input,
-    tibble::tribble(
-      ~subj, ~visit,       ~aval,
-      "1",        1,          11,
-      "1",        2,          11,
-      "2",        2,      999999
-    ) %>%
-      mutate(type = "AVERAGE")
-  )
-
-  actual_output <- input %>%
-    derive_summary_records(
-      dataset_add = input,
-      by_vars = exprs(subj, visit),
-      set_values_to = exprs(
-        aval = mean(val, na.rm = TRUE),
-        type = "AVERAGE"
-      ),
-      missing_values = exprs(aval = 999999)
-    )
-
-  expect_dfs_equal(
-    base = expected_output,
-    compare = actual_output,
-    keys = c("subj", "visit", "seq", "type")
-  )
-})
-
-## Test 7: make sure dataset_ref works ----
-test_that("derive_summary_records Test 7: make sure dataset_ref works", {
+test_that("derive_summary_records Test 6: test missing values with dataset_ref", {
   input <- tibble::tribble(
     ~subj, ~visit,       ~val, ~seq,
     "1",        1,         10,    1,
@@ -244,18 +204,15 @@ test_that("derive_summary_records Test 7: make sure dataset_ref works", {
     "2", 1,
     "2", 2,
   )
+
   expected_output <- bind_rows(
     input,
     tibble::tribble(
-      ~subj, ~visit,       ~val,
-      "1",        1,         11,
-      "1",        2,         11,
-      "2",        2,   NA_real_
-    ) %>%
-      mutate(type = "AVERAGE"),
-    tibble::tribble(
-      ~subj, ~visit,
-      "2", 1,
+      ~subj, ~visit,       ~aval,         ~type,
+      "1",        1,          11,     "AVERAGE",
+      "1",        2,          11,     "AVERAGE",
+      "2",        1,      999999,     "MISSING",
+      "2",        2,    NA_real_,     "AVERAGE",
     )
   )
 
@@ -265,9 +222,10 @@ test_that("derive_summary_records Test 7: make sure dataset_ref works", {
       dataset_ref = input_ref,
       by_vars = exprs(subj, visit),
       set_values_to = exprs(
-        val = mean(val, na.rm = TRUE),
+        aval = mean(val, na.rm = TRUE),
         type = "AVERAGE"
-      )
+      ),
+      missing_values = exprs(aval = 999999, type = "MISSING")
     )
 
   expect_dfs_equal(
