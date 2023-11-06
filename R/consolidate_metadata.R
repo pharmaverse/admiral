@@ -89,7 +89,7 @@ consolidate_metadata <- function(datasets,
                                  key_vars,
                                  source_var = SOURCE,
                                  check_vars = "warning",
-                                 check_keys = "error",
+                                 check_keys,
                                  check_type = "error") {
   assert_list_of(datasets, class = "data.frame", named = TRUE)
   assert_vars(key_vars)
@@ -106,13 +106,13 @@ consolidate_metadata <- function(datasets,
       "consolidate_metadata(check_keys = )",
       "consolidate_metadata(check_type = )"
     )
-    check_keys <-
+    check_type <-
       assert_character_scalar(
         check_keys,
         values = c("none", "warning", "error"),
-        case_sensitive = FALSE
+        case_sensitive = FALSE,
+        optional = TRUE
       )
-    check_type <- check_keys
   }
   check_type <-
     assert_character_scalar(
@@ -142,7 +142,7 @@ consolidate_metadata <- function(datasets,
       by_vars = key_vars,
       order = exprs(!!tmp_source_ord),
       mode = "last",
-      check_type = check_keys
+      check_type = check_type
     ) %>%
     remove_tmp_vars()
 }

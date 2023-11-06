@@ -9,7 +9,7 @@ consolidate_metadata(
   key_vars,
   source_var = SOURCE,
   check_vars = "warning",
-  check_keys = "error",
+  check_keys,
   check_type = "error"
 )
 }

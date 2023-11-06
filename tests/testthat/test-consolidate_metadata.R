@@ -60,8 +60,38 @@ test_that("consolidate_metadata Test 2: error if key vars are not unique", {
   )
 })
 
-## Test 3: warn if variables differ ----
-test_that("consolidate_metadata Test 3: warn if variables differ", {
+
+## Test 3: check_keys deprecation test ----
+test_that("consolidate_metadata Test 3: check_keys deprecation test", {
+  glob <- tibble::tribble(
+    ~id, ~val,
+    1,   "glob_val_1a",
+    1,   "glob_val_1b",
+    2,   "glob_val_2"
+  )
+  stud <- tibble::tribble(
+    ~id, ~val,
+    3,   "stud_val_3"
+  )
+
+  expect_warning(
+    try(
+      consolidate_metadata(
+        datasets = list(
+          global = glob,
+          study = stud
+        ),
+        key_vars = exprs(id),
+        check_keys = "error"
+      ),
+      silent = TRUE
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
+})
+
+## Test 4: warn if variables differ ----
+test_that("consolidate_metadata Test 4: warn if variables differ", {
   glob <- tibble::tribble(
     ~id, ~val,
     1,   "glob_val_1",
