@@ -187,7 +187,7 @@ adex <- adex %>%
       )
     ),
     dataset_add = adex,
-    filter = VISIT %in% c("WEEK 2", "WEEK 24"),
+    filter_add = VISIT %in% c("WEEK 2", "WEEK 24"),
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars)
   ) %>%
   # Overall Dose intensity and W2-24 dose intensity

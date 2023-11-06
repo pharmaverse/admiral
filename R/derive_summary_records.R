@@ -183,7 +183,7 @@
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
-derive_summary_records <- function(dataset,
+derive_summary_records <- function(dataset = NULL,
                                    dataset_add,
                                    dataset_ref = NULL,
                                    by_vars,

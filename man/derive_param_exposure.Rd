@@ -5,7 +5,7 @@
 \title{Add an Aggregated Parameter and Derive the Associated Start and End Dates}
 \usage{
 derive_param_exposure(
-  dataset,
+  dataset = NULL,
   dataset_add,
   by_vars,
   input_code,

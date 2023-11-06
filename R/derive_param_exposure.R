@@ -155,7 +155,7 @@
 #'     summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
 #'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
-derive_param_exposure <- function(dataset,
+derive_param_exposure <- function(dataset = NULL,
                                   dataset_add,
                                   by_vars,
                                   input_code,

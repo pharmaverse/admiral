@@ -5,7 +5,7 @@
 \title{Add New Records Within By Groups Using Aggregation Functions}
 \usage{
 derive_summary_records(
-  dataset,
+  dataset = NULL,
   dataset_add,
   dataset_ref = NULL,
   by_vars,
