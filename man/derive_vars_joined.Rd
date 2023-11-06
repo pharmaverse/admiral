@@ -149,7 +149,7 @@ condition is fulfilled up to the current observation. If the condition is
 not fulfilled for any of the other observations, no observations are
 considered.
 
-This parameter should be specified if \code{filter_join} contains summary
+This argument should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only from a
 certain observation before the current observation up to the current
 observation. For an example see the last example below.}
@@ -161,7 +161,7 @@ the first observation where the specified condition is fulfilled. If the
 condition is not fulfilled for any of the other observations, no
 observations are considered.
 
-This parameter should be specified if \code{filter_join} contains summary
+This argument should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only up to the
 confirmation assessment. For an example see the last example below.}
 

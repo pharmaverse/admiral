@@ -159,13 +159,9 @@ selects observations with response "CR" and for all observations up to the
 confirmation observation the response is "CR" or "NE" and there is at most
 one "NE".}
 
-\item{true_value}{Value of \code{new_var} for flagged observations
+\item{true_value}{Value of \code{new_var} for flagged observations}
 
-\emph{Default}: \code{"Y"}}
-
-\item{false_value}{Value of \code{new_var} for observations not flagged
-
-\emph{Default}: \code{NA_character_}}
+\item{false_value}{Value of \code{new_var} for observations not flagged}
 
 \item{check_type}{Check uniqueness?
 
@@ -281,7 +277,6 @@ previous step. For the other observations it is set to \code{false_value}.
 }
 \examples{
 library(tibble)
-library(admiral)
 
 # flag observations with a duration longer than 30 and
 # at, after, or up to 7 days before a COVID AE (ACOVFL == "Y")

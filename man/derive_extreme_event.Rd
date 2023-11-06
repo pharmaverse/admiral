@@ -61,8 +61,8 @@ the event and by group, the records are ordered by the specified order.
 \item{mode}{Selection mode (first or last)
 
 If a particular event from \code{events} has more than one observation,
-"first"/"last" is to select the first/last record of this type of events
-sorting by \code{order}.
+\code{"first"}/\code{"last"} is used to select the first/last record of this type of
+event sorting by \code{order}.
 
 \emph{Permitted Values:} \code{"first"}, \code{"last"}}
 

@@ -198,8 +198,8 @@ test_that("filter_joined Test 6: deprecation of `first_cond`", {
 })
 
 # min_cond ----
-## Test 7: test it ----
-test_that("min_cond Test 7: test it", {
+## Test 7: minimum is derived correctly ----
+test_that("min_cond Test 7: minimum is derived correctly", {
   data <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",
@@ -236,8 +236,8 @@ test_that("min_cond Test 7: test it", {
 })
 
 # max_cond ----
-## Test 8: test it ----
-test_that("max_cond Test 8: test it", {
+## Test 8: maximum is derived correctly ----
+test_that("max_cond Test 8: maximum is derived correctly", {
   data <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",

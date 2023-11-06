@@ -128,11 +128,7 @@
 #'
 #' @param true_value Value of `new_var` for flagged observations
 #'
-#'   *Default*: `"Y"`
-#'
 #' @param false_value Value of `new_var` for observations not flagged
-#'
-#'   *Default*: `NA_character_`
 #'
 #' @inheritParams get_joined_data
 #'
@@ -238,7 +234,6 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(admiral)
 #'
 #' # flag observations with a duration longer than 30 and
 #' # at, after, or up to 7 days before a COVID AE (ACOVFL == "Y")

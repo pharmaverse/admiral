@@ -39,8 +39,8 @@
 #' @param mode Selection mode (first or last)
 #'
 #'   If a particular event from `events` has more than one observation,
-#'   "first"/"last" is to select the first/last record of this type of events
-#'   sorting by `order`.
+#'   `"first"`/`"last"` is used to select the first/last record of this type of
+#'   event sorting by `order`.
 #'
 #'   *Permitted Values:* `"first"`, `"last"`
 #'

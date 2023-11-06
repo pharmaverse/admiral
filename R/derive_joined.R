@@ -101,7 +101,7 @@
 #'   not fulfilled for any of the other observations, no observations are
 #'   considered.
 #'
-#'   This parameter should be specified if `filter_join` contains summary
+#'   This argument should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only from a
 #'   certain observation before the current observation up to the current
 #'   observation. For an example see the last example below.
@@ -113,7 +113,7 @@
 #'   condition is not fulfilled for any of the other observations, no
 #'   observations are considered.
 #'
-#'   This parameter should be specified if `filter_join` contains summary
+#'   This argument should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment. For an example see the last example below.
 #'
@@ -669,7 +669,7 @@ derive_vars_joined <- function(dataset,
 #'   not fulfilled for any of the other observations, no observations are
 #'   considered, i.e., the observation is not flagged.
 #'
-#'   This parameter should be specified if `filter_join` contains summary
+#'   This argument should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only from a
 #'   certain observation before the current observation up to the current
 #'   observation.
@@ -681,7 +681,7 @@ derive_vars_joined <- function(dataset,
 #'   condition is not fulfilled for any of the other observations, no
 #'   observations are considered, i.e., the observation is not flagged.
 #'
-#'   This parameter should be specified if `filter_join` contains summary
+#'   This argument should be specified if `filter_join` contains summary
 #'   functions which should not apply to all observations but only up to the
 #'   confirmation assessment.
 #'
@@ -751,7 +751,7 @@ get_joined_data <- function(dataset,
                             filter_add = NULL,
                             filter_join = NULL,
                             check_type = "warning") {
-  # Check input parameters
+  # Check input arguments
   assert_vars(by_vars, optional = TRUE)
   by_vars_left <- replace_values_by_names(by_vars)
   assert_expr_list(join_vars, optional = TRUE)
