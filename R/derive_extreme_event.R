@@ -39,8 +39,8 @@
 #' @param mode Selection mode (first or last)
 #'
 #'   If a particular event from `events` has more than one observation,
-#'   "first"/"last" is to select the first/last record of this type of events
-#'   sorting by `order`.
+#'   `"first"`/`"last"` is used to select the first/last record of this type of
+#'   event sorting by `order`.
 #'
 #'   *Permitted Values:* `"first"`, `"last"`
 #'
@@ -276,7 +276,7 @@
 #'       ),
 #'       join_vars = exprs(AVALC, ADT),
 #'       join_type = "after",
-#'       first_cond = AVALC.join == "CR" &
+#'       first_cond_upper = AVALC.join == "CR" &
 #'         ADT.join >= ADT + 28,
 #'       condition = AVALC == "CR" &
 #'         all(AVALC.join %in% c("CR", "NE")) &
@@ -292,7 +292,7 @@
 #'       ),
 #'       join_vars = exprs(AVALC, ADT),
 #'       join_type = "after",
-#'       first_cond = AVALC.join %in% c("CR", "PR") &
+#'       first_cond_upper = AVALC.join %in% c("CR", "PR") &
 #'         ADT.join >= ADT + 28,
 #'       condition = AVALC == "PR" &
 #'         all(AVALC.join %in% c("CR", "PR", "NE")) &
@@ -447,12 +447,14 @@ derive_extreme_event <- function(dataset,
       } else {
         data_events <- filter_joined(
           data_source,
+          dataset_add = data_source,
           by_vars = by_vars,
           join_vars = event$join_vars,
           join_type = event$join_type,
-          first_cond = !!event$first_cond,
+          first_cond_lower = !!event$first_cond_lower,
+          first_cond_upper = !!event$first_cond_upper,
           order = event_order,
-          filter = !!event$condition
+          filter_join = !!event$condition
         )
       }
       if (is.null(event$keep_source_vars)) {
@@ -495,6 +497,8 @@ derive_extreme_event <- function(dataset,
 #'   `derive_extreme_event()`. If the argument is not specified, the input
 #'   dataset (`dataset`) of `derive_extreme_event()` is used.
 #'
+#'   *Permitted Values*: a character scalar
+#'
 #' @param condition An unquoted condition for selecting the observations, which
 #'   will contribute to the extreme event. If the condition contains summary
 #'   functions like `all()`, they are evaluated for each by group separately.
@@ -517,6 +521,8 @@ derive_extreme_event <- function(dataset,
 #'   PARAM  = "Worst Sleeping Problems")`. The values can be a symbol, a
 #'   character string, a numeric value, `NA` or an expression.
 #'
+#'   *Permitted Values*: a named list of expressions, e.g., created by `exprs()`
+#'
 #' @param keep_source_vars Variables to keep from the source dataset
 #'
 #'   The specified variables are kept for the selected observations. The
@@ -531,6 +537,8 @@ derive_extreme_event <- function(dataset,
 #'
 #'   The description does not affect the derivations where the event is used. It
 #'   is intended for documentation only.
+#'
+#'   *Permitted Values*: a character scalar
 #'
 #' @keywords source_specifications
 #' @family source_specifications
@@ -587,8 +595,21 @@ event <- function(dataset_name = NULL,
 #'   `derive_extreme_event()`. If the argument is not specified, the input
 #'   dataset (`dataset`) of `derive_extreme_event()` is used.
 #'
+#'   *Permitted Values*: a character scalar
+#'
 #' @param condition An unquoted condition for selecting the observations, which
 #'   will contribute to the extreme event.
+#'
+#'   The condition is applied to the joined dataset for selecting the confirmed
+#'   observations. The condition can include summary functions like `all()` or
+#'   `any()`. The joined dataset is grouped by the original observations. I.e.,
+#'   the summary function are applied to all observations up to the confirmation
+#'   observation. For example in the oncology setting when using this function
+#'   for confirmed best overall response,  `condition = AVALC == "CR" &
+#'   all(AVALC.join %in% c("CR", "NE")) & count_vals(var = AVALC.join, val =
+#'   "NE") <= 1` selects observations with response "CR" and for all
+#'   observations up to the confirmation observation the response is "CR" or
+#'   "NE" and there is at most one "NE".
 #'
 #'   *Permitted Values*: an unquoted condition
 #'
@@ -598,10 +619,12 @@ event <- function(dataset_name = NULL,
 #'   this parameter. The specified variables are added to the joined dataset
 #'   with suffix ".join". For example to select all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
-#'   exprs(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
+#'   exprs(AVALC, AVISITN)` and `condition = AVALC == "Y" & AVALC.join == "Y" &
 #'   AVISITN < AVISITN.join` could be specified.
 #'
 #'   The `*.join` variables are not included in the output dataset.
+#'
+#'   *Permitted Values*: a named list of expressions, e.g., created by `exprs()`
 #'
 #' @param join_type Observations to keep after joining
 #'
@@ -614,10 +637,44 @@ event <- function(dataset_name = NULL,
 #'
 #' @param first_cond Condition for selecting range of data
 #'
+#'   `r lifecycle::badge("deprecated")`
+#'
+#'   This argument is *deprecated*, please use `first_cond_upper` instead.
+#'
 #'   If this argument is specified, the other observations are restricted up to
 #'   the first observation where the specified condition is fulfilled. If the
 #'   condition is not fulfilled for any of the subsequent observations, all
 #'   observations are removed.
+#'
+#'   *Permitted Values*: an unquoted condition
+#'
+#' @param first_cond_lower Condition for selecting range of data (before)
+#'
+#'   If this argument is specified, the other observations are restricted from
+#'   the first observation before the current observation where the specified
+#'   condition is fulfilled up to the current observation. If the condition is
+#'   not fulfilled for any of the other observations, no observations are
+#'   considered, i.e., the observation is not flagged.
+#'
+#'   This parameter should be specified if `condition` contains summary
+#'   functions which should not apply to all observations but only from a
+#'   certain observation before the current observation up to the current
+#'   observation.
+#'
+#'   *Permitted Values*: an unquoted condition
+#'
+#' @param first_cond_upper Condition for selecting range of data (after)
+#'
+#'   If this argument is specified, the other observations are restricted up to
+#'   the first observation where the specified condition is fulfilled. If the
+#'   condition is not fulfilled for any of the other observations, no
+#'   observations are considered, i.e., the observation is not flagged.
+#'
+#'   This parameter should be specified if `condition` contains summary
+#'   functions which should not apply to all observations but only up to the
+#'   confirmation assessment.
+#'
+#'   *Permitted Values*: an unquoted condition
 #'
 #' @param order If specified, the specified variables or expressions are used to
 #'   select the first observation.
@@ -627,6 +684,8 @@ event <- function(dataset_name = NULL,
 #'
 #' @inheritParams event
 #'
+#' @return An object of class `event_joined`
+#'
 #' @keywords source_specifications
 #' @family source_specifications
 #'
@@ -634,16 +693,162 @@ event <- function(dataset_name = NULL,
 #'
 #' @export
 #'
-#' @return An object of class `event_joined`
+#' @examples
+#' library(tibble)
+#' library(dplyr)
+#' library(lubridate)
+#' # Derive confirmed best overall response (using event_joined())
+#' # CR - complete response, PR - partial response, SD - stable disease
+#' # NE - not evaluable, PD - progressive disease
+#' adsl <- tribble(
+#'   ~USUBJID, ~TRTSDTC,
+#'   "1",      "2020-01-01",
+#'   "2",      "2019-12-12",
+#'   "3",      "2019-11-11",
+#'   "4",      "2019-12-30",
+#'   "5",      "2020-01-01",
+#'   "6",      "2020-02-02",
+#'   "7",      "2020-02-02",
+#'   "8",      "2020-02-01"
+#' ) %>%
+#'   mutate(TRTSDT = ymd(TRTSDTC))
+#'
+#' adrs <- tribble(
+#'   ~USUBJID, ~ADTC,        ~AVALC,
+#'   "1",      "2020-01-01", "PR",
+#'   "1",      "2020-02-01", "CR",
+#'   "1",      "2020-02-16", "NE",
+#'   "1",      "2020-03-01", "CR",
+#'   "1",      "2020-04-01", "SD",
+#'   "2",      "2020-01-01", "SD",
+#'   "2",      "2020-02-01", "PR",
+#'   "2",      "2020-03-01", "SD",
+#'   "2",      "2020-03-13", "CR",
+#'   "4",      "2020-01-01", "PR",
+#'   "4",      "2020-03-01", "NE",
+#'   "4",      "2020-04-01", "NE",
+#'   "4",      "2020-05-01", "PR",
+#'   "5",      "2020-01-01", "PR",
+#'   "5",      "2020-01-10", "PR",
+#'   "5",      "2020-01-20", "PR",
+#'   "6",      "2020-02-06", "PR",
+#'   "6",      "2020-02-16", "CR",
+#'   "6",      "2020-03-30", "PR",
+#'   "7",      "2020-02-06", "PR",
+#'   "7",      "2020-02-16", "CR",
+#'   "7",      "2020-04-01", "NE",
+#'   "8",      "2020-02-16", "PD"
+#' ) %>%
+#'   mutate(
+#'     ADT = ymd(ADTC),
+#'     PARAMCD = "OVR",
+#'     PARAM = "Overall Response by Investigator"
+#'   ) %>%
+#'   derive_vars_merged(
+#'     dataset_add = adsl,
+#'     by_vars = exprs(USUBJID),
+#'     new_vars = exprs(TRTSDT)
+#'   )
+#'
+#' derive_extreme_event(
+#'   adrs,
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(ADT),
+#'   mode = "first",
+#'   source_datasets = list(adsl = adsl),
+#'   events = list(
+#'     event_joined(
+#'       description = paste(
+#'         "CR needs to be confirmed by a second CR at least 28 days later",
+#'         "at most one NE is acceptable between the two assessments"
+#'       ),
+#'       join_vars = exprs(AVALC, ADT),
+#'       join_type = "after",
+#'       first_cond_upper = AVALC.join == "CR" &
+#'         ADT.join >= ADT + 28,
+#'       condition = AVALC == "CR" &
+#'         all(AVALC.join %in% c("CR", "NE")) &
+#'         count_vals(var = AVALC.join, val = "NE") <= 1,
+#'       set_values_to = exprs(
+#'         AVALC = "CR"
+#'       )
+#'     ),
+#'     event_joined(
+#'       description = paste(
+#'         "PR needs to be confirmed by a second CR or PR at least 28 days later,",
+#'         "at most one NE is acceptable between the two assessments"
+#'       ),
+#'       join_vars = exprs(AVALC, ADT),
+#'       join_type = "after",
+#'       first_cond_upper = AVALC.join %in% c("CR", "PR") &
+#'         ADT.join >= ADT + 28,
+#'       condition = AVALC == "PR" &
+#'         all(AVALC.join %in% c("CR", "PR", "NE")) &
+#'         count_vals(var = AVALC.join, val = "NE") <= 1,
+#'       set_values_to = exprs(
+#'         AVALC = "PR"
+#'       )
+#'     ),
+#'     event(
+#'       description = paste(
+#'         "CR, PR, or SD are considered as SD if occurring at least 28",
+#'         "after treatment start"
+#'       ),
+#'       condition = AVALC %in% c("CR", "PR", "SD") & ADT >= TRTSDT + 28,
+#'       set_values_to = exprs(
+#'         AVALC = "SD"
+#'       )
+#'     ),
+#'     event(
+#'       condition = AVALC == "PD",
+#'       set_values_to = exprs(
+#'         AVALC = "PD"
+#'       )
+#'     ),
+#'     event(
+#'       condition = AVALC %in% c("CR", "PR", "SD", "NE"),
+#'       set_values_to = exprs(
+#'         AVALC = "NE"
+#'       )
+#'     ),
+#'     event(
+#'       description = "set response to MISSING for patients without records in ADRS",
+#'       dataset_name = "adsl",
+#'       condition = TRUE,
+#'       set_values_to = exprs(
+#'         AVALC = "MISSING"
+#'       ),
+#'       keep_source_vars = exprs(TRTSDT)
+#'     )
+#'   ),
+#'   set_values_to = exprs(
+#'     PARAMCD = "CBOR",
+#'     PARAM = "Best Confirmed Overall Response by Investigator"
+#'   )
+#' ) %>%
+#'   filter(PARAMCD == "CBOR")
 event_joined <- function(dataset_name = NULL,
                          condition,
                          order = NULL,
                          join_vars,
                          join_type,
                          first_cond = NULL,
+                         first_cond_lower = NULL,
+                         first_cond_upper = NULL,
                          set_values_to = NULL,
                          keep_source_vars = NULL,
                          description = NULL) {
+  if (!missing(first_cond)) {
+    deprecate_warn(
+      "1.0.0",
+      "event_joined(first_cond=)",
+      "event_joined(first_cond_upper=)"
+    )
+    first_cond_upper <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
+  } else {
+    first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
+  }
+
   out <- list(
     description = assert_character_scalar(description, optional = TRUE),
     dataset_name = assert_character_scalar(dataset_name, optional = TRUE),
@@ -655,7 +860,8 @@ event_joined <- function(dataset_name = NULL,
       values = c("before", "after", "all"),
       case_sensitive = FALSE
     ),
-    first_cond = assert_filter_cond(enexpr(first_cond), optional = TRUE),
+    first_cond_lower = assert_filter_cond(enexpr(first_cond_lower), optional = TRUE),
+    first_cond_upper = first_cond_upper,
     set_values_to = assert_expr_list(
       set_values_to,
       named = TRUE,

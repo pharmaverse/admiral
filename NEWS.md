@@ -17,6 +17,22 @@ character vector (`'--DTC'`), was imputed. (#2146)
 were enhanced such that more than one summary variable can be derived, e.g.,
 `AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
 
+- The "joined" functions (`derive_vars_joined()`, `derive_var_joined_exist_flag()`,
+`filter_joined()`, and `event_joined()`) were unified: (#2126)
+    - The `dataset_add` and `filter_add` arguments were added to
+    `derive_var_joined_exist_flag()` and `filter_joined()`.
+    - The `filter` argument was renamed to `filter_join` in
+    `derive_var_joined_exist_flag()` and `filter_joined()`.
+    - The `tmp_obs_nr_var`, the `join_type`, the `first_cond_lower`, and the
+    `first_cond_upper` arguments were added to `derive_vars_joined()`.
+    - In `derive_var_joined_exist_flag()`, `filter_joined()`, and `event_joined()`
+    the `first_cond` argument was renamed to `first_cond_upper` and the
+    `first_cond_lower` argument was added.
+    - In all "joined" functions the `filter_add` argument is applied to the
+    additional dataset grouped by `by_vars` and the `filter_join` argument is
+    applied to the joined dataset grouped by the observations from the input
+    dataset. I.e., summary functions like `all()` or `any()` can be used.
+
 - The `tmp_event_nr_var` argument was added to `derive_extreme_records()` to
 allow more control of the selection of records. It creates a temporary variable
 for the event number, which can be used in `order`. (#2140)
@@ -37,6 +53,13 @@ for the event number, which can be used in `order`. (#2140)
 - For the function `derive_vars_merged()`, the argument `match_flag` was renamed to `exist_flag` (#2125)
 
 - The default value for the `false_value` argument in `derive_extreme_records()` was changed to `NA_character_` (#2125)
+
+- In `filter_joined()` and `derive_var_joined_exist_flag()` (#2126)
+    - the `first_cond` argument was deprecated in favor of `first_cond_upper` and
+    - the `filter` argument was deprecated in favor of `filter_join`.
+
+- In `event_joined()` the `first_cond` argument was deprecated in favor of
+`first_cond_upper`. (#2126)
 
 - The `ignore_event_order` argument in `derive_extreme_event()` was deprecated
 and the selection of the records was changed to allow more control. Before, the
