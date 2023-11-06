@@ -1207,9 +1207,15 @@ compute_dtf <- function(dtc, dt) {
 #' @export
 #'
 #' @examples
-#' compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
-#' compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
-#' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
+#' library(lubridate)
+#'
+#' compute_tmf(dtc = "2019-07-18T15:25", dtm = ymd_hms("2019-07-18T15:25:00"))
+#' compute_tmf(dtc = "2019-07-18T15", dtm = ymd_hms("2019-07-18T15:25:00"))
+#' compute_tmf(dtc = "2019-07-18", dtm = ymd("2019-07-18"))
+#' compute_tmf(dtc = "2022-05--T00:00", dtm = ymd_hms("2022-05-15T23:59:59"))
+#' compute_tmf(dtc = "2022-05--T23:00", dtm = ymd_hms("2022-05-15T23:59:59"))
+#' compute_tmf(dtc = "2022-05--T23:59:00", dtm = ymd_hms("2022-05-15T23:59:59"))
+#'
 compute_tmf <- function(dtc,
                         dtm,
                         ignore_seconds_flag = FALSE) {
@@ -1217,15 +1223,30 @@ compute_tmf <- function(dtc,
   assert_character_vector(dtc)
   assert_logical_scalar(ignore_seconds_flag)
 
-  partial <- get_partialdatetime(dtc)
-  highest_miss <- convert_blanks_to_na(vector("character", length(dtc)))
-  for (c in c("hour", "minute", "second")) {
-    highest_miss <-
-      if_else(is.na(partial[[c]]) & is.na(highest_miss), c, highest_miss)
-  }
-  is_na <- is.na(dtm)
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
+
+  partial <- get_partialdatetime(dtc)
+  highest_miss <- convert_blanks_to_na(vector("character", length(dtc)))
+
+  # concatenate lubridate functions: `hour()`, `minute()`, `second()` to map over dtm input
+  hms <- c("hour", "minute", "second")
+
+  # extract hour, minute, second over each value of dtm and put into a list time_part
+  time_part <-
+    map(set_names(hms), function(y) map_dbl(dtm, function(x) exec(y, x)))
+
+  for (c in hms) {
+    highest_miss <-
+      if_else((is.na(partial[[c]]) & is.na(highest_miss)) |
+        (
+          !is.na(partial[[c]]) &
+            is.na(highest_miss) & as.numeric(partial[[c]]) != time_part[[c]]
+        ),
+      c,
+      highest_miss
+      )
+  }
 
   map <- c(
     hour = "H",

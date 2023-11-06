@@ -250,6 +250,7 @@ adsl_05 <- adsl_04 %>%
     filter_add = DSDECOD == "RANDOMIZED",
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(RAND30DT = DSSTDT),
+    join_type = "all",
     filter_join = DSSTDT >= TRTSDT - 30
   )
 ```
@@ -286,6 +287,7 @@ ae_01 <- ae %>%
     by_vars = exprs(USUBJID),
     new_vars = exprs(DCUTFL),
     join_vars = exprs(DCUTDY),
+    join_type = "all",
     filter_join = AESTDY <= DCUTDY
   )
 ```
@@ -316,6 +318,7 @@ ae_02 <- ae_01 %>%
     order = exprs(as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))),
     new_vars = exprs(AENADSEV = AESEV),
     join_vars = exprs(AESTDY),
+    join_type = "all",
     filter_join = AESTDY.join < AESTDY,
     mode = "first",
     check_type = "none"

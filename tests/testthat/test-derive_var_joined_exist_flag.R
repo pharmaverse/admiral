@@ -24,12 +24,13 @@ test_that("derive_var_joined_exist_flag Test 1: filter without first_cond", {
   actual <-
     derive_var_joined_exist_flag(
       data,
+      dataset_add = data,
       new_var = CONFFL,
       by_vars = exprs(USUBJID),
       join_vars = exprs(AVALC),
       join_type = "after",
       order = exprs(AVISITN),
-      filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR")
+      filter_join = AVALC == "PR" & AVALC.join %in% c("CR", "PR")
     )
 
   expected <- tibble::tribble(
@@ -58,7 +59,7 @@ test_that("derive_var_joined_exist_flag Test 1: filter without first_cond", {
 })
 
 ## Flagging any patient CR value that is followed by a CR
-## Test 2 : filter with first_cond ---
+## Test 2: filter with first_cond ----
 test_that("derive_var_joined_exist_flag Test 2: filter with first_cond", {
   data <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
@@ -79,14 +80,15 @@ test_that("derive_var_joined_exist_flag Test 2: filter with first_cond", {
   actual <-
     derive_var_joined_exist_flag(
       data,
+      dataset_add = data,
       new_var = CONFFL,
       by_vars = exprs(USUBJID),
       join_vars = exprs(AVALC),
       join_type = "after",
-      first_cond = AVALC == "CR" &
+      first_cond_upper = AVALC == "CR" &
         AVALC.join == "CR",
       order = exprs(AVISITN),
-      filter = TRUE
+      filter_join = TRUE
     )
 
   expected <- tibble::tribble(
@@ -115,20 +117,20 @@ test_that("derive_var_joined_exist_flag Test 2: filter with first_cond", {
 
 ## Flagging any patient PR value that is followed by a CR or PR
 ## and at most one SD in between
-## Test 3:filter with first_cond and summary function ---
-
+## Test 3: filter with first_cond and summary function ----
 test_that("derive_var_joined_exist_flag Test 3: filter with first_cond and summary function", {
   actual <-
     derive_var_joined_exist_flag(
       data,
+      dataset_add = data,
       new_var = CONFFL,
       by_vars = exprs(USUBJID),
       join_vars = exprs(AVALC),
       join_type = "after",
-      first_cond = AVALC == "PR" &
+      first_cond_upper = AVALC == "PR" &
         AVALC.join %in% c("CR", "PR"),
       order = exprs(AVISITN),
-      filter = count_vals(AVALC.join, "SD") <= 1,
+      filter_join = count_vals(AVALC.join, "SD") <= 1,
       false_value = "N"
     )
 
@@ -159,9 +161,8 @@ test_that("derive_var_joined_exist_flag Test 3: filter with first_cond and summa
 
 ## Flagging observations with a duration longer than 30 and
 ## on or after 7 days of a COVID AE (ACOVFL == "Y")
-## Test 4: join_type = 'all' ---
-
-test_that("derive_var_joined_exist_flag, Test 4: join_type = 'all'", {
+## Test 4: join_type = 'all' ----
+test_that("derive_var_joined_exist_flag Test 4: join_type = 'all'", {
   adae <- tibble::tribble(
     ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
     "1",        10, "N",          1,
@@ -179,12 +180,13 @@ test_that("derive_var_joined_exist_flag, Test 4: join_type = 'all'", {
 
   actual <- derive_var_joined_exist_flag(
     adae,
+    dataset_add = adae,
     by_vars = exprs(USUBJID),
     new_var = ALCOVFL,
     join_vars = exprs(ACOVFL, ADY),
     join_type = "all",
     order = exprs(ADY),
-    filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
+    filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
   )
 
   expected <- tibble::tribble(
@@ -210,8 +212,8 @@ test_that("derive_var_joined_exist_flag, Test 4: join_type = 'all'", {
 })
 
 ## Flagging observations with AVALC = Y and an observation with CRIT1FL = Y before
-## Test 5: join_type = 'before' ---
-test_that("derive_var_joined_exist_flag, Test 5: join_type = 'before'", {
+## Test 5: join_type = 'before' ----
+test_that("derive_var_joined_exist_flag Test 5: join_type = 'before'", {
   data <- tibble::tribble(
     ~USUBJID, ~ASEQ, ~AVALC, ~CRIT1FL,
     "1",          1, "Y",    "Y",
@@ -223,12 +225,13 @@ test_that("derive_var_joined_exist_flag, Test 5: join_type = 'before'", {
 
   actual <- derive_var_joined_exist_flag(
     data,
+    dataset_add = data,
     by_vars = exprs(USUBJID),
     order = exprs(ASEQ),
     new_var = CONFFL,
     join_vars = exprs(CRIT1FL),
     join_type = "before",
-    filter = AVALC == "Y" & CRIT1FL.join == "Y",
+    filter_join = AVALC == "Y" & CRIT1FL.join == "Y",
     false_value = "N"
   )
 
@@ -248,8 +251,8 @@ test_that("derive_var_joined_exist_flag, Test 5: join_type = 'before'", {
   )
 })
 
-## Test 6: tmp_obs_nr_var argument works ----
 
+## Test 6: tmp_obs_nr_var argument works ----
 test_that("derive_var_joined_exist_flag Test 6: tmp_obs_nr_var argument works", {
   expected <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~CRIT1FL, ~CONFFL,
@@ -265,21 +268,124 @@ test_that("derive_var_joined_exist_flag Test 6: tmp_obs_nr_var argument works", 
     "4",      2,        "N",      "N"
   )
 
-
+  input <- select(expected, -CONFFL)
   expect_dfs_equal(
     base = expected,
     compare = derive_var_joined_exist_flag(
-      select(expected, -CONFFL),
+      input,
+      dataset_add = input,
       by_vars = exprs(USUBJID),
       new_var = CONFFL,
       tmp_obs_nr_var = tmp_obs_nr,
       join_vars = exprs(CRIT1FL),
       join_type = "all",
       order = exprs(AVISITN),
-      filter = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
+      filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
         (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join)),
       false_value = "N"
     ),
+    keys = c("USUBJID", "AVISITN")
+  )
+})
+
+## Test 7: deprecation of `filter` ----
+test_that("derive_var_joined_exist_flag Test 7: deprecation of `filter`", {
+  expect_warning(
+    actual <-
+      derive_var_joined_exist_flag(
+        data,
+        dataset_add = data,
+        new_var = CONFFL,
+        by_vars = exprs(USUBJID),
+        join_vars = exprs(AVALC),
+        join_type = "after",
+        order = exprs(AVISITN),
+        filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR")
+      ),
+    class = "lifecycle_warning_deprecated"
+  )
+
+  expected <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC, ~CONFFL,
+    "1",      1,        "PR",   "Y",
+    "1",      2,        "CR",   NA_character_,
+    "1",      3,        "CR",   NA_character_,
+    "1",      4,        "SD",   NA_character_,
+    "1",      5,        "NE",   NA_character_,
+    "2",      1,        "SD",   NA_character_,
+    "2",      2,        "PR",   NA_character_,
+    "2",      3,        "PD",   NA_character_,
+    "3",      1,        "SD",   NA_character_,
+    "4",      1,        "PR",   "Y",
+    "4",      2,        "PD",   NA_character_,
+    "4",      3,        "SD",   NA_character_,
+    "4",      4,        "SD",   NA_character_,
+    "4",      5,        "PR",   NA_character_
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISITN")
+  )
+})
+
+## Test 8: deprecation of `first_cond` ----
+test_that("derive_var_joined_exist_flag Test 8: deprecation of `first_cond`", {
+  data <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PR",
+    "2",      3,        "PD",
+    "3",      1,        "CR",
+    "4",      1,        "CR",
+    "4",      2,        "SD",
+    "4",      3,        "CR",
+    "4",      4,        "CR"
+  )
+
+  expect_warning(
+    actual <-
+      derive_var_joined_exist_flag(
+        data,
+        dataset_add = data,
+        new_var = CONFFL,
+        by_vars = exprs(USUBJID),
+        join_vars = exprs(AVALC),
+        join_type = "after",
+        first_cond = AVALC == "CR" &
+          AVALC.join == "CR",
+        order = exprs(AVISITN),
+        filter_join = TRUE
+      ),
+    class = "lifecycle_warning_deprecated"
+  )
+
+  expected <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC, ~CONFFL,
+    "1",      1,        "PR",   NA_character_,
+    "1",      2,        "CR",   "Y",
+    "1",      3,        "CR",   NA_character_,
+    "1",      4,        "SD",   NA_character_,
+    "1",      5,        "NE",   NA_character_,
+    "2",      1,        "SD",   NA_character_,
+    "2",      2,        "PR",   NA_character_,
+    "2",      3,        "PD",   NA_character_,
+    "3",      1,        "CR",   NA_character_,
+    "4",      1,        "CR",   "Y",
+    "4",      2,        "SD",   NA_character_,
+    "4",      3,        "CR",   "Y",
+    "4",      4,        "CR",   NA_character_
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
     keys = c("USUBJID", "AVISITN")
   )
 })

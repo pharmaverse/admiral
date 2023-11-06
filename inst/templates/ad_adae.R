@@ -91,6 +91,7 @@ adae <- adae %>%
     by_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(LDOSEDTM = EXSTDTM),
     join_vars = exprs(EXSTDTM),
+    join_type = "all",
     order = exprs(EXSTDTM),
     filter_add = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) & !is.na(EXSTDTM),
     filter_join = EXSTDTM <= ASTDTM,
