@@ -2,7 +2,7 @@
 # Source: https://github.com/pharmaverse/admiralci
 # Common workflows designed for Admiral
 # but can be easily used by any other R package
-name: Admiral Workflows
+name: admiral CI/CD Workflows
 
 on:
   # 'workflow_dispatch' gives you the ability
@@ -11,19 +11,17 @@ on:
   # 'push' events are triggered when commits
   # are pushed to one of these branches
   push:
+    tags:
+      - "v*"
     branches:
       - main
-      - devel
-      - pre-release
-      - test
+      - patch
   # 'pull_request' events are triggered when PRs are
   # created against one of these target branches.
   pull_request:
     branches:
       - main
-      - devel
-      - pre-release
-      - test
+      - patch
   # 'release' events are triggered when...
   # you guessed it - when releases are made.
   release:
@@ -86,14 +84,14 @@ jobs:
   docs:
     name: Documentation
     uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || startsWith(github.ref, 'refs/tags/v')
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
       # Whether to skip multiversion docs
       # Note that if you have multiple versions of docs,
       # your URL links are likely to break due to path changes
-      skip-multiversion-docs: false
+      skip-multiversion-docs: true
       # Ref to use for the multiversion docs landing page
       multiversion-docs-landing-page: devel
   linter:
@@ -106,8 +104,7 @@ jobs:
   links:
     name: Links
     uses: pharmaverse/admiralci/.github/workflows/links.yml@main
-    if: >
-      github.event_name == 'push' || github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request'
   coverage:
     name: Code Coverage
     uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@main
