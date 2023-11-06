@@ -198,9 +198,9 @@ derive_param_exposure <- function(dataset,
       I("derive_param_exposure(filter = )"),
       "derive_param_exposure(filter_add = )"
     )
-    filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+    filter_add <- assert_filter_cond(enexpr(filter), optional = TRUE)
   }
-  filter <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   assert_character_scalar(input_code)
@@ -216,7 +216,7 @@ derive_param_exposure <- function(dataset,
     dataset,
     dataset_add,
     by_vars = by_vars,
-    filter_add = PARAMCD == !!input_code & !!filter,
+    filter_add = PARAMCD == !!input_code & !!filter_add,
     set_values_to = exprs(
       !!analysis_var := {{ summary_fun }}(!!analysis_var),
       !!!set_dtm,

@@ -222,13 +222,13 @@ derive_summary_records <- function(dataset,
       I("derive_summary_records(filter = )"),
       "derive_summary_records(filter_add = )"
     )
-    filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+    filter_add <- assert_filter_cond(enexpr(filter), optional = TRUE)
   }
-  filter <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
 
   summary_records <- dataset_add %>%
     group_by(!!!by_vars) %>%
-    filter_if(filter) %>%
+    filter_if(filter_add) %>%
     summarise(!!!set_values_to) %>%
     ungroup()
 
