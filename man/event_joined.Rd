@@ -11,6 +11,8 @@ event_joined(
   join_vars,
   join_type,
   first_cond = NULL,
+  first_cond_lower = NULL,
+  first_cond_upper = NULL,
   set_values_to = NULL,
   keep_source_vars = NULL,
   description = NULL
@@ -20,10 +22,21 @@ event_joined(
 \item{dataset_name}{Dataset name of the dataset to be used as input for the
 event. The name refers to the dataset specified for \code{source_datasets} in
 \code{derive_extreme_event()}. If the argument is not specified, the input
-dataset (\code{dataset}) of \code{derive_extreme_event()} is used.}
+dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
+
+\emph{Permitted Values}: a character scalar}
 
 \item{condition}{An unquoted condition for selecting the observations, which
 will contribute to the extreme event.
+
+The condition is applied to the joined dataset for selecting the confirmed
+observations. The condition can include summary functions like \code{all()} or
+\code{any()}. The joined dataset is grouped by the original observations. I.e.,
+the summary function are applied to all observations up to the confirmation
+observation. For example in the oncology setting when using this function
+for confirmed best overall response,  \code{condition = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1} selects observations with response "CR" and for all
+observations up to the confirmation observation the response is "CR" or
+"NE" and there is at most one "NE".
 
 \emph{Permitted Values}: an unquoted condition}
 
@@ -37,9 +50,11 @@ select the first observation.
 
 The variables needed from the other observations should be specified for
 this parameter. The specified variables are added to the joined dataset
-with suffix ".join". For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
+with suffix ".join". For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{condition = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
 
-The \verb{*.join} variables are not included in the output dataset.}
+The \verb{*.join} variables are not included in the output dataset.
+
+\emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}}
 
 \item{join_type}{Observations to keep after joining
 
@@ -51,14 +66,50 @@ kept.
 
 \item{first_cond}{Condition for selecting range of data
 
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This argument is \emph{deprecated}, please use \code{first_cond_upper} instead.
+
 If this argument is specified, the other observations are restricted up to
 the first observation where the specified condition is fulfilled. If the
 condition is not fulfilled for any of the subsequent observations, all
-observations are removed.}
+observations are removed.
+
+\emph{Permitted Values}: an unquoted condition}
+
+\item{first_cond_lower}{Condition for selecting range of data (before)
+
+If this argument is specified, the other observations are restricted from
+the first observation before the current observation where the specified
+condition is fulfilled up to the current observation. If the condition is
+not fulfilled for any of the other observations, no observations are
+considered, i.e., the observation is not flagged.
+
+This parameter should be specified if \code{condition} contains summary
+functions which should not apply to all observations but only from a
+certain observation before the current observation up to the current
+observation.
+
+\emph{Permitted Values}: an unquoted condition}
+
+\item{first_cond_upper}{Condition for selecting range of data (after)
+
+If this argument is specified, the other observations are restricted up to
+the first observation where the specified condition is fulfilled. If the
+condition is not fulfilled for any of the other observations, no
+observations are considered, i.e., the observation is not flagged.
+
+This parameter should be specified if \code{condition} contains summary
+functions which should not apply to all observations but only up to the
+confirmation assessment.
+
+\emph{Permitted Values}: an unquoted condition}
 
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
 to be set for the event, e.g. \code{exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")}. The values can be a symbol, a
-character string, a numeric value, \code{NA} or an expression.}
+character string, a numeric value, \code{NA} or an expression.
+
+\emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
 
@@ -72,7 +123,9 @@ a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_w
 \item{description}{Description of the event
 
 The description does not affect the derivations where the event is used. It
-is intended for documentation only.}
+is intended for documentation only.
+
+\emph{Permitted Values}: a character scalar}
 }
 \value{
 An object of class \code{event_joined}
@@ -86,6 +139,141 @@ observation of the source dataset.
 
 The events are selected by calling \code{filter_joined()}. See its documentation
 for more details.
+}
+\examples{
+library(tibble)
+library(dplyr)
+library(lubridate)
+# Derive confirmed best overall response (using event_joined())
+# CR - complete response, PR - partial response, SD - stable disease
+# NE - not evaluable, PD - progressive disease
+adsl <- tribble(
+  ~USUBJID, ~TRTSDTC,
+  "1",      "2020-01-01",
+  "2",      "2019-12-12",
+  "3",      "2019-11-11",
+  "4",      "2019-12-30",
+  "5",      "2020-01-01",
+  "6",      "2020-02-02",
+  "7",      "2020-02-02",
+  "8",      "2020-02-01"
+) \%>\%
+  mutate(TRTSDT = ymd(TRTSDTC))
+
+adrs <- tribble(
+  ~USUBJID, ~ADTC,        ~AVALC,
+  "1",      "2020-01-01", "PR",
+  "1",      "2020-02-01", "CR",
+  "1",      "2020-02-16", "NE",
+  "1",      "2020-03-01", "CR",
+  "1",      "2020-04-01", "SD",
+  "2",      "2020-01-01", "SD",
+  "2",      "2020-02-01", "PR",
+  "2",      "2020-03-01", "SD",
+  "2",      "2020-03-13", "CR",
+  "4",      "2020-01-01", "PR",
+  "4",      "2020-03-01", "NE",
+  "4",      "2020-04-01", "NE",
+  "4",      "2020-05-01", "PR",
+  "5",      "2020-01-01", "PR",
+  "5",      "2020-01-10", "PR",
+  "5",      "2020-01-20", "PR",
+  "6",      "2020-02-06", "PR",
+  "6",      "2020-02-16", "CR",
+  "6",      "2020-03-30", "PR",
+  "7",      "2020-02-06", "PR",
+  "7",      "2020-02-16", "CR",
+  "7",      "2020-04-01", "NE",
+  "8",      "2020-02-16", "PD"
+) \%>\%
+  mutate(
+    ADT = ymd(ADTC),
+    PARAMCD = "OVR",
+    PARAM = "Overall Response by Investigator"
+  ) \%>\%
+  derive_vars_merged(
+    dataset_add = adsl,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(TRTSDT)
+  )
+
+derive_extreme_event(
+  adrs,
+  by_vars = exprs(USUBJID),
+  order = exprs(ADT),
+  mode = "first",
+  source_datasets = list(adsl = adsl),
+  events = list(
+    event_joined(
+      description = paste(
+        "CR needs to be confirmed by a second CR at least 28 days later",
+        "at most one NE is acceptable between the two assessments"
+      ),
+      join_vars = exprs(AVALC, ADT),
+      join_type = "after",
+      first_cond_upper = AVALC.join == "CR" &
+        ADT.join >= ADT + 28,
+      condition = AVALC == "CR" &
+        all(AVALC.join \%in\% c("CR", "NE")) &
+        count_vals(var = AVALC.join, val = "NE") <= 1,
+      set_values_to = exprs(
+        AVALC = "CR"
+      )
+    ),
+    event_joined(
+      description = paste(
+        "PR needs to be confirmed by a second CR or PR at least 28 days later,",
+        "at most one NE is acceptable between the two assessments"
+      ),
+      join_vars = exprs(AVALC, ADT),
+      join_type = "after",
+      first_cond_upper = AVALC.join \%in\% c("CR", "PR") &
+        ADT.join >= ADT + 28,
+      condition = AVALC == "PR" &
+        all(AVALC.join \%in\% c("CR", "PR", "NE")) &
+        count_vals(var = AVALC.join, val = "NE") <= 1,
+      set_values_to = exprs(
+        AVALC = "PR"
+      )
+    ),
+    event(
+      description = paste(
+        "CR, PR, or SD are considered as SD if occurring at least 28",
+        "after treatment start"
+      ),
+      condition = AVALC \%in\% c("CR", "PR", "SD") & ADT >= TRTSDT + 28,
+      set_values_to = exprs(
+        AVALC = "SD"
+      )
+    ),
+    event(
+      condition = AVALC == "PD",
+      set_values_to = exprs(
+        AVALC = "PD"
+      )
+    ),
+    event(
+      condition = AVALC \%in\% c("CR", "PR", "SD", "NE"),
+      set_values_to = exprs(
+        AVALC = "NE"
+      )
+    ),
+    event(
+      description = "set response to MISSING for patients without records in ADRS",
+      dataset_name = "adsl",
+      condition = TRUE,
+      set_values_to = exprs(
+        AVALC = "MISSING"
+      ),
+      keep_source_vars = exprs(TRTSDT)
+    )
+  ),
+  set_values_to = exprs(
+    PARAMCD = "CBOR",
+    PARAM = "Best Confirmed Overall Response by Investigator"
+  )
+) \%>\%
+  filter(PARAMCD == "CBOR")
 }
 \seealso{
 \code{\link[=derive_extreme_event]{derive_extreme_event()}}, \code{\link[=event]{event()}}
