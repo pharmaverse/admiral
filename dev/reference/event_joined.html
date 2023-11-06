@@ -129,6 +129,8 @@ for more details.</p>
 <span>  <span class="va">join_vars</span>,</span>
 <span>  <span class="va">join_type</span>,</span>
 <span>  first_cond <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  first_cond_lower <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  first_cond_upper <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  set_values_to <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  keep_source_vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  description <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -141,12 +143,21 @@ for more details.</p>
 <dd><p>Dataset name of the dataset to be used as input for the
 event. The name refers to the dataset specified for <code>source_datasets</code> in
 <code><a href="derive_extreme_event.html">derive_extreme_event()</a></code>. If the argument is not specified, the input
-dataset (<code>dataset</code>) of <code><a href="derive_extreme_event.html">derive_extreme_event()</a></code> is used.</p></dd>
+dataset (<code>dataset</code>) of <code><a href="derive_extreme_event.html">derive_extreme_event()</a></code> is used.</p>
+<p><em>Permitted Values</em>: a character scalar</p></dd>
 
 
 <dt>condition</dt>
 <dd><p>An unquoted condition for selecting the observations, which
 will contribute to the extreme event.</p>
+<p>The condition is applied to the joined dataset for selecting the confirmed
+observations. The condition can include summary functions like <code><a href="https://rdrr.io/r/base/all.html" class="external-link">all()</a></code> or
+<code><a href="https://rdrr.io/r/base/any.html" class="external-link">any()</a></code>. The joined dataset is grouped by the original observations. I.e.,
+the summary function are applied to all observations up to the confirmation
+observation. For example in the oncology setting when using this function
+for confirmed best overall response,  <code>condition = AVALC == "CR" &amp; all(AVALC.join %in% c("CR", "NE")) &amp; count_vals(var = AVALC.join, val = "NE") &lt;= 1</code> selects observations with response "CR" and for all
+observations up to the confirmation observation the response is "CR" or
+"NE" and there is at most one "NE".</p>
 <p><em>Permitted Values</em>: an unquoted condition</p></dd>
 
 
@@ -161,8 +172,9 @@ select the first observation.</p>
 <dd><p>Variables to keep from joined dataset</p>
 <p>The variables needed from the other observations should be specified for
 this parameter. The specified variables are added to the joined dataset
-with suffix ".join". For example to select all observations with <code>AVALC == "Y"</code> and <code>AVALC == "Y"</code> for at least one subsequent visit <code>join_vars = exprs(AVALC, AVISITN)</code> and <code>filter = AVALC == "Y" &amp; AVALC.join == "Y" &amp; AVISITN &lt; AVISITN.join</code> could be specified.</p>
-<p>The <code>*.join</code> variables are not included in the output dataset.</p></dd>
+with suffix ".join". For example to select all observations with <code>AVALC == "Y"</code> and <code>AVALC == "Y"</code> for at least one subsequent visit <code>join_vars = exprs(AVALC, AVISITN)</code> and <code>condition = AVALC == "Y" &amp; AVALC.join == "Y" &amp; AVISITN &lt; AVISITN.join</code> could be specified.</p>
+<p>The <code>*.join</code> variables are not included in the output dataset.</p>
+<p><em>Permitted Values</em>: a named list of expressions, e.g., created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
 
 
 <dt>join_type</dt>
@@ -175,16 +187,46 @@ kept.</p>
 
 <dt>first_cond</dt>
 <dd><p>Condition for selecting range of data</p>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p>
+<p>This argument is <em>deprecated</em>, please use <code>first_cond_upper</code> instead.</p>
 <p>If this argument is specified, the other observations are restricted up to
 the first observation where the specified condition is fulfilled. If the
 condition is not fulfilled for any of the subsequent observations, all
-observations are removed.</p></dd>
+observations are removed.</p>
+<p><em>Permitted Values</em>: an unquoted condition</p></dd>
+
+
+<dt>first_cond_lower</dt>
+<dd><p>Condition for selecting range of data (before)</p>
+<p>If this argument is specified, the other observations are restricted from
+the first observation before the current observation where the specified
+condition is fulfilled up to the current observation. If the condition is
+not fulfilled for any of the other observations, no observations are
+considered, i.e., the observation is not flagged.</p>
+<p>This parameter should be specified if <code>condition</code> contains summary
+functions which should not apply to all observations but only from a
+certain observation before the current observation up to the current
+observation.</p>
+<p><em>Permitted Values</em>: an unquoted condition</p></dd>
+
+
+<dt>first_cond_upper</dt>
+<dd><p>Condition for selecting range of data (after)</p>
+<p>If this argument is specified, the other observations are restricted up to
+the first observation where the specified condition is fulfilled. If the
+condition is not fulfilled for any of the other observations, no
+observations are considered, i.e., the observation is not flagged.</p>
+<p>This parameter should be specified if <code>condition</code> contains summary
+functions which should not apply to all observations but only up to the
+confirmation assessment.</p>
+<p><em>Permitted Values</em>: an unquoted condition</p></dd>
 
 
 <dt>set_values_to</dt>
 <dd><p>A named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> defining the variables
 to be set for the event, e.g. <code>exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")</code>. The values can be a symbol, a
-character string, a numeric value, <code>NA</code> or an expression.</p></dd>
+character string, a numeric value, <code>NA</code> or an expression.</p>
+<p><em>Permitted Values</em>: a named list of expressions, e.g., created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
 
 
 <dt>keep_source_vars</dt>
@@ -199,7 +241,8 @@ a symbol or a tidyselect expression, e.g., <code>exprs(VISIT, VISITNUM, starts_w
 <dt>description</dt>
 <dd><p>Description of the event</p>
 <p>The description does not affect the derivations where the event is used. It
-is intended for documentation only.</p></dd>
+is intended for documentation only.</p>
+<p><em>Permitted Values</em>: a character scalar</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -226,6 +269,156 @@ is intended for documentation only.</p></dd>
 <code><a href="tte_source.html">tte_source</a>()</code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Derive confirmed best overall response (using event_joined())</span></span></span>
+<span class="r-in"><span><span class="co"># CR - complete response, PR - partial response, SD - stable disease</span></span></span>
+<span class="r-in"><span><span class="co"># NE - not evaluable, PD - progressive disease</span></span></span>
+<span class="r-in"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">TRTSDTC</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="st">"2020-01-01"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="st">"2019-12-12"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"3"</span>,      <span class="st">"2019-11-11"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"4"</span>,      <span class="st">"2019-12-30"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"5"</span>,      <span class="st">"2020-01-01"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"6"</span>,      <span class="st">"2020-02-02"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"7"</span>,      <span class="st">"2020-02-02"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"8"</span>,      <span class="st">"2020-02-01"</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>TRTSDT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">TRTSDTC</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">adrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">ADTC</span>,        <span class="op">~</span><span class="va">AVALC</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="st">"2020-01-01"</span>, <span class="st">"PR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="st">"2020-02-01"</span>, <span class="st">"CR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="st">"2020-02-16"</span>, <span class="st">"NE"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="st">"2020-03-01"</span>, <span class="st">"CR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="st">"2020-04-01"</span>, <span class="st">"SD"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="st">"2020-01-01"</span>, <span class="st">"SD"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="st">"2020-02-01"</span>, <span class="st">"PR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="st">"2020-03-01"</span>, <span class="st">"SD"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="st">"2020-03-13"</span>, <span class="st">"CR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"4"</span>,      <span class="st">"2020-01-01"</span>, <span class="st">"PR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"4"</span>,      <span class="st">"2020-03-01"</span>, <span class="st">"NE"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"4"</span>,      <span class="st">"2020-04-01"</span>, <span class="st">"NE"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"4"</span>,      <span class="st">"2020-05-01"</span>, <span class="st">"PR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"5"</span>,      <span class="st">"2020-01-01"</span>, <span class="st">"PR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"5"</span>,      <span class="st">"2020-01-10"</span>, <span class="st">"PR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"5"</span>,      <span class="st">"2020-01-20"</span>, <span class="st">"PR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"6"</span>,      <span class="st">"2020-02-06"</span>, <span class="st">"PR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"6"</span>,      <span class="st">"2020-02-16"</span>, <span class="st">"CR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"6"</span>,      <span class="st">"2020-03-30"</span>, <span class="st">"PR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"7"</span>,      <span class="st">"2020-02-06"</span>, <span class="st">"PR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"7"</span>,      <span class="st">"2020-02-16"</span>, <span class="st">"CR"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"7"</span>,      <span class="st">"2020-04-01"</span>, <span class="st">"NE"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"8"</span>,      <span class="st">"2020-02-16"</span>, <span class="st">"PD"</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    ADT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">ADTC</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    PARAMCD <span class="op">=</span> <span class="st">"OVR"</span>,</span></span>
+<span class="r-in"><span>    PARAM <span class="op">=</span> <span class="st">"Overall Response by Investigator"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="derive_vars_merged.html">derive_vars_merged</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    dataset_add <span class="op">=</span> <span class="va">adsl</span>,</span></span>
+<span class="r-in"><span>    by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    new_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">TRTSDT</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="derive_extreme_event.html">derive_extreme_event</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">adrs</span>,</span></span>
+<span class="r-in"><span>  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">ADT</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"first"</span>,</span></span>
+<span class="r-in"><span>  source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>adsl <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu">event_joined</span><span class="op">(</span></span></span>
+<span class="r-in"><span>      description <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="st">"CR needs to be confirmed by a second CR at least 28 days later"</span>,</span></span>
+<span class="r-in"><span>        <span class="st">"at most one NE is acceptable between the two assessments"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span>,</span></span>
+<span class="r-in"><span>      join_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVALC</span>, <span class="va">ADT</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      join_type <span class="op">=</span> <span class="st">"after"</span>,</span></span>
+<span class="r-in"><span>      first_cond_upper <span class="op">=</span> <span class="va">AVALC.join</span> <span class="op">==</span> <span class="st">"CR"</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>        <span class="va">ADT.join</span> <span class="op">&gt;=</span> <span class="va">ADT</span> <span class="op">+</span> <span class="fl">28</span>,</span></span>
+<span class="r-in"><span>      condition <span class="op">=</span> <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"CR"</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">AVALC.join</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"NE"</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="count_vals.html">count_vals</a></span><span class="op">(</span>var <span class="op">=</span> <span class="va">AVALC.join</span>, val <span class="op">=</span> <span class="st">"NE"</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>      set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        AVALC <span class="op">=</span> <span class="st">"CR"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu">event_joined</span><span class="op">(</span></span></span>
+<span class="r-in"><span>      description <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="st">"PR needs to be confirmed by a second CR or PR at least 28 days later,"</span>,</span></span>
+<span class="r-in"><span>        <span class="st">"at most one NE is acceptable between the two assessments"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span>,</span></span>
+<span class="r-in"><span>      join_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVALC</span>, <span class="va">ADT</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      join_type <span class="op">=</span> <span class="st">"after"</span>,</span></span>
+<span class="r-in"><span>      first_cond_upper <span class="op">=</span> <span class="va">AVALC.join</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>        <span class="va">ADT.join</span> <span class="op">&gt;=</span> <span class="va">ADT</span> <span class="op">+</span> <span class="fl">28</span>,</span></span>
+<span class="r-in"><span>      condition <span class="op">=</span> <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"PR"</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">AVALC.join</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span>, <span class="st">"NE"</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="count_vals.html">count_vals</a></span><span class="op">(</span>var <span class="op">=</span> <span class="va">AVALC.join</span>, val <span class="op">=</span> <span class="st">"NE"</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>      set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        AVALC <span class="op">=</span> <span class="st">"PR"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="event.html">event</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      description <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="st">"CR, PR, or SD are considered as SD if occurring at least 28"</span>,</span></span>
+<span class="r-in"><span>        <span class="st">"after treatment start"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span>,</span></span>
+<span class="r-in"><span>      condition <span class="op">=</span> <span class="va">AVALC</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span>, <span class="st">"SD"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">ADT</span> <span class="op">&gt;=</span> <span class="va">TRTSDT</span> <span class="op">+</span> <span class="fl">28</span>,</span></span>
+<span class="r-in"><span>      set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        AVALC <span class="op">=</span> <span class="st">"SD"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="event.html">event</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      condition <span class="op">=</span> <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"PD"</span>,</span></span>
+<span class="r-in"><span>      set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        AVALC <span class="op">=</span> <span class="st">"PD"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="event.html">event</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      condition <span class="op">=</span> <span class="va">AVALC</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span>, <span class="st">"SD"</span>, <span class="st">"NE"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        AVALC <span class="op">=</span> <span class="st">"NE"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="event.html">event</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      description <span class="op">=</span> <span class="st">"set response to MISSING for patients without records in ADRS"</span>,</span></span>
+<span class="r-in"><span>      dataset_name <span class="op">=</span> <span class="st">"adsl"</span>,</span></span>
+<span class="r-in"><span>      condition <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>      set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        AVALC <span class="op">=</span> <span class="st">"MISSING"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span>,</span></span>
+<span class="r-in"><span>      keep_source_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">TRTSDT</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    PARAMCD <span class="op">=</span> <span class="st">"CBOR"</span>,</span></span>
+<span class="r-in"><span>    PARAM <span class="op">=</span> <span class="st">"Best Confirmed Overall Response by Investigator"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CBOR"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Dataset contains duplicate records with respect to `USUBJID` and `ADT`</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Run `get_duplicates_dataset()` to access the duplicate records</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID ADTC       AVALC   ADT        PARAMCD PARAM                 TRTSDT    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1       2020-01-01 PR      2020-01-01 CBOR    Best Confirmed Overa… 2020-01-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2       2020-01-01 NE      2020-01-01 CBOR    Best Confirmed Overa… 2019-12-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3       <span style="color: #BB0000;">NA</span>         MISSING <span style="color: #BB0000;">NA</span>         CBOR    Best Confirmed Overa… 2019-11-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 4       2020-01-01 NE      2020-01-01 CBOR    Best Confirmed Overa… 2019-12-30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 5       2020-01-01 NE      2020-01-01 CBOR    Best Confirmed Overa… 2020-01-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 6       2020-02-06 PR      2020-02-06 CBOR    Best Confirmed Overa… 2020-02-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 7       2020-02-06 NE      2020-02-06 CBOR    Best Confirmed Overa… 2020-02-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> 8       2020-02-16 PD      2020-02-16 CBOR    Best Confirmed Overa… 2020-02-01</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

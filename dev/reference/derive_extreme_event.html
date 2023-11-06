@@ -178,8 +178,8 @@ the event and by group, the records are ordered by the specified order.</p>
 <dt>mode</dt>
 <dd><p>Selection mode (first or last)</p>
 <p>If a particular event from <code>events</code> has more than one observation,
-"first"/"last" is to select the first/last record of this type of events
-sorting by <code>order</code>.</p>
+<code>"first"</code>/<code>"last"</code> is used to select the first/last record of this type of
+event sorting by <code>order</code>.</p>
 <p><em>Permitted Values:</em> <code>"first"</code>, <code>"last"</code></p></dd>
 
 
@@ -478,7 +478,7 @@ the selected observations.</p></li>
 <span class="r-in"><span>      <span class="op">)</span>,</span></span>
 <span class="r-in"><span>      join_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVALC</span>, <span class="va">ADT</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>      join_type <span class="op">=</span> <span class="st">"after"</span>,</span></span>
-<span class="r-in"><span>      first_cond <span class="op">=</span> <span class="va">AVALC.join</span> <span class="op">==</span> <span class="st">"CR"</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>      first_cond_upper <span class="op">=</span> <span class="va">AVALC.join</span> <span class="op">==</span> <span class="st">"CR"</span> <span class="op">&amp;</span></span></span>
 <span class="r-in"><span>        <span class="va">ADT.join</span> <span class="op">&gt;=</span> <span class="va">ADT</span> <span class="op">+</span> <span class="fl">28</span>,</span></span>
 <span class="r-in"><span>      condition <span class="op">=</span> <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"CR"</span> <span class="op">&amp;</span></span></span>
 <span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">AVALC.join</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"NE"</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
@@ -494,7 +494,7 @@ the selected observations.</p></li>
 <span class="r-in"><span>      <span class="op">)</span>,</span></span>
 <span class="r-in"><span>      join_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVALC</span>, <span class="va">ADT</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>      join_type <span class="op">=</span> <span class="st">"after"</span>,</span></span>
-<span class="r-in"><span>      first_cond <span class="op">=</span> <span class="va">AVALC.join</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>      first_cond_upper <span class="op">=</span> <span class="va">AVALC.join</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
 <span class="r-in"><span>        <span class="va">ADT.join</span> <span class="op">&gt;=</span> <span class="va">ADT</span> <span class="op">+</span> <span class="fl">28</span>,</span></span>
 <span class="r-in"><span>      condition <span class="op">=</span> <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"PR"</span> <span class="op">&amp;</span></span></span>
 <span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">AVALC.join</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span>, <span class="st">"NE"</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span></span></span>

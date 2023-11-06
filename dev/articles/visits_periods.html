@@ -200,7 +200,8 @@ related variables (<code>AVISIT</code>, <code>AVISITN</code>,
 <span><span class="fu"><a href="../reference/derive_vars_joined.html">derive_vars_joined</a></span><span class="op">(</span></span>
 <span>  <span class="va">adbds</span>,</span>
 <span>  dataset_add <span class="op">=</span> <span class="va">windows</span>,</span>
-<span>  filter_join <span class="op">=</span> <span class="va">AWLO</span> <span class="op">&lt;=</span> <span class="va">ADY</span> <span class="op">&amp;</span> <span class="va">ADY</span> <span class="op">&lt;=</span> <span class="va">AWHI</span></span>
+<span>  filter_join <span class="op">=</span> <span class="va">AWLO</span> <span class="op">&lt;=</span> <span class="va">ADY</span> <span class="op">&amp;</span> <span class="va">ADY</span> <span class="op">&lt;=</span> <span class="va">AWHI</span>,</span>
+<span>  join_type <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 7</span></span></span>
 <span><span class="co">#&gt;   USUBJID   ADY AVISIT    AWLO  AWHI AVISITN AWTARGET</span></span>
@@ -282,23 +283,28 @@ reference dataset defined above.</p>
 <span>  <span class="st">"1"</span>,      <span class="st">"2021-04-05"</span>,</span>
 <span>  <span class="st">"2"</span>,      <span class="st">"2021-02-15"</span>,</span>
 <span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    STUDYID <span class="op">=</span> <span class="st">"xyz"</span>,</span>
+<span>    .before <span class="op">=</span> <span class="va">USUBJID</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ASTDT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">ASTDT</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/derive_vars_joined.html">derive_vars_joined</a></span><span class="op">(</span></span>
 <span>  <span class="va">adae</span>,</span>
 <span>  dataset_add <span class="op">=</span> <span class="va">phase_ref</span>,</span>
-<span>  by_vars <span class="op">=</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span>
-<span>  filter_join <span class="op">=</span> <span class="va">PHSDT</span> <span class="op">&lt;=</span> <span class="va">ASTDT</span> <span class="op">&amp;</span> <span class="va">ASTDT</span> <span class="op">&lt;=</span> <span class="va">PHEDT</span></span>
+<span>  by_vars <span class="op">=</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span>  filter_join <span class="op">=</span> <span class="va">PHSDT</span> <span class="op">&lt;=</span> <span class="va">ASTDT</span> <span class="op">&amp;</span> <span class="va">ASTDT</span> <span class="op">&lt;=</span> <span class="va">PHEDT</span>,</span>
+<span>  join_type <span class="op">=</span> <span class="st">"all"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
-<span><span class="co">#&gt;   USUBJID ASTDT      STUDYID APHASEN PHSDT      PHEDT      APHASE   </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1       2021-01-01 <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1       2021-01-05 xyz           1 2021-01-04 2021-02-06 TREATMENT</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 1       2021-02-05 xyz           1 2021-01-04 2021-02-06 TREATMENT</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 1       2021-03-05 xyz           2 2021-02-07 2021-03-07 FUP      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 1       2021-04-05 <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 2       2021-02-15 xyz           1 2021-02-02 2021-03-02 TREATMENT</span></span></code></pre></div>
+<span><span class="co">#&gt;   STUDYID USUBJID ASTDT      APHASEN PHSDT      PHEDT      APHASE   </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> xyz     1       2021-01-01      <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> xyz     1       2021-01-05       1 2021-01-04 2021-02-06 TREATMENT</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> xyz     1       2021-02-05       1 2021-01-04 2021-02-06 TREATMENT</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> xyz     1       2021-03-05       2 2021-02-07 2021-03-07 FUP      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> xyz     1       2021-04-05      <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> xyz     2       2021-02-15       1 2021-02-02 2021-03-02 TREATMENT</span></span></code></pre></div>
 <p>If no period reference dataset is available but period variables are
 in ADSL, the period reference dataset can be created from ADSL by
 calling <code><a href="../reference/create_period_dataset.html">create_period_dataset()</a></code>.</p>
@@ -402,6 +408,7 @@ can be derived from the period reference dataset defined above.</p>
 <span>  by_vars <span class="op">=</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>,</span>
 <span>  new_vars <span class="op">=</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">APERIOD</span>, <span class="va">TRTA</span><span class="op">)</span>,</span>
 <span>  join_vars <span class="op">=</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">APERSDT</span>, <span class="va">APEREDT</span><span class="op">)</span>,</span>
+<span>  join_type <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  filter_join <span class="op">=</span> <span class="va">APERSDT</span> <span class="op">&lt;=</span> <span class="va">ASTDT</span> <span class="op">&amp;</span> <span class="va">ASTDT</span> <span class="op">&lt;=</span> <span class="va">APEREDT</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span></span>

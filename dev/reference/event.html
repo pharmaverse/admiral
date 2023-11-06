@@ -124,7 +124,8 @@ derive_extreme_event() function."><meta property="og:image" content="https://pha
 <dd><p>Dataset name of the dataset to be used as input for the
 event. The name refers to the dataset specified for <code>source_datasets</code> in
 <code><a href="derive_extreme_event.html">derive_extreme_event()</a></code>. If the argument is not specified, the input
-dataset (<code>dataset</code>) of <code><a href="derive_extreme_event.html">derive_extreme_event()</a></code> is used.</p></dd>
+dataset (<code>dataset</code>) of <code><a href="derive_extreme_event.html">derive_extreme_event()</a></code> is used.</p>
+<p><em>Permitted Values</em>: a character scalar</p></dd>
 
 
 <dt>condition</dt>
@@ -150,7 +151,8 @@ first or last observation if <code>mode</code> is specified.</p>
 <dt>set_values_to</dt>
 <dd><p>A named list returned by <code><a href="reexport-exprs.html">exprs()</a></code> defining the variables
 to be set for the event, e.g. <code>exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")</code>. The values can be a symbol, a
-character string, a numeric value, <code>NA</code> or an expression.</p></dd>
+character string, a numeric value, <code>NA</code> or an expression.</p>
+<p><em>Permitted Values</em>: a named list of expressions, e.g., created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
 
 
 <dt>keep_source_vars</dt>
@@ -165,7 +167,8 @@ a symbol or a tidyselect expression, e.g., <code>exprs(VISIT, VISITNUM, starts_w
 <dt>description</dt>
 <dd><p>Description of the event</p>
 <p>The description does not affect the derivations where the event is used. It
-is intended for documentation only.</p></dd>
+is intended for documentation only.</p>
+<p><em>Permitted Values</em>: a character scalar</p></dd>
 
 </dl></div>
     <div class="section level2">
