@@ -18,7 +18,9 @@ event(
 \item{dataset_name}{Dataset name of the dataset to be used as input for the
 event. The name refers to the dataset specified for \code{source_datasets} in
 \code{derive_extreme_event()}. If the argument is not specified, the input
-dataset (\code{dataset}) of \code{derive_extreme_event()} is used.}
+dataset (\code{dataset}) of \code{derive_extreme_event()} is used.
+
+\emph{Permitted Values}: a character scalar}
 
 \item{condition}{An unquoted condition for selecting the observations, which
 will contribute to the extreme event. If the condition contains summary
@@ -39,7 +41,9 @@ first or last observation if \code{mode} is specified.
 
 \item{set_values_to}{A named list returned by \code{exprs()} defining the variables
 to be set for the event, e.g. \code{exprs(PARAMCD = "WSP", PARAM  = "Worst Sleeping Problems")}. The values can be a symbol, a
-character string, a numeric value, \code{NA} or an expression.}
+character string, a numeric value, \code{NA} or an expression.
+
+\emph{Permitted Values}: a named list of expressions, e.g., created by \code{exprs()}}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
 
@@ -53,7 +57,9 @@ a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_w
 \item{description}{Description of the event
 
 The description does not affect the derivations where the event is used. It
-is intended for documentation only.}
+is intended for documentation only.
+
+\emph{Permitted Values}: a character scalar}
 }
 \value{
 An object of class \code{event}

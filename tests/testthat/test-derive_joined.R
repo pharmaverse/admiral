@@ -24,6 +24,7 @@ test_that("derive_vars_joined Test 1: no by_vars, no order, no new_vars", {
       select(expected, USUBJID, ADY),
       dataset_add = windows,
       join_vars = exprs(AWHI, AWLO),
+      join_type = "all",
       filter_join = AWLO <= ADY & ADY <= AWHI
     ),
     keys = c("USUBJID", "ADY")
@@ -54,6 +55,7 @@ test_that("derive_vars_joined Test 2: new_vars with rename", {
       order = exprs(AVAL),
       new_vars = exprs(NADIR = AVAL),
       join_vars = exprs(ADY),
+      join_type = "all",
       filter_add = ADY > 0,
       filter_join = ADY.join < ADY,
       mode = "first",
@@ -91,6 +93,7 @@ test_that("derive_vars_joined Test 3: by_vars with rename", {
       order = exprs(FADT),
       new_vars = exprs(ATOXGR_pre = FAORRES),
       join_vars = exprs(FADT),
+      join_type = "all",
       filter_join = FADT < TRTSDTM,
       mode = "last"
     ),
@@ -125,6 +128,7 @@ test_that("derive_vars_joined Test 4: order with expression", {
       order = exprs(FADT = convert_dtc_to_dt(FADTC)),
       new_vars = exprs(ATOXGR_pre = FAORRES),
       join_vars = exprs(FADT),
+      join_type = "all",
       filter_join = FADT < TRTSDTM,
       mode = "last"
     ),
@@ -166,6 +170,7 @@ test_that("derive_vars_joined Test 5: join_vars with expression", {
       order = exprs(TRSTRESN),
       new_vars = exprs(AVAL = TRSTRESN),
       join_vars = exprs(TRDT = convert_dtc_to_dt(TRDTC)),
+      join_type = "all",
       filter_join = TRDT <= ADT,
       mode = "first",
       check_type = "none"
@@ -201,6 +206,7 @@ test_that("derive_vars_joined Test 6: no join_vars, no filter_join", {
       dataset_add = faae,
       by_vars = exprs(AEGRPID = FAGRPID),
       order = exprs(FAORRES),
+      join_type = "all",
       new_vars = exprs(ATOXGR_pre = FAORRES),
       mode = "first"
     ),
@@ -232,6 +238,7 @@ test_that("derive_vars_joined Test 7: new_vars expressions using variables from 
       dataset_add = ex,
       by_vars = exprs(USUBJID),
       order = exprs(EXSDT = convert_dtc_to_dt(EXSDTC)),
+      join_type = "all",
       new_vars = exprs(LSTDSDUR = compute_duration(
         start_date = EXSDT, end_date = ASTDT
       )),
@@ -251,6 +258,7 @@ test_that("derive_vars_joined Test 8: error if new_vars are already in dataset",
       myd,
       dataset_add = myd,
       order = exprs(day),
+      join_type = "all",
       mode = "last",
       filter_join = day < day.join
     ),
@@ -293,6 +301,7 @@ test_that("derive_vars_joined Test 9: fixing a bug from issue 1966", { # nolint
     dataset_add = adlb_tbili_pbl,
     by_vars = exprs(STUDYID, USUBJID),
     order = exprs(ADTM, ASEQ),
+    join_type = "all",
     new_vars = exprs(TBILI_ADT = ADT),
     filter_join = ADT <= ADT.join,
     mode = "first"
@@ -316,6 +325,7 @@ test_that("derive_vars_joined Test 10: order vars are selected properly in funct
     dataset_add = myd,
     new_vars = exprs(first_val = val),
     join_vars = exprs(day),
+    join_type = "all",
     order = exprs(-day),
     mode = "last",
     filter_join = day < day.join
@@ -333,6 +343,7 @@ test_that("derive_vars_joined Test 10: order vars are selected properly in funct
     keys = c("day", "val", "first_val")
   )
 })
+
 
 ## Test 11: Ensure exist_flag, true/false value arguments work ----
 test_that("derive_vars_joined Test 11: Ensure exist_flag, true/false value arguments work", {
@@ -359,11 +370,58 @@ test_that("derive_vars_joined Test 11: Ensure exist_flag, true/false value argum
       select(expected, USUBJID, ADY),
       dataset_add = windows,
       join_vars = exprs(AWHI, AWLO),
+      join_type = "all",
       filter_join = AWLO <= ADY & ADY <= AWHI,
       exist_flag = flag,
       true_value = "Yes",
       false_value = "No"
     ),
     keys = c("USUBJID", "ADY")
+  )
+})
+
+# get_joined_data ----
+## Test 12: `first_cond_lower` works ----
+test_that("get_joined_data Test 12: `first_cond_lower` works", {
+  data <- tribble(
+    ~subj, ~day, ~val,
+    "1",      1, "++",
+    "1",      2, "-",
+    "1",      3, "0",
+    "1",      4, "+",
+    "1",      5, "++",
+    "1",      6, "-",
+    "2",      1, "-",
+    "2",      2, "++",
+    "2",      3, "+",
+    "2",      4, "0",
+    "2",      5, "-",
+    "2",      6, "++"
+  )
+
+  expected <- tibble::tribble(
+    ~day.join, ~val.join,
+    2,         "++",
+    3,         "+"
+  ) %>%
+    mutate(
+      subj = "2",
+      day = 4,
+      val = "0"
+    )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = get_joined_data(
+      data,
+      dataset_add = data,
+      by_vars = exprs(subj),
+      order = exprs(day),
+      join_vars = exprs(val),
+      join_type = "before",
+      first_cond_lower = val.join == "++",
+      filter_join = val == "0" & all(val.join %in% c("+", "++"))
+    ),
+    keys = c("subj", "day.join")
   )
 })
