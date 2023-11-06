@@ -208,8 +208,8 @@ derive_param_exposure <- function(dataset = NULL,
   assert_character_vector(input_code, values = params_available)
   assert_s3_class(summary_fun, "function")
 
-  if (is.null(filter)) {
-    filter <- TRUE
+  if (is.null(filter_add)) {
+    filter_add <- TRUE
   }
 
   derive_summary_records(

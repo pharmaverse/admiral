@@ -250,7 +250,7 @@ derive_summary_records <- function(dataset = NULL,
     tmp_ref_obs <- get_new_tmp_var(new_ref_obs, prefix = "tmp_ref_obs")
 
     new_ref_obs <- new_ref_obs %>%
-      mutate(!!tmp_ref_obs  := 1L)
+      mutate(!!tmp_ref_obs := 1L)
 
     df_return <- bind_rows(
       df_return,
@@ -266,7 +266,7 @@ derive_summary_records <- function(dataset = NULL,
     )
     names(update_missings) <- names(missing_values)
     df_return <- df_return %>%
-     mutate(!!!update_missings)
+      mutate(!!!update_missings)
   }
 
   df_return %>%
