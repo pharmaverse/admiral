@@ -129,4 +129,4 @@ jobs:
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
-      push-templates-data: true
+      push-templates-data: false
