@@ -61,6 +61,8 @@ for the event number, which can be used in `order`. (#2140)
 
 - The default value for the `false_value` argument in `derive_extreme_records()` was changed to `NA_character_` (#2125)
 
+- For the function `consolidate_metadata()`, the argument `check_keys` was renamed to `check_type` to align with other functions (#2184)
+
 - In `filter_joined()` and `derive_var_joined_exist_flag()` (#2126)
     - the `first_cond` argument was deprecated in favor of `first_cond_upper` and
     - the `filter` argument was deprecated in favor of `filter_join`.
