@@ -30,7 +30,7 @@ adsl <- admiral_adsl
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
 
 ex <- convert_blanks_to_na(ex)
 pc <- convert_blanks_to_na(pc)
@@ -182,6 +182,7 @@ adppk_prev <- adppk_first_dose %>%
       AENDTM_prev = AENDTM
     ),
     join_vars = exprs(ADTM),
+    join_type = "all",
     filter_add = NULL,
     filter_join = ADTM > ADTM.join,
     mode = "last",
@@ -197,6 +198,7 @@ adppk_nom_prev <- adppk_prev %>%
     order = exprs(NFRLT),
     new_vars = exprs(NFRLT_prev = NFRLT),
     join_vars = exprs(NFRLT),
+    join_type = "all",
     filter_add = NULL,
     filter_join = NFRLT > NFRLT.join,
     mode = "last",

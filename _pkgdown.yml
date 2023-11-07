@@ -19,7 +19,7 @@ development:
   mode: auto
 
 authors:
-  before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/cran-release/)."
+  before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/)."
   footer:
     roles: [aut, ctb, cre, fnd]
     text: "Developed by"
@@ -138,8 +138,8 @@ reference:
 
 navbar:
   structure:
-    left: [getstarted, reference, articles, community, news]
-    right: [search, slack, newissue, github]
+    left: [getstarted, reference, articles, community, news, versions]
+    right: [search, slack, history, newissue, github]
   components:
     getstarted:
       text: Get Started
@@ -194,6 +194,11 @@ navbar:
         href: articles/lab_grading.html
       - text: Hy's Law Implementation
         href: articles/hys_law.html
+
+    history:
+      icon: fa-history
+      href: articles/website-versions.html
+      aria-label: Previous Release Websites
     slack:
       icon: fa-slack
       href: https://app.slack.com/client/T028PB489D3/C02M8KN8269

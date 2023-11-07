@@ -587,20 +587,26 @@ test_that("compute_tmf Test 30: compute TMF", {
     "2003-12-15T-:15:18",
     "2003-12-15T13:-:19",
     "2020-07--T00:00",
-    "2020-07--T00:00:00"
+    "2020-07--T00:00:00",
+    "2022-05--T00:00",
+    "2022-05--T23:00",
+    "2022-05--T23:59:00"
   )
   input_dtm <- c(
-    as.POSIXct("2019-07-18T15:25:52"),
-    as.POSIXct("2019-07-18T15:25:00"),
-    as.POSIXct("2019-07-18T15:00:00"),
+    ymd_hms("2019-07-18T15:25:52"),
+    ymd_hms("2019-07-18T15:25:00"),
+    ymd_hms("2019-07-18T15:00:00"),
     as.POSIXct("2019-07-18"),
     as.POSIXct("2019-02-01"),
     as.POSIXct(NA_character_),
     as.POSIXct(NA_character_),
-    as.POSIXct("2003-12-15T23:15:18"),
-    as.POSIXct("2003-12-15T13:59:19"),
-    as.POSIXct("2020-07-31T00:00:59"),
-    as.POSIXct("2020-07-31T00:00:59")
+    ymd_hms("2003-12-15T23:15:18"),
+    ymd_hms("2003-12-15T13:59:19"),
+    ymd_hms("2020-07-31T00:00:59"),
+    ymd_hms("2020-07-31T00:00:00"),
+    ymd_hms("2022-05-15T23:59:59"),
+    ymd_hms("2022-05-15T23:59:59"),
+    ymd_hms("2022-05-15T23:59:59")
   )
   expected_output <- c(
     NA_character_,
@@ -613,7 +619,10 @@ test_that("compute_tmf Test 30: compute TMF", {
     "H",
     "M",
     "S",
-    NA_character_
+    NA_character_,
+    "H",
+    "M",
+    "S"
   )
 
   expect_equal(

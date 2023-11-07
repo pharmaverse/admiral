@@ -11,8 +11,12 @@ derive_vars_joined(
   by_vars = NULL,
   order = NULL,
   new_vars = NULL,
+  tmp_obs_nr_var = NULL,
   join_vars = NULL,
+  join_type,
   filter_add = NULL,
+  first_cond_lower = NULL,
+  first_cond_upper = NULL,
   filter_join = NULL,
   mode = NULL,
   exist_flag = NULL,
@@ -78,6 +82,18 @@ additional dataset (\code{dataset_add}) are added.
 
 \emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
 
+\item{tmp_obs_nr_var}{Temporary observation number
+
+The specified variable is added to the input dataset (\code{dataset}) and the
+additional dataset (\code{dataset_add}). It is set to the observation number
+with respect to \code{order}. For each by group (\code{by_vars}) the observation
+number starts with \code{1}. The variable can be used in the conditions
+(\code{filter_join}, \code{first_cond_upper}, \code{first_cond_lower}). It can also be
+used to select consecutive observations or the last observation.
+
+The variable is not included in the output dataset. To include it specify
+it for \code{new_vars}.}
+
 \item{join_vars}{Variables to use from additional dataset
 
 Any extra variables required from the additional dataset for \code{filter_join}
@@ -95,6 +111,22 @@ The variables are not included in the output dataset.
 
 \emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
 
+\item{join_type}{Observations to keep after joining
+
+The argument determines which of the joined observations are kept with
+respect to the original observation. For example, if \code{join_type = "after"}
+is specified all observations after the original observations are kept.
+
+For example for confirmed response or BOR in the oncology setting or
+confirmed deterioration in questionnaires the confirmatory assessment must
+be after the assessment. Thus \code{join_type = "after"} could be used.
+
+Whereas, sometimes you might allow for confirmatory observations to occur
+prior to the observation. For example, to identify AEs occurring on or
+after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
+
+\emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}}
+
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
 Only observations from \code{dataset_add} fulfilling the specified condition are
@@ -104,7 +136,34 @@ observations are joined.
 Variables created by \code{order} or \code{new_vars} arguments can be used in the
 condition.
 
+The condition can include summary functions like \code{all()} or \code{any()}. The
+additional dataset is grouped by the by variables (\code{by_vars}).
+
 \emph{Permitted Values}: a condition}
+
+\item{first_cond_lower}{Condition for selecting range of data (before)
+
+If this argument is specified, the other observations are restricted from
+the first observation before the current observation where the specified
+condition is fulfilled up to the current observation. If the condition is
+not fulfilled for any of the other observations, no observations are
+considered.
+
+This argument should be specified if \code{filter_join} contains summary
+functions which should not apply to all observations but only from a
+certain observation before the current observation up to the current
+observation. For an example see the last example below.}
+
+\item{first_cond_upper}{Condition for selecting range of data (after)
+
+If this argument is specified, the other observations are restricted up to
+the first observation where the specified condition is fulfilled. If the
+condition is not fulfilled for any of the other observations, no
+observations are considered.
+
+This argument should be specified if \code{filter_join} contains summary
+functions which should not apply to all observations but only up to the
+confirmation assessment. For an example see the last example below.}
 
 \item{filter_join}{Filter for the joined dataset
 
@@ -113,6 +172,9 @@ variables from both datasets \code{dataset} and \code{dataset_add} can be used.
 
 Variables created by \code{order} or \code{new_vars} arguments can be used in the
 condition.
+
+The condition can include summary functions like \code{all()} or \code{any()}. The
+joined dataset is grouped by the original observations.
 
 \emph{Permitted Values}: a condition}
 
@@ -193,6 +255,20 @@ those matching the \code{filter_add} condition.
 \item The input dataset and the (restricted) additional dataset are left joined
 by the grouping variables (\code{by_vars}). If no grouping variables are
 specified, a full join is performed.
+\item If \code{first_cond_lower} is specified, for each observation of the input
+dataset the joined dataset is restricted to observations from the first
+observation where \code{first_cond_lower} is fulfilled (the observation fulfilling
+the condition is included) up to the observation of the input dataset. If for
+an observation of the input dataset the condition is not fulfilled, the
+observation is removed.
+
+If \code{first_cond_upper} is specified, for each observation of the input
+dataset the joined dataset is restricted to observations up to the first
+observation where \code{first_cond_upper} is fulfilled (the observation
+fulfilling the condition is included). If for an observation of the input
+dataset the condition is not fulfilled, the observation is removed.
+
+For an example see the last example in the "Examples" section.
 \item The joined dataset is restricted by the \code{filter_join} condition.
 \item If \code{order} is specified, for each observation of the input dataset the
 first or last observation (depending on \code{mode}) is selected.
@@ -233,6 +309,7 @@ windows <- tribble(
 derive_vars_joined(
   adbds,
   dataset_add = windows,
+  join_type = "all",
   filter_join = AWLO <= ADY & ADY <= AWHI
 )
 
@@ -255,6 +332,7 @@ derive_vars_joined(
   order = exprs(AVAL),
   new_vars = exprs(NADIR = AVAL),
   join_vars = exprs(ADY),
+  join_type = "all",
   filter_add = ADY > 0,
   filter_join = ADY.join < ADY,
   mode = "first",
@@ -288,6 +366,7 @@ derive_vars_joined(
   by_vars = exprs(USUBJID),
   order = exprs(AVAL, desc(ADY)),
   new_vars = exprs(HGB_MAX = AVAL, HGB_DY = ADY),
+  join_type = "all",
   filter_add = PARAMCD == "HGB",
   filter_join = ASTDY - 14 <= ADY & ADY <= ASTDY,
   mode = "last"
@@ -328,6 +407,7 @@ derive_vars_joined(
   dataset_add = period_ref,
   by_vars = exprs(STUDYID, USUBJID),
   join_vars = exprs(APERSDT, APEREDT),
+  join_type = "all",
   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
 )
 
@@ -354,6 +434,7 @@ derive_vars_joined(
   dataset_add = ex,
   by_vars = exprs(USUBJID),
   order = exprs(EXSDT = convert_dtc_to_dt(EXSDTC)),
+  join_type = "all",
   new_vars = exprs(LDRELD = compute_duration(
     start_date = EXSDT, end_date = ASTDT
   )),
@@ -361,8 +442,55 @@ derive_vars_joined(
   filter_join = EXSDT <= ASTDT,
   mode = "last"
 )
+
+# first_cond_lower and first_cond_upper argument
+myd <- tribble(
+  ~subj, ~day, ~val,
+  "1",      1, "++",
+  "1",      2, "-",
+  "1",      3, "0",
+  "1",      4, "+",
+  "1",      5, "++",
+  "1",      6, "-",
+  "2",      1, "-",
+  "2",      2, "++",
+  "2",      3, "+",
+  "2",      4, "0",
+  "2",      5, "-",
+  "2",      6, "++"
+)
+
+# derive last "++" day before "0" where all results in between are "+" or "++"
+derive_vars_joined(
+  myd,
+  dataset_add = myd,
+  by_vars = exprs(subj),
+  order = exprs(day),
+  mode = "first",
+  new_vars = exprs(prev_plus_day = day),
+  join_vars = exprs(val),
+  join_type = "before",
+  first_cond_lower = val.join == "++",
+  filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
+)
+
+# derive first "++" day after "0" where all results in between are "+" or "++"
+derive_vars_joined(
+  myd,
+  dataset_add = myd,
+  by_vars = exprs(subj),
+  order = exprs(day),
+  mode = "last",
+  new_vars = exprs(next_plus_day = day),
+  join_vars = exprs(val),
+  join_type = "after",
+  first_cond_upper = val.join == "++",
+  filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
+)
 }
 \seealso{
+\code{\link[=derive_var_joined_exist_flag]{derive_var_joined_exist_flag()}}, \code{\link[=filter_joined]{filter_joined()}}
+
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},

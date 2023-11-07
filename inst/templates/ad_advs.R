@@ -23,7 +23,7 @@ adsl <- admiral_adsl
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#handling-of-missing-values # nolint
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
 
 vs <- convert_blanks_to_na(vs)
 
@@ -135,7 +135,7 @@ advs <- advs %>%
 
 ## Get visit info ----
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#visits)
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits)
 advs <- advs %>%
   # Derive Timing
   mutate(
@@ -245,11 +245,12 @@ advs <- advs %>%
 
 ## Get treatment information ----
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html#treatment_bds)
+# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#treatment_bds)
 advs <- advs %>%
   # Assign TRTA, TRTP
   # Create End of Treatment Record
   derive_extreme_records(
+    dataset_add = advs,
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, ATPTN),
     order = exprs(ADT, AVISITN, AVAL),
     mode = "last",

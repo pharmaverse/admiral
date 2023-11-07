@@ -360,12 +360,13 @@ later:
 ```{r}
 adgdssf <- adgdssf %>%
   derive_var_joined_exist_flag(
+    dataset_add = adgdssf,
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(ADT),
     new_var = CDETFL,
     join_vars = exprs(CHGCAT1, ADY),
     join_type = "after",
-    filter = CHGCAT1 == "WORSENED" &
+    filter_join = CHGCAT1 == "WORSENED" &
       CHGCAT1.join == "WORSENED" &
       ADY.join >= ADY + 7
   )
@@ -385,13 +386,14 @@ argument is helpful:
 # Flagging deterioration at two consecutive assessments
 adgdssf <- adgdssf %>%
   derive_var_joined_exist_flag(
+    dataset_add = adgdssf,
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(ADT),
     new_var = CONDETFL,
     join_vars = exprs(CHGCAT1),
     join_type = "after",
     tmp_obs_nr_var = tmp_obs_nr,
-    filter = CHGCAT1 == "WORSENED" &
+    filter_join = CHGCAT1 == "WORSENED" &
       CHGCAT1.join == "WORSENED" &
       tmp_obs_nr.join == tmp_obs_nr + 1
   ) %>%
@@ -399,13 +401,15 @@ adgdssf <- adgdssf %>%
   # - a second deterioration at least 7 days later or
   # - deterioration at the last assessment and death due to progression
   derive_var_joined_exist_flag(
+    .,
+    dataset_add = .,
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(ADT),
     new_var = CDTDTHFL,
     join_vars = exprs(CHGCAT1, ADY),
     join_type = "all",
     tmp_obs_nr_var = tmp_obs_nr,
-    filter = CHGCAT1 == "WORSENED" & (
+    filter_join = CHGCAT1 == "WORSENED" & (
       CHGCAT1.join == "WORSENED" & ADY.join >= ADY + 7 |
         tmp_obs_nr == max(tmp_obs_nr.join) & DTHCAUS == "PROGRESSIVE DISEASE")
   )
@@ -424,12 +428,13 @@ parameter summary functions like `all()` can be used in the filter condition:
 ```{r}
 adgdssf <- adgdssf %>%
   derive_var_joined_exist_flag(
+    dataset_add = adgdssf,
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(ADT),
     new_var = DEFDETFL,
     join_vars = exprs(CHGCAT1),
     join_type = "after",
-    filter = CHGCAT1 == "WORSENED" & all(CHGCAT1.join == "WORSENED")
+    filter_join = CHGCAT1 == "WORSENED" & all(CHGCAT1.join == "WORSENED")
   )
 ```
 
@@ -457,7 +462,8 @@ adsp <- adqs %>%
   filter(PARCAT1 == "SLEEPING PROBLEMS") %>%
   derive_extreme_event(
     by_vars = exprs(USUBJID, AVISIT),
-    order = exprs(ADY, QSSEQ),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr, ADY, QSSEQ),
     mode = "first",
     events = list(
       event(

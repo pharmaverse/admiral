@@ -1,6 +1,6 @@
-# derive_extreme_records ----
+# derive_extreme_event ----
 ## Test 1: `mode` = first ----
-test_that("derive_extreme_records Test 1: `mode` = first", {
+test_that("derive_extreme_event Test 1: `mode` = first", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD,       ~AVALC,        ~ADY,
     "1",      "NO SLEEP",     "N",              1,
@@ -50,7 +50,8 @@ test_that("derive_extreme_records Test 1: `mode` = first", {
         set_values_to = exprs(AVALC = "Missing", AVAL = 99)
       )
     ),
-    order = exprs(ADY),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr, ADY),
     mode = "first",
     set_values_to = exprs(
       PARAMCD = "WSP"
@@ -66,7 +67,7 @@ test_that("derive_extreme_records Test 1: `mode` = first", {
 })
 
 ## Test 2: `mode` = last ----
-test_that("derive_extreme_records Test 2: `mode` = last", {
+test_that("derive_extreme_event Test 2: `mode` = last", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD,       ~AVALC,        ~ADY,
     "1",      "NO SLEEP",     "N",              1,
@@ -116,7 +117,8 @@ test_that("derive_extreme_records Test 2: `mode` = last", {
         set_values_to = exprs(AVALC = "Missing", AVAL = 99)
       )
     ),
-    order = exprs(ADY),
+    tmp_event_nr_var = event_nr,
+    order = exprs(desc(event_nr), ADY),
     mode = "last",
     set_values_to = exprs(
       PARAMCD = "WSP"
@@ -132,7 +134,7 @@ test_that("derive_extreme_records Test 2: `mode` = last", {
 })
 
 ## Test 3: `source_datasets` works ----
-test_that("derive_extreme_records Test 3: `source_datasets` works", {
+test_that("derive_extreme_event Test 3: `source_datasets` works", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDTC,
     "1",      "2020-01-01",
@@ -216,7 +218,8 @@ test_that("derive_extreme_records Test 3: `source_datasets` works", {
   actual <- derive_extreme_event(
     dataset = adrs,
     by_vars = exprs(STUDYID, USUBJID),
-    order = exprs(ADT),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr, ADT),
     mode = "first",
     source_datasets = list(adsl = adsl),
     events = list(
@@ -279,7 +282,7 @@ test_that("derive_extreme_records Test 3: `source_datasets` works", {
 })
 
 ## Test 4: event-specific mode ----
-test_that("derive_extreme_records Test 4: event-specific mode", {
+test_that("derive_extreme_event Test 4: event-specific mode", {
   adhy <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~CRIT1FL,
     "1",             1, "Y",
@@ -308,7 +311,8 @@ test_that("derive_extreme_records Test 4: event-specific mode", {
         set_values_to = exprs(AVALC = "Y")
       )
     ),
-    order = exprs(AVISITN),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr, AVISITN),
     mode = "first",
     keep_source_vars = exprs(AVISITN),
     set_values_to = exprs(
@@ -338,7 +342,7 @@ test_that("derive_extreme_records Test 4: event-specific mode", {
 })
 
 ## Test 5: event_joined() is handled correctly ----
-test_that("derive_extreme_records Test 5: event_joined() is handled correctly", {
+test_that("derive_extreme_event Test 5: event_joined() is handled correctly", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDTC,
     "1",      "2020-01-01",
@@ -402,14 +406,15 @@ test_that("derive_extreme_records Test 5: event_joined() is handled correctly", 
     derive_extreme_event(
       adrs,
       by_vars = exprs(STUDYID, USUBJID),
-      order = exprs(ADT),
+      tmp_event_nr_var = event_nr,
+      order = exprs(event_nr, ADT),
       mode = "first",
       source_datasets = list(adsl = adsl),
       events = list(
         event_joined(
           join_vars = exprs(AVALC, ADT),
           join_type = "after",
-          first_cond = AVALC.join == "CR" &
+          first_cond_upper = AVALC.join == "CR" &
             ADT.join >= ADT + 28,
           condition = AVALC == "CR" &
             all(AVALC.join %in% c("CR", "NE")) &
@@ -421,7 +426,7 @@ test_that("derive_extreme_records Test 5: event_joined() is handled correctly", 
         event_joined(
           join_vars = exprs(AVALC, ADT),
           join_type = "after",
-          first_cond = AVALC.join %in% c("CR", "PR") &
+          first_cond_upper = AVALC.join %in% c("CR", "PR") &
             ADT.join >= ADT + 28,
           condition = AVALC == "PR" &
             all(AVALC.join %in% c("CR", "PR", "NE")) &
@@ -511,8 +516,8 @@ test_that("derive_extreme_records Test 5: event_joined() is handled correctly", 
   )
 })
 
-## Test 6: ignore_event_order ----
-test_that("derive_extreme_records Test 6: ignore_event_order", {
+## Test 6: no tmp_event_nr_var ----
+test_that("derive_extreme_event Test 6: no tmp_event_nr_var", {
   adrs <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",             1, "PR",
@@ -530,19 +535,18 @@ test_that("derive_extreme_records Test 6: ignore_event_order", {
       event_joined(
         join_vars = exprs(AVALC),
         join_type = "after",
-        first_cond = AVALC.join == "CR",
+        first_cond_upper = AVALC.join == "CR",
         condition = AVALC == "CR",
         set_values_to = exprs(AVALC = "Y")
       ),
       event_joined(
         join_vars = exprs(AVALC),
         join_type = "after",
-        first_cond = AVALC.join %in% c("CR", "PR"),
+        first_cond_upper = AVALC.join %in% c("CR", "PR"),
         condition = AVALC == "PR",
         set_values_to = exprs(AVALC = "Y")
       )
     ),
-    ignore_event_order = TRUE,
     set_values_to = exprs(
       PARAMCD = "CRSP"
     )
@@ -560,5 +564,97 @@ test_that("derive_extreme_records Test 6: ignore_event_order", {
     base = expected,
     compare = actual,
     keys = c("USUBJID", "PARAMCD", "AVISITN")
+  )
+})
+
+## Test 7: deprecation of ignore_event_order ----
+test_that("derive_extreme_event Test 7: deprecation of ignore_event_order", {
+  adrs <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",             1, "PR",
+    "1",             2, "CR",
+    "1",             3, "CR"
+  ) %>%
+    mutate(PARAMCD = "OVR")
+
+  expect_warning(
+    actual <- derive_extreme_event(
+      adrs,
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISITN),
+      mode = "first",
+      events = list(
+        event_joined(
+          join_vars = exprs(AVALC),
+          join_type = "after",
+          first_cond_upper = AVALC.join == "CR",
+          condition = AVALC == "CR",
+          set_values_to = exprs(AVALC = "Y")
+        ),
+        event_joined(
+          join_vars = exprs(AVALC),
+          join_type = "after",
+          first_cond_upper = AVALC.join %in% c("CR", "PR"),
+          condition = AVALC == "PR",
+          set_values_to = exprs(AVALC = "Y")
+        )
+      ),
+      ignore_event_order = TRUE,
+      set_values_to = exprs(
+        PARAMCD = "CRSP"
+      )
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
+  expected <- bind_rows(
+    adrs,
+    tibble::tribble(
+      ~USUBJID, ~AVISITN, ~AVALC, ~PARAMCD,
+      "1",             1, "Y",    "CRSP"
+    )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "PARAMCD", "AVISITN")
+  )
+})
+
+# event_joined ----
+## Test 8: deprecation of `first_cond` ----
+test_that("event_joined Test 8: deprecation of `first_cond`", {
+  new_event <- event_joined(
+    join_vars = exprs(AVALC, ADT),
+    join_type = "after",
+    first_cond_upper = AVALC.join == "CR" &
+      ADT.join >= ADT + 28,
+    condition = AVALC == "CR" &
+      all(AVALC.join %in% c("CR", "NE")) &
+      count_vals(var = AVALC.join, val = "NE") <= 1,
+    set_values_to = exprs(
+      AVALC = "CR"
+    )
+  )
+
+  expect_warning(
+    old_event <- event_joined(
+      join_vars = exprs(AVALC, ADT),
+      join_type = "after",
+      first_cond = AVALC.join == "CR" &
+        ADT.join >= ADT + 28,
+      condition = AVALC == "CR" &
+        all(AVALC.join %in% c("CR", "NE")) &
+        count_vals(var = AVALC.join, val = "NE") <= 1,
+      set_values_to = exprs(
+        AVALC = "CR"
+      )
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
+
+  expect_equal(
+    old_event,
+    expected = new_event
   )
 })

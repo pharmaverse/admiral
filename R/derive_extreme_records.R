@@ -1,17 +1,13 @@
 #' Add the First or Last Observation for Each By Group as New Records
 #'
 #' Add the first or last observation for each by group as new observations. The
-#' new observations can be selected from the input dataset or an additional
-#' dataset. This function can be used for adding the maximum or minimum value
-#' as a separate visit. All variables of the selected observation are kept. This
-#' distinguishes `derive_extreme_records()` from `derive_summary_records()`,
+#' new observations can be selected from the additional dataset. This function can
+#' be used for adding the maximum or minimum value as a separate visit.
+#' All variables of the selected observation are kept. This distinguishes
+#' `derive_extreme_records()` from `derive_summary_records()`,
 #' where only the by variables are populated for the new records.
 #'
 #' @param dataset `r roxygen_param_dataset()`
-#'
-#'   If `dataset_add` is not specified, the new records are selected from the
-#'   input dataset. In this case the variables specified by `by_vars` and
-#'   `order` are expected.
 #'
 #' @param dataset_ref Reference dataset
 #'
@@ -21,18 +17,12 @@
 #'
 #' @param dataset_add Additional dataset
 #'
-#'   Observations from the specified dataset are added as new records to the
-#'   input dataset (`dataset`).
+#'   The additional dataset, which determines the by groups returned in the input dataset,
+#'   based on the groups that exist in this dataset after being subset by `filter_add`.
 #'
-#'   All observations in the specified dataset fulfilling the condition
-#'   specified by `filter_source` are considered. If `mode` and `order` are
-#'   specified, the first or last observation within each by group, defined by
-#'   `by_vars`, is selected.
-#'
-#'   If the argument is not specified, the input dataset (`dataset`) is used.
-#'
-#'   The variables specified by the `by_vars` and `order` argument (if
-#'   applicable) are expected.
+#'   The variables specified in the `by_vars` and `filter_add` parameters are expected
+#'   in this dataset. If `mode` and `order` are specified, the first or last observation
+#'   within each by group, defined by `by_vars`, is selected.
 #'
 #' @param by_vars Grouping variables
 #'
@@ -149,6 +139,7 @@
 #' # Specify the variables that need to be kept in the new records.
 #' derive_extreme_records(
 #'   adlb,
+#'   dataset_add = adlb,
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(AVAL, AVISITN),
 #'   mode = "first",
@@ -165,6 +156,7 @@
 #' # AVISITN. Set AVISITN = 98 and DTYPE = MAXIMUM for these new records.
 #' derive_extreme_records(
 #'   adlb,
+#'   dataset_add = adlb,
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(desc(AVAL), AVISITN),
 #'   mode = "first",
@@ -179,6 +171,7 @@
 #' # Set AVISITN = 99 and DTYPE = LOV for these new records.
 #' derive_extreme_records(
 #'   adlb,
+#'   dataset_add = adlb,
 #'   by_vars = exprs(USUBJID),
 #'   order = exprs(AVISITN),
 #'   mode = "last",
@@ -254,7 +247,7 @@
 #'   )
 #' )
 derive_extreme_records <- function(dataset = NULL,
-                                   dataset_add = NULL,
+                                   dataset_add,
                                    dataset_ref = NULL,
                                    by_vars = NULL,
                                    order = NULL,
@@ -271,21 +264,13 @@ derive_extreme_records <- function(dataset = NULL,
   assert_expr_list(order, optional = TRUE)
   assert_expr_list(keep_source_vars, optional = TRUE)
 
-  if (is.null(dataset_add)) {
-    expected_vars <- expr_c(by_vars, extract_vars(order))
-  } else {
-    expected_vars <- by_vars
-  }
-
   assert_data_frame(
     dataset,
-    required_vars = expected_vars,
     optional = TRUE
   )
   assert_data_frame(
     dataset_add,
-    required_vars = expr_c(by_vars, extract_vars(order)),
-    optional = TRUE
+    required_vars = expr_c(by_vars, extract_vars(order))
   )
   assert_data_frame(
     dataset_ref,
@@ -307,18 +292,8 @@ derive_extreme_records <- function(dataset = NULL,
   exist_flag <- assert_symbol(enexpr(exist_flag), optional = TRUE)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_varval_list(set_values_to)
-  if (is.null(dataset) && is.null(dataset_add)) {
-    abort(paste(
-      "Neither `dataset` nor `dataset_add` is specified.",
-      "At least one of them must be specified.",
-      sep = "\n"
-    ))
-  }
 
   # Create new observations
-  if (is.null(dataset_add)) {
-    dataset_add <- dataset
-  }
   new_add_obs <- filter_if(dataset_add, filter_add)
 
   if (!is.null(order)) {

@@ -6,20 +6,30 @@
 \usage{
 filter_joined(
   dataset,
+  dataset_add,
   by_vars,
   join_vars,
   join_type,
   first_cond = NULL,
+  first_cond_lower = NULL,
+  first_cond_upper = NULL,
   order,
   tmp_obs_nr_var = NULL,
-  filter,
+  filter_add = NULL,
+  filter_join,
+  filter = NULL,
   check_type = "warning"
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars}, \code{order} and \code{join_vars} argument(s) to be expected.}
+The variables specified by the \code{by_vars} and \code{order} argument(s) to be expected.}
+
+\item{dataset_add}{Additional dataset
+
+The variables specified for \code{by_vars}, \code{join_vars}, and \code{order} are
+expected.}
 
 \item{by_vars}{By variables
 
@@ -30,24 +40,60 @@ dataset with itself.}
 
 The variables needed from the other observations should be specified for
 this parameter. The specified variables are added to the joined dataset
-with suffix ".join". For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
+with suffix ".join". For example to select all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = exprs(AVALC, AVISITN)} and \code{filter_join = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
 
 The \verb{*.join} variables are not included in the output dataset.}
 
 \item{join_type}{Observations to keep after joining
 
 The argument determines which of the joined observations are kept with
-respect to the original observation. For example, if \code{join_type = "after"} is specified all observations after the original observations are
-kept.
+respect to the original observation. For example, if \code{join_type = "after"}
+is specified all observations after the original observations are kept.
+
+For example for confirmed response or BOR in the oncology setting or
+confirmed deterioration in questionnaires the confirmatory assessment must
+be after the assessment. Thus \code{join_type = "after"} could be used.
+
+Whereas, sometimes you might allow for confirmatory observations to occur
+prior to the observation. For example, to identify AEs occurring on or
+after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
 
 \emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}}
 
 \item{first_cond}{Condition for selecting range of data
 
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This argument is \emph{deprecated}, please use \code{first_cond_upper} instead.
+
 If this argument is specified, the other observations are restricted up to
 the first observation where the specified condition is fulfilled. If the
 condition is not fulfilled for any of the subsequent observations, all
 observations are removed.}
+
+\item{first_cond_lower}{Condition for selecting range of data (before)
+
+If this argument is specified, the other observations are restricted from
+the first observation before the current observation where the specified
+condition is fulfilled up to the current observation. If the condition is
+not fulfilled for any of the other observations, no observations are
+considered, i.e., the observation is not flagged.
+
+This parameter should be specified if \code{filter_join} contains summary
+functions which should not apply to all observations but only from a
+certain observation before the current observation up to the current
+observation. For an example see the last example below.}
+
+\item{first_cond_upper}{Condition for selecting range of data (after)
+
+If this argument is specified, the other observations are restricted up to
+the first observation where the specified condition is fulfilled. If the
+condition is not fulfilled for any of the other observations, no
+observations are considered, i.e., the observation is not flagged.
+
+This parameter should be specified if \code{filter_join} contains summary
+functions which should not apply to all observations but only up to the
+confirmation assessment. For an example see the last example below.}
 
 \item{order}{Order
 
@@ -58,14 +104,41 @@ The observations are ordered by the specified order.
 
 \item{tmp_obs_nr_var}{Temporary observation number
 
-The specified variable is added to the input dataset and set to the
-observation number with respect to \code{order}. For each by group (\code{by_vars})
-the observation number starts with \code{1}. The variable can be used in the
-conditions (\code{filter}, \code{first_cond}). It is not included in the output
-dataset. It can be used to select consecutive observations or the last
-observation (see last example below).}
+The specified variable is added to the input dataset (\code{dataset}) and the
+additional dataset (\code{dataset_add}). It is set to the observation number
+with respect to \code{order}. For each by group (\code{by_vars}) the observation
+number starts with \code{1}. The variable can be used in the conditions
+(\code{filter_join}, \code{first_cond_upper}, \code{first_cond_lower}). It is not included
+in the output dataset. It can also be used to select consecutive
+observations or the last observation (see example below).}
+
+\item{filter_add}{Filter for additional dataset (\code{dataset_add})
+
+Only observations from \code{dataset_add} fulfilling the specified condition are
+joined to the input dataset. If the argument is not specified, all
+observations are joined.
+
+Variables created by the \code{order} argument can be used in the condition.
+
+The condition can include summary functions. The additional dataset is
+grouped by the by variables (\code{by_vars}).}
+
+\item{filter_join}{Condition for selecting observations
+
+The filter is applied to the joined dataset for selecting the confirmed
+observations. The condition can include summary functions like \code{all()} or
+\code{any()}. The joined dataset is grouped by the original observations. I.e.,
+the summary function are applied to all observations up to the confirmation
+observation. For example in the oncology setting when using this function
+for confirmed best overall response,  \code{filter_join = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1} selects observations with response "CR" and for all
+observations up to the confirmation observation the response is "CR" or
+"NE" and there is at most one "NE".}
 
 \item{filter}{Condition for selecting observations
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This argument is \emph{deprecated}, please use \code{filter_join} instead.
 
 The filter is applied to the joined dataset for selecting the confirmed
 observations. The condition can include summary functions. The joined
@@ -82,8 +155,6 @@ one "NE".}
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.
-
-\emph{Default:} \code{"none"}
 
 \emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
 }
@@ -108,13 +179,23 @@ used in endpoints such as best overall response.
 \details{
 The following steps are performed to produce the output dataset.
 \subsection{Step 1}{
+\itemize{
+\item The variables specified by \code{order} are added to the additional dataset
+(\code{dataset_add}).
+\item The variables specified by \code{join_vars} are added to the additional dataset
+(\code{dataset_add}).
+\item The records from the additional dataset (\code{dataset_add}) are restricted to
+those matching the \code{filter_add} condition.
+}
 
-The input dataset is joined with itself by the variables specified for
-\code{by_vars}. From the right hand side of the join only the variables
-specified for \code{join_vars} are kept. The suffix ".join" is added to these
-variables.
+Then the  input dataset (\code{dataset}) is joined with the restricted
+additional dataset by the variables specified for \code{by_vars}. From the
+additional dataset only the variables specified for \code{join_vars} are kept.
+The suffix ".join" is added to those variables which are also present in
+the input dataset.
 
-For example, for \code{by_vars = USUBJID}, \code{join_vars = exprs(AVISITN, AVALC)} and input dataset
+For example, for \code{by_vars = USUBJID}, \code{join_vars = exprs(AVISITN, AVALC)}
+and input dataset and additional dataset
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{# A tibble: 2 x 4
 USUBJID AVISITN AVALC  AVAL
@@ -151,18 +232,27 @@ USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
 
 \subsection{Step 3}{
 
-If \code{first_cond} is specified, for each observation of the input dataset the
-joined dataset is restricted to observations up to the first observation
-where \code{first_cond} is fulfilled (the observation fulfilling the condition
-is included). If for an observation of the input dataset the condition is
-not fulfilled, the observation is removed.
+If \code{first_cond_lower} is specified, for each observation of the input
+dataset the joined dataset is restricted to observations from the first
+observation where \code{first_cond_lower} is fulfilled (the observation
+fulfilling the condition is included) up to the observation of the input
+dataset. If for an observation of the input dataset the condition is not
+fulfilled, the observation is removed.
+
+If \code{first_cond_upper} is specified, for each observation of the input
+dataset the joined dataset is restricted to observations up to the first
+observation where \code{first_cond_upper} is fulfilled (the observation
+fulfilling the condition is included). If for an observation of the input
+dataset the condition is not fulfilled, the observation is removed.
+
+For an example see the last example in the "Examples" section.
 }
 
 \subsection{Step 4}{
 
 The joined dataset is grouped by the observations from the input dataset
 and restricted to the observations fulfilling the condition specified by
-\code{filter}.
+\code{filter_join}.
 }
 
 \subsection{Step 5}{
@@ -194,11 +284,12 @@ adae <- tribble(
 
 filter_joined(
   adae,
+  dataset_add = adae,
   by_vars = exprs(USUBJID),
   join_vars = exprs(ACOVFL, ADY),
   join_type = "all",
   order = exprs(ADY),
-  filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
+  filter_join = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 )
 
 # filter observations with AVALC == "Y" and AVALC == "Y" at a subsequent visit
@@ -217,11 +308,12 @@ data <- tribble(
 
 filter_joined(
   data,
+  dataset_add = data,
   by_vars = exprs(USUBJID),
   join_vars = exprs(AVALC, AVISITN),
   join_type = "after",
   order = exprs(AVISITN),
-  filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
+  filter_join = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
 )
 
 # select observations with AVALC == "CR", AVALC == "CR" at a subsequent visit,
@@ -246,12 +338,13 @@ data <- tribble(
 
 filter_joined(
   data,
+  dataset_add = data,
   by_vars = exprs(USUBJID),
   join_vars = exprs(AVALC),
   join_type = "after",
   order = exprs(AVISITN),
-  first_cond = AVALC.join == "CR",
-  filter = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) &
+  first_cond_upper = AVALC.join == "CR",
+  filter_join = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) &
     count_vals(var = AVALC.join, val = "NE") <= 1
 )
 
@@ -278,12 +371,13 @@ data <- tribble(
 
 filter_joined(
   data,
+  dataset_add = data,
   by_vars = exprs(USUBJID),
   join_vars = exprs(AVALC, ADY),
   join_type = "after",
   order = exprs(ADY),
-  first_cond = AVALC.join \%in\% c("CR", "PR") & ADY.join - ADY >= 20,
-  filter = AVALC == "PR" &
+  first_cond_upper = AVALC.join \%in\% c("CR", "PR") & ADY.join - ADY >= 20,
+  filter_join = AVALC == "PR" &
     all(AVALC.join \%in\% c("CR", "PR", "NE")) &
     count_vals(var = AVALC.join, val = "NE") <= 1 &
     (
@@ -310,15 +404,58 @@ data <- tribble(
 
 filter_joined(
   data,
+  dataset_add = data,
   by_vars = exprs(USUBJID),
   tmp_obs_nr_var = tmp_obs_nr,
   join_vars = exprs(CRIT1FL),
   join_type = "all",
   order = exprs(AVISITN),
-  filter = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
+  filter_join = CRIT1FL == "Y" & CRIT1FL.join == "Y" &
     (tmp_obs_nr + 1 == tmp_obs_nr.join | tmp_obs_nr == max(tmp_obs_nr.join))
 )
 
+# first_cond_lower and first_cond_upper argument
+myd <- tribble(
+  ~subj, ~day, ~val,
+  "1",      1, "++",
+  "1",      2, "-",
+  "1",      3, "0",
+  "1",      4, "+",
+  "1",      5, "++",
+  "1",      6, "-",
+  "2",      1, "-",
+  "2",      2, "++",
+  "2",      3, "+",
+  "2",      4, "0",
+  "2",      5, "-",
+  "2",      6, "++"
+)
+
+# select "0" where all results from the first "++" before the "0" up to the "0"
+# (excluding the "0") are "+" or "++"
+filter_joined(
+  myd,
+  dataset_add = myd,
+  by_vars = exprs(subj),
+  order = exprs(day),
+  join_vars = exprs(val),
+  join_type = "before",
+  first_cond_lower = val.join == "++",
+  filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
+)
+
+# select "0" where all results from the "0" (excluding the "0") up to the first
+# "++" after the "0" are "+" or "++"
+filter_joined(
+  myd,
+  dataset_add = myd,
+  by_vars = exprs(subj),
+  order = exprs(day),
+  join_vars = exprs(val),
+  join_type = "after",
+  first_cond_upper = val.join == "++",
+  filter_join = val == "0" & all(val.join \%in\% c("+", "++"))
+)
 }
 \seealso{
 \code{\link[=count_vals]{count_vals()}}, \code{\link[=min_cond]{min_cond()}}, \code{\link[=max_cond]{max_cond()}}
