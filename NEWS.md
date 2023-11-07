@@ -17,7 +17,9 @@ character vector (`'--DTC'`), was imputed. (#2146)
 were enhanced such that more than one summary variable can be derived, e.g.,
 `AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
 
-- `derive_summary_records()` was enhanced with the following optional arguments: `dataset_add`, `dataset_ref`, `missing_values`. These arguments respectively, generate summary variables from additional datasets, retain/add specific records from a reference dataset, and impute user-defined missing values. (#2142)
+- `derive_summary_records()` was enhanced with the following optional arguments: `dataset_add`, `dataset_ref`, `missing_values`. These arguments respectively, generate summary variables from additional datasets, retain/add specific records from a reference dataset, and impute user-defined missing values. `derive_param_exposure()` was enhanced with `dataset_add` as well. (#2142)
+
+- The argument `dataset` is now optional for `derive_summary_records()` and `derive_param_exposure()`. (#2142)
 
 - The "joined" functions (`derive_vars_joined()`, `derive_var_joined_exist_flag()`,
 `filter_joined()`, and `event_joined()`) were unified: (#2126)
