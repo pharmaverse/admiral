@@ -30,12 +30,21 @@
 #'
 #' @param check_keys Check keys?
 #'
+#'  `r lifecycle::badge("deprecated")` Please use `check_type` instead.
+#'
 #'   If `"warning"` or `"error"` is specified, a message is issued if the key
 #'   variables (`key_vars`) are not a unique key in all of the input datasets
 #'   (`datasets`).
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
+#' @param check_type Check uniqueness?
+#'
+#'   If `"warning"` or `"error"` is specified, a message is issued if the key
+#'   variables (`key_vars`) are not a unique key in all of the input datasets
+#'   (`datasets`).
+#'
+#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
 #' @details All observations of the input datasets are put together into a
 #'   single dataset. If a by group (defined by `key_vars`) exists in more than
@@ -80,7 +89,8 @@ consolidate_metadata <- function(datasets,
                                  key_vars,
                                  source_var = SOURCE,
                                  check_vars = "warning",
-                                 check_keys = "error") {
+                                 check_keys,
+                                 check_type = "error") {
   assert_list_of(datasets, class = "data.frame", named = TRUE)
   assert_vars(key_vars)
   source_var <- assert_symbol(enexpr(source_var))
@@ -90,9 +100,23 @@ consolidate_metadata <- function(datasets,
       values = c("none", "message", "warning", "error"),
       case_sensitive = FALSE
     )
-  check_keys <-
+  if (!is_missing(check_keys)) {
+    deprecate_warn(
+      "1.0.0",
+      "consolidate_metadata(check_keys = )",
+      "consolidate_metadata(check_type = )"
+    )
+    check_type <-
+      assert_character_scalar(
+        check_keys,
+        values = c("none", "warning", "error"),
+        case_sensitive = FALSE,
+        optional = TRUE
+      )
+  }
+  check_type <-
     assert_character_scalar(
-      check_keys,
+      check_type,
       values = c("none", "warning", "error"),
       case_sensitive = FALSE
     )
@@ -118,7 +142,7 @@ consolidate_metadata <- function(datasets,
       by_vars = key_vars,
       order = exprs(!!tmp_source_ord),
       mode = "last",
-      check_type = check_keys
+      check_type = check_type
     ) %>%
     remove_tmp_vars()
 }
