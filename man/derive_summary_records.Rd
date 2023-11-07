@@ -101,7 +101,7 @@ For example:
 
 \item{missing_values}{Values for missing summary values
 
-For observations of the input dataset (\code{dataset}) or (\code{dataset_add}) which do not have a
+For observations of the reference dataset (\code{dataset_ref}) which do not have a
 complete mapping defined by the summarization defined in \code{set_values_to}.  Only variables
 specified for \code{set_values_to} can be specified for \code{missing_values}.
 
@@ -202,7 +202,7 @@ derive_summary_records(
   adeg,
   dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
-  filter = n() > 2,
+  filter_add = n() > 2,
   set_values_to = exprs(
     AVAL = mean(AVAL, na.rm = TRUE),
     DTYPE = "AVERAGE"

@@ -6,11 +6,11 @@
 #' @param dataset
 #'   `r roxygen_param_dataset(expected_vars = c("by_vars", "analysis_var"))`
 #'   `PARAMCD` is expected as well,
-#'   + Either `ASTDTM` and `AENDTM` or `ASTDT` and `AENDT` are also expected.
 #'
 #' @param dataset_add Additional dataset
 #'
-#'   The variables specified for `by_vars` are expected.
+#'   The variables specified for `by_vars`, `analysis_var`,
+#'    + alongside either `ASTDTM` and `AENDTM` or `ASTDT` and `AENDT` are also expected.
 #'   Observations from the specified dataset are going to be used to calculate and added
 #'   as new records to the input dataset (`dataset`).
 #'
@@ -187,10 +187,10 @@ derive_param_exposure <- function(dataset = NULL,
     )
   }
 
-  assert_data_frame(dataset,
+  assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
+  assert_data_frame(dataset_add,
     required_vars = expr_c(by_vars, analysis_var, exprs(PARAMCD), dates)
   )
-  assert_data_frame(dataset_add, required_vars = by_vars)
 
   if (!missing(filter)) {
     deprecate_warn(

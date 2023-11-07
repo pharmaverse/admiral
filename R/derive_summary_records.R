@@ -78,7 +78,7 @@
 #'
 #' @param missing_values Values for missing summary values
 #'
-#'   For observations of the input dataset (`dataset`) or (`dataset_add`) which do not have a
+#'   For observations of the reference dataset (`dataset_ref`) which do not have a
 #'   complete mapping defined by the summarization defined in `set_values_to`.  Only variables
 #'   specified for `set_values_to` can be specified for `missing_values`.
 #'
@@ -176,7 +176,7 @@
 #'   adeg,
 #'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
-#'   filter = n() > 2,
+#'   filter_add = n() > 2,
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL, na.rm = TRUE),
 #'     DTYPE = "AVERAGE"
@@ -194,7 +194,7 @@ derive_summary_records <- function(dataset = NULL,
                                    set_values_to,
                                    missing_values = NULL) {
   assert_vars(by_vars)
-  assert_data_frame(dataset, required_vars = by_vars)
+  assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
   assert_data_frame(dataset_add, required_vars = by_vars)
   assert_data_frame(
     dataset_ref,
@@ -247,10 +247,10 @@ derive_summary_records <- function(dataset = NULL,
       by = map_chr(by_vars, as_name)
     )
 
-    tmp_ref_obs <- get_new_tmp_var(new_ref_obs, prefix = "tmp_ref_obs")
-
-    new_ref_obs <- new_ref_obs %>%
-      mutate(!!tmp_ref_obs := 1L)
+    if (!is.null(missing_values)) {
+      new_ref_obs <- new_ref_obs %>%
+        mutate(!!!missing_values)
+    }
 
     df_return <- bind_rows(
       df_return,
@@ -258,17 +258,5 @@ derive_summary_records <- function(dataset = NULL,
     )
   }
 
-  if (!is.null(missing_values)) {
-    update_missings <- map2(
-      syms(names(missing_values)),
-      missing_values,
-      ~ expr(if_else(is.na(!!.x) & tmp_ref_obs_1 == 1, !!.y, !!.x))
-    )
-    names(update_missings) <- names(missing_values)
-    df_return <- df_return %>%
-      mutate(!!!update_missings)
-  }
-
-  df_return %>%
-    remove_tmp_vars()
+  df_return
 }

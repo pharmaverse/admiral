@@ -20,16 +20,16 @@ derive_param_exposure(
 \item{dataset}{Input dataset
 
 The variables specified by the \code{by_vars} and \code{analysis_var} argument(s) to be expected.
-\code{PARAMCD} is expected as well,
-\itemize{
-\item Either \code{ASTDTM} and \code{AENDTM} or \code{ASTDT} and \code{AENDT} are also expected.
-}}
+\code{PARAMCD} is expected as well,}
 
 \item{dataset_add}{Additional dataset
 
-The variables specified for \code{by_vars} are expected.
+The variables specified for \code{by_vars}, \code{analysis_var},
+\itemize{
+\item alongside either \code{ASTDTM} and \code{AENDTM} or \code{ASTDT} and \code{AENDT} are also expected.
 Observations from the specified dataset are going to be used to calculate and added
-as new records to the input dataset (\code{dataset}).}
+as new records to the input dataset (\code{dataset}).
+}}
 
 \item{by_vars}{Grouping variables
 
