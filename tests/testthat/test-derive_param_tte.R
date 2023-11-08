@@ -40,7 +40,7 @@ test_that("derive_param_tte Test 1: new observations with analysis date are deri
       PARAMCD = "OS",
       PARAM = "Overall Survival"
     ) %>%
-    left_join(select(adsl, USUBJID, STARTDT = TRTSDT, STARTDTF = TRTSDTF, DTHFL, DTHDT, LSTALVDT), by = "USUBJID")
+    left_join(select(adsl, USUBJID, STARTDT = TRTSDT, STARTDTF = TRTSDTF, DTHFL, DTHDT, LSTALVDT), by = "USUBJID") #nolint
 
   actual_output <- derive_param_tte(
     dataset_adsl = adsl,
@@ -146,7 +146,7 @@ test_that("derive_param_tte Test 2: new parameter with analysis datetime is deri
       PARAM = "Progression Free Survival"
     ) %>%
     left_join(
-      select(adsl, USUBJID, STARTDTM = TRTSDTM, STARTDTF = TRTSDTF, STARTTMF = TRTSTMF, DTHFL, DTHDT),
+      select(adsl, USUBJID, STARTDTM = TRTSDTM, STARTDTF = TRTSDTF, STARTTMF = TRTSTMF, DTHFL, DTHDT), # nolint
       by = "USUBJID"
     )
 
