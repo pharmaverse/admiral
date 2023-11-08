@@ -431,7 +431,7 @@ derive_param_tte <- function(dataset = NULL,
   }
 
   adsl <- dataset_adsl %>%
-    select(!!!adsl_vars)
+    select(!!!adsl_vars, !!!keep_source_vars)
 
   # create observations for new parameter #
   new_param <- filter_extreme(
@@ -454,7 +454,7 @@ derive_param_tte <- function(dataset = NULL,
     }
 
     # -vars2chr(by_vars) does not work for 3.5 #
-    new_param <- select(new_param, !!!negate_vars(by_vars), !!!keep_source_vars)
+    new_param <- select(new_param, !!!negate_vars(by_vars))
   }
 
   # add new parameter to input dataset #

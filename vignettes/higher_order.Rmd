@@ -168,15 +168,16 @@ adaette <- call_derivation(
   ),
   dataset_adsl = adsl,
   source_datasets = list(adsl = adsl, adae = adae),
-  censor_conditions = list(lastalive_censor)
+  censor_conditions = list(lastalive_censor),
+  keep_source_vars = exprs(TRT01A, EOSSTT)
 )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 adaette %>%
-  select(USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR) %>%
+  select(USUBJID, TRT01A, EOSSTT, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR) %>%
   arrange(USUBJID, PARAMCD) %>%
-  dataset_vignette(display_vars = exprs(USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR))
+  dataset_vignette(display_vars = exprs(USUBJID, TRT01A, EOSSTT, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR))
 ```
 
 Developing your ADaM scripts this way using `call_derivation()` could give the

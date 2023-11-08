@@ -40,7 +40,7 @@ test_that("derive_param_tte Test 1: new observations with analysis date are deri
       PARAMCD = "OS",
       PARAM = "Overall Survival"
     ) %>%
-    left_join(select(adsl, USUBJID, STARTDT = TRTSDT, STARTDTF = TRTSDTF), by = "USUBJID")
+    left_join(select(adsl, USUBJID, STARTDT = TRTSDT, STARTDTF = TRTSDTF, DTHFL, DTHDT, LSTALVDT), by = "USUBJID")
 
   actual_output <- derive_param_tte(
     dataset_adsl = adsl,
@@ -146,7 +146,7 @@ test_that("derive_param_tte Test 2: new parameter with analysis datetime is deri
       PARAM = "Progression Free Survival"
     ) %>%
     left_join(
-      select(adsl, USUBJID, STARTDTM = TRTSDTM, STARTDTF = TRTSDTF, STARTTMF = TRTSTMF),
+      select(adsl, USUBJID, STARTDTM = TRTSDTM, STARTDTF = TRTSDTF, STARTTMF = TRTSTMF, DTHFL, DTHDT),
       by = "USUBJID"
     )
 
@@ -251,7 +251,7 @@ test_that("derive_param_tte Test 3: no new observations for subjects not in ADSL
       PARAM = "Duration of Response"
     ) %>%
     left_join(
-      select(adsl, USUBJID, STARTDT = RSPDT),
+      select(adsl, USUBJID, STARTDT = RSPDT, DTHFL, DTHDT),
       by = "USUBJID"
     )
 
@@ -797,7 +797,8 @@ test_that("derive_param_tte Test 11: ensuring ADT is not NA because of missing s
       STUDYID = "AB42",
       PARAMCD = "ANYAETTE",
       PARAM = "Time to any first adverse event"
-    )
+    ) %>%
+    left_join(select(adsl, USUBJID, LSTALVDT), by = "USUBJID")
 
   expect_dfs_equal(
     actual_output,
