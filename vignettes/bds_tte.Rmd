@@ -402,7 +402,8 @@ adtte <- derive_param_tte(
   start_date = TRTSDT,
   event_conditions = list(pd, death),
   censor_conditions = list(lastvisit, start),
-  set_values_to = exprs(PARAMCD = "PFS", PARAM = "Progression Free Survival")
+  set_values_to = exprs(PARAMCD = "PFS", PARAM = "Progression Free Survival"),
+  keep_source_vars = exprs(USUBJID)
 )
 ```
 
@@ -599,7 +600,7 @@ adtte <- derive_param_tte(
     PARCAT1 = "TTAE",
     PARCAT2 = AEDECOD
   ),
-  keep_source_vars = exprs(USUBJID, AEDECOD)
+  keep_source_vars = exprs(USUBJID)
 )
 ```
 
