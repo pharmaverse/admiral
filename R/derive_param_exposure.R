@@ -4,13 +4,12 @@
 #' start (`ASTDT(M)`)and end date (`AENDT(M)`) as the minimum and maximum date by `by_vars`.
 #'
 #' @param dataset
-#'   `r roxygen_param_dataset(expected_vars = c("by_vars", "analysis_var"))`
-#'   `PARAMCD` is expected as well,
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param dataset_add Additional dataset
 #'
-#'   The variables specified for `by_vars`, `analysis_var`,
-#'    + alongside either `ASTDTM` and `AENDTM` or `ASTDT` and `AENDT` are also expected.
+#'   The variables specified for `by_vars`, `analysis_var`, `PARAMCD`,
+#'   alongside either `ASTDTM` and `AENDTM` or `ASTDT` and `AENDT` are also expected.
 #'   Observations from the specified dataset are going to be used to calculate and added
 #'   as new records to the input dataset (`dataset`).
 #'
