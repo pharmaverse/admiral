@@ -1,6 +1,12 @@
 #' Create Summary Records
 #'
 #' @description
+#'
+#' `r lifecycle::badge("superseded")`
+#'
+#' Development on `get_summary_records()` is complete, and for new code we recommend
+#' switching to using the `dataset_add` argument in `derive_summary_records()`.
+#'
 #' It is not uncommon to have an analysis need whereby one needs to derive an
 #' analysis value (`AVAL`) from multiple records. The ADaM basic dataset
 #' structure variable `DTYPE` is available to indicate when a new derived
@@ -64,9 +70,9 @@
 #'
 #' @return A data frame of derived records.
 #'
-#' @family der_gen
+#' @family superseded
 #'
-#' @keywords der_gen
+#' @keywords superseded
 #'
 #' @seealso [derive_summary_records()], [derive_var_merged_summary()]
 #'
@@ -154,7 +160,7 @@ get_summary_records <- function(dataset,
                                 filter = NULL,
                                 analysis_var,
                                 summary_fun,
-                                set_values_to) {
+                                set_values_to = NULL) {
   assert_vars(by_vars)
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_data_frame(
