@@ -108,12 +108,14 @@ start (<code>ASTDT(M)</code>)and end date (<code>AENDT(M)</code>) as the minimum
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">derive_param_exposure</span><span class="op">(</span></span>
-<span>  <span class="va">dataset</span>,</span>
+<span>  dataset <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">dataset_add</span>,</span>
 <span>  <span class="va">by_vars</span>,</span>
 <span>  <span class="va">input_code</span>,</span>
 <span>  <span class="va">analysis_var</span>,</span>
 <span>  <span class="va">summary_fun</span>,</span>
 <span>  filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  filter_add <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  set_values_to <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -122,9 +124,15 @@ start (<code>ASTDT(M)</code>)and end date (<code>AENDT(M)</code>) as the minimum
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dataset</dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> and <code>analysis_var</code> argument(s) to be expected.
-<code>PARAMCD</code> is expected as well,</p><ul><li><p>Either <code>ASTDTM</code> and <code>AENDTM</code> or <code>ASTDT</code> and <code>AENDT</code> are also expected.</p></li>
-</ul></dd>
+<p>The variables specified by the <code>by_vars</code> argument(s) to be expected.</p></dd>
+
+
+<dt>dataset_add</dt>
+<dd><p>Additional dataset</p>
+<p>The variables specified for <code>by_vars</code>, <code>analysis_var</code>, <code>PARAMCD</code>,
+alongside either <code>ASTDTM</code> and <code>AENDTM</code> or <code>ASTDT</code> and <code>AENDT</code> are also expected.
+Observations from the specified dataset are going to be used to calculate and added
+as new records to the input dataset (<code>dataset</code>).</p></dd>
 
 
 <dt>by_vars</dt>
@@ -154,11 +162,28 @@ for example <code>mean</code> or <code>function(x) mean(x, na.rm = TRUE)</code>.
 
 
 <dt>filter</dt>
-<dd><p>Filter condition</p>
-<p>The specified condition is applied to the input dataset before deriving the
-new parameter, i.e., only observations fulfilling the condition are taken
-into account.</p>
-<p><em>Permitted Values:</em> a condition</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>filter_add</code> instead.</p>
+<p>Filter condition as logical expression to apply during
+summary calculation. By default, filtering expressions are computed within
+<code>by_vars</code> as this will help when an aggregating, lagging, or ranking
+function is involved.</p>
+<p>For example,</p><ul><li><p><code>filter = (AVAL &gt; mean(AVAL, na.rm = TRUE))</code> will filter all <code>AVAL</code>
+values greater than mean of <code>AVAL</code> with in <code>by_vars</code>.</p></li>
+<li><p><code>filter = (dplyr::n() &gt; 2)</code> will filter n count of <code>by_vars</code> greater
+than 2.</p></li>
+</ul></dd>
+
+
+<dt>filter_add</dt>
+<dd><p>Filter condition as logical expression to apply during
+summary calculation. By default, filtering expressions are computed within
+<code>by_vars</code> as this will help when an aggregating, lagging, or ranking
+function is involved.</p>
+<p>For example,</p><ul><li><p><code>filter_add = (AVAL &gt; mean(AVAL, na.rm = TRUE))</code> will filter all <code>AVAL</code>
+values greater than mean of <code>AVAL</code> with in <code>by_vars</code>.</p></li>
+<li><p><code>filter_add = (dplyr::n() &gt; 2)</code> will filter n count of <code>by_vars</code> greater
+than 2.</p></li>
+</ul></dd>
 
 
 <dt>set_values_to</dt>
@@ -237,6 +262,7 @@ variables</p>
 <span class="r-in"><span><span class="co"># Cumulative dose</span></span></span>
 <span class="r-in"><span><span class="va">adex</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">derive_param_exposure</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    dataset_add <span class="op">=</span> <span class="va">adex</span>,</span></span>
 <span class="r-in"><span>    by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>PARAMCD <span class="op">=</span> <span class="st">"TDOSE"</span>, PARCAT1 <span class="op">=</span> <span class="st">"OVERALL"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    input_code <span class="op">=</span> <span class="st">"DOSE"</span>,</span></span>
@@ -265,6 +291,7 @@ variables</p>
 <span class="r-in"><span><span class="co"># average dose in w2-24</span></span></span>
 <span class="r-in"><span><span class="va">adex</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">derive_param_exposure</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    dataset_add <span class="op">=</span> <span class="va">adex</span>,</span></span>
 <span class="r-in"><span>    by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    filter <span class="op">=</span> <span class="va">VISIT</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WEEK 2"</span>, <span class="st">"WEEK 24"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>PARAMCD <span class="op">=</span> <span class="st">"AVDW224"</span>, PARCAT1 <span class="op">=</span> <span class="st">"WEEK2-24"</span><span class="op">)</span>,</span></span>
@@ -273,6 +300,8 @@ variables</p>
 <span class="r-in"><span>    summary_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">ASTDTM</span>, <span class="op">-</span><span class="va">AENDTM</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>derive_param_exposure(filter = ) was deprecated in admiral 1.0.0.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use the `filter_add` argument of `derive_param_exposure()` instead.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 14 × 8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID PARAMCD  AVAL AVALC         VISIT    ASTDT      AENDT      PARCAT1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
@@ -294,6 +323,7 @@ variables</p>
 <span class="r-in"><span><span class="co"># Any dose adjustment?</span></span></span>
 <span class="r-in"><span><span class="va">adex</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">derive_param_exposure</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    dataset_add <span class="op">=</span> <span class="va">adex</span>,</span></span>
 <span class="r-in"><span>    by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>PARAMCD <span class="op">=</span> <span class="st">"TADJ"</span>, PARCAT1 <span class="op">=</span> <span class="st">"OVERALL"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    input_code <span class="op">=</span> <span class="st">"ADJ"</span>,</span></span>
