@@ -55,6 +55,7 @@
 #' value.
 #'
 #'   Significant digits used to avoid floating point discrepancies when comparing numeric values.
+#'   See blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
 #'
 #' @details
 #' `new_var` is derived with values NA, "0", "1", "2", "3", "4", where "4" is the most
@@ -124,6 +125,9 @@ derive_var_atoxgr_dir <- function(dataset,
 
   # check input parameter has correct value
   assert_character_scalar(criteria_direction, values = c("L", "H"))
+
+  # check input parameter holding significant digits has correct value
+  assert_integer_scalar(signif_dig, subset = "positive")
 
   # Check Grade description variable exists on input data set
   assert_data_frame(dataset, required_vars = exprs(!!tox_description_var))

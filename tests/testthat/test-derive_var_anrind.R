@@ -129,3 +129,39 @@ test_that("derive_var_anrind Test 6: missing `AVAL` is handled properly", {
     keys = c("USUBJID", "PARAMCD", "ASEQ")
   )
 })
+
+# Show floating point issue ----
+expected_output_fp <- tibble::tribble(
+  ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~ANRIND,
+  "P01",       "PUL",     1,   100,     60,    110, "NORMAL",
+) %>%
+  mutate(AVAL = 1.1 * AVAL)
+
+input_fp <- select(expected_output_fp, USUBJID:ANRHI)
+
+
+## Test 7: Show floating points handled properly ----
+test_that("derive_var_anrind Test 7: missing `AVAL` is handled properly", {
+
+  expect_dfs_equal(
+    derive_var_anrind(input_fp),
+    expected_output_fp,
+    keys = c("USUBJID", "PARAMCD", "ASEQ")
+  )
+})
+
+## Test 8: Show floating points not handled correctly ----
+test_that("derive_var_anrind Test 8: Show floating points not handled correctly", {
+
+  # when SIGNIFICANT DIGITS = 17 then AVAL > ANRHI
+  # even though 1.1 * 100 should equal 110
+  expected_output_fpx <- expected_output_fp %>%
+    mutate(ANRIND = "HIGH")
+
+  expect_dfs_equal(
+    derive_var_anrind(input_fp, signif_dig = 17),
+    expected_output_fpx,
+    keys = c("USUBJID", "PARAMCD", "ASEQ")
+  )
+})
+

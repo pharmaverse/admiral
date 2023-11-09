@@ -8,6 +8,7 @@
 #' @param signif_dig Number of significant digits to use when comparing values.
 #'
 #'   Significant digits used to avoid floating point discrepancies when comparing numeric values.
+#'   See blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
 #'
 #' @param use_a1hia1lo A logical value indicating whether to use `A1H1` and `A1LO` in
 #' the derivation of `ANRIND`.
@@ -63,6 +64,9 @@
 derive_var_anrind <- function(dataset,
                               signif_dig = get_admiral_option("signif_digits"),
                               use_a1hia1lo = FALSE) {
+  # check input parameter holding significant digits has correct value
+  assert_integer_scalar(signif_dig, subset = "positive")
+
   aval <- "signif(AVAL, signif_dig)"
   anrlo <- "signif(ANRLO, signif_dig)"
   anrhi <- "signif(ANRHI, signif_dig)"

@@ -66,6 +66,19 @@ derive_param_exist_flag(
     PARAM = "Measurable Disease at Baseline"
   )
 )
+
+set_admiral_options(signif_digits = 14)
+
+# Derive ANRIND for ADVS
+advs <- tribble(
+  ~PARAMCD, ~AVAL, ~ANRLO, ~ANRHI,
+  "DIABP",     59,     60,     80,
+  "SYSBP",    120,     90,    130,
+  "RESP",      21,      8,     20,
+)
+
+derive_var_anrind(advs)
+
 }
 \seealso{
 \code{\link[=get_admiral_option]{get_admiral_option()}}, \code{\link[=derive_param_exist_flag]{derive_param_exist_flag()}},\code{\link[=derive_param_tte]{derive_param_tte()}},

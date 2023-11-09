@@ -63,7 +63,8 @@ for example, \code{get_unit_expr = extract_unit(PARAM)}.}
 \item{signif_dig}{Number of significant digits to use when comparing a lab value against another
 value.
 
-Significant digits used to avoid floating point discrepancies when comparing numeric values.}
+Significant digits used to avoid floating point discrepancies when comparing numeric values.
+See blog: \href{https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html}{How admiral handles floating points}}
 }
 \value{
 The input dataset with the character variable added

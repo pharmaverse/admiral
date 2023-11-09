@@ -17,7 +17,8 @@ derive_var_anrind(
 
 \item{signif_dig}{Number of significant digits to use when comparing values.
 
-Significant digits used to avoid floating point discrepancies when comparing numeric values.}
+Significant digits used to avoid floating point discrepancies when comparing numeric values.
+See blog: \href{https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html}{How admiral handles floating points}}
 
 \item{use_a1hia1lo}{A logical value indicating whether to use \code{A1H1} and \code{A1LO} in
 the derivation of \code{ANRIND}.}
