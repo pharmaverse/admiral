@@ -8,7 +8,8 @@
 #' @param signif_dig Number of significant digits to use when comparing values.
 #'
 #'   Significant digits used to avoid floating point discrepancies when comparing numeric values.
-#'   See blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
+#'   See blog: [How admiral handles floating
+#'   points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
 #'
 #' @param use_a1hia1lo A logical value indicating whether to use `A1H1` and `A1LO` in
 #' the derivation of `ANRIND`.

@@ -55,7 +55,8 @@
 #' value.
 #'
 #'   Significant digits used to avoid floating point discrepancies when comparing numeric values.
-#'   See blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
+#'   See blog: [How admiral handles floating
+#'   points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
 #'
 #' @details
 #' `new_var` is derived with values NA, "0", "1", "2", "3", "4", where "4" is the most
