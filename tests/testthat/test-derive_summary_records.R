@@ -11,6 +11,7 @@ test_that("derive_summary_records Test 1: creates new record per group and group
 
   actual_output <- input %>%
     derive_summary_records(
+      dataset_add = input,
       by_vars = exprs(subj, visit),
       set_values_to = exprs(
         val = mean(val),
@@ -50,8 +51,9 @@ test_that("derive_summary_records Test 2: Filter record within `by_vars`", {
 
   actual_output <- input %>%
     derive_summary_records(
+      dataset_add = input,
       by_vars = exprs(subj, visit),
-      filter = n() > 2,
+      filter_add = n() > 2,
       set_values_to = exprs(
         val = mean(val),
         seq = max(seq),
@@ -129,6 +131,7 @@ test_that("derive_summary_records Test 4: deprecation warning for analysis_var a
   expect_warning(
     actual_output <- input %>%
       derive_summary_records(
+        dataset_add = input,
         by_vars = exprs(subj, visit),
         analysis_var = val,
         summary_fun = mean,
@@ -136,6 +139,94 @@ test_that("derive_summary_records Test 4: deprecation warning for analysis_var a
       ),
     class = "lifecycle_warning_deprecated"
   )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("subj", "visit", "seq", "type")
+  )
+})
+
+## Test 5: make sure dataset_add works ----
+test_that("derive_summary_records Test 5: make sure dataset_add works", {
+  input <- tibble::tribble(
+    ~subj, ~visit,       ~val, ~seq,
+    "1",        1,         10,    1,
+    "1",        1,         14,    2,
+    "1",        1,          9,    3,
+    "1",        2,         11,    4,
+    "2",        2,   NA_real_,    1
+  )
+  input_add <- tibble::tribble(
+    ~subj, ~visit,       ~add_val, ~seq,
+    "1",        1,            100,    1,
+    "1",        1,            140,    2,
+    "1",        1,             90,    3
+  )
+  expected_output <- bind_rows(
+    input,
+    tibble::tribble(
+      ~subj, ~visit, ~val, ~type,
+      "1", 1, 110, "AVERAGE"
+    )
+  )
+  actual_output <- input %>%
+    derive_summary_records(
+      dataset_add = input_add,
+      by_vars = exprs(subj, visit),
+      set_values_to = exprs(
+        val = mean(add_val, na.rm = TRUE),
+        type = "AVERAGE"
+      )
+    )
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("subj", "visit", "seq", "type")
+  )
+})
+
+## Test 6: test missing values ----
+test_that("derive_summary_records Test 6: test missing values with dataset_ref", {
+  input <- tibble::tribble(
+    ~subj, ~visit,       ~val, ~seq,
+    "1",        1,         10,    1,
+    "1",        1,         14,    2,
+    "1",        1,          9,    3,
+    "1",        2,         11,    4,
+    "2",        2,   NA_real_,    1
+  )
+
+  input_ref <- tibble::tribble(
+    ~subj, ~visit,
+    "1", 1,
+    "1", 2,
+    "2", 1,
+    "2", 2,
+  )
+
+  expected_output <- bind_rows(
+    input,
+    tibble::tribble(
+      ~subj, ~visit,       ~aval,         ~type,
+      "1",        1,          11,     "AVERAGE",
+      "1",        2,          11,     "AVERAGE",
+      "2",        1,      999999,     "MISSING",
+      "2",        2,    NA_real_,     "AVERAGE",
+    )
+  )
+
+  actual_output <- input %>%
+    derive_summary_records(
+      dataset_add = input,
+      dataset_ref = input_ref,
+      by_vars = exprs(subj, visit),
+      set_values_to = exprs(
+        aval = mean(val, na.rm = TRUE),
+        type = "AVERAGE"
+      ),
+      missing_values = exprs(aval = 999999, type = "MISSING")
+    )
 
   expect_dfs_equal(
     base = expected_output,

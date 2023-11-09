@@ -141,5 +141,9 @@ derive_param_extreme_record(
   )
 )
 }
+\seealso{
+Other superseded: 
+\code{\link{get_summary_records}()}
+}
 \concept{superseded}
 \keyword{superseded}
