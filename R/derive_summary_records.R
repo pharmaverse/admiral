@@ -11,13 +11,29 @@
 #' retain those common values in the newly derived records. Otherwise new value
 #' will be set to `NA`.
 #'
-#' @param dataset  `r roxygen_param_dataset(expected_vars = c("by_vars", "analysis_var"))`
+#' @param dataset  `r roxygen_param_dataset(expected_vars = c("by_vars"))`
+#'
+#' @param dataset_add Additional dataset
+#'
+#'    The variables specified for `by_vars` are expected.
+#'   Observations from the specified dataset are going to be used to calculate and added
+#'   as new records to the input dataset (`dataset`).
+#'
+#' @param dataset_ref Reference dataset
+#'
+#'   The variables specified for `by_vars` are expected. For each
+#'   observation of the specified dataset a new observation is added to the
+#'   input dataset.
 #'
 #' @param by_vars Variables to consider for generation of groupwise summary
 #'   records. Providing the names of variables in [exprs()] will create a
 #'   groupwise summary and generate summary records for the specified groups.
 #'
-#' @param filter Filter condition as logical expression to apply during
+#' @param filter
+#'
+#'  `r lifecycle::badge("deprecated")` Please use `filter_add` instead.
+#'
+#'   Filter condition as logical expression to apply during
 #'   summary calculation. By default, filtering expressions are computed within
 #'   `by_vars` as this will help when an aggregating, lagging, or ranking
 #'   function is involved.
@@ -28,6 +44,46 @@
 #'   values greater than mean of `AVAL` with in `by_vars`.
 #'   + `filter = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
+#'
+#' @param filter_add Filter condition as logical expression to apply during
+#'   summary calculation. By default, filtering expressions are computed within
+#'   `by_vars` as this will help when an aggregating, lagging, or ranking
+#'   function is involved.
+#'
+#'   For example,
+#'
+#'   + `filter_add = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all `AVAL`
+#'   values greater than mean of `AVAL` with in `by_vars`.
+#'   + `filter_add = (dplyr::n() > 2)` will filter n count of `by_vars` greater
+#'   than 2.
+#'
+#' @param set_values_to Variables to be set
+#'
+#'   The specified variables are set to the specified values for the new
+#'   observations.
+#'
+#'   Set a list of variables to some specified value for the new records
+#'   + LHS refer to a variable.
+#'   + RHS refers to the values to set to the variable. This can be a string, a
+#'   symbol, a numeric value, an expression or NA. If summary functions are
+#'   used, the values are summarized by the variables specified for `by_vars`.
+#'
+#'   For example:
+#'   ```
+#'     set_values_to = exprs(
+#'       AVAL = sum(AVAL),
+#'       DTYPE = "AVERAGE",
+#'     )
+#'   ```
+#'
+#' @param missing_values Values for missing summary values
+#'
+#'   For observations of the reference dataset (`dataset_ref`) which do not have a
+#'   complete mapping defined by the summarization defined in `set_values_to`.  Only variables
+#'   specified for `set_values_to` can be specified for `missing_values`.
+#'
+#'   *Permitted Values*: named list of expressions, e.g.,
+#'   `exprs(AVAL = -9999)`
 #'
 #' @inheritParams get_summary_records
 #'
@@ -72,6 +128,7 @@
 #' # Summarize the average of the triplicate ECG interval values (AVAL)
 #' derive_summary_records(
 #'   adeg,
+#'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL, na.rm = TRUE),
@@ -83,6 +140,7 @@
 #' # Derive more than one summary variable
 #' derive_summary_records(
 #'   adeg,
+#'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL),
@@ -116,27 +174,36 @@
 #' # by group
 #' derive_summary_records(
 #'   adeg,
+#'   dataset_add = adeg,
 #'   by_vars = exprs(USUBJID, PARAM, AVISIT),
-#'   filter = n() > 2,
+#'   filter_add = n() > 2,
 #'   set_values_to = exprs(
 #'     AVAL = mean(AVAL, na.rm = TRUE),
 #'     DTYPE = "AVERAGE"
 #'   )
 #' ) %>%
 #'   arrange(USUBJID, AVISIT)
-derive_summary_records <- function(dataset,
+derive_summary_records <- function(dataset = NULL,
+                                   dataset_add,
+                                   dataset_ref = NULL,
                                    by_vars,
                                    filter = NULL,
+                                   filter_add = NULL,
                                    analysis_var,
                                    summary_fun,
-                                   set_values_to) {
+                                   set_values_to,
+                                   missing_values = NULL) {
   assert_vars(by_vars)
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
+  assert_data_frame(dataset_add, required_vars = by_vars)
   assert_data_frame(
-    dataset,
-    required_vars = by_vars
+    dataset_ref,
+    required_vars = by_vars,
+    optional = TRUE
   )
+
   assert_varval_list(set_values_to)
+  assert_expr_list(missing_values, named = TRUE, optional = TRUE)
 
   if (!missing(analysis_var) || !missing(summary_fun)) {
     deprecate_warn(
@@ -149,14 +216,47 @@ derive_summary_records <- function(dataset,
     set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
   }
 
-  # Summarise the analysis value and bind to the original dataset
-  bind_rows(
-    dataset,
-    get_summary_records(
-      dataset,
-      by_vars = by_vars,
-      filter = !!filter,
-      set_values_to = set_values_to
+  if (!missing(filter)) {
+    deprecate_warn(
+      "1.0.0",
+      I("derive_summary_records(filter = )"),
+      "derive_summary_records(filter_add = )"
     )
+    filter_add <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  }
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+
+  summary_records <- dataset_add %>%
+    group_by(!!!by_vars) %>%
+    filter_if(filter_add) %>%
+    summarise(!!!set_values_to) %>%
+    ungroup()
+
+  df_return <- bind_rows(
+    dataset,
+    summary_records
   )
+
+  if (!is.null(dataset_ref)) {
+    add_vars <- colnames(dataset_add)
+    ref_vars <- colnames(dataset_ref)
+
+    new_ref_obs <- anti_join(
+      select(dataset_ref, intersect(add_vars, ref_vars)),
+      select(summary_records, !!!by_vars),
+      by = map_chr(by_vars, as_name)
+    )
+
+    if (!is.null(missing_values)) {
+      new_ref_obs <- new_ref_obs %>%
+        mutate(!!!missing_values)
+    }
+
+    df_return <- bind_rows(
+      df_return,
+      new_ref_obs
+    )
+  }
+
+  df_return
 }
