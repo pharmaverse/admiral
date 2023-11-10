@@ -128,6 +128,9 @@ Reference tab. (#2174)
 
 - Added a link to the previous versions of the website to the navigation bar. (#2205)
 
+- The meaning of `date_imputation = "mid"` was clarified in the documentation of
+the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
+
 ## Various
 
 - Website now has button/links to Slack channel and GitHub Issues (#2127)
