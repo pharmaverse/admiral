@@ -26,26 +26,9 @@
 #'   and `min_dates` or `max_dates` should be specified respectively. Otherwise,
 #'   `NA_character_` is returned if the year component is missing.
 #'
-#'   *Default*: `"h"`
-#'
 #'   *Permitted Values*: `"Y"` (year, highest level), `"M"` (month), `"D"`
 #'   (day), `"h"` (hour), `"m"` (minute), `"s"` (second), `"n"` (none, lowest
 #'   level)
-#'
-#' @param date_imputation The value to impute the day/month when a datepart is
-#'   missing.
-#'
-#'   A character value is expected, either as a
-#'   - format with month and day specified as `"mm-dd"`: e.g. `"06-15"` for the
-#'   15th of June (The year can not be specified; for imputing the year
-#'   `"first"` or `"last"` together with `min_dates` or `max_dates` argument can
-#'   be used (see examples).),
-#'   - or as a keyword: `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
-#'   day/month.
-#'
-#'   The argument is ignored if `highest_imputation` is less then `"D"`.
-#'
-#'   *Default*: `"first"`.
 #'
 #' @param time_imputation The value to impute the time when a timepart is
 #'   missing.
@@ -56,8 +39,6 @@
 #'   - or as a keyword: `"first"`,`"last"` to impute to the start/end of a day.
 #'
 #'   The argument is ignored if `highest_imputation = "n"`.
-#'
-#'   *Default*: `"first"`.
 #'
 #' @param min_dates Minimum dates
 #'
@@ -110,7 +91,7 @@
 #'
 #' Permitted Values: `TRUE`, `FALSE`
 #'
-#' *Default*: `FALSE`
+#' @inheritParams impute_dtc_dt
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
@@ -607,8 +588,6 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'   and `min_dates` or `max_dates` should be specified respectively. Otherwise,
 #'   `NA_character_` is returned if the year component is missing.
 #'
-#'   *Default*: `"n"`
-#'
 #'   *Permitted Values*: `"Y"` (year, highest level), `"M"` (month), `"D"`
 #'   (day), `"n"` (none, lowest level)
 #'
@@ -621,11 +600,13 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'   `"first"` or `"last"` together with `min_dates` or `max_dates` argument can
 #'   be used (see examples).),
 #'   - or as a keyword: `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
-#'   day/month.
+#'   day/month. If `"mid"` is specified, missing components are imputed as the
+#'   middle of the possible range:
+#'       - If both month and day are missing, they are imputed as `"06-30"`
+#'        (middle of the year).
+#'       - If only day is missing, it is imputed as `"15"` (middle of the month).
 #'
 #'   The argument is ignored if `highest_imputation` is less then `"D"`.
-#'
-#'   *Default*: `"first"`
 #'
 #' @param min_dates Minimum dates
 #'
@@ -667,8 +648,6 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #' (and `date_imputation = "MID"`).
 #'
 #' Permitted Values: `TRUE`, `FALSE`
-#'
-#' Default: `FALSE`
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
@@ -1191,9 +1170,7 @@ compute_dtf <- function(dtc, dt) {
 #' (`'--DTM'`) as 00, then it is not necessary to set (`'--TMF'`) to `'S'`. A user can set this
 #' to `TRUE` so the `'S'` Flag is dropped from (`'--TMF'`).
 #'
-#'  A logical value
-#'
-#'   Default: `FALSE`
+#' *Permitted Values*: A logical value
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
@@ -1288,8 +1265,6 @@ compute_tmf <- function(dtc,
 #'
 #'   If `"auto"` is specified, the date imputation flag is derived if the
 #'   `date_imputation` argument is not null.
-#'
-#'   *Default*: `"auto"`
 #'
 #'   *Permitted Values*: `"auto"`, `"date"` or `"none"`
 #'
@@ -1499,8 +1474,6 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
 #'   If `"auto"` is specified, the date imputation flag is derived if the
 #'   `date_imputation` argument is not null and the time imputation flag is
 #'   derived if the `time_imputation` argument is not null
-#'
-#'   *Default*: `"auto"`
 #'
 #'   *Permitted Values*: `"auto"`, `"date"`, `"time"`, `"both"`, or `"none"`
 #'

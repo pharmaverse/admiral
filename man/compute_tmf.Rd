@@ -20,9 +20,7 @@ if only hours and minutes are ever collected, and seconds are imputed in
 (\code{'--DTM'}) as 00, then it is not necessary to set (\code{'--TMF'}) to \code{'S'}. A user can set this
 to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'--TMF'}).
 
-A logical value
-
-Default: \code{FALSE}}
+\emph{Permitted Values}: A logical value}
 }
 \value{
 The time imputation flag (\code{'--TMF'}) (character value of \code{'H'}, \code{'M'} , \code{'S'} or \code{NA})
