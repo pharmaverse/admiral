@@ -1,10 +1,8 @@
-#' Merge an Existence Flag
+#' Merge an Existence Flag From Muliple Sources
 #'
 #' @description Adds a flag variable to the input dataset which indicates if
-#' there exists at least one observation in another dataset fulfilling a certain
-#' condition.
-#'
-#' **Note:** This is a wrapper function for the more generic `derive_vars_merged()`.
+#'   there exists at least one observation in one of the source dataset
+#'   fulfilling a certain condition.
 #'
 #' @param dataset_add Additional dataset
 #'
@@ -28,32 +26,7 @@
 #'   value (`missing_value`) for by groups not present in the additional
 #'   dataset.
 #'
-#' @param true_value True value
-#'
-#'   *Default*: `"Y"`
-#'
-#' @param false_value False value
-#'
-#'   *Default*: `NA_character_`
-#'
-#' @param missing_value Values used for missing information
-#'
-#'   The new variable is set to the specified value for all by groups without
-#'   observations in the additional dataset.
-#'
-#'   *Default*: `NA_character_`
-#'
-#'   *Permitted Value*: A character scalar
-#'
-#' @param filter_add Filter for additional data
-#'
-#'   Only observations fulfilling the specified condition are taken into account
-#'   for flagging. If the argument is not specified, all observations are
-#'   considered.
-#'
-#'   *Permitted Values*: a condition
-#'
-#' @inheritParams derive_vars_merged
+#' @inheritParams derive_var_merged_exist_flag
 #'
 #' @return The output dataset contains all observations and variables of the
 #'   input dataset and additionally the variable specified for `new_var` derived
@@ -61,16 +34,15 @@
 #'
 #' @details
 #'
-#'   1. The additional dataset is restricted to the observations matching the
-#'   `filter_add` condition.
+#'   1. For each `flag_event()` object specified for `sources`: The condition (`condition`) is evaluated in the
+#'   dataset referenced by `dataset_name`. If the `by_vars` field is specified the dataset is grouped by the specified variables.
 #'
-#'   1. The new variable is added to the input dataset and set to the true value
-#'   (`true_value`) if for the by group at least one observation exists in the
-#'   (restricted) additional dataset where the condition evaluates to `TRUE`. It
-#'   is set to the false value (`false_value`) if for the by group at least one
-#'   observation exists and for all observations the condition evaluates to
-#'   `FALSE` or `NA`. Otherwise, it is set to the missing value
-#'   (`missing_value`).
+#'   1. The new variable (`new_var`) is added to the input dataset and set to
+#'   the true value (`true_value`) if for the by group at least one condition
+#'   evaluates to `TRUE` in one of the sources. It is set to the false value
+#'   (`false_value`) if for the by group at least one observation exists and for
+#'   all observations the condition evaluates to `FALSE` or `NA`. Otherwise, it
+#'   is set to the missing value (`missing_value`).
 #'
 #'
 #' @family der_gen
@@ -80,59 +52,90 @@
 #'
 #' @examples
 #'
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #'
-#' dm <- tribble(
-#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
-#'   "PILOT01",    "DM", "01-1028",   71, "YEARS",
-#'   "PILOT01",    "DM", "04-1127",   84, "YEARS",
-#'   "PILOT01",    "DM", "06-1049",   60, "YEARS"
+#' adsl <- tibble::tribble(
+#'   ~USUBJID,
+#'   "1",
+#'   "2",
+#'   "3",
+#'   "4"
 #' )
 #'
-#' ae <- tribble(
-#'   ~STUDYID,  ~DOMAIN,  ~USUBJID,    ~AETERM,     ~AEREL,
-#'   "PILOT01",    "AE", "01-1028", "ERYTHEMA", "POSSIBLE",
-#'   "PILOT01",    "AE", "01-1028", "PRURITUS", "PROBABLE",
-#'   "PILOT01",    "AE", "06-1049",  "SYNCOPE", "POSSIBLE",
-#'   "PILOT01",    "AE", "06-1049",  "SYNCOPE", "PROBABLE"
+#' cm <- tibble::tribble(
+#'   ~USUBJID, ~CMCAT,        ~CMSEQ,
+#'   "1",      "ANTI-CANCER",      1,
+#'   "1",      "GENERAL",          2,
+#'   "2",      "GENERAL",          1,
+#'   "3",      "ANTI-CANCER",      1
 #' )
 #'
-#'
-#' derive_var_merged_exist_flag(
-#'   dm,
-#'   dataset_add = ae,
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   new_var = AERELFL,
-#'   condition = AEREL == "PROBABLE"
-#' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
-#'
-#' vs <- tribble(
-#'   ~STUDYID,  ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSBLFL,
-#'   "PILOT01",    "VS", "01-1028", "SCREENING",  "HEIGHT",     177.8,      NA,
-#'   "PILOT01",    "VS", "01-1028", "SCREENING",  "WEIGHT",     98.88,      NA,
-#'   "PILOT01",    "VS", "01-1028",  "BASELINE",  "WEIGHT",     99.34,     "Y",
-#'   "PILOT01",    "VS", "01-1028",    "WEEK 4",  "WEIGHT",     98.88,      NA,
-#'   "PILOT01",    "VS", "04-1127", "SCREENING",  "HEIGHT",     165.1,      NA,
-#'   "PILOT01",    "VS", "04-1127", "SCREENING",  "WEIGHT",     42.87,      NA,
-#'   "PILOT01",    "VS", "04-1127",  "BASELINE",  "WEIGHT",     41.05,     "Y",
-#'   "PILOT01",    "VS", "04-1127",    "WEEK 4",  "WEIGHT",     41.73,      NA,
-#'   "PILOT01",    "VS", "06-1049", "SCREENING",  "HEIGHT",    167.64,      NA,
-#'   "PILOT01",    "VS", "06-1049", "SCREENING",  "WEIGHT",     57.61,      NA,
-#'   "PILOT01",    "VS", "06-1049",  "BASELINE",  "WEIGHT",     57.83,     "Y",
-#'   "PILOT01",    "VS", "06-1049",    "WEEK 4",  "WEIGHT",     58.97,      NA
+#' pr<- tibble::tribble(
+#'   ~USUBJID, ~PRSEQ,
+#'   "1",      1,
+#'   "1",      2,
+#'   "2",      1,
+#'   "3",      1
 #' )
-#' derive_var_merged_exist_flag(
-#'   dm,
-#'   dataset_add = vs,
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
-#'   new_var = WTBLHIFL,
-#'   condition = VSSTRESN > 90,
-#'   false_value = "N",
-#'   missing_value = "M"
-#' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
+#'
+#' actual <- derive_var_merged_exist_flag_msrc(
+#'   adsl,
+#'   sources = list(
+#'     flag_event(
+#'       dataset_name = "cm",
+#'       condition = CMCAT == "ANTI-CANCER"
+#'     ),
+#'     flag_event(
+#'       dataset_name = "pr"
+#'     )
+#'   ),
+#'   source_datasets = list(cm = cm, pr = pr),
+#'   by_vars = exprs(USUBJID),
+#'   new_var = CANCTRFL
+#' )
+#'
+#' adex <- tibble::tribble(
+#'   ~USUBJID, ~EXLNKID, ~EXADJ,
+#'   "1",       "1",      "AE",
+#'   "1",       "2",      NA_character_,
+#'   "1",       "3",      NA_character_,
+#'   "2",       "1",      NA_character_,
+#'   "3",       "1",      NA_character_
+#' )
+#'
+#' ec <- tibble::tribble(
+#'   ~USUBJID, ~ECLNKID, ~ECADJ,
+#'   "1",      "3",      "AE",
+#'   "3",      "1",      NA_character_
+#' )
+#'
+#' fa <- tibble::tribble(
+#'   ~USUBJID, ~FALNKID, ~FATESTCD, ~FAOBJ,            ~FASTRESC,
+#'   "3",      "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
+#' )
+#'
+#' actual <- derive_var_merged_exist_flag_msrc(
+#'   adex,
+#'   sources = list(
+#'     flag_event(
+#'       dataset_name = "ex",
+#'       condition = !is.na(EXADJ)
+#'     ),
+#'     flag_event(
+#'       dataset_name = "ec",
+#'       condition = !is.na(ECADJ),
+#'       by_vars = exprs(USUBJID, EXLNKID = ECLNKID)
+#'     ),
+#'     flag_event(
+#'       dataset_name = "fa",
+#'       condition = FATESTCD == "OCCUR" & FAOBJ == "DOSE ADJUSTMENT" & FASTRESC == "Y",
+#'       by_vars = exprs(USUBJID, EXLNKID = FALNKID)
+#'     )
+#'   ),
+#'   source_datasets = list(ex = adex, ec = ec, fa = fa),
+#'   by_vars = exprs(USUBJID, EXLNKID),
+#'   new_var = CANCTRFL
+#' )
 derive_var_merged_exist_flag_msrc <- function(dataset,
                                               source_datasets,
                                               sources,
@@ -144,7 +147,7 @@ derive_var_merged_exist_flag_msrc <- function(dataset,
                                               filter_add = NULL) {
   new_var <- assert_symbol(enexpr(new_var))
   assert_list_of(source_datasets, class = "data.frame", named = TRUE)
-  assert_list_of(sources, "dthcaus_source")
+  assert_list_of(sources, "flag_event")
 
   source_names <- names(source_datasets)
   assert_list_element(
@@ -160,33 +163,67 @@ derive_var_merged_exist_flag_msrc <- function(dataset,
     )
   )
 
+  tmp_cond_val <- get_new_tmp_var(dataset, prefix = "tmp_cond_val")
+
   selected_records <- map(
     sources,
     function(source) {
-
+      data_source <- source_datasets[[source$dataset_name]]
+      if (is.null(source$by_vars)) {
+        source_by_vars <- by_vars
+      } else {
+        source_by_vars <- source$by_vars
+      }
+      if (is.null(source$condition)) {
+        source_condition <- TRUE
+      } else {
+        source_condition <- source$condition
+      }
+      data_selected <- data_source %>%
+        group_by(!!!unname(source_by_vars)) %>%
+        mutate(!!tmp_cond_val := if_else(!!source_condition, TRUE, FALSE, FALSE)) %>%
+        ungroup() %>%
+        select(!!tmp_cond_val, !!!source_by_vars)
     }
   )
 
-  derive_vars_merged(
+  derive_var_merged_exist_flag(
     dataset,
-    dataset_add = add_data,
+    dataset_add = bind_rows(selected_records) ,
     by_vars = by_vars,
-    new_vars = exprs(!!new_var),
-    order = exprs(!!new_var),
-    check_type = "none",
-    mode = "last"
-  ) %>%
-    mutate(!!new_var := if_else(!!new_var == 1, true_value, false_value, missing_value))
+    new_var = !!new_var,
+    condition = !!tmp_cond_val == TRUE,
+    true_value = true_value,
+    false_value = false_value,
+    missing_value = missing_value
+  )
 }
 
+#' Create a `flag_event` Object
+#'
+#' The `flag_event` object is used to define events as input for the
+#' `derive_var_merged_exist_flag_msrc()` function.
+#'
+#' @param dataset_name Dataset name of the dataset to be used as input for the
+#'   event. The name refers to the dataset specified for `source_datasets` in
+#'   `derive_var_merged_exist_flag()`.
+#'
+#'   *Permitted Values*: a character scalar
+#'
+#' @param condition Condition
+#'
+#'   The condition is evaluated at the dataset referenced by `dataset_name`. For
+#'   all by groups where it evaluates as `TRUE` at least once the new variable
+#'   is set to the true value (`true_value`).
+#'
 
 flag_event <- function(dataset_name,
-                       filter = NULL,
+                       condition = NULL,
                        by_vars = NULL) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
-    filter = assert_filter_cond(enexpr(filter), optional = TRUE),
-    by_vars = assert_expr_list(order, optional = TRUE)
+    condition = assert_filter_cond(enexpr(condition), optional = TRUE),
+    by_vars = assert_expr_list(by_vars, optional = TRUE)
   )
   class(out) <- c("flag_event", "source", "list")
   out
