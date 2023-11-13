@@ -14,7 +14,7 @@ and the date imputation flag ('--DTF') can be added."><meta property="og:image" 
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9003</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -156,7 +156,6 @@ missing, <code>NA_character_</code> is returned.</p>
 <p>If <code>"Y"</code> is specified, <code>date_imputation</code> should be <code>"first"</code> or <code>"last"</code>
 and <code>min_dates</code> or <code>max_dates</code> should be specified respectively. Otherwise,
 <code>NA_character_</code> is returned if the year component is missing.</p>
-<p><em>Default</em>: <code>"n"</code></p>
 <p><em>Permitted Values</em>: <code>"Y"</code> (year, highest level), <code>"M"</code> (month), <code>"D"</code>
 (day), <code>"n"</code> (none, lowest level)</p></dd>
 
@@ -169,16 +168,18 @@ missing.</p>
 <code>"first"</code> or <code>"last"</code> together with <code>min_dates</code> or <code>max_dates</code> argument can
 be used (see examples).),</p></li>
 <li><p>or as a keyword: <code>"first"</code>, <code>"mid"</code>, <code>"last"</code> to impute to the first/mid/last
-day/month.</p></li>
-</ul><p>The argument is ignored if <code>highest_imputation</code> is less then <code>"D"</code>.</p>
-<p><em>Default</em>: <code>"first"</code></p></dd>
+day/month. If <code>"mid"</code> is specified, missing components are imputed as the
+middle of the possible range:</p><ul><li><p>If both month and day are missing, they are imputed as <code>"06-30"</code>
+(middle of the year).</p></li>
+<li><p>If only day is missing, it is imputed as <code>"15"</code> (middle of the month).</p></li>
+</ul></li>
+</ul><p>The argument is ignored if <code>highest_imputation</code> is less then <code>"D"</code>.</p></dd>
 
 
 <dt>flag_imputation</dt>
 <dd><p>Whether the date imputation flag must also be derived.</p>
 <p>If <code>"auto"</code> is specified, the date imputation flag is derived if the
 <code>date_imputation</code> argument is not null.</p>
-<p><em>Default</em>: <code>"auto"</code></p>
 <p><em>Permitted Values</em>: <code>"auto"</code>, <code>"date"</code> or <code>"none"</code></p></dd>
 
 
@@ -218,8 +219,7 @@ considered. A date or date-time object is expected.</p></dd>
 <dd><p>Preserve day if month is missing and day is present</p>
 <p>For example <code>"2019---07"</code> would return <code>"2019-06-07</code> if <code>preserve = TRUE</code>
 (and <code>date_imputation = "MID"</code>).</p>
-<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p>
-<p>Default: <code>FALSE</code></p></dd>
+<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></dd>
 
 </dl></div>
     <div class="section level2">
