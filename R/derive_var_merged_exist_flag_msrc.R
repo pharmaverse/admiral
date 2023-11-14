@@ -1,4 +1,4 @@
-#' Merge an Existence Flag From Muliple Sources
+#' Merge an Existence Flag From Multiple Sources
 #'
 #' @description Adds a flag variable to the input dataset which indicates if
 #'   there exists at least one observation in one of the source datasets

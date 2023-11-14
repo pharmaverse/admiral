@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_merged_exist_flag_msrc.R
 \name{derive_var_merged_exist_flag_msrc}
 \alias{derive_var_merged_exist_flag_msrc}
-\title{Merge an Existence Flag From Muliple Sources}
+\title{Merge an Existence Flag From Multiple Sources}
 \usage{
 derive_var_merged_exist_flag_msrc(
   dataset,
