@@ -18,7 +18,7 @@ test_that("derive_var_merged_exist_flag_msrc Test 1: wihtout by_vars", {
     "3",      "ANTI-CANCER",      1
   )
 
-  pr<- tibble::tribble(
+  pr <- tibble::tribble(
     ~USUBJID, ~PRSEQ,
     "2",      1,
     "3",      1
@@ -51,11 +51,11 @@ test_that("derive_var_merged_exist_flag_msrc Test 1: wihtout by_vars", {
 test_that("derive_var_merged_exist_flag_msrc Test 2: with by_vars", {
   expected <- tibble::tribble(
     ~USUBJID, ~EXLNKID, ~EXADJ,         ~DOSADJFL,
-    "1",       "1",      "AE",          "Y",
-    "1",       "2",      NA_character_, "N",
-    "1",       "3",      NA_character_, "Y",
-    "2",       "1",      NA_character_, "N",
-    "3",       "1",      NA_character_, "Y"
+    "1",      "1",      "AE",           "Y",
+    "1",      "2",      NA_character_,  "N",
+    "1",      "3",      NA_character_,  "Y",
+    "2",      "1",      NA_character_,  "N",
+    "3",      "1",      NA_character_,  "Y"
   )
 
   adex <- select(expected, -DOSADJFL)

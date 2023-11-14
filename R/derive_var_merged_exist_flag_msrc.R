@@ -95,7 +95,7 @@
 #'   "3",      "ANTI-CANCER",      1
 #' )
 #'
-#' pr<- tibble::tribble(
+#' pr <- tibble::tribble(
 #'   ~USUBJID, ~PRSEQ,
 #'   "2",      1,
 #'   "3",      1
@@ -120,11 +120,11 @@
 #' # using different by variables depending on the source
 #' adex <- tribble(
 #'   ~USUBJID, ~EXLNKID, ~EXADJ,
-#'   "1",       "1",      "AE",
-#'   "1",       "2",      NA_character_,
-#'   "1",       "3",      NA_character_,
-#'   "2",       "1",      NA_character_,
-#'   "3",       "1",      NA_character_
+#'   "1",      "1",      "AE",
+#'   "1",      "2",      NA_character_,
+#'   "1",      "3",      NA_character_,
+#'   "2",      "1",      NA_character_,
+#'   "3",      "1",      NA_character_
 #' )
 #'
 #' ec <- tribble(
@@ -212,7 +212,7 @@ derive_var_merged_exist_flag_msrc <- function(dataset,
 
   derive_var_merged_exist_flag(
     dataset,
-    dataset_add = bind_rows(selected_records) ,
+    dataset_add = bind_rows(selected_records),
     by_vars = by_vars,
     new_var = !!new_var,
     condition = !!tmp_cond_val == TRUE,
