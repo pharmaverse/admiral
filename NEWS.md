@@ -2,6 +2,12 @@
 
 ## New Features
 
+New global option created `signif_digits` to handle floating point issue, the value is
+set to `15`, and is used with the `base R` function `signif()` when comparing 2 numeric
+values. This is implemented in `admiral ` functions `derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134)
+
+For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
+
 ## Updates of Existing Functions
 
 - Fixed a bug in `compute_tmf()` where the time imputation flag was being incorrectly
@@ -41,6 +47,9 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 allow more control of the selection of records. It creates a temporary variable
 for the event number, which can be used in `order`. (#2140)
 
+- `signif_dig` argument added to both `derive_var_atoxgr_dir()` and `derive_var_anrind()`
+functions with default value set to general option `signif_digits`. The new argument to
+these functions handles any floating point issues. (#2134)
 
 ## Breaking Changes
 
@@ -127,6 +136,9 @@ order = exprs(my_order_var),
 Reference tab. (#2174)
 
 - Added a link to the previous versions of the website to the navigation bar. (#2205)
+
+- The meaning of `date_imputation = "mid"` was clarified in the documentation of
+the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
 
 ## Various
 
