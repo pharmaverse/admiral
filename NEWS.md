@@ -1,10 +1,17 @@
-# admiral 0.12.3.9005 version)
+# admiral 0.12.3.9006 version)
 
 ## New Features
 
 - The new function `derive_var_merged_exist_flag_msrc()` is provided to add a
 flag indicating if one of the conditions in one of multiple source datasets is
 fulfilled. (#1728)
+
+- New global option created `signif_digits` to handle floating point issue, the
+value is set to `15`, and is used with the `base R` function `signif()` when
+comparing 2 numeric values. This is implemented in `admiral ` functions
+`derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134)
+
+    For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
 
 ## Updates of Existing Functions
 
@@ -45,6 +52,9 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 allow more control of the selection of records. It creates a temporary variable
 for the event number, which can be used in `order`. (#2140)
 
+- `signif_dig` argument added to both `derive_var_atoxgr_dir()` and `derive_var_anrind()`
+functions with default value set to general option `signif_digits`. The new argument to
+these functions handles any floating point issues. (#2134)
 
 ## Breaking Changes
 
