@@ -4,7 +4,7 @@
 
 New global option created `signif_digits` to handle floating point issue, the value is
 set to `15`, and is used with the `base R` function `signif()` when comparing 2 numeric
-values. This is implemented in `admiral ` functions `derive_var_atoxgr_dir()` and `derive_var_anrind()`.
+values. This is implemented in `admiral ` functions `derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134)
 
 For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
 
@@ -49,7 +49,7 @@ for the event number, which can be used in `order`. (#2140)
 
 - `signif_dig` argument added to both `derive_var_atoxgr_dir()` and `derive_var_anrind()`
 functions with default value set to general option `signif_digits`. The new argument to
-these functions handles any floating point issues.
+these functions handles any floating point issues. (#2134)
 
 ## Breaking Changes
 
