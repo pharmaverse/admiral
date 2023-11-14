@@ -4,12 +4,21 @@
 \alias{derive_var_anrind}
 \title{Derive Reference Range Indicator}
 \usage{
-derive_var_anrind(dataset, use_a1hia1lo = FALSE)
+derive_var_anrind(
+  dataset,
+  signif_dig = get_admiral_option("signif_digits"),
+  use_a1hia1lo = FALSE
+)
 }
 \arguments{
 \item{dataset}{Input dataset
 \code{ANRLO}, \code{ANRHI}, and \code{AVAL} are expected and if \code{use_a1hia1lo} is set to \code{TRUE},
 \code{A1LO} and \code{A1H1} are expected as well.}
+
+\item{signif_dig}{Number of significant digits to use when comparing values.
+
+Significant digits used to avoid floating point discrepancies when comparing numeric values.
+See blog: \href{https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html}{How admiral handles floating points}}
 
 \item{use_a1hia1lo}{A logical value indicating whether to use \code{A1H1} and \code{A1LO} in
 the derivation of \code{ANRIND}.}
