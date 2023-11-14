@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9004</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9005</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,7 +111,7 @@
 <span>  <span class="va">meta_criteria</span>,</span>
 <span>  <span class="va">criteria_direction</span>,</span>
 <span>  <span class="va">get_unit_expr</span>,</span>
-<span>  signif_dig <span class="op">=</span> <span class="fl">15</span></span>
+<span>  signif_dig <span class="op">=</span> <span class="fu"><a href="get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"signif_digits"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -169,7 +169,8 @@ for example, <code>get_unit_expr = extract_unit(PARAM)</code>.</p></dd>
 <dt>signif_dig</dt>
 <dd><p>Number of significant digits to use when comparing a lab value against another
 value.</p>
-<p>Significant digits used to avoid floating point discrepancies when comparing numeric values.</p></dd>
+<p>Significant digits used to avoid floating point discrepancies when comparing numeric values.
+See blog: <a href="https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html" class="external-link">How admiral handles floating points</a></p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9004</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9005</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,12 +98,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.12.3.9004" id="admiral-01239004-version">admiral 0.12.3.9004 version)<a class="anchor" aria-label="anchor" href="#admiral-01239004-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.12.3.9005" id="admiral-01239005-version">admiral 0.12.3.9005 version)<a class="anchor" aria-label="anchor" href="#admiral-01239005-version"></a></h2>
 <div class="section level3">
-<h3 id="new-features-0-12-3-9004">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-12-3-9004"></a></h3>
+<h3 id="new-features-0-12-3-9005">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-12-3-9005"></a></h3>
+<p>New global option created <code>signif_digits</code> to handle floating point issue, the value is set to <code>15</code>, and is used with the <code>base R</code> function <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif()</a></code> when comparing 2 numeric values. This is implemented in <code>admiral</code> functions <code><a href="../reference/derive_var_atoxgr_dir.html">derive_var_atoxgr_dir()</a></code> and <code><a href="../reference/derive_var_anrind.html">derive_var_anrind()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2134" class="external-link">#2134</a>)</p>
+<p>For more information, please see blog: <a href="https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html" class="external-link">How admiral handles floating points</a></p>
 </div>
 <div class="section level3">
-<h3 id="updates-of-existing-functions-0-12-3-9004">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-0-12-3-9004"></a></h3>
+<h3 id="updates-of-existing-functions-0-12-3-9005">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-0-12-3-9005"></a></h3>
 <ul><li><p>Fixed a bug in <code><a href="../reference/compute_tmf.html">compute_tmf()</a></code> where the time imputation flag was being incorrectly populated when any of the existing time components (hour, minute and/or second) of the date character vector (<code>'--DTC'</code>), was imputed. (<a href="https://github.com/pharmaverse/admiral/issues/2146" class="external-link">#2146</a>)</p></li>
 <li><p><code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code>, <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code>,<code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code> and <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code> were enhanced with the arguments <code>true_value</code> and <code>false_value</code> to align with preexisting functions that had similar functionality (<a href="https://github.com/pharmaverse/admiral/issues/2125" class="external-link">#2125</a>)</p></li>
 <li><p><code><a href="../reference/restrict_derivation.html">restrict_derivation()</a></code> now allows <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> functions like <code>mutate</code> in the <code>derivation</code> argument (<a href="https://github.com/pharmaverse/admiral/issues/2143" class="external-link">#2143</a>)</p></li>
@@ -119,9 +121,10 @@
 <li>In all “joined” functions the <code>filter_add</code> argument is applied to the additional dataset grouped by <code>by_vars</code> and the <code>filter_join</code> argument is applied to the joined dataset grouped by the observations from the input dataset. I.e., summary functions like <code><a href="https://rdrr.io/r/base/all.html" class="external-link">all()</a></code> or <code><a href="https://rdrr.io/r/base/any.html" class="external-link">any()</a></code> can be used.</li>
 </ul></li>
 <li><p>The <code>tmp_event_nr_var</code> argument was added to <code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> to allow more control of the selection of records. It creates a temporary variable for the event number, which can be used in <code>order</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2140" class="external-link">#2140</a>)</p></li>
+<li><p><code>signif_dig</code> argument added to both <code><a href="../reference/derive_var_atoxgr_dir.html">derive_var_atoxgr_dir()</a></code> and <code><a href="../reference/derive_var_anrind.html">derive_var_anrind()</a></code> functions with default value set to general option <code>signif_digits</code>. The new argument to these functions handles any floating point issues. (<a href="https://github.com/pharmaverse/admiral/issues/2134" class="external-link">#2134</a>)</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="breaking-changes-0-12-3-9004">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-12-3-9004"></a></h3>
+<h3 id="breaking-changes-0-12-3-9005">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-12-3-9005"></a></h3>
 <ul><li><p><code><a href="../reference/derive_extreme_records.html">derive_extreme_records()</a></code> the <code>dataset_add</code> argument is now mandatory. (<a href="https://github.com/pharmaverse/admiral/issues/2139" class="external-link">#2139</a>)</p></li>
 <li><p>In <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> and <code><a href="../reference/get_summary_records.html">get_summary_records()</a></code> the arguments <code>analysis_var</code> and <code>summary_fun</code> were deprecated in favor of <code>set_values_to</code>. (<a href="https://github.com/pharmaverse/admiral/issues/1792" class="external-link">#1792</a>)</p></li>
 <li><p>In <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> and <code><a href="../reference/derive_param_exposure.html">derive_param_exposure()</a></code> the argument <code>filter</code> was renamed to <code>filter_add</code> (<a href="https://github.com/pharmaverse/admiral/issues/2142" class="external-link">#2142</a>)</p></li>
@@ -174,7 +177,7 @@ ignore_event_order = TRUE,</code></pre>
 <li><p>The <code><a href="../reference/derive_param_extreme_record.html">derive_param_extreme_record()</a></code> function has been superseded in favor of <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2141" class="external-link">#2141</a>)</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="documentation-0-12-3-9004">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-12-3-9004"></a></h3>
+<h3 id="documentation-0-12-3-9005">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-12-3-9005"></a></h3>
 <ul><li><p>A way to standardize roxygen labels and descriptions for function arguments was implemented and tested (<a href="https://github.com/pharmaverse/admiral/issues/2034" class="external-link">#2034</a>)</p></li>
 <li><p>Link to published CDISC Population PK (ADPPK) implementation guide added. (<a href="https://github.com/pharmaverse/admiral/issues/2161" class="external-link">#2161</a>)</p></li>
 <li><p>Removed Deprecation section in Reference tab. Added new Superseded section in Reference tab. (<a href="https://github.com/pharmaverse/admiral/issues/2174" class="external-link">#2174</a>)</p></li>
@@ -182,7 +185,7 @@ ignore_event_order = TRUE,</code></pre>
 <li><p>The meaning of <code>date_imputation = "mid"</code> was clarified in the documentation of the imputation functions, e.g., <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2222" class="external-link">#2222</a>)</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="various-0-12-3-9004">Various<a class="anchor" aria-label="anchor" href="#various-0-12-3-9004"></a></h3>
+<h3 id="various-0-12-3-9005">Various<a class="anchor" aria-label="anchor" href="#various-0-12-3-9005"></a></h3>
 <ul><li>Website now has button/links to Slack channel and GitHub Issues (<a href="https://github.com/pharmaverse/admiral/issues/2127" class="external-link">#2127</a>)</li>
 </ul></div>
 </div>
