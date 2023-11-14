@@ -101,7 +101,7 @@
 #'   "3",      1
 #' )
 #'
-#' derive_var_merged_exist_flag_msrc(
+#' derive_flag_select_msrc(
 #'   adsl,
 #'   flag_events = list(
 #'     flag_event(
@@ -138,7 +138,7 @@
 #'   "3",      "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
 #' )
 #'
-#' derive_var_merged_exist_flag_msrc(
+#' derive_flag_select_msrc(
 #'   adex,
 #'   flag_events = list(
 #'     flag_event(
@@ -160,14 +160,14 @@
 #'   by_vars = exprs(USUBJID, EXLNKID),
 #'   new_var = DOSADJFL
 #' )
-derive_var_merged_exist_flag_msrc <- function(dataset,
-                                              by_vars,
-                                              flag_events,
-                                              source_datasets,
-                                              new_var,
-                                              true_value = "Y",
-                                              false_value = NA_character_,
-                                              missing_value = NA_character_) {
+derive_flag_select_msrc <- function(dataset,
+                                    by_vars,
+                                    flag_events,
+                                    source_datasets,
+                                    new_var,
+                                    true_value = "Y",
+                                    false_value = NA_character_,
+                                    missing_value = NA_character_) {
   new_var <- assert_symbol(enexpr(new_var))
   assert_list_of(source_datasets, class = "data.frame", named = TRUE)
   assert_list_of(flag_events, "flag_event")
@@ -225,11 +225,11 @@ derive_var_merged_exist_flag_msrc <- function(dataset,
 #' Create a `flag_event` Object
 #'
 #' The `flag_event` object is used to define events as input for the
-#' `derive_var_merged_exist_flag_msrc()` function.
+#' `derive_flag_select_msrc()` function.
 #'
 #' @param dataset_name Dataset name of the dataset to be used as input for the
 #'   event. The name refers to the dataset specified for `source_datasets` in
-#'   `derive_var_merged_exist_flag_msrc()`.
+#'   `derive_flag_select_msrc()`.
 #'
 #'   *Permitted Values*: a character scalar
 #'
@@ -246,9 +246,9 @@ derive_var_merged_exist_flag_msrc <- function(dataset,
 #'   `by_vars = exprs(USUBJID, EXLNKID = ECLNKID)`, the variables are renamed
 #'   after the evaluation. If the `by_vars` element is not specified, the
 #'   observations are grouped by the variables specified for the `by_vars`
-#'   argument of `derive_var_merged_exist_flag_msrc()`.
+#'   argument of `derive_flag_select_msrc()`.
 #'
-#' @seealso [derive_var_merged_exist_flag_msrc()]
+#' @seealso [derive_flag_select_msrc()]
 #'
 #' @family source_specifications
 #' @keywords source_specifications

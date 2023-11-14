@@ -1,9 +1,9 @@
-# admiral 0.12.3.9006 version)
+# admiral (development version)
 
 ## New Features
 
-- The new function `derive_var_merged_exist_flag_msrc()` is provided to add a
-flag indicating if one of the conditions in one of multiple source datasets is
+- The new function `derive_flag_select_msrc()` is provided to add a flag
+indicating if one of the conditions in one of multiple source datasets is
 fulfilled. (#1728)
 
 - New global option created `signif_digits` to handle floating point issue, the
