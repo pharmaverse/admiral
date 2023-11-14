@@ -49,8 +49,6 @@ If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \
 and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
 \code{NA_character_} is returned if the year component is missing.
 
-\emph{Default}: \code{"n"}
-
 \emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
 (day), \code{"n"} (none, lowest level)}
 
@@ -64,19 +62,21 @@ A character value is expected, either as a
 \code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
 be used (see examples).),
 \item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
-day/month.
+day/month. If \code{"mid"} is specified, missing components are imputed as the
+middle of the possible range:
+\itemize{
+\item If both month and day are missing, they are imputed as \code{"06-30"}
+(middle of the year).
+\item If only day is missing, it is imputed as \code{"15"} (middle of the month).
+}
 }
 
-The argument is ignored if \code{highest_imputation} is less then \code{"D"}.
-
-\emph{Default}: \code{"first"}}
+The argument is ignored if \code{highest_imputation} is less then \code{"D"}.}
 
 \item{flag_imputation}{Whether the date imputation flag must also be derived.
 
 If \code{"auto"} is specified, the date imputation flag is derived if the
 \code{date_imputation} argument is not null.
-
-\emph{Default}: \code{"auto"}
 
 \emph{Permitted Values}: \code{"auto"}, \code{"date"} or \code{"none"}}
 
@@ -118,9 +118,7 @@ considered. A date or date-time object is expected.}
 For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
 (and \code{date_imputation = "MID"}).
 
-Permitted Values: \code{TRUE}, \code{FALSE}
-
-Default: \code{FALSE}}
+Permitted Values: \code{TRUE}, \code{FALSE}}
 }
 \value{
 The input dataset with the date \code{'--DT'} (and the date imputation flag \code{'--DTF'}
