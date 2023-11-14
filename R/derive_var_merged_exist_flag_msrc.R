@@ -190,23 +190,23 @@ derive_var_merged_exist_flag_msrc <- function(dataset,
 
   selected_records <- map(
     flag_events,
-    function(source) {
-      data_source <- source_datasets[[source$dataset_name]]
-      if (is.null(source$by_vars)) {
-        source_by_vars <- by_vars
+    function(event) {
+      data_event <- source_datasets[[event$dataset_name]]
+      if (is.null(event$by_vars)) {
+        event_by_vars <- by_vars
       } else {
-        source_by_vars <- source$by_vars
+        event_by_vars <- event$by_vars
       }
-      if (is.null(source$condition)) {
-        source_condition <- TRUE
+      if (is.null(event$condition)) {
+        event_condition <- TRUE
       } else {
-        source_condition <- source$condition
+        event_condition <- event$condition
       }
-      data_selected <- data_source %>%
-        group_by(!!!unname(source_by_vars)) %>%
-        mutate(!!tmp_cond_val := if_else(!!source_condition, TRUE, FALSE, FALSE)) %>%
+      data_selected <- data_event %>%
+        group_by(!!!unname(event_by_vars)) %>%
+        mutate(!!tmp_cond_val := if_else(!!event_condition, TRUE, FALSE, FALSE)) %>%
         ungroup() %>%
-        select(!!tmp_cond_val, !!!source_by_vars)
+        select(!!tmp_cond_val, !!!event_by_vars)
     }
   )
 
