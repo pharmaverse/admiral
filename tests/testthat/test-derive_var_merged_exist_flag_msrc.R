@@ -20,15 +20,13 @@ test_that("derive_var_merged_exist_flag_msrc Test 1: wihtout by_vars", {
 
   pr<- tibble::tribble(
     ~USUBJID, ~PRSEQ,
-    "1",      1,
-    "1",      2,
     "2",      1,
     "3",      1
   )
 
   actual <- derive_var_merged_exist_flag_msrc(
     adsl,
-    sources = list(
+    flag_events = list(
       flag_event(
         dataset_name = "cm",
         condition = CMCAT == "ANTI-CANCER"
@@ -75,7 +73,7 @@ test_that("derive_var_merged_exist_flag_msrc Test 2: with by_vars", {
 
   actual <- derive_var_merged_exist_flag_msrc(
     adex,
-    sources = list(
+    flag_events = list(
       flag_event(
         dataset_name = "ex",
         condition = !is.na(EXADJ)

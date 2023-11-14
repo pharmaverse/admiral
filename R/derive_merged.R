@@ -472,18 +472,12 @@ derive_vars_merged <- function(dataset,
 #'
 #' @param true_value True value
 #'
-#'   *Default*: `"Y"`
-#'
 #' @param false_value False value
-#'
-#'   *Default*: `NA_character_`
 #'
 #' @param missing_value Values used for missing information
 #'
 #'   The new variable is set to the specified value for all by groups without
 #'   observations in the additional dataset.
-#'
-#'   *Default*: `NA_character_`
 #'
 #'   *Permitted Value*: A character scalar
 #'

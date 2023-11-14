@@ -1,41 +1,66 @@
 #' Merge an Existence Flag From Muliple Sources
 #'
 #' @description Adds a flag variable to the input dataset which indicates if
-#'   there exists at least one observation in one of the source dataset
+#'   there exists at least one observation in one of the source datasets
 #'   fulfilling a certain condition.
 #'
-#' @param dataset_add Additional dataset
+#' @param flag_events Flag events
 #'
-#'   The variables specified by the `by_vars` argument are expected.
+#'   A list of `flag_event()` objects is expected. For each event the condition
+#'   (`condition` field) is evaluated in the source dataset referenced by the
+#'   `dataset_name` field. If it evaluates to `TRUE` at least once, the new
+#'   variable is set to `true_value`.
 #'
-#' @param by_vars Grouping variables
+#' @param source_datasets Source datasets
 #'
-#'   *Permitted Values*: list of variables
+#'   A named list of datasets is expected. The `dataset_name` field of
+#'   `flag_event()` refers to the dataset provided in the list.
 #'
 #' @param new_var New variable
 #'
 #'   The specified variable is added to the input dataset.
 #'
-#' @param condition Condition
+#' @param true_value True value
 #'
-#'   The condition is evaluated at the additional dataset (`dataset_add`). For
-#'   all by groups where it evaluates as `TRUE` at least once the new variable
-#'   is set to the true value (`true_value`). For all by groups where it
-#'   evaluates as `FALSE` or `NA` for all observations the new variable is set
-#'   to the false value (`false_value`). The new variable is set to the missing
-#'   value (`missing_value`) for by groups not present in the additional
-#'   dataset.
+#'   The new variable (`new_var`) is set to the specified value for all by
+#'   groups for which at least for one source (`sources`) the condition
+#'   evaluates to `TRUE`.
+#'
+#'   The values of `true_value`, `false_value`, and `missing_value` must be of
+#'   the same type.
+#'
+#' @param false_value False value
+#'
+#'   The new variable (`new_var`) is set to the specified value for all by
+#'   groups for which at all sources (`sources`) the condition evaluates to
+#'   `FALSE` or `NA`.
+#'
+#'   The values of `true_value`, `false_value`, and `missing_value` must be of
+#'   the same type.
+#'
+#' @param missing_value Values used for missing information
+#'
+#'   The new variable is set to the specified value for all by groups without
+#'   observations in any of the sources (`sources`).
+#'
+#'   The values of `true_value`, `false_value`, and `missing_value` must be of
+#'   the same type.
 #'
 #' @inheritParams derive_var_merged_exist_flag
 #'
 #' @return The output dataset contains all observations and variables of the
-#'   input dataset and additionally the variable specified for `new_var` derived
-#'   from the additional dataset (`dataset_add`).
+#'   input dataset and additionally the variable specified for `new_var`.
 #'
 #' @details
 #'
-#'   1. For each `flag_event()` object specified for `sources`: The condition (`condition`) is evaluated in the
-#'   dataset referenced by `dataset_name`. If the `by_vars` field is specified the dataset is grouped by the specified variables.
+#'   1. For each `flag_event()` object specified for `flag_events`: The
+#'   condition (`condition`) is evaluated in the dataset referenced by
+#'   `dataset_name`. If the `by_vars` field is specified the dataset is grouped
+#'   by the specified variables for evaluating the condition. If named elements
+#'   are used in `by_vars` like `by_vars = exprs(USUBJID, EXLNKID = ECLNKID)`,
+#'   the variables are renamed after the evaluation. If the `by_vars` element is
+#'   not specified, the observations are grouped by the variables specified for
+#'   the `by_vars` argument.
 #'
 #'   1. The new variable (`new_var`) is added to the input dataset and set to
 #'   the true value (`true_value`) if for the by group at least one condition
@@ -44,6 +69,7 @@
 #'   all observations the condition evaluates to `FALSE` or `NA`. Otherwise, it
 #'   is set to the missing value (`missing_value`).
 #'
+#' @seealso [flag_event()]
 #'
 #' @family der_gen
 #' @keywords der_gen
@@ -51,10 +77,9 @@
 #' @export
 #'
 #' @examples
-#'
 #' library(dplyr)
 #'
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID,
 #'   "1",
 #'   "2",
@@ -62,7 +87,7 @@
 #'   "4"
 #' )
 #'
-#' cm <- tibble::tribble(
+#' cm <- tribble(
 #'   ~USUBJID, ~CMCAT,        ~CMSEQ,
 #'   "1",      "ANTI-CANCER",      1,
 #'   "1",      "GENERAL",          2,
@@ -72,15 +97,13 @@
 #'
 #' pr<- tibble::tribble(
 #'   ~USUBJID, ~PRSEQ,
-#'   "1",      1,
-#'   "1",      2,
 #'   "2",      1,
 #'   "3",      1
 #' )
 #'
-#' actual <- derive_var_merged_exist_flag_msrc(
+#' derive_var_merged_exist_flag_msrc(
 #'   adsl,
-#'   sources = list(
+#'   flag_events = list(
 #'     flag_event(
 #'       dataset_name = "cm",
 #'       condition = CMCAT == "ANTI-CANCER"
@@ -94,7 +117,8 @@
 #'   new_var = CANCTRFL
 #' )
 #'
-#' adex <- tibble::tribble(
+#' # using different by variables depending on the source
+#' adex <- tribble(
 #'   ~USUBJID, ~EXLNKID, ~EXADJ,
 #'   "1",       "1",      "AE",
 #'   "1",       "2",      NA_character_,
@@ -103,20 +127,20 @@
 #'   "3",       "1",      NA_character_
 #' )
 #'
-#' ec <- tibble::tribble(
+#' ec <- tribble(
 #'   ~USUBJID, ~ECLNKID, ~ECADJ,
 #'   "1",      "3",      "AE",
 #'   "3",      "1",      NA_character_
 #' )
 #'
-#' fa <- tibble::tribble(
+#' fa <- tribble(
 #'   ~USUBJID, ~FALNKID, ~FATESTCD, ~FAOBJ,            ~FASTRESC,
 #'   "3",      "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
 #' )
 #'
-#' actual <- derive_var_merged_exist_flag_msrc(
+#' derive_var_merged_exist_flag_msrc(
 #'   adex,
-#'   sources = list(
+#'   flag_events = list(
 #'     flag_event(
 #'       dataset_name = "ex",
 #'       condition = !is.na(EXADJ)
@@ -134,24 +158,23 @@
 #'   ),
 #'   source_datasets = list(ex = adex, ec = ec, fa = fa),
 #'   by_vars = exprs(USUBJID, EXLNKID),
-#'   new_var = CANCTRFL
+#'   new_var = DOSADJFL
 #' )
 derive_var_merged_exist_flag_msrc <- function(dataset,
-                                              source_datasets,
-                                              sources,
                                               by_vars,
+                                              flag_events,
+                                              source_datasets,
                                               new_var,
                                               true_value = "Y",
                                               false_value = NA_character_,
-                                              missing_value = NA_character_,
-                                              filter_add = NULL) {
+                                              missing_value = NA_character_) {
   new_var <- assert_symbol(enexpr(new_var))
   assert_list_of(source_datasets, class = "data.frame", named = TRUE)
-  assert_list_of(sources, "flag_event")
+  assert_list_of(flag_events, "flag_event")
 
   source_names <- names(source_datasets)
   assert_list_element(
-    list = sources,
+    list = flag_events,
     element = "dataset_name",
     condition = dataset_name %in% source_names,
     source_names = source_names,
@@ -166,7 +189,7 @@ derive_var_merged_exist_flag_msrc <- function(dataset,
   tmp_cond_val <- get_new_tmp_var(dataset, prefix = "tmp_cond_val")
 
   selected_records <- map(
-    sources,
+    flag_events,
     function(source) {
       data_source <- source_datasets[[source$dataset_name]]
       if (is.null(source$by_vars)) {
@@ -206,7 +229,7 @@ derive_var_merged_exist_flag_msrc <- function(dataset,
 #'
 #' @param dataset_name Dataset name of the dataset to be used as input for the
 #'   event. The name refers to the dataset specified for `source_datasets` in
-#'   `derive_var_merged_exist_flag()`.
+#'   `derive_var_merged_exist_flag_msrc()`.
 #'
 #'   *Permitted Values*: a character scalar
 #'
@@ -216,7 +239,21 @@ derive_var_merged_exist_flag_msrc <- function(dataset,
 #'   all by groups where it evaluates as `TRUE` at least once the new variable
 #'   is set to the true value (`true_value`).
 #'
-
+#' @param by_vars Grouping variables
+#'
+#'   If specified, the dataset is grouped by the specified variables before the
+#'   condition is evaluated. If named elements are used in `by_vars` like
+#'   `by_vars = exprs(USUBJID, EXLNKID = ECLNKID)`, the variables are renamed
+#'   after the evaluation. If the `by_vars` element is not specified, the
+#'   observations are grouped by the variables specified for the `by_vars`
+#'   argument of `derive_var_merged_exist_flag_msrc()`.
+#'
+#' @seealso [derive_var_merged_exist_flag_msrc()]
+#'
+#' @family source_specifications
+#' @keywords source_specifications
+#'
+#' @export
 flag_event <- function(dataset_name,
                        condition = NULL,
                        by_vars = NULL) {

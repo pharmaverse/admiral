@@ -43,20 +43,14 @@ to the false value (\code{false_value}). The new variable is set to the missing
 value (\code{missing_value}) for by groups not present in the additional
 dataset.}
 
-\item{true_value}{True value
+\item{true_value}{True value}
 
-\emph{Default}: \code{"Y"}}
-
-\item{false_value}{False value
-
-\emph{Default}: \code{NA_character_}}
+\item{false_value}{False value}
 
 \item{missing_value}{Values used for missing information
 
 The new variable is set to the specified value for all by groups without
 observations in the additional dataset.
-
-\emph{Default}: \code{NA_character_}
 
 \emph{Permitted Value}: A character scalar}
 
@@ -153,6 +147,7 @@ derive_var_merged_exist_flag(
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},
+\code{\link{derive_var_merged_exist_flag_msrc}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
