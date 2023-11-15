@@ -62,7 +62,7 @@ Type 2 Contribution with Code:
 
 ## Development Process
 If you decide to contribute with code and you’re ready to make your first code 
-contribution, this development process step-by-step guide will help tie all the 
+contribution, this development process guide will help tie all the 
 other detailed vignettes together to give you the simplest experience of helping 
 to grow and enhance our codebase.
 
