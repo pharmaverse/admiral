@@ -16,8 +16,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-
-library(admiraldev)
 ```
 
 # Introduction
@@ -103,7 +101,7 @@ simplest experience of helping to grow and enhance our codebase.
 
 1.  Create a new feature branch from the development branch `main`
     following the naming convention and pull the latest changes - as
-    detailed on the [github
+    detailed on the [GitHub
     usage](git_usage.html#working-with-feature-branches-1) guide.
 2.  Familiarize yourself with the `{admiral}` [programming
     strategy](programming_strategy.html), and then make the required
