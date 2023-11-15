@@ -205,12 +205,6 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #'
 #' @param queries_name Name of the queries dataset, a string.
 #'
-#'
-#' @keywords other_advanced
-#' @family other_advanced
-#'
-#' @export
-#'
 #' @return The function throws an error if any of the requirements not met.
 #'
 #' @examples

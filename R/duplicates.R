@@ -42,9 +42,9 @@ get_duplicates_dataset <- function() {
 #' @return A `data.frame` of duplicate records within `dataset`
 #'
 #' @export
-#' @family utils_ds_chk
+#' @family internal
 #'
-#' @keywords utils_ds_chk
+#' @keywords internal
 #'
 #' @examples
 #' data(admiral_adsl)
@@ -88,8 +88,8 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' @return No return value, called for side effects
 #'
 #' @export
-#' @family utils_help
-#' @keywords utils_help
+#' @family internal
+#' @keywords internal
 #'
 #' @examples
 #' data(admiral_adsl)
