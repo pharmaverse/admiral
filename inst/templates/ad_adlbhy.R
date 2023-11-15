@@ -90,9 +90,9 @@ hylaw_params <- derive_param_exist_flag(
 adlbhy <- adlb_annotated %>%
   bind_rows(hylaw_params)
 
-dir <- file.path(getwd(), "tmp")
+dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
 if (!file.exists(dir)) {
   # Create the folder
-  dir.create(dir)
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 }
 save(adlbhy, file = file.path(dir, "adlbhy.rda"), compress = "bzip2")
