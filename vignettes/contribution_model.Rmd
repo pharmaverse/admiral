@@ -66,7 +66,7 @@ contribution, this development process guide will help tie all the
 other detailed vignettes together to give you the simplest experience of helping 
 to grow and enhance our codebase.
 
-1. Create a new feature branch from the development branch `main` following the naming convention and pull the latest changes - as detailed on the [github usage](git_usage.html#working-with-feature-branches-1) guide.
+1. Create a new feature branch from the `main` branch following the naming convention and pull the latest changes - as detailed on the [github usage](git_usage.html#working-with-feature-branches-1) guide.
 1. Familiarize yourself with the `{admiral}` [programming
 strategy](programming_strategy.html), and then make the required code updates.
 1. Before making a pull request, check the [Pull Request Review Guidance](pr_review_guidance.html) & the following checklist of common things developers miss:
