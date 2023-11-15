@@ -114,8 +114,7 @@ For example:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  set_values_to = exprs(
     AVAL = sum(AVAL),
-    PARAMCD = "TDOSE",
-    PARCAT1 = "OVERALL"
+    DTYPE = "AVERAGE",
   )
 }\if{html}{\out{</div>}}}
 

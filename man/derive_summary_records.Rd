@@ -5,24 +5,42 @@
 \title{Add New Records Within By Groups Using Aggregation Functions}
 \usage{
 derive_summary_records(
-  dataset,
+  dataset = NULL,
+  dataset_add,
+  dataset_ref = NULL,
   by_vars,
   filter = NULL,
+  filter_add = NULL,
   analysis_var,
   summary_fun,
-  set_values_to
+  set_values_to,
+  missing_values = NULL
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{analysis_var} argument(s) to be expected.}
+The variables specified by the \code{by_vars} argument(s) to be expected.}
+
+\item{dataset_add}{Additional dataset
+
+The variables specified for \code{by_vars} are expected.
+Observations from the specified dataset are going to be used to calculate and added
+as new records to the input dataset (\code{dataset}).}
+
+\item{dataset_ref}{Reference dataset
+
+The variables specified for \code{by_vars} are expected. For each
+observation of the specified dataset a new observation is added to the
+input dataset.}
 
 \item{by_vars}{Variables to consider for generation of groupwise summary
 records. Providing the names of variables in \code{\link[=exprs]{exprs()}} will create a
 groupwise summary and generate summary records for the specified groups.}
 
-\item{filter}{Filter condition as logical expression to apply during
+\item{filter}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{filter_add} instead.
+
+Filter condition as logical expression to apply during
 summary calculation. By default, filtering expressions are computed within
 \code{by_vars} as this will help when an aggregating, lagging, or ranking
 function is involved.
@@ -32,6 +50,19 @@ For example,
 \item \code{filter = (AVAL > mean(AVAL, na.rm = TRUE))} will filter all \code{AVAL}
 values greater than mean of \code{AVAL} with in \code{by_vars}.
 \item \code{filter = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
+than 2.
+}}
+
+\item{filter_add}{Filter condition as logical expression to apply during
+summary calculation. By default, filtering expressions are computed within
+\code{by_vars} as this will help when an aggregating, lagging, or ranking
+function is involved.
+
+For example,
+\itemize{
+\item \code{filter_add = (AVAL > mean(AVAL, na.rm = TRUE))} will filter all \code{AVAL}
+values greater than mean of \code{AVAL} with in \code{by_vars}.
+\item \code{filter_add = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
 than 2.
 }}
 
@@ -64,10 +95,18 @@ For example:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  set_values_to = exprs(
     AVAL = sum(AVAL),
-    PARAMCD = "TDOSE",
-    PARCAT1 = "OVERALL"
+    DTYPE = "AVERAGE",
   )
 }\if{html}{\out{</div>}}}
+
+\item{missing_values}{Values for missing summary values
+
+For observations of the reference dataset (\code{dataset_ref}) which do not have a
+complete mapping defined by the summarization defined in \code{set_values_to}.  Only variables
+specified for \code{set_values_to} can be specified for \code{missing_values}.
+
+\emph{Permitted Values}: named list of expressions, e.g.,
+\code{exprs(AVAL = -9999)}}
 }
 \value{
 A data frame with derived records appended to original dataset.
@@ -115,6 +154,7 @@ adeg <- tribble(
 # Summarize the average of the triplicate ECG interval values (AVAL)
 derive_summary_records(
   adeg,
+  dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
   set_values_to = exprs(
     AVAL = mean(AVAL, na.rm = TRUE),
@@ -126,6 +166,7 @@ derive_summary_records(
 # Derive more than one summary variable
 derive_summary_records(
   adeg,
+  dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
   set_values_to = exprs(
     AVAL = mean(AVAL),
@@ -159,8 +200,9 @@ adeg <- tribble(
 # by group
 derive_summary_records(
   adeg,
+  dataset_add = adeg,
   by_vars = exprs(USUBJID, PARAM, AVISIT),
-  filter = n() > 2,
+  filter_add = n() > 2,
   set_values_to = exprs(
     AVAL = mean(AVAL, na.rm = TRUE),
     DTYPE = "AVERAGE"

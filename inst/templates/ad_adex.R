@@ -148,6 +148,7 @@ adex <- adex %>%
         summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       )
     ),
+    dataset_add = adex,
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars)
   ) %>%
   # W2-W24 exposure
@@ -185,7 +186,8 @@ adex <- adex %>%
         summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       )
     ),
-    filter = VISIT %in% c("WEEK 2", "WEEK 24"),
+    dataset_add = adex,
+    filter_add = VISIT %in% c("WEEK 2", "WEEK 24"),
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars)
   ) %>%
   # Overall Dose intensity and W2-24 dose intensity

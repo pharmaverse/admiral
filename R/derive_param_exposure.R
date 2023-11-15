@@ -4,17 +4,43 @@
 #' start (`ASTDT(M)`)and end date (`AENDT(M)`) as the minimum and maximum date by `by_vars`.
 #'
 #' @param dataset
-#'   `r roxygen_param_dataset(expected_vars = c("by_vars", "analysis_var"))`
-#'   `PARAMCD` is expected as well,
-#'   + Either `ASTDTM` and `AENDTM` or `ASTDT` and `AENDT` are also expected.
+#'   `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
-#' @param filter Filter condition
+#' @param dataset_add Additional dataset
 #'
-#'   The specified condition is applied to the input dataset before deriving the
-#'   new parameter, i.e., only observations fulfilling the condition are taken
-#'   into account.
+#'   The variables specified for `by_vars`, `analysis_var`, `PARAMCD`,
+#'   alongside either `ASTDTM` and `AENDTM` or `ASTDT` and `AENDT` are also expected.
+#'   Observations from the specified dataset are going to be used to calculate and added
+#'   as new records to the input dataset (`dataset`).
 #'
-#'   *Permitted Values:* a condition
+#'
+#' @param filter
+#'
+#'  `r lifecycle::badge("deprecated")` Please use `filter_add` instead.
+#'
+#'   Filter condition as logical expression to apply during
+#'   summary calculation. By default, filtering expressions are computed within
+#'   `by_vars` as this will help when an aggregating, lagging, or ranking
+#'   function is involved.
+#'
+#'   For example,
+#'
+#'   + `filter = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all `AVAL`
+#'   values greater than mean of `AVAL` with in `by_vars`.
+#'   + `filter = (dplyr::n() > 2)` will filter n count of `by_vars` greater
+#'   than 2.
+#'
+#' @param filter_add Filter condition as logical expression to apply during
+#'   summary calculation. By default, filtering expressions are computed within
+#'   `by_vars` as this will help when an aggregating, lagging, or ranking
+#'   function is involved.
+#'
+#'   For example,
+#'
+#'   + `filter_add = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all `AVAL`
+#'   values greater than mean of `AVAL` with in `by_vars`.
+#'   + `filter_add = (dplyr::n() > 2)` will filter n count of `by_vars` greater
+#'   than 2.
 #'
 #' @param input_code Required parameter code
 #'
@@ -95,6 +121,7 @@
 #' # Cumulative dose
 #' adex %>%
 #'   derive_param_exposure(
+#'     dataset_add = adex,
 #'     by_vars = exprs(USUBJID),
 #'     set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
 #'     input_code = "DOSE",
@@ -106,6 +133,7 @@
 #' # average dose in w2-24
 #' adex %>%
 #'   derive_param_exposure(
+#'     dataset_add = adex,
 #'     by_vars = exprs(USUBJID),
 #'     filter = VISIT %in% c("WEEK 2", "WEEK 24"),
 #'     set_values_to = exprs(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
@@ -118,6 +146,7 @@
 #' # Any dose adjustment?
 #' adex %>%
 #'   derive_param_exposure(
+#'     dataset_add = adex,
 #'     by_vars = exprs(USUBJID),
 #'     set_values_to = exprs(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
 #'     input_code = "ADJ",
@@ -125,12 +154,14 @@
 #'     summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
 #'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
-derive_param_exposure <- function(dataset,
+derive_param_exposure <- function(dataset = NULL,
+                                  dataset_add,
                                   by_vars,
                                   input_code,
                                   analysis_var,
                                   summary_fun,
                                   filter = NULL,
+                                  filter_add = NULL,
                                   set_values_to = NULL) {
   by_vars <- assert_vars(by_vars)
   analysis_var <- assert_symbol(enexpr(analysis_var))
@@ -155,10 +186,20 @@ derive_param_exposure <- function(dataset,
     )
   }
 
-  assert_data_frame(dataset,
+  assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
+  assert_data_frame(dataset_add,
     required_vars = expr_c(by_vars, analysis_var, exprs(PARAMCD), dates)
   )
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+
+  if (!missing(filter)) {
+    deprecate_warn(
+      "1.0.0",
+      I("derive_param_exposure(filter = )"),
+      "derive_param_exposure(filter_add = )"
+    )
+    filter_add <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  }
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   assert_character_scalar(input_code)
@@ -166,14 +207,15 @@ derive_param_exposure <- function(dataset,
   assert_character_vector(input_code, values = params_available)
   assert_s3_class(summary_fun, "function")
 
-  if (is.null(filter)) {
-    filter <- TRUE
+  if (is.null(filter_add)) {
+    filter_add <- TRUE
   }
 
   derive_summary_records(
     dataset,
+    dataset_add,
     by_vars = by_vars,
-    filter = PARAMCD == !!input_code & !!filter,
+    filter_add = PARAMCD == !!input_code & !!filter_add,
     set_values_to = exprs(
       !!analysis_var := {{ summary_fun }}(!!analysis_var),
       !!!set_dtm,
