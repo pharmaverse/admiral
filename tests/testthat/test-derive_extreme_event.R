@@ -341,8 +341,59 @@ test_that("derive_extreme_event Test 4: event-specific mode", {
   )
 })
 
-## Test 5: event_joined() is handled correctly ----
-test_that("derive_extreme_event Test 5: event_joined() is handled correctly", {
+## Test 5: derive_vars_extreme_event ----
+test_that("derive_extreme_event Test 5: derive_vars_extreme_event", {
+  adsl <- tribble(
+    ~STUDYID, ~USUBJID, ~TRTEDT, ~DTHDT,
+    "PILOT01", "01-1130", ymd("2014-08-16"), ymd("2014-09-13"),
+    "PILOT01", "01-1133", ymd("2013-04-28"), ymd(""),
+    "PILOT01", "01-1211", ymd("2013-01-12"), ymd(""),
+    "PILOT01", "09-1081", ymd("2014-04-27"), ymd(""),
+    "PILOT01", "09-1088", ymd("2014-10-09"), ymd("2014-11-01"),
+  )
+
+  actual <- derive_vars_extreme_event(
+    adsl,
+    by_vars = exprs(STUDYID, USUBJID),
+    events = list(
+      event(
+        dataset_name = "adsl",
+        condition = !is.na(DTHDT),
+        set_values_to = exprs(LSTALVDT = DTHDT, DTHFL = "Y")
+      ),
+      event(
+        dataset_name = "adsl",
+        condition = !is.na(TRTEDT),
+        set_values_to = exprs(LSTALVDT = TRTEDT, DTHFL = "N")
+      )
+    ),
+    source_datasets = list(adsl = adsl),
+    tmp_event_nr_var = event_nr,
+    order = exprs(USUBJID, tmp_event_nr_var),
+    mode = "first",
+    keep_source_vars = exprs(STUDYID, USUBJID),
+    set_values_to = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
+  )
+
+  expected <- tribble(
+    ~STUDYID, ~USUBJID, ~TRTEDT, ~DTHDT, ~LSTALVDT, ~DTHFL,
+    "PILOT01", "01-1130", ymd("2014-08-16"), ymd("2014-09-13"), ymd("2014-09-13"), "Y",
+    "PILOT01", "01-1133", ymd("2013-04-28"), ymd(""), ymd("2013-04-28"), "N",
+    "PILOT01", "01-1211", ymd("2013-01-12"), ymd(""), ymd("2013-01-12"), "N",
+    "PILOT01", "09-1081", ymd("2014-04-27"), ymd(""), ymd("2014-04-27"), "N",
+    "PILOT01", "09-1088", ymd("2014-10-09"), ymd("2014-11-01"), ymd("2014-11-01"), "Y",
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("STUDYID", "USUBJID")
+  )
+})
+
+
+## Test 6: event_joined() is handled correctly ----
+test_that("derive_extreme_event Test 6: event_joined() is handled correctly", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDTC,
     "1",      "2020-01-01",
@@ -516,8 +567,8 @@ test_that("derive_extreme_event Test 5: event_joined() is handled correctly", {
   )
 })
 
-## Test 6: no tmp_event_nr_var ----
-test_that("derive_extreme_event Test 6: no tmp_event_nr_var", {
+## Test 7: no tmp_event_nr_var ----
+test_that("derive_extreme_event Test 7: no tmp_event_nr_var", {
   adrs <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",             1, "PR",
@@ -567,8 +618,8 @@ test_that("derive_extreme_event Test 6: no tmp_event_nr_var", {
   )
 })
 
-## Test 7: deprecation of ignore_event_order ----
-test_that("derive_extreme_event Test 7: deprecation of ignore_event_order", {
+## Test 8: deprecation of ignore_event_order ----
+test_that("derive_extreme_event Test 8: deprecation of ignore_event_order", {
   adrs <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",             1, "PR",
@@ -621,9 +672,64 @@ test_that("derive_extreme_event Test 7: deprecation of ignore_event_order", {
   )
 })
 
+## Test 9: deprecation of ignore_event_order ----
+test_that("derive_extreme_event Test 9: deprecation of ignore_event_order", {
+  adrs <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",             1, "PR",
+    "1",             2, "CR",
+    "1",             3, "CR"
+  ) %>%
+    mutate(PARAMCD = "OVR")
+
+  expect_warning(
+    actual <- derive_extreme_event(
+      adrs,
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISITN),
+      mode = "first",
+      events = list(
+        event_joined(
+          join_vars = exprs(AVALC),
+          join_type = "after",
+          first_cond_upper = AVALC.join == "CR",
+          condition = AVALC == "CR",
+          set_values_to = exprs(AVALC = "Y")
+        ),
+        event_joined(
+          join_vars = exprs(AVALC),
+          join_type = "after",
+          first_cond_upper = AVALC.join %in% c("CR", "PR"),
+          condition = AVALC == "PR",
+          set_values_to = exprs(AVALC = "Y")
+        )
+      ),
+      ignore_event_order = FALSE,
+      set_values_to = exprs(
+        PARAMCD = "CRSP"
+      )
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
+  expected <- bind_rows(
+    adrs,
+    tibble::tribble(
+      ~USUBJID, ~AVISITN, ~AVALC, ~PARAMCD,
+      "1",             1, "Y",    "CRSP"
+    )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "PARAMCD", "AVISITN")
+  )
+})
+
+
 # event_joined ----
-## Test 8: deprecation of `first_cond` ----
-test_that("event_joined Test 8: deprecation of `first_cond`", {
+## Test 10: deprecation of `first_cond` ----
+test_that("event_joined Test 10: deprecation of `first_cond`", {
   new_event <- event_joined(
     join_vars = exprs(AVALC, ADT),
     join_type = "after",

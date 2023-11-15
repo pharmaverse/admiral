@@ -76,6 +76,7 @@ ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_vars_aage}()},
+\code{\link{derive_vars_extreme_event}()},
 \code{\link{derive_vars_period}()}
 }
 \concept{der_adsl}

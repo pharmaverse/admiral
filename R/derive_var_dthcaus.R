@@ -1,5 +1,9 @@
 #' Derive Death Cause
 #'
+#' @description
+#' `r lifecycle::badge("superseded")` The `derive_var_dthcaus()`
+#' function has been superseded in favor of `derive_vars_extreme_event()`.
+#'
 #' Derive death cause (`DTHCAUS`) and add traceability variables if required.
 #'
 #' @param dataset

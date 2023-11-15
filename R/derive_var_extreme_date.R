@@ -1,5 +1,9 @@
 #' Derive First or Last Datetime from Multiple Sources
 #'
+#' @description
+#' `r lifecycle::badge("superseded")` The `derive_var_extreme_dtm()`
+#' function has been superseded in favor of `derive_vars_extreme_event()`.
+#'
 #' Add the first or last datetime from multiple sources to the dataset, e.g.,
 #' the last known alive datetime (`LSTALVDTM`).
 #'
@@ -332,7 +336,11 @@ derive_var_extreme_dtm <- function(dataset,
 
 #' Derive First or Last Date from Multiple Sources
 #'
-#' @description Add the first or last date from multiple sources to the
+#' @description
+#' `r lifecycle::badge("superseded")` The `derive_var_extreme_dt()`
+#' function has been superseded in favor of `derive_vars_extreme_event()`.
+#'
+#' Add the first or last date from multiple sources to the
 #' dataset, e.g., the last known alive date (`LSTALVDT`).
 #'
 #' **Note:** This is a wrapper function for the function `derive_var_extreme_dtm()`.

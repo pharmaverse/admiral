@@ -2,6 +2,8 @@
 
 ## New Features
 
+- Implement `derive_vars_extreme_event()`, which works as `derive_extreme_event()` but returns variables instead of a parameter. (#2138)
+
 ## Updates of Existing Functions
 
 - Fixed a bug in `compute_tmf()` where the time imputation flag was being incorrectly
@@ -109,6 +111,7 @@ order = exprs(my_order_var),
   - `derive_var_ontrtfl(span_period)` 
   
 - The `derive_param_extreme_record()` function has been superseded in favor of `derive_extreme_event()`. (#2141)
+- The functions `derive_var_dthcaus()`, `derive_var_extreme_dt()`, and `derive_var_extreme_dtm()` are superseded in favor of `derive_vars_extreme_event()`. (#2138)
   
 ## Documentation
 

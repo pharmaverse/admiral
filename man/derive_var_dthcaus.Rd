@@ -30,6 +30,9 @@ A list of expressions where the expressions are symbols as returned by
 The input dataset with \code{DTHCAUS} variable added.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{derive_var_dthcaus()}
+function has been superseded in favor of \code{derive_vars_extreme_event()}.
+
 Derive death cause (\code{DTHCAUS}) and add traceability variables if required.
 }
 \details{
@@ -149,6 +152,7 @@ ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_vars_aage}()},
+\code{\link{derive_vars_extreme_event}()},
 \code{\link{derive_vars_period}()}
 }
 \concept{der_adsl}
