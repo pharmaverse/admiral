@@ -140,6 +140,9 @@ Reference tab. (#2174)
 - The meaning of `date_imputation = "mid"` was clarified in the documentation of
 the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
 
+- Moved Development Process from `admiraldev` to Contribution Model in the 
+`admiral` website, updated GitHub strategy. (#2196)
+
 ## Various
 
 - Website now has button/links to Slack channel and GitHub Issues (#2127)
