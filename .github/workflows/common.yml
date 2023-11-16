@@ -35,7 +35,7 @@ concurrency:
 
 env:
   R_VERSION: "4.1"
-  
+
 jobs:
   get_r_version:
     name: Get R version

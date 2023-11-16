@@ -13,7 +13,7 @@ Utility functions to check data, variables and conditions for functions used in 
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://pharmaverse.github.io/admiraldev/main/}
+  \item \url{https://pharmaverse.github.io/admiraldev/}
   \item \url{https://github.com/pharmaverse/admiraldev/}
   \item Report bugs at \url{https://github.com/pharmaverse/admiraldev/issues}
 }
