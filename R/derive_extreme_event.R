@@ -485,7 +485,6 @@ derive_extreme <- function(dataset,
     ) %>%
     mutate(!!!set_values_to) %>%
     select(-!!tmp_event_nr_var)
-
 }
 #' Add the Worst or Best Observation for Each By Group as New Records
 #'
@@ -842,9 +841,6 @@ derive_extreme_event <- function(dataset,
                                  check_type = "warning",
                                  set_values_to,
                                  keep_source_vars = exprs(everything())) {
-
-
-
   new_obs <- derive_extreme(
     dataset = dataset,
     by_vars = by_vars,
@@ -988,12 +984,12 @@ derive_extreme_event <- function(dataset,
 #' library(lubridate)
 #'
 #' adsl <- tribble(
-#' ~STUDYID,   ~USUBJID,              ~TRTEDT, ~DTHDT,
-#' "PILOT01", "01-1130", ymd("2014-08-16"), ymd("2014-09-13"),
-#' "PILOT01", "01-1133", ymd("2013-04-28"), ymd(""),
-#' "PILOT01", "01-1211", ymd("2013-01-12"), ymd(""),
-#' "PILOT01", "09-1081", ymd("2014-04-27"), ymd(""),
-#' "PILOT01", "09-1088", ymd("2014-10-09"), ymd("2014-11-01"),
+#'   ~STUDYID, ~USUBJID, ~TRTEDT, ~DTHDT,
+#'   "PILOT01", "01-1130", ymd("2014-08-16"), ymd("2014-09-13"),
+#'   "PILOT01", "01-1133", ymd("2013-04-28"), ymd(""),
+#'   "PILOT01", "01-1211", ymd("2013-01-12"), ymd(""),
+#'   "PILOT01", "09-1081", ymd("2014-04-27"), ymd(""),
+#'   "PILOT01", "09-1088", ymd("2014-10-09"), ymd("2014-11-01"),
 #' )
 #'
 #' derive_vars_extreme_event(
