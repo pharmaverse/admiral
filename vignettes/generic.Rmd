@@ -18,6 +18,12 @@ library(admiraldev)
 
 # Introduction
 
+This vignette provides an overview of the most important admiral functions, the
+generic functions. They do not derive a specific variable or parameter in a
+specific dataset but can be used for many different derivations in many
+different datasets. The most important concepts and some examples are presented
+here. For full details and more examples see the documentation of the functions.
+
 # Characterization of Derivations
 
 - What should be added? There are two options:
@@ -56,6 +62,20 @@ generic_derivations <- tibble::tribble(
 
 reactable(
   generic_derivations,
+  columns = list(
+    Derivation = colDef(
+      minWidth = 200,
+      cell = function(value, index) {
+        # Render as a link
+        url <- paste0(
+          "../reference/",
+          substr(value, 1, nchar(value) - 2),
+          ".html"
+        )
+        htmltools::tags$a(href = url, as.character(value))
+  }
+    )
+  ),
   defaultSorted = c("Method", "What", "Source"),
   filterable = TRUE,
   resizable = TRUE,
@@ -96,3 +116,5 @@ Summary functions in `new_vars`/`set_values_to`
 ## Computed
 
 `parameters`, `new_vars`, `set_values_to`
+
+reference to computations
