@@ -2,6 +2,12 @@
 
 ## New Features
 
+New global option created `signif_digits` to handle floating point issue, the value is
+set to `15`, and is used with the `base R` function `signif()` when comparing 2 numeric
+values. This is implemented in `admiral ` functions `derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134)
+
+For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
+
 ## Updates of Existing Functions
 
 - Fixed a bug in `compute_tmf()` where the time imputation flag was being incorrectly
@@ -16,6 +22,10 @@ character vector (`'--DTC'`), was imputed. (#2146)
 - `derive_summary_records()`, `derive_var_merged_summary()`, and `get_summary_records()`
 were enhanced such that more than one summary variable can be derived, e.g.,
 `AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
+
+- `derive_summary_records()` was enhanced with the following optional arguments: `dataset_add`, `dataset_ref`, `missing_values`. These arguments respectively, generate summary variables from additional datasets, retain/add specific records from a reference dataset, and impute user-defined missing values. `derive_param_exposure()` was enhanced with `dataset_add` as well. (#2142)
+
+- The argument `dataset` is now optional for `derive_summary_records()` and `derive_param_exposure()`. (#2142)
 
 - The "joined" functions (`derive_vars_joined()`, `derive_var_joined_exist_flag()`,
 `filter_joined()`, and `event_joined()`) were unified: (#2126)
@@ -37,6 +47,10 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 allow more control of the selection of records. It creates a temporary variable
 for the event number, which can be used in `order`. (#2140)
 
+- `signif_dig` argument added to both `derive_var_atoxgr_dir()` and `derive_var_anrind()`
+functions with default value set to general option `signif_digits`. The new argument to
+these functions handles any floating point issues. (#2134)
+
 ## Breaking Changes
 
 - `derive_extreme_records()` the `dataset_add` argument is now mandatory. (#2139)
@@ -44,6 +58,8 @@ for the event number, which can be used in `order`. (#2140)
 - In `derive_summary_records()` and `get_summary_records()` the arguments
 `analysis_var` and `summary_fun` were deprecated in favor of `set_values_to`.
 (#1792)
+
+- In `derive_summary_records()` and `derive_param_exposure()` the argument `filter` was renamed to `filter_add` (#2142)
 
 - In `derive_var_merged_summary()` the arguments `new_var`, `analysis_var`, and
 `summary_fun` were deprecated in favor of `new_vars`. (#1792)
@@ -53,6 +69,8 @@ for the event number, which can be used in `order`. (#2140)
 - For the function `derive_vars_merged()`, the argument `match_flag` was renamed to `exist_flag` (#2125)
 
 - The default value for the `false_value` argument in `derive_extreme_records()` was changed to `NA_character_` (#2125)
+
+- For the function `consolidate_metadata()`, the argument `check_keys` was renamed to `check_type` to align with other functions (#2184)
 
 - In `filter_joined()` and `derive_var_joined_exist_flag()` (#2126)
     - the `first_cond` argument was deprecated in favor of `first_cond_upper` and
@@ -118,6 +136,9 @@ order = exprs(my_order_var),
 Reference tab. (#2174)
 
 - Added a link to the previous versions of the website to the navigation bar. (#2205)
+
+- The meaning of `date_imputation = "mid"` was clarified in the documentation of
+the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
 
 ## Various
 

@@ -10,7 +10,7 @@ get_summary_records(
   filter = NULL,
   analysis_var,
   summary_fun,
-  set_values_to
+  set_values_to = NULL
 )
 }
 \arguments{
@@ -73,6 +73,11 @@ For example:
 A data frame of derived records.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+Development on \code{get_summary_records()} is complete, and for new code we recommend
+switching to using the \code{dataset_add} argument in \code{derive_summary_records()}.
+
 It is not uncommon to have an analysis need whereby one needs to derive an
 analysis value (\code{AVAL}) from multiple records. The ADaM basic dataset
 structure variable \code{DTYPE} is available to indicate when a new derived
@@ -164,17 +169,8 @@ get_summary_records(
 \seealso{
 \code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
 
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_merged_summary}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_transposed}()}
+Other superseded: 
+\code{\link{derive_param_extreme_record}()}
 }
-\concept{der_gen}
-\keyword{der_gen}
+\concept{superseded}
+\keyword{superseded}

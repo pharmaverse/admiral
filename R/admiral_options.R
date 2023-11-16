@@ -78,6 +78,10 @@ get_admiral_option <- function(option) {
 #'   `exprs(STUDYID, USUBJID)`. This option is used as default value for the
 #'   `subject_keys` argument in all admiral functions.
 #'
+#' @param signif_digits Holds number of significant digits when comparing to numeric variables,
+#'  defaults to `15`. This option is used as default value for the  `signif_dig` argument in
+#'  admiral functions `derive_var_atoxgr_dir()` and `derive_var_anrind()`.
+#'
 #' @details
 #' Modify an admiral option, e.g `subject_keys`, such that it automatically affects downstream
 #' function inputs where `get_admiral_option()` is called such as `derive_param_exist_flag()`.
@@ -93,7 +97,7 @@ get_admiral_option <- function(option) {
 #'
 #' @seealso [get_admiral_option()], [derive_param_exist_flag()],[derive_param_tte()],
 #' [derive_var_dthcaus()], [derive_var_extreme_dtm()], [derive_vars_period()],
-#' [create_period_dataset()]
+#' [create_period_dataset()], [derive_var_atoxgr_dir()], [derive_var_anrind()]
 #'
 #' @examples
 #' library(lubridate)
@@ -136,10 +140,27 @@ get_admiral_option <- function(option) {
 #'     PARAM = "Measurable Disease at Baseline"
 #'   )
 #' )
-set_admiral_options <- function(subject_keys) {
+#'
+#' set_admiral_options(signif_digits = 14)
+#'
+#' # Derive ANRIND for ADVS
+#' advs <- tribble(
+#'   ~PARAMCD, ~AVAL, ~ANRLO, ~ANRHI,
+#'   "DIABP",     59,     60,     80,
+#'   "SYSBP",    120,     90,    130,
+#'   "RESP",      21,      8,     20,
+#' )
+#'
+#' derive_var_anrind(advs)
+#'
+set_admiral_options <- function(subject_keys, signif_digits) {
   if (!missing(subject_keys)) {
     assert_vars(subject_keys)
     admiral_environment$admiral_options$subject_keys <- subject_keys
+  }
+  if (!missing(signif_digits)) {
+    assert_integer_scalar(signif_digits, subset = "positive")
+    admiral_environment$admiral_options$signif_digits <- signif_digits
   }
 
   # Add future input to function formals above
