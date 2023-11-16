@@ -135,8 +135,8 @@
 #'   "3",      "NO SLEEP",     NA_character_,    1
 #' )
 #'
-#' # Add a new record for each USUBJID storing the the worst sleeping problem.
-#' derive_extreme_event(
+#' # Find records for each USUBJID storing the the worst sleeping problem.
+#' derive_extreme(
 #'   adqs,
 #'   by_vars = exprs(USUBJID),
 #'   events = list(
@@ -187,7 +187,7 @@
 #'     PARAM = "Alkaline Phosphatase (U/L)"
 #'   )
 #'
-#' derive_extreme_event(
+#' derive_extreme(
 #'   adhy,
 #'   by_vars = exprs(USUBJID),
 #'   events = list(
@@ -211,7 +211,7 @@
 #'   )
 #' )
 #'
-#' # Derive confirmed best overall response (using event_joined())
+#' # Find records for confirmed best overall response (using event_joined())
 #' # CR - complete response, PR - partial response, SD - stable disease
 #' # NE - not evaluable, PD - progressive disease
 #' adsl <- tribble(
