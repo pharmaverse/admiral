@@ -182,6 +182,23 @@ adsl <- tribble(
   "PILOT01", "09-1088", ymd("2014-10-09"), ymd("2014-11-01"),
 )
 
+lb <- tribble(
+  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~LBSEQ,             ~LBDTC,
+  "PILOT01",    "LB", "01-1130",    219, "2014-06-07T13:20",
+  "PILOT01",    "LB", "01-1130",    322, "2014-08-16T13:10",
+  "PILOT01",    "LB", "01-1133",    268, "2013-04-18T15:30",
+  "PILOT01",    "LB", "01-1133",    304, "2013-05-01T10:13",
+  "PILOT01",    "LB", "01-1211",      8, "2012-10-30T14:26",
+  "PILOT01",    "LB", "01-1211",    162, "2013-01-08T12:13",
+  "PILOT01",    "LB", "09-1081",     47, "2014-02-01T10:55",
+  "PILOT01",    "LB", "09-1081",    219, "2014-05-10T11:15",
+  "PILOT01",    "LB", "09-1088",    283, "2014-09-27T12:13",
+  "PILOT01",    "LB", "09-1088",    322, "2014-10-09T13:25"
+) \%>\%
+  mutate(
+    ADT = convert_dtc_to_dt(LBDTC)
+  )
+
 derive_vars_extreme_event(
   adsl,
   by_vars = exprs(STUDYID, USUBJID),
@@ -192,15 +209,24 @@ derive_vars_extreme_event(
       set_values_to = exprs(LSTALVDT = DTHDT, DTHFL = "Y")
     ),
     event(
+      dataset_name = "lb",
+      condition = !is.na(ADT),
+      order = exprs(ADT),
+      mode = "last",
+      set_values_to = exprs(LSTALVDT = ADT, DTHFL = "N")
+    ),
+    event(
       dataset_name = "adsl",
       condition = !is.na(TRTEDT),
+      order = exprs(TRTEDT),
+      mode = "last",
       set_values_to = exprs(LSTALVDT = TRTEDT, DTHFL = "N")
     )
   ),
-  source_datasets = list(adsl = adsl),
+  source_datasets = list(adsl = adsl, lb = lb),
   tmp_event_nr_var = event_nr,
-  order = exprs(USUBJID, tmp_event_nr_var),
-  mode = "first",
+  order = exprs(USUBJID, LSTALVDT, tmp_event_nr_var),
+  mode = "last",
   keep_source_vars = exprs(STUDYID, USUBJID),
   set_values_to = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
 )
