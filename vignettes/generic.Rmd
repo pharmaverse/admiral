@@ -24,7 +24,19 @@ specific dataset but can be used for many different derivations in many
 different datasets. The most important concepts and some examples are presented
 here. For full details and more examples see the documentation of the functions.
 
+## Required Packages
+
+The examples in this vignette require the following packages.
+
+```{r, warning=FALSE, message=FALSE}
+library(admiral)
+library(tibble)
+```
+
+
 # Characterization of Derivations
+
+The generic functions can be characterized by the following three properties:
 
 - What should be added? There are two options:
     - _Variables_
@@ -41,6 +53,10 @@ here. For full details and more examples see the documentation of the functions.
     one value as input, e.g., deriving BMI or BSA from height and weight 
 
 ## Overview of Derivations
+
+Using the three properties makes it easy to find the appropriate function for a
+particular derivation. The following interactive table lists all generic
+functions and their properties.
 
 ```{r, echo=FALSE}
 library(reactable)
@@ -85,23 +101,239 @@ reactable(
 
 # Source Data
 
+Most derivation functions expect a single source dataset. For some multiple
+source datasets can be specified. In both cases the way how to specify the
+source datasets is the same across all generic functions.
+
 ## Single Source Dataset
 
-The data is provided by the `dataset_add` argument. This is a mandatory argument. The data provided by the dataset argument is not used. (Add exceptions) 
+For functions expecting a single source dataset the data is provided by the
+`dataset_add` argument. This is a mandatory argument. The data provided by the
+`dataset` argument is not used[^1].
+
+[^1]: `derive_param_computed()` is an exception. It uses the data from both
+arguments is. This may be changed in admiral 2.0.
+
+If the `dataset_add` argument is not provided, the data from `dataset` is used
+(`derive_var_extreme_flag()`).
 
 ## Multiple Source Datasets
 
-The data is provided by the `source_datasets` argument. The datasets are referred to by the `dataset_name` element of the source objects. If the  dataset_name element is not specified, the input dataset is used. (Not fulfilled by all functions.) (Add example)
+For functions expecting multiple source datasets the data is provided by the
+`source_datasets` argument. The datasets are referred to by the `dataset_name`
+element of the source objects.
+
+For example, consider the derivation of a response parameter. The three possible
+responses are defined by `event()` objects. These objects define the events but
+do not include any data. Instead the `dataset_name` field is set to an
+(character) id. This id is used in the `source_datasets` argument of the
+derivation function to link the data to the events. I.e., for the first two
+events (`complete_response` and `partial_response`) the dataset `adrs_ovr` is
+used while for the last event the dataset `myadsl` is used.
+```
+complete_response <- event(
+  description = "Define complete response",
+  dataset_name = "ovr",
+  condition = AVALC == "CR",
+  set_values_to = exprs(AVALC = "COMPLETE RESPONSE")
+)
+
+partial_response <- event(
+  description = "Define partial response",
+  dataset_name = "ovr",
+  condition = AVALC == "PR",
+  set_values_to = exprs(AVALC = "PARTIAL RESPONSE")
+)
+
+no_response <- event(
+  description = "Define no response for all patients in adsl",
+  dataset_name = "adsl",
+  condition = TRUE,
+  set_values_to = exprs(AVALC = "NO RESPONSE")
+)
+
+derive_extreme_event(
+  ...
+  events = list(complete_response, partial_response, no_response),
+  source_datasets = list(ovr = adrs_ovr, adsl = myadsl),
+  ...
+)
+```
+This allows to define the source objects independent of the data. I.e., the same
+source object can be used for different source datasets. For example, the
+parameter above could be derived for data from a second reporter by just
+changing `source_dataset`:
+```
+derive_extreme_event(
+  ...
+  events = list(complete_response, partial_response, no_response),
+  source_datasets = list(ovr = adrs_ovr_reporter2, adsl = myadsl),
+  ...
+)
+```
+
+For some source objects the `dataset_name` element is optional, e.g., `event()`.
+If it is not specified, the input dataset (`dataset`) is used.
 
 # Methods
 
+The generic derivations use three different for deriving the values of the new
+variables or records. Usually the derivation applies the method several times,
+once for each group in the input or source data. The groups are defined by the
+`by_vars` argument, e.g., `by_vars = exprs(USUBJID)` for "each subject or
+`by_vars = exprs(USUBJID, PARAMCD)` for "each subject and parameter".
+
 ## Selection
 
+The most commen method is the selection method. It selects a record from the
+source dataset(s) and adds information from the selected record to the input
+dataset. This information could be just a flag indicating that a record exists,
+one or more variables from the selected records, or new variables created from
+the selected record.
 
 ### Options for Selection
 
-- condition: `filter_add`, `filter`
-- first or last records: `order`, `mode`
+In the simplest case the record is selected by a condition. The condition is
+specified by the `filter_add` or `filter` argument. In the following example
+baseline weight is added to `ADSL`.
+```{r}
+adsl <- tribble(
+  ~USUBJID,
+  "1",
+  "2",
+  "3"
+)
+
+advs <- tribble(
+  ~USUBJID, ~PARAMCD, ~AVISIT,    ~ABLFL, ~AVAL, ~AVALU,
+  "1",      "WEIGHT", "BASELINE", "Y",     58.7, "kg",
+  "1",      "HEIGHT", "BASELINE", "Y",    169.2, "cm",
+  "1",      "WEIGHT", "WEEK 3",   NA,      59.3, "kg",
+  "2",      "WEIGHT", "BASELINE", "Y",     72.5, "kg",
+  "2",      "WEIGHT", "WEKK 3",   NA,      71.9, "kg",
+)
+
+derive_vars_merged(
+  adsl,
+  dataset_add = advs,
+  by_vars = exprs(USUBJID),
+  filter_add = PARAMCD == "WEIGHT" & ABLFL == "Y",
+  new_vars = exprs(WGTBL = AVAL)
+)
+```
+
+Sometimes it is not possible to select the record of interest by a condition,
+e.g., if the first, last, best, worst, lowest, highest, ... value should be
+derived. In this case the `mode` and `order` argument can be specified to select
+the first or last record with respect to the variables specified for `order`.
+Below the day of the last valid dose is added to `ADSL`.
+
+```{r}
+adsl <- tribble(
+  ~USUBJID,
+  "1",
+  "2",
+  "3"
+)
+
+ex <- tribble(
+  ~USUBJID, ~EXSTDY, ~EXDOSE,
+  "1",            1,      50,
+  "1",            7,      70,
+  "1",           14,       0,
+  "2",            1,      75,
+  "2",            9,      70
+)
+
+derive_vars_merged(
+  adsl,
+  dataset_add = ex,
+  by_vars = exprs(USUBJID),
+  filter_add = EXDOSE > 0,
+  order = exprs(EXSTDY),
+  mode = "last",
+  new_vars = exprs(TRTEDY = EXSTDY)
+)
+```
+
+It is also possible to select the record based on records of the input and the
+source dataset. For this type of selection `{admiral}` provides the functions
+`derive_vars_joined()`, `derive_var_joined_exist_flag()`, and
+`derive_extreme_event()`. They provide the `filter_join` argument which accepts
+conditions with variables from both the input dataset (`dataset`) and the
+additional dataset (`dataset_add`). As an example consider deriving the day and
+dose of the last study treatment before an adverse event:
+
+```{r}
+adae <- tribble(
+  ~USUBJID, ~ASTDY, ~AESEQ,
+  "1",           3,      1,
+  "1",           3,      2,
+  "1",          15,      3
+)
+
+ex <- tribble(
+  ~USUBJID, ~EXSTDY, ~EXDOSE,
+  "1",            1,      50,
+  "1",            7,      70,
+  "1",           14,       0,
+  "2",            1,      75,
+  "2",            9,      70
+)
+
+derive_vars_joined(
+  adae,
+  dataset_add = ex,
+  by_vars = exprs(USUBJID),
+  filter_add = EXDOSE > 0,
+  filter_join = EXSTDY <= ASTDY,
+  join_type = "all",
+  order = exprs(EXSTDY),
+  mode = "last",
+  new_vars = exprs(LSTDOSDY = EXSTDY, LASTDOS = EXDOSE)
+)
+```
+
+The `filter_join` condition is applied on a temporary dataset created by left joining the input dataset and the additional dataset (restricted by `filter_add`):
+```{r, echo=FALSE}
+admiral:::get_joined_data(
+  adae,
+  dataset_add = ex,
+  by_vars = exprs(USUBJID),
+  filter_add = EXDOSE > 0,
+  join_vars = exprs(EXDOSE),
+  join_type = "all",
+  order = exprs(EXSTDY)
+)
+```
+
+
+The "joined" function can also be used when the condition for selecting depends on previous or subsequent records in the dataset. Consider:
+```{r}
+adlb <- tribble(
+  ~USUBJID, ~PARAMCD, ~ADY, ~ANRIND,
+  "1",      "AST",       1, "HIGH",
+  "1",      "AST",       7, "HIGH",
+  "1",      "AST",      14, "NORMAL",
+  "1",      "ALT",       1, "HIGH",
+  "1",      "ALT",       7, "NORMAL",
+  "1",      "ALT",      14, "HIGH",
+  "2",      "AST",       1, "HIGH",
+  "2",      "AST",      15, "HIGH",
+  "2",      "ALT",       1, "HIGH"
+)
+
+derive_var_joined_exist_flag(
+  adlb,
+  dataset_add = adlb,
+  by_vars = exprs(USUBJID, PARAMCD),
+  order = exprs(ADY),
+  join_vars = exprs(ADY, ANRIND),
+  join_type = "all",
+  filter_join = ANRIND == "HIGH" & ANRIND.join == "HIGH" & ADY.join > ADY + 10,
+  new_var = HICONFFL
+)
+```
 - other records: `filter_join`, `join_vars`, `join_type`, `first_cond_upper`, `first_cond_lower`
 
 ### New Values
