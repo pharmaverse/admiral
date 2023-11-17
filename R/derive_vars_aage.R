@@ -35,7 +35,7 @@
 #'
 #'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 #'
-#' @param unit *Deprecated*, please use `age_unit` instead.
+#' @param unit `r lifecycle::badge("deprecated")` Please use `age_unit` instead.
 #'
 #' @details The duration is derived as time from start to end date in the
 #'   specified output unit. If the end date is before the start date, the duration
