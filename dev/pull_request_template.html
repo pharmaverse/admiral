@@ -98,19 +98,19 @@
     </div>
 
 
-<p>Thank you for your Pull Request! We have developed this task checklist from the <a href="https://pharmaverse.github.io/admiraldev/devel/articles/development_process.html">Development Process Guide</a> to help with the final steps of the process. Completing the below tasks helps to ensure our reviewers can maximize their time on your code as well as making sure the admiral codebase remains robust and consistent.</p>
+<p>Thank you for your Pull Request! We have developed this task checklist from the <a href="https://pharmaverse.github.io/admiraldev/articles/development_process.html">Development Process Guide</a> to help with the final steps of the process. Completing the below tasks helps to ensure our reviewers can maximize their time on your code as well as making sure the admiral codebase remains robust and consistent.</p>
 <p>Please check off each taskbox as an acknowledgment that you completed the task or check off that it is not relevant to your Pull Request. This checklist is part of the Github Action workflows and the Pull Request will not be merged into the <code>devel</code> branch until you have checked off each task.</p>
 <ul class="task-list"><li>
 <input type="checkbox">Place Closes #<insert_issue_number> into the beginning of your Pull Request Title (Use Edit button in top-right if you need to update)</insert_issue_number></li>
 <li>
 <input type="checkbox">Code is formatted according to the <a href="https://style.tidyverse.org/" class="external-link">tidyverse style guide</a>. Run <code><a href="https://styler.r-lib.org/reference/style_file.html" class="external-link">styler::style_file()</a></code> to style R and Rmd files</li>
 <li>
-<input type="checkbox">Updated relevant unit tests or have written new unit tests, which should consider realistic data scenarios and edge cases, e.g. empty datasets, errors, boundary cases etc. - See <a href="https://pharmaverse.github.io/admiraldev/devel/articles/unit_test_guidance.html#tests-should-be-robust-to-cover-realistic-data-scenarios">Unit Test Guide</a>
+<input type="checkbox">Updated relevant unit tests or have written new unit tests, which should consider realistic data scenarios and edge cases, e.g. empty datasets, errors, boundary cases etc. - See <a href="https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html#tests-should-be-robust-to-cover-realistic-data-scenarios">Unit Test Guide</a>
 </li>
 <li>
-<input type="checkbox">If you removed/replaced any function and/or function parameters, did you fully follow the <a href="https://pharmaverse.github.io/admiraldev/devel/articles/programming_strategy.html#deprecation">deprecation guidance</a>?</li>
+<input type="checkbox">If you removed/replaced any function and/or function parameters, did you fully follow the <a href="https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation">deprecation guidance</a>?</li>
 <li>
-<input type="checkbox">Update to all relevant roxygen headers and examples, including keywords and families. Refer to the <a href="https://pharmaverse.github.io/admiraldev/devel/articles/programming_strategy.html#categorization-of-functions">categorization of functions</a> to tag appropriate keyword/family.</li>
+<input type="checkbox">Update to all relevant roxygen headers and examples, including keywords and families. Refer to the <a href="https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#categorization-of-functions">categorization of functions</a> to tag appropriate keyword/family.</li>
 <li>
 <input type="checkbox">Run <code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code> so all <code>.Rd</code> files in the <code>man</code> folder and the <code>NAMESPACE</code> file in the project root are updated appropriately</li>
 <li>
