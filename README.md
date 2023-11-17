@@ -32,7 +32,7 @@ devtools::install_github("pharmaverse/admiral")
 
 ## Cheat Sheet
 
-<a href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/%7Badmiral%7D%20cheatsheet.pdf"><img src="https://raw.githubusercontent.com/pharmaverse/admiral/main/inst/cheatsheet/cheatsheet%20image.png" width="630" height="252"/></a>  
+<a href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf"><img src="https://raw.githubusercontent.com/pharmaverse/admiral/main/inst/cheatsheet/cheatsheet_image.png" width="630" height="252"/></a>  
 
 ## Release Schedule
 
