@@ -94,6 +94,27 @@ ex_ext <- ex %>%
     time_imputation = "last"
   )
 
+# Source objects ----
+
+# Death cause sources
+src_ae <- dthcaus_source(
+  dataset_name = "ae",
+  filter = AEOUT == "FATAL",
+  date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
+  mode = "first",
+  dthcaus = AEDECOD,
+  set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
+)
+
+src_ds <- dthcaus_source(
+  dataset_name = "ds",
+  filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+  date = DSSTDT,
+  mode = "first",
+  dthcaus = DSTERM,
+  set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
+)
+
 adsl <- dm %>%
   ## derive treatment variables (TRT01P, TRT01A) ----
   # See also the "Visit and Period Variables" vignette
@@ -189,7 +210,19 @@ adsl <- adsl %>%
     start_date = TRTEDT,
     end_date = DTHDT,
     add_one = FALSE
-  )
+  ) %>%
+  # Cause of Death and Traceability Variables
+  derive_var_dthcaus(
+    src_ae, src_ds,
+    source_datasets = list(ae = ae, ds = ds_ext)
+  ) %>%
+  # Death Cause Category
+  mutate(DTHCGR1 = case_when(
+    is.na(DTHDOM) ~ NA_character_,
+    DTHDOM == "AE" ~ "ADVERSE EVENT",
+    str_detect(DTHCAUS, "(PROGRESSIVE DISEASE|DISEASE RELAPSE)") ~ "PROGRESSIVE DISEASE",
+    TRUE ~ "OTHER"
+  ))
 
 ## Last known alive date ----
 ## DTC variables are converted to numeric dates imputing missing day and month

@@ -531,6 +531,18 @@ dataset_vignette(
 )
 ```
 
+Following the derivation of `DTHCAUS` and related traceability variables, it is then possible to derive grouping variables such as death categories (`DTHCGRx`) using standard tidyverse code.
+
+```{r eval=TRUE}
+adsl <- adsl %>% 
+    mutate(DTHCGR1 = case_when(
+    is.na(DTHDOM) ~ NA_character_,
+    DTHDOM == "AE" ~ "ADVERSE EVENT",
+    str_detect(DTHCAUS, "(PROGRESSIVE DISEASE|DISEASE RELAPSE)") ~ "PROGRESSIVE DISEASE",
+    TRUE ~ "OTHER"
+  ))
+```
+
 ### Duration Relative to Death {#death_other}
 
 The function `derive_vars_duration()` can be used to derive duration relative to death like the Relative 
