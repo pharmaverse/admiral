@@ -116,7 +116,7 @@ knitr::opts_chunk$set(
 
 ##### Will there be a user/**contribution** guide?
 
- * Our [programming strategy](https://pharmaverse.github.io/admiraldev/devel/articles/programming_strategy.html) serves as a framework
+ * Our [programming strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) serves as a framework
  for users how to create their own functions. 
  * Please see the [contribution model website](contribution_model.html) for a detailed description how to contribute
 
