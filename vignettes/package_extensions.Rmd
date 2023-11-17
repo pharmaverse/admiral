@@ -57,6 +57,7 @@ _Note: The ordering numbers below are suggested but don't all need to strictly b
 1. Agree on a charter and expectations of each company, e.g. we usually ask for at least 3 developers with at least 25% capacity and a mix of R, GitHub and TA experience. Within the charter make sure the scope and timelines are clear. _It is important here not to try to boil the ocean. Focus first on the very common endpoints required as a foundation and then the package can build up from here via contributions from both the co-development companies and also the wider across-industry admiral community. If useful, the `{admiralonco}` charter could be shared as a guide._
 
 1. Each company should start to identify the required developer resources. Then each developer is required to complete the `{admiral`} [dummy issue for onboarding](https://github.com/pharmaverse/admiral/issues/1839), as well as reading up on the [admiraldev documentation](https://pharmaverse.github.io/admiraldev/index.html), - especially the developer guides, which all need to be followed for package extensions.
+
 ![Dummy issue for new developers](https://github.com/pharmaverse/admiraldev/raw/main/vignettes/dummy_issue.png){width=100%}
 
 1. Optionally it can be useful to host a kick-off meeting to decide how the team will work, for which we recommend agile/scrum practices.
