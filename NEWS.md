@@ -144,6 +144,8 @@ the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
 
 - Website now has button/links to Slack channel and GitHub Issues (#2127)
 
+- Cheatsheet now added to website front page (#2130)
+
 # admiral 0.12.3
 
 - Fixed a bug in `derive_var_dthcaus()` where if a subject has observations in
