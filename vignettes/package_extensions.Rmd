@@ -77,13 +77,13 @@ _Note: The ordering numbers below are suggested but don't all need to strictly b
 1. Update the template license file in your repo by adding the co-development company names in place of Roche & GSK - for `{admiral}` package extensions we use Apache 2.0, which is our preferred permissive license. Agree with the co-development companies any required extra wording for the copyright/IP section.
 
 1. Set up a project board, such as [this](https://github.com/orgs/pharmaverse/projects/12), to help manage your backlog.
-![admiral core project board](https://github.com/pharmaverse/admiraldev/raw/devel/vignettes/project_board.png){width=100%}
+![admiral core project board](https://github.com/pharmaverse/admiraldev/raw/main/vignettes/project_board.png){width=100%}
 
 1. Assuming you work under agile/scrum, then create a product backlog, prioritize and make a sprint plan.
 
-1. The intention is always to re-use as much as possible from `{admiral}` core package. If you find anything additional needed for the package extension, you should first question whether it might be a common need for other TAs and if so consider instead raising an issue to `{admiral}` core. When designing new functions always try to stay aligned with the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html). 
+1. The intention is always to re-use as much as possible from `{admiral}` core package. If you find anything additional needed for the package extension, you should first question whether it might be a common need for other TAs and if so consider instead raising an issue to `{admiral}` core. When designing new functions always try to stay aligned with the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html).
 
-1. Start development of your foundational first release 0.1.0. Follow a consistent [Development Process](https://pharmaverse.github.io/admiraldev/articles/development_process.html) to `{admiral}`. 
+1. Start development of your foundational first release 0.1.0. Follow a consistent [Development Process](https://pharmaverse.github.io/admiral/articles/contribution_model.html) to `{admiral}`. 
 
 1. Line up testers from your companies and others and set expectations around when you believe a stable version would be available for user testing. You can use the admiral Slack community to raise interest to get involved.
 
