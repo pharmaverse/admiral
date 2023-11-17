@@ -456,12 +456,12 @@ Standardized Drug Groupings (SDG).
 
 ```{r, eval=TRUE}
 sdg <- tibble::tribble(
-  ~PREFIX,     ~GRPNAME,       ~GRPID,   ~SCOPE, ~SCOPEN,  ~SRCVAR,     ~TERMCHAR,         ~TERMNUM,
-  "SDG01",     "Diuretics",        11,  "BROAD",       1,  "CMDECOD",   "Diuretic 1",           NA,
-  "SDG01",     "Diuretics",        11,  "BROAD",       1,  "CMDECOD",   "Diuretic 2",           NA,
-  "SDG02",     "Costicosteroids",  12,  "BROAD",       1,  "CMDECOD",   "Costicosteroid 1",     NA,
-  "SDG02",     "Costicosteroids",  12,  "BROAD",       1,  "CMDECOD",   "Costicosteroid 2",     NA,
-  "SDG02",     "Costicosteroids",  12,  "BROAD",       1,  "CMDECOD",   "Costicosteroid 3",     NA,
+  ~PREFIX, ~GRPNAME, ~GRPID, ~SCOPE, ~SCOPEN, ~SRCVAR, ~TERMCHAR, ~TERMNUM,
+  "SDG01", "Diuretics", 11, "BROAD", 1, "CMDECOD", "Diuretic 1", NA,
+  "SDG01", "Diuretics", 11, "BROAD", 1, "CMDECOD", "Diuretic 2", NA,
+  "SDG02", "Costicosteroids", 12, "BROAD", 1, "CMDECOD", "Costicosteroid 1", NA,
+  "SDG02", "Costicosteroids", 12, "BROAD", 1, "CMDECOD", "Costicosteroid 2", NA,
+  "SDG02", "Costicosteroids", 12, "BROAD", 1, "CMDECOD", "Costicosteroid 3", NA,
 )
 adcm <- tibble::tribble(
   ~USUBJID, ~ASTDTM,               ~CMDECOD,

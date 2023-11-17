@@ -38,9 +38,9 @@ test_that("derive_vars_query Test 1: Derive CQ and SMQ variables with two term l
 ## Test 2: Derive when no unique key excluding `SRCVAR` columns ----
 test_that("derive_vars_query Test 2: Derive when no unique key excluding `SRCVAR` columns", {
   query <- tibble::tribble(
-    ~PREFIX,  ~GRPNAME,   ~SRCVAR, ~TERMCHAR, ~GRPID,  ~TERMNUM,
-    "CQ42", "My Query", "AEDECOD",    "PTSI",      1, NA_real_,
-    "CQ42", "My Query",   "AELLT",   "LLTSI",      1, NA_real_
+    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
+    "CQ42", "My Query", "AEDECOD", "PTSI", 1, NA_real_,
+    "CQ42", "My Query", "AELLT", "LLTSI", 1, NA_real_
   )
 
   my_ae <- tibble::tribble(
@@ -67,9 +67,9 @@ test_that("derive_vars_query Test 2: Derive when no unique key excluding `SRCVAR
 ## Test 3: Derive when an adverse event is in multiple baskets ----
 test_that("derive_vars_query Test 3: Derive when an adverse event is in multiple baskets", {
   query <- tibble::tribble(
-    ~PREFIX,    ~GRPNAME,   ~SRCVAR, ~TERMCHAR, ~GRPID,  ~TERMNUM,
-    "CQ40", "My Query 1", "AEDECOD",    "PTSI",      1, NA_real_,
-    "CQ42", "My Query 2",   "AELLT",   "LLTSI",      2, NA_real_
+    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
+    "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA_real_,
+    "CQ42", "My Query 2", "AELLT", "LLTSI", 2, NA_real_
   )
 
   my_ae <- tibble::tribble(

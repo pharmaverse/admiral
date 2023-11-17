@@ -111,7 +111,7 @@
 #'
 #' # creating a query dataset for a customized query
 #' cqterms <- tribble(
-#'   ~TERMCHAR,                     ~TERMNUM,
+#'   ~TERMCHAR, ~TERMNUM,
 #'   "APPLICATION SITE ERYTHEMA", 10003041L,
 #'   "APPLICATION SITE PRURITUS", 10003053L
 #' ) %>%
@@ -529,7 +529,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'
 #' # creating a query for a customized query
 #' cqterms <- tribble(
-#'   ~TERMCHAR,                     ~TERMNUM,
+#'   ~TERMCHAR, ~TERMNUM,
 #'   "APPLICATION SITE ERYTHEMA", 10003041L,
 #'   "APPLICATION SITE PRURITUS", 10003053L
 #' ) %>%
