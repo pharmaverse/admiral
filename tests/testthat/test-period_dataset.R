@@ -462,4 +462,3 @@ test_that("derive_vars_period Test 13: periods", {
     keys = c("USUBJID")
   )
 })
-
