@@ -142,13 +142,11 @@ the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
 
 - Added an example derivation of `DTHCGR1` to the ADSL vignette. (#2218)
 
-## Templates
-
-- Added example derivations of `DTHCAUS` and `DTHCGR1` to the ADSL template. (#2218)
-
 ## Various
 
 - Website now has button/links to Slack channel and GitHub Issues (#2127)
+
+- Added example derivations of `DTHCAUS` and `DTHCGR1` to the ADSL template. (#2218)
 
 # admiral 0.12.3
 
