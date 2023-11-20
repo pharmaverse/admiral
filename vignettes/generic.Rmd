@@ -89,7 +89,7 @@ reactable(
           ".html"
         )
         htmltools::tags$a(href = url, as.character(value))
-  }
+      }
     )
   ),
   defaultSorted = c("Method", "What", "Source"),
@@ -373,7 +373,6 @@ derive_var_joined_exist_flag(
   filter_join = ANRIND == "HIGH" & all(ANRIND.join == "HIGH"),
   new_var = HICONFFL
 )
-
 ```
 If the `first_cond_upper` argument is specified the records in the joined
 dataset are restricted up to the first records where the condition is fulfilled:
@@ -387,7 +386,6 @@ admiral:::get_joined_data(
   join_type = "after",
   first_cond_upper = ANRIND.join == "HIGH" & ADY.join > ADY + 10
 )
-
 ```
 Thereafter `filter_join` is applied to the restricted joined dataset. I.e., the
 `all()` function considers only the results up to the confirmation records and

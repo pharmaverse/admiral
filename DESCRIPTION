@@ -55,6 +55,7 @@ Suggests:
     knitr,
     methods,
     pharmaversesdtm,
+    reactable,
     readxl,
     rmarkdown,
     testthat (>= 3.0.0),
