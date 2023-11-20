@@ -581,29 +581,6 @@ derive_vars_joined <- function(dataset,
 #'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
 #'    `exprs(ADT, desc(AVAL))` or `NULL`
 #'
-#' @param new_vars Variables to add
-#'
-#'   The specified variables from the additional dataset are added to the output
-#'   dataset. Variables can be renamed by naming the element, i.e., `new_vars =
-#'   exprs(<new name> = <old name>)`.
-#'
-#'   For example `new_vars = exprs(var1, var2)` adds variables `var1` and `var2`
-#'   from `dataset_add` to the input dataset.
-#'
-#'   And `new_vars = exprs(var1, new_var2 = old_var2)` takes `var1` and
-#'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
-#'   `old_var2` to `new_var2`.
-#'
-#'   Values of the added variables can be modified by specifying an expression.
-#'   For example, `new_vars = LASTRSP = exprs(str_to_upper(AVALC))` adds the
-#'   variable `LASTRSP` to the dataset and sets it to the upper case value of
-#'   `AVALC`.
-#'
-#'   If the argument is not specified or set to `NULL`, all variables from the
-#'   additional dataset (`dataset_add`) are added.
-#'
-#'   *Permitted Values*: list of variables or named expressions created by `exprs()`
-#'
 #' @param join_vars Variables to use from additional dataset
 #'
 #'   Any extra variables required from the additional dataset for `filter_join`
@@ -697,15 +674,6 @@ derive_vars_joined <- function(dataset,
 #'   joined dataset is grouped by the original observations.
 #'
 #'   *Permitted Values*: a condition
-#'
-#' @param mode Selection mode
-#'
-#'   Determines if the first or last observation is selected. If the `order`
-#'   argument is specified, `mode` must be non-null.
-#'
-#'   If the `order` argument is not specified, the `mode` argument is ignored.
-#'
-#'   *Permitted Values*: `"first"`, `"last"`, `NULL`
 #'
 #' @param check_type Check uniqueness?
 #'
