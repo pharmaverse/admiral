@@ -341,7 +341,7 @@ derive_vars_merged <- function(dataset,
   assert_atomic_vector(true_value, optional = TRUE)
   assert_atomic_vector(false_value, optional = TRUE)
   assert_expr_list(missing_values, named = TRUE, optional = TRUE)
-  if (!is.null(missing_values) & !is.null(new_vars)) {
+  if (!is.null(missing_values) && !is.null(new_vars)) {
     invalid_vars <- setdiff(
       names(missing_values),
       vars2chr(replace_values_by_names(new_vars))
