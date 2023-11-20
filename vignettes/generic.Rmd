@@ -185,7 +185,7 @@ or `by_vars = exprs(USUBJID, PARAMCD)` for "each subject and parameter".
 
 ## Selection
 
-The most commen method is the selection method. It selects a record from the
+The most common method is the selection method. It selects a record from the
 source dataset(s) and adds information from the selected record to the input
 dataset. This information could be just a flag indicating that a record exists,
 one or more variables from the selected records, or new variables created from
