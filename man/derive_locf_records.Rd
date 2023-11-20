@@ -19,7 +19,7 @@ derive_locf_records(
 
 The variables specified by the \code{by_vars}, \code{analysis_var}, \code{order} and \code{keep_vars} argument(s) to be expected.}
 
-\item{dataset_expected_obs}{\emph{Deprecated}, please use \code{dataset_ref} instead.}
+\item{dataset_expected_obs}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{dataset_ref} instead.}
 
 \item{dataset_ref}{Expected observations dataset
 
