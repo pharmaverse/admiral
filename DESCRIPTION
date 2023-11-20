@@ -52,6 +52,7 @@ Imports:
 Suggests:
     diffdf,
     DT,
+    htmltools,
     knitr,
     methods,
     pharmaversesdtm,
