@@ -36,7 +36,7 @@ vector to a date object.
 
 Default: \code{RANDDT}}
 
-\item{unit}{\emph{Deprecated}, please use \code{age_unit} instead.}
+\item{unit}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{age_unit} instead.}
 
 \item{age_unit}{Age unit
 
