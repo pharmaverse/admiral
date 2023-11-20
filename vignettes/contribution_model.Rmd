@@ -48,11 +48,11 @@ on [GitHub](https://github.com/pharmaverse/admiral/issues) to put it in
 our backlog.
 
 🦋 Familiarize yourself with our [programming
-strategy](https://pharmaverse.github.io/admiraldev/devel/articles/programming_strategy.html),
+strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html),
 guidance for [GitHub
-usage](https://pharmaverse.github.io/admiraldev/devel/articles/git_usage.html)
+usage](https://pharmaverse.github.io/admiraldev/articles/git_usage.html)
 and [unit
-testing](https://pharmaverse.github.io/admiraldev/devel/articles/unit_test_guidance.html).
+testing](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html).
 
 🦋 All [created issues](https://github.com/pharmaverse/admiral/issues)
 will be reviewed and the creator will receive an initial feedback via a
