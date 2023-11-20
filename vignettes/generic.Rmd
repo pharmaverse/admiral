@@ -47,7 +47,7 @@ The generic functions can be characterized by the following three properties:
 - Which method should be used? There are three options:
     - _Selection_: The new values are derived by selecting records, e.g., the
     baseline records, the last exposure record, ...
-    - _Summary_: The new values are derived by summarizing values, e.g.., sum,
+    - _Summary_: The new values are derived by summarizing values, e.g., sum,
     average, concatenation, ...
     - _Computation_: The new values are derived by a computation with more than
     one value as input, e.g., deriving BMI or BSA from height and weight 
@@ -125,7 +125,7 @@ element of the source objects.
 
 For example, consider the derivation of a response parameter. The three possible
 responses are defined by `event()` objects. These objects define the events but
-do not include any data. Instead the `dataset_name` field is set to an
+do not include any data. Instead the `dataset_name` field is set to a
 (character) id. This id is used in the `source_datasets` argument of the
 derivation function to link the data to the events. I.e., for the first two
 events (`complete_response` and `partial_response`) the dataset `adrs_ovr` is
@@ -177,11 +177,11 @@ If it is not specified, the input dataset (`dataset`) is used.
 
 # Methods
 
-The generic derivations use three different for deriving the values of the new
-variables or records. Usually the derivation applies the method several times,
-once for each group in the input or source data. The groups are defined by the
-`by_vars` argument, e.g., `by_vars = exprs(USUBJID)` for "each subject or
-`by_vars = exprs(USUBJID, PARAMCD)` for "each subject and parameter".
+The generic derivations use three different methods for deriving the values of
+the new variables or records. Usually the derivation applies the method several
+times, once for each group in the input or source data. The groups are defined
+by the `by_vars` argument, e.g., `by_vars = exprs(USUBJID)` for "each subject"
+or `by_vars = exprs(USUBJID, PARAMCD)` for "each subject and parameter".
 
 ## Selection
 
@@ -256,7 +256,7 @@ derive_vars_merged(
 )
 ```
 
-It is also possible to select the record based on records of the input and the
+It is also possible to select the record based on records of the input _and_ the
 source dataset. For this type of selection `{admiral}` provides the functions
 `derive_vars_joined()`, `derive_var_joined_exist_flag()`, and
 `derive_extreme_event()`. They provide the `filter_join` argument which accepts
@@ -308,7 +308,11 @@ admiral:::get_joined_data(
 ```
 
 
-The "joined" function can also be used when the condition for selecting depends on previous or subsequent records in the dataset. Consider:
+The "joined" function can also be used when the condition for selecting depends
+on previous or subsequent records in the dataset. In this case the same dataset
+is specified for `dataset` and `dataest_add`. Consider the following example
+where `"HIGH"` results should be flagged which are confirmed by a second
+`"HIGH"` result at least ten days later.
 ```{r}
 adlb <- tribble(
   ~USUBJID, ~PARAMCD, ~ADY, ~ANRIND,
@@ -320,6 +324,7 @@ adlb <- tribble(
   "1",      "ALT",      14, "HIGH",
   "2",      "AST",       1, "HIGH",
   "2",      "AST",      15, "HIGH",
+  "2",      "AST",      22, "NORMAL",
   "2",      "ALT",       1, "HIGH"
 )
 
@@ -329,24 +334,176 @@ derive_var_joined_exist_flag(
   by_vars = exprs(USUBJID, PARAMCD),
   order = exprs(ADY),
   join_vars = exprs(ADY, ANRIND),
-  join_type = "all",
+  join_type = "after",
   filter_join = ANRIND == "HIGH" & ANRIND.join == "HIGH" & ADY.join > ADY + 10,
   new_var = HICONFFL
 )
 ```
-- other records: `filter_join`, `join_vars`, `join_type`, `first_cond_upper`, `first_cond_lower`
+The `join_type` argument is set to `"after"` to restrict the joined records to
+subsequent results.
+
+As the same variables are included in `dataset` and `dataset_add`, those from
+`dataset_add` are renamed by adding the suffix ".join". The variables from
+`dataset_add` which are used in `filter_join` must be specified for `join_vars`.
+So the temporary dataset for applying `filter_join` is:
+```{r, echo=FALSE}
+admiral:::get_joined_data(
+  adlb,
+  dataset_add = adlb,
+  by_vars = exprs(USUBJID, PARAMCD),
+  order = exprs(ADY),
+  join_vars = exprs(ADY, ANRIND),
+  join_type = "after"
+)
+```
+It is possible to use summary functions like `all()` or `any()` in
+`filter_join`. Assume that in the previous example records should be flagged
+only if all results between the flagged record and the confirmation record were
+`"HIGH"`. This can be achieved by specifying the `first_cond_upper` argument and
+set it to the condition for confirmation.
+```{r}
+derive_var_joined_exist_flag(
+  adlb,
+  dataset_add = adlb,
+  by_vars = exprs(USUBJID, PARAMCD),
+  order = exprs(ADY),
+  join_vars = exprs(ADY, ANRIND),
+  join_type = "after",
+  first_cond_upper = ANRIND.join == "HIGH" & ADY.join > ADY + 10,
+  filter_join = ANRIND == "HIGH" & all(ANRIND.join == "HIGH"),
+  new_var = HICONFFL
+)
+
+```
+If the `first_cond_upper` argument is specified the records in the joined
+dataset are restricted up to the first records where the condition is fulfilled:
+```{r, echo=FALSE}
+admiral:::get_joined_data(
+  adlb,
+  dataset_add = adlb,
+  by_vars = exprs(USUBJID, PARAMCD),
+  order = exprs(ADY),
+  join_vars = exprs(ADY, ANRIND),
+  join_type = "after",
+  first_cond_upper = ANRIND.join == "HIGH" & ADY.join > ADY + 10
+)
+
+```
+Thereafter `filter_join` is applied to the restricted joined dataset. I.e., the
+`all()` function considers only the results up to the confirmation records and
+ignores subsequent results.
+
 
 ### New Values
 
-- flag: `new_var`/`exist_flat`, `true_value`, `false_value`, `missing_value`
-- variables from the selected records: `new_vars`, `set_values_to`
+How the (new) variables are set depends on if variables, a flag, or records are
+added by the derivation.
+
+- If only a flag needs to be added, the flag functions
+(`derive_var_merged_exist_flag()`, `derive_var_joined_exist_flag()`) can be
+used. The name of the new variable is specified by the `new_var` argument and
+the values of the flag by `true_value` and `false_value`.
+- If new variables from the selected record needs to be added, the name of the
+new variables and their values are specified by the `new_vars` argument. If in
+addition a flag should be added, the `exist_flag` argument and the `true_value`
+and `false_value` argument can be used.
+- If new records are added, the variables and their values are defined by the
+`set_values_to` argument.
 
 ## Summary
 
-Summary functions in `new_vars`/`set_values_to`
+If the new values should be derived by summarizing values, e.g., sum, average,
+concatenation, ..., the functions `derive_summary_records()` or
+`derive_var_merged_summary()` can be used. For example, adding an average dose
+parameter to `ADEX` can be done by the following:
+```{r}
+adex <- tribble(
+  ~USUBJID, ~ASTDY, ~AVAL, ~PARAMCD,
+  "1",           1,    50, "DOSE",
+  "1",           7,    70, "DOSE",
+  "1",          14,     0, "DOSE",
+  "2",           1,    75, "DOSE",
+  "2",           9,    70, "DOSE"
+)
+
+derive_summary_records(
+  adex,
+  dataset_add = adex,
+  filter_add = AVAL > 0,
+  by_vars = exprs(USUBJID),
+  set_values_to = exprs(
+    AVAL = mean(AVAL),
+    PARAMCD = "AVERAGE DOSE"
+  )
+)
+```
+The summary function, the source variable, and the new variable can be specified
+by the `set_values_to` argument. Variables which are not specified by
+`set_values_to` or `by_vars` are set to `NA` for the new records.
+
+If the average dose should be added as a variable to `ADSL`, consider the
+following:
+```{r}
+adsl <- tribble(
+  ~USUBJID,
+  "1",
+  "2",
+  "3"
+)
+
+derive_var_merged_summary(
+  adsl,
+  dataset_add = adex,
+  filter_add = AVAL > 0,
+  by_vars = exprs(USUBJID),
+  new_vars = exprs(
+    AVERDOSE = mean(AVAL)
+  ),
+  missing_values = exprs(AVERDOSE = 0)
+)
+```
+Here the summary function, the source variable, and the new variable are
+specified by the `new_vars` argument. For subjects without exposure observations
+the value of the new variable can be defined by the `missing_values` argument.
 
 ## Computed
 
-`parameters`, `new_vars`, `set_values_to`
+If the new values should be computed from different parameters of the source dataset,  `derive_param_computed()` can be used. The computed value can be specified by the `set_values_to` argument. The values of the source variable for a parameter can be referred to by temporary variables of the form `<variable name>.<parameter name>`.
+```{r}
+advs <- tribble(
+  ~USUBJID, ~AVISIT,    ~PARAMCD, ~AVAL, ~AVALU,
+  "1",      "BASELINE", "WEIGHT",  32.6, "kg",
+  "1",      "BASELINE", "HEIGHT", 155.4, "cm",
+  "1",      "MONTH 6",  "WEIGHT",  33.2, "kg",
+  "1",      "MONTH 6",  "HEIGHT", 155.8, "cm",
+  "2",      "BASELINE", "WEIGHT",  44.2, "kg",
+  "2",      "BASELINE", "HEIGHT", 145.3, "cm",
+  "2",      "MONTH 6",  "WEIGHT",  42.0, "kg",
+  "2",      "MONTH 6",  "HEIGHT", 146.4, "cm"
+)
 
-reference to computations
+derive_param_computed(
+  advs,
+  by_vars = exprs(USUBJID, AVISIT),
+  parameters = c("WEIGHT", "HEIGHT"),
+  set_values_to = exprs(
+    AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
+    PARAMCD = "BMI",
+    AVALU = "kg/m^2"
+  )
+)
+```
+
+For common computations like BMI `{admiral}` offers [computations](../reference/#computation-functions-for-vectors). In the previous example `compute_bmi()` could be used instead of the formula for BMI:
+```{r}
+derive_param_computed(
+  advs,
+  by_vars = exprs(USUBJID, AVISIT),
+  parameters = c("WEIGHT", "HEIGHT"),
+  set_values_to = exprs(
+    AVAL = compute_bmi(weight = AVAL.WEIGHT, height = AVAL.HEIGHT),
+    PARAMCD = "BMI",
+    AVALU = "kg/m^2"
+  )
+)
+```
