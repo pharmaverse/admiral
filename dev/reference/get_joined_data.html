@@ -12,7 +12,7 @@ variables are included in the output dataset.'><meta property="og:image" content
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9006</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9007</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -255,32 +255,6 @@ is issued independent of <code>check_type</code> if the restricted joined datase
 contains more than one observation for any of the observations of the input
 dataset.</p>
 <p><em>Permitted Values</em>: <code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></dd>
-
-
-<dt>new_vars</dt>
-<dd><p>Variables to add</p>
-<p>The specified variables from the additional dataset are added to the output
-dataset. Variables can be renamed by naming the element, i.e., <code>new_vars = exprs(&lt;new name&gt; = &lt;old name&gt;)</code>.</p>
-<p>For example <code>new_vars = exprs(var1, var2)</code> adds variables <code>var1</code> and <code>var2</code>
-from <code>dataset_add</code> to the input dataset.</p>
-<p>And <code>new_vars = exprs(var1, new_var2 = old_var2)</code> takes <code>var1</code> and
-<code>old_var2</code> from <code>dataset_add</code> and adds them to the input dataset renaming
-<code>old_var2</code> to <code>new_var2</code>.</p>
-<p>Values of the added variables can be modified by specifying an expression.
-For example, <code>new_vars = LASTRSP = exprs(str_to_upper(AVALC))</code> adds the
-variable <code>LASTRSP</code> to the dataset and sets it to the upper case value of
-<code>AVALC</code>.</p>
-<p>If the argument is not specified or set to <code>NULL</code>, all variables from the
-additional dataset (<code>dataset_add</code>) are added.</p>
-<p><em>Permitted Values</em>: list of variables or named expressions created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
-
-
-<dt>mode</dt>
-<dd><p>Selection mode</p>
-<p>Determines if the first or last observation is selected. If the <code>order</code>
-argument is specified, <code>mode</code> must be non-null.</p>
-<p>If the <code>order</code> argument is not specified, the <code>mode</code> argument is ignored.</p>
-<p><em>Permitted Values</em>: <code>"first"</code>, <code>"last"</code>, <code>NULL</code></p></dd>
 
 </dl></div>
     <div class="section level2">
