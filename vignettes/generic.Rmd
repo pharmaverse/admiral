@@ -19,7 +19,7 @@ library(admiraldev)
 # Introduction
 
 This vignette provides an overview of the most important admiral functions, the
-generic functions. They do not derive a specific variable or parameter in a
+generic derivations. They do not derive a specific variable or parameter in a
 specific dataset but can be used for many different derivations in many
 different datasets. The most important concepts and some examples are presented
 here. For full details and more examples see the documentation of the functions.
@@ -391,6 +391,12 @@ Thereafter `filter_join` is applied to the restricted joined dataset. I.e., the
 `all()` function considers only the results up to the confirmation records and
 ignores subsequent results.
 
+**Note:** In principle, we actually could achieve every result from
+`derive_vars_merged()` and `derive_var_merged_exist_flag()` by using
+`derive_vars_joined()` or `derive_var_joined_exist_flag()` respectively.
+However, the "joined" functions require much more resources (time and memory),
+hence it is recommended to use them only if it is really required, i.e., the
+condition for selecting records depends on variables from _both_ datasets.
 
 ### New Values
 

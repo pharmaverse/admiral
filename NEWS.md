@@ -132,9 +132,10 @@ order = exprs(my_order_var),
   
 ## Documentation
 
-- The "Generic Functions" vignette was rewritten. Now it provides a more
-complete overview of the generic functions, describe the common concepts, and
-makes it easier to find the appropriate function. (#2230)
+- The "Generic Functions" vignette (now "Generic Derivations") was rewritten.
+Now it provides a more complete overview of the generic derivations, describe
+the common concepts, and makes it easier to find the appropriate function.
+(#2230)
 
 - A way to standardize roxygen labels and descriptions for function arguments was implemented and tested (#2034)
 
