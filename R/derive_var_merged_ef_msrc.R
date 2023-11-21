@@ -2,7 +2,9 @@
 #'
 #' @description Adds a flag variable to the input dataset which indicates if
 #'   there exists at least one observation in one of the source datasets
-#'   fulfilling a certain condition.
+#'   fulfilling a certain condition. For example, if a dose adjustment flag
+#'   should be added to `ADEX` but the dose adjustment information is collected
+#'   in different datasets, e.g., `EX`, `EC`, and `FA`.
 #'
 #' @param flag_events Flag events
 #'
@@ -23,8 +25,8 @@
 #' @param true_value True value
 #'
 #'   The new variable (`new_var`) is set to the specified value for all by
-#'   groups for which at least for one source (`sources`) the condition
-#'   evaluates to `TRUE`.
+#'   groups for which at least one of the source object (`sources`) has the
+#'   condition evaluate to `TRUE`.
 #'
 #'   The values of `true_value`, `false_value`, and `missing_value` must be of
 #'   the same type.
@@ -32,8 +34,8 @@
 #' @param false_value False value
 #'
 #'   The new variable (`new_var`) is set to the specified value for all by
-#'   groups for which at all sources (`sources`) the condition evaluates to
-#'   `FALSE` or `NA`.
+#'   groups which occur in at least one source (`sources`) but the condition
+#'   never evaluates to `TRUE`.
 #'
 #'   The values of `true_value`, `false_value`, and `missing_value` must be of
 #'   the same type.
@@ -79,6 +81,7 @@
 #' @examples
 #' library(dplyr)
 #'
+#' # Derive a flag indicating anti-cancer treatment based on CM and PR
 #' adsl <- tribble(
 #'   ~USUBJID,
 #'   "1",
@@ -95,14 +98,16 @@
 #'   "3",      "ANTI-CANCER",      1
 #' )
 #'
+#' # Assuming all records in PR indicate cancer treatment
 #' pr <- tibble::tribble(
 #'   ~USUBJID, ~PRSEQ,
 #'   "2",      1,
 #'   "3",      1
 #' )
 #'
-#' derive_flag_select_msrc(
+#' derive_var_merged_ef_msrc(
 #'   adsl,
+#'   by_vars = exprs(USUBJID),
 #'   flag_events = list(
 #'     flag_event(
 #'       dataset_name = "cm",
@@ -113,11 +118,11 @@
 #'     )
 #'   ),
 #'   source_datasets = list(cm = cm, pr = pr),
-#'   by_vars = exprs(USUBJID),
 #'   new_var = CANCTRFL
 #' )
 #'
-#' # using different by variables depending on the source
+#' # Using different by variables depending on the source
+#' # Add a dose adjustment flag to ADEX based on ADEX, EC, and FA
 #' adex <- tribble(
 #'   ~USUBJID, ~EXLNKID, ~EXADJ,
 #'   "1",      "1",      "AE",
@@ -138,8 +143,9 @@
 #'   "3",      "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
 #' )
 #'
-#' derive_flag_select_msrc(
+#' derive_var_merged_ef_msrc(
 #'   adex,
+#'   by_vars = exprs(USUBJID, EXLNKID),
 #'   flag_events = list(
 #'     flag_event(
 #'       dataset_name = "ex",
@@ -157,17 +163,16 @@
 #'     )
 #'   ),
 #'   source_datasets = list(ex = adex, ec = ec, fa = fa),
-#'   by_vars = exprs(USUBJID, EXLNKID),
 #'   new_var = DOSADJFL
 #' )
-derive_flag_select_msrc <- function(dataset,
-                                    by_vars,
-                                    flag_events,
-                                    source_datasets,
-                                    new_var,
-                                    true_value = "Y",
-                                    false_value = NA_character_,
-                                    missing_value = NA_character_) {
+derive_var_merged_ef_msrc <- function(dataset,
+                                      by_vars,
+                                      flag_events,
+                                      source_datasets,
+                                      new_var,
+                                      true_value = "Y",
+                                      false_value = NA_character_,
+                                      missing_value = NA_character_) {
   new_var <- assert_symbol(enexpr(new_var))
   assert_list_of(source_datasets, class = "data.frame", named = TRUE)
   assert_list_of(flag_events, "flag_event")
@@ -225,11 +230,11 @@ derive_flag_select_msrc <- function(dataset,
 #' Create a `flag_event` Object
 #'
 #' The `flag_event` object is used to define events as input for the
-#' `derive_flag_select_msrc()` function.
+#' `derive_var_merged_ef_msrc()` function.
 #'
 #' @param dataset_name Dataset name of the dataset to be used as input for the
 #'   event. The name refers to the dataset specified for `source_datasets` in
-#'   `derive_flag_select_msrc()`.
+#'   `derive_var_merged_ef_msrc()`.
 #'
 #'   *Permitted Values*: a character scalar
 #'
@@ -246,9 +251,9 @@ derive_flag_select_msrc <- function(dataset,
 #'   `by_vars = exprs(USUBJID, EXLNKID = ECLNKID)`, the variables are renamed
 #'   after the evaluation. If the `by_vars` element is not specified, the
 #'   observations are grouped by the variables specified for the `by_vars`
-#'   argument of `derive_flag_select_msrc()`.
+#'   argument of `derive_var_merged_ef_msrc()`.
 #'
-#' @seealso [derive_flag_select_msrc()]
+#' @seealso [derive_var_merged_ef_msrc()]
 #'
 #' @family source_specifications
 #' @keywords source_specifications

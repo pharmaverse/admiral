@@ -19,7 +19,7 @@ derive_vars_dt(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{dtc} argument(s) to be expected.}
+The variables specified by the \code{dtc} argument are expected to be in the dataset.}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 

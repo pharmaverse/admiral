@@ -27,7 +27,7 @@ derive_var_joined_exist_flag(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{join_vars} argument(s) to be expected.}
+The variables specified by the \code{by_vars} and \code{join_vars} arguments are expected to be in the dataset.}
 
 \item{dataset_add}{Additional dataset
 
@@ -480,8 +480,8 @@ derive_var_joined_exist_flag(
 \code{\link[=filter_joined]{filter_joined()}}, \code{\link[=derive_vars_joined]{derive_vars_joined()}}
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_flag_select_msrc}()},
 \code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_merged_ef_msrc}()},
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},

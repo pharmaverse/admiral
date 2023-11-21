@@ -2,7 +2,7 @@
 
 ## New Features
 
-- The new function `derive_flag_select_msrc()` is provided to add a flag
+- The new function `derive_var_merged_ef_msrc()` is provided to add a flag
 indicating if one of the conditions in one of multiple source datasets is
 fulfilled. (#1728)
 

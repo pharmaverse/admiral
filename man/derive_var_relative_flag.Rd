@@ -20,7 +20,7 @@ derive_var_relative_flag(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{order} argument(s) to be expected.}
+The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.}
 
 \item{by_vars}{Grouping variables
 
@@ -170,9 +170,9 @@ response \%>\%
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_flag_select_msrc}()},
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},
+\code{\link{derive_var_merged_ef_msrc}()},
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},

@@ -454,7 +454,7 @@ derive_vars_merged <- function(dataset,
 #'
 #' @param by_vars Grouping variables
 #'
-#'   *Permitted Values*: list of variables
+#'   *Permitted Values*: list of variables created by `exprs()`
 #'
 #' @param new_var New variable
 #'

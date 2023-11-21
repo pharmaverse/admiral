@@ -1,5 +1,5 @@
 ## Test 1: wihtout by_vars ----
-test_that("derive_flag_select_msrc Test 1: wihtout by_vars", {
+test_that("derive_var_merged_ef_msrc Test 1: wihtout by_vars", {
   expected <- tibble::tribble(
     ~USUBJID, ~CANCTRFL,
     "1",      "Y",
@@ -24,7 +24,7 @@ test_that("derive_flag_select_msrc Test 1: wihtout by_vars", {
     "3",      1
   )
 
-  actual <- derive_flag_select_msrc(
+  actual <- derive_var_merged_ef_msrc(
     adsl,
     flag_events = list(
       flag_event(
@@ -48,7 +48,7 @@ test_that("derive_flag_select_msrc Test 1: wihtout by_vars", {
 })
 
 ## Test 2: with by_vars ----
-test_that("derive_flag_select_msrc Test 2: with by_vars", {
+test_that("derive_var_merged_ef_msrc Test 2: with by_vars", {
   expected <- tibble::tribble(
     ~USUBJID, ~EXLNKID, ~EXADJ,         ~DOSADJFL,
     "1",      "1",      "AE",           "Y",
@@ -71,7 +71,7 @@ test_that("derive_flag_select_msrc Test 2: with by_vars", {
     "3",      "1",      "OCCUR",   "DOSE ADJUSTMENT", "Y"
   )
 
-  actual <- derive_flag_select_msrc(
+  actual <- derive_var_merged_ef_msrc(
     adex,
     flag_events = list(
       flag_event(
