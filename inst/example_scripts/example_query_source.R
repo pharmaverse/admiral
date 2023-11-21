@@ -3,11 +3,11 @@
 # GRPID, could be NULL
 # SCOPE, ‘BROAD’, ‘NARROW’, or NULL
 # SRCVAR, e.g., AEDECOD, AELLT, ...
-# TERMNAME, non NULL
+# TERMCHAR, non NULL
 
 queries <- tibble::tribble(
   ~PREFIX, ~GRPNAME, ~GRPID, ~SCOPE,
-  ~SCOPEN, ~SRCVAR, ~TERMNAME, ~TERMID,
+  ~SCOPEN, ~SRCVAR, ~TERMCHAR, ~TERMNUM,
   "CQ01", "Dermatologic events", NA_integer_, NA_character_,
   NA_integer_, "AELLT", "APPLICATION SITE ERYTHEMA", NA_integer_,
   "CQ01", "Dermatologic events", NA_integer_, NA_character_,

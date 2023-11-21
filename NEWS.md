@@ -127,6 +127,14 @@ order = exprs(my_order_var),
   - `derive_var_ontrtfl(span_period)` 
   
 - The `derive_param_extreme_record()` function has been superseded in favor of `derive_extreme_event()`. (#2141)
+
+- `create_query_data()` and `derive_vars_query()` updated to rename variables in 
+    query data set as follows: (#2186)
+
+    - `TERMNAME` to `TERMCHAR`
+    - `TERMID` to `TERMNUM`
+  
+    Users need to adjust their `get_terms()` function accordingly.
   
 ## Documentation
 
@@ -141,6 +149,9 @@ Reference tab. (#2174)
 
 - The meaning of `date_imputation = "mid"` was clarified in the documentation of
 the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
+
+- Moved Development Process from `admiraldev` to Contribution Model in the 
+`admiral` website, updated GitHub strategy. (#2196)
 
 ## Various
 

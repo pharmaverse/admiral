@@ -221,8 +221,8 @@ TADJ
 TADJAE
 TDOSE
 TDURD
-TERMID
-TERMNAME
+TERMNUM
+TERMCHAR
 TID
 TLFs
 TMF
@@ -357,4 +357,8 @@ xpt
 admiraldev
 admiralophtha
 admiralvaccine
-
+Changelog
+DAIDS
+Pharmaverse
+Phosphatase
+onboarding
