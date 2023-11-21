@@ -299,4 +299,4 @@ channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269).
 
 - [Template scripts](https://github.com/pharmaverse/admiral/tree/main/inst/templates)
 
-- [Programming Strategy](https://pharmaverse.github.io/admiraldev/main/articles/programming_strategy.html)
+- [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html)
