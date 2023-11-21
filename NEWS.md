@@ -2,11 +2,16 @@
 
 ## New Features
 
-New global option created `signif_digits` to handle floating point issue, the value is
-set to `15`, and is used with the `base R` function `signif()` when comparing 2 numeric
-values. This is implemented in `admiral ` functions `derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134)
+- The new function `derive_var_merged_ef_msrc()` is provided to add a flag
+indicating if one of the conditions in one of multiple source datasets is
+fulfilled. (#1728)
 
-For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
+- New global option created `signif_digits` to handle floating point issue, the
+value is set to `15`, and is used with the `base R` function `signif()` when
+comparing 2 numeric values. This is implemented in `admiral ` functions
+`derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134)
+
+    For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
 
 ## Updates of Existing Functions
 
