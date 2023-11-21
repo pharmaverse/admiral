@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9008</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9009</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -175,6 +175,16 @@ ignore_event_order = TRUE,</code></pre>
 <li><code>derive_var_ontrtfl(span_period)</code></li>
 </ul></li>
 <li><p>The <code><a href="../reference/derive_param_extreme_record.html">derive_param_extreme_record()</a></code> function has been superseded in favor of <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2141" class="external-link">#2141</a>)</p></li>
+<li>
+<p><code><a href="../reference/create_query_data.html">create_query_data()</a></code> and <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> updated to rename variables in query data set as follows: (<a href="https://github.com/pharmaverse/admiral/issues/2186" class="external-link">#2186</a>)</p>
+<ul><li>
+<code>TERMNAME</code> to <code>TERMCHAR</code>
+</li>
+<li>
+<code>TERMID</code> to <code>TERMNUM</code>
+</li>
+</ul><p>Users need to adjust their <code>get_terms()</code> function accordingly.</p>
+</li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>

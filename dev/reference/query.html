@@ -14,7 +14,7 @@ as input to create_query_data()."><meta property="og:image" content="https://pha
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9008</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9009</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -151,16 +151,16 @@ object.</p>
 <dd><p>Definition of terms belonging to the query</p>
 <p>There are three different ways to define the terms:</p><ul><li><p>An <code><a href="basket_select.html">basket_select()</a></code> object is specified to select a query from the SMQ
 database.</p></li>
-<li><p>A data frame with columns <code>SRCVAR</code> and <code>TERMNAME</code> or <code>TERMID</code> can
+<li><p>A data frame with columns <code>SRCVAR</code> and <code>TERMCHAR</code> or <code>TERMNUM</code> can
 be specified to define the terms of a customized query. The <code>SRCVAR</code>
 should be set to the name of the variable which should be used to select
 the terms, e.g., <code>"AEDECOD"</code> or <code>"AELLTCD"</code>. <code>SRCVAR</code> does not need
 to be constant within a query. For example a query can be based on
 <code>AEDECOD</code> and <code>AELLT</code>.</p>
-<p>If <code>SRCVAR</code> refers to a character variable, <code>TERMNAME</code> should be set
-to the value the variable. If it refers to a numeric variable, <code>TERMID</code>
+<p>If <code>SRCVAR</code> refers to a character variable, <code>TERMCHAR</code> should be set
+to the value the variable. If it refers to a numeric variable, <code>TERMNUM</code>
 should be set to the value of the variable. If only character variables
-or only numeric variables are used, <code>TERMID</code> or <code>TERMNAME</code> respectively
+or only numeric variables are used, <code>TERMNUM</code> or <code>TERMCHAR</code> respectively
 can be omitted.</p></li>
 <li><p>A list of data frames and <code><a href="basket_select.html">basket_select()</a></code> objects can be specified to
 define a customized query based on custom terms and SMQs. The data frames
@@ -244,7 +244,7 @@ data frame, or a list of data frames and <code><a href="basket_select.html">bask
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># creating a query for a customized query</span></span></span>
 <span class="r-in"><span><span class="va">cqterms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="op">~</span><span class="va">TERMNAME</span>,                     <span class="op">~</span><span class="va">TERMID</span>,</span></span>
+<span class="r-in"><span>  <span class="op">~</span><span class="va">TERMCHAR</span>, <span class="op">~</span><span class="va">TERMNUM</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"APPLICATION SITE ERYTHEMA"</span>, <span class="fl">10003041L</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"APPLICATION SITE PRURITUS"</span>, <span class="fl">10003053L</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
@@ -261,7 +261,7 @@ data frame, or a list of data frames and <code><a href="basket_select.html">bask
 <span class="r-out co"><span class="r-pr">#&gt;</span> add_scope_num: FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> definition:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   TERMNAME                    TERMID SRCVAR </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   TERMCHAR                   TERMNUM SRCVAR </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> APPLICATION SITE ERYTHEMA 10<span style="text-decoration: underline;">003</span>041 AEDECOD</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> APPLICATION SITE PRURITUS 10<span style="text-decoration: underline;">003</span>053 AEDECOD</span>

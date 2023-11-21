@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9008</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9009</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,7 +115,7 @@
 
 <dt>dataset_queries</dt>
 <dd><p>A dataset containing required columns <code>PREFIX</code>,
-<code>GRPNAME</code>, <code>SRCVAR</code>, <code>TERMNAME</code>, <code>TERMID</code>, and optional columns
+<code>GRPNAME</code>, <code>SRCVAR</code>, <code>TERMCHAR</code>, <code>TERMNUM</code>, and optional columns
 <code>GRPID</code>, <code>SCOPE</code>, <code>SCOPEN</code>.</p>
 <p>The content of the dataset will be verified by <code><a href="assert_valid_queries.html">assert_valid_queries()</a></code>.</p>
 <p><code><a href="create_query_data.html">create_query_data()</a></code> can be used to create the dataset.</p></dd>
@@ -144,9 +144,9 @@ if <code>SCOPE</code> is not "" or NA, then the corresponding "SC" variable will
 be created; if <code>SCOPEN</code> is not "" or NA, then the corresponding
 "SCN" variable will be created.</p>
 <p>For each record in <code>dataset</code>, the "NAM" variable takes the value of
-<code>GRPNAME</code> if the value of <code>TERMNAME</code> or <code>TERMID</code> in <code>dataset_queries</code> matches
+<code>GRPNAME</code> if the value of <code>TERMCHAR</code> or <code>TERMNUM</code> in <code>dataset_queries</code> matches
 the value of the respective SRCVAR in <code>dataset</code>.
-Note that <code>TERMNAME</code> in <code>dataset_queries</code> dataset may be NA only when <code>TERMID</code>
+Note that <code>TERMCHAR</code> in <code>dataset_queries</code> dataset may be NA only when <code>TERMNUM</code>
 is non-NA and vice versa.
 The "CD", "SC", and "SCN" variables are derived accordingly based on
 <code>GRPID</code>, <code>SCOPE</code>, and <code>SCOPEN</code> respectively,
