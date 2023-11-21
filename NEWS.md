@@ -130,6 +130,14 @@ order = exprs(my_order_var),
   - `derive_var_ontrtfl(span_period)` 
   
 - The `derive_param_extreme_record()` function has been superseded in favor of `derive_extreme_event()`. (#2141)
+
+- `create_query_data()` and `derive_vars_query()` updated to rename variables in 
+    query data set as follows: (#2186)
+
+    - `TERMNAME` to `TERMCHAR`
+    - `TERMID` to `TERMNUM`
+  
+    Users need to adjust their `get_terms()` function accordingly.
   
 ## Documentation
 
