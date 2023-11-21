@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9010</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9011</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,9 +101,12 @@
 <h2 class="pkg-version" data-toc-text="development version" id="admiral-development-version">admiral (development version)<a class="anchor" aria-label="anchor" href="#admiral-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li><p>The new function <code><a href="../reference/derive_var_merged_ef_msrc.html">derive_var_merged_ef_msrc()</a></code> is provided to add a flag indicating if one of the conditions in one of multiple source datasets is fulfilled. (<a href="https://github.com/pharmaverse/admiral/issues/1728" class="external-link">#1728</a>)</p></li>
+<li>
 <p>New global option created <code>signif_digits</code> to handle floating point issue, the value is set to <code>15</code>, and is used with the <code>base R</code> function <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif()</a></code> when comparing 2 numeric values. This is implemented in <code>admiral</code> functions <code><a href="../reference/derive_var_atoxgr_dir.html">derive_var_atoxgr_dir()</a></code> and <code><a href="../reference/derive_var_anrind.html">derive_var_anrind()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2134" class="external-link">#2134</a>)</p>
 <p>For more information, please see blog: <a href="https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html" class="external-link">How admiral handles floating points</a></p>
-</div>
+</li>
+</ul></div>
 <div class="section level3">
 <h3 id="updates-of-existing-functions-development-version">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-development-version"></a></h3>
 <ul><li><p>Fixed a bug in <code><a href="../reference/compute_tmf.html">compute_tmf()</a></code> where the time imputation flag was being incorrectly populated when any of the existing time components (hour, minute and/or second) of the date character vector (<code>'--DTC'</code>), was imputed. (<a href="https://github.com/pharmaverse/admiral/issues/2146" class="external-link">#2146</a>)</p></li>
