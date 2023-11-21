@@ -430,7 +430,7 @@ test_that("derive_vars_period Test 13: periods", {
     "2",      "2021-02-02", "2021-03-02"
   ) %>%
     mutate(
-      dplyr::across(matches("AP\\d\\d[ES]DT"), ymd)
+      across(matches("AP\\d\\d[ES]DT"), ymd)
     ) %>%
     mutate(
       STUDYID = "xyz"
