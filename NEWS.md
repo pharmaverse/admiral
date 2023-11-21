@@ -51,6 +51,8 @@ for the event number, which can be used in `order`. (#2140)
 functions with default value set to general option `signif_digits`. The new argument to
 these functions handles any floating point issues. (#2134)
 
+- Fixed a bug in `derive_vars_period()` where the function was throwing an error whenever `dataset_ref` contained variables that were neither key variables, nor `APERIOD`, `ASPER`, `APHASEN`, nor mentioned in the `new_vars` argument. (#2231)
+
 ## Breaking Changes
 
 - `derive_extreme_records()` the `dataset_add` argument is now mandatory. (#2139)
