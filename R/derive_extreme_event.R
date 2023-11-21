@@ -647,6 +647,52 @@ derive_extreme_event <- function(dataset,
 #'   keep_source_vars = exprs(STUDYID, USUBJID),
 #'   new_vars = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
 #' )
+#'
+#' # Derive DTHCAUS from AE and DS domain data
+#' adsl <- tribble(
+#'   ~STUDYID,  ~USUBJID,
+#'   "STUDY01", "PAT01",
+#'   "STUDY01", "PAT02",
+#'   "STUDY01", "PAT03"
+#' )
+#' ae <- tribble(
+#'   ~STUDYID,  ~USUBJID, ~AESEQ, ~AEDECOD,       ~AEOUT,  ~AEDTHDTC,
+#'   "STUDY01", "PAT01",  12,     "SUDDEN DEATH", "FATAL", "2021-04-04",
+#'   "STUDY01", "PAT01",  13,     "CARDIAC ARREST", "FATAL", "2021-04-03",
+#' )
+#'
+#' ds <- tribble(
+#'   ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
+#'   "STUDY01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
+#'   "STUDY01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+#'   "STUDY01", "PAT02", 3, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01",
+#'   "STUDY01", "PAT03", 1, "DEATH", "POST STUDY REPORTING OF DEATH", "2022-03-03"
+#' )
+#'
+#' derive_vars_extreme_event(
+#'   adsl,
+#'   by_vars = exprs(STUDYID, USUBJID),
+#'   events = list(
+#'     event(
+#'       dataset_name = "ae",
+#'       condition = AEOUT == "FATAL",
+#'       set_values_to = exprs(DTHCAUS = AEDECOD, DTHDT = convert_dtc_to_dt(AEDTHDTC)),
+#'       order = exprs(DTHDT)
+#'     ),
+#'     event(
+#'       dataset_name = "ds",
+#'       condition = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+#'       set_values_to = exprs(DTHCAUS = DSTERM, DTHDT = convert_dtc_to_dt(DSSTDTC)),
+#'       order = exprs(DTHDT)
+#'     )
+#'   ),
+#'   source_datasets = list(ae = ae, ds = ds),
+#'   tmp_event_nr_var = event_nr,
+#'   order = exprs(USUBJID, DTHDT, event_nr),
+#'   mode = "first",
+#'   keep_source_vars = exprs(STUDYID, USUBJID),
+#'   new_vars = exprs(DTHCAUS = DTHCAUS, DTHDT = DTHDT)
+#' )
 derive_vars_extreme_event <- function(dataset,
                                       by_vars = NULL,
                                       events,
