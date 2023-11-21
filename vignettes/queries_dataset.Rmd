@@ -48,9 +48,9 @@ Variable | Scope |  Type | Example Value
 ------- | ----- | ------ | ----- 
 **PREFIX** | The prefix used to define the grouping variables |  Character |  `"SMQ01"`
 **GRPNAME** | The value provided to the grouping variables name|   Character | `"Immune-Mediated Guillain-Barre Syndrome"`
-**SRCVAR** | The variable used to define the grouping. Used in conjunction with TERMNAME |  Character | `"AEDECOD"`
-**TERMNAME** | A term used to define the grouping. Used in conjunction with SRCVAR |  Character | `"GUILLAIN-BARRE SYNDROME"`
-**TERMID** | A code used to define the grouping. Used in conjunction with SRCVAR |  Integer | `10018767`
+**SRCVAR** | The variable used to define the grouping. Used in conjunction with TERMCHAR |  Character | `"AEDECOD"`
+**TERMCHAR** | A term used to define the grouping. Used in conjunction with SRCVAR |  Character | `"GUILLAIN-BARRE SYNDROME"`
+**TERMNUM** | A code used to define the grouping. Used in conjunction with SRCVAR |  Integer | `10018767`
 GRPID | Id number of the query. This could be a SMQ identifier |  Integer | `20000131`
 SCOPE | Scope (Broad/Narrow) of the query |  Character | `BROAD`, `NARROW`, `NA`
 SCOPEN | Scope (Broad/Narrow) of the query |  Integer | `1`, `2`, `NA`
@@ -66,7 +66,7 @@ are in line.
 
 Each row must be unique within the dataset.
 
-As described above, the variables `PREFIX`, `GRPNAME`, `SRCVAR`, `TERMNAME` and `TERMID` are required.
+As described above, the variables `PREFIX`, `GRPNAME`, `SRCVAR`, `TERMCHAR` and `TERMNUM` are required.
 The combination of these variables will allow the creation of the grouping variable.
 
 ### Input
@@ -82,11 +82,11 @@ The combination of these variables will allow the creation of the grouping varia
     
     + Different `SRCVAR` variables may be specified within a `PREFIX`.
 
-  + `TERMNAME` must be a character string. 
-  This **must** be populated if `TERMID` is missing.
+  + `TERMCHAR` must be a character string. 
+  This **must** be populated if `TERMNUM` is missing.
   
-  + `TERMID` must be an integer. 
-  This **must** be populated if `TERMNAME` is missing.
+  + `TERMNUM` must be an integer. 
+  This **must** be populated if `TERMCHAR` is missing.
   
 
 
@@ -104,28 +104,28 @@ The combination of these variables will allow the creation of the grouping varia
 
   + `SRCVAR` will be used to identify the variables from `dataset` used to perform the grouping (e.g. `AEDECOD`,`AEBODSYS`, `AELLTCD`).
 
-  + `TERMNAME` (for character variables), `TERMID` (for numeric variables) will be used to identify the records meeting the criteria in `dataset` based on the variable defined in `SRCVAR`.
+  + `TERMCHAR` (for character variables), `TERMNUM` (for numeric variables) will be used to identify the records meeting the criteria in `dataset` based on the variable defined in `SRCVAR`.
   
   
   + **Result:**
   
-    + For each record in `dataset`, where the variable defined by `SRCVAR` match a term from the `TERMNAME` (for character variables) or `TERMID` (for numeric variables) in the `datasets_queries`, `ABCzzNAM` is populated with `GRPNAME`.
+    + For each record in `dataset`, where the variable defined by `SRCVAR` match a term from the `TERMCHAR` (for character variables) or `TERMNUM` (for numeric variables) in the `datasets_queries`, `ABCzzNAM` is populated with `GRPNAME`.
     
     
-    + Note: The type (numeric or character) of the variable defined in `SRCVAR` is checked in `dataset`. If the variable is a character variable (e.g. `AEDECOD`), it is expected that `TERMNAME` is populated, if it is a numeric variable (e.g. `AEBDSYCD`), it is expected that `TERMID` is populated, otherwise an error is issued.
+    + Note: The type (numeric or character) of the variable defined in `SRCVAR` is checked in `dataset`. If the variable is a character variable (e.g. `AEDECOD`), it is expected that `TERMCHAR` is populated, if it is a numeric variable (e.g. `AEBDSYCD`), it is expected that `TERMNUM` is populated, otherwise an error is issued.
     
 
 ### Example
 
 In this example, one standard MedDRA query (`PREFIX = "SMQ01"`) and one customized query (`PREFIX = "CQ02"`) are  defined to analyze the adverse events. 
 
-  + The standard MedDRA query variable `SMQ01NAM` [`PREFIX`] will be populated with "Standard Query 1" [`GRPNAME`] if any preferred term (`AEDECOD`) [`SRCVAR`] in `dataset` is equal to "AE1" or "AE2" [`TERMNAME`]
+  + The standard MedDRA query variable `SMQ01NAM` [`PREFIX`] will be populated with "Standard Query 1" [`GRPNAME`] if any preferred term (`AEDECOD`) [`SRCVAR`] in `dataset` is equal to "AE1" or "AE2" [`TERMCHAR`]
   
-  + The customized query (`CQ02NAM`) [`PREFIX`] will be populated with "Query 2" [`GRPNAME`] if any Low Level Term Code (`AELLTCD`)  [`SRCVAR`] in `dataset` is equal to 10  [`TERMID`] or any preferred term (`AEDECOD`) [`SRCVAR`] in `dataset` is equal to "AE4" [`TERMNAME`].
+  + The customized query (`CQ02NAM`) [`PREFIX`] will be populated with "Query 2" [`GRPNAME`] if any Low Level Term Code (`AELLTCD`)  [`SRCVAR`] in `dataset` is equal to 10  [`TERMNUM`] or any preferred term (`AEDECOD`) [`SRCVAR`] in `dataset` is equal to "AE4" [`TERMCHAR`].
   
 #### Query Dataset (`ds_query`)
   
-PREFIX | GRPNAME | SRCVAR | TERMNAME | TERMID |
+PREFIX | GRPNAME | SRCVAR | TERMCHAR | TERMNUM |
 ------- | ----- | ------ | ----- | ----- | -----
 SMQ01| Standard Query 1 | AEDECOD | AE1 | 
 SMQ01| Standard Query 1 | AEDECOD | AE2 | 

@@ -35,9 +35,9 @@ The output dataset must contain the following variables.
 \itemize{
 \item \code{SRCVAR}: the variable to be used for defining a term of the basket,
 e.g., \code{AEDECOD}
-\item \code{TERMNAME}: the name of the term if the variable \code{SRCVAR} is
+\item \code{TERMCHAR}: the name of the term if the variable \code{SRCVAR} is
 referring to is character
-\item \code{TERMID} the numeric id of the term if the variable \code{SRCVAR} is
+\item \code{TERMNUM} the numeric id of the term if the variable \code{SRCVAR} is
 referring to is numeric
 \item \code{GRPNAME}: the name of the basket. The values must be the same for
 all observations.
@@ -69,7 +69,7 @@ in the \code{derive_vars_query()} function as defined in the \href{../articles/q
 }
 \details{
 For each \code{query()} object listed in the \code{queries} argument, the terms belonging
-to the query (\code{SRCVAR}, \code{TERMNAME}, \code{TERMID}) are determined with respect
+to the query (\code{SRCVAR}, \code{TERMCHAR}, \code{TERMNUM}) are determined with respect
 to the \code{definition} field of the query: if the definition field of the
 \code{query()} object is
 \itemize{
@@ -99,8 +99,8 @@ equals \code{FALSE}, the variable is set to \code{NA}. If the \code{add_scope_nu
 equals \code{FALSE} for all baskets or none of the queries is an basket , the variable
 is not created.
 \item \code{SRCVAR}: Name of the variable used to identify the terms.
-\item \code{TERMNAME}: Value of the term variable if it is a character variable.
-\item \code{TERMID}: Value of the term variable if it is a numeric variable.
+\item \code{TERMCHAR}: Value of the term variable if it is a character variable.
+\item \code{TERMNUM}: Value of the term variable if it is a numeric variable.
 \item \code{VERSION}: Set to the value of the \code{version} argument. If it is not
 specified, the variable is not created.
 }
@@ -113,7 +113,7 @@ library(admiral)
 
 # creating a query dataset for a customized query
 cqterms <- tribble(
-  ~TERMNAME,                     ~TERMID,
+  ~TERMCHAR, ~TERMNUM,
   "APPLICATION SITE ERYTHEMA", 10003041L,
   "APPLICATION SITE PRURITUS", 10003053L
 ) \%>\%

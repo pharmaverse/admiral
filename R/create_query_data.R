@@ -31,9 +31,9 @@
 #'
 #'   - `SRCVAR`: the variable to be used for defining a term of the basket,
 #'    e.g., `AEDECOD`
-#'   - `TERMNAME`: the name of the term if the variable `SRCVAR` is
+#'   - `TERMCHAR`: the name of the term if the variable `SRCVAR` is
 #'   referring to is character
-#'   - `TERMID` the numeric id of the term if the variable `SRCVAR` is
+#'   - `TERMNUM` the numeric id of the term if the variable `SRCVAR` is
 #'   referring to is numeric
 #'   - `GRPNAME`: the name of the basket. The values must be the same for
 #'   all observations.
@@ -56,7 +56,7 @@
 #' @details
 #'
 #'   For each `query()` object listed in the `queries` argument, the terms belonging
-#'   to the query (`SRCVAR`, `TERMNAME`, `TERMID`) are determined with respect
+#'   to the query (`SRCVAR`, `TERMCHAR`, `TERMNUM`) are determined with respect
 #'   to the `definition` field of the query: if the definition field of the
 #'   `query()` object is
 #'
@@ -86,8 +86,8 @@
 #'   equals `FALSE` for all baskets or none of the queries is an basket , the variable
 #'   is not created.
 #'   * `SRCVAR`: Name of the variable used to identify the terms.
-#'   * `TERMNAME`: Value of the term variable if it is a character variable.
-#'   * `TERMID`: Value of the term variable if it is a numeric variable.
+#'   * `TERMCHAR`: Value of the term variable if it is a character variable.
+#'   * `TERMNUM`: Value of the term variable if it is a numeric variable.
 #'   * `VERSION`: Set to the value of the `version` argument. If it is not
 #'   specified, the variable is not created.
 #'
@@ -111,7 +111,7 @@
 #'
 #' # creating a query dataset for a customized query
 #' cqterms <- tribble(
-#'   ~TERMNAME,                     ~TERMID,
+#'   ~TERMCHAR, ~TERMNUM,
 #'   "APPLICATION SITE ERYTHEMA", 10003041L,
 #'   "APPLICATION SITE PRURITUS", 10003053L
 #' ) %>%
@@ -468,17 +468,17 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'   * An `basket_select()` object is specified to select a query from the SMQ
 #'     database.
 #'
-#'   * A data frame with columns `SRCVAR` and `TERMNAME` or `TERMID` can
+#'   * A data frame with columns `SRCVAR` and `TERMCHAR` or `TERMNUM` can
 #'     be specified to define the terms of a customized query. The `SRCVAR`
 #'     should be set to the name of the variable which should be used to select
 #'     the terms, e.g., `"AEDECOD"` or `"AELLTCD"`. `SRCVAR` does not need
 #'     to be constant within a query. For example a query can be based on
 #'     `AEDECOD` and `AELLT`.
 #'
-#'     If `SRCVAR` refers to a character variable, `TERMNAME` should be set
-#'     to the value the variable. If it refers to a numeric variable, `TERMID`
+#'     If `SRCVAR` refers to a character variable, `TERMCHAR` should be set
+#'     to the value the variable. If it refers to a numeric variable, `TERMNUM`
 #'     should be set to the value of the variable. If only character variables
-#'     or only numeric variables are used, `TERMID` or `TERMNAME` respectively
+#'     or only numeric variables are used, `TERMNUM` or `TERMCHAR` respectively
 #'     can be omitted.
 #'
 #'   * A list of data frames and `basket_select()` objects can be specified to
@@ -529,7 +529,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'
 #' # creating a query for a customized query
 #' cqterms <- tribble(
-#'   ~TERMNAME,                     ~TERMID,
+#'   ~TERMCHAR, ~TERMNUM,
 #'   "APPLICATION SITE ERYTHEMA", 10003041L,
 #'   "APPLICATION SITE PRURITUS", 10003053L
 #' ) %>%
@@ -713,7 +713,7 @@ validate_query <- function(obj) {
 #' - `terms` is not a data frame,
 #' - `terms` has zero observations,
 #' - the `SRCVAR` variable is not in `terms`,
-#' - neither the `TERMNAME` nor the `TERMID` variable is in `terms`,
+#' - neither the `TERMCHAR` nor the `TERMNUM` variable is in `terms`,
 #' - `expect_grpname == TRUE` and the `GRPNAME` variable is not in `terms`,
 #' - `expect_grpid == TRUE` and the `GRPID` variable is not in `terms`,
 #'
@@ -784,10 +784,10 @@ assert_terms <- function(terms,
       )
     }
   }
-  if (!"TERMNAME" %in% vars && !"TERMID" %in% vars) {
+  if (!"TERMCHAR" %in% vars && !"TERMNUM" %in% vars) {
     abort(
       paste0(
-        "Variable `TERMNAME` or `TERMID` is required.\n",
+        "Variable `TERMCHAR` or `TERMNUM` is required.\n",
         "None of them is in ",
         source_text,
         ".\n",
