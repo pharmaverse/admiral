@@ -50,7 +50,6 @@ test_that("derive_extreme_event Test 1: `mode` = first", {
         set_values_to = exprs(AVALC = "Missing", AVAL = 99)
       )
     ),
-    tmp_event_nr_var = event_nr,
     order = exprs(event_nr, ADY),
     mode = "first",
     set_values_to = exprs(
@@ -117,7 +116,6 @@ test_that("derive_extreme_event Test 2: `mode` = last", {
         set_values_to = exprs(AVALC = "Missing", AVAL = 99)
       )
     ),
-    tmp_event_nr_var = event_nr,
     order = exprs(desc(event_nr), ADY),
     mode = "last",
     set_values_to = exprs(
@@ -218,7 +216,6 @@ test_that("derive_extreme_event Test 3: `source_datasets` works", {
   actual <- derive_extreme_event(
     dataset = adrs,
     by_vars = exprs(STUDYID, USUBJID),
-    tmp_event_nr_var = event_nr,
     order = exprs(event_nr, ADT),
     mode = "first",
     source_datasets = list(adsl = adsl),
@@ -311,7 +308,6 @@ test_that("derive_extreme_event Test 4: event-specific mode", {
         set_values_to = exprs(AVALC = "Y")
       )
     ),
-    tmp_event_nr_var = event_nr,
     order = exprs(event_nr, AVISITN),
     mode = "first",
     keep_source_vars = exprs(AVISITN),
@@ -368,11 +364,10 @@ test_that("derive_extreme_event Test 5: derive_vars_extreme_event", {
       )
     ),
     source_datasets = list(adsl = adsl),
-    tmp_event_nr_var = event_nr,
-    order = exprs(USUBJID, tmp_event_nr_var),
+    order = exprs(USUBJID, event_nr),
     mode = "first",
     keep_source_vars = exprs(STUDYID, USUBJID),
-    set_values_to = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
+    new_vars = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
   )
 
   expected <- tribble(
@@ -453,11 +448,10 @@ test_that("derive_extreme_event Test 6: Cover event$order", {
       )
     ),
     source_datasets = list(adsl_ext = adsl_ext, lb_ext = lb_ext),
-    tmp_event_nr_var = event_nr,
-    order = exprs(USUBJID, LSTALVDT, tmp_event_nr_var),
+    order = exprs(USUBJID, LSTALVDT, event_nr),
     mode = "last",
     keep_source_vars = exprs(STUDYID, USUBJID),
-    set_values_to = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
+    new_vars = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
   )
 
 
@@ -534,7 +528,6 @@ test_that("derive_extreme_event Test 7: event_joined() is handled correctly", {
     derive_extreme_event(
       adrs,
       by_vars = exprs(STUDYID, USUBJID),
-      tmp_event_nr_var = event_nr,
       order = exprs(event_nr, ADT),
       mode = "first",
       source_datasets = list(adsl = adsl),

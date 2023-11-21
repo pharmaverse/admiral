@@ -238,13 +238,12 @@ dm \%>\%
 \code{\link[=date_source]{date_source()}}, \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}},
 \code{\link[=derive_vars_merged]{derive_vars_merged()}}
 
-ADSL Functions that returns variable appended to dataset: 
-\code{\link{derive_var_age_years}()},
+Other superseded: 
+\code{\link{derive_param_extreme_record}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},
-\code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_extreme_event}()},
-\code{\link{derive_vars_period}()}
+\code{\link{dthcaus_source}()},
+\code{\link{get_summary_records}()}
 }
-\concept{der_adsl}
-\keyword{der_adsl}
+\concept{superseded}
+\keyword{superseded}

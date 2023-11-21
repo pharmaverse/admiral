@@ -64,7 +64,6 @@ Source Objects:
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
-\code{\link{dthcaus_source}()},
 \code{\link{event_joined}()},
 \code{\link{event_source}()},
 \code{\link{event}()},

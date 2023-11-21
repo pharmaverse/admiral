@@ -2,7 +2,7 @@
 
 ## New Features
 
-- Implement `derive_vars_extreme_event()`, which works as `derive_extreme_event()` but returns variables instead of a parameter. (#2138)
+- Implement `derive_vars_extreme_event()`, which works as `derive_extreme_event()` but adds variables instead of a parameter. (#2138)
 
 - New global option created `signif_digits` to handle floating point issue, the value is set to `15`, and is used with the `base R` function `signif()` when comparing 2 numeric values. This is implemented in `admiral ` functions `derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134) 
 - For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)

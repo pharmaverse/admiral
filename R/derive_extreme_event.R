@@ -18,7 +18,7 @@
 #'   functions like `all()` or `any()` can be used in `condition`.
 #'
 #'   For `event_joined()` events the observations are selected by calling
-#'   `filter_joined`. The `condition` field is passed to the `filter` argument.
+#'   `filter_joined()`. The `condition` field is passed to the `filter` argument.
 #'
 #' @param tmp_event_nr_var Temporary event number variable
 #'
@@ -382,7 +382,6 @@ derive_extreme <- function(dataset,
   }
 
   if (!is.null(ignore_event_order)) {
-    assert_logical_scalar(ignore_event_order, optional = TRUE)
     if (ignore_event_order) {
       deprecate_details <- paste(
         "The event order is ignored by default.",
@@ -506,7 +505,7 @@ derive_extreme <- function(dataset,
 #'   functions like `all()` or `any()` can be used in `condition`.
 #'
 #'   For `event_joined()` events the observations are selected by calling
-#'   `filter_joined`. The `condition` field is passed to the `filter` argument.
+#'   `filter_joined()`. The `condition` field is passed to the `filter` argument.
 #'
 #' @param tmp_event_nr_var Temporary event number variable
 #'
@@ -601,7 +600,7 @@ derive_extreme <- function(dataset,
 #' @family der_prm_bds_findings
 #' @keywords der_prm_bds_findings
 #'
-#' @seealso [event()], [event_joined()]
+#' @seealso [event()], [event_joined()], [derive_vars_extreme_event()]
 #'
 #' @export
 #'
@@ -864,11 +863,6 @@ derive_extreme_event <- function(dataset,
 #' Add the first available record from `events` for each by group as new
 #' variables, all variables of the selected observation are kept. It can be used
 #' for selecting the extreme observation from a series of user-defined events.
-#' This distinguishes `derive_vars_extreme_event()` from `derive_extreme_records()`,
-#' where extreme records are derived based on certain order of existing
-#' variables.
-#'
-#' **Note:** This is a wrapper function for the function `derive_extreme()`.
 #'
 #' @param events Conditions and new values defining events
 #'
@@ -879,7 +873,7 @@ derive_extreme_event <- function(dataset,
 #'   functions like `all()` or `any()` can be used in `condition`.
 #'
 #'   For `event_joined()` events the observations are selected by calling
-#'   `filter_joined`. The `condition` field is passed to the `filter` argument.
+#'   `filter_joined()`. The `condition` field is passed to the `filter` argument.
 #'
 #' @param tmp_event_nr_var Temporary event number variable
 #'
@@ -912,22 +906,6 @@ derive_extreme_event <- function(dataset,
 #'   A named list of datasets is expected. The `dataset_name` field of `event()`
 #'   and `event_joined()` refers to the dataset provided in the list.
 #'
-#' @param ignore_event_order Ignore event order
-#'
-#'   `r lifecycle::badge("deprecated")`
-#'
-#'   This argument is *deprecated*. If event order should be ignored, please
-#'   specify neither `ignore_event_order` nor `tmp_event_nr_var`. If the event
-#'   order should be considered, don't specify `ignore_event_order` but specify
-#'   `tmp_event_nr_var` and and the specified variable to `order`.
-#'
-#'   If the argument is set to `TRUE`, all events defined by `events` are
-#'   considered equivalent. If there is more than one observation per by group
-#'   the first or last (with respect to `mode` and `order`) is select without
-#'   taking the order of the events into account.
-#'
-#'   *Permitted Values:* `TRUE`, `FALSE`
-#'
 #' @param keep_source_vars Variables to keep from the source dataset
 #'
 #'   For each event the specified variables are kept from the selected
@@ -937,6 +915,12 @@ derive_extreme_event <- function(dataset,
 #'   *Permitted Values*: A list of expressions where each element is
 #'   a symbol or a tidyselect expression, e.g., `exprs(VISIT, VISITNUM,
 #'   starts_with("RS"))`.
+#'
+#' @param new_vars Variables to add
+#'
+#'   The specified variables from the events are added to the output
+#'   dataset. Variables can be renamed by naming the element, i.e., `new_vars =
+#'   exprs(<new name> = <old name>)`.
 #'
 #' @inheritParams filter_extreme
 #' @inheritParams derive_summary_records
@@ -1034,11 +1018,10 @@ derive_extreme_event <- function(dataset,
 #'     )
 #'   ),
 #'   source_datasets = list(adsl = adsl, lb = lb),
-#'   tmp_event_nr_var = event_nr,
-#'   order = exprs(USUBJID, LSTALVDT, tmp_event_nr_var),
+#'   order = exprs(USUBJID, LSTALVDT, event_nr),
 #'   mode = "last",
 #'   keep_source_vars = exprs(STUDYID, USUBJID),
-#'   set_values_to = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
+#'   new_vars = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
 #' )
 derive_vars_extreme_event <- function(dataset,
                                       by_vars = NULL,
@@ -1047,21 +1030,19 @@ derive_vars_extreme_event <- function(dataset,
                                       order,
                                       mode,
                                       source_datasets = NULL,
-                                      ignore_event_order = NULL,
                                       check_type = "warning",
-                                      set_values_to,
-                                      keep_source_vars = exprs(everything())) {
+                                      new_vars,
+                                      keep_source_vars = by_vars) {
   new_obs <- derive_extreme(
     dataset = dataset,
     by_vars = by_vars,
     events = events,
-    tmp_event_nr_var = tmp_event_nr_var,
+    tmp_event_nr_var = event_nr,
     order = order,
     mode = mode,
     source_datasets = source_datasets,
-    ignore_event_order = ignore_event_order,
     check_type = check_type,
-    set_values_to = set_values_to,
+    set_values_to = new_vars,
     keep_source_vars = keep_source_vars
   )
 

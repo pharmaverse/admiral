@@ -38,7 +38,7 @@ record sorted by \code{order}. The data is grouped by \code{by_vars}, i.e., summ
 functions like \code{all()} or \code{any()} can be used in \code{condition}.
 
 For \code{event_joined()} events the observations are selected by calling
-\code{filter_joined}. The \code{condition} field is passed to the \code{filter} argument.}
+\code{filter_joined()}. The \code{condition} field is passed to the \code{filter} argument.}
 
 \item{tmp_event_nr_var}{Temporary event number variable
 
@@ -395,7 +395,7 @@ derive_extreme_event(
 
 }
 \seealso{
-\code{\link[=event]{event()}}, \code{\link[=event_joined]{event_joined()}}
+\code{\link[=event]{event()}}, \code{\link[=event_joined]{event_joined()}}, \code{\link[=derive_vars_extreme_event]{derive_vars_extreme_event()}}
 
 BDS-Findings Functions for adding Parameters/Records: 
 \code{\link{default_qtc_paramcd}()},

@@ -53,8 +53,8 @@
 #' @return The input dataset with the new variable added.
 #'
 #'
-#' @family der_adsl
-#' @keywords der_adsl
+#' @family superseded
+#' @keywords superseded
 #'
 #' @seealso [date_source()], [derive_var_extreme_dt()],
 #'   [derive_vars_merged()]
@@ -371,8 +371,8 @@ derive_var_extreme_dtm <- function(dataset,
 #' @return The input dataset with the new variable added.
 #'
 #'
-#' @family der_adsl
-#' @keywords der_adsl
+#' @family superseded
+#' @keywords superseded
 #'
 #' @seealso [date_source()], [derive_var_extreme_dtm()], [derive_vars_merged()]
 #'

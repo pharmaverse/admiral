@@ -143,6 +143,10 @@ derive_param_extreme_record(
 }
 \seealso{
 Other superseded: 
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{dthcaus_source}()},
 \code{\link{get_summary_records}()}
 }
 \concept{superseded}

@@ -12,10 +12,9 @@ derive_vars_extreme_event(
   order,
   mode,
   source_datasets = NULL,
-  ignore_event_order = NULL,
   check_type = "warning",
-  set_values_to,
-  keep_source_vars = exprs(everything())
+  new_vars,
+  keep_source_vars = by_vars
 )
 }
 \arguments{
@@ -38,7 +37,7 @@ record sorted by \code{order}. The data is grouped by \code{by_vars}, i.e., summ
 functions like \code{all()} or \code{any()} can be used in \code{condition}.
 
 For \code{event_joined()} events the observations are selected by calling
-\code{filter_joined}. The \code{condition} field is passed to the \code{filter} argument.}
+\code{filter_joined()}. The \code{condition} field is passed to the \code{filter} argument.}
 
 \item{tmp_event_nr_var}{Temporary event number variable
 
@@ -71,22 +70,6 @@ event sorting by \code{order}.
 A named list of datasets is expected. The \code{dataset_name} field of \code{event()}
 and \code{event_joined()} refers to the dataset provided in the list.}
 
-\item{ignore_event_order}{Ignore event order
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-
-This argument is \emph{deprecated}. If event order should be ignored, please
-specify neither \code{ignore_event_order} nor \code{tmp_event_nr_var}. If the event
-order should be considered, don't specify \code{ignore_event_order} but specify
-\code{tmp_event_nr_var} and and the specified variable to \code{order}.
-
-If the argument is set to \code{TRUE}, all events defined by \code{events} are
-considered equivalent. If there is more than one observation per by group
-the first or last (with respect to \code{mode} and \code{order}) is select without
-taking the order of the events into account.
-
-\emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
-
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
@@ -97,26 +80,10 @@ by variables and the order.
 
 \emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
 
-\item{set_values_to}{Variables to be set
+\item{new_vars}{Variables to add
 
-The specified variables are set to the specified values for the new
-observations.
-
-Set a list of variables to some specified value for the new records
-\itemize{
-\item LHS refer to a variable.
-\item RHS refers to the values to set to the variable. This can be a string, a
-symbol, a numeric value, an expression or NA. If summary functions are
-used, the values are summarized by the variables specified for \code{by_vars}.
-}
-
-For example:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{  set_values_to = exprs(
-    AVAL = sum(AVAL),
-    DTYPE = "AVERAGE",
-  )
-}\if{html}{\out{</div>}}}
+The specified variables from the events are added to the output
+dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = exprs(<new name> = <old name>)}.}
 
 \item{keep_source_vars}{Variables to keep from the source dataset
 
@@ -135,12 +102,8 @@ added as new variables.
 Add the first available record from \code{events} for each by group as new
 variables, all variables of the selected observation are kept. It can be used
 for selecting the extreme observation from a series of user-defined events.
-This distinguishes \code{derive_vars_extreme_event()} from \code{derive_extreme_records()},
-where extreme records are derived based on certain order of existing
-variables.
 }
 \details{
-\strong{Note:} This is a wrapper function for the function \code{derive_extreme()}.
 \enumerate{
 \item For each event select the observations to consider:
 \enumerate{
@@ -224,11 +187,10 @@ derive_vars_extreme_event(
     )
   ),
   source_datasets = list(adsl = adsl, lb = lb),
-  tmp_event_nr_var = event_nr,
-  order = exprs(USUBJID, LSTALVDT, tmp_event_nr_var),
+  order = exprs(USUBJID, LSTALVDT, event_nr),
   mode = "last",
   keep_source_vars = exprs(STUDYID, USUBJID),
-  set_values_to = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
+  new_vars = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
 )
 }
 \seealso{
@@ -236,9 +198,6 @@ derive_vars_extreme_event(
 
 ADSL Functions that returns variable appended to dataset: 
 \code{\link{derive_var_age_years}()},
-\code{\link{derive_var_dthcaus}()},
-\code{\link{derive_var_extreme_dtm}()},
-\code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_vars_aage}()},
 \code{\link{derive_vars_period}()}
 }
