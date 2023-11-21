@@ -140,7 +140,6 @@ where extreme records are derived based on certain order of existing
 variables.
 }
 \details{
-\strong{Note:} This is a wrapper function for the function \code{derive_extreme()}.
 \enumerate{
 \item For each event select the observations to consider:
 \enumerate{
@@ -401,7 +400,6 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_records}()},
-\code{\link{derive_extreme}()},
 \code{\link{derive_locf_records}()},
 \code{\link{derive_param_bmi}()},
 \code{\link{derive_param_bsa}()},
