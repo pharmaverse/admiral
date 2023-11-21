@@ -341,16 +341,16 @@
 #'   filter(PARAMCD == "CBOR")
 #'
 derive_extreme_event <- function(dataset,
-                           by_vars = NULL,
-                           events,
-                           tmp_event_nr_var = NULL,
-                           order,
-                           mode,
-                           source_datasets = NULL,
-                           ignore_event_order = NULL,
-                           check_type = "warning",
-                           set_values_to,
-                           keep_source_vars = exprs(everything())) {
+                                 by_vars = NULL,
+                                 events,
+                                 tmp_event_nr_var = NULL,
+                                 order,
+                                 mode,
+                                 source_datasets = NULL,
+                                 ignore_event_order = NULL,
+                                 check_type = "warning",
+                                 set_values_to,
+                                 keep_source_vars = exprs(everything())) {
   # Check input parameters
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
