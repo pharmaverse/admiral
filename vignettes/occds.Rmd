@@ -468,7 +468,7 @@ adcm <- tibble::tribble(
   "01",     "2020-06-02 23:59:59", "Diuretic 1",
   "02",     "2020-06-05 23:59:59", "Diuretic 1",
   "03",     "2020-06-07 23:59:59", "Costicosteroid 2",
-  "05",     "2020-06-09 23:59:59", "Diuretic 2" 
+  "05",     "2020-06-09 23:59:59", "Diuretic 2"
 )
 adcm_query <- derive_vars_query(adcm, sdg)
 ```
