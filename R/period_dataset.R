@@ -356,7 +356,6 @@ derive_vars_period <- function(dataset,
   assert_vars(new_vars, expect_names = TRUE)
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
-  assert_data_frame(dataset_ref, required_vars = subject_keys)
 
   new_vars_names <- names(new_vars)
   new_vars_chr <- vars2chr(new_vars)
@@ -409,11 +408,11 @@ derive_vars_period <- function(dataset,
     id_vars <- exprs(APHASEN)
   }
 
+  assert_data_frame(dataset_ref, required_vars = expr_c(subject_keys, new_vars, id_vars))
+
   # Strip period reference dataset of any variables not required for later derivations
   ref_cols <- names(dataset_ref) %in% c(subject_keys, new_vars_chr, id_vars)
   ref_stripped <- dataset_ref[, ref_cols]
-
-  assert_data_frame(ref_stripped, required_vars = expr_c(subject_keys, new_vars, id_vars))
 
   ref_wide <- pivot_wider(
     ref_stripped,
