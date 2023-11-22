@@ -9,7 +9,7 @@ derive_vars_dy(dataset, reference_date, source_vars)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{reference_date} and \code{source_vars} argument(s) to be expected.}
+The variables specified by the \code{reference_date} and \code{source_vars} arguments are expected to be in the dataset.}
 
 \item{reference_date}{A date or date-time column, e.g., date of first treatment
 or date-time of last exposure to treatment.

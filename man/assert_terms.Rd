@@ -21,7 +21,7 @@ An error is issued if
 \item \code{terms} is not a data frame,
 \item \code{terms} has zero observations,
 \item the \code{SRCVAR} variable is not in \code{terms},
-\item neither the \code{TERMNAME} nor the \code{TERMID} variable is in \code{terms},
+\item neither the \code{TERMCHAR} nor the \code{TERMNUM} variable is in \code{terms},
 \item \code{expect_grpname == TRUE} and the \code{GRPNAME} variable is not in \code{terms},
 \item \code{expect_grpid == TRUE} and the \code{GRPID} variable is not in \code{terms},
 }

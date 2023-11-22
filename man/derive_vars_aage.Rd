@@ -16,7 +16,7 @@ derive_vars_aage(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{start_date} and \code{end_date} argument(s) to be expected.}
+The variables specified by the \code{start_date} and \code{end_date} arguments are expected to be in the dataset.}
 
 \item{start_date}{The start date
 
@@ -36,7 +36,7 @@ vector to a date object.
 
 Default: \code{RANDDT}}
 
-\item{unit}{\emph{Deprecated}, please use \code{age_unit} instead.}
+\item{unit}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{age_unit} instead.}
 
 \item{age_unit}{Age unit
 
