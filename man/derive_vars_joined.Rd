@@ -38,10 +38,18 @@ and the \code{order} argument are expected.}
 
 \item{by_vars}{Grouping variables
 
-The two datasets are joined by the specified variables. Variables from the
-additional dataset can be renamed by naming the element, i.e., \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}.
+The two datasets are joined by the specified variables.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}}
+A list of quoted expressions specifying variables to group by.
+
+The expressions should be quoted using the \code{exprs()} function from the rlang package.e.g. exprs(USUBJID, VISIT)
+
+The by variables must be a unique key of the selected observations in \code{dataset_add}.
+
+Variables from \code{dataset_add} can be renamed by naming the element, I.e.
+by_vars = exprs(<name in input dataset› = ‹name in additional dataset>), similar to the dplyr joins.
+
+\emph{Permitted Values}: list of variables created by exprs()}
 
 \item{order}{Sort order
 

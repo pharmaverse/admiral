@@ -17,13 +17,9 @@
 #' @param by_vars Grouping variables
 #'
 #'   The input dataset and the selected observations from the additional dataset
-#'   are merged by the specified by variables. The by variables must be a unique
-#'   key of the selected observations. Variables from the additional dataset can
-#'   be renamed by naming the element, i.e., `by_vars =
-#'   exprs(<name in input dataset> = <name in additional dataset>)`, similar to
-#'   the dplyr joins.
+#'   are merged by the specified by variables.
 #'
-#'   *Permitted Values*: list of variables created by `exprs()`
+#'   `r roxygen_param_by_vars(additional_dataset = "dataset_add")`
 #'
 #' @param order Sort order
 #'
@@ -454,7 +450,7 @@ derive_vars_merged <- function(dataset,
 #'
 #' @param by_vars Grouping variables
 #'
-#'   *Permitted Values*: list of variables
+#' `roxygen_param_by_vars(additional_dataset = "dataset_add")`
 #'
 #' @param new_var New variable
 #'
@@ -774,7 +770,7 @@ get_not_mapped <- function() {
 #'   specified *variables*. Then the resulting values are merged to the input
 #'   dataset (`dataset`) by the specified *variables*.
 #'
-#'   *Permitted Values*: list of variables created by `exprs()`
+#'   `roxygen_param_by_vars(additional_dataset = "dataset_add")`
 #'
 #' @param new_vars New variables to add
 #'

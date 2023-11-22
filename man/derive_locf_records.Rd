@@ -31,7 +31,18 @@ Data frame with all the combinations of \code{PARAMCD}, \code{PARAM}, \code{AVIS
 For each group defined by \code{by_vars} those observations from \code{dataset_ref}
 are added to the output dataset which do not have a corresponding observation
 in the input dataset or for which \code{analysis_var} is \code{NA} for the corresponding observation
-in the input dataset.}
+in the input dataset.
+
+A list of quoted expressions specifying variables to group by.
+
+The expressions should be quoted using the \code{exprs()} function from the rlang package.e.g. exprs(USUBJID, VISIT)
+
+The by variables must be a unique key of the selected observations in \code{dataset_ref}.
+
+Variables from \code{dataset_ref} can be renamed by naming the element, I.e.
+by_vars = exprs(<name in input dataset› = ‹name in additional dataset>), similar to the dplyr joins.
+
+\emph{Permitted Values}: list of variables created by exprs()}
 
 \item{analysis_var}{Analysis variable.
 

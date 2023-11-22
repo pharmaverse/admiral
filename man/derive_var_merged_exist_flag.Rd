@@ -27,7 +27,7 @@ The variables specified by the \code{by_vars} argument are expected.}
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values}: list of variables}
+\code{roxygen_param_by_vars(additional_dataset = "dataset_add")}}
 
 \item{new_var}{New variable
 
