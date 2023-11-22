@@ -511,4 +511,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 }
-save(adpc, file = file.path(dir, "adcp.rda"), compress = "bzip2")
+save(adpc, file = file.path(dir, "adpc.rda"), compress = "bzip2")
