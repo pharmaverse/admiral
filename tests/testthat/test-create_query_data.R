@@ -11,7 +11,7 @@ get_smq <- function(basket_select,
   if (is.null(basket_select$name)) {
     basket_select$name <- paste("SMQ name of", basket_select$id)
   }
-  terms <- tibble(TERMNAME = paste(basket_select$name, "Term", c(1:end), "(", version, ")"))
+  terms <- tibble(TERMCHAR = paste(basket_select$name, "Term", c(1:end), "(", version, ")"))
   terms <- mutate(terms, SRCVAR = "AEDECOD", GRPNAME = basket_select$name)
   if (keep_id) {
     mutate(terms, GRPID = 42)
@@ -24,7 +24,7 @@ get_sdg <- function(basket_select,
                     version,
                     keep_id = FALSE,
                     temp_env) {
-  terms <- tibble(TERMNAME = paste(basket_select$name, "Term", c(1:4)))
+  terms <- tibble(TERMCHAR = paste(basket_select$name, "Term", c(1:4)))
   terms <- mutate(terms, SRCVAR = "CMDECOD", GRPNAME = basket_select$name)
   if (keep_id) {
     mutate(terms, GRPID = 42)
@@ -34,7 +34,7 @@ get_sdg <- function(basket_select,
 }
 
 cqterms <- tibble::tribble(
-  ~TERMNAME, ~TERMID,
+  ~TERMCHAR, ~TERMNUM,
   "APPLICATION SITE ERYTHEMA", 10003041L,
   "APPLICATION SITE PRURITUS", 10003053L
 ) %>%
@@ -59,7 +59,7 @@ test_that("create_query_data Test 1: customized query defined by terms", {
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("PREFIX", "TERMNAME")
+    keys = c("PREFIX", "TERMCHAR")
   )
 })
 
@@ -117,7 +117,7 @@ test_that("create_query_data Test 2: customized query defined by SMQs", {
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("PREFIX", "TERMNAME")
+    keys = c("PREFIX", "TERMCHAR")
   )
 })
 
@@ -176,7 +176,7 @@ test_that("create_query_data Test 3: customized query defined by terms and SMQs"
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("PREFIX", "TERMNAME")
+    keys = c("PREFIX", "TERMCHAR")
   )
 })
 
@@ -247,7 +247,7 @@ test_that("SMQs Test 4: SMQs", {
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("PREFIX", "TERMNAME")
+    keys = c("PREFIX", "TERMCHAR")
   )
 })
 
@@ -310,7 +310,7 @@ test_that("SDGs Test 6: SDGs", {
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("PREFIX", "TERMNAME")
+    keys = c("PREFIX", "TERMCHAR")
   )
 })
 
@@ -393,16 +393,16 @@ test_that("assert_terms Test 11: assert_terms: error: SRCVAR missing", {
   )
 })
 
-# assert_terms: error: TERMNAME and TERMID missing ----
-## Test 12: assert_terms: error: TERMNAME and TERMID missing ----
-test_that("assert_terms Test 12: assert_terms: error: TERMNAME and TERMID missing", {
+# assert_terms: error: TERMCHAR and TERMNUM missing ----
+## Test 12: assert_terms: error: TERMCHAR and TERMNUM missing ----
+test_that("assert_terms Test 12: assert_terms: error: TERMCHAR and TERMNUM missing", {
   expect_error(
     assert_terms(
       terms = select(cqterms, SRCVAR),
       source_text = "my test data"
     ),
     regexp = paste0(
-      "Variable `TERMNAME` or `TERMID` is required.\n",
+      "Variable `TERMCHAR` or `TERMNUM` is required.\n",
       "None of them is in my test data.\nProvided variables: `SRCVAR`"
     ),
     fixed = TRUE
@@ -427,7 +427,7 @@ test_that("assert_terms Test 13: assert_terms: error: no data frame", {
 test_that("assert_terms Test 14: assert_terms: error: no observations", {
   expect_error(
     assert_terms(
-      terms = filter(cqterms, TERMID == 42),
+      terms = filter(cqterms, TERMNUM == 42),
       source_text = "object returned by calling get_my_smq"
     ),
     regexp = "object returned by calling get_my_smq does not contain any observations.",

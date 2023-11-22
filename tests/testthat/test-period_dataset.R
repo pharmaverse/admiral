@@ -421,3 +421,44 @@ test_that("create_period_dataset Test 12: DT and DTM columns exist, pulls only o
     keys = c("USUBJID", "APERIOD")
   )
 })
+
+## Test 13: Periods derived even when some variables in dataset_ref are unused ----
+test_that("derive_vars_period Test 13: periods", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~AP01SDT,     ~AP01EDT,
+    "1",      "2021-01-04", "2021-02-06",
+    "2",      "2021-02-02", "2021-03-02"
+  ) %>%
+    mutate(
+      across(matches("AP\\d\\d[ES]DT"), ymd)
+    ) %>%
+    mutate(
+      STUDYID = "xyz"
+    )
+
+  period_ref <- tibble::tribble(
+    ~USUBJID, ~APERIOD, ~APERSDT,     ~APEREDT,     ~APERSDTM,             ~APEREDTM,
+    "1",             1, "2021-01-04", "2021-02-06", "2021-01-04 10:01:02", "2021-02-06 14:03:04",
+    "2",             1, "2021-02-02", "2021-03-02", "2021-02-02 04:11:34", "2021-03-02 16:55:59"
+  ) %>%
+    mutate(
+      STUDYID = "xyz",
+      APERIOD = as.integer(APERIOD),
+      APERSDT = ymd(APERSDT),
+      APEREDT = ymd(APEREDT),
+      APERSDTM = ymd_hms(APERSDTM),
+      APEREDTM = ymd_hms(APEREDTM)
+    )
+
+  adsl <- tibble::tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
+
+  expect_dfs_equal(
+    base = expected,
+    compare = derive_vars_period(
+      adsl,
+      dataset_ref = period_ref,
+      new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
+    ),
+    keys = c("USUBJID")
+  )
+})

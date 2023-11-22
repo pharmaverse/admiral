@@ -22,7 +22,7 @@ get_joined_data(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument(s) to be expected.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{dataset_add}{Additional dataset
 
@@ -158,37 +158,6 @@ contains more than one observation for any of the observations of the input
 dataset.
 
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
-
-\item{new_vars}{Variables to add
-
-The specified variables from the additional dataset are added to the output
-dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = exprs(<new name> = <old name>)}.
-
-For example \code{new_vars = exprs(var1, var2)} adds variables \code{var1} and \code{var2}
-from \code{dataset_add} to the input dataset.
-
-And \code{new_vars = exprs(var1, new_var2 = old_var2)} takes \code{var1} and
-\code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
-\code{old_var2} to \code{new_var2}.
-
-Values of the added variables can be modified by specifying an expression.
-For example, \code{new_vars = LASTRSP = exprs(str_to_upper(AVALC))} adds the
-variable \code{LASTRSP} to the dataset and sets it to the upper case value of
-\code{AVALC}.
-
-If the argument is not specified or set to \code{NULL}, all variables from the
-additional dataset (\code{dataset_add}) are added.
-
-\emph{Permitted Values}: list of variables or named expressions created by \code{exprs()}}
-
-\item{mode}{Selection mode
-
-Determines if the first or last observation is selected. If the \code{order}
-argument is specified, \code{mode} must be non-null.
-
-If the \code{order} argument is not specified, the \code{mode} argument is ignored.
-
-\emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
 }
 \description{
 The helper function joins the data for the "joined" functions. All \code{.join}

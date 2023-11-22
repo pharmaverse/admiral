@@ -2,11 +2,16 @@
 
 ## New Features
 
-New global option created `signif_digits` to handle floating point issue, the value is
-set to `15`, and is used with the `base R` function `signif()` when comparing 2 numeric
-values. This is implemented in `admiral ` functions `derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134)
+- The new function `derive_var_merged_ef_msrc()` is provided to add a flag
+indicating if one of the conditions in one of multiple source datasets is
+fulfilled. (#1728)
 
-For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
+- New global option created `signif_digits` to handle floating point issue, the
+value is set to `15`, and is used with the `base R` function `signif()` when
+comparing 2 numeric values. This is implemented in `admiral ` functions
+`derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134)
+
+    For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
 
 ## Updates of Existing Functions
 
@@ -50,6 +55,8 @@ for the event number, which can be used in `order`. (#2140)
 - `signif_dig` argument added to both `derive_var_atoxgr_dir()` and `derive_var_anrind()`
 functions with default value set to general option `signif_digits`. The new argument to
 these functions handles any floating point issues. (#2134)
+
+- Fixed a bug in `derive_vars_period()` where the function was throwing an error whenever `dataset_ref` contained variables that were neither key variables, nor `APERIOD`, `ASPER`, `APHASEN`, nor mentioned in the `new_vars` argument. (#2231)
 
 ## Breaking Changes
 
@@ -125,6 +132,14 @@ order = exprs(my_order_var),
   - `derive_var_ontrtfl(span_period)` 
   
 - The `derive_param_extreme_record()` function has been superseded in favor of `derive_extreme_event()`. (#2141)
+
+- `create_query_data()` and `derive_vars_query()` updated to rename variables in 
+    query data set as follows: (#2186)
+
+    - `TERMNAME` to `TERMCHAR`
+    - `TERMID` to `TERMNUM`
+  
+    Users need to adjust their `get_terms()` function accordingly.
   
 ## Documentation
 
@@ -139,6 +154,9 @@ Reference tab. (#2174)
 
 - The meaning of `date_imputation = "mid"` was clarified in the documentation of
 the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
+
+- Moved Development Process from `admiraldev` to Contribution Model in the 
+`admiral` website, updated GitHub strategy. (#2196)
 
 ## Various
 
@@ -1106,9 +1124,9 @@ this case the day is imputed as `15` (#592)
 
 - README and site homepage has been updated with important new section around expectations of {admiral}, as well as other useful references such as links to conference talks (#868 & #802)
 
-- New vignette [Development Process](https://pharmaverse.github.io/admiraldev/main/articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
+- New vignette [Development Process](https://pharmaverse.github.io/admiraldev/articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 
-- Updated [Pull Request Review Guidance](https://pharmaverse.github.io/admiraldev/main/articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
+- Updated [Pull Request Review Guidance](https://pharmaverse.github.io/admiraldev/articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
 
 ## Various
 
@@ -1122,7 +1140,7 @@ this case the day is imputed as `15` (#592)
 
 - New vignette [Contributing to admiral](https://pharmaverse.github.io/admiral/articles/contribution_model.html) (#679)
 
-- New vignette [Unit Test Guidance](https://pharmaverse.github.io/admiraldev/main/articles/unit_test_guidance.html) (#679)
+- New vignette [Unit Test Guidance](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html) (#679)
 
 - Broken links in README have been fixed (#564)
 
@@ -1181,9 +1199,9 @@ to specify the unit of the input age (#569)
 
 - New vignette [Queries Dataset Documentation](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) (#561)
 
-- New vignette [Writing Vignettes](https://pharmaverse.github.io/admiraldev/main/articles/writing_vignettes.html) (#334)
+- New vignette [Writing Vignettes](https://pharmaverse.github.io/admiraldev/articles/writing_vignettes.html) (#334)
 
-- New vignette [Pull Request Review Guidance](https://pharmaverse.github.io/admiraldev/main/articles/pr_review_guidance.html) (#554)
+- New vignette [Pull Request Review Guidance](https://pharmaverse.github.io/admiraldev/articles/pr_review_guidance.html) (#554)
 
 - A section on handling missing values when working with {admiral} has been added to the "Get Started" vignette (#577)
 
