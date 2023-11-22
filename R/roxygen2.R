@@ -18,38 +18,31 @@ roxygen_param_dataset <- function(expected_vars = NULL) {
 
 # function to properly document the by_vars argument including specifying the use of exprs():
 
-roxygen_param_by_vars <- function(type = "group", additional_dataset = NULL) {
-
-  if (type == "group") {
-    by_vars_text <- "A list of quoted expressions specifying variables to group by. \n \n"
-  }
+roxygen_param_by_vars <- function(additional_dataset = NULL, unique = FALSE, rename = FALSE) {
 
 
-  by_vars_text <- paste0(
-    by_vars_text,
-    # "The variables must be a unique key of the selected observations. \n \n",
-    #
 
-    "The expressions should be quoted using the `exprs()` function from ",
-    "the rlang package.",
-    "e.g. exprs(USUBJID, VISIT) \n \n"
-
-  )
+  by_vars_text <- ""
 
   if (!is.null(additional_dataset)) {
-    by_vars_text <- paste0(
-      by_vars_text,
-      "The by variables must be a unique key of the selected observations in ",
-      enumerate(additional_dataset), ". \n \n",
-      "Variables from ", enumerate(additional_dataset),
-      " can be renamed by naming the element, I.e. \n",
-      "by_vars = exprs(<name in input dataset› = ‹name in additional dataset>), similar to the dplyr joins.\n \n"
-    )
+    if(unique) {
+      by_vars_text <- paste0(by_vars_text, "Variables must be a unique key of the selected observations in ",
+                            enumerate(additional_dataset), ". \n \n")
+    }
+    if(rename){
+      by_vars_text <- paste0(
+        by_vars_text,
+        "Variables from ", enumerate(additional_dataset),
+        " can be renamed by naming the element, I.e. \n",
+        "by_vars = exprs(<name in input dataset› = ‹name in additional dataset>), similar to the dplyr joins.\n \n"
+      )
+    }
   }
 
   by_vars_text <- paste0(
     by_vars_text,
-    "*Permitted Values*: list of variables created by exprs()"
+    "*Permitted Values*: list of variables created by exprs() \n \n",
+    "e.g. exprs(USUBJID, VISIT)"
     )
 
   return(by_vars_text)

@@ -18,7 +18,7 @@
 #'
 #'   The two datasets are joined by the specified variables.
 #'
-#'   `r roxygen_param_by_vars(additional_dataset = "dataset_add")`
+#'   `r roxygen_param_by_vars(additional_dataset = "dataset_add", rename = TRUE)`
 #'
 #' @param order Sort order
 #'
@@ -557,7 +557,7 @@ derive_vars_joined <- function(dataset,
 #'
 #'   The two datasets are joined by the specified variables.
 #'
-#'   `r roxygen_param_by_vars(additional_dataset = "dataset_ref")`
+#'   `r roxygen_param_by_vars(additional_dataset = "dataset_ref", rename = TRUE)`
 #'
 #' @param order Sort order
 #'
