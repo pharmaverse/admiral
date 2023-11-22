@@ -18,16 +18,10 @@
 #'
 #' @examples
 #' wlcm_admiral(hw = FALSE)
-
 wlcm_admiral <- function(hw = TRUE) {
-  if(hw) {
+  if (hw) {
     message("Welcome to the admiral family!")
-  }  else{
+  } else {
     message("Welcome to the admiral family!")
   }
 }
-
-
-
-
-
