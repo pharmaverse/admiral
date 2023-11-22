@@ -40,7 +40,7 @@ The generic functions can be characterized by the following three properties:
 
 - What should be added? There are two options:
     - _Variables_
-    - _Records_
+    - _Records/Parameters_
 - What is the source data? There are two options:
     - A _single_ source dataset
     - _Multiple_ source datasets
@@ -65,6 +65,7 @@ generic_derivations <- tibble::tribble(
   ~Derivation,                      ~Method,       ~What,       ~Source,
   "derive_var_extreme_flag()",      "selection",   "variables", "single",
   "derive_var_joined_exist_flag()", "selection",   "variables", "single",
+  "derive_var_merged_ef_msrc()",    "selection",   "variables", "multiple",
   "derive_var_merged_exist_flag()", "selection",   "variables", "single",
   "derive_vars_merged_summary()",   "summary",     "variables", "single",
   "derive_vars_joined()",           "selection",   "variables", "single",
@@ -112,7 +113,7 @@ For functions expecting a single source dataset the data is provided by the
 `dataset` argument is not used[^1].
 
 [^1]: `derive_param_computed()` is an exception. It uses the data from both
-arguments is. This may be changed in admiral 2.0.
+arguments.
 
 If the `dataset_add` argument is not provided, the data from `dataset` is used
 (`derive_var_extreme_flag()`).
@@ -400,8 +401,8 @@ condition for selecting records depends on variables from _both_ datasets.
 
 ### New Values
 
-How the (new) variables are set depends on if variables, a flag, or records are
-added by the derivation.
+How the (new) variables are set depends on whether variables, a flag, or records
+are added by the derivation.
 
 - If only a flag needs to be added, the flag functions
 (`derive_var_merged_exist_flag()`, `derive_var_joined_exist_flag()`) can be
@@ -498,7 +499,9 @@ derive_param_computed(
 )
 ```
 
-For common computations like BMI `{admiral}` offers [computations](../reference/#computation-functions-for-vectors). In the previous example `compute_bmi()` could be used instead of the formula for BMI:
+For common computations like BMI `{admiral}` offers [computation
+functions](../reference/#computation-functions-for-vectors). In the previous
+example `compute_bmi()` could be used instead of the formula for BMI:
 ```{r}
 derive_param_computed(
   advs,
