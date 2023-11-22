@@ -16,7 +16,7 @@ derive_vars_aage(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{start_date} and \code{end_date} argument(s) to be expected.}
+The variables specified by the \code{start_date} and \code{end_date} arguments are expected to be in the dataset.}
 
 \item{start_date}{The start date
 

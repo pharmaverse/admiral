@@ -4,8 +4,16 @@
 
 - Implement `derive_vars_extreme_event()`, which works as `derive_extreme_event()` but adds variables instead of a parameter. (#2138)
 
-- New global option created `signif_digits` to handle floating point issue, the value is set to `15`, and is used with the `base R` function `signif()` when comparing 2 numeric values. This is implemented in `admiral ` functions `derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134) 
-- For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
+- The new function `derive_var_merged_ef_msrc()` is provided to add a flag
+indicating if one of the conditions in one of multiple source datasets is
+fulfilled. (#1728)
+
+- New global option created `signif_digits` to handle floating point issue, the
+value is set to `15`, and is used with the `base R` function `signif()` when
+comparing 2 numeric values. This is implemented in `admiral ` functions
+`derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134)
+
+    For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
 
 ## Updates of Existing Functions
 
@@ -49,6 +57,8 @@ for the event number, which can be used in `order`. (#2140)
 - `signif_dig` argument added to both `derive_var_atoxgr_dir()` and `derive_var_anrind()`
 functions with default value set to general option `signif_digits`. The new argument to
 these functions handles any floating point issues. (#2134)
+
+- Fixed a bug in `derive_vars_period()` where the function was throwing an error whenever `dataset_ref` contained variables that were neither key variables, nor `APERIOD`, `ASPER`, `APHASEN`, nor mentioned in the `new_vars` argument. (#2231)
 
 ## Breaking Changes
 
@@ -103,6 +113,14 @@ to
 order = exprs(my_order_var),
 ```
 
+- `create_query_data()` and `derive_vars_query()` updated to rename variables in 
+    query data set as follows: (#2186)
+    
+    - `TERMNAME` to `TERMCHAR`
+    - `TERMID` to `TERMNUM`
+  
+    Users need to adjust their `get_terms()` function accordingly.
+    
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#2098)
   - `derive_param_extreme_event()`
   - `derive_vars_last_dose()`

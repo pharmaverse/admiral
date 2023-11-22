@@ -14,7 +14,7 @@ derive_vars_period(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{subject_keys} argument(s) to be expected.}
+The variables specified by the \code{subject_keys} argument are expected to be in the dataset.}
 
 \item{dataset_ref}{Period reference dataset
 

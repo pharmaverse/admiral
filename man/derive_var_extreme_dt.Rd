@@ -16,7 +16,7 @@ derive_var_extreme_dt(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{subject_keys} argument(s) to be expected.}
+The variables specified by the \code{subject_keys} argument are expected to be in the dataset.}
 
 \item{new_var}{Name of variable to create}
 
