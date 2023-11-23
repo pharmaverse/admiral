@@ -75,7 +75,7 @@ generic_derivations <- tibble::tribble(
   "derive_param_computed()",        "computation", "records",   "single",
   "derive_param_exist_flag()",      "selection",   "records",   "single",
   "derive_summary_records()",       "summary",     "records",   "single"
-)
+) %>% dplyr::select(Derivation, What, Source, Method)
 
 reactable(
   generic_derivations,
@@ -93,7 +93,7 @@ reactable(
       }
     )
   ),
-  defaultSorted = c("Method", "What", "Source"),
+  defaultSorted = list("What" = "desc", "Source" = "desc", "Method" = "asc"),
   filterable = TRUE,
   resizable = TRUE,
   defaultPageSize = 20
