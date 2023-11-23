@@ -174,6 +174,7 @@ derive_vars_extreme_event(
     )
   ),
   source_datasets = list(adsl = adsl, lb = lb),
+  tmp_event_nr_var = event_nr,
   order = exprs(LSTALVDT, event_nr),
   mode = "last",
   new_vars = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
