@@ -552,7 +552,7 @@ and perform associated checks can be found at the [pharmaverse E2E example](http
 
 # Example Scripts
 
-ADaM | Sample Code
+ADaM | Sourcing Command
 ---- | --------------
-ADAE | [`ad_adae.R`](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adae.R){target="_blank"}
-ADCM | [`ad_adcm.R`](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adcm.R){target="_blank"}
+ADAE | `use_ad_template("ADAE")`
+ADCM | `use_ad_template("ADCM")`
