@@ -119,7 +119,8 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},
 \code{\link{derive_param_wbc_abs}()},
-\code{\link{derive_summary_records}()}
+\code{\link{derive_summary_records}()},
+\code{\link{derive_vars_computed}()}
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}
