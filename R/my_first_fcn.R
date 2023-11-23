@@ -6,13 +6,13 @@
 #'
 #' @author Open Source
 #'
-#' @details Created function to output "Welciome to admiral family"
+#' @details Created function to output "Welcome to admiral family"
 #'
 #' @return Welcome Message
 #'
-#' @family der_adxx
+#' @family der_welcome
 #'
-#' @keywords der_adxx
+#' @keywords der_welcome
 #'
 #' @export
 #'
