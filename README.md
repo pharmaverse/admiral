@@ -30,6 +30,10 @@ To install the development version of the package from GitHub run
 devtools::install_github("pharmaverse/admiral")
 ```
 
+## Cheat Sheet
+
+<a href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf"><img src="https://raw.githubusercontent.com/pharmaverse/admiral/main/inst/cheatsheet/cheatsheet_image.png" width="630" height="252"/></a>  
+
 ## Release Schedule
 
 [{admiral}](https://pharmaverse.github.io/admiral/) releases are targeted for the first Monday of the last month of each quarter.
