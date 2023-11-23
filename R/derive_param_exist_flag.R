@@ -83,7 +83,7 @@
 #'
 #' @param by_vars Variables to uniquely identify a group
 #'
-#'   A list of symbols created using `exprs()` is expected.
+#'   `r roxygen_param_by_vars(unique = TRUE)`
 #'
 #' @details
 #'   1. The additional dataset (`dataset_add`) is restricted to the observations

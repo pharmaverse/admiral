@@ -46,7 +46,8 @@
 #'
 #' @param by_vars Grouping variables
 #'
-#'   Permitted Values: list of variables
+#'   `r roxygen_param_by_vars()`
+#'
 #'
 #' @param check_type Check uniqueness?
 #'

@@ -23,6 +23,8 @@
 #'   The specified variables are used as by variables for joining the input
 #'   dataset (`dataset`) with the additional dataset (`dataset_add`).
 #'
+#'   `r roxygen_param_by_vars(additional_dataset = "dataset_add")`
+#'
 #' @param order Order
 #'
 #'   The observations are ordered by the specified order.

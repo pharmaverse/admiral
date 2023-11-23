@@ -26,6 +26,8 @@
 #'
 #'   The by variables are not included in the output dataset.
 #'
+#'   `r roxygen_param_by_vars()`
+#'
 #' @param start_date Time to event origin date
 #'
 #'   The variable `STARTDT` is set to the specified date. The value is taken
@@ -471,6 +473,8 @@ derive_param_tte <- function(dataset = NULL,
 #'   If the parameter is specified, for each by group the observations are
 #'   selected separately.
 #'
+#'   `r roxygen_param_by_vars()`
+#'
 #' @param create_datetime Create datetime variable?
 #'
 #'   If set to `TRUE`, variables `ADTM` is created. Otherwise, variables `ADT`
@@ -656,6 +660,8 @@ filter_date_sources <- function(sources,
 #'   by variables or none of the by variables.
 #'
 #' @param by_vars By variables
+#'
+#' `r roxygen_param_by_vars()`
 #'
 #'
 #' @return The list of extended source datasets

@@ -20,10 +20,12 @@
 #'   `records_source()` refers to the dataset provided in the list. The variables
 #'   specified by the `order` and the `by_vars` arguments are expected after applying `new_vars`.
 #'
-#' @param by_vars By variables
+#' @param by_vars Grouping variables
 #'
 #'   If the argument is specified, for each by group the observations are
 #'   selected separately.
+#'
+#'   `r roxygen_param_by_vars()`
 #'
 #' @param order Sort order
 #'

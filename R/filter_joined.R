@@ -28,6 +28,8 @@
 #'   The specified variables are used as by variables for joining the input
 #'   dataset with itself.
 #'
+#'  `r roxygen_param_by_vars()`
+#'
 #' @param join_vars Variables to keep from joined dataset
 #'
 #'   The variables needed from the other observations should be specified for
