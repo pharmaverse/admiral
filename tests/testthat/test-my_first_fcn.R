@@ -10,10 +10,3 @@ test_that("hello admiral greets with hw", {
     "^Welcome to the admiral family!\\n"
   )
 })
-
-
-
-
-
-
-
