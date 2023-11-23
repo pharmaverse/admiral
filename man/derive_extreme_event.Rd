@@ -5,7 +5,7 @@
 \title{Add the Worst or Best Observation for Each By Group as New Records}
 \usage{
 derive_extreme_event(
-  dataset,
+  dataset = NULL,
   by_vars = NULL,
   events,
   tmp_event_nr_var = NULL,

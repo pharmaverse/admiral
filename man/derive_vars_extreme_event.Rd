@@ -13,14 +13,13 @@ derive_vars_extreme_event(
   mode,
   source_datasets = NULL,
   check_type = "warning",
-  new_vars,
-  keep_source_vars = by_vars
+  new_vars
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{order} argument(s) to be expected.}
+The variables specified by the \code{by_vars} and \code{order} arguments are expected to be in the dataset.}
 
 \item{by_vars}{Grouping variables
 
@@ -84,15 +83,6 @@ by variables and the order.
 
 The specified variables from the events are added to the output
 dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = exprs(<new name> = <old name>)}.}
-
-\item{keep_source_vars}{Variables to keep from the source dataset
-
-For each event the specified variables are kept from the selected
-observations. The variables specified for \code{by_vars} and created by
-\code{set_values_to} are always kept.
-
-\emph{Permitted Values}: A list of expressions where each element is
-a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
 }
 \value{
 The input dataset with the best or worst observation of each by group
@@ -117,16 +107,13 @@ select the observations.
 are added to the selected observations.
 \item The variable specified for \code{tmp_event_nr_var} is added and set to
 the number of the event.
-\item Only the variables specified for the \code{keep_source_vars} field of the
-event, and the by variables (\code{by_vars}) and the variables created by
-\code{set_values_to} are kept.
 }
 \item All selected observations are bound together.
 \item For each group (with respect to the variables specified for the
 \code{by_vars} parameter) the first or last observation (with respect to the
 order specified for the \code{order} parameter and the mode specified for the
 \code{mode} parameter) is selected.
-\item The variables specified by the \code{set_values_to} parameter are added to
+\item The variables specified by the \code{new_vars} parameter are added to
 the selected observations.
 \item The variables are added to input dataset.
 }
@@ -187,9 +174,8 @@ derive_vars_extreme_event(
     )
   ),
   source_datasets = list(adsl = adsl, lb = lb),
-  order = exprs(USUBJID, LSTALVDT, event_nr),
+  order = exprs(LSTALVDT, event_nr),
   mode = "last",
-  keep_source_vars = exprs(STUDYID, USUBJID),
   new_vars = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
 )
 
@@ -201,9 +187,9 @@ adsl <- tribble(
   "STUDY01", "PAT03"
 )
 ae <- tribble(
-  ~STUDYID,  ~USUBJID, ~AESEQ, ~AEDECOD,       ~AEOUT,  ~AEDTHDTC,
-  "STUDY01", "PAT01",  12,     "SUDDEN DEATH", "FATAL", "2021-04-04",
-  "STUDY01", "PAT01",  13,     "CARDIAC ARREST", "FATAL", "2021-04-03",
+  ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
+  "STUDY01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04",
+  "STUDY01", "PAT01", 13, "CARDIAC ARREST", "FATAL", "2021-04-03",
 )
 
 ds <- tribble(
@@ -233,9 +219,8 @@ derive_vars_extreme_event(
   ),
   source_datasets = list(ae = ae, ds = ds),
   tmp_event_nr_var = event_nr,
-  order = exprs(USUBJID, DTHDT, event_nr),
+  order = exprs(DTHDT, event_nr),
   mode = "first",
-  keep_source_vars = exprs(STUDYID, USUBJID),
   new_vars = exprs(DTHCAUS = DTHCAUS, DTHDT = DTHDT)
 )
 }

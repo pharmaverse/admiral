@@ -340,7 +340,7 @@
 #' ) %>%
 #'   filter(PARAMCD == "CBOR")
 #'
-derive_extreme_event <- function(dataset,
+derive_extreme_event <- function(dataset = NULL,
                                  by_vars = NULL,
                                  events,
                                  tmp_event_nr_var = NULL,
@@ -530,16 +530,6 @@ derive_extreme_event <- function(dataset,
 #'   A named list of datasets is expected. The `dataset_name` field of `event()`
 #'   and `event_joined()` refers to the dataset provided in the list.
 #'
-#' @param keep_source_vars Variables to keep from the source dataset
-#'
-#'   For each event the specified variables are kept from the selected
-#'   observations. The variables specified for `by_vars` and created by
-#'   `set_values_to` are always kept.
-#'
-#'   *Permitted Values*: A list of expressions where each element is
-#'   a symbol or a tidyselect expression, e.g., `exprs(VISIT, VISITNUM,
-#'   starts_with("RS"))`.
-#'
 #' @param new_vars Variables to add
 #'
 #'   The specified variables from the events are added to the output
@@ -563,15 +553,12 @@ derive_extreme_event <- function(dataset,
 #'       are added to the selected observations.
 #'       1. The variable specified for `tmp_event_nr_var` is added and set to
 #'       the number of the event.
-#'       1. Only the variables specified for the `keep_source_vars` field of the
-#'       event, and the by variables (`by_vars`) and the variables created by
-#'       `set_values_to` are kept.
 #'   1. All selected observations are bound together.
 #'   1. For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) the first or last observation (with respect to the
 #'   order specified for the `order` parameter and the mode specified for the
 #'   `mode` parameter) is selected.
-#'   1. The variables specified by the `set_values_to` parameter are added to
+#'   1. The variables specified by the `new_vars` parameter are added to
 #'   the selected observations.
 #'   1. The variables are added to input dataset.
 #'
@@ -642,9 +629,8 @@ derive_extreme_event <- function(dataset,
 #'     )
 #'   ),
 #'   source_datasets = list(adsl = adsl, lb = lb),
-#'   order = exprs(USUBJID, LSTALVDT, event_nr),
+#'   order = exprs(LSTALVDT, event_nr),
 #'   mode = "last",
-#'   keep_source_vars = exprs(STUDYID, USUBJID),
 #'   new_vars = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
 #' )
 #'
@@ -656,9 +642,9 @@ derive_extreme_event <- function(dataset,
 #'   "STUDY01", "PAT03"
 #' )
 #' ae <- tribble(
-#'   ~STUDYID,  ~USUBJID, ~AESEQ, ~AEDECOD,       ~AEOUT,  ~AEDTHDTC,
-#'   "STUDY01", "PAT01",  12,     "SUDDEN DEATH", "FATAL", "2021-04-04",
-#'   "STUDY01", "PAT01",  13,     "CARDIAC ARREST", "FATAL", "2021-04-03",
+#'   ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
+#'   "STUDY01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04",
+#'   "STUDY01", "PAT01", 13, "CARDIAC ARREST", "FATAL", "2021-04-03",
 #' )
 #'
 #' ds <- tribble(
@@ -688,9 +674,8 @@ derive_extreme_event <- function(dataset,
 #'   ),
 #'   source_datasets = list(ae = ae, ds = ds),
 #'   tmp_event_nr_var = event_nr,
-#'   order = exprs(USUBJID, DTHDT, event_nr),
+#'   order = exprs(DTHDT, event_nr),
 #'   mode = "first",
-#'   keep_source_vars = exprs(STUDYID, USUBJID),
 #'   new_vars = exprs(DTHCAUS = DTHCAUS, DTHDT = DTHDT)
 #' )
 derive_vars_extreme_event <- function(dataset,
@@ -701,26 +686,26 @@ derive_vars_extreme_event <- function(dataset,
                                       mode,
                                       source_datasets = NULL,
                                       check_type = "warning",
-                                      new_vars,
-                                      keep_source_vars = by_vars) {
+                                      new_vars) {
   assert_expr_list(new_vars)
+  tmp_event_nr_var <- assert_symbol(enexpr(tmp_event_nr_var), optional = TRUE)
 
   new_obs <- derive_extreme_event(
     dataset = NULL,
     by_vars = by_vars,
     events = events,
-    tmp_event_nr_var = event_nr,
+    tmp_event_nr_var = !!tmp_event_nr_var,
     order = order,
     mode = mode,
     source_datasets = source_datasets,
     check_type = check_type,
-    set_values_to = new_vars,
-    keep_source_vars = keep_source_vars
+    set_values_to = new_vars
   )
 
   derive_vars_merged(
     dataset,
     dataset_add = new_obs,
+    new_vars = new_vars,
     by_vars = by_vars
   )
 }

@@ -368,10 +368,8 @@ test_that("derive_extreme_event Test 5: derive_vars_extreme_event", {
       )
     ),
     source_datasets = list(adsl = adsl),
-    tmp_event_nr_var = event_nr,
-    order = exprs(USUBJID, event_nr),
-    mode = "first",
-    keep_source_vars = exprs(STUDYID, USUBJID),
+    order = exprs(LSTALVDT),
+    mode = "last",
     new_vars = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
   )
 
@@ -440,7 +438,7 @@ test_that("derive_extreme_event Test 6: Cover event$order", {
       event(
         dataset_name = "lb_ext",
         condition = !is.na(ADT),
-        order = exprs(ADT),
+        order = exprs(ADT, LBSEQ),
         mode = "last",
         set_values_to = exprs(LSTALVDT = ADT, DTHFL = "N")
       ),
@@ -454,9 +452,8 @@ test_that("derive_extreme_event Test 6: Cover event$order", {
     ),
     source_datasets = list(adsl_ext = adsl_ext, lb_ext = lb_ext),
     tmp_event_nr_var = event_nr,
-    order = exprs(USUBJID, LSTALVDT, event_nr),
+    order = exprs(LSTALVDT, event_nr),
     mode = "last",
-    keep_source_vars = exprs(STUDYID, USUBJID),
     new_vars = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
   )
 
