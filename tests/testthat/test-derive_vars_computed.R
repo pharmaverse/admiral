@@ -31,7 +31,7 @@ test_that("derive_vars_computed Test 1: new variable is derived correctly", {
 
 
   expect_dfs_equal(
-    derive_param_computed(
+    derive_vars_computed(
       dataset = adsl,
       dataset_add = advs,
       by_vars = exprs(STUDYID, USUBJID),
@@ -73,7 +73,7 @@ test_that("derive_vars_computed Test 2: no new variables added if filtered datas
   expected <- adsl
 
   expect_warning(
-    derive_param_computed(
+    derive_vars_computed(
       dataset = adsl,
       dataset_add = advs,
       by_vars = exprs(USUBJID),
@@ -92,7 +92,7 @@ test_that("derive_vars_computed Test 2: no new variables added if filtered datas
 })
 
 ## Test 3: no new variables are added if a parameter is missing ----
-test_that("derive_param_computed Test 3: no new variables are added if a parameter is missing", {
+test_that("derive_vars_computed Test 3: no new variables are added if a parameter is missing", {
   adsl <- tribble(
     ~STUDYID,   ~USUBJID, ~AGE,   ~AGEU,
     "PILOT01", "01-1302",   61, "YEARS",
@@ -118,7 +118,7 @@ test_that("derive_param_computed Test 3: no new variables are added if a paramet
   expected <- adsl
 
   expect_warning(
-    derive_param_computed(
+    derive_vars_computed(
       dataset = adsl,
       dataset_add = advs,
       by_vars = exprs(STUDYID, USUBJID),
@@ -152,7 +152,7 @@ test_that("assert_parameters_argument Test 4: error if argument is of wrong type
 
 # get_hori_data ----
 ## Test 5: error if variables with more than one dot ----
-test_that("get_hori_data Test 5: error if variables with more than one dot", {
+test_that("get_temp_data Test 5: error if variables with more than one dot", {
   input <- tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~AVAL, ~AVALU,
     "PILOT01", "01-1302", "HEIGHT", "Height (cm)", "SCREENING", 160.4, "cm",
@@ -166,7 +166,7 @@ test_that("get_hori_data Test 5: error if variables with more than one dot", {
   )
 
   expect_error(
-    get_hori_data(
+    get_temp_data(
       input,
       parameters = exprs(HEIGHT, WEIGHT),
       by_vars = exprs(USUBJID, VISIT),

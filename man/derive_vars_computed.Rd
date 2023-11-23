@@ -89,7 +89,7 @@ into account.
 
 \emph{Permitted Values:} a condition}
 
-\item{filter_add}{Filter conditionv of additional dataset
+\item{filter_add}{Filter condition of additional dataset
 
 The specified condition is applied to the additional dataset before
 deriving the new variable, i.e., only observations fulfilling the
@@ -150,6 +150,8 @@ dataset (\code{dataset_add}) contains exactly one observation for each parameter
 code specified for \code{parameters}.
 }
 \examples{
+library(tibble)
+library(dplyr)
 
 # Example 1: Derive BMIBL
 adsl <- tribble(

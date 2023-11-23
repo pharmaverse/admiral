@@ -32,7 +32,7 @@
 #'
 #'   *Permitted Values:* a condition
 #'
-#' @param filter_add Filter conditionv of additional dataset
+#' @param filter_add Filter condition of additional dataset
 #'
 #'   The specified condition is applied to the additional dataset before
 #'   deriving the new variable, i.e., only observations fulfilling the
@@ -141,6 +141,8 @@
 #' @export
 #'
 #' @examples
+#' library(tibble)
+#' library(dplyr)
 #'
 #' # Example 1: Derive BMIBL
 #' adsl <- tribble(
@@ -221,7 +223,7 @@ derive_vars_computed <- function(dataset = NULL,
     }
   }
 
-  hori_return <- get_hori_data(
+  temp_return <- get_temp_data(
     data_source,
     by_vars = by_vars,
     parameters = parameters,
@@ -229,31 +231,31 @@ derive_vars_computed <- function(dataset = NULL,
     filter = !!filter,
     filter_add = !!filter_add
   )
-  hori_data <- hori_return[["hori_data"]]
-  if (is.null(hori_data)) {
+  temp_data <- temp_return[["temp_data"]]
+  if (is.null(temp_data)) {
     return(dataset)
   }
-  analysis_vars_chr <- hori_return[["analysis_vars_chr"]]
+  analysis_vars_chr <- temp_return[["analysis_vars_chr"]]
 
   if (!is.null(constant_parameters)) {
-    hori_const_data <- get_hori_data(
+    temp_const_data <- get_temp_data(
       data_source,
       by_vars = constant_by_vars,
       parameters = constant_parameters,
       set_values_to = new_vars,
       filter = !!filter,
       filter_add = !!filter_add
-    )[["hori_data"]]
+    )[["temp_data"]]
 
-    if (is.null(hori_const_data)) {
+    if (is.null(temp_const_data)) {
       return(dataset)
     }
 
-    hori_data <- inner_join(hori_data, hori_const_data, by = vars2chr(constant_by_vars))
+    temp_data <- inner_join(temp_data, temp_const_data, by = vars2chr(constant_by_vars))
   }
 
 
-  hori_data <- hori_data %>%
+  temp_data <- temp_data %>%
     process_set_values_to(new_vars) %>%
     select(-all_of(analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]))
 
@@ -261,7 +263,7 @@ derive_vars_computed <- function(dataset = NULL,
   if (!keep_nas) {
     # keep only observations where all analysis values are available
     left_join(dataset,
-      hori_data,
+      temp_data,
       by = vars2chr(by_vars)
     ) %>%
       filter(
@@ -269,7 +271,7 @@ derive_vars_computed <- function(dataset = NULL,
       )
   } else {
     left_join(dataset,
-      hori_data,
+      temp_data,
       by = vars2chr(by_vars)
     )
   }
@@ -352,7 +354,7 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'
 #'   *Permitted Values:* An unquoted expression
 #'
-#'  @param filter_add Filter condition used for restricting the additional dataset
+#' @param filter_add Filter condition used for restricting the additional dataset
 #'
 #'    The specified filter condition is used in the warnings only. It is not
 #'    applied to the additional dataset.
@@ -364,7 +366,7 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'   `<variable>.<parameter>` occurring in `analysis_value`.
 #'
 #' @keywords internal
-get_hori_data <- function(dataset,
+get_temp_data <- function(dataset,
                           by_vars,
                           parameters,
                           set_values_to,
@@ -430,7 +432,7 @@ get_hori_data <- function(dataset,
         )
       )
     }
-    return(list(hori_data = NULL))
+    return(list(temp_data = NULL))
   }
 
   params_available <- unique(data_parameters$PARAMCD)
@@ -463,7 +465,7 @@ get_hori_data <- function(dataset,
         )
       )
     }
-    return(list(hori_data = NULL))
+    return(list(temp_data = NULL))
   }
 
   signal_duplicate_records(
@@ -492,29 +494,29 @@ get_hori_data <- function(dataset,
       )
     )
   }
-  vars_hori <- analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")] %>%
+  vars_temp <- analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")] %>%
     str_split(pattern = "\\.") %>%
     map_chr(`[[`, 1) %>%
     unique()
 
-  hori_data <- data_parameters
-  for (i in seq_along(vars_hori)) {
+  temp_data <- data_parameters
+  for (i in seq_along(vars_temp)) {
     pivoted_data <- pivot_wider(
-      select(data_parameters, !!!by_vars, PARAMCD, sym(vars_hori[[i]])),
+      select(data_parameters, !!!by_vars, PARAMCD, sym(vars_temp[[i]])),
       names_from = PARAMCD,
-      values_from = sym(vars_hori[[i]]),
-      names_prefix = paste0(vars_hori[[i]], ".")
+      values_from = sym(vars_temp[[i]]),
+      names_prefix = paste0(vars_temp[[i]], ".")
     )
 
-    hori_data <- left_join(
-      hori_data,
+    temp_data <- left_join(
+      temp_data,
       pivoted_data,
       by = vars2chr(by_vars)
     )
   }
 
   list(
-    hori_data = bind_rows(hori_data) %>%
+    temp_data = bind_rows(temp_data) %>%
       select(!!!by_vars, any_of(analysis_vars_chr)),
     analysis_vars_chr = analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]
   )
