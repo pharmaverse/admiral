@@ -24,13 +24,6 @@
 #'   are considered in addition to the observations from the input dataset
 #'   (`dataset` restricted by `filter`).
 #'
-#' @param filter Filter condition of dataset
-#'
-#'   The specified condition is applied to the input dataset before deriving the
-#'   new variable, i.e., only observations fulfilling the condition are taken
-#'   into account.
-#'
-#'   *Permitted Values:* a condition
 #'
 #' @param filter_add Filter condition of additional dataset
 #'
@@ -177,347 +170,42 @@
 #'   new_vars = exprs(BMIBL = compute_bmi(height = AVAL.HEIGHT, weight = AVAL.WEIGHT)),
 #'   filter_add = ABLFL == "Y"
 #' )
-derive_vars_computed <- function(dataset = NULL,
+derive_vars_computed <- function(dataset,
                                  dataset_add = NULL,
                                  by_vars,
                                  parameters,
                                  new_vars,
-                                 filter = NULL,
                                  filter_add = NULL,
                                  constant_by_vars = NULL,
                                  constant_parameters = NULL,
                                  keep_nas = FALSE) {
-  assert_vars(by_vars)
-  assert_vars(constant_by_vars, optional = TRUE)
-  assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
-  assert_data_frame(dataset_add, optional = TRUE)
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
 
-  assert_varval_list(new_vars)
-  if (!is.null(new_vars$PARAMCD) && !is.null(dataset)) {
-    assert_param_does_not_exist(dataset, new_vars$PARAMCD)
-  }
-  assert_logical_scalar(keep_nas)
+  dataset_add <- dataset_add %>%
+    filter_if(filter_add)
 
-
-  parameters <- assert_parameters_argument(parameters)
-  constant_parameters <- assert_parameters_argument(constant_parameters, optional = TRUE)
-
-  # select observations and variables required for new observations
-  if (is.null(dataset)) {
-    data_source <- dataset_add %>%
-      filter_if(filter_add)
-  } else {
-    if (!is.null(dataset_add)) {
-      dataset_add <- dataset_add %>%
-        filter_if(filter_add)
-      data_source <- dataset %>%
-        filter_if(filter) %>%
-        left_join(dataset_add,
-          by = vars2chr(by_vars)
-        )
-    } else {
-      data_source <- dataset %>%
-        filter_if(filter)
-    }
-  }
-
-  temp_return <- get_temp_data(
-    data_source,
+  derive_param_return <- derive_param_computed(
+    dataset = dataset,
+    dataset_add = dataset_add,
     by_vars = by_vars,
     parameters = parameters,
     set_values_to = new_vars,
-    filter = !!filter,
-    filter_add = !!filter_add
-  )
-  temp_data <- temp_return[["temp_data"]]
-  if (is.null(temp_data)) {
-    return(dataset)
-  }
-  analysis_vars_chr <- temp_return[["analysis_vars_chr"]]
-
-  if (!is.null(constant_parameters)) {
-    temp_const_data <- get_temp_data(
-      data_source,
-      by_vars = constant_by_vars,
-      parameters = constant_parameters,
-      set_values_to = new_vars,
-      filter = !!filter,
-      filter_add = !!filter_add
-    )[["temp_data"]]
-
-    if (is.null(temp_const_data)) {
-      return(dataset)
-    }
-
-    temp_data <- inner_join(temp_data, temp_const_data, by = vars2chr(constant_by_vars))
-  }
-
-
-  temp_data <- temp_data %>%
-    process_set_values_to(new_vars) %>%
-    select(-all_of(analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]))
-
-  # add analysis value (AVAL) and parameter variables, e.g., PARAMCD
-  if (!keep_nas) {
-    # keep only observations where all analysis values are available
-    left_join(dataset,
-      temp_data,
-      by = vars2chr(by_vars)
-    ) %>%
-      filter(
-        !is.na(!!!parse_exprs(names(new_vars)[1]))
-      )
-  } else {
-    left_join(dataset,
-      temp_data,
-      by = vars2chr(by_vars)
-    )
-  }
-}
-
-#' Asserts `parameters` Argument and Converts to List of Expressions
-#'
-#' The function asserts that the argument is a character vector or a list of
-#' expressions. If it is a character vector, it converts it to a list of
-#' symbols.
-#'
-#' @param parameters The argument to check
-#'
-#' @param optional Is the checked argument optional? If set to `FALSE` and
-#'   `parameters` is `NULL` then an error is thrown.
-#'
-#' @return The `parameters` argument (converted to a list of symbol, if it is a
-#'   character vector)
-#'
-#' @keywords internal
-assert_parameters_argument <- function(parameters, optional = TRUE) {
-  assert_logical_scalar(optional)
-  if (optional && is.null(parameters)) {
-    return(invisible(parameters))
-  }
-
-  if (typeof(parameters) == "character") {
-    parameters <- map(parameters, sym)
-  } else {
-    if (!inherits(parameters, "list") || any(!map_lgl(
-      parameters,
-      ~ is_call(.x) || is_expression(.x)
-    ))) {
-      abort(
-        paste0(
-          "`",
-          arg_name(substitute(parameters)),
-          "` must be a character vector or a list of expressions but it is ",
-          what_is_it(parameters),
-          "."
-        )
-      )
-    }
-  }
-  parameters
-}
-
-#' Creating Temporary Parameters and `<variable>.<parameter>` Variables
-#'
-#' The function creates temporary parameters and variables of the form
-#' `<variable>.<parameter>`, e.g., `AVAL.WEIGHT`.
-#'
-#' @param dataset
-#' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
-#'
-#' @param by_vars By variables
-#'
-#' @param parameters List of parameter codes
-#'
-#'   The input dataset is restricted to the specified parameter codes. If an
-#'   expression is specified, a new parameter code is added to the input
-#'   dataset. The name of the element defines the parameter code and the
-#'   expression the observations to select.
-#'
-#'   *Permitted Values:* A character vector of `PARAMCD` values or a list of expressions
-#'
-#' @param set_values_to
-#'
-#'   All variables of the form `<variable>.<parameter>` like `AVAL.WEIGHT` are
-#'   added to the input dataset. They are set to the value of the variable for
-#'   the parameter. E.g., `AVAL.WEIGHT` is set to the value of `AVAL` where
-#'   `PARAMCD == "WEIGHT"`.
-#'
-#'   *Permitted Values:* A list of expressions
-#'
-#' @param filter Filter condition used for restricting the input dataset
-#'
-#'    The specified filter condition is used in the warnings only. It is not
-#'    applied to the input dataset.
-#'
-#'   *Permitted Values:* An unquoted expression
-#'
-#' @param filter_add Filter condition used for restricting the additional dataset
-#'
-#'    The specified filter condition is used in the warnings only. It is not
-#'    applied to the additional dataset.
-#'
-#'   *Permitted Values:* An unquoted expression
-#'
-#' @return A dataset with one observation per by group. It contains the
-#'   variables specified for `by_vars` and all variables of the form
-#'   `<variable>.<parameter>` occurring in `analysis_value`.
-#'
-#' @keywords internal
-get_temp_data <- function(dataset,
-                          by_vars,
-                          parameters,
-                          set_values_to,
-                          filter,
-                          filter_add) {
-  assert_vars(by_vars)
-  assert_data_frame(dataset, required_vars = by_vars)
-  parameters <- assert_parameters_argument(parameters)
-  assert_expr_list(set_values_to)
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
-  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
-
-
-  # determine parameter values
-  if (is.null(names(parameters))) {
-    param_values <- map(parameters, as_label)
-  } else {
-    param_values <- map2(
-      parameters,
-      names(parameters),
-      ~ if_else(.y == "", as_label(.x), .y)
-    )
-  }
-
-  new_params <- parameters[names(parameters) != ""]
-  new_names <- names(new_params)
-
-  new_data <- vector("list", length(new_params))
-  for (i in seq_along(new_params)) {
-    new_data[[i]] <- filter(dataset, !!new_params[[i]]) %>%
-      mutate(PARAMCD = new_names[[i]])
-  }
-
-  data_parameters <- dataset %>%
-    bind_rows(new_data) %>%
-    filter(PARAMCD %in% param_values)
-
-  if (nrow(data_parameters) == 0L) {
-    if (!is.null(filter) && !is.null(filter_add)) {
-      warn(
-        paste0(
-          "The dataset does not contain any observations fullfiling the filter condition (",
-          expr_label(filter),
-          ") and (",
-          expr_label(filter_add),
-          ")."
-        )
-      )
-    } else if (is.null(filter)) {
-      warn(
-        paste0(
-          "The dataset does not contain any observations fullfiling the filter condition (",
-          expr_label(filter_add),
-          ")."
-        )
-      )
-    } else if (is.null(filter_add)) {
-      warn(
-        paste0(
-          "The dataset does not contain any observations fullfiling the filter condition (",
-          expr_label(filter),
-          ")."
-        )
-      )
-    }
-    return(list(temp_data = NULL))
-  }
-
-  params_available <- unique(data_parameters$PARAMCD)
-  params_missing <- setdiff(param_values, params_available)
-  if (length(params_missing) > 0) {
-    if (!is.null(filter) && !is.null(filter_add)) {
-      warn(
-        paste0(
-          "The dataset does not contain any observations fullfiling the filter condition (",
-          expr_label(filter),
-          ") and (",
-          expr_label(filter_add),
-          ")."
-        )
-      )
-    } else if (is.null(filter)) {
-      warn(
-        paste0(
-          "The dataset does not contain any observations fullfiling the filter condition (",
-          expr_label(filter_add),
-          ")."
-        )
-      )
-    } else if (is.null(filter_add)) {
-      warn(
-        paste0(
-          "The dataset does not contain any observations fullfiling the filter condition (",
-          expr_label(filter),
-          ")."
-        )
-      )
-    }
-    return(list(temp_data = NULL))
-  }
-
-  signal_duplicate_records(
-    data_parameters,
-    by_vars = exprs(!!!by_vars, PARAMCD),
-    msg = paste(
-      "The filtered dataset contains duplicate records with respect to",
-      enumerate(c(vars2chr(by_vars), "PARAMCD")),
-      "\nPlease ensure that the variables specified for `by_vars` and `PARAMCD`",
-      "are a unique key of the input data set restricted by the condition",
-      "specified for `filter` and `filter_add` and to the parameters specified
-      for `parameters`."
-    )
+    constant_by_vars = constant_by_vars,
+    constant_parameters = constant_parameters,
+    keep_nas = keep_nas
   )
 
-  # horizontalize data, e.g., AVAL for PARAMCD = "PARAMx" -> AVAL.PARAMx
-  analysis_vars <- flatten(map(unname(set_values_to), extract_vars))
-  analysis_vars_chr <- vars2chr(analysis_vars)
-  multi_dot_names <- str_count(analysis_vars_chr, "\\.") > 1
-  if (any(multi_dot_names)) {
-    abort(
-      paste(
-        "The `new_vars` argument contains variable names with more than one dot:",
-        enumerate(analysis_vars_chr[multi_dot_names]),
-        sep = "\n"
-      )
+  if ((names(new_vars)[1]) %in% names(derive_param_return)) {
+    derive_param_return <- derive_param_return %>%
+      filter(!is.na(!!!parse_exprs(names(new_vars)[1]))) %>%
+      select(where(function(x) any(!is.na(x))))
+
+    derive_vars_merged(
+      dataset,
+      dataset_add = derive_param_return,
+      by_vars = by_vars
     )
+  } else {
+    dataset
   }
-  vars_temp <- analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")] %>%
-    str_split(pattern = "\\.") %>%
-    map_chr(`[[`, 1) %>%
-    unique()
-
-  temp_data <- data_parameters
-  for (i in seq_along(vars_temp)) {
-    pivoted_data <- pivot_wider(
-      select(data_parameters, !!!by_vars, PARAMCD, sym(vars_temp[[i]])),
-      names_from = PARAMCD,
-      values_from = sym(vars_temp[[i]]),
-      names_prefix = paste0(vars_temp[[i]], ".")
-    )
-
-    temp_data <- left_join(
-      temp_data,
-      pivoted_data,
-      by = vars2chr(by_vars)
-    )
-  }
-
-  list(
-    temp_data = bind_rows(temp_data) %>%
-      select(!!!by_vars, any_of(analysis_vars_chr)),
-    analysis_vars_chr = analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]
-  )
 }

@@ -5,12 +5,11 @@
 \title{Adds a Variable Computed from the Analysis Value of one or more Parameters}
 \usage{
 derive_vars_computed(
-  dataset = NULL,
+  dataset,
   dataset_add = NULL,
   by_vars,
   parameters,
   new_vars,
-  filter = NULL,
   filter_add = NULL,
   constant_by_vars = NULL,
   constant_parameters = NULL,
@@ -80,14 +79,6 @@ defines the analysis value and parameter code for the new variable.
 Variable names in the expression must not contain more than one dot.
 
 \emph{Permitted Values:} List of variable-value pairs}
-
-\item{filter}{Filter condition of dataset
-
-The specified condition is applied to the input dataset before deriving the
-new variable, i.e., only observations fulfilling the condition are taken
-into account.
-
-\emph{Permitted Values:} a condition}
 
 \item{filter_add}{Filter condition of additional dataset
 
