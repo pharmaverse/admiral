@@ -17,13 +17,13 @@ to develop ADaM datasets in R.
 
 ## Installation
 
-The package is available from CRAN and can be installed with
+The package is available from CRAN and can be installed with:
 
 ```r
 install.packages("admiral")
 ```
 
-To install the development version of the package from GitHub run
+To install the development version of the package from GitHub run:
 
 ```r
 # install.packages("devtools")
@@ -73,23 +73,23 @@ achievable---ADaM is endless.
 We will provide:
 
 * A toolbox of re-usable functions and utilities to create ADaM datasets using R scripts in a
-  modular manner (an "opinionated" design strategy)
+  modular manner (an "opinionated" design strategy).
 * Pharmaceutical communities and companies are encouraged to contribute to `{admiral}` following
   the provided programming strategy and modular approach
 * Functions that are comprehensively documented and tested, including example calls---these are
-  all listed in the [Reference section](https://pharmaverse.github.io/admiral/reference/index.html)
-* Vignettes on how to create ADSL, BDS and OCCDS datasets, including example scripts
-* Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs ...)
+  all listed in the [Reference section](https://pharmaverse.github.io/admiral/reference/index.html).
+* Vignettes on how to create ADSL, BDS and OCCDS datasets, including example scripts.
+* Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs ...).
 
 ## The {admiral} Family of Packages
 
 There are three types of packages in the `{admiral}` family:
 
-* Core package---one package containing all core functions required to create ADaMs, usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS)
+* Core package---one package containing all core functions required to create ADaMs, usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS).
 * TA (Therapeutic Area) package extensions---one package per TA with functions that are
-  specific to algorithms and requirements for that particular TA (e.g. [`{admiralonco}`](https://pharmaverse.github.io/admiralonco/))
+  specific to algorithms and requirements for that particular TA (e.g. [`{admiralonco}`](https://pharmaverse.github.io/admiralonco/)).
 * Company package extensions---specific needs and plug-ins for the company, such as access to metadata
-  (e.g. `{admiralroche}` or `{admiralgsk}`)
+  (e.g. `{admiralroche}` or `{admiralgsk}`).
   
 ## Related Packages
 
@@ -187,8 +187,8 @@ We are also always looking for keen `{admiral}` users to publish their own blog 
 
 We use the following for support and communications between user and developer community:
 
-* [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269)---for informal discussions, Q\&A and building our user community. If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join the pharmaverse Slack workspace
-* [GitHub Issues](https://github.com/pharmaverse/admiral/issues)---for direct feedback, enhancement requests or raising bugs
+* [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269)---for informal discussions, Q\&A and building our user community. If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join the pharmaverse Slack workspace.
+* [GitHub Issues](https://github.com/pharmaverse/admiral/issues)---for direct feedback, enhancement requests or raising bugs.
 
 ## Acknowledgments
 
