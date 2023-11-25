@@ -70,7 +70,8 @@ test_that("derive_vars_computed Test 2: no new variables added if filtered datas
     "PILOT01", "17-1344", "WEIGHT", "Weight (kg)", "WEEK 6", 58.97, "kg", "N"
   )
 
-  expected <- adsl
+  expected <- adsl %>%
+    mutate(BMIBL = NA_integer_)
 
   expect_warning(
     derive_vars_computed(
@@ -100,13 +101,11 @@ test_that("derive_vars_computed Test 3: no new variables are added if a paramete
 
   advs <- tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~AVAL, ~AVALU, ~ABLFL,
-    "PILOT01", "01-1302", "HEIGHT", "Height (cm)", "SCREENING", 177.8, "cm", "Y",
     "PILOT01", "01-1302", "WEIGHT", "Weight (kg)", "SCREENING", 81.19, "kg", "N",
     "PILOT01", "01-1302", "WEIGHT", "Weight (kg)", "BASELINE", 82.1, "kg", "Y",
     "PILOT01", "01-1302", "WEIGHT", "Weight (kg)", "WEEK 2", 81.19, "kg", "N",
     "PILOT01", "01-1302", "WEIGHT", "Weight (kg)", "WEEK 4", 82.56, "kg", "N",
     "PILOT01", "01-1302", "WEIGHT", "Weight (kg)", "WEEK 6", 80.74, "kg", "N",
-    "PILOT01", "17-1344", "HEIGHT", "Height (cm)", "SCREENING", 163.5, "cm", "Y",
     "PILOT01", "17-1344", "WEIGHT", "Weight (kg)", "SCREENING", 58.06, "kg", "N",
     "PILOT01", "17-1344", "WEIGHT", "Weight (kg)", "BASELINE", 58.06, "kg", "Y",
     "PILOT01", "17-1344", "WEIGHT", "Weight (kg)", "WEEK 2", 58.97, "kg", "N",
@@ -114,7 +113,8 @@ test_that("derive_vars_computed Test 3: no new variables are added if a paramete
     "PILOT01", "17-1344", "WEIGHT", "Weight (kg)", "WEEK 6", 58.97, "kg", "N"
   )
 
-  expected <- adsl
+  expected <- adsl %>%
+    mutate(BMIBL = NA_integer_)
 
   expect_warning(
     derive_vars_computed(
@@ -125,7 +125,7 @@ test_that("derive_vars_computed Test 3: no new variables are added if a paramete
       constant_by_vars = exprs(STUDYID, USUBJID),
       constant_parameters = c("HEIGHT"),
       new_vars = exprs(BMIBL = compute_bmi(height = AVAL.HEIGHT, weight = AVAL.WEIGHT)),
-      filter_add = ABLFL == "Y" & PARAMCD == "HEIGHT"
+      filter_add = ABLFL == "Y"
     )
     %>%
       expect_dfs_equal(expected,

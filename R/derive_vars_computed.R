@@ -3,14 +3,12 @@
 #' Adds a variable computed from the analysis value of one or more parameters.
 #' It is expected that the value of the new variable is defined by an expression
 #' using the analysis values of other parameters. For example Body Mass Index at
-#' Baseline (BMIBL) can be derived from of HEIGHT and WEIGHT parameters.
+#' Baseline (`BMIBL`) in `ADSL` can be derived from of HEIGHT and WEIGHT
+#' parameters in `ADVS`.
 #'
 #' @param dataset
 #'
 #'   The variables specified by the `by_vars` parameter are expected.
-#'
-#'   The variable specified by `by_vars` must be a unique key of the input
-#'   dataset after restricting it by the filter condition (`filter` parameter).
 #'
 #' @param dataset_add Additional dataset
 #'
@@ -19,10 +17,6 @@
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the additional dataset after restricting it by the filter condition
 #'   (`filter_add` parameter) and to the parameters specified by `parameters`.
-#'
-#'   If the argument is specified, the observations of the additional dataset
-#'   are considered in addition to the observations from the input dataset
-#'   (`dataset` restricted by `filter`).
 #'
 #'
 #' @param filter_add Filter condition of additional dataset
@@ -108,28 +102,24 @@
 #'     BMIBL = (AVAL.WEIGHT / (AVAL.HEIGHT/100)^2)
 #'   )
 #'   ```
-#'   defines the analysis value and parameter code for the new variable.
+#'   defines the value for the new variable.
 #'
 #'   Variable names in the expression must not contain more than one dot.
 #'
 #'   *Permitted Values:* List of variable-value pairs
 #'
-#' @param keep_nas Keep observations with `NA`s
-#'
-#'   If the argument is set to `TRUE`, observations are added even if some of
-#'   the values contributing to the computed value are `NA`.
 #'
 #' @details For each group (with respect to the variables specified for the
-#'   `by_vars` parameter), the value of the new variable is computed in the
-#'   output dataset if the filtered input dataset (`dataset`) or the additional
-#'   dataset (`dataset_add`) contains exactly one observation for each parameter
-#'   code specified for `parameters`.
+#'   `by_vars` argument), the values of the new variables (`new_vars`) are
+#'   computed based on the parameters in the additional dataset
+#'   (`dataset_add`) and then the new variables are merged to the input
+#'   dataset (`dataset`).
 #'
-#' @return The input dataset with the new variable added.
+#' @return The input dataset with the new variables added.
 #'
-#' @family der_prm_bds_findings
+#' @family der_gen
 #'
-#' @keywords der_prm_bds_findings
+#' @keywords der_gen
 #'
 #' @export
 #'
@@ -164,48 +154,41 @@
 #'   dataset = adsl,
 #'   dataset_add = advs,
 #'   by_vars = exprs(STUDYID, USUBJID),
-#'   parameters = c("WEIGHT"),
-#'   constant_by_vars = exprs(STUDYID, USUBJID),
-#'   constant_parameters = c("HEIGHT"),
+#'   parameters = c("WEIGHT", "HEIGHT"),
 #'   new_vars = exprs(BMIBL = compute_bmi(height = AVAL.HEIGHT, weight = AVAL.WEIGHT)),
 #'   filter_add = ABLFL == "Y"
 #' )
 derive_vars_computed <- function(dataset,
-                                 dataset_add = NULL,
+                                 dataset_add,
                                  by_vars,
                                  parameters,
                                  new_vars,
                                  filter_add = NULL,
                                  constant_by_vars = NULL,
-                                 constant_parameters = NULL,
-                                 keep_nas = FALSE) {
+                                 constant_parameters = NULL) {
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
 
   dataset_add <- dataset_add %>%
     filter_if(filter_add)
 
   derive_param_return <- derive_param_computed(
-    dataset = dataset,
     dataset_add = dataset_add,
     by_vars = by_vars,
     parameters = parameters,
     set_values_to = new_vars,
     constant_by_vars = constant_by_vars,
     constant_parameters = constant_parameters,
-    keep_nas = keep_nas
+    keep_nas = TRUE
   )
 
-  if ((names(new_vars)[1]) %in% names(derive_param_return)) {
-    derive_param_return <- derive_param_return %>%
-      filter(!is.na(!!!parse_exprs(names(new_vars)[1]))) %>%
-      select(where(function(x) any(!is.na(x))))
-
+  if (!is.null(derive_param_return)) {
     derive_vars_merged(
       dataset,
       dataset_add = derive_param_return,
       by_vars = by_vars
     )
   } else {
-    dataset
+    dataset %>%
+      mutate(!!!setNames(rep(list(NA_integer_), length(names(new_vars))), names(new_vars)))
   }
 }

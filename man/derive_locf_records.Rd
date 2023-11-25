@@ -140,8 +140,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_qtc}()},
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()},
-\code{\link{derive_summary_records}()},
-\code{\link{derive_vars_computed}()}
+\code{\link{derive_summary_records}()}
 }
 \author{
 G Gayatri

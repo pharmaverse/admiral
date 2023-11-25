@@ -6,21 +6,17 @@
 \usage{
 derive_vars_computed(
   dataset,
-  dataset_add = NULL,
+  dataset_add,
   by_vars,
   parameters,
   new_vars,
   filter_add = NULL,
   constant_by_vars = NULL,
-  constant_parameters = NULL,
-  keep_nas = FALSE
+  constant_parameters = NULL
 )
 }
 \arguments{
-\item{dataset}{The variables specified by the \code{by_vars} parameter are expected.
-
-The variable specified by \code{by_vars} must be a unique key of the input
-dataset after restricting it by the filter condition (\code{filter} parameter).}
+\item{dataset}{The variables specified by the \code{by_vars} parameter are expected.}
 
 \item{dataset_add}{Additional dataset
 
@@ -28,11 +24,7 @@ The variables specified by the \code{by_vars} parameter are expected.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the additional dataset after restricting it by the filter condition
-(\code{filter_add} parameter) and to the parameters specified by \code{parameters}.
-
-If the argument is specified, the observations of the additional dataset
-are considered in addition to the observations from the input dataset
-(\code{dataset} restricted by \code{filter}).}
+(\code{filter_add} parameter) and to the parameters specified by \code{parameters}.}
 
 \item{by_vars}{Grouping variables
 
@@ -74,7 +66,7 @@ variables of the parameters specified by \code{parameters} can be accessed using
 )
 }\if{html}{\out{</div>}}
 
-defines the analysis value and parameter code for the new variable.
+defines the value for the new variable.
 
 Variable names in the expression must not contain more than one dot.
 
@@ -118,27 +110,23 @@ codes. For example, \code{constant_parameters = exprs(WEIGHT, HGHT = VSTESTCD ==
 parameter code \code{"HGHT"}.
 
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions}
-
-\item{keep_nas}{Keep observations with \code{NA}s
-
-If the argument is set to \code{TRUE}, observations are added even if some of
-the values contributing to the computed value are \code{NA}.}
 }
 \value{
-The input dataset with the new variable added.
+The input dataset with the new variables added.
 }
 \description{
 Adds a variable computed from the analysis value of one or more parameters.
 It is expected that the value of the new variable is defined by an expression
 using the analysis values of other parameters. For example Body Mass Index at
-Baseline (BMIBL) can be derived from of HEIGHT and WEIGHT parameters.
+Baseline (\code{BMIBL}) in \code{ADSL} can be derived from of HEIGHT and WEIGHT
+parameters in \code{ADVS}.
 }
 \details{
 For each group (with respect to the variables specified for the
-\code{by_vars} parameter), the value of the new variable is computed in the
-output dataset if the filtered input dataset (\code{dataset}) or the additional
-dataset (\code{dataset_add}) contains exactly one observation for each parameter
-code specified for \code{parameters}.
+\code{by_vars} argument), the values of the new variables (\code{new_vars}) are
+computed based on the parameters in the additional dataset
+(\code{dataset_add}) and then the new variables are merged to the input
+dataset (\code{dataset}).
 }
 \examples{
 library(tibble)
@@ -171,32 +159,24 @@ derive_vars_computed(
   dataset = adsl,
   dataset_add = advs,
   by_vars = exprs(STUDYID, USUBJID),
-  parameters = c("WEIGHT"),
-  constant_by_vars = exprs(STUDYID, USUBJID),
-  constant_parameters = c("HEIGHT"),
+  parameters = c("WEIGHT", "HEIGHT"),
   new_vars = exprs(BMIBL = compute_bmi(height = AVAL.HEIGHT, weight = AVAL.WEIGHT)),
   filter_add = ABLFL == "Y"
 )
 }
 \seealso{
-BDS-Findings Functions for adding Parameters/Records: 
-\code{\link{default_qtc_paramcd}()},
-\code{\link{derive_expected_records}()},
-\code{\link{derive_extreme_event}()},
-\code{\link{derive_extreme_records}()},
-\code{\link{derive_locf_records}()},
-\code{\link{derive_param_bmi}()},
-\code{\link{derive_param_bsa}()},
-\code{\link{derive_param_computed}()},
-\code{\link{derive_param_doseint}()},
-\code{\link{derive_param_exist_flag}()},
-\code{\link{derive_param_exposure}()},
-\code{\link{derive_param_framingham}()},
-\code{\link{derive_param_map}()},
-\code{\link{derive_param_qtc}()},
-\code{\link{derive_param_rr}()},
-\code{\link{derive_param_wbc_abs}()},
-\code{\link{derive_summary_records}()}
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
+\code{\link{derive_var_merged_ef_msrc}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_merged_summary}()},
+\code{\link{derive_var_obs_number}()},
+\code{\link{derive_var_relative_flag}()},
+\code{\link{derive_vars_joined}()},
+\code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_merged}()},
+\code{\link{derive_vars_transposed}()}
 }
-\concept{der_prm_bds_findings}
-\keyword{der_prm_bds_findings}
+\concept{der_gen}
+\keyword{der_gen}

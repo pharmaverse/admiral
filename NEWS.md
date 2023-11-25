@@ -15,7 +15,7 @@ comparing 2 numeric values. This is implemented in `admiral ` functions
 
 - The new function `derive_vars_computed()` is provided which has the same 
 functionality as `derive_param_computed()` but instead of adding the computed 
-values as a new parameter, adds it as a new variable.
+values as a new parameter, adds it as a new variable. (#2178)
 
 ## Updates of Existing Functions
 
