@@ -403,7 +403,7 @@ derive_extreme_event <- function(dataset = NULL,
       values = c("none", "warning", "error"),
       case_sensitive = FALSE
     )
-  assert_varval_list(set_values_to)
+  assert_varval_list(set_values_to, optional = TRUE)
   keep_source_vars <- assert_expr_list(keep_source_vars)
 
   # Create new observations
@@ -700,7 +700,7 @@ derive_vars_extreme_event <- function(dataset,
     mode = mode,
     source_datasets = source_datasets,
     check_type = check_type,
-    set_values_to = new_vars
+    set_values_to = NULL
   )
 
   derive_vars_merged(
