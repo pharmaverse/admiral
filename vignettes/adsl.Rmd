@@ -415,7 +415,7 @@ See also [Date and Time Imputation](imputation.html).
 
 ### Cause of Death  (`DTHCAUS`) {#death_cause}
 
-The cause of death `DTHCAUS` can be derived using the function `derive_var_dthcaus()`.
+The cause of death `DTHCAUS` can be derived using the function `derive_vars_extreme_event()`.
 
 Since the cause of death could be collected/mapped in different domains (e.g. `DS`, `AE`, `DD`), it 
 is important the user specifies the right source(s) to derive the cause of death from.
@@ -423,64 +423,32 @@ is important the user specifies the right source(s) to derive the cause of death
 For example, if the date of death is collected in the AE form when the AE is Fatal, the cause of 
 death would be set to the preferred term (`AEDECOD`) of that Fatal AE, while if the date of death is 
 collected in  the `DS` form, the cause of death would be set to the disposition term (`DSTERM`).
-To achieve this, the `dthcaus_source()` objects must be specified and defined such as it fits the 
+To achieve this, the `event()` objects within `derive_vars_extreme_event()` must be specified and defined such that they fit the 
 study requirement. 
 
-`dthcaus_source()` specifications:
-
-- `dataset_name`: the name of the dataset where to search for death information,
-- `filter`: the condition to define death,
-- `date`: the date of death,
-- `mode`: `first` or `last` to select the first/last date of death if multiple dates are collected,
-- `dthcaus`: variable  or text used to populate `DTHCAUS`.
-- `set_values_to`: whether the traceability variables need to be added (e.g source domain,
-sequence, variable)
-
-An example call to define the sources would be: 
-
-```{r eval=TRUE}
-src_ae <- dthcaus_source(
-  dataset_name = "ae",
-  filter = AEOUT == "FATAL",
-  date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
-  mode = "first",
-  dthcaus = AEDECOD
-)
-```
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  ae,
-  display_vars = exprs(USUBJID, AESTDTC, AEENDTC, AEDECOD, AEOUT),
-  filter = AEOUT == "FATAL"
-)
-```
-
-```{r eval=TRUE}
-src_ds <- dthcaus_source(
-  dataset_name = "ds",
-  filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-  date = DSSTDT,
-  mode = "first",
-  dthcaus = "Death in DS"
-)
-```
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  ds,
-  display_vars = exprs(USUBJID, DSDECOD, DSTERM, DSSTDTC),
-  filter = DSDECOD == "DEATH"
-)
-```
-
-Once the sources are defined, the function `derive_var_dthcaus()` can be used to derive `DTHCAUS`:
+An example call to `derive_vars_extreme_event()` would be: 
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_dthcaus(
-    src_ae, src_ds,
-    source_datasets = list(ae = ae, ds = ds_ext)
+  derive_vars_extreme_event(
+    by_vars = exprs(STUDYID, USUBJID),
+    events = list(
+      event(
+        dataset_name = "ae",
+        condition = AEOUT == "FATAL",
+        set_values_to = exprs(DTHCAUS = AEDECOD),
+      ),
+      event(
+        dataset_name = "ds",
+        condition = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+        set_values_to = exprs(DTHCAUS = DSTERM),
+      )
+    ),
+    source_datasets = list(ae = ae, ds = ds),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr),
+    mode = "first",
+    new_vars = exprs(DTHCAUS = DTHCAUS)
   )
 ```
 
@@ -494,32 +462,30 @@ dataset_vignette(
 
 The function also offers the option to add some traceability variables (e.g. `DTHDOM` would 
 store the domain where the date of death is collected, and `DTHSEQ` would store the `xxSEQ` value of 
-that domain). To add them, the `traceability_vars` argument must be added to the `dthcaus_source()`
-arguments:
+that domain). The traceability variables should be added to the `event()` calls and included in the `new_vars` parameter of `derive_vars_extreme_event()`.
 
 ```{r eval=TRUE}
-src_ae <- dthcaus_source(
-  dataset_name = "ae",
-  filter = AEOUT == "FATAL",
-  date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
-  mode = "first",
-  dthcaus = AEDECOD,
-  set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
-)
-
-src_ds <- dthcaus_source(
-  dataset_name = "ds",
-  filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-  date = DSSTDT,
-  mode = "first",
-  dthcaus = DSTERM,
-  set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
-)
 adsl <- adsl %>%
   select(-DTHCAUS) %>% # remove it before deriving it again
-  derive_var_dthcaus(
-    src_ae, src_ds,
-    source_datasets = list(ae = ae, ds = ds_ext)
+  derive_vars_extreme_event(
+    by_vars = exprs(STUDYID, USUBJID),
+    events = list(
+      event(
+        dataset_name = "ae",
+        condition = AEOUT == "FATAL",
+        set_values_to = exprs(DTHCAUS = AEDECOD, DTHDOM = "AE", DTHSEQ = AESEQ),
+      ),
+      event(
+        dataset_name = "ds",
+        condition = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+        set_values_to = exprs(DTHCAUS = DSTERM, DTHDOM = "DS", DTHSEQ = DSSEQ),
+      )
+    ),
+    source_datasets = list(ae = ae, ds = ds),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr),
+    mode = "first",
+    new_vars = exprs(DTHCAUS = DTHCAUS, DTHDOM = DTHDOM, DTHSEQ = DTHSEQ)
   )
 ```
 
