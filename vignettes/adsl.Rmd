@@ -570,49 +570,54 @@ dataset_vignette(
 ## Derive the Last Date Known Alive (`LSTALVDT`) {#lstalvdt}
 
 Similarly as for the cause of death (`DTHCAUS`), the last known alive date
-(`LSTALVDT`) can be derived from multiples sources and the user must ensure the
-sources (`date_source()`) are correctly defined.
-
-`date_source()` specifications:
-
-- `dataset_name`: the name of the dataset where to search for date information,
-- `filter`: the filter to apply on the datasets,
-- `date`: the date of interest,
-- `set_values_to`: whether the traceability variables need to be added (e.g
-source domain, sequence, variable)
+(`LSTALVDT`) can be derived from multiples sources using `derive_vars_extreme_event()`.
 
 An example could be (DTC dates are converted to numeric dates imputing missing
 day and month to the first):
 
 ```{r eval=TRUE}
-ae_start_date <- date_source(
-  dataset_name = "ae",
-  date = convert_dtc_to_dt(AESTDTC, highest_imputation = "M")
-)
-ae_end_date <- date_source(
-  dataset_name = "ae",
-  date = convert_dtc_to_dt(AEENDTC, highest_imputation = "M")
-)
-lb_date <- date_source(
-  dataset_name = "lb",
-  date = convert_dtc_to_dt(LBDTC, highest_imputation = "M")
-)
-trt_end_date <- date_source(
-  dataset_name = "adsl",
-  date = TRTEDT
-)
-```
-
-Once the sources are defined, the function `derive_var_extreme_dt()` can be used
-to derive `LSTALVDT`:
-
-```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_extreme_dt(
-    new_var = LSTALVDT,
-    ae_start_date, ae_end_date, lb_date, trt_end_date,
-    source_datasets = list(ae = ae, adsl = adsl, lb = lb),
-    mode = "last"
+  derive_vars_extreme_event(
+    by_vars = exprs(STUDYID, USUBJID),
+    events = list(
+      event(
+        dataset_name = "ae",
+        order = exprs(AESTDTC, AESEQ),
+        condition = !is.na(AESTDTC),
+        set_values_to = exprs(
+          LSTALVDT = convert_dtc_to_dt(AESTDTC, highest_imputation = "M"),
+          seq = AESEQ
+        ),
+      ),
+      event(
+        dataset_name = "ae",
+        order = exprs(AEENDTC, AESEQ),
+        condition = !is.na(AEENDTC),
+        set_values_to = exprs(
+          LSTALVDT = convert_dtc_to_dt(AEENDTC, highest_imputation = "M"),
+          seq = AESEQ
+        ),
+      ),
+      event(
+        dataset_name = "lb",
+        order = exprs(LBDTC, LBSEQ),
+        condition = !is.na(LBDTC),
+        set_values_to = exprs(
+          LSTALVDT = convert_dtc_to_dt(LBDTC, highest_imputation = "M"),
+          seq = LBSEQ
+        ),
+      ),
+      event(
+        dataset_name = "adsl",
+        condition = !is.na(TRTEDT),
+        set_values_to = exprs(LSTALVDT = TRTEDT, seq = 0),
+      )
+    ),
+    source_datasets = list(ae = ae, lb = lb, adsl = adsl),
+    tmp_event_nr_var = event_nr,
+    order = exprs(LSTALVDT, seq, event_nr),
+    mode = "last",
+    new_vars = exprs(LSTALVDT = LSTALVDT)
   )
 ```
 
@@ -624,38 +629,58 @@ dataset_vignette(
 )
 ```
 
-Similarly to `dthcaus_source()`, the traceability variables can be added by specifying the 
-`set_values_to` argument in `date_source()`.
+Traceability variables can be added by specifying the variables in the `set_values_to` parameter of the `event()` function.
 
 ```{r eval=TRUE}
-ae_start_date <- date_source(
-  dataset_name = "ae",
-  date = convert_dtc_to_dt(AESTDTC, highest_imputation = "M"),
-  set_values_to = exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")
-)
-ae_end_date <- date_source(
-  dataset_name = "ae",
-  date = convert_dtc_to_dt(AEENDTC, highest_imputation = "M"),
-  set_values_to = exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC")
-)
-lb_date <- date_source(
-  dataset_name = "lb",
-  date = convert_dtc_to_dt(LBDTC, highest_imputation = "M"),
-  set_values_to = exprs(LALVDOM = "LB", LALVSEQ = LBSEQ, LALVVAR = "LBDTC")
-)
-trt_end_date <- date_source(
-  dataset_name = "adsl",
-  date = TRTEDTM,
-  set_values_to = exprs(LALVDOM = "ADSL", LALVSEQ = NA_integer_, LALVVAR = "TRTEDTM")
-)
-
 adsl <- adsl %>%
   select(-LSTALVDT) %>% # created in the previous call
-  derive_var_extreme_dt(
-    new_var = LSTALVDT,
-    ae_start_date, ae_end_date, lb_date, trt_end_date,
-    source_datasets = list(ae = ae, adsl = adsl, lb = lb),
-    mode = "last"
+  derive_vars_extreme_event(
+    by_vars = exprs(STUDYID, USUBJID),
+    events = list(
+      event(
+        dataset_name = "ae",
+        order = exprs(AESTDTC, AESEQ),
+        condition = !is.na(AESTDTC),
+        set_values_to = exprs(
+          LSTALVDT = convert_dtc_to_dt(AESTDTC, highest_imputation = "M"),
+          LALVSEQ = AESEQ,
+          LALVDOM = "AE",
+          LALVVAR = "AESTDTC"
+        ),
+      ),
+      event(
+        dataset_name = "ae",
+        order = exprs(AEENDTC, AESEQ),
+        condition = !is.na(AEENDTC),
+        set_values_to = exprs(
+          LSTALVDT = convert_dtc_to_dt(AEENDTC, highest_imputation = "M"),
+          LALVSEQ = AESEQ,
+          LALVDOM = "AE",
+          LALVVAR = "AEENDTC"
+        ),
+      ),
+      event(
+        dataset_name = "lb",
+        order = exprs(LBDTC, LBSEQ),
+        condition = !is.na(LBDTC),
+        set_values_to = exprs(
+          LSTALVDT = convert_dtc_to_dt(LBDTC, highest_imputation = "M"),
+          LALVSEQ = LBSEQ,
+          LALVDOM = "LB",
+          LALVVAR = "LBDTC"
+        ),
+      ),
+      event(
+        dataset_name = "adsl",
+        condition = !is.na(TRTEDT),
+        set_values_to = exprs(LSTALVDT = TRTEDT, LALVSEQ = NA_integer_, LALVDOM = "ADSL", LALVVAR = "TRTEDTM"),
+      )
+    ),
+    source_datasets = list(ae = ae, lb = lb, adsl = adsl),
+    tmp_event_nr_var = event_nr,
+    order = exprs(LSTALVDT, LALVSEQ, event_nr),
+    mode = "last",
+    new_vars = exprs(LSTALVDT = LSTALVDT, LALVSEQ = LALVSEQ, LALVDOM = LALVDOM, LALVVAR = LALVVAR)
   )
 ```
 
