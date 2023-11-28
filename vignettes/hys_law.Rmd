@@ -195,7 +195,7 @@ We hope by demonstrating the flexibility of `admiral` functions and using a gene
 
 # Example Script 
 
-ADaM   | Sample Code
--------| --------------
-ADLBHY | [ad_adlbhy.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adlbhy.R){target="_blank"} 
+ADaM   | Sourcing Command
+------ | --------------
+ADLBHY | `use_ad_template("ADLBHY")`
 
