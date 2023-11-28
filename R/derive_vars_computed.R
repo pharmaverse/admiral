@@ -1,6 +1,6 @@
-#' Adds a Variable Computed from the Analysis Value of one or more Parameters
+#' Adds Variable(s) Computed from the Analysis Value of one or more Parameters
 #'
-#' Adds a variable computed from the analysis value of one or more parameters.
+#' Adds Variable(s) computed from the analysis value of one or more parameters.
 #' It is expected that the value of the new variable is defined by an expression
 #' using the analysis values of other parameters. For example Body Mass Index at
 #' Baseline (`BMIBL`) in `ADSL` can be derived from of HEIGHT and WEIGHT
@@ -56,7 +56,7 @@
 #'   Grouping variables uniquely identifying a set of records for which
 #'   `new_vars` are to be calculated.
 #'
-#'   *Permitted Values:* list of variables
+#'   *Permitted Values:* list of variables created by exprs()
 #'
 #' @param constant_parameters Required constant parameter codes
 #'

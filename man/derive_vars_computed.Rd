@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_computed.R
 \name{derive_vars_computed}
 \alias{derive_vars_computed}
-\title{Adds a Variable Computed from the Analysis Value of one or more Parameters}
+\title{Adds Variable(s) Computed from the Analysis Value of one or more Parameters}
 \usage{
 derive_vars_computed(
   dataset,
@@ -31,7 +31,7 @@ the additional dataset after restricting it by the filter condition
 Grouping variables uniquely identifying a set of records for which
 \code{new_vars} are to be calculated.
 
-\emph{Permitted Values:} list of variables}
+\emph{Permitted Values:} list of variables created by exprs()}
 
 \item{parameters}{Required parameter codes
 
@@ -115,7 +115,7 @@ parameter code \code{"HGHT"}.
 The input dataset with the new variables added.
 }
 \description{
-Adds a variable computed from the analysis value of one or more parameters.
+Adds Variable(s) computed from the analysis value of one or more parameters.
 It is expected that the value of the new variable is defined by an expression
 using the analysis values of other parameters. For example Body Mass Index at
 Baseline (\code{BMIBL}) in \code{ADSL} can be derived from of HEIGHT and WEIGHT
