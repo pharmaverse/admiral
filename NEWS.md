@@ -162,6 +162,8 @@ the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
 - Moved Development Process from `admiraldev` to Contribution Model in the 
 `admiral` website, updated GitHub strategy. (#2196)
 
+- All "Example Script(s)" sections in the User Guide vignettes were updated to point the user towards using `use_ad_template("ADaM")` rather than linking to the template in the code repository. (#2239)
+
 ## Various
 
 - Website now has button/links to Slack channel and GitHub Issues (#2127)
