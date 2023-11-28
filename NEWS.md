@@ -15,6 +15,10 @@ comparing 2 numeric values. This is implemented in `admiral ` functions
 
     For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
 
+- The new function `derive_vars_computed()` is provided which has the same 
+functionality as `derive_param_computed()` but instead of adding the computed 
+values as a new parameter, adds it as a new variable. (#2178)
+
 ## Updates of Existing Functions
 
 - Fixed a bug in `compute_tmf()` where the time imputation flag was being incorrectly
@@ -31,6 +35,10 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 `AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
 
 - `derive_summary_records()` was enhanced with the following optional arguments: `dataset_add`, `dataset_ref`, `missing_values`. These arguments respectively, generate summary variables from additional datasets, retain/add specific records from a reference dataset, and impute user-defined missing values. `derive_param_exposure()` was enhanced with `dataset_add` as well. (#2142)
+
+- The `missing_values` argument was added to `derive_var_merged_summary()`. It
+allows to define values for by groups, e.g., subjects which are not in the
+additional dataset. (#2230)
 
 - The argument `dataset` is now optional for `derive_summary_records()` and `derive_param_exposure()`. (#2142)
 
@@ -145,6 +153,11 @@ order = exprs(my_order_var),
 - The functions `derive_var_dthcaus()`, `derive_var_extreme_dt()`, and `derive_var_extreme_dtm()` are superseded in favor of `derive_vars_extreme_event()`. (#2138)
   
 ## Documentation
+
+- The "Generic Functions" vignette (now "Generic Derivations") was rewritten.
+Now it provides a more complete overview of the generic derivations, describe
+the common concepts, and makes it easier to find the appropriate function.
+(#2230)
 
 - A way to standardize roxygen labels and descriptions for function arguments was implemented and tested (#2034)
 
