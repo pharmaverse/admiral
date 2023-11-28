@@ -714,7 +714,7 @@ derive_vars_extreme_event <- function(dataset,
 #' Create a `event` Object
 #'
 #' The `event` object is used to define events as input for the
-#' `derive_extreme_event()` function.
+#' `derive_extreme_event()` and `derive_vars_extreme_event()` functions.
 #'
 #' @param dataset_name Dataset name of the dataset to be used as input for the
 #'   event. The name refers to the dataset specified for `source_datasets` in
@@ -767,7 +767,7 @@ derive_vars_extreme_event <- function(dataset,
 #' @keywords source_specifications
 #' @family source_specifications
 #'
-#' @seealso [derive_extreme_event()], [event_joined()]
+#' @seealso [derive_extreme_event()], [derive_vars_extreme_event()], [event_joined()]
 #'
 #' @export
 #'
@@ -806,10 +806,11 @@ event <- function(dataset_name = NULL,
 #' @description
 #'
 #' The `event_joined` object is used to define events as input for the
-#' `derive_extreme_event()` function. This object should be used if the event
-#' does not depend on a single observation of the source dataset but on multiple
-#' observations. For example, if the event needs to be confirmed by a second
-#' observation of the source dataset.
+#' `derive_extreme_event()` and `derive_vars_extreme_event()` functions.
+#' This object should be used if the event does not depend on a single
+#' observation of the source dataset but on multiple observations. For example,
+#' if the event needs to be confirmed by a second observation of the source
+#' dataset.
 #'
 #' The events are selected by calling `filter_joined()`. See its documentation
 #' for more details.
@@ -913,7 +914,7 @@ event <- function(dataset_name = NULL,
 #' @keywords source_specifications
 #' @family source_specifications
 #'
-#' @seealso [derive_extreme_event()], [event()]
+#' @seealso [derive_extreme_event()], [derive_vars_extreme_event()], [event()]
 #'
 #' @export
 #'

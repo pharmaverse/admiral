@@ -38,7 +38,6 @@ The \code{flag_event} object is used to define events as input for the
 Source Objects: 
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
-\code{\link{date_source}()},
 \code{\link{death_event}},
 \code{\link{event_joined}()},
 \code{\link{event_source}()},

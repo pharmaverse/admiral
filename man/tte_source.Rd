@@ -43,7 +43,6 @@ The \code{tte_source} object is used to define events and possible censorings.
 Source Objects: 
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
-\code{\link{date_source}()},
 \code{\link{death_event}},
 \code{\link{event_joined}()},
 \code{\link{event_source}()},

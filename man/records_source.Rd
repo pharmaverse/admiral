@@ -43,7 +43,6 @@ The \code{records_source} object is used to find extreme records of interest.
 Source Objects: 
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
-\code{\link{date_source}()},
 \code{\link{death_event}},
 \code{\link{event_joined}()},
 \code{\link{event_source}()},

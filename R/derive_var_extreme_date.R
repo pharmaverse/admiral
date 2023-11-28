@@ -569,6 +569,10 @@ derive_var_extreme_dt <- function(dataset,
 
 #' Create a `date_source` object
 #'
+#' @description
+#' `r lifecycle::badge("superseded")` The `date_source()`
+#' function has been superseded in favor of `derive_vars_extreme_event()`.
+#'
 #' Create a `date_source` object as input for `derive_var_extreme_dt()` and
 #' `derive_var_extreme_dtm()`.
 #'
@@ -591,8 +595,8 @@ derive_var_extreme_dt <- function(dataset,
 #'
 #' @seealso [derive_var_extreme_dtm()], [derive_var_extreme_dt()]
 #'
-#' @family source_specifications
-#' @keywords source_specifications
+#' @family superseded
+#' @keywords superseded
 #'
 #' @export
 #'
