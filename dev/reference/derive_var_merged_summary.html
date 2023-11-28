@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9014</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9015</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,7 @@
     <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
     <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
     <a class="dropdown-item" href="../articles/visits_periods.html">Visit and Period Variables</a>
-    <a class="dropdown-item" href="../articles/generic.html">Generic Functions</a>
+    <a class="dropdown-item" href="../articles/generic.html">Generic Derivations</a>
     <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
     <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     <a class="dropdown-item" href="../articles/lab_grading.html">Lab Grading</a>
@@ -111,6 +111,7 @@
 <span>  new_vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">new_var</span>,</span>
 <span>  filter_add <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  missing_values <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">analysis_var</span>,</span>
 <span>  <span class="va">summary_fun</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -164,6 +165,16 @@ the summarized values.</p></dd>
 for summarizing. If the argument is not specified, all observations are
 considered.</p>
 <p><em>Permitted Values</em>: a condition</p></dd>
+
+
+<dt>missing_values</dt>
+<dd><p>Values for non-matching observations</p>
+<p>For observations of the input dataset (<code>dataset</code>) which do not have a
+matching observation in the additional dataset (<code>dataset_add</code>) the values
+of the specified variables are set to the specified value. Only variables
+specified for <code>new_vars</code> can be specified for <code>missing_values</code>.</p>
+<p><em>Permitted Values</em>: named list of expressions, e.g.,
+<code>exprs(BASEC = "MISSING", BASE = -1)</code></p></dd>
 
 
 <dt>analysis_var</dt>
