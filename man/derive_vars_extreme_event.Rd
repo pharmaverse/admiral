@@ -177,7 +177,7 @@ derive_vars_extreme_event(
   tmp_event_nr_var = event_nr,
   order = exprs(LSTALVDT, event_nr),
   mode = "last",
-  new_vars = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
+  new_vars = exprs(LSTALVDT, DTHFL)
 )
 
 # Derive DTHCAUS from AE and DS domain data
@@ -222,7 +222,7 @@ derive_vars_extreme_event(
   tmp_event_nr_var = event_nr,
   order = exprs(DTHDT, event_nr),
   mode = "first",
-  new_vars = exprs(DTHCAUS = DTHCAUS, DTHDT = DTHDT)
+  new_vars = exprs(DTHCAUS, DTHDT)
 )
 }
 \seealso{
