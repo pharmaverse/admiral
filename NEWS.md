@@ -34,6 +34,10 @@ were enhanced such that more than one summary variable can be derived, e.g.,
 
 - `derive_summary_records()` was enhanced with the following optional arguments: `dataset_add`, `dataset_ref`, `missing_values`. These arguments respectively, generate summary variables from additional datasets, retain/add specific records from a reference dataset, and impute user-defined missing values. `derive_param_exposure()` was enhanced with `dataset_add` as well. (#2142)
 
+- The `missing_values` argument was added to `derive_var_merged_summary()`. It
+allows to define values for by groups, e.g., subjects which are not in the
+additional dataset. (#2230)
+
 - The argument `dataset` is now optional for `derive_summary_records()` and `derive_param_exposure()`. (#2142)
 
 - The "joined" functions (`derive_vars_joined()`, `derive_var_joined_exist_flag()`,
@@ -146,6 +150,11 @@ order = exprs(my_order_var),
     Users need to adjust their `get_terms()` function accordingly.
   
 ## Documentation
+
+- The "Generic Functions" vignette (now "Generic Derivations") was rewritten.
+Now it provides a more complete overview of the generic derivations, describe
+the common concepts, and makes it easier to find the appropriate function.
+(#2230)
 
 - A way to standardize roxygen labels and descriptions for function arguments was implemented and tested (#2034)
 
