@@ -341,133 +341,9 @@ test_that("derive_extreme_event Test 4: event-specific mode", {
   )
 })
 
-## Test 5: derive_vars_extreme_event ----
-test_that("derive_extreme_event Test 5: derive_vars_extreme_event", {
-  adsl <- tribble(
-    ~STUDYID, ~USUBJID, ~TRTEDT, ~DTHDT,
-    "PILOT01", "01-1130", ymd("2014-08-16"), ymd("2014-09-13"),
-    "PILOT01", "01-1133", ymd("2013-04-28"), ymd(""),
-    "PILOT01", "01-1211", ymd("2013-01-12"), ymd(""),
-    "PILOT01", "09-1081", ymd("2014-04-27"), ymd(""),
-    "PILOT01", "09-1088", ymd("2014-10-09"), ymd("2014-11-01"),
-  )
 
-  actual <- derive_vars_extreme_event(
-    adsl,
-    by_vars = exprs(STUDYID, USUBJID),
-    events = list(
-      event(
-        dataset_name = "adsl",
-        condition = !is.na(DTHDT),
-        set_values_to = exprs(LSTALVDT = DTHDT, DTHFL = "Y")
-      ),
-      event(
-        dataset_name = "adsl",
-        condition = !is.na(TRTEDT),
-        set_values_to = exprs(LSTALVDT = TRTEDT, DTHFL = "N")
-      )
-    ),
-    source_datasets = list(adsl = adsl),
-    order = exprs(LSTALVDT),
-    mode = "last",
-    new_vars = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
-  )
-
-  expected <- tribble(
-    ~STUDYID, ~USUBJID, ~TRTEDT, ~DTHDT, ~LSTALVDT, ~DTHFL,
-    "PILOT01", "01-1130", ymd("2014-08-16"), ymd("2014-09-13"), ymd("2014-09-13"), "Y",
-    "PILOT01", "01-1133", ymd("2013-04-28"), ymd(""), ymd("2013-04-28"), "N",
-    "PILOT01", "01-1211", ymd("2013-01-12"), ymd(""), ymd("2013-01-12"), "N",
-    "PILOT01", "09-1081", ymd("2014-04-27"), ymd(""), ymd("2014-04-27"), "N",
-    "PILOT01", "09-1088", ymd("2014-10-09"), ymd("2014-11-01"), ymd("2014-11-01"), "Y",
-  )
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("STUDYID", "USUBJID")
-  )
-})
-
-## Test 6: Cover event$order ----
-test_that("derive_extreme_event Test 6: Cover event$order", {
-  adsl_ext <- tribble(
-    ~STUDYID, ~USUBJID, ~TRTEDT, ~DTHDT,
-    "PILOT01", "01-1130", ymd("2014-08-16"), ymd("2014-09-13"),
-    "PILOT01", "01-1133", ymd("2013-04-28"), ymd(""),
-    "PILOT01", "01-1211", ymd("2013-01-12"), ymd(""),
-    "PILOT01", "09-1081", ymd("2014-04-27"), ymd(""),
-    "PILOT01", "09-1088", ymd("2014-10-09"), ymd("2014-11-01"),
-  )
-
-  lb_ext <- tribble(
-    ~STUDYID,  ~DOMAIN,  ~USUBJID, ~LBSEQ,             ~LBDTC,
-    "PILOT01",    "LB", "01-1130",    219, "2014-06-07T13:20",
-    "PILOT01",    "LB", "01-1130",    322, "2014-08-16T13:10",
-    "PILOT01",    "LB", "01-1133",    268, "2013-04-18T15:30",
-    "PILOT01",    "LB", "01-1133",    304, "2013-05-01T10:13",
-    "PILOT01",    "LB", "01-1211",      8, "2012-10-30T14:26",
-    "PILOT01",    "LB", "01-1211",    162, "2013-01-08T12:13",
-    "PILOT01",    "LB", "09-1081",     47, "2014-02-01T10:55",
-    "PILOT01",    "LB", "09-1081",    219, "2014-05-10T11:15",
-    "PILOT01",    "LB", "09-1088",    283, "2014-09-27T12:13",
-    "PILOT01",    "LB", "09-1088",    322, "2014-10-09T13:25"
-  ) %>%
-    mutate(
-      ADT = convert_dtc_to_dt(LBDTC)
-    )
-
-  expected_output <- tribble(
-    ~STUDYID, ~USUBJID, ~TRTEDT, ~DTHDT, ~LSTALVDT, ~DTHFL,
-    "PILOT01", "01-1130", ymd("2014-08-16"), ymd("2014-09-13"), ymd("2014-09-13"), "Y",
-    "PILOT01", "01-1133", ymd("2013-04-28"), ymd(""), ymd("2013-05-01"), "N",
-    "PILOT01", "01-1211", ymd("2013-01-12"), ymd(""), ymd("2013-01-12"), "N",
-    "PILOT01", "09-1081", ymd("2014-04-27"), ymd(""), ymd("2014-05-10"), "N",
-    "PILOT01", "09-1088", ymd("2014-10-09"), ymd("2014-11-01"), ymd("2014-11-01"), "Y",
-  )
-
-  actual_output <- derive_vars_extreme_event(
-    adsl_ext,
-    by_vars = exprs(STUDYID, USUBJID),
-    events = list(
-      event(
-        dataset_name = "adsl_ext",
-        condition = !is.na(DTHDT),
-        set_values_to = exprs(LSTALVDT = DTHDT, DTHFL = "Y")
-      ),
-      event(
-        dataset_name = "lb_ext",
-        condition = !is.na(ADT),
-        order = exprs(ADT, LBSEQ),
-        mode = "last",
-        set_values_to = exprs(LSTALVDT = ADT, DTHFL = "N")
-      ),
-      event(
-        dataset_name = "adsl_ext",
-        condition = !is.na(TRTEDT),
-        order = exprs(TRTEDT),
-        mode = "last",
-        set_values_to = exprs(LSTALVDT = TRTEDT, DTHFL = "N")
-      )
-    ),
-    source_datasets = list(adsl_ext = adsl_ext, lb_ext = lb_ext),
-    tmp_event_nr_var = event_nr,
-    order = exprs(LSTALVDT, event_nr),
-    mode = "last",
-    new_vars = exprs(LSTALVDT = LSTALVDT, DTHFL = DTHFL)
-  )
-
-
-  expect_dfs_equal(
-    base = expected_output,
-    compare = actual_output,
-    keys = c("USUBJID")
-  )
-})
-
-
-## Test 7: event_joined() is handled correctly ----
-test_that("derive_extreme_event Test 7: event_joined() is handled correctly", {
+## Test 5: event_joined() is handled correctly ----
+test_that("derive_extreme_event Test 5: event_joined() is handled correctly", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDTC,
     "1",      "2020-01-01",
@@ -641,8 +517,8 @@ test_that("derive_extreme_event Test 7: event_joined() is handled correctly", {
   )
 })
 
-## Test 8: no tmp_event_nr_var ----
-test_that("derive_extreme_event Test 8: no tmp_event_nr_var", {
+## Test 6: no tmp_event_nr_var ----
+test_that("derive_extreme_event Test 6: no tmp_event_nr_var", {
   adrs <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",             1, "PR",
@@ -692,8 +568,8 @@ test_that("derive_extreme_event Test 8: no tmp_event_nr_var", {
   )
 })
 
-## Test 9: deprecation of ignore_event_order ----
-test_that("derive_extreme_event Test 9: deprecation of ignore_event_order", {
+## Test 7: deprecation of ignore_event_order ----
+test_that("derive_extreme_event Test 7: deprecation of ignore_event_order", {
   adrs <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",             1, "PR",
@@ -746,8 +622,8 @@ test_that("derive_extreme_event Test 9: deprecation of ignore_event_order", {
   )
 })
 
-## Test 10: deprecation of ignore_event_order ----
-test_that("derive_extreme_event Test 10: deprecation of ignore_event_order", {
+## Test 8: deprecation of ignore_event_order ----
+test_that("derive_extreme_event Test 8: deprecation of ignore_event_order", {
   adrs <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",             1, "PR",
@@ -797,44 +673,5 @@ test_that("derive_extreme_event Test 10: deprecation of ignore_event_order", {
     base = expected,
     compare = actual,
     keys = c("USUBJID", "PARAMCD", "AVISITN")
-  )
-})
-
-
-# event_joined ----
-## Test 11: deprecation of `first_cond` ----
-test_that("event_joined Test 11: deprecation of `first_cond`", {
-  new_event <- event_joined(
-    join_vars = exprs(AVALC, ADT),
-    join_type = "after",
-    first_cond_upper = AVALC.join == "CR" &
-      ADT.join >= ADT + 28,
-    condition = AVALC == "CR" &
-      all(AVALC.join %in% c("CR", "NE")) &
-      count_vals(var = AVALC.join, val = "NE") <= 1,
-    set_values_to = exprs(
-      AVALC = "CR"
-    )
-  )
-
-  expect_warning(
-    old_event <- event_joined(
-      join_vars = exprs(AVALC, ADT),
-      join_type = "after",
-      first_cond = AVALC.join == "CR" &
-        ADT.join >= ADT + 28,
-      condition = AVALC == "CR" &
-        all(AVALC.join %in% c("CR", "NE")) &
-        count_vals(var = AVALC.join, val = "NE") <= 1,
-      set_values_to = exprs(
-        AVALC = "CR"
-      )
-    ),
-    class = "lifecycle_warning_deprecated"
-  )
-
-  expect_equal(
-    old_event,
-    expected = new_event
   )
 })
