@@ -46,9 +46,18 @@ Phases:
 | Release Schedule | Phase 1- Date and Packages                                               | Phase 2- Date and Packages                                           |
 | ---------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- |
 | Q4-2023          | December 4th                                                             | December 11th                                                        |
-|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)     |
-|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)           | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/) |
-|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                 |                                                                      |
+|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)          |
+|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)      |
+|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      |                                                                      |
+| Q1-2024          |                                                                          | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)    |
+| Q2-2024          | June 3rd                                                                 | June 8th                                                             |
+|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)          |
+|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)      |
+|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      |                                                                      |
+| Q4-2024          | December 2nd                                                             | December 9th                                                         |
+|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)          |
+|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)      |
+|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      |                                                                      |
 
 The `{admiral}` Q4-2023 release will officially be `{admiral}`'s version 1.0.0 release, where we commit to increased package maturity and pivot towards focusing on maintenance rather than new content. This does not mean that there will never be any new content in `{admiral}`, rather it means we will be more mindful about introducing new functionality and/or breaking changes. The release schedule in 2024 and onward will also shift to twice-yearly, rather than quarterly, so that our users have ample time to react to any new content and changes that do make it onto `{admiral}`.
 
@@ -151,7 +160,7 @@ All `{admiral}` functions are easily findable.
 All `{admiral}` functions follow the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html)
 that all our developers and contributors must follow, so that all our code has a high degree of consistency and readability.
 
-* We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.
+* We encourage use of tidyverse (e.g. dplyr) over similar functionality existing in base R.
 * For sections of code that perform the actual derivations (e.g. besides assertions or basic utilities), we try to limit nesting of too many dependencies or functions.
 * Modularity is a focus---we don't try to achieve too many steps in one.
 * All code has to be well commented.
@@ -159,12 +168,12 @@ that all our developers and contributors must follow, so that all our code has a
 
 ## References and Documentation
 
-* Please go to [Get Started](https://pharmaverse.github.io/admiral/articles/admiral.html) section to start using `{admiral}`
+* Please go to [Get Started](https://pharmaverse.github.io/admiral/articles/admiral.html) section to start using `{admiral}`.
 * Please see the [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) for videos related to `{admiral}`.
-* Please see the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) to understand how functions are created
-* Please see the [FAQ](https://pharmaverse.github.io/admiral/articles/faq.html) for the most frequent questions
-* Please see the [Contribution Model](https://pharmaverse.github.io/admiral/articles/contribution_model.html) for how to get involved with making contributions
-* Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
+* Please see the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) to understand how functions are created.
+* Please see the [FAQ](https://pharmaverse.github.io/admiral/articles/faq.html) for the most frequent questions.
+* Please see the [Contribution Model](https://pharmaverse.github.io/admiral/articles/contribution_model.html) for how to get involved with making contributions.
+* Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development). for why we develop with certain R and package versions.
 
 ## Pharmaverse Blog
 
@@ -174,15 +183,16 @@ We are also always looking for keen `{admiral}` users to publish their own blog 
 
 ## Conference Presentations
 
-* [{admiral} - from open source to company implementation](https://www.youtube.com/watch?v=ZbV3E0_xrrI) (recording from R in Pharma 2023)
-* [Cross Industry Package Development](https://www.youtube.com/watch?v=M4L1PPMu0pU) (recording from R in Pharma 2023)
-* [Paving the way for clinical submissions in R](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/EU/London/PRE_London09.pdf) (slides from PHUSE SDE in London)
-* [An Overview of {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/US/Summit/PRE_Summit03.pdf) (slides from PHUSE SDE in Summit, NJ)
-* [{admiralonco}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS12.mp4) (recording for talk at PHUSE US Connect 2023, slides also available [here](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/PRE_OS12.pdf))
-* [Programming ADNCA using R and {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS09.mp4) (recording of presentation from PHUSE US Connect 2023)
-* [Clinical Reporting in R](https://www.youtube.com/watch?v=9eod8MLF5ys\&list=PLMtxz1fUYA5AWYQHB5mZAs-yamNJ5Tm_8\&index=2) (recording of workshop at R in Pharma 2022)
-* [Introducing {admiral}](https://www.youtube.com/watch?v=N7Bw8c3D5fU) (recording of talk for R in Pharma 2021)
-* [Pharmaverse workshop](https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022) (slides and materials from PHUSE US Connect 2022---including `{admiral}` workshop slides from PHUSE EU Connect 2021)
+* [The Development of {admiralophtha}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/EU/Birmingham/PAP_TT03.pdf) (paper from PHUSE EU Connect 2023 in Birmingham, UK, slides also available [here](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/EU/Birmingham/PRE_TT03.pdf)).
+* [{admiral} - from Open Source to Company Implementation](https://www.youtube.com/watch?v=ZbV3E0_xrrI) (recording from R in Pharma 2023).
+* [Cross Industry Package Development](https://www.youtube.com/watch?v=M4L1PPMu0pU) (recording from R in Pharma 2023).
+* [Paving the Way for Clinical Submissions in R](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/EU/London/PRE_London09.pdf) (slides from PHUSE SDE in London).
+* [An Overview of {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/US/Summit/PRE_Summit03.pdf) (slides from PHUSE SDE in Summit, NJ).
+* [{admiralonco}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS12.mp4) (recording for talk at PHUSE US Connect 2023, slides also available [here](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/PRE_OS12.pdf)).
+* [Programming ADNCA using R and {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS09.mp4) (recording of presentation from PHUSE US Connect 2023).
+* [Clinical Reporting in R](https://www.youtube.com/watch?v=9eod8MLF5ys\&list=PLMtxz1fUYA5AWYQHB5mZAs-yamNJ5Tm_8\&index=2) (recording of workshop at R in Pharma 2022).
+* [Pharmaverse Workshop](https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022) (slides and materials from PHUSE US Connect 2022---including `{admiral}` workshop slides from PHUSE EU Connect 2021).
+* [Introducing {admiral}](https://www.youtube.com/watch?v=N7Bw8c3D5fU) (recording of talk for R in Pharma 2021).
 
 ## Contact
 
