@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9013</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9014</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,6 +106,7 @@
 <p>New global option created <code>signif_digits</code> to handle floating point issue, the value is set to <code>15</code>, and is used with the <code>base R</code> function <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif()</a></code> when comparing 2 numeric values. This is implemented in <code>admiral</code> functions <code><a href="../reference/derive_var_atoxgr_dir.html">derive_var_atoxgr_dir()</a></code> and <code><a href="../reference/derive_var_anrind.html">derive_var_anrind()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2134" class="external-link">#2134</a>)</p>
 <p>For more information, please see blog: <a href="https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html" class="external-link">How admiral handles floating points</a></p>
 </li>
+<li><p>The new function <code><a href="../reference/derive_vars_computed.html">derive_vars_computed()</a></code> is provided which has the same functionality as <code><a href="../reference/derive_param_computed.html">derive_param_computed()</a></code> but instead of adding the computed values as a new parameter, adds it as a new variable. (<a href="https://github.com/pharmaverse/admiral/issues/2178" class="external-link">#2178</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="updates-of-existing-functions-development-version">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-development-version"></a></h3>
