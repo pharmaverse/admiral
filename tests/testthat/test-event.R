@@ -1,4 +1,3 @@
-
 ## Test 1: Cover event$order ----
 test_that("event Test 1: Cover event$order", {
   adsl_ext <- tribble(
