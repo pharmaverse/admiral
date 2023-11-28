@@ -236,7 +236,7 @@ adsl <- adsl %>%
     tmp_event_nr_var = event_nr,
     order = exprs(LSTALVDT, seq, event_nr),
     mode = "last",
-    new_vars = exprs(LSTALVDT = LSTALVDT)
+    new_vars = exprs(LSTALVDT)
   ) %>%
   derive_var_merged_exist_flag(
     dataset_add = ex,

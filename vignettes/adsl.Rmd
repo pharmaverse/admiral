@@ -448,7 +448,7 @@ adsl <- adsl %>%
     tmp_event_nr_var = event_nr,
     order = exprs(event_nr),
     mode = "first",
-    new_vars = exprs(DTHCAUS = DTHCAUS)
+    new_vars = exprs(DTHCAUS)
   )
 ```
 
@@ -485,7 +485,7 @@ adsl <- adsl %>%
     tmp_event_nr_var = event_nr,
     order = exprs(event_nr),
     mode = "first",
-    new_vars = exprs(DTHCAUS = DTHCAUS, DTHDOM = DTHDOM, DTHSEQ = DTHSEQ)
+    new_vars = exprs(DTHCAUS, DTHDOM, DTHSEQ)
   )
 ```
 
@@ -583,7 +583,7 @@ adsl <- adsl %>%
     tmp_event_nr_var = event_nr,
     order = exprs(LSTALVDT, seq, event_nr),
     mode = "last",
-    new_vars = exprs(LSTALVDT = LSTALVDT)
+    new_vars = exprs(LSTALVDT)
   )
 ```
 
@@ -646,7 +646,7 @@ adsl <- adsl %>%
     tmp_event_nr_var = event_nr,
     order = exprs(LSTALVDT, LALVSEQ, event_nr),
     mode = "last",
-    new_vars = exprs(LSTALVDT = LSTALVDT, LALVSEQ = LALVSEQ, LALVDOM = LALVDOM, LALVVAR = LALVVAR)
+    new_vars = exprs(LSTALVDT, LALVSEQ, LALVDOM, LALVVAR)
   )
 ```
 
