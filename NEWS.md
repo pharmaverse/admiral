@@ -174,7 +174,10 @@ the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
 - Moved Development Process from `admiraldev` to Contribution Model in the 
 `admiral` website, updated GitHub strategy. (#2196)
 
-- All "Example Script(s)" sections in the User Guide vignettes were updated to point the user towards using `use_ad_template("ADaM")` rather than linking to the template in the code repository. (#2239)
+- Added new drop downs in Get Started navigation bar- Getting Started, Admiral Discovery, Cheatsheet. Community removed from top. (#2217)
+
+- All "Example Script(s)" sections in the User Guide vignettes were updated to point the user towards using `use_ad_template("ADaM")` rather 
+  than linking to the template in the code repository. (#2239)
 
 ## Various
 
