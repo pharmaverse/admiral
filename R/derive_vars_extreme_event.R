@@ -13,7 +13,7 @@
 #'   functions like `all()` or `any()` can be used in `condition`.
 #'
 #'   For `event_joined()` events the observations are selected by calling
-#'   `filter_joined()`. The `condition` field is passed to the `filter` argument.
+#'   `filter_joined()`. The `condition` field is passed to the `filter_join` argument.
 #'
 #' @param tmp_event_nr_var Temporary event number variable
 #'
