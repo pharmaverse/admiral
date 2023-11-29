@@ -18,5 +18,8 @@ roxygen_param_dataset <- function(expected_vars = NULL) {
 }
 
 roxygen_order_na_handling <- function() {
-  "For handling of `NA`s in sorting variables see [Sort Order](../articles/generic.html#sort_order)."
+  paste(
+    "For handling of `NA`s in sorting variables see",
+    "[Sort Order](../articles/generic.html#sort_order)."
+  )
 }
