@@ -38,8 +38,22 @@ test_that("compute_duration Test 3: Age in years", {
   )
 })
 
-## Test 4: Age in months ----
-test_that("compute_duration Test 4: Age in months", {
+## Test 4: Age in YEARS ----
+test_that("compute_duration Test 4: Age in YEARS", {
+  expect_equal(
+    compute_duration(
+      ymd("1984-09-06"),
+      ymd("2020-02-24"),
+      trunc_out = TRUE,
+      out_unit = "YEARS",
+      add_one = FALSE
+    ),
+    35
+  )
+})
+
+## Test 5: Age in months ----
+test_that("compute_duration Test 5: Age in months", {
   expect_equal(
     compute_duration(
       ymd("1984-09-06"),
@@ -52,8 +66,22 @@ test_that("compute_duration Test 4: Age in months", {
   )
 })
 
-## Test 5: Age in weeks ----
-test_that("compute_duration Test 5: Age in weeks", {
+## Test 6: Age in MONTHS ----
+test_that("compute_duration Test 6: Age in MONTHS", {
+  expect_equal(
+    compute_duration(
+      ymd("1984-09-06"),
+      ymd("2020-02-24"),
+      trunc_out = TRUE,
+      out_unit = "MONTHS",
+      add_one = FALSE
+    ),
+    425
+  )
+})
+
+## Test 7: Age in weeks ----
+test_that("compute_duration Test 7: Age in weeks", {
   expect_equal(
     compute_duration(
       ymd("2020-02-03"),
@@ -66,8 +94,8 @@ test_that("compute_duration Test 5: Age in weeks", {
   )
 })
 
-## Test 6: Duration in hours ----
-test_that("compute_duration Test 6: Duration in hours", {
+## Test 8: Duration in hours ----
+test_that("compute_duration Test 8: Duration in hours", {
   expect_equal(
     compute_duration(
       ymd_hms("2020-12-06T9:00:00"),
@@ -81,8 +109,8 @@ test_that("compute_duration Test 6: Duration in hours", {
 })
 
 
-## Test 7: Duration in minutes (minutes option) ----
-test_that("compute_duration Test 7: Duration in minutes (minutes option)", {
+## Test 9: Duration in minutes (minutes option) ----
+test_that("compute_duration Test 9: Duration in minutes (minutes option)", {
   expect_equal(
     compute_duration(
       ymd_hms("2020-12-06T13:00:00"),
@@ -95,8 +123,8 @@ test_that("compute_duration Test 7: Duration in minutes (minutes option)", {
   )
 })
 
-## Test 8: Duration in minutes (min option) ----
-test_that("compute_duration Test 8: Duration in minutes (min option)", {
+## Test 10: Duration in minutes (min option) ----
+test_that("compute_duration Test 10: Duration in minutes (min option)", {
   expect_equal(
     compute_duration(
       ymd_hms("2020-12-06T13:00:00"),
@@ -110,8 +138,8 @@ test_that("compute_duration Test 8: Duration in minutes (min option)", {
 })
 
 
-## Test 9: Duration in seconds (seconds option) ----
-test_that("compute_duration Test 9: Duration in seconds (seconds option)", {
+## Test 11: Duration in seconds (seconds option) ----
+test_that("compute_duration Test 11: Duration in seconds (seconds option)", {
   expect_equal(
     compute_duration(
       ymd_hms("2020-12-06T13:30:00"),
@@ -126,8 +154,8 @@ test_that("compute_duration Test 9: Duration in seconds (seconds option)", {
 
 
 
-## Test 10: Duration in seconds (sec option) ----
-test_that("compute_duration Test 10: Duration in seconds (sec option)", {
+## Test 12: Duration in seconds (sec option) ----
+test_that("compute_duration Test 12: Duration in seconds (sec option)", {
   expect_equal(
     compute_duration(
       ymd_hms("2020-12-06T13:30:00"),
@@ -141,8 +169,8 @@ test_that("compute_duration Test 10: Duration in seconds (sec option)", {
 })
 
 
-## Test 11: Duration (instead of interval) ----
-test_that("compute_duration Test 11: Duration (instead of interval)", {
+## Test 13: Duration (instead of interval) ----
+test_that("compute_duration Test 13: Duration (instead of interval)", {
   expect_equal(
     compute_duration(
       ymd("2000-02-01"),
@@ -166,8 +194,8 @@ test_that("compute_duration Test 11: Duration (instead of interval)", {
   )
 })
 
-## Test 12: Interval (instead of duration) ----
-test_that("compute_duration Test 12: Interval (instead of duration)", {
+## Test 14: Interval (instead of duration) ----
+test_that("compute_duration Test 14: Interval (instead of duration)", {
   expect_equal(
     compute_duration(
       ymd("2000-02-01"),
@@ -191,8 +219,8 @@ test_that("compute_duration Test 12: Interval (instead of duration)", {
   )
 })
 
-## Test 13: Interval with duration/interval invariant units ----
-test_that("compute_duration Test 13: Interval with duration/interval invariant units", {
+## Test 15: Interval with duration/interval invariant units ----
+test_that("compute_duration Test 15: Interval with duration/interval invariant units", {
   expect_equal(
     compute_duration(
       ymd("2000-02-01"),

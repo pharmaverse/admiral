@@ -28,7 +28,7 @@
 #'   Default: 'days'
 #'
 #'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
-#'   'seconds', 'sec'
+#'   'seconds', 'sec', capitalized versions of these terms is accepted too
 #'
 #' @param out_unit Output unit
 #'
@@ -37,7 +37,7 @@
 #'   Default: 'days'
 #'
 #'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
-#'   'min', 'seconds', 'sec'
+#'   'min', 'seconds', 'sec', capitalized versions of these terms is accepted too
 #'
 #' @param floor_in Round down input dates?
 #'

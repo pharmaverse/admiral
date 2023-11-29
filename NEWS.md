@@ -66,6 +66,8 @@ these functions handles any floating point issues. (#2134)
 
 - Fixed a bug in `derive_vars_period()` where the function was throwing an error whenever `dataset_ref` contained variables that were neither key variables, nor `APERIOD`, `ASPER`, `APHASEN`, nor mentioned in the `new_vars` argument. (#2231)
 
+- `compute_duration()` and `derive_vars_duration()` now accept capitalized terms for the `in_unit` and `out_unit`arguments (#2255)
+
 ## Breaking Changes
 
 - `derive_extreme_records()` the `dataset_add` argument is now mandatory. (#2139)
