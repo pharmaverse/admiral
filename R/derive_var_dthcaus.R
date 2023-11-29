@@ -1,5 +1,9 @@
 #' Derive Death Cause
 #'
+#' @description
+#' `r lifecycle::badge("superseded")` The `derive_var_dthcaus()`
+#' function has been superseded in favor of `derive_vars_extreme_event()`.
+#'
 #' Derive death cause (`DTHCAUS`) and add traceability variables if required.
 #'
 #' @param dataset
@@ -22,8 +26,8 @@
 #' equivalent, the first source will be kept, so the user should provide the inputs in
 #' the preferred order.
 #'
-#' @family der_adsl
-#' @keywords der_adsl
+#' @family superseded
+#' @keywords superseded
 #'
 #' @return The input dataset with `DTHCAUS` variable added.
 #'
@@ -237,6 +241,11 @@ derive_var_dthcaus <- function(dataset,
 
 #' Create a `dthcaus_source` Object
 #'
+#' @description
+#' `r lifecycle::badge("superseded")` The `derive_var_dthcaus()`
+#' function and `dthcaus_source()` have been superseded in favor of
+#' `derive_vars_extreme_event()`.
+#'
 #' @param dataset_name The name of the dataset, i.e. a string, used to search for
 #'   the death cause.
 #'
@@ -279,8 +288,8 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param set_values_to Variables to be set to trace the source dataset
 #'
-#' @keywords source_specifications
-#' @family source_specifications
+#' @family superseded
+#' @keywords superseded
 #'
 #'
 #' @export
