@@ -2,6 +2,8 @@
 
 ## New Features
 
+- Implement `derive_vars_extreme_event()`, which works as `derive_extreme_event()` but adds variables instead of a parameter. (#2138)
+
 - The new function `derive_var_merged_ef_msrc()` is provided to add a flag
 indicating if one of the conditions in one of multiple source datasets is
 fulfilled. (#1728)
@@ -119,6 +121,14 @@ to
 order = exprs(my_order_var),
 ```
 
+- `create_query_data()` and `derive_vars_query()` updated to rename variables in 
+    query data set as follows: (#2186)
+    
+    - `TERMNAME` to `TERMCHAR`
+    - `TERMID` to `TERMNUM`
+  
+    Users need to adjust their `get_terms()` function accordingly.
+    
 - The following functions, which were deprecated in previous `{admiral}` versions, have been removed: (#2098)
   - `derive_param_extreme_event()`
   - `derive_vars_last_dose()`
@@ -140,14 +150,7 @@ order = exprs(my_order_var),
   - `derive_var_ontrtfl(span_period)` 
   
 - The `derive_param_extreme_record()` function has been superseded in favor of `derive_extreme_event()`. (#2141)
-
-- `create_query_data()` and `derive_vars_query()` updated to rename variables in 
-    query data set as follows: (#2186)
-
-    - `TERMNAME` to `TERMCHAR`
-    - `TERMID` to `TERMNUM`
-  
-    Users need to adjust their `get_terms()` function accordingly.
+- The functions `derive_var_dthcaus()`, `derive_var_extreme_dt()`, and `derive_var_extreme_dtm()` are superseded in favor of `derive_vars_extreme_event()`. (#2138)
   
 ## Documentation
 
