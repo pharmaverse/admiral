@@ -215,8 +215,7 @@ derive_vars_extreme_event <- function(dataset,
     order = order,
     mode = mode,
     source_datasets = source_datasets,
-    check_type = check_type,
-    set_values_to = NULL
+    check_type = check_type
   )
 
   derive_vars_merged(
