@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9016</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9017</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,8 +18,13 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
+      <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-get-started">Get Started</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-get-started">
+    <a class="dropdown-item" href="../articles/admiral.html">Getting Started</a>
+    <a class="dropdown-item" href="https://pharmaverse.github.io/admiraldiscovery/articles/gt.html">Admiral Discovery</a>
+    <a class="external-link dropdown-item" href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf">Cheatsheet</a>
+  </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../reference/">Reference</a>
@@ -27,7 +32,6 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
-    <a class="dropdown-item" href="../articles/admiral.html">Getting Started</a>
     <a class="dropdown-item" href="../articles/adsl.html">Creating a Basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
@@ -46,14 +50,6 @@
     <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     <a class="dropdown-item" href="../articles/lab_grading.html">Lab Grading</a>
     <a class="dropdown-item" href="../articles/hys_law.html">Hy's Law Implementation</a>
-  </div>
-</li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-community">
-    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
-    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
-    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -203,6 +199,7 @@ ignore_event_order = TRUE,</code></pre>
 <li><p>Added a link to the previous versions of the website to the navigation bar. (<a href="https://github.com/pharmaverse/admiral/issues/2205" class="external-link">#2205</a>)</p></li>
 <li><p>The meaning of <code>date_imputation = "mid"</code> was clarified in the documentation of the imputation functions, e.g., <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2222" class="external-link">#2222</a>)</p></li>
 <li><p>Moved Development Process from <code>admiraldev</code> to Contribution Model in the <code>admiral</code> website, updated GitHub strategy. (<a href="https://github.com/pharmaverse/admiral/issues/2196" class="external-link">#2196</a>)</p></li>
+<li><p>Added new drop downs in Get Started navigation bar- Getting Started, Admiral Discovery, Cheatsheet. Community removed from top. (<a href="https://github.com/pharmaverse/admiral/issues/2217" class="external-link">#2217</a>)</p></li>
 <li><p>All “Example Script(s)” sections in the User Guide vignettes were updated to point the user towards using <code>use_ad_template("ADaM")</code> rather than linking to the template in the code repository. (<a href="https://github.com/pharmaverse/admiral/issues/2239" class="external-link">#2239</a>)</p></li>
 </ul></div>
 <div class="section level3">
