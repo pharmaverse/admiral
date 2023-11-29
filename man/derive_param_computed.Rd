@@ -40,13 +40,15 @@ If the argument is specified, the observations of the additional dataset
 are considered in addition to the observations from the input dataset
 (\code{dataset} restricted by \code{filter}).}
 
-\item{by_vars}{Grouping variables
+\item{by_vars}{Grouping variable
 
 For each group defined by \code{by_vars} an observation is added to the output
 dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-\emph{Permitted Values:} list of variables}
+\emph{Permitted Values}: list of variables created by exprs()
+
+e.g. exprs(USUBJID, VISIT)}
 
 \item{parameters}{Required parameter codes
 
@@ -123,7 +125,9 @@ into account.
 The constant parameters (parameters that are measured only once) are merged
 to the other parameters using the specified variables. (Refer to Example 2)
 
-\emph{Permitted Values:} list of variables}
+\emph{Permitted Values}: list of variables created by exprs()
+
+e.g. exprs(USUBJID, VISIT)}
 
 \item{constant_parameters}{Required constant parameter codes
 

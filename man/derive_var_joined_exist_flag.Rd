@@ -37,7 +37,11 @@ expected.}
 \item{by_vars}{By variables
 
 The specified variables are used as by variables for joining the input
-dataset (\code{dataset}) with the additional dataset (\code{dataset_add}).}
+dataset (\code{dataset}) with the additional dataset (\code{dataset_add}).
+
+\emph{Permitted Values}: list of variables created by exprs()
+
+e.g. exprs(USUBJID, VISIT)}
 
 \item{order}{Order
 

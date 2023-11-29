@@ -21,9 +21,13 @@ The variables specified by the \code{by_vars} argument(s) to be expected.}
 The variables specified by the \code{by_vars} and \code{value_var} parameters,
 \code{FAGRPID} and \code{FATESTCD} are required}
 
-\item{by_vars}{Keys used to merge \code{dataset_facm} with \code{dataset}
+\item{by_vars}{By variables
 
-\emph{Permitted Values:} list of variables}
+Keys used to merge \code{dataset_facm} with \code{dataset}.
+
+\emph{Permitted Values}: list of variables created by exprs()
+
+e.g. exprs(USUBJID, VISIT)}
 
 \item{value_var}{The variable of \code{dataset_facm} containing the values of the
 transposed variables

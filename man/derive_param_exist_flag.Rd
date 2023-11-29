@@ -90,7 +90,9 @@ considered.
 
 \item{by_vars}{Variables to uniquely identify a group
 
-A list of symbols created using \code{exprs()} is expected.}
+\emph{Permitted Values}: list of variables created by exprs()
+
+e.g. exprs(USUBJID, VISIT)}
 
 \item{set_values_to}{Variables to set
 

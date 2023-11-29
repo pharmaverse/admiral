@@ -30,11 +30,9 @@ parameter) and to the parameters specified by \code{qt_code} and \code{rr_code}.
 Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-A list of quoted expressions specifying variables to group by.
+\emph{Permitted Values}: list of variables created by exprs()
 
-The expressions should be quoted using the \code{exprs()} function from the rlang package.e.g. exprs(USUBJID, VISIT)
-
-\emph{Permitted Values}: list of variables created by exprs()}
+e.g. exprs(USUBJID, VISIT)}
 
 \item{method}{Method used to QT correction
 

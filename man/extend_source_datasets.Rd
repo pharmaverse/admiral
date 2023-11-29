@@ -12,7 +12,11 @@ extend_source_datasets(source_datasets, by_vars)
 A named list of datasets is expected. Each dataset must contain either all
 by variables or none of the by variables.}
 
-\item{by_vars}{By variables}
+\item{by_vars}{By variables
+
+\emph{Permitted Values}: list of variables created by exprs()
+
+e.g. exprs(USUBJID, VISIT)}
 }
 \value{
 The list of extended source datasets

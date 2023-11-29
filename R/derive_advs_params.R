@@ -277,7 +277,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'   This will produce BSA at all visits where weight is measured.  Otherwise
 #'   it will only be calculated at visits with both height and weight collected.
 #'
-#'   *Permitted Values:* list of variables
+#'   `r roxygen_param_by_vars()`
 #'
 #' @inheritParams derive_param_map
 #'
@@ -581,7 +581,7 @@ compute_bsa <- function(height = height,
 #'   This will produce BMI at all visits where weight is measured.  Otherwise
 #'   it will only be calculated at visits with both height and weight collected.
 #'
-#'   *Permitted Values:* list of variables
+#'   `r roxygen_param_by_vars()`
 #'
 #' @inheritParams derive_param_map
 #'

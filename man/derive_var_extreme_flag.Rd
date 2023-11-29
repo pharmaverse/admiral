@@ -23,7 +23,9 @@ The variables specified by the \code{by_vars} argument(s) to be expected.}
 
 \item{by_vars}{Grouping variables
 
-Permitted Values: list of variables}
+\emph{Permitted Values}: list of variables created by exprs()
+
+e.g. exprs(USUBJID, VISIT)}
 
 \item{order}{Sort order
 

@@ -26,7 +26,11 @@ A named list of datasets is expected. The \code{dataset_name} field of
 \item{by_vars}{By variables
 
 If the parameter is specified, for each by group the observations are
-selected separately.}
+selected separately.
+
+\emph{Permitted Values}: list of variables created by exprs()
+
+e.g. exprs(USUBJID, VISIT)}
 
 \item{create_datetime}{Create datetime variable?
 

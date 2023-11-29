@@ -37,7 +37,9 @@ and \code{hdl_code}.}
 Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-Permitted Values: list of variables}
+\emph{Permitted Values}: list of variables created by exprs()
+
+e.g. exprs(USUBJID, VISIT)}
 
 \item{set_values_to}{Variables to be set
 

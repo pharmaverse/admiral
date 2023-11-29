@@ -26,13 +26,15 @@ the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{sysbp_code}, \code{diabp_code}
 and \code{hr_code}.}
 
-\item{by_vars}{Grouping variables
+\item{by_vars}{Grouping variable
 
 For each group defined by \code{by_vars} an observation is added to the output
 dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-\emph{Permitted Values:} list of variables}
+\emph{Permitted Values}: list of variables created by exprs()
+
+e.g. exprs(USUBJID, VISIT)}
 
 \item{set_values_to}{Variables to be set
 

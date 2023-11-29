@@ -40,7 +40,11 @@ The by variables must be in at least one of the source datasets. Each
 source dataset must contain either all by variables or none of the by
 variables.
 
-The by variables are not included in the output dataset.}
+The by variables are not included in the output dataset.
+
+\emph{Permitted Values}: list of variables created by exprs()
+
+e.g. exprs(USUBJID, VISIT)}
 
 \item{start_date}{Time to event origin date
 

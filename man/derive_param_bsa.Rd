@@ -26,13 +26,15 @@ The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key
 the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{HEIGHT} and \code{WEIGHT}.}
 
-\item{by_vars}{Grouping variables
+\item{by_vars}{Grouping variable
 
 For each group defined by \code{by_vars} an observation is added to the output
 dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-\emph{Permitted Values:} list of variables}
+\emph{Permitted Values}: list of variables created by exprs()
+
+e.g. exprs(USUBJID, VISIT)}
 
 \item{method}{Derivation method to use. Note that \code{HEIGHT} is expected
 in cm and \code{WEIGHT} is expected in kg:
@@ -99,7 +101,9 @@ use \code{constant_by_vars} to select the subject-level variable to merge on (e.
 This will produce BSA at all visits where weight is measured.  Otherwise
 it will only be calculated at visits with both height and weight collected.
 
-\emph{Permitted Values:} list of variables}
+\emph{Permitted Values}: list of variables created by exprs()
+
+e.g. exprs(USUBJID, VISIT)}
 }
 \value{
 The input dataset with the new parameter added. Note, a variable will only
