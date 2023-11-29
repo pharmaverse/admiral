@@ -14,3 +14,18 @@ test_that("roxygen_param_dataset Test 2: Input dataset standardized text works",
     roxygen_param_dataset(expected_vars = c("by_vars"))
   )
 })
+
+test_that("roxygen_param_by_vars Test 1: Text variations", {
+  expect_snapshot(
+    roxygen_param_by_vars()
+  )
+  expect_snapshot(
+    roxygen_param_by_vars(additional_dataset = "additional_dataset", rename = TRUE)
+  )
+  expect_snapshot(
+    roxygen_param_by_vars(additional_dataset = "additional_dataset", unique = TRUE)
+  )
+  expect_snapshot(
+    roxygen_param_by_vars(additional_dataset = "additional_dataset", unique = TRUE, rename = TRUE)
+  )
+})
