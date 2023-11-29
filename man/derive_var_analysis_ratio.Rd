@@ -9,7 +9,7 @@ derive_var_analysis_ratio(dataset, numer_var, denom_var, new_var = NULL)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{numer_var} and \code{denom_var} argument(s) to be expected.}
+The variables specified by the \code{numer_var} and \code{denom_var} arguments are expected to be in the dataset.}
 
 \item{numer_var}{Variable containing numeric values to be used in the numerator of
 the ratio calculation.}

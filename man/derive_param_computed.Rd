@@ -21,7 +21,7 @@ derive_param_computed(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument(s) to be expected.
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 \code{PARAMCD} is expected as well.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of

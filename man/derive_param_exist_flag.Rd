@@ -20,7 +20,7 @@ derive_param_exist_flag(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument(s) to be expected.
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.
 \code{PARAMCD} is expected as well.}
 
 \item{dataset_ref}{Reference dataset, e.g., ADSL

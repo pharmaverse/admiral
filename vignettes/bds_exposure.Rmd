@@ -613,8 +613,8 @@ have them associated with an End to End pipeline under the umbrella of the
 [pharmaverse](https://github.com/pharmaverse). An example of applying metadata 
 and perform associated checks can be found at the [pharmaverse E2E example](https://examples.pharmaverse.org/data/adsl/).
 
-# Example Scripts {#example}
+# Example Script {#example}
 
-ADaM | Sample Code
+ADaM | Sourcing Command
 ---- | --------------
-ADEX | [ad_adex.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adex.R){target="_blank"}
+ADEX | `use_ad_template("ADEX")`
