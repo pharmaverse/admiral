@@ -349,7 +349,7 @@ derive_extreme_event <- function(dataset = NULL,
                                  source_datasets = NULL,
                                  ignore_event_order = NULL,
                                  check_type = "warning",
-                                 set_values_to,
+                                 set_values_to = NULL,
                                  keep_source_vars = exprs(everything())) {
   # Check input parameters
   assert_data_frame(dataset, optional = TRUE)
