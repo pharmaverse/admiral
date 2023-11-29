@@ -33,6 +33,8 @@
 #'   If a particular event from `events` has more than one observation, within
 #'   the event and by group, the records are ordered by the specified order.
 #'
+#'   `r roxygen_order_na_handling()`
+#'
 #'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))`
 #'
@@ -513,6 +515,8 @@ derive_extreme_event <- function(dataset,
 #' @param order The specified variables or expressions are used to select the
 #'   first or last observation if `mode` is specified.
 #'
+#'   `r roxygen_order_na_handling()`
+#'
 #'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))` or `NULL`
 #'
@@ -678,6 +682,8 @@ event <- function(dataset_name = NULL,
 #'
 #' @param order If specified, the specified variables or expressions are used to
 #'   select the first observation.
+#'
+#'   `r roxygen_order_na_handling()`
 #'
 #'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))` or `NULL`

@@ -55,6 +55,8 @@ The variable is not included in the output dataset.}
 If a particular event from \code{events} has more than one observation, within
 the event and by group, the records are ordered by the specified order.
 
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+
 \emph{Permitted Values:} list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))}}
 

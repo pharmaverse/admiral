@@ -14,3 +14,14 @@ test_that("roxygen_param_dataset Test 2: Input dataset standardized text works",
     roxygen_param_dataset(expected_vars = c("by_vars"))
   )
 })
+
+# roxygen_order_na_handling ----
+test_that("Standardized text works", {
+  expect_equal(
+    roxygen_order_na_handling(),
+    paste(
+      "For handling of `NA`s in sorting variables see",
+      "[Sort Order](../articles/generic.html#sort_order)."
+    )
+  )
+})
