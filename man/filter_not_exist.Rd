@@ -9,7 +9,7 @@ filter_not_exist(dataset, dataset_add, by_vars, filter_add = NULL)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument(s) to be expected.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{dataset_add}{Source dataset
 

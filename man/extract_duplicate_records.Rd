@@ -9,7 +9,7 @@ extract_duplicate_records(dataset, by_vars)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument(s) to be expected.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{by_vars}{Grouping variables
 

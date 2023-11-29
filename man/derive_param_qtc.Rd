@@ -18,7 +18,7 @@ derive_param_qtc(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{get_unit_expr} argument(s) to be expected.
+The variables specified by the \code{by_vars} and \code{get_unit_expr} arguments are expected to be in the dataset.
 \code{PARAMCD}, and \code{AVAL} are expected as well.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
