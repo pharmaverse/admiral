@@ -186,7 +186,7 @@ navbar:
         href: articles/imputation.html
       - text: Visit and Period Variables
         href: articles/visits_periods.html
-      - text: Generic Functions
+      - text: Generic Derivations
         href: articles/generic.html
       - text: Higher Order Functions
         href: articles/higher_order.html
