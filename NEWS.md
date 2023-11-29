@@ -151,6 +151,8 @@ the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
 - Moved Development Process from `admiraldev` to Contribution Model in the 
 `admiral` website, updated GitHub strategy. (#2196)
 
+- Added new drop downs in Get Started navigation bar- Getting Started, Admiral Discovery, Cheatsheet. Community removed from top. (#2217)
+
 ## Various
 
 - Website now has button/links to Slack channel and GitHub Issues (#2127)
