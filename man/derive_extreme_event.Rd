@@ -14,7 +14,7 @@ derive_extreme_event(
   source_datasets = NULL,
   ignore_event_order = NULL,
   check_type = "warning",
-  set_values_to,
+  set_values_to = NULL,
   keep_source_vars = exprs(everything())
 )
 }
