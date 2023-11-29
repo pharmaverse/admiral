@@ -128,6 +128,8 @@ order = exprs(my_order_var),
   
 ## Documentation
 
+- The documentation of the `by_vars` and `constant_by_vars` argument was improved and unified across all functions where it is used. (#2137)
+
 - A way to standardize roxygen labels and descriptions for function arguments was implemented and tested (#2034)
 
 - Link to published CDISC Population PK (ADPPK) implementation guide added. (#2161)

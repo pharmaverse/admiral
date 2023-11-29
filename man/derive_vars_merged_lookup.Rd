@@ -34,7 +34,7 @@ are merged by the specified by variables.
 Variables must be a unique key of the selected observations in \code{dataset_add}.
 
 Variables from \code{dataset_add} can be renamed by naming the element, I.e.
-by_vars = exprs(<name in input dataset› = ‹name in additional dataset>), similar to the dplyr joins.
+by_vars = exprs(\if{html}{\out{<name in input dataset>}} = \if{html}{\out{<name in additional dataset>}}),similar to the dplyr joins.
 
 \emph{Permitted Values}: list of variables created by exprs()
 
