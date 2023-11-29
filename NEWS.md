@@ -13,6 +13,10 @@ comparing 2 numeric values. This is implemented in `admiral ` functions
 
     For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
 
+- The new function `derive_vars_computed()` is provided which has the same 
+functionality as `derive_param_computed()` but instead of adding the computed 
+values as a new parameter, adds it as a new variable. (#2178)
+
 ## Updates of Existing Functions
 
 - Fixed a bug in `compute_tmf()` where the time imputation flag was being incorrectly
@@ -166,6 +170,8 @@ the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
 
 - Moved Development Process from `admiraldev` to Contribution Model in the 
 `admiral` website, updated GitHub strategy. (#2196)
+
+- All "Example Script(s)" sections in the User Guide vignettes were updated to point the user towards using `use_ad_template("ADaM")` rather than linking to the template in the code repository. (#2239)
 
 ## Various
 
