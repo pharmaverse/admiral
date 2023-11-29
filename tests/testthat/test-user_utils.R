@@ -170,7 +170,7 @@ test_that("print.source Test 14: `source` objects containing `source` objects", 
 ## Test 15: `source` objects containing `data.frame` ----
 test_that("print.source Test 15: `source` objects containing `data.frame`", {
   cqterms <- tibble::tribble(
-    ~TERMNAME,                     ~TERMID,
+    ~TERMCHAR, ~TERMNUM,
     "APPLICATION SITE ERYTHEMA", 10003041L,
     "APPLICATION SITE PRURITUS", 10003053L
   ) %>%
@@ -188,7 +188,7 @@ test_that("print.source Test 15: `source` objects containing `data.frame`", {
     "add_scope_num: FALSE",
     "definition:",
     "# A tibble: 2 x 3",
-    "  TERMNAME                    TERMID SRCVAR ",
+    "  TERMCHAR                   TERMNUM SRCVAR ",
     "  <chr>                        <int> <chr>  ",
     "1 APPLICATION SITE ERYTHEMA 10003041 AEDECOD",
     "2 APPLICATION SITE PRURITUS 10003053 AEDECOD"
