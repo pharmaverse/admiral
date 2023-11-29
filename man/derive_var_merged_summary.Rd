@@ -11,6 +11,7 @@ derive_var_merged_summary(
   new_vars = NULL,
   new_var,
   filter_add = NULL,
+  missing_values = NULL,
   analysis_var,
   summary_fun
 )
@@ -67,6 +68,16 @@ for summarizing. If the argument is not specified, all observations are
 considered.
 
 \emph{Permitted Values}: a condition}
+
+\item{missing_values}{Values for non-matching observations
+
+For observations of the input dataset (\code{dataset}) which do not have a
+matching observation in the additional dataset (\code{dataset_add}) the values
+of the specified variables are set to the specified value. Only variables
+specified for \code{new_vars} can be specified for \code{missing_values}.
+
+\emph{Permitted Values}: named list of expressions, e.g.,
+\code{exprs(BASEC = "MISSING", BASE = -1)}}
 
 \item{analysis_var}{Analysis variable
 
@@ -173,6 +184,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
+\code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},

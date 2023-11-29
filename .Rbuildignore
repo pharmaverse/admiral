@@ -30,3 +30,4 @@
 ^inst/dev_dependencies.R$
 ^\.devcontainer$
 ^vignettes/articles$
+^inst/cheatsheet$
