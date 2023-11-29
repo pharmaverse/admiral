@@ -173,7 +173,7 @@ that all our developers and contributors must follow, so that all our code has a
 * Please see the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) to understand how functions are created.
 * Please see the [FAQ](https://pharmaverse.github.io/admiral/articles/faq.html) for the most frequent questions.
 * Please see the [Contribution Model](https://pharmaverse.github.io/admiral/articles/contribution_model.html) for how to get involved with making contributions.
-* Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development). for why we develop with certain R and package versions.
+* Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
 
 ## Pharmaverse Blog
 
@@ -181,7 +181,7 @@ If you are interested in R and Clinical Reporting, then visit the [pharmaverse b
 
 We are also always looking for keen `{admiral}` users to publish their own blog posts about how they use the package. If this could be you, feel free make an issue in the [GitHub repo](https://github.com/pharmaverse/blog) and get started!
 
-## Conference Presentations
+## Recent Conference Presentations
 
 * [The Development of {admiralophtha}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/EU/Birmingham/PAP_TT03.pdf) (paper from PHUSE EU Connect 2023 in Birmingham, UK, slides also available [here](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/EU/Birmingham/PRE_TT03.pdf)).
 * [{admiral} - from Open Source to Company Implementation](https://www.youtube.com/watch?v=ZbV3E0_xrrI) (recording from R in Pharma 2023).
@@ -190,9 +190,8 @@ We are also always looking for keen `{admiral}` users to publish their own blog 
 * [An Overview of {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/US/Summit/PRE_Summit03.pdf) (slides from PHUSE SDE in Summit, NJ).
 * [{admiralonco}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS12.mp4) (recording for talk at PHUSE US Connect 2023, slides also available [here](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/PRE_OS12.pdf)).
 * [Programming ADNCA using R and {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS09.mp4) (recording of presentation from PHUSE US Connect 2023).
-* [Clinical Reporting in R](https://www.youtube.com/watch?v=9eod8MLF5ys\&list=PLMtxz1fUYA5AWYQHB5mZAs-yamNJ5Tm_8\&index=2) (recording of workshop at R in Pharma 2022).
-* [Pharmaverse Workshop](https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022) (slides and materials from PHUSE US Connect 2022---including `{admiral}` workshop slides from PHUSE EU Connect 2021).
-* [Introducing {admiral}](https://www.youtube.com/watch?v=N7Bw8c3D5fU) (recording of talk for R in Pharma 2021).
+
+For a full collection of `{admiral}` conference presentations over the years, please travel to our [Presentation Archive](presentation_archive.html).
 
 ## Contact
 

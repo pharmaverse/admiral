@@ -1,0 +1,33 @@
+---
+title: "Presentation Archive"
+output:
+  rmarkdown::html_vignette:
+vignette: >
+  %\VignetteIndexEntry{Presentation Archive}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In the table below you can find links to material from various`{admiral}`-related presentations given by members of our community over the years.
+
+| Year             | Title                                                                    | Conference                                                           | Presentation Material                                                                                                                                                                                       |
+| ---------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2023             | The Development of {admiralophtha}                                       | PHUSE EU Connect 2023 - Birmingham, UK                               | [Paper](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/EU/Birmingham/PAP_TT03.pdf), [Slides](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/EU/Birmingham/PRE_TT03.pdf) |
+| 2023             | {admiral} - from Open Source to Company Implementation                   | R in Pharma 2023                                                     | [Recording](https://www.youtube.com/watch?v=ZbV3E0_xrrI)                                                                                                                                                    |
+| 2023             | Cross Industry Package Development                                       | R in Pharma 2023                                                     | [Recording](https://www.youtube.com/watch?v=M4L1PPMu0pU)                                                                                                                                                    |
+| 2023             | Paving the Way for Clinical Submissions in R                             | PHUSE SDE - London, UK                                               | [Slides](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/EU/London/PRE_London09.pdf)                                                                                                           |
+| 2023             | An overview of {admiral}                                                 | PHUSE SDE - Summit, NJ                                               | [Slides](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/US/Summit/PRE_Summit03.pdf)                                                                                                           |
+| 2023             | {admiralonco}                                                            | PHUSE US Connect 2023 - Orlando, FL                                  | [Recording](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS12.mp4), [Slides](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/PRE_OS12.pdf)   |
+| 2023             | Programming ADNCA using R and {admiral}                                  | PHUSE US Connect 2023 - Orlando, FL                                  | [Recording](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS09.mp4)                                                                                                       |
+| 2022             | Clinical Reporting in R                                                  | R in Pharma 2022                                                     | [Workshop Recording](https://www.youtube.com/watch?v=9eod8MLF5ys\&list=PLMtxz1fUYA5AWYQHB5mZAs-yamNJ5Tm_8\&index=2)                                                                                         |
+| 2022             | Pharmaverse Workshop                                                     | PHUSE US Connect 2022 - Atlanta, GA                                  | [Slides and resources](https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022) (including `{admiral}` workshop slides from PHUSE EU Connect 2021)                                                  |
+| 2021             | Introducing {admiral}                                                    | R in Pharma 2021                                                     | [Recording](https://www.youtube.com/watch?v=N7Bw8c3D5fU)                                                                                                                                                    |
