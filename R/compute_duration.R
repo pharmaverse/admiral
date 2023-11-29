@@ -154,15 +154,22 @@ compute_duration <- function(start_date,
   # Checks
   assert_date_vector(start_date)
   assert_date_vector(end_date)
-  assert_character_scalar(in_unit, values = valid_time_units())
+  assert_character_scalar(in_unit, values = c(
+    valid_time_units(),
+    toupper(valid_time_units())
+  ))
   assert_character_scalar(type, values = c("interval", "duration"))
   assert_character_scalar(out_unit, values = c(
-    valid_time_units(), "weeks",
-    "min", "sec"
+    valid_time_units(),
+    toupper(valid_time_units()),
+    "weeks", "min", "sec"
   ))
   assert_logical_scalar(floor_in)
   assert_logical_scalar(add_one)
   assert_logical_scalar(trunc_out)
+
+  in_unit <- tolower(in_unit)
+  out_unit <- tolower(out_unit)
 
   # Derivation
   if (floor_in) {
