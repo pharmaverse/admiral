@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9015</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9016</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,7 +101,8 @@
 <h2 class="pkg-version" data-toc-text="development version" id="admiral-development-version">admiral (development version)<a class="anchor" aria-label="anchor" href="#admiral-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li><p>The new function <code><a href="../reference/derive_var_merged_ef_msrc.html">derive_var_merged_ef_msrc()</a></code> is provided to add a flag indicating if one of the conditions in one of multiple source datasets is fulfilled. (<a href="https://github.com/pharmaverse/admiral/issues/1728" class="external-link">#1728</a>)</p></li>
+<ul><li><p>Implement <code><a href="../reference/derive_vars_extreme_event.html">derive_vars_extreme_event()</a></code>, which works as <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code> but adds variables instead of a parameter. (<a href="https://github.com/pharmaverse/admiral/issues/2138" class="external-link">#2138</a>)</p></li>
+<li><p>The new function <code><a href="../reference/derive_var_merged_ef_msrc.html">derive_var_merged_ef_msrc()</a></code> is provided to add a flag indicating if one of the conditions in one of multiple source datasets is fulfilled. (<a href="https://github.com/pharmaverse/admiral/issues/1728" class="external-link">#1728</a>)</p></li>
 <li>
 <p>New global option created <code>signif_digits</code> to handle floating point issue, the value is set to <code>15</code>, and is used with the <code>base R</code> function <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif()</a></code> when comparing 2 numeric values. This is implemented in <code>admiral</code> functions <code><a href="../reference/derive_var_atoxgr_dir.html">derive_var_atoxgr_dir()</a></code> and <code><a href="../reference/derive_var_anrind.html">derive_var_anrind()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2134" class="external-link">#2134</a>)</p>
 <p>For more information, please see blog: <a href="https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html" class="external-link">How admiral handles floating points</a></p>
@@ -160,6 +161,16 @@ ignore_event_order = TRUE,</code></pre>
 <pre><code>order = exprs(my_order_var),</code></pre>
 </li>
 <li>
+<p><code><a href="../reference/create_query_data.html">create_query_data()</a></code> and <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> updated to rename variables in query data set as follows: (<a href="https://github.com/pharmaverse/admiral/issues/2186" class="external-link">#2186</a>)</p>
+<ul><li>
+<code>TERMNAME</code> to <code>TERMCHAR</code>
+</li>
+<li>
+<code>TERMID</code> to <code>TERMNUM</code>
+</li>
+</ul><p>Users need to adjust their <code>get_terms()</code> function accordingly.</p>
+</li>
+<li>
 <p>The following functions, which were deprecated in previous <a href="https://pharmaverse.github.io/admiral/">admiral</a> versions, have been removed: (<a href="https://github.com/pharmaverse/admiral/issues/2098" class="external-link">#2098</a>)</p>
 <ul><li><code>derive_param_extreme_event()</code></li>
 <li><code>derive_vars_last_dose()</code></li>
@@ -181,16 +192,7 @@ ignore_event_order = TRUE,</code></pre>
 <li><code>derive_var_ontrtfl(span_period)</code></li>
 </ul></li>
 <li><p>The <code><a href="../reference/derive_param_extreme_record.html">derive_param_extreme_record()</a></code> function has been superseded in favor of <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2141" class="external-link">#2141</a>)</p></li>
-<li>
-<p><code><a href="../reference/create_query_data.html">create_query_data()</a></code> and <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> updated to rename variables in query data set as follows: (<a href="https://github.com/pharmaverse/admiral/issues/2186" class="external-link">#2186</a>)</p>
-<ul><li>
-<code>TERMNAME</code> to <code>TERMCHAR</code>
-</li>
-<li>
-<code>TERMID</code> to <code>TERMNUM</code>
-</li>
-</ul><p>Users need to adjust their <code>get_terms()</code> function accordingly.</p>
-</li>
+<li><p>The functions <code><a href="../reference/derive_var_dthcaus.html">derive_var_dthcaus()</a></code>, <code><a href="../reference/derive_var_extreme_dt.html">derive_var_extreme_dt()</a></code>, and <code><a href="../reference/derive_var_extreme_dtm.html">derive_var_extreme_dtm()</a></code> are superseded in favor of <code><a href="../reference/derive_vars_extreme_event.html">derive_vars_extreme_event()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2138" class="external-link">#2138</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
