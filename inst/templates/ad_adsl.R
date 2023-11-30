@@ -94,6 +94,27 @@ ex_ext <- ex %>%
     time_imputation = "last"
   )
 
+# Source objects ----
+
+# Death cause sources
+src_ae <- dthcaus_source(
+  dataset_name = "ae",
+  filter = AEOUT == "FATAL",
+  date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
+  mode = "first",
+  dthcaus = AEDECOD,
+  set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
+)
+
+src_ds <- dthcaus_source(
+  dataset_name = "ds",
+  filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+  date = DSSTDT,
+  mode = "first",
+  dthcaus = DSTERM,
+  set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
+)
+
 adsl <- dm %>%
   ## derive treatment variables (TRT01P, TRT01A) ----
   # See also the "Visit and Period Variables" vignette
@@ -189,34 +210,82 @@ adsl <- adsl %>%
     start_date = TRTEDT,
     end_date = DTHDT,
     add_one = FALSE
-  )
+  ) %>%
+  # Cause of Death and Traceability Variables
+  derive_vars_extreme_event(
+    by_vars = exprs(STUDYID, USUBJID),
+    events = list(
+      event(
+        dataset_name = "ae",
+        condition = AEOUT == "FATAL",
+        set_values_to = exprs(DTHCAUS = AEDECOD, DTHDOM = DOMAIN),
+      ),
+      event(
+        dataset_name = "ds",
+        condition = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+        set_values_to = exprs(DTHCAUS = DSTERM, DTHDOM = DOMAIN),
+      )
+    ),
+    source_datasets = list(ae = ae, ds = ds),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr),
+    mode = "first",
+    new_vars = exprs(DTHCAUS = DTHCAUS, DTHDOM = DTHDOM)
+  ) %>%
+  # Death Cause Category
+  mutate(DTHCGR1 = case_when(
+    is.na(DTHDOM) ~ NA_character_,
+    DTHDOM == "AE" ~ "ADVERSE EVENT",
+    str_detect(DTHCAUS, "(PROGRESSIVE DISEASE|DISEASE RELAPSE)") ~ "PROGRESSIVE DISEASE",
+    TRUE ~ "OTHER"
+  ))
 
 ## Last known alive date ----
 ## DTC variables are converted to numeric dates imputing missing day and month
 ## to the first
-ae_start_date <- date_source(
-  dataset_name = "ae",
-  date = convert_dtc_to_dt(AESTDTC, highest_imputation = "M")
-)
-ae_end_date <- date_source(
-  dataset_name = "ae",
-  date = convert_dtc_to_dt(AEENDTC, highest_imputation = "M")
-)
-lb_date <- date_source(
-  dataset_name = "lb",
-  date = convert_dtc_to_dt(LBDTC, highest_imputation = "M")
-)
-trt_end_date <- date_source(
-  dataset_name = "adsl",
-  date = TRTEDT
-)
 
 adsl <- adsl %>%
-  derive_var_extreme_dt(
-    new_var = LSTALVDT,
-    ae_start_date, ae_end_date, lb_date, trt_end_date,
+  derive_vars_extreme_event(
+    by_vars = exprs(STUDYID, USUBJID),
+    events = list(
+      event(
+        dataset_name = "ae",
+        order = exprs(AESTDTC, AESEQ),
+        condition = !is.na(AESTDTC),
+        set_values_to = exprs(
+          LSTALVDT = convert_dtc_to_dt(AESTDTC, highest_imputation = "M"),
+          seq = AESEQ
+        ),
+      ),
+      event(
+        dataset_name = "ae",
+        order = exprs(AEENDTC, AESEQ),
+        condition = !is.na(AEENDTC),
+        set_values_to = exprs(
+          LSTALVDT = convert_dtc_to_dt(AEENDTC, highest_imputation = "M"),
+          seq = AESEQ
+        ),
+      ),
+      event(
+        dataset_name = "lb",
+        order = exprs(LBDTC, LBSEQ),
+        condition = !is.na(LBDTC),
+        set_values_to = exprs(
+          LSTALVDT = convert_dtc_to_dt(LBDTC, highest_imputation = "M"),
+          seq = LBSEQ
+        ),
+      ),
+      event(
+        dataset_name = "adsl",
+        condition = !is.na(TRTEDT),
+        set_values_to = exprs(LSTALVDT = TRTEDT, seq = NA_integer_),
+      )
+    ),
     source_datasets = list(ae = ae, lb = lb, adsl = adsl),
-    mode = "last"
+    tmp_event_nr_var = event_nr,
+    order = exprs(LSTALVDT, seq, event_nr),
+    mode = "last",
+    new_vars = exprs(LSTALVDT)
   ) %>%
   derive_var_merged_exist_flag(
     dataset_add = ex,

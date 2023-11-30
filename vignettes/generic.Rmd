@@ -70,6 +70,8 @@ generic_derivations <- tibble::tribble(
   "derive_vars_merged_summary()",   "summary",     "variables", "single",
   "derive_vars_joined()",           "selection",   "variables", "single",
   "derive_vars_merged()",           "selection",   "variables", "single",
+  "derive_vars_extreme_event()",    "selection",   "variables", "multiple",
+  "derive_vars_computed()",         "computation", "variables", "single",
   "derive_extreme_event()",         "selection",   "records",   "multiple",
   "derive_extreme_records()",       "selection",   "records",   "single",
   "derive_param_computed()",        "computation", "records",   "single",
@@ -398,6 +400,54 @@ ignores subsequent results.
 However, the "joined" functions require much more resources (time and memory),
 hence it is recommended to use them only if it is really required, i.e., the
 condition for selecting records depends on variables from _both_ datasets.
+
+### Sort Order {#sort_order}
+
+The `{admiral}` functions use `dplyr::arrange()` for sorting, i.e., `NA`s are
+always sorted to the end (regardless whether `desc()` is used or not).
+
+Consider for example the following derivation of a last visit flag. The record
+with `AVISITN == NA` is flagged because `NA` is sorted to the end.
+```{r}
+advs <- tribble(
+  ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL,
+  "1",      "WEIGHT",       NA,  62.1,
+  "1",      "WEIGHT",        1,  62.3,
+  "1",      "WEIGHT",        2,  62.5,
+  "1",      "WEIGHT",        3,  62.4
+)
+
+derive_var_extreme_flag(
+  advs,
+  by_vars = exprs(USUBJID, PARAMCD),
+  order = exprs(AVISITN),
+  mode = "last",
+  new_var = LSTVISFL
+)
+```
+The `order` argument accepts expressions. This allows to specify how `NA`s
+should be handled. For example, the following sorts the `NA` to the start. Thus
+the `AVISITN == 3` record is flagged.
+```{r}
+derive_var_extreme_flag(
+  advs,
+  by_vars = exprs(USUBJID, PARAMCD),
+  order = exprs(if_else(is.na(AVISITN), -Inf, AVISITN)),
+  mode = "last",
+  new_var = LSTVISFL
+)
+```
+The same can achieved with the following, which also works for character
+variables.
+```{r}
+derive_var_extreme_flag(
+  advs,
+  by_vars = exprs(USUBJID, PARAMCD),
+  order = exprs(!is.na(AVISITN), AVISITN),
+  mode = "last",
+  new_var = LSTVISFL
+)
+```
 
 ### New Values
 

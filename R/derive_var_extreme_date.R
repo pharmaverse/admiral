@@ -1,5 +1,9 @@
 #' Derive First or Last Datetime from Multiple Sources
 #'
+#' @description
+#' `r lifecycle::badge("superseded")` The `derive_var_extreme_dtm()`
+#' function has been superseded in favor of `derive_vars_extreme_event()`.
+#'
 #' Add the first or last datetime from multiple sources to the dataset, e.g.,
 #' the last known alive datetime (`LSTALVDTM`).
 #'
@@ -49,8 +53,8 @@
 #' @return The input dataset with the new variable added.
 #'
 #'
-#' @family der_adsl
-#' @keywords der_adsl
+#' @family superseded
+#' @keywords superseded
 #'
 #' @seealso [date_source()], [derive_var_extreme_dt()],
 #'   [derive_vars_merged()]
@@ -332,7 +336,11 @@ derive_var_extreme_dtm <- function(dataset,
 
 #' Derive First or Last Date from Multiple Sources
 #'
-#' @description Add the first or last date from multiple sources to the
+#' @description
+#' `r lifecycle::badge("superseded")` The `derive_var_extreme_dt()`
+#' function has been superseded in favor of `derive_vars_extreme_event()`.
+#'
+#' Add the first or last date from multiple sources to the
 #' dataset, e.g., the last known alive date (`LSTALVDT`).
 #'
 #' **Note:** This is a wrapper function for the function `derive_var_extreme_dtm()`.
@@ -363,8 +371,8 @@ derive_var_extreme_dtm <- function(dataset,
 #' @return The input dataset with the new variable added.
 #'
 #'
-#' @family der_adsl
-#' @keywords der_adsl
+#' @family superseded
+#' @keywords superseded
 #'
 #' @seealso [date_source()], [derive_var_extreme_dtm()], [derive_vars_merged()]
 #'
@@ -561,6 +569,10 @@ derive_var_extreme_dt <- function(dataset,
 
 #' Create a `date_source` object
 #'
+#' @description
+#' `r lifecycle::badge("superseded")` The `date_source()`
+#' function has been superseded in favor of `derive_vars_extreme_event()`.
+#'
 #' Create a `date_source` object as input for `derive_var_extreme_dt()` and
 #' `derive_var_extreme_dtm()`.
 #'
@@ -583,8 +595,8 @@ derive_var_extreme_dt <- function(dataset,
 #'
 #' @seealso [derive_var_extreme_dtm()], [derive_var_extreme_dt()]
 #'
-#' @family source_specifications
-#' @keywords source_specifications
+#' @family superseded
+#' @keywords superseded
 #'
 #' @export
 #'
