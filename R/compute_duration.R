@@ -151,25 +151,34 @@ compute_duration <- function(start_date,
                              add_one = TRUE,
                              trunc_out = FALSE,
                              type = "duration") {
+  mapping <- c(
+    years = c("year", "years", "yr", "yrs", "y"),
+    months = c("month", "months", "mo", "mos"),
+    weeks = c("week", "weeks", "wk", "wks", "w"),
+    days = c("day", "days", "d"),
+    hours = c("hour", "hours", "hr", "hrs", "h"),
+    minutes = c("minute", "minutes", "min", "mins"),
+    seconds = c("second", "seconds", "sec", "secs", "s")
+  )
+  in_unit <- names(mapping[mapping %in% tolower(in_unit)]) %>% str_replace(., '[0-9]', '')
+  out_unit <- names(mapping[mapping %in% tolower(out_unit)]) %>% str_replace(., '[0-9]', '')
+
   # Checks
   assert_date_vector(start_date)
   assert_date_vector(end_date)
   assert_character_scalar(in_unit, values = c(
     valid_time_units(),
-    toupper(valid_time_units())
+    "min", "sec"
   ))
   assert_character_scalar(type, values = c("interval", "duration"))
   assert_character_scalar(out_unit, values = c(
     valid_time_units(),
-    toupper(valid_time_units()),
     "weeks", "min", "sec"
   ))
   assert_logical_scalar(floor_in)
   assert_logical_scalar(add_one)
   assert_logical_scalar(trunc_out)
 
-  in_unit <- tolower(in_unit)
-  out_unit <- tolower(out_unit)
 
   # Derivation
   if (floor_in) {

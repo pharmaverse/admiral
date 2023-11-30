@@ -203,9 +203,23 @@ derive_vars_duration <- function(dataset,
   start_date <- assert_symbol(enexpr(start_date))
   end_date <- assert_symbol(enexpr(end_date))
   assert_data_frame(dataset, required_vars = exprs(!!start_date, !!end_date))
+
+  mapping <- c(
+    years = c("year", "years", "yr", "yrs", "y"),
+    months = c("month", "months", "mo", "mos"),
+    weeks = c("week", "weeks", "wk", "wks", "w"),
+    days = c("day", "days", "d"),
+    hours = c("hour", "hours", "hr", "hrs", "h"),
+    minutes = c("minute", "minutes", "min", "mins"),
+    seconds = c("second", "seconds", "sec", "secs", "s")
+  )
+  in_unit <- names(mapping[mapping %in% tolower(in_unit)]) %>% str_replace(., '[0-9]', '')
+  out_unit <- names(mapping[mapping %in% tolower(out_unit)]) %>% str_replace(., '[0-9]', '')
+
   assert_character_scalar(in_unit, values = c(
     valid_time_units(),
-    toupper(valid_time_units())
+    toupper(valid_time_units()),
+    "min", "sec"
   ))
   assert_character_scalar(out_unit, values = c(
     valid_time_units(),
@@ -240,7 +254,7 @@ derive_vars_duration <- function(dataset,
 
   if (!is.null(new_var_unit)) {
     dataset <- dataset %>%
-      mutate(!!new_var_unit := if_else(is.na(!!new_var), NA_character_, toupper(out_unit)))
+      mutate(!!new_var_unit := if_else(is.na(!!new_var), NA_character_, out_unit))
   }
 
   dataset
