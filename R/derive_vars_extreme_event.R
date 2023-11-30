@@ -30,6 +30,8 @@
 #'   If a particular event from `events` has more than one observation, within
 #'   the event and by group, the records are ordered by the specified order.
 #'
+#'   `r roxygen_order_na_handling()`
+#'
 #'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))`
 #'

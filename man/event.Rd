@@ -36,6 +36,8 @@ selected for each by group.
 \item{order}{The specified variables or expressions are used to select the
 first or last observation if \code{mode} is specified.
 
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 

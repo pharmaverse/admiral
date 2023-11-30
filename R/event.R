@@ -24,6 +24,8 @@
 #' @param order The specified variables or expressions are used to select the
 #'   first or last observation if `mode` is specified.
 #'
+#'   `r roxygen_order_na_handling()`
+#'
 #'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))` or `NULL`
 #'
@@ -190,6 +192,8 @@ event <- function(dataset_name = NULL,
 #'
 #' @param order If specified, the specified variables or expressions are used to
 #'   select the first observation.
+#'
+#'   `r roxygen_order_na_handling()`
 #'
 #'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))` or `NULL`
