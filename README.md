@@ -183,15 +183,7 @@ We are also always looking for keen `{admiral}` users to publish their own blog 
 
 ## Recent Conference Presentations
 
-* [The Development of {admiralophtha}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/EU/Birmingham/PAP_TT03.pdf) (paper from PHUSE EU Connect 2023 in Birmingham, UK, slides also available [here](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/EU/Birmingham/PRE_TT03.pdf)).
-* [{admiral} - from Open Source to Company Implementation](https://www.youtube.com/watch?v=ZbV3E0_xrrI) (recording from R in Pharma 2023).
-* [Cross Industry Package Development](https://www.youtube.com/watch?v=M4L1PPMu0pU) (recording from R in Pharma 2023).
-* [Paving the Way for Clinical Submissions in R](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/EU/London/PRE_London09.pdf) (slides from PHUSE SDE in London).
-* [An Overview of {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/US/Summit/PRE_Summit03.pdf) (slides from PHUSE SDE in Summit, NJ).
-* [{admiralonco}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS12.mp4) (recording for talk at PHUSE US Connect 2023, slides also available [here](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/PRE_OS12.pdf)).
-* [Programming ADNCA using R and {admiral}](https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS09.mp4) (recording of presentation from PHUSE US Connect 2023).
-
-For a full collection of `{admiral}` conference presentations over the years, please travel to our [Presentation Archive](presentation_archive.html).
+For a full collection of `{admiral}` conference presentations over the years, please travel to our [Presentation Archive](https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html).
 
 ## Contact
 

@@ -152,8 +152,6 @@ navbar:
       menu:
       - text: Contribute to admiral
         href: articles/contribution_model.html
-      - text: Presentation archive
-        href: articles/presentation_archive.html
       - text: Find us on Slack
         href: https://app.slack.com/client/T028PB489D3/C02M8KN8269
       - text: Welcome to the Pharmaverse
