@@ -204,21 +204,29 @@ derive_vars_duration <- function(dataset,
   end_date <- assert_symbol(enexpr(end_date))
   assert_data_frame(dataset, required_vars = exprs(!!start_date, !!end_date))
 
-  mapping <- c(
-    years = c("year", "years", "yr", "yrs", "y"),
-    months = c("month", "months", "mo", "mos"),
-    weeks = c("week", "weeks", "wk", "wks", "w"),
-    days = c("day", "days", "d"),
-    hours = c("hour", "hours", "hr", "hrs", "h"),
-    minutes = c("minute", "minutes", "min", "mins"),
-    seconds = c("second", "seconds", "sec", "secs", "s")
+  in_unit <- case_match(
+    tolower(in_unit),
+    c("year", "years", "yr", "yrs", "y") ~ "years",
+    c("month", "months", "mo", "mos") ~ "months",
+    c("week", "weeks", "wk", "wks", "w") ~ "weeks",
+    c("day", "days", "d") ~ "days",
+    c("hour", "hours", "hr", "hrs", "h") ~ "hours",
+    c("minute", "minutes", "min", "mins") ~ "minutes",
+    c("second", "seconds", "sec", "secs", "s") ~ "seconds",
+    .default = in_unit
   )
-  if (any(mapping %in% tolower(in_unit))) {
-    in_unit <- names(mapping[mapping %in% tolower(in_unit)]) %>% str_replace(., "[0-9]", "")
-  }
-  if (any(mapping %in% tolower(out_unit))) {
-    out_unit <- names(mapping[mapping %in% tolower(out_unit)]) %>% str_replace(., "[0-9]", "")
-  }
+
+  out_unit <- case_match(
+    tolower(out_unit),
+    c("year", "years", "yr", "yrs", "y") ~ "years",
+    c("month", "months", "mo", "mos") ~ "months",
+    c("week", "weeks", "wk", "wks", "w") ~ "weeks",
+    c("day", "days", "d") ~ "days",
+    c("hour", "hours", "hr", "hrs", "h") ~ "hours",
+    c("minute", "minutes", "min", "mins") ~ "minutes",
+    c("second", "seconds", "sec", "secs", "s") ~ "seconds",
+    .default = out_unit
+  )
 
   assert_character_scalar(in_unit, values = c(
     valid_time_units(),

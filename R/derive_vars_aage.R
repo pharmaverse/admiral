@@ -94,18 +94,17 @@ derive_vars_aage <- function(dataset,
   end_date <- assert_symbol(enexpr(end_date))
   assert_data_frame(dataset, required_vars = expr_c(start_date, end_date))
 
-  mapping <- c(
-    years = c("year", "years", "yr", "yrs", "y"),
-    months = c("month", "months", "mo", "mos"),
-    weeks = c("week", "weeks", "wk", "wks", "w"),
-    days = c("day", "days", "d"),
-    hours = c("hour", "hours", "hr", "hrs", "h"),
-    minutes = c("minute", "minutes", "min", "mins"),
-    seconds = c("second", "seconds", "sec", "secs", "s")
+  age_unit <- case_match(
+    tolower(age_unit),
+    c("year", "years", "yr", "yrs", "y") ~ "years",
+    c("month", "months", "mo", "mos") ~ "months",
+    c("week", "weeks", "wk", "wks", "w") ~ "weeks",
+    c("day", "days", "d") ~ "days",
+    c("hour", "hours", "hr", "hrs", "h") ~ "hours",
+    c("minute", "minutes", "min", "mins") ~ "minutes",
+    c("second", "seconds", "sec", "secs", "s") ~ "seconds",
+    .default = age_unit
   )
-  if (any(mapping %in% tolower(age_unit))) {
-    age_unit <- names(mapping[mapping %in% tolower(age_unit)]) %>% str_replace(., "[0-9]", "")
-  }
 
   assert_character_scalar(
     age_unit,
