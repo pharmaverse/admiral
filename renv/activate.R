@@ -562,7 +562,7 @@ local({
 
     # construct version prefix
     version <- paste(R.version$major, R.version$minor, sep = ".")
-    prefix <- paste("R", numeric_version(version)[1, 1:2], sep = "-")
+    prefix <- paste("R", numeric_version(version, strict = FALSE)[1, 1:2], sep = "-")
 
     # include SVN revision for development versions of R
     # (to avoid sharing platform-specific artefacts with released versions of R)
@@ -706,7 +706,7 @@ local({
     parts <- strsplit(contents, "[[:space:]]")[[1L]]
     for (part in parts) {
 
-      nv <- tryCatch(numeric_version(part), error = identity)
+      nv <- tryCatch(numeric_version(part, strict = FALSE), error = identity)
       if (inherits(nv, "error"))
         next
 
