@@ -218,12 +218,10 @@ derive_vars_duration <- function(dataset,
 
   assert_character_scalar(in_unit, values = c(
     valid_time_units(),
-    toupper(valid_time_units()),
     "min", "sec"
   ))
   assert_character_scalar(out_unit, values = c(
     valid_time_units(),
-    toupper(valid_time_units()),
     "weeks", "min", "sec"
   ))
   assert_logical_scalar(floor_in)
