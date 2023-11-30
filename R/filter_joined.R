@@ -80,6 +80,8 @@
 #'
 #'   The observations are ordered by the specified order.
 #'
+#'   `r roxygen_order_na_handling()`
+#'
 #'   *Permitted Values:* list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))`
 #'

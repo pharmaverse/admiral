@@ -34,6 +34,8 @@
 #'   The dataset is sorted by `order` before carrying the last observation
 #'   forward (e.g. `AVAL`) within each `by_vars`.
 #'
+#'   `r roxygen_order_na_handling()`
+#'
 #' @param keep_vars Variables that need carrying the last observation forward
 #'
 #'   Keep variables that need carrying the last observation forward other than `analysis_var`

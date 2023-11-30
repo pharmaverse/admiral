@@ -15,6 +15,7 @@ test_that("roxygen_param_dataset Test 2: Input dataset standardized text works",
   )
 })
 
+
 test_that("roxygen_param_by_vars Test 1: Text variations", {
   expect_snapshot(
     roxygen_param_by_vars()
@@ -27,5 +28,16 @@ test_that("roxygen_param_by_vars Test 1: Text variations", {
   )
   expect_snapshot(
     roxygen_param_by_vars(additional_dataset = "additional_dataset", unique = TRUE, rename = TRUE)
+  )
+})
+
+# roxygen_order_na_handling ----
+test_that("Standardized text works", {
+  expect_equal(
+    roxygen_order_na_handling(),
+    paste(
+      "For handling of `NA`s in sorting variables see",
+      "[Sort Order](../articles/generic.html#sort_order)."
+    )
   )
 })

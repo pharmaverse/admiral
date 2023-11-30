@@ -46,7 +46,9 @@ e.g. exprs(USUBJID, VISIT)}
 \item{order}{Sort order
 
 The dataset is sorted by \code{order} before carrying the last observation
-forward (e.g. \code{AVAL}) within each \code{by_vars}.}
+forward (e.g. \code{AVAL}) within each \code{by_vars}.
+
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.}
 
 \item{keep_vars}{Variables that need carrying the last observation forward
 

@@ -48,6 +48,8 @@ specified order.
 
 Variables defined by the \code{new_vars} argument can be used in the sort order.
 
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 

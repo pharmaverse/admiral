@@ -341,6 +341,7 @@ test_that("derive_extreme_event Test 4: event-specific mode", {
   )
 })
 
+
 ## Test 5: event_joined() is handled correctly ----
 test_that("derive_extreme_event Test 5: event_joined() is handled correctly", {
   adsl <- tibble::tribble(
@@ -621,40 +622,56 @@ test_that("derive_extreme_event Test 7: deprecation of ignore_event_order", {
   )
 })
 
-# event_joined ----
-## Test 8: deprecation of `first_cond` ----
-test_that("event_joined Test 8: deprecation of `first_cond`", {
-  new_event <- event_joined(
-    join_vars = exprs(AVALC, ADT),
-    join_type = "after",
-    first_cond_upper = AVALC.join == "CR" &
-      ADT.join >= ADT + 28,
-    condition = AVALC == "CR" &
-      all(AVALC.join %in% c("CR", "NE")) &
-      count_vals(var = AVALC.join, val = "NE") <= 1,
-    set_values_to = exprs(
-      AVALC = "CR"
-    )
-  )
+## Test 8: deprecation of ignore_event_order ----
+test_that("derive_extreme_event Test 8: deprecation of ignore_event_order", {
+  adrs <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",             1, "PR",
+    "1",             2, "CR",
+    "1",             3, "CR"
+  ) %>%
+    mutate(PARAMCD = "OVR")
 
   expect_warning(
-    old_event <- event_joined(
-      join_vars = exprs(AVALC, ADT),
-      join_type = "after",
-      first_cond = AVALC.join == "CR" &
-        ADT.join >= ADT + 28,
-      condition = AVALC == "CR" &
-        all(AVALC.join %in% c("CR", "NE")) &
-        count_vals(var = AVALC.join, val = "NE") <= 1,
+    actual <- derive_extreme_event(
+      adrs,
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISITN),
+      mode = "first",
+      events = list(
+        event_joined(
+          join_vars = exprs(AVALC),
+          join_type = "after",
+          first_cond_upper = AVALC.join == "CR",
+          condition = AVALC == "CR",
+          set_values_to = exprs(AVALC = "Y")
+        ),
+        event_joined(
+          join_vars = exprs(AVALC),
+          join_type = "after",
+          first_cond_upper = AVALC.join %in% c("CR", "PR"),
+          condition = AVALC == "PR",
+          set_values_to = exprs(AVALC = "Y")
+        )
+      ),
+      ignore_event_order = FALSE,
       set_values_to = exprs(
-        AVALC = "CR"
+        PARAMCD = "CRSP"
       )
     ),
     class = "lifecycle_warning_deprecated"
   )
+  expected <- bind_rows(
+    adrs,
+    tibble::tribble(
+      ~USUBJID, ~AVISITN, ~AVALC, ~PARAMCD,
+      "1",             1, "Y",    "CRSP"
+    )
+  )
 
-  expect_equal(
-    old_event,
-    expected = new_event
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "PARAMCD", "AVISITN")
   )
 })

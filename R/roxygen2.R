@@ -50,3 +50,9 @@ roxygen_param_by_vars <- function(additional_dataset = NULL, unique = FALSE, ren
 
   return(by_vars_text)
 }
+roxygen_order_na_handling <- function() {
+  paste(
+    "For handling of `NA`s in sorting variables see",
+    "[Sort Order](../articles/generic.html#sort_order)."
+  )
+}
