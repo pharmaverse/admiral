@@ -706,7 +706,7 @@ local({
     parts <- strsplit(contents, "[[:space:]]")[[1L]]
     for (part in parts) {
 
-      nv <- tryCatch(numeric_version(part, strict = FALSE), error = identity)
+      nv <- tryCatch(numeric_version(part), error = identity)
       if (inherits(nv, "error"))
         next
 
