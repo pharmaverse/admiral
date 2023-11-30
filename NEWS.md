@@ -180,7 +180,7 @@ the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
   than linking to the template in the code repository. (#2239)
 
 - Handling of `NA` values was added to the documentation of the `order` argument
-for all functions. (#2230)
+for all functions. (#2230, #2257)
 
 ## Various
 

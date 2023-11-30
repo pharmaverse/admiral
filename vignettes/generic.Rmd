@@ -437,6 +437,17 @@ derive_var_extreme_flag(
   new_var = LSTVISFL
 )
 ```
+The same can achieved with the following, which also works for character
+variables.
+```{r}
+derive_var_extreme_flag(
+  advs,
+  by_vars = exprs(USUBJID, PARAMCD),
+  order = exprs(!is.na(AVISITN), AVISITN),
+  mode = "last",
+  new_var = LSTVISFL
+)
+```
 
 ### New Values
 
