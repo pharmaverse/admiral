@@ -213,10 +213,10 @@ derive_vars_duration <- function(dataset,
     minutes = c("minute", "minutes", "min", "mins"),
     seconds = c("second", "seconds", "sec", "secs", "s")
   )
-  if(any(mapping %in% tolower(in_unit))){
+  if (any(mapping %in% tolower(in_unit))) {
     in_unit <- names(mapping[mapping %in% tolower(in_unit)]) %>% str_replace(., "[0-9]", "")
   }
-  if(any(mapping %in% tolower(out_unit))){
+  if (any(mapping %in% tolower(out_unit))) {
     out_unit <- names(mapping[mapping %in% tolower(out_unit)]) %>% str_replace(., "[0-9]", "")
   }
 

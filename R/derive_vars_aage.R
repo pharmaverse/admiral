@@ -103,7 +103,7 @@ derive_vars_aage <- function(dataset,
     minutes = c("minute", "minutes", "min", "mins"),
     seconds = c("second", "seconds", "sec", "secs", "s")
   )
-  if(any(mapping %in% tolower(age_unit))){
+  if (any(mapping %in% tolower(age_unit))) {
     age_unit <- names(mapping[mapping %in% tolower(age_unit)]) %>% str_replace(., "[0-9]", "")
   }
 
