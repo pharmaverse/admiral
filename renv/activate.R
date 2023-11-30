@@ -908,7 +908,7 @@ local({
 
     substr(path, 1L, 1L) %in% c("~", "/", "\\") || (
       substr(path, 1L, 1L) %in% c(letters, LETTERS) &&
-      substr(path, 2L, 3L) %in% c(":/", ":\\")
+        substr(path, 2L, 3L) %in% c(":/", ":\\")
     )
 
   }
