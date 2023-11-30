@@ -24,7 +24,7 @@ for more details."><meta property="og:image" content="https://pharmaverse.github
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9017</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9018</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -163,6 +163,7 @@ observations up to the confirmation observation the response is "CR" or
 <dt>order</dt>
 <dd><p>If specified, the specified variables or expressions are used to
 select the first observation.</p>
+<p>For handling of <code>NA</code>s in sorting variables see <a href="../articles/generic.html#sort_order">Sort Order</a>.</p>
 <p><em>Permitted Values</em>: list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
 <code>exprs(ADT, desc(AVAL))</code> or <code>NULL</code></p></dd>
 
