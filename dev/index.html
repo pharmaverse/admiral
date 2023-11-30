@@ -48,7 +48,7 @@
     
     <a class="navbar-brand me-2" href="index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9019</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9021</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,8 +60,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-get-started">Get Started</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-get-started">
-    <a class="dropdown-item" href="articles/admiral.html">Getting Started</a>
-    <a class="dropdown-item" href="https://pharmaverse.github.io/admiraldiscovery/articles/gt.html">Admiral Discovery</a>
+    <a class="dropdown-item" href="articles/admiral.html">Simple ADSL Walkthrough</a>
+    <a class="dropdown-item" href="https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html">CDISC Variables mapped to admiral functions</a>
     <a class="external-link dropdown-item" href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf">Cheatsheet</a>
   </div>
 </li>
@@ -148,10 +148,10 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>The package is available from CRAN and can be installed with</p>
+<p>The package is available from CRAN and can be installed with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"admiral"</span><span class="op">)</span></span></code></pre></div>
-<p>To install the development version of the package from GitHub run</p>
+<p>To install the development version of the package from GitHub run:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiral"</span><span class="op">)</span></span></code></pre></div>
@@ -202,6 +202,51 @@
 <td><a href="https://pharmaverse.github.io/admiral/">{admiral}</a></td>
 <td></td>
 </tr>
+<tr class="odd">
+<td>Q1-2024</td>
+<td></td>
+<td><a href="https://pharmaverse.github.io/admiralvaccine/">{admiralvaccine}</a></td>
+</tr>
+<tr class="even">
+<td>Q2-2024</td>
+<td>June 3rd</td>
+<td>June 8th</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><a href="https://pharmaverse.github.io/pharmaversesdtm/main/" class="external-link">{pharmaversesdtm}</a></td>
+<td><a href="https://pharmaverse.github.io/admiralonco/">{admiralonco}</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><a href="https://pharmaverse.github.io/admiraldev/">{admiraldev}</a></td>
+<td><a href="https://pharmaverse.github.io/admiralophtha/">{admiralophtha}</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><a href="https://pharmaverse.github.io/admiral/">{admiral}</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Q4-2024</td>
+<td>December 2nd</td>
+<td>December 9th</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><a href="https://pharmaverse.github.io/pharmaversesdtm/main/" class="external-link">{pharmaversesdtm}</a></td>
+<td><a href="https://pharmaverse.github.io/admiralonco/">{admiralonco}</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><a href="https://pharmaverse.github.io/admiraldev/">{admiraldev}</a></td>
+<td><a href="https://pharmaverse.github.io/admiralophtha/">{admiralophtha}</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><a href="https://pharmaverse.github.io/admiral/">{admiral}</a></td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <p>The <a href="https://pharmaverse.github.io/admiral/">admiral</a> Q4-2023 release will officially be <a href="https://pharmaverse.github.io/admiral/">admiral</a>’s version 1.0.0 release, where we commit to increased package maturity and pivot towards focusing on maintenance rather than new content. This does not mean that there will never be any new content in <a href="https://pharmaverse.github.io/admiral/">admiral</a>, rather it means we will be more mindful about introducing new functionality and/or breaking changes. The release schedule in 2024 and onward will also shift to twice-yearly, rather than quarterly, so that our users have ample time to react to any new content and changes that do make it onto <a href="https://pharmaverse.github.io/admiral/">admiral</a>.</p>
@@ -218,12 +263,11 @@
 <p>To set expectations: It is not our target that <a href="https://pharmaverse.github.io/admiral/">admiral</a> will ever provide all possible solutions for all ADaM datasets outside of study specific needs. It depends on the user’s collaboration and contribution to help grow over time to an asset library that is robust, easy to use and has an across-industry focus. We do not see a coverage of 100% of all ADaM derivations as ever achievable—ADaM is endless.</p>
 <p>We will provide:</p>
 <ul>
-<li>A toolbox of re-usable functions and utilities to create ADaM datasets using R scripts in a modular manner (an “opinionated” design strategy)</li>
+<li>A toolbox of re-usable functions and utilities to create ADaM datasets using R scripts in a modular manner (an “opinionated” design strategy).</li>
 <li>Pharmaceutical communities and companies are encouraged to contribute to <a href="https://pharmaverse.github.io/admiral/">admiral</a> following the provided programming strategy and modular approach</li>
-<li>Functions that are comprehensively documented and tested, including example calls—these are all listed in the <a href="https://pharmaverse.github.io/admiral/reference/index.html">Reference section</a>
-</li>
-<li>Vignettes on how to create ADSL, BDS and OCCDS datasets, including example scripts</li>
-<li>Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs …)</li>
+<li>Functions that are comprehensively documented and tested, including example calls—these are all listed in the <a href="https://pharmaverse.github.io/admiral/reference/index.html">Reference section</a>.</li>
+<li>Vignettes on how to create ADSL, BDS and OCCDS datasets, including example scripts.</li>
+<li>Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs …).</li>
 </ul>
 </div>
 <div class="section level2">
@@ -231,9 +275,9 @@
 </h2>
 <p>There are three types of packages in the <a href="https://pharmaverse.github.io/admiral/">admiral</a> family:</p>
 <ul>
-<li>Core package—one package containing all core functions required to create ADaMs, usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS)</li>
-<li>TA (Therapeutic Area) package extensions—one package per TA with functions that are specific to algorithms and requirements for that particular TA (e.g. <a href="https://pharmaverse.github.io/admiralonco/"><code>{admiralonco}</code></a>)</li>
-<li>Company package extensions—specific needs and plug-ins for the company, such as access to metadata (e.g. <code>{admiralroche}</code> or <code>{admiralgsk}</code>)</li>
+<li>Core package—one package containing all core functions required to create ADaMs, usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS).</li>
+<li>TA (Therapeutic Area) package extensions—one package per TA with functions that are specific to algorithms and requirements for that particular TA (e.g. <a href="https://pharmaverse.github.io/admiralonco/"><code>{admiralonco}</code></a>).</li>
+<li>Company package extensions—specific needs and plug-ins for the company, such as access to metadata (e.g. <code>{admiralroche}</code> or <code>{admiralgsk}</code>).</li>
 </ul>
 </div>
 <div class="section level2">
@@ -298,7 +342,7 @@
 </h3>
 <p>All <a href="https://pharmaverse.github.io/admiral/">admiral</a> functions follow the <a href="https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html">Programming Strategy</a> that all our developers and contributors must follow, so that all our code has a high degree of consistency and readability.</p>
 <ul>
-<li>We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.</li>
+<li>We encourage use of tidyverse (e.g. dplyr) over similar functionality existing in base R.</li>
 <li>For sections of code that perform the actual derivations (e.g. besides assertions or basic utilities), we try to limit nesting of too many dependencies or functions.</li>
 <li>Modularity is a focus—we don’t try to achieve too many steps in one.</li>
 <li>All code has to be well commented.</li>
@@ -310,12 +354,11 @@
 <h2 id="references-and-documentation">References and Documentation<a class="anchor" aria-label="anchor" href="#references-and-documentation"></a>
 </h2>
 <ul>
-<li>Please go to <a href="https://pharmaverse.github.io/admiral/articles/admiral.html">Get Started</a> section to start using <a href="https://pharmaverse.github.io/admiral/">admiral</a>
-</li>
+<li>Please go to <a href="https://pharmaverse.github.io/admiral/articles/admiral.html">Get Started</a> section to start using <a href="https://pharmaverse.github.io/admiral/">admiral</a>.</li>
 <li>Please see the <a href="https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q" class="external-link">pharmaverse YouTube channel</a> for videos related to <a href="https://pharmaverse.github.io/admiral/">admiral</a>.</li>
-<li>Please see the <a href="https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html">Programming Strategy</a> to understand how functions are created</li>
-<li>Please see the <a href="https://pharmaverse.github.io/admiral/articles/faq.html">FAQ</a> for the most frequent questions</li>
-<li>Please see the <a href="https://pharmaverse.github.io/admiral/articles/contribution_model.html">Contribution Model</a> for how to get involved with making contributions</li>
+<li>Please see the <a href="https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html">Programming Strategy</a> to understand how functions are created.</li>
+<li>Please see the <a href="https://pharmaverse.github.io/admiral/articles/faq.html">FAQ</a> for the most frequent questions.</li>
+<li>Please see the <a href="https://pharmaverse.github.io/admiral/articles/contribution_model.html">Contribution Model</a> for how to get involved with making contributions.</li>
 <li>Please see <a href="https://pharmaverse.github.io/admiral/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development">FAQ: R and Package Versions</a> for why we develop with certain R and package versions.</li>
 </ul>
 </div>
@@ -326,26 +369,9 @@
 <p>We are also always looking for keen <a href="https://pharmaverse.github.io/admiral/">admiral</a> users to publish their own blog posts about how they use the package. If this could be you, feel free make an issue in the <a href="https://github.com/pharmaverse/blog" class="external-link">GitHub repo</a> and get started!</p>
 </div>
 <div class="section level2">
-<h2 id="conference-presentations">Conference Presentations<a class="anchor" aria-label="anchor" href="#conference-presentations"></a>
+<h2 id="recent-conference-presentations">Recent Conference Presentations<a class="anchor" aria-label="anchor" href="#recent-conference-presentations"></a>
 </h2>
-<ul>
-<li>
-<a href="https://www.youtube.com/watch?v=M4L1PPMu0pU" class="external-link">Cross Industry Package Development</a> (recording from R in Pharma 2022)</li>
-<li>
-<a href="https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/EU/London/PRE_London09.pdf" class="external-link">Paving the way for clinical submissions in R</a> (slides from PHUSE SDE in London)</li>
-<li>
-<a href="https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/SDE/US/Summit/PRE_Summit03.pdf" class="external-link">An Overview of {admiral}</a> (slides from PHUSE SDE in Summit, NJ)</li>
-<li>
-<a href="https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS12.mp4" class="external-link">{admiralonco}</a> (recording for talk at PHUSE US Connect 2023, slides also available <a href="https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/PRE_OS12.pdf" class="external-link">here</a>)</li>
-<li>
-<a href="https://phuse.s3.eu-central-1.amazonaws.com/Archive/2023/Connect/US/Florida/REC_OS09.mp4" class="external-link">Programming ADNCA using R and {admiral}</a> (recording of presentation from PHUSE US Connect 2023)</li>
-<li>
-<a href="https://www.youtube.com/watch?v=9eod8MLF5ys&amp;list=PLMtxz1fUYA5AWYQHB5mZAs-yamNJ5Tm_8&amp;index=2" class="external-link">Clinical Reporting in R</a> (recording of workshop at R in Pharma 2022)</li>
-<li>
-<a href="https://www.youtube.com/watch?v=N7Bw8c3D5fU" class="external-link">Introducing {admiral}</a> (recording of talk for R in Pharma 2021)</li>
-<li>
-<a href="https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022" class="external-link">Pharmaverse workshop</a> (slides and materials from PHUSE US Connect 2022—including <a href="https://pharmaverse.github.io/admiral/">admiral</a> workshop slides from PHUSE EU Connect 2021)</li>
-</ul>
+<p>For a full collection of <a href="https://pharmaverse.github.io/admiral/">admiral</a> conference presentations over the years, please travel to our <a href="https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html">Presentation Archive</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="contact">Contact<a class="anchor" aria-label="anchor" href="#contact"></a>
@@ -353,15 +379,15 @@
 <p>We use the following for support and communications between user and developer community:</p>
 <ul>
 <li>
-<a href="https://app.slack.com/client/T028PB489D3/C02M8KN8269" class="external-link">Slack</a>—for informal discussions, Q&amp;A and building our user community. If you don’t have access, use this <a href="https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A" class="external-link">link</a> to join the pharmaverse Slack workspace</li>
+<a href="https://app.slack.com/client/T028PB489D3/C02M8KN8269" class="external-link">Slack</a>—for informal discussions, Q&amp;A and building our user community. If you don’t have access, use this <a href="https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A" class="external-link">link</a> to join the pharmaverse Slack workspace.</li>
 <li>
-<a href="https://github.com/pharmaverse/admiral/issues" class="external-link">GitHub Issues</a>—for direct feedback, enhancement requests or raising bugs</li>
+<a href="https://github.com/pharmaverse/admiral/issues" class="external-link">GitHub Issues</a>—for direct feedback, enhancement requests or raising bugs.</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a>
 </h2>
-<p>Along with the authors and contributors, thanks to the following people for their work on the package: Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Bill Denney, Kamila Duniec, Alice Ehmann, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Yohann Omnes, Barbara O’Reilly, Hamza Rahal, Nick Ramirez, Tom Ratford, Tamara Senior, Sophie Shapcott, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay and Franciszek Walkowiak.</p>
+<p>Along with the authors and contributors, thanks to the following people for their work on the package: Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Asha Chakma, Bill Denney, Kamila Duniec, Alice Ehmann, Romain François, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Yohann Omnes, Barbara O’Reilly, Hamza Rahal, Nick Ramirez, Tom Ratford, Sukalpo Saha, Tamara Senior, Sophie Shapcott, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay and Franciszek Walkowiak.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -404,6 +430,7 @@
 <li>Jeffrey Dickinson <br><small class="roles"> Author </small>  </li>
 <li>Ross Farrugia <br><small class="roles"> Author </small>  </li>
 <li>Adam Forys <br><small class="roles"> Author </small>  </li>
+<li>G Gayatri <br><small class="roles"> Author </small>  </li>
 <li>Daphne Grasselly <br><small class="roles"> Author </small>  </li>
 <li>Dinakar Kulkarni <br><small class="roles"> Author </small>  </li>
 <li>Edoardo Mancini <br><small class="roles"> Author </small>  </li>
@@ -411,6 +438,7 @@
 <li>Gordon Miller <br><small class="roles"> Author </small>  </li>
 <li>Sophie Shapcott <br><small class="roles"> Author </small>  </li>
 <li>Eric Simms <br><small class="roles"> Author </small>  </li>
+<li>Daniel Sjoberg <br><small class="roles"> Author </small>  </li>
 <li>Stefan Thoma <br><small class="roles"> Author </small>  </li>
 <li>Kangjie Zhang <br><small class="roles"> Author </small>  </li>
 <li>Zelos Zhu <br><small class="roles"> Author </small>  </li>
@@ -433,7 +461,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Stefan Thoma, Kangjie Zhang, Zelos Zhu, G Gayatri, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+<p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, G Gayatri, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Daniel Sjoberg, Stefan Thoma, Kangjie Zhang, Zelos Zhu, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
