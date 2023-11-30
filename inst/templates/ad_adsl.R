@@ -212,9 +212,25 @@ adsl <- adsl %>%
     add_one = FALSE
   ) %>%
   # Cause of Death and Traceability Variables
-  derive_var_dthcaus(
-    src_ae, src_ds,
-    source_datasets = list(ae = ae, ds = ds_ext)
+  derive_vars_extreme_event(
+    by_vars = exprs(STUDYID, USUBJID),
+    events = list(
+      event(
+        dataset_name = "ae",
+        condition = AEOUT == "FATAL",
+        set_values_to = exprs(DTHCAUS = AEDECOD, DTHDOM = DOMAIN),
+      ),
+      event(
+        dataset_name = "ds",
+        condition = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+        set_values_to = exprs(DTHCAUS = DSTERM, DTHDOM = DOMAIN),
+      )
+    ),
+    source_datasets = list(ae = ae, ds = ds),
+    tmp_event_nr_var = event_nr,
+    order = exprs(event_nr),
+    mode = "first",
+    new_vars = exprs(DTHCAUS = DTHCAUS, DTHDOM = DTHDOM)
   ) %>%
   # Death Cause Category
   mutate(DTHCGR1 = case_when(

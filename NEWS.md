@@ -171,9 +171,8 @@ Reference tab. (#2174)
 - The meaning of `date_imputation = "mid"` was clarified in the documentation of
 the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
 
-<<<<<<< HEAD
 - Added an example derivation of `DTHCGR1` to the ADSL vignette. (#2218)
-=======
+
 - Moved Development Process from `admiraldev` to Contribution Model in the 
 `admiral` website, updated GitHub strategy. (#2196)
 
@@ -181,17 +180,14 @@ the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
 
 - All "Example Script(s)" sections in the User Guide vignettes were updated to point the user towards using `use_ad_template("ADaM")` rather 
   than linking to the template in the code repository. (#2239)
->>>>>>> main
 
 ## Various
 
 - Website now has button/links to Slack channel and GitHub Issues (#2127)
 
-<<<<<<< HEAD
 - Added example derivations of `DTHCAUS` and `DTHCGR1` to the ADSL template. (#2218)
-=======
+
 - Cheat Sheet now added to website front page (#2130)
->>>>>>> main
 
 # admiral 0.12.3
 
