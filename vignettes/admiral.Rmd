@@ -256,6 +256,9 @@ mean(c(1, NA, 2), na.rm = TRUE)
 
 This is very important to keep in mind when using `{admiral}`'s aggregation functions such as `derive_summary_records()`.
 
+For handling of `NA`s in sorting variables see [Sort
+Order](generic.html#sort_order).
+
 # Validation
 
 All functions are reviewed and tested to ensure that they work as described in

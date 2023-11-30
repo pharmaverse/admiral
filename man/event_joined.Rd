@@ -43,6 +43,8 @@ observations up to the confirmation observation the response is "CR" or
 \item{order}{If specified, the specified variables or expressions are used to
 select the first observation.
 
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
 
