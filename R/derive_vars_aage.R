@@ -103,9 +103,14 @@ derive_vars_aage <- function(dataset,
     minutes = c("minute", "minutes", "min", "mins"),
     seconds = c("second", "seconds", "sec", "secs", "s")
   )
-  age_unit <- names(mapping[mapping %in% tolower(age_unit)]) %>% str_replace(., "[0-9]", "")
+  if(any(mapping %in% tolower(age_unit))){
+    age_unit <- names(mapping[mapping %in% tolower(age_unit)]) %>% str_replace(., "[0-9]", "")
+  }
 
-  assert_character_scalar(age_unit, c(valid_time_units(), "weeks"))
+  assert_character_scalar(
+    age_unit,
+    values = c("years", "months", "weeks", "days", "hours", "minutes", "seconds")
+  )
 
   derive_vars_duration(
     dataset,
