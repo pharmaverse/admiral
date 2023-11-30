@@ -41,7 +41,9 @@ dataset (\code{dataset}) with the additional dataset (\code{dataset_add}).}
 
 \item{order}{Order
 
-The observations are ordered by the specified order.}
+The observations are ordered by the specified order.
+
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.}
 
 \item{new_var}{New variable
 

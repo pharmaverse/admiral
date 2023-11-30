@@ -33,6 +33,8 @@
 #'
 #'   Variables defined by the `new_vars` argument can be used in the sort order.
 #'
+#'   `r roxygen_order_na_handling()`
+#'
 #'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
 #'   `exprs(ADT, desc(AVAL))` or `NULL`
 #'

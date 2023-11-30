@@ -37,6 +37,8 @@
 #'   (`filter_add`, `filter_join`) and for `join_vars` and `new_vars`. The
 #'   variable is not included in the output dataset.
 #'
+#'   `r roxygen_order_na_handling()`
+#'
 #'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
 #'    `exprs(ADT, desc(AVAL))` or `NULL`
 #'
@@ -577,6 +579,8 @@ derive_vars_joined <- function(dataset,
 #'   added to the additional dataset and can be used in the filter conditions
 #'   (`filter_add`, `filter_join`) and for `join_vars` and `new_vars`. The
 #'   variable is not included in the output dataset.
+#'
+#'   `r roxygen_order_na_handling()`
 #'
 #'   *Permitted Values*: list of expressions created by `exprs()`, e.g.,
 #'    `exprs(ADT, desc(AVAL))` or `NULL`

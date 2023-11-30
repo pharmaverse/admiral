@@ -30,6 +30,8 @@ Permitted Values: list of variables}
 The first or last observation is determined with respect to the specified
 order.
 
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
+
 Permitted Values: list of variables or functions of variables}
 
 \item{new_var}{Variable to add
