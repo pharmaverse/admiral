@@ -144,10 +144,10 @@ navbar:
     getstarted:
       text: Get Started
       menu:
-      - text: Getting Started
+      - text: Simple ADSL Walkthrough
         href: articles/admiral.html
-      - text: Admiral Discovery
-        href: https://pharmaverse.github.io/admiraldiscovery/articles/gt.html
+      - text: CDISC Variables mapped to admiral functions
+        href: https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html
       - text: Cheatsheet
         href: https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf
     reference:
