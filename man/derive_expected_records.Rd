@@ -15,7 +15,7 @@ derive_expected_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{dataset_ref} and \code{by_vars} argument(s) to be expected.}
+The variables specified by the \code{dataset_ref} and \code{by_vars} arguments are expected to be in the dataset.}
 
 \item{dataset_expected_obs}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{dataset_ref} instead.}
 

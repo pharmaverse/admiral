@@ -16,7 +16,7 @@ derive_vars_aage(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{start_date} and \code{end_date} argument(s) to be expected.}
+The variables specified by the \code{start_date} and \code{end_date} arguments are expected to be in the dataset.}
 
 \item{start_date}{The start date
 
@@ -100,9 +100,7 @@ derive_vars_aage(data)
 
 ADSL Functions that returns variable appended to dataset: 
 \code{\link{derive_var_age_years}()},
-\code{\link{derive_var_dthcaus}()},
-\code{\link{derive_var_extreme_dtm}()},
-\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_vars_extreme_event}()},
 \code{\link{derive_vars_period}()}
 }
 \concept{der_adsl}

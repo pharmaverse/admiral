@@ -341,7 +341,7 @@ derive_vars_merged <- function(dataset,
   assert_atomic_vector(true_value, optional = TRUE)
   assert_atomic_vector(false_value, optional = TRUE)
   assert_expr_list(missing_values, named = TRUE, optional = TRUE)
-  if (!is.null(missing_values)) {
+  if (!is.null(missing_values) && !is.null(new_vars)) {
     invalid_vars <- setdiff(
       names(missing_values),
       vars2chr(replace_values_by_names(new_vars))
@@ -454,7 +454,7 @@ derive_vars_merged <- function(dataset,
 #'
 #' @param by_vars Grouping variables
 #'
-#'   *Permitted Values*: list of variables
+#'   *Permitted Values*: list of variables created by `exprs()`
 #'
 #' @param new_var New variable
 #'
@@ -472,18 +472,12 @@ derive_vars_merged <- function(dataset,
 #'
 #' @param true_value True value
 #'
-#'   *Default*: `"Y"`
-#'
 #' @param false_value False value
-#'
-#'   *Default*: `NA_character_`
 #'
 #' @param missing_value Values used for missing information
 #'
 #'   The new variable is set to the specified value for all by groups without
 #'   observations in the additional dataset.
-#'
-#'   *Default*: `NA_character_`
 #'
 #'   *Permitted Value*: A character scalar
 #'
@@ -817,6 +811,7 @@ get_not_mapped <- function() {
 #'   calculation. This can include built-in functions as well as user defined
 #'   functions, for example `mean` or `function(x) mean(x, na.rm = TRUE)`.
 #'
+#' @inheritParams derive_vars_merged
 #'
 #' @details
 #'
@@ -907,6 +902,7 @@ derive_var_merged_summary <- function(dataset,
                                       new_vars = NULL,
                                       new_var,
                                       filter_add = NULL,
+                                      missing_values = NULL,
                                       analysis_var,
                                       summary_fun) {
   assert_vars(by_vars)
@@ -940,13 +936,14 @@ derive_var_merged_summary <- function(dataset,
   # Summarise the analysis value and merge to the original dataset
   derive_vars_merged(
     dataset,
-    dataset_add = get_summary_records(
-      dataset_add,
+    dataset_add = derive_summary_records(
+      dataset_add = dataset_add,
       by_vars = by_vars_right,
-      filter = !!filter_add,
+      filter_add = !!filter_add,
       set_values_to = new_vars,
     ) %>%
       select(!!!by_vars_right, names(new_vars)),
-    by_vars = by_vars
+    by_vars = by_vars,
+    missing_values = missing_values
   )
 }

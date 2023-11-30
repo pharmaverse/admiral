@@ -9,7 +9,7 @@ derive_var_age_years(dataset, age_var, age_unit = NULL, new_var)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{age_var} argument(s) to be expected.}
+The variables specified by the \code{age_var} argument are expected to be in the dataset.}
 
 \item{age_var}{Age variable.
 
@@ -72,10 +72,8 @@ derive_var_age_years(data, AGE, age_unit = "months", new_var = AAGE)
 \code{\link[=derive_vars_duration]{derive_vars_duration()}}
 
 ADSL Functions that returns variable appended to dataset: 
-\code{\link{derive_var_dthcaus}()},
-\code{\link{derive_var_extreme_dtm}()},
-\code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_vars_aage}()},
+\code{\link{derive_vars_extreme_event}()},
 \code{\link{derive_vars_period}()}
 }
 \concept{der_adsl}

@@ -13,7 +13,7 @@ derive_var_atoxgr(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{lotox_description_var} and \code{hitox_description_var} argument(s) to be expected.
+The variables specified by the \code{lotox_description_var} and \code{hitox_description_var} arguments are expected to be in the dataset.
 \code{ATOXGRL}, and \code{ATOXGRH} are expected as well.}
 
 \item{lotox_description_var}{Variable containing the toxicity grade description

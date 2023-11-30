@@ -138,29 +138,24 @@ reference:
 
 navbar:
   structure:
-    left: [getstarted, reference, articles, community, news, versions]
+    left: [getstarted, reference, articles, news, versions]
     right: [search, slack, history, newissue, github]
   components:
     getstarted:
       text: Get Started
-      href: articles/admiral.html
-    reference:
-      text: Reference
-      href: reference/
-    community:
-      text: Community
-      menu:
-      - text: Contribute to admiral
-        href: articles/contribution_model.html
-      - text: Find us on Slack
-        href: https://app.slack.com/client/T028PB489D3/C02M8KN8269
-      - text: Welcome to the Pharmaverse
-        href: https://pharmaverse.org/
-    articles:
-      text: User Guides
       menu:
       - text: Getting Started
         href: articles/admiral.html
+      - text: Admiral Discovery
+        href: https://pharmaverse.github.io/admiraldiscovery/articles/gt.html
+      - text: Cheatsheet
+        href: https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf
+    reference:
+      text: Reference
+      href: reference/
+    articles:
+      text: User Guides
+      menu:
       - text: Creating a Basic ADSL
         href: articles/adsl.html
       - text: FAQ
@@ -184,7 +179,7 @@ navbar:
         href: articles/imputation.html
       - text: Visit and Period Variables
         href: articles/visits_periods.html
-      - text: Generic Functions
+      - text: Generic Derivations
         href: articles/generic.html
       - text: Higher Order Functions
         href: articles/higher_order.html

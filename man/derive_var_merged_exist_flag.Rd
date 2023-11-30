@@ -19,7 +19,7 @@ derive_var_merged_exist_flag(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument(s) to be expected.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{dataset_add}{Additional dataset
 
@@ -27,7 +27,7 @@ The variables specified by the \code{by_vars} argument are expected.}
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values}: list of variables}
+\emph{Permitted Values}: list of variables created by \code{exprs()}}
 
 \item{new_var}{New variable
 
@@ -43,20 +43,14 @@ to the false value (\code{false_value}). The new variable is set to the missing
 value (\code{missing_value}) for by groups not present in the additional
 dataset.}
 
-\item{true_value}{True value
+\item{true_value}{True value}
 
-\emph{Default}: \code{"Y"}}
-
-\item{false_value}{False value
-
-\emph{Default}: \code{NA_character_}}
+\item{false_value}{False value}
 
 \item{missing_value}{Values used for missing information
 
 The new variable is set to the specified value for all by groups without
 observations in the additional dataset.
-
-\emph{Default}: \code{NA_character_}
 
 \emph{Permitted Value}: A character scalar}
 
@@ -153,9 +147,11 @@ derive_var_merged_exist_flag(
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},
+\code{\link{derive_var_merged_ef_msrc}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
+\code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},

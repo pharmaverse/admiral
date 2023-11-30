@@ -33,6 +33,9 @@ an expression, or \code{NA}.
 An object of class \code{date_source}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{date_source()}
+function has been superseded in favor of \code{derive_vars_extreme_event()}.
+
 Create a \code{date_source} object as input for \code{derive_var_extreme_dt()} and
 \code{derive_var_extreme_dtm()}.
 }
@@ -64,17 +67,13 @@ death_date <- date_source(
 \seealso{
 \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}}
 
-Source Objects: 
-\code{\link{basket_select}()},
-\code{\link{censor_source}()},
-\code{\link{death_event}},
+Other superseded: 
+\code{\link{derive_param_extreme_record}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_extreme_dt}()},
 \code{\link{dthcaus_source}()},
-\code{\link{event_joined}()},
-\code{\link{event_source}()},
-\code{\link{event}()},
-\code{\link{query}()},
-\code{\link{records_source}()},
-\code{\link{tte_source}()}
+\code{\link{get_summary_records}()}
 }
-\concept{source_specifications}
-\keyword{source_specifications}
+\concept{superseded}
+\keyword{superseded}

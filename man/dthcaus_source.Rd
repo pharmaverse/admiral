@@ -60,7 +60,9 @@ expressions referring to existing variables.
 An object of class "dthcaus_source".
 }
 \description{
-Create a \code{dthcaus_source} Object
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{derive_var_dthcaus()}
+function and \code{dthcaus_source()} have been superseded in favor of
+\code{derive_vars_extreme_event()}.
 }
 \examples{
 # Deaths sourced from AE
@@ -84,17 +86,13 @@ src_ds <- dthcaus_source(
 \seealso{
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}
 
-Source Objects: 
-\code{\link{basket_select}()},
-\code{\link{censor_source}()},
+Other superseded: 
 \code{\link{date_source}()},
-\code{\link{death_event}},
-\code{\link{event_joined}()},
-\code{\link{event_source}()},
-\code{\link{event}()},
-\code{\link{query}()},
-\code{\link{records_source}()},
-\code{\link{tte_source}()}
+\code{\link{derive_param_extreme_record}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{get_summary_records}()}
 }
-\concept{source_specifications}
-\keyword{source_specifications}
+\concept{superseded}
+\keyword{superseded}
