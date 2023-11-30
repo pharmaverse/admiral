@@ -213,8 +213,8 @@ derive_vars_duration <- function(dataset,
     minutes = c("minute", "minutes", "min", "mins"),
     seconds = c("second", "seconds", "sec", "secs", "s")
   )
-  in_unit <- names(mapping[mapping %in% tolower(in_unit)]) %>% str_replace(., '[0-9]', '')
-  out_unit <- names(mapping[mapping %in% tolower(out_unit)]) %>% str_replace(., '[0-9]', '')
+  in_unit <- names(mapping[mapping %in% tolower(in_unit)]) %>% str_replace(., "[0-9]", "")
+  out_unit <- names(mapping[mapping %in% tolower(out_unit)]) %>% str_replace(., "[0-9]", "")
 
   assert_character_scalar(in_unit, values = c(
     valid_time_units(),

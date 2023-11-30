@@ -160,8 +160,8 @@ compute_duration <- function(start_date,
     minutes = c("minute", "minutes", "min", "mins"),
     seconds = c("second", "seconds", "sec", "secs", "s")
   )
-  in_unit <- names(mapping[mapping %in% tolower(in_unit)]) %>% str_replace(., '[0-9]', '')
-  out_unit <- names(mapping[mapping %in% tolower(out_unit)]) %>% str_replace(., '[0-9]', '')
+  in_unit <- names(mapping[mapping %in% tolower(in_unit)]) %>% str_replace(., "[0-9]", "")
+  out_unit <- names(mapping[mapping %in% tolower(out_unit)]) %>% str_replace(., "[0-9]", "")
 
   # Checks
   assert_date_vector(start_date)
