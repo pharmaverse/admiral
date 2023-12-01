@@ -21,7 +21,7 @@ derive_vars_duration(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{start_date} and \code{end_date} argument(s) to be expected.}
+The variables specified by the \code{start_date} and \code{end_date} arguments are expected to be in the dataset.}
 
 \item{new_var}{Name of variable to create}
 

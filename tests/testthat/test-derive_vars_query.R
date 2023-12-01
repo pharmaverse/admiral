@@ -3,14 +3,14 @@
 test_that("derive_vars_query Test 1: Derive CQ and SMQ variables with two term levels", {
   # nolint start
   queries <- tibble::tribble(
-    ~PREFIX, ~GRPNAME, ~GRPID, ~SCOPE, ~SCOPEN, ~SRCVAR, ~TERMNAME,
+    ~PREFIX, ~GRPNAME, ~GRPID, ~SCOPE, ~SCOPEN, ~SRCVAR, ~TERMCHAR,
     "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
     "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "AMMONIA ABNORMALL",
     "SMQ03", "Immune-Mediated Hypothyroidism", 20000161, "NARROW", 1, "AEDECOD", "BASEDOW'S DISEASE",
     "SMQ05", "Immune-Mediated Pneumonitis", NA, "NARROW", 1, "AEDECOD", "ALVEOLAR PROTEINOSIS",
     "CQ06", "Some query", 11111, NA, NA, "AELLT", "SOME TERM"
   ) %>% dplyr::mutate(
-    TERMID = as.integer(as.factor(.data$TERMNAME))
+    TERMNUM = as.integer(as.factor(.data$TERMCHAR))
   )
 
   adae <- tibble::tribble(
@@ -38,9 +38,9 @@ test_that("derive_vars_query Test 1: Derive CQ and SMQ variables with two term l
 ## Test 2: Derive when no unique key excluding `SRCVAR` columns ----
 test_that("derive_vars_query Test 2: Derive when no unique key excluding `SRCVAR` columns", {
   query <- tibble::tribble(
-    ~PREFIX,  ~GRPNAME,   ~SRCVAR, ~TERMNAME, ~GRPID,  ~TERMID,
-    "CQ42", "My Query", "AEDECOD",    "PTSI",      1, NA_real_,
-    "CQ42", "My Query",   "AELLT",   "LLTSI",      1, NA_real_
+    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
+    "CQ42", "My Query", "AEDECOD", "PTSI", 1, NA_real_,
+    "CQ42", "My Query", "AELLT", "LLTSI", 1, NA_real_
   )
 
   my_ae <- tibble::tribble(
@@ -67,9 +67,9 @@ test_that("derive_vars_query Test 2: Derive when no unique key excluding `SRCVAR
 ## Test 3: Derive when an adverse event is in multiple baskets ----
 test_that("derive_vars_query Test 3: Derive when an adverse event is in multiple baskets", {
   query <- tibble::tribble(
-    ~PREFIX,    ~GRPNAME,   ~SRCVAR, ~TERMNAME, ~GRPID,  ~TERMID,
-    "CQ40", "My Query 1", "AEDECOD",    "PTSI",      1, NA_real_,
-    "CQ42", "My Query 2",   "AELLT",   "LLTSI",      2, NA_real_
+    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
+    "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA_real_,
+    "CQ42", "My Query 2", "AELLT", "LLTSI", 2, NA_real_
   )
 
   my_ae <- tibble::tribble(
@@ -97,7 +97,7 @@ test_that("derive_vars_query Test 3: Derive when an adverse event is in multiple
 ## Test 4: Derive when no GRPID or SCOPE column ----
 test_that("derive_vars_query Test 4: Derive when no GRPID or SCOPE column", {
   query <- tibble::tribble(
-    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMNAME, ~TERMID,
+    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~TERMNUM,
     "CQ42", "My Query", "AEDECOD", "PTSI", NA_real_,
     "CQ42", "My Query", "AELLT", "LLTSI", NA_real_
   )
@@ -123,10 +123,10 @@ test_that("derive_vars_query Test 4: Derive when no GRPID or SCOPE column", {
   expect_equal(expected_output, actual_output)
 })
 
-## Test 5: Derive decides between TERMNAME and TERMID based on type ----
-test_that("derive_vars_query Test 5: Derive decides between TERMNAME and TERMID based on type", {
+## Test 5: Derive decides between TERMCHAR and TERMNUM based on type ----
+test_that("derive_vars_query Test 5: Derive decides between TERMCHAR and TERMNUM based on type", {
   query <- tibble::tribble(
-    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMNAME, ~GRPID, ~TERMID,
+    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
     "CQ42", "My Query 2", "AELLTCD", NA_character_, 2, 1
   )
@@ -159,7 +159,7 @@ test_that("derive_vars_query Test 5: Derive decides between TERMNAME and TERMID 
 ## Test 6: assert_valid_queries checks ----
 test_that("assert_valid_queries Test 6: assert_valid_queries checks", {
   query <- tibble::tribble(
-    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMNAME, ~GRPID, ~TERMID,
+    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
     "CQ42", "My Query 2", "AELLTCD", NA_character_, 2, 1
   )
@@ -214,11 +214,11 @@ test_that("assert_valid_queries Test 6: assert_valid_queries checks", {
 
   expect_error(
     assert_valid_queries(
-      mutate(query, TERMNAME = c(NA, NA)),
+      mutate(query, TERMCHAR = c(NA, NA)),
       "test"
     ),
     regexp = paste(
-      "Either `TERMNAME` or `TERMID` need to be specified in `test`.",
+      "Either `TERMCHAR` or `TERMNUM` need to be specified in `test`.",
       "They both cannot be NA or empty."
     )
   )

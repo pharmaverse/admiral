@@ -16,7 +16,7 @@ get_summary_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{analysis_var} argument(s) to be expected.}
+The variables specified by the \code{by_vars} and \code{analysis_var} arguments are expected to be in the dataset.}
 
 \item{by_vars}{Variables to consider for generation of groupwise summary
 records. Providing the names of variables in \code{\link[=exprs]{exprs()}} will create a
@@ -170,7 +170,12 @@ get_summary_records(
 \code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
 
 Other superseded: 
-\code{\link{derive_param_extreme_record}()}
+\code{\link{date_source}()},
+\code{\link{derive_param_extreme_record}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{dthcaus_source}()}
 }
 \concept{superseded}
 \keyword{superseded}

@@ -1454,7 +1454,7 @@ example](https://examples.pharmaverse.org/data/adsl/).
 
 # Example Scripts {#example}
 
-| ADaM  | Sample Code                                                                                               |
-|------------|------------------------------------------------------------|
-| ADPC  | [ad_adpc.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adpc.R){target="_blank"}   |
-| ADPPK | [ad_adppk.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adppk.R){target="_blank"} |
+ADaM  | Sourcing Command
+----- | --------------
+ADPC  | `use_ad_template("ADPC")`
+ADPPK | `use_ad_template("ADPPK")`

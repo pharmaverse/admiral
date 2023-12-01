@@ -304,9 +304,10 @@ adex <- adex %>%
 
 # Save output ----
 
-dir <- file.path(getwd(), "tmp")
+# Change to whichever directory you want to save the dataset in
+dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
 if (!file.exists(dir)) {
   # Create the folder
-  dir.create(dir)
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 }
 save(adex, file = file.path(dir, "adex.rda"), compress = "bzip2")

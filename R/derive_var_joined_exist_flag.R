@@ -27,6 +27,8 @@
 #'
 #'   The observations are ordered by the specified order.
 #'
+#'   `r roxygen_order_na_handling()`
+#'
 #' @param new_var New variable
 #'
 #'   The specified variable is added to the input dataset.

@@ -10,6 +10,8 @@
 #'   The first or last observation is determined with respect to the specified
 #'   order.
 #'
+#'   `r roxygen_order_na_handling()`
+#'
 #'   Permitted Values: list of variables or functions of variables
 #'
 #' @param new_var Variable to add

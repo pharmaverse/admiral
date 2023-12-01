@@ -18,9 +18,9 @@
 #'   "SCN" variable will be created.
 #'
 #'   For each record in `dataset`, the "NAM" variable takes the value of
-#'   `GRPNAME` if the value of `TERMNAME` or `TERMID` in `dataset_queries` matches
+#'   `GRPNAME` if the value of `TERMCHAR` or `TERMNUM` in `dataset_queries` matches
 #'   the value of the respective SRCVAR in `dataset`.
-#'   Note that `TERMNAME` in `dataset_queries` dataset may be NA only when `TERMID`
+#'   Note that `TERMCHAR` in `dataset_queries` dataset may be NA only when `TERMNUM`
 #'   is non-NA and vice versa.
 #'   The "CD", "SC", and "SCN" variables are derived accordingly based on
 #'   `GRPID`, `SCOPE`, and `SCOPEN` respectively,
@@ -29,7 +29,7 @@
 #' @param dataset `r roxygen_param_dataset()`
 #'
 #' @param dataset_queries A dataset containing required columns `PREFIX`,
-#' `GRPNAME`, `SRCVAR`, `TERMNAME`, `TERMID`, and optional columns
+#' `GRPNAME`, `SRCVAR`, `TERMCHAR`, `TERMNUM`, and optional columns
 #' `GRPID`, `SCOPE`, `SCOPEN`.
 #'
 #'   The content of the dataset will be verified by [assert_valid_queries()].
@@ -111,7 +111,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
   # queries restructured
   queries_wide <- dataset_queries %>%
     mutate(
-      TERMNAME = toupper(TERMNAME),
+      TERMCHAR = toupper(TERMCHAR),
       PREFIX_NAM = paste0(PREFIX, "NAM")
     ) %>%
     pivot_wider(names_from = PREFIX_NAM, values_from = GRPNAME) %>%
@@ -123,12 +123,12 @@ derive_vars_query <- function(dataset, dataset_queries) {
     pivot_wider(names_from = PREFIX_SCN, values_from = SCOPEN) %>%
     select(-PREFIX) %>%
     # determine join column based on type of SRCVAR
-    # numeric -> TERMID, character -> TERMNAME, otherwise -> error
+    # numeric -> TERMNUM, character -> TERMCHAR, otherwise -> error
     mutate(
       tmp_col_type = vapply(dataset[SRCVAR], typeof, character(1)),
       TERM_NAME_ID = case_when(
-        tmp_col_type == "character" ~ TERMNAME,
-        tmp_col_type %in% c("double", "integer") ~ as.character(TERMID),
+        tmp_col_type == "character" ~ TERMCHAR,
+        tmp_col_type %in% c("double", "integer") ~ as.character(TERMNUM),
         TRUE ~ NA_character_
       )
     )
@@ -196,10 +196,10 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #' - `SCOPE`, 'BROAD', 'NARROW', or NA
 #' - `SCOPEN`, 1, 2, or NA
 #' - `SRCVAR`, e.g., `"AEDECOD"`, `"AELLT"`, `"AELLTCD"`, ...
-#' - `TERMNAME`, character, could be NA only at those observations
-#' where `TERMID` is non-NA
-#' - `TERMID`, integer, could be NA only at those observations
-#' where `TERMNAME` is non-NA
+#' - `TERMCHAR`, character, could be NA only at those observations
+#' where `TERMNUM` is non-NA
+#' - `TERMNUM`, integer, could be NA only at those observations
+#' where `TERMCHAR` is non-NA
 #'
 #' @param queries A data.frame.
 #'
@@ -214,7 +214,7 @@ assert_valid_queries <- function(queries, queries_name) {
   # check required columns
   assert_data_frame(
     queries,
-    required_vars = exprs(PREFIX, GRPNAME, SRCVAR, TERMNAME, TERMID)
+    required_vars = exprs(PREFIX, GRPNAME, SRCVAR, TERMCHAR, TERMNUM)
   )
 
   # check duplicate rows
@@ -288,10 +288,10 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
   # check illegal term name
-  if (any(is.na(queries$TERMNAME) & is.na(queries$TERMID)) ||
-    any(queries$TERMNAME == "" & is.na(queries$TERMID))) {
+  if (any(is.na(queries$TERMCHAR) & is.na(queries$TERMNUM)) ||
+    any(queries$TERMCHAR == "" & is.na(queries$TERMNUM))) {
     abort(paste0(
-      "Either `TERMNAME` or `TERMID` need to be specified",
+      "Either `TERMCHAR` or `TERMNUM` need to be specified",
       " in `", queries_name, "`. ",
       "They both cannot be NA or empty."
     ))

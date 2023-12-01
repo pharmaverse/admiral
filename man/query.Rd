@@ -42,17 +42,17 @@ There are three different ways to define the terms:
 \itemize{
 \item An \code{basket_select()} object is specified to select a query from the SMQ
 database.
-\item A data frame with columns \code{SRCVAR} and \code{TERMNAME} or \code{TERMID} can
+\item A data frame with columns \code{SRCVAR} and \code{TERMCHAR} or \code{TERMNUM} can
 be specified to define the terms of a customized query. The \code{SRCVAR}
 should be set to the name of the variable which should be used to select
 the terms, e.g., \code{"AEDECOD"} or \code{"AELLTCD"}. \code{SRCVAR} does not need
 to be constant within a query. For example a query can be based on
 \code{AEDECOD} and \code{AELLT}.
 
-If \code{SRCVAR} refers to a character variable, \code{TERMNAME} should be set
-to the value the variable. If it refers to a numeric variable, \code{TERMID}
+If \code{SRCVAR} refers to a character variable, \code{TERMCHAR} should be set
+to the value the variable. If it refers to a numeric variable, \code{TERMNUM}
 should be set to the value of the variable. If only character variables
-or only numeric variables are used, \code{TERMID} or \code{TERMNAME} respectively
+or only numeric variables are used, \code{TERMNUM} or \code{TERMCHAR} respectively
 can be omitted.
 \item A list of data frames and \code{basket_select()} objects can be specified to
 define a customized query based on custom terms and SMQs. The data frames
@@ -100,7 +100,7 @@ query(
 
 # creating a query for a customized query
 cqterms <- tribble(
-  ~TERMNAME,                     ~TERMID,
+  ~TERMCHAR, ~TERMNUM,
   "APPLICATION SITE ERYTHEMA", 10003041L,
   "APPLICATION SITE PRURITUS", 10003053L
 ) \%>\%
@@ -137,12 +137,11 @@ query(
 Source Objects: 
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
-\code{\link{date_source}()},
 \code{\link{death_event}},
-\code{\link{dthcaus_source}()},
 \code{\link{event_joined}()},
 \code{\link{event_source}()},
 \code{\link{event}()},
+\code{\link{flag_event}()},
 \code{\link{records_source}()},
 \code{\link{tte_source}()}
 }

@@ -16,7 +16,7 @@ derive_var_extreme_dt(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{subject_keys} argument(s) to be expected.}
+The variables specified by the \code{subject_keys} argument are expected to be in the dataset.}
 
 \item{new_var}{Name of variable to create}
 
@@ -42,6 +42,9 @@ A list of expressions where the expressions are symbols as returned by
 The input dataset with the new variable added.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{derive_var_extreme_dt()}
+function has been superseded in favor of \code{derive_vars_extreme_event()}.
+
 Add the first or last date from multiple sources to the
 dataset, e.g., the last known alive date (\code{LSTALVDT}).
 
@@ -236,12 +239,13 @@ dm \%>\%
 \seealso{
 \code{\link[=date_source]{date_source()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_merged]{derive_vars_merged()}}
 
-ADSL Functions that returns variable appended to dataset: 
-\code{\link{derive_var_age_years}()},
+Other superseded: 
+\code{\link{date_source}()},
+\code{\link{derive_param_extreme_record}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dtm}()},
-\code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_period}()}
+\code{\link{dthcaus_source}()},
+\code{\link{get_summary_records}()}
 }
-\concept{der_adsl}
-\keyword{der_adsl}
+\concept{superseded}
+\keyword{superseded}
