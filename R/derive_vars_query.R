@@ -71,7 +71,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
 
   # check optionality of TERMNUM or TERMCHAR based on SRCVAR type
   srcvar_types <- unique(vapply(dataset[dataset_queries$SRCVAR], typeof, character(1)))
-  if (srvar_types == "character") {
+  if (srcvar_types == "character") {
     assert_data_frame(dataset_queries, required_vars = exprs(TERMCHAR))
     if ("TERMNUM" %in% names(dataset_queries)) {
       abort(paste0(
@@ -81,7 +81,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
       ))
     }
   }
-  if (length(srvar_types) == 1 & srcvar_types %in% c("integer", "double")) {
+  if (length(srcvar_types) == 1 & srcvar_types %in% c("integer", "double")) {
     assert_data_frame(dataset_queries, required_vars = exprs(TERMNUM))
     if ("TERMCHAR" %in% names(dataset_queries)) {
       abort(paste0(
