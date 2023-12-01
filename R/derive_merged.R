@@ -452,7 +452,7 @@ derive_vars_merged <- function(dataset,
 #'
 #' @param by_vars Grouping variables
 #'
-#' `roxygen_param_by_vars()`
+#' `r roxygen_param_by_vars()`
 #'
 #' @param new_var New variable
 #'
