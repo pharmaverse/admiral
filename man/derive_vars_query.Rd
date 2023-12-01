@@ -53,6 +53,17 @@ whenever not missing.
 \examples{
 library(tibble)
 data("queries")
+adae <- tribble(
+  ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
+  "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
+  3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
+  "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
+  5, "Basedow's disease", NA_character_, 1L,
+  "03", "2020-06-07 23:59:59", "SOME TERM",
+  2, "Some query", "Some term", NA_integer_,
+  "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
+  7, "Alveolar proteinosis", NA_character_, NA_integer_
+)
 derive_vars_query(adae, queries)
 }
 \seealso{
