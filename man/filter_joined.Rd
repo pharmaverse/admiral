@@ -36,7 +36,7 @@ expected.}
 The specified variables are used as by variables for joining the input
 dataset with itself.
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{join_vars}{Variables to keep from joined dataset

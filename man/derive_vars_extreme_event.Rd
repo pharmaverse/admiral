@@ -25,7 +25,7 @@ The variables specified by the \code{by_vars} and \code{order} arguments are exp
 
 \emph{Default}: \code{NULL}
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{events}{Conditions and new values defining events

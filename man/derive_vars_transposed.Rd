@@ -27,7 +27,7 @@ are expected}
 
 Keys used to merge \code{dataset_merge} with \code{dataset}.
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{key_var}{The variable of \code{dataset_merge} containing the names of the

@@ -22,7 +22,7 @@ The variables specified by the \code{by_vars} and \code{analysis_var} arguments 
 
 Variables to consider for generation of groupwise summary records.
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{filter}{Filter condition as logical expression to apply during

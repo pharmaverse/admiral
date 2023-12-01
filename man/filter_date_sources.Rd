@@ -28,7 +28,7 @@ A named list of datasets is expected. The \code{dataset_name} field of
 If the parameter is specified, for each by group the observations are
 selected separately.
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{create_datetime}{Create datetime variable?

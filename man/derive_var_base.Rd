@@ -22,7 +22,7 @@ The variables specified by the \code{by_vars} and \code{source_var} arguments ar
 Grouping variables uniquely identifying a set
 of records for which to calculate \code{new_var}.
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{source_var}{The column from which to extract the baseline value, e.g. \code{AVAL}}

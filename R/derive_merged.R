@@ -17,9 +17,9 @@
 #' @param by_vars Grouping variables
 #'
 #'   The input dataset and the selected observations from the additional dataset
-#'   are merged by the specified.
+#'   are merged by the specified variables.
 #'
-#'   `r roxygen_param_by_vars(rename = TRUE, unique = TRUE)`
+#'   `r roxygen_param_by_vars(rename = TRUE)`
 #'
 #' @param order Sort order
 #'

@@ -35,12 +35,12 @@ argument are expected.}
 \item{by_vars}{Grouping variables
 
 The input dataset and the selected observations from the additional dataset
-are merged by the specified.
+are merged by the specified variables.
 
-Variables must be a unique key of the selected observations.
 Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the dplyr joins.
-\emph{Permitted Values}: list of variables created by exprs()
+
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{order}{Sort order

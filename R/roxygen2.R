@@ -20,15 +20,9 @@ roxygen_param_dataset <- function(expected_vars = NULL) {
 
 # function to properly document the by_vars argument including specifying the use of exprs():
 
-roxygen_param_by_vars <- function(unique = FALSE, rename = FALSE) {
+roxygen_param_by_vars <- function(rename = FALSE) {
   by_vars_text <- ""
 
-  if (unique) {
-    by_vars_text <- paste0(
-      by_vars_text,
-      "Variables must be a unique key of the selected observations.\n"
-    )
-  }
   if (rename) {
     by_vars_text <- paste0(
       by_vars_text,

@@ -90,7 +90,7 @@ considered.
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{set_values_to}{Variables to set

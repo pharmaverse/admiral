@@ -21,7 +21,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 
 Defines groups of records in which to look for duplicates.
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{msg}{The condition message}

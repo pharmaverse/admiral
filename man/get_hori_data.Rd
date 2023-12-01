@@ -13,7 +13,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 
 \item{by_vars}{Grouping variables
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{parameters}{List of parameter codes

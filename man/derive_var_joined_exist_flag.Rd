@@ -39,7 +39,7 @@ expected.}
 The specified variables are used for joining the input
 dataset (\code{dataset}) with the additional dataset (\code{dataset_add}).
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{order}{Order

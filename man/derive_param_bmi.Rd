@@ -31,7 +31,7 @@ For each group defined by \code{by_vars} an observation is added to the output
 dataset. Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{set_values_to}{Variables to be set
@@ -82,7 +82,7 @@ use \code{constant_by_vars} to select the subject-level variable to merge on (e.
 This will produce BMI at all visits where weight is measured.  Otherwise
 it will only be calculated at visits with both height and weight collected.
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 }
 \value{

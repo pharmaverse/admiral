@@ -35,7 +35,8 @@ The two datasets are joined by the specified variables.
 
 Variables can be renamed by naming the element, i.e.
 \verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the dplyr joins.
-\emph{Permitted Values}: list of variables created by exprs()
+
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{join_vars}{Variables to use from additional dataset

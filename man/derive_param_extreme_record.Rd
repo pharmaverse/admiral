@@ -32,7 +32,7 @@ specified by the \code{order} and the \code{by_vars} arguments are expected afte
 If the argument is specified, for each by group the observations are
 selected separately.
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{order}{Sort order

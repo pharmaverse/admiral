@@ -25,7 +25,7 @@ The variables specified by the \code{by_vars} and \code{value_var} parameters,
 
 Keys used to merge \code{dataset_facm} with \code{dataset}.
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{value_var}{The variable of \code{dataset_facm} containing the values of the

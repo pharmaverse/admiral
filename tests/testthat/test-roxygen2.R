@@ -23,12 +23,6 @@ test_that("roxygen_param_by_vars Test 1: Text variations", {
   expect_snapshot(
     roxygen_param_by_vars(rename = TRUE)
   )
-  expect_snapshot(
-    roxygen_param_by_vars(unique = TRUE)
-  )
-  expect_snapshot(
-    roxygen_param_by_vars(unique = TRUE, rename = TRUE)
-  )
 })
 
 # roxygen_order_na_handling ----

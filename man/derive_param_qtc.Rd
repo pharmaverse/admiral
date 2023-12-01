@@ -30,7 +30,7 @@ parameter) and to the parameters specified by \code{qt_code} and \code{rr_code}.
 Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
-\emph{Permitted Values}: list of variables created by exprs()
+\emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{method}{Method used to QT correction
