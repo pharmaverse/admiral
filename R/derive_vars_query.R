@@ -31,9 +31,7 @@
 #' @param dataset_queries A dataset containing required columns `PREFIX`,
 #' `GRPNAME`, `SRCVAR`, `TERMCHAR`, `TERMNUM`, and optional columns
 #' `GRPID`, `SCOPE`, `SCOPEN`.
-#'
-#'   The content of the dataset will be verified by [assert_valid_queries()].
-#'
+#'#'
 #'   `create_query_data()` can be used to create the dataset.
 #'
 #'

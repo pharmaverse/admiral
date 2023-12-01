@@ -163,6 +163,8 @@ convert_na_to_blanks.data.frame <- function(x) { # nolint
 #' @keywords utils_quo
 #' @family utils_quo
 #'
+#' @export
+#'
 #' @examples
 #' chr2vars(c("USUBJID", "AVAL"))
 chr2vars <- function(chr) {

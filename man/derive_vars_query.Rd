@@ -12,9 +12,7 @@ derive_vars_query(dataset, dataset_queries)
 \item{dataset_queries}{A dataset containing required columns \code{PREFIX},
 \code{GRPNAME}, \code{SRCVAR}, \code{TERMCHAR}, \code{TERMNUM}, and optional columns
 \code{GRPID}, \code{SCOPE}, \code{SCOPEN}.
-
-The content of the dataset will be verified by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.
-
+#'
 \code{create_query_data()} can be used to create the dataset.}
 }
 \value{
