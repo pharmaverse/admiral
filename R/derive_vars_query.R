@@ -73,23 +73,9 @@ derive_vars_query <- function(dataset, dataset_queries) {
   srcvar_types <- unique(vapply(dataset[dataset_queries$SRCVAR], typeof, character(1)))
   if (srcvar_types == "character") {
     assert_data_frame(dataset_queries, required_vars = exprs(TERMCHAR))
-    if ("TERMNUM" %in% names(dataset_queries)) {
-      abort(paste0(
-        "`TERMNUM` should not be available",
-        " in `", deparse(substitute(dataset_queries)), "`, ",
-        " as all variables specified in `SRCVAR` are character."
-      ))
-    }
   }
   if (length(srcvar_types) == 1 && srcvar_types %in% c("integer", "double")) {
     assert_data_frame(dataset_queries, required_vars = exprs(TERMNUM))
-    if ("TERMCHAR" %in% names(dataset_queries)) {
-      abort(paste0(
-        "`TERMCHAR` should not be available",
-        " in `", deparse(substitute(dataset_queries)), "`, ",
-        " as all variables specified in `SRCVAR` are numeric`."
-      ))
-    }
   }
   if (length(srcvar_types) > 1 &&
     "character" %in% srcvar_types &&
