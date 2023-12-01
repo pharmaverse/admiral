@@ -391,7 +391,6 @@ get_terms_from_db <- function(version,
 #' @return An error is issued if `version` or `fun` is null.
 #'
 #' @noRd
-#'
 assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name, queries, i) {
   if (is.null(fun)) {
     msg <-
@@ -589,9 +588,8 @@ query <- function(prefix,
 #'
 #' @seealso [query()]
 #'
-#' @noRd
-#'
 #' @return The original object.
+#' @noRd
 validate_query <- function(obj) {
   assert_s3_class(obj, "query")
   values <- unclass(obj)
@@ -722,9 +720,6 @@ validate_query <- function(obj) {
 #' )
 #'
 #' @noRd
-#'
-#' @seealso [create_query_data()], [query()]
-#'
 assert_terms <- function(terms,
                          expect_grpname = FALSE,
                          expect_grpid = FALSE,
