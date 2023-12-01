@@ -61,7 +61,7 @@
 #'   7, "Alveolar proteinosis", NA_character_, NA_integer_
 #' )
 #' derive_vars_query(adae, queries)
-derive_vars_query <- function(dataset, dataset_queries) {
+derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
   assert_data_frame(dataset_queries)
   assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
   assert_data_frame(dataset,
