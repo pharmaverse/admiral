@@ -151,7 +151,6 @@ compute_duration <- function(start_date,
                              add_one = TRUE,
                              trunc_out = FALSE,
                              type = "duration") {
-
   in_unit <- valid_time_mappings(in_unit)
   out_unit <- valid_time_mappings(out_unit)
 
@@ -242,7 +241,7 @@ valid_time_mappings <- function(time_unit) {
     lowercase == "y" ~ "years",
     # map common months units
     lowercase == "month" ~ "months",
-    lowercase == "months"~ "months",
+    lowercase == "months" ~ "months",
     lowercase == "mo" ~ "months",
     lowercase == "mos" ~ "months",
     # map common weeks units
