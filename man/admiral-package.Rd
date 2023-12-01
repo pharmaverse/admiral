@@ -28,6 +28,7 @@ Authors:
   \item Jeffrey Dickinson
   \item Ross Farrugia
   \item Adam Forys
+  \item G Gayatri
   \item Daphne Grasselly
   \item Dinakar Kulkarni
   \item Edoardo Mancini
@@ -35,6 +36,7 @@ Authors:
   \item Gordon Miller
   \item Sophie Shapcott
   \item Eric Simms
+  \item Daniel Sjoberg
   \item Stefan Thoma
   \item Kangjie Zhang
   \item Zelos Zhu
@@ -42,7 +44,6 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item G Gayatri [contributor]
   \item Thomas Neitmann [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
