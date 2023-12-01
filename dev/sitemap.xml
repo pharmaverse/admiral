@@ -88,16 +88,7 @@
     <loc>https://pharmaverse.github.io/admiral/dev/reference/admiral_adsl.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiral/dev/reference/assert_db_requirements.html</loc>
-  </url>
-  <url>
     <loc>https://pharmaverse.github.io/admiral/dev/reference/assert_parameters_argument.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/dev/reference/assert_terms.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/dev/reference/assert_valid_queries.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/dev/reference/atoxgr_criteria_ctcv4.html</loc>
@@ -403,16 +394,10 @@
     <loc>https://pharmaverse.github.io/admiral/dev/reference/example_qs.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiral/dev/reference/extend_source_datasets.html</loc>
-  </url>
-  <url>
     <loc>https://pharmaverse.github.io/admiral/dev/reference/extract_duplicate_records.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/dev/reference/extract_unit.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/dev/reference/filter_date_sources.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/dev/reference/filter_exist.html</loc>
@@ -557,12 +542,6 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/dev/reference/use_ad_template.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/dev/reference/validate_basket_select.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/dev/reference/validate_query.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/dev/reference/yn_to_numeric.html</loc>
