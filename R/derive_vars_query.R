@@ -29,7 +29,7 @@
 #' @param dataset `r roxygen_param_dataset()`
 #'
 #' @param dataset_queries A dataset containing required columns `PREFIX`,
-#' `GRPNAME`, `SRCVAR`, `TERMCHAR`, `TERMNUM`, and optional columns
+#' `GRPNAME`, `SRCVAR`, `TERMCHAR` and/or `TERMNUM`, and optional columns
 #' `GRPID`, `SCOPE`, `SCOPEN`.
 #'
 #'   The content of the dataset will be verified by [assert_valid_queries()].
@@ -49,17 +49,17 @@
 #' @examples
 #' library(tibble)
 #' data("queries")
-#' adae <- tribble(
-#'   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
-#'   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
-#'   3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
-#'   "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
-#'   5, "Basedow's disease", NA_character_, 1L,
-#'   "03", "2020-06-07 23:59:59", "SOME TERM",
-#'   2, "Some query", "Some term", NA_integer_,
-#'   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
-#'   7, "Alveolar proteinosis", NA_character_, NA_integer_
-#' )
+#  adae <- tribble(
+#    ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
+#    "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
+#    3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
+#    "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
+#    5, "Basedow's disease", NA_character_, 1L,
+#    "03", "2020-06-07 23:59:59", "SOME TERM",
+#    2, "Some query", "Some term", NA_integer_,
+#    "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
+#    7, "Alveolar proteinosis", NA_character_, NA_integer_
+#  )
 #' derive_vars_query(adae, queries)
 derive_vars_query <- function(dataset, dataset_queries) {
   assert_data_frame(dataset_queries)
@@ -68,6 +68,41 @@ derive_vars_query <- function(dataset, dataset_queries) {
     required_vars = exprs(!!!syms(unique(dataset_queries$SRCVAR))),
     optional = FALSE
   )
+
+  # check optionality of TERMNUM or TERMCHAR based on SRCVAR type
+  srcvar_types <- unique(vapply(dataset[dataset_queries$SRCVAR], typeof, character(1)))
+  if (srvar_types == "character") {
+    assert_data_frame(dataset_queries, required_vars = exprs(TERMCHAR))
+    if ("TERMNUM" %in% names(dataset_queries)) {
+      abort(paste0(
+        "`TERMNUM` should not be available",
+        " in `", deparse(substitute(dataset_queries)), "`, ",
+        " as all variables specified in `SRCVAR` are character."
+      ))
+    }
+  }
+  if (length(srvar_types) == 1 & srcvar_types %in% c("integer", "double")) {
+    assert_data_frame(dataset_queries, required_vars = exprs(TERMNUM))
+    if ("TERMCHAR" %in% names(dataset_queries)) {
+      abort(paste0(
+        "`TERMCHAR` should not be available",
+        " in `", deparse(substitute(dataset_queries)), "`, ",
+        " as all variables specified in `SRCVAR` are numeric`."
+      ))
+    }
+  }
+  if (length(srcvar_types) > 1 & "character" %in% srcvar_types & ("integer" %in% srcvar_types | "double" %in% srcvar_types)) {
+    assert_data_frame(dataset_queries, required_vars = exprs(TERMCHAR, TERMNUM))
+    # check illegal term name
+    if (any(is.na(dataset_queries$TERMCHAR) & is.na(dataset_queries$TERMNUM)) ||
+      any(dataset_queries$TERMCHAR == "" & is.na(dataset_queries$TERMNUM))) {
+      abort(paste0(
+        "Either `TERMCHAR` or `TERMNUM` need to be specified",
+        " in `", deparse(substitute(dataset_queries)), "`. ",
+        "They both cannot be NA or empty."
+      ))
+    }
+  }
 
   dataset_queries <- convert_blanks_to_na(dataset_queries)
 
@@ -220,7 +255,7 @@ assert_valid_queries <- function(queries, queries_name) {
   # check required columns
   assert_data_frame(
     queries,
-    required_vars = exprs(PREFIX, GRPNAME, SRCVAR, TERMCHAR, TERMNUM)
+    required_vars = exprs(PREFIX, GRPNAME, SRCVAR)
   )
 
   # check duplicate rows
@@ -291,16 +326,6 @@ assert_valid_queries <- function(queries, queries_name) {
         )
       )
     }
-  }
-
-  # check illegal term name
-  if (any(is.na(queries$TERMCHAR) & is.na(queries$TERMNUM)) ||
-    any(queries$TERMCHAR == "" & is.na(queries$TERMNUM))) {
-    abort(paste0(
-      "Either `TERMCHAR` or `TERMNUM` need to be specified",
-      " in `", queries_name, "`. ",
-      "They both cannot be NA or empty."
-    ))
   }
 
   # each PREFIX must have unique GRPNAME, GRPID if the columns exist
