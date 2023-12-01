@@ -21,7 +21,7 @@
 #'   Only variables specified in `by_vars` will be populated
 #'   in the newly created records.
 #'
-#'   Permitted Values: list of variables
+#'   `r roxygen_param_by_vars()`
 #'
 #' @param tadm_code Total Doses Administered parameter code
 #'

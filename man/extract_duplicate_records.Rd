@@ -11,8 +11,12 @@ extract_duplicate_records(dataset, by_vars)
 
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
-\item{by_vars}{A list of expressions created using \code{exprs()} identifying
-groups of records in which to look for duplicates}
+\item{by_vars}{Grouping variables
+
+Defines groups of records in which to look for duplicates.
+
+\emph{Permitted Values}: list of variables created by \code{exprs()}
+e.g. \code{exprs(USUBJID, VISIT)}}
 }
 \value{
 A \code{data.frame} of duplicate records within \code{dataset}

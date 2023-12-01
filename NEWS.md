@@ -157,6 +157,8 @@ order = exprs(my_order_var),
   
 ## Documentation
 
+- The documentation of the `by_vars` and `constant_by_vars` argument was improved and unified across all functions where it is used. (#2137)
+
 - The functions `assert_db_requirements()`, `assert_terms()`, `assert_valid_queries()`,
   `extend_source_datasets()`, `filter_date_sources()`, `validate_basket_select()`,
   `validate_query()` are no longer exported and have had documentation removed. (#2220)

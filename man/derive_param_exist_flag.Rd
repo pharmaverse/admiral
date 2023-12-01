@@ -88,9 +88,10 @@ considered.
 
 \emph{Permitted Values}: a condition}
 
-\item{by_vars}{Variables to uniquely identify a group
+\item{by_vars}{Grouping variables
 
-A list of symbols created using \code{exprs()} is expected.}
+\emph{Permitted Values}: list of variables created by \code{exprs()}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{set_values_to}{Variables to set
 

@@ -25,9 +25,13 @@
 #'   observation of the specified dataset a new observation is added to the
 #'   input dataset.
 #'
-#' @param by_vars Variables to consider for generation of groupwise summary
+#' @param by_vars Grouping variables
+#'
+#'   Variables to consider for generation of groupwise summary
 #'   records. Providing the names of variables in [exprs()] will create a
 #'   groupwise summary and generate summary records for the specified groups.
+#'
+#'   `r roxygen_param_by_vars()`
 #'
 #' @param filter
 #'

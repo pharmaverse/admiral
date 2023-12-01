@@ -35,7 +35,7 @@
 #'
 #' @param by_vars Grouping variables
 #'
-#'   Permitted Values: list of variables
+#' `r roxygen_param_by_vars()`
 #'
 #' @param wbc_code White Blood Cell (WBC) parameter
 #'

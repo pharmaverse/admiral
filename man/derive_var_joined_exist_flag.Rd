@@ -34,10 +34,13 @@ The variables specified by the \code{by_vars} and \code{join_vars} arguments are
 The variables specified for \code{by_vars}, \code{join_vars}, and \code{order} are
 expected.}
 
-\item{by_vars}{By variables
+\item{by_vars}{Grouping variables
 
-The specified variables are used as by variables for joining the input
-dataset (\code{dataset}) with the additional dataset (\code{dataset_add}).}
+The specified variables are used for joining the input
+dataset (\code{dataset}) with the additional dataset (\code{dataset_add}).
+
+\emph{Permitted Values}: list of variables created by \code{exprs()}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{order}{Order
 
