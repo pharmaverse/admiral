@@ -16,8 +16,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 Defines groups of records in which to look for duplicates.
 
 \emph{Permitted Values}: list of variables created by exprs()
-
-e.g. exprs(USUBJID, VISIT)}
+e.g. \code{exprs(USUBJID, VISIT)}}
 }
 \value{
 A \code{data.frame} of duplicate records within \code{dataset}

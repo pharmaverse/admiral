@@ -27,8 +27,7 @@ the input dataset, and to the parameters specified by \code{wbc_code} and \code{
 \item{by_vars}{Grouping variables
 
 \emph{Permitted Values}: list of variables created by exprs()
-
-e.g. exprs(USUBJID, VISIT)}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{set_values_to}{Variables to set
 

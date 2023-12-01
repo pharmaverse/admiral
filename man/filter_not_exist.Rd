@@ -22,8 +22,7 @@ in this dataset.}
 \item{by_vars}{Grouping variables
 
 \emph{Permitted Values}: list of variables created by exprs()
-
-e.g. exprs(USUBJID, VISIT)}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{filter_add}{Filter for the source dataset
 

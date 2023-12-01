@@ -33,8 +33,7 @@ If the argument is specified, for each by group the observations are
 selected separately.
 
 \emph{Permitted Values}: list of variables created by exprs()
-
-e.g. exprs(USUBJID, VISIT)}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{order}{Sort order
 

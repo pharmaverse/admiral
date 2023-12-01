@@ -66,7 +66,7 @@
 #'
 #'   *Permitted Values*: An unquoted symbol
 #'
-#' @param by_vars Grouping variable
+#' @param by_vars Grouping variables
 #'
 #'   For each group defined by `by_vars` an observation is added to the output
 #'   dataset. Only variables specified in `by_vars` will be populated

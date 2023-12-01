@@ -33,12 +33,10 @@ and the \code{order} argument are expected.}
 
 The two datasets are joined by the specified variables.
 
-Variables from \code{dataset_ref} can be renamed by naming the element, I.e.
-by_vars = exprs(\if{html}{\out{<name in input dataset>}} = \if{html}{\out{<name in additional dataset>}}),similar to the dplyr joins.
-
+Variables can be renamed by naming the element, i.e.
+\verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the dplyr joins.
 \emph{Permitted Values}: list of variables created by exprs()
-
-e.g. exprs(USUBJID, VISIT)}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{join_vars}{Variables to use from additional dataset
 

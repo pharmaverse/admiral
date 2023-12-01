@@ -43,8 +43,7 @@ input dataset.}
 If \code{dataset_ref} is specified, this argument must be specified.
 
 \emph{Permitted Values}: list of variables created by exprs()
-
-e.g. exprs(USUBJID, VISIT)}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{order}{Sort order
 

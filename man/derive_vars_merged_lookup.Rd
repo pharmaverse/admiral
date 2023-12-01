@@ -29,16 +29,13 @@ The variables specified by the \code{by_vars} argument are expected.}
 \item{by_vars}{Grouping variables
 
 The input dataset and the selected observations from the additional dataset
-are merged by the specified by variables.
+are merged by the specified.
 
-Variables must be a unique key of the selected observations in \code{dataset_add}.
-
-Variables from \code{dataset_add} can be renamed by naming the element, I.e.
-by_vars = exprs(\if{html}{\out{<name in input dataset>}} = \if{html}{\out{<name in additional dataset>}}),similar to the dplyr joins.
-
+Variables must be a unique key of the selected observations.
+Variables can be renamed by naming the element, i.e.
+\verb{by_vars = exprs(<name in input dataset> = <name in additional dataset>)}, similar to the dplyr joins.
 \emph{Permitted Values}: list of variables created by exprs()
-
-e.g. exprs(USUBJID, VISIT)}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{order}{Sort order
 

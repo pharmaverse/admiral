@@ -21,13 +21,13 @@ test_that("roxygen_param_by_vars Test 1: Text variations", {
     roxygen_param_by_vars()
   )
   expect_snapshot(
-    roxygen_param_by_vars(additional_dataset = "additional_dataset", rename = TRUE)
+    roxygen_param_by_vars(rename = TRUE)
   )
   expect_snapshot(
-    roxygen_param_by_vars(additional_dataset = "additional_dataset", unique = TRUE)
+    roxygen_param_by_vars(unique = TRUE)
   )
   expect_snapshot(
-    roxygen_param_by_vars(additional_dataset = "additional_dataset", unique = TRUE, rename = TRUE)
+    roxygen_param_by_vars(unique = TRUE, rename = TRUE)
   )
 })
 

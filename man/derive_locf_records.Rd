@@ -34,8 +34,7 @@ in the input dataset or for which \code{analysis_var} is \code{NA} for the corre
 in the input dataset.
 
 \emph{Permitted Values}: list of variables created by exprs()
-
-e.g. exprs(USUBJID, VISIT)}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{analysis_var}{Analysis variable.
 

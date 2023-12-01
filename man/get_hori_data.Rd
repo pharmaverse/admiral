@@ -11,9 +11,10 @@ get_hori_data(dataset, by_vars, parameters, set_values_to, filter)
 
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
-\item{by_vars}{\emph{Permitted Values}: list of variables created by exprs()
+\item{by_vars}{Grouping variables
 
-e.g. exprs(USUBJID, VISIT)}
+\emph{Permitted Values}: list of variables created by exprs()
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{parameters}{List of parameter codes
 

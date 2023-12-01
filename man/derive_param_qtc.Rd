@@ -31,8 +31,7 @@ Only variables specified in \code{by_vars} will be populated
 in the newly created records.
 
 \emph{Permitted Values}: list of variables created by exprs()
-
-e.g. exprs(USUBJID, VISIT)}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{method}{Method used to QT correction
 

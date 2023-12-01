@@ -15,8 +15,7 @@ by variables or none of the by variables.}
 \item{by_vars}{By variables
 
 \emph{Permitted Values}: list of variables created by exprs()
-
-e.g. exprs(USUBJID, VISIT)}
+e.g. \code{exprs(USUBJID, VISIT)}}
 }
 \value{
 The list of extended source datasets

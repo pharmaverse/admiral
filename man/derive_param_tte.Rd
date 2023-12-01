@@ -43,8 +43,7 @@ variables.
 The by variables are not included in the output dataset.
 
 \emph{Permitted Values}: list of variables created by exprs()
-
-e.g. exprs(USUBJID, VISIT)}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{start_date}{Time to event origin date
 
