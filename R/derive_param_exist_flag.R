@@ -81,9 +81,9 @@
 #'   Baseline")` is expected. The values must be symbols, character strings,
 #'   numeric values, `NA`, or expressions.
 #'
-#' @param by_vars Variables to uniquely identify a group
+#' @param by_vars Grouping variables
 #'
-#'   `r roxygen_param_by_vars(unique = TRUE)`
+#'   `r roxygen_param_by_vars()`
 #'
 #' @details
 #'   1. The additional dataset (`dataset_add`) is restricted to the observations
