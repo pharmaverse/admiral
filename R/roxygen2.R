@@ -40,7 +40,7 @@ roxygen_param_by_vars <- function(unique = FALSE, rename = FALSE) {
 
   by_vars_text <- paste0(
     by_vars_text,
-    "*Permitted Values*: list of variables created by exprs() \n",
+    "*Permitted Values*: list of variables created by `exprs()` \n",
     "e.g. `exprs(USUBJID, VISIT)`"
   )
 
