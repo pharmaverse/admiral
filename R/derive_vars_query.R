@@ -207,6 +207,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #'
 #' @return The function throws an error if any of the requirements not met.
 #'
+#' @noRd
 #' @examples
 #' data("queries")
 #' assert_valid_queries(queries, "queries")

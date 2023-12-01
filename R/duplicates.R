@@ -43,7 +43,6 @@ get_duplicates_dataset <- function() {
 #'
 #' @export
 #' @family internal
-#'
 #' @keywords internal
 #'
 #' @examples

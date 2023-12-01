@@ -18,9 +18,3 @@ Turn a character vector into a list of expressions
 \examples{
 chr2vars(c("USUBJID", "AVAL"))
 }
-\seealso{
-Other utils_quo: 
-\code{\link{negate_vars}()}
-}
-\concept{utils_quo}
-\keyword{utils_quo}

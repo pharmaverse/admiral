@@ -512,6 +512,8 @@ derive_param_tte <- function(dataset = NULL,
 #' @return A dataset with one observation per subject as described in the
 #'   "Details" section.
 #'
+#' @noRd
+#'
 #' @examples
 #' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
@@ -678,7 +680,8 @@ filter_date_sources <- function(sources,
 #'   source_datasets = list(adsl = adsl, ae = ae),
 #'   by_vars = exprs(AEDECOD)
 #' )
-
+#'
+#' @noRd
 extend_source_datasets <- function(source_datasets,
                                    by_vars) {
   assert_list_of(source_datasets, "data.frame")

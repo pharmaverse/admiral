@@ -22,9 +22,5 @@ e.g., \code{select(!!!negate_vars(by_vars))} removes all by variables.
 \examples{
 negate_vars(exprs(USUBJID, STUDYID))
 }
-\seealso{
-Other utils_quo: 
-\code{\link{chr2vars}()}
-}
 \concept{utils_quo}
 \keyword{utils_quo}
