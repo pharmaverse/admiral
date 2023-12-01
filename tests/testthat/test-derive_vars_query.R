@@ -154,10 +154,33 @@ test_that("derive_vars_query Test 5: Derive decides between TERMCHAR and TERMNUM
     regexp = ".* is of type logical, numeric or character is required"
   )
 })
+##  Test 6: moving the TERMCHAR/TERMNUM NA check ----
+test_that("derive_vars_query Test 6: moving the TERMCHAR/TERMNUM NA check", {
+  query <- tibble::tribble(
+    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
+    "CQ40", "My Query 1", "AEDECOD", NA_character_, 1, NA,
+    "CQ42", "My Query 2", "AELLTCD", NA_character_, 2, 1
+  )
+
+  my_ae <- tibble::tribble(
+    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~AELLTCD,
+    "1", 1, "PTSI", "other", NA,
+    "1", 2, "PTSI", "LLTSI", NA,
+    "1", 3, NA, NA, 1
+  )
+
+  expect_error(
+    derive_vars_query(my_ae, query),
+    regexp = paste(
+      "Either `TERMCHAR` or `TERMNUM` need to be specified in `query`.",
+      "They both cannot be NA or empty."
+    )
+  )
+})
 
 # assert_valid_queries ----
-## Test 6: assert_valid_queries checks ----
-test_that("assert_valid_queries Test 6: assert_valid_queries checks", {
+## Test 7: assert_valid_queries checks ----
+test_that("assert_valid_queries Test 7: assert_valid_queries checks", {
   query <- tibble::tribble(
     ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
@@ -210,17 +233,6 @@ test_that("assert_valid_queries Test 6: assert_valid_queries checks", {
       "test"
     ),
     regexp = "`SCOPEN` in `test` must be one of 1, 2, or NA. Issue with `10` and `11`."
-  )
-
-  expect_error(
-    assert_valid_queries(
-      mutate(query, TERMCHAR = c(NA, NA)),
-      "test"
-    ),
-    regexp = paste(
-      "Either `TERMCHAR` or `TERMNUM` need to be specified in `test`.",
-      "They both cannot be NA or empty."
-    )
   )
 
   expect_error(
