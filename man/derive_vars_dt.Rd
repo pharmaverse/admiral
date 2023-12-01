@@ -75,10 +75,15 @@ The argument is ignored if \code{highest_imputation} is less then \code{"D"}.}
 
 \item{flag_imputation}{Whether the date imputation flag must also be derived.
 
-If \code{"auto"} is specified, the date imputation flag is derived if the
-\code{date_imputation} argument is not null.
+If \code{"auto"} is specified and \code{date_imputation} argument is not null or ,
+then date imputation flag is derived.
 
-\emph{Permitted Values}: \code{"auto"}, \code{"date"} or \code{"none"}}
+If \code{"date"} is specified, then date imputation flag is derived.
+
+If \code{"none"} is specified, then no date imputation flag is derived.
+
+\emph{Permitted Values}: \code{"auto"}, \code{"date"} or \code{"none"}
+\emph{Default}: \code{"auto"}}
 
 \item{min_dates}{Minimum dates
 
@@ -189,7 +194,7 @@ derive_vars_dt(
 )
 
 # Create BIRTHDT
-# Impute partial dates to 15th of June. No DTF
+# Impute partial dates to 15th of June. No Date Imputation Flag
 derive_vars_dt(
   mhdt,
   new_vars_prefix = "BIRTH",
