@@ -27,7 +27,8 @@ The variables specified by the \code{by_vars} argument are expected.}
 
 \item{by_vars}{Grouping variables
 
-\code{roxygen_param_by_vars()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{new_var}{New variable
 
