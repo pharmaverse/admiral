@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -193,7 +193,8 @@ ignore_event_order = TRUE,</code></pre>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
-<ul><li><p>The functions <code>assert_db_requirements()</code>, <code>assert_terms()</code>, <code>assert_valid_queries()</code>, <code>extend_source_datasets()</code>, <code>filter_date_sources()</code>, <code>validate_basket_select()</code>, <code>validate_query()</code> are no longer exported and have had documentation removed. (<a href="https://github.com/pharmaverse/admiral/issues/2220" class="external-link">#2220</a>)</p></li>
+<ul><li><p>The documentation of the <code>by_vars</code> and <code>constant_by_vars</code> argument was improved and unified across all functions where it is used. (<a href="https://github.com/pharmaverse/admiral/issues/2137" class="external-link">#2137</a>)</p></li>
+<li><p>The functions <code>assert_db_requirements()</code>, <code>assert_terms()</code>, <code>assert_valid_queries()</code>, <code>extend_source_datasets()</code>, <code>filter_date_sources()</code>, <code>validate_basket_select()</code>, <code>validate_query()</code> are no longer exported and have had documentation removed. (<a href="https://github.com/pharmaverse/admiral/issues/2220" class="external-link">#2220</a>)</p></li>
 <li><p>The function <code><a href="../reference/extract_duplicate_records.html">extract_duplicate_records()</a></code> has been re-classified as an <code>internal</code> function, which means that the function still appears in our help pages but not on our website. (<a href="https://github.com/pharmaverse/admiral/issues/2220" class="external-link">#2220</a>)</p></li>
 <li><p>The “Generic Functions” vignette (now “Generic Derivations”) was rewritten. Now it provides a more complete overview of the generic derivations, describe the common concepts, and makes it easier to find the appropriate function. (<a href="https://github.com/pharmaverse/admiral/issues/2230" class="external-link">#2230</a>)</p></li>
 <li><p>A way to standardize roxygen labels and descriptions for function arguments was implemented and tested (<a href="https://github.com/pharmaverse/admiral/issues/2034" class="external-link">#2034</a>)</p></li>

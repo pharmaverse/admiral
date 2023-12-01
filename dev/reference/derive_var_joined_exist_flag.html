@@ -12,7 +12,7 @@ example, flagging events which need to be confirmed by a second event."><meta pr
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -138,9 +138,11 @@ expected.</p></dd>
 
 
 <dt>by_vars</dt>
-<dd><p>By variables</p>
-<p>The specified variables are used as by variables for joining the input
-dataset (<code>dataset</code>) with the additional dataset (<code>dataset_add</code>).</p></dd>
+<dd><p>Grouping variables</p>
+<p>The specified variables are used for joining the input
+dataset (<code>dataset</code>) with the additional dataset (<code>dataset_add</code>).</p>
+<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
+e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 
 
 <dt>order</dt>

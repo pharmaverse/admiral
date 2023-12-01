@@ -18,7 +18,7 @@ each by group (order and mode argument)."><meta property="og:image" content="htt
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -146,11 +146,11 @@ argument are expected.</p></dd>
 <dt>by_vars</dt>
 <dd><p>Grouping variables</p>
 <p>The input dataset and the selected observations from the additional dataset
-are merged by the specified by variables. The by variables must be a unique
-key of the selected observations. Variables from the additional dataset can
-be renamed by naming the element, i.e., <code>by_vars = exprs(&lt;name in input dataset&gt; = &lt;name in additional dataset&gt;)</code>, similar to
-the dplyr joins.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
+are merged by the specified variables.</p>
+<p>Variables can be renamed by naming the element, i.e.
+<code>by_vars = exprs(&lt;name in input dataset&gt; = &lt;name in additional dataset&gt;)</code>, similar to the <code>dplyr</code> joins.</p>
+<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
+e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 
 
 <dt>order</dt>

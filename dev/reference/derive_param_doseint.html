@@ -18,7 +18,7 @@ Total Dose / Planned Dose * 100"><meta property="og:image" content="https://phar
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -138,7 +138,8 @@ parameter) and to the parameters specified by <code>tadm_code</code> and <code>p
 <dd><p>Grouping variables</p>
 <p>Only variables specified in <code>by_vars</code> will be populated
 in the newly created records.</p>
-<p>Permitted Values: list of variables</p></dd>
+<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
+e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 
 
 <dt>set_values_to</dt>

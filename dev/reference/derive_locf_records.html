@@ -12,7 +12,7 @@ does not contain observations for missed visits/time points."><meta property="og
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,7 +136,9 @@ does not contain observations for missed visits/time points.</p>
 <p>For each group defined by <code>by_vars</code> those observations from <code>dataset_ref</code>
 are added to the output dataset which do not have a corresponding observation
 in the input dataset or for which <code>analysis_var</code> is <code>NA</code> for the corresponding observation
-in the input dataset.</p></dd>
+in the input dataset.</p>
+<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
+e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 
 
 <dt>analysis_var</dt>

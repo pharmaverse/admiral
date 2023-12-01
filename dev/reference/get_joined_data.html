@@ -12,7 +12,7 @@ variables are included in the output dataset.'><meta property="og:image" content
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -134,9 +134,11 @@ and the <code>order</code> argument are expected.</p></dd>
 
 <dt>by_vars</dt>
 <dd><p>Grouping variables</p>
-<p>The two datasets are joined by the specified variables. Variables from the
-additional dataset can be renamed by naming the element, i.e., <code>by_vars = exprs(&lt;name in input dataset&gt; = &lt;name in additional dataset&gt;)</code>.</p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
+<p>The two datasets are joined by the specified variables.</p>
+<p>Variables can be renamed by naming the element, i.e.
+<code>by_vars = exprs(&lt;name in input dataset&gt; = &lt;name in additional dataset&gt;)</code>, similar to the <code>dplyr</code> joins.</p>
+<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
+e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 
 
 <dt>join_vars</dt>
