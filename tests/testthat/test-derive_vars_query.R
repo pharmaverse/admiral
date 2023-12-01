@@ -154,8 +154,8 @@ test_that("derive_vars_query Test 5: Derive decides between TERMCHAR and TERMNUM
     regexp = ".* is of type logical, numeric or character is required"
   )
 })
-##  Test 6: Ensure that TERMCHAR/TERMNUM are specified ----
-test_that("derive_vars_query Test 6: Ensure that TERMCHAR/TERMNUM are specified", {
+##  Test 6: Error is given when both TERMCHAR/TERMNUM are NA or empty ----
+test_that("derive_vars_query Test 6: Error is given when both TERMCHAR/TERMNUM are NA or empty", {
   query <- tibble::tribble(
     ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
     "CQ40", "My Query 1", "AEDECOD", NA_character_, 1, NA,
