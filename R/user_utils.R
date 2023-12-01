@@ -160,6 +160,9 @@ convert_na_to_blanks.data.frame <- function(x) { # nolint
 #'
 #' @return A `list` of expressions as returned by [`exprs()`]
 #'
+#' @keywords utils_quo
+#' @family utils_quo
+#'
 #' @examples
 #' chr2vars(c("USUBJID", "AVAL"))
 chr2vars <- function(chr) {
