@@ -40,8 +40,13 @@ See floor_in and add_one parameter for details.
 
 Default: 'days'
 
-Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
-'seconds', 'sec', capitalized versions of these terms is accepted too}
+Permitted Values:
+For years: "year", "years", "yr", "yrs", "y"
+For months: "month", "months", "mo", "mos"
+For days: "day", "days", "d"
+For hours: "hour", "hours", "hr", "hrs", "h"
+For minutes: "minute", "minutes", "min", "mins"
+For seconds: "second", "seconds", "sec", "secs", "s"}
 
 \item{out_unit}{Output unit
 
@@ -49,15 +54,21 @@ The duration is derived in the specified unit
 
 Default: 'days'
 
-Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
-'min', 'seconds', 'sec', capitalized versions of these terms is accepted too}
+Permitted Values:
+For years: "year", "years", "yr", "yrs", "y"
+For months: "month", "months", "mo", "mos"
+For weeks: "week", "weeks", "wk", "wks", "w"
+For days: "day", "days", "d"
+For hours: "hour", "hours", "hr", "hrs", "h"
+For minutes: "minute", "minutes", "min", "mins"
+For seconds: "second", "seconds", "sec", "secs", "s"}
 
 \item{floor_in}{Round down input dates?
 
 The input dates are round down with respect to the input unit, e.g., if the
 input unit is 'days', the time of the input dates is ignored.
 
-Default: `TRUE``
+Default: \code{TRUE}
 
 Permitted Values: \code{TRUE}, \code{FALSE}}
 

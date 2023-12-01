@@ -11,70 +11,7 @@
 #' @param new_var_unit Name of the unit variable If the parameter is not
 #'   specified, no variable for the unit is created.
 #'
-#' @param start_date The start date
-#'
-#'   A date or date-time variable is expected. This variable must be present in
-#'   specified input dataset.
-#'
-#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
-#'   character vector to a date object.
-#'
-#' @param end_date The end date
-#'
-#'   A date or date-time variable is expected. This variable must be present in
-#'   specified input dataset.
-#'
-#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
-#'   character vector to a date object.
-#'
-#' @param in_unit Input unit
-#'
-#'   See floor_in and add_one parameter for details.
-#'
-#'   Default: 'days'
-#'
-#'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
-#'   'seconds', 'sec', capitalized versions of these terms is accepted too
-#'
-#' @param out_unit Output unit
-#'
-#'   The duration is derived in the specified unit
-#'
-#'   Default: 'days'
-#'
-#'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
-#'   'seconds', 'sec', capitalized versions of these terms is accepted too
-#'
-#' @param floor_in Round down input dates?
-#'
-#'   The input dates are round down with respect to the input unit, e.g., if the
-#'   input unit is 'days', the time of the input dates is ignored.
-#'
-#'   Default: `TRUE``
-#'
-#'   Permitted Values: `TRUE`, `FALSE`
-#'
-#' @param add_one Add one input unit?
-#'
-#'   If the duration is non-negative, one input unit is added. I.e., the
-#'   duration can not be zero.
-#'
-#'   Default: `TRUE` Permitted Values: `TRUE`, `FALSE`
-#'
-#' @param trunc_out Return integer part
-#'
-#'   The fractional part of the duration (in output unit) is removed, i.e., the
-#'   integer part is returned.
-#'
-#'   Default: `FALSE`
-#'
-#'   Permitted Values: `TRUE`, `FALSE`
-#'
-#' @param type lubridate duration type.
-#'
-#'   See below for details.
-#'
-#'   Permitted Values: `"duration"`, `"interval"`
+#' @inheritParams compute_duration
 #'
 #' @details The duration is derived as time from start to end date in the
 #'   specified output unit. If the end date is before the start date, the duration
@@ -204,16 +141,26 @@ derive_vars_duration <- function(dataset,
   end_date <- assert_symbol(enexpr(end_date))
   assert_data_frame(dataset, required_vars = exprs(!!start_date, !!end_date))
 
-  in_unit <- valid_time_mappings(in_unit)
-  out_unit <- valid_time_mappings(out_unit)
+  in_unit <- get_unified_time_unit(in_unit)
+  original_out_unit <- out_unit
+  out_unit <- get_unified_time_unit(out_unit)
 
   assert_character_scalar(in_unit, values = c(
-    valid_time_units(),
-    "min", "sec"
+    c("year", "years", "yr", "yrs", "y"),
+    c("month", "months", "mo", "mos"),
+    c("day", "days", "d"),
+    c("hour", "hours", "hr", "hrs", "h"),
+    c("minute", "minutes", "min", "mins"),
+    c("second", "seconds", "sec", "secs", "s")
   ))
   assert_character_scalar(out_unit, values = c(
-    valid_time_units(),
-    "weeks", "min", "sec"
+    c("year", "years", "yr", "yrs", "y"),
+    c("month", "months", "mo", "mos"),
+    c("week", "weeks", "wk", "wks", "w"),
+    c("day", "days", "d"),
+    c("hour", "hours", "hr", "hrs", "h"),
+    c("minute", "minutes", "min", "mins"),
+    c("second", "seconds", "sec", "secs", "s")
   ))
   assert_logical_scalar(floor_in)
   assert_logical_scalar(add_one)
@@ -243,7 +190,7 @@ derive_vars_duration <- function(dataset,
 
   if (!is.null(new_var_unit)) {
     dataset <- dataset %>%
-      mutate(!!new_var_unit := if_else(is.na(!!new_var), NA_character_, out_unit))
+      mutate(!!new_var_unit := if_else(is.na(!!new_var), NA_character_, original_out_unit))
   }
 
   dataset

@@ -27,8 +27,13 @@
 #'
 #'   Default: 'days'
 #'
-#'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
-#'   'seconds', 'sec', capitalized versions of these terms is accepted too
+#'   Permitted Values:
+#'   For years: "year", "years", "yr", "yrs", "y"
+#'   For months: "month", "months", "mo", "mos"
+#'   For days: "day", "days", "d"
+#'   For hours: "hour", "hours", "hr", "hrs", "h"
+#'   For minutes: "minute", "minutes", "min", "mins"
+#'   For seconds: "second", "seconds", "sec", "secs", "s"
 #'
 #' @param out_unit Output unit
 #'
@@ -36,15 +41,21 @@
 #'
 #'   Default: 'days'
 #'
-#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
-#'   'min', 'seconds', 'sec', capitalized versions of these terms is accepted too
+#'   Permitted Values:
+#'   For years: "year", "years", "yr", "yrs", "y"
+#'   For months: "month", "months", "mo", "mos"
+#'   For weeks: "week", "weeks", "wk", "wks", "w"
+#'   For days: "day", "days", "d"
+#'   For hours: "hour", "hours", "hr", "hrs", "h"
+#'   For minutes: "minute", "minutes", "min", "mins"
+#'   For seconds: "second", "seconds", "sec", "secs", "s"
 #'
 #' @param floor_in Round down input dates?
 #'
 #'   The input dates are round down with respect to the input unit, e.g., if the
 #'   input unit is 'days', the time of the input dates is ignored.
 #'
-#'   Default: `TRUE``
+#'   Default: `TRUE`
 #'
 #'   Permitted Values: `TRUE`, `FALSE`
 #'
@@ -151,20 +162,29 @@ compute_duration <- function(start_date,
                              add_one = TRUE,
                              trunc_out = FALSE,
                              type = "duration") {
-  in_unit <- valid_time_mappings(in_unit)
-  out_unit <- valid_time_mappings(out_unit)
+  in_unit <- get_unified_time_unit(in_unit)
+  out_unit <- get_unified_time_unit(out_unit)
 
   # Checks
   assert_date_vector(start_date)
   assert_date_vector(end_date)
   assert_character_scalar(in_unit, values = c(
-    valid_time_units(),
-    "min", "sec"
+    c("year", "years", "yr", "yrs", "y"),
+    c("month", "months", "mo", "mos"),
+    c("day", "days", "d"),
+    c("hour", "hours", "hr", "hrs", "h"),
+    c("minute", "minutes", "min", "mins"),
+    c("second", "seconds", "sec", "secs", "s")
   ))
   assert_character_scalar(type, values = c("interval", "duration"))
   assert_character_scalar(out_unit, values = c(
-    valid_time_units(),
-    "weeks", "min", "sec"
+    c("year", "years", "yr", "yrs", "y"),
+    c("month", "months", "mo", "mos"),
+    c("week", "weeks", "wk", "wks", "w"),
+    c("day", "days", "d"),
+    c("hour", "hours", "hr", "hrs", "h"),
+    c("minute", "minutes", "min", "mins"),
+    c("second", "seconds", "sec", "secs", "s")
   ))
   assert_logical_scalar(floor_in)
   assert_logical_scalar(add_one)
@@ -230,7 +250,7 @@ compute_duration <- function(start_date,
 #' @family internal
 #'
 #' @noRd
-valid_time_mappings <- function(time_unit) {
+get_unified_time_unit <- function(time_unit) {
   lowercase <- tolower(time_unit)
   case_when(
     # map common years units

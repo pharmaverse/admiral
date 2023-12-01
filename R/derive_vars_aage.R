@@ -33,7 +33,14 @@
 #'
 #'   Default: 'years'
 #'
-#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
+#'   Permitted Values:
+#'   For years: "year", "years", "yr", "yrs", "y"
+#'   For months: "month", "months", "mo", "mos"
+#'   For weeks: "week", "weeks", "wk", "wks", "w"
+#'   For days: "day", "days", "d"
+#'   For hours: "hour", "hours", "hr", "hrs", "h"
+#'   For minutes: "minute", "minutes", "min", "mins"
+#'   For seconds: "second", "seconds", "sec", "secs", "s"
 #'
 #' @param unit `r lifecycle::badge("deprecated")` Please use `age_unit` instead.
 #'
@@ -94,12 +101,17 @@ derive_vars_aage <- function(dataset,
   end_date <- assert_symbol(enexpr(end_date))
   assert_data_frame(dataset, required_vars = expr_c(start_date, end_date))
 
-  age_unit <- valid_time_mappings(age_unit)
+  age_unit <- get_unified_time_unit(age_unit)
 
-  assert_character_scalar(
-    age_unit,
-    values = c("years", "months", "weeks", "days", "hours", "minutes", "seconds")
-  )
+  assert_character_scalar(age_unit, values = c(
+    c("year", "years", "yr", "yrs", "y"),
+    c("month", "months", "mo", "mos"),
+    c("week", "weeks", "wk", "wks", "w"),
+    c("day", "days", "d"),
+    c("hour", "hours", "hr", "hrs", "h"),
+    c("minute", "minutes", "min", "mins"),
+    c("second", "seconds", "sec", "secs", "s")
+  ))
 
   derive_vars_duration(
     dataset,

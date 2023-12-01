@@ -44,11 +44,20 @@ The age is derived in the specified unit
 
 Default: 'years'
 
-Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
+Permitted Values:
+For years: "year", "years", "yr", "yrs", "y"
+For months: "month", "months", "mo", "mos"
+For weeks: "week", "weeks", "wk", "wks", "w"
+For days: "day", "days", "d"
+For hours: "hour", "hours", "hr", "hrs", "h"
+For minutes: "minute", "minutes", "min", "mins"
+For seconds: "second", "seconds", "sec", "secs", "s"}
 
 \item{type}{lubridate duration type.
 
 See below for details.
+
+Default: \code{"duration"}
 
 Permitted Values: \code{"duration"}, \code{"interval"}}
 }
