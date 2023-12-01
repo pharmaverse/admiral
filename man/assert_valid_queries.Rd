@@ -26,10 +26,10 @@ Check if the dataset has the following columns
 \item \code{SCOPE}, 'BROAD', 'NARROW', or NA
 \item \code{SCOPEN}, 1, 2, or NA
 \item \code{SRCVAR}, e.g., \code{"AEDECOD"}, \code{"AELLT"}, \code{"AELLTCD"}, ...
-\item \code{TERMNAME}, character, could be NA only at those observations
-where \code{TERMID} is non-NA
-\item \code{TERMID}, integer, could be NA only at those observations
-where \code{TERMNAME} is non-NA
+\item \code{TERMCHAR}, character, could be NA only at those observations
+where \code{TERMNUM} is non-NA
+\item \code{TERMNUM}, integer, could be NA only at those observations
+where \code{TERMCHAR} is non-NA
 }
 }
 \examples{

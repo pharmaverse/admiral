@@ -1,13 +1,14 @@
-Package: admiral
 Type: Package
+Package: admiral
 Title: ADaM in R Asset Library
-Version: 0.12.3.9002
+Version: 0.12.3.9022
 Authors@R: c(
-    person("Ben", "Straub", email = "ben.x.straub@gsk.com", role = c("aut", "cre")),
+    person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
     person("Jeffrey", "Dickinson", role = "aut"),
     person("Ross", "Farrugia", role = "aut"),
     person("Adam", "Forys", role = "aut"),
+    person("G", "Gayatri", role = "aut"),
     person("Daphne", "Grasselly", role = "aut"),
     person("Dinakar", "Kulkarni", role = "aut"),
     person("Edoardo", "Mancini", role = "aut"),
@@ -15,31 +16,30 @@ Authors@R: c(
     person("Gordon", "Miller", role = "aut"),
     person("Sophie", "Shapcott", role = "aut"),
     person("Eric", "Simms", role = "aut"),
+    person("Daniel", "Sjoberg", role = "aut"),
     person("Stefan", "Thoma", role = "aut"),
     person("Kangjie", "Zhang", role = "aut"),
     person("Zelos", "Zhu", role = "aut"),
-    person("G", "Gayatri", role = "ctb"),
     person("Thomas", "Neitmann", role = "ctb"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
-    )
-Description: A toolbox for programming Clinical Data Interchange Standards Consortium
-    (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
-    mandatory part of any New Drug or Biologics License Application submitted to the
-    United States Food and Drug Administration (FDA). Analysis derivations are
-    implemented in accordance with the "Analysis Data Model Implementation Guide"
-    (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam>).
-Language: en-US
+  )
+Description: A toolbox for programming Clinical Data Interchange Standards
+    Consortium (CDISC) compliant Analysis Data Model (ADaM) datasets in R.
+    ADaM datasets are a mandatory part of any New Drug or Biologics
+    License Application submitted to the United States Food and Drug
+    Administration (FDA). Analysis derivations are implemented in
+    accordance with the "Analysis Data Model Implementation Guide" (CDISC
+    Analysis Data Model Team, 2021,
+    <https://www.cdisc.org/standards/foundational/adam>).
 License: Apache License (>= 2)
+URL: https://pharmaverse.github.io/admiral/,
+    https://github.com/pharmaverse/admiral
 BugReports: https://github.com/pharmaverse/admiral/issues
-URL: https://pharmaverse.github.io/admiral/, https://github.com/pharmaverse/admiral
-Encoding: UTF-8
-LazyData: true
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
-Depends: R (>= 4.0)
+Depends: 
+    R (>= 4.0)
 Imports:
-    admiraldev (>= 0.4.0),
+    admiraldev (>= 0.5.0.9000),
     dplyr (>= 0.8.4),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
@@ -51,15 +51,25 @@ Imports:
     tidyr (>= 1.0.2),
     tidyselect (>= 1.1.0)
 Suggests:
-    pharmaversesdtm,
-    DT,
     diffdf,
+    DT,
+    htmltools,
     knitr,
-    rmarkdown,
     methods,
+    pharmaversesdtm,
+    reactable,
     readxl,
+    rmarkdown,
     testthat (>= 3.0.0),
     tibble
-VignetteBuilder: knitr
-Config/testthat/edition: 3
+VignetteBuilder: 
+    knitr
+Remotes: 
+    pharmaverse/admiraldev
 Config/Needs/website: gert
+Config/testthat/edition: 3
+Encoding: UTF-8
+Language: en-US
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3

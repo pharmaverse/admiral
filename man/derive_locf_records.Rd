@@ -17,9 +17,9 @@ derive_locf_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars}, \code{analysis_var}, \code{order} and \code{keep_vars} argument(s) to be expected.}
+The variables specified by the \code{by_vars}, \code{analysis_var}, \code{order} and \code{keep_vars} arguments are expected to be in the dataset.}
 
-\item{dataset_expected_obs}{\emph{Deprecated}, please use \code{dataset_ref} instead.}
+\item{dataset_expected_obs}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{dataset_ref} instead.}
 
 \item{dataset_ref}{Expected observations dataset
 
@@ -42,7 +42,9 @@ in the input dataset.}
 \item{order}{Sort order
 
 The dataset is sorted by \code{order} before carrying the last observation
-forward (e.g. \code{AVAL}) within each \code{by_vars}.}
+forward (e.g. \code{AVAL}) within each \code{by_vars}.
+
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.}
 
 \item{keep_vars}{Variables that need carrying the last observation forward
 

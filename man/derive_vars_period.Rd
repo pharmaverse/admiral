@@ -14,7 +14,7 @@ derive_vars_period(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{subject_keys} argument(s) to be expected.}
+The variables specified by the \code{subject_keys} argument are expected to be in the dataset.}
 
 \item{dataset_ref}{Period reference dataset
 
@@ -138,10 +138,8 @@ derive_vars_period(
 
 ADSL Functions that returns variable appended to dataset: 
 \code{\link{derive_var_age_years}()},
-\code{\link{derive_var_dthcaus}()},
-\code{\link{derive_var_extreme_dtm}()},
-\code{\link{derive_var_extreme_dt}()},
-\code{\link{derive_vars_aage}()}
+\code{\link{derive_vars_aage}()},
+\code{\link{derive_vars_extreme_event}()}
 }
 \concept{der_adsl}
 \keyword{der_adsl}

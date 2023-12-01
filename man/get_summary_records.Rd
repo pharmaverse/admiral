@@ -10,13 +10,13 @@ get_summary_records(
   filter = NULL,
   analysis_var,
   summary_fun,
-  set_values_to
+  set_values_to = NULL
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and \code{analysis_var} argument(s) to be expected.}
+The variables specified by the \code{by_vars} and \code{analysis_var} arguments are expected to be in the dataset.}
 
 \item{by_vars}{Variables to consider for generation of groupwise summary
 records. Providing the names of variables in \code{\link[=exprs]{exprs()}} will create a
@@ -73,6 +73,11 @@ For example:
 A data frame of derived records.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+Development on \code{get_summary_records()} is complete, and for new code we recommend
+switching to using the \code{dataset_add} argument in \code{derive_summary_records()}.
+
 It is not uncommon to have an analysis need whereby one needs to derive an
 analysis value (\code{AVAL}) from multiple records. The ADaM basic dataset
 structure variable \code{DTYPE} is available to indicate when a new derived
@@ -164,17 +169,13 @@ get_summary_records(
 \seealso{
 \code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
 
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_merged_summary}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_transposed}()}
+Other superseded: 
+\code{\link{date_source}()},
+\code{\link{derive_param_extreme_record}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{dthcaus_source}()}
 }
-\concept{der_gen}
-\keyword{der_gen}
+\concept{superseded}
+\keyword{superseded}

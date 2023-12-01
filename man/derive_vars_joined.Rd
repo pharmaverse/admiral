@@ -29,7 +29,7 @@ derive_vars_joined(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument(s) to be expected.}
+The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
 \item{dataset_add}{Additional dataset
 
@@ -56,6 +56,8 @@ If an expression is named, e.g., \code{exprs(EXSTDT = convert_dtc_to_dt(EXSTDTC)
 added to the additional dataset and can be used in the filter conditions
 (\code{filter_add}, \code{filter_join}) and for \code{join_vars} and \code{new_vars}. The
 variable is not included in the output dataset.
+
+For handling of \code{NA}s in sorting variables see \href{../articles/generic.html#sort_order}{Sort Order}.
 
 \emph{Permitted Values}: list of expressions created by \code{exprs()}, e.g.,
 \code{exprs(ADT, desc(AVAL))} or \code{NULL}}
@@ -494,14 +496,15 @@ derive_vars_joined(
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},
+\code{\link{derive_var_merged_ef_msrc}()},
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
+\code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_transposed}()},
-\code{\link{get_summary_records}()}
+\code{\link{derive_vars_transposed}()}
 }
 \concept{der_gen}
 \keyword{der_gen}

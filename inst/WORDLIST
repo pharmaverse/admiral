@@ -38,6 +38,7 @@ Alkalosis
 Alanine
 Analyte
 Ania
+Asha
 Aspartate
 BDS
 BILI
@@ -61,7 +62,9 @@ CTCAEV
 CTCAEv
 CVD
 Carlucci
+Chakma
 Chemistries
+Cheatsheet
 Chol
 Cockcroft
 Creat
@@ -93,6 +96,7 @@ Fibrinogen
 Findability
 Framingham
 Franciszek
+François
 Fridericia
 Fridericia's
 Fujimoto
@@ -192,6 +196,8 @@ QID
 README
 Rahal
 Ratford
+Romain
+Saha
 SCE
 SCN
 SCOPEN
@@ -215,14 +221,15 @@ Slama
 Stefonishin
 Subperiod
 Subperiods
+Sukalpo
 Syed
 Sys
 TADJ
 TADJAE
 TDOSE
 TDURD
-TERMID
-TERMNAME
+TERMNUM
+TERMCHAR
 TID
 TLFs
 TMF
@@ -312,6 +319,7 @@ mmHg
 mmol
 modularized
 msec
+nd
 occds
 onwards
 parttime
@@ -330,6 +338,7 @@ rlang
 roche
 roxygen
 scalable
+signif
 submittable
 subperiod
 subperiods
@@ -356,4 +365,8 @@ xpt
 admiraldev
 admiralophtha
 admiralvaccine
-
+Changelog
+DAIDS
+Pharmaverse
+Phosphatase
+onboarding

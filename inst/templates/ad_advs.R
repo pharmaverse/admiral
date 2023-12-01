@@ -156,8 +156,9 @@ advs <- advs %>%
 ## Derive a new record as a summary record (e.g. mean of the triplicates at each time point) ----
 advs <- advs %>%
   derive_summary_records(
+    dataset_add = advs,
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT, ADY),
-    filter = !is.na(AVAL),
+    filter_add = !is.na(AVAL),
     set_values_to = exprs(
       AVAL = mean(AVAL),
       DTYPE = "AVERAGE"

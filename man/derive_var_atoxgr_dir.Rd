@@ -11,13 +11,13 @@ derive_var_atoxgr_dir(
   meta_criteria,
   criteria_direction,
   get_unit_expr,
-  signif_dig = 15
+  signif_dig = get_admiral_option("signif_digits")
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{tox_description_var} argument(s) to be expected.}
+The variables specified by the \code{tox_description_var} argument are expected to be in the dataset.}
 
 \item{new_var}{Name of the character grade variable to create, for example, \code{ATOXGRH}
 or \code{ATOXGRL}.}
@@ -63,7 +63,8 @@ for example, \code{get_unit_expr = extract_unit(PARAM)}.}
 \item{signif_dig}{Number of significant digits to use when comparing a lab value against another
 value.
 
-Significant digits used to avoid floating point discrepancies when comparing numeric values.}
+Significant digits used to avoid floating point discrepancies when comparing numeric values.
+See blog: \href{https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html}{How admiral handles floating points}}
 }
 \value{
 The input dataset with the character variable added

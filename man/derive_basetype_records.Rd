@@ -9,7 +9,7 @@ derive_basetype_records(dataset, basetypes)
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{basetypes} argument(s) to be expected.}
+The variables specified by the \code{basetypes} argument are expected to be in the dataset.}
 
 \item{basetypes}{A \emph{named} list of expressions created using the
 \code{rlang::exprs()} function

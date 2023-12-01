@@ -6,7 +6,7 @@
 #' @param dataset
 #' `r roxygen_param_dataset(expected_vars = c("by_vars", "analysis_var", "order", "keep_vars"))`
 #'
-#' @param dataset_expected_obs *Deprecated*, please use `dataset_ref` instead.
+#' @param dataset_expected_obs `r lifecycle::badge("deprecated")` Please use `dataset_ref` instead.
 #'
 #' @param dataset_ref Expected observations dataset
 #'
@@ -31,6 +31,8 @@
 #'
 #'   The dataset is sorted by `order` before carrying the last observation
 #'   forward (e.g. `AVAL`) within each `by_vars`.
+#'
+#'   `r roxygen_order_na_handling()`
 #'
 #' @param keep_vars Variables that need carrying the last observation forward
 #'

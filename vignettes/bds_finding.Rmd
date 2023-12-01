@@ -991,9 +991,10 @@ Set `DTYPE` to `AVERAGE`.
 ```{r eval=TRUE}
 advs_ex2 <- derive_summary_records(
   advs,
+  dataset_add = advs,
   by_vars = exprs(STUDYID, USUBJID, PARAMCD, VISITNUM, ADT),
   set_values_to = exprs(
-    AVAL = mean(AVAL),
+    AVAL = mean(AVAL, na.rm = TRUE),
     DTYPE = "AVERAGE"
   )
 )
@@ -1061,8 +1062,8 @@ and perform associated checks can be found at the [pharmaverse E2E example](http
 
 # Example Scripts {#example}
 
-ADaM | Sample Code 
+ADaM | Sourcing Command
 ---- | --------------
-ADEG | [ad_adeg.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adeg.R){target="_blank"}
-ADVS | [ad_advs.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_advs.R){target="_blank"}
-ADLB | [ad_adlb.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adlb.R){target="_blank"}
+ADEG | `use_ad_template("ADEG")`
+ADVS | `use_ad_template("ADVS")`
+ADLB | `use_ad_template("ADLB")`

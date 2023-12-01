@@ -87,7 +87,7 @@ When comparing numeric values, for example `AVAL > 1.1*ANRHI`, unexpected result
 due to floating point issues. To solve this issue {admiral} used the `signif()` function on
 both side of the equation, the number of significant digits used to compare is passed into the 
 function `derive_var_atoxgr_dir()` via the argument `signif_dig`. Please see documentation of the 
-function for more details.
+function for more details and the blog post [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html) for more context.
 
 # Creating the lab grade
 
