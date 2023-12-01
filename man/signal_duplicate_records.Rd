@@ -44,10 +44,10 @@ adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "message")
 }
 \seealso{
-Utilities used within Derivation functions: 
-\code{\link{call_user_fun}()},
-\code{\link{extract_unit}()},
-\code{\link{get_not_mapped}()}
+Other internal: 
+\code{\link{admiral}},
+\code{\link{extract_duplicate_records}()},
+\code{\link{format.basket_select}()}
 }
-\concept{utils_help}
-\keyword{utils_help}
+\concept{internal}
+\keyword{internal}

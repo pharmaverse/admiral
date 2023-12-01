@@ -13,8 +13,6 @@ derive_vars_query(dataset, dataset_queries)
 \code{GRPNAME}, \code{SRCVAR}, \code{TERMCHAR}, \code{TERMNUM}, and optional columns
 \code{GRPID}, \code{SCOPE}, \code{SCOPEN}.
 
-The content of the dataset will be verified by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.
-
 \code{create_query_data()} can be used to create the dataset.}
 }
 \value{
@@ -67,7 +65,7 @@ adae <- tribble(
 derive_vars_query(adae, queries)
 }
 \seealso{
-\code{\link[=create_query_data]{create_query_data()}} \code{\link[=assert_valid_queries]{assert_valid_queries()}}
+\code{\link[=create_query_data]{create_query_data()}}]
 
 OCCDS Functions: 
 \code{\link{derive_var_trtemfl}()},

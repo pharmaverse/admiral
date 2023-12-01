@@ -32,9 +32,7 @@
 #' `GRPNAME`, `SRCVAR`, `TERMCHAR`, `TERMNUM`, and optional columns
 #' `GRPID`, `SCOPE`, `SCOPEN`.
 #'
-#'   The content of the dataset will be verified by [assert_valid_queries()].
-#'
-#'   `create_query_data()` can be used to create the dataset.
+#' `create_query_data()` can be used to create the dataset.
 #'
 #'
 #' @return The input dataset with query variables derived.
@@ -42,7 +40,7 @@
 #' @family der_occds
 #' @keywords der_occds
 #'
-#' @seealso [create_query_data()] [assert_valid_queries()]
+#' @seealso [create_query_data()]]
 #'
 #' @export
 #'
@@ -205,17 +203,12 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #'
 #' @param queries_name Name of the queries dataset, a string.
 #'
-#'
-#' @keywords other_advanced
-#' @family other_advanced
-#'
-#' @export
-#'
 #' @return The function throws an error if any of the requirements not met.
 #'
 #' @examples
 #' data("queries")
 #' assert_valid_queries(queries, "queries")
+#' @noRd
 assert_valid_queries <- function(queries, queries_name) {
   # check required columns
   assert_data_frame(

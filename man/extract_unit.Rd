@@ -23,8 +23,7 @@ extract_unit("Diastolic Blood Pressure (mmHg)")
 \seealso{
 Utilities used within Derivation functions: 
 \code{\link{call_user_fun}()},
-\code{\link{get_not_mapped}()},
-\code{\link{signal_duplicate_records}()}
+\code{\link{get_not_mapped}()}
 }
 \concept{utils_help}
 \keyword{utils_help}
