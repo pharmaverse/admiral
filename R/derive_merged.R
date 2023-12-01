@@ -766,7 +766,7 @@ get_not_mapped <- function() {
 #'   specified *variables*. Then the resulting values are merged to the input
 #'   dataset (`dataset`) by the specified *variables*.
 #'
-#'   `roxygen_param_by_vars()`
+#'   `r roxygen_param_by_vars()`
 #'
 #' @param new_vars New variables to add
 #'
