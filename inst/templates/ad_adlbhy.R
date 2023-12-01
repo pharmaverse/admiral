@@ -90,6 +90,7 @@ hylaw_params <- derive_param_exist_flag(
 adlbhy <- adlb_annotated %>%
   bind_rows(hylaw_params)
 
+# Change to whichever directory you want to save the dataset in
 dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
 if (!file.exists(dir)) {
   # Create the folder
