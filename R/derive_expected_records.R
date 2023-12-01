@@ -19,7 +19,7 @@
 #'   are added to the output dataset which do not have a corresponding observation
 #'   in the input dataset.
 #'
-#'   `r roxygen_param_by_vars(additional_dataset = "dataset_ref")`
+#'   `r roxygen_param_by_vars()`
 #'
 #' @param set_values_to Variables to be set
 #'

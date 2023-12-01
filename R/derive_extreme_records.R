@@ -28,7 +28,7 @@
 #'
 #'   If `dataset_ref` is specified, this argument must be specified.
 #'
-#'   `r roxygen_param_by_vars(additional_dataset = "dataset_ref")`
+#'   `r roxygen_param_by_vars()`
 #'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'

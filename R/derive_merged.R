@@ -17,9 +17,9 @@
 #' @param by_vars Grouping variables
 #'
 #'   The input dataset and the selected observations from the additional dataset
-#'   are merged by the specified by variables.
+#'   are merged by the specified.
 #'
-#'   `r roxygen_param_by_vars(additional_dataset = "dataset_add", rename = TRUE, unique = TRUE)`
+#'   `r roxygen_param_by_vars(rename = TRUE, unique = TRUE)`
 #'
 #' @param order Sort order
 #'
@@ -452,7 +452,7 @@ derive_vars_merged <- function(dataset,
 #'
 #' @param by_vars Grouping variables
 #'
-#' `roxygen_param_by_vars(additional_dataset = "dataset_add")`
+#' `roxygen_param_by_vars()`
 #'
 #' @param new_var New variable
 #'

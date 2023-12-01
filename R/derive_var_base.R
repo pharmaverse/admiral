@@ -11,7 +11,7 @@
 #'  Grouping variables uniquely identifying a set
 #'  of records for which to calculate `new_var`.
 #'
-#'  `r roxygen_param_by_vars(unique = TRUE)`
+#'  `r roxygen_param_by_vars()`
 #'
 #' @param source_var The column from which to extract the baseline value, e.g. `AVAL`
 #'
