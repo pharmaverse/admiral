@@ -34,7 +34,7 @@ roxygen_param_by_vars <- function(unique = FALSE, rename = FALSE) {
       by_vars_text,
       "Variables can be renamed by naming the element, i.e. \n",
       "`by_vars = exprs(<name in input dataset> = <name in additional dataset>)`, ",
-      "similar to the dplyr joins.\n"
+      "similar to the dplyr joins.\n \n"
     )
   }
 
