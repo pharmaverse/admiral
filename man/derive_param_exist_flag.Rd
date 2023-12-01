@@ -88,9 +88,8 @@ considered.
 
 \emph{Permitted Values}: a condition}
 
-\item{by_vars}{Variables to uniquely identify a group
+\item{by_vars}{Grouping variables
 
-Variables must be a unique key of the selected observations.
 \emph{Permitted Values}: list of variables created by exprs()
 e.g. \code{exprs(USUBJID, VISIT)}}
 

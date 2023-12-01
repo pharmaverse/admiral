@@ -21,7 +21,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 The variables specified by the \code{by_vars} and \code{value_var} parameters,
 \code{FAGRPID} and \code{FATESTCD} are required}
 
-\item{by_vars}{By variables
+\item{by_vars}{Grouping variables
 
 Keys used to merge \code{dataset_facm} with \code{dataset}.
 

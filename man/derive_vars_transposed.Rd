@@ -23,7 +23,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 The variables specified by the \code{by_vars}, \code{key_var} and \code{value_var} parameters
 are expected}
 
-\item{by_vars}{By variables
+\item{by_vars}{Grouping variables
 
 Keys used to merge \code{dataset_merge} with \code{dataset}.
 

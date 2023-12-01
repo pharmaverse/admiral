@@ -10,7 +10,7 @@
 #'   The variables specified by the `by_vars`, `key_var` and `value_var` parameters
 #'   are expected
 #'
-#' @param by_vars By variables
+#' @param by_vars Grouping variables
 #'
 #'  Keys used to merge `dataset_merge` with `dataset`.
 #'
@@ -113,7 +113,7 @@ derive_vars_transposed <- function(dataset,
 #'   The variables specified by the `by_vars` and `value_var` parameters,
 #'   `FAGRPID` and `FATESTCD` are required
 #'
-#' @param by_vars By variables
+#' @param by_vars Grouping variables
 #'
 #'  Keys used to merge `dataset_facm` with `dataset`.
 #'
