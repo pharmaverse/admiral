@@ -15,8 +15,7 @@ Get list of records not mapped from the lookup table.
 \seealso{
 Utilities used within Derivation functions: 
 \code{\link{call_user_fun}()},
-\code{\link{extract_unit}()},
-\code{\link{signal_duplicate_records}()}
+\code{\link{extract_unit}()}
 }
 \concept{utils_help}
 \keyword{utils_help}

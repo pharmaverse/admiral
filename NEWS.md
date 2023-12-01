@@ -157,6 +157,14 @@ order = exprs(my_order_var),
   
 ## Documentation
 
+- The functions `assert_db_requirements()`, `assert_terms()`, `assert_valid_queries()`,
+  `extend_source_datasets()`, `filter_date_sources()`, `validate_basket_select()`,
+  `validate_query()` are no longer exported and have had documentation removed. (#2220)
+  
+- The function `extract_duplicate_records()` has been re-classified as an `internal`
+  function, which means that the function still appears in our help pages but not
+  on our website. (#2220)
+
 - The "Generic Functions" vignette (now "Generic Derivations") was rewritten.
 Now it provides a more complete overview of the generic derivations, describe
 the common concepts, and makes it easier to find the appropriate function.

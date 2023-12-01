@@ -26,4 +26,5 @@
 #' @importFrom tidyselect all_of any_of contains matches vars_select
 #' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
+#' @importFrom stats setNames
 "_PACKAGE"
