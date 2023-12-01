@@ -68,6 +68,9 @@ these functions handles any floating point issues. (#2134)
 
 - Fixed a bug in `derive_vars_period()` where the function was throwing an error whenever `dataset_ref` contained variables that were neither key variables, nor `APERIOD`, `ASPER`, `APHASEN`, nor mentioned in the `new_vars` argument. (#2231)
 
+- Updated the unit test for `derive_var_obs_number()`. The new test checked the derivation of the default and customized `new_var`, 
+sorting with the the missing value and expected conditions. (#2260)
+
 ## Breaking Changes
 
 - `derive_extreme_records()` the `dataset_add` argument is now mandatory. (#2139)
