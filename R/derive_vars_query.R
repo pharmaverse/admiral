@@ -81,7 +81,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
       ))
     }
   }
-  if (length(srcvar_types) == 1 & srcvar_types %in% c("integer", "double")) {
+  if (length(srcvar_types) == 1 && srcvar_types %in% c("integer", "double")) {
     assert_data_frame(dataset_queries, required_vars = exprs(TERMNUM))
     if ("TERMCHAR" %in% names(dataset_queries)) {
       abort(paste0(
@@ -91,7 +91,9 @@ derive_vars_query <- function(dataset, dataset_queries) {
       ))
     }
   }
-  if (length(srcvar_types) > 1 & "character" %in% srcvar_types & ("integer" %in% srcvar_types | "double" %in% srcvar_types)) {
+  if (length(srcvar_types) > 1 &&
+    "character" %in% srcvar_types &&
+    ("integer" %in% srcvar_types || "double" %in% srcvar_types)) {
     assert_data_frame(dataset_queries, required_vars = exprs(TERMCHAR, TERMNUM))
     # check illegal term name
     if (any(is.na(dataset_queries$TERMCHAR) & is.na(dataset_queries$TERMNUM)) ||
