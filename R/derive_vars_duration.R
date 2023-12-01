@@ -204,29 +204,8 @@ derive_vars_duration <- function(dataset,
   end_date <- assert_symbol(enexpr(end_date))
   assert_data_frame(dataset, required_vars = exprs(!!start_date, !!end_date))
 
-  in_unit <- case_match(
-    tolower(in_unit),
-    c("year", "years", "yr", "yrs", "y") ~ "years",
-    c("month", "months", "mo", "mos") ~ "months",
-    c("week", "weeks", "wk", "wks", "w") ~ "weeks",
-    c("day", "days", "d") ~ "days",
-    c("hour", "hours", "hr", "hrs", "h") ~ "hours",
-    c("minute", "minutes", "min", "mins") ~ "minutes",
-    c("second", "seconds", "sec", "secs", "s") ~ "seconds",
-    .default = in_unit
-  )
-
-  out_unit <- case_match(
-    tolower(out_unit),
-    c("year", "years", "yr", "yrs", "y") ~ "years",
-    c("month", "months", "mo", "mos") ~ "months",
-    c("week", "weeks", "wk", "wks", "w") ~ "weeks",
-    c("day", "days", "d") ~ "days",
-    c("hour", "hours", "hr", "hrs", "h") ~ "hours",
-    c("minute", "minutes", "min", "mins") ~ "minutes",
-    c("second", "seconds", "sec", "secs", "s") ~ "seconds",
-    .default = out_unit
-  )
+  in_unit <- valid_time_mappings(in_unit)
+  out_unit <- valid_time_mappings(out_unit)
 
   assert_character_scalar(in_unit, values = c(
     valid_time_units(),

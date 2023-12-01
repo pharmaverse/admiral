@@ -151,29 +151,9 @@ compute_duration <- function(start_date,
                              add_one = TRUE,
                              trunc_out = FALSE,
                              type = "duration") {
-  in_unit <- case_match(
-    tolower(in_unit),
-    c("year", "years", "yr", "yrs", "y") ~ "years",
-    c("month", "months", "mo", "mos") ~ "months",
-    c("week", "weeks", "wk", "wks", "w") ~ "weeks",
-    c("day", "days", "d") ~ "days",
-    c("hour", "hours", "hr", "hrs", "h") ~ "hours",
-    c("minute", "minutes", "min", "mins") ~ "minutes",
-    c("second", "seconds", "sec", "secs", "s") ~ "seconds",
-    .default = in_unit
-  )
 
-  out_unit <- case_match(
-    tolower(out_unit),
-    c("year", "years", "yr", "yrs", "y") ~ "years",
-    c("month", "months", "mo", "mos") ~ "months",
-    c("week", "weeks", "wk", "wks", "w") ~ "weeks",
-    c("day", "days", "d") ~ "days",
-    c("hour", "hours", "hr", "hrs", "h") ~ "hours",
-    c("minute", "minutes", "min", "mins") ~ "minutes",
-    c("second", "seconds", "sec", "secs", "s") ~ "seconds",
-    .default = out_unit
-  )
+  in_unit <- valid_time_mappings(in_unit)
+  out_unit <- valid_time_mappings(out_unit)
 
   # Checks
   assert_date_vector(start_date)
@@ -239,4 +219,59 @@ compute_duration <- function(start_date,
     duration <- trunc(duration)
   }
   duration
+}
+
+#' Map common units of time into standardized terms
+#'
+#' @param time_unit input unit
+#'
+#' @return standardized term if mapping is available
+#'
+#' @keywords internal
+#' @family internal
+#'
+#' @noRd
+valid_time_mappings <- function(time_unit) {
+  lowercase <- tolower(time_unit)
+  case_when(
+    # map common years units
+    lowercase == "year" ~ "years",
+    lowercase == "years" ~ "years",
+    lowercase == "yr" ~ "years",
+    lowercase == "yrs" ~ "years",
+    lowercase == "y" ~ "years",
+    # map common months units
+    lowercase == "month" ~ "months",
+    lowercase == "months"~ "months",
+    lowercase == "mo" ~ "months",
+    lowercase == "mos" ~ "months",
+    # map common weeks units
+    lowercase == "week" ~ "weeks",
+    lowercase == "weeks" ~ "weeks",
+    lowercase == "wk" ~ "weeks",
+    lowercase == "wks" ~ "weeks",
+    lowercase == "w" ~ "weeks",
+    # map common days units
+    lowercase == "day" ~ "days",
+    lowercase == "days" ~ "days",
+    lowercase == "d" ~ "days",
+    # map common hours units
+    lowercase == "hour" ~ "hours",
+    lowercase == "hours" ~ "hours",
+    lowercase == "hr" ~ "hours",
+    lowercase == "hrs" ~ "hours",
+    lowercase == "h" ~ "hours",
+    # map common minutes units
+    lowercase == "minute" ~ "minutes",
+    lowercase == "minutes" ~ "minutes",
+    lowercase == "min" ~ "minutes",
+    lowercase == "mins" ~ "minutes",
+    # map common seconds units
+    lowercase == "second" ~ "seconds",
+    lowercase == "seconds" ~ "seconds",
+    lowercase == "sec" ~ "seconds",
+    lowercase == "secs" ~ "seconds",
+    lowercase == "s" ~ "seconds",
+    TRUE ~ time_unit
+  )
 }
