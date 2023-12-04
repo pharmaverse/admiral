@@ -40,7 +40,7 @@ If you decide to contribute with code and you're ready to make your first code c
 1.  Create a new feature branch from the development branch `main`
     following the naming convention and pull the latest changes - as
     detailed on the [GitHub
-    usage](git_usage.html#working-with-feature-branches-1) guide.
+    usage](https://pharmaverse.github.io/admiraldev/articles/git_usage.html#working-with-feature-branches-1) guide.
 2.  Familiarize yourself with the `{admiral}` [programming
     strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html), and then make the required
     code updates.
