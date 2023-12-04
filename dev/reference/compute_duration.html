@@ -12,7 +12,7 @@ relative day, age, ..."><meta property="og:image" content="https://pharmaverse.g
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9025</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9026</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,24 +136,33 @@ character vector to a date object.</p>
 <dt>in_unit</dt>
 <dd><p>Input unit</p>
 <p>See floor_in and add_one parameter for details.</p>
-<p>Default: 'days'</p>
-<p>Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
-'seconds', 'sec'</p></dd>
+<p>Permitted Values:</p>
+<p>For years: <code>"year"</code>, <code>"years"</code>, <code>"yr"</code>, <code>"yrs"</code>, <code>"y"</code></p>
+<p>For months: <code>"month"</code>, <code>"months"</code>, <code>"mo"</code>, <code>"mos"</code></p>
+<p>For days: <code>"day"</code>, <code>"days"</code>, <code>"d"</code></p>
+<p>For hours: <code>"hour"</code>, <code>"hours"</code>, <code>"hr"</code>, <code>"hrs"</code>, <code>"h"</code></p>
+<p>For minutes: <code>"minute"</code>, <code>"minutes"</code>, <code>"min"</code>, <code>"mins"</code></p>
+<p>For seconds: <code>"second"</code>, <code>"seconds"</code>, <code>"sec"</code>, <code>"secs"</code>, <code>"s"</code></p></dd>
 
 
 <dt>out_unit</dt>
 <dd><p>Output unit</p>
 <p>The duration is derived in the specified unit</p>
-<p>Default: 'days'</p>
-<p>Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
-'min', 'seconds', 'sec'</p></dd>
+<p>Permitted Values:</p>
+<p>For years: <code>"year"</code>, <code>"years"</code>, <code>"yr"</code>, <code>"yrs"</code>, <code>"y"</code></p>
+<p>For months: <code>"month"</code>, <code>"months"</code>, <code>"mo"</code>, <code>"mos"</code></p>
+<p>For weeks: <code>"week"</code>, <code>"weeks"</code>, <code>"wk"</code>, <code>"wks"</code>, <code>"w"</code></p>
+<p>For days: <code>"day"</code>, <code>"days"</code>, <code>"d"</code></p>
+<p>For hours: <code>"hour"</code>, <code>"hours"</code>, <code>"hr"</code>, <code>"hrs"</code>, <code>"h"</code></p>
+<p>For minutes: <code>"minute"</code>, <code>"minutes"</code>, <code>"min"</code>, <code>"mins"</code></p>
+<p>For seconds: <code>"second"</code>, <code>"seconds"</code>, <code>"sec"</code>, <code>"secs"</code>, <code>"s"</code></p></dd>
 
 
 <dt>floor_in</dt>
 <dd><p>Round down input dates?</p>
 <p>The input dates are round down with respect to the input unit, e.g., if the
 input unit is 'days', the time of the input dates is ignored.</p>
-<p>Default: `TRUE``</p>
+<p>Default: <code>TRUE</code></p>
 <p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></dd>
 
 

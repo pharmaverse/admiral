@@ -14,7 +14,7 @@ and the date/time imputation flag ('--DTF', '--TMF') can be added."><meta proper
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9025</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9026</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -187,9 +187,13 @@ for the start of the day,</p></li>
 
 <dt>flag_imputation</dt>
 <dd><p>Whether the date/time imputation flag(s) must also be derived.</p>
-<p>If <code>"auto"</code> is specified, the date imputation flag is derived if the
-<code>date_imputation</code> argument is not null and the time imputation flag is
-derived if the <code>time_imputation</code> argument is not null</p>
+<p>If <code>"both"</code> or <code>"date"</code> is specified, then date imputation flag is derived.
+If <code>"auto"</code> is specified and <code>highest_imputation</code> argument is greater than
+<code>"h"</code>, then date imputation flag is derived.</p>
+<p>If <code>"both"</code> or <code>"time"</code> is specified, then time imputation flag is derived.
+If <code>"auto"</code> is specified and <code>highest_imputation</code> argument is not <code>"n"</code>,
+then time imputation flag is derived.</p>
+<p>If <code>"none"</code> is specified, then no date or time imputation flag is derived.</p>
 <p><em>Permitted Values</em>: <code>"auto"</code>, <code>"date"</code>, <code>"time"</code>, <code>"both"</code>, or <code>"none"</code></p></dd>
 
 

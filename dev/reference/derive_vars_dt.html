@@ -14,7 +14,7 @@ and the date imputation flag ('--DTF') can be added."><meta property="og:image" 
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9025</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9026</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -174,8 +174,10 @@ middle of the possible range:</p><ul><li><p>If both month and day are missing, t
 
 <dt>flag_imputation</dt>
 <dd><p>Whether the date imputation flag must also be derived.</p>
-<p>If <code>"auto"</code> is specified, the date imputation flag is derived if the
-<code>date_imputation</code> argument is not null.</p>
+<p>If <code>"auto"</code> is specified and <code>highest_imputation</code> argument is not <code>"n"</code>,
+then date imputation flag is derived.</p>
+<p>If <code>"date"</code> is specified, then date imputation flag is derived.</p>
+<p>If <code>"none"</code> is specified, then no date imputation flag is derived.</p>
 <p><em>Permitted Values</em>: <code>"auto"</code>, <code>"date"</code> or <code>"none"</code></p></dd>
 
 
@@ -339,7 +341,7 @@ a warning is issued and <code>'--DTF'</code> will be overwritten.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> <span style="color: #949494;">""</span>                    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>    </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Create BIRTHDT</span></span></span>
-<span class="r-in"><span><span class="co"># Impute partial dates to 15th of June. No DTF</span></span></span>
+<span class="r-in"><span><span class="co"># Impute partial dates to 15th of June. No Date Imputation Flag</span></span></span>
 <span class="r-in"><span><span class="fu">derive_vars_dt</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">mhdt</span>,</span></span>
 <span class="r-in"><span>  new_vars_prefix <span class="op">=</span> <span class="st">"BIRTH"</span>,</span></span>

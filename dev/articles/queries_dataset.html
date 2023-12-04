@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9025</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9026</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -239,7 +239,12 @@ SRCVAR</td>
 </table>
 <p><strong>Bold variables</strong> are required in
 <code>dataset_queries</code>: an error is issued if any of these
-variables is missing. Other variables are optional.</p>
+variables is missing. <code>TERMCHAR</code> is only REQUIRED if there is
+character variable named in <code>SRCVAR</code>. <code>TERMNUM</code> is
+only REQUIRED if there is numeric variable named in <code>SRCVAR</code>.
+When <code>SRCVAR</code> contains both character and numeric variables,
+then both <code>TERMCHAR</code> and <code>TERMNUM</code> are required.
+Other variables are optional.</p>
 <p>The <code>VERSION</code> variable is not used by
 <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> but can be used to check if the
 dictionary version of the queries dataset and the analysis dataset are
