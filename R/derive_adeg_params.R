@@ -20,7 +20,7 @@
 #'   Only variables specified in `by_vars` will be populated
 #'   in the newly created records.
 #'
-#'   Permitted Values: list of variables
+#'   `r roxygen_param_by_vars()`
 #'
 #' @param method Method used to QT correction
 #'

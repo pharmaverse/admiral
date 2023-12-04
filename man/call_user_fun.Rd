@@ -30,8 +30,7 @@ try(call_user_fun(compute_bmi(
 \seealso{
 Utilities used within Derivation functions: 
 \code{\link{extract_unit}()},
-\code{\link{get_not_mapped}()},
-\code{\link{signal_duplicate_records}()}
+\code{\link{get_not_mapped}()}
 }
 \concept{utils_help}
 \keyword{utils_help}

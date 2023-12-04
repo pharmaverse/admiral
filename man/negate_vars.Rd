@@ -23,7 +23,7 @@ e.g., \code{select(!!!negate_vars(by_vars))} removes all by variables.
 negate_vars(exprs(USUBJID, STUDYID))
 }
 \seealso{
-Other utils_quo: 
+Utilities for working with quosures/list of expressions: 
 \code{\link{chr2vars}()}
 }
 \concept{utils_quo}

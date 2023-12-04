@@ -28,7 +28,7 @@
 #'
 #'   If `dataset_ref` is specified, this argument must be specified.
 #'
-#'   *Permitted Values*: list of variables created by `exprs()`
+#'   `r roxygen_param_by_vars()`
 #'
 #' @param filter_add Filter for additional dataset (`dataset_add`)
 #'

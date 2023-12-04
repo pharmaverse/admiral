@@ -18,10 +18,12 @@
 #'   The variables specified for `by_vars`, `join_vars`, and `order` are
 #'   expected.
 #'
-#' @param by_vars By variables
+#' @param by_vars Grouping variables
 #'
-#'   The specified variables are used as by variables for joining the input
+#'   The specified variables are used for joining the input
 #'   dataset (`dataset`) with the additional dataset (`dataset_add`).
+#'
+#'   `r roxygen_param_by_vars()`
 #'
 #' @param order Order
 #'

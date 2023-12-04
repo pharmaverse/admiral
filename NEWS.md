@@ -68,6 +68,9 @@ these functions handles any floating point issues. (#2134)
 
 - Fixed a bug in `derive_vars_period()` where the function was throwing an error whenever `dataset_ref` contained variables that were neither key variables, nor `APERIOD`, `ASPER`, `APHASEN`, nor mentioned in the `new_vars` argument. (#2231)
 
+- Updated the unit test for `derive_var_obs_number()`. The new test checked the derivation of the default and customized `new_var`, 
+sorting with the the missing value and expected conditions. (#2260)
+
 ## Breaking Changes
 
 - `derive_extreme_records()` the `dataset_add` argument is now mandatory. (#2139)
@@ -153,6 +156,16 @@ order = exprs(my_order_var),
 - The functions `derive_var_dthcaus()`, `derive_var_extreme_dt()`, and `derive_var_extreme_dtm()` are superseded in favor of `derive_vars_extreme_event()`. (#2138)
   
 ## Documentation
+
+- The documentation of the `by_vars` and `constant_by_vars` argument was improved and unified across all functions where it is used. (#2137)
+
+- The functions `assert_db_requirements()`, `assert_terms()`, `assert_valid_queries()`,
+  `extend_source_datasets()`, `filter_date_sources()`, `validate_basket_select()`,
+  `validate_query()` are no longer exported and have had documentation removed. (#2220)
+  
+- The function `extract_duplicate_records()` has been re-classified as an `internal`
+  function, which means that the function still appears in our help pages but not
+  on our website. (#2220)
 
 - The "Generic Functions" vignette (now "Generic Derivations") was rewritten.
 Now it provides a more complete overview of the generic derivations, describe

@@ -388,11 +388,9 @@ get_terms_from_db <- function(version,
 #'
 #' @param i Index of query being checked
 #'
-#' @keywords other_advanced
-#' @family other_advanced
-#'
 #' @return An error is issued if `version` or `fun` is null.
 #'
+#' @noRd
 assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name, queries, i) {
   if (is.null(fun)) {
     msg <-
@@ -588,15 +586,10 @@ query <- function(prefix,
 #'
 #' @param obj An object to be validated.
 #'
-#'
-#' @keywords other_advanced
-#' @family other_advanced
-#'
 #' @seealso [query()]
 #'
-#' @export
-#'
 #' @return The original object.
+#' @noRd
 validate_query <- function(obj) {
   assert_s3_class(obj, "query")
   values <- unclass(obj)
@@ -725,13 +718,8 @@ validate_query <- function(obj) {
 #'     source_text = "object provided by the `definition` element"
 #'   )
 #' )
-#' @export
 #'
-#' @seealso [create_query_data()], [query()]
-#'
-#' @keywords other_advanced
-#' @family other_advanced
-#'
+#' @noRd
 assert_terms <- function(terms,
                          expect_grpname = FALSE,
                          expect_grpid = FALSE,
@@ -846,11 +834,7 @@ basket_select <- function(name = NULL,
 #'
 #' @seealso [basket_select()]
 #'
-#' @keywords other_advanced
-#' @family other_advanced
-#'
-#'
-#' @export
+#' @noRd
 #'
 #' @return The original object.
 validate_basket_select <- function(obj) {
@@ -892,8 +876,8 @@ validate_basket_select <- function(obj) {
 #'
 #' @seealso [basket_select()]
 #'
-#' @keywords other_advanced
-#' @family other_advanced
+#' @keywords internal
+#' @family internal
 #'
 #' @export
 #'

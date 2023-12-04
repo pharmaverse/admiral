@@ -18,9 +18,12 @@ get_summary_records(
 
 The variables specified by the \code{by_vars} and \code{analysis_var} arguments are expected to be in the dataset.}
 
-\item{by_vars}{Variables to consider for generation of groupwise summary
-records. Providing the names of variables in \code{\link[=exprs]{exprs()}} will create a
-groupwise summary and generate summary records for the specified groups.}
+\item{by_vars}{Grouping variables
+
+Variables to consider for generation of groupwise summary records.
+
+\emph{Permitted Values}: list of variables created by \code{exprs()}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{filter}{Filter condition as logical expression to apply during
 summary calculation. By default, filtering expressions are computed within

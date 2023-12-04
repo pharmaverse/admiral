@@ -27,10 +27,13 @@ A named list of datasets is expected. The \code{dataset_name} field of
 \code{records_source()} refers to the dataset provided in the list. The variables
 specified by the \code{order} and the \code{by_vars} arguments are expected after applying \code{new_vars}.}
 
-\item{by_vars}{By variables
+\item{by_vars}{Grouping variables
 
 If the argument is specified, for each by group the observations are
-selected separately.}
+selected separately.
+
+\emph{Permitted Values}: list of variables created by \code{exprs()}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{order}{Sort order
 

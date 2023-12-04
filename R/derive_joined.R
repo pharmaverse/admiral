@@ -16,11 +16,9 @@
 #'
 #' @param by_vars Grouping variables
 #'
-#'   The two datasets are joined by the specified variables. Variables from the
-#'   additional dataset can be renamed by naming the element, i.e., `by_vars =
-#'   exprs(<name in input dataset> = <name in additional dataset>)`.
+#'   The two datasets are joined by the specified variables.
 #'
-#'   *Permitted Values*: list of variables created by `exprs()`
+#'   `r roxygen_param_by_vars(rename = TRUE)`
 #'
 #' @param order Sort order
 #'
@@ -559,11 +557,9 @@ derive_vars_joined <- function(dataset,
 #'
 #' @param by_vars Grouping variables
 #'
-#'   The two datasets are joined by the specified variables. Variables from the
-#'   additional dataset can be renamed by naming the element, i.e., `by_vars =
-#'   exprs(<name in input dataset> = <name in additional dataset>)`.
+#'   The two datasets are joined by the specified variables.
 #'
-#'   *Permitted Values*: list of variables created by `exprs()`
+#'   `r roxygen_param_by_vars(rename = TRUE)`
 #'
 #' @param order Sort order
 #'

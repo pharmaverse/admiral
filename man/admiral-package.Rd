@@ -18,6 +18,11 @@ Useful links:
   \item Report bugs at \url{https://github.com/pharmaverse/admiral/issues}
 }
 
+
+Other internal: 
+\code{\link{extract_duplicate_records}()},
+\code{\link{format.basket_select}()},
+\code{\link{signal_duplicate_records}()}
 }
 \author{
 \strong{Maintainer}: Ben Straub \email{ben.x.straub@gsk.com}

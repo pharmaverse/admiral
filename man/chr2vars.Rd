@@ -19,7 +19,7 @@ Turn a character vector into a list of expressions
 chr2vars(c("USUBJID", "AVAL"))
 }
 \seealso{
-Other utils_quo: 
+Utilities for working with quosures/list of expressions: 
 \code{\link{negate_vars}()}
 }
 \concept{utils_quo}

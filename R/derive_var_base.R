@@ -6,8 +6,12 @@
 #'
 #' @param dataset `r roxygen_param_dataset(expected_vars = c("by_vars", "source_var"))`
 #'
-#' @param by_vars Grouping variables uniquely identifying a set
-#'        of records for which to calculate `new_var`
+#' @param by_vars Grouping variables
+#'
+#'  Grouping variables uniquely identifying a set
+#'  of records for which to calculate `new_var`.
+#'
+#'  `r roxygen_param_by_vars()`
 #'
 #' @param source_var The column from which to extract the baseline value, e.g. `AVAL`
 #'
