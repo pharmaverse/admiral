@@ -11,8 +11,12 @@ extract_duplicate_records(dataset, by_vars)
 
 The variables specified by the \code{by_vars} argument are expected to be in the dataset.}
 
-\item{by_vars}{A list of expressions created using \code{exprs()} identifying
-groups of records in which to look for duplicates}
+\item{by_vars}{Grouping variables
+
+Defines groups of records in which to look for duplicates.
+
+\emph{Permitted Values}: list of variables created by \code{exprs()}
+e.g. \code{exprs(USUBJID, VISIT)}}
 }
 \value{
 A \code{data.frame} of duplicate records within \code{dataset}
@@ -29,10 +33,10 @@ adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 extract_duplicate_records(adsl, exprs(USUBJID))
 }
 \seealso{
-Utilities for Dataset Checking: 
-\code{\link{get_duplicates_dataset}()},
-\code{\link{get_many_to_one_dataset}()},
-\code{\link{get_one_to_many_dataset}()}
+Other internal: 
+\code{\link{admiral}},
+\code{\link{format.basket_select}()},
+\code{\link{signal_duplicate_records}()}
 }
-\concept{utils_ds_chk}
-\keyword{utils_ds_chk}
+\concept{internal}
+\keyword{internal}

@@ -21,7 +21,8 @@ in this dataset.}
 
 \item{by_vars}{Grouping variables
 
-A list of variable names specified within \code{exprs()} is expected.}
+\emph{Permitted Values}: list of variables created by \code{exprs()}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{filter_add}{Filter for the source dataset
 

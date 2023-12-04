@@ -214,6 +214,16 @@ passed "as is", e.g. `filter = PARAMCD == "TEMP"`
 - For arguments which expect one or more expressions, a list of expressions is
 expected, e.g. `order = exprs(AVISIT, desc(AESEV))`
 
+## What is `exprs()`?
+
+`exprs()` is a function from the `{rlang}` package. It is used to create a list
+of expressions. The expressions are not evaluated. Rather they are passed on to
+the derivation function which evaluates them in its own environment. This allows
+the derivation function to evaluate the expressions in the context of the input
+dataset.
+Specifically, the `exprs()` function allows users to pass variable names of datasets 
+to the function without wrapping them in quotation marks. 
+
 # Handling of Missing Values
 
 When using the `{haven}` package to read SAS datasets into R, SAS-style character missing values, i.e. `""`, are *not* converted into proper R `NA` values. Rather they are kept as is. This is problematic for any downstream data processing as R handles `""` just as any other string. Thus, before any data manipulation is being performed SAS blanks should be converted to R `NA`s using `{admiral}`'s `convert_blanks_to_na()` function, e.g.

@@ -32,7 +32,8 @@ The expressions on the left hand sides of \code{new_vars} are evaluated by the
 specified \emph{variables}. Then the resulting values are merged to the input
 dataset (\code{dataset}) by the specified \emph{variables}.
 
-\emph{Permitted Values}: list of variables created by \code{exprs()}}
+\emph{Permitted Values}: list of variables created by \code{exprs()}
+e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{new_vars}{New variables to add
 

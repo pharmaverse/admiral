@@ -18,6 +18,7 @@ list(
     utils_examples = "Utilities used for examples and template scripts: ",
     utils_impute = "Utilities used for date imputation: ",
     utils_print = "Utilities for printing: ",
+    utils_quo = "Utilities for working with quosures/list of expressions: ",
     source_specifications = "Source Objects: ",
     other_advanced = "Other Advanced Functions: ",
     high_order_function = "Higher Order Functions: ",

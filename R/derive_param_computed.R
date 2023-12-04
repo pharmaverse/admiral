@@ -72,7 +72,7 @@
 #'   dataset. Only variables specified in `by_vars` will be populated
 #'   in the newly created records.
 #'
-#'   *Permitted Values:* list of variables
+#'   `r roxygen_param_by_vars()`
 #'
 #' @param constant_parameters Required constant parameter codes
 #'
@@ -103,7 +103,7 @@
 #'   The constant parameters (parameters that are measured only once) are merged
 #'   to the other parameters using the specified variables. (Refer to Example 2)
 #'
-#'   *Permitted Values:* list of variables
+#'   `r roxygen_param_by_vars()`
 #'
 #' @param analysis_value Definition of the analysis value
 #'
@@ -431,7 +431,9 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #' @param dataset
 #' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
-#' @param by_vars By variables
+#' @param by_vars Grouping variables
+#'
+#' `r roxygen_param_by_vars()`
 #'
 #' @param parameters List of parameter codes
 #'

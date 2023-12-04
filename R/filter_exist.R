@@ -17,7 +17,7 @@
 #'
 #' @param by_vars Grouping variables
 #'
-#'   A list of variable names specified within `exprs()` is expected.
+#' `r roxygen_param_by_vars()`
 #'
 #' @param filter_add Filter for the source dataset
 #'
