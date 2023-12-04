@@ -75,15 +75,14 @@ The argument is ignored if \code{highest_imputation} is less then \code{"D"}.}
 
 \item{flag_imputation}{Whether the date imputation flag must also be derived.
 
-If \code{"auto"} is specified and \code{date_imputation} argument is not null or ,
+If \code{"auto"} is specified and \code{highest_imputation} argument is not \code{"n"},
 then date imputation flag is derived.
 
 If \code{"date"} is specified, then date imputation flag is derived.
 
 If \code{"none"} is specified, then no date imputation flag is derived.
 
-\emph{Permitted Values}: \code{"auto"}, \code{"date"} or \code{"none"}
-\emph{Default}: \code{"auto"}}
+\emph{Permitted Values}: \code{"auto"}, \code{"date"} or \code{"none"}}
 
 \item{min_dates}{Minimum dates
 
