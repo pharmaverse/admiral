@@ -42,16 +42,21 @@ Default: \code{RANDDT}}
 
 The age is derived in the specified unit
 
-Default: 'years'
-
 Permitted Values:
-For years: "year", "years", "yr", "yrs", "y"
-For months: "month", "months", "mo", "mos"
-For weeks: "week", "weeks", "wk", "wks", "w"
-For days: "day", "days", "d"
-For hours: "hour", "hours", "hr", "hrs", "h"
-For minutes: "minute", "minutes", "min", "mins"
-For seconds: "second", "seconds", "sec", "secs", "s"}
+
+For years: \code{"year"}, \code{"years"}, \code{"yr"}, \code{"yrs"}, \code{"y"}
+
+For months: \code{"month"}, \code{"months"}, \code{"mo"}, \code{"mos"}
+
+For weeks: \code{"week"}, \code{"weeks"}, \code{"wk"}, \code{"wks"}, \code{"w"}
+
+For days: \code{"day"}, \code{"days"}, \code{"d"}
+
+For hours: \code{"hour"}, \code{"hours"}, \code{"hr"}, \code{"hrs"}, \code{"h"}
+
+For minutes: \code{"minute"}, \code{"minutes"}, \code{"min"}, \code{"mins"}
+
+For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \code{"s"}}
 
 \item{type}{lubridate duration type.
 

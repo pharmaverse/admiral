@@ -25,30 +25,39 @@
 #'
 #'   See floor_in and add_one parameter for details.
 #'
-#'   Default: 'days'
-#'
 #'   Permitted Values:
-#'   For years: "year", "years", "yr", "yrs", "y"
-#'   For months: "month", "months", "mo", "mos"
-#'   For days: "day", "days", "d"
-#'   For hours: "hour", "hours", "hr", "hrs", "h"
-#'   For minutes: "minute", "minutes", "min", "mins"
-#'   For seconds: "second", "seconds", "sec", "secs", "s"
+#'
+#'   For years: `"year"`, `"years"`, `"yr"`, `"yrs"`, `"y"`
+#'
+#'   For months: `"month"`, `"months"`, `"mo"`, `"mos"`
+#'
+#'   For days: `"day"`, `"days"`, `"d"`
+#'
+#'   For hours: `"hour"`, `"hours"`, `"hr"`, `"hrs"`, `"h"`
+#'
+#'   For minutes: `"minute"`, `"minutes"`, `"min"`, `"mins"`
+#'
+#'   For seconds: `"second"`, `"seconds"`, `"sec"`, `"secs"`, `"s"`
 #'
 #' @param out_unit Output unit
 #'
 #'   The duration is derived in the specified unit
 #'
-#'   Default: 'days'
-#'
 #'   Permitted Values:
-#'   For years: "year", "years", "yr", "yrs", "y"
-#'   For months: "month", "months", "mo", "mos"
-#'   For weeks: "week", "weeks", "wk", "wks", "w"
-#'   For days: "day", "days", "d"
-#'   For hours: "hour", "hours", "hr", "hrs", "h"
-#'   For minutes: "minute", "minutes", "min", "mins"
-#'   For seconds: "second", "seconds", "sec", "secs", "s"
+#'
+#'   For years: `"year"`, `"years"`, `"yr"`, `"yrs"`, `"y"`
+#'
+#'   For months: `"month"`, `"months"`, `"mo"`, `"mos"`
+#'
+#'   For weeks: `"week"`, `"weeks"`, `"wk"`, `"wks"`, `"w"`
+#'
+#'   For days: `"day"`, `"days"`, `"d"`
+#'
+#'   For hours: `"hour"`, `"hours"`, `"hr"`, `"hrs"`, `"h"`
+#'
+#'   For minutes: `"minute"`, `"minutes"`, `"min"`, `"mins"`
+#'
+#'   For seconds: `"second"`, `"seconds"`, `"sec"`, `"secs"`, `"s"`
 #'
 #' @param floor_in Round down input dates?
 #'
