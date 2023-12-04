@@ -2,16 +2,17 @@
 
 ## New Features
 
-- Implemented `derive_vars_extreme_event()`, which works as `derive_extreme_event()` but adds variables instead of a parameter. (#2138)
+- The new function `derive_vars_extreme_event()`, which works as `derive_extreme_event()` 
+but adds variables instead of a parameter. (#2138)
 
 - The new function `derive_var_merged_ef_msrc()` is provided to add a flag
 indicating if one of the conditions in one of multiple source datasets is
 fulfilled. (#1728)
 
-- New global option created `signif_digits` to handle floating point issue, the
-value is set to `15`, and is used with the `base R` function `signif()` when
-comparing 2 numeric values. This is implemented in `admiral ` functions
-`derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134)
+- New global option created `signif_digits` and added to `set_admiral_options()` to 
+handle floating point issue, the value is set to `15`, and is used with the `base R` 
+function `signif()` when comparing 2 numeric values. This is implemented in `admiral ` 
+functions `derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134)
 
     For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
 
@@ -73,6 +74,8 @@ sorting with the the missing value and expected conditions. (#2260)
 
 ## Breaking Changes
 
+- `{admiral}` now only supports R >= 4.0.0 
+
 - In `derive_extreme_records()` the `dataset_add` argument is now mandatory. (#2139)
 
 - In `derive_summary_records()` and `get_summary_records()` the arguments
@@ -83,8 +86,6 @@ sorting with the the missing value and expected conditions. (#2260)
 
 - In `derive_var_merged_summary()` the arguments `new_var`, `analysis_var`, and
 `summary_fun` were deprecated in favor of `new_vars`. (#1792)
-
-- `{admiral}` now only supports R >= 4.0.0 
 
 - In `derive_vars_merged()`, the argument `match_flag` was renamed to `exist_flag` (#2125)
 
@@ -152,7 +153,9 @@ order = exprs(my_order_var),
   - `derive_expected_records(dataset_expected_obs)` 
   - `derive_var_ontrtfl(span_period)` 
   
+  
 - The `derive_param_extreme_record()` function has been superseded in favor of `derive_extreme_event()`. (#2141)
+
 - The functions `derive_var_dthcaus()`, `derive_var_extreme_dt()`, and `derive_var_extreme_dtm()` have been superseded in favor of `derive_vars_extreme_event()`. (#2138)
   
 ## Documentation
@@ -186,7 +189,7 @@ the imputation functions, e.g. `derive_vars_dtm()`. (#2222)
 
 - Added an example derivation of `DTHCGR1` to the ADSL vignette. (#2218)
 
-- Moved Development Process from `admiraldev` to Contribution Model in the 
+- Moved Development Process from `{admiraldev}` to Contribution Model in the 
 `admiral` website, updated GitHub strategy. (#2196)
 
 - Added new drop downs in Get Started navigation bar- Getting Started, Admiral Discovery, Cheatsheet. Community removed from top. (#2217)
