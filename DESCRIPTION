@@ -56,7 +56,7 @@ Suggests:
     htmltools,
     knitr,
     methods,
-    pharmaversesdtm,
+    pharmaversesdtm (>= 0.2.0),
     reactable,
     readxl,
     rmarkdown,
