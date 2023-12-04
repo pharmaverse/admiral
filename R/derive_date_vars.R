@@ -1263,8 +1263,12 @@ compute_tmf <- function(dtc,
 #'
 #' @param flag_imputation Whether the date imputation flag must also be derived.
 #'
-#'   If `"auto"` is specified, the date imputation flag is derived if the
-#'   `date_imputation` argument is not null.
+#'   If `"auto"` is specified and `highest_imputation` argument is not `"n"`,
+#'   then date imputation flag is derived.
+#'
+#'   If `"date"` is specified, then date imputation flag is derived.
+#'
+#'   If `"none"` is specified, then no date imputation flag is derived.
 #'
 #'   *Permitted Values*: `"auto"`, `"date"` or `"none"`
 #'
@@ -1338,7 +1342,7 @@ compute_tmf <- function(dtc,
 #' )
 #'
 #' # Create BIRTHDT
-#' # Impute partial dates to 15th of June. No DTF
+#' # Impute partial dates to 15th of June. No Date Imputation Flag
 #' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "BIRTH",
@@ -1471,9 +1475,15 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
 #'
 #' @param flag_imputation Whether the date/time imputation flag(s) must also be derived.
 #'
-#'   If `"auto"` is specified, the date imputation flag is derived if the
-#'   `date_imputation` argument is not null and the time imputation flag is
-#'   derived if the `time_imputation` argument is not null
+#'   If `"both"` or `"date"` is specified, then date imputation flag is derived.
+#'   If `"auto"` is specified and `highest_imputation` argument is greater than
+#'   `"h"`, then date imputation flag is derived.
+#'
+#'   If `"both"` or `"time"` is specified, then time imputation flag is derived.
+#'   If `"auto"` is specified and `highest_imputation` argument is not `"n"`,
+#'   then time imputation flag is derived.
+#'
+#'   If `"none"` is specified, then no date or time imputation flag is derived.
 #'
 #'   *Permitted Values*: `"auto"`, `"date"`, `"time"`, `"both"`, or `"none"`
 #'

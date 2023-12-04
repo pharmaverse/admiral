@@ -8,7 +8,8 @@
 #'
 #'   *Default*: `NULL`
 #'
-#'   *Permitted Values:* list of variables created by `exprs()`
+#'   `r roxygen_param_by_vars()`
+#'
 #'
 #' @param order Sort order
 #'

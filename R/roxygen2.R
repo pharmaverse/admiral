@@ -17,6 +17,30 @@ roxygen_param_dataset <- function(expected_vars = NULL) {
   return(dataset_text)
 }
 
+
+# function to properly document the by_vars argument including specifying the use of exprs():
+
+roxygen_param_by_vars <- function(rename = FALSE) {
+  by_vars_text <- ""
+
+  if (rename) {
+    by_vars_text <- paste0(
+      by_vars_text,
+      "Variables can be renamed by naming the element, i.e. \n",
+      "`by_vars = exprs(<name in input dataset> = <name in additional dataset>)`, ",
+      "similar to the `dplyr` joins.\n \n"
+    )
+  }
+
+  by_vars_text <- paste0(
+    by_vars_text,
+    "*Permitted Values*: list of variables created by `exprs()` \n",
+    "e.g. `exprs(USUBJID, VISIT)`"
+  )
+
+  return(by_vars_text)
+}
+
 roxygen_order_na_handling <- function() {
   paste(
     "For handling of `NA`s in sorting variables see",

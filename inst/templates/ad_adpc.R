@@ -506,9 +506,10 @@ adpc <- adpc_baselines %>%
 # ...
 # ---- Save output ----
 
-dir <- file.path(getwd(), "tmp")
+# Change to whichever directory you want to save the dataset in
+dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
 if (!file.exists(dir)) {
   # Create the folder
-  dir.create(dir)
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 }
-save(adpc, file = file.path(dir, "adcp.rda"), compress = "bzip2")
+save(adpc, file = file.path(dir, "adpc.rda"), compress = "bzip2")

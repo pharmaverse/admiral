@@ -100,15 +100,7 @@ call_derivation(
 \code{\link[=call_derivation]{call_derivation()}}
 
 Other Advanced Functions: 
-\code{\link{assert_db_requirements}()},
-\code{\link{assert_terms}()},
-\code{\link{assert_valid_queries}()},
-\code{\link{extend_source_datasets}()},
-\code{\link{filter_date_sources}()},
-\code{\link{format.basket_select}()},
-\code{\link{list_tte_source_objects}()},
-\code{\link{validate_basket_select}()},
-\code{\link{validate_query}()}
+\code{\link{list_tte_source_objects}()}
 }
 \concept{other_advanced}
 \keyword{other_advanced}

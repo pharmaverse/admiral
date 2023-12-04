@@ -19,6 +19,8 @@
 #'   are added to the output dataset which do not have a corresponding observation
 #'   in the input dataset.
 #'
+#'   `r roxygen_param_by_vars()`
+#'
 #' @param set_values_to Variables to be set
 #'
 #'   The specified variables are set to the specified values for the new
