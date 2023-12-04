@@ -62,25 +62,17 @@
 #' )
 #' derive_vars_query(adae, queries)
 derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
-  assert_data_frame(dataset_queries)
-  assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
+  source_vars <- unique(dataset_queries$SRCVAR)
   assert_data_frame(dataset,
-    required_vars = exprs(!!!syms(unique(dataset_queries$SRCVAR))),
+    required_vars = chr2vars(source_vars),
     optional = FALSE
   )
 
   # check optionality of TERMNUM or TERMCHAR based on SRCVAR type
-  srcvar_types <- unique(vapply(dataset[dataset_queries$SRCVAR], typeof, character(1)))
-  if (length(srcvar_types) == 1 && srcvar_types == "character") {
-    assert_data_frame(dataset_queries, required_vars = exprs(TERMCHAR))
-  }
-  if (length(srcvar_types) == 1 && srcvar_types %in% c("integer", "double")) {
-    assert_data_frame(dataset_queries, required_vars = exprs(TERMNUM))
-  }
-  if (length(srcvar_types) > 1 &&
-    "character" %in% srcvar_types &&
-    ("integer" %in% srcvar_types || "double" %in% srcvar_types)) {
-    assert_data_frame(dataset_queries, required_vars = exprs(TERMCHAR, TERMNUM))
+  termvars <- exprs(character = TERMCHAR, integer = TERMNUM, double = TERMNUM)
+  expected_termvars <- unique(termvars[srcvar_types])
+  assert_data_frame(dataset_queries, required_vars = c(exprs(PREFIX, GRPNAME, SRCVAR), expected_termvars))
+  if (length(srcvar_types) > 1) {
     # check illegal term name
     if (any(is.na(dataset_queries$TERMCHAR) & is.na(dataset_queries$TERMNUM)) ||
       any(dataset_queries$TERMCHAR == "" & is.na(dataset_queries$TERMNUM))) {
@@ -91,6 +83,7 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
       ))
     }
   }
+  assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
 
   dataset_queries <- convert_blanks_to_na(dataset_queries)
 
@@ -133,10 +126,6 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
 
   # queries restructured
   queries_wide <- dataset_queries %>%
-    mutate(
-      TERMCHAR = toupper(TERMCHAR),
-      PREFIX_NAM = paste0(PREFIX, "NAM")
-    ) %>%
     pivot_wider(names_from = PREFIX_NAM, values_from = GRPNAME) %>%
     mutate(PREFIX_CD = paste0(PREFIX, "CD")) %>%
     pivot_wider(names_from = PREFIX_CD, values_from = GRPID) %>%
@@ -173,7 +162,7 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
   }
 
   # prepare input dataset for joining
-  static_cols <- setdiff(names(dataset), unique(dataset_queries$SRCVAR))
+  static_cols <- setdiff(names(dataset), chr2vars(source_vars))
   # if dataset does not have a unique key, create a temp one
   no_key <- dataset %>%
     select(all_of(static_cols)) %>%
@@ -240,12 +229,6 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
 #' data("queries")
 #' assert_valid_queries(queries, "queries")
 assert_valid_queries <- function(queries, queries_name) {
-  # check required columns
-  assert_data_frame(
-    queries,
-    required_vars = exprs(PREFIX, GRPNAME, SRCVAR)
-  )
-
   # check duplicate rows
   signal_duplicate_records(queries, by_vars = exprs(!!!syms(colnames(queries))))
 
