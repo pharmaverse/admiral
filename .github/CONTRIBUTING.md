@@ -42,18 +42,18 @@ If you decide to contribute with code and you're ready to make your first code c
     detailed on the [GitHub
     usage](git_usage.html#working-with-feature-branches-1) guide.
 2.  Familiarize yourself with the `{admiral}` [programming
-    strategy](programming_strategy.html), and then make the required
+    strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html), and then make the required
     code updates.
 3.  Before making a pull request, check the [Pull Request Review
-    Guidance](pr_review_guidance.html) & the following checklist of
+    Guidance](https://pharmaverse.github.io/admiraldev/articles/pr_review_guidance.html) & the following checklist of
     common things developers miss:
     a.  Is all your code formatted according to the
         [tidyverse](https://style.tidyverse.org/) style guide?
     b.  Did you create/add appropriate [unit
-        tests](unit_test_guidance.html#writing-unit-tests-in-admiral)?
+        tests](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html#writing-unit-tests-in-admiral)?
     c.  If you removed/replaced any function and/or function parameters,
         did you fully follow the [deprecation
-        guidance](programming_strategy.html#deprecation)?
+        guidance](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation)?
     d.  Did you update the
         [documentation]https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#function-header-documentation)?
         If so, remember to run `devtools::document()` and include the
@@ -67,13 +67,13 @@ If you decide to contribute with code and you're ready to make your first code c
     h.  Did you build `{admiral}` site `pkgdown::build_site()` and check
         that all affected examples are displayed correctly and that all
         new functions occur on the
-        "[Reference](../reference/index.html)" page?
+        "[Reference](https://pharmaverse.github.io/admiral/reference/)" page?
 4.  Once happy with all the updates, make a [pull
-    request](git_usage.html#pull-request) to merge to the `main` branch
+    request](https://pharmaverse.github.io/admiraldev/articles/git_usage.html#pull-request) to merge to the `main` branch
     and link the issue so that it closes after successful merging.
 5.  Check that there are no merge conflicts. If there are any, fix them
     before requesting review. See [solving merge
-    conflicts](git_usage.html#solving-merge-conflicts-in-the-terminal-on-rstudio)
+    conflicts](https://pharmaverse.github.io/admiraldev/articles/git_usage.html#solving-merge-conflicts-in-the-terminal-on-rstudio)
     guidance.
 6.  Check the results of the automated `R-CMD check` and `lintr` checks
     and if any issues consult this
