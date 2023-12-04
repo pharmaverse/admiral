@@ -125,6 +125,10 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
 
   # queries restructured
   queries_wide <- dataset_queries %>%
+    mutate(
+      TERMCHAR = toupper(TERMCHAR),
+      PREFIX_NAM = paste0(PREFIX, "NAM")
+    ) %>%
     pivot_wider(names_from = PREFIX_NAM, values_from = GRPNAME) %>%
     mutate(PREFIX_CD = paste0(PREFIX, "CD")) %>%
     pivot_wider(names_from = PREFIX_CD, values_from = GRPID) %>%
