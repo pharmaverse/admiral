@@ -67,10 +67,11 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
   )
 
   # check optionality of TERMNUM or TERMCHAR based on SRCVAR type
+  srcvar_types <- unique(vapply(dataset[source_vars], typeof, character(1)))
   termvars <- exprs(character = TERMCHAR, integer = TERMNUM, double = TERMNUM)
   expected_termvars <- unique(termvars[srcvar_types])
   assert_data_frame(dataset_queries, required_vars = c(exprs(PREFIX, GRPNAME, SRCVAR), expected_termvars))
-  if (length(srcvar_types) > 1) {
+  if (length(expected_termvars) > 1) {
     # check illegal term name
     if (any(is.na(dataset_queries$TERMCHAR) & is.na(dataset_queries$TERMNUM)) ||
       any(dataset_queries$TERMCHAR == "" & is.na(dataset_queries$TERMNUM))) {
