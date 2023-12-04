@@ -47,7 +47,8 @@ The {admiral} family has several downstream and upstream dependencies and so rel
 |                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)          |
 |                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)      |
 |                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      |                                                                      |
-| Q1-2024          |                                                                          | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)    |
+| Q1-2024          |                                                                          | January (Date TBC)                                                   |
+|                  |                                                                          | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)    |
 | Q2-2024          | June 3rd                                                                 | June 8th                                                             |
 |                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)          |
 |                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)      |
