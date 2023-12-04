@@ -91,9 +91,15 @@ The argument is ignored if \code{highest_imputation = "n"}.}
 
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
-If \code{"auto"} is specified, the date imputation flag is derived if the
-\code{date_imputation} argument is not null and the time imputation flag is
-derived if the \code{time_imputation} argument is not null
+If \code{"both"} or \code{"date"} is specified, then date imputation flag is derived.
+If \code{"auto"} is specified and \code{highest_imputation} argument is greater than
+\code{"h"}, then date imputation flag is derived.
+
+If \code{"both"} or \code{"time"} is specified, then time imputation flag is derived.
+If \code{"auto"} is specified and \code{highest_imputation} argument is not \code{"n"},
+then time imputation flag is derived.
+
+If \code{"none"} is specified, then no date or time imputation flag is derived.
 
 \emph{Permitted Values}: \code{"auto"}, \code{"date"}, \code{"time"}, \code{"both"}, or \code{"none"}}
 
