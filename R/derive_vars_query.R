@@ -29,7 +29,7 @@
 #' @param dataset `r roxygen_param_dataset()`
 #'
 #' @param dataset_queries A dataset containing required columns `PREFIX`,
-#' `GRPNAME`, `SRCVAR`, `TERMCHAR`, `TERMNUM`, and optional columns
+#' `GRPNAME`, `SRCVAR`, `TERMCHAR` and/or `TERMNUM`, and optional columns
 #' `GRPID`, `SCOPE`, `SCOPEN`.
 #'
 #' `create_query_data()` can be used to create the dataset.
@@ -59,13 +59,45 @@
 #'   7, "Alveolar proteinosis", NA_character_, NA_integer_
 #' )
 #' derive_vars_query(adae, queries)
-derive_vars_query <- function(dataset, dataset_queries) {
-  assert_data_frame(dataset_queries)
-  assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
+derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
+  source_vars <- unique(dataset_queries$SRCVAR)
   assert_data_frame(dataset,
-    required_vars = exprs(!!!syms(unique(dataset_queries$SRCVAR))),
+    required_vars = chr2vars(source_vars),
     optional = FALSE
   )
+
+  # check optionality of TERMNUM or TERMCHAR based on SRCVAR type
+  srcvar_types <- unique(vapply(dataset[source_vars], typeof, character(1)))
+  if (!all(srcvar_types %in% c("character", "integer", "double"))) {
+    idx <- source_vars[!vapply(dataset[source_vars], typeof, character(1)) %in% c("character", "integer", "double")] # nolint
+    dat_incorrect_type <- dataset[idx]
+    msg <- paste0(
+      paste0(
+        colnames(dat_incorrect_type),
+        " is of type ",
+        vapply(dat_incorrect_type, typeof, character(1)),
+        collapse = ", "
+      ),
+      ", numeric or character is required"
+    )
+    abort(msg)
+  }
+
+  termvars <- exprs(character = TERMCHAR, integer = TERMNUM, double = TERMNUM)
+  expected_termvars <- unique(termvars[srcvar_types])
+  assert_data_frame(dataset_queries, required_vars = c(exprs(PREFIX, GRPNAME, SRCVAR), expected_termvars)) # nolint
+  if (length(expected_termvars) > 1) {
+    # check illegal term name
+    if (any(is.na(dataset_queries$TERMCHAR) & is.na(dataset_queries$TERMNUM)) ||
+      any(dataset_queries$TERMCHAR == "" & is.na(dataset_queries$TERMNUM))) {
+      abort(paste0(
+        "Either `TERMCHAR` or `TERMNUM` need to be specified",
+        " in `", deparse(substitute(dataset_queries)), "`. ",
+        "They both cannot be NA or empty."
+      ))
+    }
+  }
+  assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
 
   dataset_queries <- convert_blanks_to_na(dataset_queries)
 
@@ -131,24 +163,8 @@ derive_vars_query <- function(dataset, dataset_queries) {
       )
     )
 
-  # throw error if any type of column is not character or numeric
-  if (any(is.na(queries_wide$TERM_NAME_ID))) {
-    idx <- is.na(queries_wide$TERM_NAME_ID)
-    dat_incorrect_type <- dataset[queries_wide$SRCVAR[idx]]
-    msg <- paste0(
-      paste0(
-        colnames(dat_incorrect_type),
-        " is of type ",
-        vapply(dat_incorrect_type, typeof, character(1)),
-        collapse = ", "
-      ),
-      ", numeric or character is required"
-    )
-    abort(msg)
-  }
-
   # prepare input dataset for joining
-  static_cols <- setdiff(names(dataset), unique(dataset_queries$SRCVAR))
+  static_cols <- setdiff(names(dataset), chr2vars(source_vars))
   # if dataset does not have a unique key, create a temp one
   no_key <- dataset %>%
     select(all_of(static_cols)) %>%
@@ -210,12 +226,6 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #' assert_valid_queries(queries, "queries")
 #' @noRd
 assert_valid_queries <- function(queries, queries_name) {
-  # check required columns
-  assert_data_frame(
-    queries,
-    required_vars = exprs(PREFIX, GRPNAME, SRCVAR, TERMCHAR, TERMNUM)
-  )
-
   # check duplicate rows
   signal_duplicate_records(queries, by_vars = exprs(!!!syms(colnames(queries))))
 
@@ -284,16 +294,6 @@ assert_valid_queries <- function(queries, queries_name) {
         )
       )
     }
-  }
-
-  # check illegal term name
-  if (any(is.na(queries$TERMCHAR) & is.na(queries$TERMNUM)) ||
-    any(queries$TERMCHAR == "" & is.na(queries$TERMNUM))) {
-    abort(paste0(
-      "Either `TERMCHAR` or `TERMNUM` need to be specified",
-      " in `", queries_name, "`. ",
-      "They both cannot be NA or empty."
-    ))
   }
 
   # each PREFIX must have unique GRPNAME, GRPID if the columns exist

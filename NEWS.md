@@ -68,8 +68,12 @@ these functions handles any floating point issues. (#2134)
 
 - Fixed a bug in `derive_vars_period()` where the function was throwing an error whenever `dataset_ref` contained variables that were neither key variables, nor `APERIOD`, `ASPER`, `APHASEN`, nor mentioned in the `new_vars` argument. (#2231)
 
+- `compute_duration()`, `derive_vars_duration()`, `derive_vars_aage()` now accepts more terms for the `in_unit`, `out_unit`, and `age_unit` arguments (#2255)
+
 - Updated the unit test for `derive_var_obs_number()`. The new test checked the derivation of the default and customized `new_var`, 
 sorting with the the missing value and expected conditions. (#2260)
+
+- The check for existence of `TERMNUM`/`TERMCHAR` in queries dataset is now less strict depending on values of `SRCVAR` for `derive_vars_query()` (#2264) 
 
 ## Breaking Changes
 
