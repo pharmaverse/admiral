@@ -5,7 +5,7 @@ test_that("derive_vars_aage Test 1: duration and unit variable are added", {
     ~BRTHDT, ~RANDDT,
     ymd("1999-09-09"), ymd("2020-02-20")
   )
-  expected_output <- mutate(input, AAGE = 20, AAGEU = "YEARS")
+  expected_output <- mutate(input, AAGE = 20, AAGEU = "years")
 
   expect_dfs_equal(derive_vars_aage(input), expected_output, keys = c("BRTHDT", "RANDDT"))
 })
@@ -18,9 +18,10 @@ test_that("derive_vars_aage Test 2: Error is thrown when age_unit is not proper 
   )
   expect_error(
     derive_vars_aage(input, age_unit = "centuries"),
-    "`age_unit` must be one of 'years', 'months', 'weeks', 'days', 'hours', 'minutes' or 'seconds' but is 'centuries'" # nolint
+    "but is 'centuries'"
   )
 })
+
 
 # derive_var_age_years ----
 ## Test 3: derive_var_age_years works as expected when AGEU exists ----

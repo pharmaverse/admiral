@@ -40,7 +40,7 @@ Depends:
     R (>= 4.0)
 Imports:
     admiraldev (>= 0.5.0.9000),
-    dplyr (>= 0.8.4),
+    dplyr (>= 1.0.5),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
     lubridate (>= 1.7.4),

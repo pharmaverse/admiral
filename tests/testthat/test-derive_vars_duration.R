@@ -20,7 +20,8 @@ test_that("derive_vars_duration Test 1: Duration and unit variable are added", {
     new_var_unit = AGEU,
     out_unit = "years",
     trunc_out = TRUE
-  )
+  ) %>%
+    mutate(AGEU = toupper(AGEU))
 
   expect_dfs_equal(actual_output, expected_output, keys = "USUBJID")
 })
@@ -46,7 +47,8 @@ test_that("derive_vars_duration Test 2: Duration and unit variable are added", {
     start_date = ASTDT,
     end_date = AENDT,
     out_unit = "days"
-  )
+  ) %>%
+    mutate(ADURU = toupper(ADURU))
 
   expect_dfs_equal(actual_output, expected_output, keys = "USUBJID")
 })
@@ -74,7 +76,8 @@ test_that("derive_vars_duration Test 3: Duration and unit variable are added", {
     in_unit = "minutes",
     out_unit = "minutes",
     add_one = FALSE
-  )
+  ) %>%
+    mutate(ADURU = toupper(ADURU))
 
   expect_dfs_equal(actual_output, expected_output, keys = "USUBJID")
 })
@@ -96,7 +99,9 @@ test_that("derive_vars_duration Test 4: type argument works for interval", {
     out_unit = "months",
     add_one = FALSE,
     type = "interval"
-  )
+  ) %>%
+    mutate(ADURU = toupper(ADURU))
+
   expected_output <- dplyr::mutate(
     input,
     ADURN = c(1, 1),
@@ -122,7 +127,9 @@ test_that("derive_vars_duration Test 5: type argument works for duration", {
     out_unit = "months",
     add_one = FALSE,
     type = "duration"
-  )
+  ) %>%
+    mutate(ADURU = toupper(ADURU))
+
   expected_output <- dplyr::mutate(
     input,
     ADURN = c((28 / (365.25 / 12)), (29 / (365.25 / 12))),
