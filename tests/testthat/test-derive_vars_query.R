@@ -136,8 +136,7 @@ test_that("derive_vars_query Test 5: Derive decides between TERMCHAR and TERMNUM
     "1", 1, "PTSI", "other", NA,
     "1", 2, "PTSI", "LLTSI", NA,
     "1", 3, NA, NA, 1
-  ) %>%
-    mutate(AELLTCD = as.logical(AELLTCD))
+  )
 
   actual_output <- derive_vars_query(my_ae, dataset_queries = query)
 
@@ -152,9 +151,10 @@ test_that("derive_vars_query Test 5: Derive decides between TERMCHAR and TERMNUM
 
   expect_error(
     derive_vars_query(mutate(my_ae, AELLTCD = as.logical(AELLTCD)), query),
-    regexp = ", numeric or character is required"
+    regexp = "numeric or character is required"
   )
 })
+
 ##  Test 6: Error is given when both TERMCHAR/TERMNUM are NA or empty ----
 test_that("derive_vars_query Test 6: Error is given when both TERMCHAR/TERMNUM are NA or empty", {
   query <- tibble::tribble(
