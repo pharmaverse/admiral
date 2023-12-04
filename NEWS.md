@@ -181,7 +181,7 @@ the common concepts, and makes it easier to find the appropriate function.
 
 - A way to standardize roxygen labels and descriptions for function arguments was implemented and tested. (#2034)
 
-- A link to published CDISC Population PK (ADPPK) implementation guide wasadded. (#2161)
+- A link to published CDISC Population PK (ADPPK) implementation guide was added. (#2161)
 
 - Removed Deprecation section in Reference tab. Added new Superseded section in 
 Reference tab. (#2174)
