@@ -71,6 +71,8 @@ these functions handles any floating point issues. (#2134)
 - Updated the unit test for `derive_var_obs_number()`. The new test checked the derivation of the default and customized `new_var`, 
 sorting with the the missing value and expected conditions. (#2260)
 
+- The check for existence of `TERMNUM`/`TERMCHAR` in queries dataset is now less strict depending on values of `SRCVAR` for `derive_vars_query()` (#2264) 
+
 ## Breaking Changes
 
 - `derive_extreme_records()` the `dataset_add` argument is now mandatory. (#2139)
