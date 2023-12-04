@@ -55,11 +55,11 @@ If you decide to contribute with code and you're ready to make your first code c
         did you fully follow the [deprecation
         guidance](programming_strategy.html#deprecation)?
     d.  Did you update the
-        [documentation](programming_strategy.html#function-header-documentation)?
+        [documentation]https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#function-header-documentation)?
         If so, remember to run `devtools::document()` and include the
         updated `NAMESPACE` and `.Rd` files in `man/`.
     e.  Does your code update have any impact on the [ADaM
-        template](https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html#starting-a-script)
+        template](https://pharmaverse.github.io/admiral/articles/admiral.html#starting-a-script)
         R scripts stored in `inst/templates`?
     f.  Does your code update have any impact on the vignettes stored in
         vignettes?
@@ -77,7 +77,7 @@ If you decide to contribute with code and you're ready to make your first code c
     guidance.
 6.  Check the results of the automated `R-CMD check` and `lintr` checks
     and if any issues consult this
-    [guide](pr_review_guidance.html#common-r-cmd-check-issues).
+    [guide](https://pharmaverse.github.io/admiraldev/articles/pr_review_guidance.html#common-r-cmd-check-issues).
 7.  Assign a reviewer from the `{admiral}` core development team - this
     could be anyone you discussed the issue with previously via Slack or
     GitHub. If unsure, add a comment that the pull request is ready for
