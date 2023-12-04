@@ -68,6 +68,21 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
 
   # check optionality of TERMNUM or TERMCHAR based on SRCVAR type
   srcvar_types <- unique(vapply(dataset[source_vars], typeof, character(1)))
+  if (!all(srcvar_types %in% c("character", "integer", "double"))) {
+    idx <- source_vars[!vapply(dataset[source_vars], typeof, character(1)) %in% c("character", "integer", "double")] # nolint
+    dat_incorrect_type <- dataset[idx]
+    msg <- paste0(
+      paste0(
+        colnames(dat_incorrect_type),
+        " is of type ",
+        vapply(dat_incorrect_type, typeof, character(1)),
+        collapse = ", "
+      ),
+      ", numeric or character is required"
+    )
+    abort(msg)
+  }
+
   termvars <- exprs(character = TERMCHAR, integer = TERMNUM, double = TERMNUM)
   expected_termvars <- unique(termvars[srcvar_types])
   assert_data_frame(dataset_queries, required_vars = c(exprs(PREFIX, GRPNAME, SRCVAR), expected_termvars))
@@ -147,22 +162,6 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
         TRUE ~ NA_character_
       )
     )
-
-  # throw error if any type of column is not character or numeric
-  if (any(is.na(queries_wide$TERM_NAME_ID))) {
-    idx <- is.na(queries_wide$TERM_NAME_ID)
-    dat_incorrect_type <- dataset[queries_wide$SRCVAR[idx]]
-    msg <- paste0(
-      paste0(
-        colnames(dat_incorrect_type),
-        " is of type ",
-        vapply(dat_incorrect_type, typeof, character(1)),
-        collapse = ", "
-      ),
-      ", numeric or character is required"
-    )
-    abort(msg)
-  }
 
   # prepare input dataset for joining
   static_cols <- setdiff(names(dataset), chr2vars(source_vars))
