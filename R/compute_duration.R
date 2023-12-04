@@ -25,26 +25,46 @@
 #'
 #'   See floor_in and add_one parameter for details.
 #'
-#'   Default: 'days'
+#'   Permitted Values:
 #'
-#'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
-#'   'seconds', 'sec'
+#'   For years: `"year"`, `"years"`, `"yr"`, `"yrs"`, `"y"`
+#'
+#'   For months: `"month"`, `"months"`, `"mo"`, `"mos"`
+#'
+#'   For days: `"day"`, `"days"`, `"d"`
+#'
+#'   For hours: `"hour"`, `"hours"`, `"hr"`, `"hrs"`, `"h"`
+#'
+#'   For minutes: `"minute"`, `"minutes"`, `"min"`, `"mins"`
+#'
+#'   For seconds: `"second"`, `"seconds"`, `"sec"`, `"secs"`, `"s"`
 #'
 #' @param out_unit Output unit
 #'
 #'   The duration is derived in the specified unit
 #'
-#'   Default: 'days'
+#'   Permitted Values:
 #'
-#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
-#'   'min', 'seconds', 'sec'
+#'   For years: `"year"`, `"years"`, `"yr"`, `"yrs"`, `"y"`
+#'
+#'   For months: `"month"`, `"months"`, `"mo"`, `"mos"`
+#'
+#'   For weeks: `"week"`, `"weeks"`, `"wk"`, `"wks"`, `"w"`
+#'
+#'   For days: `"day"`, `"days"`, `"d"`
+#'
+#'   For hours: `"hour"`, `"hours"`, `"hr"`, `"hrs"`, `"h"`
+#'
+#'   For minutes: `"minute"`, `"minutes"`, `"min"`, `"mins"`
+#'
+#'   For seconds: `"second"`, `"seconds"`, `"sec"`, `"secs"`, `"s"`
 #'
 #' @param floor_in Round down input dates?
 #'
 #'   The input dates are round down with respect to the input unit, e.g., if the
 #'   input unit is 'days', the time of the input dates is ignored.
 #'
-#'   Default: `TRUE``
+#'   Default: `TRUE`
 #'
 #'   Permitted Values: `TRUE`, `FALSE`
 #'
@@ -151,18 +171,34 @@ compute_duration <- function(start_date,
                              add_one = TRUE,
                              trunc_out = FALSE,
                              type = "duration") {
+  in_unit <- get_unified_time_unit(in_unit)
+  out_unit <- get_unified_time_unit(out_unit)
+
   # Checks
   assert_date_vector(start_date)
   assert_date_vector(end_date)
-  assert_character_scalar(in_unit, values = valid_time_units())
+  assert_character_scalar(in_unit, values = c(
+    c("year", "years", "yr", "yrs", "y"),
+    c("month", "months", "mo", "mos"),
+    c("day", "days", "d"),
+    c("hour", "hours", "hr", "hrs", "h"),
+    c("minute", "minutes", "min", "mins"),
+    c("second", "seconds", "sec", "secs", "s")
+  ))
   assert_character_scalar(type, values = c("interval", "duration"))
   assert_character_scalar(out_unit, values = c(
-    valid_time_units(), "weeks",
-    "min", "sec"
+    c("year", "years", "yr", "yrs", "y"),
+    c("month", "months", "mo", "mos"),
+    c("week", "weeks", "wk", "wks", "w"),
+    c("day", "days", "d"),
+    c("hour", "hours", "hr", "hrs", "h"),
+    c("minute", "minutes", "min", "mins"),
+    c("second", "seconds", "sec", "secs", "s")
   ))
   assert_logical_scalar(floor_in)
   assert_logical_scalar(add_one)
   assert_logical_scalar(trunc_out)
+
 
   # Derivation
   if (floor_in) {
@@ -211,4 +247,59 @@ compute_duration <- function(start_date,
     duration <- trunc(duration)
   }
   duration
+}
+
+#' Map common units of time into standardized terms
+#'
+#' @param time_unit input unit
+#'
+#' @return standardized term if mapping is available
+#'
+#' @keywords internal
+#' @family internal
+#'
+#' @noRd
+get_unified_time_unit <- function(time_unit) {
+  lowercase <- tolower(time_unit)
+  case_when(
+    # map common years units
+    lowercase == "year" ~ "years",
+    lowercase == "years" ~ "years",
+    lowercase == "yr" ~ "years",
+    lowercase == "yrs" ~ "years",
+    lowercase == "y" ~ "years",
+    # map common months units
+    lowercase == "month" ~ "months",
+    lowercase == "months" ~ "months",
+    lowercase == "mo" ~ "months",
+    lowercase == "mos" ~ "months",
+    # map common weeks units
+    lowercase == "week" ~ "weeks",
+    lowercase == "weeks" ~ "weeks",
+    lowercase == "wk" ~ "weeks",
+    lowercase == "wks" ~ "weeks",
+    lowercase == "w" ~ "weeks",
+    # map common days units
+    lowercase == "day" ~ "days",
+    lowercase == "days" ~ "days",
+    lowercase == "d" ~ "days",
+    # map common hours units
+    lowercase == "hour" ~ "hours",
+    lowercase == "hours" ~ "hours",
+    lowercase == "hr" ~ "hours",
+    lowercase == "hrs" ~ "hours",
+    lowercase == "h" ~ "hours",
+    # map common minutes units
+    lowercase == "minute" ~ "minutes",
+    lowercase == "minutes" ~ "minutes",
+    lowercase == "min" ~ "minutes",
+    lowercase == "mins" ~ "minutes",
+    # map common seconds units
+    lowercase == "second" ~ "seconds",
+    lowercase == "seconds" ~ "seconds",
+    lowercase == "sec" ~ "seconds",
+    lowercase == "secs" ~ "seconds",
+    lowercase == "s" ~ "seconds",
+    TRUE ~ time_unit
+  )
 }
