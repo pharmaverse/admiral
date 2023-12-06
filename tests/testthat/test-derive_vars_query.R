@@ -208,8 +208,8 @@ test_that("derive_vars_query Test 7: character SRCVAR and just TERMCHAR is provi
 ## Test 8: numeric SRCVAR and just TERMNUM is provided ----
 test_that("derive_vars_query Test 8: numeric SRCVAR and just TERMNUM is provided", {
   query <- tibble::tribble(
-    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
-    "CQ42", "My Query 2", "AELLTCD", NA_character_, 2, 1
+    ~PREFIX, ~GRPNAME, ~SRCVAR, ~GRPID, ~TERMNUM,
+    "CQ42", "My Query 2", "AELLTCD", 2, 1
   )
 
   my_ae <- tibble::tribble(
