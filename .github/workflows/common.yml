@@ -1,5 +1,5 @@
 ---
-# Source: https://github.com/pharmaverse/admiralci
+# Source: https://github.com/pharmaverse/admiralci 
 # Common workflows designed for Admiral
 # but can be easily used by any other R package
 name: admiral CI/CD Workflows
