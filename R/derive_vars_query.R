@@ -141,7 +141,6 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
   # queries restructured
   queries_wide <- dataset_queries %>%
     mutate(
-      TERMCHAR = toupper(TERMCHAR),
       PREFIX_NAM = paste0(PREFIX, "NAM")
     ) %>%
     pivot_wider(names_from = PREFIX_NAM, values_from = GRPNAME) %>%
@@ -156,11 +155,7 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
     # numeric -> TERMNUM, character -> TERMCHAR, otherwise -> error
     mutate(
       tmp_col_type = vapply(dataset[SRCVAR], typeof, character(1)),
-      TERM_NAME_ID = case_when(
-        tmp_col_type == "character" ~ TERMCHAR,
-        tmp_col_type %in% c("double", "integer") ~ as.character(TERMNUM),
-        TRUE ~ NA_character_
-      )
+      TERM_NAME_ID = ifelse(tmp_col_type == "character", TERMCHAR, as.character(TERMNUM))
     )
 
   # prepare input dataset for joining
