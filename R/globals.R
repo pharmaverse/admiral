@@ -130,4 +130,4 @@ globalVariables(c(
   "DTYPE",
   "where", # this entry should be moved to @importFrom tidyselect once we use tidyselect 1.2.0
   "tmp_col_type"
-  ))
+))
