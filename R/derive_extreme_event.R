@@ -343,7 +343,7 @@
 #'   filter(PARAMCD == "CBOR")
 #'
 derive_extreme_event <- function(dataset = NULL,
-                                 by_vars = NULL,
+                                 by_vars,
                                  events,
                                  tmp_event_nr_var = NULL,
                                  order,
@@ -355,7 +355,7 @@ derive_extreme_event <- function(dataset = NULL,
                                  keep_source_vars = exprs(everything())) {
   # Check input parameters
   assert_data_frame(dataset, optional = TRUE)
-  assert_vars(by_vars, optional = TRUE)
+  assert_vars(by_vars)
   assert_list_of(events, "event_def")
   assert_expr_list(order)
   mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)

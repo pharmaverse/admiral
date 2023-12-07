@@ -1,7 +1,7 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 0.12.3.9026
+Version: 0.12.3.9034
 Authors@R: c(
     person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
@@ -56,7 +56,7 @@ Suggests:
     htmltools,
     knitr,
     methods,
-    pharmaversesdtm,
+    pharmaversesdtm (>= 0.2.0),
     reactable,
     readxl,
     rmarkdown,

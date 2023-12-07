@@ -2,16 +2,17 @@
 
 ## New Features
 
-- Implement `derive_vars_extreme_event()`, which works as `derive_extreme_event()` but adds variables instead of a parameter. (#2138)
+- The new function `derive_vars_extreme_event()`, which works as `derive_extreme_event()` 
+but adds variables instead of a parameter. (#2138)
 
 - The new function `derive_var_merged_ef_msrc()` is provided to add a flag
 indicating if one of the conditions in one of multiple source datasets is
 fulfilled. (#1728)
 
-- New global option created `signif_digits` to handle floating point issue, the
-value is set to `15`, and is used with the `base R` function `signif()` when
-comparing 2 numeric values. This is implemented in `admiral ` functions
-`derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134)
+- New global option created `signif_digits` and added to `set_admiral_options()` to 
+handle floating point issue, the value is set to `15`, and is used with the `base R` 
+function `signif()` when comparing 2 numeric values. This is implemented in `admiral ` 
+functions `derive_var_atoxgr_dir()` and `derive_var_anrind()`. (#2134)
 
     For more information, please see blog: [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html)
 
@@ -25,10 +26,10 @@ values as a new parameter, adds it as a new variable. (#2178)
 populated when any of the existing time components (hour, minute and/or second) of the date
 character vector (`'--DTC'`), was imputed. (#2146)
 
-- `derive_extreme_records()`, `derive_var_extreme_flag()`,`derive_vars_joined()` and `derive_vars_merged()` were enhanced with the arguments `true_value` and `false_value` to align with preexisting functions that had similar functionality (#2125)
+- `derive_extreme_records()`, `derive_var_extreme_flag()`,`derive_vars_joined()` and `derive_vars_merged()` were enhanced with the arguments `true_value` and `false_value` to align with preexisting functions that had similar functionality. (#2125)
 
-- `restrict_derivation()` now allows `{dplyr}` functions like `mutate` in the
-`derivation` argument (#2143)
+- `restrict_derivation()` now allows `{dplyr}` functions like `mutate()` in the
+`derivation` argument. (#2143)
 
 - `derive_summary_records()`, `derive_var_merged_summary()`, and `get_summary_records()`
 were enhanced such that more than one summary variable can be derived, e.g.,
@@ -73,9 +74,15 @@ these functions handles any floating point issues. (#2134)
 - Updated the unit test for `derive_var_obs_number()`. The new test checked the derivation of the default and customized `new_var`, 
 sorting with the the missing value and expected conditions. (#2260)
 
+- The check for existence of `TERMNUM`/`TERMCHAR` in queries dataset is now less strict depending on values of `SRCVAR` for `derive_vars_query()` (#2264)
+
+- DAIDS grading criteria fixed for `Grade = 0` for `TERM = "Absolute Lymphocyte Count, Low"`, criteria was `AVAL <= 0.65`, now corrected to `AVAL >= 0.65` (#2284).
+
 ## Breaking Changes
 
-- `derive_extreme_records()` the `dataset_add` argument is now mandatory. (#2139)
+- `{admiral}` now only supports R >= 4.0.0 
+
+- In `derive_extreme_records()` the `dataset_add` argument is now mandatory. (#2139)
 
 - In `derive_summary_records()` and `get_summary_records()` the arguments
 `analysis_var` and `summary_fun` were deprecated in favor of `set_values_to`.
@@ -86,13 +93,11 @@ sorting with the the missing value and expected conditions. (#2260)
 - In `derive_var_merged_summary()` the arguments `new_var`, `analysis_var`, and
 `summary_fun` were deprecated in favor of `new_vars`. (#1792)
 
-- admiral now only supports R >= 4.0.0 
-
-- For the function `derive_vars_merged()`, the argument `match_flag` was renamed to `exist_flag` (#2125)
+- In `derive_vars_merged()`, the argument `match_flag` was renamed to `exist_flag` (#2125)
 
 - The default value for the `false_value` argument in `derive_extreme_records()` was changed to `NA_character_` (#2125)
 
-- For the function `consolidate_metadata()`, the argument `check_keys` was renamed to `check_type` to align with other functions (#2184)
+- In `consolidate_metadata()`, the argument `check_keys` was renamed to `check_type` to align with other functions (#2184)
 
 - In `filter_joined()` and `derive_var_joined_exist_flag()` (#2126)
     - the `first_cond` argument was deprecated in favor of `first_cond_upper` and
@@ -101,10 +106,10 @@ sorting with the the missing value and expected conditions. (#2260)
 - In `event_joined()` the `first_cond` argument was deprecated in favor of
 `first_cond_upper`. (#2126)
 
-- The `ignore_event_order` argument in `derive_extreme_event()` was deprecated
+- In `derive_extreme_event()`, the `ignore_event_order` argument was deprecated
 and the selection of the records was changed to allow more control. Before, the
 records were selected first by event and then by `order`. Now they are selected
-by `order` only but the event number can be added to it.
+by `order` only, but the event number can be added to it.
 
    To achieve the old behavior update
 ```
@@ -126,7 +131,7 @@ to
 order = exprs(my_order_var),
 ```
 
-- `create_query_data()` and `derive_vars_query()` updated to rename variables in 
+- `create_query_data()` and `derive_vars_query()` were updated to rename variables in 
     query data set as follows: (#2186)
     
     - `TERMNAME` to `TERMCHAR`
@@ -154,8 +159,10 @@ order = exprs(my_order_var),
   - `derive_expected_records(dataset_expected_obs)` 
   - `derive_var_ontrtfl(span_period)` 
   
+  
 - The `derive_param_extreme_record()` function has been superseded in favor of `derive_extreme_event()`. (#2141)
-- The functions `derive_var_dthcaus()`, `derive_var_extreme_dt()`, and `derive_var_extreme_dtm()` are superseded in favor of `derive_vars_extreme_event()`. (#2138)
+
+- The functions `derive_var_dthcaus()`, `derive_var_extreme_dt()`, and `derive_var_extreme_dtm()` have been superseded in favor of `derive_vars_extreme_event()`. (#2138)
   
 ## Documentation
 
@@ -174,21 +181,21 @@ Now it provides a more complete overview of the generic derivations, describe
 the common concepts, and makes it easier to find the appropriate function.
 (#2230)
 
-- A way to standardize roxygen labels and descriptions for function arguments was implemented and tested (#2034)
+- A way to standardize roxygen labels and descriptions for function arguments was implemented and tested. (#2034)
 
-- Link to published CDISC Population PK (ADPPK) implementation guide added. (#2161)
+- A link to published CDISC Population PK (ADPPK) implementation guide was added. (#2161)
 
-- Removed Deprecation section in Reference tab.  Added new Superseded section in 
+- Removed Deprecation section in Reference tab. Added new Superseded section in 
 Reference tab. (#2174)
 
 - Added a link to the previous versions of the website to the navigation bar. (#2205)
 
 - The meaning of `date_imputation = "mid"` was clarified in the documentation of
-the imputation functions, e.g., `derive_vars_dtm()`. (#2222)
+the imputation functions, e.g. `derive_vars_dtm()`. (#2222)
 
 - Added an example derivation of `DTHCGR1` to the ADSL vignette. (#2218)
 
-- Moved Development Process from `admiraldev` to Contribution Model in the 
+- Moved Development Process from `{admiraldev}` to Contribution Model in the 
 `admiral` website, updated GitHub strategy. (#2196)
 
 - Added new drop downs in Get Started navigation bar- Getting Started, Admiral Discovery, Cheatsheet. Community removed from top. (#2217)
@@ -201,7 +208,7 @@ for all functions. (#2230, #2257)
 
 ## Various
 
-- Website now has button/links to Slack channel and GitHub Issues (#2127)
+- Website now has button/links to Slack channel and GitHub Issues. (#2127)
 
 - Added example derivations of `DTHCAUS` and `DTHCGR1` to the ADSL template. (#2218)
 

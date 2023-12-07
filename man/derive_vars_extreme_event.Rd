@@ -6,7 +6,7 @@
 \usage{
 derive_vars_extreme_event(
   dataset,
-  by_vars = NULL,
+  by_vars,
   events,
   tmp_event_nr_var = NULL,
   order,

@@ -198,7 +198,7 @@
 #'   new_vars = exprs(DTHCAUS, DTHDT)
 #' )
 derive_vars_extreme_event <- function(dataset,
-                                      by_vars = NULL,
+                                      by_vars,
                                       events,
                                       tmp_event_nr_var = NULL,
                                       order,

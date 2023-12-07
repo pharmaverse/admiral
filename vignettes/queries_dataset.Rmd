@@ -56,7 +56,7 @@ SCOPE | Scope (Broad/Narrow) of the query |  Character | `BROAD`, `NARROW`, `NA`
 SCOPEN | Scope (Broad/Narrow) of the query |  Integer | `1`, `2`, `NA`
 VERSION | The version of the dictionary | Character | `"20.1"`
 
-**Bold  variables** are required in `dataset_queries`: an error is issued if any of these variables is missing. Other variables are optional.
+**Bold  variables** are required in `dataset_queries`: an error is issued if any of these variables is missing. `TERMCHAR` is only REQUIRED if there is character variable named in `SRCVAR`. `TERMNUM` is only REQUIRED if there is numeric variable named in `SRCVAR`. When `SRCVAR` contains both character and numeric variables, then both `TERMCHAR` and `TERMNUM` are required. Other variables are optional. 
 
 The `VERSION` variable is not used by `derive_vars_query()` but can be used to
 check if the dictionary version of the queries dataset and the analysis dataset
