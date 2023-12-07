@@ -74,7 +74,9 @@ these functions handles any floating point issues. (#2134)
 - Updated the unit test for `derive_var_obs_number()`. The new test checked the derivation of the default and customized `new_var`, 
 sorting with the the missing value and expected conditions. (#2260)
 
-- The check for existence of `TERMNUM`/`TERMCHAR` in queries dataset is now less strict depending on values of `SRCVAR` for `derive_vars_query()` (#2264) 
+- The check for existence of `TERMNUM`/`TERMCHAR` in queries dataset is now less strict depending on values of `SRCVAR` for `derive_vars_query()` (#2264)
+
+- DAIDS grading criteria fixed for `Grade = 0` for `TERM = "Absolute Lymphocyte Count, Low"`, criteria was `AVAL <= 0.65`, now corrected to `AVAL >= 0.65`.
 
 ## Breaking Changes
 
