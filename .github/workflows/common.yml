@@ -49,41 +49,41 @@ jobs:
         shell: bash
   style:
     name: Code Style
-    uses: pharmaverse/admiralci/.github/workflows/style.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/style.yml@use_cran_latest
     if: github.event_name == 'pull_request'
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   spellcheck:
     name: Spelling
-    uses: pharmaverse/admiralci/.github/workflows/spellcheck.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/spellcheck.yml@use_cran_latest
     if: github.event_name == 'pull_request'
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   readme:
     name: Render README
-    uses: pharmaverse/admiralci/.github/workflows/readme-render.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/readme-render.yml@use_cran_latest
     if: github.event_name == 'push'
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   validation:
     name: Validation
-    uses: pharmaverse/admiralci/.github/workflows/r-pkg-validation.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/r-pkg-validation.yml@use_cran_latest
     if: github.event_name == 'release'
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   check:
     name: Check
-    uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@use_cran_latest
     with:
       error-on: warning # TODO: find a way to ignore specific notes
     if: github.event_name == 'pull_request'
   docs:
     name: Documentation
-    uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@use_cran_latest
     if: github.event_name == 'push' || startsWith(github.ref, 'refs/tags/v')
     needs: get_r_version
     with:
@@ -93,18 +93,18 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
   linter:
     name: Lint
-    uses: pharmaverse/admiralci/.github/workflows/lintr.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/lintr.yml@use_cran_latest
     needs: get_r_version
     if: github.event_name == 'pull_request'
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   links:
     name: Links
-    uses: pharmaverse/admiralci/.github/workflows/links.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/links.yml@use_cran_latest
     if: github.event_name == 'pull_request'
   coverage:
     name: Code Coverage
-    uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@use_cran_latest
     if: >
       github.event_name != 'release'
     needs: get_r_version
@@ -116,14 +116,14 @@ jobs:
       skip-coverage-badges: false
   man-pages:
     name: Man Pages
-    uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@use_cran_latest
     if: github.event_name == 'pull_request'
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   templates:
     name: Check Templates
-    uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@use_cran_latest
     secrets: inherit
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     needs: get_r_version
