@@ -11,7 +11,7 @@ derive_vars_duration(
   start_date,
   end_date,
   in_unit = "days",
-  out_unit = "days",
+  out_unit = "DAYS",
   floor_in = TRUE,
   add_one = TRUE,
   trunc_out = FALSE,
@@ -50,7 +50,7 @@ Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.}
 
 See floor_in and add_one parameter for details.
 
-Permitted Values:
+Permitted Values (case-insensitive):
 
 For years: \code{"year"}, \code{"years"}, \code{"yr"}, \code{"yrs"}, \code{"y"}
 
@@ -68,7 +68,7 @@ For seconds: \code{"second"}, \code{"seconds"}, \code{"sec"}, \code{"secs"}, \co
 
 The duration is derived in the specified unit
 
-Permitted Values:
+Permitted Values (case-insensitive):
 
 For years: \code{"year"}, \code{"years"}, \code{"yr"}, \code{"yrs"}, \code{"y"}
 

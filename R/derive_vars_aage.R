@@ -31,7 +31,7 @@
 #'
 #'   The age is derived in the specified unit
 #'
-#'   Permitted Values:
+#'   Permitted Values (case-insensitive):
 #'
 #'   For years: `"year"`, `"years"`, `"yr"`, `"yrs"`, `"y"`
 #'
@@ -95,7 +95,7 @@ derive_vars_aage <- function(dataset,
                              start_date = BRTHDT,
                              end_date = RANDDT,
                              unit = "years",
-                             age_unit = "years",
+                             age_unit = "YEARS",
                              type = "interval") {
   if (!missing(unit)) {
     deprecate_stop("0.12.0", "derive_vars_aage(unit = )", "derive_vars_aage(age_unit = )")

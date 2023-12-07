@@ -25,7 +25,7 @@
 #'
 #'   See floor_in and add_one parameter for details.
 #'
-#'   Permitted Values:
+#'   Permitted Values (case-insensitive):
 #'
 #'   For years: `"year"`, `"years"`, `"yr"`, `"yrs"`, `"y"`
 #'
@@ -43,7 +43,7 @@
 #'
 #'   The duration is derived in the specified unit
 #'
-#'   Permitted Values:
+#'   Permitted Values (case-insensitive):
 #'
 #'   For years: `"year"`, `"years"`, `"yr"`, `"yrs"`, `"y"`
 #'
