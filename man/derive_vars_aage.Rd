@@ -9,7 +9,7 @@ derive_vars_aage(
   start_date = BRTHDT,
   end_date = RANDDT,
   unit = "years",
-  age_unit = "years",
+  age_unit = "YEARS",
   type = "interval"
 )
 }
@@ -42,7 +42,7 @@ Default: \code{RANDDT}}
 
 The age is derived in the specified unit
 
-Permitted Values:
+Permitted Values (case-insensitive):
 
 For years: \code{"year"}, \code{"years"}, \code{"yr"}, \code{"yrs"}, \code{"y"}
 
