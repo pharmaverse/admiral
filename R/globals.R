@@ -128,5 +128,6 @@ globalVariables(c(
   "TERM_UPPER",
   "atoxgr_criteria_ctcv4",
   "DTYPE",
-  "where" # this entry should be moved to @importFrom tidyselect once we use tidyselect 1.2.0
+  "where", # this entry should be moved to @importFrom tidyselect once we use tidyselect 1.2.0
+  "tmp_col_type"
 ))
