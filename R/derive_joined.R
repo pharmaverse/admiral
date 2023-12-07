@@ -456,7 +456,7 @@ derive_vars_joined <- function(dataset,
   exist_flag <- assert_symbol(enexpr(exist_flag), optional = TRUE)
 
   if (is.null(new_vars)) {
-    new_vars <- chr2vars(colnames(dataset_add))
+    new_vars <- setdiff(chr2vars(colnames(dataset_add)), by_vars)
   }
   preexisting_vars <- chr2vars(colnames(dataset))
   preexisting_vars_no_by_vars <- preexisting_vars[which(!(preexisting_vars %in% by_vars))]

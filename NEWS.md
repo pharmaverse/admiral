@@ -78,6 +78,9 @@ sorting with the the missing value and expected conditions. (#2260)
 
 - DAIDS grading criteria fixed for `Grade = 0` for `TERM = "Absolute Lymphocyte Count, Low"`, criteria was `AVAL <= 0.65`, now corrected to `AVAL >= 0.65` (#2284).
 
+- A bug in `derive_vars_joined()` was fixed. The function no longer fails if
+renaming is used in `by_vars` and `new_vars` is not specified (#2289).
+
 ## Breaking Changes
 
 - `{admiral}` now only supports R >= 4.0.0 

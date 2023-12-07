@@ -380,9 +380,40 @@ test_that("derive_vars_joined Test 11: Ensure exist_flag, true/false value argum
   )
 })
 
+## Test 12: by_vars with rename, no new_vars ----
+test_that("derive_vars_joined Test 12: by_vars with rename, no new_vars", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~EXLINKID, ~FA,
+    "1",      "001",       1,
+    "1",      "002",      NA,
+    "2",      "001",       1
+  )
+
+  fa <- tibble::tribble(
+    ~USUBJID, ~FALINKID, ~FA,
+    "1",      "001",     1,
+    "1",      "002",     0,
+    "2",      "001",     1,
+  )
+
+  ex <- select(expected, -FA)
+
+  expect_dfs_equal(
+    base = expected,
+    compare = derive_vars_joined(
+      ex,
+      dataset_add = fa,
+      by_vars = exprs(USUBJID, EXLINKID = FALINKID),
+      join_type = "all",
+      filter_add = FA == 1
+    ),
+    keys = c("USUBJID", "EXLINKID")
+  )
+})
+
 # get_joined_data ----
-## Test 12: `first_cond_lower` works ----
-test_that("get_joined_data Test 12: `first_cond_lower` works", {
+## Test 13: `first_cond_lower` works ----
+test_that("get_joined_data Test 13: `first_cond_lower` works", {
   data <- tribble(
     ~subj, ~day, ~val,
     "1",      1, "++",
