@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9031</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9032</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,6 +128,7 @@
 <li><p><code><a href="../reference/compute_duration.html">compute_duration()</a></code>, <code><a href="../reference/derive_vars_duration.html">derive_vars_duration()</a></code>, <code><a href="../reference/derive_vars_aage.html">derive_vars_aage()</a></code> now accepts more terms for the <code>in_unit</code>, <code>out_unit</code>, and <code>age_unit</code> arguments (<a href="https://github.com/pharmaverse/admiral/issues/2255" class="external-link">#2255</a>)</p></li>
 <li><p>Updated the unit test for <code><a href="../reference/derive_var_obs_number.html">derive_var_obs_number()</a></code>. The new test checked the derivation of the default and customized <code>new_var</code>, sorting with the the missing value and expected conditions. (<a href="https://github.com/pharmaverse/admiral/issues/2260" class="external-link">#2260</a>)</p></li>
 <li><p>The check for existence of <code>TERMNUM</code>/<code>TERMCHAR</code> in queries dataset is now less strict depending on values of <code>SRCVAR</code> for <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/2264" class="external-link">#2264</a>)</p></li>
+<li><p>DAIDS grading criteria fixed for <code>Grade = 0</code> for <code>TERM = "Absolute Lymphocyte Count, Low"</code>, criteria was <code>AVAL &lt;= 0.65</code>, now corrected to <code>AVAL &gt;= 0.65</code>.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
