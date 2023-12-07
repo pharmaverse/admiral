@@ -35,7 +35,7 @@ character vector (`'--DTC'`), was imputed. (#2146)
 were enhanced such that more than one summary variable can be derived, e.g.,
 `AVAL` as the sum and `ADT` as the maximum of the contributing records. (#1792)
 
-- `derive_summary_records()` was enhanced with the following optional arguments: `dataset_add`, `dataset_ref`, `missing_values`. These arguments respectively, generate summary variables from additional datasets, retain/add specific records from a reference dataset, and impute user-defined missing values. `derive_param_exposure()` was enhanced with `dataset_add` as well. (#2142)
+- `derive_summary_records()` was enhanced with the following arguments: `dataset_add` (required), `dataset_ref` (optional), `missing_values` (optional). These arguments respectively, generate summary variables from additional datasets, retain/add specific records from a reference dataset, and impute user-defined missing values. Note that `dataset_add` can be set to the same value as `dataset` if a different additional dataset is not required. `derive_param_exposure()` was enhanced with `dataset_add` as well. (#2142)
 
 - The `missing_values` argument was added to `derive_var_merged_summary()`. It
 allows to define values for by groups, e.g., subjects which are not in the
