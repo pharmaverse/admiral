@@ -76,7 +76,7 @@ sorting with the the missing value and expected conditions. (#2260)
 
 - The check for existence of `TERMNUM`/`TERMCHAR` in queries dataset is now less strict depending on values of `SRCVAR` for `derive_vars_query()` (#2264)
 
-- DAIDS grading criteria fixed for `Grade = 0` for `TERM = "Absolute Lymphocyte Count, Low"`, criteria was `AVAL <= 0.65`, now corrected to `AVAL >= 0.65`.
+- DAIDS grading criteria fixed for `Grade = 0` for `TERM = "Absolute Lymphocyte Count, Low"`, criteria was `AVAL <= 0.65`, now corrected to `AVAL >= 0.65` (#2284).
 
 ## Breaking Changes
 
