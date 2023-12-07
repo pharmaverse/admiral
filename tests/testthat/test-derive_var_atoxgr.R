@@ -5234,8 +5234,9 @@ test_that("derive_var_atoxgr Test 114: DAIDS Absolute Lymphocyte Count, Low", {
     0.6,    "10^9/L",  "1",      7,
     0.64,   "10^9/L",  "1",      8,
     0.65,   "10^9/L",  "0",      9,
-    NA,     "10^9/L",  NA,       10,
-    1,      NA,        NA,       11,
+    0.66,   "10^9/L",  "0",      10,
+    NA,     "10^9/L",  NA,       11,
+    1,      NA,        NA,       12,
   ) %>%
     mutate(
       ATOXDSCL = "Absolute Lymphocyte Count, Low",
@@ -5248,7 +5249,7 @@ test_that("derive_var_atoxgr Test 114: DAIDS Absolute Lymphocyte Count, Low", {
     mutate(
       LBDT = lubridate::ymd("2028-07-01"),
       ATOXGRL = NA_character_,
-      TESTNUM = TESTNUM + 11
+      TESTNUM = TESTNUM + 12
     )
 
   # add missing LBDT and BRTHDT
@@ -5258,7 +5259,7 @@ test_that("derive_var_atoxgr Test 114: DAIDS Absolute Lymphocyte Count, Low", {
       LBDT = if_else(TESTNUM == 5, NA, LBDT),
       BRTHDT = if_else(TESTNUM == 6, NA, BRTHDT),
       ATOXGRL = NA_character_,
-      TESTNUM = if_else(TESTNUM == 5, 23, 24)
+      TESTNUM = if_else(TESTNUM == 5, 25, 26)
     )
 
   expected_lymphd_daids <- expected_lymphd_daids_gt5y %>%
