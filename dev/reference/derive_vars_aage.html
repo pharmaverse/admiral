@@ -12,7 +12,7 @@ Note: This is a wrapper function for the more generic derive_vars_duration()."><
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9033</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9034</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@ Note: This is a wrapper function for the more generic derive_vars_duration()."><
 <span>  start_date <span class="op">=</span> <span class="va">BRTHDT</span>,</span>
 <span>  end_date <span class="op">=</span> <span class="va">RANDDT</span>,</span>
 <span>  unit <span class="op">=</span> <span class="st">"years"</span>,</span>
-<span>  age_unit <span class="op">=</span> <span class="st">"years"</span>,</span>
+<span>  age_unit <span class="op">=</span> <span class="st">"YEARS"</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"interval"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -143,7 +143,7 @@ vector to a date object.</p>
 <dt>age_unit</dt>
 <dd><p>Age unit</p>
 <p>The age is derived in the specified unit</p>
-<p>Permitted Values:</p>
+<p>Permitted Values (case-insensitive):</p>
 <p>For years: <code>"year"</code>, <code>"years"</code>, <code>"yr"</code>, <code>"yrs"</code>, <code>"y"</code></p>
 <p>For months: <code>"month"</code>, <code>"months"</code>, <code>"mo"</code>, <code>"mos"</code></p>
 <p>For weeks: <code>"week"</code>, <code>"weeks"</code>, <code>"wk"</code>, <code>"wks"</code>, <code>"w"</code></p>
@@ -210,7 +210,7 @@ length is <code>30.4375</code>, i.e. <code>29 / 30.4375 = 0.95</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   BRTHDT     RANDDT      AAGE AAGEU</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1984-09-06 2020-02-24    35 years</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1984-09-06 2020-02-24    35 YEARS</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
