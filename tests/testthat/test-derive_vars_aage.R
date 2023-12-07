@@ -5,7 +5,7 @@ test_that("derive_vars_aage Test 1: duration and unit variable are added", {
     ~BRTHDT, ~RANDDT,
     ymd("1999-09-09"), ymd("2020-02-20")
   )
-  expected_output <- mutate(input, AAGE = 20, AAGEU = "years")
+  expected_output <- mutate(input, AAGE = 20, AAGEU = "YEARS")
 
   expect_dfs_equal(derive_vars_aage(input), expected_output, keys = c("BRTHDT", "RANDDT"))
 })
