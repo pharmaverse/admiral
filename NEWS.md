@@ -81,6 +81,9 @@ sorting with the the missing value and expected conditions. (#2260)
 - A bug in `derive_extreme_event()` was fixed. The `condition` field is no
 longer ignored if `mode` is specified for `event()` (#2291).
 
+- A bug in `derive_vars_joined()` was fixed. The function no longer fails if
+renaming is used in `by_vars` and `new_vars` is not specified (#2289).
+
 ## Breaking Changes
 
 - `{admiral}` now only supports R >= 4.0.0 
