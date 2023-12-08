@@ -436,7 +436,7 @@ derive_extreme_event <- function(dataset = NULL,
           ungroup()
         if (!is.null(event$mode)) {
           data_events <- filter_extreme(
-            data_source,
+            data_events,
             by_vars = by_vars,
             order = event_order,
             mode = event$mode
