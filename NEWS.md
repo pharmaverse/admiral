@@ -78,6 +78,9 @@ sorting with the the missing value and expected conditions. (#2260)
 
 - DAIDS grading criteria fixed for `Grade = 0` for `TERM = "Absolute Lymphocyte Count, Low"`, criteria was `AVAL <= 0.65`, now corrected to `AVAL >= 0.65` (#2284).
 
+- A bug in `derive_extreme_event()` was fixed. The `condition` field is no
+longer ignored if `mode` is specified for `event()` (#2291).
+
 ## Breaking Changes
 
 - `{admiral}` now only supports R >= 4.0.0 

@@ -568,8 +568,41 @@ test_that("derive_extreme_event Test 6: no tmp_event_nr_var", {
   )
 })
 
-## Test 7: deprecation of ignore_event_order ----
-test_that("derive_extreme_event Test 7: deprecation of ignore_event_order", {
+## Test 7: mode and condition used in event() ----
+test_that("derive_extreme_event Test 7: mode and condition used in event()", {
+  mydata <- tibble::tribble(
+    ~USUBJID, ~CRIT1FL, ~ADY,
+    "1",      "Y",         1,
+    "1",      "Y",         2,
+    "2",      "N",         1
+  )
+
+  expected <- tibble::tribble(
+    ~USUBJID, ~CRIT1FL, ~ADY,
+    "1",      "Y",         1
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = derive_extreme_event(
+      source_datasets = list(mydata = mydata),
+      by_vars = exprs(USUBJID),
+      order = exprs(ADY),
+      mode = "first",
+      events = list(
+        event(
+          dataset_name = "mydata",
+          condition = CRIT1FL == "Y",
+          mode = "first"
+        )
+      )
+    ),
+    keys = "USUBJID"
+  )
+})
+
+## Test 8: deprecation of ignore_event_order ----
+test_that("derive_extreme_event Test 8: deprecation of ignore_event_order", {
   adrs <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",             1, "PR",
@@ -622,8 +655,8 @@ test_that("derive_extreme_event Test 7: deprecation of ignore_event_order", {
   )
 })
 
-## Test 8: deprecation of ignore_event_order ----
-test_that("derive_extreme_event Test 8: deprecation of ignore_event_order", {
+## Test 9: deprecation of ignore_event_order ----
+test_that("derive_extreme_event Test 9: deprecation of ignore_event_order", {
   adrs <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",             1, "PR",
