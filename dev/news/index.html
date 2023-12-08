@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.3.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,6 +129,7 @@
 <li><p>Updated the unit test for <code><a href="../reference/derive_var_obs_number.html">derive_var_obs_number()</a></code>. The new test checked the derivation of the default and customized <code>new_var</code>, sorting with the the missing value and expected conditions. (<a href="https://github.com/pharmaverse/admiral/issues/2260" class="external-link">#2260</a>)</p></li>
 <li><p>The check for existence of <code>TERMNUM</code>/<code>TERMCHAR</code> in queries dataset is now less strict depending on values of <code>SRCVAR</code> for <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/2264" class="external-link">#2264</a>)</p></li>
 <li><p>DAIDS grading criteria fixed for <code>Grade = 0</code> for <code>TERM = "Absolute Lymphocyte Count, Low"</code>, criteria was <code>AVAL &lt;= 0.65</code>, now corrected to <code>AVAL &gt;= 0.65</code> (<a href="https://github.com/pharmaverse/admiral/issues/2284" class="external-link">#2284</a>).</p></li>
+<li><p>A bug in <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code> was fixed. The <code>condition</code> field is no longer ignored if <code>mode</code> is specified for <code><a href="../reference/event.html">event()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/2291" class="external-link">#2291</a>).</p></li>
 <li><p>A bug in <code><a href="../reference/derive_vars_joined.html">derive_vars_joined()</a></code> was fixed. The function no longer fails if renaming is used in <code>by_vars</code> and <code>new_vars</code> is not specified (<a href="https://github.com/pharmaverse/admiral/issues/2289" class="external-link">#2289</a>).</p></li>
 </ul></div>
 <div class="section level3">
