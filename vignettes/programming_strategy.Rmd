@@ -146,7 +146,7 @@ documentation of `set_admiral_options()`.
 
 | Other Common Function Name Terms             | Description                                                                                         |
 |----------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `_merged_` / `_joined_` / `_extreme_`        | Functions that follow the [generic function user-guide](https://pharmaverse.github.io/admiral/cran-release/articles/generic.html).                                              |
+| `_merged_` / `_joined_` / `_extreme_`        | Functions that follow the [generic function user-guide](https://pharmaverse.github.io/admiral/articles/generic.html).                                              |
 
 
 

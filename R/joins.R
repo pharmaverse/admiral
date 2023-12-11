@@ -1,6 +1,6 @@
 #' Join Functions
 #'
-#' The `*_join()` functions from {dplyr} without a warning on different attributes
+#' The `*_join()` functions from `{dplyr}` without a warning on different attributes
 #' in datasets.
 #'
 #' @param x `data.frame`

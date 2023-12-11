@@ -29,7 +29,7 @@ Closely following the below guidance will ensure that our all our "addressed" is
 
 For a pull request to be merged into `main` it needs to pass the automated CI checks that will appear at the bottom of the Pull Request. In addition, the PR creator and reviewer should make sure that
 
--   the [Programming Strategy](programming_strategy.html) and [Development Process](https://pharmaverse.github.io/admiral/articles/contribution_model.html) are followed
+-   the [Programming Strategy](programming_strategy.html) and [Development Process](https://pharmaverse.github.io/admiral/dev/CONTRIBUTING.html) are followed
 
 -   the function is ADaM IG compliant
 
@@ -61,7 +61,7 @@ Sometimes, the development of a function or a vignette falls under a specific-to
 
 # So much Red Tape!
 
-The `{admiral}` development team is aware and sympathetic to the great many checks, processes and documents needed to work through in order to do a compliant Pull Request. The `task-list-completed` GitHub workflow was created to help reduce this burden on contributors by providing a standardized checklist that compiles information from the Pull Request Review Guidance, [Programming Strategy](programming_strategy.html) and [Development Process](https://pharmaverse.github.io/admiral/articles/contribution_model.html) vignettes.
+The `{admiral}` development team is aware and sympathetic to the great many checks, processes and documents needed to work through in order to do a compliant Pull Request. The `task-list-completed` GitHub workflow was created to help reduce this burden on contributors by providing a standardized checklist that compiles information from the Pull Request Review Guidance, [Programming Strategy](programming_strategy.html) and [Development Process](https://pharmaverse.github.io/admiral/dev/CONTRIBUTING.html) vignettes.
 
 The next three sections give a high-level overview of what a contributor faces in opening a PR, and how a contributor interacts with the `task-list-completed` workflow in their PR.
 

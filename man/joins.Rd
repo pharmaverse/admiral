@@ -29,7 +29,7 @@ left_join(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 \code{data.frame}
 }
 \description{
-The \verb{*_join()} functions from {dplyr} without a warning on different attributes
+The \verb{*_join()} functions from \code{{dplyr}} without a warning on different attributes
 in datasets.
 }
 \keyword{joins}

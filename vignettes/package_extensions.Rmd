@@ -84,21 +84,21 @@ _Note: The ordering numbers below are suggested but don't all need to strictly b
 
 1. The intention is always to re-use as much as possible from `{admiral}` core package. If you find anything additional needed for the package extension, you should first question whether it might be a common need for other TAs and if so consider instead raising an issue to `{admiral}` core. When designing new functions always try to stay aligned with the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html).
 
-1. Start development of your foundational first release 0.1.0. Follow a consistent [Development Process](https://pharmaverse.github.io/admiral/articles/contribution_model.html) to `{admiral}`. 
+1. Start development of your foundational first release 0.1.0. Follow a consistent [Development Process](https://pharmaverse.github.io/admiral/dev/CONTRIBUTING.html) to `{admiral}`. 
 
 1. Line up testers from your companies and others and set expectations around when you believe a stable version would be available for user testing. You can use the admiral Slack community to raise interest to get involved.
 
 1. Add a pharmaverse badge to your README: https://pharmaverse.org/contribute/badges/ - needs support from a pharmaverse council rep.\
 [<img src="http://pharmaverse.org/shields/admiral.svg">](https://pharmaverse.org/contribute/badges/)
 
-1. Raise an `{admiral}` repo issue to ensure your package extension site is linked from the core `{admiral}` site here [here](https://pharmaverse.github.io/admiral/cran-release/).`
+1. Raise an `{admiral}` repo issue to ensure your package extension site is linked from the core `{admiral}` site here [here](https://pharmaverse.github.io/admiral/).`
 
 1. It is important that the `{admiral}` family of packages keep to a similar release schedule and cadence, in order to ease adoption by our users and to give clear expectations. The `{admiral}` core package cadence of releases is one every quarter on a fixed schedule (every first Monday of the last month of a quarter - March, June, September, December). The core package will set the release schedule for the package extensions to follow, i.e. once `{admiral}` releases we'd expect package extension releases targeted within a 2 week window. These releases are communicated via our Slack channel as well as at our quarterly user community meetings.
 
 1. Once you are happy your package extension has been well tested and is at a sufficient state then make a submission to CRAN. The technical lead should be named as maintainer. After the CRAN release, you should advertise this via Slack & LinkedIn.
 
 
-1. Plan any future further enhancements and make issues. When your team feels ready you can open up to development contributions for these from the wider community - see [this page](https://pharmaverse.github.io/admiral/cran-release/). Please use the <span class="github-button firstissue">good first issue</span> (ideal for new starters) & <span class="github-button helpwanted">help wanted</span> (ideal for more experienced contributors) issue labels.
+1. Plan any future further enhancements and make issues. When your team feels ready you can open up to development contributions for these from the wider community - see [this page](https://pharmaverse.github.io/admiral/). Please use the <span class="github-button firstissue">good first issue</span> (ideal for new starters) & <span class="github-button helpwanted">help wanted</span> (ideal for more experienced contributors) issue labels.
 
 **Note**: the core `{admiral}` team will carry out periodic reviews of of the extension package contents to ensure nothing is duplicated and  ensure standards and best practices are followed. The frequency of these reviews is to be agreed upon by the technical leads of the core and extension packages. 
 
