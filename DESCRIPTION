@@ -1,7 +1,7 @@
 Package: admiraldev
 Type: Package
 Title: Utility Functions and Development Tools for the Admiral Package Family
-Version: 0.5.0.9000
+Version: 1.0.0
 Authors@R: c(
     person("Ben", "Straub", email = "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
