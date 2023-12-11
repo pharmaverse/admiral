@@ -14,7 +14,7 @@ Note: This is a wrapper function for the function convert_dtc_to_dtm()."><meta p
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,8 +22,13 @@ Note: This is a wrapper function for the function convert_dtc_to_dtm()."><meta p
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
+      <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-get-started">Get Started</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-get-started">
+    <a class="dropdown-item" href="../articles/admiral.html">Simple ADSL Walkthrough</a>
+    <a class="dropdown-item" href="https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html">CDISC Variables mapped to admiral functions</a>
+    <a class="external-link dropdown-item" href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf">Cheatsheet</a>
+  </div>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/">Reference</a>
@@ -31,7 +36,6 @@ Note: This is a wrapper function for the function convert_dtc_to_dtm()."><meta p
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
-    <a class="dropdown-item" href="../articles/admiral.html">Getting Started</a>
     <a class="dropdown-item" href="../articles/adsl.html">Creating a Basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
@@ -45,19 +49,11 @@ Note: This is a wrapper function for the function convert_dtc_to_dtm()."><meta p
     <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
     <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
     <a class="dropdown-item" href="../articles/visits_periods.html">Visit and Period Variables</a>
-    <a class="dropdown-item" href="../articles/generic.html">Generic Functions</a>
+    <a class="dropdown-item" href="../articles/generic.html">Generic Derivations</a>
     <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
     <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     <a class="dropdown-item" href="../articles/lab_grading.html">Lab Grading</a>
     <a class="dropdown-item" href="../articles/hys_law.html">Hy's Law Implementation</a>
-  </div>
-</li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-community">
-    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
-    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
-    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
   </div>
 </li>
 <li class="nav-item">
@@ -67,6 +63,24 @@ Note: This is a wrapper function for the function convert_dtc_to_dtm()."><meta p
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269" aria-label="Slack">
+    <span class="fa fa-slack"></span>
+     
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../articles/website-versions.html" aria-label="Previous Release Websites">
+    <span class="fa fa-history"></span>
+     
+  </a>
+</li>
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/issues/new/choose" aria-label="New Issue">
+    <span class="fa fa-bug"></span>
+     
+  </a>
+</li>
+<li class="nav-item">
   <a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
@@ -122,7 +136,6 @@ missing, <code>NA_character_</code> is returned.</p>
 <p>If <code>"Y"</code> is specified, <code>date_imputation</code> should be <code>"first"</code> or <code>"last"</code>
 and <code>min_dates</code> or <code>max_dates</code> should be specified respectively. Otherwise,
 <code>NA_character_</code> is returned if the year component is missing.</p>
-<p><em>Default</em>: <code>"h"</code></p>
 <p><em>Permitted Values</em>: <code>"Y"</code> (year, highest level), <code>"M"</code> (month), <code>"D"</code>
 (day), <code>"h"</code> (hour), <code>"m"</code> (minute), <code>"s"</code> (second), <code>"n"</code> (none, lowest
 level)</p></dd>
@@ -136,9 +149,12 @@ missing.</p>
 <code>"first"</code> or <code>"last"</code> together with <code>min_dates</code> or <code>max_dates</code> argument can
 be used (see examples).),</p></li>
 <li><p>or as a keyword: <code>"first"</code>, <code>"mid"</code>, <code>"last"</code> to impute to the first/mid/last
-day/month.</p></li>
-</ul><p>The argument is ignored if <code>highest_imputation</code> is less then <code>"D"</code>.</p>
-<p><em>Default</em>: <code>"first"</code>.</p></dd>
+day/month. If <code>"mid"</code> is specified, missing components are imputed as the
+middle of the possible range:</p><ul><li><p>If both month and day are missing, they are imputed as <code>"06-30"</code>
+(middle of the year).</p></li>
+<li><p>If only day is missing, it is imputed as <code>"15"</code> (middle of the month).</p></li>
+</ul></li>
+</ul><p>The argument is ignored if <code>highest_imputation</code> is less then <code>"D"</code>.</p></dd>
 
 
 <dt>time_imputation</dt>
@@ -147,8 +163,7 @@ missing.</p>
 <p>A character value is expected, either as a</p><ul><li><p>format with hour, min and sec specified as <code>"hh:mm:ss"</code>: e.g. <code>"00:00:00"</code>
 for the start of the day,</p></li>
 <li><p>or as a keyword: <code>"first"</code>,<code>"last"</code> to impute to the start/end of a day.</p></li>
-</ul><p>The argument is ignored if <code>highest_imputation = "n"</code>.</p>
-<p><em>Default</em>: <code>"first"</code>.</p></dd>
+</ul><p>The argument is ignored if <code>highest_imputation = "n"</code>.</p></dd>
 
 
 <dt>min_dates</dt>
@@ -190,11 +205,12 @@ imputed. If only time is imputed, date variables do not affect the result.</p></
 
 
 <dt>preserve</dt>
-<dd><p>Preserve day if month is missing and day is present</p>
+<dd><p>Preserve lower level date/time part when higher order part
+is missing, e.g. preserve day if month is missing or
+preserve minute when hour is missing.</p>
 <p>For example <code>"2019---07"</code> would return <code>"2019-06-07</code> if <code>preserve = TRUE</code>
 (and <code>date_imputation = "mid"</code>).</p>
-<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p>
-<p><em>Default</em>: <code>FALSE</code></p></dd>
+<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -225,7 +241,7 @@ imputed. If only time is imputed, date variables do not affect the result.</p></
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="st">"2019-07-18T15:25:00"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2019-07-18 15:25:00 UTC"</span>
 <span class="r-in"><span><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-10-30 13:55:43 PDT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-12-11 15:03:16 UTC"</span>
 <span class="r-in"><span><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2019-07-18"</span><span class="op">)</span>, time_imputation <span class="op">=</span> <span class="st">"23:59:59"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2019-07-18 23:59:59 UTC"</span>
 <span class="r-in"><span><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="st">"2019-07-18"</span>, time_imputation <span class="op">=</span> <span class="st">"23:59:59"</span><span class="op">)</span></span></span>
@@ -239,7 +255,7 @@ imputed. If only time is imputed, date variables do not affect the result.</p></
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Stefan Thoma, Kangjie Zhang, Zelos Zhu, G Gayatri, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, G Gayatri, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Daniel Sjoberg, Stefan Thoma, Kangjie Zhang, Zelos Zhu, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
