@@ -1,6 +1,6 @@
 # Contribution to {admiral} 
 
-This outlines how to propose a change to the admiral package. For more detailed info about contributing to {admiral}, and other [pharmaverse packages](https://pharmaverse.org/), please see the [development process guide](https://pharmaverse.github.io/admiraldev/articles/development_process.html) as well as other Developer Guides in the Articles section of the [{admiral} website](https://pharmaverse.github.io/admiral/cran-release/index.html).
+This outlines how to propose a change to the admiral package. For more detailed info about contributing to {admiral}, and other [pharmaverse packages](https://pharmaverse.org/), please see the [Contribution Guide](https://pharmaverse.github.io/admiral/CONTRIBUTING.html) as well as other Developer Guides in the Articles section of the [{admiraldev} website](https://pharmaverse.github.io/admiraldev/).
 
 Please note that we try to align to best practices used in other R packages' development processes - so veteran developers should be familiar with our processes. However, we do deviate slightly from some best practices and we advise all new contributors to review our package documentation accordingly.
 
