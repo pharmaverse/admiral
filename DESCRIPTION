@@ -1,7 +1,7 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 0.12.3.9038
+Version: 1.0.0
 Authors@R: c(
     person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
@@ -39,7 +39,7 @@ BugReports: https://github.com/pharmaverse/admiral/issues
 Depends: 
     R (>= 4.0)
 Imports:
-    admiraldev (>= 0.5.0.9000),
+    admiraldev (>= 1.0.0),
     dplyr (>= 1.0.5),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
@@ -64,8 +64,6 @@ Suggests:
     tibble
 VignetteBuilder: 
     knitr
-Remotes: 
-    pharmaverse/admiraldev
 Config/Needs/website: gert
 Config/testthat/edition: 3
 Encoding: UTF-8
