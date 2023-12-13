@@ -20,7 +20,7 @@ variables."><meta property="og:image" content="https://pharmaverse.github.io/adm
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,13 +28,8 @@ variables."><meta property="og:image" content="https://pharmaverse.github.io/adm
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-get-started">Get Started</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-get-started">
-    <a class="dropdown-item" href="../articles/admiral.html">Simple ADSL Walkthrough</a>
-    <a class="dropdown-item" href="https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html">CDISC Variables mapped to admiral functions</a>
-    <a class="external-link dropdown-item" href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf">Cheatsheet</a>
-  </div>
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/">Reference</a>
@@ -42,6 +37,7 @@ variables."><meta property="og:image" content="https://pharmaverse.github.io/adm
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
+    <a class="dropdown-item" href="../articles/admiral.html">Getting Started</a>
     <a class="dropdown-item" href="../articles/adsl.html">Creating a Basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
@@ -55,11 +51,19 @@ variables."><meta property="og:image" content="https://pharmaverse.github.io/adm
     <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
     <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
     <a class="dropdown-item" href="../articles/visits_periods.html">Visit and Period Variables</a>
-    <a class="dropdown-item" href="../articles/generic.html">Generic Derivations</a>
+    <a class="dropdown-item" href="../articles/generic.html">Generic Functions</a>
     <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
     <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     <a class="dropdown-item" href="../articles/lab_grading.html">Lab Grading</a>
     <a class="dropdown-item" href="../articles/hys_law.html">Hy's Law Implementation</a>
+  </div>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-community">
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
+    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
+    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
   </div>
 </li>
 <li class="nav-item">
@@ -69,24 +73,6 @@ variables."><meta property="og:image" content="https://pharmaverse.github.io/adm
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269" aria-label="Slack">
-    <span class="fa fa-slack"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/website-versions.html" aria-label="Previous Release Websites">
-    <span class="fa fa-history"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/issues/new/choose" aria-label="New Issue">
-    <span class="fa fa-bug"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
   <a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
@@ -116,16 +102,15 @@ variables.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">derive_extreme_event</span><span class="op">(</span></span>
-<span>  dataset <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">by_vars</span>,</span>
+<span>  <span class="va">dataset</span>,</span>
+<span>  by_vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">events</span>,</span>
-<span>  tmp_event_nr_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">order</span>,</span>
 <span>  <span class="va">mode</span>,</span>
 <span>  source_datasets <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  ignore_event_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ignore_event_order <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  check_type <span class="op">=</span> <span class="st">"warning"</span>,</span>
-<span>  set_values_to <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">set_values_to</span>,</span>
 <span>  keep_source_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -134,14 +119,14 @@ variables.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dataset</dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> and <code>order</code> arguments are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>order</code> and the <code>by_vars</code> parameter are
+expected.</p></dd>
 
 
 <dt>by_vars</dt>
 <dd><p>Grouping variables</p>
 <p><em>Default</em>: <code>NULL</code></p>
-<p><em>Permitted Values</em>: list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code>
-e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
+<p><em>Permitted Values:</em> list of variables created by <code><a href="reexport-exprs.html">exprs()</a></code></p></dd>
 
 
 <dt>events</dt>
@@ -152,23 +137,13 @@ event. If multiple records meet the filter <code>condition</code>, take the firs
 record sorted by <code>order</code>. The data is grouped by <code>by_vars</code>, i.e., summary
 functions like <code><a href="https://rdrr.io/r/base/all.html" class="external-link">all()</a></code> or <code><a href="https://rdrr.io/r/base/any.html" class="external-link">any()</a></code> can be used in <code>condition</code>.</p>
 <p>For <code><a href="event_joined.html">event_joined()</a></code> events the observations are selected by calling
-<code><a href="filter_joined.html">filter_joined()</a></code>. The <code>condition</code> field is passed to the <code>filter_join</code> argument.</p></dd>
-
-
-<dt>tmp_event_nr_var</dt>
-<dd><p>Temporary event number variable</p>
-<p>The specified variable is added to all source datasets and is set to the
-number of the event before selecting the records of the event.</p>
-<p>It can be used in <code>order</code> to determine which record should be used if
-records from more than one event are selected.</p>
-<p>The variable is not included in the output dataset.</p></dd>
+<code>filter_joined</code>. The <code>condition</code> field is passed to the <code>filter</code> argument.</p></dd>
 
 
 <dt>order</dt>
 <dd><p>Sort order</p>
 <p>If a particular event from <code>events</code> has more than one observation, within
 the event and by group, the records are ordered by the specified order.</p>
-<p>For handling of <code>NA</code>s in sorting variables see <a href="../articles/generic.html#sort_order">Sort Order</a>.</p>
 <p><em>Permitted Values:</em> list of expressions created by <code><a href="reexport-exprs.html">exprs()</a></code>, e.g.,
 <code>exprs(ADT, desc(AVAL))</code></p></dd>
 
@@ -176,8 +151,8 @@ the event and by group, the records are ordered by the specified order.</p>
 <dt>mode</dt>
 <dd><p>Selection mode (first or last)</p>
 <p>If a particular event from <code>events</code> has more than one observation,
-<code>"first"</code>/<code>"last"</code> is used to select the first/last record of this type of
-event sorting by <code>order</code>.</p>
+"first"/"last" is to select the first/last record of this type of events
+sorting by <code>order</code>.</p>
 <p><em>Permitted Values:</em> <code>"first"</code>, <code>"last"</code></p></dd>
 
 
@@ -189,11 +164,6 @@ and <code><a href="event_joined.html">event_joined()</a></code> refers to the da
 
 <dt>ignore_event_order</dt>
 <dd><p>Ignore event order</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p>
-<p>This argument is <em>deprecated</em>. If event order should be ignored, please
-specify neither <code>ignore_event_order</code> nor <code>tmp_event_nr_var</code>. If the event
-order should be considered, don't specify <code>ignore_event_order</code> but specify
-<code>tmp_event_nr_var</code> and and the specified variable to <code>order</code>.</p>
 <p>If the argument is set to <code>TRUE</code>, all events defined by <code>events</code> are
 considered equivalent. If there is more than one observation per by group
 the first or last (with respect to <code>mode</code> and <code>order</code>) is select without
@@ -214,15 +184,10 @@ by variables and the order.</p>
 <dd><p>Variables to be set</p>
 <p>The specified variables are set to the specified values for the new
 observations.</p>
-<p>Set a list of variables to some specified value for the new records</p><ul><li><p>LHS refer to a variable.</p></li>
+<p>A list of variable name-value pairs is expected.</p><ul><li><p>LHS refers to a variable.</p></li>
 <li><p>RHS refers to the values to set to the variable. This can be a string, a
-symbol, a numeric value, an expression or NA. If summary functions are
-used, the values are summarized by the variables specified for <code>by_vars</code>.</p></li>
-</ul><p>For example:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>  set_values_to <span class="ot">=</span> <span class="fu">exprs</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>    <span class="at">AVAL =</span> <span class="fu">sum</span>(AVAL),</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="at">DTYPE =</span> <span class="st">"AVERAGE"</span>,</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  )</span></code></pre><p></p></div></dd>
+symbol, a numeric value, an expression, or <code>NA</code>, e.g., <code>exprs(PARAMCD =   "TDOSE", PARCAT1 = "OVERALL")</code>.</p></li>
+</ul></dd>
 
 
 <dt>keep_source_vars</dt>
@@ -251,15 +216,13 @@ observation per by group (<code>by_vars</code>) is selected.</p>
 select the observations.</p></li>
 <li><p>The variables specified by the <code>set_values_to</code> field of the event
 are added to the selected observations.</p></li>
-<li><p>The variable specified for <code>tmp_event_nr_var</code> is added and set to
-the number of the event.</p></li>
 <li><p>Only the variables specified for the <code>keep_source_vars</code> field of the
 event, and the by variables (<code>by_vars</code>) and the variables created by
 <code>set_values_to</code> are kept.</p></li>
 </ol></li>
-<li><p>All selected observations are bound together.</p></li>
 <li><p>For each group (with respect to the variables specified for the
-<code>by_vars</code> parameter) the first or last observation (with respect to the
+<code>by_vars</code> parameter) the first event is selected. If there is more than one
+observation per event the first or last observation (with respect to the
 order specified for the <code>order</code> parameter and the mode specified for the
 <code>mode</code> parameter) is selected.</p></li>
 <li><p>The variables specified by the <code>set_values_to</code> parameter are added to
@@ -268,7 +231,7 @@ the selected observations.</p></li>
 </ol></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="event.html">event()</a></code>, <code><a href="event_joined.html">event_joined()</a></code>, <code><a href="derive_vars_extreme_event.html">derive_vars_extreme_event()</a></code></p>
+    <div class="dont-index"><p><code><a href="event.html">event()</a></code>, <code><a href="event_joined.html">event_joined()</a></code></p>
 <p>BDS-Findings Functions for adding Parameters/Records: 
 <code><a href="default_qtc_paramcd.html">default_qtc_paramcd</a>()</code>,
 <code><a href="derive_expected_records.html">derive_expected_records</a>()</code>,
@@ -280,6 +243,7 @@ the selected observations.</p></li>
 <code><a href="derive_param_doseint.html">derive_param_doseint</a>()</code>,
 <code><a href="derive_param_exist_flag.html">derive_param_exist_flag</a>()</code>,
 <code><a href="derive_param_exposure.html">derive_param_exposure</a>()</code>,
+<code><a href="derive_param_extreme_record.html">derive_param_extreme_record</a>()</code>,
 <code><a href="derive_param_framingham.html">derive_param_framingham</a>()</code>,
 <code><a href="derive_param_map.html">derive_param_map</a>()</code>,
 <code><a href="derive_param_qtc.html">derive_param_qtc</a>()</code>,
@@ -334,9 +298,8 @@ the selected observations.</p></li>
 <span class="r-in"><span>      set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>AVALC <span class="op">=</span> <span class="st">"Missing"</span>, AVAL <span class="op">=</span> <span class="fl">99</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  tmp_event_nr_var <span class="op">=</span> <span class="va">event_nr</span>,</span></span>
-<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">event_nr</span>, <span class="fu"><a href="reexport-desc.html">desc</a></span><span class="op">(</span><span class="va">ADY</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"first"</span>,</span></span>
+<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">ADY</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"last"</span>,</span></span>
 <span class="r-in"><span>  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    PARAMCD <span class="op">=</span> <span class="st">"WSP"</span>,</span></span>
 <span class="r-in"><span>    PARAM <span class="op">=</span> <span class="st">"Worst Sleeping Problems"</span></span></span>
@@ -386,8 +349,7 @@ the selected observations.</p></li>
 <span class="r-in"><span>      set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span>AVALC <span class="op">=</span> <span class="st">"Y"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  tmp_event_nr_var <span class="op">=</span> <span class="va">event_nr</span>,</span></span>
-<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">event_nr</span>, <span class="va">AVISITN</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVISITN</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"first"</span>,</span></span>
 <span class="r-in"><span>  keep_source_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVISITN</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
@@ -463,8 +425,7 @@ the selected observations.</p></li>
 <span class="r-in"><span><span class="fu">derive_extreme_event</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">adrs</span>,</span></span>
 <span class="r-in"><span>  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  tmp_event_nr_var <span class="op">=</span> <span class="va">event_nr</span>,</span></span>
-<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">event_nr</span>, <span class="va">ADT</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  order <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">ADT</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"first"</span>,</span></span>
 <span class="r-in"><span>  source_datasets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>adsl <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
@@ -475,7 +436,7 @@ the selected observations.</p></li>
 <span class="r-in"><span>      <span class="op">)</span>,</span></span>
 <span class="r-in"><span>      join_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVALC</span>, <span class="va">ADT</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>      join_type <span class="op">=</span> <span class="st">"after"</span>,</span></span>
-<span class="r-in"><span>      first_cond_upper <span class="op">=</span> <span class="va">AVALC.join</span> <span class="op">==</span> <span class="st">"CR"</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>      first_cond <span class="op">=</span> <span class="va">AVALC.join</span> <span class="op">==</span> <span class="st">"CR"</span> <span class="op">&amp;</span></span></span>
 <span class="r-in"><span>        <span class="va">ADT.join</span> <span class="op">&gt;=</span> <span class="va">ADT</span> <span class="op">+</span> <span class="fl">28</span>,</span></span>
 <span class="r-in"><span>      condition <span class="op">=</span> <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"CR"</span> <span class="op">&amp;</span></span></span>
 <span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">AVALC.join</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"NE"</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
@@ -491,7 +452,7 @@ the selected observations.</p></li>
 <span class="r-in"><span>      <span class="op">)</span>,</span></span>
 <span class="r-in"><span>      join_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">AVALC</span>, <span class="va">ADT</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>      join_type <span class="op">=</span> <span class="st">"after"</span>,</span></span>
-<span class="r-in"><span>      first_cond_upper <span class="op">=</span> <span class="va">AVALC.join</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>      first_cond <span class="op">=</span> <span class="va">AVALC.join</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
 <span class="r-in"><span>        <span class="va">ADT.join</span> <span class="op">&gt;=</span> <span class="va">ADT</span> <span class="op">+</span> <span class="fl">28</span>,</span></span>
 <span class="r-in"><span>      condition <span class="op">=</span> <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"PR"</span> <span class="op">&amp;</span></span></span>
 <span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">AVALC.join</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span>, <span class="st">"NE"</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
@@ -557,7 +518,7 @@ the selected observations.</p></li>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, G Gayatri, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Daniel Sjoberg, Stefan Thoma, Kangjie Zhang, Zelos Zhu, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Stefan Thoma, Kangjie Zhang, Zelos Zhu, G Gayatri, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -12,7 +12,7 @@ input dataset e.g., duration of adverse events, relative day, age, ..."><meta pr
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,13 +20,8 @@ input dataset e.g., duration of adverse events, relative day, age, ..."><meta pr
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-get-started">Get Started</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-get-started">
-    <a class="dropdown-item" href="../articles/admiral.html">Simple ADSL Walkthrough</a>
-    <a class="dropdown-item" href="https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html">CDISC Variables mapped to admiral functions</a>
-    <a class="external-link dropdown-item" href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf">Cheatsheet</a>
-  </div>
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/admiral.html">Get Started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/">Reference</a>
@@ -34,6 +29,7 @@ input dataset e.g., duration of adverse events, relative day, age, ..."><meta pr
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
+    <a class="dropdown-item" href="../articles/admiral.html">Getting Started</a>
     <a class="dropdown-item" href="../articles/adsl.html">Creating a Basic ADSL</a>
     <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
     <div class="dropdown-divider"></div>
@@ -47,11 +43,19 @@ input dataset e.g., duration of adverse events, relative day, age, ..."><meta pr
     <h6 class="dropdown-header" data-toc-skip>Advanced User Guides</h6>
     <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
     <a class="dropdown-item" href="../articles/visits_periods.html">Visit and Period Variables</a>
-    <a class="dropdown-item" href="../articles/generic.html">Generic Derivations</a>
+    <a class="dropdown-item" href="../articles/generic.html">Generic Functions</a>
     <a class="dropdown-item" href="../articles/higher_order.html">Higher Order Functions</a>
     <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     <a class="dropdown-item" href="../articles/lab_grading.html">Lab Grading</a>
     <a class="dropdown-item" href="../articles/hys_law.html">Hy's Law Implementation</a>
+  </div>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-community">Community</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-community">
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribute to admiral</a>
+    <a class="external-link dropdown-item" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Find us on Slack</a>
+    <a class="external-link dropdown-item" href="https://pharmaverse.org/">Welcome to the Pharmaverse</a>
   </div>
 </li>
 <li class="nav-item">
@@ -61,24 +65,6 @@ input dataset e.g., duration of adverse events, relative day, age, ..."><meta pr
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://app.slack.com/client/T028PB489D3/C02M8KN8269" aria-label="Slack">
-    <span class="fa fa-slack"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/website-versions.html" aria-label="Previous Release Websites">
-    <span class="fa fa-history"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/issues/new/choose" aria-label="New Issue">
-    <span class="fa fa-bug"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
   <a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
@@ -110,7 +96,7 @@ input dataset e.g., duration of adverse events, relative day, age, ...</p>
 <span>  <span class="va">start_date</span>,</span>
 <span>  <span class="va">end_date</span>,</span>
 <span>  in_unit <span class="op">=</span> <span class="st">"days"</span>,</span>
-<span>  out_unit <span class="op">=</span> <span class="st">"DAYS"</span>,</span>
+<span>  out_unit <span class="op">=</span> <span class="st">"days"</span>,</span>
 <span>  floor_in <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_one <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  trunc_out <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -122,7 +108,8 @@ input dataset e.g., duration of adverse events, relative day, age, ...</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dataset</dt>
 <dd><p>Input dataset</p>
-<p>The variables specified by the <code>start_date</code> and <code>end_date</code> arguments are expected to be in the dataset.</p></dd>
+<p>The variables specified by the <code>start_date</code> and the <code>end_date</code> parameter are
+expected.</p></dd>
 
 
 <dt>new_var</dt>
@@ -136,59 +123,49 @@ specified, no variable for the unit is created.</p></dd>
 
 <dt>start_date</dt>
 <dd><p>The start date</p>
-<p>A date or date-time object is expected.</p>
+<p>A date or date-time variable is expected. This variable must be present in
+specified input dataset.</p>
 <p>Refer to <code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> to impute and derive a date from a date
-character vector to a date object.</p>
-<p>Refer to <code><a href="convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code> to obtain a vector of imputed dates.</p></dd>
+character vector to a date object.</p></dd>
 
 
 <dt>end_date</dt>
 <dd><p>The end date</p>
-<p>A date or date-time object is expected.</p>
+<p>A date or date-time variable is expected. This variable must be present in
+specified input dataset.</p>
 <p>Refer to <code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> to impute and derive a date from a date
-character vector to a date object.</p>
-<p>Refer to <code><a href="convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code> to obtain a vector of imputed dates.</p></dd>
+character vector to a date object.</p></dd>
 
 
 <dt>in_unit</dt>
 <dd><p>Input unit</p>
 <p>See floor_in and add_one parameter for details.</p>
-<p>Permitted Values (case-insensitive):</p>
-<p>For years: <code>"year"</code>, <code>"years"</code>, <code>"yr"</code>, <code>"yrs"</code>, <code>"y"</code></p>
-<p>For months: <code>"month"</code>, <code>"months"</code>, <code>"mo"</code>, <code>"mos"</code></p>
-<p>For days: <code>"day"</code>, <code>"days"</code>, <code>"d"</code></p>
-<p>For hours: <code>"hour"</code>, <code>"hours"</code>, <code>"hr"</code>, <code>"hrs"</code>, <code>"h"</code></p>
-<p>For minutes: <code>"minute"</code>, <code>"minutes"</code>, <code>"min"</code>, <code>"mins"</code></p>
-<p>For seconds: <code>"second"</code>, <code>"seconds"</code>, <code>"sec"</code>, <code>"secs"</code>, <code>"s"</code></p></dd>
+<p>Default: 'days'</p>
+<p>Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
+'seconds', 'sec'</p></dd>
 
 
 <dt>out_unit</dt>
 <dd><p>Output unit</p>
 <p>The duration is derived in the specified unit</p>
-<p>Permitted Values (case-insensitive):</p>
-<p>For years: <code>"year"</code>, <code>"years"</code>, <code>"yr"</code>, <code>"yrs"</code>, <code>"y"</code></p>
-<p>For months: <code>"month"</code>, <code>"months"</code>, <code>"mo"</code>, <code>"mos"</code></p>
-<p>For weeks: <code>"week"</code>, <code>"weeks"</code>, <code>"wk"</code>, <code>"wks"</code>, <code>"w"</code></p>
-<p>For days: <code>"day"</code>, <code>"days"</code>, <code>"d"</code></p>
-<p>For hours: <code>"hour"</code>, <code>"hours"</code>, <code>"hr"</code>, <code>"hrs"</code>, <code>"h"</code></p>
-<p>For minutes: <code>"minute"</code>, <code>"minutes"</code>, <code>"min"</code>, <code>"mins"</code></p>
-<p>For seconds: <code>"second"</code>, <code>"seconds"</code>, <code>"sec"</code>, <code>"secs"</code>, <code>"s"</code></p></dd>
+<p>Default: 'days'</p>
+<p>Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'min',
+'seconds', 'sec'</p></dd>
 
 
 <dt>floor_in</dt>
 <dd><p>Round down input dates?</p>
 <p>The input dates are round down with respect to the input unit, e.g., if the
 input unit is 'days', the time of the input dates is ignored.</p>
-<p>Default: <code>TRUE</code></p>
+<p>Default: `TRUE``</p>
 <p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></dd>
 
 
 <dt>add_one</dt>
 <dd><p>Add one input unit?</p>
-<p>If the duration is non-negative, one input unit is added. i.e., the
+<p>If the duration is non-negative, one input unit is added. I.e., the
 duration can not be zero.</p>
-<p>Default: <code>TRUE</code></p>
-<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></dd>
+<p>Default: <code>TRUE</code> Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></dd>
 
 
 <dt>trunc_out</dt>
@@ -202,7 +179,6 @@ integer part is returned.</p>
 <dt>type</dt>
 <dd><p>lubridate duration type.</p>
 <p>See below for details.</p>
-<p>Default: <code>"duration"</code></p>
 <p>Permitted Values: <code>"duration"</code>, <code>"interval"</code></p></dd>
 
 </dl></div>
@@ -271,7 +247,7 @@ length is <code>30.4375</code>, i.e. <code>29 / 30.4375 = 0.95</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID BRTHDT     RANDDT      AAGE AAGEU</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> P01     1984-09-06 2020-02-24    35 years</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> P01     1984-09-06 2020-02-24    35 YEARS</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> P02     1985-01-01 <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> P03     <span style="color: #BB0000;">NA</span>         2021-03-10    <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> P04     <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>   </span>
@@ -295,8 +271,8 @@ length is <code>30.4375</code>, i.e. <code>29 / 30.4375 = 0.95</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID ASTDT      AENDT      ADURN ADURU</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> P01     2021-03-05 2021-03-02    -<span style="color: #BB0000;">3</span> days </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> P02     2019-09-18 2019-09-18     1 days </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> P01     2021-03-05 2021-03-02    -<span style="color: #BB0000;">3</span> DAYS </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> P02     2019-09-18 2019-09-18     1 DAYS </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> P03     1985-01-01 <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> P04     <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-in"><span></span></span>
@@ -321,9 +297,9 @@ length is <code>30.4375</code>, i.e. <code>29 / 30.4375 = 0.95</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID ADTM                TRTSDTM             ADURN ADURU  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> P01     2019-08-09 <span style="color: #949494;">04:30:56</span> 2019-08-09 <span style="color: #949494;">05:00:00</span>    30 minutes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> P02     2019-11-11 <span style="color: #949494;">10:30:00</span> 2019-11-11 <span style="color: #949494;">11:30:00</span>    60 minutes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> P03     2019-11-11 <span style="color: #949494;">00:00:00</span> 2019-11-11 <span style="color: #949494;">04:00:00</span>   240 minutes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> P01     2019-08-09 <span style="color: #949494;">04:30:56</span> 2019-08-09 <span style="color: #949494;">05:00:00</span>    30 MINUTES</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> P02     2019-11-11 <span style="color: #949494;">10:30:00</span> 2019-11-11 <span style="color: #949494;">11:30:00</span>    60 MINUTES</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> P03     2019-11-11 <span style="color: #949494;">00:00:00</span> 2019-11-11 <span style="color: #949494;">04:00:00</span>   240 MINUTES</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> P04     <span style="color: #BB0000;">NA</span>                  2019-11-11 <span style="color: #949494;">12:34:56</span>    <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Derive adverse event start time since last dose in hours</span></span></span>
@@ -348,9 +324,9 @@ length is <code>30.4375</code>, i.e. <code>29 / 30.4375 = 0.95</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USUBJID ASTDTM              LDOSEDTM            LDRELTM LDRELTMU</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> P01     2019-08-09 <span style="color: #949494;">04:30:56</span> 2019-08-08 <span style="color: #949494;">10:05:00</span>      18 hours   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> P02     2019-11-11 <span style="color: #949494;">23:59:59</span> 2019-10-11 <span style="color: #949494;">11:37:00</span>     756 hours   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> P03     2019-11-11 <span style="color: #949494;">00:00:00</span> 2019-11-10 <span style="color: #949494;">23:59:59</span>       1 hours   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> P01     2019-08-09 <span style="color: #949494;">04:30:56</span> 2019-08-08 <span style="color: #949494;">10:05:00</span>      18 HOURS   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> P02     2019-11-11 <span style="color: #949494;">23:59:59</span> 2019-10-11 <span style="color: #949494;">11:37:00</span>     756 HOURS   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> P03     2019-11-11 <span style="color: #949494;">00:00:00</span> 2019-11-10 <span style="color: #949494;">23:59:59</span>       1 HOURS   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> P04     2019-11-11 <span style="color: #949494;">12:34:56</span> <span style="color: #BB0000;">NA</span>                       <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> P05     <span style="color: #BB0000;">NA</span>                  2019-09-28 <span style="color: #949494;">12:34:56</span>      <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>      </span>
 </code></pre></div>
@@ -360,7 +336,7 @@ length is <code>30.4375</code>, i.e. <code>29 / 30.4375 = 0.95</code>.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, G Gayatri, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Daniel Sjoberg, Stefan Thoma, Kangjie Zhang, Zelos Zhu, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p></p><p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Stefan Thoma, Kangjie Zhang, Zelos Zhu, G Gayatri, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
