@@ -1,5 +1,14 @@
 # admiral (development version)
 
+## New Features
+
+## Updates of Existing Functions
+
+## Breaking Changes
+
+## Various
+
+
 # admiral 1.0.0
 
 ## New Features
