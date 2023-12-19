@@ -1,3 +1,7 @@
+# admiral 1.0.1
+
+* Patching something
+
 # admiral 1.0.0
 
 ## New Features
