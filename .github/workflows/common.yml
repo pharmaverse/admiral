@@ -77,7 +77,7 @@ jobs:
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   check-test:
-    name: Check v2 
+    name: Check v2
     uses: pharmaverse/admiralci/.github/workflows/r-cmd-check-test.yml@use_cran_latest
     if: github.event_name == 'push'
   check:
