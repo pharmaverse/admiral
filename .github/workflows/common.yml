@@ -82,6 +82,12 @@ jobs:
     with:
       error-on: warning # TODO: find a way to ignore specific notes
     if: github.event_name == 'push'
+
+  # https://github.com/pharmaverse/ggsurvfit/blob/main/.github/workflows/R-CMD-check.yaml
+  check-test:
+    name: Check v2
+    uses: pharmaverse/admiralci/.github/workflows/r-cmd-check-test.yml@use_cran_latest
+    if: github.event_name == 'push'
   docs:
     name: Documentation
     uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
