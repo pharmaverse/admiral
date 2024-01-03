@@ -76,17 +76,15 @@ jobs:
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
+  check-test:
+    name: Check v2
+    uses: pharmaverse/admiralci/.github/workflows/r-cmd-check-test.yml@use_cran_latest
+    if: github.event_name == 'push'
   check:
     name: Check
     uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@use_cran_latest
     with:
       error-on: warning # TODO: find a way to ignore specific notes
-    if: github.event_name == 'push'
-
-  # https://github.com/pharmaverse/ggsurvfit/blob/main/.github/workflows/R-CMD-check.yaml
-  check-test:
-    name: Check v2
-    uses: pharmaverse/admiralci/.github/workflows/r-cmd-check-test.yml@use_cran_latest
     if: github.event_name == 'push'
   docs:
     name: Documentation
