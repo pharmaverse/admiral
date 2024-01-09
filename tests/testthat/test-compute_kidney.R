@@ -99,4 +99,3 @@ test_that("compute_egfr Test 7: CKD-EPI calculated on input data", {
     keys = c("USUBJID")
   )
 })
-
