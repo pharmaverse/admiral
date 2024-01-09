@@ -438,4 +438,3 @@ test_that("derive_var_ontrtfl Test 15: if trt end date is missing, the obs may s
     )
   )
 })
-
