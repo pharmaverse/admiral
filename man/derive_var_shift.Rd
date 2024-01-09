@@ -9,7 +9,6 @@ derive_var_shift(
   new_var,
   from_var,
   to_var,
-  na_val,
   missing_value = "NULL",
   sep_val = " to "
 )
@@ -24,8 +23,6 @@ The variables specified by the \code{from_var} and \code{to_var} arguments are e
 \item{from_var}{Variable containing value to shift from.}
 
 \item{to_var}{Variable containing value to shift to.}
-
-\item{na_val}{\emph{Deprecated}, please use \code{missing_value} instead.}
 
 \item{missing_value}{Character string to replace missing values in \code{from_var} or \code{to_var}.
 

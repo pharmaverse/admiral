@@ -4,7 +4,7 @@
 \alias{compute_egfr}
 \title{Compute Estimated Glomerular Filtration Rate (eGFR) for Kidney Function}
 \usage{
-compute_egfr(creat, creatu = "SI", age, weight, sex, race = NULL, method, wt)
+compute_egfr(creat, creatu = "SI", age, weight, sex, race = NULL, method)
 }
 \arguments{
 \item{creat}{Creatinine
@@ -44,8 +44,6 @@ Expected Values: \code{"BLACK OR AFRICAN AMERICAN"} and others}
 A character vector is expected.
 
 Expected Values: \code{"CRCL"}, \code{"CKD-EPI"}, \code{"MDRD"}}
-
-\item{wt}{\emph{Deprecated}, please use \code{weight} instead.}
 }
 \value{
 A numeric vector of egfr values
