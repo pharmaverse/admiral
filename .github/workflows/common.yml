@@ -81,7 +81,7 @@ jobs:
     uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@main
     with:
       error-on: warning # TODO: find a way to ignore specific notes
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
   docs:
     name: Documentation
     uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
