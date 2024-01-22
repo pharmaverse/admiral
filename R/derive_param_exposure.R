@@ -161,7 +161,13 @@ derive_param_exposure <- function(dataset = NULL,
                                   filter_add = NULL,
                                   set_values_to = NULL) {
   by_vars <- assert_vars(by_vars)
-  analysis_var <- assert_symbol(enexpr(analysis_var))
+  if (!missing(analysis_var) || !missing(summary_fun)) {
+    deprecate_stop(
+      "1.1.0",
+      I("derive_param_exposure(anaylsis_var = , summary_fun = )"),
+      "derive_param_exposure(set_values_to = )"
+    )
+  }
 
   dtm <- c("ASTDTM", "AENDTM") %in% colnames(dataset)
   dt <- c("ASTDT", "AENDT") %in% colnames(dataset)
@@ -185,7 +191,7 @@ derive_param_exposure <- function(dataset = NULL,
 
   assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
   assert_data_frame(dataset_add,
-    required_vars = expr_c(by_vars, analysis_var, exprs(PARAMCD), dates)
+    required_vars = expr_c(by_vars, exprs(PARAMCD), dates)
   )
 
   if (!missing(filter)) {
@@ -202,7 +208,6 @@ derive_param_exposure <- function(dataset = NULL,
   assert_character_scalar(input_code)
   params_available <- unique(dataset$PARAMCD)
   assert_character_vector(input_code, values = params_available)
-  assert_s3_class(summary_fun, "function")
 
   if (is.null(filter_add)) {
     filter_add <- TRUE
