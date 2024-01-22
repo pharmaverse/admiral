@@ -125,8 +125,7 @@
 #'     by_vars = exprs(USUBJID),
 #'     set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
 #'     input_code = "DOSE",
-#'     analysis_var = AVAL,
-#'     summary_fun = function(x) sum(x, na.rm = TRUE)
+#'     set_values_to = exprs(AVAL = sum(AVAL, na.rm = TRUE))
 #'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
 #'
@@ -138,8 +137,7 @@
 #'     filter = VISIT %in% c("WEEK 2", "WEEK 24"),
 #'     set_values_to = exprs(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
 #'     input_code = "DOSE",
-#'     analysis_var = AVAL,
-#'     summary_fun = function(x) mean(x, na.rm = TRUE)
+#'     set_values_to = exprs(AVAL = mean(AVAL, na.rm = TRUE))
 #'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
 #'
@@ -150,8 +148,7 @@
 #'     by_vars = exprs(USUBJID),
 #'     set_values_to = exprs(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
 #'     input_code = "ADJ",
-#'     analysis_var = AVALC,
-#'     summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
+#'     set_values_to = exprs(AVALC = if_else(sum(!is.na(x)) > 0, "Y", NA_character_))
 #'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
 derive_param_exposure <- function(dataset = NULL,
@@ -217,7 +214,6 @@ derive_param_exposure <- function(dataset = NULL,
     by_vars = by_vars,
     filter_add = PARAMCD == !!input_code & !!filter_add,
     set_values_to = exprs(
-      !!analysis_var := {{ summary_fun }}(!!analysis_var),
       !!!set_dtm,
       !!!set_dt,
       !!!set_values_to

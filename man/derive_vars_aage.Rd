@@ -8,7 +8,6 @@ derive_vars_aage(
   dataset,
   start_date = BRTHDT,
   end_date = RANDDT,
-  unit = "years",
   age_unit = "YEARS",
   type = "interval"
 )

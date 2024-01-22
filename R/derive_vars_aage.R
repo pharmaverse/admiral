@@ -92,7 +92,6 @@
 derive_vars_aage <- function(dataset,
                              start_date = BRTHDT,
                              end_date = RANDDT,
-                             unit = "years",
                              age_unit = "YEARS",
                              type = "interval") {
 

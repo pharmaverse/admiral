@@ -120,32 +120,27 @@ adex <- adex %>%
       params(
         set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
         input_code = "DOSE",
-        analysis_var = AVAL,
-        summary_fun = function(x) sum(x, na.rm = TRUE)
+        set_values_to = exprs(AVAL = sum(AVAL, na.rm = TRUE))
       ),
       params(
         set_values_to = exprs(PARAMCD = "TPDOSE", PARCAT1 = "OVERALL"),
         input_code = "PLDOSE",
-        analysis_var = AVAL,
-        summary_fun = function(x) sum(x, na.rm = TRUE)
+        set_values_to = exprs(AVAL = sum(AVAL, na.rm = TRUE))
       ),
       params(
         set_values_to = exprs(PARAMCD = "TDURD", PARCAT1 = "OVERALL"),
         input_code = "DURD",
-        analysis_var = AVAL,
-        summary_fun = function(x) sum(x, na.rm = TRUE)
+        set_values_to = exprs(AVAL = sum(AVAL, na.rm = TRUE))
       ),
       params(
         set_values_to = exprs(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
         input_code = "ADJ",
-        analysis_var = AVALC,
-        summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
+        set_values_to = exprs(AVALC = if_else(sum(!is.na(x)) > 0, "Y", NA_character_))
       ),
       params(
         set_values_to = exprs(PARAMCD = "TADJAE", PARCAT1 = "OVERALL"),
         input_code = "ADJAE",
-        analysis_var = AVALC,
-        summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
+        set_values_to = exprs(AVALC = if_else(sum(!is.na(x)) > 0, "Y", NA_character_))
       )
     ),
     dataset_add = adex,
