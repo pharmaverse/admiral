@@ -94,7 +94,6 @@ derive_vars_aage <- function(dataset,
                              end_date = RANDDT,
                              age_unit = "YEARS",
                              type = "interval") {
-
   start_date <- assert_symbol(enexpr(start_date))
   end_date <- assert_symbol(enexpr(end_date))
   assert_data_frame(dataset, required_vars = expr_c(start_date, end_date))

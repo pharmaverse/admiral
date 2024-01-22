@@ -117,7 +117,6 @@ derive_locf_records <- function(dataset,
                                 analysis_var = AVAL,
                                 order,
                                 keep_vars = NULL) {
-
   #### Input Checking ####
   analysis_var <- assert_symbol(enexpr(analysis_var))
 

@@ -312,7 +312,6 @@ dthcaus_source <- function(dataset_name,
                            mode = "first",
                            dthcaus,
                            set_values_to = NULL) {
-
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),

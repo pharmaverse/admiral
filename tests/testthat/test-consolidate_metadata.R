@@ -76,13 +76,13 @@ test_that("consolidate_metadata Test 3: check_keys deprecation test", {
 
   expect_error(
     consolidate_metadata(
-        datasets = list(
-          global = glob,
-          study = stud
-        ),
-        key_vars = exprs(id),
-        check_keys = "error"
+      datasets = list(
+        global = glob,
+        study = stud
       ),
+      key_vars = exprs(id),
+      check_keys = "error"
+    ),
     class = "lifecycle_error_deprecated"
   )
 })
