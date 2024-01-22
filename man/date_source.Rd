@@ -4,13 +4,7 @@
 \alias{date_source}
 \title{Create a \code{date_source} object}
 \usage{
-date_source(
-  dataset_name,
-  filter = NULL,
-  date,
-  traceability_vars = NULL,
-  set_values_to = NULL
-)
+date_source(dataset_name, filter = NULL, date, set_values_to = NULL)
 }
 \arguments{
 \item{dataset_name}{The name of the dataset, i.e. a string, used to search for
@@ -20,12 +14,6 @@ the date.}
 
 \item{date}{A variable or an expression providing a date. A date or a
 datetime can be specified. An unquoted symbol or expression is expected.}
-
-\item{traceability_vars}{A named list returned by \code{exprs()} defining the
-traceability variables, e.g. \code{exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, a numeric,
-an expression, or \code{NA}.
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.}
 
 \item{set_values_to}{Variables to be set}
 }

@@ -47,8 +47,6 @@
 #'
 #'   For seconds: `"second"`, `"seconds"`, `"sec"`, `"secs"`, `"s"`
 #'
-#' @param unit `r lifecycle::badge("deprecated")` Please use `age_unit` instead.
-#'
 #' @details The duration is derived as time from start to end date in the
 #'   specified output unit. If the end date is before the start date, the duration
 #'   is negative. The start and end date variable must be present in the specified
@@ -97,10 +95,6 @@ derive_vars_aage <- function(dataset,
                              unit = "years",
                              age_unit = "YEARS",
                              type = "interval") {
-  if (!missing(unit)) {
-    deprecate_stop("0.12.0", "derive_vars_aage(unit = )", "derive_vars_aage(age_unit = )")
-    age_unit <- unit
-  }
 
   start_date <- assert_symbol(enexpr(start_date))
   end_date <- assert_symbol(enexpr(end_date))

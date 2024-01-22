@@ -465,8 +465,8 @@ filter_joined <- function(dataset,
   first_cond_lower <- assert_filter_cond(enexpr(first_cond_lower), optional = TRUE)
   first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
   if (!missing(first_cond)) {
-    deprecate_warn(
-      "1.0.0",
+    deprecate_stop(
+      "1.1.0",
       "filter_joined(first_cond=)",
       "filter_joined(first_cond_upper=)"
     )
@@ -477,7 +477,7 @@ filter_joined <- function(dataset,
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   filter_join <- assert_filter_cond(enexpr(filter_join))
   if (!missing(filter)) {
-    deprecate_warn("1.0.0", "filter_joined(filter=)", "filter_joined(filter_join=)")
+    deprecate_stop("1.1.0", "filter_joined(filter=)", "filter_joined(filter_join=)")
     filter_join <- assert_filter_cond(enexpr(filter))
   }
   check_type <-

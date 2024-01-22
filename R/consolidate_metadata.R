@@ -101,8 +101,8 @@ consolidate_metadata <- function(datasets,
       case_sensitive = FALSE
     )
   if (!is_missing(check_keys)) {
-    deprecate_warn(
-      "1.0.0",
+    deprecate_stop(
+      "1.1.0",
       "consolidate_metadata(check_keys = )",
       "consolidate_metadata(check_type = )"
     )

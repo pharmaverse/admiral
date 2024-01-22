@@ -172,8 +172,8 @@ get_summary_records <- function(dataset,
   )
   assert_varval_list(set_values_to)
   if (!missing(analysis_var) || !missing(summary_fun)) {
-    deprecate_warn(
-      "1.0.0",
+    deprecate_stop(
+      "1.1.0",
       I("get_summary_records(anaylsis_var = , summary_fun = )"),
       "get_summary_records(set_values_to = )"
     )

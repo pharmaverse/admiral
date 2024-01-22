@@ -210,8 +210,8 @@ derive_summary_records <- function(dataset = NULL,
   assert_expr_list(missing_values, named = TRUE, optional = TRUE)
 
   if (!missing(analysis_var) || !missing(summary_fun)) {
-    deprecate_warn(
-      "1.0.0",
+    deprecate_stop(
+      "1.1.0",
       I("derive_summary_records(anaylsis_var = , summary_fun = )"),
       "derive_summary_records(set_values_to = )"
     )
@@ -221,8 +221,8 @@ derive_summary_records <- function(dataset = NULL,
   }
 
   if (!missing(filter)) {
-    deprecate_warn(
-      "1.0.0",
+    deprecate_stop(
+      "1.1.0",
       I("derive_summary_records(filter = )"),
       "derive_summary_records(filter_add = )"
     )

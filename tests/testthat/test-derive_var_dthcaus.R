@@ -414,32 +414,8 @@ test_that("derive_var_dthcaus Test 8: `dataset` is sorted using the `order` para
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
 
-## Test 9: returns a warning when traceability_vars is used ----
-test_that("derive_var_dthcaus Test 9: returns a warning when traceability_vars is used", {
-  ae <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
-    "TEST01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
-  )
-
-  expect_error(
-    src_ae <- dthcaus_source(
-      dataset_name = "ae",
-      filter = AEOUT == "FATAL",
-      date = AEDTHDT,
-      mode = "first",
-      dthcaus = AEDECOD,
-      traceability_vars = exprs(DTHDOM = "AE", DTHSEQ = AESEQ),
-      set_values_to = exprs(
-        DTHDOM = "AE",
-        DTHSEQ = AESEQ
-      )
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
-## Test 10: multiple observations from different sources ----
-test_that("derive_var_dthcaus Test 10: multiple observations from different sources", {
+## Test 9: multiple observations from different sources ----
+test_that("derive_var_dthcaus Test 9: multiple observations from different sources", {
   expected <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~DTHCAUS,
     "TEST01", "PAT01",  "SUDDEN DEATH",
@@ -494,8 +470,8 @@ test_that("derive_var_dthcaus Test 10: multiple observations from different sour
   )
 })
 
-## Test 11: multiple observations from different sources with same date ----
-test_that("derive_var_dthcaus Test 11: multiple observations with same date", {
+## Test 10: multiple observations with same date ----
+test_that("derive_var_dthcaus Test 10: multiple observations with same date", {
   expected <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~DTHCAUS,
     "TEST01", "PAT01",  "SUDDEN DEATH",

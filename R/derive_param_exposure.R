@@ -192,8 +192,8 @@ derive_param_exposure <- function(dataset = NULL,
   )
 
   if (!missing(filter)) {
-    deprecate_warn(
-      "1.0.0",
+    deprecate_stop(
+      "1.1.0",
       I("derive_param_exposure(filter = )"),
       "derive_param_exposure(filter_add = )"
     )
