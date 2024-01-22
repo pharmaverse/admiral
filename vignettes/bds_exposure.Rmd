@@ -406,7 +406,7 @@ adex <- adex %>%
           PARCAT1 = "OVERALL",
           AVAL = sum(AVAL, na.rm = TRUE)
         ),
-        input_code = "DOSE",
+        input_code = "DOSE"
       ),
       params(
         set_values_to = exprs(
@@ -414,7 +414,7 @@ adex <- adex %>%
           PARCAT1 = "OVERALL",
           AVAL = sum(AVAL, na.rm = TRUE)
         ),
-        input_code = "PLDOSE",
+        input_code = "PLDOSE"
       ),
       params(
         set_values_to = exprs(
@@ -422,7 +422,7 @@ adex <- adex %>%
           PARCAT1 = "OVERALL",
           AVAL = sum(AVAL, na.rm = TRUE)
         ),
-        input_code = "DURD",
+        input_code = "DURD"
       ),
       params(
         set_values_to = exprs(
@@ -430,7 +430,7 @@ adex <- adex %>%
           PARCAT1 = "OVERALL",
           AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_)
         ),
-        input_code = "ADJ",
+        input_code = "ADJ"
       ),
       params(
         set_values_to = exprs(
