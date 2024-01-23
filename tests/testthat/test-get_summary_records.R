@@ -33,13 +33,13 @@ test_that("get_summary_records Test 1: Summarize the average of the triplicate E
     dplyr::mutate(AVAL = round(AVAL))
 
   expected_output <- tibble::tribble(
-    ~USUBJID,   ~PARAM,             ~AVISIT,    ~AVAL, ~DTYPE,
-    "XYZ-1001", "QTcF Int. (msec)", "Baseline",  393, "AVERAGE",
-    "XYZ-1001", "QTcF Int. (msec)", "Visit 2",   388, "AVERAGE",
-    "XYZ-1001", "QTcF Int. (msec)", "Visit 3",   394, "AVERAGE",
-    "XYZ-1002", "QTcF Int. (msec)", "Baseline",  400, "AVERAGE",
-    "XYZ-1002", "QTcF Int. (msec)", "Visit 2",   403, "AVERAGE",
-    "XYZ-1002", "QTcF Int. (msec)", "Visit 3",   409, "AVERAGE"
+    ~USUBJID, ~PARAM, ~AVISIT, ~AVAL, ~DTYPE,
+    "XYZ-1001", "QTcF Int. (msec)", "Baseline", 393, "AVERAGE",
+    "XYZ-1001", "QTcF Int. (msec)", "Visit 2", 388, "AVERAGE",
+    "XYZ-1001", "QTcF Int. (msec)", "Visit 3", 394, "AVERAGE",
+    "XYZ-1002", "QTcF Int. (msec)", "Baseline", 400, "AVERAGE",
+    "XYZ-1002", "QTcF Int. (msec)", "Visit 2", 403, "AVERAGE",
+    "XYZ-1002", "QTcF Int. (msec)", "Visit 3", 409, "AVERAGE"
   )
 
   expect_dfs_equal(
@@ -81,23 +81,23 @@ test_that("get_summary_records Test 2: Derive more than one summary variable", {
         ASTDTM = min(convert_dtc_to_dtm(EGDTC)),
         AENDTM = max(convert_dtc_to_dtm(EGDTC)),
         DTYPE = "AVERAGE"
-        )
-      ) %>%
+      )
+    ) %>%
     dplyr::mutate(AVAL = round(AVAL))
 
   expected_output <- tibble::tribble(
-    ~USUBJID,   ~PARAM,             ~AVISIT,     ~AVAL, ~ASTDTM,               ~AENDTM,               ~DTYPE,
-    "XYZ-1001", "QTcF Int. (msec)", "Baseline",  393.,  "2016-02-24 07:50:00", "2016-02-24 07:56 :00", "AVERAGE",
-    "XYZ-1001", "QTcF Int. (msec)", "Visit 2",   388.,  "2016-03-08 09:45:00", "2016-03-08 09:51:00", "AVERAGE",
-    "XYZ-1001", "QTcF Int. (msec)", "Visit 3",   394.,  "2016-03-22 10:45:00", "2016-03-22 10:51:00", "AVERAGE",
-    "XYZ-1002", "QTcF Int. (msec)", "Baseline",  400.,  "2016-02-22 07:58:00", "2016-02-22 08:01:00", "AVERAGE",
-    "XYZ-1002", "QTcF Int. (msec)", "Visit 2",   403.,  "2016-03-06 09:50:00", "2016-03-06 09:56:00", "AVERAGE",
-    "XYZ-1002", "QTcF Int. (msec)", "Visit 3",   409.,  "2016-03-24 10:50:00", "2016-03-24 10:56:00", "AVERAGE"
-  )  %>%
+    ~USUBJID, ~PARAM, ~AVISIT, ~AVAL, ~ASTDTM, ~AENDTM, ~DTYPE,
+    "XYZ-1001", "QTcF Int. (msec)", "Baseline", 393., "2016-02-24 07:50:00", "2016-02-24 07:56 :00", "AVERAGE",
+    "XYZ-1001", "QTcF Int. (msec)", "Visit 2", 388., "2016-03-08 09:45:00", "2016-03-08 09:51:00", "AVERAGE",
+    "XYZ-1001", "QTcF Int. (msec)", "Visit 3", 394., "2016-03-22 10:45:00", "2016-03-22 10:51:00", "AVERAGE",
+    "XYZ-1002", "QTcF Int. (msec)", "Baseline", 400., "2016-02-22 07:58:00", "2016-02-22 08:01:00", "AVERAGE",
+    "XYZ-1002", "QTcF Int. (msec)", "Visit 2", 403., "2016-03-06 09:50:00", "2016-03-06 09:56:00", "AVERAGE",
+    "XYZ-1002", "QTcF Int. (msec)", "Visit 3", 409., "2016-03-24 10:50:00", "2016-03-24 10:56:00", "AVERAGE"
+  ) %>%
     dplyr::mutate(
       ASTDTM = as.POSIXct(ASTDTM, tz = "UTC"),
       AENDTM = as.POSIXct(AENDTM, tz = "UTC")
-      )
+    )
 
   expect_dfs_equal(
     base = expected_output,
@@ -133,8 +133,8 @@ test_that("get_summary_records Test 3: Compute the average of AVAL only if there
       set_values_to = exprs(
         AVAL = mean(AVAL, na.rm = TRUE),
         DTYPE = "AVERAGE"
-        )
-      ) %>%
+      )
+    ) %>%
     dplyr::mutate(AVAL = round(AVAL))
 
   expected_output <- tibble::tribble(
