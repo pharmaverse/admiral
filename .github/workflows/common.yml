@@ -64,7 +64,7 @@ jobs:
   readme:
     name: Render README
     uses: pharmaverse/admiralci/.github/workflows/readme-render.yml@main
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'push'
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
@@ -80,11 +80,11 @@ jobs:
     uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@main
     with:
       error-on: warning # TODO: find a way to ignore specific notes
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request'
   docs:
     name: Documentation
     uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
-    if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'push' || startsWith(github.ref, 'refs/tags/v')
     needs: get_r_version
     with:
       r-version: "4.3"
@@ -131,7 +131,7 @@ jobs:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   vbump:
     name: Version Bump 🤜🤛
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'push'
     uses: insightsengineering/r.pkg.template/.github/workflows/version-bump.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.PHARMAVERSE_BOT }}
