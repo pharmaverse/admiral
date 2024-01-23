@@ -87,12 +87,14 @@ test_that("get_summary_records Test 2: Derive more than one summary variable", {
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAM, ~AVISIT, ~AVAL, ~ASTDTM, ~AENDTM, ~DTYPE,
+    # nolint start: line_len
     "XYZ-1001", "QTcF Int. (msec)", "Baseline", 393., "2016-02-24 07:50:00", "2016-02-24 07:56 :00", "AVERAGE",
     "XYZ-1001", "QTcF Int. (msec)", "Visit 2", 388., "2016-03-08 09:45:00", "2016-03-08 09:51:00", "AVERAGE",
     "XYZ-1001", "QTcF Int. (msec)", "Visit 3", 394., "2016-03-22 10:45:00", "2016-03-22 10:51:00", "AVERAGE",
     "XYZ-1002", "QTcF Int. (msec)", "Baseline", 400., "2016-02-22 07:58:00", "2016-02-22 08:01:00", "AVERAGE",
     "XYZ-1002", "QTcF Int. (msec)", "Visit 2", 403., "2016-03-06 09:50:00", "2016-03-06 09:56:00", "AVERAGE",
     "XYZ-1002", "QTcF Int. (msec)", "Visit 3", 409., "2016-03-24 10:50:00", "2016-03-24 10:56:00", "AVERAGE"
+    # nolint end
   ) %>%
     dplyr::mutate(
       ASTDTM = as.POSIXct(ASTDTM, tz = "UTC"),
