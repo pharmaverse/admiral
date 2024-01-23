@@ -2,7 +2,7 @@
 # Source: https://github.com/pharmaverse/admiralci
 # Common workflows designed for Admiral
 # but can be easily used by any other R package
-name: admiral CI/CD Workflows 
+name: admiral CI/CD Workflows
 
 on:
   # 'workflow_dispatch' gives you the ability
@@ -16,7 +16,6 @@ on:
     branches:
       - main
       - patch
-      - test_cran_latest
   # 'pull_request' events are triggered when PRs are
   # created against one of these target branches.
   pull_request:
@@ -35,7 +34,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  R_VERSION: "4.1"
+  R_VERSION: "release"
 
 jobs:
   get_r_version:
