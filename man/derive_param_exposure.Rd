@@ -149,7 +149,7 @@ adex \%>\%
       PARAMCD = "TDOSE",
       PARCAT1 = "OVERALL",
       AVAL = sum(AVAL, na.rm = TRUE)
-     ),
+    ),
     input_code = "DOSE"
   ) \%>\%
   select(-ASTDTM, -AENDTM)
@@ -159,12 +159,12 @@ adex \%>\%
   derive_param_exposure(
     dataset_add = adex,
     by_vars = exprs(USUBJID),
-    filter = VISIT \%in\% c("WEEK 2", "WEEK 24"),
+    filter_add = VISIT \%in\% c("WEEK 2", "WEEK 24"),
     set_values_to = exprs(
       PARAMCD = "AVDW224",
       PARCAT1 = "WEEK2-24",
       AVAL = mean(AVAL, na.rm = TRUE)
-     ),
+    ),
     input_code = "DOSE"
   ) \%>\%
   select(-ASTDTM, -AENDTM)
@@ -178,7 +178,7 @@ adex \%>\%
       PARAMCD = "TADJ",
       PARCAT1 = "OVERALL",
       AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_)
-     ),
+    ),
     input_code = "ADJ"
   ) \%>\%
   select(-ASTDTM, -AENDTM)

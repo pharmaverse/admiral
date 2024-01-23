@@ -410,7 +410,7 @@ adex <- adex %>%
       ),
       params(
         set_values_to = exprs(
-          PARAMCD = "TPDOSE", 
+          PARAMCD = "TPDOSE",
           PARCAT1 = "OVERALL",
           AVAL = sum(AVAL, na.rm = TRUE)
         ),
@@ -418,7 +418,7 @@ adex <- adex %>%
       ),
       params(
         set_values_to = exprs(
-          PARAMCD = "TDURD", 
+          PARAMCD = "TDURD",
           PARCAT1 = "OVERALL",
           AVAL = sum(AVAL, na.rm = TRUE)
         ),
@@ -426,7 +426,7 @@ adex <- adex %>%
       ),
       params(
         set_values_to = exprs(
-          PARAMCD = "TADJ", 
+          PARAMCD = "TADJ",
           PARCAT1 = "OVERALL",
           AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_)
         ),
@@ -434,7 +434,7 @@ adex <- adex %>%
       ),
       params(
         set_values_to = exprs(
-          PARAMCD = "TADJAE", 
+          PARAMCD = "TADJAE",
           PARCAT1 = "OVERALL",
           AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_)
         ),
@@ -623,7 +623,7 @@ file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbw
 NOTE: All these packages are in the experimental phase, but the vision is to
 have them associated with an End to End pipeline under the umbrella of the
 [pharmaverse](https://github.com/pharmaverse). An example of applying metadata 
-and perform associated checks can be found at the [pharmaverse E2E example](https://examples.pharmaverse.org/data/adsl/).
+and perform associated checks can be found at the [pharmaverse E2E example](https://https://pharmaverse.github.io/examples/adam/adsl.htmlorg/data/adsl/).
 
 # Example Script {#example}
 
