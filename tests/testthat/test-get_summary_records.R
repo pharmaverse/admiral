@@ -1,5 +1,5 @@
 ## Test 1: Summarize the average of the triplicate ECG interval values (AVAL) ----
-test_that("get_summary_records Test 1: Summarize the average of the triplicate ECG interval values (AVAL)", {
+test_that("get_summary_records Test 1: Summarize average of triplicate ECG interval values", {
   input <- tibble::tribble(
     ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
     "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
@@ -106,8 +106,8 @@ test_that("get_summary_records Test 2: Derive more than one summary variable", {
   )
 })
 
-## Test 3: Compute the average of AVAL only if there are more than 2 records within the by group ----
-test_that("get_summary_records Test 3: Compute the average of AVAL only if there are more than 2 records within the by group", {
+## Test 3: Compute avg AVAL only if >2 records within by group ----
+test_that("get_summary_records Test 3: Compute avg AVAL only if >2 records within by group", {
   input <- tibble::tribble(
     ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
     "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
