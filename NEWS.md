@@ -4,6 +4,8 @@
 
 ## Updates of Existing Functions
 
+- Created three unit tests for `get_summary_records()`. (#2304)
+
 ## Breaking Changes
 
 ## Various
