@@ -86,7 +86,7 @@ jobs:
   docs:
     name: Documentation
     uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
-    if: github.event_name == 'push' || startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/v')
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
@@ -127,13 +127,13 @@ jobs:
     name: Check Templates
     uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
     secrets: inherit
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   vbump:
     name: Version Bump 🤜🤛
-    if: github.event_name == 'push'
+    if: github.event_name == 'pull_request'
     uses: insightsengineering/r.pkg.template/.github/workflows/version-bump.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.PHARMAVERSE_BOT }}
