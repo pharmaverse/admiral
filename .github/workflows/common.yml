@@ -89,7 +89,7 @@ jobs:
     if: github.event_name == 'push' || startsWith(github.ref, 'refs/tags/v')
     needs: get_r_version
     with:
-      r-version: "4.3"
+      r-version: "${{ needs.get_r_version.outputs.r-version }}"
       skip-multiversion-docs: true
     secrets:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
