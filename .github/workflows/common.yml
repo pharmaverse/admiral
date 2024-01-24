@@ -97,7 +97,7 @@ jobs:
     name: Lint
     uses: pharmaverse/admiralci/.github/workflows/lintr.yml@main
     needs: get_r_version
-    if: github.event_name == 'push'
+    if: github.event_name == 'pull_request'
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   links:
