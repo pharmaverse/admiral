@@ -25,8 +25,8 @@ Other datasets:
 \code{\link{admiral_adsl}},
 \code{\link{ex_single}},
 \code{\link{example_qs}},
-\code{\link{queries_mh}},
-\code{\link{queries}}
+\code{\link{queries}},
+\code{\link{queries_mh}}
 }
 \concept{datasets}
 \keyword{datasets}
