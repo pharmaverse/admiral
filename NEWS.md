@@ -10,6 +10,11 @@
 
 ## Various
 
+In the previous version, `renv` was the default framework used to manage package dependencies. Now, we use `devtools` as our main package manager (some changes also occurred for  [admiralci workflows](https://github.com/pharmaverse/admiralci)).
+There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for `R CMD CHECKS` jobs, there is an associated renv.lock file (under the deps artifact):
+
+ ![Download dependencies from CI workflows](man/figures/dependencies_devtools.png) (#2306)
+
 
 # admiral 1.0.0
 
@@ -225,12 +230,7 @@ the imputation functions, e.g. `derive_vars_dtm()`. (#2222)
 - Handling of `NA` values was added to the documentation of the `order` argument
 for all functions. (#2230, #2257)
 
-## Developer
 
-In the previous version, `renv` was the default framework used to manage package dependencies. Now, we use `devtools` as our main package manager (some changes also occurred for  [admiralci workflows](https://github.com/pharmaverse/admiralci)).
-There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for `R CMD CHECKS` jobs, there is an associated renv.lock file (under the deps artifact):
-
- ![Download dependencies from CI workflows](man/figures/dependencies_devtools.png)
 
 ## Various
 
