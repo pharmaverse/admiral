@@ -32,7 +32,7 @@ devtools::install_github("pharmaverse/admiral")
 
 ## Cheat Sheet
 
-<a href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf"><img src="https://raw.githubusercontent.com/pharmaverse/admiral/main/inst/cheatsheet/cheatsheet_image.png" width="630" height="252"/></a>  
+<a href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf"><img src="https://raw.githubusercontent.com/pharmaverse/admiral/main/inst/cheatsheet/cheatsheet_image.png" width="630" height="252"/></a>
 
 ## Release Schedule
 
@@ -41,22 +41,22 @@ The {admiral} family has several downstream and upstream dependencies and so rel
 * Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/), and [{admiral}](https://pharmaverse.github.io/admiral/) core
 * Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)
 
-| Release Schedule | Phase 1- Date and Packages                                               | Phase 2- Date and Packages                                           |
-| ---------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- |
-| Q4-2023          | December 4th                                                             | December 11th                                                        |
-|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)          |
-|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)      |
-|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      |                                                                      |
-| Q1-2024          |                                                                          | January (Date TBC)                                                   |
-|                  |                                                                          | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)    |
-| Q2-2024          | June 3rd                                                                 | June 8th                                                             |
-|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)          |
-|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)      |
-|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      |                                                                      |
-| Q4-2024          | December 2nd                                                             | December 9th                                                         |
-|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)          |
-|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)      |
-|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      |                                                                      |
+| Release Schedule | Phase 1- Date and Packages                                               | Phase 2- Date and Packages                                        |
+| ---------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| Q4-2023          | December 4th                                                             | December 11th                                                     |
+|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)       |
+|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)   |
+|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      |                                                                   |
+| Q1-2024          |                                                                          | January (Date TBC)                                                |
+|                  |                                                                          | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) |
+| Q2-2024          | June 3rd                                                                 | June 8th                                                          |
+|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)       |
+|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)   |
+|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      |                                                                   |
+| Q4-2024          | December 2nd                                                             | December 9th                                                      |
+|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/main/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)       |
+|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)   |
+|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      |                                                                   |
 
 The `{admiral}` Q4-2023 release will officially be `{admiral}`'s version 1.0.0 release, where we commit to increased package maturity and pivot towards focusing on maintenance rather than new content. This does not mean that there will never be any new content in `{admiral}`, rather it means we will be more mindful about introducing new functionality and/or breaking changes. The release schedule in 2024 and onward will also shift to twice-yearly, rather than quarterly, so that our users have ample time to react to any new content and changes that do make it onto `{admiral}`.
 
@@ -98,7 +98,7 @@ There are three types of packages in the `{admiral}` family:
   specific to algorithms and requirements for that particular TA (e.g. [`{admiralonco}`](https://pharmaverse.github.io/admiralonco/)).
 * Company package extensions---specific needs and plug-ins for the company, such as access to metadata
   (e.g. `{admiralroche}` or `{admiralgsk}`).
-  
+
 ## Related Packages
 
 Related data packages include:
