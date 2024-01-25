@@ -270,6 +270,7 @@ dL
 datepart
 datetime
 datetimes
+deps
 der
 desc
 deteriorations
@@ -289,7 +290,6 @@ glomerular
 groupwise
 lockfile
 lubridate
-mins
 mL
 magrittr
 metacore
@@ -311,7 +311,9 @@ prev
 prm
 quosures
 recoded
+renv
 repo
+reproducibility
 rlang
 roche
 roxygen
@@ -333,14 +335,6 @@ tte
 umol
 ungrouped
 usethis
-wks
-www
 xULN
 xportr
 xpt
-adam
-adamig
-cdisc
-https
-poppk
-www
