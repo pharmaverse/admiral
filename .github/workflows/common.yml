@@ -16,14 +16,12 @@ on:
     branches:
       - main
       - patch
-      - delete_renv
   # 'pull_request' events are triggered when PRs are
   # created against one of these target branches.
   pull_request:
     branches:
       - main
       - patch
-      - delete_renv
   # 'release' events are triggered when...
   # you guessed it - when releases are made.
   release:
@@ -52,14 +50,14 @@ jobs:
   style:
     name: Code Style
     uses: pharmaverse/admiralci/.github/workflows/style.yml@main
-    if: github.event_name == 'push'
+    if: github.event_name == 'pull_request'
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   spellcheck:
     name: Spelling
     uses: pharmaverse/admiralci/.github/workflows/spellcheck.yml@main
-    if: github.event_name == 'push'
+    if: github.event_name == 'pull_request'
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
@@ -82,14 +80,14 @@ jobs:
     uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@main
     with:
       error-on: warning # TODO: find a way to ignore specific notes
-    if: github.event_name == 'push'
+    if: github.event_name == 'pull_request'
   docs:
     name: Documentation
     uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
-    if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'push' || startsWith(github.ref, 'refs/tags/v')
     needs: get_r_version
     with:
-      r-version: "${{ needs.get_r_version.outputs.r-version }}"
+      r-version: "release"
       skip-multiversion-docs: true
     secrets:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -103,7 +101,7 @@ jobs:
   links:
     name: Links
     uses: pharmaverse/admiralci/.github/workflows/links.yml@main
-    if: github.event_name == 'push'
+    if: github.event_name == 'pull_request'
   coverage:
     name: Code Coverage
     uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@main
@@ -119,7 +117,7 @@ jobs:
   man-pages:
     name: Man Pages
     uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@main
-    if: github.event_name == 'push'
+    if: github.event_name == 'pull_request'
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
@@ -133,7 +131,7 @@ jobs:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   vbump:
     name: Version Bump 🤜🤛
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'push'
     uses: insightsengineering/r.pkg.template/.github/workflows/version-bump.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.PHARMAVERSE_BOT }}
