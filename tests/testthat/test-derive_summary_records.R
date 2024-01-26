@@ -128,7 +128,7 @@ test_that("derive_summary_records Test 4: deprecation warning for analysis_var a
       mutate(type = "AVERAGE")
   )
 
-  expect_warning(
+  expect_error(
     actual_output <- input %>%
       derive_summary_records(
         dataset_add = input,
@@ -137,13 +137,7 @@ test_that("derive_summary_records Test 4: deprecation warning for analysis_var a
         summary_fun = mean,
         set_values_to = exprs(type = "AVERAGE")
       ),
-    class = "lifecycle_warning_deprecated"
-  )
-
-  expect_dfs_equal(
-    base = expected_output,
-    compare = actual_output,
-    keys = c("subj", "visit", "seq", "type")
+    class = "lifecycle_error_deprecated"
   )
 })
 

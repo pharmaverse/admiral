@@ -611,8 +611,8 @@ test_that("derive_extreme_event Test 8: deprecation of ignore_event_order", {
   ) %>%
     mutate(PARAMCD = "OVR")
 
-  expect_warning(
-    actual <- derive_extreme_event(
+  expect_error(
+    derive_extreme_event(
       adrs,
       by_vars = exprs(USUBJID),
       order = exprs(AVISITN),
@@ -638,20 +638,7 @@ test_that("derive_extreme_event Test 8: deprecation of ignore_event_order", {
         PARAMCD = "CRSP"
       )
     ),
-    class = "lifecycle_warning_deprecated"
-  )
-  expected <- bind_rows(
-    adrs,
-    tibble::tribble(
-      ~USUBJID, ~AVISITN, ~AVALC, ~PARAMCD,
-      "1",             1, "Y",    "CRSP"
-    )
-  )
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("USUBJID", "PARAMCD", "AVISITN")
+    class = "lifecycle_error_deprecated"
   )
 })
 
@@ -665,8 +652,8 @@ test_that("derive_extreme_event Test 9: deprecation of ignore_event_order", {
   ) %>%
     mutate(PARAMCD = "OVR")
 
-  expect_warning(
-    actual <- derive_extreme_event(
+  expect_error(
+    derive_extreme_event(
       adrs,
       by_vars = exprs(USUBJID),
       order = exprs(AVISITN),
@@ -692,19 +679,6 @@ test_that("derive_extreme_event Test 9: deprecation of ignore_event_order", {
         PARAMCD = "CRSP"
       )
     ),
-    class = "lifecycle_warning_deprecated"
-  )
-  expected <- bind_rows(
-    adrs,
-    tibble::tribble(
-      ~USUBJID, ~AVISITN, ~AVALC, ~PARAMCD,
-      "1",             1, "Y",    "CRSP"
-    )
-  )
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("USUBJID", "PARAMCD", "AVISITN")
+    class = "lifecycle_error_deprecated"
   )
 })

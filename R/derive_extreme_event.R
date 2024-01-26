@@ -391,8 +391,8 @@ derive_extreme_event <- function(dataset = NULL,
         "Add the specified variable to `order`."
       )
     }
-    deprecate_warn(
-      "1.0.0",
+    deprecate_stop(
+      "1.1.0",
       "derive_extreme_event(ignore_event_order=)",
       "derive_extreme_event(tmp_event_nr_var=)",
       details = deprecate_details

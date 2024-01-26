@@ -9,8 +9,6 @@ derive_param_computed(
   dataset_add = NULL,
   by_vars,
   parameters,
-  analysis_var = AVAL,
-  analysis_value,
   set_values_to,
   filter = NULL,
   constant_by_vars = NULL,
@@ -69,28 +67,6 @@ codes. For example, \code{parameters = exprs(WEIGHT, HGHT = VSTESTCD == "HEIGHT"
 parameter code \code{"HGHT"}.
 
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values or a list of expressions}
-
-\item{analysis_var}{Analysis variable
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.
-
-The specified variable is set to the value of \code{analysis_value} for the new
-observations.
-
-\emph{Permitted Values}: An unquoted symbol}
-
-\item{analysis_value}{Definition of the analysis value
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.
-
-An expression defining the analysis value (\code{AVAL}) of the new parameter is
-expected. The values of variables of the parameters specified by
-\code{parameters} can be accessed using \verb{<variable name>.<parameter code>},
-e.g., \code{AVAL.SYSBP}.
-
-Variable names in the expression must not contain more than one dot.
-
-\emph{Permitted Values:} An unquoted expression}
 
 \item{set_values_to}{Variables to be set
 

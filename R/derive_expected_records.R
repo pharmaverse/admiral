@@ -6,8 +6,6 @@
 #' @param dataset
 #' `r roxygen_param_dataset(expected_vars = c("dataset_ref", "by_vars"))`
 #'
-#' @param dataset_expected_obs `r lifecycle::badge("deprecated")` Please use `dataset_ref` instead.
-#'
 #' @param dataset_ref Expected observations dataset
 #'
 #'   Data frame with the expected observations, e.g., all the expected
@@ -86,20 +84,9 @@
 #' )
 #'
 derive_expected_records <- function(dataset,
-                                    dataset_expected_obs,
                                     dataset_ref,
                                     by_vars = NULL,
                                     set_values_to = NULL) {
-  if (!missing(dataset_expected_obs)) {
-    deprecate_stop(
-      "0.12.0",
-      "derive_expected_records(dataset_expected_obs = )",
-      "derive_expected_records(dataset_ref = )"
-    )
-    assert_data_frame(dataset_expected_obs)
-    dataset_ref <- dataset_expected_obs
-  }
-
   # Check input parameters
   assert_vars(by_vars, optional = TRUE)
   assert_data_frame(dataset_ref)
