@@ -1,6 +1,6 @@
-Thank you for your Pull Request! We have developed this task checklist from the [Development Process Guide](https://pharmaverse.github.io/admiral/CONTRIBUTING.html) to help with the final steps of the process. Completing the below tasks helps to ensure our reviewers can maximize their time on your code as well as making sure the admiral codebase remains robust and consistent.   
+Thank you for your Pull Request! We have developed this task checklist from the [Development Process Guide]([https://pharmaverse.github.io/admiral/CONTRIBUTING.html](https://pharmaverse.github.io/admiral/CONTRIBUTING.html#detailed-development-process)) to help with the final steps of the process. Completing the below tasks helps to ensure our reviewers can maximize their time on your code as well as making sure the admiral codebase remains robust and consistent.   
 
-Please check off each taskbox as an acknowledgment that you completed the task or check off that it is not relevant to your Pull Request. This checklist is part of the Github Action workflows and the Pull Request will not be merged into the `devel` branch until you have checked off each task.
+Please check off each taskbox as an acknowledgment that you completed the task or check off that it is not relevant to your Pull Request. This checklist is part of the Github Action workflows and the Pull Request will not be merged into the `main` branch until you have checked off each task.
 
 - [ ] Place Closes #<insert_issue_number> into the beginning of your Pull Request Title (Use Edit button in top-right if you need to update)
 - [ ] Code is formatted according to the [tidyverse style guide](https://style.tidyverse.org/). Run `styler::style_file()` to style R and Rmd files
