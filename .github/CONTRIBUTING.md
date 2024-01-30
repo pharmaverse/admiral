@@ -37,7 +37,7 @@ Please note that we try to align to best practices used in other R packages' dev
 
 If you decide to contribute with code and you're ready to make your first code contribution, this detailed development process step-by-step guide will help tie all the other detailed vignettes together to give you the simplest experience of helping to grow and enhance our codebase.
 
-1.  Create a new feature branch from the development branch `main`
+1.  Create a new feature branch from the `main` branch
     following the naming convention and pull the latest changes - as
     detailed on the [GitHub
     usage](https://pharmaverse.github.io/admiraldev/articles/git_usage.html#working-with-feature-branches-1) guide.
