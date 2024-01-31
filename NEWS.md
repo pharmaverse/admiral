@@ -1,4 +1,4 @@
-# admiral 0.11.1
+# admiral 1.0.1
 
 - Fix bug in `derive_vars_query()`. (#2311)
 
