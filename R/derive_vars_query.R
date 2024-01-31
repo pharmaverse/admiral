@@ -155,7 +155,11 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
     # numeric -> TERMNUM, character -> TERMCHAR, otherwise -> error
     mutate(
       tmp_col_type = vapply(dataset[SRCVAR], typeof, character(1)),
-      TERM_NAME_ID = ifelse(tmp_col_type == "character", TERMCHAR, as.character(TERMNUM))
+      TERM_NAME_ID = ifelse(
+        tmp_col_type == "character",
+        TERMCHAR,
+        as.character(TERMNUM)
+      )
     )
 
   # prepare input dataset for joining
