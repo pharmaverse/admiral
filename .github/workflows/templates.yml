@@ -1,0 +1,17 @@
+---
+name: Check Templates
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+      - patch
+
+jobs:
+  templates:
+    name: Check Templates
+    uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
+    if: github.event_name == 'pull_request'
+    with:
+      r-version: "4.1"
