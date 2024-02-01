@@ -276,17 +276,6 @@ derive_var_dthcaus <- function(dataset,
 #'   the results is assigned to `DTHCAUS`; if a string literal, e.g. `"Adverse
 #'   Event"`, it is the fixed value to be assigned to `DTHCAUS`.
 #'
-#'
-#' @param traceability_vars A named list returned by [`exprs()`] listing the
-#'   traceability variables, e.g. `exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)`. The
-#'   left-hand side (names of the list elements) gives the names of the
-#'   traceability variables in the returned dataset. The right-hand side (values
-#'   of the list elements) gives the values of the traceability variables in the
-#'   returned dataset. These can be either strings, numbers, symbols, or
-#'   expressions referring to existing variables.
-#'
-#'    `r lifecycle::badge("deprecated")` Please use `set_values_to` instead.
-#'
 #' @param set_values_to Variables to be set to trace the source dataset
 #'
 #' @family superseded
@@ -323,17 +312,7 @@ dthcaus_source <- function(dataset_name,
                            order = NULL,
                            mode = "first",
                            dthcaus,
-                           set_values_to = NULL,
-                           traceability_vars = NULL) {
-  if (!is.null(traceability_vars)) {
-    deprecate_stop(
-      "0.12.0",
-      "dthcaus_source(traceability_vars = )",
-      "dthcaus_source(set_values_to = )"
-    )
-    set_values_to <- traceability_vars
-  }
-
+                           set_values_to = NULL) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),

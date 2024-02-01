@@ -11,8 +11,7 @@ dthcaus_source(
   order = NULL,
   mode = "first",
   dthcaus,
-  set_values_to = NULL,
-  traceability_vars = NULL
+  set_values_to = NULL
 )
 }
 \arguments{
@@ -45,16 +44,6 @@ e.g., \code{str_to_upper(AEDECOD)}, it is evaluated in the source dataset and
 the results is assigned to \code{DTHCAUS}; if a string literal, e.g. \code{"Adverse Event"}, it is the fixed value to be assigned to \code{DTHCAUS}.}
 
 \item{set_values_to}{Variables to be set to trace the source dataset}
-
-\item{traceability_vars}{A named list returned by \code{\link[=exprs]{exprs()}} listing the
-traceability variables, e.g. \code{exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)}. The
-left-hand side (names of the list elements) gives the names of the
-traceability variables in the returned dataset. The right-hand side (values
-of the list elements) gives the values of the traceability variables in the
-returned dataset. These can be either strings, numbers, symbols, or
-expressions referring to existing variables.
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{set_values_to} instead.}
 }
 \value{
 An object of class "dthcaus_source".

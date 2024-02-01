@@ -42,8 +42,6 @@
 #'
 #'   Expected Values: `"CRCL"`, `"CKD-EPI"`, `"MDRD"`
 #'
-#' @param wt *Deprecated*, please use `weight` instead.
-#'
 #' @details
 #'
 #' Calculates an estimate of Glomerular Filtration Rate (eGFR)
@@ -134,13 +132,7 @@
 #'       race = RACE, method = "MDRD"
 #'     ),
 #'   )
-compute_egfr <- function(creat, creatu = "SI", age, weight, sex, race = NULL, method, wt) {
-  ### BEGIN DEPRECATION
-  if (!missing(wt)) {
-    deprecate_stop("0.12.0", "compute_egfr(old_param = 'wt')", "compute_egfr(new_param = 'weight')")
-  }
-  ### END DEPRECATION
-
+compute_egfr <- function(creat, creatu = "SI", age, weight, sex, race = NULL, method) {
   assert_numeric_vector(creat)
   assert_character_vector(creatu, values = c(
     "SI", "CV", "mg/dL", "umol/L", NA_character_,

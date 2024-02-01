@@ -90,7 +90,7 @@ test_that("event_joined Test 2: deprecation of `first_cond`", {
     )
   )
 
-  expect_warning(
+  expect_error(
     old_event <- event_joined(
       join_vars = exprs(AVALC, ADT),
       join_type = "after",
@@ -103,11 +103,6 @@ test_that("event_joined Test 2: deprecation of `first_cond`", {
         AVALC = "CR"
       )
     ),
-    class = "lifecycle_warning_deprecated"
-  )
-
-  expect_equal(
-    old_event,
-    expected = new_event
+    class = "lifecycle_error_deprecated"
   )
 })

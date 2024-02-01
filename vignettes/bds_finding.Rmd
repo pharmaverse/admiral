@@ -981,8 +981,8 @@ dataset_vignette(
 ### Example 2 (Deriving a Summary Record)
 
 For adding new records based on aggregating records `derive_summary_records()`
-can be used. For the new records only the variables specified by `by_vars`,
-`analysis_var`, and `set_values_to` are populated.
+can be used. For the new records only the variables specified by `by_vars` and
+`set_values_to` are populated.
 
 For each subject, Vital Signs parameter, visit, and date add a record holding
 the average value for observations on that date.
@@ -1058,7 +1058,8 @@ file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbw
 NOTE: All these packages are in the experimental phase, but the vision is to
 have them associated with an End to End pipeline under the umbrella of the
 [pharmaverse](https://github.com/pharmaverse). An example of applying metadata 
-and perform associated checks can be found at the [pharmaverse E2E example](https://pharmaverse.github.io/examples/adam/adsl.html).
+and perform associated checks can be found at the [pharmaverse E2E example](https://pharmaverse.github.io/examples/adam/adsl).
+
 
 # Example Scripts {#example}
 

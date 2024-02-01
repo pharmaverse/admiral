@@ -438,39 +438,3 @@ test_that("derive_var_ontrtfl Test 15: if trt end date is missing, the obs may s
     )
   )
 })
-
-## Test 16: expected deprecation messaging ----
-test_that("derive_var_ontrtfl Test 16: expected deprecation messaging", { # nolint
-  adcm <- tibble::tribble(
-    ~USUBJID, ~ASTDT, ~TRTSDT, ~TRTEDT, ~AENDT,
-    "P01", ymd("2018-03-15"), ymd("2019-01-01"), NA, ymd("2022-12-01"),
-    "P02", ymd("2020-04-30"), ymd("2019-01-01"), NA, ymd("2022-03-15"),
-    "P03", ymd("2020-04-30"), ymd("2019-01-01"), NA, NA,
-  )
-
-  # all flags should be "Y" because span_period flag is TRUE
-  expect_error(
-    derive_var_ontrtfl(
-      adcm,
-      start_date = ASTDT,
-      end_date = AENDT,
-      ref_start_date = TRTSDT,
-      ref_end_date = TRTEDT,
-      span_period = "Y"
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-
-  # first obs started before treatment, and it should NOT be flagged
-  expect_error(
-    derive_var_ontrtfl(
-      adcm,
-      start_date = ASTDT,
-      end_date = AENDT,
-      ref_start_date = TRTSDT,
-      ref_end_date = TRTEDT,
-      span_period = NULL
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})

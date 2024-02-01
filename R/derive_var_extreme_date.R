@@ -585,13 +585,6 @@ derive_var_extreme_dt <- function(dataset,
 #' @param date A variable or an expression providing a date. A date or a
 #'   datetime can be specified. An unquoted symbol or expression is expected.
 #'
-#' @param traceability_vars A named list returned by `exprs()` defining the
-#'   traceability variables, e.g. `exprs(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
-#'   = "AESTDTC")`. The values must be a symbol, a character string, a numeric,
-#'   an expression, or `NA`.
-#'
-#'    `r lifecycle::badge("deprecated")` Please use `set_values_to` instead.
-#'
 #' @param set_values_to Variables to be set
 #'
 #' @seealso [derive_var_extreme_dtm()], [derive_var_extreme_dt()]
@@ -630,17 +623,7 @@ derive_var_extreme_dt <- function(dataset,
 date_source <- function(dataset_name,
                         filter = NULL,
                         date,
-                        traceability_vars = NULL,
                         set_values_to = NULL) {
-  if (!is.null(traceability_vars)) {
-    deprecate_stop(
-      "0.12.0",
-      "date_source(traceability_vars = )",
-      "date_source(set_values_to = )"
-    )
-    set_values_to <- traceability_vars
-  }
-
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),

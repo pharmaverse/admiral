@@ -7,6 +7,31 @@
 - Created three unit tests for `get_summary_records()`. (#2304)
 
 ## Breaking Changes
+  
+- The following function arguments are entering the next phase of the deprecation process: (#2299)
+  
+  - `compute_egfr(wt)`
+  - `consolidate_metadata(check_keys)`
+  - `derive_expected_records(dataset_expected_obs)` 
+  - `derive_locf_records(dataset_expected_obs)`
+  - `derive_extreme_event(ignore_event_order)`
+  - `derive_vars_merged(match_flag, new_var, analysis_var, summary_fun)`
+  - `derive_param_computed(analysis_value, analysis_var)`
+  - `derive_param_exposure(filter, analysis_var, summary_fun)`
+  - `derive_summary_records(filter)`
+  - `derive_extreme_records(filter)`
+  - `derive_var_joined_exist_flag(first_cond, filter)`
+  - `event_joined(first_cond)`
+  - `filter_joined(first_cond, filter)`
+  
+- The following function arguments have reached the end of the deprecation process and been removed: (#2299)
+
+  - `dthcaus_source(traceability_vars)`
+  - `date_source(traceability_vars)`
+  - `derive_var_ontrtfl(span_period)` 
+  - `derive_var_shift(na_val)`
+  - `derive_vars_aage(unit)`
+
 
 ## Various
 

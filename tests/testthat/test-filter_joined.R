@@ -139,7 +139,7 @@ test_that("filter_joined Test 4: join_type = 'all'", {
 
 ## Test 5: deprecation of `filter` ----
 test_that("filter_joined Test 5: deprecation of `filter`", {
-  expect_warning(
+  expect_error(
     actual <-
       filter_joined(
         data,
@@ -151,25 +151,13 @@ test_that("filter_joined Test 5: deprecation of `filter`", {
         filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR") &
           AVISITN < AVISITN.join
       ),
-    class = "lifecycle_warning_deprecated"
-  )
-
-  expected <- tibble::tribble(
-    ~USUBJID, ~AVISITN, ~AVALC,
-    "1",      1,        "PR",
-    "4",      1,        "PR"
-  )
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("USUBJID", "AVISITN")
+    class = "lifecycle_error_deprecated"
   )
 })
 
 ## Test 6: deprecation of `first_cond` ----
 test_that("filter_joined Test 6: deprecation of `first_cond`", {
-  expect_warning(
+  expect_error(
     actual <-
       filter_joined(
         data,
@@ -182,18 +170,7 @@ test_that("filter_joined Test 6: deprecation of `first_cond`", {
         order = exprs(AVISITN),
         filter_join = TRUE
       ),
-    class = "lifecycle_warning_deprecated"
-  )
-
-  expected <- tibble::tribble(
-    ~USUBJID, ~AVISITN, ~AVALC,
-    "1",      2,        "CR"
-  )
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("USUBJID", "AVISITN")
+    class = "lifecycle_error_deprecated"
   )
 })
 
