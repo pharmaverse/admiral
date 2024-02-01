@@ -157,7 +157,7 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
       tmp_col_type = vapply(dataset[SRCVAR], typeof, character(1)),
       TERM_NAME_ID = ifelse(
         tmp_col_type == "character",
-        TERMCHAR,
+        toupper(TERMCHAR),
         as.character(TERMNUM)
       )
     )
