@@ -1,3 +1,7 @@
+# admiral 1.0.1
+
+- Fix bug in `derive_vars_query()` where if AE terms were in mixed case no terms are flagged. (#2311)
+
 # admiral 1.0.0
 
 ## New Features
