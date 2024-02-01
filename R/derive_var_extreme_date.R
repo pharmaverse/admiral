@@ -310,11 +310,12 @@ derive_var_extreme_dtm <- function(dataset,
         check_type = "none"
       )
 
-    add_data[[i]] <- transmute(
+    add_data[[i]] <- mutate(
       add_data[[i]],
       !!!subject_keys,
       !!!sources[[i]]$set_values_to,
-      !!new_var := convert_date_to_dtm(!!date_var)
+      !!new_var := convert_date_to_dtm(!!date_var),
+      .keep = "none"
     )
   }
 

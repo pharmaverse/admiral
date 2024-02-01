@@ -3,7 +3,7 @@
 #' @import admiraldev
 #' @importFrom dplyr across arrange bind_rows case_when desc ends_with
 #'   everything filter full_join group_by if_else mutate n pull rename
-#'   rename_with row_number select slice semi_join starts_with transmute ungroup
+#'   rename_with row_number select slice semi_join starts_with ungroup
 #'   n_distinct union distinct summarise coalesce bind_cols na_if tibble tribble
 #'   summarise_all group_by_at first
 #' @importFrom magrittr %>%
