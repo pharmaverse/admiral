@@ -79,7 +79,7 @@ derive_var_shift <- function(dataset,
   sep_val <- assert_character_scalar(sep_val)
   assert_data_frame(dataset, required_vars = exprs(!!from_var, !!to_var))
 
-  # Derive shift variable. If from_var or to_var has missing value then set to na_val.
+  # Derive shift variable. If from_var or to_var has missing value then set to missing_value.
   dataset %>%
     mutate(
       temp_from_var = if_else(is.na(!!from_var), !!missing_value, as.character(!!from_var)),
