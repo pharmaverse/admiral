@@ -215,12 +215,13 @@ derive_var_dthcaus <- function(dataset,
       warn_if_vars_exist(source_dataset, names(sources[[ii]]$traceability))
       assert_data_frame(source_dataset, required_vars = get_source_vars(sources[[ii]]$traceability))
       add_data[[ii]] <- add_data[[ii]] %>%
-        transmute(
+        mutate(
           !!!subject_keys,
           !!tmp_source_nr,
           !!tmp_date,
           DTHCAUS,
-          !!!sources[[ii]]$traceability
+          !!!sources[[ii]]$traceability,
+          .keep = "none"
         )
     } else {
       add_data[[ii]] <- add_data[[ii]] %>%
