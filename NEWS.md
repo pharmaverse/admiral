@@ -31,6 +31,8 @@
   - `derive_var_ontrtfl(span_period)` 
   - `derive_var_shift(na_val)`
   - `derive_vars_aage(unit)`
+  
+- The function dplyr::transmute() is superseded in favor of dplyr::mutate(.keep = "none"). Consequently, all the admiral functions that utilized the former have been updated accordingly. (#2274)
 
 
 ## Various
