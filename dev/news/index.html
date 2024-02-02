@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9003</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -131,9 +131,10 @@
 </ul></div>
 <div class="section level3">
 <h3 id="various-development-version">Various<a class="anchor" aria-label="anchor" href="#various-development-version"></a></h3>
-<p>In the previous version, <code>renv</code> was the default framework used to manage package dependencies. Now, we use <code>devtools</code> as our main package manager (some changes also occurred for <a href="https://github.com/pharmaverse/admiralci" class="external-link">admiralci workflows</a>). There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for <code>R CMD CHECKS</code> jobs, there is an associated renv.lock file (under the deps artifact):</p>
-<p><img src="reference/figures/dependencies_devtools.png" alt="Download dependencies from CI workflows"> (<a href="https://github.com/pharmaverse/admiral/issues/2306" class="external-link">#2306</a>)</p>
-</div>
+<ul><li>In the previous version, <code>renv</code> was the default framework used to manage package dependencies. Now, we use <code>devtools</code> as our main package manager (some changes also occurred for <a href="https://github.com/pharmaverse/admiralci" class="external-link">admiralci workflows</a>). There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for <code>R CMD CHECKS</code> jobs, there is an associated renv.lock file (under the deps artifact):</li>
+</ul><p><img src="reference/figures/dependencies_devtools.png" alt="Download dependencies from CI workflows"> (<a href="https://github.com/pharmaverse/admiral/issues/2306" class="external-link">#2306</a>)</p>
+<ul><li>The function <code><a href="https://dplyr.tidyverse.org/reference/transmute.html" class="external-link">dplyr::transmute()</a></code> is superseded in favor of <code>dplyr::mutate(.keep = "none")</code>. Consequently, all the admiral functions that utilized the former have been updated accordingly. (<a href="https://github.com/pharmaverse/admiral/issues/2274" class="external-link">#2274</a>)</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="admiral-100">admiral 1.0.0<a class="anchor" aria-label="anchor" href="#admiral-100"></a></h2><p class="text-muted">CRAN release: 2023-12-15</p>
