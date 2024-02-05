@@ -458,8 +458,8 @@ derive_var_joined_exist_flag <- function(dataset,
   first_cond_lower <- assert_filter_cond(enexpr(first_cond_lower), optional = TRUE)
   first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
   if (!missing(first_cond)) {
-    deprecate_warn(
-      "1.0.0",
+    deprecate_stop(
+      "1.1.0",
       "derive_var_joined_exist_flag(first_cond=)",
       "derive_var_joined_exist_flag(first_cond_upper=)"
     )
@@ -468,8 +468,8 @@ derive_var_joined_exist_flag <- function(dataset,
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   filter_join <- assert_filter_cond(enexpr(filter_join))
   if (!missing(filter)) {
-    deprecate_warn(
-      "1.0.0",
+    deprecate_stop(
+      "1.1.0",
       "derive_var_joined_exist_flag(filter=)",
       "derive_var_joined_exist_flag(filter_join=)"
     )

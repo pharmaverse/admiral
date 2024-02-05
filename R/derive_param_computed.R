@@ -57,15 +57,6 @@
 #'
 #'   *Permitted Values:* A character vector of `PARAMCD` values or a list of expressions
 #'
-#' @param analysis_var Analysis variable
-#'
-#'   `r lifecycle::badge("deprecated")` Please use `set_values_to` instead.
-#'
-#'   The specified variable is set to the value of `analysis_value` for the new
-#'   observations.
-#'
-#'   *Permitted Values*: An unquoted symbol
-#'
 #' @param by_vars Grouping variables
 #'
 #'   For each group defined by `by_vars` an observation is added to the output
@@ -104,19 +95,6 @@
 #'   to the other parameters using the specified variables. (Refer to Example 2)
 #'
 #'   `r roxygen_param_by_vars()`
-#'
-#' @param analysis_value Definition of the analysis value
-#'
-#'  `r lifecycle::badge("deprecated")` Please use `set_values_to` instead.
-#'
-#'   An expression defining the analysis value (`AVAL`) of the new parameter is
-#'   expected. The values of variables of the parameters specified by
-#'   `parameters` can be accessed using `<variable name>.<parameter code>`,
-#'   e.g., `AVAL.SYSBP`.
-#'
-#'   Variable names in the expression must not contain more than one dot.
-#'
-#'   *Permitted Values:* An unquoted expression
 #'
 #' @param set_values_to Variables to be set
 #'
@@ -285,8 +263,6 @@ derive_param_computed <- function(dataset = NULL,
                                   dataset_add = NULL,
                                   by_vars,
                                   parameters,
-                                  analysis_var = AVAL,
-                                  analysis_value,
                                   set_values_to,
                                   filter = NULL,
                                   constant_by_vars = NULL,
@@ -302,25 +278,6 @@ derive_param_computed <- function(dataset = NULL,
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
   assert_logical_scalar(keep_nas)
-  ### BEGIN DEPRECATION
-  if (!missing(analysis_var)) {
-    deprecate_stop(
-      "0.12.0",
-      "derive_param_computed(analysis_var = )",
-      "derive_param_computed(set_values_to = )"
-    )
-  }
-  analysis_var <- assert_symbol(enexpr(analysis_var))
-
-  if (!missing(analysis_value)) {
-    deprecate_stop(
-      "0.12.0",
-      "derive_param_computed(analysis_value = )",
-      "derive_param_computed(set_values_to = )"
-    )
-    set_values_to <- exprs(!!analysis_var := !!enexpr(analysis_value), !!!set_values_to)
-  }
-  ### END DEPRECATION
 
   parameters <- assert_parameters_argument(parameters)
   constant_parameters <- assert_parameters_argument(constant_parameters, optional = TRUE)

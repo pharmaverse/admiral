@@ -141,16 +141,4 @@ test_that("derive_var_shift Test 5: Test deprecation warning of na_val argument"
     "P02", "ALB", 49, NA, NA, "HIGH",
     "P02", "SODIUM", 147, "Y", "HIGH", "HIGH"
   )
-
-  expect_error(
-    derive_var_shift(
-      input,
-      new_var = SHIFT1,
-      from_var = BNRIND,
-      to_var = ANRIND,
-      na_val = "MISSING",
-      sep_val = " - "
-    ),
-    class = "lifecycle_error_deprecated"
-  )
 })

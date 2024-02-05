@@ -64,25 +64,31 @@ test_that("derive_param_exposure Test 1: works with DTM variables", {
       dataset_add = input,
       by_vars = exprs(USUBJID),
       input_code = "DOSE",
-      analysis_var = AVAL,
-      summary_fun = function(x) sum(x, na.rm = TRUE),
-      set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+      set_values_to = exprs(
+        PARAMCD = "TDOSE",
+        PARCAT1 = "OVERALL",
+        AVAL = sum(AVAL, na.rm = TRUE)
+      )
     ) %>%
     derive_param_exposure(
       dataset_add = input,
       by_vars = exprs(USUBJID),
       input_code = "DOSE",
-      analysis_var = AVAL,
-      summary_fun = function(x) mean(x, na.rm = TRUE),
-      set_values_to = exprs(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
+      set_values_to = exprs(
+        PARAMCD = "AVDOSE",
+        PARCAT1 = "OVERALL",
+        AVAL = mean(AVAL, na.rme = TRUE)
+      )
     ) %>%
     derive_param_exposure(
       dataset_add = input,
       by_vars = exprs(USUBJID),
       input_code = "ADJ",
-      analysis_var = AVALC,
-      summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_),
-      set_values_to = exprs(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
+      set_values_to = exprs(
+        PARAMCD = "TADJ",
+        PARCAT1 = "OVERALL",
+        AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_)
+      )
     )
 
   expect_dfs_equal(
@@ -131,25 +137,31 @@ test_that("derive_param_exposure Test 2: works with DT variables", {
       dataset_add = input_no_dtm,
       by_vars = exprs(USUBJID),
       input_code = "DOSE",
-      analysis_var = AVAL,
-      summary_fun = function(x) sum(x, na.rm = TRUE),
-      set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+      set_values_to = exprs(
+        PARAMCD = "TDOSE",
+        PARCAT1 = "OVERALL",
+        AVAL = sum(AVAL, na.rm = TRUE)
+      )
     ) %>%
     derive_param_exposure(
       dataset_add = input_no_dtm,
       by_vars = exprs(USUBJID),
       input_code = "DOSE",
-      analysis_var = AVAL,
-      summary_fun = function(x) mean(x, na.rm = TRUE),
-      set_values_to = exprs(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
+      set_values_to = exprs(
+        PARAMCD = "AVDOSE",
+        PARCAT1 = "OVERALL",
+        AVAL = mean(AVAL, na.rme = TRUE)
+      )
     ) %>%
     derive_param_exposure(
       dataset_add = input_no_dtm,
       by_vars = exprs(USUBJID),
       input_code = "ADJ",
-      analysis_var = AVALC,
-      summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_),
-      set_values_to = exprs(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
+      set_values_to = exprs(
+        PARAMCD = "TADJ",
+        PARCAT1 = "OVERALL",
+        AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_)
+      )
     )
 
   expect_dfs_equal(
@@ -168,9 +180,10 @@ test_that("derive_param_exposure Test 3: Errors", {
         dataset_add = input,
         by_vars = exprs(USUBJID),
         input_code = "DOSE",
-        analysis_var = AVAL,
-        summary_fun = function(x) mean(x, na.rm = TRUE),
-        set_values_to = exprs(PARCAT1 = "OVERALL")
+        set_values_to = exprs(
+          PARCAT1 = "OVERALL",
+          AVAL = mean(AVAL, na.rm = TRUE)
+        )
       ),
     regexp = paste("The following required elements are missing in `set_values_to`: 'PARAMCD'")
   )
@@ -181,9 +194,11 @@ test_that("derive_param_exposure Test 3: Errors", {
         dataset_add = input,
         by_vars = exprs(USUBJID),
         input_code = "DOSED",
-        analysis_var = AVAL,
-        summary_fun = function(x) mean(x, na.rm = TRUE),
-        set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+        set_values_to = exprs(
+          PARAMCD = "TDOSE",
+          PARCAT1 = "OVERALL",
+          AVAL = mean(AVAL, na.rm = TRUE)
+        )
       ),
     regexp = paste(
       "`input_code` contains invalid values:\n`DOSED`\nValid",
@@ -200,9 +215,10 @@ test_that("derive_param_exposure Test 3: Errors", {
         dataset_add = .,
         by_vars = exprs(USUBJID),
         input_code = "DOSE",
-        analysis_var = AVAL,
-        summary_fun = function(x) mean(x, na.rm = TRUE),
-        set_values_to = exprs(PARCAT1 = "OVERALL")
+        set_values_to = exprs(
+          PARCAT1 = "OVERALL",
+          AVAL = mean(AVAL, na.rm = TRUE)
+        )
       ),
     regexp = paste("Required variables `ASTDT` and `AENDT` are missing")
   )

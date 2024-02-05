@@ -355,8 +355,8 @@ event_joined <- function(dataset_name = NULL,
                          keep_source_vars = NULL,
                          description = NULL) {
   if (!missing(first_cond)) {
-    deprecate_warn(
-      "1.0.0",
+    deprecate_stop(
+      "1.1.0",
       "event_joined(first_cond=)",
       "event_joined(first_cond_upper=)"
     )

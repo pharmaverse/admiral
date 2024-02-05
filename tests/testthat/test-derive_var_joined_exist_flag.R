@@ -290,7 +290,7 @@ test_that("derive_var_joined_exist_flag Test 6: tmp_obs_nr_var argument works", 
 
 ## Test 7: deprecation of `filter` ----
 test_that("derive_var_joined_exist_flag Test 7: deprecation of `filter`", {
-  expect_warning(
+  expect_error(
     actual <-
       derive_var_joined_exist_flag(
         data,
@@ -302,31 +302,7 @@ test_that("derive_var_joined_exist_flag Test 7: deprecation of `filter`", {
         order = exprs(AVISITN),
         filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR")
       ),
-    class = "lifecycle_warning_deprecated"
-  )
-
-  expected <- tibble::tribble(
-    ~USUBJID, ~AVISITN, ~AVALC, ~CONFFL,
-    "1",      1,        "PR",   "Y",
-    "1",      2,        "CR",   NA_character_,
-    "1",      3,        "CR",   NA_character_,
-    "1",      4,        "SD",   NA_character_,
-    "1",      5,        "NE",   NA_character_,
-    "2",      1,        "SD",   NA_character_,
-    "2",      2,        "PR",   NA_character_,
-    "2",      3,        "PD",   NA_character_,
-    "3",      1,        "SD",   NA_character_,
-    "4",      1,        "PR",   "Y",
-    "4",      2,        "PD",   NA_character_,
-    "4",      3,        "SD",   NA_character_,
-    "4",      4,        "SD",   NA_character_,
-    "4",      5,        "PR",   NA_character_
-  )
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("USUBJID", "AVISITN")
+    class = "lifecycle_error_deprecated"
   )
 })
 
@@ -349,7 +325,7 @@ test_that("derive_var_joined_exist_flag Test 8: deprecation of `first_cond`", {
     "4",      4,        "CR"
   )
 
-  expect_warning(
+  expect_error(
     actual <-
       derive_var_joined_exist_flag(
         data,
@@ -363,29 +339,6 @@ test_that("derive_var_joined_exist_flag Test 8: deprecation of `first_cond`", {
         order = exprs(AVISITN),
         filter_join = TRUE
       ),
-    class = "lifecycle_warning_deprecated"
-  )
-
-  expected <- tibble::tribble(
-    ~USUBJID, ~AVISITN, ~AVALC, ~CONFFL,
-    "1",      1,        "PR",   NA_character_,
-    "1",      2,        "CR",   "Y",
-    "1",      3,        "CR",   NA_character_,
-    "1",      4,        "SD",   NA_character_,
-    "1",      5,        "NE",   NA_character_,
-    "2",      1,        "SD",   NA_character_,
-    "2",      2,        "PR",   NA_character_,
-    "2",      3,        "PD",   NA_character_,
-    "3",      1,        "CR",   NA_character_,
-    "4",      1,        "CR",   "Y",
-    "4",      2,        "SD",   NA_character_,
-    "4",      3,        "CR",   "Y",
-    "4",      4,        "CR",   NA_character_
-  )
-
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("USUBJID", "AVISITN")
+    class = "lifecycle_error_deprecated"
   )
 })

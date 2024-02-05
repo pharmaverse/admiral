@@ -99,14 +99,3 @@ test_that("compute_egfr Test 7: CKD-EPI calculated on input data", {
     keys = c("USUBJID")
   )
 })
-
-## Test 8: 'wt' argument deprecation warning ----
-test_that("compute_egfr Test 8: 'wt' argument deprecation warning", {
-  # expect deprecation warning
-  expect_error(
-    compute_egfr(
-      creat = 1.09, creatu = "mg/dL", age = 55, sex = "M", wt = 90, method = "CRCL"
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})

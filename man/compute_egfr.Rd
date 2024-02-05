@@ -4,7 +4,7 @@
 \alias{compute_egfr}
 \title{Compute Estimated Glomerular Filtration Rate (eGFR) for Kidney Function}
 \usage{
-compute_egfr(creat, creatu = "SI", age, weight, sex, race = NULL, method, wt)
+compute_egfr(creat, creatu = "SI", age, weight, sex, race = NULL, method)
 }
 \arguments{
 \item{creat}{Creatinine
@@ -44,8 +44,6 @@ Expected Values: \code{"BLACK OR AFRICAN AMERICAN"} and others}
 A character vector is expected.
 
 Expected Values: \code{"CRCL"}, \code{"CKD-EPI"}, \code{"MDRD"}}
-
-\item{wt}{\emph{Deprecated}, please use \code{weight} instead.}
 }
 \value{
 A numeric vector of egfr values
@@ -147,8 +145,8 @@ BDS-Findings Functions that returns a vector:
 \code{\link{compute_framingham}()},
 \code{\link{compute_map}()},
 \code{\link{compute_qtc}()},
-\code{\link{compute_qual_imputation_dec}()},
 \code{\link{compute_qual_imputation}()},
+\code{\link{compute_qual_imputation_dec}()},
 \code{\link{compute_rr}()},
 \code{\link{compute_scale}()}
 }

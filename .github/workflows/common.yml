@@ -34,7 +34,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  R_VERSION: "4.1"
+  R_VERSION: "release"
 
 jobs:
   get_r_version:
@@ -87,7 +87,7 @@ jobs:
     if: github.event_name == 'push' || startsWith(github.ref, 'refs/tags/v')
     needs: get_r_version
     with:
-      r-version: "4.3"
+      r-version: "release"
       skip-multiversion-docs: true
     secrets:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
