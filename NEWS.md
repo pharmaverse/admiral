@@ -8,6 +8,9 @@
 
 ## Documentation
 
+- The "Release Strategy" vignette was updated with respect to the new branching
+strategy. (#353)
+
 # admiraldev 1.0.0
 
 ## New Features
