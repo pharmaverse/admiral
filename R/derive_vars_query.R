@@ -21,7 +21,7 @@
 #'   `GRPNAME` if the value of `TERMCHAR` or `TERMNUM` in `dataset_queries` matches
 #'   the value of the respective SRCVAR in `dataset`.
 #'   Note that `TERMCHAR` in `dataset_queries` dataset may be NA only when `TERMNUM`
-#'   is non-NA and vice versa.
+#'   is non-NA and vice versa. The matching is case insensitive.
 #'   The "CD", "SC", and "SCN" variables are derived accordingly based on
 #'   `GRPID`, `SCOPE`, and `SCOPEN` respectively,
 #'   whenever not missing.
@@ -155,7 +155,11 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
     # numeric -> TERMNUM, character -> TERMCHAR, otherwise -> error
     mutate(
       tmp_col_type = vapply(dataset[SRCVAR], typeof, character(1)),
-      TERM_NAME_ID = ifelse(tmp_col_type == "character", TERMCHAR, as.character(TERMNUM))
+      TERM_NAME_ID = ifelse(
+        tmp_col_type == "character",
+        toupper(TERMCHAR),
+        as.character(TERMNUM)
+      )
     )
 
   # prepare input dataset for joining

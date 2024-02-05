@@ -41,6 +41,9 @@ There is a possibility to get package dependency versions used for the workflows
  
 - The function `dplyr::transmute()` is superseded in favor of `dplyr::mutate(.keep = "none")`. Consequently, all the admiral functions that utilized the former have been updated accordingly. (#2274)
 
+# admiral 1.0.1
+
+- Fix bug in `derive_vars_query()` where if AE terms were in mixed case no terms are flagged. (#2311)
 
 # admiral 1.0.0
 
