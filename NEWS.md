@@ -1,6 +1,7 @@
 # admiral (development version)
 
 ## New Features
+- Created new dummy function for on boarding process `my_first_fcn()`. (#1839)
 
 ## Updates of Existing Functions
 
