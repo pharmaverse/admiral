@@ -1,4 +1,4 @@
-# my_first_fcn ----
+# my_first_fcn -----
 
 ## Test 1: input is Null ----
 test_that("my_first_fcn Test 1: Null as input", {
