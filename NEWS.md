@@ -2,6 +2,8 @@
 
 ## New Features
 
+- The new function `my_first_fcn()` is provided to display a Welcome message. (#1839)
+
 ## Updates of Existing Functions
 
 - Created three unit tests for `get_summary_records()`. (#2304)
