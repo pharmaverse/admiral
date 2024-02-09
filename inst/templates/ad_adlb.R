@@ -25,7 +25,8 @@ adsl <- admiral_adsl
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
 
-lb <- convert_blanks_to_na(lb)
+lb <- convert_blanks_to_na(lb) %>%
+  filter(LBTESTCD != "BASO" & LBTESTCD != "LYMPH")
 
 # Look-up tables ----
 
