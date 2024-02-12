@@ -103,7 +103,8 @@ adpp_aval <- adpp_pp %>%
   ## Calculate AVAL and AVALC ----
   mutate(
     AVAL = PPSTRESN,
-    AVALC = PPSTRESC
+    AVALC = PPSTRESC,
+    AVALU = PPSTRESU,
   ) %>%
   # Remove variables
   select(-PPSTRESN, -PPSTRESC) %>%
@@ -121,14 +122,10 @@ adpp_aval <- adpp_pp %>%
 adpp_avisit <- adpp_aval %>%
   # Derive Timing
   mutate(
-    VISIT = "", # /!\ To remove
-    VISITNUM = NA, # /!\ To remove
-    AVISIT = case_when(
-      str_detect(VISIT, "SCREEN|UNSCHED|RETRIEVAL|AMBUL") ~ NA_character_,
-      !is.na(VISIT) ~ str_to_title(VISIT),
-      TRUE ~ NA_character_
-    ),
-    AVISITN = VISITNUM
+    AVISITN = ADY,
+    AVISIT = paste("Day", ADY),
+    VISITNUM = AVISITN,
+    VISIT = AVISIT
   ) %>%
   ## Assign TRTA, TRTP ----
   # See also the "Visit and Period Variables" vignette
