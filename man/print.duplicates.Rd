@@ -19,6 +19,7 @@ Print \code{duplicates} Objects
 }
 \seealso{
 Utilities for printing: 
+\code{\link{my_first_fcn}()},
 \code{\link{print.adam_templates}()},
 \code{\link{print.source}()},
 \code{\link{print_named_list}()}

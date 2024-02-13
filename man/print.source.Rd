@@ -23,6 +23,7 @@ print(death_event)
 }
 \seealso{
 Utilities for printing: 
+\code{\link{my_first_fcn}()},
 \code{\link{print.adam_templates}()},
 \code{\link{print.duplicates}()},
 \code{\link{print_named_list}()}
