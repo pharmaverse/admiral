@@ -422,7 +422,7 @@ dtype <- adpc_aval %>%
     DOSEA = EXDOSE_next,
     BASETYPE = paste(AVISIT_next, "Baseline"),
     ATPT = "Pre-dose",
-    ATPTN = NFRLT,
+    ATPTN = -0.5,
     ABLFL = "Y",
     DTYPE = "COPY"
   ) %>%
