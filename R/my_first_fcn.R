@@ -1,4 +1,4 @@
-#' Derive onboarding dummy function
+#' Derive on boarding dummy function
 #'
 #' @author   Fanny Gautier
 #'
