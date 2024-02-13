@@ -2,7 +2,7 @@
 % Please edit documentation in R/my_first_fcn.R
 \name{my_first_fcn}
 \alias{my_first_fcn}
-\title{Derive onboarding dummy function}
+\title{Derive on boarding dummy function}
 \usage{
 my_first_fcn(first_time = TRUE)
 }
@@ -13,12 +13,13 @@ my_first_fcn(first_time = TRUE)
 a Welcome message
 }
 \description{
-Derive onboarding dummy function
+Derive on boarding dummy function
 }
 \details{
 outputs "Welcome to the admiral family!".
 }
 \examples{
+library(testthat)
 my_first_fcn(first_time = FALSE)
 }
 \seealso{
