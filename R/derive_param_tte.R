@@ -610,19 +610,21 @@ filter_date_sources <- function(sources,
       )
 
     # add date variable and accompanying variables
+
     if (create_datetime) {
       date_derv <- exprs(!!date_var := as_datetime(!!source_date_var))
     } else {
       date_derv <- exprs(!!date_var := date(!!source_date_var))
     }
 
-    data[[i]] <- transmute(
+    data[[i]] <- mutate(
       data[[i]],
       !!!by_vars,
       !!!subject_keys,
       !!!sources[[i]]$set_values_to,
       CNSR = sources[[i]]$censor,
-      !!!date_derv
+      !!!date_derv,
+      .keep = "none"
     )
   }
 

@@ -62,7 +62,9 @@ extract_duplicate_records <- function(dataset, by_vars) {
   data_by <- dataset %>%
     ungroup() %>%
     # evaluate expressions in by_vars
-    transmute(!!!by_vars)
+    mutate(!!!by_vars,
+      .keep = "none"
+    )
 
   is_duplicate <- duplicated(data_by) | duplicated(data_by, fromLast = TRUE)
 
