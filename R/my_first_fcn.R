@@ -6,8 +6,11 @@
 #' @param    first_time TRUE or FALSE
 #' @details  outputs "Welcome to the admiral family!".
 #' @return   a Welcome message
-#  keyword  der_message is not a known tag, so not included for this function
-#  family   der_message is not a known tag, so not included for this function
+#' @export
+#' @keywords utils_print
+#' @family   utils_print
+#  keywords  der_message is not a known tag, so not included for this function
+#  family    der_message is not a known tag, so not included for this function
 #' @examples my_first_fcn(first_time = FALSE)
 
 my_first_fcn <- function(first_time = TRUE) {

@@ -121,6 +121,10 @@ reference:
   contents:
   - has_keyword('utils_examples')
 
+- subtitle: Utilities used for Printing Objects in the Console
+  contents:
+  - has_keyword('utils_print')
+
 - title: Objects exported from other packages
   desc: |
     To maximize the user-friendliness of `{admiral}`, functions from other packages are provided
