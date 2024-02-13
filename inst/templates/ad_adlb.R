@@ -25,8 +25,7 @@ adsl <- admiral_adsl
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
 
-lb <- convert_blanks_to_na(lb) %>%
-  filter(LBTESTCD != "BASO" & LBTESTCD != "LYMPH")
+lb <- convert_blanks_to_na(lb)
 
 # Look-up tables ----
 
@@ -38,7 +37,7 @@ param_lookup <- tibble::tribble(
   "ALT", "ALT", "Alanine Aminotransferase (U/L)", 3,
   "ANISO", "ANISO", "Anisocytes", 4,
   "AST", "AST", "Aspartate Aminotransferase (U/L)", 5,
-  "BASO", "BASO", "Basophils (10^9/L)", 6,
+  "BASO", "BASO", "Basophils Abs (10^9/L)", 6,
   "BASOLE", "BASOLE", "Basophils/Leukocytes (FRACTION)", 7,
   "BILI", "BILI", "Bilirubin (umol/L)", 8,
   "BUN", "BUN", "Blood Urea Nitrogen (mmol/L)", 9,
@@ -57,7 +56,7 @@ param_lookup <- tibble::tribble(
   "HGB", "HGB", "Hemoglobin (mmol/L)", 22,
   "K", "POTAS", "Potassium (mmol/L)", 23,
   "KETONES", "KETON", "Ketones", 24,
-  "LYM", "LYMPH", "Lymphocytes (10^9/L)", 25,
+  "LYM", "LYMPH", "Lymphocytes Abs (10^9/L)", 25,
   "LYMLE", "LYMPHLE", "Lymphocytes/Leukocytes (FRACTION)", 26,
   "MACROCY", "MACROC", "Macrocytes", 27,
   "MCH", "MCH", "Ery. Mean Corpuscular Hemoglobin (fmol(Fe))", 28,
