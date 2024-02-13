@@ -19,7 +19,6 @@ Derive on boarding dummy function
 outputs "Welcome to the admiral family!".
 }
 \examples{
-library(testthat)
 my_first_fcn(first_time = FALSE)
 }
 \seealso{
@@ -28,9 +27,6 @@ Utilities for printing:
 \code{\link{print.duplicates}()},
 \code{\link{print.source}()},
 \code{\link{print_named_list}()}
-}
-\author{
-Fanny Gautier
 }
 \concept{utils_print}
 \keyword{utils_print}
