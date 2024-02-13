@@ -4,7 +4,7 @@ test_that("derive_vars_query Test 1: Derive CQ and SMQ variables with two term l
   # nolint start
   queries <- tibble::tribble(
     ~PREFIX, ~GRPNAME, ~GRPID, ~SCOPE, ~SCOPEN, ~SRCVAR, ~TERMCHAR,
-    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
+    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "Alanine AMINOTRANSFERASE ABNORMAL",
     "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "AMMONIA ABNORMALL",
     "SMQ03", "Immune-Mediated Hypothyroidism", 20000161, "NARROW", 1, "AEDECOD", "BASEDOW'S DISEASE",
     "SMQ05", "Immune-Mediated Pneumonitis", NA, "NARROW", 1, "AEDECOD", "ALVEOLAR PROTEINOSIS",
@@ -15,7 +15,7 @@ test_that("derive_vars_query Test 1: Derive CQ and SMQ variables with two term l
 
   adae <- tibble::tribble(
     ~USUBJID,           ~ASTDTM,                             ~AETERM, ~AESEQ,                            ~AEDECOD,      ~AELLT,
-    "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",      3, "Alanine aminotransferase abnormal",          NA,
+    "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",      3, "ALANINE aminotransferase abnormal",          NA,
     "02", "2020-06-05 23:59:59",                 "BASEDOW'S DISEASE",      5,                 "Basedow's disease",          NA,
     "03", "2020-06-07 23:59:59",                         "SOME TERM",      2,                        "Some query", "Some term",
     "05", "2020-06-09 23:59:59",              "ALVEOLAR PROTEINOSIS",      7,              "Alveolar proteinosis",          NA
@@ -23,7 +23,7 @@ test_that("derive_vars_query Test 1: Derive CQ and SMQ variables with two term l
 
   expected_output <- tibble::tribble(
     ~USUBJID,           ~ASTDTM,                             ~AETERM, ~AESEQ,                            ~AEDECOD,      ~AELLT,                        ~SMQ03NAM, ~SMQ03CD, ~SMQ03SC, ~SMQ03SCN,                     ~SMQ05NAM, ~SMQ05SC, ~SMQ05SCN,                                                      ~CQ01NAM,  ~CQ01CD,  ~CQ01SC, ~CQ01SCN,     ~CQ06NAM, ~CQ06CD,
-    "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",      3, "Alanine aminotransferase abnormal",          NA,                               NA,       NA,       NA,        NA,                            NA,       NA,        NA, "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW",        1,           NA,      NA,
+    "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",      3, "ALANINE aminotransferase abnormal",          NA,                               NA,       NA,       NA,        NA,                            NA,       NA,        NA, "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW",        1,           NA,      NA,
     "02", "2020-06-05 23:59:59",                 "BASEDOW'S DISEASE",      5,                 "Basedow's disease",          NA, "Immune-Mediated Hypothyroidism", 20000161, "NARROW",         1,                            NA,       NA,        NA,                                                            NA,       NA,       NA,       NA,           NA,      NA,
     "03", "2020-06-07 23:59:59",                         "SOME TERM",      2,                        "Some query", "Some term",                               NA,       NA,       NA,        NA,                            NA,       NA,        NA,                                                            NA,       NA,       NA,       NA, "Some query",   11111,
     "05", "2020-06-09 23:59:59",              "ALVEOLAR PROTEINOSIS",      7,              "Alveolar proteinosis",          NA,                               NA,       NA,       NA,        NA, "Immune-Mediated Pneumonitis", "NARROW",         1,                                                            NA,       NA,       NA,       NA,           NA,      NA
