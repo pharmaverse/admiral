@@ -18,12 +18,29 @@ a welcome message
 Dummy function for on boarding
 }
 \details{
-create a function to output a text message Welcome to the admiral family!
+create a function to output a text message 'Welcome to the admiral family!'
 }
 \examples{
 my_first_fcn("Y")
 my_first_fcn(NULL)
 }
+\seealso{
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_joined_exist_flag}()},
+\code{\link{derive_var_merged_ef_msrc}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_merged_summary}()},
+\code{\link{derive_var_obs_number}()},
+\code{\link{derive_var_relative_flag}()},
+\code{\link{derive_vars_computed}()},
+\code{\link{derive_vars_joined}()},
+\code{\link{derive_vars_merged}()},
+\code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_transposed}()}
+}
 \author{
 Lina Patil
 }
+\concept{der_gen}
+\keyword{der_gen}
