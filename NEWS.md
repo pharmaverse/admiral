@@ -43,7 +43,7 @@ There is a possibility to get package dependency versions used for the workflows
 
 - The templates for ADPP and ADPC are updated for missing variables (#2308) and to make `ATPT` and `ATPTN` consistent. (#2328)
 
-- The templates for ADLB is updated to make `PARAM` and `PARAMCD` consistent. (#2327)
+- ADLB template updated to make `PARAM` consistent for `PARAMCD` values `"BASO"` and `"LYMPH"`. (#2327)
 
 # admiral 1.0.1
 
