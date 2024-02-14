@@ -6,6 +6,8 @@
 
 ## Breaking Changes
 
+* `renv` and related files have been removed (#360)
+
 ## Documentation
 
 - The "Release Strategy" vignette was updated with respect to the new branching

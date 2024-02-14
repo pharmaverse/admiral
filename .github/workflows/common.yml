@@ -34,7 +34,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  R_VERSION: "4.1"
+  R_VERSION: "release"
 
 jobs:
   get_r_version:
