@@ -43,6 +43,8 @@ There is a possibility to get package dependency versions used for the workflows
 
 - The templates for ADPP and ADPC are updated for missing variables (#2308) and to make `ATPT` and `ATPTN` consistent. (#2328)
 
+- ADLB template updated to make `PARAM` consistent for `PARAMCD` values `"BASO"` and `"LYMPH"`. (#2327)
+
 # admiral 1.0.1
 
 - Fix bug in `derive_vars_query()` where if AE terms were in mixed case no terms are flagged. (#2311)
