@@ -404,29 +404,20 @@ get_partialdatetime <- function(dtc) {
 #' @keywords internal
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
-get_imputation_target_date <- function(date_imputation,
-                                       month) {
+get_imputation_target_date <- function(date_imputation, month) {
   target <- vector("list", 3)
   names(target) <- c("year", "month", "day")
-  if (date_imputation == "first") {
-    target[["year"]] <- "0000"
-    target[["month"]] <- "01"
-    target[["day"]] <- "01"
-  } else if (date_imputation == "mid") {
-    target[["year"]] <- "xxxx"
-    target[["month"]] <- "06"
-    target[["day"]] <- if_else(is.na(month), "30", "15")
-  } else if (date_imputation == "last") {
-    target[["year"]] <- "9999"
-    target[["month"]] <- "12"
-    target[["day"]] <- "28"
-  } else {
-    target[["year"]] <- "xxxx"
-    target[["month"]] <- str_sub(date_imputation, 1, 2)
-    target[["day"]] <- str_sub(date_imputation, 4, 5)
-  }
-  target
+
+  target <- case_when(
+    date_imputation == "first" ~ list(year = "0000", month = "01", day = "01"),
+    date_imputation == "mid" ~ list(year = "xxxx", month = "06", day = if_else(is.na(month), "30", "15")),
+    date_imputation == "last" ~ list(year = "9999", month = "12", day = "28"),
+    TRUE ~ list(year = "xxxx", month = str_sub(date_imputation, 1, 2), day = str_sub(date_imputation, 4, 5))
+  )
+
+  return(target)
 }
+
 
 #' Get Time Imputation Targets
 #'
