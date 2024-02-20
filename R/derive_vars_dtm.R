@@ -148,7 +148,7 @@ derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
     case_sensitive = FALSE
   )
   if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
-      (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
+    (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
     abort("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
   }
   if (highest_imputation == "Y") {
@@ -178,7 +178,7 @@ derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
   )
 
   if (flag_imputation %in% c("both", "date") ||
-      flag_imputation == "auto" && dtm_level(highest_imputation) > dtm_level("h")) {
+    flag_imputation == "auto" && dtm_level(highest_imputation) > dtm_level("h")) {
     # add --DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
@@ -195,7 +195,7 @@ derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
   }
 
   if (flag_imputation %in% c("both", "time") ||
-      flag_imputation == "auto" && highest_imputation != "n") {
+    flag_imputation == "auto" && highest_imputation != "n") {
     # add --TMF variable
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)
@@ -588,7 +588,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
                                      min_dates,
                                      max_dates) {
   if (!(is.null(min_dates) || length(min_dates) == 0) ||
-      !(is.null(max_dates) || length(max_dates) == 0)) {
+    !(is.null(max_dates) || length(max_dates) == 0)) {
     suppress_warning(
       { # nolint
         # determine range of possible dates
@@ -761,12 +761,12 @@ compute_tmf <- function(dtc,
   for (c in hms) {
     highest_miss <-
       if_else((is.na(partial[[c]]) & is.na(highest_miss)) |
-                (
-                  !is.na(partial[[c]]) &
-                    is.na(highest_miss) & as.numeric(partial[[c]]) != time_part[[c]]
-                ),
-              c,
-              highest_miss
+        (
+          !is.na(partial[[c]]) &
+            is.na(highest_miss) & as.numeric(partial[[c]]) != time_part[[c]]
+        ),
+      c,
+      highest_miss
       )
   }
 

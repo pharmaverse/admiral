@@ -157,7 +157,7 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
     case_sensitive = FALSE
   )
   if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
-      (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
+    (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
     abort("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
   }
   if (highest_imputation == "Y") {
@@ -189,7 +189,7 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
 
   # derive DTF
   if (flag_imputation == "date" ||
-      flag_imputation == "auto" && highest_imputation != "n") {
+    flag_imputation == "auto" && highest_imputation != "n") {
     # add --DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
@@ -546,7 +546,7 @@ restrict_imputed_dtc_dt <- function(dtc,
                                     min_dates,
                                     max_dates) {
   if (!(is.null(min_dates) || length(min_dates) == 0) ||
-      !(is.null(max_dates) || length(max_dates) == 0)) {
+    !(is.null(max_dates) || length(max_dates) == 0)) {
     suppress_warning(
       { # nolint
         # determine range of possible dates
@@ -646,8 +646,8 @@ compute_dtf <- function(dtc, dt) {
 
   # Find date portion
   date_portion <- ifelse(grepl("T", dtc),
-                         gsub("T", "", substr(dtc, 1, str_locate(dtc, "T")[, 1])),
-                         substr(dtc, 1, 10)
+    gsub("T", "", substr(dtc, 1, str_locate(dtc, "T")[, 1])),
+    substr(dtc, 1, 10)
   )
   n_chr_date_portion <- nchar(date_portion)
 
