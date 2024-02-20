@@ -33,8 +33,8 @@ Utilities used for date imputation:
 \code{\link{dtm_level}()},
 \code{\link{get_imputation_target_date}()},
 \code{\link{get_imputation_target_time}()},
-\code{\link{restrict_imputed_dtc_dtm}()},
-\code{\link{restrict_imputed_dtc_dt}()}
+\code{\link{restrict_imputed_dtc_dt}()},
+\code{\link{restrict_imputed_dtc_dtm}()}
 }
 \concept{utils_impute}
 \keyword{internal}
