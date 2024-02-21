@@ -652,51 +652,6 @@ restrict_imputed_dtc_dtm <- function(dtc,
   imputed_dtc
 }
 
-#' Parse DTC variable and Determine Components
-#'
-#' @param dtc The `'--DTC'` date to parse
-#'
-#'   A character date is expected in a format like `yyyy-mm-dd` or
-#'   `yyyy-mm-ddThh:mm:ss`. Trailing components can be omitted and `-` is a
-#'   valid value for any component.
-#'
-#' @returns A list of character vectors. The elements of the list are named
-#'   "year", "month", "day", "hour", "minute", and "second". Missing components
-#'   are set to `NA_character_`.
-#'
-#' @details The function can be replaced by the parttime parser once it is
-#'   available.
-#'
-#'
-#' @family utils_impute
-#'
-#' @keywords internal
-#'
-#' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
-get_partialdatetime <- function(dtc) {
-  two <- "(\\d{2}|-?)"
-  partialdate <- str_match(dtc, paste0(
-    "(\\d{4}|-?)-?",
-    two,
-    "-?",
-    two,
-    "T?",
-    two,
-    ":?",
-    two,
-    ":?",
-    "(\\d{2}(\\.\\d{1,5})?)?"
-  ))
-  partial <- vector("list", 6)
-  components <- c("year", "month", "day", "hour", "minute", "second")
-  names(partial) <- components
-  for (i in seq_along(components)) {
-    partial[[i]] <- partialdate[, i + 1]
-    partial[[i]] <- if_else(partial[[i]] %in% c("-", ""), NA_character_, partial[[i]])
-  }
-  partial
-}
-
 #' Derive the Time Imputation Flag
 #'
 #' Derive the time imputation flag (`'--TMF'`) comparing a date character vector
