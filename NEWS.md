@@ -31,6 +31,8 @@
   - `derive_var_ontrtfl(span_period)` 
   - `derive_var_shift(na_val)`
   - `derive_vars_aage(unit)`
+  
+- The `derive_var_merged_exist_flag()` function has been superseded in favor of `derive_var_merged_ef_msrc()`. (#2303)  
 
 ## Various
 

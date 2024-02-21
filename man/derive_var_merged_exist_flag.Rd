@@ -69,6 +69,9 @@ input dataset and additionally the variable specified for \code{new_var} derived
 from the additional dataset (\code{dataset_add}).
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{derive_var_merged_exist_flag}
+function has been superseded in favor of \code{derive_var_merged_ef_msrc()}.
+
 Adds a flag variable to the input dataset which indicates if
 there exists at least one observation in another dataset fulfilling a certain
 condition.
@@ -145,18 +148,14 @@ derive_var_merged_exist_flag(
   select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
 }
 \seealso{
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_ef_msrc}()},
-\code{\link{derive_var_merged_summary}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_computed}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_transposed}()}
+Other superseded: 
+\code{\link{date_source}()},
+\code{\link{derive_param_extreme_record}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{dthcaus_source}()},
+\code{\link{get_summary_records}()}
 }
-\concept{der_gen}
-\keyword{der_gen}
+\concept{superseded}
+\keyword{superseded}

@@ -264,7 +264,6 @@ example_ae \%>\%
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
 \code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_merged_ef_msrc}()},
-\code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},

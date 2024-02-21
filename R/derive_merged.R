@@ -440,7 +440,11 @@ derive_vars_merged <- function(dataset,
 
 #' Merge an Existence Flag
 #'
-#' @description Adds a flag variable to the input dataset which indicates if
+#' @description
+#' `r lifecycle::badge("superseded")` The `derive_var_merged_exist_flag`
+#' function has been superseded in favor of `derive_var_merged_ef_msrc()`.
+#'
+#' Adds a flag variable to the input dataset which indicates if
 #' there exists at least one observation in another dataset fulfilling a certain
 #' condition.
 #'
@@ -507,8 +511,8 @@ derive_vars_merged <- function(dataset,
 #'   (`missing_value`).
 #'
 #'
-#' @family der_gen
-#' @keywords der_gen
+#' @family superseded
+#' @keywords superseded
 #'
 #' @export
 #'

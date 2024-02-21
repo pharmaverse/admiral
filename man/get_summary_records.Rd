@@ -178,6 +178,7 @@ Other superseded:
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_merged_exist_flag}()},
 \code{\link{dthcaus_source}()}
 }
 \concept{superseded}
