@@ -32,6 +32,10 @@
   - `derive_var_shift(na_val)`
   - `derive_vars_aage(unit)`
 
+## Documentation
+
+- The documentation of the `check_type` argument is updated to describe that the `check_type` argument is ignored if `order` is not specified. (#2326)
+
 ## Various
 
 - In the previous version, `renv` was the default framework used to manage package dependencies. Now, we use `devtools` as our main package manager (some changes also occurred for  [admiralci workflows](https://github.com/pharmaverse/admiralci)).
