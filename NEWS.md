@@ -31,8 +31,6 @@
   - `derive_var_ontrtfl(span_period)` 
   - `derive_var_shift(na_val)`
   - `derive_vars_aage(unit)`
-  
-- The `derive_var_merged_exist_flag()` function has been superseded in favor of `derive_var_merged_ef_msrc()`. (#2303)  
 
 ## Various
 
@@ -46,6 +44,8 @@ There is a possibility to get package dependency versions used for the workflows
 - The templates for ADPP and ADPC are updated for missing variables (#2308) and to make `ATPT` and `ATPTN` consistent. (#2328)
 
 - ADLB template updated to make `PARAM` consistent for `PARAMCD` values `"BASO"` and `"LYMPH"`. (#2327)
+
+- The `derive_var_merged_exist_flag()` function has been superseded in favor of `derive_var_merged_ef_msrc()`. (#2303)
 
 # admiral 1.0.1
 
