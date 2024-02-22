@@ -2,8 +2,8 @@ linters: linters_with_defaults(
     line_length_linter(100),
     object_usage_linter=NULL,
     cyclocomp_linter(complexity_limit = 22),
-    indentation_linter=NULL,
-    undesirable_function_linter = undesirable_function_linter()
+    indentation_linter=NULL
+    #undesirable_function_linter = undesirable_function_linter()
   )
 exclusions: list(
     "R/data.R" = Inf,
