@@ -11,8 +11,9 @@ test_that("convert_blanks_to_na Test 1: blank strings are turned into `NA`", {
 test_that("convert_blanks_to_na Test 2: attributes are preserved when converting blanks to `NA`", {
   input <- `attributes<-`(
     letters,
-    list(names = rev(letters),
-         label = "Letters"
+    list(
+      names = rev(letters),
+      label = "Letters"
     )
   )
   input[c(1, 9, 23)] <- NA
@@ -64,8 +65,9 @@ test_that("convert_na_to_blanks Test 5: `NA` strings are turned into blank ", {
 test_that("convert_na_to_blanks Test 6: attributes are preserved when converting `NA` to blanks", {
   input <- `attributes<-`(
     letters,
-    list(names = rev(letters),
-         label = "Letters"
+    list(
+      names = rev(letters),
+      label = "Letters"
     )
   )
 
