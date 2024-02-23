@@ -11,9 +11,9 @@
 #'
 #' @return Happy Message
 #'
-#' @family der_adxx
+#' @family internal
 #'
-#' @keywords der_adxx
+#' @keywords internal
 #'
 #' @export
 #'

@@ -45,9 +45,10 @@ signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "message")
 }
 \seealso{
 Other internal: 
-\code{\link{admiral}},
+\code{\link{admiral-package}},
 \code{\link{extract_duplicate_records}()},
-\code{\link{format.basket_select}()}
+\code{\link{format.basket_select}()},
+\code{\link{hello_admiral}()}
 }
 \concept{internal}
 \keyword{internal}

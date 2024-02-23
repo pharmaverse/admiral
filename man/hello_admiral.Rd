@@ -24,5 +24,12 @@ Under \code{./man/roxygen/meta.R}, you will find where to store these family/key
 \examples{
 hello_admiral(hw = FALSE)
 }
-\concept{der_adxx}
-\keyword{der_adxx}
+\seealso{
+Other internal: 
+\code{\link{admiral-package}},
+\code{\link{extract_duplicate_records}()},
+\code{\link{format.basket_select}()},
+\code{\link{signal_duplicate_records}()}
+}
+\concept{internal}
+\keyword{internal}
