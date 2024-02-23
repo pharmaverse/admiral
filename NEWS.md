@@ -7,6 +7,9 @@
 - Created three unit tests for `get_summary_records()`. (#2304)
 
 ## Breaking Changes
+
+- The following function has been added: (#1839)
+  - `my_first_fcn(hw)`
   
 - The following function arguments are entering the next phase of the deprecation process: (#2299)
   
