@@ -9,7 +9,7 @@ test_that("convert_blanks_to_na Test 1: blank strings are turned into `NA`", {
 
 ## Test 2: attributes are preserved when converting blanks to `NA` ----
 test_that("convert_blanks_to_na Test 2: attributes are preserved when converting blanks to `NA`", {
-  input <- structure(letters, names = rev(letters), label = "Letters")
+  input <- structure(letters, names = rev(letters), label = "Letters") # nolint: undesirable_function_linter
   input[c(1, 9, 23)] <- NA
   output <- convert_blanks_to_na(input)
 
@@ -19,6 +19,7 @@ test_that("convert_blanks_to_na Test 2: attributes are preserved when converting
 
 ## Test 3: blank strings are turned into `NA` inside data frames ----
 test_that("convert_blanks_to_na Test 3: blank strings are turned into `NA` inside data frames", {
+  # nolint start: undesirable_function_linter
   input <- tibble::tibble(
     a = structure(c("a", "b", "", "c"), label = "A"),
     b = structure(c(1, NA, 21, 9), label = "B"),
@@ -31,6 +32,7 @@ test_that("convert_blanks_to_na Test 3: blank strings are turned into `NA` insid
     c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
     d = structure(c(NA, NA, "s", "q"), label = "D")
   )
+  # nolint end
 
   expect_identical(convert_blanks_to_na(input), expected_output)
 })
@@ -57,7 +59,7 @@ test_that("convert_na_to_blanks Test 5: `NA` strings are turned into blank ", {
 
 ## Test 6: attributes are preserved when converting `NA` to blanks ----
 test_that("convert_na_to_blanks Test 6: attributes are preserved when converting `NA` to blanks", {
-  input <- structure(letters, names = rev(letters), label = "Letters")
+  input <- structure(letters, names = rev(letters), label = "Letters") # nolint: undesirable_function_linter
   input[c(1, 9, 23)] <- NA_character_
   output <- convert_na_to_blanks(input)
 
@@ -68,6 +70,7 @@ test_that("convert_na_to_blanks Test 6: attributes are preserved when converting
 # convert_na_to_blanks.data.frame ----
 ## Test 7: `NA` are turned into blank strings inside data frames ----
 test_that("convert_na_to_blanks.data.frame Test 7: `NA` are turned into blank strings inside data frames", { # nolint
+  # nolint start: undesirable_function_linter
   input <- tibble::tibble(
     a = structure(c("a", "b", NA, "c"), label = "A"),
     b = structure(c(1, NA, 21, 9), label = "B"),
@@ -81,6 +84,7 @@ test_that("convert_na_to_blanks.data.frame Test 7: `NA` are turned into blank st
     c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
     d = structure(c("", "", "s", "q"), label = "D")
   )
+  # nolint end
 
   expect_equal(convert_na_to_blanks.data.frame(input), expected_output, ignore_attr = TRUE)
 })
