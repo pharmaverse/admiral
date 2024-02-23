@@ -203,20 +203,20 @@ test_that("impute_dtc_dtm Test 7: impute month and day to mid, time to first", {
 test_that("impute_dtc_dtm Test 8: min_dates parameter works", {
   expect_equal(
     impute_dtc_dtm(c("2020-12", "2020-11", NA_character_),
-                   min_dates = list(
-                     c(
-                       ymd_hms("2020-12-06T12:12:12"),
-                       NA,
-                       NA
-                     ),
-                     c(
-                       ymd_hms("2020-11-11T11:11:11"),
-                       ymd_hms("2020-11-11T11:11:11"),
-                       ymd_hms("2020-11-11T11:11:11")
-                     )
-                   ),
-                   highest_imputation = "Y",
-                   date_imputation = "first"
+      min_dates = list(
+        c(
+          ymd_hms("2020-12-06T12:12:12"),
+          NA,
+          NA
+        ),
+        c(
+          ymd_hms("2020-11-11T11:11:11"),
+          ymd_hms("2020-11-11T11:11:11"),
+          ymd_hms("2020-11-11T11:11:11")
+        )
+      ),
+      highest_imputation = "Y",
+      date_imputation = "first"
     ),
     c("2020-12-06T12:12:12", "2020-11-11T11:11:11", "2020-11-11T11:11:11")
   )
@@ -226,13 +226,13 @@ test_that("impute_dtc_dtm Test 8: min_dates parameter works", {
 test_that("impute_dtc_dtm Test 9: max_dates parameter works", {
   expect_equal(
     impute_dtc_dtm(c("2020-12", "2020-11", NA_character_, "2020-02-02"),
-                   max_dates = list(
-                     c(ymd_hms("2020-12-06T12:12:12"), NA, ymd_hms("2020-09-13T08:30:00"), NA),
-                     c(ymd(""), ymd("2020-11-11"), ymd(""), ymd("2020-02-02"))
-                   ),
-                   highest_imputation = "Y",
-                   date_imputation = "last",
-                   time_imputation = "last"
+      max_dates = list(
+        c(ymd_hms("2020-12-06T12:12:12"), NA, ymd_hms("2020-09-13T08:30:00"), NA),
+        c(ymd(""), ymd("2020-11-11"), ymd(""), ymd("2020-02-02"))
+      ),
+      highest_imputation = "Y",
+      date_imputation = "last",
+      time_imputation = "last"
     ),
     c("2020-12-06T12:12:12", "2020-11-11T23:59:59", "2020-09-13T08:30:00", "2020-02-02T23:59:59")
   )

@@ -1,4 +1,3 @@
-
 # impute_dtc_dt ----
 input <- c(
   "2019-07-18",
@@ -131,12 +130,12 @@ test_that("impute_dtc_dt Test 6: min_dates parameter works", {
 test_that("impute_dtc_dt Test 7: max_dates parameter works", {
   expect_equal(
     impute_dtc_dt(c("2020-12", "2020-11", NA_character_),
-                  max_dates = list(
-                    c(ymd("2020-12-06"), NA, ymd("2020-09-13")),
-                    c(ymd(""), ymd("2020-11-11"), ymd(""))
-                  ),
-                  highest_imputation = "Y",
-                  date_imputation = "last"
+      max_dates = list(
+        c(ymd("2020-12-06"), NA, ymd("2020-09-13")),
+        c(ymd(""), ymd("2020-11-11"), ymd(""))
+      ),
+      highest_imputation = "Y",
+      date_imputation = "last"
     ),
     c("2020-12-06", "2020-11-11", "2020-09-13")
   )
