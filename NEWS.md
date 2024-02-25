@@ -443,6 +443,8 @@ source dataset. (#1699)
 
 - New function `compute_egfr()` for calculating Estimated Glomerular Filtration Rate (eGFR) and Creatinine Clearance for Kidney Function. (#1826)
 
+- New function `hello_admiral()` based on the dummy issue. (#1839)
+
 ## Updates of Existing Functions
 
 - `derive_extreme_records()` was enhanced such that it includes the
