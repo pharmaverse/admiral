@@ -36,6 +36,7 @@ extract_duplicate_records(adsl, exprs(USUBJID))
 Other internal: 
 \code{\link{admiral-package}},
 \code{\link{format.basket_select}()},
+\code{\link{hello_admiral}()},
 \code{\link{signal_duplicate_records}()}
 }
 \concept{internal}

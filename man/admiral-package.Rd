@@ -22,6 +22,7 @@ Useful links:
 Other internal: 
 \code{\link{extract_duplicate_records}()},
 \code{\link{format.basket_select}()},
+\code{\link{hello_admiral}()},
 \code{\link{signal_duplicate_records}()}
 }
 \author{
