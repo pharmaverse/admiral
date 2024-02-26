@@ -807,7 +807,6 @@ test_that("derive_param_tte Test 11: ensuring ADT is not NA because of missing s
 
 ## Test 12: test dataset and dynamic byvars populated ----
 test_that("derive_param_tte Test 12: test dataset and dynamic byvars populated", {
-
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~TRTEDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-02"), ymd("2021-03-06"),
@@ -867,24 +866,26 @@ test_that("derive_param_tte Test 12: test dataset and dynamic byvars populated",
   expected_output <- bind_rows(
     adsl %>% select(STUDYID, USUBJID) %>% mutate(PARAMCD = "XYZ"),
     tibble::tribble(
-    ~USUBJID,    ~EVNTDESC, ~SRCDOM,   ~SRCVAR,  ~SRCSEQ, ~CNSR,              ~ADT,          ~STARTDT,
-    "01",             "AE",    "AE", "AESTDTC",        2,    0L, ymd("2021-03-04"), ymd("2020-12-06"),
-    "02",     "END OF TRT",  "ADSL",  "TRTEDT", NA_real_,    1L, ymd("2021-01-30"), ymd("2021-01-16")
-    ) %>%
-    mutate(
-      STUDYID = "AB42",
-      PARAMCD = "TTAE1",
-      PARAM = "Time to First Cough Adverse Event",
-      PARCAT1 = "TTAE",
-      PARCAT2 = "Cough"
-    ),
-    tibble::tribble(
-      ~USUBJID,    ~EVNTDESC, ~SRCDOM,   ~SRCVAR,  ~SRCSEQ, ~CNSR,              ~ADT,          ~STARTDT,
-      "01",             "AE",    "AE", "AESTDTC",        3,    0L, ymd("2021-01-01"), ymd("2020-12-06"),
-      "02",     "END OF TRT",  "ADSL",  "TRTEDT", NA_real_,    1L, ymd("2021-01-30"), ymd("2021-01-16")
+      ~USUBJID,    ~EVNTDESC, ~SRCDOM,   ~SRCVAR,  ~SRCSEQ, ~CNSR,              ~ADT,
+      "01",             "AE",    "AE", "AESTDTC",        2,    0L, ymd("2021-03-04"),
+      "02",     "END OF TRT",  "ADSL",  "TRTEDT", NA_real_,    1L, ymd("2021-01-30"),
     ) %>%
       mutate(
         STUDYID = "AB42",
+        STARTDT = if_else(USUBJID == "01", ymd("2020-12-06"), ymd("2021-01-16")),
+        PARAMCD = "TTAE1",
+        PARAM = "Time to First Cough Adverse Event",
+        PARCAT1 = "TTAE",
+        PARCAT2 = "Cough"
+      ),
+    tibble::tribble(
+      ~USUBJID,    ~EVNTDESC, ~SRCDOM,   ~SRCVAR,  ~SRCSEQ, ~CNSR,              ~ADT,
+      "01",             "AE",    "AE", "AESTDTC",        3,    0L, ymd("2021-01-01"),
+      "02",     "END OF TRT",  "ADSL",  "TRTEDT", NA_real_,    1L, ymd("2021-01-30"),
+    ) %>%
+      mutate(
+        STUDYID = "AB42",
+        STARTDT = if_else(USUBJID == "01", ymd("2020-12-06"), ymd("2021-01-16")),
         PARAMCD = "TTAE2",
         PARAM = "Time to First Flu Adverse Event",
         PARCAT1 = "TTAE",
@@ -912,21 +913,27 @@ test_that("list_tte_source_objects Test 13: error is issued if package does not 
 ## Test 14: expected objects produced ----
 test_that("list_tte_source_objects Test 14: expected objects produced", {
   expected_output <- tibble::tribble(
-    ~object, ~dataset_name, ~filter, ~date, ~censor,
-    "ae_ser_event", "adae", quote(TRTEMFL == "Y" & AESER == "Y"), "ASTDT", 0,
-    "ae_gr2_event", "adae", quote(TRTEMFL == "Y" & ATOXGR == "2"), "ASTDT", 0,
-    "ae_sev_event", "adae", quote(TRTEMFL == "Y" & AESEV == "SEVERE"), "ASTDT", 0,
-    "ae_gr4_event", "adae", quote(TRTEMFL == "Y" & ATOXGR == "4"), "ASTDT", 0,
-    "ae_gr3_event", "adae", quote(TRTEMFL == "Y" & ATOXGR == "3"), "ASTDT", 0,
-    "lastalive_censor", "adsl", NULL, "LSTALVDT", 1,
-    "ae_event", "adae", quote(TRTEMFL == "Y"), "ASTDT", 0,
-    "death_event", "adsl", quote(DTHFL == "Y"), "DTHDT", 0,
-    "ae_gr35_event", "adae", quote(TRTEMFL == "Y" & ATOXGR %in% c("3", "4", "5")), "ASTDT", 0,
-    "ae_wd_event", "adae", quote(TRTEMFL == "Y" & AEACN == "DRUG WITHDRAWN"), "ASTDT", 0,
-    "ae_gr1_event", "adae", quote(TRTEMFL == "Y" & ATOXGR == "1"), "ASTDT", 0,
-    "ae_gr5_event", "adae", quote(TRTEMFL == "Y" & ATOXGR == "5"), "ASTDT", 0,
+    ~object,            ~dataset_name,                                              ~filter,
+    "ae_ser_event",            "adae",                 quote(TRTEMFL == "Y" & AESER == "Y"),
+    "ae_gr2_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "2"),
+    "ae_sev_event",            "adae",            quote(TRTEMFL == "Y" & AESEV == "SEVERE"),
+    "ae_gr4_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "4"),
+    "ae_gr3_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "3"),
+    "lastalive_censor",        "adsl",                                                 NULL,
+    "ae_event",                "adae",                                quote(TRTEMFL == "Y"),
+    "death_event",             "adsl",                                  quote(DTHFL == "Y"),
+    "ae_gr35_event",           "adae", quote(TRTEMFL == "Y" & ATOXGR %in% c("3", "4", "5")),
+    "ae_wd_event",             "adae",    quote(TRTEMFL == "Y" & AEACN == "DRUG WITHDRAWN"),
+    "ae_gr1_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "1"),
+    "ae_gr5_event",            "adae",                quote(TRTEMFL == "Y" & ATOXGR == "5")
   ) %>%
     mutate(
+      date = case_when(
+        object == "lastalive_censor" ~ "LSTALVDT",
+        object == "death_event" ~ "DTHDT",
+        TRUE ~ "ASTDT"
+      ),
+      censor = if_else(object == "lastalive_censor", 1, 0),
       filter = as.character(filter),
       censor = as.integer(censor)
     )
