@@ -805,17 +805,112 @@ test_that("derive_param_tte Test 11: ensuring ADT is not NA because of missing s
   )
 })
 
+## Test 12: test dataset and dynamic byvars populated ----
+test_that("derive_param_tte Test 12: test dataset and dynamic byvars populated", {
+
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,           ~TRTEDT,           ~EOSDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-02"), ymd("2021-03-06"),
+    "02",     ymd("2021-01-16"), ymd("2021-01-20"), ymd("2021-02-03")
+  ) %>%
+    mutate(STUDYID = "AB42")
+
+  ae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03",      1, "Flu",
+    "01",     "2021-03-04",      2, "Cough",
+    "01",     "2021-01-01",      3, "Flu"
+  ) %>%
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
+
+  ttae <- event_source(
+    dataset_name = "ae",
+    date = AESTDT,
+    set_values_to = exprs(
+      EVNTDESC = "AE",
+      SRCDOM = "AE",
+      SRCVAR = "AESTDTC",
+      SRCSEQ = AESEQ
+    )
+  )
+
+  eot <- censor_source(
+    dataset_name = "adsl",
+    date = pmin(TRTEDT + days(10), EOSDT),
+    censor = 1,
+    set_values_to = exprs(
+      EVNTDESC = "END OF TRT",
+      SRCDOM = "ADSL",
+      SRCVAR = "TRTEDT"
+    )
+  )
+
+  actual_output <- derive_param_tte(
+    dataset = adsl %>% select(STUDYID, USUBJID) %>% mutate(PARAMCD = "XYZ"),
+    dataset_adsl = adsl,
+    by_vars = exprs(AEDECOD),
+    start_date = TRTSDT,
+    event_conditions = list(ttae),
+    censor_conditions = list(eot),
+    source_datasets = list(adsl = adsl, ae = ae),
+    set_values_to = exprs(
+      PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
+      PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
+      PARCAT1 = "TTAE",
+      PARCAT2 = AEDECOD
+    )
+  )
+
+  expected_output <- bind_rows(
+    adsl %>% select(STUDYID, USUBJID) %>% mutate(PARAMCD = "XYZ"),
+    tibble::tribble(
+    ~USUBJID,    ~EVNTDESC, ~SRCDOM,   ~SRCVAR,  ~SRCSEQ, ~CNSR,              ~ADT,          ~STARTDT,
+    "01",             "AE",    "AE", "AESTDTC",        2,    0L, ymd("2021-03-04"), ymd("2020-12-06"),
+    "02",     "END OF TRT",  "ADSL",  "TRTEDT", NA_real_,    1L, ymd("2021-01-30"), ymd("2021-01-16")
+    ) %>%
+    mutate(
+      STUDYID = "AB42",
+      PARAMCD = "TTAE1",
+      PARAM = "Time to First Cough Adverse Event",
+      PARCAT1 = "TTAE",
+      PARCAT2 = "Cough"
+    ),
+    tibble::tribble(
+      ~USUBJID,    ~EVNTDESC, ~SRCDOM,   ~SRCVAR,  ~SRCSEQ, ~CNSR,              ~ADT,          ~STARTDT,
+      "01",             "AE",    "AE", "AESTDTC",        3,    0L, ymd("2021-01-01"), ymd("2020-12-06"),
+      "02",     "END OF TRT",  "ADSL",  "TRTEDT", NA_real_,    1L, ymd("2021-01-30"), ymd("2021-01-16")
+    ) %>%
+      mutate(
+        STUDYID = "AB42",
+        PARAMCD = "TTAE2",
+        PARAM = "Time to First Flu Adverse Event",
+        PARCAT1 = "TTAE",
+        PARCAT2 = "Flu"
+      )
+  )
+
+  expect_dfs_equal(
+    actual_output,
+    expected_output,
+    keys = c("USUBJID", "PARAMCD")
+  )
+})
+
+
 # list_tte_source_objects ----
-## Test 12: error is issued if package does not exist ----
-test_that("list_tte_source_objects Test 12: error is issued if package does not exist", {
+## Test 13: error is issued if package does not exist ----
+test_that("list_tte_source_objects Test 13: error is issued if package does not exist", {
   expect_error(
     list_tte_source_objects(package = "tte"),
     regexp = "No package called 'tte' is installed and hence no `tte_source` objects are available"
   )
 })
 
-## Test 13: expected objects produced ----
-test_that("list_tte_source_objects Test 13: expected objects produced", {
+## Test 14: expected objects produced ----
+test_that("list_tte_source_objects Test 14: expected objects produced", {
   expected_output <- tibble::tribble(
     ~object, ~dataset_name, ~filter, ~date, ~censor,
     "ae_ser_event", "adae", quote(TRTEMFL == "Y" & AESER == "Y"), "ASTDT", 0,
