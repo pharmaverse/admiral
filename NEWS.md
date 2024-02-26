@@ -1,6 +1,6 @@
 # admiral 1.0.2
 
-- Fix bug in `derive_param_tte()` where argument `dataset` populated and argument `by_vars` is dynamic. (#2336)
+- Fix bug in `derive_param_tte()` where argument `dataset` populated and `PARAMCD` in `SET_VALUE_TO` argument is an expression. (#2336)
 
 # admiral 1.0.1
 
