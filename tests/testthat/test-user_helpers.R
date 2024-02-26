@@ -65,7 +65,7 @@ test_that("`adam_templates` objects are printed as intended: no templates", {
 
 test_that("`adam_templates` objects are printed as intended: some templates", {
   templates <- c("ADAE", "ADSL") %>%
-    structure(class = c("adam_templates", "character"), package = "admiral")
+    structure(class = c("adam_templates", "character"), package = "admiral") # nolint: undesirable_function_linter
   expected_print_output <- c(
     "Existing ADaM templates in package 'admiral':",
     if (is.na(iconv("\U2022"))) "- ADAE" else "\U2022 ADAE",
