@@ -45,6 +45,8 @@ There is a possibility to get package dependency versions used for the workflows
 
 - ADLB template updated to make `PARAM` consistent for `PARAMCD` values `"BASO"` and `"LYMPH"`. (#2327)
 
+- Splitting out `R` and `test` files for date/time functions for cyclomatic complexity refactor (#2340)(#2339)
+
 # admiral 1.0.1
 
 - Fix bug in `derive_vars_query()` where if AE terms were in mixed case no terms are flagged. (#2311)
