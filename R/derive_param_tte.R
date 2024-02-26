@@ -449,8 +449,9 @@ derive_param_tte <- function(dataset = NULL,
 
   # check newly created parameter(s) do not already exist
   if (!is.null(set_values_to$PARAMCD) && !is.null(dataset)) {
-    for (i in seq_along(new_param$PARAMCD)) {
-      assert_param_does_not_exist(dataset, new_param$PARAMCD[i])
+    unique_params <- unique(new_param$PARAMCD)
+    for (i in seq_along(unique_params)) {
+      assert_param_does_not_exist(dataset, unique_params[i])
     }
   }
 
