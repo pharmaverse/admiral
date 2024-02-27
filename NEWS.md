@@ -2,6 +2,8 @@
 
 ## New Features
 
+- Create `my_first_fcn()` as dummy example (#1839)
+
 ## Updates of Existing Functions
 
 - Created three unit tests for `get_summary_records()`. (#2304)
