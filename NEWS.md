@@ -34,7 +34,7 @@
 
 ## Documentation
 
-- The documentation of `derive_vars_merged()` function is updated to describe that the `check_type` argument is ignored if `order` is not specified. (#2326)
+- The documentation of `derive_vars_merged()` function is updated to describe that the `check_type` argument is ignored (an error is issued) if `order` is not specified. (#2326)
 
 ## Various
 
