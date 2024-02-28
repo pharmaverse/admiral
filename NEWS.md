@@ -2,6 +2,8 @@
 
 ## New Features
 
+- added my_first_function
+
 ## Updates of Existing Functions
 
 - Created three unit tests for `get_summary_records()`. (#2304)
