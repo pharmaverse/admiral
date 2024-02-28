@@ -32,6 +32,10 @@
   - `derive_var_shift(na_val)`
   - `derive_vars_aage(unit)`
 
+## Documentation
+
+- The "Visit and Period Variables" vignette was updated and refactored to include example code to creat a period reference dataset. (#2321)
+
 ## Various
 
 - In the previous version, `renv` was the default framework used to manage package dependencies. Now, we use `devtools` as our main package manager (some changes also occurred for  [admiralci workflows](https://github.com/pharmaverse/admiralci)).
