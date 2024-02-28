@@ -15,3 +15,5 @@ My First Function
 \examples{
 my_first_function()
 }
+\concept{my_first_function}
+\keyword{my_first_function}
