@@ -136,7 +136,7 @@ and phases. For periods the numeric variable `APERIOD` is expected, for
 subperiods the numeric variables `APERIOD` and `ASPER`, and for phases
 the numeric variable `APHASEN`.
 
-## Example Creation of the Period Reference Dataset {#example_period}
+## Example Creation of the Period/Phase Reference Dataset {#example_period}
 
 Consider a simple crossover study with the following design:
 
@@ -173,7 +173,7 @@ ex <- tribble(
   "xyz",    "2",       "Week 20", "Drug X", "2024-03-17",
   "xyz",    "2",       "Week 24", "Drug X", "2024-04-22",
   "xyz",    "2",       "Week 28", "Drug X", "2024-05-21"
-) 
+)
 
 ex
 ```
@@ -181,11 +181,9 @@ ex
 Then to create a period reference dataset, code like this (or similar) would suffice:
 
 ```{r echo=TRUE}
-period_ref <- ex %>% 
-  
+period_ref <- ex %>%
   # Select visits marking the start of each period
-  filter(VISIT %in% c("Day 1", "Week 16")) %>% 
-  
+  filter(VISIT %in% c("Day 1", "Week 16")) %>%
   # Create APERIOD, APERSDT, TRTA based on SDTM counterparts
   mutate(
     APERIOD = case_when(
@@ -194,19 +192,17 @@ period_ref <- ex %>%
     ),
     APERSDT = ymd(EXSTDTC),
     TRTA = EXTRT
-  ) %>% 
-  
+  ) %>%
   # Create APEREDT based on start date of next period
   arrange(USUBJID, desc(APERSDT)) %>%
   group_by(USUBJID) %>%
   mutate(
     APEREDT = lag(APERSDT) - 1 # one day before start of next period
-  ) %>% 
-  
+  ) %>%
   # Tidy up
   ungroup() %>%
   arrange(USUBJID, APERSDT) %>%
-  select(-starts_with("EX"), - VISIT) 
+  select(-starts_with("EX"), -VISIT)
 
 period_ref
 ```
@@ -220,14 +216,14 @@ adsl <- tribble(
   ~STUDYID,  ~USUBJID,  ~EOSDT,
   "xyz",     "1",       ymd("2022-09-10"),
   "xyz",     "2",       ymd("2024-06-30")
-) 
+)
 
-period_ref <- period_ref %>% 
-  left_join(adsl, by = c("STUDYID", "USUBJID")) %>% 
+period_ref <- period_ref %>%
+  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
   mutate(APEREDT = case_when(
     APERIOD == "1" ~ APEREDT,
     APERIOD == "2" ~ EOSDT
-  )) %>% 
+  )) %>%
   select(-EOSDT)
 
 period_ref
@@ -238,11 +234,9 @@ for the study phases, this time using Day 1 and Week 28 as reference
 visits, to obtain:
 
 ```{r echo=FALSE}
-phase_ref <- ex %>% 
-  
+phase_ref <- ex %>%
   # Select visits marking the start of each phase
-  filter(VISIT %in% c("Day 1", "Week 28")) %>% 
-  
+  filter(VISIT %in% c("Day 1", "Week 28")) %>%
   # Create APHASE(N), PHSDT based on SDTM counterparts
   mutate(
     APHASEN = case_when(
@@ -254,26 +248,23 @@ phase_ref <- ex %>%
       APHASEN == 2 ~ "FUP"
     ),
     PHSDT = ymd(EXSTDTC)
-  ) %>% 
-  
+  ) %>%
   # Create PHEDT based on start date of next phase
   arrange(USUBJID, desc(PHSDT)) %>%
   group_by(USUBJID) %>%
   mutate(
     PHEDT = lag(PHSDT) - 1 # one day before start of next phase
-  ) %>% 
-  
+  ) %>%
   # Tidy up
   ungroup() %>%
   arrange(USUBJID, APHASEN) %>%
-  select(-starts_with("EX"), - VISIT) %>% 
-  
+  select(-starts_with("EX"), -VISIT) %>%
   # Add PHEDT for second Phase
-  left_join(adsl, by = c("STUDYID", "USUBJID")) %>% 
+  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
   mutate(PHEDT = case_when(
     APHASEN == 1 ~ PHEDT,
     APHASEN == 2 ~ EOSDT
-  )) %>% 
+  )) %>%
   select(-EOSDT)
 
 phase_ref
@@ -318,7 +309,7 @@ adae <- tribble(
   "xyz",    "1",      "2022-09-09",
   "xyz",    "2",      "2023-12-25",
   "xyz",    "2",      "2024-06-07",
-) %>% 
+) %>%
   mutate(ASTDT = ymd(ASTDT))
 
 derive_vars_joined(
@@ -397,7 +388,7 @@ adae <- tribble(
   "xyz",    "1",      "2022-09-09",
   "xyz",    "2",      "2023-12-25",
   "xyz",    "2",      "2024-06-07",
-) 
+)
 
 derive_vars_joined(
   adae,
@@ -411,8 +402,7 @@ derive_vars_joined(
 ```
 
 If no period/phase reference dataset is available but period/phase variables are in
-ADSL, the period reference dataset can be created from ADSL by calling
-`create_period_dataset()`.
+ADSL, then the former can be created from ADSL by calling `create_period_dataset()`.
 
 For example, a period reference dataset for periods and treatments can
 be created from the ADSL dataset created above:
