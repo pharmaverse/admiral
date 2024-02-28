@@ -34,7 +34,7 @@
 
 ## Documentation
 
-- The "Visit and Period Variables" vignette was updated and refactored to include example code to creat a period reference dataset. (#2321)
+- The "Visit and Period Variables" vignette was updated and refactored to include example code to create a period reference dataset. (#2321)
 
 ## Various
 
