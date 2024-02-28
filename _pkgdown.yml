@@ -136,6 +136,9 @@ reference:
   contents:
   - has_keyword("superseded")
 
+- title: My Functions
+  contents:
+  - has_keyword('my_first_function')
 navbar:
   structure:
     left: [getstarted, reference, articles, news, versions]
