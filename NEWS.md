@@ -2,7 +2,7 @@
 
 ## New Features
 
-- added my_first_function
+- added my_first_function to close #1839
 
 ## Updates of Existing Functions
 
