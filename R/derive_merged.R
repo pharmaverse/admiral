@@ -444,15 +444,9 @@ derive_vars_merged <- function(dataset,
 #' there exists at least one observation in another dataset fulfilling a certain
 #' condition.
 #'
-#' **Note:** This is a wrapper function for the more generic `derive_vars_merged()`.
+#' **Note:** This is a helper function for `derive_vars_merged_exist_flag` which inputs 
+#' this result into `derive_vars_merged()`.
 #'
-#' @param dataset_add Additional dataset
-#'
-#'   The variables specified by the `by_vars` argument are expected.
-#'
-#' @param by_vars Grouping variables
-#'
-#' `r roxygen_param_by_vars()`
 #'
 #' @param new_var New variable
 #'
@@ -487,8 +481,6 @@ derive_vars_merged <- function(dataset,
 #'
 #'   *Permitted Values*: a condition
 #'
-#' @inheritParams derive_vars_merged
-#'
 #' @return The output dataset contains all observations and variables of the
 #'   input dataset and additionally the variable specified for `new_var` derived
 #'   from the additional dataset (`dataset_add`).
@@ -498,7 +490,7 @@ derive_vars_merged <- function(dataset,
 #'   1. The additional dataset is restricted to the observations matching the
 #'   `filter_add` condition.
 #'
-#'   1. The new variable is added to the input dataset and set to the true value
+#'   1. The new variable is created to be added to the input dataset and set to the true value
 #'   (`true_value`) if for the by group at least one observation exists in the
 #'   (restricted) additional dataset where the condition evaluates to `TRUE`. It
 #'   is set to the false value (`false_value`) if for the by group at least one
