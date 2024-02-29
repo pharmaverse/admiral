@@ -257,9 +257,10 @@ derive_vars_for_query <- function(dataset, dataset_queries) { # nolint: cyclocom
 #'   7, "Alveolar proteinosis", NA_character_, NA_integer_
 #' )
 #' derive_vars_query(adae, queries)
+
 derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
   # join restructured queries to input dataset
-  joined <- derive_vars_query(dataset, dataset_queries)
+  joined <- derive_vars_for_query(dataset, dataset_queries)
 
   # join queries to input dataset
   derive_vars_merged(dataset, dataset_add = joined, by_vars = exprs(!!!syms(static_cols))) %>%
