@@ -108,8 +108,8 @@ always be required. There are two options:
 -   Study specific code is used to first derive the variables `PxxSwSDT` and
 `PxxSwEDT` in ADSL. Then `create_period_dataset()` and
 `derive_vars_joined()` can be used to derive period/subperiod
-variables like `ASPER` or `ASPRSDT` in BDS and OCCDS datasets. (See
-[example](#adsl_example).)
+variables like `ASPER` or `ASPRSDT` in BDS and OCCDS datasets. See an example 
+dataset [here](#adsl_example).
 
 -   Study specific code is used to derive a dataset with one
 observation per patient, period, and subperiod (see [period
@@ -127,14 +127,15 @@ option should be used. This vignette contains examples for both workflows.
 
 ## The Period/Phase Reference Dataset {#reference}
 
-The period/phase reference dataset should be created according to the design and ADaM needs of the study in question. It should contain one observation per subject and
-period, subperiod, or phase. See the [next section](#example_period) for an 
-example dataset.
-
-The admiral functions expect separate datasets for periods, subperiods,
+The admiral functions expect separate reference datasets for periods, subperiods,
 and phases. For periods the numeric variable `APERIOD` is expected, for
 subperiods the numeric variables `APERIOD` and `ASPER`, and for phases
 the numeric variable `APHASEN`.
+
+The period/phase reference dataset should be created according to the design 
+and ADaM needs of the study in question. It should contain one observation per subject and
+period, subperiod, or phase. See the [next section](#example_period) for an 
+example dataset.
 
 ## Example Creation of the Period/Phase Reference Dataset {#example_period}
 
@@ -142,7 +143,7 @@ Consider a simple crossover study with the following design:
 
 <img src="https://raw.githubusercontent.com/pharmaverse/admiral/2321_period_examples/inst/visit_periods/dummy_study_design.png" width="630" height="252"/>
 
-Given this design, the ADaM programmer may wish to split the study into two periods:
+Given this design, an option could be to split the study into two periods:
 
 * Period 1 (Day 1 to Week 16);
 * Period 2 (Week 16 to End of Study).
