@@ -643,7 +643,7 @@ test_that("derive_vars_merged Test 24: error if not unique w.r.t the by variable
       order = NULL,
       check_type = "error"
     ),
-    regexp = NULL
+    regexp = "Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`"
   )
 })
 
@@ -658,7 +658,7 @@ test_that("derive_vars_merged Test 25: error if not unique w.r.t the by variable
       order = NULL,
       check_type = "warning"
     ),
-    regexp = NULL
+    regexp = "Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`"
   )
 })
 
@@ -673,6 +673,6 @@ test_that("derive_vars_merged Test 26: error if not unique w.r.t the by variable
       order = NULL,
       check_type = NULL
     ),
-    regexp = NULL
+    regexp = "Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`"
   )
 })
