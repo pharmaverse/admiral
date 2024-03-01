@@ -410,9 +410,17 @@ get_imputation_target_date <- function(date_imputation,
   names(target) <- c("year", "month", "day")
   target <- case_when(
     date_imputation == "first" ~ list(year = "0000", month = "01", day = "01"),
-    date_imputation == "mid" ~ list(year = "xxxx", month = "06", day = if_else(is.na(month), "30", "15")),
+    date_imputation == "mid" ~ list(
+      year = "xxxx",
+      month = "06",
+      day = if_else(is.na(month), "30", "15")
+    ),
     date_imputation == "last" ~ list(year = "9999", month = "12", day = "28"),
-    TRUE ~ list(year = "xxxx", month = str_sub(date_imputation, 1, 2), day = str_sub(date_imputation, 4, 5))
+    TRUE ~ list(
+      year = "xxxx",
+      month = str_sub(date_imputation, 1, 2),
+      day = str_sub(date_imputation, 4, 5)
+    )
   )
 
   return(target)
