@@ -3,6 +3,7 @@
 #' @return a string
 #' @export
 #'
+#' @keywords internal
 #' @examples
 #' my_first_fcn()
 my_first_fcn <- function() {

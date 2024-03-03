@@ -3,14 +3,18 @@
 \name{my_first_fcn}
 \alias{my_first_fcn}
 \title{My first function
-Admiral onboarding Ticket}
+Admiral on boarding Ticket}
 \usage{
 my_first_fcn()
 }
+\value{
+a string
+}
 \description{
 My first function
-Admiral onboarding Ticket
+Admiral on boarding Ticket
 }
 \examples{
 my_first_fcn()
 }
+\keyword{internal}
