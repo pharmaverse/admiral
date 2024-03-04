@@ -191,18 +191,17 @@ period_ref <- ex %>%
       VISIT == "Day 1" ~ 1,
       VISIT == "Week 16" ~ 2
     ),
-    APERSDT = ymd(EXSTDTC),
+    APERSDT = convert_dtc_to_dt(EXSTDTC),
     TRTA = EXTRT
   ) %>%
   # Create APEREDT based on start date of next period
-  arrange(USUBJID, desc(APERSDT)) %>%
+  arrange(USUBJID, APERSDT) %>%
   group_by(USUBJID) %>%
   mutate(
-    APEREDT = lag(APERSDT) - 1 # one day before start of next period
+    APEREDT = lead(APERSDT) - 1 # one day before start of next period
   ) %>%
   # Tidy up
   ungroup() %>%
-  arrange(USUBJID, APERSDT) %>%
   select(-starts_with("EX"), -VISIT)
 
 period_ref
@@ -248,17 +247,16 @@ phase_ref <- ex %>%
       APHASEN == 1 ~ "TREATMENT",
       APHASEN == 2 ~ "FUP"
     ),
-    PHSDT = ymd(EXSTDTC)
+    PHSDT = convert_dtc_to_dt(EXSTDTC)
   ) %>%
   # Create PHEDT based on start date of next phase
-  arrange(USUBJID, desc(PHSDT)) %>%
+  arrange(USUBJID, PHSDT) %>%
   group_by(USUBJID) %>%
   mutate(
-    PHEDT = lag(PHSDT) - 1 # one day before start of next phase
+    PHEDT = lead(PHSDT) - 1 # one day before start of next phase
   ) %>%
   # Tidy up
   ungroup() %>%
-  arrange(USUBJID, APHASEN) %>%
   select(-starts_with("EX"), -VISIT) %>%
   # Add PHEDT for second Phase
   left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
@@ -389,7 +387,8 @@ adae <- tribble(
   "xyz",    "1",      "2022-09-09",
   "xyz",    "2",      "2023-12-25",
   "xyz",    "2",      "2024-06-07",
-)
+) %>%
+  mutate(ASTDT = ymd(ASTDT))
 
 derive_vars_joined(
   adae,
