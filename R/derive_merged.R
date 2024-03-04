@@ -708,11 +708,13 @@ derive_vars_merged_lookup <- function(dataset,
       distinct(!!!by_vars_left)
 
     if (nrow(temp_not_mapped) > 0) {
+      # nolint start: undesirable_function_linter
       admiral_environment$nmap <- structure(
         temp_not_mapped,
         class = union("nmap", class(temp_not_mapped)),
         by_vars = vars2chr(by_vars_left)
       )
+      # nolint end
 
       message(
         "List of ", enumerate(vars2chr(by_vars_left)), " not mapped: ", "\n",

@@ -119,11 +119,13 @@ signal_duplicate_records <- function(dataset,
 
   duplicate_records <- extract_duplicate_records(dataset, by_vars)
   if (nrow(duplicate_records) >= 1L) {
+    # nolint start: undesirable_function_linter
     admiral_environment$duplicates <- structure(
       duplicate_records,
       class = union("duplicates", class(duplicate_records)),
       by_vars = replace_values_by_names(by_vars)
     )
+    # nolint end
     full_msg <- paste0(msg, "\nRun `get_duplicates_dataset()` to access the duplicate records")
     cnd_funs[[cnd_type]](full_msg)
   }
