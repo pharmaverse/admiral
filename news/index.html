@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,6 +93,10 @@
       <small>Source: <a href="https://github.com/pharmaverse/admiral/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.2" id="admiral-102">admiral 1.0.2<a class="anchor" aria-label="anchor" href="#admiral-102"></a></h2>
+<ul><li>Fix bug in <code><a href="../reference/derive_param_tte.html">derive_param_tte()</a></code> where argument <code>dataset</code> populated and <code>PARAMCD</code> in <code>set_values_to</code> argument is an expression. Previously, there was a check early in function to see if <code>PARAMCD</code> defined in <code>set_values_to</code> argument, already existed in the dataset passed into <code>dataset</code> argument. If <code>PARAMCD</code> was not an expression i.e. <code>PARAMCD = "XYZ"</code> then check worked. However, if <code>PARAMCD</code> to be created was an expression, and wasn’t resolved yet, this caused an ERROR. The check has been moved to near the end of the function, where <code>PARAMCD</code> is resolved in the dataset holding the new parameters. (<a href="https://github.com/pharmaverse/admiral/issues/2336" class="external-link">#2336</a>)</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.1" id="admiral-101">admiral 1.0.1<a class="anchor" aria-label="anchor" href="#admiral-101"></a></h2><p class="text-muted">CRAN release: 2024-02-01</p>
 <ul><li>Fix bug in <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> where if AE terms were in mixed case no terms are flagged. (<a href="https://github.com/pharmaverse/admiral/issues/2311" class="external-link">#2311</a>)</li>
