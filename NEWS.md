@@ -1,3 +1,7 @@
+# admiral 1.0.2
+
+- Fix bug in `derive_param_tte()` where argument `dataset` populated and `PARAMCD` in `set_values_to` argument is an expression. Previously, there was a check early in function to see if `PARAMCD` defined in `set_values_to` argument, already existed in the dataset passed into `dataset` argument. If `PARAMCD` was not an expression i.e. `PARAMCD = "XYZ"` then check worked. However, if `PARAMCD` to be created was an expression, and wasn't resolved yet, this caused an ERROR. The check has been moved to near the end of the function, where `PARAMCD` is resolved in the dataset holding the new parameters. (#2336)
+
 # admiral 1.0.1
 
 - Fix bug in `derive_vars_query()` where if AE terms were in mixed case no terms are flagged. (#2311)
