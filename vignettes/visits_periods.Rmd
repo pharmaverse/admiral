@@ -195,8 +195,8 @@ period_ref <- ex %>%
       VISIT == "Day 1" ~ 1,
       VISIT == "Week 16" ~ 2
     ),
-    APERSDT = convert_dtc_to_dt(EXSTDTC),
-    TRTA = EXTRT
+    TRTA = EXTRT,
+    APERSDT = convert_dtc_to_dt(EXSTDTC)
   ) %>%
   # Create APEREDT based on start date of next period
   arrange(USUBJID, APERSDT) %>%
@@ -262,19 +262,19 @@ If a period/phase reference dataset is available, the ADSL variables for
 periods, subperiods, or phases can be created from this dataset by
 calling `derive_vars_period()`.
 
-For example the phase reference dataset from the previous section can
-be used to add the phase variables (`PHwSDT`, `PHwEDT`, and `APHASEw`)
+For example the period reference dataset from the previous section can
+be used to add the period variables (`APxxSDT`, `APxxEDT`)
 to ADSL:
 
-```{r}
-adsl <- derive_vars_period(
+```{r, eval = TRUE}
+adsl2 <- derive_vars_period(
   adsl,
-  dataset_ref = phase_ref,
-  new_vars = exprs(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
+  dataset_ref = period_ref,
+  new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
 ) %>%
-  select(STUDYID, USUBJID, PH1SDT, PH1EDT, PH2SDT, PH2EDT, APHASE1, APHASE2)
+  select(STUDYID, USUBJID, AP01SDT, AP01EDT, AP02SDT, AP02EDT)
 
-adsl
+adsl2
 ```
 
 ## Creating BDS and OCCDS Period, Subperiod, or Phase Variables {#periods_bds}
