@@ -235,7 +235,7 @@ period_ref
 
 ### Creating the Period/Phase Reference Dataset from ADSL {#from_adsl}
 
-If we instead wish to use an ADSL dataset containing treatment start and end dates to create a phase reference dataset, we can do so by employing `create_period_ref()`. Here is an example command to achieve this goal:
+If the treatment start and end dates are already included in `ADSL`, we can derive the phase variables directly in `ADSL` and create a phase reference dataset by employing `create_period_dataset()`. Here is an example command to achieve this goal:
 
 ```{r, eval = TRUE}
 adsl1 <- adsl %>%
