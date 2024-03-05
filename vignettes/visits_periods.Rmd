@@ -217,8 +217,8 @@ with the End of Study Date (`EOSDT`) from ADSL, to obtain:
 
 ```{r echo=TRUE}
 adsl <- tribble(
-  ~STUDYID,  ~USUBJID,  ~TRTSDT,           ~TRTEDT,           ~EOSDT,         
-  "xyz",     "1",       ymd("2022-01-02"), ymd("2022-08-04"), ymd("2022-09-10"), 
+  ~STUDYID,  ~USUBJID,  ~TRTSDT,           ~TRTEDT,           ~EOSDT,
+  "xyz",     "1",       ymd("2022-01-02"), ymd("2022-08-04"), ymd("2022-09-10"),
   "xyz",     "2",       ymd("2023-10-20"), ymd("2024-05-21"), ymd("2024-06-30")
 )
 
@@ -246,7 +246,7 @@ adsl1 <- adsl %>%
     PH2SDT = TRTEDT + 29,
     PH2EDT = EOSDT,
     APHASE2 = "FUP"
-)
+  )
 
 phase_ref <- create_period_dataset(
   adsl1,
