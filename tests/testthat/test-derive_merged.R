@@ -631,3 +631,48 @@ test_that("derive_var_merged_summary Test 23: deprecation warning", {
     class = "lifecycle_error_deprecated"
   )
 })
+
+## Test 24: error if not unique w.r.t the by variables and the order is not specified -
+# case 1, check_type = "error" ----
+test_that("derive_vars_merged Test 24: error if not unique w.r.t the by variables and
+          the order is not specified", {
+  expect_error(
+    actual <- derive_vars_merged(advs,
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = NULL,
+      check_type = "error"
+    ),
+    regexp = "Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`"
+  )
+})
+
+## Test 25: error if not unique w.r.t the by variables and the order is not specified -
+# case 2, check_type = "warning" ----
+test_that("derive_vars_merged Test 25: error if not unique w.r.t the by variables and
+          the order is not specified", {
+  expect_error(
+    actual <- derive_vars_merged(advs,
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = NULL,
+      check_type = "warning"
+    ),
+    regexp = "Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`"
+  )
+})
+
+## Test 26: error if not unique w.r.t the by variables and the order is not specified -
+# case 3, check_type = NULL ----
+test_that("derive_vars_merged Test 26: error if not unique w.r.t the by variables and
+          the order is not specified", {
+  expect_error(
+    actual <- derive_vars_merged(advs,
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = NULL,
+      check_type = NULL
+    ),
+    regexp = "Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`"
+  )
+})
