@@ -127,6 +127,10 @@
 #'   if the observations of the (restricted) additional dataset are not unique
 #'   with respect to the by variables and the order.
 #'
+#'   If the `order` argument is not specified, the `check_type` argument is ignored:
+#'    if the observations of the (restricted) additional dataset are not unique with respect
+#'    to the by variables, an error is issued.
+#'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
 #' @param duplicate_msg Message of unique check
