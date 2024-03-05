@@ -150,10 +150,14 @@ Given this design, an option could be to split the study into two periods:
 
 Alternatively (or additionally) one could split into two phases:
 
-* Phase 1 - Treatment (Day 1 to Week 28);
-* Phase 2 - Follow-up (Week 28 to End of Study).
+* Phase 1 - Treatment (Day 1 to 28 days after Week 28);
+* Phase 2 - Follow-up (29 days after Week 28 to End of Study).
 
-Consider the following exposure dataset:
+Below, we present two example workflows: one where where a period reference dataset is created from the exposure dataset EX, and the other where a phase reference dataset is created using ADSL variables.
+
+### Creating the Period/Phase Reference Dataset from EX
+
+Below we create a period reference dataset starting from the exposure dataset EX. Consider the following exposure dataset:
 
 ```{r echo=FALSE}
 ex <- tribble(
@@ -213,9 +217,9 @@ with the End of Study Date (`EOSDT`) from ADSL, to obtain:
 
 ```{r echo=TRUE}
 adsl <- tribble(
-  ~STUDYID,  ~USUBJID,  ~EOSDT,
-  "xyz",     "1",       ymd("2022-09-10"),
-  "xyz",     "2",       ymd("2024-06-30")
+  ~STUDYID,  ~USUBJID,  ~TRTSDT,           ~TRTEDT,           ~EOSDT,         
+  "xyz",     "1",       ymd("2022-01-02"), ymd("2022-08-04"), ymd("2022-09-10"), 
+  "xyz",     "2",       ymd("2023-10-20"), ymd("2024-05-21"), ymd("2024-06-30")
 )
 
 period_ref <- period_ref %>%
@@ -224,47 +228,30 @@ period_ref <- period_ref %>%
     APERIOD == "1" ~ APEREDT,
     APERIOD == "2" ~ EOSDT
   )) %>%
-  select(-EOSDT)
+  select(-EOSDT, -TRTSDT, -TRTEDT)
 
 period_ref
 ```
 
-A very similar process could be followed for the phase reference dataset 
-for the study phases, this time using Day 1 and Week 28 as reference 
-visits, to obtain:
+### Creating the Period/Phase Reference Dataset from ADSL
 
-```{r echo=FALSE}
-phase_ref <- ex %>%
-  # Select visits marking the start of each phase
-  filter(VISIT %in% c("Day 1", "Week 28")) %>%
-  # Create APHASE(N), PHSDT based on SDTM counterparts
+If we instead wish to use an ADSL dataset containing treatment start and end dates to create a phase reference dataset, we can do so by employing `create_period_ref()`. Here is an example command to achieve this goal:
+
+```{r, eval = TRUE}
+adsl1 <- adsl %>%
   mutate(
-    APHASEN = case_when(
-      VISIT == "Day 1" ~ 1,
-      VISIT == "Week 28" ~ 2
-    ),
-    APHASE = case_when(
-      APHASEN == 1 ~ "TREATMENT",
-      APHASEN == 2 ~ "FUP"
-    ),
-    PHSDT = convert_dtc_to_dt(EXSTDTC)
-  ) %>%
-  # Create PHEDT based on start date of next phase
-  arrange(USUBJID, PHSDT) %>%
-  group_by(USUBJID) %>%
-  mutate(
-    PHEDT = lead(PHSDT) - 1 # one day before start of next phase
-  ) %>%
-  # Tidy up
-  ungroup() %>%
-  select(-starts_with("EX"), -VISIT) %>%
-  # Add PHEDT for second Phase
-  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
-  mutate(PHEDT = case_when(
-    APHASEN == 1 ~ PHEDT,
-    APHASEN == 2 ~ EOSDT
-  )) %>%
-  select(-EOSDT)
+    PH1SDT = TRTSDT,
+    PH1EDT = TRTEDT + 28,
+    APHASE1 = "TREATMENT",
+    PH2SDT = TRTEDT + 29,
+    PH2EDT = EOSDT,
+    APHASE2 = "FUP"
+)
+
+phase_ref <- create_period_dataset(
+  adsl1,
+  new_vars = exprs(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
+)
 
 phase_ref
 ```
@@ -304,10 +291,10 @@ adae <- tribble(
   ~STUDYID, ~USUBJID, ~ASTDT,
   "xyz",    "1",      "2022-01-31",
   "xyz",    "1",      "2022-05-02",
-  "xyz",    "1",      "2022-08-24",
+  "xyz",    "1",      "2022-09-03",
   "xyz",    "1",      "2022-09-09",
   "xyz",    "2",      "2023-12-25",
-  "xyz",    "2",      "2024-06-07",
+  "xyz",    "2",      "2024-06-19",
 ) %>%
   mutate(ASTDT = ymd(ASTDT))
 
@@ -317,20 +304,6 @@ derive_vars_joined(
   by_vars = exprs(STUDYID, USUBJID),
   filter_join = PHSDT <= ASTDT & ASTDT <= PHEDT,
   join_type = "all"
-)
-```
-
-If no period/phase reference dataset is available but period/phase variables are in
-ADSL, the period/phase reference dataset can be created from ADSL by calling
-`create_period_dataset()`.
-
-For [example]{#adsl_example}, a phase reference dataset can be created from the 
-ADSL dataset created above:
-
-```{r}
-create_period_dataset(
-  adsl,
-  new_vars = exprs(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
 )
 ```
 
