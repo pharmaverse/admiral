@@ -14,7 +14,8 @@ derive_var_trtemfl(
   end_window = NULL,
   ignore_time_for_trt_end = TRUE,
   initial_intensity = NULL,
-  intensity = NULL
+  intensity = NULL,
+  group_var = NULL
 )
 }
 \arguments{
@@ -57,9 +58,6 @@ the event occurred more than \code{end_window} days after end of treatment.
 
 \item{initial_intensity}{Initial severity/intensity or toxicity
 
-This derivation assumes AE data collection method as single record per AE
-with "initial" and "most extreme" severity/intensity recorded separately.
-
 If the argument is specified, events which start before treatment start and
 end after treatment start (or are ongoing) and worsened (i.e., the
 intensity is greater than the initial intensity), are flagged.
@@ -80,6 +78,21 @@ intensity is greater than the initial intensity), are flagged.
 The values of the specified variable must be comparable with the usual
 comparison operators. I.e., if the intensity is greater than the initial
 intensity \code{initial_intensity < intensity} must evaluate to \code{TRUE}.
+
+\emph{Permitted Values:} A symbol referring to a variable of the input dataset
+or \code{NULL}}
+
+\item{group_var}{Grouping variable
+
+If the argument is specified it assumes that AE are recorded as one episode
+of AE with multiple lines using a grouping variable.
+
+If the argument is specified, events which start before treatment start and
+end after treatment start (or are ongoing) and worsened (i.e., the
+intensity is greater than the initial intensity), are flagged.
+
+Once an AE record within a grouped AE is flagged, then any subsequent record
+is also flagged regardless of the severity and within the treatment window.
 
 \emph{Permitted Values:} A symbol referring to a variable of the input dataset
 or \code{NULL}}
@@ -169,6 +182,51 @@ derive_var_trtemfl(
   initial_intensity = AEITOXGR,
   intensity = AETOXGR
 ) \%>\% select(ASTDTM, AENDTM, AEITOXGR, AETOXGR, TRTEM2FL)
+
+adae2 <- expected2 <- tribble(
+~USUBJID, ~ASTDTM,            ~AENDTM,            ~AEITOXGR, ~AETOXGR, ~AEGRPID,
+# before treatment
+"1",      "2021-12-13T20:15", "2021-12-15T12:45", "1",       "1",      "1",
+"1",      "2021-12-14T20:15", "2021-12-14T22:00", "1",       "3",      "1",
+# starting before treatment and ending during treatment
+"1",      "2021-12-30T20:00", "2022-01-14T11:00", "2",       "2",      "2",
+"1",      "2022-01-05T20:15", "2022-06-01T01:23", "2",       "3",      "2",
+"1",      "2022-01-10T20:15", "2022-03-01T01:23", "2",       "1",      "2",
+# starting during treatment
+"1",      "2022-01-01T12:00", "2022-01-02T23:25", "4",       "4",       "3",
+
+# after treatment
+"1",      "2022-05-10T11:00", "2022-05-10T13:05", "2",       "2",       "4",
+"1",      "2022-05-11T11:00", "2022-05-11T13:05", "2",       "2",       "4",
+# missing dates
+"1",      "",                 "",                 "3",       "4",       "5",
+"1",      "2021-12-30T09:00", "",                 "3",       "4",       "5",
+"1",      "2021-12-30T11:00", "",                 "3",       "3",       "5",
+"1",      "",                 "2022-01-04T09:00", "3",       "4",       "5",
+"1",      "",                 "2021-12-24T19:00", "3",       "4",       "5",
+"1",      "",                 "2022-06-04T09:00", "3",       "4",       "5",
+# without treatment
+"2",      "",                 "2021-12-03T12:00", "1",       "2",        "1",
+"2",      "2021-12-01T12:00", "2021-12-03T12:00", "1",       "2",        "2",
+"2",      "2021-12-06T18:00", "",                 "1",       "2",        "3"
+) \%>\%
+  mutate(
+    ASTDTM = ymd_hm(ASTDTM),
+    AENDTM = ymd_hm(AENDTM),
+    TRTSDTM = if_else(USUBJID == "1", ymd_hm("2022-01-01T01:01"), ymd_hms("")),
+    TRTEDTM = if_else(USUBJID == "1", ymd_hm("2022-04-30T23:59"), ymd_hms(""))
+  )
+
+# derive TRTEMFL taking treatment end and worsening into account within a grouping variable
+derive_var_trtemfl(
+  adae2,
+  new_var = TRTEMFL,
+  trt_end_date = TRTEDTM,
+  end_window = 10,
+  initial_intensity = AEITOXGR,
+  intensity = AETOXGR,
+  group_var = AEGRPID
+) \%>\% select(ASTDTM, AENDTM, AEITOXGR, AETOXGR, AEGRPID, TRTEMFL)
 }
 \seealso{
 OCCDS Functions: 

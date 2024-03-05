@@ -129,5 +129,8 @@ globalVariables(c(
   "atoxgr_criteria_ctcv4",
   "DTYPE",
   "where", # this entry should be moved to @importFrom tidyselect once we use tidyselect 1.2.0
-  "tmp_col_type"
+  "tmp_col_type",
+  "num_records",
+  "worsen_date",
+  "first_worsen_date"
 ))
