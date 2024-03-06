@@ -35,31 +35,31 @@ expected <- tibble::tribble(
 adae <- select(expected, -starts_with("TRTEM"))
 
 expected2 <- tribble(
-  ~USUBJID, ~ASTDTM,            ~AENDTM,            ~AEITOXGR, ~AETOXGR, ~AEGRPID, ~TRTEMFL,
+  ~USUBJID, ~ASTDTM, ~AENDTM, ~AEITOXGR, ~AETOXGR, ~AEGRPID, ~TRTEMFL,
   # before treatment
-  "1",      "2021-12-13T20:15", "2021-12-15T12:45", "1",       "1",      "1",   NA,
-  "1",      "2021-12-14T20:15", "2021-12-14T22:00", "1",       "3",      "1",   NA,
+  "1", "2021-12-13T20:15", "2021-12-15T12:45", "1", "1", "1", NA,
+  "1", "2021-12-14T20:15", "2021-12-14T22:00", "1", "3", "1", NA,
   # starting before treatment and ending during treatment
-  "1",      "2021-12-30T20:00", "2022-01-14T11:00", "2",       "2",      "2",   NA,
-  "1",      "2022-01-05T20:15", "2022-06-01T01:23", "2",       "3",      "2",   "Y",
-  "1",      "2022-01-10T20:15", "2022-03-01T01:23", "2",       "1",      "2",   "Y",
+  "1", "2021-12-30T20:00", "2022-01-14T11:00", "2", "2", "2", NA,
+  "1", "2022-01-05T20:15", "2022-06-01T01:23", "2", "3", "2", "Y",
+  "1", "2022-01-10T20:15", "2022-03-01T01:23", "2", "1", "2", "Y",
   # starting during treatment
-  "1",      "2022-01-01T12:00", "2022-01-02T23:25", "4",       "4",      "3",   "Y",
+  "1", "2022-01-01T12:00", "2022-01-02T23:25", "4", "4", "3", "Y",
 
   # after treatment
-  "1",      "2022-05-10T11:00", "2022-05-10T13:05", "2",       "2",       "4",  "Y",
-  "1",      "2022-05-11T11:00", "2022-05-11T13:05", "2",       "2",       "4",  NA,
+  "1", "2022-05-10T11:00", "2022-05-10T13:05", "2", "2", "4", "Y",
+  "1", "2022-05-11T11:00", "2022-05-11T13:05", "2", "2", "4", NA,
   # missing dates
-  "1",      "",                 "",                 "3",       "4",       "5",  "Y",
-  "1",      "2021-12-30T09:00", "",                 "3",       "4",       "5",  NA,
-  "1",      "2021-12-30T11:00", "",                 "3",       "3",       "5",  NA,
-  "1",      "",                 "2022-01-04T09:00", "3",       "4",       "5",  "Y",
-  "1",      "",                 "2021-12-24T19:00", "3",       "4",       "5",  NA,
-  "1",      "",                 "2022-06-04T09:00", "3",       "4",       "5",  "Y",
+  "1", "", "", "3", "4", "5", "Y",
+  "1", "2021-12-30T09:00", "", "3", "4", "5", NA,
+  "1", "2021-12-30T11:00", "", "3", "3", "5", NA,
+  "1", "", "2022-01-04T09:00", "3", "4", "5", "Y",
+  "1", "", "2021-12-24T19:00", "3", "4", "5", NA,
+  "1", "", "2022-06-04T09:00", "3", "4", "5", "Y",
   # without treatment
-  "2",      "",                 "2021-12-03T12:00", "1",       "2",        "1", NA,
-  "2",      "2021-12-01T12:00", "2021-12-03T12:00", "1",       "2",        "2", NA,
-  "2",      "2021-12-06T18:00", "",                 "1",       "2",        "3", NA
+  "2", "", "2021-12-03T12:00", "1", "2", "1", NA,
+  "2", "2021-12-01T12:00", "2021-12-03T12:00", "1", "2", "2", NA,
+  "2", "2021-12-06T18:00", "", "1", "2", "3", NA
 ) %>%
   mutate(
     ASTDTM = lubridate::ymd_hm(ASTDTM),
@@ -164,7 +164,7 @@ test_that("derive_var_trtemfl Test 6: error if `initial_intensity` without `inte
 
 ## Test 7: error if `intensity` without `initial_intensity` ----
 test_that("derive_var_trtemfl Test 7: error if `intensity` without `initial_intensity`", {
- expect_error(
+  expect_error(
     derive_var_trtemfl(
       adae,
       intensity = AETOXGR
@@ -174,8 +174,6 @@ test_that("derive_var_trtemfl Test 7: error if `intensity` without `initial_inte
       "Either both or none of them must be specified.",
       sep = "\n"
     ),
-    fixed  = TRUE
+    fixed = TRUE
   )
 })
-
-

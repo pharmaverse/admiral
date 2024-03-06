@@ -5,7 +5,7 @@
 ## Updates of Existing Functions
 
 - Created three unit tests for `get_summary_records()`. (#2304)
-- `group_var` (optional) argument is added to `derive_var_trtemfl()` to derive TRTEMFL for AE data if the data are collected as one episode of AE with multiple lines. (#2302)
+- `group_var` (optional) parameter is added to `derive_var_trtemfl()` to derive `TRTEMFL` for AE data if the data are collected as one episode of AE with multiple lines. (#2302)
 
 ## Breaking Changes
   
