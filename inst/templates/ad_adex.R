@@ -118,34 +118,44 @@ adex <- adex %>%
     derivation = derive_param_exposure,
     variable_params = list(
       params(
-        set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
-        input_code = "DOSE",
-        analysis_var = AVAL,
-        summary_fun = function(x) sum(x, na.rm = TRUE)
+        set_values_to = exprs(
+          PARAMCD = "TDOSE",
+          PARCAT1 = "OVERALL",
+          AVAL = sum(AVAL, na.rm = TRUE)
+        ),
+        input_code = "DOSE"
       ),
       params(
-        set_values_to = exprs(PARAMCD = "TPDOSE", PARCAT1 = "OVERALL"),
-        input_code = "PLDOSE",
-        analysis_var = AVAL,
-        summary_fun = function(x) sum(x, na.rm = TRUE)
+        set_values_to = exprs(
+          PARAMCD = "TPDOSE",
+          PARCAT1 = "OVERALL",
+          AVAL = sum(AVAL, na.rm = TRUE)
+        ),
+        input_code = "PLDOSE"
       ),
       params(
-        set_values_to = exprs(PARAMCD = "TDURD", PARCAT1 = "OVERALL"),
-        input_code = "DURD",
-        analysis_var = AVAL,
-        summary_fun = function(x) sum(x, na.rm = TRUE)
+        set_values_to = exprs(
+          PARAMCD = "TDURD",
+          PARCAT1 = "OVERALL",
+          AVAL = sum(AVAL, na.rm = TRUE)
+        ),
+        input_code = "DURD"
       ),
       params(
-        set_values_to = exprs(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
-        input_code = "ADJ",
-        analysis_var = AVALC,
-        summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
+        set_values_to = exprs(
+          PARAMCD = "TADJ",
+          PARCAT1 = "OVERALL",
+          AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_)
+        ),
+        input_code = "ADJ"
       ),
       params(
-        set_values_to = exprs(PARAMCD = "TADJAE", PARCAT1 = "OVERALL"),
-        input_code = "ADJAE",
-        analysis_var = AVALC,
-        summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
+        set_values_to = exprs(
+          PARAMCD = "TADJAE",
+          PARCAT1 = "OVERALL",
+          AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_)
+        ),
+        input_code = "ADJAE"
       )
     ),
     dataset_add = adex,
@@ -156,34 +166,44 @@ adex <- adex %>%
     derivation = derive_param_exposure,
     variable_params = list(
       params(
-        set_values_to = exprs(PARAMCD = "PDOSE", PARCAT1 = "WEEK 2-24"),
-        input_code = "DOSE",
-        analysis_var = AVAL,
-        summary_fun = function(x) sum(x, na.rm = TRUE)
+        set_values_to = exprs(
+          PARAMCD = "PDOSE",
+          PARCAT1 = "WEEK 2-24",
+          AVAL = sum(AVAL, na.rm = TRUE)
+        ),
+        input_code = "DOSE"
       ),
       params(
-        set_values_to = exprs(PARAMCD = "PPDOSE", PARCAT1 = "WEEK 2-24"),
-        input_code = "PLDOSE",
-        analysis_var = AVAL,
-        summary_fun = function(x) sum(x, na.rm = TRUE)
+        set_values_to = exprs(
+          PARAMCD = "PPDOSE",
+          PARCAT1 = "WEEK 2-24",
+          AVAL = sum(AVAL, na.rm = TRUE)
+        ),
+        input_code = "PLDOSE"
       ),
       params(
-        set_values_to = exprs(PARAMCD = "PDURD", PARCAT1 = "WEEK 2-24"),
-        input_code = "DURD",
-        analysis_var = AVAL,
-        summary_fun = function(x) sum(x, na.rm = TRUE)
+        set_values_to = exprs(
+          PARAMCD = "PDURD",
+          PARCAT1 = "WEEK 2-24",
+          AVAL = sum(AVAL, na.rm = TRUE)
+        ),
+        input_code = "DURD"
       ),
       params(
-        set_values_to = exprs(PARAMCD = "PADJ", PARCAT1 = "WEEK 2-24"),
-        input_code = "ADJ",
-        analysis_var = AVALC,
-        summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
+        set_values_to = exprs(
+          PARAMCD = "PADJ",
+          PARCAT1 = "WEEK 2-24",
+          AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_)
+        ),
+        input_code = "ADJ"
       ),
       params(
-        set_values_to = exprs(PARAMCD = "PADJAE", PARCAT1 = "WEEK 2-24"),
-        input_code = "ADJAE",
-        analysis_var = AVALC,
-        summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
+        set_values_to = exprs(
+          PARAMCD = "PADJAE",
+          PARCAT1 = "WEEK 2-24",
+          AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_)
+        ),
+        input_code = "ADJAE"
       )
     ),
     dataset_add = adex,

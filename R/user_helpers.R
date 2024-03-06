@@ -99,7 +99,7 @@ list_all_templates <- function(package = "admiral") {
     str_remove(".R$") %>%
     str_remove("^ad_") %>%
     toupper() %>%
-    structure(class = c("adam_templates", "character"), package = package)
+    structure(class = c("adam_templates", "character"), package = package) # nolint: undesirable_function_linter
 }
 
 #' Print `adam_templates` Objects

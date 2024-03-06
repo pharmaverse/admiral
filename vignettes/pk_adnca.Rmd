@@ -760,7 +760,7 @@ dtype <- adpc_aval %>%
     DOSEA = EXDOSE_next,
     BASETYPE = paste(AVISIT_next, "Baseline"),
     ATPT = "Pre-dose",
-    ATPTN = NFRLT,
+    ATPTN = -0.5,
     ABLFL = "Y",
     DTYPE = "COPY"
   ) %>%
@@ -1449,8 +1449,8 @@ NOTE: All these packages are in the experimental phase, but the vision
 is to have them associated with an End to End pipeline under the
 umbrella of the [pharmaverse](https://github.com/pharmaverse). An
 example of applying metadata and perform associated checks can be found
-at the [pharmaverse E2E
-example](https://pharmaverse.github.io/examples/adam/adsl).
+at the [pharmaverse E2E example](https://pharmaverse.github.io/examples/adam/adsl).
+
 
 # Example Scripts {#example}
 

@@ -187,16 +187,6 @@ derive_var_ontrtfl <- function(dataset,
                                ignore_time_for_ref_end_date = TRUE,
                                filter_pre_timepoint = NULL,
                                span_period = FALSE) {
-  if (is.null(span_period) || span_period %in% c("Y", "y")) {
-    # replace span_period with lgl version
-    span_period <- !is.null(span_period)
-    deprecate_stop(
-      when = "0.12.0",
-      what = "admiral::derive_var_ontrtfl(span_period = 'must be TRUE or FALSE')",
-      details =
-        c(i = stringr::str_glue("Use `derive_var_ontrtfl(span_period={span_period})` instead."))
-    )
-  }
   new_var <- assert_symbol(enexpr(new_var))
   start_date <- assert_symbol(enexpr(start_date))
   end_date <- assert_symbol(enexpr(end_date), optional = TRUE)

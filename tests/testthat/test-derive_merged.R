@@ -308,8 +308,9 @@ test_that("derive_vars_merged Test 12: error if variables in missing_values but 
   )
 })
 
-test_that("deprecation messaging for match_flag", {
-  expect_warning(
+## Test 13: deprecation messaging for match_flag ----
+test_that("derive_vars_merged Test 13: deprecation messaging for match_flag", {
+  expect_error(
     derive_vars_merged(adsl,
       dataset_add = advs,
       order = exprs(AVAL),
@@ -318,13 +319,13 @@ test_that("deprecation messaging for match_flag", {
       mode = "last",
       match_flag = matched
     ),
-    class = "lifecycle_warning_deprecated"
+    class = "lifecycle_error_deprecated"
   )
 })
 
 # derive_var_merged_exist_flag ----
-## Test 13: merge existence flag ----
-test_that("derive_var_merged_exist_flag Test 13: merge existence flag", {
+## Test 14: merge existence flag ----
+test_that("derive_var_merged_exist_flag Test 14: merge existence flag", {
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs,
@@ -344,8 +345,8 @@ test_that("derive_var_merged_exist_flag Test 13: merge existence flag", {
   )
 })
 
-## Test 14: by_vars with rename ----
-test_that("derive_var_merged_exist_flag Test 14: by_vars with rename", {
+## Test 15: by_vars with rename ----
+test_that("derive_var_merged_exist_flag Test 15: by_vars with rename", {
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs1,
@@ -366,8 +367,8 @@ test_that("derive_var_merged_exist_flag Test 14: by_vars with rename", {
 })
 
 # derive_vars_merged_lookup ----
-## Test 15: merge lookup table ----
-test_that("derive_vars_merged_lookup Test 15: merge lookup table", {
+## Test 16: merge lookup table ----
+test_that("derive_vars_merged_lookup Test 16: merge lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -404,8 +405,8 @@ test_that("derive_vars_merged_lookup Test 15: merge lookup table", {
 
 
 ## the lookup table
-## Test 16:  all by_vars have records in the lookup table ----
-test_that("derive_vars_merged_lookup Test 16:  all by_vars have records in the lookup table", {
+## Test 17:  all by_vars have records in the lookup table ----
+test_that("derive_vars_merged_lookup Test 17:  all by_vars have records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -440,8 +441,8 @@ test_that("derive_vars_merged_lookup Test 16:  all by_vars have records in the l
   )
 })
 
-## Test 17: by_vars with rename ----
-test_that("derive_vars_merged_lookup Test 17: by_vars with rename", {
+## Test 18: by_vars with rename ----
+test_that("derive_vars_merged_lookup Test 18: by_vars with rename", {
   param_lookup <- tibble::tribble(
     ~TESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -477,8 +478,8 @@ test_that("derive_vars_merged_lookup Test 17: by_vars with rename", {
 
 
 # get_not_mapped ----
-## Test 18: not all by_vars have records in the lookup table ----
-test_that("get_not_mapped Test 18: not all by_vars have records in the lookup table", {
+## Test 19: not all by_vars have records in the lookup table ----
+test_that("get_not_mapped Test 19: not all by_vars have records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
@@ -516,8 +517,8 @@ test_that("get_not_mapped Test 18: not all by_vars have records in the lookup ta
 })
 
 # derive_var_merged_summary ----
-## Test 19: dataset == dataset_add, no filter ----
-test_that("derive_var_merged_summary Test 19: dataset == dataset_add, no filter", {
+## Test 20: dataset == dataset_add, no filter ----
+test_that("derive_var_merged_summary Test 20: dataset == dataset_add, no filter", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -543,8 +544,8 @@ test_that("derive_var_merged_summary Test 19: dataset == dataset_add, no filter"
   )
 })
 
-## Test 20: dataset != dataset_add, filter ----
-test_that("derive_var_merged_summary Test 20: dataset != dataset_add, filter", {
+## Test 21: dataset != dataset_add, filter ----
+test_that("derive_var_merged_summary Test 21: dataset != dataset_add, filter", {
   expected <- tibble::tribble(
     ~USUBJID, ~MEANPBL,
     "1",          13.5,
@@ -575,8 +576,8 @@ test_that("derive_var_merged_summary Test 20: dataset != dataset_add, filter", {
   )
 })
 
-## Test 21: by_vars with rename ----
-test_that("derive_var_merged_summary Test 21: by_vars with rename", {
+## Test 22: by_vars with rename ----
+test_that("derive_var_merged_summary Test 22: by_vars with rename", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -603,8 +604,8 @@ test_that("derive_var_merged_summary Test 21: by_vars with rename", {
   )
 })
 
-## Test 22: deprecation warning ----
-test_that("derive_var_merged_summary Test 22: deprecation warning", {
+## Test 23: deprecation warning ----
+test_that("derive_var_merged_summary Test 23: deprecation warning", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
     "WEEK 1",     1,    10,       10,
@@ -618,7 +619,7 @@ test_that("derive_var_merged_summary Test 22: deprecation warning", {
 
   adbds <- select(expected, -MEANVIS)
 
-  expect_warning(
+  expect_error(
     actual <- derive_var_merged_summary(
       adbds,
       dataset_add = adbds,
@@ -627,12 +628,51 @@ test_that("derive_var_merged_summary Test 22: deprecation warning", {
       analysis_var = AVAL,
       summary_fun = function(x) mean(x, na.rm = TRUE)
     ),
-    class = "lifecycle_warning_deprecated"
+    class = "lifecycle_error_deprecated"
   )
+})
 
-  expect_dfs_equal(
-    base = expected,
-    compare = actual,
-    keys = c("AVISIT", "ASEQ")
+## Test 24: error if not unique w.r.t the by variables and the order is not specified -
+# case 1, check_type = "error" ----
+test_that("derive_vars_merged Test 24: error if not unique w.r.t the by variables and
+          the order is not specified", {
+  expect_error(
+    actual <- derive_vars_merged(advs,
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = NULL,
+      check_type = "error"
+    ),
+    regexp = "Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`"
+  )
+})
+
+## Test 25: error if not unique w.r.t the by variables and the order is not specified -
+# case 2, check_type = "warning" ----
+test_that("derive_vars_merged Test 25: error if not unique w.r.t the by variables and
+          the order is not specified", {
+  expect_error(
+    actual <- derive_vars_merged(advs,
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = NULL,
+      check_type = "warning"
+    ),
+    regexp = "Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`"
+  )
+})
+
+## Test 26: error if not unique w.r.t the by variables and the order is not specified -
+# case 3, check_type = NULL ----
+test_that("derive_vars_merged Test 26: error if not unique w.r.t the by variables and
+          the order is not specified", {
+  expect_error(
+    actual <- derive_vars_merged(advs,
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = NULL,
+      check_type = NULL
+    ),
+    regexp = "Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`"
   )
 })

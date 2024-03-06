@@ -13,8 +13,6 @@
 #'
 #' @param to_var Variable containing value to shift to.
 #'
-#' @param na_val *Deprecated*, please use `missing_value` instead.
-#'
 #' @param missing_value Character string to replace missing values in `from_var` or `to_var`.
 #'
 #'  Default: "NULL"
@@ -72,16 +70,8 @@ derive_var_shift <- function(dataset,
                              new_var,
                              from_var,
                              to_var,
-                             na_val,
                              missing_value = "NULL",
                              sep_val = " to ") {
-  ### BEGIN DEPRECATION
-  if (!missing(na_val)) {
-    deprecate_stop("0.12.0", "derive_var_shift(na_val = )", "derive_var_shift(missing_value = )")
-    missing_value <- na_val
-  }
-  ### END DEPRECATION
-
   new_var <- assert_symbol(enexpr(new_var))
   from_var <- assert_symbol(enexpr(from_var))
   to_var <- assert_symbol(enexpr(to_var))
@@ -89,7 +79,7 @@ derive_var_shift <- function(dataset,
   sep_val <- assert_character_scalar(sep_val)
   assert_data_frame(dataset, required_vars = exprs(!!from_var, !!to_var))
 
-  # Derive shift variable. If from_var or to_var has missing value then set to na_val.
+  # Derive shift variable. If from_var or to_var has missing value then set to missing_value.
   dataset %>%
     mutate(
       temp_from_var = if_else(is.na(!!from_var), !!missing_value, as.character(!!from_var)),

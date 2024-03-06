@@ -129,28 +129,3 @@ test_that("derive_var_shift Test 4: Shift with user-specified missing_value and 
     expected_output
   )
 })
-
-## Test 5: Test deprecation warning of na_val argument ----
-test_that("derive_var_shift Test 5: Test deprecation warning of na_val argument", {
-  input <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,
-    "P01", "ALB", 33, "Y", "LOW", "LOW",
-    "P01", "ALB", 38, NA, "LOW", "NORMAL",
-    "P01", "ALB", NA, NA, "LOW", NA,
-    "P02", "ALB", NA, "Y", NA, NA,
-    "P02", "ALB", 49, NA, NA, "HIGH",
-    "P02", "SODIUM", 147, "Y", "HIGH", "HIGH"
-  )
-
-  expect_error(
-    derive_var_shift(
-      input,
-      new_var = SHIFT1,
-      from_var = BNRIND,
-      to_var = ANRIND,
-      na_val = "MISSING",
-      sep_val = " - "
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})

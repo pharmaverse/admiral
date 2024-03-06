@@ -123,10 +123,12 @@
 #'   derive_param_exposure(
 #'     dataset_add = adex,
 #'     by_vars = exprs(USUBJID),
-#'     set_values_to = exprs(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
-#'     input_code = "DOSE",
-#'     analysis_var = AVAL,
-#'     summary_fun = function(x) sum(x, na.rm = TRUE)
+#'     set_values_to = exprs(
+#'       PARAMCD = "TDOSE",
+#'       PARCAT1 = "OVERALL",
+#'       AVAL = sum(AVAL, na.rm = TRUE)
+#'     ),
+#'     input_code = "DOSE"
 #'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
 #'
@@ -135,11 +137,13 @@
 #'   derive_param_exposure(
 #'     dataset_add = adex,
 #'     by_vars = exprs(USUBJID),
-#'     filter = VISIT %in% c("WEEK 2", "WEEK 24"),
-#'     set_values_to = exprs(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
-#'     input_code = "DOSE",
-#'     analysis_var = AVAL,
-#'     summary_fun = function(x) mean(x, na.rm = TRUE)
+#'     filter_add = VISIT %in% c("WEEK 2", "WEEK 24"),
+#'     set_values_to = exprs(
+#'       PARAMCD = "AVDW224",
+#'       PARCAT1 = "WEEK2-24",
+#'       AVAL = mean(AVAL, na.rm = TRUE)
+#'     ),
+#'     input_code = "DOSE"
 #'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
 #'
@@ -148,10 +152,12 @@
 #'   derive_param_exposure(
 #'     dataset_add = adex,
 #'     by_vars = exprs(USUBJID),
-#'     set_values_to = exprs(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
-#'     input_code = "ADJ",
-#'     analysis_var = AVALC,
-#'     summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
+#'     set_values_to = exprs(
+#'       PARAMCD = "TADJ",
+#'       PARCAT1 = "OVERALL",
+#'       AVALC = if_else(sum(!is.na(AVALC)) > 0, "Y", NA_character_)
+#'     ),
+#'     input_code = "ADJ"
 #'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
 derive_param_exposure <- function(dataset = NULL,
@@ -164,7 +170,13 @@ derive_param_exposure <- function(dataset = NULL,
                                   filter_add = NULL,
                                   set_values_to = NULL) {
   by_vars <- assert_vars(by_vars)
-  analysis_var <- assert_symbol(enexpr(analysis_var))
+  if (!missing(analysis_var) || !missing(summary_fun)) {
+    deprecate_stop(
+      "1.1.0",
+      I("derive_param_exposure(anaylsis_var = , summary_fun = )"),
+      "derive_param_exposure(set_values_to = )"
+    )
+  }
 
   dtm <- c("ASTDTM", "AENDTM") %in% colnames(dataset)
   dt <- c("ASTDT", "AENDT") %in% colnames(dataset)
@@ -188,12 +200,12 @@ derive_param_exposure <- function(dataset = NULL,
 
   assert_data_frame(dataset, required_vars = by_vars, optional = TRUE)
   assert_data_frame(dataset_add,
-    required_vars = expr_c(by_vars, analysis_var, exprs(PARAMCD), dates)
+    required_vars = expr_c(by_vars, exprs(PARAMCD), dates)
   )
 
   if (!missing(filter)) {
-    deprecate_warn(
-      "1.0.0",
+    deprecate_stop(
+      "1.1.0",
       I("derive_param_exposure(filter = )"),
       "derive_param_exposure(filter_add = )"
     )
@@ -205,7 +217,6 @@ derive_param_exposure <- function(dataset = NULL,
   assert_character_scalar(input_code)
   params_available <- unique(dataset$PARAMCD)
   assert_character_vector(input_code, values = params_available)
-  assert_s3_class(summary_fun, "function")
 
   if (is.null(filter_add)) {
     filter_add <- TRUE
@@ -217,7 +228,6 @@ derive_param_exposure <- function(dataset = NULL,
     by_vars = by_vars,
     filter_add = PARAMCD == !!input_code & !!filter_add,
     set_values_to = exprs(
-      !!analysis_var := {{ summary_fun }}(!!analysis_var),
       !!!set_dtm,
       !!!set_dt,
       !!!set_values_to
