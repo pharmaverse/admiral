@@ -10,7 +10,7 @@
 #'   is_bare_formula is_call is_character is_expression is_formula is_integerish
 #'   is_logical is_missing is_quosure is_symbol is_symbolic new_formula
 #'   parse_expr parse_exprs quo quo_is_missing quo_is_null set_names sym syms
-#'   type_of warn
+#'   type_of warn %||%
 #' @importFrom utils capture.output str
 #' @importFrom purrr map map2 map_chr map_lgl reduce walk keep map_if transpose
 #'             flatten every modify_at modify_if reduce compose

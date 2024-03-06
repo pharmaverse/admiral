@@ -357,9 +357,13 @@ test_that("assert_logical_scalar Test 21: error if `arg` is not TRUE or FALSE", 
     assert_logical_scalar(arg)
   }
   arg <- c()
-  expect_error(example_fun(NA))
-  expect_error(example_fun(arg))
-  expect_error(example_fun("test"))
+  expect_error(example_fun(NA), class = "assert_logical_scalar")
+  expect_error(example_fun(arg), class = "assert_logical_scalar")
+  expect_error(example_fun("test"), class = "assert_logical_scalar")
+  expect_snapshot(
+    error = TRUE,
+    example_fun("test")
+  )
 })
 
 # assert_symbol ----
