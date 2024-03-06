@@ -335,7 +335,7 @@ test_that("derive_var_merged_exist_flag Test 14: merge existence flag", {
     adsl,
     advs,
     by_vars = exprs(USUBJID),
-    new_var = advs$VSEVALFL,
+    new_var = VSEVALFL,
     condition = advs$AVISIT == "BASELINE"
   )
   

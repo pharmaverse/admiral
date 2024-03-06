@@ -725,7 +725,7 @@ derive_var_merged_exist_flag <- function(dataset,
                                          filter_add = NULL) {
 
   add_data <- derive_var_exist_flag(dataset_add, new_var, condition, true_value, false_value, missing_value, filter_add)
-  print(add_data)
+
   derive_vars_merged(
     dataset,
     dataset_add = add_data,
