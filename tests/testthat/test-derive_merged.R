@@ -1,3 +1,8 @@
+library("tibble")
+library("rlang")
+library("admiraldev")
+
+
 adsl <- tibble::tribble(
   ~USUBJID, ~SEX, ~COUNTRY,
   "ST42-1", "F",  "AUT",
@@ -326,15 +331,12 @@ vs <- tibble::tribble(
 # derive_var_merged_exist_flag ----
 ## Test 14: merge existence flag ----
 test_that("derive_var_merged_exist_flag Test 14: merge existence flag", {
-  expected <-
-    mutate(adsl, VSEVALFL = c("Y", "Y", NA_character_, NA_character_))
-  print(expected)
   actual <- derive_var_merged_exist_flag(
     adsl,
-    dataset_add = advs,
+    advs,
     by_vars = exprs(USUBJID),
-    new_var = VSEVALFL,
-    condition = AVISIT == "BASELINE"
+    new_var = advs$VSEVALFL,
+    condition = advs$AVISIT == "BASELINE"
   )
   
   expected <-
