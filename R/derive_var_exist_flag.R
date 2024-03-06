@@ -134,7 +134,7 @@ derive_var_exist_flag <- function(dataset_add,
   filter_add <-
     assert_filter_cond(enexpr(filter_add), optional = TRUE)
 
-  print(filter_add)
   add_data <- filter_if(dataset_add, filter_add) %>%
     mutate(!!new_var := if_else(!!condition, 1, 0, 0))
+
 }

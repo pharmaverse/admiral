@@ -334,7 +334,7 @@ test_that("derive_var_merged_exist_flag Test 14: merge existence flag", {
     dataset_add = advs,
     by_vars = exprs(USUBJID),
     new_var = VSEVALFL,
-    condition = exprs(AVISIT == "BASELINE")
+    condition = AVISIT == "BASELINE"
   )
   
   expected <-

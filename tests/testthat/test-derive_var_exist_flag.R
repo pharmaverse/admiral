@@ -68,36 +68,32 @@ test_that("derive_var_exist_flag Test 14: merge existence flag", {
   actual <- derive_var_exist_flag(
     advs,
     new_var = VSEVALFL,
-    condition = advs$AVISIT == "BASELINE"
+    condition = AVISIT == "BASELINE"
   )
     
   expected <-
-    data.frame(VSEVALFL = c("Y", "Y", NA_character_, NA_character_))
+     mutate(advs,VSEVALFL = c(1, 0, 1, 0, 0))
 
   print(actual)
   print(expected)
   expect_dfs_equal(
     base = expected,
     compare = actual,
-    keys = "USUBJID"
+    keys = ("USUBJID")
   )
 })
 
 ## Test 15: by_vars with rename ----
 test_that("derive_var_merged_exist_flag Test 15: by_vars with rename", {
-  expected <-
-    c("Y", "Y", NA_character_, NA_character_)
-    print(expected)
+  
   actual <- derive_var_exist_flag(
     adsl,
     new_var = VSEVALFL,
     condition = AVISIT == "BASELINE",
   )
 
-  
-    
-    print(expected)
-
+  print(actual)
+  print(adsl)
   expect_dfs_equal(
     base = expected,
     compare = actual,
