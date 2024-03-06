@@ -295,7 +295,7 @@ derive_var_trtemfl <- function(dataset,
     } else {
       end_cond <-
         expr(is.na(!!trt_end_date) |
-          !!start_date <= !!trt_end_date + days(end_window))
+               !!start_date <= !!trt_end_date + days(end_window))
     }
   }
 
