@@ -92,12 +92,14 @@ derive_vars_joined(
 
 # Period, Subperiod, and Phase Variables
 
-If periods, subperiods, or phases are used, the corresponding variables
+If periods, subperiods, or phases are used, in the simpler of ADaM applications the corresponding variables
 have to be consistent across all datasets. This can be achieved by
 defining the periods, subperiods, or phases once and then using this
 definition for all datasets. The definition can be stored in ADSL or in
-a separate dataset. In the following examples, this separate dataset is
+a separate dataset. In this vignette's examples, this separate dataset is
 called period/phase reference dataset depending what data it contains.
+
+Note that periods, subperiods, or phases *can* be defined differently across datasets (for instance, they may be different across safety and efficacy analyses) in which case the start/stop dates should be defined in the individual datasets, instead of in ADSL. However, this vignette will not cover this scenario.
 
 ## A Note on Study Specific Code
 
