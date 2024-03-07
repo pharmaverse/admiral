@@ -34,6 +34,10 @@
   - `derive_var_shift(na_val)`
   - `derive_vars_aage(unit)`
 
+## Documentation
+
+- The documentation of `derive_vars_merged()` function is updated to describe that the `check_type` argument is ignored (an error is issued) if `order` is not specified. (#2326)
+
 ## Various
 
 - In the previous version, `renv` was the default framework used to manage package dependencies. Now, we use `devtools` as our main package manager (some changes also occurred for  [admiralci workflows](https://github.com/pharmaverse/admiralci)).
@@ -48,6 +52,10 @@ There is a possibility to get package dependency versions used for the workflows
 - ADLB template updated to make `PARAM` consistent for `PARAMCD` values `"BASO"` and `"LYMPH"`. (#2327)
 
 - Splitting out `R` and `test` files for date/time functions for cyclomatic complexity refactor (#2340)(#2339)
+
+# admiral 1.0.2
+
+- Fix bug in `derive_param_tte()` where argument `dataset` populated and `PARAMCD` in `set_values_to` argument is an expression. Previously, there was a check early in function to see if `PARAMCD` defined in `set_values_to` argument, already existed in the dataset passed into `dataset` argument. If `PARAMCD` was not an expression i.e. `PARAMCD = "XYZ"` then check worked. However, if `PARAMCD` to be created was an expression, and wasn't resolved yet, this caused an ERROR. The check has been moved to near the end of the function, where `PARAMCD` is resolved in the dataset holding the new parameters. (#2336)
 
 # admiral 1.0.1
 
