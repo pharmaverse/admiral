@@ -2,13 +2,13 @@
 
 ## New Features
 
+- A new dummy function was added: `my_fist_fcn()` (#1839)
+
 ## Updates of Existing Functions
 
 - Created three unit tests for `get_summary_records()`. (#2304)
 
 ## Breaking Changes
-
-- A new onboarding function was added: `my_fist_fcn()`
   
 - The following function arguments are entering the next phase of the deprecation process: (#2299)
   
