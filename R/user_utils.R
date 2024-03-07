@@ -70,7 +70,7 @@ convert_blanks_to_na.default <- function(x) {
 #' @export
 #' @rdname convert_blanks_to_na
 convert_blanks_to_na.character <- function(x) {
-  do.call(structure, c(list(if_else(x == "", NA_character_, x)), attributes(x)))
+  do.call(structure, c(list(if_else(x == "", NA_character_, x)), attributes(x))) # nolint: undesirable_function_linter
 }
 
 #' @export
@@ -134,7 +134,7 @@ convert_na_to_blanks.default <- function(x) {
 #' @export
 #' @rdname convert_na_to_blanks
 convert_na_to_blanks.character <- function(x) {
-  do.call(structure, c(list(if_else(is.na(x), "", x)), attributes(x)))
+  do.call(structure, c(list(if_else(is.na(x), "", x)), attributes(x))) # nolint: undesirable_function_linter
 }
 
 #' @export

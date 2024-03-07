@@ -127,6 +127,10 @@
 #'   if the observations of the (restricted) additional dataset are not unique
 #'   with respect to the by variables and the order.
 #'
+#'   If the `order` argument is not specified, the `check_type` argument is ignored:
+#'    if the observations of the (restricted) additional dataset are not unique with respect
+#'    to the by variables, an error is issued.
+#'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
 #' @param duplicate_msg Message of unique check
@@ -708,11 +712,13 @@ derive_vars_merged_lookup <- function(dataset,
       distinct(!!!by_vars_left)
 
     if (nrow(temp_not_mapped) > 0) {
+      # nolint start: undesirable_function_linter
       admiral_environment$nmap <- structure(
         temp_not_mapped,
         class = union("nmap", class(temp_not_mapped)),
         by_vars = vars2chr(by_vars_left)
       )
+      # nolint end
 
       message(
         "List of ", enumerate(vars2chr(by_vars_left)), " not mapped: ", "\n",

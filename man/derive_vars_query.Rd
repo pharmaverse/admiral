@@ -43,7 +43,7 @@ For each record in \code{dataset}, the "NAM" variable takes the value of
 \code{GRPNAME} if the value of \code{TERMCHAR} or \code{TERMNUM} in \code{dataset_queries} matches
 the value of the respective SRCVAR in \code{dataset}.
 Note that \code{TERMCHAR} in \code{dataset_queries} dataset may be NA only when \code{TERMNUM}
-is non-NA and vice versa.
+is non-NA and vice versa. The matching is case insensitive.
 The "CD", "SC", and "SCN" variables are derived accordingly based on
 \code{GRPID}, \code{SCOPE}, and \code{SCOPEN} respectively,
 whenever not missing.

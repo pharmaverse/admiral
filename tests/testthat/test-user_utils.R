@@ -9,7 +9,7 @@ test_that("convert_blanks_to_na Test 1: blank strings are turned into `NA`", {
 
 ## Test 2: attributes are preserved when converting blanks to `NA` ----
 test_that("convert_blanks_to_na Test 2: attributes are preserved when converting blanks to `NA`", {
-  input <- structure(letters, names = rev(letters), label = "Letters")
+  input <- structure(letters, names = rev(letters), label = "Letters") # nolint: undesirable_function_linter
   input[c(1, 9, 23)] <- NA
   output <- convert_blanks_to_na(input)
 
@@ -19,22 +19,32 @@ test_that("convert_blanks_to_na Test 2: attributes are preserved when converting
 
 ## Test 3: blank strings are turned into `NA` inside data frames ----
 test_that("convert_blanks_to_na Test 3: blank strings are turned into `NA` inside data frames", {
-  input <- tibble::tibble(
-    a = structure(c("a", "b", "", "c"), label = "A"),
-    b = structure(c(1, NA, 21, 9), label = "B"),
-    c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
-    d = structure(c("", "", "s", "q"), label = "D")
+  input <- tibble::tribble(
+    ~a, ~b, ~c, ~d,
+    "a", 1, TRUE, "",
+    "b", NA, FALSE, "",
+    "", 21, TRUE, "s",
+    "c", 9, TRUE, "q"
   )
-  expected_output <- tibble::tibble(
-    a = structure(c("a", "b", NA, "c"), label = "A"),
-    b = structure(c(1, NA, 21, 9), label = "B"),
-    c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
-    d = structure(c(NA, NA, "s", "q"), label = "D")
+  attr(input$a, "label") <- "A"
+  attr(input$b, "label") <- "B"
+  attr(input$c, "label") <- "C"
+  attr(input$d, "label") <- "D"
+
+  expected_output <- tibble::tribble(
+    ~a, ~b, ~c, ~d,
+    "a", 1, TRUE, NA,
+    "b", NA, FALSE, NA,
+    NA, 21, TRUE, "s",
+    "c", 9, TRUE, "q"
   )
+  attr(expected_output$a, "label") <- "A"
+  attr(expected_output$b, "label") <- "B"
+  attr(expected_output$c, "label") <- "C"
+  attr(expected_output$d, "label") <- "D"
 
   expect_identical(convert_blanks_to_na(input), expected_output)
 })
-
 
 # convert_blanks_to_na.list ----
 ## Test 4: `convert_blanks_to_na.list` produces a lists ----
@@ -57,7 +67,7 @@ test_that("convert_na_to_blanks Test 5: `NA` strings are turned into blank ", {
 
 ## Test 6: attributes are preserved when converting `NA` to blanks ----
 test_that("convert_na_to_blanks Test 6: attributes are preserved when converting `NA` to blanks", {
-  input <- structure(letters, names = rev(letters), label = "Letters")
+  input <- structure(letters, names = rev(letters), label = "Letters") # nolint: undesirable_function_linter
   input[c(1, 9, 23)] <- NA_character_
   output <- convert_na_to_blanks(input)
 
@@ -68,19 +78,29 @@ test_that("convert_na_to_blanks Test 6: attributes are preserved when converting
 # convert_na_to_blanks.data.frame ----
 ## Test 7: `NA` are turned into blank strings inside data frames ----
 test_that("convert_na_to_blanks.data.frame Test 7: `NA` are turned into blank strings inside data frames", { # nolint
-  input <- tibble::tibble(
-    a = structure(c("a", "b", NA, "c"), label = "A"),
-    b = structure(c(1, NA, 21, 9), label = "B"),
-    c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
-    d = structure(c(NA, NA, "s", "q"), label = "D")
+  input <- tibble::tribble(
+    ~a, ~b, ~c, ~d,
+    "a", 1, TRUE, NA,
+    "b", NA, FALSE, NA,
+    NA, 21, TRUE, "s",
+    "c", 9, TRUE, "q"
   )
+  attr(input$a, "label") <- "A"
+  attr(input$b, "label") <- "B"
+  attr(input$c, "label") <- "C"
+  attr(input$d, "label") <- "D"
 
-  expected_output <- tibble::tibble(
-    a = structure(c("a", "b", "", "c"), label = "A"),
-    b = structure(c(1, NA, 21, 9), label = "B"),
-    c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
-    d = structure(c("", "", "s", "q"), label = "D")
+  expected_output <- tibble::tribble(
+    ~a, ~b, ~c, ~d,
+    "a", 1, TRUE, "",
+    "b", NA, FALSE, "",
+    "", 21, TRUE, "s",
+    "c", 9, TRUE, "q"
   )
+  attr(expected_output$a, "label") <- "A"
+  attr(expected_output$b, "label") <- "B"
+  attr(expected_output$c, "label") <- "C"
+  attr(expected_output$d, "label") <- "D"
 
   expect_equal(convert_na_to_blanks.data.frame(input), expected_output, ignore_attr = TRUE)
 })

@@ -148,6 +148,10 @@ If \code{"warning"} or \code{"error"} is specified, the specified message is iss
 if the observations of the (restricted) additional dataset are not unique
 with respect to the by variables and the order.
 
+If the \code{order} argument is not specified, the \code{check_type} argument is ignored:
+if the observations of the (restricted) additional dataset are not unique with respect
+to the by variables, an error is issued.
+
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 
 \item{duplicate_msg}{Message of unique check
