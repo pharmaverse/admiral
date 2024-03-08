@@ -204,6 +204,7 @@ assert_character_scalar <- function(arg,
 #'   vector are named.
 #' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
+#' @inheritParams assert_logical_scalar
 #'
 #'
 #' @return
@@ -229,7 +230,12 @@ assert_character_scalar <- function(arg,
 #' }
 #'
 #' try(example_fun2(c(alpha = "a", "b", gamma = "c")))
-assert_character_vector <- function(arg, values = NULL, named = FALSE, optional = FALSE) {
+assert_character_vector <- function(arg, values = NULL, named = FALSE,
+                                    optional = FALSE,
+                                    arg_name = rlang::caller_arg(arg),
+                                    message = NULL,
+                                    class = "assert_character_vector",
+                                    call = parent.frame()) {
   assert_logical_scalar(named)
   assert_logical_scalar(optional)
 
@@ -237,31 +243,25 @@ assert_character_vector <- function(arg, values = NULL, named = FALSE, optional 
     return(invisible(arg))
   }
 
-  if (!is.character(arg)) {
-    err_msg <- sprintf(
-      "`%s` must be a character vector but is %s",
-      arg_name(substitute(arg)),
-      what_is_it(arg)
+  message <-
+    message %||%
+    ifelse(
+      is.null(values),
+      "Argument {.arg {arg_name}} must be {.cls character}, but is {.obj_type_friendly {arg}}.",
+      "Argument {.arg {arg_name}} must be {.cls character} with values {.val {values}}."
     )
-    abort(err_msg)
-  }
 
-  assert_character_vector(values, optional = TRUE)
-  if (!is.null(values)) {
-    mismatches <- unique(arg[!map_lgl(arg, `%in%`, values)])
-    if (length(mismatches) > 0) {
-      abort(paste0(
-        "`", arg_name(substitute(arg)),
-        "` contains invalid values:\n",
-        enumerate(mismatches), "\n",
-        "Valid values:\n",
-        enumerate(values)
-      ))
-    }
+  if (!is.character(arg) ||
+    (!is.null(values) && length(unique(arg[!map_lgl(arg, `%in%`, values)])) > 0L)) {
+    cli::cli_abort(
+      message = message,
+      call = call,
+      class = c(class, "assert-admiraldev")
+    )
   }
 
   if (named) {
-    assert_named(arg)
+    assert_named(arg, call = call, class = class, arg_name = arg_name)
   }
 }
 
@@ -275,7 +275,7 @@ assert_character_vector <- function(arg, values = NULL, named = FALSE, optional 
 #' `NULL` is considered as valid value.
 #' @param arg_name string indicating the label/symbol of the object being checked.
 #' @param message string passed to `cli::cli_abort(message)`.
-#' When `NULL`, default messaging is used.
+#' When `NULL`, default messaging is used. `"{arg_name}"` can be used in messaging.
 #' @inheritParams cli::cli_abort
 #' @inheritParams rlang::abort
 #'
@@ -805,7 +805,11 @@ assert_list_of <- function(arg, class, named = FALSE, optional = TRUE) {
 #'
 #' Assert that all elements of the argument are named.
 #'
+#' @param message string passed to `cli::cli_abort(message)`.
+#' When `NULL`, default messaging is used.
+#' `"{arg_name}"` and `"{indices}"` can be used in messaging.
 #' @inheritParams assert_data_frame
+#' @inheritParams assert_logical_scalar
 #'
 #' @keywords assertion
 #' @family assertion
@@ -826,26 +830,38 @@ assert_list_of <- function(arg, class, named = FALSE, optional = TRUE) {
 #' try(example_fun(list(1, "x")))
 #'
 #' try(example_fun(list(var = 1, "x")))
-assert_named <- function(arg, optional = FALSE) {
+assert_named <- function(arg, optional = FALSE,
+                         arg_name = rlang::caller_arg(arg),
+                         message = NULL,
+                         class = "assert_named",
+                         call = parent.frame()) {
   if (optional && is.null(arg)) {
     return(invisible(arg))
   }
 
-  if (length(arg) > 0) {
-    if (is.null(names(arg))) {
-      abort(paste0(
-        "All elements of `", arg_name(substitute(arg)), "` must be named.\n",
-        "No element is named."
-      ))
-    }
-    unnamed <- which(names(arg) == "")
-    if (length(unnamed) > 0) {
-      abort(paste0(
-        "All elements of `", arg_name(substitute(arg)), "` must be named.\n",
-        "The following elements are not named: ", enumerate(unnamed, quote_fun = NULL)
-      ))
-    }
+  # if argument is greater than length 0 and any element not named, return arg invisibly
+  any_unnamed <- length(arg) > 0L && !rlang::is_named(arg)
+  if (isFALSE(any_unnamed)) {
+    return(invisible(arg))
   }
+
+  # get the indices of the unnamed elements for using in the error message.
+  if (is.null(names(arg))) {
+    indices <- seq_along(arg)
+  } else {
+    indices <- which(names(arg) == "")
+  }
+
+  message <- message %||%
+    c("All elements of {.arg {arg_name}} argument must be named.",
+      i = "The indices of the unnamed elements are {.val {indices}}"
+    )
+
+  cli::cli_abort(
+    message = message,
+    call = call,
+    class = c(class, "assert-admiraldev")
+  )
 }
 
 #' Assert Argument is a Named List of Expressions
