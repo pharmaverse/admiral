@@ -14,6 +14,8 @@
 #' @examples
 #' my_first_fcn()
 #' my_first_fcn(hw = FALSE)
+#'
+#'
 my_first_fcn <- function(hw = TRUE) {
   if (hw) {
     message("Welcome to the admiral family!")
