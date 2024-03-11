@@ -15,7 +15,3 @@ character vector containing the welcome message.
 \description{
 Prints a welcome message to the Admiral family.
 }
-\examples{
-my_first_fcn(hw = TRUE)
-my_first_fcn()
-}
