@@ -22,4 +22,5 @@ This is my first trial to write a function
 \examples{
 my_first_fcn()
 my_first_fcn(hw = FALSE)
+
 }
