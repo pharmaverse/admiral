@@ -1633,6 +1633,9 @@ assert_date_vector <- function(arg, optional = FALSE) {
 #' Checks if all arguments are of the same type.
 #'
 #' @param ... Arguments to be checked
+#' @param .message character vector passed to `cli::cli_abort(message)` when assertion fails.
+#' @param .class character vector passed to `cli::cli_abort(class)` when assertion fails.
+#' @param .call environment passed to `cli::cli_abort(call)` when assertion fails.
 #'
 #'
 #' @return The function throws an error if not all arguments are of the same type.
@@ -1658,20 +1661,30 @@ assert_date_vector <- function(arg, optional = FALSE) {
 #'   false_value = 0,
 #'   missing_value = "missing"
 #' ))
-assert_same_type <- function(...) {
+assert_same_type <- function(...,
+                             .message = c(
+                               "Arguments {.arg {arg_names}} must be the same type.",
+                               i = paste(
+                                 "Argument types are",
+                                 paste0("{.arg ", arg_names, "} {.cls ", types, "}",
+                                   collapse = ", "
+                                 )
+                               )
+                             ),
+                             .class = "assert_same_type",
+                             .call = parent.frame()) {
   args <- rlang::dots_list(..., .named = TRUE)
-  arg_names <- lapply(args, function(x) deparse(substitute(x)))
+  arg_names <- names(args)
   types <- lapply(args, typeof)
 
+  # if more than one type resent, return error
   if (length(unique(types)) > 1) {
-    abort(
-      paste(
-        "All arguments must be of the same type.",
-        "Argument: Type",
-        "--------------",
-        paste0(names(args), ": ", types, collapse = "\n"),
-        sep = "\n"
-      )
+    cli::cli_abort(
+      message = .message,
+      class = c(.class, "assert-admiraldev"),
+      call = .call
     )
   }
+
+  invisible()
 }

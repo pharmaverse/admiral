@@ -41,3 +41,12 @@
       ! All elements of `arg` argument must be named.
       i The indices of the unnamed elements are 1 and 2
 
+# assert_same_type Test 91: error if different type
+
+    Code
+      assert_same_type(true_value, false_value, missing_value)
+    Condition
+      Error:
+      ! Arguments `true_value`, `false_value`, and `missing_value` must be the same type.
+      i Argument types are `true_value` <character>, `false_value` <character>, `missing_value` <double>
+

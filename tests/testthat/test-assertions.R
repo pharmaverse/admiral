@@ -1212,18 +1212,15 @@ test_that("assert_same_type Test 91: error if different type", {
   true_value <- "Y"
   false_value <- "N"
   missing_value <- 0
+
+  # perform a class match of the error message
   expect_error(
     assert_same_type(true_value, false_value, missing_value),
-    regexp = paste(
-      "All arguments must be of the same type.",
-      "Argument: Type",
-      "--------------",
-      "true_value: character",
-      "false_value: character",
-      "missing_value: double",
-      sep = "\n"
-    ),
-    fixed = TRUE
+    class = "assert_same_type"
+  )
+  expect_snapshot(
+    error = TRUE,
+    assert_same_type(true_value, false_value, missing_value)
   )
 })
 

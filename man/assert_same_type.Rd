@@ -4,10 +4,23 @@
 \alias{assert_same_type}
 \title{Are All Argument of the Same Type?}
 \usage{
-assert_same_type(...)
+assert_same_type(
+  ...,
+  .message = c("Arguments {.arg {arg_names}} must be the same type.", i =
+    paste("Argument types are", paste0("{.arg ", arg_names, "} {.cls ", types, "}",
+    collapse = ", "))),
+  .class = "assert_same_type",
+  .call = parent.frame()
+)
 }
 \arguments{
 \item{...}{Arguments to be checked}
+
+\item{.message}{character vector passed to \code{cli::cli_abort(message)} when assertion fails.}
+
+\item{.class}{character vector passed to \code{cli::cli_abort(class)} when assertion fails.}
+
+\item{.call}{environment passed to \code{cli::cli_abort(call)} when assertion fails.}
 }
 \value{
 The function throws an error if not all arguments are of the same type.
