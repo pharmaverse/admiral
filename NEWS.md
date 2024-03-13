@@ -2,6 +2,8 @@
 
 ## New Features
 
+- Error Messaging has been made more "user-friendly". (#2372)
+
 ## Updates of Existing Functions
 
 - Created three unit tests for `get_summary_records()`. (#2304)

@@ -200,10 +200,7 @@ test_that("derive_param_exposure Test 3: Errors", {
           AVAL = mean(AVAL, na.rm = TRUE)
         )
       ),
-    regexp = paste(
-      "`input_code` contains invalid values:\n`DOSED`\nValid",
-      "values:\n`DOSE` and `ADJ`"
-    )
+    class = "assert_character_vector"
   )
 
   # ASTDTM/AENDTM or ASTDT/AENDT must be present
