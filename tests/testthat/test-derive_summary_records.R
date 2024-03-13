@@ -90,7 +90,7 @@ test_that("derive_summary_records Test 3: Errors", {
         z = mean(z)
       )
     ),
-    regexp = "`arg` must be an object of class 'list' but is `\"x\"`"
+    class = "assert_s3_class"
   )
 
   # Does by_vars exist in input dataset?
