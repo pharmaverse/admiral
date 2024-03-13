@@ -359,9 +359,6 @@ derive_param_tte <- function(dataset = NULL,
   )
   assert_logical_scalar(create_datetime)
   assert_varval_list(set_values_to, optional = TRUE)
-  if (!is.null(set_values_to$PARAMCD) && !is.null(dataset)) {
-    assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
-  }
   if (!is.null(by_vars)) {
     source_datasets <- extend_source_datasets(
       source_datasets = source_datasets,
@@ -448,6 +445,14 @@ derive_param_tte <- function(dataset = NULL,
 
     # -vars2chr(by_vars) does not work for 3.5 #
     new_param <- select(new_param, !!!negate_vars(by_vars))
+  }
+
+  # check newly created parameter(s) do not already exist
+  if (!is.null(set_values_to$PARAMCD) && !is.null(dataset)) {
+    unique_params <- unique(new_param$PARAMCD)
+    for (i in seq_along(unique_params)) {
+      assert_param_does_not_exist(dataset, unique_params[i])
+    }
   }
 
   # add new parameter to input dataset #
