@@ -462,17 +462,39 @@ test_that("assert_expr Test 28: no error if optional is TRUE and `arg` is NULL",
 test_that("assert_expr Test 29: `assert_expr` throws an error if `arg` is missing", {
   expect_error(
     assert_expr(),
-    regexp = "Argument `arg` missing, with no default",
-    fixed = TRUE
+    class = "assert_expr"
+  )
+
+  expect_snapshot(
+    assert_expr(),
+    error = TRUE
+  )
+
+  example_fun <- function(data) {
+    assert_expr(data)
+  }
+  expect_snapshot(
+    example_fun(),
+    error = TRUE
   )
 })
 
 ## Test 30: `assert_expr` throws an error if `arg` is not an expression ----
 test_that("assert_expr Test 30: `assert_expr` throws an error if `arg` is not an expression", {
   expect_error(
-    assert_expr(var <- c(1, 2)),
-    regexp = "`var` must be an expression but is a double vector",
-    fixed = TRUE
+    {
+      var <- c(1, 2)
+      assert_expr(var)
+    },
+    class = "assert_expr"
+  )
+
+  expect_snapshot(
+    {
+      var <- c(1, 2)
+      assert_expr(var)
+    },
+    error = TRUE
   )
 })
 

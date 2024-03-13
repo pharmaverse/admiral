@@ -16,11 +16,11 @@ assert_same_type(
 \arguments{
 \item{...}{Arguments to be checked}
 
-\item{.message}{character vector passed to \code{cli::cli_abort(message)} when assertion fails.}
+\item{.message}{character vector passed to \code{cli_abort(message)} when assertion fails.}
 
-\item{.class}{character vector passed to \code{cli::cli_abort(class)} when assertion fails.}
+\item{.class}{character vector passed to \code{cli_abort(class)} when assertion fails.}
 
-\item{.call}{environment passed to \code{cli::cli_abort(call)} when assertion fails.}
+\item{.call}{environment passed to \code{cli_abort(call)} when assertion fails.}
 }
 \value{
 The function throws an error if not all arguments are of the same type.
