@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 The derivation of visit variables like `AVISIT`, `AVISITN`, `AWLO`,
 `AWHI`, ... or period, subperiod, or phase variables like `APERIOD`,
 `TRT01A`, `TRT02A`, `ASPER`, `PHSDTM`, `PHEDTM`, ... is highly
-study-specific. Therefore admiral cannot provide functions which derive
+study-specific. Therefore `{admiral}` cannot provide functions which derive
 these variables. However, for common scenarios like visit assignments
 based on time windows or deriving BDS period variables from ADSL period
 variables, functions are provided which support those derivations.
@@ -103,7 +103,7 @@ Note that periods, subperiods, or phases *can* be defined differently across dat
 
 ## A Note on Study Specific Code
 
-The sections below showcase the available tools in admiral to work with period, 
+The sections below showcase the available tools in `{admiral}` to work with period, 
 subperiod and phase variables. However, at some point study specific code will 
 always be required. There are two options:
 
@@ -129,7 +129,7 @@ option should be used. This vignette contains examples for both workflows.
 
 ## The Period/Phase Reference Dataset {#reference}
 
-The admiral functions expect separate reference datasets for periods, subperiods,
+The `{admiral}` functions expect separate reference datasets for periods, subperiods,
 and phases. For periods the numeric variable `APERIOD` is expected, for
 subperiods the numeric variables `APERIOD` and `ASPER`, and for phases
 the numeric variable `APHASEN`.
@@ -144,6 +144,7 @@ example dataset.
 Consider a simple crossover study with the following design:
 
 <img src="https://raw.githubusercontent.com/pharmaverse/admiral/2321_period_examples/inst/visit_periods/dummy_study_design.png" width="630" height="252"/>
+<!-- This image is located at the following location within the package: inst/visit_periods/dummy_study_design.png -->
 
 Given this design, an option could be to split the study into two periods:
 
@@ -237,7 +238,7 @@ period_ref
 
 ### Creating the Period/Phase Reference Dataset from ADSL {#from_adsl}
 
-If the treatment start and end dates are already included in `ADSL`, we can derive the phase variables directly in `ADSL` and create a phase reference dataset by employing `create_period_dataset()`. Here is an example command to achieve this goal:
+If the treatment start and end dates are already included in ADSL, we can derive the phase variables directly in ADSL and create a phase reference dataset by employing `create_period_dataset()`. Here is an example command to achieve this goal:
 
 ```{r, eval = TRUE}
 adsl1 <- adsl %>%
