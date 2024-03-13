@@ -18,7 +18,7 @@ test_that("derive_vars_aage Test 2: Error is thrown when age_unit is not proper 
   )
   expect_error(
     derive_vars_aage(input, age_unit = "centuries"),
-    "but is 'centuries'"
+    class = "assert_character_scalar"
   )
 })
 
@@ -61,7 +61,7 @@ test_that("derive_var_age_years Test 5: Error is thrown when age_unit is not pro
   input <- data.frame(AGE = c(12, 24, 36, 48))
   expect_error(
     derive_var_age_years(input, AGE, age_unit = "month", new_var = AAGE),
-    "`age_unit` must be one of 'years', 'months', 'weeks', 'days', 'hours', 'minutes' or 'seconds' but is 'month'" # nolint
+    class = "assert_character_scalar"
   )
 })
 

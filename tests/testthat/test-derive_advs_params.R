@@ -221,10 +221,7 @@ test_that("compute_bsa Test 24: Takahira method - height & weight vectors - miss
 test_that("compute_bsa Test 25: an error is issued if an invalid method is specified", {
   expect_error(
     compute_bsa(height = c(170, 185), weight = c(75, 90), method = "unknown-method"),
-    paste(
-      "`method` must be one of 'Mosteller', 'DuBois-DuBois', 'Haycock', 'Gehan-George',",
-      "'Boyd', 'Fujimoto' or 'Takahira' but is 'unknown-method'"
-    )
+    class = "assert_character_scalar"
   )
 })
 
