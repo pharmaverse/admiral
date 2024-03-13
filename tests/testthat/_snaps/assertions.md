@@ -1,3 +1,19 @@
+# assert_character_scalar Test 17: error if `arg` not in values
+
+    Code
+      check_unit("month")
+    Condition
+      Error in `check_unit()`:
+      ! Argument `duration_unit` must be a scalar of class <character> and equal to one of "years", "months", "weeks", "days", "hours", "minutes", or "seconds".
+
+---
+
+    Code
+      check_unit2("month")
+    Condition
+      Error in `check_unit2()`:
+      ! Argument `duration_unit` must be a scalar of class <character> and equal to one of "YEARS", "MONTHS", "WEEKS", "DAYS", "HOURS", "MINUTES", or "SECONDS".
+
 # assert_character_vector Test 18: error if `arg` not a character vector
 
     Code
@@ -30,6 +46,22 @@
     Condition
       Error in `example_fun()`:
       ! Argument `arg` must be either TRUE or FALSE, but is a string.
+
+# assert_s3_class Test 41: error if `arg` is NULL and optional is FALSE
+
+    Code
+      example_fun(NULL)
+    Condition
+      Error in `example_fun()`:
+      ! Argument `arg` must be class <factor>, but is NULL.
+
+# assert_list_of Test 45: error if `arg` is NULL and optional is FALSE
+
+    Code
+      example_fun(NULL)
+    Condition
+      Error in `assert_list_of()`:
+      ! Argument `arg` must be class <list>, but is NULL.
 
 # assert_named Test 51: error if no elements are named
 

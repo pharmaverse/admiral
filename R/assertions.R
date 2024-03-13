@@ -94,6 +94,7 @@ assert_data_frame <- function(arg,
 #' permitted values and returning the argument.
 #' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
+#' @inheritParams assert_logical_scalar
 #'
 #'
 #' @return
@@ -132,7 +133,11 @@ assert_data_frame <- function(arg,
 assert_character_scalar <- function(arg,
                                     values = NULL,
                                     case_sensitive = TRUE,
-                                    optional = FALSE) {
+                                    optional = FALSE,
+                                    arg_name = rlang::caller_arg(arg),
+                                    message = NULL,
+                                    class = "assert_character_scalar",
+                                    call = parent.frame()) {
   assert_character_vector(values, optional = TRUE)
   assert_logical_scalar(optional)
 
@@ -140,22 +145,27 @@ assert_character_scalar <- function(arg,
     return(invisible(arg))
   }
 
-  if (!is.character(arg)) {
-    err_msg <- sprintf(
-      "`%s` must be a character scalar but is %s",
-      arg_name(substitute(arg)),
-      what_is_it(arg)
+  # set default message, if not specified in function call
+  message <-
+    message %||%
+    ifelse(
+      is.null(values),
+      "Argument {.arg {arg_name}} must be a scalar of class {.cls character},
+       but is {.obj_type_friendly {arg}}.",
+      "Argument {.arg {arg_name}} must be a scalar of class {.cls character} and
+       equal to one of {.val {values}}."
     )
-    abort(err_msg)
-  }
+  # change cli `.val` to end with OR instead of AND
+  divid <- cli::cli_div(theme = list(.val = list("vec-last" = ", or ", "vec_sep2" = " or ")))
 
-  if (length(arg) != 1L) {
-    err_msg <- sprintf(
-      "`%s` must be a character scalar but is a character vector of length %d",
-      arg_name(substitute(arg)),
-      length(arg)
+
+  # check class and length of `arg`
+  if (!is.character(arg) || length(arg) != 1L) {
+    cli::cli_abort(
+      message = message,
+      call = call,
+      class = c(class, "assert-admiraldev")
     )
-    abort(err_msg)
   }
 
   # Create case_adjusted_arg and case_adjusted_values for the following purpose:
@@ -182,13 +192,11 @@ assert_character_scalar <- function(arg,
   }
 
   if (!is.null(values) && case_adjusted_arg %notin% case_adjusted_values) {
-    err_msg <- sprintf(
-      "`%s` must be one of %s but is '%s'",
-      arg_name(substitute(arg)),
-      enumerate(values, quote_fun = squote, conjunction = "or"),
-      arg
+    cli::cli_abort(
+      message = message,
+      call = call,
+      class = c(class, "assert-admiraldev")
     )
-    abort(err_msg)
   }
 
   invisible(case_adjusted_arg)
@@ -676,9 +684,10 @@ assert_atomic_vector <- function(arg, optional = FALSE) {
 #'
 #' Checks if an argument is an object inheriting from the S3 class specified.
 #' @param arg A function argument to be checked
-#' @param class The S3 class to check for
+#' @param cls The S3 class to check for
 #' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #'   is `NULL` then an error is thrown
+#' @inheritParams assert_logical_scalar
 #'
 #'
 #' @return
@@ -699,22 +708,29 @@ assert_atomic_vector <- function(arg, optional = FALSE) {
 #' try(example_fun(letters))
 #'
 #' try(example_fun(1:10))
-assert_s3_class <- function(arg, class, optional = FALSE) {
-  assert_character_scalar(class)
+assert_s3_class <- function(arg, cls,
+                            optional = FALSE,
+                            arg_name = rlang::caller_arg(arg),
+                            message = NULL,
+                            class = "assert_s3_class",
+                            call = parent.frame()) {
+  assert_character_scalar(cls)
   assert_logical_scalar(optional)
 
   if (is.null(arg) && optional) {
     return(invisible(arg))
   }
 
-  if (!inherits(arg, class)) {
-    err_msg <- sprintf(
-      "`%s` must be an object of class '%s' but is %s",
-      arg_name(substitute(arg)),
-      class,
-      what_is_it(arg)
+  messagge <-
+    message %||%
+    "Argument {.arg {arg_name}} must be class {.cls {cls}}, but is {.obj_type_friendly {arg}}."
+
+  if (!inherits(arg, cls)) {
+    cli::cli_abort(
+      message = messagge,
+      class = c(class, "assert-admiraldev"),
+      call = call
     )
-    abort(err_msg)
   }
 
   invisible(arg)
