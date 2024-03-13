@@ -185,7 +185,7 @@ test_that("derive_param_exposure Test 3: Errors", {
           AVAL = mean(AVAL, na.rm = TRUE)
         )
       ),
-    class = "assert_character_vector"
+    regexp = paste("The following required elements are missing in `set_values_to`: 'PARAMCD'")
   )
   # input code must be present
   expect_error(
@@ -217,6 +217,6 @@ test_that("derive_param_exposure Test 3: Errors", {
           AVAL = mean(AVAL, na.rm = TRUE)
         )
       ),
-    class = "assert_character_vector"
+    regexp = paste("Required variables `ASTDT` and `AENDT` are missing")
   )
 })
