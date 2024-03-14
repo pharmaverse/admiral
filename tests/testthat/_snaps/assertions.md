@@ -47,6 +47,23 @@
       Error in `example_fun()`:
       ! Argument `arg` must be either TRUE or FALSE, but is a string.
 
+
+# assert_symbol Test 24: `assert_symbol` throws an error if `arg` is missing
+
+    Code
+      example_fun(f())
+    Condition
+      Error in `example_fun()`:
+      ! Argument `arg` must be a <symbol>, but is missing.
+
+# assert_symbol Test 25: `assert_symbol` throws an error if `arg` is not a symbol
+
+    Code
+      example_fun(f(NULL))
+    Condition
+      Error in `example_fun()`:
+      ! Argument `arg` must be a <symbol>, but is NULL.
+
 # assert_expr Test 29: `assert_expr` throws an error if `arg` is missing
 
     Code
@@ -106,4 +123,3 @@
       Error:
       ! Arguments `true_value`, `false_value`, and `missing_value` must be the same type.
       i Argument types are `true_value` <character>, `false_value` <character>, `missing_value` <double>
-
