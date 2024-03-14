@@ -667,6 +667,7 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
 #' @param arg A function argument to be checked
 #' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
+#' @inheritParams assert_logical_scalar
 #'
 #'
 #' @return
@@ -685,7 +686,12 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
 #' example_fun(1:10)
 #'
 #' try(example_fun(list(1, 2)))
-assert_atomic_vector <- function(arg, optional = FALSE) {
+assert_atomic_vector <- function(arg,
+                                 optional = FALSE,
+                                 arg_name = rlang::caller_arg(arg),
+                                 message = NULL,
+                                 class = "assert_atomic_vector",
+                                 call = parent.frame()) {
   assert_logical_scalar(optional)
 
   if (optional && is.null(arg)) {
@@ -693,13 +699,15 @@ assert_atomic_vector <- function(arg, optional = FALSE) {
   }
 
   if (!is.atomic(arg)) {
-    err_msg <- sprintf(
-      "`%s` must be an atomic vector but is %s",
-      arg_name(substitute(arg)),
-      what_is_it(arg)
+    cli_abort(
+      message = message %||%
+        "Argument {.arg {arg_name}} must be an atomic vector, but is {.obj_type_friendly {arg}}.",
+      call = call,
+      class = c(class, "assert-admiraldev")
     )
-    abort(err_msg)
   }
+
+  invisible(arg)
 }
 
 #' Is an Argument an Object of a Specific S3 Class?

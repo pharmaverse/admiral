@@ -1208,7 +1208,11 @@ test_that("assert_date_vector Test 88: error if `arg` is NULL and optional is FA
 ## Test 89: error if input is not atomic vector ----
 test_that("assert_atomic_vector Test 89: error if input is not atomic vector", {
   x <- list("a", "a", "b", "c", "d", "d", 1, 1, 4)
-  expect_error(assert_atomic_vector(x))
+  expect_error(assert_atomic_vector(x), class = "assert_atomic_vector")
+  expect_snapshot(
+    error = TRUE,
+    assert_atomic_vector(x)
+  )
 })
 
 # assert_same_type ----

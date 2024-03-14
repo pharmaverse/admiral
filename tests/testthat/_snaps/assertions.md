@@ -134,6 +134,14 @@
       ! All elements of `arg` argument must be named.
       i The indices of the unnamed elements are 1 and 2
 
+# assert_atomic_vector Test 89: error if input is not atomic vector
+
+    Code
+      assert_atomic_vector(x)
+    Condition
+      Error:
+      ! Argument `x` must be an atomic vector, but is a list.
+
 # assert_same_type Test 91: error if different type
 
     Code
