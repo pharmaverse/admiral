@@ -4,7 +4,7 @@
       check_unit("month")
     Condition
       Error in `check_unit()`:
-      ! Argument `duration_unit` must be a scalar of class <character> and equal to one of "years", "months", "weeks", "days", "hours", "minutes", or "seconds".
+      ! Argument `duration_unit` must be equal to one of "years", "months", "weeks", "days", "hours", "minutes", or "seconds".
 
 ---
 
@@ -12,7 +12,7 @@
       check_unit2("month")
     Condition
       Error in `check_unit2()`:
-      ! Argument `duration_unit` must be a scalar of class <character> and equal to one of "YEARS", "MONTHS", "WEEKS", "DAYS", "HOURS", "MINUTES", or "SECONDS".
+      ! Argument `duration_unit` must be equal to one of "YEARS", "MONTHS", "WEEKS", "DAYS", "HOURS", "MINUTES", or "SECONDS".
 
 # assert_character_vector Test 18: error if `arg` not a character vector
 

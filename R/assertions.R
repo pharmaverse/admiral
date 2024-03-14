@@ -145,24 +145,25 @@ assert_character_scalar <- function(arg,
     return(invisible(arg))
   }
 
-  # set default message, if not specified in function call
-  message <-
-    message %||%
-    ifelse(
-      is.null(values),
-      "Argument {.arg {arg_name}} must be a scalar of class {.cls character},
-       but is {.obj_type_friendly {arg}}.",
-      "Argument {.arg {arg_name}} must be a scalar of class {.cls character} and
-       equal to one of {.val {values}}."
-    )
   # change cli `.val` to end with OR instead of AND
-  divid <- cli::cli_div(theme = list(.val = list("vec-last" = ", or ", "vec_sep2" = " or ")))
-
+  divid <- cli_div(theme = list(.val = list("vec-last" = ", or ", "vec_sep2" = " or ")))
 
   # check class and length of `arg`
-  if (!is.character(arg) || length(arg) != 1L) {
+  if (!is.character(arg)) {
     cli_abort(
-      message = message,
+      message = message %||%
+        "Argument {.arg {arg_name}} must be a scalar of class {.cls character},
+         but is {.obj_type_friendly {arg}}.",
+      call = call,
+      class = c(class, "assert-admiraldev")
+    )
+  }
+
+  if (length(arg) != 1L) {
+    cli_abort(
+      message = message %||%
+        "Argument {.arg {arg_name}} must be a scalar of class {.cls character},
+         but is length {.val {length(arg)}}",
       call = call,
       class = c(class, "assert-admiraldev")
     )
@@ -192,8 +193,9 @@ assert_character_scalar <- function(arg,
   }
 
   if (!is.null(values) && case_adjusted_arg %notin% case_adjusted_values) {
-    cli_abort(
-      message = message,
+    cli::cli_abort(
+      message = message %||%
+        "Argument {.arg {arg_name}} must be equal to one of {.val {values}}.",
       call = call,
       class = c(class, "assert-admiraldev")
     )
@@ -282,7 +284,7 @@ assert_character_vector <- function(arg, values = NULL, named = FALSE,
 #' If set to `FALSE` and `arg` is `NULL` then an error is thrown. Otherwise,
 #' `NULL` is considered as valid value.
 #' @param arg_name string indicating the label/symbol of the object being checked.
-#' @param message string passed to `cli_abort(message)`.
+#' @param message string passed to `cli::cli_abort(message)`.
 #' When `NULL`, default messaging is used. `"{arg_name}"` can be used in messaging.
 #' @inheritParams cli::cli_abort
 #' @inheritParams rlang::abort
@@ -841,7 +843,7 @@ assert_list_of <- function(arg, class, named = FALSE, optional = TRUE) {
 #'
 #' Assert that all elements of the argument are named.
 #'
-#' @param message string passed to `cli_abort(message)`.
+#' @param message string passed to `cli::cli_abort(message)`.
 #' When `NULL`, default messaging is used.
 #' `"{arg_name}"` and `"{indices}"` can be used in messaging.
 #' @inheritParams assert_data_frame

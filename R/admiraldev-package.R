@@ -23,5 +23,5 @@
 #' @importFrom tidyselect all_of contains vars_select
 #' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
-#' @importFrom cli cli_abort
+#' @importFrom cli cli_abort cli_div
 "_PACKAGE"
