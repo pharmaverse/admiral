@@ -568,6 +568,7 @@ assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
 #'   of `"none"` (the default), `"positive"`, `"non-negative"` or `"negative"`.
 #' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #'   is `NULL` then an error is thrown
+#' @inheritParams assert_logical_scalar
 #'
 #'
 #' @return
@@ -591,7 +592,13 @@ assert_vars <- function(arg, expect_names = FALSE, optional = FALSE) {
 #' try(example_fun(2, 0))
 #'
 #' try(example_fun("2", 0))
-assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
+assert_integer_scalar <- function(arg,
+                                  subset = "none",
+                                  optional = FALSE,
+                                  arg_name = rlang::caller_arg(arg),
+                                  message = NULL,
+                                  class = "assert_integer_scalar",
+                                  call = parent.frame()) {
   subsets <- list(
     "positive" = quote(arg > 0L),
     "non-negative" = quote(arg >= 0L),
@@ -606,13 +613,14 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
   }
 
   if (!is_integerish(arg) || length(arg) != 1L || !is.finite(arg) || !eval(subsets[[subset]])) {
-    err_msg <- sprintf(
-      "`%s` must be %s integer scalar but is %s",
-      arg_name(substitute(arg)),
-      ifelse(subset == "none", "an", paste("a", subset)),
-      what_is_it(arg)
+    cli_abort(
+      message = message %||%
+        "Argument {.arg {arg_name}} must be
+         {ifelse(subset == 'none', 'an', paste('a', subset))}
+         integer scalar.",
+      class = c(class, "assert-admiraldev"),
+      call = call
     )
-    abort(err_msg)
   }
 
   invisible(as.integer(arg))
