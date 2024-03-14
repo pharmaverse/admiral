@@ -24,4 +24,5 @@
 #' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
 #' @importFrom cli cli_abort cli_div
+#' @importFrom glue glue glue_collapse
 "_PACKAGE"

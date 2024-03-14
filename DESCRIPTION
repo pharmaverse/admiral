@@ -34,6 +34,7 @@ Depends: R (>= 3.5)
 Imports:
     cli,
     dplyr (>= 1.0.5),
+    glue (>= 1.6.0),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
     lubridate (>= 1.7.4),

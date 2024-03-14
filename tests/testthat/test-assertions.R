@@ -654,7 +654,7 @@ test_that("assert_list_of Test 43: error if `arg` is not a list of specific clas
 ## Test 44: no error if `arg` is NULL and optional is TRUE ----
 test_that("assert_list_of Test 44: no error if `arg` is NULL and optional is TRUE", {
   example_fun <- function(arg) {
-    assert_list_of(arg, class = "factor", optional = TRUE)
+    assert_list_of(arg, cls = "factor", optional = TRUE)
   }
 
   expect_invisible(
@@ -665,16 +665,13 @@ test_that("assert_list_of Test 44: no error if `arg` is NULL and optional is TRU
 ## Test 45: error if `arg` is NULL and optional is FALSE ----
 test_that("assert_list_of Test 45: error if `arg` is NULL and optional is FALSE", {
   example_fun <- function(arg) {
-    assert_list_of(arg, class = "factor", optional = FALSE)
+    assert_list_of(arg, cls = "factor", optional = FALSE)
   }
 
   expect_error(
     example_fun(NULL),
-    # TODO: update this to "assert_list_of" after we update that function
-    class = "assert_s3_class"
+    class = "assert_list_of"
   )
-  # TODO: this snapshot will update after we update `assert_list_of()`
-  #   Instead of `Error in `assert_list_of()`` it will be `Error in `example_fun()``
   expect_snapshot(example_fun(NULL), error = TRUE)
 })
 
@@ -694,31 +691,43 @@ test_that("assert_list_of Test 46: no error if `arg` is a list of specific class
 ## Test 47: error if `arg` is not a named list (no elements named) ----
 test_that("assert_list_of Test 47: error if `arg` is not a named list (no elements named)", {
   expect_error(
-    assert_list_of(mylist <- list(1, 2, 3), class = "numeric", named = TRUE),
-    paste(
-      "All elements of mylist must be named.",
-      "No element is named.",
-      sep = "\n"
-    )
+    {
+      mylist <- list(1, 2, 3)
+      assert_list_of(mylist, cls = "numeric", named = TRUE)
+    },
+    class = "assert_list_of"
+  )
+  expect_snapshot(
+    {
+      mylist <- list(1, 2, 3)
+      assert_list_of(mylist, cls = "numeric", named = TRUE)
+    },
+    error = TRUE
   )
 })
 
 ## Test 48: error if `arg` is not a named list (some elements named) ----
 test_that("assert_list_of Test 48: error if `arg` is not a named list (some elements named)", {
   expect_error(
-    assert_list_of(mylist <- list(1, 2, 3, d = 4), class = "numeric", named = TRUE),
-    paste(
-      "All elements of mylist must be named.",
-      "The following elements are not named: 1, 2 and 3",
-      sep = "\n"
-    )
+    {
+      mylist <- list(1, 2, 3, d = 4)
+      assert_list_of(mylist, cls = "numeric", named = TRUE)
+    },
+    class = "assert_list_of"
+  )
+  expect_snapshot(
+    {
+      mylist <- list(1, 2, 3, d = 4)
+      assert_list_of(mylist, cls = "numeric", named = TRUE)
+    },
+    error = TRUE
   )
 })
 
 ## Test 49: no error if `arg` is a named list ----
 test_that("assert_list_of Test 49: no error if `arg` is a named list", {
   expect_invisible(
-    assert_list_of(mylist <- list(a = 1, b = 2, c = 3), class = "numeric", named = TRUE)
+    assert_list_of(mylist <- list(a = 1, b = 2, c = 3), cls = "numeric", named = TRUE)
   )
 })
 
