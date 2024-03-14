@@ -15,6 +15,9 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+library(dplyr)
+library(reactable)
 ```
 
 # Introduction
@@ -50,13 +53,13 @@ function.
 A package release is done in the following steps:
 
 1) Create the release version:
-    a) Create a new feature branch from `main`.
-    a) Call `usethis::use_version()` to update the `Versions:` field in the
-    `DESCRIPTION` file and update `NEWS.md` (replace "(development version)"
-    with the version to be released)
-    a) Create a PR into `main` and merge it. The title of the PR must contain "[skip vbump]".
-    Otherwise, the vbump workflow sets the version to a development version and
-    CRAN will reject the submission.
+a) Create a new feature branch from `main`.
+a) Call `usethis::use_version()` to update the `Versions:` field in the
+`DESCRIPTION` file and update `NEWS.md` (replace "(development version)"
+with the version to be released)
+a) Create a PR into `main` and merge it. The title of the PR must contain "[skip vbump]".
+Otherwise, the vbump workflow sets the version to a development version and
+CRAN will reject the submission.
 1) Bundle up from `main` (`devtools::build(manual = TRUE)`) and send off to
 CRAN. See the [chapter](https://r-pkgs.org/release.html#decide-the-release-type)
 in R Packages for more details.
@@ -68,22 +71,22 @@ releases](https://github.com/pharmaverse/admiral/releases) for reference and
 [Releasing to Github](release_strategy.html#releasing-to-github) section for
 more details).
 
-    This releases onto Github archives the version of code within the `main` branch,
+This releases onto Github archives the version of code within the `main` branch,
 attaches the News/Changelog file, bundles the code into a `tar.gz` file and
 makes a validation report via the GitHub action `validation` from
 [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).
 
-    It also builds the website for the released version and stores it in a new
+It also builds the website for the released version and stores it in a new
 `vx.y.z` folder on the `gh-pages` branch.
 
 1) Merge `main` into `patch` to be prepared in case of a needed hotfix.
 1) Create the next development version:
-    a) Create a new feature branch from `main`.
-    a) Call `usethis::use_dev_version()` to update `NEWS.md` (adds a new
-    section `# admiral (development version)`) and update the version in the
-    `DESCRIPTION` file to a development version.
-    a) Create a PR into `main` and merge it.
-    
+a) Create a new feature branch from `main`.
+a) Call `usethis::use_dev_version()` to update `NEWS.md` (adds a new
+section `# admiral (development version)`) and update the version in the
+`DESCRIPTION` file to a development version.
+a) Create a PR into `main` and merge it.
+
 ## Hot Fix Release
 
 Rarely, we may need to release a hot fix to immediately address a bug. In the
@@ -125,21 +128,21 @@ releases](https://github.com/pharmaverse/admiral/releases) for reference and
 [Releasing to Github](release_strategy.html#releasing-to-github) section for
 more details).
 
-    This releases onto Github archives the version of code within the `patch`
+This releases onto Github archives the version of code within the `patch`
 branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file
 and makes a validation report via the GitHub action `validation` from
 [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).
 
-    It also builds the website for the released version and stores it in a new
+It also builds the website for the released version and stores it in a new
 `vx.y.z` folder on the `gh-pages` branch.
 
 1) These hot fixes should then be merged into the `main` branch through an
 additional Pull Request. Merging the PR will update the version in the
 `DESCRIPTION` file to a development version.
 1) Create the next development version:
-    a) Create a new feature branch from `main`.
-    a) Update `NEWS.md` (add a new section `# admiral (development version)`)
-    a) Create a PR into `main` and merge it.
+a) Create a new feature branch from `main`.
+a) Update `NEWS.md` (add a new section `# admiral (development version)`)
+a) Create a PR into `main` and merge it.
 
 # Releasing to Github
 Under the [Releases](https://github.com/pharmaverse/admiral/releases) section in the main repo, select `Draft a New Release`. Proceed by creating the appropriate release tag and header, denoted as `vX.X.X` and `admiral X.X.X` respectively, for the release:
@@ -156,6 +159,11 @@ Then in the upload box where it says, "Attach binaries by dropping them here or 
 
 `git push --delete origin tagname`
 
+# Release Tracking
+
+When a new package release has been submitted to CRAN and is awaiting go-live, you can track its status by searching for it within [this dashboard](https://r-hub.github.io/cransays/articles/dashboard.html).
+
 # Communications
 
 After the release, we raise awareness via our Slack channel and LinkedIn.
+
