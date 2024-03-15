@@ -969,7 +969,8 @@ test_that("assert_varval_list Test 67: error if `arg` is not a list of var-value
   }
 
   expect_error(
-    example_fun(c("USUBJID", "PARAMCD", "VISIT"))
+    example_fun(c("USUBJID", "PARAMCD", "VISIT")),
+    class = "assert_varval_list"
   )
 })
 

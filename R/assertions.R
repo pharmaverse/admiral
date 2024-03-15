@@ -1222,6 +1222,7 @@ assert_param_does_not_exist <- function(dataset, param) {
 #'   right hand side be accepted?
 #' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown.
+#' @inheritParams assert_logical_scalar
 #'
 #'
 #' @return
@@ -1246,7 +1247,11 @@ assert_varval_list <- function(arg, # nolint
                                required_elements = NULL,
                                accept_expr = TRUE,
                                accept_var = FALSE,
-                               optional = FALSE) {
+                               optional = FALSE,
+                               arg_name = rlang::caller_arg(arg),
+                               message = NULL,
+                               class = "assert_varval_list",
+                               call = parent.frame()) {
   assert_logical_scalar(accept_expr)
   assert_logical_scalar(accept_var)
   assert_logical_scalar(optional)
@@ -1257,50 +1262,47 @@ assert_varval_list <- function(arg, # nolint
   }
 
   if (accept_expr) {
-    valid_vals <- "a symbol, character scalar, numeric scalar, an expression, or `NA`"
+    valid_vals <- "a symbol, character scalar, numeric scalar, an expression, or {.val {NA}}"
   } else if (accept_var) {
-    valid_vals <- "a symbol, character scalar, numeric scalar, variable names or `NA`"
+    valid_vals <- "a symbol, character scalar, numeric scalar, variable names or {.val {NA}}"
   } else {
-    valid_vals <- "a symbol, character scalar, numeric scalar, or `NA`"
+    valid_vals <- "a symbol, character scalar, numeric scalar, or {.val {NA}}"
   }
 
   if (!accept_var && (!inherits(arg, "list") || !is_named(arg))) {
-    err_msg <- sprintf(
-      paste0(
-        "`%s` must be a named list of expressions where each element is ",
-        valid_vals,
-        " but it is %s\n",
-        "\u2139 To create a list of expressions use `exprs()`"
-      ),
-      arg_name(substitute(arg)),
-      what_is_it(arg)
+    cli_abort(
+      message = message %||%
+        c(paste0("Argument {.arg {arg_name}} must be a named list of expressions
+                 where each element is ", valid_vals, ", but is {.obj_type_friendly {arg}}."),
+          i = "To create a list of expressions use {.fun exprs}."
+        ),
+      class = c(class, "assert-admiraldev"),
+      call = call
     )
-    abort(err_msg)
   }
 
   if (accept_var && (!contains_vars(arg))) {
-    err_msg <- sprintf(
-      paste0(
-        "`%s` must be a list of expressions where each element is ",
-        valid_vals,
-        " but it is %s\n",
-        "\u2139 To create a list of expressions use `exprs()`"
-      ),
-      arg_name(substitute(arg)),
-      what_is_it(arg)
+    cli_abort(
+      message = message %||%
+        c(paste0("Argument {.arg {arg_name}} must be a list of expressions where
+                  each element is ", valid_vals, ", but is {.obj_type_friendly {arg}}."),
+          i = "To create a list of expressions use {.fun exprs}."
+        ),
+      class = c(class, "assert-admiraldev"),
+      call = call
     )
-    abort(err_msg)
   }
 
   if (!is.null(required_elements)) {
     missing_elements <- setdiff(required_elements, names(arg))
     if (length(missing_elements) >= 1L) {
-      err_msg <- sprintf(
-        "The following required elements are missing in `%s`: %s",
-        arg_name(substitute(arg)),
-        enumerate(missing_elements, quote_fun = squote)
+      cli_abort(
+        message = message %||%
+          "The following required elements are missing from
+           argument {.arg {arg_name}}: {.val {missing_elements}}.",
+        class = c(class, "assert-admiraldev"),
+        call = call
       )
-      abort(err_msg)
     }
   }
 
@@ -1323,22 +1325,20 @@ assert_varval_list <- function(arg, # nolint
     )]
   }
   if (length(invalids) > 0) {
-    abort(
-      paste0(
-        "The elements of the list ",
-        arg_name(substitute(arg)),
-        " must be ",
-        valid_vals,
-        ".\n",
-        paste(
-          names(invalids),
-          "=",
-          map_chr(invalids, expr_label),
-          "is of type",
-          map_chr(invalids, typeof),
-          collapse = "\n"
+    cli_abort(
+      message = message %||%
+        c(
+          paste0(
+            "The elements of the list in argument {.arg {arg_name}} must be ",
+            valid_vals, "."
+          ),
+          i = glue_collapse(
+            glue("{{.val {names(invalids)}}} = {{.code {invalids}}} is of type
+                  {{.cls {map_chr(invalids, typeof)}}}"),
+            sep = ", ",
+            last = ", and "
+          )
         )
-      )
     )
   }
 
