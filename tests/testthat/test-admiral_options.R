@@ -12,7 +12,9 @@ test_that("get_admiral_option Test 2: common typo gives error to select availabl
 ## Test 3: non-character argument triggers assertion error ----
 test_that("get_admiral_option Test 3: non-character argument triggers assertion error", {
   subject_keys <- 1
-  expect_error(get_admiral_option(subject_keys), "`option` must be a character scalar but is `1`")
+  expect_error(get_admiral_option(subject_keys),
+    class = "assert_character_scalar"
+  )
 })
 
 # set_admiral_options ----
