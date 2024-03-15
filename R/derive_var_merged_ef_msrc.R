@@ -174,8 +174,8 @@ derive_var_merged_ef_msrc <- function(dataset,
                                       false_value = NA_character_,
                                       missing_value = NA_character_) {
   new_var <- assert_symbol(enexpr(new_var))
-  assert_list_of(source_datasets, class = "data.frame", named = TRUE)
-  assert_list_of(flag_events, "flag_event")
+  assert_list_of(source_datasets, cls = "data.frame", named = TRUE)
+  assert_list_of(flag_events, cls = "flag_event")
 
   source_names <- names(source_datasets)
   assert_list_element(
