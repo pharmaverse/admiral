@@ -867,8 +867,8 @@ assert_list_of <- function(arg, cls,
         sep = ", ", last = ", and "
       )
       message <- c(
-        "Each element of the list in argument {{.arg {{arg_name}}}}
-         must be class/type {{.cls {cls}}}.",
+        "Each element of the list in argument {.arg {arg_name}}
+         must be class/type {.cls {cls}}.",
         i = paste("But,", info_msg)
       )
     }
