@@ -1198,8 +1198,11 @@ test_that("assert_date_vector Test 88: error if `arg` is NULL and optional is FA
 
   expect_error(
     example_fun(NULL),
-    "`arg` must be a date or datetime variable but it's `NULL`",
-    fixed = TRUE
+    class = "assert_date_vector"
+  )
+  expect_snapshot(
+    example_fun(NULL),
+    error = TRUE
   )
 })
 
