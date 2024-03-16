@@ -28,11 +28,7 @@ test_that("set_admiral_options Test 4: set works", {
 test_that("set_admiral_options Test 5: unexpected function input for set gives error", {
   expect_error(
     set_admiral_options(subject_keys = rlang::quos(STUDYID, USUBJID2)),
-    regexp = paste(
-      "Each element of `arg` must be an object of class/type 'symbol'",
-      "but the following are not:"
-    ),
-    fixed = TRUE
+    class = "assert_list_of"
   )
   expect_error(
     set_admiral_options(subject_keys = STUDYID),
