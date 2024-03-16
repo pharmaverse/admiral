@@ -91,7 +91,7 @@ consolidate_metadata <- function(datasets,
                                  check_vars = "warning",
                                  check_keys,
                                  check_type = "error") {
-  assert_list_of(datasets, class = "data.frame", named = TRUE)
+  assert_list_of(datasets, cls = "data.frame", named = TRUE)
   assert_vars(key_vars)
   source_var <- assert_symbol(enexpr(source_var))
   check_vars <-

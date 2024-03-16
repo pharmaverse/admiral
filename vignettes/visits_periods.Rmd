@@ -143,7 +143,7 @@ example dataset.
 
 Consider a simple crossover study with the following design:
 
-<img src="https://raw.githubusercontent.com/pharmaverse/admiral/2321_period_examples/inst/visit_periods/dummy_study_design.png" width="630" height="252"/>
+<img src="https://raw.githubusercontent.com/pharmaverse/admiral/main/inst/visit_periods/dummy_study_design.png" width="630" height="252"/>
 <!-- This image is located at the following location within the package: inst/visit_periods/dummy_study_design.png -->
 
 Given this design, an option could be to split the study into two periods:
