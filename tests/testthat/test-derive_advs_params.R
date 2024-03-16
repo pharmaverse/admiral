@@ -349,7 +349,7 @@ test_that("derive_param_bmi Test 35: BMI parameter NOT added - PARAMCD not set",
       set_values_to = exprs(PARAM = "Body Mass Index"),
       get_unit_expr = VSSTRESU
     ),
-    "The following required elements are missing in `set_values_to`: 'PARAMCD'"
+    class = "assert_varval_list"
   )
 })
 
@@ -550,10 +550,7 @@ test_that("derive_param_bsa Test 42: BSA parameter NOT added - PARAMCD not set",
       set_values_to = exprs(PARAM = "Body Surface Area"),
       get_unit_expr = VSSTRESU
     ),
-    paste(
-      "The following required elements are missing in",
-      "`set_values_to`: 'PARAMCD'"
-    )
+    class = "assert_varval_list"
   )
 })
 
@@ -972,10 +969,7 @@ test_that("derive_param_map Test 55: MAP parameter NOT added - PARAMCD not set",
       set_values_to = exprs(PARAM = "Mean Arterial Pressure"),
       get_unit_expr = extract_unit(PARAM)
     ),
-    paste(
-      "The following required elements are missing in",
-      "`set_values_to`: 'PARAMCD'"
-    )
+    class = "assert_varval_list"
   )
 })
 
