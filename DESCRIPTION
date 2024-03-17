@@ -1,7 +1,7 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 1.0.2.9015
+Version: 1.0.2.9016
 Authors@R: c(
     person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
@@ -62,7 +62,6 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     tibble
-Remotes: pharmaverse/admiraldev
 VignetteBuilder: 
     knitr
 Remotes: 
