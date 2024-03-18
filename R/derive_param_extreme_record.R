@@ -138,8 +138,8 @@ derive_param_extreme_record <- function(dataset = NULL,
                                         set_values_to) {
   # Check arguments assertions
   assert_data_frame(dataset, optional = TRUE)
-  assert_list_of(sources, "records_source")
-  assert_list_of(source_datasets, "data.frame")
+  assert_list_of(sources, cls = "records_source")
+  assert_list_of(source_datasets, cls = "data.frame")
   assert_vars(by_vars, optional = TRUE)
   assert_character_scalar(
     mode,

@@ -150,7 +150,7 @@ test_that("derive_param_extreme_record Test 3: Error given when sources is not i
         PARAM = "First Anti-Cancer Therapy"
       )
     ),
-    regexp = "Each element of `sources` must be an object of class/type 'records_source' but the following are not:" # nolint
+    class = "assert_list_of"
   )
 })
 

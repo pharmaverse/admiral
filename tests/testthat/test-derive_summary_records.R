@@ -89,8 +89,7 @@ test_that("derive_summary_records Test 3: Errors", {
       set_values_to = exprs(
         z = mean(z)
       )
-    ),
-    class = "assert_s3_class"
+    )
   )
 
   # Does by_vars exist in input dataset?
