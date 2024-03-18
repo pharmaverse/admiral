@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9015</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9016</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -203,44 +203,11 @@ however at some stage we had to make a decision :)</li>
 </ul>
 </div>
 <div class="section level5">
-<h5 id="why-do-we-use-a-certain-r-version-and-package-versions-for-development">Why do we use a <strong>certain R version and package
-versions</strong> for development?<a class="anchor" aria-label="anchor" href="#why-do-we-use-a-certain-r-version-and-package-versions-for-development"></a>
-</h5>
-<ul>
-<li>The choice of R Version is not set in stone. However, a common
-development environment is important to establish when working across
-multiple companies and multiple developers. We currently work in the
-earliest of the three latest R Versions. This need for a common
-development environment also carries over for our choice of package
-versions.<br>
-</li>
-<li>GitHub allows us through the Actions/Workflows to test
-<a href="https://pharmaverse.github.io/admiral/">admiral</a> under several versions of R as well as several
-versions of dependent R packages needed for <a href="https://pharmaverse.github.io/admiral/">admiral</a>.
-Currently we test <a href="https://pharmaverse.github.io/admiral/">admiral</a> against the three latest R
-Versions and the closest snapshots of packages to those R versions. You
-can view this workflow and others on our <a href="https://github.com/pharmaverse/admiralci" class="external-link">admiralci GitHub
-Repository</a>.</li>
-<li>This common development allows us to easily re-create bugs and
-provide solutions to each other issues that developers will
-encounter.</li>
-<li>Reviewers of Pull Requests when running code will know that their
-environment is identical to the initiator of the Pull Request. This
-ensures faster review times and higher quality Pull Request
-reviews.</li>
-<li>We achieve this common development environment by using a
-<strong>lockfile</strong> created from the <a href="https://rstudio.github.io/renv/" class="external-link"><code>renv</code></a> package.
-New developers will encounter a suggested <code><a href="https://rstudio.github.io/renv/reference/restore.html" class="external-link">renv::restore()</a></code>
-in the console to revert or move forward your R version and package
-versions.</li>
-</ul>
-</div>
-<div class="section level5">
 <h5 id="admiral-offers-a-toolbox-of-functions-to-facilitate-adam--what-does-that-mean">Admiral offers a <strong>toolbox of functions to facilitate
 ADaM</strong>. What does that mean?<a class="anchor" aria-label="anchor" href="#admiral-offers-a-toolbox-of-functions-to-facilitate-adam--what-does-that-mean"></a>
 </h5>
 <ul>
-<li>Functions are usually not necessarily specific but parameter driven:
+<li>Functions are usually parameter driven:
 <ul>
 <li>e.g. the <code>derive_vars_aage</code> has a parameterized start and
 end-date and a unit.</li>
@@ -268,6 +235,18 @@ function.</li>
 <li>
 <a href="https://pharmaverse.github.io/admiral/">admiral</a> does not provide a link to an explicit
 specification in the define.xml.</li>
+</ul>
+</div>
+<div class="section level5">
+<h5 id="where-a-user-can-quickly-find-some-references-or-advises-to-use-a-function">Where a user can quickly find some <strong>references or
+advises</strong> to use a function?<a class="anchor" aria-label="anchor" href="#where-a-user-can-quickly-find-some-references-or-advises-to-use-a-function"></a>
+</h5>
+<ul>
+<li>A <a href="https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf" class="external-link">Cheat
+Sheet</a> is available, providing some examples of the many
+<a href="https://pharmaverse.github.io/admiral/">admiral</a> functions.</li>
+<li>For more detailed description, please refer to the <a href="https://pharmaverse.github.io/admiral/reference/index.html">Reference
+section</a>.</li>
 </ul>
 </div>
 <div class="section level5">
@@ -429,6 +408,16 @@ both the design, development, documentation, and validation details are
 available for teams to readily adopt.”</em></li>
 </ul>
 </li>
+</ul>
+</div>
+<div class="section level5">
+<h5 id="are-there-any-presentations-available-about-admiral">Are there any <strong>presentations</strong> available about
+<code>{admiral}</code>?<a class="anchor" aria-label="anchor" href="#are-there-any-presentations-available-about-admiral"></a>
+</h5>
+<ul>
+<li>For a full collection of <a href="https://pharmaverse.github.io/admiral/">admiral</a> conference
+presentations over the years, please travel to our <a href="https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html">Presentation
+Archive</a>.</li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
