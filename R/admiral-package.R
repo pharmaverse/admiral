@@ -27,4 +27,5 @@
 #' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
 #' @importFrom stats setNames
+#' @importFrom stats lag
 "_PACKAGE"
