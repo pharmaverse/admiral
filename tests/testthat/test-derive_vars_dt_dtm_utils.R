@@ -32,8 +32,6 @@ test_that("convert_date_to_dtm Test 4: Keep -- DTM as the original date time obj
 })
 
 # get_imputation_target_date ----
-devtools::load_all()
-
 ## Test 5: get correct target for missing dates ----
 test_that("get_imputation_target_date Test 5: get correct target for missing dates", {
   expect_equal(
@@ -53,7 +51,6 @@ test_that("get_imputation_target_date Test 6: get correct target for missing dat
 
 ## Test 7: get correct target for missing dates ----
 test_that("get_imputation_target_date Test 7: get correct target for missing dates", {
-  devtools::load_all()
   expect_equal(
     get_imputation_target_date("last", NA),
     list(year = "9999", month = "12", day = "28")
