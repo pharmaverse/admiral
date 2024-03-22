@@ -454,6 +454,7 @@ assert_expr <- function(arg,
 #'
 #' @param arg Quosure - filtering condition.
 #' @param optional Logical - is the argument optional? Defaults to `FALSE`.
+#' @inheritParams assert_logical_scalar
 #'
 #' @details Check if `arg` is a suitable filtering condition to be used in
 #' functions like `subset` or `dplyr::filter`.
@@ -473,14 +474,19 @@ assert_expr <- function(arg,
 #'
 #' # typical usage in a function as an argument check
 #' example_fun <- function(dat, x) {
-#'   x <- assert_filter_cond(enquo(x))
+#'   x <- assert_filter_cond(enexpr(x), arg_name = "x")
 #'   filter(dat, !!x)
 #' }
 #'
 #' example_fun(dm, AGE == 64)
 #'
-#' try(example_fun(dm, USUBJID))
-assert_filter_cond <- function(arg, optional = FALSE) {
+#' try(assert_filter_cond(mtcars))
+assert_filter_cond <- function(arg,
+                               optional = FALSE,
+                               arg_name = rlang::caller_arg(arg),
+                               message = NULL,
+                               class = "assert_filter_cond",
+                               call = parent.frame()) {
   assert_logical_scalar(optional)
 
   if (optional && is.null(arg)) {
@@ -489,12 +495,12 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 
   provided <- !is_missing(arg)
   if (provided && !(is_call(arg) || is_logical(arg))) {
-    err_msg <- sprintf(
-      "`%s` must be a filter condition but is %s",
-      arg_name(substitute(arg)),
-      what_is_it(arg)
+    cli_abort(
+      message = message %||%
+        "Argument {.arg {arg_name}} must be a filter condition, but is {.obj_type_friendly {arg}}",
+      class = c(class, "assert-admiraldev"),
+      call = call
     )
-    abort(err_msg)
   }
 
   invisible(arg)
