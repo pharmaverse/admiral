@@ -165,11 +165,55 @@ test_that("assert_vars Test 10: no error if expected input", {
 
 ## Test 11: error if unexpected input ----
 test_that("assert_vars Test 11: error if unexpected input", {
-  expect_error(assert_vars(AVAL + 1))
-  expect_error(assert_vars(rlang::quos(USUBJID, PARAMCD)))
-  expect_error(assert_vars(c("USUBJID", "PARAMCD", "VISIT")))
-  expect_error(assert_vars(exprs(USUBJID, AVAL + 2)))
-  expect_error(assert_vars(exprs(APERSDT = APxxSDT, APxxEDT), expect_names = TRUE))
+  expect_error(
+    assert_vars(AVAL + 1),
+    class = "assert_vars"
+  )
+
+  expect_snapshot(
+    assert_vars(AVAL + 1),
+    error = TRUE
+  )
+
+  expect_error(
+    assert_vars(rlang::quos(USUBJID, PARAMCD)),
+    class = "assert_vars"
+  )
+
+  expect_snapshot(
+    assert_vars(rlang::quos(USUBJID, PARAMCD)),
+    error = TRUE
+  )
+
+  expect_error(
+    assert_vars(c("USUBJID", "PARAMCD", "VISIT")),
+    class = "assert_vars"
+  )
+
+  expect_snapshot(
+    assert_vars(c("USUBJID", "PARAMCD", "VISIT")),
+    error = TRUE
+  )
+
+  expect_error(
+    assert_vars(exprs(USUBJID, AVAL + 2)),
+    class = "assert_vars"
+  )
+
+  expect_snapshot(
+    assert_vars(exprs(USUBJID, AVAL + 2)),
+    error = TRUE
+  )
+
+  expect_error(
+    assert_vars(exprs(APERSDT = APxxSDT, APxxEDT), expect_names = TRUE),
+    class = "assert_vars"
+  )
+
+  expect_snapshot(
+    assert_vars(exprs(APERSDT = APxxSDT, APxxEDT), expect_names = TRUE),
+    error = TRUE
+  )
 })
 
 # assert_data_frame ----

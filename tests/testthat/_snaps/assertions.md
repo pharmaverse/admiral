@@ -1,3 +1,46 @@
+# assert_vars Test 11: error if unexpected input
+
+    Code
+      assert_vars(AVAL + 1)
+    Condition
+      Error:
+      ! Argument `AVAL + 1` must be a list of <symbol>, e.g., `exprs(USUBJID, VISIT)`.
+
+---
+
+    Code
+      assert_vars(rlang::quos(USUBJID, PARAMCD))
+    Condition
+      Error:
+      ! Each element of the list in argument `rlang::quos(USUBJID, PARAMCD)` must be class/type <symbol>.
+      i But, element 1 is a <quosure> object, and element 2 is a <quosure> object
+
+---
+
+    Code
+      assert_vars(c("USUBJID", "PARAMCD", "VISIT"))
+    Condition
+      Error:
+      ! Argument `c("USUBJID", "PARAMCD", "VISIT")` must be class <list>, but is a character vector.
+
+---
+
+    Code
+      assert_vars(exprs(USUBJID, AVAL + 2))
+    Condition
+      Error:
+      ! Each element of the list in argument `exprs(USUBJID, AVAL + 2)` must be class/type <symbol>.
+      i But, element 2 is a call
+
+---
+
+    Code
+      assert_vars(exprs(APERSDT = APxxSDT, APxxEDT), expect_names = TRUE)
+    Condition
+      Error:
+      ! All elements of `exprs(APERSDT = APxxSDT, APxxEDT)` argument must be named.
+      i The indices of the unnamed elements are 2
+
 # assert_character_scalar Test 17: error if `arg` not in values
 
     Code
