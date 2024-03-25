@@ -69,7 +69,7 @@
 #' advs <- tribble(
 #'   ~STUDYID,  ~USUBJID,      ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
 #'   "CDISC01", "01-701-1015", "PULSE",        1,    61,        0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "PULSE",        1,    60,        2, "WEEK 6",
+#'   "CDISC01", "01-701-1015", "PULSE",        1,    60,        2, "WEEK 2",
 #'   "CDISC01", "01-701-1015", "DIABP",        2,    51,        0, "BASELINE",
 #'   "CDISC01", "01-701-1015", "DIABP",        2,    50,        2, "WEEK 2",
 #'   "CDISC01", "01-701-1015", "DIABP",        2,    51,        4, "WEEK 4",
