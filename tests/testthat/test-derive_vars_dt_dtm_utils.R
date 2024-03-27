@@ -52,6 +52,15 @@ test_that("get_imputation_target_date Test 6: get correct target for missing dat
 ## Test 7: get correct target for missing dates ----
 test_that("get_imputation_target_date Test 7: get correct target for missing dates", {
   expect_equal(
+    get_imputation_target_date("mid", NA),
+    list(year = "xxxx", month = "06", day = "30")
+  )
+})
+
+
+## Test 8: get correct target for missing dates ----
+test_that("get_imputation_target_date Test 8: get correct target for missing dates", {
+  expect_equal(
     get_imputation_target_date("last", NA),
     list(year = "9999", month = "12", day = "28")
   )
