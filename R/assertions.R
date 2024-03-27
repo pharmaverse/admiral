@@ -1029,7 +1029,7 @@ assert_has_variables <- function(dataset, required_vars) {
 #' @param optional Is the checked argument optional?
 #'
 #' If set to `FALSE` and `arg` is `NULL` then an error is thrown.
-#'
+#' @inheritParams assert_logical_scalar
 #'
 #' @return The function throws an error
 #'
@@ -1053,7 +1053,13 @@ assert_has_variables <- function(dataset, required_vars) {
 #' try(example_fun(1))
 #'
 #' try(example_fun(sum))
-assert_function <- function(arg, params = NULL, optional = FALSE) {
+assert_function <- function(arg,
+                            params = NULL,
+                            optional = FALSE,
+                            arg_name = rlang::caller_arg(arg),
+                            message = NULL,
+                            class = "assert_function",
+                            call = parent.frame()) {
   assert_character_vector(params, optional = TRUE)
   assert_logical_scalar(optional)
 
@@ -1061,37 +1067,41 @@ assert_function <- function(arg, params = NULL, optional = FALSE) {
     return(invisible(arg))
   }
 
+  arg_name <- tryCatch(force(arg_name), error = function(e) "arg")
   if (missing(arg)) {
-    err_msg <- sprintf(
-      "Argument `%s` missing, with no default",
-      arg_name(substitute(arg))
+    cli_abort(
+      message = message %||%
+        "Argument {.arg {arg_name}} cannot be missing.",
+      class = c(class, "assert-admiraldev"),
+      call = call
     )
-    abort(err_msg)
   }
 
   if (!is.function(arg)) {
-    err_msg <- sprintf(
-      "`%s` must be a function but is %s",
-      arg_name(substitute(arg)),
-      what_is_it(arg)
+    cli_abort(
+      message = message %||%
+        "Argument {.arg {arg_name}} must be a function, but is {.obj_type_friendly {arg}}.",
+      class = c(class, "assert-admiraldev"),
+      call = call
     )
-    abort(err_msg)
   }
   if (!is.null(params)) {
     if ("..." %in% names(formals(arg))) {
       return(invisible(arg))
     }
     is_param <- params %in% names(formals(arg))
+
     if (!all(is_param)) {
-      txt <- if (sum(!is_param) == 1L) {
-        "%s is not an argument of the function specified for `%s`"
-      } else {
-        "%s are not arguments of the function specified for `%s`"
-      }
-      err_msg <- sprintf(txt, enumerate(params[!is_param]), arg_name(substitute(arg)))
-      abort(err_msg)
+      cli_abort(
+        message = message %||%
+          "{.val {params[!is_param]}} {?is/are} not {?an argument/arguments}
+        of the function specified for {.arg {arg_name}}.",
+        call = call,
+        class = c(class, "assert-admiraldev")
+      )
     }
   }
+
   invisible(arg)
 }
 
