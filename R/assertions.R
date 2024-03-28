@@ -9,10 +9,11 @@
 #' @param optional Is the checked argument optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
+#' @inheritParams assert_logical_scalar
 #'
 #' @return
-#' The function throws an error if `arg` is not a data frame or if `arg`
-#' is a data frame but misses any variable specified in `required_vars`. Otherwise,
+#' The function throws an error if `arg` is not a data frame or if `arg` is a
+#' data frame but misses any variable specified in `required_vars`. Otherwise,
 #' the input is returned invisibly.
 #'
 #' @export
@@ -21,10 +22,14 @@
 #' @family assertion
 #'
 #' @examples
-#' library(pharmaversesdtm)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(tibble)
+#' library(dplyr)
 #' library(rlang)
-#' data(dm)
+#' dm <- tribble(
+#'   ~STUDYID, ~USUBJID,
+#'   "XYZ",    "1",
+#'   "XYZ",    "2"
+#' )
 #'
 #' example_fun <- function(dataset) {
 #'   assert_data_frame(dataset, required_vars = exprs(STUDYID, USUBJID))
@@ -35,10 +40,16 @@
 #' try(example_fun(select(dm, -STUDYID)))
 #'
 #' try(example_fun("Not a dataset"))
+#'
+#' try(example_fun(group_by(dm, USUBJID)))
 assert_data_frame <- function(arg,
                               required_vars = NULL,
                               check_is_grouped = TRUE,
-                              optional = FALSE) {
+                              optional = FALSE,
+                              arg_name = rlang::caller_arg(arg),
+                              message = NULL,
+                              class = "assert_data_frame",
+                              call = parent.frame()) {
   assert_vars(required_vars, optional = TRUE)
   assert_logical_scalar(check_is_grouped)
   assert_logical_scalar(optional)
@@ -47,21 +58,23 @@ assert_data_frame <- function(arg,
     return(invisible(arg))
   }
 
-  if (!is.data.frame(arg)) {
-    err_msg <- sprintf(
-      "`%s` must be a data frame but is %s",
-      arg_name(substitute(arg)),
-      what_is_it(arg)
-    )
-    abort(err_msg)
-  }
+  assert_s3_class(
+    arg,
+    cls = "data.frame",
+    optional = optional,
+    arg_name = arg_name,
+    message = message,
+    class = class,
+    call = call
+  )
 
   if (check_is_grouped && dplyr::is_grouped_df(arg)) {
-    err_msg <- sprintf(
-      "`%s` is a grouped data frame, please `ungroup()` it first",
-      arg_name(substitute(arg))
+    cli_abort(
+      message = message %||%
+        "Argument {.arg {arg_name}} must not be a grouped dataset, please `ungroup()` it.",
+      class = c(class, "assert-admiraldev"),
+      call = call
     )
-    abort(err_msg)
   }
 
   if (!is.null(required_vars)) {
@@ -70,11 +83,16 @@ assert_data_frame <- function(arg,
     if (any(is_missing)) {
       missing_vars <- required_vars[is_missing]
       if (length(missing_vars) == 1L) {
-        err_msg <- sprintf("Required variable `%s` is missing", missing_vars)
+        err_msg <- "Required variable {.var {missing_vars}} is missing in {.arg {arg_name}}"
       } else {
-        err_msg <- sprintf("Required variables %s are missing", enumerate(missing_vars))
+        err_msg <- "Required variables {.var {missing_vars}} are missing in {.arg {arg_name}}"
       }
-      abort(err_msg)
+      cli_abort(
+        message = message %||%
+          err_msg,
+        class = c(class, "assert-admiraldev"),
+        call = call
+      )
     }
   }
 
