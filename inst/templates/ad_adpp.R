@@ -51,7 +51,9 @@ param_lookup <- tibble::tribble(
   "TCEND", "TCEND", "Time of CEND", 17, # non Cdisc Term
   "TLST", "TLST", "Time of Last Nonzero Conc", 18,
   "TMAX", "TMAX", "Time of CMAX", 19,
-  "VSSO", "VSSO", "Vol Dist Steady State Obs", 20
+  "VSSO", "VSSO", "Vol Dist Steady State Obs", 20,
+  "RCAMINT", "RCAMINT", "Ae", 21,
+  "RENALCL", "RENALCL", "CLR", 22
 )
 
 # ASSIGN AVALCAT1
@@ -100,8 +102,9 @@ adpp_aval <- adpp_pp %>%
     select(param_lookup, PPTESTCD, PARAMCD),
     by = "PPTESTCD"
   ) %>%
-  ## Calculate AVAL and AVALC ----
+  ## Calculate PARCAT1, AVAL and AVALC ----
   mutate(
+    PARCAT1 = PPCAT,
     AVAL = PPSTRESN,
     AVALC = PPSTRESC,
     AVALU = PPSTRESU,
