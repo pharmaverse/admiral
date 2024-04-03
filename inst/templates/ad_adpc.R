@@ -346,6 +346,7 @@ adpc_nrrlt <- adpc_arrlt %>%
 
 adpc_aval <- adpc_nrrlt %>%
   mutate(
+    PARCAT1 = PCSPEC,
     ATPTN = case_when(
       EVID == 1 ~ 0,
       TRUE ~ PCTPTNUM
@@ -444,7 +445,7 @@ adpc_dtype <- bind_rows(adpc_aval, dtype) %>%
 
 adpc_base <- adpc_dtype %>%
   derive_var_base(
-    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, PARCAT1, BASETYPE),
     source_var = AVAL,
     new_var = BASE,
     filter = ABLFL == "Y"
@@ -459,7 +460,7 @@ adpc_aseq <- adpc_chg %>%
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
-    order = exprs(ADTM, BASETYPE, EVID, AVISITN, ATPTN, DTYPE),
+    order = exprs(ADTM, BASETYPE, EVID, AVISITN, ATPTN, PARCAT1, DTYPE),
     check_type = "error"
   ) %>%
   # Remove temporary variables
