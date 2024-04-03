@@ -225,6 +225,22 @@
       Error in `example_fun()`:
       ! Argument `arg` must be a function, but is a number.
 
+# assert_unit Test 65: error if there are multiple units in the input dataset
+
+    Code
+      assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
+    Condition
+      Error:
+      ! Multiple units "kg" and "lb" found for "WEIGHT". Please review and update the units.
+
+# assert_unit Test 66: error if unexpected unit in the input dataset
+
+    Code
+      assert_unit(advs, param = "WEIGHT", required_unit = "lb", get_unit_expr = VSSTRESU)
+    Condition
+      Error:
+      ! It is expected that "WEIGHT" has unit of "lb". In the input dataset the unit is "kg".
+
 # assert_date_vector Test 90: error if `arg` is NULL and optional is FALSE
 
     Code

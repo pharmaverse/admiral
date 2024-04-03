@@ -1024,7 +1024,12 @@ test_that("assert_unit Test 65: error if there are multiple units in the input d
   )
 
   expect_error(
-    assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
+    assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU),
+    class = "assert_unit"
+  )
+  expect_snapshot(
+    assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU),
+    error = TRUE
   )
 })
 
@@ -1037,7 +1042,12 @@ test_that("assert_unit Test 66: error if unexpected unit in the input dataset", 
   )
 
   expect_error(
-    assert_unit(advs, param = "WEIGHT", required_unit = "lb", get_unit_expr = VSSTRESU)
+    assert_unit(advs, param = "WEIGHT", required_unit = "lb", get_unit_expr = VSSTRESU),
+    class = "assert_unit"
+  )
+  expect_snapshot(
+    assert_unit(advs, param = "WEIGHT", required_unit = "lb", get_unit_expr = VSSTRESU),
+    error = TRUE
   )
 })
 

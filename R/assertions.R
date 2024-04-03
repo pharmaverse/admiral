@@ -1155,6 +1155,8 @@ assert_function_param <- function(arg, params) {
 #' @param required_unit Expected unit
 #' @param get_unit_expr Expression used to provide the unit of `param`
 #'
+#' @inheritParams assert_logical_scalar
+#'
 #'
 #' @keywords assertion
 #' @family assertion
@@ -1175,7 +1177,14 @@ assert_function_param <- function(arg, params) {
 #' )
 #'
 #' assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
-assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
+assert_unit <- function(dataset,
+                        param,
+                        required_unit,
+                        get_unit_expr,
+                        arg_name = rlang::caller_arg(required_unit),
+                        message = NULL,
+                        class = "assert_unit",
+                        call = parent.frame()) {
   assert_data_frame(dataset, required_vars = exprs(PARAMCD))
   assert_character_scalar(param)
   assert_character_scalar(required_unit)
@@ -1188,29 +1197,26 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
     unique()
 
   if (length(units) != 1L) {
-    abort(
-      paste0(
-        "Multiple units ",
-        enumerate(units, quote_fun = squote),
-        " found for ",
-        squote(param),
-        ".\n",
-        "Please review and update the units."
-      )
+    message <-
+      message %||%
+      "Multiple units {.val {units}} found for {.val {param}}. Please review and update the units."
+
+    cli_abort(
+      message = message,
+      call = call,
+      class = c(class, "assert-admiraldev")
     )
   }
   if (tolower(units) != tolower(required_unit)) {
-    abort(
-      paste0(
-        "It is expected that ",
-        squote(param),
-        " is measured in ",
-        squote(required_unit),
-        ".\n",
-        "In the input dataset it is measured in ",
-        enumerate(units, quote_fun = squote),
-        "."
-      )
+    message <-
+      message %||%
+      "It is expected that {.val {param}} has unit of {.val {required_unit}}.
+       In the input dataset the unit is {.val {units}}."
+
+    cli_abort(
+      message = message,
+      call = call,
+      class = c(class, "assert-admiraldev")
     )
   }
 
