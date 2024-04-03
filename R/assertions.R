@@ -1229,6 +1229,7 @@ assert_unit <- function(dataset,
 #'
 #' @param dataset A `data.frame`
 #' @param param Parameter code to check
+#' @inheritParams assert_logical_scalar
 #'
 #'
 #' @return
@@ -1249,17 +1250,22 @@ assert_unit <- function(dataset,
 #' )
 #' assert_param_does_not_exist(advs, param = "HR")
 #' try(assert_param_does_not_exist(advs, param = "WEIGHT"))
-assert_param_does_not_exist <- function(dataset, param) {
+assert_param_does_not_exist <- function(dataset,
+                                        param,
+                                        arg_name = rlang::caller_arg(dataset),
+                                        message = NULL,
+                                        class = "assert_param_does_not_exist",
+                                        call = parent.frame()) {
   assert_data_frame(dataset, required_vars = exprs(PARAMCD))
   if (param %in% unique(dataset$PARAMCD)) {
-    abort(
-      paste0(
-        "The parameter code ",
-        squote(param),
-        " does already exist in `",
-        arg_name(substitute(dataset)),
-        "`."
-      )
+    message <-
+      message %||%
+      "The parameter code {.val {param}} already exists in dataset {.arg {arg_name}}."
+
+    cli_abort(
+      message = message,
+      class = c(class, "assert-admiraldev"),
+      call = call
     )
   }
   invisible(dataset)

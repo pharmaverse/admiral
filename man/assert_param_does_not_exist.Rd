@@ -4,12 +4,41 @@
 \alias{assert_param_does_not_exist}
 \title{Asserts That a Parameter Does Not Exist in the Dataset}
 \usage{
-assert_param_does_not_exist(dataset, param)
+assert_param_does_not_exist(
+  dataset,
+  param,
+  arg_name = rlang::caller_arg(dataset),
+  message = NULL,
+  class = "assert_param_does_not_exist",
+  call = parent.frame()
+)
 }
 \arguments{
 \item{dataset}{A \code{data.frame}}
 
 \item{param}{Parameter code to check}
+
+\item{arg_name}{string indicating the label/symbol of the object being checked.}
+
+\item{message}{string passed to \code{cli::cli_abort(message)}.
+When \code{NULL}, default messaging is used (see examples for default messages).
+\code{"{arg_name}"} can be used in messaging.}
+
+\item{class}{Subclass of the condition.}
+
+\item{call}{The execution environment of a currently running
+function, e.g. \code{call = caller_env()}. The corresponding function
+call is retrieved and mentioned in error messages as the source
+of the error.
+
+You only need to supply \code{call} when throwing a condition from a
+helper function which wouldn't be relevant to mention in the
+message.
+
+Can also be \code{NULL} or a \link[rlang:topic-defuse]{defused function call} to
+respectively not display any call or hard-code a code to display.
+
+For more information about error calls, see \ifelse{html}{\link[rlang:topic-error-call]{Including function calls in error messages}}{\link[rlang:topic-error-call]{Including function calls in error messages}}.}
 }
 \value{
 The function throws an error if the parameter exists in the input

@@ -1061,7 +1061,13 @@ test_that("assert_param_does_not_exist Test 67: error if parameter exists in the
   )
 
   expect_error(
-    assert_param_does_not_exist(advs, param = "WEIGHT")
+    assert_param_does_not_exist(advs, param = "WEIGHT"),
+    class = "assert_param_does_not_exist"
+  )
+
+  expect_snapshot(
+    assert_param_does_not_exist(advs, param = "WEIGHT"),
+    error = TRUE
   )
 })
 
