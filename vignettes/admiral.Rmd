@@ -1,8 +1,8 @@
 ---
-title: "Get Started"
+title: "Simple ADSL & ADVS Walkthrough"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Get Started}
+  %\VignetteIndexEntry{Simple ADSL & ADVS Walkthrough}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -22,7 +22,10 @@ The main idea of `{admiral}` is that an ADaM dataset is built by a sequence of
 derivations. Each derivation adds one or more variables or parameters to the
 processed dataset. This modular approach makes it easy to adjust code by adding,
 removing, or modifying derivations. Each derivation is a function call. Consider
-for example the following script which creates a (very simple) ADSL dataset.
+for example the following scripts which create a (very simple) [ADSL](#adsl_example) dataset or
+[ADVS](#advs_example) dataset.
+
+# ADSL example {#adsl_example}
 
 ## Load Packages and Example Datasets
 
@@ -196,111 +199,29 @@ dataset_vignette(
   display_vars = exprs(STUDYID, USUBJID, FINLABDT)
 )
 ```
+# ADVS example {#advs_example}
 
-# Arguments
+## Load Packages and Example Datasets
 
-For arguments which expect variable names or expressions of variable names, 
-symbols or expressions must be specified rather than strings.
+Similarly to ADSL's example, we will load our packages and example datasets to
+help with our `ADVS` creation. Some of the data frames needed may be `VS` and `ADSL`.
 
-- For arguments which expect a single variable name, the name can be specified
-without quotes and quotation, e.g. `new_var = TEMPBL`
+```{r message=FALSE}
+library(admiral)
+library(dplyr, warn.conflicts = FALSE)
+library(pharmaversesdtm)
+library(lubridate)
+library(stringr)
+library(tibble)
 
-- For arguments which expect one or more variable names, a list of symbols is
-expected, e.g. `by_vars = exprs(PARAMCD, AVISIT)` 
+data("admiral_adsl")
+data("vs")
 
-- For arguments which expect a single expression, the expression needs to be
-passed "as is", e.g. `filter = PARAMCD == "TEMP"`
-
-- For arguments which expect one or more expressions, a list of expressions is
-expected, e.g. `order = exprs(AVISIT, desc(AESEV))`
-
-## What is `exprs()`?
-
-`exprs()` is a function from the `{rlang}` package. It is used to create a list
-of expressions. The expressions are not evaluated. Rather they are passed on to
-the derivation function which evaluates them in its own environment. This allows
-the derivation function to evaluate the expressions in the context of the input
-dataset.
-Specifically, the `exprs()` function allows users to pass variable names of datasets 
-to the function without wrapping them in quotation marks. 
-
-# Handling of Missing Values
-
-When using the `{haven}` package to read SAS datasets into R, SAS-style character missing values, i.e. `""`, are *not* converted into proper R `NA` values. Rather they are kept as is. This is problematic for any downstream data processing as R handles `""` just as any other string. Thus, before any data manipulation is being performed SAS blanks should be converted to R `NA`s using `{admiral}`'s `convert_blanks_to_na()` function, e.g.
-
-```r
-dm <- haven::read_sas("dm.sas7bdat") %>% 
-  convert_blanks_to_na()
+adsl <- admiral_adsl
+vs <- convert_blanks_to_na(vs)
 ```
-
-Note that any logical operator being applied to an `NA` value *always* returns `NA` rather than `TRUE` or `FALSE`.
-
-```{r}
-visits <- c("Baseline", NA, "Screening", "Week 1 Day 7")
-visits != "Baseline"
-```
-
-The only exception is `is.na()` which returns `TRUE` if the input is `NA`.
-
-```{r}
-is.na(visits)
-```
-
-Thus, to filter all visits which are not `"Baseline"` the following condition would need to be used.
-
-```{r}
-visits != "Baseline" | is.na(visits)
-```
-
-Also note that most aggregation functions, like `mean()` or `max()`, also return `NA` if any element of the input vector is missing.
-
-```{r}
-mean(c(1, NA, 2))
-```
-
-To avoid this behavior one has to explicitly set `na.rm = TRUE`.
-
-```{r}
-mean(c(1, NA, 2), na.rm = TRUE)
-```
-
-This is very important to keep in mind when using `{admiral}`'s aggregation functions such as `derive_summary_records()`.
-
-For handling of `NA`s in sorting variables see [Sort
-Order](generic.html#sort_order).
-
-# Validation
-
-All functions are reviewed and tested to ensure that they work as described in
-the documentation. They are **not validated** yet.
-
-Although `{admiral}` follows CDISC standards, it does not claim that the dataset
-resulting from calling `{admiral}` functions is ADaM compliant. This has to be
-ensured by the user.
-
-# Starting a Script
-
-For the ADaM data structures, an overview of the flow and example function calls
-for the most common steps are provided by the following vignettes:
-
-- [Creating ADSL](adsl.html)
-- [Creating an OCCDS ADaM](occds.html)
-- [Creating a BDS Finding ADaM](bds_finding.html)
-
-`{admiral}` also provides template R scripts as a starting point. They can be
-created by calling `use_ad_template()`, e.g.,
-
-```r
-use_ad_template(
-  adam_name = "adsl",
-  save_path = "./ad_adsl.R"
-)
-```
-
-A list of all available templates can be obtained by `list_all_templates()`:
-
-```{r}
-list_all_templates()
+```{r echo=FALSE}
+vs <- filter(vs, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
 ```
 
 # Support
