@@ -1168,8 +1168,7 @@ test_that("assert_varval_list Test 75: no error if an argument is a variable-val
 test_that("assert_expr_list Test 76: error if `arg` is not a list of expressions", {
   expect_error(
     assert_expr_list(arg <- c("USUBJID", "PARAMCD", "VISIT")),
-    regexp = "`arg` must be a named list of expressions but it is a",
-    fixed = TRUE
+    class = "assert_expr_list"
   )
 })
 
@@ -1188,8 +1187,7 @@ test_that("assert_expr_list Test 78: error if `required_elements` are missing fr
       arg <- exprs(DTHSEQ = AESEQ),
       required_elements = "DTHDOM"
     ),
-    regexp = "The following required elements are missing in `arg`: 'DTHDOM'",
-    fixed = TRUE
+    class = "assert_expr_list"
   )
 })
 
@@ -1204,8 +1202,7 @@ test_that("assert_expr_list Test 79: no error if `arg` is NULL and optional is T
 test_that("assert_expr_list Test 80: error if element is invalid", {
   expect_error(
     assert_expr_list(arg <- exprs(DTHSEQ = !!mean)),
-    regexp = "All elements of `arg` must be an expression.",
-    fixed = TRUE
+    class = "assert_expr_list"
   )
 })
 

@@ -8,7 +8,11 @@ assert_expr_list(
   arg,
   required_elements = NULL,
   named = FALSE,
-  optional = FALSE
+  optional = FALSE,
+  arg_name = rlang::caller_arg(arg),
+  message = NULL,
+  class = "assert_expr_list",
+  call = parent.frame()
 )
 }
 \arguments{
@@ -21,6 +25,28 @@ list are named.}
 
 \item{optional}{Is the checked argument optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown.}
+
+\item{arg_name}{string indicating the label/symbol of the object being checked.}
+
+\item{message}{string passed to \code{cli::cli_abort(message)}.
+When \code{NULL}, default messaging is used (see examples for default messages).
+\code{"{arg_name}"} can be used in messaging.}
+
+\item{class}{Subclass of the condition.}
+
+\item{call}{The execution environment of a currently running
+function, e.g. \code{call = caller_env()}. The corresponding function
+call is retrieved and mentioned in error messages as the source
+of the error.
+
+You only need to supply \code{call} when throwing a condition from a
+helper function which wouldn't be relevant to mention in the
+message.
+
+Can also be \code{NULL} or a \link[rlang:topic-defuse]{defused function call} to
+respectively not display any call or hard-code a code to display.
+
+For more information about error calls, see \ifelse{html}{\link[rlang:topic-error-call]{Including function calls in error messages}}{\link[rlang:topic-error-call]{Including function calls in error messages}}.}
 }
 \value{
 The function throws an error if \code{arg} is not a list of expressions.
@@ -37,7 +63,7 @@ example_fun <- function(vars) {
 }
 example_fun(exprs(DTHDOM = "AE", DTHSEQ = AESEQ))
 
-try(example_fun(exprs("AE", DTSEQ = AESEQ, !!list("a"))))
+try(example_fun(exprs("AE", DTSEQ = AESEQ, !!list("a"), !!list("a"))))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 
