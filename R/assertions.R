@@ -1400,7 +1400,9 @@ assert_varval_list <- function(arg, # nolint
             sep = ", ",
             last = ", and "
           )
-        )
+        ),
+      class = c(class, "assert-admiraldev"),
+      call = call
     )
   }
 
@@ -1516,42 +1518,43 @@ assert_expr_list <- function(arg, # nolint
 #' fulfilling the condition are listed.
 #'
 #' @param list A list to be checked
-#'
 #'   A list of named lists or classes is expected.
-#'
 #' @param element The name of an element of the lists/classes
-#'
 #'   A character scalar is expected.
-#'
 #' @param condition Condition to be fulfilled
-#'
 #'   The condition is evaluated for each element of the list. The element of the
 #'   lists/classes can be referred to by its name, e.g., `censor == 0` to check
 #'   the `censor` field of a class.
-#'
-#' @param message_text Text to be displayed in the message
-#'
-#'   The text should describe the condition to be fulfilled, e.g., "For events
-#'   the censor values must be zero.".
-#'
+#' @param message_text Text to be displayed in the error message above
+#'   the listing of values that do not meet the condition.
+#'   The text should describe the condition to be fulfilled,
+#'   e.g., `"Error in {arg_name}: the censor values must be zero."`.
+#'   If `message` argument is specified, that text will be displayed and `message_text`
+#'   is ignored.
 #' @param ... Objects required to evaluate the condition
-#'
 #'   If the condition contains objects apart from the element, they have to be
 #'   passed to the function. See the second example below.
-#'
+#' @inheritParams assert_logical_scalar
 #'
 #' @return
-#' An error if the condition is not meet. The input otherwise.
+#' An error if the condition is not met. The input otherwise.
 #'
 #' @keywords assertion
 #' @family assertion
 #' @export
 #'
-assert_list_element <- function(list, element, condition, message_text, ...) {
+assert_list_element <- function(list,
+                                element,
+                                condition,
+                                message_text,
+                                arg_name = rlang::caller_arg(list),
+                                message = NULL,
+                                class = "assert_list_element",
+                                call = parent.frame(), ...) {
   assert_s3_class(list, "list")
   assert_character_scalar(element)
   condition <- assert_filter_cond(enexpr(condition))
-  assert_character_scalar(message_text)
+
   # store elements of the lists/classes in a vector named as the element #
   rlang::env_poke(current_env(), eval(element), lapply(list, `[[`, element))
   invalids <- !eval(
@@ -1561,20 +1564,29 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
   )
   if (any(invalids)) {
     invalids_idx <- which(invalids)
-    abort(
-      paste0(
-        message_text,
-        "\n",
-        paste0(
-          arg_name(substitute(list)),
-          "[[", invalids_idx, "]]$", element,
-          " = ",
-          lapply(list[invalids_idx], `[[`, element),
-          collapse = "\n"
-        )
+
+    # construct supplementary message listing elements that are not correct type
+    if (is.null(message)) {
+      info_msg <- glue_collapse(
+        glue(
+          "{{.code {arg_name}[[{invalids_idx}]]${element} =
+           {lapply(list[invalids_idx], `[[`, element)}}}"
+        ),
+        sep = ", ", last = ", and "
       )
+      message <- c(
+        message_text,
+        i = paste(" But,", info_msg)
+      )
+    }
+
+    cli::cli_abort(
+      message = message,
+      class = c(class, "assert-admiraldev"),
+      call = call
     )
   }
+
   invisible(list)
 }
 

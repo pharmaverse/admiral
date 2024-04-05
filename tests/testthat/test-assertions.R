@@ -1237,16 +1237,30 @@ test_that("assert_list_element Test 82: no error if the elements fulfill a certa
 test_that("assert_list_element Test 83: error if the elements do not fulfill the condition", {
   expect_error(
     assert_list_element(
-      input <- list(
+      list(
         list(var = expr(DTHDT), val = 1),
         list(var = expr(EOSDT), val = -1)
       ),
       element = "val",
       condition = val >= 0,
-      message_text = "Invalid value for `val`:"
-    ),
-    "Invalid value for `val`:\ninput[[2]]$val = -1",
-    fixed = TRUE
+      message_text = "List element {.val val} must be `>=0` in argument {.arg {arg_name}}:",
+      arg_name = "input"
+    )
+  )
+
+  expect_snapshot(
+    error = TRUE,
+    assert_list_element(
+      list(
+        list(var = expr(DTHDT), val = 1),
+        list(var = expr(EOSDT), val = -1),
+        list(var = expr(EOSDT), val = -2)
+      ),
+      element = "val",
+      condition = val >= 0,
+      message_text = "List element {.val val} must be `>=0` in argument {.arg {arg_name}}:",
+      arg_name = "input"
+    )
   )
 })
 
