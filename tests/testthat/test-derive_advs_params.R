@@ -290,10 +290,7 @@ test_that("derive_param_bmi Test 32: BMI parameter NOT added - wrong hgt unit", 
 
   expect_error(
     derive_param_bmi(input, by_vars = exprs(USUBJID, VISIT), get_unit_expr = VSSTRESU),
-    paste(
-      "It is expected that 'HEIGHT' is measured in 'cm'.\nIn the",
-      "input dataset it is measured in 'm'."
-    )
+    class = "assert_unit"
   )
 })
 
@@ -308,10 +305,7 @@ test_that("derive_param_bmi Test 33: BMI parameter NOT added - wrong wgt unit", 
 
   expect_error(
     derive_param_bmi(input, by_vars = exprs(USUBJID, VISIT), get_unit_expr = VSSTRESU),
-    paste(
-      "It is expected that 'WEIGHT' is measured in 'kg'.\nIn the",
-      "input dataset it is measured in 'g'."
-    )
+    class = "assert_unit"
   )
 })
 
@@ -327,10 +321,7 @@ test_that("derive_param_bmi Test 34: BMI parameter NOT added - multiple unit for
 
   expect_error(
     derive_param_bmi(input, by_vars = exprs(USUBJID, VISIT), get_unit_expr = VSSTRESU),
-    paste0(
-      "Multiple units 'kg' and 'g' found for 'WEIGHT'.",
-      "\nPlease review and update the units."
-    )
+    class = "assert_unit"
   )
 })
 
@@ -480,10 +471,7 @@ test_that("derive_param_bsa Test 39: BSA parameter NOT added - wrong unit for he
       method = "Mosteller",
       get_unit_expr = VSSTRESU
     ),
-    paste(
-      "It is expected that 'HEIGHT' is measured in 'cm'.\nIn the",
-      "input dataset it is measured in 'm'."
-    )
+    class = "assert_unit"
   )
 })
 
@@ -503,10 +491,7 @@ test_that("derive_param_bsa Test 40: BSA parameter NOT added - wrong unit for we
       method = "Mosteller",
       get_unit_expr = VSSTRESU
     ),
-    paste(
-      "It is expected that 'WEIGHT' is measured in 'kg'.\nIn the",
-      "input dataset it is measured in 'g'."
-    )
+    class = "assert_unit"
   )
 })
 
@@ -527,10 +512,7 @@ test_that("derive_param_bsa Test 41: BSA parameter NOT added - multiple unit for
       method = "Mosteller",
       get_unit_expr = VSSTRESU
     ),
-    paste0(
-      "Multiple units 'kg' and 'g' found for 'WEIGHT'.",
-      "\nPlease review and update the units."
-    )
+    class = "assert_unit"
   )
 })
 
@@ -903,10 +885,7 @@ test_that("derive_param_map Test 52: MAP parameter NOT added - wrong DIABP unit"
       by_vars = exprs(USUBJID, VISIT),
       get_unit_expr = extract_unit(PARAM)
     ),
-    paste(
-      "It is expected that 'DIABP' is measured in 'mmHg'.\nIn the",
-      "input dataset it is measured in 'mHg'."
-    )
+    class = "assert_unit"
   )
 })
 
@@ -924,10 +903,7 @@ test_that("derive_param_map Test 53: MAP parameter NOT added - wrong SYSBP unit"
       by_vars = exprs(USUBJID, VISIT),
       get_unit_expr = extract_unit(PARAM)
     ),
-    paste(
-      "It is expected that 'SYSBP' is measured in 'mmHg'.\nIn the",
-      "input dataset it is measured in 'mHg'."
-    )
+    class = "assert_unit"
   )
 })
 
@@ -947,10 +923,7 @@ test_that("derive_param_map Test 54: MAP parameter NOT added - wrong PULSE unit"
       hr_code = "PULSE",
       get_unit_expr = extract_unit(PARAM)
     ),
-    paste(
-      "It is expected that 'PULSE' is measured in 'beats/min'.\nIn the",
-      "input dataset it is measured in 'beats/m'."
-    )
+    class = "assert_unit"
   )
 })
 
