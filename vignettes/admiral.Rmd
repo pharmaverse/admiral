@@ -204,7 +204,7 @@ dataset_vignette(
 ## Load Packages and Example Datasets
 
 Similarly to ADSL's example, we will load our packages and example datasets to
-help with our `ADVS` creation. Some of the data frames needed may be `VS` and `ADSL`.
+help with our `ADVS` creation. The datasets required are `VS` and `ADSL`.
 
 ```{r message=FALSE}
 library(admiral)
@@ -222,6 +222,32 @@ vs <- convert_blanks_to_na(vs)
 ```
 ```{r echo=FALSE}
 vs <- filter(vs, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
+```
+
+# Starting a Script
+
+For the ADaM data structures, an overview of the flow and example function calls
+for the most common steps are provided by the following vignettes:
+
+- [Creating ADSL](adsl.html)
+- [Creating an OCCDS ADaM](occds.html)
+- [Creating a BDS Finding ADaM](bds_finding.html)
+
+`{admiral}` also provides template R scripts as a starting point. They can be
+created by calling `use_ad_template()`, e.g.,
+
+```r
+use_ad_template(
+  adam_name = "adsl",
+  save_path = "./ad_adsl.R"
+)
+```
+
+A list of all available templates can be obtained by `list_all_templates()`:
+
+```{r}
+library(admiral)
+list_all_templates()
 ```
 
 # Support

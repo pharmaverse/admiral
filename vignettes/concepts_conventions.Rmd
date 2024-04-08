@@ -1,0 +1,127 @@
+---
+title: "Admiral Programming Concepts and Conventions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Admiral Programming Concepts and Conventions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(admiraldev)
+```
+
+# Introduction
+
+This vignette aims to discuss some of the common programming concepts and conventions that have been adopted within the
+`{admiral}` packages. This includes how missing values are handled in `{admiral}`, as well as the way in which users are
+expected to pass inputs to `{admiral}` functions, and how those inputs should look.
+
+# Handling of Missing Values
+
+When using the `{haven}` package to read SAS datasets into R, SAS-style character missing values, i.e. `""`, are *not* 
+converted into proper R `NA` values. Rather they are kept as is. This is problematic for any downstream data processing 
+as R handles `""` just as any other string. Thus, before any data manipulation is being performed SAS blanks should be 
+converted to R `NA`s using `{admiral}`'s `convert_blanks_to_na()` function, e.g.
+
+```r
+dm <- haven::read_sas("dm.sas7bdat") %>% 
+  convert_blanks_to_na()
+```
+
+Note that any logical operator being applied to an `NA` value *always* returns `NA` rather than `TRUE` or `FALSE`.
+
+```{r}
+visits <- c("Baseline", NA, "Screening", "Week 1 Day 7")
+visits != "Baseline"
+```
+
+The only exception is `is.na()` which returns `TRUE` if the input is `NA`.
+
+```{r}
+is.na(visits)
+```
+
+Thus, to filter all visits which are not `"Baseline"` the following condition would need to be used.
+
+```{r}
+visits != "Baseline" | is.na(visits)
+```
+
+Also note that most aggregation functions, like `mean()` or `max()`, also return `NA` if any element of the input vector is missing.
+
+```{r}
+mean(c(1, NA, 2))
+```
+
+To avoid this behavior one has to explicitly set `na.rm = TRUE`.
+
+```{r}
+mean(c(1, NA, 2), na.rm = TRUE)
+```
+
+This is very important to keep in mind when using `{admiral}`'s aggregation functions such as `derive_summary_records()`.
+
+For handling of `NA`s in sorting variables see [Sort Order](generic.html#sort_order).
+
+# Argument Conventions
+
+Within the `{admiral}` package, any arguments which expect variable names or expressions of variable names, symbols or 
+expressions must be specified rather than strings.
+
+- For arguments which expect a single variable name, the name can be specified without quotes and quotation, e.g.
+`new_var = TEMPBL`
+
+- For arguments which expect one or more variable names, a list of symbols is expected, e.g. `by_vars = exprs(PARAMCD, AVISIT)` 
+
+- For arguments which expect a single expression, the expression needs to be passed "as is", e.g. `filter = PARAMCD == "TEMP"`
+
+- For arguments which expect one or more expressions, a list of expressions is expected, e.g. `order = exprs(AVISIT, desc(AESEV))`
+
+If you are new to expressions, read the [corresponding section](#exprs) to learn more.
+
+# `exprs()` {#exprs}
+
+## What is `exprs()`?
+
+`exprs()` is a function from the `{rlang}` package. It is used to create a list of expressions. The expressions are not evaluated 
+- rather, they are passed on to the derivation function which evaluates them in its own environment. This allows the derivation 
+function to evaluate the expressions in the context of the input dataset. Specifically, the `exprs()` function allows users to pass
+variable names of datasets to the function without wrapping them in quotation marks. 
+
+The expressions/`exprs()` framework is powerful because users are able to intuitively "inject code" into `admiral` functions
+(through the function parameters) using very similar syntax as if they were writing open code, with the exception possibly being an
+outer `exprs()` wrapper.  For instance, in the `derive_vars_merged()` call below, the user is merging `adsl` with `ex` and is able
+to filter `ex` prior to the merge using an expression passed to the `filter_add` parameter. Because `filter_add` accepts expressions, 
+the user has full power to filter their dataset as they please. In the same vein, the user is able to create any new variables they 
+wish after the merge using the `new_vars` argument, to which they pass a list of expressions containing standard R code.
+
+``` {r, eval = FALSE}
+derive_vars_merged(
+  adsl,
+  dataset_add = ex,
+  filter_add = !is.na(EXENDTM),
+  by_vars = exprs(STUDYID, USUBJID),
+  new_vars = exprs(
+    TRTEDTM = EXENDTM, 
+    TRTETMF = EXENTMF, 
+    COMPTRT = ifelse(!is.na(EXENDTM, "Y", "N"))
+  ),
+  order = exprs(EXENDTM),
+  mode = "last"
+)
+```
+
+In summary, although expressions/`exprs()` may seem slightly clunky and un-intuitive to begin with, they allow for such power
+and flexibility that they are a key part of the `{admiral}` package. 
+
+## Common pitfalls 
+
+# See also
+
+- [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html)
