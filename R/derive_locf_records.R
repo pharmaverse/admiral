@@ -207,6 +207,3 @@ derive_locf_records <- function(dataset,
   # Output dataset - merge the analysis_var missing with non-missing+newly added LOCF records
   bind_rows(aval_not_missing_locf, aval_missing)
 }
-
-
-
