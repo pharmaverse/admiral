@@ -339,11 +339,10 @@ test_that("derive_var_merged_exist_flag Test 14: merge existence flag", {
     new_var = VSEVALFL,
     condition = advs$AVISIT == "BASELINE"
   )
-  
+  print(actual)
   expected <-
     mutate(adsl, VSEVALFL = c("Y", "Y", NA_character_, NA_character_))
-
-
+  print(expected)
   expect_dfs_equal(
     base = expected,
     compare = actual,

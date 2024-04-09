@@ -119,8 +119,8 @@
 #'   missing_value = "M"
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
-#' 
-#' 
+#'
+#'
 
 derive_var_exist_flag <- function(dataset_add,
                       new_var,
@@ -133,7 +133,6 @@ derive_var_exist_flag <- function(dataset_add,
   condition <- assert_filter_cond(condition)
   filter_add <- assert_filter_cond(filter_add, optional = TRUE)
 
-  add_data <- if_all(dataset_add, filter(filter_add)) %>%
-    mutate(!!new_var := if_else(!!condition, 1, 0, 0))
+  add_data <- if_all(dataset_add, filter_add)
 
 }
