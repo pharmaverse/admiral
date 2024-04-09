@@ -1,86 +1,115 @@
-# impute_dtc_dt ----
 input <- c(
-  "2019-07-18",
-  "2019-02",
-  "2019",
-  "2019---07"
+  "2019-07-18", # full date
+  "--07-18", # missing year
+  "2019", # missing month and day
+  "2019-07--", # missing day
+  "2019---07", # missing just month
+  "", # empty string
+  NA_character_, # NA
+  "2019/07/18" # inappropriate date format/string
 )
 
+# impute_dtc_dt ----
 ## Test 1: default: no date imputation ----
 test_that("impute_dtc_dt Test 1: default: no date imputation", {
   expected_output <- c(
     "2019-07-18",
     NA_character_,
     NA_character_,
+    NA_character_,
+    NA_character_,
+    NA_character_,
+    NA_character_,
     NA_character_
   )
-  expect_equal(impute_dtc_dt(dtc = input), expected_output)
+  actual_output <- (
+    suppressWarnings(impute_dtc_dt(dtc = input))
+  )
+  expect_equal(actual_output, expected_output)
 })
 
 ## Test 2: impute month and day to first ----
 test_that("impute_dtc_dt Test 2: impute month and day to first", {
   expected_output <- c(
     "2019-07-18",
-    "2019-02-01",
+    NA_character_,
     "2019-01-01",
+    "2019-07-01",
+    "2019-01-01",
+    NA_character_,
+    NA_character_,
     "2019-01-01"
   )
 
-  expect_equal(
+  actual_output <- suppressWarnings(
     impute_dtc_dt(
       dtc = input,
       highest_imputation = "M",
       date_imputation = "first"
-    ),
-    expected_output
+    )
   )
 
-  expect_equal(
+  expect_equal(actual_output, expected_output)
+
+  actual_output <- suppressWarnings(
     impute_dtc_dt(
       dtc = input,
       highest_imputation = "M",
       date_imputation = "01-01"
-    ),
-    expected_output
+    )
   )
+
+  expect_equal(actual_output, expected_output)
 })
 
 ## Test 3: impute day to last ----
 test_that("impute_dtc_dt Test 3: impute day to last", {
   expected_output <- c(
     "2019-07-18",
-    "2019-02-28",
+    NA_character_,
+    NA_character_,
+    "2019-07-31",
+    NA_character_,
+    NA_character_,
     NA_character_,
     NA_character_
   )
-  expect_equal(
+
+  actual_output <- suppressWarnings(
     impute_dtc_dt(
       dtc = input,
       highest_imputation = "D",
       date_imputation = "LAST",
       preserve = FALSE
-    ),
-    expected_output
+    )
   )
+
+  expect_equal(actual_output, expected_output)
 })
 
 ## Test 4: impute month and day to last and preserve = TRUE ----
 test_that("impute_dtc_dt Test 4: impute month and day to last and preserve = TRUE", {
   expected_output <- c(
     "2019-07-18",
-    "2019-02-28",
+    NA_character_,
     "2019-12-31",
-    "2019-12-07"
+    "2019-07-31",
+    "2019-12-07",
+    NA_character_,
+    NA_character_,
+    "2019-12-31"
   )
-  expect_equal(
-    imputes <- impute_dtc_dt(
+
+  actual_output <- suppressWarnings(
+    impute_dtc_dt(
       dtc = input,
       highest_imputation = "M",
       date_imputation = "LAST",
       preserve = TRUE
-    ),
-    expected_output
+    )
   )
+
+  expect_equal(actual_output, expected_output)
 })
 
 
@@ -88,18 +117,24 @@ test_that("impute_dtc_dt Test 4: impute month and day to last and preserve = TRU
 test_that("impute_dtc_dt Test 5: impute month and day to mid", {
   expected_output <- c(
     "2019-07-18",
-    "2019-02-15",
+    NA_character_,
     "2019-06-30",
+    "2019-07-15",
+    "2019-06-30",
+    NA_character_,
+    NA_character_,
     "2019-06-30"
   )
-  expect_equal(
-    imputes <- impute_dtc_dt(
+
+  actual_output <- suppressWarnings(
+    impute_dtc_dt(
       dtc = input,
       highest_imputation = "M",
       date_imputation = "mid"
-    ),
-    expected_output
+    )
   )
+
+  expect_equal(actual_output, expected_output)
 })
 
 ## Test 6: min_dates parameter works ----
