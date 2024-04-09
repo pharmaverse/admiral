@@ -21,10 +21,10 @@ advs <- tibble::tribble(
   "ST42-3", "WEIGHT", "Week 4",   50
 ) %>% mutate(STUDYID = "ST42")
 
-# derive_var_merged_exist_flag ----
-## Test 1: merge existence flag ----
-test_that("derive_var_exist_flag Test 14: merge existence flag", {
-    
+# derive_var_exist_flag ----
+## Test 1: generate existence flag ----
+test_that("derive_var_exist_flag Test 1: generate existence flag", {
+  
   actual <- derive_var_exist_flag(
     advs,
     new_var = VSEVALFL,

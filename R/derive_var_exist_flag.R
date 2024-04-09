@@ -130,11 +130,10 @@ derive_var_exist_flag <- function(dataset_add,
                       missing_value = NA_character_,
                       filter_add = NULL) {
   new_var <- assert_symbol(enexpr(new_var))
-  print(new_var)
-  condition <- assert_filter_cond(condition)  
+  condition <- assert_filter_cond(condition)
   filter_add <- assert_filter_cond(filter_add, optional = TRUE)
 
-  add_data <- filter_if(dataset_add, filter_add) %>%
+  add_data <- if_all(dataset_add, filter(filter_add)) %>%
     mutate(!!new_var := if_else(!!condition, 1, 0, 0))
 
 }

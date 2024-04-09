@@ -1,7 +1,8 @@
 library("tibble")
 library("rlang")
 library("admiraldev")
-
+library("dplyr")
+library("testthat")
 
 adsl <- tibble::tribble(
   ~USUBJID, ~SEX, ~COUNTRY,

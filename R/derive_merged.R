@@ -566,22 +566,6 @@ derive_vars_merged <- function(dataset,
 #' 
 #' 
 
-derive_var_exist_flag <- function(new_var,
-                      condition,
-                      true_value = "Y",
-                      false_value = NA_character_,
-                      missing_value = NA_character_,
-                      filter_add = NULL) {
-
-  new_var <- assert_symbol(enexpr(new_var))
-  condition <- assert_filter_cond(enexpr(condition))  
-  filter_add <-
-    assert_filter_cond(enexpr(filter_add), optional = TRUE)
- 
-  add_data <- filter_if(dataset_add, filter_add) %>%
-    mutate(!!new_var := if_else(!!condition, 1, 0, 0))
-}
-
 #' Merge an Existence Flag
 #'
 #' @description Adds a flag variable to the input dataset which indicates if
