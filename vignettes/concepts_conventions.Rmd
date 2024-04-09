@@ -19,8 +19,7 @@ library(admiraldev)
 # Introduction
 
 This vignette aims to discuss some of the common programming concepts and conventions that have been adopted within the
-`{admiral}` packages. This includes how missing values are handled in `{admiral}`, as well as the way in which users are
-expected to pass inputs to `{admiral}` functions, and how those inputs should look.
+`{admiral}` family of packages. This includes how missing values are handled in `{admiral}`, as well as the way in which users are expected to pass inputs to `{admiral}` functions, and how those inputs should look.
 
 # Handling of Missing Values
 
@@ -99,7 +98,7 @@ The expressions/`exprs()` framework is powerful because users are able to intuit
 outer `exprs()` wrapper.  For instance, in the `derive_vars_merged()` call below, the user is merging `adsl` with `ex` and is able
 to filter `ex` prior to the merge using an expression passed to the `filter_add` parameter. Because `filter_add` accepts expressions, 
 the user has full power to filter their dataset as they please. In the same vein, the user is able to create any new variables they 
-wish after the merge using the `new_vars` argument, to which they pass a list of expressions containing standard R code.
+wish after the merge using the `new_vars` argument, to which they pass a list of expressions containing "standard" R code.
 
 ``` {r, eval = FALSE}
 derive_vars_merged(
@@ -121,6 +120,122 @@ In summary, although expressions/`exprs()` may seem slightly clunky and un-intui
 and flexibility that they are a key part of the `{admiral}` package. 
 
 ## Common pitfalls 
+
+As Uncle Ben from Spiderman would say, "With great power comes great responsibility", and this couldn't ring truer when working 
+with expressions: their power and flexibility can lead to misunderstandings about their functionality Let's set up some dummy data
+to explore some common issues that new (or experienced!) programmers may encounter when dealing with expressions.
+
+```{r, eval = TRUE, echo = FALSE}
+library(dplyr, warn.conflicts = FALSE)
+library(admiral)
+
+vs <- tribble(
+   ~USUBJID, ~VSTESTCD,      ~VISIT, ~VSSTRESN, ~VSSTRESU,           ~VSDTC,
+  "01-1301",  "WEIGHT",  "SCREENING",      82.1,      "kg",    "2013-08-29",
+  "01-1301",  "WEIGHT",     "WEEK 2",     81.19,      "kg",    "2013-09-15",
+  "01-1301",  "WEIGHT",     "WEEK 4",     82.56,      "kg",    "2013-09-24",
+  "01-1302",     "BMI",  "SCREENING",      20.1,      "kg/m2", "2013-08-29",
+  "01-1302",     "BMI",     "WEEK 2",      20.2,      "kg/m2", "2013-09-15",
+  "01-1302",     "BMI",     "WEEK 4",      19.9,      "kg/m2", "2013-09-24"
+)
+
+dm <- tribble(
+   ~USUBJID, ~AGE,
+   "01-1301", 18
+)
+```
+
+### 1. Mistakenly passing something that isn't an expression to an argument
+
+When writing more com `{admiral}` code it can be easy to mistakenly pass the wrong input to an argument that 
+expects an expression. For example, the code below fails because `my_expression` is not an expression - is 
+the name of an object in the global environment containing an expression.
+
+```{r, eval = TRUE, error = TRUE}
+my_expression = expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING")
+
+derive_vars_merged(
+  dm,
+  dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
+  by_vars = exprs(USUBJID),
+  filter_add = my_expression
+)
+```
+
+To fix this code, we need to unquote `my_expression` so that the expression that it is holding is passsed 
+correctly to `derive_vars_merged()`:
+
+```{r, eval = TRUE, error = FALSE}
+derive_vars_merged(
+  dm,
+  dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
+  by_vars = exprs(USUBJID),
+  filter_add = !!my_expression
+)
+```
+
+### 2. Forgetting that expressions must be evaluable in the dataset
+
+In a similar vein to above, even if an actual expression *is* passed as an argument, you must make
+sure that it can be evaluated within the dataset of interest. For intance, consider this code:
+
+```{r, eval = TRUE, error = TRUE}
+merge_weight_or_bmi <- function(weight_or_bmi){
+  
+  if(weight_or_bmi == "WEIGHT"){
+    my_wt_bmi_expression <- 'VSTESTCD == "WEIGHT" & VISIT == "SCREENING"'
+  }else{
+    my_wt_bmi_expression <- 'VSTESTCD == "WEIGHT" & VISIT == "SCREENING"'
+  }
+  
+  derive_vars_merged(
+    dm,
+    dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
+    by_vars = exprs(USUBJID),
+    filter_add = eval(parse(text = my_wt_bmi_expression))
+  )
+  
+}
+
+merge_weight_or_bmi("BMI")
+```
+
+This fails because the expression is:
+
+```{r, eval = TRUE}
+  expr(eval(parse(text = my_fn_condition)))
+```
+
+and contains `my_fn_condition`, which is not in the dataset.
+
+Conversely, this works:
+
+```{r, eval = TRUE}
+merge_weight_or_bmi <- function(weight_or_bmi){
+  
+  if(weight_or_bmi == "WEIGHT"){
+    my_wt_bmi_expression <- expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING")
+  }else{
+    my_wt_bmi_expression <- expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING")
+  }
+  
+  derive_vars_merged(
+    dm,
+    dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
+    by_vars = exprs(USUBJID),
+    filter_add = !!my_wt_bmi_expression
+  )
+  
+}
+
+merge_weight_or_bmi("BMI")
+```
+
+because the expression being passed to `derive_vars_merged()` is:
+
+```{r, eval = TRUE}
+  expr(!!expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING"))
+```
 
 # See also
 
