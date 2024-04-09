@@ -89,8 +89,7 @@ test_that("derive_summary_records Test 3: Errors", {
       set_values_to = exprs(
         z = mean(z)
       )
-    ),
-    regexp = "`arg` must be an object of class 'list' but is `\"x\"`"
+    )
   )
 
   # Does by_vars exist in input dataset?

@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 The derivation of visit variables like `AVISIT`, `AVISITN`, `AWLO`,
 `AWHI`, ... or period, subperiod, or phase variables like `APERIOD`,
 `TRT01A`, `TRT02A`, `ASPER`, `PHSDTM`, `PHEDTM`, ... is highly
-study-specific. Therefore admiral cannot provide functions which derive
+study-specific. Therefore `{admiral}` cannot provide functions which derive
 these variables. However, for common scenarios like visit assignments
 based on time windows or deriving BDS period variables from ADSL period
 variables, functions are provided which support those derivations.
@@ -47,7 +47,7 @@ library(admiraldev)
 The most common ways of deriving `AVISIT` and `AVISITN` are:
 
 -   The variables are set to the collected visits (`VISIT` and
-    `VISITNUM`).
+`VISITNUM`).
 -   The variables are set based on time windows.
 
 The former can be achieved simply by calling `mutate()`, like in the
@@ -92,86 +92,213 @@ derive_vars_joined(
 
 # Period, Subperiod, and Phase Variables
 
-If periods, subperiods, or phases are used, the corresponding variables
+If periods, subperiods, or phases are used, in the simpler of ADaM applications the corresponding variables
 have to be consistent across all datasets. This can be achieved by
-defining the periods, subperiods, or phases once and then use this
+defining the periods, subperiods, or phases once and then using this
 definition for all datasets. The definition can be stored in ADSL or in
-a separate dataset. In the following examples, this separate dataset is
-called period reference dataset.
+a separate dataset. In this vignette's examples, this separate dataset is
+called period/phase reference dataset depending what data it contains.
 
-## Period Reference Dataset {#reference}
+Note that periods, subperiods, or phases *can* be defined differently across datasets (for instance, they may be different across safety and efficacy analyses) in which case the start/stop dates should be defined in the individual datasets, instead of in ADSL. However, this vignette will not cover this scenario.
 
-The period reference dataset contains one observation per subject and
-period, subperiod, or phase. For example:
+## A Note on Study Specific Code
 
-```{r echo=FALSE}
-phase_ref <- tribble(
-  ~USUBJID, ~APHASEN, ~PHSDT,       ~PHEDT,       ~APHASE,
-  "1",             1, "2021-01-04", "2021-02-06", "TREATMENT",
-  "1",             2, "2021-02-07", "2021-03-07", "FUP",
-  "2",             1, "2021-02-02", "2021-03-02", "TREATMENT"
-) %>%
-  mutate(
-    STUDYID = "xyz",
-    APHASEN = as.integer(APHASEN),
-    across(matches("PH[ES]DT"), ymd)
-  ) %>%
-  select(STUDYID, everything())
+The sections below showcase the available tools in `{admiral}` to work with period, 
+subperiod and phase variables. However, at some point study specific code will 
+always be required. There are two options:
 
-phase_ref
-```
+-   Study specific code is used to first derive the variables `PxxSwSDT` and
+`PxxSwEDT` in ADSL. Then `create_period_dataset()` and
+`derive_vars_joined()` can be used to derive period/subperiod
+variables like `ASPER` or `ASPRSDT` in BDS and OCCDS datasets. See an example 
+dataset [here](#adsl_example).
 
-The admiral functions expect separate datasets for periods, subperiods,
+-   Study specific code is used to derive a dataset with one
+observation per patient, period, and subperiod (see [period
+reference dataset](#reference)). Then `derive_vars_period()` can be
+used to derive `PxxSwSDT` and `PxxSwEDT` in ADSL and
+`derive_vars_joined()` can be used to derive period/subperiod
+variables like `ASPER` or `ASPRSDT` in BDS and OCCDS datasets.
+
+It depends on the specific definition of the periods/subperiods which
+option works best. If the definition is based on other ADSL variables,
+the first option would work best. If the definition is based on
+vertically structured data like exposure data (EX dataset), the second
+option should be used. This vignette contains examples for both workflows.
+
+
+## The Period/Phase Reference Dataset {#reference}
+
+The `{admiral}` functions expect separate reference datasets for periods, subperiods,
 and phases. For periods the numeric variable `APERIOD` is expected, for
 subperiods the numeric variables `APERIOD` and `ASPER`, and for phases
 the numeric variable `APHASEN`.
 
+The period/phase reference dataset should be created according to the design 
+and ADaM needs of the study in question. It should contain one observation per subject and
+period, subperiod, or phase. See the [next section](#example_period) for an 
+example dataset.
+
+## Example Creation of the Period/Phase Reference Dataset {#example_period}
+
+Consider a simple crossover study with the following design:
+
+<img src="https://raw.githubusercontent.com/pharmaverse/admiral/main/inst/visit_periods/dummy_study_design.png" width="630" height="252"/>
+<!-- This image is located at the following location within the package: inst/visit_periods/dummy_study_design.png -->
+
+Given this design, an option could be to split the study into two periods:
+
+* Period 1 (Day 1 to Week 16);
+* Period 2 (Week 16 to End of Study).
+
+Alternatively (or additionally) one could split into two phases:
+
+* Phase 1 - Treatment (Day 1 to 28 days after Week 28);
+* Phase 2 - Follow-up (29 days after Week 28 to End of Study).
+
+Below, we present two example workflows: one where where a period reference dataset is created from the exposure dataset EX, and the other where a phase reference dataset is created using ADSL variables.
+
+### Creating the Period/Phase Reference Dataset from EX
+
+Below we create a period reference dataset starting from the exposure dataset EX. Consider the following exposure dataset:
+
+```{r echo=FALSE}
+ex <- tribble(
+  ~STUDYID, ~USUBJID,  ~VISIT,    ~EXTRT,   ~EXSTDTC,
+  "xyz",    "1",       "Day 1",   "Drug X", "2022-01-02",
+  "xyz",    "1",       "Week 4",  "Drug X", "2022-02-05",
+  "xyz",    "1",       "Week 8",  "Drug X", "2022-03-01",
+  "xyz",    "1",       "Week 12", "Drug X", "2022-04-03",
+  "xyz",    "1",       "Week 16", "Drug Y", "2022-05-03",
+  "xyz",    "1",       "Week 20", "Drug Y", "2022-06-02",
+  "xyz",    "1",       "Week 24", "Drug Y", "2022-07-01",
+  "xyz",    "1",       "Week 28", "Drug Y", "2022-08-04",
+  "xyz",    "2",       "Day 1",   "Drug Y", "2023-10-20",
+  "xyz",    "2",       "Week 4",  "Drug Y", "2023-11-21",
+  "xyz",    "2",       "Week 8",  "Drug Y", "2023-12-19",
+  "xyz",    "2",       "Week 12", "Drug Y", "2024-01-19",
+  "xyz",    "2",       "Week 16", "Drug X", "2024-02-20",
+  "xyz",    "2",       "Week 20", "Drug X", "2024-03-17",
+  "xyz",    "2",       "Week 24", "Drug X", "2024-04-22",
+  "xyz",    "2",       "Week 28", "Drug X", "2024-05-21"
+)
+
+ex
+```
+
+Then to create a period reference dataset, code like this (or similar) would suffice:
+
+```{r echo=TRUE}
+period_ref <- ex %>%
+  # Select visits marking the start of each period
+  filter(VISIT %in% c("Day 1", "Week 16")) %>%
+  # Create APERIOD, APERSDT, TRTA based on SDTM counterparts
+  mutate(
+    APERIOD = case_when(
+      VISIT == "Day 1" ~ 1,
+      VISIT == "Week 16" ~ 2
+    ),
+    TRTA = EXTRT,
+    APERSDT = convert_dtc_to_dt(EXSTDTC)
+  ) %>%
+  # Create APEREDT based on start date of next period
+  arrange(USUBJID, APERSDT) %>%
+  group_by(USUBJID) %>%
+  mutate(
+    APEREDT = lead(APERSDT) - 1 # one day before start of next period
+  ) %>%
+  # Tidy up
+  ungroup() %>%
+  select(-starts_with("EX"), -VISIT)
+
+period_ref
+```
+
+The workflow above populates the Period End Date `APEREDT` for all periods 
+except the last one. The value of the last period could then be populated 
+with the End of Study Date (`EOSDT`) from ADSL, to obtain:
+
+```{r echo=TRUE}
+adsl <- tribble(
+  ~STUDYID,  ~USUBJID,  ~TRTSDT,           ~TRTEDT,           ~EOSDT,
+  "xyz",     "1",       ymd("2022-01-02"), ymd("2022-08-04"), ymd("2022-09-10"),
+  "xyz",     "2",       ymd("2023-10-20"), ymd("2024-05-21"), ymd("2024-06-30")
+)
+
+period_ref <- period_ref %>%
+  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
+  mutate(APEREDT = case_when(
+    APERIOD == "1" ~ APEREDT,
+    APERIOD == "2" ~ EOSDT
+  )) %>%
+  select(-EOSDT, -TRTSDT, -TRTEDT)
+
+period_ref
+```
+
+### Creating the Period/Phase Reference Dataset from ADSL {#from_adsl}
+
+If the treatment start and end dates are already included in ADSL, we can derive the phase variables directly in ADSL and create a phase reference dataset by employing `create_period_dataset()`. Here is an example command to achieve this goal:
+
+```{r, eval = TRUE}
+adsl1 <- adsl %>%
+  mutate(
+    PH1SDT = TRTSDT,
+    PH1EDT = TRTEDT + 28,
+    APHASE1 = "TREATMENT",
+    PH2SDT = TRTEDT + 29,
+    PH2EDT = EOSDT,
+    APHASE2 = "FUP"
+  )
+
+phase_ref <- create_period_dataset(
+  adsl1,
+  new_vars = exprs(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
+)
+
+phase_ref
+```
+
 ## Creating ADSL Period, Subperiod, or Phase Variables {#periods_adsl}
 
-If a period reference dataset is available, the ADSL variables for
+If a period/phase reference dataset is available, the ADSL variables for
 periods, subperiods, or phases can be created from this dataset by
 calling `derive_vars_period()`.
 
 For example the period reference dataset from the previous section can
-be used to add the phase variables (`PHwSDT`, `PHwEDT`, and `APHASEw`)
+be used to add the period variables (`APxxSDT`, `APxxEDT`)
 to ADSL:
 
-```{r}
-adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
-
-adsl <- derive_vars_period(
+```{r, eval = TRUE}
+adsl2 <- derive_vars_period(
   adsl,
-  dataset_ref = phase_ref,
-  new_vars = exprs(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
+  dataset_ref = period_ref,
+  new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
 ) %>%
-  select(STUDYID, USUBJID, PH1SDT, PH1EDT, PH2SDT, PH2EDT, APHASE1, APHASE2)
+  select(STUDYID, USUBJID, AP01SDT, AP01EDT, AP02SDT, AP02EDT)
 
-adsl
+adsl2
 ```
 
 ## Creating BDS and OCCDS Period, Subperiod, or Phase Variables {#periods_bds}
 
-If a period reference dataset is available, BDS and OCCDS variables for
+If a period/phase reference dataset is available, BDS and OCCDS variables for
 periods, subperiods, or phases can be created by calling
 `derive_vars_joined()`.
 
 For example the variables `APHASEN`, `PHSDT`, `PHEDT`, `APHASE` can be
-derived from the period reference dataset defined above.
+derived from the phase reference dataset defined above.
 
 ```{r}
 adae <- tribble(
-  ~USUBJID, ~ASTDT,
-  "1",      "2021-01-01",
-  "1",      "2021-01-05",
-  "1",      "2021-02-05",
-  "1",      "2021-03-05",
-  "1",      "2021-04-05",
-  "2",      "2021-02-15",
+  ~STUDYID, ~USUBJID, ~ASTDT,
+  "xyz",    "1",      "2022-01-31",
+  "xyz",    "1",      "2022-05-02",
+  "xyz",    "1",      "2022-09-03",
+  "xyz",    "1",      "2022-09-09",
+  "xyz",    "2",      "2023-12-25",
+  "xyz",    "2",      "2024-06-19",
 ) %>%
-  mutate(
-    STUDYID = "xyz",
-    .before = USUBJID
-  ) %>%
   mutate(ASTDT = ymd(ASTDT))
 
 derive_vars_joined(
@@ -183,24 +310,11 @@ derive_vars_joined(
 )
 ```
 
-If no period reference dataset is available but period variables are in
-ADSL, the period reference dataset can be created from ADSL by calling
-`create_period_dataset()`.
-
-For [example]{#adsl_example}, a period reference dataset for phases can
-be created from the ADSL dataset created above:
-
-```{r}
-create_period_dataset(
-  adsl,
-  new_vars = exprs(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
-)
-```
-
 # Treatment Variables (`TRTxxP`, `TRTxxA`, `TRTP`, `TRTA`, ...)
 
 In studies with multiple periods the treatment can differ by period,
-e.g. for a crossover trial. CDISC defines variables for planned and
+e.g. for a crossover trial - see the [previous section](#example_period)
+for an example design showcasing this. CDISC defines variables for planned and
 actual treatments in ADSL (`TRTxxP`, `TRTxxA`, `TRxxPGy`, `TRxxAGy`,
 ...) and corresponding variables in BDS and OCCDS datasets (`TRTP`,
 `TRTA`, `TRTPGy`, `TRTAGy`, ...). They can be derived in the same way
@@ -208,25 +322,12 @@ actual treatments in ADSL (`TRTxxP`, `TRTxxA`, `TRxxPGy`, `TRxxAGy`,
 
 ## Creating ADSL Treatment Variables {#treatment_adsl}
 
-If the treatment information is included in the period reference
+If the treatment information is included in the period/phase reference
 dataset, the treatment ADSL variables can be created by calling
-`derive_vars_period()`:
+`derive_vars_period()`. This is showcased below using the period reference
+dataset from previous sections.
 
 ```{r}
-# Add period variables to ADSL
-period_ref <- tribble(
-  ~USUBJID, ~APERIOD, ~APERSDT,     ~APEREDT,     ~TRTA,
-  "1",             1, "2021-01-04", "2021-02-06", "DRUG A",
-  "1",             2, "2021-02-07", "2021-03-07", "DRUG B",
-  "2",             1, "2021-02-02", "2021-03-02", "DRUG B",
-  "2",             2, "2021-03-03", "2021-04-01", "DRUG B"
-) %>%
-  mutate(
-    STUDYID = "xyz",
-    APERIOD = as.integer(APERIOD),
-    across(ends_with("DT"), ymd)
-  )
-
 adsl <- derive_vars_period(
   adsl,
   dataset_ref = period_ref,
@@ -247,7 +348,7 @@ adsl
 
 ## Creating BDS and OCCDS Treatment Variables {#treatment_bds}
 
-If a period reference dataset is available, BDS and OCCDS variables for
+If a period/phase reference dataset is available, BDS and OCCDS variables for
 treatment can be created by calling `derive_vars_joined()`.
 
 For example the variables `APERIOD` and `TRTA` can be derived from the
@@ -255,18 +356,15 @@ period reference dataset defined above.
 
 ```{r}
 adae <- tribble(
-  ~USUBJID, ~ASTDT,
-  "1",      "2021-01-05",
-  "1",      "2021-02-05",
-  "1",      "2021-03-05",
-  "1",      "2021-04-05",
-  "2",      "2021-02-15",
-  "2",      "2021-03-10",
+  ~STUDYID, ~USUBJID, ~ASTDT,
+  "xyz",    "1",      "2022-01-31",
+  "xyz",    "1",      "2022-05-02",
+  "xyz",    "1",      "2022-08-24",
+  "xyz",    "1",      "2022-09-09",
+  "xyz",    "2",      "2023-12-25",
+  "xyz",    "2",      "2024-06-07",
 ) %>%
-  mutate(
-    ASTDT = ymd(ASTDT),
-    STUDYID = "xyz"
-  )
+  mutate(ASTDT = ymd(ASTDT))
 
 derive_vars_joined(
   adae,
@@ -279,12 +377,10 @@ derive_vars_joined(
 )
 ```
 
-If no period reference dataset is available but period variables are in
-ADSL, the period reference dataset can be created from ADSL by calling
-`create_period_dataset()`.
+If no period/phase reference dataset is available but period/phase variables are in
+ADSL, then the former can again be created from ADSL by calling `create_period_dataset()`, as was showcased [here](#from_adsl).
 
-For example, a period reference dataset for periods and treatments can
-be created from the ADSL dataset created above:
+This time, when calling `create_period_dataset()` we just need to make sure we include `TRTA = TRTxxA` as part of the `new_vars` argument to create the treatment variables as well.
 
 ```{r}
 create_period_dataset(
@@ -292,27 +388,3 @@ create_period_dataset(
   new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT, TRTA = TRTxxA)
 )
 ```
-
-# Study Specific Code
-
-At some point study specific code is required to derive period/subperiod
-variables. There are two options:
-
--   Study specific code is used to derive the variables `PxxSwSDT` and
-    `PxxSwEDT` in ADSL. Then `create_period_dataset()` and
-    `derive_vars_joined()` can be used to derive period/subperiod
-    variables like `ASPER` or `ASPRSDT` in BDS and OCCDS datasets. (See
-    [example](#adsl_example).)
-
--   Study specific code is used to derive a dataset with one
-    observations per patient, period, and subperiod (see [period
-    reference dataset](#reference) ). Then `derive_vars_period()` can be
-    used to derive `PxxSwSDT` and `PxxSwEDT` in ADSL and
-    `derive_vars_joined()` can be used to derive period/subperiod
-    variables like `ASPER` or `ASPRSDT` in BDS and OCCDS datasets.
-
-It depends on the specific definition of the periods/subperiods which
-option works best. If the definition is based on other ADSL variables,
-the first option would work best. If the definition is based on
-vertically structured data like exposure data (EX dataset), the second
-option should be used.
