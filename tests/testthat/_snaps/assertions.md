@@ -259,7 +259,7 @@
     Condition
       Error:
       ! List element "val" must be `>=0` in argument `input`:
-      i But, `input[[2]]$val = -1`, and `input[[3]]$val = -2`
+      i  But, `input[[2]]$val = -1`, and `input[[3]]$val = -2`
 
 # assert_date_vector Test 90: error if `arg` is NULL and optional is FALSE
 
