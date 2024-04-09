@@ -24,18 +24,18 @@ advs <- tibble::tribble(
 # derive_var_exist_flag ----
 ## Test 1: generate existence flag ----
 test_that("derive_var_exist_flag Test 1: generate existence flag", {
-  
+
   actual <- derive_var_exist_flag(
-    advs,
+    dataset_add = advs,
     new_var = VSEVALFL,
-    condition = advs$AVISIT == "BASELINE"
+    condition = AVISIT == "BASELINE"
   )
-    
-  expected <- mutate(advs,VSEVALFL = c(1, 0, 1, 0, 0))
+
+  expected <- mutate(advs, VSEVALFL = c(1, 0, 1, 0, 0))
 
   expect_dfs_equal(
     base = expected,
     compare = actual,
-    keys = c("USUBJID","AVISIT")
+    keys = c("USUBJID", "AVISIT")
   )
 })

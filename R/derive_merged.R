@@ -708,7 +708,7 @@ derive_var_merged_exist_flag <- function(dataset,
                                          missing_value = NA_character_,
                                          filter_add = NULL) {
 
-  add_data <- derive_var_exist_flag(dataset_add, new_var, condition, true_value, false_value, missing_value, filter_add)
+  add_data <- derive_var_exist_flag(dataset_add, new_var = new_var, condition = !!condition, true_value, false_value, missing_value, filter_add)
 
   derive_vars_merged(
     dataset,

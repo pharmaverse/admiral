@@ -337,7 +337,7 @@ test_that("derive_var_merged_exist_flag Test 14: merge existence flag", {
     advs,
     by_vars = exprs(USUBJID),
     new_var = VSEVALFL,
-    condition = advs$AVISIT == "BASELINE"
+    condition = enexprs(AVISIT == "BASELINE")
   )
   print(actual)
   expected <-
@@ -357,7 +357,7 @@ test_that("derive_var_merged_exist_flag Test 15: by_vars with rename", {
     dataset_add = advs1,
     by_vars = exprs(USUBJID = ID),
     new_var = VSEVALFL,
-    condition = AVISIT == "BASELINE",
+    condition = advs1$AVISIT == "BASELINE",
   )
 
   expected <-
