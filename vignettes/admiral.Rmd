@@ -246,7 +246,7 @@ advs <- derive_vars_merged(
 
 ## Derive Numeric Date and Analysis Day (`ADT`,  `ADY`)
 
-The function `derive_vars_dt()` can be used to derive `ADT`. For date imputation, refer to the `BDS Finding ADaM` page. 
+The function `derive_vars_dt()` can be used to derive `ADT`. For date imputation, refer to the [BDS Finding ADaM](https://pharmaverse.github.io/admiral/articles/bds_finding.html) page. 
 
 Example calls:
 
