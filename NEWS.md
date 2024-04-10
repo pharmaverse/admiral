@@ -42,7 +42,7 @@
 
 - The documentation of `derive_vars_merged()` function is updated to describe that the `check_type` argument is ignored (an error is issued) if `order` is not specified. (#2326)
 
-- A new "Programming Concepts and Conventions" vignette was added under the "Get Started" section to provide more context and information around common `{admiral}` behaviours and ways of working. (#2395)
+- A new "Programming Concepts and Conventions" vignette was added under the "Get Started" section to provide more context and information around common `{admiral}` behaviors and ways of working. (#2395)
 
 - Simple ADVS walk through has been added under the "Get Started" section to provide a simplified overview of adding records in BDS datasets. (#2395)
 
