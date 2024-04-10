@@ -41,6 +41,8 @@
 
 - The documentation of `derive_vars_merged()` function is updated to describe that the `check_type` argument is ignored (an error is issued) if `order` is not specified. (#2326)
 
+- A new "Programming Concepts and Conventions" vignette was added under the "Get Started" section to provide more context and information around common `{admiral}` behaviours and ways of working. (#2395)
+
 ## Various
 
 - In the previous version, `renv` was the default framework used to manage package dependencies. Now, we use `devtools` as our main package manager (some changes also occurred for  [admiralci workflows](https://github.com/pharmaverse/admiralci)).
