@@ -291,6 +291,8 @@ assert_character_vector <- function(arg, values = NULL, named = FALSE,
   if (named) {
     assert_named(arg, call = call, class = class, arg_name = arg_name)
   }
+
+  invisible(arg)
 }
 
 #' Is an Argument a Logical Scalar (Boolean)?
@@ -959,7 +961,7 @@ assert_named <- function(arg, optional = FALSE,
     return(invisible(arg))
   }
 
-  # if argument is greater than length 0 and any element not named, return arg invisibly
+  # if argument is greater than length 0 and all element named, return arg invisibly
   any_unnamed <- length(arg) > 0L && !rlang::is_named(arg)
   if (isFALSE(any_unnamed)) {
     return(invisible(arg))
