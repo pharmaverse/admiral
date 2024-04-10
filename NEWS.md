@@ -44,6 +44,8 @@
 
 - A new "Programming Concepts and Conventions" vignette was added under the "Get Started" section to provide more context and information around common `{admiral}` behaviours and ways of working. (#2395)
 
+- Simple ADVS walk through has been added under the "Get Started" section to provide a simplified overview of adding records in BDS datasets. (#2395)
+
 ## Various
 
 - In the previous version, `renv` was the default framework used to manage package dependencies. Now, we use `devtools` as our main package manager (some changes also occurred for  [admiralci workflows](https://github.com/pharmaverse/admiralci)).
