@@ -7,6 +7,7 @@
 ## Updates of Existing Functions
 
 - Created three unit tests for `get_summary_records()`. (#2304)
+- Created unit tests for developer internal function `get_imputation_target_date()` (#2378)
 - Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (#2392)
 
 ## Breaking Changes
