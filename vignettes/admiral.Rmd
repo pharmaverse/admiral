@@ -206,7 +206,7 @@ In this example we will simply add new records by deriving the
 
 ## Load Packages and Example Datasets
 
-Similarly to ADSL's example, we will load our packages and example datasets to
+Similarly to the example of ADSL, we will load our packages and example datasets to
 help with our `ADVS` creation. The datasets required are `VS` and `ADSL`.
 
 ```{r message=FALSE}
@@ -224,9 +224,11 @@ adsl <- admiral_adsl
 vs <- convert_blanks_to_na(vs)
 ```
 ```{r echo=FALSE}
-vs <- filter(vs, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086",
-                                "01-703-1096", "01-707-1037", "01-716-1024") &
-               VSTESTCD %in% c("SYSBP","DIABP"))
+vs <- filter(vs, USUBJID %in% c(
+  "01-701-1015", "01-701-1023", "01-703-1086",
+  "01-703-1096", "01-707-1037", "01-716-1024"
+) &
+  VSTESTCD %in% c("SYSBP", "DIABP"))
 ```
 
 At this step, it may be useful to join `ADSL` to your `VS` domain. Only the 
@@ -241,7 +243,6 @@ advs <- derive_vars_merged(
   new_vars = adsl_vars,
   by_vars = exprs(STUDYID, USUBJID)
 )
-
 ```
 
 ## Derive Numeric Date and Analysis Day (`ADT`,  `ADY`)
