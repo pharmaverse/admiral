@@ -1,5 +1,5 @@
 ---
-title: "Admiral Programming Concepts and Conventions"
+title: "Programming Concepts and Conventions"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Admiral Programming Concepts and Conventions}
@@ -19,8 +19,23 @@ library(admiraldev)
 # Introduction
 
 This vignette aims to discuss some of the common programming concepts and conventions that have been adopted within the
-`{admiral}` packages. This includes how missing values are handled in `{admiral}`, as well as the way in which users are
-expected to pass inputs to `{admiral}` functions, and how those inputs should look.
+`{admiral}` family of packages. It is intended to be a user-facing version of the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) page, but users can also read the
+latter after becoming more familiar with the package to expand further on any topics of interest. For some of common
+`{admiral}` FAQ, visit the corresponding [FAQ page](faq.html).
+
+# `{admiral}` Functions and Options
+
+As a general principle, the behavior of the `{admiral}` functions is only determined by their input, not by any global object,
+i.e. all inputs like datasets, variable names, options, etc. must be provided to the function by arguments. Correspondingly, the
+functions do not have any side-effects like creating or modifying global objects, printing, writing files, etc.
+
+An exception to the above principle is found in our approach to option (see `get_admiral_option()` and `set_admiral_options()`,
+where we have certain pre-defined defaults with added flexibility to allow for user-defined defaults on commonly used function 
+arguments. For instance, the option `subject_keys` is currently pre-defined as `exprs(STUDYID, USUBJID)`, but can be modified
+using `set_admiral_options(subject_keys = exprs(...))` at the top of a script.
+
+For a full discussion on admiral Inputs, Outputs and Options, see [this section](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#input-output-and-side-effects) on our
+developer-facing Programming Strategy.
 
 # Handling of Missing Values
 
@@ -99,7 +114,7 @@ The expressions/`exprs()` framework is powerful because users are able to intuit
 outer `exprs()` wrapper.  For instance, in the `derive_vars_merged()` call below, the user is merging `adsl` with `ex` and is able
 to filter `ex` prior to the merge using an expression passed to the `filter_add` parameter. Because `filter_add` accepts expressions, 
 the user has full power to filter their dataset as they please. In the same vein, the user is able to create any new variables they 
-wish after the merge using the `new_vars` argument, to which they pass a list of expressions containing standard R code.
+wish after the merge using the `new_vars` argument, to which they pass a list of expressions containing "standard" R code.
 
 ``` {r, eval = FALSE}
 derive_vars_merged(
@@ -118,9 +133,125 @@ derive_vars_merged(
 ```
 
 In summary, although expressions/`exprs()` may seem slightly clunky and un-intuitive to begin with, they allow for such power
-and flexibility that they are a key part of the `{admiral}` package. 
+and flexibility that they are a key part of the `{admiral}` package. For a comprehensive treatment of expressions, see 
+[Chapter 18](https://adv-r.hadley.nz/expressions.html) of the Advanced R textbook.
 
 ## Common pitfalls 
+
+Expressions are very powerful, but this can also lead to misunderstandings about their functionality. Let's set up some dummy
+data to explore common issues that new (or experienced!) programmers may encounter when dealing with expressions.
+
+```{r, eval = TRUE, echo = TRUE}
+library(dplyr, warn.conflicts = FALSE)
+library(admiral)
+
+vs <- tribble(
+   ~USUBJID, ~VSTESTCD,      ~VISIT, ~VSSTRESN, ~VSSTRESU,           ~VSDTC,
+  "01-1301",  "WEIGHT",  "SCREENING",      82.1,      "kg",    "2013-08-29",
+  "01-1301",  "WEIGHT",     "WEEK 2",     81.19,      "kg",    "2013-09-15",
+  "01-1301",  "WEIGHT",     "WEEK 4",     82.56,      "kg",    "2013-09-24",
+  "01-1302",     "BMI",  "SCREENING",      20.1,      "kg/m2", "2013-08-29",
+  "01-1302",     "BMI",     "WEEK 2",      20.2,      "kg/m2", "2013-09-15",
+  "01-1302",     "BMI",     "WEEK 4",      19.9,      "kg/m2", "2013-09-24"
+)
+
+dm <- tribble(
+   ~USUBJID, ~AGE,
+   "01-1301", 18
+)
+```
+
+### 1. Mistakenly passing something that isn't an expression to an argument
+
+When writing more complex `{admiral}` code it can be easy to mistakenly pass the wrong input to an argument that 
+expects an expression. For example, the code below fails because `my_expression` is not an expression - is 
+the name of an object in the global environment containing an expression.
+
+```{r, eval = TRUE, error = TRUE}
+my_expression = expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING")
+
+derive_vars_merged(
+  dm,
+  dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
+  by_vars = exprs(USUBJID),
+  filter_add = my_expression
+)
+```
+
+To fix this code, we need to [unquote](https://adv-r.hadley.nz/quasiquotation.html#quasi-motivation) `my_expression` so 
+that the expression that it is holding is passed correctly to `derive_vars_merged()`:
+
+```{r, eval = TRUE, error = FALSE}
+derive_vars_merged(
+  dm,
+  dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
+  by_vars = exprs(USUBJID),
+  filter_add = !!my_expression
+)
+```
+
+### 2. Forgetting that expressions must be evaluable in the dataset
+
+In a similar vein to above, even if an actual expression *is* passed as an argument, you must make
+sure that it can be evaluated within the dataset of interest. For intance, consider this code:
+
+```{r, eval = TRUE, error = TRUE}
+merge_weight_or_bmi <- function(weight_or_bmi){
+  
+  if(weight_or_bmi == "WEIGHT"){
+    my_wt_bmi_expression <- 'VSTESTCD == "WEIGHT" & VISIT == "SCREENING"'
+  }else{
+    my_wt_bmi_expression <- 'VSTESTCD == "WEIGHT" & VISIT == "SCREENING"'
+  }
+  
+  derive_vars_merged(
+    dm,
+    dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
+    by_vars = exprs(USUBJID),
+    filter_add = eval(parse(text = my_wt_bmi_expression))
+  )
+  
+}
+
+merge_weight_or_bmi("BMI")
+```
+
+This fails because the expression is:
+
+```{r, eval = TRUE}
+  expr(eval(parse(text = my_fn_condition)))
+```
+
+and contains `my_fn_condition`, which is not in the dataset.
+
+Conversely, this works:
+
+```{r, eval = TRUE}
+merge_weight_or_bmi <- function(weight_or_bmi){
+  
+  if(weight_or_bmi == "WEIGHT"){
+    my_wt_bmi_expression <- expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING")
+  }else{
+    my_wt_bmi_expression <- expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING")
+  }
+  
+  derive_vars_merged(
+    dm,
+    dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
+    by_vars = exprs(USUBJID),
+    filter_add = !!my_wt_bmi_expression
+  )
+  
+}
+
+merge_weight_or_bmi("BMI")
+```
+
+because the expression being passed to `derive_vars_merged()` is:
+
+```{r, eval = TRUE}
+  expr(!!expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING"))
+```
 
 # See also
 

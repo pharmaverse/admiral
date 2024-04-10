@@ -146,7 +146,7 @@ navbar:
       menu:
       - text: Simple ADSL & ADVS Walkthrough
         href: articles/admiral.html
-      - text: admiral Programming Concepts and Conventions
+      - text: Programming Concepts and Conventions
         href: articles/concepts_conventions.html
       - text: CDISC Variables mapped to admiral functions
         href: https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html
