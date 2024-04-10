@@ -201,6 +201,9 @@ dataset_vignette(
 ```
 # ADVS example {#advs_example}
 
+In this example we will simply add new records by deriving the 
+`Mean Arterial Pressure` with the help of the function `derive_param_map`.
+
 ## Load Packages and Example Datasets
 
 Similarly to ADSL's example, we will load our packages and example datasets to
@@ -221,8 +224,136 @@ adsl <- admiral_adsl
 vs <- convert_blanks_to_na(vs)
 ```
 ```{r echo=FALSE}
-vs <- filter(vs, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
+vs <- filter(vs, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086",
+                                "01-703-1096", "01-707-1037", "01-716-1024") &
+               VSTESTCD %in% c("SYSBP","DIABP"))
 ```
+
+At this step, it may be useful to join `ADSL` to your `VS` domain. Only the 
+`ADSL` variables used for derivations are selected at this step.
+
+```{r eval=TRUE}
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
+
+advs <- derive_vars_merged(
+  vs,
+  dataset_add = adsl,
+  new_vars = adsl_vars,
+  by_vars = exprs(STUDYID, USUBJID)
+)
+
+```
+
+## Derive Numeric Date and Analysis Day (`ADT`,  `ADY`)
+
+The function `derive_vars_dt()` can be used to derive `ADT`. This function allows 
+the user to impute the date as well.
+
+Example calls:
+
+```{r eval=TRUE}
+advs <- derive_vars_dt(advs, new_vars_prefix = "A", dtc = VSDTC)
+```
+
+Once `ADT` is derived, the function `derive_vars_dy()` can be used to derive `ADY`.
+This example assumes both `ADT` and `TRTSDT` exist on the data frame.
+
+```{r eval=TRUE}
+advs <- derive_vars_dy(advs, reference_date = TRTSDT, source_vars = exprs(ADT))
+```
+
+## Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1`
+
+To assign parameter level values such as `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1`,
+etc., a lookup can be created to join to the source data.
+
+For example, when creating `ADVS`, a lookup based on the SDTM `--TESTCD` value 
+may be created:
+
+`VSTESTCD` | `PARAMCD` | `PARAM` | `PARAMN` | `PARCAT1` | `PARCAT1N`
+--------- | --------- | -------- | ------- | --------- | ----------
+DIABP | DIABP | Diastolic Blood Pressure (mmHg) | 3 | Vital Sign | 2
+MAP | MAP | Mean Arterial Pressure | 4 | Vital Sign | 2
+SYSBP | SYSBP | Systolic Blood Pressure (mmHg) | 6 | Vital Sign | 2
+
+This lookup may now be joined to the source data:
+
+```{r eval=TRUE, include=FALSE}
+param_lookup <- tribble(
+  ~VSTESTCD, ~PARAMCD, ~PARAM, ~PARAMN, ~PARCAT1, ~PARCAT1N,
+  "DIABP", "DIABP", "Diastolic Blood Pressure (mmHg)", 3, "Vital Sign", 2,
+  "MAP", "MAP", "Mean Arterial Pressure (mmHg)", 4, "Vital Sign", 2,
+  "SYSBP", "SYSBP", "Systolic Blood Pressure (mmHg)", 7, "Vital Sign", 2,
+)
+attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
+```
+
+At this stage, only `PARAMCD` is required to perform the derivations. Additional
+derived parameters may be added, so only `PARAMCD` is joined to the datasets at
+this point. All other variables related to `PARAMCD` (e.g. `PARAM`, `PARAMCAT1`, ...)
+will be added when all `PARAMCD` are derived.
+
+```{r eval=TRUE}
+advs <- derive_vars_merged_lookup(
+  advs,
+  dataset_add = param_lookup,
+  new_vars = exprs(PARAMCD),
+  by_vars = exprs(VSTESTCD)
+)
+```
+
+```{r, eval=TRUE, echo=FALSE}
+advs_param <- distinct(advs, USUBJID, PARAMCD, VSTESTCD)
+
+dataset_vignette(advs_param, display_vars = exprs(USUBJID, VSTESTCD, PARAMCD))
+```
+
+## Derive Results (`AVAL`, `AVALC`)
+
+The mapping of `AVAL` and `AVALC` is left to the ADaM programmer. An 
+example mapping may be:
+
+```{r eval=TRUE}
+advs <- mutate(
+  advs,
+  AVAL = VSSTRESN,
+  AVALC = VSSTRESC
+)
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  advs,
+  display_vars = exprs(VSTESTCD, PARAMCD, VSSTRESN, VSSTRESC, AVAL, AVALC),
+  filter = USUBJID == "01-716-1024"
+)
+```
+
+## Derive `MAP` Parameter
+
+Below is finally our example of creating `Mean Arterial Pressure` for `ADVS` using
+the functions `derive_param_map`.
+Note that only variables specified in the `by_vars` argument will be populated in the newly 
+created records.
+
+```{r eval=TRUE}
+advs <- derive_param_map(
+  advs,
+  by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
+  set_values_to = exprs(PARAMCD = "MAP"),
+  get_unit_expr = VSSTRESU,
+  filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
+)
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  arrange(advs, USUBJID, VISITNUM, VSTPTNUM, ADT, PARAMCD),
+  display_vars = exprs(VSTESTCD, PARAMCD, VISIT, VSTPT, AVAL, AVALC),
+  filter = USUBJID == "01-701-1015" & PARAMCD %in% c("MAP", "DIABP", "SYSBP")
+)
+```
+
 
 # Starting a Script
 
