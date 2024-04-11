@@ -1666,6 +1666,11 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
 #'
 #' @param var_name The name of the variable. If the argument is specified, the
 #'   specified name is displayed in the error message.
+#' @param message (`string`)\cr
+#'   string passed to `cli::cli_abort(message)`. When `NULL`, default messaging
+#'   is used (see examples for default messages). `"var_name"` and `"dataset_name"`,
+#'   can be used in messaging.
+#' @inheritParams assert_logical_scalar
 #'
 #' @return
 #' The function throws an error if `var` is not a date or datetime variable in
@@ -1716,28 +1721,32 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
 #'   dataset = my_data,
 #'   var = USUBJID
 #' ))
-assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) {
+assert_date_var <- function(dataset,
+                            var,
+                            dataset_name = rlang::caller_arg(dataset),
+                            var_name = rlang::caller_arg(var),
+                            message = NULL,
+                            class = "assert_date_var",
+                            call = parent.frame()) {
   var <- assert_symbol(enexpr(var))
   assert_data_frame(dataset, required_vars = exprs(!!var))
-  assert_character_scalar(dataset_name, optional = TRUE)
-  assert_character_scalar(var_name, optional = TRUE)
+  assert_character_scalar(dataset_name)
+  assert_character_scalar(var_name)
   column <- pull(dataset, !!var)
-  if (is.null(dataset_name)) {
-    dataset_name <- arg_name(substitute(dataset))
-  }
-  if (is.null(var_name)) {
-    var_name <- as_label(var)
-  }
+
   if (!is.instant(column)) {
-    abort(paste0(
-      "`",
-      var_name,
-      "` in dataset `",
-      dataset_name,
-      "` is not a date or datetime variable but is ",
-      friendly_type_of(column)
-    ))
+    message <- message %||%
+      "Column {.val {var_name}} in dataset {.code {dataset_name}} must be
+       a date or datetime, but is {.obj_type_friendly {column}}."
+
+    cli::cli_abort(
+      message = message,
+      call = call,
+      class = c(class, "assert-admiraldev")
+    )
   }
+
+  invisible(dataset)
 }
 
 #' Is an object a date or datetime vector?

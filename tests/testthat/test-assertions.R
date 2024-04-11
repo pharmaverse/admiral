@@ -1301,6 +1301,13 @@ test_that("assert_date_var Test 86: error if variable is not a date or datetime 
       var = USUBJID
     )
   )
+  expect_snapshot(
+    error = TRUE,
+    example_fun(
+      dataset = my_data,
+      var = USUBJID
+    )
+  )
 })
 
 # assert_date_vector ----

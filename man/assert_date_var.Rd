@@ -4,7 +4,15 @@
 \alias{assert_date_var}
 \title{Is a Variable in a Dataset a Date or Datetime Variable?}
 \usage{
-assert_date_var(dataset, var, dataset_name = NULL, var_name = NULL)
+assert_date_var(
+  dataset,
+  var,
+  dataset_name = rlang::caller_arg(dataset),
+  var_name = rlang::caller_arg(var),
+  message = NULL,
+  class = "assert_date_var",
+  call = parent.frame()
+)
 }
 \arguments{
 \item{dataset}{The dataset where the variable is expected}
@@ -16,6 +24,27 @@ specified name is displayed in the error message.}
 
 \item{var_name}{The name of the variable. If the argument is specified, the
 specified name is displayed in the error message.}
+
+\item{message}{(\code{string})\cr
+string passed to \code{cli::cli_abort(message)}. When \code{NULL}, default messaging
+is used (see examples for default messages). \code{"var_name"} and \code{"dataset_name"},
+can be used in messaging.}
+
+\item{class}{Subclass of the condition.}
+
+\item{call}{The execution environment of a currently running
+function, e.g. \code{call = caller_env()}. The corresponding function
+call is retrieved and mentioned in error messages as the source
+of the error.
+
+You only need to supply \code{call} when throwing a condition from a
+helper function which wouldn't be relevant to mention in the
+message.
+
+Can also be \code{NULL} or a \link[rlang:topic-defuse]{defused function call} to
+respectively not display any call or hard-code a code to display.
+
+For more information about error calls, see \ifelse{html}{\link[rlang:topic-error-call]{Including function calls in error messages}}{\link[rlang:topic-error-call]{Including function calls in error messages}}.}
 }
 \value{
 The function throws an error if \code{var} is not a date or datetime variable in

@@ -261,6 +261,14 @@
       ! List element "val" must be `>=0` in argument `input`:
       i  But, `input[[2]]$val = -1`, and `input[[3]]$val = -2`
 
+# assert_date_var Test 86: error if variable is not a date or datetime variable
+
+    Code
+      example_fun(dataset = my_data, var = USUBJID)
+    Condition
+      Error in `example_fun()`:
+      ! Column "USUBJID" in dataset `dataset` must be a date or datetime, but is a character vector.
+
 # assert_date_vector Test 90: error if `arg` is NULL and optional is FALSE
 
     Code
