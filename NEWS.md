@@ -6,7 +6,9 @@
 
 ## Breaking Changes
 
-* `renv` and related files have been removed (#360)
+* `renv` and related files have been removed. (#360)
+
+* No longer exporting `is_named()` function. (#401)
 
 ## Documentation
 

@@ -1,17 +1,3 @@
-#' Is a named argument
-#'
-#' @param x Any R object
-#'
-#' @return `TRUE` if the argument is named, `FALSE` otherwise
-#' @export
-#'
-#' @keywords is
-#' @family is
-#' @export
-is_named <- function(x) {
-  !is.null(names(x)) && all(names(x) != "")
-}
-
 #' Checks if the argument equals the auto keyword
 #'
 #' @param arg argument to check

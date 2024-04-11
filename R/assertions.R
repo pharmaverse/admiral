@@ -962,7 +962,7 @@ assert_named <- function(arg, optional = FALSE,
   }
 
   # if argument is greater than length 0 and all element named, return arg invisibly
-  any_unnamed <- length(arg) > 0L && !rlang::is_named(arg)
+  any_unnamed <- length(arg) > 0L && !is_named(arg)
   if (isFALSE(any_unnamed)) {
     return(invisible(arg))
   }
