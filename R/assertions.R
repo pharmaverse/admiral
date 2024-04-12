@@ -1605,6 +1605,12 @@ assert_list_element <- function(list,
 #'
 #' @param vars2 Second list of variables
 #'
+#' @param message string passed to `cli::cli_abort(message)`. When `NULL`, default messaging
+#'   is used (see examples for default messages). `"dataset_name"` can be used in messaging.
+#'
+#' @param dataset_name string indicating the label/symbol of the object being checked.
+#'   Default is `rlang::caller_arg(dataset)`.
+#' @inheritParams assert_logical_scalar
 #'
 #' @return
 #' An error if the condition is not meet. The input otherwise.
@@ -1613,7 +1619,40 @@ assert_list_element <- function(list,
 #' @family assertion
 #' @export
 #'
-assert_one_to_one <- function(dataset, vars1, vars2) {
+#' @examples
+#' library(dplyr)
+#' library(rlang)
+#'
+#' df <- tribble(
+#'   ~SPECIES, ~SPECIESN,
+#'   "DOG",           1L,
+#'   "CAT",           2L,
+#'   "DOG",           1L
+#' )
+#'
+#' assert_one_to_one(df, vars1 = exprs(SPECIES), vars2 = exprs(SPECIESN))
+#'
+#' df_many <- tribble(
+#'   ~SPECIES, ~SPECIESN,
+#'   "DOG",           1L,
+#'   "CAT",           2L,
+#'   "DOG",           3L
+#' )
+#'
+#' try(
+#'   assert_one_to_one(df_many, vars1 = exprs(SPECIES), vars2 = exprs(SPECIESN))
+#' )
+#'
+#' try(
+#'   assert_one_to_one(df_many, vars1 = exprs(SPECIESN), vars2 = exprs(SPECIES))
+#' )
+assert_one_to_one <- function(dataset,
+                              vars1,
+                              vars2,
+                              dataset_name = rlang::caller_arg(dataset),
+                              message = NULL,
+                              class = "assert_one_to_one",
+                              call = parent.frame()) {
   assert_vars(vars1)
   assert_vars(vars2)
   assert_data_frame(dataset, required_vars = expr_c(vars1, vars2))
@@ -1623,34 +1662,45 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
     group_by(!!!vars1) %>%
     filter(n() > 1) %>%
     arrange(!!!vars1)
+
   if (nrow(one_to_many) > 0) {
     admiraldev_environment$one_to_many <- one_to_many
-    abort(
-      paste0(
-        "For some values of ",
-        vars2chr(vars1),
-        " there is more than one value of ",
-        vars2chr(vars2),
-        ".\nCall `get_one_to_many_dataset()` to get all one to many values."
+
+    message <- message %||%
+      c("For some values of {.val {vars2chr(vars1)}} there is more than one
+           value of {.val {vars2chr(vars2)}}",
+        "i" = "Call {.fun get_one_to_many_dataset} to get all one-to-many values."
       )
+
+    cli::cli_abort(
+      message = message,
+      call = call,
+      class = c(class, "assert-admiraldev")
     )
   }
+
   many_to_one <- uniques %>%
     group_by(!!!vars2) %>%
     filter(n() > 1) %>%
     arrange(!!!vars2)
+
   if (nrow(many_to_one) > 0) {
     admiraldev_environment$many_to_one <- many_to_one
-    abort(
-      paste0(
-        "There is more than one value of ",
-        vars2chr(vars1),
-        " for some values of ",
-        vars2chr(vars2),
-        ".\nCall `get_many_to_one_dataset()` to get all many to one values."
+
+    message <- message %||%
+      c("There is more than one value of {.val {vars2chr(vars1)}} for some
+         values of {.val {vars2chr(vars2)}}",
+        "i" = "Call {.fun get_many_to_one_dataset} to get all many-to-one values."
       )
+
+    cli::cli_abort(
+      message = message,
+      call = call,
+      class = c(class, "assert-admiraldev")
     )
   }
+
+  invisible(dataset)
 }
 
 #' Is a Variable in a Dataset a Date or Datetime Variable?

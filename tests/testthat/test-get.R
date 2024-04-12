@@ -72,6 +72,9 @@ test_that("get_source_vars Test 6: no source vars returns NULL", {
 # get_dataset ----
 ## Test 7: get_dataset works ----
 test_that("get_dataset Test 7: get_dataset works", {
+  admiraldev_environment$many_to_one <- NULL
+  admiraldev_environment$one_to_many <- NULL
+
   expect_equal(NULL, get_dataset("one_to_many"))
 })
 

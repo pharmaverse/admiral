@@ -1268,6 +1268,13 @@ test_that("assert_list_element Test 83: error if the elements do not fulfill the
 ## Test 84: error if there is a one to many mapping ----
 test_that("assert_one_to_one Test 84: error if there is a one to many mapping", {
   expect_error(
+    assert_one_to_one(pharmaversesdtm::dm, exprs(DOMAIN), exprs(USUBJID)),
+    class = "assert_one_to_one"
+  )
+  admiraldev_environment$one_to_many <- NULL
+
+  expect_snapshot(
+    error = TRUE,
     assert_one_to_one(pharmaversesdtm::dm, exprs(DOMAIN), exprs(USUBJID))
   )
   admiraldev_environment$one_to_many <- NULL
@@ -1276,14 +1283,31 @@ test_that("assert_one_to_one Test 84: error if there is a one to many mapping", 
 ## Test 85: error if there is a many to one mapping ----
 test_that("assert_one_to_one Test 85: error if there is a many to one mapping", {
   expect_error(
-    assert_one_to_one(pharmaversesdtm::dm, exprs(USUBJID), exprs(DOMAIN))
+    assert_one_to_one(pharmaversesdtm::dm, exprs(USUBJID), exprs(DOMAIN)),
+    class = "assert_one_to_one"
   )
   admiraldev_environment$many_to_one <- NULL
 })
 
+## Test 86: dataset is returned invisible if one-to-one ----
+test_that("assert_one_to_one Test 86: dataset is returned invisible if one-to-one", {
+  df <- tibble::tribble(
+    ~SPECIES, ~SPECIESN,
+    "DOG",           1L,
+    "CAT",           2L,
+    "DOG",           1L
+  )
+
+  df_out <- expect_invisible(
+    assert_one_to_one(df, vars1 = exprs(SPECIES), vars2 = exprs(SPECIESN))
+  )
+
+  expect_equal(df_out, expected = df)
+})
+
 # assert_date_var ----
-## Test 86: error if variable is not a date or datetime variable ----
-test_that("assert_date_var Test 86: error if variable is not a date or datetime variable", {
+## Test 87: error if variable is not a date or datetime variable ----
+test_that("assert_date_var Test 87: error if variable is not a date or datetime variable", {
   example_fun <- function(dataset, var) {
     var <- assert_symbol(enexpr(var))
     assert_date_var(dataset = dataset, var = !!var)
@@ -1311,18 +1335,18 @@ test_that("assert_date_var Test 86: error if variable is not a date or datetime 
 })
 
 # assert_date_vector ----
-## Test 87: returns error if input vector is not a date formatted ----
-test_that("assert_date_vector Test 87: returns error if input vector is not a date formatted", {
+## Test 88: returns error if input vector is not a date formatted ----
+test_that("assert_date_vector Test 88: returns error if input vector is not a date formatted", {
   expect_error(assert_date_vector("2018-08-23"))
 })
 
-## Test 88: returns invisible if input is date formatted ----
-test_that("assert_date_vector Test 88: returns invisible if input is date formatted", {
+## Test 89: returns invisible if input is date formatted ----
+test_that("assert_date_vector Test 89: returns invisible if input is date formatted", {
   expect_invisible(assert_date_vector(as.Date("2022-10-25")))
 })
 
-## Test 89: no error if `arg` is NULL and optional is TRUE ----
-test_that("assert_date_vector Test 89: no error if `arg` is NULL and optional is TRUE", {
+## Test 90: no error if `arg` is NULL and optional is TRUE ----
+test_that("assert_date_vector Test 90: no error if `arg` is NULL and optional is TRUE", {
   example_fun <- function(arg) {
     assert_date_vector(arg, optional = TRUE)
   }
@@ -1332,8 +1356,8 @@ test_that("assert_date_vector Test 89: no error if `arg` is NULL and optional is
   )
 })
 
-## Test 90: error if `arg` is NULL and optional is FALSE ----
-test_that("assert_date_vector Test 90: error if `arg` is NULL and optional is FALSE", {
+## Test 91: error if `arg` is NULL and optional is FALSE ----
+test_that("assert_date_vector Test 91: error if `arg` is NULL and optional is FALSE", {
   example_fun <- function(arg) {
     assert_date_vector(arg, optional = FALSE)
   }
@@ -1350,8 +1374,8 @@ test_that("assert_date_vector Test 90: error if `arg` is NULL and optional is FA
 
 
 # assert_atomic_vector ----
-## Test 91: error if input is not atomic vector ----
-test_that("assert_atomic_vector Test 91: error if input is not atomic vector", {
+## Test 92: error if input is not atomic vector ----
+test_that("assert_atomic_vector Test 92: error if input is not atomic vector", {
   x <- list("a", "a", "b", "c", "d", "d", 1, 1, 4)
   expect_error(assert_atomic_vector(x), class = "assert_atomic_vector")
   expect_snapshot(
@@ -1361,15 +1385,15 @@ test_that("assert_atomic_vector Test 91: error if input is not atomic vector", {
 })
 
 # assert_same_type ----
-## Test 92: no error if same type ----
-test_that("assert_same_type Test 92: no error if same type", {
+## Test 93: no error if same type ----
+test_that("assert_same_type Test 93: no error if same type", {
   true_value <- "Y"
   false_value <- "N"
   expect_invisible(assert_same_type(true_value, false_value))
 })
 
-## Test 93: error if different type ----
-test_that("assert_same_type Test 93: error if different type", {
+## Test 94: error if different type ----
+test_that("assert_same_type Test 94: error if different type", {
   true_value <- "Y"
   false_value <- "N"
   missing_value <- 0
@@ -1385,8 +1409,8 @@ test_that("assert_same_type Test 93: error if different type", {
   )
 })
 
-## Test 94: works as intended ----
-test_that("assert_same_type Test 94: works as intended", {
+## Test 95: works as intended ----
+test_that("assert_same_type Test 95: works as intended", {
   expect_equal(
     valid_time_units(),
     c("years", "months", "days", "hours", "minutes", "seconds")
