@@ -19,7 +19,7 @@ library(admiraldev)
 # Main Idea
 
 The main idea of `{admiral}` is that an ADaM dataset is built by a sequence of
-derivations. Each derivation adds one or more variables or parameters to the
+derivations. Each derivation adds one or more variables or records to the
 processed dataset. This modular approach makes it easy to adjust code by adding,
 removing, or modifying derivations. Each derivation is a function call. Consider
 for example the following scripts which create a (very simple) [ADSL](#adsl_example) dataset or
@@ -332,7 +332,8 @@ dataset_vignette(
 ## Derive `MAP` Parameter
 
 Below is finally our example of creating `Mean Arterial Pressure` for `ADVS` using
-the functions `derive_param_map`.
+the function `derive_param_map` which is a wrapper around
+[derive_param_computed()](https://pharmaverse.github.io/admiral/reference/derive_param_computed.html).
 Note that only variables specified in the `by_vars` argument will be populated in the newly 
 created records.
 
