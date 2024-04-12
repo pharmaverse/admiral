@@ -1,5 +1,9 @@
 # admiral (development version)
 
+## New Features 4.11.2024
+
+- New function 'my_first_fcn()' as dummy practice (#1839)
+
 ## New Features
 
 - Error Messaging has been made more "user-friendly". (#2372)
