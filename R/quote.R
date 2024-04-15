@@ -20,6 +20,13 @@
 #'
 #' @export
 enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
+  lifecycle::deprecate_warn(
+    when = "1.1.0",
+    what = "admiraldev::enumerate()",
+    details = "This function was primarily used in error messaging, and can be
+               replaced with 'cli' functionality: `cli::cli_abort('{.val {letters[1:3]}}')`"
+  )
+
   if (is.null(quote_fun)) {
     quote_fun <- function(x) x
   }

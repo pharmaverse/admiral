@@ -18,6 +18,13 @@
 #' what_is_it(1:10)
 #' what_is_it(mtcars)
 what_is_it <- function(x) {
+  lifecycle::deprecate_warn(
+    when = "1.1.0",
+    what = "admiraldev::what_is_it()",
+    details = "This function was primarily used in error messaging, and can be replaced
+               with 'cli' functionality: `cli::cli_abort('{.obj_type_friendly {letters}}')`."
+  )
+
   if (is.null(x)) {
     "`NULL`"
   } else if (is.factor(x)) {

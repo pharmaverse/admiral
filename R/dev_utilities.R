@@ -44,6 +44,13 @@ convert_dtm_to_dtc <- function(dtm) {
 #'
 #' @export
 arg_name <- function(expr) { # nolint
+  lifecycle::deprecate_warn(
+    when = "1.1.0",
+    what = "admiraldev::arg_name()",
+    details = "This function was primarily used in error messaging, and can be
+               replaced with `assert_*(x, arg_name = rlang::caller_arg(x))`"
+  )
+
   if (length(expr) == 1L && is.symbol(expr)) {
     deparse(expr)
   } else if (length(expr) == 2L &&

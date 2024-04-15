@@ -17,6 +17,13 @@
 #' @keywords dev_utility
 #' @family dev_utility
 friendly_type_of <- function(x, value = TRUE, length = FALSE) { # nolint
+  lifecycle::deprecate_warn(
+    when = "1.1.0",
+    what = "admiraldev::friendly_type_of()",
+    details = "This function was primarily used in error messaging, and can be replaced
+               with 'cli' functionality: `cli::cli_abort('{.obj_type_friendly {letters}}')`."
+  )
+
   if (rlang::is_missing(x)) {
     return("absent")
   }

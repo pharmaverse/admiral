@@ -3,17 +3,14 @@
 test_that("warn_if_vars_exist Test 1: warning if a variable already exists in the input dataset", {
   dm <- pharmaversesdtm::dm
 
-  expect_warning(
-    warn_if_vars_exist(dm, "AGE"),
-    "Variable `AGE` already exists in the dataset"
+  expect_snapshot(
+    warn_if_vars_exist(dm, "AGE")
   )
-  expect_warning(
-    warn_if_vars_exist(dm, c("AGE", "AGEU", "ARM")),
-    "Variables `AGE`, `AGEU` and `ARM` already exist in the dataset"
+  expect_snapshot(
+    warn_if_vars_exist(dm, c("AGE", "AGEU", "ARM"))
   )
-  expect_warning(
-    warn_if_vars_exist(dm, c("AAGE", "AGEU", "ARM")),
-    "Variables `AGEU` and `ARM` already exist in the dataset"
+  expect_snapshot(
+    warn_if_vars_exist(dm, c("AAGE", "AGEU", "ARM"))
   )
   expect_warning(
     warn_if_vars_exist(dm, "AAGE"),
@@ -24,9 +21,8 @@ test_that("warn_if_vars_exist Test 1: warning if a variable already exists in th
 # warn_if_invalid_dtc ----
 ## Test 2: Warning if vector contains unknown datetime format ----
 test_that("warn_if_invalid_dtc Test 2: Warning if vector contains unknown datetime format", {
-  expect_warning(
-    warn_if_invalid_dtc(dtc = "20210406T12:30:30"),
-    "Dataset contains incorrect datetime format:"
+  expect_snapshot(
+    warn_if_invalid_dtc(dtc = "20210406T12:30:30")
   )
 })
 
