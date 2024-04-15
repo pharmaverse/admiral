@@ -22,8 +22,8 @@ for the 1839 dummy example.
 }
 \examples{
 
-my_first_fcn <-  function(x) {
-print("Welcome to the admiral family!")
+my_first_fcn <- function(x) {
+  print("Welcome to the admiral family!")
 }
 
 my_first_fcn()
