@@ -21,11 +21,10 @@ This function will print the description message regardless of the input or an a
 for the 1839 dummy example.
 }
 \examples{
-if(!require('devtools')){
-install.packages('devtools')
-}
 
-devtools::dev_package_deps(dependencies = T)
+my_first_fcn <-  function(x) {
+print("Welcome to the admiral family!")
+}
 
 my_first_fcn()
 }

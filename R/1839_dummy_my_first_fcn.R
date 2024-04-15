@@ -20,16 +20,14 @@
 #' @export
 #'
 #' @examples
-#' if(!require('devtools')){
-#' install.packages('devtools')
-#' }
 #'
-#' devtools::dev_package_deps(dependencies = T)
+#' my_first_fcn <-  function(x) {
+#' print("Welcome to the admiral family!")
+#' }
 #'
 #' my_first_fcn()
 
-my_first_fcn <-  function(x){
+my_first_fcn <-  function(x) {
   print("Welcome to the admiral family!")
 
 }
-
