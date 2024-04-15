@@ -1,4 +1,4 @@
-#' @name professorp 1839 Dummy Function
+#' @name professorp 1839 dummy function
 #'
 #' @title professorp 1839 Dummy Function
 #'
