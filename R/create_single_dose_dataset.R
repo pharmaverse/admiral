@@ -259,6 +259,16 @@ dose_freq_lookup <- tribble(
 #'   the output dataset. For example `EXTRT` for studies with more than one
 #'   drug.
 #'
+#' @param relationship Expected merge-relationship between the `dose_freq`
+#'   variable in `dataset` and `lookup_table`.
+#'
+#'   This argument is passed to the `dplyr::left_join()` function. See
+#'   https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments for
+#'   more details.
+#'
+#'   Permitted Values for `relationship`: `"one-to-one"`, `"one-to-many"`,
+#'   `"many-to-one"`, `"many-to-many"`, `NULL`.
+#'
 #' @details Each aggregate dose row is split into multiple rows which each
 #'   represent a single dose.The number of completed dose periods between
 #'   `start_date` or `start_datetime` and `end_date` or `end_datetime` is
@@ -452,7 +462,8 @@ create_single_dose_dataset <- function(dataset,
                                        keep_source_vars = expr_c(
                                          exprs(USUBJID), dose_freq, start_date, start_datetime,
                                          end_date, end_datetime
-                                       )) {
+                                       ),
+                                       relationship = NULL) {
   dose_freq <- assert_symbol(enexpr(dose_freq))
   lookup_column <- assert_symbol(enexpr(lookup_column))
   start_date <- assert_symbol(enexpr(start_date))
@@ -467,6 +478,11 @@ create_single_dose_dataset <- function(dataset,
   )
   assert_data_frame(dataset, required_vars = keep_source_vars)
   col_names <- colnames(dataset)
+  relationship <- assert_character_scalar(
+    relationship,
+    values = c("one-to-one", "one-to-many", "many-to-one", "many-to-many"),
+    case_sensitive = TRUE,
+    optional = TRUE)
 
   # Checking that the dates specified follow the ADaM naming convention of ending in DT
   start_datec <- as_string(as_name(start_date))
@@ -578,7 +594,8 @@ create_single_dose_dataset <- function(dataset,
   data_not_once <- left_join(
     data_not_once,
     lookup,
-    by = as.character(dose_freq)
+    by = as.character(dose_freq),
+    relationship = relationship
   )
 
   if (any(data_not_once$DOSE_WINDOW %in% c("MINUTE", "HOUR")) &&
