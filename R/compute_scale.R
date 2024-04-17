@@ -89,7 +89,7 @@ compute_scale <- function(source,
     cli_abort(
       c("Argument {.arg target_range} is missing with no default
          and {.arg source_range} is not missing.",
-        "i" = "Either both or neither argument should by specified."
+        "i" = "Either both or neither argument should be specified."
       )
     )
   }
