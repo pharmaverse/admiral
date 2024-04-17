@@ -31,7 +31,7 @@
 #' @export
 #'
 #' @examples
-#' library(tibble)
+#' library(dplyr)
 #' data <- tribble(
 #'   ~AVAL,
 #'   20

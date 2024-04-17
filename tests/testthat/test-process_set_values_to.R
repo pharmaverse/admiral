@@ -1,6 +1,6 @@
 ## Test 1: add variables ----
 test_that("process_set_values_to Test 1: add variables", {
-  bds <- tibble::tribble(
+  bds <- dplyr::tribble(
     ~USUBJID, ~AVAL,
     "1",         20,
     "2",         35
@@ -32,7 +32,7 @@ test_that("process_set_values_to Test 1: add variables", {
 
 ## Test 2: catch error ----
 test_that("process_set_values_to Test 2: catch error", {
-  bds <- tibble::tribble(
+  bds <- dplyr::tribble(
     ~USUBJID, ~AVAL,
     "1",         20,
     "2",         35
@@ -54,7 +54,7 @@ test_that("process_set_values_to Test 2: catch error", {
 
 ## Test 3: check types ----
 test_that("process_set_values_to Test 3: check types", {
-  bds <- tibble::tribble(
+  bds <- dplyr::tribble(
     ~USUBJID, ~AVAL,
     "1",         20,
     "2",         35

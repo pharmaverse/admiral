@@ -4,7 +4,7 @@ test_that("dataset_vignette Test 1: A 'knitr_kable' object is outputted when run
   Sys.setenv(IN_PKGDOWN = "false") # nolint: undesirable_function_linter
   on.exit(Sys.setenv(IN_PKGDOWN = "")) # nolint: undesirable_function_linter
 
-  dm <- tibble::tribble(
+  dm <- dplyr::tribble(
     ~STUDYID, ~USUBJID, ~COUNTRY,
     "STUDY1", "1",      "USA",
     "STUDY1", "2",      "USA",
@@ -21,7 +21,7 @@ test_that("dataset_vignette Test 2: A 'shiny.tag.list' is outputted when run ins
   Sys.setenv(IN_PKGDOWN = "true") # nolint: undesirable_function_linter
   on.exit(Sys.setenv(IN_PKGDOWN = "")) # nolint: undesirable_function_linter
 
-  dm <- tibble::tribble(
+  dm <- dplyr::tribble(
     ~STUDYID, ~USUBJID, ~COUNTRY,
     "STUDY1", "1",      "USA",
     "STUDY1", "2",      "USA",
@@ -36,7 +36,7 @@ test_that("dataset_vignette Test 2: A 'shiny.tag.list' is outputted when run ins
 
 ## Test 3: An error is outputted when calling variable not in dataset ----
 test_that("dataset_vignette Test 3: An error is outputted when calling variable not in dataset", {
-  dm <- tibble::tribble(
+  dm <- dplyr::tribble(
     ~STUDYID, ~USUBJID, ~COUNTRY,
     "STUDY1", "1",      "USA",
     "STUDY1", "2",      "USA",

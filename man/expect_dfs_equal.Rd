@@ -25,7 +25,6 @@ thought of as an R-equivalent of SAS proc compare and a useful tool for unit tes
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(tibble)
 
 tbl1 <- tribble(
   ~USUBJID, ~AGE, ~SEX,

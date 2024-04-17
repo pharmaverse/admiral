@@ -22,7 +22,6 @@
 #' @family assertion
 #'
 #' @examples
-#' library(tibble)
 #' library(dplyr)
 #' library(rlang)
 #' dm <- tribble(
@@ -1171,7 +1170,8 @@ assert_function_param <- function(arg, params) {
 #' @export
 #'
 #' @examples
-#' library(tibble)
+#' library(dplyr)
+#'
 #' advs <- tribble(
 #'   ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
 #'   "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,
@@ -1244,7 +1244,8 @@ assert_unit <- function(dataset,
 #' @family assertion
 #'
 #' @examples
-#' library(tibble)
+#' library(dplyr)
+#'
 #' advs <- tribble(
 #'   ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
 #'   "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,
@@ -1732,8 +1733,8 @@ assert_one_to_one <- function(dataset,
 #' @keywords assertion
 #'
 #' @examples
-#' library(tibble)
 #' library(lubridate)
+#' library(dplyr)
 #' library(rlang)
 #'
 #' example_fun <- function(dataset, var) {

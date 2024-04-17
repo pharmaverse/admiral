@@ -32,7 +32,7 @@ catches errors, provides user friendly error messages, and optionally checks
 the type of the created variables.
 }
 \examples{
-library(tibble)
+library(dplyr)
 data <- tribble(
   ~AVAL,
   20

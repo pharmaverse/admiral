@@ -17,7 +17,6 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(tibble)
 #'
 #' tbl1 <- tribble(
 #'   ~USUBJID, ~AGE, ~SEX,

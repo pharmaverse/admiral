@@ -1,7 +1,7 @@
 # get_constant_vars ----
 ## Test 1: without ignore_vars ----
 test_that("get_constant_vars Test 1: without ignore_vars", {
-  data <- tibble::tribble(
+  data <- dplyr::tribble(
     ~USUBJID, ~AGE, ~AVISIT,
     "1",      26,   "BASELINE",
     "1",      26,   "WEEK 1",
@@ -17,7 +17,7 @@ test_that("get_constant_vars Test 1: without ignore_vars", {
 
 ## Test 2: with ignore_vars ----
 test_that("get_constant_vars Test 2: with ignore_vars", {
-  data <- tibble::tribble(
+  data <- dplyr::tribble(
     ~USUBJID, ~AGE, ~WGTBL, ~HGTBL, ~AVISIT,
     "1",      26,   61,     172,    "BASELINE",
     "1",      26,   61,     172,    "WEEK 1",

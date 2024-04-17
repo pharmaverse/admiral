@@ -48,7 +48,8 @@ dataset. Otherwise, the dataset is returned invisibly.
 Checks if a parameter (\code{PARAMCD}) does not exist in a dataset.
 }
 \examples{
-library(tibble)
+library(dplyr)
+
 advs <- tribble(
   ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
   "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,

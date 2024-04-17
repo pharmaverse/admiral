@@ -1,7 +1,7 @@
 # assert_has_variables ----
 ## Test 1: error if a required variable is missing (deprecation error) ----
 test_that("assert_has_variables Test 1: error if a required variable is missing (deprecation error)", { # nolint
-  data <- tibble::tribble(
+  data <- dplyr::tribble(
     ~USUBJID,
     "1"
   )
@@ -19,7 +19,7 @@ test_that("assert_has_variables Test 1: error if a required variable is missing 
 
 ## Test 2: no error if a required variable exists (deprecation error) ----
 test_that("assert_has_variables Test 2: no error if a required variable exists (deprecation error)", { # nolint
-  data <- tibble::tribble(
+  data <- dplyr::tribble(
     ~USUBJID,
     "1"
   )
@@ -80,7 +80,7 @@ test_that("assert_data_frame Test 4: error if not a dataframe", {
 
 ## Test 5: assert_data_frame extract_vars() works as intended ----
 test_that("assert_data_frame Test 5: assert_data_frame extract_vars() works as intended", {
-  input <- tibble::tribble(
+  input <- dplyr::tribble(
     ~STUDYID, ~USUBJID, ~SEQ,
     "A",      "1",         1,
     "A",      "2",         2,
@@ -99,7 +99,7 @@ test_that("assert_data_frame Test 5: assert_data_frame extract_vars() works as i
 
 ## Test 6: assert_data_frame works if extract_vars() has NULL input ----
 test_that("assert_data_frame Test 6: assert_data_frame works if extract_vars() has NULL input", {
-  input <- tibble::tribble(
+  input <- dplyr::tribble(
     ~STUDYID, ~USUBJID, ~SEQ,
     "A",      "1",         1,
     "A",      "2",         2,
@@ -122,7 +122,7 @@ test_that("assert_data_frame Test 7: error if dataframe is grouped", {
     assert_data_frame(dataset, required_vars = exprs(STUDYID, USUBJID))
   }
 
-  data <- tibble::tribble(
+  data <- dplyr::tribble(
     ~STUDYID, ~USUBJID, ~ARMCD,
     "xyz",    "1",      "PLACEBO",
     "xyz",    "2",      "ACTIVE"
@@ -145,7 +145,7 @@ test_that("assert_data_frame Test 8: error if an expected variable is missing", 
     assert_data_frame(dataset, required_vars = exprs(STUDYID, USUBJID))
   }
 
-  data <- tibble::tribble(
+  data <- dplyr::tribble(
     ~STUDYID, ~ARMCD,
     "xyz",    "PLACEBO",
     "xyz",    "ACTIVE"
@@ -167,7 +167,7 @@ test_that("assert_data_frame Test 9: error if expected variables are missing", {
     assert_data_frame(dataset, required_vars = exprs(STUDYID, USUBJID))
   }
 
-  data <- tibble::tribble(
+  data <- dplyr::tribble(
     ~ARMCD,
     "PLACEBO",
     "ACTIVE"
@@ -1004,7 +1004,7 @@ test_that("assert_function_param Test 63: error if expected function parameters 
 # assert_unit ----
 ## Test 64: no error if the parameter is provided in the expected unit ----
 test_that("assert_unit Test 64: no error if the parameter is provided in the expected unit", {
-  advs <- tibble::tribble(
+  advs <- dplyr::tribble(
     ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
     "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,
     "P02",    "WEIGHT",      85.7, "kg",      "WEIGHT",  85.7
@@ -1017,7 +1017,7 @@ test_that("assert_unit Test 64: no error if the parameter is provided in the exp
 
 ## Test 65: error if there are multiple units in the input dataset ----
 test_that("assert_unit Test 65: error if there are multiple units in the input dataset", {
-  advs <- tibble::tribble(
+  advs <- dplyr::tribble(
     ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
     "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,
     "P02",    "WEIGHT",      85.7, "lb",      "WEIGHT",  85.7
@@ -1035,7 +1035,7 @@ test_that("assert_unit Test 65: error if there are multiple units in the input d
 
 ## Test 66: error if unexpected unit in the input dataset ----
 test_that("assert_unit Test 66: error if unexpected unit in the input dataset", {
-  advs <- tibble::tribble(
+  advs <- dplyr::tribble(
     ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
     "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,
     "P02",    "WEIGHT",      85.7, "kg",      "WEIGHT",  85.7
@@ -1054,7 +1054,7 @@ test_that("assert_unit Test 66: error if unexpected unit in the input dataset", 
 # assert_param_does_not_exist ----
 ## Test 67: error if parameter exists in the input dataset ----
 test_that("assert_param_does_not_exist Test 67: error if parameter exists in the input dataset", {
-  advs <- tibble::tribble(
+  advs <- dplyr::tribble(
     ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
     "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,
     "P02",    "WEIGHT",      85.7, "kg",      "WEIGHT",  85.7
@@ -1073,7 +1073,7 @@ test_that("assert_param_does_not_exist Test 67: error if parameter exists in the
 
 ## Test 68: no error if the parameter exists in the dataset ----
 test_that("assert_param_does_not_exist Test 68: no error if the parameter exists in the dataset", {
-  advs <- tibble::tribble(
+  advs <- dplyr::tribble(
     ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
     "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,
     "P02",    "WEIGHT",      85.7, "kg",      "WEIGHT",  85.7
@@ -1291,7 +1291,7 @@ test_that("assert_one_to_one Test 85: error if there is a many to one mapping", 
 
 ## Test 86: dataset is returned invisible if one-to-one ----
 test_that("assert_one_to_one Test 86: dataset is returned invisible if one-to-one", {
-  df <- tibble::tribble(
+  df <- dplyr::tribble(
     ~SPECIES, ~SPECIESN,
     "DOG",           1L,
     "CAT",           2L,
@@ -1313,7 +1313,7 @@ test_that("assert_date_var Test 87: error if variable is not a date or datetime 
     assert_date_var(dataset = dataset, var = !!var)
   }
 
-  my_data <- tibble::tribble(
+  my_data <- dplyr::tribble(
     ~USUBJID, ~ADT,
     "1",      ymd("2020-12-06"),
     "2",      ymd("")

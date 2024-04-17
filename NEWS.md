@@ -27,6 +27,13 @@ strategy. (#353)
 
 - The "Release Strategy" vignette now contains a short new "Release Tracking" section linking to an external dashboard for CRAN packages that are awaiting release. (#358)
 
+## Other
+
+- Removed dependencies not needed to build package or package documentation. (#426)
+
+- Increased minimum R version required to 4.0 to match {admiral}. (#382)
+
+
 # admiraldev 1.0.0
 
 ## New Features

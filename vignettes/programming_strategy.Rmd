@@ -373,7 +373,6 @@ An example is given below:
 #' @examples
 #' library(lubridate)
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(tibble)
 #'
 #' datain <- tribble(
 #'   ~TRTSDTM,              ~ASTDTM,               ~AENDT,
@@ -410,7 +409,7 @@ Any newly added variable(-s) should be mentioned here.
 * `@examples`: A fully self-contained example of how to use the function. 
 Self-contained means that, if this code is executed in a new R session, it will run without errors. 
 That means any packages need to be loaded with `library()` and any datasets needed either to be created directly inside the example code or loaded using `data()`.
-If a dataset is created in the example, it should be done so using the function `tribble()` (specify `library(tibble)` before calling this function).
+If a dataset is created in the example, it should be done so using the function `tribble()` (specify `library(dplyr)` before calling this function).
 If other functions are called in the example, please specify `library(pkg_name)` then refer to the respective function `fun()` as opposed to the preferred `pkg_name::fun()` notation as specified in [Unit Test Guidance](unit_test_guidance.html#set-up-the-test-script).
 Make sure to align columns as this ensures quick code readability. 
 
@@ -540,7 +539,7 @@ By using the `@importFrom` tag, it is easier to track all of our dependencies in
 Some of these functions become critically important while using admiral and
 should be included as an export. This applies to functions which are frequently
 called within `{admiral }`function calls like `rlang::exprs()`, `dplyr::desc()`
-or the pipe operator `magrittr::%>%`. To export these functions, the following R
+or the pipe operator `dplyr::%>%`. To export these functions, the following R
 code should be included in the `R/reexports.R` file using the format:
 
 ```

@@ -57,7 +57,6 @@ Checks if an argument is a data frame and (optionally) whether is contains
 a set of required variables
 }
 \examples{
-library(tibble)
 library(dplyr)
 library(rlang)
 dm <- tribble(
