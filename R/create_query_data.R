@@ -829,8 +829,7 @@ basket_select <- function(name = NULL,
       scope = scope,
       type = type
     )
-  }
-  else {
+  } else {
     if (!is_named(args)) {
       abort("All arguments inside `...` must be named")
     }
