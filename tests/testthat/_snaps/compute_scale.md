@@ -6,7 +6,7 @@
     Condition
       Error in `compute_scale()`:
       ! Argument `target_range` is missing with no default and `source_range` is not missing.
-      i Either both or neither argument should by specified.
+      i Either both or neither argument should be specified.
 
 ---
 
@@ -15,5 +15,5 @@
     Condition
       Error in `compute_scale()`:
       ! Argument `source_range` is missing with no default and `target_range` is not missing.
-      i Either both or neither argument should by specified.
+      i Either both or neither argument should be specified.
 
