@@ -96,9 +96,10 @@
 #'       the number of the event.
 #'       1. Only the variables specified for the `keep_source_vars` field of the
 #'       event, and the by variables (`by_vars`) and the variables created by
-#'       `set_values_to` are kept.
-#'       1. If `keep_source_vars = NULL` is used for an event in `derive_extreme_event()`
-#'       the value of the `keep_source_vars` argument of `derive_extreme_event()` is used.
+#'       `set_values_to` are kept. If `keep_source_vars = NULL` is used for an event
+#'       in `derive_extreme_event()` the value of the `keep_source_vars` argument of
+#'       `derive_extreme_event()` is used. In this case the `keep_source_vars` field of
+#'       the event will take precedence over the value of the `keep_source_vars` argument.
 #'   1. All selected observations are bound together.
 #'   1. For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) the first or last observation (with respect to the
