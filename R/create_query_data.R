@@ -803,6 +803,8 @@ assert_terms <- function(terms,
 #' company specific get_terms() function such that the function can determine
 #' which sort of basket is requested
 #'
+#' @param ... Any number of *named* function arguments that stay the same across iterations.
+#'
 #' @details Exactly one of `name` or `id` must be specified.
 #'
 #' @return An object of class `basket_select`.
@@ -817,13 +819,30 @@ assert_terms <- function(terms,
 basket_select <- function(name = NULL,
                           id = NULL,
                           scope = NULL,
-                          type) {
-  out <- list(
-    name = name,
-    id = id,
-    scope = scope,
-    type = type
-  )
+                          type,
+                          ...) {
+  args <- eval(substitute(alist(...)))
+  if (length(args) == 0L) {
+    out <- list(
+      name = name,
+      id = id,
+      scope = scope,
+      type = type
+    )
+  }
+  else {
+    if (!is_named(args)) {
+      abort("All arguments inside `...` must be named")
+    }
+    out <- list(
+      name = name,
+      id = id,
+      scope = scope,
+      type = type,
+      ...
+    )
+  }
+
   class(out) <- c("basket_select", "source", "list")
   validate_basket_select(out)
 }

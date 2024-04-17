@@ -504,9 +504,122 @@ test_that("basket_select Test 19: basket_select: error: name and id specified", 
   )
 })
 
+
+# basket_select: error: neither name nor id specified ----
+## Test 20: basket_select: error: neither name nor id specified ----
+test_that("basket_select Test 20: basket_select: error: neither name nor id specified", {
+  expect_error(
+    basket_select(type = "sdg", scope = NA_character_),
+    regexp = "Either id or name has to be non null.",
+    fixed = TRUE
+  )
+})
+
+# basket_select: error: type is not specified ----
+## Test 21: basket_select: error: type is not specified ----
+test_that("basket_select Test 21: basket_select: error: type is not specified", {
+  expect_error(
+    basket_select(id = 42, scope = "NARROW"),
+    regexp = "argument \"type\" is missing, with no default",
+    fixed = TRUE
+  )
+})
+
+# basket_select customized query defined by SMQs extra arguments ----
+get_smq_oth <- function(basket_select,
+                    version,
+                    keep_id = FALSE,
+                    temp_env) {
+  if (basket_select$scope == "NARROW") {
+    end <- 3
+  } else {
+    end <- 5
+  }
+
+  if (is.null(basket_select$name)) {
+    basket_select$name <- paste("SMQ name of", basket_select$id)
+  }
+  terms <- tibble(TERMCHAR = paste(basket_select$name, "Term", c(1:end), "(", version, ")"))
+  terms <- mutate(terms,
+                  SRCVAR = "AEDECOD",
+                  GRPNAME = basket_select$name,
+                  TEST1_VAR = if_else(str_detect(TERMCHAR, "meningitis"), "CHECK 1", "CHECK 2"),
+                  TEST2_VAR = if_else(str_detect(TERMCHAR, "meningitis"), "CHECK 3", "CHECK 4")
+                  )
+  if (keep_id) {
+    mutate(terms, GRPID = 42)
+  } else {
+    terms
+  }
+}
+
+
+## Test 22: basket_select customized query defined by SMQsv ----
+test_that("basket_select Test 22: basket_select customized query defined by SMQsv", {
+  cq <- query(
+    prefix = "CQ02",
+    name = "Immune-Mediated Meningoencephalitis",
+    definition = list(
+      basket_select(
+        name = "Noninfectious meningitis",
+        scope = "NARROW",
+        type = "smq",
+        TEST1_VAR = "CHECK 1",
+        TEST2_VAR = "CHECK 3"
+      ),
+      basket_select(
+        name = "Noninfectious encephalitis",
+        scope = "BROAD",
+        type = "smq",
+        TEST1_VAR = "CHECK 2",
+        TEST2_VAR = "CHECK 4"
+      )
+    )
+  )
+
+  actual_output <- create_query_data(
+    queries = list(cq),
+    version = "20.0",
+    get_terms_fun = get_smq_oth
+  )
+
+  expected_output <-
+    bind_rows(
+      get_smq_oth(
+        basket_select(
+          name = "Noninfectious meningitis",
+          scope = "NARROW",
+          type = "smq"
+        ),
+        version = "20.0"
+      ),
+      get_smq_oth(
+        basket_select(
+          name = "Noninfectious encephalitis",
+          scope = "BROAD",
+          type = "smq"
+        ),
+        version = "20.0"
+      )
+    ) %>%
+    mutate(
+      GRPNAME = "Immune-Mediated Meningoencephalitis",
+      PREFIX = "CQ02",
+      VERSION = "20.0"
+    )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("PREFIX", "TERMCHAR")
+  )
+})
+
+
+
 # format.basket_select: formatting is correct ----
-## Test 20: format.basket_select: formatting is correct ----
-test_that("basket_select Test 20: format.basket_select: formatting is correct", {
+## Test 23: format.basket_select: SMQ formatting is correct ----
+test_that("basket_select Test 23: format.basket_select: SMQ formatting is correct", {
   expect_equal(
     format(basket_select(
       id = 42,
@@ -517,30 +630,9 @@ test_that("basket_select Test 20: format.basket_select: formatting is correct", 
   )
 })
 
-# basket_select: error: neither name nor id specified ----
-## Test 21: basket_select: error: neither name nor id specified ----
-test_that("basket_select Test 21: basket_select: error: neither name nor id specified", {
-  expect_error(
-    basket_select(type = "sdg", scope = NA_character_),
-    regexp = "Either id or name has to be non null.",
-    fixed = TRUE
-  )
-})
 
-# basket_select: error: type is not specified ----
-## Test 22: basket_select: error: type is not specified ----
-test_that("basket_select Test 22: basket_select: error: type is not specified", {
-  expect_error(
-    basket_select(id = 42, scope = "NARROW"),
-    regexp = "argument \"type\" is missing, with no default",
-    fixed = TRUE
-  )
-})
-
-# format.basket_select ----
-# format.basket_select: formatting is correct ----
-## Test 23: format.basket_select: formatting is correct ----
-test_that("format.basket_select Test 23: format.basket_select: formatting is correct", {
+## Test 24: format.basket_select: SDG formatting is correct ----
+test_that("basket_select Test 24: format.basket_select: SDG formatting is correct", {
   expect_equal(
     format(basket_select(name = "My SDG", type = "sdg", scope = NA_character_)),
     "basket_select(name = \"My SDG\", id = NULL, scope = \"NA\", type = \"sdg\")"
