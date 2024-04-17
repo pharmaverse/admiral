@@ -159,6 +159,8 @@ the number of the event.
 \item Only the variables specified for the \code{keep_source_vars} field of the
 event, and the by variables (\code{by_vars}) and the variables created by
 \code{set_values_to} are kept.
+\item If \code{keep_source_vars = NULL} is used for an event in \code{derive_extreme_event()}
+the value of the \code{keep_source_vars} argument of \code{derive_extreme_event()} is used.
 }
 \item All selected observations are bound together.
 \item For each group (with respect to the variables specified for the
