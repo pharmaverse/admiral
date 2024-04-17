@@ -1,5 +1,9 @@
 # admiral (development version)
 
+## Documentation
+
+- Documentation for `derive_extreme_event()` has been updated to include a description for the value of `derive_extreme_event()` when `keep_source_vars = NULL`
+
 ## New Features
 
 - Error Messaging has been made more "user-friendly". (#2372)
