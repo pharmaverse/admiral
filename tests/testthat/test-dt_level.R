@@ -1,6 +1,6 @@
 # set up to create expected values:
 expected_levels <- c("n", "D", "M", "Y")
-add_class <- function(object, class = "dt_level"){
+add_class <- function(object, class = "dt_level") {
   class(object) <- c("dt_level", class(object))
   object
 }
@@ -35,10 +35,12 @@ test_that("dt_level Test 4: input is year; Y", {
 
 test_that("dt_level Test 5: input is not scalar", {
   expect_snapshot(dt_level(c("D", "M", "Y")),
-                  error = TRUE)
+    error = TRUE
+  )
 })
 
 test_that("dt_level Test 5: input is scalar character but not in expected set", {
   expect_snapshot(dt_level("d"),
-                  error = TRUE)
+    error = TRUE
+  )
 })
