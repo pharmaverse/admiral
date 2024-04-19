@@ -39,7 +39,9 @@ dtm_level <- function(level) {
 #'
 #' @family utils_impute
 #' @keywords internal
-dt_level <- function(level) {
+dt_level <- function(level = c("n", "D", "M", "Y")) {
+  admiraldev::assert_character_scalar(level, values = c("n", "D", "M", "Y"))
+
   out <-
     factor(
       level,
