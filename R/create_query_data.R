@@ -394,33 +394,21 @@ get_terms_from_db <- function(version,
 assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name, queries, i) {
   if (is.null(fun)) {
     msg <-
-      paste0(
-        fun_arg_name,
-        " is not specified. This is expected for basket",
-        "s.\n",
-        "A basket is requested by query ",
-        i,
-        ":\n",
-        paste(capture.output(str(queries[[i]])),
-          collapse = "\n"
-        )
+      c(
+        "{.arg {fun_arg_name}} is not specified. This is expected for baskets.",
+        "A basket is requested by query {.val {i}}:",
+        capture.output(str(queries[[i]]))
       )
-    abort(msg)
+    cli_abort(msg)
   }
   if (is.null(version)) {
     msg <-
-      paste0(
-        version_arg_name,
-        " is not specified. This is expected for basket",
-        "s.\n",
-        "A basket is requested by query ",
-        i,
-        ":\n",
-        paste(capture.output(str(queries[[i]])),
-          collapse = "\n"
-        )
+      c(
+        "{.arg {version_arg_name}} is not specified. This is expected for baskets.",
+        "A basket is requested by query {.val {i}}:",
+        capture.output(str(queries[[i]]))
       )
-    abort(msg)
+    cli_abort(msg)
   }
 }
 
@@ -773,14 +761,11 @@ assert_terms <- function(terms,
     }
   }
   if (!"TERMCHAR" %in% vars && !"TERMNUM" %in% vars) {
-    abort(
-      paste0(
-        "Variable `TERMCHAR` or `TERMNUM` is required.\n",
-        "None of them is in ",
-        source_text,
-        ".\n",
-        "Provided variables: ",
-        enumerate(vars)
+    cli_abort(
+      c(
+        "Variable {.var TERMCHAR} or {.var TERMNUM} is required.",
+        paste0("None of them is in ", source_text, "."),
+        "Provided variables: {.var {vars}}"
       )
     )
   }

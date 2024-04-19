@@ -585,11 +585,7 @@ test_that("derive_param_tte Test 8: errors if PARAMCD and by_vars are not one to
         PARCAT2 = AEDECOD
       )
     ),
-    regexp = paste0(
-      "For some values of PARAMCD there is more than one value of AEDECOD.\n",
-      "Call `get_one_to_many_dataset()` to get all one to many values."
-    ),
-    fixed = TRUE
+    class = "assert_one_to_one"
   )
 })
 
