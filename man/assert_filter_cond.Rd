@@ -52,10 +52,13 @@ Check if \code{arg} is a suitable filtering condition to be used in
 functions like \code{subset} or \code{dplyr::filter}.
 }
 \examples{
-library(pharmaversesdtm)
 library(dplyr, warn.conflicts = FALSE)
 library(rlang)
-data(dm)
+dm <- dplyr::tribble(
+  ~DOMAIN,  ~STUDYID,      ~USUBJID, ~AGE,
+  "DM",    "STUDY X", "01-701-1015",   64,
+  "DM",    "STUDY X", "01-701-1016",   65,
+)
 
 # typical usage in a function as an argument check
 example_fun <- function(dat, x) {

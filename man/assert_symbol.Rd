@@ -49,11 +49,13 @@ invisibly otherwise.
 Checks if an argument is a symbol
 }
 \examples{
-library(pharmaversesdtm)
 library(dplyr, warn.conflicts = FALSE)
 library(rlang)
-data(dm)
-
+dm <- dplyr::tribble(
+  ~DOMAIN,      ~USUBJID,
+  "DM",    "01-701-1015",
+  "DM",    "01-701-1016",
+)
 example_fun <- function(dat, var) {
   var <- assert_symbol(enexpr(var))
   select(dat, !!var)

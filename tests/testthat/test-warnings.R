@@ -1,7 +1,11 @@
 # warn_if_vars_exist ----
 ## Test 1: warning if a variable already exists in the input dataset ----
 test_that("warn_if_vars_exist Test 1: warning if a variable already exists in the input dataset", {
-  dm <- pharmaversesdtm::dm
+  dm <- dplyr::tribble(
+    ~USUBJID,      ~AGE,   ~AGEU,      ~ARM,
+    "01-701-1015",   25, "YEARS", "Placebo",
+    "01-701-1016",   27, "YEARS", "Placebo",
+  )
 
   expect_snapshot(
     warn_if_vars_exist(dm, "AGE")

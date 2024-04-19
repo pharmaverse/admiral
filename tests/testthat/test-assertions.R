@@ -6,13 +6,21 @@ test_that("assert_has_variables Test 1: error if a required variable is missing 
     "1"
   )
 
+  dm <- dplyr::tribble(
+    ~DOMAIN,      ~USUBJID,
+    "DM",    "01-701-1015",
+    "DM",    "01-701-1016",
+    "DM",    "01-701-1023",
+    "DM",    "01-701-1024",
+  )
+
   expect_error(
     assert_has_variables(data, "TRT01P"),
     class = "lifecycle_error_deprecated"
   )
 
   expect_error(
-    assert_has_variables(pharmaversesdtm::dm, c("TRT01P", "AVAL")),
+    assert_has_variables(dm, c("TRT01P", "AVAL")),
     class = "lifecycle_error_deprecated"
   )
 })
@@ -293,7 +301,11 @@ test_that("assert_data_frame Test 15: error if required variables are missing", 
     assert_data_frame(dataset, required_vars = exprs(STUDYID, USUBJID))
   }
 
-  admiral_dm <- pharmaversesdtm::dm %>% select(-c(STUDYID, USUBJID))
+  admiral_dm <- dplyr::tribble(
+    ~USUBJID2,
+    "01-701-1015",
+    "01-701-1016",
+  )
 
   expect_error(
     example_fun(admiral_dm)
@@ -306,7 +318,11 @@ test_that("assert_data_frame Test 16: error if required variable is missing", {
     assert_data_frame(dataset, required_vars = exprs(STUDYID, USUBJID))
   }
 
-  admiral_dm <- pharmaversesdtm::dm %>% select(-c(USUBJID))
+  admiral_dm <- dplyr::tribble(
+    ~USUBJID,
+    "01-701-1015",
+    "01-701-1016",
+  )
 
   expect_error(
     example_fun(admiral_dm)
@@ -533,7 +549,11 @@ test_that("assert_symbol Test 28: `assert_symbol` does not throw an error if `ar
     v <- enexpr(var)
   }
 
-  admiral_dm <- pharmaversesdtm::dm
+  admiral_dm <- dplyr::tribble(
+    ~DOMAIN,      ~USUBJID,
+    "DM",    "01-701-1015",
+    "DM",    "01-701-1016",
+  )
 
   example_fun <- function(arg) {
     assert_symbol(arg)
@@ -549,8 +569,14 @@ test_that("assert_symbol Test 28: `assert_symbol` does not throw an error if `ar
 # assert_expr ----
 ## Test 29: `assert_expr` does not throw an error if `arg` is an expression ----
 test_that("assert_expr Test 29: `assert_expr` does not throw an error if `arg` is an expression", {
+  dm <- dplyr::tribble(
+    ~DOMAIN,      ~USUBJID,
+    "DM",    "01-701-1015",
+    "DM",    "01-701-1016",
+  )
+
   expect_invisible(
-    assert_expr(var <- expr(pharmaversesdtm::dm))
+    assert_expr(var <- expr(dm))
   )
 })
 
@@ -873,8 +899,13 @@ test_that("assert_named_exprs Test 54: error if `arg` is not a named list of exp
     example_fun(5),
     class = "lifecycle_error_deprecated"
   )
+  dm <- dplyr::tribble(
+    ~DOMAIN,      ~USUBJID,
+    "DM",    "01-701-1015",
+    "DM",    "01-701-1016",
+  )
   expect_error(
-    example_fun(pharmaversesdtm::dm),
+    example_fun(dm),
     class = "lifecycle_error_deprecated"
   )
   expect_error(
@@ -1267,23 +1298,39 @@ test_that("assert_list_element Test 83: error if the elements do not fulfill the
 # assert_one_to_one ----
 ## Test 84: error if there is a one to many mapping ----
 test_that("assert_one_to_one Test 84: error if there is a one to many mapping", {
+  dm <- dplyr::tribble(
+    ~DOMAIN,      ~USUBJID,
+    "DM",    "01-701-1015",
+    "DM",    "01-701-1016",
+    "DM",    "01-701-1023",
+    "DM",    "01-701-1024",
+  )
+
   expect_error(
-    assert_one_to_one(pharmaversesdtm::dm, exprs(DOMAIN), exprs(USUBJID)),
+    assert_one_to_one(dm, exprs(DOMAIN), exprs(USUBJID)),
     class = "assert_one_to_one"
   )
   admiraldev_environment$one_to_many <- NULL
 
   expect_snapshot(
     error = TRUE,
-    assert_one_to_one(pharmaversesdtm::dm, exprs(DOMAIN), exprs(USUBJID))
+    assert_one_to_one(dm, exprs(DOMAIN), exprs(USUBJID))
   )
   admiraldev_environment$one_to_many <- NULL
 })
 
 ## Test 85: error if there is a many to one mapping ----
 test_that("assert_one_to_one Test 85: error if there is a many to one mapping", {
+  dm <- dplyr::tribble(
+    ~DOMAIN,      ~USUBJID,
+    "DM",    "01-701-1015",
+    "DM",    "01-701-1016",
+    "DM",    "01-701-1023",
+    "DM",    "01-701-1024",
+  )
+
   expect_error(
-    assert_one_to_one(pharmaversesdtm::dm, exprs(USUBJID), exprs(DOMAIN)),
+    assert_one_to_one(dm, exprs(USUBJID), exprs(DOMAIN)),
     class = "assert_one_to_one"
   )
   admiraldev_environment$many_to_one <- NULL

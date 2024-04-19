@@ -19,8 +19,11 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(pharmaversesdtm)
-#' data(dm)
+#' dm <- tribble(
+#'   ~DOMAIN,  ~STUDYID,      ~USUBJID,
+#'   "DM",    "STUDY X", "01-701-1015",
+#'   "DM",    "STUDY X", "01-701-1016",
+#' )
 #'
 #' tmp_var <- get_new_tmp_var(dm)
 #' mutate(dm, !!tmp_var := NA)
@@ -69,8 +72,11 @@ get_new_tmp_var <- function(dataset, prefix = "tmp_var") {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(pharmaversesdtm)
-#' data(dm)
+#' dm <- tribble(
+#'   ~DOMAIN,  ~STUDYID,      ~USUBJID,
+#'   "DM",    "STUDY X", "01-701-1015",
+#'   "DM",    "STUDY X", "01-701-1016",
+#' )
 #' dm <- select(dm, USUBJID)
 #' tmp_var <- get_new_tmp_var(dm)
 #' dm <- mutate(dm, !!tmp_var := NA)

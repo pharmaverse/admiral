@@ -374,11 +374,13 @@ assert_logical_scalar <- function(arg, optional = FALSE,
 #' @keywords assertion
 #' @family assertion
 #' @examples
-#' library(pharmaversesdtm)
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(rlang)
-#' data(dm)
-#'
+#' dm <- dplyr::tribble(
+#'   ~DOMAIN,      ~USUBJID,
+#'   "DM",    "01-701-1015",
+#'   "DM",    "01-701-1016",
+#' )
 #' example_fun <- function(dat, var) {
 #'   var <- assert_symbol(enexpr(var))
 #'   select(dat, !!var)
@@ -486,10 +488,13 @@ assert_expr <- function(arg,
 #' @family assertion
 #'
 #' @examples
-#' library(pharmaversesdtm)
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(rlang)
-#' data(dm)
+#' dm <- dplyr::tribble(
+#'   ~DOMAIN,  ~STUDYID,      ~USUBJID, ~AGE,
+#'   "DM",    "STUDY X", "01-701-1015",   64,
+#'   "DM",    "STUDY X", "01-701-1016",   65,
+#' )
 #'
 #' # typical usage in a function as an argument check
 #' example_fun <- function(dat, x) {

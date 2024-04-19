@@ -26,8 +26,11 @@ The function returns a new unique temporary variable name to be used inside
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(pharmaversesdtm)
-data(dm)
+dm <- tribble(
+  ~DOMAIN,  ~STUDYID,      ~USUBJID,
+  "DM",    "STUDY X", "01-701-1015",
+  "DM",    "STUDY X", "01-701-1016",
+)
 
 tmp_var <- get_new_tmp_var(dm)
 mutate(dm, !!tmp_var := NA)

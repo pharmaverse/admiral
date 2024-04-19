@@ -14,8 +14,12 @@
 #' @export
 #'
 #' @examples
-#' library(pharmaversesdtm)
-#' data(dm)
+#' library(dplyr, warn.conflicts = FALSE)
+#' dm <- tribble(
+#'   ~USUBJID,           ~ARM,
+#'   "01-701-1015", "Placebo",
+#'   "01-701-1016", "Placebo",
+#' )
 #'
 #' ## No warning as `AAGE` doesn't exist in `dm`
 #' warn_if_vars_exist(dm, "AAGE")

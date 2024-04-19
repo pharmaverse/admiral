@@ -264,7 +264,7 @@
 # assert_one_to_one Test 84: error if there is a one to many mapping
 
     Code
-      assert_one_to_one(pharmaversesdtm::dm, exprs(DOMAIN), exprs(USUBJID))
+      assert_one_to_one(dm, exprs(DOMAIN), exprs(USUBJID))
     Condition
       Error:
       ! For some values of "DOMAIN" there is more than one value of "USUBJID"

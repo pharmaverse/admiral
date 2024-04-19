@@ -14,6 +14,7 @@
 
 * No longer exporting `is_named()` function. (#401)
 
+* `pharmaversesdtm` removed as a dependency. (#434)
 * As a part of the error messaging update, the following changes were made.
 
     - The `assert_s3_class(class)` argument has been renamed to `assert_s3_class(cls)`. (#367)

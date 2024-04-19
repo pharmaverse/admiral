@@ -1,4 +1,8 @@
-dm <- select(pharmaversesdtm::dm, USUBJID)
+dm <- dplyr::tribble(
+  ~USUBJID,
+  "01-701-1015",
+  "01-701-1016",
+)
 
 # get_new_tmp_var ----
 ## Test 1: creating temporary variables works ----
