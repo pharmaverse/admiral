@@ -1,9 +1,5 @@
 # admiral (development version)
 
-## Documentation
-
-- Documentation for `derive_extreme_event()` has been updated to include a description for the value of `derive_extreme_event()` when `keep_source_vars = NULL`
-
 ## New Features
 
 - Error Messaging has been made more "user-friendly". (#2372)
@@ -41,6 +37,8 @@
   - `derive_vars_aage(unit)`
 
 ## Documentation
+
+- Documentation for `derive_extreme_event()` has been updated to include a description for the value of `derive_extreme_event()` when `keep_source_vars = NULL`. (#2398)
 
 - The "Visit and Period Variables" vignette was updated and refactored to include example code to create a period reference dataset. (#2321)
 
