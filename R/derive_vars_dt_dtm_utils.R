@@ -41,7 +41,7 @@ dtm_level <- function(level) {
 #' @keywords internal
 dt_level <- function(level) {
   possible_values <- c("n", "D", "M", "Y")
-  admiraldev::assert_character_scalar(level, values = possible_values)
+  assert_character_scalar(level, values = possible_values)
 
 
   out <-
