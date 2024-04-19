@@ -10,7 +10,7 @@
 #' @importFrom rlang := abort arg_match as_function as_label as_name as_string
 #'   call2 caller_env call_name current_env .data enexpr eval_bare eval_tidy
 #'   expr expr_interp expr_label exprs f_lhs f_rhs inform is_call is_expression
-#'   is_missing new_formula parse_expr parse_exprs set_names sym syms type_of
+#'   is_missing is_named new_formula parse_expr parse_exprs set_names sym syms type_of
 #'   warn as_data_mask list2 exec
 #' @importFrom utils capture.output str file.edit
 #' @importFrom purrr map map2 map_chr map_lgl reduce walk keep map_if transpose

@@ -80,9 +80,6 @@ test_that("derive_param_merged_exist_flag Test 2: error is issued if paramter al
         ANL01FL = "Y"
       )
     ),
-    regexp = paste(
-      "The parameter code 'OVR' does already exist in `dataset`."
-    ),
-    fixed = TRUE
+    class = "assert_param_does_not_exist"
   )
 })

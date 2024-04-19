@@ -277,7 +277,8 @@ adppk_aval <- adppk_aprlt %>%
     # Derive CMT
     CMT = case_when(
       EVID == 1 ~ 1,
-      TRUE ~ 2
+      PCSPEC == "PLASMA" ~ 2,
+      TRUE ~ 3
     ),
     # Derive BLQFL/BLQFN
     BLQFL = case_when(
@@ -321,7 +322,7 @@ adppk_aseq <- adppk_aval %>%
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
-    order = exprs(AFRLT, EVID),
+    order = exprs(AFRLT, EVID, CMT),
     check_type = "error"
   ) %>%
   # Derive PARAM and PARAMN
@@ -335,8 +336,8 @@ adppk_aseq <- adppk_aval %>%
     -DOMAIN, -starts_with("min"), -starts_with("max"), -starts_with("EX"),
     -starts_with("PC"), -ends_with("first"), -ends_with("prev"),
     -ends_with("DTM"), -ends_with("DT"), -ends_with("TM"), -starts_with("VISIT"),
-    -starts_with("AVISIT"), -starts_with("PARAM"),
-    -ends_with("TMF"), -starts_with("TRT"), -starts_with("ATPT"), -DRUG
+    -starts_with("AVISIT"), -ends_with("TMF"), -starts_with("TRT"),
+    -starts_with("ATPT"), -DRUG
   )
 
 #---- Derive Covariates ----

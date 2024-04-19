@@ -47,18 +47,9 @@ knitr::opts_chunk$set(
  * R is very popular among statisticians so new statistical methods are likely implemented in R before any other language
  * There might be equally suited programming languages out there - however at some stage we had to make a decision :)
  
-##### Why do we use a **certain R version and package versions** for development?
-
-* The choice of R Version is not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in the earliest of the three latest R Versions. This need for a common development environment also carries over for our choice of package versions.  
-* GitHub allows us through the Actions/Workflows to test `{admiral}` under several versions of R as well as several versions of dependent R packages needed for `{admiral}`.  Currently we test `{admiral}` against the three latest R Versions and the closest snapshots of packages to those R versions.  You can view this workflow and others on our [admiralci GitHub Repository](https://github.com/pharmaverse/admiralci).
-* This common development allows us to easily re-create bugs and provide solutions to each other issues that developers will encounter.
-* Reviewers of Pull Requests when running code will know that their environment is identical to the initiator of the Pull Request.  This ensures faster review times and higher quality Pull Request reviews.
-* We achieve this common development environment by using a **lockfile** created from the [`renv`](https://rstudio.github.io/renv/) package. New developers will encounter a suggested `renv::restore()` in the console to revert or move forward your R version and package versions.
-
-
 ##### Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?
 
-* Functions are usually not necessarily specific but parameter driven: 
+* Functions are usually parameter driven: 
     * e.g. the `derive_vars_aage` has a parameterized start and end-date and a unit.
     * Depending on the parameters results may vary as does the specification.
     * Functions serve as a toolbox so the user can create their ADaM according to the requirements.
@@ -69,6 +60,11 @@ knitr::opts_chunk$set(
 * Function details and its purpose, the requirements, parameters, dependencies and examples are documented in the header of each function.
 * Complex functions potentially have a vignette on the `{admiral}` homepage to provide more details. 
 * `{admiral}` does not provide a link to an explicit specification in the define.xml.
+
+##### Where a user can quickly find some **references or advises** to use a function?
+
+* A [Cheat Sheet](https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf) is available, providing some examples of the many `{admiral}` functions. 
+* For more detailed description, please refer to the [Reference section](https://pharmaverse.github.io/admiral/reference/index.html). 
 
 ##### Would `{admiral}` **create a whole** ADaM  dataset?
 
@@ -128,3 +124,7 @@ knitr::opts_chunk$set(
   * _"Extremely easy to learn and get into, well thought and planned. Plenty of minor functions instead of aiming to create a large "jack of all trades" framework. The toolkit does not attempt to become a large one-button ADaM generator (which is fantastic)."_
   * _"It is a huge advantage for all Pharma companies that we have common functions for common stuff we develop. It will be easier for the authorities when it is the same foundation in the ADaM programs. The development goes faster for every one when we develop across companies, and bug-fixing is faster as many are using same package and will most likely find potential bugs."_
   * _"I am a huge proponent of shared solutions within Pharma. Overall I was VERY impressed with the `{admiral}` project -- both the design, development, documentation, and validation details are available for teams to readily adopt."_
+
+##### Are there any **presentations** available about `{admiral}`?
+
+* For a full collection of `{admiral}` conference presentations over the years, please travel to our [Presentation Archive](https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html).

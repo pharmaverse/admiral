@@ -325,7 +325,7 @@ test_that("derive_param_tte Test 4: error is issued if DTC variables specified f
         PARAM = "Time to First Adverse Event"
       )
     ),
-    regexp = "`AESTDTC` in dataset `ae` is not a date or datetime variable but is a character vector" # nolint
+    class = "assert_date_var"
   )
 })
 
@@ -731,7 +731,7 @@ test_that("derive_param_tte Test 10: error is issued if parameter code already e
         PARAM = "Time to First Adverse Event"
       )
     ),
-    regexp = "^The parameter code 'TTAE' does already exist in `dataset`.$"
+    class = "assert_param_does_not_exist"
   )
 })
 
