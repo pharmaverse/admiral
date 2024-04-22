@@ -340,9 +340,9 @@ get_terms_from_db <- function(version,
                               temp_env) {
   assert_db_requirements(
     version = version,
-    version_arg_name = arg_name(substitute(version)),
+    version_arg_name = deparse(substitute(version)),
     fun = fun,
-    fun_arg_name = arg_name(substitute(fun)),
+    fun_arg_name = deparse(substitute(fun)),
     queries = queries,
     i = i
   )
@@ -397,8 +397,11 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
       c(
         "{.arg {fun_arg_name}} is not specified. This is expected for baskets.",
         "A basket is requested by query {.val {i}}:",
-        capture.output(str(queries[[i]]))
+        capture.output(queries[[i]])
       )
+    # set names for correct indentation
+    names(msg) <- if_else(str_starts(msg, " "), " ", "")
+    names(msg)[[2]] = "i"
     cli_abort(msg)
   }
   if (is.null(version)) {
@@ -406,8 +409,11 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
       c(
         "{.arg {version_arg_name}} is not specified. This is expected for baskets.",
         "A basket is requested by query {.val {i}}:",
-        capture.output(str(queries[[i]]))
+        capture.output(queries[[i]])
       )
+    # set names for correct indentation
+    names(msg) <- if_else(str_starts(msg, " "), " ", "")
+    names(msg)[[2]] = "i"
     cli_abort(msg)
   }
 }
@@ -712,60 +718,43 @@ assert_terms <- function(terms,
                          expect_grpname = FALSE,
                          expect_grpid = FALSE,
                          source_text) {
-  if (!is.data.frame(terms)) {
-    abort(paste0(
-      source_text,
-      " is not a data frame but ",
-      what_is_it(terms),
-      "."
-    ))
-  }
+  assert_data_frame(
+    terms,
+    message = paste0(
+     source_text,
+     " is not a data frame but {.obj_type_friendly {terms}}."
+    )
+  )
 
   if (nrow(terms) == 0) {
-    abort(paste0(
+    cli_abort(paste0(
       source_text,
       " does not contain any observations."
     ))
   }
 
-  vars <- names(terms)
-  if (!"SRCVAR" %in% vars) {
-    abort(
-      paste0(
-        "Required variable `SRCVAR` is missing in ",
-        source_text,
-        "."
-      )
-    )
-  }
+  required_vars <- exprs(SRCVAR)
   if (expect_grpname) {
-    if (!"GRPNAME" %in% vars) {
-      abort(
-        paste0(
-          "Required variable `GRPNAME` is missing in ",
-          source_text,
-          "."
-        )
-      )
-    }
+    required_vars <- exprs(!!!required_vars, GRPNAME)
   }
   if (expect_grpid) {
-    if (!"GRPID" %in% vars) {
-      abort(
-        paste0(
-          "Required variable `GRPID` is missing in ",
-          source_text,
-          "."
-        )
-      )
-    }
+    required_vars <- exprs(!!!required_vars, GRPID)
   }
+  assert_data_frame(
+    terms,
+    required_vars = required_vars,
+    message = paste0(
+      "Required variable{?s} {.var {missing_vars}} {?is/are} missing in ",
+      source_text,
+      ".")
+  )
+  vars <- names(terms)
   if (!"TERMCHAR" %in% vars && !"TERMNUM" %in% vars) {
     cli_abort(
       c(
         "Variable {.var TERMCHAR} or {.var TERMNUM} is required.",
         paste0("None of them is in ", source_text, "."),
-        "Provided variables: {.var {vars}}"
+        i = "Provided variables: {.var {vars}}"
       )
     )
   }

@@ -39,8 +39,8 @@ cqterms <- tibble::tribble(
   "APPLICATION SITE PRURITUS", 10003053L
 ) %>%
   mutate(SRCVAR = "AEDECOD")
+
 # create_query_data ----
-# customized query defined by terms ----
 ## Test 1: customized query defined by terms ----
 test_that("create_query_data Test 1: customized query defined by terms", {
   cq <- query(
@@ -63,7 +63,6 @@ test_that("create_query_data Test 1: customized query defined by terms", {
   )
 })
 
-# customized query defined by SMQs ----
 ## Test 2: customized query defined by SMQs ----
 test_that("create_query_data Test 2: customized query defined by SMQs", {
   cq <- query(
@@ -180,9 +179,8 @@ test_that("create_query_data Test 3: customized query defined by terms and SMQs"
   )
 })
 
-# SMQs ----
 ## Test 4: SMQs ----
-test_that("SMQs Test 4: SMQs", {
+test_that("create_query_data Test 4: SMQs", {
   pregsmq <- query(
     prefix = "SMQ02",
     id = 13,
@@ -251,9 +249,8 @@ test_that("SMQs Test 4: SMQs", {
   )
 })
 
-# issues error if SMQs without meddra_version are requested ----
 ## Test 5: issues error if SMQs without meddra_version are requested ----
-test_that("SMQs Test 5: issues error if SMQs without meddra_version are requested", {
+test_that("create_query_data Test 5: issues error if SMQs without meddra_version are requested", {
   pregsmq <- query(
     prefix = "SMQ02",
     definition = basket_select(
@@ -263,18 +260,17 @@ test_that("SMQs Test 5: issues error if SMQs without meddra_version are requeste
     )
   )
 
-  expect_error(
+  expect_snapshot(
     create_query_data(
       queries = list(pregsmq),
       get_terms_fun = get_smq
     ),
-    regexp = "^version is not specified. This is expected for baskets.*"
+    error = TRUE
   )
 })
 
-# SDGs ----
 ## Test 6: SDGs ----
-test_that("SDGs Test 6: SDGs", {
+test_that("create_query_data Test 6: SDGs", {
   sdg <- query(
     prefix = "SDG01",
     id = auto,
@@ -314,9 +310,8 @@ test_that("SDGs Test 6: SDGs", {
   )
 })
 
-# issues error if SDGs without meddra_version are requested ----
 ## Test 7: issues error if SDGs without meddra_version are requested ----
-test_that("SDGs Test 7: issues error if SDGs without meddra_version are requested", {
+test_that("create_query_data Test 7: issues error if SDGs without meddra_version are requested", {
   sdg <- query(
     prefix = "SDG01",
     definition = basket_select(
@@ -326,19 +321,18 @@ test_that("SDGs Test 7: issues error if SDGs without meddra_version are requeste
     )
   )
 
-  expect_error(
+  expect_snapshot(
     create_query_data(
       queries = list(sdg),
       get_terms_fun = get_sdg
     ),
-    regexp = "^version is not specified. This is expected for baskets.*"
+    error = TRUE
   )
 })
 
-# query() ----
-# query: error: name = auto for non SMQs/SDGs ----
-## Test 8: query: error: name = auto for non SMQs/SDGs ----
-test_that("SDGs Test 8: query: error: name = auto for non SMQs/SDGs", {
+# query ----
+## Test 8: error if name = auto for non SMQs/SDGs ----
+test_that("query Test 8: error if name = auto for non SMQs/SDGs", {
   expect_error(
     sdg <- query(
       prefix = "CQ01",
@@ -348,9 +342,8 @@ test_that("SDGs Test 8: query: error: name = auto for non SMQs/SDGs", {
   )
 })
 
-# query: error: name = id for non SMQs/SDGs ----
-## Test 9: query: error: name = id for non SMQs/SDGs ----
-test_that("SDGs Test 9: query: error: name = id for non SMQs/SDGs", {
+## Test 9: error if id = auto for non SMQs/SDGs ----
+test_that("query Test 9: error if id = auto for non SMQs/SDGs", {
   expect_error(
     sdg <- query(
       name = "My CQ",
@@ -362,9 +355,8 @@ test_that("SDGs Test 9: query: error: name = id for non SMQs/SDGs", {
   )
 })
 
-# query: error: invalid definition ----
-## Test 10: query: error: invalid definition ----
-test_that("SDGs Test 10: query: error: invalid definition", {
+## Test 10: error if invalid definition ----
+test_that("query Test 10: error if invalid definition", {
   expect_error(
     sdg <- query(
       name = "My CQ",
@@ -380,93 +372,89 @@ test_that("SDGs Test 10: query: error: invalid definition", {
 })
 
 # assert_terms ----
-# assert_terms: error: SRCVAR missing ----
-## Test 11: assert_terms: error: SRCVAR missing ----
-test_that("assert_terms Test 11: assert_terms: error: SRCVAR missing", {
-  expect_error(
+## Test 11: error if SRCVAR missing ----
+test_that("assert_terms Test 11: error if SRCVAR missing", {
+  expect_snapshot(
     assert_terms(
       terms = select(cqterms, -SRCVAR),
       source_text = "my test data"
     ),
-    regexp = "Required variable `SRCVAR` is missing in my test data.",
-    fixed = TRUE
+    error = TRUE
   )
 })
 
-# assert_terms: error: TERMCHAR and TERMNUM missing ----
-## Test 12: assert_terms: error: TERMCHAR and TERMNUM missing ----
-test_that("assert_terms Test 12: assert_terms: error: TERMCHAR and TERMNUM missing", {
-  expect_error(
+## Test 12: error if SRCVAR and GRPNAME missing ----
+test_that("assert_terms Test 12: error if SRCVAR and GRPNAME missing", {
+  expect_snapshot(
+    assert_terms(
+      terms = select(cqterms, -SRCVAR),
+      source_text = "my test data",
+      expect_grpname = TRUE
+    ),
+    error = TRUE
+  )
+})
+
+## Test 13: error if TERMCHAR and TERMNUM missing ----
+test_that("assert_terms Test 13: error if TERMCHAR and TERMNUM missing", {
+  expect_snapshot(
     assert_terms(
       terms = select(cqterms, SRCVAR),
       source_text = "my test data"
     ),
-    regexp = paste0(
-      "Variable `TERMCHAR` or `TERMNUM` is required.\n",
-      "None of them is in my test data.\nProvided variables: `SRCVAR`"
-    ),
-    fixed = TRUE
+    error = TRUE
   )
 })
 
-# assert_terms: error: no data frame ----
-## Test 13: assert_terms: error: no data frame ----
-test_that("assert_terms Test 13: assert_terms: error: no data frame", {
-  expect_error(
+## Test 14: error if no data frame ----
+test_that("assert_terms Test 14: error if no data frame", {
+  expect_snapshot(
     assert_terms(
       terms = 42,
       source_text = "object returned by calling get_mysmq()"
     ),
-    regexp = "object returned by calling get_mysmq() is not a data frame but `42`.",
-    fixed = TRUE
+    error = TRUE
   )
 })
 
-# assert_terms: error: no observations ----
-## Test 14: assert_terms: error: no observations ----
-test_that("assert_terms Test 14: assert_terms: error: no observations", {
-  expect_error(
+## Test 15: error if no observations ----
+test_that("assert_terms Test 15: error if no observations", {
+  expect_snapshot(
     assert_terms(
       terms = filter(cqterms, TERMNUM == 42),
       source_text = "object returned by calling get_my_smq"
     ),
-    regexp = "object returned by calling get_my_smq does not contain any observations.",
-    fixed = TRUE
+    error = TRUE
   )
 })
 
-# assert_terms: error: GRPNAME is missing ----
-## Test 15: assert_terms: error: GRPNAME is missing ----
-test_that("assert_terms Test 15: assert_terms: error: GRPNAME is missing", {
-  expect_error(
+## Test 16: error if GRPNAME is missing ----
+test_that("assert_terms Test 16: error if GRPNAME is missing", {
+  expect_snapshot(
     assert_terms(
       terms = cqterms,
       expect_grpname = TRUE,
       source_text = "object returned by calling get_my_smq"
     ),
-    regexp = "Required variable `GRPNAME` is missing in object returned by calling get_my_smq.",
-    fixed = TRUE
+    error = TRUE
   )
 })
 
-# assert_terms: error: GRPID is missing ----
-## Test 16: assert_terms: error: GRPID is missing ----
-test_that("assert_terms Test 16: assert_terms: error: GRPID is missing", {
-  expect_error(
+## Test 17: error if GRPID is missing ----
+test_that("assert_terms Test 17: error if GRPID is missing", {
+  expect_snapshot(
     assert_terms(
       terms = cqterms,
       expect_grpid = TRUE,
       source_text = "object returned by calling get_my_smq"
     ),
-    regexp = "Required variable `GRPID` is missing in object returned by calling get_my_smq.",
-    fixed = TRUE
+    error = TRUE
   )
 })
 
 # basket_select ----
-# basket_select: error: name and id specified ----
-## Test 17: basket_select: error: name and id specified ----
-test_that("basket_select Test 17: basket_select: error: name and id specified", {
+## Test 18: error if name and id specified ----
+test_that("basket_select Test 18: error if name and id specified", {
   expect_error(
     basket_select(
       name = "My SMQ",
@@ -479,9 +467,8 @@ test_that("basket_select Test 17: basket_select: error: name and id specified", 
   )
 })
 
-# basket_select: error: neither name nor id specified ----
-## Test 18: basket_select: error: neither name nor id specified ----
-test_that("basket_select Test 18: basket_select: error: neither name nor id specified", {
+## Test 19: error if neither name nor id specified ----
+test_that("basket_select Test 19: error if neither name nor id specified", {
   expect_error(
     basket_select(scope = "NARROW", type = "smq"),
     regexp = "Either id or name has to be non null.",
@@ -489,9 +476,8 @@ test_that("basket_select Test 18: basket_select: error: neither name nor id spec
   )
 })
 
-# basket_select: error: name and id specified ----
-## Test 19: basket_select: error: name and id specified ----
-test_that("basket_select Test 19: basket_select: error: name and id specified", {
+## Test 20: error if name and id specified ----
+test_that("basket_select Test 20: error if name and id specified", {
   expect_error(
     basket_select(
       name = "My SDG",
@@ -504,9 +490,27 @@ test_that("basket_select Test 19: basket_select: error: name and id specified", 
   )
 })
 
-# format.basket_select: formatting is correct ----
-## Test 20: format.basket_select: formatting is correct ----
-test_that("basket_select Test 20: format.basket_select: formatting is correct", {
+## Test 21: error if neither name nor id specified ----
+test_that("basket_select Test 21: error if neither name nor id specified", {
+  expect_error(
+    basket_select(type = "sdg", scope = NA_character_),
+    regexp = "Either id or name has to be non null.",
+    fixed = TRUE
+  )
+})
+
+## Test 22: error if type is not specified ----
+test_that("basket_select Test 22: error if type is not specified", {
+  expect_error(
+    basket_select(id = 42, scope = "NARROW"),
+    regexp = "argument \"type\" is missing, with no default",
+    fixed = TRUE
+  )
+})
+
+# format.basket_select ----
+## Test 23: formatting is correct (id specified) ----
+test_that("format.basket_select Test 23: formatting is correct (id specified)", {
   expect_equal(
     format(basket_select(
       id = 42,
@@ -517,30 +521,8 @@ test_that("basket_select Test 20: format.basket_select: formatting is correct", 
   )
 })
 
-# basket_select: error: neither name nor id specified ----
-## Test 21: basket_select: error: neither name nor id specified ----
-test_that("basket_select Test 21: basket_select: error: neither name nor id specified", {
-  expect_error(
-    basket_select(type = "sdg", scope = NA_character_),
-    regexp = "Either id or name has to be non null.",
-    fixed = TRUE
-  )
-})
-
-# basket_select: error: type is not specified ----
-## Test 22: basket_select: error: type is not specified ----
-test_that("basket_select Test 22: basket_select: error: type is not specified", {
-  expect_error(
-    basket_select(id = 42, scope = "NARROW"),
-    regexp = "argument \"type\" is missing, with no default",
-    fixed = TRUE
-  )
-})
-
-# format.basket_select ----
-# format.basket_select: formatting is correct ----
-## Test 23: format.basket_select: formatting is correct ----
-test_that("format.basket_select Test 23: format.basket_select: formatting is correct", {
+## Test 24: formatting is correct (name specified) ----
+test_that("format.basket_select Test 24: formatting is correct (name specified)", {
   expect_equal(
     format(basket_select(name = "My SDG", type = "sdg", scope = NA_character_)),
     "basket_select(name = \"My SDG\", id = NULL, scope = \"NA\", type = \"sdg\")"
