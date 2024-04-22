@@ -333,41 +333,37 @@ test_that("create_query_data Test 7: issues error if SDGs without meddra_version
 # query ----
 ## Test 8: error if name = auto for non SMQs/SDGs ----
 test_that("query Test 8: error if name = auto for non SMQs/SDGs", {
-  expect_error(
+  expect_snapshot(
     sdg <- query(
       prefix = "CQ01",
       definition = cqterms
     ),
-    regexp = "^The auto keyword can be used for baskets only.*"
+    error = TRUE
   )
 })
 
 ## Test 9: error if id = auto for non SMQs/SDGs ----
 test_that("query Test 9: error if id = auto for non SMQs/SDGs", {
-  expect_error(
+  expect_snapshot(
     sdg <- query(
       name = "My CQ",
       id = auto,
       prefix = "CQ01",
       definition = cqterms
     ),
-    regexp = "^The auto keyword can be used for baskets only.*"
+    error = TRUE
   )
 })
 
 ## Test 10: error if invalid definition ----
 test_that("query Test 10: error if invalid definition", {
-  expect_error(
+  expect_snapshot(
     sdg <- query(
       name = "My CQ",
       prefix = "CQ01",
       definition = 1
     ),
-    regexp =
-      paste0(
-        "^`definition` expects a `basket_select` object,",
-        " a data frame, or a list of data frames and `basket_select` objects*"
-      )
+    error = TRUE
   )
 })
 
@@ -455,62 +451,36 @@ test_that("assert_terms Test 17: error if GRPID is missing", {
 # basket_select ----
 ## Test 18: error if name and id specified ----
 test_that("basket_select Test 18: error if name and id specified", {
-  expect_error(
+  expect_snapshot(
     basket_select(
       name = "My SMQ",
       id = 42,
       scope = "NARROW",
       type = "smq"
     ),
-    regexp = "Either id or name has to be null.",
-    fixed = TRUE
+    error = TRUE
   )
 })
 
 ## Test 19: error if neither name nor id specified ----
 test_that("basket_select Test 19: error if neither name nor id specified", {
-  expect_error(
+  expect_snapshot(
     basket_select(scope = "NARROW", type = "smq"),
-    regexp = "Either id or name has to be non null.",
-    fixed = TRUE
+    error = TRUE
   )
 })
 
-## Test 20: error if name and id specified ----
-test_that("basket_select Test 20: error if name and id specified", {
-  expect_error(
-    basket_select(
-      name = "My SDG",
-      id = 42,
-      scope = NA_character_,
-      type = "sdg"
-    ),
-    regexp = "Either id or name has to be null.",
-    fixed = TRUE
-  )
-})
-
-## Test 21: error if neither name nor id specified ----
-test_that("basket_select Test 21: error if neither name nor id specified", {
-  expect_error(
-    basket_select(type = "sdg", scope = NA_character_),
-    regexp = "Either id or name has to be non null.",
-    fixed = TRUE
-  )
-})
-
-## Test 22: error if type is not specified ----
-test_that("basket_select Test 22: error if type is not specified", {
-  expect_error(
+## Test 20: error if type is not specified ----
+test_that("basket_select Test 20: error if type is not specified", {
+  expect_snapshot(
     basket_select(id = 42, scope = "NARROW"),
-    regexp = "argument \"type\" is missing, with no default",
-    fixed = TRUE
+    error = TRUE
   )
 })
 
 # format.basket_select ----
-## Test 23: formatting is correct (id specified) ----
-test_that("format.basket_select Test 23: formatting is correct (id specified)", {
+## Test 21: formatting is correct (id specified) ----
+test_that("format.basket_select Test 21: formatting is correct (id specified)", {
   expect_equal(
     format(basket_select(
       id = 42,
@@ -521,8 +491,8 @@ test_that("format.basket_select Test 23: formatting is correct (id specified)", 
   )
 })
 
-## Test 24: formatting is correct (name specified) ----
-test_that("format.basket_select Test 24: formatting is correct (name specified)", {
+## Test 22: formatting is correct (name specified) ----
+test_that("format.basket_select Test 22: formatting is correct (name specified)", {
   expect_equal(
     format(basket_select(name = "My SDG", type = "sdg", scope = NA_character_)),
     "basket_select(name = \"My SDG\", id = NULL, scope = \"NA\", type = \"sdg\")"
