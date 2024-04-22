@@ -38,6 +38,8 @@
 
 ## Documentation
 
+- Documentation for `derive_extreme_event()` has been updated to include a description for the value of `derive_extreme_event()` when `keep_source_vars = NULL`. (#2398)
+
 - The "Visit and Period Variables" vignette was updated and refactored to include example code to create a period reference dataset. (#2321)
 
 - The documentation of `derive_vars_merged()` function is updated to describe that the `check_type` argument is ignored (an error is issued) if `order` is not specified. (#2326)

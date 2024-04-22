@@ -125,7 +125,9 @@ For example:
 
 For each event the specified variables are kept from the selected
 observations. The variables specified for \code{by_vars} and created by
-\code{set_values_to} are always kept.
+\code{set_values_to} are always kept. The \code{keep_source_vars} field of
+the event will take precedence over the value of the \code{keep_source_vars}
+argument.
 
 \emph{Permitted Values}: A list of expressions where each element is
 a symbol or a tidyselect expression, e.g., \code{exprs(VISIT, VISITNUM, starts_with("RS"))}.}
@@ -158,7 +160,9 @@ are added to the selected observations.
 the number of the event.
 \item Only the variables specified for the \code{keep_source_vars} field of the
 event, and the by variables (\code{by_vars}) and the variables created by
-\code{set_values_to} are kept.
+\code{set_values_to} are kept. If \code{keep_source_vars = NULL} is used for an event
+in \code{derive_extreme_event()} the value of the \code{keep_source_vars} argument of
+\code{derive_extreme_event()} is used.
 }
 \item All selected observations are bound together.
 \item For each group (with respect to the variables specified for the
