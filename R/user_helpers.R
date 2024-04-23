@@ -35,23 +35,17 @@ use_ad_template <- function(adam_name = "adsl",
   assert_logical_scalar(open)
 
   if (!toupper(adam_name) %in% list_all_templates(package)) {
-    err_msg <- sprintf(
-      paste0(
-        "No template for '%s' available in package '%s'.\n",
-        "\u2139 Run `list_all_templates('%s')` to get a list of all available ADaM templates."
-      ),
-      toupper(adam_name), package, package
-    )
-    abort(err_msg)
+    cli_abort(c(
+      "No template for {toupper(adam_name)} available in package {.pkg {package}}.",
+      i = "Run {.run admiral::list_all_templates(\"{package}\")} to get a list of all available ADaM templates."
+    ))
   }
 
   if (file.exists(save_path) && !overwrite) {
-    err_msg <- paste(
-      sprintf("A file named '%s' already exists.", save_path),
-      "\u2139 Set `overwrite = TRUE` to force overwriting it.",
-      sep = "\n"
-    )
-    abort(err_msg)
+    cli_abort(c(
+      "A file named {.file {save_path}} already exists.",
+      i = "Set {.code overwrite = TRUE} to force overwriting it."
+    ))
   }
 
   template_file <- system.file(
@@ -60,7 +54,7 @@ use_ad_template <- function(adam_name = "adsl",
   )
 
   if (file.copy(template_file, save_path, overwrite = TRUE)) {
-    inform(sprintf("\u2713 File '%s' has been created successfully", save_path))
+    cli_inform(c(v ="File {.file {save_path}} has been created successfully"))
   }
 
   if (open) {
@@ -88,11 +82,9 @@ list_all_templates <- function(package = "admiral") {
   assert_character_scalar(package)
 
   if (!requireNamespace(package, quietly = TRUE)) {
-    err_msg <- sprintf(
-      "No package called '%s' is installed and hence no templates are available",
-      package
+    cli_abort(
+      "No package called {.pkg {package}} is installed and hence no templates are available."
     )
-    abort(err_msg)
   }
 
   list.files(system.file("templates", package = package)) %>%
