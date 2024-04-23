@@ -738,9 +738,10 @@ extend_source_datasets <- function(source_datasets,
     }
   }
   if (length(by_groups) == 0) {
-    cli_abort(
-      "The by variable{?s} {.var {by_vars_chr}} {?is/are} not contained in any of the source datasets."
-    )
+    cli_abort(paste(
+      "The by variable{?s} {.var {by_vars_chr}} {?is/are} not contained in any",
+      "of the source datasets."
+    ))
   }
   # extend source datasets #
   by_groups <- unique(bind_rows(by_groups))

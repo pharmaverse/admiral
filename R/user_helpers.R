@@ -37,7 +37,10 @@ use_ad_template <- function(adam_name = "adsl",
   if (!toupper(adam_name) %in% list_all_templates(package)) {
     cli_abort(c(
       "No template for {toupper(adam_name)} available in package {.pkg {package}}.",
-      i = "Run {.run admiral::list_all_templates(\"{package}\")} to get a list of all available ADaM templates."
+      i = paste(
+        "Run {.run admiral::list_all_templates(\"{package}\")} to get a list of",
+        "all available ADaM templates."
+      )
     ))
   }
 

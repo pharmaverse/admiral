@@ -126,7 +126,10 @@ signal_duplicate_records <- function(dataset,
       by_vars = replace_values_by_names(by_vars)
     )
     # nolint end
-    full_msg <- c(msg, i = "Run {.run admiral::get_duplicates_dataset()} to access the duplicate records")
+    full_msg <- c(
+      msg,
+      i = "Run {.run admiral::get_duplicates_dataset()} to access the duplicate records"
+    )
     cnd_funs[[cnd_type]](full_msg)
   }
 }

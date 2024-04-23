@@ -44,8 +44,8 @@ test_that("use_ad_template Test 4: Error Message is returned if no ADaM template
   )
 })
 
-## Test 5: Error Message is returned if ADaM template file already exists ----
-test_that("use_ad_template Test 5: Error Message is returned if ADaM template file already exists", {
+## Test 5: error if ADaM template file already exists ----
+test_that("use_ad_template Test 5: error if ADaM template file already exists", {
   dir <- tempdir()
   suppressMessages(file <- file.path(dir, "adsl.R"))
   suppressMessages(use_ad_template("adsl", save_path = file, open = FALSE))
@@ -61,8 +61,8 @@ test_that("use_ad_template Test 5: Error Message is returned if ADaM template fi
 })
 
 # print.adam_templates ----
-## Test 6: `adam_templates` objects are printed as intended: no templates ----
-test_that("print.adam_templates Test 6: `adam_templates` objects are printed as intended: no templates", {
+## Test 6: no templates ----
+test_that("print.adam_templates Test 6: no templates", {
   templates <- list_all_templates(package = "dplyr")
   expected_print_output <- c(
     "No ADaM templates available in package 'dplyr'"
@@ -70,8 +70,8 @@ test_that("print.adam_templates Test 6: `adam_templates` objects are printed as 
   expect_identical(capture.output(print(templates)), expected_print_output)
 })
 
-## Test 7: `adam_templates` objects are printed as intended: some templates ----
-test_that("print.adam_templates Test 7: `adam_templates` objects are printed as intended: some templates", {
+## Test 7: some templates ----
+test_that("print.adam_templates Test 7: some templates", {
   templates <- c("ADAE", "ADSL") %>%
     structure(class = c("adam_templates", "character"), package = "admiral") # nolint: undesirable_function_linter
   expected_print_output <- c(
