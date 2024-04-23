@@ -572,7 +572,7 @@ test_that("derive_param_tte Test 8: errors if PARAMCD and by_vars are not one to
     )
   )
 
-  expect_error(
+  expect_snapshot(
     derive_param_tte(
       dataset_adsl = adsl,
       by_vars = exprs(AEDECOD),
@@ -585,7 +585,7 @@ test_that("derive_param_tte Test 8: errors if PARAMCD and by_vars are not one to
         PARCAT2 = AEDECOD
       )
     ),
-    class = "assert_one_to_one"
+    error = TRUE
   )
 })
 
