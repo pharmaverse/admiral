@@ -15,12 +15,3 @@
       ! No template for ADXX available in package admiral.
       i Run `admiral::list_all_templates("admiral")` to get a list of all available ADaM templates.
 
-# use_ad_template Test 5: Error Message is returned if ADaM template file already exists
-
-    Code
-      suppressMessages(use_ad_template("adsl", save_path = file, open = FALSE))
-    Condition
-      Error in `use_ad_template()`:
-      ! A file named '/tmp/RtmpSbUP3F/adsl.R' already exists.
-      i Set `overwrite = TRUE` to force overwriting it.
-

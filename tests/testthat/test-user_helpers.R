@@ -50,9 +50,12 @@ test_that("use_ad_template Test 5: Error Message is returned if ADaM template fi
   suppressMessages(file <- file.path(dir, "adsl.R"))
   suppressMessages(use_ad_template("adsl", save_path = file, open = FALSE))
 
-  expect_snapshot(
+  expect_error(
     suppressMessages(use_ad_template("adsl", save_path = file, open = FALSE)),
-    error = TRUE
+    regexp = paste("A file named '.*' already exists.",
+      "i Set `overwrite = TRUE` to force overwriting it.",
+      sep = "\n"
+    )
   )
   file.remove(file)
 })
