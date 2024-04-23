@@ -338,11 +338,15 @@ derive_param_tte <- function(dataset = NULL,
     element = "dataset_name",
     condition = dataset_name %in% source_names,
     source_names = source_names,
-    message_text = paste0(
-      "The dataset names must be included in the list specified for the ",
-      "`source_datasets` parameter.\n",
-      "Following names were provided by `source_datasets`:\n",
-      enumerate(source_names, quote_fun = squote)
+    message_text = c(
+      paste0(
+        "The dataset names must be included in the list specified for the ",
+        "{.arg source_datasets} argument."
+      ),
+      i = paste(
+        "Following names were provided by {.arg source_datasets}:",
+        "{.val {source_names}}"
+      )
     )
   )
   assert_list_element(
@@ -350,11 +354,15 @@ derive_param_tte <- function(dataset = NULL,
     element = "dataset_name",
     condition = dataset_name %in% source_names,
     source_names = source_names,
-    message_text = paste0(
-      "The dataset names must be included in the list specified for the ",
-      "`source_datasets` parameter.\n",
-      "Following names were provided by `source_datasets`:\n",
-      enumerate(source_names, quote_fun = squote)
+    message_text = c(
+      paste0(
+        "The dataset names must be included in the list specified for the ",
+        "{.arg source_datasets} argument."
+      ),
+      i = paste(
+        "Following names were provided by {.arg source_datasets}:",
+        "{.val {source_names}}"
+      )
     )
   )
   assert_logical_scalar(create_datetime)

@@ -372,11 +372,12 @@ derive_extreme_event <- function(dataset = NULL,
       element = "dataset_name",
       condition = dataset_name %in% source_names,
       source_names = source_names,
-      message_text = paste0(
+      message_text = c(
+        paste0(
         "The dataset names must be included in the list specified for the ",
-        "`source_datasets` parameter.\n",
-        "Following names were provided by `source_datasets`:\n",
-        enumerate(source_names, quote_fun = squote)
+        "{.arg source_datasets} argument."
+        ),
+        i = "Following names were provided by {.arg source_datasets}: {.val {source_names}}"
       )
     )
   }

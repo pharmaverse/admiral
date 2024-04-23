@@ -462,13 +462,6 @@ derive_vars_joined <- function(dataset,
   preexisting_vars_no_by_vars <- preexisting_vars[which(!(preexisting_vars %in% by_vars))]
   duplicates <- intersect(replace_values_by_names(new_vars), preexisting_vars_no_by_vars)
   if (length(duplicates) > 0) {
-    # err_msg <- sprintf(
-    #   paste(
-    #     "The following columns in `dataset_add` have naming conflicts with `dataset`,\n",
-    #     "please make the appropriate modifications to `new_vars`, with respect to:\n%s"
-    #   ),
-    #   enumerate(vars2chr(duplicates))
-    # )
     cli_abort(
       paste(
         "The following columns in {.arg dataset_add} have naming conflicts with {.arg dataset},",
