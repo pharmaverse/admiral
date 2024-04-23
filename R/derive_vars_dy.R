@@ -91,8 +91,7 @@ derive_vars_dy <- function(dataset,
     cli_abort(c(
       "{.arg source_vars} must end in DT or DTM or be explicitly and uniquely named.",
       i = "Please name or rename the following source_vars: {.var {bad_vars}}"
-    )
-    )
+    ))
   }
 
   # named vector passed to `.names` in `across()` to derive name of dy_vars

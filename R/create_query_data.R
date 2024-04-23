@@ -401,7 +401,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
       )
     # set names for correct indentation
     names(msg) <- if_else(str_starts(msg, " "), " ", "")
-    names(msg)[[2]] = "i"
+    names(msg)[[2]] <- "i"
     cli_abort(msg)
   }
   if (is.null(version)) {
@@ -413,7 +413,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
       )
     # set names for correct indentation
     names(msg) <- if_else(str_starts(msg, " "), " ", "")
-    names(msg)[[2]] = "i"
+    names(msg)[[2]] <- "i"
     cli_abort(msg)
   }
 }
@@ -673,10 +673,11 @@ validate_query <- function(obj) {
     }
   } else {
     cli_abort(
-      c(paste(
+      c(
+        paste(
           "{.var definition} expects a {.cls basket_select} object, a data frame,",
           "or a list of data frames and {.cls basket_select} objects."
-          ),
+        ),
         i = "An object of the following class was provided: {.cls {class(values$definition)}}"
       )
     )
@@ -725,8 +726,8 @@ assert_terms <- function(terms,
   assert_data_frame(
     terms,
     message = paste0(
-     source_text,
-     " is not a data frame but {.obj_type_friendly {terms}}."
+      source_text,
+      " is not a data frame but {.obj_type_friendly {terms}}."
     )
   )
 
@@ -750,7 +751,8 @@ assert_terms <- function(terms,
     message = paste0(
       "Required variable{?s} {.var {missing_vars}} {?is/are} missing in ",
       source_text,
-      ".")
+      "."
+    )
   )
   vars <- names(terms)
   if (!"TERMCHAR" %in% vars && !"TERMNUM" %in% vars) {

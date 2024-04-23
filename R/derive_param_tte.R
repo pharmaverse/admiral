@@ -917,8 +917,7 @@ list_tte_source_objects <- function(package = "admiral") {
     cli_abort(paste(
       "No package called {.pkg {package}} is installed and hence no {.cls tte_source}",
       "objects are available."
-      )
-    )
+    ))
   }
 
   # Get all `tte_source` objects exported by `package`

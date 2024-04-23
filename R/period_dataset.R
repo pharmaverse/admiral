@@ -146,26 +146,27 @@ create_period_dataset <- function(dataset,
   }
   if (length(mode) > 1) {
     cli_abort(
-      discard(c(
-        "More than one type of subperiod, period, or phase variables ",
-        "is specified for `new_vars`:",
-        if_else(
-          "subperiod" %in% mode,
-          "subperiod: {.var {new_vars_chr[mode == \"subperiod\"]}}",
-          NA_character_
+      discard(
+        c(
+          "More than one type of subperiod, period, or phase variables ",
+          "is specified for `new_vars`:",
+          if_else(
+            "subperiod" %in% mode,
+            "subperiod: {.var {new_vars_chr[mode == \"subperiod\"]}}",
+            NA_character_
+          ),
+          if_else(
+            "period" %in% mode,
+            "period: {.var {new_vars_chr[mode == \"period\"]}}",
+            NA_character_
+          ),
+          if_else(
+            "phase" %in% mode,
+            "phase:{.var {new_vars_chr[mode == \"phase\"]}}",
+            NA_character_
+          )
         ),
-        if_else(
-          "period" %in% mode,
-          "period: {.var {new_vars_chr[mode == \"period\"]}}",
-          NA_character_
-        ),
-        if_else(
-          "phase" %in% mode,
-          "phase:{.var {new_vars_chr[mode == \"phase\"]}}",
-          NA_character_
-        )
-      ),
-      is.na
+        is.na
       )
     )
   }
@@ -377,26 +378,27 @@ derive_vars_period <- function(dataset,
   }
   if (length(mode) > 1) {
     cli_abort(
-      discard(c(
-        "More than one type of subperiod, period, or phase variables ",
-        "is specified for `new_vars`:",
-        if_else(
-          "subperiod" %in% mode,
-          "subperiod: {.var {new_vars_names[mode == \"subperiod\"]}}",
-          NA_character_
+      discard(
+        c(
+          "More than one type of subperiod, period, or phase variables ",
+          "is specified for `new_vars`:",
+          if_else(
+            "subperiod" %in% mode,
+            "subperiod: {.var {new_vars_names[mode == \"subperiod\"]}}",
+            NA_character_
+          ),
+          if_else(
+            "period" %in% mode,
+            "period: {.var {new_vars_names[mode == \"period\"]}}",
+            NA_character_
+          ),
+          if_else(
+            "phase" %in% mode,
+            "phase: {.var {new_vars_names[mode == \"phase\"]}}",
+            NA_character_
+          )
         ),
-        if_else(
-          "period" %in% mode,
-          "period: {.var {new_vars_names[mode == \"period\"]}}",
-          NA_character_
-        ),
-        if_else(
-          "phase" %in% mode,
-          "phase: {.var {new_vars_names[mode == \"phase\"]}}",
-          NA_character_
-        )
-      ),
-      is.na
+        is.na
       )
     )
   }

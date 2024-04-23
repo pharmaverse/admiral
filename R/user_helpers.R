@@ -54,7 +54,7 @@ use_ad_template <- function(adam_name = "adsl",
   )
 
   if (file.copy(template_file, save_path, overwrite = TRUE)) {
-    cli_inform(c(v ="File {.file {save_path}} has been created successfully"))
+    cli_inform(c(v = "File {.file {save_path}} has been created successfully"))
   }
 
   if (open) {

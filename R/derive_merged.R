@@ -719,8 +719,8 @@ derive_vars_merged_lookup <- function(dataset,
 
       cli_inform(
         c("List of {.var {vars2chr(by_vars_left)}} not mapped:",
-        capture.output(temp_not_mapped),
-        i = "Run {.run admiral::get_not_mapped()} to access the full list."
+          capture.output(temp_not_mapped),
+          i = "Run {.run admiral::get_not_mapped()} to access the full list."
         )
       )
     } else if (nrow(temp_not_mapped) == 0) {

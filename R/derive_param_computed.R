@@ -368,9 +368,10 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
     ))) {
       cli_abort(
         paste(
-        "{.arg {rlang::caller_arg(parameters)}} must be a character vector",
-        "or a list of expressions but it is {.obj_type_friendly {parameters}}."
-      ))
+          "{.arg {rlang::caller_arg(parameters)}} must be a character vector",
+          "or a list of expressions but it is {.obj_type_friendly {parameters}}."
+        )
+      )
     }
   }
   parameters
@@ -484,9 +485,11 @@ get_hori_data <- function(dataset,
   signal_duplicate_records(
     data_parameters,
     by_vars = exprs(!!!by_vars, PARAMCD),
-    msg = c(paste(
-      "The filtered input dataset contains duplicate records with respect to",
-      "{.var {c(vars2chr(by_vars), \"PARAMCD\")}}"),
+    msg = c(
+      paste(
+        "The filtered input dataset contains duplicate records with respect to",
+        "{.var {c(vars2chr(by_vars), \"PARAMCD\")}}"
+      ),
       i = "Please ensure that the variables specified for {.arg by_vars} and {.var PARAMCD}",
       "are a unique key of the input data set restricted by the condition",
       "specified for {.arg filter} and to the parameters specified for {.arg parameters}."
