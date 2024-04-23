@@ -449,7 +449,7 @@ test_that("derive_param_tte Test 6: an error is issued if some of the by variabl
     )
   )
 
-  expect_error(
+  expect_snapshot(
     derive_param_tte(
       dataset_adsl = adsl,
       by_vars = exprs(AEBODSYS, AEDECOD),
@@ -464,7 +464,7 @@ test_that("derive_param_tte Test 6: an error is issued if some of the by variabl
         PARCAT2 = AEDECOD
       )
     ),
-    regexp = "^Only AEDECOD are included in source dataset.*"
+    error = TRUE
   )
 })
 
@@ -510,7 +510,7 @@ test_that("derive_param_tte Test 7: errors if all by vars are missing in all sou
     )
   )
 
-  expect_error(
+  expect_snapshot(
     derive_param_tte(
       dataset_adsl = adsl,
       by_vars = exprs(AEBODSYS),
@@ -525,8 +525,7 @@ test_that("derive_param_tte Test 7: errors if all by vars are missing in all sou
         PARCAT2 = AEDECOD
       )
     ),
-    regexp = "The by variables (AEBODSYS) are not contained in any of the source datasets.",
-    fixed = TRUE
+    error = TRUE
   )
 })
 
@@ -900,9 +899,9 @@ test_that("derive_param_tte Test 12: test dataset and dynamic byvars populated",
 # list_tte_source_objects ----
 ## Test 13: error is issued if package does not exist ----
 test_that("list_tte_source_objects Test 13: error is issued if package does not exist", {
-  expect_error(
+  expect_snapshot(
     list_tte_source_objects(package = "tte"),
-    regexp = "No package called 'tte' is installed and hence no `tte_source` objects are available"
+    error = TRUE
   )
 })
 

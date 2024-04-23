@@ -718,23 +718,21 @@ extend_source_datasets <- function(source_datasets,
         )
     } else if (!setequal(by_vars_chr, missing_by_vars)) {
       # only some of the by variables are included in the source dataset #
-      abort(paste(
-        "Only",
-        paste(setdiff(by_vars_chr, missing_by_vars), collapse = ", "),
-        "are included in source dataset",
-        names(source_datasets)[[i]],
-        ".\n The source dataset must include all or none of the by variables."
+      cli_abort(c(
+        "The source dataset must include all or none of the by variables.",
+        i = paste(
+          "Only {.var {setdiff(by_vars_chr, missing_by_vars)}} {?is/are} included in",
+          "source dataset {.var {names(source_datasets)[[i]]}}."
+        )
       ))
     } else {
       extend[[i]] <- TRUE
     }
   }
   if (length(by_groups) == 0) {
-    abort(paste0(
-      "The by variables (",
-      paste(by_vars_chr, collapse = ", "),
-      ") are not contained in any of the source datasets."
-    ))
+    cli_abort(
+      "The by variable{?s} {.var {by_vars_chr}} {?is/are} not contained in any of the source datasets."
+    )
   }
   # extend source datasets #
   by_groups <- unique(bind_rows(by_groups))
@@ -916,11 +914,11 @@ list_tte_source_objects <- function(package = "admiral") {
   assert_character_scalar(package)
 
   if (!requireNamespace(package, quietly = TRUE)) {
-    err_msg <- sprintf(
-      "No package called '%s' is installed and hence no `tte_source` objects are available",
-      package
+    cli_abort(paste(
+      "No package called {.pkg {package}} is installed and hence no {.cls tte_source}",
+      "objects are available."
+      )
     )
-    abort(err_msg)
   }
 
   # Get all `tte_source` objects exported by `package`
