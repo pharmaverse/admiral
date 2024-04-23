@@ -113,27 +113,19 @@ test_that("compute_scale Test 6: error is thrown if source_range is supplied,
           but not target_range, or vice-versa", {
   input <- c(1, 3, 5, 5, 1, 3, 3)
 
-  expect_error(
+  expect_snapshot(
+    error = TRUE,
     compute_scale(input,
       source_range = c(1, 5),
       min_n = 2
-    ),
-    paste0(
-      "argument `target_range` is missing, with no default, but ",
-      "`source_range` is not missing\nEither both or neither ",
-      "argument should exist"
     )
   )
 
-  expect_error(
+  expect_snapshot(
+    error = TRUE,
     compute_scale(input,
       target_range = c(0, 100),
       min_n = 2
-    ),
-    paste0(
-      "argument `source_range` is missing, with no default, but ",
-      "`target_range` is not missing\nEither both or neither ",
-      "argument should exist"
     )
   )
 })

@@ -572,6 +572,10 @@ test_that("derive_param_tte Test 8: errors if PARAMCD and by_vars are not one to
   )
 
   expect_snapshot(
+<<<<<<< HEAD
+=======
+    error = TRUE,
+>>>>>>> 2403-cli_abort
     derive_param_tte(
       dataset_adsl = adsl,
       by_vars = exprs(AEDECOD),
@@ -583,8 +587,12 @@ test_that("derive_param_tte Test 8: errors if PARAMCD and by_vars are not one to
         PARAMCD = "TTAE",
         PARCAT2 = AEDECOD
       )
+<<<<<<< HEAD
     ),
     error = TRUE
+=======
+    )
+>>>>>>> 2403-cli_abort
   )
 })
 

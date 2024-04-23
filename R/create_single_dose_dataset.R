@@ -474,11 +474,11 @@ create_single_dose_dataset <- function(dataset,
   start_date_chk_pos <- as.vector(start_date_chk[[1]])
 
   if (str_length(start_datec) != start_date_chk_pos[-1]) {
-    err_msg <- paste0(
-      "The argument start_date is expected to have a name like xxxDT.\n",
-      "Please check as it does not follow the expected naming convention"
+    err_msg <- c(
+      "The argument {.arg start_date} is expected to have a name like {.val xxxDT}.",
+      "Please check as it does not follow the expected naming convention."
     )
-    abort(err_msg)
+    cli_abort(err_msg)
   }
 
   end_datec <- as_string(as_name(end_date))
@@ -486,11 +486,11 @@ create_single_dose_dataset <- function(dataset,
   end_date_chk_pos <- as.vector(end_date_chk[[1]])
 
   if (str_length(end_datec) != end_date_chk_pos[-1]) {
-    err_msg <- paste0(
-      "The argument end_date is expected to have a name like xxxDT.\n",
-      "Please check as it does not follow the expected naming convention"
+    err_msg <- c(
+      "The argument {.arg end_date} is expected to have a name like {.val xxxDT}.",
+      "Please check as it does not follow the expected naming convention."
     )
-    abort(err_msg)
+    cli_abort(err_msg)
   }
 
   # Set up lookup table to be joined to dataset
@@ -517,15 +517,13 @@ create_single_dose_dataset <- function(dataset,
 
   if (nrow(na_check) > 0) {
     na_columns <- paste0(colnames(na_check)[colSums(is.na(na_check)) > 0], collapse = ", ")
-    err_msg <- paste0(
-      "The arguments start_date or start_datetime",
-      " and end_date or end_datetime cannot contain `NA` values.\n",
-      sprintf(
-        "Please check %s for `NA` values.",
-        na_columns
-      )
+    err_msg <- c(
+      "The arguments {.arg start_date} or {.arg start_datetime} and
+       {.arg end_date} or {.arg end_datetime} cannot contain {.val {NA}} values.",
+      "i" = "Please check {.val {na_columns}} for {.val {NA}} values."
     )
-    abort(err_msg)
+
+    cli_abort(err_msg)
   }
 
   # Check nominal time is NULL or numeric
@@ -550,15 +548,12 @@ create_single_dose_dataset <- function(dataset,
   if (nrow(value_check) > 0) {
     values_not_found <- paste0(value_check %>% select(!!dose_freq), collapse = ", ")
 
-    err_msg <- paste0(
-      sprintf(
-        "The following values of %s in %s do not appear in %s:\n",
-        as.character(dose_freq),
-        arg_name(substitute(dataset)),
-        arg_name(substitute(lookup_table))
-      ), values_not_found
-    )
-    abort(err_msg)
+    err_msg <-
+      c("The following values of {.val {as.character(dose_freq)}} in
+         {.arg {arg_name(substitute(dataset))}} do not appear in
+         {.arg {arg_name(substitute(lookup_table))}}: {.val {values_not_found}}")
+
+    cli_abort(err_msg)
   }
 
   # Use compute_duration to determine the number of completed dose periods
@@ -583,12 +578,9 @@ create_single_dose_dataset <- function(dataset,
 
   if (any(data_not_once$DOSE_WINDOW %in% c("MINUTE", "HOUR")) &&
     (is.null(start_datetime) || is.null(end_datetime))) {
-    abort(
-      paste(
-        "There are dose frequencies more frequent than once a day.",
-        "Thus `start_datetime` and `end_datetime` must be specified.",
-        sep = "\n"
-      )
+    cli_abort(
+      "There are dose frequencies more frequent than once a day, thus
+       arguments {.arg start_datetime} and {.arg end_datetime} must be specified."
     )
   }
 

@@ -205,9 +205,8 @@ test_that("call_derivation Test 7: Error is thrown if `...` arguments are not pr
 ## Test 8: Error is thrown if duplicate parameters ----
 # ---- call_derivation Test 8: Error is thrown if duplicate parameters ----
 test_that("call_derivation Test 8: Error is thrown if duplicate parameters", {
-  expect_error(
-    params(dtc = VSDTC, dtc = VSDTC, new_vars_prefix = "A"),
-    "The following parameters have been specified more than once: `dtc`",
-    fixed = TRUE
+  expect_snapshot(
+    error = TRUE,
+    params(dtc = VSDTC, dtc = VSDTC, new_vars_prefix = "A")
   )
 })
