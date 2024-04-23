@@ -211,11 +211,10 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 
   if (!unit_var %in% colnames(dataset)) {
     if (is.null(age_unit)) {
-      err_msg <- paste(
-        "There is no variable unit:", unit_var, "associated with", age_var,
-        "and the argument `age_unit` is missing. Please specify a value for `age_unit`"
-      )
-      abort(err_msg)
+      cli_abort(paste(
+        "There is no unit variable ({.var {unit_var}}) associated with {.var {age_var}}",
+        "and the {.arg age_unit} argument is missing. Please specify a value for {.arg age_unit}."
+      ))
     } else {
       ds <- dataset %>%
         mutate(!!new_var := compute_age_years(!!age_var, age_unit))
@@ -233,21 +232,21 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
     if (!is.null(age_unit)) {
       if (length(unit) > 1) {
         msg <- paste(
-          "The variable unit", unit_var, "is associated with", age_var,
-          "and contatins multiple values but the argument `age_unit`
-          has been specified with a single different value.",
-          "The `age_unit` argument is ignored and the grouping will based on",
-          unit_var
+          "The unit variable {.var {unit_var}} is associated with {.var {age_var}}",
+          "and contains multiple values but the argument {.arg age_unit}",
+          "has been specified with a single different value.",
+          "The {.arg age_unit} argument is ignored and the conversion will based",
+          "on {.var {unit_var}}."
         )
-        warn(msg)
+        cli_warn(msg)
       } else if (unit != age_unit) {
         msg <- paste(
-          "The variable unit", unit_var, "is associated with", age_var,
-          "but the argument `age_unit` has been specified with a different value.",
-          "The `age_unit` argument is ignored and the grouping will based on",
-          unit_var
+          "The unit variable {.var {unit_var}} is associated with {.var {age_var}}",
+          "but the argument {.arg age_unit} has been specified with a different value.",
+          "The {.arg age_unit} argument is ignored and the conversion will based",
+          "on {.var {unit_var}}."
         )
-        warn(msg)
+        cli_warn(msg)
       }
     }
 
