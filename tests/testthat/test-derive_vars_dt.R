@@ -144,7 +144,7 @@ test_that("impute_dtc_dt Test 7: max_dates parameter works", {
 
 ## Test 8: min_dates length mismatch provides error ----
 test_that("impute_dtc_dt Test 8: min_dates length mismatch provides error", {
-  expect_error(
+  expect_snapshot(
     impute_dtc_dt(
       c("2020-12", NA_character_),
       min_dates = list(
@@ -153,13 +153,13 @@ test_that("impute_dtc_dt Test 8: min_dates length mismatch provides error", {
       ),
       highest_imputation = "Y"
     ),
-    "Length of `min_dates` do not match length of dates to be imputed."
+    error = TRUE
   )
 })
 
 ## Test 9: max_dates length mismatch provides error ----
 test_that("impute_dtc_dt Test 9: max_dates length mismatch provides error", {
-  expect_error(
+  expect_snapshot(
     impute_dtc_dt(
       c("2020-12", NA_character_),
       max_dates = list(
@@ -168,7 +168,7 @@ test_that("impute_dtc_dt Test 9: max_dates length mismatch provides error", {
       ),
       highest_imputation = "Y"
     ),
-    "Length of `max_dates` do not match length of dates to be imputed."
+    error = TRUE
   )
 })
 
@@ -390,8 +390,8 @@ test_that("derive_vars_dt Test 17: NA imputation for highest_imputation = Y & ma
 
 ## Test 18: NA imputation for highest_imputation = Y & max_dates but date_imputation = first ----
 test_that("derive_vars_dt Test 18: NA imputation for highest_imputation = Y & max_dates but date_imputation = first", { # nolint
-  expect_warning(
-    (data.frame(
+  expect_snapshot(
+    data.frame(
       AESTDTC = c(NA_character_, NA_character_),
       TRTSDT = c(ymd("2022-01-01"), NA)
     ) %>%
@@ -403,8 +403,7 @@ test_that("derive_vars_dt Test 18: NA imputation for highest_imputation = Y & ma
         date_imputation = "first",
         flag_imputation = "auto",
         max_dates = exprs(TRTSDT)
-      )),
-    "If `highest_impuation` = \"Y\" and `date_imputation` = \"first\" is specified, `min_dates` should be specified." # nolint
+      )
   )
 })
 
@@ -436,8 +435,8 @@ test_that("derive_vars_dt Test 19: NA imputation for highest_imputation = Y & mi
 
 ## Test 20: NA imputation for highest_imputation = Y & min_dates but date_imputation = last ----
 test_that("derive_vars_dt Test 20: NA imputation for highest_imputation = Y & min_dates but date_imputation = last", { # nolint
-  expect_warning(
-    (data.frame(
+  expect_snapshot(
+    data.frame(
       AESTDTC = c(NA_character_, NA_character_),
       TRTSDT = c(ymd("2022-01-01"), NA)
     ) %>%
@@ -449,15 +448,14 @@ test_that("derive_vars_dt Test 20: NA imputation for highest_imputation = Y & mi
         date_imputation = "last",
         flag_imputation = "auto",
         min_dates = exprs(TRTSDT)
-      )),
-    "If `highest_impuation` = \"Y\" and `date_imputation` = \"last\" is specified, `max_dates` should be specified." # nolint
+      )
   )
 })
 
 ## Test 21: NA imputation for highest_imputation = Y but null min/max dates fails ----
 test_that("derive_vars_dt Test 21: NA imputation for highest_imputation = Y but null min/max dates fails", { # nolint
-  expect_error(
-    (data.frame(
+  expect_snapshot(
+    data.frame(
       AESTDTC = c(NA_character_, NA_character_),
       TRTSDT = c(ymd("2022-01-01"), NA)
     ) %>%
@@ -468,8 +466,8 @@ test_that("derive_vars_dt Test 21: NA imputation for highest_imputation = Y but 
         highest_imputation = "Y",
         date_imputation = "first",
         flag_imputation = "auto"
-      )),
-    "If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
+      ),
+    error = TRUE
   )
 })
 
