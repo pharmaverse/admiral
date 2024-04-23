@@ -71,16 +71,15 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
   if (!all(srcvar_types %in% c("character", "integer", "double"))) {
     idx <- source_vars[!vapply(dataset[source_vars], typeof, character(1)) %in% c("character", "integer", "double")] # nolint
     dat_incorrect_type <- dataset[idx]
-    msg <- paste0(
-      paste0(
+    cli_abort(c(
+      "The source variables (values of {.var SRCVAR}) must be numeric or character.",
+      i = paste0(
         colnames(dat_incorrect_type),
         " is of type ",
         vapply(dat_incorrect_type, typeof, character(1)),
         collapse = ", "
-      ),
-      ", numeric or character is required"
-    )
-    abort(msg)
+      )
+    ))
   }
 
   termvars <- exprs(character = TERMCHAR, integer = TERMNUM, double = TERMNUM)
@@ -90,9 +89,9 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
     # check illegal term name
     if (any(is.na(dataset_queries$TERMCHAR) & is.na(dataset_queries$TERMNUM)) ||
       any(dataset_queries$TERMCHAR == "" & is.na(dataset_queries$TERMNUM))) {
-      abort(paste0(
-        "Either `TERMCHAR` or `TERMNUM` need to be specified",
-        " in `", deparse(substitute(dataset_queries)), "`. ",
+      cli_abort(paste0(
+        "Either {.var TERMCHAR} or {.var TERMNUM} need to be specified",
+        " in {.arg dataset_queries}. ",
         "They both cannot be NA or empty."
       ))
     }

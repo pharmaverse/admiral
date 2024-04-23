@@ -1,3 +1,20 @@
+# derive_vars_query Test 5: Derive decides between TERMCHAR and TERMNUM based on type
+
+    Code
+      derive_vars_query(mutate(my_ae, AELLTCD = as.logical(AELLTCD)), query)
+    Condition
+      Error in `derive_vars_query()`:
+      ! The source variables (values of `SRCVAR`) must be numeric or character.
+      i AELLTCD is of type logical
+
+# derive_vars_query Test 6: Error is given when both TERMCHAR/TERMNUM are NA or empty
+
+    Code
+      derive_vars_query(my_ae, query)
+    Condition
+      Error in `derive_vars_query()`:
+      ! Either `TERMCHAR` or `TERMNUM` need to be specified in `dataset_queries`. They both cannot be NA or empty.
+
 # assert_valid_queries Test 9: assert_valid_queries checks
 
     Code
