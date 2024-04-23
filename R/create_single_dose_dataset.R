@@ -550,9 +550,8 @@ create_single_dose_dataset <- function(dataset,
 
     err_msg <-
       c("The following values of {.val {as.character(dose_freq)}} in
-         {.arg {arg_name(substitute(dataset))}} do not appear in
-         {.arg {arg_name(substitute(lookup_table))}}: {.val {values_not_found}}")
-
+         {.arg dataset} do not appear in
+         {.arg lookup_table}: {.val {values_not_found}}")
     cli_abort(err_msg)
   }
 

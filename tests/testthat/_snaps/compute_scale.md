@@ -1,5 +1,4 @@
-# compute_scale Test 6: error is thrown if source_range is supplied,
-          but not target_range, or vice-versa
+# compute_scale Test 6: error if source_range is supplied, but not target_range
 
     Code
       compute_scale(input, source_range = c(1, 5), min_n = 2)
