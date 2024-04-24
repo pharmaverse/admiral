@@ -6,14 +6,14 @@
 #'
 #' @details
 #'
-#' `country_code` is the 3-letter county code commonly found in DM
-#' `country_name` is the country long name corresponding to to the 3-letter code
+#' `country_code` is the 3-letter county code commonly found in the ADSL COUNTRY variable.
+#' `country_name` is the country long name corresponding to to the 3-letter code.
 #' `country_number` is the numeric code corresponding to an alphabetic sorting of
 #' the 3-letter codes.
 #'
 #' To see the entire table in the console, run `print(country_code_lookup)`.
 #'
-#' @seealso [create_single_dose_dataset()]
+#' @seealso [dose_freq_lookup]
 #'
 #' @export
 #'
@@ -29,10 +29,13 @@
 #' # Create reference dataset for periods
 #' adsl <- tribble(#' adsl <- tribble(
 #'   ~USUBJID, ~SEX, ~COUNTRY,
-#'   "ST42-1", "F",  "AUT",
-#'   "ST42-2", "M",  "MWI",
-#'   "ST42-3", "M",  "NOR",
-#'   "ST42-4", "F",  "UGA"
+#'   "ST01-01", "F",  "AUT",
+#'   "ST01-02", "M",  "MWI",
+#'   "ST01-03", "F",  "GBR",
+#'   "ST01-04", "M",  "CHE",
+#'   "ST01-05", "M",  "NOR",
+#'   "ST01-06", "F",  "JPN",
+#'   "ST01-07", "F",  "USA"
 #' )
 #'
 #' covar <- adsl %>%
@@ -122,7 +125,8 @@ country_code_lookup <- tibble(
     "Virgin Islands, U.S.", "Wallis and Futuna", "Western Sahara", "Yemen", "Zambia",
     "Zimbabwe"
   )
-)
+) %>%
+  arrange(country_code)
 
 # Convert ISO 3166 alpha 3 country codes to numbers 1-249
 country_code_lookup$country_number <- seq_len(nrow(country_code_lookup))

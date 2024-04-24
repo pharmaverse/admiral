@@ -3,6 +3,7 @@
 ## New Features
 
 - Error Messaging has been made more "user-friendly". (#2372)
+- New `country_code_lookup` function added to decode countries based on ISO 3166 codes. (#2388)
 
 ## Updates of Existing Functions
 

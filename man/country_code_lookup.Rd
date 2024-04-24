@@ -15,8 +15,8 @@ These pre-defined country codes are sourced from
 \href{https://www.iso.org/iso-3166-country-codes.html}{ISO Standards}.
 }
 \details{
-\code{country_code} is the 3-letter county code commonly found in DM
-\code{country_name} is the country long name corresponding to to the 3-letter code
+\code{country_code} is the 3-letter county code commonly found in the ADSL COUNTRY variable.
+\code{country_name} is the country long name corresponding to to the 3-letter code.
 \code{country_number} is the numeric code corresponding to an alphabetic sorting of
 the 3-letter codes.
 
@@ -30,10 +30,13 @@ library(lubridate)
 # Create reference dataset for periods
 adsl <- tribble(#' adsl <- tribble(
   ~USUBJID, ~SEX, ~COUNTRY,
-  "ST42-1", "F",  "AUT",
-  "ST42-2", "M",  "MWI",
-  "ST42-3", "M",  "NOR",
-  "ST42-4", "F",  "UGA"
+  "ST01-01", "F",  "AUT",
+  "ST01-02", "M",  "MWI",
+  "ST01-03", "F",  "GBR",
+  "ST01-04", "M",  "CHE",
+  "ST01-05", "M",  "NOR",
+  "ST01-06", "F",  "JPN",
+  "ST01-07", "F",  "USA"
 )
 
 covar <- adsl \%>\%
@@ -46,7 +49,7 @@ covar
 
 }
 \seealso{
-\code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
+\link{dose_freq_lookup}
 
 Other metadata: 
 \code{\link{atoxgr_criteria_ctcv4}},
