@@ -118,38 +118,55 @@ test_that("impute_dtc_dt Test 5: impute month and day to mid", {
 test_that("impute_dtc_dt Test 6: min_dates parameter works", {
   expect_equal(
     impute_dtc_dt(
-      c("2020-12", "2020-11", NA_character_),
+      input,
       min_dates = list(
         c(
-          ymd("2020-12-06"),
-          NA,
-          NA
+          ymd("2019-07-06"),
+          ymd("2019-07-06"),
+          ymd("2019-07-06"),
+          ymd("2019-07-06"),
+          ymd("2019-07-06")
         ),
         c(
-          ymd("2020-11-11"),
-          ymd("2020-11-11"),
-          ymd("2020-11-11")
+          ymd("2019-06-06"),
+          ymd("2019-06-06"),
+          ymd("2019-06-06"),
+          ymd("2019-06-06"),
+          ymd("2019-06-06")
         )
       ),
       highest_imputation = "Y",
       date_imputation = "first"
     ),
-    c("2020-12-06", "2020-11-11", "2020-11-11")
+    c("2019-07-18", "2019-07-06", "2019-07-06", "2019-07-06", "2019-07-06")
   )
 })
 
 ## Test 7: max_dates parameter works ----
 test_that("impute_dtc_dt Test 7: max_dates parameter works", {
   expect_equal(
-    impute_dtc_dt(c("2020-12", "2020-11", NA_character_),
+    impute_dtc_dt(
+      input,
       max_dates = list(
-        c(ymd("2020-12-06"), NA, ymd("2020-09-13")),
-        c(ymd(""), ymd("2020-11-11"), ymd(""))
+        c(
+          ymd("2019-07-06"),
+          ymd("2019-07-06"),
+          ymd("2019-07-06"),
+          ymd("2019-07-06"),
+          ymd("2019-07-06")
+        ),
+        c(
+          ymd("2019-06-06"),
+          ymd("2019-06-06"),
+          ymd("2019-06-06"),
+          ymd("2019-06-06"),
+          ymd("2019-06-06")
+        )
       ),
       highest_imputation = "Y",
       date_imputation = "last"
     ),
-    c("2020-12-06", "2020-11-11", "2020-09-13")
+    c("2019-07-18", "2019-06-06", "2019-06-06", "2019-07-06", "2019-06-06")
   )
 })
 
@@ -158,12 +175,13 @@ test_that("impute_dtc_dt Test 7: max_dates parameter works", {
 test_that("impute_dtc_dt Test 8: min_dates length mismatch provides error", {
   expect_error(
     impute_dtc_dt(
-      c("2020-12", NA_character_),
+      input,
       min_dates = list(
-        c(ymd("2020-12-06")),
-        c(ymd("2020-11-11"))
+        c(ymd("2019-07-06")),
+        c(ymd("2019-06-06"))
       ),
-      highest_imputation = "Y"
+      highest_imputation = "Y",
+      date_imputation = "first"
     ),
     "Length of `min_dates` do not match length of dates to be imputed."
   )
@@ -173,12 +191,13 @@ test_that("impute_dtc_dt Test 8: min_dates length mismatch provides error", {
 test_that("impute_dtc_dt Test 9: max_dates length mismatch provides error", {
   expect_error(
     impute_dtc_dt(
-      c("2020-12", NA_character_),
+      input,
       max_dates = list(
-        c(ymd("2020-12-06")),
-        c(ymd("2020-11-11"))
+        c(ymd("2019-07-06")),
+        c(ymd("2019-06-06"))
       ),
-      highest_imputation = "Y"
+      highest_imputation = "Y",
+      date_imputation = "last"
     ),
     "Length of `max_dates` do not match length of dates to be imputed."
   )
@@ -188,7 +207,7 @@ test_that("impute_dtc_dt Test 9: max_dates length mismatch provides error", {
 test_that("impute_dtc_dt Test 10: Warning if null min/max_dates when highest_imputation = Y", {
   expect_warning(
     impute_dtc_dt(
-      c("2020-12", NA_character_),
+      input,
       highest_imputation = "Y"
     ),
     "If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
@@ -197,10 +216,15 @@ test_that("impute_dtc_dt Test 10: Warning if null min/max_dates when highest_imp
 
 
 ## Test 11: appropriate warnings for impute_dtc_dt ----
-test_that("impute_dtc_dt Test 11: appropriate warnings for impute_dtc_dt", {
+test_that("impute_dtc_dt Test 11: appropriate warnings for impute_dtc_dt but returns appropriate object back", {
   expect_warning(
     impute_dtc_dt(dtc = input_warnings),
     regexp = "incorrect datetime format"
+  )
+
+  expect_equal(
+    suppressWarnings(impute_dtc_dt(dtc = input_warnings)),
+    rep(NA_character_, 3)
   )
 })
 
