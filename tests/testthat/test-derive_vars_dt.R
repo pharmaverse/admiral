@@ -215,8 +215,8 @@ test_that("impute_dtc_dt Test 10: Warning if null min/max_dates when highest_imp
 })
 
 
-## Test 11: appropriate warnings for impute_dtc_dt ----
-test_that("impute_dtc_dt Test 11: appropriate warnings for impute_dtc_dt but returns appropriate object back", {
+## Test 11: appropriate warnings/return object for impute_dtc_dt ----
+test_that("impute_dtc_dt Test 11: appropriate warnings/return object for impute_dtc_dt", {
   expect_warning(
     impute_dtc_dt(dtc = input_warnings),
     regexp = "incorrect datetime format"
