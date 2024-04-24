@@ -27,22 +27,22 @@
 #' library(lubridate)
 #'
 #' # Create reference dataset for periods
-#' adsl <- tribble(#' adsl <- tribble(
+#' adsl <- tribble( #' adsl <- tribble(
 #'   ~USUBJID, ~SEX, ~COUNTRY,
-#'   "ST01-01", "F",  "AUT",
-#'   "ST01-02", "M",  "MWI",
-#'   "ST01-03", "F",  "GBR",
-#'   "ST01-04", "M",  "CHE",
-#'   "ST01-05", "M",  "NOR",
-#'   "ST01-06", "F",  "JPN",
-#'   "ST01-07", "F",  "USA"
+#'   "ST01-01", "F", "AUT",
+#'   "ST01-02", "M", "MWI",
+#'   "ST01-03", "F", "GBR",
+#'   "ST01-04", "M", "CHE",
+#'   "ST01-05", "M", "NOR",
+#'   "ST01-06", "F", "JPN",
+#'   "ST01-07", "F", "USA"
 #' )
 #'
 #' covar <- adsl %>%
 #'   derive_vars_merged(
-#'   dataset_add = country_code_lookup,
-#'   new_vars = exprs(COUNTRYN = country_number, COUNTRYL = country_name),
-#'   by_vars = exprs(COUNTRY = country_code)
+#'     dataset_add = country_code_lookup,
+#'     new_vars = exprs(COUNTRYN = country_number, COUNTRYL = country_name),
+#'     by_vars = exprs(COUNTRY = country_code)
 #'   )
 #' covar
 #'
@@ -130,4 +130,3 @@ country_code_lookup <- tibble(
 
 # Convert ISO 3166 alpha 3 country codes to numbers 1-249
 country_code_lookup$country_number <- seq_len(nrow(country_code_lookup))
-
