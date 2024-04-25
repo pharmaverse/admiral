@@ -13,6 +13,7 @@ country_code_lookup
 \description{
 These pre-defined country codes are sourced from
 \href{https://www.iso.org/iso-3166-country-codes.html}{ISO Standards}.
+See also \href{https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3}{Wikipedia}.
 }
 \details{
 \code{country_code} is the 3-letter county code commonly found in the ADSL COUNTRY variable.
