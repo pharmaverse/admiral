@@ -17,7 +17,7 @@ See also \href{https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3}{Wikipedia}.
 }
 \details{
 \code{country_code} is the 3-letter ISO 3166-1 county code commonly found in the
-ADSL COUNTRY variable.
+ADSL \code{COUNTRY} variable.
 \code{country_name} is the country long name corresponding to to the 3-letter code.
 \code{country_number} is the numeric code corresponding to an alphabetic sorting of
 the 3-letter codes.
