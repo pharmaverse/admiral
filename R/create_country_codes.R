@@ -8,7 +8,7 @@
 #' @details
 #'
 #' `country_code` is the 3-letter ISO 3166-1 county code commonly found in the
-#' ADSL COUNTRY variable.
+#' ADSL `COUNTRY` variable.
 #' `country_name` is the country long name corresponding to to the 3-letter code.
 #' `country_number` is the numeric code corresponding to an alphabetic sorting of
 #' the 3-letter codes.
