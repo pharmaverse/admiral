@@ -73,7 +73,7 @@ test_that("create_country_codes Test 1: Country Codes", {
       "Sri Lanka", "Sudan", "Suriname", "Svalbard and Jan Mayen", "Sweden", "Switzerland",
       "Syrian Arab Republic", "Taiwan, Province of China", "Tajikistan",
       "Tanzania, United Republic of", "Thailand", "Timor-Leste", "Togo", "Tokelau",
-      "Tonga", "Trinidad and Tobago", "Tunisia", "Türkiye", "Turkmenistan",
+      "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan",
       "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates",
       "United Kingdom of Great Britain and Northern Ireland",
       "United States of America", "United States Minor Outlying Islands", "Uruguay", "Uzbekistan",

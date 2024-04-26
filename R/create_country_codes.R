@@ -277,7 +277,7 @@ country_code_lookup <- tribble(
   "TON", "Tonga", 224,
   "TTO", "Trinidad and Tobago", 225,
   "TUN", "Tunisia", 226,
-  "TUR", "Türkiye", 227,
+  "TUR", "Turkey", 227,
   "TUV", "Tuvalu", 228,
   "TWN", "Taiwan, Province of China", 229,
   "TZA", "Tanzania, United Republic of", 230,

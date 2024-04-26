@@ -1271,7 +1271,7 @@ covar <- adsl %>%
     dataset_add = country_code_lookup,
     new_vars = exprs(COUNTRYN = country_number, COUNTRYL = country_name),
     by_vars = exprs(COUNTRY = country_code),
-  ) %>%  
+  ) %>%
   mutate(
     STUDYIDN = as.numeric(word(USUBJID, 1, sep = fixed("-"))),
     SITEIDN = as.numeric(word(USUBJID, 2, sep = fixed("-"))),
@@ -1319,7 +1319,7 @@ covar <- adsl %>%
       FORM == "PATCH" ~ 3,
       TRUE ~ 4
     )
-  ) %>%  
+  ) %>%
   select(
     STUDYID, STUDYIDN, SITEID, SITEIDN, USUBJID, USUBJIDN,
     SUBJID, SUBJIDN, AGE, SEX, SEXN, COHORT, COHORTC, ROUTE, ROUTEN,
