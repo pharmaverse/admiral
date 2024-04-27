@@ -714,7 +714,8 @@ assert_numeric_vector <- function(arg,
   if (!is.numeric(arg)) {
     cli_abort(
       message = message %||%
-        "Argument {.arg {arg_name}} must be a numeric vector, but it {.obj_type_friendly {arg}}.",
+        "Argument {.arg {arg_name}} must be a numeric vector, but it is
+        {.obj_type_friendly {arg}}.",
       class = c(class, "assert-admiraldev"),
       call = call
     )
