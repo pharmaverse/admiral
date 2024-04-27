@@ -18,7 +18,7 @@
 #' what_is_it(1:10)
 #' what_is_it(mtcars)
 what_is_it <- function(x) {
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_soft(
     when = "1.1.0",
     what = "admiraldev::what_is_it()",
     details = "This function was primarily used in error messaging, and can be replaced

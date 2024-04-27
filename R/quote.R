@@ -20,7 +20,7 @@
 #'
 #' @export
 enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_soft(
     when = "1.1.0",
     what = "admiraldev::enumerate()",
     details = "This function was primarily used in error messaging, and can be

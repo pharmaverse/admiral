@@ -17,7 +17,7 @@
 #' @keywords dev_utility
 #' @family dev_utility
 friendly_type_of <- function(x, value = TRUE, length = FALSE) { # nolint
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_soft(
     when = "1.1.0",
     what = "admiraldev::friendly_type_of()",
     details = "This function was primarily used in error messaging, and can be replaced

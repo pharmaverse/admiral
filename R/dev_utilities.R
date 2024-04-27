@@ -44,7 +44,7 @@ convert_dtm_to_dtc <- function(dtm) {
 #'
 #' @export
 arg_name <- function(expr) { # nolint
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_soft(
     when = "1.1.0",
     what = "admiraldev::arg_name()",
     details = "This function was primarily used in error messaging, and can be
