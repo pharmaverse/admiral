@@ -31,7 +31,8 @@ call_user_fun <- function(call) {
         message = c(
           "Calling {.code {as_label(enexpr(call))}} caused the following error:",
           conditionMessage(cnd)
-        )
+        ),
+        call = parent.frame(n = 4)
       )
     }
   )
