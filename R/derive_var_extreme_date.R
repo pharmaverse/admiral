@@ -259,7 +259,7 @@ derive_var_extreme_dtm <- function(dataset,
       ),
       i = paste(
         "Following names were provided by {.arg source_datasets}:",
-        "{.val {source_names}}"
+        ansi_collapse(source_names)
       )
     )
   )

@@ -235,7 +235,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
           "The unit variable {.var {unit_var}} is associated with {.var {age_var}}",
           "and contains multiple values but the argument {.arg age_unit}",
           "has been specified with a single different value.",
-          "The {.arg age_unit} argument is ignored and the conversion will based",
+          "The {.arg age_unit} argument is ignored and the conversion will be based",
           "on {.var {unit_var}}."
         )
         cli_warn(msg)
@@ -243,7 +243,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
         msg <- paste(
           "The unit variable {.var {unit_var}} is associated with {.var {age_var}}",
           "but the argument {.arg age_unit} has been specified with a different value.",
-          "The {.arg age_unit} argument is ignored and the conversion will based",
+          "The {.arg age_unit} argument is ignored and the conversion will be based",
           "on {.var {unit_var}}."
         )
         cli_warn(msg)

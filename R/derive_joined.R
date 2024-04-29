@@ -464,9 +464,9 @@ derive_vars_joined <- function(dataset,
   if (length(duplicates) > 0) {
     cli_abort(
       paste(
-        "The following columns in {.arg dataset_add} have naming conflicts with {.arg dataset},",
-        "please make the appropriate modifications to {.arg new_vars}, with respect to",
-        "{.var {duplicates}}"
+        "The variables {.var {duplicates}} in {.arg dataset_add} have naming",
+        "conflicts with {.arg dataset}, please make the appropriate modifications",
+        "to {.arg new_vars}."
       )
     )
   }

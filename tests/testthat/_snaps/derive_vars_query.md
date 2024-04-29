@@ -21,7 +21,7 @@
       assert_valid_queries(mutate(query, PREFIX = c("30", "55")), "test")
     Condition
       Error in `assert_valid_queries()`:
-      ! `PREFIX` in `test` must start with 2-3 letters.. Problem with "30" and "55".
+      ! `PREFIX` in `test` must start with 2-3 letters. Problem with "30" and "55".
 
 ---
 

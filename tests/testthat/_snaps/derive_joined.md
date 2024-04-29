@@ -5,5 +5,5 @@
       mode = "last", filter_join = day < day.join)
     Condition
       Error in `derive_vars_joined()`:
-      ! The following columns in `dataset_add` have naming conflicts with `dataset`, please make the appropriate modifications to `new_vars`, with respect to `day` and `val`
+      ! The variables `day` and `val` in `dataset_add` have naming conflicts with `dataset`, please make the appropriate modifications to `new_vars`.
 

@@ -14,8 +14,8 @@
         USUBJID, EXDOSFRQ, ADTSTD, ASTDTM, AENDT, AENDTM))
     Condition
       Error in `create_single_dose_dataset()`:
-      ! The argument `start_date` is expected to have a name like "xxxDT".
-      Please check as it does not follow the expected naming convention.
+      ! The argument `start_date` is expected to have a name ending with "---DT".
+      Please update as it does not follow the expected naming convention.
 
 # create_single_dose_dataset Test 8: Message for improper DT column names, AENDT
 

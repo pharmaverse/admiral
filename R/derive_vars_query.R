@@ -233,7 +233,7 @@ assert_valid_queries <- function(queries, queries_name) {
     cli_abort(
       paste0(
         "{.var PREFIX} in {.arg {queries_name}}",
-        " must start with 2-3 letters.. Problem with ",
+        " must start with 2-3 letters. Problem with ",
         "{.val {unique(queries$PREFIX[!is_good_prefix])}}."
       )
     )

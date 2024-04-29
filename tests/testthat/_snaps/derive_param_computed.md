@@ -14,6 +14,6 @@
       filter = NULL)
     Condition
       Error in `get_hori_data()`:
-      ! The `set_values_to` argument contains variable names with more than on dot:
+      ! The `set_values_to` argument contains variable names with more than one dot:
       `AVAL.DIA.BP`
 

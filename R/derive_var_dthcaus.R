@@ -155,11 +155,11 @@ derive_var_dthcaus <- function(dataset,
     message_text = c(
       paste0(
         "The dataset names must be included in the list specified for the ",
-        "{.arg source_datasets} parameter."
+        "{.arg source_datasets} argument."
       ),
       i = paste(
         "Following names were provided by {.arg source_datasets}:",
-        "{.val {source_names}}"
+        ansi_collapse(source_names)
       )
     )
   )

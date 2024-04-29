@@ -80,7 +80,7 @@ compute_scale <- function(source,
     cli_abort(
       c("Argument {.arg source_range} is missing with no default
          and {.arg target_range} is not missing.",
-        "i" = "Either both or neither argument should be specified."
+        "i" = "Either both or neither arguments should be specified."
       )
     )
   }
@@ -89,13 +89,12 @@ compute_scale <- function(source,
     cli_abort(
       c("Argument {.arg target_range} is missing with no default
          and {.arg source_range} is not missing.",
-        "i" = "Either both or neither argument should be specified."
+        "i" = "Either both or neither arguments should be specified."
       )
     )
   }
   assert_logical_scalar(flip_direction)
   assert_integer_scalar(min_n, subset = "positive")
-
 
   # Computation
   if (sum(!is.na(source)) >= min_n) { # nolint: undesirable_function_linter

@@ -190,7 +190,7 @@ derive_var_merged_ef_msrc <- function(dataset,
       ),
       i = paste(
         "Following names were provided by {.arg source_datasets}:",
-        "{.val {source_names}}"
+        ansi_collapse(source_names)
       )
     )
   )

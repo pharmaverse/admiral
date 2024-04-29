@@ -475,8 +475,8 @@ create_single_dose_dataset <- function(dataset,
 
   if (str_length(start_datec) != start_date_chk_pos[-1]) {
     err_msg <- c(
-      "The argument {.arg start_date} is expected to have a name like {.val xxxDT}.",
-      "Please check as it does not follow the expected naming convention."
+      "The argument {.arg start_date} is expected to have a name  ending with {.val ---DT}.",
+      "Please update as it does not follow the expected naming convention."
     )
     cli_abort(err_msg)
   }

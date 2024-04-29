@@ -503,7 +503,7 @@ get_hori_data <- function(dataset,
   if (any(multi_dot_names)) {
     cli_abort(
       c(
-        "The `set_values_to` argument contains variable names with more than on dot:",
+        "The `set_values_to` argument contains variable names with more than one dot:",
         "{.var {analysis_vars_chr[multi_dot_names]}}"
       )
     )

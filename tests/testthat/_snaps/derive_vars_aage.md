@@ -12,7 +12,7 @@
       derive_var_age_years(input, AGE, age_unit = "months", new_var = AAGE)
     Condition
       Warning:
-      The unit variable `AGEU` is associated with `AGE` and contains multiple values but the argument `age_unit` has been specified with a single different value. The `age_unit` argument is ignored and the conversion will based on `AGEU`.
+      The unit variable `AGEU` is associated with `AGE` and contains multiple values but the argument `age_unit` has been specified with a single different value. The `age_unit` argument is ignored and the conversion will be based on `AGEU`.
     Output
       # A tibble: 5 x 3
           AGE AGEU    AAGE
@@ -29,7 +29,7 @@
       derive_var_age_years(input, AGE, age_unit = "years", new_var = AAGE)
     Condition
       Warning:
-      The unit variable `AGEU` is associated with `AGE` but the argument `age_unit` has been specified with a different value. The `age_unit` argument is ignored and the conversion will based on `AGEU`.
+      The unit variable `AGEU` is associated with `AGE` but the argument `age_unit` has been specified with a different value. The `age_unit` argument is ignored and the conversion will be based on `AGEU`.
     Output
       # A tibble: 5 x 3
           AGE AGEU    AAGE

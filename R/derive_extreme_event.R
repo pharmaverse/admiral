@@ -365,22 +365,22 @@ derive_extreme_event <- function(dataset = NULL,
   mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
   assert_list_of(source_datasets, "data.frame")
   source_names <- names(source_datasets)
-  events_to_check <- events[map_lgl(events, ~ !is.null(.x$dataset_name))]
-  if (length(events_to_check) > 0) {
-    assert_list_element(
-      list = events_to_check,
-      element = "dataset_name",
-      condition = dataset_name %in% source_names,
-      source_names = source_names,
-      message_text = c(
-        paste0(
-          "The dataset names must be included in the list specified for the ",
-          "{.arg source_datasets} argument."
-        ),
-        i = "Following names were provided by {.arg source_datasets}: {.val {source_names}}"
+  assert_list_element(
+    list = events,
+    element = "dataset_name",
+    condition = map_lgl(dataset_name, is.null) | dataset_name %in% source_names,
+    source_names = source_names,
+    message_text = c(
+      paste0(
+        "The dataset names must be included in the list specified for the ",
+        "{.arg source_datasets} argument."
+      ),
+      i = paste(
+        "Following names were provided by {.arg source_datasets}:",
+        ansi_collapse(source_names)
       )
     )
-  }
+  )
 
   if (!is.null(ignore_event_order)) {
     if (ignore_event_order) {
