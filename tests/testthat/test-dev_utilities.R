@@ -1,6 +1,7 @@
 # arg_name ----
 ## Test 1: arg_name works ----
 test_that("arg_name Test 1: arg_name works", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   expect_equal(arg_name(sym("a")), "a")
   expect_equal(arg_name(call("enquo", sym("a"))), "a")
   expect_error(arg_name("a"), "Could not extract argument name from")

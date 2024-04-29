@@ -1,12 +1,14 @@
 # friendly_type_of ----
 ## Test 1: friendly_type_of() supports objects ----
 test_that("friendly_type_of Test 1: friendly_type_of() supports objects", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   expect_equal(friendly_type_of(mtcars), "a <data.frame> object")
   expect_equal(friendly_type_of(quo(1)), "a <quosure> object")
 })
 
 ## Test 2: friendly_type_of() supports matrices and arrays ----
 test_that("friendly_type_of Test 2: friendly_type_of() supports matrices and arrays", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   expect_equal(friendly_type_of(list()), "an empty list")
   expect_equal(friendly_type_of(matrix(list(1, 2))), "a list matrix")
   expect_equal(friendly_type_of(array(list(1, 2, 3), dim = 1:3)), "a list array")
@@ -20,6 +22,7 @@ test_that("friendly_type_of Test 2: friendly_type_of() supports matrices and arr
 
 ## Test 3: friendly_type_of() handles scalars ----
 test_that("friendly_type_of Test 3: friendly_type_of() handles scalars", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   expect_equal(friendly_type_of(NA), "`NA`")
 
   expect_equal(friendly_type_of(TRUE), "`TRUE`")
@@ -41,6 +44,7 @@ test_that("friendly_type_of Test 3: friendly_type_of() handles scalars", {
 
 ## Test 4: friendly_type_of() edge cases ----
 test_that("friendly_type_of Test 4: friendly_type_of() edge cases", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   expect_equal(friendly_type_of(), "absent")
   expect_equal(friendly_type_of(1:2, length = TRUE), "an integer vector of length 2")
 
@@ -77,6 +81,7 @@ test_that("friendly_type_of Test 4: friendly_type_of() edge cases", {
 # .rlang_as_friendly_type ----
 ## Test 5: .rlang_as_friendly_type() works ----
 test_that(".rlang_as_friendly_type Test 5: .rlang_as_friendly_type() works", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   setClass("person", slots = c(name = "character", age = "numeric"))
   john <- new("person", name = "John", age = 18)
   expect_equal(.rlang_as_friendly_type(typeof(john)), "an S4 object")
@@ -85,11 +90,13 @@ test_that(".rlang_as_friendly_type Test 5: .rlang_as_friendly_type() works", {
 # .rlang_stop_unexpected_typeof ----
 ## Test 6: .rlang_stop_unexpected_typeof() works ----
 test_that(".rlang_stop_unexpected_typeof Test 6: .rlang_stop_unexpected_typeof() works", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   expect_error(.rlang_stop_unexpected_typeof("test"), "Unexpected type <character>.")
 })
 
 # stop_input_type ----
 ## Test 7: stop_input_type() works ----
 test_that("stop_input_type Test 7: stop_input_type() works", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   expect_error(stop_input_type(1, what = "character"))
 })
