@@ -1589,7 +1589,7 @@ assert_list_element <- function(list,
       )
     }
 
-    cli::cli_abort(
+    cli_abort(
       message = message,
       class = c(class, "assert-admiraldev"),
       call = call
@@ -1676,10 +1676,10 @@ assert_one_to_one <- function(dataset,
     message <- message %||%
       c("For some values of {.val {vars2chr(vars1)}} there is more than one
            value of {.val {vars2chr(vars2)}}",
-        "i" = "Call {.fun get_one_to_many_dataset} to get all one-to-many values."
+        "i" = "Call {.run admiral::get_one_to_many_dataset()} to get all one-to-many values."
       )
 
-    cli::cli_abort(
+    cli_abort(
       message = message,
       call = call,
       class = c(class, "assert-admiraldev")
@@ -1697,10 +1697,10 @@ assert_one_to_one <- function(dataset,
     message <- message %||%
       c("There is more than one value of {.val {vars2chr(vars1)}} for some
          values of {.val {vars2chr(vars2)}}",
-        "i" = "Call {.fun get_many_to_one_dataset} to get all many-to-one values."
+        "i" = "Call {.run admiral::get_many_to_one_dataset()} to get all many-to-one values."
       )
 
-    cli::cli_abort(
+    cli_abort(
       message = message,
       call = call,
       class = c(class, "assert-admiraldev")
@@ -1796,7 +1796,7 @@ assert_date_var <- function(dataset,
       "Column {.val {var_name}} in dataset {.code {dataset_name}} must be
        a date or datetime, but is {.obj_type_friendly {column}}."
 
-    cli::cli_abort(
+    cli_abort(
       message = message,
       call = call,
       class = c(class, "assert-admiraldev")

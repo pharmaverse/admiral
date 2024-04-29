@@ -12,9 +12,9 @@ test_that("get_new_tmp_var Test 1: creating temporary variables works", {
 
 ## Test 2: errors if name does not start with tmp ----
 test_that("get_new_tmp_var Test 2: errors if name does not start with tmp", {
-  expect_error(
-    get_new_tmp_var(dm, prefix = "my_var"),
-    "`prefix` must start with 'tmp_'"
+  expect_snapshot(
+    error = TRUE,
+    get_new_tmp_var(dm, prefix = "my_var")
   )
 })
 

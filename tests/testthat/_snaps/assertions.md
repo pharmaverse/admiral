@@ -410,7 +410,7 @@
     Condition
       Error:
       ! For some values of "DOMAIN" there is more than one value of "USUBJID"
-      i Call `get_one_to_many_dataset()` to get all one-to-many values.
+      i Call `admiral::get_one_to_many_dataset()` to get all one-to-many values.
 
 # assert_date_var Test 86: error if variable is not a date or datetime variable
 

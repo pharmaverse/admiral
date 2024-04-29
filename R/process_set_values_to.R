@@ -70,20 +70,15 @@ process_set_values_to <- function(dataset,
   tryCatch(
     result <- mutate(dataset, !!!set_values_to),
     error = function(cnd) {
-      abort(
-        paste0(
-          "Assigning variables failed!\n",
-          "set_values_to = (\n",
-          paste(
-            " ",
-            names(set_values_to),
-            "=",
-            set_values_to,
-            collapse = "\n"
+      cli_abort(
+        message =
+          c("Assigning variables failed!",
+            "*" = "{.code set_values_to = exprs({paste(names(set_values_to), '=',
+                    set_values_to, collapse = ', ')})}",
+            "See error message below:",
+            conditionMessage(cnd)
           ),
-          "\n)\nError message:\n  ",
-          cnd
-        )
+        call = parent.frame(n = 4)
       )
     }
   )
@@ -96,18 +91,21 @@ process_set_values_to <- function(dataset,
       expected <- expected_types[vars_to_check]
       unexpected <- actual != expected
       if (any(unexpected)) {
-        abort(paste0(
-          "The following variables have an unexpected type:\n",
-          paste0(
-            names(actual[unexpected]),
-            ": expected: ",
-            expected[unexpected],
-            ", actual: ",
-            actual[unexpected],
-            collapse = "\n"
-          ),
-          sep = "\n"
-        ))
+        cli_abort(
+          message =
+            "The following variables have an unexpected type:" |>
+              c(stats::setNames(
+                paste0(
+                  names(actual[unexpected]),
+                  ": expected is {.cls ",
+                  expected[unexpected],
+                  "}, but it is {.cls ",
+                  actual[unexpected],
+                  "}."
+                ),
+                nm = rlang::rep_along(actual[unexpected], "*")
+              ))
+        )
       }
     }
   }
