@@ -630,7 +630,7 @@ test_that("derive_param_tte Test 9: errors if set_values_to contains invalid exp
     )
   )
 
-  expect_error(
+  expect_snapshot(
     derive_param_tte(
       dataset_adsl = adsl,
       by_vars = exprs(AEDECOD),
@@ -645,17 +645,7 @@ test_that("derive_param_tte Test 9: errors if set_values_to contains invalid exp
         PARCAT2 = AEDECOD
       )
     ),
-    regexp = paste0(
-      "Assigning variables failed!\n",
-      "set_values_to = \\(\n",
-      "  PARAMCD = paste0\\(\"TTAE\", as.numeric\\(as.factor\\(AEDECOD\\)\\)\\)\n",
-      "  PARAM = past\\(\"Time to First\", AEDECOD, \"Adverse Event\"\\)\n",
-      "  PARCAT1 = TTAE\n",
-      "  PARCAT2 = AEDECOD\n",
-      "\\)\n",
-      "Error message:\n",
-      "  .*"
-    )
+    error = TRUE
   )
 })
 
