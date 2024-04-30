@@ -1,22 +1,22 @@
-# impute_dtc_dt Test 8: min_dates length mismatch provides error
+# derive_vars_dt Test 8: min_dates length mismatch provides error
 
     Code
-      impute_dtc_dt(c("2020-12", NA_character_), min_dates = list(c(ymd("2020-12-06")),
-      c(ymd("2020-11-11"))), highest_imputation = "Y")
+      impute_dtc_dt(input, min_dates = list(c(ymd("2019-07-06")), c(ymd("2019-06-06"))),
+      highest_imputation = "Y", date_imputation = "first")
     Condition
       Error in `restrict_imputed_dtc_dt()`:
       ! Length of `min_dates` do not match length of dates to be imputed.
 
-# impute_dtc_dt Test 9: max_dates length mismatch provides error
+# derive_vars_dt Test 9: max_dates length mismatch provides error
 
     Code
-      impute_dtc_dt(c("2020-12", NA_character_), max_dates = list(c(ymd("2020-12-06")),
-      c(ymd("2020-11-11"))), highest_imputation = "Y")
+      impute_dtc_dt(input, max_dates = list(c(ymd("2019-07-06")), c(ymd("2019-06-06"))),
+      highest_imputation = "Y", date_imputation = "last")
     Condition
       Error in `restrict_imputed_dtc_dt()`:
       ! Length of `max_dates` do not match length of dates to be imputed.
 
-# derive_vars_dt Test 18: NA imputation for highest_imputation = Y & max_dates but date_imputation = first
+# derive_vars_dt Test 19: NA imputation for highest_imputation = Y & max_dates but date_imputation = first
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(
@@ -32,7 +32,7 @@
       1    <NA> 2022-01-01  <NA>   <NA>
       2    <NA>       <NA>  <NA>   <NA>
 
-# derive_vars_dt Test 20: NA imputation for highest_imputation = Y & min_dates but date_imputation = last
+# derive_vars_dt Test 21: NA imputation for highest_imputation = Y & min_dates but date_imputation = last
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(
@@ -48,7 +48,7 @@
       1    <NA> 2022-01-01  <NA>   <NA>
       2    <NA>       <NA>  <NA>   <NA>
 
-# derive_vars_dt Test 21: NA imputation for highest_imputation = Y but null min/max dates fails
+# derive_vars_dt Test 22: NA imputation for highest_imputation = Y but null min/max dates fails
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(
