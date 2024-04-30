@@ -14,7 +14,7 @@ mapping from the lookup table."><meta property="og:image" content="https://pharm
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9025</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9026</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -204,8 +204,10 @@ to the by variables, an error is issued.</p>
 <dd><p>Message of unique check</p>
 <p>If the uniqueness check fails, the specified message is displayed.</p>
 <p><em>Default</em>:</p>
-<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Dataset `dataset_add` contains duplicate records with respect to"</span>,</span>
-<span>      <span class="fu">enumerate</span><span class="op">(</span><span class="fu">vars2chr</span><span class="op">(</span><span class="va">by_vars</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div></dd>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Dataset {.arg dataset_add} contains duplicate records with respect to"</span>,</span>
+<span>  <span class="st">"{.var {vars2chr(by_vars)}}."</span></span>
+<span><span class="op">)</span></span></code></pre><p></p></div></dd>
 
 
 <dt>print_not_mapped</dt>
