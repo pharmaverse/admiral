@@ -4,7 +4,7 @@
       derive_var_age_years(input, AGE, new_var = AAGE)
     Condition
       Error in `derive_var_age_years()`:
-      ! There is no unit variable (`AGEU`) associated with `AGE` and the `age_unit` argument is missing. Please specify a value for `age_unit`.
+      ! There is no unit variable (`AGEU`) associated with `AGE`. Please specify a value for `age_unit`.
 
 # derive_var_age_years Test 7: warn if `age_unit` doesn't match units in data
 

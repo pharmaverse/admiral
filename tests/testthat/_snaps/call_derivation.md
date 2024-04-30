@@ -55,5 +55,5 @@
       params(dtc = VSDTC, dtc = VSDTC, new_vars_prefix = "A")
     Condition
       Error in `params()`:
-      ! The following parameters have been specified more than once: "dtc".
+      ! The following argument has been specified more than once: "dtc".
 

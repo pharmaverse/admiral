@@ -55,8 +55,10 @@ compute_age_years <- function(age,
     cli_abort(
       c("Argument {.arg age_unit} must be a single string or a vector of the
        same length as {.arg age}",
-        "i" = "There are {.val {length(age)}} values in {.arg age} and
-              {.val {length(age_unit)}} values in {.arg age_unit}."
+        i = paste(
+          "There are {.val {length(age)}} value{?s} in {.arg age} and",
+          "{.val {length(age_unit)}} value{?s} in {.arg age_unit}."
+        )
       )
     )
   }

@@ -212,8 +212,8 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
   if (!unit_var %in% colnames(dataset)) {
     if (is.null(age_unit)) {
       cli_abort(paste(
-        "There is no unit variable ({.var {unit_var}}) associated with {.var {age_var}}",
-        "and the {.arg age_unit} argument is missing. Please specify a value for {.arg age_unit}."
+        "There is no unit variable ({.var {unit_var}}) associated with {.var {age_var}}.",
+        "Please specify a value for {.arg age_unit}."
       ))
     } else {
       ds <- dataset %>%

@@ -236,8 +236,11 @@ params <- function(...) {
   }
   duplicate_params <- get_duplicates(names(args))
   if (length(duplicate_params) >= 1L) {
-    cli_abort("The following parameters have been specified more than once:
-               {.val {duplicate_params}}.")
+    cli_abort(paste(
+      "The following argument{?s} {?has/have} been specified more than once:",
+      "{.val {duplicate_params}}."
+      )
+      )
   }
   structure(args, class = c("params", "source", "list")) # nolint: undesirable_function_linter
 }
