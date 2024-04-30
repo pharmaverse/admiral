@@ -352,7 +352,7 @@ derive_vars_merged <- function(dataset,
     )
     if (length(invalid_vars) > 0) {
       cli_abort(paste(
-        "The variables {.var {invalid_vars}} were specified for {.arg missing_values}",
+        "The variable{?s} {.var {invalid_vars}} w{?as/ere} specified for {.arg missing_values}",
         "but not for {.arg new_vars}."
       ))
     }

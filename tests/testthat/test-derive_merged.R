@@ -303,7 +303,7 @@ test_that("derive_vars_merged Test 12: error if variables in missing_values but 
       mode = "last",
       missing_values = exprs(LASTVIS = "UNKNOWN", LASTVISN = -1)
     ),
-    regexp = "The variables `LASTVISN` were specified for `missing_values` but not for `new_vars`.",
+    regexp = "The variable `LASTVISN` was specified for `missing_values` but not for `new_vars`.",
     fixed = TRUE
   )
 })
