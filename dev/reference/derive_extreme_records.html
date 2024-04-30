@@ -20,7 +20,7 @@ where only the by variables are populated for the new records."><meta property="
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -382,9 +382,9 @@ arguments.</p></li>
 <span class="r-in"><span><span class="co"># Derive a new parameter for the first disease progression (PD)</span></span></span>
 <span class="r-in"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">DTHDT</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2022-05-13"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"3"</span>,      <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>,      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2022-05-13"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"2"</span>,      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"3"</span>,      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYID <span class="op">=</span> <span class="st">"XX1234"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -400,7 +400,7 @@ arguments.</p></li>
 <span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    STUDYID <span class="op">=</span> <span class="st">"XX1234"</span>,</span></span>
-<span class="r-in"><span>    ADT <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">ADTC</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    ADT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">ADTC</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    PARAMCD <span class="op">=</span> <span class="st">"OVR"</span>,</span></span>
 <span class="r-in"><span>    PARAM <span class="op">=</span> <span class="st">"Overall Response"</span>,</span></span>
 <span class="r-in"><span>    ANL01FL <span class="op">=</span> <span class="st">"Y"</span></span></span>

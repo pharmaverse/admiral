@@ -14,7 +14,7 @@ Note: This is a wrapper function for the function convert_dtc_to_dtm()."><meta p
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -179,8 +179,8 @@ For example</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span></span>
 <span>  <span class="st">"2020-11"</span>,</span>
 <span>  min_dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>   <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T12:12:12"</span><span class="op">)</span>,</span>
-<span>   <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-11-11T11:11:11"</span><span class="op">)</span></span>
+<span>   <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T12:12:12"</span><span class="op">)</span>,</span>
+<span>   <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-11-11T11:11:11"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  highest_imputation <span class="op">=</span> <span class="st">"M"</span></span>
 <span><span class="op">)</span></span></code></pre><p></p></div>
@@ -241,7 +241,7 @@ preserve minute when hour is missing.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="st">"2019-07-18T15:25:00"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2019-07-18 15:25:00 UTC"</span>
 <span class="r-in"><span><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2024-04-24 18:19:07 UTC"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2024-04-30 16:14:42 UTC"</span>
 <span class="r-in"><span><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2019-07-18"</span><span class="op">)</span>, time_imputation <span class="op">=</span> <span class="st">"23:59:59"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2019-07-18 23:59:59 UTC"</span>
 <span class="r-in"><span><span class="fu">convert_date_to_dtm</span><span class="op">(</span><span class="st">"2019-07-18"</span>, time_imputation <span class="op">=</span> <span class="st">"23:59:59"</span><span class="op">)</span></span></span>

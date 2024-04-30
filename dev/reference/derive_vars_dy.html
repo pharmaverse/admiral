@@ -12,7 +12,7 @@ AENDY."><meta property="og:image" content="https://pharmaverse.github.io/admiral
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -168,9 +168,9 @@ DY.</p>
 <span class="r-in"><span>  <span class="st">"2014-01-17T23:59:59"</span>, <span class="st">"2014-01-18T13:09:O9"</span>, <span class="st">"2014-01-20"</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    TRTSDTM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">TRTSDTM</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    ASTDTM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ASTDTM</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    AENDT <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">AENDT</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    TRTSDTM <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">TRTSDTM</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    ASTDTM <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ASTDTM</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    AENDT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">AENDT</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">derive_vars_dy</span><span class="op">(</span></span></span>
@@ -189,8 +189,8 @@ DY.</p>
 <span class="r-in"><span>  <span class="st">"2014-01-17"</span>, <span class="st">"2014-02-01"</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    TRTSDT <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">TRTSDT</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    DTHDT <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">DTHDT</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    TRTSDT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">TRTSDT</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    DTHDT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">DTHDT</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">derive_vars_dy</span><span class="op">(</span></span></span>

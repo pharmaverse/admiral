@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -347,8 +347,8 @@ ADSL, to obtain:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">STUDYID</span>,  <span class="op">~</span><span class="va">USUBJID</span>,  <span class="op">~</span><span class="va">TRTSDT</span>,           <span class="op">~</span><span class="va">TRTEDT</span>,           <span class="op">~</span><span class="va">EOSDT</span>,</span>
-<span>  <span class="st">"xyz"</span>,     <span class="st">"1"</span>,       <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2022-01-02"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2022-08-04"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2022-09-10"</span><span class="op">)</span>,</span>
-<span>  <span class="st">"xyz"</span>,     <span class="st">"2"</span>,       <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2023-10-20"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2024-05-21"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2024-06-30"</span><span class="op">)</span></span>
+<span>  <span class="st">"xyz"</span>,     <span class="st">"1"</span>,       <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2022-01-02"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2022-08-04"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2022-09-10"</span><span class="op">)</span>,</span>
+<span>  <span class="st">"xyz"</span>,     <span class="st">"2"</span>,       <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2023-10-20"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2024-05-21"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2024-06-30"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">period_ref</span> <span class="op">&lt;-</span> <span class="va">period_ref</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -390,14 +390,6 @@ Here is an example command to achieve this goal:</p>
 <span>  <span class="va">adsl1</span>,</span>
 <span>  new_vars <span class="op">=</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span>PHSDT <span class="op">=</span> <span class="va">PHwSDT</span>, PHEDT <span class="op">=</span> <span class="va">PHwEDT</span>, APHASE <span class="op">=</span> <span class="va">APHASEw</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: `enumerate()` was deprecated in admiraldev 1.1.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> This function was primarily used in error messaging, and can be replaced with</span></span>
-<span><span class="co">#&gt;   'cli' functionality: `cli::cli_abort('{.val {letters[1:3]}}')`</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">admiral</span> package.</span></span>
-<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/pharmaverse/admiral/issues&gt;</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span></span>
 <span><span class="va">phase_ref</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 6</span></span></span>
@@ -452,7 +444,7 @@ reference dataset defined above.</p>
 <span>  <span class="st">"xyz"</span>,    <span class="st">"2"</span>,      <span class="st">"2023-12-25"</span>,</span>
 <span>  <span class="st">"xyz"</span>,    <span class="st">"2"</span>,      <span class="st">"2024-06-19"</span>,</span>
 <span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ASTDT <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">ASTDT</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ASTDT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">ASTDT</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/derive_vars_joined.html">derive_vars_joined</a></span><span class="op">(</span></span>
 <span>  <span class="va">adae</span>,</span>
@@ -533,7 +525,7 @@ can be derived from the period reference dataset defined above.</p>
 <span>  <span class="st">"xyz"</span>,    <span class="st">"2"</span>,      <span class="st">"2023-12-25"</span>,</span>
 <span>  <span class="st">"xyz"</span>,    <span class="st">"2"</span>,      <span class="st">"2024-06-07"</span>,</span>
 <span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ASTDT <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">ASTDT</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ASTDT <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">ASTDT</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/derive_vars_joined.html">derive_vars_joined</a></span><span class="op">(</span></span>
 <span>  <span class="va">adae</span>,</span>

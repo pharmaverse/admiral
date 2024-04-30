@@ -12,7 +12,7 @@ relative day, age, ..."><meta property="og:image" content="https://pharmaverse.g
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -246,15 +246,15 @@ length is <code>30.4375</code>, i.e. <code>29 / 30.4375 = 0.95</code>.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Derive duration in days (integer), i.e., relative day</span></span></span>
 <span class="r-in"><span><span class="fu">compute_duration</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T15:00:00"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-24T08:15:00"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  start_date <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T15:00:00"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  end_date <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-24T08:15:00"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 19</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Derive duration in days (float)</span></span></span>
 <span class="r-in"><span><span class="fu">compute_duration</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T15:00:00"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-24T08:15:00"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  start_date <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T15:00:00"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  end_date <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-24T08:15:00"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  floor_in <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  add_one <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -262,8 +262,8 @@ length is <code>30.4375</code>, i.e. <code>29 / 30.4375 = 0.95</code>.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Derive age in years</span></span></span>
 <span class="r-in"><span><span class="fu">compute_duration</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"1984-09-06"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2020-02-24"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  start_date <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"1984-09-06"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  end_date <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2020-02-24"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  trunc_out <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  out_unit <span class="op">=</span> <span class="st">"years"</span>,</span></span>
 <span class="r-in"><span>  add_one <span class="op">=</span> <span class="cn">FALSE</span></span></span>
@@ -272,8 +272,8 @@ length is <code>30.4375</code>, i.e. <code>29 / 30.4375 = 0.95</code>.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Derive duration in hours</span></span></span>
 <span class="r-in"><span><span class="fu">compute_duration</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T9:00:00"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T13:30:00"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  start_date <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T9:00:00"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  end_date <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T13:30:00"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  out_unit <span class="op">=</span> <span class="st">"hours"</span>,</span></span>
 <span class="r-in"><span>  floor_in <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  add_one <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>

@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -362,7 +362,7 @@ argument to specify those dates. For example:</p>
 <span>  highest_imputation <span class="op">=</span> <span class="st">"M"</span>,</span>
 <span>  date_imputation <span class="op">=</span> <span class="st">"last"</span>,</span>
 <span>  time_imputation <span class="op">=</span> <span class="st">"last"</span>,</span>
-<span>  max_dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-01-14"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-02-25"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  max_dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-01-14"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-02-25"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "2019-02-25T23:59:59"</span></span></code></pre></div>
 <p>It is ensured that the imputed date is not after any of the specified
@@ -383,8 +383,8 @@ the year is not possible.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2019-02"</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
 <span>  highest_imputation <span class="op">=</span> <span class="st">"Y"</span>,</span>
 <span>  min_dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-01-14"</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-02-25"</span>, <span class="st">"2020-01-01"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-01-14"</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-02-25"</span>, <span class="st">"2020-01-01"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "2019-02-25T00:00:00" "2020-01-01T00:00:00"</span></span>
@@ -396,8 +396,8 @@ the year is not possible.</p>
 <span>  date_imputation <span class="op">=</span> <span class="st">"last"</span>,</span>
 <span>  time_imputation <span class="op">=</span> <span class="st">"last"</span>,</span>
 <span>  max_dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-01-14"</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-02-25"</span>, <span class="st">"2020-01-01"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-01-14"</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-02-25"</span>, <span class="st">"2020-01-01"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "2019-02-25T23:59:59" "2020-01-01T23:59:59"</span></span></code></pre></div>
@@ -558,10 +558,10 @@ collected information is not changed by the imputation.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">AESTDTC</span>,              <span class="op">~</span><span class="va">TRTSDTM</span>,</span>
-<span>  <span class="st">"2019-08-09T12:34:56"</span>, <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2019-11-11T12:34:56"</span><span class="op">)</span>,</span>
-<span>  <span class="st">"2019-10"</span>,             <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2019-11-11T12:34:56"</span><span class="op">)</span>,</span>
-<span>  <span class="st">"2019-11"</span>,             <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2019-11-11T12:34:56"</span><span class="op">)</span>,</span>
-<span>  <span class="st">"2019-12-04"</span>,          <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2019-11-11T12:34:56"</span><span class="op">)</span></span>
+<span>  <span class="st">"2019-08-09T12:34:56"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2019-11-11T12:34:56"</span><span class="op">)</span>,</span>
+<span>  <span class="st">"2019-10"</span>,             <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2019-11-11T12:34:56"</span><span class="op">)</span>,</span>
+<span>  <span class="st">"2019-11"</span>,             <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2019-11-11T12:34:56"</span><span class="op">)</span>,</span>
+<span>  <span class="st">"2019-12-04"</span>,          <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2019-11-11T12:34:56"</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span><span class="op">(</span></span>
 <span>    dtc <span class="op">=</span> <span class="va">AESTDTC</span>,</span>
@@ -589,10 +589,10 @@ should be done in a separate data cleaning or data cut off step.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">AEENDTC</span>,              <span class="op">~</span><span class="va">DTHDT</span>,            <span class="op">~</span><span class="va">DCUTDT</span>,</span>
-<span>  <span class="st">"2019-08-09T12:34:56"</span>, <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-11-11"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-12-02"</span><span class="op">)</span>,</span>
-<span>  <span class="st">"2019-11"</span>,             <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-11-11"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-12-02"</span><span class="op">)</span>,</span>
-<span>  <span class="st">"2019-12"</span>,             <span class="cn">NA</span>,                <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-12-02"</span><span class="op">)</span>,</span>
-<span>  <span class="st">"2019-12-04"</span>,          <span class="cn">NA</span>,                <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-12-02"</span><span class="op">)</span></span>
+<span>  <span class="st">"2019-08-09T12:34:56"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-11-11"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-12-02"</span><span class="op">)</span>,</span>
+<span>  <span class="st">"2019-11"</span>,             <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-11-11"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-12-02"</span><span class="op">)</span>,</span>
+<span>  <span class="st">"2019-12"</span>,             <span class="cn">NA</span>,                <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-12-02"</span><span class="op">)</span>,</span>
+<span>  <span class="st">"2019-12-04"</span>,          <span class="cn">NA</span>,                <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-12-02"</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span><span class="op">(</span></span>
 <span>    dtc <span class="op">=</span> <span class="va">AEENDTC</span>,</span>
@@ -614,10 +614,10 @@ vector of imputed dates. It can be used for example in conditions:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">MHSTDTC</span>,     <span class="op">~</span><span class="va">TRTSDT</span>,</span>
-<span>  <span class="st">"2019-04"</span>,    <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-04-15"</span><span class="op">)</span>,</span>
-<span>  <span class="st">"2019-04-01"</span>, <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-04-15"</span><span class="op">)</span>,</span>
-<span>  <span class="st">"2019-05"</span>,    <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-04-15"</span><span class="op">)</span>,</span>
-<span>  <span class="st">"2019-06-21"</span>, <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-04-15"</span><span class="op">)</span></span>
+<span>  <span class="st">"2019-04"</span>,    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-04-15"</span><span class="op">)</span>,</span>
+<span>  <span class="st">"2019-04-01"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-04-15"</span><span class="op">)</span>,</span>
+<span>  <span class="st">"2019-05"</span>,    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-04-15"</span><span class="op">)</span>,</span>
+<span>  <span class="st">"2019-06-21"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2019-04-15"</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/convert_dtc_to_dt.html">convert_dtc_to_dt</a></span><span class="op">(</span></span>

@@ -12,7 +12,7 @@ input."><meta property="og:image" content="https://pharmaverse.github.io/admiral
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -178,8 +178,8 @@ For example</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/impute_dtc_dtm.html">impute_dtc_dtm</a></span><span class="op">(</span></span>
 <span>  <span class="st">"2020-11"</span>,</span>
 <span>  min_dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>   <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T12:12:12"</span><span class="op">)</span>,</span>
-<span>   <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-11-11T11:11:11"</span><span class="op">)</span></span>
+<span>   <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T12:12:12"</span><span class="op">)</span>,</span>
+<span>   <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-11-11T11:11:11"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  highest_imputation <span class="op">=</span> <span class="st">"M"</span></span>
 <span><span class="op">)</span></span></code></pre><p></p></div>
@@ -323,8 +323,8 @@ preserve minute when hour is missing.</p>
 <span class="r-in"><span><span class="fu">impute_dtc_dtm</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="st">"2020-12"</span>,</span></span>
 <span class="r-in"><span>  min_dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T12:12:12"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-11-11T11:11:11"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T12:12:12"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-11-11T11:11:11"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  highest_imputation <span class="op">=</span> <span class="st">"M"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -334,8 +334,8 @@ preserve minute when hour is missing.</p>
 <span class="r-in"><span><span class="fu">impute_dtc_dtm</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2020-12"</span>, <span class="cn">NA_character_</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  min_dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T12:12:12"</span>, <span class="st">"2020-01-01T01:01:01"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/lubridate/man/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-11-11T11:11:11"</span>, <span class="cn">NA</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-12-06T12:12:12"</span>, <span class="st">"2020-01-01T01:01:01"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2020-11-11T11:11:11"</span>, <span class="cn">NA</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  highest_imputation <span class="op">=</span> <span class="st">"Y"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
