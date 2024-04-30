@@ -239,8 +239,7 @@ params <- function(...) {
     cli_abort(paste(
       "The following argument{?s} {?has/have} been specified more than once:",
       "{.val {duplicate_params}}."
-      )
-      )
+    ))
   }
   structure(args, class = c("params", "source", "list")) # nolint: undesirable_function_linter
 }
