@@ -379,15 +379,14 @@ test_that("derive_vars_merged_lookup Test 16: merge lookup table", {
   attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
   attr(param_lookup$VSTEST, "label") <- "Vital Signs Test Name"
 
-  expect_message(
+  expect_snapshot(
     actual <- derive_vars_merged_lookup(
       vs,
       dataset_add = param_lookup,
       by_vars = exprs(VSTESTCD, VSTEST),
       new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
       print_not_mapped = TRUE
-    ),
-    regex = "^List of `VSTESTCD` and `VSTEST` not mapped: .*$"
+    )
   )
 
   expected <-
@@ -453,21 +452,19 @@ test_that("derive_vars_merged_lookup Test 18: by_vars with rename", {
   attr(param_lookup$TESTCD, "label") <- "Vital Signs Test Short Name"
   attr(param_lookup$VSTEST, "label") <- "Vital Signs Test Name"
 
-  expect_message(
+  expect_snapshot(
     actual <- derive_vars_merged_lookup(
       vs,
       dataset_add = param_lookup,
       by_vars = exprs(VSTESTCD = TESTCD, VSTEST),
       new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
       print_not_mapped = TRUE
-    ),
-    regex = "^List of `VSTESTCD` and `VSTEST` not mapped: .*$"
+    )
   )
 
   expected <-
     left_join(vs, param_lookup, by = c("VSTESTCD" = "TESTCD", "VSTEST")) %>%
     rename(PARAM = DESCRIPTION)
-
 
   expect_dfs_equal(
     base = expected,
@@ -490,15 +487,14 @@ test_that("get_not_mapped Test 19: not all by_vars have records in the lookup ta
   attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
   attr(param_lookup$VSTEST, "label") <- "Vital Signs Test Name"
 
-  expect_message(
+  expect_snapshot(
     act_vs_param <- derive_vars_merged_lookup(
       vs,
       dataset_add = param_lookup,
       by_vars = exprs(VSTESTCD, VSTEST),
       new_var = exprs(PARAMCD, PARAM = DESCRIPTION),
       print_not_mapped = TRUE
-    ),
-    regex = "^List of `VSTESTCD` and `VSTEST` not mapped: .*$"
+    )
   )
 
   actual <- get_not_mapped()

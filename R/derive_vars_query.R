@@ -71,16 +71,15 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
   if (!all(srcvar_types %in% c("character", "integer", "double"))) {
     idx <- source_vars[!vapply(dataset[source_vars], typeof, character(1)) %in% c("character", "integer", "double")] # nolint
     dat_incorrect_type <- dataset[idx]
-    msg <- paste0(
-      paste0(
+    cli_abort(c(
+      "The source variables (values of {.var SRCVAR}) must be numeric or character.",
+      i = paste0(
         colnames(dat_incorrect_type),
         " is of type ",
         vapply(dat_incorrect_type, typeof, character(1)),
         collapse = ", "
-      ),
-      ", numeric or character is required"
-    )
-    abort(msg)
+      )
+    ))
   }
 
   termvars <- exprs(character = TERMCHAR, integer = TERMNUM, double = TERMNUM)
@@ -90,9 +89,9 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
     # check illegal term name
     if (any(is.na(dataset_queries$TERMCHAR) & is.na(dataset_queries$TERMNUM)) ||
       any(dataset_queries$TERMCHAR == "" & is.na(dataset_queries$TERMNUM))) {
-      abort(paste0(
-        "Either `TERMCHAR` or `TERMNUM` need to be specified",
-        " in `", deparse(substitute(dataset_queries)), "`. ",
+      cli_abort(paste0(
+        "Either {.var TERMCHAR} or {.var TERMNUM} need to be specified",
+        " in {.arg dataset_queries}. ",
         "They both cannot be NA or empty."
       ))
     }
@@ -231,12 +230,11 @@ assert_valid_queries <- function(queries, queries_name) {
   # check illegal prefix category
   is_good_prefix <- grepl("^[a-zA-Z]{2,3}", queries$PREFIX)
   if (!all(is_good_prefix)) {
-    abort(
+    cli_abort(
       paste0(
-        "`PREFIX` in `", queries_name,
-        "` must start with 2-3 letters.. Problem with ",
-        enumerate(unique(queries$PREFIX[!is_good_prefix])),
-        "."
+        "{.var PREFIX} in {.arg {queries_name}}",
+        " must start with 2-3 letters. Problem with ",
+        "{.val {unique(queries$PREFIX[!is_good_prefix])}}."
       )
     )
   }
@@ -245,51 +243,46 @@ assert_valid_queries <- function(queries, queries_name) {
   query_num <- sub("[[:alpha:]]+", "", queries$PREFIX)
   is_bad_num <- nchar(query_num) != 2 | is.na(as.numeric(query_num))
   if (any(is_bad_num)) {
-    abort(
+    cli_abort(
       paste0(
-        "`PREFIX` in `", queries_name,
-        "` must end with 2-digit numbers. Issue with ",
-        enumerate(unique(queries$PREFIX[is_bad_num])),
-        "."
+        "{.var PREFIX} in {.arg {queries_name}}",
+        " must end with 2-digit numbers. Issue with ",
+        "{.val {unique(queries$PREFIX[is_bad_num])}}."
       )
     )
   }
 
   # check illegal query name
   if (any(queries$GRPNAME == "") || any(is.na(queries$GRPNAME))) {
-    abort(paste0(
-      "`GRPNAME` in `", queries_name,
-      "` cannot be empty string or NA."
-    ))
+    cli_abort(
+      "{.var GRPNAME} in {.arg {queries_name}} cannot be empty string or NA."
+    )
   }
 
   # check query id is numeric
   if ("GRPID" %in% names(queries) && !is.numeric(queries$GRPID)) {
-    abort(paste0(
-      "`GRPID` in `", queries_name,
-      "` should be numeric."
-    ))
+    cli_abort(
+      "{.var GRPID} in {.arg {queries_name}} must be numeric."
+    )
   }
 
   # check illegal query scope
   if ("SCOPE" %in% names(queries) &&
     any(unique(queries$SCOPE) %notin% c("BROAD", "NARROW", "", NA_character_))) {
-    abort(paste0(
-      "`SCOPE` in `", queries_name,
-      "` can only be 'BROAD', 'NARROW' or `NA`."
-    ))
+    cli_abort(
+      "{.var SCOPE} in {.arg {queries_name}} can only be 'BROAD', 'NARROW' or `NA`."
+    )
   }
 
   # check illegal query scope number
   if ("SCOPEN" %in% names(queries)) {
     is_bad_scope_num <- queries$SCOPEN %notin% c(1, 2, NA_integer_)
     if (any(is_bad_scope_num)) {
-      abort(
+      cli_abort(
         paste0(
-          "`SCOPEN` in `", queries_name,
-          "` must be one of 1, 2, or NA. Issue with ",
-          enumerate(unique(queries$SCOPEN[is_bad_scope_num])),
-          "."
+          "{.var SCOPEN} in {.arg {queries_name}}",
+          " must be one of 1, 2, or NA. Issue with ",
+          "{.val {unique(queries$SCOPEN[is_bad_scope_num])}}."
         )
       )
     }
@@ -308,19 +301,17 @@ assert_valid_queries <- function(queries, queries_name) {
 
   if (any(count_unique$n_qnam > 1)) {
     idx <- which(count_unique$n_qnam > 1)
-    abort(paste0(
-      "In `", queries_name, "`, `GRPNAME` of '",
-      paste(count_unique$PREFIX[idx], collapse = ", "),
-      "' is not unique."
+    cli_abort(paste0(
+      "In {.arg {queries_name}} {.var GRPNAME} of ",
+      "{.val {count_unique$PREFIX[idx]}} is not unique."
     ))
   }
 
   if (any(count_unique$n_qid > 1)) {
     idx <- which(count_unique$n_qid > 1)
-    abort(paste0(
-      "In `", queries_name, "`, `GRPID` of '",
-      paste(count_unique$PREFIX[idx], collapse = ", "),
-      "' is not unique."
+    cli_abort(paste0(
+      "In {.arg {queries_name}} {.var GRPID} of ",
+      "{.val {count_unique$PREFIX[idx]}} is not unique."
     ))
   }
 

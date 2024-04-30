@@ -111,10 +111,10 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 
   fixed_params <- eval(substitute(alist(...)))
   if (length(fixed_params) == 0L) {
-    abort("At least one argument must be set inside `...`")
+    cli_abort("At least one argument must be set inside {.arg ...}.")
   }
   if (!is_named(fixed_params)) {
-    abort("All arguments inside `...` must be named")
+    cli_abort("All arguments inside {.arg ...} must be named.")
   }
 
   all_params <- union(unlist(map(variable_params, names)), names(fixed_params))
@@ -229,18 +229,17 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 params <- function(...) {
   args <- eval(substitute(alist(...)))
   if (length(args) == 0L) {
-    abort("At least one argument must be provided")
+    cli_abort("At least one argument must be provided.")
   }
   if (!is_named(args)) {
-    abort("All arguments passed to `params()` must be named")
+    cli_abort("All arguments passed to {.fun params} must be named.")
   }
   duplicate_params <- get_duplicates(names(args))
   if (length(duplicate_params) >= 1L) {
-    err_msg <- sprintf(
-      "The following parameters have been specified more than once: %s",
-      enumerate(duplicate_params)
-    )
-    abort(err_msg)
+    cli_abort(paste(
+      "The following argument{?s} {?has/have} been specified more than once:",
+      "{.val {duplicate_params}}."
+    ))
   }
   structure(args, class = c("params", "source", "list")) # nolint: undesirable_function_linter
 }

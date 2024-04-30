@@ -140,8 +140,10 @@
 #'   *Default*:
 #'
 #'   ```{r echo=TRUE, eval=FALSE}
-#'   paste("Dataset `dataset_add` contains duplicate records with respect to",
-#'         enumerate(vars2chr(by_vars)))
+#'   paste(
+#'     "Dataset {.arg dataset_add} contains duplicate records with respect to",
+#'     "{.var {vars2chr(by_vars)}}."
+#'   )
 #'   ```
 #'
 #' @return The output dataset contains all observations and variables of the
@@ -349,10 +351,9 @@ derive_vars_merged <- function(dataset,
       vars2chr(replace_values_by_names(new_vars))
     )
     if (length(invalid_vars) > 0) {
-      abort(paste(
-        "The variables",
-        enumerate(invalid_vars),
-        "were specified for `missing_values` but not for `new_vars`."
+      cli_abort(paste(
+        "The variables {.var {invalid_vars}} were specified for {.arg missing_values}",
+        "but not for {.arg new_vars}."
       ))
     }
   }
@@ -372,8 +373,8 @@ derive_vars_merged <- function(dataset,
   } else {
     if (is.null(duplicate_msg)) {
       duplicate_msg <- paste(
-        "Dataset `dataset_add` contains duplicate records with respect to",
-        enumerate(vars2chr(by_vars))
+        "Dataset {.arg dataset_add} contains duplicate records with respect to",
+        "{.var {vars2chr(by_vars)}}."
       )
     }
     signal_duplicate_records(
@@ -404,19 +405,15 @@ derive_vars_merged <- function(dataset,
   common_vars <-
     setdiff(intersect(names(dataset), names(add_data)), vars2chr(by_vars))
   if (length(common_vars) > 0L) {
-    abort(if_else(
+    cli_abort(if_else(
       length(common_vars) == 1L,
-      paste0(
-        "The variable ",
-        common_vars[[1]],
-        " is contained in both datasets.\n",
-        "Please add it to `by_vars` or remove or rename it in one of the datasets."
+      c(
+        "The variable {.var {common_vars[[1]]}} is contained in both datasets.",
+        i = "Please add it to {.arg by_vars} or remove or rename it in one of the datasets."
       ),
       paste0(
-        "The variables ",
-        enumerate(common_vars),
-        " are contained in both datasets.\n",
-        "Please add them to `by_vars` or remove or rename them in one of the datasets."
+        "The variables {.var {common_vars}} are contained in both datasets.",
+        i = "Please add them to {.arg by_vars} or remove or rename them in one of the datasets."
       )
     ))
   }
@@ -720,14 +717,15 @@ derive_vars_merged_lookup <- function(dataset,
       )
       # nolint end
 
-      message(
-        "List of ", enumerate(vars2chr(by_vars_left)), " not mapped: ", "\n",
-        paste0(capture.output(temp_not_mapped), collapse = "\n"),
-        "\nRun `get_not_mapped()` to access the full list"
+      cli_inform(
+        c("List of {.var {vars2chr(by_vars_left)}} not mapped:",
+          capture.output(temp_not_mapped),
+          i = "Run {.run admiral::get_not_mapped()} to access the full list."
+        )
       )
     } else if (nrow(temp_not_mapped) == 0) {
-      message(
-        "All ", enumerate(vars2chr(by_vars_left)), " are mapped."
+      cli_inform(
+        "All {.var {vars2chr(by_vars_left)}} are mapped."
       )
     }
   }

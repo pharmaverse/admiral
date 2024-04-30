@@ -110,8 +110,10 @@ If the uniqueness check fails, the specified message is displayed.
 
 \emph{Default}:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
-      enumerate(vars2chr(by_vars)))
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste(
+  "Dataset \{.arg dataset_add\} contains duplicate records with respect to",
+  "\{.var \{vars2chr(by_vars)\}\}."
+)
 }\if{html}{\out{</div>}}}
 
 \item{print_not_mapped}{Print a list of unique \code{by_vars} values that do not

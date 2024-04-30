@@ -37,12 +37,9 @@ test_that("compute_age_years Test 3: Error is issued when `age_unit` has invalid
 
   expected_output <- rep(28, 3)
 
-  expect_error(
-    compute_age_years(age_input, age_unit_input),
-    paste0(
-      "`age_unit` must be a single string or a vector of the same length as",
-      "`age`, but there are 3 values in `age` and 2 values in `age_unit`."
-    )
+  expect_snapshot(
+    error = TRUE,
+    compute_age_years(age_input, age_unit_input)
   )
 })
 

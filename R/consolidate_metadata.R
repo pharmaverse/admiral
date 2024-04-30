@@ -123,11 +123,10 @@ consolidate_metadata <- function(datasets,
 
   if (check_vars != "none") {
     if (length(unique(map(datasets, function(x) sort(names(x))))) > 1) {
-      msg_funs <- list(message = inform, warning = warn, error = abort)
-      msg_funs[[check_vars]](paste(
+      msg_funs <- list(message = cli_inform, warning = cli_warn, error = cli_abort)
+      msg_funs[[check_vars]](c(
         "The variable names differ across the input datasets.",
-        "This message can be suppressed by setting `check_vars = \"none\"`.",
-        sep = "\n"
+        i = "This message can be suppressed by setting {.code check_vars = \"none\"}."
       ))
     }
   }
