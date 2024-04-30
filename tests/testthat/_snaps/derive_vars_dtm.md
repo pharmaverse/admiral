@@ -59,3 +59,12 @@
       Error in `derive_vars_dtm()`:
       ! If `highest_impuation = "Y"` is specified, `min_dates` or `max_dates` must be specified respectively.
 
+# derive_vars_dtm Test 31: catch ignore_seconds_flag error
+
+    Code
+      derive_vars_dtm(input, new_vars_prefix = "AST", dtc = XXSTDTC,
+        ignore_seconds_flag = TRUE)
+    Condition
+      Error in `derive_vars_dtm()`:
+      ! Seconds detected in data while `ignore_seconds_flag` is invoked
+

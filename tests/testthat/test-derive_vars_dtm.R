@@ -779,3 +779,16 @@ test_that("derive_vars_dtm Test 30: Supplying both min/max dates for highest_imp
 
   expect_dfs_equal(actual, expected, keys = c("AENDTM", "AENDTF", "AENTMF"))
 })
+
+## Test 31: catch ignore_seconds_flag error ----
+test_that("derive_vars_dtm Test 31: catch ignore_seconds_flag error", {
+  expect_snapshot(
+    derive_vars_dtm(
+      input,
+      new_vars_prefix = "AST",
+      dtc = XXSTDTC,
+      ignore_seconds_flag = TRUE
+    ),
+    error = TRUE
+  )
+})

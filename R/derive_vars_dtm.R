@@ -208,12 +208,20 @@ derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)
 
-    dataset <- dataset %>%
-      mutate(!!sym(tmf) := compute_tmf(
-        dtc = !!dtc,
-        dtm = !!sym(dtm),
-        ignore_seconds_flag = ignore_seconds_flag
-      ))
+    tryCatch(
+      dataset <- dataset %>%
+        mutate(!!sym(tmf) := compute_tmf(
+          dtc = !!dtc,
+          dtm = !!sym(dtm),
+          ignore_seconds_flag = ignore_seconds_flag
+        )),
+      "dplyr:::mutate_error" = function(cnd) {
+        cli_abort(
+          message = cnd$parent$message,
+          call = parent.frame(n = 4)
+        )
+      }
+    )
   }
 
   dataset
@@ -742,7 +750,9 @@ compute_tmf <- function(dtc,
 
   if (ignore_seconds_flag) {
     if (any(!is.na(partial[["second"]]))) {
-      cli_abort("Seconds detected in data while {.arg ignore_seconds_flag} is invoked")
+      cli_abort(
+        "Seconds detected in data while {.arg ignore_seconds_flag} is invoked"
+      )
     } else {
       flag <- if_else(flag == "S", NA_character_, flag)
     }
