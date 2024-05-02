@@ -28,7 +28,37 @@
       Error in `derive_vars_merged()`:
       ! The variable `LASTVISN` was specified for `missing_values` but not for `new_vars`.
 
-# derive_vars_merged_lookup Test 16: merge lookup table
+# derive_vars_merged Test 13: error if not unique, no order, check_type = error
+
+    Code
+      actual <- derive_vars_merged(advs, dataset_add = adsl2, by_vars = exprs(STUDYID,
+        USUBJID = ID), order = NULL, check_type = "error")
+    Condition
+      Error in `signal_duplicate_records()`:
+      ! Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`.
+      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
+
+# derive_vars_merged Test 14: error if not unique, no order, check_type = warning
+
+    Code
+      actual <- derive_vars_merged(advs, dataset_add = adsl2, by_vars = exprs(STUDYID,
+        USUBJID = ID), order = NULL, check_type = "warning")
+    Condition
+      Error in `signal_duplicate_records()`:
+      ! Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`.
+      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
+
+# derive_vars_merged Test 15: error if not unique, no order, check_type = NULL
+
+    Code
+      actual <- derive_vars_merged(advs, dataset_add = adsl2, by_vars = exprs(STUDYID,
+        USUBJID = ID), order = NULL, check_type = NULL)
+    Condition
+      Error in `signal_duplicate_records()`:
+      ! Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`.
+      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
+
+# derive_vars_merged_lookup Test 19: merge lookup table
 
     Code
       actual <- derive_vars_merged_lookup(vs, dataset_add = param_lookup, by_vars = exprs(
@@ -42,7 +72,7 @@
       1 DIABP Diastolic Blood Pressure
       i Run `admiral::get_not_mapped()` to access the full list.
 
-# derive_vars_merged_lookup Test 18: by_vars with rename
+# derive_vars_merged_lookup Test 21: by_vars with rename
 
     Code
       actual <- derive_vars_merged_lookup(vs, dataset_add = param_lookup, by_vars = exprs(
@@ -56,7 +86,7 @@
       1 DIABP Diastolic Blood Pressure
       i Run `admiral::get_not_mapped()` to access the full list.
 
-# get_not_mapped Test 19: not all by_vars have records in the lookup table
+# get_not_mapped Test 22: not all by_vars have records in the lookup table
 
     Code
       act_vs_param <- derive_vars_merged_lookup(vs, dataset_add = param_lookup,
@@ -69,34 +99,4 @@
       <chr> <chr>
       1 DIABP Diastolic Blood Pressure
       i Run `admiral::get_not_mapped()` to access the full list.
-
-# derive_var_merged_summary Test 24: error if not unique, no order, check_type = error
-
-    Code
-      actual <- derive_vars_merged(advs, dataset_add = adsl2, by_vars = exprs(STUDYID,
-        USUBJID = ID), order = NULL, check_type = "error")
-    Condition
-      Error in `signal_duplicate_records()`:
-      ! Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`.
-      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
-
-# derive_var_merged_summary Test 25: error if not unique, no order, check_type = warning
-
-    Code
-      actual <- derive_vars_merged(advs, dataset_add = adsl2, by_vars = exprs(STUDYID,
-        USUBJID = ID), order = NULL, check_type = "warning")
-    Condition
-      Error in `signal_duplicate_records()`:
-      ! Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`.
-      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
-
-# derive_var_merged_summary Test 26: error if not unique, no order, check_type = NULL
-
-    Code
-      actual <- derive_vars_merged(advs, dataset_add = adsl2, by_vars = exprs(STUDYID,
-        USUBJID = ID), order = NULL, check_type = NULL)
-    Condition
-      Error in `signal_duplicate_records()`:
-      ! Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`.
-      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
