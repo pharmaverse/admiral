@@ -207,6 +207,30 @@ test_that("derive_var_extreme_dtm Test 5: error is issued if `--DTC` variable is
       ae_start,
       mode = "last"
     ),
-    regexp = "`AESTDTC` in dataset `ae` is not a date or datetime variable but is a character vector" # nolint
+    class = "assert_date_var"
+  )
+})
+
+## Test 6: error if source dataset is not available ----
+test_that("derive_var_extreme_dtm Test 6: error if source dataset is not available", {
+  ae_start <- date_source(
+    dataset_name = "ae",
+    date = AESTDT,
+    set_values_to = exprs(
+      LALVDOM = "AE",
+      LALVSEQ = AESEQ,
+      LALVVAR = "AESTDTC"
+    )
+  )
+
+  expect_snapshot(
+    derive_var_extreme_dtm(
+      adsl,
+      new_var = LSTALVDTM,
+      source_datasets = list(ea = ae),
+      ae_start,
+      mode = "last"
+    ),
+    error = TRUE
   )
 })

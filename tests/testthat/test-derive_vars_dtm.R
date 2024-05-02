@@ -353,7 +353,7 @@ test_that("compute_tmf Test 14: compute TMF", {
 
 ## Test 15: throws ERROR when ignore_seconds_flag  = T and seconds are present ----
 test_that("compute_tmf Test 15: throws ERROR when ignore_seconds_flag  = T and seconds are present", { # nolint
-  expect_error(
+  expect_snapshot(
     compute_tmf(
       dtc = c("2020-11-11T11:11:11", "2020-11-11T11:11"),
       dtm = ymd_hms(c(
@@ -361,7 +361,7 @@ test_that("compute_tmf Test 15: throws ERROR when ignore_seconds_flag  = T and s
       )),
       ignore_seconds_flag = TRUE
     ),
-    regexp = "Seconds detected in data while ignore_seconds_flag is invoked"
+    error = TRUE
   )
 })
 
@@ -550,15 +550,14 @@ test_that("derive_vars_dtm Test 22: No re-derivation is done if --DTF variable a
   ) %>%
     select(XXSTDTC, ASTDTF, everything())
 
-  expect_message(
+  expect_snapshot(
     actual_output <- derive_vars_dtm(
       mutate(input, ASTDTF = c(NA, NA, NA, NA, "D", "MD", "M")),
       new_vars_prefix = "AST",
       dtc = XXSTDTC,
       highest_imputation = "M",
       date_imputation = "first"
-    ),
-    regexp = "^The .* variable is already present in the input dataset and will not be re-derived."
+    )
   )
 
   expect_dfs_equal(
@@ -635,7 +634,7 @@ test_that("derive_vars_dtm Test 24: NA imputation for highest_imputation = Y & m
 
 ## Test 25: NA imputation for highest_imputation = Y & max_dates but date_imputation = first ----
 test_that("derive_vars_dtm Test 25: NA imputation for highest_imputation = Y & max_dates but date_imputation = first", { # nolint
-  expect_warning(
+  expect_snapshot(
     (data.frame(
       AESTDTC = c(NA_character_, NA_character_),
       TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
@@ -649,8 +648,7 @@ test_that("derive_vars_dtm Test 25: NA imputation for highest_imputation = Y & m
         time_imputation = "first",
         flag_imputation = "both",
         max_dates = exprs(TRTSDTM)
-      )),
-    "If `highest_impuation` = \"Y\" and `date_imputation` = \"first\" is specified, `min_dates` should be specified." # nolint
+      ))
   )
 })
 
@@ -684,8 +682,8 @@ test_that("derive_vars_dtm Test 26: NA imputation for highest_imputation = Y & m
 
 ## Test 27: NA imputation for highest_imputation = Y & min_dates but date_imputation = last ----
 test_that("derive_vars_dtm Test 27: NA imputation for highest_imputation = Y & min_dates but date_imputation = last", { # nolint
-  expect_warning(
-    (data.frame(
+  expect_snapshot(
+    data.frame(
       AESTDTC = c(NA_character_, NA_character_),
       TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
     ) %>%
@@ -698,15 +696,14 @@ test_that("derive_vars_dtm Test 27: NA imputation for highest_imputation = Y & m
         time_imputation = "last",
         flag_imputation = "both",
         min_dates = exprs(TRTSDTM)
-      )),
-    "If `highest_impuation` = \"Y\" and `date_imputation` = \"last\" is specified, `max_dates` should be specified." # nolint
+      )
   )
 })
 
 ## Test 28: NA imputation for highest_imputation = Y but null min/max dates fails ----
 test_that("derive_vars_dtm Test 28: NA imputation for highest_imputation = Y but null min/max dates fails", { # nolint
-  expect_error(
-    (data.frame(
+  expect_snapshot(
+    data.frame(
       AESTDTC = c(NA_character_, NA_character_),
       TRTSDTM = c(ymd_hms("2022-01-01 23:59:59"), NA)
     ) %>%
@@ -718,8 +715,8 @@ test_that("derive_vars_dtm Test 28: NA imputation for highest_imputation = Y but
         date_imputation = "first",
         time_imputation = "first",
         flag_imputation = "both"
-      )),
-    "If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively." # nolint
+      ),
+    error = TRUE
   )
 })
 
@@ -781,4 +778,17 @@ test_that("derive_vars_dtm Test 30: Supplying both min/max dates for highest_imp
   )
 
   expect_dfs_equal(actual, expected, keys = c("AENDTM", "AENDTF", "AENTMF"))
+})
+
+## Test 31: catch ignore_seconds_flag error ----
+test_that("derive_vars_dtm Test 31: catch ignore_seconds_flag error", {
+  expect_snapshot(
+    derive_vars_dtm(
+      input,
+      new_vars_prefix = "AST",
+      dtc = XXSTDTC,
+      ignore_seconds_flag = TRUE
+    ),
+    error = TRUE
+  )
 })

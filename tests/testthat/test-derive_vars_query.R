@@ -149,13 +149,12 @@ test_that("derive_vars_query Test 5: Derive decides between TERMCHAR and TERMNUM
 
   expect_equal(expected_output, actual_output)
 
-  expect_error(
+  expect_snapshot(
     derive_vars_query(mutate(my_ae, AELLTCD = as.logical(AELLTCD)), query),
-    regexp = "numeric or character is required"
+    error = TRUE
   )
 })
 
-##  Test 6: Error is given when both TERMCHAR/TERMNUM are NA or empty ----
 ## Test 6: Error is given when both TERMCHAR/TERMNUM are NA or empty ----
 test_that("derive_vars_query Test 6: Error is given when both TERMCHAR/TERMNUM are NA or empty", {
   query <- tibble::tribble(
@@ -171,12 +170,9 @@ test_that("derive_vars_query Test 6: Error is given when both TERMCHAR/TERMNUM a
     "1", 3, NA, NA, 1
   )
 
-  expect_error(
+  expect_snapshot(
     derive_vars_query(my_ae, query),
-    regexp = paste(
-      "Either `TERMCHAR` or `TERMNUM` need to be specified in `query`.",
-      "They both cannot be NA or empty."
-    )
+    error = TRUE
   )
 })
 
@@ -240,63 +236,63 @@ test_that("assert_valid_queries Test 9: assert_valid_queries checks", {
     "CQ42", "My Query 2", "AELLTCD", NA_character_, 2, 1
   )
 
-  expect_error(
+  expect_snapshot(
     assert_valid_queries(
       mutate(query, PREFIX = c("30", "55")),
       "test"
     ),
-    regexp = "`PREFIX` in `test` must start with 2-3 letters.. Problem with `30` and `55`."
+    error = TRUE
   )
 
-  expect_error(
+  expect_snapshot(
     assert_valid_queries(
       mutate(query, PREFIX = c("AA", "BB")),
       "test"
     ),
-    regexp = "`PREFIX` in `test` must end with 2-digit numbers. Issue with `AA` and `BB`."
+    error = TRUE
   )
 
-  expect_error(
+  expect_snapshot(
     assert_valid_queries(
       mutate(query, GRPNAME = c("", "A")),
       "test"
     ),
-    regexp = "`GRPNAME` in `test` cannot be empty string or NA."
+    error = TRUE
   )
 
-  expect_error(
+  expect_snapshot(
     assert_valid_queries(
       mutate(query, GRPID = as.character(GRPID)),
       "test"
     ),
-    regexp = "`GRPID` in `test` should be numeric."
+    error = TRUE
   )
 
-  expect_error(
+  expect_snapshot(
     assert_valid_queries(
       mutate(query, SCOPE = letters[1:2]),
       "test"
     ),
-    regexp = "`SCOPE` in `test` can only be 'BROAD', 'NARROW' or `NA`."
+    error = TRUE
   )
 
-  expect_error(
+  expect_snapshot(
     assert_valid_queries(
       mutate(query, SCOPEN = 10:11),
       "test"
     ),
-    regexp = "`SCOPEN` in `test` must be one of 1, 2, or NA. Issue with `10` and `11`."
+    error = TRUE
   )
 
-  expect_error(
+  expect_snapshot(
     assert_valid_queries(
       mutate(query, PREFIX = c("CQ40", "CQ40")),
       "test"
     ),
-    regexp = "In `test`, `GRPNAME` of 'CQ40' is not unique."
+    error = TRUE
   )
 
-  expect_error(
+  expect_snapshot(
     assert_valid_queries(
       mutate(
         query,
@@ -305,7 +301,7 @@ test_that("assert_valid_queries Test 9: assert_valid_queries checks", {
       ),
       "test"
     ),
-    regexp = "In `test`, `GRPID` of 'CQ40' is not unique."
+    error = TRUE
   )
 
   expect_error(
@@ -316,6 +312,7 @@ test_that("assert_valid_queries Test 9: assert_valid_queries checks", {
         SCOPEN = c(1, 1)
       ),
       "test"
-    )
+    ),
+    class = "assert_one_to_one"
   )
 })

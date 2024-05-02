@@ -366,13 +366,10 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
       parameters,
       ~ is_call(.x) || is_expression(.x)
     ))) {
-      abort(
-        paste0(
-          "`",
-          arg_name(substitute(parameters)),
-          "` must be a character vector or a list of expressions but it is ",
-          what_is_it(parameters),
-          "."
+      cli_abort(
+        paste(
+          "{.arg {rlang::caller_arg(parameters)}} must be a character vector",
+          "or a list of expressions but it is {.obj_type_friendly {parameters}}."
         )
       )
     }
@@ -458,14 +455,14 @@ get_hori_data <- function(dataset,
     filter(PARAMCD %in% param_values)
 
   if (nrow(data_parameters) == 0L) {
-    warn(
-      paste0(
+    cli_warn(
+      c(paste0(
         "The input dataset does not contain any observations fullfiling the filter condition (",
-        expr_label(filter),
+        "{.code {expr_label(filter)}}}",
         ") for the parameter codes (PARAMCD) ",
-        enumerate(param_values),
-        "\nNo new observations were added."
-      )
+        "{.val {param_values}}",
+        i = "No new observations were added."
+      ))
     )
     return(list(hori_data = NULL))
   }
@@ -473,13 +470,13 @@ get_hori_data <- function(dataset,
   params_available <- unique(data_parameters$PARAMCD)
   params_missing <- setdiff(param_values, params_available)
   if (length(params_missing) > 0) {
-    warn(
+    cli_warn(
       paste0(
         "The input dataset does not contain any observations fullfiling the filter condition (",
-        expr_label(filter),
+        "{.code {expr_label(filter)}}",
         ") for the parameter codes (PARAMCD) ",
-        enumerate(params_missing),
-        "\nNo new observations were added."
+        "{.val {params_missing}}",
+        i = "No new observations were added."
       )
     )
     return(list(hori_data = NULL))
@@ -488,12 +485,14 @@ get_hori_data <- function(dataset,
   signal_duplicate_records(
     data_parameters,
     by_vars = exprs(!!!by_vars, PARAMCD),
-    msg = paste(
-      "The filtered input dataset contains duplicate records with respect to",
-      enumerate(c(vars2chr(by_vars), "PARAMCD")),
-      "\nPlease ensure that the variables specified for `by_vars` and `PARAMCD`",
+    msg = c(
+      paste(
+        "The filtered input dataset contains duplicate records with respect to",
+        "{.var {c(vars2chr(by_vars), \"PARAMCD\")}}"
+      ),
+      i = "Please ensure that the variables specified for {.arg by_vars} and {.var PARAMCD}",
       "are a unique key of the input data set restricted by the condition",
-      "specified for `filter` and to the parameters specified for `parameters`."
+      "specified for {.arg filter} and to the parameters specified for {.arg parameters}."
     )
   )
 
@@ -502,11 +501,10 @@ get_hori_data <- function(dataset,
   analysis_vars_chr <- vars2chr(analysis_vars)
   multi_dot_names <- str_count(analysis_vars_chr, "\\.") > 1
   if (any(multi_dot_names)) {
-    abort(
-      paste(
-        "The `set_values_to` argument contains variable names with more than on dot:",
-        enumerate(analysis_vars_chr[multi_dot_names]),
-        sep = "\n"
+    cli_abort(
+      c(
+        "The `set_values_to` argument contains variable names with more than one dot:",
+        "{.var {analysis_vars_chr[multi_dot_names]}}"
       )
     )
   }

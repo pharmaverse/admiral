@@ -1,4 +1,4 @@
-## Test 1: compute_scale() works as expected ----
+## Test 1: compute_scale works as expected ----
 test_that("compute_scale Test 1: compute_scale works as expected", {
   input <- c(5, 1, 2, NA)
 
@@ -47,10 +47,8 @@ test_that("compute_scale Test 3: result is missing if min_n is not met", {
   )
 })
 
-## Test 4: average is calculated without transformation if source and  ----
-##  target range aren't specified ----
-test_that("compute_scale Test 4: average is calculated without transformation
-            if source and target range aren't specified", {
+## Test 4: no transformation if source and target range aren't specified ----
+test_that("compute_scale Test 4: no transformation if source and target range aren't specified", {
   input <- c(1, 3, 5, 5, 1, 3, 3)
 
   expected_output <- mean(input, na.rm = TRUE)
@@ -63,9 +61,8 @@ test_that("compute_scale Test 4: average is calculated without transformation
   )
 })
 
-## Test 5: compute_scale() works as expected within derive_summary_records() ----
-test_that("compute_scale Test 5: compute_scale() works as expected within
-          derive_summary_records()", {
+## Test 5: works as expected within derive_summary_records() ----
+test_that("compute_scale Test 5: works as expected within derive_summary_records()", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT, ~AVISITN, ~AVAL,
     "ADMIRAL01", "01-701-1015", "ITEM1", "WEEK 10", 100, 5,
@@ -107,33 +104,23 @@ test_that("compute_scale Test 5: compute_scale() works as expected within
   )
 })
 
-## Test 6: error is thrown if source_range is supplied, but not ----
-##  target_range, or vice-versa ----
-test_that("compute_scale Test 6: error is thrown if source_range is supplied,
-          but not target_range, or vice-versa", {
+## Test 6: error if source_range is supplied, but not target_range ----
+test_that("compute_scale Test 6: error if source_range is supplied, but not target_range", {
   input <- c(1, 3, 5, 5, 1, 3, 3)
 
-  expect_error(
+  expect_snapshot(
+    error = TRUE,
     compute_scale(input,
       source_range = c(1, 5),
       min_n = 2
-    ),
-    paste0(
-      "argument `target_range` is missing, with no default, but ",
-      "`source_range` is not missing\nEither both or neither ",
-      "argument should exist"
     )
   )
 
-  expect_error(
+  expect_snapshot(
+    error = TRUE,
     compute_scale(input,
       target_range = c(0, 100),
       min_n = 2
-    ),
-    paste0(
-      "argument `source_range` is missing, with no default, but ",
-      "`target_range` is not missing\nEither both or neither ",
-      "argument should exist"
     )
   )
 })

@@ -5,7 +5,7 @@
 #' @param option A character scalar of commonly used admiral function inputs.
 #'
 #'   As of now, support only available for
-#'   `r enumerate(names(admiral_environment$admiral_options), quote_fun = dquote, conjunction = "or")`.
+#'   `r ansi_collapse(map_chr(names(admiral_environment$admiral_options), ~ paste0('"', ., '"')))`.
 #'   See `set_admiral_options()` for a description of the options.
 #'
 #' @details
@@ -62,12 +62,12 @@ get_admiral_option <- function(option) {
     return(admiral_environment$admiral_options[[option]])
   }
 
+  # change cli `.val` to end with OR instead of AND
+  divid <- cli_div(theme = list(.val = list("vec-last" = ", or ", "vec_sep2" = " or ")))
   # Return message otherwise, catch typos
-  err_msg <- paste(
-    "Invalid function argument, select one of:",
-    enumerate(possible_inputs, quote_fun = dquote, conjunction = "or")
-  )
-  abort(err_msg)
+  cli_abort(c("Invalid function argument.",
+    "i" = "Select one of {.val {possible_inputs}}"
+  ))
 }
 
 #' Set the Value of Admiral Options

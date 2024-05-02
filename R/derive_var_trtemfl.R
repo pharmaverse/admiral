@@ -173,17 +173,15 @@ derive_var_trtemfl <- function(dataset,
   initial_intensity <- assert_symbol(enexpr(initial_intensity), optional = TRUE)
   intensity <- assert_symbol(enexpr(intensity), optional = TRUE)
   if (is.null(initial_intensity) && !is.null(intensity)) {
-    abort(paste(
-      "`intensity` argument was specified but not `initial_intensity`",
-      "Either both or none of them must be specified.",
-      sep = "\n"
+    cli_abort(c(
+      "{.arg intensity} argument was specified but not {.arg initial_intensity}",
+      "Either both or none of them must be specified."
     ))
   }
   if (!is.null(initial_intensity) && is.null(intensity)) {
-    abort(paste(
-      "`initial_intensity` argument was specified but not `intensity`",
-      "Either both or none of them must be specified.",
-      sep = "\n"
+    cli_abort(c(
+      "{.arg initial_intensity} argument was specified but not {.arg intensity}",
+      "Either both or none of them must be specified."
     ))
   }
   assert_data_frame(
@@ -208,10 +206,9 @@ derive_var_trtemfl <- function(dataset,
     end_cond <- expr(TRUE)
   } else {
     if (is.null(trt_end_date)) {
-      abort(paste(
-        "`end_window` argument was specified but not `trt_end_date`",
-        "Either both or none of them must be specified.",
-        sep = "\n"
+      cli_abort(c(
+        "{.arg end_window} argument was specified but not {.arg trt_end_date}",
+        "Either both or none of them must be specified."
       ))
     }
     if (ignore_time_for_trt_end) {
