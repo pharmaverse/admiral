@@ -311,10 +311,10 @@ test_that("derive_vars_merged Test 12: error if variables in missing_values but 
 test_that("derive_vars_merged Test 13: error if not unique, no order, check_type = error", {
   expect_snapshot(
     actual <- derive_vars_merged(advs,
-                                 dataset_add = adsl2,
-                                 by_vars = exprs(STUDYID, USUBJID = ID),
-                                 order = NULL,
-                                 check_type = "error"
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = NULL,
+      check_type = "error"
     ),
     error = TRUE
   )
@@ -323,11 +323,12 @@ test_that("derive_vars_merged Test 13: error if not unique, no order, check_type
 ## Test 14: error if not unique, no order, check_type = warning ----
 test_that("derive_vars_merged Test 14: error if not unique, no order, check_type = warning", {
   expect_snapshot(
-    actual <- derive_vars_merged(advs,
-                                 dataset_add = adsl2,
-                                 by_vars = exprs(STUDYID, USUBJID = ID),
-                                 order = NULL,
-                                 check_type = "warning"
+    actual <- derive_vars_merged(
+      advs,
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = NULL,
+      check_type = "warning"
     ),
     error = TRUE
   )
@@ -336,11 +337,12 @@ test_that("derive_vars_merged Test 14: error if not unique, no order, check_type
 ## Test 15: error if not unique, no order, check_type = NULL ----
 test_that("derive_vars_merged Test 15: error if not unique, no order, check_type = NULL", {
   expect_snapshot(
-    actual <- derive_vars_merged(advs,
-                                 dataset_add = adsl2,
-                                 by_vars = exprs(STUDYID, USUBJID = ID),
-                                 order = NULL,
-                                 check_type = NULL
+    actual <- derive_vars_merged(
+      advs,
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = NULL,
+      check_type = NULL
     ),
     error = TRUE
   )
@@ -349,7 +351,8 @@ test_that("derive_vars_merged Test 15: error if not unique, no order, check_type
 ## Test 16: deprecation messaging for match_flag ----
 test_that("derive_vars_merged Test 16: deprecation messaging for match_flag", {
   expect_error(
-    derive_vars_merged(adsl,
+    derive_vars_merged(
+      adsl,
       dataset_add = advs,
       order = exprs(AVAL),
       by_vars = exprs(STUDYID, USUBJID),
