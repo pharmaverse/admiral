@@ -546,7 +546,7 @@ create_single_dose_dataset <- function(dataset,
     unique()
 
   if (nrow(value_check) > 0) {
-    values_not_found <- paste0(value_check %>% select(!!dose_freq), collapse = ", ")
+    values_not_found <- value_check %>% select(!!dose_freq)
 
     err_msg <-
       c("The following values of {.val {as.character(dose_freq)}} in
