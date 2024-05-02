@@ -1,9 +1,3 @@
-library("tibble")
-library("rlang")
-library("admiraldev")
-library("dplyr")
-library("testthat")
-
 adsl <- tibble::tribble(
   ~USUBJID, ~SEX, ~COUNTRY,
   "ST42-1", "F",  "AUT",
@@ -67,267 +61,267 @@ vs <- tibble::tribble(
   "ST42-2", "HEIGHT", "Height", 58, 2
 ) %>% mutate(STUDYID = "ST42")
 
-# # derive_vars_merged ----
-# ## Test 1: merge all variables ----
-# test_that("derive_vars_merged Test 1: merge all variables", {
-#   actual <- derive_vars_merged(advs,
-#     dataset_add = adsl,
-#     by_vars = exprs(STUDYID, USUBJID)
-#   )
+# derive_vars_merged ----
+## Test 1: merge all variables ----
+test_that("derive_vars_merged Test 1: merge all variables", {
+  actual <- derive_vars_merged(advs,
+    dataset_add = adsl,
+    by_vars = exprs(STUDYID, USUBJID)
+  )
 
-#   expected <- left_join(advs, adsl, by = c("STUDYID", "USUBJID"))
+  expected <- left_join(advs, adsl, by = c("STUDYID", "USUBJID"))
+  
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISIT")
+  )
+})
 
-#   expect_dfs_equal(
-#     base = expected,
-#     compare = actual,
-#     keys = c("USUBJID", "AVISIT")
-#   )
-# })
+## Test 2: merge selected variables ----
+test_that("derive_vars_merged Test 2: merge selected variables", {
+  actual <- derive_vars_merged(advs,
+    dataset_add = adsl,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(SEX)
+  )
 
-# ## Test 2: merge selected variables ----
-# test_that("derive_vars_merged Test 2: merge selected variables", {
-#   actual <- derive_vars_merged(advs,
-#     dataset_add = adsl,
-#     by_vars = exprs(USUBJID),
-#     new_vars = exprs(SEX)
-#   )
+  expected <- left_join(advs, select(adsl, USUBJID, SEX), by = "USUBJID")
 
-#   expected <- left_join(advs, select(adsl, USUBJID, SEX), by = "USUBJID")
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISIT")
+  )
+})
 
-#   expect_dfs_equal(
-#     base = expected,
-#     compare = actual,
-#     keys = c("USUBJID", "AVISIT")
-#   )
-# })
+## Test 3: merge last value and flag matched by groups ----
+test_that("derive_vars_merged Test 3: merge last value and flag matched by groups", {
+  actual <- derive_vars_merged(adsl,
+    dataset_add = advs,
+    order = exprs(AVAL),
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(WEIGHTBL = AVAL),
+    mode = "last",
+    exist_flag = matched
+  )
+  expected <- adsl %>% mutate(
+    WEIGHTBL = c(68, 88, 55, NA),
+    matched = c("Y", "Y", "Y", NA_character_)
+  )
 
-# ## Test 3: merge last value and flag matched by groups ----
-# test_that("derive_vars_merged Test 3: merge last value and flag matched by groups", {
-#   actual <- derive_vars_merged(adsl,
-#     dataset_add = advs,
-#     order = exprs(AVAL),
-#     by_vars = exprs(STUDYID, USUBJID),
-#     new_vars = exprs(WEIGHTBL = AVAL),
-#     mode = "last",
-#     exist_flag = matched
-#   )
-#   expected <- adsl %>% mutate(
-#     WEIGHTBL = c(68, 88, 55, NA),
-#     matched = c("Y", "Y", "Y", NA_character_)
-#   )
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID")
+  )
+})
 
-#   expect_dfs_equal(
-#     base = expected,
-#     compare = actual,
-#     keys = c("USUBJID")
-#   )
-# })
+## Test 4: merge last value and flag matched by groups ----
+test_that("derive_vars_merged Test 4: merge last value and flag matched by groups", {
+  actual <- derive_vars_merged(adsl,
+    dataset_add = advs,
+    order = exprs(AVAL),
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(WEIGHTBL = AVAL),
+    mode = "last",
+    exist_flag = matched,
+    true_value = "Y",
+    false_value = "N"
+  )
+  expected <- adsl %>% mutate(
+    WEIGHTBL = c(68, 88, 55, NA),
+    matched = c("Y", "Y", "Y", "N")
+  )
 
-# ## Test 4: merge last value and flag matched by groups ----
-# test_that("derive_vars_merged Test 4: merge last value and flag matched by groups", {
-#   actual <- derive_vars_merged(adsl,
-#     dataset_add = advs,
-#     order = exprs(AVAL),
-#     by_vars = exprs(STUDYID, USUBJID),
-#     new_vars = exprs(WEIGHTBL = AVAL),
-#     mode = "last",
-#     exist_flag = matched,
-#     true_value = "Y",
-#     false_value = "N"
-#   )
-#   expected <- adsl %>% mutate(
-#     WEIGHTBL = c(68, 88, 55, NA),
-#     matched = c("Y", "Y", "Y", "N")
-#   )
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID")
+  )
+})
 
-#   expect_dfs_equal(
-#     base = expected,
-#     compare = actual,
-#     keys = c("USUBJID")
-#   )
-# })
+## Test 5: error if variable in both datasets ----
+test_that("derive_vars_merged Test 5: error if variable in both datasets", {
+  expect_error(
+    derive_vars_merged(advs,
+      dataset_add = adsl,
+      by_vars = exprs(USUBJID)
+    ),
+    regexp = ""
+  )
+})
 
-# ## Test 5: error if variable in both datasets ----
-# test_that("derive_vars_merged Test 5: error if variable in both datasets", {
-#   expect_error(
-#     derive_vars_merged(advs,
-#       dataset_add = adsl,
-#       by_vars = exprs(USUBJID)
-#     ),
-#     regexp = ""
-#   )
-# })
+## Test 6: by_vars with rename ----
+test_that("derive_vars_merged Test 6: by_vars with rename", {
+  actual <- derive_vars_merged(advs,
+    dataset_add = adsl1,
+    by_vars = exprs(STUDYID, USUBJID = ID),
+    filter_add = SEX == "F"
+  )
 
-# ## Test 6: by_vars with rename ----
-# test_that("derive_vars_merged Test 6: by_vars with rename", {
-#   actual <- derive_vars_merged(advs,
-#     dataset_add = adsl1,
-#     by_vars = exprs(STUDYID, USUBJID = ID),
-#     filter_add = SEX == "F"
-#   )
+  adsl_1 <- adsl1 %>% filter(SEX == "F")
+  expected <- left_join(advs, adsl_1, by = c("STUDYID", "USUBJID" = "ID"))
 
-#   adsl_1 <- adsl1 %>% filter(SEX == "F")
-#   expected <- left_join(advs, adsl_1, by = c("STUDYID", "USUBJID" = "ID"))
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISIT")
+  )
+})
 
-#   expect_dfs_equal(
-#     base = expected,
-#     compare = actual,
-#     keys = c("USUBJID", "AVISIT")
-#   )
-# })
+## Test 7: expressions for new_vars and missing_values ----
+test_that("derive_vars_merged Test 7: expressions for new_vars and missing_values", {
+  actual <- derive_vars_merged(
+    adsl,
+    dataset_add = advs,
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISIT),
+    new_vars = exprs(LASTVIS = str_to_upper(AVISIT)),
+    mode = "last",
+    missing_values = exprs(LASTVIS = "UNKNOWN")
+  )
 
-# ## Test 7: expressions for new_vars and missing_values ----
-# test_that("derive_vars_merged Test 7: expressions for new_vars and missing_values", {
-#   actual <- derive_vars_merged(
-#     adsl,
-#     dataset_add = advs,
-#     by_vars = exprs(USUBJID),
-#     order = exprs(AVISIT),
-#     new_vars = exprs(LASTVIS = str_to_upper(AVISIT)),
-#     mode = "last",
-#     missing_values = exprs(LASTVIS = "UNKNOWN")
-#   )
-
-#   expected <-
-#     mutate(adsl, LASTVIS = c("WEEK 2", "BASELINE", "WEEK 4", "UNKNOWN"))
-
-
-#   expect_dfs_equal(
-#     base = expected,
-#     compare = actual,
-#     keys = "USUBJID"
-#   )
-# })
+  expected <-
+    mutate(adsl, LASTVIS = c("WEEK 2", "BASELINE", "WEEK 4", "UNKNOWN"))
 
 
-# ## Test 8: Use of missing_values and exist_flags ----
-# test_that("derive_vars_merged Test 8: Use of missing_values and exist_flags", {
-#   actual <- derive_vars_merged(
-#     adsl,
-#     dataset_add = advs,
-#     by_vars = exprs(USUBJID),
-#     order = exprs(AVISIT),
-#     new_vars = exprs(LASTVIS = str_to_upper(AVISIT)),
-#     mode = "last",
-#     missing_values = exprs(LASTVIS = "UNKNOWN"),
-#     exist_flag = matched,
-#     true_value = NA,
-#     false_value = "No"
-#   )
-
-#   expected <- adsl %>%
-#     mutate(
-#       LASTVIS = c("WEEK 2", "BASELINE", "WEEK 4", "UNKNOWN"),
-#       matched = c(NA, NA, NA, "No")
-#     )
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = "USUBJID"
+  )
+})
 
 
-#   expect_dfs_equal(
-#     base = expected,
-#     compare = actual,
-#     keys = "USUBJID"
-#   )
-# })
+## Test 8: Use of missing_values and exist_flags ----
+test_that("derive_vars_merged Test 8: Use of missing_values and exist_flags", {
+  actual <- derive_vars_merged(
+    adsl,
+    dataset_add = advs,
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISIT),
+    new_vars = exprs(LASTVIS = str_to_upper(AVISIT)),
+    mode = "last",
+    missing_values = exprs(LASTVIS = "UNKNOWN"),
+    exist_flag = matched,
+    true_value = NA,
+    false_value = "No"
+  )
 
-# ## Test 9: use new variables in filter_add and order ----
-# test_that("derive_vars_merged Test 9: use new variables in filter_add and order", {
-#   expected <- tibble::tribble(
-#     ~USUBJID, ~TRTSDT,      ~TRTSSEQ,
-#     "ST42-1", "2020-12-14",        2,
-#     "ST42-2", "2021-01-26",        2,
-#     "ST42-3", NA,                 NA,
-#     "ST42-4", NA,                 NA
-#   ) %>% mutate(
-#     STUDYID = "ST42",
-#     TRTSDT = ymd(TRTSDT)
-#   )
+  expected <- adsl %>%
+    mutate(
+      LASTVIS = c("WEEK 2", "BASELINE", "WEEK 4", "UNKNOWN"),
+      matched = c(NA, NA, NA, "No")
+    )
 
-#   ex <- tibble::tribble(
-#     ~USUBJID, ~EXSTDTC,              ~EXSEQ,
-#     "ST42-1", "2020-12-07",               1,
-#     "ST42-1", "2020-12-14",               2,
-#     "ST42-2", "2021-01-12T12:00:00",      1,
-#     "ST42-2", "2021-01-26T13:21",         2,
-#     "ST42-3", "2021-03",                  1
-#   ) %>% mutate(STUDYID = "ST42")
 
-#   actual <- derive_vars_merged(
-#     select(adsl, STUDYID, USUBJID),
-#     dataset_add = ex,
-#     by_vars = exprs(USUBJID),
-#     order = exprs(TRTSDT),
-#     new_vars = exprs(TRTSDT = convert_dtc_to_dt(EXSTDTC), TRTSSEQ = EXSEQ),
-#     filter_add = !is.na(TRTSDT),
-#     mode = "last"
-#   )
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = "USUBJID"
+  )
+})
 
-#   expect_dfs_equal(
-#     base = expected,
-#     compare = actual,
-#     keys = "USUBJID"
-#   )
-# })
+## Test 9: use new variables in filter_add and order ----
+test_that("derive_vars_merged Test 9: use new variables in filter_add and order", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,      ~TRTSSEQ,
+    "ST42-1", "2020-12-14",        2,
+    "ST42-2", "2021-01-26",        2,
+    "ST42-3", NA,                 NA,
+    "ST42-4", NA,                 NA
+  ) %>% mutate(
+    STUDYID = "ST42",
+    TRTSDT = ymd(TRTSDT)
+  )
 
-# ## Test 10: warning if not unique w.r.t the by variables and the order ----
-# test_that("derive_vars_merged Test 10: warning if not unique w.r.t the by variables and the order", { # nolint
-#   expect_warning(
-#     actual <- derive_vars_merged(advs,
-#       dataset_add = adsl2,
-#       by_vars = exprs(STUDYID, USUBJID = ID),
-#       order = exprs(ID),
-#       mode = "last",
-#       check_type = "warning"
-#     ),
-#     regexp = ""
-#   )
-# })
+  ex <- tibble::tribble(
+    ~USUBJID, ~EXSTDTC,              ~EXSEQ,
+    "ST42-1", "2020-12-07",               1,
+    "ST42-1", "2020-12-14",               2,
+    "ST42-2", "2021-01-12T12:00:00",      1,
+    "ST42-2", "2021-01-26T13:21",         2,
+    "ST42-3", "2021-03",                  1
+  ) %>% mutate(STUDYID = "ST42")
 
-# ## Test 11: error if not unique w.r.t the by variables and the order ----
-# test_that("derive_vars_merged Test 11: error if not unique w.r.t the by variables and the order", {
-#   expect_error(
-#     actual <- derive_vars_merged(advs,
-#       dataset_add = adsl2,
-#       by_vars = exprs(STUDYID, USUBJID = ID),
-#       order = exprs(ID),
-#       mode = "last",
-#       check_type = "error",
-#       duplicate_msg = "Duplicate records present!"
-#     ),
-#     regexp = ""
-#   )
-# })
+  actual <- derive_vars_merged(
+    select(adsl, STUDYID, USUBJID),
+    dataset_add = ex,
+    by_vars = exprs(USUBJID),
+    order = exprs(TRTSDT),
+    new_vars = exprs(TRTSDT = convert_dtc_to_dt(EXSTDTC), TRTSSEQ = EXSEQ),
+    filter_add = !is.na(TRTSDT),
+    mode = "last"
+  )
 
-# ## Test 12: error if variables in missing_values but not in new_vars ----
-# test_that("derive_vars_merged Test 12: error if variables in missing_values but not in new_vars", {
-#   expect_error(
-#     derive_vars_merged(
-#       adsl,
-#       dataset_add = advs,
-#       by_vars = exprs(USUBJID),
-#       order = exprs(AVISIT),
-#       new_vars = exprs(LASTVIS = str_to_upper(AVISIT)),
-#       mode = "last",
-#       missing_values = exprs(LASTVIS = "UNKNOWN", LASTVISN = -1)
-#     ),
-#     regexp = "The variables `LASTVISN` were specified for `missing_values` but not for `new_vars`.",
-#     fixed = TRUE
-#   )
-# })
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = "USUBJID"
+  )
+})
 
-# # ## Test 13: deprecation messaging for match_flag ----
-# # test_that("derive_vars_merged Test 13: deprecation messaging for match_flag", {
-# #   expect_error(
-# #     derive_vars_merged(adsl,
-# #       dataset_add = advs,
-# #       order = exprs(AVAL),
-# #       by_vars = exprs(STUDYID, USUBJID),
-# #       new_vars = exprs(WEIGHTBL = AVAL),
-# #       mode = "last",
-# #       match_flag = matched
-# #     ),
-# #     class = "lifecycle_error_deprecated"
-# #   )
-# # })
+## Test 10: warning if not unique w.r.t the by variables and the order ----
+test_that("derive_vars_merged Test 10: warning if not unique w.r.t the by variables and the order", { # nolint
+  expect_warning(
+    actual <- derive_vars_merged(advs,
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = exprs(ID),
+      mode = "last",
+      check_type = "warning"
+    ),
+    regexp = ""
+  )
+})
+
+## Test 11: error if not unique w.r.t the by variables and the order ----
+test_that("derive_vars_merged Test 11: error if not unique w.r.t the by variables and the order", {
+  expect_error(
+    actual <- derive_vars_merged(advs,
+      dataset_add = adsl2,
+      by_vars = exprs(STUDYID, USUBJID = ID),
+      order = exprs(ID),
+      mode = "last",
+      check_type = "error",
+      duplicate_msg = "Duplicate records present!"
+    ),
+    regexp = ""
+  )
+})
+
+## Test 12: error if variables in missing_values but not in new_vars ----
+test_that("derive_vars_merged Test 12: error if variables in missing_values but not in new_vars", {
+  expect_error(
+    derive_vars_merged(
+      adsl,
+      dataset_add = advs,
+      by_vars = exprs(USUBJID),
+      order = exprs(AVISIT),
+      new_vars = exprs(LASTVIS = str_to_upper(AVISIT)),
+      mode = "last",
+      missing_values = exprs(LASTVIS = "UNKNOWN", LASTVISN = -1)
+    ),
+    regexp = "The variables `LASTVISN` were specified for `missing_values` but not for `new_vars`.",
+    fixed = TRUE
+  )
+})
+
+# ## Test 13: deprecation messaging for match_flag ----
+test_that("derive_vars_merged Test 13: deprecation messaging for match_flag", {
+  expect_error(
+    derive_vars_merged(adsl,
+      dataset_add = advs,
+      order = exprs(AVAL),
+      by_vars = exprs(STUDYID, USUBJID),
+      new_vars = exprs(WEIGHTBL = AVAL),
+      mode = "last",
+      match_flag = matched
+    ),
+    class = "lifecycle_error_deprecated"
+  )
+})
 
 # derive_var_merged_exist_flag ----
 ## Test 14: merge existence flag ----
