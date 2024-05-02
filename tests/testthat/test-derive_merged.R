@@ -143,12 +143,12 @@ test_that("derive_vars_merged Test 4: merge last value and flag matched by group
 
 ## Test 5: error if variable in both datasets ----
 test_that("derive_vars_merged Test 5: error if variable in both datasets", {
-  expect_error(
+  expect_snapshot(
     derive_vars_merged(advs,
       dataset_add = adsl,
       by_vars = exprs(USUBJID)
     ),
-    regexp = ""
+    error = TRUE
   )
 })
 
@@ -278,7 +278,7 @@ test_that("derive_vars_merged Test 10: warning if not unique w.r.t the by variab
 
 ## Test 11: error if not unique w.r.t the by variables and the order ----
 test_that("derive_vars_merged Test 11: error if not unique w.r.t the by variables and the order", {
-  expect_error(
+  expect_snapshot(
     actual <- derive_vars_merged(advs,
       dataset_add = adsl2,
       by_vars = exprs(STUDYID, USUBJID = ID),
@@ -287,13 +287,13 @@ test_that("derive_vars_merged Test 11: error if not unique w.r.t the by variable
       check_type = "error",
       duplicate_msg = "Duplicate records present!"
     ),
-    regexp = ""
+    error = TRUE
   )
 })
 
 ## Test 12: error if variables in missing_values but not in new_vars ----
 test_that("derive_vars_merged Test 12: error if variables in missing_values but not in new_vars", {
-  expect_error(
+  expect_snapshot(
     derive_vars_merged(
       adsl,
       dataset_add = advs,
@@ -303,8 +303,7 @@ test_that("derive_vars_merged Test 12: error if variables in missing_values but 
       mode = "last",
       missing_values = exprs(LASTVIS = "UNKNOWN", LASTVISN = -1)
     ),
-    regexp = "The variable `LASTVISN` was specified for `missing_values` but not for `new_vars`.",
-    fixed = TRUE
+    error = TRUE
   )
 })
 
@@ -628,47 +627,41 @@ test_that("derive_var_merged_summary Test 23: deprecation warning", {
   )
 })
 
-## Test 24: error if not unique w.r.t the by variables and the order is not specified -
-# case 1, check_type = "error" ----
-test_that("derive_vars_merged Test 24: error if not unique w.r.t the by variables and
-          the order is not specified", {
-  expect_error(
+## Test 24: error if not unique, no order, check_type = error ----
+test_that("derive_var_merged_summary Test 24: error if not unique, no order, check_type = error", {
+  expect_snapshot(
     actual <- derive_vars_merged(advs,
       dataset_add = adsl2,
       by_vars = exprs(STUDYID, USUBJID = ID),
       order = NULL,
       check_type = "error"
     ),
-    regexp = "Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`"
+    error = TRUE
   )
 })
 
-## Test 25: error if not unique w.r.t the by variables and the order is not specified -
-# case 2, check_type = "warning" ----
-test_that("derive_vars_merged Test 25: error if not unique w.r.t the by variables and
-          the order is not specified", {
-  expect_error(
+## Test 25: error if not unique, no order, check_type = warning ----
+test_that("derive_var_merged_summary Test 25: error if not unique, no order, check_type = warning", {
+  expect_snapshot(
     actual <- derive_vars_merged(advs,
       dataset_add = adsl2,
       by_vars = exprs(STUDYID, USUBJID = ID),
       order = NULL,
       check_type = "warning"
     ),
-    regexp = "Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`"
+    error = TRUE
   )
 })
 
-## Test 26: error if not unique w.r.t the by variables and the order is not specified -
-# case 3, check_type = NULL ----
-test_that("derive_vars_merged Test 26: error if not unique w.r.t the by variables and
-          the order is not specified", {
-  expect_error(
+## Test 26: error if not unique, no order, check_type = NULL ----
+test_that("derive_var_merged_summary Test 26: error if not unique, no order, check_type = NULL", {
+  expect_snapshot(
     actual <- derive_vars_merged(advs,
       dataset_add = adsl2,
       by_vars = exprs(STUDYID, USUBJID = ID),
       order = NULL,
       check_type = NULL
     ),
-    regexp = "Dataset `dataset_add` contains duplicate records with respect to `STUDYID` and `ID`"
+    error = TRUE
   )
 })

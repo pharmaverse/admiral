@@ -405,17 +405,12 @@ derive_vars_merged <- function(dataset,
   common_vars <-
     setdiff(intersect(names(dataset), names(add_data)), vars2chr(by_vars))
   if (length(common_vars) > 0L) {
-    cli_abort(if_else(
-      length(common_vars) == 1L,
+    cli_abort(
       c(
-        "The variable {.var {common_vars[[1]]}} is contained in both datasets.",
-        i = "Please add it to {.arg by_vars} or remove or rename it in one of the datasets."
-      ),
-      paste0(
-        "The variables {.var {common_vars}} are contained in both datasets.",
+        "The variable{?s} {.var {common_vars}} {?is/are} contained in both datasets.",
         i = "Please add them to {.arg by_vars} or remove or rename them in one of the datasets."
       )
-    ))
+    )
   }
   dataset <- left_join(dataset, add_data, by = vars2chr(by_vars))
 
