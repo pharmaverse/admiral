@@ -85,11 +85,9 @@
 #'
 #'
 #' derive_var_merged_exist_flag(
-#'   dm,
 #'   dataset_add = ae,
-#'   by_vars = exprs(STUDYID, USUBJID),
-#'   new_var = AERELFL,
-#'   condition = AEREL == "PROBABLE"
+#'   new_var = exprs(AERELFL),
+#'   condition = exprs(AEREL == "PROBABLE")
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
 #'
@@ -109,12 +107,10 @@
 #'   "PILOT01",    "VS", "06-1049",    "WEEK 4",  "WEIGHT",     58.97,      NA
 #' )
 #' derive_var_merged_exist_flag(
-#'   dm,
 #'   dataset_add = vs,
-#'   by_vars = exprs(STUDYID, USUBJID),
 #'   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
-#'   new_var = WTBLHIFL,
-#'   condition = VSSTRESN > 90,
+#'   new_var = exprs(WTBLHIFL),
+#'   condition = exprs(VSSTRESN > 90),
 #'   false_value = "N",
 #'   missing_value = "M"
 #' ) %>%
@@ -129,9 +125,12 @@ derive_var_exist_flag <- function(dataset_add,
                       false_value = NA_character_,
                       missing_value = NA_character_,
                       filter_add = NULL) {
-
+  # Very unclear to me why, but without these variables just hanging out here, it does not work
+  condition
+  new_var
   new_var <- assert_symbol(enexpr(new_var))
   condition <- assert_filter_cond(enexpr(condition))
+  
   filter_add <-
     assert_filter_cond(filter_add, optional = TRUE)
   if (is.null(filter_add)) {

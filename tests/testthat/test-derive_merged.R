@@ -337,12 +337,10 @@ test_that("derive_var_merged_exist_flag Test 14: merge existence flag", {
     advs,
     by_vars = exprs(USUBJID),
     new_var = VSEVALFL,
-    condition = enexprs(AVISIT == "BASELINE")
+    condition = AVISIT == "BASELINE"
   )
-  print(actual)
   expected <-
     mutate(adsl, VSEVALFL = c("Y", "Y", NA_character_, NA_character_))
-  print(expected)
   expect_dfs_equal(
     base = expected,
     compare = actual,
@@ -357,7 +355,7 @@ test_that("derive_var_merged_exist_flag Test 15: by_vars with rename", {
     dataset_add = advs1,
     by_vars = exprs(USUBJID = ID),
     new_var = VSEVALFL,
-    condition = advs1$AVISIT == "BASELINE",
+    condition = AVISIT == "BASELINE"
   )
 
   expected <-

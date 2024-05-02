@@ -1,9 +1,4 @@
-library("tibble")
-library("dplyr")
-library("testthat")
-library("rlang")
-library("admiral")
-library("admiraldev")
+
 adsl <- tibble::tribble(
   ~USUBJID, ~SEX, ~COUNTRY,
   "ST42-1", "F",  "AUT",
@@ -27,8 +22,8 @@ test_that("derive_var_exist_flag Test 1: generate existence flag", {
 
   actual <- derive_var_exist_flag(
     dataset_add = advs,
-    new_var = VSEVALFL,
-    condition = AVISIT == "BASELINE"
+    new_var = expr(VSEVALFL),
+    condition = expr(AVISIT == "BASELINE")
   )
 
   expected <- mutate(advs, VSEVALFL = c(1, 0, 1, 0, 0))

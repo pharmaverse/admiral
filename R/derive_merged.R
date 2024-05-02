@@ -704,9 +704,12 @@ derive_var_merged_exist_flag <- function(dataset,
                                          false_value = NA_character_,
                                          missing_value = NA_character_,
                                          filter_add = NULL) {
-
-  add_data <- derive_var_exist_flag(dataset_add, new_var = new_var, condition = !!condition, true_value, false_value, missing_value, filter_add)
-
+  new_cond <- assert_filter_cond(enexpr(condition))
+  new_var <- assert_symbol(enexpr(new_var))
+  n_var <- new_var
+  
+  add_data <- derive_var_exist_flag(dataset_add, new_var = n_var, condition = new_cond, true_value, false_value, missing_value, filter_add)
+  
   derive_vars_merged(
     dataset,
     dataset_add = add_data,
