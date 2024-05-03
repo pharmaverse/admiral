@@ -1,5 +1,8 @@
 # admiral (development version)
 
+## Refactor of derive_vars_merged()
+- Added helper function to derive_vars_merged() so it calls a new function to perform it's previous functionality exactly as it was (#2349)
+
 ## New Features
 
 - Error Messaging has been made more "user-friendly". (#2372)
