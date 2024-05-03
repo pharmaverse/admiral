@@ -1,4 +1,5 @@
-test_that("`target` is set to `source` where `ABLFL == 'Y'`", {
+## Test 1: `target` is set to `source` where `ABLFL == 'Y'` ----
+test_that("derive_var_base Test 1: `target` is set to `source` where `ABLFL == 'Y'`", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ABLFL, ~BASETYPE,
     "TEST01", "PAT01", "PARAM01", 1, 10.12, "Y", "LAST",
@@ -43,7 +44,8 @@ test_that("`target` is set to `source` where `ABLFL == 'Y'`", {
   )
 })
 
-test_that("`target` is set to `NA` if a baseline record is missing", {
+## Test 2: `target` is set to `NA` if a baseline record is missing ----
+test_that("derive_var_base Test 2: `target` is set to `NA` if a baseline record is missing", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ABLFL, ~BASETYPE,
     "TEST01", "PAT01", "PARAM01", 1, 10.12, "Y", "LAST",
@@ -76,7 +78,8 @@ test_that("`target` is set to `NA` if a baseline record is missing", {
   )
 })
 
-test_that("only the `target` variable is added to the input dataset", {
+## Test 3: only the `target` variable is added to the input dataset ----
+test_that("derive_var_base Test 3: only the `target` variable is added to the input dataset", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ABLFL, ~BASETYPE, ~ANL01FL,
     "TEST01", "PAT01", "PARAM01", 1, 10.12, "Y", "LAST", "Y",
@@ -109,7 +112,8 @@ test_that("only the `target` variable is added to the input dataset", {
   )
 })
 
-test_that("An error is thrown if a subject has multiple records per `PARAMCD` and `BASETYPE`", {
+## Test 4: error if multiple baseline records ----
+test_that("derive_var_base Test 4: error if multiple baseline records", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
     "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
@@ -121,13 +125,13 @@ test_that("An error is thrown if a subject has multiple records per `PARAMCD` an
     "TEST01", "PAT02",  "PARAM02", "MEDIUM", "",     "LAST",
   )
 
-  expect_error(
+  expect_snapshot(
     derive_var_base(
       input,
       by_vars = exprs(USUBJID, PARAMCD, BASETYPE),
       source_var = AVALC,
       new_var = BASEC
     ),
-    "Input dataset contains multiple baseline records with respect to .*"
+    error = TRUE
   )
 })
