@@ -94,6 +94,7 @@ cm \%>\%
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_exist_flag}()},
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_merged_ef_msrc}()},
@@ -103,8 +104,8 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_merged_lookup}()}
+\code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_merged}()}
 }
 \concept{der_gen}
 \keyword{der_gen}

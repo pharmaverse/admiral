@@ -23,8 +23,8 @@ Other datasets:
 \code{\link{admiral_adlb}},
 \code{\link{admiral_adsl}},
 \code{\link{ex_single}},
-\code{\link{queries}},
-\code{\link{queries_mh}}
+\code{\link{queries_mh}},
+\code{\link{queries}}
 }
 \concept{datasets}
 \keyword{datasets}

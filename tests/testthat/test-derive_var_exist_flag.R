@@ -1,4 +1,3 @@
-
 adsl <- tibble::tribble(
   ~USUBJID, ~SEX, ~COUNTRY,
   "ST42-1", "F",  "AUT",
@@ -19,7 +18,6 @@ advs <- tibble::tribble(
 # derive_var_exist_flag ----
 ## Test 1: generate existence flag ----
 test_that("derive_var_exist_flag Test 1: generate existence flag", {
-
   actual <- derive_var_exist_flag(
     dataset_add = advs,
     new_var = expr(VSEVALFL),

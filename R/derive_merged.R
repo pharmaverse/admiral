@@ -440,7 +440,7 @@ derive_vars_merged <- function(dataset,
 #' there exists at least one observation in another dataset fulfilling a certain
 #' condition.
 #'
-#' **Note:** This is a helper function for `derive_vars_merged_exist_flag` which inputs 
+#' **Note:** This is a helper function for `derive_vars_merged_exist_flag` which inputs
 #' this result into `derive_vars_merged()`.
 #'
 #'
@@ -555,8 +555,7 @@ derive_vars_merged <- function(dataset,
 #'   missing_value = "M"
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
-#' 
-#' 
+#'
 
 #' Merge an Existence Flag
 #'
@@ -687,9 +686,7 @@ derive_vars_merged <- function(dataset,
 #'   missing_value = "M"
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
-#' 
-#' 
-
+#'
 derive_var_merged_exist_flag <- function(dataset,
                                          dataset_add,
                                          by_vars,
@@ -702,9 +699,9 @@ derive_var_merged_exist_flag <- function(dataset,
   new_cond <- assert_filter_cond(enexpr(condition))
   new_var <- assert_symbol(enexpr(new_var))
   n_var <- new_var
-  
+
   add_data <- derive_var_exist_flag(dataset_add, new_var = n_var, condition = new_cond, true_value, false_value, missing_value, filter_add)
-  
+
   derive_vars_merged(
     dataset,
     dataset_add = add_data,
