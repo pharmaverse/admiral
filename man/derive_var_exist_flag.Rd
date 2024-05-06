@@ -78,12 +78,6 @@ observation exists and for all observations the condition evaluates to
 
 library(dplyr, warn.conflicts = FALSE)
 
-dm <- tribble(
-  ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
-  "PILOT01",    "DM", "01-1028",   71, "YEARS",
-  "PILOT01",    "DM", "04-1127",   84, "YEARS",
-  "PILOT01",    "DM", "06-1049",   60, "YEARS"
-)
 
 ae <- tribble(
   ~STUDYID,  ~DOMAIN,  ~USUBJID,    ~AETERM,     ~AEREL,
@@ -126,7 +120,6 @@ derive_var_merged_exist_flag(
 ) \%>\%
   select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
 
-
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
@@ -139,8 +132,8 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_relative_flag}()},
 \code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_merged}()},
+\code{\link{derive_vars_merged_lookup}()},
 \code{\link{derive_vars_transposed}()}
 }
 \concept{der_gen}

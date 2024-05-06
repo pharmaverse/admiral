@@ -68,12 +68,6 @@
 #'
 #' library(dplyr, warn.conflicts = FALSE)
 #'
-#' dm <- tribble(
-#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
-#'   "PILOT01",    "DM", "01-1028",   71, "YEARS",
-#'   "PILOT01",    "DM", "04-1127",   84, "YEARS",
-#'   "PILOT01",    "DM", "06-1049",   60, "YEARS"
-#' )
 #'
 #' ae <- tribble(
 #'   ~STUDYID,  ~DOMAIN,  ~USUBJID,    ~AETERM,     ~AEREL,

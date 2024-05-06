@@ -117,8 +117,8 @@ Date/Time Computation Functions that returns a vector:
 \code{\link{compute_tmf}()},
 \code{\link{convert_date_to_dtm}()},
 \code{\link{convert_dtc_to_dtm}()},
-\code{\link{impute_dtc_dtm}()},
-\code{\link{impute_dtc_dt}()}
+\code{\link{impute_dtc_dt}()},
+\code{\link{impute_dtc_dtm}()}
 }
 \concept{com_date_time}
 \keyword{com_date_time}

@@ -37,9 +37,9 @@ Exactly one of \code{name} or \code{id} must be specified.
 Source Objects: 
 \code{\link{censor_source}()},
 \code{\link{death_event}},
+\code{\link{event}()},
 \code{\link{event_joined}()},
 \code{\link{event_source}()},
-\code{\link{event}()},
 \code{\link{flag_event}()},
 \code{\link{query}()},
 \code{\link{records_source}()},
