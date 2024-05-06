@@ -5,7 +5,7 @@
 	// Install Dev Container Features. More info: https://containers.dev/features
 	"containerEnv": {
 		"ROOT": "true",
-		"PASSWORD": "password",
+		"PASSWORD": "rstudio",
 		"DISABLE_AUTH": "true",
 		"RENV_AUTOLOADER_ENABLED": "false"
 	},
