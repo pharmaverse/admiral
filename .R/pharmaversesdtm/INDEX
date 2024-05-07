@@ -1,0 +1,54 @@
+ae                      Adverse Events Dataset-updated
+ae_ophtha               Ophthalmology Adverse Events Dataset
+ce_vaccine              Clinical Events Dataset for Vaccine Studies
+cm                      Concomitant Medication Dataset
+dm                      Demography Dataset
+dm_vaccine              Demographics Dataset for Vaccine Studies
+ds                      Disposition Dataset-updated
+eg                      Electrocardiogram Dataset
+ex                      Exposure Dataset
+ex_ophtha               Ophthalmology Exposure Dataset
+ex_vaccine              Exposures Dataset for Vaccine Studies
+face_vaccine            Findings About Clinical Events Dataset for
+                        Vaccine Studies
+get_terms               An example function as expected by the
+                        'get_terms_fun' parameter of
+                        'admiral::create_query_data()'
+is_vaccine              Immunogenicity Specimen Assessments Dataset for
+                        Vaccine Studies
+lb                      Laboratory Measurements Dataset
+mh                      Medical History Dataset-updated
+oe_ophtha               Ophthalmic Examinations Dataset
+pc                      Pharmacokinetics Concentrations Dataset
+pp                      Pharmacokinetic Parameters Dataset
+qs_ophtha               Ophthalmology Questionnaire Dataset
+rs_onco                 Disease Response Dataset
+rs_onco_irecist         Disease Response Dataset (iRECIST)
+rs_onco_recist          Disease Response Dataset (RECIST 1.1)
+sc_ophtha               Subject Characteristic Dataset
+sdg_db                  SDG Dataset
+smq_db                  SMQ Dataset
+suppae                  Supplemental Adverse Events Dataset
+suppce_vaccine          Supplemental Qualifiers for Clinical Events
+                        Dataset for Vaccine Studies
+suppdm                  Supplemental Demography Dataset
+suppdm_vaccine          Supplemental Qualifiers for Demographics
+                        Dataset for Vaccine Studies
+suppds                  Supplemental Disposition Dataset-updated
+suppex_vaccine          Supplemental Qualifiers for Exposures Dataset
+                        for Vaccine Studies
+suppface_vaccine        Supplemental Qualifiers for Findings About for
+                        Clinical Events Dataset for Vaccine Studies #
+                        nolint
+suppis_vaccine          Supplemental Qualifiers for Immunogenicity
+                        Specimen Assessments Dataset for Vaccine
+                        Studies # nolint
+supptr_onco             Supplemental Tumor Results Dataset
+sv                      Subject Visits Dataset
+tr_onco                 Tumor Results Dataset
+tr_onco_recist          Tumor Results Dataset (RECIST 1.1)
+ts                      Trial Design Dataset
+tu_onco                 Tumor Identification Dataset
+tu_onco_recist          Tumor Identification Dataset (RECIST 1.1)
+vs                      Vital Signs Dataset
+vs_vaccine              Vital Signs Dataset for Vaccine Studies

@@ -1,0 +1,89 @@
+%notin%                 Negated Value Matching
+%or%                    Or
+add_suffix_to_vars      Add a Suffix to Variables in a List of
+                        Expressions
+anti_join               Join Functions
+arg_name                Extract Argument Name from an Expression
+assert_atomic_vector    Is an Argument an Atomic Vector?
+assert_character_scalar
+                        Is an Argument a Character Scalar (String)?
+assert_character_vector
+                        Is an Argument a Character Vector?
+assert_data_frame       Is an Argument a Data Frame?
+assert_date_var         Is a Variable in a Dataset a Date or Datetime
+                        Variable?
+assert_date_vector      Is an object a date or datetime vector?
+assert_expr             Assert Argument is an Expression
+assert_expr_list        Is an Argument a List of Expressions?
+assert_filter_cond      Is an Argument a Filter Condition?
+assert_function         Is Argument a Function?
+assert_function_param   Assert Argument is a Parameter of a Function
+assert_has_variables    Does a Dataset Contain All Required Variables?
+assert_integer_scalar   Is an Argument an Integer Scalar?
+assert_list_element     Is an Element of a List of Lists/Classes
+                        Fulfilling a Condition?
+assert_list_of          Is an Argument a List of Objects of a Specific
+                        S3 Class or Type?
+assert_logical_scalar   Is an Argument a Logical Scalar (Boolean)?
+assert_named            Assert Argument is a Named List or Vector
+assert_named_exprs      Assert Argument is a Named List of Expressions
+assert_numeric_vector   Is an Argument a Numeric Vector?
+assert_one_to_one       Is There a One to One Mapping between
+                        Variables?
+assert_param_does_not_exist
+                        Asserts That a Parameter Does Not Exist in the
+                        Dataset
+assert_s3_class         Is an Argument an Object of a Specific S3
+                        Class?
+assert_same_type        Are All Argument of the Same Type?
+assert_symbol           Is an Argument a Symbol?
+assert_unit             Asserts That a Parameter is Provided in the
+                        Expected Unit
+assert_vars             Is an Argument a List of Variables?
+assert_varval_list      Is an Argument a Variable-Value List?
+backquote               Wrap a String in Backquotes
+contains_vars           check that argument contains valid variable(s)
+                        created with 'exprs()' or Source Variables from
+                        a List of Expressions
+convert_dtm_to_dtc      Helper Function to Convert Date (or Date-time)
+                        Objects to Characters of dtc Format (-DTC type
+                        of variable)
+dataset_vignette        Output a Dataset in a Vignette in the admiral
+                        Format
+dquote                  Wrap a String in Double Quotes
+enumerate               Enumerate Multiple Elements
+expect_dfs_equal        Expectation: Are Two Datasets Equal?
+expr_c                  Concatenate One or More Expressions
+extract_vars            Extract All Symbols from a List of Expressions
+filter_if               Optional Filter
+friendly_type_of        Return English-friendly messaging for
+                        object-types
+get_constant_vars       Get Constant Variables
+get_dataset             Retrieve a Dataset from the
+                        'admiraldev_environment' environment
+get_duplicates          Get Duplicates From a Vector
+get_new_tmp_var         Get a New Temporary Variable Name for a Dataset
+get_source_vars         Get Source Variables from a List of Expressions
+is_auto                 Checks if the argument equals the auto keyword
+is_order_vars           Is order vars?
+is_valid_dtc            Is this string a valid DTC
+process_set_values_to   Process 'set_values_to' Argument
+remove_tmp_vars         Remove All Temporary Variables Created Within
+                        the Current Function Environment
+replace_symbol_in_expr
+                        Replace Symbols in an Expression
+replace_values_by_names
+                        Replace Expression Value with Name
+squote                  Wrap a String in Single Quotes
+suppress_warning        Suppress Specific Warnings
+valid_time_units        Valid Time Units
+vars2chr                Turn a List of Expressions into a Character
+                        Vector
+warn_if_incomplete_dtc
+                        Warn if incomplete dtc
+warn_if_inconsistent_list
+                        Warn If Two Lists are Inconsistent
+warn_if_invalid_dtc     Warn If a Vector Contains Unknown Datetime
+                        Format
+warn_if_vars_exist      Warn If a Variable Already Exists
+what_is_it              What Kind of Object is This?
