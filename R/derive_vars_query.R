@@ -262,6 +262,13 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
   dataset_queries <- convert_blanks_to_na(dataset_queries)
   source_vars <- unique(dataset_queries$SRCVAR)
   static_cols <- setdiff(names(dataset), chr2vars(source_vars))
+  no_key <- dataset %>%
+    select(all_of(static_cols)) %>%
+    distinct()
+  if (nrow(no_key) != nrow(dataset)) {
+    dataset$temp_key <- seq_len(nrow(dataset))
+    static_cols <- c(static_cols, "temp_key")
+  }
   joined <- derive_vars_for_query(dataset, dataset_queries)
   print(joined)
   print(exprs(!!!syms(static_cols)))
