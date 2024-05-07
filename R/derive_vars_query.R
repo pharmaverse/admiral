@@ -258,8 +258,14 @@ derive_vars_for_query <- function(dataset, dataset_queries) { # nolint: cyclocom
 #' derive_vars_query(adae, queries)
 derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
   # join restructured queries to input dataset
+  assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
+  dataset_queries <- convert_blanks_to_na(dataset_queries)
+  source_vars <- unique(dataset_queries$SRCVAR)
+  static_cols <- setdiff(names(dataset), chr2vars(source_vars))
   joined <- derive_vars_for_query(dataset, dataset_queries)
-
+  print(joined)
+  print(exprs(!!!syms(static_cols)))
+  print(dataset)
   # join queries to input dataset
   derive_vars_merged(dataset, dataset_add = joined, by_vars = exprs(!!!syms(static_cols))) %>%
     select(-starts_with("temp_"))

@@ -357,11 +357,11 @@ derive_vars_merged <- function(dataset,
       ))
     }
   }
-
+  
   add_data <- dataset_add %>%
     mutate(!!!new_vars) %>%
     filter_if(filter_add)
-
+  
   if (!is.null(order)) {
     add_data <- filter_extreme(
       add_data,
@@ -387,7 +387,7 @@ derive_vars_merged <- function(dataset,
     add_data <- add_data %>%
       select(!!!by_vars_right, !!!replace_values_by_names(new_vars))
   }
-
+  
   if (!is.null(missing_values) || !is.null(exist_flag)) {
     match_flag_var <- get_new_tmp_var(add_data, prefix = "tmp_match_flag")
   } else {
@@ -399,7 +399,7 @@ derive_vars_merged <- function(dataset,
       !!match_flag_var := TRUE
     )
   }
-
+  
   # check if there are any variables in both datasets which are not by vars
   # in this case an error is issued to avoid renaming of varibles by left_join()
   common_vars <-
@@ -413,7 +413,7 @@ derive_vars_merged <- function(dataset,
     )
   }
   dataset <- left_join(dataset, add_data, by = vars2chr(by_vars))
-
+  
   if (!is.null(match_flag_var)) {
     update_missings <- map2(
       syms(names(missing_values)),
@@ -424,12 +424,12 @@ derive_vars_merged <- function(dataset,
     dataset <- dataset %>%
       mutate(!!!update_missings)
   }
-
+  
   if (!is.null(exist_flag)) {
     dataset <- dataset %>%
       mutate(!!exist_flag := ifelse(is.na(!!match_flag_var), false_value, true_value))
   }
-
+  
   dataset %>%
     remove_tmp_vars()
 }
