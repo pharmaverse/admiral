@@ -15,6 +15,8 @@ derive_var_exist_flag(
 )
 }
 \arguments{
+\item{dataset_add}{The additional dataset you wish to pull variables from}
+
 \item{new_var}{New variable
 
 The specified variable is added to the input dataset.}
@@ -88,12 +90,12 @@ ae <- tribble(
 )
 
 
-derive_var_merged_exist_flag(
+derive_var_exist_flag(
   dataset_add = ae,
-  new_var = exprs(AERELFL),
-  condition = exprs(AEREL == "PROBABLE")
+  new_var = expr(AERELFL),
+  condition = expr(AEREL == "PROBABLE")
 ) \%>\%
-  select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
+  select(STUDYID, USUBJID, AERELFL)
 
 vs <- tribble(
   ~STUDYID,  ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSBLFL,
@@ -110,15 +112,15 @@ vs <- tribble(
   "PILOT01",    "VS", "06-1049",  "BASELINE",  "WEIGHT",     57.83,     "Y",
   "PILOT01",    "VS", "06-1049",    "WEEK 4",  "WEIGHT",     58.97,      NA
 )
-derive_var_merged_exist_flag(
+derive_var_exist_flag(
   dataset_add = vs,
-  filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
-  new_var = exprs(WTBLHIFL),
-  condition = exprs(VSSTRESN > 90),
+  filter_add = expr(VSTESTCD == "WEIGHT" & VSBLFL == "Y"),
+  new_var = expr(WTBLHIFL),
+  condition = expr(VSSTRESN > 90),
   false_value = "N",
   missing_value = "M"
 ) \%>\%
-  select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
+  select(STUDYID, USUBJID, WTBLHIFL)
 
 }
 \seealso{

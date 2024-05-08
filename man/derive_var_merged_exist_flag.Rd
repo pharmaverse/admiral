@@ -136,7 +136,7 @@ derive_var_merged_exist_flag(
   dm,
   dataset_add = vs,
   by_vars = exprs(STUDYID, USUBJID),
-  filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
+  filter_add = expr(VSTESTCD == "WEIGHT" & VSBLFL == "Y"),
   new_var = WTBLHIFL,
   condition = VSSTRESN > 90,
   false_value = "N",
