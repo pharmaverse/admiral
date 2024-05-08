@@ -1,4 +1,7 @@
 #' Derive Query Variables
+#' 
+#' **Note:** This function exists to work with derive_vars_query, to execute
+#' the first step of derive_vars_query seperately for metadata tracking
 #'
 #' @details This function can be used to derive CDISC variables such as
 #'   `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, and `CQzzNAM` in ADAE and
@@ -58,7 +61,7 @@
 #'   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
 #'   7, "Alveolar proteinosis", NA_character_, NA_integer_
 #' )
-#' derive_vars_query(adae, queries)
+#' derive_vars_for_query(adae, queries)
 derive_vars_for_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
   source_vars <- unique(dataset_queries$SRCVAR)
   assert_data_frame(dataset,
