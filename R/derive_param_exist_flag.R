@@ -192,7 +192,7 @@ derive_param_exist_flag <- function(dataset = NULL,
   new_obs <- derive_var_merged_exist_flag(
     dataset_ref,
     dataset_add = dataset_add,
-    filter_add = !!filter_add,
+    filter_add = filter_add,
     condition = !!condition,
     by_vars = by_vars,
     new_var = AVALC,
