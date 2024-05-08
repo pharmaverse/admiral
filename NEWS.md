@@ -7,8 +7,6 @@
 
 ## Updates of Existing Functions
 
-- Created three unit tests for `get_summary_records()`. (#2304)
-- Created unit tests for developer internal function `get_imputation_target_date()` (#2378)
 - Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (#2392)
 
 ## Breaking Changes
@@ -47,18 +45,25 @@
 
 ## Various
 
-- In the previous version, `renv` was the default framework used to manage package dependencies. Now, we use `devtools` as our main package manager (some changes also occurred for  [admiralci workflows](https://github.com/pharmaverse/admiralci)).
-There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for `R CMD CHECKS` jobs, there is an associated renv.lock file (under the deps artifact):
-
- ![Download dependencies from CI workflows](man/figures/dependencies_devtools.png) (#2306)
- 
-- The function `dplyr::transmute()` is superseded in favor of `dplyr::mutate(.keep = "none")`. Consequently, all the admiral functions that utilized the former have been updated accordingly. (#2274)
+ - The function `dplyr::transmute()` is superseded in favor of `dplyr::mutate(.keep = "none")`. Consequently, all the admiral functions that utilized the former have been updated accordingly. (#2274)
 
 - The templates for ADPP and ADPC are updated for missing variables (#2308) and to make `ATPT` and `ATPTN` consistent. (#2328)
 
 - ADLB template updated to make `PARAM` consistent for `PARAMCD` values `"BASO"` and `"LYMPH"`. (#2327)
 
+<details>
+<summary>Developer Notes</summary>
+
+- In the previous version, `renv` was the default framework used to manage package dependencies. Now, we use `devtools` as our main package manager (some changes also occurred for  [admiralci workflows](https://github.com/pharmaverse/admiralci)).
+There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for `R CMD CHECKS` jobs, there is an associated renv.lock file (under the deps artifact):
+
+ ![Download dependencies from CI workflows](man/figures/dependencies_devtools.png) (#2306)
+
 - Splitting out `R` and `test` files for date/time functions for cyclomatic complexity refactor (#2340)(#2339)
+- Created three unit tests for `get_summary_records()`. (#2304)
+- Created unit tests for developer internal function `get_imputation_target_date()` (#2378)
+
+</details>
 
 # admiral 1.0.2
 

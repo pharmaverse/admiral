@@ -52,11 +52,15 @@ compute_age_years <- function(age,
   )
 
   if (!(length(age_unit) %in% c(1, length(age)))) {
-    abort(paste0(
-      "`age_unit` must be a single string or a vector of the same length as",
-      "`age`, but there are ", length(age), " values in `age` and ",
-      length(age_unit), " values in `age_unit`."
-    ))
+    cli_abort(
+      c("Argument {.arg age_unit} must be a single string or a vector of the
+       same length as {.arg age}",
+        i = paste(
+          "There are {.val {length(age)}} value{?s} in {.arg age} and",
+          "{.val {length(age_unit)}} value{?s} in {.arg age_unit}."
+        )
+      )
+    )
   }
 
   if (length(age_unit) == 1) {

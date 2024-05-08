@@ -88,15 +88,10 @@ derive_vars_dy <- function(dataset,
       !str_detect(vars2chr(source_vars), "(DT|DTM)$"))]
 
   if (length(bad_vars > 0)) {
-    err_msg <-
-      sprintf(
-        paste0(
-          "source_vars must end in DT or DTM or be explicitly and uniquely named.\n",
-          "Please name or rename the following source_vars:\n", "%s"
-        ),
-        paste0(bad_vars, collapse = ", ")
-      )
-    abort(err_msg)
+    cli_abort(c(
+      "{.arg source_vars} must end in DT or DTM or be explicitly and uniquely named.",
+      i = "Please name or rename the following source_vars: {.var {bad_vars}}"
+    ))
   }
 
   # named vector passed to `.names` in `across()` to derive name of dy_vars

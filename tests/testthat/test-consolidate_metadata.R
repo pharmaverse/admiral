@@ -99,18 +99,13 @@ test_that("consolidate_metadata Test 4: warn if variables differ", {
     "abc",  3, "stud_val_3"
   )
 
-  expect_warning(
+  expect_snapshot(
     consolidate_metadata(
       datasets = list(
         global = glob,
         study = stud
       ),
       key_vars = exprs(id)
-    ),
-    paste(
-      "The variable names differ across the input datasets.",
-      "This message can be suppressed by setting `check_vars = \"none\"`.",
-      sep = "\n"
     )
   )
 })
