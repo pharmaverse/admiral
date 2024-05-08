@@ -1,7 +1,7 @@
 #' Derive Query Variables
 #'
 #' **Note:** This function exists to work with derive_vars_query, to execute
-#' the first step of derive_vars_query seperately for metadata tracking
+#' the first step of derive_vars_query separately for metadata tracking
 #'
 #' @details This function can be used to derive CDISC variables such as
 #'   `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, and `CQzzNAM` in ADAE and
