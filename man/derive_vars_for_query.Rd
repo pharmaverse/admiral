@@ -19,7 +19,8 @@ derive_vars_for_query(dataset, dataset_queries)
 The input dataset with query variables derived.
 }
 \description{
-Derive Query Variables
+\strong{Note:} This function exists to work with derive_vars_query, to execute
+the first step of derive_vars_query seperately for metadata tracking
 }
 \details{
 This function can be used to derive CDISC variables such as
@@ -62,7 +63,7 @@ adae <- tribble(
   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
   7, "Alveolar proteinosis", NA_character_, NA_integer_
 )
-derive_vars_query(adae, queries)
+derive_vars_for_query(adae, queries)
 }
 \seealso{
 \code{\link[=create_query_data]{create_query_data()}}]
