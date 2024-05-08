@@ -1,7 +1,7 @@
 # admiral (development version)
 
 ## Refactor of derive_vars_merged()
-- Added helper function to derive_vars_merged() so it calls a new function to perform it's previous functionality exactly as it was (#2349)
+- Added helper functions to derive_vars_merged() and derive_vars_query() so they call a new function to perform previous functionality exactly as it was, but with more explicit metadata resulting (#2349)
 
 ## New Features
 
