@@ -176,8 +176,8 @@
 #'   )
 #' )
 #'
-#' Example 1b: Using option `keep_nas = TRUE` to derive MAP in the case where some/all values
-#' of a variable used in the computation are missing
+#' # Example 1b: Using option `keep_nas = TRUE` to derive MAP in the case where some/all values
+#' # of a variable used in the computation are missing
 #'
 #' derive_param_computed(
 #'   advs,
