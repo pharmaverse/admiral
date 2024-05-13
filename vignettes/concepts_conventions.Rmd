@@ -150,8 +150,8 @@ Sometimes you may want to construct an expression using other, pre-existing expr
 to achieve this because expressions inherently pause evaluation of your code before it's executed:
 
 ```{r, eval = TRUE}
-a = expr(2)
-b = expr(3)
+a <- expr(2)
+b <- expr(3)
 
 expr(a + b)
 # NOT 2 + 3
@@ -197,9 +197,9 @@ adcm %>% select(!!!get_admiral_option("subject_keys"))
 
 ### Summary
 
-In summary, although the expressions framework may seem slightly clunky and un-intuitive to begin with, it allows for such power
+In summary, although the expressions framework may seem slightly clunky and mysterious to begin with, it allows for such power
 and flexibility that it forms a key part of the `{admiral}` package. For a comprehensive treatment of expressions, see 
-[Chapter 18](https://adv-r.hadley.nz/expressions.html) and [Chapter 19](https://adv-r.hadley.nz/quasiquotation.html) of the Advanced R textbook. Chapter 19 specfically covers in much more detail the concept of unquoting.
+[Chapter 18](https://adv-r.hadley.nz/expressions.html) and [Chapter 19](https://adv-r.hadley.nz/quasiquotation.html) of the Advanced R textbook. Chapter 19 specifically covers in much more detail the concept of unquoting.
 
 ## Common pitfalls 
 

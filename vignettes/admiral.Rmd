@@ -57,7 +57,7 @@ ex_ext <- ex %>%
     new_vars_prefix = "EXST"
   )
 
-vs <- vs %>% 
+vs <- vs %>%
   filter(
     USUBJID %in% c(
       "01-701-1015", "01-701-1023", "01-703-1086",
@@ -67,12 +67,14 @@ vs <- vs %>%
       VSPOS == "SUPINE"
   )
 
-adsl <- admiral_adsl %>% 
+adsl <- admiral_adsl %>%
   select(-TRTSDTM, -TRTSTMF)
 
-advs <- vs %>% 
-  mutate(PARAM = VSTEST, PARAMCD = VSTESTCD, AVAL = VSSTRESN, AVALU = VSORRESU,
-         AVISIT = VISIT, AVISITN = VISITNUM)
+advs <- vs %>%
+  mutate(
+    PARAM = VSTEST, PARAMCD = VSTESTCD, AVAL = VSSTRESN, AVALU = VSORRESU,
+    AVISIT = VISIT, AVISITN = VISITNUM
+  )
 ```
 
 # Derivation Functions
@@ -113,9 +115,9 @@ adsl <- adsl %>%
     order = exprs(EXSTDTM, EXSEQ),
     mode = "first",
     by_vars = exprs(STUDYID, USUBJID)
-  ) 
+  )
 
-adsl %>% 
+adsl %>%
   select(USUBJID, TRTSDTM, TRTSTMF)
 ```
 
@@ -129,7 +131,7 @@ specified in the `parameters` argument, and within `set_values_to` we set all
 the variable values for the new derived record.
 
 ```{r eval=TRUE}
-advs <- advs %>% 
+advs <- advs %>%
   derive_param_computed(
     by_vars = exprs(USUBJID, AVISIT, AVISITN),
     parameters = c("SYSBP", "DIABP"),
@@ -141,8 +143,8 @@ advs <- advs %>%
     )
   )
 
-advs %>% 
-  arrange(USUBJID, AVISITN, PARAMCD) %>% 
+advs %>%
+  arrange(USUBJID, AVISITN, PARAMCD) %>%
   select(USUBJID, AVISIT, PARAMCD, AVAL)
 ```
 
@@ -160,7 +162,7 @@ other categories.
 
 [Higher order functions](../reference/index.html#utilities-for-filtering-observations) 
 are `{admiral}` functions that take other functions as input. 
-They enhance the existing toolset of derivation functions by allowing greater 
+They enhance the existing portfolio of derivation functions by allowing greater 
 customization of the latter's behavior. This is done by allowing a derivation
 function to be:
 
@@ -206,17 +208,16 @@ can also be used on their own to explore or manipulate a dataset. For instance, 
 below we use `filter_extreme()` to extract the most recent MAP records in `advs`:
 
 ```{r, eval = TRUE}
-advs_lastmap <-advs %>%  
-  filter(PARAMCD == "MAP") %>% 
+advs_lastmap <- advs %>%
+  filter(PARAMCD == "MAP") %>%
   filter_extreme(
     by_vars = exprs(USUBJID),
     order = exprs(AVISITN, PARAMCD),
     mode = "last"
-  ) 
+  )
 
-advs_lastmap %>% 
+advs_lastmap %>%
   select(USUBJID, AVISIT, PARAMCD, AVAL)
-
 ```
 # Argument Conventions 
 
