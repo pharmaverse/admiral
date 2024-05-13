@@ -29,8 +29,8 @@ As a general principle, the behavior of the `{admiral}` functions is only determ
 i.e. all inputs like datasets, variable names, options, etc. must be provided to the function by arguments. Correspondingly, the
 functions do not have any side-effects like creating or modifying global objects, printing, writing files, etc.
 
-An exception to the above principle is found in our approach to option (see `get_admiral_option()` and `set_admiral_options()`,
-where we have certain pre-defined defaults with added flexibility to allow for user-defined defaults on commonly used function 
+An exception to the above principle is found in our approach to package options (see `get_admiral_option()` and `set_admiral_options()`),
+which allow for user-defined defaults on commonly used function 
 arguments. For instance, the option `subject_keys` is currently pre-defined as `exprs(STUDYID, USUBJID)`, but can be modified
 using `set_admiral_options(subject_keys = exprs(...))` at the top of a script.
 
