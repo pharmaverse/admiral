@@ -1,4 +1,4 @@
-#' Derive Query Variables
+#' Get Query Variables
 #'
 #' **Note:** This function exists to work with derive_vars_query, to execute
 #' the first step of derive_vars_query separately for metadata tracking
@@ -38,10 +38,10 @@
 #' `create_query_data()` can be used to create the dataset.
 #'
 #'
-#' @return The input dataset with query variables derived.
+#' @return The processed query dataset that can be joined to the input dataset.
 #'
-#' @family der_occds
-#' @keywords der_occds
+#' @family utils_help
+#' @keywords utils_help
 #'
 #' @seealso [create_query_data()]]
 #'
@@ -61,8 +61,8 @@
 #'   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
 #'   7, "Alveolar proteinosis", NA_character_, NA_integer_
 #' )
-#' derive_vars_for_query(adae, queries)
-derive_vars_for_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
+#' get_vars_query(adae, queries)
+get_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
   source_vars <- unique(dataset_queries$SRCVAR)
   assert_data_frame(dataset,
     required_vars = chr2vars(source_vars),
@@ -190,7 +190,7 @@ derive_vars_for_query <- function(dataset, dataset_queries) { # nolint: cyclocom
     mutate(TERM_NAME_ID = toupper(TERM_NAME_ID))
 
   # join restructured queries to input dataset
-  joined <- joined %>%
+  joined %>%
     inner_join(queries_wide, by = c("SRCVAR", "TERM_NAME_ID")) %>%
     select(!!!syms(c(static_cols, new_col_names))) %>%
     group_by_at(static_cols) %>%
@@ -272,10 +272,7 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
     dataset$temp_key <- seq_len(nrow(dataset))
     static_cols <- c(static_cols, "temp_key")
   }
-  joined <- derive_vars_for_query(dataset, dataset_queries)
-  print(joined)
-  print(exprs(!!!syms(static_cols)))
-  print(dataset)
+  joined <- get_vars_query(dataset, dataset_queries)
   # join queries to input dataset
   derive_vars_merged(dataset, dataset_add = joined, by_vars = exprs(!!!syms(static_cols))) %>%
     select(-starts_with("temp_"))

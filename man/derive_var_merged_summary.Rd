@@ -179,7 +179,6 @@ derive_var_merged_summary(
 \code{\link[=derive_summary_records]{derive_summary_records()}}, \code{\link[=get_summary_records]{get_summary_records()}}
 
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_exist_flag}()},
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_merged_ef_msrc}()},

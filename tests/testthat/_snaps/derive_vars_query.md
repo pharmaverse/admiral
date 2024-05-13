@@ -3,16 +3,16 @@
     Code
       derive_vars_query(mutate(my_ae, AELLTCD = as.logical(AELLTCD)), query)
     Condition
-      Error in `derive_vars_for_query()`:
+      Error in `get_vars_query()`:
       ! The source variables (values of `SRCVAR`) must be numeric or character.
       i AELLTCD is of type logical
 
-# derive_vars_for_query Test 6: Error is given when both TERMCHAR/TERMNUM are NA or empty
+# derive_vars_for_query Test 6: Error is given if both TERMCHAR/TERMNUM are NA/empty
 
     Code
       derive_vars_query(my_ae, query)
     Condition
-      Error in `derive_vars_for_query()`:
+      Error in `get_vars_query()`:
       ! Either `TERMCHAR` or `TERMNUM` need to be specified in `dataset_queries`. They both cannot be NA or empty.
 
 # assert_valid_queries Test 9: assert_valid_queries checks

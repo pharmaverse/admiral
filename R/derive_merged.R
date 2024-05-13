@@ -557,7 +557,7 @@ derive_vars_merged <- function(dataset,
 #'   dm,
 #'   dataset_add = vs,
 #'   by_vars = exprs(STUDYID, USUBJID),
-#'   filter_add = expr(VSTESTCD == "WEIGHT" & VSBLFL == "Y"),
+#'   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
 #'   new_var = WTBLHIFL,
 #'   condition = VSSTRESN > 90,
 #'   false_value = "N",
@@ -573,17 +573,13 @@ derive_var_merged_exist_flag <- function(dataset,
                                          false_value = NA_character_,
                                          missing_value = NA_character_,
                                          filter_add = NULL) {
-  new_cond <- assert_filter_cond(enexpr(condition))
+  condition <- assert_filter_cond(enexpr(condition))
   new_var <- assert_symbol(enexpr(new_var))
-  n_var <- new_var
-
-  add_data <- derive_var_exist_flag(dataset_add,
-    new_var = n_var,
-    condition = new_cond,
-    true_value,
-    false_value,
-    missing_value,
-    filter_add
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  add_data <- get_flagged_records(dataset_add,
+    new_var = !!new_var,
+    condition = !!condition,
+    !!filter_add
   )
 
   derive_vars_merged(

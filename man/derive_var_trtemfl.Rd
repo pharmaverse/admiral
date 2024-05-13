@@ -173,7 +173,6 @@ derive_var_trtemfl(
 \seealso{
 OCCDS Functions: 
 \code{\link{derive_vars_atc}()},
-\code{\link{derive_vars_for_query}()},
 \code{\link{derive_vars_query}()},
 \code{\link{get_terms_from_db}()}
 }

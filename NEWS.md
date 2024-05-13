@@ -1,10 +1,10 @@
 # admiral (development version)
 
-## Refactor of derive_vars_merged()
-- Added helper functions to derive_vars_merged() and derive_vars_query() so they call a new function to perform previous functionality exactly as it was, but with more explicit metadata resulting (#2349)
+
+
 
 ## New Features
-
+- Added helper functions to derive_vars_merged() (get_flagged_records()) and derive_vars_query() (get_vars_query()) so they call the new function to perform previous functionality exactly as it was, but with more explicit metadata resulting (#2349)
 - Error Messaging has been made more "user-friendly". (#2372)
 
 ## Updates of Existing Functions

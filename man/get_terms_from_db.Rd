@@ -61,7 +61,6 @@ is in the expected format (see \code{assert_terms()}).
 OCCDS Functions: 
 \code{\link{derive_var_trtemfl}()},
 \code{\link{derive_vars_atc}()},
-\code{\link{derive_vars_for_query}()},
 \code{\link{derive_vars_query}()}
 }
 \concept{der_occds}
