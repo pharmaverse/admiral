@@ -145,19 +145,19 @@
 #'
 #' # Example 1a: Derive MAP
 #' advs <- tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU,     ~VISIT,
-#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "mmHg", "BASELINE",
-#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    50, "mmHg", "WEEK 2",
-#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "mmHg", "BASELINE",
-#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "mmHg", "WEEK 2",
-#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    79, "mmHg", "BASELINE",
-#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    80, "mmHg", "WEEK 2",
-#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",    130, "mmHg", "BASELINE",
-#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",    132, "mmHg", "WEEK 2"
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
+#'   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
+#'   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "BASELINE",
+#'   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "WEEK 2",
+#'   "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, "mmHg", "BASELINE",
+#'   "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, "mmHg", "WEEK 2",
+#'   "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, "mmHg", "BASELINE",
+#'   "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
 #' ) %>%
 #'   mutate(
 #'     ADT = case_when(
-#'       VISIT == "BASELINE"~ as.Date("2024-01-10"),
+#'       VISIT == "BASELINE" ~ as.Date("2024-01-10"),
 #'       VISIT == "WEEK 2" ~ as.Date("2024-01-24")
 #'     ),
 #'     ADTF = NA_character_
