@@ -149,16 +149,25 @@ derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
   )
   if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
     (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
-    abort("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
+    cli_abort(paste(
+      "If {.code highest_impuation = \"Y\"} is specified, {.arg min_dates} or",
+      "{.arg max_dates} must be specified respectively."
+    ))
   }
   if (highest_imputation == "Y") {
     assert_character_scalar(date_imputation, values = c("first", "last"))
   }
   if (highest_imputation == "Y" && is.null(min_dates) && date_imputation == "first") {
-    warning("If `highest_impuation` = \"Y\" and `date_imputation` = \"first\" is specified, `min_dates` should be specified.") # nolint
+    cli_warn(paste(
+      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"first\"}",
+      "is specified, {.arg min_dates} should be specified."
+    ))
   }
   if (highest_imputation == "Y" && is.null(max_dates) && date_imputation == "last") {
-    warning("If `highest_impuation` = \"Y\" and `date_imputation` = \"last\" is specified, `max_dates` should be specified.") # nolint
+    cli_warn(paste(
+      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"last\"}",
+      "is specified, {.arg max_dates} should be specified."
+    ))
   }
 
   dtm <- paste0(new_vars_prefix, "DTM")
@@ -186,11 +195,10 @@ derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
       dataset <- dataset %>%
         mutate(!!sym(dtf) := compute_dtf(dtc = !!dtc, dt = !!sym(dtm)))
     } else {
-      msg <- sprintf(
-        "The %s variable is already present in the input dataset and will not be re-derived.",
-        dtf
-      )
-      inform(msg)
+      cli_inform(paste(
+        "The {.var {dtf}} variable is already present in the input dataset and",
+        "will not be re-derived."
+      ))
     }
   }
 
@@ -200,12 +208,20 @@ derive_vars_dtm <- function(dataset, # nolint: cyclocomp_linter
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)
 
-    dataset <- dataset %>%
-      mutate(!!sym(tmf) := compute_tmf(
-        dtc = !!dtc,
-        dtm = !!sym(dtm),
-        ignore_seconds_flag = ignore_seconds_flag
-      ))
+    tryCatch(
+      dataset <- dataset %>%
+        mutate(!!sym(tmf) := compute_tmf(
+          dtc = !!dtc,
+          dtm = !!sym(dtm),
+          ignore_seconds_flag = ignore_seconds_flag
+        )),
+      "dplyr:::mutate_error" = function(cnd) {
+        cli_abort(
+          message = cnd$parent$message,
+          call = parent.frame(n = 4)
+        )
+      }
+    )
   }
 
   dataset
@@ -613,7 +629,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
   }
   if (!(is.null(min_dates) || length(min_dates) == 0)) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
-      abort("Length of `min_dates` do not match length of dates to be imputed.")
+      cli_abort("Length of {.arg min_dates} do not match length of dates to be imputed.")
     }
     # for each minimum date within the range ensure that the imputed date is not
     # before it
@@ -630,7 +646,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
   }
   if (!(is.null(max_dates) || length(max_dates) == 0)) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
-      abort("Length of `max_dates` do not match length of dates to be imputed.")
+      cli_abort("Length of {.arg max_dates} do not match length of dates to be imputed.")
     }
     # for each maximum date within the range ensure that the imputed date is not
     # after it
@@ -734,7 +750,9 @@ compute_tmf <- function(dtc,
 
   if (ignore_seconds_flag) {
     if (any(!is.na(partial[["second"]]))) {
-      abort("Seconds detected in data while ignore_seconds_flag is invoked")
+      cli_abort(
+        "Seconds detected in data while {.arg ignore_seconds_flag} is invoked"
+      )
     } else {
       flag <- if_else(flag == "S", NA_character_, flag)
     }

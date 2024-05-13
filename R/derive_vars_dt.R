@@ -158,16 +158,25 @@ derive_vars_dt <- function(dataset, # nolint: cyclocomp_linter
   )
   if ((highest_imputation == "Y" && is.null(min_dates) && is.null(max_dates)) ||
     (highest_imputation == "Y" && length(min_dates) == 0 && length(max_dates) == 0)) {
-    abort("If `highest_impuation` = \"Y\" is specified, `min_dates` or `max_dates` should be specified respectively.") # nolint
+    cli_abort(paste(
+      "If {.code highest_impuation = \"Y\"} is specified, {.arg min_dates} or",
+      "{.arg max_dates} must be specified respectively."
+    ))
   }
   if (highest_imputation == "Y") {
     assert_character_scalar(date_imputation, values = c("first", "last"))
   }
   if (highest_imputation == "Y" && is.null(min_dates) && date_imputation == "first") {
-    warning("If `highest_impuation` = \"Y\" and `date_imputation` = \"first\" is specified, `min_dates` should be specified.") # nolint
+    cli_warn(paste(
+      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"first\"}",
+      "is specified, {.arg min_dates} should be specified."
+    ))
   }
   if (highest_imputation == "Y" && is.null(max_dates) && date_imputation == "last") {
-    warning("If `highest_impuation` = \"Y\" and `date_imputation` = \"last\" is specified, `max_dates` should be specified.") # nolint
+    cli_warn(paste(
+      "If {.code highest_impuation = \"Y\"} and {.code date_imputation = \"last\"}",
+      "is specified, {.arg max_dates} should be specified."
+    ))
   }
 
   # output varname
@@ -569,7 +578,7 @@ restrict_imputed_dtc_dt <- function(dtc,
   }
   if (!(is.null(min_dates) || length(min_dates) == 0)) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(min_dates, length))))) != 1) {
-      abort("Length of `min_dates` do not match length of dates to be imputed.")
+      cli_abort("Length of {.arg min_dates} do not match length of dates to be imputed.")
     }
     # for each minimum date within the range ensure that the imputed date is not
     # before it
@@ -586,7 +595,7 @@ restrict_imputed_dtc_dt <- function(dtc,
   }
   if (!(is.null(max_dates) || length(max_dates) == 0)) {
     if (length(unique(c(length(imputed_dtc), unlist(lapply(max_dates, length))))) != 1) {
-      abort("Length of `max_dates` do not match length of dates to be imputed.")
+      cli_abort("Length of {.arg max_dates} do not match length of dates to be imputed.")
     }
     # for each maximum date within the range ensure that the imputed date is not
     # after it

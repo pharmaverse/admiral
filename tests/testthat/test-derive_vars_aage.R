@@ -10,7 +10,7 @@ test_that("derive_vars_aage Test 1: duration and unit variable are added", {
   expect_dfs_equal(derive_vars_aage(input), expected_output, keys = c("BRTHDT", "RANDDT"))
 })
 
-## Test 2: duration and unit variable are added ----
+## Test 2: Error is thrown when age_unit is not proper unit ----
 test_that("derive_vars_aage Test 2: Error is thrown when age_unit is not proper unit", {
   input <- tibble::tribble(
     ~BRTHDT, ~RANDDT,
@@ -39,10 +39,8 @@ test_that("derive_var_age_years Test 3: derive_var_age_years works as expected w
   expect_dfs_equal(derive_var_age_years(input, AGE, new_var = AAGE), expected_output, keys = "AGE")
 })
 
-## Test 4: derive_var_age_years works as expected when AGEU doesn't exist and
-## `age_unit` is used ----
-test_that("derive_var_age_years Test 4: derive_var_age_years works as expected
-          when AGEU doesn't exist and `age_unit` is used", {
+## Test 4: AGEU doesn't exist and `age_unit` is used ----
+test_that("derive_var_age_years Test 4: AGEU doesn't exist and `age_unit` is used", {
   input <- tibble::tibble(AGE = c(12, 24, 36, 48, 60))
 
   expected_output <- mutate(
@@ -68,19 +66,16 @@ test_that("derive_var_age_years Test 5: Error is thrown when age_unit is not pro
 ## Test 6: Error is issued if age_unit is missing ----
 test_that("derive_var_age_years Test 6: Error is issued if age_unit is missing", {
   input <- data.frame(AGE = c(12, 24, 36, 48))
-  expect_error(
-    derive_var_age_years(input, AGE, new_var = AAGE)
+  expect_snapshot(
+    derive_var_age_years(input, AGE, new_var = AAGE),
+    error = TRUE
   )
 })
 
-## Test 7: Warning is issued if age_unit is not null, but the 'unit' variable
-##         corresponding to age_var stores more than one unique value. ----
-test_that("derive_var_age_years Test 7: Warning is issued if age_unit is not
-          null, but the 'unit' variable corresponding to age_var stores more
-          than one unique value.", {
+## Test 7: warn if `age_unit` doesn't match units in data ----
+test_that("derive_var_age_years Test 7: warn if `age_unit` doesn't match units in data", {
   input <- tibble::tribble(
     ~AGE,   ~AGEU,
-    #-------/---------
     25,     "years",
     312,    "months",
     51,     "years",
@@ -88,18 +83,16 @@ test_that("derive_var_age_years Test 7: Warning is issued if age_unit is not
     432,    "months"
   )
 
-  expect_warning(
+  expect_snapshot(
     derive_var_age_years(input, AGE, age_unit = "months", new_var = AAGE)
   )
 })
 
 
-## Test 8: Error is issued if age_unit consists of more than one unique value. ----
-test_that("derive_var_age_years Test 8: Error is issued if age_unit consists of
-          more than one unique value.", {
+## Test 8: error if age_unit has more than one value. ----
+test_that("derive_var_age_years Test 8: error if age_unit has more than one value.", {
   input <- tibble::tribble(
     ~AGE,   ~AGEU,
-    #-------/---------
     459,    "months",
     312,    "months",
     510,    "months",
@@ -108,23 +101,18 @@ test_that("derive_var_age_years Test 8: Error is issued if age_unit consists of
   )
 
   expect_error(
-    derive_var_age_years(input, AGE, age_unit = c("months", "years"), new_var = AAGE)
+    derive_var_age_years(input, AGE, age_unit = c("months", "years"), new_var = AAGE),
+    class = "assert_character_scalar"
   )
 })
 
-## Test 9: The 'unit' variable corresponding to age_var will be considered as
-##         storing one unique unit, if values differ only by case, i.e.
-##         'months', 'Months', 'MONTHS' considered same unit, etc. ----
-test_that("derive_var_age_years Test 9: The 'unit' variable corresponding to
-          age_var will be considered as storing one unique unit, if values
-          differ only by case, i.e. 'months', 'Months', 'MONTHS' considered same
-          unit, etc.", {
+## Test 9: 'unit' variable is handled case insensitive ----
+test_that("derive_var_age_years Test 9: 'unit' variable is handled case insensitive", {
   # The tibbles "input" and "input2" differ only in the third row: "Months"
   # versus "months".
 
   input <- tibble::tribble(
     ~AGE,   ~AGEU,
-    #-------/---------
     459,    "months",
     312,    "months",
     510,    "Months",
@@ -134,7 +122,6 @@ test_that("derive_var_age_years Test 9: The 'unit' variable corresponding to
 
   input2 <- tibble::tribble(
     ~AGE,   ~AGEU,
-    #-------/---------
     459,    "months",
     312,    "months",
     510,    "months",
@@ -148,15 +135,10 @@ test_that("derive_var_age_years Test 9: The 'unit' variable corresponding to
   )
 })
 
-## Test 10: Warning is issued if age_unit is not null, but the 'unit' variable
-##          corresponding to age_var stores one unique unit that is not
-##          equivalent to age_unit. ----
-test_that("derive_var_age_years Test 10: Warning is issued if age_unit is not
-          null, but the 'unit' variable corresponding to age_var stores one
-          unique unit that is not equivalent to age_unit.", {
+## Test 10: warn if unit in data differs from `age_unit` ----
+test_that("derive_var_age_years Test 10: warn if unit in data differs from `age_unit`", {
   input <- tibble::tribble(
     ~AGE,   ~AGEU,
-    #-------/---------
     459,    "months",
     312,    "months",
     510,    "months",
@@ -164,7 +146,7 @@ test_that("derive_var_age_years Test 10: Warning is issued if age_unit is not
     432,    "months"
   )
 
-  expect_warning(
+  expect_snapshot(
     derive_var_age_years(input, AGE, age_unit = "years", new_var = AAGE)
   )
 })

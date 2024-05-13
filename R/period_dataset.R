@@ -134,37 +134,39 @@ create_period_dataset <- function(dataset,
     TRUE ~ "none"
   ) %>% unique()
   if (any(mode == "none")) {
-    abort(
-      paste(
+    cli_abort(
+      c(
         paste0(
           "The right hand side values of `new_vars` have to be CDISC style ",
           "subperiod, period, or phase variables."
         ),
-        "I.e., they must contain the xx or w fragment, e.g., APxxSDT, PxxSwSDT, or PHwSDT.",
-        sep = "\n"
+        "I.e., they must contain the xx or w fragment, e.g., APxxSDT, PxxSwSDT, or PHwSDT."
       )
     )
   }
   if (length(mode) > 1) {
-    abort(
-      paste0(
-        "More than one type of subperiod, period, or phase variables ",
-        "is specified for `new_vars`:\n",
-        if_else(
-          "subperiod" %in% mode,
-          paste0("subperiod: ", enumerate(new_vars_chr[mode == "subperiod"]), "\n"),
-          ""
+    cli_abort(
+      discard(
+        c(
+          "More than one type of subperiod, period, or phase variables ",
+          "is specified for `new_vars`:",
+          if_else(
+            "subperiod" %in% mode,
+            "subperiod: {.var {new_vars_chr[mode == \"subperiod\"]}}",
+            NA_character_
+          ),
+          if_else(
+            "period" %in% mode,
+            "period: {.var {new_vars_chr[mode == \"period\"]}}",
+            NA_character_
+          ),
+          if_else(
+            "phase" %in% mode,
+            "phase:{.var {new_vars_chr[mode == \"phase\"]}}",
+            NA_character_
+          )
         ),
-        if_else(
-          "period" %in% mode,
-          paste0("period: ", enumerate(new_vars_chr[mode == "period"]), "\n"),
-          ""
-        ),
-        if_else(
-          "phase" %in% mode,
-          paste0("phase: ", enumerate(new_vars_chr[mode == "phase"]), "\n"),
-          ""
-        )
+        is.na
       )
     )
   }
@@ -178,11 +180,9 @@ create_period_dataset <- function(dataset,
   period_ref <- vector("list", length(new_vars))
   for (i in seq_along(new_vars)) {
     if (!any(str_detect(colnames(dataset), names_pattern[[i]]))) {
-      abort(paste(
-        "No variables of the form",
-        new_vars_chr[[i]],
-        "were found in the input dataset."
-      ))
+      cli_abort(
+        "No variables of the form {.var {new_vars_chr[[i]]}} were found in the input dataset."
+      )
     }
     if (mode == "subperiod") {
       period_ref[[i]] <- pivot_longer(
@@ -366,37 +366,39 @@ derive_vars_period <- function(dataset,
     TRUE ~ "none"
   ) %>% unique()
   if (any(mode == "none")) {
-    abort(
-      paste(
+    cli_abort(
+      c(
         paste0(
           "The left hand side values of `new_vars` have to be CDISC style ",
           "subperiod, period, or phase variables."
         ),
-        "I.e., they must contain the xx or w fragment, e.g., APxxSDT, PxxSwSDT, or PHwSDT.",
-        sep = "\n"
+        "I.e., they must contain the xx or w fragment, e.g., APxxSDT, PxxSwSDT, or PHwSDT."
       )
     )
   }
   if (length(mode) > 1) {
-    abort(
-      paste0(
-        "More than one type of subperiod, period, or phase variables ",
-        "is specified for `new_vars`:\n",
-        if_else(
-          "subperiod" %in% mode,
-          paste0("subperiod: ", enumerate(new_vars_names[mode == "subperiod"]), "\n"),
-          ""
+    cli_abort(
+      discard(
+        c(
+          "More than one type of subperiod, period, or phase variables ",
+          "is specified for `new_vars`:",
+          if_else(
+            "subperiod" %in% mode,
+            "subperiod: {.var {new_vars_names[mode == \"subperiod\"]}}",
+            NA_character_
+          ),
+          if_else(
+            "period" %in% mode,
+            "period: {.var {new_vars_names[mode == \"period\"]}}",
+            NA_character_
+          ),
+          if_else(
+            "phase" %in% mode,
+            "phase: {.var {new_vars_names[mode == \"phase\"]}}",
+            NA_character_
+          )
         ),
-        if_else(
-          "period" %in% mode,
-          paste0("period: ", enumerate(new_vars_names[mode == "period"]), "\n"),
-          ""
-        ),
-        if_else(
-          "phase" %in% mode,
-          paste0("phase: ", enumerate(new_vars_names[mode == "phase"]), "\n"),
-          ""
-        )
+        is.na
       )
     )
   }

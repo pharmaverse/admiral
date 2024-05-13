@@ -109,7 +109,7 @@ test_that("call_derivation Test 3: Test that Error is thrown if ... has no argum
   input <- pharmaversesdtm::ae[sample(seq_len(nrow(pharmaversesdtm::ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
-  expect_error(
+  expect_snapshot(
     call_derivation(
       dataset = input,
       derivation = derive_vars_dt,
@@ -117,7 +117,8 @@ test_that("call_derivation Test 3: Test that Error is thrown if ... has no argum
         params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
         params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
       )
-    ), "At least one argument must be set inside `...`"
+    ),
+    error = TRUE
   )
 })
 
@@ -127,7 +128,7 @@ test_that("call_derivation Test 4: Error is thrown if ... arguments are not prop
   input <- pharmaversesdtm::ae[sample(seq_len(nrow(pharmaversesdtm::ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
-  expect_error(
+  expect_snapshot(
     call_derivation(
       dataset = input,
       derivation = derive_vars_dt,
@@ -137,17 +138,18 @@ test_that("call_derivation Test 4: Error is thrown if ... arguments are not prop
       ),
       XYZSDT,
       XYZEDT
-    )
+    ),
+    error = TRUE
   )
 })
 
 ## Test 5: Error is thrown params is empty ----
 # ---- call_derivation Test 5: Error is thrown params is empty ----
-test_that("call_derivation Test 5: Error is thrown params is empty", {
+test_that("call_derivation Test 5: Error is thrown if params is empty", {
   input <- pharmaversesdtm::ae[sample(seq_len(nrow(pharmaversesdtm::ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
-  expect_error(
+  expect_snapshot(
     call_derivation(
       dataset = input,
       derivation = derive_vars_dt,
@@ -157,7 +159,8 @@ test_that("call_derivation Test 5: Error is thrown params is empty", {
       ),
       min_dates = exprs(TRTSDT),
       max_dates = exprs(TRTEDT)
-    ), "At least one argument must be provided"
+    ),
+    error = TRUE
   )
 })
 
@@ -167,7 +170,7 @@ test_that("call_derivation Test 6: Error is thrown if passed params are not prop
   input <- pharmaversesdtm::ae[sample(seq_len(nrow(pharmaversesdtm::ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
-  expect_error(
+  expect_snapshot(
     call_derivation(
       dataset = input,
       derivation = derive_vars_dt,
@@ -177,8 +180,8 @@ test_that("call_derivation Test 6: Error is thrown if passed params are not prop
       ),
       min_dates = exprs(TRTSDT),
       max_dates = exprs(TRTEDT)
-    ), "All arguments passed to `params()` must be named",
-    fixed = TRUE
+    ),
+    error = TRUE
   )
 })
 
@@ -188,7 +191,7 @@ test_that("call_derivation Test 7: Error is thrown if `...` arguments are not pr
   input <- pharmaversesdtm::ae[sample(seq_len(nrow(pharmaversesdtm::ae)), 1000), ] %>%
     left_join(admiral_adsl, by = "USUBJID")
 
-  expect_error(
+  expect_snapshot(
     call_derivation(
       dataset = input,
       derivation = derive_vars_dt,
@@ -198,16 +201,16 @@ test_that("call_derivation Test 7: Error is thrown if `...` arguments are not pr
       ),
       XYZSDT,
       XYZEDT
-    )
+    ),
+    error = TRUE
   )
 })
 
 ## Test 8: Error is thrown if duplicate parameters ----
 # ---- call_derivation Test 8: Error is thrown if duplicate parameters ----
 test_that("call_derivation Test 8: Error is thrown if duplicate parameters", {
-  expect_error(
-    params(dtc = VSDTC, dtc = VSDTC, new_vars_prefix = "A"),
-    "The following parameters have been specified more than once: `dtc`",
-    fixed = TRUE
+  expect_snapshot(
+    error = TRUE,
+    params(dtc = VSDTC, dtc = VSDTC, new_vars_prefix = "A")
   )
 })

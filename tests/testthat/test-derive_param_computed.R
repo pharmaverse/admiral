@@ -402,13 +402,9 @@ test_that("derive_param_computed Test 9: compute multiple variables, keep_nas", 
 # assert_parameters_argument ----
 ## Test 10: error if argument is of wrong type ----
 test_that("assert_parameters_argument Test 10: error if argument is of wrong type", {
-  expect_error(
+  expect_snapshot(
     assert_parameters_argument(myparameters <- c(1, 2, 3)),
-    regexp = paste(
-      "`myparameters` must be a character vector or a list of expressions",
-      "but it is a double vector."
-    ),
-    fixed = TRUE
+    error = TRUE
   )
 })
 
@@ -427,7 +423,7 @@ test_that("get_hori_data Test 11: error if variables with more than one dot", {
     "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
   )
 
-  expect_error(
+  expect_snapshot(
     get_hori_data(
       input,
       parameters = exprs(SYSBP, DIABP),
@@ -435,11 +431,6 @@ test_that("get_hori_data Test 11: error if variables with more than one dot", {
       set_values_to = exprs(AVAL = (AVAL.SYSBP + 2 * AVAL.DIA.BP) / 3),
       filter = NULL
     ),
-    regexp = paste(
-      "The `set_values_to` argument contains variable names with more than on dot:",
-      "`AVAL.DIA.BP`",
-      sep = "\n"
-    ),
-    fixed = TRUE
+    error = TRUE
   )
 })
