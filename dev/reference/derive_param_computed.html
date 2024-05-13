@@ -20,7 +20,7 @@ $$MAP = \frac{SYSBP + 2 DIABP}{3}$$"><meta property="og:image" content="https://
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9027</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9028</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -280,18 +280,25 @@ dataset are set to <code>NA</code>.</p>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Example 1: Derive MAP</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1a: Derive MAP</span></span></span>
 <span class="r-in"><span><span class="va">advs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>,      <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">PARAM</span>,                            <span class="op">~</span><span class="va">AVAL</span>, <span class="op">~</span><span class="va">AVALU</span>, <span class="op">~</span><span class="va">VISIT</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"01-701-1015"</span>, <span class="st">"DIABP"</span>,  <span class="st">"Diastolic Blood Pressure (mmHg)"</span>,    <span class="fl">51</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"01-701-1015"</span>, <span class="st">"DIABP"</span>,  <span class="st">"Diastolic Blood Pressure (mmHg)"</span>,    <span class="fl">50</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"01-701-1015"</span>, <span class="st">"SYSBP"</span>,  <span class="st">"Systolic Blood Pressure (mmHg)"</span>,    <span class="fl">121</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"01-701-1015"</span>, <span class="st">"SYSBP"</span>,  <span class="st">"Systolic Blood Pressure (mmHg)"</span>,    <span class="fl">121</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"01-701-1028"</span>, <span class="st">"DIABP"</span>,  <span class="st">"Diastolic Blood Pressure (mmHg)"</span>,    <span class="fl">79</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"01-701-1028"</span>, <span class="st">"DIABP"</span>,  <span class="st">"Diastolic Blood Pressure (mmHg)"</span>,    <span class="fl">80</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"01-701-1028"</span>, <span class="st">"SYSBP"</span>,  <span class="st">"Systolic Blood Pressure (mmHg)"</span>,    <span class="fl">130</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"01-701-1028"</span>, <span class="st">"SYSBP"</span>,  <span class="st">"Systolic Blood Pressure (mmHg)"</span>,    <span class="fl">132</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">PARAM</span>, <span class="op">~</span><span class="va">AVAL</span>, <span class="op">~</span><span class="va">AVALU</span>, <span class="op">~</span><span class="va">VISIT</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01-701-1015"</span>, <span class="st">"DIABP"</span>, <span class="st">"Diastolic Blood Pressure (mmHg)"</span>, <span class="fl">51</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01-701-1015"</span>, <span class="st">"DIABP"</span>, <span class="st">"Diastolic Blood Pressure (mmHg)"</span>, <span class="fl">50</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01-701-1015"</span>, <span class="st">"SYSBP"</span>, <span class="st">"Systolic Blood Pressure (mmHg)"</span>, <span class="fl">121</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01-701-1015"</span>, <span class="st">"SYSBP"</span>, <span class="st">"Systolic Blood Pressure (mmHg)"</span>, <span class="fl">121</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01-701-1028"</span>, <span class="st">"DIABP"</span>, <span class="st">"Diastolic Blood Pressure (mmHg)"</span>, <span class="fl">79</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01-701-1028"</span>, <span class="st">"DIABP"</span>, <span class="st">"Diastolic Blood Pressure (mmHg)"</span>, <span class="fl">80</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01-701-1028"</span>, <span class="st">"SYSBP"</span>, <span class="st">"Systolic Blood Pressure (mmHg)"</span>, <span class="fl">130</span>, <span class="st">"mmHg"</span>, <span class="st">"BASELINE"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"01-701-1028"</span>, <span class="st">"SYSBP"</span>, <span class="st">"Systolic Blood Pressure (mmHg)"</span>, <span class="fl">132</span>, <span class="st">"mmHg"</span>, <span class="st">"WEEK 2"</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    ADT <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="va">VISIT</span> <span class="op">==</span> <span class="st">"BASELINE"</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-01-10"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="va">VISIT</span> <span class="op">==</span> <span class="st">"WEEK 2"</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-01-24"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    ADTF <span class="op">=</span> <span class="cn">NA_character_</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">derive_param_computed</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">advs</span>,</span></span>
@@ -301,24 +308,58 @@ dataset are set to <code>NA</code>.</p>
 <span class="r-in"><span>    AVAL <span class="op">=</span> <span class="op">(</span><span class="va">AVAL.SYSBP</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">AVAL.DIABP</span><span class="op">)</span> <span class="op">/</span> <span class="fl">3</span>,</span></span>
 <span class="r-in"><span>    PARAMCD <span class="op">=</span> <span class="st">"MAP"</span>,</span></span>
 <span class="r-in"><span>    PARAM <span class="op">=</span> <span class="st">"Mean Arterial Pressure (mmHg)"</span>,</span></span>
-<span class="r-in"><span>    AVALU <span class="op">=</span> <span class="st">"mmHg"</span></span></span>
+<span class="r-in"><span>    AVALU <span class="op">=</span> <span class="st">"mmHg"</span>,</span></span>
+<span class="r-in"><span>    ADT <span class="op">=</span> <span class="va">ADT.SYSBP</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     PARAMCD PARAM                            AVAL AVALU VISIT   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-701-1015 DIABP   Diastolic Blood Pressure (mmHg)  51   mmHg  BASELINE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-701-1015 DIABP   Diastolic Blood Pressure (mmHg)  50   mmHg  WEEK 2  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-701-1015 SYSBP   Systolic Blood Pressure (mmHg)  121   mmHg  BASELINE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-701-1015 SYSBP   Systolic Blood Pressure (mmHg)  121   mmHg  WEEK 2  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-701-1028 DIABP   Diastolic Blood Pressure (mmHg)  79   mmHg  BASELINE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-701-1028 DIABP   Diastolic Blood Pressure (mmHg)  80   mmHg  WEEK 2  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-701-1028 SYSBP   Systolic Blood Pressure (mmHg)  130   mmHg  BASELINE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-701-1028 SYSBP   Systolic Blood Pressure (mmHg)  132   mmHg  WEEK 2  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-701-1015 MAP     Mean Arterial Pressure (mmHg)    74.3 mmHg  BASELINE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-701-1015 MAP     Mean Arterial Pressure (mmHg)    73.7 mmHg  WEEK 2  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 01-701-1028 MAP     Mean Arterial Pressure (mmHg)    96   mmHg  BASELINE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 01-701-1028 MAP     Mean Arterial Pressure (mmHg)    97.3 mmHg  WEEK 2  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     PARAMCD PARAM                   AVAL AVALU VISIT ADT        ADTF </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-701-1015 DIABP   Diastolic Blood Press…  51   mmHg  BASE… 2024-01-10 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-701-1015 DIABP   Diastolic Blood Press…  50   mmHg  WEEK… 2024-01-24 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-701-1015 SYSBP   Systolic Blood Pressu… 121   mmHg  BASE… 2024-01-10 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-701-1015 SYSBP   Systolic Blood Pressu… 121   mmHg  WEEK… 2024-01-24 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-701-1028 DIABP   Diastolic Blood Press…  79   mmHg  BASE… 2024-01-10 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-701-1028 DIABP   Diastolic Blood Press…  80   mmHg  WEEK… 2024-01-24 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-701-1028 SYSBP   Systolic Blood Pressu… 130   mmHg  BASE… 2024-01-10 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-701-1028 SYSBP   Systolic Blood Pressu… 132   mmHg  WEEK… 2024-01-24 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-701-1015 MAP     Mean Arterial Pressur…  74.3 mmHg  BASE… 2024-01-10 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-701-1015 MAP     Mean Arterial Pressur…  73.7 mmHg  WEEK… 2024-01-24 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 01-701-1028 MAP     Mean Arterial Pressur…  96   mmHg  BASE… 2024-01-10 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 01-701-1028 MAP     Mean Arterial Pressur…  97.3 mmHg  WEEK… 2024-01-24 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 1b: Using option `keep_nas = TRUE` to derive MAP in the case where some/all values</span></span></span>
+<span class="r-in"><span><span class="co"># of a variable used in the computation are missing</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">derive_param_computed</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">advs</span>,</span></span>
+<span class="r-in"><span>  by_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">VISIT</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SYSBP"</span>, <span class="st">"DIABP"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  set_values_to <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    AVAL <span class="op">=</span> <span class="op">(</span><span class="va">AVAL.SYSBP</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">AVAL.DIABP</span><span class="op">)</span> <span class="op">/</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>    PARAMCD <span class="op">=</span> <span class="st">"MAP"</span>,</span></span>
+<span class="r-in"><span>    PARAM <span class="op">=</span> <span class="st">"Mean Arterial Pressure (mmHg)"</span>,</span></span>
+<span class="r-in"><span>    AVALU <span class="op">=</span> <span class="st">"mmHg"</span>,</span></span>
+<span class="r-in"><span>    ADT <span class="op">=</span> <span class="va">ADT.SYSBP</span>,</span></span>
+<span class="r-in"><span>    ADTF <span class="op">=</span> <span class="va">ADTF.SYSBP</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  keep_nas <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    USUBJID     PARAMCD PARAM                   AVAL AVALU VISIT ADT        ADTF </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01-701-1015 DIABP   Diastolic Blood Press…  51   mmHg  BASE… 2024-01-10 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01-701-1015 DIABP   Diastolic Blood Press…  50   mmHg  WEEK… 2024-01-24 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01-701-1015 SYSBP   Systolic Blood Pressu… 121   mmHg  BASE… 2024-01-10 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01-701-1015 SYSBP   Systolic Blood Pressu… 121   mmHg  WEEK… 2024-01-24 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 01-701-1028 DIABP   Diastolic Blood Press…  79   mmHg  BASE… 2024-01-10 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 01-701-1028 DIABP   Diastolic Blood Press…  80   mmHg  WEEK… 2024-01-24 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 01-701-1028 SYSBP   Systolic Blood Pressu… 130   mmHg  BASE… 2024-01-10 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 01-701-1028 SYSBP   Systolic Blood Pressu… 132   mmHg  WEEK… 2024-01-24 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 01-701-1015 MAP     Mean Arterial Pressur…  74.3 mmHg  BASE… 2024-01-10 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 01-701-1015 MAP     Mean Arterial Pressur…  73.7 mmHg  WEEK… 2024-01-24 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 01-701-1028 MAP     Mean Arterial Pressur…  96   mmHg  BASE… 2024-01-10 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 01-701-1028 MAP     Mean Arterial Pressur…  97.3 mmHg  WEEK… 2024-01-24 <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 2: Derive BMI where height is measured only once</span></span></span>
 <span class="r-in"><span><span class="va">advs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
