@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat) # nolint: undesirable_function_linter
-library(admiral) # nolint: undesirable_function_linter
+library(admiraldev) # nolint: undesirable_function_linter
 
-test_check("admiral")
+test_check("admiraldev")

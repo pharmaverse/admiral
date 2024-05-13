@@ -1,16 +1,14 @@
-url: https://pharmaverse.github.io/admiral
+url: https://pharmaverse.github.io/admiraldev/
 
 template:
   bootstrap: 5
   params:
     bootswatch: flatly
-search:
-  exclude: ['news/index.html']
 repo:
   url:
-    home: https://github.com/pharmaverse/admiral/
-    source: https://github.com/pharmaverse/admiral/blob/main/
-    issue: https://github.com/pharmaverse/admiral/issues/
+    home: https://github.com/pharmaverse/admiraldev
+    source: https://github.com/pharmaverse/admiraldev/blob/main/
+    issue: https://github.com/pharmaverse/admiraldev/issues/
     user: https://github.com/
 news:
   cran_dates: true
@@ -19,7 +17,7 @@ development:
   mode: auto
 
 authors:
-  before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/)."
+  before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past."
   footer:
     roles: [aut, ctb, cre, fnd]
     text: "Developed by"
@@ -27,179 +25,107 @@ authors:
     roles: [aut]
 
 reference:
-- title: Derivations for Adding Variables
-- subtitle: All ADaMs
+- title: Assertion Functions
+  desc: Checks the inputs for user-facing functions and provides error, warnings and other messaging around expectation of inputs.
   contents:
-  - has_keyword("der_gen")
+  - has_keyword('assertion')
 
-- subtitle: ADSL-specific
-  desc: Derivation functions helpful for building the ADSL dataset
+- title: Get Functions
+  desc: Gets information or input from an object
   contents:
-  - has_keyword("der_adsl")
+  - has_keyword('get')
 
-- subtitle: BDS-specific
-  desc: Derivation functions helpful for building the BDS datasets (e.g. advs, adlb, adeg, adex)
+- title: Is Functions
+  desc: Is the object what it says it is
   contents:
-  - has_keyword("der_bds_findings")
+  - has_keyword('is')
 
-- subtitle: OCCDS-specific
-  desc: Derivation functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
+- title: What Functions
+  desc: What type of object is this?
   contents:
-  - has_keyword("der_occds")
+  - has_keyword('what')
 
-- title: Derivations for Adding Parameters/Records
-- subtitle: BDS-specific
+- title: Warning Functions
+  desc: Custom warnings intended for users
   contents:
-  - has_keyword("der_prm_bds_findings")
+  - has_keyword('warnings')
 
-- subtitle: TTE-specific
+- title: Test Helper Functions
+  desc: Test Utilities that help with organization and presentation of tests
   contents:
-  - has_keyword("der_prm_tte")
+  - has_keyword('test_helper')
 
-- title: Metadata
-  desc: Auxiliary datasets providing definitions as input for derivations, e.g. grading criteria or dose frequencies
+- title: Temporary Variables
+  desc: Tools for creating and removing temporary variables within a dataset
   contents:
-  - has_keyword("metadata")
+  - has_keyword('tmp_vars')
 
-- title: Example Datasets
-  desc: You can run `use_ad_template()` to produce additional datasets
+- title: Getting Datasets
+  desc: Retrieve a dataset from the `admiraldev_environment` enironment
   contents:
   - has_keyword('datasets')
 
-- title: Advanced Functions
-- subtitle: Admiral Options
+- title: Quosure Helper Functions
+  desc: Helping your quosure needs
   contents:
-  - has_keyword("admiral_options")
+  - has_keyword('quo')
 
-- subtitle: Higher Order
+- title: Quoting Helper Functions
+  desc: Helping your quoting needs
   contents:
-  - has_keyword("high_order_function")
-
-- subtitle: Creating Auxiliary Datasets
-  contents:
-  - has_keyword("create_aux")
-
-- subtitle: Source Objects
-  contents:
-  - has_keyword("source_specifications")
-
-- subtitle: Other
-  contents:
-  - has_keyword("other_advanced")
-
-- title: Computation Functions for Vectors
-- subtitle: All ADaMs
-  contents:
-  - has_keyword('com_date_time')
-
-- subtitle: BDS-specific
-  contents:
-  - has_keyword('com_bds_findings')
-
-- title: Utility Functions
-- subtitle: Utilities for Formatting Observations
-  contents:
-  - has_keyword('utils_fmt')
-
-- subtitle: Utilities for Dataset Checking
-  contents:
-  - has_keyword('utils_ds_chk')
+  - has_keyword('quote')
 
 - subtitle: Utilities used within Derivation Functions
   contents:
   - has_keyword('utils_help')
 
-- subtitle: Utilities for Filtering Observations
+- title: Join Functions
+  desc: dplyr join function without warning about different attributes
   contents:
-  - has_keyword('utils_fil')
+  - has_keyword('joins')
 
-- subtitle: Utilities for Quosures
+- title: Miscellaneous
+  desc: Utilities without a theme
   contents:
-  - has_keyword('utils_quo')
+  - has_keyword('dev_utility')
 
-- subtitle: Utilities used for Examples and Template Scripts
-  contents:
-  - has_keyword('utils_examples')
-
-- title: Objects exported from other packages
+- title: Deprecated
   desc: |
-    To maximize the user-friendliness of `{admiral}`, functions from other packages are provided
-    without changes made to them, follow the links below to see their documentation.
-  contents:
-  - has_keyword('reexport')
+    As `{admiral}` is still evolving, functions/arguments may need to be removed or replaced over time. In such cases, the function/argument will enter the following 6-month deprecation cycle:
 
-- title: Superseded
-  desc: |
-    Superseded functions have been replaced with better functions. However, we
-    will not be removing these functions from `{admiral}`.  We do strongly
-    encourage you to make the switch over.
+    * In the first release (0-3 months), there will be a warning issued if you use the function/argument, but it will still be available to use.
+    * In the following release (3-6 months), an error will be produced if you use the function/argument.
+    * Finally, from the 3rd release (6 months) onwards, the function/argument will be removed from `{admiral}` and its documentation completely.
+
+    *Note: Guidance on replacement functionality can be found in the warning/error message produced or in the function's documentation.*
+
+    Below, you can find a list of functions in the process of being deprecated:
   contents:
-  - has_keyword("superseded")
+  - has_keyword("deprecated")
 
 navbar:
-  structure:
-    left: [getstarted, reference, articles, news, versions]
-    right: [search, slack, history, newissue, github]
-  components:
-    getstarted:
-      text: Get Started
-      menu:
-      - text: Simple ADSL Walkthrough
-        href: articles/admiral.html
-      - text: CDISC Variables mapped to admiral functions
-        href: https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html
-      - text: Cheatsheet
-        href: https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf
-    reference:
+ components:
+  reference:
       text: Reference
-      href: reference/
-    articles:
-      text: User Guides
-      menu:
-      - text: Creating a Basic ADSL
-        href: articles/adsl.html
-      - text: FAQ
-        href: articles/faq.html
-      - text: -------
-      - text: "Deep Dives on ADaMs"
-      - text: Creating an OCCDS ADaM
-        href: articles/occds.html
-      - text: Creating a BDS Findings ADAM
-        href: articles/bds_finding.html
-      - text: Creating a BDS Exposure ADaM
-        href: articles/bds_exposure.html
-      - text: Creating a BDS Time-to-Event ADaM
-        href: articles/bds_tte.html
-      - text: Creating Questionnaire ADaMs
-        href: articles/questionnaires.html
-      - text: Creating a PK NCA or Population PK ADaM
-        href: articles/pk_adnca.html
-      - text: "Advanced User Guides"
-      - text: Date and Time Imputation
-        href: articles/imputation.html
-      - text: Visit and Period Variables
-        href: articles/visits_periods.html
-      - text: Generic Derivations
-        href: articles/generic.html
-      - text: Higher Order Functions
-        href: articles/higher_order.html
-      - text: Queries Dataset Documentation
-        href: articles/queries_dataset.html
-      - text: Lab Grading
-        href: articles/lab_grading.html
-      - text: Hy's Law Implementation
-        href: articles/hys_law.html
-
-    history:
-      icon: fa-history
-      href: articles/website-versions.html
-      aria-label: Previous Release Websites
-    slack:
-      icon: fa-slack
-      href: https://app.slack.com/client/T028PB489D3/C02M8KN8269
-      aria-label: Slack
-    newissue:
-      icon: fa-bug
-      href: https://github.com/pharmaverse/admiral/issues/new/choose
-      aria-label: New Issue
-
+      href: reference/index.html
+  articles:
+    text: Developer Guides
+    menu:
+    - text: Programming Strategy
+      href: articles/programming_strategy.html
+    - text: Writing Vignettes
+      href: articles/writing_vignettes.html
+    - text: Unit Test Guidance
+      href: articles/unit_test_guidance.html
+    - text: Guidance for git and GitHub Usage
+      href: articles/git_usage.html
+    - text: Pull Request Review Guidance
+      href: articles/pr_review_guidance.html
+    - text: R CMD Issues
+      href: articles/rcmd_issues.html
+    - text: Release Strategy
+      href: articles/release_strategy.html
+    - text: Test Data Guidance
+      href: articles/test_data_guidance.html
+    - text: Package Extensions
+      href: articles/package_extensions.html

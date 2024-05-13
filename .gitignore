@@ -35,22 +35,14 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 
+# Web Documentation files
+/docs/*
+
 # R Environment Variables
 .Renviron
-
-# website documents
-/docs/*
-doc
-Meta
-admiral.Rcheck/
-admiral*.tar.gz
-admiral*.tgz
-
-# vscode
-.vscode
+admiraldev.Rcheck/
+admiraldev*.tar.gz
+admiraldev*.tgz
 
 # MacOS
 .DS_Store
-._.DS_Store
-
-.Rprofile

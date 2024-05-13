@@ -1,13 +1,12 @@
 linters: linters_with_defaults(
     line_length_linter(100),
     object_usage_linter=NULL,
-    cyclocomp_linter(complexity_limit = 22),
-    indentation_linter=NULL,
-    undesirable_function_linter = undesirable_function_linter()
+    cyclocomp_linter(complexity_limit = 20),
+    undesirable_function_linter = undesirable_function_linter(),
+    indentation_linter=NULL
   )
 exclusions: list(
     "R/data.R" = Inf,
     "inst" = list(undesirable_function_linter = Inf),
-    "vignettes" = list(undesirable_function_linter = Inf),
-    "R/admiral_options.R" = list(line_length_linter = 8)
+    "vignettes" = list(undesirable_function_linter = Inf)
   )

@@ -1,27 +1,13 @@
 list(
   rd_family_title = list(
-    der_date_time = "Date/Time Derivation Functions that returns variable appended to dataset: ",
-    der_bds_gen = "General BDS Functions: ",
-    der_bds_findings = "BDS-Findings Functions that returns variable appended to dataset: ",
-    der_prm_bds_findings = "BDS-Findings Functions for adding Parameters/Records: ",
-    der_adsl = "ADSL Functions that returns variable appended to dataset: ",
-    der_tte = "TTE Functions that returns variable appended to dataset:",
-    der_prm_tte = "TTE Functions for adding Parameters: ",
-    der_gen = "General Derivation Functions for all ADaMs that returns variable appended to dataset:",
-    der_occds = "OCCDS Functions: ",
-    com_date_time = "Date/Time Computation Functions that returns a vector: ",
-    com_bds_findings = "BDS-Findings Functions that returns a vector: ",
-    utils_ds_chk = "Utilities for Dataset Checking: ",
-    utils_fil = "Utilities for Filtering Observations: ",
-    utils_fmt = "Utilities for Formatting Observations: ",
-    utils_help = "Utilities used within Derivation functions: ",
-    utils_examples = "Utilities used for examples and template scripts: ",
-    utils_impute = "Utilities used for date imputation: ",
-    utils_print = "Utilities for printing: ",
-    utils_quo = "Utilities for working with quosures/list of expressions: ",
-    source_specifications = "Source Objects: ",
-    other_advanced = "Other Advanced Functions: ",
-    high_order_function = "Higher Order Functions: ",
-    create_aux = "Creating auxiliary datasets: "
+    is = "Identifies type of Object with return of TRUE/FALSE: ",
+    assertion = "Checks for valid input and returns warning or errors messages: ",
+    what = "Identifies type of object and returns type: ",
+    quo = "Helpers for working with Quosures: ",
+    quote = "Helpers for working with Quotes and Quoting: ",
+    get = "Brings something to you!?!: ",
+    test_helper = "Helps with Testing: ",
+    dev_utility = "Developer Utility Functions: ",
+    warnings = "Function that provide users with custom warnings"
   )
 )

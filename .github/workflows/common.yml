@@ -61,6 +61,13 @@ jobs:
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
+  readme:
+    name: Render README
+    uses: pharmaverse/admiralci/.github/workflows/readme-render.yml@main
+    if: github.event_name == 'push'
+    needs: get_r_version
+    with:
+      r-version: "${{ needs.get_r_version.outputs.r-version }}"
   validation:
     name: Validation
     uses: pharmaverse/admiralci/.github/workflows/r-pkg-validation.yml@main
@@ -80,15 +87,18 @@ jobs:
     if: github.event_name == 'push' || startsWith(github.ref, 'refs/tags/v')
     needs: get_r_version
     with:
-      r-version: "release"
+      r-version: "${{ needs.get_r_version.outputs.r-version }}"
+      # Whether to skip multiversion docs
+      # Note that if you have multiple versions of docs,
+      # your URL links are likely to break due to path changes
       skip-multiversion-docs: true
-    secrets:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      # Ref to use for the multiversion docs landing page
+      multiversion-docs-landing-page: devel
   linter:
     name: Lint
     uses: pharmaverse/admiralci/.github/workflows/lintr.yml@main
-    needs: get_r_version
     if: github.event_name == 'pull_request'
+    needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
   links:
@@ -99,7 +109,7 @@ jobs:
     name: Code Coverage
     uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@main
     if: >
-      github.event_name != 'release'
+      github.event_name == 'push' || github.event_name == 'pull_request'
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
@@ -111,14 +121,6 @@ jobs:
     name: Man Pages
     uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@main
     if: github.event_name == 'pull_request'
-    needs: get_r_version
-    with:
-      r-version: "${{ needs.get_r_version.outputs.r-version }}"
-  templates:
-    name: Check Templates
-    uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
-    secrets: inherit
-    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     needs: get_r_version
     with:
       r-version: "${{ needs.get_r_version.outputs.r-version }}"
