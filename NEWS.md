@@ -44,7 +44,8 @@
 
 - A new "Programming Concepts and Conventions" vignette was added under the "User Guides" section to provide more context and information around common `{admiral}` behaviors and ways of working. (#2395)
 
-- Simple ADVS walk through has been added under the "Get Started" section to provide a simplified overview of adding records in BDS datasets. (#2395)
+- The "Get Started" section has been revamped, placing greater focus on material that may help users familiarize themselves with `{admiral}`. There are now new sections showcasing the various types of `{admiral}` 
+functions and some of the more advanced topics have been moved to the "Programming Concepts and Conventions" vignette. (#2395)
 
 - The Examples section of `derive_param_computed()` now contains a new item showcasing how to create a derived parameter in the case that a variable contributing to the derived parameter has some/all of its values missing. (#2338)
  
