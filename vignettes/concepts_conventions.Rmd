@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+library(dplyr)
+library(admiral)
 library(admiraldev)
 ```
 
@@ -22,6 +24,31 @@ This vignette aims to discuss some of the common programming concepts and conven
 `{admiral}` family of packages. It is intended to be a user-facing version of the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) page, but users can also read the
 latter after becoming more familiar with the package to expand further on any topics of interest. For some of common
 `{admiral}` FAQ, visit the corresponding [FAQ page](faq.html).
+
+# Argument Conventions (to be moved to other page)
+
+Within the `{admiral}` package, any arguments which expect variable names or expressions of variable names, symbols or 
+expressions must be specified rather than strings.
+
+- For arguments which expect a single variable name, the name can be specified without quotes and quotation, e.g.
+`new_var = TEMPBL`
+
+- For arguments which expect one or more variable names, a list of symbols is expected, e.g. `by_vars = exprs(PARAMCD, AVISIT)` 
+
+- For arguments which expect a single expression, the expression needs to be passed "as is", e.g. `filter = PARAMCD == "TEMP"`
+
+- For arguments which expect one or more expressions, a list of expressions is expected, e.g. `order = exprs(AVISIT, desc(AESEV))`
+
+If you are new to expressions, read the [corresponding section](#exprs) to learn more.
+
+# Input and Output
+
+It is expected that the input dataset is not grouped. Otherwise an error is
+issued.
+
+The output dataset is ungrouped. The observations are not ordered in a dedicated
+way. In particular, the order of the observations of the input dataset may not
+be preserved.
 
 # `{admiral}` Functions and Options
 
@@ -84,32 +111,33 @@ This is very important to keep in mind when using `{admiral}`'s aggregation func
 
 For handling of `NA`s in sorting variables see [Sort Order](generic.html#sort_order).
 
-# Argument Conventions
+# Expressions in Scripts {#exprs}
 
-Within the `{admiral}` package, any arguments which expect variable names or expressions of variable names, symbols or 
-expressions must be specified rather than strings.
+## Quoting and Unquoting: Introducing `expr()`, `exprs()`, `!!` and `!!!`
 
-- For arguments which expect a single variable name, the name can be specified without quotes and quotation, e.g.
-`new_var = TEMPBL`
+### `expr()` and `exprs()`
 
-- For arguments which expect one or more variable names, a list of symbols is expected, e.g. `by_vars = exprs(PARAMCD, AVISIT)` 
+`expr()` is a function from the `{rlang}` package, which is used to an **expression**. The expression is not evaluated 
+- rather, it is passed on to the derivation function which evaluates it in its own environment. `exprs()` is the plural version of 
+`expr()`, so it accepts multiple comma-separated items and returns a list of expressions. 
 
-- For arguments which expect a single expression, the expression needs to be passed "as is", e.g. `filter = PARAMCD == "TEMP"`
+```{r, eval = TRUE}
+library(rlang)
 
-- For arguments which expect one or more expressions, a list of expressions is expected, e.g. `order = exprs(AVISIT, desc(AESEV))`
+adae <- data.frame(USUBJID = "XXX-1", AEDECOD = "HEADACHE")
 
-If you are new to expressions, read the [corresponding section](#exprs) to learn more.
+# Return the adae object
+adae
 
-# `exprs()` {#exprs}
+# Return an expression
+expr(adae)
+```
 
-## What is `exprs()`?
+When used within the contest of an `{admiral}` derivation function, `expr()` and `exprs()`  allow the function to evaluate the 
+expressions in the context of the input dataset. As an example, `expr()` and `exprs()` allow users to pass variable names of datasets 
+to the function without wrapping them in quotation marks. 
 
-`exprs()` is a function from the `{rlang}` package. It is used to create a list of expressions. The expressions are not evaluated 
-- rather, they are passed on to the derivation function which evaluates them in its own environment. This allows the derivation 
-function to evaluate the expressions in the context of the input dataset. Specifically, the `exprs()` function allows users to pass
-variable names of datasets to the function without wrapping them in quotation marks. 
-
-The expressions/`exprs()` framework is powerful because users are able to intuitively "inject code" into `admiral` functions
+The expressions framework is powerful because users are able to intuitively "inject code" into `admiral` functions
 (through the function parameters) using very similar syntax as if they were writing open code, with the exception possibly being an
 outer `exprs()` wrapper.  For instance, in the `derive_vars_merged()` call below, the user is merging `adsl` with `ex` and is able
 to filter `ex` prior to the merge using an expression passed to the `filter_add` parameter. Because `filter_add` accepts expressions, 
@@ -132,9 +160,62 @@ derive_vars_merged(
 )
 ```
 
-In summary, although expressions/`exprs()` may seem slightly clunky and unintuitive to begin with, they allow for such power
-and flexibility that they are a key part of the `{admiral}` package. For a comprehensive treatment of expressions, see 
-[Chapter 18](https://adv-r.hadley.nz/expressions.html) of the Advanced R textbook.
+### Bang-Bang (`!!`) and Bang-Bang-Bang (`!!!`) {#unquoting}
+
+Sometimes you may want to construct an expression using other, pre-existing expressions. However, it's not immediately clear how
+to achieve this because expressions inherently pause evaluation of your code before it's executed:
+
+```{r, eval = TRUE}
+a = expr(2)
+b = expr(3)
+
+expr(a + b)
+# NOT 2 + 3
+```
+
+This is where `!!` (bang-bang) comes in: provided again by the `{rlang}` package, it  allows you to inject the contents of an 
+expression into another expression, meaning that by using `!!` you can modify the code inside an expression before R evaluates it.
+By using `!!` you are **unquoting** an expression, i.e. evaluating it before you pass it onwards.
+
+
+```{r, eval = TRUE}
+expr(!!a + !!b)
+```
+
+You can see an example of where `!!` comes in handy within `{admiral}` code in [Common Pitfall 1](#pitfall1), where the contents of an expression is unquoted so that it can be passed to `derive_vars_merged()`.
+
+`!!!` (bang-bang-bang) is the plural version of `!!` and can be used to unquote a list of expressions:
+
+```{r, eval = TRUE}
+exprs(!!!list(a, b))
+```
+
+Within `{admiral}`, this operator can be useful if we need to unquote a list of variables (stored as expressions) to use them inside
+of an `{admiral}` or even `{dplyr}` call. One example is the `{admiral}` subject keys:
+
+```{r, eval = TRUE}
+get_admiral_option("subject_keys")
+```
+
+If we want to use the subject keys stored within this `{admiral}` option to subset a dataset, we need to use `!!!` to unquote this list.
+Let's construct a dummy example to illustrate the point:
+
+```{r, eval = TRUE, error = TRUE}
+adcm <- data.frame(STUDYID = "XXX", USUBJID = "XXX-1", CMTRT = "ASPIRIN")
+adcm
+
+# This doesn't work as we are not unquoting the subj ect keys
+adcm %>% select(get_admiral_option("subject_keys"))
+
+# This works because we are unquoting the subject keys
+adcm %>% select(!!!get_admiral_option("subject_keys"))
+```
+
+### Summary
+
+In summary, although the expressions framework may seem slightly clunky and un-intuitive to begin with, it allows for such power
+and flexibility that it forms a key part of the `{admiral}` package. For a comprehensive treatment of expressions, see 
+[Chapter 18](https://adv-r.hadley.nz/expressions.html) and [Chapter 19](https://adv-r.hadley.nz/quasiquotation.html) of the Advanced R textbook. Chapter 19 specfically covers in much more detail the concept of unquoting.
 
 ## Common pitfalls 
 
@@ -161,7 +242,7 @@ dm <- tribble(
 )
 ```
 
-### 1. Mistakenly passing something that isn't an expression to an argument
+### 1. Mistakenly passing something that isn't an expression to an argument {#pitfall1}
 
 When writing more complex `{admiral}` code it can be easy to mistakenly pass the wrong input to an argument that 
 expects an expression. For example, the code below fails because `my_expression` is not an expression - is 
@@ -178,8 +259,8 @@ derive_vars_merged(
 )
 ```
 
-To fix this code, we need to [unquote](https://adv-r.hadley.nz/quasiquotation.html#quasi-motivation) `my_expression` so 
-that the expression that it is holding is passed correctly to `derive_vars_merged()`:
+To fix this code, we need to [unquote](#unquoting) `my_expression` so that the expression that it is holding is passed correctly
+to `derive_vars_merged()`:
 
 ```{r, eval = TRUE, error = FALSE}
 derive_vars_merged(
@@ -193,61 +274,27 @@ derive_vars_merged(
 ### 2. Forgetting that expressions must be evaluable in the dataset
 
 In a similar vein to above, even if an actual expression *is* passed as an argument, you must make
-sure that it can be evaluated within the dataset of interest. For instance, consider this code:
+sure that it can be evaluated within the dataset of interest. This may seem trivial, but it is a common pitfall because
+expressions delay evaluation of code and so can delay the identification of issues. For instance, consider this example:
 
 ```{r, eval = TRUE, error = TRUE}
-merge_weight_or_bmi <- function(weight_or_bmi) {
-  if (weight_or_bmi == "WEIGHT") {
-    my_wt_bmi_expression <- 'VSTESTCD == "WEIGHT" & VISIT == "SCREENING"'
-  } else {
-    my_wt_bmi_expression <- 'VSTESTCD == "BMI" & VISIT == "SCREENING"'
-  }
-
+filter_vs_and_merge <- function(my_expression) {
   derive_vars_merged(
     dm,
     dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
     by_vars = exprs(USUBJID),
-    filter_add = eval(parse(text = my_wt_bmi_expression))
+    filter_add = !!my_expression
   )
 }
 
-merge_weight_or_bmi("BMI")
+# This works
+filter_vs_and_merge(expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING"))
+
+# This fails
+filter_vs_and_merge(expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING" & VSTPT == "PREDOSE"))
 ```
 
-This fails because the expression is:
-
-```{r, eval = TRUE}
-expr(eval(parse(text = my_fn_condition)))
-```
-
-and contains `my_fn_condition`, which is not in the dataset.
-
-Conversely, this works:
-
-```{r, eval = TRUE}
-merge_weight_or_bmi <- function(weight_or_bmi) {
-  if (weight_or_bmi == "WEIGHT") {
-    my_wt_bmi_expression <- expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING")
-  } else {
-    my_wt_bmi_expression <- expr(VSTESTCD == "BMI" & VISIT == "SCREENING")
-  }
-
-  derive_vars_merged(
-    dm,
-    dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
-    by_vars = exprs(USUBJID),
-    filter_add = !!my_wt_bmi_expression
-  )
-}
-
-merge_weight_or_bmi("BMI")
-```
-
-because the expression being passed to `derive_vars_merged()` is:
-
-```{r, eval = TRUE}
-expr(!!expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING"))
-```
+The second call fails because hidden within the expression is a mention of `VSTPT`, which is a variable missing from `vs`.
 
 # See also
 
