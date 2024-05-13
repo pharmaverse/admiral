@@ -200,7 +200,7 @@ merge_weight_or_bmi <- function(weight_or_bmi) {
   if (weight_or_bmi == "WEIGHT") {
     my_wt_bmi_expression <- 'VSTESTCD == "WEIGHT" & VISIT == "SCREENING"'
   } else {
-    my_wt_bmi_expression <- 'VSTESTCD == "WEIGHT" & VISIT == "SCREENING"'
+    my_wt_bmi_expression <- 'VSTESTCD == "BMI" & VISIT == "SCREENING"'
   }
 
   derive_vars_merged(
