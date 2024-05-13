@@ -25,22 +25,6 @@ This vignette aims to discuss some of the common programming concepts and conven
 latter after becoming more familiar with the package to expand further on any topics of interest. For some of common
 `{admiral}` FAQ, visit the corresponding [FAQ page](faq.html).
 
-# Argument Conventions (to be moved to other page)
-
-Within the `{admiral}` package, any arguments which expect variable names or expressions of variable names, symbols or 
-expressions must be specified rather than strings.
-
-- For arguments which expect a single variable name, the name can be specified without quotes and quotation, e.g.
-`new_var = TEMPBL`
-
-- For arguments which expect one or more variable names, a list of symbols is expected, e.g. `by_vars = exprs(PARAMCD, AVISIT)` 
-
-- For arguments which expect a single expression, the expression needs to be passed "as is", e.g. `filter = PARAMCD == "TEMP"`
-
-- For arguments which expect one or more expressions, a list of expressions is expected, e.g. `order = exprs(AVISIT, desc(AESEV))`
-
-If you are new to expressions, read the [corresponding section](#exprs) to learn more.
-
 # Input and Output
 
 It is expected that the input dataset is not grouped. Otherwise an error is

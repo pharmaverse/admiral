@@ -21,136 +21,65 @@ library(admiraldev)
 The main idea of `{admiral}` is that an ADaM dataset is built by a sequence of
 derivations. Each derivation adds one or more variables or records to the
 processed dataset. This modular approach makes it easy to adjust code by adding,
-removing, or modifying derivations. Each derivation is a function call. Consider
-for example the following scripts which create a (very simple) [ADSL](#adsl_example) dataset or
-[ADVS](#advs_example) dataset.
+removing, or modifying derivations. Each derivation is a function call. 
 
-# ADSL example {#adsl_example}
-
-## Load Packages and Example Datasets
-
-First, we will load our packages and example datasets to help with our `ADSL` creation. The `{dplyr}` and `{lubridate}` packages are `{tidyverse}` packages and used heavily throughout this script.  The `{admiral}` package also leverages the `{pharmaversesdtm}` package for example SDTM datasets which are from the CDISC Pilot Study.
+In this vignette we will explore some of the different type of derivation functions 
+offered by `{admiral}`, as well as the argument conventions they follow and how best 
+to start an `{admiral}` script. To help with the examples showcased, we will load 
+some packages and set up some example data to manipulate later. The `{dplyr}` and 
+`{lubridate}` and `{stringr}` packages are `{tidyverse}` packages and are used heavily
+throughout this vignette.  The `{admiral}` package also leverages the `{pharmaversesdtm}` 
+package for example SDTM datasets which are from the CDISC Pilot  Study.
 
 ```{r, message=FALSE, warning=FALSE}
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
-library(admiral)
+library(stringr)
+library(tibble)
 library(pharmaversesdtm)
+library(admiral)
 
 # Read in SDTM datasets
 data("dm")
 data("ds")
 data("ex")
+data("vs")
+data("admiral_adsl")
 
 dm <- convert_blanks_to_na(dm)
 ds <- convert_blanks_to_na(ds)
 ex <- convert_blanks_to_na(ex)
-```
+vs <- convert_blanks_to_na(vs)
 
-## Derive Treatment Variables (`TRT0xP`, `TRT0xA`) {#treatmentvargs}
-
-The mapping of the treatment variables is left to the ADaM programmer. An example mapping may be:
-
-```{r eval=TRUE}
-adsl <- dm %>%
-  mutate(TRT01P = ARM, TRT01A = ACTARM)
-```
-
-## Derive/Impute Numeric Treatment Date/Time and Flag Variables (`TRTSDTM`, `TRTEDTM`, `TRTSTMF`, `TRTETMF`) {#trtdatetimegs}
-
-The function `derive_vars_dtm()` can be used to convert the DTC variables from
-`EX` to numeric datetime variable and impute missing components. The function
-call returns the original data frame with the column `EXSTDTM`, `EXENDTM` and
-corresponding time imputation  flag variables `EXSTTMF` and  `EXENTMF` added to
-the end of the dataframe. Exposure observations with an incomplete date are
-ignored. We impute missing time to be 23:59:59 using `time_imputation = "last"`.
-The required imputation flags are determined automatically by the function. Here
-only time imputation flags are derived because time is imputed but date is not
-imputed.
-
-Don't be intimidated by the number of arguments! We try to make our arguments
-self-explanatory, e.g. the `new_vars_prefix` places `EXST` at the start of the
-`--DTM` variable and `time_imputation = "last"` appends 23:59:59.  However, this
-is not always possible to make every argument self-explanatory.  If you click on
-the function, `derive_vars_dtm()`, you can bring up the reference documentation
-and learn more about each argument.
-
-```{r, eval=TRUE}
-# Derive treatment variables
-## Impute time of exposure dates (creates numeric datetime and time imputation flag variables)
 ex_ext <- ex %>%
   derive_vars_dtm(
     dtc = EXSTDTC,
     new_vars_prefix = "EXST"
-  ) %>%
-  derive_vars_dtm(
-    dtc = EXENDTC,
-    new_vars_prefix = "EXEN",
-    time_imputation = "last"
   )
 
-## Derive variables for first/last treatment date and time imputation flags
-adsl <- adsl %>%
-  derive_vars_merged(
-    dataset_add = ex_ext,
-    filter_add = !is.na(EXSTDTM),
-    new_vars = exprs(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
-    order = exprs(EXSTDTM, EXSEQ),
-    mode = "first",
-    by_vars = exprs(STUDYID, USUBJID)
-  ) %>%
-  derive_vars_merged(
-    dataset_add = ex_ext,
-    filter_add = !is.na(EXENDTM),
-    new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
-    order = exprs(EXENDTM, EXSEQ),
-    mode = "last",
-    by_vars = exprs(STUDYID, USUBJID)
+vs <- vs %>% 
+  filter(
+    USUBJID %in% c(
+      "01-701-1015", "01-701-1023", "01-703-1086",
+      "01-703-1096", "01-707-1037", "01-716-1024"
+    ) &
+      VSTESTCD %in% c("SYSBP", "DIABP") &
+      VSPOS == "SUPINE"
   )
+
+adsl <- admiral_adsl %>% 
+  select(-TRTSDTM, -TRTSTMF)
+
+advs <- vs %>% 
+  mutate(PARAM = VSTEST, PARAMCD = VSTESTCD, AVAL = VSSTRESN, AVALU = VSORRESU,
+         AVISIT = VISIT, AVISITN = VISITNUM)
 ```
 
-## Derive Date Variables from Date/Time Variables (`TRTSDT`, `TRTEDT`) {#trtdategs}
-
-The datetime variables returned can be converted to dates using the `derive_vars_dtm_to_dt()` 
-function.
-
-```{r eval=TRUE}
-adsl <- adsl %>%
-  derive_vars_dtm_to_dt(source_vars = exprs(TRTSDTM, TRTEDTM))
-```
-
-## Derive Treatment Duration (`TRTDURD`) {#trtdurgs}
-
-Now, that `TRTSDT` and `TRTEDT` are derived, the function `derive_var_trtdurd()`
-can be used to calculate the Treatment duration (`TRTDURD`).  Notice the lack of inputs.  The function defaults are set to `TRTSDT` and `TRTEDT`.  Clicking on `derive_var_trtdurd()` will bring up the reference documentation where you can see the **default** arguments.  
-
-```{r eval=TRUE}
-adsl <- adsl %>%
-  derive_var_trtdurd()
-```
-
-Amazing! With one `{dplyr}` function and four `{admiral}` functions we
-successfully created nine new variables for our `ADSL` dataset. Let's take a
-look at all our newly derived variables.
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  adsl,
-  display_vars = exprs(
-    STUDYID, USUBJID, TRT01P, TRT01A,
-    TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
-    TRTSTMF, TRTETMF, TRTDURD
-  )
-)
-```
-
-**Note:** We only display variables that were derived.  A user running this code will have additional adsl variables displayed. You can use the **Choose Columns to Display** button to add more variables into the table.  
-
-# Derivations
+# Derivation Functions
 
 The most important functions in `{admiral}` are the
 [derivations](../reference/index.html#derivations-for-adding-variables).
-Derivations add variables or observations to the input dataset. Existing
+Derivations add variables or observations/records to the input dataset. Existing
 variables and observations of the input dataset are not changed. Derivation
 functions start with `derive_`. The first argument of these functions expects
 the input dataset. This allows us to string together derivations using the `%>%`
@@ -166,21 +95,88 @@ and `TRTSTMF` variables.
 Functions which derive a dedicated parameter start with `derive_param_` followed by
 the parameter name, e.g., `derive_param_bmi()` derives the `BMI` parameter.
 
-# Input and Output
+## Example: Adding Variables
 
-It is expected that the input dataset is not grouped. Otherwise an error is
-issued.
+Below we can see an example call to one of the most common derivation functions,
+`derive_vars_merged`. This function adds variable(s) to the input dataset based on the 
+contents of another dataset. In this example, we add the treatment start datetime and 
+corresponding imputation flag (`EXSTTMF`) to `adsl` by identifying the first record
+in `ex` with a non-missing Exposure Start Datetime (`EXSTDTM`) when sorting by `EXSTDM` 
+and `EXSEQ`.
 
-The output dataset is ungrouped. The observations are not ordered in a dedicated
-way. In particular, the order of the observations of the input dataset may not
-be preserved.
+```{r, eval = TRUE}
+adsl <- adsl %>%
+  derive_vars_merged(
+    dataset_add = ex_ext,
+    filter_add = !is.na(EXSTDTM),
+    new_vars = exprs(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
+    order = exprs(EXSTDTM, EXSEQ),
+    mode = "first",
+    by_vars = exprs(STUDYID, USUBJID)
+  ) 
 
-# Computations
+adsl %>% 
+  select(USUBJID, TRTSDTM, TRTSTMF)
+```
+
+## Example: Adding Observations
+
+Another common derivation function is `derive_param_computed()`. This function
+adds a derived parameter to an input dataset. In the example below, we use it
+to derive the Mean Arterial Pressure (MAP) from the Systolic and Diastolic values
+of the blood pressure. The parameters that are needed for the derivation are 
+specified in the `parameters` argument, and within `set_values_to` we set all 
+the variable values for the new derived record.
+
+```{r eval=TRUE}
+advs <- advs %>% 
+  derive_param_computed(
+    by_vars = exprs(USUBJID, AVISIT, AVISITN),
+    parameters = c("SYSBP", "DIABP"),
+    set_values_to = exprs(
+      AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+      PARAMCD = "MAP",
+      PARAM = "Mean Arterial Pressure (mmHg)",
+      AVALU = "mmHg"
+    )
+  )
+
+advs %>% 
+  arrange(USUBJID, AVISITN, PARAMCD) %>% 
+  select(USUBJID, AVISIT, PARAMCD, AVAL)
+```
+
+Note: `{admiral}` actually provides `derive_param_map()` (wrapper of 
+`derive_param_computed()`) to derive MAP. The above example serves for illustrative
+purposes only.
+
+# Other Types of Functions
+
+Along with the derivation functions, `{admiral}` provides a large arsenal
+of functions to help you with your ADaM derivations. Here are some of the 
+other categories.
+
+## Higher Order Functions
+
+[Higher order functions](../reference/index.html#utilities-for-filtering-observations) 
+are `{admiral}` functions that take other functions as input. 
+They enhance the existing toolset of derivation functions by allowing greater 
+customization of the latter's behavior. This is done by allowing a derivation
+function to be:
+
+* Called multiple times, while varying some of the input arguments (`call_derivation()`);
+* Executed on a subset of the input dataset (`restrict_derivation()`);
+* Executed differently on subsets of the input dataset (`slice_derivation()`).
+
+Higher order functions are a relatively advanced topic within `{admiral}`; you can
+can read all about them in their [dedicated vignette](../reference/index.html#higher_order).
+
+## Computation Functions
 
 [Computations](../reference/index.html#computation-functions-for-vectors) expect vectors as
-input and return a vector. Usually these computation functions can not be used with `%>%`. These functions can be used in expressions like
-`convert_dtc_to_dt()` in the derivation of `FINLABDT` in the
-example below:
+input and return a vector. Usually these computation functions can not be used with `%>%`. 
+These functions can be used in expressions like `convert_dtc_to_dt()` in the derivation
+of the Final Lab Visit Date (`FINLABDT`) in the example below:
 
 ```{r, eval=TRUE}
 # Add the date of the final lab visit to ADSL
@@ -199,162 +195,45 @@ dataset_vignette(
   display_vars = exprs(STUDYID, USUBJID, FINLABDT)
 )
 ```
-# ADVS example {#advs_example}
 
-In this example we will simply add new records by deriving the 
-`Mean Arterial Pressure` with the help of the function `derive_param_map`.
+## Filter Functions
 
-## Load Packages and Example Datasets
+[Filter functions](../reference/index.html#utilities-for-filtering-observations) are `{admiral}`
+utilities that filter the input dataset in different manners, for instance returning records 
+that fit/don't fit a certain condition or that are the first/last observation in a by group.
+These functions form an important internal backbone to some of the `{admiral}` functions, but
+can also be used on their own to explore or manipulate a dataset. For instance, in the example 
+below we use `filter_extreme()` to extract the most recent MAP records in `advs`:
 
-Similarly to the example of ADSL, we will load our packages and example datasets to
-help with our `ADVS` creation. The datasets required are `VS` and `ADSL`.
+```{r, eval = TRUE}
+advs_lastmap <-advs %>%  
+  filter(PARAMCD == "MAP") %>% 
+  filter_extreme(
+    by_vars = exprs(USUBJID),
+    order = exprs(AVISITN, PARAMCD),
+    mode = "last"
+  ) 
 
-```{r message=FALSE}
-library(admiral)
-library(dplyr, warn.conflicts = FALSE)
-library(pharmaversesdtm)
-library(lubridate)
-library(stringr)
-library(tibble)
+advs_lastmap %>% 
+  select(USUBJID, AVISIT, PARAMCD, AVAL)
 
-data("admiral_adsl")
-data("vs")
-
-adsl <- admiral_adsl
-vs <- convert_blanks_to_na(vs)
 ```
-```{r echo=FALSE}
-vs <- filter(vs, USUBJID %in% c(
-  "01-701-1015", "01-701-1023", "01-703-1086",
-  "01-703-1096", "01-707-1037", "01-716-1024"
-) &
-  VSTESTCD %in% c("SYSBP", "DIABP"))
-```
+# Argument Conventions 
 
-At this step, it may be useful to join `ADSL` to your `VS` domain. Only the 
-`ADSL` variables used for derivations are selected at this step.
+Within the `{admiral}` package, any arguments which expect variable names or expressions of variable names, symbols or 
+expressions must be specified rather than strings.
 
-```{r eval=TRUE}
-adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
+- For arguments which expect a single variable name, the name can be specified without quotes and quotation, e.g.
+`new_var = TEMPBL`
 
-advs <- derive_vars_merged(
-  vs,
-  dataset_add = adsl,
-  new_vars = adsl_vars,
-  by_vars = exprs(STUDYID, USUBJID)
-)
-```
+- For arguments which expect one or more variable names, a list of symbols is expected, e.g. `by_vars = exprs(PARAMCD, AVISIT)` 
 
-## Derive Numeric Date and Analysis Day (`ADT`,  `ADY`)
+- For arguments which expect a single expression, the expression needs to be passed "as is", e.g. `filter = PARAMCD == "TEMP"`
 
-The function `derive_vars_dt()` can be used to derive `ADT`. For date imputation, refer to the [BDS Finding ADaM](https://pharmaverse.github.io/admiral/articles/bds_finding.html) page. 
+- For arguments which expect one or more expressions, a list of expressions is expected, e.g. `order = exprs(AVISIT, desc(AESEV))`
 
-Example calls:
-
-```{r eval=TRUE}
-advs <- derive_vars_dt(advs, new_vars_prefix = "A", dtc = VSDTC)
-```
-
-Once `ADT` is derived, the function `derive_vars_dy()` can be used to derive `ADY`.
-This example assumes both `ADT` and `TRTSDT` exist on the data frame.
-
-```{r eval=TRUE}
-advs <- derive_vars_dy(advs, reference_date = TRTSDT, source_vars = exprs(ADT))
-```
-
-## Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1`
-
-To assign parameter level values such as `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1`,
-etc., a lookup can be created to join to the source data.
-
-For example, when creating `ADVS`, a lookup based on the SDTM `--TESTCD` value 
-may be created:
-
-`VSTESTCD` | `PARAMCD` | `PARAM` | `PARAMN` | `PARCAT1` | `PARCAT1N`
---------- | --------- | -------- | ------- | --------- | ----------
-DIABP | DIABP | Diastolic Blood Pressure (mmHg) | 3 | Vital Sign | 2
-MAP | MAP | Mean Arterial Pressure | 4 | Vital Sign | 2
-SYSBP | SYSBP | Systolic Blood Pressure (mmHg) | 6 | Vital Sign | 2
-
-This lookup may now be joined to the source data:
-
-```{r eval=TRUE, include=FALSE}
-param_lookup <- tribble(
-  ~VSTESTCD, ~PARAMCD, ~PARAM, ~PARAMN, ~PARCAT1, ~PARCAT1N,
-  "DIABP", "DIABP", "Diastolic Blood Pressure (mmHg)", 3, "Vital Sign", 2,
-  "MAP", "MAP", "Mean Arterial Pressure (mmHg)", 4, "Vital Sign", 2,
-  "SYSBP", "SYSBP", "Systolic Blood Pressure (mmHg)", 7, "Vital Sign", 2,
-)
-attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
-```
-
-At this stage, only `PARAMCD` is required to perform the derivations. Additional
-derived parameters may be added, so only `PARAMCD` is joined to the datasets at
-this point. All other variables related to `PARAMCD` (e.g. `PARAM`, `PARAMCAT1`, ...)
-will be added when all `PARAMCD` are derived.
-
-```{r eval=TRUE}
-advs <- derive_vars_merged_lookup(
-  advs,
-  dataset_add = param_lookup,
-  new_vars = exprs(PARAMCD),
-  by_vars = exprs(VSTESTCD)
-)
-```
-
-```{r, eval=TRUE, echo=FALSE}
-advs_param <- distinct(advs, USUBJID, PARAMCD, VSTESTCD)
-
-dataset_vignette(advs_param, display_vars = exprs(USUBJID, VSTESTCD, PARAMCD))
-```
-
-## Derive Results (`AVAL`, `AVALC`)
-
-The mapping of `AVAL` and `AVALC` is left to the ADaM programmer. An 
-example mapping may be:
-
-```{r eval=TRUE}
-advs <- mutate(
-  advs,
-  AVAL = VSSTRESN,
-  AVALC = VSSTRESC
-)
-```
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  advs,
-  display_vars = exprs(VSTESTCD, PARAMCD, VSSTRESN, VSSTRESC, AVAL, AVALC),
-  filter = USUBJID == "01-716-1024"
-)
-```
-
-## Derive `MAP` Parameter
-
-Below is finally our example of creating `Mean Arterial Pressure` for `ADVS` using
-the function `derive_param_map` which is a wrapper around
-[derive_param_computed()](https://pharmaverse.github.io/admiral/reference/derive_param_computed.html).
-Note that only variables specified in the `by_vars` argument will be populated in the newly 
-created records.
-
-```{r eval=TRUE}
-advs <- derive_param_map(
-  advs,
-  by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
-  set_values_to = exprs(PARAMCD = "MAP"),
-  get_unit_expr = VSSTRESU,
-  filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
-)
-```
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  arrange(advs, USUBJID, VISITNUM, VSTPTNUM, ADT, PARAMCD),
-  display_vars = exprs(VSTESTCD, PARAMCD, VISIT, VSTPT, AVAL, AVALC),
-  filter = USUBJID == "01-701-1015" & PARAMCD %in% c("MAP", "DIABP", "SYSBP")
-)
-```
-
+If you are new to expressions, consider reading our [Introduction to expressions](#../reference/index.html#concepts_conventions) to
+learn more.
 
 # Starting a Script
 
@@ -370,8 +249,8 @@ created by calling `use_ad_template()`, e.g.,
 
 ```r
 use_ad_template(
-  adam_name = "adsl",
-  save_path = "./ad_adsl.R"
+adam_name = "adsl",
+save_path = "./ad_adsl.R"
 )
 ```
 
@@ -385,7 +264,8 @@ list_all_templates()
 # Support
 
 Support is provided via the [admiral Slack
-channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269).
+channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269). Additionally,
+please feel free to raise issues in our [GitHub repository](https://github.com/pharmaverse/admiral/issues).
 
 # See also
 
