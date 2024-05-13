@@ -7,7 +7,7 @@
 #' **Note:** This is a helper function for `derive_vars_merged_exist_flag` which
 #' inputs this result into `derive_vars_merged()`.
 #'
-#' @param dataset_add The additional dataset you wish to pull variables from
+#' @param dataset The additional dataset you wish to pull variables from
 #'
 #' @param new_var New variable
 #'
@@ -22,17 +22,6 @@
 #'   to the false value (`false_value`). The new variable is set to the missing
 #'   value (`missing_value`) for by groups not present in the additional
 #'   dataset.
-#'
-#' @param true_value True value
-#'
-#' @param false_value False value
-#'
-#' @param missing_value Values used for missing information
-#'
-#'   The new variable is set to the specified value for all by groups without
-#'   observations in the additional dataset.
-#'
-#'   *Permitted Value*: A character scalar
 #'
 #' @param filter Filter for additional data
 #'

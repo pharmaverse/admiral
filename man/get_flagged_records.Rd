@@ -7,6 +7,8 @@
 get_flagged_records(dataset, new_var, condition, filter = NULL)
 }
 \arguments{
+\item{dataset}{The additional dataset you wish to pull variables from}
+
 \item{new_var}{New variable
 
 The specified variable is added to the input dataset.}
@@ -28,19 +30,6 @@ for flagging. If the argument is not specified, all observations are
 considered.
 
 \emph{Permitted Values}: a condition}
-
-\item{dataset_add}{The additional dataset you wish to pull variables from}
-
-\item{true_value}{True value}
-
-\item{false_value}{False value}
-
-\item{missing_value}{Values used for missing information
-
-The new variable is set to the specified value for all by groups without
-observations in the additional dataset.
-
-\emph{Permitted Value}: A character scalar}
 }
 \value{
 The output dataset contains a filtered version of the
