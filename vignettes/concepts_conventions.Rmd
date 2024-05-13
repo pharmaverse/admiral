@@ -125,7 +125,7 @@ derive_vars_merged(
   new_vars = exprs(
     TRTEDTM = EXENDTM,
     TRTETMF = EXENTMF,
-    COMPTRT = ifelse(!is.na(EXENDTM, "Y", "N"))
+    COMPTRT = if_else(!is.na(EXENDTM), "Y", "N")
   ),
   order = exprs(EXENDTM),
   mode = "last"
