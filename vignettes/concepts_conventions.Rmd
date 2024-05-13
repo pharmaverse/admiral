@@ -2,7 +2,7 @@
 title: "Programming Concepts and Conventions"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Admiral Programming Concepts and Conventions}
+  %\VignetteIndexEntry{Programming Concepts and Conventions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
