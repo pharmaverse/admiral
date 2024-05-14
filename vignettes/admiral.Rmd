@@ -179,7 +179,7 @@ function to be:
 * Executed differently on subsets of the input dataset (`slice_derivation()`).
 
 Higher order functions are a relatively advanced topic within `{admiral}`; you can
-can read all about them in their [dedicated vignette](../reference/index.html#higher_order).
+can read all about them in their [dedicated vignette](higher_order.html).
 
 ## Computation Functions
 
