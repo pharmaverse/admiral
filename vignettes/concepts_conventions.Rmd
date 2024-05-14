@@ -101,7 +101,7 @@ For handling of `NA`s in sorting variables see [Sort Order](generic.html#sort_or
 
 ### `expr()` and `exprs()`
 
-`expr()` is a function from the `{rlang}` package, which is used to an **expression**. The expression is not evaluated 
+`expr()` is a function from the `{rlang}` package, which is used to create an **expression**. The expression is not evaluated 
 - rather, it is passed on to the derivation function which evaluates it in its own environment. `exprs()` is the plural version of 
 `expr()`, so it accepts multiple comma-separated items and returns a list of expressions. 
 
@@ -188,7 +188,7 @@ Let's construct a dummy example to illustrate the point:
 adcm <- data.frame(STUDYID = "XXX", USUBJID = "XXX-1", CMTRT = "ASPIRIN")
 adcm
 
-# This doesn't work as we are not unquoting the subj ect keys
+# This doesn't work as we are not unquoting the subject keys
 adcm %>% select(get_admiral_option("subject_keys"))
 
 # This works because we are unquoting the subject keys
@@ -229,7 +229,7 @@ dm <- tribble(
 ### 1. Mistakenly passing something that isn't an expression to an argument {#pitfall1}
 
 When writing more complex `{admiral}` code it can be easy to mistakenly pass the wrong input to an argument that 
-expects an expression. For example, the code below fails because `my_expression` is not an expression - is 
+expects an expression. For example, the code below fails because `my_expression` is not an expression - it is 
 the name of an object in the global environment containing an expression.
 
 ```{r, eval = TRUE, error = TRUE}
@@ -278,7 +278,7 @@ filter_vs_and_merge(expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING"))
 filter_vs_and_merge(expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING" & VSTPT == "PREDOSE"))
 ```
 
-The second call fails because hidden within the expression is a mention of `VSTPT`, which is a variable missing from `vs`.
+The second call fails because hidden within the expression is a mention of `VSTPT`, which was dropped from `vs` in `filter_vs_and_merge()`.
 
 # See also
 

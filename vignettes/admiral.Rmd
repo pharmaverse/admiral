@@ -29,7 +29,7 @@ to start an `{admiral}` script. To help with the examples showcased, we will loa
 some packages and set up some example data to manipulate later. The `{dplyr}` and 
 `{lubridate}` and `{stringr}` packages are `{tidyverse}` packages and are used heavily
 throughout this vignette.  The `{admiral}` package also leverages the `{pharmaversesdtm}` 
-package for example SDTM datasets which are from the CDISC Pilot  Study.
+package for example SDTM datasets which are from the CDISC Pilot Study.
 
 ```{r, message=FALSE, warning=FALSE}
 library(dplyr, warn.conflicts = FALSE)
@@ -100,7 +100,7 @@ the parameter name, e.g., `derive_param_bmi()` derives the `BMI` parameter.
 ## Example: Adding Variables
 
 Below we can see an example call to one of the most common derivation functions,
-`derive_vars_merged`. This function adds variable(s) to the input dataset based on the 
+`derive_vars_merged()`. This function adds variable(s) to the input dataset based on the 
 contents of another dataset. In this example, we add the treatment start datetime and 
 corresponding imputation flag (`EXSTTMF`) to `adsl` by identifying the first record
 in `ex` with a non-missing Exposure Start Datetime (`EXSTDTM`) when sorting by `EXSTDM` 
@@ -160,7 +160,7 @@ other categories.
 
 ## Higher Order Functions
 
-[Higher order functions](../reference/index.html#utilities-for-filtering-observations) 
+[Higher order functions](../reference/index.html#higher-order) 
 are `{admiral}` functions that take other functions as input. 
 They enhance the existing portfolio of derivation functions by allowing greater 
 customization of the latter's behavior. This is done by allowing a derivation
@@ -233,7 +233,7 @@ expressions must be specified rather than strings.
 
 - For arguments which expect one or more expressions, a list of expressions is expected, e.g. `order = exprs(AVISIT, desc(AESEV))`
 
-If you are new to expressions, consider reading our [Introduction to expressions](#../reference/index.html#concepts_conventions) to
+If you are new to expressions, consider reading our [Introduction to expressions](concepts_conventions.html#exprs) to
 learn more.
 
 # Starting a Script
