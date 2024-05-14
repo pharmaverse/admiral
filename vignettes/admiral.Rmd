@@ -119,10 +119,10 @@ adsl <- adsl %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-  dataset_vignette(
-    adsl,
-    display_vars = exprs(USUBJID, TRTSDTM, TRTSTMF)
-  )
+dataset_vignette(
+  adsl,
+  display_vars = exprs(USUBJID, TRTSDTM, TRTSTMF)
+)
 ```
 
 ## Example: Adding Observations
