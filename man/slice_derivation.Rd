@@ -85,7 +85,7 @@ slice_derivation(
 \seealso{
 \code{\link[=params]{params()}} \code{\link[=restrict_derivation]{restrict_derivation()}}
 
-Higher Order Functions: 
+Other high_order_function: 
 \code{\link{call_derivation}()},
 \code{\link{derivation_slice}()},
 \code{\link{restrict_derivation}()}

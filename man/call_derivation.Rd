@@ -110,7 +110,7 @@ adae \%>\%
 \seealso{
 \code{\link[=params]{params()}}
 
-Higher Order Functions: 
+Other high_order_function: 
 \code{\link{derivation_slice}()},
 \code{\link{restrict_derivation}()},
 \code{\link{slice_derivation}()}

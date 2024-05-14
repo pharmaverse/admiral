@@ -33,7 +33,7 @@ advs <- tribble(
 derive_var_chg(advs)
 }
 \seealso{
-BDS-Findings Functions that returns variable appended to dataset: 
+Other der_bds_findings: 
 \code{\link{derive_basetype_records}()},
 \code{\link{derive_var_analysis_ratio}()},
 \code{\link{derive_var_anrind}()},

@@ -68,7 +68,7 @@ data \%>\%
   derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRHI, new_var = R01ANRHI)
 }
 \seealso{
-BDS-Findings Functions that returns variable appended to dataset: 
+Other der_bds_findings: 
 \code{\link{derive_basetype_records}()},
 \code{\link{derive_var_anrind}()},
 \code{\link{derive_var_atoxgr}()},

@@ -104,7 +104,7 @@ derive_param_rr(
 \seealso{
 \code{\link[=compute_rr]{compute_rr()}}
 
-BDS-Findings Functions for adding Parameters/Records: 
+Other der_prm_bds_findings: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_event}()},

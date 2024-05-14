@@ -35,7 +35,7 @@ The \code{flag_event} object is used to define events as input for the
 \seealso{
 \code{\link[=derive_var_merged_ef_msrc]{derive_var_merged_ef_msrc()}}
 
-Source Objects: 
+Other source_specifications: 
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{death_event}},

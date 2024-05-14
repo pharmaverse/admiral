@@ -77,7 +77,7 @@ facm <- tribble(
 derive_vars_atc(cm, facm)
 }
 \seealso{
-OCCDS Functions: 
+Other der_occds: 
 \code{\link{derive_var_trtemfl}()},
 \code{\link{derive_vars_query}()},
 \code{\link{get_terms_from_db}()}

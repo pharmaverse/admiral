@@ -403,7 +403,7 @@ derive_extreme_event(
 \seealso{
 \code{\link[=event]{event()}}, \code{\link[=event_joined]{event_joined()}}, \code{\link[=derive_vars_extreme_event]{derive_vars_extreme_event()}}
 
-BDS-Findings Functions for adding Parameters/Records: 
+Other der_prm_bds_findings: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_records}()},

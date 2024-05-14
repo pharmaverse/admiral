@@ -30,7 +30,7 @@ Derive an imputed value
 compute_qual_imputation("<40")
 }
 \seealso{
-BDS-Findings Functions that returns a vector: 
+Other com_bds_findings: 
 \code{\link{compute_bmi}()},
 \code{\link{compute_bsa}()},
 \code{\link{compute_egfr}()},

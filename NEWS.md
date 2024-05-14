@@ -3,6 +3,7 @@
 ## New Features
 
 ## Updates of Existing Functions
+* Updated assert_filter_cond by adding a gsub argument to extract strings within parentheses when caller_arg input is wrapped in a function, e.g., enexpr(input). Now, when the error message is generated the output contains 'input' instead of 'enexpr(input)' (#2404)
 
 * Error messaging throughout the package have been updated from `rlang::abort()` to `cli::cli_abort()`. As a part of the update, each of the `assert_*()` functions have new arguments `assert_*(message, arg_name, call, class).` (#367)
 

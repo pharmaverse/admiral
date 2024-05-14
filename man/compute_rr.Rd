@@ -28,7 +28,7 @@ compute_rr(hr = 70.14)
 \seealso{
 \code{\link[=derive_param_rr]{derive_param_rr()}}
 
-BDS-Findings Functions that returns a vector: 
+Other com_bds_findings: 
 \code{\link{compute_bmi}()},
 \code{\link{compute_bsa}()},
 \code{\link{compute_egfr}()},

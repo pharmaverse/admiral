@@ -20,7 +20,7 @@ List all \code{tte_source} Objects Available in a Package
 list_tte_source_objects()
 }
 \seealso{
-Other Advanced Functions: 
+Other other_advanced: 
 \code{\link{params}()}
 }
 \concept{other_advanced}

@@ -46,7 +46,7 @@ compute_age_years(
 
 }
 \seealso{
-Date/Time Computation Functions that returns a vector: 
+Other com_date_time: 
 \code{\link{compute_dtf}()},
 \code{\link{compute_duration}()},
 \code{\link{compute_tmf}()},

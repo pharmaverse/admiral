@@ -57,5 +57,11 @@ try(
   )
 )
 }
+\seealso{
+Other utils_help: 
+\code{\link{call_user_fun}()},
+\code{\link{extract_unit}()},
+\code{\link{get_not_mapped}()}
+}
 \concept{utils_help}
 \keyword{utils_help}

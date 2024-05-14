@@ -41,7 +41,7 @@ if (interactive()) {
 }
 }
 \seealso{
-Utilities used for examples and template scripts: 
+Other utils_examples: 
 \code{\link{list_all_templates}()}
 }
 \concept{utils_examples}

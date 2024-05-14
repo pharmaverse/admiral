@@ -52,7 +52,7 @@ event_source(
 \seealso{
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=censor_source]{censor_source()}}
 
-Source Objects: 
+Other source_specifications: 
 \code{\link{basket_select}()},
 \code{\link{censor_source}()},
 \code{\link{death_event}},

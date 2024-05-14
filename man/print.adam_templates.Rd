@@ -24,7 +24,7 @@ print(templates)
 \seealso{
 \code{\link[=list_all_templates]{list_all_templates()}}
 
-Utilities for printing: 
+Other utils_print: 
 \code{\link{print.duplicates}()},
 \code{\link{print.source}()},
 \code{\link{print_named_list}()}

@@ -135,7 +135,7 @@ convert_dtc_to_dtm("2019-07-18T00:00:00") # note Time = 00:00:00 is not printed
 convert_dtc_to_dtm("2019-07-18")
 }
 \seealso{
-Date/Time Computation Functions that returns a vector: 
+Other com_date_time: 
 \code{\link{compute_age_years}()},
 \code{\link{compute_dtf}()},
 \code{\link{compute_duration}()},

@@ -28,9 +28,10 @@ try(call_user_fun(compute_bmi(
 )))
 }
 \seealso{
-Utilities used within Derivation functions: 
+Other utils_help: 
 \code{\link{extract_unit}()},
-\code{\link{get_not_mapped}()}
+\code{\link{get_not_mapped}()},
+\code{\link{process_set_values_to}()}
 }
 \concept{utils_help}
 \keyword{utils_help}

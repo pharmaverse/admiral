@@ -23,7 +23,7 @@ Create a \code{derivation_slice} object as input for \code{slice_derivation()}.
 \seealso{
 \code{\link[=slice_derivation]{slice_derivation()}}, \code{\link[=params]{params()}}
 
-Higher Order Functions: 
+Other high_order_function: 
 \code{\link{call_derivation}()},
 \code{\link{restrict_derivation}()},
 \code{\link{slice_derivation}()}

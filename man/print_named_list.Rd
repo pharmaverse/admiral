@@ -23,7 +23,7 @@ Print Named List
 print_named_list(death_event)
 }
 \seealso{
-Utilities for printing: 
+Other utils_print: 
 \code{\link{print.adam_templates}()},
 \code{\link{print.duplicates}()},
 \code{\link{print.source}()}

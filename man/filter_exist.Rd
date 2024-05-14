@@ -80,7 +80,7 @@ filter_exist(
 
 }
 \seealso{
-Utilities for Filtering Observations: 
+Other utils_fil: 
 \code{\link{count_vals}()},
 \code{\link{filter_extreme}()},
 \code{\link{filter_joined}()},

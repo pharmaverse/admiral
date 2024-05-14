@@ -218,7 +218,7 @@ derive_summary_records(
 \seealso{
 \code{\link[=get_summary_records]{get_summary_records()}}, \code{\link[=derive_var_merged_summary]{derive_var_merged_summary()}}
 
-BDS-Findings Functions for adding Parameters/Records: 
+Other der_prm_bds_findings: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_event}()},

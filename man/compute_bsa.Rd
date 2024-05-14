@@ -64,7 +64,7 @@ compute_bsa(
 \seealso{
 \code{\link[=derive_param_bsa]{derive_param_bsa()}}
 
-BDS-Findings Functions that returns a vector: 
+Other com_bds_findings: 
 \code{\link{compute_bmi}()},
 \code{\link{compute_egfr}()},
 \code{\link{compute_framingham}()},

@@ -278,7 +278,7 @@ create_single_dose_dataset(
 )
 }
 \seealso{
-Creating auxiliary datasets: 
+Other create_aux: 
 \code{\link{consolidate_metadata}()},
 \code{\link{create_period_dataset}()},
 \code{\link{create_query_data}()}

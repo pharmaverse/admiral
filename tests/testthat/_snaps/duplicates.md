@@ -2,6 +2,10 @@
 
     Code
       get_duplicates_dataset()
+    Condition
+      Warning:
+      `enumerate()` was deprecated in admiraldev 1.1.0.
+      i This function was primarily used in error messaging, and can be replaced with 'cli' functionality: `cli::cli_abort('{.val {letters[1:3]}}')`
     Output
       Duplicate records with respect to `USUBJID`.
       # A tibble: 4 x 3

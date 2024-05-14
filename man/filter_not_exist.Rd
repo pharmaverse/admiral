@@ -81,7 +81,7 @@ filter_not_exist(
 
 }
 \seealso{
-Utilities for Filtering Observations: 
+Other utils_fil: 
 \code{\link{count_vals}()},
 \code{\link{filter_exist}()},
 \code{\link{filter_extreme}()},

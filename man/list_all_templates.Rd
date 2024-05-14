@@ -19,7 +19,7 @@ List All Available ADaM Templates
 list_all_templates()
 }
 \seealso{
-Utilities used for examples and template scripts: 
+Other utils_examples: 
 \code{\link{use_ad_template}()}
 }
 \concept{utils_examples}

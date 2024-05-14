@@ -22,7 +22,7 @@ Print \code{source} Objects
 print(death_event)
 }
 \seealso{
-Utilities for printing: 
+Other utils_print: 
 \code{\link{print.adam_templates}()},
 \code{\link{print.duplicates}()},
 \code{\link{print_named_list}()}

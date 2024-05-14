@@ -233,7 +233,7 @@ derive_vars_dt(
 )
 }
 \seealso{
-Date/Time Derivation Functions that returns variable appended to dataset: 
+Other der_date_time: 
 \code{\link{derive_var_trtdurd}()},
 \code{\link{derive_vars_dtm}()},
 \code{\link{derive_vars_dtm_to_dt}()},

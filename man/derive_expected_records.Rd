@@ -98,7 +98,7 @@ derive_expected_records(
 
 }
 \seealso{
-BDS-Findings Functions for adding Parameters/Records: 
+Other der_prm_bds_findings: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_extreme_event}()},
 \code{\link{derive_extreme_records}()},

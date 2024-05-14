@@ -21,9 +21,10 @@ extract_unit("Height (cm)")
 extract_unit("Diastolic Blood Pressure (mmHg)")
 }
 \seealso{
-Utilities used within Derivation functions: 
+Other utils_help: 
 \code{\link{call_user_fun}()},
-\code{\link{get_not_mapped}()}
+\code{\link{get_not_mapped}()},
+\code{\link{process_set_values_to}()}
 }
 \concept{utils_help}
 \keyword{utils_help}

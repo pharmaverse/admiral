@@ -99,7 +99,7 @@ call_derivation(
 \seealso{
 \code{\link[=call_derivation]{call_derivation()}}
 
-Other Advanced Functions: 
+Other other_advanced: 
 \code{\link{list_tte_source_objects}()}
 }
 \concept{other_advanced}

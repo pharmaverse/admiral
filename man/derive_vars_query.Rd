@@ -67,7 +67,7 @@ derive_vars_query(adae, queries)
 \seealso{
 \code{\link[=create_query_data]{create_query_data()}}]
 
-OCCDS Functions: 
+Other der_occds: 
 \code{\link{derive_var_trtemfl}()},
 \code{\link{derive_vars_atc}()},
 \code{\link{get_terms_from_db}()}

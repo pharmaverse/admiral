@@ -184,7 +184,7 @@ adex \%>\%
   select(-ASTDTM, -AENDTM)
 }
 \seealso{
-BDS-Findings Functions for adding Parameters/Records: 
+Other der_prm_bds_findings: 
 \code{\link{default_qtc_paramcd}()},
 \code{\link{derive_expected_records}()},
 \code{\link{derive_extreme_event}()},

@@ -13,9 +13,10 @@ A \code{data.frame} or \code{NULL}
 Get list of records not mapped from the lookup table.
 }
 \seealso{
-Utilities used within Derivation functions: 
+Other utils_help: 
 \code{\link{call_user_fun}()},
-\code{\link{extract_unit}()}
+\code{\link{extract_unit}()},
+\code{\link{process_set_values_to}()}
 }
 \concept{utils_help}
 \keyword{utils_help}

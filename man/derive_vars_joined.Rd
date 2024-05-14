@@ -496,7 +496,7 @@ derive_vars_joined(
 \seealso{
 \code{\link[=derive_var_joined_exist_flag]{derive_var_joined_exist_flag()}}, \code{\link[=filter_joined]{filter_joined()}}
 
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
+Other der_gen: 
 \code{\link{derive_var_extreme_flag}()},
 \code{\link{derive_var_joined_exist_flag}()},
 \code{\link{derive_var_merged_ef_msrc}()},

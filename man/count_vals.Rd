@@ -42,7 +42,7 @@ group_by(data, USUBJID) \%>\%
   mutate(nr_nes = count_vals(var = AVALC, val = "NE"))
 }
 \seealso{
-Utilities for Filtering Observations: 
+Other utils_fil: 
 \code{\link{filter_exist}()},
 \code{\link{filter_extreme}()},
 \code{\link{filter_joined}()},

@@ -55,7 +55,7 @@ derive_var_trtdurd(data)
 \seealso{
 \code{\link[=derive_vars_duration]{derive_vars_duration()}}
 
-Date/Time Derivation Functions that returns variable appended to dataset: 
+Other der_date_time: 
 \code{\link{derive_vars_dt}()},
 \code{\link{derive_vars_dtm}()},
 \code{\link{derive_vars_dtm_to_dt}()},
