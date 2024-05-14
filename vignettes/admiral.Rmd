@@ -1,8 +1,8 @@
 ---
-title: "Simple ADSL & ADVS Walkthrough"
+title: "Get Started"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Simple ADSL & ADVS Walkthrough}
+  %\VignetteIndexEntry{Get Started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -116,9 +116,13 @@ adsl <- adsl %>%
     mode = "first",
     by_vars = exprs(STUDYID, USUBJID)
   )
+```
 
-adsl %>%
-  select(USUBJID, TRTSDTM, TRTSTMF)
+```{r, eval=TRUE, echo=FALSE}
+  dataset_vignette(
+    adsl,
+    display_vars = exprs(USUBJID, TRTSDTM, TRTSTMF)
+  )
 ```
 
 ## Example: Adding Observations
@@ -142,15 +146,19 @@ advs <- advs %>%
       AVALU = "mmHg"
     )
   )
-
-advs %>%
-  arrange(USUBJID, AVISITN, PARAMCD) %>%
-  select(USUBJID, AVISIT, PARAMCD, AVAL)
 ```
 
-Note: `{admiral}` actually provides `derive_param_map()` (wrapper of 
-`derive_param_computed()`) to derive MAP. The above example serves for illustrative
-purposes only.
+```{r, eval=TRUE, echo=FALSE}
+advs %>%
+  arrange(USUBJID, AVISITN, PARAMCD) %>%
+  dataset_vignette(
+    display_vars = exprs(USUBJID, AVISIT, PARAMCD, AVAL)
+  )
+```
+
+Note: For the users' convenience, `{admiral}` actually provides
+`derive_param_map()`  (wrapper of `derive_param_computed()`) to derive MAP.
+The above example serves for illustrative purposes only.
 
 # Other Types of Functions
 
@@ -215,10 +223,15 @@ advs_lastmap <- advs %>%
     order = exprs(AVISITN, PARAMCD),
     mode = "last"
   )
-
-advs_lastmap %>%
-  select(USUBJID, AVISIT, PARAMCD, AVAL)
 ```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  advs_lastmap,
+  display_vars = exprs(USUBJID, AVISIT, PARAMCD, AVAL)
+)
+```
+
 # Argument Conventions 
 
 Within the `{admiral}` package, any arguments which expect variable names or expressions of variable names, symbols or 
@@ -250,8 +263,8 @@ created by calling `use_ad_template()`, e.g.,
 
 ```r
 use_ad_template(
-adam_name = "adsl",
-save_path = "./ad_adsl.R"
+  adam_name = "adsl",
+  save_path = "./ad_adsl.R"
 )
 ```
 
@@ -271,5 +284,7 @@ please feel free to raise issues in our [GitHub repository](https://github.com/p
 # See also
 
 - [Template scripts](https://github.com/pharmaverse/admiral/tree/main/inst/templates)
+
+- [Programming Concepts and Conventions](concepts_conventions.html)
 
 - [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html)
