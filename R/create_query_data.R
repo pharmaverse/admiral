@@ -811,7 +811,7 @@ basket_select <- function(name = NULL,
     )
   } else {
     if (!is_named(args)) {
-      abort("All arguments inside `...` must be named")
+      cli_abort("All arguments inside {.arg ...} must be named")
     }
     out <- list(
       name = name,
