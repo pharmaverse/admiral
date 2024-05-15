@@ -494,10 +494,10 @@ get_smq_oth <- function(basket_select,
   }
   terms <- tibble(TERMCHAR = paste(basket_select$name, "Term", c(1:end), "(", version, ")"))
   terms <- mutate(terms,
-                  SRCVAR = "AEDECOD",
-                  GRPNAME = basket_select$name,
-                  TEST1_VAR = if_else(str_detect(TERMCHAR, "meningitis"), "CHECK 1", "CHECK 2"),
-                  TEST2_VAR = if_else(str_detect(TERMCHAR, "meningitis"), "CHECK 3", "CHECK 4")
+    SRCVAR = "AEDECOD",
+    GRPNAME = basket_select$name,
+    TEST1_VAR = if_else(str_detect(TERMCHAR, "meningitis"), "CHECK 1", "CHECK 2"),
+    TEST2_VAR = if_else(str_detect(TERMCHAR, "meningitis"), "CHECK 3", "CHECK 4")
   )
   if (keep_id) {
     mutate(terms, GRPID = 42)
