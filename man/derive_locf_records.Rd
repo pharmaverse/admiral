@@ -16,7 +16,7 @@ derive_locf_records(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars}, \code{analysis_var}, \code{order} and \code{keep_vars} arguments are expected to be in the dataset.}
+The variables specified by the \code{by_vars}, \code{analysis_var}, \code{order}, and \code{keep_vars} arguments are expected to be in the dataset.}
 
 \item{dataset_ref}{Expected observations dataset
 

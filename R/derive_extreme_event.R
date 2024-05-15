@@ -69,9 +69,11 @@
 #'
 #' @param keep_source_vars Variables to keep from the source dataset
 #'
-#'   For each event the specified variables are kept from the selected
-#'   observations. The variables specified for `by_vars` and created by
-#'   `set_values_to` are always kept.
+#'  For each event the specified variables are kept from the selected
+#'  observations. The variables specified for `by_vars` and created by
+#'  `set_values_to` are always kept. The `keep_source_vars` field of
+#'  the event will take precedence over the value of the `keep_source_vars`
+#'  argument.
 #'
 #'   *Permitted Values*: A list of expressions where each element is
 #'   a symbol or a tidyselect expression, e.g., `exprs(VISIT, VISITNUM,
@@ -96,7 +98,9 @@
 #'       the number of the event.
 #'       1. Only the variables specified for the `keep_source_vars` field of the
 #'       event, and the by variables (`by_vars`) and the variables created by
-#'       `set_values_to` are kept.
+#'       `set_values_to` are kept. If `keep_source_vars = NULL` is used for an event
+#'       in `derive_extreme_event()` the value of the `keep_source_vars` argument of
+#'       `derive_extreme_event()` is used.
 #'   1. All selected observations are bound together.
 #'   1. For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) the first or last observation (with respect to the
@@ -361,21 +365,22 @@ derive_extreme_event <- function(dataset = NULL,
   mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
   assert_list_of(source_datasets, "data.frame")
   source_names <- names(source_datasets)
-  events_to_check <- events[map_lgl(events, ~ !is.null(.x$dataset_name))]
-  if (length(events_to_check) > 0) {
-    assert_list_element(
-      list = events_to_check,
-      element = "dataset_name",
-      condition = dataset_name %in% source_names,
-      source_names = source_names,
-      message_text = paste0(
+  assert_list_element(
+    list = events,
+    element = "dataset_name",
+    condition = map_lgl(dataset_name, is.null) | dataset_name %in% source_names,
+    source_names = source_names,
+    message_text = c(
+      paste0(
         "The dataset names must be included in the list specified for the ",
-        "`source_datasets` parameter.\n",
-        "Following names were provided by `source_datasets`:\n",
-        enumerate(source_names, quote_fun = squote)
+        "{.arg source_datasets} argument."
+      ),
+      i = paste(
+        "Following names were provided by {.arg source_datasets}:",
+        ansi_collapse(source_names)
       )
     )
-  }
+  )
 
   if (!is.null(ignore_event_order)) {
     if (ignore_event_order) {

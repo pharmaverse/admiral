@@ -125,20 +125,12 @@ test_that("create_period_dataset Test 4: error if no period/phase variable on RH
       STUDYID = "xyz"
     )
 
-  expect_error(
+  expect_snapshot(
     create_period_dataset(
       adsl,
       new_vars = exprs(USUBJ = USUBJID)
     ),
-    regexp = paste(
-      paste0(
-        "The right hand side values of `new_vars` have to be CDISC style ",
-        "subperiod, period, or phase variables."
-      ),
-      "I.e., they must contain the xx or w fragment, e.g., APxxSDT, PxxSwSDT, or PHwSDT.",
-      sep = "\n"
-    ),
-    fixed = TRUE
+    error = TRUE
   )
 })
 
@@ -156,18 +148,12 @@ test_that("create_period_dataset Test 5: error if different type of RHSs", {
       STUDYID = "xyz"
     )
 
-  expect_error(
+  expect_snapshot(
     create_period_dataset(
       adsl,
       new_vars = exprs(APERSDT = APxxSDT, ASPRSDT = PxxSwSDT)
     ),
-    regexp = paste(
-      "More than one type of subperiod, period, or phase variables is specified for `new_vars`:",
-      "subperiod: `PxxSwSDT`",
-      "period: `APxxSDT`",
-      sep = "\n"
-    ),
-    fixed = TRUE
+    error = TRUE
   )
 })
 
@@ -185,13 +171,12 @@ test_that("create_period_dataset Test 6: error if RHS variable not in input data
       STUDYID = "xyz"
     )
 
-  expect_error(
+  expect_snapshot(
     create_period_dataset(
       adsl,
       new_vars = exprs(PHSDT = PHwSDT)
     ),
-    regexp = "No variables of the form PHwSDT were found in the input dataset.",
-    fixed = TRUE
+    error = TRUE
   )
 })
 
@@ -333,21 +318,13 @@ test_that("derive_vars_period Test 10: error if no period/phase variable on LHS"
 
   adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
 
-  expect_error(
+  expect_snapshot(
     derive_vars_period(
       adsl,
       dataset_ref = period_ref,
       new_vars = exprs(USUBJ = USUBJID)
     ),
-    regexp = paste(
-      paste0(
-        "The left hand side values of `new_vars` have to be CDISC style ",
-        "subperiod, period, or phase variables."
-      ),
-      "I.e., they must contain the xx or w fragment, e.g., APxxSDT, PxxSwSDT, or PHwSDT.",
-      sep = "\n"
-    ),
-    fixed = TRUE
+    error = TRUE
   )
 })
 
@@ -368,19 +345,13 @@ test_that("derive_vars_period Test 11: error if different type of LHSs", {
 
   adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
 
-  expect_error(
+  expect_snapshot(
     derive_vars_period(
       adsl,
       dataset_ref = period_ref,
       new_vars = exprs(APxxSDT = APERSDT, PxxSwSDT = ASPRSDT)
     ),
-    regexp = paste(
-      "More than one type of subperiod, period, or phase variables is specified for `new_vars`:",
-      "subperiod: `PxxSwSDT`",
-      "period: `APxxSDT`",
-      sep = "\n"
-    ),
-    fixed = TRUE
+    error = TRUE
   )
 })
 
