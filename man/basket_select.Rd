@@ -22,7 +22,9 @@ from the company database.
 company specific get_terms() function such that the function can determine
 which sort of basket is requested}
 
-\item{...}{Any number of \emph{named} function arguments that stay the same across iterations.}
+\item{...}{Any number of \emph{named} function arguments. Can be used to pass in company
+specific conditions or flags that will then be used in user-defined function that is
+passed into argument \code{get_terms_fun} for function \code{create_query_data()}.}
 }
 \value{
 An object of class \code{basket_select}.

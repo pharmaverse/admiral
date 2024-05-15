@@ -783,7 +783,9 @@ assert_terms <- function(terms,
 #' company specific get_terms() function such that the function can determine
 #' which sort of basket is requested
 #'
-#' @param ... Any number of *named* function arguments that stay the same across iterations.
+#' @param ... Any number of *named* function arguments. Can be used to pass in company
+#' specific conditions or flags that will then be used in user-defined function that is
+#' passed into argument `get_terms_fun` for function `create_query_data()`.
 #'
 #' @details Exactly one of `name` or `id` must be specified.
 #'
