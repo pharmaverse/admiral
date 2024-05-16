@@ -37,8 +37,8 @@ be preserved.
 # `{admiral}` Functions and Options
 
 As a general principle, the behavior of the `{admiral}` functions is only determined by their input, not by any global object,
-i.e. all inputs like datasets, variable names, options, etc. must be provided to the function by arguments. Correspondingly, the
-functions do not have any side-effects like creating or modifying global objects, printing, writing files, etc.
+i.e. all inputs like datasets, variable names, options, etc. must be provided to the function by arguments. Correspondingly, 
+in general functions do not have any side-effects like creating or modifying global objects, printing, writing files, etc.
 
 An exception to the above principle is found in our approach to package options (see `get_admiral_option()` and `set_admiral_options()`),
 which allow for user-defined defaults on commonly used function 
@@ -194,6 +194,9 @@ adcm %>% select(get_admiral_option("subject_keys"))
 # This works because we are unquoting the subject keys
 adcm %>% select(!!!get_admiral_option("subject_keys"))
 ```
+
+You can see another example of `!!!` in action in [this line](https://github.com/pharmaverse/admiral/blob/c5dd8fb196c2cd3f27a6b02ec88fa1abd6b24d60/inst/templates/ad_adex.R#L162) of the
+`{admiral}` `ADEX` template script, where it is used to dynamically control the by variables passed to an `{admiral}` function.
 
 ### Summary
 

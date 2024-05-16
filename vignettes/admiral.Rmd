@@ -214,6 +214,22 @@ dataset_vignette(
 )
 ```
 
+Computations can also be used inside a `mutate()` statement (or similar), so they
+can be leveraged when your variable derivations do not require calls to specific
+`{admiral}` functions:
+
+```{r, eval=TRUE}
+adsl <- adsl %>% 
+  mutate(RFSTDT = convert_dtc_to_dt(RFSTDTC))
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  adsl,
+  display_vars = exprs(STUDYID, USUBJID, RFSTDTC, RFSTDT)
+)
+```
+
 ## Filter Functions
 
 [Filter functions](../reference/index.html#utilities-for-filtering-observations) are `{admiral}`
@@ -254,8 +270,8 @@ expressions must be specified rather than strings.
 
 - For arguments which expect one or more expressions, a list of expressions is expected, e.g. `order = exprs(AVISIT, desc(AESEV))`
 
-If you are new to expressions, consider reading our [Introduction to expressions](concepts_conventions.html#exprs) to
-learn more.
+If you are new to expressions, consider reading the [Expressions in Scripts](concepts_conventions.html#exprs) section 
+of our [Concepts and Conventions](concepts_conventions.html) User Guide to learn more.
 
 # Starting a Script
 
@@ -264,7 +280,7 @@ for the most common steps are provided by the following vignettes:
 
 - [Creating ADSL](adsl.html)
 - [Creating an OCCDS ADaM](occds.html)
-- [Creating a BDS Finding ADaM](bds_finding.html)
+- [Creating a BDS Findings ADaM](bds_finding.html)
 
 `{admiral}` also provides template R scripts as a starting point. They can be
 created by calling `use_ad_template()`, e.g.,
