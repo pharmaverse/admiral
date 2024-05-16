@@ -84,6 +84,13 @@ advs <- vs %>%
   )
 ```
 
+**Note:** In the example above, we are reading in dummy R data from 
+`{pharmaversesdtm}`. However, if you are using SAS datasets as a starting point, 
+be sure to consult the section [Handling of Missing Values](concepts_conventions.html#missing) 
+in the [Programming Concepts and Conventions](concepts_conventions.html) User Guide
+to learn how and why you should use the function `convert_blanks_to_na()` during 
+this process.
+
 # Derivation Functions
 
 The most important functions in `{admiral}` are the

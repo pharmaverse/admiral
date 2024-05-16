@@ -48,7 +48,7 @@ using `set_admiral_options(subject_keys = exprs(...))` at the top of a script.
 For a full discussion on admiral Inputs, Outputs and Options, see [this section](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#input-output-and-side-effects) on our
 developer-facing Programming Strategy.
 
-# Handling of Missing Values
+# Handling of Missing Values {#missing}
 
 When using the `{haven}` package to read SAS datasets into R, SAS-style character missing values, i.e. `""`, are *not* 
 converted into proper R `NA` values. Rather they are kept as is. This is problematic for any downstream data processing 
