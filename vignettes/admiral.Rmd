@@ -29,11 +29,11 @@ to start an `{admiral}` script.
 
 # Setup
 
-To help with the examples showcased later, we will load some packages and set up some
-data that we can manipulate. The `{dplyr}` and `{lubridate}` and `{stringr}` packages are
+To help with the examples showcased, we will load some packages and set up some example 
+data to manipulate later. The `{dplyr}`, `{lubridate}` and `{stringr}` packages are 
 `{tidyverse}` packages and are used heavily throughout this vignette. The `{admiral}`
-package also leverages the `{pharmaversesdtm}` package for example SDTM datasets which 
-are from the CDISC Pilot Study.
+package also leverages the `{pharmaversesdtm}` package for example SDTM datasets 
+which are from the CDISC Pilot Study.
 
 ```{r, message=FALSE, warning=FALSE}
 # Uncomment line below if you need to install these packages
@@ -163,7 +163,7 @@ advs %>%
   )
 ```
 
-Note: For the users' convenience, `{admiral}` actually provides
+**Note:** For the users' convenience, `{admiral}` actually provides
 `derive_param_map()`  (wrapper of `derive_param_computed()`) to derive MAP.
 The above example serves for illustrative purposes only.
 
@@ -181,13 +181,13 @@ They enhance the existing portfolio of derivation functions by allowing greater
 customization of the latter's behavior. This is done by allowing a derivation
 function to be:
 
-* Called multiple times, while varying some of the input arguments (`call_derivation()`);
-* Executed on a subset of the input dataset (`restrict_derivation()`);
-* Executed differently on subsets of the input dataset (`slice_derivation()`).
+* `call_derivation()` - Called multiple times, while varying some of the input arguments.
+* `restrict_derivation()` - Executed on a subset of the input dataset.
+* `slice_derivation()` - Executed differently on subsets of the input dataset.
 
 Higher order functions are a relatively advanced topic within `{admiral}`; you can
 can read all about them in the dedicated vignette about
-[Hgher Order Functions](../reference/index.html#higher_order).
+[Higher Order Functions](../reference/index.html#higher_order).
 
 ## Computation Functions
 
