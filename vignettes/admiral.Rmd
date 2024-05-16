@@ -219,7 +219,7 @@ can be leveraged when your variable derivations do not require calls to specific
 `{admiral}` functions:
 
 ```{r, eval=TRUE}
-adsl <- adsl %>% 
+adsl <- adsl %>%
   mutate(RFSTDT = convert_dtc_to_dt(RFSTDTC))
 ```
 
