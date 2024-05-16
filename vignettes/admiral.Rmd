@@ -25,13 +25,20 @@ removing, or modifying derivations. Each derivation is a function call.
 
 In this vignette we will explore some of the different type of derivation functions 
 offered by `{admiral}`, as well as the argument conventions they follow and how best 
-to start an `{admiral}` script. To help with the examples showcased, we will load 
-some packages and set up some example data to manipulate later. The `{dplyr}` and 
-`{lubridate}` and `{stringr}` packages are `{tidyverse}` packages and are used heavily
-throughout this vignette.  The `{admiral}` package also leverages the `{pharmaversesdtm}` 
-package for example SDTM datasets which are from the CDISC Pilot Study.
+to start an `{admiral}` script. 
+
+# Setup
+
+To help with the examples showcased later, we will load some packages and set up some
+data that we can manipulate. The `{dplyr}` and `{lubridate}` and `{stringr}` packages are
+`{tidyverse}` packages and are used heavily throughout this vignette. The `{admiral}`
+package also leverages the `{pharmaversesdtm}` package for example SDTM datasets which 
+are from the CDISC Pilot Study.
 
 ```{r, message=FALSE, warning=FALSE}
+# Uncomment line below if you need to install these packages
+# install.packages(c("dplyr", "lubridate", "stringr", "tibble", "pharmaversesdtm", "admiral"))
+
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 library(stringr)
@@ -45,12 +52,12 @@ data("ds")
 data("ex")
 data("vs")
 data("admiral_adsl")
+```
 
-dm <- convert_blanks_to_na(dm)
-ds <- convert_blanks_to_na(ds)
-ex <- convert_blanks_to_na(ex)
-vs <- convert_blanks_to_na(vs)
+The `adsl` and `advs` objects will now be prepared to showcase [addition of variables](#addvars)
+and [addition of records](#addrecs) later.
 
+```{r}
 ex_ext <- ex %>%
   derive_vars_dtm(
     dtc = EXSTDTC,
@@ -97,7 +104,7 @@ and `TRTSTMF` variables.
 Functions which derive a dedicated parameter start with `derive_param_` followed by
 the parameter name, e.g., `derive_param_bmi()` derives the `BMI` parameter.
 
-## Example: Adding Variables
+## Example: Adding Variables {#addvars}
 
 Below we can see an example call to one of the most common derivation functions,
 `derive_vars_merged()`. This function adds variable(s) to the input dataset based on the 
@@ -125,7 +132,7 @@ dataset_vignette(
 )
 ```
 
-## Example: Adding Observations
+## Example: Adding Records {#addrecs}
 
 Another common derivation function is `derive_param_computed()`. This function
 adds a derived parameter to an input dataset. In the example below, we use it
@@ -179,7 +186,8 @@ function to be:
 * Executed differently on subsets of the input dataset (`slice_derivation()`).
 
 Higher order functions are a relatively advanced topic within `{admiral}`; you can
-can read all about them in their [dedicated vignette](../reference/index.html#higher_order).
+can read all about them in the dedicated vignette about
+[Hgher Order Functions](../reference/index.html#higher_order).
 
 ## Computation Functions
 
