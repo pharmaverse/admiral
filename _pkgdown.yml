@@ -156,14 +156,17 @@ navbar:
     articles:
       text: User Guides
       menu:
-      - text: Creating a Basic ADSL
-        href: articles/adsl.html
+      - text: "General Guides"
       - text: Programming Concepts and Conventions
         href: articles/concepts_conventions.html
-      - text: FAQ
-        href: articles/faq.html
+      - text: Generic Derivations
+        href: articles/generic.html
+      - text: Higher Order Functions
+        href: articles/higher_order.html
       - text: -------
-      - text: "Deep Dives on ADaMs"
+      - text: "ADaM Script Guides"
+      - text: Creating a Basic ADSL
+        href: articles/adsl.html
       - text: Creating an OCCDS ADaM
         href: articles/occds.html
       - text: Creating a BDS Findings ADAM
@@ -176,21 +179,21 @@ navbar:
         href: articles/questionnaires.html
       - text: Creating a PK NCA or Population PK ADaM
         href: articles/pk_adnca.html
-      - text: "Advanced User Guides"
+      - text: Hy's Law Implementation
+        href: articles/hys_law.html
+      - text: -------
+      - text: "Special Topics Guides"
       - text: Date and Time Imputation
         href: articles/imputation.html
       - text: Visit and Period Variables
         href: articles/visits_periods.html
-      - text: Generic Derivations
-        href: articles/generic.html
-      - text: Higher Order Functions
-        href: articles/higher_order.html
       - text: Queries Dataset Documentation
         href: articles/queries_dataset.html
       - text: Lab Grading
         href: articles/lab_grading.html
-      - text: Hy's Law Implementation
-        href: articles/hys_law.html
+      - text: -------
+      - text: FAQ
+        href: articles/faq.html
 
     history:
       icon: fa-history
