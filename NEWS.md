@@ -57,8 +57,6 @@ functions and some of the more advanced topics have been moved to the new "Progr
 
 - ADLB template updated to make `PARAM` consistent for `PARAMCD` values `"BASO"` and `"LYMPH"`. (#2327)
 
-- Test for Ben
-
 <details>
 <summary>Developer Notes</summary>
 
