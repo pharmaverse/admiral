@@ -32,13 +32,14 @@ Authors:
   \item Stefan Bundfuss
   \item Jeffrey Dickinson
   \item Ross Farrugia
-  \item Adam Forys
+  \item Fanny Gautier
   \item G Gayatri
   \item Daphne Grasselly
   \item Dinakar Kulkarni
   \item Edoardo Mancini
   \item Sadchla Mascary
   \item Gordon Miller
+  \item Lina Patil
   \item Sophie Shapcott
   \item Eric Simms
   \item Daniel Sjoberg
