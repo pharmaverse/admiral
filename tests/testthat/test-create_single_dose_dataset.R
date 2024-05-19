@@ -404,3 +404,36 @@ test_that("create_single_dose_dataset Test 11: Works as expected for cases with 
     keys = "ASTDTM"
   )
 })
+
+## Test 12: Error if lookup_column contains duplicates ----
+test_that("create_single_dose_dataset Test 12: Error if lookup_column contains duplicates", {
+  custom_lookup <- tribble(
+    ~Value,   ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
+    "Q30MIN", (1 / 30),    "MINUTE",                      1,
+    "Q30MIN", (1 / 30),    "MINUTE",                      1,
+    "Q90MIN", (1 / 90),    "MINUTE",                      1
+  )
+
+  input <- tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
+    "P01", "Q30MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
+    ymd("2021-01-01"), ymd_hms("2021-01-01T07:00:00"),
+    "P02", "Q90MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
+    ymd("2021-01-01"), ymd_hms("2021-01-01T09:00:00")
+  )
+
+  expect_error(
+    create_single_dose_dataset(input,
+                               lookup_table = custom_lookup,
+                               lookup_column = Value,
+                               start_datetime = ASTDTM,
+                               end_datetime = AENDTM
+    ),
+    regexp = paste0(
+      "The following values of Value are duplicated in custom_lookup:\nQ30MIN"
+    )
+  )
+})
+
+
+

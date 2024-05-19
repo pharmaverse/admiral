@@ -467,11 +467,6 @@ create_single_dose_dataset <- function(dataset,
   )
   assert_data_frame(dataset, required_vars = keep_source_vars)
   col_names <- colnames(dataset)
-  relationship <- assert_character_scalar(
-    relationship,
-    values = c("one-to-one", "one-to-many", "many-to-one", "many-to-many"),
-    case_sensitive = TRUE,
-    optional = TRUE)
 
   # Checking that the dates specified follow the ADaM naming convention of ending in DT
   start_datec <- as_string(as_name(start_date))
@@ -566,6 +561,26 @@ create_single_dose_dataset <- function(dataset,
     abort(err_msg)
   }
 
+  # Check lookup_table does not contain duplicates
+  dup_check <- lookup %>%
+    group_by(!!dose_freq) %>%
+    summarise(n = n()) %>%
+    filter(n > 1)
+
+  if (nrow(dup_check) > 0) {
+    duplicate_values <- paste0(dup_check %>% select(!!dose_freq), collapse = ", ")
+
+    err_msg <- paste0(
+      sprintf(
+        "The following values of %s are duplicated in %s:\n",
+        as.character(lookup_column),
+        arg_name(substitute(lookup_table))
+      ), duplicate_values
+    )
+
+    abort(err_msg)
+  }
+
   # Use compute_duration to determine the number of completed dose periods
 
   if (is.null(start_datetime)) {
@@ -583,8 +598,7 @@ create_single_dose_dataset <- function(dataset,
   data_not_once <- left_join(
     data_not_once,
     lookup,
-    by = as.character(dose_freq),
-    relationship = "many-to-one"
+    by = as.character(dose_freq)
   )
 
   if (any(data_not_once$DOSE_WINDOW %in% c("MINUTE", "HOUR")) &&
