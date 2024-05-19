@@ -372,7 +372,8 @@ derive_vars_merged <- function(dataset,
     relationship,
     values = c("one-to-one", "one-to-many", "many-to-one", "many-to-many"),
     case_sensitive = TRUE,
-    optional = TRUE)
+    optional = TRUE
+  )
 
 
   add_data <- dataset_add %>%

@@ -413,16 +413,13 @@ test_that("create_single_dose_dataset Test 12: Error if lookup_column contains d
 
   expect_error(
     create_single_dose_dataset(input,
-                               lookup_table = custom_lookup,
-                               lookup_column = Value,
-                               start_datetime = ASTDTM,
-                               end_datetime = AENDTM
+      lookup_table = custom_lookup,
+      lookup_column = Value,
+      start_datetime = ASTDTM,
+      end_datetime = AENDTM
     ),
     regexp = paste0(
       "The following values of Value are duplicated in custom_lookup:\nQ30MIN"
     )
   )
 })
-
-
-

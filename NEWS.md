@@ -7,6 +7,8 @@
 ## Updates of Existing Functions
 
 - Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (#2392)
+- `create_single_dose_dataset()` has been updated to error if the `lookup_table` contains duplicates. (#2247)
+- `derive_vars_merged()` and `derive_vars_transposed()` have a `relationship` argument added (the same as found in `dplyr::*_join()` functions) for users to specify what type of join (one-to-one, one-to-many, etc.) should take place. (#2247)
 
 ## Breaking Changes
   

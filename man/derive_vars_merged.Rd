@@ -19,7 +19,8 @@ derive_vars_merged(
   false_value = NA_character_,
   missing_values = NULL,
   check_type = "warning",
-  duplicate_msg = NULL
+  duplicate_msg = NULL,
+  relationship = NULL
 )
 }
 \arguments{
@@ -165,6 +166,16 @@ If the uniqueness check fails, the specified message is displayed.
   "\{.var \{vars2chr(by_vars)\}\}."
 )
 }\if{html}{\out{</div>}}}
+
+\item{relationship}{Expected merge-relationship between the \code{by_vars}
+variable(s) in \code{dataset} and the dataset containing the additional \code{new_vars}.
+
+This argument is passed to the \code{dplyr::left_join()} function. See
+https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments for
+more details.
+
+Permitted Values for \code{relationship}: \code{"one-to-one"}, \code{"one-to-many"},
+\code{"many-to-one"}, \code{"many-to-many"}, \code{NULL}.}
 }
 \value{
 The output dataset contains all observations and variables of the

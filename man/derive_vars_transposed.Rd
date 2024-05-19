@@ -10,7 +10,8 @@ derive_vars_transposed(
   by_vars,
   key_var,
   value_var,
-  filter = NULL
+  filter = NULL,
+  relationship = NULL
 )
 }
 \arguments{
@@ -37,6 +38,16 @@ transposed variables}
 transposed variables}
 
 \item{filter}{Expression used to restrict the records of \code{dataset_merge} prior to transposing}
+
+\item{relationship}{Expected merge-relationship between the \code{by_vars}
+variable(s) in \code{dataset} and \code{dataset_merge} (after transposition)
+
+This argument is passed to the \code{dplyr::left_join()} function. See
+https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments for
+more details.
+
+Permitted Values for \code{relationship}: \code{"one-to-one"}, \code{"one-to-many"},
+\code{"many-to-one"}, \code{"many-to-many"}, \code{NULL}.}
 }
 \value{
 The input dataset with transposed variables from \code{dataset_merge} added
