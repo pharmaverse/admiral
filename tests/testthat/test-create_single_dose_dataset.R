@@ -214,9 +214,9 @@ test_that("create_single_dose_dataset Test 6: Error when a date variable contain
     "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd_hms("2021-01-15T09:00:00"),
     ymd("2021-01-29"), ymd_hms("2021-01-29T09:00:00")
   )
-  expect_error(
-    create_single_dose_dataset(input),
-    regexp = "cannot contain `NA`"
+  expect_snapshot(
+    error = TRUE,
+    create_single_dose_dataset(input)
   )
 })
 
@@ -231,7 +231,8 @@ test_that("create_single_dose_dataset Test 7: Message for improper DT column nam
     "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd_hms("2021-01-15 09:57:00"),
     ymd("2021-01-29"), ymd_hms("2021-01-29 10:57:00")
   )
-  expect_error(
+  expect_snapshot(
+    error = TRUE,
     create_single_dose_dataset(input,
       start_date = ADTSTD,
       keep_source_vars = exprs(
@@ -239,10 +240,6 @@ test_that("create_single_dose_dataset Test 7: Message for improper DT column nam
         ADTSTD, ASTDTM,
         AENDT, AENDTM
       )
-    ),
-    regexp = paste0(
-      "The argument start_date is expected to have a name like xxxDT.\n",
-      "Please check as it does not follow the expected naming convention"
     )
   )
 })
@@ -258,13 +255,10 @@ test_that("create_single_dose_dataset Test 8: Message for improper DT column nam
     "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd_hms("2021-01-15 09:57:00"),
     ymd("2021-01-29"), ymd_hms("2021-01-29 10:57:00")
   )
-  expect_error(
+  expect_snapshot(
+    error = TRUE,
     create_single_dose_dataset(input,
       end_date = ADTEND,
-    ),
-    regexp = paste0(
-      "The argument end_date is expected to have a name like xxxDT.\n",
-      "Please check as it does not follow the expected naming convention"
     )
   )
 })
@@ -277,14 +271,9 @@ test_that("create_single_dose_dataset Test 9: error if no datetime and freq more
     "P02",    "Q12H",    ymd("2021-01-01"), ymd("2021-01-01")
   )
 
-  expect_error(
-    create_single_dose_dataset(input),
-    regexp = paste(
-      "There are dose frequencies more frequent than once a day.",
-      "Thus `start_datetime` and `end_datetime` must be specified.",
-      sep = "\n"
-    ),
-    fixed = TRUE
+  expect_snapshot(
+    error = TRUE,
+    create_single_dose_dataset(input)
   )
 })
 

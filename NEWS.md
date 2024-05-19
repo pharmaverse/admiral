@@ -6,8 +6,6 @@
 
 ## Updates of Existing Functions
 
-- Created three unit tests for `get_summary_records()`. (#2304)
-- Created unit tests for developer internal function `get_imputation_target_date()` (#2378)
 - Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (#2392)
 
 ## Breaking Changes
@@ -38,24 +36,40 @@
 
 ## Documentation
 
+- Documentation for `derive_extreme_event()` has been updated to include a description for the value of `derive_extreme_event()` when `keep_source_vars = NULL`. (#2398)
+
 - The "Visit and Period Variables" vignette was updated and refactored to include example code to create a period reference dataset. (#2321)
 
 - The documentation of `derive_vars_merged()` function is updated to describe that the `check_type` argument is ignored (an error is issued) if `order` is not specified. (#2326)
 
+- The "User Guides" section has been reorganized. A new "Programming Concepts and Conventions" vignette was also added to provide more context and information around common `{admiral}` behaviors and ways of working. (#2395)
+
+- The "Get Started" section has been revamped, placing greater focus on material that may help users familiarize themselves with `{admiral}`. There are now new sections showcasing the various types of `{admiral}` 
+functions and some of the more advanced topics have been moved to the new "Programming Concepts and Conventions" vignette. (#2395)
+
+- The Examples section of `derive_param_computed()` now contains a new item showcasing how to create a derived parameter in the case that a variable contributing to the derived parameter has some/all of its values missing. (#2338)
+ 
 ## Various
 
-- In the previous version, `renv` was the default framework used to manage package dependencies. Now, we use `devtools` as our main package manager (some changes also occurred for  [admiralci workflows](https://github.com/pharmaverse/admiralci)).
-There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for `R CMD CHECKS` jobs, there is an associated renv.lock file (under the deps artifact):
-
- ![Download dependencies from CI workflows](man/figures/dependencies_devtools.png) (#2306)
- 
-- The function `dplyr::transmute()` is superseded in favor of `dplyr::mutate(.keep = "none")`. Consequently, all the admiral functions that utilized the former have been updated accordingly. (#2274)
+ - The function `dplyr::transmute()` is superseded in favor of `dplyr::mutate(.keep = "none")`. Consequently, all the admiral functions that utilized the former have been updated accordingly. (#2274)
 
 - The templates for ADPP and ADPC are updated for missing variables (#2308) and to make `ATPT` and `ATPTN` consistent. (#2328)
 
 - ADLB template updated to make `PARAM` consistent for `PARAMCD` values `"BASO"` and `"LYMPH"`. (#2327)
 
+<details>
+<summary>Developer Notes</summary>
+
+- In the previous version, `renv` was the default framework used to manage package dependencies. Now, we use `devtools` as our main package manager (some changes also occurred for  [admiralci workflows](https://github.com/pharmaverse/admiralci)).
+There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for `R CMD CHECKS` jobs, there is an associated renv.lock file (under the deps artifact):
+
+ ![Download dependencies from CI workflows](man/figures/dependencies_devtools.png) (#2306)
+
 - Splitting out `R` and `test` files for date/time functions for cyclomatic complexity refactor (#2340)(#2339)
+- Created three unit tests for `get_summary_records()`. (#2304)
+- Created unit tests for developer internal function `get_imputation_target_date()` (#2378)
+
+</details>
 
 # admiral 1.0.2
 

@@ -340,9 +340,9 @@ get_terms_from_db <- function(version,
                               temp_env) {
   assert_db_requirements(
     version = version,
-    version_arg_name = arg_name(substitute(version)),
+    version_arg_name = deparse(substitute(version)),
     fun = fun,
-    fun_arg_name = arg_name(substitute(fun)),
+    fun_arg_name = deparse(substitute(fun)),
     queries = queries,
     i = i
   )
@@ -394,33 +394,27 @@ get_terms_from_db <- function(version,
 assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name, queries, i) {
   if (is.null(fun)) {
     msg <-
-      paste0(
-        fun_arg_name,
-        " is not specified. This is expected for basket",
-        "s.\n",
-        "A basket is requested by query ",
-        i,
-        ":\n",
-        paste(capture.output(str(queries[[i]])),
-          collapse = "\n"
-        )
+      c(
+        "{.arg {fun_arg_name}} is not specified. This is expected for baskets.",
+        "A basket is requested by query {.val {i}}:",
+        capture.output(queries[[i]])
       )
-    abort(msg)
+    # set names for correct indentation
+    names(msg) <- if_else(str_starts(msg, " "), " ", "")
+    names(msg)[[2]] <- "i"
+    cli_abort(msg)
   }
   if (is.null(version)) {
     msg <-
-      paste0(
-        version_arg_name,
-        " is not specified. This is expected for basket",
-        "s.\n",
-        "A basket is requested by query ",
-        i,
-        ":\n",
-        paste(capture.output(str(queries[[i]])),
-          collapse = "\n"
-        )
+      c(
+        "{.arg {version_arg_name}} is not specified. This is expected for baskets.",
+        "A basket is requested by query {.val {i}}:",
+        capture.output(queries[[i]])
       )
-    abort(msg)
+    # set names for correct indentation
+    names(msg) <- if_else(str_starts(msg, " "), " ", "")
+    names(msg)[[2]] <- "i"
+    cli_abort(msg)
   }
 }
 
@@ -621,18 +615,18 @@ validate_query <- function(obj) {
     validate_basket_select(values$definition)
   } else if (is.data.frame(values$definition) || is.list(values$definition)) {
     if (is_auto(values$name)) {
-      abort(
-        paste0(
-          "The auto keyword can be used for baskets only.\n",
-          "It was provided for the name element."
+      cli_abort(
+        c(
+          "The auto keyword can be used for baskets only.",
+          i = "It was provided for the {.var name} element."
         )
       )
     }
     if (is_auto(values$id)) {
-      abort(
-        paste0(
-          "The auto keyword can be used for baskets only.\n",
-          "It was provided for the id element."
+      cli_abort(
+        c(
+          "The auto keyword can be used for baskets only.",
+          i = "It was provided for the {.var id} element."
         )
       )
     }
@@ -654,14 +648,18 @@ validate_query <- function(obj) {
           ),
           collapse = "\n"
         )
-        err_msg <- sprintf(
+        err_msg <- c(
           paste(
-            "Each element of the list in the definition field must be a data frame",
-            "or an object of class `basket_select` but the following are not:\n%s"
+            "Each element of the list in the {.var definition} field must be a data frame",
+            "or an object of class {.cls basket_select} but the following are not:"
           ),
-          info_msg
+          sprintf(
+            "Element %s is {.obj_type_friendly {values$definition[[%s]]}}.",
+            which(!is_valid),
+            which(!is_valid)
+          )
         )
-        abort(err_msg)
+        cli_abort(err_msg)
       }
 
       for (i in seq_along(values$definition)) {
@@ -674,12 +672,13 @@ validate_query <- function(obj) {
       }
     }
   } else {
-    abort(
-      paste0(
-        "`definition` expects a `basket_select` object, a data frame,",
-        " or a list of data frames and `basket_select` objects\n",
-        "An object of the following class was provided: ",
-        class(values$definition)
+    cli_abort(
+      c(
+        paste(
+          "{.var definition} expects a {.cls basket_select} object, a data frame,",
+          "or a list of data frames and {.cls basket_select} objects."
+        ),
+        i = "An object of the following class was provided: {.cls {class(values$definition)}}"
       )
     )
   }
@@ -724,63 +723,44 @@ assert_terms <- function(terms,
                          expect_grpname = FALSE,
                          expect_grpid = FALSE,
                          source_text) {
-  if (!is.data.frame(terms)) {
-    abort(paste0(
+  assert_data_frame(
+    terms,
+    message = paste0(
       source_text,
-      " is not a data frame but ",
-      what_is_it(terms),
-      "."
-    ))
-  }
+      " is not a data frame but {.obj_type_friendly {terms}}."
+    )
+  )
 
   if (nrow(terms) == 0) {
-    abort(paste0(
+    cli_abort(paste0(
       source_text,
       " does not contain any observations."
     ))
   }
 
-  vars <- names(terms)
-  if (!"SRCVAR" %in% vars) {
-    abort(
-      paste0(
-        "Required variable `SRCVAR` is missing in ",
-        source_text,
-        "."
-      )
-    )
-  }
+  required_vars <- exprs(SRCVAR)
   if (expect_grpname) {
-    if (!"GRPNAME" %in% vars) {
-      abort(
-        paste0(
-          "Required variable `GRPNAME` is missing in ",
-          source_text,
-          "."
-        )
-      )
-    }
+    required_vars <- exprs(!!!required_vars, GRPNAME)
   }
   if (expect_grpid) {
-    if (!"GRPID" %in% vars) {
-      abort(
-        paste0(
-          "Required variable `GRPID` is missing in ",
-          source_text,
-          "."
-        )
-      )
-    }
+    required_vars <- exprs(!!!required_vars, GRPID)
   }
+  assert_data_frame(
+    terms,
+    required_vars = required_vars,
+    message = paste0(
+      "Required variable{?s} {.var {missing_vars}} {?is/are} missing in ",
+      source_text,
+      "."
+    )
+  )
+  vars <- names(terms)
   if (!"TERMCHAR" %in% vars && !"TERMNUM" %in% vars) {
-    abort(
-      paste0(
-        "Variable `TERMCHAR` or `TERMNUM` is required.\n",
-        "None of them is in ",
-        source_text,
-        ".\n",
-        "Provided variables: ",
-        enumerate(vars)
+    cli_abort(
+      c(
+        "Variable {.var TERMCHAR} or {.var TERMNUM} is required.",
+        paste0("None of them is in ", source_text, "."),
+        i = "Provided variables: {.var {vars}}"
       )
     )
   }
@@ -854,10 +834,10 @@ validate_basket_select <- function(obj) {
   )
 
   if (is.null(values$id) && is.null(values$name)) {
-    abort("Either id or name has to be non null.")
+    cli_abort("Either {.var id} or {.var name} has to be non null.")
   }
   if (!is.null(values$id) && !is.null(values$name)) {
-    abort("Either id or name has to be null.")
+    cli_abort("Either {.var id} or {.var name} has to be null.")
   }
   obj
 }

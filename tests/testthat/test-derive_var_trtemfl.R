@@ -78,48 +78,33 @@ test_that("derive_var_trtemfl Test 3: considering trt end time", {
 
 ## Test 4: error if `end_window` without `trt_end_date` ----
 test_that("derive_var_trtemfl Test 4: error if `end_window` without `trt_end_date`", {
-  expect_error(
+  expect_snapshot(
     derive_var_trtemfl(
       adae,
       end_window = 10
     ),
-    paste(
-      "`end_window` argument was specified but not `trt_end_date`",
-      "Either both or none of them must be specified.",
-      sep = "\n"
-    ),
-    fixed = TRUE
+    error = TRUE
   )
 })
 
 ## Test 5: error if `initial_intensity` without `intensity` ----
 test_that("derive_var_trtemfl Test 5: error if `initial_intensity` without `intensity`", {
-  expect_error(
+  expect_snapshot(
     derive_var_trtemfl(
       adae,
       initial_intensity = AEITOXGR
     ),
-    paste(
-      "`initial_intensity` argument was specified but not `intensity`",
-      "Either both or none of them must be specified.",
-      sep = "\n"
-    ),
-    fixed = TRUE
+    error = TRUE
   )
 })
 
 ## Test 6: error if `intensity` without `initial_intensity` ----
 test_that("derive_var_trtemfl Test 6: error if `intensity` without `initial_intensity`", {
-  expect_error(
+  expect_snapshot(
     derive_var_trtemfl(
       adae,
       intensity = AETOXGR
     ),
-    paste(
-      "`intensity` argument was specified but not `initial_intensity`",
-      "Either both or none of them must be specified.",
-      sep = "\n"
-    ),
-    fixed = TRUE
+    error = TRUE
   )
 })

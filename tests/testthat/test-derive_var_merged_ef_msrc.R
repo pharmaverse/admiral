@@ -101,3 +101,48 @@ test_that("derive_var_merged_ef_msrc Test 2: with by_vars", {
     keys = c("USUBJID", "EXLNKID")
   )
 })
+
+test_that("error if source dataset is not available", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~CANCTRFL,
+    "1",      "Y",
+    "2",      "Y",
+    "3",      "Y",
+    "4",      NA_character_
+  )
+
+  adsl <- select(expected, -CANCTRFL)
+
+  cm <- tibble::tribble(
+    ~USUBJID, ~CMCAT,        ~CMSEQ,
+    "1",      "ANTI-CANCER",      1,
+    "1",      "GENERAL",          2,
+    "2",      "GENERAL",          1,
+    "3",      "ANTI-CANCER",      1
+  )
+
+  pr <- tibble::tribble(
+    ~USUBJID, ~PRSEQ,
+    "2",      1,
+    "3",      1
+  )
+
+  expect_snapshot(
+    derive_var_merged_ef_msrc(
+      adsl,
+      flag_events = list(
+        flag_event(
+          dataset_name = "cm",
+          condition = CMCAT == "ANTI-CANCER"
+        ),
+        flag_event(
+          dataset_name = "pr"
+        )
+      ),
+      source_datasets = list(cm = cm, pro = pr),
+      by_vars = exprs(USUBJID),
+      new_var = CANCTRFL
+    ),
+    error = TRUE
+  )
+})
