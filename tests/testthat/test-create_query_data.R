@@ -484,20 +484,20 @@ get_smq_oth <- function(basket_select,
                         keep_id = FALSE,
                         temp_env) {
   if (basket_select$scope == "NARROW") {
-    end <- 3
+    end <- 1
   } else {
-    end <- 5
+    end <- 2
   }
 
   if (is.null(basket_select$name)) {
     basket_select$name <- paste("SMQ name of", basket_select$id)
   }
-  terms <- tibble(TERMCHAR = paste(basket_select$name, "Term", c(1:end), "(", version, ")"))
+  terms <- tibble(TERMCHAR = paste(basket_select$name, "Term", c(1:end)))
   terms <- mutate(terms,
     SRCVAR = "AEDECOD",
     GRPNAME = basket_select$name,
-    TEST1_VAR = if_else(str_detect(TERMCHAR, "meningitis"), "CHECK 1", "CHECK 2"),
-    TEST2_VAR = if_else(str_detect(TERMCHAR, "meningitis"), "CHECK 3", "CHECK 4")
+    TEST1_VAR = basket_select$TEST1_VAR,
+    TEST2_VAR = basket_select$TEST2_VAR
   )
   if (keep_id) {
     mutate(terms, GRPID = 42)
@@ -537,25 +537,14 @@ test_that("basket_select Test 21: basket_select customized query defined by SMQs
   )
 
   expected_output <-
-    bind_rows(
-      get_smq_oth(
-        basket_select(
-          name = "Noninfectious meningitis",
-          scope = "NARROW",
-          type = "smq"
-        ),
-        version = "20.0"
-      ),
-      get_smq_oth(
-        basket_select(
-          name = "Noninfectious encephalitis",
-          scope = "BROAD",
-          type = "smq"
-        ),
-        version = "20.0"
-      )
+    tribble(
+      ~TERMCHAR,                           ~TEST1_VAR, ~TEST2_VAR,
+      "Noninfectious meningitis Term 1",    "CHECK 1",  "CHECK 3",
+      "Noninfectious encephalitis Term 1",  "CHECK 2",  "CHECK 4",
+      "Noninfectious encephalitis Term 2",  "CHECK 2",  "CHECK 4",
     ) %>%
     mutate(
+      SRCVAR = "AEDECOD",
       GRPNAME = "Immune-Mediated Meningoencephalitis",
       PREFIX = "CQ02",
       VERSION = "20.0"
