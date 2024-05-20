@@ -171,7 +171,7 @@ If the uniqueness check fails, the specified message is displayed.
 variable(s) in \code{dataset} and the dataset containing the additional \code{new_vars}.
 
 This argument is passed to the \code{dplyr::left_join()} function. See
-https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments for
+\url{https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments} for
 more details.
 
 Permitted Values for \code{relationship}: \code{"one-to-one"}, \code{"one-to-many"},

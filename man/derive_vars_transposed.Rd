@@ -43,7 +43,7 @@ transposed variables}
 variable(s) in \code{dataset} and \code{dataset_merge} (after transposition)
 
 This argument is passed to the \code{dplyr::left_join()} function. See
-https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments for
+\url{https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments} for
 more details.
 
 Permitted Values for \code{relationship}: \code{"one-to-one"}, \code{"one-to-many"},

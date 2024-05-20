@@ -28,7 +28,7 @@
 #'   variable(s) in `dataset` and `dataset_merge` (after transposition)
 #'
 #'   This argument is passed to the `dplyr::left_join()` function. See
-#'   https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments for
+#'   <https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments> for
 #'   more details.
 #'
 #'   Permitted Values for `relationship`: `"one-to-one"`, `"one-to-many"`,
