@@ -82,7 +82,7 @@ adbds <- tribble(
   "2",        NA,
 )
 
-adbds1 <- adbds %>% 
+adbds1 <- adbds %>%
   derive_vars_joined(
     dataset_add = windows,
     filter_join = AWLO <= ADY & ADY <= AWHI,
@@ -313,7 +313,7 @@ adae <- tribble(
 ) %>%
   mutate(ASTDT = ymd(ASTDT))
 
-adae1 <- adae %>% 
+adae1 <- adae %>%
   derive_vars_joined(
     dataset_add = phase_ref,
     by_vars = exprs(STUDYID, USUBJID),
@@ -352,7 +352,7 @@ adsl <- derive_vars_period(
     APxxEDT = APEREDT,
     TRTxxA = TRTA
   )
-) 
+)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -382,7 +382,7 @@ adae <- tribble(
 ) %>%
   mutate(ASTDT = ymd(ASTDT))
 
-adae2 <- adae %>% 
+adae2 <- adae %>%
   derive_vars_joined(
     dataset_add = period_ref,
     by_vars = exprs(STUDYID, USUBJID),
@@ -403,7 +403,7 @@ ADSL, then the former can again be created from ADSL by calling `create_period_d
 This time, when calling `create_period_dataset()` we just need to make sure we include `TRTA = TRTxxA` as part of the `new_vars` argument to create the treatment variables as well.
 
 ```{r}
-period_ref1 <- adsl %>% 
+period_ref1 <- adsl %>%
   create_period_dataset(
     new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT, TRTA = TRTxxA)
   )
