@@ -82,12 +82,16 @@ adbds <- tribble(
   "2",        NA,
 )
 
-derive_vars_joined(
-  adbds,
-  dataset_add = windows,
-  filter_join = AWLO <= ADY & ADY <= AWHI,
-  join_type = "all",
-)
+adbds1 <- adbds %>% 
+  derive_vars_joined(
+    dataset_add = windows,
+    filter_join = AWLO <= ADY & ADY <= AWHI,
+    join_type = "all",
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adbds1)
 ```
 
 # Period, Subperiod, and Phase Variables
@@ -162,7 +166,7 @@ Below, we present two example workflows: one where where a period reference data
 
 Below we create a period reference dataset starting from the exposure dataset EX. Consider the following exposure dataset:
 
-```{r echo=FALSE}
+```{r echo=TRUE}
 ex <- tribble(
   ~STUDYID, ~USUBJID,  ~VISIT,    ~EXTRT,   ~EXSTDTC,
   "xyz",    "1",       "Day 1",   "Drug X", "2022-01-02",
@@ -182,8 +186,6 @@ ex <- tribble(
   "xyz",    "2",       "Week 24", "Drug X", "2024-04-22",
   "xyz",    "2",       "Week 28", "Drug X", "2024-05-21"
 )
-
-ex
 ```
 
 Then to create a period reference dataset, code like this (or similar) would suffice:
@@ -210,8 +212,10 @@ period_ref <- ex %>%
   # Tidy up
   ungroup() %>%
   select(-starts_with("EX"), -VISIT)
+```
 
-period_ref
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(period_ref)
 ```
 
 The workflow above populates the Period End Date `APEREDT` for all periods 
@@ -232,8 +236,10 @@ period_ref <- period_ref %>%
     APERIOD == "2" ~ EOSDT
   )) %>%
   select(-EOSDT, -TRTSDT, -TRTEDT)
+```
 
-period_ref
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(period_ref)
 ```
 
 ### Creating the Period/Phase Reference Dataset from ADSL {#from_adsl}
@@ -255,8 +261,10 @@ phase_ref <- create_period_dataset(
   adsl1,
   new_vars = exprs(PHSDT = PHwSDT, PHEDT = PHwEDT, APHASE = APHASEw)
 )
+```
 
-phase_ref
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(phase_ref)
 ```
 
 ## Creating ADSL Period, Subperiod, or Phase Variables {#periods_adsl}
@@ -274,10 +282,14 @@ adsl2 <- derive_vars_period(
   adsl,
   dataset_ref = period_ref,
   new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
-) %>%
-  select(STUDYID, USUBJID, AP01SDT, AP01EDT, AP02SDT, AP02EDT)
+)
+```
 
-adsl2
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  adsl2,
+  display_vars = exprs(STUDYID, USUBJID, AP01SDT, AP01EDT, AP02SDT, AP02EDT)
+)
 ```
 
 ## Creating BDS and OCCDS Period, Subperiod, or Phase Variables {#periods_bds}
@@ -301,13 +313,17 @@ adae <- tribble(
 ) %>%
   mutate(ASTDT = ymd(ASTDT))
 
-derive_vars_joined(
-  adae,
-  dataset_add = phase_ref,
-  by_vars = exprs(STUDYID, USUBJID),
-  filter_join = PHSDT <= ASTDT & ASTDT <= PHEDT,
-  join_type = "all"
-)
+adae1 <- adae %>% 
+  derive_vars_joined(
+    dataset_add = phase_ref,
+    by_vars = exprs(STUDYID, USUBJID),
+    filter_join = PHSDT <= ASTDT & ASTDT <= PHEDT,
+    join_type = "all"
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adae1)
 ```
 
 # Treatment Variables (`TRTxxP`, `TRTxxA`, `TRTP`, `TRTA`, ...)
@@ -336,14 +352,14 @@ adsl <- derive_vars_period(
     APxxEDT = APEREDT,
     TRTxxA = TRTA
   )
-) %>%
-  select(
-    STUDYID, USUBJID,
-    TRT01A, TRT02A,
-    AP01SDT, AP01EDT, AP02SDT, AP02EDT
-  )
+) 
+```
 
-adsl
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  adsl,
+  display_vars = exprs(STUDYID, USUBJID, TRT01A, TRT02A, AP01SDT, AP01EDT, AP02SDT, AP02EDT)
+)
 ```
 
 ## Creating BDS and OCCDS Treatment Variables {#treatment_bds}
@@ -366,15 +382,19 @@ adae <- tribble(
 ) %>%
   mutate(ASTDT = ymd(ASTDT))
 
-derive_vars_joined(
-  adae,
-  dataset_add = period_ref,
-  by_vars = exprs(STUDYID, USUBJID),
-  new_vars = exprs(APERIOD, TRTA),
-  join_vars = exprs(APERSDT, APEREDT),
-  join_type = "all",
-  filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
-)
+adae2 <- adae %>% 
+  derive_vars_joined(
+    dataset_add = period_ref,
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(APERIOD, TRTA),
+    join_vars = exprs(APERSDT, APEREDT),
+    join_type = "all",
+    filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adae2)
 ```
 
 If no period/phase reference dataset is available but period/phase variables are in
@@ -383,8 +403,12 @@ ADSL, then the former can again be created from ADSL by calling `create_period_d
 This time, when calling `create_period_dataset()` we just need to make sure we include `TRTA = TRTxxA` as part of the `new_vars` argument to create the treatment variables as well.
 
 ```{r}
-create_period_dataset(
-  adsl,
-  new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT, TRTA = TRTxxA)
-)
+period_ref1 <- adsl %>% 
+  create_period_dataset(
+    new_vars = exprs(APERSDT = APxxSDT, APEREDT = APxxEDT, TRTA = TRTxxA)
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(period_ref1)
 ```
