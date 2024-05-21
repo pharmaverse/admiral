@@ -7,7 +7,7 @@
 #' **Note:** This is a helper function for `derive_vars_merged_exist_flag` which
 #' inputs this result into `derive_vars_merged()`.
 #'
-#' @param dataset The additional dataset you wish to pull variables from
+#' @param dataset Input dataset
 #'
 #' @param new_var New variable
 #'
