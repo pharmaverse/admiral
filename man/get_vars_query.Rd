@@ -16,9 +16,14 @@ get_vars_query(dataset, dataset_queries)
 \code{create_query_data()} can be used to create the dataset.}
 }
 \value{
-The processed query dataset that can be joined to the input dataset.
+The processed query dataset with \code{SRCVAR} and \code{TERM_NAME_ID} so that
+that can be merged to the input dataset to execute the derivations outlined by \code{dataset_queries}.
 }
 \description{
+Create a table for the input dataset which binds the necessary
+rows for a \code{derive_vars_query()} call with the relevant \code{SRCVAR}, \code{TERM_NAME_ID}
+and a temporary index if it is necessary
+
 \strong{Note:} This function exists to work with derive_vars_query, to execute
 the first step of derive_vars_query separately for metadata tracking
 }
@@ -66,7 +71,7 @@ adae <- tribble(
 get_vars_query(adae, queries)
 }
 \seealso{
-\code{\link[=create_query_data]{create_query_data()}}]
+\code{\link[=create_query_data]{create_query_data()}}
 
 Utilities used within Derivation functions: 
 \code{\link{call_user_fun}()},

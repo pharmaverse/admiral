@@ -7,7 +7,7 @@
 get_flagged_records(dataset, new_var, condition, filter = NULL)
 }
 \arguments{
-\item{dataset}{The additional dataset you wish to pull variables from}
+\item{dataset}{Input dataset}
 
 \item{new_var}{New variable
 
@@ -15,13 +15,9 @@ The specified variable is added to the input dataset.}
 
 \item{condition}{Condition
 
-The condition is evaluated at the additional dataset (\code{dataset_add}). For
-all by groups where it evaluates as \code{TRUE} at least once the new variable
-is set to the true value (\code{true_value}). For all by groups where it
-evaluates as \code{FALSE} or \code{NA} for all observations the new variable is set
-to the false value (\code{false_value}). The new variable is set to the missing
-value (\code{missing_value}) for by groups not present in the additional
-dataset.}
+The condition is evaluated at the dataset (\code{dataset}). For
+all rows where it evaluates as \code{TRUE} the new variable
+is set to 1 in the new column}
 
 \item{filter}{Filter for additional data
 
@@ -32,23 +28,15 @@ considered.
 \emph{Permitted Values}: a condition}
 }
 \value{
-The output dataset contains a filtered version of the
-input dataset with the variable specified for \code{new_var} representing a flag
-for the condition
+The output dataset is the input dataset filtered by the \code{filter} condition\verb{and and with the variable specified for}new_var` representing a flag for the condition.
 }
 \description{
 Create a flag variable for the input dataset which indicates if
-there exists at least one observation in another dataset fulfilling a certain
+there exists at least one observation in the input dataset fulfilling a certain
 condition.
 
-\strong{Note:} This is a helper function for \code{derive_vars_merged_exist_flag} which
-inputs this result into \code{derive_vars_merged()}.
-}
-\details{
-\enumerate{
-\item The additional dataset is restricted to the observations matching the
-\code{filter} condition.
-}
+\strong{Note:} This is a helper function for \code{derive_vars_merged_exist_flag()} which
+inputs this result into \code{derive_vars_merged()}..
 }
 \examples{
 

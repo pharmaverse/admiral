@@ -9,7 +9,7 @@ test_that("get_flagged_records Test 1: generate existence flag", {
     "ST42-3", "WEIGHT", "Week 2",   55,
     "ST42-3", "WEIGHT", "Week 4",   50
   ) %>% mutate(STUDYID = "ST42")
-  
+
   actual <- get_flagged_records(
     dataset = advs,
     new_var = VSEVALFL,
