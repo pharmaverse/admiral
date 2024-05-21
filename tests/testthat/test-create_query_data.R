@@ -567,7 +567,7 @@ test_that("format.basket_select Test 22: formatting is correct (id specified)", 
       type = "smq",
       newvar = 1
     )),
-    "basket_select(name = NULL, id = 42, scope = \"NARROW\", type = \"smq\", newvar = 1"
+    "basket_select(name = NULL, id = 42, scope = \"NARROW\", type = \"smq\", newvar = 1)"
   )
 })
 

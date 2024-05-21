@@ -889,7 +889,7 @@ format.basket_select <- function(x, ...) {
 
   formvar <- list()
 
-  for (i in 1:(length(all_arg_names))) {
+  for (i in seq_len(length(all_arg_names))) {
     is_numeric_class <- map_lgl(x[i], inherits, "numeric") | map_chr(x[i], typeof) == "numeric"
 
     if (is_numeric_class) {
