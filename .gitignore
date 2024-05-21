@@ -52,3 +52,5 @@ admiral*.tgz
 # MacOS
 .DS_Store
 ._.DS_Store
+
+.Rprofile
