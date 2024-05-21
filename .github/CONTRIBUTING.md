@@ -94,5 +94,5 @@ jump in and get involved, so please don't be afraid you'll make mistakes
 along the way -- we all have and continue to do so, and that's what the
 reviews are for. Also if ever you get stuck don't hesitate to reach out
 for support via the [Slack
-channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269).
+channel](https://pharmaverse.slack.com/).
  ***Welcome to our `{admiral}` community!***
