@@ -885,7 +885,6 @@ validate_basket_select <- function(obj) {
 #'
 #' format(basket_select(id = 42, scope = "NARROW", type = "smq"))
 format.basket_select <- function(x, ...) {
-
   all_arg_names <- names(x)
 
   formvar <- list()
@@ -900,7 +899,7 @@ format.basket_select <- function(x, ...) {
     }
   }
 
-  allvars = paste(formvar, collapse = ", ")
+  allvars <- paste(formvar, collapse = ", ")
 
   paste0(
     "basket_select(",

@@ -560,7 +560,6 @@ test_that("basket_select Test 21: basket_select customized query defined by SMQs
 # format.basket_select ----
 ## Test 22: formatting is correct (id specified) ----
 test_that("format.basket_select Test 22: formatting is correct (id specified)", {
-
   expect_equal(
     format(basket_select(
       id = 42,
