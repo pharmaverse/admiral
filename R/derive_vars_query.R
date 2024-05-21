@@ -1,4 +1,8 @@
 #' Get Query Variables
+#' 
+#' @description Create a table for the input dataset which binds the necessary
+#' rows for a `derive_vars_query()` call with the relevant `SRCVAR`, `TERM_NAME_ID` 
+#' and a temporary index if it is necessary
 #'
 #' **Note:** This function exists to work with derive_vars_query, to execute
 #' the first step of derive_vars_query separately for metadata tracking
@@ -38,12 +42,13 @@
 #' `create_query_data()` can be used to create the dataset.
 #'
 #'
-#' @return The processed query dataset that can be joined to the input dataset.
+#' @return The processed query dataset with `SRCVAR` and `TERM_NAME_ID` so that 
+#' that can be merged to the input dataset to execute the derivations outlined by `dataset_queries`.
 #'
 #' @family utils_help
 #' @keywords utils_help
 #'
-#' @seealso [create_query_data()]]
+#' @seealso [create_query_data()]
 #'
 #' @export
 #'
@@ -273,9 +278,10 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
     static_cols <- c(static_cols, "temp_key")
   }
   joined <- get_vars_query(dataset, dataset_queries)
-  # join queries to input dataset
+  # join queries to input dataset, remove temp col(s)
   derive_vars_merged(dataset, dataset_add = joined, by_vars = exprs(!!!syms(static_cols))) %>%
     select(-starts_with("temp_"))
+
 }
 
 #' Verify if a Dataset Has the Required Format as Queries Dataset.

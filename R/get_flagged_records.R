@@ -1,11 +1,11 @@
 #' Create an Existence Flag
 #'
 #' @description Create a flag variable for the input dataset which indicates if
-#' there exists at least one observation in another dataset fulfilling a certain
+#' there exists at least one observation in the input dataset fulfilling a certain
 #' condition.
 #'
-#' **Note:** This is a helper function for `derive_vars_merged_exist_flag` which
-#' inputs this result into `derive_vars_merged()`.
+#' **Note:** This is a helper function for `derive_vars_merged_exist_flag()` which
+#' inputs this result into `derive_vars_merged()`..
 #'
 #' @param dataset Input dataset
 #'
@@ -15,13 +15,9 @@
 #'
 #' @param condition Condition
 #'
-#'   The condition is evaluated at the additional dataset (`dataset_add`). For
-#'   all by groups where it evaluates as `TRUE` at least once the new variable
-#'   is set to the true value (`true_value`). For all by groups where it
-#'   evaluates as `FALSE` or `NA` for all observations the new variable is set
-#'   to the false value (`false_value`). The new variable is set to the missing
-#'   value (`missing_value`) for by groups not present in the additional
-#'   dataset.
+#'   The condition is evaluated at the dataset (`dataset`). For
+#'   all rows where it evaluates as `TRUE` the new variable
+#'   is set to 1 in the new column
 #'
 #' @param filter Filter for additional data
 #'
@@ -31,14 +27,8 @@
 #'
 #'   *Permitted Values*: a condition
 #'
-#' @return The output dataset contains a filtered version of the
-#'   input dataset with the variable specified for `new_var` representing a flag
-#'   for the condition
-#'
-#' @details
-#'
-#'   1. The additional dataset is restricted to the observations matching the
-#'   `filter` condition.
+#' @return The output dataset is the input dataset filtered by the `filter` condition` and
+#' and with the variable specified for `new_var` representing a flag for the condition.
 #'
 #'
 #'
