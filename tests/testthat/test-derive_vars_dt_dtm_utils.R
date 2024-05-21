@@ -98,6 +98,3 @@ test_that("get_imputation_target_time Test 12: get correct target for missing ti
     list(hour = "xx", minute = "yy", second = "zz")
   )
 })
-
-
-
