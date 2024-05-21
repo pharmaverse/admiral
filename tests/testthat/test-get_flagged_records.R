@@ -1,12 +1,3 @@
-
-adsl <- tibble::tribble(
-  ~USUBJID, ~SEX, ~COUNTRY,
-  "ST42-1", "F",  "AUT",
-  "ST42-2", "M",  "MWI",
-  "ST42-3", "M",  "NOR",
-  "ST42-4", "F",  "UGA"
-) %>% mutate(STUDYID = "ST42")
-
 advs <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
   "ST42-1", "WEIGHT", "BASELINE", 66,
@@ -16,14 +7,13 @@ advs <- tibble::tribble(
   "ST42-3", "WEIGHT", "Week 4",   50
 ) %>% mutate(STUDYID = "ST42")
 
-# derive_var_exist_flag ----
+# get_flagged_records ----
 ## Test 1: generate existence flag ----
-test_that("derive_var_exist_flag Test 1: generate existence flag", {
-
-  actual <- derive_var_exist_flag(
-    dataset_add = advs,
-    new_var = expr(VSEVALFL),
-    condition = expr(AVISIT == "BASELINE")
+test_that("get_flagged_records Test 1: generate existence flag", {
+  actual <- get_flagged_records(
+    dataset = advs,
+    new_var = VSEVALFL,
+    condition = AVISIT == "BASELINE"
   )
 
   expected <- mutate(advs, VSEVALFL = c(1, 0, 1, 0, 0))

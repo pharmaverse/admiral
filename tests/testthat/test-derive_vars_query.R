@@ -156,7 +156,7 @@ test_that("derive_vars_query Test 5: Derive decides between TERMCHAR and TERMNUM
 })
 
 ## Test 6: Error is given when both TERMCHAR/TERMNUM are NA or empty ----
-test_that("derive_vars_query Test 6: Error is given when both TERMCHAR/TERMNUM are NA or empty", {
+test_that("derive_vars_for_query Test 6: Error is given if both TERMCHAR/TERMNUM are NA/empty", {
   query <- tibble::tribble(
     ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
     "CQ40", "My Query 1", "AEDECOD", NA_character_, 1, NA,

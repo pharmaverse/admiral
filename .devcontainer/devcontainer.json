@@ -5,7 +5,7 @@
 	// Install Dev Container Features. More info: https://containers.dev/features
 	"containerEnv": {
 		"ROOT": "true",
-		"PASSWORD": "password",
+		"PASSWORD": "rstudio",
 		"DISABLE_AUTH": "true",
 		"RENV_AUTOLOADER_ENABLED": "false"
 	},
@@ -21,7 +21,7 @@
 			"installZsh": true,
 			"configureZshAsDefaultShell": false,
 			"installOhMyZsh": true,
-			"username": "user",
+			"username": "rstudio",
 			"upgradePackages": false
 		},
 		"ghcr.io/mikaello/devcontainer-features/modern-shell-utils:1": {}

@@ -70,7 +70,7 @@ test_that("derive_vars_merged Test 1: merge all variables", {
   )
 
   expected <- left_join(advs, adsl, by = c("STUDYID", "USUBJID"))
-  
+
   expect_dfs_equal(
     base = expected,
     compare = actual,

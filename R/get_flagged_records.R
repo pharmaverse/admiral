@@ -4,9 +4,10 @@
 #' there exists at least one observation in another dataset fulfilling a certain
 #' condition.
 #'
-#' **Note:** This is a helper function for `derive_vars_merged_exist_flag` which inputs 
-#' this result into `derive_vars_merged()`.
+#' **Note:** This is a helper function for `derive_vars_merged_exist_flag` which
+#' inputs this result into `derive_vars_merged()`.
 #'
+#' @param dataset Input dataset
 #'
 #' @param new_var New variable
 #'
@@ -22,18 +23,7 @@
 #'   value (`missing_value`) for by groups not present in the additional
 #'   dataset.
 #'
-#' @param true_value True value
-#'
-#' @param false_value False value
-#'
-#' @param missing_value Values used for missing information
-#'
-#'   The new variable is set to the specified value for all by groups without
-#'   observations in the additional dataset.
-#'
-#'   *Permitted Value*: A character scalar
-#'
-#' @param filter_add Filter for additional data
+#' @param filter Filter for additional data
 #'
 #'   Only observations fulfilling the specified condition are taken into account
 #'   for flagging. If the argument is not specified, all observations are
@@ -41,26 +31,19 @@
 #'
 #'   *Permitted Values*: a condition
 #'
-#' @return The output dataset contains all observations and variables of the
-#'   input dataset and additionally the variable specified for `new_var` derived
-#'   from the additional dataset (`dataset_add`).
+#' @return The output dataset contains a filtered version of the
+#'   input dataset with the variable specified for `new_var` representing a flag
+#'   for the condition
 #'
 #' @details
 #'
 #'   1. The additional dataset is restricted to the observations matching the
-#'   `filter_add` condition.
-#'
-#'   1. The new variable is created to be added to the input dataset and set to the true value
-#'   (`true_value`) if for the by group at least one observation exists in the
-#'   (restricted) additional dataset where the condition evaluates to `TRUE`. It
-#'   is set to the false value (`false_value`) if for the by group at least one
-#'   observation exists and for all observations the condition evaluates to
-#'   `FALSE` or `NA`. Otherwise, it is set to the missing value
-#'   (`missing_value`).
+#'   `filter` condition.
 #'
 #'
-#' @family der_gen
-#' @keywords der_gen
+#'
+#' @family utils_help
+#' @keywords utils_help
 #'
 #' @export
 #'
@@ -68,12 +51,6 @@
 #'
 #' library(dplyr, warn.conflicts = FALSE)
 #'
-#' dm <- tribble(
-#'   ~STUDYID,  ~DOMAIN,  ~USUBJID, ~AGE,   ~AGEU,
-#'   "PILOT01",    "DM", "01-1028",   71, "YEARS",
-#'   "PILOT01",    "DM", "04-1127",   84, "YEARS",
-#'   "PILOT01",    "DM", "06-1049",   60, "YEARS"
-#' )
 #'
 #' ae <- tribble(
 #'   ~STUDYID,  ~DOMAIN,  ~USUBJID,    ~AETERM,     ~AEREL,
@@ -84,12 +61,12 @@
 #' )
 #'
 #'
-#' derive_var_merged_exist_flag(
-#'   dataset_add = ae,
-#'   new_var = exprs(AERELFL),
-#'   condition = exprs(AEREL == "PROBABLE")
+#' get_flagged_records(
+#'   dataset = ae,
+#'   new_var = AERELFL,
+#'   condition = AEREL == "PROBABLE"
 #' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
+#'   select(STUDYID, USUBJID, AERELFL)
 #'
 #' vs <- tribble(
 #'   ~STUDYID,  ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSBLFL,
@@ -106,39 +83,22 @@
 #'   "PILOT01",    "VS", "06-1049",  "BASELINE",  "WEIGHT",     57.83,     "Y",
 #'   "PILOT01",    "VS", "06-1049",    "WEEK 4",  "WEIGHT",     58.97,      NA
 #' )
-#' derive_var_merged_exist_flag(
-#'   dataset_add = vs,
-#'   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
-#'   new_var = exprs(WTBLHIFL),
-#'   condition = exprs(VSSTRESN > 90),
-#'   false_value = "N",
-#'   missing_value = "M"
+#' get_flagged_records(
+#'   dataset = vs,
+#'   new_var = WTBLHIFL,
+#'   condition = VSSTRESN > 90,
+#'   filter = VSTESTCD == "WEIGHT" & VSBLFL == "Y"
 #' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
+#'   select(STUDYID, USUBJID, WTBLHIFL)
 #'
-#'
-
-derive_var_exist_flag <- function(dataset_add,
-                      new_var,
-                      condition,
-                      true_value = "Y",
-                      false_value = NA_character_,
-                      missing_value = NA_character_,
-                      filter_add = NULL) {
-  # Very unclear to me why, but without these variables just hanging out here, it does not work
-  condition
-  new_var
+get_flagged_records <- function(dataset,
+                                new_var,
+                                condition,
+                                filter = NULL) {
   new_var <- assert_symbol(enexpr(new_var))
   condition <- assert_filter_cond(enexpr(condition))
-  
-  filter_add <-
-    assert_filter_cond(filter_add, optional = TRUE)
-  if (is.null(filter_add)) {
-    add_data <- dataset_add %>%
+  filter <-
+    assert_filter_cond(enexpr(filter), optional = TRUE)
+  filter_if(dataset, filter) %>%
     mutate(!!new_var := if_else(!!condition, 1, 0, 0))
-  } else {
-  add_data <- filter_if(dataset_add, filter_add) %>%
-    mutate(!!new_var := if_else(!!condition, 1, 0, 0))
-  }
-  add_data
 }

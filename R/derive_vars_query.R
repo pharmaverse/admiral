@@ -1,4 +1,7 @@
-#' Derive Query Variables
+#' Get Query Variables
+#'
+#' **Note:** This function exists to work with derive_vars_query, to execute
+#' the first step of derive_vars_query separately for metadata tracking
 #'
 #' @details This function can be used to derive CDISC variables such as
 #'   `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, and `CQzzNAM` in ADAE and
@@ -35,10 +38,10 @@
 #' `create_query_data()` can be used to create the dataset.
 #'
 #'
-#' @return The input dataset with query variables derived.
+#' @return The processed query dataset that can be joined to the input dataset.
 #'
-#' @family der_occds
-#' @keywords der_occds
+#' @family utils_help
+#' @keywords utils_help
 #'
 #' @seealso [create_query_data()]]
 #'
@@ -58,9 +61,8 @@
 #'   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
 #'   7, "Alveolar proteinosis", NA_character_, NA_integer_
 #' )
-#' derive_vars_query(adae, queries)
-
-derive_vars_for_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
+#' get_vars_query(adae, queries)
+get_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
   source_vars <- unique(dataset_queries$SRCVAR)
   assert_data_frame(dataset,
     required_vars = chr2vars(source_vars),
@@ -188,7 +190,7 @@ derive_vars_for_query <- function(dataset, dataset_queries) { # nolint: cyclocom
     mutate(TERM_NAME_ID = toupper(TERM_NAME_ID))
 
   # join restructured queries to input dataset
-  joined <- joined %>%
+  joined %>%
     inner_join(queries_wide, by = c("SRCVAR", "TERM_NAME_ID")) %>%
     select(!!!syms(c(static_cols, new_col_names))) %>%
     group_by_at(static_cols) %>%
@@ -257,11 +259,20 @@ derive_vars_for_query <- function(dataset, dataset_queries) { # nolint: cyclocom
 #'   7, "Alveolar proteinosis", NA_character_, NA_integer_
 #' )
 #' derive_vars_query(adae, queries)
-
 derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
   # join restructured queries to input dataset
-  joined <- derive_vars_for_query(dataset, dataset_queries)
-
+  assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
+  dataset_queries <- convert_blanks_to_na(dataset_queries)
+  source_vars <- unique(dataset_queries$SRCVAR)
+  static_cols <- setdiff(names(dataset), chr2vars(source_vars))
+  no_key <- dataset %>%
+    select(all_of(static_cols)) %>%
+    distinct()
+  if (nrow(no_key) != nrow(dataset)) {
+    dataset$temp_key <- seq_len(nrow(dataset))
+    static_cols <- c(static_cols, "temp_key")
+  }
+  joined <- get_vars_query(dataset, dataset_queries)
   # join queries to input dataset
   derive_vars_merged(dataset, dataset_add = joined, by_vars = exprs(!!!syms(static_cols))) %>%
     select(-starts_with("temp_"))
