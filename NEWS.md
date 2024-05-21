@@ -43,6 +43,13 @@
 
 - The documentation of `derive_vars_merged()` function is updated to describe that the `check_type` argument is ignored (an error is issued) if `order` is not specified. (#2326)
 
+- The "User Guides" section has been reorganized. A new "Programming Concepts and Conventions" vignette was also added to provide more context and information around common `{admiral}` behaviors and ways of working. (#2395)
+
+- The "Get Started" section has been revamped, placing greater focus on material that may help users familiarize themselves with `{admiral}`. There are now new sections showcasing the various types of `{admiral}` 
+functions and some of the more advanced topics have been moved to the new "Programming Concepts and Conventions" vignette. (#2395)
+
+- The Examples section of `derive_param_computed()` now contains a new item showcasing how to create a derived parameter in the case that a variable contributing to the derived parameter has some/all of its values missing. (#2338)
+ 
 ## Various
 
  - The function `dplyr::transmute()` is superseded in favor of `dplyr::mutate(.keep = "none")`. Consequently, all the admiral functions that utilized the former have been updated accordingly. (#2274)
