@@ -53,7 +53,7 @@ admiral*.tgz
 .DS_Store
 ._.DS_Store
 
-.Rprofile#Ignore Persisted R files created through user installation
+#Ignore Persisted R files created through user installation
 .R/
 .cache/
 renv/
