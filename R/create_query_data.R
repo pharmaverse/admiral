@@ -885,15 +885,26 @@ validate_basket_select <- function(obj) {
 #'
 #' format(basket_select(id = 42, scope = "NARROW", type = "smq"))
 format.basket_select <- function(x, ...) {
+
+  all_arg_names <- names(x)
+
+  formvar <- list()
+
+  for (i in 1:(length(all_arg_names))) {
+    is_numeric_class <- map_lgl(x[i], inherits, "numeric") | map_chr(x[i], typeof) == "numeric"
+
+    if (is_numeric_class) {
+      formvar[i] <- paste(all_arg_names[i], "=", format(x[[i]]))
+    } else {
+      formvar[i] <- paste(all_arg_names[i], "=", dquote(x[[i]]))
+    }
+  }
+
+  allvars = paste(formvar, collapse = ", ")
+
   paste0(
-    "basket_select(name = ",
-    dquote(x$name),
-    ", id = ",
-    format(x$id),
-    ", scope = ",
-    dquote(x$scope),
-    ", type = ",
-    dquote(x$type),
+    "basket_select(",
+    allvars,
     ")"
   )
 }

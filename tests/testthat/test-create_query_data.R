@@ -557,18 +557,18 @@ test_that("basket_select Test 21: basket_select customized query defined by SMQs
   )
 })
 
-
-
 # format.basket_select ----
 ## Test 22: formatting is correct (id specified) ----
 test_that("format.basket_select Test 22: formatting is correct (id specified)", {
+
   expect_equal(
     format(basket_select(
       id = 42,
       scope = "NARROW",
-      type = "smq"
+      type = "smq",
+      newvar = 1
     )),
-    "basket_select(name = NULL, id = 42, scope = \"NARROW\", type = \"smq\")"
+    "basket_select(name = NULL, id = 42, scope = \"NARROW\", type = \"smq\", newvar = 1"
   )
 })
 
