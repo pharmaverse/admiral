@@ -52,9 +52,3 @@ admiral*.tgz
 # MacOS
 .DS_Store
 ._.DS_Store
-
-#Ignore Persisted R files created through user installation
-.R/
-.cache/
-renv/
-.gitignore
