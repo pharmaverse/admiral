@@ -68,7 +68,7 @@ test_that("get_imputation_target_date Test 8: get correct target for missing dat
 
 # get_imputation_target_time ----
 ## Test 9: get correct target for missing times (first) ----
-test_that("get_imputation_target_time Test 6: get correct target for missing times (first)", {
+test_that("get_imputation_target_time Test 9: get correct target for missing times (first)", {
   expect_equal(
     get_imputation_target_time("first"),
     list(hour = "00", minute = "00", second = "00")
