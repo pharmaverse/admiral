@@ -4,9 +4,9 @@
 #' rows for a `derive_vars_query()` call with the relevant `SRCVAR`, `TERM_NAME_ID`
 #' and a temporary index if it is necessary
 #'
-#' **Note:** This function is the first step performed in derive_vars_query 
+#' **Note:** This function is the first step performed in derive_vars_query
 #' requested by some users to be present independently from it.
-#' 
+#'
 #' @details This function can be used to derive CDISC variables such as
 #'   `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, and `CQzzNAM` in ADAE and
 #'   ADMH, and variables such as `SDGzzNAM`, `SDGzzCD`, and `SDGzzSC` in ADCM.
@@ -279,10 +279,10 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
   }
   tryCatch(
     expr = {
-    joined <- get_vars_query(dataset, dataset_queries)
+      joined <- get_vars_query(dataset, dataset_queries)
     },
-    error = function(e){ 
-      stop("Error in derive_vars_query call of get_vars_query: ",e)
+    error = function(e) {
+      stop("Error in derive_vars_query call of get_vars_query: ", e)
     }
   )
   # join queries to input dataset, remove temp col(s)

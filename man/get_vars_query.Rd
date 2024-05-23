@@ -24,8 +24,8 @@ Create a table for the input dataset which binds the necessary
 rows for a \code{derive_vars_query()} call with the relevant \code{SRCVAR}, \code{TERM_NAME_ID}
 and a temporary index if it is necessary
 
-\strong{Note:} This function exists to work with derive_vars_query, to execute
-the first step of derive_vars_query separately for metadata tracking
+\strong{Note:} This function is the first step performed in derive_vars_query
+requested by some users to be present independently from it.
 }
 \details{
 This function can be used to derive CDISC variables such as
