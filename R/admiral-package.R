@@ -9,10 +9,10 @@
 #'   summarise_all group_by_at first
 #' @importFrom magrittr %>%
 #' @importFrom rlang := abort arg_match as_function as_label as_name as_string
-#'   call2 caller_env call_name current_env .data enexpr eval_bare eval_tidy
-#'   expr expr_interp expr_label exprs f_lhs f_rhs inform is_call is_expression
-#'   is_missing is_named new_formula parse_expr parse_exprs set_names sym syms type_of
-#'   warn as_data_mask list2 exec
+#'   call2 caller_env call_name current_env .data enexpr enexprs eval_bare
+#'   eval_tidy expr expr_interp expr_label exprs f_lhs f_rhs inform is_call
+#'   is_expression is_missing is_named new_environment new_formula parse_expr
+#'   parse_exprs set_names sym syms type_of warn as_data_mask list2 exec
 #' @importFrom utils capture.output str file.edit
 #' @importFrom purrr discard map map2 map_chr map_lgl reduce walk keep map_if
 #'   transpose flatten every modify_at modify_if reduce compose pmap map_dbl
