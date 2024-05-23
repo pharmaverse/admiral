@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9031</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9033</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,7 +104,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">basket_select</span><span class="op">(</span>name <span class="op">=</span> <span class="cn">NULL</span>, id <span class="op">=</span> <span class="cn">NULL</span>, scope <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">type</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">basket_select</span><span class="op">(</span>name <span class="op">=</span> <span class="cn">NULL</span>, id <span class="op">=</span> <span class="cn">NULL</span>, scope <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">type</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -129,6 +129,12 @@ from the company database.</p>
 <dd><p>The type argument expects a character scalar. It is passed to the
 company specific get_terms() function such that the function can determine
 which sort of basket is requested</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Any number of <em>named</em> function arguments. Can be used to pass in company
+specific conditions or flags that will then be used in user-defined function that is
+passed into argument <code>get_terms_fun</code> for function <code><a href="create_query_data.html">create_query_data()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
