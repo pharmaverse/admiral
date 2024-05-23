@@ -29,7 +29,7 @@
 #' library(lubridate)
 #'
 #' # Create reference dataset for periods
-#' adsl <- tribble( #' adsl <- tribble(
+#' adsl <- tribble(
 #'   ~USUBJID, ~SEX, ~COUNTRY,
 #'   "ST01-01", "F", "AUT",
 #'   "ST01-02", "M", "MWI",
