@@ -338,11 +338,15 @@ derive_param_tte <- function(dataset = NULL,
     element = "dataset_name",
     condition = dataset_name %in% source_names,
     source_names = source_names,
-    message_text = paste0(
-      "The dataset names must be included in the list specified for the ",
-      "`source_datasets` parameter.\n",
-      "Following names were provided by `source_datasets`:\n",
-      enumerate(source_names, quote_fun = squote)
+    message_text = c(
+      paste0(
+        "The dataset names must be included in the list specified for the ",
+        "{.arg source_datasets} argument."
+      ),
+      i = paste(
+        "Following names were provided by {.arg source_datasets}:",
+        "{.val {source_names}}"
+      )
     )
   )
   assert_list_element(
@@ -350,11 +354,15 @@ derive_param_tte <- function(dataset = NULL,
     element = "dataset_name",
     condition = dataset_name %in% source_names,
     source_names = source_names,
-    message_text = paste0(
-      "The dataset names must be included in the list specified for the ",
-      "`source_datasets` parameter.\n",
-      "Following names were provided by `source_datasets`:\n",
-      enumerate(source_names, quote_fun = squote)
+    message_text = c(
+      paste0(
+        "The dataset names must be included in the list specified for the ",
+        "{.arg source_datasets} argument."
+      ),
+      i = paste(
+        "Following names were provided by {.arg source_datasets}:",
+        "{.val {source_names}}"
+      )
     )
   )
   assert_logical_scalar(create_datetime)
@@ -718,22 +726,21 @@ extend_source_datasets <- function(source_datasets,
         )
     } else if (!setequal(by_vars_chr, missing_by_vars)) {
       # only some of the by variables are included in the source dataset #
-      abort(paste(
-        "Only",
-        paste(setdiff(by_vars_chr, missing_by_vars), collapse = ", "),
-        "are included in source dataset",
-        names(source_datasets)[[i]],
-        ".\n The source dataset must include all or none of the by variables."
+      cli_abort(c(
+        "The source dataset must include all or none of the by variables.",
+        i = paste(
+          "Only {.var {setdiff(by_vars_chr, missing_by_vars)}} {?is/are} included in",
+          "source dataset {.var {names(source_datasets)[[i]]}}."
+        )
       ))
     } else {
       extend[[i]] <- TRUE
     }
   }
   if (length(by_groups) == 0) {
-    abort(paste0(
-      "The by variables (",
-      paste(by_vars_chr, collapse = ", "),
-      ") are not contained in any of the source datasets."
+    cli_abort(paste(
+      "The by variable{?s} {.var {by_vars_chr}} {?is/are} not contained in any",
+      "of the source datasets."
     ))
   }
   # extend source datasets #
@@ -916,11 +923,10 @@ list_tte_source_objects <- function(package = "admiral") {
   assert_character_scalar(package)
 
   if (!requireNamespace(package, quietly = TRUE)) {
-    err_msg <- sprintf(
-      "No package called '%s' is installed and hence no `tte_source` objects are available",
-      package
-    )
-    abort(err_msg)
+    cli_abort(paste(
+      "No package called {.pkg {package}} is installed and hence no {.cls tte_source}",
+      "objects are available."
+    ))
   }
 
   # Get all `tte_source` objects exported by `package`

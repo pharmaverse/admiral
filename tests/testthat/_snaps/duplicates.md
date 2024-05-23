@@ -2,8 +2,9 @@
 
     Code
       get_duplicates_dataset()
-    Output
+    Message
       Duplicate records with respect to `USUBJID`.
+    Output
       # A tibble: 4 x 3
         USUBJID COUNTRY  AAGE
       * <chr>   <chr>   <dbl>

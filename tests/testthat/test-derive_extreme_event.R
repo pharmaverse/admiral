@@ -601,8 +601,54 @@ test_that("derive_extreme_event Test 7: mode and condition used in event()", {
   )
 })
 
-## Test 8: deprecation of ignore_event_order ----
-test_that("derive_extreme_event Test 8: deprecation of ignore_event_order", {
+## Test 8: error if source dataset not available ----
+test_that("derive_extreme_event Test 8: error if source dataset not available", {
+  adhy <- tibble::tribble(
+    ~USUBJID, ~AVISITN, ~CRIT1FL,
+    "1",             1, "Y",
+    "1",             2, "Y",
+    "2",             1, "Y",
+    "2",             2, NA_character_,
+    "2",             3, "Y",
+    "2",             4, NA_character_
+  ) %>%
+    mutate(
+      PARAMCD = "ALKPH",
+      PARAM = "Alkaline Phosphatase (U/L)"
+    )
+
+  expect_snapshot(
+    derive_extreme_event(
+      adhy,
+      by_vars = exprs(USUBJID),
+      events = list(
+        event(
+          dataset_name = "adyh",
+          condition = is.na(CRIT1FL),
+          set_values_to = exprs(AVALC = "N")
+        ),
+        event(
+          condition = CRIT1FL == "Y",
+          mode = "last",
+          set_values_to = exprs(AVALC = "Y")
+        )
+      ),
+      source_datasets = list(adhy = adhy),
+      tmp_event_nr_var = event_nr,
+      order = exprs(event_nr, AVISITN),
+      mode = "first",
+      keep_source_vars = exprs(AVISITN),
+      set_values_to = exprs(
+        PARAMCD = "ALK2",
+        PARAM = "ALKPH <= 2 times ULN"
+      )
+    ),
+    error = TRUE
+  )
+})
+
+## Test 9: deprecation of ignore_event_order ----
+test_that("derive_extreme_event Test 9: deprecation of ignore_event_order", {
   adrs <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",             1, "PR",
@@ -642,8 +688,8 @@ test_that("derive_extreme_event Test 8: deprecation of ignore_event_order", {
   )
 })
 
-## Test 9: deprecation of ignore_event_order ----
-test_that("derive_extreme_event Test 9: deprecation of ignore_event_order", {
+## Test 10: deprecation of ignore_event_order ----
+test_that("derive_extreme_event Test 10: deprecation of ignore_event_order", {
   adrs <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",             1, "PR",

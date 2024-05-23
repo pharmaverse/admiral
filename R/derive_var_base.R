@@ -104,7 +104,7 @@ derive_var_base <- function(dataset,
     by_vars = by_vars,
     duplicate_msg = paste(
       "Input dataset contains multiple baseline records with respect to",
-      enumerate(vars2chr(by_vars))
+      "{.var {by_vars}}"
     )
   )
 }

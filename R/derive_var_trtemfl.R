@@ -166,39 +166,41 @@
 #' ) %>% select(ASTDTM, AENDTM, AEITOXGR, AETOXGR, TRTEM2FL)
 #'
 #' adae2 <- expected2 <- tribble(
-#'   ~USUBJID, ~ASTDTM, ~AENDTM, ~AEITOXGR, ~AETOXGR, ~AEGRPID,
-#'   # before treatment
-#'   "1", "2021-12-13T20:15", "2021-12-15T12:45", "1", "1", "1",
-#'   "1", "2021-12-14T20:15", "2021-12-14T22:00", "1", "3", "1",
-#'   # starting before treatment and ending during treatment
-#'   "1", "2021-12-30T20:00", "2022-01-14T11:00", "2", "2", "2",
-#'   "1", "2022-01-05T20:15", "2022-06-01T01:23", "2", "3", "2",
-#'   "1", "2022-01-10T20:15", "2022-03-01T01:23", "2", "1", "2",
-#'   # starting during treatment
-#'   "1", "2022-01-01T12:00", "2022-01-02T23:25", "4", "4", "3",
-#'
-#'   # after treatment
-#'   "1", "2022-05-10T11:00", "2022-05-10T13:05", "2", "2", "4",
-#'   "1", "2022-05-11T11:00", "2022-05-11T13:05", "2", "2", "4",
-#'   # missing dates
-#'   "1", "", "", "3", "4", "5",
-#'   "1", "2021-12-30T09:00", "", "3", "4", "5",
-#'   "1", "2021-12-30T11:00", "", "3", "3", "5",
-#'   "1", "", "2022-01-04T09:00", "3", "4", "5",
-#'   "1", "", "2021-12-24T19:00", "3", "4", "5",
-#'   "1", "", "2022-06-04T09:00", "3", "4", "5",
-#'   # without treatment
-#'   "2", "", "2021-12-03T12:00", "1", "2", "1",
-#'   "2", "2021-12-01T12:00", "2021-12-03T12:00", "1", "2", "2",
-#'   "2", "2021-12-06T18:00", "", "1", "2", "3"
+#' ~USUBJID, ~ASTDTM,            ~AENDTM,            ~AEITOXGR, ~AETOXGR, ~AEGRPID,
+#'  # before treatment
+#' "1",      "2021-12-13T20:15", "2021-12-15T12:45", "1",       "1",      "1",
+#' "1",      "2021-12-14T20:15", "2021-12-14T22:00", "1",       "3",      "1",
+# starting before treatment and ending during treatment
+#' "1",      "2021-12-30T20:15", "2022-01-14T01:23", "3",       "3",      "2",
+#' "1",      "2022-01-05T20:00", "2022-06-01T11:00", "3",       "1",      "2",
+#' "1",      "2022-01-10T20:15", "2022-01-11T01:23", "3",       "2",      "2",
+#' "1",      "2022-01-13T20:15", "2022-03-01T01:23", "3",       "1",      "2",
+#' # starting during treatment
+#' "1",      "2022-01-01T12:00", "2022-01-02T23:25", "4",       "4",       "3",
+
+#' # after treatment
+#' "1",      "2022-05-10T11:00", "2022-05-10T13:05", "2",       "2",       "4",
+#' "1",      "2022-05-10T12:00", "2022-05-10T13:05", "2",       "2",       "4",
+#' "1",      "2022-05-11T11:00", "2022-05-11T13:05", "2",       "2",       "4",
+#' # missing dates
+#' "1",      "",                 "",                 "3",       "4",       "5",
+#' "1",      "2021-12-30T09:00", "",                 "3",       "4",       "5",
+#' "1",      "2021-12-30T11:00", "",                 "3",       "3",       "5",
+#' "1",      "",                 "2022-01-04T09:00", "3",       "4",       "5",
+#' "1",      "",                 "2021-12-24T19:00", "3",       "4",       "5",
+#' "1",      "",                 "2022-06-04T09:00", "3",       "4",       "5",
+#' # without treatment
+#' "2",      "",                 "2021-12-03T12:00", "1",       "2",        "1",
+#' "2",      "2021-12-01T12:00", "2021-12-03T12:00", "1",       "2",        "2",
+#' "2",      "2021-12-06T18:00", "",                 "1",       "2",        "3"
 #' ) %>%
 #'   mutate(
 #'     ASTDTM = ymd_hm(ASTDTM),
 #'     AENDTM = ymd_hm(AENDTM),
-#'     TRTSDTM = if_else(USUBJID == "1", ymd_hm("2022-01-01T01:01"), ymd_hms("")),
-#'     TRTEDTM = if_else(USUBJID == "1", ymd_hm("2022-04-30T23:59"), ymd_hms(""))
-#'   )
-#'
+#'     TRTSDTM = if_else(USUBJID != "2", ymd_hm("2022-01-01T01:01"), ymd_hms("")),
+#'     TRTEDTM = if_else(USUBJID != "2", ymd_hm("2022-04-30T23:59"), ymd_hms(""))
+#'  )
+
 #' # derive TRTEMFL taking treatment end and worsening into account within a grouping variable
 #' derive_var_trtemfl(
 #'   adae2,
@@ -209,6 +211,7 @@
 #'   intensity = AETOXGR,
 #'   group_var = AEGRPID
 #' ) %>% select(ASTDTM, AENDTM, AEITOXGR, AETOXGR, AEGRPID, TRTEMFL)
+
 derive_var_trtemfl <- function(dataset,
                                new_var = TRTEMFL,
                                start_date = ASTDTM,
@@ -236,30 +239,26 @@ derive_var_trtemfl <- function(dataset,
 
   # Check if both initial_intensity and intensity are provided
   if (is.null(initial_intensity) && !is.null(intensity)) {
-    abort(paste(
-      "`intensity` argument was specified but not `initial_intensity`",
-      "Either both or none of them must be specified.",
-      sep = "\n"
+    cli_abort(c(
+      "{.arg intensity} argument was specified but not {.arg initial_intensity}",
+      "Either both or none of them must be specified."
     ))
   }
   if (!is.null(initial_intensity) && is.null(intensity)) {
-    abort(paste(
-      "`initial_intensity` argument was specified but not `intensity`",
-      "Either both or none of them must be specified.",
-      sep = "\n"
+    cli_abort(c(
+      "{.arg initial_intensity} argument was specified but not {.arg intensity}",
+      "Either both or none of them must be specified."
     ))
   }
 
   # Assert required variables
   required_vars <-
-    expr_c(
-      start_date,
-      end_date,
-      trt_start_date,
-      trt_end_date,
-      initial_intensity,
-      intensity
-    )
+    expr_c(start_date,
+           end_date,
+           trt_start_date,
+           trt_end_date,
+           initial_intensity,
+           intensity)
   if (!is.null(group_var)) {
     required_vars <- c(required_vars, enexpr(group_var))
   }
@@ -273,109 +272,91 @@ derive_var_trtemfl <- function(dataset,
     assert_date_var(dataset, var = !!trt_end_date)
   }
 
-  # Compute TEAE flag based on the presence of group_var
-
+  # end window condition
   if (is.null(end_window)) {
     end_cond <- expr(TRUE)
   } else {
     if (is.null(trt_end_date)) {
-      abort(
-        paste(
-          "`end_window` argument was specified but not `trt_end_date`",
-          "Either both or none of them must be specified.",
-          sep = "\n"
-        )
-      )
+      cli_abort(c(
+        "{.arg end_window} argument was specified but not {.arg trt_end_date}",
+        "Either both or none of them must be specified."
+      ))
     }
     if (ignore_time_for_trt_end) {
       end_cond <- expr(
-        is.na(!!trt_end_date) |
-          date(!!start_date) <= date(!!trt_end_date) + days(end_window)
+        (is.na(!!trt_end_date) |
+           date(!!start_date) <= date(!!trt_end_date) + days(end_window))
       )
     } else {
       end_cond <-
-        expr(is.na(!!trt_end_date) |
-          !!start_date <= !!trt_end_date + days(end_window))
+        expr(
+          (is.na(!!trt_end_date) |
+             !!start_date <= !!trt_end_date + days(end_window)))
     }
   }
 
-  if (is.null(group_var)) {
-    if (is.null(intensity)) {
-      worsening_cond <- expr(FALSE)
-    } else {
-      worsening_cond <-
-        expr(
-          !!start_date < !!trt_start_date &
-            (
-              !!initial_intensity < !!intensity |
-                is.na(!!initial_intensity) | is.na(!!intensity)
-            )
-        )
-    }
-  } else {
-    # Determine if there are multiple records per AE event
-    multiple_records <- dataset %>%
-      group_by(USUBJID, !!group_var) %>%
-      summarise(num_records = n(), .groups = "drop") %>%
-      filter(num_records > 1) %>%
-      nrow() > 0
 
-    # Compute TEAE flag based on the presence of multiple records
-    if (multiple_records) {
-      # Step 1: Identify worsened records after TRTSDT
-      # Step 2: Get the first worsen date after TRTSDT
+  # Flagging the single records for both single AE collected data and mutiple AE collected data
+  if (is.null(group_var)) {
+    dataset <- dataset %>%
+      mutate(srfl = "Y")
+  }
+  else{
+    dataset <- dataset %>%
+      group_by(USUBJID, !!group_var) %>%
+      mutate(srfl = ifelse(row_number() == 1, "Y", NA)) %>%
+      ungroup()
+  }
+
+  if (is.null(intensity)) {
+    worsening_cond <- expr(FALSE)
+  } else {
+    if (is.null(group_var)){
+      worsening_cond <-
+        expr(!!start_date < !!trt_start_date &
+               (!!initial_intensity < !!intensity | is.na(!!initial_intensity) | is.na(!!intensity)))
+    }
+    else{
+
       dataset <- dataset %>%
-        arrange(USUBJID, !!group_var, !!start_date) %>%
-        group_by(USUBJID, !!group_var) %>%
-        mutate(worsen_date = case_when(
-          start_date >= trt_start_date &
-            (!!intensity > !is.na(!!initial_intensity)) ~ as_datetime(!!start_date),
-          TRUE ~ NA
-        )) %>%
-        ungroup() %>%
-        group_by(USUBJID, !!group_var) %>%
-        arrange(USUBJID, !!group_var, worsen_date) %>%
+        arrange(USUBJID,!!group_var,!!start_date) %>%
+        group_by(USUBJID,!!group_var) %>%
         mutate(
-          first_worsen_date = ifelse(row_number() == 1, worsen_date, lag(worsen_date)),
-          first_worsen_date = as_datetime(first_worsen_date)
+          lag_ = dplyr::lag(!!intensity),
+          worsen_date =
+            case_when(
+              !is.na(!!start_date) & !is.na(!!trt_start_date) & !is.na(lag_) &
+                !!start_date >= !!trt_start_date &
+                (!!intensity > lag_)  ~ !!start_date,
+              TRUE ~ NA)
+
         ) %>%
+        fill(worsen_date, .direction = "down") %>%
         ungroup()
 
-      if (is.null(intensity)) {
-        worsening_cond <- expr(FALSE)
-      } else {
-        worsening_cond <-
-          expr(
-            !is.na(!!dataset$first_worsen_date) &
-              !!trt_start_date <= !!start_date < !!trt_end_date
-          )
-      }
-      dataset <-
-        select(dataset, -c("first_worsen_date", "worsen_date"))
-    } else {
-      if (is.null(intensity)) {
-        worsening_cond <- expr(FALSE)
-      } else {
-        worsening_cond <-
-          expr(
-            !!start_date < !!trt_start_date &
-              (
-                !!initial_intensity < !!intensity |
-                  is.na(!!initial_intensity) | is.na(!!intensity)
-              )
-          )
-      }
+      worsening_cond <- expr(!is.na(worsen_date))
     }
   }
 
   # Derive TRTEMFL based on conditions
-  dataset %>%
+
+  dataset <-dataset %>%
     mutate(
       !!new_var := case_when(
-        is.na(!!trt_start_date) ~ NA_character_, !!end_date < !!trt_start_date ~ NA_character_,
-        is.na(!!start_date) ~ "Y", !!start_date >= !!trt_start_date &
-          !!end_cond ~ "Y", !!worsening_cond ~ "Y"
+        is.na(!!trt_start_date) ~ NA_character_,
+        !!end_date < !!trt_start_date ~ NA_character_,
+        is.na(!!start_date) ~ "Y",
+        !!start_date >= !!trt_start_date & !!end_cond & srfl == "Y" ~ "Y",
+        !!worsening_cond  ~ "Y"
       )
-    ) %>%
-    ungroup() # Remove grouping for consistent behavior
+    )
+
+  # Remove unwanted variables
+
+  if ("worsen_date" %in% names(dataset)) {
+    dataset <- dataset %>% select(-lag_, -worsen_date, -srfl)
+  } else {
+    dataset <- dataset %>% select(-srfl)
+  }
+
 }

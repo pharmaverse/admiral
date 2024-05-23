@@ -253,7 +253,7 @@ test_that("derive_vars_joined Test 7: new_vars expressions using variables from 
 ## Test 8: error if new_vars are already in dataset ----
 test_that("derive_vars_joined Test 8: error if new_vars are already in dataset", {
   myd <- data.frame(day = c(1, 2, 3), val = c(0, 17, 21))
-  expect_error(
+  expect_snapshot(
     derive_vars_joined(
       myd,
       dataset_add = myd,
@@ -262,9 +262,7 @@ test_that("derive_vars_joined Test 8: error if new_vars are already in dataset",
       mode = "last",
       filter_join = day < day.join
     ),
-    regexp = paste(
-      "The following columns in `dataset_add` have naming conflicts with `dataset`"
-    )
+    error = TRUE
   )
 })
 

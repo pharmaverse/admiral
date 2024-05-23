@@ -245,12 +245,12 @@ test_that("derive_vars_dy Test 8: error if source variables do not end in DT or 
     "TEST01", "PAT01",  "2014-01-17T16:34:O9", "2014-01-18T13:09:O9", "2014-01-20T08:29:05"
   )
 
-  expect_error(
+  expect_snapshot(
     derive_vars_dy(datain,
       reference_date = TRTSDTW,
       source_vars = exprs(TRTSDTW, ASTDTW, AENDTW)
     ),
-    "source_vars must end in DT or DTM or be explicitly and uniquely named.\nPlease name or rename the following source_vars:\nTRTSDTW, ASTDTW, AENDTW" # nolint
+    error = TRUE
   )
 })
 
