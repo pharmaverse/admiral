@@ -170,7 +170,7 @@ test_that("derive_vars_for_query Test 6: Error is given if both TERMCHAR/TERMNUM
     "1", 3, NA, NA, 1
   )
 
-  expect_snapshot(
+  snap <- expect_snapshot(
     derive_vars_query(my_ae, query),
     error = TRUE
   )

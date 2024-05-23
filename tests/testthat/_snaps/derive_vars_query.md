@@ -3,7 +3,8 @@
     Code
       derive_vars_query(mutate(my_ae, AELLTCD = as.logical(AELLTCD)), query)
     Condition
-      Error in `get_vars_query()`:
+      Error in `value[[3L]]()`:
+      ! Error in derive_vars_query call of get_vars_query: Error in `get_vars_query()`:
       ! The source variables (values of `SRCVAR`) must be numeric or character.
       i AELLTCD is of type logical
 
@@ -12,7 +13,8 @@
     Code
       derive_vars_query(my_ae, query)
     Condition
-      Error in `get_vars_query()`:
+      Error in `value[[3L]]()`:
+      ! Error in derive_vars_query call of get_vars_query: Error in `get_vars_query()`:
       ! Either `TERMCHAR` or `TERMNUM` need to be specified in `dataset_queries`. They both cannot be NA or empty.
 
 # assert_valid_queries Test 9: assert_valid_queries checks
