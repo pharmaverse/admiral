@@ -175,7 +175,8 @@ adsl <- adsl %>%
     dataset_add = ds_ext,
     by_vars = exprs(STUDYID, USUBJID),
     filter_add = DSCAT == "DISPOSITION EVENT",
-    new_vars = exprs(EOSSTT = format_eosstt(DSDECOD))
+    new_vars = exprs(EOSSTT = format_eosstt(DSDECOD)),
+    missing_values = exprs(EOSSTT = "ONGOING")
   ) %>%
   # Last retrieval date
   derive_vars_merged(
