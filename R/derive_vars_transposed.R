@@ -14,6 +14,10 @@
 #'
 #'  Keys used to merge `dataset_merge` with `dataset`.
 #'
+#' @param id_vars ID variables
+#'
+#'  Variables (excluding by_vars) that uniquely identify each observation in `dataset_merge`.
+#'
 #' `r roxygen_param_by_vars()`
 #'
 #' @param key_var The variable of `dataset_merge` containing the names of the
@@ -75,6 +79,7 @@
 #'   derive_vars_transposed(
 #'     facm,
 #'     by_vars = exprs(USUBJID, CMREFID = FAREFID),
+#'     id_vars = exprs(FAGRPID),
 #'     key_var = FATESTCD,
 #'     value_var = FASTRESC
 #'   ) %>%
@@ -82,6 +87,7 @@
 derive_vars_transposed <- function(dataset,
                                    dataset_merge,
                                    by_vars,
+                                   id_vars = NULL,
                                    key_var,
                                    value_var,
                                    filter = NULL) {
@@ -89,12 +95,17 @@ derive_vars_transposed <- function(dataset,
   value_var <- assert_symbol(enexpr(value_var))
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
   assert_vars(by_vars)
+  assert_vars(id_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
   assert_data_frame(dataset_merge, required_vars = expr_c(by_vars, key_var, value_var))
 
   dataset_transposed <- dataset_merge %>%
     filter_if(filter) %>%
-    pivot_wider(names_from = !!key_var, values_from = !!value_var)
+    pivot_wider(
+      names_from = !!key_var,
+      values_from = !!value_var,
+      id_cols = c(as.character(by_vars), as.character(id_vars))
+    )
 
   left_join(dataset, dataset_transposed, by = vars2chr(by_vars))
 }
@@ -116,6 +127,10 @@ derive_vars_transposed <- function(dataset,
 #' @param by_vars Grouping variables
 #'
 #'  Keys used to merge `dataset_facm` with `dataset`.
+#'
+#' @param id_vars ID variables
+#'
+#'  Variables (excluding by_vars) that uniquely identify each observation in `dataset_merge`.
 #'
 #' `r roxygen_param_by_vars()`
 #'
@@ -169,6 +184,7 @@ derive_vars_transposed <- function(dataset,
 derive_vars_atc <- function(dataset,
                             dataset_facm,
                             by_vars = exprs(USUBJID, CMREFID = FAREFID),
+                            id_vars = NULL,
                             value_var = FASTRESC) {
   value_var <- assert_symbol(enexpr(value_var))
   assert_vars(by_vars)
@@ -179,6 +195,7 @@ derive_vars_atc <- function(dataset,
     derive_vars_transposed(
       select(dataset_facm, !!!unname(by_vars), !!value_var, FAGRPID, FATESTCD),
       by_vars = by_vars,
+      id_vars = id_vars,
       key_var = FATESTCD,
       value_var = !!value_var,
       filter = str_detect(FATESTCD, "^CMATC[1-4](CD)?$")
