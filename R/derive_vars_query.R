@@ -4,7 +4,7 @@
 #' rows for a `derive_vars_query()` call with the relevant `SRCVAR`, `TERM_NAME_ID`
 #' and a temporary index if it is necessary
 #'
-#' **Note:** This function is the first step performed in derive_vars_query
+#' **Note:** This function is the first step performed in `derive_vars_query()`
 #' requested by some users to be present independently from it.
 #'
 #' @details This function can be used to derive CDISC variables such as

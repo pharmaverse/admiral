@@ -24,7 +24,7 @@ Create a table for the input dataset which binds the necessary
 rows for a \code{derive_vars_query()} call with the relevant \code{SRCVAR}, \code{TERM_NAME_ID}
 and a temporary index if it is necessary
 
-\strong{Note:} This function is the first step performed in derive_vars_query
+\strong{Note:} This function is the first step performed in \code{derive_vars_query()}
 requested by some users to be present independently from it.
 }
 \details{
