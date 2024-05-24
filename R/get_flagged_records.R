@@ -27,7 +27,7 @@
 #'
 #'   *Permitted Values*: a condition
 #'
-#' @return The output dataset is the input dataset filtered by the `filter` condition` and
+#' @return The output dataset is the input dataset filtered by the `filter` condition
 #' and with the variable specified for `new_var` representing a flag for the condition.
 #'
 #'
