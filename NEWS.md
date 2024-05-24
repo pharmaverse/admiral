@@ -3,12 +3,14 @@
 ## New Features
 
 - Error Messaging has been made more "user-friendly". (#2372)
+- New `country_code_lookup()` metadata added to decode countries based on [ISO 3166 codes](https://www.iso.org/iso-3166-country-codes.html). (#2388)
 
 ## Updates of Existing Functions
 
 - `group_var` (optional) parameter is added to `derive_var_trtemfl()` to derive `TRTEMFL` for AE data if the data are collected as one episode of AE with multiple lines. (#2302)
 
 - Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (#2392)
+- `basket_select()` function updated to add `...` argument to allow other qualifiers to be passed to user-defined function specified in `get_terms_fun()` argument for function `create_query_data()`. (#2265)
 
 ## Breaking Changes
   
