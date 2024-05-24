@@ -17,7 +17,7 @@
 #'
 #'   The condition is evaluated at the dataset (`dataset`). For
 #'   all rows where it evaluates as `TRUE` the new variable
-#'   is set to 1 in the new column
+#'   is set to `1` in the new column. Otherwise, it is set to `0`.
 #'
 #' @param filter Filter for additional data
 #'
