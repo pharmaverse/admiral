@@ -17,7 +17,7 @@ The specified variable is added to the input dataset.}
 
 The condition is evaluated at the dataset (\code{dataset}). For
 all rows where it evaluates as \code{TRUE} the new variable
-is set to 1 in the new column}
+is set to \code{1} in the new column. Otherwise, it is set to \code{0}.}
 
 \item{filter}{Filter for additional data
 
@@ -28,7 +28,8 @@ considered.
 \emph{Permitted Values}: a condition}
 }
 \value{
-The output dataset is the input dataset filtered by the \code{filter} condition\verb{and and with the variable specified for}new_var` representing a flag for the condition.
+The output dataset is the input dataset filtered by the \code{filter} condition
+and with the variable specified for \code{new_var} representing a flag for the condition.
 }
 \description{
 Create a flag variable for the input dataset which indicates if
@@ -36,7 +37,7 @@ there exists at least one observation in the input dataset fulfilling a certain
 condition.
 
 \strong{Note:} This is a helper function for \code{derive_vars_merged_exist_flag()} which
-inputs this result into \code{derive_vars_merged()}..
+inputs this result into \code{derive_vars_merged()}.
 }
 \examples{
 

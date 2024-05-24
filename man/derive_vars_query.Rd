@@ -65,7 +65,7 @@ adae <- tribble(
 derive_vars_query(adae, queries)
 }
 \seealso{
-\code{\link[=create_query_data]{create_query_data()}}]
+\code{\link[=create_query_data]{create_query_data()}}
 
 OCCDS Functions: 
 \code{\link{derive_var_trtemfl}()},
