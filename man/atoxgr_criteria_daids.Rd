@@ -50,6 +50,7 @@ traceability only.
 Other metadata: 
 \code{\link{atoxgr_criteria_ctcv4}},
 \code{\link{atoxgr_criteria_ctcv5}},
+\code{\link{country_code_lookup}},
 \code{\link{dose_freq_lookup}}
 }
 \concept{metadata}

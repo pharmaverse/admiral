@@ -344,6 +344,11 @@ adppk_aseq <- adppk_aval %>%
 # Include numeric values for STUDYIDN, USUBJIDN, SEXN, RACEN etc.
 
 covar <- adsl %>%
+  derive_vars_merged(
+    dataset_add = country_code_lookup,
+    new_vars = exprs(COUNTRYN = country_number, COUNTRYL = country_name),
+    by_vars = exprs(COUNTRY = country_code),
+  ) %>%
   mutate(
     STUDYIDN = as.numeric(word(USUBJID, 1, sep = fixed("-"))),
     SITEIDN = as.numeric(word(USUBJID, 2, sep = fixed("-"))),
@@ -390,19 +395,12 @@ covar <- adsl %>%
     FORMN = case_when(
       FORM == "PATCH" ~ 3,
       TRUE ~ 4
-    ),
-    COUNTRYN = case_when(
-      COUNTRY == "USA" ~ 1,
-      COUNTRY == "CAN" ~ 2,
-      COUNTRY == "GBR" ~ 3
-    ),
-    REGION1N = COUNTRYN,
+    )
   ) %>%
   select(
     STUDYID, STUDYIDN, SITEID, SITEIDN, USUBJID, USUBJIDN,
     SUBJID, SUBJIDN, AGE, SEX, SEXN, COHORT, COHORTC, ROUTE, ROUTEN,
-    RACE, RACEN, ETHNIC, ETHNICN, FORM, FORMN, COUNTRY, COUNTRYN,
-    REGION1, REGION1N
+    RACE, RACEN, ETHNIC, ETHNICN, FORM, FORMN, COUNTRY, COUNTRYN, COUNTRYL
   )
 
 #---- Derive additional baselines from VS and LB ----
