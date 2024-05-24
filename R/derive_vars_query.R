@@ -245,7 +245,7 @@ get_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linte
 #' @family der_occds
 #' @keywords der_occds
 #'
-#' @seealso [create_query_data()]]
+#' @seealso [create_query_data()]
 #'
 #' @export
 #'
