@@ -419,7 +419,7 @@ test_that("create_single_dose_dataset Test 12: Error if lookup_column contains d
       end_datetime = AENDTM
     ),
     regexp = paste0(
-      "The following values of Value are duplicated in custom_lookup:\nQ30MIN"
+      "Dataset contains duplicate records with respect to `Value`"
     )
   )
 })

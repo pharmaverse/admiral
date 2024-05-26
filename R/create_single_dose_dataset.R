@@ -556,24 +556,10 @@ create_single_dose_dataset <- function(dataset,
   }
 
   # Check lookup_table does not contain duplicates
-  dup_check <- lookup %>%
-    group_by(!!dose_freq) %>%
-    summarise(n = n()) %>%
-    filter(n > 1)
-
-  if (nrow(dup_check) > 0) {
-    duplicate_values <- paste0(dup_check %>% select(!!dose_freq), collapse = ", ")
-
-    err_msg <- paste0(
-      sprintf(
-        "The following values of %s are duplicated in %s:\n",
-        as.character(lookup_column),
-        arg_name(substitute(lookup_table))
-      ), duplicate_values
-    )
-
-    abort(err_msg)
-  }
+  signal_duplicate_records(
+    dataset = lookup_table,
+    by_vars = exprs(!!lookup_column)
+  )
 
   # Use compute_duration to determine the number of completed dose periods
 
