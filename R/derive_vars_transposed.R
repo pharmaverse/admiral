@@ -31,8 +31,7 @@
 #'   <https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments> for
 #'   more details.
 #'
-#'   Permitted Values for `relationship`: `"one-to-one"`, `"one-to-many"`,
-#'   `"many-to-one"`, `"many-to-many"`, `NULL`.
+#'   Permitted Values for `relationship`: `"one-to-one"`,  `"many-to-one"`, `NULL`.
 #'
 #' @details
 #' After filtering `dataset_merge` based upon the condition provided in `filter`, this
@@ -104,7 +103,7 @@ derive_vars_transposed <- function(dataset,
   assert_data_frame(dataset_merge, required_vars = expr_c(by_vars, key_var, value_var))
   relationship <- assert_character_scalar(
     relationship,
-    values = c("one-to-one", "one-to-many", "many-to-one", "many-to-many"),
+    values = c("one-to-one", "many-to-one"),
     case_sensitive = TRUE,
     optional = TRUE
   )

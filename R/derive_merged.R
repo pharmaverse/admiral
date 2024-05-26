@@ -153,8 +153,7 @@
 #'   <https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments> for
 #'   more details.
 #'
-#'   Permitted Values for `relationship`: `"one-to-one"`, `"one-to-many"`,
-#'   `"many-to-one"`, `"many-to-many"`, `NULL`.
+#'   Permitted Values for `relationship`: `"one-to-one"`, `"many-to-one"`, `NULL`.
 #'
 #' @return The output dataset contains all observations and variables of the
 #'   input dataset and additionally the variables specified for `new_vars` from
@@ -370,7 +369,7 @@ derive_vars_merged <- function(dataset,
   }
   relationship <- assert_character_scalar(
     relationship,
-    values = c("one-to-one", "one-to-many", "many-to-one", "many-to-many"),
+    values = c("one-to-one", "many-to-one"),
     case_sensitive = TRUE,
     optional = TRUE
   )
