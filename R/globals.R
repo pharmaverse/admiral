@@ -132,6 +132,6 @@ globalVariables(c(
   "tmp_col_type",
   "num_records",
   "worsen_date",
-  "lag_",
+  "prev_intensity",
   "srfl"
 ))

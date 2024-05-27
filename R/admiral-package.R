@@ -6,7 +6,7 @@
 #'   everything filter full_join group_by if_else mutate n pull rename
 #'   rename_with row_number select slice semi_join starts_with ungroup
 #'   n_distinct union distinct summarise coalesce bind_cols na_if tibble tribble
-#'   summarise_all group_by_at first
+#'   summarise_all group_by_at first lag
 #' @importFrom magrittr %>%
 #' @importFrom rlang := abort arg_match as_function as_label as_name as_string
 #'   call2 caller_env call_name current_env .data enexpr eval_bare eval_tidy
@@ -28,5 +28,5 @@
 #' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
 #' @importFrom stats setNames
-#' @importFrom dplyr lag
+#' @importFrom cli cli_abort cli_div
 "_PACKAGE"

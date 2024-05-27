@@ -87,9 +87,10 @@ or \code{NULL}}
 If the argument is specified it assumes that AE are recorded as one episode
 of AE with multiple lines using a grouping variable.
 
-If the argument is specified, events which start before treatment start and
-end after treatment start (or are ongoing) and worsened (i.e., the
-intensity is greater than the initial intensity), are flagged.
+If the argument is specified, events which started during the treatment period
+irrespective of worsening condition or events which start before treatment start
+and end after treatment start (or are ongoing) and worsened during treatment
+(i.e., the intensity is greater than the previous intensity), are flagged.
 
 Once an AE record within a grouped AE is flagged, then any subsequent record
 is also flagged regardless of the severity and within the treatment window.
@@ -124,10 +125,14 @@ or before \code{trt_end_date} + \code{end_window} days, it is set to \code{"Y"},
 }
 \item \emph{event started before treatment and (possibly) worsened on treatment}:
 \itemize{
-\item if \code{initial_intensity} and \code{intensity} is specified: if
-\code{initial_intensity < intensity} and \code{start_date} is before
-\code{trt_start_date} and \code{end_date} is on or after \code{trt_start_date} or
-\code{end_date} is \code{NA}, it is set to \code{"Y"}.
+\item if \code{initial_intensity}, \code{intensity} is specified and \code{group_var} is not specified:
+if \code{initial_intensity < intensity} and \code{start_date} is before \code{trt_start_date}
+and \code{end_date} is on or after \code{trt_start_date} or \code{end_date} is \code{NA}, it
+is set to \code{"Y"};
+\item if \code{group_var} is specified:
+if previous \code{intensity} < \code{intensity} and \code{start_date} is after \code{trt_start_date}
+and \code{end_date} is on or after \code{trt_start_date} or \code{end_date} is \code{NA}, it
+is set to \code{"Y"};
 }
 \item Otherwise it is set to \code{NA_character_}.
 }
@@ -215,8 +220,8 @@ adae2 <- expected2 <- tribble(
   mutate(
     ASTDTM = ymd_hm(ASTDTM),
     AENDTM = ymd_hm(AENDTM),
-    TRTSDTM = if_else(USUBJID != "2", ymd_hm("2022-01-01T01:01"), ymd_hms("")),
-    TRTEDTM = if_else(USUBJID != "2", ymd_hm("2022-04-30T23:59"), ymd_hms(""))
+    TRTSDTM = if_else(USUBJID == "1", ymd_hm("2022-01-01T01:01"), ymd_hms("")),
+    TRTEDTM = if_else(USUBJID == "1", ymd_hm("2022-04-30T23:59"), ymd_hms(""))
   )
 # derive TRTEMFL taking treatment end and worsening into account within a grouping variable
 derive_var_trtemfl(

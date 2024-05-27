@@ -74,9 +74,10 @@
 #'  If the argument is specified it assumes that AE are recorded as one episode
 #'  of AE with multiple lines using a grouping variable.
 #'
-#'  If the argument is specified, events which start before treatment start and
-#'  end after treatment start (or are ongoing) and worsened (i.e., the
-#'  intensity is greater than the initial intensity), are flagged.
+#'  If the argument is specified, events which started during the treatment period
+#'  irrespective of worsening condition or events which start before treatment start
+#'  and end after treatment start (or are ongoing) and worsened during treatment
+#'  (i.e., the intensity is greater than the previous intensity), are flagged.
 #'
 #'  Once an AE record within a grouped AE is flagged, then any subsequent record
 #'  is also flagged regardless of the severity and within the treatment window.
@@ -101,10 +102,15 @@
 #'       if `start_date` is on or after `trt_start_date` and `start_date` is on
 #'       or before `trt_end_date` + `end_window` days, it is set to `"Y"`,
 #'  - *event started before treatment and (possibly) worsened on treatment*:
-#'    - if `initial_intensity` and `intensity` is specified: if
-#'    `initial_intensity < intensity` and `start_date` is before
-#'    `trt_start_date` and `end_date` is on or after `trt_start_date` or
-#'    `end_date` is `NA`, it is set to `"Y"`.
+#'    - if `initial_intensity`, `intensity` is specified and `group_var` is not specified:
+#'      if `initial_intensity < intensity` and `start_date` is before `trt_start_date`
+#'      and `end_date` is on or after `trt_start_date` or `end_date` is `NA`, it
+#'      is set to `"Y"`;
+#'    - if `group_var` is specified:
+#'      if previous `intensity` < `intensity` and `start_date` is after `trt_start_date`
+#'      and `end_date` is on or after `trt_start_date` or `end_date` is `NA`, it
+#'      is set to `"Y"`;
+#'
 #'  - Otherwise it is set to `NA_character_`.
 #'
 #' @return The input dataset with the variable specified by `new_var` added
@@ -197,8 +203,8 @@
 #'   mutate(
 #'     ASTDTM = ymd_hm(ASTDTM),
 #'     AENDTM = ymd_hm(AENDTM),
-#'     TRTSDTM = if_else(USUBJID != "2", ymd_hm("2022-01-01T01:01"), ymd_hms("")),
-#'     TRTEDTM = if_else(USUBJID != "2", ymd_hm("2022-04-30T23:59"), ymd_hms(""))
+#'     TRTSDTM = if_else(USUBJID == "1", ymd_hm("2022-01-01T01:01"), ymd_hms("")),
+#'     TRTEDTM = if_else(USUBJID == "1", ymd_hm("2022-04-30T23:59"), ymd_hms(""))
 #'   )
 
 #' # derive TRTEMFL taking treatment end and worsening into account within a grouping variable
@@ -304,6 +310,7 @@ derive_var_trtemfl <- function(dataset,
     dataset <- dataset %>%
       mutate(srfl = "Y")
   } else {
+    srfl <- get_new_tmp_var(dataset)
     dataset <- dataset %>%
       group_by(USUBJID, !!group_var) %>%
       mutate(srfl = ifelse(row_number() == 1, "Y", NA)) %>%
@@ -321,16 +328,19 @@ derive_var_trtemfl <- function(dataset,
               is.na(!!intensity))
         )
     } else {
+      prev_intensity <- get_new_tmp_var(dataset)
+      worsen_date <- get_new_tmp_var(dataset)
+
       dataset <- dataset %>%
         arrange(USUBJID, !!group_var, !!start_date) %>%
         group_by(USUBJID, !!group_var) %>%
         mutate(
-          lag_ = dplyr::lag(!!intensity),
+          prev_intensity = dplyr::lag(!!intensity),
           worsen_date =
             case_when(
-              !is.na(!!start_date) & !is.na(!!trt_start_date) & !is.na(lag_) &
+              !is.na(!!start_date) & !is.na(!!trt_start_date) & !is.na(prev_intensity) &
                 !!start_date >= !!trt_start_date &
-                (!!intensity > lag_) ~ !!start_date,
+                (!!intensity > prev_intensity) ~ !!start_date,
               TRUE ~ NA
             )
         ) %>%
@@ -357,7 +367,7 @@ derive_var_trtemfl <- function(dataset,
   # Remove unwanted variables
 
   if ("worsen_date" %in% names(dataset)) {
-    dataset <- dataset %>% select(-lag_, -worsen_date, -srfl)
+    dataset <- dataset %>% select(-prev_intensity, -worsen_date, -srfl)
   } else {
     dataset <- dataset %>% select(-srfl)
   }
