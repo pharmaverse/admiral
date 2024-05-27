@@ -429,7 +429,27 @@ derive_vars_merged <- function(dataset,
       )
     )
   }
-  dataset <- left_join(dataset, add_data, by = vars2chr(by_vars), relationship = relationship)
+
+  tryCatch(
+    dataset <- left_join(
+      dataset,
+      add_data,
+      by = vars2chr(by_vars),
+      relationship = relationship
+    ),
+    "dplyr_error_join_relationship_one_to_one" = function(cnd) {
+      cli_abort(
+        message = "Each row in `dataset` must match at most 1 row in `add_data`.",
+        call = parent.frame(n = 5)
+      )
+    },
+    "dplyr_error_join_relationship_many_to_one" = function(cnd) {
+      cli_abort(
+        message = "Each row in `dataset` must match at most 1 row in `add_data`.",
+        call = parent.frame(n = 5)
+      )
+    }
+  )
 
   if (!is.null(match_flag_var)) {
     update_missings <- map2(
