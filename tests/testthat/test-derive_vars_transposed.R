@@ -12,6 +12,7 @@ dataset_merge <- tibble::tribble(
   "P03",    "T02",   9
 )
 
+## Test 1: the merge dataset is transposed and merged correctly ----
 test_that("the merge dataset is transposed and merged correctly", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~VAR1, ~T01, ~T02,
@@ -31,6 +32,7 @@ test_that("the merge dataset is transposed and merged correctly", {
 })
 
 
+## Test 2: filtering the merge dataset works ----
 test_that("filtering the merge dataset works", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~VAR1, ~T01,
@@ -50,6 +52,7 @@ test_that("filtering the merge dataset works", {
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
 
+## Test 3: ATC variables are merged properly ----
 test_that("ATC variables are merged properly", {
   cm <- tibble::tribble(
     ~USUBJID, ~CMGRPID, ~CMREFID, ~CMDECOD,
@@ -102,7 +105,7 @@ test_that("ATC variables are merged properly", {
 
 
 
-
+## Test 4: ATC variables are merged properly ----
 test_that("ATC variables are merged properly", {
   cm <- tibble::tribble(
     ~USUBJID, ~CMGRPID, ~CMREFID, ~CMDECOD,
