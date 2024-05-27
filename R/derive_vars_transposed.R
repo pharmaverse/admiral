@@ -116,18 +116,23 @@ derive_vars_transposed <- function(dataset,
     left_join(dataset, dataset_transposed, by = vars2chr(by_vars), relationship = relationship),
     "dplyr_error_join_relationship_one_to_one" = function(cnd) {
       cli_abort(
-        message = "Each row in `dataset` must match at most 1 row in the transposed `dataset_merge`.",
+        message = paste0(
+          "Each row in `dataset` must match at most 1 row ",
+          "in the transposed `dataset_merge`."
+        ),
         call = parent.frame(n = 5)
       )
     },
     "dplyr_error_join_relationship_many_to_one" = function(cnd) {
       cli_abort(
-        message = "Each row in `dataset` must match at most 1 row in the transposed `dataset_merge`.",
+        message = paste0(
+          "Each row in `dataset` must match at most 1 row ",
+          "in the transposed `dataset_merge`."
+        ),
         call = parent.frame(n = 5)
       )
     }
   )
-
 }
 
 #' Derive ATC Class Variables
