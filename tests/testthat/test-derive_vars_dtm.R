@@ -793,4 +793,4 @@ test_that("derive_vars_dtm Test 31: catch ignore_seconds_flag error", {
   )
 })
 
-rm(list = c('input'))
+rm(list = c("input"))
