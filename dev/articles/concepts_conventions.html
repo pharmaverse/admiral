@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -421,8 +421,7 @@ object in the global environment containing an expression.</p>
 <span>  filter_add <span class="op">=</span> <span class="va">my_expression</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `derive_vars_merged()`:</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Argument `enexpr(filter_add)` must be a filter condition, but is a</span></span>
-<span><span class="co">#&gt;   symbol</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Argument `filter_add` must be a filter condition, but is a symbol</span></span></code></pre></div>
 <p>To fix this code, we need to <a href="#unquoting">unquote</a>
 <code>my_expression</code> so that the expression that it is holding is
 passed correctly to <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code>:</p>
