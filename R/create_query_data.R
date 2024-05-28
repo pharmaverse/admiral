@@ -783,6 +783,10 @@ assert_terms <- function(terms,
 #' company specific get_terms() function such that the function can determine
 #' which sort of basket is requested
 #'
+#' @param ... Any number of *named* function arguments. Can be used to pass in company
+#' specific conditions or flags that will then be used in user-defined function that is
+#' passed into argument `get_terms_fun` for function `create_query_data()`.
+#'
 #' @details Exactly one of `name` or `id` must be specified.
 #'
 #' @return An object of class `basket_select`.
@@ -797,13 +801,29 @@ assert_terms <- function(terms,
 basket_select <- function(name = NULL,
                           id = NULL,
                           scope = NULL,
-                          type) {
-  out <- list(
-    name = name,
-    id = id,
-    scope = scope,
-    type = type
-  )
+                          type,
+                          ...) {
+  args <- eval(substitute(alist(...)))
+  if (length(args) == 0L) {
+    out <- list(
+      name = name,
+      id = id,
+      scope = scope,
+      type = type
+    )
+  } else {
+    if (!is_named(args)) {
+      cli_abort("All arguments inside {.arg ...} must be named")
+    }
+    out <- list(
+      name = name,
+      id = id,
+      scope = scope,
+      type = type,
+      ...
+    )
+  }
+
   class(out) <- c("basket_select", "source", "list")
   validate_basket_select(out)
 }
@@ -865,15 +885,25 @@ validate_basket_select <- function(obj) {
 #'
 #' format(basket_select(id = 42, scope = "NARROW", type = "smq"))
 format.basket_select <- function(x, ...) {
+  all_arg_names <- names(x)
+
+  formvar <- list()
+
+  for (i in seq_len(length(all_arg_names))) {
+    is_numeric_class <- map_lgl(x[i], inherits, "numeric") | map_chr(x[i], typeof) == "numeric"
+
+    if (is_numeric_class) {
+      formvar[i] <- paste(all_arg_names[i], "=", format(x[[i]]))
+    } else {
+      formvar[i] <- paste(all_arg_names[i], "=", dquote(x[[i]]))
+    }
+  }
+
+  allvars <- paste(formvar, collapse = ", ")
+
   paste0(
-    "basket_select(name = ",
-    dquote(x$name),
-    ", id = ",
-    format(x$id),
-    ", scope = ",
-    dquote(x$scope),
-    ", type = ",
-    dquote(x$type),
+    "basket_select(",
+    allvars,
     ")"
   )
 }

@@ -352,7 +352,7 @@ derive_vars_merged <- function(dataset,
     )
     if (length(invalid_vars) > 0) {
       cli_abort(paste(
-        "The variables {.var {invalid_vars}} were specified for {.arg missing_values}",
+        "The variable{?s} {.var {invalid_vars}} w{?as/ere} specified for {.arg missing_values}",
         "but not for {.arg new_vars}."
       ))
     }
@@ -405,17 +405,12 @@ derive_vars_merged <- function(dataset,
   common_vars <-
     setdiff(intersect(names(dataset), names(add_data)), vars2chr(by_vars))
   if (length(common_vars) > 0L) {
-    cli_abort(if_else(
-      length(common_vars) == 1L,
+    cli_abort(
       c(
-        "The variable {.var {common_vars[[1]]}} is contained in both datasets.",
-        i = "Please add it to {.arg by_vars} or remove or rename it in one of the datasets."
-      ),
-      paste0(
-        "The variables {.var {common_vars}} are contained in both datasets.",
+        "The variable{?s} {.var {common_vars}} {?is/are} contained in both datasets.",
         i = "Please add them to {.arg by_vars} or remove or rename them in one of the datasets."
       )
-    ))
+    )
   }
   dataset <- left_join(dataset, add_data, by = vars2chr(by_vars))
 
@@ -438,6 +433,7 @@ derive_vars_merged <- function(dataset,
   dataset %>%
     remove_tmp_vars()
 }
+
 
 #' Merge an Existence Flag
 #'
@@ -577,13 +573,14 @@ derive_var_merged_exist_flag <- function(dataset,
                                          false_value = NA_character_,
                                          missing_value = NA_character_,
                                          filter_add = NULL) {
-  new_var <- assert_symbol(enexpr(new_var))
   condition <- assert_filter_cond(enexpr(condition))
-  filter_add <-
-    assert_filter_cond(enexpr(filter_add), optional = TRUE)
-
-  add_data <- filter_if(dataset_add, filter_add) %>%
-    mutate(!!new_var := if_else(!!condition, 1, 0, 0))
+  new_var <- assert_symbol(enexpr(new_var))
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  add_data <- get_flagged_records(dataset_add,
+    new_var = !!new_var,
+    condition = !!condition,
+    !!filter_add
+  )
 
   derive_vars_merged(
     dataset,

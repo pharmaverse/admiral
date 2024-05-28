@@ -65,3 +65,36 @@ test_that("get_imputation_target_date Test 8: get correct target for missing dat
     list(year = "9999", month = "12", day = "28")
   )
 })
+
+# get_imputation_target_time ----
+## Test 9: get correct target for missing times (first) ----
+test_that("get_imputation_target_time Test 9: get correct target for missing times (first)", {
+  expect_equal(
+    get_imputation_target_time("first"),
+    list(hour = "00", minute = "00", second = "00")
+  )
+})
+
+## Test 10: get correct target for missing times (last) ----
+test_that("get_imputation_target_time Test 10: get correct target for missing times (last)", {
+  expect_equal(
+    get_imputation_target_time("last"),
+    list(hour = "23", minute = "59", second = "59")
+  )
+})
+
+## Test 11: get correct target for missing times (time) ----
+test_that("get_imputation_target_time Test 11: get correct target for missing times (time)", {
+  expect_equal(
+    get_imputation_target_time("22:04:35"),
+    list(hour = "22", minute = "04", second = "35")
+  )
+})
+
+## Test 12: get correct target for missing times (junk) ----
+test_that("get_imputation_target_time Test 12: get correct target for missing times (junk)", {
+  expect_equal(
+    get_imputation_target_time("xxAyyAzz"),
+    list(hour = "xx", minute = "yy", second = "zz")
+  )
+})
