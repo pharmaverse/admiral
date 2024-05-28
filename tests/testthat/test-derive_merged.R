@@ -348,7 +348,7 @@ test_that("derive_vars_merged Test 15: error if not unique, no order, check_type
   )
 })
 
-## Test 16: deprecation messaging for match_flag ----
+# ## Test 16: deprecation messaging for match_flag ----
 test_that("derive_vars_merged Test 16: deprecation messaging for match_flag", {
   expect_error(
     derive_vars_merged(
@@ -369,16 +369,13 @@ test_that("derive_vars_merged Test 16: deprecation messaging for match_flag", {
 test_that("derive_var_merged_exist_flag Test 17: merge existence flag", {
   actual <- derive_var_merged_exist_flag(
     adsl,
-    dataset_add = advs,
+    advs,
     by_vars = exprs(USUBJID),
     new_var = VSEVALFL,
     condition = AVISIT == "BASELINE"
   )
-
   expected <-
     mutate(adsl, VSEVALFL = c("Y", "Y", NA_character_, NA_character_))
-
-
   expect_dfs_equal(
     base = expected,
     compare = actual,
@@ -393,7 +390,7 @@ test_that("derive_var_merged_exist_flag Test 18: by_vars with rename", {
     dataset_add = advs1,
     by_vars = exprs(USUBJID = ID),
     new_var = VSEVALFL,
-    condition = AVISIT == "BASELINE",
+    condition = AVISIT == "BASELINE"
   )
 
   expected <-
