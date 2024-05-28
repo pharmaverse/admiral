@@ -285,8 +285,8 @@ test_that("impute_dtc_dtm Test 12: Warning if null min/max_dates when highest_im
 ## Test 13: Convert a complete -- DTC into a date time object ----
 test_that("convert_dtc_to_dtm Test 13: Convert a complete -- DTC into a date time object", {
   expect_equal(
-    convert_dtc_to_dtm("2019-07-18T15:25:52"),
-    ymd_hms("2019-07-18T15:25:52")
+    convert_dtc_to_dtm(input[1]),
+    ymd_hms("2019-07-18T15:25:40.243")
   )
 })
 
@@ -792,3 +792,5 @@ test_that("derive_vars_dtm Test 31: catch ignore_seconds_flag error", {
     error = TRUE
   )
 })
+
+rm(list = c('input'))
