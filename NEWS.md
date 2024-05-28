@@ -12,6 +12,7 @@
 
 - Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (#2392)
 - `basket_select()` function updated to add `...` argument to allow other qualifiers to be passed to user-defined function specified in `get_terms_fun()` argument for function `create_query_data()`. (#2265)
+- Template for ADSL updated so that `EOSSTT ` is assigned as  `"ONGOING" ` when no study completion rows exist yet in DS. (#2436)
 
 ## Breaking Changes
   
