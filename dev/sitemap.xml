@@ -427,6 +427,9 @@
     <loc>https://pharmaverse.github.io/admiral/dev/reference/get_duplicates_dataset.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/dev/reference/get_flagged_records.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/dev/reference/get_hori_data.html</loc>
   </url>
   <url>
@@ -455,6 +458,9 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/dev/reference/get_terms_from_db.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/dev/reference/get_vars_query.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/dev/reference/impute_dtc_dt.html</loc>
