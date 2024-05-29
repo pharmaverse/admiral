@@ -112,13 +112,25 @@ adlb <- adlb %>%
     print_not_mapped = FALSE
   ) %>%
   ## Calculate PARCAT1 AVAL AVALC ANRLO ANRHI ----
-  mutate(
-    PARCAT1 = LBCAT,
-    AVAL = LBSTRESN,
-    AVALC = LBSTRESC,
-    ANRLO = LBSTNRLO,
-    ANRHI = LBSTNRHI
-  )
+  # mutate(
+  #   PARCAT1 = LBCAT,
+  #   AVAL = LBSTRESN,
+  #   AVALC = ifelse(is.na(as.numeric(LBSTRESC)), LBSTRESC, NA),
+  #   ANRLO = LBSTNRLO,
+  #   ANRHI = LBSTNRHI
+  # )
+
+mutate(
+  PARCAT1 = LBCAT,
+  AVAL = LBSTRESN,
+  # Only populate AVALC if character value is non-redundant with AVAL
+  AVALC = ifelse(
+    is.na(LBSTRESN) | as.character(LBSTRESN) != LBSTRESC,
+    LBSTRESC,
+    NA),
+  ANRLO = LBSTNRLO,
+  ANRHI = LBSTNRHI
+)
 
 # Derive Absolute values from fractional Differentials using WBC
 # Only derive where absolute values do not already exist
