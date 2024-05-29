@@ -471,6 +471,7 @@ derive_vars_merged <- function(dataset,
     remove_tmp_vars()
 }
 
+
 #' Merge an Existence Flag
 #'
 #' @description Adds a flag variable to the input dataset which indicates if
@@ -609,13 +610,14 @@ derive_var_merged_exist_flag <- function(dataset,
                                          false_value = NA_character_,
                                          missing_value = NA_character_,
                                          filter_add = NULL) {
-  new_var <- assert_symbol(enexpr(new_var))
   condition <- assert_filter_cond(enexpr(condition))
-  filter_add <-
-    assert_filter_cond(enexpr(filter_add), optional = TRUE)
-
-  add_data <- filter_if(dataset_add, filter_add) %>%
-    mutate(!!new_var := if_else(!!condition, 1, 0, 0))
+  new_var <- assert_symbol(enexpr(new_var))
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  add_data <- get_flagged_records(dataset_add,
+    new_var = !!new_var,
+    condition = !!condition,
+    !!filter_add
+  )
 
   derive_vars_merged(
     dataset,

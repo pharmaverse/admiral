@@ -8,6 +8,7 @@ derive_vars_transposed(
   dataset,
   dataset_merge,
   by_vars,
+  id_vars = NULL,
   key_var,
   value_var,
   filter = NULL,
@@ -26,7 +27,11 @@ are expected}
 
 \item{by_vars}{Grouping variables
 
-Keys used to merge \code{dataset_merge} with \code{dataset}.
+Keys used to merge \code{dataset_merge} with \code{dataset}.}
+
+\item{id_vars}{ID variables
+
+Variables (excluding by_vars) that uniquely identify each observation in \code{dataset_merge}.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
@@ -97,6 +102,7 @@ cm \%>\%
   derive_vars_transposed(
     facm,
     by_vars = exprs(USUBJID, CMREFID = FAREFID),
+    id_vars = exprs(FAGRPID),
     key_var = FATESTCD,
     value_var = FASTRESC
   ) \%>\%
