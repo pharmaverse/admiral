@@ -12,6 +12,7 @@
 
 - Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (#2392)
 - `basket_select()` function updated to add `...` argument to allow other qualifiers to be passed to user-defined function specified in `get_terms_fun()` argument for function `create_query_data()`. (#2265)
+- The `id_vars` argument was added to `derive_vars_transposed()` and `derive_vars_atc()` to allow additional variables, beyond those in `by_vars`, to uniquely identify records in the `dataset_merge` argument. (#2325)
 - Update PK Programming vignette and templates for ADPC and ADPPK for the nominal time formula `NFRLT` to reduce duplicate records in dose expansion with `create_single_dose_dataset()`. (#2426)
 - Template for ADSL updated so that `EOSSTT ` is assigned as  `"ONGOING" ` when no study completion rows exist yet in DS. (#2436)
 
