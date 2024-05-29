@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9037</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9038</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,6 +110,7 @@
 <ul><li>Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (<a href="https://github.com/pharmaverse/admiral/issues/2392" class="external-link">#2392</a>)</li>
 <li>
 <code><a href="../reference/basket_select.html">basket_select()</a></code> function updated to add <code>...</code> argument to allow other qualifiers to be passed to user-defined function specified in <code>get_terms_fun()</code> argument for function <code><a href="../reference/create_query_data.html">create_query_data()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2265" class="external-link">#2265</a>)</li>
+<li>The <code>id_vars</code> argument was added to <code><a href="../reference/derive_vars_transposed.html">derive_vars_transposed()</a></code> and <code><a href="../reference/derive_vars_atc.html">derive_vars_atc()</a></code> to allow additional variables, beyond those in <code>by_vars</code>, to uniquely identify records in the <code>dataset_merge</code> argument. (<a href="https://github.com/pharmaverse/admiral/issues/2325" class="external-link">#2325</a>)</li>
 <li>Update PK Programming vignette and templates for ADPC and ADPPK for the nominal time formula <code>NFRLT</code> to reduce duplicate records in dose expansion with <code><a href="../reference/create_single_dose_dataset.html">create_single_dose_dataset()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2426" class="external-link">#2426</a>)</li>
 <li>Template for ADSL updated so that <code>EOSSTT</code> is assigned as <code>"ONGOING"</code> when no study completion rows exist yet in DS. (<a href="https://github.com/pharmaverse/admiral/issues/2436" class="external-link">#2436</a>)</li>
 </ul></div>
