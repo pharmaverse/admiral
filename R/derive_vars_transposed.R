@@ -188,6 +188,7 @@ derive_vars_atc <- function(dataset,
                             value_var = FASTRESC) {
   value_var <- assert_symbol(enexpr(value_var))
   assert_vars(by_vars)
+  assert_vars(id_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
   assert_data_frame(dataset_facm, required_vars = exprs(!!!by_vars, !!value_var, FAGRPID, FATESTCD))
 
