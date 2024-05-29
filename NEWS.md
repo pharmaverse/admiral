@@ -76,6 +76,7 @@ There is a possibility to get package dependency versions used for the workflows
 - Splitting out `R` and `test` files for date/time functions for cyclomatic complexity refactor (#2340)(#2339)
 - Created three unit tests for `get_summary_records()`. (#2304)
 - Created unit tests for developer internal function `get_imputation_target_date()` (#2378)
+- Modified unit tests to use unified example (#2424)
 
 </details>
 
