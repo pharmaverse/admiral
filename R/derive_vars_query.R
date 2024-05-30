@@ -1,4 +1,11 @@
-#' Derive Query Variables
+#' Get Query Variables
+#'
+#' @description Create a table for the input dataset which binds the necessary
+#' rows for a `derive_vars_query()` call with the relevant `SRCVAR`, `TERM_NAME_ID`
+#' and a temporary index if it is necessary
+#'
+#' **Note:** This function is the first step performed in `derive_vars_query()`
+#' requested by some users to be present independently from it.
 #'
 #' @details This function can be used to derive CDISC variables such as
 #'   `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, and `CQzzNAM` in ADAE and
@@ -35,12 +42,13 @@
 #' `create_query_data()` can be used to create the dataset.
 #'
 #'
-#' @return The input dataset with query variables derived.
+#' @return The processed query dataset with `SRCVAR` and `TERM_NAME_ID` so that
+#' that can be merged to the input dataset to execute the derivations outlined by `dataset_queries`.
 #'
-#' @family der_occds
-#' @keywords der_occds
+#' @family utils_help
+#' @keywords utils_help
 #'
-#' @seealso [create_query_data()]]
+#' @seealso [create_query_data()]
 #'
 #' @export
 #'
@@ -58,8 +66,8 @@
 #'   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
 #'   7, "Alveolar proteinosis", NA_character_, NA_integer_
 #' )
-#' derive_vars_query(adae, queries)
-derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
+#' get_vars_query(adae, queries)
+get_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
   source_vars <- unique(dataset_queries$SRCVAR)
   assert_data_frame(dataset,
     required_vars = chr2vars(source_vars),
@@ -187,14 +195,97 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
     mutate(TERM_NAME_ID = toupper(TERM_NAME_ID))
 
   # join restructured queries to input dataset
-  joined <- joined %>%
+  joined %>%
     inner_join(queries_wide, by = c("SRCVAR", "TERM_NAME_ID")) %>%
     select(!!!syms(c(static_cols, new_col_names))) %>%
     group_by_at(static_cols) %>%
     summarise_all(~ first(na.omit(.))) %>%
     ungroup()
+}
 
-  # join queries to input dataset
+#' Derive Query Variables
+#'
+#' @details This function can be used to derive CDISC variables such as
+#'   `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, and `CQzzNAM` in ADAE and
+#'   ADMH, and variables such as `SDGzzNAM`, `SDGzzCD`, and `SDGzzSC` in ADCM.
+#'   An example usage of this function can be found in the
+#'   [OCCDS vignette](../articles/occds.html).
+#'
+#'   A query dataset is expected as an input to this function. See the
+#'   [Queries Dataset Documentation vignette](../articles/queries_dataset.html)
+#'   for descriptions, or call `data("queries")` for an example of a query dataset.
+#'
+#'   For each unique element in `PREFIX`, the corresponding "NAM"
+#'   variable will be created. For each unique `PREFIX`, if `GRPID` is
+#'   not "" or NA, then the corresponding "CD" variable is created; similarly,
+#'   if `SCOPE` is not "" or NA, then the corresponding "SC" variable will
+#'   be created; if `SCOPEN` is not "" or NA, then the corresponding
+#'   "SCN" variable will be created.
+#'
+#'   For each record in `dataset`, the "NAM" variable takes the value of
+#'   `GRPNAME` if the value of `TERMCHAR` or `TERMNUM` in `dataset_queries` matches
+#'   the value of the respective SRCVAR in `dataset`.
+#'   Note that `TERMCHAR` in `dataset_queries` dataset may be NA only when `TERMNUM`
+#'   is non-NA and vice versa. The matching is case insensitive.
+#'   The "CD", "SC", and "SCN" variables are derived accordingly based on
+#'   `GRPID`, `SCOPE`, and `SCOPEN` respectively,
+#'   whenever not missing.
+#'
+#' @param dataset `r roxygen_param_dataset()`
+#'
+#' @param dataset_queries A dataset containing required columns `PREFIX`,
+#' `GRPNAME`, `SRCVAR`, `TERMCHAR` and/or `TERMNUM`, and optional columns
+#' `GRPID`, `SCOPE`, `SCOPEN`.
+#'
+#' `create_query_data()` can be used to create the dataset.
+#'
+#'
+#' @return The input dataset with query variables derived.
+#'
+#' @family der_occds
+#' @keywords der_occds
+#'
+#' @seealso [create_query_data()]
+#'
+#' @export
+#'
+#' @examples
+#' library(tibble)
+#' data("queries")
+#' adae <- tribble(
+#'   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
+#'   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
+#'   3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
+#'   "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
+#'   5, "Basedow's disease", NA_character_, 1L,
+#'   "03", "2020-06-07 23:59:59", "SOME TERM",
+#'   2, "Some query", "Some term", NA_integer_,
+#'   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
+#'   7, "Alveolar proteinosis", NA_character_, NA_integer_
+#' )
+#' derive_vars_query(adae, queries)
+derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linter
+  # join restructured queries to input dataset
+  assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
+  dataset_queries <- convert_blanks_to_na(dataset_queries)
+  source_vars <- unique(dataset_queries$SRCVAR)
+  static_cols <- setdiff(names(dataset), chr2vars(source_vars))
+  no_key <- dataset %>%
+    select(all_of(static_cols)) %>%
+    distinct()
+  if (nrow(no_key) != nrow(dataset)) {
+    dataset$temp_key <- seq_len(nrow(dataset))
+    static_cols <- c(static_cols, "temp_key")
+  }
+  tryCatch(
+    expr = {
+      joined <- get_vars_query(dataset, dataset_queries)
+    },
+    error = function(e) {
+      stop("Error in derive_vars_query call of get_vars_query: ", e)
+    }
+  )
+  # join queries to input dataset, remove temp col(s)
   derive_vars_merged(dataset, dataset_add = joined, by_vars = exprs(!!!syms(static_cols))) %>%
     select(-starts_with("temp_"))
 }

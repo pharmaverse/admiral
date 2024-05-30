@@ -210,8 +210,7 @@ This section uses the `{admiral}` functions `derive_vars_merged()`,
 `derive_vars_dtm()`, and `derive_vars_dtm_to_dt()`. Time is imputed to
 00:00:00 here for reasons specific to the sample data. Other imputation
 times may be used based on study details. Here we create `NFRLT` for
-`EX` data based on `VISITDY` using the formula `(VISITDY - 1) * 24`
-using `dplyr::mutate`.
+`EX` data based on `VISITDY` using `dplyr::mutate()`.
 
 ```{r eval=TRUE, echo=TRUE}
 # ---- Get dosing information ----
@@ -241,7 +240,10 @@ ex_dates <- ex %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
     EVID = 1,
-    NFRLT = 24 * (VISITDY - 1), .after = USUBJID
+    NFRLT = case_when(
+      VISITDY == 1 ~ 0,
+      TRUE ~ 24 * VISITDY
+    )
   ) %>%
   # Set missing end dates to start date
   mutate(AENDTM = case_when(

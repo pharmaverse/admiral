@@ -106,7 +106,6 @@ adpp_aval <- adpp_pp %>%
   mutate(
     PARCAT1 = PPCAT,
     AVAL = PPSTRESN,
-    AVALC = PPSTRESC,
     AVALU = PPSTRESU,
   ) %>%
   # Remove variables
