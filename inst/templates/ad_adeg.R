@@ -127,7 +127,8 @@ adeg <- adeg %>%
     AVALC = ifelse(
       is.na(EGSTRESN) | as.character(EGSTRESN) != EGSTRESC,
       EGSTRESC,
-      NA)
+      NA
+    )
   ) %>%
   ## Derive new parameters based on existing records ----
   # Note that, for the following four `derive_param_*()` functions, only the

@@ -119,7 +119,8 @@ adlb <- adlb %>%
     AVALC = ifelse(
       is.na(LBSTRESN) | as.character(LBSTRESN) != LBSTRESC,
       LBSTRESC,
-      NA),
+      NA
+    ),
     ANRLO = LBSTNRLO,
     ANRHI = LBSTNRHI
   )
