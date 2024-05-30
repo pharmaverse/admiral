@@ -22,6 +22,10 @@
 
 - Template for ADSL updated so that `EOSSTT ` is assigned as  `"ONGOING" ` when no study completion rows exist yet in DS. (#2436)
 
+- The `slice_derivation()` function was updated such that it works now when
+called in a function where objects from the function environment are used.
+(#2244)
+
 ## Breaking Changes
   
 - The following function arguments are entering the next phase of the deprecation process: (#2299)
