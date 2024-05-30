@@ -215,20 +215,13 @@ advs <- advs %>%
     new_var = BASE
   ) %>%
   # Calculate BASEC
-<<<<<<< HEAD
-  derive_var_base(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
-    source_var = AVALC,
-    new_var = BASEC
-  ) %>%
-=======
+
   # only if AVALC is mapped
   # derive_var_base(
   #   by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
   #   source_var = AVALC,
   #   new_var = BASEC
   # ) %>%
->>>>>>> 3183d8b88fe9ecf75e134fede0726d1c6e907e7e
   # Calculate BNRIND
   derive_var_base(
     by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
