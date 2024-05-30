@@ -37,13 +37,13 @@ ex <- convert_blanks_to_na(ex)
 ex <- ex %>%
   mutate(
     EXADJ = case_when(
-      USUBJID == "01-701-1034" & VISIT %in% c("WEEK 2", "WEEK 24") ~ "ADVERSE EVENT",
-      USUBJID == "01-701-1148" & VISIT %in% c("WEEK 24") ~ "MEDICATION ERROR",
+      USUBJID  == "01-701-1034" & VISIT %in% c("WEEK 2", "WEEK 24") ~ "ADVERSE EVENT",
+      USUBJID  == "01-701-1148" & VISIT %in% c("WEEK 24") ~ "MEDICATION ERROR",
       TRUE ~ NA_character_
     ),
     EXDOSE = case_when(
-      USUBJID == "01-701-1034" & VISIT %in% c("WEEK 2", "WEEK 24") ~ 0,
-      USUBJID == "01-701-1148" & VISIT %in% c("WEEK 24") ~ 0,
+      USUBJID  == "01-701-1034" & VISIT %in% c("WEEK 2", "WEEK 24") ~ 0,
+      USUBJID  == "01-701-1148" & VISIT %in% c("WEEK 24") ~ 0,
       TRUE ~ EXDOSE
     )
   ) %>%
@@ -63,7 +63,7 @@ adex0 <- ex %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = exprs(STUDYID, USUBJID)
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   ) %>%
   ## Calculate ASTDTM, AENDTM using `derive_vars_dtm()` ----
   derive_vars_dtm(
@@ -159,7 +159,7 @@ adex <- adex %>%
       )
     ),
     dataset_add = adex,
-    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars)
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars)
   ) %>%
   # W2-W24 exposure
   call_derivation(
@@ -208,7 +208,7 @@ adex <- adex %>%
     ),
     dataset_add = adex,
     filter_add = VISIT %in% c("WEEK 2", "WEEK 24"),
-    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars)
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars)
   ) %>%
   # Overall Dose intensity and W2-24 dose intensity
   call_derivation(
@@ -226,7 +226,7 @@ adex <- adex %>%
       )
     ),
     by_vars = exprs(
-      STUDYID, USUBJID, !!!adsl_vars, PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT
+      !!!get_admiral_option("subject_keys"), !!!adsl_vars, PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT
     )
   ) %>%
   # Overall/W2-24 Average daily dose
@@ -249,7 +249,7 @@ adex <- adex %>%
       )
     ),
     by_vars = exprs(
-      STUDYID, USUBJID, !!!adsl_vars, PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT
+      !!!get_admiral_option("subject_keys"), !!!adsl_vars, PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT
     )
   )
 
@@ -306,7 +306,7 @@ adex <- adex %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = exprs(STUDYID, USUBJID),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     order = exprs(PARCAT1, ASTDT, VISIT, VISITNUM, EXSEQ, PARAMN),
     check_type = "error"
   )
@@ -315,7 +315,7 @@ adex <- adex %>%
 adex <- adex %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(STUDYID, USUBJID)
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   )
 
 # Final Steps, Select final variables and Add labels

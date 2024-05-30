@@ -36,7 +36,7 @@ adcm <- cm %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by = exprs(STUDYID, USUBJID)
+    by = exprs(!!!get_admiral_option("subject_keys"))
   ) %>%
   ## Derive analysis start time ----
   derive_vars_dtm(
@@ -97,7 +97,7 @@ adcm <- adcm %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = AOCCPFL,
-      by_vars = exprs(USUBJID, CMDECOD),
+      by_vars = exprs(!!!get_admiral_option("subject_keys"), CMDECOD),
       order = exprs(ASTDTM, CMSEQ),
       mode = "first"
     ),
@@ -132,7 +132,7 @@ adcm <- adcm %>%
 adcm <- adcm %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(STUDYID, USUBJID)
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   )
 
 
