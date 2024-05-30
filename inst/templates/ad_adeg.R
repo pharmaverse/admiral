@@ -254,7 +254,7 @@ adeg <- adeg %>%
       PARAMCD != "EGINTP"
     )
   )
-adlb$LBBLFL
+
 ## Derive baseline information ----
 adeg <- adeg %>%
   # Calculate BASE
