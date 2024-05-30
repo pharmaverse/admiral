@@ -65,7 +65,7 @@ functions and some of the more advanced topics have been moved to the new "Progr
  
 ## Various
 
-- Templates and vignettes do not add or populate `AVALC` for findings BDS where the information contained in `AVALC` would be redundant with `AVAL`. (#2442)
+- Templates and vignettes do not add or populate `AVALC` for BDS-findings datasets where the information contained in `AVALC` would be redundant with `AVAL`. (#2442)
 
 - The function `dplyr::transmute()` is superseded in favor of `dplyr::mutate(.keep = "none")`. Consequently, all the admiral functions that utilized the former have been updated accordingly. (#2274)
 
