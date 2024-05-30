@@ -115,7 +115,12 @@ adlb <- adlb %>%
   mutate(
     PARCAT1 = LBCAT,
     AVAL = LBSTRESN,
-    AVALC = LBSTRESC,
+    # Only populate AVALC if character value is non-redundant with AVAL
+    AVALC = ifelse(
+      is.na(LBSTRESN) | as.character(LBSTRESN) != LBSTRESC,
+      LBSTRESC,
+      NA
+    ),
     ANRLO = LBSTNRLO,
     ANRHI = LBSTNRHI
   )

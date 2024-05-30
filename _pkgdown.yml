@@ -17,6 +17,10 @@ news:
 
 development:
   mode: auto
+  # Set version_label to "danger" (= red color) for development/auto mode
+  # Else ensure to switch version_label to "default" (= light gray color) before to proceed with an official release
+  # version_label: danger
+  version_label: default
 
 authors:
   before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://pharmaverse.github.io/admiral/)."
@@ -201,7 +205,7 @@ navbar:
       aria-label: Previous Release Websites
     slack:
       icon: fa-slack
-      href: https://app.slack.com/client/T028PB489D3/C02M8KN8269
+      href: https://pharmaverse.slack.com/
       aria-label: Slack
     newissue:
       icon: fa-bug
