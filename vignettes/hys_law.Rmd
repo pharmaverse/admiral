@@ -113,7 +113,7 @@ bili_records <- adlb_annotated %>%
 hylaw_records <- derive_vars_joined(
   dataset = altast_records,
   dataset_add = bili_records,
-  by_vars = exprs(STUDYID, USUBJID),
+  by_vars = exprs(!!!get_admiral_option("subject_keys")),
   order = exprs(ADY),
   join_type = "all",
   filter_join = 0 <= ADT.join - ADT & ADT.join - ADT <= 14 & CRIT1FL == "Y" & CRIT1FL.join == "Y",
@@ -154,7 +154,7 @@ hylaw_params <- derive_param_exist_flag(
   condition = CRIT1FL == "Y" & BILI_CRITFL == "Y",
   false_value = "N",
   missing_value = "N",
-  by_vars = exprs(STUDYID, USUBJID, TRT01A), # add AVISIT, ADT for by visit
+  by_vars = exprs(!!!get_admiral_option("subject_keys"), TRT01A), # add AVISIT, ADT for by visit
   set_values_to = exprs(
     PARAMCD = "HYSLAW",
     PARAM = "ALT/AST >= 3xULN and BILI >= 2xULN",

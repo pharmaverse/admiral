@@ -148,7 +148,7 @@ adtte <- derive_param_tte(
 ```{r, echo=FALSE}
 dataset_vignette(
   adtte,
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, STARTDT, ADT, CNSR)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, STARTDT, ADT, CNSR)
 )
 ```
 
@@ -190,7 +190,7 @@ adtte <- derive_param_tte(
 ```{r, echo=FALSE}
 dataset_vignette(
   adtte,
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, STARTDT, ADT, CNSR)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, STARTDT, ADT, CNSR)
 )
 ```
 
@@ -239,7 +239,7 @@ adtte <- derive_param_tte(
 ```{r, echo=FALSE}
 dataset_vignette(
   adtte,
-  display_vars = exprs(USUBJID, EVNTDESC, SRCDOM, SRCVAR, CNSR, ADT)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), EVNTDESC, SRCDOM, SRCVAR, CNSR, ADT)
 )
 # save adtte and adsl for next section
 adtte_bak <- adtte
@@ -282,7 +282,7 @@ adsl <- tibble::tribble(
 
 dataset_vignette(
   adsl,
-  display_vars = exprs(USUBJID, DTHFL, DTHDT, TRTSDT, TRTSDTF)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), DTHFL, DTHDT, TRTSDT, TRTSDTF)
 )
 ```
 
@@ -305,11 +305,11 @@ adrs <- tibble::tribble(
     PARAMCD = "OVR",
     PARAM = "Overall Response"
   ) %>%
-  select(STUDYID, USUBJID, PARAMCD, PARAM, ADT, ASEQ, AVALC)
+  select(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, ADT, ASEQ, AVALC)
 
 dataset_vignette(
   adrs,
-  display_vars = exprs(USUBJID, AVALC, ADT, ASEQ, PARAMCD, PARAM)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), AVALC, ADT, ASEQ, PARAMCD, PARAM)
 )
 ```
 
@@ -407,10 +407,10 @@ adtte <- derive_param_tte(
 dataset_vignette(
   adtte %>%
     select(
-      STUDYID, USUBJID, PARAMCD, PARAM, STARTDT, ADT, ADTF, CNSR,
+      !!!get_admiral_option("subject_keys"), PARAMCD, PARAM, STARTDT, ADT, ADTF, CNSR,
       EVNTDESC, SRCDOM, SRCVAR
     ),
-  display_vars = exprs(USUBJID, PARAMCD, STARTDT, ADT, ADTF, CNSR)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, ADTF, CNSR)
 )
 ```
 
@@ -503,9 +503,9 @@ adaette <- call_derivation(
 
 ```{r, echo=FALSE}
 adaette %>%
-  select(STUDYID, USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR) %>%
-  arrange(USUBJID, PARAMCD) %>%
-  dataset_vignette(display_vars = exprs(USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR))
+  select(!!!get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR) %>%
+  arrange(!!!get_admiral_option("subject_keys"), PARAMCD) %>%
+  dataset_vignette(display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR))
 ```
 
 ### Deriving Time-to-Event Parameters Using By Groups
@@ -602,10 +602,10 @@ adtte <- derive_param_tte(
 dataset_vignette(
   adtte %>%
     select(
-      USUBJID, STARTDT, PARAMCD, PARAM, PARCAT1, PARCAT2, ADT, CNSR,
+      !!!get_admiral_option("subject_keys"), STARTDT, PARAMCD, PARAM, PARCAT1, PARCAT2, ADT, CNSR,
       EVNTDESC, SRCDOM, SRCVAR, SRCSEQ
     ),
-  display_vars = exprs(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 )
 ```
 
@@ -642,7 +642,7 @@ The `{admiral}` function `derive_var_obs_number()` can be used to derive `ASEQ`:
 ```{r eval=TRUE}
 adtte <- derive_var_obs_number(
   adtte,
-  by_vars = exprs(STUDYID, USUBJID),
+  by_vars = exprs(!!!get_admiral_option("subject_keys")),
   order = exprs(PARAMCD),
   check_type = "error"
 )
@@ -662,14 +662,14 @@ adtte <- derive_vars_merged(
   adtte,
   dataset_add = adsl,
   new_vars = exprs(ARMCD, ARM, ACTARMCD, ACTARM, AGE, SEX),
-  by_vars = exprs(STUDYID, USUBJID)
+  by_vars = exprs(!!!get_admiral_option("subject_keys"))
 )
 ```
 
 ```{r, echo=FALSE}
 dataset_vignette(
   adtte,
-  display_vars = exprs(USUBJID, PARAMCD, CNSR, AVAL, ARMCD, AGE, SEX)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, CNSR, AVAL, ARMCD, AGE, SEX)
 )
 ```
 

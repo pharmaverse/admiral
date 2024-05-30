@@ -87,13 +87,13 @@ Here is an example of how to achieve this **without** using `call_derivation()`:
 ```{r}
 vs_without <- vs %>%
   derive_var_extreme_flag(
-    by_vars = exprs(USUBJID, VSTESTCD),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), VSTESTCD),
     order = exprs(VSORRES, VSSEQ),
     new_var = AHIFL,
     mode = "last"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = exprs(USUBJID, VSTESTCD),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), VSTESTCD),
     order = exprs(VSORRES, VSSEQ),
     new_var = ALOFL,
     mode = "first"
@@ -102,9 +102,9 @@ vs_without <- vs %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 vs_without %>%
-  arrange(USUBJID, VSTESTCD, VSDY, VSSEQ) %>%
+  arrange(!!!get_admiral_option("subject_keys"), VSTESTCD, VSDY, VSSEQ) %>%
   dataset_vignette(
-    display_vars = exprs(USUBJID, VSTESTCD, VSORRES, ALOFL, AHIFL),
+    display_vars = exprs(!!!get_admiral_option("subject_keys"), VSTESTCD, VSORRES, ALOFL, AHIFL),
     filter = VSTESTCD %in% c("TEMP", "WEIGHT")
   )
 ```
@@ -120,16 +120,16 @@ vs_with <- vs %>%
       params(new_var = AHIFL, mode = "last"),
       params(new_var = ALOFL, mode = "first")
     ),
-    by_vars = exprs(USUBJID, VSTESTCD),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), VSTESTCD),
     order = exprs(VSORRES, VSSEQ)
   )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 vs_with %>%
-  arrange(USUBJID, VSTESTCD, VSDY, VSSEQ) %>%
+  arrange(!!!get_admiral_option("subject_keys"), VSTESTCD, VSDY, VSSEQ) %>%
   dataset_vignette(
-    display_vars = exprs(USUBJID, VSTESTCD, VSORRES, ALOFL, AHIFL),
+    display_vars = exprs(!!!get_admiral_option("subject_keys"), VSTESTCD, VSORRES, ALOFL, AHIFL),
     filter = VSTESTCD %in% c("TEMP", "WEIGHT")
   )
 ```
@@ -174,9 +174,9 @@ adaette <- call_derivation(
 
 ```{r, eval=TRUE, echo=FALSE}
 adaette %>%
-  select(USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR) %>%
-  arrange(USUBJID, PARAMCD) %>%
-  dataset_vignette(display_vars = exprs(USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR))
+  select(!!!get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR) %>%
+  arrange(!!!get_admiral_option("subject_keys"), PARAMCD) %>%
+  dataset_vignette(display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR))
 ```
 
 Developing your ADaM scripts this way using `call_derivation()` could give the
@@ -209,7 +209,7 @@ ae <- ae %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = AHSEVFL,
-      by_vars = exprs(USUBJID),
+      by_vars = exprs(!!!get_admiral_option("subject_keys")),
       order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
       mode = "first"
     ),
@@ -219,9 +219,9 @@ ae <- ae %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 ae %>%
-  arrange(USUBJID, AESTDY, AESEQ, desc(TEMP_AESEVN)) %>%
+  arrange(!!!get_admiral_option("subject_keys"), AESTDY, AESEQ, desc(TEMP_AESEVN)) %>%
   dataset_vignette(
-    display_vars = exprs(USUBJID, AEDECOD, AESTDY, AESEQ, AESEV, AHSEVFL)
+    display_vars = exprs(!!!get_admiral_option("subject_keys"), AEDECOD, AESTDY, AESEQ, AESEV, AHSEVFL)
   )
 ```
 
@@ -247,7 +247,7 @@ ae <- ae %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = AHSEV2FL,
-      by_vars = exprs(USUBJID)
+      by_vars = exprs(!!!get_admiral_option("subject_keys"))
     ),
     derivation_slice(
       filter = AESTDY >= 1,
@@ -262,9 +262,9 @@ ae <- ae %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 ae %>%
-  arrange(USUBJID, AESTDY, AESEQ, desc(TEMP_AESEVN)) %>%
+  arrange(!!!get_admiral_option("subject_keys"), AESTDY, AESEQ, desc(TEMP_AESEVN)) %>%
   dataset_vignette(
-    display_vars = exprs(USUBJID, AEDECOD, AESTDY, AESEQ, AESEV, AHSEV2FL)
+    display_vars = exprs(!!!get_admiral_option("subject_keys"), AEDECOD, AESTDY, AESEQ, AESEV, AHSEV2FL)
   )
 ```
 
@@ -286,7 +286,7 @@ ae <- ae %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = AHSEV3FL,
-      by_vars = exprs(USUBJID)
+      by_vars = exprs(!!!get_admiral_option("subject_keys"))
     ),
     derivation_slice(
       filter = AESEV == "SEVERE",
@@ -305,9 +305,9 @@ ae <- ae %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 ae %>%
-  arrange(USUBJID, AESTDY, AESEQ) %>%
+  arrange(!!!get_admiral_option("subject_keys"), AESTDY, AESEQ) %>%
   dataset_vignette(
-    display_vars = exprs(USUBJID, AEDECOD, AESTDY, AESEQ, AESEV, AHSEV3FL)
+    display_vars = exprs(!!!get_admiral_option("subject_keys"), AEDECOD, AESTDY, AESEQ, AESEV, AHSEV3FL)
   )
 ```
 

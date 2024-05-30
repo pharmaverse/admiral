@@ -88,7 +88,7 @@ adqs <- qs %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = exprs(TRTSDT, DTHCAUS),
-    by_vars = exprs(STUDYID, USUBJID)
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   ) %>%
   # Add analysis parameter variables
   mutate(
@@ -110,7 +110,7 @@ adqs <- qs %>%
 ```{r echo=FALSE}
 dataset_vignette(
   arrange(adqs, USUBJID, PARCAT1, ADY, PARAMCD),
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, PARCAT1, AVALC, AVAL, ADY, AVISIT)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, PARCAT1, AVALC, AVAL, ADY, AVISIT)
 )
 ```
 
@@ -143,7 +143,7 @@ adgad7 <- adqs %>%
   derive_summary_records(
     dataset = .,
     dataset_add = .,
-    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
     # Select records contributing to total score
     filter_add = str_detect(PARAMCD, "GAD020[1-7]"),
     set_values_to = exprs(
@@ -157,7 +157,7 @@ adgad7 <- adqs %>%
 ```{r echo=FALSE}
 dataset_vignette(
   arrange(adgad7, USUBJID, ADY, PARAMCD),
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVAL, ADY, AVISIT)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, AVAL, ADY, AVISIT)
 )
 ```
 
@@ -173,7 +173,7 @@ adgdssf <- adqs %>%
   derive_summary_records(
     dataset = .,
     dataset_add = .,
-    by_vars = exprs(STUDYID, USUBJID, AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), AVISIT, ADT, ADY, TRTSDT, DTHCAUS),
     # Select records contributing to total score
     filter_add = str_detect(PARAMCD, "GDS02[01][0-9]"),
     set_values_to = exprs(
@@ -193,7 +193,7 @@ adgdssf <- adqs %>%
 ```{r echo=FALSE}
 dataset_vignette(
   arrange(adgdssf, USUBJID, ADY, PARAMCD),
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVAL, ADY, AVISIT)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, AVAL, ADY, AVISIT)
 )
 ```
 
@@ -205,7 +205,7 @@ adgdssf <- adgdssf %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+      by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD),
       order = exprs(ADT),
       new_var = ABLFL,
       mode = "last"
@@ -214,7 +214,7 @@ adgdssf <- adgdssf %>%
   ) %>%
   # Derive baseline and change from baseline variables
   derive_var_base(
-    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD),
     source_var = AVAL,
     new_var = BASE
   ) %>%
@@ -222,7 +222,7 @@ adgdssf <- adgdssf %>%
   derive_var_pchg() %>%
   # Derive sequence number
   derive_var_obs_number(
-    by_vars = exprs(STUDYID, USUBJID),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     order = exprs(PARAMCD, ADT),
     check_type = "error"
   )
@@ -231,7 +231,7 @@ adgdssf <- adgdssf %>%
 ```{r echo=FALSE}
 dataset_vignette(
   adgdssf,
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVAL, BASE, CHG, PCHG)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, AVISIT, AVAL, BASE, CHG, PCHG)
 )
 ```
 
@@ -264,12 +264,12 @@ adgdssf <- adgdssf %>%
     )
   ) %>%
   derive_var_base(
-    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD),
     source_var = AVALCAT1,
     new_var = BASECAT1
   ) %>%
   derive_var_base(
-    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD),
     source_var = AVALCAT1N,
     new_var = BASECA1N
   ) %>%
@@ -285,7 +285,7 @@ adgdssf <- adgdssf %>%
 ```{r echo=FALSE}
 dataset_vignette(
   arrange(adgdssf, USUBJID, desc(PARAMCD), ADY),
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVAL, AVALCAT1, CHGCAT1)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, AVISIT, AVAL, AVALCAT1, CHGCAT1)
 )
 ```
 
@@ -349,7 +349,7 @@ adgdstte <- derive_param_tte(
 ```{r echo=FALSE}
 dataset_vignette(
   adgdstte,
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVAL, CNSR, EVNTDESC, SRCDOM, SRCVAR)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, AVAL, CNSR, EVNTDESC, SRCDOM, SRCVAR)
 )
 ```
 
@@ -365,7 +365,7 @@ later:
 adgdssf <- adgdssf %>%
   derive_var_joined_exist_flag(
     dataset_add = adgdssf,
-    by_vars = exprs(USUBJID, PARAMCD),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD),
     order = exprs(ADT),
     new_var = CDETFL,
     join_vars = exprs(CHGCAT1, ADY),
@@ -379,7 +379,7 @@ adgdssf <- adgdssf %>%
 ```{r echo=FALSE}
 dataset_vignette(
   arrange(adgdssf, USUBJID, desc(PARAMCD), ADY),
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, ADY, CHGCAT1, CDETFL)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, ADY, CHGCAT1, CDETFL)
 )
 ```
 
@@ -391,7 +391,7 @@ argument is helpful:
 adgdssf <- adgdssf %>%
   derive_var_joined_exist_flag(
     dataset_add = adgdssf,
-    by_vars = exprs(USUBJID, PARAMCD),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD),
     order = exprs(ADT),
     new_var = CONDETFL,
     join_vars = exprs(CHGCAT1),
@@ -407,7 +407,7 @@ adgdssf <- adgdssf %>%
   derive_var_joined_exist_flag(
     .,
     dataset_add = .,
-    by_vars = exprs(USUBJID, PARAMCD),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD),
     order = exprs(ADT),
     new_var = CDTDTHFL,
     join_vars = exprs(CHGCAT1, ADY),
@@ -422,7 +422,7 @@ adgdssf <- adgdssf %>%
 ```{r echo=FALSE}
 dataset_vignette(
   arrange(adgdssf, USUBJID, desc(PARAMCD), ADY),
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, ADY, CHGCAT1, CONDETFL, CDTDTHFL)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, ADY, CHGCAT1, CONDETFL, CDTDTHFL)
 )
 ```
 
@@ -433,7 +433,7 @@ parameter summary functions like `all()` can be used in the filter condition:
 adgdssf <- adgdssf %>%
   derive_var_joined_exist_flag(
     dataset_add = adgdssf,
-    by_vars = exprs(USUBJID, PARAMCD),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD),
     order = exprs(ADT),
     new_var = DEFDETFL,
     join_vars = exprs(CHGCAT1),
@@ -445,7 +445,7 @@ adgdssf <- adgdssf %>%
 ```{r echo=FALSE}
 dataset_vignette(
   arrange(adgdssf, USUBJID, desc(PARAMCD), ADY),
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, ADY, CHGCAT1, DEFDETFL)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, ADY, CHGCAT1, DEFDETFL)
 )
 ```
 
@@ -465,7 +465,7 @@ example, "no sleeping problems" is assumed if all questions were answered with
 adsp <- adqs %>%
   filter(PARCAT1 == "SLEEPING PROBLEMS") %>%
   derive_extreme_event(
-    by_vars = exprs(USUBJID, AVISIT),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), AVISIT),
     tmp_event_nr_var = event_nr,
     order = exprs(event_nr, ADY, QSSEQ),
     mode = "first",
@@ -516,7 +516,7 @@ adsp <- adqs %>%
 ```{r echo=FALSE}
 dataset_vignette(
   arrange(adsp, USUBJID, ADY, PARAMCD),
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVALC)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, AVISIT, AVALC)
 )
 ```
 
@@ -529,7 +529,7 @@ adgdssf <- adgdssf %>%
   derive_summary_records(
     dataset_add = adgdssf,
     filter_add = str_detect(PARAMCD, "GDS02[01][0-9]"),
-    by_vars = exprs(USUBJID, AVISIT),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), AVISIT),
     set_values_to = exprs(
       AVAL = sum(!is.na(AVAL)) / 15 >= 0.9,
       PARAMCD = "COMPL90P",
@@ -542,7 +542,7 @@ adgdssf <- adgdssf %>%
 ```{r echo=FALSE}
 dataset_vignette(
   arrange(adgdssf, USUBJID, PARAMCD, ADY),
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVALC)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, AVISIT, AVALC)
 )
 ```
 
@@ -571,7 +571,7 @@ parm_visit_ref <- crossing(
 adgdssf <- adgdssf %>%
   derive_expected_records(
     dataset_ref = parm_visit_ref,
-    by_vars = exprs(USUBJID),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     set_values_to = exprs(
       filled_in = 1
     )
@@ -580,7 +580,7 @@ adgdssf <- adgdssf %>%
     dataset = .,
     dataset_add = .,
     filter_add = str_detect(PARAMCD, "GDS02[01][0-9]"),
-    by_vars = exprs(USUBJID, AVISIT),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), AVISIT),
     set_values_to = exprs(
       AVAL = all(!is.na(AVAL)),
       PARAMCD = "COMPLALL",
@@ -595,6 +595,6 @@ adgdssf <- adgdssf %>%
 ```{r echo=FALSE}
 dataset_vignette(
   arrange(adgdssf, USUBJID, PARAMCD, ADY),
-  display_vars = exprs(USUBJID, PARAMCD, PARAM, AVISIT, AVALC)
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, AVISIT, AVALC)
 )
 ```

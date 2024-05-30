@@ -219,7 +219,7 @@ advs <- tribble(
 derive_vars_merged(
   adsl,
   dataset_add = advs,
-  by_vars = exprs(USUBJID),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]]),
   filter_add = PARAMCD == "WEIGHT" & ABLFL == "Y",
   new_vars = exprs(WGTBL = AVAL)
 )
@@ -251,7 +251,7 @@ ex <- tribble(
 derive_vars_merged(
   adsl,
   dataset_add = ex,
-  by_vars = exprs(USUBJID),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]]),
   filter_add = EXDOSE > 0,
   order = exprs(EXSTDY),
   mode = "last",
@@ -287,7 +287,7 @@ ex <- tribble(
 derive_vars_joined(
   adae,
   dataset_add = ex,
-  by_vars = exprs(USUBJID),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]]),
   filter_add = EXDOSE > 0,
   filter_join = EXSTDY <= ASTDY,
   join_type = "all",
@@ -302,7 +302,7 @@ The `filter_join` condition is applied on a temporary dataset created by left jo
 admiral:::get_joined_data(
   adae,
   dataset_add = ex,
-  by_vars = exprs(USUBJID),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]]),
   filter_add = EXDOSE > 0,
   join_vars = exprs(EXDOSE),
   join_type = "all",
@@ -334,7 +334,7 @@ adlb <- tribble(
 derive_var_joined_exist_flag(
   adlb,
   dataset_add = adlb,
-  by_vars = exprs(USUBJID, PARAMCD),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
   order = exprs(ADY),
   join_vars = exprs(ADY, ANRIND),
   join_type = "after",
@@ -353,7 +353,7 @@ So the temporary dataset for applying `filter_join` is:
 admiral:::get_joined_data(
   adlb,
   dataset_add = adlb,
-  by_vars = exprs(USUBJID, PARAMCD),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
   order = exprs(ADY),
   join_vars = exprs(ADY, ANRIND),
   join_type = "after"
@@ -368,7 +368,7 @@ set it to the condition for confirmation.
 derive_var_joined_exist_flag(
   adlb,
   dataset_add = adlb,
-  by_vars = exprs(USUBJID, PARAMCD),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
   order = exprs(ADY),
   join_vars = exprs(ADY, ANRIND),
   join_type = "after",
@@ -383,7 +383,7 @@ dataset are restricted up to the first records where the condition is fulfilled:
 admiral:::get_joined_data(
   adlb,
   dataset_add = adlb,
-  by_vars = exprs(USUBJID, PARAMCD),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
   order = exprs(ADY),
   join_vars = exprs(ADY, ANRIND),
   join_type = "after",
@@ -419,7 +419,7 @@ advs <- tribble(
 
 derive_var_extreme_flag(
   advs,
-  by_vars = exprs(USUBJID, PARAMCD),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
   order = exprs(AVISITN),
   mode = "last",
   new_var = LSTVISFL
@@ -431,7 +431,7 @@ the `AVISITN == 3` record is flagged.
 ```{r}
 derive_var_extreme_flag(
   advs,
-  by_vars = exprs(USUBJID, PARAMCD),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
   order = exprs(if_else(is.na(AVISITN), -Inf, AVISITN)),
   mode = "last",
   new_var = LSTVISFL
@@ -442,7 +442,7 @@ variables.
 ```{r}
 derive_var_extreme_flag(
   advs,
-  by_vars = exprs(USUBJID, PARAMCD),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
   order = exprs(!is.na(AVISITN), AVISITN),
   mode = "last",
   new_var = LSTVISFL
@@ -485,7 +485,7 @@ derive_summary_records(
   adex,
   dataset_add = adex,
   filter_add = AVAL > 0,
-  by_vars = exprs(USUBJID),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]]),
   set_values_to = exprs(
     AVAL = mean(AVAL),
     PARAMCD = "AVERAGE DOSE"
@@ -510,7 +510,7 @@ derive_var_merged_summary(
   adsl,
   dataset_add = adex,
   filter_add = AVAL > 0,
-  by_vars = exprs(USUBJID),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]]),
   new_vars = exprs(
     AVERDOSE = mean(AVAL)
   ),
@@ -539,7 +539,7 @@ advs <- tribble(
 
 derive_param_computed(
   advs,
-  by_vars = exprs(USUBJID, AVISIT),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], AVISIT),
   parameters = c("WEIGHT", "HEIGHT"),
   set_values_to = exprs(
     AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
@@ -555,7 +555,7 @@ example `compute_bmi()` could be used instead of the formula for BMI:
 ```{r}
 derive_param_computed(
   advs,
-  by_vars = exprs(USUBJID, AVISIT),
+  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], AVISIT),
   parameters = c("WEIGHT", "HEIGHT"),
   set_values_to = exprs(
     AVAL = compute_bmi(weight = AVAL.WEIGHT, height = AVAL.HEIGHT),

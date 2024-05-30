@@ -79,7 +79,7 @@ adae <- derive_vars_merged(
   ae,
   dataset_add = adsl,
   new_vars = adsl_vars,
-  by = exprs(STUDYID, USUBJID)
+  by = exprs(!!!get_admiral_option("subject_keys"))
 )
 ```
 
@@ -87,7 +87,7 @@ adae <- derive_vars_merged(
 dataset_vignette(
   adae,
   display_vars = exprs(
-    USUBJID, AESEQ, AETERM, AESTDTC, TRTSDT,
+    !!!get_admiral_option("subject_keys"), AESEQ, AETERM, AESTDTC, TRTSDT,
     TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT
   )
 )
@@ -128,7 +128,7 @@ adae <- adae %>%
 dataset_vignette(
   adae,
   display_vars = exprs(
-    USUBJID, AESTDTC, AEENDTC, ASTDTM, ASTDT,
+    !!!get_admiral_option("subject_keys"), AESTDTC, AEENDTC, ASTDTM, ASTDT,
     ASTDY, AENDTM, AENDT, AENDY
   )
 )
@@ -155,7 +155,7 @@ adae <- adae %>%
 dataset_vignette(
   adae,
   display_vars = exprs(
-    USUBJID, AESTDTC, AEENDTC, ASTDT, AENDT,
+    !!!get_admiral_option("subject_keys"), AESTDTC, AEENDTC, ASTDT, AENDT,
     ADURN, ADURU
   )
 )
@@ -239,7 +239,7 @@ ex_single <- derive_vars_dtm(
 adae <- derive_vars_joined(
   adae,
   ex_single,
-  by_vars = exprs(STUDYID, USUBJID),
+  by_vars = exprs(!!!get_admiral_option("subject_keys")),
   new_vars = exprs(LDOSEDTM = EXSTDTM),
   join_vars = exprs(EXSTDTM),
   join_type = "all",
@@ -254,7 +254,7 @@ adae <- derive_vars_joined(
 dataset_vignette(
   adae,
   display_vars = exprs(
-    USUBJID, AEDECOD, AESEQ, AESTDTC, AEENDTC,
+    !!!get_admiral_option("subject_keys"), AEDECOD, AESEQ, AESTDTC, AEENDTC,
     ASTDT, AENDT, LDOSEDTM
   )
 )
@@ -292,7 +292,7 @@ adae <- adae %>%
 dataset_vignette(
   adae,
   display_vars = exprs(
-    USUBJID, TRTSDT, TRTEDT, AESTDTC, ASTDT,
+    !!!get_admiral_option("subject_keys"), TRTSDT, TRTEDT, AESTDTC, ASTDT,
     TRTEMFL
   )
 )
@@ -406,7 +406,7 @@ adae <- adae %>%
 dataset_vignette(
   adae,
   display_vars = exprs(
-    USUBJID, ASTDTM, ASEV, AESEQ, TRTEMFL, AOCCIFL
+    !!!get_admiral_option("subject_keys"), ASTDTM, ASEV, AESEQ, TRTEMFL, AOCCIFL
   )
 )
 ```
@@ -485,7 +485,7 @@ If needed, the other `ADSL` variables can now be added:
 adae <- adae %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(STUDYID, USUBJID)
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   )
 ```
 
@@ -493,7 +493,7 @@ adae <- adae %>%
 dataset_vignette(
   adae,
   display_vars = exprs(
-    USUBJID, AEDECOD, ASTDTM, DTHDT, RFSTDTC,
+    !!!get_admiral_option("subject_keys"), AEDECOD, ASTDTM, DTHDT, RFSTDTC,
     RFENDTC, AGE, AGEU, SEX
   )
 )
@@ -517,7 +517,7 @@ adcm <- tibble::tribble(
 
 adcm_aseq <- adcm %>%
   derive_var_obs_number(
-    by_vars    = exprs(USUBJID),
+    by_vars    = exprs(!!get_admiral_option("subject_keys")[[2]]),
     order      = exprs(ASTDTM, CMSEQ, ATC1CD, ATC2CD, ATC3CD, ATC4CD),
     new_var    = ASEQ,
     check_type = "error"
