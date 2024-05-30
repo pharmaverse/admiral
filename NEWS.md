@@ -5,15 +5,21 @@
 
 ## New Features
 - Added helper functions to `derive_vars_merged()` (`get_flagged_records()`) and `derive_vars_query()` (`get_vars_query()`) so that those can be called independently as per user's request. `derive_vars_merged()` function call results are not impacted by the change (#2441).
+
 - Error Messaging has been made more "user-friendly". (#2372)
+
 - New `country_code_lookup()` metadata added to decode countries based on [ISO 3166 codes](https://www.iso.org/iso-3166-country-codes.html). (#2388)
 
 ## Updates of Existing Functions
 
 - Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (#2392)
+
 - `basket_select()` function updated to add `...` argument to allow other qualifiers to be passed to user-defined function specified in `get_terms_fun()` argument for function `create_query_data()`. (#2265)
+
 - The `id_vars` argument was added to `derive_vars_transposed()` and `derive_vars_atc()` to allow additional variables, beyond those in `by_vars`, to uniquely identify records in the `dataset_merge` argument. (#2325)
+
 - Update PK Programming vignette and templates for ADPC and ADPPK for the nominal time formula `NFRLT` to reduce duplicate records in dose expansion with `create_single_dose_dataset()`. (#2426)
+
 - Template for ADSL updated so that `EOSSTT ` is assigned as  `"ONGOING" ` when no study completion rows exist yet in DS. (#2436)
 
 ## Breaking Changes
@@ -59,7 +65,9 @@ functions and some of the more advanced topics have been moved to the new "Progr
  
 ## Various
 
- - The function `dplyr::transmute()` is superseded in favor of `dplyr::mutate(.keep = "none")`. Consequently, all the admiral functions that utilized the former have been updated accordingly. (#2274)
+- Templates and vignettes do not add or populate `AVALC` for BDS-findings datasets where the information contained in `AVALC` would be redundant with `AVAL`. (#2442)
+
+- The function `dplyr::transmute()` is superseded in favor of `dplyr::mutate(.keep = "none")`. Consequently, all the admiral functions that utilized the former have been updated accordingly. (#2274)
 
 - The templates for ADPP and ADPC are updated for missing variables (#2308) and to make `ATPT` and `ATPTN` consistent. (#2328)
 
