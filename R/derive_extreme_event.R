@@ -444,8 +444,8 @@ derive_extreme_event <- function(dataset = NULL,
           signal_duplicate_records(
             dataset = data_events,
             by_vars = append(by_vars, event_order),
-            msg = paste("Check duplicates: ", event$dataset_name, " dataset contains duplicate records
-                        with respect to {.var {replace_values_by_names(by_vars)}}"),
+            msg = paste("Check duplicates: ", event$dataset_name, " dataset contains duplicate
+                        records with respect to {.var {replace_values_by_names(by_vars)}}"),
             cnd_type = "message"
           )
 
