@@ -37,13 +37,13 @@ ex <- convert_blanks_to_na(ex)
 ex <- ex %>%
   mutate(
     EXADJ = case_when(
-      USUBJID  == "01-701-1034" & VISIT %in% c("WEEK 2", "WEEK 24") ~ "ADVERSE EVENT",
-      USUBJID  == "01-701-1148" & VISIT %in% c("WEEK 24") ~ "MEDICATION ERROR",
+      USUBJID == "01-701-1034" & VISIT %in% c("WEEK 2", "WEEK 24") ~ "ADVERSE EVENT",
+      USUBJID == "01-701-1148" & VISIT %in% c("WEEK 24") ~ "MEDICATION ERROR",
       TRUE ~ NA_character_
     ),
     EXDOSE = case_when(
-      USUBJID  == "01-701-1034" & VISIT %in% c("WEEK 2", "WEEK 24") ~ 0,
-      USUBJID  == "01-701-1148" & VISIT %in% c("WEEK 24") ~ 0,
+      USUBJID == "01-701-1034" & VISIT %in% c("WEEK 2", "WEEK 24") ~ 0,
+      USUBJID == "01-701-1148" & VISIT %in% c("WEEK 24") ~ 0,
       TRUE ~ EXDOSE
     )
   ) %>%
