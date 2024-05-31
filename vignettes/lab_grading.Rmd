@@ -225,7 +225,11 @@ adlb <- lb %>%
   mutate(
     PARCAT1 = LBCAT,
     AVAL = LBSTRESN,
-    AVALC = LBSTRESC,
+    AVALC = ifelse(
+      is.na(LBSTRESN) | as.character(LBSTRESN) != LBSTRESC,
+      LBSTRESC,
+      NA
+    ),
     ANRLO = LBSTNRLO,
     ANRHI = LBSTNRHI,
     BASE = AVAL - 10
