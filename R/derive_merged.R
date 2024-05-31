@@ -439,7 +439,7 @@ derive_vars_merged <- function(dataset,
     ),
     "dplyr_error_join_relationship_one_to_one" = function(cnd) {
       cli_abort(
-        message = "Each row in `dataset` must match at most 1 row in `add_data`.",
+        message = "Each row in `dataset` must match at most 1 row in `dataset_add`.",
         call = parent.frame(n = 5)
       )
     },
