@@ -11,6 +11,7 @@
 - New `country_code_lookup()` metadata added to decode countries based on [ISO 3166 codes](https://www.iso.org/iso-3166-country-codes.html). (#2388)
 
 ## Updates of Existing Functions
+- Replaced hard coding of `expr(USUBJID, STUDYID)` and `expr(USUBJID)` with `get_admiral_option("subject_keys")` so the argument is flexible and can be changed from the default by the user. (#2415)
 
 - Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (#2392)
 
