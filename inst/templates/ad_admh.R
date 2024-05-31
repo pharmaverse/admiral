@@ -88,13 +88,13 @@ admh <- mh %>%
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = get_admiral_option("subject_keys"), MHBODSYS),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(MHBODSYS)),
     order = get_admiral_option("subject_keys"), MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
     new_var = AOCCSFL,
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = get_admiral_option("subject_keys"), MHDECOD),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(MHDECOD)),
     order = get_admiral_option("subject_keys"), MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
     new_var = AOCCPFL,
     mode = "first"
@@ -107,13 +107,13 @@ admh <- mh %>%
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = get_admiral_option("subject_keys"), MHBODSYS),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(MHBODSYS)),
     order = get_admiral_option("subject_keys"), AHIST, MHBODSYS, MHCAT, ASTDT, MHSEQ),
     new_var = AOCPSFL,
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = get_admiral_option("subject_keys"), MHDECOD),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(MHDECOD)),
     order = get_admiral_option("subject_keys"), AHIST, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
     new_var = AOCPPFL,
     mode = "first"

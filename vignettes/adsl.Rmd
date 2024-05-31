@@ -88,7 +88,7 @@ adsl <- dm %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = get_admiral_option("subject_keys"), RFSTDTC, COUNTRY, AGE, SEX, RACE, ETHNIC, ARM, ACTARM)
+  display_vars = c(get_admiral_option("subject_keys"), exprs(RFSTDTC, COUNTRY, AGE, SEX, RACE, ETHNIC, ARM, ACTARM))
 )
 ```
 
@@ -186,7 +186,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = get_admiral_option("subject_keys"), RFSTDTC, TRTSDTM, TRTSDT, TRTEDTM, TRTEDT, TRTDURD)
+  display_vars = c(get_admiral_option("subject_keys"), exprs(RFSTDTC, TRTSDTM, TRTSDT, TRTEDTM, TRTEDT, TRTDURD))
 )
 ```
 
@@ -225,14 +225,14 @@ The `ds_ext` dataset:
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   ds_ext,
-  display_vars = get_admiral_option("subject_keys"), DSCAT, DSDECOD, DSTERM, DSSTDT, DSSTDTC),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(DSCAT, DSDECOD, DSTERM, DSSTDT, DSSTDTC)),
   filter = DSDECOD != "SCREEN FAILURE"
 )
 ```
 
 The `adsl` dataset:
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, display_vars = get_admiral_option("subject_keys"), EOSDT))
+dataset_vignette(adsl, display_vars = c(get_admiral_option("subject_keys"), exprs(EOSDT)))
 ```
 
 The `derive_vars_dt()` function allows to impute partial dates as well. If
@@ -280,7 +280,7 @@ adsl <- adsl %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, display_vars = get_admiral_option("subject_keys"), EOSDT, EOSSTT))
+dataset_vignette(adsl, display_vars = c(get_admiral_option("subject_keys"), exprs(EOSDT, EOSSTT)))
 ```
 
 This call would return the input dataset with the column `EOSSTT` added. 
@@ -313,7 +313,7 @@ adsl <- adsl %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, display_vars = get_admiral_option("subject_keys"), EOSDT, EOSSTT, DCSREAS, DCSREASP))
+dataset_vignette(adsl, display_vars = c(get_admiral_option("subject_keys"), exprs(EOSDT, EOSSTT, DCSREAS, DCSREASP)))
 ```
 This call would return the input dataset with the column `DCSREAS` and `DCSREASP` added. 
 
@@ -347,7 +347,7 @@ adsl <- adsl %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, display_vars = get_admiral_option("subject_keys"), EOSDT, EOSSTT, DCSREAS, DCSREASP))
+dataset_vignette(adsl, display_vars = c(get_admiral_option("subject_keys"), exprs(EOSDT, EOSSTT, DCSREAS, DCSREASP)))
 ```
 
 ### Randomization Date (`RANDDT`) {#randomization_date}
@@ -369,7 +369,7 @@ adsl <- adsl %>%
 This call would return the input dataset with the column `RANDDT` is added.
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, display_vars = get_admiral_option("subject_keys"), RANDDT))
+dataset_vignette(adsl, display_vars = c(get_admiral_option("subject_keys"), exprs(RANDDT)))
 ```
 
 ## Derive Death Variables {#death}
@@ -390,7 +390,7 @@ adsl <- adsl %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl %>% filter(!is.na(DTHDT) | row_number() %% 50 == 0), display_vars = get_admiral_option("subject_keys"), TRTEDT, DTHDTC, DTHDT, DTHFL))
+dataset_vignette(adsl %>% filter(!is.na(DTHDT) | row_number() %% 50 == 0), display_vars = c(get_admiral_option("subject_keys"), exprs(TRTEDT, DTHDTC, DTHDT, DTHFL)))
 ```
 
 This call would return the input dataset with the columns `DTHDT` added and, by
@@ -455,7 +455,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = get_admiral_option("subject_keys"), EOSDT, DTHDTC, DTHDT, DTHCAUS),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(EOSDT, DTHDTC, DTHDT, DTHCAUS)),
   filter = DTHFL == "Y"
 )
 ```
@@ -492,7 +492,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = get_admiral_option("subject_keys"), TRTEDT, DTHDTC, DTHDT, DTHCAUS, DTHDOM, DTHSEQ),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(TRTEDT, DTHDTC, DTHDT, DTHCAUS, DTHDOM, DTHSEQ)),
   filter = DTHFL == "Y"
 )
 ```
@@ -540,7 +540,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = get_admiral_option("subject_keys"), TRTEDT, DTHDTC, DTHDT, DTHCAUS, DTHADY, LDDTHELD),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(TRTEDT, DTHDTC, DTHDT, DTHCAUS, DTHADY, LDDTHELD)),
   filter = DTHFL == "Y"
 )
 ```
@@ -602,7 +602,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = get_admiral_option("subject_keys"), TRTEDT, DTHDTC, LSTALVDT),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(TRTEDT, DTHDTC, LSTALVDT)),
   filter = !is.na(TRTSDT)
 )
 ```
@@ -665,7 +665,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = get_admiral_option("subject_keys"), TRTEDT, DTHDTC, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(TRTEDT, DTHDTC, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)),
   filter = !is.na(TRTSDT)
 )
 ```
@@ -718,7 +718,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = get_admiral_option("subject_keys"), AGE, SEX, COUNTRY, AGEGR1, REGION1)
+  display_vars = c(get_admiral_option("subject_keys"), exprs(AGE, SEX, COUNTRY, AGEGR1, REGION1))
 )
 ```
 
@@ -742,7 +742,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = get_admiral_option("subject_keys"), TRTSDT, ARM, ACTARM, SAFFL)
+  display_vars = c(get_admiral_option("subject_keys"), exprs(TRTSDT, ARM, ACTARM, SAFFL))
 )
 ```
 

@@ -86,9 +86,9 @@ adae <- derive_vars_merged(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), AESEQ, AETERM, AESTDTC, TRTSDT,
+  display_vars = c(get_admiral_option("subject_keys"), exprs(AESEQ, AETERM, AESTDTC, TRTSDT,
     TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT
+    )
   )
 )
 ```
@@ -127,9 +127,10 @@ adae <- adae %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), AESTDTC, AEENDTC, ASTDTM, ASTDT,
-    ASTDY, AENDTM, AENDT, AENDY
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(AESTDTC, AEENDTC, ASTDTM, ASTDT,
+                   ASTDY, AENDTM, AENDT, AENDY
+    )
   )
 )
 ```
@@ -154,9 +155,10 @@ adae <- adae %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), AESTDTC, AEENDTC, ASTDT, AENDT,
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(AESTDTC, AEENDTC, ASTDT, AENDT,
     ADURN, ADURU
+    )
   )
 )
 ```
@@ -253,9 +255,10 @@ adae <- derive_vars_joined(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), AEDECOD, AESEQ, AESTDTC, AEENDTC,
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(AEDECOD, AESEQ, AESTDTC, AEENDTC,
     ASTDT, AENDT, LDOSEDTM
+    )
   )
 )
 ```
@@ -291,9 +294,10 @@ adae <- adae %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), TRTSDT, TRTEDT, AESTDTC, ASTDT,
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(TRTSDT, TRTEDT, AESTDTC, ASTDT,
     TRTEMFL
+    )
   )
 )
 ```
@@ -405,8 +409,9 @@ adae <- adae %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), ASTDTM, ASEV, AESEQ, TRTEMFL, AOCCIFL
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(ASTDTM, ASEV, AESEQ, TRTEMFL, AOCCIFL
+    )
   )
 )
 ```
@@ -492,10 +497,10 @@ adae <- adae %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), AEDECOD, ASTDTM, DTHDT, RFSTDTC,
+  display_vars = c(
+    get_admiral_option("subject_keys"), exprs(AEDECOD, ASTDTM, DTHDT, RFSTDTC,
     RFENDTC, AGE, AGEU, SEX
-  )
+  ))
 )
 ```
 

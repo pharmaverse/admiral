@@ -288,7 +288,7 @@ adsl2 <- derive_vars_period(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl2,
-  display_vars = get_admiral_option("subject_keys"), AP01SDT, AP01EDT, AP02SDT, AP02EDT)
+  display_vars = c(get_admiral_option("subject_keys"), exprs(AP01SDT, AP01EDT, AP02SDT, AP02EDT))
 )
 ```
 
@@ -358,7 +358,7 @@ adsl <- derive_vars_period(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = get_admiral_option("subject_keys"), TRT01A, TRT02A, AP01SDT, AP01EDT, AP02SDT, AP02EDT)
+  display_vars = c(get_admiral_option("subject_keys"), exprs(TRT01A, TRT02A, AP01SDT, AP01EDT, AP02SDT, AP02EDT))
 )
 ```
 

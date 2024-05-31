@@ -199,8 +199,9 @@ pc_dates <- pc %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   pc_dates,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), PCTEST, ADTM, VISIT, PCTPT, NFRLT
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(PCTEST, ADTM, VISIT, PCTPT, NFRLT
+                   )
   )
 )
 ```
@@ -258,8 +259,9 @@ ex_dates <- ex %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   ex_dates,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), EXTRT, EXDOSFRQ, ASTDTM, AENDTM, VISIT, VISITDY, NFRLT
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(EXTRT, EXDOSFRQ, ASTDTM, AENDTM,
+                         VISIT,VISITDY, NFRLT)
   )
 )
 ```
@@ -297,11 +299,11 @@ ex_exp <- ex_dates %>%
     nominal_time = NFRLT,
     lookup_table = dose_freq_lookup,
     lookup_column = CDISC_VALUE,
-    keep_source_vars = exprs(
-      STUDYID, !!!get_admiral_option("subject_keys"), EVID, EXDOSFRQ, EXDOSFRM,
+    keep_source_vars = c(
+     get_admiral_option("subject_keys"), exprs(EVID, EXDOSFRQ, EXDOSFRM,
       NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
       VISIT, VISITNUM, VISITDY, TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
-    )
+    ))
   ) %>%
   # Derive AVISIT based on nominal relative time
   # Derive AVISITN to nominal time in whole days using integer division
@@ -323,8 +325,9 @@ ex_exp <- ex_dates %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   ex_exp,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), DRUG, EXDOSFRQ, ASTDTM, AENDTM, AVISIT, NFRLT
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(DRUG,EXDOSFRQ, ASTDTM, AENDTM,
+                         AVISIT, NFRLT)
   )
 )
 ```
@@ -348,7 +351,7 @@ adpc_first_dose <- pc_dates %>%
     new_vars = exprs(FANLDTM = ADTM),
     order = exprs(ADTM, EXSEQ),
     mode = "first",
-    by_vars = get_admiral_option("subject_keys"), DRUG)
+    by_vars = c(get_admiral_option("subject_keys"), exprs(DRUG))
   ) %>%
   filter(!is.na(FANLDTM)) %>%
   # Derive AVISIT based on nominal relative time
@@ -357,14 +360,16 @@ adpc_first_dose <- pc_dates %>%
   mutate(
     AVISITN = NFRLT %/% 24 + 1,
     AVISIT = paste("Day", AVISITN)
-  )
+    )
+ 
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adpc_first_dose,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), FANLDTM, AVISIT, ADTM, PCTPT
+  display_vars = c(
+   get_admiral_option("subject_keys"), exprs(FANLDTM, AVISIT, ADTM, PCTPT
+    )
   )
 )
 ```
@@ -401,8 +406,10 @@ adpc_prev <- adpc_first_dose %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adpc_prev,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), VISIT, ADTM, VISIT, PCTPT, ADTM_prev, EXDOSE_prev, AVISIT_prev
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(VISIT, ADTM, VISIT, PCTPT,
+                         ADTM_prev, EXDOSE_prev, AVISIT_prev
+                   )
   )
 )
 ```
@@ -436,9 +443,9 @@ adpc_next <- adpc_prev %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adpc_next,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"),
-    VISIT, ADTM, VISIT, PCTPT, ADTM_next, EXDOSE_next, AVISIT_next
+  display_vars = c(get_admiral_option("subject_keys"),
+    exprs(VISIT, ADTM, VISIT, PCTPT, ADTM_next, EXDOSE_next,
+          AVISIT_next)
   )
 )
 ```
@@ -488,8 +495,9 @@ adpc_nom_next <- adpc_nom_prev %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adpc_nom_next,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), NFRLT, PCTPT, NFRLT_prev, NFRLT_next
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(NFRLT, PCTPT, NFRLT_prev, NFRLT_next
+                   )
   )
 )
 ```
@@ -582,8 +590,9 @@ adpc_arrlt <- bind_rows(adpc_nom_next, ex_exp) %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adpc_arrlt,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), FANLDTM, AVISIT, PCTPT, AFRLT, ARRLT, AXRLT
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(FANLDTM, AVISIT, PCTPT, AFRLT,
+                         ARRLT, AXRLT)
   )
 )
 ```
@@ -610,8 +619,9 @@ adpc_nrrlt <- adpc_arrlt %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adpc_nrrlt,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), AVISIT, PCTPT, NFRLT, NRRLT, NXRLT
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(AVISIT, PCTPT, NFRLT, NRRLT, NXRLT
+                   )
   )
 )
 ```
@@ -720,8 +730,9 @@ adpc_aval <- adpc_nrrlt %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adpc_aval,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), NFRLT, AVISIT, ATPT, ABLFL, ATPTREF, AVAL, AVALCAT1
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(NFRLT, AVISIT, ATPT, ABLFL,
+                         ATPTREF, AVAL, AVALCAT1)
   )
 )
 ```
@@ -774,8 +785,9 @@ dtype <- adpc_aval %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   dtype,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), DTYPE, ATPT, NFRLT, NRRLT, AFRLT, ARRLT, BASETYPE
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(DTYPE, ATPT, NFRLT, NRRLT,
+                         AFRLT, ARRLT, BASETYPE)
   )
 )
 ```
@@ -808,9 +820,11 @@ adpc_dtype <- bind_rows(adpc_aval, dtype) %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 adpc_dtype %>%
-  dataset_vignette(display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), BASETYPE, ADTM, ATPT, NFRLT, NRRLT, ARRLT, MRRLT
-  ))
+  dataset_vignette(display_vars = c(get_admiral_option("subject_keys"), exprs(BASETYPE, ADTM,
+                                    ATPT, NFRLT, NRRLT,
+                                    ARRLT, MRRLT)
+    )
+  )
 ```
 
 ## Calculate Change from Baseline and Assign `ASEQ` {#aseq}
@@ -830,7 +844,7 @@ Finally we derive `PARAM` and `PARAMN` from a lookup table.
 adpc_base <- adpc_dtype %>%
   # Derive BASE
   derive_var_base(
-    by_vars = get_admiral_option("subject_keys"), PARAMCD, PARCAT1, BASETYPE),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, PARCAT1, BASETYPE)),
     source_var = AVAL,
     new_var = BASE,
     filter = ABLFL == "Y"
@@ -862,9 +876,10 @@ adpc_aseq <- adpc_chg %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 adpc_aseq %>%
-  dataset_vignette(display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), BASETYPE, DTYPE, AVISIT, ATPT, AVAL, NFRLT, NRRLT, AFRLT, ARRLT, BASE, CHG
-  ))
+  dataset_vignette(display_vars = c(get_admiral_option("subject_keys"), exprs(BASETYPE, DTYPE, AVISIT, ATPT, AVAL, NFRLT, NRRLT, AFRLT, ARRLT, BASE, CHG
+    )
+  )
+)
 ```
 
 ## Add Additional Baseline Variables {#baselines}
@@ -898,9 +913,9 @@ adpc_baselines <- adpc_aseq %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 adpc_baselines %>%
-  dataset_vignette(display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), HTBL, HTBLU, WTBL, WTBLU, BMIBL, BMIBLU, BASETYPE, ATPT, AVAL
-  ))
+  dataset_vignette(display_vars = c(get_admiral_option("subject_keys"), exprs(HTBL, HTBLU, WTBL, WTBLU, BMIBL, BMIBLU, BASETYPE, ATPT, AVAL)
+  )
+)
 ```
 
 ## Add the `ADSL` variables {#adsl_vars}
@@ -991,7 +1006,7 @@ adppk_first_dose <- pc_dates %>%
     new_vars = exprs(FANLDTM = ADTM, EXDOSE_first = EXDOSE),
     order = exprs(ADTM, EXSEQ),
     mode = "first",
-    by_vars = get_admiral_option("subject_keys"), DRUG)
+    by_vars = c(get_admiral_option("subject_keys"), exprs(DRUG))
   ) %>%
   filter(!is.na(FANLDTM)) %>%
   # Derive AVISIT based on nominal relative time
@@ -1006,8 +1021,9 @@ adppk_first_dose <- pc_dates %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adppk_first_dose,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), FANLDTM, AVISIT, ADTM, PCTPT
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(FANLDTM, AVISIT, ADTM, PCTPT
+    )
   )
 )
 ```
@@ -1059,8 +1075,10 @@ adppk_nom_prev <- adppk_prev %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adppk_nom_prev,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), VISIT, ADTM, VISIT, PCTPT, ADTM_prev, NFRLT_prev
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(VISIT, ADTM, VISIT, PCTPT,
+                         ADTM_prev, NFRLT_prev
+    )
   )
 )
 ```
@@ -1125,8 +1143,9 @@ adppk_aprlt <- bind_rows(adppk_nom_prev, ex_exp) %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adppk_aprlt,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), EVID, NFRLT, AFRLT, APRLT, NPRLT
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(EVID, NFRLT, AFRLT, APRLT, NPRLT
+    )
   )
 )
 ```
@@ -1209,8 +1228,9 @@ adppk_aval <- adppk_aprlt %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adppk_aval,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), EVID, DOSEA, AMT, NFRLT, AFRLT, CMT, DV, MDV, BLQFN
+  display_vars = c(get_admiral_option("subject_keys"),
+                   exprs(EVID, DOSEA, AMT, NFRLT, AFRLT,
+                         CMT, DV, MDV, BLQFN)
   )
 )
 ```
@@ -1251,9 +1271,9 @@ adppk_aseq <- adppk_aval %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adppk_aseq,
-  display_vars = exprs(
-    !!!get_admiral_option("subject_keys"), EVID, DOSEA, AMT, NFRLT, AFRLT, CMT, DV, MDV, BLQFN, ASEQ
-  )
+  display_vars = c(
+    get_admiral_option("subject_keys"), exprs(EVID, DOSEA, AMT, NFRLT, AFRLT, CMT, DV, MDV, BLQFN, ASEQ
+  ))
 )
 ```
 

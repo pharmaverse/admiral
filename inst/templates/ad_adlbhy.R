@@ -32,7 +32,7 @@ adlb_annotated <- adlb %>%
     .,
     derivation = derive_var_merged_exist_flag,
     dataset_add = .,
-    by_vars = get_admiral_option("subject_keys"), LBSEQ, PARAMCD, ADT),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(LBSEQ, PARAMCD, ADT)),
     variable_params = list(
       params(
         new_var = CRIT1FL,
@@ -79,7 +79,7 @@ hylaw_params <- derive_param_exist_flag(
   condition = CRIT1FL == "Y" & BILI_CRITFL == "Y",
   false_value = "N",
   missing_value = "N",
-  by_vars = get_admiral_option("subject_keys"), TRT01A), # add AVISIT, ADT for by visit
+  by_vars = c(get_admiral_option("subject_keys"), exprs(TRT01A)), # add AVISIT, ADT for by visit
   set_values_to = exprs(
     PARAMCD = "HYSLAW",
     PARAM = "ALT/AST >= 3xULN and BILI >= 2xULN"

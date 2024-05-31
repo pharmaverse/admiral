@@ -93,7 +93,7 @@ advs <- derive_vars_merged(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = get_admiral_option("subject_keys"), VSTESTCD, VSDTC, VISIT, TRTSDT, TRTEDT, TRT01A, TRT01P),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(VSTESTCD, VSDTC, VISIT, TRTSDT, TRTEDT, TRT01A, TRT01P)),
   filter = VSTESTCD == "DIABP" & VISIT == "WEEK 2"
 )
 ```
@@ -113,7 +113,7 @@ advs <- derive_vars_dt(advs, new_vars_prefix = "A", dtc = VSDTC)
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = get_admiral_option("subject_keys"), VISIT, VSDTC, ADT),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(VISIT, VSDTC, ADT)),
   filter = VSTESTCD == "DIABP"
 )
 ```
@@ -147,7 +147,7 @@ advs <- derive_vars_dt(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = get_admiral_option("subject_keys"), VISIT, VSDTC, ADT, ADTF),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(VISIT, VSDTC, ADT, ADTF)),
   filter = USUBJID == "01-716-1024"
 )
 ```
@@ -188,7 +188,7 @@ advs <-
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = get_admiral_option("subject_keys"), VISIT, ADT, ADY, TRTSDT),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(VISIT, ADT, ADY, TRTSDT)),
   filter = USUBJID == "01-716-1024"
 )
 ```
@@ -293,7 +293,7 @@ Example 3 in section below [Derive New Rows](#additional) for alternative way of
 ```{r eval=TRUE}
 advs <- derive_param_map(
   advs,
-  by_vars = get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
   set_values_to = exprs(PARAMCD = "MAP"),
   get_unit_expr = VSSTRESU,
   filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
@@ -314,7 +314,7 @@ Likewise, function call below, to create parameter `Body Surface Area` (BSA) and
 ```{r eval=TRUE}
 advs <- derive_param_bsa(
   advs,
-  by_vars = get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
   method = "Mosteller",
   set_values_to = exprs(PARAMCD = "BSA"),
   get_unit_expr = VSSTRESU,
@@ -324,7 +324,7 @@ advs <- derive_param_bsa(
 
 advs <- derive_param_bmi(
   advs,
-  by_vars = get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
   set_values_to = exprs(PARAMCD = "BMI"),
   get_unit_expr = VSSTRESU,
   filter = VSSTAT != "NOT DONE" | is.na(VSSTAT),
@@ -335,7 +335,7 @@ advs <- derive_param_bmi(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   arrange(advs, USUBJID, VISITNUM, VSTPTNUM, ADT, PARAMCD),
-  display_vars = get_admiral_option("subject_keys"), VSTESTCD, PARAMCD, VISIT, VSTPT, AVAL),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(VSTESTCD, PARAMCD, VISIT, VSTPT, AVAL)),
   filter = PARAMCD %in% c("BSA", "BMI")
 )
 ```
@@ -354,7 +354,7 @@ adeg <- tibble::tribble(
 
 adeg <- derive_param_qtc(
   adeg,
-  by_vars = get_admiral_option("subject_keys"), VISIT),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(VISIT)),
   method = "Fridericia",
   set_values_to = exprs(PARAMCD = "QTCFR"),
   get_unit_expr = EGSTRESU
@@ -375,7 +375,7 @@ adlb <- tibble::tribble(
 
 derive_param_wbc_abs(
   dataset = adlb,
-  by_vars = get_admiral_option("subject_keys"), VISIT),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(VISIT)),
   set_values_to = exprs(
     PARAMCD = "LYMPH",
     PARAM = "Lymphocytes Abs (10^9/L)",
@@ -615,7 +615,7 @@ advs <- restrict_derivation(
   advs,
   derivation = derive_var_extreme_flag,
   args = params(
-    by_vars = get_admiral_option("subject_keys"), BASETYPE, PARAMCD),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(BASETYPE, PARAMCD)),
     order = exprs(ADT, ATPTN, VISITNUM),
     new_var = ABLFL,
     mode = "last"
@@ -627,7 +627,7 @@ advs <- restrict_derivation(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = get_admiral_option("subject_keys"), BASETYPE, PARAMCD, ADT, TRTSDT, ATPTN, TRTSDT, ABLFL),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(BASETYPE, PARAMCD, ADT, TRTSDT, ATPTN, TRTSDT, ABLFL)),
   filter = PARAMCD == "DIABP" & VISIT %in% c("WEEK 2", "BASELINE")
 )
 ```
@@ -641,14 +641,14 @@ Lastly, the `BASE`, and  `BNRIND` columns can be derived using the `{admiral}` f
 ```{r eval=TRUE}
 advs <- derive_var_base(
   advs,
-  by_vars = get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
   source_var = AVAL,
   new_var = BASE
 )
 
 advs <- derive_var_base(
   advs,
-  by_vars = get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
   source_var = ANRIND,
   new_var = BNRIND
 )
@@ -657,7 +657,7 @@ advs <- derive_var_base(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = get_admiral_option("subject_keys"), BASETYPE, PARAMCD, ABLFL, BASE, ANRIND, BNRIND),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(BASETYPE, PARAMCD, ABLFL, BASE, ANRIND, BNRIND)),
   filter = PARAMCD == "DIABP" & VISIT %in% c("WEEK 2", "BASELINE")
 )
 ```
@@ -678,7 +678,7 @@ advs <- derive_var_pchg(advs)
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = get_admiral_option("subject_keys"), VISIT, BASE, AVAL, CHG, PCHG),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(VISIT, BASE, AVAL, CHG, PCHG)),
   filter = PARAMCD == "DIABP" & VISIT %in% c("WEEK 2", "WEEK 8")
 )
 ```
@@ -728,7 +728,7 @@ advs <- derive_var_analysis_ratio(advs,
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = get_admiral_option("subject_keys"), VISIT, BASE, AVAL, ANRLO, R2BASE, R01ANRLO),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(VISIT, BASE, AVAL, ANRLO, R2BASE, R01ANRLO)),
   filter = PARAMCD == "DIABP" & VISIT %in% c("WEEK 2", "WEEK 8")
 )
 ```
@@ -754,7 +754,7 @@ advs <- restrict_derivation(
   advs,
   derivation = derive_var_extreme_flag,
   args = params(
-    by_vars = get_admiral_option("subject_keys"), BASETYPE, PARAMCD, AVISIT),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(BASETYPE, PARAMCD, AVISIT)),
     order = exprs(ADT, ATPTN, AVAL),
     new_var = ANL01FL,
     mode = "last"
@@ -766,7 +766,7 @@ advs <- restrict_derivation(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = get_admiral_option("subject_keys"), PARAMCD, AVISIT, ATPTN, ADT, AVAL, ANL01FL),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, AVISIT, ATPTN, ADT, AVAL, ANL01FL)),
   filter = PARAMCD == "DIABP" & VISIT %in% c("WEEK 2", "WEEK 8")
 )
 ```
@@ -781,7 +781,7 @@ advs <- slice_derivation(
   advs,
   derivation = derive_var_extreme_flag,
   args = params(
-    by_vars = get_admiral_option("subject_keys"), BASETYPE, PARAMCD, AVISIT),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(BASETYPE, PARAMCD, AVISIT)),
     order = exprs(ADT, ATPTN),
     new_var = WORSTFL,
     mode = "first"
@@ -801,7 +801,7 @@ advs <- slice_derivation(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = get_admiral_option("subject_keys"), PARAMCD, AVISIT, AVAL, ADT, ATPTN, WORSTFL),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, AVISIT, AVAL, ADT, ATPTN, WORSTFL)),
   filter = USUBJID == "01-701-1015" & WORSTFL == "Y"
 )
 ```
@@ -924,7 +924,7 @@ assign a unique `AVISITN` value.
 advs_ex1 <- advs %>%
   derive_extreme_records(
     dataset_add = advs,
-    by_vars = get_admiral_option("subject_keys"), PARAMCD),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
     order = exprs(ADT, AVISITN, ATPTN, AVAL),
     mode = "last",
     filter_add = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y"),
@@ -954,7 +954,7 @@ and assign a unique `AVISITN` value.
 advs_ex1 <- advs %>%
   derive_extreme_records(
     dataset_add = advs,
-    by_vars = get_admiral_option("subject_keys"), PARAMCD),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
     order = exprs(AVAL, ADT, AVISITN, ATPTN),
     mode = "first",
     filter_add = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y" & !is.na(AVAL)),
@@ -988,7 +988,7 @@ Set `DTYPE` to `AVERAGE`.
 advs_ex2 <- derive_summary_records(
   advs,
   dataset_add = advs,
-  by_vars = get_admiral_option("subject_keys"), PARAMCD, VISITNUM, ADT),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, VISITNUM, ADT)),
   set_values_to = exprs(
     AVAL = mean(AVAL, na.rm = TRUE),
     DTYPE = "AVERAGE"
@@ -999,7 +999,7 @@ advs_ex2 <- derive_summary_records(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   arrange(advs_ex2, USUBJID, PARAMCD, VISITNUM, ADT, DTYPE),
-  display_vars = get_admiral_option("subject_keys"), PARAMCD, VISITNUM, ADT, AVAL, DTYPE),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, VISITNUM, ADT, AVAL, DTYPE)),
   filter = USUBJID == "01-701-1015"
 )
 ```
@@ -1016,7 +1016,7 @@ Below is an example of creating `Mean Arterial Pressure`
 ```{r eval=TRUE}
 advs_ex3 <- derive_param_computed(
   advs,
-  by_vars = get_admiral_option("subject_keys"), VISIT, ATPT),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(VISIT, ATPT)),
   parameters = c("SYSBP", "DIABP"),
   set_values_to = exprs(
     AVAL = (AVAL.SYSBP - AVAL.DIABP) / 3 + AVAL.DIABP,
@@ -1029,7 +1029,7 @@ advs_ex3 <- derive_param_computed(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   arrange(advs_ex3, !!!get_admiral_option("subject_keys"), VISIT, ATPT, PARAMCD),
-  display_vars = get_admiral_option("subject_keys"), PARAMCD, VISIT, ATPT, AVAL),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, VISIT, ATPT, AVAL)),
   filter = USUBJID == "01-701-1015" & PARAMCD %in% c("MAP2", "SYSBP", "DIABP")
 )
 ```
