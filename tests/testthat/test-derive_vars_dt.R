@@ -234,19 +234,13 @@ test_that("derive_vars_dt Test 11: appropriate warnings/return object for impute
 
 
 # convert_dtc_to_dt ----
-inputdtc <- c(
-  "2019-07-18T15:25:52",
-  "2019-07-18"
-)
-
 ## Test 12: Convert a complete -- DTC into a date object ----
 test_that("convert_dtc_to_dt Test 12: Convert a complete -- DTC into a date object", {
   expected_output <- c(
-    as.Date("2019-07-18"),
     as.Date("2019-07-18")
   )
   expect_equal(
-    convert_dtc_to_dt(dtc = inputdtc),
+    convert_dtc_to_dt(dtc = input[[1]]),
     expected_output
   )
 })
@@ -574,3 +568,5 @@ test_that("derive_vars_dt Test 24: Supplying both min/max dates for highest_impu
 
   expect_dfs_equal(actual, expected, keys = c("ASTDT", "ASTDTF"))
 })
+
+rm(input, input_warnings)
