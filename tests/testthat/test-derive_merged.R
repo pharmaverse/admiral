@@ -665,3 +665,48 @@ test_that("derive_var_merged_summary Test 26: deprecation warning", {
     class = "lifecycle_error_deprecated"
   )
 })
+
+## Test 2: merge selected variables ----
+test_that("derive_vars_merged Test 2: merge selected variables with relatioship as 'many-to-one'", {
+  actual <- derive_vars_merged(advs,
+                               dataset_add = adsl,
+                               by_vars = exprs(USUBJID),
+                               new_vars = exprs(SEX),
+                               relationship = "many-to-one"
+  )
+
+  expected <- left_join(advs, select(adsl, USUBJID, SEX), by = "USUBJID")
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISIT")
+  )
+})
+
+## Test 2: merge selected variables ----
+test_that("derive_vars_merged Test 2: error when relatioship is incorrectly specificed 'one-to-one'", {
+
+  expect_snapshot(
+    derive_vars_merged(advs,
+                       dataset_add = adsl,
+                       by_vars = exprs(USUBJID),
+                       new_vars = exprs(SEX),
+                       relationship = "one-to-one"
+    ),
+    error = TRUE
+  )
+})
+
+test_that("derive_vars_merged Test 2: merge selected variables with relatioship as 'one-to-one'", {
+
+  expect_snapshot(
+    derive_vars_merged(adsl,
+    dataset_add = advs,
+    by_vars = exprs(USUBJID),
+    new_vars = exprs(WEIGHTBL = AVAL),
+    filter_add = AVISIT == "BASELINE",
+    relationship = "one-to-one"
+  )
+  )
+})

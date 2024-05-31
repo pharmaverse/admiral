@@ -147,13 +147,14 @@
 #'   ```
 #'
 #' @param relationship Expected merge-relationship between the `by_vars`
-#'   variable(s) in `dataset` and the dataset containing the additional `new_vars`.
+#'   variable(s) in `dataset` (input dataset) and the `dataset_add` (additional dataset)
+#'    containing the additional `new_vars`.
 #'
 #'   This argument is passed to the `dplyr::left_join()` function. See
 #'   <https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments> for
 #'   more details.
 #'
-#'   Permitted Values for `relationship`: `"one-to-one"`, `"many-to-one"`, `NULL`.
+#'   **Permitted Values:** `"one-to-one"`, `"many-to-one"`, `NULL`.
 #'
 #' @return The output dataset contains all observations and variables of the
 #'   input dataset and additionally the variables specified for `new_vars` from
