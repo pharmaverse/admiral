@@ -105,7 +105,7 @@ adeg <- eg %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = exprs(get_admiral_option("subject_keys"))
+    by_vars = get_admiral_option("subject_keys")
   ) %>%
   ## Calculate ADTM, ADY ----
   derive_vars_dtm(
@@ -306,7 +306,7 @@ adeg <- adeg %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = exprs(get_admiral_option("subject_keys")),
+    by_vars = get_admiral_option("subject_keys"),
     order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
     check_type = "error"
   ) %>%
@@ -329,7 +329,7 @@ adeg <- adeg %>%
 adeg <- adeg %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(get_admiral_option("subject_keys"))
+    by_vars = get_admiral_option("subject_keys")
   )
 
 

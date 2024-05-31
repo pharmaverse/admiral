@@ -56,7 +56,7 @@ bili_records <- adlb_annotated %>%
 hylaw_records <- derive_vars_joined(
   dataset = altast_records,
   dataset_add = bili_records,
-  by_vars = exprs(get_admiral_option("subject_keys")),
+  by_vars = get_admiral_option("subject_keys"),
   order = exprs(ADY),
   join_type = "all",
   filter_join = ADT.join - ADT <= 14 & CRIT1FL == "Y" & CRIT1FL.join == "Y",

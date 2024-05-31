@@ -8,7 +8,7 @@ signal_duplicate_records(
   dataset,
   by_vars,
   msg =
-    "Dataset contains duplicate records with respect to {.var {replace_values_by_names(by_vars)}}",
+    "Dataset contains duplicate records with respect to\\n                                     {.var {replace_values_by_names(by_vars)}}",
   cnd_type = "error"
 )
 }

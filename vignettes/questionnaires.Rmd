@@ -88,7 +88,7 @@ adqs <- qs %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = exprs(TRTSDT, DTHCAUS),
-    by_vars = exprs(get_admiral_option("subject_keys"))
+    by_vars = get_admiral_option("subject_keys")
   ) %>%
   # Add analysis parameter variables
   mutate(
@@ -222,7 +222,7 @@ adgdssf <- adgdssf %>%
   derive_var_pchg() %>%
   # Derive sequence number
   derive_var_obs_number(
-    by_vars = exprs(get_admiral_option("subject_keys")),
+    by_vars = get_admiral_option("subject_keys"),
     order = exprs(PARAMCD, ADT),
     check_type = "error"
   )
@@ -571,7 +571,7 @@ parm_visit_ref <- crossing(
 adgdssf <- adgdssf %>%
   derive_expected_records(
     dataset_ref = parm_visit_ref,
-    by_vars = exprs(get_admiral_option("subject_keys")),
+    by_vars = get_admiral_option("subject_keys"),
     set_values_to = exprs(
       filled_in = 1
     )

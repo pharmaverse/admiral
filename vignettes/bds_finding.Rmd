@@ -86,7 +86,7 @@ advs <- derive_vars_merged(
   vs,
   dataset_add = adsl,
   new_vars = adsl_vars,
-  by_vars = exprs(get_admiral_option("subject_keys"))
+  by_vars = get_admiral_option("subject_keys")
 )
 ```
 
@@ -319,7 +319,7 @@ advs <- derive_param_bsa(
   set_values_to = exprs(PARAMCD = "BSA"),
   get_unit_expr = VSSTRESU,
   filter = VSSTAT != "NOT DONE" | is.na(VSSTAT),
-  constant_by_vars = exprs(get_admiral_option("subject_keys"))
+  constant_by_vars = get_admiral_option("subject_keys")
 )
 
 advs <- derive_param_bmi(
@@ -328,7 +328,7 @@ advs <- derive_param_bmi(
   set_values_to = exprs(PARAMCD = "BMI"),
   get_unit_expr = VSSTRESU,
   filter = VSSTAT != "NOT DONE" | is.na(VSSTAT),
-  constant_by_vars = exprs(get_admiral_option("subject_keys"))
+  constant_by_vars = get_admiral_option("subject_keys")
 )
 ```
 
@@ -832,7 +832,7 @@ example call is:
 advs <- derive_var_obs_number(
   advs,
   new_var = ASEQ,
-  by_vars = exprs(get_admiral_option("subject_keys")),
+  by_vars = get_admiral_option("subject_keys"),
   order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN),
   check_type = "error"
 )
@@ -890,7 +890,7 @@ List of ADSL variables already merged held in vector `adsl_vars`
 advs <- advs %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(get_admiral_option("subject_keys"))
+    by_vars = get_admiral_option("subject_keys")
   )
 ```
 
