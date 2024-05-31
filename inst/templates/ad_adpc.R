@@ -185,7 +185,7 @@ adpc_first_dose <- pc_dates %>%
     new_vars = exprs(FANLDTM = ADTM),
     order = exprs(ADTM, EXSEQ),
     mode = "first",
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), DRUG)
+    by_vars = get_admiral_option("subject_keys"), DRUG)
   ) %>%
   filter(!is.na(FANLDTM)) %>%
   # Derive AVISIT based on nominal relative time
@@ -448,7 +448,7 @@ adpc_dtype <- bind_rows(adpc_aval, dtype) %>%
 
 adpc_base <- adpc_dtype %>%
   derive_var_base(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARCAT1, BASETYPE),
+    by_vars = get_admiral_option("subject_keys"), PARAMCD, PARCAT1, BASETYPE),
     source_var = AVAL,
     new_var = BASE,
     filter = ABLFL == "Y"

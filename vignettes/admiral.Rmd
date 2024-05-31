@@ -135,7 +135,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), TRTSDTM, TRTSTMF)
+  display_vars = get_admiral_option("subject_keys"), TRTSDTM, TRTSTMF)
 )
 ```
 
@@ -151,7 +151,7 @@ the variable values for the new derived record.
 ```{r eval=TRUE}
 advs <- advs %>%
   derive_param_computed(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), AVISIT, AVISITN),
+    by_vars = get_admiral_option("subject_keys"), AVISIT, AVISITN),
     parameters = c("SYSBP", "DIABP"),
     set_values_to = exprs(
       AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
@@ -166,7 +166,7 @@ advs <- advs %>%
 advs %>%
   arrange(!!!get_admiral_option("subject_keys"), AVISITN, PARAMCD) %>%
   dataset_vignette(
-    display_vars = exprs(!!!get_admiral_option("subject_keys"), AVISIT, PARAMCD, AVAL)
+    display_vars = get_admiral_option("subject_keys"), AVISIT, PARAMCD, AVAL)
   )
 ```
 
@@ -217,7 +217,7 @@ adsl <- dm %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), FINLABDT)
+  display_vars = get_admiral_option("subject_keys"), FINLABDT)
 )
 ```
 
@@ -233,7 +233,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), RFSTDTC, RFSTDT)
+  display_vars = get_admiral_option("subject_keys"), RFSTDTC, RFSTDT)
 )
 ```
 
@@ -259,7 +259,7 @@ advs_lastmap <- advs %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs_lastmap,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), AVISIT, PARAMCD, AVAL)
+  display_vars = get_admiral_option("subject_keys"), AVISIT, PARAMCD, AVAL)
 )
 ```
 

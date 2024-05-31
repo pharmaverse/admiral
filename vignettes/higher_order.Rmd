@@ -87,13 +87,13 @@ Here is an example of how to achieve this **without** using `call_derivation()`:
 ```{r}
 vs_without <- vs %>%
   derive_var_extreme_flag(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), VSTESTCD),
+    by_vars = get_admiral_option("subject_keys"), VSTESTCD),
     order = exprs(VSORRES, VSSEQ),
     new_var = AHIFL,
     mode = "last"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), VSTESTCD),
+    by_vars = get_admiral_option("subject_keys"), VSTESTCD),
     order = exprs(VSORRES, VSSEQ),
     new_var = ALOFL,
     mode = "first"
@@ -104,7 +104,7 @@ vs_without <- vs %>%
 vs_without %>%
   arrange(!!!get_admiral_option("subject_keys"), VSTESTCD, VSDY, VSSEQ) %>%
   dataset_vignette(
-    display_vars = exprs(!!!get_admiral_option("subject_keys"), VSTESTCD, VSORRES, ALOFL, AHIFL),
+    display_vars = get_admiral_option("subject_keys"), VSTESTCD, VSORRES, ALOFL, AHIFL),
     filter = VSTESTCD %in% c("TEMP", "WEIGHT")
   )
 ```
@@ -120,7 +120,7 @@ vs_with <- vs %>%
       params(new_var = AHIFL, mode = "last"),
       params(new_var = ALOFL, mode = "first")
     ),
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), VSTESTCD),
+    by_vars = get_admiral_option("subject_keys"), VSTESTCD),
     order = exprs(VSORRES, VSSEQ)
   )
 ```
@@ -129,7 +129,7 @@ vs_with <- vs %>%
 vs_with %>%
   arrange(!!!get_admiral_option("subject_keys"), VSTESTCD, VSDY, VSSEQ) %>%
   dataset_vignette(
-    display_vars = exprs(!!!get_admiral_option("subject_keys"), VSTESTCD, VSORRES, ALOFL, AHIFL),
+    display_vars = get_admiral_option("subject_keys"), VSTESTCD, VSORRES, ALOFL, AHIFL),
     filter = VSTESTCD %in% c("TEMP", "WEIGHT")
   )
 ```
@@ -176,7 +176,7 @@ adaette <- call_derivation(
 adaette %>%
   select(!!!get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR) %>%
   arrange(!!!get_admiral_option("subject_keys"), PARAMCD) %>%
-  dataset_vignette(display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR))
+  dataset_vignette(display_vars = get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR))
 ```
 
 Developing your ADaM scripts this way using `call_derivation()` could give the
@@ -221,7 +221,7 @@ ae <- ae %>%
 ae %>%
   arrange(!!!get_admiral_option("subject_keys"), AESTDY, AESEQ, desc(TEMP_AESEVN)) %>%
   dataset_vignette(
-    display_vars = exprs(!!!get_admiral_option("subject_keys"), AEDECOD, AESTDY, AESEQ, AESEV, AHSEVFL)
+    display_vars = get_admiral_option("subject_keys"), AEDECOD, AESTDY, AESEQ, AESEV, AHSEVFL)
   )
 ```
 
@@ -264,7 +264,7 @@ ae <- ae %>%
 ae %>%
   arrange(!!!get_admiral_option("subject_keys"), AESTDY, AESEQ, desc(TEMP_AESEVN)) %>%
   dataset_vignette(
-    display_vars = exprs(!!!get_admiral_option("subject_keys"), AEDECOD, AESTDY, AESEQ, AESEV, AHSEV2FL)
+    display_vars = get_admiral_option("subject_keys"), AEDECOD, AESTDY, AESEQ, AESEV, AHSEV2FL)
   )
 ```
 
@@ -307,7 +307,7 @@ ae <- ae %>%
 ae %>%
   arrange(!!!get_admiral_option("subject_keys"), AESTDY, AESEQ) %>%
   dataset_vignette(
-    display_vars = exprs(!!!get_admiral_option("subject_keys"), AEDECOD, AESTDY, AESEQ, AESEV, AHSEV3FL)
+    display_vars = get_admiral_option("subject_keys"), AEDECOD, AESTDY, AESEQ, AESEV, AHSEV3FL)
   )
 ```
 

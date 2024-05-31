@@ -161,7 +161,7 @@ adppk_first_dose <- pc_dates %>%
     new_vars = exprs(FANLDTM = ADTM, EXDOSE_first = EXDOSE),
     order = exprs(ADTM, EXSEQ),
     mode = "first",
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), DRUG)
+    by_vars = get_admiral_option("subject_keys"), DRUG)
   ) %>%
   filter(!is.na(FANLDTM)) %>%
   # Derive AVISIT based on nominal relative time

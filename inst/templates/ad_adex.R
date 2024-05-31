@@ -159,7 +159,7 @@ adex <- adex %>%
       )
     ),
     dataset_add = adex,
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars)
+    by_vars = get_admiral_option("subject_keys"), !!!adsl_vars)
   ) %>%
   # W2-W24 exposure
   call_derivation(
@@ -208,7 +208,7 @@ adex <- adex %>%
     ),
     dataset_add = adex,
     filter_add = VISIT %in% c("WEEK 2", "WEEK 24"),
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars)
+    by_vars = get_admiral_option("subject_keys"), !!!adsl_vars)
   ) %>%
   # Overall Dose intensity and W2-24 dose intensity
   call_derivation(

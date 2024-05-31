@@ -97,7 +97,7 @@ adcm <- adcm %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = AOCCPFL,
-      by_vars = exprs(!!!get_admiral_option("subject_keys"), CMDECOD),
+      by_vars = get_admiral_option("subject_keys"), CMDECOD),
       order = exprs(ASTDTM, CMSEQ),
       mode = "first"
     ),

@@ -154,7 +154,7 @@ hylaw_params <- derive_param_exist_flag(
   condition = CRIT1FL == "Y" & BILI_CRITFL == "Y",
   false_value = "N",
   missing_value = "N",
-  by_vars = exprs(!!!get_admiral_option("subject_keys"), TRT01A), # add AVISIT, ADT for by visit
+  by_vars = get_admiral_option("subject_keys"), TRT01A), # add AVISIT, ADT for by visit
   set_values_to = exprs(
     PARAMCD = "HYSLAW",
     PARAM = "ALT/AST >= 3xULN and BILI >= 2xULN",

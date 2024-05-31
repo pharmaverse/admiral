@@ -136,7 +136,7 @@ adex <- derive_vars_dt(adex, new_vars_prefix = "AEN", dtc = EXENDTC)
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adex,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), VISIT, EXSTDTC, EXENDTC, ASTDT, AENDT)
+  display_vars = get_admiral_option("subject_keys"), VISIT, EXSTDTC, EXENDTC, ASTDT, AENDT)
 )
 ```
 
@@ -163,7 +163,7 @@ adex <- derive_vars_dtm(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adex,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), VISIT, EXSTDTC, EXENDTC, ASTDTM, AENDTM)
+  display_vars = get_admiral_option("subject_keys"), VISIT, EXSTDTC, EXENDTC, ASTDTM, AENDTM)
 )
 ```
 
@@ -260,7 +260,7 @@ adex <- adex %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adex,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), EXDOSE, EXPLDOS, EXDURD, DOSEO, PDOSEO)
+  display_vars = get_admiral_option("subject_keys"), EXDOSE, EXPLDOS, EXDURD, DOSEO, PDOSEO)
 )
 ```
 
@@ -277,13 +277,13 @@ frequency to a corresponding set of records each representing one dose (i.e.
 ```{r eval=TRUE, echo=TRUE}
 single_dose <- adex %>%
   filter(USUBJID == "01-701-1015" & EXSTDY == 1) %>%
-  create_single_dose_dataset(keep_source_vars = exprs(!!!get_admiral_option("subject_keys"), EXDOSE, EXPLDOS, EXDOSFRQ, ASTDT, AENDT))
+  create_single_dose_dataset(keep_source_vars = get_admiral_option("subject_keys"), EXDOSE, EXPLDOS, EXDOSFRQ, ASTDT, AENDT))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   single_dose,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), EXDOSE, EXPLDOS, EXDOSFRQ, ASTDT, AENDT)
+  display_vars = get_admiral_option("subject_keys"), EXDOSE, EXPLDOS, EXDOSFRQ, ASTDT, AENDT)
 )
 ```
 
@@ -346,7 +346,7 @@ count(adex, PARAMCD)
 ```{r, eval=TRUE, echo=FALSE}
 adex %>%
   arrange(USUBJID, VISIT, desc(PARAMCD), EXSTDTC, EXENDTC) %>%
-  dataset_vignette(display_vars = exprs(!!!get_admiral_option("subject_keys"), VISIT, ASTDT, AENDT, PARAMCD, AVAL, AVALC))
+  dataset_vignette(display_vars = get_admiral_option("subject_keys"), VISIT, ASTDT, AENDT, PARAMCD, AVAL, AVALC))
 ```
 
 ## Create Summary Records {#summaryrec}
@@ -362,7 +362,7 @@ For example, to calculate the total dose by subject and treatment,
 adex <- derive_param_exposure(
   adex,
   dataset_add = adex,
-  by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars),
+  by_vars = get_admiral_option("subject_keys"), !!!adsl_vars),
   input_code = "DOSE",
   set_values_to = exprs(
     PARAMCD = "TDOSE",
@@ -442,7 +442,7 @@ adex <- adex %>%
       )
     ),
     dataset_add = adex,
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars)
+    by_vars = get_admiral_option("subject_keys"), !!!adsl_vars)
   )
 
 count(adex, PARAMCD, PARCAT1)
@@ -466,7 +466,7 @@ specified in the `by_vars` argument will be populated in this new record.
 ```{r eval=TRUE, echo=TRUE}
 adex <- adex %>%
   derive_param_doseint(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars),
+    by_vars = get_admiral_option("subject_keys"), !!!adsl_vars),
     set_values_to = exprs(PARAMCD = "TNDOSINT"),
     tadm_code = "TDOSE",
     tpadm_code = "TPDOSE"
@@ -567,7 +567,7 @@ adex <- adex %>%
 ```{r, eval=TRUE, echo=FALSE}
 adex %>%
   arrange(USUBJID, AVALCAT1, PARCAT1, VISIT, EXSTDTC, EXENDTC) %>%
-  dataset_vignette(display_vars = exprs(!!!get_admiral_option("subject_keys"), VISIT, PARCAT1, PARAMCD, AVAL, AVALCAT1))
+  dataset_vignette(display_vars = get_admiral_option("subject_keys"), VISIT, PARCAT1, PARAMCD, AVAL, AVALCAT1))
 ```
 
 ## Assign `ASEQ` {#aseq}
@@ -588,7 +588,7 @@ adex <- derive_var_obs_number(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adex,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), VISIT, PARCAT1, PARAMCD, AVAL, ASTDT, ASEQ)
+  display_vars = get_admiral_option("subject_keys"), VISIT, PARCAT1, PARAMCD, AVAL, ASTDT, ASEQ)
 )
 ```
 

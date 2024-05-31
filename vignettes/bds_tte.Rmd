@@ -148,7 +148,7 @@ adtte <- derive_param_tte(
 ```{r, echo=FALSE}
 dataset_vignette(
   adtte,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, STARTDT, ADT, CNSR)
+  display_vars = get_admiral_option("subject_keys"), PARAMCD, PARAM, STARTDT, ADT, CNSR)
 )
 ```
 
@@ -190,7 +190,7 @@ adtte <- derive_param_tte(
 ```{r, echo=FALSE}
 dataset_vignette(
   adtte,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, STARTDT, ADT, CNSR)
+  display_vars = get_admiral_option("subject_keys"), PARAMCD, PARAM, STARTDT, ADT, CNSR)
 )
 ```
 
@@ -239,7 +239,7 @@ adtte <- derive_param_tte(
 ```{r, echo=FALSE}
 dataset_vignette(
   adtte,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), EVNTDESC, SRCDOM, SRCVAR, CNSR, ADT)
+  display_vars = get_admiral_option("subject_keys"), EVNTDESC, SRCDOM, SRCVAR, CNSR, ADT)
 )
 # save adtte and adsl for next section
 adtte_bak <- adtte
@@ -282,7 +282,7 @@ adsl <- tibble::tribble(
 
 dataset_vignette(
   adsl,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), DTHFL, DTHDT, TRTSDT, TRTSDTF)
+  display_vars = get_admiral_option("subject_keys"), DTHFL, DTHDT, TRTSDT, TRTSDTF)
 )
 ```
 
@@ -309,7 +309,7 @@ adrs <- tibble::tribble(
 
 dataset_vignette(
   adrs,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), AVALC, ADT, ASEQ, PARAMCD, PARAM)
+  display_vars = get_admiral_option("subject_keys"), AVALC, ADT, ASEQ, PARAMCD, PARAM)
 )
 ```
 
@@ -410,7 +410,7 @@ dataset_vignette(
       !!!get_admiral_option("subject_keys"), PARAMCD, PARAM, STARTDT, ADT, ADTF, CNSR,
       EVNTDESC, SRCDOM, SRCVAR
     ),
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, ADTF, CNSR)
+  display_vars = get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, ADTF, CNSR)
 )
 ```
 
@@ -505,7 +505,7 @@ adaette <- call_derivation(
 adaette %>%
   select(!!!get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR) %>%
   arrange(!!!get_admiral_option("subject_keys"), PARAMCD) %>%
-  dataset_vignette(display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR))
+  dataset_vignette(display_vars = get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR))
 ```
 
 ### Deriving Time-to-Event Parameters Using By Groups
@@ -605,7 +605,7 @@ dataset_vignette(
       !!!get_admiral_option("subject_keys"), STARTDT, PARAMCD, PARAM, PARCAT1, PARCAT2, ADT, CNSR,
       EVNTDESC, SRCDOM, SRCVAR, SRCSEQ
     ),
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
+  display_vars = get_admiral_option("subject_keys"), STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 )
 ```
 
@@ -669,7 +669,7 @@ adtte <- derive_vars_merged(
 ```{r, echo=FALSE}
 dataset_vignette(
   adtte,
-  display_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, CNSR, AVAL, ARMCD, AGE, SEX)
+  display_vars = get_admiral_option("subject_keys"), PARAMCD, CNSR, AVAL, ARMCD, AGE, SEX)
 )
 ```
 

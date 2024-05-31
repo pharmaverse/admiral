@@ -137,7 +137,7 @@ adeg <- adeg %>%
 
   # Derive RRR
   derive_param_rr(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
+    by_vars = get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     set_values_to = exprs(PARAMCD = "RRR"),
     hr_code = "HR",
     get_unit_expr = tolower(EGSTRESU),
@@ -145,7 +145,7 @@ adeg <- adeg %>%
   ) %>%
   # Derive QTCBR
   derive_param_qtc(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
+    by_vars = get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     method = "Bazett",
     set_values_to = exprs(PARAMCD = "QTCBR"),
     qt_code = "QT",
@@ -155,7 +155,7 @@ adeg <- adeg %>%
   ) %>%
   # Derive QTCFR
   derive_param_qtc(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
+    by_vars = get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     method = "Fridericia",
     set_values_to = exprs(PARAMCD = "QTCFR"),
     qt_code = "QT",
@@ -165,7 +165,7 @@ adeg <- adeg %>%
   ) %>%
   # Derive QTLCR
   derive_param_qtc(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
+    by_vars = get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     method = "Sagie",
     set_values_to = exprs(PARAMCD = "QTLCR"),
     qt_code = "QT",
@@ -202,7 +202,7 @@ adeg <- adeg %>%
 adeg <- adeg %>%
   derive_summary_records(
     dataset_add = adeg,
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT),
+    by_vars = get_admiral_option("subject_keys"), !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT),
     filter_add = dplyr::n() >= 2 & PARAMCD != "EGINTP",
     set_values_to = exprs(
       AVAL = mean(AVAL, na.rm = TRUE),
@@ -245,7 +245,7 @@ adeg <- adeg %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, PARAMCD),
+      by_vars = get_admiral_option("subject_keys"), BASETYPE, PARAMCD),
       order = exprs(ADT, VISITNUM, EGSEQ),
       new_var = ABLFL,
       mode = "last"
@@ -260,19 +260,19 @@ adeg <- adeg %>%
 adeg <- adeg %>%
   # Calculate BASE
   derive_var_base(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
+    by_vars = get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   ) %>%
   # Calculate BASEC
   derive_var_base(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
+    by_vars = get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
     source_var = AVALC,
     new_var = BASEC
   ) %>%
   # Calculate BNRIND
   derive_var_base(
-    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
+    by_vars = get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
     source_var = ANRIND,
     new_var = BNRIND
   ) %>%
@@ -286,7 +286,7 @@ adeg <- adeg %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, AVISIT, ATPT, DTYPE),
+      by_vars = get_admiral_option("subject_keys"), PARAMCD, AVISIT, ATPT, DTYPE),
       order = exprs(ADT, AVAL),
       new_var = ANL01FL,
       mode = "last"
