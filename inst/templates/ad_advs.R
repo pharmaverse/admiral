@@ -81,7 +81,7 @@ advs <- vs %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(get_admiral_option("subject_keys"))
   ) %>%
   ## Calculate ADT, ADY ----
   derive_vars_dt(
@@ -122,7 +122,7 @@ advs <- advs %>%
     set_values_to = exprs(PARAMCD = "BSA"),
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT),
-    constant_by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    constant_by_vars = exprs(get_admiral_option("subject_keys"))
   ) %>%
   # Derive Body Mass Index
   derive_param_bmi(
@@ -130,7 +130,7 @@ advs <- advs %>%
     set_values_to = exprs(PARAMCD = "BMI"),
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT),
-    constant_by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    constant_by_vars = exprs(get_admiral_option("subject_keys"))
   )
 
 
@@ -275,7 +275,7 @@ advs <- advs %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
     check_type = "error"
   ) %>%
@@ -290,7 +290,7 @@ advs <- advs %>%
 advs <- advs %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(get_admiral_option("subject_keys"))
   )
 
 # Final Steps, Select final variables and Add labels

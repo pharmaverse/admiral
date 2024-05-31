@@ -130,7 +130,7 @@ adsl <- dm %>%
     new_vars = exprs(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
     order = exprs(EXSTDTM, EXSEQ),
     mode = "first",
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(get_admiral_option("subject_keys"))
   ) %>%
   ## derive treatment end date (TRTEDTM) ----
   derive_vars_merged(
@@ -141,7 +141,7 @@ adsl <- dm %>%
     new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
     order = exprs(EXENDTM, EXSEQ),
     mode = "last",
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(get_admiral_option("subject_keys"))
   ) %>%
   ## Derive treatment end/start date TRTSDT/TRTEDT ----
   derive_vars_dtm_to_dt(source_vars = exprs(TRTSDTM, TRTEDTM)) %>%
@@ -160,20 +160,20 @@ ds_ext <- derive_vars_dt(
 adsl <- adsl %>%
   derive_vars_merged(
     dataset_add = ds_ext,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_vars = exprs(SCRFDT = DSSTDT),
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE"
   ) %>%
   derive_vars_merged(
     dataset_add = ds_ext,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_vars = exprs(EOSDT = DSSTDT),
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   ) %>%
   # EOS status
   derive_vars_merged(
     dataset_add = ds_ext,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     filter_add = DSCAT == "DISPOSITION EVENT",
     new_vars = exprs(EOSSTT = format_eosstt(DSDECOD)),
     missing_values = exprs(EOSSTT = "ONGOING")
@@ -181,7 +181,7 @@ adsl <- adsl %>%
   # Last retrieval date
   derive_vars_merged(
     dataset_add = ds_ext,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_vars = exprs(FRVDT = DSSTDT),
     filter_add = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
   ) %>%
@@ -189,7 +189,7 @@ adsl <- adsl %>%
   derive_vars_merged(
     dataset_add = ds_ext,
     filter_add = DSDECOD == "RANDOMIZED",
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_vars = exprs(RANDDT = DSSTDT)
   ) %>%
   # Death date - impute partial date to first day/month
@@ -214,7 +214,7 @@ adsl <- adsl %>%
   ) %>%
   # Cause of Death and Traceability Variables
   derive_vars_extreme_event(
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     events = list(
       event(
         dataset_name = "ae",
@@ -247,7 +247,7 @@ adsl <- adsl %>%
 
 adsl <- adsl %>%
   derive_vars_extreme_event(
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     events = list(
       event(
         dataset_name = "ae",
@@ -290,7 +290,7 @@ adsl <- adsl %>%
   ) %>%
   derive_var_merged_exist_flag(
     dataset_add = ex,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_var = SAFFL,
     condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
   ) %>%

@@ -316,7 +316,7 @@ adae <- tribble(
 adae1 <- adae %>%
   derive_vars_joined(
     dataset_add = phase_ref,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     filter_join = PHSDT <= ASTDT & ASTDT <= PHEDT,
     join_type = "all"
   )
@@ -385,7 +385,7 @@ adae <- tribble(
 adae2 <- adae %>%
   derive_vars_joined(
     dataset_add = period_ref,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_vars = exprs(APERIOD, TRTA),
     join_vars = exprs(APERSDT, APEREDT),
     join_type = "all",

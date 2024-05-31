@@ -79,7 +79,7 @@ adae <- derive_vars_merged(
   ae,
   dataset_add = adsl,
   new_vars = adsl_vars,
-  by = exprs(!!!get_admiral_option("subject_keys"))
+ by_vars = exprs(get_admiral_option("subject_keys"))
 )
 ```
 
@@ -239,7 +239,7 @@ ex_single <- derive_vars_dtm(
 adae <- derive_vars_joined(
   adae,
   ex_single,
-  by_vars = exprs(!!!get_admiral_option("subject_keys")),
+  by_vars = exprs(get_admiral_option("subject_keys")),
   new_vars = exprs(LDOSEDTM = EXSTDTM),
   join_vars = exprs(EXSTDTM),
   join_type = "all",
@@ -485,7 +485,7 @@ If needed, the other `ADSL` variables can now be added:
 adae <- adae %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(get_admiral_option("subject_keys"))
   )
 ```
 

@@ -87,7 +87,7 @@ adpp_pp <- pp %>%
   derive_vars_merged(
     dataset_add = admiral_adsl,
     new_vars = adsl_vars,
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(get_admiral_option("subject_keys"))
   ) %>%
   ## Calculate ADT, ADY ----
   derive_vars_dt(
@@ -144,7 +144,7 @@ adpp_avisit <- adpp_aval %>%
 adpp <- adpp_avisit %>%
   derive_vars_merged(
     dataset_add = select(admiral_adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(get_admiral_option("subject_keys"))
   )
 
 # Final Steps, Select final variables and Add labels

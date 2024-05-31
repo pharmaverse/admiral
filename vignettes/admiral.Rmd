@@ -128,7 +128,7 @@ adsl <- adsl %>%
     new_vars = exprs(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
     order = exprs(EXSTDTM, EXSEQ),
     mode = "first",
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(get_admiral_option("subject_keys"))
   )
 ```
 
@@ -208,7 +208,7 @@ of the Final Lab Visit Date (`FINLABDT`) in the example below:
 adsl <- dm %>%
   derive_vars_merged(
     dataset_add = ds,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_vars = exprs(FINLABDT = convert_dtc_to_dt(DSSTDTC)),
     filter_add = DSDECOD == "FINAL LAB VISIT"
   )
@@ -250,7 +250,7 @@ below we use `filter_extreme()` to extract the most recent MAP records in `advs`
 advs_lastmap <- advs %>%
   filter(PARAMCD == "MAP") %>%
   filter_extreme(
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     order = exprs(AVISITN, PARAMCD),
     mode = "last"
   )

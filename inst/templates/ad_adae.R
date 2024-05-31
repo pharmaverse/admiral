@@ -40,7 +40,7 @@ adae <- ae %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by = exprs(!!!get_admiral_option("subject_keys"))
+   by_vars = exprs(get_admiral_option("subject_keys"))
   ) %>%
   ## Derive analysis start time ----
   derive_vars_dtm(
@@ -88,7 +88,7 @@ adae <- adae %>%
   ## Derive last dose date/time ----
   derive_vars_joined(
     dataset_add = ex_ext,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_vars = exprs(LDOSEDTM = EXSTDTM),
     join_vars = exprs(EXSTDTM),
     join_type = "all",
@@ -116,7 +116,7 @@ adae <- adae %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = exprs(!!!get_admiral_option("subject_keys")),
+      by_vars = exprs(get_admiral_option("subject_keys")),
       order = exprs(desc(ASEVN), ASTDTM, AESEQ),
       new_var = AOCCIFL,
       mode = "first"
@@ -128,7 +128,7 @@ adae <- adae %>%
 adae <- adae %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(get_admiral_option("subject_keys"))
   )
 
 

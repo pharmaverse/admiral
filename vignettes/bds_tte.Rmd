@@ -642,7 +642,7 @@ The `{admiral}` function `derive_var_obs_number()` can be used to derive `ASEQ`:
 ```{r eval=TRUE}
 adtte <- derive_var_obs_number(
   adtte,
-  by_vars = exprs(!!!get_admiral_option("subject_keys")),
+  by_vars = exprs(get_admiral_option("subject_keys")),
   order = exprs(PARAMCD),
   check_type = "error"
 )
@@ -662,7 +662,7 @@ adtte <- derive_vars_merged(
   adtte,
   dataset_add = adsl,
   new_vars = exprs(ARMCD, ARM, ACTARMCD, ACTARM, AGE, SEX),
-  by_vars = exprs(!!!get_admiral_option("subject_keys"))
+  by_vars = exprs(get_admiral_option("subject_keys"))
 )
 ```
 

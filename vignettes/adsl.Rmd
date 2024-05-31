@@ -147,7 +147,7 @@ adsl <- adsl %>%
     new_vars = exprs(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
     order = exprs(EXSTDTM, EXSEQ),
     mode = "first",
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(get_admiral_option("subject_keys"))
   ) %>%
   derive_vars_merged(
     dataset_add = ex_ext,
@@ -157,7 +157,7 @@ adsl <- adsl %>%
     new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
     order = exprs(EXENDTM, EXSEQ),
     mode = "last",
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(get_admiral_option("subject_keys"))
   )
 ```
 
@@ -215,7 +215,7 @@ ds_ext <- derive_vars_dt(
 adsl <- adsl %>%
   derive_vars_merged(
     dataset_add = ds_ext,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_vars = exprs(EOSDT = DSSTDT),
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   )
@@ -272,7 +272,7 @@ set to `"ONGOING"` by specifying the `missing_values` argument.
 adsl <- adsl %>%
   derive_vars_merged(
     dataset_add = ds,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     filter_add = DSCAT == "DISPOSITION EVENT",
     new_vars = exprs(EOSSTT = format_eosstt(DSDECOD)),
     missing_values = exprs(EOSSTT = "ONGOING")
@@ -305,7 +305,7 @@ will map `DCSREAS` as `DSDECOD`, and `DCSREASP` as `DSTERM` if `DSDECOD` is not
 adsl <- adsl %>%
   derive_vars_merged(
     dataset_add = ds,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_vars = exprs(DCSREAS = DSDECOD, DCSREASP = DSTERM),
     filter_add = DSCAT == "DISPOSITION EVENT" &
       !(DSDECOD %in% c("SCREEN FAILURE", "COMPLETED", NA))
@@ -333,14 +333,14 @@ adsl <- adsl %>%
 adsl <- adsl %>%
   derive_vars_merged(
     dataset_add = ds,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_vars = exprs(DCSREAS = DSDECOD),
     filter_add = DSCAT == "DISPOSITION EVENT" &
       DSDECOD %notin% c("SCREEN FAILURE", "COMPLETED", NA)
   ) %>%
   derive_vars_merged(
     dataset_add = ds,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_vars = exprs(DCSREASP = DSTERM),
     filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD %in% "OTHER"
   )
@@ -360,7 +360,7 @@ adsl <- adsl %>%
   derive_vars_merged(
     dataset_add = ds_ext,
     filter_add = DSDECOD == "RANDOMIZED",
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_vars = exprs(RANDDT = DSSTDT)
   )
 ```
@@ -431,7 +431,7 @@ An example call to `derive_vars_extreme_event()` would be:
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_vars_extreme_event(
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     events = list(
       event(
         dataset_name = "ae",
@@ -468,7 +468,7 @@ that domain). The traceability variables should be added to the `event()` calls 
 adsl <- adsl %>%
   select(-DTHCAUS) %>% # remove it before deriving it again
   derive_vars_extreme_event(
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     events = list(
       event(
         dataset_name = "ae",
@@ -556,7 +556,7 @@ day and month to the first):
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_vars_extreme_event(
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     events = list(
       event(
         dataset_name = "ae",
@@ -613,7 +613,7 @@ Traceability variables can be added by specifying the variables in the `set_valu
 adsl <- adsl %>%
   select(-LSTALVDT) %>% # created in the previous call
   derive_vars_extreme_event(
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     events = list(
       event(
         dataset_name = "ae",
@@ -733,7 +733,7 @@ An example of an implementation could be:
 adsl <- adsl %>%
   derive_var_merged_exist_flag(
     dataset_add = ex,
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     new_var = SAFFL,
     condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
   )

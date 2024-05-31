@@ -41,7 +41,7 @@ admh <- mh %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(get_admiral_option("subject_keys"))
   ) %>%
   ## Derive dates (ASTDT, AEDT, ...) ----
   # Derive analysis start date and flag
@@ -82,7 +82,7 @@ admh <- mh %>%
   )) %>%
   ## Derive occurrence flags ----
   derive_var_extreme_flag(
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     order = exprs(ASTDT, MHSEQ),
     new_var = AOCCFL,
     mode = "first"
@@ -101,7 +101,7 @@ admh <- mh %>%
   ) %>%
   # (company specific occurrence flag variables derivation)
   derive_var_extreme_flag(
-    by_vars = exprs(!!!get_admiral_option("subject_keys")),
+    by_vars = exprs(get_admiral_option("subject_keys")),
     order = exprs(!!!get_admiral_option("subject_keys"), AHIST, ASTDT, MHSEQ),
     new_var = AOCPFL,
     mode = "first"
@@ -159,7 +159,7 @@ admh <- restrict_derivation(
 admh <- admh %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(!!!get_admiral_option("subject_keys"))
+    by_vars = exprs(get_admiral_option("subject_keys"))
   )
 
 

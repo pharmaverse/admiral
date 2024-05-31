@@ -209,7 +209,7 @@ ae <- ae %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = AHSEVFL,
-      by_vars = exprs(!!!get_admiral_option("subject_keys")),
+      by_vars = exprs(get_admiral_option("subject_keys")),
       order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
       mode = "first"
     ),
@@ -247,7 +247,7 @@ ae <- ae %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = AHSEV2FL,
-      by_vars = exprs(!!!get_admiral_option("subject_keys"))
+      by_vars = exprs(get_admiral_option("subject_keys"))
     ),
     derivation_slice(
       filter = AESTDY >= 1,
@@ -286,7 +286,7 @@ ae <- ae %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = AHSEV3FL,
-      by_vars = exprs(!!!get_admiral_option("subject_keys"))
+      by_vars = exprs(get_admiral_option("subject_keys"))
     ),
     derivation_slice(
       filter = AESEV == "SEVERE",
