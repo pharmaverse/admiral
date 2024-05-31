@@ -473,8 +473,6 @@ derive_vars_merged <- function(dataset,
     }
   )
 
-  return(cnd)
-
   if (!is.null(match_flag_var)) {
     update_missings <- map2(
       syms(names(missing_values)),
