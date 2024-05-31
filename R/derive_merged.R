@@ -443,12 +443,12 @@ derive_vars_merged <- function(dataset,
           str_replace(
             str_replace(
               cnd$message, "`x`", "`dataset`"
-              ),  "`y`", "`dataset_add`"
+            ), "`y`", "`dataset_add`"
           ),
           i = str_replace(
             str_replace(
               cnd$body, "`x`", "`dataset`"
-            ),  "`y`", "`dataset_add`"
+            ), "`y`", "`dataset_add`"
           )
         ),
         call = parent.frame(n = 4)
@@ -460,12 +460,12 @@ derive_vars_merged <- function(dataset,
           str_replace(
             str_replace(
               cnd$message, "`x`", "`dataset`"
-            ),  "`y`", "`dataset_add`"
+            ), "`y`", "`dataset_add`"
           ),
           i = str_replace(
             str_replace(
               cnd$body, "`x`", "`dataset`"
-            ),  "`y`", "`dataset_add`"
+            ), "`y`", "`dataset_add`"
           )
         ),
         call = parent.frame(n = 4)

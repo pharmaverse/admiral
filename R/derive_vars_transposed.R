@@ -137,12 +137,12 @@ derive_vars_transposed <- function(dataset,
           str_replace(
             str_replace(
               cnd$message, "`x`", "`dataset`"
-            ),  "`y`", "the transposed `dataset_merge`"
+            ), "`y`", "the transposed `dataset_merge`"
           ),
           i = str_replace(
             str_replace(
               cnd$body, "`x`", "`dataset`"
-            ),  "`y`", "the transposed `dataset_merge`"
+            ), "`y`", "the transposed `dataset_merge`"
           )
         ),
         call = parent.frame(n = 4)
@@ -154,12 +154,12 @@ derive_vars_transposed <- function(dataset,
           str_replace(
             str_replace(
               cnd$message, "`x`", "`dataset`"
-            ),  "`y`", "the transposed `dataset_merge`"
+            ), "`y`", "the transposed `dataset_merge`"
           ),
           i = str_replace(
             str_replace(
               cnd$body, "`x`", "`dataset`"
-            ),  "`y`", "the transposed `dataset_merge`"
+            ), "`y`", "the transposed `dataset_merge`"
           )
         ),
         call = parent.frame(n = 4)
@@ -171,12 +171,12 @@ derive_vars_transposed <- function(dataset,
           str_replace(
             str_replace(
               cnd$message, "`x`", "`dataset`"
-            ),  "`y`", "the transposed `dataset_merge`"
+            ), "`y`", "the transposed `dataset_merge`"
           ),
           i = str_replace(
             str_replace(
               cnd$body, "`x`", "`dataset`"
-            ),  "`y`", "the transposed `dataset_merge`"
+            ), "`y`", "the transposed `dataset_merge`"
           )
         ),
         call = parent.frame(n = 4)
