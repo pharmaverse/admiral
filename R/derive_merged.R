@@ -439,17 +439,41 @@ derive_vars_merged <- function(dataset,
     ),
     "dplyr_error_join_relationship_one_to_one" = function(cnd) {
       cli_abort(
-        message = "Each row in `dataset` must match at most 1 row in `dataset_add`.",
-        call = parent.frame(n = 5)
+        message = c(
+          str_replace(
+            str_replace(
+              cnd$message, "`x`", "`dataset`"
+              ),  "`y`", "`dataset_add`"
+          ),
+          i = str_replace(
+            str_replace(
+              cnd$body, "`x`", "`dataset`"
+            ),  "`y`", "`dataset_add`"
+          )
+        ),
+        call = parent.frame(n = 4)
       )
     },
     "dplyr_error_join_relationship_many_to_one" = function(cnd) {
       cli_abort(
-        message = "Each row in `dataset` must match at most 1 row in `add_data`.",
-        call = parent.frame(n = 5)
+        message = c(
+          str_replace(
+            str_replace(
+              cnd$message, "`x`", "`dataset`"
+            ),  "`y`", "`dataset_add`"
+          ),
+          i = str_replace(
+            str_replace(
+              cnd$body, "`x`", "`dataset`"
+            ),  "`y`", "`dataset_add`"
+          )
+        ),
+        call = parent.frame(n = 4)
       )
     }
   )
+
+  return(cnd)
 
   if (!is.null(match_flag_var)) {
     update_missings <- map2(

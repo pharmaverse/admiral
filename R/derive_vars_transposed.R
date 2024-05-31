@@ -35,7 +35,8 @@
 #'   <https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments> for
 #'   more details.
 #'
-#'   Permitted Values for `relationship`: `"one-to-one"`,  `"many-to-one"`, `NULL`.
+#'   Permitted Values for `relationship`: `"one-to-one"`, `"one-to-many"`,
+#'   `"many-to-one"`, `"many-to-many"`, `NULL`.
 #'
 #' @details
 #' After filtering `dataset_merge` based upon the condition provided in `filter`, this
@@ -110,7 +111,7 @@ derive_vars_transposed <- function(dataset,
   assert_data_frame(dataset_merge, required_vars = expr_c(by_vars, key_var, value_var))
   relationship <- assert_character_scalar(
     relationship,
-    values = c("one-to-one", "many-to-one"),
+    values = c("one-to-one", "one-to-many", "many-to-one", "many-to-many"),
     case_sensitive = TRUE,
     optional = TRUE
   )
@@ -124,23 +125,61 @@ derive_vars_transposed <- function(dataset,
     )
 
   tryCatch(
-    left_join(dataset, dataset_transposed, by = vars2chr(by_vars), relationship = relationship),
+    left_join(
+      dataset,
+      dataset_transposed,
+      by = vars2chr(by_vars),
+      relationship = relationship
+    ),
     "dplyr_error_join_relationship_one_to_one" = function(cnd) {
       cli_abort(
-        message = paste0(
-          "Each row in `dataset` must match at most 1 row ",
-          "in the transposed `dataset_merge`."
+        message = c(
+          str_replace(
+            str_replace(
+              cnd$message, "`x`", "`dataset`"
+            ),  "`y`", "the transposed `dataset_merge`"
+          ),
+          i = str_replace(
+            str_replace(
+              cnd$body, "`x`", "`dataset`"
+            ),  "`y`", "the transposed `dataset_merge`"
+          )
         ),
-        call = parent.frame(n = 5)
+        call = parent.frame(n = 4)
       )
     },
     "dplyr_error_join_relationship_many_to_one" = function(cnd) {
       cli_abort(
-        message = paste0(
-          "Each row in `dataset` must match at most 1 row ",
-          "in the transposed `dataset_merge`."
+        message = c(
+          str_replace(
+            str_replace(
+              cnd$message, "`x`", "`dataset`"
+            ),  "`y`", "the transposed `dataset_merge`"
+          ),
+          i = str_replace(
+            str_replace(
+              cnd$body, "`x`", "`dataset`"
+            ),  "`y`", "the transposed `dataset_merge`"
+          )
         ),
-        call = parent.frame(n = 5)
+        call = parent.frame(n = 4)
+      )
+    },
+    "dplyr_error_join_relationship_one_to_many" = function(cnd) {
+      cli_abort(
+        message = c(
+          str_replace(
+            str_replace(
+              cnd$message, "`x`", "`dataset`"
+            ),  "`y`", "the transposed `dataset_merge`"
+          ),
+          i = str_replace(
+            str_replace(
+              cnd$body, "`x`", "`dataset`"
+            ),  "`y`", "the transposed `dataset_merge`"
+          )
+        ),
+        call = parent.frame(n = 4)
       )
     }
   )
