@@ -36,7 +36,7 @@ adcm <- cm %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-   by_vars = get_admiral_option("subject_keys")
+    by_vars = get_admiral_option("subject_keys")
   ) %>%
   ## Derive analysis start time ----
   derive_vars_dtm(

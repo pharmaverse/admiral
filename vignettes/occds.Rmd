@@ -79,7 +79,7 @@ adae <- derive_vars_merged(
   ae,
   dataset_add = adsl,
   new_vars = adsl_vars,
- by_vars = get_admiral_option("subject_keys")
+  by_vars = get_admiral_option("subject_keys")
 )
 ```
 
