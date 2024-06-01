@@ -89,32 +89,32 @@ admh <- mh %>%
   ) %>%
   derive_var_extreme_flag(
     by_vars = c(get_admiral_option("subject_keys"), exprs(MHBODSYS)),
-    order = get_admiral_option("subject_keys"), MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
+    order = c(get_admiral_option("subject_keys"), exprs(MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ)),
     new_var = AOCCSFL,
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
     by_vars = c(get_admiral_option("subject_keys"), exprs(MHDECOD)),
-    order = get_admiral_option("subject_keys"), MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
+    order = c(get_admiral_option("subject_keys"), exprs(MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ)),
     new_var = AOCCPFL,
     mode = "first"
   ) %>%
   # (company specific occurrence flag variables derivation)
   derive_var_extreme_flag(
     by_vars = get_admiral_option("subject_keys"),
-    order = get_admiral_option("subject_keys"), AHIST, ASTDT, MHSEQ),
+    order = c(get_admiral_option("subject_keys"), exprs(AHIST, ASTDT, MHSEQ)),
     new_var = AOCPFL,
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
     by_vars = c(get_admiral_option("subject_keys"), exprs(MHBODSYS)),
-    order = get_admiral_option("subject_keys"), AHIST, MHBODSYS, MHCAT, ASTDT, MHSEQ),
+    order = c(get_admiral_option("subject_keys"), exprs(AHIST, MHBODSYS, MHCAT, ASTDT, MHSEQ)),
     new_var = AOCPSFL,
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
     by_vars = c(get_admiral_option("subject_keys"), exprs(MHDECOD)),
-    order = get_admiral_option("subject_keys"), AHIST, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
+    order = c(get_admiral_option("subject_keys"), exprs(AHIST, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ)),
     new_var = AOCPPFL,
     mode = "first"
   ) %>%

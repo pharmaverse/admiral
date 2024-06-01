@@ -306,7 +306,7 @@ adrs <- tibble::tribble(
     PARAM = "Overall Response"
   ) %>%
   select(!!!get_admiral_option("subject_keys"), PARAMCD, PARAM, ADT, ASEQ, AVALC)
-      
+
 
 dataset_vignette(
   adrs,
@@ -410,8 +410,7 @@ dataset_vignette(
     select(
       !!!get_admiral_option("subject_keys"), PARAMCD, PARAM, STARTDT, ADT, ADTF, CNSR,
       EVNTDESC, SRCDOM, SRCVAR
-    )
-  ,
+    ),
   display_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, STARTDT, ADT, ADTF, CNSR))
 )
 ```
@@ -507,10 +506,7 @@ adaette <- call_derivation(
 adaette %>%
   select(!!!get_admiral_option("subject_keys"), PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR) %>%
   arrange(!!!get_admiral_option("subject_keys"), PARAMCD) %>%
-  
-  dataset_vignette(display_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR)
-                                    )
-                   )
+  dataset_vignette(display_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR)))
 ```
 
 ### Deriving Time-to-Event Parameters Using By Groups
