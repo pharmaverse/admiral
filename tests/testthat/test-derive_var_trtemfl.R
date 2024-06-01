@@ -106,7 +106,6 @@ test_that("derive_var_trtemfl Test 3: with end_window and worsening within group
       new_var = TRTEMFL,
       trt_end_date = TRTEDTM,
       end_window = 10,
-      initial_intensity = AEITOXGR,
       intensity = AETOXGR,
       group_var = AEGRPID
     ),
@@ -142,7 +141,6 @@ test_that("derive_var_trtemfl Test 5: considering trt end time", {
       trt_end_date = TRTEDTM,
       end_window = 10,
       ignore_time_for_trt_end = FALSE,
-      initial_intensity = AEITOXGR,
       intensity = AETOXGR,
       group_var = AEGRPID
     ),
@@ -188,9 +186,20 @@ test_that("derive_var_trtemfl Test 9: error if `intensity` without `initial_inte
   expect_snapshot(
     derive_var_trtemfl(
       adae2,
-      intensity = AETOXGR,
-      group_var = AEGRPID
+      intensity = AETOXGR
     ),
     error = TRUE
+  )
+})
+
+## Test 10: warning if both `initial_intensity` and `group_var` are specified ----
+test_that("derive_var_trtemfl Test 9: error if `intensity` without `initial_intensity`", {
+  expect_warning(
+    derive_var_trtemfl(
+      adae2,
+      initial_intensity = AETOXGR,
+      group_var = AEGRPID
+    ),
+    "`initial_intensity` argument is ignored when `group_var` is specified"
   )
 })

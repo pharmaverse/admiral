@@ -85,6 +85,8 @@
 #'  *Permitted Values:* A symbol referring to a variable of the input dataset
 #'   or `NULL`
 #'
+#' @inheritParams derive_param_tte
+#'
 #' @details For the derivation of the new variable the following cases are
 #'   considered in this order. The first case which applies, defines the value
 #'   of the variable.
@@ -228,7 +230,8 @@ derive_var_trtemfl <- function(dataset,
                                ignore_time_for_trt_end = TRUE,
                                initial_intensity = NULL,
                                intensity = NULL,
-                               group_var = NULL) {
+                               group_var = NULL,
+                               subject_keys = get_admiral_option("subject_keys")[2]) {
   # Convert inputs to symbols
   new_var <- assert_symbol(enexpr(new_var))
   start_date <- assert_symbol(enexpr(start_date))
@@ -243,18 +246,28 @@ derive_var_trtemfl <- function(dataset,
   intensity <- assert_symbol(enexpr(intensity), optional = TRUE)
   group_var <- assert_symbol(enexpr(group_var), optional = TRUE)
 
+  # group_var is not specified
   # Check if both initial_intensity and intensity are provided
-  if (is.null(initial_intensity) && !is.null(intensity)) {
-    cli_abort(c(
-      "{.arg intensity} argument was specified but not {.arg initial_intensity}",
-      "Either both or none of them must be specified."
-    ))
-  }
-  if (!is.null(initial_intensity) && is.null(intensity)) {
-    cli_abort(c(
-      "{.arg initial_intensity} argument was specified but not {.arg intensity}",
-      "Either both or none of them must be specified."
-    ))
+  if (is.null(group_var)) {
+    if (is.null(initial_intensity) && !is.null(intensity)) {
+      cli_abort(c(
+        "{.arg intensity} argument was specified but not {.arg initial_intensity}",
+        "Either both or none of them must be specified."
+      ))
+    }
+    if (!is.null(initial_intensity) && is.null(intensity)) {
+      cli_abort(c(
+        "{.arg initial_intensity} argument was specified but not {.arg intensity}",
+        "Either both or none of them must be specified."
+      ))
+    }
+  # group_var is specified
+  } else {
+    if (!is.null(initial_intensity)) {
+      cli_warn(c(
+        "{.arg initial_intensity} argument is ignored when {.arg group_var} is specified"
+      ))
+    }
   }
 
   # Assert required variables

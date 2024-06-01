@@ -28,7 +28,7 @@
 # derive_var_trtemfl Test 9: error if `intensity` without `initial_intensity`
 
     Code
-      derive_var_trtemfl(adae2, intensity = AETOXGR, group_var = AEGRPID)
+      derive_var_trtemfl(adae2, intensity = AETOXGR)
     Condition
       Error in `derive_var_trtemfl()`:
       ! `intensity` argument was specified but not `initial_intensity`
