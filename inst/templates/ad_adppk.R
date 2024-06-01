@@ -129,11 +129,13 @@ ex_exp <- ex_dates %>%
     lookup_table = dose_freq_lookup,
     lookup_column = CDISC_VALUE,
     keep_source_vars = c(
-      get_admiral_option("subject_keys"), exprs(EVID, EXDOSFRQ, EXDOSFRM,
-      NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
-      VISIT, VISITNUM, VISITDY,
-      TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
-    ))
+      get_admiral_option("subject_keys"), exprs(
+        EVID, EXDOSFRQ, EXDOSFRM,
+        NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
+        VISIT, VISITNUM, VISITDY,
+        TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
+      )
+    )
   ) %>%
   # Derive AVISIT based on nominal relative time
   # Derive AVISITN to nominal time in whole days using integer division
