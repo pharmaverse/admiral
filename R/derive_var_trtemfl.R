@@ -335,7 +335,7 @@ derive_var_trtemfl <- function(dataset,
         arrange(USUBJID, !!group_var, !!start_date) %>%
         group_by(USUBJID, !!group_var) %>%
         mutate(
-          prev_intensity = dplyr::lag(!!intensity),
+          prev_intensity = lag(!!intensity),
           worsen_date =
             case_when(
               !is.na(!!start_date) & !is.na(!!trt_start_date) & !is.na(prev_intensity) &
