@@ -171,7 +171,7 @@
 #'   intensity = AETOXGR
 #' ) %>% select(ASTDTM, AENDTM, AEITOXGR, AETOXGR, TRTEM2FL)
 #'
-#' adae2 <- expected2 <- tribble(
+#' adae2 <- tribble(
 #'   ~USUBJID, ~ASTDTM, ~AENDTM, ~AEITOXGR, ~AETOXGR, ~AEGRPID,
 #'   # before treatment
 #'   "1", "2021-12-13T20:15", "2021-12-15T12:45", "1", "1", "1",
