@@ -71,7 +71,7 @@
 #'
 #' @param group_var Grouping variable
 #'
-#'  If the argument is specified it assumes that AE are recorded as one episode
+#'  If the argument is specified, it assumes that AEs are recorded as one episode
 #'  of AE with multiple lines using a grouping variable.
 #'
 #'  If the argument is specified, events which started during the treatment period
