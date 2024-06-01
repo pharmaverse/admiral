@@ -268,7 +268,7 @@ derive_var_trtemfl <- function(dataset,
       intensity
     )
   if (!is.null(group_var)) {
-    required_vars <- c(required_vars, enexpr(group_var))
+    required_vars <- c(required_vars, group_var)
   }
   assert_data_frame(dataset, required_vars = required_vars)
 
