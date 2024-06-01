@@ -45,9 +45,12 @@
 #'
 #' @param initial_intensity Initial severity/intensity or toxicity
 #'
-#'   If the argument is specified, events which start before treatment start and
-#'   end after treatment start (or are ongoing) and worsened (i.e., the
-#'   intensity is greater than the initial intensity), are flagged.
+#'   `initial_intensity` is ignored when `group_var` is specified.
+#'
+#'   If this argument is specified and `group_var` is `NULL`, events which start
+#'   before treatment start and end after treatment start (or are ongoing) and
+#'   worsened (i.e., the intensity is greater than the initial intensity), are
+#'   flagged.
 #'
 #'   The values of the specified variable must be comparable with the usual
 #'   comparison operators. I.e., if the intensity is greater than the initial
@@ -128,7 +131,7 @@
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
-#' adae <- expected <- tribble(
+#' adae <- tribble(
 #'   ~USUBJID, ~ASTDTM,            ~AENDTM,            ~AEITOXGR, ~AETOXGR,
 #'   # before treatment
 #'   "1",      "2021-12-13T20:15", "2021-12-15T12:45", "1",       "1",
@@ -261,7 +264,7 @@ derive_var_trtemfl <- function(dataset,
         "Either both or none of them must be specified."
       ))
     }
-  # group_var is specified
+    # group_var is specified
   } else {
     if (!is.null(initial_intensity)) {
       cli_warn(c(
@@ -318,16 +321,26 @@ derive_var_trtemfl <- function(dataset,
   }
 
 
-  # Flagging the single records for both single AE collected data and mutiple AE collected data
+  # new_ae_cond: Y - new AE, N - AE exists before trt_start_date
+  new_ae_cond <- get_new_tmp_var(dataset)
   if (is.null(group_var)) {
     dataset <- dataset %>%
-      mutate(srfl = "Y")
+      mutate(
+        !!new_ae_cond := if_else(!!start_date >= !!trt_start_date, "Y", "N")
+      )
   } else {
-    srfl <- get_new_tmp_var(dataset)
     dataset <- dataset %>%
-      group_by(USUBJID, !!group_var) %>%
-      mutate(srfl = ifelse(row_number() == 1, "Y", NA)) %>%
-      ungroup()
+      derive_vars_merged(
+        dataset_add = dataset,
+        by_vars = expr_c(subject_keys, group_var),
+        order = exprs(!!start_date),
+        new_vars = exprs(!!new_ae_cond := "N"),
+        filter_add = !!start_date < !!trt_start_date,
+        mode = "last"
+      ) %>%
+      mutate(
+        !!new_ae_cond := if_else(is.na(!!new_ae_cond), "Y", "N")
+      )
   }
 
   if (is.null(intensity)) {
@@ -348,21 +361,22 @@ derive_var_trtemfl <- function(dataset,
         arrange(USUBJID, !!group_var, !!start_date) %>%
         group_by(USUBJID, !!group_var) %>%
         mutate(
-          prev_intensity = lag(!!intensity),
-          worsen_date =
+          !!prev_intensity := lag(!!intensity),
+          !!worsen_date :=
             case_when(
-              !is.na(!!start_date) & !is.na(!!trt_start_date) & !is.na(prev_intensity) &
+              !is.na(!!start_date) & !is.na(!!trt_start_date) & !is.na(!!prev_intensity) &
                 !!start_date >= !!trt_start_date &
-                (!!intensity > prev_intensity) ~ !!start_date,
+                (!!intensity > !!prev_intensity) ~ !!start_date,
               TRUE ~ NA
             )
         ) %>%
-        fill(worsen_date, .direction = "down") %>%
+        fill(!!worsen_date, .direction = "down") %>%
         ungroup()
 
-      worsening_cond <- expr(!is.na(worsen_date))
+      worsening_cond <- expr(!is.na(!!worsen_date))
     }
   }
+
 
   # Derive TRTEMFL based on conditions
 
@@ -372,16 +386,10 @@ derive_var_trtemfl <- function(dataset,
         is.na(!!trt_start_date) ~ NA_character_,
         !!end_date < !!trt_start_date ~ NA_character_,
         is.na(!!start_date) ~ "Y",
-        !!start_date >= !!trt_start_date & !!end_cond & srfl == "Y" ~ "Y",
-        !!worsening_cond ~ "Y"
+        !!new_ae_cond == "Y" & !!end_cond ~ "Y", # new AE
+        !!worsening_cond ~ "Y" # worsened AE
       )
-    )
-
-  # Remove unwanted variables
-
-  if ("worsen_date" %in% names(dataset)) {
-    dataset <- dataset %>% select(-prev_intensity, -worsen_date, -srfl)
-  } else {
-    dataset <- dataset %>% select(-srfl)
-  }
+    ) %>%
+    # Remove temporary variable
+    remove_tmp_vars()
 }
