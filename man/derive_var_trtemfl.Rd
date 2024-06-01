@@ -15,7 +15,8 @@ derive_var_trtemfl(
   ignore_time_for_trt_end = TRUE,
   initial_intensity = NULL,
   intensity = NULL,
-  group_var = NULL
+  group_var = NULL,
+  subject_keys = get_admiral_option("subject_keys")[2]
 )
 }
 \arguments{
@@ -58,9 +59,12 @@ the event occurred more than \code{end_window} days after end of treatment.
 
 \item{initial_intensity}{Initial severity/intensity or toxicity
 
-If the argument is specified, events which start before treatment start and
-end after treatment start (or are ongoing) and worsened (i.e., the
-intensity is greater than the initial intensity), are flagged.
+\code{initial_intensity} is ignored when \code{group_var} is specified.
+
+If this argument is specified and \code{group_var} is \code{NULL}, events which start
+before treatment start and end after treatment start (or are ongoing) and
+worsened (i.e., the intensity is greater than the initial intensity), are
+flagged.
 
 The values of the specified variable must be comparable with the usual
 comparison operators. I.e., if the intensity is greater than the initial
@@ -84,7 +88,7 @@ or \code{NULL}}
 
 \item{group_var}{Grouping variable
 
-If the argument is specified it assumes that AE are recorded as one episode
+If the argument is specified, it assumes that AEs are recorded as one episode
 of AE with multiple lines using a grouping variable.
 
 If the argument is specified, events which started during the treatment period
@@ -97,6 +101,10 @@ is also flagged regardless of the severity and within the treatment window.
 
 \emph{Permitted Values:} A symbol referring to a variable of the input dataset
 or \code{NULL}}
+
+\item{subject_keys}{Variables to uniquely identify a subject
+
+A list of symbols created using \code{exprs()} is expected.}
 }
 \value{
 The input dataset with the variable specified by \code{new_var} added
@@ -143,7 +151,7 @@ library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 
-adae <- expected <- tribble(
+adae <- tribble(
   ~USUBJID, ~ASTDTM,            ~AENDTM,            ~AEITOXGR, ~AETOXGR,
   # before treatment
   "1",      "2021-12-13T20:15", "2021-12-15T12:45", "1",       "1",
@@ -188,7 +196,7 @@ derive_var_trtemfl(
   intensity = AETOXGR
 ) \%>\% select(ASTDTM, AENDTM, AEITOXGR, AETOXGR, TRTEM2FL)
 
-adae2 <- expected2 <- tribble(
+adae2 <- tribble(
   ~USUBJID, ~ASTDTM, ~AENDTM, ~AEITOXGR, ~AETOXGR, ~AEGRPID,
   # before treatment
   "1", "2021-12-13T20:15", "2021-12-15T12:45", "1", "1", "1",
