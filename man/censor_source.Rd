@@ -65,9 +65,9 @@ censor_source(
 Source Objects: 
 \code{\link{basket_select}()},
 \code{\link{death_event}},
+\code{\link{event}()},
 \code{\link{event_joined}()},
 \code{\link{event_source}()},
-\code{\link{event}()},
 \code{\link{flag_event}()},
 \code{\link{query}()},
 \code{\link{records_source}()},
