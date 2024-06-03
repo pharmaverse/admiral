@@ -13,7 +13,7 @@ dataset_merge <- tibble::tribble(
 )
 
 ## Test 1: the merge dataset is transposed and merged correctly ----
-test_that("the merge dataset is transposed and merged correctly", {
+test_that("derive_vars_transposed Test 1: the merge dataset is transposed and merged correctly", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~VAR1, ~T01, ~T02,
     "P01", 3, 31, 5,
@@ -33,7 +33,7 @@ test_that("the merge dataset is transposed and merged correctly", {
 
 
 ## Test 2: filtering the merge dataset works ----
-test_that("filtering the merge dataset works", {
+test_that("derive_vars_transposed Test 2: filtering the merge dataset works", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~VAR1, ~T01,
     "P01", 3, 31,
@@ -52,8 +52,24 @@ test_that("filtering the merge dataset works", {
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
 
-## Test 3: ATC variables are merged properly ----
-test_that("ATC variables are merged properly", {
+## Test 3: filtering the merge dataset works with relationship 'many-to-one' ----
+test_that("derive_vars_transposed Test 3: filtering the merge dataset works
+          with relationship 'many-to-one'", {
+  expect_snapshot(
+    derive_vars_transposed(
+      dataset,
+      dataset_merge,
+      by_vars = exprs(USUBJID),
+      key_var = TESTCD,
+      value_var = VALUE,
+      filter = TESTCD == "T01",
+      relationship = "many-to-one"
+    )
+  )
+})
+
+## Test 4: ATC variables are merged properly ----
+test_that("derive_vars_transposed Test 4: ATC variables are merged properly", {
   cm <- tibble::tribble(
     ~USUBJID, ~CMGRPID, ~CMREFID, ~CMDECOD,
     "BP40257-1001", "14", "1192056", "PARACETAMOL",
@@ -105,8 +121,8 @@ test_that("ATC variables are merged properly", {
 
 
 
-## Test 4: ATC variables are merged properly ----
-test_that("ATC variables are merged properly", {
+## Test 5: ATC variables are merged properly ----
+test_that("derive_vars_transposed Test 5: ATC variables are merged properly", {
   cm <- tibble::tribble(
     ~USUBJID, ~CMGRPID, ~CMREFID, ~CMDECOD,
     "BP40257-1001", "14", "1192056", "PARACETAMOL",
