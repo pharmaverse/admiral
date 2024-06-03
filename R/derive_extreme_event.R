@@ -499,7 +499,7 @@ derive_extreme_event <- function(dataset = NULL,
     by_vars = append(by_vars, order),
     msg = paste("Check duplicates: selected_records dataset contains duplicate records
                 with respect to {.var {replace_values_by_names(by_vars)}}"),
-    cnd_type = "message"
+    cnd_type = check_type
   )
 
   ## filter_extreme
