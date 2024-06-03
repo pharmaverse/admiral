@@ -55,7 +55,6 @@ test_that("derive_vars_transposed Test 2: filtering the merge dataset works", {
 ## Test 3: filtering the merge dataset works with relationship 'many-to-one' ----
 test_that("derive_vars_transposed Test 3: filtering the merge dataset works
           with relationship 'many-to-one'", {
-
   expect_snapshot(
     derive_vars_transposed(
       dataset,
@@ -66,8 +65,7 @@ test_that("derive_vars_transposed Test 3: filtering the merge dataset works
       filter = TESTCD == "T01",
       relationship = "many-to-one"
     )
-    )
-
+  )
 })
 
 ## Test 4: ATC variables are merged properly ----
@@ -172,4 +170,3 @@ test_that("derive_vars_transposed Test 5: ATC variables are merged properly", {
 
   expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "CMDECOD", "ATC4CD"))
 })
-
