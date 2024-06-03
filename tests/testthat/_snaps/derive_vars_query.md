@@ -8,7 +8,7 @@
       ! The source variables (values of `SRCVAR`) must be numeric or character.
       i AELLTCD is of type logical
 
-# derive_vars_for_query Test 6: Error is given if both TERMCHAR/TERMNUM are NA/empty
+# derive_vars_query Test 6: Error is given if both TERMCHAR/TERMNUM are NA/empty
 
     Code
       derive_vars_query(my_ae, query)
