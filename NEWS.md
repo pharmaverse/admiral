@@ -1,8 +1,5 @@
 # admiral (development version)
 
-
-
-
 ## New Features
 - Added helper functions to `derive_vars_merged()` (`get_flagged_records()`) and `derive_vars_query()` (`get_vars_query()`) so that those can be called independently as per user's request. `derive_vars_merged()` function call results are not impacted by the change (#2441).
 
@@ -85,10 +82,7 @@ functions and some of the more advanced topics have been moved to the new "Progr
 <summary>Developer Notes</summary>
 
 - In the previous version, `renv` was the default framework used to manage package dependencies. Now, we use `devtools` as our main package manager (some changes also occurred for  [admiralci workflows](https://github.com/pharmaverse/admiralci)).
-There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for `R CMD CHECKS` jobs, there is an associated renv.lock file (under the deps artifact):
-
- ![Download dependencies from CI workflows](man/figures/dependencies_devtools.png) (#2306)
-
+There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for `R CMD CHECKS` jobs, there is an associated renv.lock file (under the deps artifact).
 - Splitting out `R` and `test` files for date/time functions for cyclomatic complexity refactor (#2340)(#2339)
 - Created three unit tests for `get_summary_records()`. (#2304)
 - Created unit tests for developer internal function `get_imputation_target_date()` (#2378)
