@@ -446,7 +446,7 @@ derive_extreme_event <- function(dataset = NULL,
             by_vars = append(by_vars, event_order),
             msg = paste("Check duplicates: ", event$dataset_name, " dataset contains duplicate
                         records with respect to {.var {replace_values_by_names(by_vars)}}"),
-            cnd_type = "message"
+            cnd_type = check_type
           )
 
           data_events <- filter_extreme(
@@ -463,7 +463,7 @@ derive_extreme_event <- function(dataset = NULL,
           by_vars = append(by_vars, event_order),
           msg = paste("Check duplicates: ", event$dataset_name, " dataset contains duplicate records
                       with respect to {.var {replace_values_by_names(by_vars)}}"),
-          cnd_type = "message"
+          cnd_type = check_type
         )
 
         data_events <- filter_joined(
@@ -497,7 +497,8 @@ derive_extreme_event <- function(dataset = NULL,
   signal_duplicate_records(
     dataset = selected_records,
     by_vars = append(by_vars, order),
-    msg = paste("Check duplicates: selected_records dataset contains duplicate records
+    msg = paste("Check duplicates: the dataset which consists of all records selected
+                for any of the events defined by events contains duplicate records
                 with respect to {.var {replace_values_by_names(by_vars)}}"),
     cnd_type = check_type
   )
@@ -508,7 +509,7 @@ derive_extreme_event <- function(dataset = NULL,
       by_vars = by_vars,
       order = order,
       mode = mode,
-      check_type = check_type
+      check_type = "none"
     ) %>%
     mutate(!!!set_values_to) %>%
     select(-!!tmp_event_nr_var)
