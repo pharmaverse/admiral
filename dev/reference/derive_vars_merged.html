@@ -16,7 +16,7 @@ each by group (order and mode argument)."><meta property="og:image" content="htt
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9042</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9043</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,7 +127,8 @@ each by group (<code>order</code> and <code>mode</code> argument).</p>
 <span>  false_value <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
 <span>  missing_values <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  check_type <span class="op">=</span> <span class="st">"warning"</span>,</span>
-<span>  duplicate_msg <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  duplicate_msg <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  relationship <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -263,6 +264,16 @@ to the by variables, an error is issued.</p>
 <span>  <span class="st">"Dataset {.arg dataset_add} contains duplicate records with respect to"</span>,</span>
 <span>  <span class="st">"{.var {vars2chr(by_vars)}}."</span></span>
 <span><span class="op">)</span></span></code></pre><p></p></div></dd>
+
+
+<dt>relationship</dt>
+<dd><p>Expected merge-relationship between the <code>by_vars</code>
+variable(s) in <code>dataset</code> (input dataset) and the <code>dataset_add</code> (additional dataset)
+containing the additional <code>new_vars</code>.</p>
+<p>This argument is passed to the <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code> function. See
+<a href="https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments" class="external-link">https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments</a> for
+more details.</p>
+<p><strong>Permitted Values:</strong> <code>"one-to-one"</code>, <code>"many-to-one"</code>, <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

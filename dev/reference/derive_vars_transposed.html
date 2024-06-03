@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9042</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9043</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,7 +111,8 @@
 <span>  id_vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">key_var</span>,</span>
 <span>  <span class="va">value_var</span>,</span>
-<span>  filter <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  relationship <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -152,6 +153,16 @@ transposed variables</p></dd>
 
 <dt>filter</dt>
 <dd><p>Expression used to restrict the records of <code>dataset_merge</code> prior to transposing</p></dd>
+
+
+<dt>relationship</dt>
+<dd><p>Expected merge-relationship between the <code>by_vars</code>
+variable(s) in <code>dataset</code> and <code>dataset_merge</code> (after transposition)</p>
+<p>This argument is passed to the <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code> function. See
+<a href="https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments" class="external-link">https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments</a> for
+more details.</p>
+<p>Permitted Values for <code>relationship</code>: <code>"one-to-one"</code>, <code>"one-to-many"</code>,
+<code>"many-to-one"</code>, <code>"many-to-many"</code>, <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

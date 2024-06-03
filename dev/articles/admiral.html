@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9042</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9043</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -166,7 +166,7 @@ set up some example data to manipulate later. The <a href="https://dplyr.tidyver
 <a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a> and <a href="https://stringr.tidyverse.org" class="external-link">stringr</a> packages are
 <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a> packages and are used heavily throughout this
 vignette. The <a href="https://pharmaverse.github.io/admiral/">admiral</a> package also leverages the
-<a href="https://pharmaverse.github.io/pharmaversesdtm/main/" class="external-link">pharmaversesdtm</a> package for example SDTM datasets which
+<a href="https://pharmaverse.github.io/pharmaversesdtm/" class="external-link">pharmaversesdtm</a> package for example SDTM datasets which
 are from the CDISC Pilot Study.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Uncomment line below if you need to install these packages</span></span>
@@ -176,7 +176,7 @@ are from the CDISC Pilot Study.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/pharmaversesdtm/main/" class="external-link">pharmaversesdtm</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/pharmaversesdtm/" class="external-link">pharmaversesdtm</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/">admiral</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Read in SDTM datasets</span></span>
@@ -213,7 +213,7 @@ prepared to showcase <a href="#addvars">addition of variables</a> and <a href="#
 <span>    AVISIT <span class="op">=</span> <span class="va">VISIT</span>, AVISITN <span class="op">=</span> <span class="va">VISITNUM</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><strong>Note:</strong> In the example above, we are reading in dummy
-R data from <a href="https://pharmaverse.github.io/pharmaversesdtm/main/" class="external-link">pharmaversesdtm</a>. However, if you are using
+R data from <a href="https://pharmaverse.github.io/pharmaversesdtm/" class="external-link">pharmaversesdtm</a>. However, if you are using
 SAS datasets as a starting point, be sure to consult the section <a href="concepts_conventions.html#missing">Handling of Missing Values</a>
 in the <a href="concepts_conventions.html">Programming Concepts and
 Conventions</a> User Guide to learn how and why you should use the
