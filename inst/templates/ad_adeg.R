@@ -124,7 +124,11 @@ adeg <- adeg %>%
   ## Calculate AVAL and AVALC ----
   mutate(
     AVAL = EGSTRESN,
-    AVALC = EGSTRESC
+    AVALC = ifelse(
+      is.na(EGSTRESN) | as.character(EGSTRESN) != EGSTRESC,
+      EGSTRESC,
+      NA
+    )
   ) %>%
   ## Derive new parameters based on existing records ----
   # Note that, for the following four `derive_param_*()` functions, only the

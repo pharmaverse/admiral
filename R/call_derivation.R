@@ -109,7 +109,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
   assert_s3_class(derivation, "function")
   assert_list_of(variable_params, "params")
 
-  fixed_params <- eval(substitute(alist(...)))
+  fixed_params <- enexprs(...)
   if (length(fixed_params) == 0L) {
     cli_abort("At least one argument must be set inside {.arg ...}.")
   }
@@ -122,9 +122,24 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 
   for (i in seq_along(variable_params)) {
     fixed_params_ <- fixed_params[names(fixed_params) %notin% names(variable_params[[i]])]
-    args <- c(quote(dataset), variable_params[[i]], fixed_params_)
-    call <- as.call(c(substitute(derivation), args))
-    dataset <- eval(call, envir = list(dataset = dataset), enclos = parent.frame())
+    call <- call2(derivation, expr(dataset), !!!variable_params[[i]], !!!fixed_params_)
+    fixed_env <- caller_env()
+    variable_env <- attr(variable_params[[i]], "env")
+    if (!identical(fixed_env, variable_env)) {
+      # prefer objects in the variable environment to objects in fixed environment
+      # Note: objects in any of the parent environments of the variable environment are ignored.
+      eval_env <- new_environment(
+        data = c(list(dataset = dataset), as.list(variable_env)),
+        parent = fixed_env
+      )
+    } else {
+      eval_env <- new_environment(
+        data = list(dataset = dataset),
+        parent = fixed_env
+      )
+    }
+
+    dataset <- eval_tidy(call, env = eval_env)
   }
 
   dataset
@@ -227,7 +242,8 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #' ## The above call using `call_derivation()` is equivalent to the call using `derive_vars_dt()`
 #' ## to derive variables `ASTDT` and `AENDT` separately at the beginning.
 params <- function(...) {
-  args <- eval(substitute(alist(...)))
+  args <- enexprs(...)
+  attr(args, "env") <- caller_env()
   if (length(args) == 0L) {
     cli_abort("At least one argument must be provided.")
   }

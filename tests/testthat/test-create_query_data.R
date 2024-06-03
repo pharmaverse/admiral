@@ -478,21 +478,101 @@ test_that("basket_select Test 20: error if type is not specified", {
   )
 })
 
+# basket_select customized query defined by SMQs extra arguments ----
+get_smq_oth <- function(basket_select,
+                        version,
+                        keep_id = FALSE,
+                        temp_env) {
+  if (basket_select$scope == "NARROW") {
+    end <- 1
+  } else {
+    end <- 2
+  }
+
+  if (is.null(basket_select$name)) {
+    basket_select$name <- paste("SMQ name of", basket_select$id)
+  }
+  terms <- tibble(TERMCHAR = paste(basket_select$name, "Term", c(1:end)))
+  terms <- mutate(terms,
+    SRCVAR = "AEDECOD",
+    GRPNAME = basket_select$name,
+    TEST1_VAR = basket_select$TEST1_VAR,
+    TEST2_VAR = basket_select$TEST2_VAR
+  )
+  if (keep_id) {
+    mutate(terms, GRPID = 42)
+  } else {
+    terms
+  }
+}
+
+
+## Test 21: basket_select customized query defined by SMQs extra arguments ----
+test_that("basket_select Test 21: basket_select customized query defined by SMQs extra arguments", {
+  cq <- query(
+    prefix = "CQ02",
+    name = "Immune-Mediated Meningoencephalitis",
+    definition = list(
+      basket_select(
+        name = "Noninfectious meningitis",
+        scope = "NARROW",
+        type = "smq",
+        TEST1_VAR = "CHECK 1",
+        TEST2_VAR = "CHECK 3"
+      ),
+      basket_select(
+        name = "Noninfectious encephalitis",
+        scope = "BROAD",
+        type = "smq",
+        TEST1_VAR = "CHECK 2",
+        TEST2_VAR = "CHECK 4"
+      )
+    )
+  )
+
+  actual_output <- create_query_data(
+    queries = list(cq),
+    version = "20.0",
+    get_terms_fun = get_smq_oth
+  )
+
+  expected_output <-
+    tribble(
+      ~TERMCHAR,                           ~TEST1_VAR, ~TEST2_VAR,
+      "Noninfectious meningitis Term 1",    "CHECK 1",  "CHECK 3",
+      "Noninfectious encephalitis Term 1",  "CHECK 2",  "CHECK 4",
+      "Noninfectious encephalitis Term 2",  "CHECK 2",  "CHECK 4",
+    ) %>%
+    mutate(
+      SRCVAR = "AEDECOD",
+      GRPNAME = "Immune-Mediated Meningoencephalitis",
+      PREFIX = "CQ02",
+      VERSION = "20.0"
+    )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("PREFIX", "TERMCHAR")
+  )
+})
+
 # format.basket_select ----
-## Test 21: formatting is correct (id specified) ----
-test_that("format.basket_select Test 21: formatting is correct (id specified)", {
+## Test 22: formatting is correct (id specified) ----
+test_that("format.basket_select Test 22: formatting is correct (id specified)", {
   expect_equal(
     format(basket_select(
       id = 42,
       scope = "NARROW",
-      type = "smq"
+      type = "smq",
+      newvar = 1
     )),
-    "basket_select(name = NULL, id = 42, scope = \"NARROW\", type = \"smq\")"
+    "basket_select(name = NULL, id = 42, scope = \"NARROW\", type = \"smq\", newvar = 1)"
   )
 })
 
-## Test 22: formatting is correct (name specified) ----
-test_that("format.basket_select Test 22: formatting is correct (name specified)", {
+## Test 23: formatting is correct (name specified) ----
+test_that("format.basket_select Test 23: formatting is correct (name specified)", {
   expect_equal(
     format(basket_select(name = "My SDG", type = "sdg", scope = NA_character_)),
     "basket_select(name = \"My SDG\", id = NULL, scope = \"NA\", type = \"sdg\")"

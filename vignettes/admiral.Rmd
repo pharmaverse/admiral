@@ -309,7 +309,7 @@ list_all_templates()
 # Support
 
 Support is provided via the [admiral Slack
-channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269). Additionally,
+channel](https://pharmaverse.slack.com/). Additionally,
 please feel free to raise issues in our [GitHub repository](https://github.com/pharmaverse/admiral/issues).
 
 # See also

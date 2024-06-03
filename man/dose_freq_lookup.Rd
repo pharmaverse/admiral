@@ -46,7 +46,8 @@ To see the entire table in the console, run \code{print(dose_freq_lookup)}.
 Other metadata: 
 \code{\link{atoxgr_criteria_ctcv4}},
 \code{\link{atoxgr_criteria_ctcv5}},
-\code{\link{atoxgr_criteria_daids}}
+\code{\link{atoxgr_criteria_daids}},
+\code{\link{country_code_lookup}}
 }
 \concept{metadata}
 \keyword{metadata}

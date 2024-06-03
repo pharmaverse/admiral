@@ -98,9 +98,10 @@ advs <- advs %>%
     by_vars = exprs(VSTESTCD)
   ) %>%
   ## Calculate AVAL and AVALC ----
+  # AVALC should only be mapped if it contains non-redundant information.
   mutate(
-    AVAL = VSSTRESN,
-    AVALC = VSSTRESC
+    # AVALC = VSSTRESC,
+    AVAL = VSSTRESN
   ) %>%
   ## Derive new parameters based on existing records ----
   # Note that, for the following three `derive_param_*()` functions, only the
@@ -214,11 +215,12 @@ advs <- advs %>%
     new_var = BASE
   ) %>%
   # Calculate BASEC
-  derive_var_base(
-    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
-    source_var = AVALC,
-    new_var = BASEC
-  ) %>%
+  # only if AVALC is mapped
+  # derive_var_base(
+  #   by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
+  #   source_var = AVALC,
+  #   new_var = BASEC
+  # ) %>%
   # Calculate BNRIND
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
