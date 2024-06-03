@@ -42,7 +42,7 @@ applied to the input dataset.
 \value{
 A dataset with one observation per by group. It contains the
 variables specified for \code{by_vars} and all variables of the form
-\verb{<variable>.<parameter>} occurring in \code{analysis_value}.
+\verb{<variable>.<parameter>} occurring in \code{set_values_to}.
 }
 \description{
 The function creates temporary parameters and variables of the form

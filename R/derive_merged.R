@@ -146,6 +146,16 @@
 #'   )
 #'   ```
 #'
+#' @param relationship Expected merge-relationship between the `by_vars`
+#'   variable(s) in `dataset` (input dataset) and the `dataset_add` (additional dataset)
+#'    containing the additional `new_vars`.
+#'
+#'   This argument is passed to the `dplyr::left_join()` function. See
+#'   <https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments> for
+#'   more details.
+#'
+#'   **Permitted Values:** `"one-to-one"`, `"many-to-one"`, `NULL`.
+#'
 #' @return The output dataset contains all observations and variables of the
 #'   input dataset and additionally the variables specified for `new_vars` from
 #'   the additional dataset (`dataset_add`).
@@ -317,7 +327,8 @@ derive_vars_merged <- function(dataset,
                                false_value = NA_character_,
                                missing_values = NULL,
                                check_type = "warning",
-                               duplicate_msg = NULL) {
+                               duplicate_msg = NULL,
+                               relationship = NULL) {
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   assert_vars(by_vars)
   by_vars_left <- replace_values_by_names(by_vars)
@@ -357,6 +368,13 @@ derive_vars_merged <- function(dataset,
       ))
     }
   }
+  relationship <- assert_character_scalar(
+    relationship,
+    values = c("one-to-one", "many-to-one"),
+    case_sensitive = TRUE,
+    optional = TRUE
+  )
+
 
   add_data <- dataset_add %>%
     mutate(!!!new_vars) %>%
@@ -412,7 +430,49 @@ derive_vars_merged <- function(dataset,
       )
     )
   }
-  dataset <- left_join(dataset, add_data, by = vars2chr(by_vars))
+
+  tryCatch(
+    dataset <- left_join(
+      dataset,
+      add_data,
+      by = vars2chr(by_vars),
+      relationship = relationship
+    ),
+    "dplyr_error_join_relationship_one_to_one" = function(cnd) {
+      cli_abort(
+        message = c(
+          str_replace(
+            str_replace(
+              cnd$message, "`x`", "`dataset`"
+            ), "`y`", "`dataset_add`"
+          ),
+          i = str_replace(
+            str_replace(
+              cnd$body, "`x`", "`dataset`"
+            ), "`y`", "`dataset_add`"
+          )
+        ),
+        call = parent.frame(n = 4)
+      )
+    },
+    "dplyr_error_join_relationship_many_to_one" = function(cnd) {
+      cli_abort(
+        message = c(
+          str_replace(
+            str_replace(
+              cnd$message, "`x`", "`dataset`"
+            ), "`y`", "`dataset_add`"
+          ),
+          i = str_replace(
+            str_replace(
+              cnd$body, "`x`", "`dataset`"
+            ), "`y`", "`dataset_add`"
+          )
+        ),
+        call = parent.frame(n = 4)
+      )
+    }
+  )
 
   if (!is.null(match_flag_var)) {
     update_missings <- map2(
@@ -433,6 +493,7 @@ derive_vars_merged <- function(dataset,
   dataset %>%
     remove_tmp_vars()
 }
+
 
 #' Merge an Existence Flag
 #'
@@ -572,13 +633,14 @@ derive_var_merged_exist_flag <- function(dataset,
                                          false_value = NA_character_,
                                          missing_value = NA_character_,
                                          filter_add = NULL) {
-  new_var <- assert_symbol(enexpr(new_var))
   condition <- assert_filter_cond(enexpr(condition))
-  filter_add <-
-    assert_filter_cond(enexpr(filter_add), optional = TRUE)
-
-  add_data <- filter_if(dataset_add, filter_add) %>%
-    mutate(!!new_var := if_else(!!condition, 1, 0, 0))
+  new_var <- assert_symbol(enexpr(new_var))
+  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  add_data <- get_flagged_records(dataset_add,
+    new_var = !!new_var,
+    condition = !!condition,
+    !!filter_add
+  )
 
   derive_vars_merged(
     dataset,

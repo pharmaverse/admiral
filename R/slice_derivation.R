@@ -121,15 +121,29 @@ slice_derivation <- function(dataset,
     # remove global arguments which were specified by the slice
     act_args <- args[names(args) %notin% names(slices[[i]]$args)]
 
-    call <- as.call(c(substitute(derivation), c(quote(data), act_args, slices[[i]]$args)))
+    call <- call2(derivation, expr(data), !!!act_args, !!!slices[[i]]$args)
     obsnr <- which(dataset_split$temp_slicenr == i)
     if (length(obsnr) > 0) {
       # call the derivation for non-empty slices only
+      # create environment in which the call to the derivation is evaluated
+      act_env <- attr(args, "env")
+      slice_env <- attr(slices[[i]]$args, "env")
+      if (!identical(act_env, slice_env)) {
+        # prefer objects in the slice environment to object in args environment
+        # Note: objects in any of the parent environments of the slice environment are ignored.
+        eval_env <- new_environment(
+          data = c(list(data = dataset_split$data[[obsnr]]), as.list(slice_env)),
+          parent = act_env
+        )
+      } else {
+        eval_env <- new_environment(
+          data = list(data = dataset_split$data[[obsnr]]),
+          parent = act_env
+        )
+      }
+
       dataset_split$data[[obsnr]] <-
-        eval(call, envir = list(
-          data = dataset_split$data[[obsnr]],
-          enclos = parent.frame()
-        ))
+        eval_tidy(call, env = eval_env)
     }
   }
 
