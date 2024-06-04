@@ -218,7 +218,7 @@ advs <- advs %>%
 
   # only if AVALC is mapped
   # derive_var_base(
-  #   by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
+  #   by_vars = exprs(get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
   #   source_var = AVALC,
   #   new_var = BASEC
   # ) %>%

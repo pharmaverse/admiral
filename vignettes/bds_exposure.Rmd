@@ -364,7 +364,7 @@ For example, to calculate the total dose by subject and treatment,
 adex <- derive_param_exposure(
   adex,
   dataset_add = adex,
-  by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars)),
+  by_vars = c(get_admiral_option("subject_keys"), adsl_vars),
   input_code = "DOSE",
   set_values_to = exprs(
     PARAMCD = "TDOSE",
@@ -447,7 +447,7 @@ adex <- adex %>%
       )
     ),
     dataset_add = adex,
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars))
+    by_vars = c(get_admiral_option("subject_keys"), adsl_vars)
   )
 
 count(adex, PARAMCD, PARCAT1)
@@ -473,7 +473,7 @@ specified in the `by_vars` argument will be populated in this new record.
 ```{r eval=TRUE, echo=TRUE}
 adex <- adex %>%
   derive_param_doseint(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars)),
+    by_vars = c(get_admiral_option("subject_keys"), adsl_vars),
     set_values_to = exprs(PARAMCD = "TNDOSINT"),
     tadm_code = "TDOSE",
     tpadm_code = "TPDOSE"

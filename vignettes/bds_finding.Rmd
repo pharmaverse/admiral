@@ -243,9 +243,9 @@ advs <- derive_vars_merged_lookup(
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-advs_param <- distinct(advs, USUBJID, PARAMCD, VSTESTCD)
+advs_param <- distinct(advs, STUDYID, USUBJID, PARAMCD, VSTESTCD)
 
-dataset_vignette(advs_param, display_vars = exprs(!!get_admiral_option("subject_keys")[[2]], VSTESTCD, PARAMCD))
+dataset_vignette(advs_param, display_vars = c(get_admiral_option("subject_keys"), exprs(VSTESTCD, PARAMCD)))
 ```
 
 Please note, it may be necessary to include other variables in the join. For
@@ -460,7 +460,7 @@ advs <- derive_var_ontrtfl(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD, ADT, TRTSDT, TRTEDT, ONTRTFL),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ADT, TRTSDT, TRTEDT, ONTRTFL)),
   filter = PARAMCD == "DIABP" & VISIT == "WEEK 2"
 )
 ```
@@ -515,10 +515,10 @@ and `ref_end_date = AP01EDT`.
 advs_pre <- select(advs, -ONTRTFL)
 
 advs <- tibble::tribble(
-  ~USUBJID, ~ASTDT, ~AP01SDT, ~AP01EDT, ~AENDT,
-  "P01", ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
-  "P02", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
-  "P03", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
+  ~STUDYID, ~USUBJID, ~ASTDT, ~AP01SDT, ~AP01EDT, ~AENDT,
+  "odr_1", "P01", ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
+  "odr_1", "P02", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
+  "odr_1", "P03", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
 )
 ```
 
@@ -533,10 +533,11 @@ advs <- derive_var_ontrtfl(
   span_period = TRUE
 )
 ```
+
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = exprs(!!get_admiral_option("subject_keys")[[2]], ASTDT, AENDT, AP01SDT, AP01EDT, ONTR01FL)
+  display_vars = c(get_admiral_option("subject_keys"), exprs(ASTDT, AENDT, AP01SDT, AP01EDT, ONTR01FL))
 )
 ```
 
@@ -574,7 +575,7 @@ advs <- derive_var_anrind(advs)
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD, AVAL, ANRLO, ANRHI, A1LO, A1HI, ANRIND),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, AVAL, ANRLO, ANRHI, A1LO, A1HI, ANRIND)),
   filter = PARAMCD == "DIABP" & VISIT == "WEEK 2"
 )
 ```
@@ -841,7 +842,7 @@ advs <- derive_var_obs_number(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD, ADT, AVISITN, ATPTN, VISIT, ADT, ASEQ),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ADT, AVISITN, ATPTN, VISIT, ADT, ASEQ)),
   filter = USUBJID == "01-701-1015"
 )
 ```
@@ -877,7 +878,7 @@ advs <- advs %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD, AVAL, AVALCA1N, AVALCAT1),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, AVAL, AVALCA1N, AVALCAT1)),
   filter = PARAMCD == "HEIGHT"
 )
 ```
@@ -897,7 +898,7 @@ advs <- advs %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = exprs(!!get_admiral_option("subject_keys")[[2]], RFSTDTC, RFENDTC, DTHDTC, DTHFL, AGE, AGEU),
+  display_vars = c(get_admiral_option("subject_keys"),exprs(RFSTDTC, RFENDTC, DTHDTC, DTHFL, AGE, AGEU)),
   filter = USUBJID == "01-701-1015"
 )
 ```
@@ -939,7 +940,7 @@ advs_ex1 <- advs %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   arrange(advs_ex1, USUBJID, PARAMCD, desc(AVISITN), ATPTN),
-  display_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD, ADT, AVISITN, AVISIT, ATPTN, AVAL, DTYPE, ANL01FL),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ADT, AVISITN, AVISIT, ATPTN, AVAL, DTYPE, ANL01FL)),
   filter = USUBJID == "01-701-1015" & ANL01FL == "Y"
 )
 ```
@@ -969,7 +970,7 @@ advs_ex1 <- advs %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   arrange(advs_ex1, USUBJID, PARAMCD, desc(AVISITN), ATPTN),
-  display_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD, ADT, AVISITN, AVISIT, ATPTN, AVAL, DTYPE, ANL01FL),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ADT, AVISITN, AVISIT, ATPTN, AVAL, DTYPE, ANL01FL)),
   filter = USUBJID == "01-701-1015" & ANL01FL == "Y"
 )
 ```

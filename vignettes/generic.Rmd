@@ -201,25 +201,25 @@ specified by the `filter_add` or `filter` argument. In the following example
 baseline weight is added to `ADSL`.
 ```{r}
 adsl <- tribble(
-  ~USUBJID,
-  "1",
-  "2",
-  "3"
+  ~STUDYID, ~USUBJID,
+    "xyz",    "1",
+    "xyz",    "2",
+    "xyz",    "3"
 )
 
 advs <- tribble(
-  ~USUBJID, ~PARAMCD, ~AVISIT,    ~ABLFL, ~AVAL, ~AVALU,
-  "1",      "WEIGHT", "BASELINE", "Y",     58.7, "kg",
-  "1",      "HEIGHT", "BASELINE", "Y",    169.2, "cm",
-  "1",      "WEIGHT", "WEEK 3",   NA,      59.3, "kg",
-  "2",      "WEIGHT", "BASELINE", "Y",     72.5, "kg",
-  "2",      "WEIGHT", "WEKK 3",   NA,      71.9, "kg",
+~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~ABLFL, ~AVAL, ~AVALU,
+  "xyz"     ,"1",      "WEIGHT", "BASELINE", "Y",     58.7, "kg",
+  "xyz",     "1",      "HEIGHT", "BASELINE", "Y",    169.2, "cm",
+  "xyz",    "1",      "WEIGHT", "WEEK 3",   NA,      59.3, "kg",
+  "xyz",    "2",      "WEIGHT", "BASELINE", "Y",     72.5, "kg",
+  "xyz",    "2",      "WEIGHT", "WEKK 3",   NA,      71.9, "kg",
 )
 
 derive_vars_merged(
   adsl,
   dataset_add = advs,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]]),
+  by_vars = get_admiral_option("subject_keys"),
   filter_add = PARAMCD == "WEIGHT" & ABLFL == "Y",
   new_vars = exprs(WGTBL = AVAL)
 )
@@ -233,25 +233,25 @@ Below the day of the last valid dose is added to `ADSL`.
 
 ```{r}
 adsl <- tribble(
-  ~USUBJID,
-  "1",
-  "2",
-  "3"
+  ~STUDYID, ~USUBJID,
+    "xyz",    "1",
+    "xyz",    "2",
+    "xyz",    "3"
 )
 
 ex <- tribble(
-  ~USUBJID, ~EXSTDY, ~EXDOSE,
-  "1",            1,      50,
-  "1",            7,      70,
-  "1",           14,       0,
-  "2",            1,      75,
-  "2",            9,      70
-)
+  ~STUDYID, ~USUBJID, ~EXSTDY, ~EXDOSE,
+    "xyz",     "1",        1,      50,
+    "xyz",     "1",        7,      70,
+    "xyz",     "1",       14,       0,
+    "xyz",     "2",        1,      75,
+    "xyz",     "2",        9,      70
+        )
 
 derive_vars_merged(
   adsl,
   dataset_add = ex,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]]),
+  by_vars = get_admiral_option("subject_keys"),
   filter_add = EXDOSE > 0,
   order = exprs(EXSTDY),
   mode = "last",
@@ -269,25 +269,25 @@ dose of the last study treatment before an adverse event:
 
 ```{r}
 adae <- tribble(
-  ~USUBJID, ~ASTDY, ~AESEQ,
-  "1",           3,      1,
-  "1",           3,      2,
-  "1",          15,      3
+~STUDYID,  ~USUBJID, ~ASTDY, ~AESEQ,
+  "xyz",      "1",           3,      1,
+  "xyz",      "1",           3,      2,
+  "xyz",      "1",          15,      3
 )
 
 ex <- tribble(
-  ~USUBJID, ~EXSTDY, ~EXDOSE,
-  "1",            1,      50,
-  "1",            7,      70,
-  "1",           14,       0,
-  "2",            1,      75,
-  "2",            9,      70
+~STUDYID, ~USUBJID, ~EXSTDY, ~EXDOSE,
+  "xyz",    "1",       1,      50,
+  "xyz",    "1",      7,       70,
+  "xyz",    "1",      14,       0,
+  "xyz",    "2",      1,       75,
+  "xyz",    "2",      9,       70
 )
 
 derive_vars_joined(
   adae,
   dataset_add = ex,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]]),
+  by_vars = get_admiral_option("subject_keys"),
   filter_add = EXDOSE > 0,
   filter_join = EXSTDY <= ASTDY,
   join_type = "all",
@@ -302,7 +302,7 @@ The `filter_join` condition is applied on a temporary dataset created by left jo
 admiral:::get_joined_data(
   adae,
   dataset_add = ex,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]]),
+  by_vars = get_admiral_option("subject_keys"),
   filter_add = EXDOSE > 0,
   join_vars = exprs(EXDOSE),
   join_type = "all",
@@ -318,23 +318,23 @@ where `"HIGH"` results should be flagged which are confirmed by a second
 `"HIGH"` result at least ten days later.
 ```{r}
 adlb <- tribble(
-  ~USUBJID, ~PARAMCD, ~ADY, ~ANRIND,
-  "1",      "AST",       1, "HIGH",
-  "1",      "AST",       7, "HIGH",
-  "1",      "AST",      14, "NORMAL",
-  "1",      "ALT",       1, "HIGH",
-  "1",      "ALT",       7, "NORMAL",
-  "1",      "ALT",      14, "HIGH",
-  "2",      "AST",       1, "HIGH",
-  "2",      "AST",      15, "HIGH",
-  "2",      "AST",      22, "NORMAL",
-  "2",      "ALT",       1, "HIGH"
+  ~STUDYID, ~USUBJID, ~PARAMCD, ~ADY, ~ANRIND,
+    "xyz",    "1",      "AST",       1, "HIGH",
+    "xyz",    "1",      "AST",       7, "HIGH",
+    "xyz",    "1",      "AST",      14, "NORMAL",
+    "xyz",    "1",      "ALT",       1, "HIGH",
+    "xyz",    "1",      "ALT",       7, "NORMAL",
+    "xyz",    "1",      "ALT",      14, "HIGH",
+    "xyz",    "2",      "AST",       1, "HIGH",
+    "xyz",    "2",      "AST",      15, "HIGH",
+    "xyz",    "2",      "AST",      22, "NORMAL",
+    "xyz",    "2",      "ALT",       1, "HIGH"
 )
 
 derive_var_joined_exist_flag(
   adlb,
   dataset_add = adlb,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
   order = exprs(ADY),
   join_vars = exprs(ADY, ANRIND),
   join_type = "after",
@@ -353,7 +353,7 @@ So the temporary dataset for applying `filter_join` is:
 admiral:::get_joined_data(
   adlb,
   dataset_add = adlb,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
   order = exprs(ADY),
   join_vars = exprs(ADY, ANRIND),
   join_type = "after"
@@ -368,7 +368,7 @@ set it to the condition for confirmation.
 derive_var_joined_exist_flag(
   adlb,
   dataset_add = adlb,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
   order = exprs(ADY),
   join_vars = exprs(ADY, ANRIND),
   join_type = "after",
@@ -383,7 +383,7 @@ dataset are restricted up to the first records where the condition is fulfilled:
 admiral:::get_joined_data(
   adlb,
   dataset_add = adlb,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
   order = exprs(ADY),
   join_vars = exprs(ADY, ANRIND),
   join_type = "after",
@@ -410,16 +410,16 @@ Consider for example the following derivation of a last visit flag. The record
 with `AVISITN == NA` is flagged because `NA` is sorted to the end.
 ```{r}
 advs <- tribble(
-  ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL,
-  "1",      "WEIGHT",       NA,  62.1,
-  "1",      "WEIGHT",        1,  62.3,
-  "1",      "WEIGHT",        2,  62.5,
-  "1",      "WEIGHT",        3,  62.4
+ ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL,
+  "xyz",      "1",    "WEIGHT",   NA,     62.1,
+  "xyz",      "1",    "WEIGHT",    1,     62.3,
+  "xyz",      "1",    "WEIGHT",    2,     62.5,
+  "xyz",      "1",    "WEIGHT",    3,     62.4
 )
 
 derive_var_extreme_flag(
   advs,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
   order = exprs(AVISITN),
   mode = "last",
   new_var = LSTVISFL
@@ -431,7 +431,7 @@ the `AVISITN == 3` record is flagged.
 ```{r}
 derive_var_extreme_flag(
   advs,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
   order = exprs(if_else(is.na(AVISITN), -Inf, AVISITN)),
   mode = "last",
   new_var = LSTVISFL
@@ -442,7 +442,7 @@ variables.
 ```{r}
 derive_var_extreme_flag(
   advs,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], PARAMCD),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
   order = exprs(!is.na(AVISITN), AVISITN),
   mode = "last",
   new_var = LSTVISFL
@@ -473,19 +473,19 @@ concatenation, ..., the functions `derive_summary_records()` or
 parameter to `ADEX` can be done by the following:
 ```{r}
 adex <- tribble(
-  ~USUBJID, ~ASTDY, ~AVAL, ~PARAMCD,
-  "1",           1,    50, "DOSE",
-  "1",           7,    70, "DOSE",
-  "1",          14,     0, "DOSE",
-  "2",           1,    75, "DOSE",
-  "2",           9,    70, "DOSE"
+ ~STUDYID, ~USUBJID, ~ASTDY, ~AVAL, ~PARAMCD,
+  "xyz",     "1",       1,    50,    "DOSE",
+  "xyz",     "1",       7,    70,    "DOSE",
+  "xyz",     "1",       14,     0,   "DOSE",
+  "xyz",     "2",       1,    75,    "DOSE",
+  "xyz",     "2",       9,    70,    "DOSE"
 )
 
 derive_summary_records(
   adex,
   dataset_add = adex,
   filter_add = AVAL > 0,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]]),
+  by_vars = get_admiral_option("subject_keys"),
   set_values_to = exprs(
     AVAL = mean(AVAL),
     PARAMCD = "AVERAGE DOSE"
@@ -500,17 +500,17 @@ If the average dose should be added as a variable to `ADSL`, consider the
 following:
 ```{r}
 adsl <- tribble(
-  ~USUBJID,
-  "1",
-  "2",
-  "3"
+ ~STUDYID, ~USUBJID,
+  "xyz",      "1",
+  "xyz",      "2",
+  "xyz",      "3"
 )
 
 derive_var_merged_summary(
   adsl,
   dataset_add = adex,
   filter_add = AVAL > 0,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]]),
+  by_vars = get_admiral_option("subject_keys"),
   new_vars = exprs(
     AVERDOSE = mean(AVAL)
   ),
@@ -526,20 +526,20 @@ the value of the new variable can be defined by the `missing_values` argument.
 If the new values should be computed from different parameters of the source dataset,  `derive_param_computed()` can be used. The computed value can be specified by the `set_values_to` argument. The values of the source variable for a parameter can be referred to by temporary variables of the form `<variable name>.<parameter name>`.
 ```{r}
 advs <- tribble(
-  ~USUBJID, ~AVISIT,    ~PARAMCD, ~AVAL, ~AVALU,
-  "1",      "BASELINE", "WEIGHT",  32.6, "kg",
-  "1",      "BASELINE", "HEIGHT", 155.4, "cm",
-  "1",      "MONTH 6",  "WEIGHT",  33.2, "kg",
-  "1",      "MONTH 6",  "HEIGHT", 155.8, "cm",
-  "2",      "BASELINE", "WEIGHT",  44.2, "kg",
-  "2",      "BASELINE", "HEIGHT", 145.3, "cm",
-  "2",      "MONTH 6",  "WEIGHT",  42.0, "kg",
-  "2",      "MONTH 6",  "HEIGHT", 146.4, "cm"
+  ~STUDYID, ~USUBJID, ~AVISIT,    ~PARAMCD, ~AVAL, ~AVALU,
+  "xyz",       "1",  "BASELINE", "WEIGHT",  32.6, "kg",
+  "xyz",       "1",  "BASELINE", "HEIGHT", 155.4, "cm",
+  "xyz",       "1",  "MONTH 6",  "WEIGHT",  33.2, "kg",
+  "xyz",       "1",  "MONTH 6",  "HEIGHT", 155.8, "cm",
+  "xyz",       "2",  "BASELINE", "WEIGHT",  44.2, "kg",
+  "xyz",       "2",  "BASELINE", "HEIGHT", 145.3, "cm",
+  "xyz",       "2",  "MONTH 6",  "WEIGHT",  42.0, "kg",
+  "xyz",       "2",  "MONTH 6",  "HEIGHT", 146.4, "cm"
 )
 
 derive_param_computed(
   advs,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], AVISIT),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(AVISIT)),
   parameters = c("WEIGHT", "HEIGHT"),
   set_values_to = exprs(
     AVAL = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
@@ -555,7 +555,7 @@ example `compute_bmi()` could be used instead of the formula for BMI:
 ```{r}
 derive_param_computed(
   advs,
-  by_vars = exprs(!!get_admiral_option("subject_keys")[[2]], AVISIT),
+  by_vars = c(get_admiral_option("subject_keys"), exprs(AVISIT)),
   parameters = c("WEIGHT", "HEIGHT"),
   set_values_to = exprs(
     AVAL = compute_bmi(weight = AVAL.WEIGHT, height = AVAL.HEIGHT),
