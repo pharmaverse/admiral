@@ -522,12 +522,12 @@ For example, there can be multiple records present in `ADCM` for a single subjec
 
 ``` {r eval=TRUE, echo=TRUE}
 adcm <- tibble::tribble(
- ~STUDYID,  ~USUBJID,       ~ASTDTM,          ~CMSEQ, ~CMDECOD,         ~ATC1CD, ~ATC2CD, ~ATC3CD, ~ATC4CD,
-  "xyz112",  "BP40257-1001", "2013-07-05 UTC", "14",   "PARACETAMOL",    "N",     "N02",   "N02B",  "N02BE",
-  "xyz112", "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "D",     "D10",   "D10A",  "D10AA",
-  "xyz112", "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "D",     "D07",   "D07A",  "D07AA",
-  "xyz112", "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "H",     "H02",   "H02A",  "H02AB",
-  "xyz112", "BP40257-1002", "2012-12-15 UTC", "19",   "SPIRONOLACTONE", "C",     "C03",   "C03D",  "C03DA"
+  ~STUDYID, ~USUBJID, ~ASTDTM, ~CMSEQ, ~CMDECOD, ~ATC1CD, ~ATC2CD, ~ATC3CD, ~ATC4CD,
+  "xyz112", "BP40257-1001", "2013-07-05 UTC", "14", "PARACETAMOL", "N", "N02", "N02B", "N02BE",
+  "xyz112", "BP40257-1001", "2013-08-15 UTC", "18", "SOLUMEDROL", "D", "D10", "D10A", "D10AA",
+  "xyz112", "BP40257-1001", "2013-08-15 UTC", "18", "SOLUMEDROL", "D", "D07", "D07A", "D07AA",
+  "xyz112", "BP40257-1001", "2013-08-15 UTC", "18", "SOLUMEDROL", "H", "H02", "H02A", "H02AB",
+  "xyz112", "BP40257-1002", "2012-12-15 UTC", "19", "SPIRONOLACTONE", "C", "C03", "C03D", "C03DA"
 )
 
 adcm_aseq <- adcm %>%

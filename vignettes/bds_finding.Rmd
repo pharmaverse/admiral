@@ -898,7 +898,7 @@ advs <- advs %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = c(get_admiral_option("subject_keys"),exprs(RFSTDTC, RFENDTC, DTHDTC, DTHFL, AGE, AGEU)),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(RFSTDTC, RFENDTC, DTHDTC, DTHFL, AGE, AGEU)),
   filter = USUBJID == "01-701-1015"
 )
 ```

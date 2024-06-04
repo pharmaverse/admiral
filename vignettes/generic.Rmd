@@ -202,18 +202,18 @@ baseline weight is added to `ADSL`.
 ```{r}
 adsl <- tribble(
   ~STUDYID, ~USUBJID,
-    "xyz",    "1",
-    "xyz",    "2",
-    "xyz",    "3"
+  "xyz", "1",
+  "xyz", "2",
+  "xyz", "3"
 )
 
 advs <- tribble(
-~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~ABLFL, ~AVAL, ~AVALU,
-  "xyz"     ,"1",      "WEIGHT", "BASELINE", "Y",     58.7, "kg",
-  "xyz",     "1",      "HEIGHT", "BASELINE", "Y",    169.2, "cm",
-  "xyz",    "1",      "WEIGHT", "WEEK 3",   NA,      59.3, "kg",
-  "xyz",    "2",      "WEIGHT", "BASELINE", "Y",     72.5, "kg",
-  "xyz",    "2",      "WEIGHT", "WEKK 3",   NA,      71.9, "kg",
+  ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT, ~ABLFL, ~AVAL, ~AVALU,
+  "xyz", "1", "WEIGHT", "BASELINE", "Y", 58.7, "kg",
+  "xyz", "1", "HEIGHT", "BASELINE", "Y", 169.2, "cm",
+  "xyz", "1", "WEIGHT", "WEEK 3", NA, 59.3, "kg",
+  "xyz", "2", "WEIGHT", "BASELINE", "Y", 72.5, "kg",
+  "xyz", "2", "WEIGHT", "WEKK 3", NA, 71.9, "kg",
 )
 
 derive_vars_merged(
@@ -234,19 +234,19 @@ Below the day of the last valid dose is added to `ADSL`.
 ```{r}
 adsl <- tribble(
   ~STUDYID, ~USUBJID,
-    "xyz",    "1",
-    "xyz",    "2",
-    "xyz",    "3"
+  "xyz", "1",
+  "xyz", "2",
+  "xyz", "3"
 )
 
 ex <- tribble(
   ~STUDYID, ~USUBJID, ~EXSTDY, ~EXDOSE,
-    "xyz",     "1",        1,      50,
-    "xyz",     "1",        7,      70,
-    "xyz",     "1",       14,       0,
-    "xyz",     "2",        1,      75,
-    "xyz",     "2",        9,      70
-        )
+  "xyz", "1", 1, 50,
+  "xyz", "1", 7, 70,
+  "xyz", "1", 14, 0,
+  "xyz", "2", 1, 75,
+  "xyz", "2", 9, 70
+)
 
 derive_vars_merged(
   adsl,
@@ -269,19 +269,19 @@ dose of the last study treatment before an adverse event:
 
 ```{r}
 adae <- tribble(
-~STUDYID,  ~USUBJID, ~ASTDY, ~AESEQ,
-  "xyz",      "1",           3,      1,
-  "xyz",      "1",           3,      2,
-  "xyz",      "1",          15,      3
+  ~STUDYID, ~USUBJID, ~ASTDY, ~AESEQ,
+  "xyz", "1", 3, 1,
+  "xyz", "1", 3, 2,
+  "xyz", "1", 15, 3
 )
 
 ex <- tribble(
-~STUDYID, ~USUBJID, ~EXSTDY, ~EXDOSE,
-  "xyz",    "1",       1,      50,
-  "xyz",    "1",      7,       70,
-  "xyz",    "1",      14,       0,
-  "xyz",    "2",      1,       75,
-  "xyz",    "2",      9,       70
+  ~STUDYID, ~USUBJID, ~EXSTDY, ~EXDOSE,
+  "xyz", "1", 1, 50,
+  "xyz", "1", 7, 70,
+  "xyz", "1", 14, 0,
+  "xyz", "2", 1, 75,
+  "xyz", "2", 9, 70
 )
 
 derive_vars_joined(
@@ -319,16 +319,16 @@ where `"HIGH"` results should be flagged which are confirmed by a second
 ```{r}
 adlb <- tribble(
   ~STUDYID, ~USUBJID, ~PARAMCD, ~ADY, ~ANRIND,
-    "xyz",    "1",      "AST",       1, "HIGH",
-    "xyz",    "1",      "AST",       7, "HIGH",
-    "xyz",    "1",      "AST",      14, "NORMAL",
-    "xyz",    "1",      "ALT",       1, "HIGH",
-    "xyz",    "1",      "ALT",       7, "NORMAL",
-    "xyz",    "1",      "ALT",      14, "HIGH",
-    "xyz",    "2",      "AST",       1, "HIGH",
-    "xyz",    "2",      "AST",      15, "HIGH",
-    "xyz",    "2",      "AST",      22, "NORMAL",
-    "xyz",    "2",      "ALT",       1, "HIGH"
+  "xyz", "1", "AST", 1, "HIGH",
+  "xyz", "1", "AST", 7, "HIGH",
+  "xyz", "1", "AST", 14, "NORMAL",
+  "xyz", "1", "ALT", 1, "HIGH",
+  "xyz", "1", "ALT", 7, "NORMAL",
+  "xyz", "1", "ALT", 14, "HIGH",
+  "xyz", "2", "AST", 1, "HIGH",
+  "xyz", "2", "AST", 15, "HIGH",
+  "xyz", "2", "AST", 22, "NORMAL",
+  "xyz", "2", "ALT", 1, "HIGH"
 )
 
 derive_var_joined_exist_flag(
@@ -410,11 +410,11 @@ Consider for example the following derivation of a last visit flag. The record
 with `AVISITN == NA` is flagged because `NA` is sorted to the end.
 ```{r}
 advs <- tribble(
- ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL,
-  "xyz",      "1",    "WEIGHT",   NA,     62.1,
-  "xyz",      "1",    "WEIGHT",    1,     62.3,
-  "xyz",      "1",    "WEIGHT",    2,     62.5,
-  "xyz",      "1",    "WEIGHT",    3,     62.4
+  ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL,
+  "xyz", "1", "WEIGHT", NA, 62.1,
+  "xyz", "1", "WEIGHT", 1, 62.3,
+  "xyz", "1", "WEIGHT", 2, 62.5,
+  "xyz", "1", "WEIGHT", 3, 62.4
 )
 
 derive_var_extreme_flag(
@@ -473,12 +473,12 @@ concatenation, ..., the functions `derive_summary_records()` or
 parameter to `ADEX` can be done by the following:
 ```{r}
 adex <- tribble(
- ~STUDYID, ~USUBJID, ~ASTDY, ~AVAL, ~PARAMCD,
-  "xyz",     "1",       1,    50,    "DOSE",
-  "xyz",     "1",       7,    70,    "DOSE",
-  "xyz",     "1",       14,     0,   "DOSE",
-  "xyz",     "2",       1,    75,    "DOSE",
-  "xyz",     "2",       9,    70,    "DOSE"
+  ~STUDYID, ~USUBJID, ~ASTDY, ~AVAL, ~PARAMCD,
+  "xyz", "1", 1, 50, "DOSE",
+  "xyz", "1", 7, 70, "DOSE",
+  "xyz", "1", 14, 0, "DOSE",
+  "xyz", "2", 1, 75, "DOSE",
+  "xyz", "2", 9, 70, "DOSE"
 )
 
 derive_summary_records(
@@ -500,10 +500,10 @@ If the average dose should be added as a variable to `ADSL`, consider the
 following:
 ```{r}
 adsl <- tribble(
- ~STUDYID, ~USUBJID,
-  "xyz",      "1",
-  "xyz",      "2",
-  "xyz",      "3"
+  ~STUDYID, ~USUBJID,
+  "xyz", "1",
+  "xyz", "2",
+  "xyz", "3"
 )
 
 derive_var_merged_summary(
@@ -526,15 +526,15 @@ the value of the new variable can be defined by the `missing_values` argument.
 If the new values should be computed from different parameters of the source dataset,  `derive_param_computed()` can be used. The computed value can be specified by the `set_values_to` argument. The values of the source variable for a parameter can be referred to by temporary variables of the form `<variable name>.<parameter name>`.
 ```{r}
 advs <- tribble(
-  ~STUDYID, ~USUBJID, ~AVISIT,    ~PARAMCD, ~AVAL, ~AVALU,
-  "xyz",       "1",  "BASELINE", "WEIGHT",  32.6, "kg",
-  "xyz",       "1",  "BASELINE", "HEIGHT", 155.4, "cm",
-  "xyz",       "1",  "MONTH 6",  "WEIGHT",  33.2, "kg",
-  "xyz",       "1",  "MONTH 6",  "HEIGHT", 155.8, "cm",
-  "xyz",       "2",  "BASELINE", "WEIGHT",  44.2, "kg",
-  "xyz",       "2",  "BASELINE", "HEIGHT", 145.3, "cm",
-  "xyz",       "2",  "MONTH 6",  "WEIGHT",  42.0, "kg",
-  "xyz",       "2",  "MONTH 6",  "HEIGHT", 146.4, "cm"
+  ~STUDYID, ~USUBJID, ~AVISIT, ~PARAMCD, ~AVAL, ~AVALU,
+  "xyz", "1", "BASELINE", "WEIGHT", 32.6, "kg",
+  "xyz", "1", "BASELINE", "HEIGHT", 155.4, "cm",
+  "xyz", "1", "MONTH 6", "WEIGHT", 33.2, "kg",
+  "xyz", "1", "MONTH 6", "HEIGHT", 155.8, "cm",
+  "xyz", "2", "BASELINE", "WEIGHT", 44.2, "kg",
+  "xyz", "2", "BASELINE", "HEIGHT", 145.3, "cm",
+  "xyz", "2", "MONTH 6", "WEIGHT", 42.0, "kg",
+  "xyz", "2", "MONTH 6", "HEIGHT", 146.4, "cm"
 )
 
 derive_param_computed(
