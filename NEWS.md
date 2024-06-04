@@ -12,6 +12,8 @@
 
 ## Updates of Existing Functions
 
+- `group_var` (optional) parameter is added to `derive_var_trtemfl()` to derive `TRTEMFL` for AE data if the data are collected as one episode of AE with multiple lines. (#2302)
+
 - Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (#2392)
 
 - `create_single_dose_dataset()` has been updated to error if the `lookup_table` contains duplicates. (#2247)
