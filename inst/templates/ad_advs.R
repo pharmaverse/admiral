@@ -110,14 +110,14 @@ advs <- advs %>%
 
   # Derive Mean Arterial Pressure
   derive_param_map(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
+    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
     set_values_to = exprs(PARAMCD = "MAP"),
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   ) %>%
   # Derive Body Surface Area
   derive_param_bsa(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
+    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
     method = "Mosteller",
     set_values_to = exprs(PARAMCD = "BSA"),
     get_unit_expr = VSSTRESU,
@@ -126,7 +126,7 @@ advs <- advs %>%
   ) %>%
   # Derive Body Mass Index
   derive_param_bmi(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
+    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
     set_values_to = exprs(PARAMCD = "BMI"),
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT),
@@ -158,7 +158,7 @@ advs <- advs %>%
 advs <- advs %>%
   derive_summary_records(
     dataset_add = advs,
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT, ADY)),
+    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(PARAMCD, AVISITN, AVISIT, ADT, ADY)),
     filter_add = !is.na(AVAL),
     set_values_to = exprs(
       AVAL = mean(AVAL),

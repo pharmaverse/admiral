@@ -226,7 +226,7 @@ adex <- adex %>%
       )
     ),
     by_vars = c(
-      get_admiral_option("subject_keys"), exprs(!!!adsl_vars, PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT)
+      get_admiral_option("subject_keys"), adsl_vars, exprs(PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT)
     )
   ) %>%
   # Overall/W2-24 Average daily dose
@@ -249,7 +249,7 @@ adex <- adex %>%
       )
     ),
     by_vars = c(
-      get_admiral_option("subject_keys"), exprs(!!!adsl_vars, PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT)
+      get_admiral_option("subject_keys"), adsl_vars, exprs(PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT)
     )
   )
 

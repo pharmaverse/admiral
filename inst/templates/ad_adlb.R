@@ -131,7 +131,7 @@ adlb <- adlb %>%
 adlb <- adlb %>%
   # Derive absolute Basophils
   derive_param_wbc_abs(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, DOMAIN, VISIT, VISITNUM, ADT, ADY)),
+    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(DOMAIN, VISIT, VISITNUM, ADT, ADY)),
     set_values_to = exprs(
       PARAMCD = "BASO",
       PARAM = "Basophils Abs (10^9/L)",
@@ -144,7 +144,7 @@ adlb <- adlb %>%
   ) %>%
   # Derive absolute Lymphocytes
   derive_param_wbc_abs(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, DOMAIN, VISIT, VISITNUM, ADT, ADY)),
+    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(DOMAIN, VISIT, VISITNUM, ADT, ADY)),
     set_values_to = exprs(
       PARAMCD = "LYMPH",
       PARAM = "Lymphocytes Abs (10^9/L)",

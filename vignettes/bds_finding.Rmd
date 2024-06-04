@@ -293,7 +293,7 @@ Example 3 in section below [Derive New Rows](#additional) for alternative way of
 ```{r eval=TRUE}
 advs <- derive_param_map(
   advs,
-  by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
+  by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
   set_values_to = exprs(PARAMCD = "MAP"),
   get_unit_expr = VSSTRESU,
   filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
@@ -314,7 +314,7 @@ Likewise, function call below, to create parameter `Body Surface Area` (BSA) and
 ```{r eval=TRUE}
 advs <- derive_param_bsa(
   advs,
-  by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
+  by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
   method = "Mosteller",
   set_values_to = exprs(PARAMCD = "BSA"),
   get_unit_expr = VSSTRESU,
@@ -324,7 +324,7 @@ advs <- derive_param_bsa(
 
 advs <- derive_param_bmi(
   advs,
-  by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
+  by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
   set_values_to = exprs(PARAMCD = "BMI"),
   get_unit_expr = VSSTRESU,
   filter = VSSTAT != "NOT DONE" | is.na(VSSTAT),

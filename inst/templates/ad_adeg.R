@@ -137,7 +137,7 @@ adeg <- adeg %>%
 
   # Derive RRR
   derive_param_rr(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY)),
+    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY)),
     set_values_to = exprs(PARAMCD = "RRR"),
     hr_code = "HR",
     get_unit_expr = tolower(EGSTRESU),
@@ -145,7 +145,7 @@ adeg <- adeg %>%
   ) %>%
   # Derive QTCBR
   derive_param_qtc(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY)),
+    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY)),
     method = "Bazett",
     set_values_to = exprs(PARAMCD = "QTCBR"),
     qt_code = "QT",
@@ -155,7 +155,7 @@ adeg <- adeg %>%
   ) %>%
   # Derive QTCFR
   derive_param_qtc(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY)),
+    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY)),
     method = "Fridericia",
     set_values_to = exprs(PARAMCD = "QTCFR"),
     qt_code = "QT",
@@ -165,7 +165,7 @@ adeg <- adeg %>%
   ) %>%
   # Derive QTLCR
   derive_param_qtc(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY)),
+    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY)),
     method = "Sagie",
     set_values_to = exprs(PARAMCD = "QTLCR"),
     qt_code = "QT",
@@ -202,7 +202,7 @@ adeg <- adeg %>%
 adeg <- adeg %>%
   derive_summary_records(
     dataset_add = adeg,
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT)),
+    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(PARAMCD, AVISITN, AVISIT, ADT)),
     filter_add = dplyr::n() >= 2 & PARAMCD != "EGINTP",
     set_values_to = exprs(
       AVAL = mean(AVAL, na.rm = TRUE),
