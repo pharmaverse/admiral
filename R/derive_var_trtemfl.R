@@ -89,11 +89,6 @@
 #'   A list of symbols created using `exprs()` is expected. This argument is only
 #'   used when `group_var` is specified.
 #'
-#'   Default: `get_admiral_option("subject_keys")[2]`
-#'
-#'   For admiral options, see [`get_admiral_option`](../reference/get_admiral_option.html)
-#'   and [`set_admiral_options`](../reference/set_admiral_options.html)
-#'
 #' @details For the derivation of the new variable the following cases are
 #'   considered in this order. The first case which applies, defines the value
 #'   of the variable.
@@ -237,7 +232,7 @@ derive_var_trtemfl <- function(dataset,
                                initial_intensity = NULL,
                                intensity = NULL,
                                group_var = NULL,
-                               subject_keys = get_admiral_option("subject_keys")[2]) {
+                               subject_keys = get_admiral_option("subject_keys")) {
   # Convert inputs to symbols
   new_var <- assert_symbol(enexpr(new_var))
   start_date <- assert_symbol(enexpr(start_date))

@@ -16,7 +16,7 @@ derive_var_trtemfl(
   initial_intensity = NULL,
   intensity = NULL,
   group_var = NULL,
-  subject_keys = get_admiral_option("subject_keys")[2]
+  subject_keys = get_admiral_option("subject_keys")
 )
 }
 \arguments{
@@ -101,12 +101,7 @@ or \code{NULL}}
 \item{subject_keys}{Variables to uniquely identify a subject.
 
 A list of symbols created using \code{exprs()} is expected. This argument is only
-used when \code{group_var} is specified.
-
-Default: \code{get_admiral_option("subject_keys")[2]}
-
-For admiral options, see \href{../reference/get_admiral_option.html}{\code{get_admiral_option}}
-and \href{../reference/set_admiral_options.html}{\code{set_admiral_options}}}
+used when \code{group_var} is specified.}
 }
 \value{
 The input dataset with the variable specified by \code{new_var} added

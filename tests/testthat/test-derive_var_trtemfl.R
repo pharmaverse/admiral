@@ -64,6 +64,7 @@ expected2 <- tribble(
   "2", "2021-12-06T18:00", "", "1", "2", "3", NA, NA
 ) %>%
   mutate(
+    STUDYID = "ABC12345",
     ASTDTM = lubridate::ymd_hm(ASTDTM),
     AENDTM = lubridate::ymd_hm(AENDTM),
     TRTSDTM = if_else(USUBJID != "2", lubridate::ymd_hm("2022-01-01T01:01"), ymd_hms("")),
