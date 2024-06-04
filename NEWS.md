@@ -19,6 +19,7 @@
 - `derive_vars_merged()` and `derive_vars_transposed()` have a `relationship` argument added (the same as found in `dplyr::*_join()` functions) for users to specify what type of join (one-to-one, one-to-many, etc.) should take place. (#2247)
 
 - `basket_select()` function updated to add `...` argument to allow other qualifiers to be passed to user-defined function specified in `get_terms_fun()` argument for function `create_query_data()`. (#2265)
+- Messaging updated for `derive_extreme_event()` to improve clarity around duplicates. #2405
 
 - The `id_vars` argument was added to `derive_vars_transposed()` and `derive_vars_atc()` to allow additional variables, beyond those in `by_vars`, to uniquely identify records in the `dataset_merge` argument. (#2325)
 
