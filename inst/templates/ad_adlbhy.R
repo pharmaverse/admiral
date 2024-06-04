@@ -43,7 +43,7 @@ adlb_annotated <- adlb %>%
       )
     )
   ) %>%
-  select(get_admiral_option("subject_keys"), TRT01A, PARAMCD, LBSEQ, ADT, AVISIT, ADY, AVAL, ANRHI, CRIT1, CRIT1FL)
+  select(USUBJID, STUDYID, TRT01A, PARAMCD, LBSEQ, ADT, AVISIT, ADY, AVAL, ANRHI, CRIT1, CRIT1FL)
 
 # Subset Datasets
 altast_records <- adlb_annotated %>%
@@ -65,11 +65,11 @@ hylaw_records <- derive_vars_joined(
 )
 
 hylaw_records_pts_visits <- hylaw_records %>%
-  select(get_admiral_option("subject_keys"), TRT01A) %>% # add AVISIT, ADT for by visit
+  select(USUBJID, STUDYID, TRT01A) %>% # add AVISIT, ADT for by visit
   distinct()
 
 hylaw_records_fls <- hylaw_records %>%
-  select(get_admiral_option("subject_keys"), TRT01A, CRIT1FL, BILI_CRITFL) %>% # add AVISIT, ADT for by visit
+  select(USUBJID, STUDYID, TRT01A, CRIT1FL, BILI_CRITFL) %>% # add AVISIT, ADT for by visit
   distinct()
 
 # Create new parameters based on records that present potential case

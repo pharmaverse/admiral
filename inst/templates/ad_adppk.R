@@ -403,7 +403,7 @@ covar <- adsl %>%
     )
   ) %>%
   select(
-    get_admiral_option("subject_keys"), STUDYIDN, SITEID, SITEIDN, USUBJIDN,
+    USUBJID, STUDYID, STUDYIDN, SITEID, SITEIDN, USUBJIDN,
     SUBJID, SUBJIDN, AGE, SEX, SEXN, COHORT, COHORTC, ROUTE, ROUTEN,
     RACE, RACEN, ETHNIC, ETHNICN, FORM, FORMN, COUNTRY, COUNTRYN, COUNTRYL
   )
@@ -413,7 +413,7 @@ covar <- adsl %>%
 labsbl <- lb %>%
   filter(LBBLFL == "Y" & LBTESTCD %in% c("CREAT", "ALT", "AST", "BILI")) %>%
   mutate(LBTESTCDB = paste0(LBTESTCD, "BL")) %>%
-  select(get_admiral_option("subject_keys"), LBTESTCDB, LBSTRESN)
+  select(USUBJID, STUDYID, LBTESTCDB, LBSTRESN)
 
 covar_vslb <- covar %>%
   derive_vars_merged(
