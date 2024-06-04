@@ -77,18 +77,22 @@
 #'  If the argument is specified, it assumes that AEs are recorded as one episode
 #'  of AE with multiple lines using a grouping variable.
 #'
-#'  If the argument is specified, events which started during the treatment period
-#'  irrespective of worsening condition or events which start before treatment start
-#'  and end after treatment start (or are ongoing) and worsened during treatment
-#'  (i.e., the intensity is greater than the previous intensity), are flagged.
-#'
-#'  Once an AE record within a grouped AE is flagged, then any subsequent record
-#'  is also flagged regardless of the severity and within the treatment window.
+#'  Events starting during treatment or before treatment and worsening afterward
+#'  are flagged. Once an AE record in a group is flagged, all subsequent records
+#'  in the treatment window are flagged regardless of severity.
 #'
 #'  *Permitted Values:* A symbol referring to a variable of the input dataset
 #'   or `NULL`
 #'
-#' @inheritParams derive_param_tte
+#' @param subject_keys Variables to uniquely identify a subject.
+#'
+#'   A list of symbols created using `exprs()` is expected. This argument is only
+#'   used when `group_var` is specified.
+#'
+#'   Default: `get_admiral_option("subject_keys")[2]`
+#'
+#'   For admiral options, see [`get_admiral_option`](../reference/get_admiral_option.html)
+#'   and [`set_admiral_options`](../reference/set_admiral_options.html)
 #'
 #' @details For the derivation of the new variable the following cases are
 #'   considered in this order. The first case which applies, defines the value
@@ -218,7 +222,6 @@
 #'   new_var = TRTEMFL,
 #'   trt_end_date = TRTEDTM,
 #'   end_window = 10,
-#'   initial_intensity = AEITOXGR,
 #'   intensity = AETOXGR,
 #'   group_var = AEGRPID
 #' ) %>% select(ASTDTM, AENDTM, AEITOXGR, AETOXGR, AEGRPID, TRTEMFL)
@@ -268,9 +271,17 @@ derive_var_trtemfl <- function(dataset,
   } else {
     if (!is.null(initial_intensity)) {
       cli_warn(c(
-        "{.arg initial_intensity} argument is ignored when {.arg group_var} is specified"
+        "{.arg initial_intensity} argument is ignored when {.arg group_var} is specified",
+        "Please only specify one of them."
       ))
     }
+    if (is.null(subject_keys)) {
+      cli_abort(c(
+        "{.arg group_var} argument was specified but not {.arg subject_keys}",
+        "{.arg subject_keys} argument must be provided when {.arg group_var} is specified."
+      ))
+    }
+    assert_vars(subject_keys)
   }
 
   # Assert required variables
