@@ -453,7 +453,8 @@ derive_extreme_event <- function(dataset = NULL,
             data_events,
             by_vars = by_vars,
             order = event_order,
-            mode = event$mode
+            mode = event$mode,
+            check_type = "none"
           )
         }
       } else {
