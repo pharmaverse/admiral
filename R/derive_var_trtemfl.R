@@ -205,6 +205,7 @@
 #'   "2", "2021-12-06T18:00", "", "1", "2", "3"
 #' ) %>%
 #'   mutate(
+#'     STUDYID = "ABC12345",
 #'     ASTDTM = ymd_hm(ASTDTM),
 #'     AENDTM = ymd_hm(AENDTM),
 #'     TRTSDTM = if_else(USUBJID == "1", ymd_hm("2022-01-01T01:01"), ymd_hms("")),
