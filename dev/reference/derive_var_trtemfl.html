@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9044</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9045</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,7 +114,9 @@
 <span>  end_window <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ignore_time_for_trt_end <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  initial_intensity <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  intensity <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  intensity <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  group_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  subject_keys <span class="op">=</span> <span class="fu"><a href="get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -168,11 +170,11 @@ the event occurred more than <code>end_window</code> days after end of treatment
 
 <dt>initial_intensity</dt>
 <dd><p>Initial severity/intensity or toxicity</p>
-<p>This derivation assumes AE data collection method as single record per AE
-with "initial" and "most extreme" severity/intensity recorded separately.</p>
-<p>If the argument is specified, events which start before treatment start and
-end after treatment start (or are ongoing) and worsened (i.e., the
-intensity is greater than the initial intensity), are flagged.</p>
+<p><code>initial_intensity</code> is ignored when <code>group_var</code> is specified.</p>
+<p>If this argument is specified and <code>group_var</code> is <code>NULL</code>, events which start
+before treatment start and end after treatment start (or are ongoing) and
+worsened (i.e., the intensity is greater than the initial intensity), are
+flagged.</p>
 <p>The values of the specified variable must be comparable with the usual
 comparison operators. I.e., if the intensity is greater than the initial
 intensity <code>initial_intensity &lt; intensity</code> must evaluate to <code>TRUE</code>.</p>
@@ -190,6 +192,23 @@ comparison operators. I.e., if the intensity is greater than the initial
 intensity <code>initial_intensity &lt; intensity</code> must evaluate to <code>TRUE</code>.</p>
 <p><em>Permitted Values:</em> A symbol referring to a variable of the input dataset
 or <code>NULL</code></p></dd>
+
+
+<dt>group_var</dt>
+<dd><p>Grouping variable</p>
+<p>If the argument is specified, it assumes that AEs are recorded as one episode
+of AE with multiple lines using a grouping variable.</p>
+<p>Events starting during treatment or before treatment and worsening afterward
+are flagged. Once an AE record in a group is flagged, all subsequent records
+in the treatment window are flagged regardless of severity.</p>
+<p><em>Permitted Values:</em> A symbol referring to a variable of the input dataset
+or <code>NULL</code></p></dd>
+
+
+<dt>subject_keys</dt>
+<dd><p>Variables to uniquely identify a subject.</p>
+<p>A list of symbols created using <code><a href="reexport-exprs.html">exprs()</a></code> is expected. This argument is only
+used when <code>group_var</code> is specified.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -214,10 +233,14 @@ if <code>start_date</code> is on or after <code>trt_start_date</code>, it is set
 if <code>start_date</code> is on or after <code>trt_start_date</code> and <code>start_date</code> is on
 or before <code>trt_end_date</code> + <code>end_window</code> days, it is set to <code>"Y"</code>,</p></li>
 </ul></li>
-<li><p><em>event started before treatment and (possibly) worsened on treatment</em>:</p><ul><li><p>if <code>initial_intensity</code> and <code>intensity</code> is specified: if
-<code>initial_intensity &lt; intensity</code> and <code>start_date</code> is before
-<code>trt_start_date</code> and <code>end_date</code> is on or after <code>trt_start_date</code> or
-<code>end_date</code> is <code>NA</code>, it is set to <code>"Y"</code>.</p></li>
+<li><p><em>event started before treatment and (possibly) worsened on treatment</em>:</p><ul><li><p>if <code>initial_intensity</code>, <code>intensity</code> is specified and <code>group_var</code> is not specified:
+if <code>initial_intensity &lt; intensity</code> and <code>start_date</code> is before <code>trt_start_date</code>
+and <code>end_date</code> is on or after <code>trt_start_date</code> or <code>end_date</code> is <code>NA</code>, it
+is set to <code>"Y"</code>;</p></li>
+<li><p>if <code>group_var</code> is specified:
+if previous <code>intensity</code> &lt; <code>intensity</code> and <code>start_date</code> is after <code>trt_start_date</code>
+and <code>end_date</code> is on or after <code>trt_start_date</code> or <code>end_date</code> is <code>NA</code>, it
+is set to <code>"Y"</code>;</p></li>
 </ul></li>
 <li><p>Otherwise it is set to <code>NA_character_</code>.</p></li>
 </ul></div>
@@ -236,7 +259,7 @@ or before <code>trt_end_date</code> + <code>end_window</code> days, it is set to
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">adae</span> <span class="op">&lt;-</span> <span class="va">expected</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">ASTDTM</span>,            <span class="op">~</span><span class="va">AENDTM</span>,            <span class="op">~</span><span class="va">AEITOXGR</span>, <span class="op">~</span><span class="va">AETOXGR</span>,</span></span>
 <span class="r-in"><span>  <span class="co"># before treatment</span></span></span>
 <span class="r-in"><span>  <span class="st">"1"</span>,      <span class="st">"2021-12-13T20:15"</span>, <span class="st">"2021-12-15T12:45"</span>, <span class="st">"1"</span>,       <span class="st">"1"</span>,</span></span>
@@ -318,6 +341,74 @@ or before <code>trt_end_date</code> + <code>end_window</code> days, it is set to
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> <span style="color: #BB0000;">NA</span>                  2021-12-03 <span style="color: #949494;">12:00:00</span> 1        2       <span style="color: #BB0000;">NA</span>      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> 2021-12-01 <span style="color: #949494;">12:00:00</span> 2021-12-03 <span style="color: #949494;">12:00:00</span> 1        2       <span style="color: #BB0000;">NA</span>      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> 2021-12-06 <span style="color: #949494;">18:00:00</span> <span style="color: #BB0000;">NA</span>                  1        2       <span style="color: #BB0000;">NA</span>      </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">adae2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">ASTDTM</span>, <span class="op">~</span><span class="va">AENDTM</span>, <span class="op">~</span><span class="va">AEITOXGR</span>, <span class="op">~</span><span class="va">AETOXGR</span>, <span class="op">~</span><span class="va">AEGRPID</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># before treatment</span></span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">"2021-12-13T20:15"</span>, <span class="st">"2021-12-15T12:45"</span>, <span class="st">"1"</span>, <span class="st">"1"</span>, <span class="st">"1"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">"2021-12-14T20:15"</span>, <span class="st">"2021-12-14T22:00"</span>, <span class="st">"1"</span>, <span class="st">"3"</span>, <span class="st">"1"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># starting before treatment and ending during treatment</span></span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">"2021-12-30T20:15"</span>, <span class="st">"2022-01-14T01:23"</span>, <span class="st">"3"</span>, <span class="st">"3"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">"2022-01-05T20:00"</span>, <span class="st">"2022-06-01T11:00"</span>, <span class="st">"3"</span>, <span class="st">"1"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">"2022-01-10T20:15"</span>, <span class="st">"2022-01-11T01:23"</span>, <span class="st">"3"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">"2022-01-13T20:15"</span>, <span class="st">"2022-03-01T01:23"</span>, <span class="st">"3"</span>, <span class="st">"1"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># starting during treatment</span></span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">"2022-01-01T12:00"</span>, <span class="st">"2022-01-02T23:25"</span>, <span class="st">"4"</span>, <span class="st">"4"</span>, <span class="st">"3"</span>,</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># after treatment</span></span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">"2022-05-10T11:00"</span>, <span class="st">"2022-05-10T13:05"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>, <span class="st">"4"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">"2022-05-10T12:00"</span>, <span class="st">"2022-05-10T13:05"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>, <span class="st">"4"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">"2022-05-11T11:00"</span>, <span class="st">"2022-05-11T13:05"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>, <span class="st">"4"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># missing dates</span></span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">""</span>, <span class="st">""</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">"2021-12-30T09:00"</span>, <span class="st">""</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">"2021-12-30T11:00"</span>, <span class="st">""</span>, <span class="st">"3"</span>, <span class="st">"3"</span>, <span class="st">"5"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">""</span>, <span class="st">"2022-01-04T09:00"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">""</span>, <span class="st">"2021-12-24T19:00"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"1"</span>, <span class="st">""</span>, <span class="st">"2022-06-04T09:00"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># without treatment</span></span></span>
+<span class="r-in"><span>  <span class="st">"2"</span>, <span class="st">""</span>, <span class="st">"2021-12-03T12:00"</span>, <span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"1"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"2"</span>, <span class="st">"2021-12-01T12:00"</span>, <span class="st">"2021-12-03T12:00"</span>, <span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"2"</span>, <span class="st">"2021-12-06T18:00"</span>, <span class="st">""</span>, <span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    STUDYID <span class="op">=</span> <span class="st">"ABC12345"</span>,</span></span>
+<span class="r-in"><span>    ASTDTM <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hm</a></span><span class="op">(</span><span class="va">ASTDTM</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    AENDTM <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hm</a></span><span class="op">(</span><span class="va">AENDTM</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    TRTSDTM <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">USUBJID</span> <span class="op">==</span> <span class="st">"1"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hm</a></span><span class="op">(</span><span class="st">"2022-01-01T01:01"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    TRTEDTM <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">USUBJID</span> <span class="op">==</span> <span class="st">"1"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hm</a></span><span class="op">(</span><span class="st">"2022-04-30T23:59"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># derive TRTEMFL taking treatment end and worsening into account within a grouping variable</span></span></span>
+<span class="r-in"><span><span class="fu">derive_var_trtemfl</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">adae2</span>,</span></span>
+<span class="r-in"><span>  new_var <span class="op">=</span> <span class="va">TRTEMFL</span>,</span></span>
+<span class="r-in"><span>  trt_end_date <span class="op">=</span> <span class="va">TRTEDTM</span>,</span></span>
+<span class="r-in"><span>  end_window <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>  intensity <span class="op">=</span> <span class="va">AETOXGR</span>,</span></span>
+<span class="r-in"><span>  group_var <span class="op">=</span> <span class="va">AEGRPID</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ASTDTM</span>, <span class="va">AENDTM</span>, <span class="va">AEITOXGR</span>, <span class="va">AETOXGR</span>, <span class="va">AEGRPID</span>, <span class="va">TRTEMFL</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 19 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    ASTDTM              AENDTM              AEITOXGR AETOXGR AEGRPID TRTEMFL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2021-12-13 <span style="color: #949494;">20:15:00</span> 2021-12-15 <span style="color: #949494;">12:45:00</span> 1        1       1       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2021-12-14 <span style="color: #949494;">20:15:00</span> 2021-12-14 <span style="color: #949494;">22:00:00</span> 1        3       1       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2021-12-30 <span style="color: #949494;">20:15:00</span> 2022-01-14 <span style="color: #949494;">01:23:00</span> 3        3       2       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-01-05 <span style="color: #949494;">20:00:00</span> 2022-06-01 <span style="color: #949494;">11:00:00</span> 3        1       2       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-01-10 <span style="color: #949494;">20:15:00</span> 2022-01-11 <span style="color: #949494;">01:23:00</span> 3        2       2       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-01-13 <span style="color: #949494;">20:15:00</span> 2022-03-01 <span style="color: #949494;">01:23:00</span> 3        1       2       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-01-01 <span style="color: #949494;">12:00:00</span> 2022-01-02 <span style="color: #949494;">23:25:00</span> 4        4       3       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-05-10 <span style="color: #949494;">11:00:00</span> 2022-05-10 <span style="color: #949494;">13:05:00</span> 2        2       4       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-05-10 <span style="color: #949494;">12:00:00</span> 2022-05-10 <span style="color: #949494;">13:05:00</span> 2        2       4       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-05-11 <span style="color: #949494;">11:00:00</span> 2022-05-11 <span style="color: #949494;">13:05:00</span> 2        2       4       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 2021-12-30 <span style="color: #949494;">09:00:00</span> <span style="color: #BB0000;">NA</span>                  3        4       5       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 2021-12-30 <span style="color: #949494;">11:00:00</span> <span style="color: #BB0000;">NA</span>                  3        3       5       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                  3        4       5       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> <span style="color: #BB0000;">NA</span>                  2022-01-04 <span style="color: #949494;">09:00:00</span> 3        4       5       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> <span style="color: #BB0000;">NA</span>                  2021-12-24 <span style="color: #949494;">19:00:00</span> 3        4       5       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> <span style="color: #BB0000;">NA</span>                  2022-06-04 <span style="color: #949494;">09:00:00</span> 3        4       5       Y      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> <span style="color: #BB0000;">NA</span>                  2021-12-03 <span style="color: #949494;">12:00:00</span> 1        2       1       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> 2021-12-01 <span style="color: #949494;">12:00:00</span> 2021-12-03 <span style="color: #949494;">12:00:00</span> 1        2       2       <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> 2021-12-06 <span style="color: #949494;">18:00:00</span> <span style="color: #BB0000;">NA</span>                  1        2       3       <span style="color: #BB0000;">NA</span>     </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9044</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9045</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,7 +107,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="updates-of-existing-functions-development-version">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-development-version"></a></h3>
-<ul><li><p>Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (<a href="https://github.com/pharmaverse/admiral/issues/2392" class="external-link">#2392</a>)</p></li>
+<ul><li><p><code>group_var</code> (optional) parameter is added to <code><a href="../reference/derive_var_trtemfl.html">derive_var_trtemfl()</a></code> to derive <code>TRTEMFL</code> for AE data if the data are collected as one episode of AE with multiple lines. (<a href="https://github.com/pharmaverse/admiral/issues/2302" class="external-link">#2302</a>)</p></li>
+<li><p>Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (<a href="https://github.com/pharmaverse/admiral/issues/2392" class="external-link">#2392</a>)</p></li>
 <li><p><code><a href="../reference/create_single_dose_dataset.html">create_single_dose_dataset()</a></code> has been updated to error if the <code>lookup_table</code> contains duplicates. (<a href="https://github.com/pharmaverse/admiral/issues/2247" class="external-link">#2247</a>)</p></li>
 <li><p><code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code> and <code><a href="../reference/derive_vars_transposed.html">derive_vars_transposed()</a></code> have a <code>relationship</code> argument added (the same as found in <code>dplyr::*_join()</code> functions) for users to specify what type of join (one-to-one, one-to-many, etc.) should take place. (<a href="https://github.com/pharmaverse/admiral/issues/2247" class="external-link">#2247</a>)</p></li>
 <li><p><code><a href="../reference/basket_select.html">basket_select()</a></code> function updated to add <code>...</code> argument to allow other qualifiers to be passed to user-defined function specified in <code>get_terms_fun()</code> argument for function <code><a href="../reference/create_query_data.html">create_query_data()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2265" class="external-link">#2265</a>)</p></li>
