@@ -124,7 +124,7 @@ Depending on the question, `QSORRES == "YES"` is mapped to `QSSTRESN = 0` or
 `QSSTRESN = 1`. If the `QSSTRESN` values are not ready to be used for deriving
 scores and require transformation, it is recommended that `QSSTRESN` is kept in
 the ADaM dataset for traceability, and the transformed value is stored in
-`AVAL`, since that’s what will be used for the score calculation.
+`AVAL`, since that's what will be used for the score calculation.
 
 # Scales and Scores
 
