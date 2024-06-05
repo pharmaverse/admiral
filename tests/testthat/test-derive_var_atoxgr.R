@@ -3199,7 +3199,7 @@ test_that("derive_var_atoxgr Test 81: CTCAEv4 Hypophosphatemia", {
 ### Acidosis
 ### Grade 4: pH < 7.3 with lifethreatening consequences
 ### Grade 3: pH < 7.3 without lifethreatening consequences
-### Grade 2: pH ≥ 7.3 to < LLN
+### Grade 2: pH >= 7.3 to < LLN
 
 ## Test 82: DAIDS Acidosis ----
 test_that("derive_var_atoxgr Test 82: DAIDS Acidosis", {
@@ -3348,7 +3348,7 @@ test_that("derive_var_atoxgr Test 84: DAIDS Alkaline Phosphatase, High", {
 ### Alkalosis
 ### Grade 4: pH > 7.5 with lifethreatening consequences
 ### Grade 3: pH > 7.5 without lifethreatening consequences
-### Grade 2: pH > ULN to ≤ 7.5
+### Grade 2: pH > ULN to <= 7.5
 
 ## Test 85: DAIDS Alkalosis ----
 test_that("derive_var_atoxgr Test 85: DAIDS Alkalosis", {
