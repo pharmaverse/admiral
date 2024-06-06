@@ -34,7 +34,7 @@ Authors:
   \item Ross Farrugia
   \item Fanny Gautier
   \item G Gayatri
-  \item Daphne Grasselly
+  \item Asha Chakma
   \item Dinakar Kulkarni
   \item Edoardo Mancini
   \item Sadchla Mascary
