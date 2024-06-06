@@ -48,7 +48,6 @@ Basetype
 Bazett
 Bazett's
 Biologics
-Brucken
 CDISC
 CKD
 COVID
@@ -70,11 +69,11 @@ Cockcroft
 Creat
 Creatine
 Creatinine
-cyclomatic
 DAIDS
 DAIDs
 DIABP
 DILI
+DS
 DT
 DTC
 DTF
@@ -95,7 +94,6 @@ FACM
 FCVD
 Fibrinogen
 Findability
-Forys
 Framingham
 Franciszek
 François
@@ -130,10 +128,9 @@ Hypokalemia
 Hypomagnesemia
 Hyponatremia
 Hypophosphatemia
-Iain
 IG
 INR
-Janardhanswami
+Iain
 Jaxon
 Jordanna
 Kabi
@@ -171,7 +168,7 @@ NCICTCAEv
 NFRLT
 NPRLT
 NRRLT
-Nancy
+Neitmann
 Neutrophil
 Nom
 Nonfasting
@@ -186,13 +183,11 @@ PARAMN
 PLDOSE
 PTT
 Param
-param
 Pavan
 Pharma
 Pharmacokinetic
 Pharmacokinetics
 Pharmaverse
-Phil
 Phosphatase
 Pooja
 Pre
@@ -217,7 +212,6 @@ SYSBP
 Sagie
 Sagie's
 Saha
-Sai
 Samia
 Shan
 Shimeng
@@ -230,7 +224,6 @@ Syed
 Sys
 TADJ
 TADJAE
-TBC
 TDOSE
 TDURD
 TERMCHAR
@@ -251,8 +244,6 @@ VAD
 Vignesh
 WBC
 Walkowiak
-Walkthrough
-Webster
 Wenyi
 XXXXXXXX
 Yohann
@@ -278,6 +269,7 @@ chk
 codebase
 constructible
 creatinine
+cyclomatic
 dL
 datepart
 datetime
@@ -301,7 +293,6 @@ framingham
 funder
 glomerular
 groupwise
-lockfile
 lubridate
 mL
 magrittr
@@ -347,7 +338,6 @@ timepoint
 tte
 umol
 ungrouped
-unintuitive
 usethis
 xULN
 xportr
