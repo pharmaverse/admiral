@@ -3199,7 +3199,7 @@ test_that("derive_var_atoxgr Test 81: CTCAEv4 Hypophosphatemia", {
 ### Acidosis
 ### Grade 4: pH < 7.3 with lifethreatening consequences
 ### Grade 3: pH < 7.3 without lifethreatening consequences
-### Grade 2: pH ≥ 7.3 to < LLN
+### Grade 2: pH >= 7.3 to < LLN
 
 ## Test 82: DAIDS Acidosis ----
 test_that("derive_var_atoxgr Test 82: DAIDS Acidosis", {
@@ -3348,7 +3348,7 @@ test_that("derive_var_atoxgr Test 84: DAIDS Alkaline Phosphatase, High", {
 ### Alkalosis
 ### Grade 4: pH > 7.5 with lifethreatening consequences
 ### Grade 3: pH > 7.5 without lifethreatening consequences
-### Grade 2: pH > ULN to ≤ 7.5
+### Grade 2: pH > ULN to <= 7.5
 
 ## Test 85: DAIDS Alkalosis ----
 test_that("derive_var_atoxgr Test 85: DAIDS Alkalosis", {
@@ -5420,7 +5420,7 @@ test_that("derive_var_atoxgr Test 115: DAIDS ANC Low", {
 ### Fibrinogen Decreased
 ### Grade 4: <0.5 g/L OR < 0.25 x LLN
 ### Grade 3: 0.5 to <0.75 g/L OR 0.25 to < 0.50 x LLN
-### Grade 2: 0.75 to <1 g/L OR ≥ 0.50 to < 0.75 x LLN
+### Grade 2: 0.75 to <1 g/L OR >= 0.50 to < 0.75 x LLN
 ### Grade 1: 1 to < 2 g/L OR 0.75 to < 1.00 x LLN
 
 ## Test 116: DAIDS Fibrinogen Decreased ----
@@ -5559,7 +5559,7 @@ expected_hgbd_daids_lt13y <- tibble::tribble(
     LBDT = lubridate::ymd("2023-06-30")
   )
 
-### 36 to ≤ 56 days of age (male and female)
+### 36 to <= 56 days of age (male and female)
 
 ### Grade 4: < 60 g/L
 ### Grade 3: 60 to < 70 g/L
@@ -5586,7 +5586,7 @@ expected_hgbd_daids_le56d <- tibble::tribble(
   )
 
 
-### 22 to ≤ 35 days of age (male and female)
+### 22 to <= 35 days of age (male and female)
 
 ### Grade 4: < 67 g/L
 ### Grade 3: 67 to < 80 g/L
@@ -5613,7 +5613,7 @@ expected_hgbd_daids_le35d <- tibble::tribble(
   )
 
 
-### 8 to ≤ 21 days of age (male and female)
+### 8 to <= 21 days of age (male and female)
 
 ### Grade 4: < 80 g/L
 ### Grade 3: 80 to < 90 g/L
@@ -5639,7 +5639,7 @@ expected_hgbd_daids_le21d <- tibble::tribble(
     LBDT = lubridate::ymd("2023-07-22")
   )
 
-### ≤ 7 days of age (male and female)
+### <= 7 days of age (male and female)
 
 ### Grade 4: < 90 g/L
 ### Grade 3: 90 to < 100 g/L
