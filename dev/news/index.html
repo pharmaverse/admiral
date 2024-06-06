@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.2.9046</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,15 +98,15 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="admiral-development-version">admiral (development version)<a class="anchor" aria-label="anchor" href="#admiral-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.1.0.9000" id="admiral-1109000">admiral 1.1.0.9000<a class="anchor" aria-label="anchor" href="#admiral-1109000"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-1-1-0-9000">New Features<a class="anchor" aria-label="anchor" href="#new-features-1-1-0-9000"></a></h3>
 <ul><li><p>Added helper functions to <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code> (<code><a href="../reference/get_flagged_records.html">get_flagged_records()</a></code>) and <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> (<code><a href="../reference/get_vars_query.html">get_vars_query()</a></code>) so that those can be called independently as per user’s request. <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code> function call results are not impacted by the change (<a href="https://github.com/pharmaverse/admiral/issues/2441" class="external-link">#2441</a>).</p></li>
 <li><p>Error Messaging has been made more “user-friendly”. (<a href="https://github.com/pharmaverse/admiral/issues/2372" class="external-link">#2372</a>)</p></li>
 <li><p>New <code><a href="../reference/country_code_lookup.html">country_code_lookup()</a></code> metadata added to decode countries based on <a href="https://www.iso.org/iso-3166-country-codes.html" class="external-link">ISO 3166 codes</a>. (<a href="https://github.com/pharmaverse/admiral/issues/2388" class="external-link">#2388</a>)</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="updates-of-existing-functions-development-version">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-development-version"></a></h3>
+<h3 id="updates-of-existing-functions-1-1-0-9000">Updates of Existing Functions<a class="anchor" aria-label="anchor" href="#updates-of-existing-functions-1-1-0-9000"></a></h3>
 <ul><li><p><code>group_var</code> (optional) parameter is added to <code><a href="../reference/derive_var_trtemfl.html">derive_var_trtemfl()</a></code> to derive <code>TRTEMFL</code> for AE data if the data are collected as one episode of AE with multiple lines. (<a href="https://github.com/pharmaverse/admiral/issues/2302" class="external-link">#2302</a>)</p></li>
 <li><p>Templates for ADPC, ADPPK and ADPP are updated to handle urine records. (<a href="https://github.com/pharmaverse/admiral/issues/2392" class="external-link">#2392</a>)</p></li>
 <li><p><code><a href="../reference/create_single_dose_dataset.html">create_single_dose_dataset()</a></code> has been updated to error if the <code>lookup_table</code> contains duplicates. (<a href="https://github.com/pharmaverse/admiral/issues/2247" class="external-link">#2247</a>)</p></li>
@@ -119,7 +119,7 @@
 <li><p>The <code><a href="../reference/slice_derivation.html">slice_derivation()</a></code> function was updated such that it works now when called in a function where objects from the function environment are used. (<a href="https://github.com/pharmaverse/admiral/issues/2244" class="external-link">#2244</a>)</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<h3 id="breaking-changes-1-1-0-9000">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-1-0-9000"></a></h3>
 <ul><li>
 <p>The following function arguments are entering the next phase of the deprecation process: (<a href="https://github.com/pharmaverse/admiral/issues/2299" class="external-link">#2299</a>)</p>
 <ul><li><code>compute_egfr(wt)</code></li>
@@ -146,7 +146,7 @@
 </ul></li>
 </ul></div>
 <div class="section level3">
-<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+<h3 id="documentation-1-1-0-9000">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-1-0-9000"></a></h3>
 <ul><li><p>Documentation for <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code> has been updated to include a description for the value of <code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code> when <code>keep_source_vars = NULL</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2398" class="external-link">#2398</a>)</p></li>
 <li><p>The “Visit and Period Variables” vignette was updated and refactored to include example code to create a period reference dataset. (<a href="https://github.com/pharmaverse/admiral/issues/2321" class="external-link">#2321</a>)</p></li>
 <li><p>The documentation of <code><a href="../reference/derive_vars_merged.html">derive_vars_merged()</a></code> function is updated to describe that the <code>check_type</code> argument is ignored (an error is issued) if <code>order</code> is not specified. (<a href="https://github.com/pharmaverse/admiral/issues/2326" class="external-link">#2326</a>)</p></li>
@@ -155,16 +155,15 @@
 <li><p>The Examples section of <code><a href="../reference/derive_param_computed.html">derive_param_computed()</a></code> now contains a new item showcasing how to create a derived parameter in the case that a variable contributing to the derived parameter has some/all of its values missing. (<a href="https://github.com/pharmaverse/admiral/issues/2338" class="external-link">#2338</a>)</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="various-development-version">Various<a class="anchor" aria-label="anchor" href="#various-development-version"></a></h3>
+<h3 id="various-1-1-0-9000">Various<a class="anchor" aria-label="anchor" href="#various-1-1-0-9000"></a></h3>
 <ul><li><p>Templates and vignettes do not add or populate <code>AVALC</code> for BDS-findings datasets where the information contained in <code>AVALC</code> would be redundant with <code>AVAL</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2442" class="external-link">#2442</a>)</p></li>
 <li><p>The function <code><a href="https://dplyr.tidyverse.org/reference/transmute.html" class="external-link">dplyr::transmute()</a></code> is superseded in favor of <code>dplyr::mutate(.keep = "none")</code>. Consequently, all the admiral functions that utilized the former have been updated accordingly. (<a href="https://github.com/pharmaverse/admiral/issues/2274" class="external-link">#2274</a>)</p></li>
 <li><p>The templates for ADPP and ADPC are updated for missing variables (<a href="https://github.com/pharmaverse/admiral/issues/2308" class="external-link">#2308</a>) and to make <code>ATPT</code> and <code>ATPTN</code> consistent. (<a href="https://github.com/pharmaverse/admiral/issues/2328" class="external-link">#2328</a>)</p></li>
 <li><p>ADLB template updated to make <code>PARAM</code> consistent for <code>PARAMCD</code> values <code>"BASO"</code> and <code>"LYMPH"</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2327" class="external-link">#2327</a>)</p></li>
 </ul><details><summary>
 Developer Notes
-</summary><ul><li>In the previous version, <code>renv</code> was the default framework used to manage package dependencies. Now, we use <code>devtools</code> as our main package manager (some changes also occurred for <a href="https://github.com/pharmaverse/admiralci" class="external-link">admiralci workflows</a>). There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for <code>R CMD CHECKS</code> jobs, there is an associated renv.lock file (under the deps artifact):</li>
-</ul><p><img src="reference/figures/dependencies_devtools.png" alt="Download dependencies from CI workflows"> (<a href="https://github.com/pharmaverse/admiral/issues/2306" class="external-link">#2306</a>)</p>
-<ul><li>Splitting out <code>R</code> and <code>test</code> files for date/time functions for cyclomatic complexity refactor (<a href="https://github.com/pharmaverse/admiral/issues/2340" class="external-link">#2340</a>)(<a href="https://github.com/pharmaverse/admiral/issues/2339" class="external-link">#2339</a>)</li>
+</summary><ul><li>In the previous version, <code>renv</code> was the default framework used to manage package dependencies. Now, we use <code>devtools</code> as our main package manager (some changes also occurred for <a href="https://github.com/pharmaverse/admiralci" class="external-link">admiralci workflows</a>). There is a possibility to get package dependency versions used for the workflows to ensure local reproducibility. For this, you need to go under the latest action summary in your current PR. You can see a deps artifact. For each version of R used for <code>R CMD CHECKS</code> jobs, there is an associated renv.lock file (under the deps artifact).</li>
+<li>Splitting out <code>R</code> and <code>test</code> files for date/time functions for cyclomatic complexity refactor (<a href="https://github.com/pharmaverse/admiral/issues/2340" class="external-link">#2340</a>)(<a href="https://github.com/pharmaverse/admiral/issues/2339" class="external-link">#2339</a>)</li>
 <li>Created three unit tests for <code><a href="../reference/get_summary_records.html">get_summary_records()</a></code>. (<a href="https://github.com/pharmaverse/admiral/issues/2304" class="external-link">#2304</a>)</li>
 <li>Created unit tests for developer internal function <code><a href="../reference/get_imputation_target_date.html">get_imputation_target_date()</a></code> (<a href="https://github.com/pharmaverse/admiral/issues/2378" class="external-link">#2378</a>)</li>
 <li>Modified date/time unit tests to use unified example (<a href="https://github.com/pharmaverse/admiral/issues/2424" class="external-link">#2424</a>)</li>
@@ -1183,7 +1182,7 @@ ignore_event_order = TRUE,</code></pre>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Adam Forys, G Gayatri, Daphne Grasselly, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Sophie Shapcott, Eric Simms, Daniel Sjoberg, Stefan Thoma, Kangjie Zhang, Zelos Zhu, Thomas Neitmann, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Ben Straub, Stefan Bundfuss, Jeffrey Dickinson, Ross Farrugia, Fanny Gautier, G Gayatri, Asha Chakma, Dinakar Kulkarni, Edoardo Mancini, Sadchla Mascary, Gordon Miller, Lina Patil, Sophie Shapcott, Eric Simms, Daniel Sjoberg, Stefan Thoma, Phillip Webster, Kangjie Zhang, Zelos Zhu, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
