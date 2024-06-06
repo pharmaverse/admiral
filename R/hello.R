@@ -5,5 +5,5 @@
 #'
 #' @examples
 #' hello <- function() {
-#'  print("Hello World!")
+#'   print("Hello World!")
 #' }

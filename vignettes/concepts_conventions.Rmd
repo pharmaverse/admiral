@@ -214,18 +214,18 @@ library(dplyr, warn.conflicts = FALSE)
 library(admiral)
 
 vs <- tribble(
-~STUDYID,  ~USUBJID, ~VSTESTCD, ~VISIT, ~VSSTRESN, ~VSSTRESU, ~VSDTC,
- "dmog_1", "01-1301", "WEIGHT", "SCREENING", 82.1, "kg", "2013-08-29",
- "dmog_1",   "01-1301", "WEIGHT", "WEEK 2", 81.19, "kg", "2013-09-15",
- "dmog_1",   "01-1301", "WEIGHT", "WEEK 4", 82.56, "kg", "2013-09-24",
- "dmog_1",   "01-1302", "BMI", "SCREENING", 20.1, "kg/m2", "2013-08-29",
- "dmog_1",   "01-1302", "BMI", "WEEK 2", 20.2, "kg/m2", "2013-09-15",
- "dmog_1",  "01-1302", "BMI", "WEEK 4", 19.9, "kg/m2", "2013-09-24"
+  ~STUDYID, ~USUBJID, ~VSTESTCD, ~VISIT, ~VSSTRESN, ~VSSTRESU, ~VSDTC,
+  "dmog_1", "01-1301", "WEIGHT", "SCREENING", 82.1, "kg", "2013-08-29",
+  "dmog_1", "01-1301", "WEIGHT", "WEEK 2", 81.19, "kg", "2013-09-15",
+  "dmog_1", "01-1301", "WEIGHT", "WEEK 4", 82.56, "kg", "2013-09-24",
+  "dmog_1", "01-1302", "BMI", "SCREENING", 20.1, "kg/m2", "2013-08-29",
+  "dmog_1", "01-1302", "BMI", "WEEK 2", 20.2, "kg/m2", "2013-09-15",
+  "dmog_1", "01-1302", "BMI", "WEEK 4", 19.9, "kg/m2", "2013-09-24"
 )
 
 dm <- tribble(
-~STUDYID,  ~USUBJID, ~AGE,
-"dmog_1",  "01-1301", 18
+  ~STUDYID, ~USUBJID, ~AGE,
+  "dmog_1", "01-1301", 18
 )
 ```
 

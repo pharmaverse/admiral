@@ -2,24 +2,24 @@
 ## Test 1: `mode` = first ----
 test_that("derive_extreme_event Test 1: `mode` = first", {
   input <- tibble::tribble(
-  ~STUDYID,    ~USUBJID, ~PARAMCD,       ~AVALC,        ~ADY,
-    "xyz",        "1",      "NO SLEEP",     "N",              1,
-    "xyz",       "1",      "WAKE UP",      "N",              2,
-    "xyz",       "1",      "FALL ASLEEP",  "N",              3,
-    "xyz",       "2",      "NO SLEEP",     "N",              1,
-    "xyz",       "2",      "WAKE UP",      "Y",              2,
-    "xyz",       "2",      "WAKE UP",      "Y",              3,
-    "xyz",       "2",      "FALL ASLEEP",  "N",              4,
-    "xyz",       "3",      "NO SLEEP",     NA_character_,    1
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVALC, ~ADY,
+    "xyz", "1", "NO SLEEP", "N", 1,
+    "xyz", "1", "WAKE UP", "N", 2,
+    "xyz", "1", "FALL ASLEEP", "N", 3,
+    "xyz", "2", "NO SLEEP", "N", 1,
+    "xyz", "2", "WAKE UP", "Y", 2,
+    "xyz", "2", "WAKE UP", "Y", 3,
+    "xyz", "2", "FALL ASLEEP", "N", 4,
+    "xyz", "3", "NO SLEEP", NA_character_, 1
   )
 
   expected_output <- bind_rows(
     input,
     tibble::tribble(
-  ~STUDYID,    ~USUBJID, ~PARAMCD, ~AVALC,                            ~AVAL, ~ADY,
-    "xyz",       "1",      "WSP",    "No sleeping problems",                4,    1,
-    "xyz",       "2",      "WSP",    "Waking up more than three times",     2,    2,
-    "xyz",       "3",      "WSP",    "Missing",                            99,    1
+      ~STUDYID, ~USUBJID, ~PARAMCD, ~AVALC, ~AVAL, ~ADY,
+      "xyz", "1", "WSP", "No sleeping problems", 4, 1,
+      "xyz", "2", "WSP", "Waking up more than three times", 2, 2,
+      "xyz", "3", "WSP", "Missing", 99, 1
     )
   )
 
@@ -69,24 +69,24 @@ test_that("derive_extreme_event Test 1: `mode` = first", {
 ## Test 2: `mode` = last ----
 test_that("derive_extreme_event Test 2: `mode` = last", {
   input <- tibble::tribble(
-    ~STUDYID,  ~USUBJID, ~PARAMCD,       ~AVALC,        ~ADY,
-      "xyz",     "1",      "NO SLEEP",     "N",              1,
-      "xyz",     "1",      "WAKE UP",      "N",              2,
-      "xyz",     "1",      "FALL ASLEEP",  "N",              3,
-      "xyz",     "2",      "NO SLEEP",     "N",              1,
-      "xyz",     "2",      "WAKE UP",      "Y",              2,
-      "xyz",     "2",      "WAKE UP",      "Y",              3,
-      "xyz",     "2",      "FALL ASLEEP",  "N",              4,
-      "xyz",     "3",      "NO SLEEP",     NA_character_,    1
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVALC, ~ADY,
+    "xyz", "1", "NO SLEEP", "N", 1,
+    "xyz", "1", "WAKE UP", "N", 2,
+    "xyz", "1", "FALL ASLEEP", "N", 3,
+    "xyz", "2", "NO SLEEP", "N", 1,
+    "xyz", "2", "WAKE UP", "Y", 2,
+    "xyz", "2", "WAKE UP", "Y", 3,
+    "xyz", "2", "FALL ASLEEP", "N", 4,
+    "xyz", "3", "NO SLEEP", NA_character_, 1
   )
 
   expected_output <- bind_rows(
     input,
     tibble::tribble(
-   ~STUDYID,   ~USUBJID, ~PARAMCD, ~AVALC,                            ~AVAL, ~ADY,
-     "xyz",     "1",      "WSP",    "No sleeping problems",                4,    3,
-     "xyz",     "2",      "WSP",    "Waking up more than three times",     2,    3,
-     "xyz",     "3",      "WSP",    "Missing",                            99,    1
+      ~STUDYID, ~USUBJID, ~PARAMCD, ~AVALC, ~AVAL, ~ADY,
+      "xyz", "1", "WSP", "No sleeping problems", 4, 3,
+      "xyz", "2", "WSP", "Waking up more than three times", 2, 3,
+      "xyz", "3", "WSP", "Missing", 99, 1
     )
   )
 
@@ -284,13 +284,13 @@ test_that("derive_extreme_event Test 3: `source_datasets` works", {
 ## Test 4: event-specific mode ----
 test_that("derive_extreme_event Test 4: event-specific mode", {
   adhy <- tibble::tribble(
-   ~STUDYID, ~USUBJID, ~AVISITN, ~CRIT1FL,
-    "xyz",        "1",             1, "Y",
-    "xyz",        "1",             2, "Y",
-    "xyz",        "2",             1, "Y",
-    "xyz",        "2",             2, NA_character_,
-    "xyz",        "2",             3, "Y",
-    "xyz",        "2",             4, NA_character_
+    ~STUDYID, ~USUBJID, ~AVISITN, ~CRIT1FL,
+    "xyz", "1", 1, "Y",
+    "xyz", "1", 2, "Y",
+    "xyz", "2", 1, "Y",
+    "xyz", "2", 2, NA_character_,
+    "xyz", "2", 3, "Y",
+    "xyz", "2", 4, NA_character_
   ) %>%
     mutate(
       PARAMCD = "ALKPH",
@@ -324,9 +324,9 @@ test_that("derive_extreme_event Test 4: event-specific mode", {
   expected <- bind_rows(
     adhy,
     tribble(
-     ~STUDYID, ~USUBJID, ~AVISITN, ~AVALC,
-       "xyz",    "1",             2, "Y",
-       "xyz",    "2",             2, "N"
+      ~STUDYID, ~USUBJID, ~AVISITN, ~AVALC,
+      "xyz", "1", 2, "Y",
+      "xyz", "2", 2, "N"
     ) %>%
       mutate(
         PARAMCD = "ALK2",
@@ -345,16 +345,16 @@ test_that("derive_extreme_event Test 4: event-specific mode", {
 ## Test 5: event_joined() is handled correctly ----
 test_that("derive_extreme_event Test 5: event_joined() is handled correctly", {
   adsl <- tibble::tribble(
-  ~STUDYID,  ~USUBJID, ~TRTSDTC,
-    "xyz",          "1",      "2020-01-01",
-    "xyz",          "2",      "2019-12-12",
-    "xyz",          "3",      "2019-11-11",
-    "xyz",          "4",      "2019-12-30",
-    "xyz",          "5",      "2020-01-01",
-    "xyz",          "6",      "2020-02-02",
-    "xyz",          "7",      "2020-02-02",
-    "xyz",          "8",      "2020-04-01",
-    "xyz",          "9",      "2020-02-01"
+    ~STUDYID, ~USUBJID, ~TRTSDTC,
+    "xyz", "1", "2020-01-01",
+    "xyz", "2", "2019-12-12",
+    "xyz", "3", "2019-11-11",
+    "xyz", "4", "2019-12-30",
+    "xyz", "5", "2020-01-01",
+    "xyz", "6", "2020-02-02",
+    "xyz", "7", "2020-02-02",
+    "xyz", "8", "2020-04-01",
+    "xyz", "9", "2020-02-01"
   ) %>%
     mutate(
       TRTSDT = lubridate::ymd(TRTSDTC),
@@ -362,35 +362,35 @@ test_that("derive_extreme_event Test 5: event_joined() is handled correctly", {
     )
 
   adrs <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~ADTC,        ~AVALC,
-   "xyz",    "1",      "2020-01-01", "PR",
-   "xyz",    "1",      "2020-02-01", "CR",
-   "xyz",    "1",      "2020-02-16", "NE",
-   "xyz",    "1",      "2020-03-01", "CR",
-   "xyz",    "1",      "2020-04-01", "SD",
-   "xyz",    "2",      "2020-01-01", "SD",
-   "xyz",    "2",      "2020-02-01", "PR",
-   "xyz",    "2",      "2020-03-01", "SD",
-   "xyz",    "2",      "2020-03-13", "CR",
-   "xyz",    "3",      "2019-11-12", "CR",
-   "xyz",    "3",      "2019-12-02", "CR",
-   "xyz",    "3",      "2020-01-01", "SD",
-   "xyz",    "4",      "2020-01-01", "PR",
-   "xyz",    "4",      "2020-03-01", "SD",
-   "xyz",    "4",      "2020-04-01", "SD",
-   "xyz",    "4",      "2020-05-01", "PR",
-   "xyz",    "4",      "2020-05-15", "NON-CR/NON-PD",
-   "xyz",    "5",      "2020-01-01", "PR",
-   "xyz",    "5",      "2020-01-10", "SD",
-   "xyz",    "5",      "2020-01-20", "PR",
-   "xyz",    "5",      "2020-05-15", "NON-CR/NON-PD",
-   "xyz",    "6",      "2020-02-06", "PR",
-   "xyz",    "6",      "2020-02-16", "CR",
-   "xyz",    "6",      "2020-03-30", "PR",
-   "xyz",    "7",      "2020-02-06", "PR",
-   "xyz",    "7",      "2020-02-16", "CR",
-   "xyz",    "7",      "2020-04-01", "NE",
-   "xyz",    "9",      "2020-02-16", "PD"
+    ~STUDYID, ~USUBJID, ~ADTC, ~AVALC,
+    "xyz", "1", "2020-01-01", "PR",
+    "xyz", "1", "2020-02-01", "CR",
+    "xyz", "1", "2020-02-16", "NE",
+    "xyz", "1", "2020-03-01", "CR",
+    "xyz", "1", "2020-04-01", "SD",
+    "xyz", "2", "2020-01-01", "SD",
+    "xyz", "2", "2020-02-01", "PR",
+    "xyz", "2", "2020-03-01", "SD",
+    "xyz", "2", "2020-03-13", "CR",
+    "xyz", "3", "2019-11-12", "CR",
+    "xyz", "3", "2019-12-02", "CR",
+    "xyz", "3", "2020-01-01", "SD",
+    "xyz", "4", "2020-01-01", "PR",
+    "xyz", "4", "2020-03-01", "SD",
+    "xyz", "4", "2020-04-01", "SD",
+    "xyz", "4", "2020-05-01", "PR",
+    "xyz", "4", "2020-05-15", "NON-CR/NON-PD",
+    "xyz", "5", "2020-01-01", "PR",
+    "xyz", "5", "2020-01-10", "SD",
+    "xyz", "5", "2020-01-20", "PR",
+    "xyz", "5", "2020-05-15", "NON-CR/NON-PD",
+    "xyz", "6", "2020-02-06", "PR",
+    "xyz", "6", "2020-02-16", "CR",
+    "xyz", "6", "2020-03-30", "PR",
+    "xyz", "7", "2020-02-06", "PR",
+    "xyz", "7", "2020-02-16", "CR",
+    "xyz", "7", "2020-04-01", "NE",
+    "xyz", "9", "2020-02-16", "PD"
   ) %>%
     mutate(
       PARAMCD = "OVR",
@@ -486,16 +486,16 @@ test_that("derive_extreme_event Test 5: event_joined() is handled correctly", {
   expected <- bind_rows(
     adrs,
     tibble::tribble(
-  ~STUDYID, ~USUBJID, ~ADTC,         ~AVALC,
-   "xyz",      "1",      "2020-02-01",  "CR",
-   "xyz",      "2",      "2020-02-01",  "SD",
-   "xyz",      "3",      "2020-01-01",  "SD",
-   "xyz",      "4",      "2020-03-01",  "SD",
-   "xyz",      "5",      "2020-05-15",  "NON-CR/NON-PD",
-   "xyz",      "6",      "2020-03-30",  "SD",
-   "xyz",      "7",      "2020-02-06",  "NE",
-   "xyz",      "8",      NA_character_, "MISSING",
-   "xyz",      "9",      "2020-02-16",  "PD"
+      ~STUDYID, ~USUBJID, ~ADTC, ~AVALC,
+      "xyz", "1", "2020-02-01", "CR",
+      "xyz", "2", "2020-02-01", "SD",
+      "xyz", "3", "2020-01-01", "SD",
+      "xyz", "4", "2020-03-01", "SD",
+      "xyz", "5", "2020-05-15", "NON-CR/NON-PD",
+      "xyz", "6", "2020-03-30", "SD",
+      "xyz", "7", "2020-02-06", "NE",
+      "xyz", "8", NA_character_, "MISSING",
+      "xyz", "9", "2020-02-16", "PD"
     ) %>%
       mutate(
         ADT = lubridate::ymd(ADTC),
@@ -520,10 +520,10 @@ test_that("derive_extreme_event Test 5: event_joined() is handled correctly", {
 ## Test 6: no tmp_event_nr_var ----
 test_that("derive_extreme_event Test 6: no tmp_event_nr_var", {
   adrs <- tibble::tribble(
-   ~STUDYID, ~USUBJID, ~AVISITN, ~AVALC,
-     "xyz",   "1",       1,       "PR",
-     "xyz",   "1",       2,       "CR",
-     "xyz",    "1",      3,        "CR"
+    ~STUDYID, ~USUBJID, ~AVISITN, ~AVALC,
+    "xyz", "1", 1, "PR",
+    "xyz", "1", 2, "CR",
+    "xyz", "1", 3, "CR"
   ) %>%
     mutate(PARAMCD = "OVR")
 
@@ -556,8 +556,8 @@ test_that("derive_extreme_event Test 6: no tmp_event_nr_var", {
   expected <- bind_rows(
     adrs,
     tibble::tribble(
-   ~STUDYID, ~USUBJID, ~AVISITN, ~AVALC, ~PARAMCD,
-    "xyz",        "1",             1, "Y",    "CRSP"
+      ~STUDYID, ~USUBJID, ~AVISITN, ~AVALC, ~PARAMCD,
+      "xyz", "1", 1, "Y", "CRSP"
     )
   )
 
@@ -571,15 +571,15 @@ test_that("derive_extreme_event Test 6: no tmp_event_nr_var", {
 ## Test 7: mode and condition used in event() ----
 test_that("derive_extreme_event Test 7: mode and condition used in event()", {
   mydata <- tibble::tribble(
-   ~STUDYID, ~USUBJID, ~CRIT1FL, ~ADY,
-  "xyz",       "1",      "Y",         1,
-  "xyz",      "1",      "Y",         2,
-  "xyz",      "2",      "N",         1
+    ~STUDYID, ~USUBJID, ~CRIT1FL, ~ADY,
+    "xyz", "1", "Y", 1,
+    "xyz", "1", "Y", 2,
+    "xyz", "2", "N", 1
   )
 
   expected <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~CRIT1FL, ~ADY,
-      "xyz",          "1",      "Y",         1
+    "xyz", "1", "Y", 1
   )
 
   expect_dfs_equal(
@@ -604,13 +604,13 @@ test_that("derive_extreme_event Test 7: mode and condition used in event()", {
 ## Test 8: error if source dataset not available ----
 test_that("derive_extreme_event Test 8: error if source dataset not available", {
   adhy <- tibble::tribble(
-   ~STUDYID, ~USUBJID, ~AVISITN, ~CRIT1FL,
-    "xyz",    "1",             1, "Y",
-    "xyz",    "1",             2, "Y",
-    "xyz",    "2",             1, "Y",
-    "xyz",    "2",             2, NA_character_,
-    "xyz",    "2",             3, "Y",
-    "xyz",    "2",             4, NA_character_
+    ~STUDYID, ~USUBJID, ~AVISITN, ~CRIT1FL,
+    "xyz", "1", 1, "Y",
+    "xyz", "1", 2, "Y",
+    "xyz", "2", 1, "Y",
+    "xyz", "2", 2, NA_character_,
+    "xyz", "2", 3, "Y",
+    "xyz", "2", 4, NA_character_
   ) %>%
     mutate(
       PARAMCD = "ALKPH",
@@ -650,10 +650,10 @@ test_that("derive_extreme_event Test 8: error if source dataset not available", 
 ## Test 9: deprecation of ignore_event_order ----
 test_that("derive_extreme_event Test 9: deprecation of ignore_event_order", {
   adrs <- tibble::tribble(
-   ~STUDYID, ~USUBJID, ~AVISITN, ~AVALC,
-    "xyz",    "1",             1, "PR",
-    "xyz",    "1",             2, "CR",
-    "xyz",    "1",             3, "CR"
+    ~STUDYID, ~USUBJID, ~AVISITN, ~AVALC,
+    "xyz", "1", 1, "PR",
+    "xyz", "1", 2, "CR",
+    "xyz", "1", 3, "CR"
   ) %>%
     mutate(PARAMCD = "OVR")
 
@@ -691,10 +691,10 @@ test_that("derive_extreme_event Test 9: deprecation of ignore_event_order", {
 ## Test 10: deprecation of ignore_event_order ----
 test_that("derive_extreme_event Test 10: deprecation of ignore_event_order", {
   adrs <- tibble::tribble(
- ~STUDYID, ~USUBJID, ~AVISITN, ~AVALC,
-  "xyz",    "1",             1, "PR",
-  "xyz",    "1",             2, "CR",
-  "xyz",    "1",             3, "CR"
+    ~STUDYID, ~USUBJID, ~AVISITN, ~AVALC,
+    "xyz", "1", 1, "PR",
+    "xyz", "1", 2, "CR",
+    "xyz", "1", 3, "CR"
   ) %>%
     mutate(PARAMCD = "OVR")
 

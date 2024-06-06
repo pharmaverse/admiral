@@ -116,7 +116,7 @@ adae <- adae %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = !!!get_admiral_option("subject_keys"),
+      by_vars = get_admiral_option("subject_keys"),
       order = exprs(desc(ASEVN), ASTDTM, AESEQ),
       new_var = AOCCIFL,
       mode = "first"
