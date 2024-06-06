@@ -40,7 +40,7 @@ BugReports: https://github.com/pharmaverse/admiral/issues
 Depends: 
     R (>= 4.0)
 Imports:
-    admiraldev (>= 1.0.0.9004),
+    admiraldev (>= 1.1.0),
     cli (>= 3.6.2),
     dplyr (>= 1.0.5),
     hms (>= 0.5.3),
@@ -58,7 +58,7 @@ Suggests:
     htmltools,
     knitr,
     methods,
-    pharmaversesdtm (>= 0.2.0),
+    pharmaversesdtm (>= 1.0.0),
     reactable,
     readxl,
     rmarkdown,
