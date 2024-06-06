@@ -44,13 +44,13 @@ Authors:
   \item Eric Simms
   \item Daniel Sjoberg
   \item Stefan Thoma
+  \item Phillip Webster
   \item Kangjie Zhang
   \item Zelos Zhu
 }
 
 Other contributors:
 \itemize{
-  \item Thomas Neitmann [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
 }
