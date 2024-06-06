@@ -555,6 +555,12 @@ create_single_dose_dataset <- function(dataset,
     cli_abort(err_msg)
   }
 
+  # Check lookup_table does not contain duplicates
+  signal_duplicate_records(
+    dataset = lookup_table,
+    by_vars = exprs(!!lookup_column)
+  )
+
   # Use compute_duration to determine the number of completed dose periods
 
   if (is.null(start_datetime)) {
