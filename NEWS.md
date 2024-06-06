@@ -1,4 +1,4 @@
-# admiral (development version)
+# admiral 1.1.0
 
 ## New Features
 - Added helper functions to `derive_vars_merged()` (`get_flagged_records()`) and `derive_vars_query()` (`get_vars_query()`) so that those can be called independently as per user's request. `derive_vars_merged()` function call results are not impacted by the change (#2441).
