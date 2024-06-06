@@ -442,7 +442,7 @@ assert_parameters_argument <- function(parameters, optional = TRUE) {
 #'
 #' @return A dataset with one observation per by group. It contains the
 #'   variables specified for `by_vars` and all variables of the form
-#'   `<variable>.<parameter>` occurring in `analysis_value`.
+#'   `<variable>.<parameter>` occurring in `set_values_to`.
 #'
 #' @keywords internal
 get_hori_data <- function(dataset,

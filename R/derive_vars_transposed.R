@@ -28,6 +28,16 @@
 #'
 #' @param filter Expression used to restrict the records of `dataset_merge` prior to transposing
 #'
+#' @param relationship Expected merge-relationship between the `by_vars`
+#'   variable(s) in `dataset` and `dataset_merge` (after transposition)
+#'
+#'   This argument is passed to the `dplyr::left_join()` function. See
+#'   <https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments> for
+#'   more details.
+#'
+#'   Permitted Values for `relationship`: `"one-to-one"`, `"one-to-many"`,
+#'   `"many-to-one"`, `"many-to-many"`, `NULL`.
+#'
 #' @details
 #' After filtering `dataset_merge` based upon the condition provided in `filter`, this
 #' dataset is transposed and subsequently merged onto `dataset` using `by_vars` as
@@ -90,7 +100,8 @@ derive_vars_transposed <- function(dataset,
                                    id_vars = NULL,
                                    key_var,
                                    value_var,
-                                   filter = NULL) {
+                                   filter = NULL,
+                                   relationship = NULL) {
   key_var <- assert_symbol(enexpr(key_var))
   value_var <- assert_symbol(enexpr(value_var))
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
@@ -98,6 +109,12 @@ derive_vars_transposed <- function(dataset,
   assert_vars(id_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
   assert_data_frame(dataset_merge, required_vars = expr_c(by_vars, key_var, value_var))
+  relationship <- assert_character_scalar(
+    relationship,
+    values = c("one-to-one", "one-to-many", "many-to-one", "many-to-many"),
+    case_sensitive = TRUE,
+    optional = TRUE
+  )
 
   dataset_transposed <- dataset_merge %>%
     filter_if(filter) %>%
@@ -107,7 +124,65 @@ derive_vars_transposed <- function(dataset,
       id_cols = c(as.character(by_vars), as.character(id_vars))
     )
 
-  left_join(dataset, dataset_transposed, by = vars2chr(by_vars))
+  tryCatch(
+    left_join(
+      dataset,
+      dataset_transposed,
+      by = vars2chr(by_vars),
+      relationship = relationship
+    ),
+    "dplyr_error_join_relationship_one_to_one" = function(cnd) {
+      cli_abort(
+        message = c(
+          str_replace(
+            str_replace(
+              cnd$message, "`x`", "`dataset`"
+            ), "`y`", "the transposed `dataset_merge`"
+          ),
+          i = str_replace(
+            str_replace(
+              cnd$body, "`x`", "`dataset`"
+            ), "`y`", "the transposed `dataset_merge`"
+          )
+        ),
+        call = parent.frame(n = 4)
+      )
+    },
+    "dplyr_error_join_relationship_many_to_one" = function(cnd) {
+      cli_abort(
+        message = c(
+          str_replace(
+            str_replace(
+              cnd$message, "`x`", "`dataset`"
+            ), "`y`", "the transposed `dataset_merge`"
+          ),
+          i = str_replace(
+            str_replace(
+              cnd$body, "`x`", "`dataset`"
+            ), "`y`", "the transposed `dataset_merge`"
+          )
+        ),
+        call = parent.frame(n = 4)
+      )
+    },
+    "dplyr_error_join_relationship_one_to_many" = function(cnd) {
+      cli_abort(
+        message = c(
+          str_replace(
+            str_replace(
+              cnd$message, "`x`", "`dataset`"
+            ), "`y`", "the transposed `dataset_merge`"
+          ),
+          i = str_replace(
+            str_replace(
+              cnd$body, "`x`", "`dataset`"
+            ), "`y`", "the transposed `dataset_merge`"
+          )
+        ),
+        call = parent.frame(n = 4)
+      )
+    }
+  )
 }
 
 #' Derive ATC Class Variables

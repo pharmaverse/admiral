@@ -291,7 +291,7 @@ map `DSDECOD` to a suitable `EOSSTT` value.
 ### Disposition Reason(s) (e.g. `DCSREAS`, `DCSREASP`) {#disposition_reason}
 
 The main reason for discontinuation is usually stored in `DSDECOD` while `DSTERM` provides 
-additional details regarding subject’s discontinuation (e.g., description of `"OTHER"`).
+additional details regarding subject's discontinuation (e.g., description of `"OTHER"`).
 
 The function `derive_vars_merged()` can be used to derive a disposition reason
 (along with the details, if required) at a specific timepoint. The relevant
