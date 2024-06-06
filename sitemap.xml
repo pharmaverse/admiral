@@ -28,6 +28,9 @@
     <loc>https://pharmaverse.github.io/admiral/articles/bds_tte.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/articles/concepts_conventions.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/articles/faq.html</loc>
   </url>
   <url>
@@ -74,9 +77,6 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pharmaverse.github.io/admiral/pull_request_template.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/admiral-package.html</loc>
@@ -176,6 +176,9 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/count_vals.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/country_code_lookup.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/create_period_dataset.html</loc>
@@ -427,6 +430,9 @@
     <loc>https://pharmaverse.github.io/admiral/reference/get_duplicates_dataset.html</loc>
   </url>
   <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/get_flagged_records.html</loc>
+  </url>
+  <url>
     <loc>https://pharmaverse.github.io/admiral/reference/get_hori_data.html</loc>
   </url>
   <url>
@@ -455,6 +461,9 @@
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/get_terms_from_db.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiral/reference/get_vars_query.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiral/reference/impute_dtc_dt.html</loc>
