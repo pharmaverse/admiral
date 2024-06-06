@@ -1,9 +1,9 @@
 #' Print Hello World
 #'
 #' @export
-#' @return
+#' @return Hello World!
 #'
 #' @examples
-hello <- function() {
-  print("Hello World!")
-}
+#' hello <- function() {
+#'  print("Hello World!")
+#' }

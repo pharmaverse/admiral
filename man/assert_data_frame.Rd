@@ -66,7 +66,7 @@ dm <- tribble(
 )
 
 example_fun <- function(dataset) {
-  assert_data_frame(dataset, required_vars = exprs(STUDYID, USUBJID))
+  assert_data_frame(dataset, required_vars = get_admiral_option("subject_keys"))
 }
 
 example_fun(dm)
