@@ -333,7 +333,7 @@ adbds <- tribble(
 derive_vars_joined(
   adbds,
   dataset_add = adbds,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   order = exprs(AVAL),
   new_vars = exprs(NADIR = AVAL),
   join_vars = exprs(ADY),
@@ -368,7 +368,7 @@ adlb <- tribble(
 derive_vars_joined(
   adae,
   dataset_add = adlb,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   order = exprs(AVAL, desc(ADY)),
   new_vars = exprs(HGB_MAX = AVAL, HGB_DY = ADY),
   join_type = "all",
@@ -410,7 +410,7 @@ adae <- tribble(
 derive_vars_joined(
   adae,
   dataset_add = period_ref,
-  by_vars = exprs(STUDYID, USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   join_vars = exprs(APERSDT, APEREDT),
   join_type = "all",
   filter_join = APERSDT <= ASTDT & ASTDT <= APEREDT
@@ -437,7 +437,7 @@ ex <- tribble(
 derive_vars_joined(
   adae,
   dataset_add = ex,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   order = exprs(EXSDT = convert_dtc_to_dt(EXSDTC)),
   join_type = "all",
   new_vars = exprs(LDRELD = compute_duration(

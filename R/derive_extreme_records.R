@@ -140,7 +140,7 @@
 #' derive_extreme_records(
 #'   adlb,
 #'   dataset_add = adlb,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   order = exprs(AVAL, AVISITN),
 #'   mode = "first",
 #'   filter_add = !is.na(AVAL),
@@ -157,7 +157,7 @@
 #' derive_extreme_records(
 #'   adlb,
 #'   dataset_add = adlb,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   order = exprs(desc(AVAL), AVISITN),
 #'   mode = "first",
 #'   filter_add = !is.na(AVAL),
@@ -172,7 +172,7 @@
 #' derive_extreme_records(
 #'   adlb,
 #'   dataset_add = adlb,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   order = exprs(AVISITN),
 #'   mode = "last",
 #'   set_values_to = exprs(
@@ -213,7 +213,7 @@
 #'   adrs,
 #'   dataset_ref = adsl,
 #'   dataset_add = adrs,
-#'   by_vars = exprs(STUDYID, USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   filter_add = PARAMCD == "OVR" & AVALC == "PD",
 #'   order = exprs(ADT),
 #'   exist_flag = AVALC,
@@ -233,7 +233,7 @@
 #' derive_extreme_records(
 #'   dataset_ref = adsl,
 #'   dataset_add = adsl,
-#'   by_vars = exprs(STUDYID, USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   filter_add = !is.na(DTHDT),
 #'   exist_flag = AVALC,
 #'   true_value = "Y",

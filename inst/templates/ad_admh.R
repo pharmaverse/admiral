@@ -41,7 +41,7 @@ admh <- mh %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = exprs(STUDYID, USUBJID)
+    by_vars = get_admiral_option("subject_keys")
   ) %>%
   ## Derive dates (ASTDT, AEDT, ...) ----
   # Derive analysis start date and flag
@@ -82,39 +82,39 @@ admh <- mh %>%
   )) %>%
   ## Derive occurrence flags ----
   derive_var_extreme_flag(
-    by_vars = exprs(USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     order = exprs(ASTDT, MHSEQ),
     new_var = AOCCFL,
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = exprs(USUBJID, MHBODSYS),
-    order = exprs(USUBJID, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(MHBODSYS)),
+    order = c(get_admiral_option("subject_keys"), exprs(MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ)),
     new_var = AOCCSFL,
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = exprs(USUBJID, MHDECOD),
-    order = exprs(USUBJID, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(MHDECOD)),
+    order = c(get_admiral_option("subject_keys"), exprs(MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ)),
     new_var = AOCCPFL,
     mode = "first"
   ) %>%
   # (company specific occurrence flag variables derivation)
   derive_var_extreme_flag(
-    by_vars = exprs(USUBJID),
-    order = exprs(USUBJID, AHIST, ASTDT, MHSEQ),
+    by_vars = get_admiral_option("subject_keys"),
+    order = c(get_admiral_option("subject_keys"), exprs(AHIST, ASTDT, MHSEQ)),
     new_var = AOCPFL,
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = exprs(USUBJID, MHBODSYS),
-    order = exprs(USUBJID, AHIST, MHBODSYS, MHCAT, ASTDT, MHSEQ),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(MHBODSYS)),
+    order = c(get_admiral_option("subject_keys"), exprs(AHIST, MHBODSYS, MHCAT, ASTDT, MHSEQ)),
     new_var = AOCPSFL,
     mode = "first"
   ) %>%
   derive_var_extreme_flag(
-    by_vars = exprs(USUBJID, MHDECOD),
-    order = exprs(USUBJID, AHIST, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(MHDECOD)),
+    order = c(get_admiral_option("subject_keys"), exprs(AHIST, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ)),
     new_var = AOCPPFL,
     mode = "first"
   ) %>%
@@ -159,7 +159,7 @@ admh <- restrict_derivation(
 admh <- admh %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(STUDYID, USUBJID)
+    by_vars = get_admiral_option("subject_keys")
   )
 
 

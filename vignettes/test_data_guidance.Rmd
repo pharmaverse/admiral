@@ -1,0 +1,20 @@
+---
+title: "Test Data Guidance"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Test Data Guidance}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+There are two test data packages that enable any Pharmaverse package development team to re-use test SDTM and ADaM: 
+
+- [`{pharmaversesdtm}`](https://github.com/pharmaverse/pharmaversesdtm): a data package that stores test SDTM data. If the current available data does not meet your need, update or add the new data in this package based on the instructions provided on the [How to Update](https://pharmaverse.github.io/pharmaversesdtm/cran-release/).
+
+- [`{pharmaverseadam}`](https://github.com/pharmaverse/pharmaverseadam): a data package that stores test ADaM data created from {admiral} templates. There is an integration test that runs {admiral} templates and compares them with the stored version. If differences are found, it then triggers an action: either accepting the difference and storing the new ADaM, or rejecting it and identifying the cause of the differences in the templates.

@@ -30,7 +30,7 @@ data(admiral_adsl)
 # Duplicate the first record
 adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 
-extract_duplicate_records(adsl, exprs(USUBJID))
+extract_duplicate_records(adsl, get_admiral_option("subject_keys"))
 }
 \seealso{
 Other internal: 

@@ -194,7 +194,7 @@ adqs <- tribble(
 # Add a new record for each USUBJID storing the the worst sleeping problem.
 derive_extreme_event(
   adqs,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   events = list(
     event(
       condition = PARAMCD == "NO SLEEP" & AVALC == "Y",
@@ -245,7 +245,7 @@ adhy <- tribble(
 
 derive_extreme_event(
   adhy,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   events = list(
     event(
       condition = is.na(CRIT1FL),
@@ -316,13 +316,13 @@ adrs <- tribble(
   ) \%>\%
   derive_vars_merged(
     dataset_add = adsl,
-    by_vars = exprs(USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     new_vars = exprs(TRTSDT)
   )
 
 derive_extreme_event(
   adrs,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   tmp_event_nr_var = event_nr,
   order = exprs(event_nr, ADT),
   mode = "first",

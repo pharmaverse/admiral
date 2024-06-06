@@ -58,7 +58,7 @@ get_flagged_records(
   new_var = AERELFL,
   condition = AEREL == "PROBABLE"
 ) \%>\%
-  select(STUDYID, USUBJID, AERELFL)
+  select(!!!get_admiral_option("subject_keys"), AERELFL)
 
 vs <- tribble(
   ~STUDYID,  ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSBLFL,
@@ -81,7 +81,7 @@ get_flagged_records(
   condition = VSSTRESN > 90,
   filter = VSTESTCD == "WEIGHT" & VSBLFL == "Y"
 ) \%>\%
-  select(STUDYID, USUBJID, WTBLHIFL)
+  select(!!!get_admiral_option("subject_keys"), WTBLHIFL)
 
 }
 \seealso{
@@ -89,7 +89,8 @@ Utilities used within Derivation functions:
 \code{\link{call_user_fun}()},
 \code{\link{extract_unit}()},
 \code{\link{get_not_mapped}()},
-\code{\link{get_vars_query}()}
+\code{\link{get_vars_query}()},
+\code{\link{process_set_values_to}()}
 }
 \concept{utils_help}
 \keyword{utils_help}

@@ -81,7 +81,7 @@
 #' # Select first dose for each patient
 #' ex %>%
 #'   filter_extreme(
-#'     by_vars = exprs(USUBJID),
+#'     by_vars = get_admiral_option("subject_keys"),
 #'     order = exprs(EXSEQ),
 #'     mode = "first"
 #'   ) %>%
@@ -91,7 +91,7 @@
 #' ex %>%
 #'   filter(EXTRT != "PLACEBO") %>%
 #'   filter_extreme(
-#'     by_vars = exprs(USUBJID),
+#'     by_vars = get_admiral_option("subject_keys"),
 #'     order = exprs(EXDOSE),
 #'     mode = "last",
 #'     check_type = "none"

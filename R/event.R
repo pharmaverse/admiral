@@ -262,13 +262,13 @@ event <- function(dataset_name = NULL,
 #'   ) %>%
 #'   derive_vars_merged(
 #'     dataset_add = adsl,
-#'     by_vars = exprs(USUBJID),
+#'     by_vars = get_admiral_option("subject_keys"),
 #'     new_vars = exprs(TRTSDT)
 #'   )
 #'
 #' derive_extreme_event(
 #'   adrs,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   order = exprs(ADT),
 #'   mode = "first",
 #'   source_datasets = list(adsl = adsl),

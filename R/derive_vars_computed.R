@@ -153,7 +153,7 @@
 #' derive_vars_computed(
 #'   dataset = adsl,
 #'   dataset_add = advs,
-#'   by_vars = exprs(STUDYID, USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   parameters = c("WEIGHT", "HEIGHT"),
 #'   new_vars = exprs(BMIBL = compute_bmi(height = AVAL.HEIGHT, weight = AVAL.WEIGHT)),
 #'   filter_add = ABLFL == "Y"

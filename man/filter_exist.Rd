@@ -74,7 +74,7 @@ adae <- tribble(
 filter_exist(
   dataset = adsl,
   dataset_add = adae,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   filter_add = AEDECOD == "FATIGUE" & AESEV \%in\% c("MODERATE", "SEVERE")
 )
 

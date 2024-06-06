@@ -107,7 +107,7 @@
 #'
 #' derive_var_merged_ef_msrc(
 #'   adsl,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   flag_events = list(
 #'     flag_event(
 #'       dataset_name = "cm",

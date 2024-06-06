@@ -1,0 +1,169 @@
+---
+title: "Release Strategy"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 6
+vignette: >
+  %\VignetteIndexEntry{Release Strategy}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(dplyr)
+library(reactable)
+```
+
+# Introduction
+
+This article explains how we do package releases for `{admiral}` and across all our
+package extensions. This includes details around planned/scheduled releases, as well
+as hotfixes.
+
+# Release Schedule
+
+A release schedule is maintained on the [homepage](https://pharmaverse.github.io/admiral/#release-schedule).
+
+# Planning Releases
+
+In the past, whenever we started looking towards a future release, we would create 
+a new release issue label on GitHub of the form `release Q4-2022` and **prioritize** 
+these issues. However, as our backlog is minimal every issue should be considered 
+a Priority Issue.  If an issue is not a Priority, then it should be sent back to 
+a Discussion Tab and formed into a Priority issue.
+
+We should share in advance with our users a high level summary of expected package
+updates via the community meetings, especially any anticipated breaking changes.
+
+# Package Release Process
+
+In the following the most important steps for a planned release and a hot fix
+release are described. Depending on the package it may be helpful to use
+`usethis::use_release_issue()` with a package-specific `release_bullets()`
+function.
+
+## Planned Release
+
+A package release is done in the following steps:
+
+1) Create the release version:
+a) Create a new feature branch from `main`.
+a) Call `usethis::use_version()` to update the `Versions:` field in the
+`DESCRIPTION` file and update `NEWS.md` (replace "(development version)"
+with the version to be released)
+a) Create a PR into `main` and merge it. The title of the PR must contain "[skip vbump]".
+Otherwise, the vbump workflow sets the version to a development version and
+CRAN will reject the submission.
+1) Bundle up from `main` (`devtools::build(manual = TRUE)`) and send off to
+CRAN. See the [chapter](https://r-pkgs.org/release.html#decide-the-release-type)
+in R Packages for more details.
+1) If CRAN asks for modifications, repeat steps 1-2 as necessary.
+1) Once the package is accepted and available on CRAN, use the release button on
+GitHub to "release" the package onto GitHub, select the `main` branch as target,
+and use a tag of the form `vX.Y.Z`, e.g., `v1.1.2` (see past [admiral
+releases](https://github.com/pharmaverse/admiral/releases) for reference and
+[Releasing to Github](release_strategy.html#releasing-to-github) section for
+more details).
+
+This releases onto Github archives the version of code within the `main` branch,
+attaches the News/Changelog file, bundles the code into a `tar.gz` file and
+makes a validation report via the GitHub action `validation` from
+[insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).
+
+It also builds the website for the released version and stores it in a new
+`vx.y.z` folder on the `gh-pages` branch.
+
+1) Merge `main` into `patch` to be prepared in case of a needed hotfix.
+1) Create the next development version:
+a) Create a new feature branch from `main`.
+a) Call `usethis::use_dev_version()` to update `NEWS.md` (adds a new
+section `# admiral (development version)`) and update the version in the
+`DESCRIPTION` file to a development version.
+a) Create a PR into `main` and merge it.
+
+## Hot Fix Release
+
+Rarely, we may need to release a hot fix to immediately address a bug. In the
+majority of cases, an off-cycle release can be made directly from the `main`
+branch, where bug fixes and new features would be released earlier than planned,
+thus avoiding the `patch` branch release.
+
+A hot fix release is done in the following steps:
+
+1) Identify all the bugs that need to be fixed for this hot fix release and
+label them with the "hotfix" label.
+1) Branches addressing the bugs should have Pull Requests merged into a single
+`patch` branch **NOT** the `main` branch, where the `patch` branch has been
+created from the most recent release of the package. To do this, run the following git commands:
+
+`git checkout -b patch vX.Y.Z`
+
+`git push -u origin patch`
+
+There is no need to use
+development versions. I.e., the first pull request should set the version in
+`DESCRIPTION` to the version to be released and a corresponding heading should
+be added to `NEWS.md`.
+
+1) When naming the branch follow the [naming conventions](git_usage.html#implementing-an-issue) guide.
+
+1) If all PRs for the hot fix are merged (to `patch`), bundle up from `patch`
+(`devtools::build(manual = TRUE)`) and send off to CRAN. See the
+[chapter](https://r-pkgs.org/release.html#decide-the-release-type) in R Packages
+for more details.
+
+1) If CRAN asks for modifications, repeat steps 1-4 as necessary.
+
+1) Once the package is accepted and available on CRAN, , use the release button
+
+on GitHub to "release" the package onto GitHub, select the `patch` branch as
+target, and use a tag of the form `vX.Y.Z`, e.g., `v1.1.2` (see past [admiral
+releases](https://github.com/pharmaverse/admiral/releases) for reference and
+[Releasing to Github](release_strategy.html#releasing-to-github) section for
+more details).
+
+This releases onto Github archives the version of code within the `patch`
+branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file
+and makes a validation report via the GitHub action `validation` from
+[insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).
+
+It also builds the website for the released version and stores it in a new
+`vx.y.z` folder on the `gh-pages` branch.
+
+1) These hot fixes should then be merged into the `main` branch through an
+additional Pull Request. Merging the PR will update the version in the
+`DESCRIPTION` file to a development version.
+1) Create the next development version:
+a) Create a new feature branch from `main`.
+a) Update `NEWS.md` (add a new section `# admiral (development version)`)
+a) Create a PR into `main` and merge it.
+
+# Releasing to Github
+Under the [Releases](https://github.com/pharmaverse/admiral/releases) section in the main repo, select `Draft a New Release`. Proceed by creating the appropriate release tag and header, denoted as `vX.X.X` and `admiral X.X.X` respectively, for the release:
+
+![](https://user-images.githubusercontent.com/43018762/228875673-5b6daa64-1909-47c9-bd61-69b810c2f742.png)
+
+Copy the contents of the `NEWS.md` section for the release, paste it into the release notes section:
+
+![](https://user-images.githubusercontent.com/43018762/228875743-d17729fe-9b38-432a-9bb0-5fdc157ec231.png)
+
+Then in the upload box where it says, "Attach binaries by dropping them here or selecting them" upload the appropriate `admiral_X.X.X.tar.gz` file available for download at the  [CRAN website](https://cran.r-project.org/web/packages/admiral/index.html). Click `Publish Release` and you're all done!
+
+**NB:** Occasionally, you might need to delete the tag when something is done in error.  Deleting a tag can not be done on GitHub and must be done in the terminal.  However, it is very easy!!  Just use:
+
+`git push --delete origin tagname`
+
+# Release Tracking
+
+When a new package release has been submitted to CRAN and is awaiting go-live, you can track its status by searching for it within [this dashboard](https://r-hub.github.io/cransays/articles/dashboard.html).
+
+# Communications
+
+After the release, we raise awareness via our Slack channel and LinkedIn.
+

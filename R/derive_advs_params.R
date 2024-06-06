@@ -322,7 +322,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'     PARAM = "Body Surface Area (m^2)"
 #'   ),
 #'   get_unit_expr = extract_unit(PARAM),
-#'   constant_by_vars = exprs(USUBJID)
+#'   constant_by_vars = get_admiral_option("subject_keys")
 #' )
 #'
 #' derive_param_bsa(
@@ -334,7 +334,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'     PARAM = "Body Surface Area (m^2)"
 #'   ),
 #'   get_unit_expr = extract_unit(PARAM),
-#'   constant_by_vars = exprs(USUBJID)
+#'   constant_by_vars = get_admiral_option("subject_keys")
 #' )
 #'
 #' # Example 2: Derive BSA where height is measured only once and keep only one record
@@ -630,7 +630,7 @@ compute_bsa <- function(height = height,
 #'     PARAM = "Body Mass Index (kg/m^2)"
 #'   ),
 #'   get_unit_expr = extract_unit(PARAM),
-#'   constant_by_vars = exprs(USUBJID)
+#'   constant_by_vars = get_admiral_option("subject_keys")
 #' )
 #'
 #' # Example 2: Derive BMI where height is measured only once and keep only one record

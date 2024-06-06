@@ -290,7 +290,7 @@ adae <- tribble(
 filter_joined(
   adae,
   dataset_add = adae,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   join_vars = exprs(ACOVFL, ADY),
   join_type = "all",
   order = exprs(ADY),
@@ -314,7 +314,7 @@ data <- tribble(
 filter_joined(
   data,
   dataset_add = data,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   join_vars = exprs(AVALC, AVISITN),
   join_type = "after",
   order = exprs(AVISITN),
@@ -344,7 +344,7 @@ data <- tribble(
 filter_joined(
   data,
   dataset_add = data,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   join_vars = exprs(AVALC),
   join_type = "after",
   order = exprs(AVISITN),
@@ -377,7 +377,7 @@ data <- tribble(
 filter_joined(
   data,
   dataset_add = data,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   join_vars = exprs(AVALC, ADY),
   join_type = "after",
   order = exprs(ADY),
@@ -410,7 +410,7 @@ data <- tribble(
 filter_joined(
   data,
   dataset_add = data,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   tmp_obs_nr_var = tmp_obs_nr,
   join_vars = exprs(CRIT1FL),
   join_type = "all",

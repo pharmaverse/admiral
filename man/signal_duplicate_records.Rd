@@ -8,7 +8,7 @@ signal_duplicate_records(
   dataset,
   by_vars,
   msg =
-    "Dataset contains duplicate records with respect to {.var {replace_values_by_names(by_vars)}}",
+    "Dataset contains duplicate records with respect to\\n                                     {.var {replace_values_by_names(by_vars)}}",
   cnd_type = "error"
 )
 }
@@ -41,7 +41,7 @@ data(admiral_adsl)
 # Duplicate the first record
 adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 
-signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "message")
+signal_duplicate_records(adsl, get_admiral_option("subject_keys"), cnd_type = "message")
 }
 \seealso{
 Other internal: 

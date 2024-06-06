@@ -47,7 +47,7 @@
 #'   adlb,
 #'   derivation = derive_vars_merged,
 #'   args = params(
-#'     by_vars = exprs(USUBJID),
+#'     by_vars = get_admiral_option("subject_keys"),
 #'     dataset_add = adlb,
 #'     filter_add = ABLFL == "Y",
 #'     new_vars = exprs(BASE = AVAL)
@@ -60,7 +60,7 @@
 #'   adlb,
 #'   derivation = derive_var_base,
 #'   args = params(
-#'     by_vars = exprs(USUBJID)
+#'     by_vars = get_admiral_option("subject_keys")
 #'   ),
 #'   filter = AVISITN >= 0
 #' ) %>%

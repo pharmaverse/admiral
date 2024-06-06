@@ -106,7 +106,7 @@
 #' derive_locf_records(
 #'   dataset = advs,
 #'   dataset_ref = advs_expected_obsv,
-#'   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+#'   by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
 #'   order = exprs(AVISITN, AVISIT),
 #'   keep_vars = exprs(PARAMN)
 #' )

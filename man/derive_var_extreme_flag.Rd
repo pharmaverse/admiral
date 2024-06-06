@@ -222,7 +222,7 @@ example_ae \%>\%
   ) \%>\%
   derive_var_extreme_flag(
     new_var = AOCCIFL,
-    by_vars = exprs(USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     order = exprs(TEMP_AESEVN, AESTDY, AESEQ),
     mode = "first"
   ) \%>\%
@@ -237,7 +237,7 @@ example_ae \%>\%
   ) \%>\%
   derive_var_extreme_flag(
     new_var = AOCCIFL,
-    by_vars = exprs(USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     order = exprs(TEMP_AESEVN, AESTDY),
     mode = "first",
     flag_all = TRUE

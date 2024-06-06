@@ -833,7 +833,7 @@ test_that("derive_param_tte Test 12: test dataset and dynamic byvars populated",
   )
 
   actual_output <- derive_param_tte(
-    dataset = adsl %>% select(STUDYID, USUBJID) %>% mutate(PARAMCD = "XYZ"),
+    dataset = adsl %>% select(!!!get_admiral_option("subject_keys")) %>% mutate(PARAMCD = "XYZ"),
     dataset_adsl = adsl,
     by_vars = exprs(AEDECOD),
     start_date = TRTSDT,
@@ -849,7 +849,7 @@ test_that("derive_param_tte Test 12: test dataset and dynamic byvars populated",
   )
 
   expected_output <- bind_rows(
-    adsl %>% select(STUDYID, USUBJID) %>% mutate(PARAMCD = "XYZ"),
+    adsl %>% select(!!!get_admiral_option("subject_keys")) %>% mutate(PARAMCD = "XYZ"),
     tibble::tribble(
       ~USUBJID,    ~EVNTDESC, ~SRCDOM,   ~SRCVAR,  ~SRCSEQ, ~CNSR,              ~ADT,
       "01",             "AE",    "AE", "AESTDTC",        2,    0L, ymd("2021-03-04"),

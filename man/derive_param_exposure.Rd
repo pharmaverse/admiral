@@ -144,7 +144,7 @@ adex <- tribble(
 adex \%>\%
   derive_param_exposure(
     dataset_add = adex,
-    by_vars = exprs(USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     set_values_to = exprs(
       PARAMCD = "TDOSE",
       PARCAT1 = "OVERALL",
@@ -158,7 +158,7 @@ adex \%>\%
 adex \%>\%
   derive_param_exposure(
     dataset_add = adex,
-    by_vars = exprs(USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     filter_add = VISIT \%in\% c("WEEK 2", "WEEK 24"),
     set_values_to = exprs(
       PARAMCD = "AVDW224",
@@ -173,7 +173,7 @@ adex \%>\%
 adex \%>\%
   derive_param_exposure(
     dataset_add = adex,
-    by_vars = exprs(USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     set_values_to = exprs(
       PARAMCD = "TADJ",
       PARCAT1 = "OVERALL",

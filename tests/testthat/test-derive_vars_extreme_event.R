@@ -11,7 +11,7 @@ test_that("derive_vars_extreme_event Test 1: derive_vars_extreme_event", {
 
   actual <- derive_vars_extreme_event(
     adsl,
-    by_vars = exprs(STUDYID, USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     events = list(
       event(
         dataset_name = "adsl",

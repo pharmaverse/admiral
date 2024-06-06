@@ -2,21 +2,21 @@
 ## Test 1: add last observation for each group ----
 test_that("derive_extreme_records Test 1: add last observation for each group", {
   input <- tibble::tribble(
-    ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
-    "1",             1,    12,      1,
-    "1",             3,     9,      2,
-    "2",             2,    42,      1,
-    "3",             3,    14,      1,
-    "3",             3,    10,      2
+   ~STUDYID, ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
+   "xyz",      "1",             1,    12,      1,
+   "xyz",      "1",             3,     9,      2,
+   "xyz",      "2",             2,    42,      1,
+   "xyz",      "3",             3,    14,      1,
+   "xyz",      "3",             3,    10,      2
   )
 
   expected_output <- bind_rows(
     input,
     tibble::tribble(
-      ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
-      "1",             3,     9,      2,
-      "2",             2,    42,      1,
-      "3",             3,    10,      2
+    ~STUDYID,  ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
+      "xyz",    "1",             3,     9,      2,
+      "xyz",    "2",             2,    42,      1,
+      "xyz",    "3",             3,    10,      2
     ) %>%
       mutate(DTYPE = "LOV")
   )
@@ -25,7 +25,7 @@ test_that("derive_extreme_records Test 1: add last observation for each group", 
     input,
     dataset_add = input,
     order = exprs(AVISITN, LBSEQ),
-    by_vars = exprs(USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     mode = "last",
     set_values_to = exprs(DTYPE = "LOV")
   )
@@ -74,7 +74,7 @@ test_that("derive_extreme_records Test 2: derive first PD date", {
     adrs,
     dataset_ref = adsl,
     dataset_add = adrs,
-    by_vars = exprs(USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     filter_add = PARAMCD == "OVR" & AVALC == "PD",
     exist_flag = AVALC,
     order = exprs(ADT),
@@ -121,7 +121,7 @@ test_that("derive_extreme_records Test 3: derive death date parameter", {
   actual <- derive_extreme_records(
     dataset_ref = adsl,
     dataset_add = adsl,
-    by_vars = exprs(STUDYID, USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     filter_add = !is.na(DTHDT),
     exist_flag = AVAL,
     true_value = 1,
@@ -192,7 +192,7 @@ test_that("derive_extreme_records Test 4: latest evaluable tumor assessment date
     dataset = adrs,
     dataset_ref = adsl,
     dataset_add = adrs,
-    by_vars = exprs(STUDYID, USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     filter_add = PARAMCD == "OVR" & AVALC != "NE",
     order = exprs(ADT),
     exist_flag = AVALC,
@@ -267,7 +267,7 @@ test_that("derive_extreme_records Test 5: latest evaluable tumor assessment date
     dataset = adrs,
     dataset_ref = adsl,
     dataset_add = adrs,
-    by_vars = exprs(STUDYID, USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     filter_add = PARAMCD == "OVR" & AVALC != "NE",
     order = exprs(ADT),
     mode = "last",
@@ -314,23 +314,23 @@ test_that("derive_extreme_records Test 6: error if no dataset_add", {
 ## Test 7: keep vars in `keep_source_vars` in the new records ----
 test_that("derive_extreme_records Test 7: keep vars in `keep_source_vars` in the new records", {
   input <- tibble::tribble(
-    ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
-    1, 1, 12, 1,
-    1, 3, 9, 2,
-    2, 2, 42, 1,
-    3, 3, 14, 1,
-    3, 3, 10, 2
+ ~STUDYID, ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
+ "xyz", 1, 1, 12, 1,
+ "xyz", 1, 3, 9, 2,
+ "xyz", 2, 2, 42, 1,
+ "xyz", 3, 3, 14, 1,
+ "xyz", 3, 3, 10, 2
   )
 
   expected_output <- bind_rows(
     input,
     tibble::tribble(
-      ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
-      1, 3, 9, 2,
-      2, 2, 42, 1,
-      3, 3, 10, 2
+    ~STUDYID, ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
+      "xyz", 1, 3, 9, 2,
+    "xyz", 2, 2, 42, 1,
+    "xyz", 3, 3, 10, 2
     ) %>%
-      select(USUBJID, AVISITN, AVAL) %>%
+      select(!!!get_admiral_option("subject_keys"), AVISITN, AVAL) %>%
       mutate(DTYPE = "LOV")
   )
 
@@ -338,7 +338,7 @@ test_that("derive_extreme_records Test 7: keep vars in `keep_source_vars` in the
     input,
     dataset_add = input,
     order = exprs(AVISITN, LBSEQ),
-    by_vars = exprs(USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     mode = "last",
     keep_source_vars = exprs(AVISITN, AVAL),
     set_values_to = exprs(DTYPE = "LOV")
@@ -354,21 +354,21 @@ test_that("derive_extreme_records Test 7: keep vars in `keep_source_vars` in the
 ## Test 8: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())' ----
 test_that("derive_extreme_records Test 8: keep all vars in the new records when `keep_source_vars` is 'exprs(everything())'", { # nolint
   input <- tibble::tribble(
-    ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
-    1, 1, 12, 1,
-    1, 3, 9, 2,
-    2, 2, 42, 1,
-    3, 3, 14, 1,
-    3, 3, 10, 2
+  ~STUDYID, ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
+  "xyz", 1, 1, 12, 1,
+  "xyz", 1, 3, 9, 2,
+  "xyz", 2, 2, 42, 1,
+  "xyz", 3, 3, 14, 1,
+  "xyz", 3, 3, 10, 2
   )
 
   expected_output <- bind_rows(
     input,
     tibble::tribble(
-      ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
-      1, 3, 9, 2,
-      2, 2, 42, 1,
-      3, 3, 10, 2
+   ~STUDYID, ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
+   "xyz", 1, 3, 9, 2,
+   "xyz", 2, 2, 42, 1,
+   "xyz", 3, 3, 10, 2
     ) %>%
       mutate(DTYPE = "LOV")
   )
@@ -377,7 +377,7 @@ test_that("derive_extreme_records Test 8: keep all vars in the new records when 
     input,
     dataset_add = input,
     order = exprs(AVISITN, LBSEQ),
-    by_vars = exprs(USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     mode = "last",
     keep_source_vars = exprs(everything()),
     set_values_to = exprs(DTYPE = "LOV")
@@ -393,22 +393,22 @@ test_that("derive_extreme_records Test 8: keep all vars in the new records when 
 ## Test 9: order vars from dataset_add ----
 test_that("derive_extreme_records Test 9: order vars from dataset_add", {
   bds <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVALC,
-    "1",      "PARAM",  "1"
+ ~STUDYID, ~USUBJID, ~PARAMCD, ~AVALC,
+    "xyz",    "1",      "PARAM",  "1"
   )
 
   xx <- tibble::tribble(
-    ~USUBJID, ~XXTESTCD, ~XXSEQ,
-    "1",      "A",       1,
-    "1",      "A",       2,
-    "1",      "B",       3
+  ~STUDYID,  ~USUBJID, ~XXTESTCD, ~XXSEQ,
+    "xyz", "1",      "A",       1,
+    "xyz", "1",      "A",       2,
+    "xyz", "1",      "B",       3
   )
 
   actual <- derive_extreme_records(
     bds,
     dataset_add = xx,
     dataset_ref = bds,
-    by_vars = exprs(USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     order = exprs(XXSEQ),
     mode = "first",
     filter_add = XXTESTCD == "A",
@@ -419,9 +419,9 @@ test_that("derive_extreme_records Test 9: order vars from dataset_add", {
   )
 
   expected <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVALC, ~XXTESTCD,     ~XXSEQ,
-    "1",      "PARAM",  "1",    NA_character_, NA_real_,
-    "1",      "XXFL",   "Y",    "A",           1
+   ~STUDYID, ~USUBJID, ~PARAMCD, ~AVALC, ~XXTESTCD,     ~XXSEQ,
+    "xyz",     "1",      "PARAM",  "1",    NA_character_, NA_real_,
+   "xyz",     "1",      "XXFL",   "Y",    "A",           1
   )
 
   expect_dfs_equal(

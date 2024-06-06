@@ -98,7 +98,7 @@
 #' # Select observations up to first PD for each patient
 #' response %>%
 #'   filter_relative(
-#'     by_vars = exprs(USUBJID),
+#'     by_vars = get_admiral_option("subject_keys"),
 #'     order = exprs(AVISITN),
 #'     condition = AVALC == "PD",
 #'     mode = "first",
@@ -109,7 +109,7 @@
 #' # Select observations after last CR, PR, or SD for each patient
 #' response %>%
 #'   filter_relative(
-#'     by_vars = exprs(USUBJID),
+#'     by_vars = get_admiral_option("subject_keys"),
 #'     order = exprs(AVISITN),
 #'     condition = AVALC %in% c("CR", "PR", "SD"),
 #'     mode = "last",
@@ -120,7 +120,7 @@
 #' # Select observations from first response to first PD
 #' response %>%
 #'   filter_relative(
-#'     by_vars = exprs(USUBJID),
+#'     by_vars = get_admiral_option("subject_keys"),
 #'     order = exprs(AVISITN),
 #'     condition = AVALC %in% c("CR", "PR"),
 #'     mode = "first",
@@ -129,7 +129,7 @@
 #'     keep_no_ref_groups = FALSE
 #'   ) %>%
 #'   filter_relative(
-#'     by_vars = exprs(USUBJID),
+#'     by_vars = get_admiral_option("subject_keys"),
 #'     order = exprs(AVISITN),
 #'     condition = AVALC == "PD",
 #'     mode = "first",

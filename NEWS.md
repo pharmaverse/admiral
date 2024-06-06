@@ -11,6 +11,7 @@
 - New `country_code_lookup()` metadata added to decode countries based on [ISO 3166 codes](https://www.iso.org/iso-3166-country-codes.html). (#2388)
 
 ## Updates of Existing Functions
+- Replaced hard coding of `expr(USUBJID, STUDYID)` and `expr(USUBJID)` with `get_admiral_option("subject_keys")` so the argument is flexible and can be changed from the default by the user. (#2415)
 
 - `group_var` (optional) parameter is added to `derive_var_trtemfl()` to derive `TRTEMFL` for AE data if the data are collected as one episode of AE with multiple lines. (#2302)
 

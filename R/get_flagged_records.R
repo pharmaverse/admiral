@@ -56,7 +56,7 @@
 #'   new_var = AERELFL,
 #'   condition = AEREL == "PROBABLE"
 #' ) %>%
-#'   select(STUDYID, USUBJID, AERELFL)
+#'   select(!!!get_admiral_option("subject_keys"), AERELFL)
 #'
 #' vs <- tribble(
 #'   ~STUDYID,  ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSBLFL,
@@ -79,7 +79,7 @@
 #'   condition = VSSTRESN > 90,
 #'   filter = VSTESTCD == "WEIGHT" & VSBLFL == "Y"
 #' ) %>%
-#'   select(STUDYID, USUBJID, WTBLHIFL)
+#'   select(!!!get_admiral_option("subject_keys"), WTBLHIFL)
 #'
 get_flagged_records <- function(dataset,
                                 new_var,

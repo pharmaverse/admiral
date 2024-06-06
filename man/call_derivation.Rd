@@ -74,7 +74,7 @@ adae <- ae \%>\%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = exprs(TRTSDT, TRTEDT),
-    by_vars = exprs(USUBJID)
+    by_vars = get_admiral_option("subject_keys")
   )
 
 ## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
