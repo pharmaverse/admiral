@@ -97,7 +97,7 @@
 #'
 #' derive_var_relative_flag(
 #'   adae,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   order = exprs(ASTDY, AESEQ),
 #'   new_var = PSTCOVFL,
 #'   condition = ACOVFL == "Y",
@@ -128,7 +128,7 @@
 #' # Flag observations up to first PD for each patient
 #' response %>%
 #'   derive_var_relative_flag(
-#'     by_vars = exprs(USUBJID),
+#'     by_vars = get_admiral_option("subject_keys"),
 #'     order = exprs(AVISITN),
 #'     new_var = ANL02FL,
 #'     condition = AVALC == "PD",
@@ -142,7 +142,7 @@
 #'   restrict_derivation(
 #'     derivation = derive_var_relative_flag,
 #'     args = params(
-#'       by_vars = exprs(USUBJID),
+#'       by_vars = get_admiral_option("subject_keys"),
 #'       order = exprs(AVISITN),
 #'       new_var = ANL02FL,
 #'       condition = AVALC == "PD",

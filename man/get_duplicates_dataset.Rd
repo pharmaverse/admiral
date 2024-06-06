@@ -29,7 +29,7 @@ data(admiral_adsl)
 # Duplicate the first record
 adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 
-signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "warning")
+signal_duplicate_records(adsl, get_admiral_option("subject_keys"), cnd_type = "warning")
 
 get_duplicates_dataset()
 }

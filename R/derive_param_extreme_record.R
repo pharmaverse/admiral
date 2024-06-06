@@ -121,7 +121,7 @@
 #'     )
 #'   ),
 #'   source_datasets = list(cm = cm, pr = pr),
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   order = exprs(ADT),
 #'   mode = "first",
 #'   set_values_to = exprs(

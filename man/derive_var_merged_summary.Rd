@@ -169,7 +169,7 @@ adtr <- tribble(
 derive_var_merged_summary(
   adsl,
   dataset_add = adtr,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   filter_add = AVISIT == "BASELINE",
   new_vars = exprs(LESIONSBL = paste(LESIONID, collapse = ", "))
 )

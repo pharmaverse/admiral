@@ -81,7 +81,7 @@ advs <- vs %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = get_admiral_option("subject_keys")
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   ) %>%
   ## Calculate ADT, ADY ----
   derive_vars_dt(
@@ -98,10 +98,9 @@ advs <- advs %>%
     by_vars = exprs(VSTESTCD)
   ) %>%
   ## Calculate AVAL and AVALC ----
-  # AVALC should only be mapped if it contains non-redundant information.
   mutate(
-    # AVALC = VSSTRESC,
-    AVAL = VSSTRESN
+    AVAL = VSSTRESN,
+    AVALC = VSSTRESC
   ) %>%
   ## Derive new parameters based on existing records ----
   # Note that, for the following three `derive_param_*()` functions, only the
@@ -110,27 +109,27 @@ advs <- advs %>%
 
   # Derive Mean Arterial Pressure
   derive_param_map(
-    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = exprs(PARAMCD = "MAP"),
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   ) %>%
   # Derive Body Surface Area
   derive_param_bsa(
-    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     method = "Mosteller",
     set_values_to = exprs(PARAMCD = "BSA"),
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT),
-    constant_by_vars = get_admiral_option("subject_keys")
+    constant_by_vars = exprs(!!!get_admiral_option("subject_keys"))
   ) %>%
   # Derive Body Mass Index
   derive_param_bmi(
-    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM)),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = exprs(PARAMCD = "BMI"),
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT),
-    constant_by_vars = get_admiral_option("subject_keys")
+    constant_by_vars = exprs(!!!get_admiral_option("subject_keys"))
   )
 
 
@@ -158,7 +157,7 @@ advs <- advs %>%
 advs <- advs %>%
   derive_summary_records(
     dataset_add = advs,
-    by_vars = c(get_admiral_option("subject_keys"), adsl_vars, exprs(PARAMCD, AVISITN, AVISIT, ADT, ADY)),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT, ADY),
     filter_add = !is.na(AVAL),
     set_values_to = exprs(
       AVAL = mean(AVAL),
@@ -197,7 +196,7 @@ advs <- advs %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = c(get_admiral_option("subject_keys"), exprs(BASETYPE, PARAMCD)),
+      by_vars = exprs(!!!get_admiral_option("subject_keys"), BASETYPE, PARAMCD),
       order = exprs(ADT, VISITNUM, VSSEQ),
       new_var = ABLFL,
       mode = "last"
@@ -210,21 +209,19 @@ advs <- advs %>%
 advs <- advs %>%
   # Calculate BASE
   derive_var_base(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   ) %>%
   # Calculate BASEC
-
-  # only if AVALC is mapped
-  # derive_var_base(
-  #   by_vars = exprs(get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
-  #   source_var = AVALC,
-  #   new_var = BASEC
-  # ) %>%
+  derive_var_base(
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
+    source_var = AVALC,
+    new_var = BASEC
+  ) %>%
   # Calculate BNRIND
   derive_var_base(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, BASETYPE),
     source_var = ANRIND,
     new_var = BNRIND
   ) %>%
@@ -240,7 +237,7 @@ advs <- advs %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ANL01FL,
-      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, AVISIT, ATPT, DTYPE)),
+      by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, AVISIT, ATPT, DTYPE),
       order = exprs(ADT, AVAL),
       mode = "last"
     ),
@@ -255,7 +252,7 @@ advs <- advs %>%
   # Create End of Treatment Record
   derive_extreme_records(
     dataset_add = advs,
-    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPTN)),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, ATPTN),
     order = exprs(ADT, AVISITN, AVAL),
     mode = "last",
     filter_add = (4 < AVISITN & AVISITN <= 13 & ANL01FL == "Y" & is.na(DTYPE)),
@@ -275,7 +272,7 @@ advs <- advs %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
     check_type = "error"
   ) %>%
@@ -290,7 +287,7 @@ advs <- advs %>%
 advs <- advs %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = get_admiral_option("subject_keys")
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   )
 
 # Final Steps, Select final variables and Add labels

@@ -124,7 +124,7 @@ derive_param_bmi(
     PARAM = "Body Mass Index (kg/m^2)"
   ),
   get_unit_expr = extract_unit(PARAM),
-  constant_by_vars = exprs(USUBJID)
+  constant_by_vars = get_admiral_option("subject_keys")
 )
 
 # Example 2: Derive BMI where height is measured only once and keep only one record

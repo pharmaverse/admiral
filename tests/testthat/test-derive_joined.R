@@ -297,7 +297,7 @@ test_that("derive_vars_joined Test 9: fixing a bug from issue 1966", { # nolint
   adlb_joined <- derive_vars_joined(
     adlb_ast,
     dataset_add = adlb_tbili_pbl,
-    by_vars = exprs(STUDYID, USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     order = exprs(ADTM, ASEQ),
     join_type = "all",
     new_vars = exprs(TBILI_ADT = ADT),

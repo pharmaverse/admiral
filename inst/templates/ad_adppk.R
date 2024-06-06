@@ -54,7 +54,7 @@ pc_dates <- pc %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = get_admiral_option("subject_keys")
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   ) %>%
   # Derive analysis date/time
   # Impute missing time to 00:00:00
@@ -79,7 +79,7 @@ ex_dates <- ex %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = get_admiral_option("subject_keys")
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   ) %>%
   # Keep records with nonzero dose
   filter(EXDOSE > 0) %>%
@@ -100,10 +100,7 @@ ex_dates <- ex %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
     EVID = 1,
-    NFRLT = case_when(
-      VISITDY == 1 ~ 0,
-      TRUE ~ 24 * VISITDY
-    )
+    NFRLT = 24 * (VISITDY - 1), .after = USUBJID
   ) %>%
   # Set missing end dates to start date
   mutate(AENDTM = case_when(
@@ -128,13 +125,11 @@ ex_exp <- ex_dates %>%
     nominal_time = NFRLT,
     lookup_table = dose_freq_lookup,
     lookup_column = CDISC_VALUE,
-    keep_source_vars = c(
-      get_admiral_option("subject_keys"), exprs(
-        EVID, EXDOSFRQ, EXDOSFRM,
-        NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
-        VISIT, VISITNUM, VISITDY,
-        TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
-      )
+    keep_source_vars = exprs(
+      !!!get_admiral_option("subject_keys"), EVID, EXDOSFRQ, EXDOSFRM,
+      NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
+      VISIT, VISITNUM, VISITDY,
+      TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
     )
   ) %>%
   # Derive AVISIT based on nominal relative time
@@ -163,7 +158,7 @@ adppk_first_dose <- pc_dates %>%
     new_vars = exprs(FANLDTM = ADTM, EXDOSE_first = EXDOSE),
     order = exprs(ADTM, EXSEQ),
     mode = "first",
-    by_vars = c(get_admiral_option("subject_keys"), exprs(DRUG))
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), DRUG)
   ) %>%
   filter(!is.na(FANLDTM)) %>%
   # Derive AVISIT based on nominal relative time
@@ -180,7 +175,7 @@ adppk_first_dose <- pc_dates %>%
 adppk_prev <- adppk_first_dose %>%
   derive_vars_joined(
     dataset_add = ex_exp,
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     order = exprs(ADTM),
     new_vars = exprs(
       ADTM_prev = ADTM, EXDOSE_prev = EXDOSE, AVISIT_prev = AVISIT,
@@ -199,7 +194,7 @@ adppk_prev <- adppk_first_dose %>%
 adppk_nom_prev <- adppk_prev %>%
   derive_vars_joined(
     dataset_add = ex_exp,
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     order = exprs(NFRLT),
     new_vars = exprs(NFRLT_prev = NFRLT),
     join_vars = exprs(NFRLT),
@@ -326,7 +321,7 @@ adppk_aseq <- adppk_aval %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     order = exprs(AFRLT, EVID, CMT),
     check_type = "error"
   ) %>%
@@ -349,11 +344,6 @@ adppk_aseq <- adppk_aval %>%
 # Include numeric values for STUDYIDN, USUBJIDN, SEXN, RACEN etc.
 
 covar <- adsl %>%
-  derive_vars_merged(
-    dataset_add = country_code_lookup,
-    new_vars = exprs(COUNTRYN = country_number, COUNTRYL = country_name),
-    by_vars = exprs(COUNTRY = country_code),
-  ) %>%
   mutate(
     STUDYIDN = as.numeric(word(USUBJID, 1, sep = fixed("-"))),
     SITEIDN = as.numeric(word(USUBJID, 2, sep = fixed("-"))),
@@ -400,12 +390,19 @@ covar <- adsl %>%
     FORMN = case_when(
       FORM == "PATCH" ~ 3,
       TRUE ~ 4
-    )
+    ),
+    COUNTRYN = case_when(
+      COUNTRY == "USA" ~ 1,
+      COUNTRY == "CAN" ~ 2,
+      COUNTRY == "GBR" ~ 3
+    ),
+    REGION1N = COUNTRYN,
   ) %>%
   select(
-    USUBJID, STUDYID, STUDYIDN, SITEID, SITEIDN, USUBJIDN,
+    STUDYID, STUDYIDN, SITEID, SITEIDN, USUBJID, USUBJIDN,
     SUBJID, SUBJIDN, AGE, SEX, SEXN, COHORT, COHORTC, ROUTE, ROUTEN,
-    RACE, RACEN, ETHNIC, ETHNICN, FORM, FORMN, COUNTRY, COUNTRYN, COUNTRYL
+    RACE, RACEN, ETHNIC, ETHNICN, FORM, FORMN, COUNTRY, COUNTRYN,
+    REGION1, REGION1N
   )
 
 #---- Derive additional baselines from VS and LB ----
@@ -413,24 +410,24 @@ covar <- adsl %>%
 labsbl <- lb %>%
   filter(LBBLFL == "Y" & LBTESTCD %in% c("CREAT", "ALT", "AST", "BILI")) %>%
   mutate(LBTESTCDB = paste0(LBTESTCD, "BL")) %>%
-  select(USUBJID, STUDYID, LBTESTCDB, LBSTRESN)
+  select(STUDYID, USUBJID, LBTESTCDB, LBSTRESN)
 
 covar_vslb <- covar %>%
   derive_vars_merged(
     dataset_add = vs,
     filter_add = VSTESTCD == "HEIGHT",
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     new_vars = exprs(HTBL = VSSTRESN)
   ) %>%
   derive_vars_merged(
     dataset_add = vs,
     filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     new_vars = exprs(WTBL = VSSTRESN)
   ) %>%
   derive_vars_transposed(
     dataset_merge = labsbl,
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     key_var = LBTESTCDB,
     value_var = LBSTRESN
   ) %>%
@@ -457,7 +454,7 @@ covar_vslb <- covar %>%
 adppk <- adppk_aseq %>%
   derive_vars_merged(
     dataset_add = covar_vslb,
-    by_vars = get_admiral_option("subject_keys")
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   ) %>%
   arrange(STUDYIDN, USUBJIDN, AFRLT, EVID) %>%
   mutate(RECSEQ = row_number())

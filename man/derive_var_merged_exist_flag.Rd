@@ -111,11 +111,11 @@ ae <- tribble(
 derive_var_merged_exist_flag(
   dm,
   dataset_add = ae,
-  by_vars = exprs(STUDYID, USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   new_var = AERELFL,
   condition = AEREL == "PROBABLE"
 ) \%>\%
-  select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
+  select(!!!get_admiral_option("subject_keys"), AGE, AGEU, AERELFL)
 
 vs <- tribble(
   ~STUDYID,  ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSBLFL,
@@ -135,14 +135,14 @@ vs <- tribble(
 derive_var_merged_exist_flag(
   dm,
   dataset_add = vs,
-  by_vars = exprs(STUDYID, USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
   new_var = WTBLHIFL,
   condition = VSSTRESN > 90,
   false_value = "N",
   missing_value = "M"
 ) \%>\%
-  select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
+  select(!!!get_admiral_option("subject_keys"), AGE, AGEU, WTBLHIFL)
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:

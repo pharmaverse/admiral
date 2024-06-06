@@ -139,7 +139,7 @@ derive_param_bsa(
     PARAM = "Body Surface Area (m^2)"
   ),
   get_unit_expr = extract_unit(PARAM),
-  constant_by_vars = exprs(USUBJID)
+  constant_by_vars = get_admiral_option("subject_keys")
 )
 
 derive_param_bsa(
@@ -151,7 +151,7 @@ derive_param_bsa(
     PARAM = "Body Surface Area (m^2)"
   ),
   get_unit_expr = extract_unit(PARAM),
-  constant_by_vars = exprs(USUBJID)
+  constant_by_vars = get_admiral_option("subject_keys")
 )
 
 # Example 2: Derive BSA where height is measured only once and keep only one record

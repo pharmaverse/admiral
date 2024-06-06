@@ -204,8 +204,8 @@ period_ref <- ex %>%
     APERSDT = convert_dtc_to_dt(EXSTDTC)
   ) %>%
   # Create APEREDT based on start date of next period
-  arrange(USUBJID, APERSDT) %>%
-  group_by(USUBJID) %>%
+  arrange(!!!get_admiral_option("subject_keys"), APERSDT) %>%
+  group_by(!!!get_admiral_option("subject_keys")) %>%
   mutate(
     APEREDT = lead(APERSDT) - 1 # one day before start of next period
   ) %>%

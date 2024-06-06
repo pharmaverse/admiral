@@ -88,7 +88,7 @@ derive_vars_period(
   dataset_ref = period_ref,
   new_vars = exprs(APxxSDT = APERSDT, APxxEDT = APEREDT)
 ) \%>\%
-  select(STUDYID, USUBJID, AP01SDT, AP01EDT, AP02SDT, AP02EDT)
+  select(!!!get_admiral_option("subject_keys"), AP01SDT, AP01EDT, AP02SDT, AP02EDT)
 
 # Add phase variables to ADSL
 phase_ref <- tribble(
@@ -108,7 +108,7 @@ derive_vars_period(
   dataset_ref = phase_ref,
   new_vars = exprs(PHwSDT = PHSDT, PHwEDT = PHEDT, APHASEw = APHASE)
 ) \%>\%
-  select(STUDYID, USUBJID, PH1SDT, PH1EDT, PH2SDT, PH2EDT, APHASE1, APHASE2)
+  select(!!!get_admiral_option("subject_keys"), PH1SDT, PH1EDT, PH2SDT, PH2EDT, APHASE1, APHASE2)
 
 # Add subperiod variables to ADSL
 subperiod_ref <- tribble(
@@ -131,7 +131,8 @@ derive_vars_period(
   dataset_ref = subperiod_ref,
   new_vars = exprs(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
 ) \%>\%
-  select(STUDYID, USUBJID, P01S1SDT, P01S1EDT, P01S2SDT, P01S2EDT, P02S1SDT, P02S1EDT)
+  select(!!!get_admiral_option("subject_keys"), P01S1SDT, P01S1EDT, P01S2SDT, P01S2EDT,
+  P02S1SDT, P02S1EDT)
 }
 \seealso{
 \code{\link[=create_period_dataset]{create_period_dataset()}}

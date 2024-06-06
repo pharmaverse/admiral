@@ -128,14 +128,14 @@ adsl <- adsl %>%
     new_vars = exprs(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
     order = exprs(EXSTDTM, EXSEQ),
     mode = "first",
-    by_vars = get_admiral_option("subject_keys")
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = c(get_admiral_option("subject_keys"), exprs(TRTSDTM, TRTSTMF))
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), TRTSDTM, TRTSTMF)
 )
 ```
 
@@ -151,7 +151,7 @@ the variable values for the new derived record.
 ```{r eval=TRUE}
 advs <- advs %>%
   derive_param_computed(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(AVISIT, AVISITN)),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), AVISIT, AVISITN),
     parameters = c("SYSBP", "DIABP"),
     set_values_to = exprs(
       AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
@@ -166,7 +166,7 @@ advs <- advs %>%
 advs %>%
   arrange(!!!get_admiral_option("subject_keys"), AVISITN, PARAMCD) %>%
   dataset_vignette(
-    display_vars = c(get_admiral_option("subject_keys"), exprs(AVISIT, PARAMCD, AVAL))
+    display_vars = exprs(!!!get_admiral_option("subject_keys"), AVISIT, PARAMCD, AVAL)
   )
 ```
 
@@ -208,7 +208,7 @@ of the Final Lab Visit Date (`FINLABDT`) in the example below:
 adsl <- dm %>%
   derive_vars_merged(
     dataset_add = ds,
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     new_vars = exprs(FINLABDT = convert_dtc_to_dt(DSSTDTC)),
     filter_add = DSDECOD == "FINAL LAB VISIT"
   )
@@ -217,7 +217,7 @@ adsl <- dm %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = c(get_admiral_option("subject_keys"), exprs(FINLABDT))
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), FINLABDT)
 )
 ```
 
@@ -233,7 +233,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = c(get_admiral_option("subject_keys"), exprs(RFSTDTC, RFSTDT))
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), RFSTDTC, RFSTDT)
 )
 ```
 
@@ -250,7 +250,7 @@ below we use `filter_extreme()` to extract the most recent MAP records in `advs`
 advs_lastmap <- advs %>%
   filter(PARAMCD == "MAP") %>%
   filter_extreme(
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     order = exprs(AVISITN, PARAMCD),
     mode = "last"
   )
@@ -259,7 +259,7 @@ advs_lastmap <- advs %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs_lastmap,
-  display_vars = c(get_admiral_option("subject_keys"), exprs(AVISIT, PARAMCD, AVAL))
+  display_vars = exprs(!!!get_admiral_option("subject_keys"), AVISIT, PARAMCD, AVAL)
 )
 ```
 

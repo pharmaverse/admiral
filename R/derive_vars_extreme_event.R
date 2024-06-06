@@ -124,7 +124,7 @@
 #'
 #' derive_vars_extreme_event(
 #'   adsl,
-#'   by_vars = exprs(STUDYID, USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   events = list(
 #'     event(
 #'       dataset_name = "adsl",
@@ -176,7 +176,7 @@
 #'
 #' derive_vars_extreme_event(
 #'   adsl,
-#'   by_vars = exprs(STUDYID, USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   events = list(
 #'     event(
 #'       dataset_name = "ae",

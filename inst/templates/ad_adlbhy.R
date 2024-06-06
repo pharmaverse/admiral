@@ -32,7 +32,7 @@ adlb_annotated <- adlb %>%
     .,
     derivation = derive_var_merged_exist_flag,
     dataset_add = .,
-    by_vars = c(get_admiral_option("subject_keys"), exprs(LBSEQ, PARAMCD, ADT)),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), LBSEQ, PARAMCD, ADT),
     variable_params = list(
       params(
         new_var = CRIT1FL,
@@ -43,7 +43,7 @@ adlb_annotated <- adlb %>%
       )
     )
   ) %>%
-  select(USUBJID, STUDYID, TRT01A, PARAMCD, LBSEQ, ADT, AVISIT, ADY, AVAL, ANRHI, CRIT1, CRIT1FL)
+  select(STUDYID, USUBJID, TRT01A, PARAMCD, LBSEQ, ADT, AVISIT, ADY, AVAL, ANRHI, CRIT1, CRIT1FL)
 
 # Subset Datasets
 altast_records <- adlb_annotated %>%
@@ -56,7 +56,7 @@ bili_records <- adlb_annotated %>%
 hylaw_records <- derive_vars_joined(
   dataset = altast_records,
   dataset_add = bili_records,
-  by_vars = get_admiral_option("subject_keys"),
+  by_vars = exprs(!!!get_admiral_option("subject_keys")),
   order = exprs(ADY),
   join_type = "all",
   filter_join = ADT.join - ADT <= 14 & CRIT1FL == "Y" & CRIT1FL.join == "Y",
@@ -65,11 +65,11 @@ hylaw_records <- derive_vars_joined(
 )
 
 hylaw_records_pts_visits <- hylaw_records %>%
-  select(USUBJID, STUDYID, TRT01A) %>% # add AVISIT, ADT for by visit
+  select(STUDYID, USUBJID, TRT01A) %>% # add AVISIT, ADT for by visit
   distinct()
 
 hylaw_records_fls <- hylaw_records %>%
-  select(USUBJID, STUDYID, TRT01A, CRIT1FL, BILI_CRITFL) %>% # add AVISIT, ADT for by visit
+  select(STUDYID, USUBJID, TRT01A, CRIT1FL, BILI_CRITFL) %>% # add AVISIT, ADT for by visit
   distinct()
 
 # Create new parameters based on records that present potential case
@@ -79,7 +79,7 @@ hylaw_params <- derive_param_exist_flag(
   condition = CRIT1FL == "Y" & BILI_CRITFL == "Y",
   false_value = "N",
   missing_value = "N",
-  by_vars = c(get_admiral_option("subject_keys"), exprs(TRT01A)), # add AVISIT, ADT for by visit
+  by_vars = exprs(!!!get_admiral_option("subject_keys"), TRT01A), # add AVISIT, ADT for by visit
   set_values_to = exprs(
     PARAMCD = "HYSLAW",
     PARAM = "ALT/AST >= 3xULN and BILI >= 2xULN"

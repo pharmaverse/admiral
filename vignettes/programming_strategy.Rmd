@@ -1,0 +1,762 @@
+---
+title: "Programming Strategy"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Programming Strategy}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+As `{admiral}` is intended to be contributed by the user community, this 
+article is meant for developers that want to either expand `{admiral}` functionalities or build on top of `{admiral}`. 
+In order to keep the framework robust across the whole community, 
+we have defined a programming strategy that should be followed in such cases.
+These contributions could include, for example, company specific derivations of ADaM datasets. 
+
+
+# Functional Workflow
+
+* Overall programming will follow a functional approach.
+* We mandate the use of tidyverse (e.g. dplyr) over similar functionality existing in base R
+* Each ADaM dataset is built with a set of functions and not with free flow code.
+* Each ADaM dataset has a specific programming workflow.
+* Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an `{admiral}` function or a company specific function.
+* Admiral functions can be re-used for company specific functions.
+* Each function belongs to one category defined in keywords/family.
+* Each function that is used to derive one or multiple variable(s) is required to be unit tested.
+* Functions have a standard naming convention.
+* Double coding is not used as a QC method (only if absolutely necessary).
+* ADaMs are created with readable, submission-ready code.
+
+# Functions in R
+
+## Function Design
+
+Firstly, it is important to explain how we decide on the need for new derivation functions. 
+
+If a derivation rule or algorithm is common and highly similar across different variables/parameters
+(e.g. study day or duration) then we would provide a generic function that can be used to satisfy all
+the times this may be needed across different ADaMs. Similarly, if we feel that a certain derivation
+could be useful beyond a single purpose we also would provide a generic function (e.g. instead of a
+last known alive date function, we have an extreme date function where a user could find the last date
+from a selection, or for example the first).
+
+Otherwise, if we feel that a derivation rule is a unique need or sufficiently complex to justify then we
+opt for a dedicated function for that specific variable/parameter (e.g. treatment-emergent flag for AEs).
+
+If certain variables are closely connected (e.g. an imputed date and the corresponding imputation flag)
+then a single function would provide both variables.
+
+If something needed for ADaM could be achieved simply via an existing tidyverse function, then we do not
+wrap this into an admiral function, as that would add an unnecessary extra layer for users.
+
+The following principles are key when designing a new function:
+
+* _**Modularity**_ - All code follows a modular approach, i.e. the steps must be clearly separated and
+have a dedicated purpose. This applies to scripts creating a dataset where each module should create a
+single variable or parameter. But also to complex derivations with several steps. Commenting on these
+steps is key for readability.
+
+* _**Avoid Copy and Paste**_ - If the same or very similar code is used multiple times, it should be put
+into a separate function. This improves readability and maintainability and makes unit testing easier.
+This should not be done for every simple programming step where tidyverse can be used. But rather for
+computational functions or data checks. However, also consider not to nest too many functions.
+
+* _**Checks**_ - Whenever a function fails, a meaningful error message must be provided with a clear
+reference to the input which caused the failure. A users should not have to dig into detailed
+code if they only want to apply a function.  A meaningful error message supports usability.
+
+* _**Flexibility**_ - Functions should be as flexible as possible as long as it does not reduce the usability.
+For example:
+
+  * The source variables or newly created variables and conditions for selecting observations should not be hard-coded.
+
+  * It is useful if an argument triggers optional steps, e.g. if the `filter` argument is specified, the input dataset
+is restricted, otherwise this step is skipped.
+
+  * However, arguments should not trigger completely different algorithms. For example `BNRIND` could be derived based
+on `BASE` or based on `ANRIND`. It should not be implemented within one function as the algorithms are completely different.
+If `BASE` is used, the values are categorized while if `ANRIND` is used, the values are merged from the baseline observation.
+
+## Input, Output, and Side-effects
+
+* The behavior of the function is only determined by its input, not by any global object,  
+i.e. all input like datasets, variable names, options, … must be provided to the function by arguments.
+* It is expected that the input datasets are not grouped. If any are grouped, the function must issue an error.
+* If a function requires grouping, the function must provide the `by_vars` argument.
+* The output dataset must be ungrouped.
+* The functions should not sort (arrange) the output dataset at the end.
+* If the function needs to create temporary variables in an input dataset, names
+for these variables must be generated by `get_new_tmp_var()` to avoid that
+variables of the input dataset are accidentally overwritten. The temporary
+variables must be removed from the output dataset by calling
+`remove_tmp_vars()`.
+* If developers find the need to use or create *environment* objects to achieve flexibility, use the `admiral_environment` environment object created in `admiral_environment.R`. All objects which are stored in this environment must be documented in `admiral_environment.R`. An equivalent environment object and `.R` file exist for admiraldev as well. For more details how environments work, see relevant sections on environments in [R Packages](https://r-pkgs.org) and [Advanced R](https://adv-r.hadley.nz) textbooks.
+* In general, the function must not have any side-effects like creating or modifying global objects, printing, writing files, ...
+
+## Admiral Options
+
+* An exception is made for admiral options, see `get_admiral_option()` and
+`set_admiral_options()`, where we have certain pre-defined defaults with added
+flexibility to allow for user-defined defaults on *commonly used* function
+arguments e.g. `subject_keys` currently pre-defined as `exprs(STUDYID,
+USUBJID)`, but can be modified using `set_admiral_options(subject_keys =
+exprs(...))` at the top of a script. The reasoning behind this was to relieve
+the user of repeatedly changing aforementioned *commonly used* function
+arguments multiple times in a script, which may be called across many admiral
+functions.
+* If this additional flexibility needs to be added for another *commonly used*
+function argument e.g. `future_input` to be set as `exprs(...)` it can be added
+as an admiral option. In the function formals define `future_input =
+get_admiral_option("future_input")` then proceed to modify the body and roxygen
+documentation of `set_admiral_options()`.
+
+## Function Names
+
+* Function names should start with a verb and use snake case, e.g. `derive_var_base()`. 
+
+| Function name prefix                         | Description                                                                                         |
+|----------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `assert_` / `warn_` / `is_`                  | Functions that check other functions’ inputs                                                        |
+| `derive_`                                    | Functions that take a dataset as input and return a new dataset with additional rows and/or columns |
+| `derive_var_` (e.g. `derive_var_trtdurd`)    | Functions which add a single variable                                                               |
+| `derive_vars_` (e.g. `derive_vars_dt`)       | Functions which add multiple variables                                                              |
+| `derive_param_` (e.g. `derive_param_os`)     | Functions which add a single parameter                                                              |
+| `compute_` /  `calculate_` / ...             | Functions that take vectors as input and return a vector                                            |
+| `create_`  /  `consolidate_`                 | Functions that create datasets without keeping the original observations                            |
+| `get_`                                       | Usually utility functions that return very specific objects that get passed through other functions |
+| `filter_`                                    | Functions that filter observations based on conditions associated with common clinical trial syntax |
+
+| Function Name Suffix                         | Description                                                                                         |
+|----------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `_derivation` (suffix)                       | High order functions that call a user specified derivation                                          |
+| `_date` / `_time` / `_dt` / `_dtc` / `_dtm`  | Functions associated with dates, times, datetimes, and their character equivalents.                 |
+| `_source`                                    | Functions that create source datasets that usually will be passed through other `derive_` functions.|
+
+| Other Common Function Name Terms             | Description                                                                                         |
+|----------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `_merged_` / `_joined_` / `_extreme_`        | Functions that follow the [generic function user-guide](https://pharmaverse.github.io/admiral/articles/generic.html).                                              |
+
+
+
+Please note that the appropriate *var*/*vars* prefix should be used for all cases in which the function creates any variable(s), regardless of the presence of a `new_var` argument in the function call. 
+
+Oftentimes when creating a new `derive_var` or `derive_param` function there may be some sort of non-trivial calculation involved that you may want to write a customized function for. This is when creating a `compute_` function becomes appropriate, such that the calculation portion is contained in one step as part of the overall `derive_` function, reducing clutter in the main function body and assisting in debugging. In addition, a `compute_` function should be implemented if the calculation could be used for more than one derivation. For example `compute_bmi()` could be used to derive a baseline BMI variable in ADSL (based on baseline weight and baseline height variables) and could also be used to derive a BMI parameter in ADVS (based on weight and height parameters). Please see `compute_age_years()` and `derive_var_age_years()` as another example. 
+
+
+## Function Arguments
+
+The default value of optional arguments should be `NULL`.
+
+There is a recommended argument order that all contributors are asked to adhere to 
+(in order to keep consistency across functions):
+
+1. `dataset` (and any additional datasets denoted by `dataset_*`)
+1. `by_vars`
+1. `order`
+1. `new_var` (and any related `new_var_*` arguments)
+1. `filter` (and any additional filters denoted by `filter_*`)
+1. all additional arguments:
+    * Make sure to always mention `start_date` before `end_date` (or related).
+
+Names of variables inside a dataset should be passed as symbols rather than
+strings, i.e. `AVAL` rather than `"AVAL"`. If an argument accepts one or more
+variables or expressions as input then the variables and expressions should be
+wrapped inside `exprs()`.
+
+For example:
+
+* `new_var = TEMPBL`
+* `by_vars = exprs(PARAMCD, AVISIT)`
+* `filter = PARAMCD == "TEMP"`
+* `order = exprs(AVISIT, desc(AESEV))`
+* `new_vars = exprs(LDOSE = EXDOSE, LDOSEDT = convert_dtc_to_dt(EXSTDTC))`
+
+Each function argument needs to be tested with `assert_` type of function. 
+
+Each expression needs to be tested for the following 
+(there are many utility functions in `{admiral}` available to the contributor):
+
+* whether it is an expression (or a list of expressions, depending on the function)
+* whether it is a valid expression (i.e. whether it evaluates without error)
+
+## Common Function Arguments Naming Convention
+
+The first argument of `derive_` functions should be the input dataset and it
+should be named `dataset`. If more than one input dataset is required, the other
+input dataset should start with `dataset_`, e.g., `dataset_ex.`
+
+Arguments for specifying items to add should start with `new_`. If a variable is
+added, the second part of the argument name should be var, if a parameter is
+added, it should be `param.` For example: `new_var`, `new_var_unit`,
+`new_param`.
+
+Arguments which expect a boolean or boolean vector must start with a verb, e.g.,
+`is_imputed` or `impute_date`.
+
+Arguments which only expect one value or variable name must be a singular version of the word(s), e.g., `missing_value` or `new_var`. Arguments which expect several values or variable names (as a list, expressions, etc.) must be a plural version of the word(s), e.g., `missing_values` or `new_vars`.
+
+## List of Common Arguments
+| Argument Name   | Description                                                                                                         |
+|------------------|--------------------------------------------------------------------------------------------------------------------|
+| `dataset`        | The input dataset. Expects a data.frame or a tibble.                                                               |
+| `dataset_ref`    | The reference dataset, e.g. ADSL. Typically includes just one observation per subject.                             |
+| `dataset_add`    | An additional dataset. Used in some `derive_xx` and `filter_xx` functions to access variables from an additional dataset.            |
+| `by_vars`        | Variables to group by.                                                                                             |
+| `order`          | List of expressions for sorting a dataset, e.g., `exprs(PARAMCD, AVISITN, desc(AVAL))`.                            |
+| `new_var`        | Name of a single variable to be added to the dataset.                                                              |
+| `new_vars`       | List of variables to be added to the dataset.                                                                      |
+| `new_var_unit`   | Name of the unit variable to be added. It should be the unit of the variable specified for the `new_var` argument. |
+| `filter`         | Expression to filter a dataset, e.g., `PARAMCD == "TEMP"`.                                                         |
+| `start_date`     | The start date of an event/interval. Expects a date object.                                                        |
+| `end_date`       | The end date of an event/interval. Expects a date object.                                                          |
+| `start_dtc`      | (Partial) start date/datetime in ISO 8601 format.                                                                  |
+| `dtc`            | (Partial) date/datetime in ISO 8601 format.                                                                        |
+| `date`           | Date of an event / interval. Expects a date object.                                                                |
+| `subject_keys`   | Variables to uniquely identify a subject, defaults to `exprs(STUDYID, USUBJID)`. In function formals, use `subject_keys = get_admiral_option("subject_keys")`                                     |
+| `set_values_to`  | List of variable name-value pairs. Use `process_set_values_to()` for processing the value and providing user friendly error messages. |
+| `keep_source_vars` | Specifies which variables from the selected observations should be kept. The default of the argument should be `exprs(everything())`. The primary difference between `set_values_to` and `keep_source_vars` is that `keep_source_vars` only selects and retains the variables from a source dataset, so e.g. `keep_source_vars = exprs(DOMAIN)` would join + keep the `DOMAIN` variable, whereas `set_values_to` can make renaming and inline function changes such as `set_values_to = exprs(LALVDOM = DOMAIN)`                       |
+| `missing_value`    | A singular value to be entered if the data is missing.                                                           |
+| `missing_values`   | A named list of expressions where the names are variables in the dataset and the values are a value to be entered if the data is missing, e.g., `exprs(BASEC = "MISSING", BASE = -1)`.      |
+
+## Source Code Formatting
+
+All source code should be formatted according to the
+[tidyverse](https://style.tidyverse.org/) style guide. The
+[lintr](https://github.com/jimhester/lintr) and
+[styler](https://github.com/r-lib/styler) packages are used to check and enforce
+this.
+
+## Comments
+
+Comments should be added to help other readers than the author to understand the
+code. There are two main cases:
+
+- If the intention of a chunk of code is not clear, a comment should be added.
+The comment should not rephrase the code but provide additional information.
+
+    *Bad*
+    
+    ```
+      # If AVAL equals zero, set it to 0.0001. Otherwise, do not change it
+      mutate(dataset, AVAL = if_else(AVAL == 0, 0.0001, AVAL))
+    ```
+
+    *Good*
+    
+    ```
+      # AVAL is to be displayed on a logarithmic scale.
+      # Thus replace zeros by a small value to avoid gaps.
+      mutate(dataset, AVAL = if_else(AVAL == 0, 0.0001, AVAL))
+    ```
+
+- For long functions (>100 lines) comments can be added to structure the code
+and simplify navigation. In this case the comment should end with `----` to add
+an entry to the document outline in RStudio. For example:
+  ```
+    # Check arguments ----
+  ```
+
+The formatting of the comments must follow the
+[tidyverse](https://style.tidyverse.org/syntax.html#comments) style guide. I.e.,
+the comment should start with a single `#` and a space. No decoration (except
+for outline entries) must be added.
+
+*Bad*
+```
+# This is a comment #
+
+###########################
+# This is another comment #
+###########################
+
+#+++++++++++++++++++++++++++++++
+# This is a section comment ----
+#+++++++++++++++++++++++++++++++
+```
+
+*Good*
+```
+# This is a comment
+
+# This is another comment
+
+# This is a section comment ----
+```
+
+## Input Checking
+
+In line with the [fail-fast](https://en.wikipedia.org/wiki/Fail-fast) design principle, 
+function inputs should be checked for validity 
+and, if there’s an invalid input, the function should stop immediately with an error. 
+An exception is the case where a variable to be added by a function already exists in the input dataset: 
+here only a warning should be displayed and the function should continue executing.
+
+Inputs should be checked using custom assertion functions defined in [`R/assertions.R`](https://github.com/pharmaverse/admiraldev/blob/main/R/assertions.R).
+These custom assertion functions should either return an error in case of an invalid input or return nothing.
+
+For the most common types of input arguments like a single variable, a list of
+variables, a dataset, ... functions for checking are available (see
+[assertions](../reference/index.html#section-assertions)).
+
+Arguments which expect keywords should handle them in a case-insensitive manner,
+e.g., both `date_imputation = "FIRST"` and `date_imputation = "first"` should be
+accepted. The `assert_character_scalar()` function helps with handling arguments
+in a case-insensitive manner.
+
+A argument should not be checked in an outer function if the argument name is the same as in the inner function. 
+This rule is applicable only if both functions are part of `{admiral}`.
+
+
+## Function Header (Documentation)
+
+Every function that is exported from the package must have an accompanying header 
+that should be formatted according to the [roxygen2](https://roxygen2.r-lib.org/) convention. 
+
+In addition to the standard roxygen2 tags, the `@family` and `@keywords` tags are also used. 
+
+The family/keywords are used to categorize the function, which is used both on our website and the internal package help pages. Please see section [Categorization of functions](programming_strategy.html#categorization-of-functions).
+
+An example is given below:
+
+```{r, eval=FALSE}
+#' Derive Relative Day Variables
+#'
+#' Adds relative day variables (`--DY`) to the dataset, e.g., `ASTDY` and
+#' `AENDY`.
+#'
+#' @param dataset Input dataset
+#'
+#'   The columns specified by the `reference_date` and the `source_vars`
+#'   argument are expected.
+#'
+#' @param reference_date The start date column, e.g., date of first treatment
+#'
+#'   A date or date-time object column is expected.
+#'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
+#'
+#' @param source_vars A list of datetime or date variables created using
+#'   `exprs()` from which dates are to be extracted. This can either be a list of
+#'   date(time) variables or named `--DY` variables and corresponding --DT(M)
+#'   variables e.g. `exprs(TRTSDTM, ASTDTM, AENDT)` or `exprs(TRTSDT, ASTDTM,
+#'   AENDT, DEATHDY = DTHDT)`. If the source variable does not end in --DT(M), a
+#'   name for the resulting `--DY` variable must be provided.
+#'
+#' @details The relative day is derived as number of days from the reference
+#'   date to the end date. If it is nonnegative, one is added. I.e., the
+#'   relative day of the reference date is 1. Unless a name is explicitly
+#'   specified, the name of the resulting relative day variable is generated
+#'   from the source variable name by replacing DT (or DTM as appropriate) with
+#'   DY.
+#'
+#' @return The input dataset with `--DY` corresponding to the `--DTM` or `--DT`
+#'   source variable(s) added
+#'
+#' @keywords der_date_time
+#' @family der_date_time
+#'
+#' @export
+#'
+#' @examples
+#' library(lubridate)
+#' library(dplyr, warn.conflicts = FALSE)
+#'
+#' datain <- tribble(
+#'   ~TRTSDTM,              ~ASTDTM,               ~AENDT,
+#'   "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
+#' ) %>%
+#'   mutate(
+#'     TRTSDTM = as_datetime(TRTSDTM),
+#'     ASTDTM = as_datetime(ASTDTM),
+#'     AENDT = ymd(AENDT)
+#'   )
+#'
+#' derive_vars_dy(
+#'   datain,
+#'   reference_date = TRTSDTM,
+#'   source_vars = exprs(TRTSDTM, ASTDTM, AENDT)
+#' )
+```
+
+
+The following fields are mandatory:
+
+* `@param`: One entry per function argument. 
+The following attributes should be described: expected data type (e.g. `data.frame`, `logical`, `numeric` etc.), permitted values (if applicable), optionality (i.e. is this a required argument). If the expected input is a dataset then the required variables should be clearly stated. Describing the default value becomes difficult to maintain and subject to manual error when it is already declared in the function arguments. The description for permitted values should be written as a separate line italicizing the phrase "Permitted Values", example below: 
+
+```
+#'   *Permitted Values*: example description of permitted values here
+```
+
+* `@details`: A natural-language description of the derivation used inside the function.
+* `@keyword`: One applicable tag to the function - identical to family.
+* `@family`: One applicable tag to the function - identical to keyword.
+* `@return`: A description of the return value of the function. 
+Any newly added variable(-s) should be mentioned here.
+* `@examples`: A fully self-contained example of how to use the function. 
+Self-contained means that, if this code is executed in a new R session, it will run without errors. 
+That means any packages need to be loaded with `library()` and any datasets needed either to be created directly inside the example code or loaded using `data()`.
+If a dataset is created in the example, it should be done so using the function `tribble()` (specify `library(dplyr)` before calling this function).
+If other functions are called in the example, please specify `library(pkg_name)` then refer to the respective function `fun()` as opposed to the preferred `pkg_name::fun()` notation as specified in [Unit Test Guidance](unit_test_guidance.html#set-up-the-test-script).
+Make sure to align columns as this ensures quick code readability. 
+
+Copying descriptions should be avoided as it makes the documentation hard to
+maintain. For example if the same argument with the same description is used by
+more than one function, the argument should be described for one function and
+the other functions should use `@inheritParams <function name where the
+argument is described>`.
+
+Please note that if `@inheritParams func_first` is used in the header of the
+`func_second()` function, those argument descriptions of `func_first()` are
+included in the documentation of `func_second()` for which
+
+- the argument is offered by `func_second()` and
+- no `@param` tag for the argument is included in the header of
+`func_second()`.
+
+The order of the `@param` tags should be the same as in the function definition.
+The `@inheritParams` tags should be after the `@param`. This does not affect the
+order of the argument description in the rendered documentation but makes it
+easier to maintain the headers.
+
+Variable names, expressions, functions, and any other code must be enclosed
+which backticks. This will render it as code.
+
+For functions which derive a specific CDISC variable, the title must state the 
+label of the variable without the variable name. The variable should be stated 
+in the description.
+
+## Categorization of Functions
+
+The functions are categorized by keywords and families within the roxygen header. Categorization is important 
+as the `admiral` user-facing functions base totals above 125 and is growing!  However, to ease the burden for developers, we have decided that
+the keywords and families should be identical in the roxygen header, which are specified via the `@keywords` and `@family` fields. 
+To reiterate, each function must use the **same keyword and family**. Also, please note that the keywords and families are case-sensitive.
+
+### `@keywords`
+
+The keywords allows for the reference page to be easily organized when using certain 
+`pgkdown` functions. For example, using the function `has_keyword(der_bds_gen)` in the `_pkgdown.yml` file while building
+the website will collect all the BDS General Derivation functions and display them in alphabetical order on the Reference Page in a section called
+BDS-Specific.
+
+### `@family`
+
+The families allow for similar functions to be displayed in the **See Also** section of a function's documentation. For example, a user looking at
+`derive_vars_dy()` function documentation might be interested in other Date/Time functions.  Using the `@family` tag `der_date_time` will display
+all the Date/Time functions available in admiral to the user in the **See Also** section of `derive_vars_dy()` function documentation. Please take a look at the
+function documentation for `derive_vars_dy()` to see the family tag in action.
+
+Below are the list of available keyword/family tags to be used in `admiral` functions. If you think an additional keyword/family tag should be added, then please
+add an issue in GitHub for discussion.
+
+
+| Keyword/Family                                                                    | Description                                                                                                              |
+|-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| `com_date_time`                                                                   | Date/Time Computation Functions that returns a vector                                                                    | 	
+| `com_bds_findings`                                                                | BDS-Findings Functions that returns a vector                                                                             |
+| `create_aux`                                                                      | Functions for Creating Auxiliary Datasets |
+| `datasets`                                                                        | Example datasets used within admiral                                                                                     |
+| `der_gen`                                                                         | General Derivation Functions that can be used for any ADaM.                                                              |
+| `der_date_time`                                                                   | Date/Time Derivation Function                                                                                            |
+| `der_bds_gen`                                                                     | Basic Data Structure (BDS) Functions that can be used across different BDS ADaM (adex, advs, adlb, etc)                  |
+| `der_bds_findings`                                                                | Basic Data Structure (BDS) Functions specific to the BDS-Findings ADaMs                                                  |
+| `der_prm_bds_findings`                                                            | BDS-Findings Functions for adding Parameters                                                                             |
+| `der_adsl`                                                                        | Functions that can only be used for creating ADSL.                                                                       |
+| `der_tte`                                                                         | Function used only for creating a Time to Event (TTE) Dataset                                                            |
+| `der_occds`                                                                       | OCCDS specific derivation of helper Functions                                                                            |
+| `der_prm_tte`                                                                     | TTE Functions for adding Parameters to TTE Dataset                                                                       |
+| `deprecated`                                                                      | Function which will be removed from admiral after next release.  See  [Deprecation Guidance](#deprecation).                                                                                                               |
+| `metadata`                                                                        | Auxiliary datasets providing definitions as input for derivations, e.g. grading criteria or dose frequencies         |
+| `utils_ds_chk`                                                                    | Utilities for Dataset Checking                                                                                           |	
+| `utils_fil`                                                                       | Utilities for Filtering Observations                                                                                     |
+| `utils_fmt`                                                                       | Utilities for Formatting Observations                                                                                    |	
+| `utils_print`                                                                       | Utilities for Printing Objects in the Console                                                                                    |	
+| `utils_help` 	                                                                    | Utilities used within Derivation functions                                                                               |	
+| `utils_examples`                                                                  | Utilities used for examples and template scripts                                                                         |
+| `source_specifications` 	                                                        | Source Objects                                                                                                             |	
+| `other_advanced` 	                                                                | Other Advanced Functions                                                                                                   |	
+| `high_order_function`                                                             |	Higher Order Functions                                                                                                   |	                                                                     |	
+| `internal`                                                                        | Internal functions only available to admiral developers                                                                  |
+|                                                                                   |                                                                                                                         |
+| `assertion`*                                                                       | Asserts a certain type and gives warning, error to user        |
+| `warning`                                                                         | Provides custom warnings to user       |
+| `what`                                                                            | A function that ...      |
+| `is`                                                                              | A function that ...      |
+| `get`                                                                             | A function that ...      |
+
+**NOTE:** It is strongly encouraged that each `@keyword` and `@family` are to be identical.  This eases the burden of development and maintenance for admiral functions. If you need to use multiple keywords or families, please reach out to the core development team for discussion.  
+
+
+# Missing values
+
+Missing values (`NA`s) need to be explicitly shown.
+
+Regarding character vectors converted from SAS files: SAS treats missing character values as blank. 
+Those are imported into R as empty strings (`""`) although in nature they are missing values (`NA`). 
+All empty strings that originate like this need to be converted to proper R missing values `NA`.
+
+# File Structuring
+
+Organizing functions into files is more of an art than a science.
+Thus, there are no hard rules but just recommendations.
+First and foremost, there are two extremes that should be avoided:
+putting each function into its own file and putting all functions into a single file.
+Apart from that the following recommendations should be taken into consideration when deciding upon file structuring:
+
+- If a function is very long (together with its documentation), store it in a separate file
+- If some functions are documented together, put them into one file
+- If some functions have some sort of commonality or relevance with one another (like `dplyr::bind_rows()` and `dplyr::bind_cols()`), put them into one file
+- Store functions together with their helpers and methods
+- Have no more than 1000 lines in a single file, unless necessary (exceptions are, for example, classes with methods)
+
+It is the responsibility of both the author of a new function and reviewer to ensure that these recommendations are put into practice.
+
+
+# R Package Dependencies
+
+Package dependencies have to be documented in the `DESCRIPTION` file. 
+If a package is used only in examples and/or unit tests then it should be listed in `Suggests`, otherwise in `Imports`.
+
+Functions from other packages have to be explicitly imported by using the `@importFrom` tag in the `R/admiral-package.R` file. 
+To import the `if_else()` and `mutate()` function from `dplyr` the following line would have to be included in that file:
+`#' @importFrom dplyr if_else mutate`.
+By using the `@importFrom` tag, it is easier to track all of our dependencies in one place and improves code readability. 
+
+Some of these functions become critically important while using admiral and
+should be included as an export. This applies to functions which are frequently
+called within `{admiral }`function calls like `rlang::exprs()`, `dplyr::desc()`
+or the pipe operator `dplyr::%>%`. To export these functions, the following R
+code should be included in the `R/reexports.R` file using the format:
+
+```
+#' @export
+pkg_name::fun
+```
+
+# Metadata
+
+Functions should only perform the derivation logic and not add any kind of metadata, e.g. labels.
+
+
+# Unit Testing
+
+A function requires a set of unit tests to verify it produces the expected result.
+See [Writing Unit Tests in {admiral}](unit_test_guidance.html#writing-unit-tests-in-admiral) for details.
+
+# Deprecation
+
+As `{admiral}` is still evolving, functions or arguments may need to be removed
+or replaced with more efficient options from one release to another. In such
+cases, the relevant function or argument must be marked as deprecated. This
+deprecation is done in three phases over our release cycles.
+
+-  **Phase 1:** In the release where the identified function or argument is to
+be deprecated there will be a warning issued when using the function or argument
+using `deprecate_warn()`.
+
+-  **Phase 2:** In the next release an error will be thrown using
+`deprecate_stop()`.
+
+-  **Phase 3:** Finally in the 3rd release thereafter the function will be
+removed from the package altogether.
+
+Information about deprecation timelines must be added to the warning/error message.
+
+Note that the deprecation cycle time for a function or argument based on our
+current release schedule is 6 months.
+
+## Documentation
+
+If a function or argument is removed, the documentation must be updated to
+indicate the function or the argument is now deprecated and which new
+function/argument should be used instead.
+
+The documentation will be updated at:
+
++ the description level for a function, 
++ the `@keywords` and`@family` roxygen tags will be replaced with `deprecated`
+
+    ```{r, eval=FALSE}
+#' Title of the function
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `new_fun()` instead.
+#' .
+#' @family deprecated
+#'
+#' @keywords deprecated
+#' .
+    ``` 
+
++ the `@examples` section should be removed.
+
++ the `@param` level for a argument.
+
+    ```
+    @param old_param *Deprecated*, please use `new_param` instead.
+    ```
+
+## Handling of Warning and Error
+
+When a function or argument is deprecated, the function must be updated to issue
+a warning or error using `deprecate_warn()` and `deprecate_stop()`,
+respectively, as described above.
+
+There should be a test case added in the test file of the function that checks
+whether this warning/error is issued as appropriate when using the deprecated
+function or argument.
+
+### Function
+
+In the initial release in which a function is deprecated the original function
+body must be replaced with a call to `deprecate_warn()` and subsequently all
+arguments should be passed on to the new function.
+
+```r
+fun_xxx <- function(dataset, some_param, other_param) {
+  deprecate_warn("x.y.z", "fun_xxx()", "new_fun_xxx()")
+  new_fun_xxx(
+    dataset = dataset,
+    some_param = some_param,
+    other_param = other_param
+  )
+}
+```
+
+In the following release the function body should be changed to just include a call
+to `deprecate_stop()`.
+
+```r
+fun_xxx <- function(dataset, some_param, other_param) {
+  deprecate_stop("x.y.z", "fun_xxx()", "new_fun_xxx()")
+}
+```
+
+Finally, in the next release the function should be removed from the package.
+
+### Argument
+
+If an argument is removed and is not replaced, an **error** must be generated:
+
+```
+### BEGIN DEPRECATION
+  if (!missing(old_param)) {
+    deprecate_stop("x.y.z", "fun_xxx(old_param = )", "fun_xxx(new_param = )")
+  }
+### END DEPRECATION
+```
+
+If the argument is renamed or replaced, a **warning** must be issued and the
+new argument takes the value of the old argument until the next release. Note:
+arguments which are not passed as `exprs()` argument (e.g. `new_var = VAR1` or
+`filter = AVAL >10`) will need to be quoted.
+
+``` 
+### BEGIN DEPRECATION
+  if (!missing(old_param)) {
+    deprecate_warn("x.y.z", "fun_xxx(old_param = )", "fun_xxx(new_param = )")
+    # old_param is given using exprs()
+    new_param <- old_param
+    # old_param is NOT given using exprs()
+    new_param <- enexpr(old_param)
+  }
+### END DEPRECATION
+```
+
+## Unit Testing
+
+Unit tests for deprecated functions and arguments must be added to the test file [^1] of the function to ensure that a warning or error is issued.
+
+[^1]: For example, if `derive_var_example()` is going to be deprecated and
+it is defined in `examples.R`, the unit tests are in
+`tests/testthat/test-examples.R`.
+
+When writing the unit test, check that the error or warning has the right class,
+i.e., `"lifecycle_error_deprecated"` or `"lifecycle_warning_deprecated"`,
+respectively. The unit-test should follow the corresponding format, per the
+[unit test guidance](unit_test_guidance.html#writing-unit-tests-in-admiral).
+
+### For Deprecated Functions that Issues a Warning (Phase 1)
+
+A unit test like the following must be added.
+```
+## Test #: deprecation warning if function is called ----
+test_that("derive_var_example() Test #: deprecation warning if function is called", {
+  expect_warning(
+    derive_var_example(),
+    class = "lifecycle_warning_deprecated"
+  )
+})
+```
+
+In the existing unit tests the call of the deprecated function need to be enclosed by `suppress_warning()`. For example,
+```
+  actual <- suppress_warning(
+    derive_var_example(),
+    regexpr = "was deprecated"
+  )
+```
+The `regexpr` argument must be specified to ensure that only the deprecation
+warning is suppressed.
+
+### For Deprecated Functions that Issues an Error (Phase 2)
+
+A unit test like the following must be added.
+```
+## Test #: error if function is called ----
+test_that("derive_var_example() Test #: deprecation error if function is called", {
+  expect_error(
+    derive_var_example(),
+    class = "lifecycle_error_deprecated"
+  )
+})
+```
+Other unit tests of the deprecated function must be removed.
+
+# Best Practices and Hints
+
+Please take the following list as recommendation and try to adhere to its rules if possible.
+
+* Arguments in function calls should be named except for the first parameter 
+(e.g. `assert_data_frame(dataset, required_vars = exprs(var1, var2), optional = TRUE)`).
+* `dplyr::if_else()` should be used when there are only two conditions. 
+Try to always set the `missing` argument whenever appropriate.
+
+## How Quoting is used
+
+* Some admiral arguments require selecting one particular option like `mode`, e.g. `mode = "last"`. Use quotation marks to capture these. The expected assertion function corresponding to these arguments is `assert_character_scalar()/assert_character_vector()`.
+* Many admiral arguments require capturing an expression, typically encased in a `exprs()` statement, which are to be evaluated _later_ inside the function body, see arguments like `new_vars`, e.g. `new_vars = exprs(TRTSDTM = EXSTDTM)`. Oftentimes, the assertion function corresponding to these are `assert_expr()/assert_expr_list()`. These arguments are unquoted by using `!!!`.
+* Some admiral arguments like `new_var` or `filter` which expect a _single_ variable or expression are not quoted in the call. In the function body, it has to be quoted by using `enexpr().` Usually this is combined with the assertion, e.g., `new_var <- assert_symbol(enexpr(new_var))`. These arguments are unquoted by using `!!`.
+* Keep in mind `!!` is a one-to-one replacement and `!!!` is a one-to-many replacement. Please see [this chapter](https://adv-r.hadley.nz/quasiquotation.html) in the Advanced R textbook for more details.
+
+## Standardizing Text Used to Label and Describe Arguments
+
+In the following [PR](https://github.com/pharmaverse/admiral/pull/2065/files), you will find an example of how the function argument `dataset` was able to be standardized such that the Label and Description of said function argument was aligned across the codebase. Please see the changes to the file `derive_adeg_params.R` for further details. 
+
+The benefits of having a programmatic way to write documentation is that if any changes need to be made, _making the modification on the corresponding function, in this case, `roxygen_param_dataset()`, scales across the codebase, can be tested, and is less prone to user-error such as typos or grammar mistakes_.
+
+These functions are implemented in `roxygen2.R` and the naming convention for each argument will be as follows `roxygen_param_xxx()`, where "xxx" is the be replaced with the argument name.
+
+# R and Package Versions for Development
+
+* The choice of R Version is not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in the earliest of the three latest R Versions. This need for a common development environment also carries over for our choice of package versions.  
+* GitHub allows us through the Actions/Workflows to test `{admiral}` under several versions of R as well as several versions of dependent R packages needed for `{admiral}`.  Currently we test `{admiral}` against the three latest R Versions and the closest snapshots of packages to those R versions.  You can view this workflow and others on our [admiralci GitHub Repository](https://github.com/pharmaverse/admiralci).
+* This common development allows us to easily re-create bugs and provide solutions to each other issues that developers will encounter.  
+* Reviewers of Pull Requests when running code will know that their environment is identical to the initiator of the Pull Request.  This ensures faster review times and higher quality Pull Request reviews.
+* We achieve this common development environment by using a **lockfile** created from the [`renv`](https://rstudio.github.io/renv/) package. New developers will encounter a suggested `renv::restore()` in the console to revert or move forward your R version and package versions.

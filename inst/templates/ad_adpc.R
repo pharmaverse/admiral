@@ -75,7 +75,7 @@ pc_dates <- pc %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = get_admiral_option("subject_keys")
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   ) %>%
   # Derive analysis date/time
   # Impute missing time to 00:00:00
@@ -102,7 +102,7 @@ ex_dates <- ex %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = get_admiral_option("subject_keys")
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   ) %>%
   # Keep records with nonzero dose
   filter(EXDOSE > 0) %>%
@@ -123,10 +123,7 @@ ex_dates <- ex %>%
   # Derive event ID and nominal relative time from first dose (NFRLT)
   mutate(
     EVID = 1,
-    NFRLT = case_when(
-      VISITDY == 1 ~ 0,
-      TRUE ~ 24 * VISITDY
-    )
+    NFRLT = 24 * (VISITDY - 1), .after = USUBJID
   ) %>%
   # Set missing end dates to start date
   mutate(AENDTM = case_when(
@@ -151,13 +148,11 @@ ex_exp <- ex_dates %>%
     nominal_time = NFRLT,
     lookup_table = dose_freq_lookup,
     lookup_column = CDISC_VALUE,
-    keep_source_vars = c(
-      get_admiral_option("subject_keys"), exprs(
-        EVID, EXDOSFRQ, EXDOSFRM,
-        NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
-        VISIT, VISITNUM, VISITDY,
-        TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
-      )
+    keep_source_vars = exprs(
+      !!!get_admiral_option("subject_keys"), EVID, EXDOSFRQ, EXDOSFRM,
+      NFRLT, EXDOSE, EXDOSU, EXTRT, ASTDT, ASTDTM, AENDT, AENDTM,
+      VISIT, VISITNUM, VISITDY,
+      TRT01A, TRT01P, DOMAIN, EXSEQ, !!!adsl_vars
     )
   ) %>%
   # Derive AVISIT based on nominal relative time
@@ -187,7 +182,7 @@ adpc_first_dose <- pc_dates %>%
     new_vars = exprs(FANLDTM = ADTM),
     order = exprs(ADTM, EXSEQ),
     mode = "first",
-    by_vars = c(get_admiral_option("subject_keys"), exprs(DRUG))
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), DRUG)
   ) %>%
   filter(!is.na(FANLDTM)) %>%
   # Derive AVISIT based on nominal relative time
@@ -204,7 +199,7 @@ adpc_first_dose <- pc_dates %>%
 adpc_prev <- adpc_first_dose %>%
   derive_vars_joined(
     dataset_add = ex_exp,
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     order = exprs(ADTM),
     new_vars = exprs(
       ADTM_prev = ADTM, EXDOSE_prev = EXDOSE, AVISIT_prev = AVISIT,
@@ -223,7 +218,7 @@ adpc_prev <- adpc_first_dose %>%
 adpc_next <- adpc_prev %>%
   derive_vars_joined(
     dataset_add = ex_exp,
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     order = exprs(ADTM),
     new_vars = exprs(
       ADTM_next = ADTM, EXDOSE_next = EXDOSE, AVISIT_next = AVISIT,
@@ -242,7 +237,7 @@ adpc_next <- adpc_prev %>%
 adpc_nom_prev <- adpc_next %>%
   derive_vars_joined(
     dataset_add = ex_exp,
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     order = exprs(NFRLT),
     new_vars = exprs(NFRLT_prev = NFRLT),
     join_vars = exprs(NFRLT),
@@ -258,7 +253,7 @@ adpc_nom_prev <- adpc_next %>%
 adpc_nom_next <- adpc_nom_prev %>%
   derive_vars_joined(
     dataset_add = ex_exp,
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     order = exprs(NFRLT),
     new_vars = exprs(NFRLT_next = NFRLT),
     join_vars = exprs(NFRLT),
@@ -450,7 +445,7 @@ adpc_dtype <- bind_rows(adpc_aval, dtype) %>%
 
 adpc_base <- adpc_dtype %>%
   derive_var_base(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, PARCAT1, BASETYPE)),
+    by_vars = exprs(!!!get_admiral_option("subject_keys"), PARAMCD, PARCAT1, BASETYPE),
     source_var = AVAL,
     new_var = BASE,
     filter = ABLFL == "Y"
@@ -464,7 +459,7 @@ adpc_aseq <- adpc_chg %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     order = exprs(ADTM, BASETYPE, EVID, AVISITN, ATPTN, PARCAT1, DTYPE),
     check_type = "error"
   ) %>%
@@ -484,13 +479,13 @@ adpc_baselines <- adpc_aseq %>%
   derive_vars_merged(
     dataset_add = vs,
     filter_add = VSTESTCD == "HEIGHT",
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     new_vars = exprs(HTBL = VSSTRESN, HTBLU = VSSTRESU)
   ) %>%
   derive_vars_merged(
     dataset_add = vs,
     filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
-    by_vars = get_admiral_option("subject_keys"),
+    by_vars = exprs(!!!get_admiral_option("subject_keys")),
     new_vars = exprs(WTBL = VSSTRESN, WTBLU = VSSTRESU)
   ) %>%
   mutate(
@@ -504,7 +499,7 @@ adpc_baselines <- adpc_aseq %>%
 adpc <- adpc_baselines %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = get_admiral_option("subject_keys")
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   )
 
 # Final Steps, Select final variables and Add labels

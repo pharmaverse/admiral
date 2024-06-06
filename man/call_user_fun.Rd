@@ -32,7 +32,8 @@ Utilities used within Derivation functions:
 \code{\link{extract_unit}()},
 \code{\link{get_flagged_records}()},
 \code{\link{get_not_mapped}()},
-\code{\link{get_vars_query}()}
+\code{\link{get_vars_query}()},
+\code{\link{process_set_values_to}()}
 }
 \concept{utils_help}
 \keyword{utils_help}

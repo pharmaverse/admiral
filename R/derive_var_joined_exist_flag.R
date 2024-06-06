@@ -259,7 +259,7 @@
 #'   adae,
 #'   dataset_add = adae,
 #'   new_var = ALCOVFL,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   join_vars = exprs(ACOVFL, ADY),
 #'   join_type = "all",
 #'   order = exprs(ADY),
@@ -283,7 +283,7 @@
 #' derive_var_joined_exist_flag(
 #'   data,
 #'   dataset_add = data,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   new_var = CONFFL,
 #'   join_vars = exprs(AVALC, AVISITN),
 #'   join_type = "after",
@@ -314,7 +314,7 @@
 #' derive_var_joined_exist_flag(
 #'   data,
 #'   dataset_add = data,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   join_vars = exprs(AVALC),
 #'   join_type = "after",
 #'   order = exprs(AVISITN),
@@ -348,7 +348,7 @@
 #' derive_var_joined_exist_flag(
 #'   data,
 #'   dataset_add = data,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   join_vars = exprs(AVALC, ADY),
 #'   join_type = "after",
 #'   order = exprs(ADY),
@@ -382,7 +382,7 @@
 #' derive_var_joined_exist_flag(
 #'   data,
 #'   dataset_add = data,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   new_var = CONFFL,
 #'   tmp_obs_nr_var = tmp_obs_nr,
 #'   join_vars = exprs(CRIT1FL),

@@ -218,7 +218,7 @@
 #'     AVALU = "kg/m^2"
 #'   ),
 #'   constant_parameters = c("HEIGHT"),
-#'   constant_by_vars = exprs(USUBJID)
+#'   constant_by_vars = get_admiral_option("subject_keys")
 #' )
 #'
 #' # Example 3: Using data from an additional dataset and other variables than AVAL
@@ -274,7 +274,7 @@
 #'
 #' derive_param_computed(
 #'   dataset_add = adlb_tbilialk,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   parameters = c("ALK2", "TBILI2"),
 #'   set_values_to = exprs(
 #'     AVALC = if_else(AVALC.TBILI2 == "Y" & AVALC.ALK2 == "Y", "Y", "N"),

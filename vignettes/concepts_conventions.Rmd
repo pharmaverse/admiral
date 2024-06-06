@@ -133,7 +133,7 @@ derive_vars_merged(
   adsl,
   dataset_add = ex,
   filter_add = !is.na(EXENDTM),
-  by_vars = exprs(STUDYID, USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   new_vars = exprs(
     TRTEDTM = EXENDTM,
     TRTETMF = EXENTMF,
@@ -189,7 +189,7 @@ adcm <- data.frame(STUDYID = "XXX", USUBJID = "XXX-1", CMTRT = "ASPIRIN")
 adcm
 
 # This doesn't work as we are not unquoting the subject keys
-adcm %>% select(get_admiral_option("subject_keys"))
+adcm %>% select(!!!get_admiral_option("subject_keys"))
 
 # This works because we are unquoting the subject keys
 adcm %>% select(!!!get_admiral_option("subject_keys"))
@@ -214,18 +214,18 @@ library(dplyr, warn.conflicts = FALSE)
 library(admiral)
 
 vs <- tribble(
-  ~USUBJID, ~VSTESTCD, ~VISIT, ~VSSTRESN, ~VSSTRESU, ~VSDTC,
-  "01-1301", "WEIGHT", "SCREENING", 82.1, "kg", "2013-08-29",
-  "01-1301", "WEIGHT", "WEEK 2", 81.19, "kg", "2013-09-15",
-  "01-1301", "WEIGHT", "WEEK 4", 82.56, "kg", "2013-09-24",
-  "01-1302", "BMI", "SCREENING", 20.1, "kg/m2", "2013-08-29",
-  "01-1302", "BMI", "WEEK 2", 20.2, "kg/m2", "2013-09-15",
-  "01-1302", "BMI", "WEEK 4", 19.9, "kg/m2", "2013-09-24"
+~STUDYID,  ~USUBJID, ~VSTESTCD, ~VISIT, ~VSSTRESN, ~VSSTRESU, ~VSDTC,
+ "dmog_1", "01-1301", "WEIGHT", "SCREENING", 82.1, "kg", "2013-08-29",
+ "dmog_1",   "01-1301", "WEIGHT", "WEEK 2", 81.19, "kg", "2013-09-15",
+ "dmog_1",   "01-1301", "WEIGHT", "WEEK 4", 82.56, "kg", "2013-09-24",
+ "dmog_1",   "01-1302", "BMI", "SCREENING", 20.1, "kg/m2", "2013-08-29",
+ "dmog_1",   "01-1302", "BMI", "WEEK 2", 20.2, "kg/m2", "2013-09-15",
+ "dmog_1",  "01-1302", "BMI", "WEEK 4", 19.9, "kg/m2", "2013-09-24"
 )
 
 dm <- tribble(
-  ~USUBJID, ~AGE,
-  "01-1301", 18
+~STUDYID,  ~USUBJID, ~AGE,
+"dmog_1",  "01-1301", 18
 )
 ```
 
@@ -240,9 +240,9 @@ my_expression <- expr(VSTESTCD == "WEIGHT" & VISIT == "SCREENING")
 
 derive_vars_merged(
   dm,
-  dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
-  by_vars = exprs(USUBJID),
-  filter_add = my_expression
+  dataset_add = select(vs, !!!get_admiral_option("subject_keys"), VSTESTCD, VISIT),
+  by_vars = get_admiral_option("subject_keys"),
+  filter_add = !!my_expression
 )
 ```
 
@@ -252,8 +252,8 @@ to `derive_vars_merged()`:
 ```{r, eval = TRUE, error = FALSE}
 derive_vars_merged(
   dm,
-  dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
-  by_vars = exprs(USUBJID),
+  dataset_add = select(vs, !!!get_admiral_option("subject_keys"), VSTESTCD, VISIT),
+  by_vars = get_admiral_option("subject_keys"),
   filter_add = !!my_expression
 )
 ```
@@ -268,8 +268,8 @@ expressions delay evaluation of code and so can delay the identification of issu
 filter_vs_and_merge <- function(my_expression) {
   derive_vars_merged(
     dm,
-    dataset_add = select(vs, USUBJID, VSTESTCD, VISIT),
-    by_vars = exprs(USUBJID),
+    dataset_add = select(vs, !!!get_admiral_option("subject_keys"), VSTESTCD, VISIT),
+    by_vars = get_admiral_option("subject_keys"),
     filter_add = !!my_expression
   )
 }

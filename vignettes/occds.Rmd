@@ -79,17 +79,17 @@ adae <- derive_vars_merged(
   ae,
   dataset_add = adsl,
   new_vars = adsl_vars,
-  by_vars = get_admiral_option("subject_keys")
+  by = exprs(!!!get_admiral_option("subject_keys"))
 )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = c(get_admiral_option("subject_keys"), exprs(
-    AESEQ, AETERM, AESTDTC, TRTSDT,
+  display_vars = exprs(
+    !!!get_admiral_option("subject_keys"), AESEQ, AETERM, AESTDTC, TRTSDT,
     TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT
-  ))
+  )
 )
 ```
 
@@ -127,12 +127,9 @@ adae <- adae %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = c(
-    get_admiral_option("subject_keys"),
-    exprs(
-      AESTDTC, AEENDTC, ASTDTM, ASTDT,
-      ASTDY, AENDTM, AENDT, AENDY
-    )
+  display_vars = exprs(
+    !!!get_admiral_option("subject_keys"), AESTDTC, AEENDTC, ASTDTM, ASTDT,
+    ASTDY, AENDTM, AENDT, AENDY
   )
 )
 ```
@@ -157,12 +154,9 @@ adae <- adae %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = c(
-    get_admiral_option("subject_keys"),
-    exprs(
-      AESTDTC, AEENDTC, ASTDT, AENDT,
-      ADURN, ADURU
-    )
+  display_vars = exprs(
+    !!!get_admiral_option("subject_keys"), AESTDTC, AEENDTC, ASTDT, AENDT,
+    ADURN, ADURU
   )
 )
 ```
@@ -245,7 +239,7 @@ ex_single <- derive_vars_dtm(
 adae <- derive_vars_joined(
   adae,
   ex_single,
-  by_vars = get_admiral_option("subject_keys"),
+  by_vars = exprs(!!!get_admiral_option("subject_keys")),
   new_vars = exprs(LDOSEDTM = EXSTDTM),
   join_vars = exprs(EXSTDTM),
   join_type = "all",
@@ -259,12 +253,9 @@ adae <- derive_vars_joined(
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = c(
-    get_admiral_option("subject_keys"),
-    exprs(
-      AEDECOD, AESEQ, AESTDTC, AEENDTC,
-      ASTDT, AENDT, LDOSEDTM
-    )
+  display_vars = exprs(
+    !!!get_admiral_option("subject_keys"), AEDECOD, AESEQ, AESTDTC, AEENDTC,
+    ASTDT, AENDT, LDOSEDTM
   )
 )
 ```
@@ -300,12 +291,9 @@ adae <- adae %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = c(
-    get_admiral_option("subject_keys"),
-    exprs(
-      TRTSDT, TRTEDT, AESTDTC, ASTDT,
-      TRTEMFL
-    )
+  display_vars = exprs(
+    !!!get_admiral_option("subject_keys"), TRTSDT, TRTEDT, AESTDTC, ASTDT,
+    TRTEMFL
   )
 )
 ```
@@ -417,9 +405,8 @@ adae <- adae %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = c(
-    get_admiral_option("subject_keys"),
-    exprs(ASTDTM, ASEV, AESEQ, TRTEMFL, AOCCIFL)
+  display_vars = exprs(
+    !!!get_admiral_option("subject_keys"), ASTDTM, ASEV, AESEQ, TRTEMFL, AOCCIFL
   )
 )
 ```
@@ -498,18 +485,16 @@ If needed, the other `ADSL` variables can now be added:
 adae <- adae %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = get_admiral_option("subject_keys")
+    by_vars = exprs(!!!get_admiral_option("subject_keys"))
   )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adae,
-  display_vars = c(
-    get_admiral_option("subject_keys"), exprs(
-      AEDECOD, ASTDTM, DTHDT, RFSTDTC,
-      RFENDTC, AGE, AGEU, SEX
-    )
+  display_vars = exprs(
+    !!!get_admiral_option("subject_keys"), AEDECOD, ASTDTM, DTHDT, RFSTDTC,
+    RFENDTC, AGE, AGEU, SEX
   )
 )
 ```
@@ -522,17 +507,17 @@ For example, there can be multiple records present in `ADCM` for a single subjec
 
 ``` {r eval=TRUE, echo=TRUE}
 adcm <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~ASTDTM, ~CMSEQ, ~CMDECOD, ~ATC1CD, ~ATC2CD, ~ATC3CD, ~ATC4CD,
-  "xyz112", "BP40257-1001", "2013-07-05 UTC", "14", "PARACETAMOL", "N", "N02", "N02B", "N02BE",
-  "xyz112", "BP40257-1001", "2013-08-15 UTC", "18", "SOLUMEDROL", "D", "D10", "D10A", "D10AA",
-  "xyz112", "BP40257-1001", "2013-08-15 UTC", "18", "SOLUMEDROL", "D", "D07", "D07A", "D07AA",
-  "xyz112", "BP40257-1001", "2013-08-15 UTC", "18", "SOLUMEDROL", "H", "H02", "H02A", "H02AB",
-  "xyz112", "BP40257-1002", "2012-12-15 UTC", "19", "SPIRONOLACTONE", "C", "C03", "C03D", "C03DA"
+  ~USUBJID,       ~ASTDTM,          ~CMSEQ, ~CMDECOD,         ~ATC1CD, ~ATC2CD, ~ATC3CD, ~ATC4CD,
+  "BP40257-1001", "2013-07-05 UTC", "14",   "PARACETAMOL",    "N",     "N02",   "N02B",  "N02BE",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "D",     "D10",   "D10A",  "D10AA",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "D",     "D07",   "D07A",  "D07AA",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "H",     "H02",   "H02A",  "H02AB",
+  "BP40257-1002", "2012-12-15 UTC", "19",   "SPIRONOLACTONE", "C",     "C03",   "C03D",  "C03DA"
 )
 
 adcm_aseq <- adcm %>%
   derive_var_obs_number(
-    by_vars    = get_admiral_option("subject_keys"),
+    by_vars    = exprs(!!get_admiral_option("subject_keys")[[2]]),
     order      = exprs(ASTDTM, CMSEQ, ATC1CD, ATC2CD, ATC3CD, ATC4CD),
     new_var    = ASEQ,
     check_type = "error"

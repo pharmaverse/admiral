@@ -206,9 +206,9 @@
 #' derive_vars_merged(
 #'   vs,
 #'   dataset_add = select(dm, -DOMAIN),
-#'   by_vars = exprs(STUDYID, USUBJID)
+#'   by_vars = get_admiral_option("subject_keys")
 #' ) %>%
-#'   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
+#'   select(!!!get_admiral_option("subject_keys"), VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
 #'
 #'
 #' # Merge last weight to adsl
@@ -222,14 +222,14 @@
 #' derive_vars_merged(
 #'   adsl,
 #'   dataset_add = vs,
-#'   by_vars = exprs(STUDYID, USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   order = exprs(convert_dtc_to_dtm(VSDTC)),
 #'   mode = "last",
 #'   new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
 #'   filter_add = VSTESTCD == "WEIGHT",
 #'   exist_flag = vsdatafl
 #' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
+#'   select(!!!get_admiral_option("subject_keys"), AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 #'
 #'
 #' # Derive treatment start datetime (TRTSDTM)
@@ -251,7 +251,7 @@
 #' derive_vars_merged(
 #'   select(dm, STUDYID, USUBJID),
 #'   dataset_add = ex_ext,
-#'   by_vars = exprs(STUDYID, USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
 #'   order = exprs(EXSTDTM),
 #'   mode = "first"
@@ -270,7 +270,7 @@
 #'   select(adsl, STUDYID, USUBJID),
 #'   dataset_add = ex_ext,
 #'   filter_add = !is.na(EXENDTM),
-#'   by_vars = exprs(STUDYID, USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
 #'   order = exprs(EXENDTM),
 #'   mode = "last"
@@ -296,7 +296,7 @@
 #' derive_vars_merged(
 #'   adsl,
 #'   dataset_add = advs,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   new_vars = exprs(
 #'     LSTVSCAT = if_else(AVISIT == "BASELINE", "BASELINE", "POST-BASELINE")
 #'   ),
@@ -532,11 +532,11 @@ derive_vars_merged <- function(dataset,
 #' derive_var_merged_exist_flag(
 #'   dm,
 #'   dataset_add = ae,
-#'   by_vars = exprs(STUDYID, USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   new_var = AERELFL,
 #'   condition = AEREL == "PROBABLE"
 #' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
+#'   select(!!!get_admiral_option("subject_keys"), AGE, AGEU, AERELFL)
 #'
 #' vs <- tribble(
 #'   ~STUDYID,  ~DOMAIN,  ~USUBJID,      ~VISIT, ~VSTESTCD, ~VSSTRESN, ~VSBLFL,
@@ -556,14 +556,14 @@ derive_vars_merged <- function(dataset,
 #' derive_var_merged_exist_flag(
 #'   dm,
 #'   dataset_add = vs,
-#'   by_vars = exprs(STUDYID, USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
 #'   new_var = WTBLHIFL,
 #'   condition = VSSTRESN > 90,
 #'   false_value = "N",
 #'   missing_value = "M"
 #' ) %>%
-#'   select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
+#'   select(!!!get_admiral_option("subject_keys"), AGE, AGEU, WTBLHIFL)
 derive_var_merged_exist_flag <- function(dataset,
                                          dataset_add,
                                          by_vars,
@@ -890,7 +890,7 @@ get_not_mapped <- function() {
 #' derive_var_merged_summary(
 #'   adsl,
 #'   dataset_add = adtr,
-#'   by_vars = exprs(USUBJID),
+#'   by_vars = get_admiral_option("subject_keys"),
 #'   filter_add = AVISIT == "BASELINE",
 #'   new_vars = exprs(LESIONSBL = paste(LESIONID, collapse = ", "))
 #' )

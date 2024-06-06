@@ -226,9 +226,9 @@ dm <- tribble(
 derive_vars_merged(
   vs,
   dataset_add = select(dm, -DOMAIN),
-  by_vars = exprs(STUDYID, USUBJID)
+  by_vars = get_admiral_option("subject_keys")
 ) \%>\%
-  select(STUDYID, USUBJID, VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
+  select(!!!get_admiral_option("subject_keys"), VSTESTCD, VISIT, VSSTRESN, AGE, AGEU)
 
 
 # Merge last weight to adsl
@@ -242,14 +242,14 @@ adsl <- tribble(
 derive_vars_merged(
   adsl,
   dataset_add = vs,
-  by_vars = exprs(STUDYID, USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   order = exprs(convert_dtc_to_dtm(VSDTC)),
   mode = "last",
   new_vars = exprs(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
   filter_add = VSTESTCD == "WEIGHT",
   exist_flag = vsdatafl
 ) \%>\%
-  select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
+  select(!!!get_admiral_option("subject_keys"), AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 
 
 # Derive treatment start datetime (TRTSDTM)
@@ -271,7 +271,7 @@ ex_ext <- derive_vars_dtm(
 derive_vars_merged(
   select(dm, STUDYID, USUBJID),
   dataset_add = ex_ext,
-  by_vars = exprs(STUDYID, USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   new_vars = exprs(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
   order = exprs(EXSTDTM),
   mode = "first"
@@ -290,7 +290,7 @@ derive_vars_merged(
   select(adsl, STUDYID, USUBJID),
   dataset_add = ex_ext,
   filter_add = !is.na(EXENDTM),
-  by_vars = exprs(STUDYID, USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   new_vars = exprs(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
   order = exprs(EXENDTM),
   mode = "last"
@@ -316,7 +316,7 @@ advs <- tribble(
 derive_vars_merged(
   adsl,
   dataset_add = advs,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   new_vars = exprs(
     LSTVSCAT = if_else(AVISIT == "BASELINE", "BASELINE", "POST-BASELINE")
   ),

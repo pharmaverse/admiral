@@ -86,7 +86,7 @@ adlb_annotated <- adlb %>%
       NA_character_
     )
   ) %>%
-  select(STUDYID, USUBJID, TRT01A, PARAMCD, LBSEQ, ADT, AVISIT, ADY, AVAL, ANRHI, CRIT1, CRIT1FL)
+  select(!!!get_admiral_option("subject_keys"), TRT01A, PARAMCD, LBSEQ, ADT, AVISIT, ADY, AVAL, ANRHI, CRIT1, CRIT1FL)
 ```
 
 ```{r, echo = FALSE}
@@ -141,11 +141,11 @@ Additional modifications can be made such as:
 
 ```{r}
 hylaw_records_pts_visits <- hylaw_records %>%
-  select(STUDYID, USUBJID, TRT01A) %>% # add AVISIT, ADT for by visit
+  select(!!!get_admiral_option("subject_keys"), TRT01A) %>% # add AVISIT, ADT for by visit
   distinct()
 
 hylaw_records_fls <- hylaw_records %>%
-  select(STUDYID, USUBJID, TRT01A, CRIT1FL, BILI_CRITFL) %>% # add AVISIT, ADT for by visit
+  select(!!!get_admiral_option("subject_keys"), TRT01A, CRIT1FL, BILI_CRITFL) %>% # add AVISIT, ADT for by visit
   distinct()
 
 hylaw_params <- derive_param_exist_flag(

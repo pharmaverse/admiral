@@ -541,13 +541,13 @@ the dosing records up to that date.
 # Derive Relative Time Variables
 
 adpc_arrlt <- bind_rows(adpc_nom_next, ex_exp) %>%
-  group_by(USUBJID, DRUG) %>%
+  group_by(!!!get_admiral_option("subject_keys"), DRUG) %>%
   mutate(
     FANLDTM = min(FANLDTM, na.rm = TRUE),
     min_NFRLT = min(NFRLT_prev, na.rm = TRUE),
     maxdate = max(ADT[EVID == 0], na.rm = TRUE), .after = USUBJID
   ) %>%
-  arrange(USUBJID, ADTM) %>%
+  arrange(!!!get_admiral_option("subject_keys"), ADTM) %>%
   ungroup() %>%
   filter(ADT <= maxdate) %>%
   # Derive Actual Relative Time from First Dose (AFRLT)
@@ -1115,13 +1115,13 @@ records.
 # Derive Relative Time Variables
 
 adppk_aprlt <- bind_rows(adppk_nom_prev, ex_exp) %>%
-  group_by(USUBJID, DRUG) %>%
+  group_by(!!!get_admiral_option("subject_keys"), DRUG) %>%
   mutate(
     FANLDTM = min(FANLDTM, na.rm = TRUE),
     min_NFRLT = min(NFRLT, na.rm = TRUE),
     maxdate = max(ADT[EVID == 0], na.rm = TRUE), .after = USUBJID
   ) %>%
-  arrange(USUBJID, ADTM) %>%
+  arrange(!!!get_admiral_option("subject_keys"), ADTM) %>%
   ungroup() %>%
   filter(ADT <= maxdate) %>%
   # Derive Actual Relative Time from First Dose (AFRLT)
@@ -1363,7 +1363,7 @@ covar <- adsl %>%
     )
   ) %>%
   select(
-    STUDYID, STUDYIDN, SITEID, SITEIDN, USUBJID, USUBJIDN,
+    !!!get_admiral_option("subject_keys"), STUDYIDN, SITEID, SITEIDN, USUBJIDN,
     SUBJID, SUBJIDN, AGE, SEX, SEXN, COHORT, COHORTC, ROUTE, ROUTEN,
     RACE, RACEN, ETHNIC, ETHNICN, FORM, FORMN, COUNTRY, COUNTRYN, COUNTRYL
   )
@@ -1393,7 +1393,7 @@ filtration rate (eGFR) `EGFRBL` using `compute_egfr()` function.
 labsbl <- lb %>%
   filter(LBBLFL == "Y" & LBTESTCD %in% c("CREAT", "ALT", "AST", "BILI")) %>%
   mutate(LBTESTCDB = paste0(LBTESTCD, "BL")) %>%
-  select(STUDYID, USUBJID, LBTESTCDB, LBSTRESN)
+  select(!!!get_admiral_option("subject_keys"), LBTESTCDB, LBSTRESN)
 
 covar_vslb <- covar %>%
   derive_vars_merged(

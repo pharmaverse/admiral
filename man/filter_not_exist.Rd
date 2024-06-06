@@ -75,7 +75,7 @@ adcm <- tribble(
 filter_not_exist(
   dataset = adsl,
   dataset_add = adcm,
-  by_vars = exprs(USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   filter_add = str_detect(CMTRT, "VITAMIN")
 )
 

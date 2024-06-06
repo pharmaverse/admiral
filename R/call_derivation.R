@@ -72,7 +72,7 @@
 #'   derive_vars_merged(
 #'     dataset_add = adsl,
 #'     new_vars = exprs(TRTSDT, TRTEDT),
-#'     by_vars = exprs(USUBJID)
+#'     by_vars = get_admiral_option("subject_keys")
 #'   )
 #'
 #' ## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
@@ -201,7 +201,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'   derive_vars_merged(
 #'     dataset_add = adsl,
 #'     new_vars = exprs(TRTSDT, TRTEDT),
-#'     by_vars = exprs(USUBJID)
+#'     by_vars = get_admiral_option("subject_keys")
 #'   )
 #'
 #' ## In order to derive both `ASTDT` and `AENDT` in `ADAE`, one can use `derive_vars_dt()`

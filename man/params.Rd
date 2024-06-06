@@ -55,7 +55,7 @@ adae <- ae \%>\%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = exprs(TRTSDT, TRTEDT),
-    by_vars = exprs(USUBJID)
+    by_vars = get_admiral_option("subject_keys")
   )
 
 ## In order to derive both `ASTDT` and `AENDT` in `ADAE`, one can use `derive_vars_dt()`
