@@ -131,11 +131,11 @@ library(DT)
 
 data(vs)
 vs <- tribble(
-  ~USUBJID, ~VSTESTCD, ~VISIT, ~VSDTC,
-  "01-701-1015", "WEIGHT", "BASELINE", "2013-12-26",
-  "01-701-1015", "WEIGHT", "WEEK 2", "2014-01-14",
-  "01-701-1016", "WEIGHT", "BASELINE", "2014-01-06",
-  "01-701-1016", "WEIGHT", "WEEK 2", "2014-01-22",
+ ~STUDYID, ~USUBJID, ~VSTESTCD, ~VISIT, ~VSDTC,
+  "omep_1",  "01-701-1015", "WEIGHT", "BASELINE", "2013-12-26",
+  "omep_1",  "01-701-1015", "WEIGHT", "WEEK 2", "2014-01-14",
+  "omep_1",  "01-701-1016", "WEIGHT", "BASELINE", "2014-01-06",
+  "omep_1",  "01-701-1016", "WEIGHT", "WEEK 2", "2014-01-22",
 )
 ```
 
@@ -161,7 +161,8 @@ vs1 <- vs %>%
 
 dataset_vignette(
   vs1,
-  display_vars = exprs(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(VSTESTCD, VISIT, VSDTC, ADT)
+                   ),
   filter = VSTESTCD == "WEIGHT"
 )
 ```
@@ -173,7 +174,8 @@ Note: The call to get the formatted dataset would be:
       ```{r, eval=FALSE, echo=TRUE}
 dataset_vignette(
   vs1,
-  display_vars = exprs(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
+  display_vars = c(get_admiral_option("subject_keys"), exprs(VSTESTCD, VISIT, VSDTC, ADT)
+                   ),
   filter = VSTESTCD == "WEIGHT"
 )
       ```
