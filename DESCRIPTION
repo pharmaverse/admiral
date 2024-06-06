@@ -1,26 +1,27 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 1.0.2.9047
+Version: 1.1.0
 Authors@R: c(
     person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
     person("Jeffrey", "Dickinson", role = "aut"),
     person("Ross", "Farrugia", role = "aut"),
-    person("Adam", "Forys", role = "aut"),
+    person("Fanny", "Gautier", role = "aut"),
     person("G", "Gayatri", role = "aut"),
     person("Daphne", "Grasselly", role = "aut"),
     person("Dinakar", "Kulkarni", role = "aut"),
     person("Edoardo", "Mancini", role = "aut"),
     person("Sadchla", "Mascary", role = "aut"),
     person("Gordon", "Miller", role = "aut"),
+    person("Lina", "Patil", role = "aut"),
     person("Sophie", "Shapcott", role = "aut"),
     person("Eric", "Simms", role = "aut"),
     person("Daniel", "Sjoberg", role = "aut"),
     person("Stefan", "Thoma", role = "aut"),
+    person("Phillip", "Webster", role = "aut"),
     person("Kangjie", "Zhang", role = "aut"),
     person("Zelos", "Zhu", role = "aut"),
-    person("Thomas", "Neitmann", role = "ctb"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
   )
@@ -65,8 +66,6 @@ Suggests:
     tibble
 VignetteBuilder: 
     knitr
-Remotes: 
-    pharmaverse/admiraldev
 Config/Needs/website: gert
 Config/testthat/edition: 3
 Encoding: UTF-8

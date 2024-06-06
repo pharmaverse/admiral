@@ -39,26 +39,20 @@ devtools::install_github("pharmaverse/admiral")
 The {admiral} family has several downstream and upstream dependencies and so releases are done in two Phases:
 
 * Phase 1 release is for [{admiraldev}](https://pharmaverse.github.io/admiraldev/), [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/), and [{admiral}](https://pharmaverse.github.io/admiral/) core
-* Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/)
+* Phase 2 release is extension packages, e.g. [{admiralonco}](https://pharmaverse.github.io/admiralonco/), [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/), [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) and [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/).
 
 | Release Schedule | Phase 1- Date and Packages                                               | Phase 2- Date and Packages                                        |
 | ---------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------- |
-| Q4-2023          | December 4th                                                             | December 11th                                                     |
-|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)       |
-|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)   |
-|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      |                                                                   |
-| Q1-2024          |                                                                          | January (Date TBC)                                                |
-|                  |                                                                          | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) |
-| Q2-2024          | June 3rd                                                                 | June 8th                                                          |
-|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)       |
-|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)   |
-|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      |                                                                   |
+|                  |                                                                          |                                                                   |
 | Q4-2024          | December 2nd                                                             | December 9th                                                      |
-|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/) | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)       |
+|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/)      | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)       |
 |                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)   |
-|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      |                                                                   |
-
-The `{admiral}` Q4-2023 release will officially be `{admiral}`'s version 1.0.0 release, where we commit to increased package maturity and pivot towards focusing on maintenance rather than new content. This does not mean that there will never be any new content in `{admiral}`, rather it means we will be more mindful about introducing new functionality and/or breaking changes. The release schedule in 2024 and onward will also shift to twice-yearly, rather than quarterly, so that our users have ample time to react to any new content and changes that do make it onto `{admiral}`.
+|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) |                        |                  |                                                                          | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/)  |
+|                  |                                                                          |                                                                   | 
+| Q2-2025          | June 2nd                                                                 | June 10th                                                      |
+|                  | [{pharmaversesdtm}](https://pharmaverse.github.io/pharmaversesdtm/)      | [{admiralonco}](https://pharmaverse.github.io/admiralonco/)       |
+|                  | [{admiraldev}](https://pharmaverse.github.io/admiraldev/)                | [{admiralophtha}](https://pharmaverse.github.io/admiralophtha/)   |
+|                  | [{admiral}](https://pharmaverse.github.io/admiral/)                      | [{admiralvaccine}](https://pharmaverse.github.io/admiralvaccine/) |                        |                  |                                                                          | [{pharmaverseadam}](https://pharmaverse.github.io/pharmaverseadam/)   |                                                                       
 
 ## Main Goal
 
@@ -194,4 +188,5 @@ We use the following for support and communications between user and developer c
 ## Acknowledgments
 
 Along with the authors and contributors, thanks to the following people for their work on the package:
-Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Asha Chakma, Bill Denney, Kamila Duniec, Alice Ehmann, Romain Francois, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Iain McCay, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Yohann Omnes, Barbara O'Reilly, Hamza Rahal, Nick Ramirez, Tom Ratford, Sukalpo Saha, Tamara Senior, Sophie Shapcott, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay and Franciszek Walkowiak.
+
+Jaxon Abercrombie, Mahdi About, Teckla Akinyi, James Black, Claudia Carlucci, Asha Chakma, Bill Denney, Kamila Duniec, Alice Ehmann, Romain Francois, Ania Golab, Alana Harris, Declan Hodges, Anthony Howard, Shimeng Huang, Samia Kabi, James Kim, John Kirkpatrick, Leena Khatri, Robin Koeger, Konstantina Koukourikou, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Iain McCay, Jack McGavigan, Jordanna Morrish, Syed Mubasheer, Thomas Neitmann, Yohann Omnes, Barbara O'Reilly, Hamza Rahal, Nick Ramirez, Tom Ratford, Sukalpo Saha, Tamara Senior, Sophie Shapcott, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe, Annie Yang, Ojesh Upadhyay and Franciszek Walkowiak.

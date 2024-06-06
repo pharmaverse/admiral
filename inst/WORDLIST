@@ -69,11 +69,11 @@ Cockcroft
 Creat
 Creatine
 Creatinine
-cyclomatic
 DAIDS
 DAIDs
 DIABP
 DILI
+DS
 DT
 DTC
 DTF
@@ -128,9 +128,9 @@ Hypokalemia
 Hypomagnesemia
 Hyponatremia
 Hypophosphatemia
-Iain
 IG
 INR
+Iain
 Jaxon
 Jordanna
 Kabi
@@ -168,6 +168,7 @@ NCICTCAEv
 NFRLT
 NPRLT
 NRRLT
+Neitmann
 Neutrophil
 Nom
 Nonfasting
@@ -182,7 +183,6 @@ PARAMN
 PLDOSE
 PTT
 Param
-param
 Pavan
 Pharma
 Pharmacokinetic
@@ -224,7 +224,6 @@ Syed
 Sys
 TADJ
 TADJAE
-TBC
 TDOSE
 TDURD
 TERMCHAR
@@ -245,7 +244,6 @@ VAD
 Vignesh
 WBC
 Walkowiak
-Walkthrough
 Wenyi
 XXXXXXXX
 Yohann
@@ -271,6 +269,7 @@ chk
 codebase
 constructible
 creatinine
+cyclomatic
 dL
 datepart
 datetime
@@ -294,7 +293,6 @@ framingham
 funder
 glomerular
 groupwise
-lockfile
 lubridate
 mL
 magrittr
@@ -340,7 +338,6 @@ timepoint
 tte
 umol
 ungrouped
-unintuitive
 usethis
 xULN
 xportr

@@ -32,24 +32,25 @@ Authors:
   \item Stefan Bundfuss
   \item Jeffrey Dickinson
   \item Ross Farrugia
-  \item Adam Forys
+  \item Fanny Gautier
   \item G Gayatri
   \item Daphne Grasselly
   \item Dinakar Kulkarni
   \item Edoardo Mancini
   \item Sadchla Mascary
   \item Gordon Miller
+  \item Lina Patil
   \item Sophie Shapcott
   \item Eric Simms
   \item Daniel Sjoberg
   \item Stefan Thoma
+  \item Phillip Webster
   \item Kangjie Zhang
   \item Zelos Zhu
 }
 
 Other contributors:
 \itemize{
-  \item Thomas Neitmann [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
 }
