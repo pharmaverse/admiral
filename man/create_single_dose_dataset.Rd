@@ -272,9 +272,11 @@ create_single_dose_dataset(
   end_date = EXENDT,
   end_datetime = EXENDTM,
   keep_source_vars = c(
-    get_admiral_option("subject_keys"), exprs(EXTRT, EXDOSE, EXDOSFRQ,
-    DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
-  ))
+    get_admiral_option("subject_keys"), exprs(
+      EXTRT, EXDOSE, EXDOSFRQ,
+      DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
+    )
+  )
 )
 }
 \seealso{

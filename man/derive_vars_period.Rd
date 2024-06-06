@@ -131,8 +131,10 @@ derive_vars_period(
   dataset_ref = subperiod_ref,
   new_vars = exprs(PxxSwSDT = ASPRSDT, PxxSwEDT = ASPREDT)
 ) \%>\%
-  select(!!!get_admiral_option("subject_keys"), P01S1SDT, P01S1EDT, P01S2SDT, P01S2EDT,
-  P02S1SDT, P02S1EDT)
+  select(
+    !!!get_admiral_option("subject_keys"), P01S1SDT, P01S1EDT, P01S2SDT, P01S2EDT,
+    P02S1SDT, P02S1EDT
+  )
 }
 \seealso{
 \code{\link[=create_period_dataset]{create_period_dataset()}}
