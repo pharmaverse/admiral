@@ -108,7 +108,11 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "message")
 signal_duplicate_records <- function(dataset,
                                      by_vars,
-                                     msg = "Dataset contains duplicate records with respect to {.var {replace_values_by_names(by_vars)}}", # nolint
+                                     msg = paste(
+                                       "Dataset contains duplicate records",
+                                       "with respect to",
+                                       "{.var {replace_values_by_names(by_vars)}}"
+                                     ),
                                      cnd_type = "error") {
   assert_expr_list(by_vars)
   assert_data_frame(dataset, required_vars = extract_vars(by_vars), check_is_grouped = FALSE)
