@@ -23,7 +23,8 @@ library(admiraldev)
 This vignette aims to discuss some of the common programming concepts and conventions that have been adopted within the
 `{admiral}` family of packages. It is intended to be a user-facing version of the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html) vignette, but users can also read the
 latter after becoming more familiar with the package to expand further on any topics of interest. For some of common
-`{admiral}` FAQ, visit the corresponding [FAQ page](faq.html).
+`{admiral}` FAQ, visit the corresponding FAQ page provided in the same drop down menu
+as this vignette.
 
 # Input and Output
 
