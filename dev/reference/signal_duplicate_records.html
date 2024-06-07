@@ -107,8 +107,8 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">signal_duplicate_records</span><span class="op">(</span></span>
 <span>  <span class="va">dataset</span>,</span>
 <span>  <span class="va">by_vars</span>,</span>
-<span>  msg <span class="op">=</span></span>
-<span>    <span class="st">"Dataset contains duplicate records with respect to {.var {replace_values_by_names(by_vars)}}"</span>,</span>
+<span>  msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Dataset contains duplicate records"</span>, <span class="st">"with respect to"</span>,</span>
+<span>    <span class="st">"{.var {replace_values_by_names(by_vars)}}"</span><span class="op">)</span>,</span>
 <span>  cnd_type <span class="op">=</span> <span class="st">"error"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
