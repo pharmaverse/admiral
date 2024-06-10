@@ -1,4 +1,7 @@
-# admiral (development version)
+# admiral 1.1.1
+
+- `derive_extreme_event()` was fixed such that `check_type = "none"` is accepted
+again. (#2462)
 
 # admiral 1.1.0
 
