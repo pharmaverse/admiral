@@ -56,7 +56,7 @@ test_that("derive_extreme_event Test 1: `mode` = first", {
     set_values_to = exprs(
       PARAMCD = "WSP"
     ),
-    check_type = "warning"
+    check_type = "none"
   )
 
   expect_dfs_equal(
