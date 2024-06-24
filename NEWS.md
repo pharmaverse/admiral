@@ -2,6 +2,9 @@
 
 ## New Features
 
+- New function `derive_vars_crit_flag()` for deriving criterion flag variables
+(`CRITy`, `CRITyFL`, `CRITyFLN`). (#2468)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
