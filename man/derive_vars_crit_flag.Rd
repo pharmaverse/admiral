@@ -16,19 +16,36 @@ derive_vars_crit_flag(
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{crit_nr}{The criterion number}
+\item{crit_nr}{The criterion number, i.e., the \code{y} in \code{CRITy}
 
-\item{condition}{The condition for deriving the criterion flag.}
+\emph{Permitted Values}: a positive integer}
+
+\item{condition}{Condition for flagging records
+
+See description of the \code{values_yn} argument for details on how the
+\code{CRITyFL} variable is populated.
+
+\emph{Permitted Values}: an unquoted expression which evaluates to a logical (in
+\code{dataset})}
 
 \item{description}{The description of the criterion
 
-The \code{CRITy} variable is set to the specified value.}
+The \code{CRITy} variable is set to the specified value.
+
+An expression can be specified to set the value depending on the parameter.
+Please note that the value must be constant within a parameter.
+
+\emph{Permitted Values}: an unquoted expression which evaluates to a character
+(in \code{dataset})}
 
 \item{values_yn}{Should \code{"Y"} and \code{"N"} be used for \code{CRITyFL}?
 
 If set to \code{TRUE}, the \code{CRITyFL} variable is set to \code{"Y"} if the condition
 (\code{condition}) evaluates to \code{TRUE}, it is set to \code{"N"} if the condition
 evaluate to \code{FALSE}, and to \code{NA} if it evaluates to \code{NA}.
+
+Otherwise, the \code{CRITyFL} variable is set to \code{"Y"} if the condition
+(\code{condition}) evaluates to \code{TRUE}, and to \code{NA} otherwise.
 
 \emph{Permitted Values}: \code{TRUE}, \code{FALSE}}
 
@@ -40,30 +57,68 @@ If set to \code{TRUE}, the \code{CRITyFLN} variable is created. It is set to \co
 \emph{Permitted Values}: \code{TRUE}, \code{FALSE}}
 }
 \value{
-The modified dataset with the derived criterion flag variable.
+The input dataset with the variables \code{CRITy}, \code{CRITyFL}, and
+optionally \code{CRITyFLN} added.
 }
 \description{
-Derives criterion flags based on the provided dataset, condition, and
-description.
+The function derives ADaM compliant criterion flags. I.e., if a criterion
+flag can't be derived with this function, the derivation is not ADaM
+compliant. It helps to ensure that
+\itemize{
+\item the condition of the criterion depends only on variables of the same row,
+\item the \code{CRITyFL} is populated with valid values, i.e, either \code{"Y"} and \code{NA} or
+\code{"Y"}, \code{"N"}, and \code{NA}.
+\item the \code{CRITy} variable is populated correctly, i.e.,
+\itemize{
+\item set to a constant value within a parameter if \code{CRITyFL} is populated with
+\code{"Y"}, \code{"N"}, and \code{NA} and
+\item set to a constant value within a parameter if the criterion condition is
+fulfilled and to \code{NA} otherwise if \code{CRITyFL} is populated with \code{"Y"},  and
+\code{NA}
+}
+}
 }
 \examples{
-dataset <- data.frame(x = c(1, 2, 3), y = c(4, 5, 6))
-derive_vars_crit_flag(dataset, crit_nr = 1, condition = x > 2, description = "Flag 1")
+library(tibble)
+adbds <- tribble(
+  ~PARAMCD, ~AVAL,
+  "AST",    42,
+  "AST",    52,
+  "AST",    NA_real_,
+  "ALT",    33,
+  "ALT",    51
+)
+
+# Create a criterion flag with values "Y" and NA
+derive_vars_crit_flag(
+  adbds,
+  condition = AVAL > 50,
+  description = "Absolute value > 50"
+)
+
+# Create criterion flag with values "Y", "N", and NA and parameter dependent
+# criterion description
+derive_vars_crit_flag(
+  adbds,
+  crit_nr = 2,
+  condition = AVAL > 50,
+  description = paste(PARAMCD, "> 50"),
+  values_yn = TRUE,
+  create_numeric_flag = TRUE
+)
 }
 \seealso{
-General Derivation Functions for all ADaMs that returns variable appended to dataset:
-\code{\link{derive_var_extreme_flag}()},
-\code{\link{derive_var_joined_exist_flag}()},
-\code{\link{derive_var_merged_ef_msrc}()},
-\code{\link{derive_var_merged_exist_flag}()},
-\code{\link{derive_var_merged_summary}()},
-\code{\link{derive_var_obs_number}()},
-\code{\link{derive_var_relative_flag}()},
-\code{\link{derive_vars_computed}()},
-\code{\link{derive_vars_joined}()},
-\code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_merged_lookup}()},
-\code{\link{derive_vars_transposed}()}
+BDS-Findings Functions that returns variable appended to dataset: 
+\code{\link{derive_basetype_records}()},
+\code{\link{derive_var_analysis_ratio}()},
+\code{\link{derive_var_anrind}()},
+\code{\link{derive_var_atoxgr}()},
+\code{\link{derive_var_atoxgr_dir}()},
+\code{\link{derive_var_base}()},
+\code{\link{derive_var_chg}()},
+\code{\link{derive_var_ontrtfl}()},
+\code{\link{derive_var_pchg}()},
+\code{\link{derive_var_shift}()}
 }
-\concept{der_gen}
-\keyword{der_gen}
+\concept{der_bds_findings}
+\keyword{der_bds_findings}
