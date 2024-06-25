@@ -58,15 +58,37 @@ derive_vars_crit_flag <- function(dataset,
     crityfl_no = NA_character_
     crityfln_no = NA_integer_
   }
-  dataset <- dataset %>% mutate(!!new_critflvar := if_else(!!condition, "Y", crityfl_no))
 
-  if (values_yn) {
-    dataset <- dataset %>% mutate(!!new_critvar := !!description)
-  } else {
-    dataset <- dataset %>% mutate(
-      !!new_critvar := if_else(!!sym(new_critflvar) == "Y", !!description, NA_character_)
-    )
-  }
+  tryCatch(
+    dataset <- dataset %>% mutate(!!new_critflvar := if_else(!!condition, "Y", crityfl_no)),
+    error = function(cnd) {
+      cli_abort(c(
+          "Evaluating {.arg condition} ({.code {as_label(condition)}}) in {.arg dataset} failed:",
+          ` ` = cnd$parent$message
+        ),
+        call = parent.frame(n = 4)
+      )
+    }
+  )
+
+  tryCatch(
+    {
+      if (values_yn) {
+        dataset <- dataset %>% mutate(!!new_critvar := !!description)
+      } else {
+        dataset <- dataset %>% mutate(
+          !!new_critvar := if_else(!!sym(new_critflvar) == "Y", !!description, NA_character_)
+        )
+      }
+    },
+    error = function(cnd) {
+      cli_abort(c(
+        "Evaluating {.arg description} ({.code {as_label(description)}}) in {.arg dataset} failed:",
+        ` ` = cnd$parent$message
+      ),
+      call = parent.frame(n = 4))
+    }
+  )
 
   if (create_numeric_flag) {
     new_critflnvar <- paste0("CRIT", as.character(crit_nr), "FLN")
