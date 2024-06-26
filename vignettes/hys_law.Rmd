@@ -45,11 +45,11 @@ library(dplyr, warn.conflicts = FALSE)
 
 We assume that an `ADLB` dataset is available [^1].
 
-[^1]: In the walk through below we will use the ADLB dataset created from the call `use_ad_template("adlb")`. Due to the size of the dataset, we only included the following USUBJIDs: 
+[^1]: In the walk through below we will use the `ADLB` dataset created from the call `use_ad_template("adlb")`. Due to the size of the dataset, we only included the following `USUBJID`s: 
 
     * `01-701-1015`, `01-701-1023`, `01-701-1028`, `01-701-1033`, `01-701-1034`, `01-701-1047`, `01-701-1097`, `01-705-1186`, `01-705-1292`, `01-705-1310`, `01-708-1286`.
 
-First we read in the ADLB parameters required for the Hy's Law parameters:
+First we read in the `ADLB` parameters required for the Hy's Law parameters:
 
 ```{r, eval = TRUE}
 data(admiral_adlb)
@@ -65,7 +65,7 @@ head(adlb) %>%
 
 ## Flagging Elevated Values (`CRITy`, `CRITyFL`) {#columns}
 
-A standard convention of ADLBHY datasets, are various `CRITy` and `CRITyFL` columns to describe the conditions necessary to reach that particular criterion of Hy's Law and the actual flag itself to indicate whether or not the condition was reached.
+A standard convention of `ADLBHY` datasets, are various `CRITy` and `CRITyFL` columns to describe the conditions necessary to reach that particular criterion of Hy's Law and the actual flag itself to indicate whether or not the condition was reached.
 
 Using `mutate()`, `call_derivation()` and `derive_var_merged_exist_flag()`, we can create these columns that indicate the the 3-fold or greater than upper limit of normal of ALT/AST and the 2-fold or greater than upper limit of normal of BILI.
 
@@ -73,24 +73,34 @@ To increase visibility and for simplicity, we will retain only columns that are 
 
 ```{r}
 adlb_annotated <- adlb %>%
-  mutate(
-    CRIT1 = case_when(
-      PARAMCD == "AST" ~ "AST >=3xULN",
-      PARAMCD == "ALT" ~ "ALT >=3xULN",
-      PARAMCD == "BILI" ~ "BILI >=2xULN"
+  slice_derivation(
+    derive_vars_crit_flag,
+    args = params(
+      values_yn = TRUE
     ),
-    CRIT1FL = if_else(
-      (AVAL / ANRHI >= 3 & PARAMCD %in% c("AST", "ALT")) |
-        (AVAL / ANRHI >= 2 & PARAMCD == "BILI"),
-      "Y",
-      NA_character_
+    derivation_slice(
+      filter = PARAMCD %in% c("AST", "ALT"),
+      args = params(
+        condition = AVAL / ANRHI >= 3,
+        description = paste(PARAMCD, ">=3xULN")
+      )
+    ),
+    derivation_slice(
+      filter = PARAMCD == "BILI",
+      args = params(
+        condition = AVAL / ANRHI >= 2,
+        description = "BILI >= 2xULN"
+      )
     )
   ) %>%
   select(STUDYID, USUBJID, TRT01A, PARAMCD, LBSEQ, ADT, AVISIT, ADY, AVAL, ANRHI, CRIT1, CRIT1FL)
 ```
 
 ```{r, echo = FALSE}
-dataset_vignette(adlb_annotated)
+dataset_vignette(
+  adlb_annotated,
+  display_vars = exprs(USUBJID, PARAMCD, AVISIT, AVAL, ANRHI, CRIT1, CRIT1FL)
+)
 ```
 
 
@@ -125,7 +135,7 @@ hylaw_records <- derive_vars_joined(
 ```{r, echo = FALSE}
 hylaw_records %>%
   arrange(desc(BILI_CRITFL), desc(CRIT1FL)) %>%
-  dataset_vignette()
+  dataset_vignette(display_vars = exprs(USUBJID, PARAMCD, AVISIT, ADT, CRIT1FL, BILI_DT, BILI_CRITFL))
 ```
 
 
@@ -166,7 +176,8 @@ hylaw_params <- derive_param_exist_flag(
 ```{r, echo = FALSE}
 hylaw_params %>%
   arrange(desc(AVAL)) %>%
-  dataset_vignette()
+  relocate(AVALC, .before = AVAL) %>% 
+  dataset_vignette(display_vars = exprs(USUBJID, PARAMCD, PARAM, AVALC, AVAL))
 ```
 
 
@@ -180,7 +191,9 @@ adlbhy <- adlb_annotated %>%
 ```
 
 ```{r, echo = FALSE}
-dataset_vignette(adlbhy)
+dataset_vignette(
+  adlbhy %>% relocate(AVALC, .before = AVAL),
+  display_vars = exprs(USUBJID, PARAMCD, AVISIT, AVALC, AVAL, CRIT1, CRIT1FL))
 ```
 
 Here we demonstrated what is the base-case that may be asked of as a trial programmer. The reality is that Hy's Law and assessing potential DILI events can get rather complex quite quickly. Differences in assessment across organizations and specific trials might require modifications, which may include:
@@ -191,11 +204,11 @@ Here we demonstrated what is the base-case that may be asked of as a trial progr
  - different criteria cutoffs that depend on baseline values or characteristics
  - other parameters such as worsening of condition
 
-We hope by demonstrating the flexibility of `admiral` functions and using a general workflow to create the necessary parameters for an ADLBHY, that creating this final dataset becomes simplified and easily scalable. Ideally, this is ready for your organization's standard macros or previous code for TLFs and outputs as well. This is our first attempt at breaking down and summarizing this topic. We welcome feedback and ideas to improve this guide!
+We hope by demonstrating the flexibility of `admiral` functions and using a general workflow to create the necessary parameters for an `ADLBHY`, that creating this final dataset becomes simplified and easily scalable. Ideally, this is ready for your organization's standard macros or previous code for TLFs and outputs as well. This is our first attempt at breaking down and summarizing this topic. We welcome feedback and ideas to improve this guide!
 
 # Example Script 
 
-ADaM   | Sourcing Command
------- | --------------
-ADLBHY | `use_ad_template("ADLBHY")`
+ADaM     | Sourcing Command
+------   | --------------
+`ADLBHY` | `use_ad_template("ADLBHY")`
 
