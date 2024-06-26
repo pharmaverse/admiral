@@ -1,8 +1,9 @@
 #' Open an ADaM Template Script
 #'
-#' @param adam_name An ADaM dataset name. You can use any of the available dataset name
-#' `r list_all_templates()`, and the dataset name is case-insensitive. The default dataset
-#' name is ADSL.
+#' @param adam_name An ADaM dataset name. You can use any of the available
+#'   dataset names
+#'   `r map_chr(list_all_templates(), ~ paste0("\\code{\"", .x, "\"}"))`.
+#'   The dataset name is case-insensitive. The default dataset name is `"ADSL"`.
 #' @param save_path Path to save the script.
 #' @param package The R package in which to look for templates. By default `"admiral"`.
 #' @param overwrite Whether to overwrite an existing file named `save_path`.
@@ -10,9 +11,8 @@
 #'
 #' @return No return values, called for side effects
 #'
-#' @details Running without any arguments such as `use_ad_template()` auto-generates adsl.R in
+#' @details Running without any arguments such as `use_ad_template()` auto-generates `adsl.R` in
 #' the current path. Use `list_all_templates()` to discover which templates are available.
-#'
 #'
 #' @family utils_examples
 #' @keywords utils_examples
