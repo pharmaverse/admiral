@@ -140,7 +140,10 @@ derive_vars_crit_flag <- function(dataset,
     error = function(cnd) {
       cli_abort(
         c(
-          "Evaluating {.arg description} ({.code {as_label(description)}}) in {.arg dataset} failed:",
+          paste(
+            "Evaluating {.arg description} ({.code {as_label(description)}}) in",
+            "{.arg dataset} failed:"
+          ),
           ` ` = cnd$parent$message
         ),
         call = parent.frame(n = 4)
