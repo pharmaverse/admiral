@@ -14,7 +14,8 @@ test_that("derive_vars_crit_flag Test 1: works with defaults", {
       condition = AVAL > 40,
       description = "AVAL > 40"
     ),
-    keys = "AVAL")
+    keys = "AVAL"
+  )
 })
 
 ## Test 2: create numeric flag ----
@@ -34,7 +35,8 @@ test_that("derive_vars_crit_flag Test 2: create numeric flag", {
       description = "AVAL > 40",
       create_numeric_flag = TRUE
     ),
-    keys = "AVAL")
+    keys = "AVAL"
+  )
 })
 
 ## Test 3: using values Y and N ----
@@ -58,7 +60,8 @@ test_that("derive_vars_crit_flag Test 3: using values Y and N", {
       values_yn = TRUE,
       create_numeric_flag = TRUE
     ),
-    keys = "AVAL")
+    keys = "AVAL"
+  )
 })
 
 ## Test 4: error if invalid condition ----
@@ -71,12 +74,12 @@ test_that("derive_vars_crit_flag Test 4: error if invalid condition", {
   )
 
   expect_snapshot(
-  derive_vars_crit_flag(
-    input,
-    condition = AVAL > 3 * ANRHI,
-    description = "> 3ULN"
-  ),
-  error = TRUE
+    derive_vars_crit_flag(
+      input,
+      condition = AVAL > 3 * ANRHI,
+      description = "> 3ULN"
+    ),
+    error = TRUE
   )
 })
 
@@ -100,5 +103,6 @@ test_that("derive_vars_crit_flag Test 5: error if invalid description", {
       values_yn = TRUE,
       create_numeric_flag = TRUE
     ),
-    error = TRUE)
+    error = TRUE
+  )
 })
