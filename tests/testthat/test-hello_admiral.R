@@ -1,5 +1,4 @@
 
-S = "Welcome to Admiral family"
 
 #  hello_admiral -------
 ## Test 1: hello_admiral works ----
@@ -19,9 +18,10 @@ test_that("hello_admiral() Test #2 Error if input not acceptable type", {
  }
 )
 
-## Test3: hello_admiral .....
+## Test3: hello_admiral ..... -----
 test_that("hello_admiral() Test #3: Return value is `interpreted string literal`", {
-    expect_identical(hello_admiral(), cat(S, "\n"))
+   S ="Welcome to Admiral family"
+   expect_identical(hello_admiral(), cat(S, "\n"))
 }
 )
 
