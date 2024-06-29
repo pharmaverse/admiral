@@ -16,7 +16,9 @@ hello_admiral <- function(hw = TRUE) {
   if (hw) {
     message("Welcome to Admiral family")
   } else {
-    cli::cli_text("Using cli:: rather than base:: to say ", "\n",
-                  "'Welcome to Admiral Family'")
+    cli::cli_text(
+      "Using cli:: rather than base:: to say ", "\n",
+      "'Welcome to Admiral Family'"
+    )
   }
 }
