@@ -5,7 +5,6 @@
 #' @param hw TRUE or FALSE
 #'
 #' @author Anders
-#' @keywords other_advanced
 #'
 #' @return Happy Message
 #'

@@ -21,4 +21,3 @@ hello_admiral(hw = FALSE)
 \author{
 Anders
 }
-\keyword{other_advanced}
