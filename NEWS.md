@@ -2,6 +2,8 @@
 
 ## New Features
 
+- Created function `hello_admiral()` as part of onboarding task. (#1839)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
