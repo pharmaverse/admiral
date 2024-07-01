@@ -2,6 +2,8 @@
 
 ## New Features
 
+- Added `hello_admiral()` function for on boarding task (#1839)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
