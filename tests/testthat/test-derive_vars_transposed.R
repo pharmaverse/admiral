@@ -53,8 +53,7 @@ test_that("derive_vars_transposed Test 2: filtering the merge dataset works", {
 })
 
 ## Test 3: filtering the merge dataset works with relationship 'many-to-one' ----
-test_that("derive_vars_transposed Test 3: filtering the merge dataset works
-          with relationship 'many-to-one'", {
+test_that("derive_vars_transposed Test 3: filter merge dataset 'many-to-one'", {
   expect_snapshot(
     derive_vars_transposed(
       dataset,
