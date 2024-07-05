@@ -6,6 +6,7 @@
 #' @param dataset
 #' `r roxygen_param_dataset(expected_vars = c("by_vars", "analysis_var", "order", "keep_vars"))`
 #'
+
 #' @param dataset_ref Expected observations dataset
 #'
 #'   Data frame with all the combinations of `PARAMCD`, `PARAM`, `AVISIT`,
@@ -109,7 +110,9 @@
 #'   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
 #'   order = exprs(AVISITN, AVISIT),
 #'   keep_vars = exprs(PARAMN)
-#' )
+#' ) |>
+#'   dplyr::arrange(DTYPE) |>
+#'   print(n = 30)
 #'
 derive_locf_records <- function(dataset,
                                 dataset_ref,

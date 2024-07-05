@@ -122,7 +122,9 @@ derive_locf_records(
   by_vars = exprs(STUDYID, USUBJID, PARAMCD),
   order = exprs(AVISITN, AVISIT),
   keep_vars = exprs(PARAMN)
-)
+) |>
+  dplyr::arrange(DTYPE) |>
+  print(n = 30)
 
 }
 \seealso{
