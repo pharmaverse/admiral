@@ -100,8 +100,7 @@
       1 DIABP Diastolic Blood Pressure
       i Run `admiral::get_not_mapped()` to access the full list.
 
-# derive_var_merged_summary Test 28: error when relatioship is
-          incorrectly specificed 'one-to-one'
+# derive_var_merged_summary Test 28: error incorrect 'one-to-one'
 
     Code
       derive_vars_merged(advs, dataset_add = adsl, by_vars = exprs(USUBJID),
@@ -111,8 +110,7 @@
       ! Each row in `dataset_add` must match at most 1 row in `dataset`.
       i Row 1 of `dataset_add` matches multiple rows in `dataset`.
 
-# derive_var_merged_summary Test 29: merge selected variables with
-          relatioship as 'one-to-one'
+# derive_var_merged_summary Test 29: merge sel vars 'one-to-one'
 
     Code
       derive_vars_merged(adsl, dataset_add = advs, by_vars = exprs(USUBJID),

@@ -1,5 +1,4 @@
-# derive_vars_transposed Test 3: filtering the merge dataset works
-          with relationship 'many-to-one'
+# derive_vars_transposed Test 3: filter merge dataset 'many-to-one'
 
     Code
       derive_vars_transposed(dataset, dataset_merge, by_vars = exprs(USUBJID),

@@ -687,8 +687,7 @@ test_that("derive_var_merged_summary Test 27: merge selected variables with
 })
 
 ## Test 28: error when relatioship is incorrectly specificed 'one-to-one' ----
-test_that("derive_var_merged_summary Test 28: error when relatioship is
-          incorrectly specificed 'one-to-one'", {
+test_that("derive_var_merged_summary Test 28: error incorrect 'one-to-one'", {
   expect_snapshot(
     derive_vars_merged(advs,
       dataset_add = adsl,
@@ -701,8 +700,7 @@ test_that("derive_var_merged_summary Test 28: error when relatioship is
 })
 
 ## Test 29: merge selected variables with relatioship as 'one-to-one' ----
-test_that("derive_var_merged_summary Test 29: merge selected variables with
-          relatioship as 'one-to-one'", {
+test_that("derive_var_merged_summary Test 29: merge sel vars 'one-to-one'", {
   expect_snapshot(
     derive_vars_merged(adsl,
       dataset_add = advs,
