@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9001</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -335,11 +335,11 @@ more details and the blog post <a href="https://pharmaverse.github.io/blog/posts
 admiral handles floating points</a> for more context.</p>
 </div>
 <div class="section level2">
-<h2 id="creating-the-lab-grade">Creating the lab grade<a class="anchor" aria-label="anchor" href="#creating-the-lab-grade"></a>
+<h2 id="creating-the-lab-grade">Creating the Lab Grade<a class="anchor" aria-label="anchor" href="#creating-the-lab-grade"></a>
 </h2>
 <div class="section level3">
-<h3 id="mapping-adlb-vad-to-the-term-variable-in-the-admiral-metadata-data-set">Mapping ADLB VAD to the TERM variable in the <code>{admiral}</code>
-metadata data set<a class="anchor" aria-label="anchor" href="#mapping-adlb-vad-to-the-term-variable-in-the-admiral-metadata-data-set"></a>
+<h3 id="mapping-adlb-to-the-term-variable-in-the-admiral-metadata-data-set">Mapping <code>ADLB</code> to the <code>TERM</code> variable in the
+<code>{admiral}</code> metadata data set<a class="anchor" aria-label="anchor" href="#mapping-adlb-to-the-term-variable-in-the-admiral-metadata-data-set"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/">admiral</a></span><span class="op">)</span></span>
@@ -543,10 +543,10 @@ high values.</p>
 </h3>
 <p>Grading is implemented for those lab tests where a lab value is
 included in the grading definition, <a href="https://pharmaverse.github.io/admiral/">admiral</a> does NOT try
-to read any other data to determine the grade, and only the ADLB VAD is
-used. The following CTCAE v4.0 SOC values were identified for grading,
-these are “Investigations”, “Metabolism and nutrition disorders” and
-“Blood and lymphatic system disorders”.</p>
+to read any other data to determine the grade, and only the
+<code>ADLB</code> dataset is used. The following CTCAE v4.0 SOC values
+were identified for grading, these are “Investigations”, “Metabolism and
+nutrition disorders” and “Blood and lymphatic system disorders”.</p>
 <p>From these SOC values the following terms criteria is implemented in
 <a href="https://pharmaverse.github.io/admiral/">admiral</a></p>
 <p>From SOC = “Investigations” there are 21 CTCAE v4.0 Terms:</p>
@@ -651,10 +651,10 @@ case is assumed as grade 2. The decision made was put in the
 </h3>
 <p>Grading is implemented for those lab tests where a lab value is
 included in the grading definition, <a href="https://pharmaverse.github.io/admiral/">admiral</a> does NOT try
-to read any other data to determine the grade, and only the ADLB VAD is
-used. The following CTCAE v5.0 SOC values were identified for grading,
-these are “Investigations”, “Metabolism and nutrition disorders” and
-“Blood and lymphatic system disorders”.</p>
+to read any other data to determine the grade, and only the
+<code>ADLB</code> dataset is used. The following CTCAE v5.0 SOC values
+were identified for grading, these are “Investigations”, “Metabolism and
+nutrition disorders” and “Blood and lymphatic system disorders”.</p>
 <p>From these SOC values the following terms criteria is implemented in
 <a href="https://pharmaverse.github.io/admiral/">admiral</a></p>
 <p>From SOC = “Investigations” there are 21 CTCAE v5.0 Terms:</p>
@@ -775,9 +775,9 @@ same with respect to the lab value, then worse case is assumed as grade
 </h3>
 <p>Grading is implemented for those lab tests where a lab value is
 included in the grading definition, <a href="https://pharmaverse.github.io/admiral/">admiral</a> does NOT try
-to read any other data to determine the grade, and only the ADLB VAD is
-used. The following DAIDS SOC values were identified for grading, these
-are “Chemistries” and “Hematology”.</p>
+to read any other data to determine the grade, and only the
+<code>ADLB</code> dataset is used. The following DAIDS SOC values were
+identified for grading, these are “Chemistries” and “Hematology”.</p>
 <p>From these SOC values the following terms criteria is implemented in
 <a href="https://pharmaverse.github.io/admiral/">admiral</a></p>
 <p>From SOC = “Chemistries” there are 31 DAIDS Terms:</p>
