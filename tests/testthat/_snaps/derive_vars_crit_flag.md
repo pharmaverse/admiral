@@ -1,4 +1,4 @@
-# derive_vars_crit_flag Test 4: error if invalid condition
+# derive_vars_crit_flag Test 4: error if invalid condition (var not in input)
 
     Code
       derive_vars_crit_flag(input, condition = AVAL > 3 * ANRHI, description = "> 3ULN")
@@ -7,7 +7,7 @@
       ! Evaluating `condition` (`AVAL > 3 * ANRHI`) in `dataset` failed:
         object 'ANRHI' not found
 
-# derive_vars_crit_flag Test 5: error if invalid description
+# derive_vars_crit_flag Test 5: error if invalid description (PARAMCD not in input)
 
     Code
       derive_vars_crit_flag(select(input, AVAL), crit_nr = 2, condition = AVAL > 40,

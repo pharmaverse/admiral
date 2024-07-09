@@ -2,12 +2,14 @@
 #'
 #' @description
 #'
-#' The function derives ADaM compliant criterion flags. I.e., if a criterion
-#' flag can't be derived with this function, the derivation is not ADaM
-#' compliant. It helps to ensure that
+#' The function derives ADaM compliant criterion flags, e.g., to facilitate
+#' subgroup analyses.
+#'
+#' If a criterion flag can't be derived with this function, the derivation is
+#' not ADaM compliant. It helps to ensure that
 #' - the condition of the criterion depends only on variables of the same row,
 #' - the `CRITyFL` is populated with valid values, i.e, either `"Y"` and `NA` or
-#'  `"Y"`, `"N"`, and `NA`.
+#'  `"Y"`, `"N"`, and `NA`,
 #' - the `CRITy` variable is populated correctly, i.e.,
 #'   - set to a constant value within a parameter if `CRITyFL` is populated with
 #'   `"Y"`, `"N"`, and `NA` and

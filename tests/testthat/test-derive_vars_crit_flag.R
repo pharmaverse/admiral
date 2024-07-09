@@ -64,8 +64,8 @@ test_that("derive_vars_crit_flag Test 3: using values Y and N", {
   )
 })
 
-## Test 4: error if invalid condition ----
-test_that("derive_vars_crit_flag Test 4: error if invalid condition", {
+## Test 4: error if invalid condition (var not in input) ----
+test_that("derive_vars_crit_flag Test 4: error if invalid condition (var not in input)", {
   input <- tibble::tribble(
     ~AVAL,
     23,
@@ -84,7 +84,7 @@ test_that("derive_vars_crit_flag Test 4: error if invalid condition", {
 })
 
 ## Test 5: error if invalid description ----
-test_that("derive_vars_crit_flag Test 5: error if invalid description", {
+test_that("derive_vars_crit_flag Test 5: error if invalid description (PARAMCD not in input)", {
   input <- tibble::tribble(
     ~PARAMCD, ~AVAL,
     "AST",    23,

@@ -61,13 +61,15 @@ The input dataset with the variables \code{CRITy}, \code{CRITyFL}, and
 optionally \code{CRITyFLN} added.
 }
 \description{
-The function derives ADaM compliant criterion flags. I.e., if a criterion
-flag can't be derived with this function, the derivation is not ADaM
-compliant. It helps to ensure that
+The function derives ADaM compliant criterion flags, e.g., to facilitate
+subgroup analyses.
+
+If a criterion flag can't be derived with this function, the derivation is
+not ADaM compliant. It helps to ensure that
 \itemize{
 \item the condition of the criterion depends only on variables of the same row,
 \item the \code{CRITyFL} is populated with valid values, i.e, either \code{"Y"} and \code{NA} or
-\code{"Y"}, \code{"N"}, and \code{NA}.
+\code{"Y"}, \code{"N"}, and \code{NA},
 \item the \code{CRITy} variable is populated correctly, i.e.,
 \itemize{
 \item set to a constant value within a parameter if \code{CRITyFL} is populated with
