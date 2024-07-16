@@ -2,6 +2,9 @@
 
 ## New Features
 
+- New function `derive_vars_crit_flag()` for deriving criterion flag variables
+(`CRITy`, `CRITyFL`, `CRITyFLN`). (#2468)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
@@ -488,7 +491,7 @@ dates updated (#2028)
 
 ## Various
 
-- The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as *authors*, whereas those who made a significant contribution in the past are now down as *contributors*. All other acknowledgements have been moved to README section (#1941).
+- The list of package authors/contributors has been reformatted so that those who are actively maintaining the code base are now marked as *authors*, whereas those who made a significant contribution in the past are now down as *contributors*. All other acknowledgments have been moved to README section (#1941).
 
 - `derive_vars_joined()` had two bugs with regards to duplicates messaging and when `new_vars` was set to `NULL` that have now been addressed (#1966). 
 

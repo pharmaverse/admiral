@@ -89,9 +89,9 @@ both side of the equation, the number of significant digits used to compare is p
 function `derive_var_atoxgr_dir()` via the argument `signif_dig`. Please see documentation of the 
 function for more details and the blog post [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html) for more context.
 
-# Creating the lab grade
+# Creating the Lab Grade
 
-## Mapping ADLB VAD to the TERM variable in the `{admiral}` metadata data set
+## Mapping `ADLB` to the `TERM` variable in the `{admiral}` metadata data set
 
 
 ```{r message=FALSE}
@@ -339,7 +339,7 @@ adlb %>%
 ## Terms graded
 
 Grading is implemented for those lab tests where a lab value is included in the grading definition,
-`{admiral}` does NOT try to read any other data to determine the grade, and only the ADLB VAD is used.
+`{admiral}` does NOT try to read any other data to determine the grade, and only the `ADLB` dataset is used.
 The following CTCAE v4.0 SOC values were identified for grading, these are "Investigations", 
 "Metabolism and nutrition disorders" and "Blood and lymphatic system disorders".
 
@@ -481,7 +481,7 @@ atoxgr_criteria_ctcv4 %>%
 ## Terms graded
 
 Grading is implemented for those lab tests where a lab value is included in the grading definition,
-`{admiral}` does NOT try to read any other data to determine the grade, and only the ADLB VAD is used.
+`{admiral}` does NOT try to read any other data to determine the grade, and only the `ADLB` dataset is used.
 The following CTCAE v5.0 SOC values were identified for grading, these are “Investigations", 
 “Metabolism and nutrition disorders” and “Blood and lymphatic system disorders”.
 
@@ -646,7 +646,7 @@ atoxgr_criteria_ctcv5 %>%
 ## Terms graded
 
 Grading is implemented for those lab tests where a lab value is included in the grading definition,
-`{admiral}` does NOT try to read any other data to determine the grade, and only the ADLB VAD is used.
+`{admiral}` does NOT try to read any other data to determine the grade, and only the `ADLB` dataset is used.
 The following DAIDS SOC values were identified for grading, these are "Chemistries" and 
 "Hematology".
 

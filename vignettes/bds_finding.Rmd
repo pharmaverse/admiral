@@ -45,6 +45,7 @@ otherwise specified.*
 * [Assign Treatment (`TRTA`, `TRTP`)](#treatment)
 * [Assign `ASEQ`](#aseq)
 * [Derive Categorization Variables (`AVALCATx`)](#cat)
+* [Derive Criterion Variables (`CRITy`, `CRITyFL`, `CRITyFLN`)](#crit_vars)
 * [Add ADSL variables](#adsl_vars)
 * [Derive New Rows](#additional)
 * [Add Labels and Attributes](#attributes)
@@ -848,8 +849,8 @@ dataset_vignette(
 
 ## Derive Categorization Variables (`AVALCATx`) {#cat}
 
-Admiral does not currently have a generic function to aid in assigning `AVALCATx`/
-`AVALCAxN` values. Below is a simple example of how these values may be
+Admiral does not currently have a generic function to aid in assigning `AVALCATy`/
+`AVALCAvN` values. Below is a simple example of how these values may be
 assigned:
 
 ```{r eval=TRUE}
@@ -879,6 +880,78 @@ dataset_vignette(
   advs,
   display_vars = exprs(USUBJID, PARAMCD, AVAL, AVALCA1N, AVALCAT1),
   filter = PARAMCD == "HEIGHT"
+)
+```
+
+## Derive Criterion Variables (`CRITy`, `CRITyFL`, `CRITyFLN`) {#crit_vars}
+
+For deriving criterion variables (`CRITy`, `CRITyFL`, `CRITyFLN`) `{admiral}`
+provides `derive_vars_crit_flag()`. It ensures that they are derived in an
+ADaM-compliant way (see documentation of the function for details).
+
+In most cases the criterion depends on the parameter. The higher order functions
+`restrict_derivation()` and `slice_derivation()` are useful in this case. In the
+following example  the criterion flags for systolic and diastolic blood pressure
+from the ADaM IG are derived.
+
+The first criterion is based on `AVAL` and is derived for systolic and diastolic
+blood pressure. `slice_derivation()` us used to specify the condition and
+description of the criterion depending on the parameter.
+```{r eval=TRUE}
+advs <- advs %>%
+  slice_derivation(
+    derivation = derive_vars_crit_flag,
+    args = params(
+      values_yn = TRUE,
+      create_numeric_flag = TRUE
+    ),
+    derivation_slice(
+      filter = PARAMCD == "SYSBP",
+      args = params(
+        condition = AVAL > 160,
+        description = "Systolic Pressure > 160"
+      )
+    ),
+    derivation_slice(
+      filter = PARAMCD == "DIABP",
+      args = params(
+        condition = AVAL > 95,
+        description = "Diastolic Pressure > 95"
+      )
+    )
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  arrange(advs, USUBJID, AVISITN, ATPTN, PARAMCD),
+  display_vars = exprs(USUBJID, PARAMCD, AVAL, CHG, CRIT1, CRIT1FL, CRIT1FLN),
+  filter = PARAMCD %in% c("DIABP", "SYSBP")
+)
+```
+
+The second criterion is based on `AVAL` and `CHG` and is derived for systolic
+blood pressure only. Thus `restrict_derivation()` is used.
+```{r eval=TRUE} 
+advs <- advs %>%
+  restrict_derivation(
+    derivation = derive_vars_crit_flag,
+    args = params(
+      condition = AVAL > 160 & CHG > 10,
+      description = "Systolic Pressure > 160 and Change from Baseline in Systolic Pressure > 10",
+      crit_nr = 2,
+      values_yn = TRUE,
+      create_numeric_flag = TRUE
+    ),
+    filter = PARAMCD == "SYSBP"
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  arrange(advs, USUBJID, AVISITN, ATPTN),
+  display_vars = exprs(USUBJID, PARAMCD, AVAL, CHG, CRIT2, CRIT2FL, CRIT2FLN),
+  filter = PARAMCD == "SYSBP"
 )
 ```
 
