@@ -111,7 +111,7 @@
 #'   order = exprs(AVISITN, AVISIT),
 #'   keep_vars = exprs(PARAMN)
 #' ) |>
-#'   dplyr::arrange(DTYPE) |>
+#'   arrange(desc(USUBJID), PARAMCD, AVISIT) |>
 #'   print(n = 30)
 #'
 derive_locf_records <- function(dataset,
@@ -210,3 +210,4 @@ derive_locf_records <- function(dataset,
   # Output dataset - merge the analysis_var missing with non-missing+newly added LOCF records
   bind_rows(aval_not_missing_locf, aval_missing)
 }
+

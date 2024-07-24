@@ -123,7 +123,7 @@ derive_locf_records(
   order = exprs(AVISITN, AVISIT),
   keep_vars = exprs(PARAMN)
 ) |>
-  dplyr::arrange(DTYPE) |>
+  arrange(desc(USUBJID), PARAMCD, AVISIT) |>
   print(n = 30)
 
 }
