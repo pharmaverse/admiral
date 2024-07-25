@@ -69,25 +69,24 @@
 #'
 #' advs <- tribble(
 #'   ~STUDYID,  ~USUBJID,      ~PARAMCD, ~PARAMN, ~AVAL, ~AVISITN, ~AVISIT,
-#'   "CDISC01", "01-701-1015", "PULSE",        1,    61,        0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "PULSE",        1,    60,        6, "WEEK 6",
-#'   "CDISC01", "01-701-1015", "DIABP",        2,    51,        0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "DIABP",        2,    50,        2, "WEEK 2",
-#'   "CDISC01", "01-701-1015", "DIABP",        2,    51,        4, "WEEK 4",
-#'   "CDISC01", "01-701-1015", "DIABP",        2,    50,        6, "WEEK 6",
-#'   "CDISC01", "01-701-1015", "SYSBP",        3,   121,        0, "BASELINE",
-#'   "CDISC01", "01-701-1015", "SYSBP",        3,   121,        2, "WEEK 2",
-#'   "CDISC01", "01-701-1015", "SYSBP",        3,   121,        4, "WEEK 4",
-#'   "CDISC01", "01-701-1015", "SYSBP",        3,   121,        6, "WEEK 6",
-#'   "CDISC01", "01-701-1028", "PULSE",        1,    65,        0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "DIABP",        2,    79,        0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "DIABP",        2,    80,        2, "WEEK 2",
-#'   "CDISC01", "01-701-1028", "DIABP",        2,    NA,        4, "WEEK 4",
-#'   "CDISC01", "01-701-1028", "DIABP",        2,    NA,        6, "WEEK 6",
-#'   "CDISC01", "01-701-1028", "SYSBP",        3,   130,        0, "BASELINE",
-#'   "CDISC01", "01-701-1028", "SYSBP",        3,   132,        2, "WEEK 2"
+#'   "CDISC01", "01-701-1015", "PULSE",        1,    65,        0, "BASELINE",
+#'   "CDISC01", "01-701-1015", "DIABP",        2,    79,        0, "BASELINE",
+#'   "CDISC01", "01-701-1015", "DIABP",        2,    80,        2, "WEEK 2",
+#'   "CDISC01", "01-701-1015", "DIABP",        2,    NA,        4, "WEEK 4",
+#'   "CDISC01", "01-701-1015", "DIABP",        2,    NA,        6, "WEEK 6",
+#'   "CDISC01", "01-701-1015", "SYSBP",        3,   130,        0, "BASELINE",
+#'   "CDISC01", "01-701-1015", "SYSBP",        3,   132,        2, "WEEK 2",
+#'   "CDISC01", "01-701-1028", "PULSE",        1,    61,        0, "BASELINE",
+#'   "CDISC01", "01-701-1028", "PULSE",        1,    60,        6, "WEEK 6",
+#'   "CDISC01", "01-701-1028", "DIABP",        2,    51,        0, "BASELINE",
+#'   "CDISC01", "01-701-1028", "DIABP",        2,    50,        2, "WEEK 2",
+#'   "CDISC01", "01-701-1028", "DIABP",        2,    51,        4, "WEEK 4",
+#'   "CDISC01", "01-701-1028", "DIABP",        2,    50,        6, "WEEK 6",
+#'   "CDISC01", "01-701-1028", "SYSBP",        3,   121,        0, "BASELINE",
+#'   "CDISC01", "01-701-1028", "SYSBP",        3,   121,        2, "WEEK 2",
+#'   "CDISC01", "01-701-1028", "SYSBP",        3,   121,        4, "WEEK 4",
+#'   "CDISC01", "01-701-1028", "SYSBP",        3,   121,        6, "WEEK 6"
 #' )
-#'
 #'
 #' # A dataset with all the combinations of PARAMCD, PARAM, AVISIT, AVISITN, ... which are expected.
 #' advs_expected_obsv <- tribble(
@@ -111,8 +110,7 @@
 #'   order = exprs(AVISITN, AVISIT),
 #'   keep_vars = exprs(PARAMN)
 #' ) |>
-#'   arrange(desc(USUBJID), PARAMCD, AVISIT) |>
-#'   print(n = 30)
+#'   arrange(USUBJID, PARAMCD, AVISIT)
 #'
 derive_locf_records <- function(dataset,
                                 dataset_ref,
@@ -210,4 +208,3 @@ derive_locf_records <- function(dataset,
   # Output dataset - merge the analysis_var missing with non-missing+newly added LOCF records
   bind_rows(aval_not_missing_locf, aval_missing)
 }
-
