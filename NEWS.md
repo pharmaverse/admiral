@@ -2,8 +2,7 @@
 
 ## New Features
 
-- New function `derive_vars_crit_flag()` for deriving criterion flag variables
-(`CRITy`, `CRITyFL`, `CRITyFLN`). (#2468)
+- New function 'my_first_fcn()' as dummy practice (#1839)
 
 ## Updates of Existing Functions
 
