@@ -4,7 +4,7 @@ Title: ADaM in R Asset Library
 Version: 1.1.1.9004
 Authors@R: c(
     person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
-    person("Stefan", "Bundfuss", role = "aut"),
+    person("Stefan", "Bundfuss", role = "aut", comment = c(ORCID = "0009-0005-0027-1198")),
     person("Jeffrey", "Dickinson", role = "aut"),
     person("Ross", "Farrugia", role = "aut"),
     person("Fanny", "Gautier", role = "aut"),
