@@ -227,12 +227,12 @@ advs <- advs %>%
     source_var = ANRIND,
     new_var = BNRIND
   ) %>%
-  # Calculate CHG for post-baseline
+  # Calculate CHG for post-baseline records
   restrict_derivation(
     derivation = derive_var_chg,
     filter = AVISITN > 0
   ) %>%
-  # Calculate PCHG for post-baseline
+  # Calculate PCHG for post-baseline records
   restrict_derivation(
     derivation = derive_var_pchg,
     filter = AVISITN > 0
