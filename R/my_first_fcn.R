@@ -23,4 +23,3 @@ hello_admiral <- function(hw = TRUE) {
     message("Welcome to the admiral family!")
   }
 }
-
