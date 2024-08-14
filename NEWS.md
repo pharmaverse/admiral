@@ -23,6 +23,8 @@
 - `derive_extreme_event()` was fixed such that `check_type = "none"` is accepted
 again. (#2462)
 
+- `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
+
 # admiral 1.1.0
 
 ## New Features
