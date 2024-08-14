@@ -22,5 +22,12 @@ First function to generate welcome message
 \examples{
 hello_admiral(hw = FALSE)
 }
-\concept{der_adxx}
-\keyword{der_adxx}
+\seealso{
+ADSL Functions that returns variable appended to dataset: 
+\code{\link{derive_var_age_years}()},
+\code{\link{derive_vars_aage}()},
+\code{\link{derive_vars_extreme_event}()},
+\code{\link{derive_vars_period}()}
+}
+\concept{der_adsl}
+\keyword{der_adsl}
