@@ -292,6 +292,71 @@ test_that("compute_dtf Test 13: compute DTF", {
   )
 })
 
+# restrict_imputed_dtc_dt ----
+test_that("", {
+  imputed_dtc <- impute_dtc_dt(
+    input,
+    min_dates = list(
+      c(
+        ymd("2019-07-06"),
+        ymd("2019-07-06"),
+        ymd("2019-07-06"),
+        ymd("2019-07-06"),
+        ymd("2019-07-06")
+      ),
+      c(
+        ymd("2019-06-06"),
+        ymd("2019-06-06"),
+        ymd("2019-06-06"),
+        ymd("2019-06-06"),
+        ymd("2019-06-06")
+      )
+    ),
+    highest_imputation = "Y",
+    date_imputation = "first"
+  )
+  restricted <- restrict_imputed_dtc_dt(
+    input,
+    imputed_dtc = imputed_dtc,
+    min_dates = list(
+      c(
+        ymd("2019-07-06"),
+        ymd("2019-07-06"),
+        ymd("2019-07-06"),
+        ymd("2019-07-06"),
+        ymd("2019-07-06")
+      ),
+      c(
+        ymd("2019-06-06"),
+        ymd("2019-06-06"),
+        ymd("2019-06-06"),
+        ymd("2019-06-06"),
+        ymd("2019-06-06")
+      )
+    ),
+    max_dates = list(
+      c(
+        ymd("2019-07-06"),
+        ymd("2019-07-06"),
+        ymd("2019-07-06"),
+        ymd("2019-07-06"),
+        ymd("2019-07-06")
+      ),
+      c(
+        ymd("2019-06-06"),
+        ymd("2019-06-06"),
+        ymd("2019-06-06"),
+        ymd("2019-06-06"),
+        ymd("2019-06-06")
+      )
+    )
+  )
+  expect_equal(
+    restricted,
+    c("2019-07-18", "2019-06-06", "2019-06-06", "2019-07-06", "2019-06-06")
+  )
+})
+
 # derive_vars_dt ----
 
 date <- tibble::tribble(
