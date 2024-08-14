@@ -8,9 +8,9 @@
 #'
 #' @return Happy Message
 #'
-#' @family der_adxx
+#' @family der_adsl
 #'
-#' @keywords der_adxx
+#' @keywords der_adsl
 #'
 #' @export
 #'
