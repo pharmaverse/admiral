@@ -634,4 +634,4 @@ test_that("derive_vars_dt Test 24: Supplying both min/max dates for highest_impu
   expect_dfs_equal(actual, expected, keys = c("ASTDT", "ASTDTF"))
 })
 
-rm(input, input_warnings)
+rm(input, input_warnings, inputdt, inputdtc, date)
