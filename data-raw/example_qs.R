@@ -1,12 +1,8 @@
-## code to prepare `example_qs.rda` dataset goes here
+## Code to create `example_qs.rda` dataset and save it in data/
+## This replaces inst/example_scripts/example_qs.R
+## Follows the same standard as pharmaversesdtm 
 
-## Setup steps:
-## - usethis::use_data_raw(name="example_qs")
-## - edit script data-raw/example-qs.R
-##
-## - check:   last line usethis::use_data(example_qs.rda, overwrite = TRUE)
 
-library(admiraldev)
 library(dplyr)
 # nolint start
 suppress_warning(
@@ -212,8 +208,8 @@ example_qs <- bind_rows(qs_gad7, qs_gdssf, qs_sp) %>%
     .before = everything()
   )
 
+## TO BE REMOVED
 #save(example_qs, file = file.path("data", "example_qs.rda"), compress = "bzip2")
 
 example_qs_new=example_qs
 usethis::use_data(example_qs_new, overwrite = TRUE)
-
