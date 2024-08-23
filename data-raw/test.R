@@ -1,23 +1,30 @@
+
 #
 # Test:
-#    In folder data/   files should contain identical R objects:
+#    Newly created *.rda files in folder data/   MUST BE IDENTICAL to old_data/*.rda
 
-#    example_qs.rda was created in via script inst/example_scripts/example_qs.R
-#    example_qs_new.rda was created by NEWER method, script data-raw/example_qs_new.R
+#    *.rda file in old_data/ is copy of file created in via script inst/example_scripts/example_qs.R
 
 # Run both methods, create the 2 *.rda files:
-source("data-raw/example_qs.r")
-source("inst/example_scripts/example_qs.R")
+source("data-raw/example_qs.R")  # new
+source("inst/example_scripts/example_qs.R")  # old
 
 
 ## Please restart R or remove objects in environment
 
-# load stored objects into environment
-# original method
+# Load stored objects into environments
+# Because `load` places objects in current environment, put old_data in a new environment
+
+# For created data, place object into current_env
 load("data/example_qs.rda")
 
-# newer method
-load("data/example_qs_new.rda")
+# But create new environment for old_data/
+e <- new_environment()
+load("old_data/example_qs.rda", envir = e)
 
 
-identical(example_qs_new, example_qs)
+# test
+identical(example_qs, e$example_qs)
+
+# cleanup: remove e
+rm(e)
