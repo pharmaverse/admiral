@@ -1,4 +1,3 @@
-
 #
 # Test:
 #    Newly created *.rda files in folder data/   MUST BE IDENTICAL to old_data/*.rda
@@ -6,8 +5,8 @@
 #    *.rda file in old_data/ is copy of file created in via script inst/example_scripts/example_qs.R
 
 # Run both methods, create the 2 *.rda files:
-source("data-raw/example_qs.R")  # new
-source("inst/example_scripts/example_qs.R")  # old
+source("data-raw/example_qs.R") # new
+source("inst/example_scripts/example_qs.R") # old
 
 
 ## Please restart R or remove objects in environment
