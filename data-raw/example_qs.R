@@ -3,8 +3,6 @@
 ## Follows the same standard as pharmaversesdtm
 
 
-#library(dplyr)
-#library(admiraldev)
 # nolint start
 suppress_warning(
   qs_gad7 <- tibble::tribble(
