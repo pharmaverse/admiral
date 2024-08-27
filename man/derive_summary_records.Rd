@@ -9,7 +9,6 @@ derive_summary_records(
   dataset_add,
   dataset_ref = NULL,
   by_vars,
-  filter = NULL,
   filter_add = NULL,
   set_values_to,
   missing_values = NULL
@@ -40,21 +39,6 @@ groupwise summary and generate summary records for the specified groups.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
-
-\item{filter}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{filter_add} instead.
-
-Filter condition as logical expression to apply during
-summary calculation. By default, filtering expressions are computed within
-\code{by_vars} as this will help when an aggregating, lagging, or ranking
-function is involved.
-
-For example,
-\itemize{
-\item \code{filter = (AVAL > mean(AVAL, na.rm = TRUE))} will filter all \code{AVAL}
-values greater than mean of \code{AVAL} with in \code{by_vars}.
-\item \code{filter = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
-than 2.
-}}
 
 \item{filter_add}{Filter condition as logical expression to apply during
 summary calculation. By default, filtering expressions are computed within
