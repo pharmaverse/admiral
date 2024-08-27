@@ -89,8 +89,6 @@
 #'   *Permitted Values*: named list of expressions, e.g.,
 #'   `exprs(AVAL = -9999)`
 #'
-#' @inheritParams get_summary_records
-#'
 #' @return A data frame with derived records appended to original dataset.
 #'
 #' @family der_prm_bds_findings
@@ -193,8 +191,6 @@ derive_summary_records <- function(dataset = NULL,
                                    by_vars,
                                    filter = NULL,
                                    filter_add = NULL,
-                                   analysis_var,
-                                   summary_fun,
                                    set_values_to,
                                    missing_values = NULL) {
   assert_vars(by_vars)
@@ -208,17 +204,6 @@ derive_summary_records <- function(dataset = NULL,
 
   assert_varval_list(set_values_to)
   assert_expr_list(missing_values, named = TRUE, optional = TRUE)
-
-  if (!missing(analysis_var) || !missing(summary_fun)) {
-    deprecate_stop(
-      "1.1.0",
-      I("derive_summary_records(anaylsis_var = , summary_fun = )"),
-      "derive_summary_records(set_values_to = )"
-    )
-    analysis_var <- assert_symbol(enexpr(analysis_var))
-    assert_s3_class(summary_fun, "function")
-    set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
-  }
 
   if (!missing(filter)) {
     deprecate_stop(

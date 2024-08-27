@@ -21,19 +21,15 @@
   - Removed at v1.1.1 `derive_expected_records(dataset_expected_obs)` 
   - Removed at v1.1.1 `derive_locf_records(dataset_expected_obs)`
   - `derive_extreme_event(ignore_event_order)`
-
-
-### NOT DONE YET
-  
-  - `derive_vars_merged(match_flag, new_var, analysis_var, summary_fun)`
-  - `derive_param_computed(analysis_value, analysis_var)`
+  - `derive_vars_merged(match_flag)`
+  - `derive_var_merged_summary(new_var, analysis_var, summary_fun)`
+  - Removed at v1.1.1 `derive_param_computed(analysis_value, analysis_var)`
   - `derive_param_exposure(filter, analysis_var, summary_fun)`
   - `derive_summary_records(filter)`
-  - `derive_extreme_records(filter)`
+  - Removed at v1.1.1 `derive_extreme_records(filter)`
   - `derive_var_joined_exist_flag(first_cond, filter)`
   - `event_joined(first_cond)`
   - `filter_joined(first_cond, filter)`
-  
 
 ## Documentation
 
