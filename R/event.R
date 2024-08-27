@@ -340,7 +340,6 @@ event_joined <- function(dataset_name = NULL,
                          set_values_to = NULL,
                          keep_source_vars = NULL,
                          description = NULL) {
-
   first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
 
   out <- list(
