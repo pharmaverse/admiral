@@ -1,7 +1,8 @@
 library(pharmaversesdtm)
 library(admiral)
 library(dplyr)
-data(ex)
+ex <- pharmaversesdtm::ex
+
 
 # check that there is only one start/end date of exposure per subject and visit
 check_cond <- ex %>%
@@ -52,4 +53,5 @@ attr(ex_single$EXSTDTC, "label") <- attr(ex$EXSTDTC, "label")
 attr(ex_single$EXENDTC, "label") <- attr(ex$EXENDTC, "label")
 attr(ex_single$EXDOSFRQ, "label") <- attr(ex$EXDOSFRQ, "label")
 
-save(ex_single, file = file.path("data", "ex_single.rda"), compress = "bzip2")
+#save(ex_single, file = file.path("data", "ex_single.rda"), compress = "bzip2")
+usethis::use_data(ex_single, overwrite = TRUE)
