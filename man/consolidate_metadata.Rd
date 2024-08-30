@@ -9,7 +9,6 @@ consolidate_metadata(
   key_vars,
   source_var = SOURCE,
   check_vars = "warning",
-  check_keys,
   check_type = "error"
 )
 }
@@ -37,16 +36,6 @@ If \code{"message"}, \code{"warning"}, or \code{"error"} is specified, a message
 if the variable names differ across the input datasets (\code{datasets}).
 
 \emph{Permitted Values}: \code{"none"}, \code{"message"}, \code{"warning"}, \code{"error"}}
-
-\item{check_keys}{Check keys?
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{check_type} instead.
-
-If \code{"warning"} or \code{"error"} is specified, a message is issued if the key
-variables (\code{key_vars}) are not a unique key in all of the input datasets
-(\code{datasets}).
-
-\emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 
 \item{check_type}{Check uniqueness?
 

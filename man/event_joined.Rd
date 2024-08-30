@@ -10,7 +10,6 @@ event_joined(
   order = NULL,
   join_vars,
   join_type,
-  first_cond = NULL,
   first_cond_lower = NULL,
   first_cond_upper = NULL,
   set_values_to = NULL,
@@ -65,19 +64,6 @@ respect to the original observation. For example, if \code{join_type = "after"} 
 kept.
 
 \emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}}
-
-\item{first_cond}{Condition for selecting range of data
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-
-This argument is \emph{deprecated}, please use \code{first_cond_upper} instead.
-
-If this argument is specified, the other observations are restricted up to
-the first observation where the specified condition is fulfilled. If the
-condition is not fulfilled for any of the subsequent observations, all
-observations are removed.
-
-\emph{Permitted Values}: an unquoted condition}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
 
