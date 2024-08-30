@@ -20,7 +20,7 @@ variables."><meta property="og:image" content="https://pharmaverse.github.io/adm
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9005</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9006</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,7 +127,6 @@ variables.</p>
 <span>  <span class="va">order</span>,</span>
 <span>  <span class="va">mode</span>,</span>
 <span>  source_datasets <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  ignore_event_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  check_type <span class="op">=</span> <span class="st">"warning"</span>,</span>
 <span>  set_values_to <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  keep_source_vars <span class="op">=</span> <span class="fu"><a href="reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -189,20 +188,6 @@ event sorting by <code>order</code>.</p>
 <dd><p>Source datasets</p>
 <p>A named list of datasets is expected. The <code>dataset_name</code> field of <code><a href="event.html">event()</a></code>
 and <code><a href="event_joined.html">event_joined()</a></code> refers to the dataset provided in the list.</p></dd>
-
-
-<dt>ignore_event_order</dt>
-<dd><p>Ignore event order</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p>
-<p>This argument is <em>deprecated</em>. If event order should be ignored, please
-specify neither <code>ignore_event_order</code> nor <code>tmp_event_nr_var</code>. If the event
-order should be considered, don't specify <code>ignore_event_order</code> but specify
-<code>tmp_event_nr_var</code> and and the specified variable to <code>order</code>.</p>
-<p>If the argument is set to <code>TRUE</code>, all events defined by <code>events</code> are
-considered equivalent. If there is more than one observation per by group
-the first or last (with respect to <code>mode</code> and <code>order</code>) is select without
-taking the order of the events into account.</p>
-<p><em>Permitted Values:</em> <code>TRUE</code>, <code>FALSE</code></p></dd>
 
 
 <dt>check_type</dt>

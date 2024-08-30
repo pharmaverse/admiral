@@ -16,7 +16,7 @@ each by group (order and mode argument)."><meta property="og:image" content="htt
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9005</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9006</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -121,7 +121,6 @@ each by group (<code>order</code> and <code>mode</code> argument).</p>
 <span>  new_vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  filter_add <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  mode <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">match_flag</span>,</span>
 <span>  exist_flag <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  true_value <span class="op">=</span> <span class="st">"Y"</span>,</span>
 <span>  false_value <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
@@ -200,16 +199,6 @@ condition.</p>
 argument is specified, <code>mode</code> must be non-null.</p>
 <p>If the <code>order</code> argument is not specified, the <code>mode</code> argument is ignored.</p>
 <p><em>Permitted Values</em>: <code>"first"</code>, <code>"last"</code>, <code>NULL</code></p></dd>
-
-
-<dt>match_flag</dt>
-<dd><p>Match flag</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>exist_flag</code> instead.</p>
-<p>If the argument is specified (e.g., <code>match_flag = FLAG</code>), the specified
-variable (e.g., <code>FLAG</code>) is added to the input dataset. This variable will
-be <code>TRUE</code> for all selected records from <code>dataset_add</code> which are merged into
-the input dataset, and <code>NA</code> otherwise.</p>
-<p><em>Permitted Values</em>: Variable name</p></dd>
 
 
 <dt>exist_flag</dt>

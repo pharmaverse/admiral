@@ -24,7 +24,7 @@ for more details."><meta property="og:image" content="https://pharmaverse.github
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9005</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9006</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -131,7 +131,6 @@ for more details.</p>
 <span>  order <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">join_vars</span>,</span>
 <span>  <span class="va">join_type</span>,</span>
-<span>  first_cond <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  first_cond_lower <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  first_cond_upper <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  set_values_to <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -187,17 +186,6 @@ with suffix ".join". For example to select all observations with <code>AVALC == 
 respect to the original observation. For example, if <code>join_type = "after"</code> is specified all observations after the original observations are
 kept.</p>
 <p><em>Permitted Values:</em> <code>"before"</code>, <code>"after"</code>, <code>"all"</code></p></dd>
-
-
-<dt>first_cond</dt>
-<dd><p>Condition for selecting range of data</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p>
-<p>This argument is <em>deprecated</em>, please use <code>first_cond_upper</code> instead.</p>
-<p>If this argument is specified, the other observations are restricted up to
-the first observation where the specified condition is fulfilled. If the
-condition is not fulfilled for any of the subsequent observations, all
-observations are removed.</p>
-<p><em>Permitted Values</em>: an unquoted condition</p></dd>
 
 
 <dt>first_cond_lower</dt>

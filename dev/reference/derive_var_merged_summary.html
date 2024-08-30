@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9005</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9006</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,11 +109,8 @@
 <span>  <span class="va">dataset_add</span>,</span>
 <span>  <span class="va">by_vars</span>,</span>
 <span>  new_vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">new_var</span>,</span>
 <span>  filter_add <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  missing_values <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">analysis_var</span>,</span>
-<span>  <span class="va">summary_fun</span></span>
+<span>  missing_values <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -153,13 +150,6 @@ used, the values are summarized by the variables specified for <code>by_vars</co
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  )</span></code></pre><p></p></div></dd>
 
 
-<dt>new_var</dt>
-<dd><p>Variable to add</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>new_vars</code> instead.</p>
-<p>The specified variable is added to the input dataset (<code>dataset</code>) and set to
-the summarized values.</p></dd>
-
-
 <dt>filter_add</dt>
 <dd><p>Filter for additional dataset (<code>dataset_add</code>)</p>
 <p>Only observations fulfilling the specified condition are taken into account
@@ -176,21 +166,6 @@ of the specified variables are set to the specified value. Only variables
 specified for <code>new_vars</code> can be specified for <code>missing_values</code>.</p>
 <p><em>Permitted Values</em>: named list of expressions, e.g.,
 <code>exprs(BASEC = "MISSING", BASE = -1)</code></p></dd>
-
-
-<dt>analysis_var</dt>
-<dd><p>Analysis variable</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>new_vars</code> instead.</p>
-<p>The values of the specified variable are summarized by the function
-specified for <code>summary_fun</code>.</p></dd>
-
-
-<dt>summary_fun</dt>
-<dd><p>Summary function</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>new_vars</code> instead.</p>
-<p>The specified function that takes as input <code>analysis_var</code> and performs the
-calculation. This can include built-in functions as well as user defined
-functions, for example <code>mean</code> or <code>function(x) mean(x, na.rm = TRUE)</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

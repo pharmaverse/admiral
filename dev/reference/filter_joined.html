@@ -28,7 +28,7 @@ used in endpoints such as best overall response.'><meta property="og:image" cont
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9005</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9006</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -137,14 +137,12 @@ used in endpoints such as best overall response.</p>
 <span>  <span class="va">by_vars</span>,</span>
 <span>  <span class="va">join_vars</span>,</span>
 <span>  <span class="va">join_type</span>,</span>
-<span>  first_cond <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  first_cond_lower <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  first_cond_upper <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">order</span>,</span>
 <span>  tmp_obs_nr_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  filter_add <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">filter_join</span>,</span>
-<span>  filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  check_type <span class="op">=</span> <span class="st">"warning"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -190,16 +188,6 @@ be after the assessment. Thus <code>join_type = "after"</code> could be used.</p
 prior to the observation. For example, to identify AEs occurring on or
 after seven days before a COVID AE. Thus <code>join_type = "all"</code> could be used.</p>
 <p><em>Permitted Values:</em> <code>"before"</code>, <code>"after"</code>, <code>"all"</code></p></dd>
-
-
-<dt>first_cond</dt>
-<dd><p>Condition for selecting range of data</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p>
-<p>This argument is <em>deprecated</em>, please use <code>first_cond_upper</code> instead.</p>
-<p>If this argument is specified, the other observations are restricted up to
-the first observation where the specified condition is fulfilled. If the
-condition is not fulfilled for any of the subsequent observations, all
-observations are removed.</p></dd>
 
 
 <dt>first_cond_lower</dt>
@@ -265,21 +253,6 @@ observation. For example in the oncology setting when using this function
 for confirmed best overall response,  <code>filter_join = AVALC == "CR" &amp; all(AVALC.join %in% c("CR", "NE")) &amp; count_vals(var = AVALC.join, val = "NE") &lt;= 1</code> selects observations with response "CR" and for all
 observations up to the confirmation observation the response is "CR" or
 "NE" and there is at most one "NE".</p></dd>
-
-
-<dt>filter</dt>
-<dd><p>Condition for selecting observations</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p>
-<p>This argument is <em>deprecated</em>, please use <code>filter_join</code> instead.</p>
-<p>The filter is applied to the joined dataset for selecting the confirmed
-observations. The condition can include summary functions. The joined
-dataset is grouped by the original observations. I.e., the summary function
-are applied to all observations up to the confirmation observation. For
-example in the oncology setting when using this function for confirmed best
-overall response,  <code>filter = AVALC == "CR" &amp; all(AVALC.join %in% c("CR", "NE")) &amp; count_vals(var = AVALC.join, val = "NE") &lt;= 1</code> selects
-observations with response "CR" and for all observations up to the
-confirmation observation the response is "CR" or "NE" and there is at most
-one "NE".</p></dd>
 
 
 <dt>check_type</dt>

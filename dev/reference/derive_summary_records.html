@@ -16,7 +16,7 @@ records has been added to a dataset."><meta property="og:image" content="https:/
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9005</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9006</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,10 +118,7 @@ records has been added to a dataset.</p>
 <span>  <span class="va">dataset_add</span>,</span>
 <span>  dataset_ref <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">by_vars</span>,</span>
-<span>  filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  filter_add <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">analysis_var</span>,</span>
-<span>  <span class="va">summary_fun</span>,</span>
 <span>  <span class="va">set_values_to</span>,</span>
 <span>  missing_values <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -157,19 +154,6 @@ groupwise summary and generate summary records for the specified groups.</p>
 e.g. <code>exprs(USUBJID, VISIT)</code></p></dd>
 
 
-<dt>filter</dt>
-<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>filter_add</code> instead.</p>
-<p>Filter condition as logical expression to apply during
-summary calculation. By default, filtering expressions are computed within
-<code>by_vars</code> as this will help when an aggregating, lagging, or ranking
-function is involved.</p>
-<p>For example,</p><ul><li><p><code>filter = (AVAL &gt; mean(AVAL, na.rm = TRUE))</code> will filter all <code>AVAL</code>
-values greater than mean of <code>AVAL</code> with in <code>by_vars</code>.</p></li>
-<li><p><code>filter = (dplyr::n() &gt; 2)</code> will filter n count of <code>by_vars</code> greater
-than 2.</p></li>
-</ul></dd>
-
-
 <dt>filter_add</dt>
 <dd><p>Filter condition as logical expression to apply during
 summary calculation. By default, filtering expressions are computed within
@@ -180,19 +164,6 @@ values greater than mean of <code>AVAL</code> with in <code>by_vars</code>.</p><
 <li><p><code>filter_add = (dplyr::n() &gt; 2)</code> will filter n count of <code>by_vars</code> greater
 than 2.</p></li>
 </ul></dd>
-
-
-<dt>analysis_var</dt>
-<dd><p>Analysis variable.</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>set_values_to</code> instead.</p></dd>
-
-
-<dt>summary_fun</dt>
-<dd><p>Function that takes as an input the <code>analysis_var</code> and
-performs the calculation.</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>set_values_to</code> instead.</p>
-<p>This can include built-in functions as well as user defined functions,
-for example <code>mean</code> or <code>function(x) mean(x, na.rm = TRUE)</code>.</p></dd>
 
 
 <dt>set_values_to</dt>
