@@ -647,89 +647,7 @@ test_that("derive_extreme_event Test 8: error if source dataset not available", 
   )
 })
 
-## Test 9: deprecation of ignore_event_order ----
-test_that("derive_extreme_event Test 9: deprecation of ignore_event_order", {
-  adrs <- tibble::tribble(
-    ~USUBJID, ~AVISITN, ~AVALC,
-    "1",             1, "PR",
-    "1",             2, "CR",
-    "1",             3, "CR"
-  ) %>%
-    mutate(PARAMCD = "OVR")
-
-  expect_error(
-    derive_extreme_event(
-      adrs,
-      by_vars = exprs(USUBJID),
-      order = exprs(AVISITN),
-      mode = "first",
-      events = list(
-        event_joined(
-          join_vars = exprs(AVALC),
-          join_type = "after",
-          first_cond_upper = AVALC.join == "CR",
-          condition = AVALC == "CR",
-          set_values_to = exprs(AVALC = "Y")
-        ),
-        event_joined(
-          join_vars = exprs(AVALC),
-          join_type = "after",
-          first_cond_upper = AVALC.join %in% c("CR", "PR"),
-          condition = AVALC == "PR",
-          set_values_to = exprs(AVALC = "Y")
-        )
-      ),
-      ignore_event_order = TRUE,
-      set_values_to = exprs(
-        PARAMCD = "CRSP"
-      )
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
-## Test 10: deprecation of ignore_event_order ----
-test_that("derive_extreme_event Test 10: deprecation of ignore_event_order", {
-  adrs <- tibble::tribble(
-    ~USUBJID, ~AVISITN, ~AVALC,
-    "1",             1, "PR",
-    "1",             2, "CR",
-    "1",             3, "CR"
-  ) %>%
-    mutate(PARAMCD = "OVR")
-
-  expect_error(
-    derive_extreme_event(
-      adrs,
-      by_vars = exprs(USUBJID),
-      order = exprs(AVISITN),
-      mode = "first",
-      events = list(
-        event_joined(
-          join_vars = exprs(AVALC),
-          join_type = "after",
-          first_cond_upper = AVALC.join == "CR",
-          condition = AVALC == "CR",
-          set_values_to = exprs(AVALC = "Y")
-        ),
-        event_joined(
-          join_vars = exprs(AVALC),
-          join_type = "after",
-          first_cond_upper = AVALC.join %in% c("CR", "PR"),
-          condition = AVALC == "PR",
-          set_values_to = exprs(AVALC = "Y")
-        )
-      ),
-      ignore_event_order = FALSE,
-      set_values_to = exprs(
-        PARAMCD = "CRSP"
-      )
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
-## Test 11: test for duplicates: one warning ----
+## Test 9: test for duplicates: one warning ----
 test_that("derive_extreme_event Test 11: test for duplicates: one warning", {
   ad1 <- tribble(
     ~USUBJID, ~AVALC, ~ADY, ~ASEQ,
@@ -789,7 +707,7 @@ test_that("derive_extreme_event Test 11: test for duplicates: one warning", {
 })
 
 
-## Test 12: test for duplicates: with error ----
+## Test 10: test for duplicates: with error ----
 test_that("derive_extreme_event Test 12: test for duplicates: with error", {
   ad1 <- tribble(
     ~USUBJID, ~AVALC, ~ADY, ~ASEQ,

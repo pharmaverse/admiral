@@ -56,21 +56,6 @@
 #'
 #'   The `*.join` variables are not included in the output dataset.
 #'
-#' @param first_cond Condition for selecting range of data
-#'
-#'   `r lifecycle::badge("deprecated")`
-#'
-#'   This argument is *deprecated*, please use `first_cond_upper` instead.
-#'
-#'   If this argument is specified, the other observations are restricted up to
-#'   the first observation where the specified condition is fulfilled. If the
-#'   condition is not fulfilled for any of the other observations, no
-#'   observations are considered, i.e., the observation is not flagged.
-#'
-#'   This parameter should be specified if `filter_join` contains summary
-#'   functions which should not apply to all observations but only up to the
-#'   confirmation assessment. For an example see the third example below.
-#'
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'
 #'   If this argument is specified, the other observations are restricted from
@@ -106,21 +91,6 @@
 #'   selects observations with response "CR" and for all observations up to the
 #'   confirmation observation the response is "CR" or "NE" and there is at most
 #'   one "NE".
-#'
-#' @param filter Condition for selecting observations
-#'
-#'   `r lifecycle::badge("deprecated")`
-#'
-#'   This argument is *deprecated*, please use `filter_join` instead.
-#'
-#'   The filter is applied to the joined dataset for flagging the confirmed
-#'   observations. The condition can include summary functions. The joined
-#'   dataset is grouped by the original observations. I.e., the summary function
-#'   are applied to all observations up to the confirmation observation. For
-#'   example, `filter = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
-#'   count_vals(var = AVALC.join, val = "NE") <= 1` selects observations with
-#'   response "CR" and for all observations up to the confirmation observation
-#'   the response is "CR" or "NE" and there is at most one "NE".
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -444,10 +414,8 @@ derive_var_joined_exist_flag <- function(dataset,
                                          tmp_obs_nr_var = NULL,
                                          join_vars,
                                          join_type,
-                                         first_cond = NULL,
                                          first_cond_lower = NULL,
                                          first_cond_upper = NULL,
-                                         filter = NULL,
                                          filter_add = NULL,
                                          filter_join,
                                          true_value = "Y",
@@ -457,24 +425,8 @@ derive_var_joined_exist_flag <- function(dataset,
   tmp_obs_nr_var <- assert_symbol(enexpr(tmp_obs_nr_var), optional = TRUE)
   first_cond_lower <- assert_filter_cond(enexpr(first_cond_lower), optional = TRUE)
   first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
-  if (!missing(first_cond)) {
-    deprecate_stop(
-      "1.1.0",
-      "derive_var_joined_exist_flag(first_cond=)",
-      "derive_var_joined_exist_flag(first_cond_upper=)"
-    )
-    first_cond_upper <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
-  }
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   filter_join <- assert_filter_cond(enexpr(filter_join))
-  if (!missing(filter)) {
-    deprecate_stop(
-      "1.1.0",
-      "derive_var_joined_exist_flag(filter=)",
-      "derive_var_joined_exist_flag(filter_join=)"
-    )
-    filter_join <- assert_filter_cond(enexpr(filter))
-  }
   assert_data_frame(dataset)
 
   tmp_obs_nr <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")

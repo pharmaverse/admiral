@@ -77,17 +77,6 @@
 #'
 #'   *Permitted Values*: `"first"`, `"last"`, `NULL`
 #'
-#' @param match_flag Match flag
-#'
-#'  `r lifecycle::badge("deprecated")` Please use `exist_flag` instead.
-#'
-#'   If the argument is specified (e.g., `match_flag = FLAG`), the specified
-#'   variable (e.g., `FLAG`) is added to the input dataset. This variable will
-#'   be `TRUE` for all selected records from `dataset_add` which are merged into
-#'   the input dataset, and `NA` otherwise.
-#'
-#'   *Permitted Values*: Variable name
-#'
 #' @param exist_flag Exist flag
 #'
 #'   If the argument is specified (e.g., `exist_flag = FLAG`), the specified
@@ -321,7 +310,6 @@ derive_vars_merged <- function(dataset,
                                new_vars = NULL,
                                filter_add = NULL,
                                mode = NULL,
-                               match_flag,
                                exist_flag = NULL,
                                true_value = "Y",
                                false_value = NA_character_,
@@ -344,14 +332,7 @@ derive_vars_merged <- function(dataset,
       extract_vars(new_vars)
     )
   )
-  if (!is_missing(enexpr(match_flag))) {
-    deprecate_stop(
-      "1.1.0",
-      "derive_vars_merged(match_flag =)",
-      "derive_vars_merged(exist_flag =)"
-    )
-    exist_flag <- assert_symbol(enexpr(match_flag), optional = TRUE)
-  }
+
   exist_flag <- assert_symbol(enexpr(exist_flag), optional = TRUE)
   assert_atomic_vector(true_value, optional = TRUE)
   assert_atomic_vector(false_value, optional = TRUE)
@@ -814,13 +795,6 @@ get_not_mapped <- function() {
 #'   The variables specified by the `by_vars` and the variables used on the left
 #'   hand sides of the `new_vars` arguments are expected.
 #'
-#' @param new_var Variable to add
-#'
-#'  `r lifecycle::badge("deprecated")` Please use `new_vars` instead.
-#'
-#'   The specified variable is added to the input dataset (`dataset`) and set to
-#'   the summarized values.
-#'
 #' @param by_vars Grouping variables
 #'
 #'   The expressions on the left hand sides of `new_vars` are evaluated by the
@@ -854,21 +828,6 @@ get_not_mapped <- function() {
 #'   considered.
 #'
 #'   *Permitted Values*: a condition
-#'
-#' @param analysis_var Analysis variable
-#'
-#'  `r lifecycle::badge("deprecated")` Please use `new_vars` instead.
-#'
-#'   The values of the specified variable are summarized by the function
-#'   specified for `summary_fun`.
-#'
-#' @param summary_fun Summary function
-#'
-#'  `r lifecycle::badge("deprecated")` Please use `new_vars` instead.
-#'
-#'   The specified function that takes as input `analysis_var` and performs the
-#'   calculation. This can include built-in functions as well as user defined
-#'   functions, for example `mean` or `function(x) mean(x, na.rm = TRUE)`.
 #'
 #' @inheritParams derive_vars_merged
 #'
@@ -959,11 +918,8 @@ derive_var_merged_summary <- function(dataset,
                                       dataset_add,
                                       by_vars,
                                       new_vars = NULL,
-                                      new_var,
                                       filter_add = NULL,
-                                      missing_values = NULL,
-                                      analysis_var,
-                                      summary_fun) {
+                                      missing_values = NULL) {
   assert_vars(by_vars)
   by_vars_left <- replace_values_by_names(by_vars)
   by_vars_right <- chr2vars(paste(vars2chr(by_vars)))
@@ -979,18 +935,6 @@ derive_var_merged_summary <- function(dataset,
     dataset_add,
     required_vars = expr_c(by_vars_right, extract_vars(new_vars))
   )
-
-  if (!missing(new_var) || !missing(analysis_var) || !missing(summary_fun)) {
-    deprecate_stop(
-      "1.1.0",
-      I("derive_var_merged_summary(new_var = , anaylsis_var = , summary_fun = )"),
-      "derive_var_merged_summary(new_vars = )"
-    )
-    new_var <- assert_symbol(enexpr(new_var))
-    analysis_var <- assert_symbol(enexpr(analysis_var))
-    assert_s3_class(summary_fun, "function")
-    new_vars <- exprs(!!new_var := {{ summary_fun }}(!!analysis_var), !!!new_vars)
-  }
 
   # Summarise the analysis value and merge to the original dataset
   derive_vars_merged(

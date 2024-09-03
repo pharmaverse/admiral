@@ -51,22 +51,6 @@
 #'   A named list of datasets is expected. The `dataset_name` field of `event()`
 #'   and `event_joined()` refers to the dataset provided in the list.
 #'
-#' @param ignore_event_order Ignore event order
-#'
-#'   `r lifecycle::badge("deprecated")`
-#'
-#'   This argument is *deprecated*. If event order should be ignored, please
-#'   specify neither `ignore_event_order` nor `tmp_event_nr_var`. If the event
-#'   order should be considered, don't specify `ignore_event_order` but specify
-#'   `tmp_event_nr_var` and and the specified variable to `order`.
-#'
-#'   If the argument is set to `TRUE`, all events defined by `events` are
-#'   considered equivalent. If there is more than one observation per by group
-#'   the first or last (with respect to `mode` and `order`) is select without
-#'   taking the order of the events into account.
-#'
-#'   *Permitted Values:* `TRUE`, `FALSE`
-#'
 #' @param keep_source_vars Variables to keep from the source dataset
 #'
 #'  For each event the specified variables are kept from the selected
@@ -353,7 +337,6 @@ derive_extreme_event <- function(dataset = NULL,
                                  order,
                                  mode,
                                  source_datasets = NULL,
-                                 ignore_event_order = NULL,
                                  check_type = "warning",
                                  set_values_to = NULL,
                                  keep_source_vars = exprs(everything())) {
@@ -382,27 +365,6 @@ derive_extreme_event <- function(dataset = NULL,
     )
   )
 
-  if (!is.null(ignore_event_order)) {
-    if (ignore_event_order) {
-      deprecate_details <- paste(
-        "The event order is ignored by default.",
-        "Please remove `ignore_event_order = TRUE` from the call.",
-        sep = "\n"
-      )
-    } else {
-      deprecate_details <- c(
-        "Please remove `ignore_event_order = FALSE` from the call.",
-        "Specify `tmp_event_nr_var`.",
-        "Add the specified variable to `order`."
-      )
-    }
-    deprecate_stop(
-      "1.1.0",
-      "derive_extreme_event(ignore_event_order=)",
-      "derive_extreme_event(tmp_event_nr_var=)",
-      details = deprecate_details
-    )
-  }
   tmp_event_nr_var <- assert_symbol(enexpr(tmp_event_nr_var), optional = TRUE)
   check_type <-
     assert_character_scalar(
