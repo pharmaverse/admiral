@@ -231,12 +231,12 @@ adgdssf <- adgdssf %>%
     filter = AVISITN > 0
   )
 
-  # Derive sequence number
-  derive_var_obs_number(
-    by_vars = exprs(STUDYID, USUBJID),
-    order = exprs(PARAMCD, ADT),
-    check_type = "error"
-  )
+# Derive sequence number
+derive_var_obs_number(
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(PARAMCD, ADT),
+  check_type = "error"
+)
 ```
 
 ```{r echo=FALSE}
