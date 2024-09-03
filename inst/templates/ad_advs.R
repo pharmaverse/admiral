@@ -227,11 +227,18 @@ advs <- advs %>%
     source_var = ANRIND,
     new_var = BNRIND
   ) %>%
-  # Calculate CHG
-  derive_var_chg() %>%
-  # Calculate PCHG
-  derive_var_pchg()
-
+  # Calculate CHG for post-baseline records
+  # The decision on how to populate pre-baseline and baseline values of CHG is left to producer choice
+  restrict_derivation(
+    derivation = derive_var_chg,
+    filter = AVISITN > 0
+  ) %>%
+  # Calculate PCHG for post-baseline records
+  # The decision on how to populate pre-baseline and baseline values of PCHG is left to producer choice
+  restrict_derivation(
+    derivation = derive_var_pchg,
+    filter = AVISITN > 0
+  )
 
 ## ANL01FL: Flag last result within an AVISIT and ATPT for post-baseline records ----
 advs <- advs %>%

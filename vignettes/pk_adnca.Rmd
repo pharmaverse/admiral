@@ -836,7 +836,13 @@ adpc_base <- adpc_dtype %>%
     filter = ABLFL == "Y"
   )
 
-adpc_chg <- derive_var_chg(adpc_base)
+# Calculate CHG for post-baseline records
+# The decision on how to populate pre-baseline and baseline values of CHG is left to producer choice
+adpc_chg <- restrict_derivation(
+  adpc_base,
+  derivation = derive_var_chg,
+  filter = AVISITN > 0
+)
 
 # ---- Add ASEQ ----
 
