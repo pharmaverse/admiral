@@ -149,19 +149,6 @@ event <- function(dataset_name = NULL,
 #'
 #'   *Permitted Values:* `"before"`, `"after"`, `"all"`
 #'
-#' @param first_cond Condition for selecting range of data
-#'
-#'   `r lifecycle::badge("deprecated")`
-#'
-#'   This argument is *deprecated*, please use `first_cond_upper` instead.
-#'
-#'   If this argument is specified, the other observations are restricted up to
-#'   the first observation where the specified condition is fulfilled. If the
-#'   condition is not fulfilled for any of the subsequent observations, all
-#'   observations are removed.
-#'
-#'   *Permitted Values*: an unquoted condition
-#'
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'
 #'   If this argument is specified, the other observations are restricted from
@@ -348,22 +335,12 @@ event_joined <- function(dataset_name = NULL,
                          order = NULL,
                          join_vars,
                          join_type,
-                         first_cond = NULL,
                          first_cond_lower = NULL,
                          first_cond_upper = NULL,
                          set_values_to = NULL,
                          keep_source_vars = NULL,
                          description = NULL) {
-  if (!missing(first_cond)) {
-    deprecate_stop(
-      "1.1.0",
-      "event_joined(first_cond=)",
-      "event_joined(first_cond_upper=)"
-    )
-    first_cond_upper <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
-  } else {
-    first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
-  }
+  first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
 
   out <- list(
     description = assert_character_scalar(description, optional = TRUE),

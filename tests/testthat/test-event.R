@@ -73,36 +73,3 @@ test_that("event Test 1: Cover event$order", {
     keys = c("USUBJID")
   )
 })
-
-# event_joined ----
-## Test 2: deprecation of `first_cond` ----
-test_that("event_joined Test 2: deprecation of `first_cond`", {
-  new_event <- event_joined(
-    join_vars = exprs(AVALC, ADT),
-    join_type = "after",
-    first_cond_upper = AVALC.join == "CR" &
-      ADT.join >= ADT + 28,
-    condition = AVALC == "CR" &
-      all(AVALC.join %in% c("CR", "NE")) &
-      count_vals(var = AVALC.join, val = "NE") <= 1,
-    set_values_to = exprs(
-      AVALC = "CR"
-    )
-  )
-
-  expect_error(
-    old_event <- event_joined(
-      join_vars = exprs(AVALC, ADT),
-      join_type = "after",
-      first_cond = AVALC.join == "CR" &
-        ADT.join >= ADT + 28,
-      condition = AVALC == "CR" &
-        all(AVALC.join %in% c("CR", "NE")) &
-        count_vals(var = AVALC.join, val = "NE") <= 1,
-      set_values_to = exprs(
-        AVALC = "CR"
-      )
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})

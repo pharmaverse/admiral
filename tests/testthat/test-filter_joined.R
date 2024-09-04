@@ -137,45 +137,8 @@ test_that("filter_joined Test 4: join_type = 'all'", {
   )
 })
 
-## Test 5: deprecation of `filter` ----
-test_that("filter_joined Test 5: deprecation of `filter`", {
-  expect_error(
-    actual <-
-      filter_joined(
-        data,
-        dataset_add = data,
-        by_vars = exprs(USUBJID),
-        join_vars = exprs(AVISITN, AVALC),
-        join_type = "after",
-        order = exprs(AVISITN),
-        filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR") &
-          AVISITN < AVISITN.join
-      ),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
-## Test 6: deprecation of `first_cond` ----
-test_that("filter_joined Test 6: deprecation of `first_cond`", {
-  expect_error(
-    actual <-
-      filter_joined(
-        data,
-        dataset_add = data,
-        by_vars = exprs(USUBJID),
-        join_vars = exprs(AVALC),
-        join_type = "after",
-        first_cond = AVALC == "CR" &
-          AVALC.join == "CR",
-        order = exprs(AVISITN),
-        filter_join = TRUE
-      ),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
 # min_cond ----
-## Test 7: minimum is derived correctly ----
+## Test 5: minimum is derived correctly ----
 test_that("min_cond Test 7: minimum is derived correctly", {
   data <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
@@ -213,7 +176,7 @@ test_that("min_cond Test 7: minimum is derived correctly", {
 })
 
 # max_cond ----
-## Test 8: maximum is derived correctly ----
+## Test 6: maximum is derived correctly ----
 test_that("max_cond Test 8: maximum is derived correctly", {
   data <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
