@@ -1,24 +1,28 @@
 Type: Package
 Package: admiral
 Title: ADaM in R Asset Library
-Version: 1.1.1.9005
+Version: 1.1.1.9008
 Authors@R: c(
     person("Ben", "Straub", , "ben.x.straub@gsk.com", role = c("aut", "cre")),
-    person("Stefan", "Bundfuss", role = "aut"),
+    person("Stefan", "Bundfuss", role = "aut",
+           comment = c(ORCID = "0009-0005-0027-1198")),
     person("Jeffrey", "Dickinson", role = "aut"),
     person("Ross", "Farrugia", role = "aut"),
     person("Fanny", "Gautier", role = "aut"),
     person("G", "Gayatri", role = "aut"),
     person("Asha", "Chakma", role = "aut"),
     person("Dinakar", "Kulkarni", role = "aut"),
-    person("Edoardo", "Mancini", role = "aut"),
+    person("Edoardo", "Mancini", role = "aut",
+           comment = c(ORCID = "0009-0006-4899-8641")),
     person("Sadchla", "Mascary", role = "aut"),
     person("Gordon", "Miller", role = "aut"),
     person("Lina", "Patil", role = "aut"),
     person("Sophie", "Shapcott", role = "aut"),
     person("Eric", "Simms", role = "aut"),
-    person("Daniel", "Sjoberg", role = "aut"),
-    person("Stefan", "Thoma", role = "aut"),
+    person("Daniel", "Sjoberg", role = "aut",
+           comment = c(ORCID = "0000-0003-0862-2018")),
+    person("Stefan", "Thoma", role = "aut",
+           comment = c(ORCID = "0000-0002-5553-9252")),
     person("Phillip", "Webster", role = "aut"),
     person("Kangjie", "Zhang", role = "aut"),
     person("Zelos", "Zhu", role = "aut"),

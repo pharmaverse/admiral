@@ -89,7 +89,7 @@ adcm <- adcm %>%
   # Derive Follow-Up flag
   mutate(FUPFL = if_else(ASTDT > TRTEDT, "Y", NA_character_)) %>%
   # Derive ANL01FL
-  # This variable is sponsor specific and may be used to indicate particular
+  # This variable is producer specific and may be used to indicate particular
   # records to be used in subsequent derivations or analysis.
   mutate(ANL01FL = if_else(ONTRTFL == "Y", "Y", NA_character_)) %>%
   # Derive 1st Occurrence of Preferred Term Flag

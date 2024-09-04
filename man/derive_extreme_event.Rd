@@ -12,7 +12,6 @@ derive_extreme_event(
   order,
   mode,
   source_datasets = NULL,
-  ignore_event_order = NULL,
   check_type = "warning",
   set_values_to = NULL,
   keep_source_vars = exprs(everything())
@@ -73,22 +72,6 @@ event sorting by \code{order}.
 
 A named list of datasets is expected. The \code{dataset_name} field of \code{event()}
 and \code{event_joined()} refers to the dataset provided in the list.}
-
-\item{ignore_event_order}{Ignore event order
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-
-This argument is \emph{deprecated}. If event order should be ignored, please
-specify neither \code{ignore_event_order} nor \code{tmp_event_nr_var}. If the event
-order should be considered, don't specify \code{ignore_event_order} but specify
-\code{tmp_event_nr_var} and and the specified variable to \code{order}.
-
-If the argument is set to \code{TRUE}, all events defined by \code{events} are
-considered equivalent. If there is more than one observation per by group
-the first or last (with respect to \code{mode} and \code{order}) is select without
-taking the order of the events into account.
-
-\emph{Permitted Values:} \code{TRUE}, \code{FALSE}}
 
 \item{check_type}{Check uniqueness?
 
