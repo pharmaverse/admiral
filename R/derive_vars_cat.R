@@ -1,42 +1,32 @@
 #' Derive pair of variables
-#'
-#'
-#' @param dataset
+#' @param dataset data frame containing the variables specified in the conditions
 #' @param definition of condition and values defined as `exprs()` object.
 #' e.g. exprs(~condition, ~AVALCAT1, ~AVALCA1N
 #'            AVAL >= 140, ">=140 cm", 1,
 #'            AVAL < 140, "<140 cm", 2)
 #'
-#' @return
+#' @return data frame
 #' @export
 #'
 #' @examples
 #'
-# advs <- tibble::tribble(
-#   ~USUBJID, ~PARAMCD, ~AVAL,
-#   "01",     "HEIGHT", 150,
-#   "02",     "HEIGHT", 135,
-#   "03",     "HEIGHT", 145
-# )
-
-# advs <- pharmaverseadam::advs
-#
-# definition <- exprs(
-#   ~condition,  ~AVALCAT1,  ~AVALCA1N, ~NEWCOL,
-#   VSTESTCD == "HEIGHT" & AVAL > 140,  ">140 cm",          1,  "extra1",
-#   VSTESTCD == "HEIGHT" & AVAL <= 140, "<=140 cm",         2,  "extra2"
-# )
-#
-#
-# definition <- exprs(
-#   ~condition,                                              ~AVALCAT1,  ~AVALCA1N,   ~NEWCOL,
-#   VSTESTCD == "HEIGHT" & AVAL >= 150,                     ">=150 cm",          1,  "extra1",
-#   VSTESTCD == "HEIGHT" & AVAL > 140 & AVAL < 150, "[140 cm, 150 cm]",          2,  "extra2",
-#   VSTESTCD == "HEIGHT" & AVAL <= 140,                     "<=140 cm",          3,  "extra3"
-# )
-#
-
-# derive_vars_cat(dataset = advs, definition = definition) %>% select(USUBJID, VSTESTCD, AVAL, AVALCA1N, AVALCAT1) %>% filter(VSTESTCD == "HEIGHT")
+#' advs <- tibble::tribble(
+#'   ~USUBJID, ~PARAMCD, ~AVAL,
+#'   "01",     "HEIGHT", 150,
+#'   "02",     "HEIGHT", 135,
+#'   "03",     "HEIGHT", 145
+#' )
+#' advs <- pharmaverseadam::advs
+#'
+#' definition <- exprs(
+#'   ~condition,  ~AVALCAT1,  ~AVALCA1N, ~NEWCOL,
+#'   VSTESTCD == "HEIGHT" & AVAL > 140,  ">140 cm",          1,  "extra1",
+#'   VSTESTCD == "HEIGHT" & AVAL <= 140, "<=140 cm",         2,  "extra2"
+#' )
+#'
+#' derive_vars_cat(dataset = advs %>% filter(VSTESTCD == "HEIGHT"),
+#'                 definition = definition) %>%
+#'   select(USUBJID, VSTESTCD, AVAL, AVALCA1N, AVALCAT1)
 
 derive_vars_cat <- function(dataset,
                             definition) {

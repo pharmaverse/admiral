@@ -1,7 +1,3 @@
-library(testthat)
-library(dplyr)
-library(pharmaverseadam)
-
 # Load the advs dataset
 advs <- pharmaverseadam::advs
 
