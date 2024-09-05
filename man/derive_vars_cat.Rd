@@ -56,5 +56,5 @@ derive_vars_cat(
   dataset = advs \%>\% filter(VSTESTCD == "Height"),
   definition = definition
 ) \%>\%
-  select(USUBJID, VSTESTCD, AVAL, AVALCA1N, AVALCAT1)
+  dplyr::select(USUBJID, VSTESTCD, AVAL, AVALCA1N, AVALCAT1)
 }

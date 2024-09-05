@@ -44,7 +44,7 @@
 #'   dataset = advs %>% filter(VSTESTCD == "Height"),
 #'   definition = definition
 #' ) %>%
-#'   select(USUBJID, VSTESTCD, AVAL, AVALCA1N, AVALCAT1)
+#'   dplyr::select(USUBJID, VSTESTCD, AVAL, AVALCA1N, AVALCAT1)
 derive_vars_cat <- function(dataset,
                             definition) {
   # assertions
