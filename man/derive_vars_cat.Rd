@@ -22,21 +22,15 @@ Derive pair of variables
 }
 \examples{
 
-advs <- tibble::tribble(
-  ~USUBJID, ~PARAMCD, ~AVAL,
-  "01",     "HEIGHT", 150,
-  "02",     "HEIGHT", 135,
-  "03",     "HEIGHT", 145
-)
 advs <- pharmaverseadam::advs
 
 definition <- exprs(
   ~condition,  ~AVALCAT1,  ~AVALCA1N, ~NEWCOL,
-  VSTESTCD == "HEIGHT" & AVAL > 140,  ">140 cm",          1,  "extra1",
-  VSTESTCD == "HEIGHT" & AVAL <= 140, "<=140 cm",         2,  "extra2"
+  VSTESTCD == "Height" & AVAL > 140,  ">140 cm",          1,  "extra1",
+  VSTESTCD == "Height" & AVAL <= 140, "<=140 cm",         2,  "extra2"
 )
 
-derive_vars_cat(dataset = advs \%>\% filter(VSTESTCD == "HEIGHT"),
+derive_vars_cat(dataset = advs \%>\% filter(VSTESTCD == "Height"),
                 definition = definition) \%>\%
   select(USUBJID, VSTESTCD, AVAL, AVALCA1N, AVALCAT1)
 }
