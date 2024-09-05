@@ -10,21 +10,15 @@
 #'
 #' @examples
 #'
-#' advs <- tibble::tribble(
-#'   ~USUBJID, ~PARAMCD, ~AVAL,
-#'   "01",     "HEIGHT", 150,
-#'   "02",     "HEIGHT", 135,
-#'   "03",     "HEIGHT", 145
-#' )
 #' advs <- pharmaverseadam::advs
 #'
 #' definition <- exprs(
 #'   ~condition,  ~AVALCAT1,  ~AVALCA1N, ~NEWCOL,
-#'   VSTESTCD == "HEIGHT" & AVAL > 140,  ">140 cm",          1,  "extra1",
-#'   VSTESTCD == "HEIGHT" & AVAL <= 140, "<=140 cm",         2,  "extra2"
+#'   VSTESTCD == "Height" & AVAL > 140,  ">140 cm",          1,  "extra1",
+#'   VSTESTCD == "Height" & AVAL <= 140, "<=140 cm",         2,  "extra2"
 #' )
 #'
-#' derive_vars_cat(dataset = advs %>% filter(VSTESTCD == "HEIGHT"),
+#' derive_vars_cat(dataset = advs %>% filter(VSTESTCD == "Height"),
 #'                 definition = definition) %>%
 #'   select(USUBJID, VSTESTCD, AVAL, AVALCA1N, AVALCAT1)
 
@@ -42,7 +36,7 @@ derive_vars_cat <- function(dataset,
 
 
   # extract new variable names and conditions
-  new_col_names <- names(definition)[!names(definition)=="condition"]
+  new_col_names <- names(definition) [!names(definition) == "condition"]
   condition <- definition[["condition"]] # could also be outside of the function
 
   # (re)apply the function for each new variable name and iteratively derive the categories

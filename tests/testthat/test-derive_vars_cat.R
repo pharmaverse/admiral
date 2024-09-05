@@ -108,23 +108,8 @@ test_that("derive_vars_cat Test 7: Handles missing values in dataset correctly",
   expect_snapshot(result)
 })
 
-## too slow, not sure if necessary.
-# test_that("Large dataset is handled efficiently", {
-#   # Create a large dataset by replicating advs
-#   large_advs <- bind_rows(replicate(1000, advs, simplify = FALSE))
-#
-#   # Define the condition and categories
-#   definition <- exprs(
-#     ~condition, ~AVALCAT1, ~AVALCA1N,
-#     VSTEST == "Height" & AVAL >= 160, ">=160", 1,
-#     VSTEST == "Height" & AVAL < 160, "<160", 2
-#   )
-#
-#   expect_snapshot(derive_vars_cat(large_advs, definition))
-# })
-
 ## Test 8: Error when condition is missing from exprs() definition object ----
-test_that("derive_vars_cat Test 8: Error when condition is missing from exprs() definition object", {
+test_that("derive_vars_cat Test 8: Error when condition is missing from `definition`", {
   # Define the condition but omit the 'condition' column from the definition
   definition <- exprs(
     ~AVALCAT1, ~AVALCA1N,

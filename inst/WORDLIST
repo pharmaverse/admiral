@@ -30,6 +30,8 @@ ASTDTM
 ATC
 ATOXGR
 AVAL
+AVALCA
+AVALCAT
 Abercrombie
 Akinyi
 Alanine
@@ -170,10 +172,10 @@ Nom
 Nonfasting
 O'Reilly
 OCCDS
+ORCID
 Ojesh
 Omnes
 Ondrej
-ORCID
 PARAM
 PARAMCD
 PARAMN
@@ -310,14 +312,12 @@ pre
 prev
 prm
 quosures
-Rothstein
 recoded
 renv
 repo
 reproducibility
 rlang
 roche
-Rothstein
 roxygen
 scalable
 signif
