@@ -1,5 +1,27 @@
 # Load the advs dataset
-advs <- pharmaverseadam::advs
+advs <- tibble::tribble(
+  ~USUBJID, ~VSTEST, ~AVAL,
+  "01-701-1015", "Height", 147.32,
+  "01-701-1015", "Weight", 53.98,
+  "01-701-1023", "Height", 162.56,
+  "01-701-1023", "Weight", 78.47,
+  "01-701-1028", "Height", 177.8,
+  "01-701-1028", "Weight", 98.88,
+  "01-701-1033", "Height", 175.26,
+  "01-701-1033", "Weight", 88.45,
+  "01-701-1034", "Height", 154.94,
+  "01-701-1034", "Weight", 63.5,
+  "01-701-1047", "Height", 148.59,
+  "01-701-1047", "Weight", 66.23,
+  "01-701-1097", "Height", 168.91,
+  "01-701-1097", "Weight", 78.02,
+  "01-701-1111", "Height", 158.24,
+  "01-701-1111", "Weight", 60.33,
+  "01-701-1115", "Height", 181.61,
+  "01-701-1115", "Weight", 78.7,
+  "01-701-1118", "Height", 180.34,
+  "01-701-1118", "Weight", 71.67
+)
 
 ## Test 1: Basic functionality with advs dataset ----
 test_that("derive_vars_cat Test 1: Basic functionality with advs dataset", {
