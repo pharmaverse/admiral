@@ -36,15 +36,15 @@
 #'
 #' definition <- exprs(
 #'   ~condition, ~AVALCAT1, ~AVALCA1N, ~NEWCOL,
-#'   VSTESTCD == "Height" & AVAL > 140, ">140 cm", 1, "extra1",
-#'   VSTESTCD == "Height" & AVAL <= 140, "<=140 cm", 2, "extra2"
+#'   VSTEST == "Height" & AVAL > 140, ">140 cm", 1, "extra1",
+#'   VSTEST == "Height" & AVAL <= 140, "<=140 cm", 2, "extra2"
 #' )
 #'
 #' derive_vars_cat(
-#'   dataset = advs %>% filter(VSTESTCD == "Height"),
+#'   dataset = advs %>% filter(VSTEST == "Height"),
 #'   definition = definition
 #' ) %>%
-#'   dplyr::select(USUBJID, VSTESTCD, AVAL, AVALCA1N, AVALCAT1)
+#'   dplyr::select(USUBJID, VSTEST, AVAL, AVALCA1N, AVALCAT1)
 derive_vars_cat <- function(dataset,
                             definition) {
   # assertions
