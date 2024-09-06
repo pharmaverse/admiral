@@ -41,7 +41,7 @@
 #' )
 #'
 #' derive_vars_cat(
-#'   dataset = advs %>% filter(VSTEST == "Height"),
+#'   dataset = advs %>% dplyr::filter(VSTEST == "Height"),
 #'   definition = definition
 #' )
 derive_vars_cat <- function(dataset,
