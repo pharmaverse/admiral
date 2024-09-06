@@ -44,7 +44,6 @@
 #'   dataset = advs %>% filter(VSTEST == "Height"),
 #'   definition = definition
 #' )
-
 derive_vars_cat <- function(dataset,
                             definition) {
   # assertions
