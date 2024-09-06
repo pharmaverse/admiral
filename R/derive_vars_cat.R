@@ -6,6 +6,8 @@
 #'            AVAL < 140, "<140 cm", 2)
 #'
 #' @return data frame
+#' @family der_gen
+#' @keywords der_gen
 #' @export
 #'
 #' @examples
