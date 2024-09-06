@@ -2,6 +2,8 @@
 
 ## New Features
 
+- New function `derive_vars_cat()` for deriving pairs of variables or more, e.g. 
+`MCRITyML` & `MCRITyMN`. (#2480)
 - New function `derive_vars_crit_flag()` for deriving criterion flag variables
 (`CRITy`, `CRITyFL`, `CRITyFLN`). (#2468)
 
