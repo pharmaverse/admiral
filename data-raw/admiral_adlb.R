@@ -224,11 +224,18 @@ adlb <- adlb %>%
     source_var = ANRIND,
     new_var = BNRIND
   ) %>%
-  # Calculate CHG
-  derive_var_chg() %>%
-  # Calculate PCHG
-  derive_var_pchg()
-
+  # Calculate CHG for post-baseline records
+  # The decision on how to populate pre-baseline and baseline values of CHG is left to producer choice
+  restrict_derivation(
+    derivation = derive_var_chg,
+    filter = AVISITN > 0
+  ) %>%
+  # Calculate PCHG for post-baseline records
+  # The decision on how to populate pre-baseline and baseline values of PCHG is left to producer choice
+  restrict_derivation(
+    derivation = derive_var_pchg,
+    filter = AVISITN > 0
+  )
 
 ## Calculate lab grading ----
 
@@ -447,25 +454,9 @@ adlb <- adlb %>%
 # Save output ----
 
 # Change to whichever directory you want to save the dataset in
-#dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
-#if (!file.exists(dir)) {
+dir <- tools::R_user_dir("admiral_templates_data", which = "cache")
+if (!file.exists(dir)) {
   # Create the folder
-#  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
-#}
-#save(adlb, file = file.path(dir, "adlb.rda"), compress = "bzip2")
-
-admiral_adlb = adlb
-use_data(admiral_adlb, overwrite=T)
-
-
-# check - This dataset is identical to backup ?
-e1 = new.env()
-e2 = new.env()
-
-load("data/admiral_adlb.rda", e1)
-load("data-backup/admiral_adlb.rda", e2)
-e1$admiral_adlb
-e2$admiral_adlb
-identical(e1$admiral_adlb, e2$admiral_adlb)
-
-
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+}
+save(adlb, file = file.path(dir, "adlb.rda"), compress = "bzip2")
