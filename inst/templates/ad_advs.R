@@ -53,23 +53,18 @@ range_lookup <- tibble::tribble(
   "PULSE", 60, 100, 40, 110,
   "TEMP", 36.5, 37.5, 35, 38
 )
-# ASSIGN AVALCAT1
-avalcat_lookup <- tibble::tribble(
-  ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
-  "HEIGHT", 1, ">100 cm",
-  "HEIGHT", 2, "<= 100 cm"
+# # Assign AVALCAT1
+# avalcat_lookup <- tibble::tribble(
+#   ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
+#   "HEIGHT", 1, ">100 cm",
+#   "HEIGHT", 2, "<= 100 cm"
+# )
+# Assign AVALCATx
+avalcax_lookup <- exprs(
+  ~condition, ~AVALCAT1, ~AVALCA1N,
+  PARAMCD == "HEIGHT" & AVAL > 140, ">140 cm", 1,
+  PARAMCD == "HEIGHT" & AVAL <= 140, "<=140 cm", 2
 )
-
-# User defined functions ----
-
-# Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate()`.
-format_avalcat1n <- function(param, aval) {
-  case_when(
-    param == "HEIGHT" & aval > 140 ~ 1,
-    param == "HEIGHT" & aval <= 140 ~ 2
-  )
-}
 
 # Derivations ----
 
@@ -276,7 +271,7 @@ advs <- advs %>%
     TRTA = TRT01A
   )
 
-## Get ASEQ and AVALCATx and add PARAM/PARAMN ----
+# Get ASEQ and AVALCATx and add PARAM/PARAMN ----
 advs <- advs %>%
   # Calculate ASEQ
   derive_var_obs_number(
@@ -285,11 +280,13 @@ advs <- advs %>%
     order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
     check_type = "error"
   ) %>%
-  # Derive AVALCA1N and AVALCAT1
-  mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
-  derive_vars_merged(dataset_add = avalcat_lookup, by_vars = exprs(PARAMCD, AVALCA1N)) %>%
+  # Define condition and categories using derive_vars_cat
+  derive_vars_cat(
+    definition = avalcax_lookup
+  ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(dataset_add = select(param_lookup, -VSTESTCD), by_vars = exprs(PARAMCD))
+
 
 
 # Add all ADSL variables
