@@ -4,6 +4,8 @@
 #' e.g. exprs(~condition, ~AVALCAT1, ~AVALCA1N
 #'            AVAL >= 140, ">=140 cm", 1,
 #'            AVAL < 140, "<140 cm", 2)
+#' @param by_vars list of expressions with one element. `NULL` by default.
+#' Allows for specifying a single category, e.g. `exprs(PARAMCD)`.
 #'
 #' @return data frame
 #' @family der_gen
@@ -41,22 +43,48 @@
 #'   VSTEST == "Height" & AVAL > 140, ">140 cm", 1, "extra1",
 #'   VSTEST == "Height" & AVAL <= 140, "<=140 cm", 2, "extra2"
 #' )
-#'
 #' derive_vars_cat(
 #'   dataset = advs %>% dplyr::filter(VSTEST == "Height"),
 #'   definition = definition
 #' )
+#'
+#' definition2 <- exprs(
+#'   ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
+#'   "Height", AVAL > 140, ">140 cm", 1,
+#'   "Height", AVAL <= 140, "<=140 cm", 2
+#' )
+#'
+#' derive_vars_cat(
+#'   dataset = advs,
+#'   definition = definition2,
+#'   by_vars = exprs(VSTEST)
+#' )
+
 derive_vars_cat <- function(dataset,
-                            definition) {
+                            definition,
+                            by_vars = NULL) {
   # assertions
   assert_data_frame(dataset)
   assert_expr_list(definition)
-  assert_data_frame(dataset, required_vars = admiraldev::extract_vars(definition) %>% unique())
+  if(!is.null(by_vars)){
+    assert_expr_list(by_vars)
+    assert_data_frame(dataset, required_vars = c(admiraldev::extract_vars(definition) %>% unique(), extract_vars(by_vars)))
+
+  } else{
+    assert_data_frame(dataset, required_vars = admiraldev::extract_vars(definition) %>% unique())
+  }
+
 
   # transform definition to tibble
   names(definition) <- NULL
   definition <- tibble::tribble(!!!definition)
-  assert_data_frame(definition, required_vars = exprs(condition))
+  if(!is.null(by_vars)){
+    assert_data_frame(definition, required_vars = c(exprs(condition), by_vars))
+    # add condition
+    definition <- definition %>% mutate(
+      condition = extend_condition(as.character(condition), as.character(by_vars), is = !!sym(as.character(by_vars))) %>% parse_exprs()
+    )
+  } else assert_data_frame(definition, required_vars = exprs(condition))
 
 
   # extract new variable names and conditions
@@ -77,4 +105,11 @@ derive_vars_cat <- function(dataset,
   }, .init = dataset)
 
   return(new_dataset)
+}
+
+## helper
+
+definition
+extend_condition <- function(cond, var, is) {
+  paste(cond, " & ", var, " == '", is, "'", sep = "")
 }
