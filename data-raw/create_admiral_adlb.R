@@ -1,10 +1,13 @@
 #  Create dataset:   data/admiral_adlb.rda
 
-# This is a MULTI-step process.
 
-# First, using template to create the R script (in data-raw/admiral_adlb.R).
+# The ultimate goal of this script (`create_admiral_adlb.R`) is to create dataset data/admiral_adlb.rda.
+# This script controls the multi-step process.
+
+
+# First, use template to create the R script (in data-raw/admiral_adlb.R).
 # Next, source this script and create the data (~/.cache/R/admiral_template_data/admiral_adlb.rda)
-# Finally, shorten this data (now ~ 1.2 MB) by selecting only certain USERJID
+# Finally, shorten this data (now ~ 1.2 MB) by selecting only certain USUBJID
 
 
 # First,  create the R script (from a template)
