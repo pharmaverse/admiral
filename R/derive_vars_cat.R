@@ -51,7 +51,9 @@
 #' definition2 <- exprs(
 #'   ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
 #'   "Height", AVAL > 140, ">140 cm", 1,
-#'   "Height", AVAL <= 140, "<=140 cm", 2
+#'   "Height", AVAL <= 140, "<=140 cm", 2,
+#'   "Weight", AVAL > 70, ">70 kg", 1,
+#'   "Weight", AVAL <= 70, "<=70 kg", 2
 #' )
 #'
 #' derive_vars_cat(
@@ -74,7 +76,6 @@ derive_vars_cat <- function(dataset,
     assert_data_frame(dataset, required_vars = admiraldev::extract_vars(definition) %>% unique())
   }
 
-
   # transform definition to tibble
   names(definition) <- NULL
   definition <- tibble::tribble(!!!definition)
@@ -90,6 +91,7 @@ derive_vars_cat <- function(dataset,
   # extract new variable names and conditions
   new_col_names <- names(definition)[!names(definition) == "condition"]
   condition <- definition[["condition"]] # could also be outside of the function
+
 
   # (re)apply the function for each new variable name and iteratively derive the categories
   new_dataset <- reduce(new_col_names, function(.data, col_name) {
@@ -113,3 +115,75 @@ definition
 extend_condition <- function(cond, var, is) {
   paste(cond, " & ", var, " == '", is, "'", sep = "")
 }
+
+
+derive_vars_cat_rec <- function(dataset,
+                            definition,
+                            by_vars = NULL) {
+  # assertions
+  assert_data_frame(dataset)
+  if(is.null(by_vars)){
+    if(!is.data.frame(definition)){
+      names(definition) <- NULL
+      definition <- tibble::tribble(!!!definition)
+    }
+
+
+    assert_data_frame(dataset, required_vars = admiraldev::extract_vars(definition) %>% unique())
+    assert_data_frame(definition, required_vars = exprs(condition))
+
+    new_col_names <- names(definition)[!names(definition) == "condition"]
+    condition <- definition[["condition"]] # could also be outside of the function
+
+    # (re)apply the function for each new variable name and iteratively derive the categories
+    new_dataset <- reduce(new_col_names, function(.data, col_name) {
+      # extract conditions
+      values <- definition[[col_name]]
+      # extract values
+
+      .data %>%
+        mutate(!!sym(col_name) := eval(rlang::call2(
+          "case_when",
+          !!!map2(condition, values, ~ expr(!!.x ~ !!.y))
+        )))
+    }, .init = dataset)
+
+    return(new_dataset)
+  }
+
+  assert_expr_list(definition)
+
+  names(definition) <- NULL
+  definition <- tibble::tribble(!!!definition)
+  der_slice_list <- definition %>% group_by(!!sym(by_vars[[1]])) %>%
+    dplyr::group_split() %>% lapply(FUN = function(x) {
+
+      var <- x %>% pull(by_vars[[1]]) %>% unique()
+      def <- x %>% select(-by_vars[[1]])
+
+      derivation_slice(filter = !!sym(by_vars[[1]]) == !!var,
+        args = params(definition = !!def))
+    }
+    )
+
+
+  args <- list(dataset = dataset, derivation = derive_vars_cat_rec, args = NULL)
+  args <- c(args, der_slice_list)
+  result <- do.call(slice_derivation, args = args)
+  return(result)
+}
+
+#'
+#' definition2 <- exprs(
+#'   ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
+#'   "Height", AVAL > 140, ">140 cm", 1,
+#'   "Height", AVAL <= 140, "<=140 cm", 2,
+#'   "Weight", AVAL > 70, ">70 kg", 1,
+#'   "Weight", AVAL <= 70, "<=70 kg", 2
+#' )
+
+# derive_vars_cat_rec(
+#   dataset = advs,
+#   definition = definition2,
+#   by_vars = exprs(VSTEST)
+# )
