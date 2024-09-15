@@ -48,6 +48,7 @@ Bazett's
 Biologics
 CDISC
 CKD
+CMD
 COVID
 CPK
 CQ
@@ -170,10 +171,10 @@ Nom
 Nonfasting
 O'Reilly
 OCCDS
+ORCID
 Ojesh
 Omnes
 Ondrej
-ORCID
 PARAM
 PARAMCD
 PARAMN
@@ -310,14 +311,12 @@ pre
 prev
 prm
 quosures
-Rothstein
 recoded
 renv
 repo
 reproducibility
 rlang
 roche
-Rothstein
 roxygen
 scalable
 signif
