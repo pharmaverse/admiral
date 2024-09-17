@@ -1,9 +1,14 @@
-#  Create dataset:   data/admiral_adlb.rda
-#  This script:  create_admiral_adlb.R creates dataset data/admiral_adlb.rda.
+#  Create dataset:   data/admiral_adsl.rda
+#  This script:  create_admiral_adsl.R creates dataset data/admiral_adsl.rda.
 #
+
+# styler:style_pkg()
+# devtools::lint()
+# devtools::spellcheck()
 
 # Preliminary
 library(diffdf)
+
 
 # To clarify directories (can be removed)
 CACHE_DIR <- "~/.cache/R/admiral_templates_data/"
@@ -23,7 +28,7 @@ if (file.exists(THE_FILE)) file.remove(THE_FILE)
 # Next, source this script and create the data (~/.cache/R/admiral_template_data/admiral_adlb.rda)
 # Finally, shorten this data (now ~ 1.2 MB) by selecting only certain USUBJID
 
-# orignal method  - OMIT
+# OMIT -- orignal method  - OMIT
 if (FALSE) {
   # ### original mehtod (method 1)
   # # First,  create the R script (from a template)
@@ -41,63 +46,31 @@ if (FALSE) {
 }
 
 #
+#
 # Instead, USE template, as recommened by Buzz
 #
-source(paste0(TEMPLATE_DIR, "/ad_adlb.R")) # nolint
-load(paste0(CACHE_DIR, "adlb.rda"))
-
-#
-# limit rows, by selecting only these USUBJID
-#
-#' 01-701-1015, 01-701-1023, 01-701-1028, 01-701-1033,
-#' 01-701-1034, 01-701-1047, 01-701-1097, 01-705-1186,
-#' 01-705-1292, 01-705-1310, 01-708-1286
-
-usubjid <-
-  c(
-    "01-701-1015",
-    "01-701-1023",
-    "01-701-1028",
-    "01-701-1033",
-    "01-701-1034",
-    "01-701-1047",
-    "01-701-1097",
-    "01-705-1186",
-    "01-705-1292",
-    "01-705-1310",
-    "01-708-1286"
-  )
-
-#  prepare for inner join
-user <- tibble(
-  USUBJID = usubjid
-)
-
-result <- inner_join(adlb, user)
-admiral_adlb <- result
-admiral_adlb
+source(paste0(TEMPLATE_DIR, "/ad_adsl.R")) # nolint
+load(paste0(CACHE_DIR, "adsl.rda"))
+admiral_adsl <- adsl
 
 #
 # Finally, save reduced ds
 #
-use_data(admiral_adlb, overwrite = TRUE)
+use_data(admiral_adsl, overwrite = TRUE)
 
 #
 #  TEST - is dataset identical to .... backup of unaltered dataset
 #
 e1 <- new.env()
 e2 <- new.env()
-load("data/admiral_adlb.rda", e1)
+load("data/admiral_adsl.rda", e1)
 
 # CHANGE to YOUR location of original dataset
-load("data-backup/admiral_adlb.rda", e2)
+load("data-backup/admiral_adsl.rda", e2)
 
-# compare field names
-t <- tibble(e1 = names(e1$admiral_adlb), e2 = names(e2$admiral_adlb))
-t |> print(n = 111)
 
-identical(e1$admiral_adlb, e2$admiral_adlb)
-diffdf(e1$admiral_adlb, e2$admiral_adlb)
+identical(e1$admiral_adsl, e2$admiral_adsl)
+diffdf(e1$admiral_adsl, e2$admiral_adsl)
 
 #
 # cleanup
