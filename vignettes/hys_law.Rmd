@@ -52,8 +52,7 @@ We assume that an `ADLB` dataset is available [^1].
 First we read in the `ADLB` parameters required for the Hy's Law parameters:
 
 ```{r, eval = TRUE}
-data(admiral_adlb)
-adlb <- admiral_adlb %>%
+adlb <- admiral::admiral_adlb %>%
   filter(PARAMCD %in% c("AST", "ALT", "BILI") & is.na(DTYPE))
 ```
 

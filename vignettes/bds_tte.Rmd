@@ -61,11 +61,10 @@ For example purpose, the ADSL dataset---which is included
 in `{admiral}`---and the SDTM datasets from `{pharmaversesdtm}` are used.
 
 ```{r}
-data("ae")
-data("admiral_adsl")
+ae <- pharmaversesdtm::ae
+adsl <- admiral::admiral_adsl
 
 ae <- convert_blanks_to_na(ae)
-adsl <- admiral_adsl
 ```
 
 ```{r echo=FALSE}

@@ -111,13 +111,12 @@ library(lubridate)
 library(stringr)
 library(tibble)
 
-data("admiral_adsl")
-data("ex")
-data("pc")
-data("vs")
-data("lb")
+ex <- pharmaversesdtm::ex
+pc <- pharmaversesdtm::pc
+vs <- pharmaversesdtm::vs
+lb <- pharmaversesdtm::lb
 
-adsl <- admiral_adsl
+adsl <- admiral::admiral_adsl
 ex <- convert_blanks_to_na(ex)
 
 # Load PC

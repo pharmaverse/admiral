@@ -14,12 +14,11 @@ library(lubridate)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("ae")
-data("admiral_adsl")
-data("ex_single")
-data("suppae")
+ae <- pharmaversesdtm::ae
+suppae <- pharmaversesdtm::suppae
 
-adsl <- admiral_adsl
+adsl <- admiral::admiral_adsl
+ex_single <- admiral::ex_single
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing

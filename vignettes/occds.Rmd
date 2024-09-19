@@ -58,11 +58,11 @@ library(dplyr, warn.conflicts = FALSE)
 library(pharmaversesdtm)
 library(lubridate)
 
-data("ae")
-data("admiral_adsl")
+ae <- pharmaversesdtm::ae
 
 ae <- convert_blanks_to_na(ae)
-adsl <- admiral_adsl
+adsl <- admiral::admiral_adsl
+ex_single <- admiral::ex_single
 ```
 ```{r echo = FALSE}
 ae <- filter(ae, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
@@ -228,7 +228,6 @@ vignette](visits_periods.html#treatment_bds).
 The function `derive_vars_joined()` can be used to derive the last dose date before the start of the event. 
 
 ```{r eval=TRUE}
-data(ex_single)
 ex_single <- derive_vars_dtm(
   ex_single,
   dtc = EXSTDTC,
@@ -424,7 +423,7 @@ The following example shows how to derive query variables for Standardized MedDR
 Queries (SMQs) in ADAE.
 
 ```{r, eval=TRUE}
-data("queries")
+queries <- admiral::queries
 ```
 
 ```{r, eval=TRUE, echo=FALSE}

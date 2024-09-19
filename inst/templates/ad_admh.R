@@ -13,11 +13,10 @@ library(lubridate)
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
-data("mh")
-data("admiral_adsl")
-data("queries_mh")
 
-adsl <- admiral_adsl
+mh <- pharmaversesdtm::mh
+queries_mh <- admiral::queries_mh
+adsl <- admiral::admiral_adsl
 
 mh <- convert_blanks_to_na(mh)
 

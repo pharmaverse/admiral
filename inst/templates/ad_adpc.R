@@ -19,15 +19,12 @@ library(pharmaversesdtm) # Contains example datasets from the CDISC pilot projec
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-
 # Load PC, EX, VS and ADSL
-data("pc")
-data("ex")
-data("vs")
+pc <- pharmaversesdtm::pc
+ex <- pharmaversesdtm::ex
+vs <- pharmaversesdtm::vs
 
-data("admiral_adsl")
-
-adsl <- admiral_adsl
+adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
