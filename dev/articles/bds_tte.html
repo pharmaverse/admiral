@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9008</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -157,11 +157,10 @@ specific process.</p>
 <a href="https://pharmaverse.github.io/admiral/">admiral</a>—and the SDTM datasets from
 <a href="https://pharmaverse.github.io/pharmaversesdtm/" class="external-link">pharmaversesdtm</a> are used.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"ae"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_adsl"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu">pharmaversesdtm</span><span class="fu">::</span><span class="va"><a href="https://pharmaverse.github.io/pharmaversesdtm/reference/ae.html" class="external-link">ae</a></span></span>
+<span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu">admiral</span><span class="fu">::</span><span class="va"><a href="../reference/admiral_adsl.html">admiral_adsl</a></span></span>
 <span></span>
-<span><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/convert_blanks_to_na.html">convert_blanks_to_na</a></span><span class="op">(</span><span class="va">ae</span><span class="op">)</span></span>
-<span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va">admiral_adsl</span></span></code></pre></div>
+<span><span class="va">ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/convert_blanks_to_na.html">convert_blanks_to_na</a></span><span class="op">(</span><span class="va">ae</span><span class="op">)</span></span></code></pre></div>
 <p>The following code creates a minimally viable ADAE dataset to be used
 throughout the following examples.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -794,7 +793,7 @@ example</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
