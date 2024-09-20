@@ -38,7 +38,7 @@
 #'   ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
 #'   "Height", AVAL > 170, ">170 cm", 1,
 #'   "Height", AVAL <= 170, "<=170 cm", 2,
-#'   "Height", AVAL <= 160, "<=160 cm", 3,
+#'   "Height", AVAL <= 160, "<=160 cm", 3
 #' )
 #'
 #' then `AVALCAT1` will be `"<=170 cm"`, as this is the first match for `AVAL`.
@@ -48,7 +48,7 @@
 #'   ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
 #'   "Height", AVAL <= 160, "<=160 cm", 3,
 #'   "Height", AVAL <= 170, "<=170 cm", 2,
-#'   "Height", AVAL > 170, ">170 cm", 1,
+#'   "Height", AVAL > 170, ">170 cm", 1
 #' )
 #'
 #' Then `AVAL <= 160` will lead to `AVALCAT1 == "<=160 cm"`,
@@ -92,8 +92,8 @@
 #'
 #' definition <- exprs(
 #'   ~condition, ~AVALCAT1, ~AVALCA1N, ~NEWCOL,
-#'   VSTEST == "Height" & AVAL > 140, ">140 cm", 1, "extra1",
-#'   VSTEST == "Height" & AVAL <= 140, "<=140 cm", 2, "extra2"
+#'   VSTEST == "Height" & AVAL > 160, ">160 cm", 1, "extra1",
+#'   VSTEST == "Height" & AVAL <= 160, "<=160 cm", 2, "extra2"
 #' )
 #' derive_vars_cat(
 #'   dataset = advs %>% dplyr::filter(VSTEST == "Height"),
@@ -102,8 +102,8 @@
 #' # using by_vars:
 #' definition2 <- exprs(
 #'   ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
-#'   "Height", AVAL > 140, ">140 cm", 1,
-#'   "Height", AVAL <= 140, "<=140 cm", 2,
+#'   "Height", AVAL > 160, ">160 cm", 1,
+#'   "Height", AVAL <= 160, "<=160 cm", 2,
 #'   "Weight", AVAL > 70, ">70 kg", 1,
 #'   "Weight", AVAL <= 70, "<=70 kg", 2
 #' )
@@ -119,7 +119,7 @@
 #'   ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
 #'   "Height", AVAL > 170, ">170 cm", 1,
 #'   "Height", AVAL <= 170 & AVAL > 160, "<=170 cm", 2,
-#'   "Height", AVAL <= 160, "<=160 cm", 3,
+#'   "Height", AVAL <= 160, "<=160 cm", 3
 #' )
 #'
 #' derive_vars_cat(
@@ -143,7 +143,12 @@ derive_vars_cat <- function(dataset,
 
   # transform definition to tibble
   names(definition) <- NULL
-  definition <- tibble::tribble(!!!definition)
+  definition <- tryCatch(
+    {tibble::tribble(!!!definition)},
+    error = function(e) {
+      # Catch the error and append your own message
+      stop("Failed to convert `definition` to tribble: ", e$message)
+    })
   assert_data_frame(definition, required_vars = c(exprs(condition), by_vars))
   if(!is.null(by_vars)){
     # add condition
@@ -174,8 +179,6 @@ derive_vars_cat <- function(dataset,
 }
 
 ## helper
-
-definition
 extend_condition <- function(cond, var, is) {
   paste(cond, " & ", var, " == '", is, "'", sep = "")
 }
