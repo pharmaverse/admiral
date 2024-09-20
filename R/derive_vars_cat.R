@@ -199,7 +199,20 @@ derive_vars_cat <- function(dataset,
   return(new_dataset)
 }
 
-## helper
+#' Extend a condition string by adding a new condition based on a variable and its value
+#'
+#' This internal helper function extends a condition string by appending a new condition
+#' that checks if a variable equals a specific value.
+#'
+#' @param cond A character string representing an existing condition.
+#' @param var A character string representing the name of the variable to check.
+#' @param is A character string representing the value the variable should be equal to.
+#'
+#' @return A character string representing the extended condition.
+#' @examples
+#' # Extend an existing condition to include a check for 'AGE == "30"'
+#' extend_condition("SEX == 'M'", "AGE", "30")
+#' @noRd
 extend_condition <- function(cond, var, is) {
   paste(cond, " & ", var, " == '", is, "'", sep = "")
 }
