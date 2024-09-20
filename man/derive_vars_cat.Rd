@@ -4,21 +4,74 @@
 \alias{derive_vars_cat}
 \title{Derive pair of variables}
 \usage{
-derive_vars_cat(dataset, definition)
+derive_vars_cat(dataset, definition, by_vars = NULL)
 }
 \arguments{
-\item{dataset}{data frame containing the variables specified in the conditions}
+\item{dataset}{Input dataset
 
-\item{definition}{of condition and values defined as \code{exprs()} object.
-e.g. exprs(~condition, ~AVALCAT1, ~AVALCA1N
-AVAL >= 140, ">=140 cm", 1,
-AVAL < 140, "<140 cm", 2)}
+The variables specified by the \code{by_vars} and \code{definition} arguments are expected to be in the dataset.}
+
+\item{definition}{List of expressions created by: \code{exprs()}.
+Must be in the format of a tribble.
+Must contain:
+\itemize{
+\item the column \code{condition} which evaluates to a logic in \code{dataset}.
+\item at least one additional column with the new column name and the category value.
+\item the column specified in \code{by_vars} (if \code{by_vars} is specified)
+}
+
+e.g. if \code{by_vars} is not specified:
+\verb{exprs(~condition, ~AVALCAT1, ~AVALCA1N AVAL >= 140, ">=140 cm", 1, AVAL < 140, "<140 cm", 2)}
+
+e.g. if \code{by_vars} is specified as \code{exprs(VSTEST)}:
+\verb{exprs(~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N "Height", AVAL >= 140, ">=140 cm", 1, "Height", AVAL < 140, "<140 cm", 2)}}
+
+\item{by_vars}{list of expressions with one element. \code{NULL} by default.
+Allows for specifying by groups, e.g. \code{exprs(PARAMCD)}.
+Variable must be present in both \code{dataset} and \code{definition}.
+The conditions in \code{definition} are applied only to those records that match \code{by_vars}.
+The categorization variables are set to NA for records
+not matching any of the by groups in \code{definition}.}
 }
 \value{
 data frame
 }
 \description{
 Derive pair of variables
+}
+\details{
+If conditions are overlapping, the row order of \code{definitions} must be carefully considered.
+The \strong{first} match will determine the category.
+i.e. if
+
+\code{AVAL = 155}
+
+and the \code{definition} is:
+
+definition <- exprs(
+~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
+"Height", AVAL > 170, ">170 cm", 1,
+"Height", AVAL <= 170, "<=170 cm", 2,
+"Height", AVAL <= 160, "<=160 cm", 3
+)
+
+then \code{AVALCAT1} will be \code{"<=170 cm"}, as this is the first match for \code{AVAL}.
+If you specify:
+
+definition <- exprs(
+~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
+"Height", AVAL <= 160, "<=160 cm", 3,
+"Height", AVAL <= 170, "<=170 cm", 2,
+"Height", AVAL > 170, ">170 cm", 1
+)
+
+Then \code{AVAL <= 160} will lead to \code{AVALCAT1 == "<=160 cm"},
+\code{AVAL} inbetween \code{160} and \code{170} will lead to \code{AVALCAT1 == "<=170 cm"},
+and \code{AVAL <= 170} will lead to \code{AVALCAT1 == ">170 cm"}.
+
+However, we suggest to be more explicit when defining the \code{condition}, to avoid overlap.
+In this case, the middle condition should be:
+\code{AVAL <= 170 & AVAL > 160}
 }
 \examples{
 
@@ -48,13 +101,40 @@ advs <- tibble::tribble(
 
 definition <- exprs(
   ~condition, ~AVALCAT1, ~AVALCA1N, ~NEWCOL,
-  VSTEST == "Height" & AVAL > 140, ">140 cm", 1, "extra1",
-  VSTEST == "Height" & AVAL <= 140, "<=140 cm", 2, "extra2"
+  VSTEST == "Height" & AVAL > 160, ">160 cm", 1, "extra1",
+  VSTEST == "Height" & AVAL <= 160, "<=160 cm", 2, "extra2"
 )
-
 derive_vars_cat(
   dataset = advs \%>\% dplyr::filter(VSTEST == "Height"),
   definition = definition
+)
+# using by_vars:
+definition2 <- exprs(
+  ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
+  "Height", AVAL > 160, ">160 cm", 1,
+  "Height", AVAL <= 160, "<=160 cm", 2,
+  "Weight", AVAL > 70, ">70 kg", 1,
+  "Weight", AVAL <= 70, "<=70 kg", 2
+)
+
+derive_vars_cat(
+  dataset = advs,
+  definition = definition2,
+  by_vars = exprs(VSTEST)
+)
+
+# With three conditions:
+definition3 <- exprs(
+  ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
+  "Height", AVAL > 170, ">170 cm", 1,
+  "Height", AVAL <= 170 & AVAL > 160, "<=170 cm", 2,
+  "Height", AVAL <= 160, "<=160 cm", 3
+)
+
+derive_vars_cat(
+  dataset = advs,
+  definition = definition3,
+  by_vars = exprs(VSTEST)
 )
 }
 \seealso{
