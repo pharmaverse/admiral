@@ -66,7 +66,7 @@ definition <- exprs(
 )
 
 Then \code{AVAL <= 160} will lead to \code{AVALCAT1 == "<=160 cm"},
-\code{AVAL} inbetween \code{160} and \code{170} will lead to \code{AVALCAT1 == "<=170 cm"},
+\code{AVAL} in-between \code{160} and \code{170} will lead to \code{AVALCAT1 == "<=170 cm"},
 and \code{AVAL <= 170} will lead to \code{AVALCAT1 == ">170 cm"}.
 
 However, we suggest to be more explicit when defining the \code{condition}, to avoid overlap.

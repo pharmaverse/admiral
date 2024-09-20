@@ -53,7 +53,7 @@
 #' )
 #'
 #' Then `AVAL <= 160` will lead to `AVALCAT1 == "<=160 cm"`,
-#' `AVAL` inbetween `160` and `170` will lead to `AVALCAT1 == "<=170 cm"`,
+#' `AVAL` in-between `160` and `170` will lead to `AVALCAT1 == "<=170 cm"`,
 #' and `AVAL <= 170` will lead to `AVALCAT1 == ">170 cm"`.
 #'
 #' However, we suggest to be more explicit when defining the `condition`, to avoid overlap.
