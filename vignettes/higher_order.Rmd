@@ -46,10 +46,10 @@ library(admiral)
 library(pharmaversesdtm)
 library(dplyr, warn.conflicts = FALSE)
 
-data("admiral_adsl")
-data("ae")
-data("vs")
-adsl <- admiral_adsl
+ae <- pharmaversesdtm::ae
+vs <- pharmaversesdtm::vs
+adsl <- admiral::admiral_adsl
+
 ae <- convert_blanks_to_na(ae)
 vs <- convert_blanks_to_na(vs)
 ```

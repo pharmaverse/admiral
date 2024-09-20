@@ -65,11 +65,11 @@ library(pharmaversesdtm)
 library(lubridate)
 library(stringr)
 
-data("dm")
-data("ds")
-data("ex")
-data("ae")
-data("lb")
+dm <- pharmaversesdtm::dm
+ds <- pharmaversesdtm::ds
+ex <- pharmaversesdtm::ex
+ae <- pharmaversesdtm::ae
+lb <- pharmaversesdtm::lb
 
 dm <- convert_blanks_to_na(dm)
 ds <- convert_blanks_to_na(ds)

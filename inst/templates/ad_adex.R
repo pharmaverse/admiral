@@ -15,10 +15,9 @@ library(stringr)
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 #  as needed and assign to the variables below.
 # The CDISC pilot datasets are used for demonstration purpose.
-data("admiral_adsl")
-data("ex")
 
-adsl <- admiral_adsl
+ex <- pharmaversesdtm::ex
+adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing

@@ -62,10 +62,9 @@ library(lubridate)
 library(stringr)
 library(tibble)
 
-data("admiral_adsl")
-data("ex")
+ex <- pharmaversesdtm::ex
+adsl <- admiral::admiral_adsl
 
-adsl <- admiral_adsl
 ex <- convert_blanks_to_na(ex)
 ```
 ```{r echo=FALSE}
