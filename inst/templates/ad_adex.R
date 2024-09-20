@@ -17,7 +17,6 @@ library(stringr)
 # The CDISC pilot datasets are used for demonstration purpose.
 
 ex <- pharmaversesdtm::ex
-
 adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing

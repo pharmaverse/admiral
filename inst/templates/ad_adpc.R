@@ -23,7 +23,6 @@ library(pharmaversesdtm) # Contains example datasets from the CDISC pilot projec
 pc <- pharmaversesdtm::pc
 ex <- pharmaversesdtm::ex
 vs <- pharmaversesdtm::vs
-
 adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
@@ -31,16 +30,8 @@ adsl <- admiral::admiral_adsl
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
 
-# Load EX
-
 ex <- convert_blanks_to_na(ex)
-
-# Load PC
-
 pc <- convert_blanks_to_na(pc)
-
-# Load VS for baseline height and weight
-
 vs <- convert_blanks_to_na(vs)
 
 # ---- Lookup tables ----

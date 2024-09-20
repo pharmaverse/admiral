@@ -67,8 +67,8 @@ library(stringr)
 library(tibble)
 
 vs <- pharmaversesdtm::vs
-
 adsl <- admiral::admiral_adsl
+
 vs <- convert_blanks_to_na(vs)
 ```
 ```{r echo=FALSE}

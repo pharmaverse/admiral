@@ -102,8 +102,8 @@ library(stringr)
 library(tibble)
 
 lb <- pharmaversesdtm::lb
-
 adsl <- admiral::admiral_adsl
+
 lb <- convert_blanks_to_na(lb)
 ```
 ```{r echo=FALSE}

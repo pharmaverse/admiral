@@ -59,10 +59,10 @@ library(pharmaversesdtm)
 library(lubridate)
 
 ae <- pharmaversesdtm::ae
-
-ae <- convert_blanks_to_na(ae)
 adsl <- admiral::admiral_adsl
 ex_single <- admiral::ex_single
+
+ae <- convert_blanks_to_na(ae)
 ```
 ```{r echo = FALSE}
 ae <- filter(ae, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))

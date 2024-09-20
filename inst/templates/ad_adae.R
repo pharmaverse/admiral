@@ -16,7 +16,6 @@ library(lubridate)
 
 ae <- pharmaversesdtm::ae
 suppae <- pharmaversesdtm::suppae
-
 adsl <- admiral::admiral_adsl
 ex_single <- admiral::ex_single
 

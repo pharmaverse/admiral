@@ -22,7 +22,6 @@ pc <- pharmaversesdtm::pc
 ex <- pharmaversesdtm::ex
 vs <- pharmaversesdtm::vs
 lb <- pharmaversesdtm::lb
-
 adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
