@@ -22,7 +22,8 @@
 #' Allows for specifying by groups, e.g. `exprs(PARAMCD)`.
 #' Variable must be present in both `dataset` and `definition`.
 #' The conditions in `definition` are applied only to those records that match `by_vars`.
-#' The categorization variables are set to NA for records not matching any of the by groups in `definition`.
+#' The categorization variables are set to NA for records
+#' not matching any of the by groups in `definition`.
 #'
 #'
 #' @details
@@ -127,34 +128,47 @@
 #'   definition = definition3,
 #'   by_vars = exprs(VSTEST)
 #' )
-
 derive_vars_cat <- function(dataset,
                             definition,
                             by_vars = NULL) {
   # assertions
   assert_data_frame(dataset)
   assert_expr_list(definition)
-  if(!is.null(by_vars)){
+  if (!is.null(by_vars)) {
     assert_vars(by_vars)
-    assert_data_frame(dataset, required_vars = c(admiraldev::extract_vars(definition) %>% unique(), by_vars))
-  } else{
+    assert_data_frame(dataset,
+      required_vars = c(
+        admiraldev::extract_vars(definition) %>% unique(),
+        by_vars
+      )
+    )
+  } else {
     assert_data_frame(dataset, required_vars = admiraldev::extract_vars(definition) %>% unique())
   }
 
   # transform definition to tibble
   names(definition) <- NULL
   definition <- tryCatch(
-    {tibble::tribble(!!!definition)},
+    {
+      tibble::tribble(!!!definition)
+    },
     error = function(e) {
       # Catch the error and append your own message
       stop("Failed to convert `definition` to tribble: ", e$message)
-    })
+    }
+  )
   assert_data_frame(definition, required_vars = c(exprs(condition), by_vars))
-  if(!is.null(by_vars)){
+  if (!is.null(by_vars)) {
     # add condition
-    definition <- definition %>% mutate(
-      condition = extend_condition(as.character(condition), as.character(by_vars), is = !!sym(as.character(by_vars))) %>% parse_exprs()
-    ) %>% select(-by_vars[[1]])
+    definition <- definition %>%
+      mutate(
+        condition = extend_condition(as.character(condition),
+          as.character(by_vars),
+          is = !!sym(as.character(by_vars))
+        ) %>%
+          parse_exprs()
+      ) %>%
+      select(-by_vars[[1]])
   }
 
   # extract new variable names and conditions
@@ -162,9 +176,11 @@ derive_vars_cat <- function(dataset,
   condition <- definition[["condition"]]
 
   # warn if new variables already exist
-  if(any(new_col_names %in% names(dataset))){
+  if (any(new_col_names %in% names(dataset))) {
     warning(paste("Column(s) in `definition` already exist in `dataset`.",
-            "Did you forget to specify `by_vars`?", sep = "\n"))
+      "Did you forget to specify `by_vars`?",
+      sep = "\n"
+    ))
   }
 
   # (re)apply the function for each new variable name and iteratively derive the categories

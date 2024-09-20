@@ -192,7 +192,8 @@ test_that("derive_vars_cat Test 11: Wrong input for by_vars", {
   )
 
   expect_error(derive_vars_cat(advs, definition, by_vars = exprs(VSTEST == "Height")),
-               class = "assert_vars")
+    class = "assert_vars"
+  )
 })
 
 ## Test 12: definition has wrong shape ----
