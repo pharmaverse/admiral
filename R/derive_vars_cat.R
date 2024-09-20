@@ -159,8 +159,13 @@ derive_vars_cat <- function(dataset,
 
   # extract new variable names and conditions
   new_col_names <- names(definition)[!names(definition) == "condition"]
-  condition <- definition[["condition"]] # could also be outside of the function
+  condition <- definition[["condition"]]
 
+  # warn if new variables already exist
+  if(any(new_col_names %in% names(dataset))){
+    warning(paste("Column(s) in `definition` already exist in `dataset`.",
+            "Did you forget to specify `by_vars`?", sep = "\n"))
+  }
 
   # (re)apply the function for each new variable name and iteratively derive the categories
   new_dataset <- reduce(new_col_names, function(.data, col_name) {

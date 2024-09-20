@@ -48,8 +48,19 @@ test_that("derive_vars_cat Test 1: Basic functionality with advs dataset", {
   expect_dfs_equal(base = result, compare = result2, keys = c("USUBJID", "VSTEST"))
 })
 
-## Test 2: Error when dataset is not a dataframe ----
-test_that("derive_vars_cat Test 2: Error when dataset is not a dataframe", {
+## Test 2: Forgot to specify by_vars ----
+test_that("derive_vars_cat Test 2: Forgot to specify by_vars", {
+  definition <- exprs(
+    ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
+    "Height", AVAL >= 160, ">=160", 1,
+    "Height", AVAL < 160, "<160", 2
+  )
+
+  expect_snapshot_warning(derive_vars_cat(advs, definition))
+})
+
+## Test 3: Error when dataset is not a dataframe ----
+test_that("derive_vars_cat Test 3: Error when dataset is not a dataframe", {
   # Define the condition and categories
   definition <- exprs(
     ~condition, ~AVALCAT1, ~AVALCA1N,
@@ -64,8 +75,8 @@ test_that("derive_vars_cat Test 2: Error when dataset is not a dataframe", {
   )
 })
 
-## Test 3: Error when definition is not an exprs object ----
-test_that("derive_vars_cat Test 3: Error when definition is not an exprs object", {
+## Test 4: Error when definition is not an exprs object ----
+test_that("derive_vars_cat Test 4: Error when definition is not an exprs object", {
   definition <- tribble(
     ~condition, ~AVALCAT1, ~AVALCA1N,
     "AVAL >= 160", ">=160", 1,
@@ -77,8 +88,8 @@ test_that("derive_vars_cat Test 3: Error when definition is not an exprs object"
   )
 })
 
-## Test 4: Error when required columns are missing from dataset ----
-test_that("derive_vars_cat Test 4: Error when required columns are missing from dataset", {
+## Test 5: Error when required columns are missing from dataset ----
+test_that("derive_vars_cat Test 5: Error when required columns are missing from dataset", {
   # Define the condition and categories (without VSTEST in the dataset)
   definition <- exprs(
     ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
@@ -96,8 +107,8 @@ test_that("derive_vars_cat Test 4: Error when required columns are missing from 
   )
 })
 
-## Test 5: Correct behavior when no conditions are met ----
-test_that("derive_vars_cat Test 5: Correct behavior when no conditions are met", {
+## Test 6: Correct behavior when no conditions are met ----
+test_that("derive_vars_cat Test 6: Correct behavior when no conditions are met", {
   # Define conditions that do not match any rows
   definition <- exprs(
     ~condition, ~AVALCAT1, ~AVALCA1N,
@@ -109,8 +120,8 @@ test_that("derive_vars_cat Test 5: Correct behavior when no conditions are met",
   expect_snapshot(result)
 })
 
-## Test 6: Overlapping conditions handled correctly ----
-test_that("derive_vars_cat Test 6: Overlapping conditions handled correctly", {
+## Test 7: Overlapping conditions handled correctly ----
+test_that("derive_vars_cat Test 7: Overlapping conditions handled correctly", {
   # Define overlapping conditions
   definition <- exprs(
     ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
@@ -125,8 +136,8 @@ test_that("derive_vars_cat Test 6: Overlapping conditions handled correctly", {
 })
 
 
-## Test 7: Error when condition is missing from `definition` ----
-test_that("derive_vars_cat Test 7: Error when condition is missing from `definition`", {
+## Test 8: Error when condition is missing from `definition` ----
+test_that("derive_vars_cat Test 8: Error when condition is missing from `definition`", {
   # Define the condition but omit the 'condition' column from the definition
   definition <- exprs(
     ~AVALCAT1, ~AVALCA1N,
@@ -141,8 +152,8 @@ test_that("derive_vars_cat Test 7: Error when condition is missing from `definit
   )
 })
 
-## Test 8: Conditions for multiple VSTESTs (Height and Weight) ----
-test_that("derive_vars_cat Test 8: Conditions for multiple VSTESTs (Height and Weight)", {
+## Test 9: Conditions for multiple VSTESTs (Height and Weight) ----
+test_that("derive_vars_cat Test 9: Conditions for multiple VSTESTs (Height and Weight)", {
   # Define conditions for two different VSTEST values: Height and BILI
   definition <- exprs(
     ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
@@ -157,8 +168,8 @@ test_that("derive_vars_cat Test 8: Conditions for multiple VSTESTs (Height and W
   expect_snapshot(result)
 })
 
-## Test 9: Adding an extra variable (flag) to the dataset ----
-test_that("derive_vars_cat Test 9: Adding an extra variable (flag) to the dataset", {
+## Test 10: Adding an extra variable (flag) to the dataset ----
+test_that("derive_vars_cat Test 10: Adding an extra variable (flag) to the dataset", {
   # Define conditions and add a third variable (flag) that is TRUE or FALSE
   definition <- exprs(
     ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N, ~extra_var,
@@ -171,8 +182,8 @@ test_that("derive_vars_cat Test 9: Adding an extra variable (flag) to the datase
   expect_snapshot(result)
 })
 
-## Test 10: Wrong input for by_vars ----
-test_that("derive_vars_cat Test 10: Wrong input for by_vars", {
+## Test 11: Wrong input for by_vars ----
+test_that("derive_vars_cat Test 11: Wrong input for by_vars", {
   # Define conditions
   definition <- exprs(
     ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
@@ -184,8 +195,8 @@ test_that("derive_vars_cat Test 10: Wrong input for by_vars", {
                class = "assert_vars")
 })
 
-## Test 11: definition has wrong shape ----
-test_that("derive_vars_cat Test 11: definition has wrong shape", {
+## Test 12: definition has wrong shape ----
+test_that("derive_vars_cat Test 12: definition has wrong shape", {
   # Define conditions
   definition_wrong_shape <- exprs(
     ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,

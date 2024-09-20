@@ -56,12 +56,17 @@
       19 01-701-1115 Weight  78.7 <NA>           NA
       20 01-701-1118 Weight  71.7 <NA>           NA
 
-# derive_vars_cat Test 3: Error when definition is not an exprs object
+# derive_vars_cat Test 2: Forgot to specify by_vars
+
+    Column(s) in `definition` already exist in `dataset`.
+    Did you forget to specify `by_vars`?
+
+# derive_vars_cat Test 4: Error when definition is not an exprs object
 
     Argument `definition` must be a list of expressions but is a tibble.
     i To create a list of expressions use `exprs()`.
 
-# derive_vars_cat Test 5: Correct behavior when no conditions are met
+# derive_vars_cat Test 6: Correct behavior when no conditions are met
 
     Code
       result
@@ -90,7 +95,7 @@
       19 01-701-1115 Weight  78.7 <NA>           NA
       20 01-701-1118 Weight  71.7 <NA>           NA
 
-# derive_vars_cat Test 6: Overlapping conditions handled correctly
+# derive_vars_cat Test 7: Overlapping conditions handled correctly
 
     Code
       result
@@ -119,7 +124,7 @@
       19 01-701-1115 Weight  78.7 <NA>           NA
       20 01-701-1118 Weight  71.7 <NA>           NA
 
-# derive_vars_cat Test 8: Conditions for multiple VSTESTs (Height and Weight)
+# derive_vars_cat Test 9: Conditions for multiple VSTESTs (Height and Weight)
 
     Code
       result
@@ -148,7 +153,7 @@
       19 01-701-1115 Weight  78.7 Weight >= 66.68        1
       20 01-701-1118 Weight  71.7 Weight >= 66.68        1
 
-# derive_vars_cat Test 9: Adding an extra variable (flag) to the dataset
+# derive_vars_cat Test 10: Adding an extra variable (flag) to the dataset
 
     Code
       result
@@ -177,7 +182,7 @@
       19 01-701-1115 Weight  78.7 <NA>           NA NA       
       20 01-701-1118 Weight  71.7 <NA>           NA NA       
 
-# derive_vars_cat Test 11: definition has wrong shape
+# derive_vars_cat Test 12: definition has wrong shape
 
     Failed to convert `definition` to tribble: Data must be rectangular.
 
