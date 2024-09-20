@@ -15,10 +15,8 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("lb")
-data("admiral_adsl")
-
-adsl <- admiral_adsl
+lb <- pharmaversesdtm::lb
+adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing

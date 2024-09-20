@@ -66,10 +66,9 @@ library(lubridate)
 library(stringr)
 library(tibble)
 
-data("admiral_adsl")
-data("vs")
+vs <- pharmaversesdtm::vs
+adsl <- admiral::admiral_adsl
 
-adsl <- admiral_adsl
 vs <- convert_blanks_to_na(vs)
 ```
 ```{r echo=FALSE}

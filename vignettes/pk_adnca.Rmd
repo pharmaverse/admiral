@@ -111,25 +111,15 @@ library(lubridate)
 library(stringr)
 library(tibble)
 
-data("admiral_adsl")
-data("ex")
-data("pc")
-data("vs")
-data("lb")
+ex <- pharmaversesdtm::ex
+pc <- pharmaversesdtm::pc
+vs <- pharmaversesdtm::vs
+lb <- pharmaversesdtm::lb
+adsl <- admiral::admiral_adsl
 
-adsl <- admiral_adsl
 ex <- convert_blanks_to_na(ex)
-
-# Load PC
-
 pc <- convert_blanks_to_na(pc)
-
-# Load VS for baseline height and weight
-
 vs <- convert_blanks_to_na(vs)
-
-# Load LB for baseline lab values
-
 lb <- convert_blanks_to_na(lb) %>%
   filter(LBBLFL == "Y")
 
