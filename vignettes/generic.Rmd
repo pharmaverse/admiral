@@ -72,6 +72,7 @@ generic_derivations <- tibble::tribble(
   "derive_vars_merged()",           "selection",   "variables", "single",
   "derive_vars_extreme_event()",    "selection",   "variables", "multiple",
   "derive_vars_computed()",         "computation", "variables", "single",
+  "derive_vars_cat()",              "selection",   "variables", "single",
   "derive_extreme_event()",         "selection",   "records",   "multiple",
   "derive_extreme_records()",       "selection",   "records",   "single",
   "derive_param_computed()",        "computation", "records",   "single",

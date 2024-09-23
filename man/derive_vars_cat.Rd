@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_cat.R
 \name{derive_vars_cat}
 \alias{derive_vars_cat}
-\title{Derive pair of variables}
+\title{Derive Categorization Variables Like \code{AVALCATy} and \code{AVALCAyN}}
 \usage{
 derive_vars_cat(dataset, definition, by_vars = NULL)
 }
@@ -37,7 +37,7 @@ not matching any of the by groups in \code{definition}.}
 data frame
 }
 \description{
-Derive pair of variables
+Derive Categorization Variables Like \code{AVALCATy} and \code{AVALCAyN}
 }
 \details{
 If conditions are overlapping, the row order of \code{definitions} must be carefully considered.

@@ -848,26 +848,19 @@ dataset_vignette(
 
 ## Derive Categorization Variables (`AVALCATx`) {#cat}
 
-Admiral does not currently have a generic function to aid in assigning `AVALCATy`/
-`AVALCAvN` values. Below is a simple example of how these values may be
-assigned:
+We can use the `derive_vars_cat` function to derive the categorization variables.
 
 ```{r eval=TRUE}
-avalcat_lookup <- tibble::tribble(
-  ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
-  "HEIGHT",         1, ">140 cm",
-  "HEIGHT",         2, "<= 140 cm"
+avalcat_lookup <- exprs(
+  ~PARAMCD, ~condition, ~AVALCAT1, ~AVALCA1N,
+  "HEIGHT", AVAL > 140, ">140 cm", 1,
+  "HEIGHT", AVAL <= 140, "<= 140 cm", 2
 )
-
-format_avalcat1n <- function(param, aval) {
-  case_when(
-    param == "HEIGHT" & aval > 140 ~ 1,
-    param == "HEIGHT" & aval <= 140 ~ 2
-  )
-}
-
 advs <- advs %>%
-  mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
+  derive_vars_cat(
+    definition = avalcat_lookup,
+    by_vars = exprs(PARAMCD)
+  ) %>%
   derive_vars_merged(
     avalcat_lookup,
     by = exprs(PARAMCD, AVALCA1N)
