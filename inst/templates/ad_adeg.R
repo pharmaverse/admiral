@@ -59,7 +59,7 @@ avalcax_lookup <- exprs(
   ~PARAMCD, ~condition, ~AVALCAT1, ~AVALCA1N,
   "QT", AVAL <= 450, "<= 450 msec", 1,
   "QT", AVAL > 450 & AVAL <= 480, ">450<=480 msec", 2,
-  "QT", AVAL > 480 & AVAL <=500, ">480<=500 msec", 3,
+  "QT", AVAL > 480 & AVAL <= 500, ">480<=500 msec", 3,
   "QT", AVAL > 500, ">500 msec", 4
 )
 # Assign CHGCAx
