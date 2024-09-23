@@ -54,43 +54,21 @@ range_lookup <- tibble::tribble(
   "QTLCR", 350, 450,
 )
 
-# ASSIGN AVALCAT1
-avalcat_lookup <- tibble::tribble(
-  ~AVALCA1N, ~AVALCAT1,
-  1, "<= 450 msec",
-  2, ">450<=480 msec",
-  3, ">480<=500 msec",
-  4, ">500 msec"
+# Assign AVALCAx
+avalcax_lookup <- exprs(
+  ~PARAMCD, ~condition, ~AVALCAT1, ~AVALCA1N,
+  "QT", AVAL <= 450, "<= 450 msec", 1,
+  "QT", AVAL > 450 & AVAL <= 480, ">450<=480 msec", 2,
+  "QT", AVAL > 480 & AVAL <=500, ">480<=500 msec", 3,
+  "QT", AVAL > 500, ">500 msec", 4
 )
-
-# ASSIGN CHGCAT1
-chgcat_lookup <- tibble::tribble(
-  ~CHGCAT1N, ~CHGCAT1,
-  1, "<= 30 msec",
-  2, ">30<=60 msec",
-  3, ">60 msec"
+# Assign CHGCAx
+chgcax_lookup <- exprs(
+  ~PARAMCD, ~condition, ~CHGCAT1, ~CHGCAT1N,
+  "QT", CHG <= 30, "<= 30 msec", 1,
+  "QT", CHG > 30 & CHG <= 60, ">30<=60 msec", 2,
+  "QT", CHG > 60, ">60 msec", 3
 )
-
-# Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate()`. Info then used for
-# lookup table
-format_avalca1n <- function(paramcd, aval) {
-  case_when(
-    str_detect(paramcd, "QT") & aval <= 450 ~ 1,
-    str_detect(paramcd, "QT") & aval > 450 & aval <= 480 ~ 2,
-    str_detect(paramcd, "QT") & aval > 480 & aval <= 500 ~ 3,
-    str_detect(paramcd, "QT") & aval > 500 ~ 4
-  )
-}
-
-format_chgcat1n <- function(paramcd, chg) {
-  case_when(
-    str_detect(paramcd, "QT") & chg <= 30 ~ 1,
-    str_detect(paramcd, "QT") & chg > 30 & chg <= 60 ~ 2,
-    str_detect(paramcd, "QT") & chg > 60 ~ 3
-  )
-}
-
 
 # Derivations ----
 
@@ -316,14 +294,15 @@ adeg <- adeg %>%
     check_type = "error"
   ) %>%
   # Derive AVALCA1N and AVALCAT1
-  mutate(AVALCA1N = format_avalca1n(param = PARAMCD, aval = AVAL)) %>%
-  derive_vars_merged(
-    dataset_add = avalcat_lookup,
-    by_vars = exprs(AVALCA1N)
+  derive_vars_cat(
+    definition = avalcax_lookup,
+    by_vars = exprs(PARAMCD)
   ) %>%
   # Derive CHGCAT1N and CHGCAT1
-  mutate(CHGCAT1N = format_chgcat1n(param = PARAMCD, chg = CHG)) %>%
-  derive_vars_merged(dataset_add = chgcat_lookup, by_vars = exprs(CHGCAT1N)) %>%
+  derive_vars_cat(
+    definition = chgcax_lookup,
+    by_vars = exprs(PARAMCD)
+  ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(
     dataset_add = select(param_lookup, -EGTESTCD),

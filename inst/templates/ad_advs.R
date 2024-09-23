@@ -51,17 +51,12 @@ range_lookup <- tibble::tribble(
   "PULSE", 60, 100, 40, 110,
   "TEMP", 36.5, 37.5, 35, 38
 )
-# # Assign AVALCAT1
-# avalcat_lookup <- tibble::tribble(
-#   ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
-#   "HEIGHT", 1, ">100 cm",
-#   "HEIGHT", 2, "<= 100 cm"
-# )
+
 # Assign AVALCATx
 avalcax_lookup <- exprs(
-  ~condition, ~AVALCAT1, ~AVALCA1N,
-  PARAMCD == "HEIGHT" & AVAL > 140, ">140 cm", 1,
-  PARAMCD == "HEIGHT" & AVAL <= 140, "<=140 cm", 2
+  ~PARAMCD, ~condition, ~AVALCAT1, ~AVALCA1N,
+  "HEIGHT", AVAL > 100, ">100 cm", 1,
+  "HEIGHT", AVAL <= 100, "<=100 cm", 2
 )
 
 # Derivations ----
@@ -280,7 +275,8 @@ advs <- advs %>%
   ) %>%
   # Define condition and categories using derive_vars_cat
   derive_vars_cat(
-    definition = avalcax_lookup
+    definition = avalcax_lookup,
+    by_vars = exprs(PARAMCD)
   ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(dataset_add = select(param_lookup, -VSTESTCD), by_vars = exprs(PARAMCD))

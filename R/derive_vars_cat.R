@@ -1,4 +1,4 @@
-#' Derive pair of variables
+#' Derive Categorization Variables Like `AVALCATy` and `AVALCAyN`
 #' @param dataset
 #' `r roxygen_param_dataset(expected_vars = c("by_vars", "definition"))`
 #' @param definition List of expressions created by: `exprs()`.

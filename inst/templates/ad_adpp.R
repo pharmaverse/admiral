@@ -56,26 +56,14 @@ param_lookup <- tibble::tribble(
   "RENALCL", "RENALCL", "CLR", 22
 )
 
-# ASSIGN AVALCAT1
-avalcat_lookup <- tibble::tribble(
-  ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
-  "AUCALL", 1, "< 19",
-  "AUCALL", 2, ">= 19"
+# Assign AVALCATx
+avalcax_lookup <- exprs(
+  ~PARAMCD, ~condition, ~AVALCAT1, ~AVALCA1N,
+  "AUCALL", AVAL < 19, "<19", 1,
+  "AUCALL", AVAL >= 19, ">=19", 2
 )
 
 attr(param_lookup$PPTESTCD, "label") <- "Parameter Short Name"
-
-# User defined functions ----
-
-# Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate`.
-format_avalcat1n <- function(param, aval) {
-  case_when(
-    param == "AUCALL" & aval < 19 ~ 1,
-    param == "AUCALL" & aval >= 19 ~ 2,
-    TRUE ~ NA_real_
-  )
-}
 
 # Derivations ----
 
@@ -137,9 +125,10 @@ adpp_avisit <- adpp_aval %>%
     TRTA = TRT01A
   ) %>%
   ## Derive AVALCA1N and AVALCAT1 ----
-  mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
-  derive_vars_merged(dataset_add = avalcat_lookup, by_vars = exprs(PARAMCD, AVALCA1N))
-
+  derive_vars_cat(
+    definition = avalcax_lookup,
+    by_vars = exprs(PARAMCD)
+  )
 # Add all ADSL variables
 adpp <- adpp_avisit %>%
   derive_vars_merged(

@@ -279,20 +279,20 @@ param_lookup <- tibble::tribble(
   "PDOSINT", "W2-24 dose intensity (%)", 91
 )
 
-# User defined functions ----
-# Derive AVALCAT1
-# Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate()`.
-format_avalcat1 <- function(param, aval) {
-  case_when(
-    param %in% c("TDURD", "PDURD") & aval < 30 & !is.na(aval) ~ "< 30 days",
-    param %in% c("TDURD", "PDURD") & aval >= 30 & aval < 90 ~ ">= 30 and < 90 days",
-    param %in% c("TDURD", "PDURD") & aval >= 90 ~ ">=90 days",
-    param %in% c("TDOSE", "PDOSE") & aval < 100 & !is.na(aval) ~ "< 100 mg",
-    param %in% c("TDOSE", "PDOSE") & aval >= 100 ~ ">= 100 mg",
-    TRUE ~ NA_character_
-  )
-}
+# Assign AVALCATx
+avalcax_lookup <- exprs(
+  ~PARAMCD, ~condition, ~AVALCAT1,
+  "TDURD", AVAL >= 90, ">= 90 days",
+  "TDURD", AVAL >= 30 & AVAL < 90, ">= 30 and < 90 days",
+  "TDURD", AVAL < 30, "< 30 days",
+  "PDURD", AVAL >= 90, ">= 90 days",
+  "PDURD", AVAL >= 30 & AVAL < 90, ">= 30 and < 90 days",
+  "PDURD", AVAL < 30, "< 30 days",
+  "TDOSE", AVAL < 100, "< 100 mg",
+  "TDOSE", AVAL >= 100, ">= 100 mg",
+  "PDOSE", AVAL < 100, "< 100 mg",
+  "PDOSE", AVAL >= 100, ">= 100 mg"
+)
 
 adex <- adex %>%
   # Add PARAMN and PARAM, AVALU
@@ -301,7 +301,10 @@ adex <- adex %>%
     by_vars = exprs(PARAMCD)
   ) %>%
   # Derive AVALCATx
-  mutate(AVALCAT1 = format_avalcat1(param = PARAMCD, aval = AVAL)) %>%
+  derive_vars_cat(
+    definition = avalcax_lookup,
+    by_vars = exprs(PARAMCD)
+  ) %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
