@@ -860,10 +860,6 @@ advs <- advs %>%
   derive_vars_cat(
     definition = avalcat_lookup,
     by_vars = exprs(PARAMCD)
-  ) %>%
-  derive_vars_merged(
-    avalcat_lookup,
-    by = exprs(PARAMCD, AVALCA1N)
   )
 ```
 
