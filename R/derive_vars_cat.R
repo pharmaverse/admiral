@@ -193,7 +193,15 @@ derive_vars_cat <- function(dataset,
     },
     error = function(e) {
       # Catch the error and append your own message
-      stop("Failed to convert `definition` to tribble: ", e$message)
+      stop(
+        paste("Failed to convert `definition` to `tibble`.",
+          "`definition` should be specified similarly to how you would",
+          "specify a `tibble` using the `tribble()` function so it",
+          "can be converted to `tibble` using `tribble()`.", "",
+          sep = "\n"
+        ),
+        e$message
+      )
     }
   )
   assert_data_frame(definition, required_vars = c(exprs(condition), by_vars))
