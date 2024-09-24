@@ -11,7 +11,7 @@ derive_vars_cat(dataset, definition, by_vars = NULL)
 
 The variables specified by the \code{by_vars} and \code{definition} arguments are expected to be in the dataset.}
 
-\item{definition}{List of expressions created by: \code{exprs()}.
+\item{definition}{List of expressions created by \code{exprs()}.
 Must be in rectangular format and specified using the same syntax as when creating
 a \code{tibble} using the \code{tribble()} function.
 The \code{definition} object it will be converted to a \code{tibble} using the \code{tribble()} function.
@@ -161,7 +161,8 @@ adlb \%>\%
   derive_vars_cat(
     definition = definition_mcrit,
     by_vars = exprs(PARAM)
-  ) \%>\% print()
+  ) \%>\%
+  print()
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
