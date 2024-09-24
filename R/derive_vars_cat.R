@@ -2,21 +2,32 @@
 #' @param dataset
 #' `r roxygen_param_dataset(expected_vars = c("by_vars", "definition"))`
 #' @param definition List of expressions created by: `exprs()`.
-#' Must be in the format of a tribble.
+#' Must be in rectangular format and specified using the same syntax as when creating
+#' a `tibble` using the `tribble()` function.
+#' The `definition` object it will be converted to a `tibble` using the `tribble()` function.
+#'
 #' Must contain:
 #'  - the column `condition` which evaluates to a logic in `dataset`.
 #'  - at least one additional column with the new column name and the category value.
 #'  - the column specified in `by_vars` (if `by_vars` is specified)
 #'
 #' e.g. if `by_vars` is not specified:
-#' `exprs(~condition, ~AVALCAT1, ~AVALCA1N
-#'        AVAL >= 140, ">=140 cm", 1,
-#'        AVAL < 140, "<140 cm", 2)`
+#'
+#' ```{r}
+#' #| eval: false
+#' exprs(~condition, ~AVALCAT1, ~AVALCA1N,
+#'       AVAL >= 140, ">=140 cm", 1,
+#'       AVAL < 140,  "<140 cm",  2)
+#' ```
 #'
 #' e.g. if `by_vars` is specified as `exprs(VSTEST)`:
-#' `exprs(~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N
-#'        "Height", AVAL >= 140, ">=140 cm", 1,
-#'        "Height", AVAL < 140, "<140 cm", 2)`
+#'
+#' ```{r}
+#' #| eval: false
+#' exprs(~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
+#'       "Height", AVAL >= 140, ">=140 cm", 1,
+#'       "Height", AVAL < 140, "<140 cm", 2)
+#' ```
 #'
 #' @param by_vars list of expressions with one element. `NULL` by default.
 #' Allows for specifying by groups, e.g. `exprs(PARAMCD)`.
@@ -35,22 +46,27 @@
 #'
 #' and the `definition` is:
 #'
+#' ```{r}
+#' #| eval: false
 #' definition <- exprs(
 #'   ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
 #'   "Height", AVAL > 170, ">170 cm", 1,
 #'   "Height", AVAL <= 170, "<=170 cm", 2,
 #'   "Height", AVAL <= 160, "<=160 cm", 3
 #' )
-#'
+#' ```
 #' then `AVALCAT1` will be `"<=170 cm"`, as this is the first match for `AVAL`.
 #' If you specify:
 #'
+#' ```{r}
+#' #| eval: false
 #' definition <- exprs(
 #'   ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
 #'   "Height", AVAL <= 160, "<=160 cm", 3,
 #'   "Height", AVAL <= 170, "<=170 cm", 2,
 #'   "Height", AVAL > 170, ">170 cm", 1
 #' )
+#' ```
 #'
 #' Then `AVAL <= 160` will lead to `AVALCAT1 == "<=160 cm"`,
 #' `AVAL` in-between `160` and `170` will lead to `AVALCAT1 == "<=170 cm"`,
@@ -74,23 +90,11 @@
 #'   "01-701-1015", "Height", 147.32,
 #'   "01-701-1015", "Weight", 53.98,
 #'   "01-701-1023", "Height", 162.56,
-#'   "01-701-1023", "Weight", 78.47,
-#'   "01-701-1028", "Height", 177.8,
-#'   "01-701-1028", "Weight", 98.88,
+#'   "01-701-1023", "Weight", NA,
+#'   "01-701-1028", "Height", NA,
+#'   "01-701-1028", "Weight", NA,
 #'   "01-701-1033", "Height", 175.26,
-#'   "01-701-1033", "Weight", 88.45,
-#'   "01-701-1034", "Height", 154.94,
-#'   "01-701-1034", "Weight", 63.5,
-#'   "01-701-1047", "Height", 148.59,
-#'   "01-701-1047", "Weight", 66.23,
-#'   "01-701-1097", "Height", 168.91,
-#'   "01-701-1097", "Weight", 78.02,
-#'   "01-701-1111", "Height", 158.24,
-#'   "01-701-1111", "Weight", 60.33,
-#'   "01-701-1115", "Height", 181.61,
-#'   "01-701-1115", "Weight", 78.7,
-#'   "01-701-1118", "Height", 180.34,
-#'   "01-701-1118", "Weight", 71.67
+#'   "01-701-1033", "Weight", 88.45
 #' )
 #'
 #' definition <- exprs(
@@ -99,7 +103,7 @@
 #'   VSTEST == "Height" & AVAL <= 160, "<=160 cm", 2, "extra2"
 #' )
 #' derive_vars_cat(
-#'   dataset = advs %>% dplyr::filter(VSTEST == "Height"),
+#'   dataset = advs,
 #'   definition = definition
 #' )
 #' # using by_vars:
@@ -130,6 +134,40 @@
 #'   definition = definition3,
 #'   by_vars = exprs(VSTEST)
 #' )
+#'
+#' # Let's derive both the MCRITyML and the MCRITyMN variables
+#' adlb <- tibble::tribble(
+#'   ~USUBJID,        ~PARAM, ~AVAL, ~AVALU, ~ULN, ~LLN,
+#'   "01-701-1015", "ALT",  150,   "U/L",  40,   10,
+#'   "01-701-1023", "ALT",  70,    "U/L",  40,   10,
+#'   "01-701-1036", "ALT",  130,   "U/L",  40,   10,
+#'   "01-701-1048", "ALT",  30,    "U/L",  40,   10,
+#'   "01-701-1015", "AST",  50,    "U/L",  35,   5
+#' )
+#'
+#' # Deriving MCRIT1ML: ALT > 3x ULN
+#' definition_mcrit1ml <- exprs(
+#'   ~PARAM, ~condition, ~MCRIT1ML,
+#'   "ALT", AVAL > 3 * ULN, "Y",
+#'   "ALT", AVAL <= 3 * ULN, "N"
+#' )
+#'
+#' # Deriving MCRIT1MN: ALT < LLN
+#' definition_mcrit1mn <- exprs(
+#'   ~PARAM, ~condition, ~MCRIT1MN,
+#'   "ALT", AVAL > ULN, "Y",
+#'   "ALT", AVAL <= ULN, "N"
+#' )
+#'
+#' adlb %>%
+#'   derive_vars_cat(
+#'     definition = definition_mcrit1ml,
+#'     by_vars = exprs(PARAM)
+#'   ) %>%
+#'   derive_vars_cat(
+#'     definition = definition_mcrit1mn,
+#'     by_vars = exprs(PARAM)
+#'   )
 derive_vars_cat <- function(dataset,
                             definition,
                             by_vars = NULL) {
