@@ -163,7 +163,7 @@ derive_vars_cat <- function(dataset,
                             by_vars = NULL) {
   assert_expr_list(definition)
   assert_vars(by_vars, optional = TRUE)
-  if(length(by_vars) > 1){
+  if (length(by_vars) > 1) {
     stop("`by_vars` must contain just one variable, e.g. `exprs(PARAMCD)`")
   }
 
