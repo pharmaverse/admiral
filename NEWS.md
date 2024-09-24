@@ -3,7 +3,7 @@
 ## New Features
 
 - New function `derive_vars_cat()` for deriving pairs of variables or more, e.g. 
-`AVALCATx` & `AVALCAyN`. (#2480)
+`AVALCATx` & `AVALCAxN`. (#2480)
 - New function `derive_vars_crit_flag()` for deriving criterion flag variables
 (`CRITy`, `CRITyFL`, `CRITyFLN`). (#2468)
 
