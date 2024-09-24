@@ -59,7 +59,8 @@
 # derive_vars_cat Test 2: Forgot to specify by_vars
 
     Column(s) in `definition` already exist in `dataset`.
-    Did you forget to specify `by_vars`?
+    Did you forget to specify `by_vars`,
+    or are you rerunning your code?
 
 # derive_vars_cat Test 4: Error when definition is not an exprs object
 

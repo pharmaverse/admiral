@@ -171,19 +171,16 @@
 derive_vars_cat <- function(dataset,
                             definition,
                             by_vars = NULL) {
-  assert_data_frame(dataset)
   assert_expr_list(definition)
-  if (!is.null(by_vars)) {
-    assert_vars(by_vars)
-    assert_data_frame(dataset,
-      required_vars = c(
-        admiraldev::extract_vars(definition) %>% unique(),
-        by_vars
-      )
+  assert_vars(by_vars, optional = TRUE)
+  assertthat::assert_that(is.null(by_vars) || assertthat::is.scalar(by_vars))
+
+  assert_data_frame(dataset,
+    required_vars = c(
+      admiraldev::extract_vars(definition) %>% unique(),
+      by_vars
     )
-  } else {
-    assert_data_frame(dataset, required_vars = admiraldev::extract_vars(definition) %>% unique())
-  }
+  )
 
   # transform definition to tibble
   names(definition) <- NULL
@@ -225,7 +222,8 @@ derive_vars_cat <- function(dataset,
   # warn if new variables already exist
   if (any(new_col_names %in% names(dataset))) {
     warning(paste("Column(s) in `definition` already exist in `dataset`.",
-      "Did you forget to specify `by_vars`?",
+      "Did you forget to specify `by_vars`,",
+      "or are you rerunning your code?",
       sep = "\n"
     ))
   }
