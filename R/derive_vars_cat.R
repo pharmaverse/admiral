@@ -186,7 +186,6 @@ derive_vars_cat <- function(dataset,
   new_dataset <- reduce(new_col_names, function(.data, col_name) {
     # extract conditions
     values <- definition[[col_name]]
-    # extract values
 
     .data %>%
       mutate(!!sym(col_name) := eval(rlang::call2(
