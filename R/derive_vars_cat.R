@@ -131,7 +131,6 @@
 derive_vars_cat <- function(dataset,
                             definition,
                             by_vars = NULL) {
-  # assertions
   assert_data_frame(dataset)
   assert_expr_list(definition)
   if (!is.null(by_vars)) {
