@@ -848,7 +848,7 @@ dataset_vignette(
 
 ## Derive Categorization Variables (`AVALCATx`) {#cat}
 
-We can use the `derive_vars_cat` function to derive the categorization variables.
+We can use the `derive_vars_cat()` function to derive the categorization variables.
 
 ```{r eval=TRUE}
 avalcat_lookup <- exprs(
