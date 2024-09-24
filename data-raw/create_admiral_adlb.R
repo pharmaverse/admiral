@@ -72,7 +72,6 @@ usubjid <-
 user <- tibble(
   USUBJID = usubjid
 )
-
 result <- inner_join(adlb, user)
 admiral_adlb <- result
 admiral_adlb
@@ -99,8 +98,12 @@ t |> print(n = 111)
 identical(e1$admiral_adlb, e2$admiral_adlb)
 diffdf(e1$admiral_adlb, e2$admiral_adlb)
 
+## Capture diffdf to file
+
+capture.output(diffdf(compare=e1$admiral_adlb, base=e2$admiral_adlb, keys  = c("STUDYID", "DOMAIN", "USUBJID", "AVAL", "VISIT")),
+               file="data-raw/diffdf_adlb_23SEPT")
 #
 # cleanup
 #
-rm(e1)
-rm(e2)
+#rm(e1)
+#rm(e2)
