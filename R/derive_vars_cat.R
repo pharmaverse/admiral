@@ -66,6 +66,8 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr)
+#' library(tibble)
 #'
 #' advs <- tibble::tribble(
 #'   ~USUBJID, ~VSTEST, ~AVAL,
