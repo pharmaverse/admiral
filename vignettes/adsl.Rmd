@@ -677,7 +677,7 @@ dataset_vignette(
 
 Numeric and categorical variables (`AGE`, `RACE`, `COUNTRY`, etc.) may need to be grouped to perform
 the required analysis.
-`{admiral}` provides the `derive_vars_cat` function to create such groups. 
+`{admiral}` provides the `derive_vars_cat()` function to create such groups. 
 However, one needs to be careful when considering the order of the conditions in the lookup table. 
 The category is assigned based on the first match.
 That means *catch-all* conditions must come after specific conditions, e.g. `!is.na(AGE)`
