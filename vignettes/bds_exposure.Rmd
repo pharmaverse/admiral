@@ -545,7 +545,7 @@ the join depending on your lookup/metadata table.
 
 ## Derive Categorization Variables (`AVALCATx`) {#cat}
 
-We can use the `derive_vars_cat` function to derive the categorization variables.
+We can use the `derive_vars_cat()` function to derive the categorization variables.
 
 ```{r eval=TRUE, echo=TRUE}
 avalcax_lookup <- exprs(
