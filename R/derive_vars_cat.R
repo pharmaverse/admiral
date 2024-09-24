@@ -1,7 +1,7 @@
 #' Derive Categorization Variables Like `AVALCATy` and `AVALCAyN`
 #' @param dataset
 #' `r roxygen_param_dataset(expected_vars = c("by_vars", "definition"))`
-#' @param definition List of expressions created by: `exprs()`.
+#' @param definition List of expressions created by `exprs()`.
 #' Must be in rectangular format and specified using the same syntax as when creating
 #' a `tibble` using the `tribble()` function.
 #' The `definition` object it will be converted to a `tibble` using the `tribble()` function.
