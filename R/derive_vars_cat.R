@@ -163,7 +163,9 @@ derive_vars_cat <- function(dataset,
                             by_vars = NULL) {
   assert_expr_list(definition)
   assert_vars(by_vars, optional = TRUE)
-  assertthat::assert_that(is.null(by_vars) || assertthat::is.scalar(by_vars))
+  if(length(by_vars) > 1){
+    stop("`by_vars` must contain just one variable, e.g. `exprs(PARAMCD)`")
+  }
 
   assert_data_frame(dataset,
     required_vars = c(
