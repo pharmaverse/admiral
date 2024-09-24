@@ -25,16 +25,16 @@ Must contain:
 
 e.g. if \code{by_vars} is not specified:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{exprs(~condition, ~AVALCAT1, ~AVALCA1N,
-      AVAL >= 140, ">=140 cm", 1,
-      AVAL < 140,  "<140 cm",  2)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{exprs(~condition,   ~AVALCAT1, ~AVALCA1N,
+      AVAL >= 140, ">=140 cm",         1,
+      AVAL < 140,   "<140 cm",         2)
 }\if{html}{\out{</div>}}
 
 e.g. if \code{by_vars} is specified as \code{exprs(VSTEST)}:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{exprs(~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
-      "Height", AVAL >= 140, ">=140 cm", 1,
-      "Height", AVAL < 140, "<140 cm", 2)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{exprs(~VSTEST,   ~condition,  ~AVALCAT1, ~AVALCA1N,
+      "Height", AVAL >= 140, ">=140 cm",         1,
+      "Height",  AVAL < 140,  "<140 cm",         2)
 }\if{html}{\out{</div>}}}
 
 \item{by_vars}{list of expressions with one element. \code{NULL} by default.
@@ -60,10 +60,10 @@ i.e. if
 and the \code{definition} is:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{definition <- exprs(
-  ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
-  "Height", AVAL > 170, ">170 cm", 1,
-  "Height", AVAL <= 170, "<=170 cm", 2,
-  "Height", AVAL <= 160, "<=160 cm", 3
+  ~VSTEST,   ~condition,  ~AVALCAT1, ~AVALCA1N,
+  "Height",  AVAL > 170,  ">170 cm",         1,
+  "Height", AVAL <= 170, "<=170 cm",         2,
+  "Height", AVAL <= 160, "<=160 cm",         3
 )
 }\if{html}{\out{</div>}}
 
@@ -71,10 +71,10 @@ then \code{AVALCAT1} will be \code{"<=170 cm"}, as this is the first match for \
 If you specify:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{definition <- exprs(
-  ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
-  "Height", AVAL <= 160, "<=160 cm", 3,
-  "Height", AVAL <= 170, "<=170 cm", 2,
-  "Height", AVAL > 170, ">170 cm", 1
+  ~VSTEST,   ~condition,  ~AVALCAT1, ~AVALCA1N,
+  "Height", AVAL <= 160, "<=160 cm",         3,
+  "Height", AVAL <= 170, "<=170 cm",         2,
+  "Height",  AVAL > 170,  ">170 cm",         1
 )
 }\if{html}{\out{</div>}}
 
@@ -91,21 +91,21 @@ library(dplyr)
 library(tibble)
 
 advs <- tibble::tribble(
-  ~USUBJID, ~VSTEST, ~AVAL,
+  ~USUBJID,       ~VSTEST,  ~AVAL,
   "01-701-1015", "Height", 147.32,
-  "01-701-1015", "Weight", 53.98,
+  "01-701-1015", "Weight",  53.98,
   "01-701-1023", "Height", 162.56,
-  "01-701-1023", "Weight", NA,
-  "01-701-1028", "Height", NA,
-  "01-701-1028", "Weight", NA,
+  "01-701-1023", "Weight",     NA,
+  "01-701-1028", "Height",     NA,
+  "01-701-1028", "Weight",     NA,
   "01-701-1033", "Height", 175.26,
-  "01-701-1033", "Weight", 88.45
+  "01-701-1033", "Weight",  88.45
 )
 
 definition <- exprs(
-  ~condition, ~AVALCAT1, ~AVALCA1N, ~NEWCOL,
-  VSTEST == "Height" & AVAL > 160, ">160 cm", 1, "extra1",
-  VSTEST == "Height" & AVAL <= 160, "<=160 cm", 2, "extra2"
+  ~condition,                        ~AVALCAT1, ~AVALCA1N,  ~NEWCOL,
+  VSTEST == "Height" & AVAL > 160,   ">160 cm",         1, "extra1",
+  VSTEST == "Height" & AVAL <= 160, "<=160 cm",         2, "extra2"
 )
 derive_vars_cat(
   dataset = advs,
@@ -113,11 +113,11 @@ derive_vars_cat(
 )
 # using by_vars:
 definition2 <- exprs(
-  ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
-  "Height", AVAL > 160, ">160 cm", 1,
-  "Height", AVAL <= 160, "<=160 cm", 2,
-  "Weight", AVAL > 70, ">70 kg", 1,
-  "Weight", AVAL <= 70, "<=70 kg", 2
+  ~VSTEST,   ~condition,  ~AVALCAT1, ~AVALCA1N,
+  "Height",  AVAL > 160,  ">160 cm",         1,
+  "Height", AVAL <= 160, "<=160 cm",         2,
+  "Weight",   AVAL > 70,   ">70 kg",         1,
+  "Weight",  AVAL <= 70,  "<=70 kg",         2
 )
 
 derive_vars_cat(
@@ -128,10 +128,10 @@ derive_vars_cat(
 
 # With three conditions:
 definition3 <- exprs(
-  ~VSTEST, ~condition, ~AVALCAT1, ~AVALCA1N,
-  "Height", AVAL > 170, ">170 cm", 1,
-  "Height", AVAL <= 170 & AVAL > 160, "<=170 cm", 2,
-  "Height", AVAL <= 160, "<=160 cm", 3
+  ~VSTEST,                ~condition,  ~AVALCAT1, ~AVALCA1N,
+  "Height",               AVAL > 170,  ">170 cm",         1,
+  "Height", AVAL <= 170 & AVAL > 160, "<=170 cm",         2,
+  "Height",              AVAL <= 160, "<=160 cm",         3
 )
 
 derive_vars_cat(
@@ -142,26 +142,26 @@ derive_vars_cat(
 
 # Let's derive both the MCRITyML and the MCRITyMN variables
 adlb <- tibble::tribble(
-  ~USUBJID,        ~PARAM, ~AVAL, ~AVALU, ~ULN, ~LLN,
-  "01-701-1015", "ALT",  150,   "U/L",  40,   10,
-  "01-701-1023", "ALT",  70,    "U/L",  40,   10,
-  "01-701-1036", "ALT",  130,   "U/L",  40,   10,
-  "01-701-1048", "ALT",  30,    "U/L",  40,   10,
-  "01-701-1015", "AST",  50,    "U/L",  35,   5
+  ~USUBJID,     ~PARAM, ~AVAL, ~AVALU, ~ULN, ~LLN,
+  "01-701-1015", "ALT",   150,  "U/L",   40,   10,
+  "01-701-1023", "ALT",    70,  "U/L",   40,   10,
+  "01-701-1036", "ALT",   130,  "U/L",   40,   10,
+  "01-701-1048", "ALT",    30,  "U/L",   40,   10,
+  "01-701-1015", "AST",    50,  "U/L",   35,    5
 )
 
 # Deriving MCRIT1ML: ALT > 3x ULN
 definition_mcrit1ml <- exprs(
-  ~PARAM, ~condition, ~MCRIT1ML,
-  "ALT", AVAL > 3 * ULN, "Y",
-  "ALT", AVAL <= 3 * ULN, "N"
+  ~PARAM,     ~condition, ~MCRIT1ML,
+  "ALT",  AVAL > 3 * ULN,       "Y",
+  "ALT", AVAL <= 3 * ULN,       "N"
 )
 
 # Deriving MCRIT1MN: ALT < LLN
 definition_mcrit1mn <- exprs(
   ~PARAM, ~condition, ~MCRIT1MN,
-  "ALT", AVAL > ULN, "Y",
-  "ALT", AVAL <= ULN, "N"
+  "ALT",  AVAL > ULN,       "Y",
+  "ALT", AVAL <= ULN,       "N"
 )
 
 adlb \%>\%
