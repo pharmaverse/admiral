@@ -264,7 +264,7 @@ advs <- advs %>%
     TRTA = TRT01A
   )
 
-# Get ASEQ and AVALCATx and add PARAM/PARAMN ----
+## Get ASEQ and AVALCATx and add PARAM/PARAMN ----
 advs <- advs %>%
   # Calculate ASEQ
   derive_var_obs_number(
