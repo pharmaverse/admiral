@@ -142,37 +142,26 @@ derive_vars_cat(
 
 # Let's derive both the MCRITyML and the MCRITyMN variables
 adlb <- tibble::tribble(
-  ~USUBJID,     ~PARAM, ~AVAL, ~AVALU, ~ULN, ~LLN,
-  "01-701-1015", "ALT",   150,  "U/L",   40,   10,
-  "01-701-1023", "ALT",    70,  "U/L",   40,   10,
-  "01-701-1036", "ALT",   130,  "U/L",   40,   10,
-  "01-701-1048", "ALT",    30,  "U/L",   40,   10,
-  "01-701-1015", "AST",    50,  "U/L",   35,    5
+  ~USUBJID,     ~PARAM, ~AVAL, ~AVALU,  ~ANRHI,
+  "01-701-1015", "ALT",   150,  "U/L",      40,
+  "01-701-1023", "ALT",    70,  "U/L",      40,
+  "01-701-1036", "ALT",   130,  "U/L",      40,
+  "01-701-1048", "ALT",    30,  "U/L",      40,
+  "01-701-1015", "AST",    50,  "U/L",      35
 )
 
-# Deriving MCRIT1ML: ALT > 3x ULN
-definition_mcrit1ml <- exprs(
-  ~PARAM,     ~condition, ~MCRIT1ML,
-  "ALT",  AVAL > 3 * ULN,       "Y",
-  "ALT", AVAL <= 3 * ULN,       "N"
-)
-
-# Deriving MCRIT1MN: ALT < LLN
-definition_mcrit1mn <- exprs(
-  ~PARAM, ~condition, ~MCRIT1MN,
-  "ALT",  AVAL > ULN,       "Y",
-  "ALT", AVAL <= ULN,       "N"
+definition_mcrit <- exprs(
+  ~PARAM,                      ~condition,    ~MCRIT1ML, ~MCRIT1MN,
+  "ALT",                    AVAL <= ANRHI,    "<=ANRHI",         1,
+  "ALT", ANRHI < AVAL & AVAL <= 3 * ANRHI, ">1-3*ANRHI",         2,
+  "ALT",                 3 * ANRHI < AVAL,   ">3*ANRHI",         3
 )
 
 adlb \%>\%
   derive_vars_cat(
-    definition = definition_mcrit1ml,
+    definition = definition_mcrit,
     by_vars = exprs(PARAM)
-  ) \%>\%
-  derive_vars_cat(
-    definition = definition_mcrit1mn,
-    by_vars = exprs(PARAM)
-  )
+  ) \%>\% print()
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
