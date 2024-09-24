@@ -19,31 +19,19 @@ library(pharmaversesdtm) # Contains example datasets from the CDISC pilot projec
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-
 # Load PC, EX, VS and ADSL
-data("pc")
-data("ex")
-data("vs")
-
-data("admiral_adsl")
-
-adsl <- admiral_adsl
+pc <- pharmaversesdtm::pc
+ex <- pharmaversesdtm::ex
+vs <- pharmaversesdtm::vs
+adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
 
-# Load EX
-
 ex <- convert_blanks_to_na(ex)
-
-# Load PC
-
 pc <- convert_blanks_to_na(pc)
-
-# Load VS for baseline height and weight
-
 vs <- convert_blanks_to_na(vs)
 
 # ---- Lookup tables ----

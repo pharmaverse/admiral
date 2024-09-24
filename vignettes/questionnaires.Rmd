@@ -58,8 +58,7 @@ In this vignette we use the example data from the CDISC ADaM Supplements
 [^1]: The example `QS` data (`example_qs`) is included in the admiral package.
 
 ```{r}
-data("example_qs")
-qs <- example_qs
+qs <- admiral::example_qs
 ```
 
 ```{r echo=FALSE}

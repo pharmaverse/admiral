@@ -1,5 +1,7 @@
+library(pharmaversesdtm)
+library(admiral)
+library(dplyr)
 ex <- pharmaversesdtm::ex
-
 
 # check that there is only one start/end date of exposure per subject and visit
 check_cond <- ex %>%

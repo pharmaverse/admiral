@@ -16,9 +16,7 @@ library(lubridate)
 # ADLBHY is a special dataset specifically used to check for potential drug induced liver injuries
 # Please see "Hy's Law Implementation Guide" on the admiral website for additional information
 
-
-data("admiral_adlb")
-adlb <- admiral_adlb
+adlb <- admiral::admiral_adlb
 
 adlb_annotated <- adlb %>%
   filter(PARAMCD %in% c("AST", "ALT", "BILI") & is.na(DTYPE)) %>%

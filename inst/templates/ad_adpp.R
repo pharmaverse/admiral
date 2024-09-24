@@ -19,8 +19,8 @@ library(stringr)
 # For illustration purposes read in admiral test data
 
 # Load PP and Adsl
-data("pp")
-data("admiral_adsl")
+pp <- pharmaversesdtm::pp
+admiral_adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
