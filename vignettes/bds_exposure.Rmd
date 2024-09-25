@@ -543,7 +543,7 @@ count(adex, PARAMCD, PARAM, PARAMN)
 Please note, this is an example only and additional columns may be needed for
 the join depending on your lookup/metadata table.
 
-## Derive Categorization Variables (`AVALCATx`) {#cat}
+## Derive Categorization Variables (`AVALCATy`) {#cat}
 
 We can use the `derive_vars_cat()` function to derive the categorization variables.
 
