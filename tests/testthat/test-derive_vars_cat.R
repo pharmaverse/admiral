@@ -55,12 +55,15 @@ test_that("derive_vars_cat Test 1: Basic functionality without by_vars", {
     VSTEST == "Height" & AVAL < 160,   "<160",         2
   )
 
-  expect_dfs_equal(base =
-                     derive_vars_cat(
-                       advs,
-                       definition),
-                   compare = expected_result,
-                   keys = c("USUBJID", "VSTEST"))
+  expect_dfs_equal(
+    base =
+      derive_vars_cat(
+        advs,
+        definition
+      ),
+    compare = expected_result,
+    keys = c("USUBJID", "VSTEST")
+  )
 })
 
 ## Test 2: Basic functionality with by_vars ----
@@ -74,13 +77,16 @@ test_that("derive_vars_cat Test 2: Basic functionality with by_vars", {
 
 
 
-  expect_dfs_equal(base =
-                     derive_vars_cat(
-                       advs,
-                       definition,
-                       by_vars = exprs(VSTEST)),
-                   compare = expected_result,
-                   keys = c("USUBJID", "VSTEST"))
+  expect_dfs_equal(
+    base =
+      derive_vars_cat(
+        advs,
+        definition,
+        by_vars = exprs(VSTEST)
+      ),
+    compare = expected_result,
+    keys = c("USUBJID", "VSTEST")
+  )
 })
 
 ## Test 3: Forgot to specify by_vars ----
@@ -174,9 +180,11 @@ test_that("derive_vars_cat Test 7: Correct behavior when no conditions are met",
     "01-701-1118", "Weight",  71.67, NA_character_,  NA_real_
   )
 
-  expect_dfs_equal(base = derive_vars_cat(advs, definition),
-                   compare = expected_result,
-                   keys = c("USUBJID", "VSTEST"))
+  expect_dfs_equal(
+    base = derive_vars_cat(advs, definition),
+    compare = expected_result,
+    keys = c("USUBJID", "VSTEST")
+  )
 })
 
 ## Test 8: Overlapping conditions handled correctly ----
@@ -213,9 +221,11 @@ test_that("derive_vars_cat Test 8: Overlapping conditions handled correctly", {
     "01-701-1118", "Weight",  71.67,        NA,        NA
   )
 
-  expect_dfs_equal(base = derive_vars_cat(advs, definition, by_vars = exprs(VSTEST)),
-                   compare = expected_result,
-                   keys = c("USUBJID", "VSTEST"))
+  expect_dfs_equal(
+    base = derive_vars_cat(advs, definition, by_vars = exprs(VSTEST)),
+    compare = expected_result,
+    keys = c("USUBJID", "VSTEST")
+  )
 })
 
 
@@ -269,9 +279,11 @@ test_that("derive_vars_cat Test 10: Conditions for multiple VSTESTs (Height and 
     "01-701-1115", "Weight",   78.7, "Weight >= 66.68",         1,
     "01-701-1118", "Weight",  71.67, "Weight >= 66.68",         1
   )
-  expect_dfs_equal(base = derive_vars_cat(advs, definition, by_vars = exprs(VSTEST)),
-                   compare = expected_result,
-                   keys = c("USUBJID", "VSTEST"))
+  expect_dfs_equal(
+    base = derive_vars_cat(advs, definition, by_vars = exprs(VSTEST)),
+    compare = expected_result,
+    keys = c("USUBJID", "VSTEST")
+  )
 })
 
 ## Test 11: Adding an extra variable (flag) to the dataset ----
@@ -306,9 +318,11 @@ test_that("derive_vars_cat Test 11: Adding an extra variable (flag) to the datas
     "01-701-1115", "Weight",   78.7,        NA,        NA,         NA,
     "01-701-1118", "Weight",  71.67,        NA,        NA,         NA
   )
-  expect_dfs_equal(base = derive_vars_cat(advs, definition, by_vars = exprs(VSTEST)),
-                   compare = expected_result,
-                   keys = c("USUBJID", "VSTEST"))
+  expect_dfs_equal(
+    base = derive_vars_cat(advs, definition, by_vars = exprs(VSTEST)),
+    compare = expected_result,
+    keys = c("USUBJID", "VSTEST")
+  )
 })
 
 ## Test 12: Wrong input for by_vars ----

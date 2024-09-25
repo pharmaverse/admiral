@@ -56,18 +56,18 @@ range_lookup <- tibble::tribble(
 
 # Assign AVALCAx
 avalcax_lookup <- exprs(
-  ~PARAMCD,           ~condition,        ~AVALCAT1, ~AVALCA1N,
-  "QT",              AVAL <= 450,    "<= 450 msec",         1,
-  "QT", AVAL > 450 & AVAL <= 480, ">450<=480 msec",         2,
-  "QT", AVAL > 480 & AVAL <= 500, ">480<=500 msec",         3,
-  "QT",               AVAL > 500,      ">500 msec",         4
+  ~condition,                                                   ~AVALCAT1, ~AVALCA1N,
+  starts_with(PARAMCD, "QT") & AVAL <= 450,                 "<= 450 msec",         1,
+  starts_with(PARAMCD, "QT") & AVAL > 450 & AVAL <= 480, ">450<=480 msec",         2,
+  starts_with(PARAMCD, "QT") & AVAL > 480 & AVAL <= 500, ">480<=500 msec",         3,
+  starts_with(PARAMCD, "QT") & AVAL > 500,                    ">500 msec",         4
 )
 # Assign CHGCAx
 chgcax_lookup <- exprs(
-  ~PARAMCD,       ~condition,       ~CHGCAT1, ~CHGCAT1N,
-  "QT",            CHG <= 30,   "<= 30 msec",         1,
-  "QT", CHG > 30 & CHG <= 60, ">30<=60 msec",         2,
-  "QT",             CHG > 60,     ">60 msec",         3
+  ~condition,                                              ~CHGCAT1, ~CHGCAT1N,
+  starts_with(PARAMCD, "QT") & CHG <= 30,              "<= 30 msec",         1,
+  starts_with(PARAMCD, "QT") & CHG > 30 & CHG <= 60, ">30<=60 msec",         2,
+  starts_with(PARAMCD, "QT") & CHG > 60,                 ">60 msec",         3
 )
 
 # Derivations ----
@@ -295,13 +295,11 @@ adeg <- adeg %>%
   ) %>%
   # Derive AVALCA1N and AVALCAT1
   derive_vars_cat(
-    definition = avalcax_lookup,
-    by_vars = exprs(PARAMCD)
+    definition = avalcax_lookup
   ) %>%
   # Derive CHGCAT1N and CHGCAT1
   derive_vars_cat(
-    definition = chgcax_lookup,
-    by_vars = exprs(PARAMCD)
+    definition = chgcax_lookup
   ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(

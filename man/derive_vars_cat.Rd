@@ -45,7 +45,7 @@ The categorization variables are set to NA for records
 not matching any of the by groups in \code{definition}.}
 }
 \value{
-data frame
+The input dataset with the new variables defined in \code{definition} added
 }
 \description{
 Derive Categorization Variables Like \code{AVALCATy} and \code{AVALCAyN}
@@ -111,7 +111,7 @@ derive_vars_cat(
   dataset = advs,
   definition = definition
 )
-# using by_vars:
+# Using by_vars:
 definition2 <- exprs(
   ~VSTEST,   ~condition,  ~AVALCAT1, ~AVALCA1N,
   "Height",  AVAL > 160,  ">160 cm",         1,
@@ -161,8 +161,7 @@ adlb \%>\%
   derive_vars_cat(
     definition = definition_mcrit,
     by_vars = exprs(PARAM)
-  ) \%>\%
-  print()
+  )
 }
 \seealso{
 General Derivation Functions for all ADaMs that returns variable appended to dataset:
