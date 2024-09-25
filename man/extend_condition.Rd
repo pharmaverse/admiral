@@ -22,6 +22,6 @@ that checks if a variable equals a specific value.
 }
 \examples{
 # Extend an existing condition to include a check for 'AGE == "30"'
-extend_condition("SEX == 'M'", "AGE", "30")
+admiral:::extend_condition("SEX == 'M'", "AGE", "30")
 }
 \keyword{internal}
