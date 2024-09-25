@@ -846,7 +846,7 @@ dataset_vignette(
 )
 ```
 
-## Derive Categorization Variables (`AVALCATx`) {#cat}
+## Derive Categorization Variables (`AVALCATy`) {#cat}
 
 We can use the `derive_vars_cat()` function to derive the categorization variables.
 
