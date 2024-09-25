@@ -76,7 +76,7 @@
 #' In this case, the middle condition should be:
 #' `AVAL <= 170 & AVAL > 160`
 #'
-#' @return data frame
+#' @return The input dataset with the new variables defined in `definition` added
 #' @family der_gen
 #' @keywords der_gen
 #' @export
