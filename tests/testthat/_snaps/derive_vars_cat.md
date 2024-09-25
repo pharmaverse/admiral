@@ -185,9 +185,5 @@
 
 # derive_vars_cat Test 12: definition has wrong shape
 
-    Failed to convert `definition` to `tibble`.
-    `definition` should be specified similarly to how you would
-    specify a `tibble` using the `tribble()` function so it
-    can be converted to `tibble` using `tribble()`.
-    Data must be rectangular.
+    Failed to convert `definition` to `tibble`. `definition` should be specified similarly to how you would specify a `tibble` using the `tribble()` function so it can be converted to `tibble` using `tribble()`.
 

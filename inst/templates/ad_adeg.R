@@ -31,43 +31,43 @@ eg <- convert_blanks_to_na(eg)
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
-  ~EGTESTCD, ~PARAMCD, ~PARAM, ~PARAMN,
-  "ECGINT", "EGINTP", "ECG Interpretation", 1,
-  "HR", "HR", "Heart Rate (beats/min)", 2,
-  "RR", "RR", "RR Duration (msec)", 3,
-  "RRR", "RRR", "RR Duration Rederived (msec)", 4,
-  "QT", "QT", "QT Duration (msec)", 10,
-  "QTCBR", "QTCBR", "QTcB - Bazett's Correction Formula Rederived (msec)", 11,
-  "QTCFR", "QTCFR", "QTcF - Fridericia's Correction Formula Rederived (msec)", 12,
-  "QTLCR", "QTLCR", "QTlc - Sagie's Correction Formula Rederived (msec)", 13,
+  ~EGTESTCD, ~PARAMCD,                                                    ~PARAM, ~PARAMN,
+  "ECGINT",  "EGINTP",                                      "ECG Interpretation",       1,
+  "HR",          "HR",                                  "Heart Rate (beats/min)",       2,
+  "RR",          "RR",                                      "RR Duration (msec)",       3,
+  "RRR",        "RRR",                            "RR Duration Rederived (msec)",       4,
+  "QT",          "QT",                                      "QT Duration (msec)",      10,
+  "QTCBR",    "QTCBR",     "QTcB - Bazett's Correction Formula Rederived (msec)",      11,
+  "QTCFR",    "QTCFR", "QTcF - Fridericia's Correction Formula Rederived (msec)",      12,
+  "QTLCR",    "QTLCR",      "QTlc - Sagie's Correction Formula Rederived (msec)",      13,
 )
 
 range_lookup <- tibble::tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI,
-  "EGINTP", NA, NA,
-  "HR", 40, 100,
-  "RR", 600, 1500,
-  "QT", 350, 450,
-  "RRR", 600, 1500,
-  "QTCBR", 350, 450,
-  "QTCFR", 350, 450,
-  "QTLCR", 350, 450,
+  "EGINTP",     NA,     NA,
+  "HR",         40,    100,
+  "RR",        600,   1500,
+  "QT",        350,    450,
+  "RRR",       600,   1500,
+  "QTCBR",     350,    450,
+  "QTCFR",     350,    450,
+  "QTLCR",     350,    450
 )
 
 # Assign AVALCAx
 avalcax_lookup <- exprs(
-  ~PARAMCD, ~condition, ~AVALCAT1, ~AVALCA1N,
-  "QT", AVAL <= 450, "<= 450 msec", 1,
-  "QT", AVAL > 450 & AVAL <= 480, ">450<=480 msec", 2,
-  "QT", AVAL > 480 & AVAL <= 500, ">480<=500 msec", 3,
-  "QT", AVAL > 500, ">500 msec", 4
+  ~PARAMCD,           ~condition,        ~AVALCAT1, ~AVALCA1N,
+  "QT",              AVAL <= 450,    "<= 450 msec",         1,
+  "QT", AVAL > 450 & AVAL <= 480, ">450<=480 msec",         2,
+  "QT", AVAL > 480 & AVAL <= 500, ">480<=500 msec",         3,
+  "QT",               AVAL > 500,      ">500 msec",         4
 )
 # Assign CHGCAx
 chgcax_lookup <- exprs(
-  ~PARAMCD, ~condition, ~CHGCAT1, ~CHGCAT1N,
-  "QT", CHG <= 30, "<= 30 msec", 1,
-  "QT", CHG > 30 & CHG <= 60, ">30<=60 msec", 2,
-  "QT", CHG > 60, ">60 msec", 3
+  ~PARAMCD,       ~condition,       ~CHGCAT1, ~CHGCAT1N,
+  "QT",            CHG <= 30,   "<= 30 msec",         1,
+  "QT", CHG > 30 & CHG <= 60, ">30<=60 msec",         2,
+  "QT",             CHG > 60,     ">60 msec",         3
 )
 
 # Derivations ----

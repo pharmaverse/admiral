@@ -164,7 +164,7 @@ derive_vars_cat <- function(dataset,
   assert_expr_list(definition)
   assert_vars(by_vars, optional = TRUE)
   if (length(by_vars) > 1) {
-    stop("`by_vars` must contain just one variable, e.g. `exprs(PARAMCD)`")
+    cli_abort("`by_vars` must contain just one variable, e.g. `exprs(PARAMCD)`")
   }
 
   assert_data_frame(dataset,
@@ -182,12 +182,11 @@ derive_vars_cat <- function(dataset,
     },
     error = function(e) {
       # Catch the error and append your own message
-      stop(
+      cli_abort(
         paste("Failed to convert `definition` to `tibble`.",
           "`definition` should be specified similarly to how you would",
           "specify a `tibble` using the `tribble()` function so it",
-          "can be converted to `tibble` using `tribble()`.", "",
-          sep = "\n"
+          "can be converted to `tibble` using `tribble()`."
         ),
         e$message
       )

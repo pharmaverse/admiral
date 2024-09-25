@@ -29,16 +29,16 @@ vs <- convert_blanks_to_na(vs)
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
-  ~VSTESTCD, ~PARAMCD, ~PARAM, ~PARAMN,
-  "SYSBP", "SYSBP", "Systolic Blood Pressure (mmHg)", 1,
-  "DIABP", "DIABP", "Diastolic Blood Pressure (mmHg)", 2,
-  "PULSE", "PULSE", "Pulse Rate (beats/min)", 3,
-  "WEIGHT", "WEIGHT", "Weight (kg)", 4,
-  "HEIGHT", "HEIGHT", "Height (cm)", 5,
-  "TEMP", "TEMP", "Temperature (C)", 6,
-  "MAP", "MAP", "Mean Arterial Pressure (mmHg)", 7,
-  "BMI", "BMI", "Body Mass Index(kg/m^2)", 8,
-  "BSA", "BSA", "Body Surface Area(m^2)", 9
+  ~VSTESTCD, ~PARAMCD,                            ~PARAM, ~PARAMN,
+  "SYSBP",    "SYSBP",  "Systolic Blood Pressure (mmHg)",       1,
+  "DIABP",    "DIABP", "Diastolic Blood Pressure (mmHg)",       2,
+  "PULSE",    "PULSE",          "Pulse Rate (beats/min)",       3,
+  "WEIGHT",  "WEIGHT",                     "Weight (kg)",       4,
+  "HEIGHT",  "HEIGHT",                     "Height (cm)",       5,
+  "TEMP",      "TEMP",                 "Temperature (C)",       6,
+  "MAP",        "MAP",   "Mean Arterial Pressure (mmHg)",       7,
+  "BMI",        "BMI",         "Body Mass Index(kg/m^2)",       8,
+  "BSA",        "BSA",          "Body Surface Area(m^2)",       9
 )
 attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
 
@@ -46,17 +46,17 @@ attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
 # Assign ANRLO/HI, A1LO/HI
 range_lookup <- tibble::tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-  "SYSBP", 90, 130, 70, 140,
-  "DIABP", 60, 80, 40, 90,
-  "PULSE", 60, 100, 40, 110,
-  "TEMP", 36.5, 37.5, 35, 38
+  "SYSBP",      90,    130,    70,   140,
+  "DIABP",      60,     80,    40,    90,
+  "PULSE",      60,    100,    40,   110,
+  "TEMP",     36.5,   37.5,    35,    38
 )
 
 # Assign AVALCATx
 avalcax_lookup <- exprs(
-  ~PARAMCD, ~condition, ~AVALCAT1, ~AVALCA1N,
-  "HEIGHT", AVAL > 100, ">100 cm", 1,
-  "HEIGHT", AVAL <= 100, "<=100 cm", 2
+  ~PARAMCD,  ~condition,  ~AVALCAT1, ~AVALCA1N,
+  "HEIGHT",  AVAL > 100,  ">100 cm",         1,
+  "HEIGHT", AVAL <= 100, "<=100 cm",         2
 )
 
 # Derivations ----
