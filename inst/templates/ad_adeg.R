@@ -57,17 +57,17 @@ range_lookup <- tibble::tribble(
 # Assign AVALCAx
 avalcax_lookup <- exprs(
   ~condition,                                                   ~AVALCAT1, ~AVALCA1N,
-  starts_with(PARAMCD, "QT") & AVAL <= 450,                 "<= 450 msec",         1,
-  starts_with(PARAMCD, "QT") & AVAL > 450 & AVAL <= 480, ">450<=480 msec",         2,
-  starts_with(PARAMCD, "QT") & AVAL > 480 & AVAL <= 500, ">480<=500 msec",         3,
-  starts_with(PARAMCD, "QT") & AVAL > 500,                    ">500 msec",         4
+  startsWith(PARAMCD, "QT") & AVAL <= 450,                 "<= 450 msec",         1,
+  startsWith(PARAMCD, "QT") & AVAL > 450 & AVAL <= 480, ">450<=480 msec",         2,
+  startsWith(PARAMCD, "QT") & AVAL > 480 & AVAL <= 500, ">480<=500 msec",         3,
+  startsWith(PARAMCD, "QT") & AVAL > 500,                    ">500 msec",         4
 )
 # Assign CHGCAx
 chgcax_lookup <- exprs(
   ~condition,                                              ~CHGCAT1, ~CHGCAT1N,
-  starts_with(PARAMCD, "QT") & CHG <= 30,              "<= 30 msec",         1,
-  starts_with(PARAMCD, "QT") & CHG > 30 & CHG <= 60, ">30<=60 msec",         2,
-  starts_with(PARAMCD, "QT") & CHG > 60,                 ">60 msec",         3
+  startsWith(PARAMCD, "QT") & CHG <= 30,              "<= 30 msec",         1,
+  startsWith(PARAMCD, "QT") & CHG > 30 & CHG <= 60, ">30<=60 msec",         2,
+  startsWith(PARAMCD, "QT") & CHG > 60,                 ">60 msec",         3
 )
 
 # Derivations ----
