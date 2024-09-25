@@ -247,7 +247,7 @@ derive_vars_cat <- function(dataset,
 #' @return A character string representing the extended condition.
 #' @examples
 #' # Extend an existing condition to include a check for 'AGE == "30"'
-#' extend_condition("SEX == 'M'", "AGE", "30")
+#' admiral:::extend_condition("SEX == 'M'", "AGE", "30")
 #' @keywords internal
 extend_condition <- function(cond, var, is) {
   paste(cond, " & ", var, " == '", is, "'", sep = "")
