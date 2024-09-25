@@ -157,8 +157,7 @@
 #'   derive_vars_cat(
 #'     definition = definition_mcrit,
 #'     by_vars = exprs(PARAM)
-#'   ) %>%
-#'   print()
+#'   )
 derive_vars_cat <- function(dataset,
                             definition,
                             by_vars = NULL) {
