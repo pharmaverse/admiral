@@ -678,8 +678,8 @@ dataset_vignette(
 Numeric and categorical variables (`AGE`, `RACE`, `COUNTRY`, etc.) may need to be grouped to perform
 the required analysis.
 `{admiral}` provides the `derive_vars_cat()` function to create such groups.
-This function is especially useful if more than one variables need to be created for
-each condition, which is not the case here.
+This function is especially useful if more than one variable needs to be created for
+each condition, e.g., `AGEGR1` and `AGEGR1N.
 
 Additionally, one needs to be careful when considering the order of the conditions in the lookup table. 
 The category is assigned based on the first match.
