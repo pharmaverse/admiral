@@ -106,7 +106,7 @@
 #'   dataset = advs,
 #'   definition = definition
 #' )
-
+#'
 #' # Using by_vars:
 #' definition2 <- exprs(
 #'   ~VSTEST,   ~condition,  ~AVALCAT1, ~AVALCA1N,
