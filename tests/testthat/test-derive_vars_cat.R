@@ -1,28 +1,3 @@
-# Load the advs dataset
-advs <- tibble::tribble(
-  ~USUBJID,       ~VSTEST,  ~AVAL,
-  "01-701-1015", "Height", 147.32,
-  "01-701-1015", "Weight",  53.98,
-  "01-701-1023", "Height", 162.56,
-  "01-701-1023", "Weight",  78.47,
-  "01-701-1028", "Height",  177.8,
-  "01-701-1028", "Weight",  98.88,
-  "01-701-1033", "Height", 175.26,
-  "01-701-1033", "Weight",  88.45,
-  "01-701-1034", "Height",     NA,
-  "01-701-1034", "Weight",     NA,
-  "01-701-1047", "Height",     NA,
-  "01-701-1047", "Weight",     NA,
-  "01-701-1097", "Height", 168.91,
-  "01-701-1097", "Weight",  78.02,
-  "01-701-1111", "Height", 158.24,
-  "01-701-1111", "Weight",  60.33,
-  "01-701-1115", "Height", 181.61,
-  "01-701-1115", "Weight",   78.7,
-  "01-701-1118", "Height", 180.34,
-  "01-701-1118", "Weight",  71.67
-) %>% arrange(VSTEST)
-
 expected_result <- tibble::tribble(
   ~USUBJID,       ~VSTEST,  ~AVAL, ~AVALCAT1, ~AVALCA1N,
   "01-701-1015", "Height", 147.32,    "<160",         2,
@@ -45,6 +20,10 @@ expected_result <- tibble::tribble(
   "01-701-1111", "Weight",  60.33,        NA,        NA,
   "01-701-1115", "Weight",   78.7,        NA,        NA,
   "01-701-1118", "Weight",  71.67,        NA,        NA
+)
+
+advs <- expected_result %>% select(
+  USUBJID, VSTEST, AVAL
 )
 ## Test 1: Basic functionality without by_vars ----
 test_that("derive_vars_cat Test 1: Basic functionality without by_vars", {
@@ -124,8 +103,9 @@ test_that("derive_vars_cat Test 5: Error when definition is not an exprs object"
     "AVAL < 160",   "<160",         2
   )
   # Snapshot the error message
-  expect_snapshot_error(
-    derive_vars_cat(advs, definition)
+  expect_error(
+    derive_vars_cat(advs, definition),
+    class = "assert_expr_list"
   )
 })
 
@@ -152,8 +132,8 @@ test_that("derive_vars_cat Test 6: Error when required columns are missing from 
 test_that("derive_vars_cat Test 7: Correct behavior when no conditions are met", {
   # Define conditions that do not match any rows
   definition <- exprs(
-    ~condition, ~AVALCAT1, ~AVALCA1N,
-    VSTEST == "Height" & AVAL < 0, "<0", 1
+    ~condition,                    ~AVALCAT1, ~AVALCA1N,
+    VSTEST == "Height" & AVAL < 0,      "<0",         1
   )
 
   expected_result <- tibble::tribble(

@@ -183,13 +183,15 @@ derive_vars_cat <- function(dataset,
     error = function(e) {
       # Catch the error and append your own message
       cli_abort(
-        paste(
-          "Failed to convert {.arg definition} to {.cls tibble}.",
-          "{.arg definition} should be specified similarly to how you would",
-          "specify a {.cls tibble} using the {.fun tibble::tribble}` function so it",
-          "can be converted to {.cls tibble}` using {.fun tibble::tribble}`."
-        ),
-        e$message
+        c(
+          paste(
+            "Failed to convert {.arg definition} to {.cls tibble}.",
+            "{.arg definition} should be specified similarly to how you would",
+            "specify a {.cls tibble} using the {.fun tibble::tribble} function so it",
+            "can be converted to {.cls tibble} using {.fun tibble::tribble}."
+          ),
+          e$message
+        )
       )
     }
   )
