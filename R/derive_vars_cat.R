@@ -164,7 +164,7 @@ derive_vars_cat <- function(dataset,
   assert_expr_list(definition)
   assert_vars(by_vars, optional = TRUE)
   if (length(by_vars) > 1) {
-    cli_abort("`by_vars` must contain just one variable, e.g. `exprs(PARAMCD)`")
+    cli_abort("{.arg by_vars} must contain just one variable, e.g. {.code exprs(PARAMCD)}")
   }
 
   assert_data_frame(dataset,
