@@ -2,10 +2,6 @@
 #  This script:  create_admiral_adsl.R creates dataset data/admiral_adsl.rda.
 #
 
-# styler:style_pkg()
-# devtools::lint()
-# devtools::spellcheck()
-
 # Preliminary
 library(diffdf)
 
@@ -70,12 +66,11 @@ load("data-backup/admiral_adsl.rda", e2)
 
 
 identical(e1$admiral_adsl, e2$admiral_adsl)
-diffdf(compare=e1$admiral_adsl, base=e2$admiral_adsl, keys  = c("STUDYID", "USUBJID"))
-capture.output(diffdf(compare=e1$admiral_adsl, base=e2$admiral_adsl, keys  = c("STUDYID", "USUBJID")),
-               file="data-raw/diffdf_23SEPT")
-
-#
-# cleanup
-#
-#rm(e1)
-#rm(e2)
+diffdf(compare = e1$admiral_adsl, base = e2$admiral_adsl, keys = c("STUDYID", "USUBJID"))
+capture.output(
+  diffdf(
+    compare = e1$admiral_adsl, base = e2$admiral_adsl,
+    keys = c("STUDYID", "USUBJID")
+  ),
+  file = "data-raw/diffdf_23SEPT"
+)
