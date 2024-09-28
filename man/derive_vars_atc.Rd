@@ -7,7 +7,7 @@
 derive_vars_atc(
   dataset,
   dataset_facm,
-  by_vars = exprs(USUBJID, CMREFID = FAREFID),
+  by_vars = exprs(get_admiral_option("subject_keys"), CMREFID = FAREFID),
   value_var = FASTRESC
 )
 }

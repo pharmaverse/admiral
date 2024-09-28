@@ -362,7 +362,7 @@ For example, to calculate the total dose by subject and treatment,
 adex <- derive_param_exposure(
   adex,
   dataset_add = adex,
-  by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars),
+  by_vars = c(exprs(STUDYID, USUBJID), !!!adsl_vars)),
   input_code = "DOSE",
   set_values_to = exprs(
     PARAMCD = "TDOSE",
