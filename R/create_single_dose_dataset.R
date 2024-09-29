@@ -342,7 +342,7 @@ dose_freq_lookup <- tribble(
 #'   lookup_column = CDISC_VALUE,
 #'   nominal_time = NFRLT,
 #'   keep_source_vars = exprs(
-#'     get_admiral_option("subject_keys"), EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, NFRLT
+#'     USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, NFRLT
 #'   )
 #' )
 #'
@@ -436,7 +436,7 @@ dose_freq_lookup <- tribble(
 #'   end_date = EXENDT,
 #'   end_datetime = EXENDTM,
 #'   keep_source_vars = exprs(
-#'     get_admiral_option("subject_keys"), EXTRT, EXDOSE, EXDOSFRQ,
+#'     STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ,
 #'     DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
 #'   )
 #' )
@@ -450,7 +450,8 @@ create_single_dose_dataset <- function(dataset,
                                        lookup_column = CDISC_VALUE,
                                        nominal_time = NULL,
                                        keep_source_vars = expr_c(
-                                         get_admiral_option("subject_keys"), dose_freq, start_date, start_datetime,
+                                         get_admiral_option("subject_keys"), dose_freq,
+                                         start_date, start_datetime,
                                          end_date, end_datetime
                                        )) {
   dose_freq <- assert_symbol(enexpr(dose_freq))
