@@ -18,8 +18,10 @@ The \code{definition} object will be converted to a \code{tibble} using \code{tr
 
 Must contain:
 \itemize{
-\item the column \code{condition} which will be converted to a logical expression and used on the \code{dataset} input.
-\item at least one additional column with the new column name and the category value(s) used by the logical expression.
+\item the column \code{condition} which will be converted to a logical expression and
+will be used on the \code{dataset} input.
+\item at least one additional column with the new column name and
+the category value(s) used by the logical expression.
 \item the column specified in \code{by_vars} (if \code{by_vars} is specified)
 }
 
