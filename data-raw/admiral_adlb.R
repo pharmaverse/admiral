@@ -3,11 +3,13 @@
 # Label: Lab Analysis Dataset
 #
 # Input: adsl, lb
+# nolint start: undesirable_function_linter
 library(admiral)
 library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
+# nolint end
 
 # Load source datasets ----
 
@@ -223,15 +225,17 @@ adlb <- adlb %>%
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ANRIND,
     new_var = BNRIND
-  ) %>%
+  ) %>% # nolint start
   # Calculate CHG for post-baseline records
   # The decision on how to populate pre-baseline and baseline values of CHG is left to producer choice
+  # nolint end
   restrict_derivation(
     derivation = derive_var_chg,
     filter = AVISITN > 0
-  ) %>%
+  ) %>% # nolint start
   # Calculate PCHG for post-baseline records
   # The decision on how to populate pre-baseline and baseline values of PCHG is left to producer choice
+  # nolint end
   restrict_derivation(
     derivation = derive_var_pchg,
     filter = AVISITN > 0

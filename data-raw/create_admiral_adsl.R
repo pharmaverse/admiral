@@ -3,9 +3,10 @@
 #
 
 # Preliminary
-library(diffdf)
+library(diffdf) # nolint
 
 
+# nolint start: object_name_linter.
 # To clarify directories (can be removed)
 CACHE_DIR <- "~/.cache/R/admiral_templates_data/"
 DATA_DIR <- "data-dir"
@@ -16,6 +17,7 @@ TEMPLATE_DIR <- "inst/templates/"
 THE_FILE <- paste0(CACHE_DIR, "/adlb.rda")
 THE_FILE <- paste0(CACHE_DIR, "/adsl.rda")
 if (file.exists(THE_FILE)) file.remove(THE_FILE)
+# nolint end
 
 #
 # STEPS

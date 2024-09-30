@@ -1,6 +1,9 @@
+# nolint start: undersiderable_function_linter
 library(pharmaversesdtm)
 library(admiral)
 library(dplyr)
+# nolint end
+
 ex <- pharmaversesdtm::ex
 
 # check that there is only one start/end date of exposure per subject and visit
