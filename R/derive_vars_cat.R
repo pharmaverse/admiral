@@ -217,10 +217,9 @@ derive_vars_cat <- function(dataset,
 
   # warn if new variables already exist
   if (any(new_col_names %in% names(dataset))) {
-    warning(paste("Column(s) in `definition` already exist in `dataset`.",
-      "Did you forget to specify `by_vars`,",
-      "or are you rerunning your code?",
-      sep = "\n"
+    cli_warn(paste("Column(s) in {.arg definition} already exist in {.arg dataset}.",
+      "Did you forget to specify {.arg by_vars},",
+      "or are you rerunning your code?"
     ))
   }
 

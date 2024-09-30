@@ -1,8 +1,6 @@
 # derive_vars_cat Test 3: Forgot to specify by_vars
 
-    Column(s) in `definition` already exist in `dataset`.
-    Did you forget to specify `by_vars`,
-    or are you rerunning your code?
+    Column(s) in `definition` already exist in `dataset`. Did you forget to specify `by_vars`, or are you rerunning your code?
 
 # derive_vars_cat Test 13: definition has wrong shape
 
