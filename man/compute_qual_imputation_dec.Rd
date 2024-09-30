@@ -35,6 +35,7 @@ BDS-Findings Functions that returns a vector:
 \code{\link{compute_map}()},
 \code{\link{compute_qtc}()},
 \code{\link{compute_qual_imputation}()},
+\code{\link{compute_ratio}()},
 \code{\link{compute_rr}()},
 \code{\link{compute_scale}()}
 }

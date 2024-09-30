@@ -155,6 +155,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \code{\link{derive_param_exposure}()},
 \code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
+\code{\link{derive_param_ratio}()},
 \code{\link{derive_param_rr}()},
 \code{\link{derive_param_wbc_abs}()},
 \code{\link{derive_summary_records}()}
