@@ -7,7 +7,7 @@
 #' The `definition` object will be converted to a `tibble` using `tribble()` inside this function.
 #'
 #' Must contain:
-#'  - the column `condition` which evaluates to a logic in `dataset`.
+#'  - the column `condition` which will be converted to a logical expression and used on the `dataset` input.
 #'  - at least one additional column with the new column name and the category value.
 #'  - the column specified in `by_vars` (if `by_vars` is specified)
 #'
