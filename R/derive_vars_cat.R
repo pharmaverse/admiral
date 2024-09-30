@@ -33,7 +33,7 @@
 #' Allows for specifying by groups, e.g. `exprs(PARAMCD)`.
 #' Variable must be present in both `dataset` and `definition`.
 #' The conditions in `definition` are applied only to those records that match `by_vars`.
-#' The categorization variables are set to NA for records
+#' The categorization variables are set to `NA` for records
 #' not matching any of the by groups in `definition`.
 #'
 #'
