@@ -4,7 +4,7 @@
 #' @param definition List of expressions created by `exprs()`.
 #' Must be in rectangular format and specified using the same syntax as when creating
 #' a `tibble` using the `tribble()` function.
-#' The `definition` object it will be converted to a `tibble` using the `tribble()` function.
+#' The `definition` object will be converted to a `tibble` using `tribble()` inside this function.
 #'
 #' Must contain:
 #'  - the column `condition` which evaluates to a logic in `dataset`.
