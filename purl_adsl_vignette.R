@@ -33,7 +33,7 @@ adsl <- dm %>%
 
 
 ## ----eval=TRUE, echo=FALSE-----------------------------------------------------------------------------------------------------------------------------------------
-z =dataset_vignette(
+z <- dataset_vignette(
   adsl,
   display_vars = exprs(USUBJID, RFSTDTC, COUNTRY, AGE, SEX, RACE, ETHNIC, ARM, ACTARM)
 )
@@ -494,4 +494,3 @@ dataset_vignette(
   adsl,
   display_vars = exprs(USUBJID, TRTSDT, ARM, ACTARM, SAFFL)
 )
-
