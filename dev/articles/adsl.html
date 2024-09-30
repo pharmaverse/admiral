@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9009</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9010</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -741,21 +741,43 @@ function.</p>
 </h4>
 <p>Numeric and categorical variables (<code>AGE</code>,
 <code>RACE</code>, <code>COUNTRY</code>, etc.) may need to be grouped to
-perform the required analysis. <a href="https://pharmaverse.github.io/admiral/">admiral</a> does not
-<strong>currently</strong> have functionality to assist with all
-required groupings. So, the user will often need to create his/her own
-function to meet his/her study requirement.</p>
-<p>For example, if</p>
-<ul>
-<li>
-<code>AGEGR1</code> is required to categorize <code>AGE</code> into
-<code>&lt;18</code>, <code>18-64</code> and <code>&gt;64</code>, or</li>
-<li>
-<code>REGION1</code> is required to categorize <code>COUNTRY</code>
-in <code>North America</code>, <code>Rest of the World</code>,</li>
-</ul>
-<p>the user defined functions would look like the following:</p>
+perform the required analysis. <a href="https://pharmaverse.github.io/admiral/">admiral</a> provides the
+<code><a href="../reference/derive_vars_cat.html">derive_vars_cat()</a></code> function to create such groups. This
+function is especially useful if more than one variable needs to be
+created for each condition, e.g., <code>AGEGR1</code> and
+<code>AGEGR1N</code>.</p>
+<p>Additionally, one needs to be careful when considering the order of
+the conditions in the lookup table. The category is assigned based on
+the first match. That means <em>catch-all</em> conditions must come
+after specific conditions, e.g. <code>!is.na(AGE)</code> must come after
+<code>AGE &lt; 18</code>.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># create lookup tables</span></span>
+<span><span class="va">agegr1_lookup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span>  <span class="op">~</span><span class="va">condition</span>,           <span class="op">~</span><span class="va">AGEGR1</span>,</span>
+<span>  <span class="va">AGE</span> <span class="op">&lt;</span> <span class="fl">18</span>,               <span class="st">"&lt;18"</span>,</span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="va">AGE</span>, <span class="fl">18</span>, <span class="fl">64</span><span class="op">)</span>, <span class="st">"18-64"</span>,</span>
+<span>  <span class="va">AGE</span> <span class="op">&gt;</span> <span class="fl">64</span>,               <span class="st">"&gt;64"</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AGE</span><span class="op">)</span>,         <span class="st">"Missing"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">region1_lookup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span></span>
+<span>  <span class="op">~</span><span class="va">condition</span>,                          <span class="op">~</span><span class="va">REGION1</span>,</span>
+<span>  <span class="va">COUNTRY</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CAN"</span>, <span class="st">"USA"</span><span class="op">)</span>, <span class="st">"North America"</span>,</span>
+<span>  <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">COUNTRY</span><span class="op">)</span>,          <span class="st">"Rest of the World"</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">COUNTRY</span><span class="op">)</span>,                     <span class="st">"Missing"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va">adsl</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/derive_vars_cat.html">derive_vars_cat</a></span><span class="op">(</span></span>
+<span>    definition <span class="op">=</span> <span class="va">agegr1_lookup</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/derive_vars_cat.html">derive_vars_cat</a></span><span class="op">(</span></span>
+<span>    definition <span class="op">=</span> <span class="va">region1_lookup</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>Alternatively, you can also solve this task with custom
+functions:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">format_agegr1</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">var_input</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>    <span class="va">var_input</span> <span class="op">&lt;</span> <span class="fl">18</span> <span class="op">~</span> <span class="st">"&lt;18"</span>,</span>
@@ -764,18 +786,15 @@ in <code>North America</code>, <code>Rest of the World</code>,</li>
 <span>    <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Missing"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span></span>
 <span><span class="va">format_region1</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">var_input</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>    <span class="va">var_input</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CAN"</span>, <span class="st">"USA"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"North America"</span>,</span>
 <span>    <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">var_input</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Rest of the World"</span>,</span>
 <span>    <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Missing"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p>These functions are then used in a <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> statement to
-derive the required grouping variables:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va">adsl</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">adsl</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    AGEGR1 <span class="op">=</span> <span class="fu">format_agegr1</span><span class="op">(</span><span class="va">AGE</span><span class="op">)</span>,</span>
 <span>    REGION1 <span class="op">=</span> <span class="fu">format_region1</span><span class="op">(</span><span class="va">COUNTRY</span><span class="op">)</span></span>
@@ -790,7 +809,7 @@ derive the required grouping variables:</p>
 dedicated functions are provided, but in most cases they can easily be
 derived using <code>derive_var_merged_exist_flag</code>.</p>
 <p>An example of an implementation could be:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va">adsl</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/derive_var_merged_exist_flag.html">derive_var_merged_exist_flag</a></span><span class="op">(</span></span>
 <span>    dataset_add <span class="op">=</span> <span class="va">ex</span>,</span>
