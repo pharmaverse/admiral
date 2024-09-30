@@ -8,7 +8,7 @@
 #'
 #' Must contain:
 #'  - the column `condition` which will be converted to a logical expression and used on the `dataset` input.
-#'  - at least one additional column with the new column name and the category value.
+#'  - at least one additional column with the new column name and the category value(s) used by the logical expression.
 #'  - the column specified in `by_vars` (if `by_vars` is specified)
 #'
 #' e.g. if `by_vars` is not specified:
