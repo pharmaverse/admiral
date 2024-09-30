@@ -3,7 +3,7 @@
 #
 
 # Preliminary
-library(diffdf) # nolint
+library(diffdf)   # nolint
 
 
 # nolint start: object_name_linter.
