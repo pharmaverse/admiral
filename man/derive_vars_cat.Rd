@@ -14,12 +14,12 @@ The variables specified by the \code{by_vars} and \code{definition} arguments ar
 \item{definition}{List of expressions created by \code{exprs()}.
 Must be in rectangular format and specified using the same syntax as when creating
 a \code{tibble} using the \code{tribble()} function.
-The \code{definition} object it will be converted to a \code{tibble} using the \code{tribble()} function.
+The \code{definition} object will be converted to a \code{tibble} using \code{tribble()} inside this function.
 
 Must contain:
 \itemize{
-\item the column \code{condition} which evaluates to a logic in \code{dataset}.
-\item at least one additional column with the new column name and the category value.
+\item the column \code{condition} which will be converted to a logical expression and used on the \code{dataset} input.
+\item at least one additional column with the new column name and the category value(s) used by the logical expression.
 \item the column specified in \code{by_vars} (if \code{by_vars} is specified)
 }
 
@@ -41,7 +41,7 @@ e.g. if \code{by_vars} is specified as \code{exprs(VSTEST)}:
 Allows for specifying by groups, e.g. \code{exprs(PARAMCD)}.
 Variable must be present in both \code{dataset} and \code{definition}.
 The conditions in \code{definition} are applied only to those records that match \code{by_vars}.
-The categorization variables are set to NA for records
+The categorization variables are set to \code{NA} for records
 not matching any of the by groups in \code{definition}.}
 }
 \value{

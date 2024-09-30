@@ -330,3 +330,19 @@ test_that("derive_vars_cat Test 13: definition has wrong shape", {
 
   expect_snapshot_error(derive_vars_cat(advs, definition_wrong_shape, by_vars = exprs(VSTEST)))
 })
+
+## Test 14: two by_vars variables ----
+test_that("derive_vars_cat Test 14: two by_vars variables", {
+  # Define conditions
+  definition <- exprs(
+    ~VISIT,     ~VSTEST,  ~condition, ~AVALCAT1, ~AVALCA1N,
+    "Week 24", "Height", AVAL >= 160,   ">=160",         1,
+    "Week 24", "Height",  AVAL < 160,    "<160",         2,
+  )
+
+  advs_visit <- advs %>% mutate(
+    VISIT = "Week 24"
+  )
+
+  expect_snapshot_error(derive_vars_cat(advs_visit, definition, by_vars = exprs(VSTEST, VISIT)))
+})
