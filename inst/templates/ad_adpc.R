@@ -41,18 +41,6 @@ param_lookup <- tibble::tribble(
   "DOSE", "DOSE", "Xanomeline Patch Dose", 2,
 )
 
-# ---- User defined functions ----
-
-# Here is an example of how you can create your own function that
-# operates on vectors, which can be used in `mutate`.
-format_avalcat1n <- function(param, aval) {
-  case_when(
-    param == "PKCONC" & aval < 1 ~ 1,
-    param == "PKCONC" & aval >= 1 ~ 2,
-    T ~ NA_real_
-  )
-}
-
 # ---- Derivations ----
 
 # Get list of ADSL vars required for derivations
