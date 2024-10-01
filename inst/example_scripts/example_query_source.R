@@ -1,7 +1,7 @@
 # PREFIX, e.g., SMQ01, CQ12
 # GRPNAME, non NULL
 # GRPID, could be NULL
-# SCOPE, ‘BROAD’, ‘NARROW’, or NULL
+# SCOPE, 'BROAD', 'NARROW', or NULL
 # SRCVAR, e.g., AEDECOD, AELLT, ...
 # TERMCHAR, non NULL
 

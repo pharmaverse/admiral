@@ -123,7 +123,7 @@ test_that("derive_extreme_event Test 2: `mode` = last", {
     set_values_to = exprs(
       PARAMCD = "WSP"
     ),
-    check_type = "none"
+    check_type = "warning"
   )
 
   expect_dfs_equal(
@@ -647,84 +647,122 @@ test_that("derive_extreme_event Test 8: error if source dataset not available", 
   )
 })
 
-## Test 9: deprecation of ignore_event_order ----
-test_that("derive_extreme_event Test 9: deprecation of ignore_event_order", {
-  adrs <- tibble::tribble(
-    ~USUBJID, ~AVISITN, ~AVALC,
-    "1",             1, "PR",
-    "1",             2, "CR",
-    "1",             3, "CR"
-  ) %>%
-    mutate(PARAMCD = "OVR")
+## Test 9: test for duplicates: one warning ----
+test_that("derive_extreme_event Test 11: test for duplicates: one warning", {
+  ad1 <- tribble(
+    ~USUBJID, ~AVALC, ~ADY, ~ASEQ,
+    "1",      "Y",       3,     1,
+    "2",      "Y",       5,     1,
+    "3",      "N",       2,     1,
+    "4",      "N",       4,     1
+  )
 
-  expect_error(
+  ad2 <- tribble(
+    ~USUBJID, ~AVALC, ~ADY, ~ASEQ,
+    "1",      "Y",       3,     1,
+    "2",      "Y",       3,     1,
+    "3",      "Y",       2,     1
+  )
+
+
+  expect_warning(
     derive_extreme_event(
-      adrs,
       by_vars = exprs(USUBJID),
-      order = exprs(AVISITN),
+      source_datasets = list(ad1 = ad1, ad2 = ad2),
+      order = exprs(event_nr, ADY),
       mode = "first",
+      check_type = "warning",
+      tmp_event_nr_var = event_nr,
       events = list(
-        event_joined(
-          join_vars = exprs(AVALC),
-          join_type = "after",
-          first_cond_upper = AVALC.join == "CR",
-          condition = AVALC == "CR",
-          set_values_to = exprs(AVALC = "Y")
+        event(
+          dataset_name = "ad1",
+          condition = AVALC == "Y",
+          mode = "first",
+          set_values_to = exprs(
+            event_nr = 1,
+            AVALC = "Y"
+          )
         ),
-        event_joined(
-          join_vars = exprs(AVALC),
-          join_type = "after",
-          first_cond_upper = AVALC.join %in% c("CR", "PR"),
-          condition = AVALC == "PR",
-          set_values_to = exprs(AVALC = "Y")
+        event(
+          dataset_name = "ad2",
+          condition = AVALC == "Y",
+          mode = "first",
+          set_values_to = exprs(
+            event_nr = 1,
+            AVALC = "Y"
+          )
+        ),
+        event(
+          dataset_name = "ad1",
+          mode = "last",
+          set_values_to = exprs(
+            event_nr = 2,
+            AVALC = "N"
+          )
         )
-      ),
-      ignore_event_order = TRUE,
-      set_values_to = exprs(
-        PARAMCD = "CRSP"
       )
     ),
-    class = "lifecycle_error_deprecated"
+    "Check duplicates*"
   )
 })
 
-## Test 10: deprecation of ignore_event_order ----
-test_that("derive_extreme_event Test 10: deprecation of ignore_event_order", {
-  adrs <- tibble::tribble(
-    ~USUBJID, ~AVISITN, ~AVALC,
-    "1",             1, "PR",
-    "1",             2, "CR",
-    "1",             3, "CR"
-  ) %>%
-    mutate(PARAMCD = "OVR")
+
+## Test 10: test for duplicates: with error ----
+test_that("derive_extreme_event Test 12: test for duplicates: with error", {
+  ad1 <- tribble(
+    ~USUBJID, ~AVALC, ~ADY, ~ASEQ,
+    "1",      "Y",       3,     1,
+    "1",      "Y",       3,     2,
+    "2",      "Y",       5,     1,
+    "3",      "N",       2,     1,
+    "4",      "N",       4,     1
+  )
+
+  ad2 <- tribble(
+    ~USUBJID, ~AVALC, ~ADY, ~ASEQ,
+    "1",      "Y",       3,     1,
+    "2",      "Y",       3,     1,
+    "3",      "Y",       2,     1
+  )
+
 
   expect_error(
     derive_extreme_event(
-      adrs,
       by_vars = exprs(USUBJID),
-      order = exprs(AVISITN),
+      source_datasets = list(ad1 = ad1, ad2 = ad2),
+      order = exprs(event_nr, ADY),
       mode = "first",
+      check_type = "error",
+      tmp_event_nr_var = event_nr,
       events = list(
-        event_joined(
-          join_vars = exprs(AVALC),
-          join_type = "after",
-          first_cond_upper = AVALC.join == "CR",
-          condition = AVALC == "CR",
-          set_values_to = exprs(AVALC = "Y")
+        event(
+          dataset_name = "ad1",
+          condition = AVALC == "Y",
+          mode = "first",
+          set_values_to = exprs(
+            event_nr = 1,
+            AVALC = "Y"
+          )
         ),
-        event_joined(
-          join_vars = exprs(AVALC),
-          join_type = "after",
-          first_cond_upper = AVALC.join %in% c("CR", "PR"),
-          condition = AVALC == "PR",
-          set_values_to = exprs(AVALC = "Y")
+        event(
+          dataset_name = "ad2",
+          condition = AVALC == "Y",
+          mode = "first",
+          set_values_to = exprs(
+            event_nr = 1,
+            AVALC = "Y"
+          )
+        ),
+        event(
+          dataset_name = "ad1",
+          mode = "last",
+          set_values_to = exprs(
+            event_nr = 2,
+            AVALC = "N"
+          )
         )
-      ),
-      ignore_event_order = FALSE,
-      set_values_to = exprs(
-        PARAMCD = "CRSP"
       )
     ),
-    class = "lifecycle_error_deprecated"
+    NULL
   )
 })

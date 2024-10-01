@@ -9,11 +9,8 @@ derive_var_merged_summary(
   dataset_add,
   by_vars,
   new_vars = NULL,
-  new_var,
   filter_add = NULL,
-  missing_values = NULL,
-  analysis_var,
-  summary_fun
+  missing_values = NULL
 )
 }
 \arguments{
@@ -55,13 +52,6 @@ For example:
   )
 }\if{html}{\out{</div>}}}
 
-\item{new_var}{Variable to add
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{new_vars} instead.
-
-The specified variable is added to the input dataset (\code{dataset}) and set to
-the summarized values.}
-
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
 Only observations fulfilling the specified condition are taken into account
@@ -79,21 +69,6 @@ specified for \code{new_vars} can be specified for \code{missing_values}.
 
 \emph{Permitted Values}: named list of expressions, e.g.,
 \code{exprs(BASEC = "MISSING", BASE = -1)}}
-
-\item{analysis_var}{Analysis variable
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{new_vars} instead.
-
-The values of the specified variable are summarized by the function
-specified for \code{summary_fun}.}
-
-\item{summary_fun}{Summary function
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{new_vars} instead.
-
-The specified function that takes as input \code{analysis_var} and performs the
-calculation. This can include built-in functions as well as user defined
-functions, for example \code{mean} or \code{function(x) mean(x, na.rm = TRUE)}.}
 }
 \value{
 The output dataset contains all observations and variables of the
@@ -185,6 +160,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_exist_flag}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
+\code{\link{derive_vars_cat}()},
 \code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_merged}()},

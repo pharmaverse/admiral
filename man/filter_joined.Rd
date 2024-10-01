@@ -10,14 +10,12 @@ filter_joined(
   by_vars,
   join_vars,
   join_type,
-  first_cond = NULL,
   first_cond_lower = NULL,
   first_cond_upper = NULL,
   order,
   tmp_obs_nr_var = NULL,
   filter_add = NULL,
   filter_join,
-  filter = NULL,
   check_type = "warning"
 )
 }
@@ -62,17 +60,6 @@ prior to the observation. For example, to identify AEs occurring on or
 after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
 
 \emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}}
-
-\item{first_cond}{Condition for selecting range of data
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-
-This argument is \emph{deprecated}, please use \code{first_cond_upper} instead.
-
-If this argument is specified, the other observations are restricted up to
-the first observation where the specified condition is fulfilled. If the
-condition is not fulfilled for any of the subsequent observations, all
-observations are removed.}
 
 \item{first_cond_lower}{Condition for selecting range of data (before)
 
@@ -138,22 +125,6 @@ observation. For example in the oncology setting when using this function
 for confirmed best overall response,  \code{filter_join = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1} selects observations with response "CR" and for all
 observations up to the confirmation observation the response is "CR" or
 "NE" and there is at most one "NE".}
-
-\item{filter}{Condition for selecting observations
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-
-This argument is \emph{deprecated}, please use \code{filter_join} instead.
-
-The filter is applied to the joined dataset for selecting the confirmed
-observations. The condition can include summary functions. The joined
-dataset is grouped by the original observations. I.e., the summary function
-are applied to all observations up to the confirmation observation. For
-example in the oncology setting when using this function for confirmed best
-overall response,  \code{filter = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1} selects
-observations with response "CR" and for all observations up to the
-confirmation observation the response is "CR" or "NE" and there is at most
-one "NE".}
 
 \item{check_type}{Check uniqueness?
 

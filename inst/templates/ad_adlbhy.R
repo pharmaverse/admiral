@@ -16,30 +16,28 @@ library(lubridate)
 # ADLBHY is a special dataset specifically used to check for potential drug induced liver injuries
 # Please see "Hy's Law Implementation Guide" on the admiral website for additional information
 
-
-data("admiral_adlb")
-adlb <- admiral_adlb
+adlb <- admiral::admiral_adlb
 
 adlb_annotated <- adlb %>%
   filter(PARAMCD %in% c("AST", "ALT", "BILI") & is.na(DTYPE)) %>%
-  mutate(CRIT1 = case_when(
-    PARAMCD == "AST" ~ "AST >=3xULN",
-    PARAMCD == "ALT" ~ "ALT >=3xULN",
-    PARAMCD == "BILI" ~ "BILI >=2xULN"
-  )) %>%
   # Assign flags for contribution to potential Hy's Law event
-  call_derivation(
-    .,
-    derivation = derive_var_merged_exist_flag,
-    dataset_add = .,
-    by_vars = exprs(USUBJID, LBSEQ, PARAMCD, ADT),
-    variable_params = list(
-      params(
-        new_var = CRIT1FL,
-        condition = (
-          (AVAL / ANRHI >= 3 & PARAMCD %in% c("AST", "ALT")) |
-            (AVAL / ANRHI >= 2 & PARAMCD == "BILI")
-        )
+  slice_derivation(
+    derive_vars_crit_flag,
+    args = params(
+      values_yn = TRUE
+    ),
+    derivation_slice(
+      filter = PARAMCD %in% c("AST", "ALT"),
+      args = params(
+        condition = AVAL / ANRHI >= 3,
+        description = paste(PARAMCD, ">=3xULN")
+      )
+    ),
+    derivation_slice(
+      filter = PARAMCD == "BILI",
+      args = params(
+        condition = AVAL / ANRHI >= 2,
+        description = "BILI >= 2xULN"
       )
     )
   ) %>%
@@ -52,14 +50,14 @@ altast_records <- adlb_annotated %>%
 bili_records <- adlb_annotated %>%
   filter(PARAMCD %in% c("BILI"))
 
-# Use a join and filter to accomplish time-window search
+# Flag elevated AST/ALT values with a BILI elevation within 14 days
 hylaw_records <- derive_vars_joined(
   dataset = altast_records,
   dataset_add = bili_records,
   by_vars = exprs(STUDYID, USUBJID),
   order = exprs(ADY),
   join_type = "all",
-  filter_join = ADT.join - ADT <= 14 & CRIT1FL == "Y" & CRIT1FL.join == "Y",
+  filter_join = 0 <= ADT.join - ADT & ADT.join - ADT <= 14 & CRIT1FL == "Y" & CRIT1FL.join == "Y",
   new_vars = exprs(BILI_LBSEQ = LBSEQ, BILI_DT = ADT, BILI_CRITFL = CRIT1FL),
   mode = "first"
 )

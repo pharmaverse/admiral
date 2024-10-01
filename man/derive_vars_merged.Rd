@@ -13,13 +13,13 @@ derive_vars_merged(
   new_vars = NULL,
   filter_add = NULL,
   mode = NULL,
-  match_flag,
   exist_flag = NULL,
   true_value = "Y",
   false_value = NA_character_,
   missing_values = NULL,
   check_type = "warning",
-  duplicate_msg = NULL
+  duplicate_msg = NULL,
+  relationship = NULL
 )
 }
 \arguments{
@@ -98,17 +98,6 @@ If the \code{order} argument is not specified, the \code{mode} argument is ignor
 
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
 
-\item{match_flag}{Match flag
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{exist_flag} instead.
-
-If the argument is specified (e.g., \code{match_flag = FLAG}), the specified
-variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
-be \code{TRUE} for all selected records from \code{dataset_add} which are merged into
-the input dataset, and \code{NA} otherwise.
-
-\emph{Permitted Values}: Variable name}
-
 \item{exist_flag}{Exist flag
 
 If the argument is specified (e.g., \code{exist_flag = FLAG}), the specified
@@ -165,6 +154,16 @@ If the uniqueness check fails, the specified message is displayed.
   "\{.var \{vars2chr(by_vars)\}\}."
 )
 }\if{html}{\out{</div>}}}
+
+\item{relationship}{Expected merge-relationship between the \code{by_vars}
+variable(s) in \code{dataset} (input dataset) and the \code{dataset_add} (additional dataset)
+containing the additional \code{new_vars}.
+
+This argument is passed to the \code{dplyr::left_join()} function. See
+\url{https://dplyr.tidyverse.org/reference/mutate-joins.html#arguments} for
+more details.
+
+\strong{Permitted Values:} \code{"one-to-one"}, \code{"many-to-one"}, \code{NULL}.}
 }
 \value{
 The output dataset contains all observations and variables of the
@@ -334,6 +333,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
+\code{\link{derive_vars_cat}()},
 \code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_merged_lookup}()},

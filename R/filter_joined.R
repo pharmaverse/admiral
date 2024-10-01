@@ -41,17 +41,6 @@
 #'
 #'   The `*.join` variables are not included in the output dataset.
 #'
-#' @param first_cond Condition for selecting range of data
-#'
-#'   `r lifecycle::badge("deprecated")`
-#'
-#'   This argument is *deprecated*, please use `first_cond_upper` instead.
-#'
-#'   If this argument is specified, the other observations are restricted up to
-#'   the first observation where the specified condition is fulfilled. If the
-#'   condition is not fulfilled for any of the subsequent observations, all
-#'   observations are removed.
-#'
 #' @param first_cond_lower Condition for selecting range of data (before)
 #'
 #'   If this argument is specified, the other observations are restricted from
@@ -105,23 +94,6 @@
 #'
 #'   The condition can include summary functions. The additional dataset is
 #'   grouped by the by variables (`by_vars`).
-#'
-#' @param filter Condition for selecting observations
-#'
-#'   `r lifecycle::badge("deprecated")`
-#'
-#'   This argument is *deprecated*, please use `filter_join` instead.
-#'
-#'   The filter is applied to the joined dataset for selecting the confirmed
-#'   observations. The condition can include summary functions. The joined
-#'   dataset is grouped by the original observations. I.e., the summary function
-#'   are applied to all observations up to the confirmation observation. For
-#'   example in the oncology setting when using this function for confirmed best
-#'   overall response,  `filter = AVALC == "CR" & all(AVALC.join %in% c("CR",
-#'   "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1` selects
-#'   observations with response "CR" and for all observations up to the
-#'   confirmation observation the response is "CR" or "NE" and there is at most
-#'   one "NE".
 #'
 #' @param filter_join Condition for selecting observations
 #'
@@ -444,14 +416,12 @@ filter_joined <- function(dataset,
                           by_vars,
                           join_vars,
                           join_type,
-                          first_cond = NULL,
                           first_cond_lower = NULL,
                           first_cond_upper = NULL,
                           order,
                           tmp_obs_nr_var = NULL,
                           filter_add = NULL,
                           filter_join,
-                          filter = NULL,
                           check_type = "warning") {
   # Check input parameters
   assert_vars(by_vars)
@@ -464,22 +434,10 @@ filter_joined <- function(dataset,
     )
   first_cond_lower <- assert_filter_cond(enexpr(first_cond_lower), optional = TRUE)
   first_cond_upper <- assert_filter_cond(enexpr(first_cond_upper), optional = TRUE)
-  if (!missing(first_cond)) {
-    deprecate_stop(
-      "1.1.0",
-      "filter_joined(first_cond=)",
-      "filter_joined(first_cond_upper=)"
-    )
-    first_cond_upper <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
-  }
   assert_expr_list(order)
   tmp_obs_nr_var <- assert_symbol(enexpr(tmp_obs_nr_var), optional = TRUE)
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
   filter_join <- assert_filter_cond(enexpr(filter_join))
-  if (!missing(filter)) {
-    deprecate_stop("1.1.0", "filter_joined(filter=)", "filter_joined(filter_join=)")
-    filter_join <- assert_filter_cond(enexpr(filter))
-  }
   check_type <-
     assert_character_scalar(
       check_type,

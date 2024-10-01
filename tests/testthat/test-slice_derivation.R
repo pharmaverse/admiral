@@ -146,3 +146,50 @@ test_that("slice_derivation Test 4: slice without arguments", {
     keys = c("USUBJID", "VSSEQ")
   )
 })
+
+## Test 5: calling it in a function ----
+test_that("slice_derivation Test 5: calling it in a function", {
+  expected <- tibble::tribble(
+    ~USUBJID, ~ARM, ~MVAL,
+    "1",      "A",  "A_val",
+    "2",      "B",  "B_val"
+  )
+
+  a_data <- tibble::tribble(
+    ~USUBJID, ~AVALC,
+    "1",      "A_val"
+  )
+
+  b_data <- tibble::tribble(
+    ~USUBJID, ~AVALC,
+    "2",      "B_val"
+  )
+
+  my_merge <- function(dataset, my_b_data) {
+    slice_derivation(
+      dataset,
+      derivation = derive_vars_merged,
+      args = params(
+        by_vars = exprs(USUBJID),
+        new_vars = exprs(MVAL = AVALC)
+      ),
+      derivation_slice(
+        filter = ARM == "A",
+        args = params(dataset_add = a_data)
+      ),
+      derivation_slice(
+        filter = ARM == "B",
+        args = params(dataset_add = my_b_data)
+      )
+    )
+  }
+
+  expect_dfs_equal(
+    base = expected,
+    compare = my_merge(
+      dataset = select(expected, -MVAL),
+      my_b_data = b_data
+    ),
+    keys = "USUBJID"
+  )
+})

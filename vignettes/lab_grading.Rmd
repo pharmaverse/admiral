@@ -25,7 +25,7 @@ library(admiraldev)
 Within the ADLB ADaM data set there is a concept of lab grading, where there is 
 a set of criteria for particular lab tests that grade the severity or abnormality of 
 a lab value. The grades are from 0 to 4, where grade 0 can be viewed generally as a 
-“NORMAL” value. The higher the grade the more severe or more abnormal the lab value is.
+"NORMAL" value. The higher the grade the more severe or more abnormal the lab value is.
 There are several sets of lab grading criteria, currently `{admiral}` has implemented
 NCI-CTCAEv4, NCI-CTCAEv5 and DAIDS grading criteria. In future releases `{admiral}` may look
 to implement further grading criteria.
@@ -89,9 +89,9 @@ both side of the equation, the number of significant digits used to compare is p
 function `derive_var_atoxgr_dir()` via the argument `signif_dig`. Please see documentation of the 
 function for more details and the blog post [How admiral handles floating points](https://pharmaverse.github.io/blog/posts/2023-10-30_floating_point/floating_point.html) for more context.
 
-# Creating the lab grade
+# Creating the Lab Grade
 
-## Mapping ADLB VAD to the TERM variable in the `{admiral}` metadata data set
+## Mapping `ADLB` to the `TERM` variable in the `{admiral}` metadata data set
 
 
 ```{r message=FALSE}
@@ -101,9 +101,9 @@ library(dplyr, warn.conflicts = FALSE)
 library(stringr)
 library(tibble)
 
-data("lb")
+lb <- pharmaversesdtm::lb
+adsl <- admiral::admiral_adsl
 
-adsl <- admiral_adsl
 lb <- convert_blanks_to_na(lb)
 ```
 ```{r echo=FALSE}
@@ -225,7 +225,11 @@ adlb <- lb %>%
   mutate(
     PARCAT1 = LBCAT,
     AVAL = LBSTRESN,
-    AVALC = LBSTRESC,
+    AVALC = ifelse(
+      is.na(LBSTRESN) | as.character(LBSTRESN) != LBSTRESC,
+      LBSTRESC,
+      NA
+    ),
     ANRLO = LBSTNRLO,
     ANRHI = LBSTNRHI,
     BASE = AVAL - 10
@@ -335,13 +339,13 @@ adlb %>%
 ## Terms graded
 
 Grading is implemented for those lab tests where a lab value is included in the grading definition,
-`{admiral}` does NOT try to read any other data to determine the grade, and only the ADLB VAD is used.
-The following CTCAE v4.0 SOC values were identified for grading, these are “Investigations", 
-“Metabolism and nutrition disorders” and “Blood and lymphatic system disorders”.
+`{admiral}` does NOT try to read any other data to determine the grade, and only the `ADLB` dataset is used.
+The following CTCAE v4.0 SOC values were identified for grading, these are "Investigations", 
+"Metabolism and nutrition disorders" and "Blood and lymphatic system disorders".
 
 From these SOC values the following terms criteria is implemented in `{admiral}` 
 
-From SOC = “Investigations" there are 21 CTCAE v4.0 Terms:
+From SOC = "Investigations" there are 21 CTCAE v4.0 Terms:
 
   + Activated partial thromboplastin time prolonged
   + Alanine aminotransferase increased
@@ -365,7 +369,7 @@ From SOC = “Investigations" there are 21 CTCAE v4.0 Terms:
   + Serum amylase increased
   + White blood cell decreased
 
-From the SOC =  “Metabolism and nutrition disorders” there are 14 CTCAE v4.0 Terms:
+From the SOC =  "Metabolism and nutrition disorders" there are 14 CTCAE v4.0 Terms:
 
   + Hypercalcemia
   + Hyperglycemia
@@ -382,7 +386,7 @@ From the SOC =  “Metabolism and nutrition disorders” there are 14 CTCAE v4.0
   + Hyponatremia
   + Hypophosphatemia
 
-From the SOC =  “Blood and lymphatic system disorders” there are 2 CTCAE v4.0 Terms:
+From the SOC =  "Blood and lymphatic system disorders" there are 2 CTCAE v4.0 Terms:
 
   + Anemia
   + Leukocytosis
@@ -477,7 +481,7 @@ atoxgr_criteria_ctcv4 %>%
 ## Terms graded
 
 Grading is implemented for those lab tests where a lab value is included in the grading definition,
-`{admiral}` does NOT try to read any other data to determine the grade, and only the ADLB VAD is used.
+`{admiral}` does NOT try to read any other data to determine the grade, and only the `ADLB` dataset is used.
 The following CTCAE v5.0 SOC values were identified for grading, these are “Investigations", 
 “Metabolism and nutrition disorders” and “Blood and lymphatic system disorders”.
 
@@ -642,9 +646,9 @@ atoxgr_criteria_ctcv5 %>%
 ## Terms graded
 
 Grading is implemented for those lab tests where a lab value is included in the grading definition,
-`{admiral}` does NOT try to read any other data to determine the grade, and only the ADLB VAD is used.
-The following DAIDS SOC values were identified for grading, these are “Chemistries" and 
-“Hematology”.
+`{admiral}` does NOT try to read any other data to determine the grade, and only the `ADLB` dataset is used.
+The following DAIDS SOC values were identified for grading, these are "Chemistries" and 
+"Hematology".
 
 From these SOC values the following terms criteria is implemented in `{admiral}` 
 

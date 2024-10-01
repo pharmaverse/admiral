@@ -4,7 +4,6 @@ ADEG
 ADEX
 ADJAE
 ADLB
-ADLBHY
 ADMH
 ADNCA
 ADPC
@@ -37,7 +36,6 @@ Alanine
 Alkalosis
 Analyte
 Ania
-Asha
 Aspartate
 BDS
 BILI
@@ -50,6 +48,7 @@ Bazett's
 Biologics
 CDISC
 CKD
+CMD
 COVID
 CPK
 CQ
@@ -61,7 +60,6 @@ CTCAEV
 CTCAEv
 CVD
 Carlucci
-Chakma
 Cheatsheet
 Chemistries
 Chol
@@ -69,11 +67,11 @@ Cockcroft
 Creat
 Creatine
 Creatinine
-cyclomatic
 DAIDS
 DAIDs
 DIABP
 DILI
+DS
 DT
 DTC
 DTF
@@ -96,7 +94,6 @@ Fibrinogen
 Findability
 Framingham
 Franciszek
-François
 Fridericia
 Fridericia's
 Fujimoto
@@ -128,9 +125,9 @@ Hypokalemia
 Hypomagnesemia
 Hyponatremia
 Hypophosphatemia
-Iain
 IG
 INR
+Iain
 Jaxon
 Jordanna
 Kabi
@@ -168,11 +165,13 @@ NCICTCAEv
 NFRLT
 NPRLT
 NRRLT
+Neitmann
 Neutrophil
 Nom
 Nonfasting
 O'Reilly
 OCCDS
+ORCID
 Ojesh
 Omnes
 Ondrej
@@ -182,7 +181,6 @@ PARAMN
 PLDOSE
 PTT
 Param
-param
 Pavan
 Pharma
 Pharmacokinetic
@@ -197,6 +195,7 @@ README
 Rahal
 Ratford
 Romain
+Rothstein
 SCE
 SCN
 SCOPEN
@@ -224,7 +223,6 @@ Syed
 Sys
 TADJ
 TADJAE
-TBC
 TDOSE
 TDURD
 TERMCHAR
@@ -241,15 +239,12 @@ ULN
 USUBJID
 USUBJIDs
 Upadhyay
-VAD
 Vignesh
 WBC
 Walkowiak
-Walkthrough
 Wenyi
 XXXXXXXX
 Yohann
-acknowledgements
 admiralci
 admiraldev
 admiralonco
@@ -271,6 +266,7 @@ chk
 codebase
 constructible
 creatinine
+cyclomatic
 dL
 datepart
 datetime
@@ -294,7 +290,6 @@ framingham
 funder
 glomerular
 groupwise
-lockfile
 lubridate
 mL
 magrittr
@@ -340,7 +335,6 @@ timepoint
 tte
 umol
 ungrouped
-unintuitive
 usethis
 xULN
 xportr
