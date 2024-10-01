@@ -83,6 +83,8 @@
 #'
 #' @examples
 #'
+#' library(tibble)
+#'
 #' # Example 1: Derive Waist-to-Hip Ratio where both source parameters are measured multiple times
 #'
 #' advs <- tribble(

@@ -116,6 +116,8 @@ The analysis value of the new parameter is derived as
 }
 \examples{
 
+library(tibble)
+
 # Example 1: Derive Waist-to-Hip Ratio where both source parameters are measured multiple times
 
 advs <- tribble(
