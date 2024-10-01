@@ -178,7 +178,7 @@ create_single_dose_dataset(data,
   lookup_column = CDISC_VALUE,
   nominal_time = NFRLT,
   keep_source_vars = exprs(
-    get_admiral_option("subject_keys"), EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, NFRLT
+    USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, NFRLT
   )
 )
 
@@ -272,7 +272,7 @@ create_single_dose_dataset(
   end_date = EXENDT,
   end_datetime = EXENDTM,
   keep_source_vars = exprs(
-    get_admiral_option("subject_keys"), EXTRT, EXDOSE, EXDOSFRQ,
+    STUDYID, USUBJID, EXTRT, EXDOSE, EXDOSFRQ,
     DCUTDT, EXSTDT, EXSTDTM, EXENDT, EXENDTM, EXSTDTC, EXENDTC
   )
 )
