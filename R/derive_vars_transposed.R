@@ -260,7 +260,7 @@ derive_vars_atc <- function(dataset,
                             dataset_facm,
                             by_vars = c(
                               get_admiral_option("subject_keys"),
-                              expr(CMREFID = FAREFID)
+                              CMREFID = FAREFID
                             ),
                             value_var = FASTRESC) {
   value_var <- assert_symbol(enexpr(value_var))
