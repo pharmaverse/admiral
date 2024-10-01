@@ -258,8 +258,10 @@ derive_vars_transposed <- function(dataset,
 #' derive_vars_atc(cm, facm)
 derive_vars_atc <- function(dataset,
                             dataset_facm,
-                            by_vars = c(get_admiral_option("subject_keys"),
-                            exprs(CMREFID = FAREFID)),
+                            by_vars = c(
+                              get_admiral_option("subject_keys"),
+                              expr(CMREFID = FAREFID)
+                            ),
                             value_var = FASTRESC) {
   value_var <- assert_symbol(enexpr(value_var))
   assert_vars(by_vars)

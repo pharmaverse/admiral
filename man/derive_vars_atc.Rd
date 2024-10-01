@@ -7,7 +7,7 @@
 derive_vars_atc(
   dataset,
   dataset_facm,
-  by_vars = c(get_admiral_option("subject_keys"), exprs(CMREFID = FAREFID)),
+  by_vars = c(get_admiral_option("subject_keys"), expr(CMREFID = FAREFID)),
   value_var = FASTRESC
 )
 }
@@ -25,17 +25,17 @@ The variables specified by the \code{by_vars} and \code{value_var} parameters,
 
 Keys used to merge \code{dataset_facm} with \code{dataset}.}
 
+\item{value_var}{The variable of \code{dataset_facm} containing the values of the
+transposed variables
+
+Default: \code{FASTRESC}}
+
 \item{id_vars}{ID variables
 
 Variables (excluding by_vars) that uniquely identify each observation in \code{dataset_merge}.
 
 \emph{Permitted Values}: list of variables created by \code{exprs()}
 e.g. \code{exprs(USUBJID, VISIT)}}
-
-\item{value_var}{The variable of \code{dataset_facm} containing the values of the
-transposed variables
-
-Default: \code{FASTRESC}}
 }
 \value{
 The input dataset with ATC variables added
