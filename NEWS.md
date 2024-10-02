@@ -45,7 +45,7 @@
 </details>
 
 # admiral 1.1.1
-- `derive_vars_atc()` and `create_single_dose_dataset()` `by_vars` argument updated to use `get_admiral_option("subject_keys")` instead of  USUBJID or STUDYID.
+- `derive_vars_atc()` and `create_single_dose_dataset()` `by_vars` argument updated to use `get_admiral_option("subject_keys")` instead of  `USUBJID` or `STUDYID`.
 - test scripts, R, and markdown files for `create_single_dose_dataset` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. 
 - `derive_extreme_event()` was fixed such that `check_type = "none"` is accepted
 again. (#2462)
