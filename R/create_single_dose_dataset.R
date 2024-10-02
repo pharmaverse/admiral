@@ -287,12 +287,12 @@ dose_freq_lookup <- tribble(
 #' library(dplyr)
 #'
 #' data <- tribble(
-#'   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
-#'   "P01", "Q2D", ymd("2021-01-01"), ymd_hms("2021-01-01 10:30:00"),
+#'   ~STUDYID, ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
+#'   "STUDY01", "P01", "Q2D", ymd("2021-01-01"), ymd_hms("2021-01-01 10:30:00"),
 #'   ymd("2021-01-07"), ymd_hms("2021-01-07 11:30:00"),
-#'   "P01", "Q3D", ymd("2021-01-08"), ymd_hms("2021-01-08 12:00:00"),
+#'   "STUDY01", "P01", "Q3D", ymd("2021-01-08"), ymd_hms("2021-01-08 12:00:00"),
 #'   ymd("2021-01-14"), ymd_hms("2021-01-14 14:00:00"),
-#'   "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd_hms("2021-01-15 09:57:00"),
+#'   "STUDY01", "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd_hms("2021-01-15 09:57:00"),
 #'   ymd("2021-01-29"), ymd_hms("2021-01-29 10:57:00")
 #' )
 #'
@@ -307,10 +307,10 @@ dose_freq_lookup <- tribble(
 #' )
 #'
 #' data <- tribble(
-#'   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
-#'   "P01", "Q30MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
+#'   ~STUDYID, ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
+#'   "STUDY01", "P01", "Q30MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
 #'   ymd("2021-01-01"), ymd_hms("2021-01-01T07:00:00"),
-#'   "P02", "Q90MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
+#'   "STUDY02", "P02", "Q90MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
 #'   ymd("2021-01-01"), ymd_hms("2021-01-01T09:00:00")
 #' )
 #'
@@ -323,12 +323,12 @@ dose_freq_lookup <- tribble(
 #' # Example with nominal time
 #'
 #' data <- tribble(
-#'   ~USUBJID, ~EXDOSFRQ, ~NFRLT, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
-#'   "P01", "BID", 0, ymd("2021-01-01"), ymd_hms("2021-01-01 08:00:00"),
+#'   ~STUDYID, ~USUBJID, ~EXDOSFRQ, ~NFRLT, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
+#'   "STUDY01", "P01", "BID", 0, ymd("2021-01-01"), ymd_hms("2021-01-01 08:00:00"),
 #'   ymd("2021-01-07"), ymd_hms("2021-01-07 20:00:00"),
-#'   "P01", "BID", 168, ymd("2021-01-08"), ymd_hms("2021-01-08 08:00:00"),
+#'   "STUDY01", "P01", "BID", 168, ymd("2021-01-08"), ymd_hms("2021-01-08 08:00:00"),
 #'   ymd("2021-01-14"), ymd_hms("2021-01-14 20:00:00"),
-#'   "P01", "BID", 336, ymd("2021-01-15"), ymd_hms("2021-01-15 08:00:00"),
+#'   "STUDY01", "P01", "BID", 336, ymd("2021-01-15"), ymd_hms("2021-01-15 08:00:00"),
 #'   ymd("2021-01-29"), ymd_hms("2021-01-29 20:00:00")
 #' )
 #'
