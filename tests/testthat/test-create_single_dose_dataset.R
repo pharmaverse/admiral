@@ -136,8 +136,10 @@ test_that("create_single_dose_dataset Test 3: Works for different treatments", {
       input,
       start_datetime = ASTDTM,
       end_datetime = AENDTM,
-      keep_source_vars = exprs(!!!get_admiral_option("subject_keys"),
-      EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, EXTRT)
+      keep_source_vars = exprs(
+        !!!get_admiral_option("subject_keys"),
+        EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, EXTRT
+      )
     ),
     expected_output,
     keys = c("EXTRT", "ASTDT")

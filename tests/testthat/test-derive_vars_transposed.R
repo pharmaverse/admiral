@@ -1,15 +1,15 @@
 dataset <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~VAR1,
-  "STUDY01", "P01",    3,
-  "STUDY01", "P02",    31,
-  "STUDY01", "P03",    42
+  "STUDY01", "P01", 3,
+  "STUDY01", "P02", 31,
+  "STUDY01", "P03", 42
 )
 dataset_merge <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~TESTCD, ~VALUE,
-  "STUDY01", "P01",    "T01",   31,
-  "STUDY01", "P01",    "T02",   5,
-  "STUDY01", "P02",    "T01",   3,
-  "STUDY01", "P03",    "T02",   9
+  "STUDY01", "P01", "T01", 31,
+  "STUDY01", "P01", "T02", 5,
+  "STUDY01", "P02", "T01", 3,
+  "STUDY01", "P03", "T02", 9
 )
 
 ## Test 1: the merge dataset is transposed and merged correctly ----
@@ -167,6 +167,8 @@ test_that("derive_vars_transposed Test 5: ATC variables are merged properly", {
     id_vars = exprs(FAGRPID)
   )
 
-  expect_dfs_equal(expected_output, actual_output, keys = c("STUDYID", "USUBJID",
-  "CMDECOD", "ATC4CD"))
+  expect_dfs_equal(expected_output, actual_output, keys = c(
+    "STUDYID", "USUBJID",
+    "CMDECOD", "ATC4CD"
+  ))
 })
