@@ -10,6 +10,10 @@
 - Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
 
 ## Updates of Existing Functions
+- `derive_vars_atc()` and `create_single_dose_dataset()` `by_vars` argument updated to use `get_admiral_option("subject_keys")` instead of  `USUBJID` or `STUDYID`.
+- test scripts, R, and markdown files for `create_single_dose_dataset` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. 
+- `derive_extreme_event()` was fixed such that `check_type = "none"` is accepted
+again. (#2462)
 
 ## Breaking Changes
   
@@ -45,11 +49,6 @@
 </details>
 
 # admiral 1.1.1
-- `derive_vars_atc()` and `create_single_dose_dataset()` `by_vars` argument updated to use `get_admiral_option("subject_keys")` instead of  `USUBJID` or `STUDYID`.
-- test scripts, R, and markdown files for `create_single_dose_dataset` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. 
-- `derive_extreme_event()` was fixed such that `check_type = "none"` is accepted
-again. (#2462)
-
 - `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
 
 # admiral 1.1.0
