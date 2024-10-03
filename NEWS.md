@@ -42,7 +42,7 @@
 <details>
 <summary>Developer Notes</summary>
 
-- Adopted `data-raw/data` R Pacakge Convention (#2427)
+- Adopted `data-raw/data` R Package Convention (#2427)
 
 </details>
 
