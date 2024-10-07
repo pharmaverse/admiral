@@ -81,31 +81,4 @@ admiral_adlb
 #
 # Finally, save reduced ds
 #
-use_data(admiral_adlb, overwrite = TRUE)
-
-#
-#  TEST - is dataset identical to .... backup of unaltered dataset
-#
-e1 <- new.env()
-e2 <- new.env()
-load("data/admiral_adlb.rda", e1)
-
-# CHANGE to YOUR location of original dataset
-load("data-backup/admiral_adlb.rda", e2)
-
-# compare field names
-t <- tibble(e1 = names(e1$admiral_adlb), e2 = names(e2$admiral_adlb))
-t |> print(n = 111)
-
-identical(e1$admiral_adlb, e2$admiral_adlb)
-diffdf(e1$admiral_adlb, e2$admiral_adlb)
-
-## Capture diffdf to file
-
-capture.output(
-  diffdf(
-    compare = e1$admiral_adlb, base = e2$admiral_adlb,
-    keys = c("STUDYID", "DOMAIN", "USUBJID", "AVAL", "VISIT")
-  ),
-  file = "data-raw/diffdf_adlb_23SEPT"
-)
+usethis::use_data(admiral_adlb, overwrite = TRUE)
