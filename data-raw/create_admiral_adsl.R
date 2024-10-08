@@ -6,7 +6,7 @@ library(diffdf) # nolint
 #
 # nolint start: object_name_linter.
 # To clarify directories (can be removed)
-CACHE_DIR <- "~/.config/cache/R/admiral_templates_data/"
+CACHE_DIR <- tools::R_user_dir("admiral_templates_data", which = "cache")
 DATA_DIR <- "data-dir"
 DATA_RAW <- "data-raw"
 TEMPLATE_DIR <- "inst/templates/"
@@ -20,13 +20,11 @@ if (file.exists(THE_FILE)) file.remove(THE_FILE)
 #
 # STEPS
 #
-# First, use template to create the R script (in data-raw/admiral_adlb.R).
-# Next, source this script and create the data (~/.cache/R/admiral_template_data/admiral_adlb.rda)
-# Finally, shorten this data (now ~ 1.2 MB) by selecting only certain USUBJID
+# Source template (ad_adsl.R) to create the data (adsl.rda) and save in CACHE_DIR
 #
 source(paste0(TEMPLATE_DIR, "/ad_adsl.R")) # nolint
-load(paste0(CACHE_DIR, "adsl.rda"))
-admiral_adsl <- adsl
+load(paste0(CACHE_DIR, "/adsl.rda"))
+admiral_adsl <- adsl # use correct name
 
 #
 # Finally, save reduced ds
