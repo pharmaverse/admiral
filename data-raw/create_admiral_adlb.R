@@ -18,24 +18,14 @@ THE_FILE <- paste0(CACHE_DIR, "/adsl.rda")
 if (file.exists(THE_FILE)) file.remove(THE_FILE)
 # nolint end
 
-#
-# STEPS
-#
-# Source template (ad_adlb.R) to create the data (adlb.rda) and save in CACHE_DIR
 
+# Create dataset data/admiral_adlb.rda
 
-source(paste0(TEMPLATE_DIR, "/ad_adlb.R")) # nolint
-load(paste0(CACHE_DIR, "/adlb.rda"))
+# Run template script to create adlb
+source("inst/templates/ad_adlb.R", echo = TRUE) # nolint
 
-# Finally, shorten this data (now ~ 1.2 MB) by selecting only certain USUBJID
-#
-# limit rows, by selecting only these USUBJID
-#
-#' 01-701-1015, 01-701-1023, 01-701-1028, 01-701-1033,
-#' 01-701-1034, 01-701-1047, 01-701-1097, 01-705-1186,
-#' 01-705-1292, 01-705-1310, 01-708-1286
-
-usubjid <-
+# Limit rows by selecting only these USUBJIDs
+usubjids <-
   c(
     "01-701-1015",
     "01-701-1023",
@@ -50,14 +40,18 @@ usubjid <-
     "01-708-1286"
   )
 
-#  prepare for inner join
-user <- tibble(
-  USUBJID = usubjid
-)
-result <- inner_join(adlb, user)
-admiral_adlb <- result
+admiral_adlb <- filter(adlb, USUBJID %in% usubjids)
 
-#
-# Finally, save reduced ds
-#
+
+# Get previous dataset for comparison
+adlb_old <- admiral::admiral_adlb
+
+# Finally, save reduced dataset
 usethis::use_data(admiral_adlb, overwrite = TRUE)
+
+# Compare with previous version
+diffdf::diffdf(
+  base = adlb_old,
+  compare = admiral_adlb,
+  keys = c("USUBJID", "PARAMCD", "AVISIT", "ADT")
+)
