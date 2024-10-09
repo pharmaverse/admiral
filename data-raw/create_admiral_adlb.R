@@ -1,23 +1,5 @@
 #  Create dataset:   data/admiral_adlb.rda
 #  This script:  create_admiral_adlb.R creates dataset data/admiral_adlb.rda.
-#
-
-# Preliminary
-library(diffdf) # nolint
-
-# To clarify directories (can be removed)
-# nolint start: object_name_linter
-CACHE_DIR <- tools::R_user_dir("admiral_templates_data", which = "cache")
-DATA_DIR <- "data-dir"
-DATA_RAW <- "data-raw"
-TEMPLATE_DIR <- "inst/templates/"
-
-# clean CACHE_DIR
-THE_FILE <- paste0(CACHE_DIR, "/adlb.rda")
-THE_FILE <- paste0(CACHE_DIR, "/adsl.rda")
-if (file.exists(THE_FILE)) file.remove(THE_FILE)
-# nolint end
-
 
 # Create dataset data/admiral_adlb.rda
 
@@ -41,7 +23,6 @@ usubjids <-
   )
 
 admiral_adlb <- filter(adlb, USUBJID %in% usubjids)
-
 
 # Get previous dataset for comparison
 adlb_old <- admiral::admiral_adlb
