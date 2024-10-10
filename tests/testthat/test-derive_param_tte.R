@@ -917,18 +917,19 @@ test_that("derive_param_tte Test 13: error if dataset_name not in source_datsets
   )
 
   expect_snapshot(
-   derive_param_tte(
-    dataset_adsl = adsl,
-    start_date = TRTSDT,
-    event_conditions = list(death),
-    censor_conditions = list(lstalv),
-    source_datasets = list(adsl = adsl),
-    set_values_to = exprs(
-      PARAMCD = "OS",
-      PARAM = "Overall Survival"
-    )
-  ),
-  error = TRUE)
+    derive_param_tte(
+      dataset_adsl = adsl,
+      start_date = TRTSDT,
+      event_conditions = list(death),
+      censor_conditions = list(lstalv),
+      source_datasets = list(adsl = adsl),
+      set_values_to = exprs(
+        PARAMCD = "OS",
+        PARAM = "Overall Survival"
+      )
+    ),
+    error = TRUE
+  )
 })
 
 # list_tte_source_objects ----
