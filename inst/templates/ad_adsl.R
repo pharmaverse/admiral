@@ -95,24 +95,8 @@ ex_ext <- ex %>%
 
 # Source objects ----
 
-# Death cause sources
-src_ae <- dthcaus_source(
-  dataset_name = "ae",
-  filter = AEOUT == "FATAL",
-  date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
-  mode = "first",
-  dthcaus = AEDECOD,
-  set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
-)
+# Death cause sources, replaced by derive_vars_extreme_event() function
 
-src_ds <- dthcaus_source(
-  dataset_name = "ds",
-  filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-  date = DSSTDT,
-  mode = "first",
-  dthcaus = DSTERM,
-  set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
-)
 
 adsl <- dm %>%
   ## derive treatment variables (TRT01P, TRT01A) ----
