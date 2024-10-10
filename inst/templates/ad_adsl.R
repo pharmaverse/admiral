@@ -2,18 +2,17 @@
 #
 # Label: Subject Level Analysis Dataset
 #
-# Input: dm, ex, ds
+# Load packages (including test datasets)
 library(admiral)
 library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
 
-# Load source datasets ----
+# Though datasets are already loaded, identify specific datasets for this template.
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
-# For illustration purposes read in admiral test data
 
 dm <- pharmaversesdtm::dm
 ds <- pharmaversesdtm::ds
@@ -96,24 +95,8 @@ ex_ext <- ex %>%
 
 # Source objects ----
 
-# Death cause sources
-src_ae <- dthcaus_source(
-  dataset_name = "ae",
-  filter = AEOUT == "FATAL",
-  date = convert_dtc_to_dtm(AESTDTC, highest_imputation = "M"),
-  mode = "first",
-  dthcaus = AEDECOD,
-  set_values_to = exprs(DTHDOM = "AE", DTHSEQ = AESEQ)
-)
+# Death cause sources, replaced by derive_vars_extreme_event() function
 
-src_ds <- dthcaus_source(
-  dataset_name = "ds",
-  filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-  date = DSSTDT,
-  mode = "first",
-  dthcaus = DSTERM,
-  set_values_to = exprs(DTHDOM = "DS", DTHSEQ = DSSEQ)
-)
 
 adsl <- dm %>%
   ## derive treatment variables (TRT01P, TRT01A) ----

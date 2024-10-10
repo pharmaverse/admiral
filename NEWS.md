@@ -9,6 +9,8 @@
 
 - Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
 
+- Remove src_ae_dthcaus_source() and src_ds_dthcaus_source(); replaced by derive_vars_extreme_event() 2517 and #XXXX)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
