@@ -2,18 +2,17 @@
 #
 # Label: Subject Level Analysis Dataset
 #
-# Input: dm, ex, ds
+# Load packages (including test datasets)
 library(admiral)
 library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
 
-# Load source datasets ----
+# Though datasets are already loaded, identify specific datasets for this template.
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
-# For illustration purposes read in admiral test data
 
 dm <- pharmaversesdtm::dm
 ds <- pharmaversesdtm::ds
