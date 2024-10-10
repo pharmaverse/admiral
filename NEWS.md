@@ -11,6 +11,10 @@
 
 ## Updates of Existing Functions
 
+- `derive_param_tte()` now provides a useful error message if in
+`event_conditions` or `censor_conditions` a dataset is referenced which is not
+specified in `source_datasets`. (#2519)
+
 ## Breaking Changes
   
 - The following function arguments are entering the next phase of the deprecation process: (#2487)
