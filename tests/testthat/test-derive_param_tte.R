@@ -885,18 +885,63 @@ test_that("derive_param_tte Test 12: test dataset and dynamic byvars populated",
   )
 })
 
+## Test 13: error if dataset_name not in source_datsets ----
+test_that("derive_param_tte Test 13: error if dataset_name not in source_datsets", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~DTHFL, ~DTHDT,            ~LSTALVDT,         ~TRTSDT,           ~TRTSDTF,
+    "03",     "Y",    ymd("2021-08-21"), ymd("2021-08-21"), ymd("2021-08-10"), NA,
+    "04",     "N",    NA,                ymd("2021-05-24"), ymd("2021-02-03"), NA
+  ) %>%
+    mutate(STUDYID = "AB42")
+
+  death <- event_source(
+    dataset_name = "adsl",
+    filter = DTHFL == "Y",
+    date = DTHDT,
+    set_values_to = exprs(
+      EVENTDESC = "DEATH",
+      SRCDOM = "ADSL",
+      SRCVAR = "DTHDT"
+    )
+  )
+
+  lstalv <- censor_source(
+    dataset_name = "adls",
+    date = LSTALVDT,
+    censor = 1,
+    set_values_to = exprs(
+      EVENTDESC = "LAST KNOWN ALIVE DATE",
+      SRCDOM = "ADSL",
+      SRCVAR = "LSTALVDT"
+    )
+  )
+
+  expect_snapshot(
+   derive_param_tte(
+    dataset_adsl = adsl,
+    start_date = TRTSDT,
+    event_conditions = list(death),
+    censor_conditions = list(lstalv),
+    source_datasets = list(adsl = adsl),
+    set_values_to = exprs(
+      PARAMCD = "OS",
+      PARAM = "Overall Survival"
+    )
+  ),
+  error = TRUE)
+})
 
 # list_tte_source_objects ----
-## Test 13: error is issued if package does not exist ----
-test_that("list_tte_source_objects Test 13: error is issued if package does not exist", {
+## Test 14: error is issued if package does not exist ----
+test_that("list_tte_source_objects Test 14: error is issued if package does not exist", {
   expect_snapshot(
     list_tte_source_objects(package = "tte"),
     error = TRUE
   )
 })
 
-## Test 14: expected objects produced ----
-test_that("list_tte_source_objects Test 14: expected objects produced", {
+## Test 15: expected objects produced ----
+test_that("list_tte_source_objects Test 15: expected objects produced", {
   expected_output <- tibble::tribble(
     ~object,            ~dataset_name,                                              ~filter,
     "ae_ser_event",            "adae",                 quote(TRTEMFL == "Y" & AESER == "Y"),
