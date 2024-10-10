@@ -2,17 +2,18 @@
 #
 # Label: Subject Level Analysis Dataset
 #
-# Load packages (including test datasets)
+# Input: dm, ds, ex, ae, lb
 library(admiral)
 library(pharmaversesdtm) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
 
-# Though datasets are already loaded, identify specific datasets for this template.
+# Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
+# For illustration purposes read in admiral test data.
 
 dm <- pharmaversesdtm::dm
 ds <- pharmaversesdtm::ds
@@ -24,6 +25,7 @@ lb <- pharmaversesdtm::lb
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
+
 
 dm <- convert_blanks_to_na(dm)
 ds <- convert_blanks_to_na(ds)
