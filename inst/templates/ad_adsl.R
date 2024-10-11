@@ -97,9 +97,6 @@ ex_ext <- ex %>%
 
 # Source objects ----
 
-# Death cause sources, replaced by derive_vars_extreme_event() function
-
-
 adsl <- dm %>%
   ## derive treatment variables (TRT01P, TRT01A) ----
   # See also the "Visit and Period Variables" vignette
