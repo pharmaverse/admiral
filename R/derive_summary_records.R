@@ -33,22 +33,6 @@
 #'
 #'   `r roxygen_param_by_vars()`
 #'
-#' @param filter
-#'
-#'  `r lifecycle::badge("deprecated")` Please use `filter_add` instead.
-#'
-#'   Filter condition as logical expression to apply during
-#'   summary calculation. By default, filtering expressions are computed within
-#'   `by_vars` as this will help when an aggregating, lagging, or ranking
-#'   function is involved.
-#'
-#'   For example,
-#'
-#'   + `filter = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all `AVAL`
-#'   values greater than mean of `AVAL` with in `by_vars`.
-#'   + `filter = (dplyr::n() > 2)` will filter n count of `by_vars` greater
-#'   than 2.
-#'
 #' @param filter_add Filter condition as logical expression to apply during
 #'   summary calculation. By default, filtering expressions are computed within
 #'   `by_vars` as this will help when an aggregating, lagging, or ranking
@@ -88,8 +72,6 @@
 #'
 #'   *Permitted Values*: named list of expressions, e.g.,
 #'   `exprs(AVAL = -9999)`
-#'
-#' @inheritParams get_summary_records
 #'
 #' @return A data frame with derived records appended to original dataset.
 #'
@@ -191,10 +173,7 @@ derive_summary_records <- function(dataset = NULL,
                                    dataset_add,
                                    dataset_ref = NULL,
                                    by_vars,
-                                   filter = NULL,
                                    filter_add = NULL,
-                                   analysis_var,
-                                   summary_fun,
                                    set_values_to,
                                    missing_values = NULL) {
   assert_vars(by_vars)
@@ -209,25 +188,6 @@ derive_summary_records <- function(dataset = NULL,
   assert_varval_list(set_values_to)
   assert_expr_list(missing_values, named = TRUE, optional = TRUE)
 
-  if (!missing(analysis_var) || !missing(summary_fun)) {
-    deprecate_stop(
-      "1.1.0",
-      I("derive_summary_records(anaylsis_var = , summary_fun = )"),
-      "derive_summary_records(set_values_to = )"
-    )
-    analysis_var <- assert_symbol(enexpr(analysis_var))
-    assert_s3_class(summary_fun, "function")
-    set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
-  }
-
-  if (!missing(filter)) {
-    deprecate_stop(
-      "1.1.0",
-      I("derive_summary_records(filter = )"),
-      "derive_summary_records(filter_add = )"
-    )
-    filter_add <- assert_filter_cond(enexpr(filter), optional = TRUE)
-  }
   filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
 
   summary_records <- dataset_add %>%

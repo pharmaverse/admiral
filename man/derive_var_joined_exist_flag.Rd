@@ -13,10 +13,8 @@ derive_var_joined_exist_flag(
   tmp_obs_nr_var = NULL,
   join_vars,
   join_type,
-  first_cond = NULL,
   first_cond_lower = NULL,
   first_cond_upper = NULL,
-  filter = NULL,
   filter_add = NULL,
   filter_join,
   true_value = "Y",
@@ -86,21 +84,6 @@ after seven days before a COVID AE. Thus \code{join_type = "all"} could be used.
 
 \emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}}
 
-\item{first_cond}{Condition for selecting range of data
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-
-This argument is \emph{deprecated}, please use \code{first_cond_upper} instead.
-
-If this argument is specified, the other observations are restricted up to
-the first observation where the specified condition is fulfilled. If the
-condition is not fulfilled for any of the other observations, no
-observations are considered, i.e., the observation is not flagged.
-
-This parameter should be specified if \code{filter_join} contains summary
-functions which should not apply to all observations but only up to the
-confirmation assessment. For an example see the third example below.}
-
 \item{first_cond_lower}{Condition for selecting range of data (before)
 
 If this argument is specified, the other observations are restricted from
@@ -124,20 +107,6 @@ observations are considered, i.e., the observation is not flagged.
 This parameter should be specified if \code{filter_join} contains summary
 functions which should not apply to all observations but only up to the
 confirmation assessment. For an example see the third example below.}
-
-\item{filter}{Condition for selecting observations
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-
-This argument is \emph{deprecated}, please use \code{filter_join} instead.
-
-The filter is applied to the joined dataset for flagging the confirmed
-observations. The condition can include summary functions. The joined
-dataset is grouped by the original observations. I.e., the summary function
-are applied to all observations up to the confirmation observation. For
-example, \code{filter = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1} selects observations with
-response "CR" and for all observations up to the confirmation observation
-the response is "CR" or "NE" and there is at most one "NE".}
 
 \item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
@@ -491,6 +460,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
+\code{\link{derive_vars_cat}()},
 \code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_merged}()},

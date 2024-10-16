@@ -13,7 +13,6 @@ derive_vars_merged(
   new_vars = NULL,
   filter_add = NULL,
   mode = NULL,
-  match_flag,
   exist_flag = NULL,
   true_value = "Y",
   false_value = NA_character_,
@@ -98,17 +97,6 @@ argument is specified, \code{mode} must be non-null.
 If the \code{order} argument is not specified, the \code{mode} argument is ignored.
 
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
-
-\item{match_flag}{Match flag
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{exist_flag} instead.
-
-If the argument is specified (e.g., \code{match_flag = FLAG}), the specified
-variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
-be \code{TRUE} for all selected records from \code{dataset_add} which are merged into
-the input dataset, and \code{NA} otherwise.
-
-\emph{Permitted Values}: Variable name}
 
 \item{exist_flag}{Exist flag
 
@@ -345,6 +333,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_relative_flag}()},
+\code{\link{derive_vars_cat}()},
 \code{\link{derive_vars_computed}()},
 \code{\link{derive_vars_joined}()},
 \code{\link{derive_vars_merged_lookup}()},

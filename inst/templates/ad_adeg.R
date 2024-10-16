@@ -17,11 +17,8 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("admiral_adsl")
-data("eg")
-
-adsl <- admiral_adsl
-eg <- eg
+eg <- pharmaversesdtm::eg
+adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
@@ -34,66 +31,44 @@ eg <- convert_blanks_to_na(eg)
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
-  ~EGTESTCD, ~PARAMCD, ~PARAM, ~PARAMN,
-  "ECGINT", "EGINTP", "ECG Interpretation", 1,
-  "HR", "HR", "Heart Rate (beats/min)", 2,
-  "RR", "RR", "RR Duration (msec)", 3,
-  "RRR", "RRR", "RR Duration Rederived (msec)", 4,
-  "QT", "QT", "QT Duration (msec)", 10,
-  "QTCBR", "QTCBR", "QTcB - Bazett's Correction Formula Rederived (msec)", 11,
-  "QTCFR", "QTCFR", "QTcF - Fridericia's Correction Formula Rederived (msec)", 12,
-  "QTLCR", "QTLCR", "QTlc - Sagie's Correction Formula Rederived (msec)", 13,
+  ~EGTESTCD, ~PARAMCD,                                                    ~PARAM, ~PARAMN,
+  "ECGINT",  "EGINTP",                                      "ECG Interpretation",       1,
+  "HR",          "HR",                                  "Heart Rate (beats/min)",       2,
+  "RR",          "RR",                                      "RR Duration (msec)",       3,
+  "RRR",        "RRR",                            "RR Duration Rederived (msec)",       4,
+  "QT",          "QT",                                      "QT Duration (msec)",      10,
+  "QTCBR",    "QTCBR",     "QTcB - Bazett's Correction Formula Rederived (msec)",      11,
+  "QTCFR",    "QTCFR", "QTcF - Fridericia's Correction Formula Rederived (msec)",      12,
+  "QTLCR",    "QTLCR",      "QTlc - Sagie's Correction Formula Rederived (msec)",      13,
 )
 
 range_lookup <- tibble::tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI,
-  "EGINTP", NA, NA,
-  "HR", 40, 100,
-  "RR", 600, 1500,
-  "QT", 350, 450,
-  "RRR", 600, 1500,
-  "QTCBR", 350, 450,
-  "QTCFR", 350, 450,
-  "QTLCR", 350, 450,
+  "EGINTP",     NA,     NA,
+  "HR",         40,    100,
+  "RR",        600,   1500,
+  "QT",        350,    450,
+  "RRR",       600,   1500,
+  "QTCBR",     350,    450,
+  "QTCFR",     350,    450,
+  "QTLCR",     350,    450
 )
 
-# ASSIGN AVALCAT1
-avalcat_lookup <- tibble::tribble(
-  ~AVALCA1N, ~AVALCAT1,
-  1, "<= 450 msec",
-  2, ">450<=480 msec",
-  3, ">480<=500 msec",
-  4, ">500 msec"
+# Assign AVALCAx
+avalcax_lookup <- exprs(
+  ~condition,                                                  ~AVALCAT1, ~AVALCA1N,
+  startsWith(PARAMCD, "QT") & AVAL <= 450,                 "<= 450 msec",         1,
+  startsWith(PARAMCD, "QT") & AVAL > 450 & AVAL <= 480, ">450<=480 msec",         2,
+  startsWith(PARAMCD, "QT") & AVAL > 480 & AVAL <= 500, ">480<=500 msec",         3,
+  startsWith(PARAMCD, "QT") & AVAL > 500,                    ">500 msec",         4
 )
-
-# ASSIGN CHGCAT1
-chgcat_lookup <- tibble::tribble(
-  ~CHGCAT1N, ~CHGCAT1,
-  1, "<= 30 msec",
-  2, ">30<=60 msec",
-  3, ">60 msec"
+# Assign CHGCAx
+chgcax_lookup <- exprs(
+  ~condition,                                             ~CHGCAT1, ~CHGCAT1N,
+  startsWith(PARAMCD, "QT") & CHG <= 30,              "<= 30 msec",         1,
+  startsWith(PARAMCD, "QT") & CHG > 30 & CHG <= 60, ">30<=60 msec",         2,
+  startsWith(PARAMCD, "QT") & CHG > 60,                 ">60 msec",         3
 )
-
-# Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate()`. Info then used for
-# lookup table
-format_avalca1n <- function(paramcd, aval) {
-  case_when(
-    str_detect(paramcd, "QT") & aval <= 450 ~ 1,
-    str_detect(paramcd, "QT") & aval > 450 & aval <= 480 ~ 2,
-    str_detect(paramcd, "QT") & aval > 480 & aval <= 500 ~ 3,
-    str_detect(paramcd, "QT") & aval > 500 ~ 4
-  )
-}
-
-format_chgcat1n <- function(paramcd, chg) {
-  case_when(
-    str_detect(paramcd, "QT") & chg <= 30 ~ 1,
-    str_detect(paramcd, "QT") & chg > 30 & chg <= 60 ~ 2,
-    str_detect(paramcd, "QT") & chg > 60 ~ 3
-  )
-}
-
 
 # Derivations ----
 
@@ -276,10 +251,18 @@ adeg <- adeg %>%
     source_var = ANRIND,
     new_var = BNRIND
   ) %>%
-  # Calculate CHG
-  derive_var_chg() %>%
-  # Calculate PCHG
-  derive_var_pchg()
+  # Calculate CHG for post-baseline records
+  # The decision on how to populate pre-baseline and baseline values of CHG is left to producer choice
+  restrict_derivation(
+    derivation = derive_var_chg,
+    filter = AVISITN > 0
+  ) %>%
+  # Calculate PCHG for post-baseline records
+  # The decision on how to populate pre-baseline and baseline values of PCHG is left to producer choice
+  restrict_derivation(
+    derivation = derive_var_pchg,
+    filter = AVISITN > 0
+  )
 
 ## ANL01FL: Flag last result within an AVISIT and ATPT for post-baseline records ----
 adeg <- adeg %>%
@@ -311,14 +294,13 @@ adeg <- adeg %>%
     check_type = "error"
   ) %>%
   # Derive AVALCA1N and AVALCAT1
-  mutate(AVALCA1N = format_avalca1n(param = PARAMCD, aval = AVAL)) %>%
-  derive_vars_merged(
-    dataset_add = avalcat_lookup,
-    by_vars = exprs(AVALCA1N)
+  derive_vars_cat(
+    definition = avalcax_lookup
   ) %>%
   # Derive CHGCAT1N and CHGCAT1
-  mutate(CHGCAT1N = format_chgcat1n(param = PARAMCD, chg = CHG)) %>%
-  derive_vars_merged(dataset_add = chgcat_lookup, by_vars = exprs(CHGCAT1N)) %>%
+  derive_vars_cat(
+    definition = chgcax_lookup
+  ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(
     dataset_add = select(param_lookup, -EGTESTCD),

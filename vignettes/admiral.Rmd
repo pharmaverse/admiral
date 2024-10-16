@@ -47,11 +47,11 @@ library(pharmaversesdtm)
 library(admiral)
 
 # Read in SDTM datasets
-data("dm")
-data("ds")
-data("ex")
-data("vs")
-data("admiral_adsl")
+dm <- pharmaversesdtm::dm
+ds <- pharmaversesdtm::ds
+ex <- pharmaversesdtm::ex
+vs <- pharmaversesdtm::vs
+admiral_adsl <- admiral::admiral_adsl
 ```
 
 The `adsl` and `advs` objects will now be prepared to showcase [addition of variables](#addvars)

@@ -15,10 +15,9 @@ library(stringr)
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 #  as needed and assign to the variables below.
 # The CDISC pilot datasets are used for demonstration purpose.
-data("admiral_adsl")
-data("ex")
 
-adsl <- admiral_adsl
+ex <- pharmaversesdtm::ex
+adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
@@ -258,42 +257,42 @@ adex <- adex %>%
 # Assign PARAMCD, PARAM, and PARAMN
 # ---- Lookup tables ----
 param_lookup <- tibble::tribble(
-  ~PARAMCD, ~PARAM, ~PARAMN,
-  "DURD", "Study drug duration during constant dosing interval (days)", 1,
-  "DOSE", "Dose administered during constant dosing interval (mg)", 2,
-  "PLDOSE", "Planned dose during constant dosing interval (mg)", 3,
-  "ADJ", "Dose adjusted during constant dosing interval", 4,
-  "ADJAE", "Dose adjusted  due to AE during constant dosing interval", 5,
-  "TDURD", "Overall duration (days)", 7,
-  "TDOSE", "Total dose administered (mg)", 8,
-  "AVDDSE", "Average daily dose administered (mg/mg)", 10,
-  "TPDOSE", "Total planned dose (mg)", 11,
-  "TADJ", "Dose adjusted during study", 13,
-  "TADJAE", "Dose adjusted during study due to AE", 14,
-  "PDURD", "Overall duration in W2-W24 (days)", 19,
-  "PDOSE", "Total dose administered in W2-W2 (mg)4", 20,
-  "PPDOSE", "Total planned dose in W2-W24 (mg)", 21,
-  "PAVDDSE", "Average daily dose administered in W2-W24 (mg)", 23,
-  "PADJ", "Dose adjusted during W2-W24", 24,
-  "PADJAE", "Dose adjusted  in W2-W24 due to AE", 25,
-  "TDOSINT", "Overall dose intensity (%)", 90,
-  "PDOSINT", "W2-24 dose intensity (%)", 91
+  ~PARAMCD,                                                     ~PARAM, ~PARAMN,
+  "DURD", "Study drug duration during constant dosing interval (days)",       1,
+  "DOSE",     "Dose administered during constant dosing interval (mg)",       2,
+  "PLDOSE",        "Planned dose during constant dosing interval (mg)",       3,
+  "ADJ",               "Dose adjusted during constant dosing interval",       4,
+  "ADJAE",  "Dose adjusted  due to AE during constant dosing interval",       5,
+  "TDURD",                                   "Overall duration (days)",       7,
+  "TDOSE",                              "Total dose administered (mg)",       8,
+  "AVDDSE",                  "Average daily dose administered (mg/mg)",      10,
+  "TPDOSE",                                  "Total planned dose (mg)",      11,
+  "TADJ",                                 "Dose adjusted during study",      13,
+  "TADJAE",                     "Dose adjusted during study due to AE",      14,
+  "PDURD",                         "Overall duration in W2-W24 (days)",      19,
+  "PDOSE",                    "Total dose administered in W2-W2 (mg)4",      20,
+  "PPDOSE",                        "Total planned dose in W2-W24 (mg)",      21,
+  "PAVDDSE",          "Average daily dose administered in W2-W24 (mg)",      23,
+  "PADJ",                                "Dose adjusted during W2-W24",      24,
+  "PADJAE",                       "Dose adjusted  in W2-W24 due to AE",      25,
+  "TDOSINT",                              "Overall dose intensity (%)",      90,
+  "PDOSINT",                                "W2-24 dose intensity (%)",      91
 )
 
-# User defined functions ----
-# Derive AVALCAT1
-# Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate()`.
-format_avalcat1 <- function(param, aval) {
-  case_when(
-    param %in% c("TDURD", "PDURD") & aval < 30 & !is.na(aval) ~ "< 30 days",
-    param %in% c("TDURD", "PDURD") & aval >= 30 & aval < 90 ~ ">= 30 and < 90 days",
-    param %in% c("TDURD", "PDURD") & aval >= 90 ~ ">=90 days",
-    param %in% c("TDOSE", "PDOSE") & aval < 100 & !is.na(aval) ~ "< 100 mg",
-    param %in% c("TDOSE", "PDOSE") & aval >= 100 ~ ">= 100 mg",
-    TRUE ~ NA_character_
-  )
-}
+# Assign AVALCATx
+avalcax_lookup <- exprs(
+  ~PARAMCD,            ~condition,             ~AVALCAT1,
+  "TDURD",             AVAL >= 90,          ">= 90 days",
+  "TDURD", AVAL >= 30 & AVAL < 90, ">= 30 and < 90 days",
+  "TDURD",              AVAL < 30,           "< 30 days",
+  "PDURD",             AVAL >= 90,          ">= 90 days",
+  "PDURD", AVAL >= 30 & AVAL < 90, ">= 30 and < 90 days",
+  "PDURD",              AVAL < 30,           "< 30 days",
+  "TDOSE",             AVAL < 100,            "< 100 mg",
+  "TDOSE",            AVAL >= 100,           ">= 100 mg",
+  "PDOSE",             AVAL < 100,            "< 100 mg",
+  "PDOSE",            AVAL >= 100,           ">= 100 mg"
+)
 
 adex <- adex %>%
   # Add PARAMN and PARAM, AVALU
@@ -302,7 +301,10 @@ adex <- adex %>%
     by_vars = exprs(PARAMCD)
   ) %>%
   # Derive AVALCATx
-  mutate(AVALCAT1 = format_avalcat1(param = PARAMCD, aval = AVAL)) %>%
+  derive_vars_cat(
+    definition = avalcax_lookup,
+    by_vars = exprs(PARAMCD)
+  ) %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
