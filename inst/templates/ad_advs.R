@@ -15,10 +15,8 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("vs")
-data("admiral_adsl")
-
-adsl <- admiral_adsl
+vs <- pharmaversesdtm::vs
+adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
@@ -31,16 +29,16 @@ vs <- convert_blanks_to_na(vs)
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
-  ~VSTESTCD, ~PARAMCD, ~PARAM, ~PARAMN,
-  "SYSBP", "SYSBP", "Systolic Blood Pressure (mmHg)", 1,
-  "DIABP", "DIABP", "Diastolic Blood Pressure (mmHg)", 2,
-  "PULSE", "PULSE", "Pulse Rate (beats/min)", 3,
-  "WEIGHT", "WEIGHT", "Weight (kg)", 4,
-  "HEIGHT", "HEIGHT", "Height (cm)", 5,
-  "TEMP", "TEMP", "Temperature (C)", 6,
-  "MAP", "MAP", "Mean Arterial Pressure (mmHg)", 7,
-  "BMI", "BMI", "Body Mass Index(kg/m^2)", 8,
-  "BSA", "BSA", "Body Surface Area(m^2)", 9
+  ~VSTESTCD, ~PARAMCD,                            ~PARAM, ~PARAMN,
+  "SYSBP",    "SYSBP",  "Systolic Blood Pressure (mmHg)",       1,
+  "DIABP",    "DIABP", "Diastolic Blood Pressure (mmHg)",       2,
+  "PULSE",    "PULSE",          "Pulse Rate (beats/min)",       3,
+  "WEIGHT",  "WEIGHT",                     "Weight (kg)",       4,
+  "HEIGHT",  "HEIGHT",                     "Height (cm)",       5,
+  "TEMP",      "TEMP",                 "Temperature (C)",       6,
+  "MAP",        "MAP",   "Mean Arterial Pressure (mmHg)",       7,
+  "BMI",        "BMI",         "Body Mass Index(kg/m^2)",       8,
+  "BSA",        "BSA",          "Body Surface Area(m^2)",       9
 )
 attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
 
@@ -48,28 +46,18 @@ attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
 # Assign ANRLO/HI, A1LO/HI
 range_lookup <- tibble::tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-  "SYSBP", 90, 130, 70, 140,
-  "DIABP", 60, 80, 40, 90,
-  "PULSE", 60, 100, 40, 110,
-  "TEMP", 36.5, 37.5, 35, 38
-)
-# ASSIGN AVALCAT1
-avalcat_lookup <- tibble::tribble(
-  ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
-  "HEIGHT", 1, ">100 cm",
-  "HEIGHT", 2, "<= 100 cm"
+  "SYSBP",      90,    130,    70,   140,
+  "DIABP",      60,     80,    40,    90,
+  "PULSE",      60,    100,    40,   110,
+  "TEMP",     36.5,   37.5,    35,    38
 )
 
-# User defined functions ----
-
-# Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate()`.
-format_avalcat1n <- function(param, aval) {
-  case_when(
-    param == "HEIGHT" & aval > 140 ~ 1,
-    param == "HEIGHT" & aval <= 140 ~ 2
-  )
-}
+# Assign AVALCATx
+avalcax_lookup <- exprs(
+  ~PARAMCD,  ~condition,  ~AVALCAT1, ~AVALCA1N,
+  "HEIGHT",  AVAL > 100,  ">100 cm",         1,
+  "HEIGHT", AVAL <= 100, "<=100 cm",         2
+)
 
 # Derivations ----
 
@@ -227,11 +215,18 @@ advs <- advs %>%
     source_var = ANRIND,
     new_var = BNRIND
   ) %>%
-  # Calculate CHG
-  derive_var_chg() %>%
-  # Calculate PCHG
-  derive_var_pchg()
-
+  # Calculate CHG for post-baseline records
+  # The decision on how to populate pre-baseline and baseline values of CHG is left to producer choice
+  restrict_derivation(
+    derivation = derive_var_chg,
+    filter = AVISITN > 0
+  ) %>%
+  # Calculate PCHG for post-baseline records
+  # The decision on how to populate pre-baseline and baseline values of PCHG is left to producer choice
+  restrict_derivation(
+    derivation = derive_var_pchg,
+    filter = AVISITN > 0
+  )
 
 ## ANL01FL: Flag last result within an AVISIT and ATPT for post-baseline records ----
 advs <- advs %>%
@@ -278,11 +273,14 @@ advs <- advs %>%
     order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
     check_type = "error"
   ) %>%
-  # Derive AVALCA1N and AVALCAT1
-  mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
-  derive_vars_merged(dataset_add = avalcat_lookup, by_vars = exprs(PARAMCD, AVALCA1N)) %>%
+  # Define condition and categories using derive_vars_cat
+  derive_vars_cat(
+    definition = avalcax_lookup,
+    by_vars = exprs(PARAMCD)
+  ) %>%
   # Derive PARAM and PARAMN
   derive_vars_merged(dataset_add = select(param_lookup, -VSTESTCD), by_vars = exprs(PARAMCD))
+
 
 
 # Add all ADSL variables

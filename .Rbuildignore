@@ -31,3 +31,5 @@
 ^\.devcontainer$
 ^vignettes/articles$
 ^inst/cheatsheet$
+^data-raw$
+^doc$

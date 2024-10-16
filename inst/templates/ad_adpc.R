@@ -19,31 +19,19 @@ library(pharmaversesdtm) # Contains example datasets from the CDISC pilot projec
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-
 # Load PC, EX, VS and ADSL
-data("pc")
-data("ex")
-data("vs")
-
-data("admiral_adsl")
-
-adsl <- admiral_adsl
+pc <- pharmaversesdtm::pc
+ex <- pharmaversesdtm::ex
+vs <- pharmaversesdtm::vs
+adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values # nolint
 
-# Load EX
-
 ex <- convert_blanks_to_na(ex)
-
-# Load PC
-
 pc <- convert_blanks_to_na(pc)
-
-# Load VS for baseline height and weight
-
 vs <- convert_blanks_to_na(vs)
 
 # ---- Lookup tables ----
@@ -52,18 +40,6 @@ param_lookup <- tibble::tribble(
   "XAN", "XAN", "Pharmacokinetic concentration of Xanomeline", 1,
   "DOSE", "DOSE", "Xanomeline Patch Dose", 2,
 )
-
-# ---- User defined functions ----
-
-# Here is an example of how you can create your own function that
-# operates on vectors, which can be used in `mutate`.
-format_avalcat1n <- function(param, aval) {
-  case_when(
-    param == "PKCONC" & aval < 1 ~ 1,
-    param == "PKCONC" & aval >= 1 ~ 2,
-    T ~ NA_real_
-  )
-}
 
 # ---- Derivations ----
 
@@ -454,7 +430,13 @@ adpc_base <- adpc_dtype %>%
     filter = ABLFL == "Y"
   )
 
-adpc_chg <- derive_var_chg(adpc_base)
+# Calculate CHG for post-baseline records
+# The decision on how to populate pre-baseline and baseline values of CHG is left to producer choice
+adpc_chg <- restrict_derivation(
+  adpc_base,
+  derivation = derive_var_chg,
+  filter = AVISITN > 0
+)
 
 # ---- Add ASEQ ----
 

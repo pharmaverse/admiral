@@ -348,25 +348,9 @@ test_that("derive_vars_merged Test 15: error if not unique, no order, check_type
   )
 })
 
-# ## Test 16: deprecation messaging for match_flag ----
-## Test 16: deprecation messaging for match_flag ----
-test_that("derive_vars_merged Test 16: deprecation messaging for match_flag", {
-  expect_error(
-    derive_vars_merged(
-      adsl,
-      dataset_add = advs,
-      order = exprs(AVAL),
-      by_vars = exprs(STUDYID, USUBJID),
-      new_vars = exprs(WEIGHTBL = AVAL),
-      mode = "last",
-      match_flag = matched
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})
 
 # derive_var_merged_exist_flag ----
-## Test 17: merge existence flag ----
+## Test 16: merge existence flag ----
 test_that("derive_var_merged_exist_flag Test 17: merge existence flag", {
   actual <- derive_var_merged_exist_flag(
     adsl,
@@ -384,7 +368,7 @@ test_that("derive_var_merged_exist_flag Test 17: merge existence flag", {
   )
 })
 
-## Test 18: by_vars with rename ----
+## Test 17: by_vars with rename ----
 test_that("derive_var_merged_exist_flag Test 18: by_vars with rename", {
   actual <- derive_var_merged_exist_flag(
     adsl,
@@ -406,7 +390,7 @@ test_that("derive_var_merged_exist_flag Test 18: by_vars with rename", {
 })
 
 # derive_vars_merged_lookup ----
-## Test 19: merge lookup table ----
+## Test 18: merge lookup table ----
 test_that("derive_vars_merged_lookup Test 19: merge lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
@@ -443,7 +427,7 @@ test_that("derive_vars_merged_lookup Test 19: merge lookup table", {
 
 
 ## the lookup table
-## Test 20:  all by_vars have records in the lookup table ----
+## Test 19:  all by_vars have records in the lookup table ----
 test_that("derive_vars_merged_lookup Test 20:  all by_vars have records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
@@ -479,7 +463,7 @@ test_that("derive_vars_merged_lookup Test 20:  all by_vars have records in the l
   )
 })
 
-## Test 21: by_vars with rename ----
+## Test 20: by_vars with rename ----
 test_that("derive_vars_merged_lookup Test 21: by_vars with rename", {
   param_lookup <- tibble::tribble(
     ~TESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
@@ -514,7 +498,7 @@ test_that("derive_vars_merged_lookup Test 21: by_vars with rename", {
 
 
 # get_not_mapped ----
-## Test 22: not all by_vars have records in the lookup table ----
+## Test 21: not all by_vars have records in the lookup table ----
 test_that("get_not_mapped Test 22: not all by_vars have records in the lookup table", {
   param_lookup <- tibble::tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
@@ -552,7 +536,7 @@ test_that("get_not_mapped Test 22: not all by_vars have records in the lookup ta
 })
 
 # derive_var_merged_summary ----
-## Test 23: dataset == dataset_add, no filter ----
+## Test 22: dataset == dataset_add, no filter ----
 test_that("derive_var_merged_summary Test 23: dataset == dataset_add, no filter", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
@@ -579,7 +563,7 @@ test_that("derive_var_merged_summary Test 23: dataset == dataset_add, no filter"
   )
 })
 
-## Test 24: dataset != dataset_add, filter ----
+## Test 23: dataset != dataset_add, filter ----
 test_that("derive_var_merged_summary Test 24: dataset != dataset_add, filter", {
   expected <- tibble::tribble(
     ~USUBJID, ~MEANPBL,
@@ -611,7 +595,7 @@ test_that("derive_var_merged_summary Test 24: dataset != dataset_add, filter", {
   )
 })
 
-## Test 25: by_vars with rename ----
+## Test 24: by_vars with rename ----
 test_that("derive_var_merged_summary Test 25: by_vars with rename", {
   expected <- tibble::tribble(
     ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
@@ -639,35 +623,7 @@ test_that("derive_var_merged_summary Test 25: by_vars with rename", {
   )
 })
 
-## Test 26: deprecation warning ----
-test_that("derive_var_merged_summary Test 26: deprecation warning", {
-  expected <- tibble::tribble(
-    ~AVISIT,  ~ASEQ, ~AVAL, ~MEANVIS,
-    "WEEK 1",     1,    10,       10,
-    "WEEK 1",     2,    NA,       10,
-    "WEEK 2",     3,    NA,       NA,
-    "WEEK 3",     4,    42,       42,
-    "WEEK 4",     5,    12,       13,
-    "WEEK 4",     6,    12,       13,
-    "WEEK 4",     7,    15,       13
-  )
-
-  adbds <- select(expected, -MEANVIS)
-
-  expect_error(
-    actual <- derive_var_merged_summary(
-      adbds,
-      dataset_add = adbds,
-      by_vars = exprs(AVISIT),
-      new_var = MEANVIS,
-      analysis_var = AVAL,
-      summary_fun = function(x) mean(x, na.rm = TRUE)
-    ),
-    class = "lifecycle_error_deprecated"
-  )
-})
-
-## Test 27: merge selected variables with relatioship as 'many-to-one' ----
+## Test 25: merge selected variables with relatioship as 'many-to-one' ----
 test_that("derive_var_merged_summary Test 27: merge selected variables with
           relatioship as 'many-to-one'", {
   actual <- derive_vars_merged(advs,
@@ -686,7 +642,7 @@ test_that("derive_var_merged_summary Test 27: merge selected variables with
   )
 })
 
-## Test 28: error when relatioship is incorrectly specificed 'one-to-one' ----
+## Test 26: error when relatioship is incorrectly specificed 'one-to-one' ----
 test_that("derive_var_merged_summary Test 28: error incorrect 'one-to-one'", {
   expect_snapshot(
     derive_vars_merged(advs,
@@ -699,7 +655,7 @@ test_that("derive_var_merged_summary Test 28: error incorrect 'one-to-one'", {
   )
 })
 
-## Test 29: merge selected variables with relatioship as 'one-to-one' ----
+## Test 27: merge selected variables with relatioship as 'one-to-one' ----
 test_that("derive_var_merged_summary Test 29: merge sel vars 'one-to-one'", {
   expect_snapshot(
     derive_vars_merged(adsl,

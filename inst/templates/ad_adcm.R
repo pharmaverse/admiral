@@ -14,10 +14,8 @@ library(lubridate)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("cm")
-data("admiral_adsl")
-
-adsl <- admiral_adsl
+cm <- pharmaversesdtm::cm
+adsl <- admiral::admiral_adsl
 
 # When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
@@ -89,7 +87,7 @@ adcm <- adcm %>%
   # Derive Follow-Up flag
   mutate(FUPFL = if_else(ASTDT > TRTEDT, "Y", NA_character_)) %>%
   # Derive ANL01FL
-  # This variable is sponsor specific and may be used to indicate particular
+  # This variable is producer specific and may be used to indicate particular
   # records to be used in subsequent derivations or analysis.
   mutate(ANL01FL = if_else(ONTRTFL == "Y", "Y", NA_character_)) %>%
   # Derive 1st Occurrence of Preferred Term Flag
