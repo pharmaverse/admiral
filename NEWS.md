@@ -9,6 +9,8 @@
 
 - Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
 
+- Remove `dthcaus_source()` calls in `ADSL` template because they are deprecated. (#2517)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
