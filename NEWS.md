@@ -16,6 +16,8 @@
 <details>
 <summary>Developer Notes</summary>
 
+- Created unit tests for developer internal function `restricted_imputed_dtc_dt()` (#2495)
+
 </details>
 
 # admiral 1.1.1
