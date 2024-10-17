@@ -9,5 +9,5 @@
 #' @examples
 #' my_first_fcn() ## returns "Welcome to the admiral family!"
 my_first_fcn <- function() {
-  print("Welcome to the admiral family!")
+  "Welcome to the admiral family!"
 }
