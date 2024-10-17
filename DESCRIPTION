@@ -27,7 +27,8 @@ Authors@R: c(
     person("Kangjie", "Zhang", role = "aut"),
     person("Zelos", "Zhu", role = "aut"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
-    person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
+    person("GlaxoSmithKline LLC", role = c("cph", "fnd")),
+    person("Shunsuke", "Goto", role = "aut")
   )
 Description: A toolbox for programming Clinical Data Interchange Standards
     Consortium (CDISC) compliant Analysis Data Model (ADaM) datasets in R.
