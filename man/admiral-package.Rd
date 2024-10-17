@@ -47,6 +47,7 @@ Authors:
   \item Phillip Webster
   \item Kangjie Zhang
   \item Zelos Zhu
+  \item Shunsuke Goto
 }
 
 Other contributors:
