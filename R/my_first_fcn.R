@@ -1,3 +1,13 @@
+
+#' my_first_fcn
+#'
+#' @return
+#' This function returns the Character "Welcome to the admiral family!".
+#'
+#' @export
+#'
+#' @examples
+#' my_first_fcn() ## returns "Welcome to the admiral family!"
 my_first_fcn <- function() {
   print("Welcome to the admiral family!")
 }
