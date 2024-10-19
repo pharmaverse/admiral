@@ -6,6 +6,7 @@
 `AVALCATx` & `AVALCAxN`. (#2480)
 - New function `derive_vars_crit_flag()` for deriving criterion flag variables
 (`CRITy`, `CRITyFL`, `CRITyFLN`). (#2468)
+- New function `my_first_fcn()` as dummy practice. (#1839)
 
 - Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
 

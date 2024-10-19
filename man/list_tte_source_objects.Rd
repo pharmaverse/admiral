@@ -21,6 +21,7 @@ list_tte_source_objects()
 }
 \seealso{
 Other Advanced Functions: 
+\code{\link{my_first_fcn}()},
 \code{\link{params}()}
 }
 \concept{other_advanced}
