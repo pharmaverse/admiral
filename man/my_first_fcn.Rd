@@ -18,5 +18,10 @@ This is a function created as dummy.
 \examples{
 my_first_fcn() ## returns "Welcome to the admiral family!"
 }
-\concept{my_first_fcn}
-\keyword{my_first_fcn}
+\seealso{
+Other Advanced Functions: 
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()}
+}
+\concept{other_advanced}
+\keyword{other_advanced}
