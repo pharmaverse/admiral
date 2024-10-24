@@ -265,6 +265,7 @@ bds
 censorings
 chk
 codebase
+codespace
 constructible
 creatinine
 cyclomatic
@@ -276,6 +277,7 @@ deps
 der
 desc
 deteriorations
+devcontainer
 dplyr
 ds
 dthcaus
