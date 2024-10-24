@@ -5,9 +5,9 @@
 #' @details
 #' This is a function created as dummy.
 #'
-#' @keywords my_first_fcn
+#' @keywords other_advanced
 #'
-#' @family my_first_fcn
+#' @family other_advanced
 #'
 #' @return
 #' This function returns the Character "Welcome to the admiral family!".
