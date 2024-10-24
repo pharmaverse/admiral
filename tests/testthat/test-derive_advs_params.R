@@ -54,7 +54,7 @@ test_that("compute_bsa Test 6: Mosteller method - height & weight vectors - miss
 })
 
 ## compute_bsa: DuBois-DuBois method ----
-#  FORMULA : 0.20247 x (HGT/100)^0.725 x WGT^0.425
+#  FORMULA : 0.007184 x (HGT)^0.725 x WGT^0.425
 
 ## Test 7: DuBois-DuBois method - single height & weight values ----
 test_that("compute_bsa Test 7: DuBois-DuBois method - single height & weight values", {
@@ -604,7 +604,7 @@ test_that("derive_param_bsa Test 44: BSA parameter (Mosteller Method) is correct
 })
 
 dubois <- function(hgt, wgt) {
-  0.20247 * (hgt / 100)^0.725 * wgt^0.425
+  0.007184 * hgt^0.725 * wgt^0.425
 }
 
 ## Test 45: BSA parameter (DuBois-DuBois method) is correctly added ----
