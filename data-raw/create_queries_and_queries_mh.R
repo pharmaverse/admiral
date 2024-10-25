@@ -54,13 +54,20 @@ adae <- tibble::tribble(
   "APPLICATION SITE ERYTHEMA", "Application site erythema", 1
 )
 
+#  create queries.rda in data/
+usethis::use_data(queries, overwrite = TRUE)
+
 # try below:
 derive_vars_query(adae, queries)
-
 
 # example to use for ADMH:
 queries_mh <- queries %>%
   filter(SRCVAR %in% c("AELLT", "AEDECOD")) %>%
   mutate(SRCVAR = ifelse(SRCVAR == "AELLT", "MHLLT", "MHDECOD"))
 
+usethis::use_data(queries_mh, overwrite = TRUE)
+
+source("inst/templates/ad_admh.R", echo = TRUE) # nolint
+
+# Currently producing an error
 derive_vars_query(admh, queries_mh)
