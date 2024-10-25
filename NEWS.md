@@ -7,9 +7,11 @@
 - New function `derive_vars_crit_flag()` for deriving criterion flag variables
 (`CRITy`, `CRITyFL`, `CRITyFLN`). (#2468)
 - Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
-- `compute_bsa(height, weight, method` - now uses improved version of DuBois-DuBois forumula for bsa (#2532)
 
 ## Updates of Existing Functions
+
+- `compute_bsa(height, weight, method` - now uses improved version of DuBois-DuBois forumula for bsa (#2532)
+
 
 ## Breaking Changes
   
