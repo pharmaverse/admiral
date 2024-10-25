@@ -42,7 +42,7 @@
 <summary>Developer Notes</summary>
 
 - Adopted `data-raw/data` R Package Convention (#2427)
-- - Remove .devcontainer file (codespace) (#2524)
+- Removed `.devcontainer` file (codespace) (#2524)
 
 </details>
 
