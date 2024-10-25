@@ -95,8 +95,6 @@ ex_ext <- ex %>%
     time_imputation = "last"
   )
 
-# Source objects ----
-
 adsl <- dm %>%
   ## derive treatment variables (TRT01P, TRT01A) ----
   # See also the "Visit and Period Variables" vignette
