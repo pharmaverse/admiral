@@ -519,8 +519,6 @@ compute_bsa <- function(height = height,
   if (method == "Mosteller") {
     bsa <- sqrt(height * weight / 3600)
   } else if (method == "DuBois-DuBois") {
-    # The DuBois & DuBois formula expects the value of height in meters
-    # We need to convert from cm
     bsa <- 0.007184 * height^0.725 * weight^0.425
   } else if (method == "Haycock") {
     bsa <- 0.024265 * height^0.3964 * weight^0.5378
