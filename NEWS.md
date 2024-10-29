@@ -44,7 +44,7 @@
 
 - Adopted `data-raw/data` R Package Convention (#2427)
 - `compute_bsa(height, weight, method` - now uses improved version of DuBois-DuBois forumula for bsa (#2532)  
-
+- Removed `.devcontainer` file (codespace) (#2524)
 
 
 </details>
