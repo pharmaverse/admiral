@@ -10,8 +10,6 @@
 
 ## Updates of Existing Functions
 
-- `compute_bsa(height, weight, method` - now uses improved version of DuBois-DuBois forumula for bsa (#2532)
-
 
 ## Breaking Changes
   
@@ -45,6 +43,9 @@
 <summary>Developer Notes</summary>
 
 - Adopted `data-raw/data` R Package Convention (#2427)
+- `compute_bsa(height, weight, method` - now uses improved version of DuBois-DuBois forumula for bsa (#2532)  
+
+
 
 </details>
 
