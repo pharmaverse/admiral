@@ -423,10 +423,10 @@ test_that("derive_param_computed Test 10: specify variables for keep_nas", {
   expected <- bind_rows(
     advs,
     tibble::tribble(
-      ~USUBJID,      ~AVISIT,     ~AVAL,
-      "01-701-1015", "BASELINE", (121 + 2*51)/3,
-      "01-701-1015", "WEEK 2",   (121 + 2*50)/3,
-      "01-701-1028", "BASELINE", (130 + 2*79)/3
+      ~USUBJID,      ~AVISIT,    ~AVAL,
+      "01-701-1015", "BASELINE", (121 + 2 * 51) / 3,
+      "01-701-1015", "WEEK 2",   (121 + 2 * 50) / 3,
+      "01-701-1028", "BASELINE", (130 + 2 * 79) / 3
     ) %>%
       mutate(
         PARAMCD = "MAP",
@@ -475,21 +475,20 @@ test_that("derive_param_computed Test 11: error if keep_nas is invalid", {
   )
 
   expect_snapshot(
-   derive_param_computed(
-    advs,
-    by_vars = exprs(USUBJID, AVISIT),
-    parameters = c("SYSBP", "DIABP"),
-    set_values_to = exprs(
-      AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
-      PARAMCD = "MAP",
-      PARAM = "Mean Arterial Pressure (mmHg)"
+    derive_param_computed(
+      advs,
+      by_vars = exprs(USUBJID, AVISIT),
+      parameters = c("SYSBP", "DIABP"),
+      set_values_to = exprs(
+        AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+        PARAMCD = "MAP",
+        PARAM = "Mean Arterial Pressure (mmHg)"
+      ),
+      keep_nas = 3
     ),
-    keep_nas = 3
-  ),
-  error = TRUE
+    error = TRUE
   )
-}
-)
+})
 
 # assert_parameters_argument ----
 ## Test 12: error if argument is of wrong type ----
