@@ -117,13 +117,18 @@
 #' @param keep_nas Keep observations with `NA`s
 #'
 #'   If the argument is set to `TRUE`, observations are added even if some of
-#'   the values contributing to the computed value are `NA`.
+#'   the values contributing to the computed value are `NA` (see Example 1b).
+#'
+#'   If the argument is set to a list of variables, observations are added even
+#'   if some of specified variables are `NA` (see Example 1c).
 #'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) an observation is added to the output dataset if the
 #'   filtered input dataset (`dataset`) or the additional dataset
 #'   (`dataset_add`) contains exactly one observation for each parameter code
-#'   specified for `parameters`.
+#'   specified for `parameters` and all contributing values like `AVAL.SYSBP`
+#'   are not `NA`. The `keep_nas` can be used to specify variables for which
+#'   `NA`s are acceptable. See also Example 1b and 1c.
 #'
 #'   For the new observations the variables specified for `set_values_to` are
 #'   set to the provided values. The values of the other variables of the input
@@ -145,17 +150,18 @@
 #'
 #' # Example 1a: Derive MAP
 #' advs <- tribble(
-#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
-#'   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
-#'   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
-#'   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "BASELINE",
-#'   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "WEEK 2",
-#'   "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, "mmHg", "BASELINE",
-#'   "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, "mmHg", "WEEK 2",
-#'   "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, "mmHg", "BASELINE",
-#'   "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
+#'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
+#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
+#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    50, "WEEK 2",
+#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "BASELINE",
+#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",    121, "WEEK 2",
+#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    79, "BASELINE",
+#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",    80, "WEEK 2",
+#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",    130, "BASELINE",
+#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",     NA, "WEEK 2"
 #' ) %>%
 #'   mutate(
+#'     AVALU = "mmHg",
 #'     ADT = case_when(
 #'       VISIT == "BASELINE" ~ as.Date("2024-01-10"),
 #'       VISIT == "WEEK 2" ~ as.Date("2024-01-24")
@@ -176,8 +182,8 @@
 #'   )
 #' )
 #'
-#' # Example 1b: Using option `keep_nas = TRUE` to derive MAP in the case where some/all values
-#' # of a variable used in the computation are missing
+#' # Example 1b: Using option `keep_nas = TRUE` to derive MAP in the case where some/all
+#' # values of a variable used in the computation are missing
 #'
 #' derive_param_computed(
 #'   advs,
@@ -192,6 +198,24 @@
 #'     ADTF = ADTF.SYSBP
 #'   ),
 #'   keep_nas = TRUE
+#' )
+#'
+#' # Example 1c: Using option `keep_nas = exprs(ADTF)` to derive MAP in the case where
+#' # some/all values of a variable used in the computation are missing but ignoring ADTF
+#'
+#' derive_param_computed(
+#'   advs,
+#'   by_vars = exprs(USUBJID, VISIT),
+#'   parameters = c("SYSBP", "DIABP"),
+#'   set_values_to = exprs(
+#'     AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+#'     PARAMCD = "MAP",
+#'     PARAM = "Mean Arterial Pressure (mmHg)",
+#'     AVALU = "mmHg",
+#'     ADT = ADT.SYSBP,
+#'     ADTF = ADTF.SYSBP
+#'   ),
+#'   keep_nas = exprs(ADTF)
 #' )
 #'
 #' # Example 2: Derive BMI where height is measured only once
@@ -303,7 +327,17 @@ derive_param_computed <- function(dataset = NULL,
   if (!is.null(set_values_to$PARAMCD) && !is.null(dataset)) {
     assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   }
-  assert_logical_scalar(keep_nas)
+  if (typeof(keep_nas) == "list") {
+    assert_vars(keep_nas)
+  } else {
+    assert_logical_scalar(
+      keep_nas,
+      message = paste(
+        "Argument {.arg {arg_name}} must be either {.val {TRUE}}, {.val {FALSE}},",
+        "or a list of {.cls symbol}, but is {.obj_type_friendly {arg}}."
+      )
+    )
+  }
 
   parameters <- assert_parameters_argument(parameters)
   constant_parameters <- assert_parameters_argument(constant_parameters, optional = TRUE)
@@ -346,17 +380,26 @@ derive_param_computed <- function(dataset = NULL,
     hori_data <- inner_join(hori_data, hori_const_data, by = vars2chr(constant_by_vars))
   }
 
-  # add analysis value (AVAL) and parameter variables, e.g., PARAMCD
-  if (!keep_nas) {
-    # keep only observations where all analysis values are available
+  if (isFALSE(keep_nas) || typeof(keep_nas) == "list") {
+    # keep only observations where the specified analysis values are available
+    if (typeof(keep_nas) == "list") {
+      na_vars <- discard(
+        analysis_vars_chr,
+        ~ str_detect(., paste0("^(", paste(vars2chr(keep_nas), collapse = "|"), ")\\."))
+      )
+    } else {
+      na_vars <- analysis_vars_chr
+    }
     hori_data <- filter(
       hori_data,
       !!!parse_exprs(map_chr(
-        analysis_vars_chr,
+        na_vars,
         ~ str_c("!is.na(", .x, ")")
       ))
     )
   }
+
+  # add computed variables like AVAL and constant variables like PARAMCD
   hori_data <- hori_data %>%
     process_set_values_to(set_values_to) %>%
     select(-all_of(analysis_vars_chr[str_detect(analysis_vars_chr, "\\.")]))
