@@ -234,7 +234,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'   parameter) and to the parameters specified by `HEIGHT` and `WEIGHT`.
 #'
 #' @param method Derivation method to use. Note that `HEIGHT` is expected
-#'    in m and `WEIGHT` is expected in kg:
+#'    in cm and `WEIGHT` is expected in kg:
 #'
 #'   Mosteller: `sqrt(height * weight / 3600)`
 #'
@@ -256,7 +256,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #' @param height_code HEIGHT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
-#'   as the HEIGHT assessments. It is expected that HEIGHT is measured in m.
+#'   as the HEIGHT assessments. It is expected that HEIGHT is measured in cm.
 #'
 #'   *Permitted Values:* character value
 #'
@@ -448,7 +448,7 @@ derive_param_bsa <- function(dataset,
 #'
 #' @param height HEIGHT value
 #'
-#'   It is expected that HEIGHT is in m.
+#'   It is expected that HEIGHT is in cm.
 #'
 #'   *Permitted Values:* numeric vector
 #'
@@ -520,6 +520,7 @@ compute_bsa <- function(height = height,
     bsa <- sqrt(height * weight / 3600)
   } else if (method == "DuBois-DuBois") {
     # The DuBois & DuBois formula expects the value of height in meters
+    # We need to convert from cm
     bsa <- 0.007184 * height^0.725 * weight^0.425
   } else if (method == "Haycock") {
     bsa <- 0.024265 * height^0.3964 * weight^0.5378
@@ -564,7 +565,7 @@ compute_bsa <- function(height = height,
 #' @param height_code HEIGHT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
-#'   as the HEIGHT. It is expected that HEIGHT is measured in m
+#'   as the HEIGHT. It is expected that HEIGHT is measured in cm
 #'
 #'   *Permitted Values:* character value
 #'
@@ -698,7 +699,7 @@ derive_param_bmi <- function(dataset,
   assert_unit(
     dataset,
     param = height_code,
-    required_unit = "m",
+    required_unit = "cm",
     get_unit_expr = !!get_unit_expr
   )
 
@@ -737,7 +738,7 @@ derive_param_bmi <- function(dataset,
 #'
 #' @param height HEIGHT value
 #'
-#'   It is expected that HEIGHT is in m.
+#'   It is expected that HEIGHT is in cm.
 #'
 #'   *Permitted Values:* numeric vector
 #'
