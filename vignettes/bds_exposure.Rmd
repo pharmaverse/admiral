@@ -81,7 +81,7 @@ adex <- derive_vars_merged(
   ex,
   dataset_add = adsl,
   new_vars = adsl_vars,
-  by_vars = exprs(STUDYID, USUBJID)
+  by_vars = get_admiral_option("subject_keys")
 )
 ```
 
@@ -581,7 +581,7 @@ example call is:
 adex <- derive_var_obs_number(
   adex,
   new_var = ASEQ,
-  by_vars = exprs(STUDYID, USUBJID),
+  by_vars = get_admiral_option("subject_keys"),
   order = exprs(PARCAT1, ASTDT, VISIT, VISITNUM, EXSEQ, PARAMN),
   check_type = "error"
 )
@@ -602,7 +602,7 @@ If needed, the other `ADSL` variables can now be added:
 adex <- adex %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(STUDYID, USUBJID)
+    by_vars = get_admiral_option("subject_keys")
   )
 ```
 ## Add Labels and Attributes {#attributes}

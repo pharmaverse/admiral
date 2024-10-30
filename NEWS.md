@@ -10,10 +10,8 @@
 - Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
 
 ## Updates of Existing Functions
-- `derive_vars_atc()` and `create_single_dose_dataset()` `by_vars` argument updated to use `get_admiral_option("subject_keys")` instead of  `USUBJID` or `STUDYID`.
-- test scripts, R, and markdown files for `create_single_dose_dataset` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. 
-- `derive_extreme_event()` was fixed such that `check_type = "none"` is accepted
-again. (#2462)
+
+
 
 ## Breaking Changes
   
@@ -50,6 +48,8 @@ again. (#2462)
 
 # admiral 1.1.1
 - `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
+- `derive_vars_atc()` and `create_single_dose_dataset()` `by_vars` argument updated to use `get_admiral_option("subject_keys")` instead of  `USUBJID` or `STUDYID` in `bds_exposure.Rmd`.
+- test scripts, R, and markdown files for `create_single_dose_dataset` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. 
 
 # admiral 1.1.0
 
@@ -61,6 +61,8 @@ again. (#2462)
 - New `country_code_lookup()` metadata added to decode countries based on [ISO 3166 codes](https://www.iso.org/iso-3166-country-codes.html). (#2388)
 
 ## Updates of Existing Functions
+- `derive_extreme_event()` was fixed such that `check_type = "none"` is accepted
+again. (#2462)
 
 - `group_var` (optional) parameter is added to `derive_var_trtemfl()` to derive `TRTEMFL` for AE data if the data are collected as one episode of AE with multiple lines. (#2302)
 
