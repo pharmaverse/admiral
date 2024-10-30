@@ -2,24 +2,24 @@
 ## Test 1: Works as expected for Q*/EVERY * cases ----
 test_that("create_single_dose_dataset Test 1: Works as expected for Q*/EVERY * cases", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~EXDOSFRQ,          ~ASTDT,           ~AENDT,
-    "STUDY01", "P01",     "Q2D",       ymd("2021-01-01"), ymd("2021-01-07"),
-    "STUDY01", "P01",     "Q3D",       ymd("2021-01-08"), ymd("2021-01-14"),
+    ~STUDYID, ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
+    "STUDY01", "P01", "Q2D", ymd("2021-01-01"), ymd("2021-01-07"),
+    "STUDY01", "P01", "Q3D", ymd("2021-01-08"), ymd("2021-01-14"),
     "STUDY01", "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd("2021-01-29"),
-    "STUDY01", "P02",     "ONCE",      ymd("2021-02-02"), ymd("2021-02-02")
+    "STUDY01", "P02", "ONCE", ymd("2021-02-02"), ymd("2021-02-02")
   )
   expected_output <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~EXDOSFRQ,    ~ASTDT,            ~AENDT,
-    "STUDY01", "P01",     "ONCE", ymd("2021-01-01"), ymd("2021-01-01"),
-    "STUDY01", "P01",     "ONCE", ymd("2021-01-03"), ymd("2021-01-03"),
-    "STUDY01", "P01",     "ONCE", ymd("2021-01-05"), ymd("2021-01-05"),
-    "STUDY01", "P01",     "ONCE", ymd("2021-01-07"), ymd("2021-01-07"),
-    "STUDY01", "P01",     "ONCE", ymd("2021-01-08"), ymd("2021-01-08"),
-    "STUDY01", "P01",     "ONCE", ymd("2021-01-11"), ymd("2021-01-11"),
-    "STUDY01", "P01",     "ONCE", ymd("2021-01-14"), ymd("2021-01-14"),
-    "STUDY01", "P01",     "ONCE", ymd("2021-01-15"), ymd("2021-01-15"),
-    "STUDY01", "P01",     "ONCE", ymd("2021-01-29"), ymd("2021-01-29"),
-    "STUDY01", "P02",     "ONCE", ymd("2021-02-02"), ymd("2021-02-02")
+    ~STUDYID, ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
+    "STUDY01", "P01", "ONCE", ymd("2021-01-01"), ymd("2021-01-01"),
+    "STUDY01", "P01", "ONCE", ymd("2021-01-03"), ymd("2021-01-03"),
+    "STUDY01", "P01", "ONCE", ymd("2021-01-05"), ymd("2021-01-05"),
+    "STUDY01", "P01", "ONCE", ymd("2021-01-07"), ymd("2021-01-07"),
+    "STUDY01", "P01", "ONCE", ymd("2021-01-08"), ymd("2021-01-08"),
+    "STUDY01", "P01", "ONCE", ymd("2021-01-11"), ymd("2021-01-11"),
+    "STUDY01", "P01", "ONCE", ymd("2021-01-14"), ymd("2021-01-14"),
+    "STUDY01", "P01", "ONCE", ymd("2021-01-15"), ymd("2021-01-15"),
+    "STUDY01", "P01", "ONCE", ymd("2021-01-29"), ymd("2021-01-29"),
+    "STUDY01", "P02", "ONCE", ymd("2021-02-02"), ymd("2021-02-02")
   )
 
   expect_dfs_equal(
