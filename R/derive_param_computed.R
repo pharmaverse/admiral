@@ -122,6 +122,9 @@
 #'   If the argument is set to a list of variables, observations are added even
 #'   if some of specified variables are `NA` (see Example 1c).
 #'
+#'   *Permitted Values:* `TRUE`, `FALSE`, or a list of variables created by
+#'   `exprs()` e.g. `exprs(ADTF, ATMF)`
+#'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) an observation is added to the output dataset if the
 #'   filtered input dataset (`dataset`) or the additional dataset
@@ -390,6 +393,7 @@ derive_param_computed <- function(dataset = NULL,
     } else {
       na_vars <- analysis_vars_chr
     }
+    nobs_before <- nrow(hori_data)
     hori_data <- filter(
       hori_data,
       !!!parse_exprs(map_chr(
@@ -397,6 +401,18 @@ derive_param_computed <- function(dataset = NULL,
         ~ str_c("!is.na(", .x, ")")
       ))
     )
+    if (nobs_before > 0 && nrow(hori_data) == 0) {
+      cli_inform(c(
+        paste(
+          "No computed records were added because for all potential computed",
+          "records at least one of the contributing values was {.val {NA}}."
+        ),
+        paste(
+          "If this is not expected, please check the input data and the value of",
+          "the {.arg keep_nas} argument."
+        )
+      ))
+    }
   }
 
   # add computed variables like AVAL and constant variables like PARAMCD

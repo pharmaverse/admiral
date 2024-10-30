@@ -131,7 +131,10 @@ If the argument is set to \code{TRUE}, observations are added even if some of
 the values contributing to the computed value are \code{NA} (see Example 1b).
 
 If the argument is set to a list of variables, observations are added even
-if some of specified variables are \code{NA} (see Example 1c).}
+if some of specified variables are \code{NA} (see Example 1c).
+
+\emph{Permitted Values:} \code{TRUE}, \code{FALSE}, or a list of variables created by
+\code{exprs()} e.g. \code{exprs(ADTF, ATMF)}}
 }
 \value{
 The input dataset with the new parameter added. Note, a variable will only
