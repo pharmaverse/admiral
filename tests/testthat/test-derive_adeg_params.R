@@ -14,16 +14,16 @@ test_that("derive_param_qtc Test 1: Bazett's method", {
     input,
     tibble::tribble(
       ~USUBJID,      ~PARAMCD, ~VISIT,   ~AVAL,
-      "01-701-1015", "QTCBR",  "WEEK 2", 370 / sqrt(710/1000),
-      "01-701-1028", "QTCBR",  "WEEK 2", 480 / sqrt(842/1000)
+      "01-701-1015", "QTCBR",  "WEEK 2", 370 / sqrt(710 / 1000),
+      "01-701-1028", "QTCBR",  "WEEK 2", 480 / sqrt(842 / 1000)
     )
   )
   actual <- derive_param_qtc(
-      input,
-      by_vars = exprs(USUBJID, VISIT),
-      method = "Bazett",
-      get_unit_expr = AVALU
-    )
+    input,
+    by_vars = exprs(USUBJID, VISIT),
+    method = "Bazett",
+    get_unit_expr = AVALU
+  )
 
   expect_dfs_equal(
     base = expected,
@@ -47,8 +47,8 @@ test_that("derive_param_qtc Test 2: Fridericia's method", {
     input,
     tibble::tribble(
       ~USUBJID,      ~PARAMCD, ~VISIT,   ~AVAL,
-      "01-701-1015", "QTCFR",  "WEEK 2", 370 / 710^(1/3) * 10,
-      "01-701-1028", "QTCFR",  "WEEK 2", 480 / 842^(1/3) * 10
+      "01-701-1015", "QTCFR",  "WEEK 2", 370 / 710^(1 / 3) * 10,
+      "01-701-1028", "QTCFR",  "WEEK 2", 480 / 842^(1 / 3) * 10
     )
   )
   actual <- derive_param_qtc(
@@ -80,8 +80,8 @@ test_that("derive_param_qtc Test 3: Sagie's method", {
     input,
     tibble::tribble(
       ~USUBJID,      ~PARAMCD, ~VISIT,   ~AVAL,
-      "01-701-1015", "QTLCR",   "WEEK 2", 370 + 154 * (1 - 710/1000),
-      "01-701-1028", "QTLCR",   "WEEK 2", 480 + 154 * (1 - 842/1000)
+      "01-701-1015", "QTLCR",  "WEEK 2", 370 + 154 * (1 - 710 / 1000),
+      "01-701-1028", "QTLCR",  "WEEK 2", 480 + 154 * (1 - 842 / 1000)
     )
   )
   actual <- derive_param_qtc(
