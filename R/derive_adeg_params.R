@@ -12,7 +12,7 @@
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`
-#'   parameter) and to the parameters specified by `qt_code` and `rr_code`.
+#'   argument) and to the parameters specified by `qt_code` and `rr_code`.
 #'
 #'
 #' @param by_vars Grouping variables
@@ -24,36 +24,39 @@
 #'
 #' @param method Method used to QT correction
 #'
-#'   Permitted Values: `"Bazett"`, `"Fridericia"`, `"Sagie"`
+#'   *Permitted Values*: `"Bazett"`, `"Fridericia"`, `"Sagie"`
 #'
 #' @param qt_code QT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
-#'   as the QT interval assessments. It is expected that QT is measured in msec.
+#'   as the QT interval assessments. It is expected that QT is measured in msec
+#'   or ms.
 #'
-#'   Permitted Values: character value
+#'   *Permitted Values*: character value
 #'
 #' @param rr_code RR parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
-#'   as the RR interval assessments. It is expected that RR is measured in msec.
+#'   as the RR interval assessments. It is expected that RR is measured in msec
+#'   or ms.
 #'
-#'   Permitted Values: character value
+#'   *Permitted Values*: character value
 #'
 #' @param get_unit_expr An expression providing the unit of the parameter
 #'
 #'   The result is used to check the units of the input parameters.
 #'
-#'   Permitted Values: A variable of the input dataset or a function call
+#'   *Permitted Values*: A expression which is evaluable in the input dataset
+#'   and results in a charater value
 #'
 #' @inheritParams derive_param_map
 #'
 #' @inheritParams derive_param_computed
 #'
-#' @seealso [compute_qtc()]
-#'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
+#'
+#' @seealso [compute_qtc()]
 #'
 #' @family der_prm_bds_findings
 #'
@@ -61,22 +64,20 @@
 #'
 #' @export
 #'
-#' @seealso [compute_qtc()]
-#'
 #' @examples
 #' library(tibble)
 #'
 #' adeg <- tribble(
-#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
-#'   "01-701-1015", "HR", "Heart Rate (beats/min)", 70.14, "beats/min", "BASELINE",
-#'   "01-701-1015", "QT", "QT Duration (msec)", 370, "msec", "WEEK 2",
-#'   "01-701-1015", "HR", "Heart Rate (beats/min)", 62.66, "beats/min", "WEEK 1",
-#'   "01-701-1015", "RR", "RR Duration (msec)", 710, "msec", "WEEK 2",
-#'   "01-701-1028", "HR", "Heart Rate (beats/min)", 85.45, "beats/min", "BASELINE",
-#'   "01-701-1028", "QT", "QT Duration (msec)", 480, "msec", "WEEK 2",
-#'   "01-701-1028", "QT", "QT Duration (msec)", 350, "msec", "WEEK 3",
-#'   "01-701-1028", "HR", "Heart Rate (beats/min)", 56.54, "beats/min", "WEEK 3",
-#'   "01-701-1028", "RR", "RR Duration (msec)", 842, "msec", "WEEK 2",
+#'   ~USUBJID,      ~PARAMCD, ~PARAM,                   ~AVAL, ~AVALU,      ~VISIT,
+#'   "01-701-1015", "HR",     "Heart Rate (beats/min)", 70.14, "beats/min", "BASELINE",
+#'   "01-701-1015", "QT",     "QT Duration (ms)",         370, "ms",        "WEEK 2",
+#'   "01-701-1015", "HR",     "Heart Rate (beats/min)", 62.66, "beats/min", "WEEK 1",
+#'   "01-701-1015", "RR",     "RR Duration (ms)",         710, "ms",        "WEEK 2",
+#'   "01-701-1028", "HR",     "Heart Rate (beats/min)", 85.45, "beats/min", "BASELINE",
+#'   "01-701-1028", "QT",     "QT Duration (ms)",         480, "ms",        "WEEK 2",
+#'   "01-701-1028", "QT",     "QT Duration (ms)",         350, "ms",        "WEEK 3",
+#'   "01-701-1028", "HR",     "Heart Rate (beats/min)", 56.54, "beats/min", "WEEK 3",
+#'   "01-701-1028", "RR",     "RR Duration (ms)",         842, "ms",        "WEEK 2"
 #' )
 #'
 #' derive_param_qtc(
@@ -85,8 +86,8 @@
 #'   method = "Bazett",
 #'   set_values_to = exprs(
 #'     PARAMCD = "QTCBR",
-#'     PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)",
-#'     AVALU = "msec"
+#'     PARAM = "QTcB - Bazett's Correction Formula Rederived (ms)",
+#'     AVALU = "ms"
 #'   ),
 #'   get_unit_expr = AVALU
 #' )
@@ -97,8 +98,8 @@
 #'   method = "Fridericia",
 #'   set_values_to = exprs(
 #'     PARAMCD = "QTCFR",
-#'     PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)",
-#'     AVALU = "msec"
+#'     PARAM = "QTcF - Fridericia's Correction Formula Rederived (ms)",
+#'     AVALU = "ms"
 #'   ),
 #'   get_unit_expr = extract_unit(PARAM)
 #' )
@@ -109,8 +110,8 @@
 #'   method = "Sagie",
 #'   set_values_to = exprs(
 #'     PARAMCD = "QTLCR",
-#'     PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)",
-#'     AVALU = "msec"
+#'     PARAM = "QTlc - Sagie's Correction Formula Rederived (ms)",
+#'     AVALU = "ms"
 #'   ),
 #'   get_unit_expr = extract_unit(PARAM)
 #' )
@@ -138,13 +139,13 @@ derive_param_qtc <- function(dataset,
   assert_unit(
     dataset,
     param = qt_code,
-    required_unit = "msec",
+    required_unit = c("msec", "ms"),
     get_unit_expr = !!get_unit_expr
   )
   assert_unit(
     dataset,
     param = rr_code,
-    required_unit = "msec",
+    required_unit = c("msec", "ms"),
     get_unit_expr = !!get_unit_expr
   )
 
@@ -168,7 +169,7 @@ derive_param_qtc <- function(dataset,
 #'
 #' @param method Method used to QT correction
 #'
-#'   Permitted Values: `"Bazett"`, `"Fridericia"`, `"Sagie"`
+#'   *Permitted Values*: `"Bazett"`, `"Fridericia"`, `"Sagie"`
 #'
 #' @return
 #' `"QTCBR"` if `method` is `"Bazett"`, `"QTCFR"` if it's `"Fridericia"` or
@@ -196,16 +197,17 @@ default_qtc_paramcd <- function(method) {
 #'
 #' @param qt QT interval
 #'
-#'   A numeric vector is expected. It is expected that QT is measured in msec.
+#'   A numeric vector is expected. It is expected that QT is measured in msec or
+#'   ms.
 #'
 #' @param rr RR interval
 #'
-#'   A numeric vector is expected. It is expected that RR is measured in msec.
+#'   A numeric vector is expected. It is expected that RR is measured in msec or
+#'   ms.
 #'
 #' @inheritParams derive_param_qtc
 #'
-#'
-#' @return QT interval in msec
+#' @return QT interval in ms
 #'
 #' @details
 #' Depending on the chosen `method` one of the following formulae is used.
@@ -228,11 +230,11 @@ default_qtc_paramcd <- function(method) {
 #' @seealso [derive_param_qtc()]
 #'
 #' @examples
-#' compute_qtc(qt = 350, rr = 56.54, method = "Bazett")
+#' compute_qtc(qt = 350, rr = 857, method = "Bazett")
 #'
-#' compute_qtc(qt = 350, rr = 56.54, method = "Fridericia")
+#' compute_qtc(qt = 350, rr = 857, method = "Fridericia")
 #'
-#' compute_qtc(qt = 350, rr = 56.54, method = "Sagie")
+#' compute_qtc(qt = 350, rr = 857, method = "Sagie")
 compute_qtc <- function(qt, rr, method) {
   assert_numeric_vector(qt)
   assert_numeric_vector(rr)
@@ -262,7 +264,7 @@ compute_qtc <- function(qt, rr, method) {
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`
-#'   parameter) and to the parameters specified by `hr_code`.
+#'   argument) and to the parameters specified by `hr_code`.
 #'
 #' @param hr_code HR parameter code
 #'
@@ -294,14 +296,14 @@ compute_qtc <- function(qt, rr, method) {
 #' adeg <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "HR", "Heart Rate", 70.14, "beats/min", "BASELINE",
-#'   "01-701-1015", "QT", "QT Duration", 370, "msec", "WEEK 2",
+#'   "01-701-1015", "QT", "QT Duration", 370, "ms", "WEEK 2",
 #'   "01-701-1015", "HR", "Heart Rate", 62.66, "beats/min", "WEEK 1",
-#'   "01-701-1015", "RR", "RR Duration", 710, "msec", "WEEK 2",
+#'   "01-701-1015", "RR", "RR Duration", 710, "ms", "WEEK 2",
 #'   "01-701-1028", "HR", "Heart Rate", 85.45, "beats/min", "BASELINE",
-#'   "01-701-1028", "QT", "QT Duration", 480, "msec", "WEEK 2",
-#'   "01-701-1028", "QT", "QT Duration", 350, "msec", "WEEK 3",
+#'   "01-701-1028", "QT", "QT Duration", 480, "ms", "WEEK 2",
+#'   "01-701-1028", "QT", "QT Duration", 350, "ms", "WEEK 3",
 #'   "01-701-1028", "HR", "Heart Rate", 56.54, "beats/min", "WEEK 3",
-#'   "01-701-1028", "RR", "RR Duration", 842, "msec", "WEEK 2"
+#'   "01-701-1028", "RR", "RR Duration", 842, "ms", "WEEK 2"
 #' )
 #'
 #' derive_param_rr(
@@ -309,8 +311,8 @@ compute_qtc <- function(qt, rr, method) {
 #'   by_vars = exprs(USUBJID, VISIT),
 #'   set_values_to = exprs(
 #'     PARAMCD = "RRR",
-#'     PARAM = "RR Duration Rederived (msec)",
-#'     AVALU = "msec"
+#'     PARAM = "RR Duration Rederived (ms)",
+#'     AVALU = "ms"
 #'   ),
 #'   get_unit_expr = AVALU
 #' )
@@ -362,7 +364,7 @@ derive_param_rr <- function(dataset,
 #'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
-#' @return RR interval in msec:
+#' @return RR interval in ms:
 #' \deqn{\frac{60000}{HR}}{60000 / HR}
 #'
 #' @family com_bds_findings

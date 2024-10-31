@@ -1,6 +1,7 @@
 url: https://pharmaverse.github.io/admiral
 
 template:
+  math-rendering: mathjax
   bootstrap: 5
   params:
     bootswatch: flatly

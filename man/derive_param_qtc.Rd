@@ -23,7 +23,7 @@ The variables specified by the \code{by_vars} and \code{get_unit_expr} arguments
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
-parameter) and to the parameters specified by \code{qt_code} and \code{rr_code}.}
+argument) and to the parameters specified by \code{qt_code} and \code{rr_code}.}
 
 \item{by_vars}{Grouping variables
 
@@ -35,7 +35,7 @@ e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{method}{Method used to QT correction
 
-Permitted Values: \code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
+\emph{Permitted Values}: \code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
 
 \item{set_values_to}{Variables to be set
 
@@ -48,22 +48,25 @@ for the new parameter.
 \item{qt_code}{QT parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
-as the QT interval assessments. It is expected that QT is measured in msec.
+as the QT interval assessments. It is expected that QT is measured in msec
+or ms.
 
-Permitted Values: character value}
+\emph{Permitted Values}: character value}
 
 \item{rr_code}{RR parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
-as the RR interval assessments. It is expected that RR is measured in msec.
+as the RR interval assessments. It is expected that RR is measured in msec
+or ms.
 
-Permitted Values: character value}
+\emph{Permitted Values}: character value}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
 The result is used to check the units of the input parameters.
 
-Permitted Values: A variable of the input dataset or a function call}
+\emph{Permitted Values}: A expression which is evaluable in the input dataset
+and results in a charater value}
 
 \item{filter}{Filter condition
 
@@ -88,16 +91,16 @@ are available.
 library(tibble)
 
 adeg <- tribble(
-  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
-  "01-701-1015", "HR", "Heart Rate (beats/min)", 70.14, "beats/min", "BASELINE",
-  "01-701-1015", "QT", "QT Duration (msec)", 370, "msec", "WEEK 2",
-  "01-701-1015", "HR", "Heart Rate (beats/min)", 62.66, "beats/min", "WEEK 1",
-  "01-701-1015", "RR", "RR Duration (msec)", 710, "msec", "WEEK 2",
-  "01-701-1028", "HR", "Heart Rate (beats/min)", 85.45, "beats/min", "BASELINE",
-  "01-701-1028", "QT", "QT Duration (msec)", 480, "msec", "WEEK 2",
-  "01-701-1028", "QT", "QT Duration (msec)", 350, "msec", "WEEK 3",
-  "01-701-1028", "HR", "Heart Rate (beats/min)", 56.54, "beats/min", "WEEK 3",
-  "01-701-1028", "RR", "RR Duration (msec)", 842, "msec", "WEEK 2",
+  ~USUBJID,      ~PARAMCD, ~PARAM,                   ~AVAL, ~AVALU,      ~VISIT,
+  "01-701-1015", "HR",     "Heart Rate (beats/min)", 70.14, "beats/min", "BASELINE",
+  "01-701-1015", "QT",     "QT Duration (ms)",         370, "ms",        "WEEK 2",
+  "01-701-1015", "HR",     "Heart Rate (beats/min)", 62.66, "beats/min", "WEEK 1",
+  "01-701-1015", "RR",     "RR Duration (ms)",         710, "ms",        "WEEK 2",
+  "01-701-1028", "HR",     "Heart Rate (beats/min)", 85.45, "beats/min", "BASELINE",
+  "01-701-1028", "QT",     "QT Duration (ms)",         480, "ms",        "WEEK 2",
+  "01-701-1028", "QT",     "QT Duration (ms)",         350, "ms",        "WEEK 3",
+  "01-701-1028", "HR",     "Heart Rate (beats/min)", 56.54, "beats/min", "WEEK 3",
+  "01-701-1028", "RR",     "RR Duration (ms)",         842, "ms",        "WEEK 2"
 )
 
 derive_param_qtc(
@@ -106,8 +109,8 @@ derive_param_qtc(
   method = "Bazett",
   set_values_to = exprs(
     PARAMCD = "QTCBR",
-    PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)",
-    AVALU = "msec"
+    PARAM = "QTcB - Bazett's Correction Formula Rederived (ms)",
+    AVALU = "ms"
   ),
   get_unit_expr = AVALU
 )
@@ -118,8 +121,8 @@ derive_param_qtc(
   method = "Fridericia",
   set_values_to = exprs(
     PARAMCD = "QTCFR",
-    PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)",
-    AVALU = "msec"
+    PARAM = "QTcF - Fridericia's Correction Formula Rederived (ms)",
+    AVALU = "ms"
   ),
   get_unit_expr = extract_unit(PARAM)
 )
@@ -130,15 +133,13 @@ derive_param_qtc(
   method = "Sagie",
   set_values_to = exprs(
     PARAMCD = "QTLCR",
-    PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)",
-    AVALU = "msec"
+    PARAM = "QTlc - Sagie's Correction Formula Rederived (ms)",
+    AVALU = "ms"
   ),
   get_unit_expr = extract_unit(PARAM)
 )
 }
 \seealso{
-\code{\link[=compute_qtc]{compute_qtc()}}
-
 \code{\link[=compute_qtc]{compute_qtc()}}
 
 BDS-Findings Functions for adding Parameters/Records: 

@@ -80,7 +80,8 @@ as the WEIGHT assessments. It is expected that WEIGHT is measured in kg.
 
 The result is used to check the units of the input parameters.
 
-Permitted Values: A variable of the input dataset or a function call}
+\emph{Permitted Values}: A expression which is evaluable in the input dataset
+and results in a charater value}
 
 \item{filter}{Filter condition
 
