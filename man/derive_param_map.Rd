@@ -68,8 +68,8 @@ as the heart rate assessments.
 
 The result is used to check the units of the input parameters.
 
-\emph{Permitted Values}: A expression which is evaluable in the input dataset
-and results in a charater value}
+\emph{Permitted Values}: An expression which is evaluable in the input dataset
+and results in a character value}
 
 \item{filter}{Filter condition
 

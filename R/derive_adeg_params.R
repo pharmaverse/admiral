@@ -46,8 +46,8 @@
 #'
 #'   The result is used to check the units of the input parameters.
 #'
-#'   *Permitted Values*: A expression which is evaluable in the input dataset
-#'   and results in a charater value
+#'   *Permitted Values*: An expression which is evaluable in the input dataset
+#'   and results in a character value
 #'
 #' @inheritParams derive_param_map
 #'
