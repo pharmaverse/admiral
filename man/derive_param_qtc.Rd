@@ -35,6 +35,8 @@ e.g. \code{exprs(USUBJID, VISIT)}}
 
 \item{method}{Method used to QT correction
 
+See \code{\link[=compute_qtc]{compute_qtc()}} for details.
+
 \emph{Permitted Values}: \code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
 
 \item{set_values_to}{Variables to be set

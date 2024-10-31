@@ -24,6 +24,8 @@
 #'
 #' @param method Method used to QT correction
 #'
+#'   See [compute_qtc()] for details.
+#'
 #'   *Permitted Values*: `"Bazett"`, `"Fridericia"`, `"Sagie"`
 #'
 #' @param qt_code QT parameter code
@@ -175,7 +177,6 @@ derive_param_qtc <- function(dataset,
 #' `"QTCBR"` if `method` is `"Bazett"`, `"QTCFR"` if it's `"Fridericia"` or
 #' `"QTLCR"` if it's `"Sagie"`. An error otherwise.
 #'
-#'
 #' @export
 #'
 #' @family der_prm_bds_findings
@@ -205,7 +206,9 @@ default_qtc_paramcd <- function(method) {
 #'   A numeric vector is expected. It is expected that RR is measured in msec or
 #'   ms.
 #'
-#' @inheritParams derive_param_qtc
+#' @param method Method used to QT correction
+#'
+#'   *Permitted Values*: `"Bazett"`, `"Fridericia"`, `"Sagie"`
 #'
 #' @return QT interval in ms
 #'
