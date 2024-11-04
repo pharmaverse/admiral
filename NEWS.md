@@ -46,6 +46,7 @@ of the input parameters. (#2513)
 <details>
 <summary>Developer Notes</summary>
 
+- Created unit tests for developer internal function `restricted_imputed_dtc_dt()` (#2495)
 - Adopted `data-raw/data` R Package Convention (#2427)
 - Removed `.devcontainer` file (codespace) (#2524)
 
