@@ -12,7 +12,7 @@
 
 ## Updates of Existing Functions
 
-- The `derive_param_qtc()` function accepts now both `"msec"` and `"ms"` as unit
+- The `derive_param_qtc()` function accepts now both `"ms"` and `"msec"` as unit
 of the input parameters. (#2513)
 
 ## Breaking Changes

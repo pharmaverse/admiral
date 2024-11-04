@@ -9,13 +9,13 @@ compute_qtc(qt, rr, method)
 \arguments{
 \item{qt}{QT interval
 
-A numeric vector is expected. It is expected that QT is measured in msec or
-ms.}
+A numeric vector is expected. It is expected that QT is measured in ms or
+msec.}
 
 \item{rr}{RR interval
 
-A numeric vector is expected. It is expected that RR is measured in msec or
-ms.}
+A numeric vector is expected. It is expected that RR is measured in ms or
+msec.}
 
 \item{method}{Method used to QT correction
 

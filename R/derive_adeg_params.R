@@ -31,16 +31,16 @@
 #' @param qt_code QT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
-#'   as the QT interval assessments. It is expected that QT is measured in msec
-#'   or ms.
+#'   as the QT interval assessments. It is expected that QT is measured in ms or
+#'   msec.
 #'
 #'   *Permitted Values*: character value
 #'
 #' @param rr_code RR parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
-#'   as the RR interval assessments. It is expected that RR is measured in msec
-#'   or ms.
+#'   as the RR interval assessments. It is expected that RR is measured in ms or
+#'   msec.
 #'
 #'   *Permitted Values*: character value
 #'
@@ -198,13 +198,13 @@ default_qtc_paramcd <- function(method) {
 #'
 #' @param qt QT interval
 #'
-#'   A numeric vector is expected. It is expected that QT is measured in msec or
-#'   ms.
+#'   A numeric vector is expected. It is expected that QT is measured in ms or
+#'   msec.
 #'
 #' @param rr RR interval
 #'
-#'   A numeric vector is expected. It is expected that RR is measured in msec or
-#'   ms.
+#'   A numeric vector is expected. It is expected that RR is measured in ms or
+#'   msec.
 #'
 #' @param method Method used to QT correction
 #'

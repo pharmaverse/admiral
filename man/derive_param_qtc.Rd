@@ -50,16 +50,16 @@ for the new parameter.
 \item{qt_code}{QT parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
-as the QT interval assessments. It is expected that QT is measured in msec
-or ms.
+as the QT interval assessments. It is expected that QT is measured in ms or
+msec.
 
 \emph{Permitted Values}: character value}
 
 \item{rr_code}{RR parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered
-as the RR interval assessments. It is expected that RR is measured in msec
-or ms.
+as the RR interval assessments. It is expected that RR is measured in ms or
+msec.
 
 \emph{Permitted Values}: character value}
 
