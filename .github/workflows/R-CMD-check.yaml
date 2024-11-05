@@ -46,6 +46,7 @@ jobs:
 
       - name: Install Development Versions of Dependencies
         run: |
+          install.packages("remotes")
           remotes::install_github("pharmaverse/admiraldev", ref = "main")
         shell: Rscript {0}
 
