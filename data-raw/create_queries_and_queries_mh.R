@@ -5,8 +5,8 @@
 # SRCVAR, e.g., AEDECOD, AELLT, ...
 # TERMCHAR, non NULL
 
-library(dplyr)
-library(admiral)
+library(dplyr) # nolint
+library(admiral) # nolint
 
 queries <- tibble::tribble(
   ~PREFIX, ~GRPNAME, ~GRPID, ~SCOPE,
