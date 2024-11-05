@@ -12,6 +12,10 @@
 
 ## Updates of Existing Functions
 
+- In `derive_vars_query()` the error message was improved for the cases that
+some of the requested query variables are already present in the input dataset
+or that the queries dataset contains duplicates. (#2543)
+
 ## Breaking Changes
   
 - The following function arguments are entering the next phase of the deprecation process: (#2487)
