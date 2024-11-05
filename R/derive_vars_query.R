@@ -330,7 +330,8 @@ assert_valid_queries <- function(queries, queries_name) {
       "Queries dataset ({.var ", queries_name, "}) contains duplicate records ",
       "with respect to {.var {replace_values_by_names(by_vars)}}"
     ),
-    by_vars = exprs(!!!syms(colnames(queries))))
+    by_vars = exprs(!!!syms(colnames(queries)))
+  )
 
   # check illegal prefix category
   is_good_prefix <- grepl("^[a-zA-Z]{2,3}", queries$PREFIX)
