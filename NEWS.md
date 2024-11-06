@@ -12,7 +12,13 @@
 
 ## Updates of Existing Functions
 
-- NCICTCAEv5 grading criteria fixed for ``TERM = "INR Increased"`, criteria was wrongly using `x ULN`, for first part of criteria for grades 1 to 3. For example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534).
+- In `derive_vars_query()` the error message was improved for the cases that
+some of the requested query variables are already present in the input dataset
+or that the queries dataset contains duplicates. (#2543)
+
+- NCICTCAEv5 grading criteria fixed for `TERM = "INR Increased"`, criteria was
+wrongly using `x ULN`, for first part of criteria for grades 1 to 3. For
+example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 
 ## Breaking Changes
   
