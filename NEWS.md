@@ -14,6 +14,9 @@
 
 - The `derive_param_qtc()` function accepts now both `"ms"` and `"msec"` as unit
 of the input parameters. (#2513)
+- NCICTCAEv5 grading criteria fixed for `TERM = "INR Increased"`, criteria was wrongly using `x ULN`, 
+for first part of criteria for grades 1 to 3. For example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534).
+
 
 ## Breaking Changes
   
