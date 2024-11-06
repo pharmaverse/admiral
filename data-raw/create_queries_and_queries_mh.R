@@ -6,7 +6,6 @@
 # TERMCHAR, non NULL
 
 library(dplyr) # nolint
-library(admiral) # nolint
 
 queries <- tibble::tribble(
   ~PREFIX, ~GRPNAME, ~GRPID, ~SCOPE,
