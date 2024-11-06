@@ -8,7 +8,8 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 14 rows and 8 columns.
 }
 \source{
-An example of standard query MH dataset to be used in deriving variables in ADMH
+An example of standard query MH dataset to be used in deriving Standardized
+MedDRA Query variables in ADMH
 }
 \usage{
 queries_mh

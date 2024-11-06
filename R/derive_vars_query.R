@@ -145,6 +145,14 @@ get_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_linte
     arrange(desc(order1), order2, order3) %>%
     pull(value)
 
+  existing_new_vars <- intersect(new_col_names, colnames(dataset))
+  if (length(existing_new_vars) > 0) {
+    cli_abort(paste(
+      "The following variable{?s} requested by {.arg dataset_queries} already",
+      "exist{?s/} in {.arg dataset}: {.var {existing_new_vars}}"
+    ))
+  }
+
   # queries restructured
   queries_wide <- dataset_queries %>%
     mutate(
@@ -316,7 +324,14 @@ derive_vars_query <- function(dataset, dataset_queries) { # nolint: cyclocomp_li
 #' @noRd
 assert_valid_queries <- function(queries, queries_name) {
   # check duplicate rows
-  signal_duplicate_records(queries, by_vars = exprs(!!!syms(colnames(queries))))
+  signal_duplicate_records(
+    queries,
+    msg = paste0(
+      "Queries dataset ({.var ", queries_name, "}) contains duplicate records ",
+      "with respect to {.var {replace_values_by_names(by_vars)}}"
+    ),
+    by_vars = exprs(!!!syms(colnames(queries)))
+  )
 
   # check illegal prefix category
   is_good_prefix <- grepl("^[a-zA-Z]{2,3}", queries$PREFIX)
