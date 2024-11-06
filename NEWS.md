@@ -12,6 +12,8 @@
 
 ## Updates of Existing Functions
 
+- NCICTCAEv5 grading criteria fixed for ``TERM = "INR Increased"`, criteria was wrongly using `x ULN`, for first part of criteria for grades 1 to 3. For example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534).
+
 ## Breaking Changes
   
 - The following function arguments are entering the next phase of the deprecation process: (#2487)
