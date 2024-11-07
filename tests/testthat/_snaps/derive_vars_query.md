@@ -17,7 +17,16 @@
       ! Error in derive_vars_query call of get_vars_query: Error in `get_vars_query()`:
       ! Either `TERMCHAR` or `TERMNUM` need to be specified in `dataset_queries`. They both cannot be NA or empty.
 
-# assert_valid_queries Test 9: assert_valid_queries checks
+# derive_vars_query Test 9: Error if requested variables already exist
+
+    Code
+      derive_vars_query(adae, queries)
+    Condition
+      Error in `value[[3L]]()`:
+      ! Error in derive_vars_query call of get_vars_query: Error in `get_vars_query()`:
+      ! The following variables requested by `dataset_queries` already exist in `dataset`: `SMQ03NAM`, `SMQ03CD`, `SMQ03SC`, and `SMQ03SCN`
+
+# assert_valid_queries Test 10: assert_valid_queries checks
 
     Code
       assert_valid_queries(mutate(query, PREFIX = c("30", "55")), "test")
@@ -81,4 +90,13 @@
     Condition
       Error in `assert_valid_queries()`:
       ! In `test` `GRPID` of "CQ40" is not unique.
+
+---
+
+    Code
+      assert_valid_queries(queries = bind_rows(query, query), queries_name = "test")
+    Condition
+      Error in `signal_duplicate_records()`:
+      ! Queries dataset (`test`) contains duplicate records with respect to `PREFIX`, `GRPNAME`, `SRCVAR`, `TERMCHAR`, `GRPID`, and `TERMNUM`
+      i Run `admiral::get_duplicates_dataset()` to access the duplicate records
 
