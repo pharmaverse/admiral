@@ -9,18 +9,20 @@ compute_qtc(qt, rr, method)
 \arguments{
 \item{qt}{QT interval
 
-A numeric vector is expected. It is expected that QT is measured in msec.}
+A numeric vector is expected. It is expected that QT is measured in ms or
+msec.}
 
 \item{rr}{RR interval
 
-A numeric vector is expected. It is expected that RR is measured in msec.}
+A numeric vector is expected. It is expected that RR is measured in ms or
+msec.}
 
 \item{method}{Method used to QT correction
 
-Permitted Values: \code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
+\emph{Permitted Values}: \code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
 }
 \value{
-QT interval in msec
+QT interval in ms
 }
 \description{
 Computes corrected QT using Bazett's, Fridericia's or Sagie's formula.
@@ -38,11 +40,11 @@ Depending on the chosen \code{method} one of the following formulae is used.
 Usually this computation function can not be used with \verb{\%>\%}.
 }
 \examples{
-compute_qtc(qt = 350, rr = 56.54, method = "Bazett")
+compute_qtc(qt = 350, rr = 857, method = "Bazett")
 
-compute_qtc(qt = 350, rr = 56.54, method = "Fridericia")
+compute_qtc(qt = 350, rr = 857, method = "Fridericia")
 
-compute_qtc(qt = 350, rr = 56.54, method = "Sagie")
+compute_qtc(qt = 350, rr = 857, method = "Sagie")
 }
 \seealso{
 \code{\link[=derive_param_qtc]{derive_param_qtc()}}
