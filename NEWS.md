@@ -6,14 +6,23 @@
 `AVALCATx` & `AVALCAxN`. (#2480)
 - New function `derive_vars_crit_flag()` for deriving criterion flag variables
 (`CRITy`, `CRITyFL`, `CRITyFLN`). (#2468)
-
 - Replace use of `data("sdtm")` with `sdtm <- pharmaverse::sdtm` in templates and vignettes. (#2498)
+
+- Remove `dthcaus_source()` calls in `ADSL` template because they are deprecated. (#2517)
 
 ## Updates of Existing Functions
 
 - `derive_param_tte()` now provides a useful error message if in
 `event_conditions` or `censor_conditions` a dataset is referenced which is not
 specified in `source_datasets`. (#2519)
+
+- In `derive_vars_query()` the error message was improved for the cases that
+some of the requested query variables are already present in the input dataset
+or that the queries dataset contains duplicates. (#2543)
+
+- NCICTCAEv5 grading criteria fixed for `TERM = "INR Increased"`, criteria was
+wrongly using `x ULN`, for first part of criteria for grades 1 to 3. For
+example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 
 ## Breaking Changes
   
@@ -46,7 +55,9 @@ specified in `source_datasets`. (#2519)
 <details>
 <summary>Developer Notes</summary>
 
+- Created unit tests for developer internal function `restricted_imputed_dtc_dt()` (#2495)
 - Adopted `data-raw/data` R Package Convention (#2427)
+- Removed `.devcontainer` file (codespace) (#2524)
 
 </details>
 

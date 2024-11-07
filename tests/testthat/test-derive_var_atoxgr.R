@@ -1490,38 +1490,36 @@ test_that("derive_var_atoxgr Test 35: CTCAEv4 INR increased", {
   )
 })
 
-### INR increased (NCICTCV4)
-### NCICTCV5 different for grade 1
-### Grade 3: >2.5 x ULN; >2.5 times above baseline if on anticoagulation
-### Grade 2: >1.5 - 2.5 x ULN; >1.5 - 2.5 times above baseline if on anticoagulation
-### Grade 1: >1.2 - 1.5 x ULN; >1 - 1.5 times above baseline if on anticoagulation
+### INR increased (NCICTCV5)
+### NCICTCV5 different to NCICTCv4 (do not use x ULN)
+### Grade 3: >2.5; >2.5 times above baseline if on anticoagulation
+### Grade 2: >1.5 - 2.5; >1.5 - 2.5 times above baseline if on anticoagulation
+### Grade 1: >1.2 - 1.5; >1 - 1.5 times above baseline if on anticoagulation
 
 ## Test 36: CTCAEv5 INR increased ----
 test_that("derive_var_atoxgr Test 36: CTCAEv5 INR increased", {
   expected_inri <- tibble::tribble(
-    ~ATOXDSCH,       ~AVAL, ~BASE, ~ANRHI, ~AVALU,        ~ATOXGRH, ~TESTNUM,
-    "Not a term",    80,    120,   200,    NA_character_, NA,       1,
-    NA_character_,   60,    50,    100,    NA_character_, NA,       2,
-    # GRADE derived from AVAL against ANRHI
-    "INR IncreaSed", 251,   200,   100,    NA_character_, "3",      3,
-    "INR Increased", 250,   199,   100,    NA_character_, "2",      4,
-    "INR Increased", 151,   150,   100,    NA_character_, "2",      5,
-    "INR Increased", 150,   150,   100,    NA_character_, "1",      6,
-    "INR Increased", 121,   150,   100,    NA_character_, "1",      7,
-    "INR Increased", 120,   120,   100,    NA_character_, "0",      8,
+    ~ATOXDSCH,       ~AVAL, ~BASE, ~AVALU,        ~ATOXGRH, ~TESTNUM,
+    "Not a term",    80,    120,   NA_character_, NA,       1,
+    NA_character_,   60,    50,    NA_character_, NA,       2,
+    # GRADE derived from AVAL against first half of criteria
+    "INR IncreaSed", 2.51,  2.6,   NA_character_, "3",      3,
+    "INR Increased", 2.5,   1,     NA_character_, "2",      4,
+    "INR Increased", 1.51,  1,     NA_character_, "2",      5,
+    "INR Increased", 1.5,   1,     NA_character_, "1",      6,
+    "INR Increased", 1.2,   1,     NA_character_, "1",      7,
+    "INR Increased", 1.19,  1.19,  NA_character_, "0",      8,
     # GRADE derived from AVAL against BASE
-    "INR IncreaSed", 251,   100,   200,    NA_character_, "3",      9,
-    "INR Increased", 250,   100,   199,    NA_character_, "2",      10,
-    "INR Increased", 151,   100,   150,    NA_character_, "2",      11,
-    "INR Increased", 150,   100,   150,    NA_character_, "1",      12,
-    "INR Increased", 101,   100,   150,    NA_character_, "1",      13,
-    "INR Increased", 100,   100,   100,    NA_character_, "0",      14,
-    # BASE missing - AVAL <= ANRLO cannot grade as NORMAL
-    "INR Increased", 100,   NA,    100,    NA_character_, NA,       15,
-    # ANRHI missing - AVAL <= BASE cannot grade as NORMAL
-    "INR Increased", 100,   100,   NA,     NA_character_, NA,       16,
+    "INR IncreaSed", 2.5,   0.99,  NA_character_, "3",      9,
+    "INR Increased", 1.5,   0.6,   NA_character_, "2",      10,
+    "INR Increased", 1.5,   0.99,  NA_character_, "2",      11,
+    "INR Increased", 1.2,   0.8,   NA_character_, "1",      12,
+    "INR Increased", 1.2,   1.19,  NA_character_, "1",      13,
+    "INR Increased", 1.2,   1.2,   NA_character_, "0",      14,
+    # BASE missing - AVAL <= 1.2 cannot grade as NORMAL
+    "INR Increased", 1.2,   NA,    NA_character_, NA,       15,
     # AVAL missing cannot grade
-    "INR Increased", NA,    100,   100,    NA_character_, NA,       17,
+    "INR Increased", NA,    100,   NA_character_, NA,       16,
   )
   input_inri <- expected_inri %>%
     select(-ATOXGRH)

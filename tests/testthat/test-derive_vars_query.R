@@ -155,7 +155,7 @@ test_that("derive_vars_query Test 5: Derive decides between TERMCHAR and TERMNUM
   )
 })
 
-## Test 6: Error is given when both TERMCHAR/TERMNUM are NA or empty ----
+## Test 6: Error is given if both TERMCHAR/TERMNUM are NA/empty ----
 test_that("derive_vars_query Test 6: Error is given if both TERMCHAR/TERMNUM are NA/empty", {
   query <- tibble::tribble(
     ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
@@ -227,13 +227,37 @@ test_that("derive_vars_query Test 8: numeric SRCVAR and just TERMNUM is provided
   expect_equal(expected_output, actual_output)
 })
 
+## Test 9: Error if requested variables already exist ----
+test_that("derive_vars_query Test 9: Error if requested variables already exist", {
+  # nolint start
+  queries <- tibble::tribble(
+    ~PREFIX, ~GRPNAME,                         ~GRPID,   ~SCOPE,   ~SCOPEN, ~SRCVAR,   ~TERMCHAR,
+    "SMQ03", "Immune-Mediated Hypothyroidism", 20000161, "NARROW", 1,       "AEDECOD", "BASEDOW'S DISEASE",
+  )
+
+  adae <- tibble::tribble(
+    ~USUBJID, ~AEDECOD,                            ~SMQ03NAM,                        ~SMQ03CD, ~SMQ03SC, ~SMQ03SCN,
+    "01",     "ALANINE aminotransferase abnormal", NA_character_,                    NA,       NA,       NA,
+    "02",     "Basedow's disease",                 "Immune-Mediated Hypothyroidism", 20000161, "NARROW", 1,
+    "03",     "Some term",                         NA_character_,                    NA,       NA,       NA,
+    "05",     "Alveolar proteinosis",              NA_character_,                    NA,       NA,       NA
+  )
+  # nolint end
+
+  expect_snapshot(
+    derive_vars_query(adae, queries),
+    error = TRUE
+  )
+})
+
+
 # assert_valid_queries ----
-## Test 9: assert_valid_queries checks ----
-test_that("assert_valid_queries Test 9: assert_valid_queries checks", {
+## Test 10: assert_valid_queries checks ----
+test_that("assert_valid_queries Test 10: assert_valid_queries checks", {
   query <- tibble::tribble(
-    ~PREFIX, ~GRPNAME, ~SRCVAR, ~TERMCHAR, ~GRPID, ~TERMNUM,
-    "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
-    "CQ42", "My Query 2", "AELLTCD", NA_character_, 2, 1
+    ~PREFIX, ~GRPNAME,     ~SRCVAR,   ~TERMCHAR,     ~GRPID, ~TERMNUM,
+    "CQ40",  "My Query 1", "AEDECOD", "PTSI",             1,       NA,
+    "CQ42",  "My Query 2", "AELLTCD", NA_character_,      2,        1
   )
 
   expect_snapshot(
@@ -314,5 +338,13 @@ test_that("assert_valid_queries Test 9: assert_valid_queries checks", {
       "test"
     ),
     class = "assert_one_to_one"
+  )
+
+  expect_snapshot(
+    assert_valid_queries(
+      queries = bind_rows(query, query),
+      queries_name = "test"
+    ),
+    error = TRUE
   )
 })
