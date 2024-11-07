@@ -16,7 +16,7 @@
       Error in `restrict_imputed_dtc_dt()`:
       ! Length of `max_dates` do not match length of dates to be imputed.
 
-# derive_vars_dt Test 19: NA imputation for highest_imputation = Y & max_dates but date_imputation = first
+# derive_vars_dt Test 20: NA imputation for highest_imputation = Y & max_dates but date_imputation = first
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(
@@ -32,7 +32,7 @@
       1    <NA> 2022-01-01  <NA>   <NA>
       2    <NA>       <NA>  <NA>   <NA>
 
-# derive_vars_dt Test 21: NA imputation for highest_imputation = Y & min_dates but date_imputation = last
+# derive_vars_dt Test 22: NA imputation for highest_imputation = Y & min_dates but date_imputation = last
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(
@@ -48,7 +48,7 @@
       1    <NA> 2022-01-01  <NA>   <NA>
       2    <NA>       <NA>  <NA>   <NA>
 
-# derive_vars_dt Test 22: NA imputation for highest_imputation = Y but null min/max dates fails
+# derive_vars_dt Test 23: NA imputation for highest_imputation = Y but null min/max dates fails
 
     Code
       data.frame(AESTDTC = c(NA_character_, NA_character_), TRTSDT = c(ymd(
