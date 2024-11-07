@@ -77,3 +77,5 @@ Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+Remotes: 
+    pharmaverse/admiraldev

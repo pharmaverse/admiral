@@ -12,6 +12,9 @@
 
 ## Updates of Existing Functions
 
+- The `derive_param_qtc()` function accepts now both `"ms"` and `"msec"` as unit
+of the input parameters. (#2513)
+
 - In `derive_vars_query()` the error message was improved for the cases that
 some of the requested query variables are already present in the input dataset
 or that the queries dataset contains duplicates. (#2543)
