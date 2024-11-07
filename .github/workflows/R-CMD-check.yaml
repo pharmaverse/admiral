@@ -45,6 +45,11 @@ jobs:
           needs: check
 
       - name: Install Development Versions of Dependencies
+        if: |
+          !(contains(github.event.commits[0].message, '[skip vbump]') ||
+            contains(github.event.head_commit.message, '[skip vbump]') ||
+            github.ref == 'refs/heads/patch'
+          )
         run: |
           install.packages("remotes")
           remotes::install_github("pharmaverse/admiraldev", ref = "main")
