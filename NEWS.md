@@ -12,6 +12,11 @@
 
 ## Updates of Existing Functions
 
+- The `keep_nas` argument of `derive_param_computed()` was enhanced such that it
+is now possible to specify a list of variables for which `NA`s are acceptable.
+I.e., records are added even if some of the specified variables are `NA`.
+(#2510)
+
 - `derive_param_tte()` now provides a useful error message if in
 `event_conditions` or `censor_conditions` a dataset is referenced which is not
 specified in `source_datasets`. (#2519)
