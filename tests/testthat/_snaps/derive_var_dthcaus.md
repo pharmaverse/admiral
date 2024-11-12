@@ -7,5 +7,5 @@
       Error in `derive_var_dthcaus()`:
       ! The dataset names must be included in the list specified for the `source_datasets` argument.
       i Following names were provided by `source_datasets`: ae and dd
-      i  But, `sources[[2]]$dataset_name = ds`
+      i But, `sources[[2]]$dataset_name = ds`
 

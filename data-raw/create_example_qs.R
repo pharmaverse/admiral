@@ -1,4 +1,8 @@
-library(dplyr)
+## Code to create `example_qs.rda` dataset and save it in data/
+## This replaces inst/example_scripts/example_qs.R
+## Follows the same standard as pharmaversesdtm
+
+
 # nolint start
 suppress_warning(
   qs_gad7 <- tibble::tribble(
@@ -202,5 +206,5 @@ example_qs <- bind_rows(qs_gad7, qs_gdssf, qs_sp) %>%
     STUDYID = "STUDYX",
     .before = everything()
   )
-
-save(example_qs, file = file.path("data", "example_qs.rda"), compress = "bzip2")
+#  create example_qs.rda in data/
+usethis::use_data(example_qs, overwrite = TRUE)

@@ -13,12 +13,15 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+library(admiral)
 library(admiraldev)
 ```
 
 # Introduction
 
-During the drug development process, clinical trials are often required to assess for the potential that the experimental drug can cause severe liver injury, known as a drug induced liver injury [(DILI)](https://www.fda.gov/media/116737/download). There are multiple criteria that need to be evaluated to determine and classify a DILI "Event". Hy's Law, a common rule of thumb for a DILI Event , is usually comprised of three parts:
+During the drug development process, clinical trials are often required to assess for the potential that the experimental drug can cause severe liver injury, known as a drug induced liver injury (DILI)  [Drug-Induced Liver Injury:
+Premarketing Clinical
+Evaluation](https://www.fda.gov/media/116737/download). There are multiple criteria that need to be evaluated to determine and classify a DILI "Event". Hy's Law, a common rule of thumb for a DILI Event , is usually comprised of three parts:
 
 - Elevated alanine aminotransferase (ALT) or aspartate aminotransferase (AST) by 3-times or greater of the upper limit of normal.
 - Elevated serum total bilirubin (BILI) by 2-times or greater within a window of time, ~14 days after the elevated ALT/AST event.

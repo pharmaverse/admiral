@@ -24,7 +24,8 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' An example of standard query dataset to be used in deriving variables in ADAE and ADCM
+#' An example of standard query dataset to be used in deriving Standardized
+#' MedDRA Query variables in ADAE
 #'
 "queries"
 
@@ -32,7 +33,8 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' An example of standard query MH dataset to be used in deriving variables in ADMH
+#' An example of standard query MH dataset to be used in deriving Standardized
+#' MedDRA Query variables in ADMH
 #'
 "queries_mh"
 
