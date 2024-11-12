@@ -62,6 +62,8 @@ example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 
 ## Documentation
 
+- `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
+
 ## Various
 
 <details>
@@ -74,7 +76,8 @@ example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 </details>
 
 # admiral 1.1.1
-- `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
+- `derive_extreme_event()` was fixed such that `check_type = "none"` is accepted
+again. (#2462)
 
 # admiral 1.1.0
 
@@ -86,8 +89,7 @@ example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 - New `country_code_lookup()` metadata added to decode countries based on [ISO 3166 codes](https://www.iso.org/iso-3166-country-codes.html). (#2388)
 
 ## Updates of Existing Functions
-- `derive_extreme_event()` was fixed such that `check_type = "none"` is accepted
-again. (#2462)
+
 
 - `group_var` (optional) parameter is added to `derive_var_trtemfl()` to derive `TRTEMFL` for AE data if the data are collected as one episode of AE with multiple lines. (#2302)
 
