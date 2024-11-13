@@ -11,7 +11,8 @@
 
     Code
       create_single_dose_dataset(input, start_date = ADTSTD, keep_source_vars = exprs(
-        USUBJID, EXDOSFRQ, ADTSTD, ASTDTM, AENDT, AENDTM))
+        !!!get_admiral_option("subject_keys"), EXDOSFRQ, ADTSTD, ASTDTM, AENDT,
+        AENDTM))
     Condition
       Error in `create_single_dose_dataset()`:
       ! The argument `start_date` is expected to have a name ending with "---DT".

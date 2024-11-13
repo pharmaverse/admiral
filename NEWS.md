@@ -32,6 +32,10 @@ or that the queries dataset contains duplicates. (#2543)
 wrongly using `x ULN`, for first part of criteria for grades 1 to 3. For
 example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 
+- `derive_vars_atc()` and `create_single_dose_dataset()` `by_vars` argument updated to use `get_admiral_option("subject_keys")` instead of  `USUBJID` or `STUDYID` in `bds_exposure.Rmd`. (#2501)
+  
+- test scripts, R, and markdown files for `create_single_dose_dataset` and `occds.Rmd` updated to include a `STUDYID` column because of `get_admiral_option("subject_keys")` update above. (#2501)
+
 ## Breaking Changes
   
 - The following function arguments are entering the next phase of the deprecation process: (#2487)
@@ -58,6 +62,8 @@ example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 
 ## Documentation
 
+- `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
+
 ## Various
 
 <details>
@@ -70,11 +76,8 @@ example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 </details>
 
 # admiral 1.1.1
-
 - `derive_extreme_event()` was fixed such that `check_type = "none"` is accepted
 again. (#2462)
-
-- `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
 
 # admiral 1.1.0
 
@@ -86,6 +89,7 @@ again. (#2462)
 - New `country_code_lookup()` metadata added to decode countries based on [ISO 3166 codes](https://www.iso.org/iso-3166-country-codes.html). (#2388)
 
 ## Updates of Existing Functions
+
 
 - `group_var` (optional) parameter is added to `derive_var_trtemfl()` to derive `TRTEMFL` for AE data if the data are collected as one episode of AE with multiple lines. (#2302)
 
