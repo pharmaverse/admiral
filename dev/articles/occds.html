@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9020</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9021</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -242,50 +242,44 @@ Class Variables.</p>
 added.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span>  <span class="op">~</span><span class="va">USUBJID</span>,       <span class="op">~</span><span class="va">CMGRPID</span>, <span class="op">~</span><span class="va">CMREFID</span>,  <span class="op">~</span><span class="va">CMDECOD</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,     <span class="st">"14"</span>, <span class="st">"1192056"</span>, <span class="st">"PARACETAMOL"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,     <span class="st">"18"</span>, <span class="st">"2007001"</span>, <span class="st">"SOLUMEDROL"</span>,</span>
-<span>  <span class="st">"BP40257-1002"</span>,     <span class="st">"19"</span>, <span class="st">"2791596"</span>, <span class="st">"SPIRONOLACTONE"</span></span>
+<span>  <span class="op">~</span><span class="va">STUDYID</span>,  <span class="op">~</span><span class="va">USUBJID</span>,       <span class="op">~</span><span class="va">CMGRPID</span>, <span class="op">~</span><span class="va">CMREFID</span>,  <span class="op">~</span><span class="va">CMDECOD</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"14"</span>,     <span class="st">"1192056"</span>, <span class="st">"PARACETAMOL"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"18"</span>,     <span class="st">"2007001"</span>, <span class="st">"SOLUMEDROL"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1002"</span>, <span class="st">"19"</span>,     <span class="st">"2791596"</span>, <span class="st">"SPIRONOLACTONE"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">facm</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span>  <span class="op">~</span><span class="va">USUBJID</span>,       <span class="op">~</span><span class="va">FAGRPID</span>,  <span class="op">~</span><span class="va">FAREFID</span>, <span class="op">~</span><span class="va">FATESTCD</span>,  <span class="op">~</span><span class="va">FASTRESC</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"1"</span>, <span class="st">"1192056"</span>, <span class="st">"CMATC1CD"</span>,       <span class="st">"N"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"1"</span>, <span class="st">"1192056"</span>, <span class="st">"CMATC2CD"</span>,     <span class="st">"N02"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"1"</span>, <span class="st">"1192056"</span>, <span class="st">"CMATC3CD"</span>,    <span class="st">"N02B"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"1"</span>, <span class="st">"1192056"</span>, <span class="st">"CMATC4CD"</span>,   <span class="st">"N02BE"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"1"</span>, <span class="st">"2007001"</span>, <span class="st">"CMATC1CD"</span>,       <span class="st">"D"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"1"</span>, <span class="st">"2007001"</span>, <span class="st">"CMATC2CD"</span>,     <span class="st">"D10"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"1"</span>, <span class="st">"2007001"</span>, <span class="st">"CMATC3CD"</span>,    <span class="st">"D10A"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"1"</span>, <span class="st">"2007001"</span>, <span class="st">"CMATC4CD"</span>,   <span class="st">"D10AA"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"2"</span>, <span class="st">"2007001"</span>, <span class="st">"CMATC1CD"</span>,       <span class="st">"D"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"2"</span>, <span class="st">"2007001"</span>, <span class="st">"CMATC2CD"</span>,     <span class="st">"D07"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"2"</span>, <span class="st">"2007001"</span>, <span class="st">"CMATC3CD"</span>,    <span class="st">"D07A"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"2"</span>, <span class="st">"2007001"</span>, <span class="st">"CMATC4CD"</span>,   <span class="st">"D07AA"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"3"</span>, <span class="st">"2007001"</span>, <span class="st">"CMATC1CD"</span>,       <span class="st">"H"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"3"</span>, <span class="st">"2007001"</span>, <span class="st">"CMATC2CD"</span>,     <span class="st">"H02"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"3"</span>, <span class="st">"2007001"</span>, <span class="st">"CMATC3CD"</span>,    <span class="st">"H02A"</span>,</span>
-<span>  <span class="st">"BP40257-1001"</span>,      <span class="st">"3"</span>, <span class="st">"2007001"</span>, <span class="st">"CMATC4CD"</span>,   <span class="st">"H02AB"</span>,</span>
-<span>  <span class="st">"BP40257-1002"</span>,      <span class="st">"1"</span>, <span class="st">"2791596"</span>, <span class="st">"CMATC1CD"</span>,       <span class="st">"C"</span>,</span>
-<span>  <span class="st">"BP40257-1002"</span>,      <span class="st">"1"</span>, <span class="st">"2791596"</span>, <span class="st">"CMATC2CD"</span>,     <span class="st">"C03"</span>,</span>
-<span>  <span class="st">"BP40257-1002"</span>,      <span class="st">"1"</span>, <span class="st">"2791596"</span>, <span class="st">"CMATC3CD"</span>,    <span class="st">"C03D"</span>,</span>
-<span>  <span class="st">"BP40257-1002"</span>,      <span class="st">"1"</span>, <span class="st">"2791596"</span>, <span class="st">"CMATC4CD"</span>,   <span class="st">"C03DA"</span></span>
+<span>  <span class="op">~</span><span class="va">STUDYID</span>,  <span class="op">~</span><span class="va">USUBJID</span>,       <span class="op">~</span><span class="va">FAGRPID</span>, <span class="op">~</span><span class="va">FAREFID</span>,  <span class="op">~</span><span class="va">FATESTCD</span>,  <span class="op">~</span><span class="va">FASTRESC</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"1"</span>,      <span class="st">"1192056"</span>, <span class="st">"CMATC1CD"</span>, <span class="st">"N"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"1"</span>,      <span class="st">"1192056"</span>, <span class="st">"CMATC2CD"</span>, <span class="st">"N02"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"1"</span>,      <span class="st">"1192056"</span>, <span class="st">"CMATC3CD"</span>, <span class="st">"N02B"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"1"</span>,      <span class="st">"1192056"</span>, <span class="st">"CMATC4CD"</span>, <span class="st">"N02BE"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"1"</span>,      <span class="st">"2007001"</span>, <span class="st">"CMATC1CD"</span>, <span class="st">"D"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"1"</span>,      <span class="st">"2007001"</span>, <span class="st">"CMATC2CD"</span>, <span class="st">"D10"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"1"</span>,      <span class="st">"2007001"</span>, <span class="st">"CMATC3CD"</span>, <span class="st">"D10A"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"1"</span>,      <span class="st">"2007001"</span>, <span class="st">"CMATC4CD"</span>, <span class="st">"D10AA"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"2"</span>,      <span class="st">"2007001"</span>, <span class="st">"CMATC1CD"</span>, <span class="st">"D"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"2"</span>,      <span class="st">"2007001"</span>, <span class="st">"CMATC2CD"</span>, <span class="st">"D07"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"2"</span>,      <span class="st">"2007001"</span>, <span class="st">"CMATC3CD"</span>, <span class="st">"D07A"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"2"</span>,      <span class="st">"2007001"</span>, <span class="st">"CMATC4CD"</span>, <span class="st">"D07AA"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"3"</span>,      <span class="st">"2007001"</span>, <span class="st">"CMATC1CD"</span>, <span class="st">"H"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"3"</span>,      <span class="st">"2007001"</span>, <span class="st">"CMATC2CD"</span>, <span class="st">"H02"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"3"</span>,      <span class="st">"2007001"</span>, <span class="st">"CMATC3CD"</span>, <span class="st">"H02A"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1001"</span>, <span class="st">"3"</span>,      <span class="st">"2007001"</span>, <span class="st">"CMATC4CD"</span>, <span class="st">"H02AB"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1002"</span>, <span class="st">"1"</span>,      <span class="st">"2791596"</span>, <span class="st">"CMATC1CD"</span>, <span class="st">"C"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1002"</span>, <span class="st">"1"</span>,      <span class="st">"2791596"</span>, <span class="st">"CMATC2CD"</span>, <span class="st">"C03"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1002"</span>, <span class="st">"1"</span>,      <span class="st">"2791596"</span>, <span class="st">"CMATC3CD"</span>, <span class="st">"C03D"</span>,</span>
+<span>  <span class="st">"STUDY01"</span>, <span class="st">"BP40257-1002"</span>, <span class="st">"1"</span>,      <span class="st">"2791596"</span>, <span class="st">"CMATC4CD"</span>, <span class="st">"C03DA"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/derive_vars_atc.html">derive_vars_atc</a></span><span class="op">(</span><span class="va">cm</span>, <span class="va">facm</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Values from `FASTRESC` are not uniquely identified; output will contain</span></span>
-<span><span class="co">#&gt; list-cols.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Use `values_fn = list` to suppress this warning.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Use `values_fn = {summary_fun}` to summarise duplicates.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Use the following dplyr code to identify duplicates.</span></span>
-<span><span class="co">#&gt;   {data} |&gt;</span></span>
-<span><span class="co">#&gt;   dplyr::summarise(n = dplyr::n(), .by = c(USUBJID, FAREFID, FATESTCD)) |&gt;</span></span>
-<span><span class="co">#&gt;   dplyr::filter(n &gt; 1L)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 8</span></span></span>
-<span><span class="co">#&gt;   USUBJID      CMGRPID CMREFID CMDECOD        ATC1CD    ATC2CD    ATC3CD ATC4CD</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> BP40257-1001 14      1192056 PARACETAMOL    <span style="color: #949494;">&lt;chr [1]&gt;</span> <span style="color: #949494;">&lt;chr [1]&gt;</span> <span style="color: #949494;">&lt;chr&gt;</span>  <span style="color: #949494;">&lt;chr&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> BP40257-1001 18      2007001 SOLUMEDROL     <span style="color: #949494;">&lt;chr [3]&gt;</span> <span style="color: #949494;">&lt;chr [3]&gt;</span> <span style="color: #949494;">&lt;chr&gt;</span>  <span style="color: #949494;">&lt;chr&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> BP40257-1002 19      2791596 SPIRONOLACTONE <span style="color: #949494;">&lt;chr [1]&gt;</span> <span style="color: #949494;">&lt;chr [1]&gt;</span> <span style="color: #949494;">&lt;chr&gt;</span>  <span style="color: #949494;">&lt;chr&gt;</span></span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/derive_vars_atc.html">derive_vars_atc</a></span><span class="op">(</span><span class="va">cm</span>, dataset_facm <span class="op">=</span> <span class="va">facm</span>, id_vars <span class="op">=</span> <span class="fu"><a href="../reference/reexport-exprs.html">exprs</a></span><span class="op">(</span><span class="va">FAGRPID</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 9</span></span></span>
+<span><span class="co">#&gt;   STUDYID USUBJID      CMGRPID CMREFID CMDECOD       ATC1CD ATC2CD ATC3CD ATC4CD</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> STUDY01 BP40257-1001 14      1192056 PARACETAMOL   N      N02    N02B   N02BE </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    D      D10    D10A   D10AA </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    D      D07    D07A   D07AA </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> STUDY01 BP40257-1001 18      2007001 SOLUMEDROL    H      H02    H02A   H02AB </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> STUDY01 BP40257-1002 19      2791596 SPIRONOLACTO… C      C03    C03D   C03DA</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="trtpa">Derive Planned and Actual Treatment<a class="anchor" aria-label="anchor" href="#trtpa"></a>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9020</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9021</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,6 +81,8 @@
 <li><p>The <code><a href="../reference/derive_param_qtc.html">derive_param_qtc()</a></code> function accepts now both <code>"ms"</code> and <code>"msec"</code> as unit of the input parameters. (<a href="https://github.com/pharmaverse/admiral/issues/2513" class="external-link">#2513</a>)</p></li>
 <li><p>In <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> the error message was improved for the cases that some of the requested query variables are already present in the input dataset or that the queries dataset contains duplicates. (<a href="https://github.com/pharmaverse/admiral/issues/2543" class="external-link">#2543</a>)</p></li>
 <li><p>NCICTCAEv5 grading criteria fixed for <code>TERM = "INR Increased"</code>, criteria was wrongly using <code>x ULN</code>, for first part of criteria for grades 1 to 3. For example, <code>"&gt;2.5 x ULN"</code> changed to <code>"&gt;2.5"</code> for grade 3. (<a href="https://github.com/pharmaverse/admiral/issues/2534" class="external-link">#2534</a>)</p></li>
+<li><p><code><a href="../reference/derive_vars_atc.html">derive_vars_atc()</a></code> and <code><a href="../reference/create_single_dose_dataset.html">create_single_dose_dataset()</a></code> <code>by_vars</code> argument updated to use <code>get_admiral_option("subject_keys")</code> instead of <code>USUBJID</code> or <code>STUDYID</code> in <code>bds_exposure.Rmd</code>. (<a href="https://github.com/pharmaverse/admiral/issues/2501" class="external-link">#2501</a>)</p></li>
+<li><p>test scripts, R, and markdown files for <code>create_single_dose_dataset</code> and <code>occds.Rmd</code> updated to include a <code>STUDYID</code> column because of <code>get_admiral_option("subject_keys")</code> update above. (<a href="https://github.com/pharmaverse/admiral/issues/2501" class="external-link">#2501</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
@@ -116,7 +118,9 @@
 </div>
 <div class="section level3">
 <h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
-</div>
+<ul><li>
+<code><a href="../reference/derive_locf_records.html">derive_locf_records()</a></code> documentation example was fixed to display LOCF records. (<a href="https://github.com/pharmaverse/admiral/issues/2461" class="external-link">#2461</a>)</li>
+</ul></div>
 <div class="section level3">
 <h3 id="various-development-version">Various<a class="anchor" aria-label="anchor" href="#various-development-version"></a></h3>
 <details><summary>
@@ -128,8 +132,8 @@ Developer Notes
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.1" id="admiral-111">admiral 1.1.1<a class="anchor" aria-label="anchor" href="#admiral-111"></a></h2><p class="text-muted">CRAN release: 2024-06-17</p>
-<ul><li><p><code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code> was fixed such that <code>check_type = "none"</code> is accepted again. (<a href="https://github.com/pharmaverse/admiral/issues/2462" class="external-link">#2462</a>)</p></li>
-<li><p><code><a href="../reference/derive_locf_records.html">derive_locf_records()</a></code> documentation example was fixed to display LOCF records. (<a href="https://github.com/pharmaverse/admiral/issues/2461" class="external-link">#2461</a>)</p></li>
+<ul><li>
+<code><a href="../reference/derive_extreme_event.html">derive_extreme_event()</a></code> was fixed such that <code>check_type = "none"</code> is accepted again. (<a href="https://github.com/pharmaverse/admiral/issues/2462" class="external-link">#2462</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.0" id="admiral-110">admiral 1.1.0<a class="anchor" aria-label="anchor" href="#admiral-110"></a></h2><p class="text-muted">CRAN release: 2024-06-07</p>
