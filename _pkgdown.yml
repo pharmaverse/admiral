@@ -143,7 +143,7 @@ reference:
 
 navbar:
   structure:
-    left: [getstarted, reference, articles, news, versions]
+    left: [getstarted, reference, articles, admiraldiscovery, news, versions]
     right: [search, slack, history, newissue, github]
   components:
     getstarted:
@@ -151,10 +151,10 @@ navbar:
       menu:
       - text: Get Started
         href: articles/admiral.html
-      - text: CDISC Variables mapped to admiral functions
-        href: https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html
       - text: Cheatsheet
         href: https://github.com/pharmaverse/admiral/blob/main/inst/cheatsheet/admiral_cheatsheet.pdf
+      - text: Presentation Archive
+        href: https://pharmaverse.github.io/admiraldiscovery/articles/presentation_archive.html
     reference:
       text: Reference
       href: reference/
@@ -199,7 +199,9 @@ navbar:
       - text: -------
       - text: FAQ
         href: articles/faq.html
-
+    admiraldiscovery:
+      text: "🔎 Find my admiral function"
+      href: https://pharmaverse.github.io/admiraldiscovery/articles/reactable.html
     history:
       icon: fa-history
       href: articles/website-versions.html
@@ -212,4 +214,3 @@ navbar:
       icon: fa-bug
       href: https://github.com/pharmaverse/admiral/issues/new/choose
       aria-label: New Issue
-
