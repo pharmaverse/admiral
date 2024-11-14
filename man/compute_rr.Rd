@@ -13,7 +13,7 @@ A numeric vector is expected. It is expected that heart rate is measured in
 beats/min.}
 }
 \value{
-RR interval in msec:
+RR interval in ms:
 \deqn{\frac{60000}{HR}}{60000 / HR}
 }
 \description{

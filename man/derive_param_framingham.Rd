@@ -109,7 +109,8 @@ pressure}
 
 The result is used to check the units of the input parameters.
 
-Permitted Values: A variable of the input dataset or a function call}
+\emph{Permitted Values}: An expression which is evaluable in the input dataset
+and results in a character value}
 
 \item{filter}{Filter condition
 

@@ -49,7 +49,19 @@
       See error message below:
       i In argument: `PARAM = past("Time to First", AEDECOD, "Adverse Event")`. Caused by error in `past()`: ! could not find function "past"
 
-# list_tte_source_objects Test 13: error is issued if package does not exist
+# derive_param_tte Test 13: error if dataset_name not in source_datsets
+
+    Code
+      derive_param_tte(dataset_adsl = adsl, start_date = TRTSDT, event_conditions = list(
+        death), censor_conditions = list(lstalv), source_datasets = list(adsl = adsl),
+      set_values_to = exprs(PARAMCD = "OS", PARAM = "Overall Survival"))
+    Condition
+      Error in `derive_param_tte()`:
+      ! The dataset names must be included in the list specified for the `source_datasets` argument.
+      i Following names were provided by `source_datasets`: "adsl"
+      i But, `censor_conditions[[1]]$dataset_name = adls`
+
+# list_tte_source_objects Test 14: error is issued if package does not exist
 
     Code
       list_tte_source_objects(package = "tte")

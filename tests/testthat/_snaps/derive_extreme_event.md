@@ -12,5 +12,5 @@
       Error in `derive_extreme_event()`:
       ! The dataset names must be included in the list specified for the `source_datasets` argument.
       i Following names were provided by `source_datasets`: adhy
-      i  But, `events[[1]]$dataset_name = adyh`
+      i But, `events[[1]]$dataset_name = adyh`
 
