@@ -63,6 +63,7 @@ example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 ## Documentation
 
 - `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
+- The "Find my `{admiral}` Function"" and "Presentation Archive"" links were made more prominent in the website navigation bar. (#2536)
 
 ## Various
 
