@@ -98,10 +98,37 @@ test_that("derive_param_qtc Test 3: Sagie's method", {
   )
 })
 
+## Test 4: Message if no new records ----
+test_that("derive_param_qtc Test 4: Message if no new records", {
+  input <- tibble::tribble(
+    ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
+    "01-701-1015", "QT",     "QT Duration",   370, "ms",   "WEEK 2",
+    "01-701-1015", "RR",     "RR Duration",    NA, "ms",   "WEEK 2",
+    "01-701-1028", "QT",     "QT Duration",   480, "ms",   "WEEK 2",
+    "01-701-1028", "QT",     "QT Duration",   350, "ms",   "WEEK 3",
+    "01-701-1028", "RR",     "RR Duration",    NA, "ms",   "WEEK 2",
+  )
+
+  expect_snapshot(
+  actual <- derive_param_qtc(
+    input,
+    by_vars = exprs(USUBJID, VISIT),
+    method = "Bazett",
+    get_unit_expr = AVALU
+  )
+  )
+
+  expect_dfs_equal(
+    base = input,
+    compare = actual,
+    keys = c("USUBJID", "PARAMCD", "VISIT")
+  )
+})
+
 # derive_param_rr ----
 
-## Test 4: new observations are derived correctly ----
-test_that("derive_param_rr Test 4: new observations are derived correctly", {
+## Test 5: new observations are derived correctly ----
+test_that("derive_param_rr Test 5: new observations are derived correctly", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
     "01-701-1015", "HR",     "Heart Rate",  70.14, "beats/min", "BASELINE",
@@ -135,6 +162,36 @@ test_that("derive_param_rr Test 4: new observations are derived correctly", {
       get_unit_expr = AVALU
     ),
     expected_output,
+    keys = c("USUBJID", "PARAMCD", "VISIT")
+  )
+})
+
+## Test 6: Message if no new records ----
+test_that("derive_param_rr Test 6: Message if no new records", {
+  input <- tibble::tribble(
+    ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
+    "01-701-1015", "HR",     "Heart Rate",  NA   , "beats/min", "BASELINE",
+    "01-701-1015", "HR",     "Heart Rate",  NA   , "beats/min", "WEEK 1",
+    "01-701-1015", "RR",     "RR Duration", 710,   "ms",        "WEEK 2"
+  )
+
+
+  expect_snapshot(
+    actual <- derive_param_rr(
+      input,
+      by_vars = exprs(USUBJID, VISIT),
+      set_values_to = exprs(
+        PARAMCD = "RRR",
+        PARAM = "RR Duration Rederived (ms)",
+        AVALU = "ms"
+      ),
+      get_unit_expr = AVALU
+    )
+  )
+
+  expect_dfs_equal(
+    base = input,
+    compare = actual,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
 })

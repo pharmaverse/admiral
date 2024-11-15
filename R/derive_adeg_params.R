@@ -151,6 +151,7 @@ derive_param_qtc <- function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
+  withCallingHandlers(
   derive_param_computed(
     dataset,
     filter = !!filter,
@@ -164,6 +165,17 @@ derive_param_qtc <- function(dataset,
       ),
       !!!set_values_to
     )
+  ),
+  derive_param_computed_all_na = function(cnd) {
+    cli_inform(c(
+      paste(
+        "No computed records were added because for all potential computed",
+        "records at least one of the contributing values was {.val {NA}}."
+      ),
+      "If this is not expected, please check the input data."
+    ))
+    cnd_muffle(cnd)
+  }
   )
 }
 
@@ -343,6 +355,7 @@ derive_param_rr <- function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
+  withCallingHandlers(
   derive_param_computed(
     dataset,
     filter = !!filter,
@@ -352,6 +365,17 @@ derive_param_rr <- function(dataset,
       AVAL = compute_rr(!!sym(paste0("AVAL.", hr_code))),
       !!!set_values_to
     )
+  ),
+  derive_param_computed_all_na = function(cnd) {
+    cli_inform(c(
+      paste(
+        "No computed records were added because for all potential computed",
+        "records at least one of the contributing values was {.val {NA}}."
+      ),
+      "If this is not expected, please check the input data."
+    ))
+    cnd_muffle(cnd)
+  }
   )
 }
 

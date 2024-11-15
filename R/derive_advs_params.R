@@ -150,6 +150,7 @@ derive_param_map <- function(dataset,
     )
   }
 
+  withCallingHandlers(
   derive_param_computed(
     dataset,
     filter = !!filter,
@@ -159,6 +160,17 @@ derive_param_map <- function(dataset,
       AVAL = !!analysis_value,
       !!!set_values_to
     )
+  ),
+  derive_param_computed_all_na = function(cnd) {
+    cli_inform(c(
+      paste(
+        "No computed records were added because for all potential computed",
+        "records at least one of the contributing values was {.val {NA}}."
+      ),
+      "If this is not expected, please check the input data."
+      ))
+    cnd_muffle(cnd)
+  }
   )
 }
 
@@ -428,6 +440,7 @@ derive_param_bsa <- function(dataset,
     constant_parameters <- c(height_code)
   }
 
+  withCallingHandlers(
   derive_param_computed(
     dataset,
     filter = !!filter,
@@ -439,6 +452,17 @@ derive_param_bsa <- function(dataset,
     ),
     constant_parameters = constant_parameters,
     constant_by_vars = constant_by_vars
+  ),
+  derive_param_computed_all_na = function(cnd) {
+    cli_inform(c(
+      paste(
+        "No computed records were added because for all potential computed",
+        "records at least one of the contributing values was {.val {NA}}."
+      ),
+      "If this is not expected, please check the input data."
+    ))
+    cnd_muffle(cnd)
+  }
   )
 }
 
@@ -716,6 +740,7 @@ derive_param_bmi <- function(dataset,
     constant_parameters <- c(height_code)
   }
 
+  withCallingHandlers(
   derive_param_computed(
     dataset,
     filter = !!filter,
@@ -727,6 +752,17 @@ derive_param_bmi <- function(dataset,
     ),
     constant_parameters = constant_parameters,
     constant_by_vars = constant_by_vars
+  ),
+  derive_param_computed_all_na = function(cnd) {
+    cli_inform(c(
+      paste(
+        "No computed records were added because for all potential computed",
+        "records at least one of the contributing values was {.val {NA}}."
+      ),
+      "If this is not expected, please check the input data."
+    ))
+    cnd_muffle(cnd)
+  }
   )
 }
 

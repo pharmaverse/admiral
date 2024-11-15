@@ -411,7 +411,8 @@ derive_param_computed <- function(dataset = NULL,
           "If this is not expected, please check the input data and the value of",
           "the {.arg keep_nas} argument."
         )
-      ))
+      ),
+      class = "derive_param_computed_all_na")
     }
   }
 
