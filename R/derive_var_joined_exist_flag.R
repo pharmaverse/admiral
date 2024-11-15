@@ -208,6 +208,7 @@
 #'
 #' @examples
 #' library(tibble)
+#' library(dplyr)
 #'
 #' # flag observations with a duration longer than 30 and
 #' # at, after, or up to 7 days before a COVID AE (ACOVFL == "Y")
@@ -406,6 +407,58 @@
 #'   first_cond_upper = val.join == "++",
 #'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
 #' )
+#'
+#' # Flag each dose which is lower than the previous dose per subject
+#' ex <- tribble(
+#'   ~USUBJID, ~EXSTDTM,          ~EXDOSE,
+#'   "1",      "2024-01-01T08:00",      2,
+#'   "1",      "2024-01-02T08:00",      4,
+#'   "2",      "2024-01-01T08:30",      1,
+#'   "2",      "2024-01-02T08:30",      4,
+#'   "2",      "2024-01-03T08:30",      3,
+#'   "2",      "2024-01-04T08:30",      2
+#' )
+#'
+#' derive_var_joined_exist_flag(
+#'   ex,
+#'   dataset_add = ex,
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(EXSTDTM),
+#'   new_var = DOSREDFL,
+#'   tmp_obs_nr_var = tmp_dose_nr,
+#'   join_vars = exprs(EXDOSE),
+#'   join_type = "before",
+#'   filter_join = (
+#'     tmp_dose_nr == tmp_dose_nr.join + 1 # Look only at adjacent doses
+#'     & EXDOSE > 0 & EXDOSE.join > 0      # Both doses are valid
+#'     & EXDOSE < EXDOSE.join              # Dose is lower than previous
+#'   )
+#' )
+#'
+#' # derive definitive deterioration flag as any deterioration by
+#' # parameter that is not followed by a non-deterioration
+#' adqs <- tribble(
+#'   ~USUBJID, ~PARAMCD, ~ADY, ~CHGCAT1,
+#'   "1",      "QS1",      10, "Improved",
+#'   "1",      "QS1",      21, "Improved",
+#'   "1",      "QS1",      23, "Improved",
+#'   "1",      "QS2",      32, "Worsened",
+#'   "1",      "QS2",      42, "Improved",
+#'   "2",      "QS1",      11, "Worsened",
+#'   "2",      "QS1",      24, "Worsened"
+#' )
+#'
+#' derive_var_joined_exist_flag(
+#'   adqs,
+#'   dataset_add = adqs,
+#'   new_var = NODDFL,
+#'   by_vars = exprs(USUBJID, PARAMCD),
+#'   join_vars = exprs(CHGCAT1),
+#'   join_type = "after",
+#'   order = exprs(ADY),
+#'   filter_join = CHGCAT1.join != "Worsened"
+#' ) %>%
+#' mutate(DDETERFL = if_else(CHGCAT1 == "Worsened" & is.na(NODDFL), "Y", NA_character_))
 derive_var_joined_exist_flag <- function(dataset,
                                          dataset_add,
                                          by_vars,
