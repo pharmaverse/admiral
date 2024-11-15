@@ -408,7 +408,7 @@
 #'   filter_join = val == "0" & all(val.join %in% c("+", "++"))
 #' )
 #'
-#' # Flag each dose which is lower than the previous dose per subject
+#' # flag each dose which is lower than the previous dose per subject
 #' ex <- tribble(
 #'   ~USUBJID, ~EXSTDTM,          ~EXDOSE,
 #'   "1",      "2024-01-01T08:00",      2,
@@ -435,8 +435,8 @@
 #'   )
 #' )
 #'
-#' # derive definitive deterioration flag as any deterioration by
-#' # parameter that is not followed by a non-deterioration
+#' # derive definitive deterioration flag as any deterioration (CHGCAT1 = "Worsened")
+#' # by parameter that is not followed by a non-deterioration
 #' adqs <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~ADY, ~CHGCAT1,
 #'   "1",      "QS1",      10, "Improved",
@@ -456,7 +456,7 @@
 #'   join_vars = exprs(CHGCAT1),
 #'   join_type = "after",
 #'   order = exprs(ADY),
-#'   filter_join = CHGCAT1.join != "Worsened"
+#'   filter_join = CHGCAT1.join != "Worsened" # flags if followed by a non-deterioration
 #' ) %>%
 #' mutate(DDETERFL = if_else(CHGCAT1 == "Worsened" & is.na(NODDFL), "Y", NA_character_))
 derive_var_joined_exist_flag <- function(dataset,
