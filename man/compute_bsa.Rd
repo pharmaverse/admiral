@@ -23,7 +23,7 @@ It is expected that WEIGHT is in kg.
 
 Mosteller: sqrt(height * weight / 3600)
 
-DuBois-DuBois: 0.20247 * (height/100) ^ 0.725 * weight ^ 0.425
+DuBois-DuBois: 0.007184 * height ^ 0.725 * weight ^ 0.425
 
 Haycock: 0.024265 * height ^ 0.3964 * weight ^ 0.5378
 
