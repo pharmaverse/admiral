@@ -430,8 +430,8 @@
 #'   join_type = "before",
 #'   filter_join = (
 #'     tmp_dose_nr == tmp_dose_nr.join + 1 # Look only at adjacent doses
-#'     & EXDOSE > 0 & EXDOSE.join > 0      # Both doses are valid
-#'     & EXDOSE < EXDOSE.join              # Dose is lower than previous
+#'     & EXDOSE > 0 & EXDOSE.join > 0 # Both doses are valid
+#'     & EXDOSE < EXDOSE.join # Dose is lower than previous
 #'   )
 #' )
 #'
@@ -458,7 +458,7 @@
 #'   order = exprs(ADY),
 #'   filter_join = CHGCAT1.join != "Worsened" # flags if followed by a non-deterioration
 #' ) %>%
-#' mutate(DDETERFL = if_else(CHGCAT1 == "Worsened" & is.na(NODDFL), "Y", NA_character_))
+#'   mutate(DDETERFL = if_else(CHGCAT1 == "Worsened" & is.na(NODDFL), "Y", NA_character_))
 derive_var_joined_exist_flag <- function(dataset,
                                          dataset_add,
                                          by_vars,
