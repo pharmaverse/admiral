@@ -71,7 +71,7 @@ example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 
 - Created unit tests for developer internal function `restricted_imputed_dtc_dt()` (#2495)
 - Adopted `data-raw/data` R Package Convention (#2427)
-- `compute_bsa(height, weight, method` - now uses improved version of DuBois-DuBois forumula for bsa (#2532)  
+- `compute_bsa()` now uses the more common (but equivalent) version of the DuBois-DuBois formula for BSA. The results have not changed. (#2532)  
 - Removed `.devcontainer` file (codespace) (#2524)
 
 </details>
