@@ -251,7 +251,6 @@ previous step. For the other observations it is set to \code{false_value}.
 }
 \examples{
 library(tibble)
-library(dplyr)
 
 # flag observations with a duration longer than 30 and
 # at, after, or up to 7 days before a COVID AE (ACOVFL == "Y")
@@ -459,7 +458,8 @@ ex <- tribble(
   "2",      "2024-01-01T08:30",      1,
   "2",      "2024-01-02T08:30",      4,
   "2",      "2024-01-03T08:30",      3,
-  "2",      "2024-01-04T08:30",      2
+  "2",      "2024-01-04T08:30",      2,
+  "2",      "2024-01-05T08:30",      2
 )
 
 derive_var_joined_exist_flag(
@@ -494,14 +494,13 @@ adqs <- tribble(
 derive_var_joined_exist_flag(
   adqs,
   dataset_add = adqs,
-  new_var = NODDFL,
+  new_var = DDETERFL,
   by_vars = exprs(USUBJID, PARAMCD),
   join_vars = exprs(CHGCAT1),
-  join_type = "after",
+  join_type = "all",
   order = exprs(ADY),
-  filter_join = CHGCAT1.join != "Worsened" # flags if followed by a non-deterioration
-) \%>\%
-  mutate(DDETERFL = if_else(CHGCAT1 == "Worsened" & is.na(NODDFL), "Y", NA_character_))
+  filter_join = all(CHGCAT1.join == "Worsened" | ADY > ADY.join)
+)
 }
 \seealso{
 \code{\link[=filter_joined]{filter_joined()}}, \code{\link[=derive_vars_joined]{derive_vars_joined()}}
