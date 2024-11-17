@@ -171,16 +171,16 @@ get_summary_records <- function(dataset,
     check_is_grouped = FALSE
   )
   assert_varval_list(set_values_to)
-  if (!missing(analysis_var) || !missing(summary_fun)) {
-    deprecate_stop(
-      "1.1.0",
-      I("get_summary_records(anaylsis_var = , summary_fun = )"),
-      "get_summary_records(set_values_to = )"
-    )
-    analysis_var <- assert_symbol(enexpr(analysis_var))
-    assert_s3_class(summary_fun, "function")
-    set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
-  }
+  # if (!missing(analysis_var) || !missing(summary_fun)) {
+  #   deprecate_stop(
+  #     "1.1.0",
+  #     I("get_summary_records(anaylsis_var = , summary_fun = )"),
+  #     "get_summary_records(set_values_to = )"
+  #   )
+    # analysis_var <- assert_symbol(enexpr(analysis_var))
+    # assert_s3_class(summary_fun, "function")
+    # set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
+  #}
 
   # Summarise the analysis value
   dataset %>%
