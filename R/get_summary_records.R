@@ -177,10 +177,10 @@ get_summary_records <- function(dataset,
   #     I("get_summary_records(anaylsis_var = , summary_fun = )"),
   #     "get_summary_records(set_values_to = )"
   #   )
-    # analysis_var <- assert_symbol(enexpr(analysis_var))
-    # assert_s3_class(summary_fun, "function")
-    # set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
-  #}
+  # analysis_var <- assert_symbol(enexpr(analysis_var))
+  # assert_s3_class(summary_fun, "function")
+  # set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
+  # }
 
   # Summarise the analysis value
   dataset %>%

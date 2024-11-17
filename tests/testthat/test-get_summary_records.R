@@ -176,23 +176,22 @@ test_that("get_summary_records Test 4: Using deprecated formal argument will thr
     "XYZ-1002", 9,      "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402,   "Active 20mg"
   )
 
-    expect_no_error(get_summary_records(
-      input,
-      by_vars = exprs(USUBJID, PARAM, AVISIT),
-      set_values_to = exprs(
-        AVAL = mean(AVAL, na.rm = TRUE),
-        DTYPE = "AVERAGE"
-      )))
-
-    expect_no_error(get_summary_records(
-      input,
-      by_vars = exprs(USUBJID, PARAM, AVISIT),
-      set_values_to = exprs(
-        AVAL = mean(AVAL, na.rm = TRUE),
-        DTYPE = "AVERAGE"
-      ),
-      analysis_var = exprs(AVAL)
-      )
+  expect_no_error(get_summary_records(
+    input,
+    by_vars = exprs(USUBJID, PARAM, AVISIT),
+    set_values_to = exprs(
+      AVAL = mean(AVAL, na.rm = TRUE),
+      DTYPE = "AVERAGE"
     )
+  ))
 
+  expect_no_error(get_summary_records(
+    input,
+    by_vars = exprs(USUBJID, PARAM, AVISIT),
+    set_values_to = exprs(
+      AVAL = mean(AVAL, na.rm = TRUE),
+      DTYPE = "AVERAGE"
+    ),
+    analysis_var = exprs(AVAL)
+  ))
 })
