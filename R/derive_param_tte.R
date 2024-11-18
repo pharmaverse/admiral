@@ -324,8 +324,13 @@ derive_param_tte <- function(dataset = NULL,
                              set_values_to,
                              subject_keys = get_admiral_option("subject_keys"),
                              check_type = "warning") {
-  #filter 'by_vars' to include variables present in dataset_adsl
+  
+  # Match check_type to valid admiral options
+  check_type <- rlang::arg_match(check_type, c("warning", "error", "none"))
+
+  #filter 'by_vars' to only include variables present in dataset_adsl
   filtered_by_vars <- by_vars[by_vars %in% colnames(dataset_adsl)]
+
   #check for duplicates in dataset
   signal_duplicate_records(dataset = dataset_adsl,
                            by_vars = expr_c(filtered_by_vars, subject_keys),
