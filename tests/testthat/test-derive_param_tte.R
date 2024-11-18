@@ -928,3 +928,208 @@ test_that("list_tte_source_objects Test 14: expected objects produced", {
 
   expect_dfs_equal(expected_output, observed_output, keys = c("object"))
 })
+
+# Test 15: "derive_param_tte detects duplicates when check_type = 'warning'`
+test_that("derive_param_tte detects duplicates when check_type = 'warning'", {
+  # Define ADSL dataset
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,           ~TRTEDT,           ~EOSDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-02"), ymd("2021-03-06"),
+    "02",     ymd("2021-01-16"), ymd("2021-01-20"), ymd("2021-02-03")
+  ) %>%
+    mutate(STUDYID = "AB42")
+
+  # Define AE dataset with duplicates
+  ae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03",      1, "Flu",
+    "01",     "2021-03-04",      2, "Cough",
+    "01",     "2021-01-03",      3, "Flu"
+  ) %>%
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
+
+  # Define event source
+  ttae <- event_source(
+    dataset_name = "ae",
+    date = AESTDT,
+    set_values_to = exprs(
+      EVENTDESC = "AE",
+      SRCDOM = "AE",
+      SRCVAR = "AESTDTC",
+      SRCSEQ = AESEQ
+    )
+  )
+
+  # Define censor source
+  eot <- censor_source(
+    dataset_name = "adsl",
+    date = pmin(TRTEDT + days(10), EOSDT),
+    censor = 1,
+    set_values_to = exprs(
+      EVENTDESC = "END OF TRT",
+      SRCDOM = "ADSL",
+      SRCVAR = "TRTEDT"
+    )
+  )
+
+  # Test for duplicate detection
+  expect_warning(
+    derive_param_tte(
+      dataset_adsl = adsl,
+      start_date = TRTSDT,
+      event_conditions = list(ttae),
+      censor_conditions = list(eot),
+      source_datasets = list(adsl = adsl, ae = ae),
+      set_values_to = exprs(PARAMCD = "TTAE"),
+      check_type = "warning"
+    ),
+    regexp = "Dataset contains duplicate records"
+  )
+})
+
+# Test 16: "derive_param_tte produces consistent results regardless of input sort order"
+test_that("derive_param_tte produces consistent results regardless of input sort order", {
+  # Define ADSL dataset
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,           ~TRTEDT,           ~EOSDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-02"), ymd("2021-03-06"),
+    "02",     ymd("2021-01-16"), ymd("2021-01-20"), ymd("2021-02-03")
+  ) %>%
+    mutate(STUDYID = "AB42")
+
+  # Define AE dataset
+  ae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03",      1, "Flu",
+    "01",     "2021-03-04",      2, "Cough",
+    "01",     "2021-01-03",      3, "Flu"
+  ) %>%
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
+
+  # Define event source with order
+  ttae <- event_source(
+    dataset_name = "ae",
+    date = AESTDT,
+    set_values_to = exprs(
+      EVENTDESC = "AE",
+      SRCDOM = "AE",
+      SRCVAR = "AESTDTC",
+      SRCSEQ = AESEQ
+    ),
+    order = exprs(AESEQ)
+  )
+
+  # Define censor source with order
+  eot <- censor_source(
+    dataset_name = "adsl",
+    date = pmin(TRTEDT + days(10), EOSDT),
+    censor = 1,
+    set_values_to = exprs(
+      EVENTDESC = "END OF TRT",
+      SRCDOM = "ADSL",
+      SRCVAR = "TRTEDT"
+    ),
+    order = exprs(TRTEDT)
+  )
+
+  # Run derive_param_tte with sorted AE dataset
+  result_sorted <- derive_param_tte(
+    dataset_adsl = adsl,
+    start_date = TRTSDT,
+    event_conditions = list(ttae),
+    censor_conditions = list(eot),
+    source_datasets = list(adsl = adsl, ae = arrange(ae, AESEQ)),
+    set_values_to = exprs(PARAMCD = "TTAE")
+  )
+
+  # Run derive_param_tte with reverse-sorted AE dataset
+  result_unsorted <- derive_param_tte(
+    dataset_adsl = adsl,
+    start_date = TRTSDT,
+    event_conditions = list(ttae),
+    censor_conditions = list(eot),
+    source_datasets = list(adsl = adsl, ae = arrange(ae, desc(AESEQ))),
+    set_values_to = exprs(PARAMCD = "TTAE")
+  )
+
+  # Validate that the results are the same
+  expect_equal(result_sorted, result_unsorted, ignore_attr = TRUE)
+})
+
+# Test 17: "derive_param_tte produces expected output for common scenario"
+test_that("derive_param_tte produces expected output for common scenario", {
+  # Define ADSL dataset
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,           ~TRTEDT,           ~EOSDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-02"), ymd("2021-03-06"),
+    "02",     ymd("2021-01-16"), ymd("2021-01-20"), ymd("2021-02-03")
+  ) %>%
+    mutate(STUDYID = "AB42")
+
+  # Define AE dataset
+  ae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03",      1, "Flu",
+    "01",     "2021-03-04",      2, "Cough"
+  ) %>%
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
+
+  # Define event and censor sources
+  ttae <- event_source(
+    dataset_name = "ae",
+    date = AESTDT,
+    set_values_to = exprs(
+      EVENTDESC = "AE",
+      SRCDOM = "AE",
+      SRCVAR = "AESTDTC",
+      SRCSEQ = AESEQ
+    )
+  )
+
+  eot <- censor_source(
+    dataset_name = "adsl",
+    date = pmin(TRTEDT + days(10), EOSDT),
+    censor = 1,
+    set_values_to = exprs(
+      EVENTDESC = "END OF TRT",
+      SRCDOM = "ADSL",
+      SRCVAR = "TRTEDT"
+    )
+  )
+
+  # Run derive_param_tte
+  result <- derive_param_tte(
+    dataset_adsl = adsl,
+    start_date = TRTSDT,
+    event_conditions = list(ttae),
+    censor_conditions = list(eot),
+    source_datasets = list(adsl = adsl, ae = ae),
+    set_values_to = exprs(PARAMCD = "TTAE")
+  )
+
+  # Expected result
+  expected <- tibble::tibble(
+    USUBJID = c("01", "02"),
+    STUDYID = "AB42",
+    EVENTDESC = c("AE", "END OF TRT"),
+    SRCDOM = c("AE", "ADSL"),
+    SRCVAR = c("AESTDTC", "TRTEDT"),
+    SRCSEQ = c(1, NA),
+    CNSR = c(0, 1),
+    ADT = as.Date(c("2021-01-03", "2021-01-30")),
+    STARTDT = as.Date(c("2020-12-06", "2021-01-16")),
+    PARAMCD = "TTAE"
+  )
+
+  # Validate output
+  expect_equal(result, expected, ignore_attr = TRUE)
+})

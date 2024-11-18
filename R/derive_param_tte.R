@@ -322,7 +322,12 @@ derive_param_tte <- function(dataset = NULL,
                              censor_conditions,
                              create_datetime = FALSE,
                              set_values_to,
-                             subject_keys = get_admiral_option("subject_keys")) {
+                             subject_keys = get_admiral_option("subject_keys"),
+                             check_type = "warning") {
+  #check for duplicates in dataset
+  signal_duplicate_records(dataset = dataset_adsl,
+                           by_vars = expr_c(subject_keys, by_vars),
+                           cnd_type = check_type)
   # checking and quoting #
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
@@ -844,13 +849,15 @@ tte_source <- function(dataset_name,
 event_source <- function(dataset_name,
                          filter = NULL,
                          date,
-                         set_values_to = NULL) {
+                         set_values_to = NULL,
+                         order = NULL) {
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),
     filter = !!enexpr(filter),
     date = !!assert_expr(enexpr(date)),
     censor = 0,
-    set_values_to = set_values_to
+    set_values_to = set_values_to,
+    order = order
   )
   class(out) <- c("event_source", class(out))
   out
@@ -891,13 +898,15 @@ censor_source <- function(dataset_name,
                           filter = NULL,
                           date,
                           censor = 1,
-                          set_values_to = NULL) {
+                          set_values_to = NULL,
+                          order = NULL) {
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),
     filter = !!enexpr(filter),
     date = !!assert_expr(enexpr(date)),
     censor = assert_integer_scalar(censor, subset = "positive"),
-    set_values_to = set_values_to
+    set_values_to = set_values_to,
+    order = order
   )
   class(out) <- c("censor_source", class(out))
   out

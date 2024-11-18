@@ -478,7 +478,7 @@ derive_vars_joined <- function(dataset,
     derive_var_obs_number(
       new_var = !!tmp_obs_nr,
       by_vars = by_vars_left,
-      check_type = "none"
+      "none"
     )
 
   data_joined <- get_joined_data(
