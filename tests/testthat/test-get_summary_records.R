@@ -152,8 +152,8 @@ test_that("get_summary_records Test 3: Compute avg AVAL only if >2 records withi
   )
 })
 
-## Test 4: With lifecycle deprecation code removed, will deprecated formal argument throw error?
-test_that("get_summary_records Test 4: Using deprecated formal argument will throw an error?", {
+## Test 4: With lifecycle deprecation code removed, deprecated format argument `analysis_var` should throw error"
+test_that("get_summary_records Test 4: Show deprecated formal argument `analysis_var` will throw an error", {
   input <- tibble::tribble(
     ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
     "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
@@ -185,7 +185,16 @@ test_that("get_summary_records Test 4: Using deprecated formal argument will thr
     )
   ))
 
-  expect_no_error(get_summary_records(
+  # using deprecated arguments
+  expect_error(get_summary_records(
+    input,
+    by_vars = exprs(USUBJID, PARAM, AVISIT),
+    analysis_var = exprs(AVAL),
+    summary_fun = exprs(mean)
+  ))
+
+  # using correct arguments, plus deprecated argument `analysis_var`
+  expect_error(get_summary_records(
     input,
     by_vars = exprs(USUBJID, PARAM, AVISIT),
     set_values_to = exprs(
@@ -194,4 +203,16 @@ test_that("get_summary_records Test 4: Using deprecated formal argument will thr
     ),
     analysis_var = exprs(AVAL)
   ))
+
+  # using correct arguments, plus deprecated argument `summary_fun`
+  expect_error(get_summary_records(
+    input,
+    by_vars = exprs(USUBJID, PARAM, AVISIT),
+    set_values_to = exprs(
+      AVAL = mean(AVAL, na.rm = TRUE),
+      DTYPE = "AVERAGE"
+    ),
+    summary_fun = exprs(mean)
+  ))
+
 })
