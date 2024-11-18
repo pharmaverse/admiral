@@ -326,16 +326,9 @@ derive_param_tte <- function(dataset = NULL,
                              check_type = "warning") {
   
   # Match check_type to valid admiral options
-  check_type <- rlang::arg_match(check_type, c("warning", "error", "none"))
-
-  #filter 'by_vars' to only include variables present in dataset_adsl
-  filtered_by_vars <- by_vars[by_vars %in% colnames(dataset_adsl)]
-
-  #check for duplicates in dataset
-  signal_duplicate_records(dataset = dataset_adsl,
-                           by_vars = expr_c(filtered_by_vars, subject_keys),
-                           cnd_type = check_type)
-  # checking and quoting #
+  check_type <- rlang::arg_match(check_type, c("warning", "message", "error", "none"))
+     
+ # checking and quoting #
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
   start_date <- assert_symbol(enexpr(start_date))
@@ -387,6 +380,7 @@ derive_param_tte <- function(dataset = NULL,
   }
 
   tmp_event <- get_new_tmp_var(dataset)
+
   # determine events #
   event_data <- filter_date_sources(
     sources = event_conditions,
@@ -398,6 +392,11 @@ derive_param_tte <- function(dataset = NULL,
   ) %>%
     mutate(!!tmp_event := 1L)
 
+  #check for duplicates in event_data
+  signal_duplicate_records(dataset = event_data,
+    by_vars = expr_c(by_vars, subject_keys),
+    cnd_type = check_type)
+
   # determine censoring observations #
   censor_data <- filter_date_sources(
     sources = censor_conditions,
@@ -408,6 +407,11 @@ derive_param_tte <- function(dataset = NULL,
     mode = "last"
   ) %>%
     mutate(!!tmp_event := 0L)
+
+  #check for duplicates in censor_data
+  signal_duplicate_records(dataset = censor_data,
+    by_vars = expr_c(by_vars, subject_keys),
+    cnd_type = check_type)
 
   # determine variable to add from ADSL #
   if (create_datetime) {
@@ -475,7 +479,7 @@ derive_param_tte <- function(dataset = NULL,
     }
   }
 
-  # add new parameter to input dataset #
+    # add new parameter to input dataset #
   bind_rows(dataset, new_param)
 }
 
