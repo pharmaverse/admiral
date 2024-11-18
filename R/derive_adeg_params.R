@@ -151,19 +151,34 @@ derive_param_qtc <- function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
-  derive_param_computed(
-    dataset,
-    filter = !!filter,
-    parameters = c(qt_code, rr_code),
-    by_vars = by_vars,
-    set_values_to = exprs(
-      AVAL = compute_qtc(
-        qt = !!sym(paste0("AVAL.", qt_code)),
-        rr = !!sym(paste0("AVAL.", rr_code)),
-        method = !!method
-      ),
-      !!!set_values_to
-    )
+  withCallingHandlers(
+    derive_param_computed(
+      dataset,
+      filter = !!filter,
+      parameters = c(qt_code, rr_code),
+      by_vars = by_vars,
+      set_values_to = exprs(
+        AVAL = compute_qtc(
+          qt = !!sym(paste0("AVAL.", qt_code)),
+          rr = !!sym(paste0("AVAL.", rr_code)),
+          method = !!method
+        ),
+        !!!set_values_to
+      )
+    ),
+    derive_param_computed_all_na = function(cnd) {
+      cli_inform(
+        c(
+          paste(
+            "No computed records were added because for all potential computed",
+            "records at least one of the contributing values was {.val {NA}}."
+          ),
+          "If this is not expected, please check the input data."
+        ),
+        class = class(cnd)
+      )
+      cnd_muffle(cnd)
+    }
   )
 }
 
@@ -343,15 +358,30 @@ derive_param_rr <- function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
-  derive_param_computed(
-    dataset,
-    filter = !!filter,
-    parameters = c(hr_code),
-    by_vars = by_vars,
-    set_values_to = exprs(
-      AVAL = compute_rr(!!sym(paste0("AVAL.", hr_code))),
-      !!!set_values_to
-    )
+  withCallingHandlers(
+    derive_param_computed(
+      dataset,
+      filter = !!filter,
+      parameters = c(hr_code),
+      by_vars = by_vars,
+      set_values_to = exprs(
+        AVAL = compute_rr(!!sym(paste0("AVAL.", hr_code))),
+        !!!set_values_to
+      )
+    ),
+    derive_param_computed_all_na = function(cnd) {
+      cli_inform(
+        c(
+          paste(
+            "No computed records were added because for all potential computed",
+            "records at least one of the contributing values was {.val {NA}}."
+          ),
+          "If this is not expected, please check the input data."
+        ),
+        class = class(cnd)
+      )
+      cnd_muffle(cnd)
+    }
   )
 }
 
