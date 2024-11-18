@@ -152,8 +152,12 @@ test_that("get_summary_records Test 3: Compute avg AVAL only if >2 records withi
   )
 })
 
-## Test 4: With lifecycle deprecation code removed, deprecated formal argument `analysis_var` throws error"
-test_that("get_summary_records Test 4: Show deprecated formal argument `analysis_var` throws an error", {
+# nolint start
+
+## Test 4: Throw error if deprecated formal argument analysis_var used ----
+test_that("get_summary_records Test 4: Show deprecated formal argument `analysis_var`
+          throws an error", {
+# nolint end
   input <- tibble::tribble(
     ~USUBJID,   ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,             ~AVAL, ~TRTA,
     "XYZ-1001", 1,      "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385,   NA_character_,
