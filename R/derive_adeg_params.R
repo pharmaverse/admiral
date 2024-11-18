@@ -167,13 +167,16 @@ derive_param_qtc <- function(dataset,
       )
     ),
     derive_param_computed_all_na = function(cnd) {
-      cli_inform(c(
-        paste(
-          "No computed records were added because for all potential computed",
-          "records at least one of the contributing values was {.val {NA}}."
+      cli_inform(
+        c(
+          paste(
+            "No computed records were added because for all potential computed",
+            "records at least one of the contributing values was {.val {NA}}."
+          ),
+          "If this is not expected, please check the input data."
         ),
-        "If this is not expected, please check the input data."
-      ))
+        class = class(cnd)
+      )
       cnd_muffle(cnd)
     }
   )
@@ -367,13 +370,16 @@ derive_param_rr <- function(dataset,
       )
     ),
     derive_param_computed_all_na = function(cnd) {
-      cli_inform(c(
-        paste(
-          "No computed records were added because for all potential computed",
-          "records at least one of the contributing values was {.val {NA}}."
+      cli_inform(
+        c(
+          paste(
+            "No computed records were added because for all potential computed",
+            "records at least one of the contributing values was {.val {NA}}."
+          ),
+          "If this is not expected, please check the input data."
         ),
-        "If this is not expected, please check the input data."
-      ))
+        class = class(cnd)
+      )
       cnd_muffle(cnd)
     }
   )
