@@ -362,8 +362,16 @@ test_that("derive_param_bmi Test 36: BMI parameter NOT added", {
 
   input <- expected_output
 
+  expect_snapshot(
+    result <- derive_param_bmi(
+      input,
+      by_vars = exprs(USUBJID, VISIT),
+      get_unit_expr = VSSTRESU
+    )
+  )
+
   expect_dfs_equal(
-    derive_param_bmi(input, by_vars = exprs(USUBJID, VISIT), get_unit_expr = VSSTRESU),
+    result,
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -554,13 +562,17 @@ test_that("derive_param_bsa Test 43: BSA parameter NOT added", {
 
   input <- expected_output
 
-  expect_dfs_equal(
-    derive_param_bsa(
+  expect_snapshot(
+    result <- derive_param_bsa(
       input,
       by_vars = exprs(USUBJID, VISIT),
       method = "Mosteller",
       get_unit_expr = VSSTRESU
-    ),
+    )
+  )
+
+  expect_dfs_equal(
+    result,
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -965,13 +977,17 @@ test_that("derive_param_map Test 56: MAP parameter NOT added", {
 
   input <- expected_output
 
-  expect_dfs_equal(
-    derive_param_map(
+  expect_snapshot(
+    result <- derive_param_map(
       input,
       by_vars = exprs(USUBJID, VISIT),
       hr_code = "PULSE",
       get_unit_expr = extract_unit(PARAM)
-    ),
+    )
+  )
+
+  expect_dfs_equal(
+    result,
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
