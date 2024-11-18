@@ -640,7 +640,7 @@ test_that("derive_param_tte Test 9: errors if set_values_to contains invalid exp
       source_datasets = list(adsl = adsl, ae = ae),
       set_values_to = exprs(
         PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
-        PARAM = past("Time to First", AEDECOD, "Adverse Event"),
+        PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
         PARCAT1 = "TTAE",
         PARCAT2 = AEDECOD
       )
