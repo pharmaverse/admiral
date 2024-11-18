@@ -18,7 +18,7 @@
 #' see the `derive_summary_records()` function.
 #'
 #' @param dataset
-#' `r roxygen_param_dataset(expected_vars = c("by_vars", "analysis_var"))`
+#' `r roxygen_param_dataset(expected_vars = c("by_vars"))`
 #'
 #' @param by_vars Grouping variables
 #'
@@ -37,18 +37,6 @@
 #'   values greater than mean of AVAL with in `by_vars`.
 #'   + `filter_rows = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
-#'
-#' @param analysis_var Analysis variable.
-#'
-#'  `r lifecycle::badge("deprecated")` Please use `set_values_to` instead.
-#'
-#' @param summary_fun Function that takes as an input the `analysis_var` and
-#'   performs the calculation.
-#'
-#'  `r lifecycle::badge("deprecated")` Please use `set_values_to` instead.
-#'
-#'   This can include built-in functions as well as user defined functions,
-#'   for example `mean` or `function(x) mean(x, na.rm = TRUE)`.
 #'
 #' @param set_values_to Variables to be set
 #'
@@ -160,8 +148,6 @@
 get_summary_records <- function(dataset,
                                 by_vars,
                                 filter = NULL,
-                                analysis_var,
-                                summary_fun,
                                 set_values_to = NULL) {
   assert_vars(by_vars)
   filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
@@ -171,16 +157,6 @@ get_summary_records <- function(dataset,
     check_is_grouped = FALSE
   )
   assert_varval_list(set_values_to)
-  # if (!missing(analysis_var) || !missing(summary_fun)) {
-  #   deprecate_stop(
-  #     "1.1.0",
-  #     I("get_summary_records(anaylsis_var = , summary_fun = )"),
-  #     "get_summary_records(set_values_to = )"
-  #   )
-  # analysis_var <- assert_symbol(enexpr(analysis_var))
-  # assert_s3_class(summary_fun, "function")
-  # set_values_to <- exprs(!!analysis_var := {{ summary_fun }}(!!analysis_var), !!!set_values_to)
-  # }
 
   # Summarise the analysis value
   dataset %>%
