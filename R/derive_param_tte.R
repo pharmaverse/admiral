@@ -324,10 +324,8 @@ derive_param_tte <- function(dataset = NULL,
                              set_values_to,
                              subject_keys = get_admiral_option("subject_keys"),
                              check_type = "warning") {
-  
-  # Match check_type to valid admiral options
+# Match check_type to valid admiral options
   check_type <- rlang::arg_match(check_type, c("warning", "message", "error", "none"))
-     
  # checking and quoting #
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
