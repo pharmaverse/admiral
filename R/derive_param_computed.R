@@ -402,17 +402,19 @@ derive_param_computed <- function(dataset = NULL,
       ))
     )
     if (nobs_before > 0 && nrow(hori_data) == 0) {
-      cli_inform(c(
-        paste(
-          "No computed records were added because for all potential computed",
-          "records at least one of the contributing values was {.val {NA}}."
+      cli_inform(
+        c(
+          paste(
+            "No computed records were added because for all potential computed",
+            "records at least one of the contributing values was {.val {NA}}."
+          ),
+          paste(
+            "If this is not expected, please check the input data and the value of",
+            "the {.arg keep_nas} argument."
+          )
         ),
-        paste(
-          "If this is not expected, please check the input data and the value of",
-          "the {.arg keep_nas} argument."
-        )
-      ),
-      class = "derive_param_computed_all_na")
+        class = "derive_param_computed_all_na"
+      )
     }
   }
 

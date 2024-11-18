@@ -110,12 +110,12 @@ test_that("derive_param_qtc Test 4: Message if no new records", {
   )
 
   expect_snapshot(
-  actual <- derive_param_qtc(
-    input,
-    by_vars = exprs(USUBJID, VISIT),
-    method = "Bazett",
-    get_unit_expr = AVALU
-  )
+    actual <- derive_param_qtc(
+      input,
+      by_vars = exprs(USUBJID, VISIT),
+      method = "Bazett",
+      get_unit_expr = AVALU
+    )
   )
 
   expect_dfs_equal(
@@ -170,9 +170,9 @@ test_that("derive_param_rr Test 5: new observations are derived correctly", {
 test_that("derive_param_rr Test 6: Message if no new records", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
-    "01-701-1015", "HR",     "Heart Rate",  NA   , "beats/min", "BASELINE",
-    "01-701-1015", "HR",     "Heart Rate",  NA   , "beats/min", "WEEK 1",
-    "01-701-1015", "RR",     "RR Duration", 710,   "ms",        "WEEK 2"
+    "01-701-1015", "HR",     "Heart Rate",     NA, "beats/min", "BASELINE",
+    "01-701-1015", "HR",     "Heart Rate",     NA, "beats/min", "WEEK 1",
+    "01-701-1015", "RR",     "RR Duration",   710, "ms",        "WEEK 2"
   )
 
 
