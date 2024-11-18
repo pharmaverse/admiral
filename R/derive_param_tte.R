@@ -798,7 +798,8 @@ tte_source <- function(dataset_name,
                        filter = NULL,
                        date,
                        censor = 0,
-                       set_values_to = NULL) {
+                       set_values_to = NULL,
+                       order = order) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enexpr(filter), optional = TRUE),
@@ -808,7 +809,8 @@ tte_source <- function(dataset_name,
       set_values_to,
       named = TRUE,
       optional = TRUE
-    )
+    ),
+    order = order
   )
   class(out) <- c("tte_source", "source", "list")
   out

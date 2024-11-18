@@ -4,7 +4,13 @@
 \alias{event_source}
 \title{Create an \code{event_source} Object}
 \usage{
-event_source(dataset_name, filter = NULL, date, set_values_to = NULL)
+event_source(
+  dataset_name,
+  filter = NULL,
+  date,
+  set_values_to = NULL,
+  order = NULL
+)
 }
 \arguments{
 \item{dataset_name}{The name of the source dataset

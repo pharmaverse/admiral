@@ -4,7 +4,14 @@
 \alias{tte_source}
 \title{Create a \code{tte_source} Object}
 \usage{
-tte_source(dataset_name, filter = NULL, date, censor = 0, set_values_to = NULL)
+tte_source(
+  dataset_name,
+  filter = NULL,
+  date,
+  censor = 0,
+  set_values_to = NULL,
+  order = order
+)
 }
 \arguments{
 \item{dataset_name}{The name of the source dataset
