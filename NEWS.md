@@ -64,6 +64,8 @@ example, `">2.5 x ULN"` changed to `">2.5"` for grade 3. (#2534)
 
 - `derive_locf_records()` documentation example was fixed to display LOCF records. (#2461)
 
+- `derive_var_joined_exist_flag()` documentation updated with extra examples. (#2523)
+
 ## Various
 
 <details>
