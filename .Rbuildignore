@@ -28,6 +28,7 @@
 ^\.lycheeignore$
 ^staged_dependencies.yaml$
 ^inst/dev_dependencies.R$
-^\.devcontainer$
 ^vignettes/articles$
 ^inst/cheatsheet$
+^data-raw$
+^doc$

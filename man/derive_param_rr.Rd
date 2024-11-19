@@ -21,7 +21,7 @@ The variables specified by the \code{by_vars} argument are expected to be in the
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
-parameter) and to the parameters specified by \code{hr_code}.}
+argument) and to the parameters specified by \code{hr_code}.}
 
 \item{by_vars}{Grouping variables
 
@@ -51,7 +51,8 @@ Permitted Values: character value}
 
 The result is used to check the units of the input parameters.
 
-Permitted Values: A variable of the input dataset or a function call}
+\emph{Permitted Values}: An expression which is evaluable in the input dataset
+and results in a character value}
 
 \item{filter}{Filter condition
 
@@ -80,14 +81,14 @@ library(tibble)
 adeg <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "HR", "Heart Rate", 70.14, "beats/min", "BASELINE",
-  "01-701-1015", "QT", "QT Duration", 370, "msec", "WEEK 2",
+  "01-701-1015", "QT", "QT Duration", 370, "ms", "WEEK 2",
   "01-701-1015", "HR", "Heart Rate", 62.66, "beats/min", "WEEK 1",
-  "01-701-1015", "RR", "RR Duration", 710, "msec", "WEEK 2",
+  "01-701-1015", "RR", "RR Duration", 710, "ms", "WEEK 2",
   "01-701-1028", "HR", "Heart Rate", 85.45, "beats/min", "BASELINE",
-  "01-701-1028", "QT", "QT Duration", 480, "msec", "WEEK 2",
-  "01-701-1028", "QT", "QT Duration", 350, "msec", "WEEK 3",
+  "01-701-1028", "QT", "QT Duration", 480, "ms", "WEEK 2",
+  "01-701-1028", "QT", "QT Duration", 350, "ms", "WEEK 3",
   "01-701-1028", "HR", "Heart Rate", 56.54, "beats/min", "WEEK 3",
-  "01-701-1028", "RR", "RR Duration", 842, "msec", "WEEK 2"
+  "01-701-1028", "RR", "RR Duration", 842, "ms", "WEEK 2"
 )
 
 derive_param_rr(
@@ -95,8 +96,8 @@ derive_param_rr(
   by_vars = exprs(USUBJID, VISIT),
   set_values_to = exprs(
     PARAMCD = "RRR",
-    PARAM = "RR Duration Rederived (msec)",
-    AVALU = "msec"
+    PARAM = "RR Duration Rederived (ms)",
+    AVALU = "ms"
   ),
   get_unit_expr = AVALU
 )

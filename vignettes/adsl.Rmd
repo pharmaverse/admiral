@@ -65,11 +65,11 @@ library(pharmaversesdtm)
 library(lubridate)
 library(stringr)
 
-data("dm")
-data("ds")
-data("ex")
-data("ae")
-data("lb")
+dm <- pharmaversesdtm::dm
+ds <- pharmaversesdtm::ds
+ex <- pharmaversesdtm::ex
+ae <- pharmaversesdtm::ae
+lb <- pharmaversesdtm::lb
 
 dm <- convert_blanks_to_na(dm)
 ds <- convert_blanks_to_na(ds)
@@ -677,16 +677,45 @@ dataset_vignette(
 
 Numeric and categorical variables (`AGE`, `RACE`, `COUNTRY`, etc.) may need to be grouped to perform
 the required analysis.
-`{admiral}` does not **currently** have functionality to assist with all required groupings. So, the user will often need to create his/her own function to meet his/her study requirement. 
+`{admiral}` provides the `derive_vars_cat()` function to create such groups.
+This function is especially useful if more than one variable needs to be created for
+each condition, e.g., `AGEGR1` and `AGEGR1N`.
 
-For example, if 
-
-- `AGEGR1` is required to categorize `AGE` into `<18`, `18-64` and `>64`, or
-- `REGION1` is required to categorize `COUNTRY` in `North America`, `Rest of the World`,
-
-the user defined functions would look like the following:
+Additionally, one needs to be careful when considering the order of the conditions in the lookup table. 
+The category is assigned based on the first match.
+That means *catch-all* conditions must come after specific conditions, e.g. `!is.na(AGE)`
+must come after `AGE < 18`.
 
 ```{r eval=TRUE}
+# create lookup tables
+agegr1_lookup <- exprs(
+  ~condition,           ~AGEGR1,
+  AGE < 18,               "<18",
+  between(AGE, 18, 64), "18-64",
+  AGE > 64,               ">64",
+  is.na(AGE),         "Missing"
+)
+
+region1_lookup <- exprs(
+  ~condition,                          ~REGION1,
+  COUNTRY %in% c("CAN", "USA"), "North America",
+  !is.na(COUNTRY),          "Rest of the World",
+  is.na(COUNTRY),                     "Missing"
+)
+```
+
+```{r eval=TRUE}
+adsl <- adsl %>%
+  derive_vars_cat(
+    definition = agegr1_lookup
+  ) %>%
+  derive_vars_cat(
+    definition = region1_lookup
+  )
+```
+Alternatively, you can also solve this task with custom functions: 
+```{r}
+#| eval: false
 format_agegr1 <- function(var_input) {
   case_when(
     var_input < 18 ~ "<18",
@@ -695,7 +724,6 @@ format_agegr1 <- function(var_input) {
     TRUE ~ "Missing"
   )
 }
-
 format_region1 <- function(var_input) {
   case_when(
     var_input %in% c("CAN", "USA") ~ "North America",
@@ -703,17 +731,15 @@ format_region1 <- function(var_input) {
     TRUE ~ "Missing"
   )
 }
-```
 
-These functions are then used in a `mutate()` statement to derive the required grouping variables:
-
-```{r eval=TRUE}
-adsl <- adsl %>%
+adsl %>%
   mutate(
     AGEGR1 = format_agegr1(AGE),
     REGION1 = format_region1(COUNTRY)
   )
 ```
+
+
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
